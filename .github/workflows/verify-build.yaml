@@ -40,6 +40,13 @@ jobs:
         echo "${{github.workspace}}/llvm-tools" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
       shell: pwsh
 
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        # Print installed packages for debugging
+        pip freeze
+
     - name: Verify tools
       run: |
         Write-Output "Checking LLVM tools..."
@@ -67,9 +74,11 @@ jobs:
         # Try to compile it
         python compiler.py test.mini -o test.exe
 
-        # Verify the executable was created
+        # If compilation succeeds, try running it
         if (Test-Path test.exe) {
             Write-Output "Compilation successful!"
+            Write-Output "Running compiled program:"
+            ./test.exe
         } else {
             Write-Error "Compilation failed - no executable produced"
             exit 1
