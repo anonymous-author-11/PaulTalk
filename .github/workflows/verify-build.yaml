@@ -68,7 +68,8 @@ jobs:
       run: |
         # Create a simple test program
         @"
-        print(55);
+        import std;
+        IO.print("hello world!");
         "@ > test.mini
 
         # Try to compile it
