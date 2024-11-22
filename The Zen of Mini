@@ -3,7 +3,6 @@ The Zen of Mini
 The concrete should depend on the abstract.
 There is no such thing as too much abstraction, or too little--
 There is only the right abstraction, and the wrong abstraction.
-Two is a coincidence; three is a pattern.
 The purpose of programming is to produce side-effects.
 Use the type system; do not abuse the type system.
 An error should be yielded early and handled once.
@@ -15,8 +14,8 @@ All experts were once beginners.
 All working systems were once prototypes.
 Syntactic clutter leads to mental clutter.
 Simplicity is an accomplishment.
-Code explains how, comments explain why.
+Code explains how; comments explain why.
 Types are guarantees.
-Subtyping means substitutability.
+Subtyping guarantees substitutability.
 Defaults matter more than you think.
 There are no solutions, only tradeoffs.
