@@ -32,7 +32,7 @@ jobs:
 
     - name: Extract LLVM tools
       run: |
-        Expand-Archive -Path tools/mini-llvm-tools.zip -DestinationPath llvm-tools
+        Expand-Archive -Path mini-llvm-tools.zip -DestinationPath llvm-tools
       shell: pwsh
 
     - name: Add tools to PATH
