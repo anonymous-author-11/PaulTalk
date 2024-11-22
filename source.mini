@@ -1,0 +1,357 @@
+import std;
+
+extern def clock() -> i64
+extern def getchar() -> i32
+extern def fopen(name : Buffer[i8], mode : Buffer[i8]) -> Buffer[i32]
+extern def fclose(file : Buffer[i32]) -> i32
+extern def fgetc(file : Buffer[i32]) -> i32
+extern def fprintf(file : Buffer[i32], text : Buffer[i8]) -> i32
+extern def system(string : Buffer[i8]) -> i32
+
+alias number = i32 | f64;
+
+def number_taker(a : number) {
+    print("number");
+}
+
+def early_return_in_else() -> i32 {
+    if 5 > 3 {
+        return 1;
+    } else {
+        return 2;
+    }
+}
+
+class Integer {
+
+    @value : i32
+
+    def init(@value : i32) {}
+
+    def +(other : i32) -> Integer {
+        return Integer.new(@value + other);
+    }
+    def -(other : i32) -> Integer {
+        return Integer.new(@value - other);
+    }
+    def *(other : i32) -> Integer {
+        return Integer.new(@value * other);
+    }
+    def /(other : i32) -> Integer {
+        return Integer.new(@value / other);
+    }
+    def print() {
+        IO.print(@value);
+    }
+}
+
+class BigBoy extends Representable {
+    def introduce() {
+        IO.print("Here I am!");
+    }
+}
+
+class Integer2 extends Integer, BigBoy {
+    def repr() -> String {
+        return "Integer2";
+    }
+    def value() -> i32 {
+        return @value;
+    }
+}
+
+class Animal {
+    @age : i32
+    @hp : f64
+    @skill : i32
+
+    def init(@age : i32, @hp : f64, @skill : i32) {}
+
+    def say_age() {
+        self.say(@age);
+        self.say(@age);
+    }
+
+    def say_skill(){
+        skill = @skill;
+        if skill is i32 { IO.print(skill); }
+    }
+
+    def say(message : i32){ IO.print(message); }
+
+    def do_nothing() -> Animal | f64 {
+        return Animal.new(5, 5.0, 5);
+    }
+}
+
+class Beaver {
+    @color : i32
+    @name : f64
+
+    def init(@color : i32, @name : f64) {}
+
+    def +(x : i32) {
+        @color = @color + x;
+    }
+    def say_color() {
+        IO.print(@color);
+    }
+}
+
+class ListNode {
+    @data : i32
+    @next : ListNode | Nil
+    def init(@data : i32) {}
+    def push(next : ListNode) -> ListNode {
+        @next = next;
+        return next;
+    }
+    def next() -> ListNode | Nil {
+        return @next;
+    }
+    def data() -> i32 {
+        return @data;
+    }
+    def iterator() -> ListIterator {
+        head = ListNode.new(0);
+        head.push(self);
+        return ListIterator.new(head);
+    }
+}
+
+class ListIterator {
+    @node : ListNode
+    def init(@node : ListNode) {
+    }
+    def next() -> ListNode | Nil {
+        next = @node.next();
+        if next is ListNode {
+            @node = next;
+            return @node;
+        }
+        return nil;
+    }
+}
+
+def make_em_speak(animal : Animal){
+    animal.say_age();
+}
+
+def fibonacci(n : i32) -> i32 {
+    if n < 2 { return n; }
+    return fibonacci(n - 2) + fibonacci(n - 1);
+}
+
+def factorial(n : i32) -> i32 {
+    if n < 2 { return 1; }
+    return n * factorial(n - 1);
+}
+
+class Bard {
+    def init() {}
+    def take(a : i32, b : i32){
+        IO.print(a);
+        IO.print(b);
+    }
+    def take(a : f64, b : f64){
+        IO.print(a);
+        IO.print(b);
+    }
+    def take(a : i32, b : f64){
+        IO.print(a);
+        IO.print(b);
+    }
+    def take(a : Animal, b : Beaver){
+        IO.print("animal!");
+        IO.print("beaver!");
+    }
+}
+
+IO.print(clock());
+
+bard = Bard.new();
+bard.take(5, 10);
+gig : i32 | f64 = 7.0;
+bard.take(gig, 14.0);
+IO.print("start");
+larry = Animal.new(55, 8.0, 13);
+IO.print("did get here!");
+barry = Beaver.new(10, 10.0);
+bard.take(larry, barry);
+bard.take(7, gig);
+
+IO.print("barry's color is");
+barry.say_color();
+barry + 5;
+barry.say_color();
+
+mynum = Integer.new(89);
+(mynum - 7).print();
+
+num = Math.sqrt(9.0);
+IO.print(Math.abs(-9));
+IO.print(num);
+
+make_em_speak(larry);
+gary = larry.do_nothing();
+
+def throw() {
+    yield(Exception.new());
+}
+
+a = 5;
+while a is i32 {
+    IO.print(a);
+    a = a + 1;
+    if a == 9 { a = Animal.new(65, 18.0, 23); }
+}
+
+if a is i32 { IO.print(a); }
+
+if a is Animal { make_em_speak(a); }
+
+larry.say_skill();
+
+mylist = ListNode.new(0);
+next = mylist;
+
+for i in 1:10 { next = next.push(ListNode.new(i)); }
+
+IO.print(mylist.data());
+
+for node in mylist { IO.print(node.data()); }
+
+def print88() {
+    IO.print(88);
+    yield();
+    IO.print(90);
+}
+
+my_coro = Coroutine.new(print88);
+my_coro.call();
+IO.print(89);
+my_coro.call();
+for z in 1:10 {
+    if z == 5 { break; }
+    IO.print(z);
+}
+
+def grabo() {
+    IO.print("one");
+    return;
+    IO.print("two");
+    return;
+}
+
+ary = [1,2,3,4];
+ary.extend([5,6,7,8,9,10]);
+IO.print(ary.[7]);
+empty = [];
+empty.extend([8,7,6,5]);
+IO.print(empty.[3]);
+grabo();
+if ary is IntArray and ary.[0] == 5 {
+    IO.print("so it is true!");
+}
+
+IO.print(clock());
+
+sixtyfour : i64 = 5;
+IO.print(sixtyfour);
+sixtyfour : f64 = 5;
+IO.print(sixtyfour);
+
+for i in 11:14 { IO.print(i); }
+for i in [44,55,66] { IO.print(i); }
+
+byte : i8 = 3;
+IO.print(byte);
+
+for char in "boom!" { IO.print(char); }
+IO.print([1,2,3].repr());
+derived = Integer2.new(77);
+derived.print();
+IO.print(derived);
+derived.introduce();
+
+for k in (0:25).step(5) { IO.print(k); }
+
+add = (a: i32, b: i32) => { a + b; };
+times_two = (x: i32) => { x * 2; };
+returns_five = () => { 5; };
+IO.print([1,2,3,4].map(times_two).reduce(0, add));
+[5,6,7,8].each((x : i32) => { IO.print(x); });
+
+def i32toi8(x : i32) -> i8 {
+    i = 0;
+    sum : i8 = 0;
+    one : i8 = 1;
+    while i < x {
+        sum = sum + one;
+        i = i + 1;
+    }
+    return sum;
+}
+
+def read_file(file_name : String) -> String {
+    content = "";
+    file = fopen(file_name.c_string(), "r".c_string());
+    while true {
+        int = fgetc(file);
+        if int == -1 { break; }
+        content.append(i32toi8(int));
+    }
+    fclose(file);
+    return content;
+}
+
+def write_file(file_name : String, text: String) {
+    file = fopen(file_name.c_string(), "w".c_string());
+    fprintf(file, text.c_string());
+    fclose(file);
+}
+
+write_file("bigtings.txt", "this\nis how\nwe do\nit");
+IO.print(read_file("bigtings.txt"));
+
+//system("dir".c_string());
+
+(2:5).each((x : i32) => { IO.print(x*x); });
+
+captured = i32toi8;
+IO.print(captured.call(5));
+
+interesting = (a : i32, b : i32) yields i32 => {
+    c = 7;
+    add = (a: i32, b: i32) => { a + b; };
+    while true {
+        increment = yield(add.call(a,b) + c);
+        if increment is i32 { c = c + increment; }
+    }
+};
+
+interesting_coro = Coroutine.new(interesting, 6, 4);
+IO.print(interesting_coro.call(2));
+IO.print(interesting_coro.call(3));
+
+coro_returns_five = Coroutine.new(returns_five);
+coro_returns_five.call();
+IO.print(coro_returns_five.result());
+
+chan = Channel.new();
+producer = Coroutine.new((chan : Channel) => { chan.put(88); }, chan);
+producer.call();
+IO.print(chan.get());
+
+v = (1:15).map((x : i32) => { x * x; })
+    .filter((x : i32) => { x % 2 == 0; })
+    .reduce(0, add);
+
+IO.print(v);
+
+hex_literal = 0x0100;
+IO.print(hex_literal);
+tuple = (4, 5, 6);
+second = tuple.[1];
+IO.print(second);
+[4,5,6].[4];

@@ -1,0 +1,31 @@
+import core;
+
+class Blocking {
+    def init() {}
+}
+
+class Channel {
+    @value : i32 | Nil
+
+    def init() {
+        @value = nil;
+    }
+    def get() -> i32 yields Blocking {
+        while true {
+            value = @value;
+            if value is i32 {
+                @value = nil;
+                return value;
+            }
+            yield(Blocking.new());
+        }
+    }
+    def put(new_value : i32) yields Blocking {
+        old_value = @value;
+        while old_value is i32 {
+            yield(Blocking.new());
+            old_value = @value;
+        }
+        @value = new_value;
+    }
+}

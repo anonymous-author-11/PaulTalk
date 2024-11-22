@@ -1,0 +1,154 @@
+import core;
+import math;
+import int;
+import io;
+import channel;
+
+class OutOfBoundsDetails {
+	@bounds : i32
+	@index : i32
+	def init(@bounds : i32, @index : i32) {}
+	def report() {
+		IO.print("The size of the collection being indexed was");
+		IO.print(@bounds);
+		IO.print("The indexing argument was");
+		IO.print(@index);
+	}
+}
+
+class OutOfBounds extends Exception {
+	@details : OutOfBoundsDetails | Nil
+
+	def init(bounds : i32, index : i32) {
+		@details = OutOfBoundsDetails.new(bounds, index);
+		@line_number = 0;
+		@file_name = "";
+		@message = "An out-of-bounds error occurred while indexing into a collection.";
+	}
+	def print_message() {
+		IO.print(@message);
+		details = @details;
+		if details is OutOfBoundsDetails { details.report(); }
+	}
+}
+
+class IntArray extends IntIterable, Representable {
+    @buffer : Buffer[i32]
+    @length : i32
+    @capacity: i32
+
+    def Self.from_iterable(iterable : IntIterable) -> IntArray {
+    	new = [];
+    	for elem in iterable { new.append(elem); }
+    	return new;
+    }
+
+    def init() {
+        @buffer = Buffer[i32].new(1);
+        @capacity = 1;
+        @length = 0;
+    }
+
+    def init(@buffer : Buffer[i32], @length : i32, @capacity : i32) {}
+    def length() -> i32 { return @length; }
+    def capacity() -> i32 { return @capacity; }
+    def buffer() -> Buffer[i32] { return @buffer; }
+
+    def append(x : i32) -> IntArray {
+        if @length < @capacity {
+            @buffer.[@length] = x;
+            @length = @length + 1;
+            return self;
+        }
+        @capacity = @capacity * 2;
+        old_buffer = @buffer;
+        @buffer = Buffer[i32].new(@capacity);
+        i = 0;
+        while i < @length {
+            @buffer.[i] = old_buffer.[i];
+            i = i + 1;
+        }
+        @buffer.[@length] = x;
+        @length = @length + 1;
+        return self;
+    }
+    def extend(ary : IntArray) -> IntArray {
+        ary_buf = ary.buffer();
+        ary_len = ary.length();
+        if @length + ary_len < @capacity {
+            a = @length;
+            b = 0;
+            while a < @length + ary_len {
+                @buffer.[a] = ary_buf.[b];
+                a = a + 1;
+                b = b + 1;
+            }
+            @length = @length + ary_len;
+            return self;
+        }
+        @capacity = @length + ary_len;
+        old_buffer = @buffer;
+        @buffer = Buffer[i32].new(@capacity);
+        a = 0;
+        b = 0;
+        while a < @length + ary_len {
+            if a < @length {
+                @buffer.[a] = old_buffer.[a];
+                a = a + 1;
+                continue;
+            }
+            @buffer.[a] = ary_buf.[b];
+            a = a + 1;
+            b = b + 1;
+        }
+        @length = @length + ary_len;
+        return self;
+    }
+    def [](x : i32) -> i32 {
+        if x > (@length - 1) { yield(OutOfBounds.new(@length, x)); }
+        if x >= 0 { return @buffer.[x]; }
+        if (@length + x) < 0 { yield(OutOfBounds.new(@length, x)); }
+        return @buffer.[@length + x];
+    }
+    def pop() -> i32 | Nil {
+        if @length == 0 { return nil; }
+        @length = @length - 1;
+        return @buffer.[@length];
+    }
+    def copy() -> IntArray {
+        new_buf = Buffer[i32].new(@length);
+        i = 0;
+        while i < @length {
+            new_buf.[i] = @buffer.[i];
+            i = i + 1;
+        }
+        new_ary = IntArray.new(new_buf, @length, @length);
+        return new_ary;
+    }
+    def iterator() -> IntArrayIterator {
+    	return IntArrayIterator.new(self);
+    }
+    def map(f : (i32) -> i32) -> IntArray {
+    	new_buf = Buffer[i32].new(@length);
+        i = 0;
+        while i < @length {
+            new_buf.[i] = f.call(@buffer.[i]);
+            i = i + 1;
+        }
+        new_ary = IntArray.new(new_buf, @length, @length);
+        return new_ary;
+    }
+}
+
+class IntArrayIterator extends IntIterator {
+	@array : IntArray
+	@index : i32
+	def init(@array : IntArray) { @index = 0; }
+	def next() -> i32 | Nil {
+		if @index < @array.length() {
+			@index = @index + 1;
+			return @array.buffer().[@index - 1];
+		}
+		return nil;
+	}
+}

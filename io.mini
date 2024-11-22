@@ -1,0 +1,35 @@
+import core;
+
+class IO {
+    def Self.print(x : i8) {
+        print(x);
+    }
+    def Self.print(x : i32) {
+        print(x);
+    }
+    def Self.print(x : i64) {
+        print(x);
+    }
+    def Self.print(x : f64) {
+        print(x);
+    }
+    def Self.print(x : Bool) {
+        if x { print("true".c_string()); } else { print("false".c_string()); }
+    }
+    def Self.print(x : Nil) {
+        print("nil".c_string());
+    }
+    def Self.print(x : String) {
+        print(x.c_string());
+    }
+    def Self.print(x : Character){
+        buf = Buffer[i8].new(2);
+        null : i8 = 0;
+        buf.[0] = x.byte();
+        buf.[1] = null;
+        print(buf);
+    }
+    def Self.print(x : Representable){
+        print(x.repr().c_string());
+    }
+}

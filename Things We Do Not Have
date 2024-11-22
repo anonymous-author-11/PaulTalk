@@ -1,0 +1,81 @@
+# Things We Do Not Have
+
+Mini is a language with many features, but equally important are the features which are left out of the language. This document enumerates some features which were left out, and the reasons for those decisions.
+
+1. Closures
+
+Mini has first-class functions, but they do not capture their environment. This is because closures are complicated to implement, interact poorly with many other implementation details, and most importantly, Mini is not a functional language and does not want to encourage functional patterns that rely heavily on closures.
+
+Closure functionality can still be achieved using coroutines, by passing variables at coroutine creation time. Or, you can just use a class to store state.
+
+2. Enums, switches, currying, and pattern matching
+
+These are other aspects of functional-style programming which are not supported. If you are wanting to switch on an enum, do a virtual method call instead. First-class functions (and other callables) are called with .call(), so you cannot have foo()()()(). There is flow-sensitive type-narrowing via "if _ is _" statements, but this is not pattern-matching and is not intended to be used like pattern-matching. If you find yourself writing a series of such statements, use a multimethod instead.
+
+When dictionary literals are implemented, it is plausible that it will be idiomatic to index into a dictionary literal where you would otherwise reach for a switch statement. (If so, we would also guarantee sane optimizations of this idiom)
+
+3. ++ and -- operators
+
+These are cargo-cult operators, hard to read and not necessary. Plus, we only have for-in loops, not traditional C-style for-loops, thereby removing the primary use of these operators.
+
+4. += and family
+
+These may yet be added, but I am skeptical. For now we do x = x + y rather than x += y
+
+5. Var / let / const / public / static / mut / etc.
+
+There will be no "public static void main" in this language. Immutability is when a class does not expose any mutating methods. Fields are all private and methods are all public. Variables are all variable.
+
+6. Global variables
+
+There may be some specially-blessed slots for global variables (a task scheduler for example) but otherwise no globals. You can write top-level functions that return constants, and if you want access to mutable state, put it in an instance.
+
+7. Variadic arguments
+
+Pass in an iterable.
+
+8. Async / await / promises / futures
+
+The whole point of stackful coroutines is to do better than async / await. These annotations do not compose, and spread virally.
+
+9. Keywords "trait" or "interface"
+
+Note that the *keywords* "trait" and "interface" are not the same as the *concept* of an interface. Classes that act as interfaces via abstract methods and defer implementation are *absolutely* supported and encouraged. There is just no syntactic difference between them and normal classes, or any rules forbidding concrete methods or fields.
+
+"Traits" are the compromise you land on when you don't want to support inheritance. I also do not want subtyping relations to be syntactically separate from the declaration site of a class. That way, we do not have any complications around "orphan rules."
+
+Syntactically distinguishing classes and interfaces (a la C#) is considered an antipattern. Whether or not there *is* a default implementation is *itself* an implementation detail. Changing something from an implementation to an interface (conceptually) should require no shotgun-surgery adding "I" prefixes to all uses.
+
+10. Public fields
+
+Relatedly, since fields can only be accessed externally through getters, there is no syntactic distinction between calculating a property and returning an immediately available field. This means that changing something from a field to a calculated value requires no shotgun-surgery adding parentheses to all uses.
+
+11. Try / catch
+
+We use coroutines to yield exceptions rather than throwing and catching. You can check for exceptions with "if x is Exception {...}" at the place in the call stack where the exception needs to be handled. You can think of it as Try yielding a possible error, which may then be handled however you like, or yielded further up.
+
+12. Result types
+
+Result / maybe / option types are typically used alongside pattern-matching and monadic error handling. They do not fit in our language paradigm. Coroutines should be used to handle errors. Unions with nil (or other tombstones) should be used extensively when the direct caller should be responsible for handling.
+
+13. RAII or 'defer' or 'finally'
+
+It is more costly than you think to genuinely guarantee that some deferred behavior 'happens no matter what.'
+
+In addition, region-based automatic memory managment means that the primary use-case of RAII (memory) is already addressed.
+
+14. Unchecked exceptions
+
+Some people are apparently incapable of distinguishing between "the Java implementation of checked exceptions" and the concept of checked exceptions. The Java implementation is horrible, but almost entirely because it is implemented horribly. Having sane defaults-- like omitted annotation defaulting to "yields Exception | Nil"-- along with union types in general, makes tracking exceptions via the type system easy and ergonomic.
+
+14. Global type inference
+
+Really not worth it if you care about separate compilation and good compiler errors. Local flow-sensitive type inference is more than powerful enough to improve ergonomics, and annotating parameter, field, and return types is good practice anyway.
+
+15. ExpressibleByLiteral
+
+Within a scope, a given literal (like 5.0) desugars to one and only one type. Aliases can be used to change what type a literal desugars to within a given scope. This means that type inference for literals is trivial, unlike in Swift, where you can easily get compiler timeout errors trying to infer simple expressions, especially combined with operator overloading.
+
+15. Null-terminated strings
+
+No reason for a modern language to perpetuate this design mistake. Strings and arrays know their length and capacity. You can convert strings into C-style null-terminated strings via the .c_string() method for interoperability, which returns a Buffer[i8].

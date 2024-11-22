@@ -1,0 +1,453 @@
+DONE:
+
+- Intrinsics [check!]
+- Make sure overloading works with unions [check!]
+	- Need to do wrapping/unwrapping around concrete method call [check!]
+	- Need a way of getting vptr and offset for union passed in [check!]
+- make sure ambiguous overloads handled at type checking time [check!]
+- Class methods [check!]
+	- Syntactically distinguish capitalized recievers [check!]
+	- Define class methods with Self.method [check!]
+	- statically known vtable [check!]
+- Operator overloading [check!]
+- Line numbers for errors [check!]
+- Move from scf to cf for while and if statements [check!]
+	- Implement ExecuteRegion [check!]
+- Replace scope.operations with Block [check!]
+- Break and continue [check!]
+- Early / multiple returns [check!]
+- Parentheses in conditions optional [check!]
+- Compile with mypyc [check!]
+- Implement buffer type [check!]
+- Ensure assignments with method calls on fields is working properly [check!]
+- Arrays for builtin types [check!]
+- Array literal syntax [check!]
+	- Initialize with pre-filled buffer [check!]
+- Allow overloads of differing arity (different behavior for each) [check!]
+	- do behavior naming based on arity [check!]
+- Setup exception landing pad for uncaught yields [check!]
+- Change coroutine_resume to do quick pointer switch [check!]
+- Place coroutine on its own stack [check!]
+- Allow return statements in methods with no return value [check!]
+	- Syntactically allow [check!]
+	- Incorporate in type checking [check!]
+	- Incorporate in lowering [check!]
+- Implement logical or/and [check!]
+	- In parser [check!]
+	- In binary op [check!]
+	- Refactor BinaryOp [check!]
+	- Correct precedence [check!]
+- Refactor AST [check!]
+- Statically dispatch class methods when arguments are builtin types [check!] [reverted]
+- rename to .call() instead of .resume() [check!]
+- Enforce capitalization norms [check!]
+	- no capitalized function or method names [check!]
+	- class names must be uppercase [check!]
+- Use underscores for internal names and disallow them for the user [check!]
+- Self type [check!]
+- Implement i64 and i128 [check!]
+- Implement extensions from i32 to i64 [check!]
+- Ensure that there is a return statement in a function that declares a return value [check!]
+- Implement casts from integers to floats [check!]
+- Modules [check!]
+	- Import statements [check!]
+	- Load classes and functions from another file [check!]
+	- Codegen functions and classes [check!]
+- Start creating standard library [check!]
+- Range literals [check!]
+- For/in loops [check!]
+- Extern declarations [check!]
+- Add comments [check!]
+- Pretty-printing types [check!]
+- Implement proper strings [check!]
+- Empty array literals [check!]
+- Get rid of second phase of lowering [check!]
+- Provide compilation options [check!]
+- Remove global variables [check!]
+- Enable transitive imports [check!]
+- Implement type aliases [check!]
+- implement c3 linearization [check!]
+- Field access via indirection [check!]
+- Properly get type sizes for allocation [check!]
+- Use fat ptr offset for calls and field accesses [check!]
+- Add inheritance! [check!]
+- Make every class inherit from Object [check!]
+- Allow invoking inherited methods [check!]
+- Mark LUB and subtype_test as pure [check!]
+- Tune compiler passes [check!]
+- Upcasting and autocasting [check!]
+	- Modify offset value [check!]
+	- Need mapping from each class to its ancestors [check!]
+- Get rid of null-termination of strings [check!]
+- Enforce rules on overriding [check!]
+- Disallow redefinition of fields [check!]
+- Abstract methods [check!]
+	- Illegal to instantiate a class with any abstract methods [check!]
+	- Abstract methods do not have bodies [check!]
+- Decouple offset procurement from method call [check!]
+- Type check unions with objects in them [check!]
+	- Use actual subtype test rather than vptr equality [check!]
+- Clean up class/method call lowering [check!]
+- Ensure that floats and ints have value semantics [check!]
+- Make mangled names deterministic [check!]
+- Prevent duplicate codegen of files [check!]
+- Use VirtualAlloc and VirtualFree with coroutine [check!]
+	- Commit 8mb and page in on fault [check!]
+- Disallow referring to 'self' in init [check!]
+- Make subtype checks for value types vptr equality [check!]
+- Null safety for uninitialized members [check!]
+	- By disallowing references to self and checking types at end of init method [check!]
+- Ensure that fields in parameter lists match types with their declarations [check!]
+- Do not inherit init methods which are not consistent with field types [check!]
+	- I.e. does not initialize non-nil field [check!]
+- first class functions [check!]
+	- Implicit return and infer return type [check!]
+	- anon = (a : i32, b : i32) => { a + b }; [check!]
+	- Function type annotations (i32, i32) -> i32 [check!]
+- Allow writing function type with no return type [check!]
+- Disallow directly calling abstract class methods [check!]
+- Implement proper name shadowing for classes and functions [check!]
+	- Disallow duplicate classes in same file/module [check!]
+	- Make sure that transitive imports are handled properly [check!]
+- Figure out a way to handle C's i8 -> i32 return vals [check!]
+- Implement creating, opening, reading and writing files [check!]
+- Pass in two selves for method calls [check!]
+- Refactor coro_create to Coroutine.new() [check!]
+	- Allow referring to non-anonymous functions by their name [check!]
+	- Have coro_create take an identifier [check!]
+	- Fix nested anonymous functions [check!]
+- Pass initial args at coroutine creation time [check!]
+	- Pass in custom arg_passer rather than custom trampoline [check!]
+	- Store arg_passer in coroutine [check!]
+	- Use the end of the coroutine on the stack as the arg buffer [check!]
+	- We generate special arg_passer and buffer_filler functions for each coroutine [check!]
+	- Coroutines need to carry their call/yield/return types in their type [check!]
+- Figure out how coroutine returns should work [check!]
+	- Probably best to have a .result() method [check!]
+	- Implement .result() [check!]
+	- Convert to union [check!]
+- Passing coroutine arguments with call/yield [check!]
+	- Rewrite yield to be an expression [check!]
+	- Add yield type annotation for literals [check!]
+	- Cast before yield [check!]
+- Add generators and IntIterable.map() [check!]
+- Figure out makeshift type annotation for coroutines [check!]
+	- Put in subtyping rules for functions and coroutines [check!]
+- We need to move iteration logic into the condition scope [check!]
+	- This means that it will no longer be a simple expression [check!]
+	- However, it will still be a single block [check!]
+- Implement hex literals [check!]
+- Require that unitialized variables be nullable types [check!]
+- Coroutine type should reflect call parameters [check!]
+- Require that uninitialized variables be nilable [check!]
+- Add a tuple type [check!]
+	- Add to IR [check!]
+	- Add to grammar [check!]
+	- Add to AST [check!]
+	- Add indexing [check!]
+	- Add type annotation [check!]
+	- Add subtyping rules [check!]
+- Ideally we don't have to codegen all imports [check!]
+	- Codegen only interfaces for imported files [check!]
+- Remove use of 'schema' [check!]
+- Add type parameters to grammar [check!]
+- Add type parameters to FatPtr type [check!]
+- Add type parameters to ClassDef [check!]
+- Shouldn't need to initialize nilable members with nil [check!]
+- Have exceptions store the file and line number of where they were thrown from [check!]
+	- And an error message as well [check!]
+	- Store file name along with line number in every AST node [check!]
+- Simplify casting [check!]
+- Add boxing and unboxing functionality [check!]
+- store the size_in_bytes (gep calculated) in the vtable prelude [check!]
+- Add store_in_buffer and from_buffer primitives [check!]
+- Shift direct_supertypes to types rather than strings [check!]
+- Shift .ancestors() and .my_ordering() froms string to types and classdefs [check]
+- Add TypeParameter to dialect [check!]
+- Add type inference for generic methods [check!]
+- Check method arguments based on instantiated type [check!]
+- Fix loads and stores of aggregates [check!]
+- Add explicit type bounds to the grammar [check!]
+- Add generic parameters to class definition grammar [check!]
+	- Will need to recast inheritance list in terms of types rather than names [check!]
+	- T is implicitly T <: Object [check!]
+	- Add a slot for type paramters to FatPtr [check!]
+- Get basic generics working [check!] [woohoo!]
+- Explore extending instantiated generics [check!]
+	- Easy enough to pass the supertype list through the alias filter [check!]
+- Reabstraction thunks [check!]
+- Change unions to use first word for vptr [check!]
+- Fix coroutine bugs [check!]
+- Change unwrap to recursively unwrap [check!]
+- Shrink FatPtr unions to 224 bits [check!]
+- Store compile-time known strings in globals and use memcpy to assign [check!]
+- Fix bugs [check!]
+- Convert union-with-nil typecheck to vptr equality [check!]
+- Shift TypeParameter to { ptr, i160 } interface [check!]
+- Zero cost generics! [check!]
+- Overhaul dispatch system to use predicate dispatch [check!]
+- Refactor casting [check!]
+- Add tuple subtyping rules [check!]
+- Implement tuple casting [check!]
+- Add method type parameters [check!]
+	- Add to the grammar [check!]
+	- Incorporate in type checking [check!]
+- Fix buffer indexation [check!]
+- Two-stage specialization/casting: intra-behavior and between overrides [check!]
+- Drop overridden methods from behaviors [check!]
+	- Handle casts of parameters and return values [check!]
+	- Unify so special logic in dispatch not needed [check!]
+	- Will also remove special logic from instantiation [check!]
+- Switch to { ptr, i128, i32 } interface [check!]
+	- Need to address places where used interchangeably with Union [check!]
+- Clean up override system
+	- is_override_of method [check!]
+	- use for minimizing behaviors [check!]
+	- use for broad return type [check!]
+- Each method knows about what method definitions it overrides [check!]
+	- And can interpret their types in their defining class's scope [check!]
+	- Should be calculated prior to behaviors and vtables; used in their construction [check!]
+	- Store a list of overridden definitions [check!]
+	- Methods also define their broad parameter and return types [check!]
+- Inheriting from an instantiated generic should alias with the concrete type, not a bounded parameter [check!]
+	- We will need to track for each method those methods it specializes [check!]
+- Remove superfluous methods from behaviors and vtables [check!]
+- Set offsets on TypeParameters [check!]
+	- Upon boxing and upon casting [check!]
+- Allow method calls on instances of TypeParameter [check!]
+- Implement type parameters constraints [check!]
+	- Need to actually use the offset field [check!]
+- Cast type parameters to their bounds [check!]
+- Add fields for type parameters [check!]
+- Store concrete type parameters on object creation [check!]
+- Set stored type parameters as invariant [check!]
+- Pass type fields from self to new [check!]
+
+TODO:
+
+- Pass types from method context to new
+- Think about how actually to handle union type parameters
+- We need a mapping between types available to init() and type fields
+- Implement type parameter deduction from init()
+- Make sure that type bounds are applied generally
+- Where clauses for method type parameters
+- Figure out signature compatibility of overrides of generic parameters
+- Store type parameters as fields and access via vtable
+	- Organize type parameter overloads for each class [check!]
+	- Produce flat list of type parameters for each instance
+		- At time of creation
+		- Need to borrow type parameters from context
+		- Both class and method context
+- Figure out a way to get methods into builtin vtables
+	- Define intrinsics for operations on boxed interfaces
+	- Move Object and certain blessed classes to box interface
+	- Not sure it is actually necessary to have a special boxed interface for certain classes
+- Shift array and range literals to new generics
+	- Will need to do buffer optimization first for array
+	- And to do buffer optimization we need stored type parameters
+- Add file name to error messages
+- Make nil its own ancestor
+- Make intrinsics better
+- Buffer! Buffer! Buffer!
+- Think generally about the ordering of outlining and inlining
+- Make sure abstract methods don't override concrete methods
+
+- Think about how Buffer[T] works
+	- Take the generic vptr from the self fatptr to get the size_in_bytes
+- Implement generic buffer operations
+
+- Magic buffer methods
+	- store_in_buffer and create_from_buffer just need that size_in_bytes to work
+	- Store generic fields as boxed
+	- Just use unboxed for actually storing in buffer
+	- assignments with T in rhs would codegen directly to store_in_buffer
+
+- Inheriting from an instantiated generic might require storing that type parameter at runtime
+	- We could instead store it in the vtable or modify the stored subtype functions
+	- Modifying the subtype function may be the most reasonable way to do it
+
+- Allow multiple type checks in one condition
+- Tighten up return type inference for function literals
+	- You can't have a bare return and a return value in the same literal
+	- Should we disallow all return statements in literals?
+- Add tuple destructuring
+- Check for mismatched yield types
+- Allow capturing class methods
+	- Will introduce A.b syntax
+	- A.b will also denote module-qualified names
+- Shift Functions and Coroutines to FatPtr interface
+	- Store the fptr in the second word
+- Don't unnecessarily duplicate behaviors
+- Cast literals when passing as arguments
+- Narrow alternate path in branches
+	- The main motivation is to be able to pare off nil with "while x is Nil { yield(Exception); }"
+	- If the condition of a while is a type check then that type can be pared off after the loop
+	- We know that some intersections are uninhabitable (especially with nil)
+	- Therefore we know that 'if x is Nil' implies that it is non-nil in the other branch
+	- We know the intersection of a union with a negation of one of its members
+- Make sure that c3 linearization interacts properly with imports
+- Implement integer-float binary operations
+- When call is statically known, narrow result types
+	- Casting is needed (from behavior return type to narrowed return type)
+	- If the intersection of the argument/parameter types is uninhabitable, that overload is ruled out
+- Skip behavior call when all arguments are builtin types
+- Both coroutines and funcs should inherit Callable[-T, +U]
+- Actually free coroutine stacks
+- Rewrite in PDL!
+	- Block / region transformation needs to happen prior
+	- Then textual substitution can happen after
+
+# --- Known Bugs ---
+
+- There's a bug in lowering early returns in else clauses [fixed!]
+- Casting to/from Object in unions is not correct [fixed!]
+- .all() is clearly not correct [fixed!]
+- Declaring a variable without assigning to it is buggy [fixed!]
+- Must distinguish union and tuple types in lowering [fixed!]
+- Union sizing may not be technically correct for tuples because of padding
+- Blocked matmul always fails
+- If I compile with -O0 it hangs
+
+# --- Problems ---
+
+- Think about how multiple dispatch works with function types
+	- Or more generally, how inheritance order precedence applies to type parameters
+	- For Pair[+T, +U], which of Pair[Fish, Crocodile], and Pair[Shark, Reptile] is more specific for Pair[Shark, Crocodile] ?
+	- We could go based on textual order, making Pair[Shark, Reptile] more specific
+	- This would in principle allow (and incentivize) people to be intentional about the ordering of generic parameters
+	- A function needs to store its type parameters
+- The central idea is that within a confusable set, there exists a natural ordering of types
+- If any two types in a confusable set have incompatible inheritence orders, then there is no order
+- Rather than saying two methods are confusable if, for each pair of parameters, there exists a common subtype, we ought to say
+	- That two methods are confusable if it not *illegal* for there to be a common subtype for each pair of parameters
+- Currently, if an argument is passed which is a subtype of multiple parameter types, the dispatch will be arbitrary
+- We will need to be able to perform runtime subtype checks of parameterized types
+- This subtype test will be stored in the parameterized type's vtable
+- The subtype test will probably take a parameter for the number of type parameters
+- GLB with intersection types
+	- GLB includes two intersections of each pair (of classes) in the set of types for the parameter
+	- These intersections can be split into overlapping subsets representing different consistent hierarchies
+	- Intersections not in the same subset are guaranteed to be mutually exclusive possibilities
+	- Mutually exclusive possibilities can be checked consecutively with early exit
+	- Intersections within a subset agree on the precedence of the types, and can be checked consecutively with early exit
+	- Type narrowing implies that there will be variables whose static type is an intersection
+- Runtime subtyping tests for unions in overload
+	- We may actually want to disallow unions in parameter types
+	- This is because a union multiply inherits without specifying its inheritance order
+	- Alternatively, we can treat the textual order of the union as semantically relevant
+- Delegation
+	- We could pass TWO self pointers into all methods [check!]
+	- Need to provide a named field for each delegatee
+	- Normal initialization rules will apply
+	- Need to synthesize forwarding methods which use open recursion
+	- Should not inherit init method from delegates
+	- Field accesses do not use open recursion because fields cannot be overridden
+	- Allow only a single reference-type delegate
+		- This would ensure that there is no duplication of fields
+		- Still allows for multiple Struct delegates
+		- This seems reasonable-- a struct delegate is basically just inheritance with preconstruction
+		- Is there any reason to be able to refer to a struct delegate directly?
+		- Just seems like a hack to not have to override constructors
+		- Also we can't actually not inherit init methods for delegates
+	- Alternatively, disallow multiple delegates with conflicting fields
+		- There are still issues with methods
+		- Could disallow all ambiguity between delegates
+- Constructors
+	- There's the Self.new() design choice to work with
+	- T.alloc could return Uninitialized[T], which has one method, init
+	- Uninitialized[T].init() -> T
+	- Uninitialized would need to be a builtin type that forwards .init() calls
+
+# --- Possibilities ---
+
+- Inheriting from Sentinel (or do Struct types solve this)
+- Bare 'yield();' should yield the coroutine itself?
+- Specifying that a class cannot be inherited alongside another class
+- Recursive aliases?
+- Overloading *functions*
+- Propagate type information backwards?
+- Switch statements?
+- Enums?
+- Enable copying of coroutines
+	- Would have to copy the whole stack
+	- Would also have to know the actual stack size
+	- Which, if we stored the top of the stack in the coroutine, would be easy
+
+# --- later on ---
+
+- FFI
+- Struct Types
+	- How much would struct types actually entail?
+	- virtual calls resolve to static calls
+	- allocated on stack
+	- value semantics
+	- subtype test is vptr equality
+	- this seems fairly straightforward?
+	- Except that value semantics for self is immensely complicated
+	- How to pass self to virtual calls requires change
+	- Basically requires generating a struct version of the class
+- Regions
+- Generics
+	- Store type T as implicit member, use to construct instances of T
+	- No monomorphization
+	- Implicit conversion to type constraint (by default Object)
+	- Small buffer optimization for small struct types
+	- Variadic generics
+	- Roadmap
+		- start with simplistic runtime subtype checks
+		- migrate builtin generic types to uniform interface
+		- start with invariance for subtyping
+		- start by implementing the magic buffer methods for existing types
+		- what's important is that these methods are available in the vtable
+		- Maybe I should start by making everything a subtype of Object
+- Multithreading
+	- Can't use RAII for scoped mutexes
+	- But manually locked and unlocked mutexes are fine
+
+class Uninitialized[T] {
+	@allocated : T
+	def init() -> T {
+		@allocated.init();
+	}
+}
+
+class Object {
+	def Self.from_data_buffer(buf : Buffer[i8], start_index : i32) -> Self {
+		return magic_from_data_buffer(buf, start_index, Self.size_in_bytes());
+	}
+	def Self.size_in_bytes() -> i32 {
+		return magic_size_in_bytes(self);
+	}
+	def place_in_buffer(buffer : Buffer[i8], start_index : i32) {
+		magic_place_into_buffer(self, buffer, start_index);
+	}
+}
+
+class Array[T] {
+
+	@buffer : Buffer[T]
+	@size : i32
+	@capacity : i32
+
+	@T : Type	// implicit type member
+
+	def init[T] (@buffer : Buffer[T], @size : i32, @capacity : i32) {
+		// @T implicitly initialized with [T]
+	}
+	def [](i : i32) -> T {
+		return T.from_data_buffer(@buffer, T.size_in_bytes() * i);
+	}
+}
+
+consider a signature that takes a function of type f : Function[i32, Animal]
+since functions are covariant in return type and contravariant in argument type, a function of type Function[i32, Shark] should be able to be passed in
+can the offset be appropriately set?
+it may actually be more correct when the type parameter is passed in by the call and not at instantiation
+or at least the type parameter has to be updated upon upcast
+in which case is there even any difference?
+	- cost of upcast
+	- storage cost of extra member
+	- indirection cost of obtaining type member
+	- there's more to this...
+
+the offset cannot be known statically unless it is carried as a member

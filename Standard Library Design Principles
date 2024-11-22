@@ -1,0 +1,29 @@
+Standard Library Design Principles
+
+- Types should make guarantees about time and space complexity
+- Types should attempt to synthesize as many capabilities as possible from as little information as possible
+	- Example: anything iterable can also be mapped or filtered, so we can provide a general Iterable.filter method that only depends on the existence of a concrete iterator for a type extending Iterable
+	- Anything indexable with iterable indices can be iterated by iterating over the indices and indexing with each one
+	- All other comparison operators can be derived from merely the definition of == and <
+	- Et cetera
+- While examples surrounding iteration are used here for illustration, the standard library is not just about iteration
+- The more information we have, the better guarantees we can make about the performance characteristics of these synthesized capabilities
+	- Example: if something can be indexed in constant time, then it can be iterated in linear time
+- Short suggestive names are better than verbose names
+	- Example: "Sequence" is a better name than "OrderedCollection"
+	- (this isn't to pass judgment on whether Sequence is necessarily the best abstraction)
+	- Even if the names haven't been used in a programming context before!
+	- I would even encourage some charming colloquial names if they fit the abstraction
+- If a combination of characteristics enables a new time/space tradeoff or opportunity, it should be reified into its own type
+	- Example: If a collection is finite and constant-time indexable, then we can iterate over it backwards in linear time
+	- This provides a litany of opportunities for coming up more charming names than "BackwardsIterableLinearTime"
+- Standard library types for literals should be split into a standard interface and a default implementation
+	- standard interface: Array[T]
+	- default implementation: DefaultArray[T] extends Array[T]
+	- standard interfaces should not define fields
+	- Literals desugar to default implementations
+	- Aliases can be used to change which default implementations are used within a scope
+	- This hopefully enables people to write better implementations of standard interfaces
+- Iterator invalidation
+	- Modifying an iterable while iterating over it is allowed to cause unexpected behavior, but not memory unsafety
+	- No way to cause out-of-bounds accesses from invalidated iterators

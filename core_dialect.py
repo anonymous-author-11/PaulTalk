@@ -1,0 +1,1194 @@
+from xdsl.context import MLContext
+from xdsl.ir import OpResult, Attribute, Dialect, TypeAttribute, Block, Region
+from xdsl.irdl import (
+    IRDLOperation,
+    irdl_op_definition,
+    irdl_attr_definition,
+    operand_def,
+    result_def,
+    attr_def,
+    Operand,
+    region_def,
+    Region,
+    VarRegion,
+    var_region_def,
+    VarOperand,
+    var_operand_def,
+    VarResultDef,
+    var_result_def,
+    opt_region_def,
+    OptRegionDef,
+    ParametrizedAttribute,
+    ParameterDef,
+    prop_def,
+    opt_prop_def,
+    OptOperandDef,
+    opt_operand_def,
+    OptAttributeDef,
+    opt_attr_def,
+    successor_def,
+    Successor,
+    OptResultDef,
+    opt_result_def
+)
+from xdsl.dialects.builtin import IntegerType, IntegerAttr, NoneAttr, StringAttr, ArrayAttr, Float64Type, SymbolRefAttr, UnitAttr, AnyIntegerAttr, DenseArrayBase, FunctionType
+from xdsl.dialects import llvm, func, builtin
+from xdsl import traits
+from xdsl.traits import SymbolOpInterface
+from xdsl.printer import Printer
+import random
+
+def random_letters(n):
+    return "".join(random.choices('abcdefghijklmnopqrstuvwxyz', k=n))
+
+# Return type size in bits
+def type_size(typ: TypeAttribute) -> int:
+    result = 0
+    if typ == Nil(): return 0
+    if typ == llvm.LLVMPointerType.opaque(): return 64
+    if isinstance(typ, Union):
+        result = typ.max_size().bitwidth + 64
+        return result
+    if isinstance(typ, Buffer) or isinstance(typ, Coroutine) or isinstance(typ, Function):
+        return 64
+    if isinstance(typ, Tuple):
+        result = sum(type_size(member) for member in typ.types)
+        return result
+    if isinstance(typ, llvm.LLVMStructType):
+        result = sum(type_size(member) for member in typ.types)
+        return result
+    if isinstance(typ, llvm.LLVMArrayType):
+        result = type_size(typ.type) * typ.size.data
+        return result
+    if isinstance(typ, FatPtr):
+        return 160
+    if isinstance(typ, TypeParameter):
+        return 160
+    if isinstance(typ, IntegerType) or isinstance(typ, Float64Type):
+        result = typ.bitwidth
+        return result
+    if isinstance(typ.type, IntegerType) or isinstance(typ.type, Float64Type):
+        result = typ.type.bitwidth
+        return result
+    raise Exception("not a recognized type!")
+
+@irdl_attr_definition
+class TypeParameter(ParametrizedAttribute, TypeAttribute):
+    name = "mini.type_param"
+    label: ParameterDef[StringAttr]
+    bound: ParameterDef[TypeAttribute]
+    defining_class: ParameterDef[StringAttr]
+
+    @classmethod
+    def make(cls, label, defining_class, bound=None):
+        while isinstance(bound, TypeParameter): bound = bound.bound
+        return TypeParameter([StringAttr(label), bound or FatPtr.basic('Object'), StringAttr(defining_class)])
+
+    def base_typ(self):
+        return llvm.LLVMStructType.from_type_list([
+            llvm.LLVMPointerType.opaque(),
+            IntegerType(128),
+            IntegerType(32)
+        ])
+
+    def __repr__(self):
+        return f"{self.defining_class.data}.{self.label.data} <: {self.bound}"
+
+    def __format__(self, format_spec):
+        return f"{self.defining_class.data}.{self.label.data} <: {self.bound}"
+
+    def __eq__(self, other):
+        if not isinstance(other, TypeParameter): return False
+        result = self.label == other.label and self.bound == other.bound and self.defining_class == other.defining_class
+        return result
+
+@irdl_attr_definition
+class Ptr(ParametrizedAttribute, TypeAttribute):
+    name = "mini.ptr"
+    type: ParameterDef[TypeAttribute]
+
+    def base_typ(self):
+        return self.type
+
+    def __repr__(self):
+        return f"Ptr[{self.type}]"
+
+    def __format__(self, format_spec):
+        return f"Ptr[{self.type}]"
+
+@irdl_attr_definition
+class FatPtr(ParametrizedAttribute, TypeAttribute):
+    name = "mini.fatptr"
+    cls: ParameterDef[StringAttr]
+    type_params: ParameterDef[ArrayAttr[TypeAttribute] | NoneAttr]
+
+    @classmethod
+    def basic(cls, name):
+        return FatPtr([StringAttr(name), NoneAttr()])
+
+    @classmethod
+    def generic(cls, name, types):
+        if len(types) == 0: return FatPtr.basic(name)
+        return FatPtr([StringAttr(name), ArrayAttr(types)])
+
+    def base_typ(self):
+        return llvm.LLVMStructType.from_type_list([
+            llvm.LLVMPointerType.opaque(),
+            llvm.LLVMPointerType.opaque(),
+            llvm.LLVMPointerType.opaque(),
+            IntegerType(32)
+        ])
+
+    def __repr__(self):
+        return f"{self.cls.data}" + ((f"{[*self.type_params.data]}") if not isinstance(self.type_params, NoneAttr) else "")
+
+    def __format__(self, format_spec):
+        return f"{self.cls.data}" + ((f"{[*self.type_params.data]}") if not isinstance(self.type_params, NoneAttr) else "")
+
+    def __eq__(self, other):
+        if not isinstance(other, FatPtr): return False
+        if self.cls != other.cls: return False
+        if self.type_params == NoneAttr() and other.type_params == NoneAttr(): return True
+        if self.type_params == NoneAttr() and other.type_params != NoneAttr(): return False
+        if self.type_params != NoneAttr() and other.type_params == NoneAttr(): return False
+        zipped = zip(self.type_params.data, other.type_params.data)
+        return all((a == b) if (not isinstance(a, TypeParameter) or not isinstance(b, TypeParameter)) else (a.label == b.label and a.bound == b.bound) for (a,b) in zipped)
+
+    def print_parameters(self, printer: Printer) -> None:
+        printer.print_string("<")
+        printer.print_attribute(self.cls)
+        if not isinstance(self.type_params, NoneAttr):
+            printer.print_string(", ")
+            printer.print_attribute(self.type_params)
+        printer.print_string(">")
+
+@irdl_attr_definition
+class ReifiedType(ParametrizedAttribute, TypeAttribute):
+    name = "mini.reified_type"
+
+    def base_typ(self):
+        return llvm.LLVMPointerType.opaque()
+
+@irdl_attr_definition
+class Tuple(ParametrizedAttribute, TypeAttribute):
+    name = "mini.tuple"
+    types: ParameterDef[ArrayAttr]
+
+    def base_typ(self):
+        return llvm.LLVMStructType.from_type_list([t.base_typ() for t in self.types.data])
+
+    def __repr__(self):
+        return f"Tuple[{self.types.data}]"
+
+    def __format__(self, format_spec):
+        return f"Tuple[{self.types.data}]"
+
+@irdl_attr_definition
+class Callable(ParametrizedAttribute, TypeAttribute):
+    name = "mini.callable"
+    param_types: ParameterDef[ArrayAttr]
+    yield_type: ParameterDef[TypeAttribute]
+    return_type: ParameterDef[TypeAttribute]
+
+    def base_typ(self):
+        return llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque()])
+
+    def fname(self):
+        return "Callable"
+
+    def __repr__(self):
+        params = ", ".join([f"{t}" for t in self.param_types.data])
+        return self.fname() + f"[{params} -> {self.return_type}]"
+
+    def __format__(self, format_spec):
+        params = ", ".join([f"{t}" for t in self.param_types.data])
+        return self.fname() + f"[{params} -> {self.return_type}]"
+
+@irdl_attr_definition
+class Coroutine(ParametrizedAttribute, TypeAttribute):
+    name = "mini.coroutine"
+    param_types: ParameterDef[ArrayAttr]
+    yield_type: ParameterDef[TypeAttribute]
+    return_type: ParameterDef[TypeAttribute]
+
+    def base_typ(self):
+        return llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque()])
+
+    def fname(self):
+        return "Coroutine"
+
+    def __repr__(self):
+        params = ", ".join([f"{t}" for t in self.param_types.data])
+        return self.fname() + f"[{params} -> {self.return_type}]"
+
+    def __format__(self, format_spec):
+        params = ", ".join([f"{t}" for t in self.param_types.data])
+        return self.fname() + f"[{params} -> {self.return_type}]"
+
+@irdl_attr_definition
+class Function(ParametrizedAttribute, TypeAttribute):
+    name = "mini.function"
+    param_types: ParameterDef[ArrayAttr]
+    yield_type: ParameterDef[TypeAttribute]
+    return_type: ParameterDef[TypeAttribute]
+
+    def base_typ(self):
+        return llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque()])
+
+    def fname(self):
+        return "Function"
+
+    def __repr__(self):
+        params = ", ".join([f"{t}" for t in self.param_types.data])
+        return self.fname() + f"[{params} -> {self.return_type}]"
+
+    def __format__(self, format_spec):
+        params = ", ".join([f"{t}" for t in self.param_types.data])
+        return self.fname() + f"[{params} -> {self.return_type}]"
+
+@irdl_attr_definition
+class Buffer(ParametrizedAttribute, TypeAttribute):
+    name = "mini.buffer"
+    elem_type: ParameterDef[TypeAttribute]
+
+    def base_typ(self):
+        return llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque()])
+
+    def __repr__(self):
+        return f"Buffer[{self.elem_type}]"
+
+    def __format__(self, format_spec):
+        return f"Buffer[{self.elem_type}]"
+
+@irdl_attr_definition
+class Union(ParametrizedAttribute, TypeAttribute):
+    name = "mini.union"
+    types: ParameterDef[ArrayAttr]
+
+    def base_typ(self) -> TypeAttribute:
+        if len(self.types.data) == 0: return llvm.LLVMVoidType()
+        return llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque(), self.max_size()])
+
+    def max_size(self) -> IntegerType:
+        return IntegerType(max(type_size(typ) for typ in self.types.data))
+    
+    @classmethod
+    def from_list(cls, list):
+        return Union([ArrayAttr(list)])
+
+    def __repr__(self):
+        return " | ".join([f"{t}" for t in self.types.data])
+
+    def __format__(self, format_spec):
+        return " | ".join([f"{t}" for t in self.types.data])
+
+    def __eq__(self, other):
+        if not isinstance(other, Union): return False
+        return {*self.types.data} == {*other.types.data}
+
+@irdl_attr_definition
+class Intersection(ParametrizedAttribute, TypeAttribute):
+    name = "mini.intersection"
+    types: ParameterDef[ArrayAttr]
+
+    @classmethod
+    def from_list(cls, list):
+        return Intersection([ArrayAttr(list)])
+
+    def __repr__(self):
+        return " & ".join([f"{t}" for t in self.types.data])
+
+    def __format__(self, format_spec):
+        return " & ".join([f"{t}" for t in self.types.data])
+
+    def __eq__(self, other):
+        if not isinstance(other, Intersection): return False
+        return {*self.types.data} == {*other.types.data}
+
+@irdl_attr_definition
+class StackAlloc(ParametrizedAttribute, TypeAttribute):
+    name = "mini.stackalloc"
+    type: ParameterDef[Attribute]
+
+@irdl_attr_definition
+class Nothing(ParametrizedAttribute, TypeAttribute):
+    name = "mini.nothing"
+
+    def __repr__(self):
+        return "Nothing"
+
+    def __format__(self, format_spec):
+        return "Nothing"
+
+@irdl_attr_definition
+class Any(ParametrizedAttribute, TypeAttribute):
+    name = "mini.any"
+
+    def __repr__(self):
+        return "Any"
+
+    def __format__(self, format_spec):
+        return "Any"
+
+@irdl_attr_definition
+class Nil(ParametrizedAttribute, TypeAttribute):
+    name = "mini.nil"
+    def base_typ(self):
+        return llvm.LLVMArrayType.from_size_and_type(0, IntegerType(8))
+
+    def __repr__(self):
+        return "Nil"
+
+    def __format__(self, format_spec):
+        return "Nil"
+
+@irdl_op_definition
+class PreludeOp(IRDLOperation):
+    name = "mini.prelude"
+
+@irdl_op_definition
+class MainOp(IRDLOperation):
+    name = "mini.main"
+    body : Region = region_def()
+
+@irdl_op_definition
+class IdentifierOp(IRDLOperation):
+    name = "mini.identifier"
+    result: OpResult = result_def(Ptr([IntegerType(32)]))
+
+@irdl_op_definition
+class TypeDefOp(IRDLOperation):
+    name = "mini.typedef"
+    class_name: StringAttr = attr_def(StringAttr)
+    methods: ArrayAttr = attr_def(ArrayAttr)
+    hash_tbl: ArrayAttr = attr_def(ArrayAttr)
+    offset_tbl: ArrayAttr = attr_def(ArrayAttr)
+    prime: IntegerAttr = attr_def(IntegerAttr)
+    hash_id: IntegerAttr = attr_def(IntegerAttr)
+    linkage: OptAttributeDef = opt_attr_def(StringAttr)
+    base_typ: TypeAttribute = attr_def(TypeAttribute)
+
+@irdl_op_definition
+class ExternalTypeDefOp(IRDLOperation):
+    name = "mini.external_typedef"
+    class_name: StringAttr = attr_def(StringAttr)
+    vtbl_size: IntegerAttr = attr_def(IntegerAttr)
+
+@irdl_op_definition
+class TypeIntegersTableOp(IRDLOperation):
+    name = "mini.type_integers"
+    hash_id: IntegerAttr = attr_def(IntegerAttr)
+    prime: IntegerAttr = attr_def(IntegerAttr)
+    tbl_size: IntegerAttr = attr_def(IntegerAttr)
+    result: OpResult = result_def()
+
+@irdl_op_definition
+class MemCpyOp(IRDLOperation):
+    name = "mini.memcpy"
+    source: Operand = operand_def()
+    dest: Operand = operand_def()
+    type: TypeAttribute = attr_def(TypeAttribute)
+    no_pad: OptAttributeDef = opt_attr_def(UnitAttr)
+
+    @classmethod
+    def make(cls, source, dest, type, no_pad=False):
+        attr_dict = {"type":type}
+        if no_pad: attr_dict["no_pad"] = UnitAttr()
+        return MemCpyOp.create(operands=[source, dest], attributes=attr_dict)
+
+@irdl_op_definition
+class TypePtrsTableOp(IRDLOperation):
+    name = "mini.type_ptrs"
+    subtype_test: StringAttr = attr_def(StringAttr)
+    hash_tbl: StringAttr = attr_def(StringAttr)
+    offset_tbl: StringAttr = attr_def(StringAttr)
+    result: OpResult = result_def()
+    base_typ: TypeAttribute = attr_def(TypeAttribute)
+
+@irdl_op_definition
+class VtableOp(IRDLOperation):
+    name = "mini.vtable"
+    methods: ArrayAttr = attr_def(ArrayAttr)
+    result: OpResult = result_def()
+
+@irdl_op_definition
+class HashTableOp(IRDLOperation):
+    name = "mini.hash_tbl"
+    class_name: StringAttr = attr_def(StringAttr)
+    tbl: ArrayAttr = attr_def(ArrayAttr)
+
+@irdl_op_definition
+class OffsetTableOp(IRDLOperation):
+    name = "mini.offset_tbl"
+    class_name: StringAttr = attr_def(StringAttr)
+    tbl: ArrayAttr = attr_def(ArrayAttr)
+
+@irdl_op_definition
+class PlaceIntoBufferOp(IRDLOperation):
+    name = "mini.place_into_buffer"
+    fat_ptr: Operand = operand_def()
+    buf: Operand = operand_def()
+
+@irdl_op_definition
+class FromBufferOp(IRDLOperation):
+    name = "mini.from_buffer"
+    vptr: Operand = operand_def()
+    buf: Operand = operand_def()
+    result: OpResult = result_def()
+
+@irdl_op_definition
+class LiteralOp(IRDLOperation):
+    name = "mini.literal"
+    typ: Attribute = attr_def(Attribute)
+    value: Attribute = attr_def(Attribute)
+    result: OpResult = result_def(Ptr)
+
+@irdl_op_definition
+class AllocateOp(IRDLOperation):
+    name = "mini.alloc"
+    typ: TypeAttribute = attr_def(TypeAttribute)
+    result: OpResult = result_def(Ptr)
+
+@irdl_op_definition
+class InvariantOp(IRDLOperation):
+    name = "mini.invariant"
+    ptr: Operand = operand_def()
+    result: OpResult = result_def()
+    num_bytes: IntegerAttr = attr_def(IntegerAttr)
+
+    @classmethod
+    def make(cls, ptr, num_bytes):
+        return InvariantOp.create(
+            operands=[ptr],
+            attributes={"num_bytes":IntegerAttr.from_int_and_width(num_bytes, 64)},
+            result_types=[llvm.LLVMPointerType.opaque()]
+        )
+
+@irdl_op_definition
+class BufferIndexationOp(IRDLOperation):
+    name = "mini.buffer_indexation"
+    receiver: Operand = operand_def()
+    index: Operand = operand_def()
+    result: OpResult = result_def()
+    typ: TypeAttribute = attr_def(TypeAttribute)
+
+@irdl_op_definition
+class TupleIndexationOp(IRDLOperation):
+    name = "mini.tuple_indexation"
+    receiver: Operand = operand_def()
+    index: IntegerAttr = attr_def(IntegerAttr)
+    result: OpResult = result_def()
+    typ: TypeAttribute = attr_def(TypeAttribute)
+
+@irdl_op_definition
+class PDLOps(IRDLOperation):
+    name = "mini.pdl_ops"
+
+@irdl_op_definition
+class AddrOfOp(IRDLOperation):
+    name = "mini.addr_of"
+    global_name: SymbolRefAttr = attr_def(SymbolRefAttr)
+    result: OpResult = result_def(llvm.LLVMPointerType.opaque())
+
+    @classmethod
+    def from_string(cls, string):
+        return AddrOfOp.create(attributes={"global_name":SymbolRefAttr(string)}, result_types=[llvm.LLVMPointerType.opaque()])
+
+    @classmethod
+    def from_symbol(cls, symbol):
+        return AddrOfOp.create(attributes={"global_name":symbol}, result_types=[llvm.LLVMPointerType.opaque()])
+
+    @classmethod
+    def from_stringattr(cls, stringattr):
+        return AddrOfOp.create(attributes={"global_name":SymbolRefAttr(stringattr.data)}, result_types=[llvm.LLVMPointerType.opaque()])
+
+@irdl_op_definition
+class MallocOp(IRDLOperation):
+    name = "mini.malloc"
+    typ: TypeAttribute = attr_def(TypeAttribute)
+    result: OpResult = result_def(Ptr)
+
+@irdl_op_definition
+class UtilsAPIOp(IRDLOperation):
+    name = "mini.utils_api"
+
+@irdl_op_definition
+class CoroCreateOp(IRDLOperation):
+    name = "mini.coro_create"
+    func: Operand = operand_def()
+    args: VarOperand = var_operand_def()
+    result: OpResult = result_def(Ptr)
+    arg_passer: SymbolRefAttr = attr_def(SymbolRefAttr)
+    buffer_filler: SymbolRefAttr = attr_def(SymbolRefAttr)
+
+@irdl_op_definition
+class CoroCallOp(IRDLOperation):
+    name = "mini.coro_call"
+    coro: Operand = operand_def(Ptr)
+    value: OptOperandDef = opt_operand_def()
+    result: OptResultDef = opt_result_def()
+
+@irdl_op_definition
+class CoroYieldOp(IRDLOperation):
+    name = "mini.coro_yield"
+    value: OptOperandDef = opt_operand_def()
+    result: OptResultDef = opt_result_def()
+
+@irdl_op_definition
+class CoroGetResultOp(IRDLOperation):
+    name = "mini.coro_get_result"
+    coro: Operand = operand_def()
+    result: OpResult = result_def()
+
+@irdl_op_definition
+class CoroSetResultOp(IRDLOperation):
+    name = "mini.coro_set_result"
+    coro: Operand = operand_def()
+    value: Operand = operand_def()
+
+@irdl_op_definition
+class SubtypeOp(IRDLOperation):
+    name = "mini.subtype"
+    subtype_inner: Operand = operand_def()
+    tbl_size: Operand = operand_def()
+    hash_coef: Operand = operand_def()
+    cand_id: Operand = operand_def()
+    candidate: Operand = operand_def()
+    supertype_tbl: Operand = operand_def()
+    result: OpResult = result_def()
+
+@irdl_op_definition
+class TypeSizeOp(IRDLOperation):
+    name = "mini.type_size"
+    typ: TypeAttribute = attr_def(TypeAttribute)
+    result: OpResult = result_def()
+
+@irdl_op_definition
+class CreateBufferOp(IRDLOperation):
+    name = "mini.create_buffer"
+    typ: TypeAttribute = attr_def(TypeAttribute)
+    size: Operand = operand_def()
+    result: OpResult = result_def()
+
+@irdl_op_definition
+class CreateTupleOp(IRDLOperation):
+    name = "mini.create_tuple"
+    values: VarOperand = var_operand_def()
+    typ: TypeAttribute = attr_def(TypeAttribute)
+    result: OpResult = result_def()
+
+@irdl_op_definition
+class MethodCallLike(IRDLOperation):
+    name = "mini.method_call_like"
+    args: VarOperand = var_operand_def()
+    result: OpResult = result_def()
+    offset: IntegerAttr = attr_def(IntegerAttr)
+    vtable_size: IntegerAttr = attr_def(IntegerAttr)
+    vptrs: ArrayAttr = attr_def(ArrayAttr)
+    ret_type: TypeAttribute = attr_def(TypeAttribute)
+    ret_type_unq: TypeAttribute = attr_def(TypeAttribute)
+
+@irdl_op_definition
+class MethodCallOp(MethodCallLike, IRDLOperation):
+    name = "mini.method_call"
+    fat_ptr: Operand = operand_def(FatPtr)
+    traits = frozenset()
+
+    def get_fat_ptr(self):
+        return self.fat_ptr
+
+    def vptr(self):
+        dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
+        return llvm.ExtractValueOp(dense_ary, self.fat_ptr, llvm.LLVMPointerType.opaque())
+
+    def adjustment(self, vtable_buffer_size):
+        dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [3])
+        return llvm.ExtractValueOp(dense_ary, self.fat_ptr, IntegerType(32))
+
+    def all_args(self, ptr):
+        return [self.fat_ptr, ptr, *self.args]
+
+    def most_args(self):
+        return [self.fat_ptr, self.fat_ptr, *self.args]
+
+@irdl_op_definition
+class ClassMethodCallOp(MethodCallLike, IRDLOperation):
+    name = "mini.class_method_call"
+    class_name: StringAttr = attr_def(StringAttr)
+    traits = frozenset()
+
+    def get_fat_ptr(self):
+        return None
+
+    def vptr(self):
+        return AddrOfOp.from_stringattr(self.class_name)
+
+    def adjustment(self, vtable_buffer_size):
+        return llvm.ConstantOp(IntegerAttr.from_int_and_width(vtable_buffer_size, 32), IntegerType(32))
+
+    def all_args(self, ptr):
+        return [ptr, *self.args]
+
+    def most_args(self):
+        return self.args
+
+@irdl_op_definition
+class FieldAccessOp(IRDLOperation):
+    name = "mini.field_access"
+    fat_ptr: Operand = operand_def(FatPtr)
+    offset: IntegerAttr = attr_def(IntegerAttr)
+    vtable_size: IntegerAttr = attr_def(IntegerAttr)
+    result: OpResult = result_def(Ptr)
+
+@irdl_op_definition
+class GetterDefOp(IRDLOperation):
+    name = "mini.getter_def"
+    meth_name: StringAttr = attr_def(StringAttr)
+    struct_typ: TypeAttribute = attr_def(TypeAttribute)
+    offset: IntegerAttr = attr_def(IntegerAttr)
+
+@irdl_op_definition
+class ArgPasserOp(IRDLOperation):
+    name = "mini.arg_passer"
+    func_name: StringAttr = attr_def(StringAttr)
+    arg_types: ArrayAttr = attr_def(ArrayAttr)
+    yield_type: TypeAttribute = attr_def(TypeAttribute)
+    ret_type: OptAttributeDef = opt_attr_def(TypeAttribute)
+    ret_flag: OptAttributeDef = opt_attr_def(StringAttr)
+
+@irdl_op_definition
+class BufferFillerOp(IRDLOperation):
+    name = "mini.buffer_filler"
+    func_name: StringAttr = attr_def(StringAttr)
+    arg_types: ArrayAttr = attr_def(ArrayAttr)
+    yield_type: TypeAttribute = attr_def(TypeAttribute)
+
+@irdl_op_definition
+class NewOp(IRDLOperation):
+    name = "mini.new"
+    args: VarOperand = var_operand_def()
+    typ: TypeAttribute = attr_def(TypeAttribute)
+    class_name: Attribute = attr_def(StringAttr)
+    num_data_fields: IntegerAttr = attr_def(IntegerAttr)
+    type_ptrs: ArrayAttr = attr_def(ArrayAttr)
+    result: OpResult = result_def(Ptr)
+
+@irdl_op_definition
+class ReferOp(IRDLOperation):
+    name = "mini.refer"
+    value: Operand = operand_def()
+    result: OpResult = result_def()
+
+@irdl_op_definition
+class SetOffsetOp(IRDLOperation):
+    name = "mini.set_offset"
+    union: Operand = operand_def()
+    to_typ: SymbolRefAttr = attr_def(SymbolRefAttr)
+
+@irdl_op_definition
+class TypIDOp(IRDLOperation):
+    name = "mini.typid"
+    result: OpResult = result_def(Ptr)
+    typ_name: Attribute = attr_def(StringAttr)
+
+@irdl_op_definition
+class GetFlagOp(IRDLOperation):
+    name = "mini.getflag"
+    ptr: Operand = operand_def(Ptr)
+    struct_typ: TypeAttribute = attr_def(TypeAttribute)
+    result: OpResult = result_def(Ptr)
+
+@irdl_op_definition
+class SetFlagOp(IRDLOperation):
+    name = "mini.setflag"
+    ptr: Operand = operand_def(Ptr)
+    new_flag: OptOperandDef = opt_operand_def(Ptr)
+    struct_typ: TypeAttribute = attr_def(TypeAttribute)
+    typ_name: OptAttributeDef = opt_attr_def(StringAttr)
+
+@irdl_op_definition
+class CheckFlagOp(IRDLOperation):
+    name = "mini.checkflag"
+    ptr: Operand = operand_def(Ptr)
+    typ_name: Attribute = attr_def(StringAttr)
+    struct_typ: TypeAttribute = attr_def(TypeAttribute)
+    result: OpResult = result_def(Ptr)
+    neg: OptAttributeDef = opt_attr_def(UnitAttr)
+
+@irdl_op_definition
+class AssignOp(IRDLOperation):
+    name = "mini.assign"
+    target: Operand = operand_def()
+    value: Operand = operand_def()
+    typ: Attribute = attr_def(Attribute)
+
+@irdl_op_definition
+class PrintfDeclOp(IRDLOperation):
+    name = "mini.printfdecl"
+
+@irdl_op_definition
+class GlobalStrOp(IRDLOperation):
+    name = "mini.globalstr"
+    sym_name: StringAttr = attr_def(StringAttr)
+    str_type: TypeAttribute = attr_def(TypeAttribute)
+    value : StringAttr = attr_def(StringAttr)
+
+@irdl_op_definition
+class PrintOp(IRDLOperation):
+    name = "mini.print"
+    value: Operand = operand_def(Ptr([IntegerType(32)]))
+    typ: Attribute = attr_def(Attribute)
+    result: OpResult = result_def(IntegerType)
+
+@irdl_op_definition
+class PrintFOp(IRDLOperation):
+    name = "mini.printf"
+    fmt_ptr: Operand = operand_def()
+    msg: Operand = operand_def()
+    result: OpResult = result_def(IntegerType)
+
+@irdl_op_definition
+class ArithmeticOp(IRDLOperation):
+    name = "mini.arithmetic"
+    lhs : Operand = operand_def(IntegerType)
+    rhs : Operand = operand_def(IntegerType)
+    result : OpResult = result_def(IntegerType)
+    op : StringAttr = attr_def(StringAttr)
+
+@irdl_op_definition
+class ComparisonOp(IRDLOperation):
+    name = "mini.comparison"
+    lhs : Operand = operand_def(IntegerType)
+    rhs : Operand = operand_def(IntegerType)
+    result : OpResult = result_def(IntegerType(1))
+    op : StringAttr = attr_def(StringAttr)
+
+@irdl_op_definition
+class LogicalOp(IRDLOperation):
+    name = "mini.logical"
+    lhs : Operand = operand_def(IntegerType)
+    rhs : Operand = operand_def(IntegerType)
+    result : OpResult = result_def(IntegerType(1))
+    op : StringAttr = attr_def(StringAttr)
+
+@irdl_op_definition
+class WhileOp(IRDLOperation):
+    name = "mini.while"
+    before_region: Region = region_def()
+    loop_region: Region = region_def()
+    traits = frozenset([traits.NoTerminator()])
+
+@irdl_op_definition
+class IfOp(IRDLOperation):
+    name = "mini.if"
+    condition: Operand = operand_def()
+    then_region: Region = region_def()
+    else_region: OptRegionDef = opt_region_def()
+
+@irdl_op_definition
+class ReturnOp(IRDLOperation):
+    name = "mini.return"
+    value: OptOperandDef = opt_operand_def()
+
+@irdl_op_definition
+class BreakOp(IRDLOperation):
+    name = "mini.break"
+    to: Successor = successor_def()
+
+@irdl_op_definition
+class ContinueOp(IRDLOperation):
+    name = "mini.continue"
+    to: Successor = successor_def()
+
+@irdl_op_definition
+class FunctionDefOp(IRDLOperation):
+    name = "mini.func"
+    args_types: ArrayAttr[TypeAttribute] = attr_def(ArrayAttr[TypeAttribute])
+    result_types: ArrayAttr[TypeAttribute] = attr_def(ArrayAttr[TypeAttribute])
+    yield_type: TypeAttribute = attr_def(TypeAttribute)
+    func_name: StringAttr = attr_def(StringAttr)
+    body: Region = region_def()
+
+@irdl_op_definition
+class FunctionCallOp(IRDLOperation):
+    name = "mini.call"
+    func_name: StringAttr = attr_def(StringAttr)
+    args: VarOperand = var_operand_def()
+    results: VarResultDef = var_result_def()
+    ret_type: Attribute = attr_def(Attribute)
+
+@irdl_op_definition
+class FPtrCallOp(IRDLOperation):
+    name = "mini.fptr_call"
+    fptr: Operand = operand_def()
+    args: VarOperand = var_operand_def()
+    results: VarResultDef = var_result_def()
+    ret_type: Attribute = attr_def(Attribute)
+
+@irdl_op_definition
+class NextOp(IRDLOperation):
+    name = "mini.next"
+    operand: Operand = operand_def()
+    result: OpResult = result_def()
+
+@irdl_op_definition
+class SetupExceptionOp(IRDLOperation):
+    name = "mini.setup_exception"
+
+@irdl_op_definition
+class GlobalFptrOp(IRDLOperation):
+    name = "mini.global_fptr"
+    global_name: StringAttr = attr_def(StringAttr)
+
+@irdl_op_definition
+class CastOp(IRDLOperation):
+    name = "mini.cast"
+    operand: Operand = operand_def()
+    result: OpResult = result_def(Union)
+    from_typ: TypeAttribute = attr_def(TypeAttribute)
+    to_typ: TypeAttribute = attr_def(TypeAttribute)
+    from_typ_name: StringAttr = attr_def(StringAttr)
+    to_typ_name: StringAttr = attr_def(StringAttr)
+
+    @classmethod
+    def make(cls, operand, from_typ, to_typ, id_fn):
+        
+        attr_dict = {
+            "from_typ":from_typ.base_typ(),"to_typ":to_typ.base_typ(),"from_typ_name":id_fn(from_typ), "to_typ_name":id_fn(to_typ)
+        }
+
+        type_param_base = TypeParameter.make("", "").base_typ()
+        tp_like = lambda t: t.base_typ() == type_param_base or t.base_typ() == Union.from_list([FatPtr.basic("")]).base_typ()
+        should_box = (isinstance(to_typ, TypeParameter) or to_typ == FatPtr.basic("Object")) and (not isinstance(from_typ, FatPtr)) and not tp_like(from_typ)
+        should_unbox = (isinstance(from_typ, TypeParameter) or from_typ == FatPtr.basic("Object")) and (not isinstance(to_typ, FatPtr)) and not tp_like(to_typ)
+        if should_box:
+            attr_dict["from_typ_size"] = IntegerAttr.from_int_and_width(type_size(from_typ), 32)
+            return BoxOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
+        if should_unbox:
+            attr_dict["to_typ_size"] = IntegerAttr.from_int_and_width(type_size(to_typ), 32)
+            return UnboxOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
+        
+        function_to_function = isinstance(from_typ, Function) and isinstance(to_typ, Function)
+        not_substitutable = lambda a, b: (a != b) and (not (isinstance(a, TypeParameter) and isinstance(b, TypeParameter)))
+        different_param_types = function_to_function and any(not_substitutable(a,b) for a,b in zip(from_typ.param_types.data, to_typ.param_types.data))
+        needs_reabstraction = function_to_function and len(from_typ.param_types.data) and (different_param_types or not_substitutable(from_typ.return_type,to_typ.return_type))
+        if needs_reabstraction: return ReabstractOp.make(operand, from_typ, to_typ, id_fn)
+        
+        if isinstance(to_typ, FatPtr) or isinstance(to_typ, TypeParameter):
+            if isinstance(to_typ, FatPtr): attr_dict["invariant"] = UnitAttr()
+            return ToFatPtrOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
+
+        same_type = from_typ.base_typ() == to_typ.base_typ()
+        from_union = isinstance(from_typ, Union) or isinstance(from_typ, TypeParameter)
+        to_union = isinstance(to_typ, Union)
+        if same_type or (isinstance(from_typ, FatPtr) and to_union):
+            return builtin.UnrealizedConversionCastOp.create(operands=[operand], result_types=[to_typ])
+
+        is_tuple_cast = isinstance(from_typ, Tuple) and isinstance(to_typ, Tuple)
+        if is_tuple_cast: return TupleCastOp.make(operand, from_typ, to_typ, id_fn)
+        
+        if from_union and to_union: return ReUnionizeOp.create(operands=[operand], attributes=attr_dict, result_types=[to_typ])
+        if from_union: return NarrowOp.make(operand, from_typ, to_typ, id_fn)
+        if to_union: return UnionizeOp.make(operand, from_typ, to_typ, id_fn)
+        if from_typ == Ptr([IntegerType(32)]) and to_typ == Ptr([IntegerType(64)]):
+            return WidenIntOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
+        if from_typ == Ptr([IntegerType(32)]) and to_typ == Ptr([Float64Type()]):
+            return IntToFloatOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
+        raise Exception(f"cast from {from_typ} to {to_typ} not accounted for")
+
+@irdl_op_definition
+class CastAssignOp(IRDLOperation):
+    name = "mini.castassign"
+    target: Operand = operand_def()
+    value: Operand = operand_def()
+    from_typ: TypeAttribute = attr_def(TypeAttribute)
+    to_typ: TypeAttribute = attr_def(TypeAttribute)
+    from_typ_name: StringAttr = attr_def(StringAttr)
+    to_typ_name: StringAttr = attr_def(StringAttr)
+    region: Region = region_def(StringAttr)
+
+    @classmethod
+    def make(cls, target, value, from_typ, to_typ, id_fn):
+        region = Region([Block([CastOp.make(value, from_typ, to_typ, id_fn)])])
+        attr_dict = {
+            "from_typ":from_typ.base_typ(),"to_typ":to_typ.base_typ(),"from_typ_name":id_fn(from_typ),
+            "to_typ_name":id_fn(to_typ)
+        }
+        if not isinstance(to_typ, TypeParameter): attr_dict["should_offset"] = UnitAttr()
+        return CastAssignOp.create(operands=[target, value], attributes=attr_dict, regions=[region])
+
+@irdl_op_definition
+class BoxOp(CastOp, IRDLOperation):
+    name = "mini.box"
+    from_typ_size: IntegerAttr = attr_def(IntegerAttr)
+    traits = frozenset()
+
+@irdl_op_definition
+class UnboxOp(CastOp, IRDLOperation):
+    name = "mini.unbox"
+    to_typ_size: IntegerAttr = attr_def(IntegerAttr)
+    traits = frozenset()
+
+@irdl_op_definition
+class ToFatPtrOp(CastOp, IRDLOperation):
+    name = "mini.to_fat_ptr"
+    invariant: OptAttributeDef = opt_attr_def(UnitAttr)
+    traits = frozenset()
+
+@irdl_op_definition
+class UnionizeOp(CastOp, IRDLOperation):
+    name = "mini.unionize"
+    region: OptRegionDef = opt_region_def()
+    traits = frozenset()
+
+    @classmethod
+    def make(cls, operand, from_typ, to_typ, id_fn):
+        attr_dict = {
+            "from_typ":from_typ.base_typ(),"to_typ":to_typ.base_typ(),"from_typ_name":id_fn(from_typ), "to_typ_name":id_fn(to_typ)
+        }
+        regions = []
+        if not isinstance(to_typ, Union): raise Exception(f"{from_typ}, {to_typ}")
+        if from_typ not in to_typ.types.data:
+            cast = CastOp.make(operand, from_typ, FatPtr.basic("Object"), id_fn)
+            regions.append(Region([Block([cast])]))
+        return UnionizeOp.create(operands=[operand], attributes=attr_dict, result_types=[to_typ], regions=regions) 
+
+@irdl_op_definition
+class ReUnionizeOp(CastOp, IRDLOperation):
+    name = "mini.reunionize"
+    traits = frozenset()
+
+@irdl_op_definition
+class NarrowOp(CastOp, IRDLOperation):
+    name = "mini.narrow"
+    region: OptRegionDef = opt_region_def()
+    traits = frozenset()
+
+    @classmethod
+    def make(cls, operand, from_typ, to_typ, id_fn):
+        attr_dict = {
+            "from_typ":from_typ.base_typ(),"to_typ":to_typ.base_typ(),"from_typ_name":id_fn(from_typ), "to_typ_name":id_fn(to_typ)
+        }
+        regions = []
+        if to_typ not in from_typ.types.data:
+            cast = CastOp.make(operand, from_typ, FatPtr.basic("Object"), id_fn)
+            regions.append(Region([Block([cast])]))
+        return NarrowOp.create(operands=[operand], attributes=attr_dict, result_types=[to_typ], regions=regions) 
+
+@irdl_op_definition
+class ReabstractOp(CastOp, IRDLOperation):
+    name = "mini.reabstract"
+    region: Region = region_def()
+    traits = frozenset()
+
+    @classmethod
+    def make(cls, operand, from_typ, to_typ, id_fn):
+        print(f"{from_typ} is not equal to {to_typ}")
+        attr_dict = {
+            "from_typ":from_typ.base_typ(),"to_typ":to_typ.base_typ(),"from_typ_name":id_fn(from_typ), "to_typ_name":id_fn(to_typ)
+        }
+        wrapper_name = random_letters(10)
+        wrapped_name = random_letters(10)
+        f_block = Block([])
+
+        has_return = to_typ.return_type != Nothing()
+        ret_type = [to_typ.return_type.base_typ()] if has_return else []
+        
+        args = [f_block.insert_arg(t.base_typ(), i) for (i,t) in enumerate(to_typ.param_types.data)]
+        wraps = [WrapOp.create(operands=[arg], result_types=[to_typ.param_types.data[i]]) for (i, arg) in enumerate(args)]
+        casts = [CastOp.make(wraps[i].results[0], to_typ.param_types.data[i], from_typ.param_types.data[i], id_fn) for (i, arg) in enumerate(args)]
+        unwraps = [UnwrapOp.create(operands=[casts[i].results[0]], result_types=[from_typ.param_types.data[i].base_typ()]) for (i, arg) in enumerate(args)]
+        attr_dict = {"ret_type":from_typ.return_type.base_typ() if has_return else llvm.LLVMVoidType()}
+        result_types = [] if not has_return else [from_typ.return_type]
+        addr_of = AddrOfOp.from_string(wrapped_name)
+        fptr = llvm.LoadOp(addr_of.results[0], llvm.LLVMPointerType.opaque())
+        operands = [fptr.results[0], *[x.results[0] for x in unwraps]]
+        call = FPtrCallOp.create(operands=operands, attributes=attr_dict, result_types=result_types)
+        f_block.add_ops([*wraps, *casts, *unwraps, addr_of, fptr, call])
+        if has_return:
+            cast = CastOp.make(call.results[0], from_typ.return_type, to_typ.return_type, id_fn)
+            unwrap = UnwrapOp.create(operands=[cast.results[0]], result_types=[to_typ.return_type.base_typ()])
+            ret = func.Return(unwrap.results[0])
+            f_block.add_ops([cast, unwrap, ret])
+        else:
+            f_block.add_op(func.Return())
+        f_body = Region([f_block])
+        func_def = func.FuncOp(wrapper_name, FunctionType.from_lists([t.base_typ() for t in to_typ.param_types.data], ret_type), f_body)
+
+        global_fptr = GlobalFptrOp.create(attributes={"global_name":StringAttr(wrapped_name)})
+
+        wrapped = AddrOfOp.from_string(wrapped_name)
+        wrapper = AddrOfOp.from_string(wrapper_name)
+        fptr = llvm.LoadOp(operand, llvm.LLVMPointerType.opaque())
+        store0 = llvm.StoreOp(fptr.results[0], wrapped.results[0])
+        invariant = InvariantOp.make(wrapped.results[0], 8)
+        alloca = AllocateOp.create(attributes={"typ":llvm.LLVMPointerType.opaque()}, result_types=[llvm.LLVMPointerType.opaque()])
+        store1 = llvm.StoreOp(wrapper.results[0], alloca.results[0])
+
+        region = Region([Block([func_def, global_fptr, wrapped, wrapper, fptr, store0, invariant, store1, alloca])])
+        return ReabstractOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict, regions=[region])
+
+@irdl_op_definition
+class TupleCastOp(IRDLOperation):
+    name = "mini.tuple_cast"
+    region: Region = region_def()
+    traits = frozenset()
+
+    @classmethod
+    def make(cls, operand, from_typ, to_typ, id_fn):
+        print(f"input type is {operand.type}")
+        conversion = builtin.UnrealizedConversionCastOp.create(operands=[operand], result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.create(attributes={"typ":to_typ.base_typ()}, result_types=[llvm.LLVMPointerType.opaque()])
+        from_geps = [llvm.GEPOp(conversion.results[0], [0, i], pointee_type=from_typ.base_typ()) for (i, t) in enumerate(from_typ.types)]
+        to_geps = [llvm.GEPOp(alloca.results[0], [0, i], pointee_type=to_typ.base_typ()) for (i, t) in enumerate(to_typ.types.data)]
+        casts = [CastOp.make(from_geps[i].results[0], a, b, id_fn) for (i, (a, b)) in enumerate(zip(from_typ.types.data, to_typ.types.data))]
+        stores = [llvm.StoreOp(casts[i].results[0], to_geps[i].results[0]) for (i, t) in enumerate(to_typ.types.data)]
+        reg = Region([Block([alloca, conversion, *from_geps, *to_geps, *casts, *stores])])
+        return TupleCastOp.create(operands=[operand], result_types=[to_typ], regions=[reg])
+
+@irdl_op_definition
+class WidenIntOp(CastOp, IRDLOperation):
+    name = "mini.widen_int"
+    traits = frozenset()
+
+@irdl_op_definition
+class IntToFloatOp(CastOp, IRDLOperation):
+    name = "mini.int_to_float"
+    traits = frozenset()
+
+@irdl_op_definition
+class WrapOp(IRDLOperation):
+    name = "mini.wrap"
+    operand: Operand = operand_def()
+    result: OpResult = result_def()
+
+@irdl_op_definition
+class UnwrapOp(IRDLOperation):
+    name = "mini.unwrap"
+    operand: Operand = operand_def()
+    result: OpResult = result_def()
+
+@irdl_op_definition
+class IntrinsicOp(IRDLOperation):
+    name = "mini.intrinsic"
+    call_name: StringAttr = attr_def(StringAttr)
+    args: VarOperand = var_operand_def()
+    result: OpResult = result_def()
+
+@irdl_op_definition
+class GlobalOp(llvm.GlobalOp, IRDLOperation):
+    name = "mini.global"
+    traits = frozenset([SymbolOpInterface()])
+
+@irdl_op_definition
+class AddressOfOp(llvm.AddressOfOp, IRDLOperation):
+    name = "mini.addressof"
+    traits = frozenset([])
+
+@irdl_op_definition
+class PoisonOp(IRDLOperation):
+    name = "ub.poison"
+    res: OpResult = result_def(Attribute)
+
+    def __init__(self, result_type: Attribute):
+        super().__init__(result_types=[result_type])
+
+@irdl_attr_definition
+class PoisonAttr(ParametrizedAttribute):
+    name = "ub.poison"
+
+Ub = Dialect("ub", [PoisonOp], [PoisonAttr])
+
+MiniLang = Dialect(
+    "mini",
+    [
+        MainOp,
+        IdentifierOp,
+        LiteralOp,
+        AssignOp,
+        PrintfDeclOp,
+        PrintOp,
+        PrintFOp,
+        GlobalStrOp,
+        ComparisonOp,
+        ArithmeticOp,
+        LogicalOp,
+        WhileOp,
+        IfOp,
+        ReturnOp,
+        FunctionCallOp,
+        FunctionDefOp,
+        PreludeOp,
+        AllocateOp,
+        MallocOp,
+        SetFlagOp,
+        CheckFlagOp,
+        GetFlagOp,
+        NewOp,
+        TypeDefOp,
+        MethodCallOp,
+        ClassMethodCallOp,
+        FieldAccessOp,
+        WrapOp,
+        UnwrapOp,
+        CastOp,
+        BoxOp,
+        UnboxOp,
+        IntToFloatOp,
+        WidenIntOp,
+        UnionizeOp,
+        NarrowOp,
+        ToFatPtrOp,
+        ReabstractOp,
+        CastAssignOp,
+        ReferOp,
+        UtilsAPIOp,
+        CoroCreateOp,
+        CoroYieldOp,
+        CoroCallOp,
+        CoroGetResultOp,
+        CoroSetResultOp,
+        AddrOfOp,
+        NextOp,
+        IntrinsicOp,
+        CreateBufferOp,
+        CreateTupleOp,
+        BufferIndexationOp,
+        TupleIndexationOp,
+        InvariantOp,
+        SetupExceptionOp,
+        PDLOps,
+        GlobalOp,
+        AddressOfOp,
+        HashTableOp,
+        TypeIntegersTableOp,
+        TypePtrsTableOp,
+        VtableOp,
+        GetterDefOp,
+        OffsetTableOp,
+        SetOffsetOp,
+        FPtrCallOp,
+        ArgPasserOp,
+        BufferFillerOp,
+        ExternalTypeDefOp,
+        PlaceIntoBufferOp,
+        FromBufferOp,
+        MemCpyOp,
+        GlobalFptrOp,
+        SubtypeOp
+    ],
+    [
+        Ptr,
+        FatPtr,
+        ReifiedType,
+        Tuple,
+        Coroutine,
+        Function,
+        Buffer,
+        Union,
+        Intersection,
+        Nothing,
+        Nil,
+        TypeParameter
+    ],
+)

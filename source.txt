@@ -1,0 +1,137 @@
+class Animal {
+    @age : i32
+    @hp : f64
+    @skill : i32
+
+    def init(@age : i32, @hp : f64, @skill : i32) {}
+
+    def say_age() {
+        self.say(@age);
+        self.say(@age);
+    }
+
+    def say_skill(){
+        skill = @skill;
+        if(skill is i32){
+            print(skill);
+        }
+    }
+
+    def say(message : i32){ print(message); }
+
+    def do_nothing() -> Animal | f64 {
+        return new Animal(5, 5.0, 5);
+    }
+}
+
+class Beaver {
+    @color : i32
+    @name : f64
+    def init(@color : i32, @name : f64) {}
+}
+
+class ListNode {
+    @data : i32
+    @next : ListNode | Nil
+    def init(@data : i32) {}
+    def push(next : ListNode) -> ListNode {
+        @next = next;
+        return next;
+    }
+    def next() -> ListNode | Nil {
+        return @next;
+    }
+    def data() -> i32 {
+        return @data;
+    }
+}
+
+def make_em_speak(animal : Animal){
+    animal.say_age();
+}
+
+def fibonacci(n : i32) -> i32 {
+    retval : i32 = 0;
+    if(n < 2){
+        retval = n;
+    }else{
+        retval = fibonacci(n-2) + fibonacci(n-1);
+    }
+    return retval;
+}
+def factorial(n : i32) -> i32 {
+    retval : i32 = 0;
+    if(n < 2){
+        retval = 1;
+    }else{
+        retval = n * factorial(n - 1);
+    }
+    return retval;
+}
+
+larry = new Animal(55, 8.0, 13);
+barry = new Beaver(10, 10.0);
+make_em_speak(larry);
+gary = larry.do_nothing();
+
+a = 5;
+while(a is i32){
+    print(a);
+    a = a + 1;
+    if(a == 9){
+        a = new Animal(65, 18.0, 23);
+    }
+}
+if(a is i32){
+    print(a);
+}
+if(a is Animal){
+    make_em_speak(a);
+}
+larry.say_skill();
+
+i = 1;
+mylist = new ListNode(0);
+next = mylist;
+while(i < 10){
+    next = next.push(new ListNode(i));
+    i = i+1;
+}
+i = 0;
+next = mylist.next();
+while(next is ListNode){
+    print(next.data());
+    next = next.next();
+}
+
+def print88 () yields Error {
+    print(88);
+    yield;
+    print(90);
+}
+
+class Range {
+    @counter : i32
+    @max : i32
+
+    def init(@max : i32){ @counter = 0; }
+
+    def next() -> i32 | Nil {
+        @counter = @counter + 1;
+        result = @counter;
+        if(@counter == @max){ result = nil; }
+        return result;
+    }
+    def next() {}
+}
+
+myrange = new Range(20);
+next = myrange.next();
+while(next is i32){
+    print(next);
+    next = myrange.next();
+}
+my_coro = coro_create print88;
+my_coro.resume();
+print(89);
+my_coro.resume();
