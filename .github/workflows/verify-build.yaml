@@ -1,4 +1,4 @@
-ame: Verify Build Environment
+name: Verify Build Environment
 
 on:
   push:
