@@ -1,5 +1,4 @@
 immutabledict==4.2.1
-langchain_community==0.3.7
 lark==1.1.9
 more_itertools==10.5.0
 networkx==3.3
