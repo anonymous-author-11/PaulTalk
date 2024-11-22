@@ -19,7 +19,7 @@ PaulTalk combines modern language features with strong static typing:
 
 ## Example Code
 
-```crystal
+```rust
 // we import the standard library, which has been separately compiled
 import std;
 
