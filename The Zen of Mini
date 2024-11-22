@@ -5,8 +5,6 @@ There is no such thing as too much abstraction, or too little--
 There is only the right abstraction, and the wrong abstraction.
 Two is a coincidence; three is a pattern.
 The purpose of programming is to produce side-effects.
-The compiler is your collaborator, not your adversary.
-A good type system knows more than it asks.
 Use the type system; do not abuse the type system.
 An error should be yielded early and handled once.
 Do not pollute the happy path.
