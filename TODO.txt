@@ -225,6 +225,23 @@ DONE:
 
 TODO:
 
+- TypeGetterDef and TypeFieldAccess can take an offset parameter
+	- The concrete call passes the offset consistent with nested types
+	- Unclear how nested parameters will be transferred to new instances
+	- Memcpy the range between the formal parameters?
+	- Seems reasonable
+- Take type fields out of fields() but keep them in vtable
+- Because getter logic is internal, baked-in type fields can be directly returned
+- Are we ever really retreiving one type parameter...
+	- There is a fundamental difficulty here
+	- At instance creation time we may not know how many type fields there are
+	- Creating a new Pair[T, U] may involve arbitrarily nested T and U
+	- We therefore cannot statically know the mapping
+	- but we can transfer part of a mapping
+	- All mapping is either statically known or derived from one statically known
+	- Then that would in turn imply that different type parameters come from different globals
+	- Which would mean that the distance between them is meaningless
+
 - Pass types from method context to new
 - Think about how actually to handle union type parameters
 - We need a mapping between types available to init() and type fields
