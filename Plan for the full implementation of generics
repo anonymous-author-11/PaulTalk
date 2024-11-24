@@ -30,31 +30,25 @@ This means that even if many instances share exactly the same type parameters, t
 
 3. (Current best idea) Creating a (thread local) global for each unique type parameter list
 
-We would then use the third word of the fat pointer to store a pointer to this list at object creation time. This would mean that in the previous example, all the elements of the array would have a pointer to the very same parameter list. These parameter lists would be globally visible and invariant, so the optimizer can reason about them quite well.
+For "Range extends Iterable[i32]", we will call the i32 a "fixed" type parameter. It has been "fixed" by inheritance and cannot vary between instantiations. Whereas for "Array[T] extends Iterable[T]", T is not fixed. We only need to store unfixed type parameters as instance fields. For fixed type parameters, the vtable getter can immediately return the fixed type. This means that an i32 converted to an Addable[i32, i32] needs no extra fields because all of its type parameters are fixed and can be immediately returned by its vtable getters.
 
-They would still be accessed via the vtable, so that casting works as expected, but for type parameters which are 'baked in' to the type, such as the i32 in "Range extends Iterable[i32]," the vtable method could just directly return the vptr of i32.
+Each of the unfixed formal parameters will be associated with a field in the instance. That field is populated at instance creation with a pointer to a global representing the concrete type at that type parameter position. This global may be an array of types representing a nested type. So, a Pair[Pair[i32, f64], i32] would have two type fields for its two formal parameters. These fields would contain pointers to globals. These globals would be [Pair, i32, f64] for the first formal parameter and [i32] for the second.
 
-For nested type parameters, the indirection would work as follows:
+The globals would have names that are a function of the types they contain, so that globals with identical types will have identical names and can be merged at link time.
 
-Suppose we have an instance of type Mapping[i32, f64], which we are viewing as an Iterable[f64]. This is an instantiation of Mapping[T, U] which extends Iterable[U]. There are two global variables assocated with this instance. One is the type list [i32, f64], which contains vptrs. Another is a list containing just the pointer to the second element of that list, which creates the indirection necessary to map the formal type parameter Iterable.T to Mapping.U, so that when we query the vtable for Iterable.T (because we are viewing it as an Iterable), we follow the indirection to end up at the f64, which is Mapping.U. The pointer to this second global is stored in the third word of the fat pointer at the point of object creation.
-
-That layer of indirection also means that type parameter nesting can be arbitrarily deep, because each formal type parameter maps to the start of a range of (flattened) concrete type parameters. So for instance Pair[Pair[i32, i32], f64] would have a concrete type list of [Pair, i32, i32, f64], and the mapping from formal type parameters would be a two element array [T, U] with pointers to elements 0 and 3.
-
-The downside is the space overhead of having a global for each unique parameter list and each mapping of formal types to concrete types, but this does not seem so bad.
+It seems like unions can be easily incorporated into this scheme by being an array of all the types in the union. The only twist would be also storing the size of the union since unions can have a variable number of types in them.
 
 # Required changes
 
-We will need to move function pointers from being represented merely as a raw pointer to being represented by a fat pointer, so that we can store its type parameters and the @function_type vptr. The small struct optimization applies for the function ptr itself, which will be stored in the second word. Reabstraction switches out the second word fptr.
+We will need to move function pointers from being represented merely as a raw pointer to being represented by a fat pointer, so that we can store the @function_type vptr and its type parameters. We should figure out a special optimization for these, so that we can store a pointer to type information in the third word of the fat ptr. Probably that pointer will be to a global array with an element for every formal type parameter, storing pointers to global arrays for each formal parameter's concrete types. Then the @function_type's vtable getter should know to retrieve type parameters from there.
 
 Buffer creation and indexation will need to use the locally available type parameters so that buffers can remain just a single raw pointer. So for instance operations on the Buffer[T] field of Array[T] will use the T from the Array instance.
-
-Because the third word of the fat ptr is now used, we can only use the second word for small struct optimization, so only values 64 bits or smaller can be stored without an extra heap allocation. Perhaps we can have more complicated rules around small struct optimization if it has no type parameters, or defer boxing until cast to a parent which has type parameters, or something like that.
 
 We will have to create a way to cast builtin types to generic parents, for example i32 to Addable[i32, i32]. The approach here might be to write a class "Int32 extends Addable[Int32, Int32] etc." with magic methods for operators etc, and add it to the ancestor list of i32.
 
 # What this design allows
 
-First, generic fields and generic buffers can actually be the size of the concrete types they are instantiated with. An Array of i32 can actually be hold a contiguous buffer of i32's that can be iterated over with great cache locality. A Pair[i32, i32] can be stored inline inside a fat ptr.
+First, generic fields and generic buffers can actually be the size of the concrete types they are instantiated with. An Array of i32 can actually be hold a contiguous buffer of i32's that can be iterated over with great cache locality. A Pair[i32, i32] could be stored inline inside a fat ptr.
 
 Second, certain kinds of casts not available in other langauges will be possible. For example, when we add variance, it will be possible to upcast a covariant container (of value types) with essentially no runtime cost. Only at the point of taking an element out of the container will the element itself have to be casted.
 
