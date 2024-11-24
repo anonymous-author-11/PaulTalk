@@ -34,13 +34,15 @@ For "Range extends Iterable[i32]", we will call the i32 a "fixed" type parameter
 
 Each of the unfixed formal parameters will be associated with a field in the instance. That field is populated at instance creation with a pointer to a global representing the concrete type at that type parameter position. This global may be an array of types representing a nested type. So, a Pair[Pair[i32, f64], i32] would have two type fields for its two formal parameters. These fields would contain pointers to globals. These globals would be [Pair, i32, f64] for the first formal parameter and [i32] for the second.
 
+For something like "ZipIterable[T,U] extends Iterable[Pair[T,U]]", we would end up storing three type parameters, even though technically only two parameters are unfixed. For ZipIterable[i32, f64] the type fields would point to the three globals [i32], [f64], and [Pair, i32, f64].
+
 The globals would have names that are a function of the types they contain, so that globals with identical types will have identical names and can be merged at link time.
 
 It seems like unions can be easily incorporated into this scheme by being an array of all the types in the union. The only twist would be also storing the size of the union since unions can have a variable number of types in them.
 
 # Required changes
 
-We will need to move function pointers from being represented merely as a raw pointer to being represented by a fat pointer, so that we can store the @function_type vptr and its type parameters. We should figure out a special optimization for these, so that we can store a pointer to type information in the third word of the fat ptr. Probably that pointer will be to a global array with an element for every formal type parameter, storing pointers to global arrays for each formal parameter's concrete types. Then the @function_type's vtable getter should know to retrieve type parameters from there.
+We will need to move function pointers from being represented merely as a raw pointer to being represented by a fat pointer, so that we can store the @function_type vptr and the function's type parameters. We should figure out a special optimization for these, so that we can store a pointer to type information in the third word of the fat ptr. Probably that pointer will be to a global array with an element for every formal type parameter, storing pointers to global arrays for each formal parameter's concrete types. Then the @function_type's vtable getter should know to retrieve type parameters from that third word.
 
 Buffer creation and indexation will need to use the locally available type parameters so that buffers can remain just a single raw pointer. So for instance operations on the Buffer[T] field of Array[T] will use the T from the Array instance.
 
