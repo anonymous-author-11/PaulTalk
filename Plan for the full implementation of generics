@@ -28,25 +28,27 @@ This has the rather significant downside that whenever we convert an i32 to an A
 
 This means that even if many instances share exactly the same type parameters, they all get their own allocation. Consider placing i32's into an Array[Addable[i32, i32]]. Every i32 converted into an Addable will have to allocate its own version of exactly the same type parameter list.
 
-3. (Current best idea) Creating a (thread local) global for each unique type parameter list
+3. (Current best idea) Creating a (thread local) static global for each unique type parameter list
 
 For "Range extends Iterable[i32]", we will call the i32 a "fixed" type parameter. It has been "fixed" by inheritance and cannot vary between instantiations. Whereas for "Array[T] extends Iterable[T]", T is not fixed. We only need to store unfixed type parameters as instance fields. For fixed type parameters, the vtable getter can immediately return the fixed type. This means that an i32 converted to an Addable[i32, i32] needs no extra fields because all of its type parameters are fixed and can be immediately returned by its vtable getters.
 
-Each of the unfixed formal parameters will be associated with a field in the instance. That field is populated at instance creation with a pointer to a global representing the concrete type at that type parameter position. This global may be an array of types representing a nested type. So, a Pair[Pair[i32, f64], i32] would have two type fields for its two formal parameters. These fields would contain pointers to globals. These globals would be [Pair, i32, f64] for the first formal parameter and [i32] for the second.
+Each of the unfixed formal parameters will be associated with a field in the instance. That field is populated at instance creation with a pointer to a static (program-long lifetime) global representing the concrete type at that type parameter position. This global may be an array of types representing a nested type. So, a Pair[Pair[i32, f64], i32] would have two type fields for its two formal parameters. These fields would contain pointers to globals. These globals would be [Pair, i32, f64] for the first formal parameter and [i32] for the second.
 
 For something like "ZipIterable[T,U] extends Iterable[Pair[T,U]]", we would end up storing three type parameters, even though technically only two parameters are unfixed. For ZipIterable[i32, f64] the type fields would point to the three globals [i32], [f64], and [Pair, i32, f64].
 
 The globals would have names that are a function of the types they contain, so that globals with identical types will have identical names and can be merged at link time.
 
-It seems like unions can be easily incorporated into this scheme by being an array of all the types in the union. The only twist would be also storing the size of the union since unions can have a variable number of types in them.
+It seems like unions can be easily incorporated into this scheme by being an array of all the types in the union. The only twist would be also storing the size of the union since unions can have a variable number of types in them. The same considerations that allow us to have arbitraily nested type parameters also allow arbitrarily sized unions.
 
 # Required changes
 
-We will need to move function pointers from being represented merely as a raw pointer to being represented by a fat pointer, so that we can store the @function_type vptr and the function's type parameters. We should figure out a special optimization for these, so that we can store a pointer to type information in the third word of the fat ptr. Probably that pointer will be to a global array with an element for every formal type parameter, storing pointers to global arrays for each formal parameter's concrete types. Then the @function_type's vtable getter should know to retrieve type parameters from that third word.
+We will need to move first-class functions from being represented merely as a raw pointer to being represented by a fat pointer, so that we can store the @function_type vptr and the function's type parameters. We should figure out a special optimization for these, so that we can store a pointer to type information in the third word of the fat ptr. (That third word is now unused in general, because our scheme means that type information can be accessed through the vptr and the data ptr, with no need for a third ptr, except as a special optimization in this case). Probably that pointer will be to a global array with an element for every formal type parameter, storing pointers to global arrays for each formal parameter's concrete types. Then the @function_type's vtable getter should know to retrieve type parameters from that third word.
 
 Buffer creation and indexation will need to use the locally available type parameters so that buffers can remain just a single raw pointer. So for instance operations on the Buffer[T] field of Array[T] will use the T from the Array instance.
 
 We will have to create a way to cast builtin types to generic parents, for example i32 to Addable[i32, i32]. The approach here might be to write a class "Int32 extends Addable[Int32, Int32] etc." with magic methods for operators etc, and add it to the ancestor list of i32.
+
+If we want generic fields to be of specialized size, we will have to add setters to the vtable in addition to getters.
 
 # What this design allows
 

@@ -10,6 +10,7 @@ from xdsl.pattern_rewriter import (
 )
 from typing import List
 from xdsl.dialects import llvm, arith, memref, pdl
+from xdsl.traits import SymbolTable
 from xdsl.dialects.builtin import (
     ModuleOp,
     IntegerAttr,
@@ -121,6 +122,7 @@ class ThirdPass(ModulePass):
                 LowerSetFlag(),
                 LowerCheckFlag(),
                 LowerFieldAccess(),
+                LowerParameterization(),
                 LowerWrap(),
                 LowerUnwrap(),
                 LowerCastAssign(),
@@ -460,33 +462,99 @@ class LowerFromBuffer(RewritePattern):
         rewriter.inline_block_before_matched_op(Block(ops))
         rewriter.replace_matched_op(alloca)
 
+class LowerParameterization(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: ParameterizationOp, rewriter: PatternRewriter):
+        module = op.get_toplevel_object()
+        if not isinstance(module, ModuleOp):
+            raise Exception([*module.block.ops])
+        name = op.name_hierarchy.data[0]
+        name = StringAttr("_parameterization_" + name.data)
+
+        # if this parameterization already exists, erase op
+        if SymbolTable.lookup_symbol(module, name):
+            addr_of = AddrOfOp.from_stringattr(name)
+            rewriter.replace_matched_op(addr_of)
+            return
+
+        # if the parameterization is an unresolved type parameter, just return the corresponding op argument
+        id = op.id_hierarchy.data[0]
+        if isinstance(id, IntegerAttr):
+            corresponding_type_arg = op.args[id.value.data]
+            cast = builtin.UnrealizedConversionCastOp(operands=[corresponding_type_arg], result_types=[llvm.LLVMPointerType.opaque()])
+            rewriter.replace_matched_op(cast)
+            return
+
+        # determine if should be static global or malloc
+        # "subtype" in name.data means that one of the nested types is an unresolved type parameter
+        # parameterizations involving unresolved type parameters require dynamic allocations
+        needs_dynamic_allocation = "subtype" in name.data
+        typ = llvm.LLVMArrayType.from_size_and_type(len(op.name_hierarchy.data), llvm.LLVMPointerType.opaque())
+
+        if needs_dynamic_allocation:
+            malloc = MallocOp.create(attributes={"typ":typ}, result_types=[llvm.LLVMPointerType.opaque()])
+            addr_of = AddrOfOp.from_stringattr(id)
+            store = llvm.StoreOp(addr_of.results[0], malloc.results[0])
+            rewriter.inline_block_after_matched_op(Block([addr_of, store]))
+            for i, id_i in enumerate(op.id_hierarchy.data):
+                if i == 0: continue
+                parameterization = ParameterizationOp.make(op.args, id_i, op.name_hierarchy.data[i])
+                gep = llvm.GEPOp(malloc.results[0], [0, i], pointee_type=typ)
+                store = llvm.StoreOp(parameterization.results[0], gep.results[0])
+                rewriter.inline_block_after_matched_op(Block([parameterization, gep, store]))
+            rewriter.replace_matched_op(malloc)
+            return
+
+        # all components of parameterization statically known, can be a static global
+        glob = GlobalOp(
+                sym_name=name,
+                global_type=typ,
+                linkage=llvm.LinkageAttr("linkonce_odr"),
+                constant=True
+        )
+        ary = llvm.UndefOp(typ)
+        glob_block = Block([ary])
+        dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
+        id = op.id_hierarchy.data[0]
+        addr_of = AddrOfOp.from_stringattr(id)
+        ary = llvm.InsertValueOp(dense_ary, ary.results[0], addr_of.results[0])
+        glob_block.add_ops([addr_of, ary])
+        for i, id_i in enumerate(op.id_hierarchy.data):
+            if i == 0: continue
+            dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [i])
+            parameterization = ParameterizationOp.make([], id_i, op.name_hierarchy.data[i])
+            ary = llvm.InsertValueOp(dense_ary, ary.results[0], parameterization.results[0])
+            glob_block.add_ops([parameterization, ary])
+        ret = llvm.ReturnOp.create(operands=[ary.results[0]])
+        glob_block.add_op(ret)
+        glob_region = Region([glob_block])
+        glob.regions = (glob_region,)
+        glob_region.parent = glob
+        rewriter.insert_op_before(glob, module.body.block.first_op)
+        final_addr = AddrOfOp.from_stringattr(name)
+        rewriter.replace_matched_op(final_addr)
+
 class LowerNew(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: NewOp, rewriter: PatternRewriter):
         malloc = MallocOp.create(attributes={"typ":op.typ}, result_types=[llvm.LLVMPointerType.opaque()])
         vptr = AddrOfOp.from_stringattr(op.class_name)
-        five = llvm.ConstantOp(IntegerAttr.from_int_and_width(vtable_buffer_size(), 32), IntegerType(32))
+        offset = llvm.ConstantOp(IntegerAttr.from_int_and_width(vtable_buffer_size(), 32), IntegerType(32))
         fat_base = FatPtr.basic("").base_typ()
         alloca = AllocateOp(attributes={"typ":fat_base}, result_types=[llvm.LLVMPointerType.opaque()])
         gep0 = llvm.GEPOp(alloca.results[0], [0,1], pointee_type=fat_base)
         gep1 = llvm.GEPOp(alloca.results[0], [0,3], pointee_type=fat_base)
         store0 = llvm.StoreOp(vptr.results[0], alloca.results[0])
         store1 = llvm.StoreOp(malloc.results[0], gep0.results[0])
-        store2 = llvm.StoreOp(five.results[0], gep1.results[0])
+        store2 = llvm.StoreOp(offset.results[0], gep1.results[0])
         invariant0 = InvariantOp.make(alloca.results[0], 16)
-        rewriter.inline_block_before_matched_op(Block([malloc, vptr, five]))
+        rewriter.inline_block_before_matched_op(Block([malloc, vptr, offset]))
+
         if len(op.typ.types.data) > op.num_data_fields.value.data:
-            for i, t in enumerate(op.type_ptrs.data):
-                ops = []
-                if isinstance(t, StringAttr):
-                    type_ptr_op = AddrOfOp.from_stringattr(t)
-                    ops.append(type_ptr_op)
-                    type_ptr = type_ptr_op.results[0]
-                else:
-                    type_ptr = op.args[t.value.data]
+            for i, parameterization in enumerate(op.parameterizations):
                 gep_i = llvm.GEPOp(malloc.results[0], [0, op.num_data_fields.value.data + i], pointee_type=op.typ)
-                store_i = llvm.StoreOp(type_ptr, gep_i.results[0])
-                rewriter.inline_block_before_matched_op(Block([*ops, gep_i, store_i]))
+                store_i = llvm.StoreOp(parameterization, gep_i.results[0])
+                rewriter.inline_block_before_matched_op(Block([gep_i, store_i]))
             malloc_gep = llvm.GEPOp(malloc.results[0], [0, op.num_data_fields.value.data], pointee_type=op.typ)
             invariant1 = InvariantOp.make(malloc_gep.results[0], 8 * (len(op.typ.types.data) - op.num_data_fields.value.data))
             rewriter.inline_block_before_matched_op(Block([malloc_gep, invariant1]))
@@ -1540,9 +1608,9 @@ class LowerGetterDef(RewritePattern):
     def match_and_rewrite(self, op: GetterDefOp, rewriter: PatternRewriter):
         body = Region([Block([])])
         data_ptr = body.block.insert_arg(llvm.LLVMPointerType.opaque(), 0)
-        field = llvm.GEPOp(data_ptr, [0, op.offset.value.data], pointee_type=op.struct_typ)
-        ret = func.Return(field.results[0])
         ftype = ([llvm.LLVMPointerType.opaque()], [llvm.LLVMPointerType.opaque()])
+        field = ParameterizationOp.make([], op.id_hierarchy, op.name_hierarchy) if op.id_hierarchy else llvm.GEPOp(data_ptr, [0, op.offset.value.data], pointee_type=op.struct_typ)
+        ret = func.Return(field.results[0])
         body.block.add_ops([field, ret])
         func_op = func.FuncOp(name=op.meth_name.data, function_type=ftype, region=body)
         rewriter.replace_matched_op(func_op)

@@ -189,6 +189,14 @@ class Scope:
     def all_types(self):
         return [*builtin_types.values(), *[FatPtr.basic(name) for name in self.classes.keys()]]
 
+    def flat_type_list(self, typ):
+        if isinstance(typ, Union) or isinstance(typ, Tuple):
+            type_lists = (self.flat_type_list(t) for t in typ.types.data)
+            return [typ, *chain.from_iterable(type_lists)]
+        if not isinstance(typ, FatPtr) or typ.type_params == NoneAttr(): return [typ]
+        type_lists = (self.flat_type_list(t) for t in typ.type_params.data)
+        return [typ, *chain.from_iterable(type_lists)]
+
     # Simplify a type to Disjunctive Normal Form (DNF)
     def simplify(self, typ: TypeAttribute) -> TypeAttribute:
         cache_key = (typ, frozenset(self.aliases.items()))
@@ -243,6 +251,23 @@ class Scope:
 
         return typ
 
+def id_hierarchy(typ, ambient_types):
+        if isinstance(typ, TypeParameter):
+            if typ not in ambient_types: return id_hierarchy(typ.bound, ambient_types)
+            return ArrayAttr([IntegerAttr.from_int_and_width(ambient_types.index(typ), 32)])
+        if isinstance(typ, Union) or isinstance(typ, Tuple):
+            return ArrayAttr([type_id(typ), *[id_hierarchy(t, ambient_types) for t in typ.types.data]])
+        if not isinstance(typ, FatPtr) or typ.type_params == NoneAttr():
+            return ArrayAttr([type_id(typ)])
+        return ArrayAttr([type_id(typ), *[id_hierarchy(t, ambient_types) for t in typ.type_params.data]])
+
+def name_hierarchy(typ):
+        if isinstance(typ, Union) or isinstance(typ, Tuple):
+            return ArrayAttr([StringAttr(clean_name(f"{typ}")), *[name_hierarchy(t) for t in typ.types.data]])
+        if not isinstance(typ, FatPtr) or typ.type_params == NoneAttr():
+            return ArrayAttr([StringAttr(clean_name(f"{typ}"))])
+        return ArrayAttr([StringAttr(clean_name(f"{typ}")), *[name_hierarchy(t) for t in typ.type_params.data]])
+
 def clean_param_names(params):
     joined = "_".join(["".join([param.name, param._type.__repr__()]) for param in params])
     return clean_name(joined)
@@ -267,7 +292,7 @@ def type_id(typ: TypeAttribute) -> int:
     if isinstance(typ, Tuple): return StringAttr("tuple_typ")
     if isinstance(typ, TypeParameter): return type_id(typ.bound)
     if isinstance(typ, FatPtr): return typ.cls
-    if isinstance(typ, Union): return StringAttr("")
+    if isinstance(typ, Union): return StringAttr("union_typ")
     if isinstance(typ, Function): return StringAttr("function_typ")
     if isinstance(typ, Coroutine): return StringAttr("coroutine_typ")
     raise Exception(f"can't find type id for type {typ}")
@@ -289,7 +314,7 @@ builtin_types = {
     "bool_typ":Ptr([IntegerType(1)]), "i8_typ":Ptr([IntegerType(8)]), "i32_typ":Ptr([IntegerType(32)]), "i64_typ":Ptr([IntegerType(64)]),
     "i128_typ":Ptr([IntegerType(128)]), "f64_typ":Ptr([Float64Type()]), "nil_typ":Nil(),
     "coroutine_typ":Coroutine([ArrayAttr([]), Nothing(), Nothing()]), "function_typ":Function([ArrayAttr([]), Nothing(), Nothing()]),
-    "buffer_typ":Buffer([Nothing()]), "tuple_typ":Tuple([ArrayAttr([])])
+    "buffer_typ":Buffer([Nothing()]), "tuple_typ":Tuple([ArrayAttr([])]), "union_typ":Union.from_list([IntegerType(8)])
 }
 
 # Determine if a type is primitive

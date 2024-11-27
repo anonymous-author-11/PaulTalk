@@ -926,14 +926,13 @@ class ObjectCreation(Expression):
             inputs[i] = unwrap.results[0]
         cls = scope.classes[self_type.cls.data]
         n_data_fields = len([f for f in cls.fields() if not isinstance(f.declaration, TypeFieldDecl)])
-        type_ptrs, operands = self.type_ptrs(cls, self_type, scope)
+        parameterizations = self.parameterizations(cls, self_type, scope)
         attr_dict = {
             "typ":cls.base_typ(),
             "class_name":self_type.cls,
             "num_data_fields":IntegerAttr.from_int_and_width(n_data_fields, 32),
-            "type_ptrs":ArrayAttr(type_ptrs)
         }
-        new_op = NewOp.create(operands=operands, attributes=attr_dict, result_types=[self_type])
+        new_op = NewOp.create(operands=parameterizations, attributes=attr_dict, result_types=[self_type])
         scope.region.last_block.add_op(new_op)
         scope.symbol_table[self.anon_name] = new_op.results[0]
         scope.type_table[self.anon_name] = self_type
@@ -946,50 +945,47 @@ class ObjectCreation(Expression):
             MethodCall(self.filename, self.line_number, anon_id, "set_info", [line_number, file_name]).codegen(scope)
         return new_op.results[0]
 
-    def type_ptrs(self, created_cls, self_type, scope):
-        created_type_fields = [f for f in created_cls.fields() if isinstance(f.declaration, TypeFieldDecl)]
+    def parameterizations(self, created_cls, self_type, scope):
+        if self_type.type_params == NoneAttr(): return []
+        new_instance_type_fields = created_cls.stored_type_fields()
         operands = []
-        type_ptrs = []
-        for f in created_type_fields:
-            t = f.declaration.type_param
-            if isinstance(t, Union):
-                type_ptr = type_id(t.types.data[0])
-                type_ptrs.append(type_ptr)
-                continue
-            if not isinstance(t, TypeParameter):
-                type_ptr = type_id(t)
-                type_ptrs.append(type_ptr)
-                continue
-            idx = created_cls.type_parameters.index(t)
-            type_arg = self_type.type_params.data[idx]
-            if isinstance(type_arg, Union):
-                type_ptr = type_id(type_arg.types.data[0])
-                type_ptrs.append(type_ptr)
-                continue
-            if not isinstance(type_arg, TypeParameter):
-                type_ptr = type_id(type_arg)
-                type_ptrs.append(type_ptr)
-                continue
-            surrounding_class_type_fields = [x for x in scope.cls.fields() if isinstance(x.declaration, TypeFieldDecl) and x.declaration.type_param == type_arg]
-            if len(surrounding_class_type_fields) == 0:
-                type_ptr = type_id(type_arg.bound)
-                type_ptrs.append(type_ptr)
-                continue
-            if "self" not in scope.symbol_table:
-                type_ptr = type_id(type_arg.bound)
-                type_ptrs.append(type_ptr)
-                continue
-            type_ptr = IntegerAttr.from_int_and_width(len(operands), 32)
-            field = surrounding_class_type_fields[0]
-            offset = IntegerAttr.from_int_and_width(field.offset, IntegerType(64))
-            operands0 = [scope.symbol_table["self"]]
-            attr_dict = {"offset":offset, "vtable_size":IntegerAttr.from_int_and_width(scope.cls.vtable_size(), 32)}
-            field_acc = FieldAccessOp.create(operands=operands0, attributes=attr_dict, result_types=[ReifiedType()])
-            scope.region.last_block.add_op(field_acc)
-            operands.append(field_acc.results[0])
-            type_ptrs.append(type_ptr)
-            
-        return type_ptrs, operands
+        is_instance_method = "self" in scope.symbol_table
+        if is_instance_method:
+            ambient_type_fields = scope.cls.stored_type_fields()
+            for i, ambient_type_field in enumerate(ambient_type_fields):
+                offset = IntegerAttr.from_int_and_width(ambient_type_field.offset, IntegerType(64))
+                operands0 = [scope.symbol_table["self"]]
+                attr_dict = {"offset":offset, "vtable_size":IntegerAttr.from_int_and_width(scope.cls.vtable_size(), 32)}
+                field_acc = FieldAccessOp.create(operands=operands0, attributes=attr_dict, result_types=[ReifiedType()])
+                scope.region.last_block.add_op(field_acc)
+                operands.append(field_acc.results[0])
+        parameterizations = []
+
+        temp_scope = Scope(scope)
+        for t1, t2 in zip(created_cls.type_parameters, self_type.type_params.data): temp_scope.add_alias(t1, t2)
+
+        ambient_types = scope.cls.type_parameters if is_instance_method else []
+        for new_instance_type_field in new_instance_type_fields:
+            field_formal_type = temp_scope.simplify(new_instance_type_field.declaration.type_param)
+            field_id_hierarchy = id_hierarchy(field_formal_type, ambient_types)
+            field_name_hierarchy = name_hierarchy(field_formal_type)
+            parameterization = ParameterizationOp.make(operands, field_id_hierarchy, field_name_hierarchy)
+            scope.region.last_block.add_op(parameterization)
+            parameterizations.append(parameterization.results[0])
+
+            # what we really want to do is
+            # alias the new instance formal parameters by the specified ones
+            # go through the type fields of the new instance
+            # check from the scoped names whether they are fully concrete
+            # for fully concrete ones, generate a global and store the ptr to it
+            # for ones still containing type parameters
+            # we could take all the ambient type parameters as operands
+            # flatten the type
+            # replace extant type parameters in flat lists with indices
+            # still question of how to pass method type params
+            # malloc space for the flat list
+
+        return parameterizations
 
     def typeflow(self, scope):
         self.exprtype(scope)
@@ -1765,7 +1761,7 @@ class ClassDef(Statement):
                 self._scope.add_alias(old_tp, t)
         for t in self.type_parameters: self._scope.add_alias(FatPtr.basic(t.label.data), t)
 
-    def flat_type_list(self):
+    def all_type_parameters(self):
         ancestors = self.ancestors()
         flat_list = []
         for anc in ancestors:
@@ -1777,10 +1773,10 @@ class ClassDef(Statement):
         return flat_list
 
     def type_fields(self):
-        return [TypeFieldDecl(self.filename, self.line_number, f"{self.name}_{i}", ReifiedType(), self, t) for i, t in enumerate(self.flat_type_list())]
+        return [TypeFieldDecl(self.filename, self.line_number, f"{self.name}_{i}", ReifiedType(), self, t) for i, t in enumerate(self.all_type_parameters())]
 
     def base_typ(self):
-        return llvm.LLVMStructType.from_type_list([field.declaration.type(self._scope).base_typ() for field in self.fields()])
+        return llvm.LLVMStructType.from_type_list([field.declaration.type(self._scope).base_typ() for field in self.fields() if field.needs_storage()])
 
     def direct_supertypes(self):
         return [self._scope.simplify(t) for t in self._direct_supertypes]
@@ -1846,6 +1842,9 @@ class ClassDef(Statement):
     def fields(self):
         return list(reversed({elem.declaration.name:elem for elem in reversed(self.vtable()) if isinstance(elem, Field)}.values()))
 
+    def stored_type_fields(self):
+        return [f for f in self.fields() if isinstance(f.declaration, TypeFieldDecl) and f.needs_storage()]
+
     def initialize_behaviors(self):
         all_method_definitions = self.all_method_definitions()
         confusable_sets = list(reversed({tuple(definition.confusable_set(all_method_definitions, self._scope)):definition for definition in reversed(all_method_definitions)}.keys()))
@@ -1860,7 +1859,15 @@ class ClassDef(Statement):
 
     def compute_vtable(self):
         vtables = [*chain.from_iterable(cls.vtable() for cls in self.my_ordering())]
-        fields = [Field(i, self, declaration) for (i, declaration) in enumerate(self.all_field_declarations())]
+        # divide type fields into fixed and unfixed depending on whether a type parameter appears anywhere in them
+        # need a utility method to determine if a type is fully concrete
+        # we could cheat and search for "subtype" in its cleaned name
+        field_declarations = self.all_field_declarations()
+        data_fields = [field for field in field_declarations if not isinstance(field, TypeFieldDecl)]
+        fixed_type_fields = [field for field in field_declarations if isinstance(field, TypeFieldDecl) and "subtype" in field.scoped_name(self._scope)]
+        unfixed_type_fields = [field for field in field_declarations if isinstance(field, TypeFieldDecl) and "subtype" not in field.scoped_name(self._scope)]
+        field_declarations = [*data_fields, *unfixed_type_fields, *fixed_type_fields]
+        fields = [Field(i, self, declaration) for (i, declaration) in enumerate(field_declarations)]
         self.initialize_behaviors()
         methods = [*chain.from_iterable(behavior.methods for behavior in self.behaviors)]
         superfluous_methods = [*chain.from_iterable(behavior.superfluous_methods for behavior in self.behaviors)]
@@ -1989,9 +1996,17 @@ class Field:
     def codegen(self, scope):
         offset = IntegerAttr.from_int_and_width(self.offset, 32)
         meth_name = StringAttr(self.cls.name + "_field_" + self.declaration.name.replace("@",""))
-        getter = GetterDefOp.create(attributes={"struct_typ":self.cls.base_typ(), "offset":offset, "meth_name":meth_name})
+        attr_dict = {"struct_typ":self.cls.base_typ(), "offset":offset, "meth_name":meth_name}
+        if not self.needs_storage():
+            attr_dict["id_hierarchy"] = id_hierarchy(self.declaration.type_param, [])
+            attr_dict["name_hierarchy"] = name_hierarchy(self.declaration.type_param)
+        getter = GetterDefOp.create(attributes=attr_dict)
         toplevel_ops.append(getter)
         scope.region.last_block.add_op(getter)
+
+    def needs_storage(self):
+        if not isinstance(self.declaration, TypeFieldDecl): return True
+        return "subtype" in self.declaration.scoped_name(self.cls._scope)
 
     def type(self):
         return self.cls._scope.simplify(self.declaration.type(self.declaration.defining_class._scope))

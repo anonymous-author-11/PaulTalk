@@ -646,6 +646,8 @@ class GetterDefOp(IRDLOperation):
     meth_name: StringAttr = attr_def(StringAttr)
     struct_typ: TypeAttribute = attr_def(TypeAttribute)
     offset: IntegerAttr = attr_def(IntegerAttr)
+    id_hierarchy: OptAttributeDef = opt_attr_def(ArrayAttr)
+    name_hierarchy: OptAttributeDef = opt_attr_def(ArrayAttr)
 
 @irdl_op_definition
 class ArgPasserOp(IRDLOperation):
@@ -664,13 +666,25 @@ class BufferFillerOp(IRDLOperation):
     yield_type: TypeAttribute = attr_def(TypeAttribute)
 
 @irdl_op_definition
+class ParameterizationOp(IRDLOperation):
+    name = "mini.parameterization"
+    args: VarOperand = var_operand_def()
+    name_hierarchy: ArrayAttr = attr_def(ArrayAttr)
+    id_hierarchy: ArrayAttr = attr_def(ArrayAttr)
+    result: OpResult = result_def()
+
+    @classmethod
+    def make(cls, operands, id_hierarchy, name_hierarchy):
+        attr_dict = {"id_hierarchy":id_hierarchy, "name_hierarchy":name_hierarchy}
+        return ParameterizationOp.create(operands=operands, attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
+
+@irdl_op_definition
 class NewOp(IRDLOperation):
     name = "mini.new"
-    args: VarOperand = var_operand_def()
+    parameterizations: VarOperand = var_operand_def()
     typ: TypeAttribute = attr_def(TypeAttribute)
     class_name: Attribute = attr_def(StringAttr)
     num_data_fields: IntegerAttr = attr_def(IntegerAttr)
-    type_ptrs: ArrayAttr = attr_def(ArrayAttr)
     result: OpResult = result_def(Ptr)
 
 @irdl_op_definition
@@ -1175,7 +1189,8 @@ MiniLang = Dialect(
         FromBufferOp,
         MemCpyOp,
         GlobalFptrOp,
-        SubtypeOp
+        SubtypeOp,
+        ParameterizationOp
     ],
     [
         Ptr,
