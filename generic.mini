@@ -91,9 +91,9 @@ class Array[T] extends Iterable2[T] {
 	@capacity : i32
 
 	def Self.from_iterable(iterable : Iterable2[T]) -> Array[T] {
-    	new = Array[T].new();
-    	for elem in iterable { new.append(elem); }
-    	return new;
+    	result = Array[T].new();
+    	for elem in iterable { result.append(elem); }
+    	return result;
     }
 	def init() {
 		@buffer = Buffer[T].new(1);
@@ -122,14 +122,14 @@ class Array[T] extends Iterable2[T] {
             i = i + 1;
         }
     }
-    def [](x : i32) -> T {
+    def [](x : i32) -> T yields OutOfBounds | Nil {
     	past_end = x > (@length - 1);
     	before_start = (@length + x) < 0;
         if past_end or before_start { self.throw_oob(x); }
         if x < 0 { x = @length + x; }
         return @buffer.[x];
     }
-    def throw_oob(x : i32) {
+    def throw_oob(x : i32) yields OutOfBounds {
     	yield(OutOfBounds.new(@length, x));
     }
     def unsafe_index(x : i32) -> T {

@@ -234,12 +234,12 @@ DONE:
 
 TODO:
 
+- Move type parameters back to { ptr, i160 } interface
 - Pass method-scoped type parameters into methods
 	- And class-scoped type parameters into class methods
 	- Add them onto the end of the signature
 	- Will probbaly have to add them to behavior signature too?
-		- Need to think about this
-		- Why do we even pass self to behaviors?
+		- Need to think about
 	- On method call, create parameterizations and pass them in
 	- Nice how the new infrastructure covers this
 	- Add method-scoped type parameters to ambient types and operands

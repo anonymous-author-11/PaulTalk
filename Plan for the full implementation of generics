@@ -1,8 +1,8 @@
 # Plan for the full implementation of generics
 
-A full implementation of generics will involve objects (fat pointers) carrying references their type parameters at runtime. This is so that:
+A full implementation of generics will involve objects carrying references their type parameters at runtime. This is so that:
 
-1. We can do runtime type-checks of arbitrarily nested parameterzed types
+1. We can do runtime type-checks of arbitrarily nested parameterized types
 
 	Example: "if x is Iterable[Pair[i32, f64]] {...}"
 
@@ -16,33 +16,27 @@ A full implementation of generics will involve objects (fat pointers) carrying r
 
 	Example: to index into an Array[T] in constant time, we can query the stored type parameter T for its size
 
-# Implementation Strategies
+# Implementation Strategy
 
-There are several candidate approaches to storing type parameters at runtime:
+Summary: Storing them as fields of the instance alongside its data fields, accessed via the vtable
 
-1. Storing them as fields of the instance alongside its data fields, accessed via the vtable
+For "Range extends Iterable[i32]", we will call the i32 a "fixed" type parameter. It has been "fixed" by inheritance and cannot vary between instances. Whereas for "Array[T] extends Iterable[T]", T is not fixed. We only need to store unfixed type parameters as instance fields. For fixed type parameters, the vtable getter can immediately return the fixed type. This means that an i32 converted to an Addable[i32, i32] needs no extra fields because all of its type parameters are fixed and can be immediately returned by its vtable getters.
 
-This has the rather significant downside that whenever we convert an i32 to an Addable[i32, i32] for use in a generic method, we should have to allocate space on the heap and put it behind a pointer, because storing those two type parameters takes more space than is available inside the fat pointer. Gets even worse when you consider that it is also Addable[f64, f64], and Comparable[i32], and so on.
+Note that this makes our prior plan to reserve a word *in the fat pointer itself* no longer necessary. That word is now free for small struct optimizations.
 
-2. Making a separate allocation for type parameters at object creation time
+Each of the unfixed formal parameters will be associated with a field in the instance. That field is populated at instance creation with a pointer to a "parameterization" representing the concrete type at that type parameter position. This parameterization is either statically known, in which case it can be a static global variable, or not, in which case it must be dynamically allocated. This is a separate allocation from the instance itself, because different instances may share parameterizations, or parts of parameterizations. (These allocations will need to be tracked by the region inference system later, which may be annoying). So, a Pair[Pair[i32, f64], i32] would have two type fields for its two formal parameters. These fields would contain pointers to parameterizations. There would be a protocol for extracting the indvidual types from a parameterization (involving chasing pointers, which in most cases LLVM should be able to see right through).
 
-This means that even if many instances share exactly the same type parameters, they all get their own allocation. Consider placing i32's into an Array[Addable[i32, i32]]. Every i32 converted into an Addable will have to allocate its own version of exactly the same type parameter list.
+For something like "ZipIterable[T,U] extends Iterable[Pair[T,U]]", we would end up storing three parameterizations, even though technically only two parameters are unfixed. There's probably a way to optimize this if it were given more thought.
 
-3. (Current best idea) Creating a (thread local) static global for each unique type parameter list
+Any static parameterizations would have names that are a function of the types they contain, so that globals with identical types will have identical names and can be merged at link time.
 
-For "Range extends Iterable[i32]", we will call the i32 a "fixed" type parameter. It has been "fixed" by inheritance and cannot vary between instantiations. Whereas for "Array[T] extends Iterable[T]", T is not fixed. We only need to store unfixed type parameters as instance fields. For fixed type parameters, the vtable getter can immediately return the fixed type. This means that an i32 converted to an Addable[i32, i32] needs no extra fields because all of its type parameters are fixed and can be immediately returned by its vtable getters.
+It seems like unions can be easily incorporated into this scheme by being an array of all the types in the union. The only twist would be also storing the size of the union since unions can have a variable number of types in them. The same considerations that allow us to have arbitraily nested type parameters would also allow arbitrarily sized unions.
 
-Each of the unfixed formal parameters will be associated with a field in the instance. That field is populated at instance creation with a pointer to a static (program-long lifetime) global representing the concrete type at that type parameter position. This global may be an array of types representing a nested type. So, a Pair[Pair[i32, f64], i32] would have two type fields for its two formal parameters. These fields would contain pointers to globals. These globals would be [Pair, i32, f64] for the first formal parameter and [i32] for the second.
-
-For something like "ZipIterable[T,U] extends Iterable[Pair[T,U]]", we would end up storing three type parameters, even though technically only two parameters are unfixed. For ZipIterable[i32, f64] the type fields would point to the three globals [i32], [f64], and [Pair, i32, f64].
-
-The globals would have names that are a function of the types they contain, so that globals with identical types will have identical names and can be merged at link time.
-
-It seems like unions can be easily incorporated into this scheme by being an array of all the types in the union. The only twist would be also storing the size of the union since unions can have a variable number of types in them. The same considerations that allow us to have arbitraily nested type parameters also allow arbitrarily sized unions.
+Type parameter fields would be marked invariant since they cannot change after instance creation.
 
 # Required changes
 
-We will need to move first-class functions from being represented merely as a raw pointer to being represented by a fat pointer, so that we can store the @function_type vptr and the function's type parameters. We should figure out a special optimization for these, so that we can store a pointer to type information in the third word of the fat ptr. (That third word is now unused in general, because our scheme means that type information can be accessed through the vptr and the data ptr, with no need for a third ptr, except as a special optimization in this case). Probably that pointer will be to a global array with an element for every formal type parameter, storing pointers to global arrays for each formal parameter's concrete types. Then the @function_type's vtable getter should know to retrieve type parameters from that third word.
+We will need to move first-class functions from being represented merely as a raw pointer to being represented by a fat pointer, so that we can store the @function_type vptr and the function's type parameters. We should figure out a special optimization for these, so that we can store a pointer to type information in the third word of the fat ptr. (That third word is now unused in general, because our scheme means that type information can be accessed through the vptr and the data ptr, with no need for a third ptr, except as a special optimization in this case). Then the @function_type's vtable getter should know to retrieve type parameters from that third word.
 
 Buffer creation and indexation will need to use the locally available type parameters so that buffers can remain just a single raw pointer. So for instance operations on the Buffer[T] field of Array[T] will use the T from the Array instance.
 
@@ -50,10 +44,12 @@ We will have to create a way to cast builtin types to generic parents, for examp
 
 If we want generic fields to be of specialized size, we will have to add setters to the vtable in addition to getters.
 
+For method-scoped type parameters, these will need to be passed in as parameters to the method. Because the concrete method being called is not known at the point of the call, we will need to pass in a list of type parameters, and in the behavior dispatch itself, select the appropriate type parameters for the method we end up dispatching to. Type parameters will also need to be passed for class method calls.
+
 # What this design allows
 
-First, generic fields and generic buffers can actually be the size of the concrete types they are instantiated with. An Array of i32 can actually be hold a contiguous buffer of i32's that can be iterated over with great cache locality. A Pair[i32, i32] could be stored inline inside a fat ptr.
+First, generic fields and generic buffers can actually be the size of the concrete types they are instantiated with. An Array of i32 can actually be hold a contiguous buffer of i32's that can be iterated over with great cache locality.
 
-Second, certain kinds of casts not available in other langauges will be possible. For example, when we add variance, it will be possible to upcast a covariant container (of value types) with essentially no runtime cost. Only at the point of taking an element out of the container will the element itself have to be casted.
+Second, certain kinds of casts not available in other langauges will be possible. For example, when we add variance, it will be possible to upcast a covariant container (of value types) with essentially no runtime cost. Only at the point of taking an element out of the container will the element itself have to be casted. The same container can be viewed by different pieces of code as containing different types.
 
 Third, we retain separate compilation and avoid code duplication and keep all the good parts of non-monomorphized generics.
