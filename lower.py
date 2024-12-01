@@ -1488,14 +1488,14 @@ class LowerFuncDef(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: FunctionDefOp, rewriter: PatternRewriter):
         debug_code(op)
-        void_return = op.result_types.data[0] == llvm.LLVMVoidType()
+        void_return = op.result_type == llvm.LLVMVoidType()
         body = op.body
         last_block = body.last_block
         if not last_block: raise Exception("no last block")
         exit_block = Block([])
         terminator = cf.Branch(exit_block)
         last_block.add_op(terminator)
-        if not void_return: exit_arg = exit_block.insert_arg(op.result_types.data[0], 0)
+        if not void_return: exit_arg = exit_block.insert_arg(op.result_type, 0)
         ret_ops = chain.from_iterable([[op for op in block.ops if isinstance(op, ReturnOp)] for block in body.blocks])
         for ret_op in ret_ops:
             parent_block = ret_op.parent_block()
@@ -1504,7 +1504,7 @@ class LowerFuncDef(RewritePattern):
             if void_return:
                 br = cf.Branch(exit_block)
             else:
-                unwrap = UnwrapOp.create(operands=[ret_op.value], result_types=[op.result_types.data[0]])
+                unwrap = UnwrapOp.create(operands=[ret_op.value], result_types=[op.result_type])
                 rewriter.insert_op_before(unwrap, ret_op)
                 br = cf.Branch(exit_block, unwrap.results[0])
             rewriter.insert_op_before(br, ret_op)
@@ -1513,13 +1513,13 @@ class LowerFuncDef(RewritePattern):
         new_ret = func.Return(exit_arg) if not void_return else func.Return()
         exit_block.add_op(new_ret)
         body.add_block(exit_block)
-        result_types = [] if void_return else [*(op.result_types)]
+        result_types = [] if void_return else [op.result_type]
         body = op.detach_region(body)
         for block in body.blocks:
             if not isinstance(block.last_op, cf.Branch): continue
             if not void_return and exit_block in block.last_op.successors and len([*block.last_op.arguments]) == 0:
                 rewriter.replace_op(block.last_op, cf.Branch(block))
-        func_op = func.FuncOp(name=op.func_name.data, function_type=([*(op.args_types)], result_types), region=body)
+        func_op = func.FuncOp(name=op.func_name.data, function_type=([arg.type for arg in body.first_block.args], result_types), region=body)
         rewriter.replace_matched_op(func_op)
         debug_code(op)
 
@@ -1533,7 +1533,6 @@ class LowerFPtrCall(RewritePattern):
         laundered = builtin.UnrealizedConversionCastOp(operands=[op.fptr], result_types=[ftype])
         call_indirect = func.CallIndirect(laundered.results[0], [*op.args], result_types)
         rewriter.insert_op_before_matched_op(laundered)
-        fat_base = FatPtr.basic("").base_typ()
         if op.ret_type == llvm.LLVMVoidType():
             rewriter.replace_matched_op(call_indirect)
             return
@@ -1570,7 +1569,7 @@ class LowerMethodCall(RewritePattern):
         fptr = llvm.LoadOp(fptr_ptr.results[0], llvm.LLVMPointerType.opaque())
         input_type = llvm.LLVMArrayType.from_size_and_type(len(op.vptrs.data), llvm.LLVMPointerType.opaque())
         input_ptr = AllocateOp(attributes={"typ":input_type}, result_types=[llvm.LLVMPointerType.opaque()])
-        method_typ0 = FunctionType.from_lists([arg.type for arg in op.all_args(input_ptr.results[0])], [llvm.LLVMPointerType.opaque()])
+        method_typ0 = FunctionType.from_lists([arg.type for arg in op.behavior_args(input_ptr.results[0])], [llvm.LLVMPointerType.opaque()])
         laundered0 = builtin.UnrealizedConversionCastOp(operands=[fptr.results[0]], result_types=[method_typ0])
         ops = [vptr, invariant2, adjustment, offsetted, fptr_ptr, fptr, input_ptr, laundered0]
 
@@ -1588,19 +1587,20 @@ class LowerMethodCall(RewritePattern):
             store = llvm.StoreOp(v.results[0], gep1.results[0])
             ops.extend([v, gep1, store])
 
-        behavior_call = func.CallIndirect(laundered0.results[0], [*op.all_args(input_ptr.results[0])], llvm.LLVMPointerType.opaque())
+        behavior_call = func.CallIndirect(laundered0.results[0], [*op.behavior_args(input_ptr.results[0])], llvm.LLVMPointerType.opaque())
 
-        method_typ1 = FunctionType.from_lists([arg.type for arg in op.most_args()], result_types)
+        nil_ptr = AddrOfOp.from_string("nil_typ")
+        method_typ1 = FunctionType.from_lists([arg.type for arg in op.method_args(nil_ptr.results[0])], result_types)
         laundered1 = builtin.UnrealizedConversionCastOp(operands=[behavior_call.results[0]], result_types=[method_typ1])
-        call_indirect = func.CallIndirect(laundered1.results[0], [*op.most_args()], result_types)
+        call_indirect = func.CallIndirect(laundered1.results[0], [*op.method_args(nil_ptr.results[0])], result_types)
 
         if(op.ret_type == llvm.LLVMVoidType()):
-            rewriter.inline_block_before_matched_op(Block([*ops, behavior_call, laundered1]))
+            rewriter.inline_block_before_matched_op(Block([*ops, behavior_call, nil_ptr, laundered1]))
             rewriter.replace_matched_op(call_indirect)
             return
 
         wrap = WrapOp.create(operands=[call_indirect.results[0]], result_types=[llvm.LLVMPointerType.opaque()])
-        rewriter.inline_block_before_matched_op(Block([*ops, behavior_call, laundered1, call_indirect]))
+        rewriter.inline_block_before_matched_op(Block([*ops, behavior_call, nil_ptr, laundered1, call_indirect]))
         rewriter.replace_matched_op(wrap)
 
 class LowerGetterDef(RewritePattern):

@@ -393,13 +393,11 @@ class FunctionLiteral(Expression):
         body_scope.behavior = None
         body_scope.type_table = {}
         body_scope.symbol_table = {}
-        arg_types = [param.type(scope).base_typ() for param in self.params]
         self.wrap_params(body_scope)
         self.body.codegen(body_scope)
         attr_dict = {
             "func_name":StringAttr(self.name),
-            "args_types":ArrayAttr(arg_types),
-            "result_types":ArrayAttr([self.return_type().base_typ() if self.return_type() else llvm.LLVMVoidType()]),
+            "result_type":self.return_type().base_typ() if self.return_type() else llvm.LLVMVoidType(),
             "yield_type":self.yield_type
         }
         func_op = FunctionDefOp.create(attributes=attr_dict, regions=[body_scope.region])
@@ -482,9 +480,8 @@ class FieldIdentifier(Identifier):
         ssa_val = scope.symbol_table["self"]
         field_type = field.declaration.type(scope)
         field_acc = FieldAccessOp.create(operands=[ssa_val], attributes=attr_dict, result_types=[field_type])
-        cast = CastOp.make(field_acc.results[0], field_type, field.type(), type_id)
-        scope.region.last_block.add_ops([field_acc, cast])
-        return cast.results[0]
+        scope.region.last_block.add_op(field_acc)
+        return field_acc.results[0]
 
     def exprtype(self, scope):
         field = next(iter(field for field in scope.cls.fields() if field.declaration.name == self.name), None)
@@ -815,17 +812,16 @@ class ClassMethodCall(MethodCall):
             scope.region.last_block.add_ops([cast, unwrap])
             args[i] = unwrap.results[0]
         broad, specialized = self.simple_exprtype(scope)
-        ret_typ = broad
         vtable_size = IntegerAttr.from_int_and_width(rec_class.vtable_size(), 64)
 
         offset = IntegerAttr.from_int_and_width(behavior.offset, 32)
         vptrs = ArrayAttr([type_id(t) if not isinstance(t, FatPtr) else NoneAttr() for t in arg_types])
-        ret_schema = ret_typ.base_typ() if ret_typ else llvm.LLVMVoidType()
+        ret_schema = broad.base_typ() if broad else llvm.LLVMVoidType()
         attr_dict = {
             "offset":offset,"vptrs":vptrs, "vtable_size":vtable_size,
             "ret_type":ret_schema, "ret_type_unq":ret_schema, "class_name":StringAttr(self.receiver.name)
         }
-        result_types = [ret_typ] if ret_typ else []
+        result_types = [broad] if broad else []
         operands = [*args]
 
         #if(all(t in builtin_types.values() for t in arg_types)):
@@ -1063,14 +1059,12 @@ class FunctionDef(Statement):
         body_scope = Scope(scope, method=self)
         body_scope.type_table = {}
         body_scope.symbol_table = {}
-        arg_types = [param.type(scope).base_typ() for param in self.params]
         self.wrap_params(body_scope)
         self.body.codegen(body_scope)
-        result_types = [self.return_type().base_typ()] if self.return_type() else [llvm.LLVMVoidType()]
+        result_type = self.return_type().base_typ() if self.return_type() else llvm.LLVMVoidType()
         attr_dict = {
             "func_name":StringAttr(self.name),
-            "args_types":ArrayAttr(arg_types),
-            "result_types":ArrayAttr(result_types),
+            "result_type":result_type,
             "yield_type":self.yield_type
         }
         func_op = FunctionDefOp.create(attributes=attr_dict, regions=[body_scope.region])
@@ -1136,13 +1130,11 @@ class MethodDef(Statement):
         arg_types = scope.behavior.broad_param_types()
         self.wrap_self(body_scope)
         self.wrap_params(body_scope, arg_types)
-
         self.body.codegen(body_scope)
         result_type = scope.behavior.broad_return_type().base_typ() if scope.behavior.broad_return_type() else llvm.LLVMVoidType()
         attr_dict = {
             "func_name":StringAttr(self.qualified_name()),
-            "args_types":ArrayAttr(arg_types),
-            "result_types":ArrayAttr([result_type]),
+            "result_type":result_type,
             "yield_type":self.yield_type
         }
         func_op = FunctionDefOp.create(attributes=attr_dict, regions=[body_scope.region])
@@ -1180,9 +1172,10 @@ class MethodDef(Statement):
 
     def wrap_params(self, body_scope, arg_types):
         body_block = body_scope.region.block
+        type_param_list = body_block.insert_arg(llvm.LLVMPointerType.opaque(), 2)
         for i, param in enumerate(self.params):
             param_type = body_scope.simplify(param.type(body_scope))
-            arg = body_block.insert_arg(arg_types[i].base_typ(), i + 2)
+            arg = body_block.insert_arg(arg_types[i].base_typ(), i + 3)
             wrap = WrapOp.create(operands=[arg], result_types=[arg_types[i]])
             cast = CastOp.make(wrap.results[0], arg_types[i], param_type, type_id)
             body_block.add_ops([wrap, cast])
@@ -1238,16 +1231,17 @@ class MethodDef(Statement):
         if self.name[0].isupper():
             raise Exception(f"Line {self.line_number}: Method names should not be capitalized.")
         if self.name == "init" and self.return_type():
-            raise Exception(f'Line {self.line_number}: init should return anything')
+            raise Exception(f'Line {self.line_number}: init should not return anything')
         body_scope = Scope(scope, method=self)
         for t in self.type_params: body_scope.add_alias(FatPtr.basic(t.label.data), t)
         self.enforce_override_rules(body_scope)
-        if self.name == "init":
-            for t in [*body_scope.type_table.keys()]:
-                if "@" not in t: continue
-                body_scope.type_table.pop(t)
         self_typ = body_scope.simplify(FatPtr.generic(self.defining_class.name, self.defining_class.type_parameters))
         body_scope.type_table["self"] = self_typ
+        if self.name == "init":
+            body_scope.type_table.pop("self")
+            for key in [*body_scope.type_table.keys()]:
+                if "@" not in key: continue
+                body_scope.type_table.pop(key)
         for param in self.params:
             if "@" not in param.name:
                 param.typeflow(body_scope)
@@ -1410,15 +1404,13 @@ class ClassMethodDef(MethodDef):
     def codegen(self, scope):
         if self.qualified_name() in codegenned: return
         body_scope = Scope(scope, method=self)
-        
         arg_types = scope.behavior.broad_param_types()
         self.wrap_params(body_scope, arg_types)
         self.body.codegen(body_scope)
         result_type = scope.behavior.broad_return_type().base_typ() if scope.behavior.broad_return_type() else llvm.LLVMVoidType()
         attr_dict = {
             "func_name":StringAttr(self.qualified_name()),
-            "args_types":ArrayAttr(arg_types),
-            "result_types":ArrayAttr([result_type]),
+            "result_type":result_type,
             "yield_type":self.yield_type
         }
         func_op = FunctionDefOp.create(attributes=attr_dict, regions=[body_scope.region])
@@ -1428,9 +1420,10 @@ class ClassMethodDef(MethodDef):
 
     def wrap_params(self, body_scope, arg_types):
         body_block = body_scope.region.block
+        type_param_list = body_block.insert_arg(llvm.LLVMPointerType.opaque(), 0)
         for i, param in enumerate(self.params):
             param_type = body_scope.simplify(param.type(body_scope))
-            arg = body_block.insert_arg(arg_types[i].base_typ(), i)
+            arg = body_block.insert_arg(arg_types[i].base_typ(), i + 1)
             wrap = WrapOp.create(operands=[arg], result_types=[arg_types[i]])
             cast = CastOp.make(wrap.results[0], arg_types[i], param_type, type_id)
             body_block.add_ops([wrap, cast])
@@ -1515,8 +1508,7 @@ class Behavior(Statement):
         yield_typ = Nil()
         attr_dict = {
             "func_name":StringAttr(self.qualified_name()),
-            "args_types":ArrayAttr(args_types),
-            "result_types":ArrayAttr([llvm.LLVMPointerType.opaque()]),
+            "result_type":llvm.LLVMPointerType.opaque(),
             "yield_type":yield_typ
         }
 

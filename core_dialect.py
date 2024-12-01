@@ -87,8 +87,7 @@ class TypeParameter(ParametrizedAttribute, TypeAttribute):
     def base_typ(self):
         return llvm.LLVMStructType.from_type_list([
             llvm.LLVMPointerType.opaque(),
-            IntegerType(128),
-            IntegerType(32)
+            IntegerType(160)
         ])
 
     def __repr__(self):
@@ -605,11 +604,11 @@ class MethodCallOp(MethodCallLike, IRDLOperation):
         dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [3])
         return llvm.ExtractValueOp(dense_ary, self.fat_ptr, IntegerType(32))
 
-    def all_args(self, ptr):
+    def behavior_args(self, ptr):
         return [self.fat_ptr, ptr, *self.args]
 
-    def most_args(self):
-        return [self.fat_ptr, self.fat_ptr, *self.args]
+    def method_args(self, type_params_ptr):
+        return [self.fat_ptr, self.fat_ptr, type_params_ptr, *self.args]
 
 @irdl_op_definition
 class ClassMethodCallOp(MethodCallLike, IRDLOperation):
@@ -626,11 +625,11 @@ class ClassMethodCallOp(MethodCallLike, IRDLOperation):
     def adjustment(self, vtable_buffer_size):
         return llvm.ConstantOp(IntegerAttr.from_int_and_width(vtable_buffer_size, 32), IntegerType(32))
 
-    def all_args(self, ptr):
+    def behavior_args(self, ptr):
         return [ptr, *self.args]
 
-    def most_args(self):
-        return self.args
+    def method_args(self, type_params_ptr):
+        return [type_params_ptr, *self.args]
 
 @irdl_op_definition
 class FieldAccessOp(IRDLOperation):
@@ -818,7 +817,7 @@ class ContinueOp(IRDLOperation):
 class FunctionDefOp(IRDLOperation):
     name = "mini.func"
     args_types: ArrayAttr[TypeAttribute] = attr_def(ArrayAttr[TypeAttribute])
-    result_types: ArrayAttr[TypeAttribute] = attr_def(ArrayAttr[TypeAttribute])
+    result_type: TypeAttribute = attr_def(TypeAttribute)
     yield_type: TypeAttribute = attr_def(TypeAttribute)
     func_name: StringAttr = attr_def(StringAttr)
     body: Region = region_def()
