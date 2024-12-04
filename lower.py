@@ -255,10 +255,8 @@ class LowerPrelude(RewritePattern):
             str_len = 6 if key == "i64_string" else 4
             str_type = llvm.LLVMArrayType.from_size_and_type(str_len, llvm.IntegerType(8))
             str_op = GlobalStrOp.create(attributes={"value":llvm.StringAttr(value), "sym_name":llvm.StringAttr(key), "str_type":str_type})
-            rewriter.insert_op_before_matched_op(str_op)
-
+            rewriter.insert_op_before(str_op, op)
         utils_api = UtilsAPIOp.create()
-
         ops = [utils_api]
         rewriter.inline_block_before_matched_op(Block(ops))
         rewriter.replace_matched_op(print_decl)
@@ -297,14 +295,28 @@ class LowerSetFlag(RewritePattern):
 class LowerCheckFlag(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: CheckFlagOp, rewriter: PatternRewriter):
+        # Implementation of type checking using a hash-based approach
+        # This function handles both builtin types (direct comparison) and 
+        # user-defined types (hash table lookup)
+
+        # Verify we have a valid LLVM struct type for type checking
         if not isinstance(op.struct_typ, llvm.LLVMStructType): raise Exception("not good!")
+
+        # Get the flag pointer (vptr) from the object being checked
+        # This contains the type information and hash table
         get_flag = GetFlagOp.create(operands=[op.ptr],attributes={"struct_typ":op.struct_typ}, result_types=[llvm.LLVMPointerType.opaque()])
+        
+        # Get the type ID pointer for the target type we're checking against
         typ_id = TypIDOp.create(result_types=[llvm.LLVMPointerType.opaque()], attributes={"typ_name":op.typ_name})
+        
+        # Unwrap the pointers to get raw values for comparison
         vptr = UnwrapOp.create(operands=[get_flag.results[0]], result_types=[llvm.LLVMPointerType.opaque()])
         vptr_int = llvm.PtrToIntOp(vptr.results[0], IntegerType(64))
         candidate_ptr = UnwrapOp.create(operands=[typ_id.results[0]], result_types=[llvm.LLVMPointerType.opaque()])
         candidate = llvm.PtrToIntOp(candidate_ptr.results[0], IntegerType(64))
 
+        # For builtin types, we can just do direct pointer comparison
+        # This is faster than hash table lookup for primitive types
         if op.typ_name.data in builtin_types.keys():
             eq = arith.Cmpi(vptr_int.results[0], candidate.results[0], "ne" if op.neg else "eq")
             wrap = WrapOp.create(operands=[eq.results[0]], result_types=[llvm.LLVMPointerType.opaque()])
@@ -317,35 +329,62 @@ class LowerCheckFlag(RewritePattern):
         ints_tbl_type = llvm.LLVMArrayType.from_size_and_type(3, IntegerType(64))
         ptrs_tbl_type = llvm.LLVMArrayType.from_size_and_type(3, llvm.LLVMPointerType.opaque())
         vtbl_type = llvm.LLVMStructType.from_type_list([ints_tbl_type, ptrs_tbl_type])
-        prime_ptr = llvm.GEPOp(vptr.results[0], [0, 0, 1], pointee_type=vtbl_type)
-        tbl_size_ptr = llvm.GEPOp(vptr.results[0], [0, 0, 2], pointee_type=vtbl_type)
-        subtype_test_ptr = llvm.GEPOp(vptr.results[0], [0, 1, 0], pointee_type=vtbl_type)
-        hash_tbl_ptr_ptr = llvm.GEPOp(vptr.results[0], [0, 1, 1], pointee_type=vtbl_type)
+        
+        # For user-defined types, use hash-based subtype testing
+        # The vtable has this layout:
+        # struct VTable {
+        #   i64[3] ints;     // [0]: reserved, [1]: hash_coef, [2]: table_size
+        #   ptr[3] ptrs;     // [0]: subtype_test_fn, [1]: hash_table_ptr, [2]: reserved
+        # }
 
-        prime = llvm.LoadOp(prime_ptr.results[0], IntegerType(64))
-        tbl_size = llvm.LoadOp(tbl_size_ptr.results[0], IntegerType(64))
-        subtype_test = llvm.LoadOp(subtype_test_ptr.results[0], llvm.LLVMPointerType.opaque())
-        hash_tbl_ptr = llvm.LoadOp(hash_tbl_ptr_ptr.results[0], llvm.LLVMPointerType.opaque())
-        wrapper = AddrOfOp.from_string("subtype_test_wrapper")
+        # Define the LLVM types for accessing vtable fields
+        ints_tbl_type = llvm.LLVMArrayType.from_size_and_type(3, IntegerType(64))
+        ptrs_tbl_type = llvm.LLVMArrayType.from_size_and_type(3, llvm.LLVMPointerType.opaque())
+        vtbl_type = llvm.LLVMStructType.from_type_list([ints_tbl_type, ptrs_tbl_type])
+
+        # Get pointers to the various vtable fields using GEP (GetElementPtr)
+        prime_ptr = llvm.GEPOp(vptr.results[0], [0, 0, 1], pointee_type=vtbl_type)  # Hash coefficient
+        tbl_size_ptr = llvm.GEPOp(vptr.results[0], [0, 0, 2], pointee_type=vtbl_type)  # Hash table size
+        subtype_test_ptr = llvm.GEPOp(vptr.results[0], [0, 1, 0], pointee_type=vtbl_type)  # Subtype test function
+        hash_tbl_ptr_ptr = llvm.GEPOp(vptr.results[0], [0, 1, 1], pointee_type=vtbl_type)  # Hash table pointer
+
+        # Load the actual values from the vtable fields
+        prime = llvm.LoadOp(prime_ptr.results[0], IntegerType(64))  # Load hash coefficient
+        tbl_size = llvm.LoadOp(tbl_size_ptr.results[0], IntegerType(64))  # Load table size
+        subtype_test = llvm.LoadOp(subtype_test_ptr.results[0], llvm.LLVMPointerType.opaque())  # Load test function
+        hash_tbl_ptr = llvm.LoadOp(hash_tbl_ptr_ptr.results[0], llvm.LLVMPointerType.opaque())  # Load hash table
 
         cand_id = llvm.LoadOp(candidate_ptr.results[0], IntegerType(64))
 
+        # Define function type for subtype test:
+        # bool subtype_test_wrapper(fn* test, i64 tbl_size, i64 hash_coef, i64 cand_id, i64 candidate, ptr tbl)
         ftype = FunctionType.from_lists(
             [llvm.LLVMPointerType.opaque(), IntegerType(64), IntegerType(64), IntegerType(64), IntegerType(64), llvm.LLVMPointerType.opaque()],
             [IntegerType(1)]
         )
-        laundered = builtin.UnrealizedConversionCastOp.create(operands=[wrapper.results[0]], result_types=[ftype])
+        
+        # Cast the subtype test function to the correct type
+        laundered = builtin.UnrealizedConversionCastOp.create(operands=[subtype_test.results[0]], result_types=[ftype])
+        
+        # Set up arguments for the subtype test call:
+        # - subtype_test: Function pointer to perform the test
+        # - tbl_size: Size of the hash table
+        # - prime: Hash coefficient for the hash function
+        # - cand_id: ID of the type we're testing
+        # - candidate: ID of the supertype we're testing against
+        # - hash_tbl_ptr: Pointer to the hash table containing valid supertypes
         args = [subtype_test.results[0], tbl_size.results[0], prime.results[0], cand_id.results[0], candidate.results[0] , hash_tbl_ptr.results[0]]
         call = func.CallIndirect(laundered.results[0], args, [IntegerType(1)])
 
+        # Insert all operations into the IR in the correct order
         rewriter.inline_block_before_matched_op(Block([
             get_flag, typ_id, vptr, vptr_int, candidate_ptr, candidate,
-            prime_ptr, tbl_size_ptr, subtype_test_ptr, hash_tbl_ptr_ptr,prime, tbl_size, subtype_test, wrapper, hash_tbl_ptr,
+            prime_ptr, tbl_size_ptr, subtype_test_ptr, hash_tbl_ptr_ptr,prime, tbl_size, subtype_test, hash_tbl_ptr,
             cand_id, laundered, call
         ]))
 
+        # Wrap the boolean result of the subtype test and replace the original operation
         wrap = WrapOp.create(operands=[call.results[0]], result_types=[llvm.LLVMPointerType.opaque()])
-        
         rewriter.replace_matched_op(wrap)
 
 class LowerAllocate(RewritePattern):
@@ -500,7 +539,7 @@ class LowerParameterization(RewritePattern):
                 if i == 0: continue
                 parameterization = ParameterizationOp.make(op.args, id_i, op.name_hierarchy.data[i])
                 gep = llvm.GEPOp(malloc.results[0], [0, i], pointee_type=typ)
-                store = llvm.StoreOp(parameterization.results[0], gep.results[0])
+                store = llvm.StoreOp(parameterization, gep.results[0])
                 rewriter.inline_block_after_matched_op(Block([parameterization, gep, store]))
             rewriter.replace_matched_op(malloc)
             return
@@ -1362,12 +1401,18 @@ class LowerMain(RewritePattern):
         last_block = op.body.last_block
         first_block = op.body.first_block
         if not last_block or not first_block: raise Exception("no blocks!")
-        last_block.add_ops([ret_val, ret_op])
-        setup = SetupExceptionOp.create()
-        rewriter.insert_op_before(setup, first_block.first_op)
-        body = op.detach_region(op.body)
-        main_decl = func.FuncOp("main", FunctionType.from_lists([IntegerType(32), llvm.LLVMPointerType.opaque()], [IntegerType(32)]), region=body)
-        rewriter.replace_matched_op(main_decl)
+        end_block = surrounding_block.split_before(op)
+        op.before_region.move_blocks_before(end_block)
+        br = cf.Branch(condition_block)
+        surrounding_block.add_op(br)
+        op.loop_region.move_blocks_before(end_block)
+        br = cf.Branch(condition_block)
+        body_last_block.add_op(br)
+        last_op = condition_block.last_op
+        if not last_op: raise Exception("no last op!")
+        cbr = cf.ConditionalBranch(last_op.results[0], body_first_block, [], end_block, [])
+        condition_block.add_op(cbr)
+        rewriter.erase_matched_op()
         debug_code(op)
 
 class LowerAssign(RewritePattern):
@@ -1561,7 +1606,7 @@ class LowerMethodCall(RewritePattern):
         dense_ary_1 = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [3])
         vptr = op.vptr()
         invariant2 = InvariantOp.make(vptr.results[0], op.vtable_size.value.data * 8)
-        vtbl_type = llvm.LLVMArrayType.from_size_and_type(op.vtable_size.value, llvm.LLVMPointerType.opaque())
+        vtbl_type = llvm.LLVMArrayType.from_size_and_type(op.vtable_size.value.data, llvm.LLVMPointerType.opaque())
         adjustment = op.adjustment(vtable_buffer_size())
         offsetted = llvm.GEPOp.from_mixed_indices(vptr.results[0], [adjustment.results[0]], pointee_type=llvm.LLVMPointerType.opaque())
 
@@ -1679,7 +1724,7 @@ class LowerFieldAccess(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: FieldAccessOp, rewriter: PatternRewriter):
 
-        fat_base = FatPtr.basic("").base_typ()
+        fat_base = FatPtr.basic('').base_typ()
         fat_ptr = llvm.LoadOp(op.fat_ptr, fat_base)
 
         dense_ary_0 = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
@@ -1687,16 +1732,16 @@ class LowerFieldAccess(RewritePattern):
         vptr = llvm.ExtractValueOp(dense_ary_0, fat_ptr, llvm.LLVMPointerType.opaque())
         invariant2 = InvariantOp.make(vptr.results[0], op.vtable_size.value.data * 8)
         vtbl_type = llvm.LLVMArrayType.from_size_and_type(op.vtable_size.value.data, llvm.LLVMPointerType.opaque())
-        vtable = llvm.LoadOp(vptr, vtbl_type)
-        adjustment = llvm.ExtractValueOp(dense_ary_3, fat_ptr, IntegerType(32))
+        adjustment = op.adjustment(vtable_buffer_size())
         offsetted = llvm.GEPOp.from_mixed_indices(vptr.results[0], [adjustment.results[0]], pointee_type=llvm.LLVMPointerType.opaque())
+
         fptr_ptr = llvm.GEPOp.from_mixed_indices(offsetted.results[0], [op.offset.value.data], pointee_type=llvm.LLVMPointerType.opaque())
         fptr = llvm.LoadOp(fptr_ptr.results[0], llvm.LLVMPointerType.opaque())
         
         dense_ary_1 = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [1])
         structptr = llvm.ExtractValueOp(dense_ary_1, fat_ptr.results[0], llvm.LLVMPointerType.opaque())
         ftype = FunctionType.from_lists([llvm.LLVMPointerType.opaque()], [llvm.LLVMPointerType.opaque()])
-        cast = builtin.UnrealizedConversionCastOp.create(operands=[fptr.results[0]], result_types=[ftype])
+        cast = builtin.UnrealizedConversionCastOp(operands=[fptr.results[0]], result_types=[ftype])
         field = func.CallIndirect(cast.results[0], [structptr.results[0]], [llvm.LLVMPointerType.opaque()])
         rewriter.inline_block_before_matched_op(Block([fat_ptr, vptr, invariant2, adjustment, offsetted, fptr_ptr, fptr, cast, structptr]))
         rewriter.replace_matched_op(field)
