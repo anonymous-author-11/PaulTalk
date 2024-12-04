@@ -1,3 +1,18 @@
+"""
+This module implements the lowering pass of the PaulTalk compiler, which transforms high-level PaulTalk operations into LLVM IR.
+
+The file contains a collection of rewrite patterns that handle different aspects of the compilation process:
+- Type lowering patterns (LowerPtr, LowerFatPtr, etc.)
+- Operation lowering patterns (LowerAllocate, LowerFieldAccess, etc.)
+- Control flow lowering (LowerIf, LowerWhile, etc.)
+- Memory operations (LowerMemCpy, LowerMalloc, etc.)
+- Coroutine handling (LowerCoroCreate, LowerCoroYield, etc.)
+- Runtime type operations (LowerTypeDef, LowerVtable, etc.)
+
+Each pattern implements the match_and_rewrite method to transform its corresponding operation into LLVM IR.
+The patterns are organized into passes (FirstPass, SecondPass, etc.) that are applied in sequence.
+"""
+
 from xdsl.context import MLContext
 from xdsl.pattern_rewriter import (
     RewritePattern,
@@ -295,6 +310,19 @@ class LowerSetFlag(RewritePattern):
         rewriter.replace_matched_op(assign)
 
 class LowerCheckFlag(RewritePattern):
+    """A rewrite pattern that lowers CheckFlagOp operations into LLVM IR operations.
+
+    This pattern handles type checking and comparison operations by:
+    1. For builtin types: Performs direct pointer comparison
+    2. For custom types: Implements subtype testing using a hash table-based approach
+       with the following components:
+       - Table size and hash coefficient lookups
+       - Subtype test function calls
+       - Hash table pointer dereferencing
+
+    The pattern generates LLVM IR that performs the appropriate type checking
+    based on the input operation's type name and structure type.
+    """
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: CheckFlagOp, rewriter: PatternRewriter):
         if not isinstance(op.struct_typ, llvm.LLVMStructType): raise Exception("not good!")
