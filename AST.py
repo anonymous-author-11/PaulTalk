@@ -1,8 +1,13 @@
+"""
+This module defines the Abstract Syntax Tree (AST) structure for the compiler.
+It includes classes for representing various language constructs and provides
+methods for type checking and code generation.
+"""
+
 from dataclasses import dataclass
 from typing import List, Optional, Dict, Tuple, Set
 from core_dialect import *
 from utils import *
-#from lua import construct_LUA, LUA, simulate_LUA
 from method_dispatch import *
 from xdsl.dialects import llvm, arith, builtin, memref, cf, func
 from xdsl.ir import Block, Region, TypeAttribute

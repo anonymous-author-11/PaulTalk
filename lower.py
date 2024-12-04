@@ -296,6 +296,13 @@ class LowerGetFlag(RewritePattern):
         rewriter.replace_matched_op(gep_op)
 
 class LowerSetFlag(RewritePattern):
+    """
+    Rewrites a SetFlagOp by creating a GetFlagOp and handling the new flag value.
+
+    This pattern matches a SetFlagOp and replaces it with operations that get the flag
+    and set its new value, either from an SSA value or by creating a TypIDOp for a given type name.
+    """
+
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: SetFlagOp, rewriter: PatternRewriter):
         get_flag = GetFlagOp.create(operands=[op.ptr], attributes={"struct_typ":op.struct_typ}, result_types=[llvm.LLVMPointerType.opaque()])
@@ -385,6 +392,13 @@ class LowerAllocate(RewritePattern):
         rewriter.replace_matched_op(alloca)
 
 class LowerBufferIndexation(RewritePattern):
+    """
+    Rewrites BufferIndexationOp to LLVM operations for buffer indexing.
+
+    This pattern lowers high-level buffer indexing operations to lower-level
+    LLVM pointer arithmetic and memory access operations.
+    """
+
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: BufferIndexationOp, rewriter: PatternRewriter):
         buf_ptr = llvm.LoadOp(op.receiver, llvm.LLVMPointerType.opaque())
@@ -563,6 +577,19 @@ class LowerParameterization(RewritePattern):
         rewriter.replace_matched_op(final_addr)
 
 class LowerNew(RewritePattern):
+    """
+    A rewrite pattern that lowers the NewOp to LLVM dialect operations.
+    This pattern performs the following steps:
+    1. Allocates memory for the new object using MallocOp
+    2. Sets up the object's virtual table pointer
+    3. Initializes the object's fat pointer representation, which includes:
+       - A pointer to the allocated memory
+       - The virtual table pointer
+       - Any additional type information required
+    4. Handles any necessary parameterizations for generic types
+    The resulting LLVM operations provide a low-level representation of object creation.
+    """
+
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: NewOp, rewriter: PatternRewriter):
         malloc = MallocOp.create(attributes={"typ":op.typ}, result_types=[llvm.LLVMPointerType.opaque()])
@@ -862,6 +889,8 @@ class LowerCoroYield(RewritePattern):
         rewriter.insert_op_before_matched_op(call)
         rewriter.replace_matched_op(get_result)
 
+# Recursively unwrap a pointer to a struct type by loading each field
+# and constructing a new struct value. For non-struct types, simply load the value.
 def unwrap_recursive(ptr, type, rewriter):
     if not isinstance(type, llvm.LLVMStructType):
         return llvm.LoadOp(ptr, type)
