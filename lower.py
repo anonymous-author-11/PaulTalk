@@ -1728,34 +1728,4 @@ def first_pass(module: ModuleOp) -> ModuleOp:
     SecondPass().apply(ctx, module)
     ThirdPass().apply(ctx, module)
     FourthPass().apply(ctx, module)
-    return moduleted, fptr_ptr, fptr, cast, structptr]))
-        rewriter.replace_matched_op(field)
-
-class LowerCall(RewritePattern):
-    @op_type_rewrite_pattern
-    def match_and_rewrite(self, op: FunctionCallOp, rewriter: PatternRewriter):
-        debug_code(op)
-        result_types = [] if op.ret_type == llvm.LLVMVoidType() else [op.ret_type]
-        
-        ftype = FunctionType.from_lists([arg.type for arg in op.args], result_types)
-        f_ptr = AddrOfOp.from_string(op.func_name.data)
-        rewriter.insert_op_before_matched_op(f_ptr)
-        laundered = builtin.UnrealizedConversionCastOp(operands=[f_ptr.results[0]], result_types=[ftype])
-        call_indirect = func.CallIndirect(laundered.results[0], [*op.args], result_types)
-        rewriter.insert_op_before_matched_op(laundered)
-        fat_base = FatPtr.basic("").base_typ()
-        if(op.ret_type == llvm.LLVMVoidType()):
-            rewriter.replace_matched_op(call_indirect)
-            return
-        rewriter.insert_op_before_matched_op(call_indirect)
-        wrap = WrapOp.create(operands=[call_indirect.results[0]], result_types=[llvm.LLVMPointerType.opaque()])
-        rewriter.replace_matched_op(wrap)
-        debug_code(op)
-
-def first_pass(module: ModuleOp) -> ModuleOp:
-    ctx = MLContext()
-    FirstPass().apply(ctx, module)
-    SecondPass().apply(ctx, module)
-    ThirdPass().apply(ctx, module)
-    FourthPass().apply(ctx, module)
     return module
