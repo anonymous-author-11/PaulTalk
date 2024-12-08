@@ -138,6 +138,8 @@ class ThirdPass(ModulePass):
                 LowerCheckFlag(),
                 LowerFieldAccess(),
                 LowerParameterization(),
+                LowerParameterizationsArray(),
+                LowerParameterizationIndexation(),
                 LowerWrap(),
                 LowerUnwrap(),
                 LowerCastAssign(),
@@ -544,6 +546,8 @@ class LowerParameterization(RewritePattern):
                 gep = llvm.GEPOp(malloc.results[0], [0, i], pointee_type=typ)
                 store = llvm.StoreOp(parameterization.results[0], gep.results[0])
                 rewriter.inline_block_after_matched_op(Block([parameterization, gep, store]))
+            invariant = InvariantOp.make(malloc.results[0], 8 * len(op.id_hierarchy.data))
+            rewriter.insert_op_after_matched_op(invariant)
             rewriter.replace_matched_op(malloc)
             return
 
@@ -1608,6 +1612,35 @@ class LowerRefer(RewritePattern):
         rewriter.inline_block_after_matched_op(Block([memcpy, invariant]))
         rewriter.replace_matched_op(alloca)
 
+class LowerParameterizationsArray(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: ParameterizationsArrayOp, rewriter: PatternRewriter):
+        ary_type = llvm.LLVMArrayType.from_size_and_type(len([*op.parameterizations]), llvm.LLVMPointerType.opaque())
+        ary = AllocateOp(attributes={"typ":ary_type}, result_types=[llvm.LLVMPointerType.opaque()])
+        for i, parameterization in enumerate(op.parameterizations):
+            gep = llvm.GEPOp(ary.results[0], [0, i], pointee_type=ary_type)
+            store = llvm.StoreOp(parameterization, gep.results[0])
+            rewriter.inline_block_after_matched_op(Block([gep, store]))
+        invariant = InvariantOp.make(ary.results[0], 8 * len([*op.parameterizations]))
+        rewriter.insert_op_after_matched_op(invariant)
+        rewriter.replace_matched_op(ary)
+
+class LowerParameterizationIndexation(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: ParameterizationIndexationOp, rewriter: PatternRewriter):
+        indices = [idx.value.data for idx in op.indices.data]
+        if len(indices) == 1 and indices[0] == 0: 
+            cast = builtin.UnrealizedConversionCastOp.create(operands=[op.parameterization], result_types=[llvm.LLVMPointerType.opaque()])
+            rewriter.replace_matched_op(cast)
+            return
+        type = llvm.LLVMArrayType.from_size_and_type(indices[1] + 1, llvm.LLVMPointerType.opaque())
+        gep = llvm.GEPOp(op.parameterization, [0, indices[1]], pointee_type=type)
+        load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
+        attr_dict = {"indices":ArrayAttr([IntegerAttr.from_int_and_width(idx, 32) for idx in ([0, *indices[2:]] if len(indices) > 2 else [0])])}
+        parameterization = ParameterizationIndexationOp.create(operands=[load.results[0]], attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
+        rewriter.inline_block_before_matched_op(Block([gep, load]))
+        rewriter.replace_matched_op(parameterization)
+
 class LowerMethodCall(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: MethodCallLike, rewriter: PatternRewriter):
@@ -1624,11 +1657,11 @@ class LowerMethodCall(RewritePattern):
 
         fptr_ptr = llvm.GEPOp.from_mixed_indices(offsetted.results[0], [op.offset.value.data], pointee_type=llvm.LLVMPointerType.opaque())
         fptr = llvm.LoadOp(fptr_ptr.results[0], llvm.LLVMPointerType.opaque())
-        input_type = llvm.LLVMArrayType.from_size_and_type(len(op.vptrs.data), llvm.LLVMPointerType.opaque())
-        input_ptr = AllocateOp(attributes={"typ":input_type}, result_types=[llvm.LLVMPointerType.opaque()])
-        method_typ0 = FunctionType.from_lists([arg.type for arg in op.behavior_args(input_ptr.results[0])], [llvm.LLVMPointerType.opaque()])
+        concrete_ary = llvm.LLVMArrayType.from_size_and_type(len(op.vptrs.data), llvm.LLVMPointerType.opaque())
+        concrete_types = AllocateOp(attributes={"typ":concrete_ary}, result_types=[llvm.LLVMPointerType.opaque()])
+        method_typ0 = FunctionType.from_lists([arg.type for arg in op.behavior_args(concrete_types.results[0])], [llvm.LLVMPointerType.opaque()])
         laundered0 = builtin.UnrealizedConversionCastOp(operands=[fptr.results[0]], result_types=[method_typ0])
-        ops = [vptr, invariant2, adjustment, offsetted, fptr_ptr, fptr, input_ptr, laundered0]
+        ops = [vptr, invariant2, adjustment, offsetted, fptr_ptr, fptr, concrete_types, laundered0]
 
         ary_0 = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
         for (i, element) in enumerate(op.vptrs.data):
@@ -1640,24 +1673,23 @@ class LowerMethodCall(RewritePattern):
                 v = llvm.ExtractValueOp(ary_0, op.args[i], llvm.LLVMPointerType.opaque())
             else:
                 v = AddrOfOp.from_stringattr(element)
-            gep1 = llvm.GEPOp(input_ptr.results[0], [0, i], pointee_type=input_type)
+            gep1 = llvm.GEPOp(concrete_types.results[0], [0, i], pointee_type=concrete_ary)
             store = llvm.StoreOp(v.results[0], gep1.results[0])
             ops.extend([v, gep1, store])
 
-        behavior_call = func.CallIndirect(laundered0.results[0], [*op.behavior_args(input_ptr.results[0])], llvm.LLVMPointerType.opaque())
+        behavior_call = func.CallIndirect(laundered0.results[0], [*op.behavior_args(concrete_types.results[0])], llvm.LLVMPointerType.opaque())
 
-        nil_ptr = AddrOfOp.from_string("nil_typ")
-        method_typ1 = FunctionType.from_lists([arg.type for arg in op.method_args(nil_ptr.results[0])], result_types)
+        method_typ1 = FunctionType.from_lists([arg.type for arg in op.method_args()], result_types)
         laundered1 = builtin.UnrealizedConversionCastOp(operands=[behavior_call.results[0]], result_types=[method_typ1])
-        call_indirect = func.CallIndirect(laundered1.results[0], [*op.method_args(nil_ptr.results[0])], result_types)
+        call_indirect = func.CallIndirect(laundered1.results[0], [*op.method_args()], result_types)
 
         if(op.ret_type == llvm.LLVMVoidType()):
-            rewriter.inline_block_before_matched_op(Block([*ops, behavior_call, nil_ptr, laundered1]))
+            rewriter.inline_block_before_matched_op(Block([*ops, behavior_call, laundered1]))
             rewriter.replace_matched_op(call_indirect)
             return
 
         wrap = WrapOp.create(operands=[call_indirect.results[0]], result_types=[llvm.LLVMPointerType.opaque()])
-        rewriter.inline_block_before_matched_op(Block([*ops, behavior_call, nil_ptr, laundered1, call_indirect]))
+        rewriter.inline_block_before_matched_op(Block([*ops, behavior_call, laundered1, call_indirect]))
         rewriter.replace_matched_op(wrap)
 
 class LowerGetterDef(RewritePattern):

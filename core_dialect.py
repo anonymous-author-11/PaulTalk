@@ -590,6 +590,7 @@ class MethodCallLike(IRDLOperation):
 @irdl_op_definition
 class MethodCallOp(MethodCallLike, IRDLOperation):
     name = "mini.method_call"
+    parameterizations: Operand = operand_def()
     fat_ptr: Operand = operand_def(FatPtr)
     traits = frozenset()
 
@@ -607,12 +608,13 @@ class MethodCallOp(MethodCallLike, IRDLOperation):
     def behavior_args(self, ptr):
         return [self.fat_ptr, ptr, *self.args]
 
-    def method_args(self, type_params_ptr):
-        return [self.fat_ptr, self.fat_ptr, type_params_ptr, *self.args]
+    def method_args(self):
+        return [self.fat_ptr, self.fat_ptr, self.parameterizations, *self.args]
 
 @irdl_op_definition
 class ClassMethodCallOp(MethodCallLike, IRDLOperation):
     name = "mini.class_method_call"
+    parameterizations: Operand = operand_def()
     class_name: StringAttr = attr_def(StringAttr)
     traits = frozenset()
 
@@ -628,8 +630,8 @@ class ClassMethodCallOp(MethodCallLike, IRDLOperation):
     def behavior_args(self, ptr):
         return [ptr, *self.args]
 
-    def method_args(self, type_params_ptr):
-        return [type_params_ptr, *self.args]
+    def method_args(self):
+        return [self.parameterizations, *self.args]
 
 @irdl_op_definition
 class FieldAccessOp(IRDLOperation):
@@ -638,6 +640,19 @@ class FieldAccessOp(IRDLOperation):
     offset: IntegerAttr = attr_def(IntegerAttr)
     vtable_size: IntegerAttr = attr_def(IntegerAttr)
     result: OpResult = result_def(Ptr)
+
+@irdl_op_definition
+class ParameterizationsArrayOp(IRDLOperation):
+    name = "mini.parameterizations_array"
+    parameterizations: VarOperand = var_operand_def()
+    result: OpResult = result_def()
+
+@irdl_op_definition
+class ParameterizationIndexationOp(IRDLOperation):
+    name = "mini.parameterization_indexation"
+    parameterization: Operand = operand_def()
+    indices: ArrayAttr = attr_def(ArrayAttr)
+    result: OpResult = result_def()
 
 @irdl_op_definition
 class GetterDefOp(IRDLOperation):
@@ -674,6 +689,8 @@ class ParameterizationOp(IRDLOperation):
 
     @classmethod
     def make(cls, operands, id_hierarchy, name_hierarchy):
+        if not isinstance(id_hierarchy, ArrayAttr):
+            raise Exception(id_hierarchy)
         attr_dict = {"id_hierarchy":id_hierarchy, "name_hierarchy":name_hierarchy}
         return ParameterizationOp.create(operands=operands, attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
 

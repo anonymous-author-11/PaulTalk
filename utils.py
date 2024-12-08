@@ -251,12 +251,28 @@ class Scope:
 
         return typ
 
+def type_index(outer_type, inner_type):
+    if outer_type == inner_type: return [0]
+    if isinstance(outer_type, FatPtr):
+        i, t = next((i, t) for (i, t) in enumerate(outer_type.type_params.data) if f"{inner_type}" in f"{t}")
+        return [0, i, *type_index(t, inner_type)]
+    if isinstance(outer_type, Tuple) or isinstance(outer_type, Union):
+        i, t = next((i, t) for (i, t) in enumerate(outer_type.types.data) if f"{inner_type}" in f"{t}")
+        return [0, i, *type_index(t, inner_type)]
+    if isinstance(outer_type, Function):
+        i, t = next((i, t) for (i, t) in enumerate([outer_type.return_type, *outer_type.param_types.data]) if f"{inner_type}" in f"{t}")
+        return [0, i, *type_index(t, inner_type)]
+    raise Exception(f"{inner_type} is not in {outer_type}")
+
 def id_hierarchy(typ, ambient_types):
         if isinstance(typ, TypeParameter):
             if typ not in ambient_types: return id_hierarchy(typ.bound, ambient_types)
             return ArrayAttr([IntegerAttr.from_int_and_width(ambient_types.index(typ), 32)])
         if isinstance(typ, Union) or isinstance(typ, Tuple):
             return ArrayAttr([type_id(typ), *[id_hierarchy(t, ambient_types) for t in typ.types.data]])
+        if isinstance(typ, Function):
+            types = [typ.return_type, *typ.param_types.data]
+            return ArrayAttr([type_id(typ), *[id_hierarchy(t, ambient_types) for t in types]])
         if not isinstance(typ, FatPtr) or typ.type_params == NoneAttr():
             return ArrayAttr([type_id(typ)])
         return ArrayAttr([type_id(typ), *[id_hierarchy(t, ambient_types) for t in typ.type_params.data]])
@@ -264,6 +280,9 @@ def id_hierarchy(typ, ambient_types):
 def name_hierarchy(typ):
         if isinstance(typ, Union) or isinstance(typ, Tuple):
             return ArrayAttr([StringAttr(clean_name(f"{typ}")), *[name_hierarchy(t) for t in typ.types.data]])
+        if isinstance(typ, Function):
+            types = [typ.return_type, *typ.param_types.data]
+            return ArrayAttr([StringAttr(clean_name(f"{typ}")), *[name_hierarchy(t) for t in types]])
         if not isinstance(typ, FatPtr) or typ.type_params == NoneAttr():
             return ArrayAttr([StringAttr(clean_name(f"{typ}"))])
         return ArrayAttr([StringAttr(clean_name(f"{typ}")), *[name_hierarchy(t) for t in typ.type_params.data]])

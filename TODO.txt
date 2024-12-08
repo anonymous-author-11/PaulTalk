@@ -232,22 +232,20 @@ DONE:
 	- Organize type parameter overloads for each class [check!]
 	- Produce parameterizations for each instance [check!]
 - Move type parameters back to { ptr, i160 } interface [check!]
+- Add logic for retrieving types from stored parameterizations [check!]
+	- Where is the U in Pair[Pair[T, U], T] ? [check!]
+	- How do we map that to indices [0, 1] [check!]
+	- Op call with indices to retrieve type [check!]
+- Pass method-scoped type parameters into methods [check!]
+	- Add them onto the beginning of the signature [check!]
+	- On method call, create parameterizations and pass them in [check!]
+	- Nice how the new infrastructure covers this [check!]
+	- Add method-scoped type parameters to ambient types and operands [check!]
+- Pass types from method context to new [check!]
 
 TODO:
 
-- Pass method-scoped type parameters into methods
-	- And class-scoped type parameters into class methods
-	- Add them onto the end of the signature
-	- Will probably have to add them to behavior signature too?
-		- Need to think about
-	- On method call, create parameterizations and pass them in
-	- Nice how the new infrastructure covers this
-	- Add method-scoped type parameters to ambient types and operands
-- Add logic for retrieving types from stored parameterizations
-	- Where is the U in Pair[Pair[T, U], T] ?
-	- How do we map that to indices [0, 1]
-	- Op call with indices to retrieve type
-- Pass types from method context to new
+- Pass class-scoped type parameters into class methods
 - Think about how actually to handle union type parameters
 - We need a mapping between types available to init() and type fields
 - Implement type parameter deduction from init()
