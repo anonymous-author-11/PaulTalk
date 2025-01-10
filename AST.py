@@ -650,10 +650,13 @@ class MethodCall(Expression):
         if exist_local_parameterizations:
             method_scoped_parameterizations = scope.symbol_table["local_parameterizations"]
             for t in scope.method.type_params:
-                first_arg_with_type = next(param_t for param_t in scope.method.param_types() if f"{t}" in f"{param_t}")
+                i, first_arg_with_type = next((i, param_t) for (i, param_t) in enumerate(scope.method.param_types()) if f"{t}" in f"{param_t}")
                 indices = ArrayAttr([IntegerAttr.from_int_and_width(idx, 32) for idx in type_index(first_arg_with_type, t)])
-                parameterization = ParameterizationIndexationOp.create(operands=[method_scoped_parameterizations], attributes={"indices":indices}, result_types=[llvm.LLVMPointerType.opaque()])
-                scope.region.last_block.add_op(parameterization)
+                ary_type = llvm.LLVMArrayType.from_size_and_type(i + 1, llvm.LLVMPointerType.opaque())
+                gep = llvm.GEPOp(method_scoped_parameterizations, [0, i], pointee_type=ary_type)
+                load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
+                parameterization = ParameterizationIndexationOp.create(operands=[load.results[0]], attributes={"indices":indices}, result_types=[llvm.LLVMPointerType.opaque()])
+                scope.region.last_block.add_ops([gep, load, parameterization])
                 operands.append(parameterization.results[0])
         
         parameterizations = []
@@ -951,6 +954,8 @@ class PrintCall(Expression):
         self.args[0].exprtype(scope)
         self.args[0].typeflow(scope)
 
+# add a comment here explaining the following class AI!
+
 @dataclass
 class ObjectCreation(Expression):
     anon_name: str
@@ -1004,10 +1009,13 @@ class ObjectCreation(Expression):
         if exist_local_parameterizations:
             method_scoped_parameterizations = scope.symbol_table["local_parameterizations"]
             for t in scope.method.type_params:
-                first_arg_with_type = next(param_t for param_t in scope.method.param_types() if f"{t}" in f"{param_t}")
+                i, first_arg_with_type = next((i, param_t) for (i, param_t) in enumerate(scope.method.param_types()) if f"{t}" in f"{param_t}")
                 indices = ArrayAttr([IntegerAttr.from_int_and_width(idx, 32) for idx in type_index(first_arg_with_type, t)])
-                parameterization = ParameterizationIndexationOp.create(operands=[method_scoped_parameterizations], attributes={"indices":indices}, result_types=[llvm.LLVMPointerType.opaque()])
-                scope.region.last_block.add_op(parameterization)
+                ary_type = llvm.LLVMArrayType.from_size_and_type(i + 1, llvm.LLVMPointerType.opaque())
+                gep = llvm.GEPOp(method_scoped_parameterizations, [0, i], pointee_type=ary_type)
+                load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
+                parameterization = ParameterizationIndexationOp.create(operands=[load.results[0]], attributes={"indices":indices}, result_types=[llvm.LLVMPointerType.opaque()])
+                scope.region.last_block.add_ops([gep, load, parameterization])
                 operands.append(parameterization.results[0])
         parameterizations = []
 
