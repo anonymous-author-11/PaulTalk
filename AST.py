@@ -954,7 +954,7 @@ class PrintCall(Expression):
         self.args[0].exprtype(scope)
         self.args[0].typeflow(scope)
 
-# add a comment explaining the following class. make sure the scrollbar looking thing in your search/replace is handled properly. ai!
+# add a comment explaining the following class. ai!
 
 @dataclass
 class ObjectCreation(Expression):
