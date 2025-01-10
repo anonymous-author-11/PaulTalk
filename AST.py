@@ -954,6 +954,8 @@ class PrintCall(Expression):
         self.args[0].exprtype(scope)
         self.args[0].typeflow(scope)
 
+# add a comment explaining the following class. ai!
+
 @dataclass
 class ObjectCreation(Expression):
     anon_name: str
