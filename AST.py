@@ -954,9 +954,9 @@ class PrintCall(Expression):
         self.args[0].exprtype(scope)
         self.args[0].typeflow(scope)
 
-    # Represents the creation of a new object instance.
-    # It stores the type of the object being created,
-    # and the arguments passed to the constructor.
+# Represents the creation of a new object instance.
+# It stores the type of the object being created,
+# and the arguments passed to the constructor.
 @dataclass
 class ObjectCreation(Expression):
     anon_name: str
