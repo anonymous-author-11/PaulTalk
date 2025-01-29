@@ -64,10 +64,8 @@ class CompilerTests(CompilerTestCase): # Inherit from the new base class
     def test_boolean_operations(self):
         self.run_mini_code('import std;\nIO.print(true and false);\nIO.print(true or false);\nIO.print(not true);\n', "false\ntrue\nfalse", "boolean_operations_test")
 
-    # re-add this test once string comparison is implemented
-
-    #def test_string_comparison(self):
-    #    self.run_mini_code('import std;\nIO.print("hello" == "hello");\n', "true", "string_comparison_test")
+    def test_string_comparison(self):
+        self.run_mini_code('import std;\nIO.print("hello" == "hello");\n', "true", "string_comparison_test")
 
     # re-add this when nils are fixed
     #def test_nil_value(self):
@@ -134,7 +132,7 @@ class CompilerTests(CompilerTestCase): # Inherit from the new base class
         p3 = p1 + p2;
         IO.print(p3.x());
         IO.print(p3.y());
-        """, "4.0\n6.0", "operator_overloading_test")
+        """, "4.000000\n6.000000", "operator_overloading_test")
 
     def test_generic_class(self):
         self.run_mini_code("""import std;
