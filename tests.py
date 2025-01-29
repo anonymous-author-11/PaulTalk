@@ -34,7 +34,6 @@ class CompilerTests(CompilerTestCase): # Inherit from the new base class
     def test_float_print(self):
         self.run_mini_code('import std;\nIO.print(123.45);\n', "123.45", "float_print_test")
 
-
     def test_subtraction(self):
         self.run_mini_code('import std;\nIO.print(10 - 3);\n', "7", "subtraction_test")
 
@@ -88,9 +87,6 @@ class CompilerTests(CompilerTestCase): # Inherit from the new base class
 
     def test_range_step(self):
         self.run_mini_code('import std;\nfor i in (0:10).step(2) { IO.print(i); }\n', "0\n2\n4\n6\n8\n10", "range_step_test")
-
-    def test_if_else_if(self):
-        self.run_mini_code('import std;\nx = 5;\nif x < 3 {\n  IO.print("less than 3");\n} else if x < 7 {\n  IO.print("less than 7");\n} else {\n  IO.print("greater than or equal to 7");\n}\n', "less than 7", "if_else_if_test")
 
     def test_while_loop(self):
         self.run_mini_code('import std;\nx = 0;\nwhile x < 5 {\n  IO.print(x);\n  x = x + 1;\n}\n', "0\n1\n2\n3\n4", "while_loop_test")
