@@ -204,4 +204,63 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with (%addr_of)
     }
   }
+  // LowerFieldAccess Pattern
+  pdl.pattern : benefit(1) {
+    %fat_ptr = pdl.operand
+    %offset_attr = pdl.attribute
+    %vtable_size_attr = pdl.attribute
+    %result_type = pdl.type
+    %root = pdl.operation "mini.field_access"(%fat_ptr) {"offset" : %offset_attr, "vtable_size" : %vtable_size_attr} -> (%result_type)
+    pdl.rewrite %root {
+      %fat_base_ptr_type = pdl.type : !llvm.ptr
+      %fat_ptr_loaded = pdl.operation "llvm.load"(%fat_ptr) -> (%fat_base_ptr_type)
+      %fat_ptr_loaded_result = pdl.result 0 of %fat_ptr_loaded
+
+      %c0_attr = pdl.attribute = 0
+      %c0_i64_type = pdl.type : i64
+      %c0_i32_type = pdl.type : i32
+      %c0_i64 = pdl.operation "llvm.mlir.constant"() {"value" : %c0_attr} -> (%c0_i64_type)
+      %c0_i32 = pdl.operation "llvm.mlir.constant"() {"value" : %c0_attr} -> (%c0_i32_type)
+      %c0_i64_result = pdl.result 0 of %c0_i64
+      %c0_i32_result = pdl.result 0 of %c0_i32
+
+      %vptr_extracted = pdl.operation "llvm.extractvalue"(%fat_ptr_loaded_result, %c0_i32_result) { "position" = dense<0> : vector<1xi64> } -> (%fat_base_ptr_type)
+      %vptr_extracted_result = pdl.result 0 of %vptr_extracted
+
+      %vtable_size_i64 = pdl.operation "arith.extui"() {"in_width" = 32 : i64, "out_width" = 64 : i64} (%vtable_size_attr) -> (%c0_i64_type)
+      %vtable_size_i64_result = pdl.result 0 of %vtable_size_i64
+      %mul_attr = pdl.attribute = 8
+      %mul_i64 = pdl.operation "llvm.mlir.constant"() {"value" : %mul_attr} -> (%c0_i64_type)
+      %mul_i64_result = pdl.result 0 of %mul_i64
+      %vtable_size_bytes = pdl.operation "arith.muli"(%vtable_size_i64_result, %mul_i64_result) -> (%c0_i64_type)
+      %vtable_size_bytes_result = pdl.result 0 of %vtable_size_bytes
+      %invariant = pdl.operation "mini.invariant"(%vptr_extracted_result) {"num_bytes" : %vtable_size_bytes_result} -> ()
+
+      %c3_attr = pdl.attribute = 3
+      %c3_i32 = pdl.operation "llvm.mlir.constant"() {"value" : %c3_attr} -> (%c0_i32_type)
+      %c3_i32_result = pdl.result 0 of %c3_i32
+      %adjustment_extracted = pdl.operation "llvm.extractvalue"(%fat_ptr_loaded_result, %c3_i32_result) { "position" = dense<3> : vector<1xi64> } -> (i32)
+      %adjustment_extracted_result = pdl.result 0 of %adjustment_extracted
+      %offsetted_gep = pdl.operation "llvm.gep"(%vptr_extracted_result, %adjustment_extracted_result) -> (%fat_base_ptr_type)
+      %offsetted_gep_result = pdl.result 0 of %offsetted_gep
+
+      %fptr_ptr_gep = pdl.operation "llvm.gep"(%offsetted_gep_result, %offset_attr) -> (%fat_base_ptr_type)
+      %fptr_ptr_gep_result = pdl.result 0 of %fptr_ptr_gep
+      %fptr_loaded = pdl.operation "llvm.load"(%fptr_ptr_gep_result) -> (%fat_base_ptr_type)
+      %fptr_loaded_result = pdl.result 0 of %fptr_loaded
+
+      %c1_attr = pdl.attribute = 1
+      %c1_i32 = pdl.operation "llvm.mlir.constant"() {"value" : %c1_attr} -> (%c0_i32_type)
+      %c1_i32_result = pdl.result 0 of %c1_i32
+      %structptr_extracted = pdl.operation "llvm.extractvalue"(%fat_ptr_loaded_result, %c1_i32_result) { "position" = dense<1> : vector<1xi64> } -> (%fat_base_ptr_type)
+      %structptr_extracted_result = pdl.result 0 of %structptr_extracted
+
+      %func_type = pdl.type : !llvm.func<(!llvm.ptr) -> !llvm.ptr>
+      %cast = pdl.operation "builtin.unrealized_conversion_cast"(%fptr_loaded_result) -> (%func_type)
+      %cast_result = pdl.result 0 of %cast
+      %call_indirect = pdl.operation "func.call_indirect"(%cast_result, %structptr_extracted_result) -> (%fat_base_ptr_type)
+      %call_indirect_result = pdl.result 0 of %call_indirect
+      pdl.replace %root with (%call_indirect_result)
+    }
+  }
 } : () -> ()
