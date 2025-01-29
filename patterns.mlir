@@ -178,6 +178,24 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with (%alloca_result)
     }
   }
+  // LowerRefer Pattern
+  pdl.pattern : benefit(1) {
+    %value = pdl.operand
+    %result_type = pdl.type
+    %root = pdl.operation "mini.refer"(%value) -> (%result_type)
+    pdl.rewrite %root {
+      %fat_base_type = pdl.type : !llvm.ptr
+      %alloca = pdl.operation "mini.allocate"() {"typ" : %fat_base_type} -> (%result_type)
+      %alloca_result = pdl.result 0 of %alloca
+      %memcpy = pdl.operation "mini.memcpy"(%value, %alloca_result) {"type" : %fat_base_type} -> ()
+      %c16_attr = pdl.attribute = 16
+      %c16_i64_type = pdl.type : i64
+      %c16_i64 = pdl.operation "llvm.mlir.constant"() {"value" : %c16_attr} -> (%c16_i64_type)
+      %c16_i64_result = pdl.result 0 of %c16_i64
+      %invariant = pdl.operation "mini.invariant"(%alloca_result) {"num_bytes" : %c16_i64_result} -> ()
+      pdl.replace %root with (%alloca_result)
+    }
+  }
 
   // add a pattern for lowerrefer here. ai!
 
