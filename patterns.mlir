@@ -26,6 +26,21 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %trunc_op with (%cast_op)
     }
   }
+  // LowerLiteral Pattern
+  pdl.pattern : benefit(1) {
+    %value_attr = pdl.attribute
+    %typ_attr = pdl.attribute
+    %result_type = pdl.type
+    %root = pdl.operation "mini.literal"() {"value" : %value_attr, "typ" : %typ_attr} -> (%result_type)
+    pdl.rewrite %root {
+      %constant = pdl.operation "llvm.mlir.constant"() {"value" : %value_attr} -> (%typ_attr)
+      %constant_result = pdl.result 0 of %constant
+      %alloca = pdl.operation "mini.allocate"() {"typ" : %typ_attr} -> (%result_type)
+      %alloca_result = pdl.result 0 of %alloca
+      %store = pdl.operation "llvm.store"(%constant_result, %alloca_result) -> ()
+      pdl.replace %root with (%alloca_result)
+    }
+  }
   // LowerTypID Pattern
   pdl.pattern : benefit(1) {
     %typ_name_attr = pdl.attribute
