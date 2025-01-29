@@ -31,5 +31,17 @@ class CompilerTests(CompilerTestCase): # Inherit from the new base class
     def test_integer_print(self):
         self.run_mini_code('import std;\nIO.print(123);\n', "123", "integer_print_test")
 
+    def test_addition(self):
+        self.run_mini_code('import std;\nIO.print(5 + 3);\n', "8", "addition_test")
+
+    def test_string_concat(self):
+        self.run_mini_code('import std;\nIO.print("hello" + " " + "world");\n', "hello world", "string_concat_test")
+
+    def test_if_statement(self):
+        self.run_mini_code('import std;\nx = 5;\nif x > 3 {\n  IO.print("true");\n} else {\n  IO.print("false");\n}\n', "true", "if_statement_test")
+
+    def test_for_loop(self):
+        self.run_mini_code('import std;\nfor i in 0:5 {\n  IO.print(i);\n}\n', "0\n1\n2\n3\n4\n5", "for_loop_test")
+
 if __name__ == '__main__':
     unittest.main()
