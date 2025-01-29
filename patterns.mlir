@@ -194,16 +194,8 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with (%printf_call)
     }
   }
-  // LowerAddressOf Pattern
-  pdl.pattern : benefit(1) {
-    %global_name_attr = pdl.attribute
-    %result_type = pdl.type
-    %root = pdl.operation "mini.address_of"() {"global_name" : %global_name_attr} -> (%result_type)
-    pdl.rewrite %root {
-      %addr_of = pdl.operation "llvm.address_of"() {"global_name" : %global_name_attr} -> (%result_type)
-      pdl.replace %root with (%addr_of)
-    }
-  }
+
+
   // LowerFieldAccess Pattern
   pdl.pattern : benefit(1) {
     %fat_ptr = pdl.operand
@@ -261,6 +253,17 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %call_indirect = pdl.operation "func.call_indirect"(%cast_result, %structptr_extracted_result) -> (%fat_base_ptr_type)
       %call_indirect_result = pdl.result 0 of %call_indirect
       pdl.replace %root with (%call_indirect_result)
+    }
+  }
+} : () -> ()
+  // LowerAddressOf Pattern
+  pdl.pattern : benefit(1) {
+    %global_name_attr = pdl.attribute
+    %result_type = pdl.type
+    %root = pdl.operation "mini.address_of"() {"global_name" : %global_name_attr} -> (%result_type)
+    pdl.rewrite %root {
+      %addr_of = pdl.operation "llvm.address_of"() {"global_name" : %global_name_attr} -> (%result_type)
+      pdl.replace %root with (%addr_of)
     }
   }
 } : () -> ()
