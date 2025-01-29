@@ -2,6 +2,7 @@
         self.assertEqual(output, expected_output)
 
     def assertCompilerError(self, mini_code, expected_error_message_part):
+    def assertCompilerError(self, mini_code, expected_error_message_part):
         self.temp_input_file.write(mini_code)
         self.temp_input_file.close()
         compiler_command = ["python", "Compiler.py", self.temp_input_file.name, "-o", "error_test.exe"]
