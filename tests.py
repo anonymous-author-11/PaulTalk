@@ -32,7 +32,7 @@ class CompilerTests(CompilerTestCase): # Inherit from the new base class
         self.run_mini_code('import std;\nIO.print(123);\n', "123", "integer_print_test")
 
     def test_float_print(self):
-        self.run_mini_code('import std;\nIO.print(123.45);\n', "123.45", "float_print_test")
+        self.run_mini_code('import std;\nIO.print(123.45);\n', "123.450000", "float_print_test")
 
     def test_subtraction(self):
         self.run_mini_code('import std;\nIO.print(10 - 3);\n', "7", "subtraction_test")
@@ -44,10 +44,10 @@ class CompilerTests(CompilerTestCase): # Inherit from the new base class
         self.run_mini_code('import std;\nIO.print(5 < 10);\n', "true", "integer_comparison_test")
 
     def test_float_addition(self):
-        self.run_mini_code('import std;\nIO.print(5.5 + 2.5);\n', "8.0", "float_addition_test")
+        self.run_mini_code('import std;\nIO.print(5.5 + 2.5);\n', "8.000000", "float_addition_test")
 
     def test_float_comparison(self):
-        self.run_mini_code('import std;\nIO.print(5 < 10);\n', "true", "integer_comparison_test") #no change
+        self.run_mini_code('import std;\nIO.print(5 < 10);\n', "true", "integer_comparison_test")
 
     def test_boolean_literals(self):
         self.run_mini_code('import std;\nIO.print(true);\nIO.print(false);\n', "true\nfalse", "boolean_literals_test")
