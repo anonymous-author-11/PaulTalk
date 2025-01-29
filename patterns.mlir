@@ -210,8 +210,6 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with (%printf_call)
     }
   }
-
-
   // LowerFieldAccess Pattern
   pdl.pattern : benefit(1) {
     %fat_ptr = pdl.operand
