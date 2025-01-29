@@ -245,11 +245,17 @@ DONE:
 
 TODO:
 
-- Pass class-scoped type parameters into class methods
+- Pass class-scoped parameterizations into class methods
+	- Probably after the normal passed parameterizations
+	- Should actually probably modify how parameterizations are passed to constructor
+	- To enable zero-argument constructors
 - Think about how actually to handle union type parameters
 - We need a mapping between types available to init() and type fields
+	- Is this done?
+	- I think so?
 - Implement type parameter deduction from init()
 - Make sure that type bounds are applied generally
+	- What does this mean?
 - Where clauses for method type parameters
 - Figure out signature compatibility of overrides of generic parameters
 - Figure out a way to get methods into builtin vtables
@@ -259,6 +265,7 @@ TODO:
 - Shift array and range literals to new generics
 	- Will need to do buffer optimization first for array
 	- And to do buffer optimization we need stored type parameters
+	- Which we do now have
 - Add file name to error messages
 - Make nil its own ancestor
 - Make intrinsics better
@@ -379,7 +386,9 @@ TODO:
 - Specifying that a class cannot be inherited alongside another class
 - Recursive aliases?
 - Overloading *functions*
+	- Making all toplevel functions methods of a file-wide class?
 - Propagate type information backwards?
+	- Probably just in certain easy circumstances
 - Switch statements?
 - Enums?
 - Enable copying of coroutines

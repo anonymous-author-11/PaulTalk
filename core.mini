@@ -83,6 +83,15 @@ class String extends Iterable, Representable {
         if (@length + x) < 0 { yield(); }
         return @bytes.[@length + x];
     }
+    def ==(other : String) -> Bool {
+        i = 0;
+        while i < @length {
+            byte_unequal = @bytes.[i] != other.bytes().[i];
+            if byte_unequal { return false; }
+            i = i + 1;
+        }
+        return true;
+    }
     def pop() -> i8 | Nil {
         if @length == 0 { return nil; }
         @length = @length - 1;

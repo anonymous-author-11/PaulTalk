@@ -232,8 +232,7 @@ class OverloadedBinaryOp(BinaryOp):
         return method_call.exprtype(scope)
 
 @dataclass
-class UnaryOp(Expression):
-    operator: str
+class NegativeOp(Expression):
     operand: Expression
 
     def codegen(self, scope):
@@ -242,8 +241,10 @@ class UnaryOp(Expression):
         return Arithmetic(self.filename, self.line_number, zero, "SUB", self.operand).codegen(scope)
 
     def exprtype(self, scope):
-        if(self.operator == "!"): raise Exception(f"Line {self.line_number}: ! operator not yet implemented")
-        return self.operand.exprtype(scope)
+        t = self.operand.exprtype(scope)
+        if not isinstance(t, Ptr):
+            raise Exception(f"Line {self.line_number}: cannot negate type {t}; can only negate integers and floats.")
+        return t
 
     def typeflow(self, scope):
         self.operand.typeflow(scope)

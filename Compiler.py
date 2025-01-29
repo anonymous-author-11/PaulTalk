@@ -69,7 +69,7 @@ def main():
     ])
     after_firstpass = time.time()
     print(f"Time to lower custom IR: {after_firstpass - after_codegen} seconds")
-    #parsed_module_str = subprocess.run(cmd, shell=True, text=True).stdout
+    #nparsed_module_str = subprocess.run(cmd, shell=True, text=True).stdout
     parsed_module_str = subprocess.run(cmd, capture_output=True, shell=True, text=True).stdout.replace("\\","\\\\")
     after_opt = time.time()
     print(f"Time to do mlir-opt: {after_opt - after_firstpass} seconds")

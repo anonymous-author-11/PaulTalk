@@ -222,10 +222,11 @@ class CSTTransformer(Transformer):
 
     def neg_op(self, minus, expr):
         if isinstance(expr, IntegerLiteral): return IntegerLiteral(self.file_name, expr.line_number, -1 * expr.value, 32)
-        return UnaryOp(self.file_name, minus.line, "-", expr)
+        return NegativeOp(self.file_name, minus.line, expr)
 
     def not_op(self, exclam, expr):
-        return UnaryOp(self.file_name, exclam.line, "not", expr)
+        f = BoolLiteral(self.file_name, exclam.line, 0)
+        return Logical(self.file_name, exclam.line, f, "AND", expr)
 
     def paren_expr(self, expr):
         return expr

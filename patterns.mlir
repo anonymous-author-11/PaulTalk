@@ -154,7 +154,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
     }
   }
 
-  // LowerIntToFloat Pattern  ai!
+  // LowerIntToFloat Pattern 
   pdl.pattern : benefit(1) {
     %operand = pdl.operand
     %from_typ_attr = pdl.attribute
@@ -172,8 +172,6 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with (%alloca_result)
     }
   }
-
-  // add a pattern for inttofloat. ai!
 
   // LowerInvariant Pattern
   pdl.pattern : benefit(1) {
