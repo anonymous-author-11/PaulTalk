@@ -3,44 +3,33 @@ import subprocess
 import tempfile
 import os
 
-class CompilerTests(unittest.TestCase):
+class CompilerTestCase(unittest.TestCase):
+    def setUp(self):
+        self.temp_input_file = tempfile.NamedTemporaryFile(suffix=".mini", mode="w", delete=False)
+        self.output_file_name = None  # To be set in individual test methods
 
+    def tearDown(self):
+        os.remove(self.temp_input_file.name)
+        if self.output_file_name:
+            os.remove(self.output_file_name)
+
+    def run_mini_code(self, mini_code, expected_output, output_file_name_base):
+        self.temp_input_file.write(mini_code)
+        self.temp_input_file.close() # Close the file to ensure content is written
+        self.output_file_name = f"{output_file_name_base}.exe"
+        compiler_command = ["python", "Compiler.py", self.temp_input_file.name, "-o", self.output_file_name]
+        subprocess.run(compiler_command, check=True)
+
+        exe_command = [self.output_file_name]
+        completed_process = subprocess.run(exe_command, capture_output=True, text=True, check=True)
+        output = completed_process.stdout.strip()
+        self.assertEqual(output, expected_output)
+
+class CompilerTests(CompilerTestCase): # Inherit from the new base class
     def test_hello_world(self):
-        with tempfile.NamedTemporaryFile(suffix=".mini", mode="w", delete=False) as input_file:
-            input_file.write('import std;\nIO.print("hello world");\n')
-            input_file_name = input_file.name
-
-        output_file_name = "hello_world_test.exe" # Fixed output name for simplicity in test
-        compiler_command = ["python", "Compiler.py", input_file_name, "-o", output_file_name]
-        subprocess.run(compiler_command, check=True)
-
-        exe_command = [output_file_name]
-        completed_process = subprocess.run(exe_command, capture_output=True, text=True, check=True)
-        output = completed_process.stdout.strip()
-
-        self.assertEqual(output, "hello world")
-
-        os.remove(input_file_name)
-        os.remove(output_file_name) # Clean up the executable as well
-
+        self.run_mini_code('import std;\nIO.print("hello world");\n', "hello world", "hello_world_test")
     def test_integer_print(self):
-        with tempfile.NamedTemporaryFile(suffix=".mini", mode="w", delete=False) as input_file:
-            input_file.write('import std;\nIO.print(123);\n')
-            input_file_name = input_file.name
-
-        output_file_name = "integer_print_test.exe" # Fixed output name for simplicity in test
-        compiler_command = ["python", "Compiler.py", input_file_name, "-o", output_file_name]
-        subprocess.run(compiler_command, check=True)
-
-        exe_command = [output_file_name]
-        completed_process = subprocess.run(exe_command, capture_output=True, text=True, check=True)
-        output = completed_process.stdout.strip()
-
-        self.assertEqual(output, "123")
-
-        os.remove(input_file_name)
-        os.remove(output_file_name) # Clean up the executable as well
-
+        self.run_mini_code('import std;\nIO.print(123);\n', "123", "integer_print_test")
 
 if __name__ == '__main__':
     unittest.main()
