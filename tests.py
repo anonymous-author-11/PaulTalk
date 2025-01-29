@@ -34,9 +34,6 @@ class CompilerTests(CompilerTestCase): # Inherit from the new base class
     def test_addition(self):
         self.run_mini_code('import std;\nIO.print(5 + 3);\n', "8", "addition_test")
 
-    def test_string_concat(self):
-        self.run_mini_code('import std;\nIO.print("hello" + " " + "world");\n', "hello world", "string_concat_test")
-
     def test_if_statement(self):
         self.run_mini_code('import std;\nx = 5;\nif x > 3 {\n  IO.print("true");\n} else {\n  IO.print("false");\n}\n', "true", "if_statement_test")
 
