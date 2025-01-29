@@ -16,6 +16,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with (%load)
     }
   }
+  
   // TruncToCast Pattern
   pdl.pattern : benefit(1) {
     %input = pdl.operand
