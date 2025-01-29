@@ -1,6 +1,4 @@
 import unittest
-import subprocess
-import tempfile
 import os
 
 class CompilerTestCase(unittest.TestCase):
@@ -150,4 +148,12 @@ class CompilerTests(CompilerTestCase): # Inherit from the new base class
         """, "10\nhello", "generic_class_test")
 
 if __name__ == '__main__':
-    unittest.main()
+    test_suite = unittest.TestSuite()
+    test_loader = unittest.TestLoader()
+    test_dir = os.path.dirname(os.path.abspath(__file__)) # directory where tests are located
+    pattern = "test_*.py" # test file naming pattern
+    discover_suite = test_loader.discover(start_dir=test_dir, pattern=pattern)
+    test_suite.addTest(discover_suite)
+
+    runner = unittest.TextTestRunner()
+    runner.run(test_suite)
