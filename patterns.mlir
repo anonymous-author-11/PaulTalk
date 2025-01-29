@@ -154,6 +154,25 @@ builtin.module attributes {"sym_name" = "patterns"} {
     }
   }
 
+  // LowerIntToFloat Pattern  ai!
+  pdl.pattern : benefit(1) {
+    %operand = pdl.operand
+    %from_typ_attr = pdl.attribute
+    %to_typ_attr = pdl.attribute
+    %result_type = pdl.type
+    %root = pdl.operation "mini.inttofloat"(%operand) {"from_typ" : %from_typ_attr, "to_typ" : %to_typ_attr} -> (%result_type)
+    pdl.rewrite %root {
+      %alloca = pdl.operation "mini.allocate"() {"typ" : %to_typ_attr} -> (%result_type)
+      %alloca_result = pdl.result 0 of %alloca
+      %unwrapped = pdl.operation "mini.unwrap"(%operand) -> (%from_typ_attr)
+      %unwrapped_result = pdl.result 0 of %unwrapped
+      %cast = pdl.operation "arith.sitofp"(%unwrapped_result) -> (%to_typ_attr)
+      %cast_result = pdl.result 0 of %cast
+      %store = pdl.operation "llvm.store"(%cast_result, %alloca_result) -> ()
+      pdl.replace %root with (%alloca_result)
+    }
+  }
+
   // add a pattern for inttofloat. ai!
 
   // LowerInvariant Pattern
