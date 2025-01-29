@@ -153,6 +153,9 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with (%malloc)
     }
   }
+
+  // add a pattern for inttofloat. ai!
+
   // LowerInvariant Pattern
   pdl.pattern : benefit(1) {
     %ptr = pdl.operand
@@ -196,9 +199,6 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with (%alloca_result)
     }
   }
-
-  // add a pattern for lowerrefer here. ai!
-
   // LowerGlobalStr Pattern
   pdl.pattern : benefit(1) {
     %sym_name_attr = pdl.attribute
