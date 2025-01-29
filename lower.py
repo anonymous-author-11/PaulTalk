@@ -1628,18 +1628,19 @@ class LowerParameterizationsArray(RewritePattern):
 class LowerParameterizationIndexation(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: ParameterizationIndexationOp, rewriter: PatternRewriter):
-        indices = [idx.value.data for idx in op.indices.data]
-        if len(indices) == 1 and indices[0] == 0: 
-            cast = builtin.UnrealizedConversionCastOp.create(operands=[op.parameterization], result_types=[llvm.LLVMPointerType.opaque()])
-            rewriter.replace_matched_op(cast)
-            return
-        type = llvm.LLVMArrayType.from_size_and_type(indices[1] + 1, llvm.LLVMPointerType.opaque())
-        gep = llvm.GEPOp(op.parameterization, [0, indices[1]], pointee_type=type)
-        load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
-        attr_dict = {"indices":ArrayAttr([IntegerAttr.from_int_and_width(idx, 32) for idx in ([0, *indices[2:]] if len(indices) > 2 else [0])])}
-        parameterization = ParameterizationIndexationOp.create(operands=[load.results[0]], attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
-        rewriter.inline_block_before_matched_op(Block([gep, load]))
-        rewriter.replace_matched_op(parameterization)
+        current_param = op.parameterization
+        indices = op.indices.data
+
+        for i, index_attr in enumerate(indices):
+            index = index_attr.value.data + 1
+            ary_type = llvm.LLVMArrayType.from_size_and_type(len(indices) - i, llvm.LLVMPointerType.opaque())
+            gep = llvm.GEPOp.from_mixed_indices(current_param, [0, index], pointee_type=ary_type)
+            load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
+            current_param = load.results[0]
+            rewriter.inline_block_before_matched_op(Block([gep, load]))
+
+        cast = builtin.UnrealizedConversionCastOp.create(operands=[current_param], result_types=[llvm.LLVMPointerType.opaque()])
+        rewriter.replace_matched_op(cast)
 
 class LowerMethodCall(RewritePattern):
     @op_type_rewrite_pattern

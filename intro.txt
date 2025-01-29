@@ -1,0 +1,395 @@
+// we import the standard library, which has been separately compiled
+import std;
+
+// types can be declared or inferred locally
+
+a : i32 = 7;		// type declarations are "identifier : type", rather than "type identifier"
+b = 5;				// inferred to be an i32
+c = a + b;			// also inferred to be an i32
+d = "hello world";	// inferred to be a String
+
+// Union types are written as A | B, meaning the type of the variable could be A or B
+
+declared_union : i32 | f64 = 7.0;
+
+// Unions are also inferred from conditional branches
+
+inferred_union = 3;			// type is initially i32
+
+if some_condition() {
+	inferred_union = 4.0;	// within conditional branch it is assigned f64
+}		
+
+// after the branches merge, its type is i32 | f64
+
+// Union types can also be narrowed by type checks
+
+if inferred_union is f64 {				// the type check intersects i32 | f64 with f64, resulting in i32
+	IO.print(inferred_union + 10.0);	// within this block, union has type f64, so it can be added to an f64 with no problem
+}
+
+// If both branches of an if-else statement agree on the type at the end, there is no resulting union
+
+if some_condition() {
+	inferred_union = 5;
+} else {
+	inferred_union = 15;
+}
+
+// since inferred_union ends up as an i32 in both branches, its type after the if-else is just i32
+
+// Variables declared but not assigned must be unioned with Nil
+
+uninitialized_i32 : i32 | Nil;
+
+// functions are declared with 'def'
+// functions must annotate their parameter and return types (if they return a value)
+// return types come after the arrow ->
+
+def fibonacci(n : i32) -> i32 {
+    if n < 2 { return n; }							// early return
+    return fibonacci(n - 2) + fibonacci(n - 1);		// recursive call
+}
+
+def no_return_value(x : i32) { 		// no return type indicated
+	IO.print(x);					// not allowed to return a value in the body
+}
+
+// classes are declared like this:
+
+class Animal {		// all classes inherit from Object by default
+	@age : i32		// fields are written as @field
+	@name : String	// field types must be declared
+
+	// .init() is a constructor method
+	// Note that .init() has no return type
+
+	def init(@age : i32, @name : String) {}	// these fields are initialized automatically
+
+	def init(@name : String) {	// We can also overload the constructor with a different number of arguments
+		@age = 0;				// Here, @age is initialized within the method body with a default value 0
+	}							// At the end of the init method body, it is ensured that all fields are initialized
+
+	def say_name() {
+		IO.print(@name);
+	}
+
+	def age() -> i32 {
+		return @age;	// All fields are private, so a method must be used to access the field
+	}
+}
+
+// the language supports single and multiple inheritance
+
+class Airborne {
+	@flight_range : f64
+	@elevation : f64
+
+	// since this class has no constructor, it cannot be directly instantiated
+
+	def take_flight() {
+		@elevation = @elevation + 100;	// there is no += operator or ++ operator
+	}
+}
+
+class Bird extends Animal, Airborne {}	// Bird gains all the functionality from both classes
+
+class AnimalIterator {
+
+	// methods may be marked 'abstract'
+	// classes with non-overridden abstract methods cannot be instantiated
+	// abstract methods are meant to be overridden (implemented) by extending classes
+
+	abstract def next() -> Animal | Nil {}	// .next() should return a nil value when there are no more Animals
+
+}
+
+class AnimalIterable {
+
+	abstract def iterator() -> AnimalIterator {}	// we know that the returned instance will have a .next() method
+
+	def each(function : (Animal)) {		// the type (Animal) indicates a first-class function with one Animal argument and no return type
+		
+		// a for-in loop takes an iterable object on the right-hand side (in this case, 'self')
+		// the abstract .iterator() method makes this work
+		// the loop terminates when the iterator returns Nil
+
+		for animal in self {	// 'self' refers to the AnimalIterable instance itself
+
+			// the type of 'animal' within this block is simply Animal
+			// first-class functions are called with .call()
+
+			function.call(animal);	
+
+		}
+	}
+}
+
+// you can also declare anonymous functions
+// anonymous functions need not use the 'return' keyword, and their return types are inferred
+// parameter types must still be specified
+// anonymous functions do not capture their environment
+
+square = (x : i32) => { x * x; };	// the function is assigned to a variable
+IO.print(square.call(5));			// prints 25
+
+def say_their_names(animals : AnimalIterable) {
+
+	animals.each((animal : Animal) => { animal.say_name(); });	// an anonymous function is passed to .each()
+
+	// or, equivalently and more concisely
+
+	for animal in animals { animal.say_name(); }
+
+}
+
+// functions may also be turned into coroutines
+
+def counter() yields i32 {	// if no yield type is specified, it is Exception | Nil by default
+
+	i = 0;
+	while true {	// an infinite loop
+		yield(i);	// yields the value of the counter
+		i = i + 1;	// increments the value
+	}
+
+}
+
+counter_coro = Coroutine.new(counter);	// we create a coroutine from the function
+zero = counter_coro.call();				// we call the coroutine with .call(), and it yields a value
+one = counter_coro.call();				// when we call again, it resumes from where it yielded last
+
+// we could continue calling the coroutine and it will always yield a value
+
+// coroutines can also be initialized with arguments
+
+def initialized_counter(starting_value : i32) yields i32 {
+	i = starting_value;
+	while true {
+		yield(i);
+		i = i + 1;
+	}
+}
+
+new_counter = Coroutine.new(initialized_counter, 15);	// initializes the coroutine with 15
+fifteen = new_counter.call();
+sixteen = new_counter.call();
+
+// we can also pass arguments back and forth with call/yield
+
+def fancy_counter(starting_value : i32) yields i32 {
+	i = starting_value;
+	increment = yield(i);		// increment is what was passed to .call() on the other side
+	while increment is i32 {	// narrows increment from i32 | Nil
+		i = i + increment;
+		increment = yield(i);
+	}
+}
+
+newest_counter = Coroutine.new(fancy_counter, 25);
+thirty_five = newest_counter.call(10);
+fifty = new_counter.call(15);
+
+// alternatively, we could use the CSP approach and place values into channels
+// this decouples producers and consumers of values
+// there might be any number of consumers with a reference to the channel
+
+chan = Channel.new();
+anon = (chan : Channel) => { chan.put(11); };		// an anonymous function that puts a value in a channel
+producer = Coroutine.new(anon, chan);				// initialize the coroutine with the anonymous function and the channel
+producer.call();									// it places the value in the channel when called
+IO.print(chan.get());								// chan.get() blocks until there is an available value
+
+// call/yield and channels could also be used together
+
+// Exceptions are just a type you can yield
+// Because coroutines are stackful, these yields can be nested arbitrarily deep
+
+class DivideByZero extends Exception {}
+
+def divide(numerator : f64, denominator : f64) -> f64 {		// yield type is Exception | Nil by default
+	if denominator == 0 { yield(DivideByZero.new()); }		// yielding throws it up the callstack
+	return a / b;											// the direct caller is always returned an f64
+}
+
+def outside_function() {
+	a = 25.0;
+	b = 5.0;
+	c = divide(a, b); // the direct caller need not worry about divide-by-zero
+	IO.print(c);
+}
+
+wrapping_coro = Coroutine.new(outside_function);
+maybe_exception = wrapping_coro.call(); // this will yield a DivideByZero if it happens
+if maybe_exception is Exception {
+	// handle exception
+}
+
+// yields that are not caught by a wrapping coroutine will cause the program to abort with an error message
+
+// the language has multi-methods that dispatch on the *runtime* types of arguments (multiple dispatch)
+// these are implemented as efficient lookup automata
+
+class IO {
+
+	// class methods are written Self.method()
+	// class methods can be invoked without constructing an instance
+
+    def Self.print(x : i32) {	
+        print(x);
+    }
+    def Self.print(x : f64) {
+        print(x);
+    }
+    def Self.print(x : Bool) {
+        if x { print("true".c_string()); } else { print("false".c_string()); }	// C strings are Buffer[i8] and are null-terminated
+    }
+    def Self.print(x : Nil) {
+        print("nil".c_string());
+    }
+    def Self.print(x : String) {
+        print(x.c_string());
+    }
+    def Self.print(x : Representable) {		// Any class extending Representable can define the way it gets printed
+        print(x.repr().c_string());			// It just needs to override the .repr() method
+    }
+}
+
+maybe_nil : String | Nil;
+if some_condition() {
+	maybe_nil = "not nil!";
+}
+IO.print(maybe_nil);	// the method dispatches based on the *runtime* type of the variable
+
+// Operator Overloading
+// Standard operators like + - * / << >> [] can be defined for custom types
+// This works especially well in combination with multi-methods
+
+class Point {
+	@x : f64
+	@y : f64
+
+	def init(@x : f64, @y : f64) {
+	}
+	def x() -> f64 {
+		return @x;
+	}
+	def y() -> f64 {
+		return @y;
+	}
+	def +(other : Point) -> Point {
+		return Point.new(@x + other.x(), @y + other.y());
+	}
+	def -(other : Point) -> Point {
+		return Point.new(@x - other.x(), @y - other.y());
+	}
+	def *(other : Point) -> Point {
+		return Point.new(@x * other.x(), @y * other.y());
+	}
+	def /(other : Point) -> Point {
+		return Point.new(@x / other.x(), @y / other.y());
+	}
+}
+
+// Iteration
+
+// range literals are indicated with start:end, and are inclusive
+range = 0:10;
+
+// ranges are iterable
+for x in range { IO.print(x); }
+
+// you can also specify the step size
+for x in (0:25).step(5) { IO.print(x); }
+
+// strings are iterable too
+for char in "hello world!" { IO.print(char); }
+
+// so are arrays
+for elem in [4, 5, 6, 7] { IO.print(elem); }
+
+// anything iterable gets a bunch of convenient methods for free
+
+result = (1:15).map((x : i32) => { x * x; })
+    .filter((x : i32) => { x % 2 == 0; })
+    .reduce(0, (a: i32, b: i32) => { a + b; });
+
+// you can use break and continue in loops
+// this loop will print 1, 3, 5
+
+for i in 0:10 {		
+	if x % 2 == 0 { continue; }		// skips to next iteration on even numbers
+	if x == 7 { break; }			// ends loop early at seven
+	IO.print(x);					// will print odd numbers between 0 and 7
+}
+
+// indexing into collections is done with .[] and is zero-based
+
+seven = [4, 5, 6, 7].[3];
+
+// tuples can store heterogenous types
+// tuples also have value semantics
+
+tuple = (15, "a string", true, nil);	// type is Tuple[i32, String, Bool, Nil]
+string_typed = tuple.[1];				// type is String
+
+// extern defs can link to C standard library functions
+// Buffer is used to represent raw pointers
+
+extern def fopen(name : Buffer[i8], mode : Buffer[i8]) -> Buffer[i32]
+extern def fclose(file : Buffer[i32]) -> i32
+extern def fgetc(file : Buffer[i32]) -> Tuple[i8, i8, i8, i8]
+extern def fprintf(file : Buffer[i32], text : Buffer[i8]) -> i32
+
+// we can then wrap these functions with safer interfaces
+
+def read_file(file_name : String) -> String {
+    content = "";
+    file = fopen(file_name.c_string(), "r".c_string());
+    eof : i8 = -1;	// since integer literals are i32 by default, i8 has to specified
+    while true {
+        tuple = fgetc(file);			// fgetc returns four bytes
+        if tuple.[0] == eof { break; }	// if it's the end of the file, break
+        content.append(int.[3]);		// the last byte is the actual character
+    }
+    fclose(file);
+    return content;
+}
+
+def write_file(file_name : String, text: String) {
+    file = fopen(file_name.c_string(), "w".c_string());
+    fprintf(file, text.c_string());
+    fclose(file);
+}
+
+write_file("new_file.txt", "this\nis how\nwe do\nit");		// escape newlines with \n
+IO.print(read_file("new_file.txt"));
+
+// Generics are indicated with type parameters in square brackets
+// In contrast to templates, generics are fully type-checkable and can be separately compiled
+
+class Pair[T, U] {	// with no type bounds specified, T and U are implicitly T <: Object, U <: Object
+
+	@first : T
+	@second : U
+
+	def init(@first : T, @second : U) {
+	}
+	def first() -> T {
+		return @first;
+	}
+	def second() -> U {
+		return @second;
+	}
+}
+
+intpair = Pair[i32, f64].new(5, 7.0);	// Pair[i32, f64] only accepts an i32 and an f64 in its init method
+five = intpair.first();					// type of five is i32
+
+class Array[T] extends Iterable[T] {}	// You can extend generic classes, sharing type parameters with the same name
+
+class Range extends Iterable[i32] {}	// You can also extend specific instantiations of generic classes
+
+class HashMap[K, V] extends Iterable[Tuple[K, V]] where K <: Hashable {}	// You can explicitly specify type bounds with a 'where' clause
+
+// Generics are still a work-in-progress

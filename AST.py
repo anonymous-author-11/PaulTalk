@@ -998,11 +998,12 @@ class ObjectCreation(Expression):
             ambient_type_fields = [field for field in scope.cls.stored_type_fields() if field.declaration.type_param in scope.cls.type_parameters]
             for ambient_type_field in ambient_type_fields:
                 offset = IntegerAttr.from_int_and_width(ambient_type_field.offset, IntegerType(64))
-                operands0 = [scope.symbol_table["self"]]
+                local_self = [scope.symbol_table["self"]]
                 attr_dict = {"offset":offset, "vtable_size":IntegerAttr.from_int_and_width(scope.cls.vtable_size(), 32)}
-                field_acc = FieldAccessOp.create(operands=operands0, attributes=attr_dict, result_types=[ReifiedType()])
-                scope.region.last_block.add_op(field_acc)
-                operands.append(field_acc.results[0])
+                field_acc = FieldAccessOp.create(operands=local_self, attributes=attr_dict, result_types=[ReifiedType()])
+                field_load = llvm.LoadOp(field_acc.results[0], llvm.LLVMPointerType.opaque())
+                scope.region.last_block.add_ops([field_acc, field_load])
+                operands.append(field_load.results[0])
         exist_local_parameterizations = "local_parameterizations" in scope.symbol_table.keys()
         if exist_local_parameterizations:
             method_scoped_parameterizations = scope.symbol_table["local_parameterizations"]
@@ -1012,9 +1013,9 @@ class ObjectCreation(Expression):
                 ary_type = llvm.LLVMArrayType.from_size_and_type(i + 1, llvm.LLVMPointerType.opaque())
                 gep = llvm.GEPOp(method_scoped_parameterizations, [0, i], pointee_type=ary_type)
                 load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
-                parameterization = ParameterizationIndexationOp.create(operands=[load.results[0]], attributes={"indices":indices}, result_types=[llvm.LLVMPointerType.opaque()])
-                scope.region.last_block.add_ops([gep, load, parameterization])
-                operands.append(parameterization.results[0])
+                indexation = ParameterizationIndexationOp.create(operands=[load.results[0]], attributes={"indices":indices}, result_types=[llvm.LLVMPointerType.opaque()])
+                scope.region.last_block.add_ops([gep, load, indexation])
+                operands.append(indexation.results[0])
         parameterizations = []
 
         temp_scope = Scope(scope)

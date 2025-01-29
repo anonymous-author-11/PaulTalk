@@ -1,0 +1,400 @@
+import std;
+
+class Pair[T, U]
+	where T <: Object, U <: Object {
+
+	@first : T
+	@second : U
+
+	def init(@first : T, @second : U) {
+	}
+	def first() -> T {
+		return @first;
+	}
+	def second() -> U {
+		return @second;
+	}
+}
+
+pair1 = Pair[i32, f64].new(5, 7.0);
+t = pair1.second();
+IO.print(t);
+
+pair2 = Pair[f64, i32].new(7.0, 9);
+t = pair2.second();
+IO.print(t);
+
+pair3 = Pair[Tuple[f64,f64,f64,f64], f64].new((1.0, 2.0, 3.0, 4.0), 5.0);
+t = pair3.first();
+fourth = t.[3];
+IO.print(fourth);
+
+class FancyPair extends Pair[Tuple[f64,f64,f64,f64], f64] {
+
+	def init(@first : Tuple[f64,f64,f64,f64], @second : f64) {}
+
+	def second() -> f64 {
+		return @second;
+	}
+}
+
+b = FancyPair.new((1.0, 2.0, 3.0, 4.0), 5.0);
+IO.print(b.second());
+
+class Iterator2[T] {
+	abstract def next() -> T | Nil {}
+}
+
+class Iterable2[T] {
+	abstract def iterator() -> Iterator2[T] {}
+	def each(f : (T)) {
+        for x in self { f.call(x); }
+    }
+    def reduce(accumulator : T, f : (T, T) -> T) -> T {
+        for x in self { accumulator = f.call(accumulator, x); }
+        return accumulator;
+    }
+    def all(f : (T) -> Bool) -> Bool {
+        for x in self {
+            if f.call(x) { continue; }
+            return false;
+        }
+        return true;
+    }
+    def any(f : (T) -> Bool) -> Bool {
+        for x in self { if f.call(x) { return true; } }
+        return false;
+    }
+    def map[U](f : (T) -> U) -> Iterable2[U] {
+        return MapIterable2[T, U].new(self, f);
+    }
+    def filter(f : (T) -> Bool) -> Iterable2[T] {
+        return FilterIterable2[T].new(self, f);
+    }
+    def chain(other : Iterable2[T]) -> Iterable2[T] {
+        return ChainIterable2[T].new(self, other);
+    }
+    def interleave(other : Iterable2[T]) -> Iterable2[T] {
+        return InterleaveIterable2[T].new(self, other);
+    }
+    def zip[U](other : Iterable2[U]) -> ZipIterable2[T, U] {
+        return ZipIterable2[T, U].new(self, other);
+    }
+    def product[U](other : Iterable2[U]) -> ProductIterable2[T, U] {
+        return ProductIterable2[T, U].new(self, other);
+    }
+}
+
+class Array[T] extends Iterable2[T] {
+	@buffer : Buffer[T]
+	@length : i32
+	@capacity : i32
+
+	def Self.from_iterable(iterable : Iterable2[T]) -> Array[T] {
+    	result = Array[T].new();
+    	for elem in iterable { result.append(elem); }
+    	return result;
+    }
+	def init() {
+		@buffer = Buffer[T].new(1);
+		@length = 0;
+		@capacity = 1;
+	}
+	def length() -> i32 {
+		return @length;
+	}
+    def capacity() -> i32 {
+    	return @capacity;
+    }
+    def append(x : T) -> Array[T] {
+        if @length >= @capacity { self.grow(); }
+        @buffer.[@length] = x;
+        @length = @length + 1;
+        return self;
+    }
+    def grow() {
+    	@capacity = @capacity * 2;
+        old_buffer = @buffer;
+        @buffer = Buffer[T].new(@capacity);
+        i = 0;
+        while i < @length {
+            @buffer.[i] = old_buffer.[i];
+            i = i + 1;
+        }
+    }
+    def [](x : i32) -> T yields OutOfBounds | Nil {
+    	past_end = x > (@length - 1);
+    	before_start = (@length + x) < 0;
+        if past_end or before_start { self.throw_oob(x); }
+        if x < 0 { x = @length + x; }
+        return @buffer.[x];
+    }
+    def throw_oob(x : i32) yields OutOfBounds {
+    	yield(OutOfBounds.new(@length, x));
+    }
+    def unsafe_index(x : i32) -> T {
+    	return @buffer.[x];
+    }
+    def iterator() -> Iterator2[T] {
+    	return ArrayIterator[T].new(self);
+    }
+}
+
+class ArrayIterator[T] extends Iterator2[T] {
+	@array : Array[T]
+	@index : i32
+
+	def init(@array : Array[T]) { @index = 0; }
+	def next() -> T | Nil {
+		if @index >= @array.length() { return nil; }
+		@index = @index + 1;
+		return @array.unsafe_index(@index - 1);
+	}
+}
+
+class MapIterable2[T, U] extends Iterable2[U] {
+    @iterable : Iterable2[T]
+    @f : (T) -> U
+
+    def init(@iterable : Iterable2[T], @f : (T) -> U) {}
+
+    def iterator() -> Iterator2[U] {
+        return MapIterator2[T, U].new(@iterable.iterator(), @f);
+    }
+}
+
+class MapIterator2[T, U] extends Iterator2[U] {
+    @iterator : Iterator2[T]
+    @f : (T) -> U
+
+    def init(@iterator : Iterator2[T], @f : (T) -> U) {}
+
+    def next() -> U | Nil {
+        next = @iterator.next();
+        if next is T { return @f.call(next); }
+        return nil;
+    }
+}
+
+class FilterIterable2[T] extends Iterable2[T] {
+    @iterable : Iterable2[T]
+    @f : (T) -> Bool
+
+    def init(@iterable : Iterable2[T], @f : (T) -> Bool) {}
+
+    def iterator() -> Iterator2[T] {
+        return FilterIterator2[T].new(@iterable.iterator(), @f);
+    }
+}
+
+class FilterIterator2[T] extends Iterator2[T] {
+    @iterator : Iterator2[T]
+    @f : (T) -> Bool
+    
+    def init(@iterator : Iterator2[T], @f : (T) -> Bool) {}
+
+    def next() -> T | Nil {
+        next = @iterator.next();
+        while next is T {
+            if @f.call(next) { return next; }
+            next = @iterator.next();
+        }
+        return nil;
+    }
+}
+
+class ChainIterable2[T] extends Iterable2[T] {
+    @first : Iterable2[T]
+    @second : Iterable2[T]
+
+    def init(@first : Iterable2[T], @second : Iterable2[T]) {}
+
+    def iterator() -> Iterator2[T] {
+        return ChainIterator2[T].new(@first.iterator(), @second.iterator());
+    }
+}
+
+class ChainIterator2[T] extends Iterator2[T] {
+    @first : Iterator2[T]
+    @second : Iterator2[T]
+    @on_first : Bool
+
+    def init(@first : Iterator2[T], @second : Iterator2[T]) {
+        @on_first = true;
+    }
+    def next() -> T | Nil {
+        if @on_first {
+            next = @first.next();
+            if next is T { return next; }
+            @on_first = false;
+        }
+        return @second.next();
+    }
+}
+
+class InterleaveIterable2[T] extends Iterable2[T] {
+    @first : Iterable2[T]
+    @second : Iterable2[T]
+
+    def init(@first : Iterable2[T], @second : Iterable2[T]) {}
+
+    def iterator() -> Iterator2[T] {
+        return InterleaveIterator2[T].new(@first.iterator(), @second.iterator());
+    }
+}
+
+class InterleaveIterator2[T] extends Iterator2[T] {
+    @first : Iterator2[T]
+    @second : Iterator2[T]
+    @on_first : Bool
+
+    def init(@first : Iterator2[T], @second : Iterator2[T]) {
+        @on_first = true;
+    }
+    def next() -> T | Nil {
+        if @on_first {
+            @on_first = false;
+            return @first.next();
+        }
+        @on_first = true;
+        return @second.next();
+    }
+}
+
+class ZipIterable2[T, U] extends Iterable2[Pair[T, U]] {
+    @first : Iterable2[T]
+    @second : Iterable2[U]
+
+    def init(@first : Iterable2[T], @second : Iterable2[U]) {}
+
+    def iterator() -> Iterator2[Pair[T, U]] {
+        return ZipIterator2[T, U].new(@first.iterator(), @second.iterator());
+    }
+}
+
+class ZipIterator2[T, U] extends Iterator2[Pair[T, U]] {
+    @first : Iterator2[T]
+    @second : Iterator2[U]
+
+    def init(@first : Iterator2[T], @second : Iterator2[U]) {}
+
+    def next() -> Pair[T, U] | Nil {
+        first_elem = @first.next();
+        second_elem = @second.next();
+        if first_elem is T {
+            if second_elem is U { return Pair[T, U].new(first_elem, second_elem); }
+        }
+        return nil;
+    }
+}
+
+class ProductIterable2[T, U] extends Iterable2[Pair[T, U]] {
+    @first : Iterable2[T]
+    @second : Iterable2[U]
+
+    def init(@first : Iterable2[T], @second : Iterable2[U]) {}
+
+    def iterator() -> ProductIterator2[T, U] {
+        return ProductIterator2[T, U].new(@first, @second);
+    }
+}
+
+class ProductIterator2[T, U] extends Iterator2[Pair[T, U]] {
+    @first_iterator : Iterator2[T]
+    @second_iterator : Iterator2[U]
+    @second_iterable : Iterable2[U]
+    @current_first : T | Nil
+
+    def init(first_iterable : Iterable2[T], @second_iterable : Iterable2[U]) {
+        @first_iterator = first_iterable.iterator();
+        @second_iterator = @second_iterable.iterator();
+        @current_first = @first_iterator.next();
+    }
+
+    def next() -> Pair[T, U] | Nil {
+        current_first = @current_first;
+        while current_first is T {
+            second_elem = @second_iterator.next();
+            if second_elem is U { return Pair[T, U].new(current_first, second_elem); }
+            @current_first = @first_iterator.next();
+            @second_iterator = @second_iterable.iterator();
+            current_first = @current_first;
+        }
+        return nil;
+    }
+}
+
+ary = Array[i32].new();
+ary.append(5).append(6).append(7).append(8);
+add = (a : i32, b : i32) => { a + b; };
+//addf = (a : f64, b : f64) => { a + b; };
+
+IO.print(ary.reduce(0, add));
+IO.print([5,6,7].reduce(0, add));
+times_two = (x : i32) => { x * 2; };
+ftimes_two = (x : f64) => { x * 2.0; };
+identity = (x : i32) => { x; };
+to_float = (x : i32) => { y : f64 = x; y; };
+ary2 = ary.map(times_two);
+ary4 = ary2.map(identity).map(to_float);
+
+for x in ary4 {
+	IO.print(55);
+	IO.print(x);
+}
+
+ary3 = ary.zip(ary4);
+for pair in ary3 {
+	IO.print(pair.first());
+	IO.print(pair.second());
+}
+
+class Addable[T, U] {
+	abstract def +(other : T) -> U {}
+}
+
+class Float64 extends Addable[Float64, Float64], Addable[Int32, Float64] {
+	@value : f64
+	def init(@value : f64) {}
+	def value() -> f64 { return @value; }
+	def +(other : Int32) -> Float64 {
+		cast : f64 = other.value();
+		return Float64.new(@value + cast);
+	}
+	def +(other : Float64) -> Float64 {
+		return Float64.new(@value + other.value());
+	}
+}
+
+class Int32 extends Addable[Int32, Int32], Addable[Float64, Float64] {
+	@value : i32
+	def init(@value : i32) {}
+	def value() -> i32 { return @value; }
+	def +(other : Int32) -> Int32 {
+		return Int32.new(@value + other.value());
+	}
+	def +(other : Float64) -> Float64 {
+		cast : f64 = @value;
+		return Float64.new(cast + other.value());
+	}
+}
+
+a = Int32.new(5);
+b = Int32.new(7);
+c = a + b;
+IO.print(add_five(c).value());
+
+def add_five(x : Addable[Float64, Float64]) -> Float64 {
+	return x + Float64.new(5.0);
+}
+
+class Holder[T] where T <: Addable[Float64, Float64] {
+	@held : T
+	def init(@held : T) {}
+	def value() -> Float64 {
+		return @held + Float64.new(45.0);
+	} 
+}
+
+holder = Holder[Int32].new(Int32.new(6));
+IO.print(holder.value().value());

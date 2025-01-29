@@ -252,17 +252,17 @@ class Scope:
         return typ
 
 def type_index(outer_type, inner_type):
-    if outer_type == inner_type: return [0]
+    if outer_type == inner_type: return []
+    if not (isinstance(outer_type, FatPtr) or isinstance(outer_type, Tuple) or isinstance(outer_type, Union) or isinstance(outer_type, Function)):
+            raise Exception(f"{inner_type} is not in {outer_type}")
     if isinstance(outer_type, FatPtr):
         i, t = next((i, t) for (i, t) in enumerate(outer_type.type_params.data) if f"{inner_type}" in f"{t}")
-        return [0, i, *type_index(t, inner_type)]
     if isinstance(outer_type, Tuple) or isinstance(outer_type, Union):
         i, t = next((i, t) for (i, t) in enumerate(outer_type.types.data) if f"{inner_type}" in f"{t}")
-        return [0, i, *type_index(t, inner_type)]
     if isinstance(outer_type, Function):
         i, t = next((i, t) for (i, t) in enumerate([outer_type.return_type, *outer_type.param_types.data]) if f"{inner_type}" in f"{t}")
-        return [0, i, *type_index(t, inner_type)]
-    raise Exception(f"{inner_type} is not in {outer_type}")
+    print(f"index of {inner_type} in {outer_type} is {[i, *type_index(t, inner_type)]}")
+    return [i, *type_index(t, inner_type)]
 
 def id_hierarchy(typ, ambient_types):
         if isinstance(typ, TypeParameter):
