@@ -269,4 +269,35 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with (%call_indirect_result)
     }
   }
+  // LowerCheckFlag Pattern (builtin type case)
+  pdl.pattern : benefit(1) {
+    %ptr = pdl.operand
+    %struct_typ_attr = pdl.attribute
+    %typ_name_attr = pdl.attribute
+    %neg_attr = pdl.attribute
+    %result_type = pdl.type
+    %root = pdl.operation "mini.check_flag"(%ptr) {"struct_typ" : %struct_typ_attr, "typ_name" : %typ_name_attr, "neg" : %neg_attr} -> (%result_type)
+    pdl.rewrite %root {
+      %get_flag = pdl.operation "mini.get_flag"(%ptr) {"struct_typ" : %struct_typ_attr} -> (!llvm.ptr)
+      %get_flag_result = pdl.result 0 of %get_flag
+      %typ_id = pdl.operation "mini.typ_id"() {"typ_name" : %typ_name_attr} -> (!llvm.ptr)
+      %typ_id_result = pdl.result 0 of %typ_id
+      %vptr = pdl.operation "mini.unwrap"(%get_flag_result) -> (!llvm.ptr)
+      %vptr_result = pdl.result 0 of %vptr
+      %i64_type = pdl.type : i64
+      %vptr_int = pdl.operation "llvm.ptrtoint"(%vptr_result) -> (%i64_type)
+      %vptr_int_result = pdl.result 0 of %vptr_int
+      %candidate_ptr = pdl.operation "mini.unwrap"(%typ_id_result) -> (!llvm.ptr)
+      %candidate_ptr_result = pdl.result 0 of %candidate_ptr
+      %candidate = pdl.operation "llvm.ptrtoint"(%candidate_ptr_result) -> (%i64_type)
+      %candidate_result = pdl.result 0 of %candidate
+      %op_name_attr = pdl.attribute = "ne"
+      %i1_type = pdl.type : i1
+      %eq = pdl.operation "arith.cmpi"(%vptr_int_result, %candidate_result) {"predicate" : %op_name_attr} -> (%i1_type)
+      %eq_result = pdl.result 0 of %eq
+      %ptr_type = pdl.type : !llvm.ptr
+      %wrap = pdl.operation "mini.wrap"(%eq_result) -> (%ptr_type)
+      pdl.replace %root with (%wrap)
+    }
+  }
 } : () -> ()
