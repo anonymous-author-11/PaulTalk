@@ -133,7 +133,7 @@ class CompilerTests(CompilerTestCase): # Inherit from the new base class
         p2 = Point.new(3.0, 4.0);
         p3 = p1 + p2;
         IO.print(p3.x());
-        IO.print(p3.y()); #no change
+        IO.print(p3.y());
         """, "4.0\n6.0", "operator_overloading_test")
 
     def test_generic_class(self):
