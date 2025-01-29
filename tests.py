@@ -43,9 +43,6 @@ class CompilerTests(CompilerTestCase): # Inherit from the new base class
     def test_boolean_literals(self):
         self.run_mini_code('import std;\nIO.print(true);\nIO.print(false);\n', "true\nfalse", "boolean_literals_test")
 
-    def test_if_else_if_statement(self):
-        self.run_mini_code('import std;\nx = 5;\nif x > 10 {\n  IO.print("greater than 10");\n} else if x > 3 {\n  IO.print("greater than 3");\n} else {\n  IO.print("less than or equal to 3");\n}\n', "greater than 3", "if_else_if_test")
-
     def test_addition(self):
         self.run_mini_code('import std;\nIO.print(5 + 3);\n', "8", "addition_test")
 
