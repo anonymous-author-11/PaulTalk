@@ -15,4 +15,13 @@ builtin.module attributes {"sym_name" = "patterns"} {
 			pdl.replace %root with (%load)
 		}
 	}
+  pdl.pattern : benefit(1) {
+    %input = pdl.operand
+    %result_type = pdl.type
+    %trunc_op = pdl.operation "arith.trunc"(%input) -> (%result_type)
+    pdl.rewrite %trunc_op {
+      %cast_op = pdl.operation "builtin.unrealized_conversion_cast"(%input) -> (%result_type)
+      pdl.replace %trunc_op with (%cast_op)
+    }
+  }
 } : () -> ()
