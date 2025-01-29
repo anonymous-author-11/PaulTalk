@@ -256,14 +256,3 @@ builtin.module attributes {"sym_name" = "patterns"} {
     }
   }
 } : () -> ()
-  // LowerAddressOf Pattern
-  pdl.pattern : benefit(1) {
-    %global_name_attr = pdl.attribute
-    %result_type = pdl.type
-    %root = pdl.operation "mini.address_of"() {"global_name" : %global_name_attr} -> (%result_type)
-    pdl.rewrite %root {
-      %addr_of = pdl.operation "llvm.address_of"() {"global_name" : %global_name_attr} -> (%result_type)
-      pdl.replace %root with (%addr_of)
-    }
-  }
-} : () -> ()
