@@ -77,6 +77,22 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with (%gep)
     }
   }
+  // LowerSetFlag Pattern (with typ_name)
+  pdl.pattern : benefit(1) {
+    %ptr = pdl.operand
+    %struct_typ_attr = pdl.attribute
+    %typ_name_attr = pdl.attribute
+    %root = pdl.operation "mini.set_flag"(%ptr) {"struct_typ" : %struct_typ_attr, "typ_name" : %typ_name_attr} -> ()
+    pdl.rewrite %root {
+      %get_flag = pdl.operation "mini.get_flag"(%ptr) {"struct_typ" : %struct_typ_attr} -> (!llvm.ptr)
+      %get_flag_result = pdl.result 0 of %get_flag
+      %typ_id = pdl.operation "mini.typ_id"() {"typ_name" : %typ_name_attr} -> (!llvm.ptr)
+      %typ_id_result = pdl.result 0 of %typ_id
+      %i64_type = pdl.type : i64
+      %assign = pdl.operation "mini.assign"(%get_flag_result, %typ_id_result) {"typ" : %i64_type} -> ()
+      pdl.replace %root with ()
+    }
+  }
   // LowerAllocate Pattern
   pdl.pattern : benefit(1) {
     %typ_attr = pdl.attribute
