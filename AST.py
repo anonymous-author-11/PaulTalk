@@ -645,8 +645,9 @@ class MethodCall(Expression):
                 operands0 = [scope.symbol_table["self"]]
                 attr_dict = {"offset":offset, "vtable_size":IntegerAttr.from_int_and_width(scope.cls.vtable_size(), 32)}
                 field_acc = FieldAccessOp.create(operands=operands0, attributes=attr_dict, result_types=[ReifiedType()])
-                scope.region.last_block.add_op(field_acc)
-                operands.append(field_acc.results[0])
+                field_load = llvm.LoadOp(field_acc.results[0], llvm.LLVMPointerType.opaque())
+                scope.region.last_block.add_ops([field_acc, field_load])
+                operands.append(field_load.results[0])
         exist_local_parameterizations = "local_parameterizations" in scope.symbol_table.keys()
         if exist_local_parameterizations:
             method_scoped_parameterizations = scope.symbol_table["local_parameterizations"]

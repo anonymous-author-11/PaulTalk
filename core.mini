@@ -84,6 +84,7 @@ class String extends Iterable, Representable {
         return @bytes.[@length + x];
     }
     def ==(other : String) -> Bool {
+        if @length != other.length() { return false; }
         i = 0;
         while i < @length {
             byte_unequal = @bytes.[i] != other.bytes().[i];
