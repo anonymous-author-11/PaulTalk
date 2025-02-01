@@ -661,7 +661,10 @@ class LowerArithmetic(RewritePattern):
                 "DIV": arith.DivSI,
                 "MOD":arith.RemSI,
                 "LSHIFT":arith.ShLI,
-                "RSHIFT":arith.ShRSI
+                "RSHIFT":arith.ShRSI,
+                "bit_and":arith.AndI,
+                "bit_or":arith.OrI,
+                "bit_xor":arith.XorI
             }
             concrete_op1 = op_map1[op.op.data]
             add1 = concrete_op1(op.lhs, op.rhs)

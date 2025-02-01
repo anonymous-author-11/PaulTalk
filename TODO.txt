@@ -242,17 +242,15 @@ DONE:
 	- Nice how the new infrastructure covers this [check!]
 	- Add method-scoped type parameters to ambient types and operands [check!]
 - Pass types from method context to new [check!]
+- Pass class-scoped parameterizations into class methods [check!]
+	- Probably after the normal passed parameterizations [check!]
+- We need a mapping between types available to init() and type fields [check!]
 
 TODO:
 
-- Pass class-scoped parameterizations into class methods
-	- Probably after the normal passed parameterizations
-	- Should actually probably modify how parameterizations are passed to constructor
-	- To enable zero-argument constructors
+- Bitwise operations
+- Implement a hash table
 - Think about how actually to handle union type parameters
-- We need a mapping between types available to init() and type fields
-	- Is this done?
-	- I think so?
 - Implement type parameter deduction from init()
 - Make sure that type bounds are applied generally
 	- What does this mean?
@@ -260,8 +258,7 @@ TODO:
 - Figure out signature compatibility of overrides of generic parameters
 - Figure out a way to get methods into builtin vtables
 	- Define intrinsics for operations on boxed interfaces
-	- Move Object and certain blessed classes to box interface
-	- Not sure it is actually necessary to have a special boxed interface for certain classes
+	- PrimitiveDef subtype of ClassDef?
 - Shift array and range literals to new generics
 	- Will need to do buffer optimization first for array
 	- And to do buffer optimization we need stored type parameters

@@ -171,7 +171,9 @@ class BinaryOp(Expression):
         right_type = self.right.exprtype(scope)
         if left_type != right_type:
             raise Exception(f"Line {self.line_number}: tried to use {self.operator} on different types: {left_type} and {right_type}")
-        if self.operator in ["MOD", "LSHIFT", "RSHIFT"] and not (isinstance(left_type, Ptr) and isinstance(left_type.type, IntegerType)):
+        needs_integers = self.operator in ["MOD", "LSHIFT", "RSHIFT", "bit_and", "bit_or", "bit_xor"]
+        uses_integers = isinstance(left_type, Ptr) and isinstance(left_type.type, IntegerType)
+        if needs_integers and not uses_integers:
             raise Exception(f"Line {self.line_number}: {self.operator} only works on integers, not {left_type} and {right_type}")
         return self.concrete_exprtype(left_type, right_type)
 
@@ -206,6 +208,13 @@ class Logical(BinaryOp):
         if left_type != Ptr([IntegerType(1)]):
             raise Exception(f"Operator {self.operator} not available for type {left_type}")
         return Ptr([IntegerType(1)])
+
+@dataclass
+class Bitwise(BinaryOp):
+    def concrete_op(self, operands, attributes, result_types):
+        return ArithmeticOp.create(operands=operands, attributes=attributes, result_types=result_types)
+    def concrete_exprtype(self, left_type, right_type):
+        return left_type
 
 @dataclass
 class OverloadedBinaryOp(BinaryOp):

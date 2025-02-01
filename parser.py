@@ -205,6 +205,9 @@ class CSTTransformer(Transformer):
     def logical(self, left, op, right):
         return Logical(self.file_name, op.line, left, op.value, right)
 
+    def bitwise(self, left, op, right):
+        return Bitwise(self.file_name, op.line, left, op.value, right)
+
     def operator(self, op):
         return op
 
