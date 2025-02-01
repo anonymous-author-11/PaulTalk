@@ -261,7 +261,7 @@ def type_index(outer_type, inner_type):
         i, t = next((i, t) for (i, t) in enumerate(outer_type.types.data) if f"{inner_type}" in f"{t}")
     if isinstance(outer_type, Function):
         i, t = next((i, t) for (i, t) in enumerate([outer_type.return_type, *outer_type.param_types.data]) if f"{inner_type}" in f"{t}")
-    print(f"index of {inner_type} in {outer_type} is {[i, *type_index(t, inner_type)]}")
+    #print(f"index of {inner_type} in {outer_type} is {[i, *type_index(t, inner_type)]}")
     return [i, *type_index(t, inner_type)]
 
 def id_hierarchy(typ, ambient_types):

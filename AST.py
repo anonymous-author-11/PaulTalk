@@ -553,7 +553,40 @@ class TypeCheck(Expression):
         self.exprtype(scope)
 
 @dataclass
-class FunctionCall(Expression):
+class Call(Expression):
+
+    def extract_self_parameterizations(self, scope):
+        self_parameterizations = []
+        if not "self" in scope.symbol_table: return self_parameterizations
+        ambient_type_fields = [field for field in scope.cls.stored_type_fields() if field.declaration.type_param in scope.cls.type_parameters]
+        for ambient_type_field in ambient_type_fields:
+            offset = IntegerAttr.from_int_and_width(ambient_type_field.offset, IntegerType(64))
+            local_self = [scope.symbol_table["self"]]
+            attr_dict = {"offset":offset, "vtable_size":IntegerAttr.from_int_and_width(scope.cls.vtable_size(), 32)}
+            field_acc = FieldAccessOp.create(operands=local_self, attributes=attr_dict, result_types=[ReifiedType()])
+            field_load = llvm.LoadOp(field_acc.results[0], llvm.LLVMPointerType.opaque())
+            scope.region.last_block.add_ops([field_acc, field_load])
+            self_parameterizations.append(field_load.results[0])
+        return self_parameterizations
+
+    def extract_scoped_parameterizations(self, scope):
+        scoped_parameterizations = []
+        if not "local_parameterizations" in scope.symbol_table.keys(): return scoped_parameterizations
+        scoped_parameterizations_array = scope.symbol_table["local_parameterizations"]
+        class_scoped_type_params = scope.cls.type_parameters if scope.cls else []
+        for t in scope.method.type_params:
+            i, first_arg_with_type = next((i, param_t) for (i, param_t) in enumerate([*scope.method.param_types(), *class_scoped_type_params]) if f"{t}" in f"{param_t}")
+            indices = ArrayAttr([IntegerAttr.from_int_and_width(idx, 32) for idx in type_index(first_arg_with_type, t)])
+            ary_type = llvm.LLVMArrayType.from_size_and_type(i + 1, llvm.LLVMPointerType.opaque())
+            gep = llvm.GEPOp(scoped_parameterizations_array, [0, i], pointee_type=ary_type)
+            load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
+            parameterization = ParameterizationIndexationOp.create(operands=[load.results[0]], attributes={"indices":indices}, result_types=[llvm.LLVMPointerType.opaque()])
+            scope.region.last_block.add_ops([gep, load, parameterization])
+            scoped_parameterizations.append(parameterization.results[0])
+        return scoped_parameterizations
+
+@dataclass
+class FunctionCall(Call):
     function: str
     arguments: List[Expression]
 
@@ -583,7 +616,7 @@ class FunctionCall(Expression):
             raise Exception(f"Line {self.line_number}: argument type {self.arguments[i].exprtype(scope)} not subtype of declared parameter type {param.type(scope)} for parameter {param.name}")
 
 @dataclass
-class MethodCall(Expression):
+class MethodCall(Call):
     receiver: Expression
     method: str
     arguments: List[Expression]
@@ -636,38 +669,16 @@ class MethodCall(Expression):
         return cast.results[0]
 
     def parameterizations(self, arg_types, scope):
-        operands = []
-        is_instance_method = "self" in scope.symbol_table
-        if is_instance_method:
-            ambient_type_fields = [field for field in scope.cls.stored_type_fields() if field.declaration.type_param in scope.cls.type_parameters]
-            for ambient_type_field in ambient_type_fields:
-                offset = IntegerAttr.from_int_and_width(ambient_type_field.offset, IntegerType(64))
-                operands0 = [scope.symbol_table["self"]]
-                attr_dict = {"offset":offset, "vtable_size":IntegerAttr.from_int_and_width(scope.cls.vtable_size(), 32)}
-                field_acc = FieldAccessOp.create(operands=operands0, attributes=attr_dict, result_types=[ReifiedType()])
-                field_load = llvm.LoadOp(field_acc.results[0], llvm.LLVMPointerType.opaque())
-                scope.region.last_block.add_ops([field_acc, field_load])
-                operands.append(field_load.results[0])
-        exist_local_parameterizations = "local_parameterizations" in scope.symbol_table.keys()
-        if exist_local_parameterizations:
-            method_scoped_parameterizations = scope.symbol_table["local_parameterizations"]
-            for t in scope.method.type_params:
-                i, first_arg_with_type = next((i, param_t) for (i, param_t) in enumerate(scope.method.param_types()) if f"{t}" in f"{param_t}")
-                indices = ArrayAttr([IntegerAttr.from_int_and_width(idx, 32) for idx in type_index(first_arg_with_type, t)])
-                ary_type = llvm.LLVMArrayType.from_size_and_type(i + 1, llvm.LLVMPointerType.opaque())
-                gep = llvm.GEPOp(method_scoped_parameterizations, [0, i], pointee_type=ary_type)
-                load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
-                parameterization = ParameterizationIndexationOp.create(operands=[load.results[0]], attributes={"indices":indices}, result_types=[llvm.LLVMPointerType.opaque()])
-                scope.region.last_block.add_ops([gep, load, parameterization])
-                operands.append(parameterization.results[0])
-        
+        available_parameterizations = [*self.extract_self_parameterizations(scope), *self.extract_scoped_parameterizations(scope)]
+        ambient_types = scope.cls.type_parameters if "self" in scope.symbol_table else []
+        if "local_parameterizations" in scope.symbol_table.keys(): ambient_types = [*ambient_types, *scope.method.type_params]
+
+        # for each passed argument, add a parameterization representing its static type to the parameterizations array
         parameterizations = []
-        ambient_types = scope.cls.type_parameters if is_instance_method else []
-        if exist_local_parameterizations: ambient_types = [*ambient_types, *scope.method.type_params]
         for t in arg_types:
             t_name_hierarchy = name_hierarchy(t)
             t_id_hierarchy = id_hierarchy(t, ambient_types)
-            parameterization = ParameterizationOp.make(operands, t_id_hierarchy, t_name_hierarchy)
+            parameterization = ParameterizationOp.make(available_parameterizations, t_id_hierarchy, t_name_hierarchy)
             scope.region.last_block.add_op(parameterization)
             parameterizations.append(parameterization.results[0])
         ary = ParameterizationsArrayOp.create(operands=parameterizations, result_types=[llvm.LLVMPointerType.opaque()])
@@ -891,6 +902,33 @@ class ClassMethodCall(MethodCall):
         scope.region.last_block.add_op(cast)
         return cast.results[0]
 
+    def parameterizations(self, arg_types, scope):
+        available_parameterizations = [*self.extract_self_parameterizations(scope), *self.extract_scoped_parameterizations(scope)]
+        ambient_types = scope.cls.type_parameters if "self" in scope.symbol_table else []
+        if "local_parameterizations" in scope.symbol_table.keys(): ambient_types = [*ambient_types, *scope.method.type_params]
+
+        # for each passed argument, add a parameterization representing its static type to the parameterizations array
+        parameterizations = []
+        for t in arg_types:
+            t_name_hierarchy = name_hierarchy(t)
+            t_id_hierarchy = id_hierarchy(t, ambient_types)
+            parameterization = ParameterizationOp.make(available_parameterizations, t_id_hierarchy, t_name_hierarchy)
+            scope.region.last_block.add_op(parameterization)
+            parameterizations.append(parameterization.results[0])
+
+        rec_typ = scope.simplify(FatPtr.basic(self.receiver.name))
+        if rec_typ.type_params != NoneAttr():
+            for t in rec_typ.type_params:
+                t_name_hierarchy = name_hierarchy(t)
+                t_id_hierarchy = id_hierarchy(t, ambient_types)
+                parameterization = ParameterizationOp.make(available_parameterizations, t_id_hierarchy, t_name_hierarchy)
+                scope.region.last_block.add_op(parameterization)
+                parameterizations.append(parameterization.results[0])
+
+        ary = ParameterizationsArrayOp.create(operands=parameterizations, result_types=[llvm.LLVMPointerType.opaque()])
+        scope.region.last_block.add_op(ary)
+        return ary.results[0]
+
     def simple_exprtype(self, scope):
         if self.receiver == "Self":
             if not scope.cls:
@@ -943,7 +981,7 @@ class IntrinsicCall(ClassMethodCall):
         raise Exception(f"Line {self.line_number}: not implemented intrinsic {self.method} for type yet")
 
 @dataclass
-class PrintCall(Expression):
+class PrintCall(Call):
     args: List[Expression]
 
     def codegen(self, scope):
@@ -957,7 +995,7 @@ class PrintCall(Expression):
         self.args[0].typeflow(scope)
 
 @dataclass
-class ObjectCreation(Expression):
+class ObjectCreation(Call):
     anon_name: str
     type: TypeAttribute
     arguments: List[Expression]
@@ -994,56 +1032,22 @@ class ObjectCreation(Expression):
 
     def parameterizations(self, created_cls, self_type, scope):
         if self_type.type_params == NoneAttr(): return []
-        operands = []
-        is_instance_method = "self" in scope.symbol_table
-        if is_instance_method:
-            ambient_type_fields = [field for field in scope.cls.stored_type_fields() if field.declaration.type_param in scope.cls.type_parameters]
-            for ambient_type_field in ambient_type_fields:
-                offset = IntegerAttr.from_int_and_width(ambient_type_field.offset, IntegerType(64))
-                local_self = [scope.symbol_table["self"]]
-                attr_dict = {"offset":offset, "vtable_size":IntegerAttr.from_int_and_width(scope.cls.vtable_size(), 32)}
-                field_acc = FieldAccessOp.create(operands=local_self, attributes=attr_dict, result_types=[ReifiedType()])
-                field_load = llvm.LoadOp(field_acc.results[0], llvm.LLVMPointerType.opaque())
-                scope.region.last_block.add_ops([field_acc, field_load])
-                operands.append(field_load.results[0])
-        exist_local_parameterizations = "local_parameterizations" in scope.symbol_table.keys()
-        if exist_local_parameterizations:
-            method_scoped_parameterizations = scope.symbol_table["local_parameterizations"]
-            for t in scope.method.type_params:
-                i, first_arg_with_type = next((i, param_t) for (i, param_t) in enumerate(scope.method.param_types()) if f"{t}" in f"{param_t}")
-                indices = ArrayAttr([IntegerAttr.from_int_and_width(idx, 32) for idx in type_index(first_arg_with_type, t)])
-                ary_type = llvm.LLVMArrayType.from_size_and_type(i + 1, llvm.LLVMPointerType.opaque())
-                gep = llvm.GEPOp(method_scoped_parameterizations, [0, i], pointee_type=ary_type)
-                load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
-                indexation = ParameterizationIndexationOp.create(operands=[load.results[0]], attributes={"indices":indices}, result_types=[llvm.LLVMPointerType.opaque()])
-                scope.region.last_block.add_ops([gep, load, indexation])
-                operands.append(indexation.results[0])
-        parameterizations = []
+        available_parameterizations = [*self.extract_self_parameterizations(scope), *self.extract_scoped_parameterizations(scope)]
 
         temp_scope = Scope(scope)
         for t1, t2 in zip(created_cls.type_parameters, self_type.type_params.data): temp_scope.add_alias(t1, t2)
 
-        ambient_types = scope.cls.type_parameters if is_instance_method else []
-        if exist_local_parameterizations: ambient_types = [*ambient_types, *scope.method.type_params]
+        ambient_types = scope.cls.type_parameters if "self" in scope.symbol_table else []
+        if "local_parameterizations" in scope.symbol_table.keys(): ambient_types = [*ambient_types, *scope.method.type_params]
+
+        parameterizations = []
         for new_instance_type_field in created_cls.stored_type_fields():
             field_formal_type = temp_scope.simplify(new_instance_type_field.declaration.type_param)
             field_id_hierarchy = id_hierarchy(field_formal_type, ambient_types)
             field_name_hierarchy = name_hierarchy(field_formal_type)
-            parameterization = ParameterizationOp.make(operands, field_id_hierarchy, field_name_hierarchy)
+            parameterization = ParameterizationOp.make(available_parameterizations, field_id_hierarchy, field_name_hierarchy)
             scope.region.last_block.add_op(parameterization)
             parameterizations.append(parameterization.results[0])
-
-            # what we really want to do is
-            # alias the new instance formal parameters by the specified ones
-            # go through the type fields of the new instance
-            # check from the scoped names whether they are fully concrete
-            # for fully concrete ones, generate a global and store the ptr to it
-            # for ones still containing type parameters
-            # we could take all the ambient type parameters as operands
-            # flatten the type
-            # replace extant type parameters in flat lists with indices
-            # still question of how to pass method type params
-            # malloc space for the flat list
 
         return parameterizations
 
