@@ -60,6 +60,8 @@ declare ptr @malloc(i64)
 
 declare void @setup_landing_pad()
 
+declare void @anoint_trampoline(ptr)
+
 declare ptr @coroutine_create(ptr, ptr)
 
 declare void @arg_passer(ptr)

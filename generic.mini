@@ -351,6 +351,8 @@ for pair in ary3 {
 	IO.print(pair.second());
 }
 
+IO.print("basta!");
+
 class Addable[T, U] {
 	abstract def +(other : T) -> U {}
 }

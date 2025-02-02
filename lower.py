@@ -1464,16 +1464,23 @@ class LowerAssign(RewritePattern):
             memcpy = MemCpyOp.make(op.value, op.target, op.typ)
             rewriter.replace_matched_op(memcpy)
             return
-        data_size = llvm.ConstantOp(IntegerAttr.from_int_and_width(op.typ.size.data, 64), IntegerType(64))
-        false = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 1), IntegerType(1))
-        args = [op.target, op.value, data_size.results[0], false.results[0]]
+        if op.typ.size.data == 0:
+            rewriter.erase_matched_op()
+            return
+        load = llvm.LoadOp(op.value, IntegerType(8 * op.typ.size.data))
+        store = llvm.StoreOp(load.results[0], op.target)
+        rewriter.insert_op_before_matched_op(load)
+        rewriter.replace_matched_op(store)
+        #data_size = llvm.ConstantOp(IntegerAttr.from_int_and_width(op.typ.size.data, 64), IntegerType(64))
+        #false = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 1), IntegerType(1))
+        #args = [op.target, op.value, data_size.results[0], false.results[0]]
         # declare void @llvm.memcpy.inline.p0.p0.i64(ptr <dest>, ptr <src>, i64 <len>, i1 <isvolatile>)
-        memcpy = llvm.CallIntrinsicOp("llvm.memcpy.inline.p0.p0.i64", [args], [])
-        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [4, 0])
-        memcpy.properties["operandSegmentSizes"] = operandSegmentSizes
-        memcpy.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
-        rewriter.inline_block_before_matched_op(Block([data_size, false]))
-        rewriter.replace_matched_op(memcpy)
+        #memcpy = llvm.CallIntrinsicOp("llvm.memcpy.inline.p0.p0.i64", [args], [])
+        #operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [4, 0])
+        #memcpy.properties["operandSegmentSizes"] = operandSegmentSizes
+        #memcpy.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        #rewriter.inline_block_before_matched_op(Block([data_size, false]))
+        #rewriter.replace_matched_op(memcpy)
         debug_code(op)
 
 class LowerAddrOf(RewritePattern):

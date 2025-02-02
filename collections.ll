@@ -4,7 +4,7 @@ source_filename = "LLVMDialectModule"
 @_parameterization_Ptri1 = linkonce_odr constant [1 x ptr] [ptr @bool_typ]
 @_parameterization_String = linkonce_odr constant [1 x ptr] [ptr @String]
 @_parameterization_BufferPtri8 = linkonce_odr constant [1 x ptr] [ptr @buffer_typ]
-@cggqy_collectionsmini = internal constant [16 x i8] c"collections.mini"
+@iipyv_collectionsmini = internal constant [16 x i8] c"collections.mini"
 @_parameterization_Ptri32 = linkonce_odr constant [1 x ptr] [ptr @i32_typ]
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
@@ -135,6 +135,8 @@ source_filename = "LLVMDialectModule"
 declare ptr @malloc(i64)
 
 declare void @setup_landing_pad()
+
+declare void @anoint_trampoline(ptr)
 
 declare ptr @coroutine_create(ptr, ptr)
 
@@ -4014,7 +4016,7 @@ define void @Array_throw_oob_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr,
   %93 = call ptr @llvm.invariant.start.p0(i64 16, ptr %80)
   %94 = load ptr, ptr %80, align 8
   %95 = getelementptr i8, ptr %94, i64 0
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %95, ptr @cggqy_collectionsmini, i64 16, i1 false)
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %95, ptr @iipyv_collectionsmini, i64 16, i1 false)
   %96 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %97 = alloca { ptr, ptr, ptr, i32 }, align 8
   %98 = getelementptr { ptr, ptr, ptr, i32 }, ptr %97, i32 0, i32 1
