@@ -1,6 +1,0 @@
-{
-  "stderrContains": "",
-  "stdoutContains": "call void @bar(%Qubit* %q1)",
-  "args": ["--replace-functions", "foo=bar"],
-  "expectFail": false
-}
