@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from collections.abc import Iterable, Iterator, Mapping, Sequence
+from immutabledict import immutabledict
 from dataclasses import dataclass
 from enum import Enum
 from math import prod
@@ -665,12 +666,17 @@ class ComplexType(ParametrizedAttribute, TypeAttribute):
 
 
 @irdl_attr_definition
-class DictionaryAttr(GenericData[dict[str, Attribute]]):
+class DictionaryAttr(GenericData[immutabledict[str, Attribute]]):
     name = "dictionary"
 
+    def __init__(self, value: Mapping[str, Attribute]):
+        if not isinstance(value, immutabledict):
+            value = immutabledict(value)
+        super().__init__(value)
+
     @classmethod
-    def parse_parameter(cls, parser: AttrParser) -> dict[str, Attribute]:
-        return parser.parse_optional_dictionary_attr_dict()
+    def parse_parameter(cls, parser: AttrParser) -> immutabledict[str, Attribute]:
+        return immutabledict(parser.parse_optional_dictionary_attr_dict())
 
     def print_parameter(self, printer: Printer) -> None:
         printer.print_attr_dict(self.data)

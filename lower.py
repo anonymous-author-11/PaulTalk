@@ -168,6 +168,7 @@ class ThirdPass(ModulePass):
                 LowerCoroCall(),
                 LowerCoroGetResult(),
                 LowerCoroSetResult(),
+                LowerAnointTrampoline(),
                 LowerPrintF(),
                 LowerSetupException(),
                 LowerAddrOf(),
@@ -664,7 +665,7 @@ class LowerArithmetic(RewritePattern):
                 "RSHIFT":arith.ShRSI,
                 "bit_and":arith.AndI,
                 "bit_or":arith.OrI,
-                "bit_xor":arith.XorI
+                "bit_xor":arith.XOrI
             }
             concrete_op1 = op_map1[op.op.data]
             add1 = concrete_op1(op.lhs, op.rhs)
@@ -736,6 +737,9 @@ class LowerUtilsAPI(RewritePattern):
         rewriter.insert_op_before_matched_op(full_func)
         func_type = llvm.LLVMFunctionType([], llvm.LLVMVoidType())
         full_func = llvm.FuncOp("setup_landing_pad", func_type, linkage=llvm.LinkageAttr("external"))
+        rewriter.insert_op_before_matched_op(full_func)
+        func_type = llvm.LLVMFunctionType([llvm.LLVMPointerType.opaque()], llvm.LLVMVoidType())
+        full_func = llvm.FuncOp("anoint_trampoline", func_type, linkage=llvm.LinkageAttr("external"))
         rewriter.insert_op_before_matched_op(full_func)
         func_type = llvm.LLVMFunctionType([llvm.LLVMPointerType.opaque(), llvm.LLVMPointerType.opaque()], llvm.LLVMPointerType.opaque())
         full_func = llvm.FuncOp("coroutine_create", func_type, linkage=llvm.LinkageAttr("external"))
@@ -872,6 +876,15 @@ class LowerSetOffset(RewritePattern):
         call.properties["operandSegmentSizes"] = operandSegmentSizes
         call.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
         rewriter.insert_op_before_matched_op(to_type)
+        rewriter.replace_matched_op(call)
+
+class LowerAnointTrampoline(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: AnointTrampolineOp, rewriter: PatternRewriter):
+        call = llvm.CallOp("anoint_trampoline", op.tramp)
+        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
+        call.properties["operandSegmentSizes"] = operandSegmentSizes
+        call.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
         rewriter.replace_matched_op(call)
 
 class LowerCoroYield(RewritePattern):
@@ -1045,7 +1058,7 @@ class LowerWidenInt(RewritePattern):
     def match_and_rewrite(self, op: WidenIntOp, rewriter: PatternRewriter):
         alloca = AllocateOp.create(attributes={"typ":op.to_typ}, result_types=[llvm.LLVMPointerType.opaque()])
         unwrapped = UnwrapOp.create(operands=[op.operand], result_types=[op.from_typ])
-        extended = arith.ExtSIOp(unwrapped.results[0], IntegerType(64))
+        extended = arith.ExtSIOp(unwrapped.results[0], op.to_typ)
         store = llvm.StoreOp(extended.results[0], alloca.results[0])
         rewriter.inline_block_after_matched_op(Block([unwrapped, extended, store]))
         rewriter.replace_matched_op(alloca)
@@ -1103,16 +1116,25 @@ class LowerReabstract(RewritePattern):
     def match_and_rewrite(self, op: ReabstractOp, rewriter: PatternRewriter):
         block = op.region.detach_block(op.region.first_block)
         func_def = block.first_op
-        global_fptr = func_def.next_op
-        replacement = block.last_op
+        tramp = func_def.next_op
         top_level = op.get_toplevel_object()
         block.detach_op(func_def)
-        block.detach_op(global_fptr)
-        block.detach_op(replacement)
+        adjust_trampoline = llvm.CallIntrinsicOp(
+            "llvm.adjust.trampoline",
+            [[tramp.results[0]]], 
+            [llvm.LLVMPointerType.opaque()]
+        )
+        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
+        adjust_trampoline.properties["operandSegmentSizes"] = operandSegmentSizes
+        adjust_trampoline.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        alloca = AllocateOp.create(attributes={"typ":llvm.LLVMPointerType.opaque()}, result_types=[llvm.LLVMPointerType.opaque()])
+        store = llvm.StoreOp(adjust_trampoline.results[0], alloca.results[0])
+        invariant0 = InvariantOp.make(tramp.results[0], 16)
+        invariant1 = InvariantOp.make(alloca.results[0], 8)
         rewriter.insert_op_before(func_def, top_level.body.block.first_op)
-        rewriter.insert_op_before(global_fptr, func_def)
-        rewriter.inline_block_after_matched_op(block)
-        rewriter.replace_matched_op(replacement)
+        rewriter.inline_block_before_matched_op(block)
+        rewriter.inline_block_after_matched_op(Block([adjust_trampoline, store, invariant0, invariant1]))
+        rewriter.replace_matched_op(alloca)
 
 class LowerTupleCast(RewritePattern):
     @op_type_rewrite_pattern

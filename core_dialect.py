@@ -31,7 +31,7 @@ from xdsl.irdl import (
     OptResultDef,
     opt_result_def
 )
-from xdsl.dialects.builtin import IntegerType, IntegerAttr, NoneAttr, StringAttr, ArrayAttr, Float64Type, SymbolRefAttr, UnitAttr, AnyIntegerAttr, DenseArrayBase, FunctionType
+from xdsl.dialects.builtin import IntegerType, IntegerAttr, NoneAttr, StringAttr, ArrayAttr, Float64Type, SymbolRefAttr, UnitAttr, AnyIntegerAttr, DenseArrayBase, FunctionType, DictionaryAttr
 from xdsl.dialects import llvm, func, builtin
 from xdsl import traits
 from xdsl.traits import SymbolOpInterface
@@ -716,6 +716,11 @@ class SetOffsetOp(IRDLOperation):
     to_typ: SymbolRefAttr = attr_def(SymbolRefAttr)
 
 @irdl_op_definition
+class AnointTrampolineOp(IRDLOperation):
+    name = "mini.anoint_trampoline"
+    tramp: Operand = operand_def()
+
+@irdl_op_definition
 class TypIDOp(IRDLOperation):
     name = "mini.typid"
     result: OpResult = result_def(Ptr)
@@ -920,7 +925,8 @@ class CastOp(IRDLOperation):
         if from_union and to_union: return ReUnionizeOp.create(operands=[operand], attributes=attr_dict, result_types=[to_typ])
         if from_union: return NarrowOp.make(operand, from_typ, to_typ, id_fn)
         if to_union: return UnionizeOp.make(operand, from_typ, to_typ, id_fn)
-        if from_typ == Ptr([IntegerType(32)]) and to_typ == Ptr([IntegerType(64)]):
+        ptr_to_ptr = isinstance(from_typ, Ptr) and isinstance(to_typ, Ptr)
+        if ptr_to_ptr and isinstance(from_typ.type, IntegerType) and isinstance(to_typ.type, IntegerType) and to_typ.type.bitwidth > from_typ.type.bitwidth:
             return WidenIntOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
         if from_typ == Ptr([IntegerType(32)]) and to_typ == Ptr([Float64Type()]):
             return IntToFloatOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
@@ -1013,12 +1019,11 @@ class ReabstractOp(CastOp, IRDLOperation):
 
     @classmethod
     def make(cls, operand, from_typ, to_typ, id_fn):
-        print(f"{from_typ} is not equal to {to_typ}")
+        #print(f"{from_typ} is not equal to {to_typ}")
         attr_dict = {
             "from_typ":from_typ.base_typ(),"to_typ":to_typ.base_typ(),"from_typ_name":id_fn(from_typ), "to_typ_name":id_fn(to_typ)
         }
         wrapper_name = random_letters(10)
-        wrapped_name = random_letters(10)
         f_block = Block([])
 
         has_return = to_typ.return_type != Nothing()
@@ -1030,11 +1035,10 @@ class ReabstractOp(CastOp, IRDLOperation):
         unwraps = [UnwrapOp.create(operands=[casts[i].results[0]], result_types=[from_typ.param_types.data[i].base_typ()]) for (i, arg) in enumerate(args)]
         attr_dict = {"ret_type":from_typ.return_type.base_typ() if has_return else llvm.LLVMVoidType()}
         result_types = [] if not has_return else [from_typ.return_type]
-        addr_of = AddrOfOp.from_string(wrapped_name)
-        fptr = llvm.LoadOp(addr_of.results[0], llvm.LLVMPointerType.opaque())
-        operands = [fptr.results[0], *[x.results[0] for x in unwraps]]
+        fptr = f_block.insert_arg(llvm.LLVMPointerType.opaque(), 0)
+        operands = [fptr, *[x.results[0] for x in unwraps]]
         call = FPtrCallOp.create(operands=operands, attributes=attr_dict, result_types=result_types)
-        f_block.add_ops([*wraps, *casts, *unwraps, addr_of, fptr, call])
+        f_block.add_ops([*wraps, *casts, *unwraps, call])
         if has_return:
             cast = CastOp.make(call.results[0], from_typ.return_type, to_typ.return_type, id_fn)
             unwrap = UnwrapOp.create(operands=[cast.results[0]], result_types=[to_typ.return_type.base_typ()])
@@ -1043,19 +1047,23 @@ class ReabstractOp(CastOp, IRDLOperation):
         else:
             f_block.add_op(func.Return())
         f_body = Region([f_block])
-        func_def = func.FuncOp(wrapper_name, FunctionType.from_lists([t.base_typ() for t in to_typ.param_types.data], ret_type), f_body)
+        dict_ary = ArrayAttr([DictionaryAttr({"llvm.nest":UnitAttr()}), *[DictionaryAttr({}) for arg in to_typ.param_types.data]])
+        func_def = func.FuncOp(wrapper_name, FunctionType.from_lists([t.base_typ() for t in to_typ.param_types.data], ret_type), f_body, arg_attrs=dict_ary)
 
-        global_fptr = GlobalFptrOp.create(attributes={"global_name":StringAttr(wrapped_name)})
-
-        wrapped = AddrOfOp.from_string(wrapped_name)
+        tramp = MallocOp.create(attributes={"typ":llvm.LLVMArrayType.from_size_and_type(16, IntegerType(8))}, result_types=[llvm.LLVMPointerType.opaque()])
+        anoint = AnointTrampolineOp.create(operands=[tramp.results[0]])
         wrapper = AddrOfOp.from_string(wrapper_name)
         fptr = llvm.LoadOp(operand, llvm.LLVMPointerType.opaque())
-        store0 = llvm.StoreOp(fptr.results[0], wrapped.results[0])
-        invariant = InvariantOp.make(wrapped.results[0], 8)
-        alloca = AllocateOp.create(attributes={"typ":llvm.LLVMPointerType.opaque()}, result_types=[llvm.LLVMPointerType.opaque()])
-        store1 = llvm.StoreOp(wrapper.results[0], alloca.results[0])
-
-        region = Region([Block([func_def, global_fptr, wrapped, wrapper, fptr, store0, invariant, store1, alloca])])
+        init_trampoline = llvm.CallIntrinsicOp(
+            "llvm.init.trampoline",
+            [[tramp.results[0], wrapper.results[0], fptr.results[0]]], 
+            []
+        )
+        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [3, 0])
+        init_trampoline.properties["operandSegmentSizes"] = operandSegmentSizes
+        init_trampoline.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        
+        region = Region([Block([func_def, tramp, anoint, wrapper, fptr, init_trampoline])])
         return ReabstractOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict, regions=[region])
 
 @irdl_op_definition

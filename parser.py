@@ -195,7 +195,11 @@ class CSTTransformer(Transformer):
         return term
 
     def arithmetic(self, left, op, right):
-        translated_op = {"+":"ADD","-":"SUB","*":"MUL","/":"DIV","%":"MOD","<<":"LSHIFT",">>":"RSHIFT"}[op.value]
+        translated_op = {
+            "+":"ADD","-":"SUB","*":"MUL","/":"DIV",
+            "%":"MOD","<<":"LSHIFT",">>":"RSHIFT",
+            "bit_and":"bit_and","bit_or":"bit_or","bit_xor":"bit_xor"
+        }[op.value]
         return Arithmetic(self.file_name, op.line, left, translated_op, right)
 
     def comparison(self, left, op, right):

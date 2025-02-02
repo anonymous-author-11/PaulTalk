@@ -12,6 +12,7 @@ declare i32 @printf(ptr, ...)
 declare void @exit()
 declare ptr @VirtualAlloc(ptr, i64, i32, i32)
 declare i32 @VirtualFree(ptr, i64, i32)
+declare i32 @VirtualProtect(ptr, i64, i32, ptr)
 declare void @report_exception( {ptr} )
 declare void @llvm.init.trampoline(ptr, ptr, ptr)
 
@@ -22,6 +23,12 @@ declare void @llvm.init.trampoline(ptr, ptr, ptr)
 @into_caller_buf = internal thread_local global [3 x ptr] zeroinitializer
 @current_coroutine = internal thread_local global ptr null
 @always_one = linkonce thread_local global i1 1
+
+define void @anoint_trampoline(ptr %tramp) {
+  %oldProtect = alloca i32  
+  %result = call i32 @VirtualProtect(ptr %tramp, i64 16, i32 64, ptr %oldProtect)
+  ret void
+}
 
 ; Function to create a new coroutine
 define ptr @coroutine_create(ptr %func, ptr %arg_passer) {

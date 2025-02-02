@@ -2114,8 +2114,14 @@ class VarInit(VarDecl):
         value_type = self.initial_value.exprtype(scope)
         if not value_type or value_type == llvm.LLVMVoidType():
             raise Exception(f"Line {self.line_number}: Assignment impossible: right hand side expression does not return anything.")
+
+        # obviously needs work
         if self.initial_value and not scope.subtype(value_type, self_type):
-            if value_type != Ptr([IntegerType(32)]) or self_type not in [Ptr([Float64Type()]), Ptr([IntegerType(64)])]:
+            if not isinstance(value_type, Ptr) or not isinstance(self_type, Ptr):
+                raise Exception(f"Line {self.line_number}: rhs type {value_type} not subtype of declared type {self_type}!")
+            if not isinstance(value_type.type, IntegerType):
+                raise Exception(f"Line {self.line_number}: rhs type {value_type} not subtype of declared type {self_type}!")
+            if isinstance(self_type.type, IntegerType) and value_type.type.bitwidth > self_type.type.bitwidth:
                 raise Exception(f"Line {self.line_number}: rhs type {value_type} not subtype of declared type {self_type}!")
         self.initial_value.typeflow(scope)
         scope.type_table[self.name] = self_type
