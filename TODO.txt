@@ -245,10 +245,15 @@ DONE:
 - Pass class-scoped parameterizations into class methods [check!]
 	- Probably after the normal passed parameterizations [check!]
 - We need a mapping between types available to init() and type fields [check!]
+- Move reabstraction to trampolines [check!]
+	- Add llvm.nest attributes to wrapping functions [check!]
+	- Use llvm.init.trampoline and llvm.adjust.trampoline intrinsics [check!]
+	- Mark malloc as executable with VirtualProtect [check!]
+- Remove memcpy from string assignment; use long integers instead [check!]
+- Bitwise operations for integers [check!]
 
 TODO:
 
-- Bitwise operations
 - Implement a hash table
 - Think about how actually to handle union type parameters
 - Implement type parameter deduction from init()
