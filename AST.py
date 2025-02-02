@@ -673,6 +673,9 @@ class MethodCall(Call):
         call_op = MethodCallOp.create(operands=operands, attributes=attr_dict, result_types=result_types)
         scope.region.last_block.add_op(call_op)
         if len(call_op.results) == 0: return None
+        if not specialized:
+            print(self)
+            raise Exception()
         cast = CastOp.make(call_op.results[0], broad, specialized, type_id)
         scope.region.last_block.add_op(cast)
         return cast.results[0]
@@ -1562,6 +1565,7 @@ class Behavior(Statement):
 
     def specialized_return_type(self, rec_typ, arg_types, scope):
         all_return_types = [method.specialized_return_type(rec_typ, arg_types, scope) for method in self.methods if method.definition.return_type()]
+        print(all_return_types)
         all_return_types = [t for t in all_return_types if t]
         if len(all_return_types) == 0: return None
         return self.cls._scope.simplify(Union.from_list(all_return_types))

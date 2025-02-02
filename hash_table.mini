@@ -31,45 +31,47 @@ class Entry[K,V] {
 }
 
 class HashMap[K,V] extends Iterable2[Pair[K,V]] {
-    @entries: Buffer[Entry[K,V] | Nil]
-    @capacity: i32  // Track buffer size explicitly
+    @entries: Array[Entry[K,V] | Nil]
     @size: i32      // Number of actual entries
     @load: i32      // Number of entries including tombstones
     @hasher: (K) -> i32
     @eq: (K, K) -> Bool
     
     def init(@hasher: (K) -> i32, @eq : (K, K) -> Bool) {
-        @capacity = 16;  // Start with power of 2 size
-        @entries = Buffer[Entry[K,V] | Nil].new(@capacity);
+        @entries = Array[Entry[K,V] | Nil].new(16);
         @size = 0;
         @load = 0;
     }
 
     def find_slot(key: K, hash: i32) -> i32 {
-        i = hash bit_and (@capacity - 1);  // Mask to table size
+        i = hash bit_and (@entries.length() - 1);  // Mask to table size
         while true {
             entry = @entries.[i];
             if entry is Entry[K, V] {
             	if entry.hash() == hash {
                 	if @eq.call(entry.key(), key) { return i; }
             	}
-            	i = (i + 1) bit_and (@capacity - 1);  // Linear probe
+            	i = (i + 1) bit_and (@entries.length() - 1);  // Linear probe
             }
             return i;
         }
     }
 
-    def resize(new_capacity: i32) {
+    def resize(new_size: i32) {
         old_entries = @entries;
-        old_capacity = @capacity;
+        @entries = Array[Entry[K,V] | Nil].new(new_size);
         
-        @capacity = new_capacity;
-        @entries = Buffer[Entry[K,V] | Nil].new(@capacity);
+        i = 0;
+        while i < new_size {
+            @entries.append(nil);
+            i = i + 1;
+        }
+        
         @load = 0;
         @size = 0;
         
         i = 0;
-        while i < old_capacity {
+        while i < old_entries.length() {
             entry = old_entries.[i];
             if entry is Entry[K,V] {
                 val = entry.value();
@@ -83,8 +85,8 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
 
     def insert(key: K, value: V) {
         // Grow at 70% load factor
-        if (@load * 10) / @capacity > 7 {
-            self.resize(@capacity * 2);
+        if (@load * 10) / @entries.length() > 7 {
+            self.resize(@entries.length() * 2);
         }
 
         hash = @hasher.call(key);
@@ -138,44 +140,17 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
     }
 
     def clear() {
-        @capacity = 16;
-        @entries = Buffer[Entry[K,V] | Nil].new(@capacity);
+        @entries = Array[Entry[K,V] | Nil].new(16);
         @size = 0;
         @load = 0;
     }
 
     def size() -> i32 { return @size; }
 
-    def entries() -> Buffer[Entry[K,V] | Nil] { return @entries; }
+    def entries() -> Array[Entry[K,V] | Nil] { return @entries; }
     
-    def capacity() -> i32 { return @capacity; }
-
-    def iterator() -> HashMapIterator[K,V] {
-        return HashMapIterator[K,V].new(self);
-    }
-}
-
-class HashMapIterator[K,V] extends Iterator2[Pair[K,V]] {
-    @map: HashMap[K,V]
-    @index: i32
-
-    def init(@map: HashMap[K,V]) {
-        @index = 0;
-    }
-
-    def next() -> Pair[K,V] | Nil {
-        while @index < @map.capacity() {
-            entry = @map.entries().[@index];
-            @index = @index + 1;
-            
-            if entry is Entry[K,V] {
-                val = entry.value();
-                if val is V {
-                    return Pair[K,V].new(entry.key(), val);
-                }
-            }
-        }
-        return nil;
+    def iterator() -> Iterator2[Entry[K,V] | Nil] {
+        return @entries.iterator();
     }
 }
 
@@ -195,4 +170,9 @@ map = HashMap[i32, i32].new(i32_hasher, i32_eq);
 map.insert(5,77);
 map.insert(8,34);
 map.insert(15,99);
-IO.print(map.get(8));
+val = map.get(8);
+if val is i32 {
+    IO.print(val);
+} else {
+    IO.print("not an i32");
+}

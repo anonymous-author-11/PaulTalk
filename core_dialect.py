@@ -887,7 +887,7 @@ class CastOp(IRDLOperation):
 
     @classmethod
     def make(cls, operand, from_typ, to_typ, id_fn):
-        
+
         attr_dict = {
             "from_typ":from_typ.base_typ(),"to_typ":to_typ.base_typ(),"from_typ_name":id_fn(from_typ), "to_typ_name":id_fn(to_typ)
         }

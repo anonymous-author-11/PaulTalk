@@ -254,6 +254,7 @@ DONE:
 
 TODO:
 
+- Think about initialization of buffers and nil checks
 - Implement a hash table
 - Think about how actually to handle union type parameters
 - Implement type parameter deduction from init()

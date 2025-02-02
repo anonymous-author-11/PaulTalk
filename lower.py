@@ -428,7 +428,19 @@ class LowerCreateBuffer(RewritePattern):
         malloc_size = llvm.PtrToIntOp(gep.results[0], IntegerType(64))
         attr_dict = {"func_name":StringAttr("malloc"), "ret_type":llvm.LLVMPointerType.opaque()}
         malloc = FunctionCallOp.create(operands=[malloc_size.results[0]], attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
+        
+        # fill uninitialized memory with zeroes
+        #false = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 1), IntegerType(1))
+        #zero = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 8), IntegerType(8))
+        #args = [malloc.results[0], zero.results[0], malloc_size.results[0], false.results[0]]
+        #declare void @llvm.memset.inline.p0.p0.i64(ptr <dest>, i8 <val>, i64 <len>, i1 <isvolatile>)
+        #memset = llvm.CallIntrinsicOp("llvm.memset.inline.p0.p0.i64", [args], [])
+        #operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [4, 0])
+        #memset.properties["operandSegmentSizes"] = operandSegmentSizes
+        #memset.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+
         rewriter.inline_block_before_matched_op(Block([null, unwrap, gep, malloc_size]))
+        #rewriter.inline_block_after_matched_op(Block([false, zero, memset]))
         rewriter.replace_matched_op(malloc)
 
 class LowerCreateTuple(RewritePattern):
