@@ -179,12 +179,18 @@ class Scope:
                 print(f" problem is {typ}")
                 raise Exception(self.classes)
             if typ.type_params == NoneAttr(): return self.classes[typ.cls.data].ancestors()
+
+            # what is going on here?
+            # we want to find ancestors of a parameterized type
+            # to do so, we need to replace formal type parameters with concrete ones
+            # 
             temp_scope = Scope(self)
             cls = self.classes[typ.cls.data]
             if len(typ.type_params.data) != len(cls.type_parameters):
                 raise Exception(f"number of type parameters of {typ} is different from class {cls.name}")
             for i, t in enumerate(typ.type_params.data): temp_scope.add_alias(cls.type_parameters[i], t)
             return [temp_scope.simplify(anc) for anc in cls.ancestors()]
+
         if isinstance(typ, TypeParameter): return [typ, *self.ancestors(typ.bound)]
         raise Exception(f"can't find ancestors for {typ}")
 
