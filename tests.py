@@ -5,7 +5,7 @@ import os
 
 class CompilerTestCase(unittest.TestCase):
     def setUp(self):
-        self.temp_input_file = tempfile.NamedTemporaryFile(suffix=".mini", mode="w", delete=False)
+        self.temp_input_file = tempfile.NamedTemporaryFile(suffix=".mini", mode="w", delete=False, dir=".")
         self.output_file_name = None  # To be set in individual test methods
 
     def tearDown(self):
