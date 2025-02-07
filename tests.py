@@ -27,8 +27,6 @@ class CompilerTestCase(unittest.TestCase):
 
 class CompilerTests(CompilerTestCase): # Inherit from the new base class
 	
-class CompilerTests(CompilerTestCase): # Inherit from the new base class
-
     def test_hello_world(self):
         self.run_mini_code('import std;\nIO.print("hello world");\n', "hello world", "hello_world_test")
 
