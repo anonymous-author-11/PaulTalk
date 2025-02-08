@@ -1,7 +1,7 @@
 import unittest
 import subprocess
 import tempfile
-import os, os
+import os
 import os
 import os
 
@@ -22,8 +22,8 @@ class CompilerTestCase(unittest.TestCase):
         compiler_command = ["python", "Compiler.py", self.temp_input_file.name, "-o", self.output_file_name]
         subprocess.run(compiler_command, check=True)
 
-        # Capture compilation errors
-        compile_stderr = subprocess.run(compiler_command, capture_output=True, text=True, stderr=subprocess.PIPE).stderr
+        compile_result = subprocess.run(compiler_command, capture_output=True, text=True)
+        self.assertEqual(compile_result.stderr, "", f"Compilation error: {compile_result.stderr}")
         self.assertEqual(compile_stderr, "", f"Compilation error: {compile_stderr}")
 
         exe_command = [self.output_file_name]
@@ -53,5 +53,3 @@ class CompilerTests(CompilerTestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-
