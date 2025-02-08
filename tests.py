@@ -12,18 +12,18 @@ class CompilerTestCase(unittest.TestCase):
 
     def tearDown(self):
         os.remove(self.temp_input_file.name)
-        if self.output_file_name:
-            os.remove(f"{self.output_file_name}.ll")
-            os.remove(self.output_file_name)
+        if self.output_file_name_base:
+            os.remove(f"{self.output_file_name_base}.ll")
+            os.remove(f"{self.output_file_name_base}.exe")
 
     def run_mini_code(self, mini_code, expected_output, output_file_name_base):
         self.temp_input_file.write(mini_code)
         self.temp_input_file.close()
-        self.output_file_name = f"{output_file_name_base}.exe"
-        compiler_command = ["python", "Compiler.py", self.temp_input_file.name, "-o", self.output_file_name]
+        self.output_file_name_base = f"{output_file_name_base}.exe"
+        compiler_command = ["python", "Compiler.py", self.temp_input_file.name, "-o", f"{self.output_file_name_base}.exe"]
         subprocess.run(compiler_command, check=True)
 
-        exe_command = [self.output_file_name]
+        exe_command = [f"{self.output_file_name_base}.exe"]
         completed_process = subprocess.run(exe_command, capture_output=True, text=True, check=True)
         actual_output = completed_process.stdout.strip()
 

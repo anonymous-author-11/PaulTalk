@@ -336,7 +336,7 @@ class ArrayLiteral(Expression):
 class StringLiteral(Expression):
     value: str
     def codegen(self, scope):
-        escaped_str = self.value.replace("\\","")
+        escaped_str = self.value.encode().decode('unicode_escape')
         sizelit = IntegerLiteral(self.filename, self.line_number, len(escaped_str), 32)
         capacitylit = IntegerLiteral(self.filename, self.line_number, len(escaped_str) + 1, 32)
         buf = CreateBuffer(self.filename, self.line_number, Buffer([Ptr([IntegerType(8)])]), capacitylit)
@@ -1037,7 +1037,7 @@ class ObjectCreation(Call):
         anon_id = Identifier(self.filename, self.line_number, self.anon_name)
         MethodCall(self.filename, self.line_number, anon_id, "init", self.arguments).codegen(scope)
         if scope.subtype(self_type, FatPtr.basic("Exception")):
-            file_name = StringLiteral(self.filename, self.line_number, self.filename)
+            file_name = StringLiteral(self.filename, self.line_number, self.filename.replace("\\", "\\\\"))
             line_number = IntegerLiteral(self.filename, self.line_number, self.line_number, 32)
             MethodCall(self.filename, self.line_number, anon_id, "set_info", [line_number, file_name]).codegen(scope)
         return new_op.results[0]
@@ -1299,7 +1299,7 @@ class MethodDef(Statement):
             raise Exception(f"Line {self.line_number}: Method declares return type {self.return_type()} yet has no return statement.")
 
     def ensure_proper_init(self, body_scope):
-        for field in body_scope.cls.fields():
+        for field in self.defining_class.fields():
             declared_type = field.type()
             if field.declaration.name in body_scope.type_table and body_scope.subtype(body_scope.type_table[field.declaration.name], declared_type): continue
             if declared_type == Nil () or isinstance(declared_type, Union) and Nil() in declared_type.types.data:
@@ -1565,7 +1565,7 @@ class Behavior(Statement):
 
     def specialized_return_type(self, rec_typ, arg_types, scope):
         all_return_types = [method.specialized_return_type(rec_typ, arg_types, scope) for method in self.methods if method.definition.return_type()]
-        print(all_return_types)
+        #print(all_return_types)
         all_return_types = [t for t in all_return_types if t]
         if len(all_return_types) == 0: return None
         return self.cls._scope.simplify(Union.from_list(all_return_types))
@@ -2241,14 +2241,14 @@ class Branch(Statement):
         right_type = then_scope.simplify(self.condition.right)
         intersection = Intersection.from_list([right_type, old_typ])
         new_typ = then_scope.simplify(intersection)
-        if new_typ == Nothing():
-            print(f'narrowed {old_typ} & {right_type} to nothing')
-            if then_scope.subtype(right_type, old_typ):
-                print(f'{right_type} is a subtype of {old_typ}')
-            else:
-                print(f'{right_type} is not a subtype of {old_typ}')
-                print(f'{right_type} ancestors: {then_scope.ancestors(right_type)}')
-                print(old_typ in then_scope.ancestors(right_type))
+        #if new_typ == Nothing():
+            #print(f'narrowed {old_typ} & {right_type} to nothing')
+            #if then_scope.subtype(right_type, old_typ):
+                #print(f'{right_type} is a subtype of {old_typ}')
+            #else:
+                #print(f'{right_type} is not a subtype of {old_typ}')
+                #print(f'{right_type} ancestors: {then_scope.ancestors(right_type)}')
+                #print(old_typ in then_scope.ancestors(right_type))
         then_scope.type_table[self.condition.left.name] = new_typ
 
     def narrow(self, then_scope):
