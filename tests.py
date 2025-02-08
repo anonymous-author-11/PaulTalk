@@ -37,20 +37,15 @@ class CompilerTestCase(unittest.TestCase):
         if len(actual_lines) > len(expected_lines):
             self.fail(f"Unexpected output lines: {actual_lines[len(expected_lines):]}")
 
-class CompilerTests(CompilerTestCase): # Inherit from the new base class
-        exe_command = [self.output_file_name]
-        completed_process = subprocess.run(exe_command, capture_output=True, text=True, check=True)
-        output = completed_process.stdout.strip()
-        self.assertEqual(output, expected_output)
-
-class CompilerTests(CompilerTestCase): # Inherit from the new base class
+class CompilerTests(CompilerTestCase):
 	
     def test_tests_mini(self):
         with open("tests.mini", "r") as f:
             mini_code = f.read()
-        # Define the expected output based on tests.mini content
         expected_output = "3\nHello, World!\nfalse"
         self.run_mini_code(mini_code, expected_output, "tests")
+
+
 
 if __name__ == '__main__':
     unittest.main()
