@@ -18,8 +18,20 @@ class CompilerTestCase(unittest.TestCase):
         self.temp_input_file.close()
         self.output_file_name = f"{output_file_name_base}.exe"
         compiler_command = ["python", "Compiler.py", self.temp_input_file.name, "-o", self.output_file_name]
-        subprocess.run(compiler_command, check=True)
 
+        # Run compiler and capture output
+        compile_process = subprocess.run(
+            compiler_command,
+            capture_output=True,
+            text=True
+        )
+
+        # Check if compilation failed
+        if compile_process.returncode != 0:
+            error_msg = "Compilation failed:\n" + compile_process.stderr
+            self.fail(error_msg)
+
+        # Proceed to run executable if compilation succeeded
         exe_command = [self.output_file_name]
         completed_process = subprocess.run(exe_command, capture_output=True, text=True, check=True)
         actual_output = completed_process.stdout.strip()
