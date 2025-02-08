@@ -24,7 +24,6 @@ class CompilerTestCase(unittest.TestCase):
 
         compile_result = subprocess.run(compiler_command, capture_output=True, text=True)
         self.assertEqual(compile_result.stderr, "", f"Compilation error: {compile_result.stderr}")
-        self.assertEqual(compile_stderr, "", f"Compilation error: {compile_stderr}")
 
         exe_command = [self.output_file_name]
         completed_process = subprocess.run(exe_command, capture_output=True, text=True, check=True)
