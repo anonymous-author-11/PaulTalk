@@ -2,8 +2,6 @@ import unittest
 import subprocess
 import tempfile
 import os
-import os
-import os
 
 class CompilerTestCase(unittest.TestCase):
     def setUp(self):
