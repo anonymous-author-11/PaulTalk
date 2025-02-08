@@ -623,15 +623,22 @@ class FunctionCall(Expression):
         scope.region.last_block.add_op(call_op)
         return call_op.results[0] if len(call_op.results) > 0 else None
 
-    def exprtype(self, scope):
-        if self.function in scope.functions.keys(): return scope.functions[self.function].return_type()
-        raise Exception(f"Line {self.line_number}: function name {self.function} not found!") 
+    def ensure_declared(self, scope):
+        if self.function not in scope.functions.keys():
+            raise Exception(f"Line {self.line_number}: function name {self.function} not found!") 
 
-    def typeflow(self, scope):
-        self.exprtype(scope)
+    def ensure_valid_arg_types(self, scope):
         for i, param in enumerate(scope.functions[self.function].params):
             if(scope.subtype(self.arguments[i].exprtype(scope), param.type(scope))): continue
             raise Exception(f"Line {self.line_number}: argument type {self.arguments[i].exprtype(scope)} not subtype of declared parameter type {param.type(scope)} for parameter {param.name}")
+
+    def exprtype(self, scope):
+        self.ensure_declared(scope)
+        self.ensure_valid_arg_types(scope)
+        return scope.functions[self.function].return_type()
+
+    def typeflow(self, scope):
+        self.exprtype(scope)
 
 @dataclass
 class MethodCall(Expression):
@@ -670,8 +677,6 @@ class MethodCall(Expression):
             "ret_type":ret_schema, "ret_type_unq":ret_schema
         }
         rec_instance = self.receiver.codegen(scope)
-        if not rec_instance:
-            raise Exception(f"Line {self.line_number}: Receiver {self.receiver} has no codegen result")
         unwrap = UnwrapOp.create(operands=[rec_instance], result_types=[rec_typ.base_typ()])
         scope.region.last_block.add_op(unwrap)
         result_types = [ret_typ] if ret_typ else []
