@@ -42,7 +42,6 @@ class CompilerTestCase(unittest.TestCase):
         if len(actual_lines) > len(expected_lines):
             self.fail(f"Unexpected output lines: {actual_lines[len(expected_lines):]}")
 
-
 class CompilerTests(CompilerTestCase):
 	
     def test_tests_mini(self):
@@ -51,8 +50,6 @@ class CompilerTests(CompilerTestCase):
         expected_output = "3\nHello, World!\nfalse"
         expected_error = ""
         self.run_mini_code(mini_code, expected_output, "tests")
-
-
 
 if __name__ == '__main__':
     unittest.main()
