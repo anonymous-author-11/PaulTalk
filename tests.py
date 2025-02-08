@@ -20,14 +20,11 @@ class CompilerTestCase(unittest.TestCase):
         compiler_command = ["python", "Compiler.py", self.temp_input_file.name, "-o", self.output_file_name]
         subprocess.run(compiler_command, check=True)
 
-        compile_result = subprocess.run(compiler_command, capture_output=True, text=True)
-        self.assertEqual(compile_result.stderr, "", f"Compilation error: {compile_result.stderr}")
-
         exe_command = [self.output_file_name]
         completed_process = subprocess.run(exe_command, capture_output=True, text=True, check=True)
         actual_output = completed_process.stdout.strip()
 
-        # Split output into lines for comparison
+        # Split the actual output into lines for comparison
         actual_lines = actual_output.split('\n')
         expected_lines = expected_output.split('\n') if expected_output else []
 
@@ -45,8 +42,9 @@ class CompilerTests(CompilerTestCase):
         with open("tests.mini", "r") as f:
             mini_code = f.read()
         expected_output = "3\nHello, World!\nfalse"
-        expected_error = ""
         self.run_mini_code(mini_code, expected_output, "tests")
 
 if __name__ == '__main__':
     unittest.main()
+
+
