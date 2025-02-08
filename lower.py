@@ -284,7 +284,7 @@ class LowerPrelude(RewritePattern):
 class LowerTypID(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: TypIDOp, rewriter: PatternRewriter):
-        alloca = AllocateOp.create(attributes={"typ":IntegerType(64)}, result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.make(IntegerType(64))
         global_ptr = AddrOfOp.from_stringattr(op.typ_name)
         ptr_to_int = llvm.PtrToIntOp(global_ptr.results[0])
         store = llvm.StoreOp(ptr_to_int.results[0], alloca.results[0])
@@ -446,7 +446,7 @@ class LowerCreateBuffer(RewritePattern):
 class LowerCreateTuple(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: CreateTupleOp, rewriter: PatternRewriter):
-        alloca = AllocateOp.create(attributes={"typ":op.typ}, result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.make(op.typ)
         for i, value in enumerate(op.values):
             gep = llvm.GEPOp(alloca.results[0], [0, i], pointee_type=op.typ)
             store = llvm.StoreOp(value, gep.results[0])
@@ -500,7 +500,7 @@ class LowerFromBuffer(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: FromBufferOp, rewriter: PatternRewriter):
         fat_base = FatPtr.basic('').base_typ()
-        alloca = AllocateOp(attributes={"typ":fat_base}, result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.make(fat_base)
         data_size_ptr = llvm.GEPOp(op.vptr, [6], pointee_type=llvm.LLVMPointerType.opaque())
         data_size = llvm.LoadOp(data_size_ptr.results[0], IntegerType(64))
         threshold = llvm.ConstantOp(IntegerAttr.from_int_and_width(128, 64), IntegerType(64))
@@ -613,7 +613,7 @@ class LowerNew(RewritePattern):
         vptr = AddrOfOp.from_stringattr(op.class_name)
         offset = llvm.ConstantOp(IntegerAttr.from_int_and_width(vtable_buffer_size(), 32), IntegerType(32))
         fat_base = FatPtr.basic("").base_typ()
-        alloca = AllocateOp(attributes={"typ":fat_base}, result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.make(fat_base)
         gep0 = llvm.GEPOp(alloca.results[0], [0,1], pointee_type=fat_base)
         gep1 = llvm.GEPOp(alloca.results[0], [0,3], pointee_type=fat_base)
         store0 = llvm.StoreOp(vptr.results[0], alloca.results[0])
@@ -655,7 +655,7 @@ class LowerLiteral(RewritePattern):
             rewriter.replace_matched_op(addr_of)
             return
         constant = llvm.ConstantOp(op.value, op.typ)
-        alloca = AllocateOp.create(attributes={"typ":op.typ}, result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.make(op.typ)
         store = llvm.StoreOp(constant.results[0], alloca.results[0])
         rewriter.insert_op_before_matched_op(constant)
         rewriter.insert_op_after_matched_op(store)
@@ -965,7 +965,7 @@ class LowerInvariant(RewritePattern):
 class LowerWrap(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: WrapOp, rewriter: PatternRewriter):
-        alloca = AllocateOp.create(attributes={"typ": op.operand.type}, result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.make(op.operand.type)
         store = llvm.StoreOp(op.operand, alloca.results[0])
         fat_base = FatPtr.basic("").base_typ()
         if op.operand.type == fat_base:
@@ -1011,7 +1011,7 @@ class LowerBox(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: BoxOp, rewriter: PatternRewriter):
         if op.from_typ_size.value.data <= 128:
-            alloca = AllocateOp.create(attributes={"typ":op.to_typ}, result_types=[llvm.LLVMPointerType.opaque()])
+            alloca = AllocateOp.make(op.to_typ)
             gep0 = llvm.GEPOp(alloca.results[0], [0, 1], pointee_type=op.to_typ)
             if len(op.from_typ_name.data) == 0: raise Exception("!!")
             vptr = AddrOfOp.from_stringattr(op.from_typ_name)
@@ -1022,7 +1022,7 @@ class LowerBox(RewritePattern):
             rewriter.replace_matched_op(alloca)
             return
         malloc = MallocOp.create(attributes={"typ":op.from_typ}, result_types=[llvm.LLVMPointerType.opaque()])
-        alloca = AllocateOp.create(attributes={"typ":op.to_typ}, result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.make(op.to_typ)
         gep0 = llvm.GEPOp(alloca.results[0],[0,1], pointee_type=op.to_typ)
         if len(op.from_typ_name.data) == 0:
             raise Exception(f"{op.from_typ}, {op.to_typ}, {op.from_typ_name}, {op.to_typ_name}")
@@ -1039,7 +1039,7 @@ class LowerUnbox(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: UnboxOp, rewriter: PatternRewriter):
         if op.to_typ_size.value.data <= 128:
-            alloca = AllocateOp.create(attributes={"typ":op.to_typ}, result_types=[llvm.LLVMPointerType.opaque()])
+            alloca = AllocateOp.make(op.to_typ)
             gep = llvm.GEPOp(op.operand, [0,1], pointee_type=op.from_typ)
             memcpy = MemCpyOp.make(gep.results[0], alloca.results[0], op.to_typ)
             rewriter.inline_block_after_matched_op(Block([gep, memcpy]))
@@ -1047,7 +1047,7 @@ class LowerUnbox(RewritePattern):
             return
         data_ptr_ptr = llvm.GEPOp(op.operand, [0, 1], pointee_type=op.from_typ)
         data_ptr = llvm.LoadOp(data_ptr_ptr.results[0], llvm.LLVMPointerType.opaque())
-        alloca = AllocateOp.create(attributes={"typ":op.to_typ}, result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.make(op.to_typ)
         memcpy = MemCpyOp.make(data_ptr.results[0], alloca.results[0], op.to_typ)
         rewriter.inline_block_after_matched_op(Block([data_ptr_ptr, data_ptr, memcpy]))
         rewriter.replace_matched_op(alloca)
@@ -1055,7 +1055,7 @@ class LowerUnbox(RewritePattern):
 class LowerToFatPtr(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: ToFatPtrOp, rewriter: PatternRewriter):
-        alloca = AllocateOp.create(attributes={"typ":op.to_typ}, result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.make(op.to_typ)
         memcpy = MemCpyOp.make(op.operand, alloca.results[0], op.to_typ)
         set_offset = SetOffsetOp.create(operands=[alloca.results[0]], attributes={"to_typ":op.to_typ_name})
         ops = [memcpy, set_offset]
@@ -1068,7 +1068,7 @@ class LowerToFatPtr(RewritePattern):
 class LowerWidenInt(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: WidenIntOp, rewriter: PatternRewriter):
-        alloca = AllocateOp.create(attributes={"typ":op.to_typ}, result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.make(op.to_typ)
         unwrapped = UnwrapOp.create(operands=[op.operand], result_types=[op.from_typ])
         extended = arith.ExtSIOp(unwrapped.results[0], op.to_typ)
         store = llvm.StoreOp(extended.results[0], alloca.results[0])
@@ -1078,7 +1078,7 @@ class LowerWidenInt(RewritePattern):
 class LowerIntToFloat(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: IntToFloatOp, rewriter: PatternRewriter):
-        alloca = AllocateOp.create(attributes={"typ":op.to_typ}, result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.make(op.to_typ)
         unwrapped = UnwrapOp.create(operands=[op.operand], result_types=[op.from_typ])
         cast = arith.SIToFPOp(unwrapped.results[0], Float64Type())
         store = llvm.StoreOp(cast.results[0], alloca.results[0])
@@ -1088,7 +1088,7 @@ class LowerIntToFloat(RewritePattern):
 class LowerNarrow(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: NarrowOp, rewriter: PatternRewriter):
-        alloca = AllocateOp.create(attributes={"typ":op.to_typ}, result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.make(op.to_typ)
         operand = op.operand
         if op.region:
             block = op.region.detach_block(op.region.block)
@@ -1107,7 +1107,7 @@ class LowerUnionize(RewritePattern):
             block = op.region.detach_block(op.region.block)
             operand = block.first_op.results[0]
             rewriter.inline_block_before_matched_op(block)
-        alloca = AllocateOp.create(attributes={"typ":op.to_typ}, result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.make(op.to_typ)
         gep = llvm.GEPOp(alloca.results[0], [0, 1], pointee_type=op.to_typ)
         memcpy = MemCpyOp.make(operand, gep.results[0], op.from_typ)
         set_flag = SetFlagOp.create(operands=[alloca.results[0]], attributes={"struct_typ":op.to_typ, "typ_name":op.from_typ_name})
@@ -1118,7 +1118,7 @@ class LowerReUnionize(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: ReUnionizeOp, rewriter: PatternRewriter):
         smaller = op.from_typ if sum(x.bitwidth for x in op.from_typ.types.data[1:]) < sum(x.bitwidth for x in op.from_typ.types.data[1:]) else op.to_typ
-        alloca = AllocateOp.create(attributes={"typ":op.to_typ}, result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.make(op.to_typ)
         memcpy = MemCpyOp.make(op.operand, alloca.results[0], smaller)
         rewriter.inline_block_after_matched_op(Block([memcpy]))
         rewriter.replace_matched_op(alloca)
@@ -1139,7 +1139,7 @@ class LowerReabstract(RewritePattern):
         operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
         adjust_trampoline.properties["operandSegmentSizes"] = operandSegmentSizes
         adjust_trampoline.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
-        alloca = AllocateOp.create(attributes={"typ":llvm.LLVMPointerType.opaque()}, result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.make(llvm.LLVMPointerType.opaque())
         store = llvm.StoreOp(adjust_trampoline.results[0], alloca.results[0])
         invariant0 = InvariantOp.make(tramp.results[0], 16)
         invariant1 = InvariantOp.make(alloca.results[0], 8)
@@ -1650,7 +1650,7 @@ class LowerRefer(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: ReferOp, rewriter: PatternRewriter):
         fat_base = FatPtr.basic("").base_typ()
-        alloca = AllocateOp.create(attributes={"typ":fat_base}, result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.make(fat_base)
         memcpy = MemCpyOp.make(op.value, alloca.results[0], fat_base)
         invariant = InvariantOp.make(alloca.results[0], 16)
         rewriter.inline_block_after_matched_op(Block([memcpy, invariant]))
@@ -1660,7 +1660,7 @@ class LowerParameterizationsArray(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: ParameterizationsArrayOp, rewriter: PatternRewriter):
         ary_type = llvm.LLVMArrayType.from_size_and_type(len([*op.parameterizations]), llvm.LLVMPointerType.opaque())
-        ary = AllocateOp(attributes={"typ":ary_type}, result_types=[llvm.LLVMPointerType.opaque()])
+        ary = AllocateOp.make(ary_type)
         for i, parameterization in enumerate(op.parameterizations):
             gep = llvm.GEPOp(ary.results[0], [0, i], pointee_type=ary_type)
             store = llvm.StoreOp(parameterization, gep.results[0])
@@ -1703,7 +1703,7 @@ class LowerMethodCall(RewritePattern):
         fptr_ptr = llvm.GEPOp.from_mixed_indices(offsetted.results[0], [op.offset.value.data], pointee_type=llvm.LLVMPointerType.opaque())
         fptr = llvm.LoadOp(fptr_ptr.results[0], llvm.LLVMPointerType.opaque())
         concrete_ary = llvm.LLVMArrayType.from_size_and_type(len(op.vptrs.data), llvm.LLVMPointerType.opaque())
-        concrete_types = AllocateOp(attributes={"typ":concrete_ary}, result_types=[llvm.LLVMPointerType.opaque()])
+        concrete_types = AllocateOp.make(concrete_ary)
         method_typ0 = FunctionType.from_lists([arg.type for arg in op.behavior_args(concrete_types.results[0])], [llvm.LLVMPointerType.opaque()])
         laundered0 = builtin.UnrealizedConversionCastOp(operands=[fptr.results[0]], result_types=[method_typ0])
         ops = [vptr, invariant2, adjustment, offsetted, fptr_ptr, fptr, concrete_types, laundered0]

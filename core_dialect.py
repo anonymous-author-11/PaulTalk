@@ -448,6 +448,10 @@ class AllocateOp(IRDLOperation):
     typ: TypeAttribute = attr_def(TypeAttribute)
     result: OpResult = result_def(Ptr)
 
+    @classmethod
+    def make(cls, typ):
+        return AllocateOp.create(attributes={"typ":typ}, result_types=[llvm.LLVMPointerType.opaque()])
+
 @irdl_op_definition
 class InvariantOp(IRDLOperation):
     name = "mini.invariant"

@@ -164,17 +164,20 @@ class BinaryOp(Expression):
     def concrete_exprtype(self, left_type, right_type):
         raise Exception("abstract")
 
-    def exprtype(self, scope):
-        left_type = self.left.exprtype(scope)
-        if isinstance(left_type, FatPtr) or isinstance(left_type, TypeParameter):
-            return OverloadedBinaryOp(self.filename, self.line_number, self.left, self.operator, self.right).exprtype(scope)
-        right_type = self.right.exprtype(scope)
+    def ensure_compatible_types(self, left_type, right_type):
         if left_type != right_type:
             raise Exception(f"Line {self.line_number}: tried to use {self.operator} on different types: {left_type} and {right_type}")
         needs_integers = self.operator in ["MOD", "LSHIFT", "RSHIFT", "bit_and", "bit_or", "bit_xor"]
         uses_integers = isinstance(left_type, Ptr) and isinstance(left_type.type, IntegerType)
         if needs_integers and not uses_integers:
             raise Exception(f"Line {self.line_number}: {self.operator} only works on integers, not {left_type} and {right_type}")
+
+    def exprtype(self, scope):
+        left_type = self.left.exprtype(scope)
+        if isinstance(left_type, FatPtr) or isinstance(left_type, TypeParameter):
+            return OverloadedBinaryOp(self.filename, self.line_number, self.left, self.operator, self.right).exprtype(scope)
+        right_type = self.right.exprtype(scope)
+        self.ensure_compatible_types(left_type, right_type)
         return self.concrete_exprtype(left_type, right_type)
 
     def typeflow(self, scope):
@@ -224,19 +227,25 @@ class OverloadedBinaryOp(BinaryOp):
         method_call = MethodCall(self.filename, self.line_number, self.left, mangled_operator, [self.right])
         return method_call.codegen(scope)
 
-    def exprtype(self, scope):
-        left_type = self.left.exprtype(scope)
-        right_type = self.right.exprtype(scope)
-        if isinstance(left_type, TypeParameter): left_type = left_type.bound
+    def ensure_object_receiver(self, left_type):
         if not isinstance(left_type, FatPtr):
             raise Exception(f"Line {self.line_number}: no overloaded operators for non-object {left_type}")
         if left_type.cls.data not in scope.classes.keys():
             raise Exception(f"Line {self.line_number}: non existent class {left_type.cls.data}")
+
+    def ensure_existing_overload(self, scope, left_type, mangled_operator, right_type):
         left_class = scope.classes[left_type.cls.data]
-        mangled_operator = "_" + self.operator
         matching_behavior = any(behavior.applicable(left_type, scope, mangled_operator, [right_type]) for behavior in left_class.behaviors)
         if not matching_behavior:
             raise Exception(f"Line {self.line_number}: class {left_class.name} has no overload for operator {self.operator}")
+
+    def exprtype(self, scope):
+        left_type = self.left.exprtype(scope)
+        right_type = self.right.exprtype(scope)
+        if isinstance(left_type, TypeParameter): left_type = left_type.bound
+        self.ensure_object_receiver(left_type)
+        mangled_operator = "_" + self.operator
+        self.ensure_existing_overload(scope, left_type, mangled_operator, right_type)
         method_call = MethodCall(self.filename, self.line_number, self.left, mangled_operator, [self.right])
         return method_call.exprtype(scope)
 
@@ -249,10 +258,13 @@ class NegativeOp(Expression):
         zero = IntegerLiteral(self.filename, self.line_number, 0, 32) if typ == Ptr([IntegerType(32)]) else DoubleLiteral(self.filename, self.line_number, 0.0)
         return Arithmetic(self.filename, self.line_number, zero, "SUB", self.operand).codegen(scope)
 
-    def exprtype(self, scope):
-        t = self.operand.exprtype(scope)
+    def ensure_is_number(self, t):
         if not isinstance(t, Ptr):
             raise Exception(f"Line {self.line_number}: cannot negate type {t}; can only negate integers and floats.")
+
+    def exprtype(self, scope):
+        t = self.operand.exprtype(scope)
+        self.ensure_is_number(t)
         return t
 
     def typeflow(self, scope):
@@ -313,6 +325,7 @@ class NilLiteral(Expression):
 @dataclass
 class ArrayLiteral(Expression):
     elements: List[Expression]
+
     def codegen(self, scope):
         sizelit = IntegerLiteral(self.filename, self.line_number, len(self.elements), 32)
         capacitylit = IntegerLiteral(self.filename, self.line_number, len(self.elements) + 1, 32)
@@ -327,14 +340,17 @@ class ArrayLiteral(Expression):
             assign_i.codegen(scope)
         ary = ObjectCreation(self.filename, self.line_number, random_letters(10), FatPtr.basic("IntArray"), [temp_var, sizelit, capacitylit])
         return ary.codegen(scope)
+
     def exprtype(self, scope):
         return FatPtr.basic("IntArray")
+
     def typeflow(self, scope):
         for elem in self.elements: elem.typeflow(scope)
 
 @dataclass
 class StringLiteral(Expression):
     value: str
+
     def codegen(self, scope):
         escaped_str = self.value.encode().decode('unicode_escape')
         sizelit = IntegerLiteral(self.filename, self.line_number, len(escaped_str), 32)
@@ -353,8 +369,10 @@ class StringLiteral(Expression):
         scope.region.last_block.add_ops([lit, zero, index, assign])
         string = ObjectCreation(self.filename, self.line_number, random_letters(10), FatPtr.basic("String"), [temp_var, sizelit, capacitylit])
         return string.codegen(scope)
+
     def exprtype(self, scope):
         return FatPtr.basic("String")
+
     def typeflow(self, scope):
         pass
 
@@ -362,14 +380,20 @@ class StringLiteral(Expression):
 class RangeLiteral(Expression):
     start: Expression
     end: Expression
+
     def codegen(self, scope):
         return ObjectCreation(self.filename, self.line_number, random_letters(10), FatPtr.basic("Range"), [self.start, self.end]).codegen(scope)
+    
+    def ensure_i32_args(self, start_type, end_type):
+        if start_type != Ptr([IntegerType(32)]) or end_type != Ptr([IntegerType(32)]):
+            raise Exception(f"Line {self.line_number}: Range literals take i32 arguments, not {start_type} and {end_type}")
+
     def exprtype(self, scope):
         start_type = self.start.exprtype(scope)
         end_type = self.end.exprtype(scope)
-        if start_type != Ptr([IntegerType(32)]) or end_type != Ptr([IntegerType(32)]):
-            raise Exception(f"Line {self.line_number}: Range literals take i32 arguments, not {start_type} and {end_type}")
+        self.ensure_i32_args(start_type, end_type)
         return ObjectCreation(self.filename, self.line_number, random_letters(10), FatPtr.basic("Range"), [self.start, self.end]).exprtype(scope)
+    
     def typeflow(self, scope):
         self.exprtype(scope)
 
@@ -418,7 +442,7 @@ class FunctionLiteral(Expression):
         func_op = FunctionDefOp.create(attributes=attr_dict, regions=[body_scope.region])
         toplevel_ops.append(func_op)
         addr_of = AddrOfOp.from_string(self.name)
-        alloca = AllocateOp.create(attributes={"typ":llvm.LLVMPointerType.opaque()}, result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.make(llvm.LLVMPointerType.opaque())
         store = llvm.StoreOp(addr_of.results[0], alloca.results[0])
         scope.region.last_block.add_ops([func_op, addr_of, alloca, store])
         codegenned.add(self.name)
@@ -477,13 +501,21 @@ class Identifier(Expression):
         if self.name in scope.symbol_table: return scope.symbol_table[self.name]
         return FunctionIdentifier(self.filename, self.line_number, self.name).codegen(scope)
 
-    def exprtype(self, scope):
+    def disallow_self_in_init(self, scope):
         if self.name == "self" and scope.method and scope.method.name == "init":
             raise Exception(f"Line {self.line_number}: Cannot refer to 'self' within .init() method, as self is not yet initialized")
-        if "@" in self.name and scope.cls and "self" in scope.type_table: return FieldIdentifier(self.filename, self.line_number, self.name).exprtype(scope)
+
+    def ensured_previously_declared(self, scope):
+        if (self.name not in scope.type_table) and (self.name not in scope.functions):
+            raise Exception(f"Line {self.line_number}: identifier {self.name} not previously declared!")
+
+    def exprtype(self, scope):
+        self.disallow_self_in_init(scope)
+        if "@" in self.name and scope.cls and "self" in scope.type_table:
+            return FieldIdentifier(self.filename, self.line_number, self.name).exprtype(scope)
+        self.ensured_previously_declared(scope)
         if self.name in scope.type_table: return scope.type_table[self.name]
         if self.name in scope.functions: return FunctionIdentifier(self.filename, self.line_number, self.name).exprtype(scope)
-        raise Exception(f"Line {self.line_number}: identifier {self.name} not previously declared!")
 
 @dataclass
 class FieldIdentifier(Identifier):
@@ -498,17 +530,20 @@ class FieldIdentifier(Identifier):
         scope.region.last_block.add_op(field_acc)
         return field_acc.results[0]
 
-    def exprtype(self, scope):
-        field = next(iter(field for field in scope.cls.fields() if field.declaration.name == self.name), None)
+    def ensured_field_declared(self, scope, field):
         if not field:
             raise Exception(f"Line {self.line_number}: field {self.name} used but not declared in class {scope.cls}")
+
+    def exprtype(self, scope):
+        field = next(iter(field for field in scope.cls.fields() if field.declaration.name == self.name), None)
+        self.ensured_field_declared(scope, field)
         return field.type()
 
 @dataclass
 class FunctionIdentifier(Identifier):
 
     def codegen(self, scope):
-        alloca = AllocateOp.create(attributes={"typ":llvm.LLVMPointerType.opaque()}, result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.make(llvm.LLVMPointerType.opaque())
         addr_of = AddrOfOp.from_string(self.name)
         store = llvm.StoreOp(addr_of.results[0], alloca.results[0])
         scope.region.last_block.add_ops([alloca, addr_of, store])
@@ -516,7 +551,8 @@ class FunctionIdentifier(Identifier):
 
     def exprtype(self, scope):
         func = scope.functions[self.name]
-        return Function([ArrayAttr([param.type(scope) for param in func.params]), func.yield_type, func.return_type() if func.return_type() else Nothing()])
+        return_type = func.return_type() if func.return_type() else Nothing()
+        return Function([ArrayAttr([param.type(scope) for param in func.params]), func.yield_type, return_type])
 
 @dataclass
 class Alias(Statement):
@@ -550,11 +586,17 @@ class TypeCheck(Expression):
         scope.region.last_block.add_op(check_flag)
         return check_flag.results[0]
 
-    def exprtype(self, scope):
+    def ensure_lhs_identifier(self):
         if not isinstance(self.left, Identifier):
             raise Exception(f"Line {self.line_number}: lhs in type check is not an identifier!")
+
+    def ensure_rhs_simple(self):
         if isinstance(self.right, Union) or isinstance(self.right, Intersection):
             raise Exception(f"Line {self.line_number}: Cannot type-check {self.right} yet.")
+
+    def exprtype(self, scope):
+        self.ensure_lhs_identifier()
+        self.ensure_rhs_simple()
         return Ptr([IntegerType(1)])
 
     def typeflow(self, scope):
@@ -562,40 +604,7 @@ class TypeCheck(Expression):
         self.exprtype(scope)
 
 @dataclass
-class Call(Expression):
-
-    def extract_self_parameterizations(self, scope):
-        self_parameterizations = []
-        if not "self" in scope.symbol_table: return self_parameterizations
-        ambient_type_fields = [field for field in scope.cls.stored_type_fields() if field.declaration.type_param in scope.cls.type_parameters]
-        for ambient_type_field in ambient_type_fields:
-            offset = IntegerAttr.from_int_and_width(ambient_type_field.offset, IntegerType(64))
-            local_self = [scope.symbol_table["self"]]
-            attr_dict = {"offset":offset, "vtable_size":IntegerAttr.from_int_and_width(scope.cls.vtable_size(), 32)}
-            field_acc = FieldAccessOp.create(operands=local_self, attributes=attr_dict, result_types=[ReifiedType()])
-            field_load = llvm.LoadOp(field_acc.results[0], llvm.LLVMPointerType.opaque())
-            scope.region.last_block.add_ops([field_acc, field_load])
-            self_parameterizations.append(field_load.results[0])
-        return self_parameterizations
-
-    def extract_scoped_parameterizations(self, scope):
-        scoped_parameterizations = []
-        if not "local_parameterizations" in scope.symbol_table.keys(): return scoped_parameterizations
-        scoped_parameterizations_array = scope.symbol_table["local_parameterizations"]
-        class_scoped_type_params = scope.cls.type_parameters if scope.cls else []
-        for t in scope.method.type_params:
-            i, first_arg_with_type = next((i, param_t) for (i, param_t) in enumerate([*scope.method.param_types(), *class_scoped_type_params]) if f"{t}" in f"{param_t}")
-            indices = ArrayAttr([IntegerAttr.from_int_and_width(idx, 32) for idx in type_index(first_arg_with_type, t)])
-            ary_type = llvm.LLVMArrayType.from_size_and_type(i + 1, llvm.LLVMPointerType.opaque())
-            gep = llvm.GEPOp(scoped_parameterizations_array, [0, i], pointee_type=ary_type)
-            load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
-            parameterization = ParameterizationIndexationOp.create(operands=[load.results[0]], attributes={"indices":indices}, result_types=[llvm.LLVMPointerType.opaque()])
-            scope.region.last_block.add_ops([gep, load, parameterization])
-            scoped_parameterizations.append(parameterization.results[0])
-        return scoped_parameterizations
-
-@dataclass
-class FunctionCall(Call):
+class FunctionCall(Expression):
     function: str
     arguments: List[Expression]
 
@@ -625,7 +634,7 @@ class FunctionCall(Call):
             raise Exception(f"Line {self.line_number}: argument type {self.arguments[i].exprtype(scope)} not subtype of declared parameter type {param.type(scope)} for parameter {param.name}")
 
 @dataclass
-class MethodCall(Call):
+class MethodCall(Expression):
     receiver: Expression
     method: str
     arguments: List[Expression]
@@ -681,7 +690,7 @@ class MethodCall(Call):
         return cast.results[0]
 
     def parameterizations(self, arg_types, scope):
-        available_parameterizations = [*self.extract_self_parameterizations(scope), *self.extract_scoped_parameterizations(scope)]
+        available_parameterizations = scope.available_parameterizations()
         ambient_types = scope.cls.type_parameters if "self" in scope.symbol_table else []
         if "local_parameterizations" in scope.symbol_table.keys(): ambient_types = [*ambient_types, *scope.method.type_params]
 
@@ -915,7 +924,7 @@ class ClassMethodCall(MethodCall):
         return cast.results[0]
 
     def parameterizations(self, arg_types, scope):
-        available_parameterizations = [*self.extract_self_parameterizations(scope), *self.extract_scoped_parameterizations(scope)]
+        available_parameterizations = scope.available_parameterizations()
         ambient_types = scope.cls.type_parameters if "self" in scope.symbol_table else []
         if "local_parameterizations" in scope.symbol_table.keys(): ambient_types = [*ambient_types, *scope.method.type_params]
 
@@ -993,7 +1002,7 @@ class IntrinsicCall(ClassMethodCall):
         raise Exception(f"Line {self.line_number}: not implemented intrinsic {self.method} for type yet")
 
 @dataclass
-class PrintCall(Call):
+class PrintCall(Expression):
     args: List[Expression]
 
     def codegen(self, scope):
@@ -1007,7 +1016,7 @@ class PrintCall(Call):
         self.args[0].typeflow(scope)
 
 @dataclass
-class ObjectCreation(Call):
+class ObjectCreation(Expression):
     anon_name: str
     type: TypeAttribute
     arguments: List[Expression]
@@ -1044,7 +1053,7 @@ class ObjectCreation(Call):
 
     def parameterizations(self, created_cls, self_type, scope):
         if self_type.type_params == NoneAttr(): return []
-        available_parameterizations = [*self.extract_self_parameterizations(scope), *self.extract_scoped_parameterizations(scope)]
+        available_parameterizations = scope.available_parameterizations()
 
         temp_scope = Scope(scope)
         for t1, t2 in zip(created_cls.type_parameters, self_type.type_params.data): temp_scope.add_alias(t1, t2)
@@ -1605,7 +1614,7 @@ class Behavior(Statement):
         fat_ptr = self.fat_ptr(entry)
         invariant = InvariantOp.make(arg, 8 * self.arity)
         entry.add_op(invariant)
-        offset_ptr = AllocateOp(attributes={"typ":llvm.LLVMPointerType.opaque()}, result_types=[llvm.LLVMPointerType.opaque()])
+        offset_ptr = AllocateOp.make(llvm.LLVMPointerType.opaque())
         br = cf.Branch.create(successors=[blocks[self.automaton._initial_state_id][1]])
         entry.add_ops([offset_ptr, br])
 

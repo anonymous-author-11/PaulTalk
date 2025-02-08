@@ -106,6 +106,39 @@ class Scope:
         if isinstance(from_typ, FatPtr) and isinstance(to_typ, FatPtr): return self.classes[from_typ.cls.data].offset_to(to_typ.cls.data)
         raise Exception(f"not implemented yet for types {from_typ} and {to_typ}")
 
+    def available_parameterizations(self):
+        return [*self.extract_self_parameterizations(), *self.extract_scoped_parameterizations()]
+
+    def extract_self_parameterizations(self):
+        self_parameterizations = []
+        if not "self" in self.symbol_table: return self_parameterizations
+        ambient_type_fields = [field for field in self.cls.stored_type_fields() if field.declaration.type_param in self.cls.type_parameters]
+        for ambient_type_field in ambient_type_fields:
+            offset = IntegerAttr.from_int_and_width(ambient_type_field.offset, IntegerType(64))
+            local_self = [self.symbol_table["self"]]
+            attr_dict = {"offset":offset, "vtable_size":IntegerAttr.from_int_and_width(self.cls.vtable_size(), 32)}
+            field_acc = FieldAccessOp.create(operands=local_self, attributes=attr_dict, result_types=[ReifiedType()])
+            field_load = llvm.LoadOp(field_acc.results[0], llvm.LLVMPointerType.opaque())
+            self.region.last_block.add_ops([field_acc, field_load])
+            self_parameterizations.append(field_load.results[0])
+        return self_parameterizations
+
+    def extract_scoped_parameterizations(self):
+        scoped_parameterizations = []
+        if not "local_parameterizations" in self.symbol_table.keys(): return scoped_parameterizations
+        scoped_parameterizations_array = self.symbol_table["local_parameterizations"]
+        class_scoped_type_params = self.cls.type_parameters if self.cls else []
+        for t in self.method.type_params:
+            i, first_arg_with_type = next((i, param_t) for (i, param_t) in enumerate([*self.method.param_types(), *class_scoped_type_params]) if f"{t}" in f"{param_t}")
+            indices = ArrayAttr([IntegerAttr.from_int_and_width(idx, 32) for idx in type_index(first_arg_with_type, t)])
+            ary_type = llvm.LLVMArrayType.from_size_and_type(i + 1, llvm.LLVMPointerType.opaque())
+            gep = llvm.GEPOp(scoped_parameterizations_array, [0, i], pointee_type=ary_type)
+            load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
+            parameterization = ParameterizationIndexationOp.create(operands=[load.results[0]], attributes={"indices":indices}, result_types=[llvm.LLVMPointerType.opaque()])
+            self.region.last_block.add_ops([gep, load, parameterization])
+            scoped_parameterizations.append(parameterization.results[0])
+        return scoped_parameterizations
+
     def build_hashtable(self, typ):
         EMPTY = 2**64 - 1
         TABLE_SIZE = 1 << (len(self.ancestors(typ)) - 1).bit_length()
