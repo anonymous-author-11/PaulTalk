@@ -1,7 +1,7 @@
 import unittest
 import subprocess
 import tempfile
-import os
+import os, os
 import os
 import os
 
@@ -22,11 +22,15 @@ class CompilerTestCase(unittest.TestCase):
         compiler_command = ["python", "Compiler.py", self.temp_input_file.name, "-o", self.output_file_name]
         subprocess.run(compiler_command, check=True)
 
+        # Capture compilation errors
+        compile_stderr = subprocess.run(compiler_command, capture_output=True, text=True, stderr=subprocess.PIPE).stderr
+        self.assertEqual(compile_stderr, "", f"Compilation error: {compile_stderr}")
+
         exe_command = [self.output_file_name]
         completed_process = subprocess.run(exe_command, capture_output=True, text=True, check=True)
         actual_output = completed_process.stdout.strip()
 
-        # Split the actual output into lines for comparison
+        # Split output into lines for comparison
         actual_lines = actual_output.split('\n')
         expected_lines = expected_output.split('\n') if expected_output else []
 
@@ -38,12 +42,14 @@ class CompilerTestCase(unittest.TestCase):
         if len(actual_lines) > len(expected_lines):
             self.fail(f"Unexpected output lines: {actual_lines[len(expected_lines):]}")
 
+
 class CompilerTests(CompilerTestCase):
 	
     def test_tests_mini(self):
         with open("tests.mini", "r") as f:
             mini_code = f.read()
         expected_output = "3\nHello, World!\nfalse"
+        expected_error = ""
         self.run_mini_code(mini_code, expected_output, "tests")
 
 
