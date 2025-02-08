@@ -13,8 +13,8 @@ class CompilerTestCase(unittest.TestCase):
     def tearDown(self):
         os.remove(self.temp_input_file.name)
         if self.output_file_name:
-            os.remove(self.output_file_name)
             os.remove(f"{self.output_file_name}.ll")
+            os.remove(self.output_file_name)
 
     def run_mini_code(self, mini_code, expected_output, output_file_name_base):
         self.temp_input_file.write(mini_code)
