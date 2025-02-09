@@ -17,7 +17,7 @@ def parse(file_name) -> AST:
     except UnexpectedToken as e: # Catch UnexpectedToken
         error_message = format_parser_error(e, file_name) # Format the error
         # Optionally, raise a custom exception here to stop compilation
-        raise Exception(f"Parsing Error in import:\n\n{error_message}") # Or a more specific exception
+        raise Exception(f"Parsing Error:\n\n{error_message}") from None # Or a more specific exception
 
 def format_parser_error(exc: UnexpectedToken, file_name: str) -> str:
     """Formats a Lark UnexpectedToken exception into a user-friendly error message."""
