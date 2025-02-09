@@ -153,7 +153,7 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, "invocation of method foo with argument types .* is ambiguous."):
             self.run_mini_code(mini_code, "", "method_call_ambiguous_dispatch")
 
-    def test_indexation_non_integer_index(self): # fixed
+    def test_indexation_non_integer_index(self):
         mini_code = """
         def test() {
             tuple = (1, 2, 3);
@@ -221,7 +221,7 @@ class CompilerTests(CompilerTestCase):
         def test() {
             foo(5.0); // Arg not subtype
         }"""
-        with self.assertRaisesRegex(Exception, "argument type Ptr\\[f64\\] not subtype of declared parameter type Ptr\\[i32\\] for parameter #1"):
+        with self.assertRaisesRegex(Exception, "argument type Ptr\\[f64\\] not subtype of declared parameter type Ptr\\[i32\\] for parameter x"):
             self.run_mini_code(mini_code, "", "function_call_arg_not_subtype")
 
     def test_undefined_variable(self):
@@ -259,7 +259,7 @@ class CompilerTests(CompilerTestCase):
             y = buf.[x]; // Invalid index type
         }
         """
-        with self.assertRaisesRegex(Exception, "Indexation currently only supported with integers."): # fixed
+        with self.assertRaisesRegex(Exception, "Indexation currently only supported with integers."):
             self.run_mini_code(mini_code, "", "buffer_indexation_invalid_index_type")
 
     def test_inplace_assignment_invalid_field(self):
@@ -421,7 +421,7 @@ class CompilerTests(CompilerTestCase):
         def test() {
             test_func.call("hello"); // Invalid arg type
         }"""
-        with self.assertRaisesRegex(Exception, "argument type String not subtype of declared parameter type Ptr\\[i32\\] for parameter x"):
+        with self.assertRaisesRegex(Exception, "argument type String not subtype of declared parameter type Ptr\\[i32\\] for parameter #1"):
             self.run_mini_code(mini_code, "", "function_literal_call_invalid_arg_type")
 
     def test_continue_statement_outside_loop(self):
@@ -443,7 +443,7 @@ class CompilerTests(CompilerTestCase):
             def speak(volume : i32) {} // Different arity
         }
         """
-        with self.assertRaisesRegex(Exception, "Method override speak in class Dog has the same name as inherited methods but unique arity."): # fixed
+        with self.assertRaisesRegex(Exception, "Method override speak in class Dog has the same name as inherited methods but unique arity."):
             self.run_mini_code(mini_code, "", "override_different_arity")
 
     def test_new_expression_invalid_type_params(self):
@@ -463,7 +463,7 @@ class CompilerTests(CompilerTestCase):
         def test() {
             test_func.nonexistent_method(); // Invalid method
         }"""
-        with self.assertRaisesRegex(Exception, "Method nonexistent_method not available for type Function\\[Ptr\\[i32\\] -> Nothing\\]."): # fixed
+        with self.assertRaisesRegex(Exception, "Method nonexistent_method not available for type Function\\[Ptr\\[i32\\] -> Nothing\\]."):
             self.run_mini_code(mini_code, "", "function_literal_call_invalid_method")
 
     def test_coroutine_call_invalid_arg_type(self):
@@ -473,7 +473,7 @@ class CompilerTests(CompilerTestCase):
             x = Coroutine.new(counter);
             y = x.call("hello"); // Invalid arg type
         }"""
-        with self.assertRaisesRegex(Exception, "Coroutine.call\\\\(\\\\) expects a Ptr\\[i32\\] \\| Nil, not a String"):
+        with self.assertRaisesRegex(Exception, "Coroutine.call\\(\\) expects a Ptr\\[i32\\] \\| Nil, not a String"):
             self.run_mini_code(mini_code, "", "coroutine_call_invalid_arg_type")
 
     def test_method_def_override_invalid_param_type(self):
@@ -496,7 +496,7 @@ class CompilerTests(CompilerTestCase):
             x = Coroutine.new(counter);
             y = x.call(5, 6); // Too many args
         }"""
-        with self.assertRaisesRegex(Exception, "Coroutine.call\\\\(\\\\) takes only one argument."):
+        with self.assertRaisesRegex(Exception, "Coroutine.call\\(\\) takes only one argument."):
             self.run_mini_code(mini_code, "", "coroutine_call_too_many_args")
 
     def test_method_def_override_invalid_return_type_present(self):
@@ -509,7 +509,7 @@ class CompilerTests(CompilerTestCase):
             def speak() -> i32 { return 0; } // Invalid return type present
         }
         """
-        with self.assertRaisesRegex(Exception, "Overriding method speak in class Dog should not have a return type."): # fixed
+        with self.assertRaisesRegex(Exception, "Overriding method speak in class Dog should not have a return type."):
             self.run_mini_code(mini_code, "", "override_invalid_return_type_present")
 
     def test_function_literal_call_too_few_args(self):
@@ -518,7 +518,7 @@ class CompilerTests(CompilerTestCase):
         def test() {
             test_func.call(); // Too few args
         }"""
-        with self.assertRaisesRegex(Exception, "number of arguments to .call() \\\\(0\\\\) incompatible with reciever type Function\\[Ptr\\[i32\\] -> Nothing\\]"):
+        with self.assertRaisesRegex(Exception, "number of arguments to .call\\(\\) \\(0\\) incompatible with reciever type Function\\[Ptr\\[i32\\] -> Nothing\\]"):
             self.run_mini_code(mini_code, "", "function_literal_call_too_few_args")
 
     def test_method_def_override_invalid_return_type_missing(self):
@@ -531,7 +531,7 @@ class CompilerTests(CompilerTestCase):
             def speak() {} // Invalid return type missing
         }
         """
-        with self.assertRaisesRegex(Exception, "Overriding method speak in class Dog should have a return type."): # fixed
+        with self.assertRaisesRegex(Exception, "Overriding method speak in class Dog should have a return type."):
             self.run_mini_code(mini_code, "", "override_invalid_return_type_missing")
 
     def test_method_def_override_invalid_return_type_subtype(self):
@@ -624,7 +624,7 @@ class CompilerTests(CompilerTestCase):
             def init() {} // Field x not initialized
         }
         """
-        with self.assertRaisesRegex(Exception, "field @x not properly initialized for class Test. You may need to override this constructor."): # fixed
+        with self.assertRaisesRegex(Exception, "field @x not properly initialized for class Test. You may need to override this constructor."):
             self.run_mini_code(mini_code, "", "init_field_not_initialized")
 
     def test_for_loop_invalid_iterable_type(self):
