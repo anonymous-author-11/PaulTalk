@@ -18,7 +18,7 @@ class CompilerTestCase(unittest.TestCase):
         self.output_file_name = None  # To be set in individual test methods
 
 class CompilerTestCase(unittest.TestCase):
-    def run_mini_code(self, mini_code, expected_output, output_file_name_base):
+    def run_mini_code(self, mini_code, expected_output, output_file_name_base, expect_error=None):
         self.temp_input_file.write(mini_code)
         self.temp_input_file.close()
         self.output_file_name = f"{output_file_name_base}.exe"
@@ -31,8 +31,13 @@ class CompilerTestCase(unittest.TestCase):
             text=True
         )
 
-        # Check if compilation failed
-        if compile_process.returncode != 0:
+        # Handle expected errors
+        if expect_error:
+            if compile_process.returncode == 0:
+                self.fail(f"Expected error containing '{expect_error}' but compilation succeeded")
+            self.assertIn(expect_error, compile_process.stderr)
+            return
+        elif compile_process.returncode != 0:
             error_msg = "Compilation failed:\n" + compile_process.stderr
             self.fail(error_msg)
 
@@ -54,6 +59,14 @@ class CompilerTestCase(unittest.TestCase):
             self.fail(f"Unexpected output lines: {actual_lines[len(expected_lines):]}")
 
 class CompilerTests(CompilerTestCase):
+
+    def test_duplicate_class_definition(self):
+        mini_code = """
+        class Animal {}
+        class Animal {}  // Second declaration
+        """
+        with self.assertRaisesRegex(Exception, "Class Animal already declared in this scope"):
+            self.run_mini_code(mini_code, "", "dup_class")
 
     def test_tests_mini(self):
         with open("tests.mini", "r") as f:
