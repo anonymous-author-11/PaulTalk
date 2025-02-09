@@ -80,6 +80,17 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, "identifier x not previously declared"):
             self.run_mini_code(mini_code, "", "undef_var")
 
+    def test_self_reference_in_init(self):
+        mini_code = """
+        class Test {
+            def init() {
+                self.some_field = 5  // Invalid self reference
+            }
+        }
+        """
+        with self.assertRaisesRegex(Exception, "Cannot refer to 'self' within .init()"):
+            self.run_mini_code(mini_code, "", "self_in_init")
+
     def test_tests_mini(self):
         with open("tests.mini", "r") as f:
             mini_code = f.read()
