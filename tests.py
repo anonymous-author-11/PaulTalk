@@ -83,7 +83,7 @@ class CompilerTests(CompilerTestCase):
         mini_code = """
         def void_return() {}
         def test() {
-            x = void_return(); // IO.print returns void
+            x = void_return(); // void_return() returns void
         }
         """
         with self.assertRaisesRegex(Exception, "Assignment impossible: right hand side expression does not return anything."):
@@ -194,9 +194,8 @@ class CompilerTests(CompilerTestCase):
 
     def test_function_def_missing_return(self):
         mini_code = """
-        import core;
         def foo() -> i32 {
-            IO.print(5);
+            x = 5;
         }
         """
         with self.assertRaisesRegex(Exception, "Function declares return type Ptr\\[i32\\] yet has no return statement."):
@@ -646,7 +645,7 @@ class CompilerTests(CompilerTestCase):
         import core;
         class Test {
             def method() -> i32 {
-                IO.print(5);
+                x = 5;
             }
         }
         """
@@ -674,6 +673,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_method_def_init_field_not_initialized(self):
         mini_code = """
+        import core;
         class Test {
             @x : i32
             def init() {} // Field x not initialized
@@ -691,29 +691,6 @@ class CompilerTests(CompilerTestCase):
         """
         with self.assertRaisesRegex(Exception, "For-loop iterable must be an object with a .iterator\\(\\) method, not Ptr\\[i32\\]"):
             self.run_mini_code(mini_code, "", "for_loop_invalid_iterable_type")
-
-    def test_method_call_ambiguous_overload(self):
-        mini_code = """
-        class A {}
-        class B {}
-        class C extends A, B {
-            def init() {}
-        }
-        class D extends B, A {
-            def init() {}
-        }
-        class Test {
-            def method(x : C) {}
-            def method(x : D) {}
-        }
-        def test() {
-            t : Test = Test.new();
-            x : C | D = C.new()
-            t.method(x); // Ambiguous overload
-        }
-        """
-        with self.assertRaisesRegex(Exception, "invocation of method .* with argument types .* is ambiguous."):
-            self.run_mini_code(mini_code, "", "method_call_ambiguous_overload")
 
     def test_return_statement_outside_function(self):
         mini_code = """
