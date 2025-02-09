@@ -17,6 +17,7 @@ class CompilerTestCase(unittest.TestCase):
         self.temp_input_file = tempfile.NamedTemporaryFile(suffix=".mini", mode="w", delete=False, dir=".")
         self.output_file_name = None  # To be set in individual test methods
 
+class CompilerTestCase(unittest.TestCase):
     def run_mini_code(self, mini_code, expected_output, output_file_name_base):
         self.temp_input_file.write(mini_code)
         self.temp_input_file.close()
