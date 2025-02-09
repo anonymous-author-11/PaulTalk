@@ -71,6 +71,15 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, "Function foo already declared in this scope"):
             self.run_mini_code(mini_code, "", "dup_func")
 
+    def test_undefined_variable(self):
+        mini_code = """
+        def test() {
+            x = 5  // x not declared
+        }
+        """
+        with self.assertRaisesRegex(Exception, "identifier x not previously declared"):
+            self.run_mini_code(mini_code, "", "undef_var")
+
     def test_tests_mini(self):
         with open("tests.mini", "r") as f:
             mini_code = f.read()
