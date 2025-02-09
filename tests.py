@@ -12,10 +12,6 @@ class CompilerTestCase(unittest.TestCase):
         os.remove(self.temp_input_file.name)
         os.remove(self.temp_input_file.name.replace(".mini",".ll"))
         os.remove(self.output_file_name)
-class CompilerTestCase(unittest.TestCase):
-    def setUp(self):
-        self.temp_input_file = tempfile.NamedTemporaryFile(suffix=".mini", mode="w", delete=False, dir=".")
-        self.output_file_name = None  # To be set in individual test methods
 
 class CompilerTestCase(unittest.TestCase):
     def run_mini_code(self, mini_code, expected_output, output_file_name_base, expect_error=None):
