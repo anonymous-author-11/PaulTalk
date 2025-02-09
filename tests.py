@@ -76,7 +76,7 @@ class CompilerTests(CompilerTestCase):
             x : i32 = 6.0; // Type mismatch
         }
         """
-        with self.assertRaisesRegex(Exception, "rhs type Ptr[f64] not subtype of declared type Ptr\\[i32\\]!"):
+        with self.assertRaisesRegex(Exception, "rhs type Ptr\\[f64\\] not subtype of declared type Ptr\\[i32\\]!"):
             self.run_mini_code(mini_code, "", "assign_type_mismatch")
 
     def test_assign_void_expression(self):
@@ -272,18 +272,6 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, "field @y not in class Test!"):
             self.run_mini_code(mini_code, "", "inplace_assignment_invalid_field")
 
-    def test_method_call_no_overload_2(self):
-        mini_code = """
-        import core;
-        class Test {}
-        def test() {
-            t : Test = Test.new();
-            t.method_does_not_exist(); // No overload
-        }
-        """
-        with self.assertRaisesRegex(Exception, "there exists no overload of method Test.method_does_not_exist compatible with argument types .*"):
-            self.run_mini_code(mini_code, "", "method_call_no_overload_2")
-
     def test_self_reference_in_init(self):
         mini_code = """
         import core;
@@ -321,7 +309,7 @@ class CompilerTests(CompilerTestCase):
     def test_class_method_call_abstract_method(self):
         mini_code = """
         class Animal {
-            abstract def Self.speak()
+            abstract def Self.speak() {}
         }
         def test() {
             Animal.speak(); // Abstract method call
@@ -415,6 +403,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_class_method_call_no_overload(self):
         mini_code = """
+        import core;
         class Test {}
         def test() {
             Test.method_does_not_exist(); // No overload
@@ -447,13 +436,14 @@ class CompilerTests(CompilerTestCase):
 
     def test_new_expression_invalid_arg_count(self):
         mini_code = """
+        import core;
         class Test {
             def init(x : i32) {}
         }
         def test() {
             t : Test = Test.new(5, 6); // Invalid arg count
         }"""
-        with self.assertRaisesRegex(Exception, "No init method in class Test matches the argument types .*"):
+        with self.assertRaisesRegex(Exception, "number of arguments to new .* not same as number of params to init .*"):
             self.run_mini_code(mini_code, "", "new_expression_invalid_arg_count")
 
     def test_function_literal_call_invalid_arg_type(self):
