@@ -63,6 +63,14 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, "Class Animal already declared in this scope"):
             self.run_mini_code(mini_code, "", "dup_class")
 
+    def test_duplicate_function_definition(self):
+        mini_code = """
+        def foo() {}
+        def foo() {}  // Second declaration
+        """
+        with self.assertRaisesRegex(Exception, "Function foo already declared in this scope"):
+            self.run_mini_code(mini_code, "", "dup_func")
+
     def test_tests_mini(self):
         with open("tests.mini", "r") as f:
             mini_code = f.read()
