@@ -561,7 +561,6 @@ class CompilerTests(CompilerTestCase):
         }
         """
         with self.assertRaisesRegex(Exception, "Overriding method speak in class Dog: return type Ptr\\[i32\\] not a subtype of overridden methods' return types .*"):
-        with self.assertRaisesRegex(Exception, "Overriding method speak in class Dog: return type Ptr[i32] not a subtype of overridden methods' return types .*"):
             self.run_mini_code(mini_code, "", "override_invalid_return_type_subtype")
 
     def test_coroutine_call_invalid_method(self):
