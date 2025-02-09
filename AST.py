@@ -1290,10 +1290,8 @@ class MethodDef(Statement):
             body_block.add_ops([field_acc, cast_assign])
 
     def enforce_override_rules(self, scope):
-        parents_methods = (meth for meth in self.defining_class.parents_methods() if meth.name == self.name)
+        parents_methods = [meth for meth in self.defining_class.parents_methods() if meth.name == self.name]
         overridden_methods = [meth for meth in parents_methods if meth.arity == self.arity]
-        if next(parents_methods, None) and len(overridden_methods) == 0:
-            raise Exception(f"Line {self.line_number}: Method override {self.name} in class {self.defining_class} has the same name as inherited methods but unique arity.")
         overridden_arg_types = [scope.simplify(Union.from_list([self.defining_class._scope.simplify(meth.param_types()[k]) for meth in overridden_methods])) for k in range(self.arity)]
         if len(overridden_methods) > 0 and any(not scope.subtype(param.type(scope), overridden_arg_types[k]) for (k, param) in enumerate(self.params)):
             k, offender = next((k, param) for (k, param) in enumerate(self.params) if not scope.subtype(param.type(scope), overridden_arg_types[k]))

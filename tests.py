@@ -411,19 +411,6 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, "Can't continue when not in loop"):
             self.run_mini_code(mini_code, "", "continue_statement_outside_loop")
 
-    def test_method_def_override_different_arity(self):
-        mini_code = """
-        import core;
-        class Animal {
-            def speak() {}
-        }
-        class Dog extends Animal {
-            def speak(volume : i32) {} // Different arity
-        }
-        """
-        with self.assertRaisesRegex(Exception, "Method override speak in class Dog has the same name as inherited methods but unique arity."):
-            self.run_mini_code(mini_code, "", "override_different_arity")
-
     def test_new_expression_invalid_type_params(self):
         mini_code = """
         import core;
