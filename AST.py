@@ -227,7 +227,7 @@ class OverloadedBinaryOp(BinaryOp):
         method_call = MethodCall(self.filename, self.line_number, self.left, mangled_operator, [self.right])
         return method_call.codegen(scope)
 
-    def ensure_object_receiver(self, left_type):
+    def ensure_object_receiver(self, scope, left_type):
         if not isinstance(left_type, FatPtr):
             raise Exception(f"Line {self.line_number}: no overloaded operators for non-object {left_type}")
         if left_type.cls.data not in scope.classes.keys():
@@ -243,7 +243,7 @@ class OverloadedBinaryOp(BinaryOp):
         left_type = self.left.exprtype(scope)
         right_type = self.right.exprtype(scope)
         if isinstance(left_type, TypeParameter): left_type = left_type.bound
-        self.ensure_object_receiver(left_type)
+        self.ensure_object_receiver(scope, left_type)
         mangled_operator = "_" + self.operator
         self.ensure_existing_overload(scope, left_type, mangled_operator, right_type)
         method_call = MethodCall(self.filename, self.line_number, self.left, mangled_operator, [self.right])
@@ -1103,8 +1103,6 @@ class ObjectCreation(Expression):
         if len(behaviors) > 1:
             raise Exception(f"Line {self.line_number}: invocation of {simplified_type}.{self.method} with argument types {arg_types} is ambiguous.")
         behavior = behaviors[0]
-        if len(self.arguments) != behavior.arity:
-            raise Exception(f"Line {self.line_number}: number of arguments to new ({len(self.arguments)}) not same as number of params to init ({len(behavior.param_types())})")
         if any(isinstance(elem.definition, AbstractMethodDef) for elem in cls.vtable() if isinstance(elem, Method)):
             offender = next(elem for elem in cls.vtable() if isinstance(elem, Method) and isinstance(elem.definition, AbstractMethodDef))
             raise Exception(f"Line {self.line_number}: Cannot instantiate class {simplified_type} with abstract method {offender.definition.name} defined in class {offender.definition.defining_class.name}")
@@ -1314,6 +1312,7 @@ class MethodDef(Statement):
 
     def ensure_proper_init(self, body_scope):
         for field in self.defining_class.fields():
+            if "@" not in field.declaration.name: continue
             declared_type = field.type()
             if field.declaration.name in body_scope.type_table and body_scope.subtype(body_scope.type_table[field.declaration.name], declared_type): continue
             if declared_type == Nil () or isinstance(declared_type, Union) and Nil() in declared_type.types.data:

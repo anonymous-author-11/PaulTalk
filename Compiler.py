@@ -10,7 +10,7 @@ from xdsl.printer import Printer
 from io import StringIO
 from lower import first_pass
 from sys import argv
-from parser import CSTTransformer
+from parser import CSTTransformer, parse
 import subprocess
 import cProfile
 import re
@@ -20,7 +20,8 @@ def main():
     after_imports = time.time()
     print(f"Time to import: {after_imports - start_time} seconds")
     if len(argv) < 2: raise Exception("Please provide a file to compile")
-    print(f"compiling {argv[1]}")
+    file_name = argv[1]
+    print(f"compiling {file_name}")
     if "-o" not in argv: raise Exception("Please provide an output file.")
     for i, arg in enumerate(argv):
         if arg == "-o":
@@ -29,12 +30,9 @@ def main():
             break
     if "." not in output_name: raise Exception("Please provide an file extension in the output name.")
     output_name_short = output_name.split(".")[0]
-    with open(argv[1]) as source: source_text = source.read()
 
-    parser = Lark.open("grammar.lark", parser='lalr', propagate_positions=True)
-    tree = parser.parse(source_text)
+    ast = parse(file_name)
     #print(tree.pretty())
-    ast = CSTTransformer(argv[1]).transform(tree)
     module = ast.codegen()
 
     ll_files = [file.split(".")[0] + ".ll" for file in included_files]

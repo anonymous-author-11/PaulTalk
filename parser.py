@@ -2,9 +2,36 @@ from lark import Transformer, v_args, Lark
 from AST import *
 from core_dialect import *
 from lark import Transformer
+from lark.exceptions import UnexpectedToken
 from xdsl.ir import Block, Region
 from xdsl.dialects.builtin import IntegerType, IntegerAttr, StringAttr, NoneAttr
 from utils import *
+
+def parse(file_name) -> AST:
+    try: # Add try-except block
+        with open(file_name) as source: import_text = source.read()
+        parser = Lark.open("grammar.lark", parser='lalr', propagate_positions=True)
+        tree = parser.parse(import_text)
+        tree = CSTTransformer(file_name).transform(tree)
+        return tree
+    except UnexpectedToken as e: # Catch UnexpectedToken
+        error_message = format_parser_error(e, file_name) # Format the error
+        # Optionally, raise a custom exception here to stop compilation
+        raise Exception(f"Parsing Error in import:\n\n{error_message}") # Or a more specific exception
+
+def format_parser_error(exc: UnexpectedToken, file_name: str) -> str:
+    """Formats a Lark UnexpectedToken exception into a user-friendly error message."""
+    line = exc.line
+    column = exc.column
+    unexpected_token = exc.token.value
+    expected_tokens = ", ".join(exc.expected) # Join expected tokens for readability
+
+    error_message = f"File '{file_name}', Line {line}, Column {column}:\n"
+    error_message += f"  Grammar Error: Unexpected token '{unexpected_token}'.\n"
+    error_message += f"  Expected one of: {expected_tokens}\n"
+    # You could add more context here if needed, like showing the line of code
+
+    return error_message
 
 @v_args(inline=True)
 class CSTTransformer(Transformer):
@@ -91,10 +118,7 @@ class CSTTransformer(Transformer):
 
     def import_statement(self, *names):
         file_str = "/".join([name.value for name in names]) + ".mini"
-        with open(file_str) as source: import_text = source.read()
-        parser = Lark.open("grammar.lark", parser='lalr', propagate_positions=True)
-        tree = parser.parse(import_text)
-        ast = CSTTransformer(file_str).transform(tree)
+        ast = parse(file_str)
         return Import(self.file_name, names[0].line, file_str, ast.root, Scope())
 
     def ident_list(self, *ids):
