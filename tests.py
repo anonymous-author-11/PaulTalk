@@ -73,10 +73,10 @@ class CompilerTests(CompilerTestCase):
     def test_class_def_inconsistent_hierarchy(self):
         mini_code = """
         class A {}
-        class B extends A {}
-        class C extends A {}
-        class D extends B, C {}
-        class E extends C, B {} // Inconsistent order
+        class B {}
+        class C extends A, B {}
+        class D extends B, A {}
+        class E extends C, D {} // Inconsistent order
         """
         with self.assertRaisesRegex(Exception, "Inconsistent hierarchy for class E."):
             self.run_mini_code(mini_code, "", "inconsistent_hierarchy")
