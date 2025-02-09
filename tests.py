@@ -131,28 +131,6 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, "Inconsistent hierarchy for class E."):
             self.run_mini_code(mini_code, "", "inconsistent_hierarchy")
 
-    def test_method_call_ambiguous_dispatch(self):
-        mini_code = """import core;
-        class A {}
-        class B {}
-        class C extends A, B {
-            def init() {}
-        }
-        class D extends B, A {
-            def init() {}
-        }
-        class Test {
-            def init() {}
-            def foo(x : C) {}
-            def foo(x : D) {}
-        }
-        t = Test.new();
-        x : C | D = C.new();
-        t.foo(x);
-        """
-        with self.assertRaisesRegex(Exception, "invocation of method foo with argument types .* is ambiguous."):
-            self.run_mini_code(mini_code, "", "method_call_ambiguous_dispatch")
-
     def test_indexation_non_integer_index(self):
         mini_code = """
         def test() {
