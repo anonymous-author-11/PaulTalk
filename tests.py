@@ -65,11 +65,10 @@ class CompilerTests(CompilerTestCase):
 
     def test_abstract_class_instantiation(self):
         mini_code = """import core;
-        import core;
         class Animal {
             abstract def speak()
         }
-        def test() {import core;
+        def test() {
             x = Animal.new(); // Abstract class instantiation
         }
         """
