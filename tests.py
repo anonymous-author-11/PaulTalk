@@ -78,19 +78,20 @@ class CompilerTests(CompilerTestCase):
     def test_assign_type_mismatch(self):
         mini_code = """
         def test() {
-            x : i32 = "hello"; // Type mismatch
+            x : i32 = 6.0; // Type mismatch
         }
         """
-        with self.assertRaisesRegex(Exception, "rhs type String not subtype of declared type Ptr\\[i32\\]!"):
+        with self.assertRaisesRegex(Exception, "rhs type Ptr[f64] not subtype of declared type Ptr\\[i32\\]!"):
             self.run_mini_code(mini_code, "", "assign_type_mismatch")
 
     def test_assign_void_expression(self):
         mini_code = """
+        def void_return() {}
         def test() {
-            x = IO.print(5); // IO.print returns void
+            x = void_return(); // IO.print returns void
         }
         """
-        with self.assertRaisesRegex(Exception, "class IO not declared."):
+        with self.assertRaisesRegex(Exception, "Assignment impossible: right hand side expression does not return anything."):
             self.run_mini_code(mini_code, "", "assign_void_expression")
 
     def test_binary_op_different_types(self):
@@ -134,19 +135,32 @@ class CompilerTests(CompilerTestCase):
             self.run_mini_code(mini_code, "", "inconsistent_hierarchy")
 
     def test_method_call_ambiguous_dispatch(self):
-        mini_code = """
-        class Test {}
-        def test(x : Test) {
-            x.toString(); // Ambiguous dispatch
-        }"""
-        with self.assertRaisesRegex(Exception, "invocation of method toString with argument types .* is ambiguous."):
-            self.run_mini_code(mini_code, "", "method_call_ambiguous_dispatch", expect_error="invocation of method toString with argument types .* is ambiguous.")
+        mini_code = """import core;
+        class A {}
+        class B {}
+        class C extends A, B {
+            def init() {}
+        }
+        class D extends B, A {
+            def init() {}
+        }
+        class Test {
+            def init() {}
+            def foo(x : C) {}
+            def foo(x : D) {}
+        }
+        t = Test.new();
+        x : C | D = C.new();
+        t.foo(x);
+        """
+        with self.assertRaisesRegex(Exception, "invocation of method foo with argument types .* is ambiguous."):
+            self.run_mini_code(mini_code, "", "method_call_ambiguous_dispatch", expect_error="invocation of method foo with argument types .* is ambiguous.")
 
     def test_indexation_non_integer_index(self): # fixed
         mini_code = """
         def test() {
             tuple = (1, 2, 3);
-            x = tuple.["hello"]; // Non-integer index
+            x = tuple.[5.0]; // Non-integer index
         }
         """
         with self.assertRaisesRegex(Exception, "Tuple indexation currently only supported with integer literals."):
@@ -209,9 +223,9 @@ class CompilerTests(CompilerTestCase):
         mini_code = """
         def foo(x : i32) {}
         def test() {
-            foo("hello"); // Arg not subtype
+            foo(5.0); // Arg not subtype
         }"""
-        with self.assertRaisesRegex(Exception, "argument type String not subtype of declared parameter type Ptr\\[i32\\] for parameter x"):
+        with self.assertRaisesRegex(Exception, "argument type f64 not subtype of declared parameter type Ptr\\[i32\\] for parameter x"):
             self.run_mini_code(mini_code, "", "function_call_arg_not_subtype")
 
     def test_undefined_variable(self):
@@ -450,6 +464,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_function_literal_call_invalid_arg_type(self):
         mini_code = """
+        import core;
         def test_func(x : i32) {}
         def test() {
             test_func.call("hello"); // Invalid arg type
