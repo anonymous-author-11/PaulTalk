@@ -84,7 +84,7 @@ class CompilerTests(CompilerTestCase):
         mini_code = """
         class Test {
             def init() {
-                self.some_field = 5  // Invalid self reference
+                x = self;  // Invalid self reference
             }
         }
         """
