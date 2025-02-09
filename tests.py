@@ -54,8 +54,6 @@ class CompilerTestCase(unittest.TestCase):
             self.fail(f"Unexpected output lines: {actual_lines[len(expected_lines):]}")
 
 class CompilerTests(CompilerTestCase):
-	
-class CompilerTests(CompilerTestCase):
 
     def test_tests_mini(self):
         with open("tests.mini", "r") as f:
