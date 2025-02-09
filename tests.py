@@ -66,13 +66,13 @@ class CompilerTests(CompilerTestCase):
     def test_abstract_class_instantiation(self):
         mini_code = """import core;
         class Animal {
-            abstract def speak()
+            abstract def speak() {}
         }
         def test() {
             x = Animal.new(); // Abstract class instantiation
         }
         """
-        with self.assertRaisesRegex(Exception, "Cannot instantiate class FatPtr<Class<Animal>> with abstract method speak defined in class Animal"):
+        with self.assertRaisesRegex(Exception, "Cannot instantiate class Animal with abstract method speak defined in class Animal"):
             self.run_mini_code(mini_code, "", "abstract_class_instantiation")
 
     def test_assign_type_mismatch(self):
