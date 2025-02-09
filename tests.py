@@ -13,7 +13,6 @@ class CompilerTestCase(unittest.TestCase):
         os.remove(self.temp_input_file.name.replace(".mini",".ll"))
         os.remove(self.output_file_name)
 
-class CompilerTestCase(unittest.TestCase):
     def run_mini_code(self, mini_code, expected_output, output_file_name_base, expect_error=None):
         self.temp_input_file.write(mini_code)
         self.temp_input_file.close()
