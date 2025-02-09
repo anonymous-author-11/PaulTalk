@@ -63,6 +63,15 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, "Class Animal already declared in this scope"):
             self.run_mini_code(mini_code, "", "dup_class")
 
+    def test_assign_void_expression(self):
+        mini_code = """
+        def test() {
+            x = IO.print(5); // IO.print returns void
+        }
+        """
+        with self.assertRaisesRegex(Exception, "Assignment impossible: right hand side expression does not return anything."):
+            self.run_mini_code(mini_code, "", "assign_void_expression")
+
     def test_binary_op_different_types(self):
         mini_code = """
         def test() {
@@ -102,6 +111,15 @@ class CompilerTests(CompilerTestCase):
         """
         with self.assertRaisesRegex(Exception, "Inconsistent hierarchy for class E."):
             self.run_mini_code(mini_code, "", "inconsistent_hierarchy")
+
+    def test_inplace_assignment_not_field_or_method_call(self):
+        mini_code = """
+        def test() {
+            5 += 5; // Invalid inplace assignment target
+        }
+        """
+        with self.assertRaisesRegex(Exception, "Neither a field assignment nor a method call assignment."):
+            self.run_mini_code(mini_code, "", "inplace_assignment_not_field_or_method_call")
 
     def test_cocreate_first_arg_not_function(self):
         mini_code = """
@@ -144,6 +162,15 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, "Function declares return type Ptr<i32> yet has no return statement."):
             self.run_mini_code(mini_code, "", "func_missing_return")
 
+    def test_function_call_arg_not_subtype(self):
+        mini_code = """
+        def foo(x : i32) {}
+        def test() {
+            foo("hello"); // Arg not subtype
+        }"""
+        with self.assertRaisesRegex(Exception, "argument type Ptr<String> not subtype of declared parameter type Ptr<i32> for parameter x"):
+            self.run_mini_code(mini_code, "", "function_call_arg_not_subtype")
+
     def test_undefined_variable(self):
         mini_code = """
         def test() {
@@ -162,6 +189,15 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, "identifier x not previously declared"):
             self.run_mini_code(mini_code, "", "undef_var")
 
+    def test_function_call_function_not_declared(self):
+        mini_code = """
+        def test() {
+            nonExistentFunction(); // Function not declared
+        }
+        """
+        with self.assertRaisesRegex(Exception, "function name nonExistentFunction not found!"):
+            self.run_mini_code(mini_code, "", "function_call_function_not_declared")
+
     def test_buffer_indexation_invalid_index_type(self):
         mini_code = """
         def test() {
@@ -173,6 +209,16 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, "Indexation currently only supported with integers."):
             self.run_mini_code(mini_code, "", "buffer_indexation_invalid_index_type")
 
+    def test_inplace_assignment_invalid_field(self):
+        mini_code = """
+        class Test {}
+        def test() {
+            t : Test = new Test();
+            t.@y = 5; // Field y does not exist
+        }"""
+        with self.assertRaisesRegex(Exception, "field @y not in class Test!"):
+            self.run_mini_code(mini_code, "", "buffer_indexation_invalid_index_type")
+
     def test_self_reference_in_init(self):
         mini_code = """
         class Test {
@@ -182,6 +228,16 @@ class CompilerTests(CompilerTestCase):
         }
         """
         with self.assertRaisesRegex(Exception, "Cannot refer to 'self' within .init()"):
+            self.run_mini_code(mini_code, "", "self_in_init")
+
+    def test_field_identifier_field_not_declared(self):
+        mini_code = """
+        class Test {}
+        def test() {
+            t : Test = new Test();
+            x = t.@z; // Field z not declared
+        }"""
+        with self.assertRaisesRegex(Exception, "field @z used but not declared in class Test"):
             self.run_mini_code(mini_code, "", "self_in_init")
 
     def test_class_method_call_abstract_method(self):
@@ -205,6 +261,15 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, "Variables should not be capitalized."):
             self.run_mini_code(mini_code, "", "capitalized_var_decl")
 
+    def test_for_loop_never_enter(self):
+        mini_code = """
+        def test() {
+            for i in nil {} // Nil iterable
+        }
+        """
+        with self.assertRaisesRegex(Exception, "For-loop would never enter."):
+            self.run_mini_code(mini_code, "", "for_loop_never_enter")
+
     def test_class_method_call_class_not_declared(self):
         mini_code = """
         def test() {
@@ -213,6 +278,15 @@ class CompilerTests(CompilerTestCase):
         """
         with self.assertRaisesRegex(Exception, "class NonExistentClass not declared."):
             self.run_mini_code(mini_code, "", "class_method_call_class_not_declared")
+
+    def test_for_loop_never_terminate(self):
+        mini_code = """
+        def test() {
+            for i in 5:5 {} // Empty range
+        }
+        """
+        with self.assertRaisesRegex(Exception, "For-loop would never terminate."):
+            self.run_mini_code(mini_code, "", "for_loop_never_terminate")
 
     def test_field_decl_capitalized_name(self):
         mini_code = """
@@ -273,6 +347,15 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, 'init should not return anything'):
             self.run_mini_code(mini_code, "", "init_returns_value_2")
 
+    def test_function_literal_call_invalid_arg_type(self):
+        mini_code = """
+        def test_func(x : i32) {}
+        def test() {
+            test_func.call("hello"); // Invalid arg type
+        }"""
+        with self.assertRaisesRegex(Exception, "argument type Ptr<String> not subtype of declared parameter type Ptr<i32> for parameter param1"):
+            self.run_mini_code(mini_code, "", "function_literal_call_invalid_arg_type")
+
     def test_continue_statement_outside_loop(self):
         mini_code = """
         def test() {
@@ -293,6 +376,15 @@ class CompilerTests(CompilerTestCase):
         """
         with self.assertRaisesRegex(Exception, "Method override speak in class Dog has the same name as inherited methods but unique arity."):
             self.run_mini_code(mini_code, "", "override_different_arity")
+
+    def test_function_literal_call_invalid_method(self):
+        mini_code = """
+        def test_func(x : i32) {}
+        def test() {
+            test_func.nonexistent_method(); // Invalid method
+        }"""
+        with self.assertRaisesRegex(Exception, "Method nonexistent_method not available for type Ptr<Function<.*>>."):
+            self.run_mini_code(mini_code, "", "function_literal_call_invalid_method")
 
     def test_coroutine_call_invalid_arg_type(self):
         mini_code = """
@@ -338,6 +430,15 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, "Overriding method speak in class Dog should not have a return type."):
             self.run_mini_code(mini_code, "", "override_invalid_return_type_present")
 
+    def test_function_literal_call_too_few_args(self):
+        mini_code = """
+        def test_func(x : i32) {}
+        def test() {
+            test_func.call(); // Too few args
+        }"""
+        with self.assertRaisesRegex(Exception, "number of arguments to new \\(0\\) not same as number of params to init \\(1\\)"):
+            self.run_mini_code(mini_code, "", "function_literal_call_too_few_args")
+
     def test_method_def_override_invalid_return_type_missing(self):
         mini_code = """
         class Animal {
@@ -371,6 +472,15 @@ class CompilerTests(CompilerTestCase):
         }"""
         with self.assertRaisesRegex(Exception, "Method nonexistent_method not available for type Coroutine."):
             self.run_mini_code(mini_code, "", "coroutine_call_invalid_method")
+
+    def test_function_literal_call_too_many_args(self):
+        mini_code = """
+        def test_func(x : i32) {}
+        def test() {
+            test_func.call(5, 6); // Too many args
+        }"""
+        with self.assertRaisesRegex(Exception, "number of arguments to new \\(2\\) not same as number of params to init \\(1\\)"):
+            self.run_mini_code(mini_code, "", "function_literal_call_too_many_args")
 
     def test_coroutine_result_no_return_type(self):
         mini_code = """
@@ -411,6 +521,15 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, "Method declares return type Ptr<i32> yet has no return statement."):
             self.run_mini_code(mini_code, "", "method_missing_return")
 
+    def test_if_statement_union_type_check_not_allowed(self):
+        mini_code = """
+        def test() {
+            x : i32 | f64 = 5;
+            if x is i32 | f64 {} // Union type check not allowed
+        }"""
+        with self.assertRaisesRegex(Exception, "Cannot type-check Union<Ptr<i32>, Ptr<f64>> yet."):
+            self.run_mini_code(mini_code, "", "if_statement_union_type_check_not_allowed")
+
     def test_method_def_init_field_not_initialized(self):
         mini_code = """
         class Test {
@@ -421,11 +540,44 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, "field @x not properly initialized for class Test. You may need to override this constructor."):
             self.run_mini_code(mini_code, "", "init_field_not_initialized")
 
+    def test_if_statement_intersection_type_check_not_allowed(self):
+        mini_code = """
+        def test() {
+            x : i32 | f64 = 5;
+            if x is i32 & f64 {} // Intersection type check not allowed
+        }"""
+        with self.assertRaisesRegex(Exception, "Cannot type-check Intersection<Ptr<i32>, Ptr<f64>> yet."):
+            self.run_mini_code(mini_code, "", "if_statement_intersection_type_check_not_allowed")
+
     def test_for_loop_invalid_iterable_type(self):
         mini_code = """
         def test() {
             x : i32 = 5;
             for i in x {} // Invalid iterable type
+        }
+        """
+        with self.assertRaisesRegex(Exception, "For-loop iterable must be an object with a .iterator() method, not Ptr<i32>"):
+            self.run_mini_code(mini_code, "", "for_loop_invalid_iterable_type")
+
+    def test_method_call_ambiguous_overload(self):
+        mini_code = """
+        class Test {
+            def method(x : i32) {}
+            def method(x : f64) {}
+        }
+        def test() {
+            t : Test = new Test();
+            t.method(5); // Ambiguous overload
+        }
+        """
+        with self.assertRaisesRegex(Exception, "invocation of method with argument types .* is ambiguous."):
+            self.run_mini_code(mini_code, "", "method_call_ambiguous_overload")
+
+    def test_for_loop_invalid_iterable_type_2(self):
+        mini_code = """
+        def test() {
+            x : i32 = 5;
+            for i in 5 {} // Invalid iterable type 2
         }
         """
         with self.assertRaisesRegex(Exception, "For-loop iterable must be an object with a .iterator() method, not Ptr<i32>"):
