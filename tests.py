@@ -621,7 +621,6 @@ class CompilerTests(CompilerTestCase):
             y = x.result(); // No return type
         }"""
         with self.assertRaisesRegex(Exception, "Coroutine has no return type."):
-        with self.assertRaisesRegex(Exception, "Coroutine has no return type."): # fixed
             self.run_mini_code(mini_code, "", "Coroutine has no return type.")
 
     def test_coroutine_result_too_many_args(self):
