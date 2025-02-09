@@ -820,15 +820,17 @@ class FunctionLiteralCall(MethodCall):
         return call_op.results[0]
 
     def exprtype(self, scope):
-        return None if self.receiver.exprtype(scope).return_type == Nothing() else self.receiver.exprtype(scope).return_type
-
-    def typeflow(self, scope):
         rec_typ = self.receiver.exprtype(scope)
         if self.method != "call":
             raise Exception(f"Line {self.line_number}: Method {self.method} not available for type {rec_typ}.")
+        if len(rec_typ.param_types.data) != len(self.arguments):
+            raise Exception(f"Line {self.line_number}: number of arguments to .call() ({len(self.arguments)}) incompatible with reciever type {rec_typ}.")
         for i, param in enumerate(rec_typ.param_types.data):
-            if scope.subtype(self.arguments[i].exprtype(scope), param): continue
-            raise Exception(f"Line {self.line_number}: argument type {self.arguments[i].exprtype(scope)} not subtype of declared parameter type {param} for parameter {param.name}")
+            if not scope.subtype(self.arguments[i].exprtype(scope), param):
+                raise Exception(f"Line {self.line_number}: argument type {self.arguments[i].exprtype(scope)} not subtype of declared parameter type {param} for parameter {param.name}")
+        return None if rec_typ.return_type == Nothing() else rec_typ.return_type
+
+    def typeflow(self, scope):
         self.exprtype(scope)
 
 @dataclass

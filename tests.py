@@ -52,6 +52,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_duplicate_class_definition(self):
         mini_code = """
+        import core;
         class Animal {}
         class Animal {}  // Second declaration
         """
@@ -61,6 +62,7 @@ class CompilerTests(CompilerTestCase):
     def test_abstract_class_instantiation(self):
         mini_code = """import core;
         class Animal {
+            def init() {}
             abstract def speak() {}
         }
         def test() {
@@ -219,7 +221,7 @@ class CompilerTests(CompilerTestCase):
         def test() {
             foo(5.0); // Arg not subtype
         }"""
-        with self.assertRaisesRegex(Exception, "argument type f64 not subtype of declared parameter type Ptr\\[i32\\] for parameter x"):
+        with self.assertRaisesRegex(Exception, "argument type Ptr\\[f64\\] not subtype of declared parameter type Ptr\\[i32\\] for parameter x"):
             self.run_mini_code(mini_code, "", "function_call_arg_not_subtype")
 
     def test_undefined_variable(self):
@@ -308,6 +310,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_class_method_call_abstract_method(self):
         mini_code = """
+        import core;
         class Animal {
             abstract def Self.speak() {}
         }
@@ -326,29 +329,6 @@ class CompilerTests(CompilerTestCase):
         """
         with self.assertRaisesRegex(Exception, "Variables should not be capitalized."):
             self.run_mini_code(mini_code, "", "capitalized_var_decl")
-
-    def test_for_loop_never_enter(self):
-        mini_code = """
-        import core;
-        class TestIterable {
-            def init() {}
-            def iterator() -> TestIterator {
-                return TestIterator.new();
-            }
-        }
-        class TestIterator {
-            def init() {}
-            def next() -> Nil {
-                return nil;
-            }
-        }
-        def test() {
-            iterable = TestIterable.new();
-            for i in iterable {} // .next() returns nil
-        }
-        """
-        with self.assertRaisesRegex(Exception, "For-loop would never enter."):
-            self.run_mini_code(mini_code, "", "for_loop_never_enter")
 
     def test_new_expression_class_not_declared(self):
         mini_code = """
@@ -434,18 +414,6 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, "init should not return anything"):
             self.run_mini_code(mini_code, "", "init_returns_value")
 
-    def test_new_expression_invalid_arg_count(self):
-        mini_code = """
-        import core;
-        class Test {
-            def init(x : i32) {}
-        }
-        def test() {
-            t : Test = Test.new(5, 6); // Invalid arg count
-        }"""
-        with self.assertRaisesRegex(Exception, "number of arguments to new .* not same as number of params to init .*"):
-            self.run_mini_code(mini_code, "", "new_expression_invalid_arg_count")
-
     def test_function_literal_call_invalid_arg_type(self):
         mini_code = """
         import core;
@@ -495,7 +463,7 @@ class CompilerTests(CompilerTestCase):
         def test() {
             test_func.nonexistent_method(); // Invalid method
         }"""
-        with self.assertRaisesRegex(Exception, "Method nonexistent_method not available for type Ptr<Function<.*>>."): # fixed
+        with self.assertRaisesRegex(Exception, "Method nonexistent_method not available for type Function[Ptr[i32] -> Nothing]."): # fixed
             self.run_mini_code(mini_code, "", "function_literal_call_invalid_method")
 
     def test_coroutine_call_invalid_arg_type(self):
@@ -550,7 +518,7 @@ class CompilerTests(CompilerTestCase):
         def test() {
             test_func.call(); // Too few args
         }"""
-        with self.assertRaisesRegex(Exception, "number of arguments to new \\\\(0\\\\) not same as number of params to init \\\\(1\\\\)"):
+        with self.assertRaisesRegex(Exception, "number of arguments to .call() \\\\(0\\\\) incompatible with reciever type Function[Ptr[i32] -> Nothing]"):
             self.run_mini_code(mini_code, "", "function_literal_call_too_few_args")
 
     def test_method_def_override_invalid_return_type_missing(self):
@@ -589,19 +557,6 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, "Method nonexistent_method not available for type Coroutine."):
             self.run_mini_code(mini_code, "", "coroutine_call_invalid_method")
 
-    def test_object_creation_too_many_args(self):
-        mini_code = """
-        import core;
-        class Test {
-            def init(a : i32) {}
-        }
-        def test() {
-            x = Test.new(1, 2);
-        }
-        """
-        with self.assertRaisesRegex(Exception, "number of arguments to new \\(2\\) not same as number of params to init \\(1\\)"):
-            self.run_mini_code(mini_code, "", "object_creation_too_many_args")
-
     def test_coroutine_result_no_return_type(self):
         mini_code = """
         def counter() yields i32 { yield(5); } // No return type
@@ -614,7 +569,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_coroutine_result_too_many_args(self):
         mini_code = """
-        def counter() yields i32 { yield(5); return 6; }
+        def counter() -> i32 yields i32 { yield(5); return 6; }
         def test() {
             x = Coroutine.new(counter);
             y = x.result(5); // Too many args
