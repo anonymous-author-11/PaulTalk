@@ -74,7 +74,7 @@ class CompilerTests(CompilerTestCase):
     def test_undefined_variable(self):
         mini_code = """
         def test() {
-            x = 5  // x not declared
+            y = x;  // x not declared
         }
         """
         with self.assertRaisesRegex(Exception, "identifier x not previously declared"):
