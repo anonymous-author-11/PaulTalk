@@ -221,7 +221,7 @@ class CompilerTests(CompilerTestCase):
         def test() {
             foo(5.0); // Arg not subtype
         }"""
-        with self.assertRaisesRegex(Exception, "argument type Ptr\\[f64\\] not subtype of declared parameter type Ptr\\[i32\\] for parameter x"):
+        with self.assertRaisesRegex(Exception, "argument type Ptr\\[f64\\] not subtype of declared parameter type Ptr\\[i32\\] for parameter #1"):
             self.run_mini_code(mini_code, "", "function_call_arg_not_subtype")
 
     def test_undefined_variable(self):
@@ -463,7 +463,7 @@ class CompilerTests(CompilerTestCase):
         def test() {
             test_func.nonexistent_method(); // Invalid method
         }"""
-        with self.assertRaisesRegex(Exception, "Method nonexistent_method not available for type Function[Ptr[i32] -> Nothing]."): # fixed
+        with self.assertRaisesRegex(Exception, "Method nonexistent_method not available for type Function\\[Ptr\\[i32\\] -> Nothing\\]."): # fixed
             self.run_mini_code(mini_code, "", "function_literal_call_invalid_method")
 
     def test_coroutine_call_invalid_arg_type(self):
@@ -473,7 +473,7 @@ class CompilerTests(CompilerTestCase):
             x = Coroutine.new(counter);
             y = x.call("hello"); // Invalid arg type
         }"""
-        with self.assertRaisesRegex(Exception, "Coroutine.call() expects a Ptr\\[i32\\] \\| Nil, not a String"):
+        with self.assertRaisesRegex(Exception, "Coroutine.call\\\\(\\\\) expects a Ptr\\[i32\\] \\| Nil, not a String"):
             self.run_mini_code(mini_code, "", "coroutine_call_invalid_arg_type")
 
     def test_method_def_override_invalid_param_type(self):
@@ -496,7 +496,7 @@ class CompilerTests(CompilerTestCase):
             x = Coroutine.new(counter);
             y = x.call(5, 6); // Too many args
         }"""
-        with self.assertRaisesRegex(Exception, "Coroutine.call() takes only one argument."):
+        with self.assertRaisesRegex(Exception, "Coroutine.call\\\\(\\\\) takes only one argument."):
             self.run_mini_code(mini_code, "", "coroutine_call_too_many_args")
 
     def test_method_def_override_invalid_return_type_present(self):
@@ -518,7 +518,7 @@ class CompilerTests(CompilerTestCase):
         def test() {
             test_func.call(); // Too few args
         }"""
-        with self.assertRaisesRegex(Exception, "number of arguments to .call() \\\\(0\\\\) incompatible with reciever type Function[Ptr[i32] -> Nothing]"):
+        with self.assertRaisesRegex(Exception, "number of arguments to .call() \\\\(0\\\\) incompatible with reciever type Function\\[Ptr\\[i32\\] -> Nothing\\]"):
             self.run_mini_code(mini_code, "", "function_literal_call_too_few_args")
 
     def test_method_def_override_invalid_return_type_missing(self):
