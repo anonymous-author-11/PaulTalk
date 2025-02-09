@@ -10,7 +10,6 @@ class CompilerTestCase(unittest.TestCase):
 
     def tearDown(self):
         os.remove(self.temp_input_file.name)
-        os.remove(self.output_file_name)
 
     def run_mini_code(self, mini_code, expected_output, output_file_name_base, expect_error=None):
         self.temp_input_file.write(mini_code)
@@ -40,6 +39,7 @@ class CompilerTestCase(unittest.TestCase):
         completed_process = subprocess.run(exe_command, capture_output=True, text=True, check=True)
         actual_output = completed_process.stdout.strip()
         os.remove(self.temp_input_file.name.replace(".mini",".ll"))
+        os.remove(self.output_file_name)
 
         # Split the actual output into lines for comparison
         actual_lines = actual_output.split('\n')
