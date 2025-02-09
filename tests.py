@@ -50,11 +50,24 @@ class CompilerTestCase(unittest.TestCase):
 
 class CompilerTests(CompilerTestCase):
 	
+class CompilerTests(CompilerTestCase):
+
     def test_tests_mini(self):
         with open("tests.mini", "r") as f:
             mini_code = f.read()
         expected_output = "3\nHello, World!\nfalse"
         self.run_mini_code(mini_code, expected_output, "tests")
+
+    def test_function_name_capitalized(self):
+        mini_code = """
+        def MyFunction() {
+            return 42;
+        }
+        """
+        expected_error = "Line 2: Function names should not be capitalized."
+        with self.assertRaises(AssertionError) as cm:
+            self.run_mini_code(mini_code, "", "capitalized_function")
+        self.assertIn(expected_error, str(cm.exception))
 
 if __name__ == '__main__':
     unittest.main()
