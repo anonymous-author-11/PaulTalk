@@ -69,7 +69,7 @@ class CompilerTests(CompilerTestCase):
             x : i32 = "hello"; // Type mismatch
         }
         """
-        with self.assertRaisesRegex(Exception, "rhs type Ptr<String> not subtype of declared type Ptr[i32]!"):
+        with self.assertRaisesRegex(Exception, "rhs type String not subtype of declared type Ptr[i32]!"):
             self.run_mini_code(mini_code, "", "assign_type_mismatch")
 
     def test_assign_void_expression(self):
