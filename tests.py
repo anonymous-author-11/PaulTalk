@@ -64,7 +64,7 @@ class CompilerTests(CompilerTestCase):
             self.run_mini_code(mini_code, "", "dup_class")
 
     def test_abstract_class_instantiation(self):
-        mini_code = """
+        mini_code = """import core;
         class Animal {
             abstract def speak()
         }
@@ -116,14 +116,14 @@ class CompilerTests(CompilerTestCase):
             self.run_mini_code(mini_code, "", "bitwise_op_non_integer_types")
 
     def test_class_def_lowercase_name(self):
-        mini_code = """
+        mini_code = """import core;
         class animal {}
         """
         with self.assertRaisesRegex(Exception, "Class names should be capitalized."):
             self.run_mini_code(mini_code, "", "lowercase_class_name")
 
     def test_class_def_inconsistent_hierarchy(self):
-        mini_code = """
+        mini_code = """import core;
         class A {}
         class B {}
         class C extends A, B {}
