@@ -66,7 +66,7 @@ class CompilerTests(CompilerTestCase):
     def test_abstract_class_instantiation(self):
         mini_code = """
         class Animal {
-            abstract def speak();
+            abstract def speak()
         }
         def test() {
             x = Animal.new(); // Abstract class instantiation
@@ -171,7 +171,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_extern_def_capitalized_name(self):
         mini_code = """
-        extern def Printf(x : i32) -> i32;
+        extern def Printf(x : i32) -> i32
         """
         with self.assertRaisesRegex(Exception, "Function names should not be capitalized."):
             self.run_mini_code(mini_code, "", "extern_capitalized_func_name")
@@ -307,7 +307,7 @@ class CompilerTests(CompilerTestCase):
     def test_class_method_call_abstract_method(self):
         mini_code = """
         class Animal {
-            abstract def Self.speak();
+            abstract def Self.speak()
         }
         def test() {
             Animal.speak(); // Abstract method call
