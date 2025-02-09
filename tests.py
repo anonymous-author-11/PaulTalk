@@ -65,10 +65,11 @@ class CompilerTests(CompilerTestCase):
 
     def test_abstract_class_instantiation(self):
         mini_code = """import core;
+        import core;
         class Animal {
             abstract def speak()
         }
-        def test() {
+        def test() {import core;
             x = Animal.new(); // Abstract class instantiation
         }
         """
@@ -185,6 +186,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_function_def_missing_return(self):
         mini_code = """
+        import core;
         def foo() -> i32 {
             IO.print(5);
         }
@@ -194,6 +196,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_init_method_arg_count_mismatch(self):
         mini_code = """
+        import core;
         class Test {
             def init(x : i32) {}
         }
@@ -252,6 +255,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_inplace_assignment_invalid_field(self):
         mini_code = """
+        import core;
         class Test {
             def test() {
                 @y = 5; // Field y does not exist
@@ -263,6 +267,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_method_call_no_overload_2(self):
         mini_code = """
+        import core;
         class Test {}
         def test() {
             t : Test = Test.new();
@@ -274,6 +279,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_self_reference_in_init(self):
         mini_code = """
+        import core;
         class Test {
             def init() {
                 x = self;  // Invalid self reference
@@ -285,6 +291,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_field_identifier_field_not_declared(self):
         mini_code = """
+        import core;
         class Test {
             def test() {
                 x = @z; // Field z not declared
@@ -327,6 +334,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_for_loop_never_enter(self):
         mini_code = """
+        import core;
         class TestIterable {
             def init() {}
             def iterator() -> TestIterator {
@@ -367,6 +375,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_for_loop_never_terminate(self):
         mini_code = """
+        import core;
         class TestIterable {
             def init() {}
             def iterator() -> TestIterator {
@@ -389,6 +398,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_field_decl_capitalized_name(self):
         mini_code = """
+        import core;
         class Test {
             @FieldY : i32
         }
@@ -408,6 +418,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_method_def_capitalized_name(self):
         mini_code = """
+        import core;
         class Test {
             def MethodX() {}
         }
@@ -417,6 +428,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_method_def_init_returns_value(self):
         mini_code = """
+        import core;
         class Test {
             def init() -> i32 {
                 return 5;
@@ -457,6 +469,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_method_def_override_different_arity(self):
         mini_code = """
+        import core;
         class Animal {
             def speak() {}
         }
@@ -469,6 +482,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_new_expression_invalid_type_params(self):
         mini_code = """
+        import core;
         class Test {}
         class Pair[T, U] where T <: Test {}
         def test() {
@@ -498,6 +512,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_method_def_override_invalid_param_type(self):
         mini_code = """
+        import core;
         class Animal {
             def speak(volume : f64) {}
         }
@@ -520,6 +535,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_method_def_override_invalid_return_type_present(self):
         mini_code = """
+        import core;
         class Animal {
             def speak() {}
         }
@@ -541,6 +557,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_method_def_override_invalid_return_type_missing(self):
         mini_code = """
+        import core;
         class Animal {
             def speak() -> i32 { return 0; }
         }
@@ -553,6 +570,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_method_def_override_invalid_return_type_subtype(self):
         mini_code = """
+        import core;
         class Animal {
             def speak() -> f64 { return 0.0; }
         }
@@ -575,6 +593,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_object_creation_too_many_args(self):
         mini_code = """
+        import core;
         class Test {
             def init(a : i32) {}
         }
@@ -615,6 +634,7 @@ class CompilerTests(CompilerTestCase):
 
     def test_method_def_missing_return(self):
         mini_code = """
+        import core;
         class Test {
             def method() -> i32 {
                 IO.print(5);
