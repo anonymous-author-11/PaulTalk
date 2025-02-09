@@ -140,7 +140,7 @@ class CompilerTests(CompilerTestCase):
             x.toString(); // Ambiguous dispatch
         }"""
         with self.assertRaisesRegex(Exception, "invocation of method toString with argument types .* is ambiguous."):
-            self.run_mini_code(mini_code, "", "method_call_ambiguous_dispatch")
+            self.run_mini_code(mini_code, "", "method_call_ambiguous_dispatch", expect_error="invocation of method toString with argument types .* is ambiguous.")
 
     def test_indexation_non_integer_index(self): # fixed
         mini_code = """
@@ -314,7 +314,7 @@ class CompilerTests(CompilerTestCase):
         }
         """
         with self.assertRaisesRegex(Exception, "Class method Animal.speak has an abstract overload, and cannot be called directly."):
-            self.run_mini_code(mini_code, "", "class_method_call_abstract_method")
+            self.run_mini_code(mini_code, "", "class_method_call_abstract_method", expect_error="Class method Animal.speak has an abstract overload, and cannot be called directly.")
 
     def test_var_decl_capitalized_name(self):
         mini_code = """
@@ -404,7 +404,7 @@ class CompilerTests(CompilerTestCase):
         }
         """
         with self.assertRaisesRegex(Exception, "there exists no overload of class method Test.method_does_not_exist compatible with argument types .*"):
-            self.run_mini_code(mini_code, "", "class_method_call_no_overload")
+            self.run_mini_code(mini_code, "", "class_method_call_no_overload", expect_error="there exists no overload of class method Test.method_does_not_exist compatible with argument types .*")
 
     def test_method_def_capitalized_name(self):
         mini_code = """
@@ -528,7 +528,7 @@ class CompilerTests(CompilerTestCase):
         }
         """
         with self.assertRaisesRegex(Exception, "Overriding method speak in class Dog should not have a return type."): # fixed
-            self.run_mini_code(mini_code, "", "override_invalid_return_type_present")
+            self.run_mini_code(mini_code, "", "override_invalid_return_type_present", expect_error="Overriding method speak in class Dog should not have a return type.")
 
     def test_function_literal_call_too_few_args(self):
         mini_code = """
@@ -537,7 +537,7 @@ class CompilerTests(CompilerTestCase):
             test_func.call(); // Too few args
         }"""
         with self.assertRaisesRegex(Exception, "number of arguments to new \\\\(0\\\\) not same as number of params to init \\\\(1\\\\)"):
-            self.run_mini_code(mini_code, "", "function_literal_call_too_few_args")
+            self.run_mini_code(mini_code, "", "function_literal_call_too_few_args", expect_error="number of arguments to new \\\\(0\\\\) not same as number of params to init \\\\(1\\\\)")
 
     def test_method_def_override_invalid_return_type_missing(self):
         mini_code = """
@@ -549,7 +549,7 @@ class CompilerTests(CompilerTestCase):
         }
         """
         with self.assertRaisesRegex(Exception, "Overriding method speak in class Dog should have a return type."): # fixed
-            self.run_mini_code(mini_code, "", "override_invalid_return_type_missing")
+            self.run_mini_code(mini_code, "", "override_invalid_return_type_missing", expect_error="Overriding method speak in class Dog should have a return type.")
 
     def test_method_def_override_invalid_return_type_subtype(self):
         mini_code = """
@@ -622,7 +622,7 @@ class CompilerTests(CompilerTestCase):
         }
         """
         with self.assertRaisesRegex(Exception, "Method declares return type Ptr\\[i32\\] yet has no return statement."):
-            self.run_mini_code(mini_code, "", "method_missing_return")
+            self.run_mini_code(mini_code, "", "method_missing_return", expect_error="Method declares return type Ptr\\[i32\\] yet has no return statement.")
 
     def test_range_literal_invalid_arg_type(self):
         mini_code = """
@@ -651,7 +651,7 @@ class CompilerTests(CompilerTestCase):
         }
         """
         with self.assertRaisesRegex(Exception, "field @x not properly initialized for class Test. You may need to override this constructor."): # fixed
-            self.run_mini_code(mini_code, "", "init_field_not_initialized")
+            self.run_mini_code(mini_code, "", "init_field_not_initialized", expect_error="field @x not properly initialized for class Test. You may need to override this constructor.")
 
     def test_for_loop_invalid_iterable_type(self):
         mini_code = """
@@ -684,7 +684,7 @@ class CompilerTests(CompilerTestCase):
         }
         """
         with self.assertRaisesRegex(Exception, "invocation of method .* with argument types .* is ambiguous."):
-            self.run_mini_code(mini_code, "", "method_call_ambiguous_overload")
+            self.run_mini_code(mini_code, "", "method_call_ambiguous_overload", expect_error="invocation of method .* with argument types .* is ambiguous.")
 
     def test_return_statement_outside_function(self):
         mini_code = """
