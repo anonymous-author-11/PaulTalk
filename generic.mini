@@ -16,7 +16,7 @@ class Pair[T, U]
 	}
 }
 
-pair1 = Pair[i32, f64].new(5, 7.0)
+pair1 = Pair[i32, f64].new(5, 7.0);
 t = pair1.second();
 IO.print(t);
 
