@@ -1,4 +1,5 @@
 builtin.module attributes {"sym_name" = "patterns"} {
+
   // LowerNext Pattern
   pdl.pattern : benefit(2) {
     %inputOperand = pdl.operand
@@ -14,17 +15,6 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %addresult = pdl.result 0 of %addi
       %store = pdl.operation "llvm.store"(%addresult, %inputOperand) -> ()
       pdl.replace %root with (%load)
-    }
-  }
-  
-  // TruncToCast Pattern
-  pdl.pattern : benefit(1) {
-    %input = pdl.operand
-    %result_type = pdl.type
-    %trunc_op = pdl.operation "arith.trunc"(%input) -> (%result_type)
-    pdl.rewrite %trunc_op {
-      %cast_op = pdl.operation "builtin.unrealized_conversion_cast"(%input) -> (%result_type)
-      pdl.replace %trunc_op with (%cast_op)
     }
   }
   // LowerLiteral Pattern
@@ -172,7 +162,6 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with (%alloca_result)
     }
   }
-
   // LowerInvariant Pattern
   pdl.pattern : benefit(1) {
     %ptr = pdl.operand
@@ -223,7 +212,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
     %value_attr = pdl.attribute
     %root = pdl.operation "mini.global_str"() {"sym_name" : %sym_name_attr, "str_type" : %str_type_attr, "value" : %value_attr} -> ()
     pdl.rewrite %root {
-      %global_string = pdl.operation "llvm.global"() {"sym_name" : %sym_name_attr, "global_type" : %str_type_attr, "linkage" : "linkonce_odr", "constant" : true, "value" : %value_attr} -> ()
+      %global_string = pdl.operation "llvm.mlir.global"() {"sym_name" : %sym_name_attr, "global_type" : %str_type_attr, "linkage" : "linkonce_odr", "constant" : true, "value" : %value_attr} -> ()
       pdl.replace %root with (%global_string)
     }
   }
@@ -233,7 +222,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
     %result_type = pdl.type
     %root = pdl.operation "mini.global_fptr"() {"global_name" : %global_name_attr} -> (%result_type)
     pdl.rewrite %root {
-      %global_fptr = pdl.operation "llvm.global"() {"sym_name" : %global_name_attr, "global_type" : !llvm.ptr, "linkage" : "internal", "thread_local_" : unit} -> ()
+      %global_fptr = pdl.operation "llvm.mlir.global"() {"sym_name" : %global_name_attr, "global_type" : !llvm.ptr, "linkage" : "internal", "thread_local_" : unit} -> ()
       pdl.replace %root with (%global_fptr)
     }
   }

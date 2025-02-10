@@ -46,7 +46,7 @@ def main():
     with open("in.mlir", "w") as outfile: outfile.write(module_str)
     after_codegen = time.time()
     print(f"Time to type check + codegen: {after_codegen - after_imports} seconds")
-    
+
     module = first_pass(module)
 
     stringio = StringIO()
@@ -57,29 +57,43 @@ def main():
         output_name_short + ".obj",
         output_name_short + ".exe",
     ]
-    with open("out.mlir", "w") as outfile: outfile.write(module_str)
+
+    after_firstpass = time.time()
+    print(f"Time to lower custom IR: {after_firstpass - after_codegen} seconds")
+
+    with open("patterns_reduced.mlir", "r") as patterns_file: patterns = patterns_file.read()
+
+    cmd = " ".join([
+        "mlir-opt","-allow-unregistered-dialect","--mlir-print-op-generic","--convert-pdl-to-pdl-interp","--test-pdl-bytecode-pass"
+    ])
+
+    for i in [0, 1]:
+        mlir_string = patterns + module_str
+        cmd_out = subprocess.run(cmd, capture_output=True, shell=True, text=True, input=mlir_string).stdout.replace("\\","\\\\")
+        stringio = StringIO()
+        Printer(stringio).print(cmd_out)
+        module_str = stringio.getvalue().encode().decode('unicode_escape')[274:-15]
 
     cmd = " ".join([
         "mlir-opt","-allow-unregistered-dialect","--mlir-print-op-generic","--canonicalize=\"region-simplify=aggressive\"",
         "--mem2reg", "--sroa","--lift-cf-to-scf",
         "--canonicalize=\"region-simplify=aggressive\"", "--loop-invariant-code-motion","--loop-invariant-subset-hoisting",
-        "--buffer-hoisting","--buffer-loop-hoisting","--control-flow-sink","--convert-func-to-llvm", "out.mlir"
+        "--buffer-hoisting","--buffer-loop-hoisting","--control-flow-sink","--convert-func-to-llvm"
     ])
-    after_firstpass = time.time()
-    print(f"Time to lower custom IR: {after_firstpass - after_codegen} seconds")
-    #parsed_module_str = subprocess.run(cmd, shell=True, text=True).stdout
-    parsed_module_str = subprocess.run(cmd, capture_output=True, shell=True, text=True).stdout.replace("\\","\\\\")
+    
+    #module_str = subprocess.run(cmd, shell=True, text=True).stdout
+    module_str = subprocess.run(cmd, capture_output=True, shell=True, text=True, input=module_str).stdout.replace("\\","\\\\")
     after_opt = time.time()
     print(f"Time to do mlir-opt: {after_opt - after_firstpass} seconds")
     
-    parsed_module_str = parsed_module_str.replace("mini.addressof","llvm.mlir.addressof").replace("mini.global","llvm.mlir.global")
+    module_str = module_str.replace("mini.addressof","llvm.mlir.addressof").replace("mini.global","llvm.mlir.global")
     stringio = StringIO()
-    Printer(stringio).print(parsed_module_str)
-    with open("out.mlir", "w") as outfile: outfile.write(stringio.getvalue().encode().decode('unicode_escape'))
+    Printer(stringio).print(module_str)
+    module_str = stringio.getvalue().encode().decode('unicode_escape')
     
     cmd1 = " ".join(["mlir-opt","--convert-scf-to-cf", "--convert-arith-to-llvm","--convert-func-to-llvm","--convert-index-to-llvm",
         "--finalize-memref-to-llvm","--convert-cf-to-llvm","--convert-ub-to-llvm","--reconcile-unrealized-casts",
-        "--emit-bytecode","out.mlir", "-o", "out_optimized.mlir"
+        "--emit-bytecode", "-o", "out_optimized.mlir"
     ])
     cmd2 = ["mlir-translate", "--mlir-to-llvmir", "out_optimized.mlir", "-o", out_file_names[0]]
     cmd3 = ["llvm-link","-S", out_file_names[0], *ll_files, "utils.ll","-o","combined.ll"]
@@ -89,7 +103,7 @@ def main():
     cmd7 = ["llc", "-filetype=obj", "out_optimized.ll", "-O=3", "-o", out_file_names[1], "-mtriple=x86_64-pc-windows-msvc"]
     cmd8 = ' '.join(["lld-link", f"/out:{out_file_names[2]}", out_file_names[1], "libcmt.lib"])
 
-    subprocess.run(cmd1, text=True, shell=True)
+    subprocess.run(cmd1, text=True, shell=True, input=module_str)
     after_convert = time.time()
     print(f"Time to lower to llvm dialect: {after_convert - after_opt} seconds")
     subprocess.run(cmd2)

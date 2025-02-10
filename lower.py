@@ -140,7 +140,7 @@ class ThirdPass(ModulePass):
                 LowerParameterization(),
                 LowerParameterizationsArray(),
                 LowerParameterizationIndexation(),
-                LowerWrap(),
+                #LowerWrap(),
                 LowerUnwrap(),
                 LowerCastAssign(),
                 LowerRefer(),
@@ -234,20 +234,6 @@ class LowerIntersection(TypeConversionPattern):
     def convert_type(self, typ: Intersection):
         return llvm.LLVMPointerType.opaque()
 
-class HoistAlloca(RewritePattern):
-    @op_type_rewrite_pattern
-    def match_and_rewrite(self, op: AllocateOp, rewriter: PatternRewriter):
-        if op.parent_block() == op.parent_region().first_block: return
-        parent_region = op.parent_region()
-        rewriter.insert_op_before(op.parent_block().detach_op(op), parent_region.first_block.first_op)
-
-class TruncToCast(RewritePattern):
-    @op_type_rewrite_pattern
-    def match_and_rewrite(self, op: arith.TruncIOp, rewriter: PatternRewriter):
-        if op.input.type != op.result.type: return
-        cast = builtin.UnrealizedConversionCastOp(operands=[op.input], result_types=[op.result.type])
-        rewriter.replace_matched_op(cast)
-
 class LowerPrelude(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: PreludeOp, rewriter: PatternRewriter):
@@ -334,7 +320,7 @@ class LowerCheckFlag(RewritePattern):
 
         if op.typ_name.data in builtin_types.keys():
             eq = arith.Cmpi(vptr_int.results[0], candidate.results[0], "ne" if op.neg else "eq")
-            wrap = WrapOp.create(operands=[eq.results[0]], result_types=[llvm.LLVMPointerType.opaque()])
+            wrap = WrapOp.make(eq.results[0])
             rewriter.inline_block_before_matched_op(Block([get_flag, typ_id, vptr, vptr_int, candidate_ptr, candidate, eq]))
             rewriter.replace_matched_op(wrap)
             return
@@ -371,7 +357,7 @@ class LowerCheckFlag(RewritePattern):
             cand_id, laundered, call
         ]))
 
-        wrap = WrapOp.create(operands=[call.results[0]], result_types=[llvm.LLVMPointerType.opaque()])
+        wrap = WrapOp.make(call.results[0])
         
         rewriter.replace_matched_op(wrap)
 
@@ -1631,7 +1617,7 @@ class LowerFPtrCall(RewritePattern):
             rewriter.replace_matched_op(call_indirect)
             return
         rewriter.insert_op_before_matched_op(call_indirect)
-        wrap = WrapOp.create(operands=[call_indirect.results[0]], result_types=[llvm.LLVMPointerType.opaque()])
+        wrap = WrapOp.make(call_indirect.results[0])
         rewriter.replace_matched_op(wrap)
         debug_code(op)
 
@@ -1722,7 +1708,7 @@ class LowerMethodCall(RewritePattern):
             rewriter.replace_matched_op(call_indirect)
             return
 
-        wrap = WrapOp.create(operands=[call_indirect.results[0]], result_types=[llvm.LLVMPointerType.opaque()])
+        wrap = WrapOp.make(call_indirect.results[0])
         rewriter.inline_block_before_matched_op(Block([*ops, behavior_call, laundered1, call_indirect]))
         rewriter.replace_matched_op(wrap)
 
@@ -1841,7 +1827,7 @@ class LowerCall(RewritePattern):
             rewriter.replace_matched_op(call_indirect)
             return
         rewriter.insert_op_before_matched_op(call_indirect)
-        wrap = WrapOp.create(operands=[call_indirect.results[0]], result_types=[llvm.LLVMPointerType.opaque()])
+        wrap = WrapOp.make(call_indirect.results[0])
         rewriter.replace_matched_op(wrap)
         debug_code(op)
 

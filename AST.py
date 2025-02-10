@@ -154,7 +154,7 @@ class BinaryOp(Expression):
         operands = [left_unwrap.results[0], right_unwrap.results[0]]
         attr_dict = {"op":StringAttr(self.operator)}
         binop = self.concrete_op(operands=operands, attributes=attr_dict, result_types=[left_type.base_typ()])
-        wrap = WrapOp.create(operands=[binop.results[0]], result_types=[left_type])
+        wrap = WrapOp.make(binop.results[0], left_type)
         scope.region.last_block.add_ops([left_unwrap, right_unwrap, binop, wrap])
         return wrap.results[0]
 
@@ -453,7 +453,7 @@ class FunctionLiteral(Expression):
         for i, param in enumerate(self.params):
             param_type = param.type(body_scope)
             arg = body_block.insert_arg(param_type.base_typ(), i)            
-            refer = WrapOp.create(operands=[body_block.args[i]], result_types=[param_type])
+            refer = WrapOp.make(body_block.args[i], param_type)
             body_block.add_ops([refer])
             body_scope.symbol_table[param.name] = refer.results[0]
             body_scope.type_table[param.name] = param_type
@@ -764,7 +764,7 @@ class CoroutineCall(MethodCall):
             scope.region.last_block.add_op(call_op)
             return
         call_op = CoroCallOp.create(operands=operands, result_types=[self_type.base_typ()])
-        wrap = WrapOp.create(operands=[call_op.results[0]], result_types=[self_type])
+        wrap = WrapOp.make(call_op.results[0], self_type)
         scope.region.last_block.add_ops([call_op, wrap])
         return wrap.results[0]
 
@@ -773,7 +773,7 @@ class CoroutineCall(MethodCall):
         self_type = self.exprtype(scope)
         operand = llvm.LoadOp(coro, llvm.LLVMPointerType.opaque())
         get_result = CoroGetResultOp.create(operands=[operand.results[0]], result_types=[self_type.base_typ()])
-        wrap = WrapOp.create(operands=[get_result.results[0]], result_types=[self_type])
+        wrap = WrapOp.make(get_result.results[0], self_type)
         scope.region.last_block.add_ops([operand, get_result, wrap])
         return wrap.results[0]
 
@@ -997,7 +997,7 @@ class IntrinsicCall(ClassMethodCall):
             args[i] = unwrap.results[0]
         call_name = StringAttr(".".join(self.method.split("_")))
         intrinsic = IntrinsicOp.create(operands=args, attributes={"call_name":call_name}, result_types=[op_type.base_typ()])
-        wrap = WrapOp.create(operands=[intrinsic.results[0]], result_types=[op_type])
+        wrap = WrapOp.make(intrinsic.results[0], op_type)
         scope.region.last_block.add_ops([intrinsic, wrap])
         return wrap.results[0]
 
@@ -1183,7 +1183,7 @@ class FunctionDef(Statement):
         for i, param in enumerate(self.params):
             param_type = param.type(body_scope)
             arg = body_block.insert_arg(param_type.base_typ(), i)            
-            refer = WrapOp.create(operands=[body_block.args[i]], result_types=[param_type])
+            refer = WrapOp.make(body_block.args[i], param_type)
             cast = CastOp.make(refer.results[0], param_type, param_type, type_id)
             body_block.add_ops([refer, cast])
             body_scope.symbol_table[param.name] = cast.results[0]
@@ -1258,7 +1258,7 @@ class MethodDef(Statement):
         self_typ = body_scope.simplify(FatPtr.generic(self.defining_class.name, self.defining_class.type_parameters))
         self_arg = body_block.insert_arg(self_typ.base_typ(), 0)
         unused = body_block.insert_arg(self_typ.base_typ(), 1)
-        refer = WrapOp.create(operands=[self_arg], result_types=[self_typ])
+        refer = WrapOp.make(self_arg, self_typ)
         cast = CastOp.make(refer.results[0], self_typ, self_typ, type_id)
         body_block.add_ops([refer, cast])
         body_scope.symbol_table["self"] = cast.results[0]
@@ -1272,7 +1272,7 @@ class MethodDef(Statement):
         for i, param in enumerate(self.params):
             param_type = body_scope.simplify(param.type(body_scope))
             arg = body_block.insert_arg(arg_types[i].base_typ(), i + 3)
-            wrap = WrapOp.create(operands=[arg], result_types=[arg_types[i]])
+            wrap = WrapOp.make(arg, arg_types[i])
             cast = CastOp.make(wrap.results[0], arg_types[i], param_type, type_id)
             body_block.add_ops([wrap, cast])
             body_scope.symbol_table[param.name] = cast.results[0]
@@ -1521,7 +1521,7 @@ class ClassMethodDef(MethodDef):
         for i, param in enumerate(self.params):
             param_type = body_scope.simplify(param.type(body_scope))
             arg = body_block.insert_arg(arg_types[i].base_typ(), i + 1)
-            wrap = WrapOp.create(operands=[arg], result_types=[arg_types[i]])
+            wrap = WrapOp.make(arg, arg_types[i])
             cast = CastOp.make(wrap.results[0], arg_types[i], param_type, type_id)
             body_block.add_ops([wrap, cast])
             body_scope.symbol_table[param.name] = cast.results[0]
@@ -2523,7 +2523,7 @@ class CoYield(Expression):
         cast = CastOp.make(self.arg.codegen(scope), self.arg.exprtype(scope), to_type, type_id)
         unwrap = UnwrapOp.create(operands=[cast.results[0]], result_types=[to_type.base_typ()])
         yield_op = CoroYieldOp.create(operands=[unwrap.results[0]], result_types=[self_type.base_typ()])
-        wrap = WrapOp.create(operands=[yield_op.results[0]], result_types=[self_type])
+        wrap = WrapOp.make(yield_op.results[0], self_type)
         scope.region.last_block.add_ops([cast, unwrap, yield_op, wrap])
         return wrap.results[0]
 

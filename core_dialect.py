@@ -1034,7 +1034,7 @@ class ReabstractOp(CastOp, IRDLOperation):
         ret_type = [to_typ.return_type.base_typ()] if has_return else []
         
         args = [f_block.insert_arg(t.base_typ(), i) for (i,t) in enumerate(to_typ.param_types.data)]
-        wraps = [WrapOp.create(operands=[arg], result_types=[to_typ.param_types.data[i]]) for (i, arg) in enumerate(args)]
+        wraps = [WrapOp.make(arg, to_typ.param_types.data[i]) for (i, arg) in enumerate(args)]
         casts = [CastOp.make(wraps[i].results[0], to_typ.param_types.data[i], from_typ.param_types.data[i], id_fn) for (i, arg) in enumerate(args)]
         unwraps = [UnwrapOp.create(operands=[casts[i].results[0]], result_types=[from_typ.param_types.data[i].base_typ()]) for (i, arg) in enumerate(args)]
         attr_dict = {"ret_type":from_typ.return_type.base_typ() if has_return else llvm.LLVMVoidType()}
@@ -1103,6 +1103,10 @@ class WrapOp(IRDLOperation):
     name = "mini.wrap"
     operand: Operand = operand_def()
     result: OpResult = result_def()
+
+    @classmethod
+    def make(cls, operand, result_type=llvm.LLVMPointerType.opaque()):
+        return WrapOp.create(operands=[operand], attributes={"typ":operand.type}, result_types=[result_type])
 
 @irdl_op_definition
 class UnwrapOp(IRDLOperation):
