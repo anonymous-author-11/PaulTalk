@@ -70,9 +70,10 @@ def main():
     module_str = module_str.replace("mini.addressof","placeholder.addressof").replace("mini.global","placeholder.global")
     while "mini." in module_str:
         mlir_string = patterns + module_str
-        cmd_out = subprocess.run(cmd, capture_output=True, shell=True, text=True, input=mlir_string).stdout.replace("\\","\\\\")
+        cmd_out = subprocess.run(cmd, capture_output=True, shell=True, text=True, input=mlir_string)
+        if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
         stringio = StringIO()
-        Printer(stringio).print(cmd_out)
+        Printer(stringio).print(cmd_out.stdout.replace("\\","\\\\"))
         module_str = stringio.getvalue().encode().decode('unicode_escape')[274:-15]
 
     cmd = " ".join([
