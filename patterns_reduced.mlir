@@ -160,7 +160,8 @@ builtin.module attributes {"sym_name" = "patterns"} {
     %tramp = pdl.operand : %tramp_type // Corrected operand type syntax
     %root = pdl.operation "mini.anoint_trampoline"(%tramp : !pdl.value)
     pdl.rewrite %root { // Removed ()
-      %call = pdl.operation "llvm.call"(%tramp : !pdl.value) {"callee" = "anoint_trampoline"}
+      %call = pdl.operation "llvm.call"() {"callee" = "anoint_trampoline"} // Removed ()
+      %call = pdl.operation "llvm.call"(%tramp : !pdl.value) {"callee" = "anoint_trampoline"} // Removed ()
       pdl.replace %root with 
     }
   }
@@ -282,7 +283,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %gep = pdl.operation "llvm.gep"(%coro, %c0_attr, %c4_attr : !pdl.value, !pdl.value) {"pointee_type" : !pdl.attribute = %coro_struct_type} -> (!llvm.ptr : !pdl.type)
       %gep_result = pdl.result 0 of %gep
       %store = pdl.operation "llvm.store"(%value, %gep_result : !pdl.value, !pdl.value) // Removed ()
-      pdl.replace %root with 
+      pdl.replace %root with %store
     }
   }
   // LowerInvariant Pattern
