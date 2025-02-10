@@ -1,4 +1,13 @@
+// notes on writing valid PDL
+//
+// when an operation has no arguments, you omit the parentheses. so "mini.alloc" instead of "mini.alloc"()
+// when an operation has no return value, you omit the -> (). so just "llvm.store"(%operand, %alloca_result : !pdl.value, !pdl.value).
+// when an operation has multiple arguments, you list all the arguments and then all the types
+// like this: pdl.operation "llvm.store"(%operand, %alloca_result : !pdl.value, !pdl.value)
+// this is unlike normal MLIR where you'd write "llvm.store"(%operand : !pdl.value, %alloca_result : !pdl.value)
+
 builtin.module attributes {"sym_name" = "patterns"} {
+
   // LowerWrap Pattern
   pdl.pattern : benefit(1) {
   	%operand_type = pdl.type
