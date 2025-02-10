@@ -20,7 +20,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
     %result_type = pdl.type : !llvm.ptr
     %root = pdl.operation "mini.wrap"(%operand : !pdl.value) {"typ" : !pdl.attribute = %operand_type_attr} -> (%result_type : !pdl.type)
     pdl.rewrite %root {
-      %alloca = pdl.operation "mini.alloc" {"typ" : !pdl.attribute = %operand_type_attr} -> (%result_type : !pdl.type)
+      %alloca = pdl.operation "mini.alloc"() {"typ" : !pdl.attribute = %operand_type_attr} -> (%result_type : !pdl.type)
       %alloca_result = pdl.result 0 of %alloca
       %store = pdl.operation "llvm.store"(%operand, %alloca_result : !pdl.value, !pdl.value)
       pdl.replace %root with (%alloca_result : !pdl.value)
@@ -60,7 +60,8 @@ builtin.module attributes {"sym_name" = "patterns"} {
     %root = pdl.operation "mini.globalstr"() {"sym_name" : !pdl.attribute = %sym_name_attr, "str_type" : !pdl.attribute = %str_type_type, "value" : !pdl.attribute = %value_attr}
     pdl.rewrite %root {
       %global_string = pdl.operation "mini.global"() {"sym_name" : !pdl.attribute = %sym_name_attr, "global_type" : !pdl.attribute = %str_type_type, "value" : !pdl.attribute = %value_attr, "linkage" : !pdl.attribute = "linkonce_odr", "constant" : !pdl.attribute = true}
-      pdl.replace %root with
+      %global_string_result = pdl.result 0 of %global_string
+      pdl.replace %root with (%global_string_result : !pdl.value)
     }
   }
   // LowerPrintfDecl Pattern
@@ -71,7 +72,8 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %i32_type = pdl.type : i32
       %printf_type_attr = pdl.attribute = !llvm.func<i32 (!llvm.ptr)>
       %printf_decl = pdl.operation "func.func"() {"sym_name" = "printf", "function_type" : !pdl.attribute = %printf_type_attr, "linkage" : !pdl.attribute = "external"}
-      pdl.replace %root with
+      %printf_decl_result = pdl.result 0 of %printf_decl
+      pdl.replace %root with (%printf_decl_result : !pdl.value)
     }
   }
    // LowerReturn Pattern
@@ -79,7 +81,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
     %root = pdl.operation "mini.return"()
     pdl.rewrite %root {
       %ret_op = pdl.operation "func.return"()
-      pdl.replace %root with
+      pdl.replace %root with 
     }
   }
   // LowerIntrinsic Pattern
@@ -113,7 +115,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
     %root = pdl.operation "mini.setup_exception"()
     pdl.rewrite %root {
       %call = pdl.operation "llvm.call"() {"callee" = "setup_landing_pad"}
-      pdl.replace %root with
+      pdl.replace %root with 
     }
   }
   // LowerExternalTypeDef Pattern
@@ -124,7 +126,8 @@ builtin.module attributes {"sym_name" = "patterns"} {
     %root = pdl.operation "mini.external_typedef"() {"class_name" : !pdl.attribute = %class_name_attr, "vtbl_size" : !pdl.attribute = %vtbl_size_attr}
     pdl.rewrite %root {
       %class_glob = pdl.operation "mini.global"() {"sym_name" : !pdl.attribute = %class_name_attr, "global_type" : !pdl.attribute = %vtbl_type_type, "linkage" : !pdl.attribute = "external", "constant" : !pdl.attribute = true}
-      pdl.replace %root with
+      %class_glob_result = pdl.result 0 of %class_glob
+      pdl.replace %root with (%class_glob_result : !pdl.value)
     }
   }
   // LowerSubtype Pattern
@@ -156,7 +159,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
     %root = pdl.operation "mini.anoint_trampoline"(%tramp : !pdl.value)
     pdl.rewrite %root {
       %call = pdl.operation "llvm.call"(%tramp : !pdl.value) {"callee" = "anoint_trampoline"}
-      pdl.replace %root with
+      pdl.replace %root with 
     }
   }
   // LowerGlobalFptr Pattern
@@ -168,7 +171,8 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %global_fptr = pdl.operation "mini.global"() {"sym_name" : !pdl.attribute = %global_name_attr, "global_type" : !pdl.attribute = %result_type, "linkage" : !pdl.attribute = "internal"}
       %unit_attr = pdl.attribute = unit
       %set_thread_local = pdl.attribute_set { "thread_local_" = %unit_attr} in %global_fptr
-      pdl.replace %root with
+      %global_fptr_result = pdl.result 0 of %global_fptr
+      pdl.replace %root with (%global_fptr_result : !pdl.value)
     }
   }
   // LowerTupleIndexation Pattern
@@ -276,7 +280,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %gep = pdl.operation "llvm.gep"(%coro, %c0_attr, %c4_attr : !pdl.value, !pdl.value) {"pointee_type" : !pdl.attribute = %coro_struct_type} -> (!llvm.ptr : !pdl.type)
       %gep_result = pdl.result 0 of %gep
       %store = pdl.operation "llvm.store"(%value, %gep_result : !pdl.value, !pdl.value)
-      pdl.replace %root with
+      pdl.replace %root with 
     }
   }
   // LowerInvariant Pattern
@@ -320,7 +324,8 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %opaque_ptr_type = pdl.type : !llvm.ptr
       %func_type_attr = pdl.attribute = !llvm.func<ptr  (i64)>
       %malloc_decl = pdl.operation "func.func"() {"sym_name" = "malloc", "function_type" : !pdl.attribute = %func_type_attr, "linkage" : !pdl.attribute = "external"}
-      pdl.replace %root with
+      %malloc_decl_result = pdl.result 0 of %malloc_decl
+      pdl.replace %root with (%malloc_decl_result : !pdl.value)
     }
   }
     // LowerUtilsAPI Pattern - Setup Landing Pad
@@ -330,7 +335,8 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %opaque_ptr_type = pdl.type : !llvm.ptr
       %func_type_attr = pdl.attribute = !llvm.func<void ()>
       %setup_landing_pad_decl = pdl.operation "func.func"() {"sym_name" = "setup_landing_pad", "function_type" : !pdl.attribute = %func_type_attr, "linkage" : !pdl.attribute = "external"}
-      pdl.replace %root with
+      %setup_landing_pad_decl_result = pdl.result 0 of %setup_landing_pad_decl
+      pdl.replace %root with (%setup_landing_pad_decl_result : !pdl.value)
     }
   }
       // LowerUtilsAPI Pattern - Anoint Trampoline
@@ -340,7 +346,8 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %opaque_ptr_type = pdl.type : !llvm.ptr
       %func_type_attr = pdl.attribute = !llvm.func<void (ptr)>
       %anoint_trampoline_decl = pdl.operation "func.func"() {"sym_name" = "anoint_trampoline", "function_type" : !pdl.attribute = %func_type_attr, "linkage" : !pdl.attribute = "external"}
-      pdl.replace %root with
+      %anoint_trampoline_decl_result = pdl.result 0 of %anoint_trampoline_decl
+      pdl.replace %root with (%anoint_trampoline_decl_result : !pdl.value)
     }
   }
       // LowerUtilsAPI Pattern - Coroutine Create
@@ -350,7 +357,8 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %opaque_ptr_type = pdl.type : !llvm.ptr
       %func_type_attr = pdl.attribute = !llvm.func<ptr  (ptr, ptr)>
       %coroutine_create_decl = pdl.operation "func.func"() {"sym_name" = "coroutine_create", "function_type" : !pdl.attribute = %func_type_attr, "linkage" : !pdl.attribute = "external"}
-      pdl.replace %root with
+      %coroutine_create_decl_result = pdl.result 0 of %coroutine_create_decl
+      pdl.replace %root with (%coroutine_create_decl_result : !pdl.value)
     }
   }
         // LowerUtilsAPI Pattern - Arg Passer
@@ -360,7 +368,8 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %opaque_ptr_type = pdl.type : !llvm.ptr
       %func_type_attr = pdl.attribute = !llvm.func<void (ptr)>
       %arg_passer_decl = pdl.operation "func.func"() {"sym_name" = "arg_passer", "function_type" : !pdl.attribute = %func_type_attr, "linkage" : !pdl.attribute = "external"}
-      pdl.replace %root with
+      %arg_passer_decl_result = pdl.result 0 of %arg_passer_decl
+      pdl.replace %root with (%arg_passer_decl_result : !pdl.value)
     }
   }
           // LowerUtilsAPI Pattern - Arg Buffer Filler
@@ -370,7 +379,8 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %opaque_ptr_type = pdl.type : !llvm.ptr
       %func_type_attr = pdl.attribute = !llvm.func<void (ptr)>
       %arg_buffer_filler_decl = pdl.operation "func.func"() {"sym_name" = "arg_buffer_filler", "function_type" : !pdl.attribute = %func_type_attr, "linkage" : !pdl.attribute = "external"}
-      pdl.replace %root with
+      %arg_buffer_filler_decl_result = pdl.result 0 of %arg_buffer_filler_decl
+      pdl.replace %root with (%arg_buffer_filler_decl_result : !pdl.value)
     }
   }
             // LowerUtilsAPI Pattern - Coroutine Yield
@@ -380,7 +390,8 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %opaque_ptr_type = pdl.type : !llvm.ptr
       %func_type_attr = pdl.attribute = !llvm.func<void (ptr)>
       %coroutine_yield_decl = pdl.operation "func.func"() {"sym_name" = "coroutine_yield", "function_type" : !pdl.attribute = %func_type_attr, "linkage" : !pdl.attribute = "external"}
-      pdl.replace %root with
+      %coroutine_yield_decl_result = pdl.result 0 of %coroutine_yield_decl
+      pdl.replace %root with (%coroutine_yield_decl_result : !pdl.value)
     }
   }
               // LowerUtilsAPI Pattern - Get Current Coroutine
@@ -390,7 +401,8 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %opaque_ptr_type = pdl.type : !llvm.ptr
       %func_type_attr = pdl.attribute = !llvm.func<ptr  ()>
       %get_current_coroutine_decl = pdl.operation "func.func"() {"sym_name" = "get_current_coroutine", "function_type" : !pdl.attribute = %func_type_attr, "linkage" : !pdl.attribute = "external"}
-      pdl.replace %root with
+      %get_current_coroutine_decl_result = pdl.result 0 of %get_current_coroutine_decl
+      pdl.replace %root with (%get_current_coroutine_decl_result : !pdl.value)
     }
   }
                 // LowerUtilsAPI Pattern - Set Offset
@@ -400,7 +412,8 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %opaque_ptr_type = pdl.type : !llvm.ptr
       %func_type_attr = pdl.attribute = !llvm.func<void (ptr, ptr)>
       %set_offset_decl = pdl.operation "func.func"() {"sym_name" = "set_offset", "function_type" : !pdl.attribute = %func_type_attr, "linkage" : !pdl.attribute = "external"}
-      pdl.replace %root with
+      %set_offset_decl_result = pdl.result 0 of %set_offset_decl
+      pdl.replace %root with (%set_offset_decl_result : !pdl.value)
     }
   }
                   // LowerUtilsAPI Pattern - Least Upper Bound
@@ -412,7 +425,8 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %i64_type = pdl.type : i64
       %func_type_attr = pdl.attribute = !llvm.func<i32 (ptr, ptr, ptr, i32, i64, i64, ptr)>
       %least_upper_bound_decl = pdl.operation "func.func"() {"sym_name" = "least_upper_bound", "function_type" : !pdl.attribute = %func_type_attr, "linkage" : !pdl.attribute = "external"}
-      pdl.replace %root with
+      %least_upper_bound_decl_result = pdl.result 0 of %least_upper_bound_decl
+      pdl.replace %root with (%least_upper_bound_decl_result : !pdl.value)
     }
   }
                     // LowerUtilsAPI Pattern - Subtype Test
@@ -424,7 +438,8 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %i64_type = pdl.type : i64
       %func_type_attr = pdl.attribute = !llvm.func<i1 (i64, i64, i64, i64, ptr)>
       %subtype_test_decl = pdl.operation "func.func"() {"sym_name" = "subtype_test", "function_type" : !pdl.attribute = %func_type_attr, "linkage" : !pdl.attribute = "external"}
-      pdl.replace %root with
+      %subtype_test_decl_result = pdl.result 0 of %subtype_test_decl
+      pdl.replace %root with (%subtype_test_decl_result : !pdl.value)
     }
   }
                       // LowerUtilsAPI Pattern - Subtype Test Wrapper
@@ -436,7 +451,8 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %i64_type = pdl.type : i64
       %func_type_attr = pdl.attribute = !llvm.func<i1 (ptr, i64, i64, i64, i64, ptr)>
       %subtype_test_wrapper_decl = pdl.operation "func.func"() {"sym_name" = "subtype_test_wrapper", "function_type" : !pdl.attribute = %func_type_attr, "linkage" : !pdl.attribute = "external"}
-      pdl.replace %root with
+      %subtype_test_wrapper_decl_result = pdl.result 0 of %subtype_test_wrapper_decl
+      pdl.replace %root with (%subtype_test_wrapper_decl_result : !pdl.value)
     }
   }
                         // LowerUtilsAPI Pattern - Coroutine Call
@@ -446,7 +462,8 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %opaque_ptr_type = pdl.type : !llvm.ptr
       %func_type_attr = pdl.attribute = !llvm.func<void (ptr)>
       %coroutine_call_decl = pdl.operation "func.func"() {"sym_name" = "coroutine_call", "function_type" : !pdl.attribute = %func_type_attr, "linkage" : !pdl.attribute = "external"}
-      pdl.replace %root with
+      %coroutine_call_decl_result = pdl.result 0 of %coroutine_call_decl
+      pdl.replace %root with (%coroutine_call_decl_result : !pdl.value)
     }
   }
   // LowerNext Pattern
@@ -478,7 +495,8 @@ builtin.module attributes {"sym_name" = "patterns"} {
     %root = pdl.operation "mini.buffer_filler"() {"func_name" : !pdl.attribute = %func_name_attr, "arg_types" : !pdl.attribute = %arg_types_array_attr, "yield_type" : !pdl.attribute = %yield_type_attr}
     pdl.rewrite %root {
       %func_op = pdl.operation "func.func"() {"sym_name" = %func_name_attr, "function_type" : !pdl.attribute = %arg_types_array_attr}
-      pdl.replace %root with (%func_op)
+      %func_op_result = pdl.result 0 of %func_op
+      pdl.replace %root with (%func_op_result : !pdl.value)
     }
   }
   // LowerBufferIndexation Pattern
