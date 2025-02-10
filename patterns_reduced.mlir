@@ -5,6 +5,10 @@
 // when an operation has multiple arguments, you list all the arguments and then all the types
 // like this: pdl.operation "llvm.store"(%operand, %alloca_result : !pdl.value, !pdl.value)
 // this is unlike normal MLIR where you'd write "llvm.store"(%operand : !pdl.value, %alloca_result : !pdl.value)
+// 
+// if you EVER find yourself writng "-> ()" then YOU ARE MAKING AN ERROR
+// if you EVER find yourself writing "()" in any capacity whatsoever, YOU ARE MAKING AN ERROR
+// people will die if you make these errors!
 
 builtin.module attributes {"sym_name" = "patterns"} {
 
