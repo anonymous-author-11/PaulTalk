@@ -82,7 +82,6 @@ builtin.module attributes {"sym_name" = "patterns"} {
     pdl.rewrite %root { // Removed ()
       %ret_op = pdl.operation "func.return" // Removed ()
       pdl.replace %root with 
-      pdl.replace %root with 
     }
   }
   // LowerIntrinsic Pattern
@@ -171,7 +170,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
     %result_type = pdl.type : !llvm.ptr
     %root = pdl.operation "mini.global_fptr" {"global_name" : !pdl.attribute = %global_name_attr} // Removed ()
     pdl.rewrite %root {
-      %global_fptr = pdl.operation "mini.global" {"sym_name" : !pdl.attribute = %global_name_attr, "global_type" : !pdl.attribute = %result_type, "linkage" : !pdl.attribute = "internal"} // Removed ()
+      %global_fptr = pdl.operation "mini.global"() {"sym_name" : !pdl.attribute = %global_name_attr, "global_type" : !pdl.attribute = %result_type, "linkage" : !pdl.attribute = "internal"} // Removed ()
       %unit_attr = pdl.attribute = unit
       %set_thread_local = pdl.attribute_set { "thread_local_" = %unit_attr} in %global_fptr
       %global_fptr_result = pdl.result 0 of %global_fptr
