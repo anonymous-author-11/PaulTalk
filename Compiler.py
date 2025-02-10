@@ -61,13 +61,15 @@ def main():
     after_firstpass = time.time()
     print(f"Time to lower custom IR: {after_firstpass - after_codegen} seconds")
 
-    with open("patterns_reduced.mlir", "r") as patterns_file: patterns = patterns_file.read()
+    with open("patterns.mlir", "r") as patterns_file: patterns = patterns_file.read()
 
     cmd = " ".join([
         "mlir-opt","-allow-unregistered-dialect","--mlir-print-op-generic","--convert-pdl-to-pdl-interp","--test-pdl-bytecode-pass"
     ])
 
-    module_str = module_str.replace("mini.addressof","placeholder.addressof").replace("mini.global","placeholder.global")
+    with open("out.mlir", "w") as outfile: outfile.write(module_str)
+
+    module_str = module_str.replace("mini.addressof","placeholder.addressof").replace("\"mini.global\"","\"placeholder.global\"")
     while "mini." in module_str:
         mlir_string = patterns + module_str
         cmd_out = subprocess.run(cmd, capture_output=True, shell=True, text=True, input=mlir_string)

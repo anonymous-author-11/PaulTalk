@@ -131,7 +131,6 @@ class ThirdPass(ModulePass):
                 LowerArgPasser(),
                 LowerBufferFiller(),
                 LowerAssign(),
-                LowerLiteral(),
                 LowerGetFlag(),
                 LowerTypID(),
                 LowerSetFlag(),
@@ -140,7 +139,6 @@ class ThirdPass(ModulePass):
                 LowerParameterization(),
                 LowerParameterizationsArray(),
                 LowerParameterizationIndexation(),
-                #LowerWrap(),
                 LowerUnwrap(),
                 LowerCastAssign(),
                 LowerRefer(),
@@ -171,10 +169,12 @@ class ThirdPass(ModulePass):
                 LowerAnointTrampoline(),
                 LowerPrintF(),
                 LowerSetupException(),
-                LowerAddrOf(),
                 LowerSubtype(),
                 LowerSetOffset(),
+                LowerLiteral(),
                 LowerMemCpy()
+                #LowerAddrOf(),
+                #LowerWrap(),
                 #LowerAllocate()
             ]),
             apply_recursively=True
