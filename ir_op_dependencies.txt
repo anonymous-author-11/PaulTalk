@@ -80,3 +80,126 @@ Pass 2: Core Mini Ops (Type System and Memory)
   - mini.castassign -> mini.assign, mini.cast
   - mini.prelude -> mini.printfdecl, mini.globalstr, mini.utils_api
   - mini.cast -> mini.box, mini.unbox, mini.widen_int, mini.int_to_float, mini.unionize, mini.narrow, mini.to_fat_ptr, mini.reabstract, mini.tuple_cast, builtin.unrealized_conversion_cast, mini.reunionize
+Pass 1: Basic LLVM and Builtin Ops
+  - llvm.global
+  - func.func
+  - llvm.gep
+  - llvm.ptrtoint
+  - llvm.store
+  - llvm.constant
+  - llvm.alloca
+  - arith.addi
+  - arith.subi
+  - arith.muli
+  - arith.divsi
+  - arith.remsi
+  - arith.shli
+  - arith.shrsi
+  - arith.andi
+  - arith.ori
+  - arith.xori
+  - arith.addf
+  - arith.subf
+  - arith.mulf
+  - arith.divf
+  - arith.cmpi
+  - arith.cmpf
+  - arith.extsi
+  - arith.sitofp
+  - cf.branch
+  - cf.conditional_branch
+  - builtin.unrealized_conversion_cast
+  - llvm.address_of
+  - llvm.call
+  - llvm.call_intrinsic
+  - mini.alloc
+  - mini.addr_of
+  - mini.assign
+  - mini.globalstr
+  - mini.printfdecl
+  - mini.utils_api
+  - mini.global_fptr
+  - mini.literal
+  - mini.global
+  - mini.type_integers
+  - mini.type_ptrs
+  - mini.vtable
+  - mini.hash_tbl
+  - mini.offset_tbl
+  - mini.prelude
+  - mini.main
+  - mini.func
+  - mini.fptr_call
+  - mini.return
+  - mini.wrap
+  - mini.unwrap
+  - mini.invariant
+  - mini.intrinsic
+  - mini.create_tuple
+  - mini.create_buffer
+  - mini.parameterizations_array
+
+Pass 2: Core Mini Ops (Type System and Memory)
+  - mini.typid -> Pass 1
+  - mini.getflag -> Pass 1
+  - mini.setflag -> mini.getflag, mini.typid, mini.assign
+  - mini.checkflag -> mini.getflag, mini.typid, mini.unwrap, Pass 1, func.call_indirect, builtin.unrealized_conversion_cast
+  - mini.allocate -> Pass 1
+  - mini.buffer_indexation -> Pass 1
+  - mini.tuple_indexation -> Pass 1
+  - mini.create_buffer -> Pass 1, mini.unwrap, mini.call
+  - mini.create_tuple -> Pass 1
+  - mini.type_size -> Pass 1
+  - mini.malloc -> mini.type_size, Pass 1
+  - mini.place_into_buffer -> Pass 1, arith.cmpi, arith.select, mini.memcpy
+  - mini.from_buffer -> Pass 1, arith.cmpi, mini.malloc, arith.select, mini.memcpy, mini.alloc
+  - mini.parameterization -> mini.malloc, mini.addr_of, Pass 1, mini.invariant
+  - mini.new -> mini.malloc, mini.addr_of, Pass 1, mini.invariant
+  - mini.arithmetic -> Pass 1
+  - mini.comparison -> Pass 1
+  - mini.logical -> Pass 1
+  - mini.next -> Pass 1
+  - mini.printf -> Pass 1
+  - mini.main -> Pass 1, mini.setup_exception
+  - mini.assign -> mini.memcpy, Pass 1
+  - mini.addressof -> Pass 1
+  - mini.addr_of -> Pass 1
+  - mini.while -> Pass 1
+  - mini.if -> Pass 1
+  - mini.break -> Pass 1
+  - mini.continue -> Pass 1
+  - mini.func -> Pass 1, mini.unwrap
+  - mini.fptr_call -> Pass 1, mini.wrap
+  - mini.refer -> Pass 1, mini.invariant
+  - mini.parameterization_indexation -> Pass 1, builtin.unrealized_conversion_cast
+  - mini.method_call, mini.class_method_call -> Pass 1, mini.invariant, mini.allocate, builtin.unrealized_conversion_cast, func.call_indirect, mini.wrap
+  - mini.getter_def -> Pass 1, mini.parameterization
+  - mini.arg_passer -> Pass 1, builtin.unrealized_conversion_cast, func.call_indirect
+  - mini.buffer_filler -> Pass 1
+  - mini.field_access -> Pass 1, mini.invariant, builtin.unrealized_conversion_cast, func.call_indirect
+  - mini.call -> Pass 1, builtin.unrealized_conversion_cast, mini.wrap
+  - mini.external_typedef -> Pass 1
+  - mini.typedef -> Pass 1, mini.type_integers, mini.type_ptrs, mini.vtable, mini.hash_tbl, mini.offset_tbl
+  - mini.coro_create -> Pass 1, mini.addr_of, builtin.unrealized_conversion_cast, func.call_indirect
+  - mini.coro_get_result -> Pass 1
+  - mini.coro_set_result -> Pass 1
+  - mini.coro_call -> Pass 1, mini.coro_set_result, mini.coro_get_result
+  - mini.setup_exception -> Pass 1
+  - mini.subtype -> Pass 1
+  - mini.set_offset -> Pass 1
+  - mini.anoint_trampoline -> Pass 1
+  - mini.coro_yield -> Pass 1, mini.coro_set_result, mini.coro_get_result
+  - mini.memcpy -> Pass 1, mini.memcpy
+  - mini.widen_int -> Pass 1, mini.unwrap, arith.extsi
+  - mini.int_to_float -> Pass 1, mini.unwrap, arith.sitofp
+  - mini.narrow -> Pass 1
+  - mini.unionize -> Pass 1, mini.setflag, mini.cast
+  - mini.reunionize -> Pass 1
+  - mini.reabstract -> mini.malloc, mini.anoint_trampoline, mini.addr_of, Pass 1, mini.invariant, func.func, mini.wrap, mini.unwrap, mini.cast, func.fptr_call
+  - mini.tuple_cast -> Pass 1, builtin.unrealized_conversion_cast, mini.cast
+  - mini.castassign -> mini.assign, mini.cast
+  - mini.cast -> mini.box, mini.unbox, mini.widen_int, mini.int_to_float, mini.unionize, mini.narrow, mini.to_fat_ptr, mini.reabstract, mini.tuple_cast, builtin.unrealized_conversion_cast, mini.reunionize, Pass 1, mini.setflag, mini.memcpy
+
+  - mini.box -> Pass 2
+  - mini.unbox -> Pass 2
+  - mini.to_fat_ptr -> Pass 2
