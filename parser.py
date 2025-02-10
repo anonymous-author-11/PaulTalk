@@ -8,16 +8,15 @@ from xdsl.dialects.builtin import IntegerType, IntegerAttr, StringAttr, NoneAttr
 from utils import *
 
 def parse(file_name) -> AST:
-    try: # Add try-except block
+    try:
         with open(file_name) as source: import_text = source.read()
         parser = Lark.open("grammar.lark", parser='lalr', propagate_positions=True)
         tree = parser.parse(import_text)
         tree = CSTTransformer(file_name).transform(tree)
         return tree
-    except UnexpectedToken as e: # Catch UnexpectedToken
-        error_message = format_parser_error(e, file_name) # Format the error
-        # Optionally, raise a custom exception here to stop compilation
-        raise Exception(f"Parsing Error:\n\n{error_message}") from None # Or a more specific exception
+    except UnexpectedToken as e:
+        error_message = format_parser_error(e, file_name)
+        raise Exception(f"Parsing Error:\n\n{error_message}") from None
 
 def format_parser_error(exc: UnexpectedToken, file_name: str) -> str:
     """Formats a Lark UnexpectedToken exception into a user-friendly error message."""
@@ -29,7 +28,6 @@ def format_parser_error(exc: UnexpectedToken, file_name: str) -> str:
     error_message = f"File '{file_name}', Line {line}, Column {column}:\n"
     error_message += f"  Grammar Error: Unexpected token '{unexpected_token}'.\n"
     error_message += f"  Expected one of: {expected_tokens}\n"
-    # You could add more context here if needed, like showing the line of code
 
     return error_message
 

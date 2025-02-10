@@ -175,21 +175,10 @@ class ThirdPass(ModulePass):
                 LowerSubtype(),
                 LowerSetOffset(),
                 LowerMemCpy(),
-                HoistAlloca()
+                LowerAllocate()
             ]),
             apply_recursively=True
         )
-        walker.rewrite_module(op)
-
-class FourthPass(ModulePass):
-    name = "fourth-pass"
-
-    def __init__(self):
-        self.context = MLContext()
-        self.context.load_dialect(llvm.LLVM)
-
-    def apply(self, ctx: MLContext, op: ModuleOp) -> None:
-        walker = PatternRewriteWalker(GreedyRewritePatternApplier([LowerAllocate()]), apply_recursively=True)
         walker.rewrite_module(op)
 
 def debug_code(op):
@@ -1861,5 +1850,4 @@ def first_pass(module: ModuleOp) -> ModuleOp:
     FirstPass().apply(ctx, module)
     SecondPass().apply(ctx, module)
     ThirdPass().apply(ctx, module)
-    FourthPass().apply(ctx, module)
     return module
