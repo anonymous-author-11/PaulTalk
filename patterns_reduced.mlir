@@ -72,8 +72,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %i32_type = pdl.type : i32
       %printf_type_attr = pdl.attribute = !llvm.func<i32 (!llvm.ptr)>
       %printf_decl = pdl.operation "func.func" {"sym_name" = "printf", "function_type" : !pdl.attribute = %printf_type_attr, "linkage" : !pdl.attribute = "external"}
-      %printf_decl_result = pdl.result 0 of %printf_decl
-      pdl.replace %root with (%printf_decl_result : !pdl.value)
+      pdl.replace %root with %printf_decl
     }
   }
    // LowerReturn Pattern
@@ -158,7 +157,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
     %root = pdl.operation "mini.anoint_trampoline"(%tramp : !pdl.value)
     pdl.rewrite %root {
       %call = pdl.operation "llvm.call"(%tramp : !pdl.value) {"callee" = "anoint_trampoline"}
-      pdl.replace %root with (%call : !pdl.operation)
+      pdl.replace %root with %call
     }
   }
   // LowerGlobalFptr Pattern
@@ -409,31 +408,6 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %gep1 = pdl.operation "llvm.gep"(%buf_ptr_result, %idx_bytes_result : !pdl.value, !pdl.value) {"pointee_type" : !pdl.attribute = i8} -> (%result_type : !pdl.type)
       %gep1_result = pdl.result 0 of %gep1
       pdl.replace %root with (%gep1_result : !pdl.value)
-    }
-  }
-  // LowerParameterizationIndexation Pattern
-  pdl.pattern : benefit(1) {
-    %parameterization_type = pdl.type : !llvm.ptr
-    %parameterization = pdl.operand : %parameterization_type
-    %indices_array_attr = pdl.attribute
-    %result_type = pdl.type : !llvm.ptr
-    %root = pdl.operation "mini.parameterization_indexation"(%parameterization : !pdl.value) {"indices" : !pdl.attribute = %indices_array_attr} -> (%result_type : !pdl.type)
-    pdl.rewrite %root {
-      %cast = pdl.operation "builtin.unrealized_conversion_cast"(%parameterization : !pdl.value) -> (%result_type : !pdl.type)
-      %cast_result = pdl.result 0 of %cast
-      pdl.replace %root with (%cast_result : !pdl.value)
-    }
-  }
-  // LowerUnwrap Pattern
-  pdl.pattern : benefit(1) {
-    %operand_type = pdl.type : !llvm.ptr
-    %operand = pdl.operand : %operand_type
-    %result_type = pdl.type
-    %root = pdl.operation "mini.unwrap"(%operand : !pdl.value) -> (%result_type : !pdl.type)
-    pdl.rewrite %root {
-      %unwrap_recursive = pdl.operation "builtin.unrealized_conversion_cast"(%operand : !pdl.value) -> (%result_type : !pdl.type)
-      %unwrap_recursive_result = pdl.result 0 of %unwrap_recursive
-      pdl.replace %root with (%unwrap_recursive_result : !pdl.value)
     }
   }
 }
