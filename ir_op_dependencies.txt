@@ -2,7 +2,7 @@
 -- Level 1: Fundamental LLVM, Builtin, Arith, CF Ops --
 llvm.mlir.global
 func.func
-llvm.gep
+llvm.getelementptr
 llvm.ptrtoint
 llvm.store
 llvm.mlir.constant
@@ -49,27 +49,37 @@ mini.global -> llvm.mlir.global
 
 ----- prime ops for converting to PDL -----
 
-mini.alloc -> llvm.alloca, llvm.mlir.constant
-mini.addr_of -> llvm.address_of
+                #LowerTypeSize(),
+                #LowerGetFlag(),
+                #LowerInvariant(),
+                #LowerAnointTrampoline(),
+                #LowerSetupException(),
+                #LowerSubtype(),
+                #LowerAddrOf(),
+                #LowerWrap(),
+                #LowerAllocate()
+
+mini.alloc -> llvm.alloca, llvm.mlir.constant [check!]
+mini.addr_of -> llvm.address_of [check!]
+mini.invariant -> llvm.mlir.constant, llvm.call_intrinsic [check!]
+mini.setup_exception -> llvm.call [check!]
+mini.getflag -> llvm.gep [check!]
+mini.subtype -> llvm.call [check!]
+mini.anoint_trampoline -> llvm.call [check!]
+mini.type_size -> llvm.zero, llvm.gep, llvm.ptrtoint [check!]
+mini.next -> llvm.mlir.constant, llvm.load, arith.addi, llvm.store [check!]
+
 mini.globalstr -> mini.global
 mini.printfdecl -> func.func
-mini.return -> func.return
 mini.intrinsic -> llvm.call_intrinsic
-mini.getflag -> llvm.gep
-mini.setup_exception -> llvm.call
 mini.external_typedef -> mini.global
-mini.subtype -> llvm.call
-mini.anoint_trampoline -> llvm.call
 mini.global_fptr -> mini.global
 mini.tuple_indexation -> llvm.gep
-mini.logical -> arith.ori, arith.andi
+mini.logical -> arith.ori, arith.andi, arith.xori
 mini.comparison -> arith.cmpi, arith.cmpf
 mini.coro_get_result -> llvm.gep, llvm.load
 mini.coro_set_result -> llvm.gep, llvm.store
-mini.invariant -> llvm.mlir.constant, llvm.call_intrinsic
-mini.type_size -> llvm.zero, llvm.gep, llvm.ptrtoint
 mini.utils_api -> func.func (malloc, setup_landing_pad, etc.)
-mini.next -> llvm.mlir.constant, llvm.load, arith.addi, llvm.store
 mini.buffer_filler -> llvm.gep, llvm.store, func.return, func.func
 mini.buffer_indexation -> llvm.load, llvm.zero, llvm.gep, llvm.ptrtoint
 mini.parameterization_indexation -> llvm.gep, llvm.load, builtin.unrealized_conversion_cast

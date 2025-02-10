@@ -52,6 +52,132 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with (%addr_of_result : !pdl.value)
     }
   }
+  // LowerInvariant Pattern
+  pdl.pattern : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %ptr = pdl.operand : %ptr_type
+    %num_bytes_attr = pdl.attribute
+    %result_type = pdl.type : !llvm.ptr
+    %root = pdl.operation "mini.invariant"(%ptr : !pdl.value) {"num_bytes" = %num_bytes_attr} -> (%result_type : !pdl.type)
+    pdl.rewrite %root {
+      %i64_type = pdl.type : i64
+      %ptr_size = pdl.operation "llvm.mlir.constant" {"value" = %num_bytes_attr} -> (%i64_type : !pdl.type)
+      %ptr_size_result = pdl.result 0 of %ptr_size
+      %intrin = pdl.attribute = "llvm.invariant.start.p0"
+      %opsegsize = pdl.attribute = array<i32: 2, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %invariant = pdl.operation "llvm.call_intrinsic"(%ptr_size_result, %ptr : !pdl.value, !pdl.value) {"intrin" = %intrin, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%result_type : !pdl.type)
+      %invariant_result = pdl.result 0 of %invariant
+      pdl.replace %root with (%invariant_result : !pdl.value)
+    }
+  }
+  // LowerTypeSize Pattern
+  pdl.pattern : benefit(1) {
+    %typ_attr = pdl.attribute
+    %i64_type = pdl.type : i64
+    %result_type = pdl.type : i64
+    %root = pdl.operation "mini.type_size" {"typ" = %typ_attr} -> (%result_type : !pdl.type)
+    pdl.rewrite %root {
+      %opaque_ptr_type = pdl.type : !llvm.ptr
+      %null = pdl.operation "llvm.mlir.zero" -> (%opaque_ptr_type : !pdl.type)
+      %null_result = pdl.result 0 of %null
+      %one_attr = pdl.attribute = 1
+      %indices = pdl.attribute = array<i32: 1>
+      %gep = pdl.operation "llvm.getelementptr"(%null_result : !pdl.value) {"elem_type" = %typ_attr, "rawConstantIndices" = %indices} -> (%opaque_ptr_type : !pdl.type)
+      %gep_result = pdl.result 0 of %gep
+      %i64_attr = pdl.attribute = i64
+      %ptrtoint = pdl.operation "llvm.ptrtoint"(%gep_result : !pdl.value) {"type" = %i64_attr} -> (%result_type : !pdl.type)
+      %ptrtoint_result = pdl.result 0 of %ptrtoint
+      pdl.replace %root with (%ptrtoint_result : !pdl.value)
+    }
+  }
+  // LowerGetFlag Pattern
+  pdl.pattern : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %ptr = pdl.operand : %ptr_type
+    %struct_typ_attr = pdl.attribute
+    %result_type = pdl.type : !llvm.ptr
+    %root = pdl.operation "mini.getflag"(%ptr : !pdl.value) {"struct_typ" = %struct_typ_attr} -> (%result_type : !pdl.type)
+    pdl.rewrite %root {
+      %c0_attr = pdl.attribute = 0
+      %indices = pdl.attribute = array<i32: 0, 0>
+      %gep_op = pdl.operation "llvm.getelementptr"(%ptr : !pdl.value) {"elem_type" = %struct_typ_attr, "rawConstantIndices" = %indices} -> (%result_type : !pdl.type)
+      %gep_result = pdl.result 0 of %gep_op
+      pdl.replace %root with (%gep_result : !pdl.value)
+    }
+  }
+  // LowerSetupException Pattern
+  pdl.pattern : benefit(1) {
+    %root = pdl.operation "mini.setup_exception"
+    pdl.rewrite %root {
+      %callee = pdl.attribute = @setup_landing_pad
+      %opsegsize = pdl.attribute = array<i32: 0, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "llvm.call" {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize}
+      pdl.replace %root with %call
+    }
+  }
+  // LowerSubtype Pattern
+  pdl.pattern : benefit(1) {
+    %subtype_inner_type = pdl.type : !llvm.ptr
+    %subtype_inner = pdl.operand : %subtype_inner_type
+    %tbl_size_type = pdl.type : i64
+    %tbl_size = pdl.operand : %tbl_size_type
+    %hash_coef_type = pdl.type : i64
+    %hash_coef = pdl.operand : %hash_coef_type
+    %cand_id_type = pdl.type : i64
+    %cand_id = pdl.operand : %cand_id_type
+    %candidate_type = pdl.type : i64
+    %candidate = pdl.operand : %candidate_type
+    %supertype_tbl_type = pdl.type : !llvm.ptr
+    %supertype_tbl = pdl.operand : %supertype_tbl_type
+    %i1_type = pdl.type : i1
+    %root = pdl.operation "mini.subtype"(%subtype_inner, %tbl_size, %hash_coef, %cand_id, %candidate, %supertype_tbl : !pdl.value, !pdl.value, !pdl.value, !pdl.value, !pdl.value, !pdl.value) -> (%i1_type : !pdl.type)
+    pdl.rewrite %root {
+      %callee = pdl.attribute = @subtype_test_wrapper
+      %opsegsize = pdl.attribute = array<i32: 6, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "llvm.call"(%subtype_inner, %tbl_size, %hash_coef, %cand_id, %candidate, %supertype_tbl : !pdl.value, !pdl.value, !pdl.value, !pdl.value, !pdl.value, !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%i1_type : !pdl.type)
+      %call_result = pdl.result 0 of %call
+      pdl.replace %root with (%call_result : !pdl.value)
+    }
+  }
+  // LowerAnointTrampoline Pattern
+  pdl.pattern : benefit(1) {
+    %tramp_type = pdl.type : !llvm.ptr
+    %tramp = pdl.operand : %tramp_type
+    %root = pdl.operation "mini.anoint_trampoline"(%tramp : !pdl.value)
+    pdl.rewrite %root {
+      %callee = pdl.attribute = @anoint_trampoline
+      %opsegsize = pdl.attribute = array<i32: 1, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "llvm.call"(%tramp : !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize}
+      pdl.replace %root with %call
+    }
+  }
+  // LowerNext Pattern
+  pdl.pattern : benefit(1) {
+    %operand_type = pdl.type : !llvm.ptr
+    %operand = pdl.operand : %operand_type
+    %result_type = pdl.type : i32
+    %root = pdl.operation "mini.next"(%operand : !pdl.value) -> (%result_type : !pdl.type)
+    pdl.rewrite %root {
+      %one_attr = pdl.attribute = 1 // Corrected attribute assignment
+      %i32_type = pdl.type : i32
+      %i32_attr = pdl.attribute = i32
+      %one = pdl.operation "llvm.mlir.constant" {"value" = %one_attr} -> (%i32_type : !pdl.type)
+      %one_result = pdl.result 0 of %one
+      %load = pdl.operation "llvm.load"(%operand : !pdl.value) {"type" = %i32_attr} -> (%i32_type : !pdl.type)
+      %load_result = pdl.result 0 of %load // Corrected result name
+      %inc = pdl.operation "arith.addi"(%load_result, %one_result : !pdl.value, !pdl.value) -> (%i32_type : !pdl.type)
+      %inc_result = pdl.result 0 of %inc
+      %store = pdl.operation "llvm.store"(%inc_result, %operand : !pdl.value, !pdl.value)
+      pdl.replace %root with (%load_result : !pdl.value)
+    }
+  }
+
+  // --- below patterns are not yet fully working --- 
+
   // LowerGlobalStr Pattern
   pdl.pattern : benefit(1) {
     %sym_name_attr = pdl.attribute
@@ -74,41 +200,9 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %i32_type = pdl.type : i32
       %printf_type_attr = pdl.attribute = !llvm.func<i32 (!llvm.ptr)>
       %sym_name = pdl.attribute = "printf"
-      %linkage = pdl.attribute = "external"
+      %linkage = pdl.attribute = #llvm.linkage<external>
       %printf_decl = pdl.operation "func.func" {"sym_name" = %sym_name, "function_type" = %printf_type_attr, "linkage" = %linkage}
       pdl.replace %root with %printf_decl
-    }
-  }
-   // LowerReturn Pattern
-  pdl.pattern : benefit(1) {
-    %root = pdl.operation "mini.return"
-    pdl.rewrite %root {
-      %ret_op = pdl.operation "func.return"
-      pdl.replace %root with %ret_op
-    }
-  }
-  // LowerGetFlag Pattern
-  pdl.pattern : benefit(1) {
-    %ptr_type = pdl.type : !llvm.ptr
-    %ptr = pdl.operand : %ptr_type
-    %struct_typ_attr = pdl.attribute
-    %result_type = pdl.type : !llvm.ptr
-    %root = pdl.operation "mini.getflag"(%ptr : !pdl.value) {"struct_typ" = %struct_typ_attr} -> (%result_type : !pdl.type)
-    pdl.rewrite %root {
-      %c0_attr = pdl.attribute = 0
-      %indices = pdl.attribute = array<i32: 0, 0>
-      %gep_op = pdl.operation "llvm.getelementptr"(%ptr : !pdl.value) {"elem_type" = %struct_typ_attr, "rawConstantIndices" = %indices} -> (%result_type : !pdl.type)
-      %gep_result = pdl.result 0 of %gep_op
-      pdl.replace %root with (%gep_result : !pdl.value)
-    }
-  }
-  // LowerSetupException Pattern
-  pdl.pattern : benefit(1) {
-    %root = pdl.operation "mini.setup_exception"
-    pdl.rewrite %root {
-      %callee = pdl.attribute = "setup_landing_pad"
-      %call = pdl.operation "llvm.call" {"callee" = %callee}
-      pdl.replace %root with %call
     }
   }
   // LowerExternalTypeDef Pattern
@@ -122,40 +216,6 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %constant = pdl.attribute = unit
       %class_glob = pdl.operation "mini.global" {"sym_name" = %class_name_attr, "global_type" = %vtbl_type, "linkage" = %linkage, "constant" = %constant}
       pdl.replace %root with %class_glob
-    }
-  }
-  // LowerSubtype Pattern
-  pdl.pattern : benefit(1) {
-    %subtype_inner_type = pdl.type : !llvm.ptr
-    %subtype_inner = pdl.operand : %subtype_inner_type
-    %tbl_size_type = pdl.type : i64
-    %tbl_size = pdl.operand : %tbl_size_type
-    %hash_coef_type = pdl.type : i64
-    %hash_coef = pdl.operand : %hash_coef_type
-    %cand_id_type = pdl.type : i64
-    %cand_id = pdl.operand : %cand_id_type
-    %candidate_type = pdl.type : !llvm.ptr
-    %candidate = pdl.operand : %candidate_type
-    %supertype_tbl_type = pdl.type : !llvm.ptr
-    %supertype_tbl = pdl.operand : %supertype_tbl_type
-    %i1_type = pdl.type : i1
-    %root = pdl.operation "mini.subtype"(%subtype_inner, %tbl_size, %hash_coef, %cand_id, %candidate, %supertype_tbl : !pdl.value, !pdl.value, !pdl.value, !pdl.value, !pdl.value, !pdl.value) -> (%i1_type : !pdl.type)
-    pdl.rewrite %root {
-      %callee = pdl.attribute = "subtype_test_wrapper"
-      %call = pdl.operation "llvm.call"(%subtype_inner, %tbl_size, %hash_coef, %cand_id, %candidate, %supertype_tbl : !pdl.value, !pdl.value, !pdl.value, !pdl.value, !pdl.value, !pdl.value) {"callee" = %callee} -> (%i1_type : !pdl.type)
-      %call_result = pdl.result 0 of %call
-      pdl.replace %root with (%call_result : !pdl.value)
-    }
-  }
-  // LowerAnointTrampoline Pattern
-  pdl.pattern : benefit(1) {
-    %tramp_type = pdl.type : !llvm.ptr
-    %tramp = pdl.operand : %tramp_type
-    %root = pdl.operation "mini.anoint_trampoline"(%tramp : !pdl.value)
-    pdl.rewrite %root {
-      %callee = pdl.attribute = "anoint_trampoline"
-      %call = pdl.operation "llvm.call"(%tramp : !pdl.value) {"callee" = %callee}
-      pdl.replace %root with %call
     }
   }
   // LowerGlobalFptr Pattern
@@ -284,45 +344,6 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with %store
     }
   }
-  // LowerInvariant Pattern
-  pdl.pattern : benefit(1) {
-    %ptr_type = pdl.type : !llvm.ptr
-    %ptr = pdl.operand : %ptr_type
-    %num_bytes_attr = pdl.attribute
-    %result_type = pdl.type : !llvm.ptr
-    %root = pdl.operation "mini.invariant"(%ptr : !pdl.value) {"num_bytes" = %num_bytes_attr} -> (%result_type : !pdl.type)
-    pdl.rewrite %root {
-      %i64_type = pdl.type : i64
-      %ptr_size = pdl.operation "llvm.mlir.constant" {"value" = %num_bytes_attr} -> (%i64_type : !pdl.type)
-      %ptr_size_result = pdl.result 0 of %ptr_size
-      %intrin = pdl.attribute = "llvm.invariant.start.p0"
-      %invariant = pdl.operation "llvm.call_intrinsic"(%ptr_size_result, %ptr : !pdl.value, !pdl.value) {"intrin" = %intrin} -> (%result_type : !pdl.type)
-      %invariant_result = pdl.result 0 of %invariant
-      pdl.replace %root with (%invariant_result : !pdl.value)
-    }
-  }
-  // LowerTypeSize Pattern
-  pdl.pattern : benefit(1) {
-    %typ_attr = pdl.attribute
-    %i64_type = pdl.type : i64
-    %result_type = pdl.type : i64
-    %root = pdl.operation "mini.type_size" {"typ" = %typ_attr} -> (%result_type : !pdl.type)
-    pdl.rewrite %root {
-      %opaque_ptr_type = pdl.type : !llvm.ptr
-      %zero = pdl.attribute = 0
-      %null = pdl.operation "llvm.mlir.constant" {"value" = %zero} -> (%opaque_ptr_type : !pdl.type)
-      %null_result = pdl.result 0 of %null
-      %one_attr = pdl.attribute = 1
-      %indices = pdl.attribute = array<i32: 1>
-      %gep = pdl.operation "llvm.getelementptr"(%null_result : !pdl.value) {"elem_type" = %typ_attr, "rawConstantIndices" = %indices} -> (%opaque_ptr_type : !pdl.type)
-      %gep_result = pdl.result 0 of %gep
-      %i64_attr = pdl.attribute = i64
-      %ptrtoint = pdl.operation "llvm.ptrtoint"(%gep_result : !pdl.value) {"type" = %i64_attr} -> (%result_type : !pdl.type)
-      %ptrtoint_result = pdl.result 0 of %ptrtoint
-      pdl.replace %root with (%ptrtoint_result : !pdl.value)
-    }
-  }
-
   // LowerUtilsAPI Pattern
   pdl.pattern : benefit(1) {
     %root = pdl.operation "mini.utils_api"
@@ -372,26 +393,6 @@ builtin.module attributes {"sym_name" = "patterns"} {
       %coro_call = pdl.attribute = @coroutine_call
       %coroutine_call_decl = pdl.operation "func.func" {"sym_name" = %coro_call, "function_type" = %func_type_attr12, "linkage" = %linkage}
       pdl.replace %root with %coroutine_call_decl
-    }
-  }
-  // LowerNext Pattern
-  pdl.pattern : benefit(1) {
-    %operand_type = pdl.type : !llvm.ptr
-    %operand = pdl.operand : %operand_type
-    %result_type = pdl.type : i32
-    %root = pdl.operation "mini.next"(%operand : !pdl.value) -> (%result_type : !pdl.type)
-    pdl.rewrite %root {
-      %one_attr = pdl.attribute = 1 // Corrected attribute assignment
-      %i32_type = pdl.type : i32
-      %i32_attr = pdl.attribute = i32
-      %one = pdl.operation "llvm.mlir.constant" {"value" = %one_attr} -> (%i32_type : !pdl.type)
-      %one_result = pdl.result 0 of %one
-      %load = pdl.operation "llvm.load"(%operand : !pdl.value) {"type" = %i32_attr} -> (%i32_type : !pdl.type)
-      %load_result = pdl.result 0 of %load // Corrected result name
-      %inc = pdl.operation "arith.addi"(%load_result, %one_result : !pdl.value, !pdl.value) -> (%i32_type : !pdl.type)
-      %inc_result = pdl.result 0 of %inc
-      %store = pdl.operation "llvm.store"(%inc_result, %operand : !pdl.value, !pdl.value)
-      pdl.replace %root with (%load_result : !pdl.value)
     }
   }
   // LowerBufferFiller Pattern
