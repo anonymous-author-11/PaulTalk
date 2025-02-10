@@ -76,6 +76,7 @@ mini.buffer_filler -> llvm.gep, llvm.store, func.return, func.func
 mini.field_access -> llvm.load, llvm.extractvalue, mini.invariant, llvm.gep, builtin.unrealized_conversion_cast, func.call_indirect
 mini.call -> mini.addr_of, builtin.unrealized_conversion_cast, func.call_indirect, mini.wrap
 mini.global -> llvm.global, llvm.undef, llvm.insertvalue, llvm.return
+mini.global -> llvm.global, llvm.undef, llvm.insertvalue, llvm.return
 mini.external_typedef -> llvm.global
 mini.typedef -> mini.type_integers, mini.type_ptrs, mini.vtable, mini.hash_tbl, mini.offset_tbl, llvm.global
 mini.coro_create -> llvm.constant, llvm.alloca, llvm.load, mini.addr_of, builtin.unrealized_conversion_cast, llvm.call, func.call_indirect, llvm.store
@@ -94,7 +95,7 @@ mini.narrow -> mini.alloc, llvm.gep, mini.memcpy
 mini.unionize -> mini.alloc, llvm.gep, mini.memcpy, mini.setflag, mini.cast
 mini.reunionize -> mini.alloc, mini.memcpy
 mini.place_into_buffer -> llvm.gep, llvm.load, llvm.constant, arith.cmpi, arith.select, mini.memcpy
-mini.from_buffer -> llvm.gep, llvm.load, llvm.constant, arith.cmpi, mini.malloc, arith.select, mini.memcpy, mini.alloc
+mini.from_buffer -> mini.gep, llvm.load, llvm.constant, arith.cmpi, mini.malloc, arith.select, mini.memcpy, mini.alloc
 mini.new -> mini.malloc, mini.addr_of, llvm.constant, mini.alloc, llvm.gep, llvm.store, mini.invariant
 mini.arithmetic -> arith.addi, arith.subi, arith.muli, arith.divsi, arith.remsi, arith.shli, arith.shrsi, arith.andi, arith.ori, arith.xori, arith.addf, arith.subf, arith.mulf, arith.divf
 mini.comparison -> arith.cmpi, arith.cmpf
@@ -112,6 +113,7 @@ mini.reabstract -> mini.malloc, mini.anoint_trampoline, mini.addr_of, llvm.load,
 mini.tuple_cast -> mini.alloc, builtin.unrealized_conversion_cast, llvm.gep, mini.cast, llvm.store
 mini.castassign -> mini.assign, mini.cast
 -- Pass 1: Fundamental LLVM, Builtin, Arith, CF Ops --
+-- Level 1: Fundamental LLVM, Builtin, Arith, CF Ops --
 llvm.global
 func.func
 llvm.gep
@@ -144,7 +146,7 @@ llvm.address_of
 llvm.call
 llvm.call_intrinsic
 
--- Pass 2: Mini Lang Base Ops and Utilities --
+-- Level 2: Mini Lang Base Ops --
 mini.alloc -> llvm.alloca, llvm.constant
 mini.addr_of -> llvm.address_of
 mini.assign -> mini.memcpy, llvm.load, llvm.store
@@ -176,7 +178,9 @@ mini.buffer_indexation -> llvm.load, llvm.zero, llvm.gep, llvm.ptrtoint
 mini.tuple_indexation -> llvm.gep
 mini.type_size -> llvm.zero, llvm.gep, llvm.ptrtoint
 mini.malloc -> mini.type_size, llvm.call
+mini.assign -> mini.memcpy, llvm.load, llvm.store
 mini.addressof -> mini.addr_of
+mini.addr_of -> mini.addressof
 mini.while -> cf.branch, cf.conditional_branch
 mini.if -> cf.conditional_branch, cf.branch
 mini.break -> cf.branch
@@ -188,6 +192,7 @@ mini.arg_passer -> llvm.gep, llvm.load, builtin.unrealized_conversion_cast, func
 mini.buffer_filler -> llvm.gep, llvm.store, func.return, func.func
 mini.field_access -> llvm.load, llvm.extractvalue, mini.invariant, llvm.gep, builtin.unrealized_conversion_cast, func.call_indirect
 mini.call -> mini.addr_of, builtin.unrealized_conversion_cast, func.call_indirect, mini.wrap
+mini.global -> llvm.global, llvm.undef, llvm.insertvalue, llvm.return
 mini.global -> llvm.global, llvm.undef, llvm.insertvalue, llvm.return
 mini.external_typedef -> llvm.global
 mini.typedef -> mini.type_integers, mini.type_ptrs, mini.vtable, mini.hash_tbl, mini.offset_tbl, llvm.global
@@ -207,7 +212,7 @@ mini.narrow -> mini.alloc, llvm.gep, mini.memcpy
 mini.unionize -> mini.alloc, llvm.gep, mini.memcpy, mini.setflag, mini.cast
 mini.reunionize -> mini.alloc, mini.memcpy
 mini.place_into_buffer -> llvm.gep, llvm.load, llvm.constant, arith.cmpi, arith.select, mini.memcpy
-mini.from_buffer -> llvm.gep, llvm.load, llvm.constant, arith.cmpi, mini.malloc, arith.select, mini.memcpy, mini.alloc
+mini.from_buffer -> mini.gep, llvm.load, llvm.constant, arith.cmpi, mini.malloc, arith.select, mini.memcpy, mini.alloc
 mini.new -> mini.malloc, mini.addr_of, llvm.constant, mini.alloc, llvm.gep, llvm.store, mini.invariant
 mini.arithmetic -> arith.addi, arith.subi, arith.muli, arith.divsi, arith.remsi, arith.shli, arith.shrsi, arith.andi, arith.ori, arith.xori, arith.addf, arith.subf, arith.mulf, arith.divf
 mini.comparison -> arith.cmpi, arith.cmpf
@@ -218,8 +223,12 @@ mini.method_call, mini.class_method_call -> llvm.extractvalue, mini.invariant, l
 mini.checkflag -> mini.getflag, mini.typid, mini.unwrap, llvm.ptrtoint, llvm.cmpi, mini.wrap, llvm.load, llvm.gep, mini.addr_of, func.call_indirect, builtin.unrealized_conversion_cast
 mini.setflag -> mini.getflag, mini.typid, mini.assign
 mini.cast -> mini.box, mini.unbox, mini.widen_int, mini.int_to_float, mini.unionize, mini.narrow, mini.to_fat_ptr, mini.reabstract, mini.tuple_cast, builtin.unrealized_conversion_cast, mini.reunionize, mini.setflag, mini.memcpy
-
--- Pass 3: Complex Cast Operations and Object Model --
+mini.box -> mini.alloc, llvm.gep, mini.addr_of, llvm.store, mini.memcpy, mini.set_offset, mini.malloc, mini.invariant
+mini.unbox -> mini.alloc, llvm.gep, mini.memcpy, llvm.load
+mini.to_fat_ptr -> mini.alloc, mini.memcpy, mini.set_offset, mini.invariant
+mini.reabstract -> mini.malloc, mini.anoint_trampoline, mini.addr_of, llvm.load, llvm.call_intrinsic, mini.alloc, llvm.store, mini.invariant, func.func, mini.wrap, mini.unwrap, mini.cast, func.return, func.fptr_call
+mini.tuple_cast -> mini.alloc, builtin.unrealized_conversion_cast, llvm.gep, mini.cast, llvm.store
+mini.castassign -> mini.assign, mini.cast
 mini.box -> mini.alloc, llvm.gep, mini.addr_of, llvm.store, mini.memcpy, mini.set_offset, mini.malloc, mini.invariant
 mini.unbox -> mini.alloc, llvm.gep, mini.memcpy, llvm.load
 mini.to_fat_ptr -> mini.alloc, mini.memcpy, mini.set_offset, mini.invariant
