@@ -67,7 +67,8 @@ def main():
         "mlir-opt","-allow-unregistered-dialect","--mlir-print-op-generic","--convert-pdl-to-pdl-interp","--test-pdl-bytecode-pass"
     ])
 
-    for i in [0, 1]:
+    module_str = module_str.replace("mini.addressof","placeholder.addressof").replace("mini.global","placeholder.global")
+    while "mini." in module_str:
         mlir_string = patterns + module_str
         cmd_out = subprocess.run(cmd, capture_output=True, shell=True, text=True, input=mlir_string).stdout.replace("\\","\\\\")
         stringio = StringIO()
@@ -86,7 +87,7 @@ def main():
     after_opt = time.time()
     print(f"Time to do mlir-opt: {after_opt - after_firstpass} seconds")
     
-    module_str = module_str.replace("mini.addressof","llvm.mlir.addressof").replace("mini.global","llvm.mlir.global")
+    module_str = module_str.replace("placeholder.addressof","llvm.mlir.addressof").replace("placeholder.global","llvm.mlir.global")
     stringio = StringIO()
     Printer(stringio).print(module_str)
     module_str = stringio.getvalue().encode().decode('unicode_escape')

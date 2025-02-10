@@ -174,8 +174,8 @@ class ThirdPass(ModulePass):
                 LowerAddrOf(),
                 LowerSubtype(),
                 LowerSetOffset(),
-                LowerMemCpy(),
-                LowerAllocate()
+                LowerMemCpy()
+                #LowerAllocate()
             ]),
             apply_recursively=True
         )
@@ -1355,7 +1355,7 @@ class LowerGlobalStr(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: GlobalStrOp, rewriter: PatternRewriter):
         debug_code(op)
-        global_string = llvm.GlobalOp(
+        global_string = GlobalOp(
             sym_name=op.sym_name,
             global_type=op.str_type,
             value=llvm.StringAttr(op.value.data),
@@ -1369,7 +1369,7 @@ class LowerGlobalFptr(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: GlobalFptrOp, rewriter: PatternRewriter):
         debug_code(op)
-        global_fptr = llvm.GlobalOp(
+        global_fptr = GlobalOp(
             sym_name=op.global_name,
             global_type=llvm.LLVMPointerType.opaque(),
             linkage=llvm.LinkageAttr("internal")
