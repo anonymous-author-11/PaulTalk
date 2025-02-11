@@ -63,9 +63,7 @@ def main():
 
     with open("patterns.mlir", "r") as patterns_file: patterns = patterns_file.read()
 
-    cmd = " ".join([
-        "mlir-opt","-allow-unregistered-dialect","--mlir-print-op-generic","--convert-pdl-to-pdl-interp","--test-pdl-bytecode-pass"
-    ])
+    cmd = "mlir-opt -allow-unregistered-dialect --mlir-print-op-generic --convert-pdl-to-pdl-interp --test-pdl-bytecode-pass"
 
     with open("out.mlir", "w") as outfile: outfile.write(module_str)
 

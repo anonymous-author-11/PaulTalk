@@ -148,7 +148,6 @@ class ThirdPass(ModulePass):
                 LowerUtilsAPI(),
                 LowerArithmetic(),
                 LowerComparison(),
-                LowerLogical(),
                 LowerPrint(),
                 LowerTypeDef(),
                 LowerExternalTypeDef(),
@@ -166,6 +165,7 @@ class ThirdPass(ModulePass):
                 LowerSetOffset(),
                 LowerLiteral(),
                 LowerMemCpy()
+                #LowerLogical(),
                 #LowerNext(),
                 #LowerTypeSize(),
                 #LowerGetFlag(),

@@ -46,6 +46,7 @@ mini.type_ptrs -> llvm.undef, mini.addr_of, llvm.insertvalue, llvm.zero, llvm.ge
 mini.type_integers -> llvm.undef, llvm.mlir.constant, llvm.insertvalue
 mini.vtable -> llvm.undef, mini.addr_of, llvm.mlir.constant, llvm.insertvalue, llvm.inttoptr
 mini.global -> llvm.mlir.global
+mini.func -> func.return, mini.unwrap, cf.branch, func.func
 
 ----- prime ops for converting to PDL -----
 
@@ -66,8 +67,9 @@ mini.setup_exception -> llvm.call [check!]
 mini.getflag -> llvm.gep [check!]
 mini.subtype -> llvm.call [check!]
 mini.anoint_trampoline -> llvm.call [check!]
-mini.type_size -> llvm.zero, llvm.gep, llvm.ptrtoint [check!]
+mini.type_size -> llvm.mlir.zero, llvm.gep, llvm.ptrtoint [check!]
 mini.next -> llvm.mlir.constant, llvm.load, arith.addi, llvm.store [check!]
+mini.logical -> arith.ori, arith.andi [check!]
 
 mini.globalstr -> mini.global
 mini.printfdecl -> func.func
@@ -75,7 +77,6 @@ mini.intrinsic -> llvm.call_intrinsic
 mini.external_typedef -> mini.global
 mini.global_fptr -> mini.global
 mini.tuple_indexation -> llvm.gep
-mini.logical -> arith.ori, arith.andi, arith.xori
 mini.comparison -> arith.cmpi, arith.cmpf
 mini.coro_get_result -> llvm.gep, llvm.load
 mini.coro_set_result -> llvm.gep, llvm.store
@@ -87,13 +88,11 @@ mini.unwrap -> llvm.load, builtin.unrealized_conversion_cast, llvm.undef, llvm.g
 mini.arithmetic -> arith.addi, arith.subi, arith.muli, arith.divsi, arith.remsi, arith.shli, arith.shrsi, arith.andi, arith.ori, arith.xori, arith.addf, arith.subf, arith.mulf, arith.divf
 ----------------------------------------------------------------------------
 mini.getter_def -> llvm.gep, func.return, func.func, mini.parameterization
-mini.wrap -> mini.alloc, llvm.store, mini.invariant
-mini.addr_of -> mini.addressof
+mini.wrap -> mini.alloc, llvm.store, mini.invariant [check!]
 mini.widen_int -> mini.alloc, mini.unwrap, arith.extsi, llvm.store
 mini.memcpy -> llvm.load, llvm.store, mini.memcpy
 mini.assign -> mini.memcpy, llvm.load, llvm.store
 mini.prelude -> mini.printfdecl, mini.globalstr, mini.utils_api
-mini.func -> func.return, mini.unwrap, cf.branch, func.func
 mini.malloc -> mini.type_size, llvm.call
 mini.coro_call -> llvm.load, mini.coro_set_result, llvm.call, mini.coro_get_result
 mini.coro_yield -> llvm.call, mini.coro_set_result, mini.coro_get_result, llvm.call

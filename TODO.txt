@@ -251,6 +251,8 @@ DONE:
 	- Mark malloc as executable with VirtualProtect [check!]
 - Remove memcpy from string assignment; use long integers instead [check!]
 - Bitwise operations for integers [check!]
+- Move alloca hoisting to llvm pass [check!]
+- Start moving lowering patterns to PDL [check!]
 
 TODO:
 
