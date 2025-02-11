@@ -61,20 +61,31 @@ def main():
     after_firstpass = time.time()
     print(f"Time to lower custom IR: {after_firstpass - after_codegen} seconds")
 
-    with open("patterns.mlir", "r") as patterns_file: patterns = patterns_file.read()
+    with open("interp.mlir", "r") as patterns_file: patterns = patterns_file.read()
+    #with open("rewriters.mlir", "r") as rewriters_file: rewriters = rewriters_file.read()
 
-    cmd = "mlir-opt -allow-unregistered-dialect --mlir-print-op-generic --convert-pdl-to-pdl-interp --test-pdl-bytecode-pass"
+    to_pdl_bytecode = "mlir-opt -allow-unregistered-dialect --mlir-print-op-generic --convert-pdl-to-pdl-interp"
+    run_bytecode = "mlir-opt -allow-unregistered-dialect --mlir-print-op-generic --test-pdl-bytecode-pass"
 
     with open("out.mlir", "w") as outfile: outfile.write(module_str)
 
     module_str = module_str.replace("mini.addressof","placeholder.addressof").replace("\"mini.global\"","\"placeholder.global\"")
-    while "mini." in module_str:
-        mlir_string = patterns + module_str
-        cmd_out = subprocess.run(cmd, capture_output=True, shell=True, text=True, input=mlir_string)
+    module_str = patterns + module_str
+
+    while "\"mini." in module_str:
+        #cmd_out = subprocess.run(to_pdl_bytecode, capture_output=True, shell=True, text=True, input=module_str)
+        #if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
+        #module_str = rewriters + cmd_out.stdout[274:]
+        cmd_out = subprocess.run(run_bytecode, capture_output=True, shell=True, text=True, input=module_str)
         if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
         stringio = StringIO()
         Printer(stringio).print(cmd_out.stdout.replace("\\","\\\\"))
-        module_str = stringio.getvalue().encode().decode('unicode_escape')[274:-15]
+        module_str = stringio.getvalue().encode().decode('unicode_escape')
+
+    module_str = module_str[23:-16]
+    with open("out.mlir", "w") as outfile: outfile.write(module_str)
+
+    print("placeholder.constant" in module_str)
 
     cmd = " ".join([
         "mlir-opt","-allow-unregistered-dialect","--mlir-print-op-generic","--canonicalize=\"region-simplify=aggressive\"",
@@ -83,12 +94,12 @@ def main():
         "--buffer-hoisting","--buffer-loop-hoisting","--control-flow-sink","--convert-func-to-llvm"
     ])
     
-    #module_str = subprocess.run(cmd, shell=True, text=True).stdout
+    #module_str = subprocess.run(cmd, shell=True, text=True, input=module_str).stdout
     module_str = subprocess.run(cmd, capture_output=True, shell=True, text=True, input=module_str).stdout.replace("\\","\\\\")
     after_opt = time.time()
     print(f"Time to do mlir-opt: {after_opt - after_firstpass} seconds")
     
-    module_str = module_str.replace("placeholder.addressof","llvm.mlir.addressof").replace("placeholder.global","llvm.mlir.global")
+    module_str = module_str.replace("placeholder", "llvm.mlir")
     stringio = StringIO()
     Printer(stringio).print(module_str)
     module_str = stringio.getvalue().encode().decode('unicode_escape')

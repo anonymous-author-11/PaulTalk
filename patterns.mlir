@@ -10,10 +10,9 @@
 // if you EVER find yourself writing "()" in any capacity whatsoever, YOU ARE MAKING AN ERROR
 // people will die if you make these errors!
 
-builtin.module attributes {"sym_name" = "patterns"} {
+module @patterns {
 
-  // LowerWrap Pattern
-  pdl.pattern : benefit(1) {
+  pdl.pattern @LowerWrap : benefit(1) {
   	%operand_type = pdl.type
   	%operand_type_attr = pdl.attribute
     %operand = pdl.operand : %operand_type
@@ -26,8 +25,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
-  // LowerAllocate Pattern
-  pdl.pattern : benefit(1) {
+  pdl.pattern @LowerAllocate : benefit(1) {
     %typ_attr = pdl.attribute
     %result_type = pdl.type
     %root = pdl.operation "mini.alloc" {"typ" = %typ_attr} -> (%result_type : !pdl.type) // Removed {} and added 
@@ -41,8 +39,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
-  // LowerAddrOf Pattern
-  pdl.pattern : benefit(1) {
+  pdl.pattern @LowerAddrOf : benefit(1) {
     %global_name_attr = pdl.attribute
     %result_type = pdl.type : !llvm.ptr
     %root = pdl.operation "mini.addr_of" {"global_name" = %global_name_attr} -> (%result_type : !pdl.type)
@@ -52,8 +49,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with (%addr_of_result : !pdl.value)
     }
   }
-  // LowerInvariant Pattern
-  pdl.pattern : benefit(1) {
+  pdl.pattern @LowerInvariant : benefit(1) {
     %ptr_type = pdl.type : !llvm.ptr
     %ptr = pdl.operand : %ptr_type
     %num_bytes_attr = pdl.attribute
@@ -71,11 +67,10 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with (%invariant_result : !pdl.value)
     }
   }
-  %struct = pdl.type = !llvm.struct<!pdl.types>
-  // LowerTypeSize Pattern
-  pdl.pattern : benefit(1) {
+  pdl.pattern @LowerTypeSize : benefit(1) {
     %typ_attr = pdl.attribute
     %i64_type = pdl.type : i64
+    %struct = pdl.attribute = !llvm.struct<(!pdl.range<type>)>
     %result_type = pdl.type : i64
     %root = pdl.operation "mini.type_size" {"typ" = %typ_attr} -> (%result_type : !pdl.type)
     pdl.rewrite %root {
@@ -92,8 +87,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with (%ptrtoint_result : !pdl.value)
     }
   }
-  // LowerGetFlag Pattern
-  pdl.pattern : benefit(1) {
+  pdl.pattern @LowerGetFlag : benefit(1) {
     %ptr_type = pdl.type : !llvm.ptr
     %ptr = pdl.operand : %ptr_type
     %struct_typ_attr = pdl.attribute
@@ -107,8 +101,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with (%gep_result : !pdl.value)
     }
   }
-  // LowerSetupException Pattern
-  pdl.pattern : benefit(1) {
+  pdl.pattern  @LowerSetupException: benefit(1) {
     %root = pdl.operation "mini.setup_exception"
     pdl.rewrite %root {
       %callee = pdl.attribute = @setup_landing_pad
@@ -118,8 +111,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with %call
     }
   }
-  // LowerSubtype Pattern
-  pdl.pattern : benefit(1) {
+  pdl.pattern @LowerSubtype : benefit(1) {
     %subtype_inner_type = pdl.type : !llvm.ptr
     %subtype_inner = pdl.operand : %subtype_inner_type
     %tbl_size_type = pdl.type : i64
@@ -143,8 +135,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with (%call_result : !pdl.value)
     }
   }
-  // LowerAnointTrampoline Pattern
-  pdl.pattern : benefit(1) {
+  pdl.pattern @LowerAnointTrampoline : benefit(1) {
     %tramp_type = pdl.type : !llvm.ptr
     %tramp = pdl.operand : %tramp_type
     %root = pdl.operation "mini.anoint_trampoline"(%tramp : !pdl.value)
@@ -156,8 +147,7 @@ builtin.module attributes {"sym_name" = "patterns"} {
       pdl.replace %root with %call
     }
   }
-  // LowerNext Pattern
-  pdl.pattern : benefit(1) {
+  pdl.pattern @LowerNext : benefit(1) {
     %operand_type = pdl.type : !llvm.ptr
     %operand = pdl.operand : %operand_type
     %result_type = pdl.type : i32

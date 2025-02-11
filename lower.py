@@ -164,8 +164,8 @@ class ThirdPass(ModulePass):
                 LowerPrintF(),
                 LowerSetOffset(),
                 LowerLiteral(),
-                LowerMemCpy()
-                #LowerLogical(),
+                LowerMemCpy(),
+                LowerLogical()
                 #LowerNext(),
                 #LowerTypeSize(),
                 #LowerGetFlag(),
