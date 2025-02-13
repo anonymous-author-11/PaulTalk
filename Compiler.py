@@ -65,7 +65,7 @@ def main():
     #with open("rewriters.mlir", "r") as rewriters_file: rewriters = rewriters_file.read()
 
     to_pdl_bytecode = "mlir-opt -allow-unregistered-dialect --mlir-print-op-generic --convert-pdl-to-pdl-interp"
-    run_bytecode = "mlir-opt -allow-unregistered-dialect --mlir-print-op-generic --test-pdl-bytecode-pass"
+    run_bytecode = "mlir-opt -load-pass-plugin=C:/users/paulk/onedrive/documents/pl/pypl/build/release/MLIRTypeSizeLowering.dll -allow-unregistered-dialect --mlir-print-op-generic --minimal-pass --test-pdl-bytecode-pass"
 
     with open("out.mlir", "w") as outfile: outfile.write(module_str)
 

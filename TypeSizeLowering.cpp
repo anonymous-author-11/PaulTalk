@@ -3,14 +3,10 @@
 #include "mlir/Dialect/LLVMIR/LLVMDialect.h"
 #include "mlir/Transforms/GreedyPatternRewriteDriver.h"
 #include "mlir/Pass/PassRegistry.h"
+#include "mlir/InitAllDialects.h"
+#include "llvm/Support/raw_ostream.h"
 
 using namespace mlir;
-
-#ifdef _WIN32
-#define MLIR_PLUGIN_EXPORT __declspec(dllexport)
-#else
-#define MLIR_PLUGIN_EXPORT
-#endif
 
 namespace {
 
@@ -77,6 +73,12 @@ struct TypeSizeLowering : public PassWrapper<TypeSizeLowering, OperationPass<Mod
 
 } // namespace
 
-extern "C" MLIR_PLUGIN_EXPORT void registerPlugins() {
-  mlir::PassRegistration<TypeSizeLowering>();
+extern "C" {
+    __declspec(dllexport) void registerPlugins() {
+        mlir::PassRegistration<TypeSizeLowering>();
+    }
+    
+    __declspec(dllexport) mlir::Pass* createTypeSizeLowering() {
+        return new TypeSizeLowering();
+    }
 }
