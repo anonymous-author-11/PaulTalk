@@ -61,21 +61,22 @@ def main():
     after_firstpass = time.time()
     print(f"Time to lower custom IR: {after_firstpass - after_codegen} seconds")
 
-    with open("interp.mlir", "r") as patterns_file: patterns = patterns_file.read()
-    #with open("rewriters.mlir", "r") as rewriters_file: rewriters = rewriters_file.read()
+    with open("patterns_minimal.mlir", "r") as patterns_file: patterns = patterns_file.read()
 
     to_pdl_bytecode = "mlir-opt -allow-unregistered-dialect --mlir-print-op-generic --convert-pdl-to-pdl-interp"
-    run_bytecode = "mlir-opt -allow-unregistered-dialect --mlir-print-op-generic --test-pdl-bytecode-pass"
-
+    standalone_opt = "c:/users/paulk/onedrive/documents/pl/pypl/standalone/build/bin/standalone-opt"
+    run_bytecode = standalone_opt + " -allow-unregistered-dialect --mlir-print-op-generic --my-custom-pass"
+    
     with open("out.mlir", "w") as outfile: outfile.write(module_str)
+
+    cmd_out = subprocess.run(to_pdl_bytecode, capture_output=True, shell=True, text=True, input=patterns)
+    if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
+    patterns = cmd_out.stdout
 
     module_str = module_str.replace("mini.addressof","placeholder.addressof").replace("\"mini.global\"","\"placeholder.global\"")
     module_str = patterns + module_str
 
     while "\"mini." in module_str:
-        #cmd_out = subprocess.run(to_pdl_bytecode, capture_output=True, shell=True, text=True, input=module_str)
-        #if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
-        #module_str = rewriters + cmd_out.stdout[274:]
         cmd_out = subprocess.run(run_bytecode, capture_output=True, shell=True, text=True, input=module_str)
         if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
         stringio = StringIO()
