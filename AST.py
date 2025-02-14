@@ -197,7 +197,7 @@ class Arithmetic(BinaryOp):
 @dataclass
 class Comparison(BinaryOp):
     def concrete_op(self, operands, attributes, result_types):
-        return ComparisonOp.create(operands=operands, attributes=attributes, result_types=result_types)
+        return ComparisonOp.create(operands=operands, attributes=attributes, result_types=[IntegerType(1)])
     def concrete_exprtype(self, left_type, right_type):
         if not (isinstance(left_type, Ptr) and (isinstance(left_type.type, IntegerType) or left_type.type == Float64Type())):
             raise Exception(f"Operator {self.operator} not available for type {left_type}")
@@ -206,7 +206,7 @@ class Comparison(BinaryOp):
 @dataclass
 class Logical(BinaryOp):
     def concrete_op(self, operands, attributes, result_types):
-        return LogicalOp.create(operands=operands, attributes=attributes, result_types=result_types)
+        return LogicalOp.create(operands=operands, attributes=attributes, result_types=[IntegerType(1)])
     def concrete_exprtype(self, left_type, right_type):
         if left_type != Ptr([IntegerType(1)]):
             raise Exception(f"Operator {self.operator} not available for type {left_type}")

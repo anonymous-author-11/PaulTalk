@@ -802,6 +802,11 @@ class ComparisonOp(IRDLOperation):
     result : OpResult = result_def(IntegerType(1))
     op : StringAttr = attr_def(StringAttr)
 
+    @classmethod
+    def make(cls, lhs, rhs, op):
+        if isinstance(op, str): op = StringAttr(op)
+        return ComparisonOp.create(operands=[lhs, rhs], attributes={"op":op}, result_types=[IntegerType(1)])
+
 @irdl_op_definition
 class LogicalOp(IRDLOperation):
     name = "mini.logical"

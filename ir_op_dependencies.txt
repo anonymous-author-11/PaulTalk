@@ -50,16 +50,6 @@ mini.func -> func.return, mini.unwrap, cf.branch, func.func
 
 ----- prime ops for converting to PDL -----
 
-                #LowerTypeSize(),
-                #LowerGetFlag(),
-                #LowerInvariant(),
-                #LowerAnointTrampoline(),
-                #LowerSetupException(),
-                #LowerSubtype(),
-                #LowerAddrOf(),
-                #LowerWrap(),
-                #LowerAllocate()
-
 mini.alloc -> llvm.alloca, llvm.mlir.constant [check!]
 mini.addr_of -> llvm.address_of [check!]
 mini.invariant -> llvm.mlir.constant, llvm.call_intrinsic [check!]
@@ -70,22 +60,23 @@ mini.anoint_trampoline -> llvm.call [check!]
 mini.type_size -> llvm.mlir.zero, llvm.gep, llvm.ptrtoint [check!]
 mini.next -> llvm.mlir.constant, llvm.load, arith.addi, llvm.store [check!]
 mini.logical -> arith.ori, arith.andi [check!]
+mini.coro_get_result -> llvm.gep, llvm.load [check!]
+mini.coro_set_result -> llvm.gep, llvm.store [check!]
+mini.utils_api -> llvm.func (malloc, setup_landing_pad, etc.) [check!]
+mini.buffer_indexation -> llvm.load, llvm.zero, llvm.gep, llvm.ptrtoint [check!]
+mini.globalstr -> mini.global [check!]
+mini.printfdecl -> func.func [check!]
+mini.external_typedef -> mini.global [check!]
+mini.arithmetic -> arith.addi, arith.subi, arith.muli, arith.divsi, arith.remsi, arith.shli, arith.shrsi, arith.andi, arith.ori, arith.xori, arith.addf, arith.subf, arith.mulf, arith.divf [check!]
+mini.comparison -> arith.cmpi, arith.cmpf [check!]
+mini.unwrap -> llvm.load, builtin.unrealized_conversion_cast, llvm.undef, llvm.gep, llvm.insertvalue [check!]
 
-mini.globalstr -> mini.global
-mini.printfdecl -> func.func
 mini.intrinsic -> llvm.call_intrinsic
-mini.external_typedef -> mini.global
-mini.global_fptr -> mini.global
 mini.tuple_indexation -> llvm.gep
-mini.comparison -> arith.cmpi, arith.cmpf
-mini.coro_get_result -> llvm.gep, llvm.load
-mini.coro_set_result -> llvm.gep, llvm.store
-mini.utils_api -> func.func (malloc, setup_landing_pad, etc.)
+
 mini.buffer_filler -> llvm.gep, llvm.store, func.return, func.func
-mini.buffer_indexation -> llvm.load, llvm.zero, llvm.gep, llvm.ptrtoint
 mini.parameterization_indexation -> llvm.gep, llvm.load, builtin.unrealized_conversion_cast
-mini.unwrap -> llvm.load, builtin.unrealized_conversion_cast, llvm.undef, llvm.gep, llvm.insertvalue
-mini.arithmetic -> arith.addi, arith.subi, arith.muli, arith.divsi, arith.remsi, arith.shli, arith.shrsi, arith.andi, arith.ori, arith.xori, arith.addf, arith.subf, arith.mulf, arith.divf
+
 ----------------------------------------------------------------------------
 mini.getter_def -> llvm.gep, func.return, func.func, mini.parameterization
 mini.wrap -> mini.alloc, llvm.store, mini.invariant [check!]

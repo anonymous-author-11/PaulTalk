@@ -1,8 +1,4 @@
-//===- TestPDLByteCode.cpp - Test rewriter bytecode functionality ---------===//
-//
-// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
-// See https://llvm.org/LICENSE.txt for license information.
-// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//===- custom_rewrites.cpp - Test rewriter bytecode functionality ---------===//
 //
 //===----------------------------------------------------------------------===//
 
@@ -13,34 +9,29 @@
 #include "mlir/Pass/Pass.h"
 #include "mlir/Pass/PassManager.h"
 #include "mlir/Transforms/GreedyPatternRewriteDriver.h"
+#include "mlir/Support/LLVM.h"
 
 using namespace mlir;
 
-static LogicalResult customGetLLVMStructTypes(PatternRewriter &rewriter,
-                                          PDLResultList &results,
-                                          ArrayRef<PDLValue> args) {
-  // First argument should be the operation
-  auto *op = args[0].cast<Operation *>();
-  
-  // Try to get the "typ" attribute
-  auto typAttr = op->getAttrOfType<TypeAttr>("typ");
-  if (!typAttr)
-    return failure();
-    
-  // Verify it's an LLVM struct type
-  auto structType = typAttr.getValue().dyn_cast<LLVM::LLVMStructType>();
-  if (!structType)
-    return failure();
-    
-  // Get the body element types
-  SmallVector<Type> elementTypes;
-  for (Type elementType : structType.getBody()) {
-    elementTypes.push_back(elementType);
-  }
-  
-  // Push the type range result
-  results.push_back(TypeRange(elementTypes));
-  return success();
+static LogicalResult isFloat(PatternRewriter &rewriter,
+                                            PDLResultList &results,
+                                            ArrayRef<PDLValue> args) {
+  Type type = args[0].cast<Type>();
+  return success(type.isa<FloatType>());
+}
+
+static LogicalResult isInt(PatternRewriter &rewriter,
+                                            PDLResultList &results,
+                                            ArrayRef<PDLValue> args) {
+  Type type = args[0].cast<Type>();
+  return success(type.isa<IntegerType>());
+}
+
+static LogicalResult isStruct(PatternRewriter &rewriter,
+                                            PDLResultList &results,
+                                            ArrayRef<PDLValue> args) {
+  Type type = args[0].cast<Type>();
+  return success(type.isa<LLVM::LLVMStructType>());
 }
 
 static LogicalResult coroFrame(PatternRewriter &rewriter,
@@ -62,8 +53,8 @@ static LogicalResult coroFrame(PatternRewriter &rewriter,
     ptrType,           // !llvm.ptr
     arrayType,         // !llvm.array<3 x ptr>
     ptrType,           // !llvm.ptr
-    i1Type,           // i1
-    inputType         // %input_type
+    i1Type,            // i1
+    inputType          // %input_type
   };
   
   // Create the LLVM struct type
@@ -166,6 +157,85 @@ static LogicalResult arrayAttr(PatternRewriter &rewriter,
   return success();
 }
 
+static LogicalResult mapCmpi(PatternRewriter &rewriter,
+                                              PDLResultList &results,
+                                              ArrayRef<PDLValue> args) {
+  static const llvm::StringMap<int64_t> predicateMap = {
+    {"EQ",  0}, {"NEQ", 1}, {"LT",  2}, {"LE",  3}, {"GT",  4}, {"GE",  5}
+  };
+  
+  auto strAttr = args[0].cast<Attribute>().cast<StringAttr>();
+  auto it = predicateMap.find(strAttr.getValue());
+  if (it == predicateMap.end())
+    return failure();
+    
+  results.push_back(IntegerAttr::get(rewriter.getI64Type(), it->second));
+  return success();
+}
+
+static LogicalResult mapCmpf(PatternRewriter &rewriter,
+                                              PDLResultList &results,
+                                              ArrayRef<PDLValue> args) {
+  static const llvm::StringMap<int64_t> predicateMap = {
+    {"EQ",  1}, {"GT",  2}, {"GE",  3}, {"LT",  4}, {"LE",  5}, {"NEQ", 6}
+  };
+  
+  auto strAttr = args[0].cast<Attribute>().cast<StringAttr>();
+  auto it = predicateMap.find(strAttr.getValue());
+  if (it == predicateMap.end())
+    return failure();
+    
+  results.push_back(IntegerAttr::get(rewriter.getI64Type(), it->second));
+  return success();
+}
+
+static Value unwrapStruct(PatternRewriter &rewriter,
+                             Operation *op) {
+  // Get the result struct type
+  auto resultType = op->getResult(0).getType();
+  auto structType = resultType.cast<LLVM::LLVMStructType>();
+  
+  // Create undef value of the result type
+  auto undefOp = rewriter.create<LLVM::UndefOp>(op->getLoc(), structType);
+  Value currentValue = undefOp.getResult();
+  
+  // Get input pointer
+  Value structPtr = op->getOperand(0);
+  
+  // For each element in the struct
+  for (size_t i = 0; i < structType.getBody().size(); i++) {
+    auto elementType = structType.getBody()[i];
+    
+    // Create GEP operation
+    SmallVector<LLVM::GEPArg, 2> indices {0, i};
+    
+    auto gepOp = rewriter.create<LLVM::GEPOp>(
+      op->getLoc(),
+      LLVM::LLVMPointerType::get(rewriter.getContext()),
+      structType,  // pointee type is the full struct type
+      structPtr,
+      indices
+    );
+    
+    // Create recursive unwrap operation
+    OperationState state(op->getLoc(), "mini.unwrap");
+    state.addOperands(gepOp.getResult());
+    state.addTypes(elementType);
+    Operation *unwrapOp = rewriter.create(state);
+    
+    // Insert value into result
+    currentValue = rewriter.create<LLVM::InsertValueOp>(
+      op->getLoc(),
+      structType,
+      currentValue,
+      unwrapOp->getResult(0),
+      rewriter.getDenseI64ArrayAttr(i)
+    ).getResult();
+  }
+  
+  return currentValue;
+}
+
 namespace {
 struct MyCustomPass
     : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> {
@@ -183,7 +253,7 @@ struct MyCustomPass
   void runOnOperation() final {
     ModuleOp module = getOperation();
 
-    // The test cases are encompassed via two modules, one containing the
+    // Two modules, one containing the
     // patterns and one containing the operations to rewrite.
     ModuleOp patternModule = module.lookupSymbol<ModuleOp>(
         StringAttr::get(module->getContext(), "patterns"));
@@ -194,10 +264,16 @@ struct MyCustomPass
 
     RewritePatternSet patternList(module->getContext());
 
-    // Register ahead of time to test when functions are registered without a
-    // pattern.
     patternList.getPDLPatterns().registerConstraintFunction(
-        "get_llvm_struct_types", customGetLLVMStructTypes);
+        "is_float", isFloat);
+    patternList.getPDLPatterns().registerConstraintFunction(
+        "is_int", isInt);
+    patternList.getPDLPatterns().registerConstraintFunction(
+        "is_struct", isStruct);
+    patternList.getPDLPatterns().registerConstraintFunction(
+        "map_cmpi", mapCmpi);
+    patternList.getPDLPatterns().registerConstraintFunction(
+        "map_cmpf", mapCmpf);
     patternList.getPDLPatterns().registerConstraintFunction(
         "coro_frame", coroFrame);
     patternList.getPDLPatterns().registerConstraintFunction(
@@ -210,6 +286,8 @@ struct MyCustomPass
         "add_region", addRegion);
     patternList.getPDLPatterns().registerRewriteFunction(
         "transfer_region", transferRegion);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "unwrap_struct", unwrapStruct);
 
     patternModule.getOperation()->remove();
     PDLPatternModule pdlPattern(patternModule);

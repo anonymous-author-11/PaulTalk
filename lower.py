@@ -137,16 +137,12 @@ class ThirdPass(ModulePass):
                 LowerParameterization(),
                 LowerParameterizationsArray(),
                 LowerParameterizationIndexation(),
-                LowerUnwrap(),
                 LowerCastAssign(),
                 LowerRefer(),
                 LowerIntrinsic(),
                 LowerPrelude(),
                 LowerGlobalFptr(),
                 LowerUtilsAPI(),
-                LowerArithmetic(),
-                LowerComparison(),
-                #LowerLogical(),
                 LowerPrint(),
                 LowerTypeDef(),
                 LowerTypeIntegersTable(),
@@ -161,6 +157,10 @@ class ThirdPass(ModulePass):
                 LowerSetOffset(),
                 LowerLiteral(),
                 LowerMemCpy()
+                #LowerUnwrap(),
+                #LowerComparison(),
+                #LowerArithmetic(),
+                #LowerLogical(),
                 #LowerPrintfDecl(),
                 #LowerGlobalStr(),
                 #LowerExternalTypeDef(),
@@ -319,7 +319,7 @@ class LowerCheckFlag(RewritePattern):
         candidate = llvm.PtrToIntOp(candidate_ptr.results[0], IntegerType(64))
 
         if op.typ_name.data in builtin_types.keys():
-            eq = arith.Cmpi(vptr_int.results[0], candidate.results[0], "ne" if op.neg else "eq")
+            eq = ComparisonOp.make(vptr_int.results[0], candidate.results[0], "NEQ" if op.neg else "EQ")
             wrap = WrapOp.make(eq.results[0])
             rewriter.inline_block_before_matched_op(Block([get_flag, typ_id, vptr, vptr_int, candidate_ptr, candidate, eq]))
             rewriter.replace_matched_op(wrap)
@@ -456,7 +456,7 @@ class LowerPlaceIntoBuffer(RewritePattern):
         offset_ptr = llvm.GEPOp(op.fat_ptr, [0,3], pointee_type=fat_base)
         offset = llvm.LoadOp(offset_ptr.results[0], IntegerType(32))
         ones = llvm.ConstantOp(IntegerAttr.from_int_and_width(-1, 32), IntegerType(32))
-        eq = arith.Cmpi(ones.results[0], offset.results[0], "eq")
+        eq = ComparisonOp.make(ones.results[0], offset.results[0], "EQ")
         data_ptr_ptr = llvm.GEPOp(op.fat_ptr, [0,1], pointee_type=fat_base)
         data_ptr_if_boxed = llvm.LoadOp(data_ptr_ptr.results[0], llvm.LLVMPointerType.opaque())
         data_ptr = arith.Select(eq.results[0], data_ptr_ptr.results[0], data_ptr_if_boxed.results[0])
@@ -479,7 +479,7 @@ class LowerFromBuffer(RewritePattern):
         data_size_ptr = llvm.GEPOp(op.vptr, [6], pointee_type=llvm.LLVMPointerType.opaque())
         data_size = llvm.LoadOp(data_size_ptr.results[0], IntegerType(64))
         threshold = llvm.ConstantOp(IntegerAttr.from_int_and_width(128, 64), IntegerType(64))
-        small_struct = arith.Cmpi(data_size.results[0], threshold.results[0], "sle")
+        small_struct = ComparisonOp.make(data_size.results[0], threshold.results[0], "LE")
         malloc = llvm.CallOp("malloc", data_size.results[0], return_type=llvm.LLVMPointerType.opaque())
         operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
         malloc.properties["operandSegmentSizes"] = operandSegmentSizes
@@ -896,21 +896,6 @@ class LowerCoroYield(RewritePattern):
         rewriter.insert_op_before_matched_op(call)
         rewriter.replace_matched_op(get_result)
 
-# Recursively unwrap a pointer to a struct type by loading each field
-# and constructing a new struct value. For non-struct types, simply load the value.
-def unwrap_recursive(ptr, type, rewriter):
-    if not isinstance(type, llvm.LLVMStructType):
-        return llvm.LoadOp(ptr, type)
-    result = llvm.UndefOp(type)
-    for i, t in enumerate(type.types.data):
-        rewriter.insert_op_before_matched_op(result)
-        ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [i])
-        gep = llvm.GEPOp(ptr, [0, i], pointee_type=type)
-        load = unwrap_recursive(gep, t, rewriter)
-        result = llvm.InsertValueOp(ary, result.results[0], load.results[0])
-        rewriter.inline_block_before_matched_op(Block([gep, load]))
-    return result
-
 class LowerUnwrap(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: UnwrapOp, rewriter: PatternRewriter):
@@ -920,7 +905,19 @@ class LowerUnwrap(RewritePattern):
             rewriter.replace_matched_op(noop)
             return
         if op.operand.type != llvm.LLVMPointerType.opaque(): raise Exception(f"whoa buddy: operand is {op.operand.type}")
-        rewriter.replace_matched_op(unwrap_recursive(op.operand, op.result.type, rewriter))
+        if not isinstance(op.result.type, llvm.LLVMStructType):
+            load = llvm.LoadOp(op.operand, op.result.type)
+            rewriter.replace_matched_op(load)
+            return
+        result = llvm.UndefOp(op.result.type)
+        for i, t in enumerate(op.result.type.types.data):
+            rewriter.insert_op_before_matched_op(result)
+            ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [i])
+            gep = llvm.GEPOp(op.operand, [0, i], pointee_type=op.result.type)
+            recurse = UnwrapOp.create(operands=[gep.results[0]], result_types=[t])
+            result = llvm.InsertValueOp(ary, result.results[0], recurse.results[0])
+            rewriter.inline_block_before_matched_op(Block([gep, recurse]))
+        rewriter.replace_matched_op(result)
 
 class LowerInvariant(RewritePattern):
     @op_type_rewrite_pattern

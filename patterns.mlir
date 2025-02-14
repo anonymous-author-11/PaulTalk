@@ -34,6 +34,21 @@ module @patterns {
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
+  pdl.pattern @LowerWrapFatPtr : benefit(2) {
+    %operand_type = pdl.type : !llvm.struct<(ptr, ptr, ptr, i32)>
+    %operand = pdl.operand : %operand_type
+    %operand_type_attr = pdl.attribute = !llvm.struct<(ptr, ptr, ptr, i32)>
+    %result_type = pdl.type : !llvm.ptr
+    %root = pdl.operation "mini.wrap"(%operand : !pdl.value) -> (%result_type : !pdl.type)
+    pdl.rewrite %root {
+      %alloca = pdl.operation "mini.alloc" {"typ" = %operand_type_attr} -> (%result_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %store = pdl.operation "llvm.store"(%operand, %alloca_result : !pdl.value, !pdl.value)
+      %num_bytes = pdl.attribute = 16
+      %invariant = pdl.operation "mini.invariant"(%alloca_result : !pdl.value) {"num_bytes" = %num_bytes} -> (%result_type : !pdl.type)
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
   pdl.pattern @LowerAllocate : benefit(1) {
     %typ_attr = pdl.attribute
     %result_type = pdl.type
@@ -388,6 +403,263 @@ module @patterns {
       %and_op = pdl.operation "arith.andi"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%bool : !pdl.type)
       %and_result = pdl.result 0 of %and_op
       pdl.replace %root with (%and_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerFloatArithmetic : benefit(1) {
+    %op_type = pdl.type
+    pdl.apply_native_constraint "is_float"(%op_type : !pdl.type)
+    %lhs = pdl.operand : %op_type
+    %rhs = pdl.operand : %op_type
+    %op_name_attr = pdl.attribute
+    %root = pdl.operation "mini.arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
+    pdl.rewrite %root {
+      %replacement = pdl.operation "mini.float_arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
+      %result = pdl.result 0 of %replacement
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerIntArithmetic : benefit(1) {
+    %op_type = pdl.type
+    pdl.apply_native_constraint "is_int"(%op_type : !pdl.type)
+    %lhs = pdl.operand : %op_type
+    %rhs = pdl.operand : %op_type
+    %op_name_attr = pdl.attribute
+    %root = pdl.operation "mini.arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
+    pdl.rewrite %root {
+      %replacement = pdl.operation "mini.int_arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
+      %result = pdl.result 0 of %replacement
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerFloatAdd : benefit(1) {
+    %op_type = pdl.type
+    %lhs = pdl.operand : %op_type
+    %rhs = pdl.operand : %op_type
+    %op_name_attr = pdl.attribute = "ADD"
+    %root = pdl.operation "mini.float_arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
+    pdl.rewrite %root {
+      %replacement = pdl.operation "arith.addf"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%op_type : !pdl.type)
+      %result = pdl.result 0 of %replacement
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerFloatSub : benefit(1) {
+    %op_type = pdl.type
+    %lhs = pdl.operand : %op_type
+    %rhs = pdl.operand : %op_type
+    %op_name_attr = pdl.attribute = "SUB"
+    %root = pdl.operation "mini.float_arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
+    pdl.rewrite %root {
+      %replacement = pdl.operation "arith.subf"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%op_type : !pdl.type)
+      %result = pdl.result 0 of %replacement
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerFloatMul : benefit(1) {
+    %op_type = pdl.type
+    %lhs = pdl.operand : %op_type
+    %rhs = pdl.operand : %op_type
+    %op_name_attr = pdl.attribute = "MUL"
+    %root = pdl.operation "mini.float_arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
+    pdl.rewrite %root {
+      %replacement = pdl.operation "arith.mulf"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%op_type : !pdl.type)
+      %result = pdl.result 0 of %replacement
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerFloatDiv : benefit(1) {
+    %op_type = pdl.type
+    %lhs = pdl.operand : %op_type
+    %rhs = pdl.operand : %op_type
+    %op_name_attr = pdl.attribute = "DIV"
+    %root = pdl.operation "mini.float_arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
+    pdl.rewrite %root {
+      %replacement = pdl.operation "arith.divf"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%op_type : !pdl.type)
+      %result = pdl.result 0 of %replacement
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerIntAdd : benefit(1) {
+    %op_type = pdl.type
+    %lhs = pdl.operand : %op_type
+    %rhs = pdl.operand : %op_type
+    %op_name_attr = pdl.attribute = "ADD"
+    %root = pdl.operation "mini.int_arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
+    pdl.rewrite %root {
+      %replacement = pdl.operation "arith.addi"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%op_type : !pdl.type)
+      %result = pdl.result 0 of %replacement
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerIntSub : benefit(1) {
+    %op_type = pdl.type
+    %lhs = pdl.operand : %op_type
+    %rhs = pdl.operand : %op_type
+    %op_name_attr = pdl.attribute = "SUB"
+    %root = pdl.operation "mini.int_arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
+    pdl.rewrite %root {
+      %replacement = pdl.operation "arith.subi"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%op_type : !pdl.type)
+      %result = pdl.result 0 of %replacement
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerIntMul : benefit(1) {
+    %op_type = pdl.type
+    %lhs = pdl.operand : %op_type
+    %rhs = pdl.operand : %op_type
+    %op_name_attr = pdl.attribute = "MUL"
+    %root = pdl.operation "mini.int_arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
+    pdl.rewrite %root {
+      %replacement = pdl.operation "arith.muli"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%op_type : !pdl.type)
+      %result = pdl.result 0 of %replacement
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerIntDiv : benefit(1) {
+    %op_type = pdl.type
+    %lhs = pdl.operand : %op_type
+    %rhs = pdl.operand : %op_type
+    %op_name_attr = pdl.attribute = "DIV"
+    %root = pdl.operation "mini.int_arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
+    pdl.rewrite %root {
+      %replacement = pdl.operation "arith.divsi"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%op_type : !pdl.type)
+      %result = pdl.result 0 of %replacement
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerModulo : benefit(1) {
+    %op_type = pdl.type
+    %lhs = pdl.operand : %op_type
+    %rhs = pdl.operand : %op_type
+    %op_name_attr = pdl.attribute = "MOD"
+    %root = pdl.operation "mini.int_arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
+    pdl.rewrite %root {
+      %replacement = pdl.operation "arith.remsi"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%op_type : !pdl.type)
+      %result = pdl.result 0 of %replacement
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerLShift : benefit(1) {
+    %op_type = pdl.type
+    %lhs = pdl.operand : %op_type
+    %rhs = pdl.operand : %op_type
+    %op_name_attr = pdl.attribute = "LSHIFT"
+    %root = pdl.operation "mini.int_arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
+    pdl.rewrite %root {
+      %replacement = pdl.operation "arith.shli"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%op_type : !pdl.type)
+      %result = pdl.result 0 of %replacement
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerRShift : benefit(1) {
+    %op_type = pdl.type
+    %lhs = pdl.operand : %op_type
+    %rhs = pdl.operand : %op_type
+    %op_name_attr = pdl.attribute = "RSHIFT"
+    %root = pdl.operation "mini.int_arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
+    pdl.rewrite %root {
+      %replacement = pdl.operation "arith.shrsi"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%op_type : !pdl.type)
+      %result = pdl.result 0 of %replacement
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerBitAnd : benefit(1) {
+    %op_type = pdl.type
+    %lhs = pdl.operand : %op_type
+    %rhs = pdl.operand : %op_type
+    %op_name_attr = pdl.attribute = "bit_and"
+    %root = pdl.operation "mini.int_arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
+    pdl.rewrite %root {
+      %replacement = pdl.operation "arith.andi"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%op_type : !pdl.type)
+      %result = pdl.result 0 of %replacement
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerBitOr : benefit(1) {
+    %op_type = pdl.type
+    %lhs = pdl.operand : %op_type
+    %rhs = pdl.operand : %op_type
+    %op_name_attr = pdl.attribute = "bit_or"
+    %root = pdl.operation "mini.int_arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
+    pdl.rewrite %root {
+      %replacement = pdl.operation "arith.ori"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%op_type : !pdl.type)
+      %result = pdl.result 0 of %replacement
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerBitXor : benefit(1) {
+    %op_type = pdl.type
+    %lhs = pdl.operand : %op_type
+    %rhs = pdl.operand : %op_type
+    %op_name_attr = pdl.attribute = "bit_xor"
+    %root = pdl.operation "mini.int_arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
+    pdl.rewrite %root {
+      %replacement = pdl.operation "arith.xori"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%op_type : !pdl.type)
+      %result = pdl.result 0 of %replacement
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerFloatComparison : benefit(1) {
+    %bool = pdl.type : i1
+    %op_type = pdl.type
+    pdl.apply_native_constraint "is_float"(%op_type : !pdl.type)
+    %lhs = pdl.operand : %op_type
+    %rhs = pdl.operand : %op_type
+    %op_name_attr = pdl.attribute
+    %root = pdl.operation "mini.comparison"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%bool : !pdl.type)
+    %predicate_name = pdl.apply_native_constraint "map_cmpf"(%op_name_attr : !pdl.attribute) : !pdl.attribute
+    pdl.rewrite %root {
+      %replacement = pdl.operation "arith.cmpf"(%lhs, %rhs : !pdl.value, !pdl.value) {"predicate" = %predicate_name} -> (%bool : !pdl.type)
+      %result = pdl.result 0 of %replacement
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerIntComparison : benefit(1) {
+    %bool = pdl.type : i1
+    %op_type = pdl.type
+    pdl.apply_native_constraint "is_int"(%op_type : !pdl.type)
+    %lhs = pdl.operand : %op_type
+    %rhs = pdl.operand : %op_type
+    %op_name_attr = pdl.attribute
+    %root = pdl.operation "mini.comparison"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%bool : !pdl.type)
+    %predicate_name = pdl.apply_native_constraint "map_cmpi"(%op_name_attr : !pdl.attribute) : !pdl.attribute
+    pdl.rewrite %root {
+      %replacement = pdl.operation "arith.cmpi"(%lhs, %rhs : !pdl.value, !pdl.value) {"predicate" = %predicate_name} -> (%bool : !pdl.type)
+      %result = pdl.result 0 of %replacement
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerUnwrapNil : benefit(2) {
+    %result_type = pdl.type : !llvm.array<0 x i8>
+    %ptr_type = pdl.type : !llvm.ptr
+    %operand = pdl.operand : %ptr_type
+    %root = pdl.operation "mini.unwrap"(%operand : !pdl.value) -> (%result_type : !pdl.type)
+    pdl.rewrite %root {
+      %cast = pdl.operation "builtin.UnrealizedConversionCast"(%operand : !pdl.value) -> (%result_type : !pdl.type)
+      %result = pdl.result 0 of %cast
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerUnwrapStruct : benefit(2) {
+    %result_type = pdl.type
+    pdl.apply_native_constraint "is_struct"(%result_type : !pdl.type)
+    %ptr_type = pdl.type : !llvm.ptr
+    %operand = pdl.operand : %ptr_type
+    %root = pdl.operation "mini.unwrap"(%operand : !pdl.value) -> (%result_type : !pdl.type)
+    pdl.rewrite %root {
+      %result = pdl.apply_native_rewrite "unwrap_struct"(%root : !pdl.operation) : !pdl.value
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerUnwrapSimple : benefit(1) {
+    %result_type = pdl.type
+    %ptr_type = pdl.type : !llvm.ptr
+    %operand = pdl.operand : %ptr_type
+    %root = pdl.operation "mini.unwrap"(%operand : !pdl.value) -> (%result_type : !pdl.type)
+    pdl.rewrite %root {
+      %load = pdl.operation "llvm.load"(%operand : !pdl.value) -> (%result_type : !pdl.type)
+      %result = pdl.result 0 of %load
+      pdl.replace %root with (%result : !pdl.value)
     }
   }
 }
