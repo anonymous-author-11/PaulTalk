@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
   // TODO: Register standalone passes here.
 
   mlir::DialectRegistry registry;
-  mlir::squanto::registerMyCustomPass();
+  mlir::custom::registerMyCustomPass();
   
   // Add the following to include *all* MLIR Core dialects, or selectively
   // include what you need like above. You only need to register dialects that

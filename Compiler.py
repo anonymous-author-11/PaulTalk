@@ -61,7 +61,7 @@ def main():
     after_firstpass = time.time()
     print(f"Time to lower custom IR: {after_firstpass - after_codegen} seconds")
 
-    with open("patterns_minimal.mlir", "r") as patterns_file: patterns = patterns_file.read()
+    with open("patterns.mlir", "r") as patterns_file: patterns = patterns_file.read()
 
     to_pdl_bytecode = "mlir-opt -allow-unregistered-dialect --mlir-print-op-generic --convert-pdl-to-pdl-interp"
     standalone_opt = "c:/users/paulk/onedrive/documents/pl/pypl/standalone/build/bin/standalone-opt"

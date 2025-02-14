@@ -5,6 +5,15 @@
 // when an operation has multiple arguments, you list all the arguments and then all the types
 // like this: pdl.operation "llvm.store"(%operand, %alloca_result : !pdl.value, !pdl.value)
 // this is unlike normal MLIR where you'd write "llvm.store"(%operand : !pdl.value, %alloca_result : !pdl.value)
+//
+// when replacing an op with a return value, you write something like
+//
+// %alloca_result = pdl.result 0 of %alloca
+// pdl.replace %root with (%alloca_result : !pdl.value)
+//
+// but when replacing an op with no return value, you write something like
+//
+// pdl.replace %root with %call
 // 
 // if you EVER find yourself writng "-> ()" then YOU ARE MAKING AN ERROR
 // if you EVER find yourself writing "()" in any capacity whatsoever, YOU ARE MAKING AN ERROR
@@ -14,10 +23,10 @@ module @patterns {
 
   pdl.pattern @LowerWrap : benefit(1) {
   	%operand_type = pdl.type
-  	%operand_type_attr = pdl.attribute
     %operand = pdl.operand : %operand_type
+    %operand_type_attr = pdl.apply_native_constraint "type_to_type_attr"(%operand_type : !pdl.type) : !pdl.attribute
     %result_type = pdl.type : !llvm.ptr
-    %root = pdl.operation "mini.wrap"(%operand : !pdl.value) {"typ" = %operand_type_attr} -> (%result_type : !pdl.type)
+    %root = pdl.operation "mini.wrap"(%operand : !pdl.value) -> (%result_type : !pdl.type)
     pdl.rewrite %root {
       %alloca = pdl.operation "mini.alloc" {"typ" = %operand_type_attr} -> (%result_type : !pdl.type)
       %alloca_result = pdl.result 0 of %alloca
@@ -166,150 +175,14 @@ module @patterns {
       pdl.replace %root with (%load_result : !pdl.value)
     }
   }
-
-  // --- below patterns are not yet fully working --- 
-
-  // LowerGlobalStr Pattern
-  pdl.pattern : benefit(1) {
-    %sym_name_attr = pdl.attribute
-    %str_type = pdl.attribute
-    %value_attr = pdl.attribute
-    %root = pdl.operation "mini.globalstr" {"sym_name" = %sym_name_attr, "str_type" = %str_type, "value" = %value_attr}
-    pdl.rewrite %root {
-      %linkage = pdl.attribute = #llvm.linkage<linkonce_odr>
-      %constant = pdl.attribute = unit
-      %global_string = pdl.operation "placeholder.global" {"sym_name" = %sym_name_attr, "global_type" = %str_type, "value" = %value_attr, "linkage" = %linkage, "constant" = %constant}
-      %global_string_result = pdl.result 0 of %global_string
-      pdl.replace %root with (%global_string_result : !pdl.value)
-    }
-  }
-  // LowerPrintfDecl Pattern
-  pdl.pattern : benefit(1) {
-    %root = pdl.operation "mini.printfdecl"
-    pdl.rewrite %root {
-      %i8_ptr_type = pdl.type : !llvm.ptr
-      %i32_type = pdl.type : i32
-      %printf_type_attr = pdl.attribute = !llvm.func<i32 (!llvm.ptr)>
-      %sym_name = pdl.attribute = "printf"
-      %linkage = pdl.attribute = #llvm.linkage<external>
-      %printf_decl = pdl.operation "func.func" {"sym_name" = %sym_name, "function_type" = %printf_type_attr, "linkage" = %linkage}
-      pdl.replace %root with %printf_decl
-    }
-  }
-  // LowerExternalTypeDef Pattern
-  pdl.pattern : benefit(1) {
-    %class_name_attr = pdl.attribute
-    %vtbl_size_attr = pdl.attribute
-    %vtbl_type = pdl.attribute
-    %root = pdl.operation "mini.external_typedef" {"class_name" = %class_name_attr, "vtbl_size" = %vtbl_size_attr}
-    pdl.rewrite %root {
-      %linkage = pdl.attribute = "external"
-      %constant = pdl.attribute = unit
-      %class_glob = pdl.operation "mini.global" {"sym_name" = %class_name_attr, "global_type" = %vtbl_type, "linkage" = %linkage, "constant" = %constant}
-      pdl.replace %root with %class_glob
-    }
-  }
-  // LowerGlobalFptr Pattern
-  pdl.pattern : benefit(1) {
-    %global_name_attr = pdl.attribute
-    %result_type = pdl.attribute = !llvm.ptr
-    %root = pdl.operation "mini.global_fptr" {"global_name" = %global_name_attr}
-    pdl.rewrite %root {
-      %unit_attr = pdl.attribute = unit
-      %linkage = pdl.attribute = "internal"
-      %global_fptr = pdl.operation "mini.global" {"sym_name" = %global_name_attr, "global_type" = %result_type, "linkage" = %linkage, "thread_local_" = %unit_attr}
-      pdl.replace %root with %global_fptr
-    }
-  }
-  // LowerTupleIndexation Pattern
-  pdl.pattern : benefit(1) {
-    %receiver_type = pdl.type : !llvm.ptr
-    %receiver = pdl.operand : %receiver_type
-    %index_attr = pdl.attribute
-    %result_type = pdl.type
-    %result_type_attr = pdl.attribute
-    %root = pdl.operation "mini.tuple_indexation"(%receiver : !pdl.value) {"index" = %index_attr, "typ" = %result_type_attr} -> (%result_type : !pdl.type)
-    pdl.rewrite %root {
-      %c0_attr = pdl.attribute = 0
-      //%indices = pdl.attribute = array<i32: 0, %index_attr>
-      %indices = pdl.attribute = array<i32: 0, 0>
-      %gep = pdl.operation "llvm.getelementptr"(%receiver : !pdl.value) {"elem_type" = %result_type_attr, "rawConstantIndices" = %indices} -> (%result_type : !pdl.type)
-      %gep_result = pdl.result 0 of %gep
-      pdl.replace %root with (%gep_result : !pdl.value)
-    }
-  }
-  // LowerLogical Pattern - OR
-  pdl.pattern : benefit(1) {
-    %lhs_type = pdl.type : i1
-    %lhs = pdl.operand : %lhs_type
-    %rhs_type = pdl.type : i1
-    %rhs = pdl.operand : %rhs_type
-    %result_type = pdl.type : i1
-    %op_name_attr = pdl.attribute = "or"
-    %root = pdl.operation "mini.logical"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%result_type : !pdl.type)
-    pdl.rewrite %root {
-      %or_op = pdl.operation "arith.ori"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%result_type : !pdl.type)
-      %or_result = pdl.result 0 of %or_op
-      pdl.replace %root with (%or_result : !pdl.value)
-    }
-  }
-  // LowerLogical Pattern - AND
-  pdl.pattern : benefit(1) {
-    %lhs_type = pdl.type : i1
-    %lhs = pdl.operand : %lhs_type
-    %rhs_type = pdl.type : i1
-    %rhs = pdl.operand : %rhs_type
-    %result_type = pdl.type : i1
-    %op_name_attr = pdl.attribute = "and"
-    %root = pdl.operation "mini.logical"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%result_type : !pdl.type)
-    pdl.rewrite %root {
-      %and_op = pdl.operation "arith.andi"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%result_type : !pdl.type)
-      %and_result = pdl.result 0 of %and_op
-      pdl.replace %root with (%and_result : !pdl.value)
-    }
-  }
-  // LowerComparison Pattern - Integer EQ
-  pdl.pattern : benefit(1) {
-    %lhs_type = pdl.type : i32
-    %lhs = pdl.operand : %lhs_type
-    %rhs_type = pdl.type : i32
-    %rhs = pdl.operand : %rhs_type
-    %result_type = pdl.type : i1
-    %op_name_attr = pdl.attribute = "EQ"
-    %root = pdl.operation "mini.comparison"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%result_type : !pdl.type)
-    pdl.rewrite %root {
-      %predicate = pdl.attribute = "eq"
-      %eq_op = pdl.operation "arith.cmpi"(%lhs, %rhs : !pdl.value, !pdl.value) {"predicate" = %predicate} -> (%result_type : !pdl.type)
-      %eq_result = pdl.result 0 of %eq_op
-      pdl.replace %root with (%eq_result : !pdl.value)
-    }
-  }
-    // LowerComparison Pattern - Float NEQ
-  pdl.pattern : benefit(1) {
-    %lhs_type = pdl.type : f64
-    %lhs = pdl.operand : %lhs_type
-    %rhs_type = pdl.type : f64
-    %rhs = pdl.operand : %rhs_type
-    %result_type = pdl.type : i1
-    %op_name_attr = pdl.attribute = "NEQ"
-    %root = pdl.operation "mini.comparison"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%result_type : !pdl.type)
-    pdl.rewrite %root {
-      %predicate = pdl.attribute = "ne"
-      %neq_op = pdl.operation "arith.cmpf"(%lhs, %rhs : !pdl.value, !pdl.value) {"predicate" = %predicate} -> (%result_type : !pdl.type)
-      %neq_result = pdl.result 0 of %neq_op
-      pdl.replace %root with (%neq_result : !pdl.value)
-    }
-  }
-  // LowerCoroGetResult Pattern
-  pdl.pattern : benefit(1) {
+  pdl.pattern @LowerCoroGetResult : benefit(1) {
     %coro_type = pdl.type : !llvm.ptr
     %coro = pdl.operand : %coro_type
     %result_type = pdl.type
-    %result_type_attr = pdl.attribute
     %root = pdl.operation "mini.coro_get_result"(%coro : !pdl.value) -> (%result_type : !pdl.type)
+    %result_type_attr = pdl.apply_native_constraint "type_to_type_attr"(%result_type : !pdl.type) : !pdl.attribute
+    %coro_struct_type = pdl.apply_native_constraint "coro_frame"(%result_type : !pdl.type) : !pdl.attribute
     pdl.rewrite %root {
-      //%coro_struct_type = pdl.attribute = !llvm.struct<(!llvm.ptr, !llvm.array<3 x ptr>, !llvm.ptr, i1, %result_type_attr)>
-      %coro_struct_type = pdl.attribute = !llvm.struct<(!llvm.ptr, !llvm.array<3 x ptr>, !llvm.ptr, i1, i64)>
       %indices = pdl.attribute = array<i32: 0, 4>
       %gep = pdl.operation "llvm.getelementptr"(%coro : !pdl.value) {"elem_type" = %coro_struct_type, "rawConstantIndices" = %indices} -> (%coro_type : !pdl.type)
       %gep_result = pdl.result 0 of %gep
@@ -318,16 +191,14 @@ module @patterns {
       pdl.replace %root with (%load_result : !pdl.value)
     }
   }
-  // LowerCoroSetResult Pattern
-  pdl.pattern : benefit(1) {
+  pdl.pattern @LowerCoroSetResult : benefit(1) {
     %coro_type = pdl.type : !llvm.ptr
     %coro = pdl.operand : %coro_type
     %value_type = pdl.type
     %value = pdl.operand : %value_type
     %root = pdl.operation "mini.coro_set_result"(%coro, %value : !pdl.value, !pdl.value)
+    %coro_struct_type = pdl.apply_native_constraint "coro_frame"(%value_type : !pdl.type) : !pdl.attribute
     pdl.rewrite %root {
-      //%coro_struct_type = pdl.attribute = !llvm.struct<(!llvm.ptr, !llvm.array<3 x ptr>, !llvm.ptr, i1, %value_type_attr)>
-      %coro_struct_type = pdl.attribute = !llvm.struct<(!llvm.ptr, !llvm.array<3 x ptr>, !llvm.ptr, i1, i64)>
       %indices = pdl.attribute = array<i32: 0, 4>
       %gep = pdl.operation "llvm.getelementptr"(%coro : !pdl.value) {"elem_type" = %coro_struct_type, "rawConstantIndices" = %indices} -> (%coro_type : !pdl.type)
       %gep_result = pdl.result 0 of %gep
@@ -335,100 +206,188 @@ module @patterns {
       pdl.replace %root with %store
     }
   }
-  // LowerUtilsAPI Pattern
-  pdl.pattern : benefit(1) {
-    %root = pdl.operation "mini.utils_api"
+  pdl.pattern @LowerGlobalStr : benefit(1) {
+    %sym_name_attr = pdl.attribute
+    %str_type = pdl.attribute
+    %value_attr = pdl.attribute
+    %root = pdl.operation "mini.globalstr" {"sym_name" = %sym_name_attr, "str_type" = %str_type, "value" = %value_attr}
     pdl.rewrite %root {
-      %i64_type = pdl.type : i64
-      %opaque_ptr_type = pdl.type : !llvm.ptr
-      %func_type_attr0 = pdl.attribute = !llvm.func<ptr  (i64)>
-      %malloc = pdl.attribute = @malloc
+      %linkage = pdl.attribute = #llvm.linkage<linkonce_odr>
+      %constant = pdl.attribute = unit
+      %zero = pdl.attribute = 0
+      %global_string = pdl.operation "placeholder.global" {"sym_name" = %sym_name_attr, "global_type" = %str_type, "value" = %value_attr, "linkage" = %linkage, "constant" = %constant}
+      %with_region = pdl.apply_native_rewrite "add_region"(%global_string : !pdl.operation) : !pdl.operation
+      pdl.erase %global_string
+      pdl.erase %root
+    }
+  }
+  pdl.pattern @LowerExternalTypeDef : benefit(1) {
+    %class_name_attr = pdl.attribute
+    %vtbl_size_attr = pdl.attribute
+    %vtbl_type = pdl.apply_native_constraint "vtable_type"(%vtbl_size_attr : !pdl.attribute) : !pdl.attribute
+    %root = pdl.operation "mini.external_typedef" {"class_name" = %class_name_attr, "vtbl_size" = %vtbl_size_attr}
+    pdl.rewrite %root {
       %linkage = pdl.attribute = #llvm.linkage<external>
-      %malloc_decl = pdl.operation "func.func" {"sym_name" = %malloc, "function_type" = %func_type_attr0, "linkage" = %linkage}
-      %func_type_attr1 = pdl.attribute = !llvm.func<void ()>
-      %landing_pad = pdl.attribute = @setup_landing_pad
-      %setup_landing_pad_decl = pdl.operation "func.func" {"sym_name" = %landing_pad, "function_type" = %func_type_attr1, "linkage" = %linkage}
-      %func_type_attr2 = pdl.attribute = !llvm.func<void (ptr)>
-      %anoint = pdl.attribute = @anoint_trampoline
-      %anoint_trampoline_decl = pdl.operation "func.func" {"sym_name" = %anoint, "function_type" = %func_type_attr2, "linkage" = %linkage}
-      %func_type_attr3 = pdl.attribute = !llvm.func<ptr  (ptr, ptr)>
-      %coro_create = pdl.attribute = @coroutine_create
-      %coroutine_create_decl = pdl.operation "func.func" {"sym_name" = %coro_create, "function_type" = %func_type_attr3, "linkage" = %linkage}
-      %func_type_attr4 = pdl.attribute = !llvm.func<void (ptr)>
-      %passer = pdl.attribute = @arg_passer
-      %arg_passer_decl = pdl.operation "func.func" {"sym_name" = %passer, "function_type" = %func_type_attr4, "linkage" = %linkage}
-      %func_type_attr5 = pdl.attribute = !llvm.func<void (ptr)>
-      %buff_fill = pdl.attribute = @arg_buffer_filler
-      %arg_buffer_filler_decl = pdl.operation "func.func" {"sym_name" = %buff_fill, "function_type" = %func_type_attr5, "linkage" = %linkage}
-      %func_type_attr6 = pdl.attribute = !llvm.func<void (ptr)>
-      %yield = pdl.attribute = @coroutine_yield
-      %coroutine_yield_decl = pdl.operation "func.func" {"sym_name" = %yield, "function_type" = %func_type_attr6, "linkage" = %linkage}
-      %func_type_attr7 = pdl.attribute = !llvm.func<ptr  ()>
-      %gcc = pdl.attribute = @get_current_coroutine
-      %get_current_coroutine_decl = pdl.operation "func.func" {"sym_name" = %gcc, "function_type" = %func_type_attr7, "linkage" = %linkage}
-      %func_type_attr8 = pdl.attribute = !llvm.func<void (ptr, ptr)>
-      %set_offset = pdl.attribute = @set_offset
-      %set_offset_decl = pdl.operation "func.func" {"sym_name" = %set_offset, "function_type" = %func_type_attr8, "linkage" = %linkage}
-      %i32_type = pdl.type : i32
-      %func_type_attr9 = pdl.attribute = !llvm.func<i32 (ptr, ptr, ptr, i32, i64, i64, ptr)>
-      %lub = pdl.attribute = @least_upper_bound
-      %least_upper_bound_decl = pdl.operation "func.func" {"sym_name" = %lub, "function_type" = %func_type_attr9, "linkage" = %linkage}
-      %i1_type = pdl.type : i1
-      %func_type_attr10 = pdl.attribute = !llvm.func<i1 (i64, i64, i64, i64, ptr)>
-      %subtype = pdl.attribute = @subtype_test
-      %subtype_test_decl = pdl.operation "func.func" {"sym_name" = %subtype, "function_type" = %func_type_attr10, "linkage" = %linkage}
-      %func_type_attr11 = pdl.attribute = !llvm.func<i1 (ptr, i64, i64, i64, i64, ptr)>
-      %wrapper = pdl.attribute = @subtype_test_wrapper
-      %subtype_test_wrapper_decl = pdl.operation "func.func" {"sym_name" = %wrapper, "function_type" = %func_type_attr11, "linkage" = %linkage}
-      %func_type_attr12 = pdl.attribute = !llvm.func<void (ptr)>
-      %coro_call = pdl.attribute = @coroutine_call
-      %coroutine_call_decl = pdl.operation "func.func" {"sym_name" = %coro_call, "function_type" = %func_type_attr12, "linkage" = %linkage}
-      pdl.replace %root with %coroutine_call_decl
+      %constant = pdl.attribute = unit
+      %class_glob = pdl.operation "placeholder.global" {"sym_name" = %class_name_attr, "global_type" = %vtbl_type, "linkage" = %linkage, "constant" = %constant}
+      %with_region = pdl.apply_native_rewrite "add_region"(%class_glob : !pdl.operation) : !pdl.operation
+      pdl.erase %class_glob
+      pdl.erase %root
     }
   }
-  // LowerBufferFiller Pattern
-  pdl.pattern : benefit(1) {
-    %func_name_attr = pdl.attribute
-    %arg_types_array_attr = pdl.attribute
-    %yield_type_attr = pdl.attribute
-    %result_type = pdl.type : !llvm.ptr
-    %root = pdl.operation "mini.buffer_filler" {"func_name" = %func_name_attr, "arg_types" = %arg_types_array_attr, "yield_type" = %yield_type_attr}
+  pdl.pattern @LowerPrintfDecl : benefit(1) {
+    %root = pdl.operation "mini.printfdecl"
     pdl.rewrite %root {
-      %func_op = pdl.operation "func.func" {"sym_name" = %func_name_attr, "function_type" = %arg_types_array_attr}
-      pdl.replace %root with %func_op
+      %i8_ptr_type = pdl.type : !llvm.ptr
+      %i32_type = pdl.type : i32
+      %printf_type_attr = pdl.attribute = !llvm.func<i32 (!llvm.ptr)>
+      %sym_name = pdl.attribute = "printf"
+      %linkage = pdl.attribute = #llvm.linkage<external>
+      %printf_decl = pdl.operation "llvm.func" {"sym_name" = %sym_name, "function_type" = %printf_type_attr, "linkage" = %linkage}
+      %with_region = pdl.apply_native_rewrite "add_region"(%printf_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %printf_decl
+      pdl.erase %root
     }
   }
-  // LowerBufferIndexation Pattern
-  pdl.pattern : benefit(1) {
-    %receiver_type = pdl.type : !llvm.ptr
-    %receiver = pdl.operand : %receiver_type
-    %index_type = pdl.type : !llvm.ptr
-    %index = pdl.operand : %index_type
+  pdl.pattern @LowerUtilsAPI : benefit(1) {
+    %root = pdl.operation "mini.utils_api"
+    %i64_type = pdl.type : i64
+    %i32_type = pdl.type : i32
+    %i1_type = pdl.type : i1
+    %opaque_ptr_type = pdl.type : !llvm.ptr
+    pdl.rewrite %root {
+      
+      %malloc = pdl.attribute = @malloc
+      %func_type_attr0 = pdl.attribute = !llvm.func<ptr  (i64)>
+      %linkage = pdl.attribute = #llvm.linkage<external>
+      %malloc_decl = pdl.operation "llvm.func" {"sym_name" = %malloc, "function_type" = %func_type_attr0, "linkage" = %linkage}
+      %malloc_with_region = pdl.apply_native_rewrite "add_region"(%malloc_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %malloc_decl
+      
+      %landing_pad = pdl.attribute = @setup_landing_pad
+      %func_type_attr1 = pdl.attribute = !llvm.func<void ()>
+      %setup_landing_pad_decl = pdl.operation "llvm.func" {"sym_name" = %landing_pad, "function_type" = %func_type_attr1, "linkage" = %linkage}
+      %setup_landing_pad_with_region = pdl.apply_native_rewrite "add_region"(%setup_landing_pad_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %setup_landing_pad_decl
+      
+      %anoint = pdl.attribute = @anoint_trampoline
+      %func_type_attr2 = pdl.attribute = !llvm.func<void (ptr)>
+      %anoint_trampoline_decl = pdl.operation "llvm.func" {"sym_name" = %anoint, "function_type" = %func_type_attr2, "linkage" = %linkage}
+      %anoint_trampoline_with_region = pdl.apply_native_rewrite "add_region"(%anoint_trampoline_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %anoint_trampoline_decl
+      
+      %coro_create = pdl.attribute = @coroutine_create
+      %func_type_attr3 = pdl.attribute = !llvm.func<ptr  (ptr, ptr)>
+      %coroutine_create_decl = pdl.operation "llvm.func" {"sym_name" = %coro_create, "function_type" = %func_type_attr3, "linkage" = %linkage}
+      %coroutine_create_with_region = pdl.apply_native_rewrite "add_region"(%coroutine_create_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %coroutine_create_decl
+      
+      %passer = pdl.attribute = @arg_passer
+      %func_type_attr4 = pdl.attribute = !llvm.func<void (ptr)>
+      %arg_passer_decl = pdl.operation "llvm.func" {"sym_name" = %passer, "function_type" = %func_type_attr4, "linkage" = %linkage}
+      %arg_passer_with_region = pdl.apply_native_rewrite "add_region"(%arg_passer_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %arg_passer_decl
+      
+      %buff_fill = pdl.attribute = @arg_buffer_filler
+      %func_type_attr5 = pdl.attribute = !llvm.func<void (ptr)>
+      %arg_buffer_filler_decl = pdl.operation "llvm.func" {"sym_name" = %buff_fill, "function_type" = %func_type_attr5, "linkage" = %linkage}
+      %arg_buffer_filler_with_region = pdl.apply_native_rewrite "add_region"(%arg_buffer_filler_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %arg_buffer_filler_decl
+      
+      %yield = pdl.attribute = @coroutine_yield
+      %func_type_attr6 = pdl.attribute = !llvm.func<void (ptr)>
+      %coroutine_yield_decl = pdl.operation "llvm.func" {"sym_name" = %yield, "function_type" = %func_type_attr6, "linkage" = %linkage}
+      %coroutine_yield_with_region = pdl.apply_native_rewrite "add_region"(%coroutine_yield_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %coroutine_yield_decl
+      
+      %gcc = pdl.attribute = @get_current_coroutine
+      %func_type_attr7 = pdl.attribute = !llvm.func<ptr  ()>
+      %get_current_coroutine_decl = pdl.operation "llvm.func" {"sym_name" = %gcc, "function_type" = %func_type_attr7, "linkage" = %linkage}
+      %get_current_coroutine_with_region = pdl.apply_native_rewrite "add_region"(%get_current_coroutine_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %get_current_coroutine_decl
+      
+      %set_offset = pdl.attribute = @set_offset
+      %func_type_attr8 = pdl.attribute = !llvm.func<void (ptr, ptr)>
+      %set_offset_decl = pdl.operation "llvm.func" {"sym_name" = %set_offset, "function_type" = %func_type_attr8, "linkage" = %linkage}
+      %set_offset_with_region = pdl.apply_native_rewrite "add_region"(%set_offset_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %set_offset_decl
+
+      %lub = pdl.attribute = @least_upper_bound
+      %func_type_attr9 = pdl.attribute = !llvm.func<i32 (ptr, ptr, ptr, i32, i64, i64, ptr)>
+      %least_upper_bound_decl = pdl.operation "llvm.func" {"sym_name" = %lub, "function_type" = %func_type_attr9, "linkage" = %linkage}
+      %least_upper_bound_with_region = pdl.apply_native_rewrite "add_region"(%least_upper_bound_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %least_upper_bound_decl
+      
+      %subtype = pdl.attribute = @subtype_test
+      %func_type_attr10 = pdl.attribute = !llvm.func<i1 (i64, i64, i64, i64, ptr)>
+      %subtype_test_decl = pdl.operation "llvm.func" {"sym_name" = %subtype, "function_type" = %func_type_attr10, "linkage" = %linkage}
+      %subtype_test_with_region = pdl.apply_native_rewrite "add_region"(%subtype_test_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %subtype_test_decl
+      
+      %wrapper = pdl.attribute = @subtype_test_wrapper
+      %func_type_attr11 = pdl.attribute = !llvm.func<i1 (ptr, i64, i64, i64, i64, ptr)>
+      %subtype_test_wrapper_decl = pdl.operation "llvm.func" {"sym_name" = %wrapper, "function_type" = %func_type_attr11, "linkage" = %linkage}
+      %subtype_test_wrapper_with_region = pdl.apply_native_rewrite "add_region"(%subtype_test_wrapper_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %subtype_test_wrapper_decl
+
+      %coro_call = pdl.attribute = @coroutine_call
+      %func_type_attr12 = pdl.attribute = !llvm.func<void (ptr)>
+      %coroutine_call_decl = pdl.operation "llvm.func" {"sym_name" = %coro_call, "function_type" = %func_type_attr12, "linkage" = %linkage}
+      %coroutine_call_with_region = pdl.apply_native_rewrite "add_region"(%coroutine_call_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %coroutine_call_decl
+      
+      pdl.erase %root
+    }
+  }
+  pdl.pattern @LowerBufferIndexation : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %receiver = pdl.operand : %ptr_type
+    %index = pdl.operand : %ptr_type
     %element_type_attr = pdl.attribute
     %result_type = pdl.type : !llvm.ptr
+    %i32_type = pdl.type : i32
+    %i64_type = pdl.type : i64
+    %i8_attr = pdl.attribute = i8
     %root = pdl.operation "mini.buffer_indexation"(%receiver, %index : !pdl.value, !pdl.value) {"typ" = %element_type_attr} -> (%result_type : !pdl.type)
     pdl.rewrite %root {
-      %opaque_ptr_type = pdl.type : !llvm.ptr
-      %ptr_attr = pdl.attribute = !llvm.ptr
-      %i32_type = pdl.type : i32
-      %i32_attr = pdl.attribute = i32
-      %i64_type = pdl.type : i64
-      %i64_attr = pdl.attribute = i64
-      %i8_attr = pdl.attribute = i8
-      %buf_ptr = pdl.operation "llvm.load"(%receiver : !pdl.value) {"type" = %ptr_attr} -> (%opaque_ptr_type : !pdl.type)
+      %buf_ptr = pdl.operation "llvm.load"(%receiver : !pdl.value) -> (%ptr_type : !pdl.type)
       %buf_ptr_result = pdl.result 0 of %buf_ptr
-      %idx = pdl.operation "llvm.load"(%index : !pdl.value) {"type" = %i32_attr} -> (%i32_type : !pdl.type)
+      %idx = pdl.operation "llvm.load"(%index : !pdl.value) -> (%i32_type : !pdl.type)
       %idx_result = pdl.result 0 of %idx
-      %null = pdl.operation "llvm.mlir.zero" -> (%opaque_ptr_type : !pdl.type)
+      %null = pdl.operation "llvm.mlir.zero" -> (%ptr_type : !pdl.type)
       %null_result = pdl.result 0 of %null
       %indices = pdl.attribute = array<i32: -2147483648>
-      %gep0 = pdl.operation "llvm.getelementptr"(%null_result, %idx_result : !pdl.value, !pdl.value) {"elem_type" = %element_type_attr, "rawConstantIndices" = %indices} -> (%opaque_ptr_type : !pdl.type)
+      %gep0 = pdl.operation "llvm.getelementptr"(%null_result, %idx_result : !pdl.value, !pdl.value) {"elem_type" = %element_type_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
       %gep0_result = pdl.result 0 of %gep0
-      %idx_bytes = pdl.operation "llvm.ptrtoint"(%gep0_result : !pdl.value) {"type" = %i64_attr} -> (%i64_type : !pdl.type)
+      %idx_bytes = pdl.operation "llvm.ptrtoint"(%gep0_result : !pdl.value) -> (%i64_type : !pdl.type)
       %idx_bytes_result = pdl.result 0 of %idx_bytes
       %gep1 = pdl.operation "llvm.getelementptr"(%buf_ptr_result, %idx_bytes_result : !pdl.value, !pdl.value) {"elem_type" = %i8_attr, "rawConstantIndices" = %indices} -> (%result_type : !pdl.type)
       %gep1_result = pdl.result 0 of %gep1
       pdl.replace %root with (%gep1_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerOr : benefit(1) {
+    %bool = pdl.type : i1
+    %lhs = pdl.operand : %bool
+    %rhs = pdl.operand : %bool
+    %op_name_attr = pdl.attribute = "or"
+    %root = pdl.operation "mini.logical"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%bool : !pdl.type)
+    pdl.rewrite %root {
+      %or_op = pdl.operation "arith.ori"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%bool : !pdl.type)
+      %or_result = pdl.result 0 of %or_op
+      pdl.replace %root with (%or_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerAnd : benefit(1) {
+    %bool = pdl.type : i1
+    %lhs = pdl.operand : %bool
+    %rhs = pdl.operand : %bool
+    %op_name_attr = pdl.attribute = "and"
+    %root = pdl.operation "mini.logical"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%bool : !pdl.type)
+    pdl.rewrite %root {
+      %and_op = pdl.operation "arith.andi"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%bool : !pdl.type)
+      %and_result = pdl.result 0 of %and_op
+      pdl.replace %root with (%and_result : !pdl.value)
     }
   }
 }

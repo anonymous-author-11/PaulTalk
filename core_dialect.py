@@ -1106,7 +1106,7 @@ class WrapOp(IRDLOperation):
 
     @classmethod
     def make(cls, operand, result_type=llvm.LLVMPointerType.opaque()):
-        return WrapOp.create(operands=[operand], attributes={"typ":operand.type}, result_types=[result_type])
+        return WrapOp.create(operands=[operand], result_types=[result_type])
 
 @irdl_op_definition
 class UnwrapOp(IRDLOperation):
