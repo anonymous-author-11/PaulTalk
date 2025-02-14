@@ -694,4 +694,18 @@ module @patterns {
       pdl.replace %root with (%intrinsic_result : !pdl.value)
     }
   }
+  pdl.pattern @LowerTupleIndexation : benefit(1) {
+    %index = pdl.attribute
+    %receiver = pdl.operand
+    %result_type = pdl.type
+    %pointee_type = pdl.attribute
+    %root = pdl.operation "mini.tuple_indexation"(%receiver : !pdl.value) {"typ" = %pointee_type, "index" = %index} -> (%result_type : !pdl.type)
+    %zero = pdl.attribute = 0
+    %indices = pdl.apply_native_constraint "array_attr"(%zero, %index : !pdl.attribute, !pdl.attribute) : !pdl.attribute
+    pdl.rewrite %root {
+      %gep = pdl.operation "llvm.getelementptr"(%receiver : !pdl.value) {"elem_type" = %pointee_type, "rawConstantIndices" = %indices} -> (%result_type : !pdl.type)
+      %result = pdl.result 0 of %gep
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
 }

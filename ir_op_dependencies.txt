@@ -70,8 +70,8 @@ mini.external_typedef -> mini.global [check!]
 mini.arithmetic -> arith.addi, arith.subi, arith.muli, arith.divsi, arith.remsi, arith.shli, arith.shrsi, arith.andi, arith.ori, arith.xori, arith.addf, arith.subf, arith.mulf, arith.divf [check!]
 mini.comparison -> arith.cmpi, arith.cmpf [check!]
 mini.unwrap -> llvm.load, builtin.unrealized_conversion_cast, llvm.undef, llvm.gep, llvm.insertvalue [check!]
+mini.intrinsic -> llvm.call_intrinsic [check!]
 
-mini.intrinsic -> llvm.call_intrinsic
 mini.tuple_indexation -> llvm.gep
 
 mini.buffer_filler -> llvm.gep, llvm.store, func.return, func.func

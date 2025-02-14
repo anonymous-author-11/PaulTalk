@@ -96,7 +96,7 @@ class SecondPass(ModulePass):
                 LowerCreateTuple(),
                 LowerNew(),
                 #LowerBufferIndexation(),
-                LowerTupleIndexation(),
+                #LowerTupleIndexation(),
                 LowerPlaceIntoBuffer(),
                 LowerFromBuffer()
             ]),
