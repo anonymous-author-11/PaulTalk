@@ -253,6 +253,7 @@ DONE:
 - Bitwise operations for integers [check!]
 - Move alloca hoisting to llvm pass [check!]
 - Start moving lowering patterns to PDL [check!]
+- Get native constraints and rewrites working [check!]
 
 TODO:
 

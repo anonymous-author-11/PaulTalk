@@ -139,7 +139,7 @@ class ThirdPass(ModulePass):
                 LowerParameterizationIndexation(),
                 LowerCastAssign(),
                 LowerRefer(),
-                LowerIntrinsic(),
+                #LowerIntrinsic(),
                 LowerPrelude(),
                 LowerGlobalFptr(),
                 LowerUtilsAPI(),
@@ -153,6 +153,7 @@ class ThirdPass(ModulePass):
                 LowerCoroCreate(),
                 LowerCoroYield(),
                 LowerCoroCall(),
+                LowerPrintfDecl(),
                 LowerPrintF(),
                 LowerSetOffset(),
                 LowerLiteral(),
@@ -161,7 +162,6 @@ class ThirdPass(ModulePass):
                 #LowerComparison(),
                 #LowerArithmetic(),
                 #LowerLogical(),
-                #LowerPrintfDecl(),
                 #LowerGlobalStr(),
                 #LowerExternalTypeDef(),
                 #LowerCoroGetResult(),
@@ -949,8 +949,8 @@ class LowerWrap(RewritePattern):
 class LowerIntrinsic(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: IntrinsicOp, rewriter: PatternRewriter):
-        call = llvm.CallIntrinsicOp("llvm." + op.call_name.data, [op.args], [op.result.type])
-        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [len(op.args), 0])
+        call = llvm.CallIntrinsicOp(op.call_name.data, [op.args], [op.result.type])
+        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [op.num_args.value.data, 0])
         call.properties["operandSegmentSizes"] = operandSegmentSizes
         call.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
         rewriter.replace_matched_op(call)

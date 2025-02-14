@@ -995,8 +995,8 @@ class IntrinsicCall(ClassMethodCall):
             unwrap = UnwrapOp(operands=[arg], result_types=[arg_types[i]])
             scope.region.last_block.add_op(unwrap)
             args[i] = unwrap.results[0]
-        call_name = StringAttr(".".join(self.method.split("_")))
-        intrinsic = IntrinsicOp.create(operands=args, attributes={"call_name":call_name}, result_types=[op_type.base_typ()])
+        call_name = ".".join(self.method.split("_"))
+        intrinsic = IntrinsicOp.make(call_name, op_type.base_typ(), args)
         wrap = WrapOp.make(intrinsic.results[0], op_type)
         scope.region.last_block.add_ops([intrinsic, wrap])
         return wrap.results[0]

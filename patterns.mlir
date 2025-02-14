@@ -264,6 +264,22 @@ module @patterns {
       pdl.erase %root
     }
   }
+  pdl.pattern @LowerPrintf : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %format_ptr = pdl.operand : %ptr_type
+    %msg = pdl.operands
+    %i32_type = pdl.type : i32
+    %root = pdl.operation "mini.printf"(%format_ptr, %msg : !pdl.value, !pdl.range<value>) -> (%i32_type : !pdl.type)
+    pdl.rewrite %root {
+      %callee = pdl.attribute = @printf
+      %opsegsize = pdl.attribute = array<i32: 2, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %callee_type = pdl.attribute = !llvm.func<i32 (!llvm.ptr, ...)>
+      %call = pdl.operation "llvm.call"(%format_ptr, %msg : !pdl.value, !pdl.range<value>) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize, "callee_type" = %callee_type, "var_callee_type" = %callee_type} -> (%i32_type : !pdl.type)
+      %call_result = pdl.result 0 of %call
+      pdl.replace %root with (%call_result : !pdl.value)
+    }
+  }
   pdl.pattern @LowerUtilsAPI : benefit(1) {
     %root = pdl.operation "mini.utils_api"
     %i64_type = pdl.type : i64
@@ -660,6 +676,22 @@ module @patterns {
       %load = pdl.operation "llvm.load"(%operand : !pdl.value) -> (%result_type : !pdl.type)
       %result = pdl.result 0 of %load
       pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerIntrinsic : benefit(1) {
+    %call_name = pdl.attribute
+    %i32_type = pdl.type : i32
+    %num_args = pdl.attribute
+    %args = pdl.operands
+    %result_type = pdl.type
+    %root = pdl.operation "mini.intrinsic"(%args : !pdl.range<value>) {"call_name" = %call_name, "num_args" = %num_args} -> (%result_type : !pdl.type)
+    %zero = pdl.attribute = 0
+    %opsegsize = pdl.apply_native_constraint "array_attr"(%num_args, %zero : !pdl.attribute, !pdl.attribute) : !pdl.attribute
+    pdl.rewrite %root {
+      %opbundlesize = pdl.attribute = array<i32>
+      %intrinsic = pdl.operation "llvm.call_intrinsic"(%args : !pdl.range<value>) {"intrin" = %call_name, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%result_type : !pdl.type)
+      %intrinsic_result = pdl.result 0 of %intrinsic
+      pdl.replace %root with (%intrinsic_result : !pdl.value)
     }
   }
 }

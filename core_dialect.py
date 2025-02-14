@@ -1123,8 +1123,16 @@ class UnwrapOp(IRDLOperation):
 class IntrinsicOp(IRDLOperation):
     name = "mini.intrinsic"
     call_name: StringAttr = attr_def(StringAttr)
+    num_args: IntegerAttr = attr_def(IntegerAttr)
     args: VarOperand = var_operand_def()
     result: OpResult = result_def()
+
+    @classmethod
+    def make(cls, call_name, result_type, args):
+        return IntrinsicOp.create(
+            operands=args,
+            attributes={"call_name":StringAttr("llvm."+call_name), "num_args":IntegerAttr.from_int_and_width(len(args), 32)},
+            result_types=[result_type])
 
 @irdl_op_definition
 class GlobalOp(llvm.GlobalOp, IRDLOperation):

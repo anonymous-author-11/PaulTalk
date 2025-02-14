@@ -86,8 +86,6 @@ def main():
     module_str = module_str[23:-16]
     with open("out.mlir", "w") as outfile: outfile.write(module_str)
 
-    print("placeholder.constant" in module_str)
-
     cmd = " ".join([
         "mlir-opt","-allow-unregistered-dialect","--mlir-print-op-generic","--canonicalize=\"region-simplify=aggressive\"",
         "--mem2reg", "--sroa","--lift-cf-to-scf",

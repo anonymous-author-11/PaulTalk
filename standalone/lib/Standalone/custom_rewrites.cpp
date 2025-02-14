@@ -143,17 +143,17 @@ static LogicalResult typeToTypeAttr(PatternRewriter &rewriter,
 }
 
 static LogicalResult arrayAttr(PatternRewriter &rewriter,
-                                            PDLResultList &results,
-                                            ArrayRef<PDLValue> args) {
-  // Convert PDLValues to Attributes
-  SmallVector<Attribute> attrs;
+                             PDLResultList &results,
+                             ArrayRef<PDLValue> args) {
+  SmallVector<int32_t> values;
   for (const PDLValue &arg : args) {
-    attrs.push_back(arg.cast<Attribute>());
+    if (auto intAttr = arg.cast<Attribute>().dyn_cast<IntegerAttr>()) {
+      values.push_back(intAttr.getInt());
+    }
   }
   
-  // Create and return the ArrayAttr
-  results.push_back(ArrayAttr::get(rewriter.getContext(), attrs));
-  
+  auto attr = DenseI32ArrayAttr::get(rewriter.getContext(), values);
+  results.push_back(attr);
   return success();
 }
 

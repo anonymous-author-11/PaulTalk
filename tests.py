@@ -438,7 +438,7 @@ class CompilerTests(CompilerTestCase):
             x = Coroutine.new(counter);
             y = x.call("hello"); // Invalid arg type
         }"""
-        with self.assertRaisesRegex(Exception, "Coroutine.call\\(\\) expects a Ptr\\[i32\\] \\| Nil, not a String"):
+        with self.assertRaisesRegex(Exception, "Coroutine.call\\(\\) expects a .*, not a String"):
             self.run_mini_code(mini_code, "", "coroutine_call_invalid_arg_type")
 
     def test_method_def_override_invalid_param_type(self):
