@@ -54,11 +54,11 @@ module @patterns {
   pdl.pattern @LowerAllocate : benefit(1) {
     %typ_attr = pdl.attribute
     %result_type = pdl.type
-    %root = pdl.operation "mini.alloc" {"typ" = %typ_attr} -> (%result_type : !pdl.type) // Removed {} and added 
+    %root = pdl.operation "mini.alloc" {"typ" = %typ_attr} -> (%result_type : !pdl.type)
     pdl.rewrite %root {
       %i32_type = pdl.type : i32
       %one_attr = pdl.attribute = 1
-      %alloca_size = pdl.operation "llvm.mlir.constant" {"value" = %one_attr} -> (%i32_type : !pdl.type) // Removed {} and added 
+      %alloca_size = pdl.operation "llvm.mlir.constant" {"value" = %one_attr} -> (%i32_type : !pdl.type)
       %alloca_size_result = pdl.result 0 of %alloca_size
       %alloca = pdl.operation "llvm.alloca"(%alloca_size_result : !pdl.value) {"elem_type" = %typ_attr} -> (%result_type : !pdl.type)
       %alloca_result = pdl.result 0 of %alloca
@@ -179,13 +179,13 @@ module @patterns {
     %result_type = pdl.type : i32
     %root = pdl.operation "mini.next"(%operand : !pdl.value) -> (%result_type : !pdl.type)
     pdl.rewrite %root {
-      %one_attr = pdl.attribute = 1 // Corrected attribute assignment
+      %one_attr = pdl.attribute = 1
       %i32_type = pdl.type : i32
       %i32_attr = pdl.attribute = i32
       %one = pdl.operation "llvm.mlir.constant" {"value" = %one_attr} -> (%i32_type : !pdl.type)
       %one_result = pdl.result 0 of %one
       %load = pdl.operation "llvm.load"(%operand : !pdl.value) {"type" = %i32_attr} -> (%i32_type : !pdl.type)
-      %load_result = pdl.result 0 of %load // Corrected result name
+      %load_result = pdl.result 0 of %load
       %inc = pdl.operation "arith.addi"(%load_result, %one_result : !pdl.value, !pdl.value) -> (%i32_type : !pdl.type)
       %inc_result = pdl.result 0 of %inc
       %store = pdl.operation "llvm.store"(%inc_result, %operand : !pdl.value, !pdl.value)
