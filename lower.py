@@ -95,8 +95,6 @@ class SecondPass(ModulePass):
                 LowerCreateBuffer(),
                 LowerCreateTuple(),
                 LowerNew(),
-                #LowerBufferIndexation(),
-                #LowerTupleIndexation(),
                 LowerPlaceIntoBuffer(),
                 LowerFromBuffer()
             ]),
@@ -158,6 +156,8 @@ class ThirdPass(ModulePass):
                 LowerSetOffset(),
                 LowerLiteral(),
                 LowerMemCpy()
+                #LowerBufferIndexation(),
+                #LowerTupleIndexation(),
                 #LowerUnwrap(),
                 #LowerComparison(),
                 #LowerArithmetic(),

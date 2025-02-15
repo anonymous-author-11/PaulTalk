@@ -4,7 +4,6 @@
 // when an operation has no return value, you omit the -> (). so just "llvm.store"(%operand, %alloca_result : !pdl.value, !pdl.value).
 // when an operation has multiple arguments, you list all the arguments and then all the types
 // like this: pdl.operation "llvm.store"(%operand, %alloca_result : !pdl.value, !pdl.value)
-// this is unlike normal MLIR where you'd write "llvm.store"(%operand : !pdl.value, %alloca_result : !pdl.value)
 //
 // when replacing an op with a return value, you write something like
 //
@@ -16,8 +15,11 @@
 // pdl.replace %root with %call
 // 
 // if you EVER find yourself writng "-> ()" then YOU ARE MAKING AN ERROR
-// if you EVER find yourself writing "()" in any capacity whatsoever, YOU ARE MAKING AN ERROR
-// people will die if you make these errors!
+// if you EVER find yourself writing "foo.bar"() with parentheses and no operands, in any capacity whatsoever, YOU ARE MAKING AN ERROR
+// 
+// Only ever write a native rewrite pattern or native constraint if it cannot be done in pure PDL
+// Even then, only write the narrow part that can't be done in PDL
+// 
 
 module @patterns {
 

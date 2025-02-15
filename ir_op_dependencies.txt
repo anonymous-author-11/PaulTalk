@@ -71,8 +71,7 @@ mini.arithmetic -> arith.addi, arith.subi, arith.muli, arith.divsi, arith.remsi,
 mini.comparison -> arith.cmpi, arith.cmpf [check!]
 mini.unwrap -> llvm.load, builtin.unrealized_conversion_cast, llvm.undef, llvm.gep, llvm.insertvalue [check!]
 mini.intrinsic -> llvm.call_intrinsic [check!]
-
-mini.tuple_indexation -> llvm.gep
+mini.tuple_indexation -> llvm.gep [check!]
 
 mini.buffer_filler -> llvm.gep, llvm.store, func.return, func.func
 mini.parameterization_indexation -> llvm.gep, llvm.load, builtin.unrealized_conversion_cast
