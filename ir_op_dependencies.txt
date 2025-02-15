@@ -74,12 +74,12 @@ mini.unwrap -> llvm.load, builtin.unrealized_conversion_cast, llvm.undef, llvm.g
 mini.intrinsic -> llvm.call_intrinsic [check!]
 mini.tuple_indexation -> llvm.gep [check!]
 mini.parameterization_indexation -> llvm.gep, llvm.load, builtin.unrealized_conversion_cast [check!]
+mini.memcpy -> llvm.load, llvm.store, mini.memcpy
 
 ----------------------------------------------------------------------------
 mini.getter_def -> llvm.gep, func.return, func.func, mini.parameterization
 mini.wrap -> mini.alloc, llvm.store, mini.invariant [check!]
 mini.widen_int -> mini.alloc, mini.unwrap, arith.extsi, llvm.store
-mini.memcpy -> llvm.load, llvm.store, mini.memcpy
 mini.assign -> mini.memcpy, llvm.load, llvm.store
 mini.prelude -> mini.printfdecl, mini.globalstr, mini.utils_api
 mini.malloc -> mini.type_size, llvm.call

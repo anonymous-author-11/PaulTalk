@@ -26,10 +26,10 @@ module @patterns {
   pdl.pattern @LowerWrap : benefit(1) {
   	%operand_type = pdl.type
     %operand = pdl.operand : %operand_type
-    %operand_type_attr = pdl.apply_native_constraint "type_to_type_attr"(%operand_type : !pdl.type) : !pdl.attribute
     %result_type = pdl.type : !llvm.ptr
     %root = pdl.operation "mini.wrap"(%operand : !pdl.value) -> (%result_type : !pdl.type)
     pdl.rewrite %root {
+      %operand_type_attr = pdl.apply_native_rewrite "type_to_type_attr"(%operand_type : !pdl.type) : !pdl.attribute
       %alloca = pdl.operation "mini.alloc" {"typ" = %operand_type_attr} -> (%result_type : !pdl.type)
       %alloca_result = pdl.result 0 of %alloca
       %store = pdl.operation "llvm.store"(%operand, %alloca_result : !pdl.value, !pdl.value)
@@ -197,9 +197,9 @@ module @patterns {
     %coro = pdl.operand : %coro_type
     %result_type = pdl.type
     %root = pdl.operation "mini.coro_get_result"(%coro : !pdl.value) -> (%result_type : !pdl.type)
-    %result_type_attr = pdl.apply_native_constraint "type_to_type_attr"(%result_type : !pdl.type) : !pdl.attribute
-    %coro_struct_type = pdl.apply_native_constraint "coro_frame"(%result_type : !pdl.type) : !pdl.attribute
     pdl.rewrite %root {
+      %coro_struct_type = pdl.apply_native_rewrite "coro_frame"(%result_type : !pdl.type) : !pdl.attribute
+      %result_type_attr = pdl.apply_native_rewrite "type_to_type_attr"(%result_type : !pdl.type) : !pdl.attribute
       %indices = pdl.attribute = array<i32: 0, 4>
       %gep = pdl.operation "llvm.getelementptr"(%coro : !pdl.value) {"elem_type" = %coro_struct_type, "rawConstantIndices" = %indices} -> (%coro_type : !pdl.type)
       %gep_result = pdl.result 0 of %gep
@@ -214,8 +214,8 @@ module @patterns {
     %value_type = pdl.type
     %value = pdl.operand : %value_type
     %root = pdl.operation "mini.coro_set_result"(%coro, %value : !pdl.value, !pdl.value)
-    %coro_struct_type = pdl.apply_native_constraint "coro_frame"(%value_type : !pdl.type) : !pdl.attribute
     pdl.rewrite %root {
+      %coro_struct_type = pdl.apply_native_rewrite "coro_frame"(%value_type : !pdl.type) : !pdl.attribute
       %indices = pdl.attribute = array<i32: 0, 4>
       %gep = pdl.operation "llvm.getelementptr"(%coro : !pdl.value) {"elem_type" = %coro_struct_type, "rawConstantIndices" = %indices} -> (%coro_type : !pdl.type)
       %gep_result = pdl.result 0 of %gep
@@ -241,9 +241,9 @@ module @patterns {
   pdl.pattern @LowerExternalTypeDef : benefit(1) {
     %class_name_attr = pdl.attribute
     %vtbl_size_attr = pdl.attribute
-    %vtbl_type = pdl.apply_native_constraint "vtable_type"(%vtbl_size_attr : !pdl.attribute) : !pdl.attribute
     %root = pdl.operation "mini.external_typedef" {"class_name" = %class_name_attr, "vtbl_size" = %vtbl_size_attr}
     pdl.rewrite %root {
+      %vtbl_type = pdl.apply_native_rewrite "vtable_type"(%vtbl_size_attr : !pdl.attribute) : !pdl.attribute
       %linkage = pdl.attribute = #llvm.linkage<external>
       %constant = pdl.attribute = unit
       %class_glob = pdl.operation "placeholder.global" {"sym_name" = %class_name_attr, "global_type" = %vtbl_type, "linkage" = %linkage, "constant" = %constant}
@@ -625,8 +625,8 @@ module @patterns {
     %rhs = pdl.operand : %op_type
     %op_name_attr = pdl.attribute
     %root = pdl.operation "mini.comparison"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%bool : !pdl.type)
-    %predicate_name = pdl.apply_native_constraint "map_cmpf"(%op_name_attr : !pdl.attribute) : !pdl.attribute
     pdl.rewrite %root {
+      %predicate_name = pdl.apply_native_rewrite "map_cmpf"(%op_name_attr : !pdl.attribute) : !pdl.attribute
       %replacement = pdl.operation "arith.cmpf"(%lhs, %rhs : !pdl.value, !pdl.value) {"predicate" = %predicate_name} -> (%bool : !pdl.type)
       %result = pdl.result 0 of %replacement
       pdl.replace %root with (%result : !pdl.value)
@@ -640,8 +640,8 @@ module @patterns {
     %rhs = pdl.operand : %op_type
     %op_name_attr = pdl.attribute
     %root = pdl.operation "mini.comparison"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%bool : !pdl.type)
-    %predicate_name = pdl.apply_native_constraint "map_cmpi"(%op_name_attr : !pdl.attribute) : !pdl.attribute
     pdl.rewrite %root {
+      %predicate_name = pdl.apply_native_rewrite "map_cmpi"(%op_name_attr : !pdl.attribute) : !pdl.attribute
       %replacement = pdl.operation "arith.cmpi"(%lhs, %rhs : !pdl.value, !pdl.value) {"predicate" = %predicate_name} -> (%bool : !pdl.type)
       %result = pdl.result 0 of %replacement
       pdl.replace %root with (%result : !pdl.value)
@@ -718,6 +718,50 @@ module @patterns {
     pdl.rewrite %root {
       %result = pdl.apply_native_rewrite "lower_parameterization_indexation"(%root : !pdl.operation) : !pdl.value
       pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerMemCpyNilOperands : benefit(1) {
+    %source = pdl.operand
+    %dest = pdl.operand
+    %type = pdl.attribute
+    %root = pdl.operation "mini.memcpy"(%source, %dest : !pdl.value, !pdl.value) {"type" = %type}
+    pdl.rewrite %root {
+      pdl.erase %root
+    }
+  }
+  pdl.pattern @LowerMemCpyNilType : benefit(3) {
+    %source = pdl.operand
+    %dest = pdl.operand
+    %nil_type_attr = pdl.attribute = !llvm.array<0 x i8>
+    %root = pdl.operation "mini.memcpy"(%source, %dest : !pdl.value, !pdl.value) {"type" = %nil_type_attr}
+    pdl.rewrite %root {
+      pdl.erase %root
+    }
+  }
+  pdl.pattern @LowerMemCpyStruct : benefit(3) {
+    %struct_type_attr = pdl.attribute
+    pdl.apply_native_constraint "is_struct_attr"(%struct_type_attr : !pdl.attribute)
+    %ptr_type = pdl.type : !llvm.ptr
+    %source = pdl.operand : %ptr_type
+    %dest = pdl.operand : %ptr_type
+    %root = pdl.operation "mini.memcpy"(%source, %dest : !pdl.value, !pdl.value) {"type" = %struct_type_attr}
+    pdl.rewrite %root {
+      pdl.apply_native_rewrite "lower_memcpy_struct"(%root : !pdl.operation)
+      pdl.erase %root
+    }
+  }
+  pdl.pattern @LowerMemCpySimple : benefit(2) {
+    %type_attr = pdl.attribute
+    %ptr_type = pdl.type : !llvm.ptr
+    %source = pdl.operand : %ptr_type
+    %dest = pdl.operand : %ptr_type
+    %root = pdl.operation "mini.memcpy"(%source, %dest : !pdl.value, !pdl.value) {"type" = %type_attr}
+    pdl.rewrite %root {
+      %type = pdl.apply_native_rewrite "type_attr_to_type"(%type_attr : !pdl.attribute) : !pdl.type
+      %load = pdl.operation "llvm.load"(%source : !pdl.value) {"type" = %type_attr} -> (%type : !pdl.type)
+      %load_result = pdl.result 0 of %load
+      %store = pdl.operation "llvm.store"(%load_result, %dest : !pdl.value, !pdl.value)
+      pdl.replace %root with %store
     }
   }
 }

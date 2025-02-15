@@ -13,32 +13,23 @@
 
 using namespace mlir;
 
-static LogicalResult isFloat(PatternRewriter &rewriter,
-                                            PDLResultList &results,
-                                            ArrayRef<PDLValue> args) {
-  Type type = args[0].cast<Type>();
+static LogicalResult isFloat(PatternRewriter &rewriter, Type type) {
   return success(type.isa<FloatType>());
 }
 
-static LogicalResult isInt(PatternRewriter &rewriter,
-                                            PDLResultList &results,
-                                            ArrayRef<PDLValue> args) {
-  Type type = args[0].cast<Type>();
+static LogicalResult isInt(PatternRewriter &rewriter, Type type) {
   return success(type.isa<IntegerType>());
 }
 
-static LogicalResult isStruct(PatternRewriter &rewriter,
-                                            PDLResultList &results,
-                                            ArrayRef<PDLValue> args) {
-  Type type = args[0].cast<Type>();
+static LogicalResult isStruct(PatternRewriter &rewriter, Type type) {
   return success(type.isa<LLVM::LLVMStructType>());
 }
 
-static LogicalResult coroFrame(PatternRewriter &rewriter,
-                                                 PDLResultList &results,
-                                                 ArrayRef<PDLValue> args) {
-  // Extract the input type from args
-  Type inputType = args[0].cast<Type>();
+static LogicalResult isStructAttr(PatternRewriter &rewriter, Attribute attr) {
+  return success(attr.cast<TypeAttr>().getValue().isa<LLVM::LLVMStructType>());
+}
+
+static Attribute coroFrame(PatternRewriter &rewriter, Type inputType) {
   
   // Get the context
   MLIRContext *context = rewriter.getContext();
@@ -60,18 +51,12 @@ static LogicalResult coroFrame(PatternRewriter &rewriter,
   // Create the LLVM struct type
   auto structType = LLVM::LLVMStructType::getLiteral(context, structElements);
   
-  // Return the type as a TypeAttr
-  results.push_back(TypeAttr::get(structType));
-  
-  return success();
+  return TypeAttr::get(structType).cast<Attribute>();
 }
 
-static LogicalResult vtableType(PatternRewriter &rewriter,
-                                                PDLResultList &results,
-                                                ArrayRef<PDLValue> args) {
+static Attribute vtableType(PatternRewriter &rewriter, Attribute attr) {
 
   // Extract size from integer attribute - need to cast to Attribute first
-  auto attr = args[0].cast<Attribute>();
   auto sizeAttr = attr.cast<IntegerAttr>();
   uint32_t thirdTableSize = sizeAttr.getInt();
   
@@ -96,14 +81,10 @@ static LogicalResult vtableType(PatternRewriter &rewriter,
   
   auto structType = LLVM::LLVMStructType::getLiteral(context, structElements);
   
-  // Return as TypeAttr
-  results.push_back(TypeAttr::get(structType));
-  
-  return success();
+  return TypeAttr::get(structType).cast<Attribute>();
 }
 
-static Operation* addRegion(PatternRewriter &rewriter, 
-                          Operation *op) {
+static Operation* addRegion(PatternRewriter &rewriter, Operation *op) {
   OperationState state(op->getLoc(), op->getName());
   state.addRegion();  // Add a region to the operation state
   
@@ -123,23 +104,21 @@ static Operation* addRegion(PatternRewriter &rewriter,
   return newOp;
 }
 
-static void transferRegion(PatternRewriter &rewriter, 
-                          Operation *source,
-                          Operation *target) {
+static void transferRegion(PatternRewriter &rewriter, Operation *source, Operation *target) {
   // Transfer the region body
   target->getRegion(0).takeBody(source->getRegion(0));
 }
 
-static LogicalResult typeToTypeAttr(PatternRewriter &rewriter,
-                                               PDLResultList &results,
-                                               ArrayRef<PDLValue> args) {
+static Attribute typeToTypeAttr(PatternRewriter &rewriter, Type type) {
   // Extract the input type from args
-  Type inputType = args[0].cast<Type>();
+  Type inputType = type.cast<Type>();
   
   // Convert to TypeAttr and add to results
-  results.push_back(TypeAttr::get(inputType));
-  
-  return success();
+  return TypeAttr::get(inputType).cast<Attribute>();
+}
+
+static Type typeAttrToType(PatternRewriter &rewriter, Attribute attr) {
+  return attr.cast<TypeAttr>().getValue();
 }
 
 static LogicalResult arrayAttr(PatternRewriter &rewriter,
@@ -157,40 +136,29 @@ static LogicalResult arrayAttr(PatternRewriter &rewriter,
   return success();
 }
 
-static LogicalResult mapCmpi(PatternRewriter &rewriter,
-                                              PDLResultList &results,
-                                              ArrayRef<PDLValue> args) {
+static Attribute mapCmpi(PatternRewriter &rewriter, Attribute attr) {
   static const llvm::StringMap<int64_t> predicateMap = {
     {"EQ",  0}, {"NEQ", 1}, {"LT",  2}, {"LE",  3}, {"GT",  4}, {"GE",  5}
   };
   
-  auto strAttr = args[0].cast<Attribute>().cast<StringAttr>();
+  auto strAttr = attr.cast<StringAttr>();
   auto it = predicateMap.find(strAttr.getValue());
-  if (it == predicateMap.end())
-    return failure();
-    
-  results.push_back(IntegerAttr::get(rewriter.getI64Type(), it->second));
-  return success();
+
+  return IntegerAttr::get(rewriter.getI64Type(), it->second).cast<Attribute>();
 }
 
-static LogicalResult mapCmpf(PatternRewriter &rewriter,
-                                              PDLResultList &results,
-                                              ArrayRef<PDLValue> args) {
+static Attribute mapCmpf(PatternRewriter &rewriter, Attribute attr) {
   static const llvm::StringMap<int64_t> predicateMap = {
     {"EQ",  1}, {"GT",  2}, {"GE",  3}, {"LT",  4}, {"LE",  5}, {"NEQ", 6}
   };
   
-  auto strAttr = args[0].cast<Attribute>().cast<StringAttr>();
+  auto strAttr = attr.cast<StringAttr>();
   auto it = predicateMap.find(strAttr.getValue());
-  if (it == predicateMap.end())
-    return failure();
     
-  results.push_back(IntegerAttr::get(rewriter.getI64Type(), it->second));
-  return success();
+  return IntegerAttr::get(rewriter.getI64Type(), it->second).cast<Attribute>();
 }
 
-static Value unwrapStruct(PatternRewriter &rewriter,
-                             Operation *op) {
+static Value unwrapStruct(PatternRewriter &rewriter, Operation *op) {
   // Get the result struct type
   auto resultType = op->getResult(0).getType();
   auto structType = resultType.cast<LLVM::LLVMStructType>();
@@ -236,8 +204,7 @@ static Value unwrapStruct(PatternRewriter &rewriter,
   return currentValue;
 }
 
-static Value lowerParamIndexation(PatternRewriter &rewriter,
-                             Operation *op) {
+static Value lowerParamIndexation(PatternRewriter &rewriter, Operation *op) {
   // Get input parameterization and indices array
   Value currentParam = op->getOperand(0);
   auto indicesAttr = op->getAttrOfType<ArrayAttr>("indices");
@@ -278,9 +245,47 @@ static Value lowerParamIndexation(PatternRewriter &rewriter,
   return currentParam;
 }
 
+static void lowerMemcpyStruct(PatternRewriter &rewriter, Operation *op) {
+  // Get operands and type
+  Value source = op->getOperand(0);
+  Value dest = op->getOperand(1);
+  auto typeAttr = op->getAttrOfType<TypeAttr>("type");
+  auto structType = typeAttr.getValue().cast<LLVM::LLVMStructType>();
+
+  // For each element in the struct
+  for (size_t i = 0; i < structType.getBody().size(); i++) {
+    auto elementType = structType.getBody()[i];
+    
+    // Create GEP for source
+    SmallVector<LLVM::GEPArg, 2> sourceIndices {0, i};
+    auto sourceGep = rewriter.create<LLVM::GEPOp>(
+      op->getLoc(),
+      LLVM::LLVMPointerType::get(rewriter.getContext()),
+      structType,
+      source, 
+      sourceIndices
+    );
+
+    // Create GEP for dest
+    SmallVector<LLVM::GEPArg, 2> destIndices{0, i};
+    auto destGep = rewriter.create<LLVM::GEPOp>(
+      op->getLoc(), 
+      LLVM::LLVMPointerType::get(rewriter.getContext()),
+      structType,
+      dest,
+      destIndices
+    );
+
+    // Create memcpy for this element
+    OperationState memcpyState(op->getLoc(), "mini.memcpy");
+    memcpyState.addOperands({sourceGep, destGep});
+    memcpyState.addAttribute("type", TypeAttr::get(elementType));
+    rewriter.create(memcpyState);
+  }
+}
+
 namespace {
-struct MyCustomPass
-    : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> {
+struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> {
   MLIR_DEFINE_EXPLICIT_INTERNAL_INLINE_TYPE_ID(MyCustomPass)
 
   StringRef getArgument() const final { return "my-custom-pass"; }
@@ -313,23 +318,29 @@ struct MyCustomPass
     patternList.getPDLPatterns().registerConstraintFunction(
         "is_struct", isStruct);
     patternList.getPDLPatterns().registerConstraintFunction(
-        "map_cmpi", mapCmpi);
-    patternList.getPDLPatterns().registerConstraintFunction(
-        "map_cmpf", mapCmpf);
-    patternList.getPDLPatterns().registerConstraintFunction(
-        "coro_frame", coroFrame);
-    patternList.getPDLPatterns().registerConstraintFunction(
-        "vtable_type", vtableType);
-    patternList.getPDLPatterns().registerConstraintFunction(
-        "type_to_type_attr", typeToTypeAttr);
+        "is_struct_attr", isStructAttr);
     patternList.getPDLPatterns().registerConstraintFunction(
         "array_attr", arrayAttr);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "map_cmpi", mapCmpi);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "map_cmpf", mapCmpf);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "vtable_type", vtableType);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "type_attr_to_type", typeAttrToType);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "type_to_type_attr", typeToTypeAttr);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "coro_frame", coroFrame);
     patternList.getPDLPatterns().registerRewriteFunction(
         "add_region", addRegion);
     patternList.getPDLPatterns().registerRewriteFunction(
         "transfer_region", transferRegion);
     patternList.getPDLPatterns().registerRewriteFunction(
         "unwrap_struct", unwrapStruct);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "lower_memcpy_struct", lowerMemcpyStruct);
     patternList.getPDLPatterns().registerRewriteFunction(
         "lower_parameterization_indexation", lowerParamIndexation);
 
@@ -338,8 +349,7 @@ struct MyCustomPass
     patternList.add(std::move(pdlPattern));
 
     // Invoke the pattern driver with the provided patterns.
-    (void)applyPatternsAndFoldGreedily(irModule.getBodyRegion(),
-                                       std::move(patternList));
+    (void)applyPatternsAndFoldGreedily(irModule.getBodyRegion(), std::move(patternList));
   }
 };
 } // namespace
