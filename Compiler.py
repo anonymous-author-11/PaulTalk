@@ -105,31 +105,24 @@ def main():
     
     cmd1 = " ".join(["mlir-opt","--convert-scf-to-cf", "--convert-arith-to-llvm","--convert-func-to-llvm","--convert-index-to-llvm",
         "--finalize-memref-to-llvm","--convert-cf-to-llvm","--convert-ub-to-llvm","--reconcile-unrealized-casts",
-        "--emit-bytecode", "-o", "out_optimized.mlir"
+        "--emit-bytecode"
     ])
-    cmd2 = ["mlir-translate", "--mlir-to-llvmir", "out_optimized.mlir", "-o", out_file_names[0]]
-    cmd3 = ["llvm-link","-S", out_file_names[0], *ll_files, "utils.ll","-o","combined.ll"]
-    cmd4 = ["opt","-S", "combined.ll", "--bugpoint-enable-legacy-pm", "--alloca-hoisting", "-o","out_hoisted.ll"]
-    cmd5 = ["opt","-S", "out_hoisted.ll", "--passes=reg2mem", "-o","out_reg2mem.ll"]
+    cmd2 = f"mlir-translate --mlir-to-llvmir -o {out_file_names[0]}"
+    cmd3 = f"llvm-link -S {out_file_names[0]} {' '.join(ll_files)} utils.ll"
+    cmd4 = "opt -S --bugpoint-enable-legacy-pm --alloca-hoisting"
+    cmd5 = "opt -S --passes=reg2mem -o out_reg2mem.ll"
     cmd6 = "opt -S out_reg2mem.ll --passes=\"default<O3>\" --enable-heap-to-stack-conversion --max-heap-to-stack-size=10000 --max-devirt-iterations=100 --abort-on-max-devirt-iterations-reached --inline-threshold=10000 -o out_optimized.ll"
     cmd7 = ["llc", "-filetype=obj", "out_optimized.ll", "-O=3", "-o", out_file_names[1], "-mtriple=x86_64-pc-windows-msvc"]
     cmd8 = ' '.join(["lld-link", f"/out:{out_file_names[2]}", out_file_names[1], "libcmt.lib"])
+    cmd1and2 = " | ".join([cmd1, cmd2])
+    cmd3to5 = " | ".join([cmd3, cmd4, cmd5])
 
-    subprocess.run(cmd1, text=True, shell=True, input=module_str)
-    after_convert = time.time()
-    print(f"Time to lower to llvm dialect: {after_convert - after_opt} seconds")
-    subprocess.run(cmd2)
+    subprocess.run(cmd1and2, text=True, shell=True, input=module_str)
     after_translate = time.time()
-    print(f"Time to translate to llvm ir: {after_translate - after_convert} seconds")
-    subprocess.run(cmd3)
-    after_llvm_link = time.time()
-    print(f"Time to llvm-link: {after_llvm_link - after_translate} seconds")
-    subprocess.run(cmd4)
-    after_hoist = time.time()
-    print(f"Time to hoist allocas: {after_hoist - after_llvm_link} seconds")
-    subprocess.run(cmd5)
+    print(f"Time to lower to llvm ir: {after_translate - after_opt} seconds")
+    subprocess.run(cmd3to5, shell=True)
     after_reg2mem = time.time()
-    print(f"Time to reg2mem: {after_reg2mem - after_hoist} seconds")
+    print(f"Time to run preliminary passes: {after_reg2mem - after_translate} seconds")
     subprocess.run(cmd6, text=True, shell=True)
     after_opt = time.time()
     print(f"Time to opt: {after_opt - after_reg2mem} seconds")

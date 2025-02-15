@@ -701,8 +701,7 @@ class MethodCall(Expression):
 
         # for each passed argument, add a parameterization representing its static type to the parameterizations array
         parameterizations = []
-        print(self.line_number)
-        for i, t in enumerate(arg_types):
+        for t in arg_types:
             t_name_hierarchy = name_hierarchy(t)
             t_id_hierarchy = id_hierarchy(t, ambient_types)
             parameterization = ParameterizationOp.make(available_parameterizations, t_id_hierarchy, t_name_hierarchy)
