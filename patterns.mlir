@@ -798,4 +798,20 @@ module @patterns {
       pdl.replace %root with %memcpy
     }
   }
+  pdl.pattern @LowerMalloc : benefit(1) {
+    %type_attr = pdl.attribute
+    %ptr_type = pdl.type : !llvm.ptr
+    %i64_type = pdl.type : i64
+    %root = pdl.operation "mini.malloc" {"typ" = %type_attr} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %malloc_size = pdl.operation "mini.type_size" {"typ" = %type_attr} -> (%i64_type : !pdl.type)
+      %malloc_size_result = pdl.result 0 of %malloc_size
+      %callee = pdl.attribute = @malloc
+      %opsegsize = pdl.attribute = array<i32: 1, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "llvm.call"(%malloc_size_result : !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%ptr_type : !pdl.type)
+      %call_result = pdl.result 0 of %call
+      pdl.replace %root with (%call_result : !pdl.value)
+    }
+  }
 }

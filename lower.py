@@ -123,11 +123,9 @@ class ThirdPass(ModulePass):
                 LowerTupleCast(),
                 LowerToFatPtr(),
                 LowerFuncDef(),
-                LowerMalloc(),
                 LowerGetterDef(),
                 LowerArgPasser(),
                 LowerBufferFiller(),
-                #LowerAssign(),
                 LowerTypID(),
                 LowerSetFlag(),
                 LowerCheckFlag(),
@@ -153,7 +151,9 @@ class ThirdPass(ModulePass):
                 LowerPrintF(),
                 LowerSetOffset(),
                 LowerLiteral()
-                #LowerMemCpy()
+                #LowerMalloc(),
+                #LowerAssign(),
+                #LowerMemCpy(),
                 #LowerIntrinsic(),
                 #LowerParameterizationIndexation(),
                 #LowerBufferIndexation(),
