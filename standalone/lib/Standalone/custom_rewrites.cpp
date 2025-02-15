@@ -236,6 +236,48 @@ static Value unwrapStruct(PatternRewriter &rewriter,
   return currentValue;
 }
 
+static Value lowerParamIndexation(PatternRewriter &rewriter,
+                             Operation *op) {
+  // Get input parameterization and indices array
+  Value currentParam = op->getOperand(0);
+  auto indicesAttr = op->getAttrOfType<ArrayAttr>("indices");
+  
+  MLIRContext *context = rewriter.getContext();
+  
+  // Process each index
+  for (size_t i = 0; i < indicesAttr.size(); i++) {
+    // Get index value and add 1
+    auto indexAttr = indicesAttr[i].cast<IntegerAttr>();
+    int64_t index = indexAttr.getInt() + 1;
+    
+    // Create array type: array of remaining size of opaque pointers
+    Type ptrType = LLVM::LLVMPointerType::get(context);
+    Type arrayType = LLVM::LLVMArrayType::get(ptrType, indicesAttr.size() - i);
+    
+    // Create GEP
+    SmallVector<LLVM::GEPArg, 2> gepIndices {0, index};
+    
+    auto gepOp = rewriter.create<LLVM::GEPOp>(
+      op->getLoc(),
+      ptrType,
+      arrayType,  // pointee type is the array type
+      currentParam,
+      gepIndices
+    );
+    
+    // Load pointer
+    auto loadOp = rewriter.create<LLVM::LoadOp>(
+      op->getLoc(),
+      ptrType,
+      gepOp.getResult()
+    );
+    
+    currentParam = loadOp.getResult();
+  }
+  
+  return currentParam;
+}
+
 namespace {
 struct MyCustomPass
     : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> {
@@ -288,6 +330,8 @@ struct MyCustomPass
         "transfer_region", transferRegion);
     patternList.getPDLPatterns().registerRewriteFunction(
         "unwrap_struct", unwrapStruct);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "lower_parameterization_indexation", lowerParamIndexation);
 
     patternModule.getOperation()->remove();
     PDLPatternModule pdlPattern(patternModule);

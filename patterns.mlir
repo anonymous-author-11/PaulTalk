@@ -710,4 +710,14 @@ module @patterns {
       pdl.replace %root with (%result : !pdl.value)
     }
   }
+  pdl.pattern @LowerParameterizationIndexation : benefit(1) {
+    %result_type = pdl.type
+    %operand = pdl.operand
+    %indices = pdl.attribute
+    %root = pdl.operation "mini.parameterization_indexation"(%operand : !pdl.value) {"indices" = %indices} -> (%result_type : !pdl.type)
+    pdl.rewrite %root {
+      %result = pdl.apply_native_rewrite "lower_parameterization_indexation"(%root : !pdl.operation) : !pdl.value
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
 }

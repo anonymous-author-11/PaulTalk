@@ -47,6 +47,7 @@ mini.type_integers -> llvm.undef, llvm.mlir.constant, llvm.insertvalue
 mini.vtable -> llvm.undef, mini.addr_of, llvm.mlir.constant, llvm.insertvalue, llvm.inttoptr
 mini.global -> llvm.mlir.global
 mini.func -> func.return, mini.unwrap, cf.branch, func.func
+mini.buffer_filler -> llvm.gep, llvm.store, func.return, func.func
 
 ----- prime ops for converting to PDL -----
 
@@ -72,9 +73,7 @@ mini.comparison -> arith.cmpi, arith.cmpf [check!]
 mini.unwrap -> llvm.load, builtin.unrealized_conversion_cast, llvm.undef, llvm.gep, llvm.insertvalue [check!]
 mini.intrinsic -> llvm.call_intrinsic [check!]
 mini.tuple_indexation -> llvm.gep [check!]
-
-mini.buffer_filler -> llvm.gep, llvm.store, func.return, func.func
-mini.parameterization_indexation -> llvm.gep, llvm.load, builtin.unrealized_conversion_cast
+mini.parameterization_indexation -> llvm.gep, llvm.load, builtin.unrealized_conversion_cast [check!]
 
 ----------------------------------------------------------------------------
 mini.getter_def -> llvm.gep, func.return, func.func, mini.parameterization
