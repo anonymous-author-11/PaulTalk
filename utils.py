@@ -342,6 +342,7 @@ def random_letters(n):
 
 def type_id(typ: TypeAttribute) -> int:
     if typ == Nil(): return StringAttr("nil_typ")
+    if typ == Nothing(): return StringAttr("nothing_typ")
     if typ == Ptr([IntegerType(1)]): return StringAttr("bool_typ")
     if typ == Ptr([IntegerType(8)]): return StringAttr("i8_typ")
     if typ == Ptr([IntegerType(32)]): return StringAttr("i32_typ")
@@ -372,7 +373,7 @@ def is_builtin(typ):
 
 builtin_types = {
     "bool_typ":Ptr([IntegerType(1)]), "i8_typ":Ptr([IntegerType(8)]), "i32_typ":Ptr([IntegerType(32)]), "i64_typ":Ptr([IntegerType(64)]),
-    "i128_typ":Ptr([IntegerType(128)]), "f64_typ":Ptr([Float64Type()]), "nil_typ":Nil(),
+    "i128_typ":Ptr([IntegerType(128)]), "f64_typ":Ptr([Float64Type()]), "nil_typ":Nil(), "nothing_typ":Nothing(),
     "coroutine_typ":Coroutine([ArrayAttr([]), Nothing(), Nothing()]), "function_typ":Function([ArrayAttr([]), Nothing(), Nothing()]),
     "buffer_typ":Buffer([Nothing()]), "tuple_typ":Tuple([ArrayAttr([])]), "union_typ":Union.from_list([IntegerType(8)])
 }

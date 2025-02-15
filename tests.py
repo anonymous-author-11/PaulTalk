@@ -50,6 +50,11 @@ class CompilerTestCase(unittest.TestCase):
 
 class CompilerTests(CompilerTestCase):
 
+    def test_end_to_end(self):
+        with open("tests.mini", "r") as f: mini_code = f.read()
+        with open("test_expected.txt", "r") as f: expected_output = f.read()
+        self.run_mini_code(mini_code, expected_output, "end_to_end")
+
     def test_duplicate_class_definition(self):
         mini_code = """
         import core;
@@ -202,7 +207,7 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, "argument type Ptr\\[f64\\] not subtype of declared parameter type Ptr\\[i32\\] for parameter x"):
             self.run_mini_code(mini_code, "", "function_call_arg_not_subtype")
 
-    def test_undefined_variable(self):
+    def test_break_statement_outside_loop(self):
         mini_code = """
         def test() {
             break; // Break outside loop
@@ -211,7 +216,7 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, "Can't break when not in loop"):
             self.run_mini_code(mini_code, "", "break_statement_outside_loop")
 
-    def test_undefined_variable_2(self):
+    def test_undefined_variable(self):
         mini_code = """
         def test() {
             y = x;  // x not declared
@@ -608,12 +613,6 @@ class CompilerTests(CompilerTestCase):
         """
         with self.assertRaisesRegex(Exception, "can only have return statements in functions"):
             self.run_mini_code(mini_code, "", "return_statement_outside_function")
-
-    def test_tests_mini(self):
-        with open("tests.mini", "r") as f:
-            mini_code = f.read()
-        expected_output = "3\nHello, World!\nfalse"
-        self.run_mini_code(mini_code, expected_output, "tests")
 
 if __name__ == '__main__':
     unittest.main()

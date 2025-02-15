@@ -313,6 +313,9 @@ class StackAlloc(ParametrizedAttribute, TypeAttribute):
 class Nothing(ParametrizedAttribute, TypeAttribute):
     name = "mini.nothing"
 
+    def base_typ(self):
+        return llvm.LLVMArrayType.from_size_and_type(0, IntegerType(8))
+
     def __repr__(self):
         return "Nothing"
 
