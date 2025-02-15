@@ -127,7 +127,7 @@ class ThirdPass(ModulePass):
                 LowerGetterDef(),
                 LowerArgPasser(),
                 LowerBufferFiller(),
-                LowerAssign(),
+                #LowerAssign(),
                 LowerTypID(),
                 LowerSetFlag(),
                 LowerCheckFlag(),

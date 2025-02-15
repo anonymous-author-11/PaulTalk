@@ -764,4 +764,38 @@ module @patterns {
       pdl.replace %root with %store
     }
   }
+  pdl.pattern @LowerAssignEmptyArray : benefit(3) {
+    %target = pdl.operand
+    %value = pdl.operand
+    %type_attr = pdl.attribute
+    pdl.apply_native_constraint "is_empty_llvm_array"(%type_attr : !pdl.attribute)
+    %root = pdl.operation "mini.assign"(%target, %value : !pdl.value, !pdl.value) {"typ" = %type_attr}
+    pdl.rewrite %root {
+      pdl.erase %root
+    }
+  }
+  pdl.pattern @LowerAssignArray : benefit(2) {
+    %target = pdl.operand
+    %value = pdl.operand
+    %type_attr = pdl.attribute
+    pdl.apply_native_constraint "is_llvm_array_attr"(%type_attr : !pdl.attribute)
+    %root = pdl.operation "mini.assign"(%target, %value : !pdl.value, !pdl.value) {"typ" = %type_attr}
+    pdl.rewrite %root {
+      %equivalent_int_type = pdl.apply_native_rewrite "array_to_int"(%type_attr : !pdl.attribute) : !pdl.type
+      %load = pdl.operation "llvm.load"(%value : !pdl.value) -> (%equivalent_int_type : !pdl.type)
+      %load_result = pdl.result 0 of %load
+      %store = pdl.operation "llvm.store"(%load_result, %target : !pdl.value, !pdl.value)
+      pdl.replace %root with %store
+    }
+  }
+  pdl.pattern @LowerAssignSimple : benefit(1) {
+    %target = pdl.operand
+    %value = pdl.operand
+    %type_attr = pdl.attribute
+    %root = pdl.operation "mini.assign"(%target, %value : !pdl.value, !pdl.value) {"typ" = %type_attr}
+    pdl.rewrite %root {
+      %memcpy = pdl.operation "mini.memcpy"(%value, %target : !pdl.value, !pdl.value) {"type" = %type_attr}
+      pdl.replace %root with %memcpy
+    }
+  }
 }

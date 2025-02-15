@@ -10,6 +10,7 @@
 #include "mlir/Pass/PassManager.h"
 #include "mlir/Transforms/GreedyPatternRewriteDriver.h"
 #include "mlir/Support/LLVM.h"
+ #include "mlir/Interfaces/DataLayoutInterfaces.h"
 
 using namespace mlir;
 
@@ -27,6 +28,19 @@ static LogicalResult isStruct(PatternRewriter &rewriter, Type type) {
 
 static LogicalResult isStructAttr(PatternRewriter &rewriter, Attribute attr) {
   return success(attr.cast<TypeAttr>().getValue().isa<LLVM::LLVMStructType>());
+}
+
+static LogicalResult isLLVMArrayAttr(PatternRewriter &rewriter, Attribute attr) {
+  return success(attr.cast<TypeAttr>().getValue().isa<LLVM::LLVMArrayType>());
+}
+
+static LogicalResult isEmptyLLVMArray(PatternRewriter &rewriter, Attribute attr) {
+  if (!attr.cast<TypeAttr>().getValue().isa<LLVM::LLVMArrayType>()) {
+    return failure();
+  }
+  auto type = attr.cast<TypeAttr>().getValue().cast<LLVM::LLVMArrayType>();
+  auto len = type.getNumElements();
+  return success(len == 0);
 }
 
 static Attribute coroFrame(PatternRewriter &rewriter, Type inputType) {
@@ -134,6 +148,18 @@ static LogicalResult arrayAttr(PatternRewriter &rewriter,
   auto attr = DenseI32ArrayAttr::get(rewriter.getContext(), values);
   results.push_back(attr);
   return success();
+}
+
+static Type arrayToInt(PatternRewriter &rewriter, Attribute attr) {
+  Type arrayType = attr.cast<TypeAttr>().getValue();
+  auto llvmArray = arrayType.cast<LLVM::LLVMArrayType>();
+  
+  uint32_t numElements = llvmArray.getNumElements();
+  Type elementType = llvmArray.getElementType();
+  DataLayout layout;
+  uint64_t elementSize = layout.getTypeSizeInBits(elementType);
+
+  return IntegerType::get(rewriter.getContext(), numElements * elementSize).cast<Type>();
 }
 
 static Attribute mapCmpi(PatternRewriter &rewriter, Attribute attr) {
@@ -320,6 +346,10 @@ struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> 
     patternList.getPDLPatterns().registerConstraintFunction(
         "is_struct_attr", isStructAttr);
     patternList.getPDLPatterns().registerConstraintFunction(
+        "is_llvm_array_attr", isLLVMArrayAttr);
+    patternList.getPDLPatterns().registerConstraintFunction(
+        "is_empty_llvm_array", isEmptyLLVMArray);
+    patternList.getPDLPatterns().registerConstraintFunction(
         "array_attr", arrayAttr);
     patternList.getPDLPatterns().registerRewriteFunction(
         "map_cmpi", mapCmpi);
@@ -331,6 +361,8 @@ struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> 
         "type_attr_to_type", typeAttrToType);
     patternList.getPDLPatterns().registerRewriteFunction(
         "type_to_type_attr", typeToTypeAttr);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "array_to_int", arrayToInt);
     patternList.getPDLPatterns().registerRewriteFunction(
         "coro_frame", coroFrame);
     patternList.getPDLPatterns().registerRewriteFunction(
