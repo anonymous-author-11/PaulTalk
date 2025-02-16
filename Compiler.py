@@ -73,7 +73,9 @@ def main():
     if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
     patterns = cmd_out.stdout
 
-    module_str = module_str.replace("mini.addressof","placeholder.addressof").replace("\"mini.global\"","\"placeholder.global\"")
+    module_str = module_str.replace("mini.addressof","placeholder.addressof")
+    module_str = module_str.replace("\"mini.global\"","\"placeholder.global\"")
+    module_str = module_str.replace("\"llvm.call\"", "\"placeholder.call\"")
     module_str = patterns + module_str
 
     while "\"mini." in module_str:
@@ -98,6 +100,7 @@ def main():
     after_mlir_opt = time.time()
     print(f"Time to do mlir-opt: {after_mlir_opt - after_firstpass} seconds")
     
+    module_str = module_str.replace("placeholder.call", "llvm.call")
     module_str = module_str.replace("placeholder", "llvm.mlir")
     stringio = StringIO()
     Printer(stringio).print(module_str)

@@ -766,7 +766,7 @@ class AssignOp(IRDLOperation):
 
 @irdl_op_definition
 class PrintfDeclOp(IRDLOperation):
-    name = "mini.printfdecl"
+    name = "mini.printf_decl"
 
 @irdl_op_definition
 class GlobalStrOp(IRDLOperation):
