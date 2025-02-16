@@ -523,7 +523,7 @@ class FieldIdentifier(Identifier):
     def codegen(self, scope):
         field = next(iter(field for field in scope.cls.fields() if field.declaration.name == self.name))
         offset = IntegerAttr.from_int_and_width(field.offset, IntegerType(64))
-        attr_dict = {"offset":offset, "vtable_size":IntegerAttr.from_int_and_width(scope.cls.vtable_size(), 32)}
+        attr_dict = {"offset":offset, "vtable_bytes":IntegerAttr.from_int_and_width(scope.cls.vtable_size() * 8, 32)}
         ssa_val = scope.symbol_table["self"]
         field_type = field.declaration.type(scope)
         field_acc = FieldAccessOp.create(operands=[ssa_val], attributes=attr_dict, result_types=[field_type])
@@ -1282,7 +1282,7 @@ class MethodDef(Statement):
             field_type = field.declaration.type(body_scope)
             offset = IntegerAttr.from_int_and_width(field.offset, IntegerType(64))
             operands = [body_scope.symbol_table["self"]]
-            attr_dict = {"offset":offset, "vtable_size":IntegerAttr.from_int_and_width(self.defining_class.vtable_size(), 32)}
+            attr_dict = {"offset":offset, "vtable_bytes":IntegerAttr.from_int_and_width(self.defining_class.vtable_size() * 8, 32)}
             field_acc = FieldAccessOp.create(operands=operands, attributes=attr_dict, result_types=[field_type])
             cast_assign = CastAssignOp.make(field_acc.results[0], body_scope.symbol_table[param.name], param_type, field_type, type_id)
             body_block.add_ops([field_acc, cast_assign])

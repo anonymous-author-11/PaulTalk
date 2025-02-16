@@ -129,7 +129,6 @@ class ThirdPass(ModulePass):
                 LowerTypID(),
                 LowerSetFlag(),
                 LowerCheckFlag(),
-                LowerFieldAccess(),
                 LowerParameterization(),
                 LowerParameterizationsArray(),
                 LowerCastAssign(),
@@ -149,8 +148,9 @@ class ThirdPass(ModulePass):
                 LowerCoroCall(),
                 LowerPrintfDecl(),
                 LowerPrintF(),
-                LowerSetOffset(),
                 LowerLiteral()
+                #LowerFieldAccess(),
+                #LowerSetOffset(),
                 #LowerMalloc(),
                 #LowerAssign(),
                 #LowerMemCpy(),
@@ -1791,9 +1791,7 @@ class LowerFieldAccess(RewritePattern):
         dense_ary_0 = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
         dense_ary_3 = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [3])
         vptr = llvm.ExtractValueOp(dense_ary_0, fat_ptr, llvm.LLVMPointerType.opaque())
-        invariant2 = InvariantOp.make(vptr.results[0], op.vtable_size.value.data * 8)
-        vtbl_type = llvm.LLVMArrayType.from_size_and_type(op.vtable_size.value.data, llvm.LLVMPointerType.opaque())
-        vtable = llvm.LoadOp(vptr, vtbl_type)
+        invariant2 = InvariantOp.make(vptr.results[0], op.vtable_bytes.value.data)
         adjustment = llvm.ExtractValueOp(dense_ary_3, fat_ptr, IntegerType(32))
         offsetted = llvm.GEPOp.from_mixed_indices(vptr.results[0], [adjustment.results[0]], pointee_type=llvm.LLVMPointerType.opaque())
         fptr_ptr = llvm.GEPOp.from_mixed_indices(offsetted.results[0], [op.offset.value.data], pointee_type=llvm.LLVMPointerType.opaque())

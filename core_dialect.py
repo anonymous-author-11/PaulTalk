@@ -645,7 +645,7 @@ class FieldAccessOp(IRDLOperation):
     name = "mini.field_access"
     fat_ptr: Operand = operand_def(FatPtr)
     offset: IntegerAttr = attr_def(IntegerAttr)
-    vtable_size: IntegerAttr = attr_def(IntegerAttr)
+    vtable_bytes: IntegerAttr = attr_def(IntegerAttr)
     result: OpResult = result_def(Ptr)
 
 @irdl_op_definition

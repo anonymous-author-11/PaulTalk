@@ -14,12 +14,24 @@
 //
 // pdl.replace %root with %call
 // 
-// if you EVER find yourself writng "-> ()" then YOU ARE MAKING AN ERROR
-// if you EVER find yourself writing "foo.bar"() with parentheses and no operands, in any capacity whatsoever, YOU ARE MAKING AN ERROR
-// 
 // Only ever write a native rewrite pattern or native constraint if it cannot be done in pure PDL
 // Even then, only write the narrow part that can't be done in PDL
 // 
+// pdl.type and pdl.attribute are not interchangeable, so you cannot do something like
+//
+// %type = pdl.type
+// %op = pdl.operation "my.op" {"type" = %type}
+//
+// because "type" is expecting a pdl.attribute whereas %type is a pdl.type
+// instead, you must do something like
+//
+// %type = pdl.type
+// %type_attr = pdl.attribute : %type
+// %op = pdl.operation "my.op" {"type" = %type_attr}
+//
+// patterns with higher benefit get priority when matching
+// so more specialized patterns are typically higher benefit
+// example: @LowerUnwrapNil (benefit 2) vs @LowerUnwrapSimple (benefit 1)
 
 module @patterns {
 
@@ -653,7 +665,7 @@ module @patterns {
     %operand = pdl.operand : %ptr_type
     %root = pdl.operation "mini.unwrap"(%operand : !pdl.value) -> (%result_type : !pdl.type)
     pdl.rewrite %root {
-      %cast = pdl.operation "builtin.UnrealizedConversionCast"(%operand : !pdl.value) -> (%result_type : !pdl.type)
+      %cast = pdl.operation "builtin.unrealized_conversion_cast"(%operand : !pdl.value) -> (%result_type : !pdl.type)
       %result = pdl.result 0 of %cast
       pdl.replace %root with (%result : !pdl.value)
     }
@@ -812,6 +824,61 @@ module @patterns {
       %call = pdl.operation "llvm.call"(%malloc_size_result : !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%ptr_type : !pdl.type)
       %call_result = pdl.result 0 of %call
       pdl.replace %root with (%call_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerSetOffset : benefit (1) {
+    %to_typ = pdl.attribute
+    %ptr_type = pdl.type : !llvm.ptr
+    %union = pdl.operand
+    %root = pdl.operation "mini.set_offset"(%union : !pdl.value) {"to_typ" = %to_typ}
+    pdl.rewrite %root {
+      %symbol = pdl.apply_native_rewrite "string_to_symbol"(%to_typ: !pdl.attribute) : !pdl.attribute
+      %addr_of = pdl.operation "mini.addr_of" {"global_name" = %symbol} -> (%ptr_type : !pdl.type)
+      %addr_of_result = pdl.result 0 of %addr_of
+      %callee = pdl.attribute = @set_offset
+      %opsegsize = pdl.attribute = array<i32: 2, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "llvm.call"(%union, %addr_of_result : !pdl.value, !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize}
+      pdl.replace %root with %call
+    }
+  }
+  pdl.pattern @LowerFieldAccess : benefit(1) {
+    %operand = pdl.operand
+    %offset = pdl.attribute
+    %ptr_type = pdl.type : !llvm.ptr
+    %ptr_type_attr = pdl.attribute = !llvm.ptr
+    %vtable_bytes = pdl.attribute
+    %i32_type = pdl.type : i32
+    %indices_1 = pdl.apply_native_constraint "array_attr"(%offset : !pdl.attribute) : !pdl.attribute
+    %root = pdl.operation "mini.field_access"(%operand : !pdl.value) {"offset" = %offset, "vtable_bytes" = %vtable_bytes} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %fat_base_type = pdl.type : !llvm.struct<(ptr, ptr, ptr, i32)>
+      %fat_base_type_attr = pdl.attribute = !llvm.struct<(ptr, ptr, ptr, i32)>
+      %fat_ptr = pdl.operation "llvm.load"(%operand : !pdl.value) -> (%fat_base_type : !pdl.type)
+      %fat_ptr_result = pdl.result 0 of %fat_ptr
+      %dense_ary_0 = pdl.attribute = array<i64: 0>
+      %dense_ary_1 = pdl.attribute = array<i64: 1>
+      %dense_ary_3 = pdl.attribute = array<i64: 3>
+      %vptr = pdl.operation "llvm.extractvalue"(%fat_ptr_result : !pdl.value) {"position" = %dense_ary_0} -> (%ptr_type : !pdl.type)
+      %vptr_result = pdl.result 0 of %vptr
+      %invariant = pdl.operation "mini.invariant"(%vptr_result : !pdl.value) {"num_bytes" = %vtable_bytes} -> (%ptr_type : !pdl.type)
+      %adjustment = pdl.operation "llvm.extractvalue"(%fat_ptr_result : !pdl.value) {"position" = %dense_ary_3} -> (%i32_type : !pdl.type)
+      %adjustment_result = pdl.result 0 of %adjustment
+      %indices_0 = pdl.attribute = array<i32: -2147483648>
+      %offsetted = pdl.operation "llvm.getelementptr"(%vptr_result, %adjustment_result : !pdl.value, !pdl.value) {"elem_type" = %ptr_type_attr, "rawConstantIndices" = %indices_0} -> (%ptr_type : !pdl.type)
+      %offsetted_result = pdl.result 0 of %offsetted
+      %fptr_ptr = pdl.operation "llvm.getelementptr"(%offsetted_result : !pdl.value) {"elem_type" = %ptr_type_attr, "rawConstantIndices" = %indices_1} -> (%ptr_type : !pdl.type)
+      %fptr_ptr_result = pdl.result 0 of %fptr_ptr
+      %fptr = pdl.operation "llvm.load"(%fptr_ptr_result : !pdl.value) -> (%ptr_type : !pdl.type)
+      %fptr_result = pdl.result 0 of %fptr
+      %structptr = pdl.operation "llvm.extractvalue"(%fat_ptr_result : !pdl.value) {"position" = %dense_ary_1} -> (%ptr_type : !pdl.type)
+      %structptr_result = pdl.result 0 of %structptr
+      %ftype = pdl.type : (!llvm.ptr) -> !llvm.ptr
+      %cast = pdl.operation "builtin.unrealized_conversion_cast"(%fptr_result : !pdl.value) -> (%ftype : !pdl.type)
+      %cast_result = pdl.result 0 of %cast
+      %field = pdl.operation "func.call_indirect"(%cast_result, %structptr_result : !pdl.value, !pdl.value) -> (%ptr_type : !pdl.type)
+      %field_result = pdl.result 0 of %field
+      pdl.replace %root with (%field_result : !pdl.value)
     }
   }
 }
