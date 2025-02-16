@@ -135,8 +135,8 @@ class ThirdPass(ModulePass):
                 LowerVtable(),
                 LowerHashTable(),
                 LowerOffsetTable(),
-                LowerCoroYield(),
-                LowerCoroCall(),
+                #LowerCoroYield(),
+                #LowerCoroCall(),
                 LowerLiteral()
                 #LowerPrelude(),
                 #LowerPrintfDecl(),

@@ -1104,4 +1104,97 @@ module @patterns {
       pdl.replace %root with %printf_decl
     }
   }
+  pdl.pattern @LowerCoroCallWithOperand : benefit(3) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %value = pdl.operand
+    %coro = pdl.operand
+    %results_types = pdl.types
+    %root = pdl.operation "mini.coro_call"(%coro, %value : !pdl.value, !pdl.value) -> (%results_types : !pdl.range<type>)
+    pdl.rewrite %root {
+      %load = pdl.operation "llvm.load"(%coro : !pdl.value) -> (%ptr_type : !pdl.type)
+      %load_result = pdl.result 0 of %load
+      %set_result = pdl.operation "mini.coro_set_result"(%load_result, %value : !pdl.value, !pdl.value)
+      %replacement = pdl.operation "mini.coro_call"(%coro : !pdl.value) -> (%results_types : !pdl.range<type>)
+      pdl.replace %root with %replacement
+    }
+  }
+  pdl.pattern @LowerCoroCallWithResult : benefit(2) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %coro = pdl.operand
+    %result_type = pdl.type
+    %root = pdl.operation "mini.coro_call"(%coro : !pdl.value) -> (%result_type : !pdl.type)
+    pdl.rewrite %root {
+      %load = pdl.operation "llvm.load"(%coro : !pdl.value) -> (%ptr_type : !pdl.type)
+      %load_result = pdl.result 0 of %load
+      %replacement = pdl.operation "mini.coro_call"(%coro : !pdl.value)
+      %get_result = pdl.operation "mini.coro_get_result"(%load_result : !pdl.value) -> (%result_type : !pdl.type)
+      %get_result_result = pdl.result 0 of %get_result
+      pdl.replace %root with (%get_result_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerCoroCall : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %coro = pdl.operand
+    %root = pdl.operation "mini.coro_call"(%coro : !pdl.value)
+    pdl.rewrite %root {
+      %load = pdl.operation "llvm.load"(%coro : !pdl.value) -> (%ptr_type : !pdl.type)
+      %load_result = pdl.result 0 of %load
+      %callee = pdl.attribute = @coroutine_call
+      %opbundlesize = pdl.attribute = array<i32>
+      %opsegsize = pdl.attribute = array<i32: 1, 0>
+      %call = pdl.operation "placeholder.call"(%load_result : !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize}
+      pdl.replace %root with %call
+    }
+  }
+  pdl.pattern @LowerCoroYield : benefit(4) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %values = pdl.operands
+    %results_types = pdl.types
+    %root = pdl.operation "mini.coro_yield"(%values : !pdl.range<value>) -> (%results_types : !pdl.range<type>)
+    pdl.rewrite %root {
+      %callee = pdl.attribute = @get_current_coroutine
+      %opbundlesize = pdl.attribute = array<i32>
+      %opsegsize = pdl.attribute = array<i32: 0, 0>
+      %current_coro = pdl.operation "placeholder.call" {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%ptr_type : !pdl.type)
+      %current_coro_result = pdl.result 0 of %current_coro
+      %replacement = pdl.operation "mini.coro_yield_modified"(%current_coro_result, %values : !pdl.value, !pdl.range<value>) -> (%results_types : !pdl.range<type>)
+      pdl.replace %root with %replacement
+    }
+  }
+  pdl.pattern @LowerCoroYieldWithOperand : benefit(3) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %value = pdl.operand
+    %coro = pdl.operand
+    %results_types = pdl.types
+    %root = pdl.operation "mini.coro_yield_modified"(%coro, %value : !pdl.value, !pdl.value) -> (%results_types : !pdl.range<type>)
+    pdl.rewrite %root {
+      %set_result = pdl.operation "mini.coro_set_result"(%coro, %value : !pdl.value, !pdl.value)
+      %replacement = pdl.operation "mini.coro_yield_modified"(%coro : !pdl.value) -> (%results_types : !pdl.range<type>)
+      pdl.replace %root with %replacement
+    }
+  }
+  pdl.pattern @LowerCoroYieldWithResult : benefit(2) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %coro = pdl.operand
+    %result_type = pdl.type
+    %root = pdl.operation "mini.coro_yield_modified"(%coro : !pdl.value) -> (%result_type : !pdl.type)
+    pdl.rewrite %root {
+      %replacement = pdl.operation "mini.coro_yield_modified"(%coro : !pdl.value)
+      %get_result = pdl.operation "mini.coro_get_result"(%coro : !pdl.value) -> (%result_type : !pdl.type)
+      %get_result_result = pdl.result 0 of %get_result
+      pdl.replace %root with (%get_result_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerCoroYieldSimple : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %coro = pdl.operand
+    %root = pdl.operation "mini.coro_yield_modified"(%coro : !pdl.value)
+    pdl.rewrite %root {
+      %callee = pdl.attribute = @coroutine_yield
+      %opbundlesize = pdl.attribute = array<i32>
+      %opsegsize = pdl.attribute = array<i32: 1, 0>
+      %call = pdl.operation "placeholder.call"(%coro : !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize}
+      pdl.replace %root with %call
+    }
+  }
 }
