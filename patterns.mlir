@@ -956,4 +956,20 @@ module @patterns {
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
+  pdl.pattern @LowerReUnionize : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %operand = pdl.operand
+    %to_typ_attr = pdl.attribute
+    %from_typ_attr = pdl.attribute
+    %to_typ_name = pdl.attribute
+    %from_typ_name = pdl.attribute
+    %root = pdl.operation "mini.reunionize"(%operand : !pdl.value) {"from_typ" = %from_typ_attr, "to_typ" = %to_typ_attr, "from_typ_name" = %from_typ_name, "to_typ_name" = %to_typ_name} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %smaller = pdl.apply_native_rewrite "smaller_type"(%from_typ_attr, %to_typ_attr : !pdl.attribute, !pdl.attribute) : !pdl.attribute
+      %alloca = pdl.operation "mini.alloc" {"typ" = %smaller} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %memcpy = pdl.operation "mini.memcpy"(%operand, %alloca_result : !pdl.value, !pdl.value) {"type" = %smaller}
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
 }

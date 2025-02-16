@@ -115,7 +115,6 @@ class ThirdPass(ModulePass):
                 LowerBox(),
                 LowerUnbox(),
                 LowerUnionize(),
-                LowerReUnionize(),
                 LowerNarrow(),
                 LowerReabstract(),
                 LowerTupleCast(),
@@ -145,6 +144,7 @@ class ThirdPass(ModulePass):
                 LowerPrintfDecl(),
                 LowerPrintF(),
                 LowerLiteral()
+                #LowerReUnionize(),
                 #LowerWidenInt(),
                 #LowerIntToFloat(),
                 #LowerTypID(),

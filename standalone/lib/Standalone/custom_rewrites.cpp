@@ -77,7 +77,7 @@ static Attribute coroFrame(PatternRewriter &rewriter, Type inputType) {
   
   // Create the LLVM struct type
   auto structType = LLVM::LLVMStructType::getLiteral(context, structElements);
-  auto structAttr = TypeAttr::get(structType)
+  auto structAttr = TypeAttr::get(structType);
   
   return mlir::cast<Attribute>(structAttr);
 }
@@ -151,6 +151,16 @@ static Type typeAttrToType(PatternRewriter &rewriter, Attribute attr) {
   return mlir::cast<TypeAttr>(attr).getValue();
 }
 
+static Attribute smallerType(PatternRewriter &rewriter, Attribute attr1, Attribute attr2) {
+  auto typeAttr1 = mlir::cast<TypeAttr>(attr1);
+  auto typeAttr2 = mlir::cast<TypeAttr>(attr2);
+  DataLayout layout;
+  if (layout.getTypeSizeInBits(typeAttr1.getValue()) < layout.getTypeSizeInBits(typeAttr2.getValue())) {
+    return attr1;
+  }
+  return attr2;
+}
+
 static Type arrayFromSizeAndType(PatternRewriter &rewriter, Attribute attr, Type elementType) {
   // Extract size from integer attribute
   auto sizeAttr = mlir::cast<IntegerAttr>(attr);
@@ -203,7 +213,7 @@ static Attribute mapCmpi(PatternRewriter &rewriter, Attribute attr) {
   auto strAttr = mlir::cast<StringAttr>(attr);
   auto it = predicateMap.find(strAttr.getValue());
 
-  auto intAttr = IntegerAttr::get(rewriter.getI64Type(), it->second)
+  auto intAttr = IntegerAttr::get(rewriter.getI64Type(), it->second);
   return mlir::cast<Attribute>(intAttr);
 }
 
@@ -215,7 +225,7 @@ static Attribute mapCmpf(PatternRewriter &rewriter, Attribute attr) {
   auto strAttr = mlir::cast<StringAttr>(attr);
   auto it = predicateMap.find(strAttr.getValue());
   
-  auto intAttr = IntegerAttr::get(rewriter.getI64Type(), it->second)
+  auto intAttr = IntegerAttr::get(rewriter.getI64Type(), it->second);
   return mlir::cast<Attribute>(intAttr);
 }
 
@@ -398,6 +408,8 @@ struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> 
         "type_attr_to_type", typeAttrToType);
     patternList.getPDLPatterns().registerRewriteFunction(
         "type_to_type_attr", typeToTypeAttr);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "smaller_type", smallerType);
     patternList.getPDLPatterns().registerRewriteFunction(
         "array_to_int", arrayToInt);
     patternList.getPDLPatterns().registerRewriteFunction(
