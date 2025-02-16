@@ -138,12 +138,12 @@ class ThirdPass(ModulePass):
                 LowerVtable(),
                 LowerHashTable(),
                 LowerOffsetTable(),
-                LowerCoroCreate(),
                 LowerCoroYield(),
                 LowerCoroCall(),
                 LowerPrintfDecl(),
                 LowerPrintF(),
                 LowerLiteral()
+                #LowerCoroCreate(),
                 #LowerReUnionize(),
                 #LowerWidenInt(),
                 #LowerIntToFloat(),

@@ -75,6 +75,7 @@ mini.typid -> mini.alloc, mini.addr_of, llvm.ptrtoint, llvm.store [check!]
 mini.int_to_float -> mini.alloc, mini.unwrap, arith.sitofp, llvm.store [check!]
 mini.widen_int -> mini.alloc, mini.unwrap, arith.extsi, llvm.store [check!]
 mini.reunionize -> mini.alloc, mini.memcpy [check!]
+mini.coro_create -> llvm.mlir.constant, llvm.alloca, llvm.load, mini.addr_of, builtin.unrealized_conversion_cast, llvm.call, func.call_indirect, llvm.store [check!]
 
 mini.getter_def -> llvm.gep, func.return, func.func, mini.parameterization
 mini.parameterizations_array -> mini.alloc, llvm.gep, llvm.store, mini.invariant
@@ -88,7 +89,6 @@ mini.narrow -> mini.alloc, llvm.gep, mini.memcpy
 mini.unbox -> mini.alloc, llvm.gep, mini.memcpy, llvm.load
 mini.printf -> mini.addr_of, llvm.load, arith.extsi
 mini.arg_passer -> llvm.gep, llvm.load, builtin.unrealized_conversion_cast, func.call_indirect, llvm.store, mini.addr_of, func.return, func.func
-mini.coro_create -> llvm.mlir.constant, llvm.alloca, llvm.load, mini.addr_of, builtin.unrealized_conversion_cast, llvm.call, func.call_indirect, llvm.store
 
 -- Level 4: Lower to Level 3 Ops --
 

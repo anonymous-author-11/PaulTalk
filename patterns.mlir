@@ -972,4 +972,36 @@ module @patterns {
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
+  pdl.pattern @LowerCoroCreate : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %ptr_type_attr = pdl.attribute = !llvm.ptr
+    %args_types = pdl.types
+    %func = pdl.operand
+    %args = pdl.operands : %args_types
+    %arg_passer_symbol = pdl.attribute
+    %buffer_filler_symbol = pdl.attribute
+    %root = pdl.operation "mini.coro_create"(%func, %args : !pdl.value, !pdl.range<value>) {"arg_passer" = %arg_passer_symbol, "buffer_filler" = %buffer_filler_symbol} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %alloca = pdl.operation "mini.alloc" {"typ" = %ptr_type_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %func_ptr = pdl.operation "llvm.load"(%func : !pdl.value) -> (%ptr_type : !pdl.type)
+      %func_ptr_result = pdl.result 0 of %func_ptr
+      %arg_passer = pdl.operation "mini.addr_of" {"global_name" = %arg_passer_symbol} -> (%ptr_type : !pdl.type)
+      %arg_passer_result = pdl.result 0 of %arg_passer
+      %buffer_filler = pdl.operation "mini.addr_of" {"global_name" = %buffer_filler_symbol} -> (%ptr_type : !pdl.type)
+      %buffer_filler_result = pdl.result 0 of %buffer_filler
+      %new_range = pdl.range %ptr_type, %args_types : !pdl.type, !pdl.range<type>
+      %ftype = pdl.apply_native_rewrite "function_type"(%new_range : !pdl.range<type>) : !pdl.type
+      %laundered = pdl.operation "builtin.unrealized_conversion_cast"(%buffer_filler_result : !pdl.value) -> (%ftype : !pdl.type)
+      %laundered_result = pdl.result 0 of %laundered
+      %callee = pdl.attribute = @coroutine_create
+      %opbundlesize = pdl.attribute = array<i32>
+      %opsegsize = pdl.attribute = array<i32: 2, 0>
+      %call = pdl.operation "llvm.call"(%func_ptr_result, %arg_passer_result : !pdl.value, !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%ptr_type : !pdl.type)
+      %call_result = pdl.result 0 of %call
+      %fill = pdl.operation "func.call_indirect"(%laundered_result, %call_result, %args : !pdl.value, !pdl.value, !pdl.range<value>)
+      %store = pdl.operation "llvm.store"(%call_result, %alloca_result : !pdl.value, !pdl.value)
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
 }

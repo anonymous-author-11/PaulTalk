@@ -56,6 +56,11 @@ static Attribute stringToSymbol(PatternRewriter &rewriter, Attribute attr) {
   return mlir::cast<Attribute>(symbol);
 }
 
+static Type functionType(PatternRewriter &rewriter, TypeRange inputTypes) {
+  // Create the function type directly using get()
+  return FunctionType::get(rewriter.getContext(), inputTypes, TypeRange());
+}
+
 static Attribute coroFrame(PatternRewriter &rewriter, Type inputType) {
   
   // Get the context
@@ -101,11 +106,7 @@ static Attribute vtableType(PatternRewriter &rewriter, Attribute attr) {
   auto thirdTableType = LLVM::LLVMArrayType::get(ptrType, thirdTableSize);
   
   // Create the struct type containing the three arrays
-  SmallVector<Type, 3> structElements{
-    firstTableType,
-    secondTableType,
-    thirdTableType
-  };
+  SmallVector<Type, 3> structElements {firstTableType, secondTableType, thirdTableType};
   
   auto structType = LLVM::LLVMStructType::getLiteral(context, structElements);
   auto structAttr = TypeAttr::get(structType);
@@ -248,13 +249,8 @@ static Value unwrapStruct(PatternRewriter &rewriter, Operation *op) {
     // Create GEP operation
     SmallVector<LLVM::GEPArg, 2> indices {0, i};
     
-    auto gepOp = rewriter.create<LLVM::GEPOp>(
-      op->getLoc(),
-      LLVM::LLVMPointerType::get(rewriter.getContext()),
-      structType,  // pointee type is the full struct type
-      structPtr,
-      indices
-    );
+    auto ptrType = LLVM::LLVMPointerType::get(rewriter.getContext());
+    auto gepOp = rewriter.create<LLVM::GEPOp>(op->getLoc(), ptrType, structType, structPtr, indices);
     
     // Create recursive unwrap operation
     OperationState state(op->getLoc(), "mini.unwrap");
@@ -263,13 +259,14 @@ static Value unwrapStruct(PatternRewriter &rewriter, Operation *op) {
     Operation *unwrapOp = rewriter.create(state);
     
     // Insert value into result
-    currentValue = rewriter.create<LLVM::InsertValueOp>(
+    auto insertValue = rewriter.create<LLVM::InsertValueOp>(
       op->getLoc(),
       structType,
       currentValue,
       unwrapOp->getResult(0),
       rewriter.getDenseI64ArrayAttr(i)
-    ).getResult();
+    );
+    currentValue = insertValue.getResult();
   }
   
   return currentValue;
@@ -295,20 +292,10 @@ static Value lowerParamIndexation(PatternRewriter &rewriter, Operation *op) {
     // Create GEP
     SmallVector<LLVM::GEPArg, 2> gepIndices {0, index};
     
-    auto gepOp = rewriter.create<LLVM::GEPOp>(
-      op->getLoc(),
-      ptrType,
-      arrayType,  // pointee type is the array type
-      currentParam,
-      gepIndices
-    );
+    auto gepOp = rewriter.create<LLVM::GEPOp>(op->getLoc(), ptrType, arrayType, currentParam, gepIndices);
     
     // Load pointer
-    auto loadOp = rewriter.create<LLVM::LoadOp>(
-      op->getLoc(),
-      ptrType,
-      gepOp.getResult()
-    );
+    auto loadOp = rewriter.create<LLVM::LoadOp>(op->getLoc(), ptrType, gepOp.getResult());
     
     currentParam = loadOp.getResult();
   }
@@ -329,23 +316,12 @@ static void lowerMemcpyStruct(PatternRewriter &rewriter, Operation *op) {
     
     // Create GEP for source
     SmallVector<LLVM::GEPArg, 2> sourceIndices {0, i};
-    auto sourceGep = rewriter.create<LLVM::GEPOp>(
-      op->getLoc(),
-      LLVM::LLVMPointerType::get(rewriter.getContext()),
-      structType,
-      source, 
-      sourceIndices
-    );
+    auto ptrType = LLVM::LLVMPointerType::get(rewriter.getContext());
+    auto sourceGep = rewriter.create<LLVM::GEPOp>(op->getLoc(), ptrType, structType, source, sourceIndices);
 
     // Create GEP for dest
     SmallVector<LLVM::GEPArg, 2> destIndices{0, i};
-    auto destGep = rewriter.create<LLVM::GEPOp>(
-      op->getLoc(), 
-      LLVM::LLVMPointerType::get(rewriter.getContext()),
-      structType,
-      dest,
-      destIndices
-    );
+    auto destGep = rewriter.create<LLVM::GEPOp>(op->getLoc(), ptrType, structType, dest, destIndices);
 
     // Create memcpy for this element
     OperationState memcpyState(op->getLoc(), "mini.memcpy");
@@ -404,6 +380,8 @@ struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> 
         "map_cmpf", mapCmpf);
     patternList.getPDLPatterns().registerRewriteFunction(
         "vtable_type", vtableType);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "function_type", functionType);
     patternList.getPDLPatterns().registerRewriteFunction(
         "type_attr_to_type", typeAttrToType);
     patternList.getPDLPatterns().registerRewriteFunction(
