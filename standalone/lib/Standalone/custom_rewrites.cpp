@@ -4,13 +4,14 @@
 
 #include "mlir/Dialect/PDLInterp/IR/PDLInterp.h"
 #include "mlir/Dialect/LLVMIR/LLVMTypes.h"
+#include "mlir/Dialect/ControlFlow/IR/ControlFlowOps.h"
 #include "mlir/Dialect/LLVMIR/LLVMDialect.h"
 #include "mlir/IR/BuiltinTypes.h"
 #include "mlir/Pass/Pass.h"
 #include "mlir/Pass/PassManager.h"
 #include "mlir/Transforms/GreedyPatternRewriteDriver.h"
 #include "mlir/Support/LLVM.h"
- #include "mlir/Interfaces/DataLayoutInterfaces.h"
+#include "mlir/Interfaces/DataLayoutInterfaces.h"
 
 using namespace mlir;
 
@@ -344,6 +345,169 @@ static void lowerMemcpyStruct(PatternRewriter &rewriter, Operation *op) {
   }
 }
 
+static void insertIntoRegion(PatternRewriter &rewriter, Operation* targetOp, Operation* opToInsert) {
+
+  // Get the target region - assume first region
+  if (targetOp->getNumRegions() == 0) {
+    return;
+  }
+  Region &targetRegion = targetOp->getRegion(0);
+
+  // Get block to insert into - create if needed
+  Block *block;
+  if (targetRegion.empty()) {
+    block = rewriter.createBlock(&targetRegion);
+  } else {
+    block = &targetRegion.front();
+  }
+
+  Operation *clonedOp = rewriter.clone(*opToInsert);
+  block->getOperations().push_back(clonedOp);
+  
+  rewriter.eraseOp(opToInsert);
+}
+
+static void lowerWhile(PatternRewriter &rewriter, Operation *op) {
+  // Get necessary blocks
+  Block *surroundingBlock = op->getBlock();
+  Region &beforeRegion = op->getRegion(0); // Before/condition region
+  Region &loopRegion = op->getRegion(1);   // Loop body region
+  
+  Block *conditionBlock = &beforeRegion.front();
+  Block *bodyFirstBlock = &loopRegion.front();
+  Block *bodyLastBlock = &loopRegion.back();
+
+  // Split the surrounding block to create end block
+  Block *endBlock = rewriter.splitBlock(surroundingBlock, Block::iterator(op));
+
+  // Move condition blocks before end block
+  rewriter.inlineRegionBefore(beforeRegion, endBlock);
+  
+  // Create branch to condition block
+  rewriter.create<cf::BranchOp>(op->getLoc(), conditionBlock);
+
+  // Move loop body blocks before end block 
+  rewriter.inlineRegionBefore(loopRegion, endBlock);
+
+  // Create branch from body back to condition
+  rewriter.setInsertionPointToEnd(bodyLastBlock);
+  rewriter.create<cf::BranchOp>(op->getLoc(), conditionBlock);
+
+  // Get condition value from last op in condition block
+  Operation *lastOp = conditionBlock->getTerminator();
+  Value conditionValue = lastOp->getResult(0);
+
+  // Create conditional branch based on condition
+  rewriter.setInsertionPointToEnd(conditionBlock);
+  rewriter.create<cf::CondBranchOp>(
+    op->getLoc(),
+    conditionValue,
+    bodyFirstBlock, ValueRange(),
+    endBlock, ValueRange()
+  );
+
+  // Erase the original while op
+  rewriter.eraseOp(op);
+}
+
+static void lowerIf(PatternRewriter &rewriter, Operation *op) {
+  // Get necessary blocks
+  Block *surroundingBlock = op->getBlock();
+  Region &thenRegion = op->getRegion(0);
+  Value condition = op->getOperand(0);
+  
+  Block *thenFirstBlock = &thenRegion.front();
+  Block *thenLastBlock = &thenRegion.back();
+
+  // Split the surrounding block to create end block
+  Block *endBlock = rewriter.splitBlock(surroundingBlock, Block::iterator(op));
+
+  // Move then blocks before end block
+  rewriter.inlineRegionBefore(thenRegion, endBlock);
+  
+  // Create branch from then block to end
+  rewriter.setInsertionPointToEnd(thenLastBlock);
+  rewriter.create<cf::BranchOp>(op->getLoc(), endBlock);
+
+  // Handle case with no else region
+  if (op->getNumRegions() < 2 || op->getRegion(1).empty()) {
+    rewriter.setInsertionPoint(op);
+    rewriter.create<cf::CondBranchOp>(op->getLoc(), condition, thenFirstBlock, ValueRange(), endBlock, ValueRange());
+    rewriter.eraseOp(op);
+    return;
+  }
+
+  // Handle else region if present
+  Region &elseRegion = op->getRegion(1);
+  Block *elseFirstBlock = &elseRegion.front();
+  Block *elseLastBlock = &elseRegion.back();
+
+  // Move else blocks before end block
+  rewriter.inlineRegionBefore(elseRegion, endBlock);
+  
+  // Create branch from else block to end
+  rewriter.setInsertionPointToEnd(elseLastBlock);
+  rewriter.create<cf::BranchOp>(op->getLoc(), endBlock);
+
+  // Create conditional branch
+  rewriter.setInsertionPoint(op);
+  rewriter.create<cf::CondBranchOp>( op->getLoc(), condition, thenFirstBlock, ValueRange(), elseFirstBlock, ValueRange());
+
+  rewriter.eraseOp(op);
+}
+
+static void lowerBreak(PatternRewriter &rewriter, Operation *op) {
+  // Get parent block and region
+  Block *parentBlock = op->getBlock();
+  Region *parentRegion = parentBlock->getParent();
+
+  // Get condition block and its terminator
+  Block *conditionBlock = cast<Block *>(op->getOperand(0));
+  Operation *terminator = conditionBlock->getTerminator();
+  
+  // Verify terminator is a conditional branch
+  auto condBranch = dyn_cast<cf::CondBranchOp>(terminator);
+
+  // Get exit block (second successor of conditional branch)
+  Block *exitBlock = condBranch.getSuccessor(1);
+
+  // Create branch to exit block
+  auto brOp = rewriter.create<cf::BranchOp>(op->getLoc(), exitBlock);
+
+  // If not last op in block, handle dead code
+  if (op != &parentBlock->back()) {
+    Block *deadBlock = rewriter.splitBlock(parentBlock, std::next(Block::iterator(op)));
+    rewriter.setInsertionPointToEnd(deadBlock);
+    rewriter.create<cf::BranchOp>(op->getLoc(), deadBlock);
+  }
+
+  // Replace the break op with branch
+  rewriter.replaceOp(op, brOp);
+}
+
+static void lowerContinue(PatternRewriter &rewriter, Operation *op) {
+  // Get parent block and region
+  Block *parentBlock = op->getBlock();
+  Region *parentRegion = parentBlock->getParent();
+
+  // Get condition block and its terminator
+  Block *conditionBlock = cast<Block *>(op->getOperand(0));
+  Operation *terminator = conditionBlock->getTerminator();
+
+  // Create branch to condition block
+  auto brOp = rewriter.create<cf::BranchOp>(op->getLoc(), conditionBlock);
+
+  // If not last op in block, handle dead code
+  if (op != &parentBlock->back()) {
+    Block *deadBlock = rewriter.splitBlock(parentBlock, std::next(Block::iterator(op)));
+    rewriter.setInsertionPointToEnd(deadBlock);
+    rewriter.create<cf::BranchOp>(op->getLoc(), deadBlock);
+  }
+
+  // Replace the continue op with branch
+  rewriter.replaceOp(op, brOp);
+}
+
 namespace {
 struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> {
   MLIR_DEFINE_EXPLICIT_INTERNAL_INLINE_TYPE_ID(MyCustomPass)
@@ -422,7 +586,17 @@ struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> 
     patternList.getPDLPatterns().registerRewriteFunction(
         "lower_memcpy_struct", lowerMemcpyStruct);
     patternList.getPDLPatterns().registerRewriteFunction(
+        "inser_into_region", insertIntoRegion);
+    patternList.getPDLPatterns().registerRewriteFunction(
         "lower_parameterization_indexation", lowerParamIndexation);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "lower_while", lowerWhile);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "lower_if", lowerIf);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "lower_break", lowerBreak);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "lower_continue", lowerContinue);
 
     patternModule.getOperation()->remove();
     PDLPatternModule pdlPattern(patternModule);
