@@ -1,5 +1,6 @@
 
 -- Level 1: Fundamental LLVM, Builtin, Arith, CF Ops --
+
 llvm.mlir.global
 func.func
 llvm.getelementptr
@@ -32,24 +33,7 @@ llvm.address_of
 llvm.call
 llvm.call_intrinsic
 
--- Level 2: Mini Lang Base Ops --
-
---- special because manipulate regions, hard to put into PDL ---
-
-mini.if -> cf.conditional_branch, cf.branch
-mini.break -> cf.branch
-mini.continue -> cf.branch
-mini.while -> cf.branch, cf.conditional_branch
-mini.offset_tbl -> mini.global, llvm.undef, llvm.mlir.constant, llvm.insertvalue, llvm.return
-mini.hash_tbl -> mini.global, llvm.undef, mini.addr_of, llvm.insertvalue, llvm.zero, llvm.return
-mini.type_ptrs -> llvm.undef, mini.addr_of, llvm.insertvalue, llvm.zero, llvm.gep
-mini.type_integers -> llvm.undef, llvm.mlir.constant, llvm.insertvalue
-mini.vtable -> llvm.undef, mini.addr_of, llvm.mlir.constant, llvm.insertvalue, llvm.inttoptr
-mini.global -> llvm.mlir.global
-mini.func -> func.return, mini.unwrap, cf.branch, func.func
-mini.buffer_filler -> llvm.gep, llvm.store, func.return, func.func
-
------ prime ops for converting to PDL -----
+-- Level 2: Lower to Level 1 Ops --
 
 mini.alloc -> llvm.alloca, llvm.mlir.constant [check!]
 mini.addr_of -> llvm.address_of [check!]
@@ -76,35 +60,36 @@ mini.tuple_indexation -> llvm.gep [check!]
 mini.parameterization_indexation -> llvm.gep, llvm.load, builtin.unrealized_conversion_cast [check!]
 mini.memcpy -> llvm.load, llvm.store, mini.memcpy [check!]
 
-----------------------------------------------------------------------------
+-- Level 3: Lower to Level 2 Ops --
+
 mini.wrap -> mini.alloc, llvm.store, mini.invariant [check!]
 mini.assign -> mini.memcpy, llvm.load, llvm.store [check!]
 mini.malloc -> mini.type_size, llvm.call [check!]
 mini.field_access -> llvm.load, llvm.extractvalue, mini.invariant, llvm.gep, builtin.unrealized_conversion_cast, func.call_indirect [check!]
+mini.assign -> mini.memcpy, llvm.load, llvm.store [check!]
+mini.refer -> mini.alloc, mini.memcpy, mini.invariant [check!]
+mini.set_offset -> mini.addr_of, llvm.call [check!]
+mini.typid -> mini.alloc, mini.addr_of, llvm.ptrtoint, llvm.store [check!]
+mini.int_to_float -> mini.alloc, mini.unwrap, arith.sitofp, llvm.store [check!]
+mini.widen_int -> mini.alloc, mini.unwrap, arith.extsi, llvm.store [check!]
 
 mini.getter_def -> llvm.gep, func.return, func.func, mini.parameterization
 mini.parameterizations_array -> mini.alloc, llvm.gep, llvm.store, mini.invariant
-mini.create_buffer -> llvm.zero, mini.unwrap, llvm.gep, llvm.ptrtoint, mini.call
 mini.place_into_buffer -> llvm.gep, llvm.load, llvm.mlir.constant, arith.cmpi, arith.select, mini.memcpy
-mini.assign -> mini.memcpy, llvm.load, llvm.store
-mini.refer -> mini.alloc, mini.memcpy, mini.invariant
-mini.typid -> mini.alloc, mini.addr_of, llvm.ptrtoint, llvm.store
 mini.create_tuple -> mini.alloc, llvm.gep, llvm.store
-mini.widen_int -> mini.alloc, mini.unwrap, arith.extsi, llvm.store
 mini.prelude -> mini.printfdecl, mini.globalstr, mini.utils_api
 mini.coro_call -> llvm.load, mini.coro_set_result, llvm.call, mini.coro_get_result
 mini.coro_yield -> llvm.call, mini.coro_set_result, mini.coro_get_result, llvm.call
 mini.main -> llvm.mlir.constant, func.return, mini.setup_exception, func.func
-mini.set_offset -> mini.addr_of, llvm.call
-mini.int_to_float -> mini.alloc, mini.unwrap, arith.sitofp, llvm.store
 mini.narrow -> mini.alloc, llvm.gep, mini.memcpy
 mini.unbox -> mini.alloc, llvm.gep, mini.memcpy, llvm.load
 mini.reunionize -> mini.alloc, mini.memcpy
-mini.unbox -> mini.alloc, llvm.gep, mini.memcpy, llvm.load
 mini.printf -> mini.addr_of, llvm.load, arith.extsi
 mini.arg_passer -> llvm.gep, llvm.load, builtin.unrealized_conversion_cast, func.call_indirect, llvm.store, mini.addr_of, func.return, func.func
 mini.coro_create -> llvm.mlir.constant, llvm.alloca, llvm.load, mini.addr_of, builtin.unrealized_conversion_cast, llvm.call, func.call_indirect, llvm.store
-----------------------------------------------------------------------------
+
+-- Level 4: Lower to Level 3 Ops --
+
 mini.fptr_call -> builtin.unrealized_conversion_cast, func.call_indirect, mini.wrap
 mini.call -> mini.addr_of, builtin.unrealized_conversion_cast, func.call_indirect, mini.wrap
 mini.new -> mini.malloc, mini.addr_of, llvm.mlir.constant, mini.alloc, llvm.gep, llvm.store, mini.invariant
@@ -114,10 +99,29 @@ mini.to_fat_ptr -> mini.alloc, mini.memcpy, mini.set_offset, mini.invariant
 mini.setflag -> mini.getflag, mini.typid, mini.assign
 mini.method_call, mini.class_method_call -> llvm.extractvalue, mini.invariant, llvm.gep, llvm.load, mini.alloc, builtin.unrealized_conversion_cast, func.call_indirect, mini.wrap, mini.addr_of, llvm.store
 mini.checkflag -> mini.getflag, mini.typid, mini.unwrap, llvm.ptrtoint, llvm.cmpi, mini.wrap, llvm.load, llvm.gep, mini.addr_of, func.call_indirect, builtin.unrealized_conversion_cast
-----------------------------------------------------------------------------------------
+
+-- Level 5: Lower to Level 4 Ops --
+
+mini.create_buffer -> llvm.zero, mini.unwrap, llvm.gep, llvm.ptrtoint, mini.call
 mini.typedef -> mini.type_integers, mini.type_ptrs, mini.vtable, mini.hash_tbl, mini.offset_tbl, mini.global
 mini.cast -> mini.box, mini.unbox, mini.widen_int, mini.int_to_float, mini.unionize, mini.narrow, mini.to_fat_ptr, mini.reabstract, mini.tuple_cast, builtin.unrealized_conversion_cast, mini.reunionize, mini.setflag, mini.memcpy
 mini.unionize -> mini.alloc, llvm.gep, mini.memcpy, mini.setflag, mini.cast
 mini.reabstract -> mini.malloc, mini.anoint_trampoline, mini.addr_of, llvm.load, llvm.call_intrinsic, mini.alloc, llvm.store, mini.invariant, func.func, mini.wrap, mini.unwrap, mini.cast, func.return, func.fptr_call
 mini.tuple_cast -> mini.alloc, builtin.unrealized_conversion_cast, llvm.gep, mini.cast, llvm.store
 mini.castassign -> mini.assign, mini.cast
+
+
+--- special because manipulate regions, hard to put into PDL ---
+
+mini.if -> cf.conditional_branch, cf.branch
+mini.break -> cf.branch
+mini.continue -> cf.branch
+mini.while -> cf.branch, cf.conditional_branch
+mini.offset_tbl -> mini.global, llvm.undef, llvm.mlir.constant, llvm.insertvalue, llvm.return
+mini.hash_tbl -> mini.global, llvm.undef, mini.addr_of, llvm.insertvalue, llvm.zero, llvm.return
+mini.type_ptrs -> llvm.undef, mini.addr_of, llvm.insertvalue, llvm.zero, llvm.gep
+mini.type_integers -> llvm.undef, llvm.mlir.constant, llvm.insertvalue
+mini.vtable -> llvm.undef, mini.addr_of, llvm.mlir.constant, llvm.insertvalue, llvm.inttoptr
+mini.global -> llvm.mlir.global
+mini.func -> func.return, mini.unwrap, cf.branch, func.func
+mini.buffer_filler -> llvm.gep, llvm.store, func.return, func.func

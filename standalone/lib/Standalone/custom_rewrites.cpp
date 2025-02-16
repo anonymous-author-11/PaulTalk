@@ -27,18 +27,21 @@ static LogicalResult isStruct(PatternRewriter &rewriter, Type type) {
 }
 
 static LogicalResult isStructAttr(PatternRewriter &rewriter, Attribute attr) {
-  return success(mlir::isa<LLVM::LLVMStructType>(mlir::cast<TypeAttr>(attr).getValue()));
+  auto t = mlir::cast<TypeAttr>(attr).getValue();
+  return success(mlir::isa<LLVM::LLVMStructType>(t));
 }
 
 static LogicalResult isLLVMArrayAttr(PatternRewriter &rewriter, Attribute attr) {
-  return success(mlir::isa<LLVM::LLVMArrayType>(mlir::cast<TypeAttr>(attr).getValue()));
+  auto t = mlir::cast<TypeAttr>(attr).getValue();
+  return success(mlir::isa<LLVM::LLVMArrayType>(t));
 }
 
 static LogicalResult isEmptyLLVMArray(PatternRewriter &rewriter, Attribute attr) {
-  if (!mlir::isa<LLVM::LLVMArrayType>(mlir::cast<TypeAttr>(attr).getValue())) {
+  auto t = mlir::cast<TypeAttr>(attr).getValue();
+  if (!mlir::isa<LLVM::LLVMArrayType>(t)) {
     return failure();
   }
-  auto type = mlir::cast<LLVM::LLVMArrayType>(mlir::cast<TypeAttr>(attr).getValue());
+  auto type = mlir::cast<LLVM::LLVMArrayType>(t);
   auto len = type.getNumElements();
   return success(len == 0);
 }
@@ -49,7 +52,8 @@ static Attribute stringToSymbol(PatternRewriter &rewriter, Attribute attr) {
   StringRef value = strAttr.getValue();
   
   // Create and return a SymbolRefAttr with the string value
-  return mlir::cast<Attribute>(SymbolRefAttr::get(rewriter.getContext(), value));
+  auto symbol = SymbolRefAttr::get(rewriter.getContext(), value);
+  return mlir::cast<Attribute>(symbol);
 }
 
 static Attribute coroFrame(PatternRewriter &rewriter, Type inputType) {
@@ -73,8 +77,9 @@ static Attribute coroFrame(PatternRewriter &rewriter, Type inputType) {
   
   // Create the LLVM struct type
   auto structType = LLVM::LLVMStructType::getLiteral(context, structElements);
+  auto structAttr = TypeAttr::get(structType)
   
-  return mlir::cast<Attribute>(TypeAttr::get(structType));
+  return mlir::cast<Attribute>(structAttr);
 }
 
 static Attribute vtableType(PatternRewriter &rewriter, Attribute attr) {
@@ -103,8 +108,9 @@ static Attribute vtableType(PatternRewriter &rewriter, Attribute attr) {
   };
   
   auto structType = LLVM::LLVMStructType::getLiteral(context, structElements);
+  auto structAttr = TypeAttr::get(structType);
   
-  return mlir::cast<Attribute>(TypeAttr::get(structType));
+  return mlir::cast<Attribute>(structAttr);
 }
 
 static Operation* addRegion(PatternRewriter &rewriter, Operation *op) {
@@ -137,7 +143,8 @@ static Attribute typeToTypeAttr(PatternRewriter &rewriter, Type type) {
   Type inputType = mlir::cast<Type>(type);
   
   // Convert to TypeAttr and add to results
-  return mlir::cast<Attribute>(TypeAttr::get(inputType));
+  auto attr = TypeAttr::get(inputType);
+  return mlir::cast<Attribute>(attr);
 }
 
 static Type typeAttrToType(PatternRewriter &rewriter, Attribute attr) {
@@ -156,9 +163,7 @@ static Type arrayFromSizeAndType(PatternRewriter &rewriter, Attribute attr, Type
   return mlir::cast<Type>(arrayType);
 }
 
-static LogicalResult arrayAttr(PatternRewriter &rewriter,
-                             PDLResultList &results,
-                             ArrayRef<PDLValue> args) {
+static LogicalResult arrayAttr(PatternRewriter &rewriter, PDLResultList &results, ArrayRef<PDLValue> args) {
   SmallVector<int32_t> values;
   for (const PDLValue &arg : args) {
     if (auto intAttr = mlir::dyn_cast<IntegerAttr>(mlir::cast<Attribute>(arg))) {
@@ -180,11 +185,14 @@ static Type arrayToInt(PatternRewriter &rewriter, Attribute attr) {
   DataLayout layout;
   uint64_t elementSize = layout.getTypeSizeInBits(elementType);
 
-  return mlir::cast<Type>(IntegerType::get(rewriter.getContext(), numElements * elementSize));
+  auto intType = IntegerType::get(rewriter.getContext(), numElements * elementSize);
+  return mlir::cast<Type>(intType);
 }
 
 static Attribute timesEight(PatternRewriter &rewriter, Attribute attr) {
-  return mlir::cast<Attribute>(IntegerAttr::get(rewriter.getI64Type(), mlir::cast<IntegerAttr>(attr).getInt() * 8));
+  auto intval = mlir::cast<IntegerAttr>(attr).getInt();
+  auto intAttr = IntegerAttr::get(rewriter.getI64Type(), intval * 8);
+  return mlir::cast<Attribute>(intAttr);
 }
 
 static Attribute mapCmpi(PatternRewriter &rewriter, Attribute attr) {
@@ -195,7 +203,8 @@ static Attribute mapCmpi(PatternRewriter &rewriter, Attribute attr) {
   auto strAttr = mlir::cast<StringAttr>(attr);
   auto it = predicateMap.find(strAttr.getValue());
 
-  return mlir::cast<Attribute>(IntegerAttr::get(rewriter.getI64Type(), it->second));
+  auto intAttr = IntegerAttr::get(rewriter.getI64Type(), it->second)
+  return mlir::cast<Attribute>(intAttr);
 }
 
 static Attribute mapCmpf(PatternRewriter &rewriter, Attribute attr) {
@@ -205,8 +214,9 @@ static Attribute mapCmpf(PatternRewriter &rewriter, Attribute attr) {
   
   auto strAttr = mlir::cast<StringAttr>(attr);
   auto it = predicateMap.find(strAttr.getValue());
-    
-  return mlir::cast<Attribute>(IntegerAttr::get(rewriter.getI64Type(), it->second));
+  
+  auto intAttr = IntegerAttr::get(rewriter.getI64Type(), it->second)
+  return mlir::cast<Attribute>(intAttr);
 }
 
 static Value unwrapStruct(PatternRewriter &rewriter, Operation *op) {
