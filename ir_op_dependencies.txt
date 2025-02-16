@@ -79,12 +79,12 @@ mini.coro_create -> llvm.mlir.constant, mini.alloc, llvm.load, mini.addr_of, bui
 mini.unbox -> mini.alloc, llvm.gep, mini.memcpy, llvm.load [check!]
 mini.printf -> mini.addr_of, llvm.load, arith.extsi [check!]
 mini.prelude -> mini.printfdecl, mini.globalstr, mini.utils_api [check!]
+mini.coro_call -> llvm.load, mini.coro_set_result, llvm.call, mini.coro_get_result [check!]
+mini.coro_yield -> llvm.call, mini.coro_set_result, mini.coro_get_result, llvm.call [check!]
 
 mini.parameterizations_array -> mini.alloc, llvm.gep, llvm.store, mini.invariant
 mini.place_into_buffer -> llvm.gep, llvm.load, llvm.mlir.constant, arith.cmpi, arith.select, mini.memcpy
 mini.create_tuple -> mini.alloc, llvm.gep, llvm.store
-mini.coro_call -> llvm.load, mini.coro_set_result, llvm.call, mini.coro_get_result
-mini.coro_yield -> llvm.call, mini.coro_set_result, mini.coro_get_result, llvm.call
 mini.main -> llvm.mlir.constant, func.return, mini.setup_exception, func.func
 mini.narrow -> mini.alloc, llvm.gep, mini.memcpy
 mini.arg_passer -> llvm.gep, llvm.load, builtin.unrealized_conversion_cast, func.call_indirect, llvm.store, mini.addr_of, func.return, func.func
