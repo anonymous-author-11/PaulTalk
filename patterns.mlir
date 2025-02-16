@@ -1004,4 +1004,82 @@ module @patterns {
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
+  pdl.pattern @LowerToFatPtrInvariant : benefit(2) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %operand = pdl.operand
+    %to_typ_attr = pdl.attribute
+    %from_typ_attr = pdl.attribute
+    %to_typ_name = pdl.attribute
+    %from_typ_name = pdl.attribute
+    %unit = pdl.attribute = unit
+    %root = pdl.operation "mini.to_fat_ptr"(%operand : !pdl.value) {"from_typ" = %from_typ_attr, "to_typ" = %to_typ_attr, "from_typ_name" = %from_typ_name, "to_typ_name" = %to_typ_name, "invariant" = %unit} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %alloca = pdl.operation "mini.alloc" {"typ" = %to_typ_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %memcpy = pdl.operation "mini.memcpy"(%operand, %alloca_result : !pdl.value, !pdl.value) {"type" = %to_typ_attr}
+      %set_offset = pdl.operation "mini.set_offset"(%alloca_result : !pdl.value) {"to_typ" = %to_typ_name}
+      %twentyfour = pdl.attribute = 24
+      %invariant = pdl.operation "mini.invariant"(%alloca_result : !pdl.value) {"num_bytes" = %twentyfour} -> (%ptr_type : !pdl.type)
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerToFatPtr : benefit(2) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %operand = pdl.operand
+    %to_typ_attr = pdl.attribute
+    %from_typ_attr = pdl.attribute
+    %to_typ_name = pdl.attribute
+    %from_typ_name = pdl.attribute
+    %unit = pdl.attribute = unit
+    %root = pdl.operation "mini.to_fat_ptr"(%operand : !pdl.value) {"from_typ" = %from_typ_attr, "to_typ" = %to_typ_attr, "from_typ_name" = %from_typ_name, "to_typ_name" = %to_typ_name} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %alloca = pdl.operation "mini.alloc" {"typ" = %to_typ_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %memcpy = pdl.operation "mini.memcpy"(%operand, %alloca_result : !pdl.value, !pdl.value) {"type" = %to_typ_attr}
+      %set_offset = pdl.operation "mini.set_offset"(%alloca_result : !pdl.value) {"to_typ" = %to_typ_name}
+      %twentyfour = pdl.attribute = 24
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerUnbox : benefit(2) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %operand = pdl.operand
+    %to_typ_attr = pdl.attribute
+    %to_typ_size = pdl.apply_native_constraint "type_size"(%to_typ_attr : !pdl.attribute) : !pdl.attribute
+    %onetwentyeight = pdl.attribute = 128
+    pdl.apply_native_constraint "greater_than"(%to_typ_size, %onetwentyeight : !pdl.attribute, !pdl.attribute)
+    %from_typ_attr = pdl.attribute
+    %to_typ_name = pdl.attribute
+    %from_typ_name = pdl.attribute
+    %root = pdl.operation "mini.unbox"(%operand : !pdl.value) {"from_typ" = %from_typ_attr, "to_typ" = %to_typ_attr, "from_typ_name" = %from_typ_name, "to_typ_name" = %to_typ_name} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %alloca = pdl.operation "mini.alloc" {"typ" = %to_typ_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %indices = pdl.attribute = array<i32: 0, 1>
+      %data_ptr_ptr = pdl.operation "llvm.getelementptr"(%operand : !pdl.value) {"elem_type" = %from_typ_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
+      %data_ptr_ptr_result = pdl.result 0 of %data_ptr_ptr
+      %data_ptr = pdl.operation "llvm.load"(%data_ptr_ptr_result : !pdl.value) -> (%ptr_type : !pdl.type)
+      %data_ptr_result = pdl.result 0 of %data_ptr
+      %memcpy = pdl.operation "mini.memcpy"(%data_ptr_result, %alloca_result : !pdl.value, !pdl.value) {"type" = %to_typ_attr}
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerUnboxSmall : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %operand = pdl.operand
+    %to_typ_attr = pdl.attribute
+    %from_typ_attr = pdl.attribute
+    %to_typ_name = pdl.attribute
+    %from_typ_name = pdl.attribute
+    %root = pdl.operation "mini.unbox"(%operand : !pdl.value) {"from_typ" = %from_typ_attr, "to_typ" = %to_typ_attr, "from_typ_name" = %from_typ_name, "to_typ_name" = %to_typ_name} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %alloca = pdl.operation "mini.alloc" {"typ" = %to_typ_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %indices = pdl.attribute = array<i32: 0, 1>
+      %gep = pdl.operation "llvm.getelementptr"(%operand : !pdl.value) {"elem_type" = %from_typ_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
+      %gep_result = pdl.result 0 of %gep
+      %memcpy = pdl.operation "mini.memcpy"(%gep_result, %alloca_result : !pdl.value, !pdl.value) {"type" = %to_typ_attr}
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
 }

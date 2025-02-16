@@ -113,12 +113,10 @@ class ThirdPass(ModulePass):
         walker = PatternRewriteWalker(
             GreedyRewritePatternApplier([
                 LowerBox(),
-                LowerUnbox(),
                 LowerUnionize(),
                 LowerNarrow(),
                 LowerReabstract(),
                 LowerTupleCast(),
-                LowerToFatPtr(),
                 LowerFuncDef(),
                 LowerGetterDef(),
                 LowerArgPasser(),
@@ -143,6 +141,8 @@ class ThirdPass(ModulePass):
                 LowerPrintfDecl(),
                 LowerPrintF(),
                 LowerLiteral()
+                #LowerUnbox(),
+                #LowerToFatPtr(),
                 #LowerCoroCreate(),
                 #LowerReUnionize(),
                 #LowerWidenInt(),

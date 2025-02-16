@@ -46,6 +46,19 @@ static LogicalResult isEmptyLLVMArray(PatternRewriter &rewriter, Attribute attr)
   return success(len == 0);
 }
 
+static LogicalResult typeSize(PatternRewriter &rewriter, PDLResultList &results, ArrayRef<PDLValue> args) {
+  DataLayout layout;
+  auto attr = mlir::cast<Attribute>(args[0]);
+  auto typeAttr = mlir::cast<TypeAttr>(attr);
+  auto size = layout.getTypeSizeInBits(typeAttr.getValue());
+  results.push_back(IntegerAttr::get(rewriter.getI64Type(), size));
+  return success();
+}
+
+static LogicalResult greaterThan(PatternRewriter &rewriter, Attribute lhs, Attribute rhs) {
+  return success(mlir::cast<IntegerAttr>(lhs).getInt() > mlir::cast<IntegerAttr>(rhs).getInt());
+}
+
 static Attribute stringToSymbol(PatternRewriter &rewriter, Attribute attr) {
   // Cast input to StringAttr and get its value
   auto strAttr = mlir::cast<StringAttr>(attr);
@@ -364,6 +377,10 @@ struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> 
         "is_int", isInt);
     patternList.getPDLPatterns().registerConstraintFunction(
         "is_struct", isStruct);
+    patternList.getPDLPatterns().registerConstraintFunction(
+        "greater_than", greaterThan);
+    patternList.getPDLPatterns().registerConstraintFunction(
+        "type_size", typeSize);
     patternList.getPDLPatterns().registerConstraintFunction(
         "is_struct_attr", isStructAttr);
     patternList.getPDLPatterns().registerConstraintFunction(
