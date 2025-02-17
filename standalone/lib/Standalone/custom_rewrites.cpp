@@ -215,6 +215,11 @@ static Attribute multiply(PatternRewriter &rewriter, Attribute lhs, Attribute rh
   return IntegerAttr::get(rewriter.getI32Type(), result);
 }
 
+static Attribute divide(PatternRewriter &rewriter, Attribute lhs, Attribute rhs) {
+  auto result = mlir::cast<IntegerAttr>(lhs).getInt() / mlir::cast<IntegerAttr>(lhs).getInt();
+  return IntegerAttr::get(rewriter.getI32Type(), result);
+}
+
 static LogicalResult isRegionEmpty(PatternRewriter &rewriter, Operation *op) {
 
   // Get the first region (usually what we want to check)
@@ -613,6 +618,8 @@ struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> 
         "count_elements", countElements);
     patternList.getPDLPatterns().registerRewriteFunction(
         "multiply", multiply);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "divide", divide);
     patternList.getPDLPatterns().registerRewriteFunction(
         "array_attr", arrayAttr);
     patternList.getPDLPatterns().registerRewriteFunction(

@@ -1019,13 +1019,13 @@ module @patterns {
     %ptr_type = pdl.type : !llvm.ptr
     %operand = pdl.operand
     %to_typ_attr = pdl.attribute
-    %to_typ_size = pdl.apply_native_constraint "type_size"(%to_typ_attr : !pdl.attribute) : !pdl.attribute
+    %to_typ_size = pdl.attribute
     %onetwentyeight = pdl.attribute = 128
     pdl.apply_native_constraint "greater_than"(%to_typ_size, %onetwentyeight : !pdl.attribute, !pdl.attribute)
     %from_typ_attr = pdl.attribute
     %to_typ_name = pdl.attribute
     %from_typ_name = pdl.attribute
-    %root = pdl.operation "mini.unbox"(%operand : !pdl.value) {"from_typ" = %from_typ_attr, "to_typ" = %to_typ_attr, "from_typ_name" = %from_typ_name, "to_typ_name" = %to_typ_name} -> (%ptr_type : !pdl.type)
+    %root = pdl.operation "mini.unbox"(%operand : !pdl.value) {"from_typ" = %from_typ_attr, "to_typ" = %to_typ_attr, "from_typ_name" = %from_typ_name, "to_typ_name" = %to_typ_name, "to_typ_size" = %to_typ_size} -> (%ptr_type : !pdl.type)
     pdl.rewrite %root {
       %alloca = pdl.operation "mini.alloc" {"typ" = %to_typ_attr} -> (%ptr_type : !pdl.type)
       %alloca_result = pdl.result 0 of %alloca
@@ -1044,8 +1044,9 @@ module @patterns {
     %to_typ_attr = pdl.attribute
     %from_typ_attr = pdl.attribute
     %to_typ_name = pdl.attribute
+    %to_typ_size = pdl.attribute
     %from_typ_name = pdl.attribute
-    %root = pdl.operation "mini.unbox"(%operand : !pdl.value) {"from_typ" = %from_typ_attr, "to_typ" = %to_typ_attr, "from_typ_name" = %from_typ_name, "to_typ_name" = %to_typ_name} -> (%ptr_type : !pdl.type)
+    %root = pdl.operation "mini.unbox"(%operand : !pdl.value) {"from_typ" = %from_typ_attr, "to_typ" = %to_typ_attr, "from_typ_name" = %from_typ_name, "to_typ_name" = %to_typ_name, "to_typ_size" = %to_typ_size} -> (%ptr_type : !pdl.type)
     pdl.rewrite %root {
       %alloca = pdl.operation "mini.alloc" {"typ" = %to_typ_attr} -> (%ptr_type : !pdl.type)
       %alloca_result = pdl.result 0 of %alloca
@@ -1468,6 +1469,185 @@ module @patterns {
       pdl.apply_native_rewrite "store_operands_in_container"(%root, %type_fields_attr, %malloc_gep_result : !pdl.operation, !pdl.attribute, !pdl.value)
       %invariant1 = pdl.operation "mini.invariant"(%malloc_gep_result : !pdl.value) {"num_bytes" = %type_fields_bytes} -> (%ptr_type : !pdl.type)
       pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerFromBuffer : benefit(1) {
+    // Match the operands and types
+    %bool = pdl.type : i1
+    %ptr_type = pdl.type : !llvm.ptr
+    %ptr_type_attr = pdl.attribute = !llvm.ptr
+    %vptr = pdl.operand : %ptr_type
+    %buf = pdl.operand : %ptr_type
+    %fat_base_type = pdl.type : !llvm.struct<(ptr, ptr, ptr, i32)>
+    %fat_base_attr = pdl.attribute = !llvm.struct<(ptr, ptr, ptr, i32)>
+    %i64_type = pdl.type : i64
+    
+    // Match the original operation
+    %root = pdl.operation "mini.from_buffer"(%vptr, %buf : !pdl.value, !pdl.value) -> (%ptr_type : !pdl.type)
+    
+    pdl.rewrite %root {
+        // Allocate space for the fat pointer structure
+        %alloca = pdl.operation "mini.alloc" {"typ" = %fat_base_attr} -> (%ptr_type : !pdl.type)
+        %alloca_result = pdl.result 0 of %alloca
+        
+        // Get the data size from the vtable
+        %indices_data_size = pdl.attribute = array<i32: 6>
+        %data_size_ptr = pdl.operation "llvm.getelementptr"(%vptr : !pdl.value) {"elem_type" = %ptr_type_attr, "rawConstantIndices" = %indices_data_size} -> (%ptr_type : !pdl.type)
+        %data_size_ptr_result = pdl.result 0 of %data_size_ptr
+        %data_size = pdl.operation "llvm.load"(%data_size_ptr_result : !pdl.value) -> (%i64_type : !pdl.type)
+        %data_size_result = pdl.result 0 of %data_size
+        
+        // Create threshold for small struct optimization
+        %threshold_val = pdl.attribute = 128
+        %threshold = pdl.operation "llvm.mlir.constant" {"value" = %threshold_val} -> (%i64_type : !pdl.type)
+        %threshold_result = pdl.result 0 of %threshold
+        
+        // Compare size with threshold
+        %le_pred = pdl.attribute = "LE"
+        %predicate = pdl.apply_native_rewrite "map_cmpi"(%le_pred : !pdl.attribute) : !pdl.attribute
+        %small_struct = pdl.operation "arith.cmpi"(%data_size_result, %threshold_result : !pdl.value, !pdl.value) {"predicate" = %predicate} -> (%bool : !pdl.type)
+        %small_struct_result = pdl.result 0 of %small_struct
+        
+        // Malloc for large structures
+        %callee = pdl.attribute = @malloc
+        %malloc = pdl.operation "placeholder.call"(%data_size_result : !pdl.value) {"callee" = %callee} -> (%ptr_type : !pdl.type)
+        %malloc_result = pdl.result 0 of %malloc
+        
+        // First memcpy to copy data to malloc result
+        %false = pdl.attribute = 0
+        %false_const = pdl.operation "llvm.mlir.constant" {"value" = %false} -> (%i64_type : !pdl.type)
+        %false_const_result = pdl.result 0 of %false_const
+        
+        %intrin = pdl.attribute = "llvm.memcpy.inline.p0.p0.i64"
+        %opsegsize = pdl.attribute = array<i32: 4, 0>
+        %opbundlesize = pdl.attribute = array<i32>
+        %memcpy0 = pdl.operation "llvm.call_intrinsic"(%buf, %malloc_result, %data_size_result, %false_const_result : !pdl.value, !pdl.value, !pdl.value, !pdl.value) {"intrin" = %intrin, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize}
+        
+        // Select between malloc result and direct buffer based on size
+        %content_ptr = pdl.operation "arith.select"(%small_struct_result, %buf, %malloc_result : !pdl.value, !pdl.value, !pdl.value) -> (%ptr_type : !pdl.type)
+        %content_ptr_result = pdl.result 0 of %content_ptr
+        
+        // Final memcpy to fat pointer structure
+        %memcpy1 = pdl.operation "llvm.call_intrinsic"(%content_ptr_result, %alloca_result, %data_size_result, %false_const_result : !pdl.value, !pdl.value, !pdl.value, !pdl.value) {"intrin" = %intrin, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize}
+        
+        pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerBox : benefit(2) {
+    // Match the operands and types
+    %ptr_type = pdl.type : !llvm.ptr
+    %operand = pdl.operand : %ptr_type
+    %from_typ_attr = pdl.attribute
+    %from_typ_size = pdl.attribute
+    %onetwentyeight = pdl.attribute = 128
+    pdl.apply_native_constraint "greater_than"(%from_typ_size, %onetwentyeight : !pdl.attribute, !pdl.attribute)
+    %to_typ_attr = pdl.attribute
+    %from_typ_name = pdl.attribute
+    %to_typ_name = pdl.attribute
+    
+    // Match the original operation
+    %root = pdl.operation "mini.box"(%operand : !pdl.value) {"from_typ" = %from_typ_attr, "to_typ" = %to_typ_attr, "from_typ_name" = %from_typ_name, "to_typ_name" = %to_typ_name, "from_typ_size" = %from_typ_size} -> (%ptr_type : !pdl.type)
+    
+    pdl.rewrite %root {
+        // Malloc for the data content
+        %malloc = pdl.operation "mini.malloc" {"typ" = %from_typ_attr} -> (%ptr_type : !pdl.type)
+        %malloc_result = pdl.result 0 of %malloc
+        
+        // Allocate space for the boxed structure
+        %alloca = pdl.operation "mini.alloc" {"typ" = %to_typ_attr} -> (%ptr_type : !pdl.type)
+        %alloca_result = pdl.result 0 of %alloca
+        
+        // Get pointer to the data section
+        %indices = pdl.attribute = array<i32: 0, 1>
+        %gep0 = pdl.operation "llvm.getelementptr"(%alloca_result : !pdl.value) {"elem_type" = %to_typ_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
+        %gep0_result = pdl.result 0 of %gep0
+        
+        // Copy the data to malloc'd space
+        %memcpy = pdl.operation "mini.memcpy"(%operand, %malloc_result : !pdl.value, !pdl.value) {"type" = %from_typ_attr}
+        
+        // Get and store the vtable pointer
+        %symbol = pdl.apply_native_rewrite "string_to_symbol"(%from_typ_name : !pdl.attribute) : !pdl.attribute
+        %vptr = pdl.operation "mini.addr_of" {"global_name" = %symbol} -> (%ptr_type : !pdl.type)
+        %vptr_result = pdl.result 0 of %vptr
+        %store0 = pdl.operation "llvm.store"(%vptr_result, %alloca_result : !pdl.value, !pdl.value)
+        
+        // Calculate number of bytes for invariant
+        %eight = pdl.attribute = 8
+        %type_size_div = pdl.apply_native_rewrite "divide"(%from_typ_size, %eight : !pdl.attribute, !pdl.attribute) : !pdl.attribute
+        %invariant0 = pdl.operation "mini.invariant"(%malloc_result : !pdl.value) {"num_bytes" = %type_size_div} -> (%ptr_type : !pdl.type)
+        
+        // Store the malloc'd pointer
+        %store1 = pdl.operation "llvm.store"(%malloc_result, %gep0_result : !pdl.value, !pdl.value)
+        
+        // Set the offset for the boxed type
+        %set_offset = pdl.operation "mini.set_offset"(%alloca_result : !pdl.value) {"to_typ" = %to_typ_name}
+        pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+}
+pdl.pattern @LowerBoxSmall : benefit(1) {
+    // Match the operands and types
+    %ptr_type = pdl.type : !llvm.ptr
+    %operand = pdl.operand : %ptr_type
+    %from_typ_attr = pdl.attribute
+    %to_typ_attr = pdl.attribute
+    %from_typ_name = pdl.attribute
+    %to_typ_name = pdl.attribute
+    
+    // Match the original operation
+    %root = pdl.operation "mini.box"(%operand : !pdl.value) {"from_typ" = %from_typ_attr, "to_typ" = %to_typ_attr, "from_typ_name" = %from_typ_name, "to_typ_name" = %to_typ_name} -> (%ptr_type : !pdl.type)
+    
+    pdl.rewrite %root {
+        // Allocate space for the boxed structure
+        %alloca = pdl.operation "mini.alloc" {"typ" = %to_typ_attr} -> (%ptr_type : !pdl.type)
+        %alloca_result = pdl.result 0 of %alloca
+        
+        // Get pointer to the data section
+        %indices = pdl.attribute = array<i32: 0, 1>
+        %gep0 = pdl.operation "llvm.getelementptr"(%alloca_result : !pdl.value) {"elem_type" = %to_typ_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
+        %gep0_result = pdl.result 0 of %gep0
+        
+        // Get and store the vtable pointer
+        %symbol = pdl.apply_native_rewrite "string_to_symbol"(%from_typ_name : !pdl.attribute) : !pdl.attribute
+        %vptr = pdl.operation "mini.addr_of" {"global_name" = %symbol} -> (%ptr_type : !pdl.type)
+        %vptr_result = pdl.result 0 of %vptr
+        %store0 = pdl.operation "llvm.store"(%vptr_result, %alloca_result : !pdl.value, !pdl.value)
+        
+        // Copy the data directly into the boxed structure
+        %memcpy = pdl.operation "mini.memcpy"(%operand, %gep0_result : !pdl.value, !pdl.value) {"type" = %from_typ_attr}
+        
+        // Set the offset for the boxed type
+        %set_offset = pdl.operation "mini.set_offset"(%alloca_result : !pdl.value) {"to_typ" = %to_typ_name}
+        pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerSetFlagWithOperand : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %struct_typ_attr = pdl.attribute
+    %ptr = pdl.operand
+    %new_flag = pdl.operand
+    %i64_attr = pdl.attribute = i64
+    %root = pdl.operation "mini.setflag"(%ptr, %new_flag : !pdl.value, !pdl.value) {"struct_typ" = %struct_typ_attr}
+    pdl.rewrite %root {
+      %get_flag = pdl.operation "mini.get_flag"(%ptr : !pdl.value) {"struct_typ" = %struct_typ_attr} -> (%ptr_type : !pdl.type)
+      %get_flag_result = pdl.result 0 of %get_flag
+      %assign = pdl.operation "mini.assign"(%get_flag_result, %new_flag : !pdl.value, !pdl.value) {"typ" = %i64_attr}
+      pdl.replace %root with %assign
+    }
+  }
+  pdl.pattern @LowerSetFlag : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %struct_typ_attr = pdl.attribute
+    %ptr = pdl.operand
+    %typ_name = pdl.attribute
+    %i64_attr = pdl.attribute = i64
+    %root = pdl.operation "mini.setflag"(%ptr : !pdl.value) {"struct_typ" = %struct_typ_attr, "typ_name" = %typ_name}
+    pdl.rewrite %root {
+      %get_flag = pdl.operation "mini.getflag"(%ptr : !pdl.value) {"struct_typ" = %struct_typ_attr} -> (%ptr_type : !pdl.type)
+      %get_flag_result = pdl.result 0 of %get_flag
+      %typ_id = pdl.operation "mini.typid" {"typ_name" = %typ_name} -> (%ptr_type : !pdl.type)
+      %typ_id_result = pdl.result 0 of %typ_id
+      %assign = pdl.operation "mini.assign"(%get_flag_result, %typ_id_result : !pdl.value, !pdl.value) {"typ" = %i64_attr}
+      pdl.replace %root with %assign
     }
   }
 }

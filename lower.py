@@ -92,7 +92,6 @@ class SecondPass(ModulePass):
                 LowerContinue(),
                 LowerMethodCall(),
                 LowerCreateBuffer(),
-                LowerFromBuffer()
             ]),
             apply_recursively=True
         )
@@ -108,7 +107,6 @@ class ThirdPass(ModulePass):
     def apply(self, ctx: MLContext, op: ModuleOp) -> None:
         walker = PatternRewriteWalker(
             GreedyRewritePatternApplier([
-                LowerBox(),
                 LowerUnionize(),
                 LowerReabstract(),
                 LowerTupleCast(),
@@ -116,7 +114,6 @@ class ThirdPass(ModulePass):
                 LowerGetterDef(),
                 LowerArgPasser(),
                 LowerBufferFiller(),
-                LowerSetFlag(),
                 LowerCheckFlag(),
                 LowerParameterization(),
                 LowerCastAssign(),
@@ -130,6 +127,9 @@ class ThirdPass(ModulePass):
                 LowerHashTable(),
                 LowerOffsetTable(),
                 LowerLiteral()
+                #LowerSetFlag(),
+                #LowerBox(),
+                #LowerFromBuffer()
                 #LowerNew(),
                 #LowerCall(),
                 #LowerFPtrCall(),
