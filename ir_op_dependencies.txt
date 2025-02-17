@@ -90,9 +90,10 @@ mini.arg_passer -> llvm.gep, llvm.load, builtin.unrealized_conversion_cast, func
 
 -- Level 4: Lower to Level 3 Ops --
 
-mini.fptr_call -> builtin.unrealized_conversion_cast, func.call_indirect, mini.wrap
-mini.call -> mini.addr_of, builtin.unrealized_conversion_cast, func.call_indirect, mini.wrap
-mini.new -> mini.malloc, mini.addr_of, llvm.mlir.constant, mini.alloc, llvm.gep, llvm.store, mini.invariant
+mini.fptr_call -> builtin.unrealized_conversion_cast, func.call_indirect, mini.wrap [check!]
+mini.call -> mini.addr_of, builtin.unrealized_conversion_cast, func.call_indirect, mini.wrap [check!]
+mini.new -> mini.malloc, mini.addr_of, llvm.mlir.constant, mini.alloc, llvm.gep, llvm.store, mini.invariant [check!]
+
 mini.from_buffer -> llvm.gep, llvm.load, llvm.mlir.constant, arith.cmpi, mini.malloc, arith.select, mini.memcpy, mini.alloc
 mini.box -> mini.alloc, llvm.gep, mini.addr_of, llvm.store, mini.memcpy, mini.set_offset, mini.malloc, mini.invariant
 mini.to_fat_ptr -> mini.alloc, mini.memcpy, mini.set_offset, mini.invariant [check!]

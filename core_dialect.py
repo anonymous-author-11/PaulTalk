@@ -708,7 +708,14 @@ class NewOp(IRDLOperation):
     typ: TypeAttribute = attr_def(TypeAttribute)
     class_name: Attribute = attr_def(StringAttr)
     num_data_fields: IntegerAttr = attr_def(IntegerAttr)
+    has_type_fields: OptAttributeDef = opt_attr_def(UnitAttr)
     result: OpResult = result_def(Ptr)
+
+    @classmethod
+    def make(cls, parameterizations, typ, class_name, num_data_fields, result_type):
+        attr_dict = {"typ":typ, "class_name":class_name, "num_data_fields":num_data_fields}
+        if len(typ.types.data) > num_data_fields.value.data: attr_dict["has_type_fields"] = UnitAttr()
+        return NewOp.create(operands=parameterizations, attributes=attr_dict, result_types=[result_type])
 
 @irdl_op_definition
 class ReferOp(IRDLOperation):

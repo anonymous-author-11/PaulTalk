@@ -964,7 +964,8 @@ module @patterns {
       %buffer_filler = pdl.operation "mini.addr_of" {"global_name" = %buffer_filler_symbol} -> (%ptr_type : !pdl.type)
       %buffer_filler_result = pdl.result 0 of %buffer_filler
       %new_range = pdl.range %ptr_type, %args_types : !pdl.type, !pdl.range<type>
-      %ftype = pdl.apply_native_rewrite "function_type"(%new_range : !pdl.range<type>) : !pdl.type
+      %empty_range = pdl.range : !pdl.range<type>
+      %ftype = pdl.apply_native_rewrite "function_type"(%new_range, %empty_range : !pdl.range<type>, !pdl.range<type>) : !pdl.type
       %laundered = pdl.operation "builtin.unrealized_conversion_cast"(%buffer_filler_result : !pdl.value) -> (%ftype : !pdl.type)
       %laundered_result = pdl.result 0 of %laundered
       %callee = pdl.attribute = @coroutine_create
@@ -1175,10 +1176,10 @@ module @patterns {
     %ptr_type_attr = pdl.attribute = !llvm.ptr
     %parameterizations = pdl.operands
     %root = pdl.operation "mini.parameterizations_array"(%parameterizations : !pdl.range<value>) -> (%ptr_type : !pdl.type)
-    %num_operands = pdl.apply_native_constraint "count_elements"(%parameterizations : !pdl.range<value>) : !pdl.attribute
-    %eight = pdl.attribute = 8
-    %num_bytes = pdl.apply_native_constraint "multiply"(%num_operands, %eight : !pdl.attribute, !pdl.attribute) : !pdl.attribute
     pdl.rewrite %root {
+      %num_operands = pdl.apply_native_rewrite "count_elements"(%parameterizations : !pdl.range<value>) : !pdl.attribute
+      %eight = pdl.attribute = 8
+      %num_bytes = pdl.apply_native_rewrite "multiply"(%num_operands, %eight : !pdl.attribute, !pdl.attribute) : !pdl.attribute
       %ary_type = pdl.apply_native_rewrite "array_from_size_and_type"(%num_operands, %ptr_type : !pdl.attribute, !pdl.type) : !pdl.type
       %ary_type_attr = pdl.apply_native_rewrite "type_to_type_attr"(%ary_type : !pdl.type) : !pdl.attribute
       %ary = pdl.operation "mini.alloc" {"typ" = %ary_type_attr} -> (%ptr_type : !pdl.type)
@@ -1308,6 +1309,164 @@ module @patterns {
       %gep = pdl.operation "llvm.getelementptr"(%operand : !pdl.value) {"elem_type" = %from_typ_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
       %gep_result = pdl.result 0 of %gep
       %memcpy = pdl.operation "mini.memcpy"(%gep_result, %alloca_result : !pdl.value, !pdl.value) {"type" = %to_typ_attr}
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerFPtrCallWithResult : benefit(2) {
+    %fptr = pdl.operand
+    %arg_types = pdl.types
+    %args = pdl.operands : %arg_types
+    %return_type_attr = pdl.attribute
+    %ptr_type = pdl.type : !llvm.ptr
+    %root = pdl.operation "mini.fptr_call"(%fptr, %args : !pdl.value, !pdl.range<value>) {"ret_type" = %return_type_attr} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %return_type = pdl.apply_native_rewrite "type_attr_to_type"(%return_type_attr : !pdl.attribute) : !pdl.type
+      %output_types = pdl.range %return_type : !pdl.type
+      %ftype = pdl.apply_native_rewrite "function_type"(%arg_types, %output_types : !pdl.range<type>, !pdl.range<type>) : !pdl.type
+      %laundered = pdl.operation "builtin.unrealized_conversion_cast"(%fptr : !pdl.value) -> (%ftype : !pdl.type)
+      %laundered_result = pdl.result 0 of %laundered
+      %call_indirect = pdl.operation "func.call_indirect"(%laundered_result, %args : !pdl.value, !pdl.range<value>) -> (%return_type : !pdl.type)
+      %call_result = pdl.result 0 of %call_indirect
+      %wrap = pdl.operation "mini.wrap"(%call_result : !pdl.value) -> (%ptr_type : !pdl.type)
+      %wrap_result = pdl.result 0 of %wrap
+      pdl.replace %root with (%wrap_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerFPtrCall : benefit(1) {
+    %fptr = pdl.operand
+    %arg_types = pdl.types
+    %args = pdl.operands : %arg_types
+    %ptr_type = pdl.type : !llvm.ptr
+    %return_type_attr = pdl.attribute
+    %root = pdl.operation "mini.fptr_call"(%fptr, %args : !pdl.value, !pdl.range<value>) {"ret_type" = %return_type_attr}
+    pdl.rewrite %root {
+      %empty_range = pdl.range : !pdl.range<type>
+      %ftype = pdl.apply_native_rewrite "function_type"(%arg_types, %empty_range : !pdl.range<type>, !pdl.range<type>) : !pdl.type
+      %laundered = pdl.operation "builtin.unrealized_conversion_cast"(%fptr : !pdl.value) -> (%ftype : !pdl.type)
+      %laundered_result = pdl.result 0 of %laundered
+      %call_indirect = pdl.operation "func.call_indirect"(%laundered_result, %args : !pdl.value, !pdl.range<value>)
+      pdl.replace %root with %call_indirect
+    }
+  }
+  pdl.pattern @LowerCallWithResult : benefit(2) {
+    %arg_types = pdl.types
+    %args = pdl.operands : %arg_types
+    %return_type_attr = pdl.attribute
+    %ptr_type = pdl.type : !llvm.ptr
+    %func_name = pdl.attribute
+    %root = pdl.operation "mini.call"(%args : !pdl.range<value>) {"ret_type" = %return_type_attr, "func_name" = %func_name} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %callee = pdl.apply_native_rewrite "string_to_symbol"(%func_name : !pdl.attribute) : !pdl.attribute
+      %fptr = pdl.operation "mini.addr_of" {"global_name" = %callee} -> (%ptr_type : !pdl.type)
+      %fptr_result = pdl.result 0 of %fptr
+      %return_type = pdl.apply_native_rewrite "type_attr_to_type"(%return_type_attr : !pdl.attribute) : !pdl.type
+      %output_types = pdl.range %return_type : !pdl.type
+      %ftype = pdl.apply_native_rewrite "function_type"(%arg_types, %output_types : !pdl.range<type>, !pdl.range<type>) : !pdl.type
+      %laundered = pdl.operation "builtin.unrealized_conversion_cast"(%fptr_result : !pdl.value) -> (%ftype : !pdl.type)
+      %laundered_result = pdl.result 0 of %laundered
+      %call_indirect = pdl.operation "func.call_indirect"(%laundered_result, %args : !pdl.value, !pdl.range<value>) -> (%return_type : !pdl.type)
+      %call_result = pdl.result 0 of %call_indirect
+      %wrap = pdl.operation "mini.wrap"(%call_result : !pdl.value) -> (%ptr_type : !pdl.type)
+      %wrap_result = pdl.result 0 of %wrap
+      pdl.replace %root with (%wrap_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerCall : benefit(1) {
+    %arg_types = pdl.types
+    %args = pdl.operands : %arg_types
+    %return_type_attr = pdl.attribute
+    %ptr_type = pdl.type : !llvm.ptr
+    %func_name = pdl.attribute
+    %root = pdl.operation "mini.call"(%args : !pdl.range<value>) {"ret_type" = %return_type_attr, "func_name" = %func_name}
+    pdl.rewrite %root {
+      %callee = pdl.apply_native_rewrite "string_to_symbol"(%func_name : !pdl.attribute) : !pdl.attribute
+      %fptr = pdl.operation "mini.addr_of" {"global_name" = %callee} -> (%ptr_type : !pdl.type)
+      %fptr_result = pdl.result 0 of %fptr
+      %return_type = pdl.apply_native_rewrite "type_attr_to_type"(%return_type_attr : !pdl.attribute) : !pdl.type
+      %empty_range = pdl.range : !pdl.range<type>
+      %ftype = pdl.apply_native_rewrite "function_type"(%arg_types, %empty_range : !pdl.range<type>, !pdl.range<type>) : !pdl.type
+      %laundered = pdl.operation "builtin.unrealized_conversion_cast"(%fptr_result : !pdl.value) -> (%ftype : !pdl.type)
+      %laundered_result = pdl.result 0 of %laundered
+      %call_indirect = pdl.operation "func.call_indirect"(%laundered_result, %args : !pdl.value, !pdl.range<value>)
+      pdl.replace %root with %call_indirect
+    }
+  }
+  pdl.pattern @LowerNew : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %i32_type = pdl.type : i32
+    %fat_base_attr = pdl.attribute = !llvm.struct<(ptr, ptr, ptr, i32)>
+    %num_data_fields = pdl.attribute
+    %typ_attr = pdl.attribute
+    %class_name = pdl.attribute
+    %root = pdl.operation "mini.new" {"typ" = %typ_attr, "num_data_fields" = %num_data_fields, "class_name" = %class_name} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %malloc = pdl.operation "mini.malloc" {"typ" = %typ_attr} -> (%ptr_type : !pdl.type)
+      %malloc_result = pdl.result 0 of %malloc
+      %class_symbol = pdl.apply_native_rewrite "string_to_symbol"(%class_name : !pdl.attribute) : !pdl.attribute
+      %vptr = pdl.operation "mini.addr_of" {"global_name" = %class_symbol} -> (%ptr_type : !pdl.type)
+      %vptr_result = pdl.result 0 of %vptr
+      %vtable_buffer_size = pdl.apply_native_rewrite "vtable_buffer_size" : !pdl.attribute
+      %offset = pdl.operation "llvm.mlir.constant" {"value" = %vtable_buffer_size} -> (%i32_type : !pdl.type)
+      %offset_result = pdl.result 0 of %offset
+      %alloca = pdl.operation "mini.alloc" {"typ" = %fat_base_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %indices_1 = pdl.attribute = array<i32: 0, 1>
+      %indices_3 = pdl.attribute = array<i32: 0, 3>
+      %gep0 = pdl.operation "llvm.getelementptr"(%alloca_result : !pdl.value) {"elem_type" = %fat_base_attr, "rawConstantIndices" = %indices_1} -> (%ptr_type : !pdl.type)
+      %gep0_result = pdl.result 0 of %gep0
+      %gep1 = pdl.operation "llvm.getelementptr"(%alloca_result : !pdl.value) {"elem_type" = %fat_base_attr, "rawConstantIndices" = %indices_3} -> (%ptr_type : !pdl.type)
+      %gep1_result = pdl.result 0 of %gep1
+      %store0 = pdl.operation "llvm.store"(%vptr_result, %alloca_result : !pdl.value, !pdl.value)
+      %store1 = pdl.operation "llvm.store"(%malloc_result, %gep0_result : !pdl.value, !pdl.value)
+      %store2 = pdl.operation "llvm.store"(%offset_result, %gep1_result : !pdl.value, !pdl.value)
+      %sixteen = pdl.attribute = 16
+      %invariant0 = pdl.operation "mini.invariant"(%alloca_result : !pdl.value) {"num_bytes" = %sixteen} -> (%ptr_type : !pdl.type)
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerParameterizedNew : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %i32_type = pdl.type : i32
+    %fat_base_attr = pdl.attribute = !llvm.struct<(ptr, ptr, ptr, i32)>
+    %num_data_fields = pdl.attribute
+    %typ_attr = pdl.attribute
+    %class_name = pdl.attribute
+    %parameterizations = pdl.operands
+    %unit = pdl.attribute = unit
+    %root = pdl.operation "mini.new"(%parameterizations : !pdl.range<value>) {"typ" = %typ_attr, "num_data_fields" = %num_data_fields, "class_name" = %class_name, "has_type_fields" = %unit} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %eight = pdl.attribute = 8
+      %num_parameterizations = pdl.apply_native_rewrite "count_elements"(%parameterizations : !pdl.range<value>) : !pdl.attribute
+      %type_fields_bytes = pdl.apply_native_rewrite "multiply"(%num_parameterizations, %eight : !pdl.attribute, !pdl.attribute) : !pdl.attribute
+      %malloc = pdl.operation "mini.malloc" {"typ" = %typ_attr} -> (%ptr_type : !pdl.type)
+      %malloc_result = pdl.result 0 of %malloc
+      %class_symbol = pdl.apply_native_rewrite "string_to_symbol"(%class_name : !pdl.attribute) : !pdl.attribute
+      %vptr = pdl.operation "mini.addr_of" {"global_name" = %class_symbol} -> (%ptr_type : !pdl.type)
+      %vptr_result = pdl.result 0 of %vptr
+      %vtable_buffer_size = pdl.apply_native_rewrite "vtable_buffer_size" : !pdl.attribute
+      %offset = pdl.operation "llvm.mlir.constant" {"value" = %vtable_buffer_size} -> (%i32_type : !pdl.type)
+      %offset_result = pdl.result 0 of %offset
+      %alloca = pdl.operation "mini.alloc" {"typ" = %fat_base_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %indices_1 = pdl.attribute = array<i32: 0, 1>
+      %indices_3 = pdl.attribute = array<i32: 0, 3>
+      %gep0 = pdl.operation "llvm.getelementptr"(%alloca_result : !pdl.value) {"elem_type" = %fat_base_attr, "rawConstantIndices" = %indices_1} -> (%ptr_type : !pdl.type)
+      %gep0_result = pdl.result 0 of %gep0
+      %gep1 = pdl.operation "llvm.getelementptr"(%alloca_result : !pdl.value) {"elem_type" = %fat_base_attr, "rawConstantIndices" = %indices_3} -> (%ptr_type : !pdl.type)
+      %gep1_result = pdl.result 0 of %gep1
+      %store0 = pdl.operation "llvm.store"(%vptr_result, %alloca_result : !pdl.value, !pdl.value)
+      %store1 = pdl.operation "llvm.store"(%malloc_result, %gep0_result : !pdl.value, !pdl.value)
+      %store2 = pdl.operation "llvm.store"(%offset_result, %gep1_result : !pdl.value, !pdl.value)
+      %sixteen = pdl.attribute = 16
+      %invariant0 = pdl.operation "mini.invariant"(%alloca_result : !pdl.value) {"num_bytes" = %sixteen} -> (%ptr_type : !pdl.type)
+      %zero = pdl.attribute = 0
+      %malloc_gep_indices = pdl.apply_native_rewrite "array_attr"(%zero, %num_data_fields : !pdl.attribute, !pdl.attribute) : !pdl.attribute
+      %malloc_gep = pdl.operation "llvm.getelementptr"(%malloc_result : !pdl.value) {"elem_type" = %typ_attr, "rawConstantIndices" = %malloc_gep_indices} -> (%ptr_type : !pdl.type)
+      %malloc_gep_result = pdl.result 0 of %malloc_gep
+      %type_fields_type = pdl.apply_native_rewrite "array_from_size_and_type"(%num_parameterizations, %ptr_type : !pdl.attribute, !pdl.type) : !pdl.type
+      %type_fields_attr = pdl.apply_native_rewrite "type_to_type_attr"(%type_fields_type : !pdl.type) : !pdl.attribute
+      pdl.apply_native_rewrite "store_operands_in_container"(%root, %type_fields_attr, %malloc_gep_result : !pdl.operation, !pdl.attribute, !pdl.value)
+      %invariant1 = pdl.operation "mini.invariant"(%malloc_gep_result : !pdl.value) {"num_bytes" = %type_fields_bytes} -> (%ptr_type : !pdl.type)
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }

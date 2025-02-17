@@ -73,9 +73,14 @@ def main():
     if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
     patterns = cmd_out.stdout
 
-    module_str = module_str.replace("mini.addressof","placeholder.addressof")
-    module_str = module_str.replace("\"mini.global\"","\"placeholder.global\"")
-    module_str = module_str.replace("\"llvm.call\"", "\"placeholder.call\"")
+    replacements = {
+        "mini.addressof": "placeholder.addressof",
+        "\"mini.global\"": "\"placeholder.global\"",
+        "\"llvm.call\"": "\"placeholder.call\""
+    }
+
+    pattern = re.compile('|'.join(f'(?:{re.escape(k)})' for k in replacements))
+    module_str = pattern.sub(lambda m: replacements[m.group()], module_str)
     module_str = patterns + module_str
 
     while "\"mini." in module_str:

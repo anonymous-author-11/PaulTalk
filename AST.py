@@ -1040,12 +1040,8 @@ class ObjectCreation(Expression):
         cls = scope.classes[self_type.cls.data]
         n_data_fields = len([f for f in cls.fields() if not isinstance(f.declaration, TypeFieldDecl)])
         parameterizations = self.parameterizations(cls, self_type, scope)
-        attr_dict = {
-            "typ":cls.base_typ(),
-            "class_name":self_type.cls,
-            "num_data_fields":IntegerAttr.from_int_and_width(n_data_fields, 32),
-        }
-        new_op = NewOp.create(operands=parameterizations, attributes=attr_dict, result_types=[self_type])
+        num_data_fields = IntegerAttr.from_int_and_width(n_data_fields, 32)
+        new_op = NewOp.make(parameterizations, cls.base_typ(), self_type.cls, num_data_fields, self_type)
         scope.region.last_block.add_op(new_op)
         scope.symbol_table[self.anon_name] = new_op.results[0]
         scope.type_table[self.anon_name] = self_type

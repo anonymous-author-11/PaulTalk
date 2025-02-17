@@ -90,11 +90,8 @@ class SecondPass(ModulePass):
                 LowerWhile(),
                 LowerBreak(),
                 LowerContinue(),
-                LowerCall(),
-                LowerFPtrCall(),
                 LowerMethodCall(),
                 LowerCreateBuffer(),
-                LowerNew(),
                 LowerFromBuffer()
             ]),
             apply_recursively=True
@@ -133,6 +130,9 @@ class ThirdPass(ModulePass):
                 LowerHashTable(),
                 LowerOffsetTable(),
                 LowerLiteral()
+                #LowerNew(),
+                #LowerCall(),
+                #LowerFPtrCall(),
                 #LowerNarrow(),
                 #LowerPlaceIntoBuffer(),
                 #LowerCreateTuple(),
@@ -603,14 +603,15 @@ class LowerNew(RewritePattern):
         invariant0 = InvariantOp.make(alloca.results[0], 16)
         rewriter.inline_block_before_matched_op(Block([malloc, vptr, offset]))
 
-        if len(op.typ.types.data) > op.num_data_fields.value.data:
+        if op.has_type_fields:
+            malloc_gep = llvm.GEPOp(malloc.results[0], [0, op.num_data_fields.value.data], pointee_type=op.typ)
+            rewriter.insert_op_before_matched_op(malloc_gep)
             for i, parameterization in enumerate(op.parameterizations):
-                gep_i = llvm.GEPOp(malloc.results[0], [0, op.num_data_fields.value.data + i], pointee_type=op.typ)
+                gep_i = llvm.GEPOp(malloc_gep.results[0], [i], pointee_type=llvm.LLVMPointerType.opaque())
                 store_i = llvm.StoreOp(parameterization, gep_i.results[0])
                 rewriter.inline_block_before_matched_op(Block([gep_i, store_i]))
-            malloc_gep = llvm.GEPOp(malloc.results[0], [0, op.num_data_fields.value.data], pointee_type=op.typ)
             invariant1 = InvariantOp.make(malloc_gep.results[0], 8 * (len(op.typ.types.data) - op.num_data_fields.value.data))
-            rewriter.inline_block_before_matched_op(Block([malloc_gep, invariant1]))
+            rewriter.insert_op_before_matched_op(invariant1)
         rewriter.inline_block_after_matched_op(Block([gep0, gep1, store0, store1, store2, invariant0]))
         rewriter.replace_matched_op(alloca)
 

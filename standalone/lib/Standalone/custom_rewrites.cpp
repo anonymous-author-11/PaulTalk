@@ -70,9 +70,9 @@ static Attribute stringToSymbol(PatternRewriter &rewriter, Attribute attr) {
   return mlir::cast<Attribute>(symbol);
 }
 
-static Type functionType(PatternRewriter &rewriter, TypeRange inputTypes) {
+static Type functionType(PatternRewriter &rewriter, TypeRange inputTypes, TypeRange outputTypes) {
   // Create the function type directly using get()
-  return FunctionType::get(rewriter.getContext(), inputTypes, TypeRange());
+  return FunctionType::get(rewriter.getContext(), inputTypes, outputTypes);
 }
 
 static Attribute coroFrame(PatternRewriter &rewriter, Type inputType) {
@@ -206,12 +206,13 @@ static LogicalResult countElements(PatternRewriter &rewriter, PDLResultList &res
   return success();
 }
 
-static LogicalResult multiply(PatternRewriter &rewriter, PDLResultList &results, ArrayRef<PDLValue> args) {
-  auto lhs = mlir::cast<Attribute>(args[0]);
-  auto rhs = mlir::cast<Attribute>(args[1]);
+static Attribute vtableBufferSize(PatternRewriter &rewriter) {
+  return IntegerAttr::get(rewriter.getI32Type(), 7);
+}
+
+static Attribute multiply(PatternRewriter &rewriter, Attribute lhs, Attribute rhs) {
   auto result = mlir::cast<IntegerAttr>(lhs).getInt() * mlir::cast<IntegerAttr>(lhs).getInt();
-  results.push_back(IntegerAttr::get(rewriter.getI32Type(), result));
-  return success();
+  return IntegerAttr::get(rewriter.getI32Type(), result);
 }
 
 static LogicalResult isRegionEmpty(PatternRewriter &rewriter, Operation *op) {
@@ -241,12 +242,6 @@ static Type arrayToInt(PatternRewriter &rewriter, Attribute attr) {
 
   auto intType = IntegerType::get(rewriter.getContext(), numElements * elementSize);
   return mlir::cast<Type>(intType);
-}
-
-static Attribute timesEight(PatternRewriter &rewriter, Attribute attr) {
-  auto intval = mlir::cast<IntegerAttr>(attr).getInt();
-  auto intAttr = IntegerAttr::get(rewriter.getI64Type(), intval * 8);
-  return mlir::cast<Attribute>(intAttr);
 }
 
 static Attribute mapCmpi(PatternRewriter &rewriter, Attribute attr) {
@@ -603,13 +598,9 @@ struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> 
     patternList.getPDLPatterns().registerConstraintFunction(
         "greater_than", greaterThan);
     patternList.getPDLPatterns().registerConstraintFunction(
-        "multiply", multiply);
-    patternList.getPDLPatterns().registerConstraintFunction(
         "is_region_empty", isRegionEmpty);
     patternList.getPDLPatterns().registerConstraintFunction(
         "has_region", hasRegion);
-    patternList.getPDLPatterns().registerConstraintFunction(
-        "count_elements", countElements);
     patternList.getPDLPatterns().registerConstraintFunction(
         "type_size", typeSize);
     patternList.getPDLPatterns().registerConstraintFunction(
@@ -618,6 +609,10 @@ struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> 
         "is_llvm_array_attr", isLLVMArrayAttr);
     patternList.getPDLPatterns().registerConstraintFunction(
         "is_empty_llvm_array", isEmptyLLVMArray);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "count_elements", countElements);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "multiply", multiply);
     patternList.getPDLPatterns().registerRewriteFunction(
         "array_attr", arrayAttr);
     patternList.getPDLPatterns().registerRewriteFunction(
@@ -641,7 +636,7 @@ struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> 
     patternList.getPDLPatterns().registerRewriteFunction(
         "array_from_size_and_type", arrayFromSizeAndType);
     patternList.getPDLPatterns().registerRewriteFunction(
-        "times_eight", timesEight);
+        "vtable_buffer_size", vtableBufferSize);
     patternList.getPDLPatterns().registerRewriteFunction(
         "coro_frame", coroFrame);
     patternList.getPDLPatterns().registerRewriteFunction(
