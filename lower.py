@@ -93,9 +93,7 @@ class SecondPass(ModulePass):
                 LowerFPtrCall(),
                 LowerMethodCall(),
                 LowerCreateBuffer(),
-                LowerCreateTuple(),
                 LowerNew(),
-                LowerPlaceIntoBuffer(),
                 LowerFromBuffer()
             ]),
             apply_recursively=True
@@ -124,7 +122,6 @@ class ThirdPass(ModulePass):
                 LowerSetFlag(),
                 LowerCheckFlag(),
                 LowerParameterization(),
-                LowerParameterizationsArray(),
                 LowerCastAssign(),
                 LowerGlobalFptr(),
                 LowerUtilsAPI(),
@@ -136,6 +133,9 @@ class ThirdPass(ModulePass):
                 LowerHashTable(),
                 LowerOffsetTable(),
                 LowerLiteral()
+                #LowerPlaceIntoBuffer(),
+                #LowerCreateTuple(),
+                #LowerParameterizationsArray(),
                 #LowerCoroYield(),
                 #LowerCoroCall(),
                 #LowerPrelude(),

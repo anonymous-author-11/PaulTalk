@@ -259,6 +259,7 @@ DONE:
 
 TODO:
 
+- Clean up compilation of files with no main() or no specified outfile
 - Think about initialization of buffers and nil checks
 - Implement a hash table
 - Think about how actually to handle union type parameters

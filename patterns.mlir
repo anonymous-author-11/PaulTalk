@@ -700,8 +700,9 @@ module @patterns {
     %result_type = pdl.type
     %root = pdl.operation "mini.intrinsic"(%args : !pdl.range<value>) {"call_name" = %call_name, "num_args" = %num_args} -> (%result_type : !pdl.type)
     %zero = pdl.attribute = 0
-    %opsegsize = pdl.apply_native_constraint "array_attr"(%num_args, %zero : !pdl.attribute, !pdl.attribute) : !pdl.attribute
+    
     pdl.rewrite %root {
+      %opsegsize = pdl.apply_native_rewrite "array_attr"(%num_args, %zero : !pdl.attribute, !pdl.attribute) : !pdl.attribute
       %opbundlesize = pdl.attribute = array<i32>
       %intrinsic = pdl.operation "llvm.call_intrinsic"(%args : !pdl.range<value>) {"intrin" = %call_name, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%result_type : !pdl.type)
       %intrinsic_result = pdl.result 0 of %intrinsic
@@ -715,8 +716,9 @@ module @patterns {
     %pointee_type = pdl.attribute
     %root = pdl.operation "mini.tuple_indexation"(%receiver : !pdl.value) {"typ" = %pointee_type, "index" = %index} -> (%result_type : !pdl.type)
     %zero = pdl.attribute = 0
-    %indices = pdl.apply_native_constraint "array_attr"(%zero, %index : !pdl.attribute, !pdl.attribute) : !pdl.attribute
+    
     pdl.rewrite %root {
+      %indices = pdl.apply_native_rewrite "array_attr"(%zero, %index : !pdl.attribute, !pdl.attribute) : !pdl.attribute
       %gep = pdl.operation "llvm.getelementptr"(%receiver : !pdl.value) {"elem_type" = %pointee_type, "rawConstantIndices" = %indices} -> (%result_type : !pdl.type)
       %result = pdl.result 0 of %gep
       pdl.replace %root with (%result : !pdl.value)
@@ -849,7 +851,6 @@ module @patterns {
     %ptr_type_attr = pdl.attribute = !llvm.ptr
     %vtable_bytes = pdl.attribute
     %i32_type = pdl.type : i32
-    %indices_1 = pdl.apply_native_constraint "array_attr"(%offset : !pdl.attribute) : !pdl.attribute
     %root = pdl.operation "mini.field_access"(%operand : !pdl.value) {"offset" = %offset, "vtable_bytes" = %vtable_bytes} -> (%ptr_type : !pdl.type)
     pdl.rewrite %root {
       %fat_base_type = pdl.type : !llvm.struct<(ptr, ptr, ptr, i32)>
@@ -867,6 +868,7 @@ module @patterns {
       %indices_0 = pdl.attribute = array<i32: -2147483648>
       %offsetted = pdl.operation "llvm.getelementptr"(%vptr_result, %adjustment_result : !pdl.value, !pdl.value) {"elem_type" = %ptr_type_attr, "rawConstantIndices" = %indices_0} -> (%ptr_type : !pdl.type)
       %offsetted_result = pdl.result 0 of %offsetted
+      %indices_1 = pdl.apply_native_rewrite "array_attr"(%offset : !pdl.attribute) : !pdl.attribute
       %fptr_ptr = pdl.operation "llvm.getelementptr"(%offsetted_result : !pdl.value) {"elem_type" = %ptr_type_attr, "rawConstantIndices" = %indices_1} -> (%ptr_type : !pdl.type)
       %fptr_ptr_result = pdl.result 0 of %fptr_ptr
       %fptr = pdl.operation "llvm.load"(%fptr_ptr_result : !pdl.value) -> (%ptr_type : !pdl.type)
@@ -1195,6 +1197,109 @@ module @patterns {
       %opsegsize = pdl.attribute = array<i32: 1, 0>
       %call = pdl.operation "placeholder.call"(%coro : !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize}
       pdl.replace %root with %call
+    }
+  }
+  pdl.pattern @LowerParameterizationsArray : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %ptr_type_attr = pdl.attribute = !llvm.ptr
+    %parameterizations = pdl.operands
+    %root = pdl.operation "mini.parameterizations_array"(%parameterizations : !pdl.range<value>) -> (%ptr_type : !pdl.type)
+    %num_operands = pdl.apply_native_constraint "count_elements"(%parameterizations : !pdl.range<value>) : !pdl.attribute
+    %eight = pdl.attribute = 8
+    %num_bytes = pdl.apply_native_constraint "multiply"(%num_operands, %eight : !pdl.attribute, !pdl.attribute) : !pdl.attribute
+    pdl.rewrite %root {
+      %ary_type = pdl.apply_native_rewrite "array_from_size_and_type"(%num_operands, %ptr_type : !pdl.attribute, !pdl.type) : !pdl.type
+      %ary_type_attr = pdl.apply_native_rewrite "type_to_type_attr"(%ary_type : !pdl.type) : !pdl.attribute
+      %ary = pdl.operation "mini.alloc" {"typ" = %ary_type_attr} -> (%ptr_type : !pdl.type)
+      %ary_result = pdl.result 0 of %ary
+      pdl.apply_native_rewrite "store_operands_in_container"(%root, %ary_type_attr, %ary_result : !pdl.operation, !pdl.attribute, !pdl.value)
+      %invariant = pdl.operation "mini.invariant"(%ary_result : !pdl.value) {"num_bytes" = %num_bytes} -> (%ptr_type : !pdl.type)
+      pdl.replace %root with (%ary_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerCreateTuple : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %values = pdl.operands
+    %typ_attr = pdl.attribute
+    %root = pdl.operation "mini.create_tuple"(%values : !pdl.range<value>) {"typ" = %typ_attr} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %alloca = pdl.operation "mini.alloc" {"typ" = %typ_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      pdl.apply_native_rewrite "store_operands_in_container"(%root, %typ_attr, %alloca_result : !pdl.operation, !pdl.attribute, !pdl.value)
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerPlaceIntoBuffer : benefit(1) {
+    // Match the operands and types
+    %ptr_type = pdl.type : !llvm.ptr
+    %ptr_type_attr = pdl.attribute = !llvm.ptr
+    %fat_ptr = pdl.operand : %ptr_type
+    %buf = pdl.operand : %ptr_type
+    %fat_base_type = pdl.type : !llvm.struct<(ptr, ptr, ptr, i32)>
+    %fat_base_attr = pdl.attribute = !llvm.struct<(ptr, ptr, ptr, i32)>
+    %i32_type = pdl.type : i32
+    %i64_type = pdl.type : i64
+    
+    // Match the original operation
+    %root = pdl.operation "mini.place_into_buffer"(%fat_ptr, %buf : !pdl.value, !pdl.value)
+    
+    pdl.rewrite %root {
+        // Extract individual components from fat pointer
+        %indices_offset = pdl.attribute = array<i32: 0, 3>
+        %offset_ptr = pdl.operation "llvm.getelementptr"(%fat_ptr : !pdl.value) {"elem_type" = %fat_base_attr, "rawConstantIndices" = %indices_offset} -> (%ptr_type : !pdl.type)
+        %offset_ptr_result = pdl.result 0 of %offset_ptr
+        %offset = pdl.operation "llvm.load"(%offset_ptr_result : !pdl.value) -> (%i32_type : !pdl.type)
+        %offset_result = pdl.result 0 of %offset
+
+        // Create constant for comparison
+        %minus_one = pdl.attribute = -1
+        %ones = pdl.operation "llvm.mlir.constant" {"value" = %minus_one} -> (%i32_type : !pdl.type)
+        %ones_result = pdl.result 0 of %ones
+
+        // Compare offset with -1
+        %eq_string = pdl.attribute = "EQ"
+        %predicate = pdl.apply_native_rewrite "map_cmpi"(%eq_string : !pdl.attribute) : !pdl.attribute
+        %eq = pdl.operation "arith.cmpi"(%ones_result, %offset_result : !pdl.value, !pdl.value) {"predicate" = %predicate} -> (%i32_type : !pdl.type)
+        %eq_result = pdl.result 0 of %eq
+
+        // Get data pointer components
+        %indices_data = pdl.attribute = array<i32: 0, 1>
+        %data_ptr_ptr = pdl.operation "llvm.getelementptr"(%fat_ptr : !pdl.value) {"elem_type" = %fat_base_attr, "rawConstantIndices" = %indices_data} -> (%ptr_type : !pdl.type)
+        %data_ptr_ptr_result = pdl.result 0 of %data_ptr_ptr
+        %data_ptr_if_boxed = pdl.operation "llvm.load"(%data_ptr_ptr_result : !pdl.value) -> (%ptr_type : !pdl.type)
+        %data_ptr_if_boxed_result = pdl.result 0 of %data_ptr_if_boxed
+
+        // Select data pointer based on condition
+        %data_ptr = pdl.operation "arith.select"(%eq_result, %data_ptr_ptr_result, %data_ptr_if_boxed_result : !pdl.value, !pdl.value, !pdl.value) -> (%ptr_type : !pdl.type)
+        %data_ptr_result = pdl.result 0 of %data_ptr
+
+        // Get vtable pointer and data size
+        %vptr = pdl.operation "llvm.load"(%fat_ptr : !pdl.value) -> (%ptr_type : !pdl.type)
+        %vptr_result = pdl.result 0 of %vptr
+        %data_size_indices = pdl.attribute = array<i32: 6>
+        %data_size_ptr = pdl.operation "llvm.getelementptr"(%vptr_result : !pdl.value) {"elem_type" = %ptr_type_attr, "rawConstantIndices" = %data_size_indices} -> (%ptr_type : !pdl.type)
+        %data_size_ptr_result = pdl.result 0 of %data_size_ptr
+        %data_size = pdl.operation "llvm.load"(%data_size_ptr_result : !pdl.value) -> (%i64_type : !pdl.type)
+        %data_size_result = pdl.result 0 of %data_size
+
+        // Set up and perform memcpy
+        %false = pdl.attribute = 0
+        %false_const = pdl.operation "llvm.mlir.constant" {"value" = %false} -> (%i32_type : !pdl.type)
+        %false_const_result = pdl.result 0 of %false_const
+        
+        %intrin = pdl.attribute = "llvm.memcpy.inline.p0.p0.i64"
+        %opsegsize = pdl.attribute = array<i32: 4, 0>
+        %opbundlesize = pdl.attribute = array<i32>
+        %memcpy = pdl.operation "llvm.call_intrinsic"(%buf, %data_ptr_result, %data_size_result, %false_const_result : !pdl.value, !pdl.value, !pdl.value, !pdl.value) {"intrin" = %intrin, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize}
+
+        pdl.replace %root with %memcpy
+    }
+  }
+  pdl.pattern @LowerMainEmpty : benefit(2) {
+    %root = pdl.operation "mini.main"
+    pdl.apply_native_constraint "is_region_empty"(%root : !pdl.operation)
+    pdl.rewrite %root {
+      pdl.erase %root
     }
   }
 }

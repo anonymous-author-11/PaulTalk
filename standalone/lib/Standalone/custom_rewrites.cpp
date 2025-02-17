@@ -201,6 +201,35 @@ static LogicalResult arrayAttr(PatternRewriter &rewriter, PDLResultList &results
   return success();
 }
 
+static LogicalResult countElements(PatternRewriter &rewriter, PDLResultList &results, ArrayRef<PDLValue> args) {
+  results.push_back(IntegerAttr::get(rewriter.getI32Type(), args.size()));
+  return success();
+}
+
+static LogicalResult multiply(PatternRewriter &rewriter, PDLResultList &results, ArrayRef<PDLValue> args) {
+  auto lhs = mlir::cast<Attribute>(args[0]);
+  auto rhs = mlir::cast<Attribute>(args[1]);
+  auto result = mlir::cast<IntegerAttr>(lhs).getInt() * mlir::cast<IntegerAttr>(lhs).getInt();
+  results.push_back(IntegerAttr::get(rewriter.getI32Type(), result));
+  return success();
+}
+
+static LogicalResult isRegionEmpty(PatternRewriter &rewriter, Operation *op) {
+
+  // Get the first region (usually what we want to check)
+  Region &region = op->getRegion(0);
+  
+  // Check all blocks
+  for (Block &block : region) {
+    // If block has any operations, return failure
+    if (!block.empty()) {
+      return failure(); 
+    }
+  }
+  
+  return success();
+}
+
 static Type arrayToInt(PatternRewriter &rewriter, Attribute attr) {
   Type arrayType = mlir::cast<TypeAttr>(attr).getValue();
   auto llvmArray = mlir::cast<LLVM::LLVMArrayType>(arrayType);
@@ -305,7 +334,6 @@ static Value lowerParamIndexation(PatternRewriter &rewriter, Operation *op) {
     
     // Create GEP
     SmallVector<LLVM::GEPArg, 2> gepIndices {0, index};
-    
     auto gepOp = rewriter.create<LLVM::GEPOp>(op->getLoc(), ptrType, arrayType, currentParam, gepIndices);
     
     // Load pointer
@@ -345,12 +373,21 @@ static void lowerMemcpyStruct(PatternRewriter &rewriter, Operation *op) {
   }
 }
 
+static void storeOperandsInContainer(PatternRewriter &rewriter, Operation *op, TypeAttr typeAttr, Value destination) {
+  auto operands = op->getOperands();
+  auto ptrType = LLVM::LLVMPointerType::get(rewriter.getContext());
+  auto containerType = typeAttr.getValue();
+  for (size_t i = 0; i < op->getNumOperands(); i++) {
+    SmallVector<LLVM::GEPArg, 2> indices{0, i};
+    auto gepOp = rewriter.create<LLVM::GEPOp>(op->getLoc(), ptrType, containerType, destination, indices);
+    rewriter.create<LLVM::StoreOp>(op->getLoc(), op->getOperand(i), gepOp.getResult());
+  }
+}
+
 static void insertIntoRegion(PatternRewriter &rewriter, Operation* targetOp, Operation* opToInsert) {
 
   // Get the target region - assume first region
-  if (targetOp->getNumRegions() == 0) {
-    return;
-  }
+  if (targetOp->getNumRegions() == 0) { return; }
   Region &targetRegion = targetOp->getRegion(0);
 
   // Get block to insert into - create if needed
@@ -544,6 +581,12 @@ struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> 
     patternList.getPDLPatterns().registerConstraintFunction(
         "greater_than", greaterThan);
     patternList.getPDLPatterns().registerConstraintFunction(
+        "multiply", multiply);
+    patternList.getPDLPatterns().registerConstraintFunction(
+        "is_region_empty", isRegionEmpty);
+    patternList.getPDLPatterns().registerConstraintFunction(
+        "count_elements", countElements);
+    patternList.getPDLPatterns().registerConstraintFunction(
         "type_size", typeSize);
     patternList.getPDLPatterns().registerConstraintFunction(
         "is_struct_attr", isStructAttr);
@@ -551,7 +594,7 @@ struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> 
         "is_llvm_array_attr", isLLVMArrayAttr);
     patternList.getPDLPatterns().registerConstraintFunction(
         "is_empty_llvm_array", isEmptyLLVMArray);
-    patternList.getPDLPatterns().registerConstraintFunction(
+    patternList.getPDLPatterns().registerRewriteFunction(
         "array_attr", arrayAttr);
     patternList.getPDLPatterns().registerRewriteFunction(
         "string_to_symbol", stringToSymbol);
@@ -581,6 +624,8 @@ struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> 
         "add_region", addRegion);
     patternList.getPDLPatterns().registerRewriteFunction(
         "transfer_region", transferRegion);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "store_operands_in_container", storeOperandsInContainer);
     patternList.getPDLPatterns().registerRewriteFunction(
         "unwrap_struct", unwrapStruct);
     patternList.getPDLPatterns().registerRewriteFunction(
