@@ -117,8 +117,6 @@ class ThirdPass(ModulePass):
                 LowerCheckFlag(),
                 LowerParameterization(),
                 LowerCastAssign(),
-                LowerGlobalFptr(),
-                LowerUtilsAPI(),
                 LowerPrint(),
                 LowerTypeDef(),
                 LowerTypeIntegersTable(),
@@ -127,6 +125,8 @@ class ThirdPass(ModulePass):
                 LowerHashTable(),
                 LowerOffsetTable(),
                 LowerLiteral()
+                #LowerGlobalFptr(),
+                #LowerUtilsAPI(),
                 #LowerSetFlag(),
                 #LowerBox(),
                 #LowerFromBuffer()

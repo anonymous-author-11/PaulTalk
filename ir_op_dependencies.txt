@@ -113,6 +113,7 @@ mini.reabstract -> mini.malloc, mini.anoint_trampoline, mini.addr_of, llvm.load,
 mini.tuple_cast -> mini.alloc, builtin.unrealized_conversion_cast, llvm.gep, mini.cast, llvm.store
 mini.castassign -> mini.assign, mini.cast
 mini.main -> llvm.mlir.constant, func.return, mini.setup_exception, func.func
+mini.literal -> mini.global, mini.addr_of, mini.alloc
 
 --- special because manipulate regions, hard to put into PDL ---
 
