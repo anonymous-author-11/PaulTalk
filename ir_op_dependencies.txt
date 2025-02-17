@@ -84,9 +84,8 @@ mini.coro_yield -> llvm.call, mini.coro_set_result, mini.coro_get_result, llvm.c
 mini.parameterizations_array -> mini.alloc, llvm.gep, llvm.store, mini.invariant [check!]
 mini.create_tuple -> mini.alloc, llvm.gep, llvm.store [check!]
 mini.place_into_buffer -> llvm.gep, llvm.load, llvm.mlir.constant, arith.cmpi, arith.select, mini.memcpy [check!]
+mini.narrow -> mini.alloc, llvm.gep, mini.memcpy [check!]
 
-mini.main -> llvm.mlir.constant, func.return, mini.setup_exception, func.func
-mini.narrow -> mini.alloc, llvm.gep, mini.memcpy
 mini.arg_passer -> llvm.gep, llvm.load, builtin.unrealized_conversion_cast, func.call_indirect, llvm.store, mini.addr_of, func.return, func.func
 
 -- Level 4: Lower to Level 3 Ops --
@@ -112,7 +111,7 @@ mini.unionize -> mini.alloc, llvm.gep, mini.memcpy, mini.setflag, mini.cast
 mini.reabstract -> mini.malloc, mini.anoint_trampoline, mini.addr_of, llvm.load, llvm.call_intrinsic, mini.alloc, llvm.store, mini.invariant, func.func, mini.wrap, mini.unwrap, mini.cast, func.return, func.fptr_call
 mini.tuple_cast -> mini.alloc, builtin.unrealized_conversion_cast, llvm.gep, mini.cast, llvm.store
 mini.castassign -> mini.assign, mini.cast
-
+mini.main -> llvm.mlir.constant, func.return, mini.setup_exception, func.func
 
 --- special because manipulate regions, hard to put into PDL ---
 

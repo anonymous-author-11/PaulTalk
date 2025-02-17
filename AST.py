@@ -315,9 +315,9 @@ class BoolLiteral(Expression):
 class NilLiteral(Expression):
 
     def codegen(self, scope):
-        undef = llvm.UndefOp(llvm.LLVMArrayType.from_size_and_type(0, IntegerType(8)))
-        scope.region.last_block.add_op(undef)
-        return undef.results[0]
+        alloca = AllocateOp.make(llvm.LLVMArrayType.from_size_and_type(0, IntegerType(8)))
+        scope.region.last_block.add_op(alloca)
+        return alloca.results[0]
 
     def exprtype(self, scope):
         return Nil()

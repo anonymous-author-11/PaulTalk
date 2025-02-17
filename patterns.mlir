@@ -31,7 +31,7 @@
 //
 // patterns with higher benefit get priority when matching
 // so more specialized patterns are typically higher benefit
-// example: @LowerUnwrapNil (benefit 2) vs @LowerUnwrapSimple (benefit 1)
+// example: @LowerUnwrapStruct (benefit 2) vs @LowerUnwrapSimple (benefit 1)
 
 module @patterns {
 
@@ -659,17 +659,6 @@ module @patterns {
       pdl.replace %root with (%result : !pdl.value)
     }
   }
-  pdl.pattern @LowerUnwrapNil : benefit(2) {
-    %result_type = pdl.type : !llvm.array<0 x i8>
-    %ptr_type = pdl.type : !llvm.ptr
-    %operand = pdl.operand : %ptr_type
-    %root = pdl.operation "mini.unwrap"(%operand : !pdl.value) -> (%result_type : !pdl.type)
-    pdl.rewrite %root {
-      %cast = pdl.operation "builtin.unrealized_conversion_cast"(%operand : !pdl.value) -> (%result_type : !pdl.type)
-      %result = pdl.result 0 of %cast
-      pdl.replace %root with (%result : !pdl.value)
-    }
-  }
   pdl.pattern @LowerUnwrapStruct : benefit(2) {
     %result_type = pdl.type
     pdl.apply_native_constraint "is_struct"(%result_type : !pdl.type)
@@ -734,25 +723,7 @@ module @patterns {
       pdl.replace %root with (%result : !pdl.value)
     }
   }
-  pdl.pattern @LowerMemCpyNilOperands : benefit(1) {
-    %source = pdl.operand
-    %dest = pdl.operand
-    %type = pdl.attribute
-    %root = pdl.operation "mini.memcpy"(%source, %dest : !pdl.value, !pdl.value) {"type" = %type}
-    pdl.rewrite %root {
-      pdl.erase %root
-    }
-  }
-  pdl.pattern @LowerMemCpyNilType : benefit(3) {
-    %source = pdl.operand
-    %dest = pdl.operand
-    %nil_type_attr = pdl.attribute = !llvm.array<0 x i8>
-    %root = pdl.operation "mini.memcpy"(%source, %dest : !pdl.value, !pdl.value) {"type" = %nil_type_attr}
-    pdl.rewrite %root {
-      pdl.erase %root
-    }
-  }
-  pdl.pattern @LowerMemCpyStruct : benefit(3) {
+  pdl.pattern @LowerMemCpyStruct : benefit(2) {
     %struct_type_attr = pdl.attribute
     pdl.apply_native_constraint "is_struct_attr"(%struct_type_attr : !pdl.attribute)
     %ptr_type = pdl.type : !llvm.ptr
@@ -764,7 +735,7 @@ module @patterns {
       pdl.erase %root
     }
   }
-  pdl.pattern @LowerMemCpySimple : benefit(2) {
+  pdl.pattern @LowerMemCpySimple : benefit(1) {
     %type_attr = pdl.attribute
     %ptr_type = pdl.type : !llvm.ptr
     %source = pdl.operand : %ptr_type
@@ -1300,6 +1271,44 @@ module @patterns {
     pdl.apply_native_constraint "is_region_empty"(%root : !pdl.operation)
     pdl.rewrite %root {
       pdl.erase %root
+    }
+  }
+  pdl.pattern @LowerNarrowWithRegion : benefit(2) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %operand = pdl.operand
+    %to_typ_attr = pdl.attribute
+    %from_typ_attr = pdl.attribute
+    %to_typ_name = pdl.attribute
+    %from_typ_name = pdl.attribute
+    %root = pdl.operation "mini.narrow"(%operand : !pdl.value) {"from_typ" = %from_typ_attr, "to_typ" = %to_typ_attr, "from_typ_name" = %from_typ_name, "to_typ_name" = %to_typ_name} -> (%ptr_type : !pdl.type)
+    pdl.apply_native_constraint "has_region"(%root : !pdl.operation)
+    pdl.rewrite %root {
+      %reg_last_val = pdl.apply_native_rewrite "inline_region_before"(%root : !pdl.operation) : !pdl.value
+      %alloca = pdl.operation "mini.alloc" {"typ" = %to_typ_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %indices = pdl.attribute = array<i32: 0, 1>
+      %gep = pdl.operation "llvm.getelementptr"(%reg_last_val : !pdl.value) {"elem_type" = %from_typ_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
+      %gep_result = pdl.result 0 of %gep
+      %memcpy = pdl.operation "mini.memcpy"(%gep_result, %alloca_result : !pdl.value, !pdl.value) {"type" = %to_typ_attr}
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerNarrow : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %operand = pdl.operand
+    %to_typ_attr = pdl.attribute
+    %from_typ_attr = pdl.attribute
+    %to_typ_name = pdl.attribute
+    %from_typ_name = pdl.attribute
+    %root = pdl.operation "mini.narrow"(%operand : !pdl.value) {"from_typ" = %from_typ_attr, "to_typ" = %to_typ_attr, "from_typ_name" = %from_typ_name, "to_typ_name" = %to_typ_name} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %alloca = pdl.operation "mini.alloc" {"typ" = %to_typ_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %indices = pdl.attribute = array<i32: 0, 1>
+      %gep = pdl.operation "llvm.getelementptr"(%operand : !pdl.value) {"elem_type" = %from_typ_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
+      %gep_result = pdl.result 0 of %gep
+      %memcpy = pdl.operation "mini.memcpy"(%gep_result, %alloca_result : !pdl.value, !pdl.value) {"type" = %to_typ_attr}
+      pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
 }

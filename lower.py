@@ -60,6 +60,7 @@ class FirstPass(ModulePass):
         walker = PatternRewriteWalker(
             GreedyRewritePatternApplier([
                 LowerPtr(),
+                LowerNil(),
                 LowerFatPtr(),
                 LowerReifiedType(),
                 LowerTuple(),
@@ -112,7 +113,6 @@ class ThirdPass(ModulePass):
             GreedyRewritePatternApplier([
                 LowerBox(),
                 LowerUnionize(),
-                LowerNarrow(),
                 LowerReabstract(),
                 LowerTupleCast(),
                 LowerFuncDef(),
@@ -133,6 +133,7 @@ class ThirdPass(ModulePass):
                 LowerHashTable(),
                 LowerOffsetTable(),
                 LowerLiteral()
+                #LowerNarrow(),
                 #LowerPlaceIntoBuffer(),
                 #LowerCreateTuple(),
                 #LowerParameterizationsArray(),
@@ -187,6 +188,11 @@ def debug_code(op):
 class LowerPtr(TypeConversionPattern):
     @attr_type_rewrite_pattern
     def convert_type(self, typ: Ptr):
+        return llvm.LLVMPointerType.opaque()
+
+class LowerNil(TypeConversionPattern):
+    @attr_type_rewrite_pattern
+    def convert_type(self, typ: Nil):
         return llvm.LLVMPointerType.opaque()
 
 class LowerFatPtr(TypeConversionPattern):

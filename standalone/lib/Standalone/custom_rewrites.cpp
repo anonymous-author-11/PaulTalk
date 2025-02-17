@@ -404,6 +404,28 @@ static void insertIntoRegion(PatternRewriter &rewriter, Operation* targetOp, Ope
   rewriter.eraseOp(opToInsert);
 }
 
+static Value inlineRegionBefore(PatternRewriter &rewriter, Operation *op) {
+  // Get the region we want to inline
+  Region &region = op->getRegion(0);
+
+  // Get the last operation in the block
+  Block &block = region.front();
+
+  Operation &lastOp = block.back();
+  
+  // Get last op's result if it has one
+  Value result= lastOp.getResult(0);
+  
+  // Move the region's block contents before op
+  rewriter.inlineRegionBefore(region, Block::iterator(op)->getBlock());
+  
+  return result;
+}
+
+static LogicalResult hasRegion(PatternRewriter &rewriter, Operation *op) {
+  return success(op->getNumRegions() > 0);
+}
+
 static void lowerWhile(PatternRewriter &rewriter, Operation *op) {
   // Get necessary blocks
   Block *surroundingBlock = op->getBlock();
@@ -585,6 +607,8 @@ struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> 
     patternList.getPDLPatterns().registerConstraintFunction(
         "is_region_empty", isRegionEmpty);
     patternList.getPDLPatterns().registerConstraintFunction(
+        "has_region", hasRegion);
+    patternList.getPDLPatterns().registerConstraintFunction(
         "count_elements", countElements);
     patternList.getPDLPatterns().registerConstraintFunction(
         "type_size", typeSize);
@@ -624,6 +648,8 @@ struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> 
         "add_region", addRegion);
     patternList.getPDLPatterns().registerRewriteFunction(
         "transfer_region", transferRegion);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "inline_region_before", inlineRegionBefore);
     patternList.getPDLPatterns().registerRewriteFunction(
         "store_operands_in_container", storeOperandsInContainer);
     patternList.getPDLPatterns().registerRewriteFunction(
