@@ -40,25 +40,25 @@ define void @allocate_region() {
 }
 
 define noalias ptr @bump_malloc(i64 noundef %size) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) "alloc-family"="malloc" {
-  %result = tail call noalias ptr @bump_malloc_inner(i64 noundef %size) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) "alloc-family"="malloc"
+  %result = tail call noalias ptr @bump_malloc_inner(i64 noundef %size, ptr @current_ptr) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) "alloc-family"="malloc"
   ret ptr %result
 }
 
 ; Our malloc replacement 
-define noalias ptr @bump_malloc_inner(i64 noundef %size) noinline mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) "alloc-family"="malloc" {
+define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) noinline mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) "alloc-family"="malloc" {
   
   ; Calculate aligned size (align to 16 bytes)
   %size_plus_15 = add i64 %size, 15
   %aligned_size = and i64 %size_plus_15, -16
   
   ; Get current allocation pointer
-  %current = load ptr, ptr @current_ptr
+  %current = load ptr, ptr %current_ptr
   
   ; Calculate new allocation pointer
   %new_ptr = getelementptr i8, ptr %current, i64 %aligned_size
   
   ; Update the current pointer
-  store ptr %new_ptr, ptr @current_ptr
+  store ptr %new_ptr, ptr %current_ptr
   ret ptr %current 
 }
 
