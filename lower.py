@@ -124,19 +124,20 @@ class ThirdPass(ModulePass):
                 LowerVtable(),
                 LowerHashTable(),
                 LowerOffsetTable(),
+                LowerNew(),
+                LowerParameterizationIndexation(),
+                LowerParameterizationsArray(),
                 LowerLiteral()
                 #LowerGlobalFptr(),
                 #LowerUtilsAPI(),
                 #LowerSetFlag(),
                 #LowerBox(),
                 #LowerFromBuffer()
-                #LowerNew(),
                 #LowerCall(),
                 #LowerFPtrCall(),
                 #LowerNarrow(),
                 #LowerPlaceIntoBuffer(),
                 #LowerCreateTuple(),
-                #LowerParameterizationsArray(),
                 #LowerCoroYield(),
                 #LowerCoroCall(),
                 #LowerPrelude(),
@@ -156,7 +157,6 @@ class ThirdPass(ModulePass):
                 #LowerAssign(),
                 #LowerMemCpy(),
                 #LowerIntrinsic(),
-                #LowerParameterizationIndexation(),
                 #LowerBufferIndexation(),
                 #LowerTupleIndexation(),
                 #LowerUnwrap(),
@@ -1628,9 +1628,8 @@ class LowerFPtrCall(RewritePattern):
 class LowerRefer(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: ReferOp, rewriter: PatternRewriter):
-        fat_base = FatPtr.basic("").base_typ()
-        alloca = AllocateOp.make(fat_base)
-        memcpy = MemCpyOp.make(op.value, alloca.results[0], fat_base)
+        alloca = AllocateOp.make(op.typ)
+        memcpy = MemCpyOp.make(op.value, alloca.results[0], op.typ)
         invariant = InvariantOp.make(alloca.results[0], 16)
         rewriter.inline_block_after_matched_op(Block([memcpy, invariant]))
         rewriter.replace_matched_op(alloca)

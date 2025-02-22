@@ -2176,7 +2176,7 @@ class Reference(Assignment):
         typ = self.value.exprtype(scope)
         new_val = self.value.codegen(scope)
         cast = CastOp.make(new_val, typ, typ, type_id)
-        refer_op = ReferOp.create(operands=[cast.results[0]], result_types=[typ])
+        refer_op = ReferOp.create(operands=[cast.results[0]], attributes={"typ":typ.base_typ()}, result_types=[typ])
         scope.region.last_block.add_ops([cast, refer_op])
         new_val = refer_op.results[0]
         scope.symbol_table[self.target.name] = new_val
@@ -2553,7 +2553,7 @@ class CreateBuffer(Expression):
 
     def codegen(self, scope):
         size = self.size.codegen(scope)
-        attr_dict = {"typ":self.buf.elem_type.base_typ()}
+        attr_dict = {"typ":scope.simplify(self.buf.elem_type).base_typ()}
         create_buffer = CreateBufferOp.create(operands=[size], attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
         scope.region.last_block.add_op(create_buffer)
         return create_buffer.results[0]
@@ -2562,7 +2562,7 @@ class CreateBuffer(Expression):
         size_typ = self.size.exprtype(scope)
         if size_typ != Ptr([IntegerType(32)]):
             raise Exception(f"Line {self.line_number}: Buffer creation takes i32 as argument, not {size_typ}.")
-        return self.buf
+        return scope.simplify(self.buf)
 
 @dataclass
 class Import(Statement):

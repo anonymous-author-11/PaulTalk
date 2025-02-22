@@ -19,10 +19,48 @@ declare void @llvm.init.trampoline(ptr, ptr, ptr)
 @i32_string = internal constant [4 x i8] c"%d\0A\00"
 @i64_string = internal constant [6 x i8] c"%lld\0A\00"
 @string_string = internal constant [4 x i8] c"%s\0A\00"
+@float_string = linkonce_odr constant [4 x i8] c"%f\0A\00"
 @exception_message = internal constant [45 x i8] c"Error: uncaught exception. Program aborted.\0A\00"
 @into_caller_buf = internal thread_local global [3 x ptr] zeroinitializer
 @current_coroutine = internal thread_local global ptr null
 @always_one = linkonce thread_local global i1 1
+
+; Thread-local storage for our bump allocator state
+@region = internal thread_local global [8388608 x i8] zeroinitializer
+@current_ptr = internal thread_local global ptr null
+
+; Initialize the region if needed
+define void @allocate_region() {
+  %mem = call ptr @VirtualAlloc(ptr null, i64 8388608, i32 12288, i32 4)
+  %oldProtect = alloca i32  
+  %result = call i32 @VirtualProtect(ptr %mem, i64 8388608, i32 64, ptr %oldProtect)
+  store ptr %mem, ptr @region
+  store ptr %mem, ptr @current_ptr
+  ret void
+}
+
+define noalias noundef ptr @bump_malloc(i64 noundef %size) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) memory(inaccessiblemem: readwrite) "alloc-family"="malloc" {
+  %result = tail call noalias nonnull ptr @bump_malloc_inner(i64 noundef %size) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) memory(inaccessiblemem: readwrite) "alloc-family"="malloc"
+  ret ptr %result
+}
+
+; Our malloc replacement 
+define noalias noundef ptr @bump_malloc_inner(i64 noundef %size) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) memory(inaccessiblemem: readwrite) "alloc-family"="malloc" {
+  
+  ; Calculate aligned size (align to 16 bytes)
+  %size_plus_15 = add i64 %size, 15
+  %aligned_size = and i64 %size_plus_15, -16
+  
+  ; Get current allocation pointer
+  %current = load ptr, ptr @current_ptr
+  
+  ; Calculate new allocation pointer
+  %new_ptr = getelementptr i8, ptr %current, i64 %aligned_size
+  
+  ; Update the current pointer
+  store ptr %new_ptr, ptr @current_ptr
+  ret ptr %current
+}
 
 define void @anoint_trampoline(ptr %tramp) {
   %oldProtect = alloca i32  
@@ -88,9 +126,10 @@ exit:
 
 define i32 @get_offset(ptr %vptr, ptr %id_ptr) {
   %id = load i64, ptr %id_ptr
-  %hash_coef_ptr = getelementptr i64, ptr %vptr, i64 1
-  %tbl_size_ptr = getelementptr i64, ptr %vptr, i64 2
-  %offset_tbl_ptr = getelementptr ptr, ptr %vptr, i64 5
+  %id_of_casted = load i64, ptr %vptr
+  %hash_coef_ptr = getelementptr i64, ptr %vptr, i32 1
+  %tbl_size_ptr = getelementptr i64, ptr %vptr, i32 2
+  %offset_tbl_ptr = getelementptr ptr, ptr %vptr, i32 5
   %hash_coef = load i64, ptr %hash_coef_ptr
   %tbl_size = load i64, ptr %tbl_size_ptr
   %offset_tbl = load ptr, ptr %offset_tbl_ptr
@@ -102,6 +141,7 @@ define i32 @get_offset(ptr %vptr, ptr %id_ptr) {
 
 define void @set_offset(ptr %fat_ptr, ptr %id_ptr) {
   %vptr = load ptr, ptr %fat_ptr
+  %id_of_casted = load i64, ptr %vptr
   %offset = call i32 @get_offset(ptr %vptr, ptr %id_ptr)
   %destination = getelementptr { ptr, ptr, ptr, i32 }, ptr %fat_ptr, i32 0, i32 3
   store i32 %offset, ptr %destination
@@ -113,6 +153,7 @@ define i64 @hash_to_index(i64 %tbl_size, i64 %hash_coef, i64 %cand_id) {
   %shifted = lshr i64 %product, 32
   %xored = xor i64 %product, %shifted
   %hash = and i64 %xored, %tbl_size
+  %bug = icmp sgt i64 %hash, %tbl_size
   ret i64 %hash
 }
 

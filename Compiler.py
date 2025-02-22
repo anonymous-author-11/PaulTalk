@@ -23,6 +23,7 @@ def main():
     file_name = argv[1]
     print(f"compiling {file_name}")
     if "-o" not in argv: raise Exception("Please provide an output file.")
+    debug_mode = "--debug" in argv
     for i, arg in enumerate(argv):
         if arg == "-o":
             if len(argv) < i + 2: raise Exception("Please provide an output file.")
@@ -76,6 +77,8 @@ def main():
     replacements = {
         "mini.addressof": "placeholder.addressof",
         "\"mini.global\"": "\"placeholder.global\"",
+        #"\"llvm.load\"": "\"placeholder.load\"",
+        #"\"llvm.extractvalue\"": "\"placeholder.extractvalue\"",
         "\"llvm.call\"": "\"placeholder.call\""
     }
 
@@ -91,21 +94,23 @@ def main():
         module_str = stringio.getvalue().encode().decode('unicode_escape')
 
     module_str = module_str[23:-16]
+    module_str = module_str.replace("placeholder.call", "llvm.call")
     with open("out.mlir", "w") as outfile: outfile.write(module_str)
 
     cmd = " ".join([
         "mlir-opt","-allow-unregistered-dialect","--mlir-print-op-generic","--canonicalize=\"region-simplify=aggressive\"",
         "--mem2reg", "--sroa","--lift-cf-to-scf",
         "--canonicalize=\"region-simplify=aggressive\"", "--loop-invariant-code-motion","--loop-invariant-subset-hoisting",
-        "--buffer-hoisting","--buffer-loop-hoisting","--control-flow-sink","--convert-func-to-llvm"
+        "--buffer-hoisting","--buffer-loop-hoisting","--control-flow-sink","--optimize-allocation-liveness","--convert-func-to-llvm"
     ])
     
     #module_str = subprocess.run(cmd, shell=True, text=True, input=module_str).stdout
-    module_str = subprocess.run(cmd, capture_output=True, shell=True, text=True, input=module_str).stdout.replace("\\","\\\\")
+    cmd_out = subprocess.run(cmd, capture_output=True, shell=True, text=True, input=module_str)
+    if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
+    module_str = cmd_out.stdout.replace("\\","\\\\")
     after_mlir_opt = time.time()
     print(f"Time to do mlir-opt: {after_mlir_opt - after_firstpass} seconds")
     
-    module_str = module_str.replace("placeholder.call", "llvm.call")
     module_str = module_str.replace("placeholder", "llvm.mlir")
     stringio = StringIO()
     Printer(stringio).print(module_str)
@@ -119,9 +124,13 @@ def main():
     llvm_link = f"llvm-link -S {out_file_names[0]} {' '.join(ll_files)} utils.ll"
     reg2mem = "opt -S --passes=reg2mem"
     hoist_allocas = "opt -S --bugpoint-enable-legacy-pm --alloca-hoisting -o out_reg2mem.ll"
-    opt = "opt -S out_reg2mem.ll --passes=\"default<O3>\" --enable-heap-to-stack-conversion --max-heap-to-stack-size=10000 --max-devirt-iterations=100 --abort-on-max-devirt-iterations-reached --inline-threshold=10000 -o out_optimized.ll"
+    debug = "debugir out_reg2mem.ll"
+    debug_extension = ".dbg" if debug_mode else ""
+    opt = f"opt -S out_reg2mem{debug_extension}.ll --passes=\"default<O3>\" --enable-heap-to-stack-conversion --max-devirt-iterations=100 --abort-on-max-devirt-iterations-reached --inline-threshold=10000 -o out_optimized.ll"
+    clang = "c:/llvm-project/build/bin/clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -triple=x86_64-pc-windows-msvc"
     llc = ["llc", "-filetype=obj", "out_optimized.ll", "-O=3", "-o", out_file_names[1], "-mtriple=x86_64-pc-windows-msvc"]
-    lld_link = ' '.join(["lld-link", f"/out:{out_file_names[2]}", out_file_names[1], "libcmt.lib"])
+    debug_flag = "/debug" if debug_mode else ""
+    lld_link = ' '.join(["lld-link", f"/out:{out_file_names[2]}", out_file_names[1], debug_flag, "libcmt.lib"])
     lower_to_llvm = " | ".join([to_llvm_dialect, mlir_translate])
     preliminaries = " | ".join([llvm_link, reg2mem, hoist_allocas])
 
@@ -131,7 +140,15 @@ def main():
     subprocess.run(preliminaries, shell=True)
     after_prelims = time.time()
     print(f"Time to run preliminary passes: {after_prelims - after_translate} seconds")
-    subprocess.run(opt, text=True, shell=True)
+    if debug_mode: subprocess.run(debug, text=True, shell=True)
+    opt_out = subprocess.run(opt, text=True, shell=True)
+    #with open("out_reg2mem.ll", "r+") as f:
+    #    out_reg2mem = f.read()
+    #    f.seek(0)
+    #    f.write(out_reg2mem.replace("preserve_nonecc",""))
+    #    f.truncate()
+    #clang_out = subprocess.run(clang, text=True, shell=True, capture_output=True)
+    #with open("opt_passes.txt", "w") as outfile: outfile.write(clang_out.stderr)
     after_opt = time.time()
     print(f"Time to opt: {after_opt - after_prelims} seconds")
     subprocess.run(llc)

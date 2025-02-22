@@ -37,12 +37,12 @@ module @patterns {
 
   pdl.pattern @LowerWrap : benefit(1) {
   	%operand_type = pdl.type
+    %ptr_type = pdl.type : !llvm.ptr
     %operand = pdl.operand : %operand_type
-    %result_type = pdl.type : !llvm.ptr
-    %root = pdl.operation "mini.wrap"(%operand : !pdl.value) -> (%result_type : !pdl.type)
+    %root = pdl.operation "mini.wrap"(%operand : !pdl.value) -> (%ptr_type : !pdl.type)
     pdl.rewrite %root {
       %operand_type_attr = pdl.apply_native_rewrite "type_to_type_attr"(%operand_type : !pdl.type) : !pdl.attribute
-      %alloca = pdl.operation "mini.alloc" {"typ" = %operand_type_attr} -> (%result_type : !pdl.type)
+      %alloca = pdl.operation "mini.alloc" {"typ" = %operand_type_attr} -> (%ptr_type : !pdl.type)
       %alloca_result = pdl.result 0 of %alloca
       %store = pdl.operation "llvm.store"(%operand, %alloca_result : !pdl.value, !pdl.value)
       pdl.replace %root with (%alloca_result : !pdl.value)
@@ -51,15 +51,15 @@ module @patterns {
   pdl.pattern @LowerWrapFatPtr : benefit(2) {
     %operand_type = pdl.type : !llvm.struct<(ptr, ptr, ptr, i32)>
     %operand = pdl.operand : %operand_type
+    %ptr_type = pdl.type : !llvm.ptr
     %operand_type_attr = pdl.attribute = !llvm.struct<(ptr, ptr, ptr, i32)>
-    %result_type = pdl.type : !llvm.ptr
-    %root = pdl.operation "mini.wrap"(%operand : !pdl.value) -> (%result_type : !pdl.type)
+    %root = pdl.operation "mini.wrap"(%operand : !pdl.value) -> (%ptr_type : !pdl.type)
     pdl.rewrite %root {
-      %alloca = pdl.operation "mini.alloc" {"typ" = %operand_type_attr} -> (%result_type : !pdl.type)
+      %alloca = pdl.operation "mini.alloc" {"typ" = %operand_type_attr} -> (%ptr_type : !pdl.type)
       %alloca_result = pdl.result 0 of %alloca
       %store = pdl.operation "llvm.store"(%operand, %alloca_result : !pdl.value, !pdl.value)
       %num_bytes = pdl.attribute = 16
-      %invariant = pdl.operation "mini.invariant"(%alloca_result : !pdl.value) {"num_bytes" = %num_bytes} -> (%result_type : !pdl.type)
+      %invariant = pdl.operation "mini.invariant"(%alloca_result : !pdl.value) {"num_bytes" = %num_bytes} -> (%ptr_type : !pdl.type)
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
@@ -308,6 +308,12 @@ module @patterns {
       %malloc_decl = pdl.operation "llvm.func" {"sym_name" = %malloc, "function_type" = %func_type_attr0, "linkage" = %linkage}
       %malloc_with_region = pdl.apply_native_rewrite "add_region"(%malloc_decl : !pdl.operation) : !pdl.operation
       pdl.erase %malloc_decl
+
+      %free = pdl.attribute = "free"
+      %func_type_attr_free = pdl.attribute = !llvm.func<void  (ptr)>
+      %free_decl = pdl.operation "llvm.func" {"sym_name" = %free, "function_type" = %func_type_attr_free, "linkage" = %linkage}
+      %free_with_region = pdl.apply_native_rewrite "add_region"(%free_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %free_decl
       
       %landing_pad = pdl.attribute = "setup_landing_pad"
       %func_type_attr1 = pdl.attribute = !llvm.func<void ()>
@@ -799,11 +805,22 @@ module @patterns {
       pdl.replace %root with (%call_result : !pdl.value)
     }
   }
+  pdl.pattern @LowerFree : benefit(1) {
+    %ptr = pdl.operand
+    %root = pdl.operation "mini.free"(%ptr : !pdl.value)
+    pdl.rewrite %root {
+      %callee = pdl.attribute = @free
+      %opsegsize = pdl.attribute = array<i32: 1, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "placeholder.call"(%ptr : !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize}
+      pdl.replace %root with %call
+    }
+  }
   pdl.pattern @LowerSetOffset : benefit (1) {
     %to_typ = pdl.attribute
     %ptr_type = pdl.type : !llvm.ptr
-    %union = pdl.operand
-    %root = pdl.operation "mini.set_offset"(%union : !pdl.value) {"to_typ" = %to_typ}
+    %fat_ptr = pdl.operand
+    %root = pdl.operation "mini.set_offset"(%fat_ptr : !pdl.value) {"to_typ" = %to_typ}
     pdl.rewrite %root {
       %symbol = pdl.apply_native_rewrite "string_to_symbol"(%to_typ: !pdl.attribute) : !pdl.attribute
       %addr_of = pdl.operation "mini.addr_of" {"global_name" = %symbol} -> (%ptr_type : !pdl.type)
@@ -811,8 +828,31 @@ module @patterns {
       %callee = pdl.attribute = @set_offset
       %opsegsize = pdl.attribute = array<i32: 2, 0>
       %opbundlesize = pdl.attribute = array<i32>
-      %call = pdl.operation "placeholder.call"(%union, %addr_of_result : !pdl.value, !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize}
+      %call = pdl.operation "placeholder.call"(%fat_ptr, %addr_of_result : !pdl.value, !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize}
       pdl.replace %root with %call
+    }
+  }
+  pdl.pattern @FreezeLoads : benefit(1) {
+    %ptr = pdl.operand
+    %return_type = pdl.type
+    %root = pdl.operation "placeholder.load"(%ptr : !pdl.value) -> (%return_type : !pdl.type)
+    pdl.rewrite %root {
+      %load = pdl.operation "llvm.load"(%ptr : !pdl.value) -> (%return_type : !pdl.type)
+      %load_result = pdl.result 0 of %load
+      %freeze = pdl.operation "llvm.freeze"(%load_result : !pdl.value) -> (%return_type : !pdl.type)
+      pdl.replace %root with %freeze
+    }
+  }
+  pdl.pattern @FreezeExtracts : benefit(1) {
+    %operand = pdl.operand
+    %return_type = pdl.type
+    %position = pdl.attribute
+    %root = pdl.operation "placeholder.extractvalue"(%operand : !pdl.value) {"position" = %position} -> (%return_type : !pdl.type)
+    pdl.rewrite %root {
+      %extract = pdl.operation "llvm.extractvalue"(%operand : !pdl.value) {"position" = %position} -> (%return_type : !pdl.type)
+      %extract_result = pdl.result 0 of %extract
+      %freeze = pdl.operation "llvm.freeze"(%extract_result : !pdl.value) -> (%return_type : !pdl.type)
+      pdl.replace %root with %freeze
     }
   }
   pdl.pattern @LowerFieldAccess : benefit(1) {
@@ -855,14 +895,14 @@ module @patterns {
     }
   }
   pdl.pattern @LowerRefer : benefit (1) {
-    %fat_base_type_attr = pdl.attribute = !llvm.struct<(ptr, ptr, ptr, i32)>
+    %typ_attr = pdl.attribute
     %ptr_type = pdl.type : !llvm.ptr
     %value = pdl.operand
-    %root = pdl.operation "mini.refer"(%value : !pdl.value) -> (%ptr_type : !pdl.type)
+    %root = pdl.operation "mini.refer"(%value : !pdl.value) {"typ" = %typ_attr} -> (%ptr_type : !pdl.type)
     pdl.rewrite %root {
-      %alloca = pdl.operation "mini.alloc" {"typ" = %fat_base_type_attr} -> (%ptr_type : !pdl.type)
+      %alloca = pdl.operation "mini.alloc" {"typ" = %typ_attr} -> (%ptr_type : !pdl.type)
       %alloca_result = pdl.result 0 of %alloca
-      %memcpy = pdl.operation "mini.memcpy"(%value, %alloca_result : !pdl.value, !pdl.value) {"type" = %fat_base_type_attr}
+      %memcpy = pdl.operation "mini.memcpy"(%value, %alloca_result : !pdl.value, !pdl.value) {"type" = %typ_attr}
       %sixteen = pdl.attribute = 16
       %invariant = pdl.operation "mini.invariant"(%alloca_result : !pdl.value) {"num_bytes" = %sixteen} -> (%ptr_type : !pdl.type)
       pdl.replace %root with (%alloca_result : !pdl.value)
@@ -990,7 +1030,7 @@ module @patterns {
     pdl.rewrite %root {
       %alloca = pdl.operation "mini.alloc" {"typ" = %to_typ_attr} -> (%ptr_type : !pdl.type)
       %alloca_result = pdl.result 0 of %alloca
-      %memcpy = pdl.operation "mini.memcpy"(%operand, %alloca_result : !pdl.value, !pdl.value) {"type" = %to_typ_attr}
+      %memcpy = pdl.operation "mini.memcpy"(%operand, %alloca_result : !pdl.value, !pdl.value) {"type" = %from_typ_attr}
       %set_offset = pdl.operation "mini.set_offset"(%alloca_result : !pdl.value) {"to_typ" = %to_typ_name}
       %twentyfour = pdl.attribute = 24
       %invariant = pdl.operation "mini.invariant"(%alloca_result : !pdl.value) {"num_bytes" = %twentyfour} -> (%ptr_type : !pdl.type)
@@ -1009,7 +1049,7 @@ module @patterns {
     pdl.rewrite %root {
       %alloca = pdl.operation "mini.alloc" {"typ" = %to_typ_attr} -> (%ptr_type : !pdl.type)
       %alloca_result = pdl.result 0 of %alloca
-      %memcpy = pdl.operation "mini.memcpy"(%operand, %alloca_result : !pdl.value, !pdl.value) {"type" = %to_typ_attr}
+      %memcpy = pdl.operation "mini.memcpy"(%operand, %alloca_result : !pdl.value, !pdl.value) {"type" = %from_typ_attr}
       %set_offset = pdl.operation "mini.set_offset"(%alloca_result : !pdl.value) {"to_typ" = %to_typ_name}
       %twentyfour = pdl.attribute = 24
       pdl.replace %root with (%alloca_result : !pdl.value)

@@ -721,6 +721,7 @@ class NewOp(IRDLOperation):
 class ReferOp(IRDLOperation):
     name = "mini.refer"
     value: Operand = operand_def()
+    typ: TypeAttribute = attr_def(TypeAttribute)
     result: OpResult = result_def()
 
 @irdl_op_definition

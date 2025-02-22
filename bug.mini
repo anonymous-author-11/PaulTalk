@@ -1,0 +1,6 @@
+import core;
+import io;
+
+IO.print(10);
+IO.print("end");
+IO.print(11);
