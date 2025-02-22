@@ -126,8 +126,8 @@ class ThirdPass(ModulePass):
                 LowerOffsetTable(),
                 LowerNew(),
                 LowerParameterizationIndexation(),
-                #LowerParameterizationsArray(),
                 LowerLiteral()
+                #LowerParameterizationsArray(),
                 #LowerGlobalFptr(),
                 #LowerUtilsAPI(),
                 #LowerSetFlag(),
