@@ -202,9 +202,8 @@ static LogicalResult arrayAttr(PatternRewriter &rewriter, PDLResultList &results
   return success();
 }
 
-static LogicalResult countElements(PatternRewriter &rewriter, PDLResultList &results, ArrayRef<PDLValue> args) {
-  results.push_back(IntegerAttr::get(rewriter.getI32Type(), args.size()));
-  return success();
+static Attribute countElements(PatternRewriter &rewriter, ValueRange values) {
+  return IntegerAttr::get(rewriter.getI32Type(), values.getTypes().size());
 }
 
 static Attribute vtableBufferSize(PatternRewriter &rewriter) {
