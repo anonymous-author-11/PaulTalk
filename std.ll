@@ -2,16 +2,16 @@
 source_filename = "LLVMDialectModule"
 
 @_parameterization_IntArray = linkonce_odr constant [1 x ptr] [ptr @IntArray]
-@pklzx_stdmini = internal constant [8 x i8] c"std.mini"
-@phguh_stdmini = internal constant [8 x i8] c"std.mini"
+@vtclw_stdmini = internal constant [8 x i8] c"std.mini"
+@ggapf_stdmini = internal constant [8 x i8] c"std.mini"
 @_parameterization_BufferPtri32 = linkonce_odr constant [1 x ptr] [ptr @buffer_typ]
-@regzf_An_outofbounds_error_occurred_while_indexing_into_a_collection = internal constant [65 x i8] c"An out-of-bounds error occurred while indexing into a collection."
-@etois_ = internal constant [0 x i8] zeroinitializer
-@bpqzy_The_indexing_argument_was = internal constant [25 x i8] c"The indexing argument was"
+@znffz_An_outofbounds_error_occurred_while_indexing_into_a_collection = internal constant [65 x i8] c"An out-of-bounds error occurred while indexing into a collection."
+@gvxzi_ = internal constant [0 x i8] zeroinitializer
+@unbgd_The_indexing_argument_was = internal constant [25 x i8] c"The indexing argument was"
 @_parameterization_String = linkonce_odr constant [1 x ptr] [ptr @String]
 @_parameterization_Ptri32 = linkonce_odr constant [1 x ptr] [ptr @i32_typ]
 @_parameterization_BufferPtri8 = linkonce_odr constant [1 x ptr] [ptr @buffer_typ]
-@qzbzn_The_size_of_the_collection_being_indexed_was = internal constant [44 x i8] c"The size of the collection being indexed was"
+@ncfrr_The_size_of_the_collection_being_indexed_was = internal constant [44 x i8] c"The size of the collection being indexed was"
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
 @float_string = linkonce_odr constant [4 x i8] c"%f\0A\00"
@@ -100,7 +100,7 @@ source_filename = "LLVMDialectModule"
 
 declare i32 @printf(ptr, ...)
 
-declare ptr @malloc(i64)
+declare ptr @bump_malloc(i64)
 
 declare void @free(ptr)
 
@@ -237,7 +237,7 @@ define void @OutOfBoundsDetails_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %18 = load i32, ptr %16, align 4
   store i32 %18, ptr %17, align 4
   call void @set_offset(ptr %6, ptr @OutOfBoundsDetails)
-  %19 = call ptr @malloc(i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 45) to i64))
+  %19 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 45) to i64))
   %20 = alloca ptr, align 8
   store ptr %19, ptr %20, align 8
   %21 = alloca { ptr }, align 8
@@ -248,9 +248,9 @@ define void @OutOfBoundsDetails_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %25 = call ptr @llvm.invariant.start.p0(i64 16, ptr %21)
   %26 = load ptr, ptr %21, align 8
   %27 = getelementptr i8, ptr %26, i64 0
-  %28 = load i352, ptr @qzbzn_The_size_of_the_collection_being_indexed_was, align 4
+  %28 = load i352, ptr @ncfrr_The_size_of_the_collection_being_indexed_was, align 4
   store i352 %28, ptr %27, align 4
-  %29 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
+  %29 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %30 = alloca { ptr, ptr, ptr, i32 }, align 8
   %31 = getelementptr { ptr, ptr, ptr, i32 }, ptr %30, i32 0, i32 1
   %32 = getelementptr { ptr, ptr, ptr, i32 }, ptr %30, i32 0, i32 3
@@ -339,7 +339,7 @@ define void @OutOfBoundsDetails_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   store ptr %88, ptr %98, align 8
   %99 = call ptr %96(ptr %97, { ptr, i160 } %91)
   call void %99(ptr %92, { ptr, i160 } %91)
-  %100 = call ptr @malloc(i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 26) to i64))
+  %100 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 26) to i64))
   %101 = alloca ptr, align 8
   store ptr %100, ptr %101, align 8
   %102 = alloca { ptr }, align 8
@@ -350,9 +350,9 @@ define void @OutOfBoundsDetails_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %106 = call ptr @llvm.invariant.start.p0(i64 16, ptr %102)
   %107 = load ptr, ptr %102, align 8
   %108 = getelementptr i8, ptr %107, i64 0
-  %109 = load i200, ptr @bpqzy_The_indexing_argument_was, align 4
+  %109 = load i200, ptr @unbgd_The_indexing_argument_was, align 4
   store i200 %109, ptr %108, align 4
-  %110 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
+  %110 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %111 = alloca { ptr, ptr, ptr, i32 }, align 8
   %112 = getelementptr { ptr, ptr, ptr, i32 }, ptr %111, i32 0, i32 1
   %113 = getelementptr { ptr, ptr, ptr, i32 }, ptr %111, i32 0, i32 3
@@ -496,7 +496,7 @@ define void @OutOfBounds_init_boundsPtri32_indexPtri32({ ptr, ptr, ptr, i32 } %0
   %20 = load i32, ptr %18, align 4
   store i32 %20, ptr %19, align 4
   call void @set_offset(ptr %8, ptr @OutOfBounds)
-  %21 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ i32, i32 }, ptr null, i32 1) to i64))
+  %21 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ i32, i32 }, ptr null, i32 1) to i64))
   %22 = alloca { ptr, ptr, ptr, i32 }, align 8
   %23 = getelementptr { ptr, ptr, ptr, i32 }, ptr %22, i32 0, i32 1
   %24 = getelementptr { ptr, ptr, ptr, i32 }, ptr %22, i32 0, i32 3
@@ -559,7 +559,7 @@ define void @OutOfBounds_init_boundsPtri32_indexPtri32({ ptr, ptr, ptr, i32 } %0
   %71 = extractvalue { ptr, ptr, ptr, i32 } %64, 1
   %72 = call ptr %70(ptr %71)
   store i32 0, ptr %72, align 4
-  %73 = call ptr @malloc(i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64))
+  %73 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64))
   %74 = alloca ptr, align 8
   store ptr %73, ptr %74, align 8
   %75 = alloca { ptr }, align 8
@@ -568,7 +568,7 @@ define void @OutOfBounds_init_boundsPtri32_indexPtri32({ ptr, ptr, ptr, i32 } %0
   %78 = load ptr, ptr %76, align 8
   store ptr %78, ptr %77, align 8
   %79 = call ptr @llvm.invariant.start.p0(i64 16, ptr %75)
-  %80 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
+  %80 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %81 = alloca { ptr, ptr, ptr, i32 }, align 8
   %82 = getelementptr { ptr, ptr, ptr, i32 }, ptr %81, i32 0, i32 1
   %83 = getelementptr { ptr, ptr, ptr, i32 }, ptr %81, i32 0, i32 3
@@ -655,7 +655,7 @@ define void @OutOfBounds_init_boundsPtri32_indexPtri32({ ptr, ptr, ptr, i32 } %0
   %146 = getelementptr { ptr, ptr, ptr, i32 }, ptr %122, i32 0, i32 3
   %147 = load i32, ptr %145, align 4
   store i32 %147, ptr %146, align 4
-  %148 = call ptr @malloc(i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 66) to i64))
+  %148 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 66) to i64))
   %149 = alloca ptr, align 8
   store ptr %148, ptr %149, align 8
   %150 = alloca { ptr }, align 8
@@ -666,9 +666,9 @@ define void @OutOfBounds_init_boundsPtri32_indexPtri32({ ptr, ptr, ptr, i32 } %0
   %154 = call ptr @llvm.invariant.start.p0(i64 16, ptr %150)
   %155 = load ptr, ptr %150, align 8
   %156 = getelementptr i8, ptr %155, i64 0
-  %157 = load i520, ptr @regzf_An_outofbounds_error_occurred_while_indexing_into_a_collection, align 4
+  %157 = load i520, ptr @znffz_An_outofbounds_error_occurred_while_indexing_into_a_collection, align 4
   store i520 %157, ptr %156, align 4
-  %158 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
+  %158 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %159 = alloca { ptr, ptr, ptr, i32 }, align 8
   %160 = getelementptr { ptr, ptr, ptr, i32 }, ptr %159, i32 0, i32 1
   %161 = getelementptr { ptr, ptr, ptr, i32 }, ptr %159, i32 0, i32 3
@@ -1020,7 +1020,7 @@ define { ptr, ptr, ptr, i32 } @IntArray__Self_from_iterable_iterableIntIterable(
   %17 = load i32, ptr %15, align 4
   store i32 %17, ptr %16, align 4
   call void @set_offset(ptr %5, ptr @IntIterable)
-  %18 = call ptr @malloc(i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64))
+  %18 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64))
   %19 = alloca ptr, align 8
   store ptr %18, ptr %19, align 8
   %20 = alloca { ptr }, align 8
@@ -1029,7 +1029,7 @@ define { ptr, ptr, ptr, i32 } @IntArray__Self_from_iterable_iterableIntIterable(
   %23 = load ptr, ptr %21, align 8
   store ptr %23, ptr %22, align 8
   %24 = call ptr @llvm.invariant.start.p0(i64 16, ptr %20)
-  %25 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
+  %25 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %26 = alloca { ptr, ptr, ptr, i32 }, align 8
   %27 = getelementptr { ptr, ptr, ptr, i32 }, ptr %26, i32 0, i32 1
   %28 = getelementptr { ptr, ptr, ptr, i32 }, ptr %26, i32 0, i32 3
@@ -1357,7 +1357,7 @@ define void @IntArray_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1
   %18 = load i32, ptr %16, align 4
   store i32 %18, ptr %17, align 4
   call void @set_offset(ptr %6, ptr @IntArray)
-  %19 = call ptr @malloc(i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64))
+  %19 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64))
   %20 = alloca ptr, align 8
   store ptr %19, ptr %20, align 8
   %21 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
@@ -1739,7 +1739,7 @@ define { ptr, ptr, ptr, i32 } @IntArray_append_xPtri32({ ptr, ptr, ptr, i32 } %0
   %89 = load i32, ptr %88, align 4
   %90 = getelementptr i32, ptr null, i32 %89
   %91 = ptrtoint ptr %90 to i64
-  %92 = call ptr @malloc(i64 %91)
+  %92 = call ptr @bump_malloc(i64 %91)
   %93 = alloca ptr, align 8
   store ptr %92, ptr %93, align 8
   %94 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
@@ -2168,7 +2168,7 @@ define { ptr, ptr, ptr, i32 } @IntArray_extend_aryIntArray({ ptr, ptr, ptr, i32 
   %212 = load i32, ptr %211, align 4
   %213 = getelementptr i32, ptr null, i32 %212
   %214 = ptrtoint ptr %213 to i64
-  %215 = call ptr @malloc(i64 %214)
+  %215 = call ptr @bump_malloc(i64 %214)
   %216 = alloca ptr, align 8
   store ptr %215, ptr %216, align 8
   %217 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
@@ -2435,7 +2435,7 @@ define i32 @IntArray__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, 
   %39 = load ptr, ptr %38, align 8
   %40 = extractvalue { ptr, ptr, ptr, i32 } %33, 1
   %41 = call ptr %39(ptr %40)
-  %42 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, i160 }, i32, { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 } }, ptr null, i32 1) to i64))
+  %42 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, i160 }, i32, { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 } }, ptr null, i32 1) to i64))
   %43 = alloca { ptr, ptr, ptr, i32 }, align 8
   %44 = getelementptr { ptr, ptr, ptr, i32 }, ptr %43, i32 0, i32 1
   %45 = getelementptr { ptr, ptr, ptr, i32 }, ptr %43, i32 0, i32 3
@@ -2489,7 +2489,7 @@ define i32 @IntArray__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, 
   %83 = load i32, ptr %82, align 4
   %84 = getelementptr i8, ptr null, i32 %83
   %85 = ptrtoint ptr %84 to i64
-  %86 = call ptr @malloc(i64 %85)
+  %86 = call ptr @bump_malloc(i64 %85)
   %87 = alloca ptr, align 8
   store ptr %86, ptr %87, align 8
   %88 = alloca { ptr }, align 8
@@ -2505,13 +2505,13 @@ define i32 @IntArray__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, 
   %96 = getelementptr [8 x i8], ptr null, i32 %95
   %97 = ptrtoint ptr %96 to i64
   %98 = getelementptr i8, ptr %94, i64 %97
-  %99 = load i64, ptr @phguh_stdmini, align 4
+  %99 = load i64, ptr @ggapf_stdmini, align 4
   store i64 %99, ptr %98, align 4
   %100 = alloca i32, align 4
   store i32 8, ptr %100, align 4
   %101 = alloca i32, align 4
   store i32 9, ptr %101, align 4
-  %102 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
+  %102 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %103 = alloca { ptr, ptr, ptr, i32 }, align 8
   %104 = getelementptr { ptr, ptr, ptr, i32 }, ptr %103, i32 0, i32 1
   %105 = getelementptr { ptr, ptr, ptr, i32 }, ptr %103, i32 0, i32 3
@@ -2697,7 +2697,7 @@ define i32 @IntArray__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, 
   %247 = load ptr, ptr %246, align 8
   %248 = extractvalue { ptr, ptr, ptr, i32 } %241, 1
   %249 = call ptr %247(ptr %248)
-  %250 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, i160 }, i32, { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 } }, ptr null, i32 1) to i64))
+  %250 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, i160 }, i32, { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 } }, ptr null, i32 1) to i64))
   %251 = alloca { ptr, ptr, ptr, i32 }, align 8
   %252 = getelementptr { ptr, ptr, ptr, i32 }, ptr %251, i32 0, i32 1
   %253 = getelementptr { ptr, ptr, ptr, i32 }, ptr %251, i32 0, i32 3
@@ -2751,7 +2751,7 @@ define i32 @IntArray__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, 
   %291 = load i32, ptr %290, align 4
   %292 = getelementptr i8, ptr null, i32 %291
   %293 = ptrtoint ptr %292 to i64
-  %294 = call ptr @malloc(i64 %293)
+  %294 = call ptr @bump_malloc(i64 %293)
   %295 = alloca ptr, align 8
   store ptr %294, ptr %295, align 8
   %296 = alloca { ptr }, align 8
@@ -2767,13 +2767,13 @@ define i32 @IntArray__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, 
   %304 = getelementptr [8 x i8], ptr null, i32 %303
   %305 = ptrtoint ptr %304 to i64
   %306 = getelementptr i8, ptr %302, i64 %305
-  %307 = load i64, ptr @pklzx_stdmini, align 4
+  %307 = load i64, ptr @vtclw_stdmini, align 4
   store i64 %307, ptr %306, align 4
   %308 = alloca i32, align 4
   store i32 8, ptr %308, align 4
   %309 = alloca i32, align 4
   store i32 9, ptr %309, align 4
-  %310 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
+  %310 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %311 = alloca { ptr, ptr, ptr, i32 }, align 8
   %312 = getelementptr { ptr, ptr, ptr, i32 }, ptr %311, i32 0, i32 1
   %313 = getelementptr { ptr, ptr, ptr, i32 }, ptr %311, i32 0, i32 3
@@ -3123,7 +3123,7 @@ define { ptr, ptr, ptr, i32 } @IntArray_copy_({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %28 = load i32, ptr %27, align 4
   %29 = getelementptr i32, ptr null, i32 %28
   %30 = ptrtoint ptr %29 to i64
-  %31 = call ptr @malloc(i64 %30)
+  %31 = call ptr @bump_malloc(i64 %30)
   %32 = alloca ptr, align 8
   store ptr %31, ptr %32, align 8
   %33 = alloca { ptr }, align 8
@@ -3209,7 +3209,7 @@ define { ptr, ptr, ptr, i32 } @IntArray_copy_({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %96 = load ptr, ptr %95, align 8
   %97 = extractvalue { ptr, ptr, ptr, i32 } %90, 1
   %98 = call ptr %96(ptr %97)
-  %99 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
+  %99 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %100 = alloca { ptr, ptr, ptr, i32 }, align 8
   %101 = getelementptr { ptr, ptr, ptr, i32 }, ptr %100, i32 0, i32 1
   %102 = getelementptr { ptr, ptr, ptr, i32 }, ptr %100, i32 0, i32 3
@@ -3486,7 +3486,7 @@ define { ptr, ptr, ptr, i32 } @IntArray_map_fFunctionPtri32_to_Ptri32({ ptr, ptr
   %30 = load i32, ptr %29, align 4
   %31 = getelementptr i32, ptr null, i32 %30
   %32 = ptrtoint ptr %31 to i64
-  %33 = call ptr @malloc(i64 %32)
+  %33 = call ptr @bump_malloc(i64 %32)
   %34 = alloca ptr, align 8
   store ptr %33, ptr %34, align 8
   %35 = alloca { ptr }, align 8
@@ -3577,7 +3577,7 @@ define { ptr, ptr, ptr, i32 } @IntArray_map_fFunctionPtri32_to_Ptri32({ ptr, ptr
   %102 = load ptr, ptr %101, align 8
   %103 = extractvalue { ptr, ptr, ptr, i32 } %96, 1
   %104 = call ptr %102(ptr %103)
-  %105 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
+  %105 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %106 = alloca { ptr, ptr, ptr, i32 }, align 8
   %107 = getelementptr { ptr, ptr, ptr, i32 }, ptr %106, i32 0, i32 1
   %108 = getelementptr { ptr, ptr, ptr, i32 }, ptr %106, i32 0, i32 3
@@ -3862,7 +3862,7 @@ define { ptr, ptr, ptr, i32 } @IntArray_iterator_({ ptr, ptr, ptr, i32 } %0, { p
   %18 = load i32, ptr %16, align 4
   store i32 %18, ptr %17, align 4
   call void @set_offset(ptr %6, ptr @IntArray)
-  %19 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, i32 }, ptr null, i32 1) to i64))
+  %19 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, i32 }, ptr null, i32 1) to i64))
   %20 = alloca { ptr, ptr, ptr, i32 }, align 8
   %21 = getelementptr { ptr, ptr, ptr, i32 }, ptr %20, i32 0, i32 1
   %22 = getelementptr { ptr, ptr, ptr, i32 }, ptr %20, i32 0, i32 3

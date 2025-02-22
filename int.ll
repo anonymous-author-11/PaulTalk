@@ -115,7 +115,7 @@ source_filename = "LLVMDialectModule"
 
 declare i32 @printf(ptr, ...)
 
-declare ptr @malloc(i64)
+declare ptr @bump_malloc(i64)
 
 declare void @free(ptr)
 
@@ -968,7 +968,7 @@ define { ptr, ptr, ptr, i32 } @IntIterable_map_fFunctionPtri32_to_Ptri32({ ptr, 
   call void @set_offset(ptr %7, ptr @IntIterable)
   %20 = alloca ptr, align 8
   store { ptr } %3, ptr %20, align 8
-  %21 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr } }, ptr null, i32 1) to i64))
+  %21 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr } }, ptr null, i32 1) to i64))
   %22 = alloca { ptr, ptr, ptr, i32 }, align 8
   %23 = getelementptr { ptr, ptr, ptr, i32 }, ptr %22, i32 0, i32 1
   %24 = getelementptr { ptr, ptr, ptr, i32 }, ptr %22, i32 0, i32 3
@@ -1114,7 +1114,7 @@ define { ptr, ptr, ptr, i32 } @IntIterable_filter_fFunctionPtri32_to_Ptri1({ ptr
   call void @set_offset(ptr %7, ptr @IntIterable)
   %20 = alloca ptr, align 8
   store { ptr } %3, ptr %20, align 8
-  %21 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr } }, ptr null, i32 1) to i64))
+  %21 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr } }, ptr null, i32 1) to i64))
   %22 = alloca { ptr, ptr, ptr, i32 }, align 8
   %23 = getelementptr { ptr, ptr, ptr, i32 }, ptr %22, i32 0, i32 1
   %24 = getelementptr { ptr, ptr, ptr, i32 }, ptr %22, i32 0, i32 3
@@ -1279,7 +1279,7 @@ define { ptr, ptr, ptr, i32 } @IntIterable_chain_otherIntIterable({ ptr, ptr, pt
   %34 = load i32, ptr %32, align 4
   store i32 %34, ptr %33, align 4
   call void @set_offset(ptr %22, ptr @IntIterable)
-  %35 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 } }, ptr null, i32 1) to i64))
+  %35 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 } }, ptr null, i32 1) to i64))
   %36 = alloca { ptr, ptr, ptr, i32 }, align 8
   %37 = getelementptr { ptr, ptr, ptr, i32 }, ptr %36, i32 0, i32 1
   %38 = getelementptr { ptr, ptr, ptr, i32 }, ptr %36, i32 0, i32 3
@@ -1472,7 +1472,7 @@ define { ptr, ptr, ptr, i32 } @IntIterable_interleave_otherIntIterable({ ptr, pt
   %34 = load i32, ptr %32, align 4
   store i32 %34, ptr %33, align 4
   call void @set_offset(ptr %22, ptr @IntIterable)
-  %35 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 } }, ptr null, i32 1) to i64))
+  %35 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 } }, ptr null, i32 1) to i64))
   %36 = alloca { ptr, ptr, ptr, i32 }, align 8
   %37 = getelementptr { ptr, ptr, ptr, i32 }, ptr %36, i32 0, i32 1
   %38 = getelementptr { ptr, ptr, ptr, i32 }, ptr %36, i32 0, i32 3
@@ -1665,7 +1665,7 @@ define { ptr, ptr, ptr, i32 } @IntIterable_zip_otherIntIterable({ ptr, ptr, ptr,
   %34 = load i32, ptr %32, align 4
   store i32 %34, ptr %33, align 4
   call void @set_offset(ptr %22, ptr @IntIterable)
-  %35 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 } }, ptr null, i32 1) to i64))
+  %35 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 } }, ptr null, i32 1) to i64))
   %36 = alloca { ptr, ptr, ptr, i32 }, align 8
   %37 = getelementptr { ptr, ptr, ptr, i32 }, ptr %36, i32 0, i32 1
   %38 = getelementptr { ptr, ptr, ptr, i32 }, ptr %36, i32 0, i32 3
@@ -1858,7 +1858,7 @@ define { ptr, ptr, ptr, i32 } @IntIterable_product_otherIntIterable({ ptr, ptr, 
   %34 = load i32, ptr %32, align 4
   store i32 %34, ptr %33, align 4
   call void @set_offset(ptr %22, ptr @IntIterable)
-  %35 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 } }, ptr null, i32 1) to i64))
+  %35 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 } }, ptr null, i32 1) to i64))
   %36 = alloca { ptr, ptr, ptr, i32 }, align 8
   %37 = getelementptr { ptr, ptr, ptr, i32 }, ptr %36, i32 0, i32 1
   %38 = getelementptr { ptr, ptr, ptr, i32 }, ptr %36, i32 0, i32 3
@@ -2452,7 +2452,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable_iterator_({ ptr, ptr, ptr, i32 } %0, 
   %69 = load ptr, ptr %68, align 8
   %70 = extractvalue { ptr, ptr, ptr, i32 } %63, 1
   %71 = call ptr %69(ptr %70)
-  %72 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr } }, ptr null, i32 1) to i64))
+  %72 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr } }, ptr null, i32 1) to i64))
   %73 = alloca { ptr, ptr, ptr, i32 }, align 8
   %74 = getelementptr { ptr, ptr, ptr, i32 }, ptr %73, i32 0, i32 1
   %75 = getelementptr { ptr, ptr, ptr, i32 }, ptr %73, i32 0, i32 3
@@ -3325,7 +3325,7 @@ define { ptr, ptr, ptr, i32 } @FilterIterable_iterator_({ ptr, ptr, ptr, i32 } %
   %69 = load ptr, ptr %68, align 8
   %70 = extractvalue { ptr, ptr, ptr, i32 } %63, 1
   %71 = call ptr %69(ptr %70)
-  %72 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr } }, ptr null, i32 1) to i64))
+  %72 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr } }, ptr null, i32 1) to i64))
   %73 = alloca { ptr, ptr, ptr, i32 }, align 8
   %74 = getelementptr { ptr, ptr, ptr, i32 }, ptr %73, i32 0, i32 1
   %75 = getelementptr { ptr, ptr, ptr, i32 }, ptr %73, i32 0, i32 3
@@ -4376,7 +4376,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable_iterator_({ ptr, ptr, ptr, i32 } %0
   %107 = load i32, ptr %105, align 4
   store i32 %107, ptr %106, align 4
   call void @set_offset(ptr %95, ptr @IntIterator)
-  %108 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, i1 }, ptr null, i32 1) to i64))
+  %108 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, i1 }, ptr null, i32 1) to i64))
   %109 = alloca { ptr, ptr, ptr, i32 }, align 8
   %110 = getelementptr { ptr, ptr, ptr, i32 }, ptr %109, i32 0, i32 1
   %111 = getelementptr { ptr, ptr, ptr, i32 }, ptr %109, i32 0, i32 3
@@ -5545,7 +5545,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable_iterator_({ ptr, ptr, ptr, i32
   %107 = load i32, ptr %105, align 4
   store i32 %107, ptr %106, align 4
   call void @set_offset(ptr %95, ptr @IntIterator)
-  %108 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, i1 }, ptr null, i32 1) to i64))
+  %108 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, i1 }, ptr null, i32 1) to i64))
   %109 = alloca { ptr, ptr, ptr, i32 }, align 8
   %110 = getelementptr { ptr, ptr, ptr, i32 }, ptr %109, i32 0, i32 1
   %111 = getelementptr { ptr, ptr, ptr, i32 }, ptr %109, i32 0, i32 3
@@ -6483,7 +6483,7 @@ define { ptr, ptr, ptr, i32 } @ZipIterable_iterator_({ ptr, ptr, ptr, i32 } %0, 
   %107 = load i32, ptr %105, align 4
   store i32 %107, ptr %106, align 4
   call void @set_offset(ptr %95, ptr @IntIterator)
-  %108 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 } }, ptr null, i32 1) to i64))
+  %108 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 } }, ptr null, i32 1) to i64))
   %109 = alloca { ptr, ptr, ptr, i32 }, align 8
   %110 = getelementptr { ptr, ptr, ptr, i32 }, ptr %109, i32 0, i32 1
   %111 = getelementptr { ptr, ptr, ptr, i32 }, ptr %109, i32 0, i32 3
@@ -7358,7 +7358,7 @@ define { ptr, ptr, ptr, i32 } @ProductIterable_iterator_({ ptr, ptr, ptr, i32 } 
   %33 = load ptr, ptr %32, align 8
   %34 = extractvalue { ptr, ptr, ptr, i32 } %27, 1
   %35 = call ptr %33(ptr %34)
-  %36 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, { ptr, i32 } }, ptr null, i32 1) to i64))
+  %36 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, { ptr, i32 } }, ptr null, i32 1) to i64))
   %37 = alloca { ptr, ptr, ptr, i32 }, align 8
   %38 = getelementptr { ptr, ptr, ptr, i32 }, ptr %37, i32 0, i32 1
   %39 = getelementptr { ptr, ptr, ptr, i32 }, ptr %37, i32 0, i32 3
@@ -8770,7 +8770,7 @@ define { ptr, ptr, ptr, i32 } @Range_iterator_({ ptr, ptr, ptr, i32 } %0, { ptr,
   %42 = load ptr, ptr %41, align 8
   %43 = extractvalue { ptr, ptr, ptr, i32 } %36, 1
   %44 = call ptr %42(ptr %43)
-  %45 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({ i32, i32, i32 }, ptr null, i32 1) to i64))
+  %45 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ i32, i32, i32 }, ptr null, i32 1) to i64))
   %46 = alloca { ptr, ptr, ptr, i32 }, align 8
   %47 = getelementptr { ptr, ptr, ptr, i32 }, ptr %46, i32 0, i32 1
   %48 = getelementptr { ptr, ptr, ptr, i32 }, ptr %46, i32 0, i32 3

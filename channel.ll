@@ -61,7 +61,7 @@ source_filename = "LLVMDialectModule"
 
 declare i32 @printf(ptr, ...)
 
-declare ptr @malloc(i64)
+declare ptr @bump_malloc(i64)
 
 declare void @free(ptr)
 
@@ -241,7 +241,7 @@ define i32 @Channel_get_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, p
   br label %80
 
 44:                                               ; preds = %22
-  %45 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({}, ptr null, i32 1) to i64))
+  %45 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({}, ptr null, i32 1) to i64))
   %46 = alloca { ptr, ptr, ptr, i32 }, align 8
   %47 = getelementptr { ptr, ptr, ptr, i32 }, ptr %46, i32 0, i32 1
   %48 = getelementptr { ptr, ptr, ptr, i32 }, ptr %46, i32 0, i32 3
@@ -412,7 +412,7 @@ define void @Channel_put_new_valuePtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
   %40 = getelementptr { ptr, i32 }, ptr %27, i32 0, i32 1
   %41 = load i32, ptr %40, align 4
   store i32 %41, ptr %39, align 4
-  %42 = call ptr @malloc(i64 ptrtoint (ptr getelementptr ({}, ptr null, i32 1) to i64))
+  %42 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({}, ptr null, i32 1) to i64))
   %43 = alloca { ptr, ptr, ptr, i32 }, align 8
   %44 = getelementptr { ptr, ptr, ptr, i32 }, ptr %43, i32 0, i32 1
   %45 = getelementptr { ptr, ptr, ptr, i32 }, ptr %43, i32 0, i32 3

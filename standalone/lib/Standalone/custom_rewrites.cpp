@@ -106,7 +106,7 @@ static Attribute vtableType(PatternRewriter &rewriter, Attribute attr) {
 
   // Extract size from integer attribute - need to cast to Attribute first
   auto sizeAttr = mlir::cast<IntegerAttr>(attr);
-  uint32_t thirdTableSize = sizeAttr.getInt();
+  uint64_t thirdTableSize = sizeAttr.getInt();
   
   // Get the context
   MLIRContext *context = rewriter.getContext();
@@ -180,7 +180,7 @@ static Attribute smallerType(PatternRewriter &rewriter, Attribute attr1, Attribu
 static Type arrayFromSizeAndType(PatternRewriter &rewriter, Attribute attr, Type elementType) {
   // Extract size from integer attribute
   auto sizeAttr = mlir::cast<IntegerAttr>(attr);
-  uint32_t numElements = sizeAttr.getInt();
+  uint64_t numElements = sizeAttr.getInt();
   
   // Create LLVM array type with the specified size and element type
   auto arrayType = LLVM::LLVMArrayType::get(elementType, numElements);
@@ -241,7 +241,7 @@ static Type arrayToInt(PatternRewriter &rewriter, Attribute attr) {
   Type arrayType = mlir::cast<TypeAttr>(attr).getValue();
   auto llvmArray = mlir::cast<LLVM::LLVMArrayType>(arrayType);
   
-  uint32_t numElements = llvmArray.getNumElements();
+  uint64_t numElements = llvmArray.getNumElements();
   Type elementType = llvmArray.getElementType();
   DataLayout layout;
   uint64_t elementSize = layout.getTypeSizeInBits(elementType);
