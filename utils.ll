@@ -27,7 +27,7 @@ declare void @llvm.init.trampoline(ptr, ptr, ptr)
 
 ; Thread-local storage for our bump allocator state
 @region = internal thread_local global [8388608 x i8] zeroinitializer
-@current_ptr = internal thread_local global ptr null
+@current_ptr = internal thread_local global ptr @region
 
 ; Initialize the region if needed
 define void @allocate_region() {
@@ -39,13 +39,13 @@ define void @allocate_region() {
   ret void
 }
 
-define noalias noundef ptr @bump_malloc(i64 noundef %size) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) memory(inaccessiblemem: readwrite) "alloc-family"="malloc" {
-  %result = tail call noalias nonnull ptr @bump_malloc_inner(i64 noundef %size) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) memory(inaccessiblemem: readwrite) "alloc-family"="malloc"
+define noalias ptr @bump_malloc(i64 noundef %size) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) "alloc-family"="malloc" {
+  %result = tail call noalias ptr @bump_malloc_inner(i64 noundef %size) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) "alloc-family"="malloc"
   ret ptr %result
 }
 
 ; Our malloc replacement 
-define noalias noundef ptr @bump_malloc_inner(i64 noundef %size) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) memory(inaccessiblemem: readwrite) "alloc-family"="malloc" {
+define noalias ptr @bump_malloc_inner(i64 noundef %size) noinline mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) "alloc-family"="malloc" {
   
   ; Calculate aligned size (align to 16 bytes)
   %size_plus_15 = add i64 %size, 15
@@ -59,7 +59,7 @@ define noalias noundef ptr @bump_malloc_inner(i64 noundef %size) mustprogress no
   
   ; Update the current pointer
   store ptr %new_ptr, ptr @current_ptr
-  ret ptr %current
+  ret ptr %current 
 }
 
 define void @anoint_trampoline(ptr %tramp) {

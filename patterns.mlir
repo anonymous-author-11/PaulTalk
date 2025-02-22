@@ -302,7 +302,7 @@ module @patterns {
     %opaque_ptr_type = pdl.type : !llvm.ptr
     pdl.rewrite %root {
       
-      %malloc = pdl.attribute = "malloc"
+      %malloc = pdl.attribute = "bump_malloc"
       %func_type_attr0 = pdl.attribute = !llvm.func<ptr  (i64)>
       %linkage = pdl.attribute = #llvm.linkage<external>
       %malloc_decl = pdl.operation "llvm.func" {"sym_name" = %malloc, "function_type" = %func_type_attr0, "linkage" = %linkage}
@@ -797,7 +797,7 @@ module @patterns {
     pdl.rewrite %root {
       %malloc_size = pdl.operation "mini.type_size" {"typ" = %type_attr} -> (%i64_type : !pdl.type)
       %malloc_size_result = pdl.result 0 of %malloc_size
-      %callee = pdl.attribute = @malloc
+      %callee = pdl.attribute = @bump_malloc
       %opsegsize = pdl.attribute = array<i32: 1, 0>
       %opbundlesize = pdl.attribute = array<i32>
       %call = pdl.operation "placeholder.call"(%malloc_size_result : !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%ptr_type : !pdl.type)
@@ -1549,7 +1549,7 @@ module @patterns {
         %small_struct_result = pdl.result 0 of %small_struct
         
         // Malloc for large structures
-        %callee = pdl.attribute = @malloc
+        %callee = pdl.attribute = @bump_malloc
         %malloc = pdl.operation "placeholder.call"(%data_size_result : !pdl.value) {"callee" = %callee} -> (%ptr_type : !pdl.type)
         %malloc_result = pdl.result 0 of %malloc
         

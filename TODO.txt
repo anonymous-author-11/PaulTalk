@@ -256,9 +256,16 @@ DONE:
 - Start moving lowering patterns to PDL [check!]
 - Get native constraints and rewrites working [check!]
 - Add end-to-end test [check!]
+- Try to allocate from a memory region [check!]
+	- Ensure noalias works [check!]
 
 TODO:
 
+- Fix reverted PDL patterns (paramsarray, paramsindexation, new)
+- Do less work for imports
+	- Make .lib archives of .bc files and --link-only-needed
+	- Decrease work done in interface_codegen
+	- Type-check specific imports on-demand rather than upfront
 - Clean up compilation of files with no main() or no specified outfile
 - Think about initialization of buffers and nil checks
 - Implement a hash table

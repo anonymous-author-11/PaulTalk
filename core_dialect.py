@@ -1070,7 +1070,7 @@ class ReabstractOp(CastOp, IRDLOperation):
         dict_ary = ArrayAttr([DictionaryAttr({"llvm.nest":UnitAttr()}), *[DictionaryAttr({}) for arg in to_typ.param_types.data]])
         func_def = func.FuncOp(wrapper_name, FunctionType.from_lists([t.base_typ() for t in to_typ.param_types.data], ret_type), f_body, arg_attrs=dict_ary)
 
-        tramp = MallocOp.create(attributes={"typ":llvm.LLVMArrayType.from_size_and_type(16, IntegerType(8))}, result_types=[llvm.LLVMPointerType.opaque()])
+        tramp = MallocOp.create(attributes={"typ":llvm.LLVMArrayType.from_size_and_type(24, IntegerType(8))}, result_types=[llvm.LLVMPointerType.opaque()])
         anoint = AnointTrampolineOp.create(operands=[tramp.results[0]])
         wrapper = AddrOfOp.from_string(wrapper_name)
         fptr = llvm.LoadOp(operand, llvm.LLVMPointerType.opaque())

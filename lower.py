@@ -407,7 +407,7 @@ class LowerCreateBuffer(RewritePattern):
         unwrap = UnwrapOp.create(operands=[op.size], result_types=[IntegerType(32)])
         gep = llvm.GEPOp.from_mixed_indices(null.results[0], [unwrap.results[0]], pointee_type=op.typ)
         malloc_size = llvm.PtrToIntOp(gep.results[0], IntegerType(64))
-        attr_dict = {"func_name":StringAttr("malloc"), "ret_type":llvm.LLVMPointerType.opaque()}
+        attr_dict = {"func_name":StringAttr("bump_malloc"), "ret_type":llvm.LLVMPointerType.opaque()}
         malloc = FunctionCallOp.create(operands=[malloc_size.results[0]], attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
         
         # fill uninitialized memory with zeroes
@@ -448,7 +448,7 @@ class LowerMalloc(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: MallocOp, rewriter: PatternRewriter):
         malloc_size = TypeSizeOp.create(attributes={"typ":op.typ}, result_types=[IntegerType(64)])
-        malloc = llvm.CallOp("malloc", malloc_size.results[0], return_type=llvm.LLVMPointerType.opaque())
+        malloc = llvm.CallOp("bump_malloc", malloc_size.results[0], return_type=llvm.LLVMPointerType.opaque())
         operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
         malloc.properties["operandSegmentSizes"] = operandSegmentSizes
         malloc.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
@@ -486,7 +486,7 @@ class LowerFromBuffer(RewritePattern):
         data_size = llvm.LoadOp(data_size_ptr.results[0], IntegerType(64))
         threshold = llvm.ConstantOp(IntegerAttr.from_int_and_width(128, 64), IntegerType(64))
         small_struct = ComparisonOp.make(data_size.results[0], threshold.results[0], "LE")
-        malloc = llvm.CallOp("malloc", data_size.results[0], return_type=llvm.LLVMPointerType.opaque())
+        malloc = llvm.CallOp("bump_malloc", data_size.results[0], return_type=llvm.LLVMPointerType.opaque())
         operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
         malloc.properties["operandSegmentSizes"] = operandSegmentSizes
         malloc.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
@@ -727,7 +727,7 @@ class LowerUtilsAPI(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: UtilsAPIOp, rewriter: PatternRewriter):
         func_type = llvm.LLVMFunctionType([IntegerType(64)], llvm.LLVMPointerType.opaque())
-        full_func = llvm.FuncOp("malloc", func_type, linkage=llvm.LinkageAttr("external"))
+        full_func = llvm.FuncOp("bump_malloc", func_type, linkage=llvm.LinkageAttr("external"))
         rewriter.insert_op_before_matched_op(full_func)
         func_type = llvm.LLVMFunctionType([], llvm.LLVMVoidType())
         full_func = llvm.FuncOp("setup_landing_pad", func_type, linkage=llvm.LinkageAttr("external"))
@@ -1035,7 +1035,7 @@ class LowerToFatPtr(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: ToFatPtrOp, rewriter: PatternRewriter):
         alloca = AllocateOp.make(op.to_typ)
-        memcpy = MemCpyOp.make(op.operand, alloca.results[0], op.to_typ)
+        memcpy = MemCpyOp.make(op.operand, alloca.results[0], op.from_typ)
         set_offset = SetOffsetOp.create(operands=[alloca.results[0]], attributes={"to_typ":op.to_typ_name})
         ops = [memcpy, set_offset]
         if op.invariant:
@@ -1120,7 +1120,7 @@ class LowerReabstract(RewritePattern):
         adjust_trampoline.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
         alloca = AllocateOp.make(llvm.LLVMPointerType.opaque())
         store = llvm.StoreOp(adjust_trampoline.results[0], alloca.results[0])
-        invariant0 = InvariantOp.make(tramp.results[0], 16)
+        invariant0 = InvariantOp.make(tramp.results[0], 24)
         invariant1 = InvariantOp.make(alloca.results[0], 8)
         rewriter.insert_op_before(func_def, top_level.body.block.first_op)
         rewriter.inline_block_before_matched_op(block)
