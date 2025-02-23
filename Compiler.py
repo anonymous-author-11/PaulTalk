@@ -126,7 +126,7 @@ def main():
     hoist_allocas = "opt -S --bugpoint-enable-legacy-pm --alloca-hoisting -o out_reg2mem.ll"
     debug = "debugir out_reg2mem.ll"
     debug_extension = ".dbg" if debug_mode else ""
-    opt = f"opt -S out_reg2mem{debug_extension}.ll --passes=\"default<O1>\" --bounds-checking-single-trap --enable-heap-to-stack-conversion --max-devirt-iterations=1000 --abort-on-max-devirt-iterations-reached --inline-threshold=10000 -o out_optimized.ll"
+    opt = f"opt -S out_reg2mem{debug_extension}.ll --passes=\"default<O3>\" --enable-heap-to-stack-conversion --max-devirt-iterations=1000 --abort-on-max-devirt-iterations-reached --inline-threshold=10000 -o out_optimized.ll"
     clang = "c:/llvm-project/build/bin/clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -triple=x86_64-pc-windows-msvc"
     llc = ["llc", "-filetype=obj", "out_optimized.ll", "-O=3", "-o", out_file_names[1], "-mtriple=x86_64-pc-windows-msvc"]
     debug_flag = "/debug" if debug_mode else ""
