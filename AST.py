@@ -16,9 +16,7 @@ from xdsl.dialects.builtin import (
     SymbolRefAttr, SymbolNameAttr, DenseArrayBase, FunctionType, DenseIntOrFPElementsAttr, FloatAttr
 )
 from itertools import product, chain, combinations
-from lark import Lark
-import functools
-import more_itertools
+from functools import cmp_to_key
 import time
 import networkx as nx
 
@@ -1909,7 +1907,7 @@ class ClassDef(Statement):
         if self._my_ordering: return self._my_ordering
         def cmp_key(a, b): return 0 if self._scope.subtype(a, b) else 1
         direct_supertypes = [self._scope.classes[sup.cls.data] for sup in self.direct_supertypes()]
-        sorted_direct_supertypes = sorted(direct_supertypes, key=functools.cmp_to_key(cmp_key))
+        sorted_direct_supertypes = sorted(direct_supertypes, key=cmp_to_key(cmp_key))
         self._my_ordering = [*chain.from_iterable([sup, *sup.my_ordering()] for sup in sorted_direct_supertypes)]
         return self._my_ordering
 
@@ -2574,7 +2572,8 @@ class Import(Statement):
     def typeflow(self, scope):
         included_files.add_edge(self.filename, self.import_filename)
         if next(nx.simple_cycles(included_files), None):
-            raise Exception(f"Line {self.line_number}: Import of {import_filename} creates a cycle in the import graph.")
+            nx.write_network_text(included_files)
+            raise Exception(f"Line {self.line_number}: Import of {self.import_filename} creates a cycle in the import graph.")
         self.program.interface_typeflow(self.sandbox)
         for k, v in self.sandbox.classes.items():
             if k not in scope.classes.keys(): scope.classes[k] = v

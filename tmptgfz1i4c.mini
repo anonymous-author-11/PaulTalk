@@ -1,0 +1,7 @@
+
+        def test() {
+            x : i32 = 5;
+            y : f64 = 5.0;
+            z = x + y; // Different types
+        }
+        

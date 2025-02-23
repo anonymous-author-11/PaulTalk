@@ -262,6 +262,7 @@ DONE:
 
 TODO:
 
+- Reduce number of redundant type fields
 - Do less work for imports
 	- Make .lib archives of .bc files and --link-only-needed
 	- Decrease work done in interface_codegen

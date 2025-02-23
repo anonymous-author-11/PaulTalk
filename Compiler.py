@@ -9,15 +9,14 @@ from xdsl.context import MLContext
 from xdsl.printer import Printer
 from io import StringIO
 from lower import first_pass
-from sys import argv
+import sys
 from parser import CSTTransformer, parse
 import subprocess
-import cProfile
-import networkx as nx
 import re
+import networkx as nx
 from AST import included_files
 
-def main():
+def main(argv):
     after_imports = time.time()
     print(f"Time to import: {after_imports - start_time} seconds")
     if len(argv) < 2: raise Exception("Please provide a file to compile")
@@ -25,6 +24,7 @@ def main():
     print(f"compiling {file_name}")
     if "-o" not in argv: raise Exception("Please provide an output file.")
     debug_mode = "--debug" in argv
+    show_dependencies = "--dependencies" in argv
     for i, arg in enumerate(argv):
         if arg == "-o":
             if len(argv) < i + 2: raise Exception("Please provide an output file.")
@@ -37,8 +37,9 @@ def main():
     #print(tree.pretty())
     module = ast.codegen()
 
-    print("Dependency graph:")
-    nx.write_network_text(included_files, sources=[file_name])
+    if show_dependencies:
+        print("Dependency graph:")
+        nx.write_network_text(included_files, sources=[file_name])
 
     ll_files = [file.split(".")[0] + ".ll" for file in included_files.nodes() if file != file_name]
     for file in ll_files:
@@ -130,7 +131,7 @@ def main():
     hoist_allocas = "opt -S --bugpoint-enable-legacy-pm --alloca-hoisting -o out_reg2mem.ll"
     debug = "debugir out_reg2mem.ll"
     debug_extension = ".dbg" if debug_mode else ""
-    opt = f"opt -S out_reg2mem{debug_extension}.ll --passes=\"default<O3>\" --enable-heap-to-stack-conversion --max-devirt-iterations=1000 --abort-on-max-devirt-iterations-reached --inline-threshold=10000 -o out_optimized.ll"
+    opt = f"opt -S out_reg2mem{debug_extension}.ll --passes=\"default<O3>\" --enable-heap-to-stack-conversion --max-devirt-iterations=100 --abort-on-max-devirt-iterations-reached --inline-threshold=10000 -o out_optimized.ll"
     clang = "c:/llvm-project/build/bin/clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -triple=x86_64-pc-windows-msvc"
     llc = ["llc", "-filetype=obj", "out_optimized.ll", "-O=3", "-o", out_file_names[1], "-mtriple=x86_64-pc-windows-msvc"]
     debug_flag = "/debug" if debug_mode else ""
@@ -167,4 +168,6 @@ def main():
     print(f"Total time to compile: {final_time - start_time} seconds")
     print("completed")
 
-main()
+
+if __name__ == "__main__":
+    main(sys.argv)

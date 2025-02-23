@@ -5,7 +5,6 @@ from sympy import nextprime
 from xdsl.ir import Block, Region
 from xdsl.dialects import cf
 import random
-import functools
 
 class Scope:
     def __init__(self, parent=None, cls=None, behavior=None, method=None, wile=None):
@@ -61,7 +60,7 @@ class Scope:
             same_arity = len(left.param_types) == len(right.param_types)
             contravariant_parameters = all(self.subtype(b, a) for (a,b) in zip(left.param_types, right.param_types))
             is_subtype = covariant_return and same_arity and contravariant_parameters
-            print(f"{left} is {'' if is_subtype else 'not '} a subtype of {right}")
+            #print(f"{left} is {'' if is_subtype else 'not '} a subtype of {right}")
             return is_subtype
         if isinstance(left, TypeParameter) and isinstance(right, TypeParameter): return left.label == right.label and left.bound == right.bound
         if isinstance(left, TypeParameter): return self.subtype(left.bound, right)
@@ -265,7 +264,7 @@ class Scope:
             new_param_types = ArrayAttr([self.simplify(t) for t in typ.param_types.data])
             new_return_type = self.simplify(typ.return_type)
             new_yield_type = self.simplify(typ.yield_type)
-            print(f"simplified {typ} to {Function([new_param_types, new_yield_type, new_return_type])}")
+            #print(f"simplified {typ} to {Function([new_param_types, new_yield_type, new_return_type])}")
             return Function([new_param_types, new_yield_type, new_return_type])
 
         if isinstance(typ, Union):
