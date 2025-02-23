@@ -20,10 +20,11 @@ from lark import Lark
 import functools
 import more_itertools
 import time
+import networkx as nx
 
 codegenned = set()
 toplevel_ops = []
-included_files = set()
+included_files = nx.DiGraph()
 tim = time.time()
 
 class AST:
@@ -2571,7 +2572,9 @@ class Import(Statement):
     sandbox: Scope
 
     def typeflow(self, scope):
-        included_files.add(self.import_filename)
+        included_files.add_edge(self.filename, self.import_filename)
+        if next(nx.simple_cycles(included_files), None):
+            raise Exception(f"Line {self.line_number}: Import of {import_filename} creates a cycle in the import graph.")
         self.program.interface_typeflow(self.sandbox)
         for k, v in self.sandbox.classes.items():
             if k not in scope.classes.keys(): scope.classes[k] = v

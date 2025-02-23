@@ -13,6 +13,7 @@ from sys import argv
 from parser import CSTTransformer, parse
 import subprocess
 import cProfile
+import networkx as nx
 import re
 from AST import included_files
 
@@ -36,7 +37,10 @@ def main():
     #print(tree.pretty())
     module = ast.codegen()
 
-    ll_files = [file.split(".")[0] + ".ll" for file in included_files]
+    print("Dependency graph:")
+    nx.write_network_text(included_files, sources=[file_name])
+
+    ll_files = [file.split(".")[0] + ".ll" for file in included_files.nodes() if file != file_name]
     for file in ll_files:
         with open(file, "r") as infile: pass
 
