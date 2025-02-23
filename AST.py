@@ -2572,8 +2572,9 @@ class Import(Statement):
     def typeflow(self, scope):
         included_files.add_edge(self.filename, self.import_filename)
         if next(nx.simple_cycles(included_files), None):
+            print("Dependency graph:")
             nx.write_network_text(included_files)
-            raise Exception(f"Line {self.line_number}: Import of {self.import_filename} creates a cycle in the import graph.")
+            raise Exception(f"Line {self.line_number}: Import of {self.import_filename} from {self.filename} creates a cycle in the dependency graph.")
         self.program.interface_typeflow(self.sandbox)
         for k, v in self.sandbox.classes.items():
             if k not in scope.classes.keys(): scope.classes[k] = v

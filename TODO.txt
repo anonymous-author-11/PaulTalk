@@ -259,6 +259,7 @@ DONE:
 - Try to allocate from a memory region [check!]
 	- Ensure noalias works [check!]
 - Fix reverted PDL patterns (paramsarray, paramsindexation, new) [check!]
+- Store imports as graph rather than set [check!]
 
 TODO:
 
