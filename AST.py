@@ -1104,8 +1104,15 @@ class ObjectCreation(Expression):
         return simplified_type
 
 @dataclass
+class Constraint(Node):
+    lhs: str
+    op: str
+    rhs: str
+
+@dataclass
 class ExternDef(Statement):
     name: str
+    constraints : List[Constraint]
     params: List['VarDecl']
     arity: int
     _return_type: TypeAttribute
@@ -1135,6 +1142,7 @@ class ExternDef(Statement):
 @dataclass
 class FunctionDef(Statement):
     name: str
+    constraints : List[Constraint]
     params: List['VarDecl']
     arity: int
     _return_type: TypeAttribute
@@ -1203,6 +1211,7 @@ class FunctionDef(Statement):
 class MethodDef(Statement):
     name: str
     mangled_name: str
+    constraints: List[Constraint]
     type_params: List[TypeAttribute]
     params: List['VarDecl']
     arity: int

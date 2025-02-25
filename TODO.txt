@@ -263,6 +263,7 @@ DONE:
 
 TODO:
 
+- Implement Records
 - Reduce number of redundant type fields
 - Do less work for imports
 	- Make .lib archives of .bc files and --link-only-needed
@@ -398,6 +399,19 @@ TODO:
 	- Uninitialized would need to be a builtin type that forwards .init() calls
 
 # --- Possibilities ---
+
+- Ideas for regions
+	- Lean on aliases and defaults to minimize annotation burden
+	- put region constraints in method signature and enforce them
+	- Infer regions where possible
+	- Annotations implicitly inherited
+	- Lifetime rules
+		- Enforce that variables assigned to fields have longer lifetimes than self
+		- Enforce that references to fields have longer lifetimes than self
+		- Enforce that constraints on returned value reflected in annotations
+		- Enforce that to/from buffers longer lifetime than the buffer
+		- Enforce that constraints are a superset of called methods' constraints
+		- Propagate constraints through assignments
 
 - Inheriting from Sentinel (or do Struct types solve this)
 - Bare 'yield();' should yield the coroutine itself?

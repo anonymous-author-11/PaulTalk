@@ -27,15 +27,20 @@ type_bound: IDENT "<:" typ
 
 ident_list: IDENT ("," IDENT)*
 
-extern_def: "extern" "def" IDENT "(" param_list ")" ["->" typ] ["yields" typ]
-function_def: "def" IDENT "(" param_list ")" ["->" typ] ["yields" typ] block
+extern_def: ["#["constraint_list"]"] "extern" "def" IDENT "(" param_list ")" ["->" typ] ["yields" typ]
+function_def: ["#["constraint_list"]"] "def" IDENT "(" param_list ")" ["->" typ] ["yields" typ] block
 abstract: "abstract"
-method_def: [abstract] "def" IDENT ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
-operator_def: [abstract] "def" (operator | BRACKETS) ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
-class_method_def: [abstract] "def" "Self" "." IDENT ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
+method_def: ["#["constraint_list"]"] [abstract] "def" IDENT ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
+operator_def: ["#["constraint_list"]"] [abstract] "def" (operator | BRACKETS) ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
+class_method_def: ["#["constraint_list"]"] [abstract] "def" "Self" "." IDENT ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
 
 param_list: (param ("," param)*)?
 method_param_list: (method_param ("," method_param)*)? -> param_list
+
+constraint_list: (constraint ("," constraint)*)?
+constraint: IDENT LT IDENT
+          | IDENT GT IDENT
+          | IDENT EQ IDENT
 
 method_param: param | field_param
 param: IDENT ":" typ

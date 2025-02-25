@@ -91,6 +91,7 @@ class Array[T] extends Iterable2[T] {
 	@length : i32
 	@capacity : i32
 
+    #[ret < iterable]
 	def Self.from_iterable(iterable : Iterable2[T]) -> Array[T] {
     	result = Array[T].new();
     	for elem in iterable { result.append(elem); }
@@ -111,6 +112,7 @@ class Array[T] extends Iterable2[T] {
     def capacity() -> i32 {
     	return @capacity;
     }
+    #[x > self]
     def append(x : T) -> Array[T] {
         if @length >= @capacity { self.grow(); }
         @buffer.[@length] = x;

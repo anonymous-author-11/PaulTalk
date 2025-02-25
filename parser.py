@@ -46,24 +46,24 @@ class CSTTransformer(Transformer):
     def statement(self, stmt):
         return stmt
 
-    def extern_def(self, name, params, return_type, yield_type):
+    def extern_def(self, constraints, name, params, return_type, yield_type):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
-        return ExternDef(self.file_name, name.line, name.value, params or [], len(params or []), return_type, yield_type or exception_or_nil)
+        return ExternDef(self.file_name, name.line, name.value, constraints or [], params or [], len(params or []), return_type, yield_type or exception_or_nil)
 
-    def function_def(self, name, params, return_type, yield_type, body):
+    def function_def(self, constraints, name, params, return_type, yield_type, body):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
-        return FunctionDef(self.file_name, name.line, name.value, params or [], len(params or []), return_type, yield_type or exception_or_nil, body, False)
+        return FunctionDef(self.file_name, name.line, name.value, constraints or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, False)
 
     def abstract(self):
         return True
 
-    def method_def(self, abstract, name, type_params, params, return_type, yield_type, body):
+    def method_def(self, constraints, abstract, name, type_params, params, return_type, yield_type, body):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractMethodDef if abstract else MethodDef
         mangled_name = name.value + "_" + clean_param_names(params)
-        return ty(self.file_name, name.line, name.value, mangled_name, type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
+        return ty(self.file_name, name.line, name.value, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
 
-    def operator_def(self, abstract, op, type_params, params, return_type, yield_type, body):
+    def operator_def(self, constraints, abstract, op, type_params, params, return_type, yield_type, body):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         translated_op = "_" + {
             "+":"ADD","-":"SUB","*":"MUL","/":"DIV","%":"MOD","<<":"LSHIFT",">>":"RSHIFT",
@@ -71,13 +71,13 @@ class CSTTransformer(Transformer):
         }[op.value]
         ty = AbstractMethodDef if abstract else MethodDef
         mangled_name = translated_op + "_" + clean_param_names(params)
-        return ty(self.file_name, op.line, translated_op, mangled_name, type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
+        return ty(self.file_name, op.line, translated_op, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
 
-    def class_method_def(self, abstract, name, type_params, params, return_type, yield_type, body):
+    def class_method_def(self, constraints, abstract, name, type_params, params, return_type, yield_type, body):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractClassMethodDef if abstract else ClassMethodDef
         mangled_name = "_Self_" + name.value + "_" + clean_param_names(params)
-        return ty(self.file_name, name.line, "_Self_" + name.value, mangled_name, type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
+        return ty(self.file_name, name.line, "_Self_" + name.value, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
 
     def class_def(self, cls, name, supertype_list, bound_list, *members):
         if not isinstance(name, FatPtr):
@@ -110,6 +110,12 @@ class CSTTransformer(Transformer):
 
     def param_list(self, *params):
         return list(params)
+
+    def constraint_list(self, *constraints):
+        return list(constraints)
+
+    def constraint(self, lhs, op, rhs):
+        return Constraint(self.file_name, op.line, lhs.value, op.value, rhs.value)
 
     def alias(self, alias, name, meaning):
         return Alias(self.file_name, alias.line, name, meaning)

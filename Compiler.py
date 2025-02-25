@@ -106,12 +106,13 @@ def main(argv):
         "mlir-opt","-allow-unregistered-dialect","--mlir-print-op-generic","--canonicalize=\"region-simplify=aggressive\"",
         "--mem2reg", "--sroa","--lift-cf-to-scf",
         "--canonicalize=\"region-simplify=aggressive\"", "--loop-invariant-code-motion","--loop-invariant-subset-hoisting",
-        "--buffer-hoisting","--buffer-loop-hoisting","--control-flow-sink","--optimize-allocation-liveness","--convert-func-to-llvm"
+        "--buffer-hoisting","--buffer-loop-hoisting","--control-flow-sink","--convert-func-to-llvm"
     ])
     
     #module_str = subprocess.run(cmd, shell=True, text=True, input=module_str).stdout
     cmd_out = subprocess.run(cmd, capture_output=True, shell=True, text=True, input=module_str)
     if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
+    with open("liveness_log.txt", "w") as outfile: outfile.write(cmd_out.stderr)
     module_str = cmd_out.stdout.replace("\\","\\\\")
     after_mlir_opt = time.time()
     print(f"Time to do mlir-opt: {after_mlir_opt - after_firstpass} seconds")
