@@ -41,7 +41,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
   "mini.typedef"() {"class_name" = "ProductIterable2", "methods" = [@ProductIterable2_field_first, @ProductIterable2_field_second, @ProductIterable2_field_ProductIterable2_0, @ProductIterable2_field_ProductIterable2_1, @ProductIterable2_field_ProductIterable2_2, @ProductIterable2_B_init_firstIterable2T_secondIterable2U, @ProductIterable2_B_iterator_, @ProductIterable2_B_each_fFunctionT_to_Nothing, @ProductIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @ProductIterable2_B_all_fFunctionT_to_Ptri1, @ProductIterable2_B_any_fFunctionT_to_Ptri1, @ProductIterable2_B_map_fFunctionT_to_U, @ProductIterable2_B_filter_fFunctionT_to_Ptri1, @ProductIterable2_B_chain_otherIterable2T, @ProductIterable2_B_interleave_otherIterable2T, @ProductIterable2_B_zip_otherIterable2U, @ProductIterable2_B_product_otherIterable2U, @ProductIterable2_init_firstIterable2T_secondIterable2U, @ProductIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U, @ProductIterable2_field_ProductIterable2_2, @ProductIterable2_B_iterator_, @ProductIterable2_B_each_fFunctionT_to_Nothing, @ProductIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @ProductIterable2_B_all_fFunctionT_to_Ptri1, @ProductIterable2_B_any_fFunctionT_to_Ptri1, @ProductIterable2_B_map_fFunctionT_to_U, @ProductIterable2_B_filter_fFunctionT_to_Ptri1, @ProductIterable2_B_chain_otherIterable2T, @ProductIterable2_B_interleave_otherIterable2T, @ProductIterable2_B_zip_otherIterable2U, @ProductIterable2_B_product_otherIterable2U, @ProductIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U], "hash_tbl" = [@Object, @Iterable2, @ProductIterable2, 18446744073709551615 : i64], "offset_tbl" = [59 : i32, 36 : i32, 7 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 7827074759551300494 : i64, "base_typ" = !llvm.struct<(!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.ptr, !llvm.ptr, !llvm.ptr)>} : () -> ()
   "mini.typedef"() {"class_name" = "ProductIterator2", "methods" = [@ProductIterator2_field_first_iterator, @ProductIterator2_field_second_iterator, @ProductIterator2_field_second_iterable, @ProductIterator2_field_current_first, @ProductIterator2_field_ProductIterator2_0, @ProductIterator2_field_ProductIterator2_1, @ProductIterator2_field_ProductIterator2_2, @ProductIterator2_B_init_first_iterableIterable2T_second_iterableIterable2U, @ProductIterator2_B_next_, @ProductIterator2_init_first_iterableIterable2T_second_iterableIterable2U, @ProductIterator2_next_, @ProductIterator2_field_ProductIterator2_2, @ProductIterator2_B_next_, @ProductIterator2_next_], "hash_tbl" = [@Object, 18446744073709551615 : i64, @Iterator2, @ProductIterator2], "offset_tbl" = [21 : i32, 0 : i32, 18 : i32, 7 : i32], "prime" = 4611686018427388073 : i64, "hash_id" = 4440657219728359865 : i64, "base_typ" = !llvm.struct<(!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>, !llvm.ptr, !llvm.ptr, !llvm.ptr)>} : () -> ()
   "mini.typedef"() {"class_name" = "Addable", "methods" = [], "hash_tbl" = [@Object, @Addable], "offset_tbl" = [11 : i32, 7 : i32], "prime" = 4611686018427388073 : i64, "hash_id" = 12051435683933085745 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr)>} : () -> ()
-  "mini.typedef"() {"class_name" = "Float64", "methods" = [@Float64_field_value, @Float64_field_Float64_0, @Float64_field_Float64_1, @Float64_B_init_valuePtrf64, @Float64_B_value_, @Float64_B__ADD_otherFloat64__ADD_otherInt32, @Float64_init_valuePtrf64, @Float64_value_, @Float64__ADD_otherFloat64, @Float64__ADD_otherInt32, @Float64_field_Float64_0, @Float64_field_Float64_1, @Float64_B__ADD_otherFloat64__ADD_otherInt32, @Float64_init_valuePtrf64, @Float64_field_Float64_0, @Float64_field_Float64_1, @Float64_B__ADD_otherFloat64__ADD_otherInt32, @Float64_init_valuePtrf64], "hash_tbl" = [@Object, @Addable, 18446744073709551615 : i64, @Float64], "offset_tbl" = [21 : i32, 17 : i32, 0 : i32, 7 : i32], "prime" = 4611686018427388091 : i64, "hash_id" = 8748823673944961442 : i64, "base_typ" = !llvm.struct<(f64)>} : () -> ()
+  "mini.typedef"() {"class_name" = "Float64", "methods" = [@Float64_field_value, @Float64_field_Float64_0, @Float64_field_Float64_1, @Float64_B_init_valuePtrf64, @Float64_B_value_, @Float64_B__ADD_otherInt32__ADD_otherFloat64, @Float64_init_valuePtrf64, @Float64_value_, @Float64__ADD_otherInt32, @Float64__ADD_otherFloat64, @Float64_field_Float64_0, @Float64_field_Float64_1, @Float64_B__ADD_otherInt32__ADD_otherFloat64, @Float64_init_valuePtrf64, @Float64_field_Float64_0, @Float64_field_Float64_1, @Float64_B__ADD_otherInt32__ADD_otherFloat64, @Float64_init_valuePtrf64], "hash_tbl" = [@Object, @Addable, 18446744073709551615 : i64, @Float64], "offset_tbl" = [21 : i32, 17 : i32, 0 : i32, 7 : i32], "prime" = 4611686018427388091 : i64, "hash_id" = 8748823673944961442 : i64, "base_typ" = !llvm.struct<(f64)>} : () -> ()
   "mini.typedef"() {"class_name" = "Int32", "methods" = [@Int32_field_value, @Int32_field_Int32_0, @Int32_B_init_valuePtri32, @Int32_B_value_, @Int32_B__ADD_otherInt32__ADD_otherFloat64, @Int32_init_valuePtri32, @Int32_value_, @Int32__ADD_otherInt32, @Int32__ADD_otherFloat64, @Int32_field_Int32_0, @Int32_field_Int32_0, @Int32_B__ADD_otherInt32__ADD_otherFloat64, @Int32_init_valuePtri32, @Int32_field_Int32_0, @Int32_field_Int32_0, @Int32_B__ADD_otherInt32__ADD_otherFloat64, @Int32_init_valuePtri32], "hash_tbl" = [@Object, 18446744073709551615 : i64, @Int32, @Addable], "offset_tbl" = [20 : i32, 0 : i32, 7 : i32, 16 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 15289183833144277113 : i64, "base_typ" = !llvm.struct<(i32)>} : () -> ()
   "mini.typedef"() {"class_name" = "Holder", "methods" = [@Holder_field_held, @Holder_field_Holder_0, @Holder_B_init_heldT, @Holder_B_value_, @Holder_init_heldT, @Holder_value_], "hash_tbl" = [@Holder, @Object], "offset_tbl" = [7 : i32, 13 : i32], "prime" = 4611686018427388093 : i64, "hash_id" = 18184746607930814959 : i64, "base_typ" = !llvm.struct<(!llvm.struct<(!llvm.ptr, i160)>, !llvm.ptr)>} : () -> ()
   "llvm.func"() <{"sym_name" = "report_exception", "function_type" = !llvm.func<void (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
@@ -334,18 +334,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %209 = "llvm.load"(%208) : (!mini.reified_type) -> !llvm.ptr
       %210 = "mini.parameterizations_array"() : () -> !llvm.ptr
       %211 = "mini.method_call"(%210, %207) {"offset" = 1 : i32, "vptrs" = [], "vtable_size" = 3 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]>
-      %212 = builtin.unrealized_conversion_cast %211 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]> to !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">, !mini.nil]>
-      %213 = "mini.checkflag"(%212) {"typ_name" = "nil_typ", "struct_typ" = !llvm.struct<(!llvm.ptr, i160)>, "neg"} : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">, !mini.nil]>) -> i1
+      %212 = builtin.unrealized_conversion_cast %211 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]> to !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">]>
+      %213 = "mini.checkflag"(%212) {"typ_name" = "nil_typ", "struct_typ" = !llvm.struct<(!llvm.ptr, i160)>, "neg"} : (!mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">]>) -> i1
       %214 = "mini.unwrap"(%213) : (i1) -> i1
     }, {
-      %215 = "mini.to_fat_ptr"(%212) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "Object"} : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">, !mini.nil]>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
+      %215 = "mini.to_fat_ptr"(%212) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "Object"} : (!mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">]>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
       %216 = "mini.to_fat_ptr"(%215) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "Object"} : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
       %217 = "mini.unwrap"(%216) : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> !llvm.struct<(!llvm.ptr, i160)>
       %218 = "mini.unwrap"(%198) : (!mini.function<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">], !mini.any, !mini.nothing>) -> !llvm.ptr
       "mini.fptr_call"(%218, %217) {"ret_type" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
       "mini.castassign"(%212, %215) ({
         %219 = "mini.to_fat_ptr"(%215) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "Object"} : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
-      }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "Object"} : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">, !mini.nil]>, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> ()
+      }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "Object"} : (!mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">]>, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> ()
     }) : () -> ()
   }) {"func_name" = "Iterable2_each_fFunctionT_to_Nothing", "result_type" = !llvm.void, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
   "mini.func"() ({
@@ -403,11 +403,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %266 = "llvm.load"(%265) : (!mini.reified_type) -> !llvm.ptr
       %267 = "mini.parameterizations_array"() : () -> !llvm.ptr
       %268 = "mini.method_call"(%267, %264) {"offset" = 1 : i32, "vptrs" = [], "vtable_size" = 3 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]>
-      %269 = builtin.unrealized_conversion_cast %268 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]> to !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">, !mini.nil]>
-      %270 = "mini.checkflag"(%269) {"typ_name" = "nil_typ", "struct_typ" = !llvm.struct<(!llvm.ptr, i160)>, "neg"} : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">, !mini.nil]>) -> i1
+      %269 = builtin.unrealized_conversion_cast %268 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]> to !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">]>
+      %270 = "mini.checkflag"(%269) {"typ_name" = "nil_typ", "struct_typ" = !llvm.struct<(!llvm.ptr, i160)>, "neg"} : (!mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">]>) -> i1
       %271 = "mini.unwrap"(%270) : (i1) -> i1
     }, {
-      %272 = "mini.to_fat_ptr"(%269) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "Object"} : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">, !mini.nil]>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
+      %272 = "mini.to_fat_ptr"(%269) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "Object"} : (!mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">]>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
       %273 = "mini.to_fat_ptr"(%253) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "Object"} : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
       %274 = "mini.unwrap"(%273) : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> !llvm.struct<(!llvm.ptr, i160)>
       %275 = "mini.to_fat_ptr"(%272) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "Object"} : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
@@ -419,7 +419,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "Object"} : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> ()
       "mini.castassign"(%269, %272) ({
         %280 = "mini.to_fat_ptr"(%272) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "Object"} : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
-      }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "Object"} : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">, !mini.nil]>, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> ()
+      }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "Object"} : (!mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">]>, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> ()
     }) : () -> ()
     %281 = "mini.to_fat_ptr"(%253) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "Object"} : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
     "mini.return"(%281) : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> ()
@@ -493,11 +493,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %340 = "llvm.load"(%339) : (!mini.reified_type) -> !llvm.ptr
       %341 = "mini.parameterizations_array"() : () -> !llvm.ptr
       %342 = "mini.method_call"(%341, %338) {"offset" = 1 : i32, "vptrs" = [], "vtable_size" = 3 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]>
-      %343 = builtin.unrealized_conversion_cast %342 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]> to !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">, !mini.nil]>
-      %344 = "mini.checkflag"(%343) {"typ_name" = "nil_typ", "struct_typ" = !llvm.struct<(!llvm.ptr, i160)>, "neg"} : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">, !mini.nil]>) -> i1
+      %343 = builtin.unrealized_conversion_cast %342 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]> to !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">]>
+      %344 = "mini.checkflag"(%343) {"typ_name" = "nil_typ", "struct_typ" = !llvm.struct<(!llvm.ptr, i160)>, "neg"} : (!mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">]>) -> i1
       %345 = "mini.unwrap"(%344) : (i1) -> i1
     }, {
-      %346 = "mini.to_fat_ptr"(%343) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "Object"} : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">, !mini.nil]>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
+      %346 = "mini.to_fat_ptr"(%343) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "Object"} : (!mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">]>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
       %347 = "mini.to_fat_ptr"(%346) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "Object"} : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
       %348 = "mini.unwrap"(%347) : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> !llvm.struct<(!llvm.ptr, i160)>
       %349 = "mini.unwrap"(%329) : (!mini.function<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">], !mini.any, !mini.ptr<i1>>) -> !llvm.ptr
@@ -511,7 +511,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       "mini.return"(%353) : (!mini.ptr<i1>) -> ()
       "mini.castassign"(%343, %346) ({
         %354 = "mini.to_fat_ptr"(%346) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "Object"} : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
-      }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "Object"} : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">, !mini.nil]>, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> ()
+      }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "Object"} : (!mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">]>, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> ()
     }) : () -> ()
     %355 = "mini.literal"() {"value" = true, "typ" = i1} : () -> !mini.ptr<i1>
     %356 = builtin.unrealized_conversion_cast %355 : !mini.ptr<i1> to !mini.ptr<i1>
@@ -570,11 +570,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %400 = "llvm.load"(%399) : (!mini.reified_type) -> !llvm.ptr
       %401 = "mini.parameterizations_array"() : () -> !llvm.ptr
       %402 = "mini.method_call"(%401, %398) {"offset" = 1 : i32, "vptrs" = [], "vtable_size" = 3 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]>
-      %403 = builtin.unrealized_conversion_cast %402 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]> to !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">, !mini.nil]>
-      %404 = "mini.checkflag"(%403) {"typ_name" = "nil_typ", "struct_typ" = !llvm.struct<(!llvm.ptr, i160)>, "neg"} : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">, !mini.nil]>) -> i1
+      %403 = builtin.unrealized_conversion_cast %402 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]> to !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">]>
+      %404 = "mini.checkflag"(%403) {"typ_name" = "nil_typ", "struct_typ" = !llvm.struct<(!llvm.ptr, i160)>, "neg"} : (!mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">]>) -> i1
       %405 = "mini.unwrap"(%404) : (i1) -> i1
     }, {
-      %406 = "mini.to_fat_ptr"(%403) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "Object"} : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">, !mini.nil]>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
+      %406 = "mini.to_fat_ptr"(%403) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "Object"} : (!mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">]>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
       %407 = "mini.to_fat_ptr"(%406) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "Object"} : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
       %408 = "mini.unwrap"(%407) : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> !llvm.struct<(!llvm.ptr, i160)>
       %409 = "mini.unwrap"(%389) : (!mini.function<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">], !mini.any, !mini.ptr<i1>>) -> !llvm.ptr
@@ -587,7 +587,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       }) : (i1) -> ()
       "mini.castassign"(%403, %406) ({
         %414 = "mini.to_fat_ptr"(%406) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "Object"} : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
-      }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "Object"} : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">, !mini.nil]>, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> ()
+      }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "Object"} : (!mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">]>, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> ()
     }) : () -> ()
     %415 = "mini.literal"() {"value" = false, "typ" = i1} : () -> !mini.ptr<i1>
     %416 = builtin.unrealized_conversion_cast %415 : !mini.ptr<i1> to !mini.ptr<i1>
@@ -2658,12 +2658,12 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2051 = "llvm.load"(%2050) : (!mini.reified_type) -> !llvm.ptr
     %2052 = "mini.parameterizations_array"() : () -> !llvm.ptr
     %2053 = "mini.method_call"(%2052, %2047) {"offset" = 1 : i32, "vptrs" = [], "vtable_size" = 3 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]>
-    %2054 = builtin.unrealized_conversion_cast %2053 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]> to !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">, !mini.nil]>
-    %2055 = "mini.checkflag"(%2054) {"typ_name" = "nil_typ", "struct_typ" = !llvm.struct<(!llvm.ptr, i160)>, "neg"} : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">, !mini.nil]>) -> i1
+    %2054 = builtin.unrealized_conversion_cast %2053 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]> to !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">]>
+    %2055 = "mini.checkflag"(%2054) {"typ_name" = "nil_typ", "struct_typ" = !llvm.struct<(!llvm.ptr, i160)>, "neg"} : (!mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">]>) -> i1
     %2056 = "mini.unwrap"(%2055) : (i1) -> i1
-    %2057 = builtin.unrealized_conversion_cast %2054 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">, !mini.nil]> to !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">, !mini.nil]>
+    %2057 = builtin.unrealized_conversion_cast %2054 : !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">]> to !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">]>
     "mini.if"(%2056) ({
-      %2058 = "mini.to_fat_ptr"(%2057) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "Object"} : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">, !mini.nil]>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">
+      %2058 = "mini.to_fat_ptr"(%2057) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "Object"} : (!mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">]>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">
       %2059 = "mini.to_fat_ptr"(%2058) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "Object"} : (!mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">) -> !mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">
       %2060 = "mini.unwrap"(%2059) : (!mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">) -> !llvm.struct<(!llvm.ptr, i160)>
       %2061 = "mini.field_access"(%2045) {"offset" = 1 : i64, "vtable_bytes" = 88 : i32} : (!mini.fatptr<"MapIterator2", [!mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">, !mini.type_param<"U", !mini.fatptr<"Object">, "MapIterator2">]>) -> !mini.function<[!mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">], !mini.any, !mini.type_param<"U", !mini.fatptr<"Object">, "MapIterator2">>
@@ -2672,8 +2672,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %2064 = builtin.unrealized_conversion_cast %2063 : !mini.type_param<"U", !mini.fatptr<"Object">, "MapIterator2"> to !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]>
       "mini.return"(%2064) : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]>) -> ()
       "mini.castassign"(%2057, %2058) ({
-        %2065 = builtin.unrealized_conversion_cast %2058 : !mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2"> to !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">, !mini.nil]>
-      }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "union_typ", "should_offset"} : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">, !mini.nil]>, !mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">) -> ()
+        %2065 = builtin.unrealized_conversion_cast %2058 : !mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2"> to !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">]>
+      }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "union_typ", "should_offset"} : (!mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">]>, !mini.type_param<"T", !mini.fatptr<"Object">, "MapIterator2">) -> ()
     }) : (i1) -> ()
     %2066 = "mini.alloc"() {"typ" = !llvm.array<0 x i8>} : () -> !llvm.ptr
     %2067 = "mini.unionize"(%2066) {"from_typ" = !llvm.array<0 x i8>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]>
@@ -5702,11 +5702,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4417 = "llvm.load"(%4416) : (!mini.reified_type) -> !llvm.ptr
     %4418 = "mini.parameterizations_array"() : () -> !llvm.ptr
     %4419 = "mini.method_call"(%4418, %4413) {"offset" = 1 : i32, "vptrs" = [], "vtable_size" = 3 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]>
-    %4420 = builtin.unrealized_conversion_cast %4419 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]> to !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>
-    %4421 = "mini.field_access"(%4384) {"offset" = 3 : i64, "vtable_bytes" = 112 : i32} : (!mini.fatptr<"ProductIterator2", [!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>
+    %4420 = builtin.unrealized_conversion_cast %4419 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]> to !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]>
+    %4421 = "mini.field_access"(%4384) {"offset" = 3 : i64, "vtable_bytes" = 112 : i32} : (!mini.fatptr<"ProductIterator2", [!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]>
     "mini.castassign"(%4421, %4420) ({
-      %4422 = builtin.unrealized_conversion_cast %4420 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]> to !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>
-    }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ", "should_offset"} : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>, !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>) -> ()
+      %4422 = builtin.unrealized_conversion_cast %4420 : !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]> to !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]>
+    }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ", "should_offset"} : (!mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]>, !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]>) -> ()
   }) {"func_name" = "ProductIterator2_init_first_iterableIterable2T_second_iterableIterable2U", "result_type" = !llvm.void, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
   "mini.func"() ({
   ^bb542(%4423 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %4424 : !llvm.ptr, %4425 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %4426 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>):
@@ -5761,13 +5761,13 @@ builtin.module attributes  {"sym_name" = "ir"} {
   ^bb547(%4463 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %4464 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %4465 : !llvm.ptr):
     %4466 = "mini.wrap"(%4463) : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.fatptr<"ProductIterator2", [!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>
     %4467 = "mini.to_fat_ptr"(%4466) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "ProductIterator2", "to_typ_name" = "ProductIterator2", "invariant"} : (!mini.fatptr<"ProductIterator2", [!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !mini.fatptr<"ProductIterator2", [!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>
-    %4468 = "mini.field_access"(%4467) {"offset" = 3 : i64, "vtable_bytes" = 112 : i32} : (!mini.fatptr<"ProductIterator2", [!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>
-    %4469 = builtin.unrealized_conversion_cast %4468 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]> to !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>
+    %4468 = "mini.field_access"(%4467) {"offset" = 3 : i64, "vtable_bytes" = 112 : i32} : (!mini.fatptr<"ProductIterator2", [!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]>
+    %4469 = builtin.unrealized_conversion_cast %4468 : !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]> to !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]>
     "mini.while"() ({
-      %4470 = "mini.checkflag"(%4469) {"typ_name" = "nil_typ", "struct_typ" = !llvm.struct<(!llvm.ptr, i160)>, "neg"} : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>) -> i1
+      %4470 = "mini.checkflag"(%4469) {"typ_name" = "nil_typ", "struct_typ" = !llvm.struct<(!llvm.ptr, i160)>, "neg"} : (!mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]>) -> i1
       %4471 = "mini.unwrap"(%4470) : (i1) -> i1
     }, {
-      %4472 = "mini.to_fat_ptr"(%4469) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "Object"} : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">
+      %4472 = "mini.to_fat_ptr"(%4469) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "Object"} : (!mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">
       %4473 = "mini.field_access"(%4467) {"offset" = 1 : i64, "vtable_bytes" = 112 : i32} : (!mini.fatptr<"ProductIterator2", [!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !mini.fatptr<"Iterator2", [!mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>
       %4474 = "mini.unwrap"(%4473) : (!mini.fatptr<"Iterator2", [!mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %4475 = "mini.field_access"(%4467) {"offset" = 4 : i64, "vtable_bytes" = 112 : i32} : (!mini.fatptr<"ProductIterator2", [!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !mini.reified_type
@@ -5776,12 +5776,12 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %4478 = "llvm.load"(%4477) : (!mini.reified_type) -> !llvm.ptr
       %4479 = "mini.parameterizations_array"() : () -> !llvm.ptr
       %4480 = "mini.method_call"(%4479, %4474) {"offset" = 1 : i32, "vptrs" = [], "vtable_size" = 3 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]>
-      %4481 = builtin.unrealized_conversion_cast %4480 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]> to !mini.union<[!mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>
-      %4482 = "mini.checkflag"(%4481) {"typ_name" = "nil_typ", "struct_typ" = !llvm.struct<(!llvm.ptr, i160)>, "neg"} : (!mini.union<[!mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>) -> i1
+      %4481 = builtin.unrealized_conversion_cast %4480 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]> to !mini.union<[!mini.nil, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>
+      %4482 = "mini.checkflag"(%4481) {"typ_name" = "nil_typ", "struct_typ" = !llvm.struct<(!llvm.ptr, i160)>, "neg"} : (!mini.union<[!mini.nil, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> i1
       %4483 = "mini.unwrap"(%4482) : (i1) -> i1
-      %4484 = builtin.unrealized_conversion_cast %4481 : !mini.union<[!mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]> to !mini.union<[!mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>
+      %4484 = builtin.unrealized_conversion_cast %4481 : !mini.union<[!mini.nil, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]> to !mini.union<[!mini.nil, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>
       "mini.if"(%4483) ({
-        %4485 = "mini.to_fat_ptr"(%4484) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "Object"} : (!mini.union<[!mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>) -> !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">
+        %4485 = "mini.to_fat_ptr"(%4484) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "Object"} : (!mini.union<[!mini.nil, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">
         %4486 = "mini.unwrap"(%4472) : (!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">) -> !llvm.struct<(!llvm.ptr, i160)>
         %4487 = "mini.unwrap"(%4485) : (!mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">) -> !llvm.struct<(!llvm.ptr, i160)>
         %4488 = "mini.field_access"(%4467) {"offset" = 4 : i64, "vtable_bytes" = 112 : i32} : (!mini.fatptr<"ProductIterator2", [!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !mini.reified_type
@@ -5807,8 +5807,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %4507 = builtin.unrealized_conversion_cast %4494 : !mini.fatptr<"Pair", [!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]> to !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]>
         "mini.return"(%4507) : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]>) -> ()
         "mini.castassign"(%4484, %4485) ({
-          %4508 = builtin.unrealized_conversion_cast %4485 : !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2"> to !mini.union<[!mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>
-        }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "union_typ", "should_offset"} : (!mini.union<[!mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">) -> ()
+          %4508 = builtin.unrealized_conversion_cast %4485 : !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2"> to !mini.union<[!mini.nil, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>
+        }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "Object", "to_typ_name" = "union_typ", "should_offset"} : (!mini.union<[!mini.nil, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">) -> ()
       }) : (i1) -> ()
       %4509 = "mini.field_access"(%4467) {"offset" = 0 : i64, "vtable_bytes" = 112 : i32} : (!mini.fatptr<"ProductIterator2", [!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !mini.fatptr<"Iterator2", [!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]>
       %4510 = "mini.unwrap"(%4509) : (!mini.fatptr<"Iterator2", [!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
@@ -5818,11 +5818,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %4514 = "llvm.load"(%4513) : (!mini.reified_type) -> !llvm.ptr
       %4515 = "mini.parameterizations_array"() : () -> !llvm.ptr
       %4516 = "mini.method_call"(%4515, %4510) {"offset" = 1 : i32, "vptrs" = [], "vtable_size" = 3 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]>
-      %4517 = builtin.unrealized_conversion_cast %4516 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]> to !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>
-      %4518 = "mini.field_access"(%4467) {"offset" = 3 : i64, "vtable_bytes" = 112 : i32} : (!mini.fatptr<"ProductIterator2", [!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>
+      %4517 = builtin.unrealized_conversion_cast %4516 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]> to !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]>
+      %4518 = "mini.field_access"(%4467) {"offset" = 3 : i64, "vtable_bytes" = 112 : i32} : (!mini.fatptr<"ProductIterator2", [!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]>
       "mini.castassign"(%4518, %4517) ({
-        %4519 = builtin.unrealized_conversion_cast %4517 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]> to !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>
-      }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ", "should_offset"} : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>, !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>) -> ()
+        %4519 = builtin.unrealized_conversion_cast %4517 : !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]> to !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]>
+      }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ", "should_offset"} : (!mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]>, !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]>) -> ()
       %4520 = "mini.field_access"(%4467) {"offset" = 2 : i64, "vtable_bytes" = 112 : i32} : (!mini.fatptr<"ProductIterator2", [!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !mini.fatptr<"Iterable2", [!mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>
       %4521 = "mini.unwrap"(%4520) : (!mini.fatptr<"Iterable2", [!mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %4522 = "mini.field_access"(%4467) {"offset" = 4 : i64, "vtable_bytes" = 112 : i32} : (!mini.fatptr<"ProductIterator2", [!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !mini.reified_type
@@ -5836,10 +5836,10 @@ builtin.module attributes  {"sym_name" = "ir"} {
       "mini.castassign"(%4529, %4528) ({
         %4530 = "mini.to_fat_ptr"(%4528) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Iterator2", "to_typ_name" = "Iterator2", "invariant"} : (!mini.fatptr<"Iterator2", [!mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !mini.fatptr<"Iterator2", [!mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>
       }) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Iterator2", "to_typ_name" = "Iterator2", "should_offset"} : (!mini.fatptr<"Iterator2", [!mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>, !mini.fatptr<"Iterator2", [!mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> ()
-      %4531 = "mini.field_access"(%4467) {"offset" = 3 : i64, "vtable_bytes" = 112 : i32} : (!mini.fatptr<"ProductIterator2", [!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>
+      %4531 = "mini.field_access"(%4467) {"offset" = 3 : i64, "vtable_bytes" = 112 : i32} : (!mini.fatptr<"ProductIterator2", [!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.type_param<"U", !mini.fatptr<"Object">, "ProductIterator2">]>) -> !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]>
       "mini.castassign"(%4469, %4531) ({
-        %4532 = builtin.unrealized_conversion_cast %4531 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]> to !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>
-      }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ", "should_offset"} : (!mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>, !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">, !mini.nil]>) -> ()
+        %4532 = builtin.unrealized_conversion_cast %4531 : !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]> to !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]>
+      }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ", "should_offset"} : (!mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]>, !mini.union<[!mini.nil, !mini.type_param<"T", !mini.fatptr<"Object">, "ProductIterator2">]>) -> ()
     }) : () -> ()
     %4533 = "mini.alloc"() {"typ" = !llvm.array<0 x i8>} : () -> !llvm.ptr
     %4534 = "mini.unionize"(%4533) {"from_typ" = !llvm.array<0 x i8>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]>
@@ -5872,7 +5872,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4552 = "mini.wrap"(%4551) : (i32) -> !mini.ptr<i32>
     %4553 = builtin.unrealized_conversion_cast %4552 : !mini.ptr<i32> to !mini.ptr<i32>
     "mini.return"(%4553) : (!mini.ptr<i32>) -> ()
-  }) {"func_name" = "_functionliteral_jjzcpopaew", "result_type" = i32, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
+  }) {"func_name" = "_functionliteral_qnglvzmlbv", "result_type" = i32, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
   "mini.func"() ({
   ^bb552(%4554 : i32):
     %4555 = "mini.wrap"(%4554) : (i32) -> !mini.ptr<i32>
@@ -5883,7 +5883,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4560 = "mini.wrap"(%4559) : (i32) -> !mini.ptr<i32>
     %4561 = builtin.unrealized_conversion_cast %4560 : !mini.ptr<i32> to !mini.ptr<i32>
     "mini.return"(%4561) : (!mini.ptr<i32>) -> ()
-  }) {"func_name" = "_functionliteral_rvvealsbrd", "result_type" = i32, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
+  }) {"func_name" = "_functionliteral_looasdhrzp", "result_type" = i32, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
   "mini.func"() ({
   ^bb553(%4562 : f64):
     %4563 = "mini.wrap"(%4562) : (f64) -> !mini.ptr<f64>
@@ -5894,20 +5894,20 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4568 = "mini.wrap"(%4567) : (f64) -> !mini.ptr<f64>
     %4569 = builtin.unrealized_conversion_cast %4568 : !mini.ptr<f64> to !mini.ptr<f64>
     "mini.return"(%4569) : (!mini.ptr<f64>) -> ()
-  }) {"func_name" = "_functionliteral_xtlgmzlazj", "result_type" = f64, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
+  }) {"func_name" = "_functionliteral_mzubvibcen", "result_type" = f64, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
   "mini.func"() ({
   ^bb554(%4570 : i32):
     %4571 = "mini.wrap"(%4570) : (i32) -> !mini.ptr<i32>
     %4572 = builtin.unrealized_conversion_cast %4571 : !mini.ptr<i32> to !mini.ptr<i32>
     "mini.return"(%4572) : (!mini.ptr<i32>) -> ()
-  }) {"func_name" = "_functionliteral_focdcoyzjk", "result_type" = i32, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
+  }) {"func_name" = "_functionliteral_kkskglckhn", "result_type" = i32, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
   "mini.func"() ({
   ^bb555(%4573 : i32):
     %4574 = "mini.wrap"(%4573) : (i32) -> !mini.ptr<i32>
     %4575 = "mini.int_to_float"(%4574) {"from_typ" = i32, "to_typ" = f64, "from_typ_name" = "i32_typ", "to_typ_name" = "f64_typ"} : (!mini.ptr<i32>) -> !mini.ptr<f64>
     %4576 = builtin.unrealized_conversion_cast %4575 : !mini.ptr<f64> to !mini.ptr<f64>
     "mini.return"(%4576) : (!mini.ptr<f64>) -> ()
-  }) {"func_name" = "_functionliteral_xnyrpvvwrj", "result_type" = f64, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
+  }) {"func_name" = "_functionliteral_nximwkjvqv", "result_type" = f64, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
   "mini.getter_def"() {"struct_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr)>, "offset" = 0 : i32, "meth_name" = "Addable_field_Addable_0"} : () -> ()
   "mini.getter_def"() {"struct_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr)>, "offset" = 1 : i32, "meth_name" = "Addable_field_Addable_1"} : () -> ()
   "mini.func"() ({
@@ -5944,7 +5944,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     "mini.return"(%4601) : (!llvm.ptr) -> ()
   }) {"func_name" = "Addable_B__ADD_otherT", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
   "mini.getter_def"() {"struct_typ" = !llvm.struct<(f64)>, "offset" = 0 : i32, "meth_name" = "Float64_field_value"} : () -> ()
-  "mini.getter_def"() {"struct_typ" = !llvm.struct<(f64)>, "offset" = 1 : i32, "meth_name" = "Float64_field_Float64_0", "id_hierarchy" = ["union_typ", ["Int32"], ["Float64"]], "name_hierarchy" = ["Int32_or_Float64", ["Int32"], ["Float64"]]} : () -> ()
+  "mini.getter_def"() {"struct_typ" = !llvm.struct<(f64)>, "offset" = 1 : i32, "meth_name" = "Float64_field_Float64_0", "id_hierarchy" = ["union_typ", ["Float64"], ["Int32"]], "name_hierarchy" = ["Float64_or_Int32", ["Float64"], ["Int32"]]} : () -> ()
   "mini.getter_def"() {"struct_typ" = !llvm.struct<(f64)>, "offset" = 2 : i32, "meth_name" = "Float64_field_Float64_1", "id_hierarchy" = ["Float64"], "name_hierarchy" = ["Float64"]} : () -> ()
   "mini.func"() ({
   ^bb560(%4602 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %4603 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %4604 : !llvm.ptr, %4605 : f64):
@@ -6019,80 +6019,80 @@ builtin.module attributes  {"sym_name" = "ir"} {
   ^bb569(%4654 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %4655 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %4656 : !llvm.ptr, %4657 : !llvm.struct<(!llvm.ptr, i160)>):
     %4658 = "mini.wrap"(%4654) : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.fatptr<"Float64">
     %4659 = "mini.to_fat_ptr"(%4658) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Float64", "to_typ_name" = "Float64", "invariant"} : (!mini.fatptr<"Float64">) -> !mini.fatptr<"Float64">
-    %4660 = "mini.wrap"(%4657) : (!llvm.struct<(!llvm.ptr, i160)>) -> !mini.union<[!mini.fatptr<"Int32">, !mini.fatptr<"Float64">]>
-    %4661 = "mini.to_fat_ptr"(%4660) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "union_typ", "to_typ_name" = "Float64", "invariant"} : (!mini.union<[!mini.fatptr<"Int32">, !mini.fatptr<"Float64">]>) -> !mini.fatptr<"Float64">
-    %4662 = "mini.field_access"(%4659) {"offset" = 0 : i64, "vtable_bytes" = 144 : i32} : (!mini.fatptr<"Float64">) -> !mini.ptr<f64>
-    %4663 = "mini.unwrap"(%4661) : (!mini.fatptr<"Float64">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
-    %4664 = "mini.parameterizations_array"() : () -> !llvm.ptr
-    %4665 = "mini.method_call"(%4664, %4663) {"offset" = 4 : i32, "vptrs" = [], "vtable_size" = 18 : i64, "ret_type" = f64, "ret_type_unq" = f64} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.ptr<f64>
-    %4666 = builtin.unrealized_conversion_cast %4665 : !mini.ptr<f64> to !mini.ptr<f64>
-    %4667 = "mini.unwrap"(%4662) : (!mini.ptr<f64>) -> f64
-    %4668 = "mini.unwrap"(%4666) : (!mini.ptr<f64>) -> f64
-    %4669 = "mini.arithmetic"(%4667, %4668) {"op" = "ADD"} : (f64, f64) -> f64
-    %4670 = "mini.wrap"(%4669) : (f64) -> !mini.ptr<f64>
-    %4671 = "mini.unwrap"(%4670) : (!mini.ptr<f64>) -> f64
-    %4672 = "mini.new"() {"typ" = !llvm.struct<(f64)>, "class_name" = "Float64", "num_data_fields" = 1 : i32} : () -> !mini.fatptr<"Float64">
-    %4673 = "mini.field_access"(%4659) {"offset" = 0 : i64, "vtable_bytes" = 144 : i32} : (!mini.fatptr<"Float64">) -> !mini.ptr<f64>
-    %4674 = "mini.unwrap"(%4661) : (!mini.fatptr<"Float64">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
-    %4675 = "mini.parameterizations_array"() : () -> !llvm.ptr
-    %4676 = "mini.method_call"(%4675, %4674) {"offset" = 4 : i32, "vptrs" = [], "vtable_size" = 18 : i64, "ret_type" = f64, "ret_type_unq" = f64} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.ptr<f64>
-    %4677 = builtin.unrealized_conversion_cast %4676 : !mini.ptr<f64> to !mini.ptr<f64>
-    %4678 = "mini.unwrap"(%4673) : (!mini.ptr<f64>) -> f64
-    %4679 = "mini.unwrap"(%4677) : (!mini.ptr<f64>) -> f64
-    %4680 = "mini.arithmetic"(%4678, %4679) {"op" = "ADD"} : (f64, f64) -> f64
-    %4681 = "mini.wrap"(%4680) : (f64) -> !mini.ptr<f64>
-    %4682 = builtin.unrealized_conversion_cast %4681 : !mini.ptr<f64> to !mini.ptr<f64>
-    %4683 = "mini.unwrap"(%4682) : (!mini.ptr<f64>) -> f64
-    %4684 = "mini.unwrap"(%4672) : (!mini.fatptr<"Float64">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
-    %4685 = "mini.parameterization"() {"id_hierarchy" = ["f64_typ"], "name_hierarchy" = ["Ptrf64"]} : () -> !llvm.ptr
-    %4686 = "mini.parameterizations_array"(%4685) : (!llvm.ptr) -> !llvm.ptr
-    "mini.method_call"(%4686, %4684, %4683) {"offset" = 3 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 18 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, f64) -> ()
-    %4687 = "mini.to_fat_ptr"(%4672) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Float64", "to_typ_name" = "Float64", "invariant"} : (!mini.fatptr<"Float64">) -> !mini.fatptr<"Float64">
-    "mini.return"(%4687) : (!mini.fatptr<"Float64">) -> ()
-  }) {"func_name" = "Float64__ADD_otherFloat64", "result_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
+    %4660 = "mini.wrap"(%4657) : (!llvm.struct<(!llvm.ptr, i160)>) -> !mini.union<[!mini.fatptr<"Float64">, !mini.fatptr<"Int32">]>
+    %4661 = "mini.to_fat_ptr"(%4660) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "union_typ", "to_typ_name" = "Int32", "invariant"} : (!mini.union<[!mini.fatptr<"Float64">, !mini.fatptr<"Int32">]>) -> !mini.fatptr<"Int32">
+    %4662 = "mini.unwrap"(%4661) : (!mini.fatptr<"Int32">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
+    %4663 = "mini.parameterizations_array"() : () -> !llvm.ptr
+    %4664 = "mini.method_call"(%4663, %4662) {"offset" = 3 : i32, "vptrs" = [], "vtable_size" = 17 : i64, "ret_type" = i32, "ret_type_unq" = i32} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.ptr<i32>
+    %4665 = builtin.unrealized_conversion_cast %4664 : !mini.ptr<i32> to !mini.ptr<i32>
+    %4666 = "mini.int_to_float"(%4665) {"from_typ" = i32, "to_typ" = f64, "from_typ_name" = "i32_typ", "to_typ_name" = "f64_typ"} : (!mini.ptr<i32>) -> !mini.ptr<f64>
+    %4667 = "mini.field_access"(%4659) {"offset" = 0 : i64, "vtable_bytes" = 144 : i32} : (!mini.fatptr<"Float64">) -> !mini.ptr<f64>
+    %4668 = "mini.unwrap"(%4667) : (!mini.ptr<f64>) -> f64
+    %4669 = "mini.unwrap"(%4666) : (!mini.ptr<f64>) -> f64
+    %4670 = "mini.arithmetic"(%4668, %4669) {"op" = "ADD"} : (f64, f64) -> f64
+    %4671 = "mini.wrap"(%4670) : (f64) -> !mini.ptr<f64>
+    %4672 = "mini.unwrap"(%4671) : (!mini.ptr<f64>) -> f64
+    %4673 = "mini.new"() {"typ" = !llvm.struct<(f64)>, "class_name" = "Float64", "num_data_fields" = 1 : i32} : () -> !mini.fatptr<"Float64">
+    %4674 = "mini.field_access"(%4659) {"offset" = 0 : i64, "vtable_bytes" = 144 : i32} : (!mini.fatptr<"Float64">) -> !mini.ptr<f64>
+    %4675 = "mini.unwrap"(%4674) : (!mini.ptr<f64>) -> f64
+    %4676 = "mini.unwrap"(%4666) : (!mini.ptr<f64>) -> f64
+    %4677 = "mini.arithmetic"(%4675, %4676) {"op" = "ADD"} : (f64, f64) -> f64
+    %4678 = "mini.wrap"(%4677) : (f64) -> !mini.ptr<f64>
+    %4679 = builtin.unrealized_conversion_cast %4678 : !mini.ptr<f64> to !mini.ptr<f64>
+    %4680 = "mini.unwrap"(%4679) : (!mini.ptr<f64>) -> f64
+    %4681 = "mini.unwrap"(%4673) : (!mini.fatptr<"Float64">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
+    %4682 = "mini.parameterization"() {"id_hierarchy" = ["f64_typ"], "name_hierarchy" = ["Ptrf64"]} : () -> !llvm.ptr
+    %4683 = "mini.parameterizations_array"(%4682) : (!llvm.ptr) -> !llvm.ptr
+    "mini.method_call"(%4683, %4681, %4680) {"offset" = 3 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 18 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, f64) -> ()
+    %4684 = "mini.to_fat_ptr"(%4673) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Float64", "to_typ_name" = "Float64", "invariant"} : (!mini.fatptr<"Float64">) -> !mini.fatptr<"Float64">
+    "mini.return"(%4684) : (!mini.fatptr<"Float64">) -> ()
+  }) {"func_name" = "Float64__ADD_otherInt32", "result_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
   "mini.func"() ({
-  ^bb570(%4688 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %4689 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %4690 : !llvm.ptr, %4691 : !llvm.struct<(!llvm.ptr, i160)>):
-    %4692 = "mini.wrap"(%4688) : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.fatptr<"Float64">
-    %4693 = "mini.to_fat_ptr"(%4692) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Float64", "to_typ_name" = "Float64", "invariant"} : (!mini.fatptr<"Float64">) -> !mini.fatptr<"Float64">
-    %4694 = "mini.wrap"(%4691) : (!llvm.struct<(!llvm.ptr, i160)>) -> !mini.union<[!mini.fatptr<"Int32">, !mini.fatptr<"Float64">]>
-    %4695 = "mini.to_fat_ptr"(%4694) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "union_typ", "to_typ_name" = "Int32", "invariant"} : (!mini.union<[!mini.fatptr<"Int32">, !mini.fatptr<"Float64">]>) -> !mini.fatptr<"Int32">
-    %4696 = "mini.unwrap"(%4695) : (!mini.fatptr<"Int32">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
-    %4697 = "mini.parameterizations_array"() : () -> !llvm.ptr
-    %4698 = "mini.method_call"(%4697, %4696) {"offset" = 3 : i32, "vptrs" = [], "vtable_size" = 17 : i64, "ret_type" = i32, "ret_type_unq" = i32} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.ptr<i32>
-    %4699 = builtin.unrealized_conversion_cast %4698 : !mini.ptr<i32> to !mini.ptr<i32>
-    %4700 = "mini.int_to_float"(%4699) {"from_typ" = i32, "to_typ" = f64, "from_typ_name" = "i32_typ", "to_typ_name" = "f64_typ"} : (!mini.ptr<i32>) -> !mini.ptr<f64>
-    %4701 = "mini.field_access"(%4693) {"offset" = 0 : i64, "vtable_bytes" = 144 : i32} : (!mini.fatptr<"Float64">) -> !mini.ptr<f64>
+  ^bb570(%4685 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %4686 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %4687 : !llvm.ptr, %4688 : !llvm.struct<(!llvm.ptr, i160)>):
+    %4689 = "mini.wrap"(%4685) : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.fatptr<"Float64">
+    %4690 = "mini.to_fat_ptr"(%4689) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Float64", "to_typ_name" = "Float64", "invariant"} : (!mini.fatptr<"Float64">) -> !mini.fatptr<"Float64">
+    %4691 = "mini.wrap"(%4688) : (!llvm.struct<(!llvm.ptr, i160)>) -> !mini.union<[!mini.fatptr<"Float64">, !mini.fatptr<"Int32">]>
+    %4692 = "mini.to_fat_ptr"(%4691) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "union_typ", "to_typ_name" = "Float64", "invariant"} : (!mini.union<[!mini.fatptr<"Float64">, !mini.fatptr<"Int32">]>) -> !mini.fatptr<"Float64">
+    %4693 = "mini.field_access"(%4690) {"offset" = 0 : i64, "vtable_bytes" = 144 : i32} : (!mini.fatptr<"Float64">) -> !mini.ptr<f64>
+    %4694 = "mini.unwrap"(%4692) : (!mini.fatptr<"Float64">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
+    %4695 = "mini.parameterizations_array"() : () -> !llvm.ptr
+    %4696 = "mini.method_call"(%4695, %4694) {"offset" = 4 : i32, "vptrs" = [], "vtable_size" = 18 : i64, "ret_type" = f64, "ret_type_unq" = f64} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.ptr<f64>
+    %4697 = builtin.unrealized_conversion_cast %4696 : !mini.ptr<f64> to !mini.ptr<f64>
+    %4698 = "mini.unwrap"(%4693) : (!mini.ptr<f64>) -> f64
+    %4699 = "mini.unwrap"(%4697) : (!mini.ptr<f64>) -> f64
+    %4700 = "mini.arithmetic"(%4698, %4699) {"op" = "ADD"} : (f64, f64) -> f64
+    %4701 = "mini.wrap"(%4700) : (f64) -> !mini.ptr<f64>
     %4702 = "mini.unwrap"(%4701) : (!mini.ptr<f64>) -> f64
-    %4703 = "mini.unwrap"(%4700) : (!mini.ptr<f64>) -> f64
-    %4704 = "mini.arithmetic"(%4702, %4703) {"op" = "ADD"} : (f64, f64) -> f64
-    %4705 = "mini.wrap"(%4704) : (f64) -> !mini.ptr<f64>
-    %4706 = "mini.unwrap"(%4705) : (!mini.ptr<f64>) -> f64
-    %4707 = "mini.new"() {"typ" = !llvm.struct<(f64)>, "class_name" = "Float64", "num_data_fields" = 1 : i32} : () -> !mini.fatptr<"Float64">
-    %4708 = "mini.field_access"(%4693) {"offset" = 0 : i64, "vtable_bytes" = 144 : i32} : (!mini.fatptr<"Float64">) -> !mini.ptr<f64>
-    %4709 = "mini.unwrap"(%4708) : (!mini.ptr<f64>) -> f64
-    %4710 = "mini.unwrap"(%4700) : (!mini.ptr<f64>) -> f64
+    %4703 = "mini.new"() {"typ" = !llvm.struct<(f64)>, "class_name" = "Float64", "num_data_fields" = 1 : i32} : () -> !mini.fatptr<"Float64">
+    %4704 = "mini.field_access"(%4690) {"offset" = 0 : i64, "vtable_bytes" = 144 : i32} : (!mini.fatptr<"Float64">) -> !mini.ptr<f64>
+    %4705 = "mini.unwrap"(%4692) : (!mini.fatptr<"Float64">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
+    %4706 = "mini.parameterizations_array"() : () -> !llvm.ptr
+    %4707 = "mini.method_call"(%4706, %4705) {"offset" = 4 : i32, "vptrs" = [], "vtable_size" = 18 : i64, "ret_type" = f64, "ret_type_unq" = f64} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.ptr<f64>
+    %4708 = builtin.unrealized_conversion_cast %4707 : !mini.ptr<f64> to !mini.ptr<f64>
+    %4709 = "mini.unwrap"(%4704) : (!mini.ptr<f64>) -> f64
+    %4710 = "mini.unwrap"(%4708) : (!mini.ptr<f64>) -> f64
     %4711 = "mini.arithmetic"(%4709, %4710) {"op" = "ADD"} : (f64, f64) -> f64
     %4712 = "mini.wrap"(%4711) : (f64) -> !mini.ptr<f64>
     %4713 = builtin.unrealized_conversion_cast %4712 : !mini.ptr<f64> to !mini.ptr<f64>
     %4714 = "mini.unwrap"(%4713) : (!mini.ptr<f64>) -> f64
-    %4715 = "mini.unwrap"(%4707) : (!mini.fatptr<"Float64">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
+    %4715 = "mini.unwrap"(%4703) : (!mini.fatptr<"Float64">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
     %4716 = "mini.parameterization"() {"id_hierarchy" = ["f64_typ"], "name_hierarchy" = ["Ptrf64"]} : () -> !llvm.ptr
     %4717 = "mini.parameterizations_array"(%4716) : (!llvm.ptr) -> !llvm.ptr
     "mini.method_call"(%4717, %4715, %4714) {"offset" = 3 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 18 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, f64) -> ()
-    %4718 = "mini.to_fat_ptr"(%4707) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Float64", "to_typ_name" = "Float64", "invariant"} : (!mini.fatptr<"Float64">) -> !mini.fatptr<"Float64">
+    %4718 = "mini.to_fat_ptr"(%4703) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Float64", "to_typ_name" = "Float64", "invariant"} : (!mini.fatptr<"Float64">) -> !mini.fatptr<"Float64">
     "mini.return"(%4718) : (!mini.fatptr<"Float64">) -> ()
-  }) {"func_name" = "Float64__ADD_otherInt32", "result_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
+  }) {"func_name" = "Float64__ADD_otherFloat64", "result_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
   "mini.func"() ({
   ^bb571(%4719 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %4720 : !llvm.ptr, %4721 : !llvm.struct<(!llvm.ptr, i160)>):
     %4722 = "mini.invariant"(%4720) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
     %4723 = "mini.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
     "cf.br"() [^bb572] : () -> ()
   ^bb573:
-    %4724 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4724 = "llvm.mlir.constant"() <{"value" = 8 : i32}> : () -> i32
     "llvm.store"(%4724, %4723) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
     "cf.br"() [^bb574] : () -> ()
   ^bb575:
-    %4725 = "llvm.mlir.constant"() <{"value" = 8 : i32}> : () -> i32
+    %4725 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
     "llvm.store"(%4725, %4723) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
     "cf.br"() [^bb574] : () -> ()
   ^bb572:
@@ -6166,7 +6166,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4785 = "llvm.mlir.constant"() <{"value" = 7 : i32}> : () -> i32
     %4786 = "llvm.getelementptr"(%4784, %4785) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4786) : (!llvm.ptr) -> ()
-  }) {"func_name" = "Float64_B__ADD_otherFloat64__ADD_otherInt32", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
+  }) {"func_name" = "Float64_B__ADD_otherInt32__ADD_otherFloat64", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
   "mini.getter_def"() {"struct_typ" = !llvm.struct<(i32)>, "offset" = 0 : i32, "meth_name" = "Int32_field_value"} : () -> ()
   "mini.getter_def"() {"struct_typ" = !llvm.struct<(i32)>, "offset" = 1 : i32, "meth_name" = "Int32_field_Int32_0", "id_hierarchy" = ["union_typ", ["Float64"], ["Int32"]], "name_hierarchy" = ["Float64_or_Int32", ["Float64"], ["Int32"]]} : () -> ()
   "mini.func"() ({
@@ -6548,8 +6548,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %5087 = "mini.parameterizations_array"() : () -> !llvm.ptr
     %5088 = "mini.method_call"(%5087, %5086) {"offset" = 6 : i32, "vptrs" = [], "vtable_size" = 10 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.type_param<"U", !mini.fatptr<"Object">, "Pair">
     %5089 = "mini.unbox"(%5088) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = f64, "from_typ_name" = "Object", "to_typ_name" = "f64_typ", "to_typ_size" = 64 : i32} : (!mini.type_param<"U", !mini.fatptr<"Object">, "Pair">) -> !mini.ptr<f64>
-    %5090 = "mini.unionize"(%5089) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>
-    %5091 = "mini.unwrap"(%5090) : (!mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+    %5090 = "mini.unionize"(%5089) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>
+    %5091 = "mini.unwrap"(%5090) : (!mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
     %5092 = "mini.parameterization"() {"id_hierarchy" = ["f64_typ"], "name_hierarchy" = ["Ptrf64"]} : () -> !llvm.ptr
     %5093 = "mini.parameterizations_array"(%5092) : (!llvm.ptr) -> !llvm.ptr
     "mini.class_method_call"(%5093, %5091) {"offset" = 0 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -6577,8 +6577,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %5114 = "mini.parameterizations_array"() : () -> !llvm.ptr
     %5115 = "mini.method_call"(%5114, %5113) {"offset" = 6 : i32, "vptrs" = [], "vtable_size" = 10 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.type_param<"U", !mini.fatptr<"Object">, "Pair">
     %5116 = "mini.unbox"(%5115) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = i32, "from_typ_name" = "Object", "to_typ_name" = "i32_typ", "to_typ_size" = 32 : i32} : (!mini.type_param<"U", !mini.fatptr<"Object">, "Pair">) -> !mini.ptr<i32>
-    %5117 = "mini.unionize"(%5116) {"from_typ" = i32, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<i32>) -> !mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>
-    %5118 = "mini.unwrap"(%5117) : (!mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+    %5117 = "mini.unionize"(%5116) {"from_typ" = i32, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<i32>) -> !mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>
+    %5118 = "mini.unwrap"(%5117) : (!mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
     %5119 = "mini.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["Ptri32"]} : () -> !llvm.ptr
     %5120 = "mini.parameterizations_array"(%5119) : (!llvm.ptr) -> !llvm.ptr
     "mini.class_method_call"(%5120, %5118) {"offset" = 0 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -6623,8 +6623,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %5158 = "mini.method_call"(%5157, %5156) {"offset" = 5 : i32, "vptrs" = [], "vtable_size" = 10 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Pair">
     %5159 = "mini.unbox"(%5158) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(f64, f64, f64, f64)>, "from_typ_name" = "Object", "to_typ_name" = "tuple_typ", "to_typ_size" = 256 : i32} : (!mini.type_param<"T", !mini.fatptr<"Object">, "Pair">) -> !mini.tuple<[!mini.ptr<f64>, !mini.ptr<f64>, !mini.ptr<f64>, !mini.ptr<f64>]>
     %5160 = "mini.tuple_indexation"(%5159) {"typ" = !llvm.struct<(f64, f64, f64, f64)>, "index" = 3 : i32} : (!mini.tuple<[!mini.ptr<f64>, !mini.ptr<f64>, !mini.ptr<f64>, !mini.ptr<f64>]>) -> !mini.ptr<f64>
-    %5161 = "mini.unionize"(%5160) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>
-    %5162 = "mini.unwrap"(%5161) : (!mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+    %5161 = "mini.unionize"(%5160) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>
+    %5162 = "mini.unwrap"(%5161) : (!mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
     %5163 = "mini.parameterization"() {"id_hierarchy" = ["f64_typ"], "name_hierarchy" = ["Ptrf64"]} : () -> !llvm.ptr
     %5164 = "mini.parameterizations_array"(%5163) : (!llvm.ptr) -> !llvm.ptr
     "mini.class_method_call"(%5164, %5162) {"offset" = 0 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -6674,8 +6674,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %5199 = "mini.parameterizations_array"() : () -> !llvm.ptr
     %5200 = "mini.method_call"(%5199, %5198) {"offset" = 6 : i32, "vptrs" = [], "vtable_size" = 20 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.type_param<"U", !mini.fatptr<"Object">, "Pair">
     %5201 = "mini.unbox"(%5200) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = f64, "from_typ_name" = "Object", "to_typ_name" = "f64_typ", "to_typ_size" = 64 : i32} : (!mini.type_param<"U", !mini.fatptr<"Object">, "Pair">) -> !mini.ptr<f64>
-    %5202 = "mini.unionize"(%5201) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>
-    %5203 = "mini.unwrap"(%5202) : (!mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+    %5202 = "mini.unionize"(%5201) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>
+    %5203 = "mini.unwrap"(%5202) : (!mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
     %5204 = "mini.parameterization"() {"id_hierarchy" = ["f64_typ"], "name_hierarchy" = ["Ptrf64"]} : () -> !llvm.ptr
     %5205 = "mini.parameterizations_array"(%5204) : (!llvm.ptr) -> !llvm.ptr
     "mini.class_method_call"(%5205, %5203) {"offset" = 0 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -6988,14 +6988,14 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %5241 = "mini.parameterizations_array"(%5240) : (!llvm.ptr) -> !llvm.ptr
     %5242 = "mini.method_call"(%5241, %5239, %5214) {"offset" = 9 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 69 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !mini.fatptr<"Array", [!mini.type_param<"T", !mini.fatptr<"Object">, "Array">]>
     %5243 = "mini.to_fat_ptr"(%5242) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Array", "to_typ_name" = "Array", "invariant"} : (!mini.fatptr<"Array", [!mini.type_param<"T", !mini.fatptr<"Object">, "Array">]>) -> !mini.fatptr<"Array", [!mini.ptr<i32>]>
-    %5244 = "mini.addr_of"() {"global_name" = @_functionliteral_jjzcpopaew} : () -> !llvm.ptr
+    %5244 = "mini.addr_of"() {"global_name" = @_functionliteral_qnglvzmlbv} : () -> !llvm.ptr
     %5245 = "mini.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
     "llvm.store"(%5244, %5245) <{"ordering" = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
     %5246 = "mini.literal"() {"value" = 0 : i32, "typ" = i32} : () -> !mini.ptr<i32>
     %5247 = "mini.box"(%5246) {"from_typ" = i32, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "i32_typ", "to_typ_name" = "Object", "from_typ_size" = 32 : i32} : (!mini.ptr<i32>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
     %5248 = "mini.unwrap"(%5247) : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> !llvm.struct<(!llvm.ptr, i160)>
     %5249 = "mini.reabstract"(%5245) ({
-      func.func @levegtuymw(%5250 : !llvm.ptr {"llvm.nest"}, %5251 : !llvm.struct<(!llvm.ptr, i160)>, %5252 : !llvm.struct<(!llvm.ptr, i160)>) -> !llvm.struct<(!llvm.ptr, i160)> {
+      func.func @bwkoxcmrug(%5250 : !llvm.ptr {"llvm.nest"}, %5251 : !llvm.struct<(!llvm.ptr, i160)>, %5252 : !llvm.struct<(!llvm.ptr, i160)>) -> !llvm.struct<(!llvm.ptr, i160)> {
         %5253 = "mini.wrap"(%5251) : (!llvm.struct<(!llvm.ptr, i160)>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
         %5254 = "mini.wrap"(%5252) : (!llvm.struct<(!llvm.ptr, i160)>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
         %5255 = "mini.unbox"(%5253) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = i32, "from_typ_name" = "Object", "to_typ_name" = "i32_typ", "to_typ_size" = 32 : i32} : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> !mini.ptr<i32>
@@ -7009,7 +7009,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       }
       %5250 = "mini.malloc"() {"typ" = !llvm.array<24 x i8>} : () -> !llvm.ptr
       "mini.anoint_trampoline"(%5250) : (!llvm.ptr) -> ()
-      %5251 = "mini.addr_of"() {"global_name" = @levegtuymw} : () -> !llvm.ptr
+      %5251 = "mini.addr_of"() {"global_name" = @bwkoxcmrug} : () -> !llvm.ptr
       %5252 = "llvm.load"(%5245) : (!llvm.ptr) -> !llvm.ptr
       "llvm.call_intrinsic"(%5250, %5251, %5252) <{"intrin" = "llvm.init.trampoline", "operandSegmentSizes" = array<i32: 3, 0>, "op_bundle_sizes" = array<i32>}> : (!llvm.ptr, !llvm.ptr, !llvm.ptr) -> ()
     }) {"ret_type" = i32} : (!llvm.ptr) -> !mini.function<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">], !mini.any, !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">>
@@ -7020,25 +7020,25 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %5257 = "mini.parameterizations_array"(%5255, %5256) : (!llvm.ptr, !llvm.ptr) -> !llvm.ptr
     %5258 = "mini.method_call"(%5257, %5254, %5248, %5253) {"offset" = 16 : i32, "vptrs" = ["i32_typ", "function_typ"], "vtable_size" = 69 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>, !llvm.struct<(!llvm.ptr)>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
     %5259 = "mini.unbox"(%5258) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = i32, "from_typ_name" = "Object", "to_typ_name" = "i32_typ", "to_typ_size" = 32 : i32} : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> !mini.ptr<i32>
-    %5260 = "mini.unionize"(%5259) {"from_typ" = i32, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<i32>) -> !mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>
-    %5261 = "mini.unwrap"(%5260) : (!mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+    %5260 = "mini.unionize"(%5259) {"from_typ" = i32, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<i32>) -> !mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>
+    %5261 = "mini.unwrap"(%5260) : (!mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
     %5262 = "mini.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["Ptri32"]} : () -> !llvm.ptr
     %5263 = "mini.parameterizations_array"(%5262) : (!llvm.ptr) -> !llvm.ptr
     "mini.class_method_call"(%5263, %5261) {"offset" = 0 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-    %5264 = "mini.addr_of"() {"global_name" = @_functionliteral_rvvealsbrd} : () -> !llvm.ptr
+    %5264 = "mini.addr_of"() {"global_name" = @_functionliteral_looasdhrzp} : () -> !llvm.ptr
     %5265 = "mini.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
     "llvm.store"(%5264, %5265) <{"ordering" = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-    %5266 = "mini.addr_of"() {"global_name" = @_functionliteral_xtlgmzlazj} : () -> !llvm.ptr
+    %5266 = "mini.addr_of"() {"global_name" = @_functionliteral_mzubvibcen} : () -> !llvm.ptr
     %5267 = "mini.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
     "llvm.store"(%5266, %5267) <{"ordering" = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-    %5268 = "mini.addr_of"() {"global_name" = @_functionliteral_focdcoyzjk} : () -> !llvm.ptr
+    %5268 = "mini.addr_of"() {"global_name" = @_functionliteral_kkskglckhn} : () -> !llvm.ptr
     %5269 = "mini.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
     "llvm.store"(%5268, %5269) <{"ordering" = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-    %5270 = "mini.addr_of"() {"global_name" = @_functionliteral_xnyrpvvwrj} : () -> !llvm.ptr
+    %5270 = "mini.addr_of"() {"global_name" = @_functionliteral_nximwkjvqv} : () -> !llvm.ptr
     %5271 = "mini.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
     "llvm.store"(%5270, %5271) <{"ordering" = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
     %5272 = "mini.reabstract"(%5265) ({
-      func.func @sgfiteeynv(%5273 : !llvm.ptr {"llvm.nest"}, %5274 : !llvm.struct<(!llvm.ptr, i160)>) -> !llvm.struct<(!llvm.ptr, i160)> {
+      func.func @piosxdnonw(%5273 : !llvm.ptr {"llvm.nest"}, %5274 : !llvm.struct<(!llvm.ptr, i160)>) -> !llvm.struct<(!llvm.ptr, i160)> {
         %5275 = "mini.wrap"(%5274) : (!llvm.struct<(!llvm.ptr, i160)>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
         %5276 = "mini.unbox"(%5275) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = i32, "from_typ_name" = "Object", "to_typ_name" = "i32_typ", "to_typ_size" = 32 : i32} : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> !mini.ptr<i32>
         %5277 = "mini.unwrap"(%5276) : (!mini.ptr<i32>) -> i32
@@ -7049,7 +7049,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       }
       %5273 = "mini.malloc"() {"typ" = !llvm.array<24 x i8>} : () -> !llvm.ptr
       "mini.anoint_trampoline"(%5273) : (!llvm.ptr) -> ()
-      %5274 = "mini.addr_of"() {"global_name" = @sgfiteeynv} : () -> !llvm.ptr
+      %5274 = "mini.addr_of"() {"global_name" = @piosxdnonw} : () -> !llvm.ptr
       %5275 = "llvm.load"(%5265) : (!llvm.ptr) -> !llvm.ptr
       "llvm.call_intrinsic"(%5273, %5274, %5275) <{"intrin" = "llvm.init.trampoline", "operandSegmentSizes" = array<i32: 3, 0>, "op_bundle_sizes" = array<i32>}> : (!llvm.ptr, !llvm.ptr, !llvm.ptr) -> ()
     }) {"ret_type" = i32} : (!llvm.ptr) -> !mini.function<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">], !mini.any, !mini.type_param<"U", !mini.fatptr<"Object">, "Iterable2">>
@@ -7062,7 +7062,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %5282 = "mini.to_fat_ptr"(%5281) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Iterable2", "to_typ_name" = "Iterable2", "invariant"} : (!mini.fatptr<"Iterable2", [!mini.ptr<i32>]>) -> !mini.fatptr<"Iterable2", [!mini.ptr<i32>]>
     %5283 = "mini.refer"(%5282) {"typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>} : (!mini.fatptr<"Iterable2", [!mini.ptr<i32>]>) -> !mini.fatptr<"Iterable2", [!mini.ptr<i32>]>
     %5284 = "mini.reabstract"(%5271) ({
-      func.func @lapqfsqhbh(%5285 : !llvm.ptr {"llvm.nest"}, %5286 : !llvm.struct<(!llvm.ptr, i160)>) -> !llvm.struct<(!llvm.ptr, i160)> {
+      func.func @lwdlrevmri(%5285 : !llvm.ptr {"llvm.nest"}, %5286 : !llvm.struct<(!llvm.ptr, i160)>) -> !llvm.struct<(!llvm.ptr, i160)> {
         %5287 = "mini.wrap"(%5286) : (!llvm.struct<(!llvm.ptr, i160)>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
         %5288 = "mini.unbox"(%5287) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = i32, "from_typ_name" = "Object", "to_typ_name" = "i32_typ", "to_typ_size" = 32 : i32} : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> !mini.ptr<i32>
         %5289 = "mini.unwrap"(%5288) : (!mini.ptr<i32>) -> i32
@@ -7073,13 +7073,13 @@ builtin.module attributes  {"sym_name" = "ir"} {
       }
       %5285 = "mini.malloc"() {"typ" = !llvm.array<24 x i8>} : () -> !llvm.ptr
       "mini.anoint_trampoline"(%5285) : (!llvm.ptr) -> ()
-      %5286 = "mini.addr_of"() {"global_name" = @lapqfsqhbh} : () -> !llvm.ptr
+      %5286 = "mini.addr_of"() {"global_name" = @lwdlrevmri} : () -> !llvm.ptr
       %5287 = "llvm.load"(%5271) : (!llvm.ptr) -> !llvm.ptr
       "llvm.call_intrinsic"(%5285, %5286, %5287) <{"intrin" = "llvm.init.trampoline", "operandSegmentSizes" = array<i32: 3, 0>, "op_bundle_sizes" = array<i32>}> : (!llvm.ptr, !llvm.ptr, !llvm.ptr) -> ()
     }) {"ret_type" = f64} : (!llvm.ptr) -> !mini.function<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">], !mini.any, !mini.type_param<"U", !mini.fatptr<"Object">, "Iterable2">>
     %5288 = "mini.unwrap"(%5284) : (!mini.function<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">], !mini.any, !mini.type_param<"U", !mini.fatptr<"Object">, "Iterable2">>) -> !llvm.struct<(!llvm.ptr)>
     %5289 = "mini.reabstract"(%5269) ({
-      func.func @dkwtrimduj(%5290 : !llvm.ptr {"llvm.nest"}, %5291 : !llvm.struct<(!llvm.ptr, i160)>) -> !llvm.struct<(!llvm.ptr, i160)> {
+      func.func @zoojkwumxa(%5290 : !llvm.ptr {"llvm.nest"}, %5291 : !llvm.struct<(!llvm.ptr, i160)>) -> !llvm.struct<(!llvm.ptr, i160)> {
         %5292 = "mini.wrap"(%5291) : (!llvm.struct<(!llvm.ptr, i160)>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">
         %5293 = "mini.unbox"(%5292) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = i32, "from_typ_name" = "Object", "to_typ_name" = "i32_typ", "to_typ_size" = 32 : i32} : (!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">) -> !mini.ptr<i32>
         %5294 = "mini.unwrap"(%5293) : (!mini.ptr<i32>) -> i32
@@ -7090,7 +7090,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       }
       %5290 = "mini.malloc"() {"typ" = !llvm.array<24 x i8>} : () -> !llvm.ptr
       "mini.anoint_trampoline"(%5290) : (!llvm.ptr) -> ()
-      %5291 = "mini.addr_of"() {"global_name" = @dkwtrimduj} : () -> !llvm.ptr
+      %5291 = "mini.addr_of"() {"global_name" = @zoojkwumxa} : () -> !llvm.ptr
       %5292 = "llvm.load"(%5269) : (!llvm.ptr) -> !llvm.ptr
       "llvm.call_intrinsic"(%5290, %5291, %5292) <{"intrin" = "llvm.init.trampoline", "operandSegmentSizes" = array<i32: 3, 0>, "op_bundle_sizes" = array<i32>}> : (!llvm.ptr, !llvm.ptr, !llvm.ptr) -> ()
     }) {"ret_type" = i32} : (!llvm.ptr) -> !mini.function<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterable2">], !mini.any, !mini.type_param<"U", !mini.fatptr<"Object">, "Iterable2">>
@@ -7123,13 +7123,13 @@ builtin.module attributes  {"sym_name" = "ir"} {
     }, {
       %5318 = "mini.narrow"(%5315) {"from_typ" = !llvm.struct<(!llvm.ptr, i64)>, "to_typ" = f64, "from_typ_name" = "union_typ", "to_typ_name" = "f64_typ"} : (!mini.union<[!mini.ptr<f64>, !mini.nil]>) -> !mini.ptr<f64>
       %5319 = "mini.literal"() {"value" = 55 : i32, "typ" = i32} : () -> !mini.ptr<i32>
-      %5320 = "mini.unionize"(%5319) {"from_typ" = i32, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<i32>) -> !mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>
-      %5321 = "mini.unwrap"(%5320) : (!mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %5320 = "mini.unionize"(%5319) {"from_typ" = i32, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<i32>) -> !mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>
+      %5321 = "mini.unwrap"(%5320) : (!mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %5322 = "mini.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["Ptri32"]} : () -> !llvm.ptr
       %5323 = "mini.parameterizations_array"(%5322) : (!llvm.ptr) -> !llvm.ptr
       "mini.class_method_call"(%5323, %5321) {"offset" = 0 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-      %5324 = "mini.unionize"(%5318) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>
-      %5325 = "mini.unwrap"(%5324) : (!mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %5324 = "mini.unionize"(%5318) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>
+      %5325 = "mini.unwrap"(%5324) : (!mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %5326 = "mini.parameterization"() {"id_hierarchy" = ["f64_typ"], "name_hierarchy" = ["Ptrf64"]} : () -> !llvm.ptr
       %5327 = "mini.parameterizations_array"(%5326) : (!llvm.ptr) -> !llvm.ptr
       "mini.class_method_call"(%5327, %5325) {"offset" = 0 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -7156,17 +7156,17 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %5344 = "mini.unwrap"(%5343) : (!mini.fatptr<"Iterator2", [!mini.fatptr<"Pair", [!mini.ptr<i32>, !mini.ptr<f64>]>]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %5345 = "mini.parameterizations_array"() : () -> !llvm.ptr
       %5346 = "mini.method_call"(%5345, %5344) {"offset" = 1 : i32, "vptrs" = [], "vtable_size" = 3 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]>
-      %5347 = builtin.unrealized_conversion_cast %5346 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]> to !mini.union<[!mini.fatptr<"Pair", [!mini.ptr<i32>, !mini.ptr<f64>]>, !mini.nil]>
-      %5348 = "mini.checkflag"(%5347) {"typ_name" = "nil_typ", "struct_typ" = !llvm.struct<(!llvm.ptr, i160)>, "neg"} : (!mini.union<[!mini.fatptr<"Pair", [!mini.ptr<i32>, !mini.ptr<f64>]>, !mini.nil]>) -> i1
+      %5347 = builtin.unrealized_conversion_cast %5346 : !mini.union<[!mini.type_param<"T", !mini.fatptr<"Object">, "Iterator2">, !mini.nil]> to !mini.union<[!mini.nil, !mini.fatptr<"Pair", [!mini.ptr<i32>, !mini.ptr<f64>]>]>
+      %5348 = "mini.checkflag"(%5347) {"typ_name" = "nil_typ", "struct_typ" = !llvm.struct<(!llvm.ptr, i160)>, "neg"} : (!mini.union<[!mini.nil, !mini.fatptr<"Pair", [!mini.ptr<i32>, !mini.ptr<f64>]>]>) -> i1
       %5349 = "mini.unwrap"(%5348) : (i1) -> i1
     }, {
-      %5350 = "mini.to_fat_ptr"(%5347) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "union_typ", "to_typ_name" = "Pair", "invariant"} : (!mini.union<[!mini.fatptr<"Pair", [!mini.ptr<i32>, !mini.ptr<f64>]>, !mini.nil]>) -> !mini.fatptr<"Pair", [!mini.ptr<i32>, !mini.ptr<f64>]>
+      %5350 = "mini.to_fat_ptr"(%5347) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "union_typ", "to_typ_name" = "Pair", "invariant"} : (!mini.union<[!mini.nil, !mini.fatptr<"Pair", [!mini.ptr<i32>, !mini.ptr<f64>]>]>) -> !mini.fatptr<"Pair", [!mini.ptr<i32>, !mini.ptr<f64>]>
       %5351 = "mini.unwrap"(%5350) : (!mini.fatptr<"Pair", [!mini.ptr<i32>, !mini.ptr<f64>]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %5352 = "mini.parameterizations_array"() : () -> !llvm.ptr
       %5353 = "mini.method_call"(%5352, %5351) {"offset" = 5 : i32, "vptrs" = [], "vtable_size" = 10 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.type_param<"T", !mini.fatptr<"Object">, "Pair">
       %5354 = "mini.unbox"(%5353) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = i32, "from_typ_name" = "Object", "to_typ_name" = "i32_typ", "to_typ_size" = 32 : i32} : (!mini.type_param<"T", !mini.fatptr<"Object">, "Pair">) -> !mini.ptr<i32>
-      %5355 = "mini.unionize"(%5354) {"from_typ" = i32, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<i32>) -> !mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>
-      %5356 = "mini.unwrap"(%5355) : (!mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %5355 = "mini.unionize"(%5354) {"from_typ" = i32, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<i32>) -> !mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>
+      %5356 = "mini.unwrap"(%5355) : (!mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %5357 = "mini.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["Ptri32"]} : () -> !llvm.ptr
       %5358 = "mini.parameterizations_array"(%5357) : (!llvm.ptr) -> !llvm.ptr
       "mini.class_method_call"(%5358, %5356) {"offset" = 0 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -7174,14 +7174,14 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %5360 = "mini.parameterizations_array"() : () -> !llvm.ptr
       %5361 = "mini.method_call"(%5360, %5359) {"offset" = 6 : i32, "vptrs" = [], "vtable_size" = 10 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.type_param<"U", !mini.fatptr<"Object">, "Pair">
       %5362 = "mini.unbox"(%5361) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = f64, "from_typ_name" = "Object", "to_typ_name" = "f64_typ", "to_typ_size" = 64 : i32} : (!mini.type_param<"U", !mini.fatptr<"Object">, "Pair">) -> !mini.ptr<f64>
-      %5363 = "mini.unionize"(%5362) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>
-      %5364 = "mini.unwrap"(%5363) : (!mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %5363 = "mini.unionize"(%5362) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>
+      %5364 = "mini.unwrap"(%5363) : (!mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %5365 = "mini.parameterization"() {"id_hierarchy" = ["f64_typ"], "name_hierarchy" = ["Ptrf64"]} : () -> !llvm.ptr
       %5366 = "mini.parameterizations_array"(%5365) : (!llvm.ptr) -> !llvm.ptr
       "mini.class_method_call"(%5366, %5364) {"offset" = 0 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
       "mini.castassign"(%5347, %5350) ({
         %5367 = "mini.to_fat_ptr"(%5350) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Pair", "to_typ_name" = "Pair", "invariant"} : (!mini.fatptr<"Pair", [!mini.ptr<i32>, !mini.ptr<f64>]>) -> !mini.fatptr<"Pair", [!mini.ptr<i32>, !mini.ptr<f64>]>
-      }) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Pair", "to_typ_name" = "Pair", "should_offset"} : (!mini.union<[!mini.fatptr<"Pair", [!mini.ptr<i32>, !mini.ptr<f64>]>, !mini.nil]>, !mini.fatptr<"Pair", [!mini.ptr<i32>, !mini.ptr<f64>]>) -> ()
+      }) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Pair", "to_typ_name" = "Pair", "should_offset"} : (!mini.union<[!mini.nil, !mini.fatptr<"Pair", [!mini.ptr<i32>, !mini.ptr<f64>]>]>, !mini.fatptr<"Pair", [!mini.ptr<i32>, !mini.ptr<f64>]>) -> ()
     }) : () -> ()
     "cf.br"() [^bb754] : () -> ()
   ^bb754:
@@ -7242,8 +7242,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %5402 = "mini.parameterizations_array"() : () -> !llvm.ptr
     %5403 = "mini.method_call"(%5402, %5401) {"offset" = 4 : i32, "vptrs" = [], "vtable_size" = 18 : i64, "ret_type" = f64, "ret_type_unq" = f64} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.ptr<f64>
     %5404 = builtin.unrealized_conversion_cast %5403 : !mini.ptr<f64> to !mini.ptr<f64>
-    %5405 = "mini.unionize"(%5404) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>
-    %5406 = "mini.unwrap"(%5405) : (!mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+    %5405 = "mini.unionize"(%5404) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>
+    %5406 = "mini.unwrap"(%5405) : (!mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
     %5407 = "mini.parameterization"() {"id_hierarchy" = ["f64_typ"], "name_hierarchy" = ["Ptrf64"]} : () -> !llvm.ptr
     %5408 = "mini.parameterizations_array"(%5407) : (!llvm.ptr) -> !llvm.ptr
     "mini.class_method_call"(%5408, %5406) {"offset" = 0 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -7292,8 +7292,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %5442 = "mini.parameterizations_array"() : () -> !llvm.ptr
     %5443 = "mini.method_call"(%5442, %5441) {"offset" = 4 : i32, "vptrs" = [], "vtable_size" = 18 : i64, "ret_type" = f64, "ret_type_unq" = f64} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.ptr<f64>
     %5444 = builtin.unrealized_conversion_cast %5443 : !mini.ptr<f64> to !mini.ptr<f64>
-    %5445 = "mini.unionize"(%5444) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>
-    %5446 = "mini.unwrap"(%5445) : (!mini.union<[!mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+    %5445 = "mini.unionize"(%5444) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>
+    %5446 = "mini.unwrap"(%5445) : (!mini.union<[!mini.fatptr<"Character">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<f64>, !mini.nil, !mini.ptr<i32>, !mini.ptr<i64>, !mini.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
     %5447 = "mini.parameterization"() {"id_hierarchy" = ["f64_typ"], "name_hierarchy" = ["Ptrf64"]} : () -> !llvm.ptr
     %5448 = "mini.parameterizations_array"(%5447) : (!llvm.ptr) -> !llvm.ptr
     "mini.class_method_call"(%5448, %5446) {"offset" = 0 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
