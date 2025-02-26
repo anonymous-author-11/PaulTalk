@@ -3,6 +3,7 @@ from typing import Dict, Set, List, Optional, FrozenSet, Tuple, Sequence
 from enum import Enum
 from xdsl.ir import TypeAttribute
 from utils import *
+from scope import Scope
 import functools
 from itertools import chain
 

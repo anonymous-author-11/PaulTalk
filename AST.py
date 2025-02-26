@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from typing import List, Optional, Dict, Tuple, Set
 from core_dialect import *
 from utils import *
+from scope import Scope
 from method_dispatch import *
 from xdsl.dialects import llvm, arith, builtin, memref, cf, func
 from xdsl.ir import Block, Region, TypeAttribute

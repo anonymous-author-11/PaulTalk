@@ -9,9 +9,11 @@ class Pair[T, U]
 
 	def init(@first : T, @second : U){
 	}
+    #[ret > self]
 	def first() -> T {
 		return @first;
 	}
+    #[ret > self]
 	def second() -> U {
 		return @second;
 	}
@@ -49,7 +51,7 @@ class Iterator2[T] {
 
 class Iterable2[T] {
 
-    #[ret > self]
+    #[ret < self]
 	abstract def iterator() -> Iterator2[T] {
     }
 	def each(f : (T)) {
@@ -70,27 +72,27 @@ class Iterable2[T] {
         for x in self { if f.call(x) { return true; } }
         return false;
     }
-    #[ret > self]
+    #[ret < self]
     def map[U](f : (T) -> U) -> Iterable2[U] {
         return MapIterable2[T, U].new(self, f);
     }
-    #[ret > self]
+    #[ret < self]
     def filter(f : (T) -> Bool) -> Iterable2[T] {
         return FilterIterable2[T].new(self, f);
     }
-    #[ret > self, ret > other]
+    #[ret < self, ret < other]
     def chain(other : Iterable2[T]) -> Iterable2[T] {
         return ChainIterable2[T].new(self, other);
     }
-    #[ret > self, ret > other]
+    #[ret < self, ret < other]
     def interleave(other : Iterable2[T]) -> Iterable2[T] {
         return InterleaveIterable2[T].new(self, other);
     }
-    #[ret > self, ret > other]
+    #[ret < self, ret < other]
     def zip[U](other : Iterable2[U]) -> ZipIterable2[T, U] {
         return ZipIterable2[T, U].new(self, other);
     }
-    #[ret > self, ret > other]
+    #[ret < self, ret < other]
     def product[U](other : Iterable2[U]) -> ProductIterable2[T, U] {
         return ProductIterable2[T, U].new(self, other);
     }
@@ -103,13 +105,17 @@ class Array[T] extends Iterable2[T] {
 
     #[ret < iterable]
 	def Self.from_iterable(iterable : Iterable2[T]) -> Array[T] {
-    	result = Array[T].new();
+    	result = Array[T].new(); // result == allocation
         
-    	for elem in iterable {      // lifetime of elem is > lifetime of iterable
-            result.append(elem);    // lifetime of elem must be > lifetime of result
+    	for elem in iterable {      // iterator < iterable, iterator < elem
+            result.append(elem);    // Array.append is annotated with #[self < x, ret == self], ergo result < elem
+                                    // do we know that iterator is dead after this loop?
+                                    // there are no variables with longer or equal lifetimes than iterator
         }
-        // Only way to guarantee that lifetime of elem > result is that lifetime of result <= iterable
-    	return result;
+    	return result; // ret == result :. ret < elem
+        // elem > result, elem > iterator
+        // if a parameter (extended) ends with constraints that are underdetermined by annotations, then there are not enough annotations
+        // iterator < iterable seems underdetermined as well, but unproblematic
     }
 	def init() {
 		@buffer = Buffer[T].new(1);
@@ -126,8 +132,7 @@ class Array[T] extends Iterable2[T] {
     def capacity() -> i32 {
     	return @capacity;
     }
-
-    #[x > self]
+    #[x > self, ret == self]
     def append(x : T) -> Array[T] {
         if @length >= @capacity { self.grow(); }
         @buffer.[@length] = x;
@@ -173,7 +178,7 @@ class ArrayIterator[T] extends Iterator2[T] {
 	def next() -> T | Nil {
 		if @index >= @array.length() { return nil; }
 		@index = @index + 1;
-		return @array.unsafe_index(@index - 1);
+		return @array.unsafe_index(@index - 1); // array > self, ret > array :. ret > self
 	}
 }
 

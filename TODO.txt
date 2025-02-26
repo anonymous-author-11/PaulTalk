@@ -402,7 +402,7 @@ TODO:
 
 - Ideas for regions
 	- Lean on aliases and defaults to minimize annotation burden
-	- put region constraints in method signature and enforce them
+	- Put region constraints in method signature and enforce them
 	- Infer regions where possible
 	- Annotations implicitly inherited
 	- Lifetime rules
@@ -412,6 +412,42 @@ TODO:
 		- Enforce that to/from buffers longer lifetime than the buffer
 		- Enforce that constraints are a superset of called methods' constraints
 		- Propagate constraints through assignments
+	- Progressive disclosure: allow having explicit passed regions
+		- maybe $reg1 syntax
+		- otherwise allocations just go into any parameter region with a transitive constraint
+		- Putting region ptrs in fatptr third word should work
+		- Because boxed structs don't have regions!
+	- You can always strengthen constraints into equality constraints and preserve safety
+	- Minimal number of constraint strengthenings to identify allocation
+	- You know that an Array[i32] has less aliasing potential than an Array[Object]
+		- An Array[Object] could hold itself for all we know
+			- So just allocate all its buffers in its self-region
+		- An Array[i32] could not hold itself
+	- Defaults
+		- Fields outlive self
+		- Field parameters create constraints
+		- Constraints added between overloads
+		- Constraints inherited by overrides
+		- Pass in a region for return value
+		- allocate in shortest-lived region compatible with constraints if not specified
+		- best would be a temporary region!
+		- if equal to ret, allocate in ret
+	- "Inferred constraints on parameter x are stronger than those imposed by explicit lifetime annotations"
+		- Parameter x is determined to have lifetime [...] than [...]
+		- Consider adding an annotation like [...] to this method
+	- Track all regions which variables in the method are ever in
+		- Include field and self regions at start of method
+		- When no variables are in the region anymore, attempt to free it
+		- If it's needed up the call stack it will have been protected
+	- Accumulate points-to facts during typeflow
+		- Flow insensitive, all facts relevant
+		- Facts created by assignments or calls (including operators)
+			- Start with just assignments
+		- Then combine these facts into a points-to graph
+		- Create a graph augmented with annotated points-to facts
+		- Minimize the augmented graph to include only parameter nodes
+		- Ensure that the parameters nodes do not have more edges in the original graph than the minimized
+		- I.e. that the annotations cover the parameter-relevant points-to information
 
 - Inheriting from Sentinel (or do Struct types solve this)
 - Bare 'yield();' should yield the coroutine itself?

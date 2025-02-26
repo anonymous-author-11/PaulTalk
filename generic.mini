@@ -47,6 +47,7 @@ class Iterator2[T] {
 }
 
 class Iterable2[T] {
+    #[ret < self]
 	abstract def iterator() -> Iterator2[T] {}
 	def each(f : (T)) {
         for x in self { f.call(x); }
