@@ -60,6 +60,7 @@ class AST:
 
 @dataclass
 class Node:
+    id: str
     filename: str
     line_number: int
 
@@ -124,9 +125,12 @@ class Program(Node):
 
 @dataclass
 class Expression(Node):
-    pass
+    
     def exprtype(self, scope):
         pass
+
+    def __hash__(self):
+        return hash(id(self))
 
 @dataclass
 class ExpressionStatement(Statement):
@@ -147,7 +151,7 @@ class BinaryOp(Expression):
     def codegen(self, scope):
         left_type = self.left.exprtype(scope)
         if isinstance(left_type, FatPtr) or isinstance(left_type, TypeParameter):
-            return OverloadedBinaryOp(self.filename, self.line_number, self.left, self.operator, self.right).codegen(scope)
+            return OverloadedBinaryOp(random_letters(10), self.filename, self.line_number, self.left, self.operator, self.right).codegen(scope)
         right_type = self.right.exprtype(scope)
         left_unwrap = UnwrapOp.create(operands=[self.left.codegen(scope)], result_types=[left_type.base_typ()])
         right_unwrap = UnwrapOp.create(operands=[self.right.codegen(scope)], result_types=[right_type.base_typ()])
@@ -175,7 +179,7 @@ class BinaryOp(Expression):
     def exprtype(self, scope):
         left_type = self.left.exprtype(scope)
         if isinstance(left_type, FatPtr) or isinstance(left_type, TypeParameter):
-            return OverloadedBinaryOp(self.filename, self.line_number, self.left, self.operator, self.right).exprtype(scope)
+            return OverloadedBinaryOp(random_letters(10), self.filename, self.line_number, self.left, self.operator, self.right).exprtype(scope)
         right_type = self.right.exprtype(scope)
         self.ensure_compatible_types(left_type, right_type)
         return self.concrete_exprtype(left_type, right_type)
@@ -224,7 +228,7 @@ class OverloadedBinaryOp(BinaryOp):
 
     def codegen(self, scope):
         mangled_operator = "_" + self.operator
-        method_call = MethodCall(self.filename, self.line_number, self.left, mangled_operator, [self.right])
+        method_call = MethodCall(random_letters(10), self.filename, self.line_number, self.left, mangled_operator, [self.right])
         return method_call.codegen(scope)
 
     def ensure_object_receiver(self, scope, left_type):
@@ -246,7 +250,7 @@ class OverloadedBinaryOp(BinaryOp):
         self.ensure_object_receiver(scope, left_type)
         mangled_operator = "_" + self.operator
         self.ensure_existing_overload(scope, left_type, mangled_operator, right_type)
-        method_call = MethodCall(self.filename, self.line_number, self.left, mangled_operator, [self.right])
+        method_call = MethodCall(random_letters(10), self.filename, self.line_number, self.left, mangled_operator, [self.right])
         return method_call.exprtype(scope)
 
 @dataclass
@@ -255,8 +259,8 @@ class NegativeOp(Expression):
 
     def codegen(self, scope):
         typ = self.exprtype(scope)
-        zero = IntegerLiteral(self.filename, self.line_number, 0, 32) if typ == Ptr([IntegerType(32)]) else DoubleLiteral(self.filename, self.line_number, 0.0)
-        return Arithmetic(self.filename, self.line_number, zero, "SUB", self.operand).codegen(scope)
+        zero = IntegerLiteral(random_letters(10), self.filename, self.line_number, 0, 32) if typ == Ptr([IntegerType(32)]) else DoubleLiteral(random_letters(10), self.filename, self.line_number, 0.0)
+        return Arithmetic(random_letters(10), self.filename, self.line_number, zero, "SUB", self.operand).codegen(scope)
 
     def ensure_is_number(self, t):
         if not isinstance(t, Ptr):
@@ -324,21 +328,21 @@ class NilLiteral(Expression):
 
 @dataclass
 class ArrayLiteral(Expression):
-    elements: List[Expression]
+    elements: tuple[Expression]
 
     def codegen(self, scope):
-        sizelit = IntegerLiteral(self.filename, self.line_number, len(self.elements), 32)
-        capacitylit = IntegerLiteral(self.filename, self.line_number, len(self.elements) + 1, 32)
-        buf = CreateBuffer(self.filename, self.line_number, Buffer([Ptr([IntegerType(32)])]), capacitylit)
-        temp_var = Identifier(self.filename, self.line_number, "_temp_buf" + random_letters(10))
-        assign = Assignment(self.filename, self.line_number, temp_var, buf)
+        sizelit = IntegerLiteral(random_letters(10), self.filename, self.line_number, len(self.elements), 32)
+        capacitylit = IntegerLiteral(random_letters(10), self.filename, self.line_number, len(self.elements) + 1, 32)
+        buf = CreateBuffer(random_letters(10), self.filename, self.line_number, Buffer([Ptr([IntegerType(32)])]), capacitylit)
+        temp_var = Identifier(random_letters(10), self.filename, self.line_number, "_temp_buf" + random_letters(10))
+        assign = Assignment(random_letters(10), self.filename, self.line_number, temp_var, buf)
         assign.codegen(scope);
         for i, elem in enumerate(self.elements):
-            iliteral = IntegerLiteral(self.filename, self.line_number, i, 32)
-            indexation = MethodCall(self.filename, self.line_number, temp_var, "_index", [iliteral])
-            assign_i = Assignment(self.filename, self.line_number, indexation, elem)
+            iliteral = IntegerLiteral(random_letters(10), self.filename, self.line_number, i, 32)
+            indexation = MethodCall(random_letters(10), self.filename, self.line_number, temp_var, "_index", [iliteral])
+            assign_i = Assignment(random_letters(10), self.filename, self.line_number, indexation, elem)
             assign_i.codegen(scope)
-        ary = ObjectCreation(self.filename, self.line_number, random_letters(10), FatPtr.basic("IntArray"), [temp_var, sizelit, capacitylit])
+        ary = ObjectCreation(random_letters(10), self.filename, self.line_number, random_letters(10), FatPtr.basic("IntArray"), [temp_var, sizelit, capacitylit])
         return ary.codegen(scope)
 
     def exprtype(self, scope):
@@ -353,11 +357,11 @@ class StringLiteral(Expression):
 
     def codegen(self, scope):
         escaped_str = self.value.encode().decode('unicode_escape')
-        sizelit = IntegerLiteral(self.filename, self.line_number, len(escaped_str), 32)
-        capacitylit = IntegerLiteral(self.filename, self.line_number, len(escaped_str) + 1, 32)
-        buf = CreateBuffer(self.filename, self.line_number, Buffer([Ptr([IntegerType(8)])]), capacitylit)
-        temp_var = Identifier(self.filename, self.line_number, "_temp_buf" + random_letters(10))
-        assign = Assignment(self.filename, self.line_number, temp_var, buf)
+        sizelit = IntegerLiteral(random_letters(10), self.filename, self.line_number, len(escaped_str), 32)
+        capacitylit = IntegerLiteral(random_letters(10), self.filename, self.line_number, len(escaped_str) + 1, 32)
+        buf = CreateBuffer(random_letters(10), self.filename, self.line_number, Buffer([Ptr([IntegerType(8)])]), capacitylit)
+        temp_var = Identifier(random_letters(10), self.filename, self.line_number, "_temp_buf" + random_letters(10))
+        assign = Assignment(random_letters(10), self.filename, self.line_number, temp_var, buf)
         assign.codegen(scope);
         llvmtype = llvm.LLVMArrayType.from_size_and_type(len(escaped_str), IntegerType(8))
         lit = LiteralOp.create(attributes={"typ":llvmtype, "value":StringAttr(self.value)}, result_types=[llvm.LLVMPointerType.opaque()])
@@ -367,7 +371,7 @@ class StringLiteral(Expression):
         index = BufferIndexationOp.create(operands=operands, attributes={"typ": llvmtype}, result_types=[llvm.LLVMPointerType.opaque()])
         assign = AssignOp.create(operands=[index.results[0], lit.results[0]], attributes={"typ":llvmtype})
         scope.region.last_block.add_ops([lit, zero, index, assign])
-        string = ObjectCreation(self.filename, self.line_number, random_letters(10), FatPtr.basic("String"), [temp_var, sizelit, capacitylit])
+        string = ObjectCreation(random_letters(10), self.filename, self.line_number, random_letters(10), FatPtr.basic("String"), [temp_var, sizelit, capacitylit])
         return string.codegen(scope)
 
     def exprtype(self, scope):
@@ -382,7 +386,7 @@ class RangeLiteral(Expression):
     end: Expression
 
     def codegen(self, scope):
-        return ObjectCreation(self.filename, self.line_number, random_letters(10), FatPtr.basic("Range"), [self.start, self.end]).codegen(scope)
+        return ObjectCreation(random_letters(10), self.filename, self.line_number, random_letters(10), FatPtr.basic("Range"), [self.start, self.end]).codegen(scope)
     
     def ensure_i32_args(self, start_type, end_type):
         if start_type != Ptr([IntegerType(32)]) or end_type != Ptr([IntegerType(32)]):
@@ -392,14 +396,14 @@ class RangeLiteral(Expression):
         start_type = self.start.exprtype(scope)
         end_type = self.end.exprtype(scope)
         self.ensure_i32_args(start_type, end_type)
-        return ObjectCreation(self.filename, self.line_number, random_letters(10), FatPtr.basic("Range"), [self.start, self.end]).exprtype(scope)
+        return ObjectCreation(random_letters(10), self.filename, self.line_number, random_letters(10), FatPtr.basic("Range"), [self.start, self.end]).exprtype(scope)
     
     def typeflow(self, scope):
         self.exprtype(scope)
 
 @dataclass
 class TupleLiteral(Expression):
-    elems: List[Expression]
+    elems: tuple[Expression]
 
     def codegen(self, scope):
         self_type = self.exprtype(scope)
@@ -420,7 +424,7 @@ class TupleLiteral(Expression):
 @dataclass
 class FunctionLiteral(Expression):
     name: str
-    params: List['VarDecl']
+    params: tuple['VarDecl']
     arity: int
     body: BlockNode
     _return_type: TypeAttribute
@@ -462,9 +466,9 @@ class FunctionLiteral(Expression):
         last_stmt = self.body.statements[-1]
         if isinstance(last_stmt, Return): return
         if isinstance(last_stmt, ExpressionStatement) and last_stmt.expr.exprtype(scope) and last_stmt.expr.exprtype(scope) != llvm.LLVMVoidType():
-            self.body.statements[-1] = ReturnValue(self.filename, self.line_number, last_stmt.expr)
+            self.body.statements[-1] = ReturnValue(random_letters(10), self.filename, self.line_number, last_stmt.expr)
             return
-        self.body.statements.append(Return(self.filename, self.line_number))
+        self.body.statements.append(Return(random_letters(10), self.filename, self.line_number))
 
     def typeflow(self, scope):
         self.exprtype(scope)
@@ -496,10 +500,13 @@ class FunctionLiteral(Expression):
 class Identifier(Expression):
     name: str
 
+    def __post_init__(self):
+        self.id = self.name
+
     def codegen(self, scope):
-        if "@" in self.name and scope.cls and "self" in scope.symbol_table: return FieldIdentifier(self.filename, self.line_number, self.name).codegen(scope)
+        if "@" in self.name and scope.cls and "self" in scope.symbol_table: return FieldIdentifier(random_letters(10), self.filename, self.line_number, self.name).codegen(scope)
         if self.name in scope.symbol_table: return scope.symbol_table[self.name]
-        return FunctionIdentifier(self.filename, self.line_number, self.name).codegen(scope)
+        return FunctionIdentifier(random_letters(10), self.filename, self.line_number, self.name).codegen(scope)
 
     def disallow_self_in_init(self, scope):
         if self.name == "self" and scope.method and scope.method.name == "init":
@@ -512,10 +519,10 @@ class Identifier(Expression):
     def exprtype(self, scope):
         self.disallow_self_in_init(scope)
         if "@" in self.name and scope.cls and "self" in scope.type_table:
-            return FieldIdentifier(self.filename, self.line_number, self.name).exprtype(scope)
+            return FieldIdentifier(random_letters(10), self.filename, self.line_number, self.name).exprtype(scope)
         self.ensured_previously_declared(scope)
         if self.name in scope.type_table: return scope.type_table[self.name]
-        if self.name in scope.functions: return FunctionIdentifier(self.filename, self.line_number, self.name).exprtype(scope)
+        if self.name in scope.functions: return FunctionIdentifier(random_letters(10), self.filename, self.line_number, self.name).exprtype(scope)
 
 @dataclass
 class FieldIdentifier(Identifier):
@@ -649,10 +656,10 @@ class MethodCall(Expression):
     def codegen(self, scope):
         rec_typ = self.receiver.exprtype(scope)
         if isinstance(rec_typ, TypeParameter): rec_typ = rec_typ.bound
-        if isinstance(rec_typ, Coroutine): return CoroutineCall(self.filename, self.line_number, self.receiver, self.method, self.arguments).codegen(scope)
-        if isinstance(rec_typ, Function): return FunctionLiteralCall(self.filename, self.line_number, self.receiver, self.method, self.arguments).codegen(scope)
-        if isinstance(rec_typ, Buffer): return BufferIndexation(self.filename, self.line_number, self.receiver, self.method, self.arguments).codegen(scope)
-        if isinstance(rec_typ, Tuple): return TupleIndexation(self.filename, self.line_number, self.receiver, self.method, self.arguments).codegen(scope)
+        if isinstance(rec_typ, Coroutine): return CoroutineCall(random_letters(10), self.filename, self.line_number, self.receiver, self.method, self.arguments).codegen(scope)
+        if isinstance(rec_typ, Function): return FunctionLiteralCall(random_letters(10), self.filename, self.line_number, self.receiver, self.method, self.arguments).codegen(scope)
+        if isinstance(rec_typ, Buffer): return BufferIndexation(random_letters(10), self.filename, self.line_number, self.receiver, self.method, self.arguments).codegen(scope)
+        if isinstance(rec_typ, Tuple): return TupleIndexation(random_letters(10), self.filename, self.line_number, self.receiver, self.method, self.arguments).codegen(scope)
         rec_class = scope.classes[rec_typ.cls.data]
 
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
@@ -733,16 +740,17 @@ class MethodCall(Expression):
     def exprtype(self, scope):
         rec_typ = self.receiver.exprtype(scope)
         if isinstance(rec_typ, TypeParameter): rec_typ = rec_typ.bound
-        if isinstance(rec_typ, Buffer): return BufferIndexation(self.filename, self.line_number, self.receiver, self.method, self.arguments).exprtype(scope)
-        if isinstance(rec_typ, Tuple): return TupleIndexation(self.filename, self.line_number, self.receiver, self.method, self.arguments).exprtype(scope)
-        if isinstance(rec_typ, Coroutine): return CoroutineCall(self.filename, self.line_number, self.receiver, self.method, self.arguments).exprtype(scope)
-        if isinstance(rec_typ, Function): return FunctionLiteralCall(self.filename, self.line_number, self.receiver, self.method, self.arguments).exprtype(scope)
+        if isinstance(rec_typ, Buffer): return BufferIndexation(random_letters(10), self.filename, self.line_number, self.receiver, self.method, self.arguments).exprtype(scope)
+        if isinstance(rec_typ, Tuple): return TupleIndexation(random_letters(10), self.filename, self.line_number, self.receiver, self.method, self.arguments).exprtype(scope)
+        if isinstance(rec_typ, Coroutine): return CoroutineCall(random_letters(10), self.filename, self.line_number, self.receiver, self.method, self.arguments).exprtype(scope)
+        if isinstance(rec_typ, Function): return FunctionLiteralCall(random_letters(10), self.filename, self.line_number, self.receiver, self.method, self.arguments).exprtype(scope)
         broad, specialized = self.simple_exprtype(scope, rec_typ)
         return specialized
 
     def typeflow(self, scope):
         self.exprtype(scope)
 
+@dataclass
 class CoroutineCall(MethodCall):
 
     def codegen(self, scope):
@@ -798,6 +806,7 @@ class CoroutineCall(MethodCall):
         union = scope.simplify(Union.from_list([Nil(), self_type]))
         return union
 
+@dataclass
 class FunctionLiteralCall(MethodCall):
 
     def codegen(self, scope):
@@ -862,6 +871,7 @@ class BufferIndexation(Indexation):
             raise Exception(f"Line {self.line_number}: Indexation currently only supported with integers.")
         return scope.simplify(rec_typ.elem_type)
 
+@dataclass
 class TupleIndexation(Indexation):
 
     def codegen(self, scope):
@@ -884,7 +894,7 @@ class ClassMethodCall(MethodCall):
 
     def codegen(self, scope):
         if isinstance(self.receiver, Identifier) and "Intrinsic" in self.receiver.name:
-            return IntrinsicCall(self.filename, self.line_number, self.receiver, self.method, self.arguments).codegen(scope)
+            return IntrinsicCall(random_letters(10), self.filename, self.line_number, self.receiver, self.method, self.arguments).codegen(scope)
         rec_typ = scope.simplify(FatPtr.basic(self.receiver.name))
         rec_class = scope.classes[rec_typ.cls.data]
 
@@ -981,10 +991,11 @@ class ClassMethodCall(MethodCall):
 
     def exprtype(self, scope):
         if "Intrinsic" in self.receiver.name:
-            return IntrinsicCall(self.filename, self.line_number, self.receiver, self.method, self.arguments).exprtype(scope)
+            return IntrinsicCall(random_letters(10), self.filename, self.line_number, self.receiver, self.method, self.arguments).exprtype(scope)
         broad, specialized = self.simple_exprtype(scope)
         return specialized
 
+@dataclass
 class IntrinsicCall(ClassMethodCall):
 
     def codegen(self, scope):
@@ -1046,12 +1057,12 @@ class ObjectCreation(Expression):
         scope.symbol_table[self.anon_name] = new_op.results[0]
         scope.type_table[self.anon_name] = self_type
 
-        anon_id = Identifier(self.filename, self.line_number, self.anon_name)
-        MethodCall(self.filename, self.line_number, anon_id, "init", self.arguments).codegen(scope)
+        anon_id = Identifier(random_letters(10), self.filename, self.line_number, self.anon_name)
+        MethodCall(random_letters(10), self.filename, self.line_number, anon_id, "init", self.arguments).codegen(scope)
         if scope.subtype(self_type, FatPtr.basic("Exception")):
-            file_name = StringLiteral(self.filename, self.line_number, self.filename.replace("\\", "\\\\"))
-            line_number = IntegerLiteral(self.filename, self.line_number, self.line_number, 32)
-            MethodCall(self.filename, self.line_number, anon_id, "set_info", [line_number, file_name]).codegen(scope)
+            file_name = StringLiteral(random_letters(10), self.filename, self.line_number, self.filename.replace("\\", "\\\\"))
+            line_number = IntegerLiteral(random_letters(10), self.filename, self.line_number, self.line_number, 32)
+            MethodCall(random_letters(10), self.filename, self.line_number, anon_id, "set_info", [line_number, file_name]).codegen(scope)
         return new_op.results[0]
 
     def parameterizations(self, created_cls, self_type, scope):
@@ -1321,8 +1332,8 @@ class MethodDef(Statement):
             declared_type = field.type()
             if field.declaration.name in body_scope.type_table and body_scope.subtype(body_scope.type_table[field.declaration.name], declared_type): continue
             if declared_type == Nil () or isinstance(declared_type, Union) and Nil() in declared_type.types.data:
-                field_id = Identifier(self.filename, self.line_number, field.declaration.name)
-                initialization = Assignment(self.filename, self.line_number, field_id, NilLiteral(self.filename, self.line_number))
+                field_id = Identifier(random_letters(10), self.filename, self.line_number, field.declaration.name)
+                initialization = Assignment(random_letters(10), self.filename, self.line_number, field_id, NilLiteral(random_letters(10), self.filename, self.line_number))
                 self.body.statements.append(initialization)
                 continue
             raise Exception(f"Line {self.line_number}: field {field.declaration.name} not properly initialized for class {body_scope.cls.name}. You may need to override this constructor.")
@@ -1868,7 +1879,7 @@ class ClassDef(Statement):
         return flat_list
 
     def type_fields(self):
-        return [TypeFieldDecl(self.filename, self.line_number, f"{self.name}_{i}", ReifiedType(), self, t) for i, t in enumerate(self.all_type_parameters())]
+        return [TypeFieldDecl(random_letters(10), self.filename, self.line_number, f"{self.name}_{i}", ReifiedType(), self, t) for i, t in enumerate(self.all_type_parameters())]
 
     def base_typ(self):
         return llvm.LLVMStructType.from_type_list([field.declaration.type(self._scope).base_typ() for field in self.fields() if field.needs_storage()])
@@ -1948,7 +1959,7 @@ class ClassDef(Statement):
             meth_name = belonging_methods[0].definition.name
             meth_arity = belonging_methods[0].definition.arity
             ty = ClassBehavior if len(meth_name) > 6 and meth_name[0:6] == "_Self_" else Behavior
-            behavior = ty(self.filename, self.line_number, meth_name, 0, belonging_methods, meth_arity, None, self, [])
+            behavior = ty(random_letters(10), self.filename, self.line_number, meth_name, 0, belonging_methods, meth_arity, None, self, [])
             behavior.remove_superfluous_methods()
             self.behaviors.append(behavior)
 
@@ -2136,7 +2147,7 @@ class VarInit(VarDecl):
         value_type = self.initial_value.exprtype(scope)
         if not value_type or value_type == llvm.LLVMVoidType():
             raise Exception(f"Line {self.line_number}: Assignment impossible: right hand side expression does not return anything.")
-
+        scope.points_to_facts.add((self.name, "==", self.initial_value.id))
         # obviously needs work
         if self.initial_value and not scope.subtype(value_type, self_type):
             if not isinstance(value_type, Ptr) or not isinstance(self_type, Ptr):
@@ -2156,12 +2167,12 @@ class Assignment(Statement):
     def codegen(self, scope):
         typ = self.value.exprtype(scope)
         if isinstance(self.target, MethodCall) or "@" in self.target.name:
-            return InplaceAssignment(self.filename, self.line_number, self.target, self.value).codegen(scope)
+            return InplaceAssignment(random_letters(10), self.filename, self.line_number, self.target, self.value).codegen(scope)
         in_symbol_table = self.target.name in scope.symbol_table
         should_reassign = in_symbol_table and scope.subtype(typ,scope.type_table[self.target.name])
-        if should_reassign: return Reassignment(self.filename, self.line_number, self.target, self.value).codegen(scope)
+        if should_reassign: return Reassignment(random_letters(10), self.filename, self.line_number, self.target, self.value).codegen(scope)
         if isinstance(typ, FatPtr) or isinstance(typ, Buffer) or isinstance(typ, Coroutine):
-            return Reference(self.filename, self.line_number, self.target, self.value).codegen(scope)
+            return Reference(random_letters(10), self.filename, self.line_number, self.target, self.value).codegen(scope)
         new_val = self.value.codegen(scope)
         scope.symbol_table[self.target.name] = new_val
         scope.type_table[self.target.name] = typ
@@ -2170,8 +2181,10 @@ class Assignment(Statement):
         value_type = self.value.exprtype(scope)
         if not value_type or value_type == llvm.LLVMVoidType():
             raise Exception(f"Line {self.line_number}: Assignment impossible: right hand side expression does not return anything.")
+        
         if isinstance(self.target, MethodCall) or isinstance(self.target, Identifier) and "@" in self.target.name:
-            return InplaceAssignment(self.filename, self.line_number, self.target, self.value).typeflow(scope)
+            return InplaceAssignment(random_letters(10), self.filename, self.line_number, self.target, self.value).typeflow(scope)
+        scope.points_to_facts.add((self.target.name, "==", self.value.id))
         if(not isinstance(self.target, Identifier)):
             raise Exception(f"Line {self.line_number}: lhs in assignment is not an identifier!")
         if self.target.name[0].isupper():
@@ -2216,6 +2229,7 @@ class InplaceAssignment(Assignment):
         if isinstance(self.target, MethodCall): return self.target.typeflow(scope)
         if "@" not in self.target.name:
             raise Exception(f"Line {self.line_number}: Neither a field assignment nor a method call assignment.")
+        scope.points_to_facts.add(("self", "<", self.value.id))
         field = next(iter(field.declaration for field in scope.cls.fields() if field.declaration.name == self.target.name), None)
         if not field:
             raise Exception(f"Line {self.line_number}: field {self.target.name} not in class {scope.cls.name}!")
@@ -2385,32 +2399,32 @@ class For(Statement):
     temp_name: str
 
     def codegen(self, scope):
-        temp = Identifier(self.filename, self.line_number, self.temp_name)
-        iterator = MethodCall(self.filename, self.line_number, self.iterable, "iterator", [])
-        assign0 = Assignment(self.filename, self.line_number, temp, iterator)
+        temp = Identifier(random_letters(10), self.filename, self.line_number, self.temp_name)
+        iterator = MethodCall(random_letters(10), self.filename, self.line_number, self.iterable, "iterator", [])
+        assign0 = Assignment(random_letters(10), self.filename, self.line_number, temp, iterator)
         assign0.codegen(scope)
-        nxt_call = MethodCall(self.filename, self.line_number, temp, "next", [])
+        nxt_call = MethodCall(random_letters(10), self.filename, self.line_number, temp, "next", [])
         nxt_type = nxt_call.exprtype(scope)
         continue_type = scope.simplify(Union.from_list([t for t in nxt_type.types.data if t != Nil()]))
-        inductee = Identifier(self.filename, self.line_number, self.inductee)
-        assign1 = Assignment(self.filename, self.line_number, inductee, nxt_call)
-        condition = TypeCheck(self.filename, self.line_number, inductee, continue_type)
-        wile = WhileStatement(self.filename, self.line_number, condition, assign1, self.body)
+        inductee = Identifier(random_letters(10), self.filename, self.line_number, self.inductee)
+        assign1 = Assignment(random_letters(10), self.filename, self.line_number, inductee, nxt_call)
+        condition = TypeCheck(random_letters(10), self.filename, self.line_number, inductee, continue_type)
+        wile = WhileStatement(random_letters(10), self.filename, self.line_number, condition, assign1, self.body)
         wile.codegen(scope)
 
     def typeflow(self, scope):
         iterable_type = self.iterable.exprtype(scope)
         if not isinstance(iterable_type, FatPtr):
             raise Exception(f"Line {self.line_number}: For-loop iterable must be an object with a .iterator() method, not {iterable_type}")
-        temp = Identifier(self.filename, self.line_number, self.temp_name)
-        iterator = MethodCall(self.filename, self.line_number, self.iterable, "iterator", [])
+        temp = Identifier(random_letters(10), self.filename, self.line_number, self.temp_name)
+        iterator = MethodCall(random_letters(10), self.filename, self.line_number, self.iterable, "iterator", [])
         iterator_type = iterator.exprtype(scope)
         if not isinstance(iterator_type, FatPtr):
             raise Exception(f"Line {self.line_number}: For-loop iterator must be an object with a .next() method, not {iterator_type}")
-        assign0 = Assignment(self.filename, self.line_number, temp, iterator)
+        assign0 = Assignment(random_letters(10), self.filename, self.line_number, temp, iterator)
         assign0.typeflow(scope)
 
-        nxt_call = MethodCall(self.filename, self.line_number, temp, "next", [])
+        nxt_call = MethodCall(random_letters(10), self.filename, self.line_number, temp, "next", [])
         nxt_type = nxt_call.exprtype(scope)
         if not isinstance(nxt_type, Union):
             print(nxt_type)
@@ -2419,10 +2433,10 @@ class For(Statement):
         if continue_type == Nothing():
             raise Exception(f"Line {self.line_number}: For-loop would never enter.")
 
-        inductee = Identifier(self.filename, self.line_number, self.inductee)
-        assign1 = Assignment(self.filename, self.line_number, inductee, nxt_call)
-        condition = TypeCheck(self.filename, self.line_number, inductee, continue_type)
-        wile = WhileStatement(self.filename, self.line_number, condition, assign1, self.body)
+        inductee = Identifier(random_letters(10), self.filename, self.line_number, self.inductee)
+        assign1 = Assignment(random_letters(10), self.filename, self.line_number, inductee, nxt_call)
+        condition = TypeCheck(random_letters(10), self.filename, self.line_number, inductee, continue_type)
+        wile = WhileStatement(random_letters(10), self.filename, self.line_number, condition, assign1, self.body)
         wile.typeflow(scope)
 
 @dataclass

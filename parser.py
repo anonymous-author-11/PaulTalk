@@ -40,7 +40,7 @@ class CSTTransformer(Transformer):
         self.file_name = file_name
     
     def start(self, *statements):
-        self.tree.root = Program(self.file_name, 0, statements)
+        self.tree.root = Program(random_letters(10), self.file_name, 0, statements)
         return self.tree
 
     def statement(self, stmt):
@@ -48,11 +48,11 @@ class CSTTransformer(Transformer):
 
     def extern_def(self, constraints, name, params, return_type, yield_type):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
-        return ExternDef(self.file_name, name.line, name.value, constraints or [], params or [], len(params or []), return_type, yield_type or exception_or_nil)
+        return ExternDef(random_letters(10), self.file_name, name.line, name.value, constraints or [], params or [], len(params or []), return_type, yield_type or exception_or_nil)
 
     def function_def(self, constraints, name, params, return_type, yield_type, body):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
-        return FunctionDef(self.file_name, name.line, name.value, constraints or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, False)
+        return FunctionDef(random_letters(10), self.file_name, name.line, name.value, constraints or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, False)
 
     def abstract(self):
         return True
@@ -61,7 +61,7 @@ class CSTTransformer(Transformer):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractMethodDef if abstract else MethodDef
         mangled_name = name.value + "_" + clean_param_names(params)
-        return ty(self.file_name, name.line, name.value, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
+        return ty(random_letters(10), self.file_name, name.line, name.value, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
 
     def operator_def(self, constraints, abstract, op, type_params, params, return_type, yield_type, body):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
@@ -71,13 +71,13 @@ class CSTTransformer(Transformer):
         }[op.value]
         ty = AbstractMethodDef if abstract else MethodDef
         mangled_name = translated_op + "_" + clean_param_names(params)
-        return ty(self.file_name, op.line, translated_op, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
+        return ty(random_letters(10), self.file_name, op.line, translated_op, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
 
     def class_method_def(self, constraints, abstract, name, type_params, params, return_type, yield_type, body):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractClassMethodDef if abstract else ClassMethodDef
         mangled_name = "_Self_" + name.value + "_" + clean_param_names(params)
-        return ty(self.file_name, name.line, "_Self_" + name.value, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
+        return ty(random_letters(10), self.file_name, name.line, "_Self_" + name.value, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
 
     def class_def(self, cls, name, supertype_list, bound_list, *members):
         if not isinstance(name, FatPtr):
@@ -101,7 +101,7 @@ class CSTTransformer(Transformer):
         
         direct_supertypes = [typ for typ in supertype_list] if supertype_list else [FatPtr.basic("Object")]
         if class_name == "Object": direct_supertypes = []
-        class_def = ClassDef(self.file_name, cls.line, class_name, type_parameters, direct_supertypes, None, fields, methods, [], None, None, None)
+        class_def = ClassDef(random_letters(10), self.file_name, cls.line, class_name, type_parameters, direct_supertypes, None, fields, methods, [], None, None, None)
         for field in fields: field.defining_class = class_def
         for method in methods:
             method.defining_class = class_def
@@ -115,52 +115,52 @@ class CSTTransformer(Transformer):
         return list(constraints)
 
     def constraint(self, lhs, op, rhs):
-        return Constraint(self.file_name, op.line, lhs.value, op.value, rhs.value)
+        return Constraint(random_letters(10), self.file_name, op.line, lhs.value, op.value, rhs.value)
 
     def alias(self, alias, name, meaning):
-        return Alias(self.file_name, alias.line, name, meaning)
+        return Alias(random_letters(10), self.file_name, alias.line, name, meaning)
 
     def import_statement(self, *names):
         file_str = "/".join([name.value for name in names]) + ".mini"
         ast = parse(file_str)
-        return Import(self.file_name, names[0].line, file_str, ast.root, Scope())
+        return Import(random_letters(10), self.file_name, names[0].line, file_str, ast.root, Scope())
 
     def ident_list(self, *ids):
         return list(ids)
 
     def param(self, name, typ):
-        return VarDecl(self.file_name, name.line, name.value, typ)
+        return VarDecl(random_letters(10), self.file_name, name.line, name.value, typ)
 
     def method_param(self, param):
         return param
 
     def var_decl(self, name, typ, initial_value):
-        if initial_value: return VarInit(self.file_name, name.line, name.value, typ, initial_value)
-        return VarInit(self.file_name, name.line, name.value, typ, NilLiteral(name.line))
+        if initial_value: return VarInit(random_letters(10), self.file_name, name.line, name.value, typ, initial_value)
+        return VarInit(random_letters(10), self.file_name, name.line, name.value, typ, NilLiteral(name.line))
 
     def field_decl(self, name, typ):
-        return FieldDecl(self.file_name, name.line, name.value, typ, None)
+        return FieldDecl(random_letters(10), self.file_name, name.line, name.value, typ, None)
 
     def assignment(self, target, value):
-        return Assignment(self.file_name, target.line_number, target, value)
+        return Assignment(random_letters(10), self.file_name, target.line_number, target, value)
 
     def if_statement(self, condition, then_block, else_block=None):
-        return IfStatement(self.file_name, condition.line_number, condition, then_block, else_block)
+        return IfStatement(random_letters(10), self.file_name, condition.line_number, condition, then_block, else_block)
 
     def while_statement(self, condition, body):
-        return WhileStatement(self.file_name, condition.line_number, condition, None, body)
+        return WhileStatement(random_letters(10), self.file_name, condition.line_number, condition, None, body)
 
     def for_statement(self, inductee, iterator, body):
-        return For(self.file_name, inductee.line, inductee.value, iterator, body, "_temp_" + random_letters(10))
+        return For(random_letters(10), self.file_name, inductee.line, inductee.value, iterator, body, "_temp_" + random_letters(10))
 
     def return_statement(self, ret, value):
-        return ReturnValue(self.file_name, ret.line, value) if value else Return(self.file_name, ret.line)
+        return ReturnValue(random_letters(10), self.file_name, ret.line, value) if value else Return(random_letters(10), self.file_name, ret.line)
 
     def break_statement(self, tree):
-        return Break(self.file_name, tree.line)
+        return Break(random_letters(10), self.file_name, tree.line)
 
     def continue_statement(self, tree):
-        return Continue(self.file_name, tree.line)
+        return Continue(random_letters(10), self.file_name, tree.line)
 
     def typ(self, t):
         return t
@@ -208,7 +208,7 @@ class CSTTransformer(Transformer):
         return StackAlloc([inner_type])
 
     def block(self, *statements):
-        return BlockNode(self.file_name, statements[0].line_number if len(statements) > 0 else 0, list(statements))
+        return BlockNode(random_letters(10), self.file_name, statements[0].line_number if len(statements) > 0 else 0, list(statements))
 
     def expression(self, expr):
         return expr
@@ -228,23 +228,23 @@ class CSTTransformer(Transformer):
             "%":"MOD","<<":"LSHIFT",">>":"RSHIFT",
             "bit_and":"bit_and","bit_or":"bit_or","bit_xor":"bit_xor"
         }[op.value]
-        return Arithmetic(self.file_name, op.line, left, translated_op, right)
+        return Arithmetic(random_letters(10), self.file_name, op.line, left, translated_op, right)
 
     def comparison(self, left, op, right):
         translated_op = {"==":"EQ","!=":"NEQ","<":"LT",">":"GT","<=":"LE",">=":"GE"}[op.value]
-        return Comparison(self.file_name, op.line, left, translated_op, right)
+        return Comparison(random_letters(10), self.file_name, op.line, left, translated_op, right)
 
     def logical(self, left, op, right):
-        return Logical(self.file_name, op.line, left, op.value, right)
+        return Logical(random_letters(10), self.file_name, op.line, left, op.value, right)
 
     def bitwise(self, left, op, right):
-        return Bitwise(self.file_name, op.line, left, op.value, right)
+        return Bitwise(random_letters(10), self.file_name, op.line, left, op.value, right)
 
     def operator(self, op):
         return op
 
     def type_check(self, identifier, typ):
-        return TypeCheck(self.file_name, identifier.line, Identifier(self.file_name, identifier.line, identifier.value), typ)
+        return TypeCheck(random_letters(10), self.file_name, identifier.line, Identifier(random_letters(10), self.file_name, identifier.line, identifier.value), typ)
 
     def term_single(self, factor):
         return factor
@@ -256,84 +256,84 @@ class CSTTransformer(Transformer):
         return comparison
 
     def neg_op(self, minus, expr):
-        if isinstance(expr, IntegerLiteral): return IntegerLiteral(self.file_name, expr.line_number, -1 * expr.value, 32)
-        return NegativeOp(self.file_name, minus.line, expr)
+        if isinstance(expr, IntegerLiteral): return IntegerLiteral(random_letters(10), self.file_name, expr.line_number, -1 * expr.value, 32)
+        return NegativeOp(random_letters(10), self.file_name, minus.line, expr)
 
     def not_op(self, exclam, expr):
-        f = BoolLiteral(self.file_name, exclam.line, 0)
-        return Logical(self.file_name, exclam.line, f, "AND", expr)
+        f = BoolLiteral(random_letters(10), self.file_name, exclam.line, 0)
+        return Logical(random_letters(10), self.file_name, exclam.line, f, "AND", expr)
 
     def paren_expr(self, expr):
         return expr
 
     def int_literal(self, token):
-        return IntegerLiteral(self.file_name, token.line, int(token.value), 32)
+        return IntegerLiteral(random_letters(10), self.file_name, token.line, int(token.value), 32)
 
     def hex_literal(self, token):
-        return IntegerLiteral(self.file_name, token.line, int(token.value, 16), 32)
+        return IntegerLiteral(random_letters(10), self.file_name, token.line, int(token.value, 16), 32)
 
     def float_literal(self, token):
-        return DoubleLiteral(self.file_name, token.line, float(token.value))
+        return DoubleLiteral(random_letters(10), self.file_name, token.line, float(token.value))
 
     def string_literal(self, token):
-        return StringLiteral(self.file_name, token.line, token.value[1:-1])  # Remove quotes
+        return StringLiteral(random_letters(10), self.file_name, token.line, token.value[1:-1])  # Remove quotes
 
     def array_literal(self, lbracket, *elems):
-        return ArrayLiteral(self.file_name, lbracket.line, elems)
+        return ArrayLiteral(random_letters(10), self.file_name, lbracket.line, tuple(elems))
 
     def tuple_literal(self, first, second, *rest):
-        return TupleLiteral(self.file_name, first.line_number, [first, second, *rest])
+        return TupleLiteral(random_letters(10), self.file_name, first.line_number, (first, second, *rest))
 
     def function_literal(self, param_list, yield_type, arrow, block):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         anon_name = "_functionliteral_" + random_letters(10)
-        return FunctionLiteral(self.file_name, arrow.line, anon_name, param_list, len(param_list), block, Any(), yield_type or exception_or_nil)
+        return FunctionLiteral(random_letters(10), self.file_name, arrow.line, anon_name, tuple(param_list), len(param_list), block, Any(), yield_type or exception_or_nil)
 
     def range_literal(self, start, end):
-        return RangeLiteral(self.file_name, start.line_number, start, end)
+        return RangeLiteral(random_letters(10), self.file_name, start.line_number, start, end)
 
     def bool_literal(self, token):
         intval = {"true":1,"false":0}[token.value]
-        return BoolLiteral(self.file_name, token.line, intval)
+        return BoolLiteral(random_letters(10), self.file_name, token.line, intval)
 
     def nil_literal(self, token):
-        return NilLiteral(self.file_name, token.line)
+        return NilLiteral(random_letters(10), self.file_name, token.line)
 
     def primary(self, literal):
         return literal
 
     def identifier(self, token):
-        return Identifier(self.file_name, token.line, token.value)
+        return Identifier(random_letters(10), self.file_name, token.line, token.value)
 
     def field(self, token):
-        return Identifier(self.file_name, token.line, token.value)
+        return Identifier(random_letters(10), self.file_name, token.line, token.value)
 
     def print_call(self, *args):
-        return PrintCall(self.file_name, args[0].line_number if len(args) > 0 else 0, args)
+        return PrintCall(random_letters(10), self.file_name, args[0].line_number if len(args) > 0 else 0, args)
 
     def function_call(self, func_name, *args):
-        return FunctionCall(self.file_name, func_name.line, func_name.value, args)
+        return FunctionCall(random_letters(10), self.file_name, func_name.line, func_name.value, args)
 
     def method_call(self, receiver, meth_name, *args):
         if isinstance(receiver, Identifier) and receiver.name[0].isupper():
             if receiver.name == "Coroutine":
-                return CoCreate(self.file_name, meth_name.line, "coroutine_" + random_letters(10), args)
+                return CoCreate(random_letters(10), self.file_name, meth_name.line, "coroutine_" + random_letters(10), args)
             if meth_name == "new":
-                return ObjectCreation(self.file_name, meth_name.line, random_letters(10), FatPtr.basic(receiver.name), args)
-            return ClassMethodCall(self.file_name, meth_name.line, receiver, meth_name.value, args)
+                return ObjectCreation(random_letters(10), self.file_name, meth_name.line, random_letters(10), FatPtr.basic(receiver.name), args)
+            return ClassMethodCall(random_letters(10), self.file_name, meth_name.line, receiver, meth_name.value, args)
         if isinstance(receiver, ParametrizedAttribute):
             if isinstance(receiver, Buffer):
-                return CreateBuffer(self.file_name, args[0].line_number, receiver, args[0])
+                return CreateBuffer(random_letters(10), self.file_name, args[0].line_number, receiver, args[0])
             if meth_name == "new":
-                return ObjectCreation(self.file_name, meth_name.line, random_letters(10), receiver, args)
+                return ObjectCreation(random_letters(10), self.file_name, meth_name.line, random_letters(10), receiver, args)
             raise Exception("can't handle this yet")
-        return MethodCall(self.file_name, meth_name.line, receiver, meth_name.value, args)
+        return MethodCall(random_letters(10), self.file_name, meth_name.line, receiver, meth_name.value, args)
 
     def indexation(self, receiver, index):
-        return MethodCall(self.file_name, receiver.line_number, receiver, "_index", [index])
+        return MethodCall(random_letters(10), self.file_name, receiver.line_number, receiver, "_index", [index])
 
     def yield_call(self, word, expression):
-        return CoYield(self.file_name, word.line, expression)
+        return CoYield(random_letters(10), self.file_name, word.line, expression)
 
     def expression_statement(self, expression):
-        return ExpressionStatement(self.file_name, expression.line_number, expression)
+        return ExpressionStatement(random_letters(10), self.file_name, expression.line_number, expression)

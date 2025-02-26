@@ -17,6 +17,7 @@ class Scope:
         self.functions = parent.functions if parent else {}
         self.subtype_cache = parent.subtype_cache if parent else {}
         self.simplify_cache = parent.simplify_cache if parent else {}
+        self.points_to_facts = parent.points_to_facts if parent else set()
         self.parent = parent
         self.cls = cls
         self.method = method
