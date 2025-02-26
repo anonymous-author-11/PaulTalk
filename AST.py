@@ -10,6 +10,7 @@ from core_dialect import *
 from utils import *
 from scope import Scope
 from method_dispatch import *
+from constraint_graph import *
 from xdsl.dialects import llvm, arith, builtin, memref, cf, func
 from xdsl.ir import Block, Region, TypeAttribute
 from xdsl.dialects.builtin import (
@@ -1365,6 +1366,7 @@ class MethodDef(Statement):
             body_scope.type_table[param.name] = param.type(self.defining_class._scope)
         self.body.debug_typeflow(body_scope)
         if self.name == "init": self.ensure_proper_init(body_scope)
+        visualize_graph(*create_constraint_graph(body_scope.points_to_facts))
         self.ensure_return_type(scope)
 
     def param_types(self):
@@ -1837,7 +1839,10 @@ class ClassDef(Statement):
         if not self.name[0].isupper():
             raise Exception(f"Line {self.line_number}: Class names should be capitalized.")
         scope.classes[self.name] = self
-        for field in self.fields(): field.declaration.typeflow(self._scope)
+        for field in self.fields():
+            field.declaration.typeflow(self._scope)
+            if not isinstance(field.declaration, TypeFieldDecl):
+                self._scope.points_to_facts.add(("self", "<", field.declaration.name))
         unpruned = [*self.field_declarations, *chain.from_iterable(cls.field_declarations for cls in self.my_ordering())]
         field_names = {declaration.name for declaration in unpruned}
         field_type_sets = [set([f.type(scope) for f in unpruned if f.name == name]) for name in field_names]
@@ -2226,10 +2231,12 @@ class InplaceAssignment(Assignment):
 
     def typeflow(self, scope):
         typ = self.value.exprtype(scope)
-        if isinstance(self.target, MethodCall): return self.target.typeflow(scope)
+        if isinstance(self.target, MethodCall):
+            scope.points_to_facts.add((self.target.receiver.id, "<", self.value.id))
+            return self.target.typeflow(scope)
         if "@" not in self.target.name:
             raise Exception(f"Line {self.line_number}: Neither a field assignment nor a method call assignment.")
-        scope.points_to_facts.add(("self", "<", self.value.id))
+        scope.points_to_facts.add((self.target.id, "==", self.value.id))
         field = next(iter(field.declaration for field in scope.cls.fields() if field.declaration.name == self.target.name), None)
         if not field:
             raise Exception(f"Line {self.line_number}: field {self.target.name} not in class {scope.cls.name}!")
@@ -2472,6 +2479,7 @@ class ReturnValue(Return):
         ret_typ = self.value.exprtype(scope)
         if not scope.subtype(ret_typ, scope.method.return_type()):
             raise Exception(f"Line {self.line_number}: returned value of invalid type: {ret_typ}. Should be subtype of {scope.method.return_type()}.")
+        scope.points_to_facts.add(("ret", "==", self.value.id))
         scope.method.hasreturn = True
 
 @dataclass
