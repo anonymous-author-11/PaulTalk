@@ -1,73 +1,65 @@
-import matplotlib.pyplot as plt
 import networkx as nx
+from networkx.utils import UnionFind
+import matplotlib.pyplot as plt
 
 def create_constraint_graph(constraints):
     """
-    Convert a set of constraint tuples into a directed graph with merged nodes.
+    Convert constraint tuples into a directed graph with merged equivalent nodes.
     
     Args:
         constraints: List of tuples (a, op, b) where op is "==", "<", "<=", ">", or ">="
         
     Returns:
-        tuple: (G, var_mapping) where:
-          - G is a NetworkX DiGraph with merged nodes
-          - var_mapping maps original variables to their representatives
+        tuple: (G, var_mapping) - the graph and variable-to-representative mapping
     """
-    # Process equality constraints using Union-Find
-    parent = {}
+    # Collect all nodes and separate constraints by type
+    nodes = set()
+    equalities = []
+    inequalities = []
     
-    def find(x):
-        if x not in parent:
-            parent[x] = x
-        if parent[x] != x:
-            parent[x] = find(parent[x])  # Path compression
-        return parent[x]
-    
-    def union(x, y):
-        parent[find(x)] = find(y)
-    
-    # Initialize and process variables
     for a, op, b in constraints:
-        if a not in parent:
-            parent[a] = a
-        if b not in parent:
-            parent[b] = b
+        nodes.add(a)
+        nodes.add(b)
         
         if op == "==":
-            union(a, b)
+            equalities.append((a, b))
+        elif op in ("<", "<=", ">", ">="):
+            # Normalize ">" and ">=" by swapping operands
+            if op in (">", ">="):
+                a, b = b, a
+                op = "<=" if op == ">=" else "<"
+            inequalities.append((a, b, op))
+        else:
+            raise ValueError(f"Unsupported operator: {op}")
     
-    # Create the contracted graph
+    # Process equalities using NetworkX's UnionFind
+    uf = UnionFind(nodes)
+    for a, b in equalities:
+        uf.union(a, b)
+    
+    # Create variable mapping and graph
+    var_mapping = {node: uf[node] for node in nodes}
     G = nx.DiGraph()
     
-    # Map variables to representatives
-    var_to_rep = {var: find(var) for var in parent}
+    # Add all representative nodes (including isolated ones)
+    G.add_nodes_from(set(var_mapping.values()))
     
-    # Add nodes (only representatives)
-    G.add_nodes_from(set(var_to_rep.values()))
-    
-    # Add edges for inequality constraints
-    for a, op, b in constraints:
-        rep_a = var_to_rep[a]
-        rep_b = var_to_rep[b]
+    # Add edges for inequalities between representative nodes
+    for a, b, op in inequalities:
+        root_a = var_mapping[a]
+        root_b = var_mapping[b]
         
-        if rep_a == rep_b:
-            continue  # Skip self-loops
-            
-        if op in ["<", "<="]:
-            G.add_edge(rep_a, rep_b, relation=op)
-        elif op in [">", ">="]:
-            G.add_edge(rep_b, rep_a, relation=op)
+        if root_a != root_b:  # Avoid self-loops
+            G.add_edge(root_a, root_b, relation=op)
     
-    return G, var_to_rep
+    return G, var_mapping
 
 def visualize_graph(G, var_mapping):
     """Visualize the constraint graph with merged nodes."""
     # Group variables by representative
     rep_to_vars = {}
     for var, rep in var_mapping.items():
-        if rep not in rep_to_vars:
-            rep_to_vars[rep] = []
-        rep_to_vars[rep].append(var)
+        rep_to_vars.setdefault(rep, []).append(var)
     
     # Create node labels showing all merged variables
     labels = {rep: f"{rep}\n{sorted(vars)}" for rep, vars in rep_to_vars.items()}
@@ -82,5 +74,4 @@ def visualize_graph(G, var_mapping):
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
     
     plt.axis('off')
-    plt.tight_layout()
     plt.show()

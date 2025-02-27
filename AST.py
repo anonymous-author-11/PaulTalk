@@ -998,6 +998,13 @@ class ClassMethodCall(MethodCall):
         scope.region.last_block.add_op(ary)
         return ary.results[0]
 
+    def apply_constraints(self, scope, behavior):
+        formal_constraints = behavior.constraints()
+        mapping = [*((i, arg.info.id) for (i, arg) in enumerate(self.arguments)), ("ret", self.info.id)]
+        mapping = {k:v for k,v in mapping}
+        mapped_constraints = [(mapping[c.lhs], c.op, mapping[c.rhs]) for c in formal_constraints]
+        for triple in mapped_constraints: scope.points_to_facts.add(triple)
+
     def simple_exprtype(self, scope):
         if self.receiver == "Self":
             if not scope.cls:
@@ -1016,6 +1023,7 @@ class ClassMethodCall(MethodCall):
         behavior_decl = behaviors[0]
         if any(isinstance(method.definition, AbstractMethodDef) for method in behavior_decl.methods):
             raise Exception(f"Line {self.info.line_number}: Class method {self.receiver.name}.{self.method} has an abstract overload, and cannot be called directly.")
+        self.apply_constraints(scope, behaviors[0])
         broad = behavior_decl.broad_return_type()
         specialized = behavior_decl.specialized_return_type(rec_typ, arg_types, scope)
         return broad, specialized
@@ -1399,7 +1407,7 @@ class MethodDef(Statement):
             body_scope.type_table[param.name] = param.type(self.defining_class._scope)
         self.body.debug_typeflow(body_scope)
         if self.name == "init": self.ensure_proper_init(body_scope)
-        #visualize_graph(*create_constraint_graph(body_scope.points_to_facts))
+        visualize_graph(*create_constraint_graph(body_scope.points_to_facts))
         self.ensure_return_type(scope)
 
     def param_types(self):
@@ -1586,11 +1594,13 @@ class ClassMethodDef(MethodDef):
             raise Exception(f"Line {self.info.line_number}: Method names should not be capitalized.")
         self.enforce_override_rules(scope)
         body_scope = Scope(scope, method=self)
+        body_scope.points_to_facts = set()
         if any("@" in param.name for param in self.params):
             raise Exception(f"Line {self.info.line_number}: cannot access instance fields ({param.name}) in class methods")
         for i, param in enumerate(self.params):
             param.typeflow(body_scope)
         self.body.debug_typeflow(body_scope)
+        visualize_graph(*create_constraint_graph(body_scope.points_to_facts))
         self.ensure_return_type(scope)
 
     def parent_repr(self):

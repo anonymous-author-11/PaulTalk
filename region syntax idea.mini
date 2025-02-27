@@ -103,11 +103,11 @@ class Array[T] extends Iterable2[T] {
 	@length : i32
 	@capacity : i32
 
-    #[ret < iterable]
+    #[ret < iterator_reg]
 	def Self.from_iterable(iterable : Iterable2[T]) -> Array[T] {
     	result = Array[T].new(); // result == allocation
         
-    	for elem in iterable {      // iterator < iterable, iterator < elem
+    	for elem in iterator_reg::iterable {      // iterator < iterable, iterator < elem
             result.append(elem);    // Array.append is annotated with #[self < x, ret == self], ergo result < elem
                                     // do we know that iterator is dead after this loop?
                                     // there are no variables with longer or equal lifetimes than iterator

@@ -450,6 +450,10 @@ TODO:
 		- I.e. that the annotations cover the parameter-relevant points-to information
 	- Have a constraints() method for every Expression
 		- Actually, just write to points-to graph directly from exprtype
+	- Error if parameters in the augmented graph have outgoing paths to non-parameter nodes
+	- By pessimizing the points-to graph, you can make it so that parameter constraints become effective
+	- By introducing a new region you can effectively create external constraints from internal ones
+	- Upon allocation, introduce points-to equivalence between allocation region and allocation result
 
 - Inheriting from Sentinel (or do Struct types solve this)
 - Bare 'yield();' should yield the coroutine itself?
