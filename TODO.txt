@@ -448,6 +448,8 @@ TODO:
 		- Minimize the augmented graph to include only parameter nodes
 		- Ensure that the parameters nodes do not have more edges in the original graph than the minimized
 		- I.e. that the annotations cover the parameter-relevant points-to information
+	- Have a constraints() method for every Expression
+		- Actually, just write to points-to graph directly from exprtype
 
 - Inheriting from Sentinel (or do Struct types solve this)
 - Bare 'yield();' should yield the coroutine itself?

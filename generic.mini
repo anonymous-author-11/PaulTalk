@@ -43,6 +43,7 @@ b = FancyPair.new((1.0, 2.0, 3.0, 4.0), 5.0);
 IO.print(b.second());
 
 class Iterator2[T] {
+    #[ret > self]
 	abstract def next() -> T | Nil {}
 }
 
@@ -135,7 +136,7 @@ class Array[T] extends Iterable2[T] {
     	before_start = (@length + x) < 0;
         if past_end or before_start { self.throw_oob(x); }
         if x < 0 { x = @length + x; }
-        return @buffer.[x];
+        return self.unsafe_index(x);
     }
     def throw_oob(x : i32) yields OutOfBounds {
     	yield(Exception.new());

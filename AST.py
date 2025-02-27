@@ -517,7 +517,7 @@ class Identifier(Expression):
         if self.name == "self" and scope.method and scope.method.name == "init":
             raise Exception(f"Line {self.info.line_number}: Cannot refer to 'self' within .init() method, as self is not yet initialized")
 
-    def ensured_previously_declared(self, scope):
+    def ensure_previously_declared(self, scope):
         if (self.name not in scope.type_table) and (self.name not in scope.functions):
             raise Exception(f"Line {self.info.line_number}: identifier {self.name} not previously declared!")
 
@@ -525,7 +525,7 @@ class Identifier(Expression):
         self.disallow_self_in_init(scope)
         if "@" in self.name and scope.cls and "self" in scope.type_table:
             return FieldIdentifier(self.info, self.name).exprtype(scope)
-        self.ensured_previously_declared(scope)
+        self.ensure_previously_declared(scope)
         if self.name in scope.type_table: return scope.type_table[self.name]
         if self.name in scope.functions: return FunctionIdentifier(self.info, self.name).exprtype(scope)
 
@@ -644,9 +644,18 @@ class FunctionCall(Expression):
             if(scope.subtype(self.arguments[i].exprtype(scope), param.type(scope))): continue
             raise Exception(f"Line {self.info.line_number}: argument type {self.arguments[i].exprtype(scope)} not subtype of declared parameter type {param.type(scope)} for parameter {param.name}")
 
+    def apply_constraints(self, scope):
+        func = scope.functions[self.function]
+        formal_constraints = func.constraints
+        mapping = [*zip((param.name for param in func.params), (arg.info.id for arg in self.arguments)), ("ret", self.info.id)]
+        mapping = {k:v for k,v in mapping}
+        mapped_constraints = [(mapping[c.lhs], c.op, mapping[c.rhs]) for c in formal_constraints]
+        for triple in mapped_constraints: scope.points_to_facts.add(triple)
+
     def exprtype(self, scope):
         self.ensure_declared(scope)
         self.ensure_valid_arg_types(scope)
+        self.apply_constraints(scope)
         return scope.functions[self.function].return_type()
 
     def typeflow(self, scope):
@@ -723,6 +732,14 @@ class MethodCall(Expression):
         scope.region.last_block.add_op(ary)
         return ary.results[0]
 
+    def apply_constraints(self, scope, behavior):
+        formal_constraints = behavior.constraints()
+        mapping = [*((i, arg.info.id) for (i, arg) in enumerate(self.arguments)), ("ret", self.info.id), ("self", self.receiver.info.id)]
+        mapping = {k:v for k,v in mapping}
+        mapped_constraints = [(mapping[c.lhs], c.op, mapping[c.rhs]) for c in formal_constraints]
+        #print(f"constraints for call {self.receiver}.{self.method}: {formal_constraints}")
+        for triple in mapped_constraints: scope.points_to_facts.add(triple)
+
     def simple_exprtype(self, scope, rec_typ):
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
         if not isinstance(rec_typ, FatPtr):
@@ -736,6 +753,7 @@ class MethodCall(Expression):
             raise Exception(f"Line {self.info.line_number}: there exists no overload of method {rec_typ}.{self.method} compatible with argument types {arg_types}")
         if len(behaviors) > 1:
             raise Exception(f"Line {self.info.line_number}: invocation of {self.method} with argument types {arg_types} is ambiguous.")
+        self.apply_constraints(scope, behaviors[0])
         broad = behaviors[0].broad_return_type()
         specialized = behaviors[0].specialized_return_type(rec_typ, arg_types, scope)
         #print(f"unspecialized return type of {rec_typ}.{self.method} with args {arg_types} is {unspecialized}")
@@ -868,12 +886,16 @@ class BufferIndexation(Indexation):
         scope.region.last_block.add_op(idx)
         return idx.results[0]
 
+    def apply_constraints(self, scope):
+        scope.points_to_facts.add((self.receiver.info.id, "<", self.info.id))
+
     def exprtype(self, scope):
         rec_typ = self.receiver.exprtype(scope)
         self.ensure_prereqs(scope, rec_typ)
         id_typ = self.arguments[0].exprtype(scope)
         if id_typ != Ptr([IntegerType(32)]):
             raise Exception(f"Line {self.info.line_number}: Indexation currently only supported with integers.")
+        self.apply_constraints(scope)
         return scope.simplify(rec_typ.elem_type)
 
 @dataclass
@@ -887,11 +909,15 @@ class TupleIndexation(Indexation):
         scope.region.last_block.add_op(idx)
         return idx.results[0]
 
+    def apply_constraints(self, scope):
+        scope.points_to_facts.add((self.receiver.info.id, "<", self.info.id))
+
     def exprtype(self, scope):
         rec_typ = self.receiver.exprtype(scope)
         self.ensure_prereqs(scope, rec_typ)
         if not isinstance(self.arguments[0], IntegerLiteral):
             raise Exception(f"Line {self.info.line_number}: Tuple indexation currently only supported with integer literals.")
+        self.apply_constraints(scope)
         return rec_typ.types.data[self.arguments[0].value]
 
 @dataclass
@@ -1062,7 +1088,7 @@ class ObjectCreation(Expression):
         scope.symbol_table[self.anon_name] = new_op.results[0]
         scope.type_table[self.anon_name] = self_type
 
-        anon_id = Identifier(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), self.anon_name)
+        anon_id = Identifier(self.info, self.anon_name)
         MethodCall(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), anon_id, "init", self.arguments).codegen(scope)
         if scope.subtype(self_type, FatPtr.basic("Exception")):
             file_name = StringLiteral(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), self.info.filename.replace("\\", "\\\\"))
@@ -1118,6 +1144,9 @@ class ObjectCreation(Expression):
         if any(isinstance(elem.definition, AbstractMethodDef) for elem in cls.vtable() if isinstance(elem, Method)):
             offender = next(elem for elem in cls.vtable() if isinstance(elem, Method) and isinstance(elem.definition, AbstractMethodDef))
             raise Exception(f"Line {self.info.line_number}: Cannot instantiate class {simplified_type} with abstract method {offender.definition.name} defined in class {offender.definition.defining_class.name}")
+        scope.type_table[self.anon_name] = simplified_type
+        anon_id = Identifier(self.info, self.anon_name)
+        MethodCall(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), anon_id, "init", self.arguments).exprtype(scope)
         return simplified_type
 
 @dataclass
@@ -1433,6 +1462,9 @@ class Method:
             for k, t in enumerate(narrow): broad[k] = def_param_types[k]
         return broad
 
+    def constraints(self):
+        return [*chain.from_iterable((self.definition.constraints, *(defn.constraints for defn in self.overridden_methods())))]
+
     def return_type(self):
         return self.cls._scope.simplify(self.definition.return_type())
 
@@ -1604,6 +1636,15 @@ class Behavior(Statement):
         all_return_types = [t for t in all_return_types if t]
         if len(all_return_types) == 0: return None
         return self.cls._scope.simplify(Union.from_list(all_return_types))
+
+    def constraints(self):
+        constraints = []
+        for m in self.methods:
+            mapping = {param.name:i for i,param in enumerate(m.definition.params)}
+            mapping["ret"] = "ret"
+            mapping["self"] = "self"
+            for c in m.constraints(): constraints.append(Constraint(c.info, mapping[c.lhs], c.op, mapping[c.rhs]))
+        return constraints
 
     def __repr__(self):
         return f"Behavior({self.name}, {self.broad_param_types()}, {self.offset})"
@@ -2068,6 +2109,9 @@ class VarDecl(Statement):
     name: str
     _type: TypeAttribute
 
+    def __post_init__(self):
+        self.info.id = self.name
+
     def codegen(self, scope):
         scope.type_table[self.name] = self.type(scope)
 
@@ -2191,10 +2235,9 @@ class Assignment(Statement):
         value_type = self.value.exprtype(scope)
         if not value_type or value_type == llvm.LLVMVoidType():
             raise Exception(f"Line {self.info.line_number}: Assignment impossible: right hand side expression does not return anything.")
-        
+        scope.points_to_facts.add((self.target.info.id, "==", self.value.info.id))
         if isinstance(self.target, MethodCall) or isinstance(self.target, Identifier) and "@" in self.target.name:
             return InplaceAssignment(self.info, self.target, self.value).typeflow(scope)
-        scope.points_to_facts.add((self.target.name, "==", self.value.info.id))
         if(not isinstance(self.target, Identifier)):
             raise Exception(f"Line {self.info.line_number}: lhs in assignment is not an identifier!")
         if self.target.name[0].isupper():
@@ -2236,12 +2279,9 @@ class InplaceAssignment(Assignment):
 
     def typeflow(self, scope):
         typ = self.value.exprtype(scope)
-        if isinstance(self.target, MethodCall):
-            scope.points_to_facts.add((self.target.receiver.info.id, "<", self.value.info.id))
-            return self.target.typeflow(scope)
+        if isinstance(self.target, MethodCall): return self.target.typeflow(scope)
         if "@" not in self.target.name:
             raise Exception(f"Line {self.info.line_number}: Neither a field assignment nor a method call assignment.")
-        scope.points_to_facts.add((self.target.info.id, "==", self.value.info.id))
         field = next(iter(field.declaration for field in scope.cls.fields() if field.declaration.name == self.target.name), None)
         if not field:
             raise Exception(f"Line {self.info.line_number}: field {self.target.name} not in class {scope.cls.name}!")
@@ -2412,7 +2452,7 @@ class For(Statement):
 
     def codegen(self, scope):
         temp = Identifier(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), self.temp_name)
-        iterator = MethodCall(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), self.iterable, "iterator", [])
+        iterator = MethodCall(NodeInfo("_iterator_" + random_letters(10), self.info.filename, self.info.line_number), self.iterable, "iterator", [])
         assign0 = Assignment(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), temp, iterator)
         assign0.codegen(scope)
         nxt_call = MethodCall(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), temp, "next", [])
@@ -2429,7 +2469,7 @@ class For(Statement):
         if not isinstance(iterable_type, FatPtr):
             raise Exception(f"Line {self.info.line_number}: For-loop iterable must be an object with a .iterator() method, not {iterable_type}")
         temp = Identifier(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), self.temp_name)
-        iterator = MethodCall(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), self.iterable, "iterator", [])
+        iterator = MethodCall(NodeInfo("_iterator_" + random_letters(10), self.info.filename, self.info.line_number), self.iterable, "iterator", [])
         iterator_type = iterator.exprtype(scope)
         if not isinstance(iterator_type, FatPtr):
             raise Exception(f"Line {self.info.line_number}: For-loop iterator must be an object with a .next() method, not {iterator_type}")

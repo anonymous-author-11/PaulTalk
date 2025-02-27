@@ -13,11 +13,11 @@ class Scope:
         self.symbol_table = parent.symbol_table.copy() if parent else {}
         self.type_table = parent.type_table.copy() if parent else {}
         self.aliases = parent.aliases.copy() if parent else {}
+        self.points_to_facts = parent.points_to_facts.copy() if parent else set()
         self.classes = parent.classes if parent else {}
         self.functions = parent.functions if parent else {}
         self.subtype_cache = parent.subtype_cache if parent else {}
         self.simplify_cache = parent.simplify_cache if parent else {}
-        self.points_to_facts = parent.points_to_facts.copy() if parent else set()
         self.parent = parent
         self.cls = cls
         self.method = method
@@ -36,6 +36,7 @@ class Scope:
     def merge(self, other: "Scope"):
         for key, value in self.type_table.items():
             self.type_table[key] = self.simplify(Union.from_list([self.type_table[key], other.type_table[key]]))
+        self.points_to_facts = self.points_to_facts.union(other.points_to_facts)
 
     def add_alias(self, key, value):
         if key == value: return
