@@ -166,7 +166,7 @@ class CSTTransformer(Transformer):
         node_info = NodeInfo(random_letters(10), self.file_name, condition.info.line_number)
         return WhileStatement(node_info, condition, None, body)
 
-    def for_statement(self, inductee, iterator, body):
+    def for_statement(self, inductee, region, iterator, body):
         node_info = NodeInfo(random_letters(10), self.file_name, inductee.line)
         return For(node_info, inductee.value, iterator, body, "_temp_" + random_letters(10))
 

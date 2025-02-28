@@ -1380,6 +1380,16 @@ class MethodDef(Statement):
                 continue
             raise Exception(f"Line {self.info.line_number}: field {field.declaration.name} not properly initialized for class {body_scope.cls.name}. You may need to override this constructor.")
 
+    def check_lifetime_constraints(self, body_scope):
+        G, var_mapping = create_constraint_graph(body_scope.points_to_facts)
+        param_names = [*self.defining_class._scope.type_table.keys()]
+        param_names.append("self")
+        if self.hasreturn: param_names.append("ret")
+        transform_parameter_graph(G, var_mapping, param_names)
+        #result, example = query_external_less_than(G, var_mapping, param_names)
+        #print(result)
+        visualize_graph_transformation(G, var_mapping, param_names)
+
     def typeflow(self, scope):
         if self.name[0].isupper():
             raise Exception(f"Line {self.info.line_number}: Method names should not be capitalized.")
@@ -1407,7 +1417,7 @@ class MethodDef(Statement):
             body_scope.type_table[param.name] = param.type(self.defining_class._scope)
         self.body.debug_typeflow(body_scope)
         if self.name == "init": self.ensure_proper_init(body_scope)
-        visualize_graph(*create_constraint_graph(body_scope.points_to_facts))
+        self.check_lifetime_constraints(body_scope)
         self.ensure_return_type(scope)
 
     def param_types(self):
@@ -1471,7 +1481,13 @@ class Method:
         return broad
 
     def constraints(self):
-        return [*chain.from_iterable((self.definition.constraints, *(defn.constraints for defn in self.overridden_methods())))]
+        constraints = [*chain.from_iterable((self.definition.constraints, *(defn.constraints for defn in self.overridden_methods())))]
+        if isinstance(self.definition, ClassMethodDef): return constraints
+        for param in self.definition.params:
+            if "@" not in param.name: continue
+            node_info = NodeInfo(random_letters(10), self.definition.info.filename, self.definition.info.line_number)
+            constraints.append(Constraint(node_info, "self", "<", param.name))
+        return constraints
 
     def return_type(self):
         return self.cls._scope.simplify(self.definition.return_type())
@@ -1589,6 +1605,15 @@ class ClassMethodDef(MethodDef):
             body_scope.symbol_table[param.name] = cast.results[0]
             body_scope.type_table[param.name] = param_type
 
+    def check_lifetime_constraints(self, body_scope):
+        G, var_mapping = create_constraint_graph(body_scope.points_to_facts)
+        param_names = [param.name for param in self.params]
+        if self.hasreturn: param_names.append("ret")
+        transform_parameter_graph(G, var_mapping, param_names)
+        #result, example = query_external_less_than(G, var_mapping, param_names)
+        #print(result)
+        visualize_graph_transformation(G, var_mapping, param_names)
+
     def typeflow(self, scope):
         if self.name[5].isupper():
             raise Exception(f"Line {self.info.line_number}: Method names should not be capitalized.")
@@ -1600,7 +1625,7 @@ class ClassMethodDef(MethodDef):
         for i, param in enumerate(self.params):
             param.typeflow(body_scope)
         self.body.debug_typeflow(body_scope)
-        visualize_graph(*create_constraint_graph(body_scope.points_to_facts))
+        self.check_lifetime_constraints(body_scope)
         self.ensure_return_type(scope)
 
     def parent_repr(self):

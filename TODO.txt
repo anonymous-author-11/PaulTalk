@@ -454,6 +454,10 @@ TODO:
 	- By pessimizing the points-to graph, you can make it so that parameter constraints become effective
 	- By introducing a new region you can effectively create external constraints from internal ones
 	- Upon allocation, introduce points-to equivalence between allocation region and allocation result
+	- Rules
+		- Any interior node (non-parameter) pointed to by a parameter node must be merged with all parameter nodes pointing to it
+		- For any path between two parameter nodes in the graph, there must be a corresponding inequality annotation
+		- For any two parameters in the same node, there must be a corresponding equality annotation
 
 - Inheriting from Sentinel (or do Struct types solve this)
 - Bare 'yield();' should yield the coroutine itself?

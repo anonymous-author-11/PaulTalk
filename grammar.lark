@@ -59,7 +59,7 @@ assignable: IDENT -> identifier
 
 if_statement: "if" expression block ("else" block)?
 while_statement: "while" expression block
-for_statement: "for" IDENT "in" expression block
+for_statement: "for" IDENT "in" [IDENT "::"] expression block
 return_statement: RETURN [expression]
 break_statement: BREAK
 continue_statement: CONTINUE
