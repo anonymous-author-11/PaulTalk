@@ -260,9 +260,13 @@ DONE:
 	- Ensure noalias works [check!]
 - Fix reverted PDL patterns (paramsarray, paramsindexation, new) [check!]
 - Store imports as graph rather than set [check!]
+- Implement lifetime constraints and points-to analysis [check!]
 
 TODO:
 
+- Minimize number of behaviors by merging identical behaviors
+- Minimize size of vtables
+- Conservatively alias parameters for first-class functions
 - Implement Records
 - Reduce number of redundant type fields
 - Do less work for imports

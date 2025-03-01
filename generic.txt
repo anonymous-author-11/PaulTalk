@@ -1,4 +1,5 @@
-import std;
+import core;
+import io;
 
 class Pair[T, U]
 	where T <: Object, U <: Object {
@@ -8,9 +9,11 @@ class Pair[T, U]
 
 	def init(@first : T, @second : U) {
 	}
+    #[ret == self]
 	def first() -> T {
 		return @first;
 	}
+    #[ret == self]
 	def second() -> U {
 		return @second;
 	}
@@ -42,14 +45,27 @@ b = FancyPair.new((1.0, 2.0, 3.0, 4.0), 5.0);
 IO.print(b.second());
 
 class Iterator2[T] {
+    #[ret == self]
 	abstract def next() -> T | Nil {}
 }
 
+class SimpleIterator2[T] extends Iterator2[T] {
+    #[ret > self]
+    abstract def next() -> T | Nil {}
+}
+
+class SimpleIterable2[T] extends Iterable2[T] {
+    #[ret < self]
+    abstract def iterator() -> SimpleIterator2[T] {}
+}
+
 class Iterable2[T] {
+    #[ret < self]
 	abstract def iterator() -> Iterator2[T] {}
 	def each(f : (T)) {
         for x in self { f.call(x); }
     }
+    #[ret == accumulator]
     def reduce(accumulator : T, f : (T, T) -> T) -> T {
         for x in self { accumulator = f.call(accumulator, x); }
         return accumulator;
@@ -65,31 +81,38 @@ class Iterable2[T] {
         for x in self { if f.call(x) { return true; } }
         return false;
     }
-    def map[U](f : (T) -> U) -> Iterable2[U] {
+    #[ret < self, ret < f]
+    def map[U](f : (T) -> U) -> MapIterable2[T, U] {
         return MapIterable2[T, U].new(self, f);
     }
-    def filter(f : (T) -> Bool) -> Iterable2[T] {
+    #[ret < self, ret < f]
+    def filter(f : (T) -> Bool) -> FilterIterable2[T] {
         return FilterIterable2[T].new(self, f);
     }
-    def chain(other : Iterable2[T]) -> Iterable2[T] {
+    #[ret < self, ret < other]
+    def chain(other : Iterable2[T]) -> ChainIterable2[T] {
         return ChainIterable2[T].new(self, other);
     }
-    def interleave(other : Iterable2[T]) -> Iterable2[T] {
+    #[ret < self, ret < other]
+    def interleave(other : Iterable2[T]) -> InterleaveIterable2[T] {
         return InterleaveIterable2[T].new(self, other);
     }
+    #[ret < self, ret < other]
     def zip[U](other : Iterable2[U]) -> ZipIterable2[T, U] {
         return ZipIterable2[T, U].new(self, other);
     }
+    #[ret < self, ret < other]
     def product[U](other : Iterable2[U]) -> ProductIterable2[T, U] {
         return ProductIterable2[T, U].new(self, other);
     }
 }
 
-class Array[T] extends Iterable2[T] {
+class Array[T] extends SimpleIterable2[T] {
 	@buffer : Buffer[T]
 	@length : i32
 	@capacity : i32
 
+    #[ret < iterable]
 	def Self.from_iterable(iterable : Iterable2[T]) -> Array[T] {
     	result = Array[T].new();
     	for elem in iterable { result.append(elem); }
@@ -100,12 +123,19 @@ class Array[T] extends Iterable2[T] {
 		@length = 0;
 		@capacity = 1;
 	}
+    def init(@capacity : i32) {
+        @buffer = Buffer[T].new(@capacity);
+        @length = 0;
+    }
+    #[ret == self]
 	def length() -> i32 {
 		return @length;
 	}
+    #[ret == self]
     def capacity() -> i32 {
     	return @capacity;
     }
+    #[ret == self, self < x]
     def append(x : T) -> Array[T] {
         if @length >= @capacity { self.grow(); }
         @buffer.[@length] = x;
@@ -122,25 +152,27 @@ class Array[T] extends Iterable2[T] {
             i = i + 1;
         }
     }
+    #[ret > self]
     def [](x : i32) -> T yields OutOfBounds | Nil {
     	past_end = x > (@length - 1);
     	before_start = (@length + x) < 0;
         if past_end or before_start { self.throw_oob(x); }
         if x < 0 { x = @length + x; }
-        return @buffer.[x];
+        return self.unsafe_index(x);
     }
     def throw_oob(x : i32) yields OutOfBounds {
-    	yield(OutOfBounds.new(@length, x));
+    	yield(Exception.new());
     }
+    #[ret > self]
     def unsafe_index(x : i32) -> T {
     	return @buffer.[x];
     }
-    def iterator() -> Iterator2[T] {
+    def iterator() -> ArrayIterator[T] {
     	return ArrayIterator[T].new(self);
     }
 }
 
-class ArrayIterator[T] extends Iterator2[T] {
+class ArrayIterator[T] extends SimpleIterator2[T] {
 	@array : Array[T]
 	@index : i32
 
@@ -152,18 +184,18 @@ class ArrayIterator[T] extends Iterator2[T] {
 	}
 }
 
-class MapIterable2[T, U] extends Iterable2[U] {
+class MapIterable2[T, U] extends SimpleIterable2[U] {
     @iterable : Iterable2[T]
     @f : (T) -> U
 
     def init(@iterable : Iterable2[T], @f : (T) -> U) {}
 
-    def iterator() -> Iterator2[U] {
+    def iterator() -> MapIterator2[T, U] {
         return MapIterator2[T, U].new(@iterable.iterator(), @f);
     }
 }
 
-class MapIterator2[T, U] extends Iterator2[U] {
+class MapIterator2[T, U] extends SimpleIterator2[U] {
     @iterator : Iterator2[T]
     @f : (T) -> U
 
@@ -171,23 +203,25 @@ class MapIterator2[T, U] extends Iterator2[U] {
 
     def next() -> U | Nil {
         next = @iterator.next();
-        if next is T { return @f.call(next); }
+        if next is T {
+            return @f.call(next);
+        }
         return nil;
     }
 }
 
-class FilterIterable2[T] extends Iterable2[T] {
+class FilterIterable2[T] extends SimpleIterable2[T] {
     @iterable : Iterable2[T]
     @f : (T) -> Bool
 
     def init(@iterable : Iterable2[T], @f : (T) -> Bool) {}
 
-    def iterator() -> Iterator2[T] {
+    def iterator() -> FilterIterator2[T] {
         return FilterIterator2[T].new(@iterable.iterator(), @f);
     }
 }
 
-class FilterIterator2[T] extends Iterator2[T] {
+class FilterIterator2[T] extends SimpleIterator2[T] {
     @iterator : Iterator2[T]
     @f : (T) -> Bool
     
@@ -203,18 +237,18 @@ class FilterIterator2[T] extends Iterator2[T] {
     }
 }
 
-class ChainIterable2[T] extends Iterable2[T] {
+class ChainIterable2[T] extends SimpleIterable2[T] {
     @first : Iterable2[T]
     @second : Iterable2[T]
 
     def init(@first : Iterable2[T], @second : Iterable2[T]) {}
 
-    def iterator() -> Iterator2[T] {
+    def iterator() -> ChainIterator2[T] {
         return ChainIterator2[T].new(@first.iterator(), @second.iterator());
     }
 }
 
-class ChainIterator2[T] extends Iterator2[T] {
+class ChainIterator2[T] extends SimpleIterator2[T] {
     @first : Iterator2[T]
     @second : Iterator2[T]
     @on_first : Bool
@@ -232,18 +266,18 @@ class ChainIterator2[T] extends Iterator2[T] {
     }
 }
 
-class InterleaveIterable2[T] extends Iterable2[T] {
+class InterleaveIterable2[T] extends SimpleIterable2[T] {
     @first : Iterable2[T]
     @second : Iterable2[T]
 
     def init(@first : Iterable2[T], @second : Iterable2[T]) {}
 
-    def iterator() -> Iterator2[T] {
+    def iterator() -> InterleaveIterator2[T] {
         return InterleaveIterator2[T].new(@first.iterator(), @second.iterator());
     }
 }
 
-class InterleaveIterator2[T] extends Iterator2[T] {
+class InterleaveIterator2[T] extends SimpleIterator2[T] {
     @first : Iterator2[T]
     @second : Iterator2[T]
     @on_first : Bool
@@ -267,7 +301,7 @@ class ZipIterable2[T, U] extends Iterable2[Pair[T, U]] {
 
     def init(@first : Iterable2[T], @second : Iterable2[U]) {}
 
-    def iterator() -> Iterator2[Pair[T, U]] {
+    def iterator() -> ZipIterator2[T, U] {
         return ZipIterator2[T, U].new(@first.iterator(), @second.iterator());
     }
 }
@@ -305,6 +339,7 @@ class ProductIterator2[T, U] extends Iterator2[Pair[T, U]] {
     @second_iterable : Iterable2[U]
     @current_first : T | Nil
 
+    #[self < first_iterable]
     def init(first_iterable : Iterable2[T], @second_iterable : Iterable2[U]) {
         @first_iterator = first_iterable.iterator();
         @second_iterator = @second_iterable.iterator();
@@ -330,7 +365,7 @@ add = (a : i32, b : i32) => { a + b; };
 //addf = (a : f64, b : f64) => { a + b; };
 
 IO.print(ary.reduce(0, add));
-IO.print([5,6,7].reduce(0, add));
+//IO.print([5,6,7].reduce(0, add));
 times_two = (x : i32) => { x * 2; };
 ftimes_two = (x : f64) => { x * 2.0; };
 identity = (x : i32) => { x; };
@@ -355,8 +390,14 @@ class Addable[T, U] {
 
 class Float64 extends Addable[Float64, Float64], Addable[Int32, Float64] {
 	@value : f64
-	def init(@value : f64) {}
-	def value() -> f64 { return @value; }
+
+	def init(@value : f64) {
+    }
+
+    #[ret == self]
+	def value() -> f64 {
+        return @value;
+    }
 	def +(other : Int32) -> Float64 {
 		cast : f64 = other.value();
 		return Float64.new(@value + cast);
@@ -368,8 +409,14 @@ class Float64 extends Addable[Float64, Float64], Addable[Int32, Float64] {
 
 class Int32 extends Addable[Int32, Int32], Addable[Float64, Float64] {
 	@value : i32
-	def init(@value : i32) {}
-	def value() -> i32 { return @value; }
+
+	def init(@value : i32) {
+    }
+
+    #[ret == self]
+	def value() -> i32 {
+        return @value;
+    }
 	def +(other : Int32) -> Int32 {
 		return Int32.new(@value + other.value());
 	}

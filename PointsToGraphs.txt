@@ -1,0 +1,719 @@
+Points-to graph for Pair.init:
+╙── self
+    ├─> @second
+    └─> @first
+
+Points-to graph for Pair.first:
+╙── self
+    ├─> @second
+    └─> @first
+
+
+Node labels:
+  @first: @first [@first, ret]
+
+Points-to graph for Pair.second:
+╙── self
+    ├─> @second
+    └─> @first
+
+
+Node labels:
+  @second: @second [@second, ret]
+
+Points-to graph for Pair.init:
+╙── self
+    ├─> @second
+    └─> @first
+
+Points-to graph for FancyPair.init:
+╙── self
+    ├─> @second
+    └─> @first
+
+Points-to graph for FancyPair.second:
+╙── self
+    ├─> @second
+    └─> @first
+
+
+Node labels:
+  @second: @second [@second, ret]
+
+Points-to graph for FancyPair.init:
+╙── self
+    ├─> @second
+    └─> @first
+
+Points-to graph for Pair.init:
+╙── self
+    ├─> @second
+    └─> @first
+
+Points-to graph for Iterator2.next:
+╙── self
+
+Points-to graph for ScopedIterator2.next:
+╙── self
+
+Points-to graph for ScopedIterable2.iterator:
+╙── self
+
+Points-to graph for Iterable2.iterator:
+╙── self
+
+Points-to graph for Iterable2.each:
+╙── gsnaqjaifn
+    └─> self
+
+
+Node labels:
+  gsnaqjaifn: gsnaqjaifn [_iterator_gureisdozi, _temp_gtjpcugomo, gsnaqjaifn, x]
+
+Points-to graph for Iterable2.reduce:
+╟── accumulator
+╙── _temp_whidkiourx
+    └─> self
+
+
+Node labels:
+  _temp_whidkiourx: _temp_whidkiourx [_iterator_rtadrysusu, _temp_whidkiourx, jkcgvgtczl, x]
+  accumulator: accumulator [accumulator, iculynsmjq, ret]
+
+Points-to graph for Iterable2.all:
+╟── ebiyrnhdcy
+╎   └─> self
+╙── ret
+
+
+Node labels:
+  ebiyrnhdcy: ebiyrnhdcy [_iterator_udlarcvewk, _temp_flimnsjwww, ebiyrnhdcy, x]
+  ret: ret [ret, wwurdbombm, zwpkbnahtr]
+
+Points-to graph for Iterable2.any:
+╟── nyqiupqoaz
+╎   └─> self
+╙── ret
+
+
+Node labels:
+  nyqiupqoaz: nyqiupqoaz [_iterator_lvyindlyen, _temp_ewzikiijko, nyqiupqoaz, x]
+  ret: ret [lmorlgruhh, ret, szskgszrgy]
+
+Points-to graph for Iterable2.map:
+╙── ret
+    ├─> f
+    └─> self
+
+
+Node labels:
+  ret: ret [akwlspzlys, ret]
+
+Points-to graph for Iterable2.filter:
+╙── ret
+    ├─> self
+    └─> f
+
+
+Node labels:
+  ret: ret [ret, xxsxkucate]
+
+Points-to graph for Iterable2.chain:
+╙── ret
+    ├─> self
+    └─> other
+
+
+Node labels:
+  ret: ret [ret, uelexfkhrk]
+
+Points-to graph for Iterable2.interleave:
+╙── ret
+    ├─> other
+    └─> self
+
+
+Node labels:
+  ret: ret [avmwxlvmky, ret]
+
+Points-to graph for Iterable2.zip:
+╙── ret
+    ├─> other
+    └─> self
+
+
+Node labels:
+  ret: ret [ret, wyzoakxsez]
+
+Points-to graph for Iterable2.product:
+╙── ret
+    ├─> other
+    └─> self
+
+
+Node labels:
+  ret: ret [eiznqmnfip, ret]
+
+Points-to graph for Array._Self_from_iterable:
+╙── ret
+    └─> iterable
+
+
+Node labels:
+  ret: ret [_iterator_sdsidaxhqd, _temp_cvmethduxu, elem, jssmhwcjnl, result, ret, rjdxyvekmw, vnblroazoz]
+
+Points-to graph for Array.init:
+╙── self
+    ├─> @buffer
+    ├─> @length
+    └─> @capacity
+
+
+Node labels:
+  @buffer: @buffer [@buffer, bzpivzxuei]
+  @capacity: @capacity [@capacity, wrjolaohvj]
+  @length: @length [@length, nhojbzmuaj]
+
+Points-to graph for Array.init:
+╙── self
+    ├─> @buffer
+    ├─> @length
+    └─> @capacity
+
+
+Node labels:
+  @buffer: @buffer [@buffer, rffeutebnr]
+  @length: @length [@length, xuqftdpcwv]
+
+Points-to graph for Array.length:
+╙── self
+    ├─> @buffer
+    ├─> @length
+    └─> @capacity
+
+
+Node labels:
+  @length: @length [@length, ret]
+
+Points-to graph for Array.capacity:
+╙── self
+    ├─> @buffer
+    ├─> @length
+    └─> @capacity
+
+
+Node labels:
+  @capacity: @capacity [@capacity, ret]
+
+Points-to graph for Array.append:
+╙── ret
+    ├─> @buffer
+    │   └─> x
+    ├─> @length
+    └─> @capacity
+
+
+Node labels:
+  @length: @length [@length, oxvjsvakiz]
+  ret: ret [ret, self]
+  x: x [lzjqarjqlq, x]
+
+Points-to graph for Array.grow:
+╟── self
+╎   ├─> @buffer
+╎   ├─> @length
+╎   └─> @capacity
+╙── vsnunfhaie
+
+
+Node labels:
+  @buffer: @buffer [@buffer, knftueerhx, nwvcvxcwoa, old_buffer, ttjdldjwtq]
+  @capacity: @capacity [@capacity, qyfesdlqug]
+  vsnunfhaie: vsnunfhaie [i, jauqrxxeac, vsnunfhaie]
+
+Points-to graph for Array._index:
+╟── self
+╎   ├─> @buffer
+╎   ├─> ret
+╎   ├─> @length
+╎   └─> @capacity
+╟── before_start
+╟── x
+╙── past_end
+
+
+Node labels:
+  before_start: before_start [before_start, xxztwvgysa]
+  past_end: past_end [past_end, vbnxtcjdou]
+  ret: ret [fzjatopjud, ret]
+  x: x [gxjktxzpeq, x]
+
+Points-to graph for Array.throw_oob:
+╙── self
+    ├─> @buffer
+    ├─> @length
+    └─> @capacity
+
+Points-to graph for Array.unsafe_index:
+╙── self
+    ├─> @buffer
+    │   └─> ret
+    ├─> @length
+    └─> @capacity
+
+
+Node labels:
+  ret: ret [eysmeiybsn, ret]
+
+Points-to graph for Array.iterator:
+╙── ret
+    └─> self
+        ├─> @buffer
+        ├─> @length
+        └─> @capacity
+
+
+Node labels:
+  ret: ret [mpqaadjndc, ret]
+
+Points-to graph for Array.init:
+╙── self
+    ├─> @buffer
+    ├─> @length
+    └─> @capacity
+
+
+Node labels:
+  @buffer: @buffer [@buffer, bzpivzxuei]
+  @capacity: @capacity [@capacity, wrjolaohvj]
+  @length: @length [@length, nhojbzmuaj]
+
+Points-to graph for Array.init:
+╙── self
+    ├─> @buffer
+    ├─> @length
+    └─> @capacity
+
+
+Node labels:
+  @buffer: @buffer [@buffer, rffeutebnr]
+  @length: @length [@length, xuqftdpcwv]
+
+Points-to graph for ArrayIterator.init:
+╙── self
+    ├─> @array
+    └─> @index
+
+
+Node labels:
+  @index: @index [@index, eoaqulzsts]
+
+Points-to graph for ArrayIterator.next:
+╙── self
+    ├─> @array
+    │   └─> ret
+    └─> @index
+
+
+Node labels:
+  @array: @array [@array, fwjdqaapqk]
+  @index: @index [@index, xbchmbnged]
+  ret: ret [hjaenzgrsq, ret, ypmnwsxysu]
+
+Points-to graph for ArrayIterator.init:
+╙── self
+    ├─> @array
+    └─> @index
+
+
+Node labels:
+  @index: @index [@index, eoaqulzsts]
+
+Points-to graph for MapIterable2.init:
+╙── self
+    ├─> @iterable
+    └─> @f
+
+Points-to graph for MapIterable2.iterator:
+╟── self
+╎   ├─> @f <─ ret
+╎   └─> @iterable <─ ret
+╙── ret
+    └─>  ...
+
+
+Node labels:
+  ret: ret [oquojufuqt, ret, yiaistuyke]
+
+Points-to graph for MapIterable2.init:
+╙── self
+    ├─> @iterable
+    └─> @f
+
+Points-to graph for MapIterator2.init:
+╙── self
+    ├─> @f
+    └─> @iterator
+
+Points-to graph for MapIterator2.next:
+╟── ret
+╙── self
+    ├─> @f
+    └─> @iterator
+
+
+Node labels:
+  @iterator: @iterator [@iterator, next, zqjuvcogyv]
+  ret: ret [iunzqqsbur, ret, rlnjelbtat]
+
+Points-to graph for MapIterator2.init:
+╙── self
+    ├─> @f
+    └─> @iterator
+
+Points-to graph for FilterIterable2.init:
+╙── self
+    ├─> @iterable
+    └─> @f
+
+Points-to graph for FilterIterable2.iterator:
+╟── ret
+╎   ├─> @f <─ self
+╎   └─> @iterable <─ self
+╙── self
+    └─>  ...
+
+
+Node labels:
+  ret: ret [nrjqxbonuy, ret, weeebotijd]
+
+Points-to graph for FilterIterable2.init:
+╙── self
+    ├─> @iterable
+    └─> @f
+
+Points-to graph for FilterIterator2.init:
+╙── self
+    ├─> @f
+    └─> @iterator
+
+Points-to graph for FilterIterator2.next:
+╙── self
+    ├─> @iterator
+    └─> @f
+
+
+Node labels:
+  @iterator: @iterator [@iterator, hokvpchvnd, irzrozkfsj, next, ret, vcueuimcrj]
+
+Points-to graph for FilterIterator2.init:
+╙── self
+    ├─> @f
+    └─> @iterator
+
+Points-to graph for ChainIterable2.init:
+╙── self
+    ├─> @second
+    └─> @first
+
+Points-to graph for ChainIterable2.iterator:
+╟── self
+╎   ├─> @second <─ ret
+╎   └─> @first <─ ret
+╙── ret
+    └─>  ...
+
+
+Node labels:
+  ret: ret [bixrvonyud, dqlqnxsqys, ret, wsrphgclja]
+
+Points-to graph for ChainIterable2.init:
+╙── self
+    ├─> @second
+    └─> @first
+
+Points-to graph for ChainIterator2.init:
+╙── self
+    ├─> @second
+    ├─> @first
+    └─> @on_first
+
+
+Node labels:
+  @on_first: @on_first [@on_first, rwxvwbubit]
+
+Points-to graph for ChainIterator2.next:
+╙── self
+    ├─> @first
+    └─> @on_first
+
+
+Node labels:
+  @first: @first [@first, @second, mmcpkclexs, next, ret, xvfaifbsnx]
+  @on_first: @on_first [@on_first, vtrgwvndca]
+
+Points-to graph for ChainIterator2.init:
+╙── self
+    ├─> @second
+    ├─> @first
+    └─> @on_first
+
+
+Node labels:
+  @on_first: @on_first [@on_first, rwxvwbubit]
+
+Points-to graph for InterleaveIterable2.init:
+╙── self
+    ├─> @second
+    └─> @first
+
+Points-to graph for InterleaveIterable2.iterator:
+╟── ret
+╎   ├─> @second <─ self
+╎   └─> @first <─ self
+╙── self
+    └─>  ...
+
+
+Node labels:
+  ret: ret [ljkaelhgdy, phaqhcsgqi, ret, tfzeghegor]
+
+Points-to graph for InterleaveIterable2.init:
+╙── self
+    ├─> @second
+    └─> @first
+
+Points-to graph for InterleaveIterator2.init:
+╙── self
+    ├─> @second
+    ├─> @first
+    └─> @on_first
+
+
+Node labels:
+  @on_first: @on_first [@on_first, rincjfbysv]
+
+Points-to graph for InterleaveIterator2.next:
+╙── self
+    ├─> @first
+    └─> @on_first
+
+
+Node labels:
+  @first: @first [@first, @second, ntyvlndyim, pxwyigpsfz, ret]
+  @on_first: @on_first [@on_first, todjyvlqxa, tyxahrfwpo]
+
+Points-to graph for InterleaveIterator2.init:
+╙── self
+    ├─> @second
+    ├─> @first
+    └─> @on_first
+
+
+Node labels:
+  @on_first: @on_first [@on_first, rincjfbysv]
+
+Points-to graph for ZipIterable2.init:
+╙── self
+    ├─> @second
+    └─> @first
+
+Points-to graph for ZipIterable2.iterator:
+╟── ret
+╎   ├─> @first <─ self
+╎   └─> @second <─ self
+╙── self
+    └─>  ...
+
+
+Node labels:
+  ret: ret [bmremkuocv, ret, txmtyvhqfh, ytklikygoc]
+
+Points-to graph for ZipIterable2.init:
+╙── self
+    ├─> @second
+    └─> @first
+
+Points-to graph for ZipIterator2.init:
+╙── self
+    ├─> @second
+    └─> @first
+
+Points-to graph for ZipIterator2.next:
+╟── self
+╎   ├─> @second <─ ret
+╎   └─> @first <─ ret
+╙── ret
+    └─>  ...
+
+
+Node labels:
+  @first: @first [@first, dmpnfxzthv, first_elem]
+  @second: @second [@second, jsitgxhqln, second_elem]
+  ret: ret [qlxveggnef, ret, wkkqfhgasp]
+
+Points-to graph for ZipIterator2.init:
+╙── self
+    ├─> @second
+    └─> @first
+
+Points-to graph for ProductIterable2.init:
+╙── self
+    ├─> @second
+    └─> @first
+
+Points-to graph for ProductIterable2.iterator:
+╟── ret
+╎   ├─> @second <─ self
+╎   └─> @first <─ self
+╙── self
+    └─>  ...
+
+
+Node labels:
+  ret: ret [lavypednpw, ret]
+
+Points-to graph for ProductIterable2.init:
+╙── self
+    ├─> @second
+    └─> @first
+
+Points-to graph for ProductIterator2.init:
+╙── self
+    ├─> @second_iterator
+    │   └─> @second_iterable <─ self
+    ├─> @current_first
+    │   └─> first_iterable
+    └─>  ...
+
+
+Node labels:
+  @current_first: @current_first [@current_first, @first_iterator, cqzbxmsfda, nuishwykqb]
+  @second_iterator: @second_iterator [@second_iterator, amojbtxiuz]
+
+Points-to graph for ProductIterator2.next:
+╟── self
+╎   ├─> @second_iterator <─ ret
+╎   │   └─> @second_iterable <─ self
+╎   ├─> @current_first <─ ret
+╎   └─>  ...
+╙── ret
+    └─>  ...
+
+
+Node labels:
+  @current_first: @current_first [@current_first, @first_iterator, current_first, kxkkjqqnbe]
+  @second_iterator: @second_iterator [@second_iterator, bqyrhchgxq, llmmlcjuru, second_elem]
+  ret: ret [ixdfbjwsnm, ret, yrmnastlds]
+
+Points-to graph for ProductIterator2.init:
+╙── self
+    ├─> @second_iterator
+    │   └─> @second_iterable <─ self
+    ├─> @current_first
+    │   └─> first_iterable
+    └─>  ...
+
+
+Node labels:
+  @current_first: @current_first [@current_first, @first_iterator, cqzbxmsfda, nuishwykqb]
+  @second_iterator: @second_iterator [@second_iterator, amojbtxiuz]
+
+Points-to graph for Addable._ADD:
+╙── self
+
+Points-to graph for Float64.init:
+╙── self
+    └─> @value
+
+Points-to graph for Float64.value:
+╙── self
+    └─> @value
+
+
+Node labels:
+  @value: @value [@value, ret]
+
+Points-to graph for Float64._ADD:
+╟── self
+╎   └─> @value
+╟── other
+╙── ret
+
+
+Node labels:
+  other: other [cast, fzciezqtux, other]
+  ret: ret [ngrdsmlxny, nwrqlcwprx, ret]
+
+Points-to graph for Float64._ADD:
+╟── ret
+╟── self
+╎   └─> @value
+╙── other
+
+
+Node labels:
+  other: other [other, txysypospr]
+  ret: ret [aggrukbflm, brcwzjlzfo, ret]
+
+Points-to graph for Float64.init:
+╙── self
+    └─> @value
+
+Points-to graph for Int32.init:
+╙── self
+    └─> @value
+
+Points-to graph for Int32.value:
+╙── self
+    └─> @value
+
+
+Node labels:
+  @value: @value [@value, ret]
+
+Points-to graph for Int32._ADD:
+╟── self
+╎   └─> @value
+╟── other
+╙── ret
+
+
+Node labels:
+  @value: @value [@value, cast]
+  other: other [other, rkbiybjpws]
+  ret: ret [jzqhgvaiie, ret, sqjwprvwfe]
+
+Points-to graph for Int32._ADD:
+╟── ret
+╟── other
+╙── self
+    └─> @value
+
+
+Node labels:
+  other: other [cokocdosbx, other]
+  ret: ret [ncqmzssbos, qicmvzbqhi, ret]
+
+Points-to graph for Int32.init:
+╙── self
+    └─> @value
+
+Points-to graph for Holder.init:
+╙── self
+    └─> @held
+
+Points-to graph for Holder.value:
+╟── self
+╎   └─> @held
+╟── ret
+╙── rbkqynlnxr
+    └─> sprzmhqgkv
+
+
+Node labels:
+  ret: ret [gdrmedzvck, ret]
+
+Points-to graph for Holder.init:
+╙── self
+    └─> @held

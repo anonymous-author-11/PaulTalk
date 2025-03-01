@@ -16,6 +16,13 @@ import re
 import networkx as nx
 from AST import included_files
 
+def print_dependency_graph(included_files, file_name):
+    print("Dependency graph:")
+    stringio = StringIO()
+    nx.write_network_text(included_files, sources=[file_name], path=stringio)
+    text_repr = stringio.getvalue().replace("╾","<─").replace("╼",">")
+    print(text_repr)
+
 def main(argv):
     after_imports = time.time()
     print(f"Time to import: {after_imports - start_time} seconds")
@@ -37,10 +44,8 @@ def main(argv):
     #print(tree.pretty())
     module = ast.codegen()
 
-    if show_dependencies:
-        print("Dependency graph:")
-        nx.write_network_text(included_files, sources=[file_name])
-
+    if show_dependencies: print_dependency_graph(included_files, file_name)
+        
     ll_files = [file.split(".")[0] + ".ll" for file in included_files.nodes() if file != file_name]
     for file in ll_files:
         with open(file, "r") as infile: pass

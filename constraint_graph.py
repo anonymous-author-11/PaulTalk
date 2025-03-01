@@ -1,6 +1,7 @@
 import networkx as nx
 from networkx.utils import UnionFind
 import matplotlib.pyplot as plt
+from io import StringIO
 
 def create_constraint_graph(constraints):
     """
@@ -337,3 +338,90 @@ def check_graph_compatibility(G1, var_mapping1, G2, var_mapping2, parameter_name
     
     # All conditions satisfied
     return True, "Both conditions are satisfied"
+
+def rename_nodes_with_parameters(G, var_mapping, parameter_names):
+    """
+    Rename nodes in the graph to use parameter names when possible.
+    
+    Args:
+        G: NetworkX DiGraph
+        var_mapping: Dictionary mapping original variables to representatives
+        parameter_names: List of parameter names
+    
+    Returns:
+        NetworkX DiGraph with renamed nodes
+    """
+    # Create a new graph for the renamed version
+    renamed_G = nx.DiGraph()
+    
+    # Create a mapping from representatives to all variables they represent
+    rep_to_vars = {}
+    for var, rep in var_mapping.items():
+        rep_to_vars.setdefault(rep, []).append(var)
+    
+    # Create a mapping from old node names to new node names
+    node_mapping = {}
+    for node in G.nodes():
+        if node in rep_to_vars:
+            # Find parameters represented by this node
+            params = [v for v in rep_to_vars[node] if v in parameter_names]
+            
+            if params:
+                # Use the first parameter name (alphabetically) as the new name
+                new_name = sorted(params)[0]
+                node_mapping[node] = new_name
+            else:
+                # No parameters, keep original name
+                node_mapping[node] = node
+        else:
+            # Node has no variables, keep original name
+            node_mapping[node] = node
+    
+    # Relabel the graph
+    renamed_G = nx.relabel_nodes(G, node_mapping)
+    
+    # Copy edge attributes
+    for u, v, data in G.edges(data=True):
+        renamed_G[node_mapping[u]][node_mapping[v]].update(data)
+    
+    return renamed_G, node_mapping
+
+def pretty_print_graph(G, var_mapping, parameter_names):
+    """
+    Print a text representation of the graph with parameter names.
+    
+    Args:
+        G: NetworkX DiGraph
+        var_mapping: Dictionary mapping original variables to representatives
+        parameter_names: List of parameter names
+    """
+    # Rename nodes to use parameter names
+    renamed_G, node_mapping = rename_nodes_with_parameters(G, var_mapping, parameter_names)
+    
+    # Add node labels to show all variables in each node
+    node_labels = {}
+    rep_to_vars = {}
+    for var, rep in var_mapping.items():
+        rep_to_vars.setdefault(rep, []).append(var)
+    
+    for node in G.nodes():
+        new_name = node_mapping[node]
+        if node in rep_to_vars:
+            all_vars = sorted(rep_to_vars[node])
+            # Skip adding label if the node name is the only variable it represents
+            if len(all_vars) > 1 or all_vars[0] != new_name:
+                label = f"{new_name} [{', '.join(all_vars)}]"
+                node_labels[new_name] = label
+    
+    # Convert to text representation
+    stringio = StringIO()
+    nx.write_network_text(renamed_G, path=stringio)
+    text_repr = stringio.getvalue()
+    
+    # Add node labels as a key
+    if node_labels:
+        text_repr += "\n\nNode labels:\n"
+        for node, label in sorted(node_labels.items()):
+            text_repr += f"  {label}\n"
+    
+    return text_repr.replace("╾","<─").replace("╼",">")

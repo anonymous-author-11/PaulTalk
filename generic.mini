@@ -49,14 +49,13 @@ class Iterator2[T] {
 	abstract def next() -> T | Nil {}
 }
 
-class SimpleIterator2[T] extends Iterator2[T] {
+class ScopedIterator2[T] extends Iterator2[T] {
     #[ret > self]
     abstract def next() -> T | Nil {}
 }
 
-class SimpleIterable2[T] extends Iterable2[T] {
-    #[ret < self]
-    abstract def iterator() -> SimpleIterator2[T] {}
+class ScopedIterable2[T] extends Iterable2[T] {
+    abstract def iterator() -> ScopedIterator2[T] {}
 }
 
 class Iterable2[T] {
@@ -107,7 +106,7 @@ class Iterable2[T] {
     }
 }
 
-class Array[T] extends SimpleIterable2[T] {
+class Array[T] extends ScopedIterable2[T] {
 	@buffer : Buffer[T]
 	@length : i32
 	@capacity : i32
@@ -172,7 +171,7 @@ class Array[T] extends SimpleIterable2[T] {
     }
 }
 
-class ArrayIterator[T] extends SimpleIterator2[T] {
+class ArrayIterator[T] extends ScopedIterator2[T] {
 	@array : Array[T]
 	@index : i32
 
@@ -184,7 +183,7 @@ class ArrayIterator[T] extends SimpleIterator2[T] {
 	}
 }
 
-class MapIterable2[T, U] extends SimpleIterable2[U] {
+class MapIterable2[T, U] extends ScopedIterable2[U] {
     @iterable : Iterable2[T]
     @f : (T) -> U
 
@@ -195,7 +194,7 @@ class MapIterable2[T, U] extends SimpleIterable2[U] {
     }
 }
 
-class MapIterator2[T, U] extends SimpleIterator2[U] {
+class MapIterator2[T, U] extends ScopedIterator2[U] {
     @iterator : Iterator2[T]
     @f : (T) -> U
 
@@ -210,7 +209,7 @@ class MapIterator2[T, U] extends SimpleIterator2[U] {
     }
 }
 
-class FilterIterable2[T] extends SimpleIterable2[T] {
+class FilterIterable2[T] extends ScopedIterable2[T] {
     @iterable : Iterable2[T]
     @f : (T) -> Bool
 
@@ -221,7 +220,7 @@ class FilterIterable2[T] extends SimpleIterable2[T] {
     }
 }
 
-class FilterIterator2[T] extends SimpleIterator2[T] {
+class FilterIterator2[T] extends ScopedIterator2[T] {
     @iterator : Iterator2[T]
     @f : (T) -> Bool
     
@@ -237,7 +236,7 @@ class FilterIterator2[T] extends SimpleIterator2[T] {
     }
 }
 
-class ChainIterable2[T] extends SimpleIterable2[T] {
+class ChainIterable2[T] extends ScopedIterable2[T] {
     @first : Iterable2[T]
     @second : Iterable2[T]
 
@@ -248,7 +247,7 @@ class ChainIterable2[T] extends SimpleIterable2[T] {
     }
 }
 
-class ChainIterator2[T] extends SimpleIterator2[T] {
+class ChainIterator2[T] extends ScopedIterator2[T] {
     @first : Iterator2[T]
     @second : Iterator2[T]
     @on_first : Bool
@@ -266,7 +265,7 @@ class ChainIterator2[T] extends SimpleIterator2[T] {
     }
 }
 
-class InterleaveIterable2[T] extends SimpleIterable2[T] {
+class InterleaveIterable2[T] extends ScopedIterable2[T] {
     @first : Iterable2[T]
     @second : Iterable2[T]
 
@@ -277,7 +276,7 @@ class InterleaveIterable2[T] extends SimpleIterable2[T] {
     }
 }
 
-class InterleaveIterator2[T] extends SimpleIterator2[T] {
+class InterleaveIterator2[T] extends ScopedIterator2[T] {
     @first : Iterator2[T]
     @second : Iterator2[T]
     @on_first : Bool
