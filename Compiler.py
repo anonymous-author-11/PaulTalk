@@ -47,6 +47,8 @@ def main(argv):
     if show_dependencies: print_dependency_graph(included_files, file_name)
         
     ll_files = [file.split(".")[0] + ".ll" for file in included_files.nodes() if file != file_name]
+
+    # check that all dependencies have already been compiled
     for file in ll_files:
         with open(file, "r") as infile: pass
 

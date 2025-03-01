@@ -1,0 +1,31 @@
+
+// data reg pc incremented
+// allocation -- know exactly where ret value is allocated
+data = Object.new();
+
+// buf reg pc incremented
+// allocation -- know exactly where ret value is allocated
+buf = Buffer[Object].new(1);
+
+// data must outlive buf
+buf.[0] = data;
+
+// ary reg pc incremented
+// buf must outlive ary
+ary = Array.new(buf, 1, 1);
+
+// iter reg pc incremented
+// don't know where iter is allocated. must increment pc internally.
+// ary must outlive iter
+iter = ary.iterator();
+
+// don't know where x is allocated. must increment x reg pc internally.
+// last use of iter imminent-- decrease protection count of ary reg, iter reg, buf reg, data reg
+// iter reg, ary reg, buf reg freed internally
+// data reg atempted free internally; still protected
+// x must outlive iter
+x = iter.next();
+
+// last use of x imminent; x reg (and data) pc decremented
+// x reg (and data) attempted free internally (succeeded)
+IO.print(x);
