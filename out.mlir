@@ -39,7 +39,7 @@
       %18289 = "llvm.insertvalue"(%18287, %18288) <{position = array<i64: 2>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
       "llvm.return"(%18289) : (!llvm.array<3 x ptr>) -> ()
     }) : () -> ()
-    "func.func"() <{arg_attrs = [{llvm.nest}, {}], function_type = (!llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, i160)>, sym_name = "maraswigjb"}> ({
+    "func.func"() <{arg_attrs = [{llvm.nest}, {}], function_type = (!llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, i160)>, sym_name = "efvweetvek"}> ({
     ^bb0(%arg723: !llvm.ptr, %arg724: !llvm.struct<(ptr, i160)>):
       %18262 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, i160)>
       %18263 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
@@ -70,7 +70,7 @@
       %18282 = "llvm.insertvalue"(%18279, %18281) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, i160)>, i160) -> !llvm.struct<(ptr, i160)>
       "func.return"(%18282) : (!llvm.struct<(ptr, i160)>) -> ()
     }) : () -> ()
-    "func.func"() <{arg_attrs = [{llvm.nest}, {}], function_type = (!llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, i160)>, sym_name = "egnhbyapwj"}> ({
+    "func.func"() <{arg_attrs = [{llvm.nest}, {}], function_type = (!llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, i160)>, sym_name = "neosxdadcx"}> ({
     ^bb0(%arg721: !llvm.ptr, %arg722: !llvm.struct<(ptr, i160)>):
       %18241 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, i160)>
       %18242 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
@@ -111,7 +111,7 @@
       %18240 = "llvm.insertvalue"(%18238, %18239) <{position = array<i64: 2>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
       "llvm.return"(%18240) : (!llvm.array<3 x ptr>) -> ()
     }) : () -> ()
-    "func.func"() <{arg_attrs = [{llvm.nest}, {}], function_type = (!llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, i160)>, sym_name = "keegywptcz"}> ({
+    "func.func"() <{arg_attrs = [{llvm.nest}, {}], function_type = (!llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, i160)>, sym_name = "dzgntczdcm"}> ({
     ^bb0(%arg719: !llvm.ptr, %arg720: !llvm.struct<(ptr, i160)>):
       %18213 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, i160)>
       %18214 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
@@ -154,7 +154,7 @@
       %18212 = "llvm.insertvalue"(%18210, %18211) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
       "llvm.return"(%18212) : (!llvm.array<4 x ptr>) -> ()
     }) : () -> ()
-    "func.func"() <{arg_attrs = [{llvm.nest}, {}, {}], function_type = (!llvm.ptr, !llvm.struct<(ptr, i160)>, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, i160)>, sym_name = "ypasyimrys"}> ({
+    "func.func"() <{arg_attrs = [{llvm.nest}, {}, {}], function_type = (!llvm.ptr, !llvm.struct<(ptr, i160)>, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, i160)>, sym_name = "jujknyjsfk"}> ({
     ^bb0(%arg716: !llvm.ptr, %arg717: !llvm.struct<(ptr, i160)>, %arg718: !llvm.struct<(ptr, i160)>):
       %18178 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, i160)>
       %18179 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
@@ -230,7 +230,7 @@
       %18157 = "llvm.insertvalue"(%18155, %18156) <{position = array<i64: 0>}> : (!llvm.array<1 x ptr>, !llvm.ptr) -> !llvm.array<1 x ptr>
       "llvm.return"(%18157) : (!llvm.array<1 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<12 x i8>, linkage = #llvm.linkage<internal>, sym_name = "zsqap_genericmini", value = "generic.mini"}> ({
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<12 x i8>, linkage = #llvm.linkage<internal>, sym_name = "sogaj_genericmini", value = "generic.mini"}> ({
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<1 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "_parameterization_Ptri32"}> ({
       %18152 = "llvm.mlir.undef"() : () -> !llvm.array<1 x ptr>
@@ -2817,21 +2817,21 @@
       %15932 = "llvm.insertvalue"(%15930, %15931) <{position = array<i64: 2>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
       %15933 = "placeholder.addressof"() {global_name = @Int32_B_value_} : () -> !llvm.ptr
       %15934 = "llvm.insertvalue"(%15932, %15933) <{position = array<i64: 3>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %15935 = "placeholder.addressof"() {global_name = @Int32_B__ADD_otherFloat64__ADD_otherInt32} : () -> !llvm.ptr
+      %15935 = "placeholder.addressof"() {global_name = @Int32_B__ADD_otherInt32__ADD_otherFloat64} : () -> !llvm.ptr
       %15936 = "llvm.insertvalue"(%15934, %15935) <{position = array<i64: 4>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
       %15937 = "placeholder.addressof"() {global_name = @Int32_init_valuePtri32} : () -> !llvm.ptr
       %15938 = "llvm.insertvalue"(%15936, %15937) <{position = array<i64: 5>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
       %15939 = "placeholder.addressof"() {global_name = @Int32_value_} : () -> !llvm.ptr
       %15940 = "llvm.insertvalue"(%15938, %15939) <{position = array<i64: 6>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %15941 = "placeholder.addressof"() {global_name = @Int32__ADD_otherFloat64} : () -> !llvm.ptr
+      %15941 = "placeholder.addressof"() {global_name = @Int32__ADD_otherInt32} : () -> !llvm.ptr
       %15942 = "llvm.insertvalue"(%15940, %15941) <{position = array<i64: 7>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %15943 = "placeholder.addressof"() {global_name = @Int32__ADD_otherInt32} : () -> !llvm.ptr
+      %15943 = "placeholder.addressof"() {global_name = @Int32__ADD_otherFloat64} : () -> !llvm.ptr
       %15944 = "llvm.insertvalue"(%15942, %15943) <{position = array<i64: 8>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
       %15945 = "placeholder.addressof"() {global_name = @Int32_field_Int32_0} : () -> !llvm.ptr
       %15946 = "llvm.insertvalue"(%15944, %15945) <{position = array<i64: 9>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
       %15947 = "placeholder.addressof"() {global_name = @Int32_field_Int32_0} : () -> !llvm.ptr
       %15948 = "llvm.insertvalue"(%15946, %15947) <{position = array<i64: 10>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %15949 = "placeholder.addressof"() {global_name = @Int32_B__ADD_otherFloat64__ADD_otherInt32} : () -> !llvm.ptr
+      %15949 = "placeholder.addressof"() {global_name = @Int32_B__ADD_otherInt32__ADD_otherFloat64} : () -> !llvm.ptr
       %15950 = "llvm.insertvalue"(%15948, %15949) <{position = array<i64: 11>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
       %15951 = "placeholder.addressof"() {global_name = @Int32_init_valuePtri32} : () -> !llvm.ptr
       %15952 = "llvm.insertvalue"(%15950, %15951) <{position = array<i64: 12>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
@@ -2839,7 +2839,7 @@
       %15954 = "llvm.insertvalue"(%15952, %15953) <{position = array<i64: 13>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
       %15955 = "placeholder.addressof"() {global_name = @Int32_field_Int32_0} : () -> !llvm.ptr
       %15956 = "llvm.insertvalue"(%15954, %15955) <{position = array<i64: 14>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %15957 = "placeholder.addressof"() {global_name = @Int32_B__ADD_otherFloat64__ADD_otherInt32} : () -> !llvm.ptr
+      %15957 = "placeholder.addressof"() {global_name = @Int32_B__ADD_otherInt32__ADD_otherFloat64} : () -> !llvm.ptr
       %15958 = "llvm.insertvalue"(%15956, %15957) <{position = array<i64: 15>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
       %15959 = "placeholder.addressof"() {global_name = @Int32_init_valuePtri32} : () -> !llvm.ptr
       %15960 = "llvm.insertvalue"(%15958, %15959) <{position = array<i64: 16>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
@@ -7894,7 +7894,7 @@
       %11881 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
       %11882 = "llvm.mlir.zero"() : () -> !llvm.ptr
       %11883 = "llvm.mlir.constant"() <{value = 13 : i32}> : () -> i32
-      %11884 = "llvm.mlir.constant"() <{value = 142 : i32}> : () -> i32
+      %11884 = "llvm.mlir.constant"() <{value = 154 : i32}> : () -> i32
       %11885 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
       %11886 = "llvm.alloca"(%11885) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
       "llvm.store"(%arg542, %11886) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> ()
@@ -7982,7 +7982,7 @@
       %11955 = "llvm.load"(%11953) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
       "llvm.store"(%11955, %11954) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %11956 = "llvm.call_intrinsic"(%11879, %11952) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %11957 = "placeholder.addressof"() {global_name = @zsqap_genericmini} : () -> !llvm.ptr
+      %11957 = "placeholder.addressof"() {global_name = @sogaj_genericmini} : () -> !llvm.ptr
       %11958 = "llvm.alloca"(%11885) <{elem_type = i32}> : (i32) -> !llvm.ptr
       "llvm.store"(%11881, %11958) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
       %11959 = "llvm.load"(%11952) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -18966,7 +18966,7 @@
     ^bb3:  // pred: ^bb2
       "func.return"(%3745) : (!llvm.ptr) -> ()
     }) : () -> ()
-    "func.func"() <{function_type = (i32, i32) -> i32, sym_name = "_functionliteral_xfqohudkig"}> ({
+    "func.func"() <{function_type = (i32, i32) -> i32, sym_name = "_functionliteral_dzowmzripf"}> ({
     ^bb0(%arg75: i32, %arg76: i32):
       %3728 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
       %3729 = "llvm.alloca"(%3728) <{elem_type = i32}> : (i32) -> !llvm.ptr
@@ -18983,7 +18983,7 @@
     ^bb1:  // pred: ^bb0
       "func.return"(%3735) : (i32) -> ()
     }) : () -> ()
-    "func.func"() <{function_type = (i32) -> i32, sym_name = "_functionliteral_crmrlopwwf"}> ({
+    "func.func"() <{function_type = (i32) -> i32, sym_name = "_functionliteral_prrwfmddev"}> ({
     ^bb0(%arg74: i32):
       %3719 = "llvm.mlir.constant"() <{value = 2 : i32}> : () -> i32
       %3720 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
@@ -19001,7 +19001,7 @@
     ^bb1:  // pred: ^bb0
       "func.return"(%3727) : (i32) -> ()
     }) : () -> ()
-    "func.func"() <{function_type = (f64) -> f64, sym_name = "_functionliteral_lsjewljsdm"}> ({
+    "func.func"() <{function_type = (f64) -> f64, sym_name = "_functionliteral_uvwswtpiat"}> ({
     ^bb0(%arg73: f64):
       %3710 = "llvm.mlir.constant"() <{value = 2.000000e+00 : f64}> : () -> f64
       %3711 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
@@ -19019,7 +19019,7 @@
     ^bb1:  // pred: ^bb0
       "func.return"(%3718) : (f64) -> ()
     }) : () -> ()
-    "func.func"() <{function_type = (i32) -> i32, sym_name = "_functionliteral_xlqrxiqnkr"}> ({
+    "func.func"() <{function_type = (i32) -> i32, sym_name = "_functionliteral_cwuvahffoh"}> ({
     ^bb0(%arg72: i32):
       %3707 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
       %3708 = "llvm.alloca"(%3707) <{elem_type = i32}> : (i32) -> !llvm.ptr
@@ -19029,7 +19029,7 @@
     ^bb1:  // pred: ^bb0
       "func.return"(%3709) : (i32) -> ()
     }) : () -> ()
-    "func.func"() <{function_type = (i32) -> f64, sym_name = "_functionliteral_fyfxbxwkiu"}> ({
+    "func.func"() <{function_type = (i32) -> f64, sym_name = "_functionliteral_pfzvxyzijk"}> ({
     ^bb0(%arg71: i32):
       %3701 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
       %3702 = "llvm.alloca"(%3701) <{elem_type = i32}> : (i32) -> !llvm.ptr
@@ -19865,184 +19865,189 @@
     ^bb3:  // pred: ^bb2
       "func.return"(%3109) : (!llvm.ptr) -> ()
     }) : () -> ()
-    "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, i160)>, sym_name = "Int32__ADD_otherFloat64"}> ({
+    "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, i160)>, sym_name = "Int32__ADD_otherInt32"}> ({
     ^bb0(%arg22: !llvm.struct<(ptr, ptr, ptr, i32)>, %arg23: !llvm.struct<(ptr, ptr, ptr, i32)>, %arg24: !llvm.ptr, %arg25: !llvm.struct<(ptr, i160)>):
-      %2956 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, i160)>
-      %2957 = "llvm.mlir.constant"() <{value = 1 : i32}> : () -> i64
-      %2958 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %2959 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %2960 = "llvm.mlir.constant"() <{value = 144 : i64}> : () -> i64
-      %2961 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i64
-      %2962 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %2963 = "llvm.mlir.constant"() <{value = 136 : i32}> : () -> i64
-      %2964 = "llvm.mlir.constant"() <{value = 16 : i64}> : () -> i64
-      %2965 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
-      %2966 = "llvm.alloca"(%2965) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
-      "llvm.store"(%arg22, %2966) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> ()
-      %2967 = "llvm.call_intrinsic"(%2964, %2966) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %2968 = "llvm.alloca"(%2965) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
-      %2969 = "llvm.getelementptr"(%2966) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %2970 = "llvm.getelementptr"(%2968) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %2950 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, i160)>
+      %2951 = "llvm.mlir.constant"() <{value = 1 : i32}> : () -> i64
+      %2952 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %2953 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %2954 = "llvm.mlir.constant"() <{value = 136 : i64}> : () -> i64
+      %2955 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i64
+      %2956 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %2957 = "llvm.mlir.constant"() <{value = 136 : i32}> : () -> i64
+      %2958 = "llvm.mlir.constant"() <{value = 16 : i64}> : () -> i64
+      %2959 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
+      %2960 = "llvm.alloca"(%2959) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
+      "llvm.store"(%arg22, %2960) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> ()
+      %2961 = "llvm.call_intrinsic"(%2958, %2960) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %2962 = "llvm.alloca"(%2959) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
+      %2963 = "llvm.getelementptr"(%2960) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %2964 = "llvm.getelementptr"(%2962) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %2965 = "llvm.load"(%2963) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%2965, %2964) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %2966 = "llvm.getelementptr"(%2960) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %2967 = "llvm.getelementptr"(%2962) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %2968 = "llvm.load"(%2966) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%2968, %2967) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %2969 = "llvm.getelementptr"(%2960) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
+      %2970 = "llvm.getelementptr"(%2962) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
       %2971 = "llvm.load"(%2969) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
       "llvm.store"(%2971, %2970) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %2972 = "llvm.getelementptr"(%2966) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %2973 = "llvm.getelementptr"(%2968) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %2974 = "llvm.load"(%2972) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%2974, %2973) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %2975 = "llvm.getelementptr"(%2966) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
-      %2976 = "llvm.getelementptr"(%2968) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
-      %2977 = "llvm.load"(%2975) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%2977, %2976) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %2978 = "llvm.getelementptr"(%2966) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %2979 = "llvm.getelementptr"(%2968) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %2980 = "llvm.load"(%2978) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
-      "llvm.store"(%2980, %2979) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %2981 = "placeholder.addressof"() {global_name = @Int32} : () -> !llvm.ptr
-      "llvm.call"(%2968, %2981) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
-      %2982 = "llvm.alloca"(%2965) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
-      "llvm.store"(%arg25, %2982) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> ()
-      %2983 = "llvm.alloca"(%2965) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
-      %2984 = "llvm.getelementptr"(%2982) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %2985 = "llvm.getelementptr"(%2983) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %2986 = "llvm.load"(%2984) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%2986, %2985) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %2987 = "llvm.getelementptr"(%2982) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %2988 = "llvm.getelementptr"(%2983) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %2989 = "llvm.load"(%2987) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
-      "llvm.store"(%2989, %2988) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %2990 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
-      "llvm.call"(%2983, %2990) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
-      %2991 = "llvm.load"(%2968) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %2992 = "llvm.extractvalue"(%2991) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>) -> !llvm.ptr
-      %2993 = "llvm.call_intrinsic"(%2963, %2992) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %2994 = "llvm.extractvalue"(%2991) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>) -> i32
-      %2995 = "llvm.getelementptr"(%2992, %2994) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
-      %2996 = "llvm.load"(%2995) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %2997 = "llvm.extractvalue"(%2991) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>) -> !llvm.ptr
-      %2998 = "builtin.unrealized_conversion_cast"(%2996) : (!llvm.ptr) -> ((!llvm.ptr) -> !llvm.ptr)
-      %2999 = "func.call_indirect"(%2998, %2997) : ((!llvm.ptr) -> !llvm.ptr, !llvm.ptr) -> !llvm.ptr
-      %3000 = "llvm.alloca"(%2965) <{elem_type = f64}> : (i32) -> !llvm.ptr
-      %3001 = "llvm.load"(%2999) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %3002 = "arith.sitofp"(%3001) : (i32) -> f64
-      "llvm.store"(%3002, %3000) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %3003 = "llvm.getelementptr"(%2983) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %3004 = "llvm.load"(%3003) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3005 = "llvm.insertvalue"(%2962, %3004) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3006 = "llvm.getelementptr"(%2983) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3007 = "llvm.load"(%3006) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3008 = "llvm.insertvalue"(%3005, %3007) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3009 = "llvm.getelementptr"(%2983) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
-      %3010 = "llvm.load"(%3009) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3011 = "llvm.insertvalue"(%3008, %3010) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3012 = "llvm.getelementptr"(%2983) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %3013 = "llvm.load"(%3012) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %3014 = "llvm.insertvalue"(%3011, %3013) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3015 = "llvm.alloca"(%2965) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
-      %3016 = "llvm.call_intrinsic"(%2961, %3015) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3017 = "llvm.call_intrinsic"(%2960, %3004) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3018 = "llvm.getelementptr"(%3004, %3013) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
-      %3019 = "llvm.getelementptr"(%3018) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 4>}> : (!llvm.ptr) -> !llvm.ptr
-      %3020 = "llvm.load"(%3019) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3021 = "llvm.alloca"(%2965) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
-      %3022 = "builtin.unrealized_conversion_cast"(%3020) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr)
-      %3023 = "func.call_indirect"(%3022, %3014, %3021) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr
-      %3024 = "builtin.unrealized_conversion_cast"(%3023) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64)
-      %3025 = "func.call_indirect"(%3024, %3014, %3014, %3015) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64
-      %3026 = "llvm.alloca"(%2965) <{elem_type = f64}> : (i32) -> !llvm.ptr
-      "llvm.store"(%3025, %3026) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %3027 = "llvm.load"(%3000) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
-      %3028 = "llvm.load"(%3026) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
-      %3029 = "arith.addf"(%3027, %3028) <{fastmath = #arith.fastmath<none>}> : (f64, f64) -> f64
-      %3030 = "llvm.alloca"(%2965) <{elem_type = f64}> : (i32) -> !llvm.ptr
-      "llvm.store"(%3029, %3030) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %3031 = "llvm.getelementptr"(%2959) <{elem_type = !llvm.struct<(f64)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3032 = "llvm.ptrtoint"(%3031) {type = i64} : (!llvm.ptr) -> i64
-      %3033 = "llvm.call"(%3032) {callee = @bump_malloc, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (i64) -> !llvm.ptr
-      %3034 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
-      %3035 = "llvm.alloca"(%2965) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
-      %3036 = "llvm.getelementptr"(%3035) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3037 = "llvm.getelementptr"(%3035) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%3034, %3035) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      "llvm.store"(%3033, %3036) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      "llvm.store"(%2958, %3037) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %3038 = "llvm.call_intrinsic"(%2964, %3035) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3039 = "llvm.getelementptr"(%2983) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %2972 = "llvm.getelementptr"(%2960) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %2973 = "llvm.getelementptr"(%2962) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %2974 = "llvm.load"(%2972) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
+      "llvm.store"(%2974, %2973) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %2975 = "placeholder.addressof"() {global_name = @Int32} : () -> !llvm.ptr
+      "llvm.call"(%2962, %2975) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
+      %2976 = "llvm.alloca"(%2959) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
+      "llvm.store"(%arg25, %2976) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> ()
+      %2977 = "llvm.alloca"(%2959) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
+      %2978 = "llvm.getelementptr"(%2976) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %2979 = "llvm.getelementptr"(%2977) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %2980 = "llvm.load"(%2978) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%2980, %2979) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %2981 = "llvm.getelementptr"(%2976) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %2982 = "llvm.getelementptr"(%2977) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %2983 = "llvm.load"(%2981) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
+      "llvm.store"(%2983, %2982) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
+      %2984 = "placeholder.addressof"() {global_name = @Int32} : () -> !llvm.ptr
+      "llvm.call"(%2977, %2984) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
+      %2985 = "llvm.load"(%2962) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %2986 = "llvm.extractvalue"(%2985) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>) -> !llvm.ptr
+      %2987 = "llvm.call_intrinsic"(%2957, %2986) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %2988 = "llvm.extractvalue"(%2985) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>) -> i32
+      %2989 = "llvm.getelementptr"(%2986, %2988) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
+      %2990 = "llvm.load"(%2989) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %2991 = "llvm.extractvalue"(%2985) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>) -> !llvm.ptr
+      %2992 = "builtin.unrealized_conversion_cast"(%2990) : (!llvm.ptr) -> ((!llvm.ptr) -> !llvm.ptr)
+      %2993 = "func.call_indirect"(%2992, %2991) : ((!llvm.ptr) -> !llvm.ptr, !llvm.ptr) -> !llvm.ptr
+      %2994 = "llvm.getelementptr"(%2977) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %2995 = "llvm.load"(%2994) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %2996 = "llvm.insertvalue"(%2956, %2995) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %2997 = "llvm.getelementptr"(%2977) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %2998 = "llvm.load"(%2997) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %2999 = "llvm.insertvalue"(%2996, %2998) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3000 = "llvm.getelementptr"(%2977) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
+      %3001 = "llvm.load"(%3000) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3002 = "llvm.insertvalue"(%2999, %3001) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3003 = "llvm.getelementptr"(%2977) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3004 = "llvm.load"(%3003) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %3005 = "llvm.insertvalue"(%3002, %3004) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3006 = "llvm.alloca"(%2959) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
+      %3007 = "llvm.call_intrinsic"(%2955, %3006) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3008 = "llvm.call_intrinsic"(%2954, %2995) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3009 = "llvm.getelementptr"(%2995, %3004) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
+      %3010 = "llvm.getelementptr"(%3009) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3011 = "llvm.load"(%3010) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3012 = "llvm.alloca"(%2959) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
+      %3013 = "builtin.unrealized_conversion_cast"(%3011) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr)
+      %3014 = "func.call_indirect"(%3013, %3005, %3012) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr
+      %3015 = "builtin.unrealized_conversion_cast"(%3014) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> i32)
+      %3016 = "func.call_indirect"(%3015, %3005, %3005, %3006) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> i32, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> i32
+      %3017 = "llvm.alloca"(%2959) <{elem_type = i32}> : (i32) -> !llvm.ptr
+      "llvm.store"(%3016, %3017) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %3018 = "llvm.load"(%2993) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %3019 = "llvm.load"(%3017) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %3020 = "arith.addi"(%3018, %3019) <{overflowFlags = #arith.overflow<none>}> : (i32, i32) -> i32
+      %3021 = "llvm.alloca"(%2959) <{elem_type = i32}> : (i32) -> !llvm.ptr
+      "llvm.store"(%3020, %3021) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %3022 = "llvm.getelementptr"(%2953) <{elem_type = !llvm.struct<(i32)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3023 = "llvm.ptrtoint"(%3022) {type = i64} : (!llvm.ptr) -> i64
+      %3024 = "llvm.call"(%3023) {callee = @bump_malloc, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (i64) -> !llvm.ptr
+      %3025 = "placeholder.addressof"() {global_name = @Int32} : () -> !llvm.ptr
+      %3026 = "llvm.alloca"(%2959) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
+      %3027 = "llvm.getelementptr"(%3026) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3028 = "llvm.getelementptr"(%3026) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%3025, %3026) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      "llvm.store"(%3024, %3027) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      "llvm.store"(%2952, %3028) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %3029 = "llvm.call_intrinsic"(%2958, %3026) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3030 = "llvm.load"(%2962) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3031 = "llvm.extractvalue"(%3030) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>) -> !llvm.ptr
+      %3032 = "llvm.call_intrinsic"(%2957, %3031) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3033 = "llvm.extractvalue"(%3030) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>) -> i32
+      %3034 = "llvm.getelementptr"(%3031, %3033) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
+      %3035 = "llvm.load"(%3034) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3036 = "llvm.extractvalue"(%3030) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>) -> !llvm.ptr
+      %3037 = "builtin.unrealized_conversion_cast"(%3035) : (!llvm.ptr) -> ((!llvm.ptr) -> !llvm.ptr)
+      %3038 = "func.call_indirect"(%3037, %3036) : ((!llvm.ptr) -> !llvm.ptr, !llvm.ptr) -> !llvm.ptr
+      %3039 = "llvm.getelementptr"(%2977) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %3040 = "llvm.load"(%3039) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3041 = "llvm.insertvalue"(%2962, %3040) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3042 = "llvm.getelementptr"(%2983) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3041 = "llvm.insertvalue"(%2956, %3040) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3042 = "llvm.getelementptr"(%2977) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %3043 = "llvm.load"(%3042) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %3044 = "llvm.insertvalue"(%3041, %3043) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3045 = "llvm.getelementptr"(%2983) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
+      %3045 = "llvm.getelementptr"(%2977) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
       %3046 = "llvm.load"(%3045) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %3047 = "llvm.insertvalue"(%3044, %3046) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3048 = "llvm.getelementptr"(%2983) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3048 = "llvm.getelementptr"(%2977) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
       %3049 = "llvm.load"(%3048) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
       %3050 = "llvm.insertvalue"(%3047, %3049) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3051 = "llvm.alloca"(%2965) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
-      %3052 = "llvm.call_intrinsic"(%2961, %3051) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3053 = "llvm.call_intrinsic"(%2960, %3040) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3051 = "llvm.alloca"(%2959) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
+      %3052 = "llvm.call_intrinsic"(%2955, %3051) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3053 = "llvm.call_intrinsic"(%2954, %3040) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
       %3054 = "llvm.getelementptr"(%3040, %3049) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
-      %3055 = "llvm.getelementptr"(%3054) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 4>}> : (!llvm.ptr) -> !llvm.ptr
+      %3055 = "llvm.getelementptr"(%3054) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 3>}> : (!llvm.ptr) -> !llvm.ptr
       %3056 = "llvm.load"(%3055) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3057 = "llvm.alloca"(%2965) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
+      %3057 = "llvm.alloca"(%2959) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
       %3058 = "builtin.unrealized_conversion_cast"(%3056) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr)
       %3059 = "func.call_indirect"(%3058, %3050, %3057) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr
-      %3060 = "builtin.unrealized_conversion_cast"(%3059) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64)
-      %3061 = "func.call_indirect"(%3060, %3050, %3050, %3051) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64
-      %3062 = "llvm.alloca"(%2965) <{elem_type = f64}> : (i32) -> !llvm.ptr
-      "llvm.store"(%3061, %3062) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %3063 = "llvm.load"(%3000) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
-      %3064 = "llvm.load"(%3062) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
-      %3065 = "arith.addf"(%3063, %3064) <{fastmath = #arith.fastmath<none>}> : (f64, f64) -> f64
-      %3066 = "llvm.alloca"(%2965) <{elem_type = f64}> : (i32) -> !llvm.ptr
-      "llvm.store"(%3065, %3066) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %3067 = "llvm.load"(%3066) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
-      %3068 = "llvm.getelementptr"(%3035) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3060 = "builtin.unrealized_conversion_cast"(%3059) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> i32)
+      %3061 = "func.call_indirect"(%3060, %3050, %3050, %3051) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> i32, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> i32
+      %3062 = "llvm.alloca"(%2959) <{elem_type = i32}> : (i32) -> !llvm.ptr
+      "llvm.store"(%3061, %3062) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %3063 = "llvm.load"(%3038) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %3064 = "llvm.load"(%3062) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %3065 = "arith.addi"(%3063, %3064) <{overflowFlags = #arith.overflow<none>}> : (i32, i32) -> i32
+      %3066 = "llvm.alloca"(%2959) <{elem_type = i32}> : (i32) -> !llvm.ptr
+      "llvm.store"(%3065, %3066) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %3067 = "llvm.load"(%3066) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %3068 = "llvm.getelementptr"(%3026) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %3069 = "llvm.load"(%3068) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3070 = "llvm.insertvalue"(%2962, %3069) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3071 = "llvm.getelementptr"(%3035) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3070 = "llvm.insertvalue"(%2956, %3069) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3071 = "llvm.getelementptr"(%3026) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %3072 = "llvm.load"(%3071) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %3073 = "llvm.insertvalue"(%3070, %3072) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3074 = "llvm.getelementptr"(%3035) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
+      %3074 = "llvm.getelementptr"(%3026) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
       %3075 = "llvm.load"(%3074) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %3076 = "llvm.insertvalue"(%3073, %3075) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3077 = "llvm.getelementptr"(%3035) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3077 = "llvm.getelementptr"(%3026) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
       %3078 = "llvm.load"(%3077) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
       %3079 = "llvm.insertvalue"(%3076, %3078) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3080 = "placeholder.addressof"() {global_name = @_parameterization_Ptrf64} : () -> !llvm.ptr
-      %3081 = "llvm.alloca"(%2965) <{elem_type = !llvm.array<1 x ptr>}> : (i32) -> !llvm.ptr
+      %3080 = "placeholder.addressof"() {global_name = @_parameterization_Ptri32} : () -> !llvm.ptr
+      %3081 = "llvm.alloca"(%2959) <{elem_type = !llvm.array<1 x ptr>}> : (i32) -> !llvm.ptr
       %3082 = "llvm.getelementptr"(%3081) <{elem_type = !llvm.array<1 x ptr>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       "llvm.store"(%3080, %3082) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %3083 = "llvm.call_intrinsic"(%2957, %3081) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3084 = "llvm.call_intrinsic"(%2960, %3069) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3083 = "llvm.call_intrinsic"(%2951, %3081) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3084 = "llvm.call_intrinsic"(%2954, %3069) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
       %3085 = "llvm.getelementptr"(%3069, %3078) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
-      %3086 = "llvm.getelementptr"(%3085) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3086 = "llvm.getelementptr"(%3085) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 2>}> : (!llvm.ptr) -> !llvm.ptr
       %3087 = "llvm.load"(%3086) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3088 = "llvm.alloca"(%2965) <{elem_type = !llvm.array<1 x ptr>}> : (i32) -> !llvm.ptr
-      %3089 = "builtin.unrealized_conversion_cast"(%3087) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> !llvm.ptr)
-      %3090 = "placeholder.addressof"() {global_name = @f64_typ} : () -> !llvm.ptr
+      %3088 = "llvm.alloca"(%2959) <{elem_type = !llvm.array<1 x ptr>}> : (i32) -> !llvm.ptr
+      %3089 = "builtin.unrealized_conversion_cast"(%3087) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, i32) -> !llvm.ptr)
+      %3090 = "placeholder.addressof"() {global_name = @i32_typ} : () -> !llvm.ptr
       %3091 = "llvm.getelementptr"(%3088) <{elem_type = !llvm.array<1 x ptr>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       "llvm.store"(%3090, %3091) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %3092 = "func.call_indirect"(%3089, %3079, %3088, %3067) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> !llvm.ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> !llvm.ptr
-      %3093 = "builtin.unrealized_conversion_cast"(%3092) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> ())
-      "func.call_indirect"(%3093, %3079, %3079, %3081, %3067) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> (), !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> ()
-      %3094 = "llvm.getelementptr"(%3035) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3092 = "func.call_indirect"(%3089, %3079, %3088, %3067) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, i32) -> !llvm.ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, i32) -> !llvm.ptr
+      %3093 = "builtin.unrealized_conversion_cast"(%3092) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, i32) -> ())
+      "func.call_indirect"(%3093, %3079, %3079, %3081, %3067) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, i32) -> (), !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, i32) -> ()
+      %3094 = "llvm.getelementptr"(%3026) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %3095 = "llvm.load"(%3094) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3096 = "llvm.insertvalue"(%2956, %3095) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> !llvm.struct<(ptr, i160)>
-      %3097 = "llvm.getelementptr"(%3035) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3096 = "llvm.insertvalue"(%2950, %3095) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> !llvm.struct<(ptr, i160)>
+      %3097 = "llvm.getelementptr"(%3026) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %3098 = "llvm.load"(%3097) <{ordering = 0 : i64}> : (!llvm.ptr) -> i160
       %3099 = "llvm.insertvalue"(%3096, %3098) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, i160)>, i160) -> !llvm.struct<(ptr, i160)>
       "cf.br"()[^bb1] : () -> ()
     ^bb1:  // pred: ^bb0
       "func.return"(%3099) : (!llvm.struct<(ptr, i160)>) -> ()
     }) : () -> ()
-    "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, i160)>, sym_name = "Int32__ADD_otherInt32"}> ({
+    "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, i160)>, sym_name = "Int32__ADD_otherFloat64"}> ({
     ^bb0(%arg18: !llvm.struct<(ptr, ptr, ptr, i32)>, %arg19: !llvm.struct<(ptr, ptr, ptr, i32)>, %arg20: !llvm.ptr, %arg21: !llvm.struct<(ptr, i160)>):
       %2806 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, i160)>
       %2807 = "llvm.mlir.constant"() <{value = 1 : i32}> : () -> i64
       %2808 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
       %2809 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %2810 = "llvm.mlir.constant"() <{value = 136 : i64}> : () -> i64
+      %2810 = "llvm.mlir.constant"() <{value = 144 : i64}> : () -> i64
       %2811 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i64
       %2812 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, ptr, ptr, i32)>
       %2813 = "llvm.mlir.constant"() <{value = 136 : i32}> : () -> i64
@@ -20081,7 +20086,7 @@
       %2838 = "llvm.getelementptr"(%2833) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %2839 = "llvm.load"(%2837) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%2839, %2838) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %2840 = "placeholder.addressof"() {global_name = @Int32} : () -> !llvm.ptr
+      %2840 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
       "llvm.call"(%2833, %2840) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %2841 = "llvm.load"(%2818) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
       %2842 = "llvm.extractvalue"(%2841) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>) -> !llvm.ptr
@@ -20092,131 +20097,126 @@
       %2847 = "llvm.extractvalue"(%2841) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>) -> !llvm.ptr
       %2848 = "builtin.unrealized_conversion_cast"(%2846) : (!llvm.ptr) -> ((!llvm.ptr) -> !llvm.ptr)
       %2849 = "func.call_indirect"(%2848, %2847) : ((!llvm.ptr) -> !llvm.ptr, !llvm.ptr) -> !llvm.ptr
-      %2850 = "llvm.getelementptr"(%2833) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %2851 = "llvm.load"(%2850) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %2852 = "llvm.insertvalue"(%2812, %2851) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %2853 = "llvm.getelementptr"(%2833) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %2850 = "llvm.alloca"(%2815) <{elem_type = f64}> : (i32) -> !llvm.ptr
+      %2851 = "llvm.load"(%2849) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %2852 = "arith.sitofp"(%2851) : (i32) -> f64
+      "llvm.store"(%2852, %2850) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
+      %2853 = "llvm.getelementptr"(%2833) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %2854 = "llvm.load"(%2853) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %2855 = "llvm.insertvalue"(%2852, %2854) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %2856 = "llvm.getelementptr"(%2833) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
+      %2855 = "llvm.insertvalue"(%2812, %2854) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %2856 = "llvm.getelementptr"(%2833) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %2857 = "llvm.load"(%2856) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %2858 = "llvm.insertvalue"(%2855, %2857) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %2859 = "llvm.getelementptr"(%2833) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %2860 = "llvm.load"(%2859) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %2861 = "llvm.insertvalue"(%2858, %2860) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %2862 = "llvm.alloca"(%2815) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
-      %2863 = "llvm.call_intrinsic"(%2811, %2862) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %2864 = "llvm.call_intrinsic"(%2810, %2851) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %2865 = "llvm.getelementptr"(%2851, %2860) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
-      %2866 = "llvm.getelementptr"(%2865) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %2867 = "llvm.load"(%2866) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %2868 = "llvm.alloca"(%2815) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
-      %2869 = "builtin.unrealized_conversion_cast"(%2867) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr)
-      %2870 = "func.call_indirect"(%2869, %2861, %2868) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr
-      %2871 = "builtin.unrealized_conversion_cast"(%2870) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> i32)
-      %2872 = "func.call_indirect"(%2871, %2861, %2861, %2862) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> i32, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> i32
-      %2873 = "llvm.alloca"(%2815) <{elem_type = i32}> : (i32) -> !llvm.ptr
-      "llvm.store"(%2872, %2873) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %2874 = "llvm.load"(%2849) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %2875 = "llvm.load"(%2873) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %2876 = "arith.addi"(%2874, %2875) <{overflowFlags = #arith.overflow<none>}> : (i32, i32) -> i32
-      %2877 = "llvm.alloca"(%2815) <{elem_type = i32}> : (i32) -> !llvm.ptr
-      "llvm.store"(%2876, %2877) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %2878 = "llvm.getelementptr"(%2809) <{elem_type = !llvm.struct<(i32)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %2879 = "llvm.ptrtoint"(%2878) {type = i64} : (!llvm.ptr) -> i64
-      %2880 = "llvm.call"(%2879) {callee = @bump_malloc, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (i64) -> !llvm.ptr
-      %2881 = "placeholder.addressof"() {global_name = @Int32} : () -> !llvm.ptr
-      %2882 = "llvm.alloca"(%2815) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
-      %2883 = "llvm.getelementptr"(%2882) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %2884 = "llvm.getelementptr"(%2882) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%2881, %2882) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      "llvm.store"(%2880, %2883) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      "llvm.store"(%2808, %2884) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %2885 = "llvm.call_intrinsic"(%2814, %2882) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %2886 = "llvm.load"(%2818) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %2887 = "llvm.extractvalue"(%2886) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>) -> !llvm.ptr
-      %2888 = "llvm.call_intrinsic"(%2813, %2887) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %2889 = "llvm.extractvalue"(%2886) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>) -> i32
-      %2890 = "llvm.getelementptr"(%2887, %2889) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
-      %2891 = "llvm.load"(%2890) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %2892 = "llvm.extractvalue"(%2886) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>) -> !llvm.ptr
-      %2893 = "builtin.unrealized_conversion_cast"(%2891) : (!llvm.ptr) -> ((!llvm.ptr) -> !llvm.ptr)
-      %2894 = "func.call_indirect"(%2893, %2892) : ((!llvm.ptr) -> !llvm.ptr, !llvm.ptr) -> !llvm.ptr
-      %2895 = "llvm.getelementptr"(%2833) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %2858 = "llvm.insertvalue"(%2855, %2857) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %2859 = "llvm.getelementptr"(%2833) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
+      %2860 = "llvm.load"(%2859) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %2861 = "llvm.insertvalue"(%2858, %2860) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %2862 = "llvm.getelementptr"(%2833) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %2863 = "llvm.load"(%2862) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %2864 = "llvm.insertvalue"(%2861, %2863) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %2865 = "llvm.alloca"(%2815) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
+      %2866 = "llvm.call_intrinsic"(%2811, %2865) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %2867 = "llvm.call_intrinsic"(%2810, %2854) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %2868 = "llvm.getelementptr"(%2854, %2863) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
+      %2869 = "llvm.getelementptr"(%2868) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 4>}> : (!llvm.ptr) -> !llvm.ptr
+      %2870 = "llvm.load"(%2869) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %2871 = "llvm.alloca"(%2815) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
+      %2872 = "builtin.unrealized_conversion_cast"(%2870) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr)
+      %2873 = "func.call_indirect"(%2872, %2864, %2871) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr
+      %2874 = "builtin.unrealized_conversion_cast"(%2873) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64)
+      %2875 = "func.call_indirect"(%2874, %2864, %2864, %2865) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64
+      %2876 = "llvm.alloca"(%2815) <{elem_type = f64}> : (i32) -> !llvm.ptr
+      "llvm.store"(%2875, %2876) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
+      %2877 = "llvm.load"(%2850) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
+      %2878 = "llvm.load"(%2876) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
+      %2879 = "arith.addf"(%2877, %2878) <{fastmath = #arith.fastmath<none>}> : (f64, f64) -> f64
+      %2880 = "llvm.alloca"(%2815) <{elem_type = f64}> : (i32) -> !llvm.ptr
+      "llvm.store"(%2879, %2880) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
+      %2881 = "llvm.getelementptr"(%2809) <{elem_type = !llvm.struct<(f64)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %2882 = "llvm.ptrtoint"(%2881) {type = i64} : (!llvm.ptr) -> i64
+      %2883 = "llvm.call"(%2882) {callee = @bump_malloc, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (i64) -> !llvm.ptr
+      %2884 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
+      %2885 = "llvm.alloca"(%2815) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
+      %2886 = "llvm.getelementptr"(%2885) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %2887 = "llvm.getelementptr"(%2885) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%2884, %2885) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      "llvm.store"(%2883, %2886) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      "llvm.store"(%2808, %2887) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %2888 = "llvm.call_intrinsic"(%2814, %2885) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %2889 = "llvm.getelementptr"(%2833) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %2890 = "llvm.load"(%2889) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %2891 = "llvm.insertvalue"(%2812, %2890) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %2892 = "llvm.getelementptr"(%2833) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %2893 = "llvm.load"(%2892) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %2894 = "llvm.insertvalue"(%2891, %2893) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %2895 = "llvm.getelementptr"(%2833) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
       %2896 = "llvm.load"(%2895) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %2897 = "llvm.insertvalue"(%2812, %2896) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %2898 = "llvm.getelementptr"(%2833) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %2899 = "llvm.load"(%2898) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %2900 = "llvm.insertvalue"(%2897, %2899) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %2901 = "llvm.getelementptr"(%2833) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
-      %2902 = "llvm.load"(%2901) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %2903 = "llvm.insertvalue"(%2900, %2902) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %2904 = "llvm.getelementptr"(%2833) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %2905 = "llvm.load"(%2904) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %2906 = "llvm.insertvalue"(%2903, %2905) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %2897 = "llvm.insertvalue"(%2894, %2896) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %2898 = "llvm.getelementptr"(%2833) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %2899 = "llvm.load"(%2898) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %2900 = "llvm.insertvalue"(%2897, %2899) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %2901 = "llvm.alloca"(%2815) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
+      %2902 = "llvm.call_intrinsic"(%2811, %2901) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %2903 = "llvm.call_intrinsic"(%2810, %2890) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %2904 = "llvm.getelementptr"(%2890, %2899) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
+      %2905 = "llvm.getelementptr"(%2904) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 4>}> : (!llvm.ptr) -> !llvm.ptr
+      %2906 = "llvm.load"(%2905) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %2907 = "llvm.alloca"(%2815) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
-      %2908 = "llvm.call_intrinsic"(%2811, %2907) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %2909 = "llvm.call_intrinsic"(%2810, %2896) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %2910 = "llvm.getelementptr"(%2896, %2905) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
-      %2911 = "llvm.getelementptr"(%2910) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %2912 = "llvm.load"(%2911) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %2913 = "llvm.alloca"(%2815) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
-      %2914 = "builtin.unrealized_conversion_cast"(%2912) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr)
-      %2915 = "func.call_indirect"(%2914, %2906, %2913) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr
-      %2916 = "builtin.unrealized_conversion_cast"(%2915) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> i32)
-      %2917 = "func.call_indirect"(%2916, %2906, %2906, %2907) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> i32, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> i32
-      %2918 = "llvm.alloca"(%2815) <{elem_type = i32}> : (i32) -> !llvm.ptr
-      "llvm.store"(%2917, %2918) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %2919 = "llvm.load"(%2894) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %2920 = "llvm.load"(%2918) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %2921 = "arith.addi"(%2919, %2920) <{overflowFlags = #arith.overflow<none>}> : (i32, i32) -> i32
-      %2922 = "llvm.alloca"(%2815) <{elem_type = i32}> : (i32) -> !llvm.ptr
-      "llvm.store"(%2921, %2922) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %2923 = "llvm.load"(%2922) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %2924 = "llvm.getelementptr"(%2882) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %2908 = "builtin.unrealized_conversion_cast"(%2906) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr)
+      %2909 = "func.call_indirect"(%2908, %2900, %2907) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr
+      %2910 = "builtin.unrealized_conversion_cast"(%2909) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64)
+      %2911 = "func.call_indirect"(%2910, %2900, %2900, %2901) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64
+      %2912 = "llvm.alloca"(%2815) <{elem_type = f64}> : (i32) -> !llvm.ptr
+      "llvm.store"(%2911, %2912) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
+      %2913 = "llvm.load"(%2850) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
+      %2914 = "llvm.load"(%2912) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
+      %2915 = "arith.addf"(%2913, %2914) <{fastmath = #arith.fastmath<none>}> : (f64, f64) -> f64
+      %2916 = "llvm.alloca"(%2815) <{elem_type = f64}> : (i32) -> !llvm.ptr
+      "llvm.store"(%2915, %2916) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
+      %2917 = "llvm.load"(%2916) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
+      %2918 = "llvm.getelementptr"(%2885) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %2919 = "llvm.load"(%2918) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %2920 = "llvm.insertvalue"(%2812, %2919) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %2921 = "llvm.getelementptr"(%2885) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %2922 = "llvm.load"(%2921) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %2923 = "llvm.insertvalue"(%2920, %2922) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %2924 = "llvm.getelementptr"(%2885) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
       %2925 = "llvm.load"(%2924) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %2926 = "llvm.insertvalue"(%2812, %2925) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %2927 = "llvm.getelementptr"(%2882) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %2928 = "llvm.load"(%2927) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %2929 = "llvm.insertvalue"(%2926, %2928) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %2930 = "llvm.getelementptr"(%2882) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
-      %2931 = "llvm.load"(%2930) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %2932 = "llvm.insertvalue"(%2929, %2931) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %2933 = "llvm.getelementptr"(%2882) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %2934 = "llvm.load"(%2933) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %2935 = "llvm.insertvalue"(%2932, %2934) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %2936 = "placeholder.addressof"() {global_name = @_parameterization_Ptri32} : () -> !llvm.ptr
-      %2937 = "llvm.alloca"(%2815) <{elem_type = !llvm.array<1 x ptr>}> : (i32) -> !llvm.ptr
-      %2938 = "llvm.getelementptr"(%2937) <{elem_type = !llvm.array<1 x ptr>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%2936, %2938) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %2939 = "llvm.call_intrinsic"(%2807, %2937) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %2940 = "llvm.call_intrinsic"(%2810, %2925) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %2941 = "llvm.getelementptr"(%2925, %2934) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
-      %2942 = "llvm.getelementptr"(%2941) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 2>}> : (!llvm.ptr) -> !llvm.ptr
-      %2943 = "llvm.load"(%2942) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %2944 = "llvm.alloca"(%2815) <{elem_type = !llvm.array<1 x ptr>}> : (i32) -> !llvm.ptr
-      %2945 = "builtin.unrealized_conversion_cast"(%2943) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, i32) -> !llvm.ptr)
-      %2946 = "placeholder.addressof"() {global_name = @i32_typ} : () -> !llvm.ptr
-      %2947 = "llvm.getelementptr"(%2944) <{elem_type = !llvm.array<1 x ptr>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%2946, %2947) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %2948 = "func.call_indirect"(%2945, %2935, %2944, %2923) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, i32) -> !llvm.ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, i32) -> !llvm.ptr
-      %2949 = "builtin.unrealized_conversion_cast"(%2948) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, i32) -> ())
-      "func.call_indirect"(%2949, %2935, %2935, %2937, %2923) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, i32) -> (), !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, i32) -> ()
-      %2950 = "llvm.getelementptr"(%2882) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %2951 = "llvm.load"(%2950) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %2952 = "llvm.insertvalue"(%2806, %2951) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> !llvm.struct<(ptr, i160)>
-      %2953 = "llvm.getelementptr"(%2882) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %2954 = "llvm.load"(%2953) <{ordering = 0 : i64}> : (!llvm.ptr) -> i160
-      %2955 = "llvm.insertvalue"(%2952, %2954) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, i160)>, i160) -> !llvm.struct<(ptr, i160)>
+      %2926 = "llvm.insertvalue"(%2923, %2925) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %2927 = "llvm.getelementptr"(%2885) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %2928 = "llvm.load"(%2927) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %2929 = "llvm.insertvalue"(%2926, %2928) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %2930 = "placeholder.addressof"() {global_name = @_parameterization_Ptrf64} : () -> !llvm.ptr
+      %2931 = "llvm.alloca"(%2815) <{elem_type = !llvm.array<1 x ptr>}> : (i32) -> !llvm.ptr
+      %2932 = "llvm.getelementptr"(%2931) <{elem_type = !llvm.array<1 x ptr>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%2930, %2932) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %2933 = "llvm.call_intrinsic"(%2807, %2931) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %2934 = "llvm.call_intrinsic"(%2810, %2919) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %2935 = "llvm.getelementptr"(%2919, %2928) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
+      %2936 = "llvm.getelementptr"(%2935) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %2937 = "llvm.load"(%2936) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %2938 = "llvm.alloca"(%2815) <{elem_type = !llvm.array<1 x ptr>}> : (i32) -> !llvm.ptr
+      %2939 = "builtin.unrealized_conversion_cast"(%2937) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> !llvm.ptr)
+      %2940 = "placeholder.addressof"() {global_name = @f64_typ} : () -> !llvm.ptr
+      %2941 = "llvm.getelementptr"(%2938) <{elem_type = !llvm.array<1 x ptr>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%2940, %2941) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %2942 = "func.call_indirect"(%2939, %2929, %2938, %2917) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> !llvm.ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> !llvm.ptr
+      %2943 = "builtin.unrealized_conversion_cast"(%2942) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> ())
+      "func.call_indirect"(%2943, %2929, %2929, %2931, %2917) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> (), !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> ()
+      %2944 = "llvm.getelementptr"(%2885) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %2945 = "llvm.load"(%2944) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %2946 = "llvm.insertvalue"(%2806, %2945) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> !llvm.struct<(ptr, i160)>
+      %2947 = "llvm.getelementptr"(%2885) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %2948 = "llvm.load"(%2947) <{ordering = 0 : i64}> : (!llvm.ptr) -> i160
+      %2949 = "llvm.insertvalue"(%2946, %2948) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, i160)>, i160) -> !llvm.struct<(ptr, i160)>
       "cf.br"()[^bb1] : () -> ()
     ^bb1:  // pred: ^bb0
-      "func.return"(%2955) : (!llvm.struct<(ptr, i160)>) -> ()
+      "func.return"(%2949) : (!llvm.struct<(ptr, i160)>) -> ()
     }) : () -> ()
-    "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.ptr, sym_name = "Int32_B__ADD_otherFloat64__ADD_otherInt32"}> ({
+    "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.ptr, sym_name = "Int32_B__ADD_otherInt32__ADD_otherFloat64"}> ({
     ^bb0(%arg15: !llvm.struct<(ptr, ptr, ptr, i32)>, %arg16: !llvm.ptr, %arg17: !llvm.struct<(ptr, i160)>):
       %2740 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
-      %2741 = "llvm.mlir.constant"() <{value = -3157560240565274503 : i64}> : () -> i64
-      %2742 = "llvm.mlir.constant"() <{value = 8748823673944961442 : i64}> : () -> i64
+      %2741 = "llvm.mlir.constant"() <{value = 8748823673944961442 : i64}> : () -> i64
+      %2742 = "llvm.mlir.constant"() <{value = -3157560240565274503 : i64}> : () -> i64
       %2743 = "llvm.mlir.constant"() <{value = 8 : i32}> : () -> i32
       %2744 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
       %2745 = "llvm.mlir.constant"() <{value = 8 : i64}> : () -> i64
@@ -20237,7 +20237,7 @@
       %2756 = "llvm.load"(%2752) <{ordering = 0 : i64}> : (!llvm.ptr) -> i64
       %2757 = "llvm.load"(%2753) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %2758 = "llvm.load"(%2754) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %2759 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
+      %2759 = "placeholder.addressof"() {global_name = @Int32} : () -> !llvm.ptr
       %2760 = "llvm.ptrtoint"(%2759) : (!llvm.ptr) -> i64
       %2761 = "llvm.call"(%2757, %2756, %2755, %2742, %2760, %2758) {callee = @subtype_test_wrapper, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 6, 0>} : (!llvm.ptr, i64, i64, i64, i64, !llvm.ptr) -> i1
       "cf.cond_br"(%2761)[^bb3, ^bb4] <{operandSegmentSizes = array<i32: 1, 0, 0>}> : (i1) -> ()
@@ -20252,7 +20252,7 @@
       %2769 = "llvm.load"(%2765) <{ordering = 0 : i64}> : (!llvm.ptr) -> i64
       %2770 = "llvm.load"(%2766) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %2771 = "llvm.load"(%2767) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %2772 = "placeholder.addressof"() {global_name = @Int32} : () -> !llvm.ptr
+      %2772 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
       %2773 = "llvm.ptrtoint"(%2772) : (!llvm.ptr) -> i64
       %2774 = "llvm.call"(%2770, %2769, %2768, %2741, %2773, %2771) {callee = @subtype_test_wrapper, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 6, 0>} : (!llvm.ptr, i64, i64, i64, i64, !llvm.ptr) -> i1
       "cf.cond_br"(%2774, %2744)[^bb4, ^bb1] <{operandSegmentSizes = array<i32: 1, 0, 1>}> : (i1, i32) -> ()
@@ -20267,7 +20267,7 @@
       %2782 = "llvm.load"(%2778) <{ordering = 0 : i64}> : (!llvm.ptr) -> i64
       %2783 = "llvm.load"(%2779) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %2784 = "llvm.load"(%2780) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %2785 = "placeholder.addressof"() {global_name = @Int32} : () -> !llvm.ptr
+      %2785 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
       %2786 = "llvm.ptrtoint"(%2785) : (!llvm.ptr) -> i64
       %2787 = "llvm.call"(%2783, %2782, %2781, %2741, %2786, %2784) {callee = @subtype_test_wrapper, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 6, 0>} : (!llvm.ptr, i64, i64, i64, i64, !llvm.ptr) -> i1
       "cf.cond_br"(%2787, %2743)[^bb5, ^bb1] <{operandSegmentSizes = array<i32: 1, 0, 1>}> : (i1, i32) -> ()
@@ -20282,7 +20282,7 @@
       %2795 = "llvm.load"(%2791) <{ordering = 0 : i64}> : (!llvm.ptr) -> i64
       %2796 = "llvm.load"(%2792) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %2797 = "llvm.load"(%2793) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %2798 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
+      %2798 = "placeholder.addressof"() {global_name = @Int32} : () -> !llvm.ptr
       %2799 = "llvm.ptrtoint"(%2798) : (!llvm.ptr) -> i64
       %2800 = "llvm.call"(%2796, %2795, %2794, %2742, %2799, %2797) {callee = @subtype_test_wrapper, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 6, 0>} : (!llvm.ptr, i64, i64, i64, i64, !llvm.ptr) -> i1
       "cf.cond_br"(%2800, %2743, %2743)[^bb1, ^bb1] <{operandSegmentSizes = array<i32: 1, 1, 1>}> : (i1, i32, i32) -> ()
@@ -22362,7 +22362,7 @@
       "llvm.store"(%993, %992) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
       %994 = "placeholder.addressof"() {global_name = @Array} : () -> !llvm.ptr
       "llvm.call"(%981, %994) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
-      %995 = "placeholder.addressof"() {global_name = @_functionliteral_xfqohudkig} : () -> !llvm.ptr
+      %995 = "placeholder.addressof"() {global_name = @_functionliteral_dzowmzripf} : () -> !llvm.ptr
       %996 = "llvm.alloca"(%18) <{elem_type = !llvm.ptr}> : (i32) -> !llvm.ptr
       "llvm.store"(%995, %996) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %997 = "llvm.alloca"(%18) <{elem_type = i32}> : (i32) -> !llvm.ptr
@@ -22385,7 +22385,7 @@
       %1010 = "llvm.ptrtoint"(%1009) {type = i64} : (!llvm.ptr) -> i64
       %1011 = "llvm.call"(%1010) {callee = @bump_malloc, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (i64) -> !llvm.ptr
       "llvm.call"(%1011) {callee = @anoint_trampoline, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (!llvm.ptr) -> ()
-      %1012 = "placeholder.addressof"() {global_name = @ypasyimrys} : () -> !llvm.ptr
+      %1012 = "placeholder.addressof"() {global_name = @jujknyjsfk} : () -> !llvm.ptr
       %1013 = "llvm.load"(%996) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       "llvm.call_intrinsic"(%1011, %1012, %1013) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.init.trampoline", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 3, 0>}> : (!llvm.ptr, !llvm.ptr, !llvm.ptr) -> ()
       %1014 = "llvm.alloca"(%18) <{elem_type = !llvm.ptr}> : (i32) -> !llvm.ptr
@@ -22469,23 +22469,23 @@
       %1080 = "func.call_indirect"(%1078, %1077, %1068) : ((!llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.ptr, !llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.ptr
       %1081 = "builtin.unrealized_conversion_cast"(%1080) : (!llvm.ptr) -> ((!llvm.ptr, !llvm.struct<(ptr, i160)>) -> ())
       "func.call_indirect"(%1081, %1070, %1068) : ((!llvm.ptr, !llvm.struct<(ptr, i160)>) -> (), !llvm.ptr, !llvm.struct<(ptr, i160)>) -> ()
-      %1082 = "placeholder.addressof"() {global_name = @_functionliteral_crmrlopwwf} : () -> !llvm.ptr
+      %1082 = "placeholder.addressof"() {global_name = @_functionliteral_prrwfmddev} : () -> !llvm.ptr
       %1083 = "llvm.alloca"(%18) <{elem_type = !llvm.ptr}> : (i32) -> !llvm.ptr
       "llvm.store"(%1082, %1083) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %1084 = "placeholder.addressof"() {global_name = @_functionliteral_lsjewljsdm} : () -> !llvm.ptr
+      %1084 = "placeholder.addressof"() {global_name = @_functionliteral_uvwswtpiat} : () -> !llvm.ptr
       %1085 = "llvm.alloca"(%18) <{elem_type = !llvm.ptr}> : (i32) -> !llvm.ptr
       "llvm.store"(%1084, %1085) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %1086 = "placeholder.addressof"() {global_name = @_functionliteral_xlqrxiqnkr} : () -> !llvm.ptr
+      %1086 = "placeholder.addressof"() {global_name = @_functionliteral_cwuvahffoh} : () -> !llvm.ptr
       %1087 = "llvm.alloca"(%18) <{elem_type = !llvm.ptr}> : (i32) -> !llvm.ptr
       "llvm.store"(%1086, %1087) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %1088 = "placeholder.addressof"() {global_name = @_functionliteral_fyfxbxwkiu} : () -> !llvm.ptr
+      %1088 = "placeholder.addressof"() {global_name = @_functionliteral_pfzvxyzijk} : () -> !llvm.ptr
       %1089 = "llvm.alloca"(%18) <{elem_type = !llvm.ptr}> : (i32) -> !llvm.ptr
       "llvm.store"(%1088, %1089) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %1090 = "llvm.getelementptr"(%17) <{elem_type = !llvm.array<24 x i8>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
       %1091 = "llvm.ptrtoint"(%1090) {type = i64} : (!llvm.ptr) -> i64
       %1092 = "llvm.call"(%1091) {callee = @bump_malloc, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (i64) -> !llvm.ptr
       "llvm.call"(%1092) {callee = @anoint_trampoline, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (!llvm.ptr) -> ()
-      %1093 = "placeholder.addressof"() {global_name = @keegywptcz} : () -> !llvm.ptr
+      %1093 = "placeholder.addressof"() {global_name = @dzgntczdcm} : () -> !llvm.ptr
       %1094 = "llvm.load"(%1083) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       "llvm.call_intrinsic"(%1092, %1093, %1094) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.init.trampoline", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 3, 0>}> : (!llvm.ptr, !llvm.ptr, !llvm.ptr) -> ()
       %1095 = "llvm.alloca"(%18) <{elem_type = !llvm.ptr}> : (i32) -> !llvm.ptr
@@ -22588,7 +22588,7 @@
       %1174 = "llvm.ptrtoint"(%1173) {type = i64} : (!llvm.ptr) -> i64
       %1175 = "llvm.call"(%1174) {callee = @bump_malloc, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (i64) -> !llvm.ptr
       "llvm.call"(%1175) {callee = @anoint_trampoline, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (!llvm.ptr) -> ()
-      %1176 = "placeholder.addressof"() {global_name = @egnhbyapwj} : () -> !llvm.ptr
+      %1176 = "placeholder.addressof"() {global_name = @neosxdadcx} : () -> !llvm.ptr
       %1177 = "llvm.load"(%1089) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       "llvm.call_intrinsic"(%1175, %1176, %1177) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.init.trampoline", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 3, 0>}> : (!llvm.ptr, !llvm.ptr, !llvm.ptr) -> ()
       %1178 = "llvm.alloca"(%18) <{elem_type = !llvm.ptr}> : (i32) -> !llvm.ptr
@@ -22603,7 +22603,7 @@
       %1186 = "llvm.ptrtoint"(%1185) {type = i64} : (!llvm.ptr) -> i64
       %1187 = "llvm.call"(%1186) {callee = @bump_malloc, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (i64) -> !llvm.ptr
       "llvm.call"(%1187) {callee = @anoint_trampoline, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (!llvm.ptr) -> ()
-      %1188 = "placeholder.addressof"() {global_name = @maraswigjb} : () -> !llvm.ptr
+      %1188 = "placeholder.addressof"() {global_name = @efvweetvek} : () -> !llvm.ptr
       %1189 = "llvm.load"(%1087) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       "llvm.call_intrinsic"(%1187, %1188, %1189) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.init.trampoline", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 3, 0>}> : (!llvm.ptr, !llvm.ptr, !llvm.ptr) -> ()
       %1190 = "llvm.alloca"(%18) <{elem_type = !llvm.ptr}> : (i32) -> !llvm.ptr

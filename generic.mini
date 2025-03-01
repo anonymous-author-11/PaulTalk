@@ -9,9 +9,11 @@ class Pair[T, U]
 
 	def init(@first : T, @second : U) {
 	}
+    #[ret == self]
 	def first() -> T {
 		return @first;
 	}
+    #[ret == self]
 	def second() -> U {
 		return @second;
 	}
@@ -53,6 +55,7 @@ class Iterable2[T] {
 	def each(f : (T)) {
         for x in self { f.call(x); }
     }
+    #[ret == accumulator]
     def reduce(accumulator : T, f : (T, T) -> T) -> T {
         for x in self { accumulator = f.call(accumulator, x); }
         return accumulator;
@@ -68,21 +71,27 @@ class Iterable2[T] {
         for x in self { if f.call(x) { return true; } }
         return false;
     }
+    #[ret < self, ret < f]
     def map[U](f : (T) -> U) -> Iterable2[U] {
         return MapIterable2[T, U].new(self, f);
     }
+    #[ret < self, ret < f]
     def filter(f : (T) -> Bool) -> Iterable2[T] {
         return FilterIterable2[T].new(self, f);
     }
+    #[ret < self, ret < other]
     def chain(other : Iterable2[T]) -> Iterable2[T] {
         return ChainIterable2[T].new(self, other);
     }
+    #[ret < self, ret < other]
     def interleave(other : Iterable2[T]) -> Iterable2[T] {
         return InterleaveIterable2[T].new(self, other);
     }
+    #[ret < self, ret < other]
     def zip[U](other : Iterable2[U]) -> ZipIterable2[T, U] {
         return ZipIterable2[T, U].new(self, other);
     }
+    #[ret < self, ret < other]
     def product[U](other : Iterable2[U]) -> ProductIterable2[T, U] {
         return ProductIterable2[T, U].new(self, other);
     }
@@ -108,13 +117,15 @@ class Array[T] extends Iterable2[T] {
         @buffer = Buffer[T].new(@capacity);
         @length = 0;
     }
+    #[ret == self]
 	def length() -> i32 {
 		return @length;
 	}
+    #[ret == self]
     def capacity() -> i32 {
     	return @capacity;
     }
-    #[x > self]
+    #[ret == self, self < x]
     def append(x : T) -> Array[T] {
         if @length >= @capacity { self.grow(); }
         @buffer.[@length] = x;
@@ -131,6 +142,7 @@ class Array[T] extends Iterable2[T] {
             i = i + 1;
         }
     }
+    #[ret > self]
     def [](x : i32) -> T yields OutOfBounds | Nil {
     	past_end = x > (@length - 1);
     	before_start = (@length + x) < 0;
@@ -141,9 +153,11 @@ class Array[T] extends Iterable2[T] {
     def throw_oob(x : i32) yields OutOfBounds {
     	yield(Exception.new());
     }
+    #[ret > self]
     def unsafe_index(x : i32) -> T {
     	return @buffer.[x];
     }
+    #[ret < self]
     def iterator() -> Iterator2[T] {
     	return ArrayIterator[T].new(self);
     }
@@ -316,6 +330,7 @@ class ProductIterator2[T, U] extends Iterator2[Pair[T, U]] {
     @second_iterable : Iterable2[U]
     @current_first : T | Nil
 
+    #[self < first_iterable]
     def init(first_iterable : Iterable2[T], @second_iterable : Iterable2[U]) {
         @first_iterator = first_iterable.iterator();
         @second_iterator = @second_iterable.iterator();
@@ -366,8 +381,14 @@ class Addable[T, U] {
 
 class Float64 extends Addable[Float64, Float64], Addable[Int32, Float64] {
 	@value : f64
-	def init(@value : f64) {}
-	def value() -> f64 { return @value; }
+
+	def init(@value : f64) {
+    }
+
+    #[ret == self]
+	def value() -> f64 {
+        return @value;
+    }
 	def +(other : Int32) -> Float64 {
 		cast : f64 = other.value();
 		return Float64.new(@value + cast);
@@ -379,8 +400,14 @@ class Float64 extends Addable[Float64, Float64], Addable[Int32, Float64] {
 
 class Int32 extends Addable[Int32, Int32], Addable[Float64, Float64] {
 	@value : i32
-	def init(@value : i32) {}
-	def value() -> i32 { return @value; }
+
+	def init(@value : i32) {
+    }
+
+    #[ret == self]
+	def value() -> i32 {
+        return @value;
+    }
 	def +(other : Int32) -> Int32 {
 		return Int32.new(@value + other.value());
 	}

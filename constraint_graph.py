@@ -303,6 +303,7 @@ def check_graph_compatibility(G1, var_mapping1, G2, var_mapping2, parameter_name
                   for p2 in valid_params[i+1:]]
     
     for p1, p2 in param_pairs:
+        #if "@" in p1 or "@" in p2: continue
         # Check if p1 and p2 are in the same node in G1
         same_node_in_G1 = var_mapping1[p1] == var_mapping1[p2]
         # Check if p1 and p2 are in the same node in G2

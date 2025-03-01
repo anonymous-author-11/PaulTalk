@@ -1345,9 +1345,13 @@ class MethodDef(Statement):
             cast_assign = CastAssignOp.make(field_acc.results[0], body_scope.symbol_table[param.name], param_type, field_type, type_id)
             body_block.add_ops([field_acc, cast_assign])
 
-    def enforce_override_rules(self, scope):
+    def overridden_methods(self):
         parents_methods = [meth for meth in self.defining_class.parents_methods() if meth.name == self.name]
         overridden_methods = [meth for meth in parents_methods if meth.arity == self.arity]
+        return overridden_methods
+
+    def enforce_override_rules(self, scope):
+        overridden_methods = self.overridden_methods()
         overridden_arg_types = [scope.simplify(Union.from_list([self.defining_class._scope.simplify(meth.param_types()[k]) for meth in overridden_methods])) for k in range(self.arity)]
         if len(overridden_methods) > 0 and any(not scope.subtype(param.type(scope), overridden_arg_types[k]) for (k, param) in enumerate(self.params)):
             k, offender = next((k, param) for (k, param) in enumerate(self.params) if not scope.subtype(param.type(scope), overridden_arg_types[k]))
@@ -1381,14 +1385,29 @@ class MethodDef(Statement):
             raise Exception(f"Line {self.info.line_number}: field {field.declaration.name} not properly initialized for class {body_scope.cls.name}. You may need to override this constructor.")
 
     def check_lifetime_constraints(self, body_scope):
-        G, var_mapping = create_constraint_graph(body_scope.points_to_facts)
-        param_names = [*self.defining_class._scope.type_table.keys()]
-        param_names.append("self")
+        fields = [key for key in self.defining_class._scope.type_table.keys() if "@" in key]
+        annotated_facts = set()
+        for name in fields:
+            #annotated_facts.add(("self","<",name))
+            annotated_facts.add(("self","==",name))
+        for meth in self.overridden_methods():
+            for c in meth.constraints:
+                # not robust to differently named parameters
+                annotated_facts.add((c.lhs, c.op, c.rhs))
+        for c in self.constraints:
+            annotated_facts.add((c.lhs, c.op, c.rhs))
+        param_names = [*(param.name for param in self.params), *fields, "self"]
         if self.hasreturn: param_names.append("ret")
-        transform_parameter_graph(G, var_mapping, param_names)
+        for name in param_names: annotated_facts.add((name, "==", name))
+        G0, var_mapping0 = create_constraint_graph(annotated_facts)
+        G1, var_mapping1 = create_constraint_graph(body_scope.points_to_facts)
+        #visualize_graph_transformation(G1, var_mapping1, param_names)
+        G1, var_mapping1 = transform_parameter_graph(G1, var_mapping1, param_names)
+        ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
+        if not ok: print(f"Line {self.info.line_number}: {comment}")
+        #print((ok, comment))
         #result, example = query_external_less_than(G, var_mapping, param_names)
         #print(result)
-        visualize_graph_transformation(G, var_mapping, param_names)
 
     def typeflow(self, scope):
         if self.name[0].isupper():
@@ -1606,13 +1625,23 @@ class ClassMethodDef(MethodDef):
             body_scope.type_table[param.name] = param_type
 
     def check_lifetime_constraints(self, body_scope):
-        G, var_mapping = create_constraint_graph(body_scope.points_to_facts)
         param_names = [param.name for param in self.params]
         if self.hasreturn: param_names.append("ret")
-        transform_parameter_graph(G, var_mapping, param_names)
-        #result, example = query_external_less_than(G, var_mapping, param_names)
-        #print(result)
-        visualize_graph_transformation(G, var_mapping, param_names)
+        annotated_facts = set()
+        for meth in self.overridden_methods():
+            for c in meth.constraints:
+                # not robust to differently named parameters
+                annotated_facts.add((c.lhs, c.op, c.rhs))
+        for c in self.constraints:
+            annotated_facts.add((c.lhs, c.op, c.rhs))
+        for name in param_names:
+            annotated_facts.add((name, "==", name))
+        G0, var_mapping0 = create_constraint_graph(annotated_facts)
+        G1, var_mapping1 = create_constraint_graph(body_scope.points_to_facts)
+        #visualize_graph_transformation(G1, var_mapping1, param_names)
+        G1, var_mapping1 = transform_parameter_graph(G1, var_mapping1, param_names)
+        ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
+        if not ok: print(f"Line {self.info.line_number}: {comment}")
 
     def typeflow(self, scope):
         if self.name[5].isupper():
@@ -1919,6 +1948,7 @@ class ClassDef(Statement):
         if not self.name[0].isupper():
             raise Exception(f"Line {self.info.line_number}: Class names should be capitalized.")
         scope.classes[self.name] = self
+        self._scope.points_to_facts.add(("self","==","self"))
         for field in self.fields():
             field.declaration.typeflow(self._scope)
             if not isinstance(field.declaration, TypeFieldDecl):
