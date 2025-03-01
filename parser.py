@@ -123,6 +123,8 @@ class CSTTransformer(Transformer):
 
     def constraint(self, lhs, op, rhs):
         node_info = NodeInfo(random_letters(10), self.file_name, op.line)
+        # canonicalize to use "<"
+        if op.value == ">": return Constraint(node_info, rhs.value, "<", lhs.value)
         return Constraint(node_info, lhs.value, op.value, rhs.value)
 
     def alias(self, alias, name, meaning):

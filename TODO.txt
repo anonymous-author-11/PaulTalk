@@ -339,6 +339,7 @@ TODO:
 
 # --- Known Bugs ---
 
+- Interface codegenning a method may create a signature mismatch with the original due to different behavior signatures
 - There's a bug in lowering early returns in else clauses [fixed!]
 - Casting to/from Object in unions is not correct [fixed!]
 - .all() is clearly not correct [fixed!]

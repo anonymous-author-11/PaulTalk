@@ -1276,7 +1276,9 @@ class MethodDef(Statement):
     hasreturn: bool
 
     def codegen(self, scope):
+        #print(f"codegenning {self.defining_class.name}.{self.name}")
         if self.qualified_name() in codegenned: return
+
         body_scope = Scope(scope, method=self)
         for t in self.type_params: body_scope.add_alias(FatPtr.basic(t.label.data), t)
         arg_types = scope.behavior.broad_param_types()
@@ -1295,6 +1297,7 @@ class MethodDef(Statement):
         codegenned.add(self.qualified_name())
 
     def interface_codegen(self, scope):
+        #print(f"interface codegenning {self.defining_class.name}.{self.name}")
         if self.qualified_name() in codegenned: return
         arg_types = [t.base_typ() for t in scope.behavior.broad_param_types()]
         result_type = scope.behavior.broad_return_type().base_typ() if scope.behavior.broad_return_type() else llvm.LLVMVoidType()
@@ -1395,16 +1398,23 @@ class MethodDef(Statement):
                 # not robust to differently named parameters
                 annotated_facts.add((c.lhs, c.op, c.rhs))
         for c in self.constraints:
+            # ensures that overrides can have more precise (less conservative) constraints
+            if (c.lhs, "==", c.rhs) in annotated_facts:
+                annotated_facts.remove((c.lhs, "==", c.rhs))
+            if (c.rhs, "==", c.lhs) in annotated_facts:
+                annotated_facts.remove((c.rhs, "==", c.lhs))
+            if c.op == "==" and ((c.lhs, "<", c.rhs) in annotated_facts or (c.rhs, "<", c.lhs) in annotated_facts):
+                raise Exception(f"Line {self.info.line_number}: Constraint {c.lhs} {c.op} {c.rhs} is less precise than constraints from overridden methods.")
             annotated_facts.add((c.lhs, c.op, c.rhs))
         param_names = [*(param.name for param in self.params), *fields, "self"]
         if self.hasreturn: param_names.append("ret")
         for name in param_names: annotated_facts.add((name, "==", name))
         G0, var_mapping0 = create_constraint_graph(annotated_facts)
         G1, var_mapping1 = create_constraint_graph(body_scope.points_to_facts)
-        #visualize_graph_transformation(G1, var_mapping1, param_names)
+        visualize_graph_transformation(G1, var_mapping1, param_names)
         G1, var_mapping1 = transform_parameter_graph(G1, var_mapping1, param_names)
         ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
-        if not ok: print(f"Line {self.info.line_number}: {comment}")
+        if not ok: raise Exception(f"Line {self.info.line_number}: {comment}")
         #print((ok, comment))
         #result, example = query_external_less_than(G, var_mapping, param_names)
         #print(result)
@@ -1462,10 +1472,10 @@ class MethodDef(Statement):
         return hash(self.qualified_name())
 
     def parent_repr(self):
-        return f"Method({self.name}, {self.param_types()}, "
+        return f"MethodDef({self.name}, {self.param_types()}, "
 
     def __repr__(self):
-        return f"Method({self.name}, {self.param_types()})"
+        return f"MethodDef({self.name}, {self.param_types()})"
 
 @dataclass
 class AbstractMethodDef(MethodDef):
@@ -1557,13 +1567,13 @@ class Method:
         candidates = (definition for definition in self.cls.parents_methods() if definition.name == self.definition.name and definition.arity == self.definition.arity)
         candidates = (candidate for candidate in candidates if self.definition.arity == 0 or all(a == self.cls._scope.simplify(candidate.defining_class._scope.simplify(b)) for (a,b) in zip(self.param_types(), candidate.param_types())))
         self._overridden_methods = [*candidates]
+        #print(f"{self.cls.name}.{self.definition.name} overrides {len(self._overridden_methods)} methods")
         return self._overridden_methods
 
     def is_override_of(self, other):
         if self is other: return False
         if self.definition.name != other.definition.name: return False
         if self.definition.arity != other.definition.arity: return False
-
         result = other.definition in self.overridden_methods()
         return result
 
@@ -1630,6 +1640,13 @@ class ClassMethodDef(MethodDef):
         annotated_facts = set()
         for meth in self.overridden_methods():
             for c in meth.constraints:
+                # ensures that overrides can have more precise (less conservative) constraints
+                if (c.lhs, "==", c.rhs) in annotated_facts:
+                    annotated_facts.remove((c.lhs, "==", c.rhs))
+                if (c.rhs, "==", c.lhs) in annotated_facts:
+                    annotated_facts.remove((c.rhs, "==", c.lhs))
+                if c.op == "==" and ((c.lhs, "<", c.rhs) in annotated_facts or (c.rhs, "<", c.lhs) in annotated_facts):
+                    raise Exception(f"Line {self.info.line_number}: Constraint {c.lhs} {c.op} {c.rhs} is less precise than constraints from overridden methods.")
                 # not robust to differently named parameters
                 annotated_facts.add((c.lhs, c.op, c.rhs))
         for c in self.constraints:
@@ -1638,10 +1655,10 @@ class ClassMethodDef(MethodDef):
             annotated_facts.add((name, "==", name))
         G0, var_mapping0 = create_constraint_graph(annotated_facts)
         G1, var_mapping1 = create_constraint_graph(body_scope.points_to_facts)
-        #visualize_graph_transformation(G1, var_mapping1, param_names)
+        visualize_graph_transformation(G1, var_mapping1, param_names)
         G1, var_mapping1 = transform_parameter_graph(G1, var_mapping1, param_names)
         ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
-        if not ok: print(f"Line {self.info.line_number}: {comment}")
+        if not ok: raise Exception(f"Line {self.info.line_number}: {comment}")
 
     def typeflow(self, scope):
         if self.name[5].isupper():
@@ -1725,7 +1742,8 @@ class Behavior(Statement):
         behavior_scope = Scope(scope, behavior=self)
         for method in self.methods:
             if method.definition.defining_class == self.cls: method.definition.codegen(behavior_scope)
-            if method.definition.defining_class != self.cls: method.definition.interface_codegen(behavior_scope)
+            if method.definition.defining_class != self.cls and method.definition.defining_class.info.filename != self.cls.info.filename:
+                method.definition.interface_codegen(behavior_scope)
 
         scope.merge_blocks(behavior_scope)
 
@@ -2069,6 +2087,7 @@ class ClassDef(Statement):
     def initialize_behaviors(self):
         all_method_definitions = self.all_method_definitions()
         confusable_sets = list(reversed({tuple(definition.confusable_set(all_method_definitions, self._scope)):definition for definition in reversed(all_method_definitions)}.keys()))
+        self.behaviors = []
         for confusable_set in confusable_sets:
             belonging_methods = [Method(definition, self, 0, None) for definition in confusable_set]
             meth_name = belonging_methods[0].definition.name
