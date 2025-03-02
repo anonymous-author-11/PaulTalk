@@ -59,16 +59,14 @@ def visualize_graph(G, var_mapping):
     """Visualize the constraint graph with merged nodes."""
     # Group variables by representative
     rep_to_vars = {}
-    for var, rep in var_mapping.items():
-        rep_to_vars.setdefault(rep, []).append(var)
+    for var, rep in var_mapping.items(): rep_to_vars.setdefault(rep, []).append(var)
     
     # Create node labels showing all merged variables
     labels = {rep: f"{rep}\n{sorted(vars)}" for rep, vars in rep_to_vars.items()}
     
     # Draw graph
     pos = nx.spring_layout(G, seed=42)
-    nx.draw(G, pos, with_labels=True, labels=labels, 
-            node_color='lightblue', node_size=2000, font_size=10)
+    nx.draw(G, pos, with_labels=True, labels=labels, node_color='lightblue', node_size=2000, font_size=10)
     
     # Add edge labels showing relation type
     edge_labels = {(u, v): d.get('relation', '') for u, v, d in G.edges(data=True)}
@@ -106,111 +104,91 @@ def query_external_less_than(G, var_mapping, names):
     # Check for external "less than" relationships
     for rep in name_reps:
         for neighbor in G.successors(rep):
-            if neighbor not in name_reps:
-                # Collect all relevant variables
-                source_vars_in_names = [var for var in rep_to_vars.get(rep, []) if var in names_set]
-                target_vars = rep_to_vars.get(neighbor, [neighbor])
-                relation = G.edges[rep, neighbor].get('relation', '<')
-                
-                return True, {
-                    'source_vars': source_vars_in_names,
-                    'target_vars': target_vars,
-                    'relation': relation
-                }
+            if neighbor in name_reps: continue
+            # Collect all relevant variables
+            source_vars_in_names = [var for var in rep_to_vars.get(rep, []) if var in names_set]
+            target_vars = rep_to_vars.get(neighbor, [neighbor])
+            relation = G.edges[rep, neighbor].get('relation', '<')
+            
+            return True, {
+                'source_vars': source_vars_in_names,
+                'target_vars': target_vars,
+                'relation': relation
+            }
     
     return False, None
 
 def transform_parameter_graph(G, var_mapping, parameter_names):
     """
-    Transform the graph by merging non-parameter nodes with ALL nodes 
-    pointing to them (if at least one parameter node points to them).
+    Transform the graph by iteratively merging non-parameter nodes with all predecessors
+    if at least one predecessor is a parameter node. This version optimizes redundant
+    merges and uses efficient data structures for better performance.
     
     Args:
-        G: NetworkX DiGraph where nodes are representatives of equivalence classes
-        var_mapping: Dictionary mapping original variables to representatives
-        parameter_names: List of variable names considered as parameters
+        G: NetworkX DiGraph with nodes as equivalence class representatives
+        var_mapping: Dict mapping original variables to their representatives
+        parameter_names: List of parameter variable names
         
     Returns:
-        tuple: (new_G, new_mapping) - transformed graph and updated mapping
+        tuple: (new_G, new_mapping) - Transformed graph and updated variable mapping
     """
-    # Step 1: Identify parameter nodes and non-parameter nodes
-    param_rep_nodes = set()
-    for param in parameter_names:
-        if param in var_mapping:
-            param_rep_nodes.add(var_mapping[param])
-    
-    non_param_nodes = set(G.nodes()) - param_rep_nodes
-    
-    # Step 2: Initialize Union-Find data structure
-    uf = UnionFind()
-    
-    # Add all nodes to Union-Find
-    for node in G.nodes():
-        uf[node]
-    
-    # Step 3: For each non-parameter node that has a parameter node pointing to it,
-    # merge it with ALL nodes pointing to it (both parameter and non-parameter)
-    for non_param in non_param_nodes:
-        # Get all predecessors of this node
-        all_predecessors = list(G.predecessors(non_param))
+
+    uf = UnionFind(G.nodes())
+    initial_param_nodes = {var_mapping[param] for param in parameter_names if param in var_mapping}
+
+    while True:
+        # Apply current merges to compute the current graph state
+        current_nodes = {uf[node] for node in G.nodes()}
+        current_G = DiGraph()
+        current_G.add_nodes_from(current_nodes)
+        for u, v, data in G.edges(data=True):
+            new_u, new_v = uf[u], uf[v]
+            if new_u != new_v:
+                current_G.add_edge(new_u, new_v, **data)
         
-        # Check if any parameter node points to this non-parameter node
-        has_param_predecessor = any(pred in param_rep_nodes for pred in all_predecessors)
-        
-        # If there's at least one parameter node pointing to this non-parameter node
-        if has_param_predecessor and all_predecessors:
-            # Merge non-parameter node with ALL nodes pointing to it
-            for pred in all_predecessors:
-                uf.union(non_param, pred)
-                
-            # Merge all predecessors with each other
-            for i in range(len(all_predecessors) - 1):
-                uf.union(all_predecessors[i], all_predecessors[i+1])
-    
-    # Step 4: Create a mapping from nodes to their representatives
-    node_to_rep = {node: uf[node] for node in G.nodes()}
-    
-    # Step 5: Ensure parameter nodes are chosen as representatives when possible
-    # Group nodes by their representatives from Union-Find
+        param_nodes = {uf[node] for node in initial_param_nodes}
+        non_param_nodes = current_nodes - param_nodes
+        merges = 0
+
+        for node in non_param_nodes:
+            predecessors = list(current_G.predecessors(node))
+            if not predecessors:
+                continue
+            if any(pred in param_nodes for pred in predecessors):
+                # Merge non-param node with all predecessors
+                for pred in predecessors:
+                    if uf[node] != uf[pred]:
+                        uf.union(node, pred)
+                        merges += 1
+
+        if merges == 0:
+            break
+
+    # Build final mapping preferring parameter nodes as representatives
     groups = {}
     for node in G.nodes():
-        rep = node_to_rep[node]
-        if rep not in groups:
-            groups[rep] = []
-        groups[rep].append(node)
+        rep = uf[node]
+        groups.setdefault(rep, []).append(node)
     
-    # Choose a parameter node as the representative for each group if possible
     final_mapping = {}
-    for rep, group_nodes in groups.items():
-        param_nodes_in_group = [n for n in group_nodes if n in param_rep_nodes]
-        
-        if param_nodes_in_group:
-            chosen_rep = param_nodes_in_group[0]
-        else:
-            chosen_rep = rep
-        
-        # Map all nodes in the group to the chosen representative
-        for node in group_nodes:
-            final_mapping[node] = chosen_rep
+    for rep, members in groups.items():
+        # Select first parameter node in the group as representative
+        chosen = next((n for n in members if n in initial_param_nodes), rep)
+        for node in members:
+            final_mapping[node] = chosen
+
+    # Construct new variable mapping and graph
+    new_var_mapping = {var: final_mapping[uf[var_mapping[var]]] for var in var_mapping}
+    new_G = DiGraph()
+    new_nodes = set(final_mapping.values())
+    new_G.add_nodes_from(new_nodes)
     
-    # Step 6: Update variable mapping
-    new_var_mapping = {var: final_mapping[rep] for var, rep in var_mapping.items()}
-    
-    # Step 7: Create the new graph with updated equivalence classes
-    new_G = nx.DiGraph()
-    
-    # Add nodes (only unique representatives after merging)
-    new_G.add_nodes_from(set(new_var_mapping.values()))
-    
-    # Add edges while respecting new equivalence classes
     for u, v, data in G.edges(data=True):
-        new_u = final_mapping[u]
-        new_v = final_mapping[v]
-        
-        # Only add edge if source and target are different (avoid self-loops)
+        new_u = final_mapping[uf[u]]
+        new_v = final_mapping[uf[v]]
         if new_u != new_v:
             new_G.add_edge(new_u, new_v, **data)
-    
+
     return new_G, new_var_mapping
 
 def visualize_graph_transformation(G, var_mapping, parameter_names):
@@ -425,3 +403,80 @@ def pretty_print_graph(G, var_mapping, parameter_names):
             text_repr += f"  {label}\n"
     
     return text_repr.replace("╾","<─").replace("╼",">")
+
+    from collections import defaultdict
+from networkx import DiGraph
+
+def transform_based_on_label_pattern(G, var_mapping):
+    """
+    Optimized version of the graph transformation function.
+    
+    Key optimizations:
+    - Precompute prefix to postfix mappings for each node representative.
+    - Use direct lookups instead of nested loops for postfix checks.
+    - Streamline data structure accesses to minimize redundant computations.
+    """
+    uf = UnionFind()
+    for node in G.nodes():
+        uf[node]
+
+    while True:
+        # Precompute current mappings
+        current_rep_to_vars = defaultdict(list)
+        for var, rep in var_mapping.items():
+            current_rep_to_vars[uf[rep]].append(var)
+        
+        # Precompute prefix_to_postfixes for each node representative
+        prefix_to_postfixes = defaultdict(lambda: defaultdict(set))
+        global_map = {}
+        for var, rep in var_mapping.items():
+            current_rep = uf[rep]
+            if "@" in var:
+                prefix, postfix = var.split("@", 1)
+                prefix_to_postfixes[current_rep][prefix].add(postfix)
+                global_map[(prefix, postfix)] = current_rep
+
+        merges = 0
+
+        # Process each node in the original graph
+        for node_a in G.nodes():
+            a_rep = uf[node_a]
+            if a_rep not in current_rep_to_vars: continue
+
+            # Check all pairs of variables in node A
+            vars_in_a = current_rep_to_vars[a_rep]
+            for i in range(len(vars_in_a)):
+                var_x = vars_in_a[i]
+                for j in range(i + 1, len(vars_in_a)):
+                    var_y = vars_in_a[j]
+
+                    # Check all successors of node A
+                    for neighbor in G.successors(node_a):
+                        b_rep = uf[neighbor]
+                        if b_rep not in prefix_to_postfixes: continue
+
+                        # Check for X@postfix in successor B
+                        postfixes = prefix_to_postfixes[b_rep].get(var_x, set())
+                        for postfix in postfixes:
+                            # Check if Y@postfix exists
+                            if (var_y, postfix) not in global_map: continue
+                            c_rep = global_map[(var_y, postfix)]
+                            if b_rep != c_rep:
+                                uf.union(b_rep, c_rep)
+                                merges += 1
+
+        if merges == 0: break
+
+    # Create new mappings and graph
+    new_var_mapping = {var: uf[rep] for var, rep in var_mapping.items()}
+    new_G = DiGraph()
+    new_nodes = {uf[node] for node in G.nodes()}
+    new_G.add_nodes_from(new_nodes)
+    
+    for u, v, data in G.edges(data=True):
+        new_u = uf[u]
+        new_v = uf[v]
+        if new_u != new_v:
+            new_G.add_edge(new_u, new_v, **data)
+
+    return new_G, new_var_mapping

@@ -467,6 +467,16 @@ TODO:
 	- Buffer.append epitomizes the problem
 		- How can we say that buffer must outlive x?
 		- What if we only say that *some* fields live in the same region as self
+	- Rules
+		- Increment protection count upon region creation
+		- Increment protection count of returned region (what about one put into other parameters?)
+		- Decrement protection count right before last use
+			- Only if you saw the allocation? No, could have happened inside a call too
+			- Only if it isn't a parameter region (passed in from outside)
+		- Free region after last use of variable pointing into it, if not used in method expected to free it
+		- Free self and its fields too
+		- Don't free ret; protected anyway
+	- Should have variable point to allocation instead of being equal?
 
 - Inheriting from Sentinel (or do Struct types solve this)
 - Bare 'yield();' should yield the coroutine itself?

@@ -1,0 +1,32 @@
+// pc == protection counter
+// reg == memory region
+
+// allocation -- know exactly where data value is allocated
+data = Object.new();
+// data reg pc incremented
+
+// allocation -- know exactly where buf value is allocated
+buf = Buffer[Object].new(1);
+// buf reg pc incremented
+
+// data must outlive buf
+buf.[0] = data;
+
+// buf must outlive ary
+ary = Array.new(buf, 1, 1);
+// ary reg pc incremented
+
+// don't know where iter is allocated. must increment iter reg pc internally.
+// ary must outlive iter
+iter = ary.iterator();
+
+// don't know where x is allocated. must increment x reg pc internally.
+// last use of iter imminent-- decrease protection count of ary reg, iter reg, buf reg, data reg
+// iter reg, ary reg, buf reg freed internally
+// data reg atempted free internally; still protected (because aliased by x)
+// x must outlive iter
+x = iter.next();
+
+// last use of x imminent; x (and data) reg pc decremented
+// x (and data) reg attempted free internally (succeeded)
+IO.print(x);

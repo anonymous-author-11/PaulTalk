@@ -506,7 +506,7 @@ class Identifier(Expression):
     name: str
 
     def __post_init__(self):
-        self.info.id = self.name
+        self.info = NodeInfo(self.name, self.info.filename, self.info.line_number)
 
     def codegen(self, scope):
         if "@" in self.name and scope.cls and "self" in scope.symbol_table: return FieldIdentifier(self.info, self.name).codegen(scope)
@@ -1155,6 +1155,7 @@ class ObjectCreation(Expression):
         scope.type_table[self.anon_name] = simplified_type
         anon_id = Identifier(self.info, self.anon_name)
         MethodCall(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), anon_id, "init", self.arguments).exprtype(scope)
+        scope.points_to_facts.add((self.info.id, "<", self.anon_name))
         return simplified_type
 
 @dataclass
@@ -1391,7 +1392,6 @@ class MethodDef(Statement):
         fields = [key for key in self.defining_class._scope.type_table.keys() if "@" in key]
         annotated_facts = set()
         for name in fields:
-            #annotated_facts.add(("self","<",name))
             annotated_facts.add(("self","==",name))
         for meth in self.overridden_methods():
             for c in meth.constraints:
@@ -1411,7 +1411,7 @@ class MethodDef(Statement):
         for name in param_names: annotated_facts.add((name, "==", name))
         G0, var_mapping0 = create_constraint_graph(annotated_facts)
         G1, var_mapping1 = create_constraint_graph(body_scope.points_to_facts)
-        #visualize_graph_transformation(G1, var_mapping1, param_names)
+        visualize_graph_transformation(G1, var_mapping1, param_names)
         G1, var_mapping1 = transform_parameter_graph(G1, var_mapping1, param_names)
         #print(f"Points-to graph for {self.defining_class.name}.{self.name}:")
         #print(pretty_print_graph(G1, var_mapping1, param_names))
@@ -1657,7 +1657,7 @@ class ClassMethodDef(MethodDef):
             annotated_facts.add((name, "==", name))
         G0, var_mapping0 = create_constraint_graph(annotated_facts)
         G1, var_mapping1 = create_constraint_graph(body_scope.points_to_facts)
-        #visualize_graph_transformation(G1, var_mapping1, param_names)
+        visualize_graph_transformation(G1, var_mapping1, param_names)
         G1, var_mapping1 = transform_parameter_graph(G1, var_mapping1, param_names)
         #print(f"Points-to graph for {self.defining_class.name}.{self.name}:")
         #print(pretty_print_graph(G1, var_mapping1, param_names))
@@ -2198,7 +2198,7 @@ class VarDecl(Statement):
     _type: TypeAttribute
 
     def __post_init__(self):
-        self.info.id = self.name
+        self.info = NodeInfo(self.name, self.info.filename, self.info.line_number)
 
     def codegen(self, scope):
         scope.type_table[self.name] = self.type(scope)
