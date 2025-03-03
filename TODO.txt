@@ -477,6 +477,22 @@ TODO:
 		- Free self and its fields too
 		- Don't free ret; protected anyway
 	- Should have variable point to allocation instead of being equal?
+	- If a must outlive b and both are used the last time as parameters together, a must be protected and freed after the call
+		- Because we can't know from the outside whether a or b will be attempted to be freed internally
+	- Memory regions
+		- Abstract memory regions (oh boy I'm cookin)
+			- Abstract associated regions (oh god!)
+				- Abstract bounded polymorphic associated regions (god mode)
+
+- Manual memory management combines four questions
+	- When memory gets allocated and deallocated
+	- Where objects are stored in memory
+		- Which objects are near each other
+	- How objects are stored in memory
+		- How they are laid out
+	- Semiautomatic memory management removes some of these choices from the programmer
+		- You decide how objects are laid out, and can impose some constraints on where
+		- The compiler decides when memory must be allocated, and when it can be deallocated safely
 
 - Inheriting from Sentinel (or do Struct types solve this)
 - Bare 'yield();' should yield the coroutine itself?

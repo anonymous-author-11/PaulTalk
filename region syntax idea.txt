@@ -2,6 +2,7 @@ import core;
 import io;
 
 class Pair[T, U] {
+
 	@first : T
 	@second : U
 
@@ -18,6 +19,7 @@ class Pair[T, U] {
 }
 
 class Iterator[T] {
+
     @elems_reg : Region
 
     #[ret == @elems_reg]
@@ -25,6 +27,7 @@ class Iterator[T] {
 }
 
 class Iterable[T] {
+
     @elems_reg : Region
 
     #[ret < @elems_reg]
@@ -79,10 +82,7 @@ class DualIterable[T] extends Iterable[T] {
     @first : Iterable[T]
     @second : Iterable[T]
 
-    regions {
-        @elems_reg < @first.elems_reg,
-        @elems_reg < @second.elems_reg
-    }
+    @elems_reg : Region < @first.elems_reg, @second.elems_reg
 
     abstract def iterator() -> DualIterator[T] {}
 }
@@ -91,20 +91,14 @@ class DualIterator[T] extends Iterator[T] {
     @first : Iterator[T]
     @second : Iterator[T]
 
-    regions {
-        @elems_reg < @first.elems_reg,
-        @elems_reg < @second.elems_reg
-    }
+    @elems_reg : Region < @first.elems_reg, @second.elems_reg
 }
 
 class PairIterable[T, U] extends Iterable[Pair[T,U]] {
     @first : Iterable[T]
     @second : Iterable[U]
 
-    regions {
-        @elems_reg < @first.elems_reg,
-        @elems_reg < @second.elems_reg
-    }
+    @elems_reg : Region < @first.elems_reg, @second.elems_reg
 
     abstract def iterator() -> PairIterator[T, U] {}
 }
@@ -113,10 +107,7 @@ class PairIterator[T, U] extends Iterator[Pair[T, U]] {
     @first : Iterator[T]
     @second : Iterator[U]
 
-    regions {
-        @elems_reg < @first.elems_reg,
-        @elems_reg < @second.elems_reg
-    }
+    @elems_reg : Region < @first.elems_reg, @second.elems_reg
 }
 
 class Array[T] extends Iterable[T] {
@@ -124,7 +115,7 @@ class Array[T] extends Iterable[T] {
 	@length : i32
 	@capacity : i32
 
-    regions { @elems_reg == @buffer }
+    @elems_reg : Region = @buffer
 
     #[ret < iterable.elems_reg]
 	def Self.from_iterable(iterable : Iterable[T]) -> Array[T] {
@@ -182,7 +173,7 @@ class Array[T] extends Iterable[T] {
     def unsafe_index(x : i32) -> T {
     	return @buffer.[x];
     }
-    def iterator() -> ArrayIterator[T] {
+    def iterator() -> Iterator[T] {
     	return ArrayIterator[T].new(self);
     }
 }
@@ -206,11 +197,11 @@ class MapIterable[T, U] extends Iterable[U] {
     @iterable : Iterable[T]
     @f : (T) -> U
 
-    regions { @elems_reg == @iterable.elems_reg }
+    @elems_reg : Region = @iterable.elems_reg
 
     def init(@iterable : Iterable[T], @f : (T) -> U) {}
 
-    def iterator() -> MapIterator[T, U] {
+    def iterator() -> Iterator[U] {
         return MapIterator[T, U].new(@iterable.iterator(), @f);
     }
 }
@@ -219,7 +210,7 @@ class MapIterator[T, U] extends Iterator[U] {
     @iterator : Iterator[T]
     @f : (T) -> U
 
-    regions { @elems_reg == @iterator.elems_reg }
+    @elems_reg : Region = @iterator.elems_reg
 
     def init(@iterator : Iterator[T], @f : (T) -> U) {}
 
@@ -236,11 +227,11 @@ class FilterIterable[T] extends Iterable[T] {
     @iterable : Iterable[T]
     @f : (T) -> Bool
 
-    regions { @elems_reg == @iterable.elems_reg }
+    @elems_reg : Region = @iterable.elems_reg
 
     def init(@iterable : Iterable[T], @f : (T) -> Bool) {}
 
-    def iterator() -> FilterIterator[T] {
+    def iterator() -> Iterator[T] {
         return FilterIterator[T].new(@iterable.iterator(), @f);
     }
 }
@@ -249,7 +240,7 @@ class FilterIterator[T] extends Iterator[T] {
     @iterator : Iterator[T]
     @f : (T) -> Bool
 
-    regions { @elems_reg == @iterator.elems_reg }
+    @elems_reg : Region = @iterator.elems_reg
     
     def init(@iterator : Iterator[T], @f : (T) -> Bool) {}
 
@@ -267,7 +258,7 @@ class ChainIterable[T] extends DualIterable[T] {
 
     def init(@first : Iterable[T], @second : Iterable[T]) {}
 
-    def iterator() -> ChainIterator[T] {
+    def iterator() -> Iterator[T] {
         return ChainIterator[T].new(@first.iterator(), @second.iterator());
     }
 }
@@ -349,11 +340,6 @@ class ProductIterator[T, U] extends PairIterator[T, U] {
     @second_iterable : Iterable[U]
     @current_first : T | Nil
 
-    regions {
-        @second.elems_reg == @second_iterable.elems_reg,
-        @current_first == @first.elems_reg
-    }
-
     def init(first_iterable : Iterable[T], @second_iterable : Iterable[U]) {
         @first = first_iterable.iterator();
         @second = @second_iterable.iterator();
@@ -388,6 +374,7 @@ ary2 = ary.map(times_two);
 ary4 = ary2.map(identity).map(to_float);
 
 for x in ary4 {
+	IO.print(55);
 	IO.print(x);
 }
 
