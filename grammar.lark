@@ -21,7 +21,8 @@ alias: ALIAS basic_type "=" typ
 
 expression_statement: expression ";"
 
-class_def: CLASS (basic_type | parameterized_type) ["extends" type_list] ["where" type_bound_list] "{" (field_decl*)? (class_method_def*)? ((method_def | operator_def)*)? "}"
+class_def: CLASS (basic_type | parameterized_type) ["extends" type_list] ["where" type_bound_list] "{" [field_decls] [class_region_constraints] (class_method_def*)? ((method_def | operator_def)*)? "}"
+field_decls: (field_decl)+
 type_bound_list: type_bound ("," type_bound)*
 type_bound: IDENT "<:" typ
 
@@ -37,10 +38,12 @@ class_method_def: ["#["constraint_list"]"] [abstract] "def" "Self" "." IDENT ["[
 param_list: (param ("," param)*)?
 method_param_list: (method_param ("," method_param)*)? -> param_list
 
+class_region_constraints: "regions" "{" constraint_list "}" 
 constraint_list: (constraint ("," constraint)*)?
-constraint: IDENT LT IDENT
-          | IDENT GT IDENT
-          | IDENT EQ IDENT
+constraint: region_variable LT region_variable
+          | region_variable GT region_variable
+          | region_variable EQ region_variable
+region_variable: (IDENT ("." IDENT)*)? 
 
 method_param: param | field_param
 param: IDENT ":" typ

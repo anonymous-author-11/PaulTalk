@@ -261,13 +261,31 @@ DONE:
 - Fix reverted PDL patterns (paramsarray, paramsindexation, new) [check!]
 - Store imports as graph rather than set [check!]
 - Implement lifetime constraints and points-to analysis [check!]
+- Add class-scope region constraints to grammar [check!]
+	- Fix up class def grammar [check!]
+	- Add dot-syntax to the constraints grammar [check!]
+- Handle abstract regions, not as fields [check!]
+	- Separate from fields in parsing [check!]
+	- Add a regions tuple to ClassDef [check!]
+	- Have a .all_regions() method which handles inherited regions [check!]
 
 TODO:
 
+- Add class-scoped constraints to method constraints
+	- After checking override validity
+- On object creation, add class constraints to caller points-to graph
+	- Including standard fields > self constraints
+	- Or just implicitly add class constraints to init
+
 - Minimize number of behaviors by merging identical behaviors
-- Minimize size of vtables
+	- This is probably done at link-time already
+	- Do we really need to generate all-new behaviors for every new subclass?
+	- Why not just new behaviors for the ones that have actually changed?
+	- Will make vtables smaller which is good
 - Conservatively alias parameters for first-class functions
 - Implement Records
+	- Should actually be relatively straightforward
+	- Record-to-tuple is also straightforward
 - Reduce number of redundant type fields
 - Do less work for imports
 	- Make .lib archives of .bc files and --link-only-needed

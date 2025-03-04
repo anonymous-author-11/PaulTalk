@@ -17,17 +17,30 @@ class Pair[T, U] {
 	}
 }
 
-class Iterator[T] {
+class Container {
     @elems_reg : Region
+}
 
+class DualContainer[T, U] extends Container
+    where T <: Container, U <: Container {
+
+    @first : T
+    @second : U
+
+    regions {
+        @elems_reg < @first.elems_reg,
+        @elems_reg < @second.elems_reg
+    }
+}
+
+class Iterator[T] extends Container {
     #[ret == @elems_reg]
 	abstract def next() -> T | Nil {}
 }
 
-class Iterable[T] {
-    @elems_reg : Region
+class Iterable[T] extends Container {
 
-    #[ret < @elems_reg]
+    #[ret < self, ret.elems_reg == @elems_reg]
 	abstract def iterator() -> Iterator[T] {
     }
 	def each(f : (T)) {
@@ -75,49 +88,13 @@ class Iterable[T] {
     }
 }
 
-class DualIterable[T] extends Iterable[T] {
-    @first : Iterable[T]
-    @second : Iterable[T]
+class DualIterable[T] extends DualContainer[Iterable[T], Iterable[T]], Iterable[T] {}
 
-    regions {
-        @elems_reg < @first.elems_reg,
-        @elems_reg < @second.elems_reg
-    }
+class DualIterator[T] extends DualContainer[Iterator[T], Iterator[T]], Iterator[T] {}
 
-    abstract def iterator() -> DualIterator[T] {}
-}
+class PairIterable[T, U] extends DualContainer[Iterable[T], Iterable[U]], Iterable[Pair[T, U]] {}
 
-class DualIterator[T] extends Iterator[T] {
-    @first : Iterator[T]
-    @second : Iterator[T]
-
-    regions {
-        @elems_reg < @first.elems_reg,
-        @elems_reg < @second.elems_reg
-    }
-}
-
-class PairIterable[T, U] extends Iterable[Pair[T,U]] {
-    @first : Iterable[T]
-    @second : Iterable[U]
-
-    regions {
-        @elems_reg < @first.elems_reg,
-        @elems_reg < @second.elems_reg
-    }
-
-    abstract def iterator() -> PairIterator[T, U] {}
-}
-
-class PairIterator[T, U] extends Iterator[Pair[T, U]] {
-    @first : Iterator[T]
-    @second : Iterator[U]
-
-    regions {
-        @elems_reg < @first.elems_reg,
-        @elems_reg < @second.elems_reg
-    }
-}
+class PairIterator[T, U] extends DualContainer[Iterator[T], Iterator[U]], Iterator[Pair[T, U]] {}
 
 class Array[T] extends Iterable[T] {
 	@buffer : Buffer[T]
@@ -126,7 +103,7 @@ class Array[T] extends Iterable[T] {
 
     regions { @elems_reg == @buffer }
 
-    #[ret < iterable.elems_reg]
+    #[ret.elems_reg == iterable.elems_reg]
 	def Self.from_iterable(iterable : Iterable[T]) -> Array[T] {
     	result = Array[T].new(); 
         
@@ -144,9 +121,11 @@ class Array[T] extends Iterable[T] {
         @buffer = Buffer[T].new(@capacity);
         @length = 0;
     }
+    #[ret == @length]
 	def length() -> i32 {
 		return @length;
 	}
+    #[ret == @capacity]
     def capacity() -> i32 {
     	return @capacity;
     }
@@ -173,7 +152,7 @@ class Array[T] extends Iterable[T] {
     	before_start = (@length + x) < 0;
         if past_end or before_start { self.throw_oob(x); }
         if x < 0 { x = @length + x; }
-        return @buffer.[x];
+        return self.unsafe_index(x);
     }
     def throw_oob(x : i32) yields OutOfBounds {
     	yield(Exception.new());
@@ -191,7 +170,7 @@ class ArrayIterator[T] extends Iterator[T] {
 	@array : Array[T]
 	@index : i32
 
-    @elems_reg : Region = @array.elems_reg
+    regions { @elems_reg == @array.elems_reg }
 
 	def init(@array : Array[T]) { @index = 0; }
 
@@ -206,7 +185,10 @@ class MapIterable[T, U] extends Iterable[U] {
     @iterable : Iterable[T]
     @f : (T) -> U
 
-    regions { @elems_reg == @iterable.elems_reg }
+    regions {
+        @elems_reg == @iterable.elems_reg,
+        @f == self
+    }
 
     def init(@iterable : Iterable[T], @f : (T) -> U) {}
 
@@ -218,8 +200,6 @@ class MapIterable[T, U] extends Iterable[U] {
 class MapIterator[T, U] extends Iterator[U] {
     @iterator : Iterator[T]
     @f : (T) -> U
-
-    regions { @elems_reg == @iterator.elems_reg }
 
     def init(@iterator : Iterator[T], @f : (T) -> U) {}
 
@@ -236,7 +216,10 @@ class FilterIterable[T] extends Iterable[T] {
     @iterable : Iterable[T]
     @f : (T) -> Bool
 
-    regions { @elems_reg == @iterable.elems_reg }
+    regions {
+        @elems_reg == @iterable.elems_reg,
+        @f == self
+    }
 
     def init(@iterable : Iterable[T], @f : (T) -> Bool) {}
 
@@ -248,8 +231,6 @@ class FilterIterable[T] extends Iterable[T] {
 class FilterIterator[T] extends Iterator[T] {
     @iterator : Iterator[T]
     @f : (T) -> Bool
-
-    regions { @elems_reg == @iterator.elems_reg }
     
     def init(@iterator : Iterator[T], @f : (T) -> Bool) {}
 

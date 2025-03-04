@@ -1411,7 +1411,7 @@ class MethodDef(Statement):
         for name in param_names: annotated_facts.add((name, "==", name))
         G0, var_mapping0 = create_constraint_graph(annotated_facts)
         G1, var_mapping1 = create_constraint_graph(body_scope.points_to_facts)
-        visualize_graph_transformation(G1, var_mapping1, param_names)
+        #visualize_graph_transformation(G1, var_mapping1, param_names)
         G1, var_mapping1 = transform_parameter_graph(G1, var_mapping1, param_names)
         #print(f"Points-to graph for {self.defining_class.name}.{self.name}:")
         #print(pretty_print_graph(G1, var_mapping1, param_names))
@@ -1657,7 +1657,7 @@ class ClassMethodDef(MethodDef):
             annotated_facts.add((name, "==", name))
         G0, var_mapping0 = create_constraint_graph(annotated_facts)
         G1, var_mapping1 = create_constraint_graph(body_scope.points_to_facts)
-        visualize_graph_transformation(G1, var_mapping1, param_names)
+        #visualize_graph_transformation(G1, var_mapping1, param_names)
         G1, var_mapping1 = transform_parameter_graph(G1, var_mapping1, param_names)
         #print(f"Points-to graph for {self.defining_class.name}.{self.name}:")
         #print(pretty_print_graph(G1, var_mapping1, param_names))
@@ -1931,6 +1931,7 @@ class ClassDef(Statement):
     _direct_supertypes: List[TypeAttribute]
     _ancestors: List[TypeAttribute]
     field_declarations: List["FieldDecl"]
+    virtual_regions: List[str]
     method_definitions: List[MethodDef]
     behaviors: List[Behavior]
     _scope: Scope
@@ -2003,6 +2004,12 @@ class ClassDef(Statement):
                 t = self._scope.simplify(Union.from_list(types))
                 self._scope.add_alias(old_tp, t)
         for t in self.type_parameters: self._scope.add_alias(FatPtr.basic(t.label.data), t)
+
+    def all_regions(self):
+        full_ordering = [self, *self.my_ordering()]
+        unpruned = [*chain.from_iterable(cls.virtual_regions for cls in full_ordering)]
+        pruned = list(reversed({reg_name:reg_name for reg_name in reversed(unpruned)}.values()))
+        return pruned
 
     def all_type_parameters(self):
         ancestors = self.ancestors()

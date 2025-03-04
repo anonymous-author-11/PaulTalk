@@ -85,7 +85,7 @@ class CSTTransformer(Transformer):
         node_info = NodeInfo(random_letters(10), self.file_name, name.line)
         return ty(node_info, "_Self_" + name.value, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
 
-    def class_def(self, cls, name, supertype_list, bound_list, *members):
+    def class_def(self, cls, name, supertype_list, bound_list, fields, region_constraints, *methods):
         if not isinstance(name, FatPtr):
             raise Exception(f"Line {cls.line}: Invalid class name.")
         class_name = name.cls.data
@@ -102,18 +102,28 @@ class CSTTransformer(Transformer):
         if supertype_list and any(not isinstance(t, FatPtr) for t in supertype_list):
             offender = next(t for t in supertype_list if not isinstance(t, FatPtr))
             raise Exception(f"Line {cls.line}: Cannot extend {t}")
-        fields = [m for m in members if isinstance(m, FieldDecl)]
-        methods = [m for m in members if isinstance(m, MethodDef)]
+        fields = fields or []
+        regions = [f.name for f in fields if f._type == FatPtr.basic("Region")]
+        fields = [f for f in fields if f._type != FatPtr.basic("Region")]
         
         direct_supertypes = [typ for typ in supertype_list] if supertype_list else [FatPtr.basic("Object")]
         if class_name == "Object": direct_supertypes = []
         node_info = NodeInfo(random_letters(10), self.file_name, cls.line)
-        class_def = ClassDef(node_info, class_name, type_parameters, direct_supertypes, None, fields, methods, [], None, None, None)
+        class_def = ClassDef(node_info, class_name, type_parameters, direct_supertypes, None, fields, regions, methods, [], None, None, None)
         for field in fields: field.defining_class = class_def
         for method in methods:
             method.defining_class = class_def
             method.type_params = [TypeParameter.make(ident.value, class_name) for ident in method.type_params]
         return class_def
+
+    def field_decls(self, *decls):
+        return list(decls)
+
+    def class_region_constraints(self, constraint_list):
+        return constraint_list
+
+    def region_variable(self, *idents):
+        return "".join(ident.value for ident in idents)
 
     def param_list(self, *params):
         return list(params)
@@ -124,8 +134,8 @@ class CSTTransformer(Transformer):
     def constraint(self, lhs, op, rhs):
         node_info = NodeInfo(random_letters(10), self.file_name, op.line)
         # canonicalize to use "<"
-        if op.value == ">": return Constraint(node_info, rhs.value, "<", lhs.value)
-        return Constraint(node_info, lhs.value, op.value, rhs.value)
+        if op.value == ">": return Constraint(node_info, rhs, "<", lhs)
+        return Constraint(node_info, lhs, op.value, rhs)
 
     def alias(self, alias, name, meaning):
         node_info = NodeInfo(random_letters(10), self.file_name, alias.line)

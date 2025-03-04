@@ -45,6 +45,9 @@ b = FancyPair.new((1.0, 2.0, 3.0, 4.0), 5.0);
 IO.print(b.second());
 
 class Iterator2[T] {
+
+    @elems_reg : Region
+
     #[ret == self]
 	abstract def next() -> T | Nil {}
 }
