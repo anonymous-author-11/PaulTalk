@@ -7,47 +7,24 @@ struct Pair<T, U> {
     second: U,
 }
 
-impl<T, U> Pair<T, U> {
-    fn new(first: T, second: U) -> Self {
-        Self { first, second }
-    }
-
-    fn first(&self) -> &T {
-        &self.first
-    }
-
-    fn second(&self) -> &U {
-        &self.second
-    }
-}
-
-// Base container trait
-trait Container {}
-
 // Iterator trait
 trait Iterator<T> {
     fn next(&mut self) -> Option<T>;
 }
 
 // Iterable trait with all the methods
-trait Iterable<T>: Container {
+trait Iterable<T> {
     fn iterator(&self) -> Box<dyn Iterator<T> + '_>;
     
     fn each<F>(&self, mut f: F)
-    where
-        F: FnMut(&T),
-        T: Clone,
+    where F: FnMut(&T), T: Clone,
     {
         let mut iter = self.iterator();
-        while let Some(item) = iter.next() {
-            f(&item);
-        }
+        while let Some(item) = iter.next() { f(&item); }
     }
     
     fn reduce<F>(&self, mut accumulator: T, mut f: F) -> T 
-    where 
-        F: FnMut(T, &T) -> T,
-        T: Clone,
+    where F: FnMut(T, &T) -> T, T: Clone,
     {
         let mut iter = self.iterator();
         while let Some(item) = iter.next() {
@@ -57,76 +34,57 @@ trait Iterable<T>: Container {
     }
     
     fn all<F>(&self, mut f: F) -> bool 
-    where 
-        F: FnMut(&T) -> bool,
-        T: Clone,
+    where F: FnMut(&T) -> bool, T: Clone,
     {
         let mut iter = self.iterator();
         while let Some(item) = iter.next() {
-            if !f(&item) {
-                return false;
-            }
+            if !f(&item) { return false; }
         }
         true
     }
     
     fn any<F>(&self, mut f: F) -> bool 
-    where 
-        F: FnMut(&T) -> bool,
-        T: Clone,
+    where F: FnMut(&T) -> bool, T: Clone,
     {
         let mut iter = self.iterator();
         while let Some(item) = iter.next() {
-            if f(&item) {
-                return true;
-            }
+            if f(&item) { return true; }
         }
         false
     }
     
     fn map<U, F>(&self, f: F) -> MapIterable<T, U, F> 
-    where 
-        F: Fn(&T) -> U + 'static,
-        T: Clone + 'static,
-        U: 'static,
+    where F: Fn(&T) -> U + 'static, T: Clone + 'static, U: 'static,
     {
         MapIterable::new(self, f)
     }
     
     fn filter<F>(&self, f: F) -> FilterIterable<T, F> 
-    where 
-        F: Fn(&T) -> bool + 'static,
-        T: Clone + 'static,
+    where F: Fn(&T) -> bool + 'static, T: Clone + 'static,
     {
         FilterIterable::new(self, f)
     }
     
     fn chain(&self, other: &dyn Iterable<T>) -> ChainIterable<T> 
-    where 
-        T: Clone + 'static,
+    where T: Clone + 'static,
     {
         ChainIterable::new(self, other)
     }
     
     fn interleave(&self, other: &dyn Iterable<T>) -> InterleaveIterable<T> 
-    where 
-        T: Clone + 'static,
+    where T: Clone + 'static,
     {
         InterleaveIterable::new(self, other)
     }
     
     fn zip<U>(&self, other: &dyn Iterable<U>) -> ZipIterable<T, U> 
-    where 
-        T: Clone + 'static,
-        U: Clone + 'static,
+    where T: Clone + 'static, U: Clone + 'static,
     {
         ZipIterable::new(self, other)
     }
     
     fn product<U>(&self, other: &dyn Iterable<U>) -> ProductIterable<T, U> 
-    where 
-        T: Clone + 'static,
-        U: Clone + 'static,
+    where T: Clone + 'static, U: Clone + 'static,
     {
         ProductIterable::new(self, other)
     }
@@ -136,8 +94,6 @@ trait Iterable<T>: Container {
 struct Array<T> {
     elements: Vec<T>,
 }
-
-impl<T> Container for Array<T> {}
 
 impl<T> Array<T> {
     fn new() -> Self {
@@ -210,10 +166,7 @@ impl<'a, T: Clone> Iterator<T> for ArrayIterator<'a, T> {
 
 // Map iterable
 struct MapIterable<T, U, F> 
-where 
-    F: Fn(&T) -> U + 'static,
-    T: Clone + 'static,
-    U: 'static,
+where F: Fn(&T) -> U + 'static, T: Clone + 'static, U: 'static,
 {
     iterable: Rc<dyn Iterable<T>>,
     f: F,
@@ -221,10 +174,7 @@ where
 }
 
 impl<T, U, F> MapIterable<T, U, F> 
-where 
-    F: Fn(&T) -> U + 'static,
-    T: Clone + 'static,
-    U: 'static,
+where F: Fn(&T) -> U + 'static, T: Clone + 'static, U: 'static,
 {
     fn new(iterable: &dyn Iterable<T>, f: F) -> Self {
         Self {
@@ -235,18 +185,8 @@ where
     }
 }
 
-impl<T, U, F> Container for MapIterable<T, U, F> 
-where 
-    F: Fn(&T) -> U + 'static,
-    T: Clone + 'static,
-    U: 'static,
-{}
-
 impl<T, U, F> Iterable<U> for MapIterable<T, U, F> 
-where 
-    F: Fn(&T) -> U + 'static,
-    T: Clone + 'static,
-    U: 'static + Clone,
+where F: Fn(&T) -> U + 'static, T: Clone + 'static, U: 'static + Clone,
 {
     fn iterator(&self) -> Box<dyn Iterator<U> + '_> {
         Box::new(MapIterator::new(&*self.iterable, &self.f))
@@ -268,8 +208,6 @@ impl<T: Clone + 'static> DynIterable<T> {
     }
 }
 
-impl<T: Clone + 'static> Container for DynIterable<T> {}
-
 impl<T: Clone + 'static> Iterable<T> for DynIterable<T> {
     fn iterator(&self) -> Box<dyn Iterator<T> + '_> {
         unsafe {
@@ -287,20 +225,14 @@ impl<T: Clone + 'static> Drop for DynIterable<T> {
 
 // Map iterator
 struct MapIterator<'a, T, U, F> 
-where 
-    F: Fn(&T) -> U + 'static,
-    T: Clone + 'static,
-    U: 'static,
+where F: Fn(&T) -> U + 'static, T: Clone + 'static, U: 'static,
 {
     iterator: Box<dyn Iterator<T> + 'a>,
     f: &'a F,
 }
 
 impl<'a, T, U, F> MapIterator<'a, T, U, F> 
-where 
-    F: Fn(&T) -> U + 'static,
-    T: Clone + 'static,
-    U: 'static,
+where F: Fn(&T) -> U + 'static, T: Clone + 'static, U: 'static,
 {
     fn new(iterable: &'a dyn Iterable<T>, f: &'a F) -> Self {
         Self {
@@ -311,10 +243,7 @@ where
 }
 
 impl<'a, T, U, F> Iterator<U> for MapIterator<'a, T, U, F> 
-where 
-    F: Fn(&T) -> U + 'static,
-    T: Clone + 'static,
-    U: 'static,
+where F: Fn(&T) -> U + 'static, T: Clone + 'static, U: 'static,
 {
     fn next(&mut self) -> Option<U> {
         self.iterator.next().map(|item| (self.f)(&item))
@@ -323,18 +252,14 @@ where
 
 // Filter iterable - similar to Map
 struct FilterIterable<T, F> 
-where 
-    F: Fn(&T) -> bool + 'static,
-    T: Clone + 'static,
+where F: Fn(&T) -> bool + 'static, T: Clone + 'static,
 {
     iterable: Rc<dyn Iterable<T>>,
     f: F,
 }
 
 impl<T, F> FilterIterable<T, F> 
-where 
-    F: Fn(&T) -> bool + 'static,
-    T: Clone + 'static,
+where F: Fn(&T) -> bool + 'static, T: Clone + 'static,
 {
     fn new(iterable: &dyn Iterable<T>, f: F) -> Self {
         Self {
@@ -344,16 +269,8 @@ where
     }
 }
 
-impl<T, F> Container for FilterIterable<T, F>
-where 
-    F: Fn(&T) -> bool + 'static,
-    T: Clone + 'static,
-{}
-
 impl<T, F> Iterable<T> for FilterIterable<T, F>
-where 
-    F: Fn(&T) -> bool + 'static,
-    T: Clone + 'static,
+where F: Fn(&T) -> bool + 'static, T: Clone + 'static,
 {
     fn iterator(&self) -> Box<dyn Iterator<T> + '_> {
         Box::new(FilterIterator::new(&*self.iterable, &self.f))
@@ -362,18 +279,14 @@ where
 
 // Filter iterator
 struct FilterIterator<'a, T, F>
-where 
-    F: Fn(&T) -> bool + 'static,
-    T: Clone + 'static,
+where F: Fn(&T) -> bool + 'static, T: Clone + 'static,
 {
     iterator: Box<dyn Iterator<T> + 'a>,
     f: &'a F,
 }
 
 impl<'a, T, F> FilterIterator<'a, T, F>
-where 
-    F: Fn(&T) -> bool + 'static,
-    T: Clone + 'static,
+where F: Fn(&T) -> bool + 'static, T: Clone + 'static,
 {
     fn new(iterable: &'a dyn Iterable<T>, f: &'a F) -> Self {
         Self {
@@ -384,9 +297,7 @@ where
 }
 
 impl<'a, T, F> Iterator<T> for FilterIterator<'a, T, F>
-where 
-    F: Fn(&T) -> bool + 'static,
-    T: Clone + 'static,
+where F: Fn(&T) -> bool + 'static, T: Clone + 'static,
 {
     fn next(&mut self) -> Option<T> {
         while let Some(item) = self.iterator.next() {
@@ -400,16 +311,14 @@ where
 
 // Chain iterable
 struct ChainIterable<T>
-where 
-    T: Clone + 'static,
+where T: Clone + 'static,
 {
     first: Rc<dyn Iterable<T>>,
     second: Rc<dyn Iterable<T>>,
 }
 
 impl<T> ChainIterable<T>
-where 
-    T: Clone + 'static,
+where T: Clone + 'static,
 {
     fn new(first: &dyn Iterable<T>, second: &dyn Iterable<T>) -> Self {
         Self {
@@ -419,14 +328,8 @@ where
     }
 }
 
-impl<T> Container for ChainIterable<T>
-where 
-    T: Clone + 'static,
-{}
-
 impl<T> Iterable<T> for ChainIterable<T>
-where 
-    T: Clone + 'static,
+where T: Clone + 'static,
 {
     fn iterator(&self) -> Box<dyn Iterator<T> + '_> {
         Box::new(ChainIterator::new(&*self.first, &*self.second))
@@ -435,8 +338,7 @@ where
 
 // Chain iterator
 struct ChainIterator<'a, T>
-where 
-    T: Clone + 'static,
+where T: Clone + 'static,
 {
     first: Box<dyn Iterator<T> + 'a>,
     second: Box<dyn Iterator<T> + 'a>,
@@ -444,8 +346,7 @@ where
 }
 
 impl<'a, T> ChainIterator<'a, T>
-where 
-    T: Clone + 'static,
+where T: Clone + 'static,
 {
     fn new(first: &'a dyn Iterable<T>, second: &'a dyn Iterable<T>) -> Self {
         Self {
@@ -457,8 +358,7 @@ where
 }
 
 impl<'a, T> Iterator<T> for ChainIterator<'a, T>
-where 
-    T: Clone + 'static,
+where T: Clone + 'static,
 {
     fn next(&mut self) -> Option<T> {
         if self.on_first {
@@ -475,16 +375,14 @@ where
 
 // Interleave iterable (similar to Chain)
 struct InterleaveIterable<T>
-where 
-    T: Clone + 'static,
+where T: Clone + 'static,
 {
     first: Rc<dyn Iterable<T>>,
     second: Rc<dyn Iterable<T>>,
 }
 
 impl<T> InterleaveIterable<T>
-where 
-    T: Clone + 'static,
+where T: Clone + 'static,
 {
     fn new(first: &dyn Iterable<T>, second: &dyn Iterable<T>) -> Self {
         Self {
@@ -494,14 +392,8 @@ where
     }
 }
 
-impl<T> Container for InterleaveIterable<T>
-where 
-    T: Clone + 'static,
-{}
-
 impl<T> Iterable<T> for InterleaveIterable<T>
-where 
-    T: Clone + 'static,
+where T: Clone + 'static,
 {
     fn iterator(&self) -> Box<dyn Iterator<T> + '_> {
         Box::new(InterleaveIterator::new(&*self.first, &*self.second))
@@ -510,8 +402,7 @@ where
 
 // Interleave iterator
 struct InterleaveIterator<'a, T>
-where 
-    T: Clone + 'static,
+where T: Clone + 'static,
 {
     first: Box<dyn Iterator<T> + 'a>,
     second: Box<dyn Iterator<T> + 'a>,
@@ -519,8 +410,7 @@ where
 }
 
 impl<'a, T> InterleaveIterator<'a, T>
-where 
-    T: Clone + 'static,
+where T: Clone + 'static,
 {
     fn new(first: &'a dyn Iterable<T>, second: &'a dyn Iterable<T>) -> Self {
         Self {
@@ -532,8 +422,7 @@ where
 }
 
 impl<'a, T> Iterator<T> for InterleaveIterator<'a, T>
-where 
-    T: Clone + 'static,
+where T: Clone + 'static,
 {
     fn next(&mut self) -> Option<T> {
         let result = if self.on_first {
@@ -548,18 +437,14 @@ where
 
 // Zip iterable
 struct ZipIterable<T, U>
-where 
-    T: Clone + 'static,
-    U: Clone + 'static,
+where T: Clone + 'static, U: Clone + 'static,
 {
     first: Rc<dyn Iterable<T>>,
     second: Rc<dyn Iterable<U>>,
 }
 
 impl<T, U> ZipIterable<T, U>
-where 
-    T: Clone + 'static,
-    U: Clone + 'static,
+where T: Clone + 'static, U: Clone + 'static,
 {
     fn new(first: &dyn Iterable<T>, second: &dyn Iterable<U>) -> Self {
         Self {
@@ -569,16 +454,8 @@ where
     }
 }
 
-impl<T, U> Container for ZipIterable<T, U>
-where 
-    T: Clone + 'static,
-    U: Clone + 'static,
-{}
-
 impl<T, U> Iterable<Pair<T, U>> for ZipIterable<T, U>
-where 
-    T: Clone + 'static,
-    U: Clone + 'static,
+where T: Clone + 'static, U: Clone + 'static,
 {
     fn iterator(&self) -> Box<dyn Iterator<Pair<T, U>> + '_> {
         Box::new(ZipIterator::new(&*self.first, &*self.second))
@@ -587,18 +464,14 @@ where
 
 // Zip iterator
 struct ZipIterator<'a, T, U>
-where 
-    T: Clone + 'static,
-    U: Clone + 'static,
+where T: Clone + 'static, U: Clone + 'static,
 {
     first: Box<dyn Iterator<T> + 'a>,
     second: Box<dyn Iterator<U> + 'a>,
 }
 
 impl<'a, T, U> ZipIterator<'a, T, U>
-where 
-    T: Clone + 'static,
-    U: Clone + 'static,
+where T: Clone + 'static, U: Clone + 'static,
 {
     fn new(first: &'a dyn Iterable<T>, second: &'a dyn Iterable<U>) -> Self {
         Self {
@@ -609,13 +482,11 @@ where
 }
 
 impl<'a, T, U> Iterator<Pair<T, U>> for ZipIterator<'a, T, U>
-where 
-    T: Clone + 'static,
-    U: Clone + 'static,
+where T: Clone + 'static, U: Clone + 'static,
 {
     fn next(&mut self) -> Option<Pair<T, U>> {
         match (self.first.next(), self.second.next()) {
-            (Some(t), Some(u)) => Some(Pair::new(t, u)),
+            (Some(t), Some(u)) => Some(Pair{t, u}),
             _ => None,
         }
     }
@@ -623,18 +494,14 @@ where
 
 // Product iterable
 struct ProductIterable<T, U>
-where 
-    T: Clone + 'static,
-    U: Clone + 'static,
+where  T: Clone + 'static, U: Clone + 'static,
 {
     first: Rc<dyn Iterable<T>>,
     second: Rc<dyn Iterable<U>>,
 }
 
 impl<T, U> ProductIterable<T, U>
-where 
-    T: Clone + 'static,
-    U: Clone + 'static,
+where T: Clone + 'static, U: Clone + 'static,
 {
     fn new(first: &dyn Iterable<T>, second: &dyn Iterable<U>) -> Self {
         Self {
@@ -644,16 +511,8 @@ where
     }
 }
 
-impl<T, U> Container for ProductIterable<T, U>
-where 
-    T: Clone + 'static,
-    U: Clone + 'static,
-{}
-
 impl<T, U> Iterable<Pair<T, U>> for ProductIterable<T, U>
-where 
-    T: Clone + 'static,
-    U: Clone + 'static,
+where T: Clone + 'static, U: Clone + 'static,
 {
     fn iterator(&self) -> Box<dyn Iterator<Pair<T, U>> + '_> {
         Box::new(ProductIterator::new(&*self.first, &*self.second))
@@ -662,9 +521,7 @@ where
 
 // Product iterator
 struct ProductIterator<'a, T, U>
-where 
-    T: Clone + 'static,
-    U: Clone + 'static,
+where T: Clone + 'static, U: Clone + 'static,
 {
     first: Box<dyn Iterator<T> + 'a>,
     second: Box<dyn Iterator<U> + 'a>,
@@ -673,9 +530,7 @@ where
 }
 
 impl<'a, T, U> ProductIterator<'a, T, U>
-where 
-    T: Clone + 'static,
-    U: Clone + 'static,
+where T: Clone + 'static, U: Clone + 'static,
 {
     fn new(first: &'a dyn Iterable<T>, second: &'a dyn Iterable<U>) -> Self {
         let mut first_iter = first.iterator();
@@ -691,9 +546,7 @@ where
 }
 
 impl<'a, T, U> Iterator<Pair<T, U>> for ProductIterator<'a, T, U>
-where 
-    T: Clone + 'static,
-    U: Clone + 'static,
+where T: Clone + 'static, U: Clone + 'static,
 {
     fn next(&mut self) -> Option<Pair<T, U>> {
         // While we have a valid element from the first iterator
@@ -702,7 +555,7 @@ where
             match self.second.next() {
                 Some(second_elem) => {
                     // We found a pair
-                    return Some(Pair::new(current_first.clone(), second_elem));
+                    return Some(Pair{current_first.clone(), second_elem});
                 }
                 None => {
                     // Second iterator exhausted, move to next element in first

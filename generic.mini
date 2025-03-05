@@ -9,11 +9,11 @@ class Pair[T, U]
 
 	def init(@first : T, @second : U) {
 	}
-    #[ret == self]
+    #[ret == @first]
 	def first() -> T {
 		return @first;
 	}
-    #[ret == self]
+    #[ret == @second]
 	def second() -> U {
 		return @second;
 	}
@@ -44,25 +44,19 @@ class FancyPair extends Pair[Tuple[f64,f64,f64,f64], f64] {
 b = FancyPair.new((1.0, 2.0, 3.0, 4.0), 5.0);
 IO.print(b.second());
 
-class Iterator2[T] {
-
+class Container {
     @elems_reg : Region
+}
 
-    #[ret == self]
+class Iterator2[T] extends Container {
+
+    #[ret > @elems_reg]
 	abstract def next() -> T | Nil {}
 }
 
-class ScopedIterator2[T] extends Iterator2[T] {
-    #[ret > self]
-    abstract def next() -> T | Nil {}
-}
+class Iterable2[T] extends Container {
 
-class ScopedIterable2[T] extends Iterable2[T] {
-    abstract def iterator() -> ScopedIterator2[T] {}
-}
-
-class Iterable2[T] {
-    #[ret < self]
+    #[ret.elems_reg == @elems_reg, ret < self]
 	abstract def iterator() -> Iterator2[T] {}
 	def each(f : (T)) {
         for x in self { f.call(x); }
@@ -109,12 +103,14 @@ class Iterable2[T] {
     }
 }
 
-class Array[T] extends ScopedIterable2[T] {
+class Array[T] extends Iterable2[T] {
 	@buffer : Buffer[T]
 	@length : i32
 	@capacity : i32
 
-    #[ret < iterable]
+    regions { @elems_reg == @buffer }
+
+    #[ret.elems_reg == iterable.elems_reg]
 	def Self.from_iterable(iterable : Iterable2[T]) -> Array[T] {
     	result = Array[T].new();
     	for elem in iterable { result.append(elem); }
@@ -129,15 +125,15 @@ class Array[T] extends ScopedIterable2[T] {
         @buffer = Buffer[T].new(@capacity);
         @length = 0;
     }
-    #[ret == self]
+    #[ret == @length]
 	def length() -> i32 {
 		return @length;
 	}
-    #[ret == self]
+    #[ret == @capacity]
     def capacity() -> i32 {
     	return @capacity;
     }
-    #[ret == self, self < x]
+    #[ret == self, x > @elems_reg]
     def append(x : T) -> Array[T] {
         if @length >= @capacity { self.grow(); }
         @buffer.[@length] = x;
@@ -154,7 +150,7 @@ class Array[T] extends ScopedIterable2[T] {
             i = i + 1;
         }
     }
-    #[ret > self]
+    #[ret > @elems_reg]
     def [](x : i32) -> T yields OutOfBounds | Nil {
     	past_end = x > (@length - 1);
     	before_start = (@length + x) < 0;
@@ -165,7 +161,7 @@ class Array[T] extends ScopedIterable2[T] {
     def throw_oob(x : i32) yields OutOfBounds {
     	yield(Exception.new());
     }
-    #[ret > self]
+    #[ret > @elems_reg]
     def unsafe_index(x : i32) -> T {
     	return @buffer.[x];
     }
@@ -174,9 +170,11 @@ class Array[T] extends ScopedIterable2[T] {
     }
 }
 
-class ArrayIterator[T] extends ScopedIterator2[T] {
+class ArrayIterator[T] extends Iterator2[T] {
 	@array : Array[T]
 	@index : i32
+
+    regions { @array == @elems_reg }
 
 	def init(@array : Array[T]) { @index = 0; }
 	def next() -> T | Nil {
@@ -186,9 +184,11 @@ class ArrayIterator[T] extends ScopedIterator2[T] {
 	}
 }
 
-class MapIterable2[T, U] extends ScopedIterable2[U] {
+class MapIterable2[T, U] extends Iterable2[U] {
     @iterable : Iterable2[T]
     @f : (T) -> U
+
+    regions { @elems_reg == @iterable.elems_reg }
 
     def init(@iterable : Iterable2[T], @f : (T) -> U) {}
 
@@ -197,9 +197,11 @@ class MapIterable2[T, U] extends ScopedIterable2[U] {
     }
 }
 
-class MapIterator2[T, U] extends ScopedIterator2[U] {
+class MapIterator2[T, U] extends Iterator2[U] {
     @iterator : Iterator2[T]
     @f : (T) -> U
+
+    regions { @elems_reg == @iterator.elems_reg }
 
     def init(@iterator : Iterator2[T], @f : (T) -> U) {}
 
@@ -212,9 +214,11 @@ class MapIterator2[T, U] extends ScopedIterator2[U] {
     }
 }
 
-class FilterIterable2[T] extends ScopedIterable2[T] {
+class FilterIterable2[T] extends Iterable2[T] {
     @iterable : Iterable2[T]
     @f : (T) -> Bool
+
+    regions { @elems_reg == @iterable.elems_reg }
 
     def init(@iterable : Iterable2[T], @f : (T) -> Bool) {}
 
@@ -223,9 +227,11 @@ class FilterIterable2[T] extends ScopedIterable2[T] {
     }
 }
 
-class FilterIterator2[T] extends ScopedIterator2[T] {
+class FilterIterator2[T] extends Iterator2[T] {
     @iterator : Iterator2[T]
     @f : (T) -> Bool
+
+    regions { @elems_reg == @iterator.elems_reg }
     
     def init(@iterator : Iterator2[T], @f : (T) -> Bool) {}
 
@@ -239,9 +245,14 @@ class FilterIterator2[T] extends ScopedIterator2[T] {
     }
 }
 
-class ChainIterable2[T] extends ScopedIterable2[T] {
+class ChainIterable2[T] extends Iterable2[T] {
     @first : Iterable2[T]
     @second : Iterable2[T]
+
+    regions {
+        @elems_reg == @first.elems_reg,
+        @elems_reg == @second.elems_reg
+    }
 
     def init(@first : Iterable2[T], @second : Iterable2[T]) {}
 
@@ -250,10 +261,15 @@ class ChainIterable2[T] extends ScopedIterable2[T] {
     }
 }
 
-class ChainIterator2[T] extends ScopedIterator2[T] {
+class ChainIterator2[T] extends Iterator2[T] {
     @first : Iterator2[T]
     @second : Iterator2[T]
     @on_first : Bool
+
+    regions {
+        @elems_reg == @first.elems_reg,
+        @elems_reg == @second.elems_reg
+    }
 
     def init(@first : Iterator2[T], @second : Iterator2[T]) {
         @on_first = true;
@@ -268,9 +284,14 @@ class ChainIterator2[T] extends ScopedIterator2[T] {
     }
 }
 
-class InterleaveIterable2[T] extends ScopedIterable2[T] {
+class InterleaveIterable2[T] extends Iterable2[T] {
     @first : Iterable2[T]
     @second : Iterable2[T]
+
+    regions {
+        @elems_reg == @first.elems_reg,
+        @elems_reg == @second.elems_reg
+    }
 
     def init(@first : Iterable2[T], @second : Iterable2[T]) {}
 
@@ -279,10 +300,15 @@ class InterleaveIterable2[T] extends ScopedIterable2[T] {
     }
 }
 
-class InterleaveIterator2[T] extends ScopedIterator2[T] {
+class InterleaveIterator2[T] extends Iterator2[T] {
     @first : Iterator2[T]
     @second : Iterator2[T]
     @on_first : Bool
+
+    regions {
+        @elems_reg == @first.elems_reg,
+        @elems_reg == @second.elems_reg
+    }
 
     def init(@first : Iterator2[T], @second : Iterator2[T]) {
         @on_first = true;
@@ -301,6 +327,11 @@ class ZipIterable2[T, U] extends Iterable2[Pair[T, U]] {
     @first : Iterable2[T]
     @second : Iterable2[U]
 
+    regions {
+        @elems_reg == @first.elems_reg,
+        @elems_reg == @second.elems_reg
+    }
+
     def init(@first : Iterable2[T], @second : Iterable2[U]) {}
 
     def iterator() -> ZipIterator2[T, U] {
@@ -311,6 +342,11 @@ class ZipIterable2[T, U] extends Iterable2[Pair[T, U]] {
 class ZipIterator2[T, U] extends Iterator2[Pair[T, U]] {
     @first : Iterator2[T]
     @second : Iterator2[U]
+
+    regions {
+        @elems_reg == @first.elems_reg,
+        @elems_reg == @second.elems_reg
+    }
 
     def init(@first : Iterator2[T], @second : Iterator2[U]) {}
 
@@ -328,6 +364,11 @@ class ProductIterable2[T, U] extends Iterable2[Pair[T, U]] {
     @first : Iterable2[T]
     @second : Iterable2[U]
 
+    regions {
+        @elems_reg == @first.elems_reg,
+        @elems_reg == @second.elems_reg
+    }
+
     def init(@first : Iterable2[T], @second : Iterable2[U]) {}
 
     def iterator() -> ProductIterator2[T, U] {
@@ -341,7 +382,15 @@ class ProductIterator2[T, U] extends Iterator2[Pair[T, U]] {
     @second_iterable : Iterable2[U]
     @current_first : T | Nil
 
-    #[self < first_iterable]
+    regions {
+        @elems_reg == @first_iterator.elems_reg,
+        @elems_reg == @second_iterator.elems_reg,
+        @second_iterable.elems_reg == @second_iterator.elems_reg,
+        @second_iterator < @second_iterable,
+        @first_iterator.elems_reg < @current_first
+    }
+
+    #[@first_iterator.elems_reg == first_iterable.elems_reg, @first_iterator < first_iterable]
     def init(first_iterable : Iterable2[T], @second_iterable : Iterable2[U]) {
         @first_iterator = first_iterable.iterator();
         @second_iterator = @second_iterable.iterator();
@@ -396,7 +445,7 @@ class Float64 extends Addable[Float64, Float64], Addable[Int32, Float64] {
 	def init(@value : f64) {
     }
 
-    #[ret == self]
+    #[ret == @value]
 	def value() -> f64 {
         return @value;
     }
@@ -415,7 +464,7 @@ class Int32 extends Addable[Int32, Int32], Addable[Float64, Float64] {
 	def init(@value : i32) {
     }
 
-    #[ret == self]
+    #[ret == @value]
 	def value() -> i32 {
         return @value;
     }

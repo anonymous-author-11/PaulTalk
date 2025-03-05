@@ -268,20 +268,27 @@ DONE:
 	- Separate from fields in parsing [check!]
 	- Add a regions tuple to ClassDef [check!]
 	- Have a .all_regions() method which handles inherited regions [check!]
+- Add class-scoped constraints to method constraints [check!]
+	- Add constraints to ClassDef [check!]
+	- Add .all_constraints() to ClassDef [check!]
+	- After checking override validity [check!]
+	- Only to instance method constraints [check!]
+- Be sure to include constraints from overloads of overidden methods [check!]
+- Translate behavior constraints arg numbering to new granular constraints [check!]
+- On object creation, add class constraints to caller points-to graph [check!]
+	- Including standard fields > self constraints [check!]
+	- Or just implicitly add class constraints to init [check!]
+	- Be sure to map names to the context [check!]
 
 TODO:
 
-- Add class-scoped constraints to method constraints
-	- After checking override validity
-- On object creation, add class constraints to caller points-to graph
-	- Including standard fields > self constraints
-	- Or just implicitly add class constraints to init
-
-- Minimize number of behaviors by merging identical behaviors
-	- This is probably done at link-time already
+- Think about precise lifetimes for buffers/tuples
+- Make sure regions and fields don't have conflicting names
+- Work on mapping field constraints for method calls [check!]
+- Minimize number of behaviors
 	- Do we really need to generate all-new behaviors for every new subclass?
 	- Why not just new behaviors for the ones that have actually changed?
-	- Will make vtables smaller which is good
+	- Will make vtables significantly smaller
 - Conservatively alias parameters for first-class functions
 - Implement Records
 	- Should actually be relatively straightforward
@@ -423,84 +430,10 @@ TODO:
 
 # --- Possibilities ---
 
-- Ideas for regions
-	- Lean on aliases and defaults to minimize annotation burden
-	- Put region constraints in method signature and enforce them
-	- Infer regions where possible
-	- Annotations implicitly inherited
-	- Lifetime rules
-		- Enforce that variables assigned to fields have longer lifetimes than self
-		- Enforce that references to fields have longer lifetimes than self
-		- Enforce that constraints on returned value reflected in annotations
-		- Enforce that to/from buffers longer lifetime than the buffer
-		- Enforce that constraints are a superset of called methods' constraints
-		- Propagate constraints through assignments
-	- Progressive disclosure: allow having explicit passed regions
-		- maybe $reg1 syntax
-		- otherwise allocations just go into any parameter region with a transitive constraint
-		- Putting region ptrs in fatptr third word should work
-		- Because boxed structs don't have regions!
-	- You can always strengthen constraints into equality constraints and preserve safety
-	- Minimal number of constraint strengthenings to identify allocation
-	- You know that an Array[i32] has less aliasing potential than an Array[Object]
-		- An Array[Object] could hold itself for all we know
-			- So just allocate all its buffers in its self-region
-		- An Array[i32] could not hold itself
-	- Defaults
-		- Fields outlive self
-		- Field parameters create constraints
-		- Constraints added between overloads
-		- Constraints inherited by overrides
-		- Pass in a region for return value
-		- allocate in shortest-lived region compatible with constraints if not specified
-		- best would be a temporary region!
-		- if equal to ret, allocate in ret
-	- "Inferred constraints on parameter x are stronger than those imposed by explicit lifetime annotations"
-		- Parameter x is determined to have lifetime [...] than [...]
-		- Consider adding an annotation like [...] to this method
-	- Track all regions which variables in the method are ever in
-		- Include field and self regions at start of method
-		- When no variables are in the region anymore, attempt to free it
-		- If it's needed up the call stack it will have been protected
-	- Accumulate points-to facts during typeflow
-		- Flow insensitive, all facts relevant
-		- Facts created by assignments or calls (including operators)
-			- Start with just assignments
-		- Then combine these facts into a points-to graph
-		- Create a graph augmented with annotated points-to facts
-		- Minimize the augmented graph to include only parameter nodes
-		- Ensure that the parameters nodes do not have more edges in the original graph than the minimized
-		- I.e. that the annotations cover the parameter-relevant points-to information
-	- Have a constraints() method for every Expression
-		- Actually, just write to points-to graph directly from exprtype
-	- Error if parameters in the augmented graph have outgoing paths to non-parameter nodes
-	- By pessimizing the points-to graph, you can make it so that parameter constraints become effective
-	- By introducing a new region you can effectively create external constraints from internal ones
-	- Upon allocation, introduce points-to equivalence between allocation region and allocation result
-	- Rules
-		- Any interior node (non-parameter) pointed to by a parameter node must be merged with all parameter nodes pointing to it
-		- For any path between two parameter nodes in the graph, there must be a corresponding inequality annotation
-		- For any two parameters in the same node, there must be a corresponding equality annotation
-	- I'm realizing this isn't going to work
-	- Buffer.append epitomizes the problem
-		- How can we say that buffer must outlive x?
-		- What if we only say that *some* fields live in the same region as self
-	- Rules
-		- Increment protection count upon region creation
-		- Increment protection count of returned region (what about one put into other parameters?)
-		- Decrement protection count right before last use
-			- Only if you saw the allocation? No, could have happened inside a call too
-			- Only if it isn't a parameter region (passed in from outside)
-		- Free region after last use of variable pointing into it, if not used in method expected to free it
-		- Free self and its fields too
-		- Don't free ret; protected anyway
-	- Should have variable point to allocation instead of being equal?
-	- If a must outlive b and both are used the last time as parameters together, a must be protected and freed after the call
-		- Because we can't know from the outside whether a or b will be attempted to be freed internally
-	- Memory regions
-		- Abstract memory regions (oh boy I'm cookin)
-			- Abstract associated regions (oh god!)
-				- Abstract bounded polymorphic associated regions (god mode)
+- Memory regions
+	- Abstract memory regions (oh boy I'm cookin)
+		- Abstract associated regions (oh god!)
+			- Abstract bounded polymorphic associated regions (god mode)
 
 - Manual memory management combines four questions
 	- When memory gets allocated and deallocated

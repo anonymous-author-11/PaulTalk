@@ -2,6 +2,7 @@ import networkx as nx
 from networkx.utils import UnionFind
 import matplotlib.pyplot as plt
 from io import StringIO
+from collections import defaultdict
 
 def create_constraint_graph(constraints):
     """
@@ -19,6 +20,8 @@ def create_constraint_graph(constraints):
     inequalities = []
     
     for a, op, b in constraints:
+        a = a.replace("@","self.")
+        b = b.replace("@","self.")
         nodes.add(a)
         nodes.add(b)
         
@@ -431,8 +434,8 @@ def transform_based_on_label_pattern(G, var_mapping):
         global_map = {}
         for var, rep in var_mapping.items():
             current_rep = uf[rep]
-            if "@" in var:
-                prefix, postfix = var.split("@", 1)
+            if "." in var:
+                prefix, postfix = var.split(".", 1)
                 prefix_to_postfixes[current_rep][prefix].add(postfix)
                 global_map[(prefix, postfix)] = current_rep
 
@@ -455,10 +458,10 @@ def transform_based_on_label_pattern(G, var_mapping):
                         b_rep = uf[neighbor]
                         if b_rep not in prefix_to_postfixes: continue
 
-                        # Check for X@postfix in successor B
+                        # Check for X.postfix in successor B
                         postfixes = prefix_to_postfixes[b_rep].get(var_x, set())
                         for postfix in postfixes:
-                            # Check if Y@postfix exists
+                            # Check if Y.postfix exists
                             if (var_y, postfix) not in global_map: continue
                             c_rep = global_map[(var_y, postfix)]
                             if b_rep != c_rep:

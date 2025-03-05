@@ -103,13 +103,14 @@ class CSTTransformer(Transformer):
             offender = next(t for t in supertype_list if not isinstance(t, FatPtr))
             raise Exception(f"Line {cls.line}: Cannot extend {t}")
         fields = fields or []
+        region_constraints = region_constraints or []
         regions = [f.name for f in fields if f._type == FatPtr.basic("Region")]
         fields = [f for f in fields if f._type != FatPtr.basic("Region")]
         
         direct_supertypes = [typ for typ in supertype_list] if supertype_list else [FatPtr.basic("Object")]
         if class_name == "Object": direct_supertypes = []
         node_info = NodeInfo(random_letters(10), self.file_name, cls.line)
-        class_def = ClassDef(node_info, class_name, type_parameters, direct_supertypes, None, fields, regions, methods, [], None, None, None)
+        class_def = ClassDef(node_info, class_name, type_parameters, direct_supertypes, None, fields, regions, region_constraints, methods, [], None, None, None)
         for field in fields: field.defining_class = class_def
         for method in methods:
             method.defining_class = class_def
@@ -123,7 +124,7 @@ class CSTTransformer(Transformer):
         return constraint_list
 
     def region_variable(self, *idents):
-        return "".join(ident.value for ident in idents)
+        return ".".join(ident.value for ident in idents)
 
     def param_list(self, *params):
         return list(params)

@@ -43,7 +43,7 @@ constraint_list: (constraint ("," constraint)*)?
 constraint: region_variable LT region_variable
           | region_variable GT region_variable
           | region_variable EQ region_variable
-region_variable: (IDENT ("." IDENT)*)? 
+region_variable: ((IDENT | FIELD) ("." (IDENT | FIELD))*)? 
 
 method_param: param | field_param
 param: IDENT ":" typ

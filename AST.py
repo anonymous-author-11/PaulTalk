@@ -649,8 +649,14 @@ class FunctionCall(Expression):
         formal_constraints = func.constraints
         mapping = [*zip((param.name for param in func.params), (arg.info.id for arg in self.arguments)), ("ret", self.info.id)]
         mapping = {k:v for k,v in mapping}
-        mapped_constraints = [(mapping[c.lhs], c.op, mapping[c.rhs]) for c in formal_constraints]
-        for triple in mapped_constraints: scope.points_to_facts.add(triple)
+        for c in formal_constraints:
+            lhs_split = c.lhs.split(".")
+            lhs_split[0] = mapping[lhs_split[0]]
+            rhs_split = c.rhs.split(".")
+            rhs_split[0] = mapping[rhs_split[0]]
+            scope.points_to_facts.add((".".join(lhs_split), c.op, ".".join(rhs_split)))
+            if len(lhs_split) > 1: scope.points_to_facts.add((lhs_split[0], "<", ".".join(lhs_split)))
+            if len(rhs_split) > 1: scope.points_to_facts.add((rhs_split[0], "<", ".".join(rhs_split)))
 
     def exprtype(self, scope):
         self.ensure_declared(scope)
@@ -734,11 +740,18 @@ class MethodCall(Expression):
 
     def apply_constraints(self, scope, behavior):
         formal_constraints = behavior.constraints()
-        mapping = [*((i, arg.info.id) for (i, arg) in enumerate(self.arguments)), ("ret", self.info.id), ("self", self.receiver.info.id)]
+        if self.method == "init":
+            formal_constraints = [*formal_constraints, *behavior.cls.all_constraints()]
+        mapping = [*((str(i), arg.info.id) for (i, arg) in enumerate(self.arguments)), ("ret", self.info.id), ("self", self.receiver.info.id)]
         mapping = {k:v for k,v in mapping}
-        mapped_constraints = [(mapping[c.lhs], c.op, mapping[c.rhs]) for c in formal_constraints]
-        #print(f"constraints for call {self.receiver}.{self.method}: {formal_constraints}")
-        for triple in mapped_constraints: scope.points_to_facts.add(triple)
+        for c in formal_constraints:
+            lhs_split = c.lhs.split(".")
+            lhs_split[0] = mapping[lhs_split[0]]
+            rhs_split = c.rhs.split(".")
+            rhs_split[0] = mapping[rhs_split[0]]
+            scope.points_to_facts.add((".".join(lhs_split), c.op, ".".join(rhs_split)))
+            if len(lhs_split) > 1: scope.points_to_facts.add((lhs_split[0], "<", ".".join(lhs_split)))
+            if len(rhs_split) > 1: scope.points_to_facts.add((rhs_split[0], "<", ".".join(rhs_split)))
 
     def simple_exprtype(self, scope, rec_typ):
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
@@ -1000,10 +1013,16 @@ class ClassMethodCall(MethodCall):
 
     def apply_constraints(self, scope, behavior):
         formal_constraints = behavior.constraints()
-        mapping = [*((i, arg.info.id) for (i, arg) in enumerate(self.arguments)), ("ret", self.info.id)]
+        mapping = [*((str(i), arg.info.id) for (i, arg) in enumerate(self.arguments)), ("ret", self.info.id)]
         mapping = {k:v for k,v in mapping}
-        mapped_constraints = [(mapping[c.lhs], c.op, mapping[c.rhs]) for c in formal_constraints]
-        for triple in mapped_constraints: scope.points_to_facts.add(triple)
+        for c in formal_constraints:
+            lhs_split = c.lhs.split(".")
+            lhs_split[0] = mapping[lhs_split[0]]
+            rhs_split = c.rhs.split(".")
+            rhs_split[0] = mapping[rhs_split[0]]
+            scope.points_to_facts.add((".".join(lhs_split), c.op, ".".join(rhs_split)))
+            if len(lhs_split) > 1: scope.points_to_facts.add((lhs_split[0], "<", ".".join(lhs_split)))
+            if len(rhs_split) > 1: scope.points_to_facts.add((rhs_split[0], "<", ".".join(rhs_split)))
 
     def simple_exprtype(self, scope):
         if self.receiver == "Self":
@@ -1155,7 +1174,7 @@ class ObjectCreation(Expression):
         scope.type_table[self.anon_name] = simplified_type
         anon_id = Identifier(self.info, self.anon_name)
         MethodCall(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), anon_id, "init", self.arguments).exprtype(scope)
-        scope.points_to_facts.add((self.info.id, "<", self.anon_name))
+        scope.points_to_facts.add((self.info.id, "==", self.anon_name))
         return simplified_type
 
 @dataclass
@@ -1163,6 +1182,10 @@ class Constraint(Node):
     lhs: str
     op: str
     rhs: str
+
+    def __post_init__(self):
+        self.lhs = self.lhs.replace("@","self.")
+        self.rhs = self.rhs.replace("@","self.")
 
 @dataclass
 class ExternDef(Statement):
@@ -1388,15 +1411,16 @@ class MethodDef(Statement):
                 continue
             raise Exception(f"Line {self.info.line_number}: field {field.declaration.name} not properly initialized for class {body_scope.cls.name}. You may need to override this constructor.")
 
-    def check_lifetime_constraints(self, body_scope):
-        fields = [key for key in self.defining_class._scope.type_table.keys() if "@" in key]
+    def annotated_points_to_facts(self, body_scope, param_names):
         annotated_facts = set()
-        for name in fields:
-            annotated_facts.add(("self","==",name))
-        for meth in self.overridden_methods():
+        for c in self.defining_class.all_constraints():
+            annotated_facts.add((c.lhs, c.op, c.rhs))
+
+        for meth in chain.from_iterable(m.overridden_methods() for m in body_scope.behavior.methods):
             for c in meth.constraints:
                 # not robust to differently named parameters
                 annotated_facts.add((c.lhs, c.op, c.rhs))
+
         for c in self.constraints:
             # ensures that overrides can have more precise (less conservative) constraints
             if (c.lhs, "==", c.rhs) in annotated_facts:
@@ -1406,17 +1430,31 @@ class MethodDef(Statement):
             if c.op == "==" and ((c.lhs, "<", c.rhs) in annotated_facts or (c.rhs, "<", c.lhs) in annotated_facts):
                 raise Exception(f"Line {self.info.line_number}: Constraint {c.lhs} {c.op} {c.rhs} is less precise than constraints from overridden methods.")
             annotated_facts.add((c.lhs, c.op, c.rhs))
-        param_names = [*(param.name for param in self.params), *fields, "self"]
-        if self.hasreturn: param_names.append("ret")
+        
         for name in param_names: annotated_facts.add((name, "==", name))
+        return annotated_facts
+
+    def check_lifetime_constraints(self, body_scope):
+        fields = [key.replace("@","self.") for key in self.defining_class._scope.type_table.keys() if "@" in key]
+        virtual_regions = [reg.replace("@","self.") for reg in self.defining_class.all_regions()]
+        param_names = [*(param.name for param in self.params), *fields, *virtual_regions, "self"]
+        if self.hasreturn: param_names.append("ret")
+        annotated_facts = self.annotated_points_to_facts(body_scope, param_names)
+        
         G0, var_mapping0 = create_constraint_graph(annotated_facts)
         G1, var_mapping1 = create_constraint_graph(body_scope.points_to_facts)
         #visualize_graph_transformation(G1, var_mapping1, param_names)
-        G1, var_mapping1 = transform_parameter_graph(G1, var_mapping1, param_names)
-        #print(f"Points-to graph for {self.defining_class.name}.{self.name}:")
-        #print(pretty_print_graph(G1, var_mapping1, param_names))
+        G1, var_mapping1 = transform_based_on_label_pattern(G1, var_mapping1)
+        #G1, var_mapping1 = transform_parameter_graph(G1, var_mapping1, param_names)
+        print(f"Points-to graph for {self.defining_class.name}.{self.name}:")
+        print(pretty_print_graph(G1, var_mapping1, param_names))
+        print(f"Annotation graph for {self.defining_class.name}.{self.name}:")
+        print(pretty_print_graph(G0, var_mapping0, param_names))
         ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
-        if not ok: raise Exception(f"Line {self.info.line_number}: {comment}")
+        if not ok:
+            print(self.defining_class.all_constraints())
+            print(annotated_facts)
+            raise Exception(f"Line {self.info.line_number}: {comment}")
         #print((ok, comment))
         #result, example = query_external_less_than(G, var_mapping, param_names)
         #print(result)
@@ -1636,31 +1674,43 @@ class ClassMethodDef(MethodDef):
             body_scope.symbol_table[param.name] = cast.results[0]
             body_scope.type_table[param.name] = param_type
 
+    def annotated_points_to_facts(self, body_scope, param_names):
+        annotated_facts = set()
+
+        for meth in chain.from_iterable(m.overridden_methods() for m in body_scope.behavior.methods):
+            for c in meth.constraints:
+                # not robust to differently named parameters
+                annotated_facts.add((c.lhs, c.op, c.rhs))
+
+        for c in self.constraints:
+            # ensures that overrides can have more precise (less conservative) constraints
+            if (c.lhs, "==", c.rhs) in annotated_facts:
+                annotated_facts.remove((c.lhs, "==", c.rhs))
+            if (c.rhs, "==", c.lhs) in annotated_facts:
+                annotated_facts.remove((c.rhs, "==", c.lhs))
+            if c.op == "==" and ((c.lhs, "<", c.rhs) in annotated_facts or (c.rhs, "<", c.lhs) in annotated_facts):
+                raise Exception(f"Line {self.info.line_number}: Constraint {c.lhs} {c.op} {c.rhs} is less precise than constraints from overridden methods.")
+            annotated_facts.add((c.lhs, c.op, c.rhs))
+        for name in param_names: annotated_facts.add((name, "==", name))
+        return annotated_facts
+
     def check_lifetime_constraints(self, body_scope):
         param_names = [param.name for param in self.params]
         if self.hasreturn: param_names.append("ret")
-        annotated_facts = set()
-        for meth in self.overridden_methods():
-            for c in meth.constraints:
-                # ensures that overrides can have more precise (less conservative) constraints
-                if (c.lhs, "==", c.rhs) in annotated_facts:
-                    annotated_facts.remove((c.lhs, "==", c.rhs))
-                if (c.rhs, "==", c.lhs) in annotated_facts:
-                    annotated_facts.remove((c.rhs, "==", c.lhs))
-                if c.op == "==" and ((c.lhs, "<", c.rhs) in annotated_facts or (c.rhs, "<", c.lhs) in annotated_facts):
-                    raise Exception(f"Line {self.info.line_number}: Constraint {c.lhs} {c.op} {c.rhs} is less precise than constraints from overridden methods.")
-                # not robust to differently named parameters
-                annotated_facts.add((c.lhs, c.op, c.rhs))
-        for c in self.constraints:
-            annotated_facts.add((c.lhs, c.op, c.rhs))
-        for name in param_names:
-            annotated_facts.add((name, "==", name))
+        annotated_facts = self.annotated_points_to_facts(body_scope, param_names)
         G0, var_mapping0 = create_constraint_graph(annotated_facts)
         G1, var_mapping1 = create_constraint_graph(body_scope.points_to_facts)
         #visualize_graph_transformation(G1, var_mapping1, param_names)
-        G1, var_mapping1 = transform_parameter_graph(G1, var_mapping1, param_names)
-        #print(f"Points-to graph for {self.defining_class.name}.{self.name}:")
+        print(f"Original points-to graph for {self.defining_class.name}.{self.name}:")
+        print(pretty_print_graph(G1, var_mapping1, param_names))
+        G1, var_mapping1 = transform_based_on_label_pattern(G1, var_mapping1)
+        print(f"Slightly transformed points-to graph for {self.defining_class.name}.{self.name}:")
+        print(pretty_print_graph(G1, var_mapping1, param_names))
+        #G1, var_mapping1 = transform_parameter_graph(G1, var_mapping1, param_names)
+        #print(f"Final points-to graph for {self.defining_class.name}.{self.name}:")
         #print(pretty_print_graph(G1, var_mapping1, param_names))
+        print(f"Annotation graph for {self.defining_class.name}.{self.name}:")
+        print(pretty_print_graph(G0, var_mapping0, param_names))
         ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
         if not ok: raise Exception(f"Line {self.info.line_number}: {comment}")
 
@@ -1725,10 +1775,15 @@ class Behavior(Statement):
     def constraints(self):
         constraints = []
         for m in self.methods:
-            mapping = {param.name:i for i,param in enumerate(m.definition.params)}
+            mapping = {param.name:str(i) for i,param in enumerate(m.definition.params)}
             mapping["ret"] = "ret"
             mapping["self"] = "self"
-            for c in m.constraints(): constraints.append(Constraint(c.info, mapping[c.lhs], c.op, mapping[c.rhs]))
+            for c in m.constraints():
+                lhs_split = c.lhs.split(".")
+                lhs_split[0] = mapping[lhs_split[0]]
+                rhs_split = c.rhs.split(".")
+                rhs_split[0] = mapping[rhs_split[0]]
+                constraints.append(Constraint(c.info, ".".join(lhs_split), c.op, ".".join(rhs_split)))
         return constraints
 
     def __repr__(self):
@@ -1932,6 +1987,7 @@ class ClassDef(Statement):
     _ancestors: List[TypeAttribute]
     field_declarations: List["FieldDecl"]
     virtual_regions: List[str]
+    region_constraints: List[Constraint]
     method_definitions: List[MethodDef]
     behaviors: List[Behavior]
     _scope: Scope
@@ -1972,6 +2028,8 @@ class ClassDef(Statement):
             raise Exception(f"Line {self.info.line_number}: Class names should be capitalized.")
         scope.classes[self.name] = self
         self._scope.points_to_facts.add(("self","==","self"))
+        for reg in self.all_regions():
+            self._scope.points_to_facts.add(("self", "<", reg))
         for field in self.fields():
             field.declaration.typeflow(self._scope)
             if not isinstance(field.declaration, TypeFieldDecl):
@@ -1982,9 +2040,8 @@ class ClassDef(Statement):
         if any(len(type_set) > 1 for type_set in field_type_sets):
             type_set, name = next((field_type_sets[k], name) for (k, name) in enumerate(field_names) if len(field_type_sets[k]) > 1)
             raise Exception(f"Line {self.info.line_number}: Field {name} in class {self.name} has more than one declared type: ({type_set}).")
-        for behavior in self.behaviors: behavior.debug_typeflow(self._scope)
-        for method in self.all_method_definitions():
-            if method.name == "init": method.debug_typeflow(self._scope)
+        for behavior in self.behaviors:
+            behavior.debug_typeflow(self._scope)
 
     def register_scope(self, scope):
         class_scope = Scope(scope, cls=self)
@@ -2010,6 +2067,30 @@ class ClassDef(Statement):
         unpruned = [*chain.from_iterable(cls.virtual_regions for cls in full_ordering)]
         pruned = list(reversed({reg_name:reg_name for reg_name in reversed(unpruned)}.values()))
         return pruned
+
+    def all_constraints(self):
+        full_ordering = [self, *self.my_ordering()]
+        region_constraints = [*chain.from_iterable(cls.region_constraints for cls in full_ordering)]
+        implicit_constraints = []
+        for c in region_constraints:
+            for i, section in enumerate(c.lhs.split(".")):
+                if i == len(c.lhs.split(".")) - 1: break
+                node_info = NodeInfo(random_letters(10), self.info.filename, self.info.line_number)
+                implicit_constraints.append(Constraint(node_info, ".".join(c.lhs.split(".")[:(i + 1)]), "<", ".".join(c.lhs.split(".")[:(i + 2)])))
+            for i, section in enumerate(c.rhs.split(".")):
+                if i == len(c.rhs.split(".")) - 1: break
+                node_info = NodeInfo(random_letters(10), self.info.filename, self.info.line_number)
+                implicit_constraints.append(Constraint(node_info, ".".join(c.rhs.split(".")[:(i + 1)]), "<", ".".join(c.rhs.split(".")[:(i + 2)])))
+        region_constraints.extend(implicit_constraints)
+        fields = [key for key in self._scope.type_table.keys() if "@" in key]
+        virtual_regions = self.all_regions()
+        for field in fields:
+            node_info = NodeInfo(random_letters(10), self.info.filename, self.info.line_number)
+            region_constraints.append(Constraint(node_info, "self", "<", field))
+        for region in virtual_regions:
+            node_info = NodeInfo(random_letters(10), self.info.filename, self.info.line_number)
+            region_constraints.append(Constraint(node_info, "self", "<", region))
+        return region_constraints
 
     def all_type_parameters(self):
         ancestors = self.ancestors()

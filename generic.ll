@@ -1,7 +1,7 @@
 ; ModuleID = 'LLVMDialectModule'
 source_filename = "LLVMDialectModule"
 
-@_parameterization_Float64_or_Int32 = linkonce_odr constant [3 x ptr] [ptr @union_typ, ptr @_parameterization_Float64, ptr @_parameterization_Int32]
+@_parameterization_Int32_or_Float64 = linkonce_odr constant [3 x ptr] [ptr @union_typ, ptr @_parameterization_Int32, ptr @_parameterization_Float64]
 @_parameterization_Ptri1 = linkonce_odr constant [1 x ptr] [ptr @bool_typ]
 @_parameterization_Int32 = linkonce_odr constant [1 x ptr] [ptr @Int32]
 @_parameterization_MapIterable2Ptri32._Ptrf64 = linkonce_odr constant [3 x ptr] [ptr @MapIterable2, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptrf64]
@@ -13,7 +13,7 @@ source_filename = "LLVMDialectModule"
 @_parameterization_Ptrf64 = linkonce_odr constant [1 x ptr] [ptr @f64_typ]
 @_parameterization_String = linkonce_odr constant [1 x ptr] [ptr @String]
 @_parameterization_BufferPtri8 = linkonce_odr constant [1 x ptr] [ptr @buffer_typ]
-@mbzjr_genericmini = internal constant [12 x i8] c"generic.mini"
+@dlmzc_genericmini = internal constant [12 x i8] c"generic.mini"
 @_parameterization_Ptri32 = linkonce_odr constant [1 x ptr] [ptr @i32_typ]
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
@@ -73,60 +73,57 @@ source_filename = "LLVMDialectModule"
 @FancyPair_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @FancyPair, ptr null, ptr @Pair]
 @FancyPair_offset_tbl = linkonce_odr constant [4 x i32] [i32 27, i32 7, i32 0, i32 17]
 @FancyPair = constant { [3 x i64], [4 x ptr], [20 x ptr] } { [3 x i64] [i64 -3765382636606614851, i64 4611686018427388073, i64 3], [4 x ptr] [ptr @subtype_test, ptr @FancyPair_hashtbl, ptr @FancyPair_offset_tbl, ptr getelementptr ({ { ptr, i160 }, { ptr, i160 } }, ptr null, i32 1)], [20 x ptr] [ptr @FancyPair_field_first, ptr @FancyPair_field_second, ptr @FancyPair_field_FancyPair_0, ptr @FancyPair_field_FancyPair_1, ptr @FancyPair_B_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64, ptr @FancyPair_B_first_, ptr @FancyPair_B_second_, ptr @FancyPair_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64, ptr @Pair_first_, ptr @FancyPair_second_, ptr @FancyPair_field_first, ptr @FancyPair_field_second, ptr @FancyPair_field_FancyPair_0, ptr @FancyPair_field_FancyPair_1, ptr @FancyPair_B_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64, ptr @FancyPair_B_first_, ptr @FancyPair_B_second_, ptr @FancyPair_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64, ptr @Pair_first_, ptr @FancyPair_second_] }
-@Iterator2_hashtbl = linkonce_odr constant [2 x ptr] [ptr @Iterator2, ptr @Object]
-@Iterator2_offset_tbl = linkonce_odr constant [2 x i32] [i32 7, i32 10]
-@Iterator2 = constant { [3 x i64], [4 x ptr], [0 x ptr] } { [3 x i64] [i64 4189192806087951739, i64 4611686018427388207, i64 1], [4 x ptr] [ptr @subtype_test, ptr @Iterator2_hashtbl, ptr @Iterator2_offset_tbl, ptr getelementptr ({ ptr }, ptr null, i32 1)], [0 x ptr] undef }
-@ScopedIterator2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @ScopedIterator2, ptr @Object, ptr null, ptr @Iterator2]
-@ScopedIterator2_offset_tbl = linkonce_odr constant [4 x i32] [i32 7, i32 13, i32 0, i32 10]
-@ScopedIterator2 = constant { [3 x i64], [4 x ptr], [0 x ptr] } { [3 x i64] [i64 5163972911298819688, i64 4611686018427388097, i64 3], [4 x ptr] [ptr @subtype_test, ptr @ScopedIterator2_hashtbl, ptr @ScopedIterator2_offset_tbl, ptr getelementptr ({ ptr }, ptr null, i32 1)], [0 x ptr] undef }
-@ScopedIterable2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Iterable2, ptr @ScopedIterable2, ptr null, ptr @Object]
-@ScopedIterable2_offset_tbl = linkonce_odr constant [4 x i32] [i32 30, i32 7, i32 0, i32 53]
-@ScopedIterable2 = constant { [3 x i64], [4 x ptr], [0 x ptr] } { [3 x i64] [i64 8150485564183782589, i64 4611686018427388093, i64 3], [4 x ptr] [ptr @subtype_test, ptr @ScopedIterable2_hashtbl, ptr @ScopedIterable2_offset_tbl, ptr getelementptr ({ ptr }, ptr null, i32 1)], [0 x ptr] undef }
-@Iterable2_hashtbl = linkonce_odr constant [2 x ptr] [ptr @Object, ptr @Iterable2]
-@Iterable2_offset_tbl = linkonce_odr constant [2 x i32] [i32 30, i32 7]
-@Iterable2 = constant { [3 x i64], [4 x ptr], [0 x ptr] } { [3 x i64] [i64 5693646204635713916, i64 4611686018427388073, i64 1], [4 x ptr] [ptr @subtype_test, ptr @Iterable2_hashtbl, ptr @Iterable2_offset_tbl, ptr getelementptr ({ ptr }, ptr null, i32 1)], [0 x ptr] undef }
-@Array_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Array, ptr @Iterable2, ptr @Object, ptr @ScopedIterable2]
-@Array_offset_tbl = linkonce_odr constant [4 x i32] [i32 7, i32 99, i32 122, i32 53]
-@Array = constant { [3 x i64], [4 x ptr], [115 x ptr] } { [3 x i64] [i64 -5261542750394134544, i64 4611686018427388699, i64 3], [4 x ptr] [ptr @subtype_test, ptr @Array_hashtbl, ptr @Array_offset_tbl, ptr getelementptr ({ { ptr }, i32, i32, ptr }, ptr null, i32 1)], [115 x ptr] [ptr @Array_field_buffer, ptr @Array_field_length, ptr @Array_field_capacity, ptr @Array_field_Array_0, ptr @Array_B__Self_from_iterable_iterableIterable2T, ptr @Array_B_init_, ptr @Array_B_init_capacityPtri32, ptr @Array_B_length_, ptr @Array_B_capacity_, ptr @Array_B_append_xT, ptr @Array_B_grow_, ptr @Array_B__index_xPtri32, ptr @Array_B_throw_oob_xPtri32, ptr @Array_B_unsafe_index_xPtri32, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Ptri1, ptr @Array_B_any_fFunctionT_to_Ptri1, ptr @Array_B_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Ptri1, ptr @Array_B_chain_otherIterable2T, ptr @Array_B_interleave_otherIterable2T, ptr @Array_B_zip_otherIterable2U, ptr @Array_B_product_otherIterable2U, ptr @Array__Self_from_iterable_iterableIterable2T, ptr @Array_init_, ptr @Array_init_capacityPtri32, ptr @Array_length_, ptr @Array_capacity_, ptr @Array_append_xT, ptr @Array_grow_, ptr @Array__index_xPtri32, ptr @Array_throw_oob_xPtri32, ptr @Array_unsafe_index_xPtri32, ptr @Array_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Ptri1, ptr @Array_B_any_fFunctionT_to_Ptri1, ptr @Array_B_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Ptri1, ptr @Array_B_chain_otherIterable2T, ptr @Array_B_interleave_otherIterable2T, ptr @Array_B_zip_otherIterable2U, ptr @Array_B_product_otherIterable2U, ptr @Array_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Ptri1, ptr @Array_B_any_fFunctionT_to_Ptri1, ptr @Array_B_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Ptri1, ptr @Array_B_chain_otherIterable2T, ptr @Array_B_interleave_otherIterable2T, ptr @Array_B_zip_otherIterable2U, ptr @Array_B_product_otherIterable2U, ptr @Array_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Ptri1, ptr @Array_B_any_fFunctionT_to_Ptri1, ptr @Array_B_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Ptri1, ptr @Array_B_chain_otherIterable2T, ptr @Array_B_interleave_otherIterable2T, ptr @Array_B_zip_otherIterable2U, ptr @Array_B_product_otherIterable2U, ptr @Array_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U] }
-@ArrayIterator_hashtbl = linkonce_odr constant [4 x ptr] [ptr @ScopedIterator2, ptr @Object, ptr @ArrayIterator, ptr @Iterator2]
-@ArrayIterator_offset_tbl = linkonce_odr constant [4 x i32] [i32 14, i32 23, i32 7, i32 20]
-@ArrayIterator = constant { [3 x i64], [4 x ptr], [16 x ptr] } { [3 x i64] [i64 3447345754186651411, i64 4611686018427388097, i64 3], [4 x ptr] [ptr @subtype_test, ptr @ArrayIterator_hashtbl, ptr @ArrayIterator_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, i32, ptr }, ptr null, i32 1)], [16 x ptr] [ptr @ArrayIterator_field_array, ptr @ArrayIterator_field_index, ptr @ArrayIterator_field_ArrayIterator_0, ptr @ArrayIterator_B_init_arrayArrayT, ptr @ArrayIterator_B_next_, ptr @ArrayIterator_init_arrayArrayT, ptr @ArrayIterator_next_, ptr @ArrayIterator_field_ArrayIterator_0, ptr @ArrayIterator_B_next_, ptr @ArrayIterator_next_, ptr @ArrayIterator_field_ArrayIterator_0, ptr @ArrayIterator_B_next_, ptr @ArrayIterator_next_, ptr @ArrayIterator_field_ArrayIterator_0, ptr @ArrayIterator_B_next_, ptr @ArrayIterator_next_] }
-@MapIterable2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Iterable2, ptr @Object, ptr @MapIterable2, ptr @ScopedIterable2]
-@MapIterable2_offset_tbl = linkonce_odr constant [4 x i32] [i32 81, i32 104, i32 7, i32 35]
-@MapIterable2 = constant { [3 x i64], [4 x ptr], [97 x ptr] } { [3 x i64] [i64 -1724859134596891929, i64 4611686018427388463, i64 3], [4 x ptr] [ptr @subtype_test, ptr @MapIterable2_hashtbl, ptr @MapIterable2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr }, ptr, ptr }, ptr null, i32 1)], [97 x ptr] [ptr @MapIterable2_field_iterable, ptr @MapIterable2_field_f, ptr @MapIterable2_field_MapIterable2_0, ptr @MapIterable2_field_MapIterable2_1, ptr @MapIterable2_B_init_iterableIterable2T_fFunctionT_to_U, ptr @MapIterable2_B_iterator_, ptr @MapIterable2_B_each_fFunctionT_to_Nothing, ptr @MapIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapIterable2_B_all_fFunctionT_to_Ptri1, ptr @MapIterable2_B_any_fFunctionT_to_Ptri1, ptr @MapIterable2_B_map_fFunctionT_to_U, ptr @MapIterable2_B_filter_fFunctionT_to_Ptri1, ptr @MapIterable2_B_chain_otherIterable2T, ptr @MapIterable2_B_interleave_otherIterable2T, ptr @MapIterable2_B_zip_otherIterable2U, ptr @MapIterable2_B_product_otherIterable2U, ptr @MapIterable2_init_iterableIterable2T_fFunctionT_to_U, ptr @MapIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @MapIterable2_field_MapIterable2_1, ptr @MapIterable2_B_iterator_, ptr @MapIterable2_B_each_fFunctionT_to_Nothing, ptr @MapIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapIterable2_B_all_fFunctionT_to_Ptri1, ptr @MapIterable2_B_any_fFunctionT_to_Ptri1, ptr @MapIterable2_B_map_fFunctionT_to_U, ptr @MapIterable2_B_filter_fFunctionT_to_Ptri1, ptr @MapIterable2_B_chain_otherIterable2T, ptr @MapIterable2_B_interleave_otherIterable2T, ptr @MapIterable2_B_zip_otherIterable2U, ptr @MapIterable2_B_product_otherIterable2U, ptr @MapIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @MapIterable2_field_MapIterable2_1, ptr @MapIterable2_B_iterator_, ptr @MapIterable2_B_each_fFunctionT_to_Nothing, ptr @MapIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapIterable2_B_all_fFunctionT_to_Ptri1, ptr @MapIterable2_B_any_fFunctionT_to_Ptri1, ptr @MapIterable2_B_map_fFunctionT_to_U, ptr @MapIterable2_B_filter_fFunctionT_to_Ptri1, ptr @MapIterable2_B_chain_otherIterable2T, ptr @MapIterable2_B_interleave_otherIterable2T, ptr @MapIterable2_B_zip_otherIterable2U, ptr @MapIterable2_B_product_otherIterable2U, ptr @MapIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @MapIterable2_field_MapIterable2_1, ptr @MapIterable2_B_iterator_, ptr @MapIterable2_B_each_fFunctionT_to_Nothing, ptr @MapIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapIterable2_B_all_fFunctionT_to_Ptri1, ptr @MapIterable2_B_any_fFunctionT_to_Ptri1, ptr @MapIterable2_B_map_fFunctionT_to_U, ptr @MapIterable2_B_filter_fFunctionT_to_Ptri1, ptr @MapIterable2_B_chain_otherIterable2T, ptr @MapIterable2_B_interleave_otherIterable2T, ptr @MapIterable2_B_zip_otherIterable2U, ptr @MapIterable2_B_product_otherIterable2U, ptr @MapIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U] }
-@MapIterator2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Iterator2, ptr @Object, ptr @ScopedIterator2, ptr @MapIterator2]
-@MapIterator2_offset_tbl = linkonce_odr constant [4 x i32] [i32 21, i32 24, i32 15, i32 7]
-@MapIterator2 = constant { [3 x i64], [4 x ptr], [17 x ptr] } { [3 x i64] [i64 -10255947709272500, i64 4611686018427388207, i64 3], [4 x ptr] [ptr @subtype_test, ptr @MapIterator2_hashtbl, ptr @MapIterator2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr }, ptr, ptr }, ptr null, i32 1)], [17 x ptr] [ptr @MapIterator2_field_iterator, ptr @MapIterator2_field_f, ptr @MapIterator2_field_MapIterator2_0, ptr @MapIterator2_field_MapIterator2_1, ptr @MapIterator2_B_init_iteratorIterator2T_fFunctionT_to_U, ptr @MapIterator2_B_next_, ptr @MapIterator2_init_iteratorIterator2T_fFunctionT_to_U, ptr @MapIterator2_next_, ptr @MapIterator2_field_MapIterator2_1, ptr @MapIterator2_B_next_, ptr @MapIterator2_next_, ptr @MapIterator2_field_MapIterator2_1, ptr @MapIterator2_B_next_, ptr @MapIterator2_next_, ptr @MapIterator2_field_MapIterator2_1, ptr @MapIterator2_B_next_, ptr @MapIterator2_next_] }
-@FilterIterable2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Iterable2, ptr @ScopedIterable2, ptr @FilterIterable2, ptr @Object]
-@FilterIterable2_offset_tbl = linkonce_odr constant [4 x i32] [i32 80, i32 34, i32 7, i32 103]
-@FilterIterable2 = constant { [3 x i64], [4 x ptr], [96 x ptr] } { [3 x i64] [i64 1178467452958968374, i64 4611686018427388349, i64 3], [4 x ptr] [ptr @subtype_test, ptr @FilterIterable2_hashtbl, ptr @FilterIterable2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr }, ptr }, ptr null, i32 1)], [96 x ptr] [ptr @FilterIterable2_field_iterable, ptr @FilterIterable2_field_f, ptr @FilterIterable2_field_FilterIterable2_0, ptr @FilterIterable2_B_init_iterableIterable2T_fFunctionT_to_Ptri1, ptr @FilterIterable2_B_iterator_, ptr @FilterIterable2_B_each_fFunctionT_to_Nothing, ptr @FilterIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @FilterIterable2_B_all_fFunctionT_to_Ptri1, ptr @FilterIterable2_B_any_fFunctionT_to_Ptri1, ptr @FilterIterable2_B_map_fFunctionT_to_U, ptr @FilterIterable2_B_filter_fFunctionT_to_Ptri1, ptr @FilterIterable2_B_chain_otherIterable2T, ptr @FilterIterable2_B_interleave_otherIterable2T, ptr @FilterIterable2_B_zip_otherIterable2U, ptr @FilterIterable2_B_product_otherIterable2U, ptr @FilterIterable2_init_iterableIterable2T_fFunctionT_to_Ptri1, ptr @FilterIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @FilterIterable2_field_FilterIterable2_0, ptr @FilterIterable2_B_iterator_, ptr @FilterIterable2_B_each_fFunctionT_to_Nothing, ptr @FilterIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @FilterIterable2_B_all_fFunctionT_to_Ptri1, ptr @FilterIterable2_B_any_fFunctionT_to_Ptri1, ptr @FilterIterable2_B_map_fFunctionT_to_U, ptr @FilterIterable2_B_filter_fFunctionT_to_Ptri1, ptr @FilterIterable2_B_chain_otherIterable2T, ptr @FilterIterable2_B_interleave_otherIterable2T, ptr @FilterIterable2_B_zip_otherIterable2U, ptr @FilterIterable2_B_product_otherIterable2U, ptr @FilterIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @FilterIterable2_field_FilterIterable2_0, ptr @FilterIterable2_B_iterator_, ptr @FilterIterable2_B_each_fFunctionT_to_Nothing, ptr @FilterIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @FilterIterable2_B_all_fFunctionT_to_Ptri1, ptr @FilterIterable2_B_any_fFunctionT_to_Ptri1, ptr @FilterIterable2_B_map_fFunctionT_to_U, ptr @FilterIterable2_B_filter_fFunctionT_to_Ptri1, ptr @FilterIterable2_B_chain_otherIterable2T, ptr @FilterIterable2_B_interleave_otherIterable2T, ptr @FilterIterable2_B_zip_otherIterable2U, ptr @FilterIterable2_B_product_otherIterable2U, ptr @FilterIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @FilterIterable2_field_FilterIterable2_0, ptr @FilterIterable2_B_iterator_, ptr @FilterIterable2_B_each_fFunctionT_to_Nothing, ptr @FilterIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @FilterIterable2_B_all_fFunctionT_to_Ptri1, ptr @FilterIterable2_B_any_fFunctionT_to_Ptri1, ptr @FilterIterable2_B_map_fFunctionT_to_U, ptr @FilterIterable2_B_filter_fFunctionT_to_Ptri1, ptr @FilterIterable2_B_chain_otherIterable2T, ptr @FilterIterable2_B_interleave_otherIterable2T, ptr @FilterIterable2_B_zip_otherIterable2U, ptr @FilterIterable2_B_product_otherIterable2U, ptr @FilterIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U] }
-@FilterIterator2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @FilterIterator2, ptr @Object, ptr @Iterator2, ptr @ScopedIterator2]
-@FilterIterator2_offset_tbl = linkonce_odr constant [4 x i32] [i32 7, i32 23, i32 20, i32 14]
-@FilterIterator2 = constant { [3 x i64], [4 x ptr], [16 x ptr] } { [3 x i64] [i64 8213847504843366470, i64 4611686018427388609, i64 3], [4 x ptr] [ptr @subtype_test, ptr @FilterIterator2_hashtbl, ptr @FilterIterator2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr }, ptr }, ptr null, i32 1)], [16 x ptr] [ptr @FilterIterator2_field_iterator, ptr @FilterIterator2_field_f, ptr @FilterIterator2_field_FilterIterator2_0, ptr @FilterIterator2_B_init_iteratorIterator2T_fFunctionT_to_Ptri1, ptr @FilterIterator2_B_next_, ptr @FilterIterator2_init_iteratorIterator2T_fFunctionT_to_Ptri1, ptr @FilterIterator2_next_, ptr @FilterIterator2_field_FilterIterator2_0, ptr @FilterIterator2_B_next_, ptr @FilterIterator2_next_, ptr @FilterIterator2_field_FilterIterator2_0, ptr @FilterIterator2_B_next_, ptr @FilterIterator2_next_, ptr @FilterIterator2_field_FilterIterator2_0, ptr @FilterIterator2_B_next_, ptr @FilterIterator2_next_] }
-@ChainIterable2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @Iterable2, ptr @ChainIterable2, ptr @ScopedIterable2]
-@ChainIterable2_offset_tbl = linkonce_odr constant [4 x i32] [i32 103, i32 80, i32 7, i32 34]
-@ChainIterable2 = constant { [3 x i64], [4 x ptr], [96 x ptr] } { [3 x i64] [i64 -5233298072945030060, i64 4611686018427388279, i64 3], [4 x ptr] [ptr @subtype_test, ptr @ChainIterable2_hashtbl, ptr @ChainIterable2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, ptr }, ptr null, i32 1)], [96 x ptr] [ptr @ChainIterable2_field_first, ptr @ChainIterable2_field_second, ptr @ChainIterable2_field_ChainIterable2_0, ptr @ChainIterable2_B_init_firstIterable2T_secondIterable2T, ptr @ChainIterable2_B_iterator_, ptr @ChainIterable2_B_each_fFunctionT_to_Nothing, ptr @ChainIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ChainIterable2_B_all_fFunctionT_to_Ptri1, ptr @ChainIterable2_B_any_fFunctionT_to_Ptri1, ptr @ChainIterable2_B_map_fFunctionT_to_U, ptr @ChainIterable2_B_filter_fFunctionT_to_Ptri1, ptr @ChainIterable2_B_chain_otherIterable2T, ptr @ChainIterable2_B_interleave_otherIterable2T, ptr @ChainIterable2_B_zip_otherIterable2U, ptr @ChainIterable2_B_product_otherIterable2U, ptr @ChainIterable2_init_firstIterable2T_secondIterable2T, ptr @ChainIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @ChainIterable2_field_ChainIterable2_0, ptr @ChainIterable2_B_iterator_, ptr @ChainIterable2_B_each_fFunctionT_to_Nothing, ptr @ChainIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ChainIterable2_B_all_fFunctionT_to_Ptri1, ptr @ChainIterable2_B_any_fFunctionT_to_Ptri1, ptr @ChainIterable2_B_map_fFunctionT_to_U, ptr @ChainIterable2_B_filter_fFunctionT_to_Ptri1, ptr @ChainIterable2_B_chain_otherIterable2T, ptr @ChainIterable2_B_interleave_otherIterable2T, ptr @ChainIterable2_B_zip_otherIterable2U, ptr @ChainIterable2_B_product_otherIterable2U, ptr @ChainIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @ChainIterable2_field_ChainIterable2_0, ptr @ChainIterable2_B_iterator_, ptr @ChainIterable2_B_each_fFunctionT_to_Nothing, ptr @ChainIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ChainIterable2_B_all_fFunctionT_to_Ptri1, ptr @ChainIterable2_B_any_fFunctionT_to_Ptri1, ptr @ChainIterable2_B_map_fFunctionT_to_U, ptr @ChainIterable2_B_filter_fFunctionT_to_Ptri1, ptr @ChainIterable2_B_chain_otherIterable2T, ptr @ChainIterable2_B_interleave_otherIterable2T, ptr @ChainIterable2_B_zip_otherIterable2U, ptr @ChainIterable2_B_product_otherIterable2U, ptr @ChainIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @ChainIterable2_field_ChainIterable2_0, ptr @ChainIterable2_B_iterator_, ptr @ChainIterable2_B_each_fFunctionT_to_Nothing, ptr @ChainIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ChainIterable2_B_all_fFunctionT_to_Ptri1, ptr @ChainIterable2_B_any_fFunctionT_to_Ptri1, ptr @ChainIterable2_B_map_fFunctionT_to_U, ptr @ChainIterable2_B_filter_fFunctionT_to_Ptri1, ptr @ChainIterable2_B_chain_otherIterable2T, ptr @ChainIterable2_B_interleave_otherIterable2T, ptr @ChainIterable2_B_zip_otherIterable2U, ptr @ChainIterable2_B_product_otherIterable2U, ptr @ChainIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U] }
-@ChainIterator2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @ScopedIterator2, ptr @ChainIterator2, ptr @Object, ptr @Iterator2]
-@ChainIterator2_offset_tbl = linkonce_odr constant [4 x i32] [i32 15, i32 7, i32 24, i32 21]
-@ChainIterator2 = constant { [3 x i64], [4 x ptr], [17 x ptr] } { [3 x i64] [i64 -228267985060461774, i64 4611686018427388273, i64 3], [4 x ptr] [ptr @subtype_test, ptr @ChainIterator2_hashtbl, ptr @ChainIterator2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, i1, ptr }, ptr null, i32 1)], [17 x ptr] [ptr @ChainIterator2_field_first, ptr @ChainIterator2_field_second, ptr @ChainIterator2_field_on_first, ptr @ChainIterator2_field_ChainIterator2_0, ptr @ChainIterator2_B_init_firstIterator2T_secondIterator2T, ptr @ChainIterator2_B_next_, ptr @ChainIterator2_init_firstIterator2T_secondIterator2T, ptr @ChainIterator2_next_, ptr @ChainIterator2_field_ChainIterator2_0, ptr @ChainIterator2_B_next_, ptr @ChainIterator2_next_, ptr @ChainIterator2_field_ChainIterator2_0, ptr @ChainIterator2_B_next_, ptr @ChainIterator2_next_, ptr @ChainIterator2_field_ChainIterator2_0, ptr @ChainIterator2_B_next_, ptr @ChainIterator2_next_] }
-@InterleaveIterable2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @InterleaveIterable2, ptr @ScopedIterable2, ptr @Iterable2, ptr @Object]
-@InterleaveIterable2_offset_tbl = linkonce_odr constant [4 x i32] [i32 7, i32 34, i32 80, i32 103]
-@InterleaveIterable2 = constant { [3 x i64], [4 x ptr], [96 x ptr] } { [3 x i64] [i64 -6258231685215461775, i64 4611686018427388289, i64 3], [4 x ptr] [ptr @subtype_test, ptr @InterleaveIterable2_hashtbl, ptr @InterleaveIterable2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, ptr }, ptr null, i32 1)], [96 x ptr] [ptr @InterleaveIterable2_field_first, ptr @InterleaveIterable2_field_second, ptr @InterleaveIterable2_field_InterleaveIterable2_0, ptr @InterleaveIterable2_B_init_firstIterable2T_secondIterable2T, ptr @InterleaveIterable2_B_iterator_, ptr @InterleaveIterable2_B_each_fFunctionT_to_Nothing, ptr @InterleaveIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @InterleaveIterable2_B_all_fFunctionT_to_Ptri1, ptr @InterleaveIterable2_B_any_fFunctionT_to_Ptri1, ptr @InterleaveIterable2_B_map_fFunctionT_to_U, ptr @InterleaveIterable2_B_filter_fFunctionT_to_Ptri1, ptr @InterleaveIterable2_B_chain_otherIterable2T, ptr @InterleaveIterable2_B_interleave_otherIterable2T, ptr @InterleaveIterable2_B_zip_otherIterable2U, ptr @InterleaveIterable2_B_product_otherIterable2U, ptr @InterleaveIterable2_init_firstIterable2T_secondIterable2T, ptr @InterleaveIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @InterleaveIterable2_field_InterleaveIterable2_0, ptr @InterleaveIterable2_B_iterator_, ptr @InterleaveIterable2_B_each_fFunctionT_to_Nothing, ptr @InterleaveIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @InterleaveIterable2_B_all_fFunctionT_to_Ptri1, ptr @InterleaveIterable2_B_any_fFunctionT_to_Ptri1, ptr @InterleaveIterable2_B_map_fFunctionT_to_U, ptr @InterleaveIterable2_B_filter_fFunctionT_to_Ptri1, ptr @InterleaveIterable2_B_chain_otherIterable2T, ptr @InterleaveIterable2_B_interleave_otherIterable2T, ptr @InterleaveIterable2_B_zip_otherIterable2U, ptr @InterleaveIterable2_B_product_otherIterable2U, ptr @InterleaveIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @InterleaveIterable2_field_InterleaveIterable2_0, ptr @InterleaveIterable2_B_iterator_, ptr @InterleaveIterable2_B_each_fFunctionT_to_Nothing, ptr @InterleaveIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @InterleaveIterable2_B_all_fFunctionT_to_Ptri1, ptr @InterleaveIterable2_B_any_fFunctionT_to_Ptri1, ptr @InterleaveIterable2_B_map_fFunctionT_to_U, ptr @InterleaveIterable2_B_filter_fFunctionT_to_Ptri1, ptr @InterleaveIterable2_B_chain_otherIterable2T, ptr @InterleaveIterable2_B_interleave_otherIterable2T, ptr @InterleaveIterable2_B_zip_otherIterable2U, ptr @InterleaveIterable2_B_product_otherIterable2U, ptr @InterleaveIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @InterleaveIterable2_field_InterleaveIterable2_0, ptr @InterleaveIterable2_B_iterator_, ptr @InterleaveIterable2_B_each_fFunctionT_to_Nothing, ptr @InterleaveIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @InterleaveIterable2_B_all_fFunctionT_to_Ptri1, ptr @InterleaveIterable2_B_any_fFunctionT_to_Ptri1, ptr @InterleaveIterable2_B_map_fFunctionT_to_U, ptr @InterleaveIterable2_B_filter_fFunctionT_to_Ptri1, ptr @InterleaveIterable2_B_chain_otherIterable2T, ptr @InterleaveIterable2_B_interleave_otherIterable2T, ptr @InterleaveIterable2_B_zip_otherIterable2U, ptr @InterleaveIterable2_B_product_otherIterable2U, ptr @InterleaveIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U] }
-@InterleaveIterator2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @ScopedIterator2, ptr @Object, ptr @InterleaveIterator2, ptr @Iterator2]
-@InterleaveIterator2_offset_tbl = linkonce_odr constant [4 x i32] [i32 15, i32 24, i32 7, i32 21]
-@InterleaveIterator2 = constant { [3 x i64], [4 x ptr], [17 x ptr] } { [3 x i64] [i64 6709847746581360093, i64 4611686018427388097, i64 3], [4 x ptr] [ptr @subtype_test, ptr @InterleaveIterator2_hashtbl, ptr @InterleaveIterator2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, i1, ptr }, ptr null, i32 1)], [17 x ptr] [ptr @InterleaveIterator2_field_first, ptr @InterleaveIterator2_field_second, ptr @InterleaveIterator2_field_on_first, ptr @InterleaveIterator2_field_InterleaveIterator2_0, ptr @InterleaveIterator2_B_init_firstIterator2T_secondIterator2T, ptr @InterleaveIterator2_B_next_, ptr @InterleaveIterator2_init_firstIterator2T_secondIterator2T, ptr @InterleaveIterator2_next_, ptr @InterleaveIterator2_field_InterleaveIterator2_0, ptr @InterleaveIterator2_B_next_, ptr @InterleaveIterator2_next_, ptr @InterleaveIterator2_field_InterleaveIterator2_0, ptr @InterleaveIterator2_B_next_, ptr @InterleaveIterator2_next_, ptr @InterleaveIterator2_field_InterleaveIterator2_0, ptr @InterleaveIterator2_B_next_, ptr @InterleaveIterator2_next_] }
-@ZipIterable2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @Iterable2, ptr @ZipIterable2, ptr null]
-@ZipIterable2_offset_tbl = linkonce_odr constant [4 x i32] [i32 59, i32 36, i32 7, i32 0]
+@Container_hashtbl = linkonce_odr constant [2 x ptr] [ptr @Object, ptr @Container]
+@Container_offset_tbl = linkonce_odr constant [2 x i32] [i32 7, i32 7]
+@Container = constant { [3 x i64], [4 x ptr], [0 x ptr] } { [3 x i64] [i64 9056556090793359372, i64 4611686018427388081, i64 1], [4 x ptr] [ptr @subtype_test, ptr @Container_hashtbl, ptr @Container_offset_tbl, ptr getelementptr ({}, ptr null, i32 1)], [0 x ptr] undef }
+@Iterator2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr null, ptr @Iterator2, ptr @Container]
+@Iterator2_offset_tbl = linkonce_odr constant [4 x i32] [i32 10, i32 0, i32 7, i32 10]
+@Iterator2 = constant { [3 x i64], [4 x ptr], [0 x ptr] } { [3 x i64] [i64 4189192806087951739, i64 4611686018427388081, i64 3], [4 x ptr] [ptr @subtype_test, ptr @Iterator2_hashtbl, ptr @Iterator2_offset_tbl, ptr getelementptr ({ ptr }, ptr null, i32 1)], [0 x ptr] undef }
+@Iterable2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @Iterable2, ptr null, ptr @Container]
+@Iterable2_offset_tbl = linkonce_odr constant [4 x i32] [i32 30, i32 7, i32 0, i32 30]
+@Iterable2 = constant { [3 x i64], [4 x ptr], [0 x ptr] } { [3 x i64] [i64 5693646204635713916, i64 4611686018427388081, i64 3], [4 x ptr] [ptr @subtype_test, ptr @Iterable2_hashtbl, ptr @Iterable2_offset_tbl, ptr getelementptr ({ ptr }, ptr null, i32 1)], [0 x ptr] undef }
+@Array_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Container, ptr @Array, ptr @Iterable2, ptr @Object]
+@Array_offset_tbl = linkonce_odr constant [4 x i32] [i32 76, i32 7, i32 53, i32 76]
+@Array = constant { [3 x i64], [4 x ptr], [69 x ptr] } { [3 x i64] [i64 -5261542750394134544, i64 4611686018427388331, i64 3], [4 x ptr] [ptr @subtype_test, ptr @Array_hashtbl, ptr @Array_offset_tbl, ptr getelementptr ({ { ptr }, i32, i32, ptr }, ptr null, i32 1)], [69 x ptr] [ptr @Array_field_buffer, ptr @Array_field_length, ptr @Array_field_capacity, ptr @Array_field_Array_0, ptr @Array_B__Self_from_iterable_iterableIterable2T, ptr @Array_B_init_, ptr @Array_B_init_capacityPtri32, ptr @Array_B_length_, ptr @Array_B_capacity_, ptr @Array_B_append_xT, ptr @Array_B_grow_, ptr @Array_B__index_xPtri32, ptr @Array_B_throw_oob_xPtri32, ptr @Array_B_unsafe_index_xPtri32, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Ptri1, ptr @Array_B_any_fFunctionT_to_Ptri1, ptr @Array_B_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Ptri1, ptr @Array_B_chain_otherIterable2T, ptr @Array_B_interleave_otherIterable2T, ptr @Array_B_zip_otherIterable2U, ptr @Array_B_product_otherIterable2U, ptr @Array__Self_from_iterable_iterableIterable2T, ptr @Array_init_, ptr @Array_init_capacityPtri32, ptr @Array_length_, ptr @Array_capacity_, ptr @Array_append_xT, ptr @Array_grow_, ptr @Array__index_xPtri32, ptr @Array_throw_oob_xPtri32, ptr @Array_unsafe_index_xPtri32, ptr @Array_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Ptri1, ptr @Array_B_any_fFunctionT_to_Ptri1, ptr @Array_B_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Ptri1, ptr @Array_B_chain_otherIterable2T, ptr @Array_B_interleave_otherIterable2T, ptr @Array_B_zip_otherIterable2U, ptr @Array_B_product_otherIterable2U, ptr @Array_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U] }
+@ArrayIterator_hashtbl = linkonce_odr constant [4 x ptr] [ptr @ArrayIterator, ptr @Object, ptr @Container, ptr @Iterator2]
+@ArrayIterator_offset_tbl = linkonce_odr constant [4 x i32] [i32 7, i32 17, i32 17, i32 14]
+@ArrayIterator = constant { [3 x i64], [4 x ptr], [10 x ptr] } { [3 x i64] [i64 3447345754186651411, i64 4611686018427388181, i64 3], [4 x ptr] [ptr @subtype_test, ptr @ArrayIterator_hashtbl, ptr @ArrayIterator_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, i32, ptr }, ptr null, i32 1)], [10 x ptr] [ptr @ArrayIterator_field_array, ptr @ArrayIterator_field_index, ptr @ArrayIterator_field_ArrayIterator_0, ptr @ArrayIterator_B_init_arrayArrayT, ptr @ArrayIterator_B_next_, ptr @ArrayIterator_init_arrayArrayT, ptr @ArrayIterator_next_, ptr @ArrayIterator_field_ArrayIterator_0, ptr @ArrayIterator_B_next_, ptr @ArrayIterator_next_] }
+@MapIterable2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @Iterable2, ptr @MapIterable2, ptr @Container]
+@MapIterable2_offset_tbl = linkonce_odr constant [4 x i32] [i32 58, i32 35, i32 7, i32 58]
+@MapIterable2 = constant { [3 x i64], [4 x ptr], [51 x ptr] } { [3 x i64] [i64 -1724859134596891929, i64 4611686018427388081, i64 3], [4 x ptr] [ptr @subtype_test, ptr @MapIterable2_hashtbl, ptr @MapIterable2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr }, ptr, ptr }, ptr null, i32 1)], [51 x ptr] [ptr @MapIterable2_field_iterable, ptr @MapIterable2_field_f, ptr @MapIterable2_field_MapIterable2_0, ptr @MapIterable2_field_MapIterable2_1, ptr @MapIterable2_B_init_iterableIterable2T_fFunctionT_to_U, ptr @MapIterable2_B_iterator_, ptr @MapIterable2_B_each_fFunctionT_to_Nothing, ptr @MapIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapIterable2_B_all_fFunctionT_to_Ptri1, ptr @MapIterable2_B_any_fFunctionT_to_Ptri1, ptr @MapIterable2_B_map_fFunctionT_to_U, ptr @MapIterable2_B_filter_fFunctionT_to_Ptri1, ptr @MapIterable2_B_chain_otherIterable2T, ptr @MapIterable2_B_interleave_otherIterable2T, ptr @MapIterable2_B_zip_otherIterable2U, ptr @MapIterable2_B_product_otherIterable2U, ptr @MapIterable2_init_iterableIterable2T_fFunctionT_to_U, ptr @MapIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @MapIterable2_field_MapIterable2_1, ptr @MapIterable2_B_iterator_, ptr @MapIterable2_B_each_fFunctionT_to_Nothing, ptr @MapIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapIterable2_B_all_fFunctionT_to_Ptri1, ptr @MapIterable2_B_any_fFunctionT_to_Ptri1, ptr @MapIterable2_B_map_fFunctionT_to_U, ptr @MapIterable2_B_filter_fFunctionT_to_Ptri1, ptr @MapIterable2_B_chain_otherIterable2T, ptr @MapIterable2_B_interleave_otherIterable2T, ptr @MapIterable2_B_zip_otherIterable2U, ptr @MapIterable2_B_product_otherIterable2U, ptr @MapIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U] }
+@MapIterator2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @MapIterator2, ptr @Iterator2, ptr @Container]
+@MapIterator2_offset_tbl = linkonce_odr constant [4 x i32] [i32 18, i32 7, i32 15, i32 18]
+@MapIterator2 = constant { [3 x i64], [4 x ptr], [11 x ptr] } { [3 x i64] [i64 -10255947709272500, i64 4611686018427388081, i64 3], [4 x ptr] [ptr @subtype_test, ptr @MapIterator2_hashtbl, ptr @MapIterator2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr }, ptr, ptr }, ptr null, i32 1)], [11 x ptr] [ptr @MapIterator2_field_iterator, ptr @MapIterator2_field_f, ptr @MapIterator2_field_MapIterator2_0, ptr @MapIterator2_field_MapIterator2_1, ptr @MapIterator2_B_init_iteratorIterator2T_fFunctionT_to_U, ptr @MapIterator2_B_next_, ptr @MapIterator2_init_iteratorIterator2T_fFunctionT_to_U, ptr @MapIterator2_next_, ptr @MapIterator2_field_MapIterator2_1, ptr @MapIterator2_B_next_, ptr @MapIterator2_next_] }
+@FilterIterable2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @Iterable2, ptr @FilterIterable2, ptr @Container]
+@FilterIterable2_offset_tbl = linkonce_odr constant [4 x i32] [i32 57, i32 34, i32 7, i32 57]
+@FilterIterable2 = constant { [3 x i64], [4 x ptr], [50 x ptr] } { [3 x i64] [i64 1178467452958968374, i64 4611686018427388081, i64 3], [4 x ptr] [ptr @subtype_test, ptr @FilterIterable2_hashtbl, ptr @FilterIterable2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr }, ptr }, ptr null, i32 1)], [50 x ptr] [ptr @FilterIterable2_field_iterable, ptr @FilterIterable2_field_f, ptr @FilterIterable2_field_FilterIterable2_0, ptr @FilterIterable2_B_init_iterableIterable2T_fFunctionT_to_Ptri1, ptr @FilterIterable2_B_iterator_, ptr @FilterIterable2_B_each_fFunctionT_to_Nothing, ptr @FilterIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @FilterIterable2_B_all_fFunctionT_to_Ptri1, ptr @FilterIterable2_B_any_fFunctionT_to_Ptri1, ptr @FilterIterable2_B_map_fFunctionT_to_U, ptr @FilterIterable2_B_filter_fFunctionT_to_Ptri1, ptr @FilterIterable2_B_chain_otherIterable2T, ptr @FilterIterable2_B_interleave_otherIterable2T, ptr @FilterIterable2_B_zip_otherIterable2U, ptr @FilterIterable2_B_product_otherIterable2U, ptr @FilterIterable2_init_iterableIterable2T_fFunctionT_to_Ptri1, ptr @FilterIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @FilterIterable2_field_FilterIterable2_0, ptr @FilterIterable2_B_iterator_, ptr @FilterIterable2_B_each_fFunctionT_to_Nothing, ptr @FilterIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @FilterIterable2_B_all_fFunctionT_to_Ptri1, ptr @FilterIterable2_B_any_fFunctionT_to_Ptri1, ptr @FilterIterable2_B_map_fFunctionT_to_U, ptr @FilterIterable2_B_filter_fFunctionT_to_Ptri1, ptr @FilterIterable2_B_chain_otherIterable2T, ptr @FilterIterable2_B_interleave_otherIterable2T, ptr @FilterIterable2_B_zip_otherIterable2U, ptr @FilterIterable2_B_product_otherIterable2U, ptr @FilterIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U] }
+@FilterIterator2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Iterator2, ptr @Object, ptr @FilterIterator2, ptr @Container]
+@FilterIterator2_offset_tbl = linkonce_odr constant [4 x i32] [i32 14, i32 17, i32 7, i32 17]
+@FilterIterator2 = constant { [3 x i64], [4 x ptr], [10 x ptr] } { [3 x i64] [i64 8213847504843366470, i64 4611686018427388207, i64 3], [4 x ptr] [ptr @subtype_test, ptr @FilterIterator2_hashtbl, ptr @FilterIterator2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr }, ptr }, ptr null, i32 1)], [10 x ptr] [ptr @FilterIterator2_field_iterator, ptr @FilterIterator2_field_f, ptr @FilterIterator2_field_FilterIterator2_0, ptr @FilterIterator2_B_init_iteratorIterator2T_fFunctionT_to_Ptri1, ptr @FilterIterator2_B_next_, ptr @FilterIterator2_init_iteratorIterator2T_fFunctionT_to_Ptri1, ptr @FilterIterator2_next_, ptr @FilterIterator2_field_FilterIterator2_0, ptr @FilterIterator2_B_next_, ptr @FilterIterator2_next_] }
+@ChainIterable2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Iterable2, ptr @ChainIterable2, ptr @Container, ptr @Object]
+@ChainIterable2_offset_tbl = linkonce_odr constant [4 x i32] [i32 34, i32 7, i32 57, i32 57]
+@ChainIterable2 = constant { [3 x i64], [4 x ptr], [50 x ptr] } { [3 x i64] [i64 -5233298072945030060, i64 4611686018427388349, i64 3], [4 x ptr] [ptr @subtype_test, ptr @ChainIterable2_hashtbl, ptr @ChainIterable2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, ptr }, ptr null, i32 1)], [50 x ptr] [ptr @ChainIterable2_field_first, ptr @ChainIterable2_field_second, ptr @ChainIterable2_field_ChainIterable2_0, ptr @ChainIterable2_B_init_firstIterable2T_secondIterable2T, ptr @ChainIterable2_B_iterator_, ptr @ChainIterable2_B_each_fFunctionT_to_Nothing, ptr @ChainIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ChainIterable2_B_all_fFunctionT_to_Ptri1, ptr @ChainIterable2_B_any_fFunctionT_to_Ptri1, ptr @ChainIterable2_B_map_fFunctionT_to_U, ptr @ChainIterable2_B_filter_fFunctionT_to_Ptri1, ptr @ChainIterable2_B_chain_otherIterable2T, ptr @ChainIterable2_B_interleave_otherIterable2T, ptr @ChainIterable2_B_zip_otherIterable2U, ptr @ChainIterable2_B_product_otherIterable2U, ptr @ChainIterable2_init_firstIterable2T_secondIterable2T, ptr @ChainIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @ChainIterable2_field_ChainIterable2_0, ptr @ChainIterable2_B_iterator_, ptr @ChainIterable2_B_each_fFunctionT_to_Nothing, ptr @ChainIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ChainIterable2_B_all_fFunctionT_to_Ptri1, ptr @ChainIterable2_B_any_fFunctionT_to_Ptri1, ptr @ChainIterable2_B_map_fFunctionT_to_U, ptr @ChainIterable2_B_filter_fFunctionT_to_Ptri1, ptr @ChainIterable2_B_chain_otherIterable2T, ptr @ChainIterable2_B_interleave_otherIterable2T, ptr @ChainIterable2_B_zip_otherIterable2U, ptr @ChainIterable2_B_product_otherIterable2U, ptr @ChainIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U] }
+@ChainIterator2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Iterator2, ptr @Object, ptr @ChainIterator2, ptr @Container]
+@ChainIterator2_offset_tbl = linkonce_odr constant [4 x i32] [i32 15, i32 18, i32 7, i32 18]
+@ChainIterator2 = constant { [3 x i64], [4 x ptr], [11 x ptr] } { [3 x i64] [i64 -228267985060461774, i64 4611686018427388207, i64 3], [4 x ptr] [ptr @subtype_test, ptr @ChainIterator2_hashtbl, ptr @ChainIterator2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, i1, ptr }, ptr null, i32 1)], [11 x ptr] [ptr @ChainIterator2_field_first, ptr @ChainIterator2_field_second, ptr @ChainIterator2_field_on_first, ptr @ChainIterator2_field_ChainIterator2_0, ptr @ChainIterator2_B_init_firstIterator2T_secondIterator2T, ptr @ChainIterator2_B_next_, ptr @ChainIterator2_init_firstIterator2T_secondIterator2T, ptr @ChainIterator2_next_, ptr @ChainIterator2_field_ChainIterator2_0, ptr @ChainIterator2_B_next_, ptr @ChainIterator2_next_] }
+@InterleaveIterable2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Iterable2, ptr @InterleaveIterable2, ptr @Container, ptr @Object]
+@InterleaveIterable2_offset_tbl = linkonce_odr constant [4 x i32] [i32 34, i32 7, i32 57, i32 57]
+@InterleaveIterable2 = constant { [3 x i64], [4 x ptr], [50 x ptr] } { [3 x i64] [i64 -6258231685215461775, i64 4611686018427388093, i64 3], [4 x ptr] [ptr @subtype_test, ptr @InterleaveIterable2_hashtbl, ptr @InterleaveIterable2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, ptr }, ptr null, i32 1)], [50 x ptr] [ptr @InterleaveIterable2_field_first, ptr @InterleaveIterable2_field_second, ptr @InterleaveIterable2_field_InterleaveIterable2_0, ptr @InterleaveIterable2_B_init_firstIterable2T_secondIterable2T, ptr @InterleaveIterable2_B_iterator_, ptr @InterleaveIterable2_B_each_fFunctionT_to_Nothing, ptr @InterleaveIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @InterleaveIterable2_B_all_fFunctionT_to_Ptri1, ptr @InterleaveIterable2_B_any_fFunctionT_to_Ptri1, ptr @InterleaveIterable2_B_map_fFunctionT_to_U, ptr @InterleaveIterable2_B_filter_fFunctionT_to_Ptri1, ptr @InterleaveIterable2_B_chain_otherIterable2T, ptr @InterleaveIterable2_B_interleave_otherIterable2T, ptr @InterleaveIterable2_B_zip_otherIterable2U, ptr @InterleaveIterable2_B_product_otherIterable2U, ptr @InterleaveIterable2_init_firstIterable2T_secondIterable2T, ptr @InterleaveIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @InterleaveIterable2_field_InterleaveIterable2_0, ptr @InterleaveIterable2_B_iterator_, ptr @InterleaveIterable2_B_each_fFunctionT_to_Nothing, ptr @InterleaveIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @InterleaveIterable2_B_all_fFunctionT_to_Ptri1, ptr @InterleaveIterable2_B_any_fFunctionT_to_Ptri1, ptr @InterleaveIterable2_B_map_fFunctionT_to_U, ptr @InterleaveIterable2_B_filter_fFunctionT_to_Ptri1, ptr @InterleaveIterable2_B_chain_otherIterable2T, ptr @InterleaveIterable2_B_interleave_otherIterable2T, ptr @InterleaveIterable2_B_zip_otherIterable2U, ptr @InterleaveIterable2_B_product_otherIterable2U, ptr @InterleaveIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U] }
+@InterleaveIterator2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Iterator2, ptr @Object, ptr @InterleaveIterator2, ptr @Container]
+@InterleaveIterator2_offset_tbl = linkonce_odr constant [4 x i32] [i32 15, i32 18, i32 7, i32 18]
+@InterleaveIterator2 = constant { [3 x i64], [4 x ptr], [11 x ptr] } { [3 x i64] [i64 6709847746581360093, i64 4611686018427388207, i64 3], [4 x ptr] [ptr @subtype_test, ptr @InterleaveIterator2_hashtbl, ptr @InterleaveIterator2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, i1, ptr }, ptr null, i32 1)], [11 x ptr] [ptr @InterleaveIterator2_field_first, ptr @InterleaveIterator2_field_second, ptr @InterleaveIterator2_field_on_first, ptr @InterleaveIterator2_field_InterleaveIterator2_0, ptr @InterleaveIterator2_B_init_firstIterator2T_secondIterator2T, ptr @InterleaveIterator2_B_next_, ptr @InterleaveIterator2_init_firstIterator2T_secondIterator2T, ptr @InterleaveIterator2_next_, ptr @InterleaveIterator2_field_InterleaveIterator2_0, ptr @InterleaveIterator2_B_next_, ptr @InterleaveIterator2_next_] }
+@ZipIterable2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @Iterable2, ptr @ZipIterable2, ptr @Container]
+@ZipIterable2_offset_tbl = linkonce_odr constant [4 x i32] [i32 59, i32 36, i32 7, i32 59]
 @ZipIterable2 = constant { [3 x i64], [4 x ptr], [52 x ptr] } { [3 x i64] [i64 -3218950579047519815, i64 4611686018427388081, i64 3], [4 x ptr] [ptr @subtype_test, ptr @ZipIterable2_hashtbl, ptr @ZipIterable2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, ptr, ptr, ptr }, ptr null, i32 1)], [52 x ptr] [ptr @ZipIterable2_field_first, ptr @ZipIterable2_field_second, ptr @ZipIterable2_field_ZipIterable2_0, ptr @ZipIterable2_field_ZipIterable2_1, ptr @ZipIterable2_field_ZipIterable2_2, ptr @ZipIterable2_B_init_firstIterable2T_secondIterable2U, ptr @ZipIterable2_B_iterator_, ptr @ZipIterable2_B_each_fFunctionT_to_Nothing, ptr @ZipIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ZipIterable2_B_all_fFunctionT_to_Ptri1, ptr @ZipIterable2_B_any_fFunctionT_to_Ptri1, ptr @ZipIterable2_B_map_fFunctionT_to_U, ptr @ZipIterable2_B_filter_fFunctionT_to_Ptri1, ptr @ZipIterable2_B_chain_otherIterable2T, ptr @ZipIterable2_B_interleave_otherIterable2T, ptr @ZipIterable2_B_zip_otherIterable2U, ptr @ZipIterable2_B_product_otherIterable2U, ptr @ZipIterable2_init_firstIterable2T_secondIterable2U, ptr @ZipIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @ZipIterable2_field_ZipIterable2_2, ptr @ZipIterable2_B_iterator_, ptr @ZipIterable2_B_each_fFunctionT_to_Nothing, ptr @ZipIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ZipIterable2_B_all_fFunctionT_to_Ptri1, ptr @ZipIterable2_B_any_fFunctionT_to_Ptri1, ptr @ZipIterable2_B_map_fFunctionT_to_U, ptr @ZipIterable2_B_filter_fFunctionT_to_Ptri1, ptr @ZipIterable2_B_chain_otherIterable2T, ptr @ZipIterable2_B_interleave_otherIterable2T, ptr @ZipIterable2_B_zip_otherIterable2U, ptr @ZipIterable2_B_product_otherIterable2U, ptr @ZipIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U] }
-@ZipIterator2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr null, ptr @Iterator2, ptr @ZipIterator2]
-@ZipIterator2_offset_tbl = linkonce_odr constant [4 x i32] [i32 19, i32 0, i32 16, i32 7]
-@ZipIterator2 = constant { [3 x i64], [4 x ptr], [12 x ptr] } { [3 x i64] [i64 5502728639611621286, i64 4611686018427388073, i64 3], [4 x ptr] [ptr @subtype_test, ptr @ZipIterator2_hashtbl, ptr @ZipIterator2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, ptr, ptr, ptr }, ptr null, i32 1)], [12 x ptr] [ptr @ZipIterator2_field_first, ptr @ZipIterator2_field_second, ptr @ZipIterator2_field_ZipIterator2_0, ptr @ZipIterator2_field_ZipIterator2_1, ptr @ZipIterator2_field_ZipIterator2_2, ptr @ZipIterator2_B_init_firstIterator2T_secondIterator2U, ptr @ZipIterator2_B_next_, ptr @ZipIterator2_init_firstIterator2T_secondIterator2U, ptr @ZipIterator2_next_, ptr @ZipIterator2_field_ZipIterator2_2, ptr @ZipIterator2_B_next_, ptr @ZipIterator2_next_] }
-@ProductIterable2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @Iterable2, ptr @ProductIterable2, ptr null]
-@ProductIterable2_offset_tbl = linkonce_odr constant [4 x i32] [i32 59, i32 36, i32 7, i32 0]
+@ZipIterator2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @ZipIterator2, ptr @Object, ptr @Container, ptr @Iterator2]
+@ZipIterator2_offset_tbl = linkonce_odr constant [4 x i32] [i32 7, i32 19, i32 19, i32 16]
+@ZipIterator2 = constant { [3 x i64], [4 x ptr], [12 x ptr] } { [3 x i64] [i64 5502728639611621286, i64 4611686018427388181, i64 3], [4 x ptr] [ptr @subtype_test, ptr @ZipIterator2_hashtbl, ptr @ZipIterator2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, ptr, ptr, ptr }, ptr null, i32 1)], [12 x ptr] [ptr @ZipIterator2_field_first, ptr @ZipIterator2_field_second, ptr @ZipIterator2_field_ZipIterator2_0, ptr @ZipIterator2_field_ZipIterator2_1, ptr @ZipIterator2_field_ZipIterator2_2, ptr @ZipIterator2_B_init_firstIterator2T_secondIterator2U, ptr @ZipIterator2_B_next_, ptr @ZipIterator2_init_firstIterator2T_secondIterator2U, ptr @ZipIterator2_next_, ptr @ZipIterator2_field_ZipIterator2_2, ptr @ZipIterator2_B_next_, ptr @ZipIterator2_next_] }
+@ProductIterable2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @Iterable2, ptr @ProductIterable2, ptr @Container]
+@ProductIterable2_offset_tbl = linkonce_odr constant [4 x i32] [i32 59, i32 36, i32 7, i32 59]
 @ProductIterable2 = constant { [3 x i64], [4 x ptr], [52 x ptr] } { [3 x i64] [i64 7827074759551300494, i64 4611686018427388081, i64 3], [4 x ptr] [ptr @subtype_test, ptr @ProductIterable2_hashtbl, ptr @ProductIterable2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, ptr, ptr, ptr }, ptr null, i32 1)], [52 x ptr] [ptr @ProductIterable2_field_first, ptr @ProductIterable2_field_second, ptr @ProductIterable2_field_ProductIterable2_0, ptr @ProductIterable2_field_ProductIterable2_1, ptr @ProductIterable2_field_ProductIterable2_2, ptr @ProductIterable2_B_init_firstIterable2T_secondIterable2U, ptr @ProductIterable2_B_iterator_, ptr @ProductIterable2_B_each_fFunctionT_to_Nothing, ptr @ProductIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ProductIterable2_B_all_fFunctionT_to_Ptri1, ptr @ProductIterable2_B_any_fFunctionT_to_Ptri1, ptr @ProductIterable2_B_map_fFunctionT_to_U, ptr @ProductIterable2_B_filter_fFunctionT_to_Ptri1, ptr @ProductIterable2_B_chain_otherIterable2T, ptr @ProductIterable2_B_interleave_otherIterable2T, ptr @ProductIterable2_B_zip_otherIterable2U, ptr @ProductIterable2_B_product_otherIterable2U, ptr @ProductIterable2_init_firstIterable2T_secondIterable2U, ptr @ProductIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @ProductIterable2_field_ProductIterable2_2, ptr @ProductIterable2_B_iterator_, ptr @ProductIterable2_B_each_fFunctionT_to_Nothing, ptr @ProductIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ProductIterable2_B_all_fFunctionT_to_Ptri1, ptr @ProductIterable2_B_any_fFunctionT_to_Ptri1, ptr @ProductIterable2_B_map_fFunctionT_to_U, ptr @ProductIterable2_B_filter_fFunctionT_to_Ptri1, ptr @ProductIterable2_B_chain_otherIterable2T, ptr @ProductIterable2_B_interleave_otherIterable2T, ptr @ProductIterable2_B_zip_otherIterable2U, ptr @ProductIterable2_B_product_otherIterable2U, ptr @ProductIterable2_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U] }
-@ProductIterator2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr null, ptr @Iterator2, ptr @ProductIterator2]
-@ProductIterator2_offset_tbl = linkonce_odr constant [4 x i32] [i32 21, i32 0, i32 18, i32 7]
-@ProductIterator2 = constant { [3 x i64], [4 x ptr], [14 x ptr] } { [3 x i64] [i64 4440657219728359865, i64 4611686018427388073, i64 3], [4 x ptr] [ptr @subtype_test, ptr @ProductIterator2_hashtbl, ptr @ProductIterator2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, { ptr, i160 }, ptr, ptr, ptr }, ptr null, i32 1)], [14 x ptr] [ptr @ProductIterator2_field_first_iterator, ptr @ProductIterator2_field_second_iterator, ptr @ProductIterator2_field_second_iterable, ptr @ProductIterator2_field_current_first, ptr @ProductIterator2_field_ProductIterator2_0, ptr @ProductIterator2_field_ProductIterator2_1, ptr @ProductIterator2_field_ProductIterator2_2, ptr @ProductIterator2_B_init_first_iterableIterable2T_second_iterableIterable2U, ptr @ProductIterator2_B_next_, ptr @ProductIterator2_init_first_iterableIterable2T_second_iterableIterable2U, ptr @ProductIterator2_next_, ptr @ProductIterator2_field_ProductIterator2_2, ptr @ProductIterator2_B_next_, ptr @ProductIterator2_next_] }
+@ProductIterator2_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @ProductIterator2, ptr @Iterator2, ptr @Container]
+@ProductIterator2_offset_tbl = linkonce_odr constant [4 x i32] [i32 21, i32 7, i32 18, i32 21]
+@ProductIterator2 = constant { [3 x i64], [4 x ptr], [14 x ptr] } { [3 x i64] [i64 4440657219728359865, i64 4611686018427388081, i64 3], [4 x ptr] [ptr @subtype_test, ptr @ProductIterator2_hashtbl, ptr @ProductIterator2_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, { ptr, i160 }, ptr, ptr, ptr }, ptr null, i32 1)], [14 x ptr] [ptr @ProductIterator2_field_first_iterator, ptr @ProductIterator2_field_second_iterator, ptr @ProductIterator2_field_second_iterable, ptr @ProductIterator2_field_current_first, ptr @ProductIterator2_field_ProductIterator2_0, ptr @ProductIterator2_field_ProductIterator2_1, ptr @ProductIterator2_field_ProductIterator2_2, ptr @ProductIterator2_B_init_first_iterableIterable2T_second_iterableIterable2U, ptr @ProductIterator2_B_next_, ptr @ProductIterator2_init_first_iterableIterable2T_second_iterableIterable2U, ptr @ProductIterator2_next_, ptr @ProductIterator2_field_ProductIterator2_2, ptr @ProductIterator2_B_next_, ptr @ProductIterator2_next_] }
 @Addable_hashtbl = linkonce_odr constant [2 x ptr] [ptr @Object, ptr @Addable]
 @Addable_offset_tbl = linkonce_odr constant [2 x i32] [i32 11, i32 7]
 @Addable = constant { [3 x i64], [4 x ptr], [0 x ptr] } { [3 x i64] [i64 -6395308389776465871, i64 4611686018427388073, i64 1], [4 x ptr] [ptr @subtype_test, ptr @Addable_hashtbl, ptr @Addable_offset_tbl, ptr getelementptr ({ ptr, ptr }, ptr null, i32 1)], [0 x ptr] undef }
@@ -135,12 +132,12 @@ source_filename = "LLVMDialectModule"
 @Float64 = constant { [3 x i64], [4 x ptr], [18 x ptr] } { [3 x i64] [i64 8748823673944961442, i64 4611686018427388091, i64 3], [4 x ptr] [ptr @subtype_test, ptr @Float64_hashtbl, ptr @Float64_offset_tbl, ptr getelementptr ({ double }, ptr null, i32 1)], [18 x ptr] [ptr @Float64_field_value, ptr @Float64_field_Float64_0, ptr @Float64_field_Float64_1, ptr @Float64_B_init_valuePtrf64, ptr @Float64_B_value_, ptr @Float64_B__ADD_otherInt32__ADD_otherFloat64, ptr @Float64_init_valuePtrf64, ptr @Float64_value_, ptr @Float64__ADD_otherInt32, ptr @Float64__ADD_otherFloat64, ptr @Float64_field_Float64_0, ptr @Float64_field_Float64_1, ptr @Float64_B__ADD_otherInt32__ADD_otherFloat64, ptr @Float64_init_valuePtrf64, ptr @Float64_field_Float64_0, ptr @Float64_field_Float64_1, ptr @Float64_B__ADD_otherInt32__ADD_otherFloat64, ptr @Float64_init_valuePtrf64] }
 @Int32_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr null, ptr @Int32, ptr @Addable]
 @Int32_offset_tbl = linkonce_odr constant [4 x i32] [i32 20, i32 0, i32 7, i32 16]
-@Int32 = constant { [3 x i64], [4 x ptr], [17 x ptr] } { [3 x i64] [i64 -3157560240565274503, i64 4611686018427388081, i64 3], [4 x ptr] [ptr @subtype_test, ptr @Int32_hashtbl, ptr @Int32_offset_tbl, ptr getelementptr ({ i32 }, ptr null, i32 1)], [17 x ptr] [ptr @Int32_field_value, ptr @Int32_field_Int32_0, ptr @Int32_B_init_valuePtri32, ptr @Int32_B_value_, ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32, ptr @Int32_init_valuePtri32, ptr @Int32_value_, ptr @Int32__ADD_otherFloat64, ptr @Int32__ADD_otherInt32, ptr @Int32_field_Int32_0, ptr @Int32_field_Int32_0, ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32, ptr @Int32_init_valuePtri32, ptr @Int32_field_Int32_0, ptr @Int32_field_Int32_0, ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32, ptr @Int32_init_valuePtri32] }
+@Int32 = constant { [3 x i64], [4 x ptr], [17 x ptr] } { [3 x i64] [i64 -3157560240565274503, i64 4611686018427388081, i64 3], [4 x ptr] [ptr @subtype_test, ptr @Int32_hashtbl, ptr @Int32_offset_tbl, ptr getelementptr ({ i32 }, ptr null, i32 1)], [17 x ptr] [ptr @Int32_field_value, ptr @Int32_field_Int32_0, ptr @Int32_B_init_valuePtri32, ptr @Int32_B_value_, ptr @Int32_B__ADD_otherInt32__ADD_otherFloat64, ptr @Int32_init_valuePtri32, ptr @Int32_value_, ptr @Int32__ADD_otherInt32, ptr @Int32__ADD_otherFloat64, ptr @Int32_field_Int32_0, ptr @Int32_field_Int32_0, ptr @Int32_B__ADD_otherInt32__ADD_otherFloat64, ptr @Int32_init_valuePtri32, ptr @Int32_field_Int32_0, ptr @Int32_field_Int32_0, ptr @Int32_B__ADD_otherInt32__ADD_otherFloat64, ptr @Int32_init_valuePtri32] }
 @Holder_hashtbl = linkonce_odr constant [2 x ptr] [ptr @Holder, ptr @Object]
 @Holder_offset_tbl = linkonce_odr constant [2 x i32] [i32 7, i32 13]
 @Holder = constant { [3 x i64], [4 x ptr], [6 x ptr] } { [3 x i64] [i64 -261997465778736657, i64 4611686018427388093, i64 1], [4 x ptr] [ptr @subtype_test, ptr @Holder_hashtbl, ptr @Holder_offset_tbl, ptr getelementptr ({ { ptr, i160 }, ptr }, ptr null, i32 1)], [6 x ptr] [ptr @Holder_field_held, ptr @Holder_field_Holder_0, ptr @Holder_B_init_heldT, ptr @Holder_B_value_, ptr @Holder_init_heldT, ptr @Holder_value_] }
 
-define { ptr, i160 } @akgnixsadz(ptr nest %0, { ptr, i160 } %1) {
+define { ptr, i160 } @ccxydhmscd(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
@@ -160,7 +157,7 @@ define { ptr, i160 } @akgnixsadz(ptr nest %0, { ptr, i160 } %1) {
   ret { ptr, i160 } %14
 }
 
-define { ptr, i160 } @jsaommlczr(ptr nest %0, { ptr, i160 } %1) {
+define { ptr, i160 } @cqejciyerb(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
@@ -180,7 +177,7 @@ define { ptr, i160 } @jsaommlczr(ptr nest %0, { ptr, i160 } %1) {
   ret { ptr, i160 } %14
 }
 
-define { ptr, i160 } @vykqxjxowl(ptr nest %0, { ptr, i160 } %1) {
+define { ptr, i160 } @vfrsdfbjoo(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
@@ -200,7 +197,7 @@ define { ptr, i160 } @vykqxjxowl(ptr nest %0, { ptr, i160 } %1) {
   ret { ptr, i160 } %14
 }
 
-define { ptr, i160 } @vwhlenclrk(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define { ptr, i160 } @zoebybybap(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -757,245 +754,6 @@ define ptr @Iterator2_B_next_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %6 = getelementptr ptr, ptr %5, i32 7
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
-}
-
-define ptr @ScopedIterator2_field_ScopedIterator2_0(ptr %0) {
-  %2 = getelementptr { ptr }, ptr %0, i32 0, i32 0
-  ret ptr %2
-}
-
-define ptr @ScopedIterator2_B_next_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
-  %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr [6 x ptr], ptr %4, i32 0, i32 2
-  %6 = getelementptr ptr, ptr %5, i32 7
-  %7 = load ptr, ptr %6, align 8
-  ret ptr %7
-}
-
-define ptr @ScopedIterable2_field_ScopedIterable2_0(ptr %0) {
-  %2 = getelementptr { ptr }, ptr %0, i32 0, i32 0
-  ret ptr %2
-}
-
-define ptr @ScopedIterable2_B_iterator_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
-  %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr [46 x ptr], ptr %4, i32 0, i32 12
-  %6 = getelementptr ptr, ptr %5, i32 7
-  %7 = load ptr, ptr %6, align 8
-  ret ptr %7
-}
-
-define ptr @ScopedIterable2_B_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 } %0, ptr %1, { ptr } %2) {
-  %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
-  %5 = getelementptr [1 x ptr], ptr %1, i32 0, i32 0
-  %6 = load ptr, ptr %5, align 8
-  %7 = getelementptr ptr, ptr %6, i32 1
-  %8 = getelementptr ptr, ptr %6, i32 2
-  %9 = getelementptr ptr, ptr %6, i32 3
-  %10 = getelementptr ptr, ptr %6, i32 4
-  %11 = load i64, ptr %7, align 4
-  %12 = load i64, ptr %8, align 4
-  %13 = load ptr, ptr %9, align 8
-  %14 = load ptr, ptr %10, align 8
-  %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
-  %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [46 x ptr], ptr %16, i32 0, i32 13
-  %18 = getelementptr ptr, ptr %17, i32 7
-  %19 = load ptr, ptr %18, align 8
-  ret ptr %19
-}
-
-define ptr @ScopedIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, ptr, ptr, i32 } %0, ptr %1, { ptr, i160 } %2, { ptr } %3) {
-  %5 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1)
-  %6 = getelementptr [2 x ptr], ptr %1, i32 0, i32 0
-  %7 = load ptr, ptr %6, align 8
-  %8 = getelementptr ptr, ptr %7, i32 1
-  %9 = getelementptr ptr, ptr %7, i32 2
-  %10 = getelementptr ptr, ptr %7, i32 3
-  %11 = getelementptr ptr, ptr %7, i32 4
-  %12 = load i64, ptr %8, align 4
-  %13 = load i64, ptr %9, align 4
-  %14 = load ptr, ptr %10, align 8
-  %15 = load ptr, ptr %11, align 8
-  %16 = call i1 @subtype_test_wrapper(ptr %14, i64 %13, i64 %12, i64 3282773614056351330, i64 ptrtoint (ptr @Object to i64), ptr %15)
-  %17 = getelementptr [2 x ptr], ptr %1, i32 0, i32 1
-  %18 = load ptr, ptr %17, align 8
-  %19 = getelementptr ptr, ptr %18, i32 1
-  %20 = getelementptr ptr, ptr %18, i32 2
-  %21 = getelementptr ptr, ptr %18, i32 3
-  %22 = getelementptr ptr, ptr %18, i32 4
-  %23 = load i64, ptr %19, align 4
-  %24 = load i64, ptr %20, align 4
-  %25 = load ptr, ptr %21, align 8
-  %26 = load ptr, ptr %22, align 8
-  %27 = call i1 @subtype_test_wrapper(ptr %25, i64 %24, i64 %23, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %26)
-  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = getelementptr [46 x ptr], ptr %28, i32 0, i32 14
-  %30 = getelementptr ptr, ptr %29, i32 7
-  %31 = load ptr, ptr %30, align 8
-  ret ptr %31
-}
-
-define ptr @ScopedIterable2_B_all_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, ptr %1, { ptr } %2) {
-  %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
-  %5 = getelementptr [1 x ptr], ptr %1, i32 0, i32 0
-  %6 = load ptr, ptr %5, align 8
-  %7 = getelementptr ptr, ptr %6, i32 1
-  %8 = getelementptr ptr, ptr %6, i32 2
-  %9 = getelementptr ptr, ptr %6, i32 3
-  %10 = getelementptr ptr, ptr %6, i32 4
-  %11 = load i64, ptr %7, align 4
-  %12 = load i64, ptr %8, align 4
-  %13 = load ptr, ptr %9, align 8
-  %14 = load ptr, ptr %10, align 8
-  %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
-  %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [46 x ptr], ptr %16, i32 0, i32 15
-  %18 = getelementptr ptr, ptr %17, i32 7
-  %19 = load ptr, ptr %18, align 8
-  ret ptr %19
-}
-
-define ptr @ScopedIterable2_B_any_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, ptr %1, { ptr } %2) {
-  %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
-  %5 = getelementptr [1 x ptr], ptr %1, i32 0, i32 0
-  %6 = load ptr, ptr %5, align 8
-  %7 = getelementptr ptr, ptr %6, i32 1
-  %8 = getelementptr ptr, ptr %6, i32 2
-  %9 = getelementptr ptr, ptr %6, i32 3
-  %10 = getelementptr ptr, ptr %6, i32 4
-  %11 = load i64, ptr %7, align 4
-  %12 = load i64, ptr %8, align 4
-  %13 = load ptr, ptr %9, align 8
-  %14 = load ptr, ptr %10, align 8
-  %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
-  %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [46 x ptr], ptr %16, i32 0, i32 16
-  %18 = getelementptr ptr, ptr %17, i32 7
-  %19 = load ptr, ptr %18, align 8
-  ret ptr %19
-}
-
-define ptr @ScopedIterable2_B_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr %1, { ptr } %2) {
-  %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
-  %5 = getelementptr [1 x ptr], ptr %1, i32 0, i32 0
-  %6 = load ptr, ptr %5, align 8
-  %7 = getelementptr ptr, ptr %6, i32 1
-  %8 = getelementptr ptr, ptr %6, i32 2
-  %9 = getelementptr ptr, ptr %6, i32 3
-  %10 = getelementptr ptr, ptr %6, i32 4
-  %11 = load i64, ptr %7, align 4
-  %12 = load i64, ptr %8, align 4
-  %13 = load ptr, ptr %9, align 8
-  %14 = load ptr, ptr %10, align 8
-  %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
-  %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [46 x ptr], ptr %16, i32 0, i32 17
-  %18 = getelementptr ptr, ptr %17, i32 7
-  %19 = load ptr, ptr %18, align 8
-  ret ptr %19
-}
-
-define ptr @ScopedIterable2_B_filter_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, ptr %1, { ptr } %2) {
-  %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
-  %5 = getelementptr [1 x ptr], ptr %1, i32 0, i32 0
-  %6 = load ptr, ptr %5, align 8
-  %7 = getelementptr ptr, ptr %6, i32 1
-  %8 = getelementptr ptr, ptr %6, i32 2
-  %9 = getelementptr ptr, ptr %6, i32 3
-  %10 = getelementptr ptr, ptr %6, i32 4
-  %11 = load i64, ptr %7, align 4
-  %12 = load i64, ptr %8, align 4
-  %13 = load ptr, ptr %9, align 8
-  %14 = load ptr, ptr %10, align 8
-  %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
-  %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [46 x ptr], ptr %16, i32 0, i32 18
-  %18 = getelementptr ptr, ptr %17, i32 7
-  %19 = load ptr, ptr %18, align 8
-  ret ptr %19
-}
-
-define ptr @ScopedIterable2_B_chain_otherIterable2T({ ptr, ptr, ptr, i32 } %0, ptr %1, { ptr, ptr, ptr, i32 } %2) {
-  %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
-  %5 = getelementptr [1 x ptr], ptr %1, i32 0, i32 0
-  %6 = load ptr, ptr %5, align 8
-  %7 = getelementptr ptr, ptr %6, i32 1
-  %8 = getelementptr ptr, ptr %6, i32 2
-  %9 = getelementptr ptr, ptr %6, i32 3
-  %10 = getelementptr ptr, ptr %6, i32 4
-  %11 = load i64, ptr %7, align 4
-  %12 = load i64, ptr %8, align 4
-  %13 = load ptr, ptr %9, align 8
-  %14 = load ptr, ptr %10, align 8
-  %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
-  %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [46 x ptr], ptr %16, i32 0, i32 19
-  %18 = getelementptr ptr, ptr %17, i32 7
-  %19 = load ptr, ptr %18, align 8
-  ret ptr %19
-}
-
-define ptr @ScopedIterable2_B_interleave_otherIterable2T({ ptr, ptr, ptr, i32 } %0, ptr %1, { ptr, ptr, ptr, i32 } %2) {
-  %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
-  %5 = getelementptr [1 x ptr], ptr %1, i32 0, i32 0
-  %6 = load ptr, ptr %5, align 8
-  %7 = getelementptr ptr, ptr %6, i32 1
-  %8 = getelementptr ptr, ptr %6, i32 2
-  %9 = getelementptr ptr, ptr %6, i32 3
-  %10 = getelementptr ptr, ptr %6, i32 4
-  %11 = load i64, ptr %7, align 4
-  %12 = load i64, ptr %8, align 4
-  %13 = load ptr, ptr %9, align 8
-  %14 = load ptr, ptr %10, align 8
-  %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
-  %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [46 x ptr], ptr %16, i32 0, i32 20
-  %18 = getelementptr ptr, ptr %17, i32 7
-  %19 = load ptr, ptr %18, align 8
-  ret ptr %19
-}
-
-define ptr @ScopedIterable2_B_zip_otherIterable2U({ ptr, ptr, ptr, i32 } %0, ptr %1, { ptr, ptr, ptr, i32 } %2) {
-  %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
-  %5 = getelementptr [1 x ptr], ptr %1, i32 0, i32 0
-  %6 = load ptr, ptr %5, align 8
-  %7 = getelementptr ptr, ptr %6, i32 1
-  %8 = getelementptr ptr, ptr %6, i32 2
-  %9 = getelementptr ptr, ptr %6, i32 3
-  %10 = getelementptr ptr, ptr %6, i32 4
-  %11 = load i64, ptr %7, align 4
-  %12 = load i64, ptr %8, align 4
-  %13 = load ptr, ptr %9, align 8
-  %14 = load ptr, ptr %10, align 8
-  %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
-  %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [46 x ptr], ptr %16, i32 0, i32 21
-  %18 = getelementptr ptr, ptr %17, i32 7
-  %19 = load ptr, ptr %18, align 8
-  ret ptr %19
-}
-
-define ptr @ScopedIterable2_B_product_otherIterable2U({ ptr, ptr, ptr, i32 } %0, ptr %1, { ptr, ptr, ptr, i32 } %2) {
-  %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
-  %5 = getelementptr [1 x ptr], ptr %1, i32 0, i32 0
-  %6 = load ptr, ptr %5, align 8
-  %7 = getelementptr ptr, ptr %6, i32 1
-  %8 = getelementptr ptr, ptr %6, i32 2
-  %9 = getelementptr ptr, ptr %6, i32 3
-  %10 = getelementptr ptr, ptr %6, i32 4
-  %11 = load i64, ptr %7, align 4
-  %12 = load i64, ptr %8, align 4
-  %13 = load ptr, ptr %9, align 8
-  %14 = load ptr, ptr %10, align 8
-  %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
-  %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [46 x ptr], ptr %16, i32 0, i32 22
-  %18 = getelementptr ptr, ptr %17, i32 7
-  %19 = load ptr, ptr %18, align 8
-  ret ptr %19
 }
 
 define ptr @Iterable2_field_Iterable2_0(ptr %0) {
@@ -2176,7 +1934,7 @@ define { ptr, ptr, ptr, i32 } @Iterable2_map_fFunctionT_to_U({ ptr, ptr, ptr, i3
   %104 = getelementptr [2 x ptr], ptr %102, i32 0, i32 1
   store ptr %98, ptr %104, align 8
   %105 = call ptr @llvm.invariant.start.p0(i64 4, ptr %102)
-  %106 = call ptr @llvm.invariant.start.p0(i64 776, ptr %71)
+  %106 = call ptr @llvm.invariant.start.p0(i64 408, ptr %71)
   %107 = getelementptr ptr, ptr %71, i32 %80
   %108 = getelementptr ptr, ptr %107, i32 4
   %109 = load ptr, ptr %108, align 8
@@ -2356,7 +2114,7 @@ define { ptr, ptr, ptr, i32 } @Iterable2_filter_fFunctionT_to_Ptri1({ ptr, ptr, 
   %95 = getelementptr [2 x ptr], ptr %93, i32 0, i32 1
   store ptr %89, ptr %95, align 8
   %96 = call ptr @llvm.invariant.start.p0(i64 4, ptr %93)
-  %97 = call ptr @llvm.invariant.start.p0(i64 768, ptr %66)
+  %97 = call ptr @llvm.invariant.start.p0(i64 400, ptr %66)
   %98 = getelementptr ptr, ptr %66, i32 %75
   %99 = getelementptr ptr, ptr %98, i32 3
   %100 = load ptr, ptr %99, align 8
@@ -2581,7 +2339,7 @@ define { ptr, ptr, ptr, i32 } @Iterable2_chain_otherIterable2T({ ptr, ptr, ptr, 
   %131 = getelementptr [2 x ptr], ptr %129, i32 0, i32 1
   store ptr %126, ptr %131, align 8
   %132 = call ptr @llvm.invariant.start.p0(i64 4, ptr %129)
-  %133 = call ptr @llvm.invariant.start.p0(i64 768, ptr %103)
+  %133 = call ptr @llvm.invariant.start.p0(i64 400, ptr %103)
   %134 = getelementptr ptr, ptr %103, i32 %112
   %135 = getelementptr ptr, ptr %134, i32 3
   %136 = load ptr, ptr %135, align 8
@@ -2806,7 +2564,7 @@ define { ptr, ptr, ptr, i32 } @Iterable2_interleave_otherIterable2T({ ptr, ptr, 
   %131 = getelementptr [2 x ptr], ptr %129, i32 0, i32 1
   store ptr %126, ptr %131, align 8
   %132 = call ptr @llvm.invariant.start.p0(i64 4, ptr %129)
-  %133 = call ptr @llvm.invariant.start.p0(i64 768, ptr %103)
+  %133 = call ptr @llvm.invariant.start.p0(i64 400, ptr %103)
   %134 = getelementptr ptr, ptr %103, i32 %112
   %135 = getelementptr ptr, ptr %134, i32 3
   %136 = load ptr, ptr %135, align 8
@@ -3429,7 +3187,7 @@ define { ptr, ptr, ptr, i32 } @Array__Self_from_iterable_iterableIterable2T(ptr 
   %39 = insertvalue { ptr, ptr, ptr, i32 } %36, i32 %38, 3
   %40 = alloca [0 x ptr], align 8
   %41 = call ptr @llvm.invariant.start.p0(i64 0, ptr %40)
-  %42 = call ptr @llvm.invariant.start.p0(i64 920, ptr %29)
+  %42 = call ptr @llvm.invariant.start.p0(i64 552, ptr %29)
   %43 = getelementptr ptr, ptr %29, i32 %38
   %44 = getelementptr ptr, ptr %43, i32 5
   %45 = load ptr, ptr %44, align 8
@@ -3635,7 +3393,7 @@ define { ptr, ptr, ptr, i32 } @Array__Self_from_iterable_iterableIterable2T(ptr 
   %206 = getelementptr [1 x ptr], ptr %205, i32 0, i32 0
   store ptr %203, ptr %206, align 8
   %207 = call ptr @llvm.invariant.start.p0(i64 1, ptr %205)
-  %208 = call ptr @llvm.invariant.start.p0(i64 920, ptr %192)
+  %208 = call ptr @llvm.invariant.start.p0(i64 552, ptr %192)
   %209 = getelementptr ptr, ptr %192, i32 %201
   %210 = getelementptr ptr, ptr %209, i32 9
   %211 = load ptr, ptr %210, align 8
@@ -3735,7 +3493,7 @@ define ptr @Array_B__Self_from_iterable_iterableIterable2T(ptr %0, { ptr, ptr, p
   %12 = load ptr, ptr %8, align 8
   %13 = load ptr, ptr %9, align 8
   %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %13)
-  %15 = load ptr, ptr getelementptr (ptr, ptr getelementptr ([115 x ptr], ptr @Array, i32 0, i32 25), i32 7), align 8
+  %15 = load ptr, ptr getelementptr (ptr, ptr getelementptr ([69 x ptr], ptr @Array, i32 0, i32 25), i32 7), align 8
   ret ptr %15
 }
 
@@ -3766,7 +3524,7 @@ define void @Array_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, p
   store ptr %19, ptr %20, align 8
   %21 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %22 = extractvalue { ptr, ptr, ptr, i32 } %21, 0
-  %23 = call ptr @llvm.invariant.start.p0(i64 920, ptr %22)
+  %23 = call ptr @llvm.invariant.start.p0(i64 552, ptr %22)
   %24 = extractvalue { ptr, ptr, ptr, i32 } %21, 3
   %25 = getelementptr ptr, ptr %22, i32 %24
   %26 = load ptr, ptr %25, align 8
@@ -3778,7 +3536,7 @@ define void @Array_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, p
   store ptr %31, ptr %30, align 8
   %32 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %33 = extractvalue { ptr, ptr, ptr, i32 } %32, 0
-  %34 = call ptr @llvm.invariant.start.p0(i64 920, ptr %33)
+  %34 = call ptr @llvm.invariant.start.p0(i64 552, ptr %33)
   %35 = extractvalue { ptr, ptr, ptr, i32 } %32, 3
   %36 = getelementptr ptr, ptr %33, i32 %35
   %37 = getelementptr ptr, ptr %36, i32 1
@@ -3788,7 +3546,7 @@ define void @Array_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, p
   store i32 0, ptr %40, align 4
   %41 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %42 = extractvalue { ptr, ptr, ptr, i32 } %41, 0
-  %43 = call ptr @llvm.invariant.start.p0(i64 920, ptr %42)
+  %43 = call ptr @llvm.invariant.start.p0(i64 552, ptr %42)
   %44 = extractvalue { ptr, ptr, ptr, i32 } %41, 3
   %45 = getelementptr ptr, ptr %42, i32 %44
   %46 = getelementptr ptr, ptr %45, i32 2
@@ -3802,7 +3560,7 @@ define void @Array_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, p
 define ptr @Array_B_init_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr [115 x ptr], ptr %4, i32 0, i32 26
+  %5 = getelementptr [69 x ptr], ptr %4, i32 0, i32 26
   %6 = getelementptr ptr, ptr %5, i32 7
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
@@ -3832,7 +3590,7 @@ define void @Array_init_capacityPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   call void @set_offset(ptr %7, ptr @Array)
   %20 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %21 = extractvalue { ptr, ptr, ptr, i32 } %20, 0
-  %22 = call ptr @llvm.invariant.start.p0(i64 920, ptr %21)
+  %22 = call ptr @llvm.invariant.start.p0(i64 552, ptr %21)
   %23 = extractvalue { ptr, ptr, ptr, i32 } %20, 3
   %24 = getelementptr ptr, ptr %21, i32 %23
   %25 = getelementptr ptr, ptr %24, i32 2
@@ -3842,7 +3600,7 @@ define void @Array_init_capacityPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   store i32 %3, ptr %28, align 4
   %29 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %30 = extractvalue { ptr, ptr, ptr, i32 } %29, 0
-  %31 = call ptr @llvm.invariant.start.p0(i64 920, ptr %30)
+  %31 = call ptr @llvm.invariant.start.p0(i64 552, ptr %30)
   %32 = extractvalue { ptr, ptr, ptr, i32 } %29, 3
   %33 = getelementptr ptr, ptr %30, i32 %32
   %34 = getelementptr ptr, ptr %33, i32 2
@@ -3857,7 +3615,7 @@ define void @Array_init_capacityPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   store ptr %41, ptr %42, align 8
   %43 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %44 = extractvalue { ptr, ptr, ptr, i32 } %43, 0
-  %45 = call ptr @llvm.invariant.start.p0(i64 920, ptr %44)
+  %45 = call ptr @llvm.invariant.start.p0(i64 552, ptr %44)
   %46 = extractvalue { ptr, ptr, ptr, i32 } %43, 3
   %47 = getelementptr ptr, ptr %44, i32 %46
   %48 = load ptr, ptr %47, align 8
@@ -3869,7 +3627,7 @@ define void @Array_init_capacityPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   store ptr %53, ptr %52, align 8
   %54 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %55 = extractvalue { ptr, ptr, ptr, i32 } %54, 0
-  %56 = call ptr @llvm.invariant.start.p0(i64 920, ptr %55)
+  %56 = call ptr @llvm.invariant.start.p0(i64 552, ptr %55)
   %57 = extractvalue { ptr, ptr, ptr, i32 } %54, 3
   %58 = getelementptr ptr, ptr %55, i32 %57
   %59 = getelementptr ptr, ptr %58, i32 1
@@ -3894,7 +3652,7 @@ define ptr @Array_B_init_capacityPtri32({ ptr, ptr, ptr, i32 } %0, ptr %1, i32 %
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 -2253724949814257982, i64 ptrtoint (ptr @i32_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [115 x ptr], ptr %16, i32 0, i32 27
+  %17 = getelementptr [69 x ptr], ptr %16, i32 0, i32 27
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -3924,7 +3682,7 @@ define i32 @Array_length_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, 
   call void @set_offset(ptr %6, ptr @Array)
   %19 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %20 = extractvalue { ptr, ptr, ptr, i32 } %19, 0
-  %21 = call ptr @llvm.invariant.start.p0(i64 920, ptr %20)
+  %21 = call ptr @llvm.invariant.start.p0(i64 552, ptr %20)
   %22 = extractvalue { ptr, ptr, ptr, i32 } %19, 3
   %23 = getelementptr ptr, ptr %20, i32 %22
   %24 = getelementptr ptr, ptr %23, i32 1
@@ -3938,7 +3696,7 @@ define i32 @Array_length_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, 
 define ptr @Array_B_length_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr [115 x ptr], ptr %4, i32 0, i32 28
+  %5 = getelementptr [69 x ptr], ptr %4, i32 0, i32 28
   %6 = getelementptr ptr, ptr %5, i32 7
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
@@ -3968,7 +3726,7 @@ define i32 @Array_capacity_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1
   call void @set_offset(ptr %6, ptr @Array)
   %19 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %20 = extractvalue { ptr, ptr, ptr, i32 } %19, 0
-  %21 = call ptr @llvm.invariant.start.p0(i64 920, ptr %20)
+  %21 = call ptr @llvm.invariant.start.p0(i64 552, ptr %20)
   %22 = extractvalue { ptr, ptr, ptr, i32 } %19, 3
   %23 = getelementptr ptr, ptr %20, i32 %22
   %24 = getelementptr ptr, ptr %23, i32 2
@@ -3982,7 +3740,7 @@ define i32 @Array_capacity_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1
 define ptr @Array_B_capacity_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr [115 x ptr], ptr %4, i32 0, i32 29
+  %5 = getelementptr [69 x ptr], ptr %4, i32 0, i32 29
   %6 = getelementptr ptr, ptr %5, i32 7
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
@@ -4024,7 +3782,7 @@ define { ptr, ptr, ptr, i32 } @Array_append_xT({ ptr, ptr, ptr, i32 } %0, { ptr,
   call void @set_offset(ptr %21, ptr @Object)
   %28 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %29 = extractvalue { ptr, ptr, ptr, i32 } %28, 0
-  %30 = call ptr @llvm.invariant.start.p0(i64 920, ptr %29)
+  %30 = call ptr @llvm.invariant.start.p0(i64 552, ptr %29)
   %31 = extractvalue { ptr, ptr, ptr, i32 } %28, 3
   %32 = getelementptr ptr, ptr %29, i32 %31
   %33 = getelementptr ptr, ptr %32, i32 1
@@ -4033,7 +3791,7 @@ define { ptr, ptr, ptr, i32 } @Array_append_xT({ ptr, ptr, ptr, i32 } %0, { ptr,
   %36 = call ptr %34(ptr %35)
   %37 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %38 = extractvalue { ptr, ptr, ptr, i32 } %37, 0
-  %39 = call ptr @llvm.invariant.start.p0(i64 920, ptr %38)
+  %39 = call ptr @llvm.invariant.start.p0(i64 552, ptr %38)
   %40 = extractvalue { ptr, ptr, ptr, i32 } %37, 3
   %41 = getelementptr ptr, ptr %38, i32 %40
   %42 = getelementptr ptr, ptr %41, i32 2
@@ -4060,7 +3818,7 @@ define { ptr, ptr, ptr, i32 } @Array_append_xT({ ptr, ptr, ptr, i32 } %0, { ptr,
   %61 = insertvalue { ptr, ptr, ptr, i32 } %58, i32 %60, 3
   %62 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %63 = extractvalue { ptr, ptr, ptr, i32 } %62, 0
-  %64 = call ptr @llvm.invariant.start.p0(i64 920, ptr %63)
+  %64 = call ptr @llvm.invariant.start.p0(i64 552, ptr %63)
   %65 = extractvalue { ptr, ptr, ptr, i32 } %62, 3
   %66 = getelementptr ptr, ptr %63, i32 %65
   %67 = getelementptr ptr, ptr %66, i32 3
@@ -4069,7 +3827,7 @@ define { ptr, ptr, ptr, i32 } @Array_append_xT({ ptr, ptr, ptr, i32 } %0, { ptr,
   %70 = call ptr %68(ptr %69)
   %71 = alloca [0 x ptr], align 8
   %72 = call ptr @llvm.invariant.start.p0(i64 0, ptr %71)
-  %73 = call ptr @llvm.invariant.start.p0(i64 920, ptr %51)
+  %73 = call ptr @llvm.invariant.start.p0(i64 552, ptr %51)
   %74 = getelementptr ptr, ptr %51, i32 %60
   %75 = getelementptr ptr, ptr %74, i32 10
   %76 = load ptr, ptr %75, align 8
@@ -4081,7 +3839,7 @@ define { ptr, ptr, ptr, i32 } @Array_append_xT({ ptr, ptr, ptr, i32 } %0, { ptr,
 79:                                               ; preds = %49, %4
   %80 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %81 = extractvalue { ptr, ptr, ptr, i32 } %80, 0
-  %82 = call ptr @llvm.invariant.start.p0(i64 920, ptr %81)
+  %82 = call ptr @llvm.invariant.start.p0(i64 552, ptr %81)
   %83 = extractvalue { ptr, ptr, ptr, i32 } %80, 3
   %84 = getelementptr ptr, ptr %81, i32 %83
   %85 = load ptr, ptr %84, align 8
@@ -4089,7 +3847,7 @@ define { ptr, ptr, ptr, i32 } @Array_append_xT({ ptr, ptr, ptr, i32 } %0, { ptr,
   %87 = call ptr %85(ptr %86)
   %88 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %89 = extractvalue { ptr, ptr, ptr, i32 } %88, 0
-  %90 = call ptr @llvm.invariant.start.p0(i64 920, ptr %89)
+  %90 = call ptr @llvm.invariant.start.p0(i64 552, ptr %89)
   %91 = extractvalue { ptr, ptr, ptr, i32 } %88, 3
   %92 = getelementptr ptr, ptr %89, i32 %91
   %93 = getelementptr ptr, ptr %92, i32 1
@@ -4121,7 +3879,7 @@ define { ptr, ptr, ptr, i32 } @Array_append_xT({ ptr, ptr, ptr, i32 } %0, { ptr,
   store i160 %114, ptr %113, align 4
   %115 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %116 = extractvalue { ptr, ptr, ptr, i32 } %115, 0
-  %117 = call ptr @llvm.invariant.start.p0(i64 920, ptr %116)
+  %117 = call ptr @llvm.invariant.start.p0(i64 552, ptr %116)
   %118 = extractvalue { ptr, ptr, ptr, i32 } %115, 3
   %119 = getelementptr ptr, ptr %116, i32 %118
   %120 = getelementptr ptr, ptr %119, i32 1
@@ -4137,7 +3895,7 @@ define { ptr, ptr, ptr, i32 } @Array_append_xT({ ptr, ptr, ptr, i32 } %0, { ptr,
   store i32 %127, ptr %128, align 4
   %129 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %130 = extractvalue { ptr, ptr, ptr, i32 } %129, 0
-  %131 = call ptr @llvm.invariant.start.p0(i64 920, ptr %130)
+  %131 = call ptr @llvm.invariant.start.p0(i64 552, ptr %130)
   %132 = extractvalue { ptr, ptr, ptr, i32 } %129, 3
   %133 = getelementptr ptr, ptr %130, i32 %132
   %134 = getelementptr ptr, ptr %133, i32 1
@@ -4193,7 +3951,7 @@ define ptr @Array_B_append_xT({ ptr, ptr, ptr, i32 } %0, ptr %1, { ptr, i160 } %
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 3282773614056351330, i64 ptrtoint (ptr @Object to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [115 x ptr], ptr %16, i32 0, i32 30
+  %17 = getelementptr [69 x ptr], ptr %16, i32 0, i32 30
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -4223,7 +3981,7 @@ define void @Array_grow_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, p
   call void @set_offset(ptr %6, ptr @Array)
   %19 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %20 = extractvalue { ptr, ptr, ptr, i32 } %19, 0
-  %21 = call ptr @llvm.invariant.start.p0(i64 920, ptr %20)
+  %21 = call ptr @llvm.invariant.start.p0(i64 552, ptr %20)
   %22 = extractvalue { ptr, ptr, ptr, i32 } %19, 3
   %23 = getelementptr ptr, ptr %20, i32 %22
   %24 = getelementptr ptr, ptr %23, i32 2
@@ -4234,7 +3992,7 @@ define void @Array_grow_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, p
   %29 = mul i32 %28, 2
   %30 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %31 = extractvalue { ptr, ptr, ptr, i32 } %30, 0
-  %32 = call ptr @llvm.invariant.start.p0(i64 920, ptr %31)
+  %32 = call ptr @llvm.invariant.start.p0(i64 552, ptr %31)
   %33 = extractvalue { ptr, ptr, ptr, i32 } %30, 3
   %34 = getelementptr ptr, ptr %31, i32 %33
   %35 = getelementptr ptr, ptr %34, i32 2
@@ -4244,7 +4002,7 @@ define void @Array_grow_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, p
   store i32 %29, ptr %38, align 4
   %39 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %40 = extractvalue { ptr, ptr, ptr, i32 } %39, 0
-  %41 = call ptr @llvm.invariant.start.p0(i64 920, ptr %40)
+  %41 = call ptr @llvm.invariant.start.p0(i64 552, ptr %40)
   %42 = extractvalue { ptr, ptr, ptr, i32 } %39, 3
   %43 = getelementptr ptr, ptr %40, i32 %42
   %44 = load ptr, ptr %43, align 8
@@ -4258,7 +4016,7 @@ define void @Array_grow_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, p
   %51 = call ptr @llvm.invariant.start.p0(i64 16, ptr %47)
   %52 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %53 = extractvalue { ptr, ptr, ptr, i32 } %52, 0
-  %54 = call ptr @llvm.invariant.start.p0(i64 920, ptr %53)
+  %54 = call ptr @llvm.invariant.start.p0(i64 552, ptr %53)
   %55 = extractvalue { ptr, ptr, ptr, i32 } %52, 3
   %56 = getelementptr ptr, ptr %53, i32 %55
   %57 = getelementptr ptr, ptr %56, i32 2
@@ -4273,7 +4031,7 @@ define void @Array_grow_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, p
   store ptr %64, ptr %65, align 8
   %66 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %67 = extractvalue { ptr, ptr, ptr, i32 } %66, 0
-  %68 = call ptr @llvm.invariant.start.p0(i64 920, ptr %67)
+  %68 = call ptr @llvm.invariant.start.p0(i64 552, ptr %67)
   %69 = extractvalue { ptr, ptr, ptr, i32 } %66, 3
   %70 = getelementptr ptr, ptr %67, i32 %69
   %71 = load ptr, ptr %70, align 8
@@ -4289,7 +4047,7 @@ define void @Array_grow_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, p
   %78 = phi i32 [ %129, %130 ], [ 0, %3 ]
   %79 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %80 = extractvalue { ptr, ptr, ptr, i32 } %79, 0
-  %81 = call ptr @llvm.invariant.start.p0(i64 920, ptr %80)
+  %81 = call ptr @llvm.invariant.start.p0(i64 552, ptr %80)
   %82 = extractvalue { ptr, ptr, ptr, i32 } %79, 3
   %83 = getelementptr ptr, ptr %80, i32 %82
   %84 = getelementptr ptr, ptr %83, i32 1
@@ -4310,7 +4068,7 @@ define void @Array_grow_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, p
   %96 = getelementptr i8, ptr %93, i64 %95
   %97 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %98 = extractvalue { ptr, ptr, ptr, i32 } %97, 0
-  %99 = call ptr @llvm.invariant.start.p0(i64 920, ptr %98)
+  %99 = call ptr @llvm.invariant.start.p0(i64 552, ptr %98)
   %100 = extractvalue { ptr, ptr, ptr, i32 } %97, 3
   %101 = getelementptr ptr, ptr %98, i32 %100
   %102 = load ptr, ptr %101, align 8
@@ -4364,7 +4122,7 @@ define void @Array_grow_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, p
 define ptr @Array_B_grow_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr [115 x ptr], ptr %4, i32 0, i32 31
+  %5 = getelementptr [69 x ptr], ptr %4, i32 0, i32 31
   %6 = getelementptr ptr, ptr %5, i32 7
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
@@ -4394,7 +4152,7 @@ define { ptr, i160 } @Array__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   call void @set_offset(ptr %7, ptr @Array)
   %20 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %21 = extractvalue { ptr, ptr, ptr, i32 } %20, 0
-  %22 = call ptr @llvm.invariant.start.p0(i64 920, ptr %21)
+  %22 = call ptr @llvm.invariant.start.p0(i64 552, ptr %21)
   %23 = extractvalue { ptr, ptr, ptr, i32 } %20, 3
   %24 = getelementptr ptr, ptr %21, i32 %23
   %25 = getelementptr ptr, ptr %24, i32 1
@@ -4406,7 +4164,7 @@ define { ptr, i160 } @Array__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %31 = icmp sgt i32 %3, %30
   %32 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %33 = extractvalue { ptr, ptr, ptr, i32 } %32, 0
-  %34 = call ptr @llvm.invariant.start.p0(i64 920, ptr %33)
+  %34 = call ptr @llvm.invariant.start.p0(i64 552, ptr %33)
   %35 = extractvalue { ptr, ptr, ptr, i32 } %32, 3
   %36 = getelementptr ptr, ptr %33, i32 %35
   %37 = getelementptr ptr, ptr %36, i32 1
@@ -4434,7 +4192,7 @@ define { ptr, i160 } @Array__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %57 = insertvalue { ptr, ptr, ptr, i32 } %54, i32 %56, 3
   %58 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %59 = extractvalue { ptr, ptr, ptr, i32 } %58, 0
-  %60 = call ptr @llvm.invariant.start.p0(i64 920, ptr %59)
+  %60 = call ptr @llvm.invariant.start.p0(i64 552, ptr %59)
   %61 = extractvalue { ptr, ptr, ptr, i32 } %58, 3
   %62 = getelementptr ptr, ptr %59, i32 %61
   %63 = getelementptr ptr, ptr %62, i32 3
@@ -4445,7 +4203,7 @@ define { ptr, i160 } @Array__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %68 = getelementptr [1 x ptr], ptr %67, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %68, align 8
   %69 = call ptr @llvm.invariant.start.p0(i64 1, ptr %67)
-  %70 = call ptr @llvm.invariant.start.p0(i64 920, ptr %47)
+  %70 = call ptr @llvm.invariant.start.p0(i64 552, ptr %47)
   %71 = getelementptr ptr, ptr %47, i32 %56
   %72 = getelementptr ptr, ptr %71, i32 12
   %73 = load ptr, ptr %72, align 8
@@ -4469,7 +4227,7 @@ define { ptr, i160 } @Array__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
 83:                                               ; preds = %77
   %84 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %85 = extractvalue { ptr, ptr, ptr, i32 } %84, 0
-  %86 = call ptr @llvm.invariant.start.p0(i64 920, ptr %85)
+  %86 = call ptr @llvm.invariant.start.p0(i64 552, ptr %85)
   %87 = extractvalue { ptr, ptr, ptr, i32 } %84, 3
   %88 = getelementptr ptr, ptr %85, i32 %87
   %89 = getelementptr ptr, ptr %88, i32 1
@@ -4505,7 +4263,7 @@ define { ptr, i160 } @Array__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %112 = insertvalue { ptr, ptr, ptr, i32 } %109, i32 %111, 3
   %113 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %114 = extractvalue { ptr, ptr, ptr, i32 } %113, 0
-  %115 = call ptr @llvm.invariant.start.p0(i64 920, ptr %114)
+  %115 = call ptr @llvm.invariant.start.p0(i64 552, ptr %114)
   %116 = extractvalue { ptr, ptr, ptr, i32 } %113, 3
   %117 = getelementptr ptr, ptr %114, i32 %116
   %118 = getelementptr ptr, ptr %117, i32 3
@@ -4516,7 +4274,7 @@ define { ptr, i160 } @Array__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %123 = getelementptr [1 x ptr], ptr %122, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %123, align 8
   %124 = call ptr @llvm.invariant.start.p0(i64 1, ptr %122)
-  %125 = call ptr @llvm.invariant.start.p0(i64 920, ptr %102)
+  %125 = call ptr @llvm.invariant.start.p0(i64 552, ptr %102)
   %126 = getelementptr ptr, ptr %102, i32 %111
   %127 = getelementptr ptr, ptr %126, i32 13
   %128 = load ptr, ptr %127, align 8
@@ -4570,7 +4328,7 @@ define ptr @Array_B__index_xPtri32({ ptr, ptr, ptr, i32 } %0, ptr %1, i32 %2) {
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 -2253724949814257982, i64 ptrtoint (ptr @i32_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [115 x ptr], ptr %16, i32 0, i32 32
+  %17 = getelementptr [69 x ptr], ptr %16, i32 0, i32 32
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -4620,7 +4378,7 @@ define void @Array_throw_oob_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr,
   %36 = insertvalue { ptr, ptr, ptr, i32 } %33, i32 %35, 3
   %37 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %38 = extractvalue { ptr, ptr, ptr, i32 } %37, 0
-  %39 = call ptr @llvm.invariant.start.p0(i64 920, ptr %38)
+  %39 = call ptr @llvm.invariant.start.p0(i64 552, ptr %38)
   %40 = extractvalue { ptr, ptr, ptr, i32 } %37, 3
   %41 = getelementptr ptr, ptr %38, i32 %40
   %42 = getelementptr ptr, ptr %41, i32 3
@@ -4647,7 +4405,7 @@ define void @Array_throw_oob_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr,
   %60 = call ptr @llvm.invariant.start.p0(i64 16, ptr %56)
   %61 = load ptr, ptr %56, align 8
   %62 = getelementptr i8, ptr %61, i64 0
-  %63 = load i96, ptr @mbzjr_genericmini, align 4
+  %63 = load i96, ptr @dlmzc_genericmini, align 4
   store i96 %63, ptr %62, align 4
   %64 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %65 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4674,7 +4432,7 @@ define void @Array_throw_oob_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr,
   %83 = insertvalue { ptr, ptr, ptr, i32 } %80, i32 %82, 3
   %84 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %85 = extractvalue { ptr, ptr, ptr, i32 } %84, 0
-  %86 = call ptr @llvm.invariant.start.p0(i64 920, ptr %85)
+  %86 = call ptr @llvm.invariant.start.p0(i64 552, ptr %85)
   %87 = extractvalue { ptr, ptr, ptr, i32 } %84, 3
   %88 = getelementptr ptr, ptr %85, i32 %87
   %89 = getelementptr ptr, ptr %88, i32 3
@@ -4746,7 +4504,7 @@ define void @Array_throw_oob_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr,
   %143 = insertvalue { ptr, ptr, ptr, i32 } %140, i32 %142, 3
   %144 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %145 = extractvalue { ptr, ptr, ptr, i32 } %144, 0
-  %146 = call ptr @llvm.invariant.start.p0(i64 920, ptr %145)
+  %146 = call ptr @llvm.invariant.start.p0(i64 552, ptr %145)
   %147 = extractvalue { ptr, ptr, ptr, i32 } %144, 3
   %148 = getelementptr ptr, ptr %145, i32 %147
   %149 = getelementptr ptr, ptr %148, i32 3
@@ -4768,8 +4526,8 @@ define void @Array_throw_oob_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr,
   store ptr @i32_typ, ptr %162, align 8
   %163 = getelementptr [2 x ptr], ptr %161, i32 0, i32 1
   store ptr %121, ptr %163, align 8
-  %164 = call ptr %160({ ptr, ptr, ptr, i32 } %143, ptr %161, i32 166, { ptr, ptr, ptr, i32 } %131)
-  call void %164({ ptr, ptr, ptr, i32 } %143, { ptr, ptr, ptr, i32 } %143, ptr %153, i32 166, { ptr, ptr, ptr, i32 } %131)
+  %164 = call ptr %160({ ptr, ptr, ptr, i32 } %143, ptr %161, i32 162, { ptr, ptr, ptr, i32 } %131)
+  call void %164({ ptr, ptr, ptr, i32 } %143, { ptr, ptr, ptr, i32 } %143, ptr %153, i32 162, { ptr, ptr, ptr, i32 } %131)
   %165 = getelementptr { ptr, i160 }, ptr %21, i32 0, i32 0
   %166 = load ptr, ptr %165, align 8
   %167 = insertvalue { ptr, i160 } undef, ptr %166, 0
@@ -4797,7 +4555,7 @@ define ptr @Array_B_throw_oob_xPtri32({ ptr, ptr, ptr, i32 } %0, ptr %1, i32 %2)
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 -2253724949814257982, i64 ptrtoint (ptr @i32_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [115 x ptr], ptr %16, i32 0, i32 33
+  %17 = getelementptr [69 x ptr], ptr %16, i32 0, i32 33
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -4827,7 +4585,7 @@ define { ptr, i160 } @Array_unsafe_index_xPtri32({ ptr, ptr, ptr, i32 } %0, { pt
   call void @set_offset(ptr %7, ptr @Array)
   %20 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %21 = extractvalue { ptr, ptr, ptr, i32 } %20, 0
-  %22 = call ptr @llvm.invariant.start.p0(i64 920, ptr %21)
+  %22 = call ptr @llvm.invariant.start.p0(i64 552, ptr %21)
   %23 = extractvalue { ptr, ptr, ptr, i32 } %20, 3
   %24 = getelementptr ptr, ptr %21, i32 %23
   %25 = load ptr, ptr %24, align 8
@@ -4870,7 +4628,7 @@ define ptr @Array_B_unsafe_index_xPtri32({ ptr, ptr, ptr, i32 } %0, ptr %1, i32 
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 -2253724949814257982, i64 ptrtoint (ptr @i32_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [115 x ptr], ptr %16, i32 0, i32 34
+  %17 = getelementptr [69 x ptr], ptr %16, i32 0, i32 34
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -4900,7 +4658,7 @@ define { ptr, ptr, ptr, i32 } @Array_iterator_({ ptr, ptr, ptr, i32 } %0, { ptr,
   call void @set_offset(ptr %6, ptr @Array)
   %19 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %20 = extractvalue { ptr, ptr, ptr, i32 } %19, 0
-  %21 = call ptr @llvm.invariant.start.p0(i64 920, ptr %20)
+  %21 = call ptr @llvm.invariant.start.p0(i64 552, ptr %20)
   %22 = extractvalue { ptr, ptr, ptr, i32 } %19, 3
   %23 = getelementptr ptr, ptr %20, i32 %22
   %24 = getelementptr ptr, ptr %23, i32 3
@@ -4964,7 +4722,7 @@ define { ptr, ptr, ptr, i32 } @Array_iterator_({ ptr, ptr, ptr, i32 } %0, { ptr,
   %73 = insertvalue { ptr, ptr, ptr, i32 } %70, i32 %72, 3
   %74 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %75 = extractvalue { ptr, ptr, ptr, i32 } %74, 0
-  %76 = call ptr @llvm.invariant.start.p0(i64 920, ptr %75)
+  %76 = call ptr @llvm.invariant.start.p0(i64 552, ptr %75)
   %77 = extractvalue { ptr, ptr, ptr, i32 } %74, 3
   %78 = getelementptr ptr, ptr %75, i32 %77
   %79 = getelementptr ptr, ptr %78, i32 3
@@ -4981,7 +4739,7 @@ define { ptr, ptr, ptr, i32 } @Array_iterator_({ ptr, ptr, ptr, i32 } %0, { ptr,
   %88 = getelementptr [1 x ptr], ptr %87, i32 0, i32 0
   store ptr %84, ptr %88, align 8
   %89 = call ptr @llvm.invariant.start.p0(i64 1, ptr %87)
-  %90 = call ptr @llvm.invariant.start.p0(i64 128, ptr %63)
+  %90 = call ptr @llvm.invariant.start.p0(i64 80, ptr %63)
   %91 = getelementptr ptr, ptr %63, i32 %72
   %92 = getelementptr ptr, ptr %91, i32 3
   %93 = load ptr, ptr %92, align 8
@@ -5026,7 +4784,7 @@ define { ptr, ptr, ptr, i32 } @Array_iterator_({ ptr, ptr, ptr, i32 } %0, { ptr,
 define ptr @Array_B_iterator_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr [115 x ptr], ptr %4, i32 0, i32 35
+  %5 = getelementptr [69 x ptr], ptr %4, i32 0, i32 35
   %6 = getelementptr ptr, ptr %5, i32 7
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
@@ -5046,7 +4804,7 @@ define ptr @Array_B_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 } %0, ptr %1
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [115 x ptr], ptr %16, i32 0, i32 36
+  %17 = getelementptr [69 x ptr], ptr %16, i32 0, i32 36
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -5077,7 +4835,7 @@ define ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, ptr, ptr, i32 
   %26 = load ptr, ptr %22, align 8
   %27 = call i1 @subtype_test_wrapper(ptr %25, i64 %24, i64 %23, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %26)
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = getelementptr [115 x ptr], ptr %28, i32 0, i32 37
+  %29 = getelementptr [69 x ptr], ptr %28, i32 0, i32 37
   %30 = getelementptr ptr, ptr %29, i32 7
   %31 = load ptr, ptr %30, align 8
   ret ptr %31
@@ -5097,7 +4855,7 @@ define ptr @Array_B_all_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, ptr %1, {
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [115 x ptr], ptr %16, i32 0, i32 38
+  %17 = getelementptr [69 x ptr], ptr %16, i32 0, i32 38
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -5117,7 +4875,7 @@ define ptr @Array_B_any_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, ptr %1, {
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [115 x ptr], ptr %16, i32 0, i32 39
+  %17 = getelementptr [69 x ptr], ptr %16, i32 0, i32 39
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -5137,7 +4895,7 @@ define ptr @Array_B_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr %1, { ptr
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [115 x ptr], ptr %16, i32 0, i32 40
+  %17 = getelementptr [69 x ptr], ptr %16, i32 0, i32 40
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -5157,7 +4915,7 @@ define ptr @Array_B_filter_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, ptr %1
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [115 x ptr], ptr %16, i32 0, i32 41
+  %17 = getelementptr [69 x ptr], ptr %16, i32 0, i32 41
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -5177,7 +4935,7 @@ define ptr @Array_B_chain_otherIterable2T({ ptr, ptr, ptr, i32 } %0, ptr %1, { p
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [115 x ptr], ptr %16, i32 0, i32 42
+  %17 = getelementptr [69 x ptr], ptr %16, i32 0, i32 42
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -5197,7 +4955,7 @@ define ptr @Array_B_interleave_otherIterable2T({ ptr, ptr, ptr, i32 } %0, ptr %1
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [115 x ptr], ptr %16, i32 0, i32 43
+  %17 = getelementptr [69 x ptr], ptr %16, i32 0, i32 43
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -5217,7 +4975,7 @@ define ptr @Array_B_zip_otherIterable2U({ ptr, ptr, ptr, i32 } %0, ptr %1, { ptr
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [115 x ptr], ptr %16, i32 0, i32 44
+  %17 = getelementptr [69 x ptr], ptr %16, i32 0, i32 44
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -5237,7 +4995,7 @@ define ptr @Array_B_product_otherIterable2U({ ptr, ptr, ptr, i32 } %0, ptr %1, {
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [115 x ptr], ptr %16, i32 0, i32 45
+  %17 = getelementptr [69 x ptr], ptr %16, i32 0, i32 45
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -5303,7 +5061,7 @@ define void @ArrayIterator_init_arrayArrayT({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   call void @set_offset(ptr %22, ptr @Array)
   %35 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %36 = extractvalue { ptr, ptr, ptr, i32 } %35, 0
-  %37 = call ptr @llvm.invariant.start.p0(i64 128, ptr %36)
+  %37 = call ptr @llvm.invariant.start.p0(i64 80, ptr %36)
   %38 = extractvalue { ptr, ptr, ptr, i32 } %35, 3
   %39 = getelementptr ptr, ptr %36, i32 %38
   %40 = load ptr, ptr %39, align 8
@@ -5345,7 +5103,7 @@ define void @ArrayIterator_init_arrayArrayT({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   store i32 %67, ptr %66, align 4
   %68 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
   %69 = extractvalue { ptr, ptr, ptr, i32 } %68, 0
-  %70 = call ptr @llvm.invariant.start.p0(i64 128, ptr %69)
+  %70 = call ptr @llvm.invariant.start.p0(i64 80, ptr %69)
   %71 = extractvalue { ptr, ptr, ptr, i32 } %68, 3
   %72 = getelementptr ptr, ptr %69, i32 %71
   %73 = getelementptr ptr, ptr %72, i32 1
@@ -5370,7 +5128,7 @@ define ptr @ArrayIterator_B_init_arrayArrayT({ ptr, ptr, ptr, i32 } %0, ptr %1, 
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 -5261542750394134544, i64 ptrtoint (ptr @Array to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [16 x ptr], ptr %16, i32 0, i32 5
+  %17 = getelementptr [10 x ptr], ptr %16, i32 0, i32 5
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -5400,7 +5158,7 @@ define { ptr, i160 } @ArrayIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   call void @set_offset(ptr %6, ptr @ArrayIterator)
   %19 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %20 = extractvalue { ptr, ptr, ptr, i32 } %19, 0
-  %21 = call ptr @llvm.invariant.start.p0(i64 128, ptr %20)
+  %21 = call ptr @llvm.invariant.start.p0(i64 80, ptr %20)
   %22 = extractvalue { ptr, ptr, ptr, i32 } %19, 3
   %23 = getelementptr ptr, ptr %20, i32 %22
   %24 = getelementptr ptr, ptr %23, i32 1
@@ -5409,7 +5167,7 @@ define { ptr, i160 } @ArrayIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %27 = call ptr %25(ptr %26)
   %28 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %29 = extractvalue { ptr, ptr, ptr, i32 } %28, 0
-  %30 = call ptr @llvm.invariant.start.p0(i64 128, ptr %29)
+  %30 = call ptr @llvm.invariant.start.p0(i64 80, ptr %29)
   %31 = extractvalue { ptr, ptr, ptr, i32 } %28, 3
   %32 = getelementptr ptr, ptr %29, i32 %31
   %33 = load ptr, ptr %32, align 8
@@ -5429,7 +5187,7 @@ define { ptr, i160 } @ArrayIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %47 = insertvalue { ptr, ptr, ptr, i32 } %44, i32 %46, 3
   %48 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %49 = extractvalue { ptr, ptr, ptr, i32 } %48, 0
-  %50 = call ptr @llvm.invariant.start.p0(i64 128, ptr %49)
+  %50 = call ptr @llvm.invariant.start.p0(i64 80, ptr %49)
   %51 = extractvalue { ptr, ptr, ptr, i32 } %48, 3
   %52 = getelementptr ptr, ptr %49, i32 %51
   %53 = getelementptr ptr, ptr %52, i32 2
@@ -5438,7 +5196,7 @@ define { ptr, i160 } @ArrayIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %56 = call ptr %54(ptr %55)
   %57 = alloca [0 x ptr], align 8
   %58 = call ptr @llvm.invariant.start.p0(i64 0, ptr %57)
-  %59 = call ptr @llvm.invariant.start.p0(i64 920, ptr %37)
+  %59 = call ptr @llvm.invariant.start.p0(i64 552, ptr %37)
   %60 = getelementptr ptr, ptr %37, i32 %46
   %61 = getelementptr ptr, ptr %60, i32 7
   %62 = load ptr, ptr %61, align 8
@@ -5468,7 +5226,7 @@ define { ptr, i160 } @ArrayIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
 79:                                               ; preds = %3
   %80 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %81 = extractvalue { ptr, ptr, ptr, i32 } %80, 0
-  %82 = call ptr @llvm.invariant.start.p0(i64 128, ptr %81)
+  %82 = call ptr @llvm.invariant.start.p0(i64 80, ptr %81)
   %83 = extractvalue { ptr, ptr, ptr, i32 } %80, 3
   %84 = getelementptr ptr, ptr %81, i32 %83
   %85 = getelementptr ptr, ptr %84, i32 1
@@ -5484,7 +5242,7 @@ define { ptr, i160 } @ArrayIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   store i32 %92, ptr %93, align 4
   %94 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %95 = extractvalue { ptr, ptr, ptr, i32 } %94, 0
-  %96 = call ptr @llvm.invariant.start.p0(i64 128, ptr %95)
+  %96 = call ptr @llvm.invariant.start.p0(i64 80, ptr %95)
   %97 = extractvalue { ptr, ptr, ptr, i32 } %94, 3
   %98 = getelementptr ptr, ptr %95, i32 %97
   %99 = getelementptr ptr, ptr %98, i32 1
@@ -5495,7 +5253,7 @@ define { ptr, i160 } @ArrayIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   store i32 %103, ptr %102, align 4
   %104 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %105 = extractvalue { ptr, ptr, ptr, i32 } %104, 0
-  %106 = call ptr @llvm.invariant.start.p0(i64 128, ptr %105)
+  %106 = call ptr @llvm.invariant.start.p0(i64 80, ptr %105)
   %107 = extractvalue { ptr, ptr, ptr, i32 } %104, 3
   %108 = getelementptr ptr, ptr %105, i32 %107
   %109 = getelementptr ptr, ptr %108, i32 1
@@ -5512,7 +5270,7 @@ define { ptr, i160 } @ArrayIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %118 = load i32, ptr %117, align 4
   %119 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %120 = extractvalue { ptr, ptr, ptr, i32 } %119, 0
-  %121 = call ptr @llvm.invariant.start.p0(i64 128, ptr %120)
+  %121 = call ptr @llvm.invariant.start.p0(i64 80, ptr %120)
   %122 = extractvalue { ptr, ptr, ptr, i32 } %119, 3
   %123 = getelementptr ptr, ptr %120, i32 %122
   %124 = load ptr, ptr %123, align 8
@@ -5532,7 +5290,7 @@ define { ptr, i160 } @ArrayIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %138 = insertvalue { ptr, ptr, ptr, i32 } %135, i32 %137, 3
   %139 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %140 = extractvalue { ptr, ptr, ptr, i32 } %139, 0
-  %141 = call ptr @llvm.invariant.start.p0(i64 128, ptr %140)
+  %141 = call ptr @llvm.invariant.start.p0(i64 80, ptr %140)
   %142 = extractvalue { ptr, ptr, ptr, i32 } %139, 3
   %143 = getelementptr ptr, ptr %140, i32 %142
   %144 = getelementptr ptr, ptr %143, i32 2
@@ -5543,7 +5301,7 @@ define { ptr, i160 } @ArrayIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %149 = getelementptr [1 x ptr], ptr %148, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %149, align 8
   %150 = call ptr @llvm.invariant.start.p0(i64 1, ptr %148)
-  %151 = call ptr @llvm.invariant.start.p0(i64 920, ptr %128)
+  %151 = call ptr @llvm.invariant.start.p0(i64 552, ptr %128)
   %152 = getelementptr ptr, ptr %128, i32 %137
   %153 = getelementptr ptr, ptr %152, i32 13
   %154 = load ptr, ptr %153, align 8
@@ -5583,7 +5341,7 @@ define { ptr, i160 } @ArrayIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
 define ptr @ArrayIterator_B_next_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr [16 x ptr], ptr %4, i32 0, i32 6
+  %5 = getelementptr [10 x ptr], ptr %4, i32 0, i32 6
   %6 = getelementptr ptr, ptr %5, i32 7
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
@@ -5654,7 +5412,7 @@ define void @MapIterable2_init_iterableIterable2T_fFunctionT_to_U({ ptr, ptr, pt
   call void @set_offset(ptr %23, ptr @Iterable2)
   %36 = load { ptr, ptr, ptr, i32 }, ptr %8, align 8
   %37 = extractvalue { ptr, ptr, ptr, i32 } %36, 0
-  %38 = call ptr @llvm.invariant.start.p0(i64 776, ptr %37)
+  %38 = call ptr @llvm.invariant.start.p0(i64 408, ptr %37)
   %39 = extractvalue { ptr, ptr, ptr, i32 } %36, 3
   %40 = getelementptr ptr, ptr %37, i32 %39
   %41 = load ptr, ptr %40, align 8
@@ -5698,7 +5456,7 @@ define void @MapIterable2_init_iterableIterable2T_fFunctionT_to_U({ ptr, ptr, pt
   store { ptr } %4, ptr %69, align 8
   %70 = load { ptr, ptr, ptr, i32 }, ptr %8, align 8
   %71 = extractvalue { ptr, ptr, ptr, i32 } %70, 0
-  %72 = call ptr @llvm.invariant.start.p0(i64 776, ptr %71)
+  %72 = call ptr @llvm.invariant.start.p0(i64 408, ptr %71)
   %73 = extractvalue { ptr, ptr, ptr, i32 } %70, 3
   %74 = getelementptr ptr, ptr %71, i32 %73
   %75 = getelementptr ptr, ptr %74, i32 1
@@ -5736,7 +5494,7 @@ define ptr @MapIterable2_B_init_iterableIterable2T_fFunctionT_to_U({ ptr, ptr, p
   %26 = load ptr, ptr %22, align 8
   %27 = call i1 @subtype_test_wrapper(ptr %25, i64 %24, i64 %23, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %26)
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = getelementptr [97 x ptr], ptr %28, i32 0, i32 16
+  %29 = getelementptr [51 x ptr], ptr %28, i32 0, i32 16
   %30 = getelementptr ptr, ptr %29, i32 7
   %31 = load ptr, ptr %30, align 8
   ret ptr %31
@@ -5766,7 +5524,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   call void @set_offset(ptr %6, ptr @MapIterable2)
   %19 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %20 = extractvalue { ptr, ptr, ptr, i32 } %19, 0
-  %21 = call ptr @llvm.invariant.start.p0(i64 776, ptr %20)
+  %21 = call ptr @llvm.invariant.start.p0(i64 408, ptr %20)
   %22 = extractvalue { ptr, ptr, ptr, i32 } %19, 3
   %23 = getelementptr ptr, ptr %20, i32 %22
   %24 = load ptr, ptr %23, align 8
@@ -5786,7 +5544,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   %38 = insertvalue { ptr, ptr, ptr, i32 } %35, i32 %37, 3
   %39 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %40 = extractvalue { ptr, ptr, ptr, i32 } %39, 0
-  %41 = call ptr @llvm.invariant.start.p0(i64 776, ptr %40)
+  %41 = call ptr @llvm.invariant.start.p0(i64 408, ptr %40)
   %42 = extractvalue { ptr, ptr, ptr, i32 } %39, 3
   %43 = getelementptr ptr, ptr %40, i32 %42
   %44 = getelementptr ptr, ptr %43, i32 2
@@ -5795,7 +5553,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   %47 = call ptr %45(ptr %46)
   %48 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %49 = extractvalue { ptr, ptr, ptr, i32 } %48, 0
-  %50 = call ptr @llvm.invariant.start.p0(i64 776, ptr %49)
+  %50 = call ptr @llvm.invariant.start.p0(i64 408, ptr %49)
   %51 = extractvalue { ptr, ptr, ptr, i32 } %48, 3
   %52 = getelementptr ptr, ptr %49, i32 %51
   %53 = getelementptr ptr, ptr %52, i32 3
@@ -5834,7 +5592,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   call void @set_offset(ptr %68, ptr @Iterator2)
   %81 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %82 = extractvalue { ptr, ptr, ptr, i32 } %81, 0
-  %83 = call ptr @llvm.invariant.start.p0(i64 776, ptr %82)
+  %83 = call ptr @llvm.invariant.start.p0(i64 408, ptr %82)
   %84 = extractvalue { ptr, ptr, ptr, i32 } %81, 3
   %85 = getelementptr ptr, ptr %82, i32 %84
   %86 = getelementptr ptr, ptr %85, i32 1
@@ -5843,7 +5601,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   %89 = call ptr %87(ptr %88)
   %90 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %91 = extractvalue { ptr, ptr, ptr, i32 } %90, 0
-  %92 = call ptr @llvm.invariant.start.p0(i64 776, ptr %91)
+  %92 = call ptr @llvm.invariant.start.p0(i64 408, ptr %91)
   %93 = extractvalue { ptr, ptr, ptr, i32 } %90, 3
   %94 = getelementptr ptr, ptr %91, i32 %93
   %95 = getelementptr ptr, ptr %94, i32 2
@@ -5853,7 +5611,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   %99 = load ptr, ptr %98, align 8
   %100 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %101 = extractvalue { ptr, ptr, ptr, i32 } %100, 0
-  %102 = call ptr @llvm.invariant.start.p0(i64 776, ptr %101)
+  %102 = call ptr @llvm.invariant.start.p0(i64 408, ptr %101)
   %103 = extractvalue { ptr, ptr, ptr, i32 } %100, 3
   %104 = getelementptr ptr, ptr %101, i32 %103
   %105 = getelementptr ptr, ptr %104, i32 3
@@ -5877,7 +5635,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   %118 = call ptr @llvm.invariant.start.p0(i64 4, ptr %115)
   %119 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %120 = extractvalue { ptr, ptr, ptr, i32 } %119, 0
-  %121 = call ptr @llvm.invariant.start.p0(i64 776, ptr %120)
+  %121 = call ptr @llvm.invariant.start.p0(i64 408, ptr %120)
   %122 = extractvalue { ptr, ptr, ptr, i32 } %119, 3
   %123 = getelementptr ptr, ptr %120, i32 %122
   %124 = load ptr, ptr %123, align 8
@@ -5897,7 +5655,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   %138 = insertvalue { ptr, ptr, ptr, i32 } %135, i32 %137, 3
   %139 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %140 = extractvalue { ptr, ptr, ptr, i32 } %139, 0
-  %141 = call ptr @llvm.invariant.start.p0(i64 776, ptr %140)
+  %141 = call ptr @llvm.invariant.start.p0(i64 408, ptr %140)
   %142 = extractvalue { ptr, ptr, ptr, i32 } %139, 3
   %143 = getelementptr ptr, ptr %140, i32 %142
   %144 = getelementptr ptr, ptr %143, i32 2
@@ -5906,7 +5664,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   %147 = call ptr %145(ptr %146)
   %148 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %149 = extractvalue { ptr, ptr, ptr, i32 } %148, 0
-  %150 = call ptr @llvm.invariant.start.p0(i64 776, ptr %149)
+  %150 = call ptr @llvm.invariant.start.p0(i64 408, ptr %149)
   %151 = extractvalue { ptr, ptr, ptr, i32 } %148, 3
   %152 = getelementptr ptr, ptr %149, i32 %151
   %153 = getelementptr ptr, ptr %152, i32 3
@@ -5945,7 +5703,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   call void @set_offset(ptr %168, ptr @Iterator2)
   %181 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %182 = extractvalue { ptr, ptr, ptr, i32 } %181, 0
-  %183 = call ptr @llvm.invariant.start.p0(i64 776, ptr %182)
+  %183 = call ptr @llvm.invariant.start.p0(i64 408, ptr %182)
   %184 = extractvalue { ptr, ptr, ptr, i32 } %181, 3
   %185 = getelementptr ptr, ptr %182, i32 %184
   %186 = getelementptr ptr, ptr %185, i32 1
@@ -5999,7 +5757,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   %229 = insertvalue { ptr, ptr, ptr, i32 } %226, i32 %228, 3
   %230 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %231 = extractvalue { ptr, ptr, ptr, i32 } %230, 0
-  %232 = call ptr @llvm.invariant.start.p0(i64 776, ptr %231)
+  %232 = call ptr @llvm.invariant.start.p0(i64 408, ptr %231)
   %233 = extractvalue { ptr, ptr, ptr, i32 } %230, 3
   %234 = getelementptr ptr, ptr %231, i32 %233
   %235 = getelementptr ptr, ptr %234, i32 2
@@ -6009,7 +5767,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   %239 = load ptr, ptr %238, align 8
   %240 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %241 = extractvalue { ptr, ptr, ptr, i32 } %240, 0
-  %242 = call ptr @llvm.invariant.start.p0(i64 776, ptr %241)
+  %242 = call ptr @llvm.invariant.start.p0(i64 408, ptr %241)
   %243 = extractvalue { ptr, ptr, ptr, i32 } %240, 3
   %244 = getelementptr ptr, ptr %241, i32 %243
   %245 = getelementptr ptr, ptr %244, i32 3
@@ -6035,7 +5793,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   %259 = getelementptr [2 x ptr], ptr %257, i32 0, i32 1
   store ptr %253, ptr %259, align 8
   %260 = call ptr @llvm.invariant.start.p0(i64 4, ptr %257)
-  %261 = call ptr @llvm.invariant.start.p0(i64 136, ptr %219)
+  %261 = call ptr @llvm.invariant.start.p0(i64 88, ptr %219)
   %262 = getelementptr ptr, ptr %219, i32 %228
   %263 = getelementptr ptr, ptr %262, i32 4
   %264 = load ptr, ptr %263, align 8
@@ -6082,7 +5840,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
 define ptr @MapIterable2_B_iterator_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr [97 x ptr], ptr %4, i32 0, i32 17
+  %5 = getelementptr [51 x ptr], ptr %4, i32 0, i32 17
   %6 = getelementptr ptr, ptr %5, i32 7
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
@@ -6102,7 +5860,7 @@ define ptr @MapIterable2_B_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 } %0,
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [97 x ptr], ptr %16, i32 0, i32 18
+  %17 = getelementptr [51 x ptr], ptr %16, i32 0, i32 18
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -6133,7 +5891,7 @@ define ptr @MapIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, ptr, pt
   %26 = load ptr, ptr %22, align 8
   %27 = call i1 @subtype_test_wrapper(ptr %25, i64 %24, i64 %23, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %26)
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = getelementptr [97 x ptr], ptr %28, i32 0, i32 19
+  %29 = getelementptr [51 x ptr], ptr %28, i32 0, i32 19
   %30 = getelementptr ptr, ptr %29, i32 7
   %31 = load ptr, ptr %30, align 8
   ret ptr %31
@@ -6153,7 +5911,7 @@ define ptr @MapIterable2_B_all_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, pt
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [97 x ptr], ptr %16, i32 0, i32 20
+  %17 = getelementptr [51 x ptr], ptr %16, i32 0, i32 20
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -6173,7 +5931,7 @@ define ptr @MapIterable2_B_any_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, pt
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [97 x ptr], ptr %16, i32 0, i32 21
+  %17 = getelementptr [51 x ptr], ptr %16, i32 0, i32 21
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -6193,7 +5951,7 @@ define ptr @MapIterable2_B_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr %1
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [97 x ptr], ptr %16, i32 0, i32 22
+  %17 = getelementptr [51 x ptr], ptr %16, i32 0, i32 22
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -6213,7 +5971,7 @@ define ptr @MapIterable2_B_filter_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0,
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [97 x ptr], ptr %16, i32 0, i32 23
+  %17 = getelementptr [51 x ptr], ptr %16, i32 0, i32 23
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -6233,7 +5991,7 @@ define ptr @MapIterable2_B_chain_otherIterable2T({ ptr, ptr, ptr, i32 } %0, ptr 
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [97 x ptr], ptr %16, i32 0, i32 24
+  %17 = getelementptr [51 x ptr], ptr %16, i32 0, i32 24
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -6253,7 +6011,7 @@ define ptr @MapIterable2_B_interleave_otherIterable2T({ ptr, ptr, ptr, i32 } %0,
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [97 x ptr], ptr %16, i32 0, i32 25
+  %17 = getelementptr [51 x ptr], ptr %16, i32 0, i32 25
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -6273,7 +6031,7 @@ define ptr @MapIterable2_B_zip_otherIterable2U({ ptr, ptr, ptr, i32 } %0, ptr %1
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [97 x ptr], ptr %16, i32 0, i32 26
+  %17 = getelementptr [51 x ptr], ptr %16, i32 0, i32 26
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -6293,7 +6051,7 @@ define ptr @MapIterable2_B_product_otherIterable2U({ ptr, ptr, ptr, i32 } %0, pt
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [97 x ptr], ptr %16, i32 0, i32 27
+  %17 = getelementptr [51 x ptr], ptr %16, i32 0, i32 27
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -6364,7 +6122,7 @@ define void @MapIterator2_init_iteratorIterator2T_fFunctionT_to_U({ ptr, ptr, pt
   call void @set_offset(ptr %23, ptr @Iterator2)
   %36 = load { ptr, ptr, ptr, i32 }, ptr %8, align 8
   %37 = extractvalue { ptr, ptr, ptr, i32 } %36, 0
-  %38 = call ptr @llvm.invariant.start.p0(i64 136, ptr %37)
+  %38 = call ptr @llvm.invariant.start.p0(i64 88, ptr %37)
   %39 = extractvalue { ptr, ptr, ptr, i32 } %36, 3
   %40 = getelementptr ptr, ptr %37, i32 %39
   %41 = load ptr, ptr %40, align 8
@@ -6408,7 +6166,7 @@ define void @MapIterator2_init_iteratorIterator2T_fFunctionT_to_U({ ptr, ptr, pt
   store { ptr } %4, ptr %69, align 8
   %70 = load { ptr, ptr, ptr, i32 }, ptr %8, align 8
   %71 = extractvalue { ptr, ptr, ptr, i32 } %70, 0
-  %72 = call ptr @llvm.invariant.start.p0(i64 136, ptr %71)
+  %72 = call ptr @llvm.invariant.start.p0(i64 88, ptr %71)
   %73 = extractvalue { ptr, ptr, ptr, i32 } %70, 3
   %74 = getelementptr ptr, ptr %71, i32 %73
   %75 = getelementptr ptr, ptr %74, i32 1
@@ -6446,7 +6204,7 @@ define ptr @MapIterator2_B_init_iteratorIterator2T_fFunctionT_to_U({ ptr, ptr, p
   %26 = load ptr, ptr %22, align 8
   %27 = call i1 @subtype_test_wrapper(ptr %25, i64 %24, i64 %23, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %26)
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = getelementptr [17 x ptr], ptr %28, i32 0, i32 6
+  %29 = getelementptr [11 x ptr], ptr %28, i32 0, i32 6
   %30 = getelementptr ptr, ptr %29, i32 7
   %31 = load ptr, ptr %30, align 8
   ret ptr %31
@@ -6476,7 +6234,7 @@ define { ptr, i160 } @MapIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
   call void @set_offset(ptr %6, ptr @MapIterator2)
   %19 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %20 = extractvalue { ptr, ptr, ptr, i32 } %19, 0
-  %21 = call ptr @llvm.invariant.start.p0(i64 136, ptr %20)
+  %21 = call ptr @llvm.invariant.start.p0(i64 88, ptr %20)
   %22 = extractvalue { ptr, ptr, ptr, i32 } %19, 3
   %23 = getelementptr ptr, ptr %20, i32 %22
   %24 = load ptr, ptr %23, align 8
@@ -6496,7 +6254,7 @@ define { ptr, i160 } @MapIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
   %38 = insertvalue { ptr, ptr, ptr, i32 } %35, i32 %37, 3
   %39 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %40 = extractvalue { ptr, ptr, ptr, i32 } %39, 0
-  %41 = call ptr @llvm.invariant.start.p0(i64 136, ptr %40)
+  %41 = call ptr @llvm.invariant.start.p0(i64 88, ptr %40)
   %42 = extractvalue { ptr, ptr, ptr, i32 } %39, 3
   %43 = getelementptr ptr, ptr %40, i32 %42
   %44 = getelementptr ptr, ptr %43, i32 2
@@ -6505,7 +6263,7 @@ define { ptr, i160 } @MapIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
   %47 = call ptr %45(ptr %46)
   %48 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %49 = extractvalue { ptr, ptr, ptr, i32 } %48, 0
-  %50 = call ptr @llvm.invariant.start.p0(i64 136, ptr %49)
+  %50 = call ptr @llvm.invariant.start.p0(i64 88, ptr %49)
   %51 = extractvalue { ptr, ptr, ptr, i32 } %48, 3
   %52 = getelementptr ptr, ptr %49, i32 %51
   %53 = getelementptr ptr, ptr %52, i32 3
@@ -6558,7 +6316,7 @@ define { ptr, i160 } @MapIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
   %91 = insertvalue { ptr, i160 } %88, i160 %90, 1
   %92 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %93 = extractvalue { ptr, ptr, ptr, i32 } %92, 0
-  %94 = call ptr @llvm.invariant.start.p0(i64 136, ptr %93)
+  %94 = call ptr @llvm.invariant.start.p0(i64 88, ptr %93)
   %95 = extractvalue { ptr, ptr, ptr, i32 } %92, 3
   %96 = getelementptr ptr, ptr %93, i32 %95
   %97 = getelementptr ptr, ptr %96, i32 1
@@ -6604,7 +6362,7 @@ define { ptr, i160 } @MapIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
 define ptr @MapIterator2_B_next_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr [17 x ptr], ptr %4, i32 0, i32 7
+  %5 = getelementptr [11 x ptr], ptr %4, i32 0, i32 7
   %6 = getelementptr ptr, ptr %5, i32 7
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
@@ -6670,7 +6428,7 @@ define void @FilterIterable2_init_iterableIterable2T_fFunctionT_to_Ptri1({ ptr, 
   call void @set_offset(ptr %23, ptr @Iterable2)
   %36 = load { ptr, ptr, ptr, i32 }, ptr %8, align 8
   %37 = extractvalue { ptr, ptr, ptr, i32 } %36, 0
-  %38 = call ptr @llvm.invariant.start.p0(i64 768, ptr %37)
+  %38 = call ptr @llvm.invariant.start.p0(i64 400, ptr %37)
   %39 = extractvalue { ptr, ptr, ptr, i32 } %36, 3
   %40 = getelementptr ptr, ptr %37, i32 %39
   %41 = load ptr, ptr %40, align 8
@@ -6714,7 +6472,7 @@ define void @FilterIterable2_init_iterableIterable2T_fFunctionT_to_Ptri1({ ptr, 
   store { ptr } %4, ptr %69, align 8
   %70 = load { ptr, ptr, ptr, i32 }, ptr %8, align 8
   %71 = extractvalue { ptr, ptr, ptr, i32 } %70, 0
-  %72 = call ptr @llvm.invariant.start.p0(i64 768, ptr %71)
+  %72 = call ptr @llvm.invariant.start.p0(i64 400, ptr %71)
   %73 = extractvalue { ptr, ptr, ptr, i32 } %70, 3
   %74 = getelementptr ptr, ptr %71, i32 %73
   %75 = getelementptr ptr, ptr %74, i32 1
@@ -6752,7 +6510,7 @@ define ptr @FilterIterable2_B_init_iterableIterable2T_fFunctionT_to_Ptri1({ ptr,
   %26 = load ptr, ptr %22, align 8
   %27 = call i1 @subtype_test_wrapper(ptr %25, i64 %24, i64 %23, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %26)
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = getelementptr [96 x ptr], ptr %28, i32 0, i32 15
+  %29 = getelementptr [50 x ptr], ptr %28, i32 0, i32 15
   %30 = getelementptr ptr, ptr %29, i32 7
   %31 = load ptr, ptr %30, align 8
   ret ptr %31
@@ -6782,7 +6540,7 @@ define { ptr, ptr, ptr, i32 } @FilterIterable2_iterator_({ ptr, ptr, ptr, i32 } 
   call void @set_offset(ptr %6, ptr @FilterIterable2)
   %19 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %20 = extractvalue { ptr, ptr, ptr, i32 } %19, 0
-  %21 = call ptr @llvm.invariant.start.p0(i64 768, ptr %20)
+  %21 = call ptr @llvm.invariant.start.p0(i64 400, ptr %20)
   %22 = extractvalue { ptr, ptr, ptr, i32 } %19, 3
   %23 = getelementptr ptr, ptr %20, i32 %22
   %24 = load ptr, ptr %23, align 8
@@ -6802,7 +6560,7 @@ define { ptr, ptr, ptr, i32 } @FilterIterable2_iterator_({ ptr, ptr, ptr, i32 } 
   %38 = insertvalue { ptr, ptr, ptr, i32 } %35, i32 %37, 3
   %39 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %40 = extractvalue { ptr, ptr, ptr, i32 } %39, 0
-  %41 = call ptr @llvm.invariant.start.p0(i64 768, ptr %40)
+  %41 = call ptr @llvm.invariant.start.p0(i64 400, ptr %40)
   %42 = extractvalue { ptr, ptr, ptr, i32 } %39, 3
   %43 = getelementptr ptr, ptr %40, i32 %42
   %44 = getelementptr ptr, ptr %43, i32 2
@@ -6841,7 +6599,7 @@ define { ptr, ptr, ptr, i32 } @FilterIterable2_iterator_({ ptr, ptr, ptr, i32 } 
   call void @set_offset(ptr %59, ptr @Iterator2)
   %72 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %73 = extractvalue { ptr, ptr, ptr, i32 } %72, 0
-  %74 = call ptr @llvm.invariant.start.p0(i64 768, ptr %73)
+  %74 = call ptr @llvm.invariant.start.p0(i64 400, ptr %73)
   %75 = extractvalue { ptr, ptr, ptr, i32 } %72, 3
   %76 = getelementptr ptr, ptr %73, i32 %75
   %77 = getelementptr ptr, ptr %76, i32 1
@@ -6850,7 +6608,7 @@ define { ptr, ptr, ptr, i32 } @FilterIterable2_iterator_({ ptr, ptr, ptr, i32 } 
   %80 = call ptr %78(ptr %79)
   %81 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %82 = extractvalue { ptr, ptr, ptr, i32 } %81, 0
-  %83 = call ptr @llvm.invariant.start.p0(i64 768, ptr %82)
+  %83 = call ptr @llvm.invariant.start.p0(i64 400, ptr %82)
   %84 = extractvalue { ptr, ptr, ptr, i32 } %81, 3
   %85 = getelementptr ptr, ptr %82, i32 %84
   %86 = getelementptr ptr, ptr %85, i32 2
@@ -6872,7 +6630,7 @@ define { ptr, ptr, ptr, i32 } @FilterIterable2_iterator_({ ptr, ptr, ptr, i32 } 
   %98 = call ptr @llvm.invariant.start.p0(i64 1, ptr %96)
   %99 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %100 = extractvalue { ptr, ptr, ptr, i32 } %99, 0
-  %101 = call ptr @llvm.invariant.start.p0(i64 768, ptr %100)
+  %101 = call ptr @llvm.invariant.start.p0(i64 400, ptr %100)
   %102 = extractvalue { ptr, ptr, ptr, i32 } %99, 3
   %103 = getelementptr ptr, ptr %100, i32 %102
   %104 = load ptr, ptr %103, align 8
@@ -6892,7 +6650,7 @@ define { ptr, ptr, ptr, i32 } @FilterIterable2_iterator_({ ptr, ptr, ptr, i32 } 
   %118 = insertvalue { ptr, ptr, ptr, i32 } %115, i32 %117, 3
   %119 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %120 = extractvalue { ptr, ptr, ptr, i32 } %119, 0
-  %121 = call ptr @llvm.invariant.start.p0(i64 768, ptr %120)
+  %121 = call ptr @llvm.invariant.start.p0(i64 400, ptr %120)
   %122 = extractvalue { ptr, ptr, ptr, i32 } %119, 3
   %123 = getelementptr ptr, ptr %120, i32 %122
   %124 = getelementptr ptr, ptr %123, i32 2
@@ -6931,7 +6689,7 @@ define { ptr, ptr, ptr, i32 } @FilterIterable2_iterator_({ ptr, ptr, ptr, i32 } 
   call void @set_offset(ptr %139, ptr @Iterator2)
   %152 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %153 = extractvalue { ptr, ptr, ptr, i32 } %152, 0
-  %154 = call ptr @llvm.invariant.start.p0(i64 768, ptr %153)
+  %154 = call ptr @llvm.invariant.start.p0(i64 400, ptr %153)
   %155 = extractvalue { ptr, ptr, ptr, i32 } %152, 3
   %156 = getelementptr ptr, ptr %153, i32 %155
   %157 = getelementptr ptr, ptr %156, i32 1
@@ -6985,7 +6743,7 @@ define { ptr, ptr, ptr, i32 } @FilterIterable2_iterator_({ ptr, ptr, ptr, i32 } 
   %200 = insertvalue { ptr, ptr, ptr, i32 } %197, i32 %199, 3
   %201 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %202 = extractvalue { ptr, ptr, ptr, i32 } %201, 0
-  %203 = call ptr @llvm.invariant.start.p0(i64 768, ptr %202)
+  %203 = call ptr @llvm.invariant.start.p0(i64 400, ptr %202)
   %204 = extractvalue { ptr, ptr, ptr, i32 } %201, 3
   %205 = getelementptr ptr, ptr %202, i32 %204
   %206 = getelementptr ptr, ptr %205, i32 2
@@ -7011,7 +6769,7 @@ define { ptr, ptr, ptr, i32 } @FilterIterable2_iterator_({ ptr, ptr, ptr, i32 } 
   %220 = getelementptr [2 x ptr], ptr %218, i32 0, i32 1
   store ptr %214, ptr %220, align 8
   %221 = call ptr @llvm.invariant.start.p0(i64 4, ptr %218)
-  %222 = call ptr @llvm.invariant.start.p0(i64 128, ptr %190)
+  %222 = call ptr @llvm.invariant.start.p0(i64 80, ptr %190)
   %223 = getelementptr ptr, ptr %190, i32 %199
   %224 = getelementptr ptr, ptr %223, i32 3
   %225 = load ptr, ptr %224, align 8
@@ -7058,7 +6816,7 @@ define { ptr, ptr, ptr, i32 } @FilterIterable2_iterator_({ ptr, ptr, ptr, i32 } 
 define ptr @FilterIterable2_B_iterator_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr [96 x ptr], ptr %4, i32 0, i32 16
+  %5 = getelementptr [50 x ptr], ptr %4, i32 0, i32 16
   %6 = getelementptr ptr, ptr %5, i32 7
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
@@ -7078,7 +6836,7 @@ define ptr @FilterIterable2_B_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 } 
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 17
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 17
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -7109,7 +6867,7 @@ define ptr @FilterIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, ptr,
   %26 = load ptr, ptr %22, align 8
   %27 = call i1 @subtype_test_wrapper(ptr %25, i64 %24, i64 %23, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %26)
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = getelementptr [96 x ptr], ptr %28, i32 0, i32 18
+  %29 = getelementptr [50 x ptr], ptr %28, i32 0, i32 18
   %30 = getelementptr ptr, ptr %29, i32 7
   %31 = load ptr, ptr %30, align 8
   ret ptr %31
@@ -7129,7 +6887,7 @@ define ptr @FilterIterable2_B_all_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0,
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 19
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 19
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -7149,7 +6907,7 @@ define ptr @FilterIterable2_B_any_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0,
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 20
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 20
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -7169,7 +6927,7 @@ define ptr @FilterIterable2_B_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 21
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 21
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -7189,7 +6947,7 @@ define ptr @FilterIterable2_B_filter_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } 
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 22
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 22
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -7209,7 +6967,7 @@ define ptr @FilterIterable2_B_chain_otherIterable2T({ ptr, ptr, ptr, i32 } %0, p
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 23
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 23
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -7229,7 +6987,7 @@ define ptr @FilterIterable2_B_interleave_otherIterable2T({ ptr, ptr, ptr, i32 } 
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 24
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 24
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -7249,7 +7007,7 @@ define ptr @FilterIterable2_B_zip_otherIterable2U({ ptr, ptr, ptr, i32 } %0, ptr
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 25
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 25
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -7269,7 +7027,7 @@ define ptr @FilterIterable2_B_product_otherIterable2U({ ptr, ptr, ptr, i32 } %0,
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 26
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 26
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -7335,7 +7093,7 @@ define void @FilterIterator2_init_iteratorIterator2T_fFunctionT_to_Ptri1({ ptr, 
   call void @set_offset(ptr %23, ptr @Iterator2)
   %36 = load { ptr, ptr, ptr, i32 }, ptr %8, align 8
   %37 = extractvalue { ptr, ptr, ptr, i32 } %36, 0
-  %38 = call ptr @llvm.invariant.start.p0(i64 128, ptr %37)
+  %38 = call ptr @llvm.invariant.start.p0(i64 80, ptr %37)
   %39 = extractvalue { ptr, ptr, ptr, i32 } %36, 3
   %40 = getelementptr ptr, ptr %37, i32 %39
   %41 = load ptr, ptr %40, align 8
@@ -7379,7 +7137,7 @@ define void @FilterIterator2_init_iteratorIterator2T_fFunctionT_to_Ptri1({ ptr, 
   store { ptr } %4, ptr %69, align 8
   %70 = load { ptr, ptr, ptr, i32 }, ptr %8, align 8
   %71 = extractvalue { ptr, ptr, ptr, i32 } %70, 0
-  %72 = call ptr @llvm.invariant.start.p0(i64 128, ptr %71)
+  %72 = call ptr @llvm.invariant.start.p0(i64 80, ptr %71)
   %73 = extractvalue { ptr, ptr, ptr, i32 } %70, 3
   %74 = getelementptr ptr, ptr %71, i32 %73
   %75 = getelementptr ptr, ptr %74, i32 1
@@ -7417,7 +7175,7 @@ define ptr @FilterIterator2_B_init_iteratorIterator2T_fFunctionT_to_Ptri1({ ptr,
   %26 = load ptr, ptr %22, align 8
   %27 = call i1 @subtype_test_wrapper(ptr %25, i64 %24, i64 %23, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %26)
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = getelementptr [16 x ptr], ptr %28, i32 0, i32 5
+  %29 = getelementptr [10 x ptr], ptr %28, i32 0, i32 5
   %30 = getelementptr ptr, ptr %29, i32 7
   %31 = load ptr, ptr %30, align 8
   ret ptr %31
@@ -7447,7 +7205,7 @@ define { ptr, i160 } @FilterIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   call void @set_offset(ptr %6, ptr @FilterIterator2)
   %19 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %20 = extractvalue { ptr, ptr, ptr, i32 } %19, 0
-  %21 = call ptr @llvm.invariant.start.p0(i64 128, ptr %20)
+  %21 = call ptr @llvm.invariant.start.p0(i64 80, ptr %20)
   %22 = extractvalue { ptr, ptr, ptr, i32 } %19, 3
   %23 = getelementptr ptr, ptr %20, i32 %22
   %24 = load ptr, ptr %23, align 8
@@ -7467,7 +7225,7 @@ define { ptr, i160 } @FilterIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %38 = insertvalue { ptr, ptr, ptr, i32 } %35, i32 %37, 3
   %39 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %40 = extractvalue { ptr, ptr, ptr, i32 } %39, 0
-  %41 = call ptr @llvm.invariant.start.p0(i64 128, ptr %40)
+  %41 = call ptr @llvm.invariant.start.p0(i64 80, ptr %40)
   %42 = extractvalue { ptr, ptr, ptr, i32 } %39, 3
   %43 = getelementptr ptr, ptr %40, i32 %42
   %44 = getelementptr ptr, ptr %43, i32 2
@@ -7530,7 +7288,7 @@ define { ptr, i160 } @FilterIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %88 = insertvalue { ptr, i160 } %85, i160 %87, 1
   %89 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %90 = extractvalue { ptr, ptr, ptr, i32 } %89, 0
-  %91 = call ptr @llvm.invariant.start.p0(i64 128, ptr %90)
+  %91 = call ptr @llvm.invariant.start.p0(i64 80, ptr %90)
   %92 = extractvalue { ptr, ptr, ptr, i32 } %89, 3
   %93 = getelementptr ptr, ptr %90, i32 %92
   %94 = getelementptr ptr, ptr %93, i32 1
@@ -7553,7 +7311,7 @@ define { ptr, i160 } @FilterIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
 106:                                              ; preds = %68
   %107 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %108 = extractvalue { ptr, ptr, ptr, i32 } %107, 0
-  %109 = call ptr @llvm.invariant.start.p0(i64 128, ptr %108)
+  %109 = call ptr @llvm.invariant.start.p0(i64 80, ptr %108)
   %110 = extractvalue { ptr, ptr, ptr, i32 } %107, 3
   %111 = getelementptr ptr, ptr %108, i32 %110
   %112 = load ptr, ptr %111, align 8
@@ -7573,7 +7331,7 @@ define { ptr, i160 } @FilterIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %126 = insertvalue { ptr, ptr, ptr, i32 } %123, i32 %125, 3
   %127 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %128 = extractvalue { ptr, ptr, ptr, i32 } %127, 0
-  %129 = call ptr @llvm.invariant.start.p0(i64 128, ptr %128)
+  %129 = call ptr @llvm.invariant.start.p0(i64 80, ptr %128)
   %130 = extractvalue { ptr, ptr, ptr, i32 } %127, 3
   %131 = getelementptr ptr, ptr %128, i32 %130
   %132 = getelementptr ptr, ptr %131, i32 2
@@ -7662,7 +7420,7 @@ define { ptr, i160 } @FilterIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
 define ptr @FilterIterator2_B_next_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr [16 x ptr], ptr %4, i32 0, i32 6
+  %5 = getelementptr [10 x ptr], ptr %4, i32 0, i32 6
   %6 = getelementptr ptr, ptr %5, i32 7
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
@@ -7728,7 +7486,7 @@ define void @ChainIterable2_init_firstIterable2T_secondIterable2T({ ptr, ptr, pt
   call void @set_offset(ptr %23, ptr @Iterable2)
   %36 = load { ptr, ptr, ptr, i32 }, ptr %8, align 8
   %37 = extractvalue { ptr, ptr, ptr, i32 } %36, 0
-  %38 = call ptr @llvm.invariant.start.p0(i64 768, ptr %37)
+  %38 = call ptr @llvm.invariant.start.p0(i64 400, ptr %37)
   %39 = extractvalue { ptr, ptr, ptr, i32 } %36, 3
   %40 = getelementptr ptr, ptr %37, i32 %39
   %41 = load ptr, ptr %40, align 8
@@ -7791,7 +7549,7 @@ define void @ChainIterable2_init_firstIterable2T_secondIterable2T({ ptr, ptr, pt
   call void @set_offset(ptr %71, ptr @Iterable2)
   %84 = load { ptr, ptr, ptr, i32 }, ptr %8, align 8
   %85 = extractvalue { ptr, ptr, ptr, i32 } %84, 0
-  %86 = call ptr @llvm.invariant.start.p0(i64 768, ptr %85)
+  %86 = call ptr @llvm.invariant.start.p0(i64 400, ptr %85)
   %87 = extractvalue { ptr, ptr, ptr, i32 } %84, 3
   %88 = getelementptr ptr, ptr %85, i32 %87
   %89 = getelementptr ptr, ptr %88, i32 1
@@ -7860,7 +7618,7 @@ define ptr @ChainIterable2_B_init_firstIterable2T_secondIterable2T({ ptr, ptr, p
   %26 = load ptr, ptr %22, align 8
   %27 = call i1 @subtype_test_wrapper(ptr %25, i64 %24, i64 %23, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %26)
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = getelementptr [96 x ptr], ptr %28, i32 0, i32 15
+  %29 = getelementptr [50 x ptr], ptr %28, i32 0, i32 15
   %30 = getelementptr ptr, ptr %29, i32 7
   %31 = load ptr, ptr %30, align 8
   ret ptr %31
@@ -7890,7 +7648,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable2_iterator_({ ptr, ptr, ptr, i32 } %
   call void @set_offset(ptr %6, ptr @ChainIterable2)
   %19 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %20 = extractvalue { ptr, ptr, ptr, i32 } %19, 0
-  %21 = call ptr @llvm.invariant.start.p0(i64 768, ptr %20)
+  %21 = call ptr @llvm.invariant.start.p0(i64 400, ptr %20)
   %22 = extractvalue { ptr, ptr, ptr, i32 } %19, 3
   %23 = getelementptr ptr, ptr %20, i32 %22
   %24 = load ptr, ptr %23, align 8
@@ -7910,7 +7668,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable2_iterator_({ ptr, ptr, ptr, i32 } %
   %38 = insertvalue { ptr, ptr, ptr, i32 } %35, i32 %37, 3
   %39 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %40 = extractvalue { ptr, ptr, ptr, i32 } %39, 0
-  %41 = call ptr @llvm.invariant.start.p0(i64 768, ptr %40)
+  %41 = call ptr @llvm.invariant.start.p0(i64 400, ptr %40)
   %42 = extractvalue { ptr, ptr, ptr, i32 } %39, 3
   %43 = getelementptr ptr, ptr %40, i32 %42
   %44 = getelementptr ptr, ptr %43, i32 2
@@ -7949,7 +7707,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable2_iterator_({ ptr, ptr, ptr, i32 } %
   call void @set_offset(ptr %59, ptr @Iterator2)
   %72 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %73 = extractvalue { ptr, ptr, ptr, i32 } %72, 0
-  %74 = call ptr @llvm.invariant.start.p0(i64 768, ptr %73)
+  %74 = call ptr @llvm.invariant.start.p0(i64 400, ptr %73)
   %75 = extractvalue { ptr, ptr, ptr, i32 } %72, 3
   %76 = getelementptr ptr, ptr %73, i32 %75
   %77 = getelementptr ptr, ptr %76, i32 1
@@ -7970,7 +7728,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable2_iterator_({ ptr, ptr, ptr, i32 } %
   %92 = insertvalue { ptr, ptr, ptr, i32 } %89, i32 %91, 3
   %93 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %94 = extractvalue { ptr, ptr, ptr, i32 } %93, 0
-  %95 = call ptr @llvm.invariant.start.p0(i64 768, ptr %94)
+  %95 = call ptr @llvm.invariant.start.p0(i64 400, ptr %94)
   %96 = extractvalue { ptr, ptr, ptr, i32 } %93, 3
   %97 = getelementptr ptr, ptr %94, i32 %96
   %98 = getelementptr ptr, ptr %97, i32 2
@@ -8009,7 +7767,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable2_iterator_({ ptr, ptr, ptr, i32 } %
   call void @set_offset(ptr %113, ptr @Iterator2)
   %126 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %127 = extractvalue { ptr, ptr, ptr, i32 } %126, 0
-  %128 = call ptr @llvm.invariant.start.p0(i64 768, ptr %127)
+  %128 = call ptr @llvm.invariant.start.p0(i64 400, ptr %127)
   %129 = extractvalue { ptr, ptr, ptr, i32 } %126, 3
   %130 = getelementptr ptr, ptr %127, i32 %129
   %131 = getelementptr ptr, ptr %130, i32 2
@@ -8031,7 +7789,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable2_iterator_({ ptr, ptr, ptr, i32 } %
   %143 = call ptr @llvm.invariant.start.p0(i64 1, ptr %141)
   %144 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %145 = extractvalue { ptr, ptr, ptr, i32 } %144, 0
-  %146 = call ptr @llvm.invariant.start.p0(i64 768, ptr %145)
+  %146 = call ptr @llvm.invariant.start.p0(i64 400, ptr %145)
   %147 = extractvalue { ptr, ptr, ptr, i32 } %144, 3
   %148 = getelementptr ptr, ptr %145, i32 %147
   %149 = load ptr, ptr %148, align 8
@@ -8051,7 +7809,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable2_iterator_({ ptr, ptr, ptr, i32 } %
   %163 = insertvalue { ptr, ptr, ptr, i32 } %160, i32 %162, 3
   %164 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %165 = extractvalue { ptr, ptr, ptr, i32 } %164, 0
-  %166 = call ptr @llvm.invariant.start.p0(i64 768, ptr %165)
+  %166 = call ptr @llvm.invariant.start.p0(i64 400, ptr %165)
   %167 = extractvalue { ptr, ptr, ptr, i32 } %164, 3
   %168 = getelementptr ptr, ptr %165, i32 %167
   %169 = getelementptr ptr, ptr %168, i32 2
@@ -8090,7 +7848,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable2_iterator_({ ptr, ptr, ptr, i32 } %
   call void @set_offset(ptr %184, ptr @Iterator2)
   %197 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %198 = extractvalue { ptr, ptr, ptr, i32 } %197, 0
-  %199 = call ptr @llvm.invariant.start.p0(i64 768, ptr %198)
+  %199 = call ptr @llvm.invariant.start.p0(i64 400, ptr %198)
   %200 = extractvalue { ptr, ptr, ptr, i32 } %197, 3
   %201 = getelementptr ptr, ptr %198, i32 %200
   %202 = getelementptr ptr, ptr %201, i32 1
@@ -8111,7 +7869,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable2_iterator_({ ptr, ptr, ptr, i32 } %
   %217 = insertvalue { ptr, ptr, ptr, i32 } %214, i32 %216, 3
   %218 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %219 = extractvalue { ptr, ptr, ptr, i32 } %218, 0
-  %220 = call ptr @llvm.invariant.start.p0(i64 768, ptr %219)
+  %220 = call ptr @llvm.invariant.start.p0(i64 400, ptr %219)
   %221 = extractvalue { ptr, ptr, ptr, i32 } %218, 3
   %222 = getelementptr ptr, ptr %219, i32 %221
   %223 = getelementptr ptr, ptr %222, i32 2
@@ -8222,7 +7980,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable2_iterator_({ ptr, ptr, ptr, i32 } %
   %312 = insertvalue { ptr, ptr, ptr, i32 } %309, i32 %311, 3
   %313 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %314 = extractvalue { ptr, ptr, ptr, i32 } %313, 0
-  %315 = call ptr @llvm.invariant.start.p0(i64 768, ptr %314)
+  %315 = call ptr @llvm.invariant.start.p0(i64 400, ptr %314)
   %316 = extractvalue { ptr, ptr, ptr, i32 } %313, 3
   %317 = getelementptr ptr, ptr %314, i32 %316
   %318 = getelementptr ptr, ptr %317, i32 2
@@ -8246,7 +8004,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable2_iterator_({ ptr, ptr, ptr, i32 } %
   %331 = getelementptr [2 x ptr], ptr %329, i32 0, i32 1
   store ptr %326, ptr %331, align 8
   %332 = call ptr @llvm.invariant.start.p0(i64 4, ptr %329)
-  %333 = call ptr @llvm.invariant.start.p0(i64 136, ptr %302)
+  %333 = call ptr @llvm.invariant.start.p0(i64 88, ptr %302)
   %334 = getelementptr ptr, ptr %302, i32 %311
   %335 = getelementptr ptr, ptr %334, i32 4
   %336 = load ptr, ptr %335, align 8
@@ -8293,7 +8051,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable2_iterator_({ ptr, ptr, ptr, i32 } %
 define ptr @ChainIterable2_B_iterator_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr [96 x ptr], ptr %4, i32 0, i32 16
+  %5 = getelementptr [50 x ptr], ptr %4, i32 0, i32 16
   %6 = getelementptr ptr, ptr %5, i32 7
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
@@ -8313,7 +8071,7 @@ define ptr @ChainIterable2_B_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 } %
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 17
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 17
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -8344,7 +8102,7 @@ define ptr @ChainIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, ptr, 
   %26 = load ptr, ptr %22, align 8
   %27 = call i1 @subtype_test_wrapper(ptr %25, i64 %24, i64 %23, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %26)
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = getelementptr [96 x ptr], ptr %28, i32 0, i32 18
+  %29 = getelementptr [50 x ptr], ptr %28, i32 0, i32 18
   %30 = getelementptr ptr, ptr %29, i32 7
   %31 = load ptr, ptr %30, align 8
   ret ptr %31
@@ -8364,7 +8122,7 @@ define ptr @ChainIterable2_B_all_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, 
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 19
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 19
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -8384,7 +8142,7 @@ define ptr @ChainIterable2_B_any_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, 
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 20
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 20
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -8404,7 +8162,7 @@ define ptr @ChainIterable2_B_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr 
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 21
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 21
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -8424,7 +8182,7 @@ define ptr @ChainIterable2_B_filter_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 22
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 22
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -8444,7 +8202,7 @@ define ptr @ChainIterable2_B_chain_otherIterable2T({ ptr, ptr, ptr, i32 } %0, pt
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 23
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 23
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -8464,7 +8222,7 @@ define ptr @ChainIterable2_B_interleave_otherIterable2T({ ptr, ptr, ptr, i32 } %
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 24
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 24
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -8484,7 +8242,7 @@ define ptr @ChainIterable2_B_zip_otherIterable2U({ ptr, ptr, ptr, i32 } %0, ptr 
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 25
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 25
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -8504,7 +8262,7 @@ define ptr @ChainIterable2_B_product_otherIterable2U({ ptr, ptr, ptr, i32 } %0, 
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 26
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 26
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -8575,7 +8333,7 @@ define void @ChainIterator2_init_firstIterator2T_secondIterator2T({ ptr, ptr, pt
   call void @set_offset(ptr %23, ptr @Iterator2)
   %36 = load { ptr, ptr, ptr, i32 }, ptr %8, align 8
   %37 = extractvalue { ptr, ptr, ptr, i32 } %36, 0
-  %38 = call ptr @llvm.invariant.start.p0(i64 136, ptr %37)
+  %38 = call ptr @llvm.invariant.start.p0(i64 88, ptr %37)
   %39 = extractvalue { ptr, ptr, ptr, i32 } %36, 3
   %40 = getelementptr ptr, ptr %37, i32 %39
   %41 = load ptr, ptr %40, align 8
@@ -8638,7 +8396,7 @@ define void @ChainIterator2_init_firstIterator2T_secondIterator2T({ ptr, ptr, pt
   call void @set_offset(ptr %71, ptr @Iterator2)
   %84 = load { ptr, ptr, ptr, i32 }, ptr %8, align 8
   %85 = extractvalue { ptr, ptr, ptr, i32 } %84, 0
-  %86 = call ptr @llvm.invariant.start.p0(i64 136, ptr %85)
+  %86 = call ptr @llvm.invariant.start.p0(i64 88, ptr %85)
   %87 = extractvalue { ptr, ptr, ptr, i32 } %84, 3
   %88 = getelementptr ptr, ptr %85, i32 %87
   %89 = getelementptr ptr, ptr %88, i32 1
@@ -8681,7 +8439,7 @@ define void @ChainIterator2_init_firstIterator2T_secondIterator2T({ ptr, ptr, pt
   store i32 %117, ptr %116, align 4
   %118 = load { ptr, ptr, ptr, i32 }, ptr %8, align 8
   %119 = extractvalue { ptr, ptr, ptr, i32 } %118, 0
-  %120 = call ptr @llvm.invariant.start.p0(i64 136, ptr %119)
+  %120 = call ptr @llvm.invariant.start.p0(i64 88, ptr %119)
   %121 = extractvalue { ptr, ptr, ptr, i32 } %118, 3
   %122 = getelementptr ptr, ptr %119, i32 %121
   %123 = getelementptr ptr, ptr %122, i32 2
@@ -8717,7 +8475,7 @@ define ptr @ChainIterator2_B_init_firstIterator2T_secondIterator2T({ ptr, ptr, p
   %26 = load ptr, ptr %22, align 8
   %27 = call i1 @subtype_test_wrapper(ptr %25, i64 %24, i64 %23, i64 4189192806087951739, i64 ptrtoint (ptr @Iterator2 to i64), ptr %26)
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = getelementptr [17 x ptr], ptr %28, i32 0, i32 6
+  %29 = getelementptr [11 x ptr], ptr %28, i32 0, i32 6
   %30 = getelementptr ptr, ptr %29, i32 7
   %31 = load ptr, ptr %30, align 8
   ret ptr %31
@@ -8747,7 +8505,7 @@ define { ptr, i160 } @ChainIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   call void @set_offset(ptr %6, ptr @ChainIterator2)
   %19 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %20 = extractvalue { ptr, ptr, ptr, i32 } %19, 0
-  %21 = call ptr @llvm.invariant.start.p0(i64 136, ptr %20)
+  %21 = call ptr @llvm.invariant.start.p0(i64 88, ptr %20)
   %22 = extractvalue { ptr, ptr, ptr, i32 } %19, 3
   %23 = getelementptr ptr, ptr %20, i32 %22
   %24 = getelementptr ptr, ptr %23, i32 2
@@ -8760,7 +8518,7 @@ define { ptr, i160 } @ChainIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
 29:                                               ; preds = %3
   %30 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %31 = extractvalue { ptr, ptr, ptr, i32 } %30, 0
-  %32 = call ptr @llvm.invariant.start.p0(i64 136, ptr %31)
+  %32 = call ptr @llvm.invariant.start.p0(i64 88, ptr %31)
   %33 = extractvalue { ptr, ptr, ptr, i32 } %30, 3
   %34 = getelementptr ptr, ptr %31, i32 %33
   %35 = load ptr, ptr %34, align 8
@@ -8780,7 +8538,7 @@ define { ptr, i160 } @ChainIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %49 = insertvalue { ptr, ptr, ptr, i32 } %46, i32 %48, 3
   %50 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %51 = extractvalue { ptr, ptr, ptr, i32 } %50, 0
-  %52 = call ptr @llvm.invariant.start.p0(i64 136, ptr %51)
+  %52 = call ptr @llvm.invariant.start.p0(i64 88, ptr %51)
   %53 = extractvalue { ptr, ptr, ptr, i32 } %50, 3
   %54 = getelementptr ptr, ptr %51, i32 %53
   %55 = getelementptr ptr, ptr %54, i32 3
@@ -8837,7 +8595,7 @@ define { ptr, i160 } @ChainIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   store i1 false, ptr %95, align 1
   %96 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %97 = extractvalue { ptr, ptr, ptr, i32 } %96, 0
-  %98 = call ptr @llvm.invariant.start.p0(i64 136, ptr %97)
+  %98 = call ptr @llvm.invariant.start.p0(i64 88, ptr %97)
   %99 = extractvalue { ptr, ptr, ptr, i32 } %96, 3
   %100 = getelementptr ptr, ptr %97, i32 %99
   %101 = getelementptr ptr, ptr %100, i32 2
@@ -8876,7 +8634,7 @@ define { ptr, i160 } @ChainIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
 117:                                              ; preds = %113
   %118 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %119 = extractvalue { ptr, ptr, ptr, i32 } %118, 0
-  %120 = call ptr @llvm.invariant.start.p0(i64 136, ptr %119)
+  %120 = call ptr @llvm.invariant.start.p0(i64 88, ptr %119)
   %121 = extractvalue { ptr, ptr, ptr, i32 } %118, 3
   %122 = getelementptr ptr, ptr %119, i32 %121
   %123 = getelementptr ptr, ptr %122, i32 1
@@ -8897,7 +8655,7 @@ define { ptr, i160 } @ChainIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %138 = insertvalue { ptr, ptr, ptr, i32 } %135, i32 %137, 3
   %139 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %140 = extractvalue { ptr, ptr, ptr, i32 } %139, 0
-  %141 = call ptr @llvm.invariant.start.p0(i64 136, ptr %140)
+  %141 = call ptr @llvm.invariant.start.p0(i64 88, ptr %140)
   %142 = extractvalue { ptr, ptr, ptr, i32 } %139, 3
   %143 = getelementptr ptr, ptr %140, i32 %142
   %144 = getelementptr ptr, ptr %143, i32 3
@@ -8931,7 +8689,7 @@ define { ptr, i160 } @ChainIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
 define ptr @ChainIterator2_B_next_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr [17 x ptr], ptr %4, i32 0, i32 7
+  %5 = getelementptr [11 x ptr], ptr %4, i32 0, i32 7
   %6 = getelementptr ptr, ptr %5, i32 7
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
@@ -8997,7 +8755,7 @@ define void @InterleaveIterable2_init_firstIterable2T_secondIterable2T({ ptr, pt
   call void @set_offset(ptr %23, ptr @Iterable2)
   %36 = load { ptr, ptr, ptr, i32 }, ptr %8, align 8
   %37 = extractvalue { ptr, ptr, ptr, i32 } %36, 0
-  %38 = call ptr @llvm.invariant.start.p0(i64 768, ptr %37)
+  %38 = call ptr @llvm.invariant.start.p0(i64 400, ptr %37)
   %39 = extractvalue { ptr, ptr, ptr, i32 } %36, 3
   %40 = getelementptr ptr, ptr %37, i32 %39
   %41 = load ptr, ptr %40, align 8
@@ -9060,7 +8818,7 @@ define void @InterleaveIterable2_init_firstIterable2T_secondIterable2T({ ptr, pt
   call void @set_offset(ptr %71, ptr @Iterable2)
   %84 = load { ptr, ptr, ptr, i32 }, ptr %8, align 8
   %85 = extractvalue { ptr, ptr, ptr, i32 } %84, 0
-  %86 = call ptr @llvm.invariant.start.p0(i64 768, ptr %85)
+  %86 = call ptr @llvm.invariant.start.p0(i64 400, ptr %85)
   %87 = extractvalue { ptr, ptr, ptr, i32 } %84, 3
   %88 = getelementptr ptr, ptr %85, i32 %87
   %89 = getelementptr ptr, ptr %88, i32 1
@@ -9129,7 +8887,7 @@ define ptr @InterleaveIterable2_B_init_firstIterable2T_secondIterable2T({ ptr, p
   %26 = load ptr, ptr %22, align 8
   %27 = call i1 @subtype_test_wrapper(ptr %25, i64 %24, i64 %23, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %26)
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = getelementptr [96 x ptr], ptr %28, i32 0, i32 15
+  %29 = getelementptr [50 x ptr], ptr %28, i32 0, i32 15
   %30 = getelementptr ptr, ptr %29, i32 7
   %31 = load ptr, ptr %30, align 8
   ret ptr %31
@@ -9159,7 +8917,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable2_iterator_({ ptr, ptr, ptr, i3
   call void @set_offset(ptr %6, ptr @InterleaveIterable2)
   %19 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %20 = extractvalue { ptr, ptr, ptr, i32 } %19, 0
-  %21 = call ptr @llvm.invariant.start.p0(i64 768, ptr %20)
+  %21 = call ptr @llvm.invariant.start.p0(i64 400, ptr %20)
   %22 = extractvalue { ptr, ptr, ptr, i32 } %19, 3
   %23 = getelementptr ptr, ptr %20, i32 %22
   %24 = load ptr, ptr %23, align 8
@@ -9179,7 +8937,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable2_iterator_({ ptr, ptr, ptr, i3
   %38 = insertvalue { ptr, ptr, ptr, i32 } %35, i32 %37, 3
   %39 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %40 = extractvalue { ptr, ptr, ptr, i32 } %39, 0
-  %41 = call ptr @llvm.invariant.start.p0(i64 768, ptr %40)
+  %41 = call ptr @llvm.invariant.start.p0(i64 400, ptr %40)
   %42 = extractvalue { ptr, ptr, ptr, i32 } %39, 3
   %43 = getelementptr ptr, ptr %40, i32 %42
   %44 = getelementptr ptr, ptr %43, i32 2
@@ -9218,7 +8976,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable2_iterator_({ ptr, ptr, ptr, i3
   call void @set_offset(ptr %59, ptr @Iterator2)
   %72 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %73 = extractvalue { ptr, ptr, ptr, i32 } %72, 0
-  %74 = call ptr @llvm.invariant.start.p0(i64 768, ptr %73)
+  %74 = call ptr @llvm.invariant.start.p0(i64 400, ptr %73)
   %75 = extractvalue { ptr, ptr, ptr, i32 } %72, 3
   %76 = getelementptr ptr, ptr %73, i32 %75
   %77 = getelementptr ptr, ptr %76, i32 1
@@ -9239,7 +8997,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable2_iterator_({ ptr, ptr, ptr, i3
   %92 = insertvalue { ptr, ptr, ptr, i32 } %89, i32 %91, 3
   %93 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %94 = extractvalue { ptr, ptr, ptr, i32 } %93, 0
-  %95 = call ptr @llvm.invariant.start.p0(i64 768, ptr %94)
+  %95 = call ptr @llvm.invariant.start.p0(i64 400, ptr %94)
   %96 = extractvalue { ptr, ptr, ptr, i32 } %93, 3
   %97 = getelementptr ptr, ptr %94, i32 %96
   %98 = getelementptr ptr, ptr %97, i32 2
@@ -9278,7 +9036,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable2_iterator_({ ptr, ptr, ptr, i3
   call void @set_offset(ptr %113, ptr @Iterator2)
   %126 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %127 = extractvalue { ptr, ptr, ptr, i32 } %126, 0
-  %128 = call ptr @llvm.invariant.start.p0(i64 768, ptr %127)
+  %128 = call ptr @llvm.invariant.start.p0(i64 400, ptr %127)
   %129 = extractvalue { ptr, ptr, ptr, i32 } %126, 3
   %130 = getelementptr ptr, ptr %127, i32 %129
   %131 = getelementptr ptr, ptr %130, i32 2
@@ -9300,7 +9058,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable2_iterator_({ ptr, ptr, ptr, i3
   %143 = call ptr @llvm.invariant.start.p0(i64 1, ptr %141)
   %144 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %145 = extractvalue { ptr, ptr, ptr, i32 } %144, 0
-  %146 = call ptr @llvm.invariant.start.p0(i64 768, ptr %145)
+  %146 = call ptr @llvm.invariant.start.p0(i64 400, ptr %145)
   %147 = extractvalue { ptr, ptr, ptr, i32 } %144, 3
   %148 = getelementptr ptr, ptr %145, i32 %147
   %149 = load ptr, ptr %148, align 8
@@ -9320,7 +9078,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable2_iterator_({ ptr, ptr, ptr, i3
   %163 = insertvalue { ptr, ptr, ptr, i32 } %160, i32 %162, 3
   %164 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %165 = extractvalue { ptr, ptr, ptr, i32 } %164, 0
-  %166 = call ptr @llvm.invariant.start.p0(i64 768, ptr %165)
+  %166 = call ptr @llvm.invariant.start.p0(i64 400, ptr %165)
   %167 = extractvalue { ptr, ptr, ptr, i32 } %164, 3
   %168 = getelementptr ptr, ptr %165, i32 %167
   %169 = getelementptr ptr, ptr %168, i32 2
@@ -9359,7 +9117,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable2_iterator_({ ptr, ptr, ptr, i3
   call void @set_offset(ptr %184, ptr @Iterator2)
   %197 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %198 = extractvalue { ptr, ptr, ptr, i32 } %197, 0
-  %199 = call ptr @llvm.invariant.start.p0(i64 768, ptr %198)
+  %199 = call ptr @llvm.invariant.start.p0(i64 400, ptr %198)
   %200 = extractvalue { ptr, ptr, ptr, i32 } %197, 3
   %201 = getelementptr ptr, ptr %198, i32 %200
   %202 = getelementptr ptr, ptr %201, i32 1
@@ -9380,7 +9138,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable2_iterator_({ ptr, ptr, ptr, i3
   %217 = insertvalue { ptr, ptr, ptr, i32 } %214, i32 %216, 3
   %218 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %219 = extractvalue { ptr, ptr, ptr, i32 } %218, 0
-  %220 = call ptr @llvm.invariant.start.p0(i64 768, ptr %219)
+  %220 = call ptr @llvm.invariant.start.p0(i64 400, ptr %219)
   %221 = extractvalue { ptr, ptr, ptr, i32 } %218, 3
   %222 = getelementptr ptr, ptr %219, i32 %221
   %223 = getelementptr ptr, ptr %222, i32 2
@@ -9491,7 +9249,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable2_iterator_({ ptr, ptr, ptr, i3
   %312 = insertvalue { ptr, ptr, ptr, i32 } %309, i32 %311, 3
   %313 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %314 = extractvalue { ptr, ptr, ptr, i32 } %313, 0
-  %315 = call ptr @llvm.invariant.start.p0(i64 768, ptr %314)
+  %315 = call ptr @llvm.invariant.start.p0(i64 400, ptr %314)
   %316 = extractvalue { ptr, ptr, ptr, i32 } %313, 3
   %317 = getelementptr ptr, ptr %314, i32 %316
   %318 = getelementptr ptr, ptr %317, i32 2
@@ -9515,7 +9273,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable2_iterator_({ ptr, ptr, ptr, i3
   %331 = getelementptr [2 x ptr], ptr %329, i32 0, i32 1
   store ptr %326, ptr %331, align 8
   %332 = call ptr @llvm.invariant.start.p0(i64 4, ptr %329)
-  %333 = call ptr @llvm.invariant.start.p0(i64 136, ptr %302)
+  %333 = call ptr @llvm.invariant.start.p0(i64 88, ptr %302)
   %334 = getelementptr ptr, ptr %302, i32 %311
   %335 = getelementptr ptr, ptr %334, i32 4
   %336 = load ptr, ptr %335, align 8
@@ -9562,7 +9320,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable2_iterator_({ ptr, ptr, ptr, i3
 define ptr @InterleaveIterable2_B_iterator_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr [96 x ptr], ptr %4, i32 0, i32 16
+  %5 = getelementptr [50 x ptr], ptr %4, i32 0, i32 16
   %6 = getelementptr ptr, ptr %5, i32 7
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
@@ -9582,7 +9340,7 @@ define ptr @InterleaveIterable2_B_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i3
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 17
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 17
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -9613,7 +9371,7 @@ define ptr @InterleaveIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, 
   %26 = load ptr, ptr %22, align 8
   %27 = call i1 @subtype_test_wrapper(ptr %25, i64 %24, i64 %23, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %26)
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = getelementptr [96 x ptr], ptr %28, i32 0, i32 18
+  %29 = getelementptr [50 x ptr], ptr %28, i32 0, i32 18
   %30 = getelementptr ptr, ptr %29, i32 7
   %31 = load ptr, ptr %30, align 8
   ret ptr %31
@@ -9633,7 +9391,7 @@ define ptr @InterleaveIterable2_B_all_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 }
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 19
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 19
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -9653,7 +9411,7 @@ define ptr @InterleaveIterable2_B_any_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 }
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 20
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 20
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -9673,7 +9431,7 @@ define ptr @InterleaveIterable2_B_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0,
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 21
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 21
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -9693,7 +9451,7 @@ define ptr @InterleaveIterable2_B_filter_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i3
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 7927147055246173914, i64 ptrtoint (ptr @function_typ to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 22
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 22
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -9713,7 +9471,7 @@ define ptr @InterleaveIterable2_B_chain_otherIterable2T({ ptr, ptr, ptr, i32 } %
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 23
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 23
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -9733,7 +9491,7 @@ define ptr @InterleaveIterable2_B_interleave_otherIterable2T({ ptr, ptr, ptr, i3
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 24
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 24
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -9753,7 +9511,7 @@ define ptr @InterleaveIterable2_B_zip_otherIterable2U({ ptr, ptr, ptr, i32 } %0,
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 25
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 25
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -9773,7 +9531,7 @@ define ptr @InterleaveIterable2_B_product_otherIterable2U({ ptr, ptr, ptr, i32 }
   %14 = load ptr, ptr %10, align 8
   %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 5693646204635713916, i64 ptrtoint (ptr @Iterable2 to i64), ptr %14)
   %16 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %17 = getelementptr [96 x ptr], ptr %16, i32 0, i32 26
+  %17 = getelementptr [50 x ptr], ptr %16, i32 0, i32 26
   %18 = getelementptr ptr, ptr %17, i32 7
   %19 = load ptr, ptr %18, align 8
   ret ptr %19
@@ -9844,7 +9602,7 @@ define void @InterleaveIterator2_init_firstIterator2T_secondIterator2T({ ptr, pt
   call void @set_offset(ptr %23, ptr @Iterator2)
   %36 = load { ptr, ptr, ptr, i32 }, ptr %8, align 8
   %37 = extractvalue { ptr, ptr, ptr, i32 } %36, 0
-  %38 = call ptr @llvm.invariant.start.p0(i64 136, ptr %37)
+  %38 = call ptr @llvm.invariant.start.p0(i64 88, ptr %37)
   %39 = extractvalue { ptr, ptr, ptr, i32 } %36, 3
   %40 = getelementptr ptr, ptr %37, i32 %39
   %41 = load ptr, ptr %40, align 8
@@ -9907,7 +9665,7 @@ define void @InterleaveIterator2_init_firstIterator2T_secondIterator2T({ ptr, pt
   call void @set_offset(ptr %71, ptr @Iterator2)
   %84 = load { ptr, ptr, ptr, i32 }, ptr %8, align 8
   %85 = extractvalue { ptr, ptr, ptr, i32 } %84, 0
-  %86 = call ptr @llvm.invariant.start.p0(i64 136, ptr %85)
+  %86 = call ptr @llvm.invariant.start.p0(i64 88, ptr %85)
   %87 = extractvalue { ptr, ptr, ptr, i32 } %84, 3
   %88 = getelementptr ptr, ptr %85, i32 %87
   %89 = getelementptr ptr, ptr %88, i32 1
@@ -9950,7 +9708,7 @@ define void @InterleaveIterator2_init_firstIterator2T_secondIterator2T({ ptr, pt
   store i32 %117, ptr %116, align 4
   %118 = load { ptr, ptr, ptr, i32 }, ptr %8, align 8
   %119 = extractvalue { ptr, ptr, ptr, i32 } %118, 0
-  %120 = call ptr @llvm.invariant.start.p0(i64 136, ptr %119)
+  %120 = call ptr @llvm.invariant.start.p0(i64 88, ptr %119)
   %121 = extractvalue { ptr, ptr, ptr, i32 } %118, 3
   %122 = getelementptr ptr, ptr %119, i32 %121
   %123 = getelementptr ptr, ptr %122, i32 2
@@ -9986,7 +9744,7 @@ define ptr @InterleaveIterator2_B_init_firstIterator2T_secondIterator2T({ ptr, p
   %26 = load ptr, ptr %22, align 8
   %27 = call i1 @subtype_test_wrapper(ptr %25, i64 %24, i64 %23, i64 4189192806087951739, i64 ptrtoint (ptr @Iterator2 to i64), ptr %26)
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = getelementptr [17 x ptr], ptr %28, i32 0, i32 6
+  %29 = getelementptr [11 x ptr], ptr %28, i32 0, i32 6
   %30 = getelementptr ptr, ptr %29, i32 7
   %31 = load ptr, ptr %30, align 8
   ret ptr %31
@@ -10016,7 +9774,7 @@ define { ptr, i160 } @InterleaveIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr
   call void @set_offset(ptr %6, ptr @InterleaveIterator2)
   %19 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %20 = extractvalue { ptr, ptr, ptr, i32 } %19, 0
-  %21 = call ptr @llvm.invariant.start.p0(i64 136, ptr %20)
+  %21 = call ptr @llvm.invariant.start.p0(i64 88, ptr %20)
   %22 = extractvalue { ptr, ptr, ptr, i32 } %19, 3
   %23 = getelementptr ptr, ptr %20, i32 %22
   %24 = getelementptr ptr, ptr %23, i32 2
@@ -10031,7 +9789,7 @@ define { ptr, i160 } @InterleaveIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr
   store i1 false, ptr %30, align 1
   %31 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %32 = extractvalue { ptr, ptr, ptr, i32 } %31, 0
-  %33 = call ptr @llvm.invariant.start.p0(i64 136, ptr %32)
+  %33 = call ptr @llvm.invariant.start.p0(i64 88, ptr %32)
   %34 = extractvalue { ptr, ptr, ptr, i32 } %31, 3
   %35 = getelementptr ptr, ptr %32, i32 %34
   %36 = getelementptr ptr, ptr %35, i32 2
@@ -10042,7 +9800,7 @@ define { ptr, i160 } @InterleaveIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr
   store i1 %40, ptr %39, align 1
   %41 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %42 = extractvalue { ptr, ptr, ptr, i32 } %41, 0
-  %43 = call ptr @llvm.invariant.start.p0(i64 136, ptr %42)
+  %43 = call ptr @llvm.invariant.start.p0(i64 88, ptr %42)
   %44 = extractvalue { ptr, ptr, ptr, i32 } %41, 3
   %45 = getelementptr ptr, ptr %42, i32 %44
   %46 = load ptr, ptr %45, align 8
@@ -10062,7 +9820,7 @@ define { ptr, i160 } @InterleaveIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr
   %60 = insertvalue { ptr, ptr, ptr, i32 } %57, i32 %59, 3
   %61 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %62 = extractvalue { ptr, ptr, ptr, i32 } %61, 0
-  %63 = call ptr @llvm.invariant.start.p0(i64 136, ptr %62)
+  %63 = call ptr @llvm.invariant.start.p0(i64 88, ptr %62)
   %64 = extractvalue { ptr, ptr, ptr, i32 } %61, 3
   %65 = getelementptr ptr, ptr %62, i32 %64
   %66 = getelementptr ptr, ptr %65, i32 3
@@ -10093,7 +9851,7 @@ define { ptr, i160 } @InterleaveIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr
   store i1 true, ptr %87, align 1
   %88 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %89 = extractvalue { ptr, ptr, ptr, i32 } %88, 0
-  %90 = call ptr @llvm.invariant.start.p0(i64 136, ptr %89)
+  %90 = call ptr @llvm.invariant.start.p0(i64 88, ptr %89)
   %91 = extractvalue { ptr, ptr, ptr, i32 } %88, 3
   %92 = getelementptr ptr, ptr %89, i32 %91
   %93 = getelementptr ptr, ptr %92, i32 2
@@ -10104,7 +9862,7 @@ define { ptr, i160 } @InterleaveIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr
   store i1 %97, ptr %96, align 1
   %98 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %99 = extractvalue { ptr, ptr, ptr, i32 } %98, 0
-  %100 = call ptr @llvm.invariant.start.p0(i64 136, ptr %99)
+  %100 = call ptr @llvm.invariant.start.p0(i64 88, ptr %99)
   %101 = extractvalue { ptr, ptr, ptr, i32 } %98, 3
   %102 = getelementptr ptr, ptr %99, i32 %101
   %103 = getelementptr ptr, ptr %102, i32 1
@@ -10125,7 +9883,7 @@ define { ptr, i160 } @InterleaveIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr
   %118 = insertvalue { ptr, ptr, ptr, i32 } %115, i32 %117, 3
   %119 = load { ptr, ptr, ptr, i32 }, ptr %6, align 8
   %120 = extractvalue { ptr, ptr, ptr, i32 } %119, 0
-  %121 = call ptr @llvm.invariant.start.p0(i64 136, ptr %120)
+  %121 = call ptr @llvm.invariant.start.p0(i64 88, ptr %120)
   %122 = extractvalue { ptr, ptr, ptr, i32 } %119, 3
   %123 = getelementptr ptr, ptr %120, i32 %122
   %124 = getelementptr ptr, ptr %123, i32 3
@@ -10162,7 +9920,7 @@ define { ptr, i160 } @InterleaveIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr
 define ptr @InterleaveIterator2_B_next_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr [17 x ptr], ptr %4, i32 0, i32 7
+  %5 = getelementptr [11 x ptr], ptr %4, i32 0, i32 7
   %6 = getelementptr ptr, ptr %5, i32 7
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
@@ -13302,26 +13060,26 @@ define ptr @ProductIterator2_B_next_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   ret ptr %7
 }
 
-define i32 @_functionliteral_unzlsbwqfy(i32 %0, i32 %1) {
+define i32 @_functionliteral_igdeskdiky(i32 %0, i32 %1) {
   %3 = add i32 %0, %1
   ret i32 %3
 }
 
-define i32 @_functionliteral_udeczrazso(i32 %0) {
+define i32 @_functionliteral_ntoqpruzgy(i32 %0) {
   %2 = mul i32 %0, 2
   ret i32 %2
 }
 
-define double @_functionliteral_ycgangeghx(double %0) {
+define double @_functionliteral_zvfobwrgzh(double %0) {
   %2 = fmul double %0, 2.000000e+00
   ret double %2
 }
 
-define i32 @_functionliteral_cgfrvifheg(i32 %0) {
+define i32 @_functionliteral_nejudtpyqs(i32 %0) {
   ret i32 %0
 }
 
-define double @_functionliteral_eyquzqwqst(i32 %0) {
+define double @_functionliteral_qraxizhkxs(i32 %0) {
   %2 = sitofp i32 %0 to double
   ret double %2
 }
@@ -13362,7 +13120,7 @@ define ptr @Float64_field_value(ptr %0) {
 }
 
 define ptr @Float64_field_Float64_0(ptr %0) {
-  ret ptr @_parameterization_Float64_or_Int32
+  ret ptr @_parameterization_Int32_or_Float64
 }
 
 define ptr @Float64_field_Float64_1(ptr %0) {
@@ -13865,7 +13623,7 @@ define ptr @Int32_field_value(ptr %0) {
 }
 
 define ptr @Int32_field_Int32_0(ptr %0) {
-  ret ptr @_parameterization_Float64_or_Int32
+  ret ptr @_parameterization_Int32_or_Float64
 }
 
 define void @Int32_init_valuePtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, i32 %3) {
@@ -13963,135 +13721,6 @@ define ptr @Int32_B_value_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %6 = getelementptr ptr, ptr %5, i32 7
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
-}
-
-define { ptr, i160 } @Int32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3) {
-  %5 = alloca { ptr, ptr, ptr, i32 }, align 8
-  store { ptr, ptr, ptr, i32 } %0, ptr %5, align 8
-  %6 = call ptr @llvm.invariant.start.p0(i64 16, ptr %5)
-  %7 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %8 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 0
-  %9 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 0
-  %10 = load ptr, ptr %8, align 8
-  store ptr %10, ptr %9, align 8
-  %11 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 1
-  %12 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 1
-  %13 = load ptr, ptr %11, align 8
-  store ptr %13, ptr %12, align 8
-  %14 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 2
-  %15 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 2
-  %16 = load ptr, ptr %14, align 8
-  store ptr %16, ptr %15, align 8
-  %17 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 3
-  %18 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 3
-  %19 = load i32, ptr %17, align 4
-  store i32 %19, ptr %18, align 4
-  call void @set_offset(ptr %7, ptr @Int32)
-  %20 = alloca { ptr, i160 }, align 8
-  store { ptr, i160 } %3, ptr %20, align 8
-  %21 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %22 = getelementptr { ptr, i160 }, ptr %20, i32 0, i32 0
-  %23 = getelementptr { ptr, i160 }, ptr %21, i32 0, i32 0
-  %24 = load ptr, ptr %22, align 8
-  store ptr %24, ptr %23, align 8
-  %25 = getelementptr { ptr, i160 }, ptr %20, i32 0, i32 1
-  %26 = getelementptr { ptr, i160 }, ptr %21, i32 0, i32 1
-  %27 = load i160, ptr %25, align 4
-  store i160 %27, ptr %26, align 4
-  call void @set_offset(ptr %21, ptr @Float64)
-  %28 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
-  %29 = extractvalue { ptr, ptr, ptr, i32 } %28, 0
-  %30 = call ptr @llvm.invariant.start.p0(i64 136, ptr %29)
-  %31 = extractvalue { ptr, ptr, ptr, i32 } %28, 3
-  %32 = getelementptr ptr, ptr %29, i32 %31
-  %33 = load ptr, ptr %32, align 8
-  %34 = extractvalue { ptr, ptr, ptr, i32 } %28, 1
-  %35 = call ptr %33(ptr %34)
-  %36 = load i32, ptr %35, align 4
-  %37 = sitofp i32 %36 to double
-  %38 = getelementptr { ptr, ptr, ptr, i32 }, ptr %21, i32 0, i32 0
-  %39 = load ptr, ptr %38, align 8
-  %40 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %39, 0
-  %41 = getelementptr { ptr, ptr, ptr, i32 }, ptr %21, i32 0, i32 1
-  %42 = load ptr, ptr %41, align 8
-  %43 = insertvalue { ptr, ptr, ptr, i32 } %40, ptr %42, 1
-  %44 = getelementptr { ptr, ptr, ptr, i32 }, ptr %21, i32 0, i32 2
-  %45 = load ptr, ptr %44, align 8
-  %46 = insertvalue { ptr, ptr, ptr, i32 } %43, ptr %45, 2
-  %47 = getelementptr { ptr, ptr, ptr, i32 }, ptr %21, i32 0, i32 3
-  %48 = load i32, ptr %47, align 4
-  %49 = insertvalue { ptr, ptr, ptr, i32 } %46, i32 %48, 3
-  %50 = alloca [0 x ptr], align 8
-  %51 = call ptr @llvm.invariant.start.p0(i64 0, ptr %50)
-  %52 = call ptr @llvm.invariant.start.p0(i64 144, ptr %39)
-  %53 = getelementptr ptr, ptr %39, i32 %48
-  %54 = getelementptr ptr, ptr %53, i32 4
-  %55 = load ptr, ptr %54, align 8
-  %56 = alloca [0 x ptr], align 8
-  %57 = call ptr %55({ ptr, ptr, ptr, i32 } %49, ptr %56)
-  %58 = call double %57({ ptr, ptr, ptr, i32 } %49, { ptr, ptr, ptr, i32 } %49, ptr %50)
-  %59 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ double }, ptr null, i32 1) to i64))
-  %60 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %61 = getelementptr { ptr, ptr, ptr, i32 }, ptr %60, i32 0, i32 1
-  %62 = getelementptr { ptr, ptr, ptr, i32 }, ptr %60, i32 0, i32 3
-  store ptr @Float64, ptr %60, align 8
-  store ptr %59, ptr %61, align 8
-  store i32 7, ptr %62, align 4
-  %63 = call ptr @llvm.invariant.start.p0(i64 16, ptr %60)
-  %64 = getelementptr { ptr, ptr, ptr, i32 }, ptr %21, i32 0, i32 0
-  %65 = load ptr, ptr %64, align 8
-  %66 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %65, 0
-  %67 = getelementptr { ptr, ptr, ptr, i32 }, ptr %21, i32 0, i32 1
-  %68 = load ptr, ptr %67, align 8
-  %69 = insertvalue { ptr, ptr, ptr, i32 } %66, ptr %68, 1
-  %70 = getelementptr { ptr, ptr, ptr, i32 }, ptr %21, i32 0, i32 2
-  %71 = load ptr, ptr %70, align 8
-  %72 = insertvalue { ptr, ptr, ptr, i32 } %69, ptr %71, 2
-  %73 = getelementptr { ptr, ptr, ptr, i32 }, ptr %21, i32 0, i32 3
-  %74 = load i32, ptr %73, align 4
-  %75 = insertvalue { ptr, ptr, ptr, i32 } %72, i32 %74, 3
-  %76 = alloca [0 x ptr], align 8
-  %77 = call ptr @llvm.invariant.start.p0(i64 0, ptr %76)
-  %78 = call ptr @llvm.invariant.start.p0(i64 144, ptr %65)
-  %79 = getelementptr ptr, ptr %65, i32 %74
-  %80 = getelementptr ptr, ptr %79, i32 4
-  %81 = load ptr, ptr %80, align 8
-  %82 = alloca [0 x ptr], align 8
-  %83 = call ptr %81({ ptr, ptr, ptr, i32 } %75, ptr %82)
-  %84 = call double %83({ ptr, ptr, ptr, i32 } %75, { ptr, ptr, ptr, i32 } %75, ptr %76)
-  %85 = fadd double %37, %84
-  %86 = getelementptr { ptr, ptr, ptr, i32 }, ptr %60, i32 0, i32 0
-  %87 = load ptr, ptr %86, align 8
-  %88 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %87, 0
-  %89 = getelementptr { ptr, ptr, ptr, i32 }, ptr %60, i32 0, i32 1
-  %90 = load ptr, ptr %89, align 8
-  %91 = insertvalue { ptr, ptr, ptr, i32 } %88, ptr %90, 1
-  %92 = getelementptr { ptr, ptr, ptr, i32 }, ptr %60, i32 0, i32 2
-  %93 = load ptr, ptr %92, align 8
-  %94 = insertvalue { ptr, ptr, ptr, i32 } %91, ptr %93, 2
-  %95 = getelementptr { ptr, ptr, ptr, i32 }, ptr %60, i32 0, i32 3
-  %96 = load i32, ptr %95, align 4
-  %97 = insertvalue { ptr, ptr, ptr, i32 } %94, i32 %96, 3
-  %98 = alloca [1 x ptr], align 8
-  %99 = getelementptr [1 x ptr], ptr %98, i32 0, i32 0
-  store ptr @_parameterization_Ptrf64, ptr %99, align 8
-  %100 = call ptr @llvm.invariant.start.p0(i64 1, ptr %98)
-  %101 = call ptr @llvm.invariant.start.p0(i64 144, ptr %87)
-  %102 = getelementptr ptr, ptr %87, i32 %96
-  %103 = getelementptr ptr, ptr %102, i32 3
-  %104 = load ptr, ptr %103, align 8
-  %105 = alloca [1 x ptr], align 8
-  %106 = getelementptr [1 x ptr], ptr %105, i32 0, i32 0
-  store ptr @f64_typ, ptr %106, align 8
-  %107 = call ptr %104({ ptr, ptr, ptr, i32 } %97, ptr %105, double %85)
-  call void %107({ ptr, ptr, ptr, i32 } %97, { ptr, ptr, ptr, i32 } %97, ptr %98, double %85)
-  %108 = getelementptr { ptr, i160 }, ptr %60, i32 0, i32 0
-  %109 = load ptr, ptr %108, align 8
-  %110 = insertvalue { ptr, i160 } undef, ptr %109, 0
-  %111 = getelementptr { ptr, i160 }, ptr %60, i32 0, i32 1
-  %112 = load i160, ptr %111, align 4
-  %113 = insertvalue { ptr, i160 } %110, i160 %112, 1
-  ret { ptr, i160 } %113
 }
 
 define { ptr, i160 } @Int32__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3) {
@@ -14230,7 +13859,136 @@ define { ptr, i160 } @Int32__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   ret { ptr, i160 } %120
 }
 
-define ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0, ptr %1, { ptr, i160 } %2) {
+define { ptr, i160 } @Int32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3) {
+  %5 = alloca { ptr, ptr, ptr, i32 }, align 8
+  store { ptr, ptr, ptr, i32 } %0, ptr %5, align 8
+  %6 = call ptr @llvm.invariant.start.p0(i64 16, ptr %5)
+  %7 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %8 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 0
+  %9 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 0
+  %10 = load ptr, ptr %8, align 8
+  store ptr %10, ptr %9, align 8
+  %11 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 1
+  %12 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 1
+  %13 = load ptr, ptr %11, align 8
+  store ptr %13, ptr %12, align 8
+  %14 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 2
+  %15 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 2
+  %16 = load ptr, ptr %14, align 8
+  store ptr %16, ptr %15, align 8
+  %17 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 3
+  %18 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 3
+  %19 = load i32, ptr %17, align 4
+  store i32 %19, ptr %18, align 4
+  call void @set_offset(ptr %7, ptr @Int32)
+  %20 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %3, ptr %20, align 8
+  %21 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %22 = getelementptr { ptr, i160 }, ptr %20, i32 0, i32 0
+  %23 = getelementptr { ptr, i160 }, ptr %21, i32 0, i32 0
+  %24 = load ptr, ptr %22, align 8
+  store ptr %24, ptr %23, align 8
+  %25 = getelementptr { ptr, i160 }, ptr %20, i32 0, i32 1
+  %26 = getelementptr { ptr, i160 }, ptr %21, i32 0, i32 1
+  %27 = load i160, ptr %25, align 4
+  store i160 %27, ptr %26, align 4
+  call void @set_offset(ptr %21, ptr @Float64)
+  %28 = load { ptr, ptr, ptr, i32 }, ptr %7, align 8
+  %29 = extractvalue { ptr, ptr, ptr, i32 } %28, 0
+  %30 = call ptr @llvm.invariant.start.p0(i64 136, ptr %29)
+  %31 = extractvalue { ptr, ptr, ptr, i32 } %28, 3
+  %32 = getelementptr ptr, ptr %29, i32 %31
+  %33 = load ptr, ptr %32, align 8
+  %34 = extractvalue { ptr, ptr, ptr, i32 } %28, 1
+  %35 = call ptr %33(ptr %34)
+  %36 = load i32, ptr %35, align 4
+  %37 = sitofp i32 %36 to double
+  %38 = getelementptr { ptr, ptr, ptr, i32 }, ptr %21, i32 0, i32 0
+  %39 = load ptr, ptr %38, align 8
+  %40 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %39, 0
+  %41 = getelementptr { ptr, ptr, ptr, i32 }, ptr %21, i32 0, i32 1
+  %42 = load ptr, ptr %41, align 8
+  %43 = insertvalue { ptr, ptr, ptr, i32 } %40, ptr %42, 1
+  %44 = getelementptr { ptr, ptr, ptr, i32 }, ptr %21, i32 0, i32 2
+  %45 = load ptr, ptr %44, align 8
+  %46 = insertvalue { ptr, ptr, ptr, i32 } %43, ptr %45, 2
+  %47 = getelementptr { ptr, ptr, ptr, i32 }, ptr %21, i32 0, i32 3
+  %48 = load i32, ptr %47, align 4
+  %49 = insertvalue { ptr, ptr, ptr, i32 } %46, i32 %48, 3
+  %50 = alloca [0 x ptr], align 8
+  %51 = call ptr @llvm.invariant.start.p0(i64 0, ptr %50)
+  %52 = call ptr @llvm.invariant.start.p0(i64 144, ptr %39)
+  %53 = getelementptr ptr, ptr %39, i32 %48
+  %54 = getelementptr ptr, ptr %53, i32 4
+  %55 = load ptr, ptr %54, align 8
+  %56 = alloca [0 x ptr], align 8
+  %57 = call ptr %55({ ptr, ptr, ptr, i32 } %49, ptr %56)
+  %58 = call double %57({ ptr, ptr, ptr, i32 } %49, { ptr, ptr, ptr, i32 } %49, ptr %50)
+  %59 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ double }, ptr null, i32 1) to i64))
+  %60 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %61 = getelementptr { ptr, ptr, ptr, i32 }, ptr %60, i32 0, i32 1
+  %62 = getelementptr { ptr, ptr, ptr, i32 }, ptr %60, i32 0, i32 3
+  store ptr @Float64, ptr %60, align 8
+  store ptr %59, ptr %61, align 8
+  store i32 7, ptr %62, align 4
+  %63 = call ptr @llvm.invariant.start.p0(i64 16, ptr %60)
+  %64 = getelementptr { ptr, ptr, ptr, i32 }, ptr %21, i32 0, i32 0
+  %65 = load ptr, ptr %64, align 8
+  %66 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %65, 0
+  %67 = getelementptr { ptr, ptr, ptr, i32 }, ptr %21, i32 0, i32 1
+  %68 = load ptr, ptr %67, align 8
+  %69 = insertvalue { ptr, ptr, ptr, i32 } %66, ptr %68, 1
+  %70 = getelementptr { ptr, ptr, ptr, i32 }, ptr %21, i32 0, i32 2
+  %71 = load ptr, ptr %70, align 8
+  %72 = insertvalue { ptr, ptr, ptr, i32 } %69, ptr %71, 2
+  %73 = getelementptr { ptr, ptr, ptr, i32 }, ptr %21, i32 0, i32 3
+  %74 = load i32, ptr %73, align 4
+  %75 = insertvalue { ptr, ptr, ptr, i32 } %72, i32 %74, 3
+  %76 = alloca [0 x ptr], align 8
+  %77 = call ptr @llvm.invariant.start.p0(i64 0, ptr %76)
+  %78 = call ptr @llvm.invariant.start.p0(i64 144, ptr %65)
+  %79 = getelementptr ptr, ptr %65, i32 %74
+  %80 = getelementptr ptr, ptr %79, i32 4
+  %81 = load ptr, ptr %80, align 8
+  %82 = alloca [0 x ptr], align 8
+  %83 = call ptr %81({ ptr, ptr, ptr, i32 } %75, ptr %82)
+  %84 = call double %83({ ptr, ptr, ptr, i32 } %75, { ptr, ptr, ptr, i32 } %75, ptr %76)
+  %85 = fadd double %37, %84
+  %86 = getelementptr { ptr, ptr, ptr, i32 }, ptr %60, i32 0, i32 0
+  %87 = load ptr, ptr %86, align 8
+  %88 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %87, 0
+  %89 = getelementptr { ptr, ptr, ptr, i32 }, ptr %60, i32 0, i32 1
+  %90 = load ptr, ptr %89, align 8
+  %91 = insertvalue { ptr, ptr, ptr, i32 } %88, ptr %90, 1
+  %92 = getelementptr { ptr, ptr, ptr, i32 }, ptr %60, i32 0, i32 2
+  %93 = load ptr, ptr %92, align 8
+  %94 = insertvalue { ptr, ptr, ptr, i32 } %91, ptr %93, 2
+  %95 = getelementptr { ptr, ptr, ptr, i32 }, ptr %60, i32 0, i32 3
+  %96 = load i32, ptr %95, align 4
+  %97 = insertvalue { ptr, ptr, ptr, i32 } %94, i32 %96, 3
+  %98 = alloca [1 x ptr], align 8
+  %99 = getelementptr [1 x ptr], ptr %98, i32 0, i32 0
+  store ptr @_parameterization_Ptrf64, ptr %99, align 8
+  %100 = call ptr @llvm.invariant.start.p0(i64 1, ptr %98)
+  %101 = call ptr @llvm.invariant.start.p0(i64 144, ptr %87)
+  %102 = getelementptr ptr, ptr %87, i32 %96
+  %103 = getelementptr ptr, ptr %102, i32 3
+  %104 = load ptr, ptr %103, align 8
+  %105 = alloca [1 x ptr], align 8
+  %106 = getelementptr [1 x ptr], ptr %105, i32 0, i32 0
+  store ptr @f64_typ, ptr %106, align 8
+  %107 = call ptr %104({ ptr, ptr, ptr, i32 } %97, ptr %105, double %85)
+  call void %107({ ptr, ptr, ptr, i32 } %97, { ptr, ptr, ptr, i32 } %97, ptr %98, double %85)
+  %108 = getelementptr { ptr, i160 }, ptr %60, i32 0, i32 0
+  %109 = load ptr, ptr %108, align 8
+  %110 = insertvalue { ptr, i160 } undef, ptr %109, 0
+  %111 = getelementptr { ptr, i160 }, ptr %60, i32 0, i32 1
+  %112 = load i160, ptr %111, align 4
+  %113 = insertvalue { ptr, i160 } %110, i160 %112, 1
+  ret { ptr, i160 } %113
+}
+
+define ptr @Int32_B__ADD_otherInt32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %0, ptr %1, { ptr, i160 } %2) {
   %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
   %5 = getelementptr [1 x ptr], ptr %1, i32 0, i32 0
   %6 = load ptr, ptr %5, align 8
@@ -14242,7 +14000,7 @@ define ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0,
   %12 = load i64, ptr %8, align 4
   %13 = load ptr, ptr %9, align 8
   %14 = load ptr, ptr %10, align 8
-  %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %14)
+  %15 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %14)
   br i1 %15, label %16, label %30
 
 16:                                               ; preds = %3
@@ -14256,7 +14014,7 @@ define ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0,
   %24 = load i64, ptr %20, align 4
   %25 = load ptr, ptr %21, align 8
   %26 = load ptr, ptr %22, align 8
-  %27 = call i1 @subtype_test_wrapper(ptr %25, i64 %24, i64 %23, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %26)
+  %27 = call i1 @subtype_test_wrapper(ptr %25, i64 %24, i64 %23, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %26)
   %28 = xor i1 %27, true
   %29 = zext i1 %28 to i32
   br label %31
@@ -14286,7 +14044,7 @@ define ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0,
   %44 = load i64, ptr %40, align 4
   %45 = load ptr, ptr %41, align 8
   %46 = load ptr, ptr %42, align 8
-  %47 = call i1 @subtype_test_wrapper(ptr %45, i64 %44, i64 %43, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %46)
+  %47 = call i1 @subtype_test_wrapper(ptr %45, i64 %44, i64 %43, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %46)
   br i1 %47, label %48, label %60
 
 48:                                               ; preds = %36
@@ -14300,7 +14058,7 @@ define ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0,
   %56 = load i64, ptr %52, align 4
   %57 = load ptr, ptr %53, align 8
   %58 = load ptr, ptr %54, align 8
-  %59 = call i1 @subtype_test_wrapper(ptr %57, i64 %56, i64 %55, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %58)
+  %59 = call i1 @subtype_test_wrapper(ptr %57, i64 %56, i64 %55, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %58)
   br label %60
 
 60:                                               ; preds = %48, %36
@@ -15428,7 +15186,7 @@ define i32 @main() {
   %521 = insertvalue { ptr, ptr, ptr, i32 } %518, i32 %520, 3
   %522 = alloca [0 x ptr], align 8
   %523 = call ptr @llvm.invariant.start.p0(i64 0, ptr %522)
-  %524 = call ptr @llvm.invariant.start.p0(i64 920, ptr %511)
+  %524 = call ptr @llvm.invariant.start.p0(i64 552, ptr %511)
   %525 = getelementptr ptr, ptr %511, i32 %520
   %526 = getelementptr ptr, ptr %525, i32 5
   %527 = load ptr, ptr %526, align 8
@@ -15531,7 +15289,7 @@ define i32 @main() {
   %602 = getelementptr [1 x ptr], ptr %601, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %602, align 8
   %603 = call ptr @llvm.invariant.start.p0(i64 1, ptr %601)
-  %604 = call ptr @llvm.invariant.start.p0(i64 920, ptr %590)
+  %604 = call ptr @llvm.invariant.start.p0(i64 552, ptr %590)
   %605 = getelementptr ptr, ptr %590, i32 %599
   %606 = getelementptr ptr, ptr %605, i32 9
   %607 = load ptr, ptr %606, align 8
@@ -15577,7 +15335,7 @@ define i32 @main() {
   %640 = getelementptr [1 x ptr], ptr %639, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %640, align 8
   %641 = call ptr @llvm.invariant.start.p0(i64 1, ptr %639)
-  %642 = call ptr @llvm.invariant.start.p0(i64 920, ptr %628)
+  %642 = call ptr @llvm.invariant.start.p0(i64 552, ptr %628)
   %643 = getelementptr ptr, ptr %628, i32 %637
   %644 = getelementptr ptr, ptr %643, i32 9
   %645 = load ptr, ptr %644, align 8
@@ -15623,7 +15381,7 @@ define i32 @main() {
   %678 = getelementptr [1 x ptr], ptr %677, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %678, align 8
   %679 = call ptr @llvm.invariant.start.p0(i64 1, ptr %677)
-  %680 = call ptr @llvm.invariant.start.p0(i64 920, ptr %666)
+  %680 = call ptr @llvm.invariant.start.p0(i64 552, ptr %666)
   %681 = getelementptr ptr, ptr %666, i32 %675
   %682 = getelementptr ptr, ptr %681, i32 9
   %683 = load ptr, ptr %682, align 8
@@ -15669,7 +15427,7 @@ define i32 @main() {
   %716 = getelementptr [1 x ptr], ptr %715, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %716, align 8
   %717 = call ptr @llvm.invariant.start.p0(i64 1, ptr %715)
-  %718 = call ptr @llvm.invariant.start.p0(i64 920, ptr %704)
+  %718 = call ptr @llvm.invariant.start.p0(i64 552, ptr %704)
   %719 = getelementptr ptr, ptr %704, i32 %713
   %720 = getelementptr ptr, ptr %719, i32 9
   %721 = load ptr, ptr %720, align 8
@@ -15712,7 +15470,7 @@ define i32 @main() {
   %748 = insertvalue { ptr, i160 } %745, i160 %747, 1
   %749 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %749)
-  call void @llvm.init.trampoline(ptr %749, ptr @vwhlenclrk, ptr @_functionliteral_unzlsbwqfy)
+  call void @llvm.init.trampoline(ptr %749, ptr @zoebybybap, ptr @_functionliteral_igdeskdiky)
   %750 = alloca ptr, align 8
   %751 = call ptr @llvm.adjust.trampoline(ptr %749)
   store ptr %751, ptr %750, align 8
@@ -15739,7 +15497,7 @@ define i32 @main() {
   %771 = getelementptr [2 x ptr], ptr %769, i32 0, i32 1
   store ptr @_parameterization_FunctionPtri32._Ptri32_to_Ptri32, ptr %771, align 8
   %772 = call ptr @llvm.invariant.start.p0(i64 4, ptr %769)
-  %773 = call ptr @llvm.invariant.start.p0(i64 920, ptr %758)
+  %773 = call ptr @llvm.invariant.start.p0(i64 552, ptr %758)
   %774 = getelementptr ptr, ptr %758, i32 %767
   %775 = getelementptr ptr, ptr %774, i32 16
   %776 = load ptr, ptr %775, align 8
@@ -15775,7 +15533,7 @@ define i32 @main() {
   call void %798(ptr %791, { ptr, i160 } %790)
   %799 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %799)
-  call void @llvm.init.trampoline(ptr %799, ptr @vykqxjxowl, ptr @_functionliteral_udeczrazso)
+  call void @llvm.init.trampoline(ptr %799, ptr @vfrsdfbjoo, ptr @_functionliteral_ntoqpruzgy)
   %800 = alloca ptr, align 8
   %801 = call ptr @llvm.adjust.trampoline(ptr %799)
   store ptr %801, ptr %800, align 8
@@ -15800,7 +15558,7 @@ define i32 @main() {
   %820 = getelementptr [1 x ptr], ptr %819, i32 0, i32 0
   store ptr @_parameterization_FunctionPtri32_to_Ptri32, ptr %820, align 8
   %821 = call ptr @llvm.invariant.start.p0(i64 1, ptr %819)
-  %822 = call ptr @llvm.invariant.start.p0(i64 920, ptr %808)
+  %822 = call ptr @llvm.invariant.start.p0(i64 552, ptr %808)
   %823 = getelementptr ptr, ptr %808, i32 %817
   %824 = getelementptr ptr, ptr %823, i32 19
   %825 = load ptr, ptr %824, align 8
@@ -15868,7 +15626,7 @@ define i32 @main() {
   %871 = call ptr @llvm.invariant.start.p0(i64 16, ptr %858)
   %872 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %872)
-  call void @llvm.init.trampoline(ptr %872, ptr @jsaommlczr, ptr @_functionliteral_eyquzqwqst)
+  call void @llvm.init.trampoline(ptr %872, ptr @cqejciyerb, ptr @_functionliteral_qraxizhkxs)
   %873 = alloca ptr, align 8
   %874 = call ptr @llvm.adjust.trampoline(ptr %872)
   store ptr %874, ptr %873, align 8
@@ -15879,7 +15637,7 @@ define i32 @main() {
   %879 = insertvalue { ptr } undef, ptr %878, 0
   %880 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %880)
-  call void @llvm.init.trampoline(ptr %880, ptr @akgnixsadz, ptr @_functionliteral_cgfrvifheg)
+  call void @llvm.init.trampoline(ptr %880, ptr @ccxydhmscd, ptr @_functionliteral_nejudtpyqs)
   %881 = alloca ptr, align 8
   %882 = call ptr @llvm.adjust.trampoline(ptr %880)
   store ptr %882, ptr %881, align 8
@@ -15904,7 +15662,7 @@ define i32 @main() {
   %901 = getelementptr [1 x ptr], ptr %900, i32 0, i32 0
   store ptr @_parameterization_FunctionPtri32_to_Ptri32, ptr %901, align 8
   %902 = call ptr @llvm.invariant.start.p0(i64 1, ptr %900)
-  %903 = call ptr @llvm.invariant.start.p0(i64 776, ptr %889)
+  %903 = call ptr @llvm.invariant.start.p0(i64 408, ptr %889)
   %904 = getelementptr ptr, ptr %889, i32 %898
   %905 = getelementptr ptr, ptr %904, i32 10
   %906 = load ptr, ptr %905, align 8
@@ -15950,7 +15708,7 @@ define i32 @main() {
   %939 = getelementptr [1 x ptr], ptr %938, i32 0, i32 0
   store ptr @_parameterization_FunctionPtri32_to_Ptrf64, ptr %939, align 8
   %940 = call ptr @llvm.invariant.start.p0(i64 1, ptr %938)
-  %941 = call ptr @llvm.invariant.start.p0(i64 776, ptr %927)
+  %941 = call ptr @llvm.invariant.start.p0(i64 408, ptr %927)
   %942 = getelementptr ptr, ptr %927, i32 %936
   %943 = getelementptr ptr, ptr %942, i32 10
   %944 = load ptr, ptr %943, align 8
@@ -16030,7 +15788,7 @@ define i32 @main() {
   %1002 = insertvalue { ptr, ptr, ptr, i32 } %999, i32 %1001, 3
   %1003 = alloca [0 x ptr], align 8
   %1004 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1003)
-  %1005 = call ptr @llvm.invariant.start.p0(i64 776, ptr %992)
+  %1005 = call ptr @llvm.invariant.start.p0(i64 408, ptr %992)
   %1006 = getelementptr ptr, ptr %992, i32 %1001
   %1007 = getelementptr ptr, ptr %1006, i32 5
   %1008 = load ptr, ptr %1007, align 8
@@ -16111,7 +15869,7 @@ define i32 @main() {
   %1066 = insertvalue { ptr, ptr, ptr, i32 } %1064, i32 %1065, 3
   %1067 = alloca [0 x ptr], align 8
   %1068 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1067)
-  %1069 = call ptr @llvm.invariant.start.p0(i64 136, ptr %1059)
+  %1069 = call ptr @llvm.invariant.start.p0(i64 88, ptr %1059)
   %1070 = getelementptr ptr, ptr %1059, i32 %1065
   %1071 = getelementptr ptr, ptr %1070, i32 5
   %1072 = load ptr, ptr %1071, align 8
@@ -16246,7 +16004,7 @@ define i32 @main() {
   %1170 = getelementptr [1 x ptr], ptr %1169, i32 0, i32 0
   store ptr @_parameterization_MapIterable2Ptri32._Ptrf64, ptr %1170, align 8
   %1171 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1169)
-  %1172 = call ptr @llvm.invariant.start.p0(i64 920, ptr %1158)
+  %1172 = call ptr @llvm.invariant.start.p0(i64 552, ptr %1158)
   %1173 = getelementptr ptr, ptr %1158, i32 %1167
   %1174 = getelementptr ptr, ptr %1173, i32 23
   %1175 = load ptr, ptr %1174, align 8
@@ -16396,7 +16154,7 @@ define i32 @main() {
   %1288 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1271, i32 0, i32 3
   br label %1289
 
-1289:                                             ; preds = %1437, %1131
+1289:                                             ; preds = %1434, %1131
   %1290 = load ptr, ptr %1285, align 8
   %1291 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1290, 0
   %1292 = load ptr, ptr %1286, align 8
@@ -16427,7 +16185,7 @@ define i32 @main() {
   %1315 = alloca i1, align 1
   store i1 %1314, ptr %1315, align 1
   %1316 = load i1, ptr %1315, align 1
-  br i1 %1316, label %1317, label %1437
+  br i1 %1316, label %1317, label %1434
 
 1317:                                             ; preds = %1289
   %1318 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -16513,626 +16271,623 @@ define i32 @main() {
   %1387 = call { ptr, i160 } %1386({ ptr, ptr, ptr, i32 } %1378, { ptr, ptr, ptr, i32 } %1378, ptr %1379)
   %1388 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1387, ptr %1388, align 8
-  %1389 = alloca { ptr, i160 }, align 8
-  %1390 = getelementptr { ptr, i160 }, ptr %1388, i32 0, i32 0
-  %1391 = getelementptr { ptr, i160 }, ptr %1389, i32 0, i32 0
-  %1392 = load ptr, ptr %1390, align 8
-  store ptr %1392, ptr %1391, align 8
-  %1393 = getelementptr { ptr, i160 }, ptr %1388, i32 0, i32 1
-  %1394 = getelementptr { ptr, i160 }, ptr %1389, i32 0, i32 1
-  %1395 = load i160, ptr %1393, align 4
-  store i160 %1395, ptr %1394, align 4
-  call void @set_offset(ptr %1389, ptr @Object)
-  %1396 = getelementptr { ptr, i160 }, ptr %1389, i32 0, i32 0
-  %1397 = load ptr, ptr %1396, align 8
+  %1389 = alloca double, align 8
+  %1390 = getelementptr { ptr, i160 }, ptr %1388, i32 0, i32 1
+  %1391 = load double, ptr %1390, align 8
+  store double %1391, ptr %1389, align 8
+  %1392 = alloca i160, align 8
+  %1393 = alloca ptr, align 8
+  %1394 = load double, ptr %1389, align 8
+  store double %1394, ptr %1392, align 8
+  %1395 = alloca i64, align 8
+  store i64 ptrtoint (ptr @f64_typ to i64), ptr %1395, align 4
+  %1396 = load i64, ptr %1395, align 4
+  store i64 %1396, ptr %1393, align 4
+  %1397 = load ptr, ptr %1393, align 8
   %1398 = insertvalue { ptr, i160 } undef, ptr %1397, 0
-  %1399 = getelementptr { ptr, i160 }, ptr %1389, i32 0, i32 1
-  %1400 = load i160, ptr %1399, align 4
-  %1401 = insertvalue { ptr, i160 } %1398, i160 %1400, 1
-  %1402 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([1 x ptr], ptr null, i32 1) to i64))
-  %1403 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1402)
-  store ptr @Object, ptr %1402, align 8
-  %1404 = alloca [1 x ptr], align 8
-  %1405 = getelementptr [1 x ptr], ptr %1404, i32 0, i32 0
-  store ptr %1402, ptr %1405, align 8
-  %1406 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1404)
-  %1407 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %1408 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 7), align 8
-  %1409 = alloca [1 x ptr], align 8
-  %1410 = getelementptr [1 x ptr], ptr %1409, i32 0, i32 0
-  store ptr %1397, ptr %1410, align 8
-  %1411 = call ptr %1408(ptr %1409, { ptr, i160 } %1401)
-  call void %1411(ptr %1404, { ptr, i160 } %1401)
-  %1412 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %1413 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1318, i32 0, i32 0
-  %1414 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1412, i32 0, i32 0
+  %1399 = load i160, ptr %1392, align 4
+  %1400 = insertvalue { ptr, i160 } %1398, i160 %1399, 1
+  %1401 = alloca [1 x ptr], align 8
+  %1402 = getelementptr [1 x ptr], ptr %1401, i32 0, i32 0
+  store ptr @_parameterization_Ptrf64, ptr %1402, align 8
+  %1403 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1401)
+  %1404 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
+  %1405 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 7), align 8
+  %1406 = alloca [1 x ptr], align 8
+  %1407 = getelementptr [1 x ptr], ptr %1406, i32 0, i32 0
+  store ptr %1397, ptr %1407, align 8
+  %1408 = call ptr %1405(ptr %1406, { ptr, i160 } %1400)
+  call void %1408(ptr %1401, { ptr, i160 } %1400)
+  %1409 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %1410 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1318, i32 0, i32 0
+  %1411 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1409, i32 0, i32 0
+  %1412 = load ptr, ptr %1410, align 8
+  store ptr %1412, ptr %1411, align 8
+  %1413 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1318, i32 0, i32 1
+  %1414 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1409, i32 0, i32 1
   %1415 = load ptr, ptr %1413, align 8
   store ptr %1415, ptr %1414, align 8
-  %1416 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1318, i32 0, i32 1
-  %1417 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1412, i32 0, i32 1
+  %1416 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1318, i32 0, i32 2
+  %1417 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1409, i32 0, i32 2
   %1418 = load ptr, ptr %1416, align 8
   store ptr %1418, ptr %1417, align 8
-  %1419 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1318, i32 0, i32 2
-  %1420 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1412, i32 0, i32 2
-  %1421 = load ptr, ptr %1419, align 8
-  store ptr %1421, ptr %1420, align 8
-  %1422 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1318, i32 0, i32 3
-  %1423 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1412, i32 0, i32 3
-  %1424 = load i32, ptr %1422, align 4
-  store i32 %1424, ptr %1423, align 4
-  call void @set_offset(ptr %1412, ptr @Pair)
-  %1425 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1412, i32 0, i32 0
-  %1426 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1307, i32 0, i32 0
+  %1419 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1318, i32 0, i32 3
+  %1420 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1409, i32 0, i32 3
+  %1421 = load i32, ptr %1419, align 4
+  store i32 %1421, ptr %1420, align 4
+  call void @set_offset(ptr %1409, ptr @Pair)
+  %1422 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1409, i32 0, i32 0
+  %1423 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1307, i32 0, i32 0
+  %1424 = load ptr, ptr %1422, align 8
+  store ptr %1424, ptr %1423, align 8
+  %1425 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1409, i32 0, i32 1
+  %1426 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1307, i32 0, i32 1
   %1427 = load ptr, ptr %1425, align 8
   store ptr %1427, ptr %1426, align 8
-  %1428 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1412, i32 0, i32 1
-  %1429 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1307, i32 0, i32 1
+  %1428 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1409, i32 0, i32 2
+  %1429 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1307, i32 0, i32 2
   %1430 = load ptr, ptr %1428, align 8
   store ptr %1430, ptr %1429, align 8
-  %1431 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1412, i32 0, i32 2
-  %1432 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1307, i32 0, i32 2
-  %1433 = load ptr, ptr %1431, align 8
-  store ptr %1433, ptr %1432, align 8
-  %1434 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1412, i32 0, i32 3
-  %1435 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1307, i32 0, i32 3
-  %1436 = load i32, ptr %1434, align 4
-  store i32 %1436, ptr %1435, align 4
-  br label %1437
+  %1431 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1409, i32 0, i32 3
+  %1432 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1307, i32 0, i32 3
+  %1433 = load i32, ptr %1431, align 4
+  store i32 %1433, ptr %1432, align 4
+  br label %1434
 
-1437:                                             ; preds = %1317, %1289
-  br i1 %1316, label %1289, label %1438
+1434:                                             ; preds = %1317, %1289
+  br i1 %1316, label %1289, label %1435
 
-1438:                                             ; preds = %1437
-  %1439 = alloca i32, align 4
-  store i32 5, ptr %1439, align 4
-  %1440 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ i32 }, ptr null, i32 1) to i64))
-  %1441 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %1442 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1441, i32 0, i32 1
-  %1443 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1441, i32 0, i32 3
-  store ptr @Int32, ptr %1441, align 8
-  store ptr %1440, ptr %1442, align 8
-  store i32 7, ptr %1443, align 4
-  %1444 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1441)
-  %1445 = alloca i32, align 4
-  store i32 5, ptr %1445, align 4
-  %1446 = load i32, ptr %1445, align 4
-  %1447 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1441, i32 0, i32 0
+1435:                                             ; preds = %1434
+  %1436 = alloca i32, align 4
+  store i32 5, ptr %1436, align 4
+  %1437 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ i32 }, ptr null, i32 1) to i64))
+  %1438 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %1439 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1438, i32 0, i32 1
+  %1440 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1438, i32 0, i32 3
+  store ptr @Int32, ptr %1438, align 8
+  store ptr %1437, ptr %1439, align 8
+  store i32 7, ptr %1440, align 4
+  %1441 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1438)
+  %1442 = alloca i32, align 4
+  store i32 5, ptr %1442, align 4
+  %1443 = load i32, ptr %1442, align 4
+  %1444 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1438, i32 0, i32 0
+  %1445 = load ptr, ptr %1444, align 8
+  %1446 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1445, 0
+  %1447 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1438, i32 0, i32 1
   %1448 = load ptr, ptr %1447, align 8
-  %1449 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1448, 0
-  %1450 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1441, i32 0, i32 1
+  %1449 = insertvalue { ptr, ptr, ptr, i32 } %1446, ptr %1448, 1
+  %1450 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1438, i32 0, i32 2
   %1451 = load ptr, ptr %1450, align 8
-  %1452 = insertvalue { ptr, ptr, ptr, i32 } %1449, ptr %1451, 1
-  %1453 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1441, i32 0, i32 2
-  %1454 = load ptr, ptr %1453, align 8
-  %1455 = insertvalue { ptr, ptr, ptr, i32 } %1452, ptr %1454, 2
-  %1456 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1441, i32 0, i32 3
-  %1457 = load i32, ptr %1456, align 4
-  %1458 = insertvalue { ptr, ptr, ptr, i32 } %1455, i32 %1457, 3
-  %1459 = alloca [1 x ptr], align 8
-  %1460 = getelementptr [1 x ptr], ptr %1459, i32 0, i32 0
-  store ptr @_parameterization_Ptri32, ptr %1460, align 8
-  %1461 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1459)
-  %1462 = call ptr @llvm.invariant.start.p0(i64 136, ptr %1448)
-  %1463 = getelementptr ptr, ptr %1448, i32 %1457
-  %1464 = getelementptr ptr, ptr %1463, i32 2
-  %1465 = load ptr, ptr %1464, align 8
-  %1466 = alloca [1 x ptr], align 8
-  %1467 = getelementptr [1 x ptr], ptr %1466, i32 0, i32 0
-  store ptr @i32_typ, ptr %1467, align 8
-  %1468 = call ptr %1465({ ptr, ptr, ptr, i32 } %1458, ptr %1466, i32 %1446)
-  call void %1468({ ptr, ptr, ptr, i32 } %1458, { ptr, ptr, ptr, i32 } %1458, ptr %1459, i32 %1446)
-  %1469 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %1470 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1441, i32 0, i32 0
-  %1471 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1469, i32 0, i32 0
+  %1452 = insertvalue { ptr, ptr, ptr, i32 } %1449, ptr %1451, 2
+  %1453 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1438, i32 0, i32 3
+  %1454 = load i32, ptr %1453, align 4
+  %1455 = insertvalue { ptr, ptr, ptr, i32 } %1452, i32 %1454, 3
+  %1456 = alloca [1 x ptr], align 8
+  %1457 = getelementptr [1 x ptr], ptr %1456, i32 0, i32 0
+  store ptr @_parameterization_Ptri32, ptr %1457, align 8
+  %1458 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1456)
+  %1459 = call ptr @llvm.invariant.start.p0(i64 136, ptr %1445)
+  %1460 = getelementptr ptr, ptr %1445, i32 %1454
+  %1461 = getelementptr ptr, ptr %1460, i32 2
+  %1462 = load ptr, ptr %1461, align 8
+  %1463 = alloca [1 x ptr], align 8
+  %1464 = getelementptr [1 x ptr], ptr %1463, i32 0, i32 0
+  store ptr @i32_typ, ptr %1464, align 8
+  %1465 = call ptr %1462({ ptr, ptr, ptr, i32 } %1455, ptr %1463, i32 %1443)
+  call void %1465({ ptr, ptr, ptr, i32 } %1455, { ptr, ptr, ptr, i32 } %1455, ptr %1456, i32 %1443)
+  %1466 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %1467 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1438, i32 0, i32 0
+  %1468 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1466, i32 0, i32 0
+  %1469 = load ptr, ptr %1467, align 8
+  store ptr %1469, ptr %1468, align 8
+  %1470 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1438, i32 0, i32 1
+  %1471 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1466, i32 0, i32 1
   %1472 = load ptr, ptr %1470, align 8
   store ptr %1472, ptr %1471, align 8
-  %1473 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1441, i32 0, i32 1
-  %1474 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1469, i32 0, i32 1
+  %1473 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1438, i32 0, i32 2
+  %1474 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1466, i32 0, i32 2
   %1475 = load ptr, ptr %1473, align 8
   store ptr %1475, ptr %1474, align 8
-  %1476 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1441, i32 0, i32 2
-  %1477 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1469, i32 0, i32 2
-  %1478 = load ptr, ptr %1476, align 8
-  store ptr %1478, ptr %1477, align 8
-  %1479 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1441, i32 0, i32 3
-  %1480 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1469, i32 0, i32 3
-  %1481 = load i32, ptr %1479, align 4
-  store i32 %1481, ptr %1480, align 4
-  call void @set_offset(ptr %1469, ptr @Int32)
-  %1482 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %1483 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1469, i32 0, i32 0
-  %1484 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1482, i32 0, i32 0
+  %1476 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1438, i32 0, i32 3
+  %1477 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1466, i32 0, i32 3
+  %1478 = load i32, ptr %1476, align 4
+  store i32 %1478, ptr %1477, align 4
+  call void @set_offset(ptr %1466, ptr @Int32)
+  %1479 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %1480 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1466, i32 0, i32 0
+  %1481 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1479, i32 0, i32 0
+  %1482 = load ptr, ptr %1480, align 8
+  store ptr %1482, ptr %1481, align 8
+  %1483 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1466, i32 0, i32 1
+  %1484 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1479, i32 0, i32 1
   %1485 = load ptr, ptr %1483, align 8
   store ptr %1485, ptr %1484, align 8
-  %1486 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1469, i32 0, i32 1
-  %1487 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1482, i32 0, i32 1
+  %1486 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1466, i32 0, i32 2
+  %1487 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1479, i32 0, i32 2
   %1488 = load ptr, ptr %1486, align 8
   store ptr %1488, ptr %1487, align 8
-  %1489 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1469, i32 0, i32 2
-  %1490 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1482, i32 0, i32 2
-  %1491 = load ptr, ptr %1489, align 8
-  store ptr %1491, ptr %1490, align 8
-  %1492 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1469, i32 0, i32 3
-  %1493 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1482, i32 0, i32 3
-  %1494 = load i32, ptr %1492, align 4
-  store i32 %1494, ptr %1493, align 4
-  %1495 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1482)
-  %1496 = alloca i32, align 4
-  store i32 7, ptr %1496, align 4
-  %1497 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ i32 }, ptr null, i32 1) to i64))
-  %1498 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %1499 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1498, i32 0, i32 1
-  %1500 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1498, i32 0, i32 3
-  store ptr @Int32, ptr %1498, align 8
-  store ptr %1497, ptr %1499, align 8
-  store i32 7, ptr %1500, align 4
-  %1501 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1498)
-  %1502 = alloca i32, align 4
-  store i32 7, ptr %1502, align 4
-  %1503 = load i32, ptr %1502, align 4
-  %1504 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1498, i32 0, i32 0
+  %1489 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1466, i32 0, i32 3
+  %1490 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1479, i32 0, i32 3
+  %1491 = load i32, ptr %1489, align 4
+  store i32 %1491, ptr %1490, align 4
+  %1492 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1479)
+  %1493 = alloca i32, align 4
+  store i32 7, ptr %1493, align 4
+  %1494 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ i32 }, ptr null, i32 1) to i64))
+  %1495 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %1496 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1495, i32 0, i32 1
+  %1497 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1495, i32 0, i32 3
+  store ptr @Int32, ptr %1495, align 8
+  store ptr %1494, ptr %1496, align 8
+  store i32 7, ptr %1497, align 4
+  %1498 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1495)
+  %1499 = alloca i32, align 4
+  store i32 7, ptr %1499, align 4
+  %1500 = load i32, ptr %1499, align 4
+  %1501 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1495, i32 0, i32 0
+  %1502 = load ptr, ptr %1501, align 8
+  %1503 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1502, 0
+  %1504 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1495, i32 0, i32 1
   %1505 = load ptr, ptr %1504, align 8
-  %1506 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1505, 0
-  %1507 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1498, i32 0, i32 1
+  %1506 = insertvalue { ptr, ptr, ptr, i32 } %1503, ptr %1505, 1
+  %1507 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1495, i32 0, i32 2
   %1508 = load ptr, ptr %1507, align 8
-  %1509 = insertvalue { ptr, ptr, ptr, i32 } %1506, ptr %1508, 1
-  %1510 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1498, i32 0, i32 2
-  %1511 = load ptr, ptr %1510, align 8
-  %1512 = insertvalue { ptr, ptr, ptr, i32 } %1509, ptr %1511, 2
-  %1513 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1498, i32 0, i32 3
-  %1514 = load i32, ptr %1513, align 4
-  %1515 = insertvalue { ptr, ptr, ptr, i32 } %1512, i32 %1514, 3
-  %1516 = alloca [1 x ptr], align 8
-  %1517 = getelementptr [1 x ptr], ptr %1516, i32 0, i32 0
-  store ptr @_parameterization_Ptri32, ptr %1517, align 8
-  %1518 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1516)
-  %1519 = call ptr @llvm.invariant.start.p0(i64 136, ptr %1505)
-  %1520 = getelementptr ptr, ptr %1505, i32 %1514
-  %1521 = getelementptr ptr, ptr %1520, i32 2
-  %1522 = load ptr, ptr %1521, align 8
-  %1523 = alloca [1 x ptr], align 8
-  %1524 = getelementptr [1 x ptr], ptr %1523, i32 0, i32 0
-  store ptr @i32_typ, ptr %1524, align 8
-  %1525 = call ptr %1522({ ptr, ptr, ptr, i32 } %1515, ptr %1523, i32 %1503)
-  call void %1525({ ptr, ptr, ptr, i32 } %1515, { ptr, ptr, ptr, i32 } %1515, ptr %1516, i32 %1503)
-  %1526 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %1527 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1498, i32 0, i32 0
-  %1528 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1526, i32 0, i32 0
+  %1509 = insertvalue { ptr, ptr, ptr, i32 } %1506, ptr %1508, 2
+  %1510 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1495, i32 0, i32 3
+  %1511 = load i32, ptr %1510, align 4
+  %1512 = insertvalue { ptr, ptr, ptr, i32 } %1509, i32 %1511, 3
+  %1513 = alloca [1 x ptr], align 8
+  %1514 = getelementptr [1 x ptr], ptr %1513, i32 0, i32 0
+  store ptr @_parameterization_Ptri32, ptr %1514, align 8
+  %1515 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1513)
+  %1516 = call ptr @llvm.invariant.start.p0(i64 136, ptr %1502)
+  %1517 = getelementptr ptr, ptr %1502, i32 %1511
+  %1518 = getelementptr ptr, ptr %1517, i32 2
+  %1519 = load ptr, ptr %1518, align 8
+  %1520 = alloca [1 x ptr], align 8
+  %1521 = getelementptr [1 x ptr], ptr %1520, i32 0, i32 0
+  store ptr @i32_typ, ptr %1521, align 8
+  %1522 = call ptr %1519({ ptr, ptr, ptr, i32 } %1512, ptr %1520, i32 %1500)
+  call void %1522({ ptr, ptr, ptr, i32 } %1512, { ptr, ptr, ptr, i32 } %1512, ptr %1513, i32 %1500)
+  %1523 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %1524 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1495, i32 0, i32 0
+  %1525 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1523, i32 0, i32 0
+  %1526 = load ptr, ptr %1524, align 8
+  store ptr %1526, ptr %1525, align 8
+  %1527 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1495, i32 0, i32 1
+  %1528 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1523, i32 0, i32 1
   %1529 = load ptr, ptr %1527, align 8
   store ptr %1529, ptr %1528, align 8
-  %1530 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1498, i32 0, i32 1
-  %1531 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1526, i32 0, i32 1
+  %1530 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1495, i32 0, i32 2
+  %1531 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1523, i32 0, i32 2
   %1532 = load ptr, ptr %1530, align 8
   store ptr %1532, ptr %1531, align 8
-  %1533 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1498, i32 0, i32 2
-  %1534 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1526, i32 0, i32 2
-  %1535 = load ptr, ptr %1533, align 8
-  store ptr %1535, ptr %1534, align 8
-  %1536 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1498, i32 0, i32 3
-  %1537 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1526, i32 0, i32 3
-  %1538 = load i32, ptr %1536, align 4
-  store i32 %1538, ptr %1537, align 4
-  call void @set_offset(ptr %1526, ptr @Int32)
-  %1539 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %1540 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1526, i32 0, i32 0
-  %1541 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1539, i32 0, i32 0
+  %1533 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1495, i32 0, i32 3
+  %1534 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1523, i32 0, i32 3
+  %1535 = load i32, ptr %1533, align 4
+  store i32 %1535, ptr %1534, align 4
+  call void @set_offset(ptr %1523, ptr @Int32)
+  %1536 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %1537 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1523, i32 0, i32 0
+  %1538 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1536, i32 0, i32 0
+  %1539 = load ptr, ptr %1537, align 8
+  store ptr %1539, ptr %1538, align 8
+  %1540 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1523, i32 0, i32 1
+  %1541 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1536, i32 0, i32 1
   %1542 = load ptr, ptr %1540, align 8
   store ptr %1542, ptr %1541, align 8
-  %1543 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1526, i32 0, i32 1
-  %1544 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1539, i32 0, i32 1
+  %1543 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1523, i32 0, i32 2
+  %1544 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1536, i32 0, i32 2
   %1545 = load ptr, ptr %1543, align 8
   store ptr %1545, ptr %1544, align 8
-  %1546 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1526, i32 0, i32 2
-  %1547 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1539, i32 0, i32 2
-  %1548 = load ptr, ptr %1546, align 8
-  store ptr %1548, ptr %1547, align 8
-  %1549 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1526, i32 0, i32 3
-  %1550 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1539, i32 0, i32 3
-  %1551 = load i32, ptr %1549, align 4
-  store i32 %1551, ptr %1550, align 4
-  %1552 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1539)
-  %1553 = getelementptr { ptr, i160 }, ptr %1539, i32 0, i32 0
-  %1554 = load ptr, ptr %1553, align 8
-  %1555 = insertvalue { ptr, i160 } undef, ptr %1554, 0
-  %1556 = getelementptr { ptr, i160 }, ptr %1539, i32 0, i32 1
-  %1557 = load i160, ptr %1556, align 4
-  %1558 = insertvalue { ptr, i160 } %1555, i160 %1557, 1
-  %1559 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1482, i32 0, i32 0
+  %1546 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1523, i32 0, i32 3
+  %1547 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1536, i32 0, i32 3
+  %1548 = load i32, ptr %1546, align 4
+  store i32 %1548, ptr %1547, align 4
+  %1549 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1536)
+  %1550 = getelementptr { ptr, i160 }, ptr %1536, i32 0, i32 0
+  %1551 = load ptr, ptr %1550, align 8
+  %1552 = insertvalue { ptr, i160 } undef, ptr %1551, 0
+  %1553 = getelementptr { ptr, i160 }, ptr %1536, i32 0, i32 1
+  %1554 = load i160, ptr %1553, align 4
+  %1555 = insertvalue { ptr, i160 } %1552, i160 %1554, 1
+  %1556 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1479, i32 0, i32 0
+  %1557 = load ptr, ptr %1556, align 8
+  %1558 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1557, 0
+  %1559 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1479, i32 0, i32 1
   %1560 = load ptr, ptr %1559, align 8
-  %1561 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1560, 0
-  %1562 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1482, i32 0, i32 1
+  %1561 = insertvalue { ptr, ptr, ptr, i32 } %1558, ptr %1560, 1
+  %1562 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1479, i32 0, i32 2
   %1563 = load ptr, ptr %1562, align 8
-  %1564 = insertvalue { ptr, ptr, ptr, i32 } %1561, ptr %1563, 1
-  %1565 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1482, i32 0, i32 2
-  %1566 = load ptr, ptr %1565, align 8
-  %1567 = insertvalue { ptr, ptr, ptr, i32 } %1564, ptr %1566, 2
-  %1568 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1482, i32 0, i32 3
-  %1569 = load i32, ptr %1568, align 4
-  %1570 = insertvalue { ptr, ptr, ptr, i32 } %1567, i32 %1569, 3
-  %1571 = alloca [1 x ptr], align 8
-  %1572 = getelementptr [1 x ptr], ptr %1571, i32 0, i32 0
-  store ptr @_parameterization_Int32, ptr %1572, align 8
-  %1573 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1571)
-  %1574 = call ptr @llvm.invariant.start.p0(i64 136, ptr %1560)
-  %1575 = getelementptr ptr, ptr %1560, i32 %1569
-  %1576 = getelementptr ptr, ptr %1575, i32 4
-  %1577 = load ptr, ptr %1576, align 8
-  %1578 = alloca [1 x ptr], align 8
-  %1579 = getelementptr [1 x ptr], ptr %1578, i32 0, i32 0
-  store ptr %1554, ptr %1579, align 8
-  %1580 = call ptr %1577({ ptr, ptr, ptr, i32 } %1570, ptr %1578, { ptr, i160 } %1558)
-  %1581 = call { ptr, i160 } %1580({ ptr, ptr, ptr, i32 } %1570, { ptr, ptr, ptr, i32 } %1570, ptr %1571, { ptr, i160 } %1558)
-  %1582 = alloca { ptr, i160 }, align 8
-  store { ptr, i160 } %1581, ptr %1582, align 8
-  %1583 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %1584 = getelementptr { ptr, i160 }, ptr %1582, i32 0, i32 0
-  %1585 = getelementptr { ptr, i160 }, ptr %1583, i32 0, i32 0
-  %1586 = load ptr, ptr %1584, align 8
-  store ptr %1586, ptr %1585, align 8
-  %1587 = getelementptr { ptr, i160 }, ptr %1582, i32 0, i32 1
-  %1588 = getelementptr { ptr, i160 }, ptr %1583, i32 0, i32 1
-  %1589 = load i160, ptr %1587, align 4
-  store i160 %1589, ptr %1588, align 4
-  call void @set_offset(ptr %1583, ptr @Int32)
-  %1590 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %1591 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1583, i32 0, i32 0
-  %1592 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1590, i32 0, i32 0
+  %1564 = insertvalue { ptr, ptr, ptr, i32 } %1561, ptr %1563, 2
+  %1565 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1479, i32 0, i32 3
+  %1566 = load i32, ptr %1565, align 4
+  %1567 = insertvalue { ptr, ptr, ptr, i32 } %1564, i32 %1566, 3
+  %1568 = alloca [1 x ptr], align 8
+  %1569 = getelementptr [1 x ptr], ptr %1568, i32 0, i32 0
+  store ptr @_parameterization_Int32, ptr %1569, align 8
+  %1570 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1568)
+  %1571 = call ptr @llvm.invariant.start.p0(i64 136, ptr %1557)
+  %1572 = getelementptr ptr, ptr %1557, i32 %1566
+  %1573 = getelementptr ptr, ptr %1572, i32 4
+  %1574 = load ptr, ptr %1573, align 8
+  %1575 = alloca [1 x ptr], align 8
+  %1576 = getelementptr [1 x ptr], ptr %1575, i32 0, i32 0
+  store ptr %1551, ptr %1576, align 8
+  %1577 = call ptr %1574({ ptr, ptr, ptr, i32 } %1567, ptr %1575, { ptr, i160 } %1555)
+  %1578 = call { ptr, i160 } %1577({ ptr, ptr, ptr, i32 } %1567, { ptr, ptr, ptr, i32 } %1567, ptr %1568, { ptr, i160 } %1555)
+  %1579 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %1578, ptr %1579, align 8
+  %1580 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %1581 = getelementptr { ptr, i160 }, ptr %1579, i32 0, i32 0
+  %1582 = getelementptr { ptr, i160 }, ptr %1580, i32 0, i32 0
+  %1583 = load ptr, ptr %1581, align 8
+  store ptr %1583, ptr %1582, align 8
+  %1584 = getelementptr { ptr, i160 }, ptr %1579, i32 0, i32 1
+  %1585 = getelementptr { ptr, i160 }, ptr %1580, i32 0, i32 1
+  %1586 = load i160, ptr %1584, align 4
+  store i160 %1586, ptr %1585, align 4
+  call void @set_offset(ptr %1580, ptr @Int32)
+  %1587 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %1588 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1580, i32 0, i32 0
+  %1589 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1587, i32 0, i32 0
+  %1590 = load ptr, ptr %1588, align 8
+  store ptr %1590, ptr %1589, align 8
+  %1591 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1580, i32 0, i32 1
+  %1592 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1587, i32 0, i32 1
   %1593 = load ptr, ptr %1591, align 8
   store ptr %1593, ptr %1592, align 8
-  %1594 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1583, i32 0, i32 1
-  %1595 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1590, i32 0, i32 1
+  %1594 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1580, i32 0, i32 2
+  %1595 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1587, i32 0, i32 2
   %1596 = load ptr, ptr %1594, align 8
   store ptr %1596, ptr %1595, align 8
-  %1597 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1583, i32 0, i32 2
-  %1598 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1590, i32 0, i32 2
-  %1599 = load ptr, ptr %1597, align 8
-  store ptr %1599, ptr %1598, align 8
-  %1600 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1583, i32 0, i32 3
-  %1601 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1590, i32 0, i32 3
-  %1602 = load i32, ptr %1600, align 4
-  store i32 %1602, ptr %1601, align 4
-  call void @set_offset(ptr %1590, ptr @Int32)
-  %1603 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %1604 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1590, i32 0, i32 0
-  %1605 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1603, i32 0, i32 0
+  %1597 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1580, i32 0, i32 3
+  %1598 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1587, i32 0, i32 3
+  %1599 = load i32, ptr %1597, align 4
+  store i32 %1599, ptr %1598, align 4
+  call void @set_offset(ptr %1587, ptr @Int32)
+  %1600 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %1601 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1587, i32 0, i32 0
+  %1602 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1600, i32 0, i32 0
+  %1603 = load ptr, ptr %1601, align 8
+  store ptr %1603, ptr %1602, align 8
+  %1604 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1587, i32 0, i32 1
+  %1605 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1600, i32 0, i32 1
   %1606 = load ptr, ptr %1604, align 8
   store ptr %1606, ptr %1605, align 8
-  %1607 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1590, i32 0, i32 1
-  %1608 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1603, i32 0, i32 1
+  %1607 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1587, i32 0, i32 2
+  %1608 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1600, i32 0, i32 2
   %1609 = load ptr, ptr %1607, align 8
   store ptr %1609, ptr %1608, align 8
-  %1610 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1590, i32 0, i32 2
-  %1611 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1603, i32 0, i32 2
-  %1612 = load ptr, ptr %1610, align 8
-  store ptr %1612, ptr %1611, align 8
-  %1613 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1590, i32 0, i32 3
-  %1614 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1603, i32 0, i32 3
-  %1615 = load i32, ptr %1613, align 4
-  store i32 %1615, ptr %1614, align 4
-  %1616 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1603)
-  %1617 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1603, i32 0, i32 0
+  %1610 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1587, i32 0, i32 3
+  %1611 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1600, i32 0, i32 3
+  %1612 = load i32, ptr %1610, align 4
+  store i32 %1612, ptr %1611, align 4
+  %1613 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1600)
+  %1614 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1600, i32 0, i32 0
+  %1615 = load ptr, ptr %1614, align 8
+  %1616 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1615, 0
+  %1617 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1600, i32 0, i32 1
   %1618 = load ptr, ptr %1617, align 8
-  %1619 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1618, 0
-  %1620 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1603, i32 0, i32 1
+  %1619 = insertvalue { ptr, ptr, ptr, i32 } %1616, ptr %1618, 1
+  %1620 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1600, i32 0, i32 2
   %1621 = load ptr, ptr %1620, align 8
-  %1622 = insertvalue { ptr, ptr, ptr, i32 } %1619, ptr %1621, 1
-  %1623 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1603, i32 0, i32 2
-  %1624 = load ptr, ptr %1623, align 8
-  %1625 = insertvalue { ptr, ptr, ptr, i32 } %1622, ptr %1624, 2
-  %1626 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1603, i32 0, i32 3
-  %1627 = load i32, ptr %1626, align 4
-  %1628 = insertvalue { ptr, ptr, ptr, i32 } %1625, i32 %1627, 3
-  %1629 = call { ptr, ptr, ptr, i32 } @add_five({ ptr, ptr, ptr, i32 } %1628)
-  %1630 = alloca { ptr, ptr, ptr, i32 }, align 8
-  store { ptr, ptr, ptr, i32 } %1629, ptr %1630, align 8
-  %1631 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1630)
-  %1632 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1630, i32 0, i32 0
+  %1622 = insertvalue { ptr, ptr, ptr, i32 } %1619, ptr %1621, 2
+  %1623 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1600, i32 0, i32 3
+  %1624 = load i32, ptr %1623, align 4
+  %1625 = insertvalue { ptr, ptr, ptr, i32 } %1622, i32 %1624, 3
+  %1626 = call { ptr, ptr, ptr, i32 } @add_five({ ptr, ptr, ptr, i32 } %1625)
+  %1627 = alloca { ptr, ptr, ptr, i32 }, align 8
+  store { ptr, ptr, ptr, i32 } %1626, ptr %1627, align 8
+  %1628 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1627)
+  %1629 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1627, i32 0, i32 0
+  %1630 = load ptr, ptr %1629, align 8
+  %1631 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1630, 0
+  %1632 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1627, i32 0, i32 1
   %1633 = load ptr, ptr %1632, align 8
-  %1634 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1633, 0
-  %1635 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1630, i32 0, i32 1
+  %1634 = insertvalue { ptr, ptr, ptr, i32 } %1631, ptr %1633, 1
+  %1635 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1627, i32 0, i32 2
   %1636 = load ptr, ptr %1635, align 8
-  %1637 = insertvalue { ptr, ptr, ptr, i32 } %1634, ptr %1636, 1
-  %1638 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1630, i32 0, i32 2
-  %1639 = load ptr, ptr %1638, align 8
-  %1640 = insertvalue { ptr, ptr, ptr, i32 } %1637, ptr %1639, 2
-  %1641 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1630, i32 0, i32 3
-  %1642 = load i32, ptr %1641, align 4
-  %1643 = insertvalue { ptr, ptr, ptr, i32 } %1640, i32 %1642, 3
-  %1644 = alloca [0 x ptr], align 8
-  %1645 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1644)
-  %1646 = call ptr @llvm.invariant.start.p0(i64 144, ptr %1633)
-  %1647 = getelementptr ptr, ptr %1633, i32 %1642
-  %1648 = getelementptr ptr, ptr %1647, i32 4
-  %1649 = load ptr, ptr %1648, align 8
-  %1650 = alloca [0 x ptr], align 8
-  %1651 = call ptr %1649({ ptr, ptr, ptr, i32 } %1643, ptr %1650)
-  %1652 = call double %1651({ ptr, ptr, ptr, i32 } %1643, { ptr, ptr, ptr, i32 } %1643, ptr %1644)
-  %1653 = alloca double, align 8
-  store double %1652, ptr %1653, align 8
-  %1654 = alloca i160, align 8
-  %1655 = alloca ptr, align 8
-  %1656 = load double, ptr %1653, align 8
-  store double %1656, ptr %1654, align 8
-  %1657 = alloca i64, align 8
-  store i64 ptrtoint (ptr @f64_typ to i64), ptr %1657, align 4
-  %1658 = load i64, ptr %1657, align 4
-  store i64 %1658, ptr %1655, align 4
-  %1659 = load ptr, ptr %1655, align 8
-  %1660 = insertvalue { ptr, i160 } undef, ptr %1659, 0
-  %1661 = load i160, ptr %1654, align 4
-  %1662 = insertvalue { ptr, i160 } %1660, i160 %1661, 1
-  %1663 = alloca [1 x ptr], align 8
-  %1664 = getelementptr [1 x ptr], ptr %1663, i32 0, i32 0
-  store ptr @_parameterization_Ptrf64, ptr %1664, align 8
-  %1665 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1663)
-  %1666 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %1667 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 7), align 8
-  %1668 = alloca [1 x ptr], align 8
-  %1669 = getelementptr [1 x ptr], ptr %1668, i32 0, i32 0
-  store ptr %1659, ptr %1669, align 8
-  %1670 = call ptr %1667(ptr %1668, { ptr, i160 } %1662)
-  call void %1670(ptr %1663, { ptr, i160 } %1662)
-  %1671 = alloca i32, align 4
-  store i32 6, ptr %1671, align 4
-  %1672 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ i32 }, ptr null, i32 1) to i64))
-  %1673 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %1674 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1673, i32 0, i32 1
-  %1675 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1673, i32 0, i32 3
-  store ptr @Int32, ptr %1673, align 8
-  store ptr %1672, ptr %1674, align 8
-  store i32 7, ptr %1675, align 4
-  %1676 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1673)
-  %1677 = alloca i32, align 4
-  store i32 6, ptr %1677, align 4
-  %1678 = load i32, ptr %1677, align 4
-  %1679 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1673, i32 0, i32 0
+  %1637 = insertvalue { ptr, ptr, ptr, i32 } %1634, ptr %1636, 2
+  %1638 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1627, i32 0, i32 3
+  %1639 = load i32, ptr %1638, align 4
+  %1640 = insertvalue { ptr, ptr, ptr, i32 } %1637, i32 %1639, 3
+  %1641 = alloca [0 x ptr], align 8
+  %1642 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1641)
+  %1643 = call ptr @llvm.invariant.start.p0(i64 144, ptr %1630)
+  %1644 = getelementptr ptr, ptr %1630, i32 %1639
+  %1645 = getelementptr ptr, ptr %1644, i32 4
+  %1646 = load ptr, ptr %1645, align 8
+  %1647 = alloca [0 x ptr], align 8
+  %1648 = call ptr %1646({ ptr, ptr, ptr, i32 } %1640, ptr %1647)
+  %1649 = call double %1648({ ptr, ptr, ptr, i32 } %1640, { ptr, ptr, ptr, i32 } %1640, ptr %1641)
+  %1650 = alloca double, align 8
+  store double %1649, ptr %1650, align 8
+  %1651 = alloca i160, align 8
+  %1652 = alloca ptr, align 8
+  %1653 = load double, ptr %1650, align 8
+  store double %1653, ptr %1651, align 8
+  %1654 = alloca i64, align 8
+  store i64 ptrtoint (ptr @f64_typ to i64), ptr %1654, align 4
+  %1655 = load i64, ptr %1654, align 4
+  store i64 %1655, ptr %1652, align 4
+  %1656 = load ptr, ptr %1652, align 8
+  %1657 = insertvalue { ptr, i160 } undef, ptr %1656, 0
+  %1658 = load i160, ptr %1651, align 4
+  %1659 = insertvalue { ptr, i160 } %1657, i160 %1658, 1
+  %1660 = alloca [1 x ptr], align 8
+  %1661 = getelementptr [1 x ptr], ptr %1660, i32 0, i32 0
+  store ptr @_parameterization_Ptrf64, ptr %1661, align 8
+  %1662 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1660)
+  %1663 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
+  %1664 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 7), align 8
+  %1665 = alloca [1 x ptr], align 8
+  %1666 = getelementptr [1 x ptr], ptr %1665, i32 0, i32 0
+  store ptr %1656, ptr %1666, align 8
+  %1667 = call ptr %1664(ptr %1665, { ptr, i160 } %1659)
+  call void %1667(ptr %1660, { ptr, i160 } %1659)
+  %1668 = alloca i32, align 4
+  store i32 6, ptr %1668, align 4
+  %1669 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ i32 }, ptr null, i32 1) to i64))
+  %1670 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %1671 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1670, i32 0, i32 1
+  %1672 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1670, i32 0, i32 3
+  store ptr @Int32, ptr %1670, align 8
+  store ptr %1669, ptr %1671, align 8
+  store i32 7, ptr %1672, align 4
+  %1673 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1670)
+  %1674 = alloca i32, align 4
+  store i32 6, ptr %1674, align 4
+  %1675 = load i32, ptr %1674, align 4
+  %1676 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1670, i32 0, i32 0
+  %1677 = load ptr, ptr %1676, align 8
+  %1678 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1677, 0
+  %1679 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1670, i32 0, i32 1
   %1680 = load ptr, ptr %1679, align 8
-  %1681 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1680, 0
-  %1682 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1673, i32 0, i32 1
+  %1681 = insertvalue { ptr, ptr, ptr, i32 } %1678, ptr %1680, 1
+  %1682 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1670, i32 0, i32 2
   %1683 = load ptr, ptr %1682, align 8
-  %1684 = insertvalue { ptr, ptr, ptr, i32 } %1681, ptr %1683, 1
-  %1685 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1673, i32 0, i32 2
-  %1686 = load ptr, ptr %1685, align 8
-  %1687 = insertvalue { ptr, ptr, ptr, i32 } %1684, ptr %1686, 2
-  %1688 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1673, i32 0, i32 3
-  %1689 = load i32, ptr %1688, align 4
-  %1690 = insertvalue { ptr, ptr, ptr, i32 } %1687, i32 %1689, 3
-  %1691 = alloca [1 x ptr], align 8
-  %1692 = getelementptr [1 x ptr], ptr %1691, i32 0, i32 0
-  store ptr @_parameterization_Ptri32, ptr %1692, align 8
-  %1693 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1691)
-  %1694 = call ptr @llvm.invariant.start.p0(i64 136, ptr %1680)
-  %1695 = getelementptr ptr, ptr %1680, i32 %1689
-  %1696 = getelementptr ptr, ptr %1695, i32 2
-  %1697 = load ptr, ptr %1696, align 8
-  %1698 = alloca [1 x ptr], align 8
-  %1699 = getelementptr [1 x ptr], ptr %1698, i32 0, i32 0
-  store ptr @i32_typ, ptr %1699, align 8
-  %1700 = call ptr %1697({ ptr, ptr, ptr, i32 } %1690, ptr %1698, i32 %1678)
-  call void %1700({ ptr, ptr, ptr, i32 } %1690, { ptr, ptr, ptr, i32 } %1690, ptr %1691, i32 %1678)
-  %1701 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, i160 }, ptr }, ptr null, i32 1) to i64))
-  %1702 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %1703 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1702, i32 0, i32 1
-  %1704 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1702, i32 0, i32 3
-  store ptr @Holder, ptr %1702, align 8
-  store ptr %1701, ptr %1703, align 8
-  store i32 7, ptr %1704, align 4
-  %1705 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1702)
-  %1706 = getelementptr { { ptr, i160 }, ptr }, ptr %1701, i32 0, i32 1
-  %1707 = getelementptr [1 x ptr], ptr %1706, i32 0, i32 0
-  store ptr @_parameterization_Int32, ptr %1707, align 8
-  %1708 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1706)
-  %1709 = alloca i32, align 4
-  store i32 6, ptr %1709, align 4
-  %1710 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ i32 }, ptr null, i32 1) to i64))
-  %1711 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %1712 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1711, i32 0, i32 1
-  %1713 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1711, i32 0, i32 3
-  store ptr @Int32, ptr %1711, align 8
-  store ptr %1710, ptr %1712, align 8
-  store i32 7, ptr %1713, align 4
-  %1714 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1711)
-  %1715 = alloca i32, align 4
-  store i32 6, ptr %1715, align 4
-  %1716 = load i32, ptr %1715, align 4
-  %1717 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1711, i32 0, i32 0
+  %1684 = insertvalue { ptr, ptr, ptr, i32 } %1681, ptr %1683, 2
+  %1685 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1670, i32 0, i32 3
+  %1686 = load i32, ptr %1685, align 4
+  %1687 = insertvalue { ptr, ptr, ptr, i32 } %1684, i32 %1686, 3
+  %1688 = alloca [1 x ptr], align 8
+  %1689 = getelementptr [1 x ptr], ptr %1688, i32 0, i32 0
+  store ptr @_parameterization_Ptri32, ptr %1689, align 8
+  %1690 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1688)
+  %1691 = call ptr @llvm.invariant.start.p0(i64 136, ptr %1677)
+  %1692 = getelementptr ptr, ptr %1677, i32 %1686
+  %1693 = getelementptr ptr, ptr %1692, i32 2
+  %1694 = load ptr, ptr %1693, align 8
+  %1695 = alloca [1 x ptr], align 8
+  %1696 = getelementptr [1 x ptr], ptr %1695, i32 0, i32 0
+  store ptr @i32_typ, ptr %1696, align 8
+  %1697 = call ptr %1694({ ptr, ptr, ptr, i32 } %1687, ptr %1695, i32 %1675)
+  call void %1697({ ptr, ptr, ptr, i32 } %1687, { ptr, ptr, ptr, i32 } %1687, ptr %1688, i32 %1675)
+  %1698 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, i160 }, ptr }, ptr null, i32 1) to i64))
+  %1699 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %1700 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1699, i32 0, i32 1
+  %1701 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1699, i32 0, i32 3
+  store ptr @Holder, ptr %1699, align 8
+  store ptr %1698, ptr %1700, align 8
+  store i32 7, ptr %1701, align 4
+  %1702 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1699)
+  %1703 = getelementptr { { ptr, i160 }, ptr }, ptr %1698, i32 0, i32 1
+  %1704 = getelementptr [1 x ptr], ptr %1703, i32 0, i32 0
+  store ptr @_parameterization_Int32, ptr %1704, align 8
+  %1705 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1703)
+  %1706 = alloca i32, align 4
+  store i32 6, ptr %1706, align 4
+  %1707 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ i32 }, ptr null, i32 1) to i64))
+  %1708 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %1709 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1708, i32 0, i32 1
+  %1710 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1708, i32 0, i32 3
+  store ptr @Int32, ptr %1708, align 8
+  store ptr %1707, ptr %1709, align 8
+  store i32 7, ptr %1710, align 4
+  %1711 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1708)
+  %1712 = alloca i32, align 4
+  store i32 6, ptr %1712, align 4
+  %1713 = load i32, ptr %1712, align 4
+  %1714 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1708, i32 0, i32 0
+  %1715 = load ptr, ptr %1714, align 8
+  %1716 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1715, 0
+  %1717 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1708, i32 0, i32 1
   %1718 = load ptr, ptr %1717, align 8
-  %1719 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1718, 0
-  %1720 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1711, i32 0, i32 1
+  %1719 = insertvalue { ptr, ptr, ptr, i32 } %1716, ptr %1718, 1
+  %1720 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1708, i32 0, i32 2
   %1721 = load ptr, ptr %1720, align 8
-  %1722 = insertvalue { ptr, ptr, ptr, i32 } %1719, ptr %1721, 1
-  %1723 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1711, i32 0, i32 2
-  %1724 = load ptr, ptr %1723, align 8
-  %1725 = insertvalue { ptr, ptr, ptr, i32 } %1722, ptr %1724, 2
-  %1726 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1711, i32 0, i32 3
-  %1727 = load i32, ptr %1726, align 4
-  %1728 = insertvalue { ptr, ptr, ptr, i32 } %1725, i32 %1727, 3
-  %1729 = alloca [1 x ptr], align 8
-  %1730 = getelementptr [1 x ptr], ptr %1729, i32 0, i32 0
-  store ptr @_parameterization_Ptri32, ptr %1730, align 8
-  %1731 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1729)
-  %1732 = call ptr @llvm.invariant.start.p0(i64 136, ptr %1718)
-  %1733 = getelementptr ptr, ptr %1718, i32 %1727
-  %1734 = getelementptr ptr, ptr %1733, i32 2
-  %1735 = load ptr, ptr %1734, align 8
-  %1736 = alloca [1 x ptr], align 8
-  %1737 = getelementptr [1 x ptr], ptr %1736, i32 0, i32 0
-  store ptr @i32_typ, ptr %1737, align 8
-  %1738 = call ptr %1735({ ptr, ptr, ptr, i32 } %1728, ptr %1736, i32 %1716)
-  call void %1738({ ptr, ptr, ptr, i32 } %1728, { ptr, ptr, ptr, i32 } %1728, ptr %1729, i32 %1716)
-  %1739 = alloca { ptr, i160 }, align 8
-  %1740 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1711, i32 0, i32 0
-  %1741 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1739, i32 0, i32 0
+  %1722 = insertvalue { ptr, ptr, ptr, i32 } %1719, ptr %1721, 2
+  %1723 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1708, i32 0, i32 3
+  %1724 = load i32, ptr %1723, align 4
+  %1725 = insertvalue { ptr, ptr, ptr, i32 } %1722, i32 %1724, 3
+  %1726 = alloca [1 x ptr], align 8
+  %1727 = getelementptr [1 x ptr], ptr %1726, i32 0, i32 0
+  store ptr @_parameterization_Ptri32, ptr %1727, align 8
+  %1728 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1726)
+  %1729 = call ptr @llvm.invariant.start.p0(i64 136, ptr %1715)
+  %1730 = getelementptr ptr, ptr %1715, i32 %1724
+  %1731 = getelementptr ptr, ptr %1730, i32 2
+  %1732 = load ptr, ptr %1731, align 8
+  %1733 = alloca [1 x ptr], align 8
+  %1734 = getelementptr [1 x ptr], ptr %1733, i32 0, i32 0
+  store ptr @i32_typ, ptr %1734, align 8
+  %1735 = call ptr %1732({ ptr, ptr, ptr, i32 } %1725, ptr %1733, i32 %1713)
+  call void %1735({ ptr, ptr, ptr, i32 } %1725, { ptr, ptr, ptr, i32 } %1725, ptr %1726, i32 %1713)
+  %1736 = alloca { ptr, i160 }, align 8
+  %1737 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1708, i32 0, i32 0
+  %1738 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1736, i32 0, i32 0
+  %1739 = load ptr, ptr %1737, align 8
+  store ptr %1739, ptr %1738, align 8
+  %1740 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1708, i32 0, i32 1
+  %1741 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1736, i32 0, i32 1
   %1742 = load ptr, ptr %1740, align 8
   store ptr %1742, ptr %1741, align 8
-  %1743 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1711, i32 0, i32 1
-  %1744 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1739, i32 0, i32 1
+  %1743 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1708, i32 0, i32 2
+  %1744 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1736, i32 0, i32 2
   %1745 = load ptr, ptr %1743, align 8
   store ptr %1745, ptr %1744, align 8
-  %1746 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1711, i32 0, i32 2
-  %1747 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1739, i32 0, i32 2
-  %1748 = load ptr, ptr %1746, align 8
-  store ptr %1748, ptr %1747, align 8
-  %1749 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1711, i32 0, i32 3
-  %1750 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1739, i32 0, i32 3
-  %1751 = load i32, ptr %1749, align 4
-  store i32 %1751, ptr %1750, align 4
-  call void @set_offset(ptr %1739, ptr @Addable)
-  %1752 = getelementptr { ptr, i160 }, ptr %1739, i32 0, i32 0
-  %1753 = load ptr, ptr %1752, align 8
-  %1754 = insertvalue { ptr, i160 } undef, ptr %1753, 0
-  %1755 = getelementptr { ptr, i160 }, ptr %1739, i32 0, i32 1
-  %1756 = load i160, ptr %1755, align 4
-  %1757 = insertvalue { ptr, i160 } %1754, i160 %1756, 1
-  %1758 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1702, i32 0, i32 0
+  %1746 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1708, i32 0, i32 3
+  %1747 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1736, i32 0, i32 3
+  %1748 = load i32, ptr %1746, align 4
+  store i32 %1748, ptr %1747, align 4
+  call void @set_offset(ptr %1736, ptr @Addable)
+  %1749 = getelementptr { ptr, i160 }, ptr %1736, i32 0, i32 0
+  %1750 = load ptr, ptr %1749, align 8
+  %1751 = insertvalue { ptr, i160 } undef, ptr %1750, 0
+  %1752 = getelementptr { ptr, i160 }, ptr %1736, i32 0, i32 1
+  %1753 = load i160, ptr %1752, align 4
+  %1754 = insertvalue { ptr, i160 } %1751, i160 %1753, 1
+  %1755 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1699, i32 0, i32 0
+  %1756 = load ptr, ptr %1755, align 8
+  %1757 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1756, 0
+  %1758 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1699, i32 0, i32 1
   %1759 = load ptr, ptr %1758, align 8
-  %1760 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1759, 0
-  %1761 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1702, i32 0, i32 1
+  %1760 = insertvalue { ptr, ptr, ptr, i32 } %1757, ptr %1759, 1
+  %1761 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1699, i32 0, i32 2
   %1762 = load ptr, ptr %1761, align 8
-  %1763 = insertvalue { ptr, ptr, ptr, i32 } %1760, ptr %1762, 1
-  %1764 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1702, i32 0, i32 2
-  %1765 = load ptr, ptr %1764, align 8
-  %1766 = insertvalue { ptr, ptr, ptr, i32 } %1763, ptr %1765, 2
-  %1767 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1702, i32 0, i32 3
-  %1768 = load i32, ptr %1767, align 4
-  %1769 = insertvalue { ptr, ptr, ptr, i32 } %1766, i32 %1768, 3
-  %1770 = alloca [1 x ptr], align 8
-  %1771 = getelementptr [1 x ptr], ptr %1770, i32 0, i32 0
-  store ptr @_parameterization_Int32, ptr %1771, align 8
-  %1772 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1770)
-  %1773 = call ptr @llvm.invariant.start.p0(i64 48, ptr %1759)
-  %1774 = getelementptr ptr, ptr %1759, i32 %1768
-  %1775 = getelementptr ptr, ptr %1774, i32 2
-  %1776 = load ptr, ptr %1775, align 8
-  %1777 = alloca [1 x ptr], align 8
-  %1778 = getelementptr [1 x ptr], ptr %1777, i32 0, i32 0
-  store ptr %1753, ptr %1778, align 8
-  %1779 = call ptr %1776({ ptr, ptr, ptr, i32 } %1769, ptr %1777, { ptr, i160 } %1757)
-  call void %1779({ ptr, ptr, ptr, i32 } %1769, { ptr, ptr, ptr, i32 } %1769, ptr %1770, { ptr, i160 } %1757)
-  %1780 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %1781 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1702, i32 0, i32 0
-  %1782 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1780, i32 0, i32 0
+  %1763 = insertvalue { ptr, ptr, ptr, i32 } %1760, ptr %1762, 2
+  %1764 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1699, i32 0, i32 3
+  %1765 = load i32, ptr %1764, align 4
+  %1766 = insertvalue { ptr, ptr, ptr, i32 } %1763, i32 %1765, 3
+  %1767 = alloca [1 x ptr], align 8
+  %1768 = getelementptr [1 x ptr], ptr %1767, i32 0, i32 0
+  store ptr @_parameterization_Int32, ptr %1768, align 8
+  %1769 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1767)
+  %1770 = call ptr @llvm.invariant.start.p0(i64 48, ptr %1756)
+  %1771 = getelementptr ptr, ptr %1756, i32 %1765
+  %1772 = getelementptr ptr, ptr %1771, i32 2
+  %1773 = load ptr, ptr %1772, align 8
+  %1774 = alloca [1 x ptr], align 8
+  %1775 = getelementptr [1 x ptr], ptr %1774, i32 0, i32 0
+  store ptr %1750, ptr %1775, align 8
+  %1776 = call ptr %1773({ ptr, ptr, ptr, i32 } %1766, ptr %1774, { ptr, i160 } %1754)
+  call void %1776({ ptr, ptr, ptr, i32 } %1766, { ptr, ptr, ptr, i32 } %1766, ptr %1767, { ptr, i160 } %1754)
+  %1777 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %1778 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1699, i32 0, i32 0
+  %1779 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1777, i32 0, i32 0
+  %1780 = load ptr, ptr %1778, align 8
+  store ptr %1780, ptr %1779, align 8
+  %1781 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1699, i32 0, i32 1
+  %1782 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1777, i32 0, i32 1
   %1783 = load ptr, ptr %1781, align 8
   store ptr %1783, ptr %1782, align 8
-  %1784 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1702, i32 0, i32 1
-  %1785 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1780, i32 0, i32 1
+  %1784 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1699, i32 0, i32 2
+  %1785 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1777, i32 0, i32 2
   %1786 = load ptr, ptr %1784, align 8
   store ptr %1786, ptr %1785, align 8
-  %1787 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1702, i32 0, i32 2
-  %1788 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1780, i32 0, i32 2
-  %1789 = load ptr, ptr %1787, align 8
-  store ptr %1789, ptr %1788, align 8
-  %1790 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1702, i32 0, i32 3
-  %1791 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1780, i32 0, i32 3
-  %1792 = load i32, ptr %1790, align 4
-  store i32 %1792, ptr %1791, align 4
-  call void @set_offset(ptr %1780, ptr @Holder)
-  %1793 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %1794 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1780, i32 0, i32 0
-  %1795 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1793, i32 0, i32 0
+  %1787 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1699, i32 0, i32 3
+  %1788 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1777, i32 0, i32 3
+  %1789 = load i32, ptr %1787, align 4
+  store i32 %1789, ptr %1788, align 4
+  call void @set_offset(ptr %1777, ptr @Holder)
+  %1790 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %1791 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1777, i32 0, i32 0
+  %1792 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1790, i32 0, i32 0
+  %1793 = load ptr, ptr %1791, align 8
+  store ptr %1793, ptr %1792, align 8
+  %1794 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1777, i32 0, i32 1
+  %1795 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1790, i32 0, i32 1
   %1796 = load ptr, ptr %1794, align 8
   store ptr %1796, ptr %1795, align 8
-  %1797 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1780, i32 0, i32 1
-  %1798 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1793, i32 0, i32 1
+  %1797 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1777, i32 0, i32 2
+  %1798 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1790, i32 0, i32 2
   %1799 = load ptr, ptr %1797, align 8
   store ptr %1799, ptr %1798, align 8
-  %1800 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1780, i32 0, i32 2
-  %1801 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1793, i32 0, i32 2
-  %1802 = load ptr, ptr %1800, align 8
-  store ptr %1802, ptr %1801, align 8
-  %1803 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1780, i32 0, i32 3
-  %1804 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1793, i32 0, i32 3
-  %1805 = load i32, ptr %1803, align 4
-  store i32 %1805, ptr %1804, align 4
-  %1806 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1793)
-  %1807 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1793, i32 0, i32 0
+  %1800 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1777, i32 0, i32 3
+  %1801 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1790, i32 0, i32 3
+  %1802 = load i32, ptr %1800, align 4
+  store i32 %1802, ptr %1801, align 4
+  %1803 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1790)
+  %1804 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1790, i32 0, i32 0
+  %1805 = load ptr, ptr %1804, align 8
+  %1806 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1805, 0
+  %1807 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1790, i32 0, i32 1
   %1808 = load ptr, ptr %1807, align 8
-  %1809 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1808, 0
-  %1810 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1793, i32 0, i32 1
+  %1809 = insertvalue { ptr, ptr, ptr, i32 } %1806, ptr %1808, 1
+  %1810 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1790, i32 0, i32 2
   %1811 = load ptr, ptr %1810, align 8
-  %1812 = insertvalue { ptr, ptr, ptr, i32 } %1809, ptr %1811, 1
-  %1813 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1793, i32 0, i32 2
-  %1814 = load ptr, ptr %1813, align 8
-  %1815 = insertvalue { ptr, ptr, ptr, i32 } %1812, ptr %1814, 2
-  %1816 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1793, i32 0, i32 3
-  %1817 = load i32, ptr %1816, align 4
-  %1818 = insertvalue { ptr, ptr, ptr, i32 } %1815, i32 %1817, 3
-  %1819 = alloca [0 x ptr], align 8
-  %1820 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1819)
-  %1821 = call ptr @llvm.invariant.start.p0(i64 48, ptr %1808)
-  %1822 = getelementptr ptr, ptr %1808, i32 %1817
-  %1823 = getelementptr ptr, ptr %1822, i32 3
-  %1824 = load ptr, ptr %1823, align 8
-  %1825 = alloca [0 x ptr], align 8
-  %1826 = call ptr %1824({ ptr, ptr, ptr, i32 } %1818, ptr %1825)
-  %1827 = call { ptr, ptr, ptr, i32 } %1826({ ptr, ptr, ptr, i32 } %1818, { ptr, ptr, ptr, i32 } %1818, ptr %1819)
-  %1828 = alloca { ptr, ptr, ptr, i32 }, align 8
-  store { ptr, ptr, ptr, i32 } %1827, ptr %1828, align 8
-  %1829 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1828)
-  %1830 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %1831 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1828, i32 0, i32 0
-  %1832 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1830, i32 0, i32 0
+  %1812 = insertvalue { ptr, ptr, ptr, i32 } %1809, ptr %1811, 2
+  %1813 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1790, i32 0, i32 3
+  %1814 = load i32, ptr %1813, align 4
+  %1815 = insertvalue { ptr, ptr, ptr, i32 } %1812, i32 %1814, 3
+  %1816 = alloca [0 x ptr], align 8
+  %1817 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1816)
+  %1818 = call ptr @llvm.invariant.start.p0(i64 48, ptr %1805)
+  %1819 = getelementptr ptr, ptr %1805, i32 %1814
+  %1820 = getelementptr ptr, ptr %1819, i32 3
+  %1821 = load ptr, ptr %1820, align 8
+  %1822 = alloca [0 x ptr], align 8
+  %1823 = call ptr %1821({ ptr, ptr, ptr, i32 } %1815, ptr %1822)
+  %1824 = call { ptr, ptr, ptr, i32 } %1823({ ptr, ptr, ptr, i32 } %1815, { ptr, ptr, ptr, i32 } %1815, ptr %1816)
+  %1825 = alloca { ptr, ptr, ptr, i32 }, align 8
+  store { ptr, ptr, ptr, i32 } %1824, ptr %1825, align 8
+  %1826 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1825)
+  %1827 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %1828 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1825, i32 0, i32 0
+  %1829 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1827, i32 0, i32 0
+  %1830 = load ptr, ptr %1828, align 8
+  store ptr %1830, ptr %1829, align 8
+  %1831 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1825, i32 0, i32 1
+  %1832 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1827, i32 0, i32 1
   %1833 = load ptr, ptr %1831, align 8
   store ptr %1833, ptr %1832, align 8
-  %1834 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1828, i32 0, i32 1
-  %1835 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1830, i32 0, i32 1
+  %1834 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1825, i32 0, i32 2
+  %1835 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1827, i32 0, i32 2
   %1836 = load ptr, ptr %1834, align 8
   store ptr %1836, ptr %1835, align 8
-  %1837 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1828, i32 0, i32 2
-  %1838 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1830, i32 0, i32 2
-  %1839 = load ptr, ptr %1837, align 8
-  store ptr %1839, ptr %1838, align 8
-  %1840 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1828, i32 0, i32 3
-  %1841 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1830, i32 0, i32 3
-  %1842 = load i32, ptr %1840, align 4
-  store i32 %1842, ptr %1841, align 4
-  call void @set_offset(ptr %1830, ptr @Float64)
-  %1843 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1830, i32 0, i32 0
+  %1837 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1825, i32 0, i32 3
+  %1838 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1827, i32 0, i32 3
+  %1839 = load i32, ptr %1837, align 4
+  store i32 %1839, ptr %1838, align 4
+  call void @set_offset(ptr %1827, ptr @Float64)
+  %1840 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1827, i32 0, i32 0
+  %1841 = load ptr, ptr %1840, align 8
+  %1842 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1841, 0
+  %1843 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1827, i32 0, i32 1
   %1844 = load ptr, ptr %1843, align 8
-  %1845 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1844, 0
-  %1846 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1830, i32 0, i32 1
+  %1845 = insertvalue { ptr, ptr, ptr, i32 } %1842, ptr %1844, 1
+  %1846 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1827, i32 0, i32 2
   %1847 = load ptr, ptr %1846, align 8
-  %1848 = insertvalue { ptr, ptr, ptr, i32 } %1845, ptr %1847, 1
-  %1849 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1830, i32 0, i32 2
-  %1850 = load ptr, ptr %1849, align 8
-  %1851 = insertvalue { ptr, ptr, ptr, i32 } %1848, ptr %1850, 2
-  %1852 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1830, i32 0, i32 3
-  %1853 = load i32, ptr %1852, align 4
-  %1854 = insertvalue { ptr, ptr, ptr, i32 } %1851, i32 %1853, 3
-  %1855 = alloca [0 x ptr], align 8
-  %1856 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1855)
-  %1857 = call ptr @llvm.invariant.start.p0(i64 144, ptr %1844)
-  %1858 = getelementptr ptr, ptr %1844, i32 %1853
-  %1859 = getelementptr ptr, ptr %1858, i32 4
-  %1860 = load ptr, ptr %1859, align 8
-  %1861 = alloca [0 x ptr], align 8
-  %1862 = call ptr %1860({ ptr, ptr, ptr, i32 } %1854, ptr %1861)
-  %1863 = call double %1862({ ptr, ptr, ptr, i32 } %1854, { ptr, ptr, ptr, i32 } %1854, ptr %1855)
-  %1864 = alloca double, align 8
-  store double %1863, ptr %1864, align 8
-  %1865 = alloca i160, align 8
-  %1866 = alloca ptr, align 8
-  %1867 = load double, ptr %1864, align 8
-  store double %1867, ptr %1865, align 8
-  %1868 = alloca i64, align 8
-  store i64 ptrtoint (ptr @f64_typ to i64), ptr %1868, align 4
-  %1869 = load i64, ptr %1868, align 4
-  store i64 %1869, ptr %1866, align 4
-  %1870 = load ptr, ptr %1866, align 8
-  %1871 = insertvalue { ptr, i160 } undef, ptr %1870, 0
-  %1872 = load i160, ptr %1865, align 4
-  %1873 = insertvalue { ptr, i160 } %1871, i160 %1872, 1
-  %1874 = alloca [1 x ptr], align 8
-  %1875 = getelementptr [1 x ptr], ptr %1874, i32 0, i32 0
-  store ptr @_parameterization_Ptrf64, ptr %1875, align 8
-  %1876 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1874)
-  %1877 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %1878 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 7), align 8
-  %1879 = alloca [1 x ptr], align 8
-  %1880 = getelementptr [1 x ptr], ptr %1879, i32 0, i32 0
-  store ptr %1870, ptr %1880, align 8
-  %1881 = call ptr %1878(ptr %1879, { ptr, i160 } %1873)
-  call void %1881(ptr %1874, { ptr, i160 } %1873)
+  %1848 = insertvalue { ptr, ptr, ptr, i32 } %1845, ptr %1847, 2
+  %1849 = getelementptr { ptr, ptr, ptr, i32 }, ptr %1827, i32 0, i32 3
+  %1850 = load i32, ptr %1849, align 4
+  %1851 = insertvalue { ptr, ptr, ptr, i32 } %1848, i32 %1850, 3
+  %1852 = alloca [0 x ptr], align 8
+  %1853 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1852)
+  %1854 = call ptr @llvm.invariant.start.p0(i64 144, ptr %1841)
+  %1855 = getelementptr ptr, ptr %1841, i32 %1850
+  %1856 = getelementptr ptr, ptr %1855, i32 4
+  %1857 = load ptr, ptr %1856, align 8
+  %1858 = alloca [0 x ptr], align 8
+  %1859 = call ptr %1857({ ptr, ptr, ptr, i32 } %1851, ptr %1858)
+  %1860 = call double %1859({ ptr, ptr, ptr, i32 } %1851, { ptr, ptr, ptr, i32 } %1851, ptr %1852)
+  %1861 = alloca double, align 8
+  store double %1860, ptr %1861, align 8
+  %1862 = alloca i160, align 8
+  %1863 = alloca ptr, align 8
+  %1864 = load double, ptr %1861, align 8
+  store double %1864, ptr %1862, align 8
+  %1865 = alloca i64, align 8
+  store i64 ptrtoint (ptr @f64_typ to i64), ptr %1865, align 4
+  %1866 = load i64, ptr %1865, align 4
+  store i64 %1866, ptr %1863, align 4
+  %1867 = load ptr, ptr %1863, align 8
+  %1868 = insertvalue { ptr, i160 } undef, ptr %1867, 0
+  %1869 = load i160, ptr %1862, align 4
+  %1870 = insertvalue { ptr, i160 } %1868, i160 %1869, 1
+  %1871 = alloca [1 x ptr], align 8
+  %1872 = getelementptr [1 x ptr], ptr %1871, i32 0, i32 0
+  store ptr @_parameterization_Ptrf64, ptr %1872, align 8
+  %1873 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1871)
+  %1874 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
+  %1875 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 7), align 8
+  %1876 = alloca [1 x ptr], align 8
+  %1877 = getelementptr [1 x ptr], ptr %1876, i32 0, i32 0
+  store ptr %1867, ptr %1877, align 8
+  %1878 = call ptr %1875(ptr %1876, { ptr, i160 } %1870)
+  call void %1878(ptr %1871, { ptr, i160 } %1870)
   ret i32 0
 }
 
