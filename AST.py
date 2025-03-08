@@ -1429,7 +1429,15 @@ class MethodDef(Statement):
             if c.op == "==" and ((c.lhs, "<", c.rhs) in annotated_facts or (c.rhs, "<", c.lhs) in annotated_facts):
                 raise Exception(f"Line {self.info.line_number}: Constraint {c.lhs} {c.op} {c.rhs} is less precise than constraints from overridden methods.")
             annotated_facts.add((c.lhs, c.op, c.rhs))
-        
+
+        return_type = self.return_type()
+        return_cls = None
+        if isinstance(return_type, FatPtr): return_cls = body_scope.classes[return_type.cls.data]
+        if isinstance(return_type, TypeParameter): return_cls = body_scope.classes[return_type.bound.cls.data]
+        if return_cls:
+            for lhs, op, rhs in return_cls.all_constraints()._set:
+                annotated_facts.add((lhs.replace("self","ret"), op, rhs.replace("self","ret")))
+
         for name in param_names: annotated_facts.add((name, "==", name))
         return annotated_facts
 
@@ -1443,6 +1451,7 @@ class MethodDef(Statement):
         G0, var_mapping0 = create_constraint_graph(annotated_facts._set)
         G1, var_mapping1 = create_constraint_graph(body_scope.points_to_facts._set)
         #visualize_graph_transformation(G1, var_mapping1, param_names)
+        G0, var_mapping0 = hyper_optimized_transform(G0, var_mapping0, param_names)
         G1, var_mapping1 = hyper_optimized_transform(G1, var_mapping1, param_names)
         #G1, var_mapping1 = transform_parameter_graph(G1, var_mapping1, param_names)
         print(f"Points-to graph for {self.defining_class.name}.{self.name}:")
@@ -1687,6 +1696,13 @@ class ClassMethodDef(MethodDef):
             if c.op == "==" and ((c.lhs, "<", c.rhs) in annotated_facts or (c.rhs, "<", c.lhs) in annotated_facts):
                 raise Exception(f"Line {self.info.line_number}: Constraint {c.lhs} {c.op} {c.rhs} is less precise than constraints from overridden methods.")
             annotated_facts.add((c.lhs, c.op, c.rhs))
+        return_cls = None
+        return_type = self.return_type()
+        if isinstance(return_type, FatPtr): return_cls = body_scope.classes[return_type.cls.data]
+        if isinstance(return_type, TypeParameter): return_cls = body_scope.classes[return_type.bound.cls.data]
+        if return_cls:
+            for lhs, op, rhs in return_cls.all_constraints()._set:
+                annotated_facts.add((lhs.replace("self","ret"), op, rhs.replace("self","ret")))
         for name in param_names: annotated_facts.add((name, "==", name))
         return annotated_facts
 
@@ -1699,6 +1715,7 @@ class ClassMethodDef(MethodDef):
         #visualize_graph_transformation(G1, var_mapping1, param_names)
         print(f"Original points-to graph for {self.defining_class.name}.{self.name}:")
         print(pretty_print_graph(G1, var_mapping1, param_names))
+        G0, var_mapping0 = hyper_optimized_transform(G0, var_mapping0, param_names)
         G1, var_mapping1 = hyper_optimized_transform(G1, var_mapping1, param_names)
         print(f"Slightly transformed points-to graph for {self.defining_class.name}.{self.name}:")
         print(pretty_print_graph(G1, var_mapping1, param_names))

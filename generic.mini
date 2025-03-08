@@ -50,13 +50,17 @@ class Container {
 
 class Iterator2[T] extends Container {
 
+    @referent_reg : Region
+
+    regions { @elems_reg == @referent_reg.elems_reg }
+
     #[ret == @elems_reg]
 	abstract def next() -> T | Nil {}
 }
 
 class Iterable2[T] extends Container {
 
-    #[ret.elems_reg == @elems_reg, ret < self]
+    #[ret.referent_reg == self]
 	abstract def iterator() -> Iterator2[T] {}
 	def each(f : (T)) {
         for x in self { f.call(x); }
@@ -97,7 +101,7 @@ class Iterable2[T] extends Container {
     def zip[U](other : Iterable2[U]) -> ZipIterable2[T, U] {
         return ZipIterable2[T, U].new(self, other);
     }
-    #[ret < self, ret < other]
+    #[ret.first == self, ret.second == other]
     def product[U](other : Iterable2[U]) -> ProductIterable2[T, U] {
         return ProductIterable2[T, U].new(self, other);
     }
@@ -174,7 +178,7 @@ class ArrayIterator[T] extends Iterator2[T] {
 	@array : Array[T]
 	@index : i32
 
-    regions { @elems_reg == @array.elems_reg }
+    regions { @referent_reg == @array }
 
 	def init(@array : Array[T]) { @index = 0; }
 	def next() -> T | Nil {
@@ -201,7 +205,7 @@ class MapIterator2[T, U] extends Iterator2[U] {
     @iterator : Iterator2[T]
     @f : (T) -> U
 
-    regions { @elems_reg == @iterator.elems_reg }
+    regions { @referent_reg == @iterator }
 
     def init(@iterator : Iterator2[T], @f : (T) -> U) {}
 
@@ -231,7 +235,7 @@ class FilterIterator2[T] extends Iterator2[T] {
     @iterator : Iterator2[T]
     @f : (T) -> Bool
 
-    regions { @elems_reg == @iterator.elems_reg }
+    regions { @referent_reg == @iterator }
     
     def init(@iterator : Iterator2[T], @f : (T) -> Bool) {}
 
@@ -250,6 +254,7 @@ class ChainIterable2[T] extends Iterable2[T] {
     @second : Iterable2[T]
 
     regions {
+        @first == @second,
         @elems_reg == @first.elems_reg,
         @elems_reg == @second.elems_reg
     }
@@ -267,8 +272,8 @@ class ChainIterator2[T] extends Iterator2[T] {
     @on_first : Bool
 
     regions {
-        @elems_reg == @first.elems_reg,
-        @elems_reg == @second.elems_reg
+        @referent_reg == @first,
+        @referent_reg == @second
     }
 
     def init(@first : Iterator2[T], @second : Iterator2[T]) {
@@ -289,6 +294,7 @@ class InterleaveIterable2[T] extends Iterable2[T] {
     @second : Iterable2[T]
 
     regions {
+        @first == @second,
         @elems_reg == @first.elems_reg,
         @elems_reg == @second.elems_reg
     }
@@ -306,8 +312,8 @@ class InterleaveIterator2[T] extends Iterator2[T] {
     @on_first : Bool
 
     regions {
-        @elems_reg == @first.elems_reg,
-        @elems_reg == @second.elems_reg
+        @referent_reg == @first,
+        @referent_reg == @second
     }
 
     def init(@first : Iterator2[T], @second : Iterator2[T]) {
@@ -328,6 +334,7 @@ class ZipIterable2[T, U] extends Iterable2[Pair[T, U]] {
     @second : Iterable2[U]
 
     regions {
+        @first == @second,
         @elems_reg == @first.elems_reg,
         @elems_reg == @second.elems_reg
     }
@@ -344,8 +351,8 @@ class ZipIterator2[T, U] extends Iterator2[Pair[T, U]] {
     @second : Iterator2[U]
 
     regions {
-        @elems_reg == @first.elems_reg,
-        @elems_reg == @second.elems_reg
+        @referent_reg == @first,
+        @referent_reg == @second
     }
 
     def init(@first : Iterator2[T], @second : Iterator2[U]) {}
@@ -365,33 +372,40 @@ class ProductIterable2[T, U] extends Iterable2[Pair[T, U]] {
     @second : Iterable2[U]
 
     regions {
+        @first == @second,
         @elems_reg == @first.elems_reg,
         @elems_reg == @second.elems_reg
     }
 
-    def init(@first : Iterable2[T], @second : Iterable2[U]) {}
-
+    def init(@first : Iterable2[T], @second : Iterable2[U]) {
+    }
+    #[ret == @first]
+    def first() -> Iterable2[T] {
+        return @first;
+    }
+    #[ret == @second]
+    def second() -> Iterable2[U] {
+        return @second;
+    }
     def iterator() -> ProductIterator2[T, U] {
-        return ProductIterator2[T, U].new(@first.iterator(), @second);
+        return ProductIterator2[T, U].new(self);
     }
 }
 
 class ProductIterator2[T, U] extends Iterator2[Pair[T, U]] {
+    @product_iterable : ProductIterable2[T, U]
     @first_iterator : Iterator2[T]
     @second_iterator : Iterator2[U]
-    @second_iterable : Iterable2[U]
     @current_first : T | Nil
 
     regions {
-        @elems_reg == @first_iterator.elems_reg,
-        @elems_reg == @second_iterator.elems_reg,
-        @second_iterable.elems_reg == @second_iterator.elems_reg,
-        @second_iterator < @second_iterable,
-        @first_iterator.elems_reg == @current_first
+        @current_first == @elems_reg,
+        @current_first == @first_iterator.elems_reg
     }
 
-    def init(@first_iterator : Iterator2[T], @second_iterable : Iterable2[U]) {
-        @second_iterator = @second_iterable.iterator();
+    def init(@product_iterable : ProductIterable2[T, U]) {
+        @first_iterator = @product_iterable.first().iterator();
+        @second_iterator = @product_iterable.second().iterator();
         @current_first = @first_iterator.next();
     }
 
@@ -401,7 +415,7 @@ class ProductIterator2[T, U] extends Iterator2[Pair[T, U]] {
             second_elem = @second_iterator.next();
             if second_elem is U { return Pair[T, U].new(current_first, second_elem); }
             @current_first = @first_iterator.next();
-            @second_iterator = @second_iterable.iterator();
+            @second_iterator = @product_iterable.second().iterator();
             current_first = @current_first;
         }
         return nil;

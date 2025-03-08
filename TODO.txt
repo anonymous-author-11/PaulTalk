@@ -285,6 +285,9 @@ DONE:
 
 TODO:
 
+- Will need to apply class region constraints upon downcast
+	- Do we actually?
+	- What about automatic downcast upon multi-dispatch?
 - Conservatively alias parameters for first-class functions
 - Figure out relationship between Any, Object, Nil
 	- Need for Foo[Bar | Nil] and for T <: Any
