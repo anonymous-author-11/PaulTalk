@@ -50,7 +50,7 @@ class Container {
 
 class Iterator2[T] extends Container {
 
-    #[ret > @elems_reg]
+    #[ret == @elems_reg]
 	abstract def next() -> T | Nil {}
 }
 
@@ -77,23 +77,23 @@ class Iterable2[T] extends Container {
         for x in self { if f.call(x) { return true; } }
         return false;
     }
-    #[ret < self, ret < f]
+    #[ret.iterable == self, ret.f == f]
     def map[U](f : (T) -> U) -> MapIterable2[T, U] {
         return MapIterable2[T, U].new(self, f);
     }
-    #[ret < self, ret < f]
+    #[ret.iterable == self, ret.f == f]
     def filter(f : (T) -> Bool) -> FilterIterable2[T] {
         return FilterIterable2[T].new(self, f);
     }
-    #[ret < self, ret < other]
+    #[ret.first == self, ret.second == other]
     def chain(other : Iterable2[T]) -> ChainIterable2[T] {
         return ChainIterable2[T].new(self, other);
     }
-    #[ret < self, ret < other]
+    #[ret.first == self, ret.second == other]
     def interleave(other : Iterable2[T]) -> InterleaveIterable2[T] {
         return InterleaveIterable2[T].new(self, other);
     }
-    #[ret < self, ret < other]
+    #[ret.first == self, ret.second == other]
     def zip[U](other : Iterable2[U]) -> ZipIterable2[T, U] {
         return ZipIterable2[T, U].new(self, other);
     }
@@ -108,7 +108,7 @@ class Array[T] extends Iterable2[T] {
 	@length : i32
 	@capacity : i32
 
-    regions { @elems_reg == @buffer }
+    regions { @elems_reg == @buffer.elems_reg }
 
     #[ret.elems_reg == iterable.elems_reg]
 	def Self.from_iterable(iterable : Iterable2[T]) -> Array[T] {
@@ -133,7 +133,7 @@ class Array[T] extends Iterable2[T] {
     def capacity() -> i32 {
     	return @capacity;
     }
-    #[ret == self, x > @elems_reg]
+    #[ret == self, x == @elems_reg]
     def append(x : T) -> Array[T] {
         if @length >= @capacity { self.grow(); }
         @buffer.[@length] = x;
@@ -150,7 +150,7 @@ class Array[T] extends Iterable2[T] {
             i = i + 1;
         }
     }
-    #[ret > @elems_reg]
+    #[ret == @elems_reg]
     def [](x : i32) -> T yields OutOfBounds | Nil {
     	past_end = x > (@length - 1);
     	before_start = (@length + x) < 0;
@@ -161,7 +161,7 @@ class Array[T] extends Iterable2[T] {
     def throw_oob(x : i32) yields OutOfBounds {
     	yield(Exception.new());
     }
-    #[ret > @elems_reg]
+    #[ret == @elems_reg]
     def unsafe_index(x : i32) -> T {
     	return @buffer.[x];
     }
@@ -174,7 +174,7 @@ class ArrayIterator[T] extends Iterator2[T] {
 	@array : Array[T]
 	@index : i32
 
-    regions { @array == @elems_reg }
+    regions { @elems_reg == @array.elems_reg }
 
 	def init(@array : Array[T]) { @index = 0; }
 	def next() -> T | Nil {
@@ -372,7 +372,7 @@ class ProductIterable2[T, U] extends Iterable2[Pair[T, U]] {
     def init(@first : Iterable2[T], @second : Iterable2[U]) {}
 
     def iterator() -> ProductIterator2[T, U] {
-        return ProductIterator2[T, U].new(@first, @second);
+        return ProductIterator2[T, U].new(@first.iterator(), @second);
     }
 }
 
@@ -387,12 +387,10 @@ class ProductIterator2[T, U] extends Iterator2[Pair[T, U]] {
         @elems_reg == @second_iterator.elems_reg,
         @second_iterable.elems_reg == @second_iterator.elems_reg,
         @second_iterator < @second_iterable,
-        @first_iterator.elems_reg < @current_first
+        @first_iterator.elems_reg == @current_first
     }
 
-    #[@first_iterator.elems_reg == first_iterable.elems_reg, @first_iterator < first_iterable]
-    def init(first_iterable : Iterable2[T], @second_iterable : Iterable2[U]) {
-        @first_iterator = first_iterable.iterator();
+    def init(@first_iterator : Iterator2[T], @second_iterable : Iterable2[U]) {
         @second_iterator = @second_iterable.iterator();
         @current_first = @first_iterator.next();
     }

@@ -6,6 +6,35 @@ from sympy import nextprime
 from xdsl.ir import Block, Region
 from xdsl.dialects import cf
 import random
+from dataclasses import dataclass
+
+@dataclass
+class ConstraintSet:
+    _set: set["Constraint"]
+
+    def add(self, triple: tuple[str, str, str]):
+        self._set.add(triple)
+        
+        # add implicit constraints ensuring that foo < foo.bar for lhs and rhs
+        lhs, op, rhs = triple
+        for i, section in enumerate(lhs.split(".")):
+            if i == len(lhs.split(".")) - 1: break
+            self._set.add((".".join(lhs.split(".")[:(i + 1)]), "<", ".".join(lhs.split(".")[:(i + 2)])))
+        for i, section in enumerate(rhs.split(".")):
+            if i == len(rhs.split(".")) - 1: break
+            self._set.add((".".join(rhs.split(".")[:(i + 1)]), "<", ".".join(rhs.split(".")[:(i + 2)])))
+
+    def __contains__(self, item):
+        return item in self._set
+
+    def remove(self, item):
+        self._set.remove(item)
+
+    def copy(self):
+        return ConstraintSet(self._set.copy())
+
+    def union(self, other):
+        return ConstraintSet(self._set.union(other._set))
 
 class Scope:
     def __init__(self, parent=None, cls=None, behavior=None, method=None, wile=None):
@@ -13,7 +42,7 @@ class Scope:
         self.symbol_table = parent.symbol_table.copy() if parent else {}
         self.type_table = parent.type_table.copy() if parent else {}
         self.aliases = parent.aliases.copy() if parent else {}
-        self.points_to_facts = parent.points_to_facts.copy() if parent else set()
+        self.points_to_facts = parent.points_to_facts.copy() if parent else ConstraintSet(set())
         self.classes = parent.classes if parent else {}
         self.functions = parent.functions if parent else {}
         self.subtype_cache = parent.subtype_cache if parent else {}

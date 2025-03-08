@@ -279,17 +279,22 @@ DONE:
 	- Including standard fields > self constraints [check!]
 	- Or just implicitly add class constraints to init [check!]
 	- Be sure to map names to the context [check!]
+- Elements do need to live in the same region for buffer [check!]
+	- Create an elems_reg pseudo-region for buffer [check!]
+- Work on mapping field constraints for method calls [check!]
 
 TODO:
 
-- Think about precise lifetimes for buffers/tuples
+- Conservatively alias parameters for first-class functions
+- Figure out relationship between Any, Object, Nil
+	- Need for Foo[Bar | Nil] and for T <: Any
+- Implement more precise lifetimes for tuples
+	- Use .1, .2, .3 pseudo-fields
 - Make sure regions and fields don't have conflicting names
-- Work on mapping field constraints for method calls [check!]
 - Minimize number of behaviors
 	- Do we really need to generate all-new behaviors for every new subclass?
 	- Why not just new behaviors for the ones that have actually changed?
 	- Will make vtables significantly smaller
-- Conservatively alias parameters for first-class functions
 - Implement Records
 	- Should actually be relatively straightforward
 	- Record-to-tuple is also straightforward

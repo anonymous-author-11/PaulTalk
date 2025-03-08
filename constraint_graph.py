@@ -58,69 +58,6 @@ def create_constraint_graph(constraints):
     
     return G, var_mapping
 
-def visualize_graph(G, var_mapping):
-    """Visualize the constraint graph with merged nodes."""
-    # Group variables by representative
-    rep_to_vars = {}
-    for var, rep in var_mapping.items(): rep_to_vars.setdefault(rep, []).append(var)
-    
-    # Create node labels showing all merged variables
-    labels = {rep: f"{rep}\n{sorted(vars)}" for rep, vars in rep_to_vars.items()}
-    
-    # Draw graph
-    pos = nx.spring_layout(G, seed=42)
-    nx.draw(G, pos, with_labels=True, labels=labels, node_color='lightblue', node_size=2000, font_size=10)
-    
-    # Add edge labels showing relation type
-    edge_labels = {(u, v): d.get('relation', '') for u, v, d in G.edges(data=True)}
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
-    
-    plt.axis('off')
-    plt.show()
-
-def query_external_less_than(G, var_mapping, names):
-    """
-    Check if any nodes containing the given names have "less than" relationships
-    pointing to nodes that don't contain any of these names.
-    
-    Args:
-        G: NetworkX DiGraph - the constraint graph
-        var_mapping: dict - mapping from variables to their representatives
-        names: tuple/list - variable names to check
-    
-    Returns:
-        tuple: (result, example) where:
-            - result: True if there are "less than" relationships pointing outside
-            - example: A dict with details if result is True, else None
-    """
-    # Convert names to a set for faster lookup
-    names_set = set(names)
-    
-    # Find representatives for the given names
-    name_reps = {var_mapping.get(name) for name in names_set if name in var_mapping}
-    
-    # Create a reverse mapping from representatives to variables
-    rep_to_vars = {}
-    for var, rep in var_mapping.items():
-        rep_to_vars.setdefault(rep, []).append(var)
-    
-    # Check for external "less than" relationships
-    for rep in name_reps:
-        for neighbor in G.successors(rep):
-            if neighbor in name_reps: continue
-            # Collect all relevant variables
-            source_vars_in_names = [var for var in rep_to_vars.get(rep, []) if var in names_set]
-            target_vars = rep_to_vars.get(neighbor, [neighbor])
-            relation = G.edges[rep, neighbor].get('relation', '<')
-            
-            return True, {
-                'source_vars': source_vars_in_names,
-                'target_vars': target_vars,
-                'relation': relation
-            }
-    
-    return False, None
-
 def transform_parameter_graph(G, var_mapping, parameter_names):
     """
     Transform the graph by iteratively merging non-parameter nodes with all predecessors
@@ -256,6 +193,7 @@ def visualize_graph_transformation(G, var_mapping, parameter_names):
     
     plt.tight_layout()
     plt.show()
+import networkx as nx
 
 def check_graph_compatibility(G1, var_mapping1, G2, var_mapping2, parameter_names):
     """
@@ -274,50 +212,43 @@ def check_graph_compatibility(G1, var_mapping1, G2, var_mapping2, parameter_name
         bool: True if both conditions are satisfied, False otherwise
         tuple: (bool, str) where str contains reason for failure if bool is False
     """
-    # Filter parameters that exist in both mappings
-    valid_params = [p for p in parameter_names if p in var_mapping1 and p in var_mapping2]
+    # Generate extended parameters from parameter_names
+    extended_params = set()
+    for param in parameter_names:
+        # Check variables in both mappings for extensions
+        for var in var_mapping1:
+            if var == param or var.startswith(f"{param}."):
+                extended_params.add(var)
+        for var in var_mapping2:
+            if var == param or var.startswith(f"{param}."):
+                extended_params.add(var)
+    
+    # Filter parameters present in both mappings
+    valid_params = [var for var in extended_params if var in var_mapping1 and var in var_mapping2]
     
     if not valid_params:
         return True, "No valid parameters to check"
     
-    # Condition 1: Check if parameters in the same node in G1 are also in the same node in G2
-    param_pairs = [(p1, p2) for i, p1 in enumerate(valid_params) 
-                  for p2 in valid_params[i+1:]]
-    
+    # Condition 1: Check parameters in the same node in G1 are in the same node in G2
+    param_pairs = [(p1, p2) for i, p1 in enumerate(valid_params) for p2 in valid_params[i+1:]]
     for p1, p2 in param_pairs:
-        #if "@" in p1 or "@" in p2: continue
-        # Check if p1 and p2 are in the same node in G1
-        same_node_in_G1 = var_mapping1[p1] == var_mapping1[p2]
-        # Check if p1 and p2 are in the same node in G2
-        same_node_in_G2 = var_mapping2[p1] == var_mapping2[p2]
-        
-        # If they're in the same node in G1, they must be in the same node in G2
-        if same_node_in_G1 and not same_node_in_G2:
+        same_node_G1 = var_mapping1[p1] == var_mapping1[p2]
+        same_node_G2 = var_mapping2[p1] == var_mapping2[p2]
+        if same_node_G1 and not same_node_G2:
             return False, f"Parameters {p1} and {p2} are in the same node in G1 but different nodes in G2"
     
-    # Condition 2: Check if parameter-to-parameter paths in G1 exist in G2
+    # Condition 2: Check paths from G1 exist in G2
     for p1 in valid_params:
         for p2 in valid_params:
-            if p1 == p2:
-                continue
-                
-            # Get representatives in both graphs
+            if p1 == p2: continue
             p1_rep_G1 = var_mapping1[p1]
             p2_rep_G1 = var_mapping1[p2]
             p1_rep_G2 = var_mapping2[p1]
             p2_rep_G2 = var_mapping2[p2]
-            
-            # Check if there's a path in G1
             path_in_G1 = nx.has_path(G1, p1_rep_G1, p2_rep_G1)
-            
-            if path_in_G1:
-                # If there's a path in G1, check if there's also a path in G2
-                path_in_G2 = nx.has_path(G2, p1_rep_G2, p2_rep_G2)
-                
-                if not path_in_G2:
-                    return False, f"Path from {p1} to {p2} exists in G1 but not in G2"
+            if path_in_G1 and not nx.has_path(G2, p1_rep_G2, p2_rep_G2):
+                return False, f"Path from {p1} to {p2} exists in G1 but not in G2"
     
-    # All conditions satisfied
     return True, "Both conditions are satisfied"
 
 def rename_nodes_with_parameters(G, var_mapping, parameter_names):
@@ -343,27 +274,28 @@ def rename_nodes_with_parameters(G, var_mapping, parameter_names):
     # Create a mapping from old node names to new node names
     node_mapping = {}
     for node in G.nodes():
-        if node in rep_to_vars:
-            # Find parameters represented by this node
-            params = [v for v in rep_to_vars[node] if v in parameter_names]
-            
-            if params:
-                # Use the first parameter name (alphabetically) as the new name
-                new_name = sorted(params)[0]
-                node_mapping[node] = new_name
-            else:
-                # No parameters, keep original name
-                node_mapping[node] = node
-        else:
-            # Node has no variables, keep original name
+        # Node has no variables, keep original name
+        if node not in rep_to_vars:
             node_mapping[node] = node
+            continue
+
+        # Find parameters represented by this node
+        params = [v for v in rep_to_vars[node] if v in parameter_names]
+        
+        # No parameters, keep original name
+        if not params:
+            node_mapping[node] = node     
+            continue
+
+        # Use the first parameter name (alphabetically) as the new name
+        new_name = sorted(params)[0]
+        node_mapping[node] = new_name
     
     # Relabel the graph
     renamed_G = nx.relabel_nodes(G, node_mapping)
     
     # Copy edge attributes
-    for u, v, data in G.edges(data=True):
-        renamed_G[node_mapping[u]][node_mapping[v]].update(data)
+    for u, v, data in G.edges(data=True): renamed_G[node_mapping[u]][node_mapping[v]].update(data)
     
     return renamed_G, node_mapping
 
@@ -412,6 +344,19 @@ from networkx import DiGraph
 
 def transform_based_on_label_pattern(G, var_mapping):
     """
+    Transform the graph by merging nodes according to the pattern:
+
+    If Node A contains labels X and Y, Node A points to Node B which contains label X.postfix,
+    and Node C contains label Y.postfix (same postfix), then merge nodes B and C.
+
+    Args:
+    G: NetworkX DiGraph
+    var_mapping: Dictionary mapping variables to their representative nodes
+    parameter_names: Optional list of parameter names (not used in this transform)
+
+    Returns:
+    tuple: (new_G, new_var_mapping) - transformed graph and updated mapping
+
     Optimized version of the graph transformation function.
     
     Key optimizations:
@@ -419,6 +364,7 @@ def transform_based_on_label_pattern(G, var_mapping):
     - Use direct lookups instead of nested loops for postfix checks.
     - Streamline data structure accesses to minimize redundant computations.
     """
+
     uf = UnionFind()
     for node in G.nodes():
         uf[node]
@@ -483,3 +429,336 @@ def transform_based_on_label_pattern(G, var_mapping):
             new_G.add_edge(new_u, new_v, **data)
 
     return new_G, new_var_mapping
+
+from collections import defaultdict
+from networkx import DiGraph
+from networkx.utils import UnionFind
+
+def enforce_parameter_postfix_rule(G, var_mapping, parameter_names):
+    """
+    Ensure that if a node contains a parameter A and variable B, and points to a node with B.foo,
+    then A.foo is added to the latter node.
+    
+    Args:
+        G: NetworkX DiGraph with merged nodes
+        var_mapping: Dict mapping original variables to their representatives
+        parameter_names: List of parameter names
+    
+    Returns:
+        tuple: (new_G, new_var_mapping) - Transformed graph and updated mapping
+    """
+
+    extended_params = set()
+    for param in parameter_names:
+        # Check variables in both mappings for extensions
+        for var in var_mapping:
+            if var == param or var.startswith(f"{param}."):
+                extended_params.add(var)
+
+    # Initialize UnionFind with existing nodes
+    uf = UnionFind()
+    for node in G.nodes():
+        uf[node]
+    
+    # Create a copy of var_mapping to avoid modifying the input
+    new_var_mapping = var_mapping.copy()
+    
+    # Reverse mapping: representative -> list of variables
+    rep_to_vars = defaultdict(list)
+    for var, rep in new_var_mapping.items():
+        rep_to_vars[rep].append(var)
+    
+    # Process each node in the graph
+    for node in G.nodes():
+        # Check if node contains parameters and non-parameters
+        variables = rep_to_vars.get(node, [])
+        parameters = [v for v in variables if v in extended_params]
+        non_parameters = [v for v in variables if v not in extended_params]
+        
+        if not parameters or not non_parameters:
+            continue
+        
+        # Check all successors of this node
+        for successor in G.successors(node):
+            # Check if successor contains any B.foo
+            successor_vars = rep_to_vars.get(successor, [])
+            for var in successor_vars:
+                if '.' not in var:
+                    continue  # Skip variables without a postfix
+                
+                base, postfix = var.split('.', 1)
+                if base not in non_parameters:
+                    continue  # Not a postfix of a non-parameter in the current node
+                
+                # For each parameter in current node, create A.postfix
+                for param in parameters:
+                    new_var = f"{param}.{postfix}"
+                    
+                    # Check if new_var already exists
+                    if new_var in new_var_mapping:
+                        existing_rep = new_var_mapping[new_var]
+                        if uf[existing_rep] != uf[successor]:
+                            # Merge existing representative with successor's representative
+                            uf.union(existing_rep, successor)
+                    else:
+                        # Add new_var to the mapping with successor's representative
+                        new_var_mapping[new_var] = uf[successor]
+    
+    # Build new graph and mapping
+    final_rep_to_vars = defaultdict(list)
+    for var, rep in new_var_mapping.items():
+        final_rep = uf[rep]
+        final_rep_to_vars[final_rep].append(var)
+    
+    new_G = DiGraph()
+    new_G.add_nodes_from(final_rep_to_vars.keys())
+    
+    # Add edges with merged representatives
+    for u, v, data in G.edges(data=True):
+        new_u = uf[u]
+        new_v = uf[v]
+        if new_u != new_v:
+            new_G.add_edge(new_u, new_v, **data)
+    
+    # Update var_mapping to point to final representatives
+    updated_var_mapping = {var: uf[rep] for var, rep in new_var_mapping.items()}
+    
+    return new_G, updated_var_mapping
+
+from collections import defaultdict
+import networkx as nx
+
+def enforce_postfix_merge_rule(G, var_mapping):
+    """
+    Merge nodes B and C if they are both successors of node A and share any common postfix in their labels.
+    
+    Args:
+        G: NetworkX DiGraph with merged nodes
+        var_mapping: Dict mapping original variables to their representatives
+    
+    Returns:
+        tuple: (new_G, new_var_mapping) - Transformed graph and updated mapping
+    """
+    uf = nx.utils.UnionFind()
+    for node in G.nodes():
+        uf[node]
+    
+    while True:
+        merges = 0
+        current_rep_to_vars = defaultdict(list)
+        for var, rep in var_mapping.items():
+            current_rep = uf[rep]
+            current_rep_to_vars[current_rep].append(var)
+        
+        # Build postfix map: {rep: set of postfixes}
+        postfix_map = defaultdict(set)
+        for rep, vars in current_rep_to_vars.items():
+            for var in vars:
+                if '.' in var:
+                    _, postfix = var.rsplit('.', 1)
+                    postfix_map[rep].add(postfix)
+        
+        # Build current edges based on UnionFind state
+        current_edges = defaultdict(set)
+        for u, v in G.edges():
+            current_u = uf[u]
+            current_v = uf[v]
+            if current_u != current_v:
+                current_edges[current_u].add(current_v)
+        
+        # Check all nodes for successor pairs with common postfixes
+        for node_a in G.nodes():
+            a_rep = uf[node_a]
+            successors = list(current_edges.get(a_rep, set()))
+            
+            # Check all pairs of successors
+            for i in range(len(successors)):
+                b_rep = successors[i]
+                for j in range(i + 1, len(successors)):
+                    c_rep = successors[j]
+                    # Check for common postfixes
+                    common = postfix_map[b_rep] & postfix_map[c_rep]
+                    if common:
+                        if uf[b_rep] != uf[c_rep]:
+                            uf.union(b_rep, c_rep)
+                            merges += 1
+        
+        if merges == 0:
+            break
+    
+    # Construct new graph and mapping
+    new_var_mapping = {var: uf[rep] for var, rep in var_mapping.items()}
+    new_G = nx.DiGraph()
+    new_nodes = {uf[node] for node in G.nodes()}
+    new_G.add_nodes_from(new_nodes)
+    
+    # Add edges with updated representatives
+    for u, v in G.edges():
+        new_u = uf[u]
+        new_v = uf[v]
+        if new_u != new_v:
+            new_G.add_edge(new_u, new_v)
+    
+    return new_G, new_var_mapping
+
+    from collections import defaultdict
+import networkx as nx
+from networkx.utils import UnionFind
+
+from collections import defaultdict
+import networkx as nx
+from networkx.utils import UnionFind
+
+def hyper_optimized_transform(G: nx.DiGraph, 
+                             var_mapping: dict, 
+                             parameter_names: list) -> tuple:
+    """
+    Hyper-optimized combined transformation pipeline with fixes for set iteration and postfix checking.
+    
+    Args:
+        G: Initial constraint graph
+        var_mapping: Original variable to representative mapping
+        parameter_names: List of parameter names
+        
+    Returns:
+        tuple: (final_G, final_mapping) - Transformed graph and updated mapping
+    """
+    param_set = set()
+    for param in parameter_names:
+        # Check variables in both mappings for extensions
+        for var in var_mapping:
+            if var == param or var.startswith(f"{param}."):
+                param_set.add(var)
+    uf = UnionFind()
+    for node in G.nodes():
+        uf[node]
+    
+    # Initialize shared data structures
+    rep_to_vars = defaultdict(set)
+    postfix_registry = defaultdict(lambda: defaultdict(set))  # rep -> {prefix: set(postfix)}
+    global_postfix_map = defaultdict(set)  # (prefix, postfix) -> set(reps)
+    
+    for var, rep in var_mapping.items():
+        current_rep = uf[rep]
+        rep_to_vars[current_rep].add(var)
+        if '.' in var:
+            prefix, postfix = var.split('.', 1)
+            postfix_registry[current_rep][prefix].add(postfix)
+            global_postfix_map[(prefix, postfix)].add(current_rep)
+    
+    while True:
+        changes = 0
+        
+        # Process all nodes and edges in single traversal
+        for node in list(uf.parents):
+            current_rep = uf[node]
+            variables = rep_to_vars.get(current_rep, set())
+            
+            # Separate parameters and non-parameters
+            params = variables & param_set
+            non_params = variables - param_set
+            
+            # Track relationships for all successors
+            successors = {uf[s] for s in G.successors(node)}
+            
+            # Rule 1: Parameter postfix propagation (fixed iteration)
+            if params and non_params:
+                for succ_rep in successors:
+                    # Iterate over COPY of the set
+                    for var in set(rep_to_vars.get(succ_rep, set())):
+                        if '.' not in var or var in param_set:
+                            continue
+                        base, postfix = var.split('.', 1)
+                        if base in non_params:
+                            for param in params:
+                                new_var = f"{param}.{postfix}"
+                                if new_var not in var_mapping:
+                                    # Add new variable to current successor
+                                    var_mapping[new_var] = succ_rep
+                                    rep_to_vars[succ_rep].add(new_var)
+                                    # Update postfix structures
+                                    p, pf = new_var.split('.', 1)
+                                    postfix_registry[succ_rep][p].add(pf)
+                                    global_postfix_map[(p, pf)].add(succ_rep)
+                                    changes += 1
+                                else:
+                                    # Merge existing representative
+                                    existing_rep = uf[var_mapping[new_var]]
+                                    if existing_rep != succ_rep:
+                                        uf.union(existing_rep, succ_rep)
+                                        changes += 1
+            
+            # Rule 2: Label pattern-based merging
+            if len(variables) >= 2:
+                # Use list to avoid iteration issues
+                var_list = list(variables)
+                for i in range(len(var_list)):
+                    var_x = var_list[i]
+                    for j in range(i+1, len(var_list)):
+                        var_y = var_list[j]
+                        for succ_rep in successors:
+                            # Check for x.postfix in successor
+                            x_postfixes = postfix_registry.get(succ_rep, {}).get(var_x, set())
+                            for postfix in x_postfixes:
+                                # Check global map for y.postfix
+                                target_reps = global_postfix_map.get((var_y, postfix), set())
+                                for target_rep in target_reps:
+                                    if uf[succ_rep] != uf[target_rep]:
+                                        uf.union(succ_rep, target_rep)
+                                        changes += 1
+            
+            # Rule 3: Successor merge by SHARED POSTFIX (corrected)
+            if len(successors) >= 2:
+                succ_list = list(successors)
+                for i in range(len(succ_list)):
+                    a = succ_list[i]
+                    for j in range(i+1, len(succ_list)):
+                        b = succ_list[j]
+                        # Collect all postfixes from both nodes
+                        a_postfixes = set()
+                        for postfixes in postfix_registry.get(a, {}).values():
+                            a_postfixes.update(postfixes)
+                        b_postfixes = set()
+                        for postfixes in postfix_registry.get(b, {}).values():
+                            b_postfixes.update(postfixes)
+                        # Check for common postfixes
+                        common = a_postfixes & b_postfixes
+                        if common:
+                            if uf[a] != uf[b]:
+                                uf.union(a, b)
+                                changes += 1
+        
+        # Early termination if no changes
+        if changes == 0:
+            break
+        
+        # Update shared data structures incrementally
+        new_rep_to_vars = defaultdict(set)
+        new_postfix_registry = defaultdict(lambda: defaultdict(set))
+        new_global_postfix = defaultdict(set)
+        
+        for var, rep in var_mapping.items():
+            current_rep = uf[rep]
+            new_rep_to_vars[current_rep].add(var)
+            if '.' in var:
+                prefix, postfix = var.split('.', 1)
+                new_postfix_registry[current_rep][prefix].add(postfix)
+                new_global_postfix[(prefix, postfix)].add(current_rep)
+        
+        rep_to_vars = new_rep_to_vars
+        postfix_registry = new_postfix_registry
+        global_postfix_map = new_global_postfix
+    
+    # Construct final graph and mapping
+    final_mapping = {var: uf[rep] for var, rep in var_mapping.items()}
+    final_G = nx.DiGraph()
+    final_nodes = {uf[node] for node in G.nodes()}
+    final_G.add_nodes_from(final_nodes)
+    
+    for u, v, data in G.edges(data=True):
+        new_u = uf[u]
+        new_v = uf[v]
+        if new_u != new_v:
+            final_G.add_edge(new_u, new_v, **data)
+    
+    return final_G, final_mapping
