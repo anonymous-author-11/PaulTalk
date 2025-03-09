@@ -285,6 +285,10 @@ DONE:
 
 TODO:
 
+- Implement getters
+	- Shouldn't be technically difficult
+	- Will significantly improve ergonomics
+	- Especially now with lifetime annotations
 - Will need to apply class region constraints upon downcast
 	- Do we actually?
 	- What about automatic downcast upon multi-dispatch?

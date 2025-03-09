@@ -334,15 +334,23 @@ class ZipIterable2[T, U] extends Iterable2[Pair[T, U]] {
     @second : Iterable2[U]
 
     regions {
-        @first == @second,
         @elems_reg == @first.elems_reg,
         @elems_reg == @second.elems_reg
     }
 
     def init(@first : Iterable2[T], @second : Iterable2[U]) {}
 
+    #[ret == @first]
+    def first() -> Iterable2[T] {
+        return @first;
+    }
+    #[ret == @second]
+    def second() -> Iterable2[U] {
+        return @second;
+    }
+
     def iterator() -> ZipIterator2[T, U] {
-        return ZipIterator2[T, U].new(@first.iterator(), @second.iterator());
+        return ZipIterator2[T, U].new(self);
     }
 }
 
@@ -351,11 +359,15 @@ class ZipIterator2[T, U] extends Iterator2[Pair[T, U]] {
     @second : Iterator2[U]
 
     regions {
-        @referent_reg == @first,
-        @referent_reg == @second
+        @elems_reg < @first.elems_reg,
+        @elems_reg < @second.elems_reg
     }
 
-    def init(@first : Iterator2[T], @second : Iterator2[U]) {}
+    #[@first.referent_reg == zip_iterable.first, @second.referent_reg == zip_iterable.second]
+    def init(zip_iterable : ZipIterable2[T, U]) {
+        @first = zip_iterable.first().iterator();
+        @second = zip_iterable.second().iterator();
+    }
 
     def next() -> Pair[T, U] | Nil {
         first_elem = @first.next();
@@ -400,7 +412,11 @@ class ProductIterator2[T, U] extends Iterator2[Pair[T, U]] {
 
     regions {
         @current_first == @elems_reg,
-        @current_first == @first_iterator.elems_reg
+        @current_first == @first_iterator.elems_reg,
+        @first_iterator.referent_reg == @product_iterable.first,
+        @second_iterator.referent_reg == @product_iterable.second,
+        @elems_reg < @first_iterator.elems_reg,
+        @elems_reg < @second_iterator.elems_reg
     }
 
     def init(@product_iterable : ProductIterable2[T, U]) {

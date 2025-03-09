@@ -1446,17 +1446,24 @@ class MethodDef(Statement):
         virtual_regions = [reg.replace("@","self.") for reg in self.defining_class.all_regions()]
         param_names = [*(param.name for param in self.params), *fields, *virtual_regions, "self"]
         if self.hasreturn: param_names.append("ret")
-        annotated_facts = self.annotated_points_to_facts(body_scope, param_names)
-        
-        G0, var_mapping0 = create_constraint_graph(annotated_facts._set)
         G1, var_mapping1 = create_constraint_graph(body_scope.points_to_facts._set)
+
+        param_names = {*chain.from_iterable([var for var in var_mapping1 if var == param or var.startswith(f"{param}.")] for param in param_names)}
+
+        annotated_facts = self.annotated_points_to_facts(body_scope, param_names)
+        G0, var_mapping0 = create_constraint_graph(annotated_facts._set)
+        
         #visualize_graph_transformation(G1, var_mapping1, param_names)
-        G0, var_mapping0 = hyper_optimized_transform(G0, var_mapping0, param_names)
-        G1, var_mapping1 = hyper_optimized_transform(G1, var_mapping1, param_names)
-        #G1, var_mapping1 = transform_parameter_graph(G1, var_mapping1, param_names)
-        print(f"Points-to graph for {self.defining_class.name}.{self.name}:")
+        print(f"Original Points-to graph for {self.defining_class.name}.{self.name}:")
         print(pretty_print_graph(G1, var_mapping1, param_names))
-        print(f"Annotation graph for {self.defining_class.name}.{self.name}:")
+        print(f"Original Annotation graph for {self.defining_class.name}.{self.name}:")
+        print(pretty_print_graph(G0, var_mapping0, param_names))
+        G0, var_mapping0 = transform_until_stable(G0, var_mapping0, param_names)
+        G1, var_mapping1 = transform_until_stable(G1, var_mapping1, param_names)
+        #G1, var_mapping1 = transform_parameter_graph(G1, var_mapping1, param_names)
+        print(f"Transformed Points-to graph for {self.defining_class.name}.{self.name}:")
+        print(pretty_print_graph(G1, var_mapping1, param_names))
+        print(f"Transformed Annotation graph for {self.defining_class.name}.{self.name}:")
         print(pretty_print_graph(G0, var_mapping0, param_names))
         ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
         if not ok: raise Exception(f"Line {self.info.line_number}: {comment}")
@@ -1709,14 +1716,18 @@ class ClassMethodDef(MethodDef):
     def check_lifetime_constraints(self, body_scope):
         param_names = [param.name for param in self.params]
         if self.hasreturn: param_names.append("ret")
-        annotated_facts = self.annotated_points_to_facts(body_scope, param_names)
-        G0, var_mapping0 = create_constraint_graph(annotated_facts._set)
         G1, var_mapping1 = create_constraint_graph(body_scope.points_to_facts._set)
+
+        param_names = {*chain.from_iterable([var for var in var_mapping1 if var == param or var.startswith(f"{param}.")] for param in param_names)}
+        annotated_facts = self.annotated_points_to_facts(body_scope, param_names)
+        
+        G0, var_mapping0 = create_constraint_graph(annotated_facts._set)
+        
         #visualize_graph_transformation(G1, var_mapping1, param_names)
         print(f"Original points-to graph for {self.defining_class.name}.{self.name}:")
         print(pretty_print_graph(G1, var_mapping1, param_names))
-        G0, var_mapping0 = hyper_optimized_transform(G0, var_mapping0, param_names)
-        G1, var_mapping1 = hyper_optimized_transform(G1, var_mapping1, param_names)
+        G0, var_mapping0 = transform_until_stable(G0, var_mapping0, param_names)
+        G1, var_mapping1 = transform_until_stable(G1, var_mapping1, param_names)
         print(f"Slightly transformed points-to graph for {self.defining_class.name}.{self.name}:")
         print(pretty_print_graph(G1, var_mapping1, param_names))
         #G1, var_mapping1 = transform_parameter_graph(G1, var_mapping1, param_names)

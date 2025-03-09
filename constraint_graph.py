@@ -193,7 +193,6 @@ def visualize_graph_transformation(G, var_mapping, parameter_names):
     
     plt.tight_layout()
     plt.show()
-import networkx as nx
 
 def check_graph_compatibility(G1, var_mapping1, G2, var_mapping2, parameter_names):
     """
@@ -213,15 +212,7 @@ def check_graph_compatibility(G1, var_mapping1, G2, var_mapping2, parameter_name
         tuple: (bool, str) where str contains reason for failure if bool is False
     """
     # Generate extended parameters from parameter_names
-    extended_params = set()
-    for param in parameter_names:
-        # Check variables in both mappings for extensions
-        for var in var_mapping1:
-            if var == param or var.startswith(f"{param}."):
-                extended_params.add(var)
-        for var in var_mapping2:
-            if var == param or var.startswith(f"{param}."):
-                extended_params.add(var)
+    extended_params = parameter_names
     
     # Filter parameters present in both mappings
     valid_params = [var for var in extended_params if var in var_mapping1 and var in var_mapping2]
@@ -448,12 +439,7 @@ def enforce_parameter_postfix_rule(G, var_mapping, parameter_names):
         tuple: (new_G, new_var_mapping) - Transformed graph and updated mapping
     """
 
-    extended_params = set()
-    for param in parameter_names:
-        # Check variables in both mappings for extensions
-        for var in var_mapping:
-            if var == param or var.startswith(f"{param}."):
-                extended_params.add(var)
+    extended_params = parameter_names
 
     # Initialize UnionFind with existing nodes
     uf = UnionFind()
@@ -601,34 +587,57 @@ def enforce_postfix_merge_rule(G, var_mapping):
     
     return new_G, new_var_mapping
 
-    from collections import defaultdict
-import networkx as nx
-from networkx.utils import UnionFind
-
-from collections import defaultdict
-import networkx as nx
-from networkx.utils import UnionFind
-
-def hyper_optimized_transform(G: nx.DiGraph, 
-                             var_mapping: dict, 
-                             parameter_names: list) -> tuple:
+def transform_until_stable(G: nx.DiGraph, var_mapping: dict, parameter_names: list) -> tuple:
     """
-    Hyper-optimized combined transformation pipeline with fixes for set iteration and postfix checking.
+    Perform comprehensive graph transformations to enforce two core consistency rules.
     
+    Rules Enforced:
+    1. Parameter Postfix Propagation
+       - If a node contains parameter A and variable B, and points to a node containing B.foo,
+         then A.foo will be added to the target node if not already present
+       - Ensures parameter attributes propagate through reference chains
+
+    3. Postfix-Based Successor Merging with Prefix Check
+       - If a node points to two nodes containing X.postfix and Y.postfix (same postfix),
+         they will be merged ONLY IF both X and Y exist in the pointing node
+       - Prevents spurious merges by verifying prefix coexistence in the prior node
+
     Args:
-        G: Initial constraint graph
-        var_mapping: Original variable to representative mapping
-        parameter_names: List of parameter names
-        
+        G: NetworkX DiGraph representing constraint relationships
+        var_mapping: Dictionary mapping original variables to their current representatives
+        parameter_names: List of variables considered parameters (special propagation rules)
+
     Returns:
-        tuple: (final_G, final_mapping) - Transformed graph and updated mapping
+        tuple: (transformed_graph, updated_mapping) where:
+            transformed_graph: DiGraph with merged nodes according to rules
+            updated_mapping: Dictionary with new representative assignments
+
+    Rule Details:
+    
+    1. Parameter Postfix Propagation:
+        - Condition: Node N contains parameter A and variable B
+        - Trigger: N points to node M containing B.foo
+        - Action: Add A.foo to M if not present
+        - Example: 
+            N = [paramA, varB] --> M = [varB.value]
+            Transformed M becomes [varB.value, paramA.value]
+
+    2. Postfix-Based Successor Merging:
+        - Condition: Node N points to M1 and M2
+        - Trigger: 
+            - M1 contains X.postfix
+            - M2 contains Y.postfix (same postfix)
+            - N contains both X and Y
+        - Action: Merge M1 and M2
+        - Safeguard: No merge if X/Y not co-located in N
+
+    Implementation Notes:
+        - Uses Union-Find data structure for efficient merge tracking
+        - Maintains global postfix registry for O(1) lookups
+        - Processes rules iteratively until graph stabilizes
+        - Preserves original edge relationships while merging nodes
     """
-    param_set = set()
-    for param in parameter_names:
-        # Check variables in both mappings for extensions
-        for var in var_mapping:
-            if var == param or var.startswith(f"{param}."):
-                param_set.add(var)
+    param_set = parameter_names
     uf = UnionFind()
     for node in G.nodes():
         uf[node]
@@ -642,7 +651,7 @@ def hyper_optimized_transform(G: nx.DiGraph,
         current_rep = uf[rep]
         rep_to_vars[current_rep].add(var)
         if '.' in var:
-            prefix, postfix = var.split('.', 1)
+            prefix, postfix = var.rsplit('.', 1)
             postfix_registry[current_rep][prefix].add(postfix)
             global_postfix_map[(prefix, postfix)].add(current_rep)
     
@@ -668,7 +677,7 @@ def hyper_optimized_transform(G: nx.DiGraph,
                     for var in set(rep_to_vars.get(succ_rep, set())):
                         if '.' not in var or var in param_set:
                             continue
-                        base, postfix = var.split('.', 1)
+                        base, postfix = var.rsplit('.', 1)
                         if base in non_params:
                             for param in params:
                                 new_var = f"{param}.{postfix}"
@@ -688,41 +697,34 @@ def hyper_optimized_transform(G: nx.DiGraph,
                                         uf.union(existing_rep, succ_rep)
                                         changes += 1
             
-            # Rule 2: Label pattern-based merging
-            if len(variables) >= 2:
-                # Use list to avoid iteration issues
-                var_list = list(variables)
-                for i in range(len(var_list)):
-                    var_x = var_list[i]
-                    for j in range(i+1, len(var_list)):
-                        var_y = var_list[j]
-                        for succ_rep in successors:
-                            # Check for x.postfix in successor
-                            x_postfixes = postfix_registry.get(succ_rep, {}).get(var_x, set())
-                            for postfix in x_postfixes:
-                                # Check global map for y.postfix
-                                target_reps = global_postfix_map.get((var_y, postfix), set())
-                                for target_rep in target_reps:
-                                    if uf[succ_rep] != uf[target_rep]:
-                                        uf.union(succ_rep, target_rep)
-                                        changes += 1
-            
-            # Rule 3: Successor merge by SHARED POSTFIX (corrected)
+            # Rule 2: Refined Successor Merge by Shared Postfix with Prefix Check
             if len(successors) >= 2:
                 succ_list = list(successors)
                 for i in range(len(succ_list)):
                     a = succ_list[i]
                     for j in range(i+1, len(succ_list)):
                         b = succ_list[j]
-                        # Collect all postfixes from both nodes
-                        a_postfixes = set()
-                        for postfixes in postfix_registry.get(a, {}).values():
-                            a_postfixes.update(postfixes)
-                        b_postfixes = set()
-                        for postfixes in postfix_registry.get(b, {}).values():
-                            b_postfixes.update(postfixes)
-                        # Check for common postfixes
-                        common = a_postfixes & b_postfixes
+                        
+                        # Get all (prefix, postfix) pairs in both nodes
+                        a_pairs = set()
+                        for prefix in postfix_registry.get(a, {}):
+                            for postfix in postfix_registry[a][prefix]:
+                                a_pairs.add((prefix, postfix))
+                        
+                        b_pairs = set()
+                        for prefix in postfix_registry.get(b, {}):
+                            for postfix in postfix_registry[b][prefix]:
+                                b_pairs.add((prefix, postfix))
+                        
+                        # Find common postfixes with prefixes present in the current_rep
+                        common = []
+                        for (prefix_a, postfix) in a_pairs:
+                            for (prefix_b, _) in b_pairs:
+                                if (prefix_b, postfix) in b_pairs:
+                                    # Check if BOTH prefixes exist in current_rep's variables
+                                    if prefix_a in variables and prefix_b in variables:
+                                        common.append(postfix)
+                        
                         if common:
                             if uf[a] != uf[b]:
                                 uf.union(a, b)
@@ -741,7 +743,7 @@ def hyper_optimized_transform(G: nx.DiGraph,
             current_rep = uf[rep]
             new_rep_to_vars[current_rep].add(var)
             if '.' in var:
-                prefix, postfix = var.split('.', 1)
+                prefix, postfix = var.rsplit('.', 1)
                 new_postfix_registry[current_rep][prefix].add(postfix)
                 new_global_postfix[(prefix, postfix)].add(current_rep)
         
