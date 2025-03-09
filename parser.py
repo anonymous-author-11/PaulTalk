@@ -305,7 +305,7 @@ class CSTTransformer(Transformer):
     def not_op(self, exclam, expr):
         node_info = NodeInfo(random_letters(10), self.file_name, exclam.line)
         f = BoolLiteral(node_info, 0)
-        return Logical(node_info, f, "AND", expr)
+        return Comparison(node_info, f, "EQ", expr)
 
     def paren_expr(self, expr):
         return expr

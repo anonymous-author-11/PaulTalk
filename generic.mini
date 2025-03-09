@@ -61,7 +61,8 @@ class Iterator2[T] extends Container {
 class Iterable2[T] extends Container {
 
     #[ret.referent_reg == self]
-	abstract def iterator() -> Iterator2[T] {}
+	abstract def iterator() -> Iterator2[T] {
+    }
 	def each(f : (T)) {
         for x in self { f.call(x); }
     }
@@ -71,10 +72,7 @@ class Iterable2[T] extends Container {
         return accumulator;
     }
     def all(f : (T) -> Bool) -> Bool {
-        for x in self {
-            if f.call(x) { continue; }
-            return false;
-        }
+        for x in self { if not f.call(x) { return false; } }
         return true;
     }
     def any(f : (T) -> Bool) -> Bool {
@@ -279,12 +277,10 @@ class ChainIterator2[T] extends Iterator2[T] {
         @on_first = true;
     }
     def next() -> T | Nil {
-        if @on_first {
-            next = @first.next();
-            if next is T { return next; }
-            @on_first = false;
-        }
-        return @second.next();
+        if not @on_first { return @second.next(); }
+        next = @first.next();
+        if next is T { return next; }
+        @on_first = false;
     }
 }
 

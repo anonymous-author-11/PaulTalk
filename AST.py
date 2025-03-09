@@ -2636,6 +2636,14 @@ class For(Statement):
     temp_name: str
 
     def codegen(self, scope):
+        """
+        for x in iterable { ... }
+
+        becomes something like (pseudocode)
+
+        _iterator_xyz = iterable.iterator();
+        while (x := _iterator_xyz.next()) is not Nil { ... }
+        """
         temp = Identifier(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), self.temp_name)
         iterator = MethodCall(NodeInfo("_iterator_" + random_letters(10), self.info.filename, self.info.line_number), self.iterable, "iterator", [])
         assign0 = Assignment(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), temp, iterator)
