@@ -215,6 +215,9 @@ def check_graph_compatibility(G1, var_mapping1, G2, var_mapping2, parameter_name
     extended_params = parameter_names
     
     # Filter parameters present in both mappings
+    for var in extended_params:
+        if var in var_mapping1 and var not in var_mapping2:
+            return False, f"Parameter {var} exists in G1 but not in G2"
     valid_params = [var for var in extended_params if var in var_mapping1 and var in var_mapping2]
     
     if not valid_params:

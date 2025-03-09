@@ -24,6 +24,16 @@ class ConstraintSet:
             if i == len(rhs.split(".")) - 1: break
             self._set.add((".".join(rhs.split(".")[:(i + 1)]), "<", ".".join(rhs.split(".")[:(i + 2)])))
 
+    def transform_with_mapping(self, mapping):
+        old_set = self._set
+        self._set = set()
+        for lhs, op, rhs in old_set:
+            lhs_split = lhs.split(".")
+            lhs_split[0] = mapping[lhs_split[0]]
+            rhs_split = rhs.split(".")
+            rhs_split[0] = mapping[rhs_split[0]]
+            self.add((".".join(lhs_split), op, ".".join(rhs_split)))
+
     def __contains__(self, item):
         return item in self._set
 
@@ -110,6 +120,17 @@ class Scope:
         if (left, right) in self.subtype_cache: return self.subtype_cache[(left, right)]
         self.subtype_cache[(left, right)] = self.subtype_inner(left, right)
         return self.subtype_cache[(left, right)]
+
+    def constraints_of(self, typ):
+        constraints = ConstraintSet(set())
+        if isinstance(typ, FatPtr):
+            return self.classes[typ.cls.data].all_constraints().copy()
+        if isinstance(typ, TypeParameter) and isinstance(typ.bound, FatPtr) and typ.bound.cls.data in self.classes:
+            return self.classes[typ.bound.cls.data].all_constraints().copy()
+        if isinstance(typ, Union):
+            for t in typ.types.data:
+                constraints = constraints.union(self.constraints_of(t))
+        return constraints
 
     def matches(self, left, right):
         if isinstance(left, FatPtr) and isinstance(right, FatPtr): return left.cls == right.cls

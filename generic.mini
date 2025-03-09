@@ -255,8 +255,7 @@ class ChainIterable2[T] extends Iterable2[T] {
 
     regions {
         @first == @second,
-        @elems_reg == @first.elems_reg,
-        @elems_reg == @second.elems_reg
+        @elems_reg == @first.elems_reg
     }
 
     def init(@first : Iterable2[T], @second : Iterable2[T]) {}
@@ -295,8 +294,7 @@ class InterleaveIterable2[T] extends Iterable2[T] {
 
     regions {
         @first == @second,
-        @elems_reg == @first.elems_reg,
-        @elems_reg == @second.elems_reg
+        @elems_reg == @first.elems_reg
     }
 
     def init(@first : Iterable2[T], @second : Iterable2[T]) {}
@@ -334,23 +332,14 @@ class ZipIterable2[T, U] extends Iterable2[Pair[T, U]] {
     @second : Iterable2[U]
 
     regions {
-        @elems_reg == @first.elems_reg,
-        @elems_reg == @second.elems_reg
+        @elems_reg < @first.elems_reg,
+        @elems_reg < @second.elems_reg
     }
 
     def init(@first : Iterable2[T], @second : Iterable2[U]) {}
 
-    #[ret == @first]
-    def first() -> Iterable2[T] {
-        return @first;
-    }
-    #[ret == @second]
-    def second() -> Iterable2[U] {
-        return @second;
-    }
-
     def iterator() -> ZipIterator2[T, U] {
-        return ZipIterator2[T, U].new(self);
+        return ZipIterator2[T, U].new(@first.iterator(), @second.iterator());
     }
 }
 
@@ -363,10 +352,7 @@ class ZipIterator2[T, U] extends Iterator2[Pair[T, U]] {
         @elems_reg < @second.elems_reg
     }
 
-    #[@first.referent_reg == zip_iterable.first, @second.referent_reg == zip_iterable.second]
-    def init(zip_iterable : ZipIterable2[T, U]) {
-        @first = zip_iterable.first().iterator();
-        @second = zip_iterable.second().iterator();
+    def init(@first : Iterator2[T], @second : Iterator2[U]) {
     }
 
     def next() -> Pair[T, U] | Nil {
@@ -384,44 +370,32 @@ class ProductIterable2[T, U] extends Iterable2[Pair[T, U]] {
     @second : Iterable2[U]
 
     regions {
-        @first == @second,
-        @elems_reg == @first.elems_reg,
-        @elems_reg == @second.elems_reg
+        @elems_reg < @first.elems_reg,
+        @elems_reg < @second.elems_reg
     }
 
     def init(@first : Iterable2[T], @second : Iterable2[U]) {
     }
-    #[ret == @first]
-    def first() -> Iterable2[T] {
-        return @first;
-    }
-    #[ret == @second]
-    def second() -> Iterable2[U] {
-        return @second;
-    }
     def iterator() -> ProductIterator2[T, U] {
-        return ProductIterator2[T, U].new(self);
+        return ProductIterator2[T, U].new(@first.iterator(), @second);
     }
 }
 
 class ProductIterator2[T, U] extends Iterator2[Pair[T, U]] {
-    @product_iterable : ProductIterable2[T, U]
     @first_iterator : Iterator2[T]
     @second_iterator : Iterator2[U]
+    @second_iterable : Iterable2[U]
     @current_first : T | Nil
 
     regions {
-        @current_first == @elems_reg,
         @current_first == @first_iterator.elems_reg,
-        @first_iterator.referent_reg == @product_iterable.first,
-        @second_iterator.referent_reg == @product_iterable.second,
+        @second_iterator.referent_reg == @second_iterable,
         @elems_reg < @first_iterator.elems_reg,
         @elems_reg < @second_iterator.elems_reg
     }
 
-    def init(@product_iterable : ProductIterable2[T, U]) {
-        @first_iterator = @product_iterable.first().iterator();
-        @second_iterator = @product_iterable.second().iterator();
+    def init(@first_iterator : Iterator2[T], @second_iterable : Iterable2[U]) {
+        @second_iterator = @second_iterable.iterator();
         @current_first = @first_iterator.next();
     }
 
@@ -431,7 +405,7 @@ class ProductIterator2[T, U] extends Iterator2[Pair[T, U]] {
             second_elem = @second_iterator.next();
             if second_elem is U { return Pair[T, U].new(current_first, second_elem); }
             @current_first = @first_iterator.next();
-            @second_iterator = @product_iterable.second().iterator();
+            @second_iterator = @second_iterable.iterator();
             current_first = @current_first;
         }
         return nil;

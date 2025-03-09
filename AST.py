@@ -738,19 +738,18 @@ class MethodCall(Expression):
         scope.region.last_block.add_op(ary)
         return ary.results[0]
 
-    def apply_constraints(self, scope, behavior):
+    def apply_constraints(self, scope, behavior, specialized):
         formal_constraints = behavior.constraints()
         if self.method == "init": formal_constraints = formal_constraints.union(behavior.cls.all_constraints())
+        if specialized:
+            return_constraints = scope.constraints_of(specialized)
+            return_constraints.transform_with_mapping({"self":"ret"})
+            formal_constraints = formal_constraints.union(return_constraints)
+
         mapping = [*((str(i), arg.info.id) for (i, arg) in enumerate(self.arguments)), ("ret", self.info.id), ("self", self.receiver.info.id)]
         mapping = {k:v for k,v in mapping}
-        for lhs, op, rhs in formal_constraints._set:
-            lhs_split = lhs.split(".")
-            lhs_split[0] = mapping[lhs_split[0]]
-            rhs_split = rhs.split(".")
-            rhs_split[0] = mapping[rhs_split[0]]
-            scope.points_to_facts.add((".".join(lhs_split), op, ".".join(rhs_split)))
-            if len(lhs_split) > 1: scope.points_to_facts.add((lhs_split[0], "<", ".".join(lhs_split)))
-            if len(rhs_split) > 1: scope.points_to_facts.add((rhs_split[0], "<", ".".join(rhs_split)))
+        formal_constraints.transform_with_mapping(mapping)
+        scope.points_to_facts = scope.points_to_facts.union(formal_constraints)
 
     def simple_exprtype(self, scope, rec_typ):
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
@@ -765,9 +764,10 @@ class MethodCall(Expression):
             raise Exception(f"Line {self.info.line_number}: there exists no overload of method {rec_typ}.{self.method} compatible with argument types {arg_types}")
         if len(behaviors) > 1:
             raise Exception(f"Line {self.info.line_number}: invocation of {self.method} with argument types {arg_types} is ambiguous.")
-        self.apply_constraints(scope, behaviors[0])
         broad = behaviors[0].broad_return_type()
         specialized = behaviors[0].specialized_return_type(rec_typ, arg_types, scope)
+        self.apply_constraints(scope, behaviors[0], specialized)
+        
         #print(f"unspecialized return type of {rec_typ}.{self.method} with args {arg_types} is {unspecialized}")
         #print(f"specialized return type of {rec_typ}.{self.method} with args {arg_types} is {specialized}")
         return broad, specialized
@@ -1016,14 +1016,8 @@ class ClassMethodCall(MethodCall):
         formal_constraints = behavior.constraints()
         mapping = [*((str(i), arg.info.id) for (i, arg) in enumerate(self.arguments)), ("ret", self.info.id)]
         mapping = {k:v for k,v in mapping}
-        for lhs, op, rhs in formal_constraints._set:
-            lhs_split = lhs.split(".")
-            lhs_split[0] = mapping[lhs_split[0]]
-            rhs_split = rhs.split(".")
-            rhs_split[0] = mapping[rhs_split[0]]
-            scope.points_to_facts.add((".".join(lhs_split), op, ".".join(rhs_split)))
-            if len(lhs_split) > 1: scope.points_to_facts.add((lhs_split[0], "<", ".".join(lhs_split)))
-            if len(rhs_split) > 1: scope.points_to_facts.add((rhs_split[0], "<", ".".join(rhs_split)))
+        formal_constraints.transform_with_mapping(mapping)
+        scope.points_to_facts = scope.points_to_facts.union(formal_constraints)
 
     def simple_exprtype(self, scope):
         if self.receiver == "Self":
@@ -1454,22 +1448,18 @@ class MethodDef(Statement):
         G0, var_mapping0 = create_constraint_graph(annotated_facts._set)
         
         #visualize_graph_transformation(G1, var_mapping1, param_names)
-        print(f"Original Points-to graph for {self.defining_class.name}.{self.name}:")
-        print(pretty_print_graph(G1, var_mapping1, param_names))
-        print(f"Original Annotation graph for {self.defining_class.name}.{self.name}:")
-        print(pretty_print_graph(G0, var_mapping0, param_names))
+        #print(f"Original Points-to graph for {self.defining_class.name}.{self.name}:")
+        #print(pretty_print_graph(G1, var_mapping1, param_names))
+        #print(f"Original Annotation graph for {self.defining_class.name}.{self.name}:")
+        #print(pretty_print_graph(G0, var_mapping0, param_names))
         G0, var_mapping0 = transform_until_stable(G0, var_mapping0, param_names)
         G1, var_mapping1 = transform_until_stable(G1, var_mapping1, param_names)
-        #G1, var_mapping1 = transform_parameter_graph(G1, var_mapping1, param_names)
         print(f"Transformed Points-to graph for {self.defining_class.name}.{self.name}:")
         print(pretty_print_graph(G1, var_mapping1, param_names))
         print(f"Transformed Annotation graph for {self.defining_class.name}.{self.name}:")
         print(pretty_print_graph(G0, var_mapping0, param_names))
         ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
         if not ok: raise Exception(f"Line {self.info.line_number}: {comment}")
-        #print((ok, comment))
-        #result, example = query_external_less_than(G, var_mapping, param_names)
-        #print(result)
 
     def typeflow(self, scope):
         if self.name[0].isupper():
@@ -1724,15 +1714,12 @@ class ClassMethodDef(MethodDef):
         G0, var_mapping0 = create_constraint_graph(annotated_facts._set)
         
         #visualize_graph_transformation(G1, var_mapping1, param_names)
-        print(f"Original points-to graph for {self.defining_class.name}.{self.name}:")
-        print(pretty_print_graph(G1, var_mapping1, param_names))
+        #print(f"Original points-to graph for {self.defining_class.name}.{self.name}:")
+        #print(pretty_print_graph(G1, var_mapping1, param_names))
         G0, var_mapping0 = transform_until_stable(G0, var_mapping0, param_names)
         G1, var_mapping1 = transform_until_stable(G1, var_mapping1, param_names)
-        print(f"Slightly transformed points-to graph for {self.defining_class.name}.{self.name}:")
+        print(f"Transformed points-to graph for {self.defining_class.name}.{self.name}:")
         print(pretty_print_graph(G1, var_mapping1, param_names))
-        #G1, var_mapping1 = transform_parameter_graph(G1, var_mapping1, param_names)
-        #print(f"Final points-to graph for {self.defining_class.name}.{self.name}:")
-        #print(pretty_print_graph(G1, var_mapping1, param_names))
         print(f"Annotation graph for {self.defining_class.name}.{self.name}:")
         print(pretty_print_graph(G0, var_mapping0, param_names))
         ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
@@ -2098,18 +2085,20 @@ class ClassDef(Statement):
         return pruned
 
     def all_constraints(self):
+        constraints = ConstraintSet(set())
         full_ordering = [self, *self.my_ordering()]
         region_constraints = [*chain.from_iterable(cls.region_constraints for cls in full_ordering)]
-        fields = [key for key in self._scope.type_table.keys() if "@" in key]
         virtual_regions = self.all_regions()
+        for c in region_constraints: constraints.add((c.lhs.replace("@","self."), c.op, c.rhs.replace("@","self.")))
+        for region in virtual_regions: constraints.add(("self", "<", region.replace("@","self.")))
+        fields = [key for key in self._scope.type_table.keys() if "@" in key]
         for field in fields:
-            node_info = NodeInfo(random_letters(10), self.info.filename, self.info.line_number)
-            region_constraints.append(Constraint(node_info, "self", "<", field))
-        for region in virtual_regions:
-            node_info = NodeInfo(random_letters(10), self.info.filename, self.info.line_number)
-            region_constraints.append(Constraint(node_info, "self", "<", region))
-        constraints = ConstraintSet(set())
-        for c in region_constraints: constraints.add((c.lhs, c.op, c.rhs))
+            constraints.add(("self", "<", field.replace("@","self.")))
+            field_type_constraints = self._scope.constraints_of(self._scope.type_table[field])
+            mapping = {"self":field.replace("@","self.")}
+            field_type_constraints.transform_with_mapping(mapping)
+            constraints = constraints.union(field_type_constraints)
+        
         return constraints
 
     def all_type_parameters(self):
