@@ -1424,7 +1424,8 @@ class MethodDef(Statement):
                 raise Exception(f"Line {self.info.line_number}: Constraint {c.lhs} {c.op} {c.rhs} is less precise than constraints from overridden methods.")
             annotated_facts.add((c.lhs, c.op, c.rhs))
 
-        return_type = self.return_type()
+        original_method = (self, *self.overridden_methods())[-1]
+        return_type = self.defining_class._scope.simplify(original_method.return_type())
         return_cls = None
         if isinstance(return_type, FatPtr): return_cls = body_scope.classes[return_type.cls.data]
         if isinstance(return_type, TypeParameter): return_cls = body_scope.classes[return_type.bound.cls.data]
@@ -1694,7 +1695,8 @@ class ClassMethodDef(MethodDef):
                 raise Exception(f"Line {self.info.line_number}: Constraint {c.lhs} {c.op} {c.rhs} is less precise than constraints from overridden methods.")
             annotated_facts.add((c.lhs, c.op, c.rhs))
         return_cls = None
-        return_type = self.return_type()
+        original_method = (self, *self.overridden_methods())[-1]
+        return_type = self.defining_class._scope.simplify(original_method.return_type())
         if isinstance(return_type, FatPtr): return_cls = body_scope.classes[return_type.cls.data]
         if isinstance(return_type, TypeParameter): return_cls = body_scope.classes[return_type.bound.cls.data]
         if return_cls:

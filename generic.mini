@@ -209,9 +209,7 @@ class MapIterator2[T, U] extends Iterator2[U] {
 
     def next() -> U | Nil {
         next = @iterator.next();
-        if next is T {
-            return @f.call(next);
-        }
+        if next is T { return @f.call(next); }
         return nil;
     }
 }
