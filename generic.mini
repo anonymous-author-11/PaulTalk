@@ -418,15 +418,15 @@ ftimes_two = (x : f64) => { x * 2.0; };
 identity = (x : i32) => { x; };
 to_float = (x : i32) => { y : f64 = x; y; };
 ary2 = ary.map(times_two);
-ary4 = ary2.map(identity).map(to_float);
+ary3 = ary2.map(identity).map(to_float);
 
-for x in ary4 {
+for x in ary3 {
 	IO.print(55);
 	IO.print(x);
 }
 
-ary3 = ary.zip(ary4);
-for pair in ary3 {
+ary4 = ary.zip(ary3);
+for pair in ary4 {
 	IO.print(pair.first());
 	IO.print(pair.second());
 }

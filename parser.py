@@ -378,14 +378,14 @@ class CSTTransformer(Transformer):
             if receiver.name == "Coroutine":
                 return CoCreate(node_info, "coroutine_" + random_letters(10), args)
             if meth_name == "new":
-                return ObjectCreation(node_info, random_letters(10), FatPtr.basic(receiver.name), args)
+                return ObjectCreation(node_info, random_letters(10), FatPtr.basic(receiver.name), args, None)
             return ClassMethodCall(node_info, receiver, meth_name.value, args)
         if isinstance(receiver, ParametrizedAttribute):
             if isinstance(receiver, Buffer):
                 node_info = NodeInfo(random_letters(10), self.file_name, args[0].info.line_number)
-                return CreateBuffer(node_info, receiver, args[0])
+                return CreateBuffer(node_info, receiver, args[0], None)
             if meth_name == "new":
-                return ObjectCreation(node_info, random_letters(10), receiver, args)
+                return ObjectCreation(node_info, random_letters(10), receiver, args, None)
             raise Exception("can't handle this yet")
         return MethodCall(node_info, receiver, meth_name.value, args)
 

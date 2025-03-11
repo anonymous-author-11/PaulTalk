@@ -406,9 +406,17 @@ class LowerCreateBuffer(RewritePattern):
         null = llvm.ZeroOp.create(result_types=[llvm.LLVMPointerType.opaque()])
         unwrap = UnwrapOp.create(operands=[op.size], result_types=[IntegerType(32)])
         gep = llvm.GEPOp.from_mixed_indices(null.results[0], [unwrap.results[0]], pointee_type=op.typ)
-        malloc_size = llvm.PtrToIntOp(gep.results[0], IntegerType(64))
-        attr_dict = {"func_name":StringAttr("bump_malloc"), "ret_type":llvm.LLVMPointerType.opaque()}
-        malloc = FunctionCallOp.create(operands=[malloc_size.results[0]], attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.make(llvm.LLVMPointerType.opaque())
+        if op.region_id.data == "stack":
+            malloc_size = llvm.ConstantOp(op.size, IntegerType(64))
+            malloc = llvm.AllocaOp(malloc_size.results[0], elem_type=op.typ)
+        else:
+            malloc_size = llvm.PtrToIntOp(gep.results[0], IntegerType(64))
+            malloc = llvm.CallOp("bump_malloc", malloc_size.results[0], return_type=llvm.LLVMPointerType.opaque())
+        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
+        malloc.properties["operandSegmentSizes"] = operandSegmentSizes
+        malloc.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        store = llvm.StoreOp(malloc.results[0], alloca.results[0])
         
         # fill uninitialized memory with zeroes
         #false = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 1), IntegerType(1))
@@ -421,8 +429,9 @@ class LowerCreateBuffer(RewritePattern):
         #memset.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
 
         rewriter.inline_block_before_matched_op(Block([null, unwrap, gep, malloc_size]))
+        rewriter.inline_block_after_matched_op(Block([malloc, store]))
         #rewriter.inline_block_after_matched_op(Block([false, zero, memset]))
-        rewriter.replace_matched_op(malloc)
+        rewriter.replace_matched_op(alloca)
 
 class LowerCreateTuple(RewritePattern):
     @op_type_rewrite_pattern

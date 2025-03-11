@@ -127,6 +127,11 @@ class Program(Node):
         for stmt in self.statements:
             if isinstance(stmt, Import): continue
             stmt.debug_typeflow(scope)
+        G0, var_mapping0 = create_constraint_graph(scope.points_to_facts._set)
+        G0, var_mapping0 = transform_until_stable(G0, var_mapping0, set())
+        print(f"Transformed points-to graph for main:")
+        print(pretty_print_graph(G0, var_mapping0, set()))
+        scope.assign_regions(var_mapping0, set())
 
 @dataclass
 class Expression(Node):
@@ -338,7 +343,7 @@ class ArrayLiteral(Expression):
     def codegen(self, scope):
         sizelit = IntegerLiteral(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), len(self.elements), 32)
         capacitylit = IntegerLiteral(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), len(self.elements) + 1, 32)
-        buf = CreateBuffer(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), Buffer([Ptr([IntegerType(32)])]), capacitylit)
+        buf = CreateBuffer(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), Buffer([Ptr([IntegerType(32)])]), capacitylit, None)
         temp_var = Identifier(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), "_temp_buf" + random_letters(10))
         assign = Assignment(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), temp_var, buf)
         assign.codegen(scope);
@@ -347,7 +352,7 @@ class ArrayLiteral(Expression):
             indexation = MethodCall(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), temp_var, "_index", [iliteral])
             assign_i = Assignment(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), indexation, elem)
             assign_i.codegen(scope)
-        ary = ObjectCreation(self.info, random_letters(10), FatPtr.basic("IntArray"), [temp_var, sizelit, capacitylit])
+        ary = ObjectCreation(self.info, random_letters(10), FatPtr.basic("IntArray"), [temp_var, sizelit, capacitylit], None)
         return ary.codegen(scope)
 
     def exprtype(self, scope):
@@ -364,7 +369,7 @@ class StringLiteral(Expression):
         escaped_str = self.value.encode().decode('unicode_escape')
         sizelit = IntegerLiteral(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), len(escaped_str), 32)
         capacitylit = IntegerLiteral(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), len(escaped_str) + 1, 32)
-        buf = CreateBuffer(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), Buffer([Ptr([IntegerType(8)])]), capacitylit)
+        buf = CreateBuffer(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), Buffer([Ptr([IntegerType(8)])]), capacitylit, None)
         temp_var = Identifier(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), "_temp_buf" + random_letters(10))
         assign = Assignment(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), temp_var, buf)
         assign.codegen(scope);
@@ -376,7 +381,7 @@ class StringLiteral(Expression):
         index = BufferIndexationOp.create(operands=operands, attributes={"typ": llvmtype}, result_types=[llvm.LLVMPointerType.opaque()])
         assign = AssignOp.create(operands=[index.results[0], lit.results[0]], attributes={"typ":llvmtype})
         scope.region.last_block.add_ops([lit, zero, index, assign])
-        string = ObjectCreation(self.info, random_letters(10), FatPtr.basic("String"), [temp_var, sizelit, capacitylit])
+        string = ObjectCreation(self.info, random_letters(10), FatPtr.basic("String"), [temp_var, sizelit, capacitylit], None)
         return string.codegen(scope)
 
     def exprtype(self, scope):
@@ -391,7 +396,7 @@ class RangeLiteral(Expression):
     end: Expression
 
     def codegen(self, scope):
-        return ObjectCreation(self.info, random_letters(10), FatPtr.basic("Range"), [self.start, self.end]).codegen(scope)
+        return ObjectCreation(self.info, random_letters(10), FatPtr.basic("Range"), [self.start, self.end], None).codegen(scope)
     
     def ensure_i32_args(self, start_type, end_type):
         if start_type != Ptr([IntegerType(32)]) or end_type != Ptr([IntegerType(32)]):
@@ -401,7 +406,7 @@ class RangeLiteral(Expression):
         start_type = self.start.exprtype(scope)
         end_type = self.end.exprtype(scope)
         self.ensure_i32_args(start_type, end_type)
-        return ObjectCreation(self.info, random_letters(10), FatPtr.basic("Range"), [self.start, self.end]).exprtype(scope)
+        return ObjectCreation(self.info, random_letters(10), FatPtr.basic("Range"), [self.start, self.end], None).exprtype(scope)
     
     def typeflow(self, scope):
         self.exprtype(scope)
@@ -1091,6 +1096,7 @@ class ObjectCreation(Expression):
     anon_name: str
     type: TypeAttribute
     arguments: List[Expression]
+    region: str
 
     def codegen(self, scope):
         input_types = [arg.exprtype(scope) for arg in self.arguments]
@@ -1105,7 +1111,7 @@ class ObjectCreation(Expression):
         n_data_fields = len([f for f in cls.fields() if not isinstance(f.declaration, TypeFieldDecl)])
         parameterizations = self.parameterizations(cls, self_type, scope)
         num_data_fields = IntegerAttr.from_int_and_width(n_data_fields, 32)
-        new_op = NewOp.make(parameterizations, cls.base_typ(), self_type.cls, num_data_fields, self_type)
+        new_op = NewOp.make(parameterizations, cls.base_typ(), self_type.cls, num_data_fields, self.region, self_type)
         scope.region.last_block.add_op(new_op)
         scope.symbol_table[self.anon_name] = new_op.results[0]
         scope.type_table[self.anon_name] = self_type
@@ -1169,6 +1175,7 @@ class ObjectCreation(Expression):
         scope.type_table[self.anon_name] = simplified_type
         anon_id = Identifier(self.info, self.anon_name)
         MethodCall(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), anon_id, "init", self.arguments).exprtype(scope)
+        scope.allocations[self.info.id] = self
         scope.points_to_facts.add((self.info.id, "==", self.anon_name))
         return simplified_type
 
@@ -1460,6 +1467,7 @@ class MethodDef(Statement):
         print(f"Transformed Annotation graph for {self.defining_class.name}.{self.name}:")
         print(pretty_print_graph(G0, var_mapping0, param_names))
         ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
+        body_scope.assign_regions(var_mapping1, param_names)
         if not ok: raise Exception(f"Line {self.info.line_number}: {comment}")
 
     def typeflow(self, scope):
@@ -1725,6 +1733,7 @@ class ClassMethodDef(MethodDef):
         print(f"Annotation graph for {self.defining_class.name}.{self.name}:")
         print(pretty_print_graph(G0, var_mapping0, param_names))
         ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
+        body_scope.assign_regions(var_mapping1, param_names)
         if not ok: raise Exception(f"Line {self.info.line_number}: {comment}")
 
     def typeflow(self, scope):
@@ -2821,10 +2830,11 @@ class Continue(Statement):
 class CreateBuffer(Expression):
     buf: TypeAttribute
     size: Expression
+    region: str
 
     def codegen(self, scope):
         size = self.size.codegen(scope)
-        attr_dict = {"typ":scope.simplify(self.buf.elem_type).base_typ()}
+        attr_dict = {"typ":scope.simplify(self.buf.elem_type).base_typ(), "region_id":StringAttr(self.region)}
         create_buffer = CreateBufferOp.create(operands=[size], attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
         scope.region.last_block.add_op(create_buffer)
         return create_buffer.results[0]
@@ -2833,6 +2843,7 @@ class CreateBuffer(Expression):
         size_typ = self.size.exprtype(scope)
         if size_typ != Ptr([IntegerType(32)]):
             raise Exception(f"Line {self.info.line_number}: Buffer creation takes i32 as argument, not {size_typ}.")
+        scope.allocations[self.info.id] = self
         return scope.simplify(self.buf)
 
 @dataclass

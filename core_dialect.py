@@ -512,6 +512,7 @@ class AddrOfOp(IRDLOperation):
 class MallocOp(IRDLOperation):
     name = "mini.malloc"
     typ: TypeAttribute = attr_def(TypeAttribute)
+    region_id: OptAttributeDef = opt_attr_def(StringAttr)
     result: OpResult = result_def(Ptr)
 
 @irdl_op_definition
@@ -574,6 +575,7 @@ class CreateBufferOp(IRDLOperation):
     name = "mini.create_buffer"
     typ: TypeAttribute = attr_def(TypeAttribute)
     size: Operand = operand_def()
+    region_id: StringAttr = attr_def(StringAttr)
     result: OpResult = result_def()
 
 @irdl_op_definition
@@ -708,12 +710,14 @@ class NewOp(IRDLOperation):
     typ: TypeAttribute = attr_def(TypeAttribute)
     class_name: Attribute = attr_def(StringAttr)
     num_data_fields: IntegerAttr = attr_def(IntegerAttr)
+    region_id: StringAttr = attr_def(StringAttr)
     has_type_fields: OptAttributeDef = opt_attr_def(UnitAttr)
     result: OpResult = result_def(Ptr)
 
     @classmethod
-    def make(cls, parameterizations, typ, class_name, num_data_fields, result_type):
-        attr_dict = {"typ":typ, "class_name":class_name, "num_data_fields":num_data_fields}
+    def make(cls, parameterizations, typ, class_name, num_data_fields, region_id, result_type):
+        if not region_id: region_id = "none"
+        attr_dict = {"typ":typ, "class_name":class_name, "num_data_fields":num_data_fields, "region_id":StringAttr(region_id)}
         if len(typ.types.data) > num_data_fields.value.data: attr_dict["has_type_fields"] = UnitAttr()
         return NewOp.create(operands=parameterizations, attributes=attr_dict, result_types=[result_type])
 
