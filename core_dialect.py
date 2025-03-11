@@ -512,7 +512,6 @@ class AddrOfOp(IRDLOperation):
 class MallocOp(IRDLOperation):
     name = "mini.malloc"
     typ: TypeAttribute = attr_def(TypeAttribute)
-    region_id: OptAttributeDef = opt_attr_def(StringAttr)
     result: OpResult = result_def(Ptr)
 
 @irdl_op_definition

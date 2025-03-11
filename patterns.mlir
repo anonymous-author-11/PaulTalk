@@ -789,21 +789,6 @@ module @patterns {
       pdl.replace %root with %memcpy
     }
   }
-  pdl.pattern @LowerStackAlloc : benefit(2) {
-    %type_attr = pdl.attribute
-    %ptr_type = pdl.type : !llvm.ptr
-    %stack = pdl.attribute = "stack"
-    %root = pdl.operation "mini.malloc" {"typ" = %type_attr, "region_id" = %stack} -> (%ptr_type : !pdl.type)
-    pdl.rewrite %root {
-      %i32_type = pdl.type : i32
-      %one_attr = pdl.attribute = 1
-      %alloca_size = pdl.operation "llvm.mlir.constant" {"value" = %one_attr} -> (%i32_type : !pdl.type)
-      %alloca_size_result = pdl.result 0 of %alloca_size
-      %alloca = pdl.operation "llvm.alloca"(%alloca_size_result : !pdl.value) {"elem_type" = %type_attr} -> (%ptr_type : !pdl.type)
-      %alloca_result = pdl.result 0 of %alloca
-      pdl.replace %root with (%alloca_result : !pdl.value)
-    }
-  }
   pdl.pattern @LowerMalloc : benefit(1) {
     %type_attr = pdl.attribute
     %ptr_type = pdl.type : !llvm.ptr
@@ -1457,7 +1442,7 @@ module @patterns {
     %class_name = pdl.attribute
     %root = pdl.operation "mini.new" {"typ" = %typ_attr, "num_data_fields" = %num_data_fields, "class_name" = %class_name, "region_id" = %region_id} -> (%ptr_type : !pdl.type)
     pdl.rewrite %root {
-      %malloc = pdl.operation "mini.malloc" {"typ" = %typ_attr, "region_id" = %region_id} -> (%ptr_type : !pdl.type)
+      %malloc = pdl.operation "mini.malloc" {"typ" = %typ_attr} -> (%ptr_type : !pdl.type)
       %malloc_result = pdl.result 0 of %malloc
       %class_symbol = pdl.apply_native_rewrite "string_to_symbol"(%class_name : !pdl.attribute) : !pdl.attribute
       %vptr = pdl.operation "mini.addr_of" {"global_name" = %class_symbol} -> (%ptr_type : !pdl.type)
@@ -1496,7 +1481,7 @@ module @patterns {
       %eight = pdl.attribute = 8
       %num_parameterizations = pdl.apply_native_rewrite "count_elements"(%parameterizations : !pdl.range<value>) : !pdl.attribute
       %type_fields_bytes = pdl.apply_native_rewrite "multiply"(%num_parameterizations, %eight : !pdl.attribute, !pdl.attribute) : !pdl.attribute
-      %malloc = pdl.operation "mini.malloc" {"typ" = %typ_attr, "region_id" = %region_id} -> (%ptr_type : !pdl.type)
+      %malloc = pdl.operation "mini.malloc" {"typ" = %typ_attr} -> (%ptr_type : !pdl.type)
       %malloc_result = pdl.result 0 of %malloc
       %class_symbol = pdl.apply_native_rewrite "string_to_symbol"(%class_name : !pdl.attribute) : !pdl.attribute
       %vptr = pdl.operation "mini.addr_of" {"global_name" = %class_symbol} -> (%ptr_type : !pdl.type)

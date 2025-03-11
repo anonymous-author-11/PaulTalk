@@ -288,6 +288,7 @@ DONE:
 
 TODO:
 
+- Calloc will zero freshly allocated memory
 - Note: Exceptions currently being stack allocated; might not be correct
 - Local buffers and trampolines can also be allocated on the stack
 - Implement getters

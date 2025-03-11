@@ -407,12 +407,8 @@ class LowerCreateBuffer(RewritePattern):
         unwrap = UnwrapOp.create(operands=[op.size], result_types=[IntegerType(32)])
         gep = llvm.GEPOp.from_mixed_indices(null.results[0], [unwrap.results[0]], pointee_type=op.typ)
         alloca = AllocateOp.make(llvm.LLVMPointerType.opaque())
-        if op.region_id.data == "stack":
-            malloc_size = llvm.ConstantOp(op.size, IntegerType(64))
-            malloc = llvm.AllocaOp(malloc_size.results[0], elem_type=op.typ)
-        else:
-            malloc_size = llvm.PtrToIntOp(gep.results[0], IntegerType(64))
-            malloc = llvm.CallOp("bump_malloc", malloc_size.results[0], return_type=llvm.LLVMPointerType.opaque())
+        malloc_size = llvm.PtrToIntOp(gep.results[0], IntegerType(64))
+        malloc = llvm.CallOp("bump_malloc", malloc_size.results[0], return_type=llvm.LLVMPointerType.opaque())
         operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
         malloc.properties["operandSegmentSizes"] = operandSegmentSizes
         malloc.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
