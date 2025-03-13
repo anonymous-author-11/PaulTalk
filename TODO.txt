@@ -282,13 +282,11 @@ DONE:
 - Elements do need to live in the same region for buffer [check!]
 	- Create an elems_reg pseudo-region for buffer [check!]
 - Work on mapping field constraints for method calls [check!]
+- Also check for null ptr on nil check [check!]
 
 TODO:
 
-- Also check for null ptr on nil check
 - Calloc will zero freshly allocated memory
-- Note: Exceptions currently being stack allocated; might not be correct
-- Local buffers and trampolines can also be allocated on the stack
 - Implement getters
 	- Shouldn't be technically difficult
 	- Will significantly improve ergonomics
@@ -393,6 +391,8 @@ TODO:
 - Union sizing may not be technically correct for tuples because of padding
 - Blocked matmul always fails
 - If I compile with -O0 it hangs
+	- Seems to be related to loading fatptr as { ptr, i160 }
+	- Plausibly related to type legalization in llc
 
 # --- Problems ---
 
@@ -446,10 +446,17 @@ TODO:
 
 # --- Possibilities ---
 
+- You can inline context switches by breaking functions into sections upon yields
+	- Would require significant ingenuity but would secure your glory forever
+	- Would significantly improve optimizations
+- Freelist of coroutine stacks?
 - Memory regions
 	- Abstract memory regions (oh boy I'm cookin)
 		- Abstract associated regions (oh god!)
 			- Abstract bounded polymorphic associated regions (god mode)
+	- Will probbaly need to store ptrs to virtual regions in fields
+		- Wait, why? Do we actually?
+	- Unclear if boxed types will need to carry regions
 
 - Manual memory management combines four questions
 	- When memory gets allocated and deallocated
