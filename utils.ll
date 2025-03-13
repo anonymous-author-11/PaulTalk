@@ -6,15 +6,15 @@ source_filename = "CoroutinesModule"
 
 ; External function declarations
 declare ptr @malloc(i64)
+declare void @free(ptr)
 declare void @llvm.eh.sjlj.longjmp(ptr)
 declare ptr @llvm.stacksave()
 declare i32 @printf(ptr, ...)
 declare void @exit()
-declare ptr @VirtualAlloc(ptr, i64, i32, i32)
-declare i32 @VirtualFree(ptr, i64, i32)
-declare i32 @VirtualProtect(ptr, i64, i32, ptr)
+declare noalias ptr @VirtualAlloc(ptr, i64, i32, i32) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(1) "alloc-family"="malloc"
+declare i32 @VirtualFree(ptr, i64, i32) mustprogress nounwind willreturn allockind("free") memory(argmem: readwrite, inaccessiblemem: readwrite)
+declare i32 @VirtualProtect(ptr, i64, i32, ptr) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
 declare void @report_exception( {ptr} )
-declare void @llvm.init.trampoline(ptr, ptr, ptr)
 
 @i32_string = internal constant [4 x i8] c"%d\0A\00"
 @i64_string = internal constant [6 x i8] c"%lld\0A\00"
@@ -25,19 +25,14 @@ declare void @llvm.init.trampoline(ptr, ptr, ptr)
 @current_coroutine = internal thread_local global ptr null
 @always_one = linkonce thread_local global i1 1
 
+define ptr @adjust_trampoline(ptr %tramp) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: read) {
+  %ret = call ptr @llvm.adjust.trampoline(ptr %tramp) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: read)
+  ret ptr %ret
+}
+
 ; Thread-local storage for our bump allocator state
 @region = internal thread_local global [8388608 x i8] zeroinitializer
 @current_ptr = internal thread_local global ptr @region
-
-; Initialize the region if needed
-define void @allocate_region() {
-  %mem = call ptr @VirtualAlloc(ptr null, i64 8388608, i32 12288, i32 4)
-  %oldProtect = alloca i32  
-  %result = call i32 @VirtualProtect(ptr %mem, i64 8388608, i32 64, ptr %oldProtect)
-  store ptr %mem, ptr @region
-  store ptr %mem, ptr @current_ptr
-  ret void
-}
 
 define noalias ptr @bump_malloc(i64 noundef %size) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) "alloc-family"="malloc" {
   %result = tail call noalias ptr @bump_malloc_inner(i64 noundef %size, ptr @current_ptr) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) "alloc-family"="malloc"
@@ -64,7 +59,7 @@ define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) noinl
 
 define void @anoint_trampoline(ptr %tramp) {
   %oldProtect = alloca i32  
-  %result = call i32 @VirtualProtect(ptr %tramp, i64 16, i32 64, ptr %oldProtect)
+  %result = call i32 @VirtualProtect(ptr %tramp, i64 16, i32 64, ptr %oldProtect) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
   ret void
 }
 
@@ -72,7 +67,7 @@ define void @anoint_trampoline(ptr %tramp) {
 define ptr @coroutine_create(ptr %func, ptr %arg_passer) {
 
   ; Allocate a new stack (8MB == 8388608 bytes) for the coroutine (and put the coroutine itself on this stack)
-  %stack = call ptr @VirtualAlloc(ptr null, i64 8388608, i32 12288, i32 4)
+  %stack = call noalias ptr @VirtualAlloc(ptr null, i64 8388608, i32 12288, i32 4) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(1) "alloc-family"="malloc"
 
   ; Store the passed function pointer in the coroutine
   %func_ptr = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %stack, i32 0, i32 0
@@ -116,7 +111,9 @@ define void @setup_landing_pad() {
 landing_pad:
   %ok = call i32 @printf(ptr @string_string, ptr @exception_message)
   %cc = load { ptr }, ptr @current_coroutine
+  %cc2 = load ptr, ptr @current_coroutine
   call void @report_exception({ ptr } %cc)
+  call void @free(ptr %cc2)
   call void @exit()
   unreachable
 

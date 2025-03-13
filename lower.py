@@ -1115,11 +1115,7 @@ class LowerReabstract(RewritePattern):
         tramp = func_def.next_op
         top_level = op.get_toplevel_object()
         block.detach_op(func_def)
-        adjust_trampoline = llvm.CallIntrinsicOp(
-            "llvm.adjust.trampoline",
-            [[tramp.results[0]]], 
-            [llvm.LLVMPointerType.opaque()]
-        )
+        adjust_trampoline = llvm.CallOp("adjust_trampoline", tramp.results[0], return_type=llvm.LLVMPointerType.opaque())
         operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
         adjust_trampoline.properties["operandSegmentSizes"] = operandSegmentSizes
         adjust_trampoline.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])

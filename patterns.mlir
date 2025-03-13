@@ -326,6 +326,12 @@ module @patterns {
       %anoint_trampoline_decl = pdl.operation "llvm.func" {"sym_name" = %anoint, "function_type" = %func_type_attr2, "linkage" = %linkage}
       %anoint_trampoline_with_region = pdl.apply_native_rewrite "add_region"(%anoint_trampoline_decl : !pdl.operation) : !pdl.operation
       pdl.erase %anoint_trampoline_decl
+
+      %adjust_tramp = pdl.attribute = "adjust_trampoline"
+      %func_type_attr22 = pdl.attribute = !llvm.func<ptr (ptr)>
+      %adjust_tramp_decl = pdl.operation "llvm.func" {"sym_name" = %adjust_tramp, "function_type" = %func_type_attr22, "linkage" = %linkage}
+      %adjust_tramp_with_region = pdl.apply_native_rewrite "add_region"(%adjust_tramp_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %adjust_tramp_decl
       
       %coro_create = pdl.attribute = "coroutine_create"
       %func_type_attr3 = pdl.attribute = !llvm.func<ptr  (ptr, ptr)>
