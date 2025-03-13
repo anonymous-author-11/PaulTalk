@@ -25,14 +25,14 @@ declare void @report_exception( {ptr} )
 @current_coroutine = internal thread_local global ptr null
 @always_one = linkonce thread_local global i1 1
 
+; Thread-local storage for our bump allocator state
+@region = internal thread_local global [8388608 x i8] zeroinitializer
+@current_ptr = internal thread_local global ptr @region
+
 define ptr @adjust_trampoline(ptr %tramp) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: read) {
   %ret = call ptr @llvm.adjust.trampoline(ptr %tramp) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: read)
   ret ptr %ret
 }
-
-; Thread-local storage for our bump allocator state
-@region = internal thread_local global [8388608 x i8] zeroinitializer
-@current_ptr = internal thread_local global ptr @region
 
 define noalias ptr @bump_malloc(i64 noundef %size) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) "alloc-family"="malloc" {
   %result = tail call noalias ptr @bump_malloc_inner(i64 noundef %size, ptr @current_ptr) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) "alloc-family"="malloc"

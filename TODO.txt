@@ -282,9 +282,6 @@ DONE:
 - Elements do need to live in the same region for buffer [check!]
 	- Create an elems_reg pseudo-region for buffer [check!]
 - Work on mapping field constraints for method calls [check!]
-- "Local regions" can just be on the stack? [check!]
-	- I.e. allocations into local regions can just be stack allocations [check!]
-	- MallocOp has optional "region_id" attribute [check!]
 
 TODO:
 

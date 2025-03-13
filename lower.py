@@ -324,10 +324,24 @@ class LowerCheckFlag(RewritePattern):
         candidate_ptr = UnwrapOp.create(operands=[typ_id.results[0]], result_types=[llvm.LLVMPointerType.opaque()])
         candidate = llvm.PtrToIntOp(candidate_ptr.results[0], IntegerType(64))
 
-        if op.typ_name.data in builtin_types.keys():
-            eq = ComparisonOp.make(vptr_int.results[0], candidate.results[0], "NEQ" if op.neg else "EQ")
-            wrap = WrapOp.make(eq.results[0])
+        if op.typ_name.data in builtin_types.keys() and op.typ_name.data != "nil_typ":
+            eq = ComparisonOp.make(vptr_int.results[0], candidate.results[0], "EQ")
             rewriter.inline_block_before_matched_op(Block([get_flag, typ_id, vptr, vptr_int, candidate_ptr, candidate, eq]))
+            wrap = WrapOp.make(eq.results[0])
+            rewriter.replace_matched_op(wrap)
+            return
+
+        if op.typ_name.data == "nil_typ":
+            eq = ComparisonOp.make(vptr_int.results[0], candidate.results[0], "EQ")
+            zero = llvm.ZeroOp.create(result_types=[IntegerType(64)])
+            extra_cmp = ComparisonOp.make(vptr_int.results[0], zero.results[0], "EQ")
+            either = arith.OrI(eq.results[0], extra_cmp.results[0])
+            rewriter.inline_block_before_matched_op(Block([get_flag, typ_id, vptr, vptr_int, candidate_ptr, candidate, eq, zero, extra_cmp, either]))
+            if op.neg: 
+                false = llvm.ZeroOp.create(result_types=[IntegerType(1)])
+                either = ComparisonOp.make(either.results[0], false.results[0], "EQ")
+                rewriter.inline_block_before_matched_op(Block([false, either]))
+            wrap = WrapOp.make(either.results[0])
             rewriter.replace_matched_op(wrap)
             return
 
