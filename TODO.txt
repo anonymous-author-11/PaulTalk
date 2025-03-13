@@ -446,10 +446,13 @@ TODO:
 
 # --- Possibilities ---
 
-- You can inline context switches by breaking functions into sections upon yields
+- You could inline context switches by breaking functions into sections upon yields and calls
 	- Would require significant ingenuity but would secure your glory forever
-	- Would significantly improve optimizations
+	- Would significantly improve optimizations across context switches
 - Freelist of coroutine stacks?
+	- Ring buffer LIFO stack
+	- Fixed capacity
+	- Much faster than VirtualAlloc
 - Memory regions
 	- Abstract memory regions (oh boy I'm cookin)
 		- Abstract associated regions (oh god!)
