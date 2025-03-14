@@ -650,6 +650,23 @@ class FieldAccessOp(IRDLOperation):
     result: OpResult = result_def(Ptr)
 
 @irdl_op_definition
+class GetFieldOp(IRDLOperation):
+    name = "mini.get_field"
+    fat_ptr: Operand = operand_def(FatPtr)
+    offset: IntegerAttr = attr_def(IntegerAttr)
+    vtable_bytes: IntegerAttr = attr_def(IntegerAttr)
+    ret_type: TypeAttribute = attr_def(TypeAttribute)
+    result: OpResult = result_def(Ptr)
+
+@irdl_op_definition
+class SetFieldOp(IRDLOperation):
+    name = "mini.set_field"
+    fat_ptr: Operand = operand_def(FatPtr)
+    value: Operand = operand_def()
+    offset: IntegerAttr = attr_def(IntegerAttr)
+    vtable_bytes: IntegerAttr = attr_def(IntegerAttr)
+
+@irdl_op_definition
 class ParameterizationsArrayOp(IRDLOperation):
     name = "mini.parameterizations_array"
     parameterizations: VarOperand = var_operand_def()

@@ -127,11 +127,11 @@ class Program(Node):
         for stmt in self.statements:
             if isinstance(stmt, Import): continue
             stmt.debug_typeflow(scope)
-        G0, var_mapping0 = create_constraint_graph(scope.points_to_facts._set)
-        G0, var_mapping0 = transform_until_stable(G0, var_mapping0, set())
-        print(f"Transformed points-to graph for main:")
-        print(pretty_print_graph(G0, var_mapping0, set()))
-        scope.assign_regions(var_mapping0, set())
+        #G0, var_mapping0 = create_constraint_graph(scope.points_to_facts._set)
+        #G0, var_mapping0 = transform_until_stable(G0, var_mapping0, set())
+        #print(f"Transformed points-to graph for main:")
+        #print(pretty_print_graph(G0, var_mapping0, set()))
+        #scope.assign_regions(var_mapping0, set())
 
 @dataclass
 class Expression(Node):
@@ -1498,7 +1498,7 @@ class MethodDef(Statement):
             body_scope.type_table[param.name] = param.type(self.defining_class._scope)
         self.body.debug_typeflow(body_scope)
         if self.name == "init": self.ensure_proper_init(body_scope)
-        self.check_lifetime_constraints(body_scope)
+        #self.check_lifetime_constraints(body_scope)
         self.ensure_return_type(scope)
 
     def param_types(self):
@@ -1748,7 +1748,7 @@ class ClassMethodDef(MethodDef):
         for i, param in enumerate(self.params):
             param.typeflow(body_scope)
         self.body.debug_typeflow(body_scope)
-        self.check_lifetime_constraints(body_scope)
+        #self.check_lifetime_constraints(body_scope)
         self.ensure_return_type(scope)
 
     def parent_repr(self):
@@ -2106,7 +2106,10 @@ class ClassDef(Statement):
         fields = [key for key in self._scope.type_table.keys() if "@" in key]
         for field in fields:
             constraints.add(("self", "<", field.replace("@","self.")))
-            field_type_constraints = self._scope.constraints_of(self._scope.type_table[field])
+            field_type = self._scope.type_table[field]
+            # recursive, need to think more about how to handle this
+            if self._scope.subtype(self.type(), field_type): continue
+            field_type_constraints = self._scope.constraints_of(field_type)
             mapping = {"self":field.replace("@","self.")}
             field_type_constraints.transform_with_mapping(mapping)
             constraints = constraints.union(field_type_constraints)

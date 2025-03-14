@@ -1819,11 +1819,11 @@ class LowerFieldAccess(RewritePattern):
         fptr = llvm.LoadOp(fptr_ptr.results[0], llvm.LLVMPointerType.opaque())
         
         dense_ary_1 = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [1])
-        structptr = llvm.ExtractValueOp(dense_ary_1, fat_ptr.results[0], llvm.LLVMPointerType.opaque())
+        data_ptr = llvm.ExtractValueOp(dense_ary_1, fat_ptr.results[0], llvm.LLVMPointerType.opaque())
         ftype = FunctionType.from_lists([llvm.LLVMPointerType.opaque()], [llvm.LLVMPointerType.opaque()])
         cast = builtin.UnrealizedConversionCastOp.create(operands=[fptr.results[0]], result_types=[ftype])
-        field = func.CallIndirect(cast.results[0], [structptr.results[0]], [llvm.LLVMPointerType.opaque()])
-        rewriter.inline_block_before_matched_op(Block([fat_ptr, vptr, invariant2, adjustment, offsetted, fptr_ptr, fptr, cast, structptr]))
+        field = func.CallIndirect(cast.results[0], [data_ptr.results[0]], [llvm.LLVMPointerType.opaque()])
+        rewriter.inline_block_before_matched_op(Block([fat_ptr, vptr, invariant2, adjustment, offsetted, fptr_ptr, fptr, cast, data_ptr]))
         rewriter.replace_matched_op(field)
 
 class LowerCall(RewritePattern):
