@@ -23,6 +23,7 @@ class String extends Iterable, Representable {
     }
 
     def init(@bytes : Buffer[i8], @length : i32, @capacity : i32) {}
+
     def length() -> i32 { return @length; }
     def capacity() -> i32 { return @capacity; }
     def bytes() -> Buffer[i8] { return @bytes; }

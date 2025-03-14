@@ -1,7 +1,7 @@
 ; ModuleID = 'out_reg2mem.ll'
 source_filename = "llvm-link"
 
-@_parameterization_Int32_or_Float64 = linkonce_odr constant [3 x ptr] [ptr @union_typ, ptr @_parameterization_Int32, ptr @_parameterization_Float64]
+@_parameterization_Float64_or_Int32 = linkonce_odr constant [3 x ptr] [ptr @union_typ, ptr @_parameterization_Float64, ptr @_parameterization_Int32]
 @_parameterization_Ptri1 = linkonce_odr constant [1 x ptr] [ptr @bool_typ]
 @_parameterization_Int32 = linkonce_odr constant [1 x ptr] [ptr @Int32]
 @_parameterization_Tuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64_ = linkonce_odr constant [5 x ptr] [ptr @tuple_typ, ptr @_parameterization_Ptrf64, ptr @_parameterization_Ptrf64, ptr @_parameterization_Ptrf64, ptr @_parameterization_Ptrf64]
@@ -12,7 +12,7 @@ source_filename = "llvm-link"
 @Pair = constant { [3 x i64], [4 x ptr], [10 x ptr] } { [3 x i64] [i64 9197944775169318296, i64 4611686018427388073, i64 1], [4 x ptr] [ptr @subtype_test, ptr @Pair_hashtbl, ptr @Pair_offset_tbl, ptr getelementptr ({ { ptr, i160 }, { ptr, i160 }, ptr, ptr }, ptr null, i32 1)], [10 x ptr] [ptr @Pair_field_first, ptr @Pair_field_second, ptr @Pair_field_Pair_0, ptr @Pair_field_Pair_1, ptr @Pair_B_init_firstT_secondU, ptr @Pair_B_first_, ptr @Pair_B_second_, ptr @Pair_init_firstT_secondU, ptr @Pair_first_, ptr @Pair_second_] }
 @FancyPair_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @FancyPair, ptr null, ptr @Pair]
 @FancyPair_offset_tbl = linkonce_odr constant [4 x i32] [i32 27, i32 7, i32 0, i32 17]
-@FancyPair = constant { [3 x i64], [4 x ptr], [20 x ptr] } { [3 x i64] [i64 -3765382636606614851, i64 4611686018427388073, i64 3], [4 x ptr] [ptr @subtype_test, ptr @FancyPair_hashtbl, ptr @FancyPair_offset_tbl, ptr getelementptr ({ { ptr, i160 }, { ptr, i160 } }, ptr null, i32 1)], [20 x ptr] [ptr @FancyPair_field_first, ptr @FancyPair_field_second, ptr @FancyPair_field_FancyPair_0, ptr @FancyPair_field_FancyPair_1, ptr @FancyPair_B_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64, ptr @FancyPair_B_first_, ptr @FancyPair_B_second_, ptr @FancyPair_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64, ptr @Pair_first_, ptr @FancyPair_second_, ptr @FancyPair_field_first, ptr @FancyPair_field_second, ptr @FancyPair_field_FancyPair_0, ptr @FancyPair_field_FancyPair_1, ptr @FancyPair_B_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64, ptr @FancyPair_B_first_, ptr @FancyPair_B_second_, ptr @FancyPair_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64, ptr @Pair_first_, ptr @FancyPair_second_] }
+@FancyPair = constant { [3 x i64], [4 x ptr], [20 x ptr] } { [3 x i64] [i64 -3765382636606614851, i64 4611686018427388073, i64 3], [4 x ptr] [ptr @subtype_test, ptr @FancyPair_hashtbl, ptr @FancyPair_offset_tbl, ptr getelementptr ({ { double, double, double, double }, double }, ptr null, i32 1)], [20 x ptr] [ptr @FancyPair_field_first, ptr @FancyPair_field_second, ptr @FancyPair_field_FancyPair_0, ptr @FancyPair_field_FancyPair_1, ptr @FancyPair_B_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64, ptr @FancyPair_B_first_, ptr @FancyPair_B_second_, ptr @FancyPair_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64, ptr @Pair_first_, ptr @FancyPair_second_, ptr @FancyPair_field_first, ptr @FancyPair_field_second, ptr @FancyPair_field_FancyPair_0, ptr @FancyPair_field_FancyPair_1, ptr @FancyPair_B_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64, ptr @FancyPair_B_first_, ptr @FancyPair_B_second_, ptr @FancyPair_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64, ptr @Pair_first_, ptr @FancyPair_second_] }
 @Container_hashtbl = linkonce_odr constant [2 x ptr] [ptr @Object, ptr @Container]
 @Container_offset_tbl = linkonce_odr constant [2 x i32] [i32 7, i32 7]
 @Container = constant { [3 x i64], [4 x ptr], [0 x ptr] } { [3 x i64] [i64 9056556090793359372, i64 4611686018427388081, i64 1], [4 x ptr] [ptr @subtype_test, ptr @Container_hashtbl, ptr @Container_offset_tbl, ptr getelementptr ({}, ptr null, i32 1)], [0 x ptr] undef }
@@ -69,10 +69,10 @@ source_filename = "llvm-link"
 @Addable = constant { [3 x i64], [4 x ptr], [0 x ptr] } { [3 x i64] [i64 -6395308389776465871, i64 4611686018427388073, i64 1], [4 x ptr] [ptr @subtype_test, ptr @Addable_hashtbl, ptr @Addable_offset_tbl, ptr getelementptr ({ ptr, ptr }, ptr null, i32 1)], [0 x ptr] undef }
 @Float64_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @Addable, ptr null, ptr @Float64]
 @Float64_offset_tbl = linkonce_odr constant [4 x i32] [i32 21, i32 17, i32 0, i32 7]
-@Float64 = constant { [3 x i64], [4 x ptr], [18 x ptr] } { [3 x i64] [i64 8748823673944961442, i64 4611686018427388091, i64 3], [4 x ptr] [ptr @subtype_test, ptr @Float64_hashtbl, ptr @Float64_offset_tbl, ptr getelementptr ({ double }, ptr null, i32 1)], [18 x ptr] [ptr @Float64_field_value, ptr @Float64_field_Float64_0, ptr @Float64_field_Float64_1, ptr @Float64_B_init_valuePtrf64, ptr @Float64_B_value_, ptr @Float64_B__ADD_otherInt32__ADD_otherFloat64, ptr @Float64_init_valuePtrf64, ptr @Float64_value_, ptr @Float64__ADD_otherInt32, ptr @Float64__ADD_otherFloat64, ptr @Float64_field_Float64_0, ptr @Float64_field_Float64_1, ptr @Float64_B__ADD_otherInt32__ADD_otherFloat64, ptr @Float64_init_valuePtrf64, ptr @Float64_field_Float64_0, ptr @Float64_field_Float64_1, ptr @Float64_B__ADD_otherInt32__ADD_otherFloat64, ptr @Float64_init_valuePtrf64] }
+@Float64 = constant { [3 x i64], [4 x ptr], [18 x ptr] } { [3 x i64] [i64 8748823673944961442, i64 4611686018427388091, i64 3], [4 x ptr] [ptr @subtype_test, ptr @Float64_hashtbl, ptr @Float64_offset_tbl, ptr getelementptr ({ double }, ptr null, i32 1)], [18 x ptr] [ptr @Float64_field_value, ptr @Float64_field_Float64_0, ptr @Float64_field_Float64_1, ptr @Float64_B_init_valuePtrf64, ptr @Float64_B_value_, ptr @Float64_B__ADD_otherFloat64__ADD_otherInt32, ptr @Float64_init_valuePtrf64, ptr @Float64_value_, ptr @Float64__ADD_otherFloat64, ptr @Float64__ADD_otherInt32, ptr @Float64_field_Float64_0, ptr @Float64_field_Float64_1, ptr @Float64_B__ADD_otherFloat64__ADD_otherInt32, ptr @Float64_init_valuePtrf64, ptr @Float64_field_Float64_0, ptr @Float64_field_Float64_1, ptr @Float64_B__ADD_otherFloat64__ADD_otherInt32, ptr @Float64_init_valuePtrf64] }
 @Int32_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr null, ptr @Int32, ptr @Addable]
 @Int32_offset_tbl = linkonce_odr constant [4 x i32] [i32 20, i32 0, i32 7, i32 16]
-@Int32 = constant { [3 x i64], [4 x ptr], [17 x ptr] } { [3 x i64] [i64 -3157560240565274503, i64 4611686018427388081, i64 3], [4 x ptr] [ptr @subtype_test, ptr @Int32_hashtbl, ptr @Int32_offset_tbl, ptr getelementptr ({ i32 }, ptr null, i32 1)], [17 x ptr] [ptr @Int32_field_value, ptr @Int32_field_Int32_0, ptr @Int32_B_init_valuePtri32, ptr @Int32_B_value_, ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32, ptr @Int32_init_valuePtri32, ptr @Int32_value_, ptr @Int32__ADD_otherFloat64, ptr @Int32__ADD_otherInt32, ptr @Int32_field_Int32_0, ptr @Int32_field_Int32_0, ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32, ptr @Int32_init_valuePtri32, ptr @Int32_field_Int32_0, ptr @Int32_field_Int32_0, ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32, ptr @Int32_init_valuePtri32] }
+@Int32 = constant { [3 x i64], [4 x ptr], [17 x ptr] } { [3 x i64] [i64 -3157560240565274503, i64 4611686018427388081, i64 3], [4 x ptr] [ptr @subtype_test, ptr @Int32_hashtbl, ptr @Int32_offset_tbl, ptr getelementptr ({ i32 }, ptr null, i32 1)], [17 x ptr] [ptr @Int32_field_value, ptr @Int32_field_Int32_0, ptr @Int32_B_init_valuePtri32, ptr @Int32_B_value_, ptr @Int32_B__ADD_otherInt32__ADD_otherFloat64, ptr @Int32_init_valuePtri32, ptr @Int32_value_, ptr @Int32__ADD_otherInt32, ptr @Int32__ADD_otherFloat64, ptr @Int32_field_Int32_0, ptr @Int32_field_Int32_0, ptr @Int32_B__ADD_otherInt32__ADD_otherFloat64, ptr @Int32_init_valuePtri32, ptr @Int32_field_Int32_0, ptr @Int32_field_Int32_0, ptr @Int32_B__ADD_otherInt32__ADD_otherFloat64, ptr @Int32_init_valuePtri32] }
 @Holder_hashtbl = linkonce_odr constant [2 x ptr] [ptr @Holder, ptr @Object]
 @Holder_offset_tbl = linkonce_odr constant [2 x i32] [i32 7, i32 13]
 @Holder = constant { [3 x i64], [4 x ptr], [6 x ptr] } { [3 x i64] [i64 -261997465778736657, i64 4611686018427388093, i64 1], [4 x ptr] [ptr @subtype_test, ptr @Holder_hashtbl, ptr @Holder_offset_tbl, ptr getelementptr ({ { ptr, i160 }, ptr }, ptr null, i32 1)], [6 x ptr] [ptr @Holder_field_held, ptr @Holder_field_Holder_0, ptr @Holder_B_init_heldT, ptr @Holder_B_value_, ptr @Holder_init_heldT, ptr @Holder_value_] }
@@ -432,31 +432,20 @@ define void @FancyPair_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtr
   %16 = getelementptr ptr, ptr %.fca.0.extract23, i64 %15
   %17 = load ptr, ptr %16, align 8
   %18 = tail call ptr %17(ptr %.fca.1.extract25)
-  %result.i = tail call noalias dereferenceable_or_null(32) ptr @bump_malloc_inner(i64 noundef 32, ptr nonnull @current_ptr) #24
-  store double %7, ptr %result.i, align 8
-  %19 = getelementptr i8, ptr %result.i, i64 8
+  store double %7, ptr %18, align 8
+  %19 = getelementptr i8, ptr %18, i64 8
   store double %9, ptr %19, align 8
-  %20 = getelementptr i8, ptr %result.i, i64 16
+  %20 = getelementptr i8, ptr %18, i64 16
   store double %11, ptr %20, align 8
-  %21 = getelementptr i8, ptr %result.i, i64 24
+  %21 = getelementptr i8, ptr %18, i64 24
   store double %13, ptr %21, align 8
-  %22 = tail call ptr @llvm.invariant.start.p0(i64 1, ptr nonnull %result.i)
-  %23 = ptrtoint ptr %result.i to i64
-  store ptr @tuple_typ, ptr %18, align 8
-  %24 = getelementptr i8, ptr %18, i64 8
-  store i64 %23, ptr %24, align 4
-  %.sroa_idx58 = getelementptr i8, ptr %18, i64 16
-  store i96 129127208515966861312, ptr %.sroa_idx58, align 4
   %.fca.1.extract = extractvalue { ptr, i160 } %4, 1
-  %25 = tail call ptr @llvm.invariant.start.p0(i64 160, ptr %.fca.0.extract23)
-  %26 = getelementptr i8, ptr %16, i64 8
-  %27 = load ptr, ptr %26, align 8
-  %28 = tail call ptr %27(ptr %.fca.1.extract25)
-  store ptr @f64_typ, ptr %28, align 8
-  %29 = getelementptr i8, ptr %28, i64 8
-  %.sroa.3.8.insert.ext = and i160 %.fca.1.extract, 18446744073709551615
-  %.sroa.3.8.insert.insert = or disjoint i160 %.sroa.3.8.insert.ext, 2381976568446569244243622252022377480192
-  store i160 %.sroa.3.8.insert.insert, ptr %29, align 4
+  %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i64
+  %22 = tail call ptr @llvm.invariant.start.p0(i64 160, ptr %.fca.0.extract23)
+  %23 = getelementptr i8, ptr %16, i64 8
+  %24 = load ptr, ptr %23, align 8
+  %25 = tail call ptr %24(ptr %.fca.1.extract25)
+  store i64 %.sroa.1.8.extract.trunc, ptr %25, align 8
   ret void
 }
 
@@ -6722,7 +6711,7 @@ define ptr @Float64_field_value(ptr readnone returned %0) #0 {
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
 define noundef nonnull ptr @Float64_field_Float64_0(ptr nocapture readnone %0) #0 {
-  ret ptr @_parameterization_Int32_or_Float64
+  ret ptr @_parameterization_Float64_or_Int32
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
@@ -6749,7 +6738,7 @@ define ptr @Float64_B_value_({ ptr, ptr, ptr, i32 } %0, ptr nocapture %1) #1 {
 }
 
 ; Function Attrs: mustprogress willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @Float64_B__ADD_otherInt32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %0, ptr nocapture %1, { ptr, i160 } %2) #4 {
+define ptr @Float64_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0, ptr nocapture %1, { ptr, i160 } %2) #4 {
 ._crit_edge:
   %3 = tail call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
   %4 = load ptr, ptr %1, align 8
@@ -6761,8 +6750,8 @@ define ptr @Float64_B__ADD_otherInt32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %
   %10 = load i64, ptr %6, align 4
   %11 = load ptr, ptr %7, align 8
   %12 = load ptr, ptr %8, align 8
-  %result.i = tail call i1 %11(i64 %10, i64 %9, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr readonly %12) #9
-  %result.i1 = tail call i1 %11(i64 %10, i64 %9, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr readonly %12) #9
+  %result.i = tail call i1 %11(i64 %10, i64 %9, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr readonly %12) #9
+  %result.i1 = tail call i1 %11(i64 %10, i64 %9, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr readonly %12) #9
   %not.result.i = xor i1 %result.i, true
   %.reg2mem5.0 = select i1 %not.result.i, i1 true, i1 %result.i1
   %13 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
@@ -6819,109 +6808,6 @@ define double @Float64_value_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } 
   %8 = tail call ptr %7(ptr %.fca.1.extract)
   %9 = load double, ptr %8, align 8
   ret double %9
-}
-
-define { ptr, ptr, ptr, i32 } @Float64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture readnone %2, { ptr, i160 } %3) {
-  %5 = alloca [0 x ptr], align 8
-  %.fca.0.extract13 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract15 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %hash_coef_ptr.i.i = getelementptr i8, ptr %.fca.0.extract13, i64 8
-  %tbl_size_ptr.i.i = getelementptr i8, ptr %.fca.0.extract13, i64 16
-  %offset_tbl_ptr.i.i = getelementptr i8, ptr %.fca.0.extract13, i64 40
-  %hash_coef.i.i = load i64, ptr %hash_coef_ptr.i.i, align 4
-  %tbl_size.i.i = load i64, ptr %tbl_size_ptr.i.i, align 4
-  %offset_tbl.i.i = load ptr, ptr %offset_tbl_ptr.i.i, align 8
-  %product.i.i.i = mul i64 %hash_coef.i.i, 8748823673944961442
-  %shifted.i.i.i = lshr i64 %product.i.i.i, 32
-  %xored.i.i.i = xor i64 %shifted.i.i.i, %product.i.i.i
-  %hash.i.i.i = and i64 %xored.i.i.i, %tbl_size.i.i
-  %offset_ptr.i.i = getelementptr i32, ptr %offset_tbl.i.i, i64 %hash.i.i.i
-  %offset.i.i = load i32, ptr %offset_ptr.i.i, align 4
-  %.fca.0.extract = extractvalue { ptr, i160 } %3, 0
-  %.fca.1.extract = extractvalue { ptr, i160 } %3, 1
-  %.sroa.348.8.extract.trunc = trunc i160 %.fca.1.extract to i64
-  %6 = inttoptr i64 %.sroa.348.8.extract.trunc to ptr
-  %.sroa.549.8.extract.shift = lshr i160 %.fca.1.extract, 64
-  %.sroa.549.8.extract.trunc = trunc i160 %.sroa.549.8.extract.shift to i64
-  %7 = inttoptr i64 %.sroa.549.8.extract.trunc to ptr
-  %hash_coef_ptr.i.i20 = getelementptr i8, ptr %.fca.0.extract, i64 8
-  %tbl_size_ptr.i.i21 = getelementptr i8, ptr %.fca.0.extract, i64 16
-  %offset_tbl_ptr.i.i22 = getelementptr i8, ptr %.fca.0.extract, i64 40
-  %hash_coef.i.i23 = load i64, ptr %hash_coef_ptr.i.i20, align 4
-  %tbl_size.i.i24 = load i64, ptr %tbl_size_ptr.i.i21, align 4
-  %offset_tbl.i.i25 = load ptr, ptr %offset_tbl_ptr.i.i22, align 8
-  %product.i.i.i26 = mul i64 %hash_coef.i.i23, -3157560240565274503
-  %shifted.i.i.i27 = lshr i64 %product.i.i.i26, 32
-  %xored.i.i.i28 = xor i64 %shifted.i.i.i27, %product.i.i.i26
-  %hash.i.i.i29 = and i64 %xored.i.i.i28, %tbl_size.i.i24
-  %offset_ptr.i.i30 = getelementptr i32, ptr %offset_tbl.i.i25, i64 %hash.i.i.i29
-  %offset.i.i31 = load i32, ptr %offset_ptr.i.i30, align 4
-  %8 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
-  %9 = insertvalue { ptr, ptr, ptr, i32 } %8, ptr %6, 1
-  %10 = insertvalue { ptr, ptr, ptr, i32 } %9, ptr %7, 2
-  %11 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %offset.i.i31, 3
-  %12 = call ptr @llvm.invariant.start.p0(i64 0, ptr nonnull %5)
-  %13 = tail call ptr @llvm.invariant.start.p0(i64 136, ptr %.fca.0.extract)
-  %14 = sext i32 %offset.i.i31 to i64
-  %15 = getelementptr ptr, ptr %.fca.0.extract, i64 %14
-  %16 = getelementptr i8, ptr %15, i64 24
-  %17 = load ptr, ptr %16, align 8
-  %18 = call ptr %17({ ptr, ptr, ptr, i32 } %11, ptr nonnull %5)
-  %19 = call i32 %18({ ptr, ptr, ptr, i32 } %11, { ptr, ptr, ptr, i32 } %11, ptr nonnull %5)
-  %20 = sitofp i32 %19 to double
-  %21 = call ptr @llvm.invariant.start.p0(i64 144, ptr %.fca.0.extract13)
-  %22 = sext i32 %offset.i.i to i64
-  %23 = getelementptr ptr, ptr %.fca.0.extract13, i64 %22
-  %24 = load ptr, ptr %23, align 8
-  %25 = call ptr %24(ptr %.fca.1.extract15)
-  %result.i = call noalias dereferenceable_or_null(8) ptr @bump_malloc_inner(i64 noundef 8, ptr nonnull @current_ptr) #24
-  %26 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %27 = getelementptr inbounds i8, ptr %26, i64 8
-  %28 = getelementptr inbounds i8, ptr %26, i64 24
-  store ptr @Float64, ptr %26, align 8
-  store ptr %result.i, ptr %27, align 8
-  store i32 7, ptr %28, align 8
-  %29 = call ptr @llvm.invariant.start.p0(i64 16, ptr nonnull %26)
-  %30 = call ptr @llvm.invariant.start.p0(i64 144, ptr %.fca.0.extract13)
-  %31 = load ptr, ptr %23, align 8
-  %32 = call ptr %31(ptr %.fca.1.extract15)
-  %33 = load double, ptr %32, align 8
-  %34 = fadd double %33, %20
-  %35 = load ptr, ptr %26, align 8
-  %36 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %35, 0
-  %37 = load ptr, ptr %27, align 8
-  %38 = insertvalue { ptr, ptr, ptr, i32 } %36, ptr %37, 1
-  %39 = getelementptr inbounds i8, ptr %26, i64 16
-  %40 = load ptr, ptr %39, align 8
-  %41 = insertvalue { ptr, ptr, ptr, i32 } %38, ptr %40, 2
-  %42 = load i32, ptr %28, align 8
-  %43 = insertvalue { ptr, ptr, ptr, i32 } %41, i32 %42, 3
-  %44 = alloca [1 x ptr], align 8
-  store ptr @_parameterization_Ptrf64, ptr %44, align 8
-  %45 = call ptr @llvm.invariant.start.p0(i64 1, ptr nonnull %44)
-  %46 = call ptr @llvm.invariant.start.p0(i64 144, ptr %35)
-  %47 = sext i32 %42 to i64
-  %48 = getelementptr ptr, ptr %35, i64 %47
-  %49 = getelementptr i8, ptr %48, i64 24
-  %50 = load ptr, ptr %49, align 8
-  %51 = alloca [1 x ptr], align 8
-  store ptr @f64_typ, ptr %51, align 8
-  %52 = call ptr %50({ ptr, ptr, ptr, i32 } %43, ptr nonnull %51, double %34)
-  call void %52({ ptr, ptr, ptr, i32 } %43, { ptr, ptr, ptr, i32 } %43, ptr nonnull %44, double %34)
-  %hash_coef_ptr.i.i34 = getelementptr i8, ptr %35, i64 8
-  %tbl_size_ptr.i.i35 = getelementptr i8, ptr %35, i64 16
-  %offset_tbl_ptr.i.i36 = getelementptr i8, ptr %35, i64 40
-  %hash_coef.i.i37 = load i64, ptr %hash_coef_ptr.i.i34, align 4
-  %tbl_size.i.i38 = load i64, ptr %tbl_size_ptr.i.i35, align 4
-  %offset_tbl.i.i39 = load ptr, ptr %offset_tbl_ptr.i.i36, align 8
-  %product.i.i.i40 = mul i64 %hash_coef.i.i37, 8748823673944961442
-  %shifted.i.i.i41 = lshr i64 %product.i.i.i40, 32
-  %xored.i.i.i42 = xor i64 %shifted.i.i.i41, %product.i.i.i40
-  %hash.i.i.i43 = and i64 %xored.i.i.i42, %tbl_size.i.i38
-  %offset_ptr.i.i44 = getelementptr i32, ptr %offset_tbl.i.i39, i64 %hash.i.i.i43
-  %offset.i.i45 = load i32, ptr %offset_ptr.i.i44, align 4
-  %53 = insertvalue { ptr, ptr, ptr, i32 } %41, i32 %offset.i.i45, 3
-  ret { ptr, ptr, ptr, i32 } %53
 }
 
 define { ptr, ptr, ptr, i32 } @Float64__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture readnone %2, { ptr, i160 } %3) {
@@ -7031,6 +6917,109 @@ define { ptr, ptr, ptr, i32 } @Float64__ADD_otherFloat64({ ptr, ptr, ptr, i32 } 
   ret { ptr, ptr, ptr, i32 } %57
 }
 
+define { ptr, ptr, ptr, i32 } @Float64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture readnone %2, { ptr, i160 } %3) {
+  %5 = alloca [0 x ptr], align 8
+  %.fca.0.extract13 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract15 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %hash_coef_ptr.i.i = getelementptr i8, ptr %.fca.0.extract13, i64 8
+  %tbl_size_ptr.i.i = getelementptr i8, ptr %.fca.0.extract13, i64 16
+  %offset_tbl_ptr.i.i = getelementptr i8, ptr %.fca.0.extract13, i64 40
+  %hash_coef.i.i = load i64, ptr %hash_coef_ptr.i.i, align 4
+  %tbl_size.i.i = load i64, ptr %tbl_size_ptr.i.i, align 4
+  %offset_tbl.i.i = load ptr, ptr %offset_tbl_ptr.i.i, align 8
+  %product.i.i.i = mul i64 %hash_coef.i.i, 8748823673944961442
+  %shifted.i.i.i = lshr i64 %product.i.i.i, 32
+  %xored.i.i.i = xor i64 %shifted.i.i.i, %product.i.i.i
+  %hash.i.i.i = and i64 %xored.i.i.i, %tbl_size.i.i
+  %offset_ptr.i.i = getelementptr i32, ptr %offset_tbl.i.i, i64 %hash.i.i.i
+  %offset.i.i = load i32, ptr %offset_ptr.i.i, align 4
+  %.fca.0.extract = extractvalue { ptr, i160 } %3, 0
+  %.fca.1.extract = extractvalue { ptr, i160 } %3, 1
+  %.sroa.348.8.extract.trunc = trunc i160 %.fca.1.extract to i64
+  %6 = inttoptr i64 %.sroa.348.8.extract.trunc to ptr
+  %.sroa.549.8.extract.shift = lshr i160 %.fca.1.extract, 64
+  %.sroa.549.8.extract.trunc = trunc i160 %.sroa.549.8.extract.shift to i64
+  %7 = inttoptr i64 %.sroa.549.8.extract.trunc to ptr
+  %hash_coef_ptr.i.i20 = getelementptr i8, ptr %.fca.0.extract, i64 8
+  %tbl_size_ptr.i.i21 = getelementptr i8, ptr %.fca.0.extract, i64 16
+  %offset_tbl_ptr.i.i22 = getelementptr i8, ptr %.fca.0.extract, i64 40
+  %hash_coef.i.i23 = load i64, ptr %hash_coef_ptr.i.i20, align 4
+  %tbl_size.i.i24 = load i64, ptr %tbl_size_ptr.i.i21, align 4
+  %offset_tbl.i.i25 = load ptr, ptr %offset_tbl_ptr.i.i22, align 8
+  %product.i.i.i26 = mul i64 %hash_coef.i.i23, -3157560240565274503
+  %shifted.i.i.i27 = lshr i64 %product.i.i.i26, 32
+  %xored.i.i.i28 = xor i64 %shifted.i.i.i27, %product.i.i.i26
+  %hash.i.i.i29 = and i64 %xored.i.i.i28, %tbl_size.i.i24
+  %offset_ptr.i.i30 = getelementptr i32, ptr %offset_tbl.i.i25, i64 %hash.i.i.i29
+  %offset.i.i31 = load i32, ptr %offset_ptr.i.i30, align 4
+  %8 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
+  %9 = insertvalue { ptr, ptr, ptr, i32 } %8, ptr %6, 1
+  %10 = insertvalue { ptr, ptr, ptr, i32 } %9, ptr %7, 2
+  %11 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %offset.i.i31, 3
+  %12 = call ptr @llvm.invariant.start.p0(i64 0, ptr nonnull %5)
+  %13 = tail call ptr @llvm.invariant.start.p0(i64 136, ptr %.fca.0.extract)
+  %14 = sext i32 %offset.i.i31 to i64
+  %15 = getelementptr ptr, ptr %.fca.0.extract, i64 %14
+  %16 = getelementptr i8, ptr %15, i64 24
+  %17 = load ptr, ptr %16, align 8
+  %18 = call ptr %17({ ptr, ptr, ptr, i32 } %11, ptr nonnull %5)
+  %19 = call i32 %18({ ptr, ptr, ptr, i32 } %11, { ptr, ptr, ptr, i32 } %11, ptr nonnull %5)
+  %20 = sitofp i32 %19 to double
+  %21 = call ptr @llvm.invariant.start.p0(i64 144, ptr %.fca.0.extract13)
+  %22 = sext i32 %offset.i.i to i64
+  %23 = getelementptr ptr, ptr %.fca.0.extract13, i64 %22
+  %24 = load ptr, ptr %23, align 8
+  %25 = call ptr %24(ptr %.fca.1.extract15)
+  %result.i = call noalias dereferenceable_or_null(8) ptr @bump_malloc_inner(i64 noundef 8, ptr nonnull @current_ptr) #24
+  %26 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %27 = getelementptr inbounds i8, ptr %26, i64 8
+  %28 = getelementptr inbounds i8, ptr %26, i64 24
+  store ptr @Float64, ptr %26, align 8
+  store ptr %result.i, ptr %27, align 8
+  store i32 7, ptr %28, align 8
+  %29 = call ptr @llvm.invariant.start.p0(i64 16, ptr nonnull %26)
+  %30 = call ptr @llvm.invariant.start.p0(i64 144, ptr %.fca.0.extract13)
+  %31 = load ptr, ptr %23, align 8
+  %32 = call ptr %31(ptr %.fca.1.extract15)
+  %33 = load double, ptr %32, align 8
+  %34 = fadd double %33, %20
+  %35 = load ptr, ptr %26, align 8
+  %36 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %35, 0
+  %37 = load ptr, ptr %27, align 8
+  %38 = insertvalue { ptr, ptr, ptr, i32 } %36, ptr %37, 1
+  %39 = getelementptr inbounds i8, ptr %26, i64 16
+  %40 = load ptr, ptr %39, align 8
+  %41 = insertvalue { ptr, ptr, ptr, i32 } %38, ptr %40, 2
+  %42 = load i32, ptr %28, align 8
+  %43 = insertvalue { ptr, ptr, ptr, i32 } %41, i32 %42, 3
+  %44 = alloca [1 x ptr], align 8
+  store ptr @_parameterization_Ptrf64, ptr %44, align 8
+  %45 = call ptr @llvm.invariant.start.p0(i64 1, ptr nonnull %44)
+  %46 = call ptr @llvm.invariant.start.p0(i64 144, ptr %35)
+  %47 = sext i32 %42 to i64
+  %48 = getelementptr ptr, ptr %35, i64 %47
+  %49 = getelementptr i8, ptr %48, i64 24
+  %50 = load ptr, ptr %49, align 8
+  %51 = alloca [1 x ptr], align 8
+  store ptr @f64_typ, ptr %51, align 8
+  %52 = call ptr %50({ ptr, ptr, ptr, i32 } %43, ptr nonnull %51, double %34)
+  call void %52({ ptr, ptr, ptr, i32 } %43, { ptr, ptr, ptr, i32 } %43, ptr nonnull %44, double %34)
+  %hash_coef_ptr.i.i34 = getelementptr i8, ptr %35, i64 8
+  %tbl_size_ptr.i.i35 = getelementptr i8, ptr %35, i64 16
+  %offset_tbl_ptr.i.i36 = getelementptr i8, ptr %35, i64 40
+  %hash_coef.i.i37 = load i64, ptr %hash_coef_ptr.i.i34, align 4
+  %tbl_size.i.i38 = load i64, ptr %tbl_size_ptr.i.i35, align 4
+  %offset_tbl.i.i39 = load ptr, ptr %offset_tbl_ptr.i.i36, align 8
+  %product.i.i.i40 = mul i64 %hash_coef.i.i37, 8748823673944961442
+  %shifted.i.i.i41 = lshr i64 %product.i.i.i40, 32
+  %xored.i.i.i42 = xor i64 %shifted.i.i.i41, %product.i.i.i40
+  %hash.i.i.i43 = and i64 %xored.i.i.i42, %tbl_size.i.i38
+  %offset_ptr.i.i44 = getelementptr i32, ptr %offset_tbl.i.i39, i64 %hash.i.i.i43
+  %offset.i.i45 = load i32, ptr %offset_ptr.i.i44, align 4
+  %53 = insertvalue { ptr, ptr, ptr, i32 } %41, i32 %offset.i.i45, 3
+  ret { ptr, ptr, ptr, i32 } %53
+}
+
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
 define ptr @Int32_field_value(ptr readnone returned %0) #0 {
   ret ptr %0
@@ -7038,7 +7027,7 @@ define ptr @Int32_field_value(ptr readnone returned %0) #0 {
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
 define noundef nonnull ptr @Int32_field_Int32_0(ptr nocapture readnone %0) #0 {
-  ret ptr @_parameterization_Int32_or_Float64
+  ret ptr @_parameterization_Float64_or_Int32
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
@@ -7060,7 +7049,7 @@ define ptr @Int32_B_value_({ ptr, ptr, ptr, i32 } %0, ptr nocapture %1) #1 {
 }
 
 ; Function Attrs: mustprogress willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0, ptr nocapture %1, { ptr, i160 } %2) #4 {
+define ptr @Int32_B__ADD_otherInt32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %0, ptr nocapture %1, { ptr, i160 } %2) #4 {
 ._crit_edge:
   %3 = tail call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
   %4 = load ptr, ptr %1, align 8
@@ -7077,7 +7066,7 @@ define ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0,
   %not.result.i = xor i1 %result.i, true
   %.reg2mem5.0 = select i1 %not.result.i, i1 true, i1 %result.i1
   %13 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %14 = select i1 %.reg2mem5.0, i64 8, i64 7
+  %14 = select i1 %.reg2mem5.0, i64 7, i64 8
   %15 = getelementptr [17 x ptr], ptr %13, i64 0, i64 %14
   %16 = getelementptr i8, ptr %15, i64 56
   %17 = load ptr, ptr %16, align 8
@@ -7130,81 +7119,6 @@ define i32 @Int32_value_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, p
   %8 = tail call ptr %7(ptr %.fca.1.extract)
   %9 = load i32, ptr %8, align 4
   ret i32 %9
-}
-
-define { ptr, i160 } @Int32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture readnone %2, { ptr, i160 } %3) {
-  %5 = alloca [0 x ptr], align 8
-  %.fca.0.extract1 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract3 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %hash_coef_ptr.i.i = getelementptr i8, ptr %.fca.0.extract1, i64 8
-  %tbl_size_ptr.i.i = getelementptr i8, ptr %.fca.0.extract1, i64 16
-  %offset_tbl_ptr.i.i = getelementptr i8, ptr %.fca.0.extract1, i64 40
-  %hash_coef.i.i = load i64, ptr %hash_coef_ptr.i.i, align 4
-  %tbl_size.i.i = load i64, ptr %tbl_size_ptr.i.i, align 4
-  %offset_tbl.i.i = load ptr, ptr %offset_tbl_ptr.i.i, align 8
-  %product.i.i.i = mul i64 %hash_coef.i.i, -3157560240565274503
-  %shifted.i.i.i = lshr i64 %product.i.i.i, 32
-  %xored.i.i.i = xor i64 %shifted.i.i.i, %product.i.i.i
-  %hash.i.i.i = and i64 %xored.i.i.i, %tbl_size.i.i
-  %offset_ptr.i.i = getelementptr i32, ptr %offset_tbl.i.i, i64 %hash.i.i.i
-  %offset.i.i = load i32, ptr %offset_ptr.i.i, align 4
-  %.fca.0.extract = extractvalue { ptr, i160 } %3, 0
-  %.fca.1.extract = extractvalue { ptr, i160 } %3, 1
-  %.sroa.4.8.extract.trunc = trunc i160 %.fca.1.extract to i64
-  %6 = inttoptr i64 %.sroa.4.8.extract.trunc to ptr
-  %.sroa.7.8.extract.shift = lshr i160 %.fca.1.extract, 64
-  %.sroa.7.8.extract.trunc = trunc i160 %.sroa.7.8.extract.shift to i64
-  %7 = inttoptr i64 %.sroa.7.8.extract.trunc to ptr
-  %hash_coef_ptr.i.i8 = getelementptr i8, ptr %.fca.0.extract, i64 8
-  %tbl_size_ptr.i.i9 = getelementptr i8, ptr %.fca.0.extract, i64 16
-  %offset_tbl_ptr.i.i10 = getelementptr i8, ptr %.fca.0.extract, i64 40
-  %hash_coef.i.i11 = load i64, ptr %hash_coef_ptr.i.i8, align 4
-  %tbl_size.i.i12 = load i64, ptr %tbl_size_ptr.i.i9, align 4
-  %offset_tbl.i.i13 = load ptr, ptr %offset_tbl_ptr.i.i10, align 8
-  %product.i.i.i14 = mul i64 %hash_coef.i.i11, 8748823673944961442
-  %shifted.i.i.i15 = lshr i64 %product.i.i.i14, 32
-  %xored.i.i.i16 = xor i64 %shifted.i.i.i15, %product.i.i.i14
-  %hash.i.i.i17 = and i64 %xored.i.i.i16, %tbl_size.i.i12
-  %offset_ptr.i.i18 = getelementptr i32, ptr %offset_tbl.i.i13, i64 %hash.i.i.i17
-  %offset.i.i19 = load i32, ptr %offset_ptr.i.i18, align 4
-  %8 = tail call ptr @llvm.invariant.start.p0(i64 136, ptr %.fca.0.extract1)
-  %9 = sext i32 %offset.i.i to i64
-  %10 = getelementptr ptr, ptr %.fca.0.extract1, i64 %9
-  %11 = load ptr, ptr %10, align 8
-  %12 = tail call ptr %11(ptr %.fca.1.extract3)
-  %13 = load i32, ptr %12, align 4
-  %14 = sitofp i32 %13 to double
-  %15 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
-  %16 = insertvalue { ptr, ptr, ptr, i32 } %15, ptr %6, 1
-  %17 = insertvalue { ptr, ptr, ptr, i32 } %16, ptr %7, 2
-  %18 = insertvalue { ptr, ptr, ptr, i32 } %17, i32 %offset.i.i19, 3
-  %19 = call ptr @llvm.invariant.start.p0(i64 0, ptr nonnull %5)
-  %20 = tail call ptr @llvm.invariant.start.p0(i64 144, ptr %.fca.0.extract)
-  %21 = sext i32 %offset.i.i19 to i64
-  %22 = getelementptr ptr, ptr %.fca.0.extract, i64 %21
-  %23 = getelementptr i8, ptr %22, i64 32
-  %24 = load ptr, ptr %23, align 8
-  %25 = call ptr %24({ ptr, ptr, ptr, i32 } %18, ptr nonnull %5)
-  %26 = call double %25({ ptr, ptr, ptr, i32 } %18, { ptr, ptr, ptr, i32 } %18, ptr nonnull %5)
-  %result.i = call noalias dereferenceable_or_null(8) ptr @bump_malloc_inner(i64 noundef 8, ptr nonnull @current_ptr) #24
-  %27 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %28 = getelementptr inbounds i8, ptr %27, i64 8
-  %29 = getelementptr inbounds i8, ptr %27, i64 24
-  store ptr @Float64, ptr %27, align 8
-  store ptr %result.i, ptr %28, align 8
-  store i32 7, ptr %29, align 8
-  %30 = call ptr @llvm.invariant.start.p0(i64 16, ptr nonnull %27)
-  %31 = call ptr @llvm.invariant.start.p0(i64 0, ptr nonnull %5)
-  %32 = call ptr @llvm.invariant.start.p0(i64 144, ptr %.fca.0.extract)
-  %33 = load ptr, ptr %23, align 8
-  %34 = call ptr %33({ ptr, ptr, ptr, i32 } %18, ptr nonnull %5)
-  %35 = call double %34({ ptr, ptr, ptr, i32 } %18, { ptr, ptr, ptr, i32 } %18, ptr nonnull %5)
-  %36 = fadd double %35, %14
-  %37 = call ptr @llvm.invariant.start.p0(i64 144, ptr nonnull @Float64)
-  store double %36, ptr %result.i, align 8
-  %38 = load i160, ptr %28, align 8
-  %39 = insertvalue { ptr, i160 } { ptr @Float64, i160 undef }, i160 %38, 1
-  ret { ptr, i160 } %39
 }
 
 define { ptr, i160 } @Int32__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture readnone %2, { ptr, i160 } %3) {
@@ -7302,6 +7216,81 @@ define { ptr, i160 } @Int32__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %58 = load i160, ptr %26, align 8
   %59 = insertvalue { ptr, i160 } %57, i160 %58, 1
   ret { ptr, i160 } %59
+}
+
+define { ptr, i160 } @Int32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture readnone %2, { ptr, i160 } %3) {
+  %5 = alloca [0 x ptr], align 8
+  %.fca.0.extract1 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract3 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %hash_coef_ptr.i.i = getelementptr i8, ptr %.fca.0.extract1, i64 8
+  %tbl_size_ptr.i.i = getelementptr i8, ptr %.fca.0.extract1, i64 16
+  %offset_tbl_ptr.i.i = getelementptr i8, ptr %.fca.0.extract1, i64 40
+  %hash_coef.i.i = load i64, ptr %hash_coef_ptr.i.i, align 4
+  %tbl_size.i.i = load i64, ptr %tbl_size_ptr.i.i, align 4
+  %offset_tbl.i.i = load ptr, ptr %offset_tbl_ptr.i.i, align 8
+  %product.i.i.i = mul i64 %hash_coef.i.i, -3157560240565274503
+  %shifted.i.i.i = lshr i64 %product.i.i.i, 32
+  %xored.i.i.i = xor i64 %shifted.i.i.i, %product.i.i.i
+  %hash.i.i.i = and i64 %xored.i.i.i, %tbl_size.i.i
+  %offset_ptr.i.i = getelementptr i32, ptr %offset_tbl.i.i, i64 %hash.i.i.i
+  %offset.i.i = load i32, ptr %offset_ptr.i.i, align 4
+  %.fca.0.extract = extractvalue { ptr, i160 } %3, 0
+  %.fca.1.extract = extractvalue { ptr, i160 } %3, 1
+  %.sroa.4.8.extract.trunc = trunc i160 %.fca.1.extract to i64
+  %6 = inttoptr i64 %.sroa.4.8.extract.trunc to ptr
+  %.sroa.7.8.extract.shift = lshr i160 %.fca.1.extract, 64
+  %.sroa.7.8.extract.trunc = trunc i160 %.sroa.7.8.extract.shift to i64
+  %7 = inttoptr i64 %.sroa.7.8.extract.trunc to ptr
+  %hash_coef_ptr.i.i8 = getelementptr i8, ptr %.fca.0.extract, i64 8
+  %tbl_size_ptr.i.i9 = getelementptr i8, ptr %.fca.0.extract, i64 16
+  %offset_tbl_ptr.i.i10 = getelementptr i8, ptr %.fca.0.extract, i64 40
+  %hash_coef.i.i11 = load i64, ptr %hash_coef_ptr.i.i8, align 4
+  %tbl_size.i.i12 = load i64, ptr %tbl_size_ptr.i.i9, align 4
+  %offset_tbl.i.i13 = load ptr, ptr %offset_tbl_ptr.i.i10, align 8
+  %product.i.i.i14 = mul i64 %hash_coef.i.i11, 8748823673944961442
+  %shifted.i.i.i15 = lshr i64 %product.i.i.i14, 32
+  %xored.i.i.i16 = xor i64 %shifted.i.i.i15, %product.i.i.i14
+  %hash.i.i.i17 = and i64 %xored.i.i.i16, %tbl_size.i.i12
+  %offset_ptr.i.i18 = getelementptr i32, ptr %offset_tbl.i.i13, i64 %hash.i.i.i17
+  %offset.i.i19 = load i32, ptr %offset_ptr.i.i18, align 4
+  %8 = tail call ptr @llvm.invariant.start.p0(i64 136, ptr %.fca.0.extract1)
+  %9 = sext i32 %offset.i.i to i64
+  %10 = getelementptr ptr, ptr %.fca.0.extract1, i64 %9
+  %11 = load ptr, ptr %10, align 8
+  %12 = tail call ptr %11(ptr %.fca.1.extract3)
+  %13 = load i32, ptr %12, align 4
+  %14 = sitofp i32 %13 to double
+  %15 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
+  %16 = insertvalue { ptr, ptr, ptr, i32 } %15, ptr %6, 1
+  %17 = insertvalue { ptr, ptr, ptr, i32 } %16, ptr %7, 2
+  %18 = insertvalue { ptr, ptr, ptr, i32 } %17, i32 %offset.i.i19, 3
+  %19 = call ptr @llvm.invariant.start.p0(i64 0, ptr nonnull %5)
+  %20 = tail call ptr @llvm.invariant.start.p0(i64 144, ptr %.fca.0.extract)
+  %21 = sext i32 %offset.i.i19 to i64
+  %22 = getelementptr ptr, ptr %.fca.0.extract, i64 %21
+  %23 = getelementptr i8, ptr %22, i64 32
+  %24 = load ptr, ptr %23, align 8
+  %25 = call ptr %24({ ptr, ptr, ptr, i32 } %18, ptr nonnull %5)
+  %26 = call double %25({ ptr, ptr, ptr, i32 } %18, { ptr, ptr, ptr, i32 } %18, ptr nonnull %5)
+  %result.i = call noalias dereferenceable_or_null(8) ptr @bump_malloc_inner(i64 noundef 8, ptr nonnull @current_ptr) #24
+  %27 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %28 = getelementptr inbounds i8, ptr %27, i64 8
+  %29 = getelementptr inbounds i8, ptr %27, i64 24
+  store ptr @Float64, ptr %27, align 8
+  store ptr %result.i, ptr %28, align 8
+  store i32 7, ptr %29, align 8
+  %30 = call ptr @llvm.invariant.start.p0(i64 16, ptr nonnull %27)
+  %31 = call ptr @llvm.invariant.start.p0(i64 0, ptr nonnull %5)
+  %32 = call ptr @llvm.invariant.start.p0(i64 144, ptr %.fca.0.extract)
+  %33 = load ptr, ptr %23, align 8
+  %34 = call ptr %33({ ptr, ptr, ptr, i32 } %18, ptr nonnull %5)
+  %35 = call double %34({ ptr, ptr, ptr, i32 } %18, { ptr, ptr, ptr, i32 } %18, ptr nonnull %5)
+  %36 = fadd double %35, %14
+  %37 = call ptr @llvm.invariant.start.p0(i64 144, ptr nonnull @Float64)
+  store double %36, ptr %result.i, align 8
+  %38 = load i160, ptr %28, align 8
+  %39 = insertvalue { ptr, i160 } { ptr @Float64, i160 undef }, i160 %38, 1
+  ret { ptr, i160 } %39
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
@@ -7460,7 +7449,7 @@ define { ptr, ptr, ptr, i32 } @Holder_value_({ ptr, ptr, ptr, i32 } %0, { ptr, p
   ret { ptr, ptr, ptr, i32 } %45
 }
 
-define { ptr, i160 } @yndrximwto(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
+define { ptr, i160 } @zvmtmuaymx(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
@@ -7470,7 +7459,7 @@ define { ptr, i160 } @yndrximwto(ptr nest nocapture readonly %0, { ptr, i160 } %
   ret { ptr, i160 } %4
 }
 
-define { ptr, i160 } @ejryviqumq(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
+define { ptr, i160 } @dmeybaahgs(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call double %0(i32 %.sroa.1.8.extract.trunc)
@@ -7481,7 +7470,7 @@ define { ptr, i160 } @ejryviqumq(ptr nest nocapture readonly %0, { ptr, i160 } %
   ret { ptr, i160 } %5
 }
 
-define { ptr, i160 } @hyffrzvftr(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
+define { ptr, i160 } @hjdwdvivcd(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
@@ -7491,7 +7480,7 @@ define { ptr, i160 } @hyffrzvftr(ptr nest nocapture readonly %0, { ptr, i160 } %
   ret { ptr, i160 } %4
 }
 
-define { ptr, i160 } @gklhkvtend(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define { ptr, i160 } @vjlmtywsjv(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %.fca.1.extract2 = extractvalue { ptr, i160 } %1, 1
   %.sroa.14.8.extract.trunc = trunc i160 %.fca.1.extract2 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -7622,30 +7611,30 @@ define ptr @Iterable2_B_product_otherIterable2U({ ptr, ptr, ptr, i32 } %0, ptr n
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define i32 @_functionliteral_fhaofovorj(i32 %0, i32 %1) #0 {
+define i32 @_functionliteral_hjbexlmden(i32 %0, i32 %1) #0 {
   %3 = add i32 %1, %0
   ret i32 %3
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define range(i32 0, -1) i32 @_functionliteral_vuqcwqylaf(i32 %0) #0 {
+define range(i32 0, -1) i32 @_functionliteral_hylaovmvqi(i32 %0) #0 {
   %2 = shl i32 %0, 1
   ret i32 %2
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define double @_functionliteral_enqblpzuci(double %0) local_unnamed_addr #0 {
+define double @_functionliteral_yfsecirmue(double %0) local_unnamed_addr #0 {
   %2 = fmul double %0, 2.000000e+00
   ret double %2
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define i32 @_functionliteral_wlqcbabttk(i32 returned %0) #0 {
+define i32 @_functionliteral_syrgylsxml(i32 returned %0) #0 {
   ret i32 %0
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define double @_functionliteral_zcqehptukb(i32 %0) #0 {
+define double @_functionliteral_kiwrzuicqc(i32 %0) #0 {
   %2 = sitofp i32 %0 to double
   ret double %2
 }
@@ -7736,7 +7725,7 @@ define { ptr, ptr, ptr, i32 } @add_five({ ptr, ptr, ptr, i32 } %0) local_unnamed
 }
 
 define noundef i32 @main() local_unnamed_addr {
-ArrayIterator_next_.exit2691:
+ArrayIterator_next_.exit2690:
   %0 = alloca [0 x ptr], align 8
   %1 = alloca { ptr, ptr, ptr, i32 }, align 8
   %2 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -7753,7 +7742,7 @@ ArrayIterator_next_.exit2691:
   %8 = tail call ptr @llvm.invariant.start.p0(i64 80, ptr nonnull @Pair)
   %9 = tail call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @float_string, double 4.000000e+00)
   %10 = tail call ptr @llvm.invariant.start.p0(i64 160, ptr nonnull @FancyPair)
-  %11 = tail call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @float_string, double bitcast (i64 ptrtoint (ptr @f64_typ to i64) to double))
+  %11 = tail call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @float_string, double 5.000000e+00)
   %result.i447 = tail call noalias dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nonnull @current_ptr) #24
   %12 = getelementptr i8, ptr %result.i447, i64 16
   store ptr @_parameterization_Ptri32, ptr %12, align 8
@@ -7787,7 +7776,7 @@ ArrayIterator_next_.exit2691:
   call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %oldProtect.i)
   %result.i589 = call i32 @VirtualProtect(ptr %result.i588, i64 16, i32 64, ptr nonnull %oldProtect.i) #13
   call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %oldProtect.i)
-  call void @llvm.init.trampoline(ptr %result.i588, ptr nonnull @gklhkvtend, ptr nonnull @_functionliteral_fhaofovorj)
+  call void @llvm.init.trampoline(ptr %result.i588, ptr nonnull @vjlmtywsjv, ptr nonnull @_functionliteral_hjbexlmden)
   %23 = call ptr @llvm.invariant.start.p0(i64 24, ptr %result.i588)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
@@ -7800,47 +7789,47 @@ ArrayIterator_next_.exit2691:
   call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %oldProtect.i608)
   %result.i609 = call i32 @VirtualProtect(ptr %result.i607, i64 16, i32 64, ptr nonnull %oldProtect.i608) #13
   call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %oldProtect.i608)
-  call void @llvm.init.trampoline(ptr %result.i607, ptr nonnull @hyffrzvftr, ptr nonnull @_functionliteral_vuqcwqylaf)
+  call void @llvm.init.trampoline(ptr %result.i607, ptr nonnull @hjdwdvivcd, ptr nonnull @_functionliteral_hylaovmvqi)
   %ret.i610 = call ptr @llvm.adjust.trampoline(ptr readonly %result.i607) #26
   %27 = call ptr @llvm.invariant.start.p0(i64 24, ptr %result.i607)
-  %result.i.i1422 = call noalias dereferenceable_or_null(56) ptr @bump_malloc_inner(i64 noundef 56, ptr nonnull @current_ptr) #24
-  %28 = getelementptr i8, ptr %result.i.i1422, i64 40
+  %result.i.i1421 = call noalias dereferenceable_or_null(56) ptr @bump_malloc_inner(i64 noundef 56, ptr nonnull @current_ptr) #24
+  %28 = getelementptr i8, ptr %result.i.i1421, i64 40
   store ptr @_parameterization_Ptri32, ptr %28, align 8
-  %29 = getelementptr i8, ptr %result.i.i1422, i64 48
+  %29 = getelementptr i8, ptr %result.i.i1421, i64 48
   store ptr @_parameterization_Ptri32, ptr %29, align 8
   %30 = call ptr @llvm.invariant.start.p0(i64 4, ptr nonnull %28)
-  store ptr @Array, ptr %result.i.i1422, align 8
-  %31 = getelementptr i8, ptr %result.i.i1422, i64 8
+  store ptr @Array, ptr %result.i.i1421, align 8
+  %31 = getelementptr i8, ptr %result.i.i1421, i64 8
   store ptr %result.i447, ptr %31, align 8
-  %32 = getelementptr i8, ptr %result.i.i1422, i64 24
+  %32 = getelementptr i8, ptr %result.i.i1421, i64 24
   store i32 53, ptr %32, align 4
-  %33 = getelementptr i8, ptr %result.i.i1422, i64 32
+  %33 = getelementptr i8, ptr %result.i.i1421, i64 32
   store ptr %ret.i610, ptr %33, align 8
   %result.i639 = call noalias dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nonnull @current_ptr) #24
   call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %oldProtect.i640)
   %result.i641 = call i32 @VirtualProtect(ptr %result.i639, i64 16, i32 64, ptr nonnull %oldProtect.i640) #13
   call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %oldProtect.i640)
-  call void @llvm.init.trampoline(ptr %result.i639, ptr nonnull @ejryviqumq, ptr nonnull @_functionliteral_zcqehptukb)
+  call void @llvm.init.trampoline(ptr %result.i639, ptr nonnull @dmeybaahgs, ptr nonnull @_functionliteral_kiwrzuicqc)
   %34 = call ptr @llvm.invariant.start.p0(i64 24, ptr %result.i639)
   %result.i643 = call noalias dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nonnull @current_ptr) #24
   call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %oldProtect.i644)
   %result.i645 = call i32 @VirtualProtect(ptr %result.i643, i64 16, i32 64, ptr nonnull %oldProtect.i644) #13
   call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %oldProtect.i644)
-  call void @llvm.init.trampoline(ptr %result.i643, ptr nonnull @yndrximwto, ptr nonnull @_functionliteral_wlqcbabttk)
+  call void @llvm.init.trampoline(ptr %result.i643, ptr nonnull @zvmtmuaymx, ptr nonnull @_functionliteral_syrgylsxml)
   %ret.i646 = call ptr @llvm.adjust.trampoline(ptr readonly %result.i643) #26
   %35 = call ptr @llvm.invariant.start.p0(i64 24, ptr %result.i643)
-  %result.i.i1468 = call noalias dereferenceable_or_null(56) ptr @bump_malloc_inner(i64 noundef 56, ptr nonnull @current_ptr) #24
-  %36 = getelementptr i8, ptr %result.i.i1468, i64 40
+  %result.i.i1467 = call noalias dereferenceable_or_null(56) ptr @bump_malloc_inner(i64 noundef 56, ptr nonnull @current_ptr) #24
+  %36 = getelementptr i8, ptr %result.i.i1467, i64 40
   store ptr @_parameterization_Ptri32, ptr %36, align 8
-  %37 = getelementptr i8, ptr %result.i.i1468, i64 48
+  %37 = getelementptr i8, ptr %result.i.i1467, i64 48
   store ptr @_parameterization_Ptri32, ptr %37, align 8
   %38 = call ptr @llvm.invariant.start.p0(i64 4, ptr nonnull %36)
-  store ptr @MapIterable2, ptr %result.i.i1468, align 8
-  %39 = getelementptr i8, ptr %result.i.i1468, i64 8
-  store ptr %result.i.i1422, ptr %39, align 8
-  %40 = getelementptr i8, ptr %result.i.i1468, i64 24
+  store ptr @MapIterable2, ptr %result.i.i1467, align 8
+  %39 = getelementptr i8, ptr %result.i.i1467, i64 8
+  store ptr %result.i.i1421, ptr %39, align 8
+  %40 = getelementptr i8, ptr %result.i.i1467, i64 24
   store i32 35, ptr %40, align 4
-  %41 = getelementptr i8, ptr %result.i.i1468, i64 32
+  %41 = getelementptr i8, ptr %result.i.i1467, i64 32
   store ptr %ret.i646, ptr %41, align 8
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   %42 = call ptr @llvm.invariant.start.p0(i64 408, ptr nonnull @MapIterable2)
@@ -7856,16 +7845,16 @@ ArrayIterator_next_.exit2691:
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   %47 = icmp ne ptr %45, @nil_typ
   %48 = icmp ne ptr %45, null
-  %.not57.i2544 = and i1 %47, %48
-  br i1 %.not57.i2544, label %MapIterator2_next_.exit2563, label %.critedge.sink.split.sink.split.sink.split
+  %.not57.i2543 = and i1 %47, %48
+  br i1 %.not57.i2543, label %MapIterator2_next_.exit2562, label %.critedge.sink.split.sink.split.sink.split
 
-MapIterator2_next_.exit2563:                      ; preds = %ArrayIterator_next_.exit2691
+MapIterator2_next_.exit2562:                      ; preds = %ArrayIterator_next_.exit2690
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   %.sroa.1.8.extract.trunc.i = trunc i160 %46 to i32
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
-  %.in2675 = shl i32 %.sroa.1.8.extract.trunc.i, 1
-  %49 = sitofp i32 %.in2675 to double
+  %.in2674 = shl i32 %.sroa.1.8.extract.trunc.i, 1
+  %49 = sitofp i32 %.in2674 to double
   %50 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @i32_string, i32 55)
   %51 = call ptr @llvm.invariant.start.p0(i64 80, ptr nonnull @IO)
   %52 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @float_string, double %49)
@@ -7876,10 +7865,10 @@ MapIterator2_next_.exit2563:                      ; preds = %ArrayIterator_next_
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   %54 = call ptr @llvm.invariant.start.p0(i64 80, ptr nonnull @ArrayIterator)
   %55 = load i32, ptr %14, align 4
-  %.not.i2705 = icmp sgt i32 %55, 1
-  br i1 %.not.i2705, label %ArrayIterator_next_.exit2728, label %.critedge.sink.split.sink.split.sink.split.sink.split
+  %.not.i2704 = icmp sgt i32 %55, 1
+  br i1 %.not.i2704, label %ArrayIterator_next_.exit2727, label %.critedge.sink.split.sink.split.sink.split.sink.split
 
-ArrayIterator_next_.exit2728:                     ; preds = %MapIterator2_next_.exit2563
+ArrayIterator_next_.exit2727:                     ; preds = %MapIterator2_next_.exit2562
   %56 = call ptr @llvm.invariant.start.p0(i64 552, ptr nonnull @Array)
   %57 = load ptr, ptr %result.i447, align 8
   %58 = getelementptr i8, ptr %57, i64 32
@@ -7889,20 +7878,20 @@ ArrayIterator_next_.exit2728:                     ; preds = %MapIterator2_next_.
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   %62 = icmp ne ptr %59, @nil_typ
   %63 = icmp ne ptr %59, null
-  %.not57.i25782677 = and i1 %62, %63
-  br i1 %.not57.i25782677, label %MapIterator2_next_.exit2602.preheader, label %.critedge.sink.split.sink.split.sink.split
+  %.not57.i25772676 = and i1 %62, %63
+  br i1 %.not57.i25772676, label %MapIterator2_next_.exit2601.preheader, label %.critedge.sink.split.sink.split.sink.split
 
-MapIterator2_next_.exit2602.preheader:            ; preds = %ArrayIterator_next_.exit2728
-  %extract.t2782 = trunc i160 %61 to i32
-  br label %MapIterator2_next_.exit2602
+MapIterator2_next_.exit2601.preheader:            ; preds = %ArrayIterator_next_.exit2727
+  %extract.t2781 = trunc i160 %61 to i32
+  br label %MapIterator2_next_.exit2601
 
-MapIterator2_next_.exit2602:                      ; preds = %MapIterator2_next_.exit2602.preheader, %ArrayIterator_next_.exit2765
-  %64 = phi i32 [ %72, %ArrayIterator_next_.exit2765 ], [ 2, %MapIterator2_next_.exit2602.preheader ]
-  %.sroa.3.8.insert.insert.i2764.pn.off0 = phi i32 [ %extract.t2781, %ArrayIterator_next_.exit2765 ], [ %extract.t2782, %MapIterator2_next_.exit2602.preheader ]
+MapIterator2_next_.exit2601:                      ; preds = %MapIterator2_next_.exit2601.preheader, %ArrayIterator_next_.exit2764
+  %64 = phi i32 [ %72, %ArrayIterator_next_.exit2764 ], [ 2, %MapIterator2_next_.exit2601.preheader ]
+  %.sroa.3.8.insert.insert.i2763.pn.off0 = phi i32 [ %extract.t2780, %ArrayIterator_next_.exit2764 ], [ %extract.t2781, %MapIterator2_next_.exit2601.preheader ]
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
-  %.in = shl i32 %.sroa.3.8.insert.insert.i2764.pn.off0, 1
+  %.in = shl i32 %.sroa.3.8.insert.insert.i2763.pn.off0, 1
   %65 = sitofp i32 %.in to double
   %66 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @i32_string, i32 55)
   %67 = call ptr @llvm.invariant.start.p0(i64 80, ptr nonnull @IO)
@@ -7914,31 +7903,31 @@ MapIterator2_next_.exit2602:                      ; preds = %MapIterator2_next_.
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   %70 = call ptr @llvm.invariant.start.p0(i64 80, ptr nonnull @ArrayIterator)
   %71 = load i32, ptr %14, align 4
-  %.not.i2742 = icmp slt i32 %64, %71
-  br i1 %.not.i2742, label %ArrayIterator_next_.exit2765, label %.critedge.sink.split.sink.split.sink.split.sink.split
+  %.not.i2741 = icmp slt i32 %64, %71
+  br i1 %.not.i2741, label %ArrayIterator_next_.exit2764, label %.critedge.sink.split.sink.split.sink.split.sink.split
 
-ArrayIterator_next_.exit2765:                     ; preds = %MapIterator2_next_.exit2602
+ArrayIterator_next_.exit2764:                     ; preds = %MapIterator2_next_.exit2601
   %72 = add nuw nsw i32 %64, 1
   %73 = call ptr @llvm.invariant.start.p0(i64 552, ptr nonnull @Array)
   %74 = load ptr, ptr %result.i447, align 8
   %75 = zext nneg i32 %64 to i64
-  %.idx.i2899 = shl nuw nsw i64 %75, 5
-  %76 = getelementptr i8, ptr %74, i64 %.idx.i2899
+  %.idx.i2898 = shl nuw nsw i64 %75, 5
+  %76 = getelementptr i8, ptr %74, i64 %.idx.i2898
   %77 = load ptr, ptr %76, align 8
   %78 = getelementptr i8, ptr %76, i64 8
   %79 = load i160, ptr %78, align 4
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   %80 = icmp ne ptr %77, @nil_typ
   %81 = icmp ne ptr %77, null
-  %.not57.i2578 = and i1 %80, %81
-  %extract.t2781 = trunc i160 %79 to i32
-  br i1 %.not57.i2578, label %MapIterator2_next_.exit2602, label %.critedge.sink.split.sink.split.sink.split
+  %.not57.i2577 = and i1 %80, %81
+  %extract.t2780 = trunc i160 %79 to i32
+  br i1 %.not57.i2577, label %MapIterator2_next_.exit2601, label %.critedge.sink.split.sink.split.sink.split
 
-.critedge.sink.split.sink.split.sink.split.sink.split: ; preds = %MapIterator2_next_.exit2602, %MapIterator2_next_.exit2563
+.critedge.sink.split.sink.split.sink.split.sink.split: ; preds = %MapIterator2_next_.exit2601, %MapIterator2_next_.exit2562
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   br label %.critedge.sink.split.sink.split.sink.split
 
-.critedge.sink.split.sink.split.sink.split:       ; preds = %ArrayIterator_next_.exit2765, %.critedge.sink.split.sink.split.sink.split.sink.split, %ArrayIterator_next_.exit2728, %ArrayIterator_next_.exit2691
+.critedge.sink.split.sink.split.sink.split:       ; preds = %ArrayIterator_next_.exit2764, %.critedge.sink.split.sink.split.sink.split.sink.split, %ArrayIterator_next_.exit2727, %ArrayIterator_next_.exit2690
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
@@ -7950,11 +7939,11 @@ ArrayIterator_next_.exit2765:                     ; preds = %MapIterator2_next_.
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %86 = load ptr, ptr %result.i.i1422, align 8
+  %86 = load ptr, ptr %result.i.i1421, align 8
   %87 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %86, 0
   %88 = load ptr, ptr %31, align 8
   %89 = insertvalue { ptr, ptr, ptr, i32 } %87, ptr %88, 1
-  %90 = getelementptr i8, ptr %result.i.i1422, i64 16
+  %90 = getelementptr i8, ptr %result.i.i1421, i64 16
   %91 = load ptr, ptr %90, align 8
   %92 = insertvalue { ptr, ptr, ptr, i32 } %89, ptr %91, 2
   %93 = load i32, ptr %32, align 4
@@ -7968,7 +7957,7 @@ ArrayIterator_next_.exit2765:                     ; preds = %MapIterator2_next_.
   %101 = load ptr, ptr %100, align 8
   %102 = call ptr %101({ ptr, ptr, ptr, i32 } %94, ptr nonnull %0)
   %103 = call { ptr, ptr, ptr, i32 } %102({ ptr, ptr, ptr, i32 } %94, { ptr, ptr, ptr, i32 } %94, ptr nonnull %0)
-  %104 = load ptr, ptr %result.i.i1422, align 8
+  %104 = load ptr, ptr %result.i.i1421, align 8
   %105 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %104, 0
   %106 = load ptr, ptr %31, align 8
   %107 = insertvalue { ptr, ptr, ptr, i32 } %105, ptr %106, 1
@@ -7988,7 +7977,7 @@ ArrayIterator_next_.exit2765:                     ; preds = %MapIterator2_next_.
   %121 = call ptr @llvm.invariant.start.p0(i64 88, ptr nonnull @MapIterator2)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %122 = load ptr, ptr %result.i.i1422, align 8
+  %122 = load ptr, ptr %result.i.i1421, align 8
   %123 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %122, 0
   %124 = load ptr, ptr %31, align 8
   %125 = insertvalue { ptr, ptr, ptr, i32 } %123, ptr %124, 1
@@ -8005,7 +7994,7 @@ ArrayIterator_next_.exit2765:                     ; preds = %MapIterator2_next_.
   %136 = load ptr, ptr %135, align 8
   %137 = call ptr %136({ ptr, ptr, ptr, i32 } %129, ptr nonnull %0)
   %138 = call { ptr, ptr, ptr, i32 } %137({ ptr, ptr, ptr, i32 } %129, { ptr, ptr, ptr, i32 } %129, ptr nonnull %0)
-  %139 = load ptr, ptr %result.i.i1422, align 8
+  %139 = load ptr, ptr %result.i.i1421, align 8
   %140 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %139, 0
   %141 = load ptr, ptr %31, align 8
   %142 = insertvalue { ptr, ptr, ptr, i32 } %140, ptr %141, 1
@@ -8027,7 +8016,7 @@ ArrayIterator_next_.exit2765:                     ; preds = %MapIterator2_next_.
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %157 = load ptr, ptr %result.i.i1422, align 8
+  %157 = load ptr, ptr %result.i.i1421, align 8
   %158 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %157, 0
   %159 = load ptr, ptr %31, align 8
   %160 = insertvalue { ptr, ptr, ptr, i32 } %158, ptr %159, 1
@@ -8044,7 +8033,7 @@ ArrayIterator_next_.exit2765:                     ; preds = %MapIterator2_next_.
   %171 = load ptr, ptr %170, align 8
   %172 = call ptr %171({ ptr, ptr, ptr, i32 } %164, ptr nonnull %0)
   %173 = call { ptr, ptr, ptr, i32 } %172({ ptr, ptr, ptr, i32 } %164, { ptr, ptr, ptr, i32 } %164, ptr nonnull %0)
-  %174 = load ptr, ptr %result.i.i1422, align 8
+  %174 = load ptr, ptr %result.i.i1421, align 8
   %175 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %174, 0
   %176 = load ptr, ptr %31, align 8
   %177 = insertvalue { ptr, ptr, ptr, i32 } %175, ptr %176, 1
@@ -8064,7 +8053,7 @@ ArrayIterator_next_.exit2765:                     ; preds = %MapIterator2_next_.
   %191 = call ptr @llvm.invariant.start.p0(i64 88, ptr nonnull @MapIterator2)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %192 = load ptr, ptr %result.i.i1422, align 8
+  %192 = load ptr, ptr %result.i.i1421, align 8
   %193 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %192, 0
   %194 = load ptr, ptr %31, align 8
   %195 = insertvalue { ptr, ptr, ptr, i32 } %193, ptr %194, 1
@@ -8081,7 +8070,7 @@ ArrayIterator_next_.exit2765:                     ; preds = %MapIterator2_next_.
   %206 = load ptr, ptr %205, align 8
   %207 = call ptr %206({ ptr, ptr, ptr, i32 } %199, ptr nonnull %0)
   %208 = call { ptr, ptr, ptr, i32 } %207({ ptr, ptr, ptr, i32 } %199, { ptr, ptr, ptr, i32 } %199, ptr nonnull %0)
-  %209 = load ptr, ptr %result.i.i1422, align 8
+  %209 = load ptr, ptr %result.i.i1421, align 8
   %210 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %209, 0
   %211 = load ptr, ptr %31, align 8
   %212 = insertvalue { ptr, ptr, ptr, i32 } %210, ptr %211, 1
@@ -8107,9 +8096,9 @@ ArrayIterator_next_.exit2765:                     ; preds = %MapIterator2_next_.
   %229 = call ptr @llvm.invariant.start.p0(i64 416, ptr nonnull @ZipIterable2)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %230 = getelementptr i8, ptr %result.i.i1468, i64 16
+  %230 = getelementptr i8, ptr %result.i.i1467, i64 16
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %231 = load ptr, ptr %result.i.i1422, align 8
+  %231 = load ptr, ptr %result.i.i1421, align 8
   %232 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %231, 0
   %233 = load ptr, ptr %31, align 8
   %234 = insertvalue { ptr, ptr, ptr, i32 } %232, ptr %233, 1
@@ -8126,7 +8115,7 @@ ArrayIterator_next_.exit2765:                     ; preds = %MapIterator2_next_.
   %245 = load ptr, ptr %244, align 8
   %246 = call ptr %245({ ptr, ptr, ptr, i32 } %238, ptr nonnull %0)
   %247 = call { ptr, ptr, ptr, i32 } %246({ ptr, ptr, ptr, i32 } %238, { ptr, ptr, ptr, i32 } %238, ptr nonnull %0)
-  %248 = load ptr, ptr %result.i.i1422, align 8
+  %248 = load ptr, ptr %result.i.i1421, align 8
   %249 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %248, 0
   %250 = load ptr, ptr %31, align 8
   %251 = insertvalue { ptr, ptr, ptr, i32 } %249, ptr %250, 1
@@ -8146,7 +8135,7 @@ ArrayIterator_next_.exit2765:                     ; preds = %MapIterator2_next_.
   %265 = call ptr @llvm.invariant.start.p0(i64 88, ptr nonnull @MapIterator2)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %266 = load ptr, ptr %result.i.i1422, align 8
+  %266 = load ptr, ptr %result.i.i1421, align 8
   %267 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %266, 0
   %268 = load ptr, ptr %31, align 8
   %269 = insertvalue { ptr, ptr, ptr, i32 } %267, ptr %268, 1
@@ -8163,7 +8152,7 @@ ArrayIterator_next_.exit2765:                     ; preds = %MapIterator2_next_.
   %280 = load ptr, ptr %279, align 8
   %281 = call ptr %280({ ptr, ptr, ptr, i32 } %273, ptr nonnull %0)
   %282 = call { ptr, ptr, ptr, i32 } %281({ ptr, ptr, ptr, i32 } %273, { ptr, ptr, ptr, i32 } %273, ptr nonnull %0)
-  %283 = load ptr, ptr %result.i.i1422, align 8
+  %283 = load ptr, ptr %result.i.i1421, align 8
   %284 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %283, 0
   %285 = load ptr, ptr %31, align 8
   %286 = insertvalue { ptr, ptr, ptr, i32 } %284, ptr %285, 1
@@ -8185,7 +8174,7 @@ ArrayIterator_next_.exit2765:                     ; preds = %MapIterator2_next_.
   %301 = call ptr @llvm.invariant.start.p0(i64 88, ptr nonnull @MapIterator2)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %302 = load ptr, ptr %result.i.i1468, align 8
+  %302 = load ptr, ptr %result.i.i1467, align 8
   %303 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %302, 0
   %304 = load ptr, ptr %39, align 8
   %305 = insertvalue { ptr, ptr, ptr, i32 } %303, ptr %304, 1
@@ -8208,23 +8197,23 @@ ArrayIterator_next_.exit2765:                     ; preds = %MapIterator2_next_.
   %322 = load ptr, ptr %315, align 8
   %323 = call ptr %322({ ptr, ptr, ptr, i32 } %309, ptr nonnull %0)
   %324 = call { ptr, ptr, ptr, i32 } %323({ ptr, ptr, ptr, i32 } %309, { ptr, ptr, ptr, i32 } %309, ptr nonnull %0)
-  %.fca.0.extract.i3469 = extractvalue { ptr, ptr, ptr, i32 } %324, 0
-  %.fca.1.extract.i3470 = extractvalue { ptr, ptr, ptr, i32 } %324, 1
-  %.fca.2.extract.i3471 = extractvalue { ptr, ptr, ptr, i32 } %324, 2
-  %hash_coef_ptr.i.i168.i3472 = getelementptr i8, ptr %.fca.0.extract.i3469, i64 8
-  %tbl_size_ptr.i.i169.i3473 = getelementptr i8, ptr %.fca.0.extract.i3469, i64 16
-  %offset_tbl_ptr.i.i170.i3474 = getelementptr i8, ptr %.fca.0.extract.i3469, i64 40
+  %.fca.0.extract.i3468 = extractvalue { ptr, ptr, ptr, i32 } %324, 0
+  %.fca.1.extract.i3469 = extractvalue { ptr, ptr, ptr, i32 } %324, 1
+  %.fca.2.extract.i3470 = extractvalue { ptr, ptr, ptr, i32 } %324, 2
+  %hash_coef_ptr.i.i168.i3471 = getelementptr i8, ptr %.fca.0.extract.i3468, i64 8
+  %tbl_size_ptr.i.i169.i3472 = getelementptr i8, ptr %.fca.0.extract.i3468, i64 16
+  %offset_tbl_ptr.i.i170.i3473 = getelementptr i8, ptr %.fca.0.extract.i3468, i64 40
   %325 = call ptr @llvm.invariant.start.p0(i64 408, ptr nonnull @MapIterable2)
   %326 = call ptr @llvm.invariant.start.p0(i64 88, ptr nonnull @MapIterator2)
-  %hash_coef.i.i44.i3737 = load i64, ptr %hash_coef_ptr.i.i168.i3472, align 4
-  %tbl_size.i.i45.i3738 = load i64, ptr %tbl_size_ptr.i.i169.i3473, align 4
-  %offset_tbl.i.i46.i3739 = load ptr, ptr %offset_tbl_ptr.i.i170.i3474, align 8
-  %product.i.i.i47.i3740 = mul i64 %hash_coef.i.i44.i3737, 4189192806087951739
-  %shifted.i.i.i48.i3741 = lshr i64 %product.i.i.i47.i3740, 32
-  %xored.i.i.i49.i3742 = xor i64 %shifted.i.i.i48.i3741, %product.i.i.i47.i3740
-  %hash.i.i.i50.i3743 = and i64 %xored.i.i.i49.i3742, %tbl_size.i.i45.i3738
-  %offset_ptr.i.i51.i3744 = getelementptr i32, ptr %offset_tbl.i.i46.i3739, i64 %hash.i.i.i50.i3743
-  %offset.i.i52.i3745 = load i32, ptr %offset_ptr.i.i51.i3744, align 4
+  %hash_coef.i.i44.i3736 = load i64, ptr %hash_coef_ptr.i.i168.i3471, align 4
+  %tbl_size.i.i45.i3737 = load i64, ptr %tbl_size_ptr.i.i169.i3472, align 4
+  %offset_tbl.i.i46.i3738 = load ptr, ptr %offset_tbl_ptr.i.i170.i3473, align 8
+  %product.i.i.i47.i3739 = mul i64 %hash_coef.i.i44.i3736, 4189192806087951739
+  %shifted.i.i.i48.i3740 = lshr i64 %product.i.i.i47.i3739, 32
+  %xored.i.i.i49.i3741 = xor i64 %shifted.i.i.i48.i3740, %product.i.i.i47.i3739
+  %hash.i.i.i50.i3742 = and i64 %xored.i.i.i49.i3741, %tbl_size.i.i45.i3737
+  %offset_ptr.i.i51.i3743 = getelementptr i32, ptr %offset_tbl.i.i46.i3738, i64 %hash.i.i.i50.i3742
+  %offset.i.i52.i3744 = load i32, ptr %offset_ptr.i.i51.i3743, align 4
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   %327 = call ptr @llvm.invariant.start.p0(i64 408, ptr nonnull @MapIterable2)
   %328 = call ptr @llvm.invariant.start.p0(i64 88, ptr nonnull @MapIterator2)
@@ -8248,45 +8237,45 @@ ArrayIterator_next_.exit2765:                     ; preds = %MapIterator2_next_.
   %338 = load ptr, ptr %337, align 8
   %339 = getelementptr i8, ptr %337, i64 8
   %340 = load i160, ptr %339, align 4
-  %.sroa.3.8.insert.ext.i3409 = and i160 %340, 340282366920938463463374607431768211455
+  %.sroa.3.8.insert.ext.i3408 = and i160 %340, 340282366920938463463374607431768211455
   br label %ArrayIterator_next_.exit
 
 ArrayIterator_next_.exit:                         ; preds = %.critedge.sink.split.sink.split.sink.split, %334
   %341 = phi i32 [ 1, %334 ], [ 0, %.critedge.sink.split.sink.split.sink.split ]
   %.reg2mem5.sroa.0.0.i = phi ptr [ %338, %334 ], [ @nil_typ, %.critedge.sink.split.sink.split.sink.split ]
-  %.reg2mem5.sroa.3.0.i = phi i160 [ %.sroa.3.8.insert.ext.i3409, %334 ], [ 0, %.critedge.sink.split.sink.split.sink.split ]
+  %.reg2mem5.sroa.3.0.i = phi i160 [ %.sroa.3.8.insert.ext.i3408, %334 ], [ 0, %.critedge.sink.split.sink.split.sink.split ]
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   %342 = call ptr @llvm.invariant.start.p0(i64 96, ptr nonnull @ZipIterator2)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %343 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract.i3469, 0
-  %344 = insertvalue { ptr, ptr, ptr, i32 } %343, ptr %.fca.1.extract.i3470, 1
-  %345 = insertvalue { ptr, ptr, ptr, i32 } %344, ptr %.fca.2.extract.i3471, 2
-  %346 = insertvalue { ptr, ptr, ptr, i32 } %345, i32 %offset.i.i52.i3745, 3
+  %343 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract.i3468, 0
+  %344 = insertvalue { ptr, ptr, ptr, i32 } %343, ptr %.fca.1.extract.i3469, 1
+  %345 = insertvalue { ptr, ptr, ptr, i32 } %344, ptr %.fca.2.extract.i3470, 2
+  %346 = insertvalue { ptr, ptr, ptr, i32 } %345, i32 %offset.i.i52.i3744, 3
   %347 = call ptr @llvm.invariant.start.p0(i64 88, ptr nonnull @MapIterator2)
   %348 = call ptr @llvm.invariant.start.p0(i64 0, ptr nonnull %0)
-  %349 = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %.fca.0.extract.i3469)
-  %350 = sext i32 %offset.i.i52.i3745 to i64
-  %351 = getelementptr ptr, ptr %.fca.0.extract.i3469, i64 %350
+  %349 = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %.fca.0.extract.i3468)
+  %350 = sext i32 %offset.i.i52.i3744 to i64
+  %351 = getelementptr ptr, ptr %.fca.0.extract.i3468, i64 %350
   %352 = getelementptr i8, ptr %351, i64 8
   %353 = load ptr, ptr %352, align 8
   %354 = call ptr %353({ ptr, ptr, ptr, i32 } %346, ptr nonnull %0)
   %355 = call { ptr, i160 } %354({ ptr, ptr, ptr, i32 } %346, { ptr, ptr, ptr, i32 } %346, ptr nonnull %0)
-  %.fca.0.extract2.i3759 = extractvalue { ptr, i160 } %355, 0
-  %356 = icmp ne ptr %.fca.0.extract2.i3759, @nil_typ
-  %357 = icmp ne ptr %.fca.0.extract2.i3759, null
+  %.fca.0.extract2.i3758 = extractvalue { ptr, i160 } %355, 0
+  %356 = icmp ne ptr %.fca.0.extract2.i3758, @nil_typ
+  %357 = icmp ne ptr %.fca.0.extract2.i3758, null
   %.not57.i = and i1 %356, %357
-  br i1 %.not57.i, label %MapIterator2_next_.exit3766, label %MapIterator2_next_.exit3766.thread
+  br i1 %.not57.i, label %MapIterator2_next_.exit3765, label %MapIterator2_next_.exit3765.thread
 
-MapIterator2_next_.exit3766.thread:               ; preds = %ArrayIterator_next_.exit
+MapIterator2_next_.exit3765.thread:               ; preds = %ArrayIterator_next_.exit
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   br label %MapIterator2_next_.exit.thread
 
-MapIterator2_next_.exit3766:                      ; preds = %ArrayIterator_next_.exit
-  %.fca.1.extract3.i3762 = extractvalue { ptr, i160 } %355, 1
-  %hash_coef_ptr.i.i59.i = getelementptr i8, ptr %.fca.0.extract2.i3759, i64 8
-  %tbl_size_ptr.i.i60.i = getelementptr i8, ptr %.fca.0.extract2.i3759, i64 16
-  %offset_tbl_ptr.i.i61.i = getelementptr i8, ptr %.fca.0.extract2.i3759, i64 40
+MapIterator2_next_.exit3765:                      ; preds = %ArrayIterator_next_.exit
+  %.fca.1.extract3.i3761 = extractvalue { ptr, i160 } %355, 1
+  %hash_coef_ptr.i.i59.i = getelementptr i8, ptr %.fca.0.extract2.i3758, i64 8
+  %tbl_size_ptr.i.i60.i = getelementptr i8, ptr %.fca.0.extract2.i3758, i64 16
+  %offset_tbl_ptr.i.i61.i = getelementptr i8, ptr %.fca.0.extract2.i3758, i64 40
   %hash_coef.i.i62.i = load i64, ptr %hash_coef_ptr.i.i59.i, align 4
   %tbl_size.i.i63.i = load i64, ptr %tbl_size_ptr.i.i60.i, align 4
   %offset_tbl.i.i64.i = load ptr, ptr %offset_tbl_ptr.i.i61.i, align 8
@@ -8298,31 +8287,31 @@ MapIterator2_next_.exit3766:                      ; preds = %ArrayIterator_next_
   %offset.i.i70.i = load i32, ptr %offset_ptr.i.i69.i, align 4
   %.sroa.591.8.insert.ext.i = zext i32 %offset.i.i70.i to i160
   %.sroa.591.8.insert.shift.i = shl nuw i160 %.sroa.591.8.insert.ext.i, 128
-  %358 = insertvalue { ptr, i160 } undef, ptr %.fca.0.extract2.i3759, 0
-  %.sroa.3.8.insert.ext.i3763 = and i160 %.fca.1.extract3.i3762, 340282366920938463463374607431768211455
-  %.sroa.3.8.insert.insert.i = or disjoint i160 %.sroa.591.8.insert.shift.i, %.sroa.3.8.insert.ext.i3763
+  %358 = insertvalue { ptr, i160 } undef, ptr %.fca.0.extract2.i3758, 0
+  %.sroa.3.8.insert.ext.i3762 = and i160 %.fca.1.extract3.i3761, 340282366920938463463374607431768211455
+  %.sroa.3.8.insert.insert.i = or disjoint i160 %.sroa.591.8.insert.shift.i, %.sroa.3.8.insert.ext.i3762
   %359 = insertvalue { ptr, i160 } %358, i160 %.sroa.3.8.insert.insert.i, 1
   %360 = call ptr @llvm.invariant.start.p0(i64 88, ptr nonnull @MapIterator2)
   %361 = call { ptr, i160 } %300({ ptr, i160 } %359)
-  %.fca.0.extract.i3764 = extractvalue { ptr, i160 } %361, 0
-  %.fca.1.extract.i3765 = extractvalue { ptr, i160 } %361, 1
+  %.fca.0.extract.i3763 = extractvalue { ptr, i160 } %361, 0
+  %.fca.1.extract.i3764 = extractvalue { ptr, i160 } %361, 1
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
-  %362 = icmp eq ptr %.fca.0.extract.i3764, @nil_typ
-  %363 = icmp eq ptr %.fca.0.extract.i3764, null
-  %.not57.i.not3394 = or i1 %362, %363
-  br i1 %.not57.i.not3394, label %MapIterator2_next_.exit.thread, label %MapIterator2_next_.exit
+  %362 = icmp eq ptr %.fca.0.extract.i3763, @nil_typ
+  %363 = icmp eq ptr %.fca.0.extract.i3763, null
+  %.not57.i.not3393 = or i1 %362, %363
+  br i1 %.not57.i.not3393, label %MapIterator2_next_.exit.thread, label %MapIterator2_next_.exit
 
-MapIterator2_next_.exit.thread:                   ; preds = %MapIterator2_next_.exit3766.thread, %MapIterator2_next_.exit3766
+MapIterator2_next_.exit.thread:                   ; preds = %MapIterator2_next_.exit3765.thread, %MapIterator2_next_.exit3765
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   br label %ZipIterator2_next_.exit.thread
 
-MapIterator2_next_.exit:                          ; preds = %MapIterator2_next_.exit3766
+MapIterator2_next_.exit:                          ; preds = %MapIterator2_next_.exit3765
   %364 = call ptr @llvm.invariant.start.p0(i64 88, ptr nonnull @MapIterator2)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   %365 = icmp eq ptr %.reg2mem5.sroa.0.0.i, @nil_typ
   %366 = icmp eq ptr %.reg2mem5.sroa.0.0.i, null
-  %.not136.i.not3392 = or i1 %365, %366
-  br i1 %.not136.i.not3392, label %ZipIterator2_next_.exit.thread, label %._crit_edge2.lr.ph
+  %.not136.i.not3391 = or i1 %365, %366
+  br i1 %.not136.i.not3391, label %ZipIterator2_next_.exit.thread, label %._crit_edge2.lr.ph
 
 ZipIterator2_next_.exit.thread:                   ; preds = %MapIterator2_next_.exit.thread, %MapIterator2_next_.exit
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
@@ -8330,23 +8319,23 @@ ZipIterator2_next_.exit.thread:                   ; preds = %MapIterator2_next_.
   br label %IO_B__Self_print_xRepresentable__Self_print_xPtri8__Self_print_xPtrf64__Self_print_xCharacter__Self_print_xPtri1__Self_print_xPtri64__Self_print_xNil__Self_print_xString__Self_print_xPtri32.exit1020
 
 ._crit_edge2.lr.ph:                               ; preds = %MapIterator2_next_.exit
-  %.sroa.1.8.extract.trunc.i3385 = trunc i160 %.fca.1.extract.i3765 to i32
-  %367 = sitofp i32 %.sroa.1.8.extract.trunc.i3385 to double
+  %.sroa.1.8.extract.trunc.i3384 = trunc i160 %.fca.1.extract.i3764 to i32
+  %367 = sitofp i32 %.sroa.1.8.extract.trunc.i3384 to double
   %368 = bitcast double %367 to i64
   %.sroa.3.8.insert.ext.i = zext i64 %368 to i160
   %offset_tbl_ptr.i.i144.i = getelementptr i8, ptr %.reg2mem5.sroa.0.0.i, i64 40
   %hash_coef_ptr.i.i142.i = getelementptr i8, ptr %.reg2mem5.sroa.0.0.i, i64 8
   %tbl_size_ptr.i.i143.i = getelementptr i8, ptr %.reg2mem5.sroa.0.0.i, i64 16
-  %result.i.i2968 = call noalias dereferenceable_or_null(80) ptr @bump_malloc_inner(i64 noundef 80, ptr nonnull @current_ptr) #24
+  %result.i.i2967 = call noalias dereferenceable_or_null(80) ptr @bump_malloc_inner(i64 noundef 80, ptr nonnull @current_ptr) #24
   %369 = getelementptr inbounds i8, ptr %2, i64 8
   %370 = getelementptr inbounds i8, ptr %2, i64 24
   store ptr @Pair, ptr %2, align 8
-  store ptr %result.i.i2968, ptr %369, align 8
+  store ptr %result.i.i2967, ptr %369, align 8
   store i32 7, ptr %370, align 8
   %371 = call ptr @llvm.invariant.start.p0(i64 16, ptr nonnull %2)
-  %372 = getelementptr i8, ptr %result.i.i2968, i64 64
+  %372 = getelementptr i8, ptr %result.i.i2967, i64 64
   store ptr %82, ptr %372, align 8
-  %373 = getelementptr i8, ptr %result.i.i2968, i64 72
+  %373 = getelementptr i8, ptr %result.i.i2967, i64 72
   store ptr @_parameterization_Ptri32, ptr %373, align 8
   %374 = call ptr @llvm.invariant.start.p0(i64 4, ptr nonnull %372)
   %375 = call ptr @llvm.invariant.start.p0(i64 96, ptr nonnull @ZipIterator2)
@@ -8360,15 +8349,15 @@ ZipIterator2_next_.exit.thread:                   ; preds = %MapIterator2_next_.
   %hash.i.i.i47.i.i = and i64 %xored.i.i.i46.i.i, %tbl_size.i.i42.i.i
   %offset_ptr.i.i48.i.i = getelementptr i32, ptr %offset_tbl.i.i43.i.i, i64 %hash.i.i.i47.i.i
   %offset.i.i49.i.i = load i32, ptr %offset_ptr.i.i48.i.i, align 4
-  store ptr %.reg2mem5.sroa.0.0.i, ptr %result.i.i2968, align 8
-  %377 = getelementptr i8, ptr %result.i.i2968, i64 8
+  store ptr %.reg2mem5.sroa.0.0.i, ptr %result.i.i2967, align 8
+  %377 = getelementptr i8, ptr %result.i.i2967, i64 8
   %.sroa.591.8.insert.ext.i.i = zext i32 %offset.i.i49.i.i to i160
   %.sroa.591.8.insert.shift.i.i = shl nuw i160 %.sroa.591.8.insert.ext.i.i, 128
   %.sroa.3.8.insert.insert90.i.i = or disjoint i160 %.sroa.591.8.insert.shift.i.i, %.reg2mem5.sroa.3.0.i
   store i160 %.sroa.3.8.insert.insert90.i.i, ptr %377, align 4
-  %378 = getelementptr i8, ptr %result.i.i2968, i64 32
+  %378 = getelementptr i8, ptr %result.i.i2967, i64 32
   store ptr @f64_typ, ptr %378, align 8
-  %379 = getelementptr i8, ptr %result.i.i2968, i64 40
+  %379 = getelementptr i8, ptr %result.i.i2967, i64 40
   %.sroa.3.8.insert.insert.i.i = or disjoint i160 %.sroa.3.8.insert.ext.i, 2381976568446569244243622252022377480192
   store i160 %.sroa.3.8.insert.insert.i.i, ptr %379, align 4
   %380 = load i160, ptr %369, align 8
@@ -8382,21 +8371,21 @@ ZipIterator2_next_.exit.thread:                   ; preds = %MapIterator2_next_.
   %385 = call ptr @llvm.invariant.start.p0(i64 80, ptr nonnull @IO)
   br label %._crit_edge2
 
-._crit_edge2:                                     ; preds = %ZipIterator2_next_.exit3024, %._crit_edge2.lr.ph
-  %386 = phi i32 [ %341, %._crit_edge2.lr.ph ], [ %412, %ZipIterator2_next_.exit3024 ]
-  %.pn3031.off0 = phi i64 [ %extract.t, %._crit_edge2.lr.ph ], [ %extract.t3032, %ZipIterator2_next_.exit3024 ]
-  %387 = inttoptr i64 %.pn3031.off0 to ptr
+._crit_edge2:                                     ; preds = %ZipIterator2_next_.exit3023, %._crit_edge2.lr.ph
+  %386 = phi i32 [ %341, %._crit_edge2.lr.ph ], [ %412, %ZipIterator2_next_.exit3023 ]
+  %.pn3030.off0 = phi i64 [ %extract.t, %._crit_edge2.lr.ph ], [ %extract.t3031, %ZipIterator2_next_.exit3023 ]
+  %387 = inttoptr i64 %.pn3030.off0 to ptr
   %388 = getelementptr i8, ptr %387, i64 8
   %389 = load i160, ptr %388, align 4
-  %.sroa.1.8.extract.trunc.i1364 = trunc i160 %389 to i32
-  %390 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @i32_string, i32 %.sroa.1.8.extract.trunc.i1364)
+  %.sroa.1.8.extract.trunc.i1363 = trunc i160 %389 to i32
+  %390 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @i32_string, i32 %.sroa.1.8.extract.trunc.i1363)
   %391 = call ptr @llvm.invariant.start.p0(i64 0, ptr nonnull %0)
   %392 = call ptr @llvm.invariant.start.p0(i64 80, ptr nonnull @Pair)
   %393 = getelementptr i8, ptr %387, i64 40
   %394 = load i160, ptr %393, align 4
   %395 = call ptr @llvm.invariant.start.p0(i64 80, ptr nonnull @IO)
-  %.sroa.1.8.extract.trunc.i1366 = trunc i160 %394 to i64
-  %396 = bitcast i64 %.sroa.1.8.extract.trunc.i1366 to double
+  %.sroa.1.8.extract.trunc.i1365 = trunc i160 %394 to i64
+  %396 = bitcast i64 %.sroa.1.8.extract.trunc.i1365 to double
   %397 = call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @float_string, double %396)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 32, ptr nonnull %1)
@@ -8405,8 +8394,8 @@ ZipIterator2_next_.exit.thread:                   ; preds = %MapIterator2_next_.
   %399 = call ptr @llvm.invariant.start.p0(i64 80, ptr nonnull @ArrayIterator)
   %400 = call ptr @llvm.invariant.start.p0(i64 552, ptr nonnull @Array)
   %401 = load i32, ptr %14, align 4
-  %.not.i3276 = icmp slt i32 %386, %401
-  br i1 %.not.i3276, label %402, label %ArrayIterator_next_.exit3299
+  %.not.i3275 = icmp slt i32 %386, %401
+  br i1 %.not.i3275, label %402, label %ArrayIterator_next_.exit3298
 
 402:                                              ; preds = %._crit_edge2
   %403 = add nsw i32 %386, 1
@@ -8419,128 +8408,128 @@ ZipIterator2_next_.exit.thread:                   ; preds = %MapIterator2_next_.
   %409 = load ptr, ptr %408, align 8
   %410 = getelementptr i8, ptr %408, i64 8
   %411 = load i160, ptr %410, align 4
-  %.sroa.3.8.insert.ext.i3452 = and i160 %411, 340282366920938463463374607431768211455
-  br label %ArrayIterator_next_.exit3299
+  %.sroa.3.8.insert.ext.i3451 = and i160 %411, 340282366920938463463374607431768211455
+  br label %ArrayIterator_next_.exit3298
 
-ArrayIterator_next_.exit3299:                     ; preds = %._crit_edge2, %402
+ArrayIterator_next_.exit3298:                     ; preds = %._crit_edge2, %402
   %412 = phi i32 [ %403, %402 ], [ %386, %._crit_edge2 ]
-  %.reg2mem5.sroa.0.0.i3277 = phi ptr [ %409, %402 ], [ @nil_typ, %._crit_edge2 ]
-  %.reg2mem5.sroa.3.0.i3278 = phi i160 [ %.sroa.3.8.insert.ext.i3452, %402 ], [ 0, %._crit_edge2 ]
+  %.reg2mem5.sroa.0.0.i3276 = phi ptr [ %409, %402 ], [ @nil_typ, %._crit_edge2 ]
+  %.reg2mem5.sroa.3.0.i3277 = phi i160 [ %.sroa.3.8.insert.ext.i3451, %402 ], [ 0, %._crit_edge2 ]
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   %413 = call ptr @llvm.invariant.start.p0(i64 96, ptr nonnull @ZipIterator2)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   %414 = call ptr @llvm.invariant.start.p0(i64 88, ptr nonnull @MapIterator2)
   %415 = call ptr @llvm.invariant.start.p0(i64 0, ptr nonnull %0)
-  %416 = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %.fca.0.extract.i3469)
+  %416 = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %.fca.0.extract.i3468)
   %417 = load ptr, ptr %352, align 8
   %418 = call ptr %417({ ptr, ptr, ptr, i32 } %346, ptr nonnull %0)
   %419 = call { ptr, i160 } %418({ ptr, ptr, ptr, i32 } %346, { ptr, ptr, ptr, i32 } %346, ptr nonnull %0)
-  %.fca.0.extract2.i3780 = extractvalue { ptr, i160 } %419, 0
-  %420 = icmp ne ptr %.fca.0.extract2.i3780, @nil_typ
-  %421 = icmp ne ptr %.fca.0.extract2.i3780, null
-  %.not57.i3781 = and i1 %420, %421
-  br i1 %.not57.i3781, label %MapIterator2_next_.exit3805, label %MapIterator2_next_.exit3805.thread
+  %.fca.0.extract2.i3779 = extractvalue { ptr, i160 } %419, 0
+  %420 = icmp ne ptr %.fca.0.extract2.i3779, @nil_typ
+  %421 = icmp ne ptr %.fca.0.extract2.i3779, null
+  %.not57.i3780 = and i1 %420, %421
+  br i1 %.not57.i3780, label %MapIterator2_next_.exit3804, label %MapIterator2_next_.exit3804.thread
 
-MapIterator2_next_.exit3805.thread:               ; preds = %ArrayIterator_next_.exit3299
+MapIterator2_next_.exit3804.thread:               ; preds = %ArrayIterator_next_.exit3298
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
-  br label %MapIterator2_next_.exit3338.thread
+  br label %MapIterator2_next_.exit3337.thread
 
-MapIterator2_next_.exit3805:                      ; preds = %ArrayIterator_next_.exit3299
-  %.fca.1.extract3.i3786 = extractvalue { ptr, i160 } %419, 1
-  %hash_coef_ptr.i.i59.i3787 = getelementptr i8, ptr %.fca.0.extract2.i3780, i64 8
-  %tbl_size_ptr.i.i60.i3788 = getelementptr i8, ptr %.fca.0.extract2.i3780, i64 16
-  %offset_tbl_ptr.i.i61.i3789 = getelementptr i8, ptr %.fca.0.extract2.i3780, i64 40
-  %hash_coef.i.i62.i3790 = load i64, ptr %hash_coef_ptr.i.i59.i3787, align 4
-  %tbl_size.i.i63.i3791 = load i64, ptr %tbl_size_ptr.i.i60.i3788, align 4
-  %offset_tbl.i.i64.i3792 = load ptr, ptr %offset_tbl_ptr.i.i61.i3789, align 8
-  %product.i.i.i65.i3793 = mul i64 %hash_coef.i.i62.i3790, 3282773614056351330
-  %shifted.i.i.i66.i3794 = lshr i64 %product.i.i.i65.i3793, 32
-  %xored.i.i.i67.i3795 = xor i64 %shifted.i.i.i66.i3794, %product.i.i.i65.i3793
-  %hash.i.i.i68.i3796 = and i64 %xored.i.i.i67.i3795, %tbl_size.i.i63.i3791
-  %offset_ptr.i.i69.i3797 = getelementptr i32, ptr %offset_tbl.i.i64.i3792, i64 %hash.i.i.i68.i3796
-  %offset.i.i70.i3798 = load i32, ptr %offset_ptr.i.i69.i3797, align 4
-  %.sroa.591.8.insert.ext.i3799 = zext i32 %offset.i.i70.i3798 to i160
-  %.sroa.591.8.insert.shift.i3800 = shl nuw i160 %.sroa.591.8.insert.ext.i3799, 128
-  %422 = insertvalue { ptr, i160 } undef, ptr %.fca.0.extract2.i3780, 0
-  %.sroa.3.8.insert.ext.i3801 = and i160 %.fca.1.extract3.i3786, 340282366920938463463374607431768211455
-  %.sroa.3.8.insert.insert.i3802 = or disjoint i160 %.sroa.591.8.insert.shift.i3800, %.sroa.3.8.insert.ext.i3801
-  %423 = insertvalue { ptr, i160 } %422, i160 %.sroa.3.8.insert.insert.i3802, 1
+MapIterator2_next_.exit3804:                      ; preds = %ArrayIterator_next_.exit3298
+  %.fca.1.extract3.i3785 = extractvalue { ptr, i160 } %419, 1
+  %hash_coef_ptr.i.i59.i3786 = getelementptr i8, ptr %.fca.0.extract2.i3779, i64 8
+  %tbl_size_ptr.i.i60.i3787 = getelementptr i8, ptr %.fca.0.extract2.i3779, i64 16
+  %offset_tbl_ptr.i.i61.i3788 = getelementptr i8, ptr %.fca.0.extract2.i3779, i64 40
+  %hash_coef.i.i62.i3789 = load i64, ptr %hash_coef_ptr.i.i59.i3786, align 4
+  %tbl_size.i.i63.i3790 = load i64, ptr %tbl_size_ptr.i.i60.i3787, align 4
+  %offset_tbl.i.i64.i3791 = load ptr, ptr %offset_tbl_ptr.i.i61.i3788, align 8
+  %product.i.i.i65.i3792 = mul i64 %hash_coef.i.i62.i3789, 3282773614056351330
+  %shifted.i.i.i66.i3793 = lshr i64 %product.i.i.i65.i3792, 32
+  %xored.i.i.i67.i3794 = xor i64 %shifted.i.i.i66.i3793, %product.i.i.i65.i3792
+  %hash.i.i.i68.i3795 = and i64 %xored.i.i.i67.i3794, %tbl_size.i.i63.i3790
+  %offset_ptr.i.i69.i3796 = getelementptr i32, ptr %offset_tbl.i.i64.i3791, i64 %hash.i.i.i68.i3795
+  %offset.i.i70.i3797 = load i32, ptr %offset_ptr.i.i69.i3796, align 4
+  %.sroa.591.8.insert.ext.i3798 = zext i32 %offset.i.i70.i3797 to i160
+  %.sroa.591.8.insert.shift.i3799 = shl nuw i160 %.sroa.591.8.insert.ext.i3798, 128
+  %422 = insertvalue { ptr, i160 } undef, ptr %.fca.0.extract2.i3779, 0
+  %.sroa.3.8.insert.ext.i3800 = and i160 %.fca.1.extract3.i3785, 340282366920938463463374607431768211455
+  %.sroa.3.8.insert.insert.i3801 = or disjoint i160 %.sroa.591.8.insert.shift.i3799, %.sroa.3.8.insert.ext.i3800
+  %423 = insertvalue { ptr, i160 } %422, i160 %.sroa.3.8.insert.insert.i3801, 1
   %424 = call ptr @llvm.invariant.start.p0(i64 88, ptr nonnull @MapIterator2)
   %425 = call { ptr, i160 } %300({ ptr, i160 } %423)
-  %.fca.0.extract.i3803 = extractvalue { ptr, i160 } %425, 0
-  %.fca.1.extract.i3804 = extractvalue { ptr, i160 } %425, 1
+  %.fca.0.extract.i3802 = extractvalue { ptr, i160 } %425, 0
+  %.fca.1.extract.i3803 = extractvalue { ptr, i160 } %425, 1
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
-  %426 = icmp eq ptr %.fca.0.extract.i3803, @nil_typ
-  %427 = icmp eq ptr %.fca.0.extract.i3803, null
-  %.not57.i3314.not3398 = or i1 %426, %427
-  br i1 %.not57.i3314.not3398, label %MapIterator2_next_.exit3338.thread, label %MapIterator2_next_.exit3338
+  %426 = icmp eq ptr %.fca.0.extract.i3802, @nil_typ
+  %427 = icmp eq ptr %.fca.0.extract.i3802, null
+  %.not57.i3313.not3397 = or i1 %426, %427
+  br i1 %.not57.i3313.not3397, label %MapIterator2_next_.exit3337.thread, label %MapIterator2_next_.exit3337
 
-MapIterator2_next_.exit3338.thread:               ; preds = %MapIterator2_next_.exit3805, %MapIterator2_next_.exit3805.thread
+MapIterator2_next_.exit3337.thread:               ; preds = %MapIterator2_next_.exit3804, %MapIterator2_next_.exit3804.thread
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
-  br label %ZipIterator2_next_.exit3024.thread
+  br label %ZipIterator2_next_.exit3023.thread
 
-MapIterator2_next_.exit3338:                      ; preds = %MapIterator2_next_.exit3805
+MapIterator2_next_.exit3337:                      ; preds = %MapIterator2_next_.exit3804
   %428 = call ptr @llvm.invariant.start.p0(i64 88, ptr nonnull @MapIterator2)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
-  %429 = icmp eq ptr %.reg2mem5.sroa.0.0.i3277, @nil_typ
-  %430 = icmp eq ptr %.reg2mem5.sroa.0.0.i3277, null
-  %.not136.i2985.not3396 = or i1 %429, %430
-  br i1 %.not136.i2985.not3396, label %ZipIterator2_next_.exit3024.thread, label %ZipIterator2_next_.exit3024
+  %429 = icmp eq ptr %.reg2mem5.sroa.0.0.i3276, @nil_typ
+  %430 = icmp eq ptr %.reg2mem5.sroa.0.0.i3276, null
+  %.not136.i2984.not3395 = or i1 %429, %430
+  br i1 %.not136.i2984.not3395, label %ZipIterator2_next_.exit3023.thread, label %ZipIterator2_next_.exit3023
 
-ZipIterator2_next_.exit3024.thread:               ; preds = %MapIterator2_next_.exit3338, %MapIterator2_next_.exit3338.thread
+ZipIterator2_next_.exit3023.thread:               ; preds = %MapIterator2_next_.exit3337, %MapIterator2_next_.exit3337.thread
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.end.p0(i64 32, ptr nonnull %1)
   br label %IO_B__Self_print_xRepresentable__Self_print_xPtri8__Self_print_xPtrf64__Self_print_xCharacter__Self_print_xPtri1__Self_print_xPtri64__Self_print_xNil__Self_print_xString__Self_print_xPtri32.exit1020
 
-ZipIterator2_next_.exit3024:                      ; preds = %MapIterator2_next_.exit3338
-  %.sroa.1.8.extract.trunc.i3387 = trunc i160 %.fca.1.extract.i3804 to i32
-  %431 = sitofp i32 %.sroa.1.8.extract.trunc.i3387 to double
+ZipIterator2_next_.exit3023:                      ; preds = %MapIterator2_next_.exit3337
+  %.sroa.1.8.extract.trunc.i3386 = trunc i160 %.fca.1.extract.i3803 to i32
+  %431 = sitofp i32 %.sroa.1.8.extract.trunc.i3386 to double
   %432 = bitcast double %431 to i64
-  %.sroa.3.8.insert.ext.i3388 = zext i64 %432 to i160
-  %offset_tbl_ptr.i.i144.i2990 = getelementptr i8, ptr %.reg2mem5.sroa.0.0.i3277, i64 40
-  %hash_coef_ptr.i.i142.i2991 = getelementptr i8, ptr %.reg2mem5.sroa.0.0.i3277, i64 8
-  %tbl_size_ptr.i.i143.i2992 = getelementptr i8, ptr %.reg2mem5.sroa.0.0.i3277, i64 16
-  %result.i.i2997 = call noalias dereferenceable_or_null(80) ptr @bump_malloc_inner(i64 noundef 80, ptr nonnull @current_ptr) #24
+  %.sroa.3.8.insert.ext.i3387 = zext i64 %432 to i160
+  %offset_tbl_ptr.i.i144.i2989 = getelementptr i8, ptr %.reg2mem5.sroa.0.0.i3276, i64 40
+  %hash_coef_ptr.i.i142.i2990 = getelementptr i8, ptr %.reg2mem5.sroa.0.0.i3276, i64 8
+  %tbl_size_ptr.i.i143.i2991 = getelementptr i8, ptr %.reg2mem5.sroa.0.0.i3276, i64 16
+  %result.i.i2996 = call noalias dereferenceable_or_null(80) ptr @bump_malloc_inner(i64 noundef 80, ptr nonnull @current_ptr) #24
   store ptr @Pair, ptr %1, align 8
-  store ptr %result.i.i2997, ptr %381, align 8
+  store ptr %result.i.i2996, ptr %381, align 8
   store i32 7, ptr %382, align 8
   %433 = call ptr @llvm.invariant.start.p0(i64 16, ptr nonnull %1)
-  %434 = getelementptr i8, ptr %result.i.i2997, i64 64
+  %434 = getelementptr i8, ptr %result.i.i2996, i64 64
   store ptr %82, ptr %434, align 8
-  %435 = getelementptr i8, ptr %result.i.i2997, i64 72
+  %435 = getelementptr i8, ptr %result.i.i2996, i64 72
   store ptr @_parameterization_Ptri32, ptr %435, align 8
   %436 = call ptr @llvm.invariant.start.p0(i64 4, ptr nonnull %434)
   %437 = call ptr @llvm.invariant.start.p0(i64 96, ptr nonnull @ZipIterator2)
   %438 = call ptr @llvm.invariant.start.p0(i64 80, ptr nonnull @Pair)
-  %hash_coef.i.i41.i.i3000 = load i64, ptr %hash_coef_ptr.i.i142.i2991, align 4
-  %tbl_size.i.i42.i.i3001 = load i64, ptr %tbl_size_ptr.i.i143.i2992, align 4
-  %offset_tbl.i.i43.i.i3002 = load ptr, ptr %offset_tbl_ptr.i.i144.i2990, align 8
-  %product.i.i.i44.i.i3003 = mul i64 %hash_coef.i.i41.i.i3000, 3282773614056351330
-  %shifted.i.i.i45.i.i3004 = lshr i64 %product.i.i.i44.i.i3003, 32
-  %xored.i.i.i46.i.i3005 = xor i64 %shifted.i.i.i45.i.i3004, %product.i.i.i44.i.i3003
-  %hash.i.i.i47.i.i3006 = and i64 %xored.i.i.i46.i.i3005, %tbl_size.i.i42.i.i3001
-  %offset_ptr.i.i48.i.i3007 = getelementptr i32, ptr %offset_tbl.i.i43.i.i3002, i64 %hash.i.i.i47.i.i3006
-  %offset.i.i49.i.i3008 = load i32, ptr %offset_ptr.i.i48.i.i3007, align 4
-  store ptr %.reg2mem5.sroa.0.0.i3277, ptr %result.i.i2997, align 8
-  %439 = getelementptr i8, ptr %result.i.i2997, i64 8
-  %.sroa.591.8.insert.ext.i.i3009 = zext i32 %offset.i.i49.i.i3008 to i160
-  %.sroa.591.8.insert.shift.i.i3010 = shl nuw i160 %.sroa.591.8.insert.ext.i.i3009, 128
-  %.sroa.3.8.insert.insert90.i.i3011 = or disjoint i160 %.sroa.591.8.insert.shift.i.i3010, %.reg2mem5.sroa.3.0.i3278
-  store i160 %.sroa.3.8.insert.insert90.i.i3011, ptr %439, align 4
+  %hash_coef.i.i41.i.i2999 = load i64, ptr %hash_coef_ptr.i.i142.i2990, align 4
+  %tbl_size.i.i42.i.i3000 = load i64, ptr %tbl_size_ptr.i.i143.i2991, align 4
+  %offset_tbl.i.i43.i.i3001 = load ptr, ptr %offset_tbl_ptr.i.i144.i2989, align 8
+  %product.i.i.i44.i.i3002 = mul i64 %hash_coef.i.i41.i.i2999, 3282773614056351330
+  %shifted.i.i.i45.i.i3003 = lshr i64 %product.i.i.i44.i.i3002, 32
+  %xored.i.i.i46.i.i3004 = xor i64 %shifted.i.i.i45.i.i3003, %product.i.i.i44.i.i3002
+  %hash.i.i.i47.i.i3005 = and i64 %xored.i.i.i46.i.i3004, %tbl_size.i.i42.i.i3000
+  %offset_ptr.i.i48.i.i3006 = getelementptr i32, ptr %offset_tbl.i.i43.i.i3001, i64 %hash.i.i.i47.i.i3005
+  %offset.i.i49.i.i3007 = load i32, ptr %offset_ptr.i.i48.i.i3006, align 4
+  store ptr %.reg2mem5.sroa.0.0.i3276, ptr %result.i.i2996, align 8
+  %439 = getelementptr i8, ptr %result.i.i2996, i64 8
+  %.sroa.591.8.insert.ext.i.i3008 = zext i32 %offset.i.i49.i.i3007 to i160
+  %.sroa.591.8.insert.shift.i.i3009 = shl nuw i160 %.sroa.591.8.insert.ext.i.i3008, 128
+  %.sroa.3.8.insert.insert90.i.i3010 = or disjoint i160 %.sroa.591.8.insert.shift.i.i3009, %.reg2mem5.sroa.3.0.i3277
+  store i160 %.sroa.3.8.insert.insert90.i.i3010, ptr %439, align 4
   %440 = call ptr @llvm.invariant.start.p0(i64 80, ptr nonnull @Pair)
-  %441 = getelementptr i8, ptr %result.i.i2997, i64 32
+  %441 = getelementptr i8, ptr %result.i.i2996, i64 32
   store ptr @f64_typ, ptr %441, align 8
-  %442 = getelementptr i8, ptr %result.i.i2997, i64 40
-  %.sroa.3.8.insert.insert.i.i3023 = or disjoint i160 %.sroa.3.8.insert.ext.i3388, 2381976568446569244243622252022377480192
-  store i160 %.sroa.3.8.insert.insert.i.i3023, ptr %442, align 4
+  %442 = getelementptr i8, ptr %result.i.i2996, i64 40
+  %.sroa.3.8.insert.insert.i.i3022 = or disjoint i160 %.sroa.3.8.insert.ext.i3387, 2381976568446569244243622252022377480192
+  store i160 %.sroa.3.8.insert.insert.i.i3022, ptr %442, align 4
   %443 = load i160, ptr %381, align 8
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.end.p0(i64 32, ptr nonnull %1)
-  %extract.t3032 = trunc i160 %443 to i64
+  %extract.t3031 = trunc i160 %443 to i64
   br label %._crit_edge2
 
-IO_B__Self_print_xRepresentable__Self_print_xPtri8__Self_print_xPtrf64__Self_print_xCharacter__Self_print_xPtri1__Self_print_xPtri64__Self_print_xNil__Self_print_xString__Self_print_xPtri32.exit1020: ; preds = %ZipIterator2_next_.exit3024.thread, %ZipIterator2_next_.exit.thread
+IO_B__Self_print_xRepresentable__Self_print_xPtri8__Self_print_xPtrf64__Self_print_xCharacter__Self_print_xPtri1__Self_print_xPtri64__Self_print_xNil__Self_print_xString__Self_print_xPtri32.exit1020: ; preds = %ZipIterator2_next_.exit3023.thread, %ZipIterator2_next_.exit.thread
   %result.i898 = call noalias dereferenceable_or_null(4) ptr @bump_malloc_inner(i64 noundef 4, ptr nonnull @current_ptr) #24
   store i32 7, ptr %result.i898, align 4
   store ptr @Int32, ptr %43, align 8
@@ -8554,17 +8543,17 @@ IO_B__Self_print_xRepresentable__Self_print_xPtri8__Self_print_xPtrf64__Self_pri
   call void @llvm.lifetime.start.p0(i64 32, ptr nonnull %5)
   %.sroa.4.8.extract.trunc.i = trunc i160 %447 to i64
   %448 = inttoptr i64 %.sroa.4.8.extract.trunc.i to ptr
-  %result.i.i1438 = call noalias dereferenceable_or_null(4) ptr @bump_malloc_inner(i64 noundef 4, ptr nonnull @current_ptr) #24
+  %result.i.i1437 = call noalias dereferenceable_or_null(4) ptr @bump_malloc_inner(i64 noundef 4, ptr nonnull @current_ptr) #24
   %449 = getelementptr inbounds i8, ptr %5, i64 8
   %450 = getelementptr inbounds i8, ptr %5, i64 24
   store ptr @Int32, ptr %5, align 8
-  store ptr %result.i.i1438, ptr %449, align 8
+  store ptr %result.i.i1437, ptr %449, align 8
   store i32 7, ptr %450, align 8
   %451 = call ptr @llvm.invariant.start.p0(i64 16, ptr nonnull %5)
   %452 = call ptr @llvm.invariant.start.p0(i64 136, ptr nonnull @Int32)
   %453 = load i32, ptr %448, align 4
   %454 = add i32 %453, 5
-  store i32 %454, ptr %result.i.i1438, align 4
+  store i32 %454, ptr %result.i.i1437, align 4
   %455 = load i160, ptr %449, align 8
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.end.p0(i64 32, ptr nonnull %5)
@@ -8576,15 +8565,15 @@ IO_B__Self_print_xRepresentable__Self_print_xPtri8__Self_print_xPtrf64__Self_pri
   %459 = call ptr @llvm.invariant.start.p0(i64 136, ptr nonnull @Int32)
   %460 = load i32, ptr %457, align 4
   %461 = sitofp i32 %460 to double
-  %result.i.i1621 = call noalias dereferenceable_or_null(8) ptr @bump_malloc_inner(i64 noundef 8, ptr nonnull @current_ptr) #24
+  %result.i.i1620 = call noalias dereferenceable_or_null(8) ptr @bump_malloc_inner(i64 noundef 8, ptr nonnull @current_ptr) #24
   %462 = getelementptr inbounds i8, ptr %3, i64 8
   %463 = getelementptr inbounds i8, ptr %3, i64 24
   store ptr @Float64, ptr %3, align 8
-  store ptr %result.i.i1621, ptr %462, align 8
+  store ptr %result.i.i1620, ptr %462, align 8
   store i32 7, ptr %463, align 8
   %464 = call ptr @llvm.invariant.start.p0(i64 16, ptr nonnull %3)
   %465 = fadd double %461, 5.000000e+00
-  store double %465, ptr %result.i.i1621, align 8
+  store double %465, ptr %result.i.i1620, align 8
   %466 = load i160, ptr %462, align 8
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.end.p0(i64 32, ptr nonnull %3)
@@ -8599,14 +8588,14 @@ IO_B__Self_print_xRepresentable__Self_print_xPtri8__Self_print_xPtrf64__Self_pri
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 32, ptr nonnull %4)
   %474 = call ptr @llvm.invariant.start.p0(i64 136, ptr nonnull @Int32)
-  %result.i.i1528 = call noalias dereferenceable_or_null(8) ptr @bump_malloc_inner(i64 noundef 8, ptr nonnull @current_ptr) #24
+  %result.i.i1527 = call noalias dereferenceable_or_null(8) ptr @bump_malloc_inner(i64 noundef 8, ptr nonnull @current_ptr) #24
   %475 = getelementptr inbounds i8, ptr %4, i64 8
   %476 = getelementptr inbounds i8, ptr %4, i64 24
   store ptr @Float64, ptr %4, align 8
-  store ptr %result.i.i1528, ptr %475, align 8
+  store ptr %result.i.i1527, ptr %475, align 8
   store i32 7, ptr %476, align 8
   %477 = call ptr @llvm.invariant.start.p0(i64 16, ptr nonnull %4)
-  store double 5.100000e+01, ptr %result.i.i1528, align 8
+  store double 5.100000e+01, ptr %result.i.i1527, align 8
   %478 = load i160, ptr %475, align 8
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.end.p0(i64 32, ptr nonnull %4)

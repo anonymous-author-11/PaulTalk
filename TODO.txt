@@ -286,11 +286,30 @@ DONE:
 
 TODO:
 
+- I really want to get generics fully working first
+	- Would really like for fields to be specialized size
+	- Will make field offsets more complicated
+	- Can you make type field getters for baked-in types more immediate
+		- Seems like this action never actually occurs
+		- Type field getters only ever get unbaked types
+	- On instance creation, store a mapping from formal offsets to real offsets
+	- Or even just store the sizes of the unbaked types
+	- 8 bits per size, add to invariant section
+	- For each of the fields prior to field in question which is dynamic size
+		- Get its size from the instance, subtract from 224 for adjustment
+		- Add them all together for total adjustment
+	- Then adjust the gep with the dynamic adjustment
+	- Alignment concerns: formal types will always be 8-byte aligned
+		- But concrete types might have smaller alignment
+		- In theory we can calculate also the adjustment due to realignment
+	- Before anything we should know why FancyPair is bugged out
 - Calloc will zero freshly allocated memory
 - Implement getters
 	- Shouldn't be technically difficult
 	- Will significantly improve ergonomics
 	- Especially now with lifetime annotations
+	- May actually technically be more efficient
+	- Not needing to cast self twice
 - Will need to apply class region constraints upon downcast
 	- Do we actually?
 	- What about automatic downcast upon multi-dispatch?

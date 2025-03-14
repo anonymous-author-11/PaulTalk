@@ -542,7 +542,7 @@ class FieldIdentifier(Identifier):
         offset = IntegerAttr.from_int_and_width(field.offset, IntegerType(64))
         attr_dict = {"offset":offset, "vtable_bytes":IntegerAttr.from_int_and_width(scope.cls.vtable_size() * 8, 32)}
         ssa_val = scope.symbol_table["self"]
-        field_type = field.declaration.type(scope)
+        field_type = field.type()
         field_acc = FieldAccessOp.create(operands=[ssa_val], attributes=attr_dict, result_types=[field_type])
         scope.region.last_block.add_op(field_acc)
         return field_acc.results[0]
@@ -554,6 +554,7 @@ class FieldIdentifier(Identifier):
     def exprtype(self, scope):
         field = next(iter(field for field in scope.cls.fields() if field.declaration.name == self.name), None)
         self.ensured_field_declared(scope, field)
+        if scope.cls.name == "FancyPair": print(f"field {field.declaration.name} type is {field.type()}")
         return field.type()
 
 @dataclass
@@ -1366,7 +1367,7 @@ class MethodDef(Statement):
             body_scope.type_table[param.name] = param_type
             if "@" not in param.name: continue
             field = next(field for field in self.defining_class.fields() if field.declaration.name == param.name)
-            field_type = field.declaration.type(body_scope)
+            field_type = field.type()
             offset = IntegerAttr.from_int_and_width(field.offset, IntegerType(64))
             operands = [body_scope.symbol_table["self"]]
             attr_dict = {"offset":offset, "vtable_bytes":IntegerAttr.from_int_and_width(self.defining_class.vtable_size() * 8, 32)}
@@ -1462,10 +1463,10 @@ class MethodDef(Statement):
         #print(pretty_print_graph(G0, var_mapping0, param_names))
         G0, var_mapping0 = transform_until_stable(G0, var_mapping0, param_names)
         G1, var_mapping1 = transform_until_stable(G1, var_mapping1, param_names)
-        print(f"Transformed Points-to graph for {self.defining_class.name}.{self.name}:")
-        print(pretty_print_graph(G1, var_mapping1, param_names))
-        print(f"Transformed Annotation graph for {self.defining_class.name}.{self.name}:")
-        print(pretty_print_graph(G0, var_mapping0, param_names))
+        #print(f"Transformed Points-to graph for {self.defining_class.name}.{self.name}:")
+        #print(pretty_print_graph(G1, var_mapping1, param_names))
+        #print(f"Transformed Annotation graph for {self.defining_class.name}.{self.name}:")
+        #print(pretty_print_graph(G0, var_mapping0, param_names))
         ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
         body_scope.assign_regions(var_mapping1, param_names)
         if not ok: raise Exception(f"Line {self.info.line_number}: {comment}")
@@ -1728,10 +1729,10 @@ class ClassMethodDef(MethodDef):
         #print(pretty_print_graph(G1, var_mapping1, param_names))
         G0, var_mapping0 = transform_until_stable(G0, var_mapping0, param_names)
         G1, var_mapping1 = transform_until_stable(G1, var_mapping1, param_names)
-        print(f"Transformed points-to graph for {self.defining_class.name}.{self.name}:")
-        print(pretty_print_graph(G1, var_mapping1, param_names))
-        print(f"Annotation graph for {self.defining_class.name}.{self.name}:")
-        print(pretty_print_graph(G0, var_mapping0, param_names))
+        #print(f"Transformed points-to graph for {self.defining_class.name}.{self.name}:")
+        #print(pretty_print_graph(G1, var_mapping1, param_names))
+        #print(f"Annotation graph for {self.defining_class.name}.{self.name}:")
+        #print(pretty_print_graph(G0, var_mapping0, param_names))
         ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
         body_scope.assign_regions(var_mapping1, param_names)
         if not ok: raise Exception(f"Line {self.info.line_number}: {comment}")
@@ -2127,7 +2128,10 @@ class ClassDef(Statement):
         return [TypeFieldDecl(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), f"{self.name}_{i}", ReifiedType(), self, t) for i, t in enumerate(self.all_type_parameters())]
 
     def base_typ(self):
-        return llvm.LLVMStructType.from_type_list([field.declaration.type(self._scope).base_typ() for field in self.fields() if field.needs_storage()])
+        return llvm.LLVMStructType.from_type_list([t.base_typ() for t in self.fields_types()])
+
+    def fields_types(self):
+        return [field.type() for field in self.fields() if field.needs_storage()]
 
     def direct_supertypes(self):
         return [self._scope.simplify(t) for t in self._direct_supertypes]
