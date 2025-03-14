@@ -1,18 +1,18 @@
 
-source_filename = "CoroutinesModule"
+source_filename = "UtilsModule"
 
 !llvm.module.flags = !{!0}
 !0 = !{i32 2, !"Debug Info Version", i32 3}
 
 ; External function declarations
-declare ptr @malloc(i64)
-declare void @free(ptr)
-declare void @llvm.eh.sjlj.longjmp(ptr)
-declare ptr @llvm.stacksave()
 declare i32 @printf(ptr, ...)
 declare void @exit()
+declare ptr @malloc(i64)
+declare void @free(ptr allocptr nocapture noundef)
+declare void @llvm.eh.sjlj.longjmp(ptr) noreturn nounwind
+declare ptr @llvm.stacksave() mustprogress nocallback nofree nosync nounwind willreturn
 declare noalias ptr @VirtualAlloc(ptr, i64, i32, i32) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(1) "alloc-family"="malloc"
-declare i32 @VirtualFree(ptr, i64, i32) mustprogress nounwind willreturn allockind("free") memory(argmem: readwrite, inaccessiblemem: readwrite)
+declare i32 @VirtualFree(ptr allocptr nocapture noundef, i64, i32) mustprogress nounwind willreturn allockind("free") memory(argmem: readwrite, inaccessiblemem: readwrite)
 declare i32 @VirtualProtect(ptr, i64, i32, ptr) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
 declare void @report_exception( {ptr} )
 
@@ -29,7 +29,7 @@ declare void @report_exception( {ptr} )
 @region = internal thread_local global [8388608 x i8] zeroinitializer
 @current_ptr = internal thread_local global ptr @region
 
-define ptr @adjust_trampoline(ptr %tramp) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: read) {
+define ptr @adjust_trampoline(ptr %tramp) {
   %ret = call ptr @llvm.adjust.trampoline(ptr %tramp) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: read)
   ret ptr %ret
 }
@@ -66,7 +66,7 @@ define void @anoint_trampoline(ptr %tramp) {
 ; Function to create a new coroutine
 define ptr @coroutine_create(ptr %func, ptr %arg_passer) {
 
-  ; Allocate a new stack (8MB == 8388608 bytes) for the coroutine (and put the coroutine itself on this stack)
+  ; Reserve a new stack (8MB == 8388608 bytes) for the coroutine (and put the coroutine itself on this stack)
   %stack = call noalias ptr @VirtualAlloc(ptr null, i64 8388608, i32 12288, i32 4) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(1) "alloc-family"="malloc"
 
   ; Store the passed function pointer in the coroutine
@@ -99,7 +99,7 @@ define void @setup_landing_pad() {
   %buf_first_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 0
   %buf_second_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 1
   %buf_third_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 2
-  %sp = call ptr @llvm.stacksave()
+  %sp = call ptr @llvm.stacksave() mustprogress nocallback nofree nosync nounwind willreturn
   store ptr %sp, ptr %buf_first_word
   store ptr blockaddress(@setup_landing_pad, %landing_pad), ptr %buf_second_word
   store ptr %sp, ptr %buf_third_word
@@ -219,19 +219,19 @@ define ptr @get_current_coroutine() {
   ret ptr %current_coroutine
 }
 
-define preserve_nonecc void @context_switch(ptr %from_buf, ptr %to_buf) noinline memory(readwrite, inaccessiblemem: readwrite) {
+define preserve_nonecc void @context_switch(ptr nocapture writeonly %from_buf, ptr %to_buf) noinline nounwind memory(readwrite, inaccessiblemem: readwrite) {
   %from_buf_first_word = getelementptr [3 x ptr], ptr %from_buf, i32 0, i32 0
   %from_buf_second_word = getelementptr [3 x ptr], ptr %from_buf, i32 0, i32 1
   %from_buf_third_word = getelementptr [3 x ptr], ptr %from_buf, i32 0, i32 2
   store ptr blockaddress(@context_switch, %return_from_switch), ptr %from_buf_second_word
-  %sp = call ptr @llvm.stacksave()
+  %sp = call ptr @llvm.stacksave() mustprogress nocallback nofree nosync nounwind willreturn
   store ptr %sp, ptr %from_buf_first_word
   store ptr %sp, ptr %from_buf_third_word
   %is_first_time = call i1 @returns_one()
   br i1 %is_first_time, label %do_switch, label %return_from_switch
 
 do_switch:
-  call void @llvm.eh.sjlj.longjmp(ptr %to_buf)
+  call void @llvm.eh.sjlj.longjmp(ptr %to_buf) noreturn nounwind
   unreachable
 
 return_from_switch:
@@ -241,7 +241,7 @@ return_from_switch:
 ; Function to yield from a coroutine
 define void @coroutine_yield(ptr %current_coroutine) {
   %into_callee_buf = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %current_coroutine, i32 0, i32 1
-  call preserve_nonecc void @context_switch(ptr %into_callee_buf, ptr @into_caller_buf)
+  call preserve_nonecc void @context_switch(ptr nocapture writeonly %into_callee_buf, ptr @into_caller_buf) nounwind memory(readwrite, inaccessiblemem: readwrite)
   ret void
 }
 
@@ -255,7 +255,7 @@ define void @coroutine_call(ptr %coroutine) {
 
   ; Context switch
   %into_callee_buf = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %coroutine, i32 0, i32 1
-  call preserve_nonecc void @context_switch(ptr @into_caller_buf, ptr %into_callee_buf)
+  call preserve_nonecc void @context_switch(ptr nocapture writeonly @into_caller_buf, ptr %into_callee_buf) nounwind memory(readwrite, inaccessiblemem: readwrite)
 
   ; Restore the old globals
   store ptr %old_coroutine, ptr @current_coroutine

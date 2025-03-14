@@ -393,6 +393,9 @@ TODO:
 - If I compile with -O0 it hangs
 	- Seems to be related to loading fatptr as { ptr, i160 }
 	- Plausibly related to type legalization in llc
+	- I believe it is that i128 and above is suppsoed to be 16-bit aligned
+	- So I should move TypeParameter and union to something like { ptr, [20 x i8] }
+	- Or maybe use something janky like {ptr, i64, i64, ... (however many) ..., i[rest] }
 
 # --- Problems ---
 
@@ -449,6 +452,9 @@ TODO:
 - You could inline context switches by breaking functions into sections upon yields and calls
 	- Would require significant ingenuity but would secure your glory forever
 	- Would significantly improve optimizations across context switches
+	- Would need to manually maintain live variables across yields and calls
+	- Maybe the outlined call would have some prelude retrieving old variables?
+	- 
 - Freelist of coroutine stacks?
 	- Ring buffer LIFO stack
 	- Fixed capacity
@@ -457,7 +463,7 @@ TODO:
 	- Abstract memory regions (oh boy I'm cookin)
 		- Abstract associated regions (oh god!)
 			- Abstract bounded polymorphic associated regions (god mode)
-	- Will probbaly need to store ptrs to virtual regions in fields
+	- Will probably need to store ptrs to virtual regions in fields
 		- Wait, why? Do we actually?
 	- Unclear if boxed types will need to carry regions
 
@@ -469,7 +475,7 @@ TODO:
 		- How they are laid out
 	- Semiautomatic memory management removes some of these choices from the programmer
 		- You decide how objects are laid out, and can impose some constraints on where
-		- The compiler decides when memory must be allocated, and when it can be deallocated safely
+		- The compiler decides when memory is allocated and deallocated
 
 - Inheriting from Sentinel (or do Struct types solve this)
 - Bare 'yield();' should yield the coroutine itself?
@@ -499,11 +505,16 @@ TODO:
 	- Except that value semantics for self is immensely complicated
 	- How to pass self to virtual calls requires change
 	- Basically requires generating a struct version of the class
+	- Unclear how methods will even work
+		- When self is passed as variable, it is copied
+		- When self is passed as receiver, it is by ref
+		- Would have to box self whenever passed as variable
+	- Must be boxed to be used in place of ref version?
 - Regions
 - Generics
 	- Store type T as implicit member, use to construct instances of T
 	- No monomorphization
-	- Implicit conversion to type constraint (by default Object)
+	- Implicit conversion to type constraint (by default Any)
 	- Small buffer optimization for small struct types
 	- Variadic generics
 	- Roadmap
