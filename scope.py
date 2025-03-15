@@ -181,10 +181,9 @@ class Scope:
             offset = IntegerAttr.from_int_and_width(ambient_type_field.offset, IntegerType(64))
             local_self = [self.symbol_table["self"]]
             attr_dict = {"offset":offset, "vtable_bytes":IntegerAttr.from_int_and_width(self.cls.vtable_size() * 8, 32)}
-            field_acc = FieldAccessOp.create(operands=local_self, attributes=attr_dict, result_types=[ReifiedType()])
-            field_load = llvm.LoadOp(field_acc.results[0], llvm.LLVMPointerType.opaque())
-            self.region.last_block.add_ops([field_acc, field_load])
-            self_parameterizations.append(field_load.results[0])
+            field_acc = GetTypeFieldOp.create(operands=local_self, attributes=attr_dict, result_types=[ReifiedType()])
+            self.region.last_block.add_op(field_acc)
+            self_parameterizations.append(field_acc.results[0])
         return self_parameterizations
 
     def extract_scoped_parameterizations(self):

@@ -540,12 +540,16 @@ class FieldIdentifier(Identifier):
     def codegen(self, scope):
         field = next(iter(field for field in scope.cls.fields() if field.declaration.name == self.name))
         offset = IntegerAttr.from_int_and_width(field.offset, IntegerType(64))
-        attr_dict = {"offset":offset, "vtable_bytes":IntegerAttr.from_int_and_width(scope.cls.vtable_size() * 8, 32)}
-        ssa_val = scope.symbol_table["self"]
-        field_type = field.type()
-        field_acc = FieldAccessOp.create(operands=[ssa_val], attributes=attr_dict, result_types=[field_type])
-        scope.region.last_block.add_op(field_acc)
-        return field_acc.results[0]
+        vtable_bytes = IntegerAttr.from_int_and_width(scope.cls.vtable_size() * 8, 32)
+        original_type = field.declaration.type(scope)
+        specialized_type = field.type()
+        attr_dict = {"offset":offset, "vtable_bytes":vtable_bytes, "original_type":original_type.base_typ()}
+        self_val = scope.symbol_table["self"]
+        
+        get = GetFieldOp.create(operands=[self_val], attributes=attr_dict, result_types=[original_type])
+        cast = CastOp.make(get.results[0], original_type, specialized_type, type_id)
+        scope.region.last_block.add_ops([get, cast])
+        return cast.results[0]
 
     def ensured_field_declared(self, scope, field):
         if not field:
@@ -1370,10 +1374,13 @@ class MethodDef(Statement):
             field_type = field.type()
             offset = IntegerAttr.from_int_and_width(field.offset, IntegerType(64))
             operands = [body_scope.symbol_table["self"]]
-            attr_dict = {"offset":offset, "vtable_bytes":IntegerAttr.from_int_and_width(self.defining_class.vtable_size() * 8, 32)}
-            field_acc = FieldAccessOp.create(operands=operands, attributes=attr_dict, result_types=[field_type])
-            cast_assign = CastAssignOp.make(field_acc.results[0], body_scope.symbol_table[param.name], param_type, field_type, type_id)
-            body_block.add_ops([field_acc, cast_assign])
+            vtable_bytes = IntegerAttr.from_int_and_width(self.defining_class.vtable_size() * 8, 32)
+            original_type = field.declaration.type(body_scope)
+            attr_dict = {"offset":offset, "vtable_bytes":vtable_bytes, "original_type":original_type.base_typ()}
+            cast = CastOp.make(body_scope.symbol_table[param.name], field_type, original_type, type_id)
+            operands = [body_scope.symbol_table["self"], cast.results[0]]
+            set_field = SetFieldOp.create(operands=operands, attributes=attr_dict)
+            body_block.add_ops([cast, set_field])
 
     def overridden_methods(self):
         parents_methods = [meth for meth in self.defining_class.parents_methods() if meth.name == self.name]
@@ -2357,15 +2364,33 @@ class Field:
     declaration: FieldDecl
 
     def codegen(self, scope):
-        offset = IntegerAttr.from_int_and_width(self.offset, 32)
-        meth_name = StringAttr(self.cls.name + "_field_" + self.declaration.name.replace("@",""))
-        attr_dict = {"struct_typ":self.cls.base_typ(), "offset":offset, "meth_name":meth_name}
-        if not self.needs_storage():
-            attr_dict["id_hierarchy"] = id_hierarchy(self.declaration.type_param, [])
-            attr_dict["name_hierarchy"] = name_hierarchy(self.declaration.type_param)
-        getter = GetterDefOp.create(attributes=attr_dict)
-        toplevel_ops.append(getter)
-        scope.region.last_block.add_op(getter)
+        
+        accessor_name = StringAttr(self.cls.name + "_field_" + self.declaration.name.replace("@",""))
+        getter_name = StringAttr(self.cls.name + "_getter_" + self.declaration.name.replace("@",""))
+        setter_name = StringAttr(self.cls.name + "_setter_" + self.declaration.name.replace("@",""))
+        original_type = self.declaration.type(scope)
+        specialized = self.type()
+        struct_type = self.cls.base_typ()
+
+        if isinstance(self.declaration, TypeFieldDecl):
+            offset = IntegerAttr.from_int_and_width(self.offset, 32)
+            attr_dict = {"offset":offset, "meth_name":accessor_name}
+            if not self.needs_storage():
+                attr_dict["id_hierarchy"] = id_hierarchy(self.declaration.type_param, [])
+                attr_dict["name_hierarchy"] = name_hierarchy(self.declaration.type_param)
+            accessor = TypeAccessorDefOp.create(attributes=attr_dict)
+            toplevel_ops.append(accessor)
+            scope.region.last_block.add_op(accessor)
+            return
+
+        getter = GetterDefOp.make(getter_name, struct_type, original_type, specialized, self.offset, type_id)
+        setter = SetterDefOp.make(setter_name, struct_type, original_type, specialized, self.offset, type_id)
+
+        attr_dict = {"meth_name":accessor_name, "getter_name":getter_name, "setter_name":setter_name}
+        accessor = AccessorDefOp.create(attributes=attr_dict)
+        
+        toplevel_ops.extend([getter, setter, accessor])
+        scope.region.last_block.add_ops([getter, setter, accessor])
 
     def needs_storage(self):
         if not isinstance(self.declaration, TypeFieldDecl): return True
@@ -2423,8 +2448,10 @@ class Assignment(Statement):
 
     def codegen(self, scope):
         typ = self.value.exprtype(scope)
-        if isinstance(self.target, MethodCall) or "@" in self.target.name:
-            return InplaceAssignment(self.info, self.target, self.value).codegen(scope)
+        if isinstance(self.target, Identifier) and "@" in self.target.name:
+            return FieldAssignment(self.info, self.target, self.value).codegen(scope)
+        if isinstance(self.target, MethodCall):
+            return CallAssignment(self.info, self.target, self.value).codegen(scope)
         in_symbol_table = self.target.name in scope.symbol_table
         should_reassign = in_symbol_table and scope.subtype(typ,scope.type_table[self.target.name])
         if should_reassign: return Reassignment(self.info, self.target, self.value).codegen(scope)
@@ -2439,8 +2466,10 @@ class Assignment(Statement):
         if not value_type or value_type == llvm.LLVMVoidType():
             raise Exception(f"Line {self.info.line_number}: Assignment impossible: right hand side expression does not return anything.")
         scope.points_to_facts.add((self.target.info.id, "==", self.value.info.id))
-        if isinstance(self.target, MethodCall) or isinstance(self.target, Identifier) and "@" in self.target.name:
-            return InplaceAssignment(self.info, self.target, self.value).typeflow(scope)
+        if isinstance(self.target, Identifier) and "@" in self.target.name:
+            return FieldAssignment(self.info, self.target, self.value).typeflow(scope)
+        if isinstance(self.target, MethodCall):
+            return CallAssignment(self.info, self.target, self.value).typeflow(scope)
         if(not isinstance(self.target, Identifier)):
             raise Exception(f"Line {self.info.line_number}: lhs in assignment is not an identifier!")
         if self.target.name[0].isupper():
@@ -2471,7 +2500,38 @@ class Reassignment(Assignment):
         scope.region.last_block.add_op(cast_assign)
 
 @dataclass
-class InplaceAssignment(Assignment):
+class FieldAssignment(Assignment):
+
+    def codegen(self, scope):
+        typ = self.value.exprtype(scope)
+        new_val = self.value.codegen(scope)
+        target_type = self.target.exprtype(scope)
+        field = next(iter(field for field in scope.cls.fields() if field.declaration.name == self.target.name), None)
+        field_type = field.type()
+        original_type = field.declaration.type(scope)
+        offset = IntegerAttr.from_int_and_width(field.offset, IntegerType(64))
+        vtable_bytes = IntegerAttr.from_int_and_width(scope.cls.vtable_size() * 8, 32)
+        attr_dict = {"offset":offset, "vtable_bytes":vtable_bytes, "original_type":original_type.base_typ()}
+        cast = CastOp.make(new_val, field_type, original_type, type_id)
+        operands = [scope.symbol_table["self"], cast.results[0]]
+        set_field = SetFieldOp.create(operands=operands, attributes=attr_dict)
+        scope.region.last_block.add_ops([cast, set_field])
+
+    def typeflow(self, scope):
+        typ = self.value.exprtype(scope)
+        field = next(iter(field for field in scope.cls.fields() if field.declaration.name == self.target.name), None)
+        if not field:
+            raise Exception(f"Line {self.info.line_number}: field {self.target.name} not in class {scope.cls.name}!")
+        declared_type = field.type()
+        if not scope.subtype(typ, declared_type):
+            if typ != Ptr([IntegerType(32)]) or declared_type not in [Ptr([Float64Type()]), Ptr([IntegerType(64)])]:
+                raise Exception(f"Line {self.info.line_number}: cannot assign to field {self.target.name}: {typ} is not a subtype of {declared_type}")
+        self.target.typeflow(scope)
+        scope.type_table[self.target.name] = typ
+
+
+@dataclass
+class CallAssignment(Assignment):
 
     def codegen(self, scope):
         typ = self.value.exprtype(scope)
@@ -2482,18 +2542,8 @@ class InplaceAssignment(Assignment):
 
     def typeflow(self, scope):
         typ = self.value.exprtype(scope)
-        if isinstance(self.target, MethodCall): return self.target.typeflow(scope)
-        if "@" not in self.target.name:
-            raise Exception(f"Line {self.info.line_number}: Neither a field assignment nor a method call assignment.")
-        field = next(iter(field.declaration for field in scope.cls.fields() if field.declaration.name == self.target.name), None)
-        if not field:
-            raise Exception(f"Line {self.info.line_number}: field {self.target.name} not in class {scope.cls.name}!")
-        declared_type = field.type(scope)
-        if not scope.subtype(typ, declared_type):
-            if typ != Ptr([IntegerType(32)]) or declared_type not in [Ptr([Float64Type()]), Ptr([IntegerType(64)])]:
-                raise Exception(f"Line {self.info.line_number}: cannot assign to field {self.target.name}: {typ} is not a subtype of {declared_type}")
         self.target.typeflow(scope)
-        scope.type_table[self.target.name] = typ
+        return
 
 @dataclass
 class Branch(Statement):

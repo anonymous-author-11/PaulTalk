@@ -655,7 +655,15 @@ class GetFieldOp(IRDLOperation):
     fat_ptr: Operand = operand_def(FatPtr)
     offset: IntegerAttr = attr_def(IntegerAttr)
     vtable_bytes: IntegerAttr = attr_def(IntegerAttr)
-    ret_type: TypeAttribute = attr_def(TypeAttribute)
+    original_type: TypeAttribute = attr_def(TypeAttribute)
+    result: OpResult = result_def(Ptr)
+
+@irdl_op_definition
+class GetTypeFieldOp(IRDLOperation):
+    name = "mini.get_type_field"
+    fat_ptr: Operand = operand_def(FatPtr)
+    offset: IntegerAttr = attr_def(IntegerAttr)
+    vtable_bytes: IntegerAttr = attr_def(IntegerAttr)
     result: OpResult = result_def(Ptr)
 
 @irdl_op_definition
@@ -665,6 +673,7 @@ class SetFieldOp(IRDLOperation):
     value: Operand = operand_def()
     offset: IntegerAttr = attr_def(IntegerAttr)
     vtable_bytes: IntegerAttr = attr_def(IntegerAttr)
+    original_type: TypeAttribute = attr_def(TypeAttribute)
 
 @irdl_op_definition
 class ParameterizationsArrayOp(IRDLOperation):
@@ -680,13 +689,74 @@ class ParameterizationIndexationOp(IRDLOperation):
     result: OpResult = result_def()
 
 @irdl_op_definition
-class GetterDefOp(IRDLOperation):
-    name = "mini.getter_def"
+class AccessorDefOp(IRDLOperation):
+    name = "mini.accessor_def"
     meth_name: StringAttr = attr_def(StringAttr)
-    struct_typ: TypeAttribute = attr_def(TypeAttribute)
+    getter_name: StringAttr = attr_def(StringAttr)
+    setter_name: StringAttr = attr_def(StringAttr)
+
+@irdl_op_definition
+class TypeAccessorDefOp(IRDLOperation):
+    name = "mini.type_accessor_def"
+    meth_name: StringAttr = attr_def(StringAttr)
     offset: IntegerAttr = attr_def(IntegerAttr)
     id_hierarchy: OptAttributeDef = opt_attr_def(ArrayAttr)
     name_hierarchy: OptAttributeDef = opt_attr_def(ArrayAttr)
+
+@irdl_op_definition
+class GetterDefOp(IRDLOperation):
+    name = "mini.getter_def"
+    meth_name: StringAttr = attr_def(StringAttr)
+    original_type: TypeAttribute = attr_def(TypeAttribute)
+    body: Region = region_def()
+
+    @classmethod
+    def make(cls, meth_name, struct_type, original_type, specialized_type, offset, id_fn):
+        body_block = Block([])
+        body = Region([body_block])
+        data_ptr = body.block.insert_arg(llvm.LLVMPointerType.opaque(), 0)
+        ftype = ([llvm.LLVMPointerType.opaque()], [original_type.base_typ()])
+        field = llvm.GEPOp(data_ptr, [0, offset], pointee_type=struct_type)
+        body_block.add_op(field)
+
+        if type_size(original_type.base_typ()) != type_size(specialized_type.base_typ()):
+            print(f"size of {original_type} ({type_size(original_type.base_typ())}) is not equal to size of specialized {specialized_type} ({type_size(specialized_type.base_typ())})")
+            field = CastOp.make(field.results[0], specialized_type, original_type, id_fn)
+            body_block.add_op(field)
+        
+        unwrap = UnwrapOp.create(operands=[field.results[0]], result_types=[original_type.base_typ()])
+        ret = func.Return(unwrap.results[0])
+        body_block.add_ops([unwrap, ret])
+        attr_dict = {"meth_name":meth_name, "original_type":original_type.base_typ()}
+        return GetterDefOp.create(attributes=attr_dict, regions=[body])
+
+@irdl_op_definition
+class SetterDefOp(IRDLOperation):
+    name = "mini.setter_def"
+    meth_name: StringAttr = attr_def(StringAttr)
+    original_type: TypeAttribute = attr_def(TypeAttribute)
+    body: Region = region_def()
+
+    @classmethod
+    def make(cls, meth_name, struct_type, original_type, specialized_type, offset, id_fn):
+        body_block = Block([])
+        body = Region([body_block])
+        data_ptr = body.block.insert_arg(llvm.LLVMPointerType.opaque(), 0)
+        value = body.block.insert_arg(original_type.base_typ(), 1)
+        ftype = ([llvm.LLVMPointerType.opaque(), original_type.base_typ()], [])
+        field = llvm.GEPOp(data_ptr, [0, offset], pointee_type=struct_type)
+        wrap = WrapOp.make(value, original_type)
+        body_block.add_ops([field, wrap])
+
+        if type_size(original_type.base_typ()) != type_size(specialized_type.base_typ()):
+            wrap = CastOp.make(wrap.results[0], original_type, specialized_type, id_fn)
+            body_block.add_op(wrap)
+        
+        memcpy = MemCpyOp.make(wrap.results[0], field.results[0], specialized_type.base_typ())
+        ret = func.Return()
+        body_block.add_ops([memcpy, ret])
+        attr_dict = {"meth_name":meth_name, "original_type":original_type.base_typ()}
+        return SetterDefOp.create(attributes=attr_dict, regions=[body])
 
 @irdl_op_definition
 class ArgPasserOp(IRDLOperation):

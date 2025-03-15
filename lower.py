@@ -112,6 +112,13 @@ class ThirdPass(ModulePass):
                 LowerTupleCast(),
                 LowerFuncDef(),
                 LowerGetterDef(),
+                LowerSetterDef(),
+                LowerAccessorDef(),
+                LowerTypeAccessorDef(),
+                LowerFieldAccess(),
+                LowerGetField(),
+                LowerSetField(),
+                LowerGetTypeField(),
                 LowerArgPasser(),
                 LowerBufferFiller(),
                 LowerCheckFlag(),
@@ -1733,12 +1740,63 @@ class LowerMethodCall(RewritePattern):
 class LowerGetterDef(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: GetterDefOp, rewriter: PatternRewriter):
-        body = Region([Block([])])
-        data_ptr = body.block.insert_arg(llvm.LLVMPointerType.opaque(), 0)
+        ftype = ([llvm.LLVMPointerType.opaque()], [op.original_type])
+        body = op.detach_region(op.body)
+        func_op = func.FuncOp(name=op.meth_name.data, function_type=ftype, region=body)
+        rewriter.replace_matched_op(func_op)
+
+class LowerSetterDef(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: SetterDefOp, rewriter: PatternRewriter):
+        ftype = ([llvm.LLVMPointerType.opaque(), op.original_type], [])
+        body = op.detach_region(op.body)
+        func_op = func.FuncOp(name=op.meth_name.data, function_type=ftype, region=body)
+        rewriter.replace_matched_op(func_op)
+
+class LowerAccessorDef(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: AccessorDefOp, rewriter: PatternRewriter):
+        body_block = Block([])
+        body = Region([body_block])
+        pair_type = llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque(), llvm.LLVMPointerType.opaque()])
+        pair = llvm.UndefOp(pair_type)
+        getter = AddrOfOp.from_stringattr(op.getter_name)
+        setter = AddrOfOp.from_stringattr(op.setter_name)
+        dense_ary0 = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
+        insert1 = llvm.InsertValueOp(dense_ary0, pair.results[0], getter.results[0])
+        dense_ary1 = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [1])
+        insert2 = llvm.InsertValueOp(dense_ary1, insert1.results[0], setter.results[0])
+        ret = llvm.ReturnOp.create(operands=[insert2.results[0]])
+        body.block.add_ops([getter, setter, pair, insert1, insert2, ret])
+
+        glob = GlobalOp(
+                sym_name=op.meth_name,
+                global_type=pair_type,
+                linkage=llvm.LinkageAttr("internal"),
+                constant=True
+        )
+        glob.regions = (body,)
+        body.parent = glob
+        rewriter.replace_matched_op(glob)
+
+class LowerTypeAccessorDef(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: TypeAccessorDefOp, rewriter: PatternRewriter):
+        body_block = Block([])
+        body = Region([body_block])
+        data_ptr = body_block.insert_arg(llvm.LLVMPointerType.opaque(), 0)
         ftype = ([llvm.LLVMPointerType.opaque()], [llvm.LLVMPointerType.opaque()])
-        field = ParameterizationOp.make([], op.id_hierarchy, op.name_hierarchy) if op.id_hierarchy else llvm.GEPOp(data_ptr, [0, op.offset.value.data], pointee_type=op.struct_typ)
-        ret = func.Return(field.results[0])
-        body.block.add_ops([field, ret])
+        if op.id_hierarchy:
+            return_ptr = ParameterizationOp.make([], op.id_hierarchy, op.name_hierarchy)
+            ret = func.Return(return_ptr.results[0])
+            body.block.add_ops([return_ptr, ret])
+            func_op = func.FuncOp(name=op.meth_name.data, function_type=ftype, region=body)
+            rewriter.replace_matched_op(func_op)
+            return
+        gep = llvm.GEPOp(data_ptr, [op.offset.value.data], pointee_type=llvm.LLVMPointerType.opaque())
+        load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
+        ret = func.Return(load.results[0])
+        body.block.add_ops([gep, load, ret])
         func_op = func.FuncOp(name=op.meth_name.data, function_type=ftype, region=body)
         rewriter.replace_matched_op(func_op)
 
@@ -1807,24 +1865,74 @@ class LowerFieldAccess(RewritePattern):
     def match_and_rewrite(self, op: FieldAccessOp, rewriter: PatternRewriter):
 
         fat_base = FatPtr.basic("").base_typ()
-        fat_ptr = llvm.LoadOp(op.fat_ptr, fat_base)
 
-        dense_ary_0 = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
-        dense_ary_3 = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [3])
-        vptr = llvm.ExtractValueOp(dense_ary_0, fat_ptr, llvm.LLVMPointerType.opaque())
+        vptr = llvm.LoadOp(op.fat_ptr, llvm.LLVMPointerType.opaque())
         invariant2 = InvariantOp.make(vptr.results[0], op.vtable_bytes.value.data)
-        adjustment = llvm.ExtractValueOp(dense_ary_3, fat_ptr, IntegerType(32))
+
+        adjustment_ptr = llvm.GEPOp(op.fat_ptr, [0, 3], pointee_type=fat_base)
+        adjustment = llvm.LoadOp(adjustment_ptr.results[0], IntegerType(32))
+
         offsetted = llvm.GEPOp.from_mixed_indices(vptr.results[0], [adjustment.results[0]], pointee_type=llvm.LLVMPointerType.opaque())
         fptr_ptr = llvm.GEPOp.from_mixed_indices(offsetted.results[0], [op.offset.value.data], pointee_type=llvm.LLVMPointerType.opaque())
         fptr = llvm.LoadOp(fptr_ptr.results[0], llvm.LLVMPointerType.opaque())
         
-        dense_ary_1 = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [1])
-        data_ptr = llvm.ExtractValueOp(dense_ary_1, fat_ptr.results[0], llvm.LLVMPointerType.opaque())
+        rewriter.inline_block_before_matched_op(Block([vptr, invariant2, adjustment_ptr, adjustment, offsetted, fptr_ptr]))
+        rewriter.replace_matched_op(fptr)
+
+class LowerGetField(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: GetFieldOp, rewriter: PatternRewriter):
+        fat_base = FatPtr.basic("").base_typ()
+        data_ptr_ptr = llvm.GEPOp(op.fat_ptr, [0, 1], pointee_type=fat_base)
+        data_ptr = llvm.LoadOp(data_ptr_ptr.results[0], llvm.LLVMPointerType.opaque())
+        attr_dict = {"vtable_bytes":op.vtable_bytes, "offset":op.offset}
+        pair_addr = FieldAccessOp.create(operands=[op.fat_ptr], attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
+        
+        pair_type = llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque(), llvm.LLVMPointerType.opaque()])
+        
+        getter_ptr = llvm.GEPOp(pair_addr.results[0], [0, 0], pointee_type=pair_type)
+        getter = llvm.LoadOp(getter_ptr.results[0], llvm.LLVMPointerType.opaque())
+        ftype = FunctionType.from_lists([llvm.LLVMPointerType.opaque()], [op.original_type])
+        cast1 = builtin.UnrealizedConversionCastOp.create(operands=[getter.results[0]], result_types=[ftype])
+        field = func.CallIndirect(cast1.results[0], [data_ptr.results[0]], [op.original_type])
+        wrap = WrapOp.make(field.results[0])
+        rewriter.inline_block_before_matched_op(Block([data_ptr_ptr, data_ptr, pair_addr, getter_ptr, getter, cast1, field]))
+        rewriter.replace_matched_op(wrap)
+
+class LowerGetTypeField(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: GetTypeFieldOp, rewriter: PatternRewriter):
+        fat_base = FatPtr.basic("").base_typ()
+        data_ptr_ptr = llvm.GEPOp(op.fat_ptr, [0, 1], pointee_type=fat_base)
+        data_ptr = llvm.LoadOp(data_ptr_ptr.results[0], llvm.LLVMPointerType.opaque())
+        attr_dict = {"vtable_bytes":op.vtable_bytes, "offset":op.offset}
+        accessor = FieldAccessOp.create(operands=[op.fat_ptr], attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
+        
         ftype = FunctionType.from_lists([llvm.LLVMPointerType.opaque()], [llvm.LLVMPointerType.opaque()])
-        cast = builtin.UnrealizedConversionCastOp.create(operands=[fptr.results[0]], result_types=[ftype])
-        field = func.CallIndirect(cast.results[0], [data_ptr.results[0]], [llvm.LLVMPointerType.opaque()])
-        rewriter.inline_block_before_matched_op(Block([fat_ptr, vptr, invariant2, adjustment, offsetted, fptr_ptr, fptr, cast, data_ptr]))
-        rewriter.replace_matched_op(field)
+        cast0 = builtin.UnrealizedConversionCastOp.create(operands=[accessor.results[0]], result_types=[ftype])
+        result = func.CallIndirect(cast0.results[0], [data_ptr.results[0]], [llvm.LLVMPointerType.opaque()])
+        rewriter.inline_block_before_matched_op(Block([data_ptr_ptr, data_ptr, accessor, cast0]))
+        rewriter.replace_matched_op(result)
+
+class LowerSetField(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: SetFieldOp, rewriter: PatternRewriter):
+        fat_base = FatPtr.basic("").base_typ()
+        data_ptr_ptr = llvm.GEPOp(op.fat_ptr, [0, 1], pointee_type=fat_base)
+        data_ptr = llvm.LoadOp(data_ptr_ptr.results[0], llvm.LLVMPointerType.opaque())
+        attr_dict = {"vtable_bytes":op.vtable_bytes, "offset":op.offset}
+        pair_addr = FieldAccessOp.create(operands=[op.fat_ptr], attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
+        
+        pair_type = llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque(), llvm.LLVMPointerType.opaque()])
+        
+        setter_ptr = llvm.GEPOp(pair_addr.results[0], [0, 1], pointee_type=pair_type)
+        setter = llvm.LoadOp(setter_ptr.results[0], llvm.LLVMPointerType.opaque())
+        ftype = FunctionType.from_lists([llvm.LLVMPointerType.opaque(), op.original_type], [])
+        cast1 = builtin.UnrealizedConversionCastOp.create(operands=[setter.results[0]], result_types=[ftype])
+        unwrap = UnwrapOp.create(operands=[op.value], result_types=[op.original_type])
+        set_field = func.CallIndirect(cast1.results[0], [data_ptr.results[0], unwrap.results[0]], [])
+        rewriter.inline_block_before_matched_op(Block([data_ptr_ptr, data_ptr, pair_addr, setter_ptr, setter, cast1, unwrap]))
+        rewriter.replace_matched_op(set_field)
 
 class LowerCall(RewritePattern):
     @op_type_rewrite_pattern

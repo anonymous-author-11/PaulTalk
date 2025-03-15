@@ -66,6 +66,8 @@ declare void @setup_landing_pad()
 
 declare void @anoint_trampoline(ptr)
 
+declare ptr @adjust_trampoline(ptr)
+
 declare ptr @coroutine_create(ptr, ptr)
 
 declare void @arg_passer(ptr)
@@ -231,8 +233,8 @@ define ptr @Math_B__Self_abs_xPtri32__Self_abs_xPtrf64(ptr %0, { ptr, i64 } %1) 
   %11 = load i64, ptr %7, align 4
   %12 = load ptr, ptr %8, align 8
   %13 = load ptr, ptr %9, align 8
-  %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 -2253724949814257982, i64 ptrtoint (ptr @i32_typ to i64), ptr %13)
-  %15 = select i1 %14, i32 8, i32 9
+  %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 -757315540097298781, i64 ptrtoint (ptr @f64_typ to i64), ptr %13)
+  %15 = select i1 %14, i32 9, i32 8
   br i1 %14, label %16, label %17
 
 16:                                               ; preds = %2
@@ -249,7 +251,7 @@ define ptr @Math_B__Self_abs_xPtri32__Self_abs_xPtrf64(ptr %0, { ptr, i64 } %1) 
   %25 = load i64, ptr %21, align 4
   %26 = load ptr, ptr %22, align 8
   %27 = load ptr, ptr %23, align 8
-  %28 = call i1 @subtype_test_wrapper(ptr %26, i64 %25, i64 %24, i64 -757315540097298781, i64 ptrtoint (ptr @f64_typ to i64), ptr %27)
+  %28 = call i1 @subtype_test_wrapper(ptr %26, i64 %25, i64 %24, i64 -2253724949814257982, i64 ptrtoint (ptr @i32_typ to i64), ptr %27)
   br label %29
 
 29:                                               ; preds = %16, %17
