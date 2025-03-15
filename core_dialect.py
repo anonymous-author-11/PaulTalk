@@ -1027,6 +1027,7 @@ class CastOp(IRDLOperation):
         same_type = from_typ.base_typ() == to_typ.base_typ()
         from_union = isinstance(from_typ, Union) or isinstance(from_typ, TypeParameter)
         to_union = isinstance(to_typ, Union)
+
         if same_type or (isinstance(from_typ, FatPtr) and to_union):
             return builtin.UnrealizedConversionCastOp.create(operands=[operand], result_types=[to_typ])
 

@@ -1383,7 +1383,7 @@ class MethodDef(Statement):
             vtable_bytes = IntegerAttr.from_int_and_width(self.defining_class.vtable_size() * 8, 32)
             original_type = field.declaration.type(body_scope)
             attr_dict = {"offset":offset, "vtable_bytes":vtable_bytes, "original_type":original_type.base_typ()}
-            cast = CastOp.make(body_scope.symbol_table[param.name], field_type, original_type, type_id)
+            cast = CastOp.make(body_scope.symbol_table[param.name], param_type, original_type, type_id)
             operands = [body_scope.symbol_table["self"], cast.results[0]]
             set_field = SetFieldOp.create(operands=operands, attributes=attr_dict)
             body_block.add_ops([cast, set_field])
@@ -2518,7 +2518,7 @@ class FieldAssignment(Assignment):
         offset = IntegerAttr.from_int_and_width(field.offset, IntegerType(64))
         vtable_bytes = IntegerAttr.from_int_and_width(scope.cls.vtable_size() * 8, 32)
         attr_dict = {"offset":offset, "vtable_bytes":vtable_bytes, "original_type":original_type.base_typ()}
-        cast = CastOp.make(new_val, field_type, original_type, type_id)
+        cast = CastOp.make(new_val, typ, original_type, type_id)
         operands = [scope.symbol_table["self"], cast.results[0]]
         set_field = SetFieldOp.create(operands=operands, attributes=attr_dict)
         scope.region.last_block.add_ops([cast, set_field])
@@ -2534,7 +2534,6 @@ class FieldAssignment(Assignment):
                 raise Exception(f"Line {self.info.line_number}: cannot assign to field {self.target.name}: {typ} is not a subtype of {declared_type}")
         self.target.typeflow(scope)
         scope.type_table[self.target.name] = typ
-
 
 @dataclass
 class CallAssignment(Assignment):

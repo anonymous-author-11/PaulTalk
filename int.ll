@@ -2507,6 +2507,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable_iterator_({ ptr, ptr, ptr, i32 } %0, 
   %30 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %29, ptr %30, align 8
   %31 = call ptr @llvm.invariant.start.p0(i64 16, ptr %30)
+  call void @assume_offset(ptr %30, ptr @IntIterable)
   %32 = getelementptr { ptr, ptr, ptr, i32 }, ptr %30, i32 0, i32 0
   %33 = load ptr, ptr %32, align 8
   %34 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %33, 0
@@ -2583,6 +2584,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable_iterator_({ ptr, ptr, ptr, i32 } %0, 
   %96 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %95, ptr %96, align 8
   %97 = call ptr @llvm.invariant.start.p0(i64 16, ptr %96)
+  call void @assume_offset(ptr %96, ptr @IntIterable)
   %98 = getelementptr { ptr, ptr, ptr, i32 }, ptr %96, i32 0, i32 0
   %99 = load ptr, ptr %98, align 8
   %100 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %99, 0
@@ -2971,6 +2973,7 @@ define { ptr, i32 } @MapIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   %30 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %29, ptr %30, align 8
   %31 = call ptr @llvm.invariant.start.p0(i64 16, ptr %30)
+  call void @assume_offset(ptr %30, ptr @IntIterator)
   %32 = getelementptr { ptr, ptr, ptr, i32 }, ptr %30, i32 0, i32 0
   %33 = load ptr, ptr %32, align 8
   %34 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %33, 0
@@ -3513,6 +3516,7 @@ define { ptr, ptr, ptr, i32 } @FilterIterable_iterator_({ ptr, ptr, ptr, i32 } %
   %30 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %29, ptr %30, align 8
   %31 = call ptr @llvm.invariant.start.p0(i64 16, ptr %30)
+  call void @assume_offset(ptr %30, ptr @IntIterable)
   %32 = getelementptr { ptr, ptr, ptr, i32 }, ptr %30, i32 0, i32 0
   %33 = load ptr, ptr %32, align 8
   %34 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %33, 0
@@ -3589,6 +3593,7 @@ define { ptr, ptr, ptr, i32 } @FilterIterable_iterator_({ ptr, ptr, ptr, i32 } %
   %96 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %95, ptr %96, align 8
   %97 = call ptr @llvm.invariant.start.p0(i64 16, ptr %96)
+  call void @assume_offset(ptr %96, ptr @IntIterable)
   %98 = getelementptr { ptr, ptr, ptr, i32 }, ptr %96, i32 0, i32 0
   %99 = load ptr, ptr %98, align 8
   %100 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %99, 0
@@ -3977,6 +3982,7 @@ define { ptr, i32 } @FilterIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %30 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %29, ptr %30, align 8
   %31 = call ptr @llvm.invariant.start.p0(i64 16, ptr %30)
+  call void @assume_offset(ptr %30, ptr @IntIterator)
   %32 = getelementptr { ptr, ptr, ptr, i32 }, ptr %30, i32 0, i32 0
   %33 = load ptr, ptr %32, align 8
   %34 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %33, 0
@@ -4066,6 +4072,7 @@ define { ptr, i32 } @FilterIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %104 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %103, ptr %104, align 8
   %105 = call ptr @llvm.invariant.start.p0(i64 16, ptr %104)
+  call void @assume_offset(ptr %104, ptr @IntIterator)
   %106 = getelementptr { ptr, ptr, ptr, i32 }, ptr %104, i32 0, i32 0
   %107 = load ptr, ptr %106, align 8
   %108 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %107, 0
@@ -4681,6 +4688,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable_iterator_({ ptr, ptr, ptr, i32 } %0
   %30 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %29, ptr %30, align 8
   %31 = call ptr @llvm.invariant.start.p0(i64 16, ptr %30)
+  call void @assume_offset(ptr %30, ptr @IntIterable)
   %32 = getelementptr { ptr, ptr, ptr, i32 }, ptr %30, i32 0, i32 0
   %33 = load ptr, ptr %32, align 8
   %34 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %33, 0
@@ -4738,6 +4746,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable_iterator_({ ptr, ptr, ptr, i32 } %0
   %80 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %79, ptr %80, align 8
   %81 = call ptr @llvm.invariant.start.p0(i64 16, ptr %80)
+  call void @assume_offset(ptr %80, ptr @IntIterable)
   %82 = getelementptr { ptr, ptr, ptr, i32 }, ptr %80, i32 0, i32 0
   %83 = load ptr, ptr %82, align 8
   %84 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %83, 0
@@ -4802,6 +4811,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable_iterator_({ ptr, ptr, ptr, i32 } %0
   %134 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %133, ptr %134, align 8
   %135 = call ptr @llvm.invariant.start.p0(i64 16, ptr %134)
+  call void @assume_offset(ptr %134, ptr @IntIterable)
   %136 = getelementptr { ptr, ptr, ptr, i32 }, ptr %134, i32 0, i32 0
   %137 = load ptr, ptr %136, align 8
   %138 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %137, 0
@@ -4859,6 +4869,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable_iterator_({ ptr, ptr, ptr, i32 } %0
   %184 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %183, ptr %184, align 8
   %185 = call ptr @llvm.invariant.start.p0(i64 16, ptr %184)
+  call void @assume_offset(ptr %184, ptr @IntIterable)
   %186 = getelementptr { ptr, ptr, ptr, i32 }, ptr %184, i32 0, i32 0
   %187 = load ptr, ptr %186, align 8
   %188 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %187, 0
@@ -5370,6 +5381,7 @@ define { ptr, i32 } @ChainIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
   %43 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %42, ptr %43, align 8
   %44 = call ptr @llvm.invariant.start.p0(i64 16, ptr %43)
+  call void @assume_offset(ptr %43, ptr @IntIterator)
   %45 = getelementptr { ptr, ptr, ptr, i32 }, ptr %43, i32 0, i32 0
   %46 = load ptr, ptr %45, align 8
   %47 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %46, 0
@@ -5488,6 +5500,7 @@ define { ptr, i32 } @ChainIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
   %131 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %130, ptr %131, align 8
   %132 = call ptr @llvm.invariant.start.p0(i64 16, ptr %131)
+  call void @assume_offset(ptr %131, ptr @IntIterator)
   %133 = getelementptr { ptr, ptr, ptr, i32 }, ptr %131, i32 0, i32 0
   %134 = load ptr, ptr %133, align 8
   %135 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %134, 0
@@ -6042,6 +6055,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable_iterator_({ ptr, ptr, ptr, i32
   %30 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %29, ptr %30, align 8
   %31 = call ptr @llvm.invariant.start.p0(i64 16, ptr %30)
+  call void @assume_offset(ptr %30, ptr @IntIterable)
   %32 = getelementptr { ptr, ptr, ptr, i32 }, ptr %30, i32 0, i32 0
   %33 = load ptr, ptr %32, align 8
   %34 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %33, 0
@@ -6099,6 +6113,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable_iterator_({ ptr, ptr, ptr, i32
   %80 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %79, ptr %80, align 8
   %81 = call ptr @llvm.invariant.start.p0(i64 16, ptr %80)
+  call void @assume_offset(ptr %80, ptr @IntIterable)
   %82 = getelementptr { ptr, ptr, ptr, i32 }, ptr %80, i32 0, i32 0
   %83 = load ptr, ptr %82, align 8
   %84 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %83, 0
@@ -6163,6 +6178,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable_iterator_({ ptr, ptr, ptr, i32
   %134 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %133, ptr %134, align 8
   %135 = call ptr @llvm.invariant.start.p0(i64 16, ptr %134)
+  call void @assume_offset(ptr %134, ptr @IntIterable)
   %136 = getelementptr { ptr, ptr, ptr, i32 }, ptr %134, i32 0, i32 0
   %137 = load ptr, ptr %136, align 8
   %138 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %137, 0
@@ -6220,6 +6236,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable_iterator_({ ptr, ptr, ptr, i32
   %184 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %183, ptr %184, align 8
   %185 = call ptr @llvm.invariant.start.p0(i64 16, ptr %184)
+  call void @assume_offset(ptr %184, ptr @IntIterable)
   %186 = getelementptr { ptr, ptr, ptr, i32 }, ptr %184, i32 0, i32 0
   %187 = load ptr, ptr %186, align 8
   %188 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %187, 0
@@ -6746,6 +6763,7 @@ define { ptr, i32 } @InterleaveIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %56 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %55, ptr %56, align 8
   %57 = call ptr @llvm.invariant.start.p0(i64 16, ptr %56)
+  call void @assume_offset(ptr %56, ptr @IntIterator)
   %58 = getelementptr { ptr, ptr, ptr, i32 }, ptr %56, i32 0, i32 0
   %59 = load ptr, ptr %58, align 8
   %60 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %59, 0
@@ -6807,6 +6825,7 @@ define { ptr, i32 } @InterleaveIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %111 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %110, ptr %111, align 8
   %112 = call ptr @llvm.invariant.start.p0(i64 16, ptr %111)
+  call void @assume_offset(ptr %111, ptr @IntIterator)
   %113 = getelementptr { ptr, ptr, ptr, i32 }, ptr %111, i32 0, i32 0
   %114 = load ptr, ptr %113, align 8
   %115 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %114, 0
@@ -7171,6 +7190,7 @@ define { ptr, ptr, ptr, i32 } @ZipIterable_iterator_({ ptr, ptr, ptr, i32 } %0, 
   %30 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %29, ptr %30, align 8
   %31 = call ptr @llvm.invariant.start.p0(i64 16, ptr %30)
+  call void @assume_offset(ptr %30, ptr @IntIterable)
   %32 = getelementptr { ptr, ptr, ptr, i32 }, ptr %30, i32 0, i32 0
   %33 = load ptr, ptr %32, align 8
   %34 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %33, 0
@@ -7228,6 +7248,7 @@ define { ptr, ptr, ptr, i32 } @ZipIterable_iterator_({ ptr, ptr, ptr, i32 } %0, 
   %80 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %79, ptr %80, align 8
   %81 = call ptr @llvm.invariant.start.p0(i64 16, ptr %80)
+  call void @assume_offset(ptr %80, ptr @IntIterable)
   %82 = getelementptr { ptr, ptr, ptr, i32 }, ptr %80, i32 0, i32 0
   %83 = load ptr, ptr %82, align 8
   %84 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %83, 0
@@ -7292,6 +7313,7 @@ define { ptr, ptr, ptr, i32 } @ZipIterable_iterator_({ ptr, ptr, ptr, i32 } %0, 
   %134 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %133, ptr %134, align 8
   %135 = call ptr @llvm.invariant.start.p0(i64 16, ptr %134)
+  call void @assume_offset(ptr %134, ptr @IntIterable)
   %136 = getelementptr { ptr, ptr, ptr, i32 }, ptr %134, i32 0, i32 0
   %137 = load ptr, ptr %136, align 8
   %138 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %137, 0
@@ -7349,6 +7371,7 @@ define { ptr, ptr, ptr, i32 } @ZipIterable_iterator_({ ptr, ptr, ptr, i32 } %0, 
   %184 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %183, ptr %184, align 8
   %185 = call ptr @llvm.invariant.start.p0(i64 16, ptr %184)
+  call void @assume_offset(ptr %184, ptr @IntIterable)
   %186 = getelementptr { ptr, ptr, ptr, i32 }, ptr %184, i32 0, i32 0
   %187 = load ptr, ptr %186, align 8
   %188 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %187, 0
@@ -7821,6 +7844,7 @@ define { ptr, i64 } @ZipIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   %30 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %29, ptr %30, align 8
   %31 = call ptr @llvm.invariant.start.p0(i64 16, ptr %30)
+  call void @assume_offset(ptr %30, ptr @IntIterator)
   %32 = getelementptr { ptr, ptr, ptr, i32 }, ptr %30, i32 0, i32 0
   %33 = load ptr, ptr %32, align 8
   %34 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %33, 0
@@ -7858,6 +7882,7 @@ define { ptr, i64 } @ZipIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   %65 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %64, ptr %65, align 8
   %66 = call ptr @llvm.invariant.start.p0(i64 16, ptr %65)
+  call void @assume_offset(ptr %65, ptr @IntIterator)
   %67 = getelementptr { ptr, ptr, ptr, i32 }, ptr %65, i32 0, i32 0
   %68 = load ptr, ptr %67, align 8
   %69 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %68, 0
@@ -8312,6 +8337,7 @@ define { ptr, ptr, ptr, i32 } @ProductIterable_iterator_({ ptr, ptr, ptr, i32 } 
   %30 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %29, ptr %30, align 8
   %31 = call ptr @llvm.invariant.start.p0(i64 16, ptr %30)
+  call void @assume_offset(ptr %30, ptr @IntIterable)
   %32 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 1
   %33 = load ptr, ptr %32, align 8
   %34 = load ptr, ptr %6, align 8
@@ -8327,6 +8353,7 @@ define { ptr, ptr, ptr, i32 } @ProductIterable_iterator_({ ptr, ptr, ptr, i32 } 
   %44 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %43, ptr %44, align 8
   %45 = call ptr @llvm.invariant.start.p0(i64 16, ptr %44)
+  call void @assume_offset(ptr %44, ptr @IntIterable)
   %46 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 }, { ptr, i32 } }, ptr null, i32 1) to i64))
   %47 = alloca { ptr, ptr, ptr, i32 }, align 8
   %48 = getelementptr { ptr, ptr, ptr, i32 }, ptr %47, i32 0, i32 1
@@ -8349,6 +8376,7 @@ define { ptr, ptr, ptr, i32 } @ProductIterable_iterator_({ ptr, ptr, ptr, i32 } 
   %62 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %61, ptr %62, align 8
   %63 = call ptr @llvm.invariant.start.p0(i64 16, ptr %62)
+  call void @assume_offset(ptr %62, ptr @IntIterable)
   %64 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 1
   %65 = load ptr, ptr %64, align 8
   %66 = load ptr, ptr %6, align 8
@@ -8364,6 +8392,7 @@ define { ptr, ptr, ptr, i32 } @ProductIterable_iterator_({ ptr, ptr, ptr, i32 } 
   %76 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %75, ptr %76, align 8
   %77 = call ptr @llvm.invariant.start.p0(i64 16, ptr %76)
+  call void @assume_offset(ptr %76, ptr @IntIterable)
   %78 = alloca { ptr, ptr, ptr, i32 }, align 8
   %79 = getelementptr { ptr, ptr, ptr, i32 }, ptr %62, i32 0, i32 0
   %80 = getelementptr { ptr, ptr, ptr, i32 }, ptr %78, i32 0, i32 0
@@ -8848,6 +8877,7 @@ define void @ProductIterator_init_first_iterableIntIterable_second_iterableIntIt
   %170 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %169, ptr %170, align 8
   %171 = call ptr @llvm.invariant.start.p0(i64 16, ptr %170)
+  call void @assume_offset(ptr %170, ptr @IntIterable)
   %172 = getelementptr { ptr, ptr, ptr, i32 }, ptr %170, i32 0, i32 0
   %173 = load ptr, ptr %172, align 8
   %174 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %173, 0
@@ -8946,6 +8976,7 @@ define void @ProductIterator_init_first_iterableIntIterable_second_iterableIntIt
   %255 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %254, ptr %255, align 8
   %256 = call ptr @llvm.invariant.start.p0(i64 16, ptr %255)
+  call void @assume_offset(ptr %255, ptr @IntIterator)
   %257 = getelementptr { ptr, ptr, ptr, i32 }, ptr %255, i32 0, i32 0
   %258 = load ptr, ptr %257, align 8
   %259 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %258, 0
@@ -9095,6 +9126,7 @@ define { ptr, i64 } @ProductIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %61 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %60, ptr %61, align 8
   %62 = call ptr @llvm.invariant.start.p0(i64 16, ptr %61)
+  call void @assume_offset(ptr %61, ptr @IntIterator)
   %63 = getelementptr { ptr, ptr, ptr, i32 }, ptr %61, i32 0, i32 0
   %64 = load ptr, ptr %63, align 8
   %65 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %64, 0
@@ -9154,6 +9186,7 @@ define { ptr, i64 } @ProductIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %112 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %111, ptr %112, align 8
   %113 = call ptr @llvm.invariant.start.p0(i64 16, ptr %112)
+  call void @assume_offset(ptr %112, ptr @IntIterator)
   %114 = getelementptr { ptr, ptr, ptr, i32 }, ptr %112, i32 0, i32 0
   %115 = load ptr, ptr %114, align 8
   %116 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %115, 0
@@ -9209,6 +9242,7 @@ define { ptr, i64 } @ProductIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %164 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %163, ptr %164, align 8
   %165 = call ptr @llvm.invariant.start.p0(i64 16, ptr %164)
+  call void @assume_offset(ptr %164, ptr @IntIterable)
   %166 = getelementptr { ptr, ptr, ptr, i32 }, ptr %164, i32 0, i32 0
   %167 = load ptr, ptr %166, align 8
   %168 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %167, 0

@@ -111,9 +111,7 @@ define void @setup_landing_pad() {
 landing_pad:
   %ok = call i32 @printf(ptr @string_string, ptr @exception_message)
   %cc = load { ptr }, ptr @current_coroutine
-  %cc2 = load ptr, ptr @current_coroutine
   call void @report_exception({ ptr } %cc)
-  call void @free(ptr %cc2)
   call void @exit()
   unreachable
 
@@ -213,7 +211,7 @@ trampoline:
   %current_coroutine2 = load ptr, ptr @current_coroutine
   %is_finished_ptr = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %current_coroutine2, i32 0, i32 3
   store i1 true, ptr %is_finished_ptr
-  call void @llvm.eh.sjlj.longjmp(ptr @into_caller_buf)
+  call void @llvm.eh.sjlj.longjmp(ptr @into_caller_buf) noreturn nounwind
   unreachable
 
 exit:

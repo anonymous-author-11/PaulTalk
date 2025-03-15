@@ -2,16 +2,16 @@
 source_filename = "LLVMDialectModule"
 
 @_parameterization_IntArray = linkonce_odr constant [1 x ptr] [ptr @IntArray]
-@auyeb_stdmini = internal constant [8 x i8] c"std.mini"
-@nnmbb_stdmini = internal constant [8 x i8] c"std.mini"
+@cjqqd_stdmini = internal constant [8 x i8] c"std.mini"
+@wrajb_stdmini = internal constant [8 x i8] c"std.mini"
 @_parameterization_BufferPtri32 = linkonce_odr constant [1 x ptr] [ptr @buffer_typ]
-@wgsdn_An_outofbounds_error_occurred_while_indexing_into_a_collection = internal constant [65 x i8] c"An out-of-bounds error occurred while indexing into a collection."
-@svoxk_ = internal constant [0 x i8] zeroinitializer
-@edmyc_The_indexing_argument_was = internal constant [25 x i8] c"The indexing argument was"
+@oaiuz_An_outofbounds_error_occurred_while_indexing_into_a_collection = internal constant [65 x i8] c"An out-of-bounds error occurred while indexing into a collection."
+@idjuk_ = internal constant [0 x i8] zeroinitializer
+@kfmcj_The_indexing_argument_was = internal constant [25 x i8] c"The indexing argument was"
 @_parameterization_String = linkonce_odr constant [1 x ptr] [ptr @String]
 @_parameterization_Ptri32 = linkonce_odr constant [1 x ptr] [ptr @i32_typ]
 @_parameterization_BufferPtri8 = linkonce_odr constant [1 x ptr] [ptr @buffer_typ]
-@htqks_The_size_of_the_collection_being_indexed_was = internal constant [44 x i8] c"The size of the collection being indexed was"
+@rmmih_The_size_of_the_collection_being_indexed_was = internal constant [44 x i8] c"The size of the collection being indexed was"
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
 @float_string = linkonce_odr constant [4 x i8] c"%f\0A\00"
@@ -281,7 +281,7 @@ define void @OutOfBoundsDetails_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %25 = call ptr @llvm.invariant.start.p0(i64 16, ptr %21)
   %26 = load ptr, ptr %21, align 8
   %27 = getelementptr i8, ptr %26, i64 0
-  %28 = load i352, ptr @htqks_The_size_of_the_collection_being_indexed_was, align 4
+  %28 = load i352, ptr @rmmih_The_size_of_the_collection_being_indexed_was, align 4
   store i352 %28, ptr %27, align 4
   %29 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %30 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -385,7 +385,7 @@ define void @OutOfBoundsDetails_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %108 = call ptr @llvm.invariant.start.p0(i64 16, ptr %104)
   %109 = load ptr, ptr %104, align 8
   %110 = getelementptr i8, ptr %109, i64 0
-  %111 = load i200, ptr @edmyc_The_indexing_argument_was, align 4
+  %111 = load i200, ptr @kfmcj_The_indexing_argument_was, align 4
   store i200 %111, ptr %110, align 4
   %112 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %113 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -805,7 +805,7 @@ define void @OutOfBounds_init_boundsPtri32_indexPtri32({ ptr, ptr, ptr, i32 } %0
   %160 = call ptr @llvm.invariant.start.p0(i64 16, ptr %156)
   %161 = load ptr, ptr %156, align 8
   %162 = getelementptr i8, ptr %161, i64 0
-  %163 = load i520, ptr @wgsdn_An_outofbounds_error_occurred_while_indexing_into_a_collection, align 4
+  %163 = load i520, ptr @oaiuz_An_outofbounds_error_occurred_while_indexing_into_a_collection, align 4
   store i520 %163, ptr %162, align 4
   %164 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %165 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -1041,6 +1041,7 @@ define void @OutOfBounds_print_message_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %31 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %30, ptr %31, align 8
   %32 = call ptr @llvm.invariant.start.p0(i64 16, ptr %31)
+  call void @assume_offset(ptr %31, ptr @String)
   %33 = getelementptr { ptr, i160 }, ptr %31, i32 0, i32 0
   %34 = load ptr, ptr %33, align 8
   %35 = insertvalue { ptr, i160 } undef, ptr %34, 0
@@ -2832,7 +2833,7 @@ define i32 @IntArray__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, 
   %106 = getelementptr [8 x i8], ptr null, i32 %105
   %107 = ptrtoint ptr %106 to i64
   %108 = getelementptr i8, ptr %104, i64 %107
-  %109 = load i64, ptr @nnmbb_stdmini, align 4
+  %109 = load i64, ptr @wrajb_stdmini, align 4
   store i64 %109, ptr %108, align 4
   %110 = alloca i32, align 4
   store i32 8, ptr %110, align 4
@@ -3114,7 +3115,7 @@ define i32 @IntArray__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, 
   %330 = getelementptr [8 x i8], ptr null, i32 %329
   %331 = ptrtoint ptr %330 to i64
   %332 = getelementptr i8, ptr %328, i64 %331
-  %333 = load i64, ptr @auyeb_stdmini, align 4
+  %333 = load i64, ptr @cjqqd_stdmini, align 4
   store i64 %333, ptr %332, align 4
   %334 = alloca i32, align 4
   store i32 8, ptr %334, align 4
@@ -4638,6 +4639,7 @@ define { ptr, i32 } @IntArrayIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %42 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %41, ptr %42, align 8
   %43 = call ptr @llvm.invariant.start.p0(i64 16, ptr %42)
+  call void @assume_offset(ptr %42, ptr @IntArray)
   %44 = getelementptr { ptr, ptr, ptr, i32 }, ptr %42, i32 0, i32 0
   %45 = load ptr, ptr %44, align 8
   %46 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %45, 0
@@ -4711,6 +4713,7 @@ define { ptr, i32 } @IntArrayIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %108 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %107, ptr %108, align 8
   %109 = call ptr @llvm.invariant.start.p0(i64 16, ptr %108)
+  call void @assume_offset(ptr %108, ptr @IntArray)
   %110 = getelementptr { ptr, ptr, ptr, i32 }, ptr %108, i32 0, i32 0
   %111 = load ptr, ptr %110, align 8
   %112 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %111, 0
