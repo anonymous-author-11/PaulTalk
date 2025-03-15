@@ -656,6 +656,7 @@ class GetFieldOp(IRDLOperation):
     offset: IntegerAttr = attr_def(IntegerAttr)
     vtable_bytes: IntegerAttr = attr_def(IntegerAttr)
     original_type: TypeAttribute = attr_def(TypeAttribute)
+    assumed_type: OptAttributeDef = opt_attr_def(StringAttr)
     result: OpResult = result_def(Ptr)
 
 @irdl_op_definition

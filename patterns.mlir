@@ -369,6 +369,12 @@ module @patterns {
       %set_offset_with_region = pdl.apply_native_rewrite "add_region"(%set_offset_decl : !pdl.operation) : !pdl.operation
       pdl.erase %set_offset_decl
 
+      %assume_offset = pdl.attribute = "assume_offset"
+      %func_type_attr81 = pdl.attribute = !llvm.func<void (ptr, ptr)>
+      %assume_offset_decl = pdl.operation "llvm.func" {"sym_name" = %assume_offset, "function_type" = %func_type_attr81, "linkage" = %linkage}
+      %assume_offset_with_region = pdl.apply_native_rewrite "add_region"(%assume_offset_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %assume_offset_decl
+
       %lub = pdl.attribute = "least_upper_bound"
       %func_type_attr9 = pdl.attribute = !llvm.func<i32 (ptr, ptr, ptr, i32, i64, i64, ptr)>
       %least_upper_bound_decl = pdl.operation "llvm.func" {"sym_name" = %lub, "function_type" = %func_type_attr9, "linkage" = %linkage}

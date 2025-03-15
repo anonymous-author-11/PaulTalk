@@ -84,6 +84,8 @@ declare ptr @get_current_coroutine()
 
 declare void @set_offset(ptr, ptr)
 
+declare void @assume_offset(ptr, ptr)
+
 declare i32 @least_upper_bound(ptr, ptr, ptr, i32, i64, i64, ptr)
 
 declare i1 @subtype_test(i64, i64, i64, i64, ptr)

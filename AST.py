@@ -546,7 +546,13 @@ class FieldIdentifier(Identifier):
         attr_dict = {"offset":offset, "vtable_bytes":vtable_bytes, "original_type":original_type.base_typ()}
         self_val = scope.symbol_table["self"]
         
+        if isinstance(original_type, TypeParameter) or isinstance(original_type, FatPtr):
+                attr_dict["assumed_type"] = type_id(original_type)
+
         get = GetFieldOp.create(operands=[self_val], attributes=attr_dict, result_types=[original_type])
+        if original_type == specialized_type:
+            scope.region.last_block.add_op(get)
+            return get.results[0]
         cast = CastOp.make(get.results[0], original_type, specialized_type, type_id)
         scope.region.last_block.add_ops([get, cast])
         return cast.results[0]

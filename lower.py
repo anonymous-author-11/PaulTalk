@@ -1897,6 +1897,14 @@ class LowerGetField(RewritePattern):
         field = func.CallIndirect(cast1.results[0], [data_ptr.results[0]], [op.original_type])
         wrap = WrapOp.make(field.results[0])
         rewriter.inline_block_before_matched_op(Block([data_ptr_ptr, data_ptr, pair_addr, getter_ptr, getter, cast1, field]))
+        if op.assumed_type:
+            assumed_type = AddrOfOp.from_stringattr(op.assumed_type)
+            assume = llvm.CallOp("assume_offset", wrap.results[0], assumed_type.results[0])
+            operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [2, 0])
+            assume.properties["operandSegmentSizes"] = operandSegmentSizes
+            assume.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+            rewriter.inline_block_after_matched_op(Block([assumed_type, assume]))
+        
         rewriter.replace_matched_op(wrap)
 
 class LowerGetTypeField(RewritePattern):
