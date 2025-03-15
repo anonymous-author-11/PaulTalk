@@ -140,7 +140,10 @@ define void @assume_offset(ptr %fat_ptr, ptr %id_ptr) {
   %offset = call i32 @get_offset(ptr %vptr, ptr %id_ptr)
   %destination = getelementptr { ptr, ptr, ptr, i32 }, ptr %fat_ptr, i32 0, i32 3
   %dest_value = load i32, ptr %destination
-  %eq = icmp eq i32 %dest_value, %offset
+  %slot = alloca i32
+  store i32 %dest_value, ptr %slot
+  %slotval = load i32, ptr %slot
+  %eq = icmp eq i32 %slotval, %offset
   call void @llvm.assume(i1 %eq) mustprogress nocallback nofree nosync nounwind willreturn memory(inaccessiblemem: write)
   ret void
 }
