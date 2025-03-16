@@ -284,16 +284,15 @@ DONE:
 - Work on mapping field constraints for method calls [check!]
 - Also check for null ptr on nil check [check!]
 - Fix FancyPair [check!]
+- Need to fix access of specialized fields [check!]
+	- Right, this is why I was thinking about generating setters [check!]
 
 TODO:
 
-- Need to fix access of specialized fields
-	- Right, this is why I was thinking about generating setters
-	- Just add to field codegen a setterdefop as well
-	- Setter should take in the data ptr and param of type.declaration.type(scope)
-	- And getter would have to have to box up the field when necessary
-	- Start by reforming getters
-	- Mixes up the vtable since now fields wouldn't generate one thing
+- See if hash compiles now
+	- no, because of problem below
+- Figure out relationship between Any, Object, Nil
+	- Need for Foo[Bar | Nil] and for T <: Any
 - Polymorphic construction could just be conservatively aliased
 	- Very interesting idea
 - I really want to get generics fully working first
@@ -323,8 +322,7 @@ TODO:
 	- Do we actually?
 	- What about automatic downcast upon multi-dispatch?
 - Conservatively alias parameters for first-class functions
-- Figure out relationship between Any, Object, Nil
-	- Need for Foo[Bar | Nil] and for T <: Any
+
 - Implement more precise lifetimes for tuples
 	- Use .1, .2, .3 pseudo-fields
 - Make sure regions and fields don't have conflicting names
@@ -421,7 +419,7 @@ TODO:
 - If I compile with -O0 it hangs
 	- Seems to be related to loading fatptr as { ptr, i160 }
 	- Plausibly related to type legalization in llc
-	- I believe it is that i128 and above is suppsoed to be 16-bit aligned
+	- I believe it is that i128 and above is supposed to be 16-bit aligned
 	- So I should move TypeParameter and union to something like { ptr, [20 x i8] }
 	- Or maybe use something janky like {ptr, i64, i64, ... (however many) ..., i[rest] }
 
@@ -476,6 +474,9 @@ TODO:
 	- Uninitialized would need to be a builtin type that forwards .init() calls
 
 # --- Possibilities ---
+
+- Assume call return value offsets
+- Expect reciever static types
 
 - You could inline context switches by breaking functions into sections upon yields and calls
 	- Would require significant ingenuity but would secure your glory forever

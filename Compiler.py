@@ -105,8 +105,12 @@ def main(argv):
         Printer(stringio).print(cmd_out.stdout.replace("\\","\\\\"))
         module_str = stringio.getvalue().encode().decode('unicode_escape')
 
+    #bad_string = 'intrin = "llvm.assume", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 3, 0>}> {op_bundle_tags = ["deferenceable_or_null"]}'
+    #good_string = 'intrin = "llvm.assume", op_bundle_sizes = array<i32: 2>, op_bundle_tags = ["dereferenceable"], operandSegmentSizes = array<i32: 1, 2>}>'
+
     module_str = module_str[23:-16]
     module_str = module_str.replace("placeholder.call", "llvm.call")
+    #module_str = module_str.replace(bad_string, good_string)
     with open("out.mlir", "w") as outfile: outfile.write(module_str)
 
     cmd = " ".join([

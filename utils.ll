@@ -54,6 +54,10 @@ define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) noinl
   
   ; Update the current pointer
   store ptr %new_ptr, ptr %current_ptr
+
+  ; why doesn't this work when I remove noinline??
+  ;call void @llvm.assume(i1 true) ["noalias"(ptr %current)]
+
   ret ptr %current 
 }
 

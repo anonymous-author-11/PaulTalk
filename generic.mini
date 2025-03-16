@@ -1,8 +1,7 @@
 import core;
 import io;
 
-class Pair[T, U]
-	where T <: Object, U <: Object {
+class Pair[T, U] {
 
 	@first : T
 	@second : U

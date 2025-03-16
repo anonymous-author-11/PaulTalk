@@ -82,7 +82,7 @@ class TypeParameter(ParametrizedAttribute, TypeAttribute):
     @classmethod
     def make(cls, label, defining_class, bound=None):
         while isinstance(bound, TypeParameter): bound = bound.bound
-        return TypeParameter([StringAttr(label), bound or FatPtr.basic('Object'), StringAttr(defining_class)])
+        return TypeParameter([StringAttr(label), bound or Any(), StringAttr(defining_class)])
 
     def base_typ(self):
         return llvm.LLVMStructType.from_type_list([
@@ -331,6 +331,14 @@ class Any(ParametrizedAttribute, TypeAttribute):
 
     def __format__(self, format_spec):
         return "Any"
+
+    def base_typ(self):
+        return llvm.LLVMStructType.from_type_list([
+            llvm.LLVMPointerType.opaque(),
+            llvm.LLVMPointerType.opaque(),
+            llvm.LLVMPointerType.opaque(),
+            IntegerType(32)
+        ])
 
 @irdl_attr_definition
 class Nil(ParametrizedAttribute, TypeAttribute):

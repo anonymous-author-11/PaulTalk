@@ -2093,7 +2093,7 @@ class ClassDef(Statement):
     
     def compute_aliases(self):
         if len(self.ancestors()) < 2: return
-        ancestors = self.ancestors()[1:]
+        ancestors = [anc for anc in self.ancestors()[1:] if anc != Any()]
         for anc in ancestors:
             if anc.type_params == NoneAttr(): continue
             for i, t in enumerate(anc.type_params.data):
@@ -2130,7 +2130,7 @@ class ClassDef(Statement):
         return constraints
 
     def all_type_parameters(self):
-        ancestors = self.ancestors()
+        ancestors = [anc for anc in self.ancestors() if anc != Any()]
         flat_list = []
         for anc in ancestors:
             if anc.type_params == NoneAttr(): continue
@@ -2182,7 +2182,7 @@ class ClassDef(Statement):
                 else:
                     raise Exception(f"Inconsistent hierarchy for class {self.name}.")
         
-        linearizations = [self._scope.classes[sup.cls.data].c3_linearization(sup.type_params.data if sup.type_params != NoneAttr() else []) for sup in self.direct_supertypes()]
+        linearizations = [self._scope.classes[sup.cls.data].c3_linearization(sup.type_params.data if sup.type_params != NoneAttr() else []) for sup in self.direct_supertypes() if isinstance(sup, FatPtr)]
         linearizations.append(self.direct_supertypes())
         
         order = merge(linearizations)
@@ -2192,7 +2192,7 @@ class ClassDef(Statement):
     def my_ordering(self):
         if self._my_ordering: return self._my_ordering
         def cmp_key(a, b): return 0 if self._scope.subtype(a, b) else 1
-        direct_supertypes = [self._scope.classes[sup.cls.data] for sup in self.direct_supertypes()]
+        direct_supertypes = [self._scope.classes[sup.cls.data] for sup in self.direct_supertypes() if isinstance(sup, FatPtr)]
         sorted_direct_supertypes = sorted(direct_supertypes, key=cmp_to_key(cmp_key))
         self._my_ordering = [*chain.from_iterable([sup, *sup.my_ordering()] for sup in sorted_direct_supertypes)]
         return self._my_ordering

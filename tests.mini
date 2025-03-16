@@ -662,8 +662,7 @@ class IntArrayIterator extends IntIterator {
     }
 }
 
-class Pair[T, U]
-    where T <: Object, U <: Object {
+class Pair[T, U] {
 
     @first : T
     @second : U

@@ -108,7 +108,7 @@ class Scope:
             return is_subtype
         if isinstance(left, TypeParameter) and isinstance(right, TypeParameter): return left.label == right.label and left.bound == right.bound
         if isinstance(left, TypeParameter): return self.subtype(left.bound, right)
-        if isinstance(right, TypeParameter): return self.subtype(left, right.bound)
+        if isinstance(right, TypeParameter): return left == right
         if isinstance(right, FatPtr):
             return left == right or right in self.ancestors(left)
         if isinstance(left, Tuple):
@@ -260,11 +260,12 @@ class Scope:
         raise Exception(f"could not build hash table for type {typ}.")
 
     def ancestors(self, typ: TypeAttribute):
-        if typ == Nil(): return []
-        if typ in builtin_types.values(): return [typ, FatPtr.basic("Object")]
-        if isinstance(typ, Tuple): return [typ, FatPtr.basic("Object")]
-        if isinstance(typ, Buffer): return [typ, FatPtr.basic("Object")]
-        if isinstance(typ, Function): return [typ, FatPtr.basic("Object")]
+        if typ == Nil(): return [typ, Any()]
+        if typ == Any(): return [typ]
+        if typ in builtin_types.values(): return [typ, FatPtr.basic("Object"), Any()]
+        if isinstance(typ, Tuple): return [typ, FatPtr.basic("Object"), Any()]
+        if isinstance(typ, Buffer): return [typ, FatPtr.basic("Object"), Any()]
+        if isinstance(typ, Function): return [typ, FatPtr.basic("Object"), Any()]
         if isinstance(typ, Union):
             #ancestor_groups = [set(self.ancestors(element)) for element in typ.types.data]
             #common_ancestors = functools.reduce(lambda a,b: a.intersection(b), ancestor_groups)
@@ -335,7 +336,7 @@ class Scope:
             simplified = {self.simplify(sub) for sub in typ.types.data} # recursive call
             flattened = {s for typ in simplified for s in (typ.types.data if isinstance(typ, Union) else [typ])}
             flattened = {s for s in flattened if not isinstance(s, Nothing)} # remove Nothing types
-            flattened = {s for s in flattened if isinstance(s, TypeParameter) or (not any(self.subtype(s, s2.bound) for s2 in flattened if isinstance(s2, TypeParameter)))}
+            flattened = {s for s in flattened if isinstance(s, TypeParameter) or isinstance(s, Nil) or (not any(self.subtype(s, s2.bound) for s2 in flattened if isinstance(s2, TypeParameter)))}
             flattened = {s for s in flattened if (not any(((self.subtype(s, s2)) and (not self.subtype(s2, s))) for s2 in flattened))} # merge subtypes
             if len(list(flattened)) == 1: return list(flattened)[0] # A union of one type is just that type
             if len(list(flattened)) == 0: return Nothing()

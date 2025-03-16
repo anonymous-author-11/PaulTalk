@@ -1,244 +1,244 @@
  "builtin.module"() <{sym_name = "ir"}> ({
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<3 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "_parameterization_Float64_or_Int32"}> ({
-      %20171 = "llvm.mlir.undef"() : () -> !llvm.array<3 x ptr>
-      %20172 = "placeholder.addressof"() {global_name = @union_typ} : () -> !llvm.ptr
-      %20173 = "llvm.insertvalue"(%20171, %20172) <{position = array<i64: 0>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
-      %20174 = "placeholder.addressof"() {global_name = @_parameterization_Float64} : () -> !llvm.ptr
-      %20175 = "llvm.insertvalue"(%20173, %20174) <{position = array<i64: 1>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
-      %20176 = "placeholder.addressof"() {global_name = @_parameterization_Int32} : () -> !llvm.ptr
-      %20177 = "llvm.insertvalue"(%20175, %20176) <{position = array<i64: 2>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
-      "llvm.return"(%20177) : (!llvm.array<3 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<3 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "_parameterization_Int32_or_Float64"}> ({
+      %20481 = "llvm.mlir.undef"() : () -> !llvm.array<3 x ptr>
+      %20482 = "placeholder.addressof"() {global_name = @union_typ} : () -> !llvm.ptr
+      %20483 = "llvm.insertvalue"(%20481, %20482) <{position = array<i64: 0>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
+      %20484 = "placeholder.addressof"() {global_name = @_parameterization_Int32} : () -> !llvm.ptr
+      %20485 = "llvm.insertvalue"(%20483, %20484) <{position = array<i64: 1>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
+      %20486 = "placeholder.addressof"() {global_name = @_parameterization_Float64} : () -> !llvm.ptr
+      %20487 = "llvm.insertvalue"(%20485, %20486) <{position = array<i64: 2>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
+      "llvm.return"(%20487) : (!llvm.array<3 x ptr>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<1 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "_parameterization_Ptri1"}> ({
-      %20168 = "llvm.mlir.undef"() : () -> !llvm.array<1 x ptr>
-      %20169 = "placeholder.addressof"() {global_name = @bool_typ} : () -> !llvm.ptr
-      %20170 = "llvm.insertvalue"(%20168, %20169) <{position = array<i64: 0>}> : (!llvm.array<1 x ptr>, !llvm.ptr) -> !llvm.array<1 x ptr>
-      "llvm.return"(%20170) : (!llvm.array<1 x ptr>) -> ()
+      %20478 = "llvm.mlir.undef"() : () -> !llvm.array<1 x ptr>
+      %20479 = "placeholder.addressof"() {global_name = @bool_typ} : () -> !llvm.ptr
+      %20480 = "llvm.insertvalue"(%20478, %20479) <{position = array<i64: 0>}> : (!llvm.array<1 x ptr>, !llvm.ptr) -> !llvm.array<1 x ptr>
+      "llvm.return"(%20480) : (!llvm.array<1 x ptr>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<1 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "_parameterization_Int32"}> ({
-      %20165 = "llvm.mlir.undef"() : () -> !llvm.array<1 x ptr>
-      %20166 = "placeholder.addressof"() {global_name = @Int32} : () -> !llvm.ptr
-      %20167 = "llvm.insertvalue"(%20165, %20166) <{position = array<i64: 0>}> : (!llvm.array<1 x ptr>, !llvm.ptr) -> !llvm.array<1 x ptr>
-      "llvm.return"(%20167) : (!llvm.array<1 x ptr>) -> ()
+      %20475 = "llvm.mlir.undef"() : () -> !llvm.array<1 x ptr>
+      %20476 = "placeholder.addressof"() {global_name = @Int32} : () -> !llvm.ptr
+      %20477 = "llvm.insertvalue"(%20475, %20476) <{position = array<i64: 0>}> : (!llvm.array<1 x ptr>, !llvm.ptr) -> !llvm.array<1 x ptr>
+      "llvm.return"(%20477) : (!llvm.array<1 x ptr>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<3 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "_parameterization_MapIterable2Ptri32._Ptrf64"}> ({
-      %20158 = "llvm.mlir.undef"() : () -> !llvm.array<3 x ptr>
-      %20159 = "placeholder.addressof"() {global_name = @MapIterable2} : () -> !llvm.ptr
-      %20160 = "llvm.insertvalue"(%20158, %20159) <{position = array<i64: 0>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
-      %20161 = "placeholder.addressof"() {global_name = @_parameterization_Ptri32} : () -> !llvm.ptr
-      %20162 = "llvm.insertvalue"(%20160, %20161) <{position = array<i64: 1>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
-      %20163 = "placeholder.addressof"() {global_name = @_parameterization_Ptrf64} : () -> !llvm.ptr
-      %20164 = "llvm.insertvalue"(%20162, %20163) <{position = array<i64: 2>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
-      "llvm.return"(%20164) : (!llvm.array<3 x ptr>) -> ()
+      %20468 = "llvm.mlir.undef"() : () -> !llvm.array<3 x ptr>
+      %20469 = "placeholder.addressof"() {global_name = @MapIterable2} : () -> !llvm.ptr
+      %20470 = "llvm.insertvalue"(%20468, %20469) <{position = array<i64: 0>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
+      %20471 = "placeholder.addressof"() {global_name = @_parameterization_Ptri32} : () -> !llvm.ptr
+      %20472 = "llvm.insertvalue"(%20470, %20471) <{position = array<i64: 1>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
+      %20473 = "placeholder.addressof"() {global_name = @_parameterization_Ptrf64} : () -> !llvm.ptr
+      %20474 = "llvm.insertvalue"(%20472, %20473) <{position = array<i64: 2>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
+      "llvm.return"(%20474) : (!llvm.array<3 x ptr>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<3 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "_parameterization_FunctionPtri32_to_Ptrf64"}> ({
-      %20151 = "llvm.mlir.undef"() : () -> !llvm.array<3 x ptr>
-      %20152 = "placeholder.addressof"() {global_name = @function_typ} : () -> !llvm.ptr
-      %20153 = "llvm.insertvalue"(%20151, %20152) <{position = array<i64: 0>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
-      %20154 = "placeholder.addressof"() {global_name = @_parameterization_Ptrf64} : () -> !llvm.ptr
-      %20155 = "llvm.insertvalue"(%20153, %20154) <{position = array<i64: 1>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
-      %20156 = "placeholder.addressof"() {global_name = @_parameterization_Ptri32} : () -> !llvm.ptr
-      %20157 = "llvm.insertvalue"(%20155, %20156) <{position = array<i64: 2>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
-      "llvm.return"(%20157) : (!llvm.array<3 x ptr>) -> ()
+      %20461 = "llvm.mlir.undef"() : () -> !llvm.array<3 x ptr>
+      %20462 = "placeholder.addressof"() {global_name = @function_typ} : () -> !llvm.ptr
+      %20463 = "llvm.insertvalue"(%20461, %20462) <{position = array<i64: 0>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
+      %20464 = "placeholder.addressof"() {global_name = @_parameterization_Ptrf64} : () -> !llvm.ptr
+      %20465 = "llvm.insertvalue"(%20463, %20464) <{position = array<i64: 1>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
+      %20466 = "placeholder.addressof"() {global_name = @_parameterization_Ptri32} : () -> !llvm.ptr
+      %20467 = "llvm.insertvalue"(%20465, %20466) <{position = array<i64: 2>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
+      "llvm.return"(%20467) : (!llvm.array<3 x ptr>) -> ()
     }) : () -> ()
-    "func.func"() <{arg_attrs = [{llvm.nest}, {}], function_type = (!llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, i160)>, sym_name = "ttjlvsyfyh"}> ({
+    "func.func"() <{arg_attrs = [{llvm.nest}, {}], function_type = (!llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, i160)>, sym_name = "smdlnssxgz"}> ({
     ^bb0(%arg803: !llvm.ptr, %arg804: !llvm.struct<(ptr, i160)>):
-      %20130 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, i160)>
-      %20131 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
-      %20132 = "llvm.alloca"(%20131) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
-      "llvm.store"(%arg804, %20132) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> ()
-      %20133 = "llvm.alloca"(%20131) <{elem_type = i32}> : (i32) -> !llvm.ptr
-      %20134 = "llvm.getelementptr"(%20132) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %20135 = "llvm.load"(%20134) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
-      "llvm.store"(%20135, %20133) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %20136 = "llvm.load"(%20133) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %20137 = "builtin.unrealized_conversion_cast"(%arg803) : (!llvm.ptr) -> ((i32) -> i32)
-      %20138 = "func.call_indirect"(%20137, %20136) : ((i32) -> i32, i32) -> i32
-      %20139 = "llvm.alloca"(%20131) <{elem_type = i32}> : (i32) -> !llvm.ptr
-      "llvm.store"(%20138, %20139) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %20140 = "llvm.alloca"(%20131) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
-      %20141 = "llvm.getelementptr"(%20140) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %20142 = "placeholder.addressof"() {global_name = @i32_typ} : () -> !llvm.ptr
-      "llvm.store"(%20142, %20140) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %20143 = "llvm.load"(%20139) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
-      "llvm.store"(%20143, %20141) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %20144 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      "llvm.call"(%20140, %20144) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
-      %20145 = "llvm.getelementptr"(%20140) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %20146 = "llvm.load"(%20145) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %20147 = "llvm.insertvalue"(%20130, %20146) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> !llvm.struct<(ptr, i160)>
-      %20148 = "llvm.getelementptr"(%20140) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %20149 = "llvm.load"(%20148) <{ordering = 0 : i64}> : (!llvm.ptr) -> i160
-      %20150 = "llvm.insertvalue"(%20147, %20149) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, i160)>, i160) -> !llvm.struct<(ptr, i160)>
-      "func.return"(%20150) : (!llvm.struct<(ptr, i160)>) -> ()
+      %20440 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, i160)>
+      %20441 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
+      %20442 = "llvm.alloca"(%20441) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
+      "llvm.store"(%arg804, %20442) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> ()
+      %20443 = "llvm.alloca"(%20441) <{elem_type = i32}> : (i32) -> !llvm.ptr
+      %20444 = "llvm.getelementptr"(%20442) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20445 = "llvm.load"(%20444) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
+      "llvm.store"(%20445, %20443) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %20446 = "llvm.load"(%20443) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %20447 = "builtin.unrealized_conversion_cast"(%arg803) : (!llvm.ptr) -> ((i32) -> i32)
+      %20448 = "func.call_indirect"(%20447, %20446) : ((i32) -> i32, i32) -> i32
+      %20449 = "llvm.alloca"(%20441) <{elem_type = i32}> : (i32) -> !llvm.ptr
+      "llvm.store"(%20448, %20449) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %20450 = "llvm.alloca"(%20441) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
+      %20451 = "llvm.getelementptr"(%20450) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20452 = "placeholder.addressof"() {global_name = @i32_typ} : () -> !llvm.ptr
+      "llvm.store"(%20452, %20450) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %20453 = "llvm.load"(%20449) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
+      "llvm.store"(%20453, %20451) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %20454 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      "llvm.call"(%20450, %20454) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
+      %20455 = "llvm.getelementptr"(%20450) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %20456 = "llvm.load"(%20455) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %20457 = "llvm.insertvalue"(%20440, %20456) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> !llvm.struct<(ptr, i160)>
+      %20458 = "llvm.getelementptr"(%20450) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20459 = "llvm.load"(%20458) <{ordering = 0 : i64}> : (!llvm.ptr) -> i160
+      %20460 = "llvm.insertvalue"(%20457, %20459) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, i160)>, i160) -> !llvm.struct<(ptr, i160)>
+      "func.return"(%20460) : (!llvm.struct<(ptr, i160)>) -> ()
     }) : () -> ()
-    "func.func"() <{arg_attrs = [{llvm.nest}, {}], function_type = (!llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, i160)>, sym_name = "smhjlgfzcp"}> ({
+    "func.func"() <{arg_attrs = [{llvm.nest}, {}], function_type = (!llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, i160)>, sym_name = "ihrxhpxshg"}> ({
     ^bb0(%arg801: !llvm.ptr, %arg802: !llvm.struct<(ptr, i160)>):
-      %20109 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, i160)>
-      %20110 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
-      %20111 = "llvm.alloca"(%20110) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
-      "llvm.store"(%arg802, %20111) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> ()
-      %20112 = "llvm.alloca"(%20110) <{elem_type = i32}> : (i32) -> !llvm.ptr
-      %20113 = "llvm.getelementptr"(%20111) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %20114 = "llvm.load"(%20113) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
-      "llvm.store"(%20114, %20112) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %20115 = "llvm.load"(%20112) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %20116 = "builtin.unrealized_conversion_cast"(%arg801) : (!llvm.ptr) -> ((i32) -> f64)
-      %20117 = "func.call_indirect"(%20116, %20115) : ((i32) -> f64, i32) -> f64
-      %20118 = "llvm.alloca"(%20110) <{elem_type = f64}> : (i32) -> !llvm.ptr
-      "llvm.store"(%20117, %20118) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %20119 = "llvm.alloca"(%20110) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
-      %20120 = "llvm.getelementptr"(%20119) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %20121 = "placeholder.addressof"() {global_name = @f64_typ} : () -> !llvm.ptr
-      "llvm.store"(%20121, %20119) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %20122 = "llvm.load"(%20118) <{ordering = 0 : i64}> {type = f64} : (!llvm.ptr) -> f64
-      "llvm.store"(%20122, %20120) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %20123 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      "llvm.call"(%20119, %20123) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
-      %20124 = "llvm.getelementptr"(%20119) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %20125 = "llvm.load"(%20124) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %20126 = "llvm.insertvalue"(%20109, %20125) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> !llvm.struct<(ptr, i160)>
-      %20127 = "llvm.getelementptr"(%20119) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %20128 = "llvm.load"(%20127) <{ordering = 0 : i64}> : (!llvm.ptr) -> i160
-      %20129 = "llvm.insertvalue"(%20126, %20128) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, i160)>, i160) -> !llvm.struct<(ptr, i160)>
-      "func.return"(%20129) : (!llvm.struct<(ptr, i160)>) -> ()
+      %20419 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, i160)>
+      %20420 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
+      %20421 = "llvm.alloca"(%20420) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
+      "llvm.store"(%arg802, %20421) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> ()
+      %20422 = "llvm.alloca"(%20420) <{elem_type = i32}> : (i32) -> !llvm.ptr
+      %20423 = "llvm.getelementptr"(%20421) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20424 = "llvm.load"(%20423) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
+      "llvm.store"(%20424, %20422) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %20425 = "llvm.load"(%20422) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %20426 = "builtin.unrealized_conversion_cast"(%arg801) : (!llvm.ptr) -> ((i32) -> f64)
+      %20427 = "func.call_indirect"(%20426, %20425) : ((i32) -> f64, i32) -> f64
+      %20428 = "llvm.alloca"(%20420) <{elem_type = f64}> : (i32) -> !llvm.ptr
+      "llvm.store"(%20427, %20428) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
+      %20429 = "llvm.alloca"(%20420) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
+      %20430 = "llvm.getelementptr"(%20429) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20431 = "placeholder.addressof"() {global_name = @f64_typ} : () -> !llvm.ptr
+      "llvm.store"(%20431, %20429) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %20432 = "llvm.load"(%20428) <{ordering = 0 : i64}> {type = f64} : (!llvm.ptr) -> f64
+      "llvm.store"(%20432, %20430) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
+      %20433 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      "llvm.call"(%20429, %20433) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
+      %20434 = "llvm.getelementptr"(%20429) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %20435 = "llvm.load"(%20434) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %20436 = "llvm.insertvalue"(%20419, %20435) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> !llvm.struct<(ptr, i160)>
+      %20437 = "llvm.getelementptr"(%20429) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20438 = "llvm.load"(%20437) <{ordering = 0 : i64}> : (!llvm.ptr) -> i160
+      %20439 = "llvm.insertvalue"(%20436, %20438) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, i160)>, i160) -> !llvm.struct<(ptr, i160)>
+      "func.return"(%20439) : (!llvm.struct<(ptr, i160)>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<3 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "_parameterization_FunctionPtri32_to_Ptri32"}> ({
-      %20102 = "llvm.mlir.undef"() : () -> !llvm.array<3 x ptr>
-      %20103 = "placeholder.addressof"() {global_name = @function_typ} : () -> !llvm.ptr
-      %20104 = "llvm.insertvalue"(%20102, %20103) <{position = array<i64: 0>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
-      %20105 = "placeholder.addressof"() {global_name = @_parameterization_Ptri32} : () -> !llvm.ptr
-      %20106 = "llvm.insertvalue"(%20104, %20105) <{position = array<i64: 1>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
-      %20107 = "placeholder.addressof"() {global_name = @_parameterization_Ptri32} : () -> !llvm.ptr
-      %20108 = "llvm.insertvalue"(%20106, %20107) <{position = array<i64: 2>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
-      "llvm.return"(%20108) : (!llvm.array<3 x ptr>) -> ()
+      %20412 = "llvm.mlir.undef"() : () -> !llvm.array<3 x ptr>
+      %20413 = "placeholder.addressof"() {global_name = @function_typ} : () -> !llvm.ptr
+      %20414 = "llvm.insertvalue"(%20412, %20413) <{position = array<i64: 0>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
+      %20415 = "placeholder.addressof"() {global_name = @_parameterization_Ptri32} : () -> !llvm.ptr
+      %20416 = "llvm.insertvalue"(%20414, %20415) <{position = array<i64: 1>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
+      %20417 = "placeholder.addressof"() {global_name = @_parameterization_Ptri32} : () -> !llvm.ptr
+      %20418 = "llvm.insertvalue"(%20416, %20417) <{position = array<i64: 2>}> : (!llvm.array<3 x ptr>, !llvm.ptr) -> !llvm.array<3 x ptr>
+      "llvm.return"(%20418) : (!llvm.array<3 x ptr>) -> ()
     }) : () -> ()
-    "func.func"() <{arg_attrs = [{llvm.nest}, {}], function_type = (!llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, i160)>, sym_name = "fbjhobwwtn"}> ({
+    "func.func"() <{arg_attrs = [{llvm.nest}, {}], function_type = (!llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, i160)>, sym_name = "aavrewcafd"}> ({
     ^bb0(%arg799: !llvm.ptr, %arg800: !llvm.struct<(ptr, i160)>):
-      %20081 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, i160)>
-      %20082 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
-      %20083 = "llvm.alloca"(%20082) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
-      "llvm.store"(%arg800, %20083) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> ()
-      %20084 = "llvm.alloca"(%20082) <{elem_type = i32}> : (i32) -> !llvm.ptr
-      %20085 = "llvm.getelementptr"(%20083) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %20086 = "llvm.load"(%20085) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
-      "llvm.store"(%20086, %20084) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %20087 = "llvm.load"(%20084) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %20088 = "builtin.unrealized_conversion_cast"(%arg799) : (!llvm.ptr) -> ((i32) -> i32)
-      %20089 = "func.call_indirect"(%20088, %20087) : ((i32) -> i32, i32) -> i32
-      %20090 = "llvm.alloca"(%20082) <{elem_type = i32}> : (i32) -> !llvm.ptr
-      "llvm.store"(%20089, %20090) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %20091 = "llvm.alloca"(%20082) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
-      %20092 = "llvm.getelementptr"(%20091) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %20093 = "placeholder.addressof"() {global_name = @i32_typ} : () -> !llvm.ptr
-      "llvm.store"(%20093, %20091) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %20094 = "llvm.load"(%20090) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
-      "llvm.store"(%20094, %20092) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %20095 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      "llvm.call"(%20091, %20095) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
-      %20096 = "llvm.getelementptr"(%20091) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %20097 = "llvm.load"(%20096) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %20098 = "llvm.insertvalue"(%20081, %20097) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> !llvm.struct<(ptr, i160)>
-      %20099 = "llvm.getelementptr"(%20091) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %20100 = "llvm.load"(%20099) <{ordering = 0 : i64}> : (!llvm.ptr) -> i160
-      %20101 = "llvm.insertvalue"(%20098, %20100) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, i160)>, i160) -> !llvm.struct<(ptr, i160)>
-      "func.return"(%20101) : (!llvm.struct<(ptr, i160)>) -> ()
+      %20391 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, i160)>
+      %20392 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
+      %20393 = "llvm.alloca"(%20392) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
+      "llvm.store"(%arg800, %20393) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> ()
+      %20394 = "llvm.alloca"(%20392) <{elem_type = i32}> : (i32) -> !llvm.ptr
+      %20395 = "llvm.getelementptr"(%20393) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20396 = "llvm.load"(%20395) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
+      "llvm.store"(%20396, %20394) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %20397 = "llvm.load"(%20394) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %20398 = "builtin.unrealized_conversion_cast"(%arg799) : (!llvm.ptr) -> ((i32) -> i32)
+      %20399 = "func.call_indirect"(%20398, %20397) : ((i32) -> i32, i32) -> i32
+      %20400 = "llvm.alloca"(%20392) <{elem_type = i32}> : (i32) -> !llvm.ptr
+      "llvm.store"(%20399, %20400) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %20401 = "llvm.alloca"(%20392) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
+      %20402 = "llvm.getelementptr"(%20401) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20403 = "placeholder.addressof"() {global_name = @i32_typ} : () -> !llvm.ptr
+      "llvm.store"(%20403, %20401) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %20404 = "llvm.load"(%20400) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
+      "llvm.store"(%20404, %20402) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %20405 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      "llvm.call"(%20401, %20405) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
+      %20406 = "llvm.getelementptr"(%20401) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %20407 = "llvm.load"(%20406) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %20408 = "llvm.insertvalue"(%20391, %20407) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> !llvm.struct<(ptr, i160)>
+      %20409 = "llvm.getelementptr"(%20401) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20410 = "llvm.load"(%20409) <{ordering = 0 : i64}> : (!llvm.ptr) -> i160
+      %20411 = "llvm.insertvalue"(%20408, %20410) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, i160)>, i160) -> !llvm.struct<(ptr, i160)>
+      "func.return"(%20411) : (!llvm.struct<(ptr, i160)>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "_parameterization_FunctionPtri32._Ptri32_to_Ptri32"}> ({
-      %20072 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %20073 = "placeholder.addressof"() {global_name = @function_typ} : () -> !llvm.ptr
-      %20074 = "llvm.insertvalue"(%20072, %20073) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %20075 = "placeholder.addressof"() {global_name = @_parameterization_Ptri32} : () -> !llvm.ptr
-      %20076 = "llvm.insertvalue"(%20074, %20075) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %20077 = "placeholder.addressof"() {global_name = @_parameterization_Ptri32} : () -> !llvm.ptr
-      %20078 = "llvm.insertvalue"(%20076, %20077) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %20079 = "placeholder.addressof"() {global_name = @_parameterization_Ptri32} : () -> !llvm.ptr
-      %20080 = "llvm.insertvalue"(%20078, %20079) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      "llvm.return"(%20080) : (!llvm.array<4 x ptr>) -> ()
+      %20382 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %20383 = "placeholder.addressof"() {global_name = @function_typ} : () -> !llvm.ptr
+      %20384 = "llvm.insertvalue"(%20382, %20383) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20385 = "placeholder.addressof"() {global_name = @_parameterization_Ptri32} : () -> !llvm.ptr
+      %20386 = "llvm.insertvalue"(%20384, %20385) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20387 = "placeholder.addressof"() {global_name = @_parameterization_Ptri32} : () -> !llvm.ptr
+      %20388 = "llvm.insertvalue"(%20386, %20387) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20389 = "placeholder.addressof"() {global_name = @_parameterization_Ptri32} : () -> !llvm.ptr
+      %20390 = "llvm.insertvalue"(%20388, %20389) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      "llvm.return"(%20390) : (!llvm.array<4 x ptr>) -> ()
     }) : () -> ()
-    "func.func"() <{arg_attrs = [{llvm.nest}, {}, {}], function_type = (!llvm.ptr, !llvm.struct<(ptr, i160)>, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, i160)>, sym_name = "ecxcuocsbx"}> ({
+    "func.func"() <{arg_attrs = [{llvm.nest}, {}, {}], function_type = (!llvm.ptr, !llvm.struct<(ptr, i160)>, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, i160)>, sym_name = "qnwveodguh"}> ({
     ^bb0(%arg796: !llvm.ptr, %arg797: !llvm.struct<(ptr, i160)>, %arg798: !llvm.struct<(ptr, i160)>):
-      %20046 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, i160)>
-      %20047 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
-      %20048 = "llvm.alloca"(%20047) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
-      "llvm.store"(%arg797, %20048) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> ()
-      %20049 = "llvm.alloca"(%20047) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
-      "llvm.store"(%arg798, %20049) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> ()
-      %20050 = "llvm.alloca"(%20047) <{elem_type = i32}> : (i32) -> !llvm.ptr
-      %20051 = "llvm.getelementptr"(%20048) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %20052 = "llvm.load"(%20051) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
-      "llvm.store"(%20052, %20050) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %20053 = "llvm.alloca"(%20047) <{elem_type = i32}> : (i32) -> !llvm.ptr
-      %20054 = "llvm.getelementptr"(%20049) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %20055 = "llvm.load"(%20054) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
-      "llvm.store"(%20055, %20053) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %20056 = "llvm.load"(%20050) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %20057 = "llvm.load"(%20053) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %20058 = "builtin.unrealized_conversion_cast"(%arg796) : (!llvm.ptr) -> ((i32, i32) -> i32)
-      %20059 = "func.call_indirect"(%20058, %20056, %20057) : ((i32, i32) -> i32, i32, i32) -> i32
-      %20060 = "llvm.alloca"(%20047) <{elem_type = i32}> : (i32) -> !llvm.ptr
-      "llvm.store"(%20059, %20060) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %20061 = "llvm.alloca"(%20047) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
-      %20062 = "llvm.getelementptr"(%20061) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %20063 = "placeholder.addressof"() {global_name = @i32_typ} : () -> !llvm.ptr
-      "llvm.store"(%20063, %20061) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %20064 = "llvm.load"(%20060) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
-      "llvm.store"(%20064, %20062) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %20065 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      "llvm.call"(%20061, %20065) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
-      %20066 = "llvm.getelementptr"(%20061) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %20067 = "llvm.load"(%20066) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %20068 = "llvm.insertvalue"(%20046, %20067) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> !llvm.struct<(ptr, i160)>
-      %20069 = "llvm.getelementptr"(%20061) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %20070 = "llvm.load"(%20069) <{ordering = 0 : i64}> : (!llvm.ptr) -> i160
-      %20071 = "llvm.insertvalue"(%20068, %20070) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, i160)>, i160) -> !llvm.struct<(ptr, i160)>
-      "func.return"(%20071) : (!llvm.struct<(ptr, i160)>) -> ()
+      %20356 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, i160)>
+      %20357 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
+      %20358 = "llvm.alloca"(%20357) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
+      "llvm.store"(%arg797, %20358) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> ()
+      %20359 = "llvm.alloca"(%20357) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
+      "llvm.store"(%arg798, %20359) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> ()
+      %20360 = "llvm.alloca"(%20357) <{elem_type = i32}> : (i32) -> !llvm.ptr
+      %20361 = "llvm.getelementptr"(%20358) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20362 = "llvm.load"(%20361) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
+      "llvm.store"(%20362, %20360) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %20363 = "llvm.alloca"(%20357) <{elem_type = i32}> : (i32) -> !llvm.ptr
+      %20364 = "llvm.getelementptr"(%20359) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20365 = "llvm.load"(%20364) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
+      "llvm.store"(%20365, %20363) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %20366 = "llvm.load"(%20360) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %20367 = "llvm.load"(%20363) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %20368 = "builtin.unrealized_conversion_cast"(%arg796) : (!llvm.ptr) -> ((i32, i32) -> i32)
+      %20369 = "func.call_indirect"(%20368, %20366, %20367) : ((i32, i32) -> i32, i32, i32) -> i32
+      %20370 = "llvm.alloca"(%20357) <{elem_type = i32}> : (i32) -> !llvm.ptr
+      "llvm.store"(%20369, %20370) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %20371 = "llvm.alloca"(%20357) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
+      %20372 = "llvm.getelementptr"(%20371) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20373 = "placeholder.addressof"() {global_name = @i32_typ} : () -> !llvm.ptr
+      "llvm.store"(%20373, %20371) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %20374 = "llvm.load"(%20370) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
+      "llvm.store"(%20374, %20372) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %20375 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      "llvm.call"(%20371, %20375) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
+      %20376 = "llvm.getelementptr"(%20371) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %20377 = "llvm.load"(%20376) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %20378 = "llvm.insertvalue"(%20356, %20377) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> !llvm.struct<(ptr, i160)>
+      %20379 = "llvm.getelementptr"(%20371) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20380 = "llvm.load"(%20379) <{ordering = 0 : i64}> : (!llvm.ptr) -> i160
+      %20381 = "llvm.insertvalue"(%20378, %20380) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, i160)>, i160) -> !llvm.struct<(ptr, i160)>
+      "func.return"(%20381) : (!llvm.struct<(ptr, i160)>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<5 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "_parameterization_Tuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64_"}> ({
-      %20035 = "llvm.mlir.undef"() : () -> !llvm.array<5 x ptr>
-      %20036 = "placeholder.addressof"() {global_name = @tuple_typ} : () -> !llvm.ptr
-      %20037 = "llvm.insertvalue"(%20035, %20036) <{position = array<i64: 0>}> : (!llvm.array<5 x ptr>, !llvm.ptr) -> !llvm.array<5 x ptr>
-      %20038 = "placeholder.addressof"() {global_name = @_parameterization_Ptrf64} : () -> !llvm.ptr
-      %20039 = "llvm.insertvalue"(%20037, %20038) <{position = array<i64: 1>}> : (!llvm.array<5 x ptr>, !llvm.ptr) -> !llvm.array<5 x ptr>
-      %20040 = "placeholder.addressof"() {global_name = @_parameterization_Ptrf64} : () -> !llvm.ptr
-      %20041 = "llvm.insertvalue"(%20039, %20040) <{position = array<i64: 2>}> : (!llvm.array<5 x ptr>, !llvm.ptr) -> !llvm.array<5 x ptr>
-      %20042 = "placeholder.addressof"() {global_name = @_parameterization_Ptrf64} : () -> !llvm.ptr
-      %20043 = "llvm.insertvalue"(%20041, %20042) <{position = array<i64: 3>}> : (!llvm.array<5 x ptr>, !llvm.ptr) -> !llvm.array<5 x ptr>
-      %20044 = "placeholder.addressof"() {global_name = @_parameterization_Ptrf64} : () -> !llvm.ptr
-      %20045 = "llvm.insertvalue"(%20043, %20044) <{position = array<i64: 4>}> : (!llvm.array<5 x ptr>, !llvm.ptr) -> !llvm.array<5 x ptr>
-      "llvm.return"(%20045) : (!llvm.array<5 x ptr>) -> ()
+      %20345 = "llvm.mlir.undef"() : () -> !llvm.array<5 x ptr>
+      %20346 = "placeholder.addressof"() {global_name = @tuple_typ} : () -> !llvm.ptr
+      %20347 = "llvm.insertvalue"(%20345, %20346) <{position = array<i64: 0>}> : (!llvm.array<5 x ptr>, !llvm.ptr) -> !llvm.array<5 x ptr>
+      %20348 = "placeholder.addressof"() {global_name = @_parameterization_Ptrf64} : () -> !llvm.ptr
+      %20349 = "llvm.insertvalue"(%20347, %20348) <{position = array<i64: 1>}> : (!llvm.array<5 x ptr>, !llvm.ptr) -> !llvm.array<5 x ptr>
+      %20350 = "placeholder.addressof"() {global_name = @_parameterization_Ptrf64} : () -> !llvm.ptr
+      %20351 = "llvm.insertvalue"(%20349, %20350) <{position = array<i64: 2>}> : (!llvm.array<5 x ptr>, !llvm.ptr) -> !llvm.array<5 x ptr>
+      %20352 = "placeholder.addressof"() {global_name = @_parameterization_Ptrf64} : () -> !llvm.ptr
+      %20353 = "llvm.insertvalue"(%20351, %20352) <{position = array<i64: 3>}> : (!llvm.array<5 x ptr>, !llvm.ptr) -> !llvm.array<5 x ptr>
+      %20354 = "placeholder.addressof"() {global_name = @_parameterization_Ptrf64} : () -> !llvm.ptr
+      %20355 = "llvm.insertvalue"(%20353, %20354) <{position = array<i64: 4>}> : (!llvm.array<5 x ptr>, !llvm.ptr) -> !llvm.array<5 x ptr>
+      "llvm.return"(%20355) : (!llvm.array<5 x ptr>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<1 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "_parameterization_Float64"}> ({
-      %20032 = "llvm.mlir.undef"() : () -> !llvm.array<1 x ptr>
-      %20033 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
-      %20034 = "llvm.insertvalue"(%20032, %20033) <{position = array<i64: 0>}> : (!llvm.array<1 x ptr>, !llvm.ptr) -> !llvm.array<1 x ptr>
-      "llvm.return"(%20034) : (!llvm.array<1 x ptr>) -> ()
+      %20342 = "llvm.mlir.undef"() : () -> !llvm.array<1 x ptr>
+      %20343 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
+      %20344 = "llvm.insertvalue"(%20342, %20343) <{position = array<i64: 0>}> : (!llvm.array<1 x ptr>, !llvm.ptr) -> !llvm.array<1 x ptr>
+      "llvm.return"(%20344) : (!llvm.array<1 x ptr>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<1 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "_parameterization_Ptrf64"}> ({
-      %20029 = "llvm.mlir.undef"() : () -> !llvm.array<1 x ptr>
-      %20030 = "placeholder.addressof"() {global_name = @f64_typ} : () -> !llvm.ptr
-      %20031 = "llvm.insertvalue"(%20029, %20030) <{position = array<i64: 0>}> : (!llvm.array<1 x ptr>, !llvm.ptr) -> !llvm.array<1 x ptr>
-      "llvm.return"(%20031) : (!llvm.array<1 x ptr>) -> ()
+      %20339 = "llvm.mlir.undef"() : () -> !llvm.array<1 x ptr>
+      %20340 = "placeholder.addressof"() {global_name = @f64_typ} : () -> !llvm.ptr
+      %20341 = "llvm.insertvalue"(%20339, %20340) <{position = array<i64: 0>}> : (!llvm.array<1 x ptr>, !llvm.ptr) -> !llvm.array<1 x ptr>
+      "llvm.return"(%20341) : (!llvm.array<1 x ptr>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<1 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "_parameterization_String"}> ({
-      %20026 = "llvm.mlir.undef"() : () -> !llvm.array<1 x ptr>
-      %20027 = "placeholder.addressof"() {global_name = @String} : () -> !llvm.ptr
-      %20028 = "llvm.insertvalue"(%20026, %20027) <{position = array<i64: 0>}> : (!llvm.array<1 x ptr>, !llvm.ptr) -> !llvm.array<1 x ptr>
-      "llvm.return"(%20028) : (!llvm.array<1 x ptr>) -> ()
+      %20336 = "llvm.mlir.undef"() : () -> !llvm.array<1 x ptr>
+      %20337 = "placeholder.addressof"() {global_name = @String} : () -> !llvm.ptr
+      %20338 = "llvm.insertvalue"(%20336, %20337) <{position = array<i64: 0>}> : (!llvm.array<1 x ptr>, !llvm.ptr) -> !llvm.array<1 x ptr>
+      "llvm.return"(%20338) : (!llvm.array<1 x ptr>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<1 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "_parameterization_BufferPtri8"}> ({
-      %20023 = "llvm.mlir.undef"() : () -> !llvm.array<1 x ptr>
-      %20024 = "placeholder.addressof"() {global_name = @buffer_typ} : () -> !llvm.ptr
-      %20025 = "llvm.insertvalue"(%20023, %20024) <{position = array<i64: 0>}> : (!llvm.array<1 x ptr>, !llvm.ptr) -> !llvm.array<1 x ptr>
-      "llvm.return"(%20025) : (!llvm.array<1 x ptr>) -> ()
+      %20333 = "llvm.mlir.undef"() : () -> !llvm.array<1 x ptr>
+      %20334 = "placeholder.addressof"() {global_name = @buffer_typ} : () -> !llvm.ptr
+      %20335 = "llvm.insertvalue"(%20333, %20334) <{position = array<i64: 0>}> : (!llvm.array<1 x ptr>, !llvm.ptr) -> !llvm.array<1 x ptr>
+      "llvm.return"(%20335) : (!llvm.array<1 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<12 x i8>, linkage = #llvm.linkage<internal>, sym_name = "bhfvu_genericmini", value = "generic.mini"}> ({
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<12 x i8>, linkage = #llvm.linkage<internal>, sym_name = "xpvdv_genericmini", value = "generic.mini"}> ({
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<1 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "_parameterization_Ptri32"}> ({
-      %20020 = "llvm.mlir.undef"() : () -> !llvm.array<1 x ptr>
-      %20021 = "placeholder.addressof"() {global_name = @i32_typ} : () -> !llvm.ptr
-      %20022 = "llvm.insertvalue"(%20020, %20021) <{position = array<i64: 0>}> : (!llvm.array<1 x ptr>, !llvm.ptr) -> !llvm.array<1 x ptr>
-      "llvm.return"(%20022) : (!llvm.array<1 x ptr>) -> ()
+      %20330 = "llvm.mlir.undef"() : () -> !llvm.array<1 x ptr>
+      %20331 = "placeholder.addressof"() {global_name = @i32_typ} : () -> !llvm.ptr
+      %20332 = "llvm.insertvalue"(%20330, %20331) <{position = array<i64: 0>}> : (!llvm.array<1 x ptr>, !llvm.ptr) -> !llvm.array<1 x ptr>
+      "llvm.return"(%20332) : (!llvm.array<1 x ptr>) -> ()
     }) : () -> ()
     "llvm.func"() <{CConv = #llvm.cconv<ccc>, function_type = !llvm.func<i32 (ptr, ...)>, linkage = #llvm.linkage<external>, sym_name = "printf", visibility_ = 0 : i64}> ({
     }) : () -> ()
@@ -282,524 +282,646 @@
     }) : () -> ()
     "llvm.func"() <{CConv = #llvm.cconv<ccc>, function_type = !llvm.func<void (ptr)>, linkage = #llvm.linkage<external>, sym_name = "coroutine_call", visibility_ = 0 : i64}> ({
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "bool_typ_hashtbl"}> ({
-      %20015 = "llvm.mlir.undef"() : () -> !llvm.array<2 x ptr>
-      %20016 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %20017 = "llvm.insertvalue"(%20015, %20016) <{position = array<i64: 0>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      %20018 = "placeholder.addressof"() {global_name = @bool_typ} : () -> !llvm.ptr
-      %20019 = "llvm.insertvalue"(%20017, %20018) <{position = array<i64: 1>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      "llvm.return"(%20019) : (!llvm.array<2 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "bool_typ_hashtbl"}> ({
+      %20321 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %20322 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %20323 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %20324 = "llvm.insertvalue"(%20322, %20323) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20325 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %20326 = "llvm.insertvalue"(%20324, %20325) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20327 = "llvm.insertvalue"(%20326, %20321) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20328 = "placeholder.addressof"() {global_name = @bool_typ} : () -> !llvm.ptr
+      %20329 = "llvm.insertvalue"(%20327, %20328) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      "llvm.return"(%20329) : (!llvm.array<4 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "bool_typ_offset_tbl"}> ({
-      %20011 = "llvm.mlir.undef"() : () -> !llvm.array<2 x i32>
-      %20012 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %20013 = "llvm.insertvalue"(%20011, %20012) <{position = array<i64: 0>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      %20014 = "llvm.insertvalue"(%20013, %20012) <{position = array<i64: 1>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      "llvm.return"(%20014) : (!llvm.array<2 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "bool_typ_offset_tbl"}> ({
+      %20314 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %20315 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
+      %20316 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %20317 = "llvm.insertvalue"(%20315, %20316) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20318 = "llvm.insertvalue"(%20317, %20316) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20319 = "llvm.insertvalue"(%20318, %20314) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20320 = "llvm.insertvalue"(%20319, %20316) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      "llvm.return"(%20320) : (!llvm.array<4 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "bool_typ"}> ({
-      %19989 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
-      %19990 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19991 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19992 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i64
-      %19993 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
-      %19994 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19995 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19996 = "llvm.mlir.constant"() <{value = 5801531371504802705 : i64}> : () -> i64
-      %19997 = "llvm.insertvalue"(%19995, %19996) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19998 = "llvm.insertvalue"(%19997, %19993) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19999 = "llvm.insertvalue"(%19998, %19992) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %20000 = "llvm.insertvalue"(%19994, %19999) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %20001 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %20002 = "llvm.insertvalue"(%19991, %20001) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %20003 = "placeholder.addressof"() {global_name = @bool_typ_hashtbl} : () -> !llvm.ptr
-      %20004 = "llvm.insertvalue"(%20002, %20003) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %20005 = "placeholder.addressof"() {global_name = @bool_typ_offset_tbl} : () -> !llvm.ptr
-      %20006 = "llvm.insertvalue"(%20004, %20005) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %20007 = "llvm.getelementptr"(%19990) <{elem_type = i1, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %20008 = "llvm.insertvalue"(%20006, %20007) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %20009 = "llvm.insertvalue"(%20000, %20008) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %20010 = "llvm.insertvalue"(%20009, %19989) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      "llvm.return"(%20010) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
+      %20292 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
+      %20293 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %20294 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %20295 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
+      %20296 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %20297 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20298 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %20299 = "llvm.mlir.constant"() <{value = 5801531371504802705 : i64}> : () -> i64
+      %20300 = "llvm.insertvalue"(%20298, %20299) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20301 = "llvm.insertvalue"(%20300, %20296) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20302 = "llvm.insertvalue"(%20301, %20295) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20303 = "llvm.insertvalue"(%20297, %20302) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20304 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %20305 = "llvm.insertvalue"(%20294, %20304) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20306 = "placeholder.addressof"() {global_name = @bool_typ_hashtbl} : () -> !llvm.ptr
+      %20307 = "llvm.insertvalue"(%20305, %20306) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20308 = "placeholder.addressof"() {global_name = @bool_typ_offset_tbl} : () -> !llvm.ptr
+      %20309 = "llvm.insertvalue"(%20307, %20308) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20310 = "llvm.getelementptr"(%20293) <{elem_type = i1, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20311 = "llvm.insertvalue"(%20309, %20310) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20312 = "llvm.insertvalue"(%20303, %20311) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20313 = "llvm.insertvalue"(%20312, %20292) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      "llvm.return"(%20313) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "i8_typ_hashtbl"}> ({
-      %19984 = "llvm.mlir.undef"() : () -> !llvm.array<2 x ptr>
-      %19985 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %19986 = "llvm.insertvalue"(%19984, %19985) <{position = array<i64: 0>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      %19987 = "placeholder.addressof"() {global_name = @i8_typ} : () -> !llvm.ptr
-      %19988 = "llvm.insertvalue"(%19986, %19987) <{position = array<i64: 1>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      "llvm.return"(%19988) : (!llvm.array<2 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "i8_typ_hashtbl"}> ({
+      %20283 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %20284 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %20285 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %20286 = "llvm.insertvalue"(%20284, %20285) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20287 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %20288 = "llvm.insertvalue"(%20286, %20287) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20289 = "llvm.insertvalue"(%20288, %20283) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20290 = "placeholder.addressof"() {global_name = @i8_typ} : () -> !llvm.ptr
+      %20291 = "llvm.insertvalue"(%20289, %20290) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      "llvm.return"(%20291) : (!llvm.array<4 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "i8_typ_offset_tbl"}> ({
-      %19980 = "llvm.mlir.undef"() : () -> !llvm.array<2 x i32>
-      %19981 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %19982 = "llvm.insertvalue"(%19980, %19981) <{position = array<i64: 0>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      %19983 = "llvm.insertvalue"(%19982, %19981) <{position = array<i64: 1>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      "llvm.return"(%19983) : (!llvm.array<2 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "i8_typ_offset_tbl"}> ({
+      %20276 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %20277 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
+      %20278 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %20279 = "llvm.insertvalue"(%20277, %20278) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20280 = "llvm.insertvalue"(%20279, %20278) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20281 = "llvm.insertvalue"(%20280, %20276) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20282 = "llvm.insertvalue"(%20281, %20278) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      "llvm.return"(%20282) : (!llvm.array<4 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "i8_typ"}> ({
-      %19958 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
-      %19959 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19960 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19961 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i64
-      %19962 = "llvm.mlir.constant"() <{value = 4611686018427388073 : i64}> : () -> i64
-      %19963 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19964 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19965 = "llvm.mlir.constant"() <{value = 2582149688529881115 : i64}> : () -> i64
-      %19966 = "llvm.insertvalue"(%19964, %19965) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19967 = "llvm.insertvalue"(%19966, %19962) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19968 = "llvm.insertvalue"(%19967, %19961) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19969 = "llvm.insertvalue"(%19963, %19968) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19970 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %19971 = "llvm.insertvalue"(%19960, %19970) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19972 = "placeholder.addressof"() {global_name = @i8_typ_hashtbl} : () -> !llvm.ptr
-      %19973 = "llvm.insertvalue"(%19971, %19972) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19974 = "placeholder.addressof"() {global_name = @i8_typ_offset_tbl} : () -> !llvm.ptr
-      %19975 = "llvm.insertvalue"(%19973, %19974) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19976 = "llvm.getelementptr"(%19959) <{elem_type = i8, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %19977 = "llvm.insertvalue"(%19975, %19976) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19978 = "llvm.insertvalue"(%19969, %19977) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19979 = "llvm.insertvalue"(%19978, %19958) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      "llvm.return"(%19979) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
+      %20254 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
+      %20255 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %20256 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %20257 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
+      %20258 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %20259 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20260 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %20261 = "llvm.mlir.constant"() <{value = 2582149688529881115 : i64}> : () -> i64
+      %20262 = "llvm.insertvalue"(%20260, %20261) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20263 = "llvm.insertvalue"(%20262, %20258) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20264 = "llvm.insertvalue"(%20263, %20257) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20265 = "llvm.insertvalue"(%20259, %20264) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20266 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %20267 = "llvm.insertvalue"(%20256, %20266) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20268 = "placeholder.addressof"() {global_name = @i8_typ_hashtbl} : () -> !llvm.ptr
+      %20269 = "llvm.insertvalue"(%20267, %20268) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20270 = "placeholder.addressof"() {global_name = @i8_typ_offset_tbl} : () -> !llvm.ptr
+      %20271 = "llvm.insertvalue"(%20269, %20270) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20272 = "llvm.getelementptr"(%20255) <{elem_type = i8, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20273 = "llvm.insertvalue"(%20271, %20272) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20274 = "llvm.insertvalue"(%20265, %20273) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20275 = "llvm.insertvalue"(%20274, %20254) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      "llvm.return"(%20275) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "i32_typ_hashtbl"}> ({
-      %19953 = "llvm.mlir.undef"() : () -> !llvm.array<2 x ptr>
-      %19954 = "placeholder.addressof"() {global_name = @i32_typ} : () -> !llvm.ptr
-      %19955 = "llvm.insertvalue"(%19953, %19954) <{position = array<i64: 0>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      %19956 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %19957 = "llvm.insertvalue"(%19955, %19956) <{position = array<i64: 1>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      "llvm.return"(%19957) : (!llvm.array<2 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "i32_typ_hashtbl"}> ({
+      %20245 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %20246 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %20247 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %20248 = "llvm.insertvalue"(%20246, %20247) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20249 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %20250 = "llvm.insertvalue"(%20248, %20249) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20251 = "placeholder.addressof"() {global_name = @i32_typ} : () -> !llvm.ptr
+      %20252 = "llvm.insertvalue"(%20250, %20251) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20253 = "llvm.insertvalue"(%20252, %20245) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      "llvm.return"(%20253) : (!llvm.array<4 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "i32_typ_offset_tbl"}> ({
-      %19949 = "llvm.mlir.undef"() : () -> !llvm.array<2 x i32>
-      %19950 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %19951 = "llvm.insertvalue"(%19949, %19950) <{position = array<i64: 0>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      %19952 = "llvm.insertvalue"(%19951, %19950) <{position = array<i64: 1>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      "llvm.return"(%19952) : (!llvm.array<2 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "i32_typ_offset_tbl"}> ({
+      %20238 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %20239 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
+      %20240 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %20241 = "llvm.insertvalue"(%20239, %20240) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20242 = "llvm.insertvalue"(%20241, %20240) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20243 = "llvm.insertvalue"(%20242, %20240) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20244 = "llvm.insertvalue"(%20243, %20238) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      "llvm.return"(%20244) : (!llvm.array<4 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "i32_typ"}> ({
-      %19927 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
-      %19928 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19929 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19930 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i64
-      %19931 = "llvm.mlir.constant"() <{value = 4611686018427388093 : i64}> : () -> i64
-      %19932 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19933 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19934 = "llvm.mlir.constant"() <{value = -2253724949814257982 : i64}> : () -> i64
-      %19935 = "llvm.insertvalue"(%19933, %19934) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19936 = "llvm.insertvalue"(%19935, %19931) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19937 = "llvm.insertvalue"(%19936, %19930) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19938 = "llvm.insertvalue"(%19932, %19937) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19939 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %19940 = "llvm.insertvalue"(%19929, %19939) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19941 = "placeholder.addressof"() {global_name = @i32_typ_hashtbl} : () -> !llvm.ptr
-      %19942 = "llvm.insertvalue"(%19940, %19941) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19943 = "placeholder.addressof"() {global_name = @i32_typ_offset_tbl} : () -> !llvm.ptr
-      %19944 = "llvm.insertvalue"(%19942, %19943) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19945 = "llvm.getelementptr"(%19928) <{elem_type = i32, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %19946 = "llvm.insertvalue"(%19944, %19945) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19947 = "llvm.insertvalue"(%19938, %19946) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19948 = "llvm.insertvalue"(%19947, %19927) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      "llvm.return"(%19948) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
+      %20216 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
+      %20217 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %20218 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %20219 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
+      %20220 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %20221 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20222 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %20223 = "llvm.mlir.constant"() <{value = -2253724949814257982 : i64}> : () -> i64
+      %20224 = "llvm.insertvalue"(%20222, %20223) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20225 = "llvm.insertvalue"(%20224, %20220) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20226 = "llvm.insertvalue"(%20225, %20219) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20227 = "llvm.insertvalue"(%20221, %20226) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20228 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %20229 = "llvm.insertvalue"(%20218, %20228) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20230 = "placeholder.addressof"() {global_name = @i32_typ_hashtbl} : () -> !llvm.ptr
+      %20231 = "llvm.insertvalue"(%20229, %20230) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20232 = "placeholder.addressof"() {global_name = @i32_typ_offset_tbl} : () -> !llvm.ptr
+      %20233 = "llvm.insertvalue"(%20231, %20232) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20234 = "llvm.getelementptr"(%20217) <{elem_type = i32, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20235 = "llvm.insertvalue"(%20233, %20234) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20236 = "llvm.insertvalue"(%20227, %20235) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20237 = "llvm.insertvalue"(%20236, %20216) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      "llvm.return"(%20237) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "i64_typ_hashtbl"}> ({
-      %19922 = "llvm.mlir.undef"() : () -> !llvm.array<2 x ptr>
-      %19923 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %19924 = "llvm.insertvalue"(%19922, %19923) <{position = array<i64: 0>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      %19925 = "placeholder.addressof"() {global_name = @i64_typ} : () -> !llvm.ptr
-      %19926 = "llvm.insertvalue"(%19924, %19925) <{position = array<i64: 1>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      "llvm.return"(%19926) : (!llvm.array<2 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "i64_typ_hashtbl"}> ({
+      %20207 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %20208 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %20209 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %20210 = "llvm.insertvalue"(%20208, %20209) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20211 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %20212 = "llvm.insertvalue"(%20210, %20211) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20213 = "placeholder.addressof"() {global_name = @i64_typ} : () -> !llvm.ptr
+      %20214 = "llvm.insertvalue"(%20212, %20213) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20215 = "llvm.insertvalue"(%20214, %20207) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      "llvm.return"(%20215) : (!llvm.array<4 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "i64_typ_offset_tbl"}> ({
-      %19918 = "llvm.mlir.undef"() : () -> !llvm.array<2 x i32>
-      %19919 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %19920 = "llvm.insertvalue"(%19918, %19919) <{position = array<i64: 0>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      %19921 = "llvm.insertvalue"(%19920, %19919) <{position = array<i64: 1>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      "llvm.return"(%19921) : (!llvm.array<2 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "i64_typ_offset_tbl"}> ({
+      %20200 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %20201 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
+      %20202 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %20203 = "llvm.insertvalue"(%20201, %20202) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20204 = "llvm.insertvalue"(%20203, %20202) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20205 = "llvm.insertvalue"(%20204, %20202) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20206 = "llvm.insertvalue"(%20205, %20200) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      "llvm.return"(%20206) : (!llvm.array<4 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "i64_typ"}> ({
-      %19896 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
-      %19897 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19898 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19899 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i64
-      %19900 = "llvm.mlir.constant"() <{value = 4611686018427388073 : i64}> : () -> i64
-      %19901 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19902 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19903 = "llvm.mlir.constant"() <{value = -7469797244461771922 : i64}> : () -> i64
-      %19904 = "llvm.insertvalue"(%19902, %19903) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19905 = "llvm.insertvalue"(%19904, %19900) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19906 = "llvm.insertvalue"(%19905, %19899) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19907 = "llvm.insertvalue"(%19901, %19906) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19908 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %19909 = "llvm.insertvalue"(%19898, %19908) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19910 = "placeholder.addressof"() {global_name = @i64_typ_hashtbl} : () -> !llvm.ptr
-      %19911 = "llvm.insertvalue"(%19909, %19910) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19912 = "placeholder.addressof"() {global_name = @i64_typ_offset_tbl} : () -> !llvm.ptr
-      %19913 = "llvm.insertvalue"(%19911, %19912) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19914 = "llvm.getelementptr"(%19897) <{elem_type = i64, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %19915 = "llvm.insertvalue"(%19913, %19914) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19916 = "llvm.insertvalue"(%19907, %19915) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19917 = "llvm.insertvalue"(%19916, %19896) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      "llvm.return"(%19917) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
+      %20178 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
+      %20179 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %20180 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %20181 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
+      %20182 = "llvm.mlir.constant"() <{value = 4611686018427388157 : i64}> : () -> i64
+      %20183 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20184 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %20185 = "llvm.mlir.constant"() <{value = -7469797244461771922 : i64}> : () -> i64
+      %20186 = "llvm.insertvalue"(%20184, %20185) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20187 = "llvm.insertvalue"(%20186, %20182) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20188 = "llvm.insertvalue"(%20187, %20181) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20189 = "llvm.insertvalue"(%20183, %20188) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20190 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %20191 = "llvm.insertvalue"(%20180, %20190) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20192 = "placeholder.addressof"() {global_name = @i64_typ_hashtbl} : () -> !llvm.ptr
+      %20193 = "llvm.insertvalue"(%20191, %20192) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20194 = "placeholder.addressof"() {global_name = @i64_typ_offset_tbl} : () -> !llvm.ptr
+      %20195 = "llvm.insertvalue"(%20193, %20194) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20196 = "llvm.getelementptr"(%20179) <{elem_type = i64, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20197 = "llvm.insertvalue"(%20195, %20196) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20198 = "llvm.insertvalue"(%20189, %20197) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20199 = "llvm.insertvalue"(%20198, %20178) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      "llvm.return"(%20199) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "i128_typ_hashtbl"}> ({
-      %19891 = "llvm.mlir.undef"() : () -> !llvm.array<2 x ptr>
-      %19892 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %19893 = "llvm.insertvalue"(%19891, %19892) <{position = array<i64: 0>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      %19894 = "placeholder.addressof"() {global_name = @i128_typ} : () -> !llvm.ptr
-      %19895 = "llvm.insertvalue"(%19893, %19894) <{position = array<i64: 1>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      "llvm.return"(%19895) : (!llvm.array<2 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "i128_typ_hashtbl"}> ({
+      %20169 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %20170 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %20171 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %20172 = "llvm.insertvalue"(%20170, %20171) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20173 = "placeholder.addressof"() {global_name = @i128_typ} : () -> !llvm.ptr
+      %20174 = "llvm.insertvalue"(%20172, %20173) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20175 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %20176 = "llvm.insertvalue"(%20174, %20175) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20177 = "llvm.insertvalue"(%20176, %20169) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      "llvm.return"(%20177) : (!llvm.array<4 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "i128_typ_offset_tbl"}> ({
-      %19887 = "llvm.mlir.undef"() : () -> !llvm.array<2 x i32>
-      %19888 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %19889 = "llvm.insertvalue"(%19887, %19888) <{position = array<i64: 0>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      %19890 = "llvm.insertvalue"(%19889, %19888) <{position = array<i64: 1>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      "llvm.return"(%19890) : (!llvm.array<2 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "i128_typ_offset_tbl"}> ({
+      %20162 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %20163 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
+      %20164 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %20165 = "llvm.insertvalue"(%20163, %20164) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20166 = "llvm.insertvalue"(%20165, %20164) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20167 = "llvm.insertvalue"(%20166, %20164) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20168 = "llvm.insertvalue"(%20167, %20162) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      "llvm.return"(%20168) : (!llvm.array<4 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "i128_typ"}> ({
-      %19865 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
-      %19866 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19867 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19868 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i64
-      %19869 = "llvm.mlir.constant"() <{value = 4611686018427388073 : i64}> : () -> i64
-      %19870 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19871 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19872 = "llvm.mlir.constant"() <{value = -8755878215469463641 : i64}> : () -> i64
-      %19873 = "llvm.insertvalue"(%19871, %19872) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19874 = "llvm.insertvalue"(%19873, %19869) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19875 = "llvm.insertvalue"(%19874, %19868) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19876 = "llvm.insertvalue"(%19870, %19875) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19877 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %19878 = "llvm.insertvalue"(%19867, %19877) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19879 = "placeholder.addressof"() {global_name = @i128_typ_hashtbl} : () -> !llvm.ptr
-      %19880 = "llvm.insertvalue"(%19878, %19879) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19881 = "placeholder.addressof"() {global_name = @i128_typ_offset_tbl} : () -> !llvm.ptr
-      %19882 = "llvm.insertvalue"(%19880, %19881) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19883 = "llvm.getelementptr"(%19866) <{elem_type = i128, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %19884 = "llvm.insertvalue"(%19882, %19883) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19885 = "llvm.insertvalue"(%19876, %19884) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19886 = "llvm.insertvalue"(%19885, %19865) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      "llvm.return"(%19886) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
+      %20140 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
+      %20141 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %20142 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %20143 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
+      %20144 = "llvm.mlir.constant"() <{value = 4611686018427388091 : i64}> : () -> i64
+      %20145 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20146 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %20147 = "llvm.mlir.constant"() <{value = -8755878215469463641 : i64}> : () -> i64
+      %20148 = "llvm.insertvalue"(%20146, %20147) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20149 = "llvm.insertvalue"(%20148, %20144) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20150 = "llvm.insertvalue"(%20149, %20143) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20151 = "llvm.insertvalue"(%20145, %20150) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20152 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %20153 = "llvm.insertvalue"(%20142, %20152) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20154 = "placeholder.addressof"() {global_name = @i128_typ_hashtbl} : () -> !llvm.ptr
+      %20155 = "llvm.insertvalue"(%20153, %20154) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20156 = "placeholder.addressof"() {global_name = @i128_typ_offset_tbl} : () -> !llvm.ptr
+      %20157 = "llvm.insertvalue"(%20155, %20156) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20158 = "llvm.getelementptr"(%20141) <{elem_type = i128, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20159 = "llvm.insertvalue"(%20157, %20158) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20160 = "llvm.insertvalue"(%20151, %20159) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20161 = "llvm.insertvalue"(%20160, %20140) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      "llvm.return"(%20161) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "f64_typ_hashtbl"}> ({
-      %19860 = "llvm.mlir.undef"() : () -> !llvm.array<2 x ptr>
-      %19861 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %19862 = "llvm.insertvalue"(%19860, %19861) <{position = array<i64: 0>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      %19863 = "placeholder.addressof"() {global_name = @f64_typ} : () -> !llvm.ptr
-      %19864 = "llvm.insertvalue"(%19862, %19863) <{position = array<i64: 1>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      "llvm.return"(%19864) : (!llvm.array<2 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "f64_typ_hashtbl"}> ({
+      %20131 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %20132 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %20133 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %20134 = "llvm.insertvalue"(%20132, %20133) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20135 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %20136 = "llvm.insertvalue"(%20134, %20135) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20137 = "llvm.insertvalue"(%20136, %20131) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20138 = "placeholder.addressof"() {global_name = @f64_typ} : () -> !llvm.ptr
+      %20139 = "llvm.insertvalue"(%20137, %20138) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      "llvm.return"(%20139) : (!llvm.array<4 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "f64_typ_offset_tbl"}> ({
-      %19856 = "llvm.mlir.undef"() : () -> !llvm.array<2 x i32>
-      %19857 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %19858 = "llvm.insertvalue"(%19856, %19857) <{position = array<i64: 0>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      %19859 = "llvm.insertvalue"(%19858, %19857) <{position = array<i64: 1>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      "llvm.return"(%19859) : (!llvm.array<2 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "f64_typ_offset_tbl"}> ({
+      %20124 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %20125 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
+      %20126 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %20127 = "llvm.insertvalue"(%20125, %20126) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20128 = "llvm.insertvalue"(%20127, %20126) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20129 = "llvm.insertvalue"(%20128, %20124) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20130 = "llvm.insertvalue"(%20129, %20126) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      "llvm.return"(%20130) : (!llvm.array<4 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "f64_typ"}> ({
-      %19834 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
-      %19835 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19836 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19837 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i64
-      %19838 = "llvm.mlir.constant"() <{value = 4611686018427388073 : i64}> : () -> i64
-      %19839 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19840 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19841 = "llvm.mlir.constant"() <{value = -757315540097298781 : i64}> : () -> i64
-      %19842 = "llvm.insertvalue"(%19840, %19841) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19843 = "llvm.insertvalue"(%19842, %19838) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19844 = "llvm.insertvalue"(%19843, %19837) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19845 = "llvm.insertvalue"(%19839, %19844) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19846 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %19847 = "llvm.insertvalue"(%19836, %19846) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19848 = "placeholder.addressof"() {global_name = @f64_typ_hashtbl} : () -> !llvm.ptr
-      %19849 = "llvm.insertvalue"(%19847, %19848) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19850 = "placeholder.addressof"() {global_name = @f64_typ_offset_tbl} : () -> !llvm.ptr
-      %19851 = "llvm.insertvalue"(%19849, %19850) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19852 = "llvm.getelementptr"(%19835) <{elem_type = f64, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %19853 = "llvm.insertvalue"(%19851, %19852) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19854 = "llvm.insertvalue"(%19845, %19853) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19855 = "llvm.insertvalue"(%19854, %19834) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      "llvm.return"(%19855) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
+      %20102 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
+      %20103 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %20104 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %20105 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
+      %20106 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %20107 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20108 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %20109 = "llvm.mlir.constant"() <{value = -757315540097298781 : i64}> : () -> i64
+      %20110 = "llvm.insertvalue"(%20108, %20109) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20111 = "llvm.insertvalue"(%20110, %20106) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20112 = "llvm.insertvalue"(%20111, %20105) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20113 = "llvm.insertvalue"(%20107, %20112) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20114 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %20115 = "llvm.insertvalue"(%20104, %20114) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20116 = "placeholder.addressof"() {global_name = @f64_typ_hashtbl} : () -> !llvm.ptr
+      %20117 = "llvm.insertvalue"(%20115, %20116) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20118 = "placeholder.addressof"() {global_name = @f64_typ_offset_tbl} : () -> !llvm.ptr
+      %20119 = "llvm.insertvalue"(%20117, %20118) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20120 = "llvm.getelementptr"(%20103) <{elem_type = f64, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20121 = "llvm.insertvalue"(%20119, %20120) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20122 = "llvm.insertvalue"(%20113, %20121) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20123 = "llvm.insertvalue"(%20122, %20102) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      "llvm.return"(%20123) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "nil_typ_hashtbl"}> ({
-      %19830 = "llvm.mlir.undef"() : () -> !llvm.array<2 x ptr>
-      %19831 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19832 = "llvm.insertvalue"(%19830, %19831) <{position = array<i64: 0>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      %19833 = "llvm.insertvalue"(%19832, %19831) <{position = array<i64: 1>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      "llvm.return"(%19833) : (!llvm.array<2 x ptr>) -> ()
+      %20097 = "llvm.mlir.undef"() : () -> !llvm.array<2 x ptr>
+      %20098 = "placeholder.addressof"() {global_name = @nil_typ} : () -> !llvm.ptr
+      %20099 = "llvm.insertvalue"(%20097, %20098) <{position = array<i64: 0>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
+      %20100 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %20101 = "llvm.insertvalue"(%20099, %20100) <{position = array<i64: 1>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
+      "llvm.return"(%20101) : (!llvm.array<2 x ptr>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "nil_typ_offset_tbl"}> ({
-      %19826 = "llvm.mlir.undef"() : () -> !llvm.array<2 x i32>
-      %19827 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
-      %19828 = "llvm.insertvalue"(%19826, %19827) <{position = array<i64: 0>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      %19829 = "llvm.insertvalue"(%19828, %19827) <{position = array<i64: 1>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      "llvm.return"(%19829) : (!llvm.array<2 x i32>) -> ()
+      %20093 = "llvm.mlir.undef"() : () -> !llvm.array<2 x i32>
+      %20094 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %20095 = "llvm.insertvalue"(%20093, %20094) <{position = array<i64: 0>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
+      %20096 = "llvm.insertvalue"(%20095, %20094) <{position = array<i64: 1>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
+      "llvm.return"(%20096) : (!llvm.array<2 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "nil_typ"}> ({
-      %19804 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
-      %19805 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19806 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19807 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i64
-      %19808 = "llvm.mlir.constant"() <{value = 4611686018427388073 : i64}> : () -> i64
-      %19809 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19810 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19811 = "llvm.mlir.constant"() <{value = -5126806859456325683 : i64}> : () -> i64
-      %19812 = "llvm.insertvalue"(%19810, %19811) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19813 = "llvm.insertvalue"(%19812, %19808) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19814 = "llvm.insertvalue"(%19813, %19807) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19815 = "llvm.insertvalue"(%19809, %19814) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19816 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %19817 = "llvm.insertvalue"(%19806, %19816) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19818 = "placeholder.addressof"() {global_name = @nil_typ_hashtbl} : () -> !llvm.ptr
-      %19819 = "llvm.insertvalue"(%19817, %19818) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19820 = "placeholder.addressof"() {global_name = @nil_typ_offset_tbl} : () -> !llvm.ptr
-      %19821 = "llvm.insertvalue"(%19819, %19820) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19822 = "llvm.getelementptr"(%19805) <{elem_type = !llvm.array<0 x i8>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %19823 = "llvm.insertvalue"(%19821, %19822) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19824 = "llvm.insertvalue"(%19815, %19823) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19825 = "llvm.insertvalue"(%19824, %19804) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      "llvm.return"(%19825) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
+      %20071 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
+      %20072 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %20073 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %20074 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i64
+      %20075 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %20076 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20077 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %20078 = "llvm.mlir.constant"() <{value = -5126806859456325683 : i64}> : () -> i64
+      %20079 = "llvm.insertvalue"(%20077, %20078) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20080 = "llvm.insertvalue"(%20079, %20075) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20081 = "llvm.insertvalue"(%20080, %20074) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20082 = "llvm.insertvalue"(%20076, %20081) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20083 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %20084 = "llvm.insertvalue"(%20073, %20083) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20085 = "placeholder.addressof"() {global_name = @nil_typ_hashtbl} : () -> !llvm.ptr
+      %20086 = "llvm.insertvalue"(%20084, %20085) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20087 = "placeholder.addressof"() {global_name = @nil_typ_offset_tbl} : () -> !llvm.ptr
+      %20088 = "llvm.insertvalue"(%20086, %20087) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20089 = "llvm.getelementptr"(%20072) <{elem_type = !llvm.array<0 x i8>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20090 = "llvm.insertvalue"(%20088, %20089) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20091 = "llvm.insertvalue"(%20082, %20090) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20092 = "llvm.insertvalue"(%20091, %20071) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      "llvm.return"(%20092) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "nothing_typ_hashtbl"}> ({
-      %19799 = "llvm.mlir.undef"() : () -> !llvm.array<2 x ptr>
-      %19800 = "placeholder.addressof"() {global_name = @nothing_typ} : () -> !llvm.ptr
-      %19801 = "llvm.insertvalue"(%19799, %19800) <{position = array<i64: 0>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      %19802 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %19803 = "llvm.insertvalue"(%19801, %19802) <{position = array<i64: 1>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      "llvm.return"(%19803) : (!llvm.array<2 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<1 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "any_typ_hashtbl"}> ({
+      %20068 = "llvm.mlir.undef"() : () -> !llvm.array<1 x ptr>
+      %20069 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %20070 = "llvm.insertvalue"(%20068, %20069) <{position = array<i64: 0>}> : (!llvm.array<1 x ptr>, !llvm.ptr) -> !llvm.array<1 x ptr>
+      "llvm.return"(%20070) : (!llvm.array<1 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "nothing_typ_offset_tbl"}> ({
-      %19795 = "llvm.mlir.undef"() : () -> !llvm.array<2 x i32>
-      %19796 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %19797 = "llvm.insertvalue"(%19795, %19796) <{position = array<i64: 0>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      %19798 = "llvm.insertvalue"(%19797, %19796) <{position = array<i64: 1>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      "llvm.return"(%19798) : (!llvm.array<2 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<1 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "any_typ_offset_tbl"}> ({
+      %20065 = "llvm.mlir.undef"() : () -> !llvm.array<1 x i32>
+      %20066 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %20067 = "llvm.insertvalue"(%20065, %20066) <{position = array<i64: 0>}> : (!llvm.array<1 x i32>, i32) -> !llvm.array<1 x i32>
+      "llvm.return"(%20067) : (!llvm.array<1 x i32>) -> ()
+    }) : () -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "any_typ"}> ({
+      %20043 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
+      %20044 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %20045 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %20046 = "llvm.mlir.constant"() <{value = 0 : i64}> : () -> i64
+      %20047 = "llvm.mlir.constant"() <{value = 4611686018427388073 : i64}> : () -> i64
+      %20048 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20049 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %20050 = "llvm.mlir.constant"() <{value = 3084208142191802847 : i64}> : () -> i64
+      %20051 = "llvm.insertvalue"(%20049, %20050) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20052 = "llvm.insertvalue"(%20051, %20047) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20053 = "llvm.insertvalue"(%20052, %20046) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20054 = "llvm.insertvalue"(%20048, %20053) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20055 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %20056 = "llvm.insertvalue"(%20045, %20055) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20057 = "placeholder.addressof"() {global_name = @any_typ_hashtbl} : () -> !llvm.ptr
+      %20058 = "llvm.insertvalue"(%20056, %20057) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20059 = "placeholder.addressof"() {global_name = @any_typ_offset_tbl} : () -> !llvm.ptr
+      %20060 = "llvm.insertvalue"(%20058, %20059) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20061 = "llvm.getelementptr"(%20044) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20062 = "llvm.insertvalue"(%20060, %20061) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20063 = "llvm.insertvalue"(%20054, %20062) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20064 = "llvm.insertvalue"(%20063, %20043) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      "llvm.return"(%20064) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
+    }) : () -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "nothing_typ_hashtbl"}> ({
+      %20034 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %20035 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %20036 = "llvm.insertvalue"(%20034, %20035) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20037 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %20038 = "llvm.insertvalue"(%20036, %20037) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20039 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %20040 = "llvm.insertvalue"(%20038, %20039) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20041 = "placeholder.addressof"() {global_name = @nothing_typ} : () -> !llvm.ptr
+      %20042 = "llvm.insertvalue"(%20040, %20041) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      "llvm.return"(%20042) : (!llvm.array<4 x ptr>) -> ()
+    }) : () -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "nothing_typ_offset_tbl"}> ({
+      %20027 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %20028 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
+      %20029 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %20030 = "llvm.insertvalue"(%20028, %20029) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20031 = "llvm.insertvalue"(%20030, %20027) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20032 = "llvm.insertvalue"(%20031, %20027) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %20033 = "llvm.insertvalue"(%20032, %20027) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      "llvm.return"(%20033) : (!llvm.array<4 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "nothing_typ"}> ({
-      %19773 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
-      %19774 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19775 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19776 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i64
-      %19777 = "llvm.mlir.constant"() <{value = 4611686018427388093 : i64}> : () -> i64
-      %19778 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19779 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19780 = "llvm.mlir.constant"() <{value = -3334456163433371378 : i64}> : () -> i64
-      %19781 = "llvm.insertvalue"(%19779, %19780) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19782 = "llvm.insertvalue"(%19781, %19777) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19783 = "llvm.insertvalue"(%19782, %19776) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19784 = "llvm.insertvalue"(%19778, %19783) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19785 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %19786 = "llvm.insertvalue"(%19775, %19785) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19787 = "placeholder.addressof"() {global_name = @nothing_typ_hashtbl} : () -> !llvm.ptr
-      %19788 = "llvm.insertvalue"(%19786, %19787) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19789 = "placeholder.addressof"() {global_name = @nothing_typ_offset_tbl} : () -> !llvm.ptr
-      %19790 = "llvm.insertvalue"(%19788, %19789) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19791 = "llvm.getelementptr"(%19774) <{elem_type = !llvm.array<0 x i8>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %19792 = "llvm.insertvalue"(%19790, %19791) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19793 = "llvm.insertvalue"(%19784, %19792) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19794 = "llvm.insertvalue"(%19793, %19773) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      "llvm.return"(%19794) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
+      %20005 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
+      %20006 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %20007 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %20008 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
+      %20009 = "llvm.mlir.constant"() <{value = 4611686018427388097 : i64}> : () -> i64
+      %20010 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20011 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %20012 = "llvm.mlir.constant"() <{value = -3334456163433371378 : i64}> : () -> i64
+      %20013 = "llvm.insertvalue"(%20011, %20012) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20014 = "llvm.insertvalue"(%20013, %20009) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20015 = "llvm.insertvalue"(%20014, %20008) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %20016 = "llvm.insertvalue"(%20010, %20015) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20017 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %20018 = "llvm.insertvalue"(%20007, %20017) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20019 = "placeholder.addressof"() {global_name = @nothing_typ_hashtbl} : () -> !llvm.ptr
+      %20020 = "llvm.insertvalue"(%20018, %20019) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20021 = "placeholder.addressof"() {global_name = @nothing_typ_offset_tbl} : () -> !llvm.ptr
+      %20022 = "llvm.insertvalue"(%20020, %20021) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20023 = "llvm.getelementptr"(%20006) <{elem_type = !llvm.array<0 x i8>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %20024 = "llvm.insertvalue"(%20022, %20023) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20025 = "llvm.insertvalue"(%20016, %20024) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %20026 = "llvm.insertvalue"(%20025, %20005) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      "llvm.return"(%20026) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "coroutine_typ_hashtbl"}> ({
-      %19768 = "llvm.mlir.undef"() : () -> !llvm.array<2 x ptr>
-      %19769 = "placeholder.addressof"() {global_name = @coroutine_typ} : () -> !llvm.ptr
-      %19770 = "llvm.insertvalue"(%19768, %19769) <{position = array<i64: 0>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      %19771 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %19772 = "llvm.insertvalue"(%19770, %19771) <{position = array<i64: 1>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      "llvm.return"(%19772) : (!llvm.array<2 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "coroutine_typ_hashtbl"}> ({
+      %19996 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19997 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19998 = "llvm.insertvalue"(%19996, %19997) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19999 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %20000 = "llvm.insertvalue"(%19998, %19999) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20001 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %20002 = "llvm.insertvalue"(%20000, %20001) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %20003 = "placeholder.addressof"() {global_name = @coroutine_typ} : () -> !llvm.ptr
+      %20004 = "llvm.insertvalue"(%20002, %20003) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      "llvm.return"(%20004) : (!llvm.array<4 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "coroutine_typ_offset_tbl"}> ({
-      %19764 = "llvm.mlir.undef"() : () -> !llvm.array<2 x i32>
-      %19765 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %19766 = "llvm.insertvalue"(%19764, %19765) <{position = array<i64: 0>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      %19767 = "llvm.insertvalue"(%19766, %19765) <{position = array<i64: 1>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      "llvm.return"(%19767) : (!llvm.array<2 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "coroutine_typ_offset_tbl"}> ({
+      %19989 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %19990 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
+      %19991 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %19992 = "llvm.insertvalue"(%19990, %19991) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19993 = "llvm.insertvalue"(%19992, %19989) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19994 = "llvm.insertvalue"(%19993, %19989) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19995 = "llvm.insertvalue"(%19994, %19989) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      "llvm.return"(%19995) : (!llvm.array<4 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "coroutine_typ"}> ({
-      %19742 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
-      %19743 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19744 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19745 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i64
-      %19746 = "llvm.mlir.constant"() <{value = 4611686018427388093 : i64}> : () -> i64
-      %19747 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19748 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19749 = "llvm.mlir.constant"() <{value = 7194361020959218064 : i64}> : () -> i64
-      %19750 = "llvm.insertvalue"(%19748, %19749) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19751 = "llvm.insertvalue"(%19750, %19746) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19752 = "llvm.insertvalue"(%19751, %19745) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19753 = "llvm.insertvalue"(%19747, %19752) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19754 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %19755 = "llvm.insertvalue"(%19744, %19754) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19756 = "placeholder.addressof"() {global_name = @coroutine_typ_hashtbl} : () -> !llvm.ptr
-      %19757 = "llvm.insertvalue"(%19755, %19756) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19758 = "placeholder.addressof"() {global_name = @coroutine_typ_offset_tbl} : () -> !llvm.ptr
-      %19759 = "llvm.insertvalue"(%19757, %19758) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19760 = "llvm.getelementptr"(%19743) <{elem_type = !llvm.struct<(ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %19761 = "llvm.insertvalue"(%19759, %19760) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19762 = "llvm.insertvalue"(%19753, %19761) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19763 = "llvm.insertvalue"(%19762, %19742) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      "llvm.return"(%19763) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
+      %19967 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
+      %19968 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19969 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19970 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
+      %19971 = "llvm.mlir.constant"() <{value = 4611686018427388097 : i64}> : () -> i64
+      %19972 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19973 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %19974 = "llvm.mlir.constant"() <{value = 7194361020959218064 : i64}> : () -> i64
+      %19975 = "llvm.insertvalue"(%19973, %19974) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19976 = "llvm.insertvalue"(%19975, %19971) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19977 = "llvm.insertvalue"(%19976, %19970) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19978 = "llvm.insertvalue"(%19972, %19977) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19979 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %19980 = "llvm.insertvalue"(%19969, %19979) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19981 = "placeholder.addressof"() {global_name = @coroutine_typ_hashtbl} : () -> !llvm.ptr
+      %19982 = "llvm.insertvalue"(%19980, %19981) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19983 = "placeholder.addressof"() {global_name = @coroutine_typ_offset_tbl} : () -> !llvm.ptr
+      %19984 = "llvm.insertvalue"(%19982, %19983) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19985 = "llvm.getelementptr"(%19968) <{elem_type = !llvm.struct<(ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %19986 = "llvm.insertvalue"(%19984, %19985) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19987 = "llvm.insertvalue"(%19978, %19986) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19988 = "llvm.insertvalue"(%19987, %19967) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      "llvm.return"(%19988) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "function_typ_hashtbl"}> ({
-      %19737 = "llvm.mlir.undef"() : () -> !llvm.array<2 x ptr>
-      %19738 = "placeholder.addressof"() {global_name = @function_typ} : () -> !llvm.ptr
-      %19739 = "llvm.insertvalue"(%19737, %19738) <{position = array<i64: 0>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      %19740 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %19741 = "llvm.insertvalue"(%19739, %19740) <{position = array<i64: 1>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      "llvm.return"(%19741) : (!llvm.array<2 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "function_typ_hashtbl"}> ({
+      %19958 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19959 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19960 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %19961 = "llvm.insertvalue"(%19959, %19960) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19962 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %19963 = "llvm.insertvalue"(%19961, %19962) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19964 = "placeholder.addressof"() {global_name = @function_typ} : () -> !llvm.ptr
+      %19965 = "llvm.insertvalue"(%19963, %19964) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19966 = "llvm.insertvalue"(%19965, %19958) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      "llvm.return"(%19966) : (!llvm.array<4 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "function_typ_offset_tbl"}> ({
-      %19733 = "llvm.mlir.undef"() : () -> !llvm.array<2 x i32>
-      %19734 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %19735 = "llvm.insertvalue"(%19733, %19734) <{position = array<i64: 0>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      %19736 = "llvm.insertvalue"(%19735, %19734) <{position = array<i64: 1>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      "llvm.return"(%19736) : (!llvm.array<2 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "function_typ_offset_tbl"}> ({
+      %19951 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %19952 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
+      %19953 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %19954 = "llvm.insertvalue"(%19952, %19953) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19955 = "llvm.insertvalue"(%19954, %19953) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19956 = "llvm.insertvalue"(%19955, %19953) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19957 = "llvm.insertvalue"(%19956, %19951) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      "llvm.return"(%19957) : (!llvm.array<4 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "function_typ"}> ({
-      %19711 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
-      %19712 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19713 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19714 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i64
-      %19715 = "llvm.mlir.constant"() <{value = 4611686018427388157 : i64}> : () -> i64
-      %19716 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19717 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19718 = "llvm.mlir.constant"() <{value = 7927147055246173914 : i64}> : () -> i64
-      %19719 = "llvm.insertvalue"(%19717, %19718) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19720 = "llvm.insertvalue"(%19719, %19715) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19721 = "llvm.insertvalue"(%19720, %19714) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19722 = "llvm.insertvalue"(%19716, %19721) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19723 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %19724 = "llvm.insertvalue"(%19713, %19723) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19725 = "placeholder.addressof"() {global_name = @function_typ_hashtbl} : () -> !llvm.ptr
-      %19726 = "llvm.insertvalue"(%19724, %19725) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19727 = "placeholder.addressof"() {global_name = @function_typ_offset_tbl} : () -> !llvm.ptr
-      %19728 = "llvm.insertvalue"(%19726, %19727) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19729 = "llvm.getelementptr"(%19712) <{elem_type = !llvm.struct<(ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %19730 = "llvm.insertvalue"(%19728, %19729) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19731 = "llvm.insertvalue"(%19722, %19730) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19732 = "llvm.insertvalue"(%19731, %19711) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      "llvm.return"(%19732) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
+      %19929 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
+      %19930 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19931 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19932 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
+      %19933 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %19934 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19935 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %19936 = "llvm.mlir.constant"() <{value = 7927147055246173914 : i64}> : () -> i64
+      %19937 = "llvm.insertvalue"(%19935, %19936) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19938 = "llvm.insertvalue"(%19937, %19933) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19939 = "llvm.insertvalue"(%19938, %19932) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19940 = "llvm.insertvalue"(%19934, %19939) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19941 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %19942 = "llvm.insertvalue"(%19931, %19941) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19943 = "placeholder.addressof"() {global_name = @function_typ_hashtbl} : () -> !llvm.ptr
+      %19944 = "llvm.insertvalue"(%19942, %19943) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19945 = "placeholder.addressof"() {global_name = @function_typ_offset_tbl} : () -> !llvm.ptr
+      %19946 = "llvm.insertvalue"(%19944, %19945) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19947 = "llvm.getelementptr"(%19930) <{elem_type = !llvm.struct<(ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %19948 = "llvm.insertvalue"(%19946, %19947) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19949 = "llvm.insertvalue"(%19940, %19948) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19950 = "llvm.insertvalue"(%19949, %19929) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      "llvm.return"(%19950) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "buffer_typ_hashtbl"}> ({
-      %19706 = "llvm.mlir.undef"() : () -> !llvm.array<2 x ptr>
-      %19707 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %19708 = "llvm.insertvalue"(%19706, %19707) <{position = array<i64: 0>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      %19709 = "placeholder.addressof"() {global_name = @buffer_typ} : () -> !llvm.ptr
-      %19710 = "llvm.insertvalue"(%19708, %19709) <{position = array<i64: 1>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      "llvm.return"(%19710) : (!llvm.array<2 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "buffer_typ_hashtbl"}> ({
+      %19920 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19921 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19922 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %19923 = "llvm.insertvalue"(%19921, %19922) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19924 = "placeholder.addressof"() {global_name = @buffer_typ} : () -> !llvm.ptr
+      %19925 = "llvm.insertvalue"(%19923, %19924) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19926 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %19927 = "llvm.insertvalue"(%19925, %19926) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19928 = "llvm.insertvalue"(%19927, %19920) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      "llvm.return"(%19928) : (!llvm.array<4 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "buffer_typ_offset_tbl"}> ({
-      %19702 = "llvm.mlir.undef"() : () -> !llvm.array<2 x i32>
-      %19703 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %19704 = "llvm.insertvalue"(%19702, %19703) <{position = array<i64: 0>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      %19705 = "llvm.insertvalue"(%19704, %19703) <{position = array<i64: 1>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      "llvm.return"(%19705) : (!llvm.array<2 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "buffer_typ_offset_tbl"}> ({
+      %19913 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %19914 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
+      %19915 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %19916 = "llvm.insertvalue"(%19914, %19915) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19917 = "llvm.insertvalue"(%19916, %19915) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19918 = "llvm.insertvalue"(%19917, %19915) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19919 = "llvm.insertvalue"(%19918, %19913) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      "llvm.return"(%19919) : (!llvm.array<4 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "buffer_typ"}> ({
-      %19680 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
-      %19681 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19682 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19683 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i64
-      %19684 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
-      %19685 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19686 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19687 = "llvm.mlir.constant"() <{value = -318192747195410237 : i64}> : () -> i64
-      %19688 = "llvm.insertvalue"(%19686, %19687) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19689 = "llvm.insertvalue"(%19688, %19684) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19690 = "llvm.insertvalue"(%19689, %19683) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19691 = "llvm.insertvalue"(%19685, %19690) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19692 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %19693 = "llvm.insertvalue"(%19682, %19692) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19694 = "placeholder.addressof"() {global_name = @buffer_typ_hashtbl} : () -> !llvm.ptr
-      %19695 = "llvm.insertvalue"(%19693, %19694) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19696 = "placeholder.addressof"() {global_name = @buffer_typ_offset_tbl} : () -> !llvm.ptr
-      %19697 = "llvm.insertvalue"(%19695, %19696) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19698 = "llvm.getelementptr"(%19681) <{elem_type = !llvm.struct<(ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %19699 = "llvm.insertvalue"(%19697, %19698) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19700 = "llvm.insertvalue"(%19691, %19699) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19701 = "llvm.insertvalue"(%19700, %19680) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      "llvm.return"(%19701) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
+      %19891 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
+      %19892 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19893 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19894 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
+      %19895 = "llvm.mlir.constant"() <{value = 4611686018427388091 : i64}> : () -> i64
+      %19896 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19897 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %19898 = "llvm.mlir.constant"() <{value = -318192747195410237 : i64}> : () -> i64
+      %19899 = "llvm.insertvalue"(%19897, %19898) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19900 = "llvm.insertvalue"(%19899, %19895) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19901 = "llvm.insertvalue"(%19900, %19894) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19902 = "llvm.insertvalue"(%19896, %19901) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19903 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %19904 = "llvm.insertvalue"(%19893, %19903) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19905 = "placeholder.addressof"() {global_name = @buffer_typ_hashtbl} : () -> !llvm.ptr
+      %19906 = "llvm.insertvalue"(%19904, %19905) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19907 = "placeholder.addressof"() {global_name = @buffer_typ_offset_tbl} : () -> !llvm.ptr
+      %19908 = "llvm.insertvalue"(%19906, %19907) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19909 = "llvm.getelementptr"(%19892) <{elem_type = !llvm.struct<(ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %19910 = "llvm.insertvalue"(%19908, %19909) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19911 = "llvm.insertvalue"(%19902, %19910) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19912 = "llvm.insertvalue"(%19911, %19891) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      "llvm.return"(%19912) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "tuple_typ_hashtbl"}> ({
-      %19675 = "llvm.mlir.undef"() : () -> !llvm.array<2 x ptr>
-      %19676 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %19677 = "llvm.insertvalue"(%19675, %19676) <{position = array<i64: 0>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      %19678 = "placeholder.addressof"() {global_name = @tuple_typ} : () -> !llvm.ptr
-      %19679 = "llvm.insertvalue"(%19677, %19678) <{position = array<i64: 1>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      "llvm.return"(%19679) : (!llvm.array<2 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "tuple_typ_hashtbl"}> ({
+      %19882 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19883 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19884 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %19885 = "llvm.insertvalue"(%19883, %19884) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19886 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %19887 = "llvm.insertvalue"(%19885, %19886) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19888 = "llvm.insertvalue"(%19887, %19882) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19889 = "placeholder.addressof"() {global_name = @tuple_typ} : () -> !llvm.ptr
+      %19890 = "llvm.insertvalue"(%19888, %19889) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      "llvm.return"(%19890) : (!llvm.array<4 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "tuple_typ_offset_tbl"}> ({
-      %19671 = "llvm.mlir.undef"() : () -> !llvm.array<2 x i32>
-      %19672 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %19673 = "llvm.insertvalue"(%19671, %19672) <{position = array<i64: 0>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      %19674 = "llvm.insertvalue"(%19673, %19672) <{position = array<i64: 1>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      "llvm.return"(%19674) : (!llvm.array<2 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "tuple_typ_offset_tbl"}> ({
+      %19875 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %19876 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
+      %19877 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %19878 = "llvm.insertvalue"(%19876, %19877) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19879 = "llvm.insertvalue"(%19878, %19877) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19880 = "llvm.insertvalue"(%19879, %19875) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19881 = "llvm.insertvalue"(%19880, %19877) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      "llvm.return"(%19881) : (!llvm.array<4 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "tuple_typ"}> ({
-      %19649 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
-      %19650 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19651 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19652 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i64
-      %19653 = "llvm.mlir.constant"() <{value = 4611686018427388073 : i64}> : () -> i64
-      %19654 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19655 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19656 = "llvm.mlir.constant"() <{value = 3422634369532007740 : i64}> : () -> i64
-      %19657 = "llvm.insertvalue"(%19655, %19656) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19658 = "llvm.insertvalue"(%19657, %19653) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19659 = "llvm.insertvalue"(%19658, %19652) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19660 = "llvm.insertvalue"(%19654, %19659) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19661 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %19662 = "llvm.insertvalue"(%19651, %19661) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19663 = "placeholder.addressof"() {global_name = @tuple_typ_hashtbl} : () -> !llvm.ptr
-      %19664 = "llvm.insertvalue"(%19662, %19663) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19665 = "placeholder.addressof"() {global_name = @tuple_typ_offset_tbl} : () -> !llvm.ptr
-      %19666 = "llvm.insertvalue"(%19664, %19665) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19667 = "llvm.getelementptr"(%19650) <{elem_type = !llvm.struct<()>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %19668 = "llvm.insertvalue"(%19666, %19667) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19669 = "llvm.insertvalue"(%19660, %19668) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19670 = "llvm.insertvalue"(%19669, %19649) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      "llvm.return"(%19670) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
+      %19853 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
+      %19854 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19855 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19856 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
+      %19857 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %19858 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19859 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %19860 = "llvm.mlir.constant"() <{value = 3422634369532007740 : i64}> : () -> i64
+      %19861 = "llvm.insertvalue"(%19859, %19860) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19862 = "llvm.insertvalue"(%19861, %19857) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19863 = "llvm.insertvalue"(%19862, %19856) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19864 = "llvm.insertvalue"(%19858, %19863) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19865 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %19866 = "llvm.insertvalue"(%19855, %19865) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19867 = "placeholder.addressof"() {global_name = @tuple_typ_hashtbl} : () -> !llvm.ptr
+      %19868 = "llvm.insertvalue"(%19866, %19867) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19869 = "placeholder.addressof"() {global_name = @tuple_typ_offset_tbl} : () -> !llvm.ptr
+      %19870 = "llvm.insertvalue"(%19868, %19869) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19871 = "llvm.getelementptr"(%19854) <{elem_type = !llvm.struct<()>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %19872 = "llvm.insertvalue"(%19870, %19871) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19873 = "llvm.insertvalue"(%19864, %19872) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19874 = "llvm.insertvalue"(%19873, %19853) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      "llvm.return"(%19874) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "union_typ_hashtbl"}> ({
-      %19644 = "llvm.mlir.undef"() : () -> !llvm.array<2 x ptr>
-      %19645 = "placeholder.addressof"() {global_name = @union_typ} : () -> !llvm.ptr
-      %19646 = "llvm.insertvalue"(%19644, %19645) <{position = array<i64: 0>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      %19647 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %19648 = "llvm.insertvalue"(%19646, %19647) <{position = array<i64: 1>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      "llvm.return"(%19648) : (!llvm.array<2 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "union_typ_hashtbl"}> ({
+      %19844 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19845 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19846 = "placeholder.addressof"() {global_name = @union_typ} : () -> !llvm.ptr
+      %19847 = "llvm.insertvalue"(%19845, %19846) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19848 = "llvm.insertvalue"(%19847, %19844) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19849 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %19850 = "llvm.insertvalue"(%19848, %19849) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19851 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %19852 = "llvm.insertvalue"(%19850, %19851) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      "llvm.return"(%19852) : (!llvm.array<4 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "union_typ_offset_tbl"}> ({
-      %19640 = "llvm.mlir.undef"() : () -> !llvm.array<2 x i32>
-      %19641 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %19642 = "llvm.insertvalue"(%19640, %19641) <{position = array<i64: 0>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      %19643 = "llvm.insertvalue"(%19642, %19641) <{position = array<i64: 1>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      "llvm.return"(%19643) : (!llvm.array<2 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "union_typ_offset_tbl"}> ({
+      %19837 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %19838 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
+      %19839 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %19840 = "llvm.insertvalue"(%19838, %19839) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19841 = "llvm.insertvalue"(%19840, %19837) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19842 = "llvm.insertvalue"(%19841, %19839) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19843 = "llvm.insertvalue"(%19842, %19839) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      "llvm.return"(%19843) : (!llvm.array<4 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "union_typ"}> ({
-      %19618 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
-      %19619 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19620 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19621 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i64
-      %19622 = "llvm.mlir.constant"() <{value = 4611686018427388093 : i64}> : () -> i64
-      %19623 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19624 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19625 = "llvm.mlir.constant"() <{value = -7543233778997666740 : i64}> : () -> i64
-      %19626 = "llvm.insertvalue"(%19624, %19625) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19627 = "llvm.insertvalue"(%19626, %19622) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19628 = "llvm.insertvalue"(%19627, %19621) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19629 = "llvm.insertvalue"(%19623, %19628) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19630 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %19631 = "llvm.insertvalue"(%19620, %19630) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19632 = "placeholder.addressof"() {global_name = @union_typ_hashtbl} : () -> !llvm.ptr
-      %19633 = "llvm.insertvalue"(%19631, %19632) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19634 = "placeholder.addressof"() {global_name = @union_typ_offset_tbl} : () -> !llvm.ptr
-      %19635 = "llvm.insertvalue"(%19633, %19634) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19636 = "llvm.getelementptr"(%19619) <{elem_type = !llvm.struct<(ptr, i8)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %19637 = "llvm.insertvalue"(%19635, %19636) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19638 = "llvm.insertvalue"(%19629, %19637) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19639 = "llvm.insertvalue"(%19638, %19618) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      "llvm.return"(%19639) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
+      %19815 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
+      %19816 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19817 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19818 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
+      %19819 = "llvm.mlir.constant"() <{value = 4611686018427388093 : i64}> : () -> i64
+      %19820 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19821 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %19822 = "llvm.mlir.constant"() <{value = -7543233778997666740 : i64}> : () -> i64
+      %19823 = "llvm.insertvalue"(%19821, %19822) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19824 = "llvm.insertvalue"(%19823, %19819) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19825 = "llvm.insertvalue"(%19824, %19818) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19826 = "llvm.insertvalue"(%19820, %19825) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19827 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %19828 = "llvm.insertvalue"(%19817, %19827) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19829 = "placeholder.addressof"() {global_name = @union_typ_hashtbl} : () -> !llvm.ptr
+      %19830 = "llvm.insertvalue"(%19828, %19829) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19831 = "placeholder.addressof"() {global_name = @union_typ_offset_tbl} : () -> !llvm.ptr
+      %19832 = "llvm.insertvalue"(%19830, %19831) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19833 = "llvm.getelementptr"(%19816) <{elem_type = !llvm.struct<(ptr, i8)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %19834 = "llvm.insertvalue"(%19832, %19833) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19835 = "llvm.insertvalue"(%19826, %19834) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19836 = "llvm.insertvalue"(%19835, %19815) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      "llvm.return"(%19836) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
     }) : () -> ()
     "placeholder.global"() ({
     }) {constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "Object"} : () -> ()
@@ -819,2101 +941,2298 @@
     }) {constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<13 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "Exception"} : () -> ()
     "placeholder.global"() ({
     }) {constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "IO"} : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Pair_hashtbl"}> ({
-      %19613 = "llvm.mlir.undef"() : () -> !llvm.array<2 x ptr>
-      %19614 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %19615 = "llvm.insertvalue"(%19613, %19614) <{position = array<i64: 0>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      %19616 = "placeholder.addressof"() {global_name = @Pair} : () -> !llvm.ptr
-      %19617 = "llvm.insertvalue"(%19615, %19616) <{position = array<i64: 1>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      "llvm.return"(%19617) : (!llvm.array<2 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Pair_hashtbl"}> ({
+      %19806 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19807 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19808 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %19809 = "llvm.insertvalue"(%19807, %19808) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19810 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %19811 = "llvm.insertvalue"(%19809, %19810) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19812 = "placeholder.addressof"() {global_name = @Pair} : () -> !llvm.ptr
+      %19813 = "llvm.insertvalue"(%19811, %19812) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19814 = "llvm.insertvalue"(%19813, %19806) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      "llvm.return"(%19814) : (!llvm.array<4 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Pair_offset_tbl"}> ({
-      %19608 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %19609 = "llvm.mlir.undef"() : () -> !llvm.array<2 x i32>
-      %19610 = "llvm.mlir.constant"() <{value = 17 : i32}> : () -> i32
-      %19611 = "llvm.insertvalue"(%19609, %19610) <{position = array<i64: 0>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      %19612 = "llvm.insertvalue"(%19611, %19608) <{position = array<i64: 1>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      "llvm.return"(%19612) : (!llvm.array<2 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Pair_offset_tbl"}> ({
+      %19798 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %19799 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %19800 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
+      %19801 = "llvm.mlir.constant"() <{value = 17 : i32}> : () -> i32
+      %19802 = "llvm.insertvalue"(%19800, %19801) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19803 = "llvm.insertvalue"(%19802, %19799) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19804 = "llvm.insertvalue"(%19803, %19799) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19805 = "llvm.insertvalue"(%19804, %19798) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      "llvm.return"(%19805) : (!llvm.array<4 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "Pair"}> ({
-      %19566 = "llvm.mlir.undef"() : () -> !llvm.array<10 x ptr>
-      %19567 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19568 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19569 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i64
-      %19570 = "llvm.mlir.constant"() <{value = 4611686018427388073 : i64}> : () -> i64
-      %19571 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
-      %19572 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19573 = "llvm.mlir.constant"() <{value = 9197944775169318296 : i64}> : () -> i64
-      %19574 = "llvm.insertvalue"(%19572, %19573) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19575 = "llvm.insertvalue"(%19574, %19570) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19576 = "llvm.insertvalue"(%19575, %19569) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19577 = "llvm.insertvalue"(%19571, %19576) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
-      %19578 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %19579 = "llvm.insertvalue"(%19568, %19578) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19580 = "placeholder.addressof"() {global_name = @Pair_hashtbl} : () -> !llvm.ptr
-      %19581 = "llvm.insertvalue"(%19579, %19580) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19582 = "placeholder.addressof"() {global_name = @Pair_offset_tbl} : () -> !llvm.ptr
-      %19583 = "llvm.insertvalue"(%19581, %19582) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19584 = "llvm.getelementptr"(%19567) <{elem_type = !llvm.struct<(struct<(ptr, i160)>, struct<(ptr, i160)>, ptr, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %19585 = "llvm.insertvalue"(%19583, %19584) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19586 = "llvm.insertvalue"(%19577, %19585) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
-      %19587 = "placeholder.addressof"() {global_name = @Pair_field_first} : () -> !llvm.ptr
-      %19588 = "llvm.insertvalue"(%19566, %19587) <{position = array<i64: 0>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %19589 = "placeholder.addressof"() {global_name = @Pair_field_second} : () -> !llvm.ptr
-      %19590 = "llvm.insertvalue"(%19588, %19589) <{position = array<i64: 1>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %19591 = "placeholder.addressof"() {global_name = @Pair_field_Pair_0} : () -> !llvm.ptr
-      %19592 = "llvm.insertvalue"(%19590, %19591) <{position = array<i64: 2>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %19593 = "placeholder.addressof"() {global_name = @Pair_field_Pair_1} : () -> !llvm.ptr
-      %19594 = "llvm.insertvalue"(%19592, %19593) <{position = array<i64: 3>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %19595 = "placeholder.addressof"() {global_name = @Pair_B_init_firstT_secondU} : () -> !llvm.ptr
-      %19596 = "llvm.insertvalue"(%19594, %19595) <{position = array<i64: 4>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %19597 = "placeholder.addressof"() {global_name = @Pair_B_first_} : () -> !llvm.ptr
-      %19598 = "llvm.insertvalue"(%19596, %19597) <{position = array<i64: 5>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %19599 = "placeholder.addressof"() {global_name = @Pair_B_second_} : () -> !llvm.ptr
-      %19600 = "llvm.insertvalue"(%19598, %19599) <{position = array<i64: 6>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %19601 = "placeholder.addressof"() {global_name = @Pair_init_firstT_secondU} : () -> !llvm.ptr
-      %19602 = "llvm.insertvalue"(%19600, %19601) <{position = array<i64: 7>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %19603 = "placeholder.addressof"() {global_name = @Pair_first_} : () -> !llvm.ptr
-      %19604 = "llvm.insertvalue"(%19602, %19603) <{position = array<i64: 8>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %19605 = "placeholder.addressof"() {global_name = @Pair_second_} : () -> !llvm.ptr
-      %19606 = "llvm.insertvalue"(%19604, %19605) <{position = array<i64: 9>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %19607 = "llvm.insertvalue"(%19586, %19606) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, !llvm.array<10 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
-      "llvm.return"(%19607) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>) -> ()
+      %19756 = "llvm.mlir.undef"() : () -> !llvm.array<10 x ptr>
+      %19757 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19758 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19759 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
+      %19760 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %19761 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
+      %19762 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %19763 = "llvm.mlir.constant"() <{value = 9197944775169318296 : i64}> : () -> i64
+      %19764 = "llvm.insertvalue"(%19762, %19763) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19765 = "llvm.insertvalue"(%19764, %19760) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19766 = "llvm.insertvalue"(%19765, %19759) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19767 = "llvm.insertvalue"(%19761, %19766) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
+      %19768 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %19769 = "llvm.insertvalue"(%19758, %19768) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19770 = "placeholder.addressof"() {global_name = @Pair_hashtbl} : () -> !llvm.ptr
+      %19771 = "llvm.insertvalue"(%19769, %19770) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19772 = "placeholder.addressof"() {global_name = @Pair_offset_tbl} : () -> !llvm.ptr
+      %19773 = "llvm.insertvalue"(%19771, %19772) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19774 = "llvm.getelementptr"(%19757) <{elem_type = !llvm.struct<(struct<(ptr, i160)>, struct<(ptr, i160)>, ptr, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %19775 = "llvm.insertvalue"(%19773, %19774) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19776 = "llvm.insertvalue"(%19767, %19775) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
+      %19777 = "placeholder.addressof"() {global_name = @Pair_field_first} : () -> !llvm.ptr
+      %19778 = "llvm.insertvalue"(%19756, %19777) <{position = array<i64: 0>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %19779 = "placeholder.addressof"() {global_name = @Pair_field_second} : () -> !llvm.ptr
+      %19780 = "llvm.insertvalue"(%19778, %19779) <{position = array<i64: 1>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %19781 = "placeholder.addressof"() {global_name = @Pair_field_Pair_0} : () -> !llvm.ptr
+      %19782 = "llvm.insertvalue"(%19780, %19781) <{position = array<i64: 2>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %19783 = "placeholder.addressof"() {global_name = @Pair_field_Pair_1} : () -> !llvm.ptr
+      %19784 = "llvm.insertvalue"(%19782, %19783) <{position = array<i64: 3>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %19785 = "placeholder.addressof"() {global_name = @Pair_B_init_firstT_secondU} : () -> !llvm.ptr
+      %19786 = "llvm.insertvalue"(%19784, %19785) <{position = array<i64: 4>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %19787 = "placeholder.addressof"() {global_name = @Pair_B_first_} : () -> !llvm.ptr
+      %19788 = "llvm.insertvalue"(%19786, %19787) <{position = array<i64: 5>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %19789 = "placeholder.addressof"() {global_name = @Pair_B_second_} : () -> !llvm.ptr
+      %19790 = "llvm.insertvalue"(%19788, %19789) <{position = array<i64: 6>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %19791 = "placeholder.addressof"() {global_name = @Pair_init_firstT_secondU} : () -> !llvm.ptr
+      %19792 = "llvm.insertvalue"(%19790, %19791) <{position = array<i64: 7>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %19793 = "placeholder.addressof"() {global_name = @Pair_first_} : () -> !llvm.ptr
+      %19794 = "llvm.insertvalue"(%19792, %19793) <{position = array<i64: 8>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %19795 = "placeholder.addressof"() {global_name = @Pair_second_} : () -> !llvm.ptr
+      %19796 = "llvm.insertvalue"(%19794, %19795) <{position = array<i64: 9>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %19797 = "llvm.insertvalue"(%19776, %19796) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, !llvm.array<10 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
+      "llvm.return"(%19797) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "FancyPair_hashtbl"}> ({
-      %19557 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19558 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19559 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %19560 = "llvm.insertvalue"(%19558, %19559) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19561 = "placeholder.addressof"() {global_name = @FancyPair} : () -> !llvm.ptr
-      %19562 = "llvm.insertvalue"(%19560, %19561) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19563 = "llvm.insertvalue"(%19562, %19557) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19564 = "placeholder.addressof"() {global_name = @Pair} : () -> !llvm.ptr
-      %19565 = "llvm.insertvalue"(%19563, %19564) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      "llvm.return"(%19565) : (!llvm.array<4 x ptr>) -> ()
+      %19747 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19748 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %19749 = "llvm.insertvalue"(%19747, %19748) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19750 = "placeholder.addressof"() {global_name = @Pair} : () -> !llvm.ptr
+      %19751 = "llvm.insertvalue"(%19749, %19750) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19752 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %19753 = "llvm.insertvalue"(%19751, %19752) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19754 = "placeholder.addressof"() {global_name = @FancyPair} : () -> !llvm.ptr
+      %19755 = "llvm.insertvalue"(%19753, %19754) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      "llvm.return"(%19755) : (!llvm.array<4 x ptr>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "FancyPair_offset_tbl"}> ({
-      %19548 = "llvm.mlir.constant"() <{value = 17 : i32}> : () -> i32
-      %19549 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
-      %19550 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %19551 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
-      %19552 = "llvm.mlir.constant"() <{value = 27 : i32}> : () -> i32
-      %19553 = "llvm.insertvalue"(%19551, %19552) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %19554 = "llvm.insertvalue"(%19553, %19550) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %19555 = "llvm.insertvalue"(%19554, %19549) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %19556 = "llvm.insertvalue"(%19555, %19548) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      "llvm.return"(%19556) : (!llvm.array<4 x i32>) -> ()
+      %19739 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %19740 = "llvm.mlir.constant"() <{value = 17 : i32}> : () -> i32
+      %19741 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
+      %19742 = "llvm.mlir.constant"() <{value = 27 : i32}> : () -> i32
+      %19743 = "llvm.insertvalue"(%19741, %19742) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19744 = "llvm.insertvalue"(%19743, %19740) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19745 = "llvm.insertvalue"(%19744, %19739) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19746 = "llvm.insertvalue"(%19745, %19739) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      "llvm.return"(%19746) : (!llvm.array<4 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<20 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "FancyPair"}> ({
-      %19486 = "llvm.mlir.undef"() : () -> !llvm.array<20 x ptr>
-      %19487 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19488 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19489 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
-      %19490 = "llvm.mlir.constant"() <{value = 4611686018427388073 : i64}> : () -> i64
-      %19491 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<20 x ptr>)>
-      %19492 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19493 = "llvm.mlir.constant"() <{value = -3765382636606614851 : i64}> : () -> i64
-      %19494 = "llvm.insertvalue"(%19492, %19493) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19495 = "llvm.insertvalue"(%19494, %19490) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19496 = "llvm.insertvalue"(%19495, %19489) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19497 = "llvm.insertvalue"(%19491, %19496) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<20 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<20 x ptr>)>
-      %19498 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %19499 = "llvm.insertvalue"(%19488, %19498) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19500 = "placeholder.addressof"() {global_name = @FancyPair_hashtbl} : () -> !llvm.ptr
-      %19501 = "llvm.insertvalue"(%19499, %19500) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19502 = "placeholder.addressof"() {global_name = @FancyPair_offset_tbl} : () -> !llvm.ptr
-      %19503 = "llvm.insertvalue"(%19501, %19502) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19504 = "llvm.getelementptr"(%19487) <{elem_type = !llvm.struct<(struct<(f64, f64, f64, f64)>, f64)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %19505 = "llvm.insertvalue"(%19503, %19504) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19506 = "llvm.insertvalue"(%19497, %19505) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<20 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<20 x ptr>)>
-      %19507 = "placeholder.addressof"() {global_name = @FancyPair_field_first} : () -> !llvm.ptr
-      %19508 = "llvm.insertvalue"(%19486, %19507) <{position = array<i64: 0>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
-      %19509 = "placeholder.addressof"() {global_name = @FancyPair_field_second} : () -> !llvm.ptr
-      %19510 = "llvm.insertvalue"(%19508, %19509) <{position = array<i64: 1>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
-      %19511 = "placeholder.addressof"() {global_name = @FancyPair_field_FancyPair_0} : () -> !llvm.ptr
-      %19512 = "llvm.insertvalue"(%19510, %19511) <{position = array<i64: 2>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
-      %19513 = "placeholder.addressof"() {global_name = @FancyPair_field_FancyPair_1} : () -> !llvm.ptr
-      %19514 = "llvm.insertvalue"(%19512, %19513) <{position = array<i64: 3>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
-      %19515 = "placeholder.addressof"() {global_name = @FancyPair_B_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64} : () -> !llvm.ptr
-      %19516 = "llvm.insertvalue"(%19514, %19515) <{position = array<i64: 4>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
-      %19517 = "placeholder.addressof"() {global_name = @FancyPair_B_first_} : () -> !llvm.ptr
-      %19518 = "llvm.insertvalue"(%19516, %19517) <{position = array<i64: 5>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
-      %19519 = "placeholder.addressof"() {global_name = @FancyPair_B_second_} : () -> !llvm.ptr
-      %19520 = "llvm.insertvalue"(%19518, %19519) <{position = array<i64: 6>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
-      %19521 = "placeholder.addressof"() {global_name = @FancyPair_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64} : () -> !llvm.ptr
-      %19522 = "llvm.insertvalue"(%19520, %19521) <{position = array<i64: 7>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
-      %19523 = "placeholder.addressof"() {global_name = @Pair_first_} : () -> !llvm.ptr
-      %19524 = "llvm.insertvalue"(%19522, %19523) <{position = array<i64: 8>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
-      %19525 = "placeholder.addressof"() {global_name = @FancyPair_second_} : () -> !llvm.ptr
-      %19526 = "llvm.insertvalue"(%19524, %19525) <{position = array<i64: 9>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
-      %19527 = "placeholder.addressof"() {global_name = @FancyPair_field_first} : () -> !llvm.ptr
-      %19528 = "llvm.insertvalue"(%19526, %19527) <{position = array<i64: 10>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
-      %19529 = "placeholder.addressof"() {global_name = @FancyPair_field_second} : () -> !llvm.ptr
-      %19530 = "llvm.insertvalue"(%19528, %19529) <{position = array<i64: 11>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
-      %19531 = "placeholder.addressof"() {global_name = @FancyPair_field_FancyPair_0} : () -> !llvm.ptr
-      %19532 = "llvm.insertvalue"(%19530, %19531) <{position = array<i64: 12>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
-      %19533 = "placeholder.addressof"() {global_name = @FancyPair_field_FancyPair_1} : () -> !llvm.ptr
-      %19534 = "llvm.insertvalue"(%19532, %19533) <{position = array<i64: 13>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
-      %19535 = "placeholder.addressof"() {global_name = @FancyPair_B_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64} : () -> !llvm.ptr
-      %19536 = "llvm.insertvalue"(%19534, %19535) <{position = array<i64: 14>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
-      %19537 = "placeholder.addressof"() {global_name = @FancyPair_B_first_} : () -> !llvm.ptr
-      %19538 = "llvm.insertvalue"(%19536, %19537) <{position = array<i64: 15>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
-      %19539 = "placeholder.addressof"() {global_name = @FancyPair_B_second_} : () -> !llvm.ptr
-      %19540 = "llvm.insertvalue"(%19538, %19539) <{position = array<i64: 16>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
-      %19541 = "placeholder.addressof"() {global_name = @FancyPair_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64} : () -> !llvm.ptr
-      %19542 = "llvm.insertvalue"(%19540, %19541) <{position = array<i64: 17>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
-      %19543 = "placeholder.addressof"() {global_name = @Pair_first_} : () -> !llvm.ptr
-      %19544 = "llvm.insertvalue"(%19542, %19543) <{position = array<i64: 18>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
-      %19545 = "placeholder.addressof"() {global_name = @FancyPair_second_} : () -> !llvm.ptr
-      %19546 = "llvm.insertvalue"(%19544, %19545) <{position = array<i64: 19>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
-      %19547 = "llvm.insertvalue"(%19506, %19546) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<20 x ptr>)>, !llvm.array<20 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<20 x ptr>)>
-      "llvm.return"(%19547) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<20 x ptr>)>) -> ()
+      %19677 = "llvm.mlir.undef"() : () -> !llvm.array<20 x ptr>
+      %19678 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19679 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19680 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
+      %19681 = "llvm.mlir.constant"() <{value = 4611686018427388091 : i64}> : () -> i64
+      %19682 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<20 x ptr>)>
+      %19683 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %19684 = "llvm.mlir.constant"() <{value = -3765382636606614851 : i64}> : () -> i64
+      %19685 = "llvm.insertvalue"(%19683, %19684) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19686 = "llvm.insertvalue"(%19685, %19681) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19687 = "llvm.insertvalue"(%19686, %19680) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19688 = "llvm.insertvalue"(%19682, %19687) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<20 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<20 x ptr>)>
+      %19689 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %19690 = "llvm.insertvalue"(%19679, %19689) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19691 = "placeholder.addressof"() {global_name = @FancyPair_hashtbl} : () -> !llvm.ptr
+      %19692 = "llvm.insertvalue"(%19690, %19691) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19693 = "placeholder.addressof"() {global_name = @FancyPair_offset_tbl} : () -> !llvm.ptr
+      %19694 = "llvm.insertvalue"(%19692, %19693) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19695 = "llvm.getelementptr"(%19678) <{elem_type = !llvm.struct<(struct<(f64, f64, f64, f64)>, f64)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %19696 = "llvm.insertvalue"(%19694, %19695) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19697 = "llvm.insertvalue"(%19688, %19696) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<20 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<20 x ptr>)>
+      %19698 = "placeholder.addressof"() {global_name = @FancyPair_field_first} : () -> !llvm.ptr
+      %19699 = "llvm.insertvalue"(%19677, %19698) <{position = array<i64: 0>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
+      %19700 = "placeholder.addressof"() {global_name = @FancyPair_field_second} : () -> !llvm.ptr
+      %19701 = "llvm.insertvalue"(%19699, %19700) <{position = array<i64: 1>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
+      %19702 = "placeholder.addressof"() {global_name = @FancyPair_field_FancyPair_0} : () -> !llvm.ptr
+      %19703 = "llvm.insertvalue"(%19701, %19702) <{position = array<i64: 2>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
+      %19704 = "placeholder.addressof"() {global_name = @FancyPair_field_FancyPair_1} : () -> !llvm.ptr
+      %19705 = "llvm.insertvalue"(%19703, %19704) <{position = array<i64: 3>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
+      %19706 = "placeholder.addressof"() {global_name = @FancyPair_B_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64} : () -> !llvm.ptr
+      %19707 = "llvm.insertvalue"(%19705, %19706) <{position = array<i64: 4>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
+      %19708 = "placeholder.addressof"() {global_name = @FancyPair_B_first_} : () -> !llvm.ptr
+      %19709 = "llvm.insertvalue"(%19707, %19708) <{position = array<i64: 5>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
+      %19710 = "placeholder.addressof"() {global_name = @FancyPair_B_second_} : () -> !llvm.ptr
+      %19711 = "llvm.insertvalue"(%19709, %19710) <{position = array<i64: 6>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
+      %19712 = "placeholder.addressof"() {global_name = @FancyPair_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64} : () -> !llvm.ptr
+      %19713 = "llvm.insertvalue"(%19711, %19712) <{position = array<i64: 7>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
+      %19714 = "placeholder.addressof"() {global_name = @Pair_first_} : () -> !llvm.ptr
+      %19715 = "llvm.insertvalue"(%19713, %19714) <{position = array<i64: 8>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
+      %19716 = "placeholder.addressof"() {global_name = @FancyPair_second_} : () -> !llvm.ptr
+      %19717 = "llvm.insertvalue"(%19715, %19716) <{position = array<i64: 9>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
+      %19718 = "placeholder.addressof"() {global_name = @FancyPair_field_first} : () -> !llvm.ptr
+      %19719 = "llvm.insertvalue"(%19717, %19718) <{position = array<i64: 10>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
+      %19720 = "placeholder.addressof"() {global_name = @FancyPair_field_second} : () -> !llvm.ptr
+      %19721 = "llvm.insertvalue"(%19719, %19720) <{position = array<i64: 11>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
+      %19722 = "placeholder.addressof"() {global_name = @FancyPair_field_FancyPair_0} : () -> !llvm.ptr
+      %19723 = "llvm.insertvalue"(%19721, %19722) <{position = array<i64: 12>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
+      %19724 = "placeholder.addressof"() {global_name = @FancyPair_field_FancyPair_1} : () -> !llvm.ptr
+      %19725 = "llvm.insertvalue"(%19723, %19724) <{position = array<i64: 13>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
+      %19726 = "placeholder.addressof"() {global_name = @FancyPair_B_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64} : () -> !llvm.ptr
+      %19727 = "llvm.insertvalue"(%19725, %19726) <{position = array<i64: 14>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
+      %19728 = "placeholder.addressof"() {global_name = @FancyPair_B_first_} : () -> !llvm.ptr
+      %19729 = "llvm.insertvalue"(%19727, %19728) <{position = array<i64: 15>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
+      %19730 = "placeholder.addressof"() {global_name = @FancyPair_B_second_} : () -> !llvm.ptr
+      %19731 = "llvm.insertvalue"(%19729, %19730) <{position = array<i64: 16>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
+      %19732 = "placeholder.addressof"() {global_name = @FancyPair_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64} : () -> !llvm.ptr
+      %19733 = "llvm.insertvalue"(%19731, %19732) <{position = array<i64: 17>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
+      %19734 = "placeholder.addressof"() {global_name = @Pair_first_} : () -> !llvm.ptr
+      %19735 = "llvm.insertvalue"(%19733, %19734) <{position = array<i64: 18>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
+      %19736 = "placeholder.addressof"() {global_name = @FancyPair_second_} : () -> !llvm.ptr
+      %19737 = "llvm.insertvalue"(%19735, %19736) <{position = array<i64: 19>}> : (!llvm.array<20 x ptr>, !llvm.ptr) -> !llvm.array<20 x ptr>
+      %19738 = "llvm.insertvalue"(%19697, %19737) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<20 x ptr>)>, !llvm.array<20 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<20 x ptr>)>
+      "llvm.return"(%19738) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<20 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Container_hashtbl"}> ({
-      %19481 = "llvm.mlir.undef"() : () -> !llvm.array<2 x ptr>
-      %19482 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %19483 = "llvm.insertvalue"(%19481, %19482) <{position = array<i64: 0>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      %19484 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
-      %19485 = "llvm.insertvalue"(%19483, %19484) <{position = array<i64: 1>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      "llvm.return"(%19485) : (!llvm.array<2 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Container_hashtbl"}> ({
+      %19668 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19669 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19670 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %19671 = "llvm.insertvalue"(%19669, %19670) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19672 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %19673 = "llvm.insertvalue"(%19671, %19672) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19674 = "llvm.insertvalue"(%19673, %19668) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19675 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
+      %19676 = "llvm.insertvalue"(%19674, %19675) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      "llvm.return"(%19676) : (!llvm.array<4 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Container_offset_tbl"}> ({
-      %19477 = "llvm.mlir.undef"() : () -> !llvm.array<2 x i32>
-      %19478 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %19479 = "llvm.insertvalue"(%19477, %19478) <{position = array<i64: 0>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      %19480 = "llvm.insertvalue"(%19479, %19478) <{position = array<i64: 1>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      "llvm.return"(%19480) : (!llvm.array<2 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Container_offset_tbl"}> ({
+      %19661 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %19662 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
+      %19663 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %19664 = "llvm.insertvalue"(%19662, %19663) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19665 = "llvm.insertvalue"(%19664, %19663) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19666 = "llvm.insertvalue"(%19665, %19661) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19667 = "llvm.insertvalue"(%19666, %19663) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      "llvm.return"(%19667) : (!llvm.array<4 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "Container"}> ({
-      %19455 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
-      %19456 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19457 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19458 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i64
-      %19459 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
-      %19460 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19461 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19462 = "llvm.mlir.constant"() <{value = 9056556090793359372 : i64}> : () -> i64
-      %19463 = "llvm.insertvalue"(%19461, %19462) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19464 = "llvm.insertvalue"(%19463, %19459) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19465 = "llvm.insertvalue"(%19464, %19458) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19466 = "llvm.insertvalue"(%19460, %19465) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19467 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %19468 = "llvm.insertvalue"(%19457, %19467) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19469 = "placeholder.addressof"() {global_name = @Container_hashtbl} : () -> !llvm.ptr
-      %19470 = "llvm.insertvalue"(%19468, %19469) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19471 = "placeholder.addressof"() {global_name = @Container_offset_tbl} : () -> !llvm.ptr
-      %19472 = "llvm.insertvalue"(%19470, %19471) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19473 = "llvm.getelementptr"(%19456) <{elem_type = !llvm.struct<()>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %19474 = "llvm.insertvalue"(%19472, %19473) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19475 = "llvm.insertvalue"(%19466, %19474) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19476 = "llvm.insertvalue"(%19475, %19455) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      "llvm.return"(%19476) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
+      %19639 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
+      %19640 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19641 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19642 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
+      %19643 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %19644 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19645 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %19646 = "llvm.mlir.constant"() <{value = 9056556090793359372 : i64}> : () -> i64
+      %19647 = "llvm.insertvalue"(%19645, %19646) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19648 = "llvm.insertvalue"(%19647, %19643) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19649 = "llvm.insertvalue"(%19648, %19642) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19650 = "llvm.insertvalue"(%19644, %19649) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19651 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %19652 = "llvm.insertvalue"(%19641, %19651) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19653 = "placeholder.addressof"() {global_name = @Container_hashtbl} : () -> !llvm.ptr
+      %19654 = "llvm.insertvalue"(%19652, %19653) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19655 = "placeholder.addressof"() {global_name = @Container_offset_tbl} : () -> !llvm.ptr
+      %19656 = "llvm.insertvalue"(%19654, %19655) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19657 = "llvm.getelementptr"(%19640) <{elem_type = !llvm.struct<()>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %19658 = "llvm.insertvalue"(%19656, %19657) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19659 = "llvm.insertvalue"(%19650, %19658) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19660 = "llvm.insertvalue"(%19659, %19639) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      "llvm.return"(%19660) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Iterator2_hashtbl"}> ({
-      %19446 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19447 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19448 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %19449 = "llvm.insertvalue"(%19447, %19448) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19450 = "llvm.insertvalue"(%19449, %19446) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19451 = "placeholder.addressof"() {global_name = @Iterator2} : () -> !llvm.ptr
-      %19452 = "llvm.insertvalue"(%19450, %19451) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19453 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
-      %19454 = "llvm.insertvalue"(%19452, %19453) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      "llvm.return"(%19454) : (!llvm.array<4 x ptr>) -> ()
+      %19630 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19631 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %19632 = "llvm.insertvalue"(%19630, %19631) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19633 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %19634 = "llvm.insertvalue"(%19632, %19633) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19635 = "placeholder.addressof"() {global_name = @Iterator2} : () -> !llvm.ptr
+      %19636 = "llvm.insertvalue"(%19634, %19635) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19637 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
+      %19638 = "llvm.insertvalue"(%19636, %19637) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      "llvm.return"(%19638) : (!llvm.array<4 x ptr>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Iterator2_offset_tbl"}> ({
-      %19438 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %19439 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
-      %19440 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
-      %19441 = "llvm.mlir.constant"() <{value = 10 : i32}> : () -> i32
-      %19442 = "llvm.insertvalue"(%19440, %19441) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %19443 = "llvm.insertvalue"(%19442, %19439) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %19444 = "llvm.insertvalue"(%19443, %19438) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %19445 = "llvm.insertvalue"(%19444, %19441) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      "llvm.return"(%19445) : (!llvm.array<4 x i32>) -> ()
+      %19623 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %19624 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
+      %19625 = "llvm.mlir.constant"() <{value = 10 : i32}> : () -> i32
+      %19626 = "llvm.insertvalue"(%19624, %19625) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19627 = "llvm.insertvalue"(%19626, %19623) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19628 = "llvm.insertvalue"(%19627, %19623) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19629 = "llvm.insertvalue"(%19628, %19625) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      "llvm.return"(%19629) : (!llvm.array<4 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "Iterator2"}> ({
-      %19416 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
-      %19417 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19418 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19419 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
-      %19420 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
-      %19421 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19422 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19423 = "llvm.mlir.constant"() <{value = 4189192806087951739 : i64}> : () -> i64
-      %19424 = "llvm.insertvalue"(%19422, %19423) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19425 = "llvm.insertvalue"(%19424, %19420) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19426 = "llvm.insertvalue"(%19425, %19419) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19427 = "llvm.insertvalue"(%19421, %19426) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19428 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %19429 = "llvm.insertvalue"(%19418, %19428) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19430 = "placeholder.addressof"() {global_name = @Iterator2_hashtbl} : () -> !llvm.ptr
-      %19431 = "llvm.insertvalue"(%19429, %19430) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19432 = "placeholder.addressof"() {global_name = @Iterator2_offset_tbl} : () -> !llvm.ptr
-      %19433 = "llvm.insertvalue"(%19431, %19432) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19434 = "llvm.getelementptr"(%19417) <{elem_type = !llvm.struct<(ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %19435 = "llvm.insertvalue"(%19433, %19434) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19436 = "llvm.insertvalue"(%19427, %19435) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19437 = "llvm.insertvalue"(%19436, %19416) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      "llvm.return"(%19437) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
+      %19601 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
+      %19602 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19603 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19604 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
+      %19605 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %19606 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19607 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %19608 = "llvm.mlir.constant"() <{value = 4189192806087951739 : i64}> : () -> i64
+      %19609 = "llvm.insertvalue"(%19607, %19608) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19610 = "llvm.insertvalue"(%19609, %19605) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19611 = "llvm.insertvalue"(%19610, %19604) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19612 = "llvm.insertvalue"(%19606, %19611) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19613 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %19614 = "llvm.insertvalue"(%19603, %19613) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19615 = "placeholder.addressof"() {global_name = @Iterator2_hashtbl} : () -> !llvm.ptr
+      %19616 = "llvm.insertvalue"(%19614, %19615) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19617 = "placeholder.addressof"() {global_name = @Iterator2_offset_tbl} : () -> !llvm.ptr
+      %19618 = "llvm.insertvalue"(%19616, %19617) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19619 = "llvm.getelementptr"(%19602) <{elem_type = !llvm.struct<(ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %19620 = "llvm.insertvalue"(%19618, %19619) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19621 = "llvm.insertvalue"(%19612, %19620) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19622 = "llvm.insertvalue"(%19621, %19601) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      "llvm.return"(%19622) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Iterable2_hashtbl"}> ({
-      %19407 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19408 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19409 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %19410 = "llvm.insertvalue"(%19408, %19409) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19411 = "placeholder.addressof"() {global_name = @Iterable2} : () -> !llvm.ptr
-      %19412 = "llvm.insertvalue"(%19410, %19411) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19413 = "llvm.insertvalue"(%19412, %19407) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19414 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
-      %19415 = "llvm.insertvalue"(%19413, %19414) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      "llvm.return"(%19415) : (!llvm.array<4 x ptr>) -> ()
+      %19592 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19593 = "placeholder.addressof"() {global_name = @Iterable2} : () -> !llvm.ptr
+      %19594 = "llvm.insertvalue"(%19592, %19593) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19595 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %19596 = "llvm.insertvalue"(%19594, %19595) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19597 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
+      %19598 = "llvm.insertvalue"(%19596, %19597) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19599 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %19600 = "llvm.insertvalue"(%19598, %19599) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      "llvm.return"(%19600) : (!llvm.array<4 x ptr>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Iterable2_offset_tbl"}> ({
-      %19399 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
-      %19400 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %19401 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
-      %19402 = "llvm.mlir.constant"() <{value = 30 : i32}> : () -> i32
-      %19403 = "llvm.insertvalue"(%19401, %19402) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %19404 = "llvm.insertvalue"(%19403, %19400) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %19405 = "llvm.insertvalue"(%19404, %19399) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %19406 = "llvm.insertvalue"(%19405, %19402) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      "llvm.return"(%19406) : (!llvm.array<4 x i32>) -> ()
+      %19585 = "llvm.mlir.constant"() <{value = 30 : i32}> : () -> i32
+      %19586 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
+      %19587 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %19588 = "llvm.insertvalue"(%19586, %19587) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19589 = "llvm.insertvalue"(%19588, %19587) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19590 = "llvm.insertvalue"(%19589, %19585) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %19591 = "llvm.insertvalue"(%19590, %19585) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      "llvm.return"(%19591) : (!llvm.array<4 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "Iterable2"}> ({
-      %19377 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
-      %19378 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19379 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19380 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
-      %19381 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
-      %19382 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19383 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19384 = "llvm.mlir.constant"() <{value = 5693646204635713916 : i64}> : () -> i64
-      %19385 = "llvm.insertvalue"(%19383, %19384) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19386 = "llvm.insertvalue"(%19385, %19381) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19387 = "llvm.insertvalue"(%19386, %19380) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19388 = "llvm.insertvalue"(%19382, %19387) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19389 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %19390 = "llvm.insertvalue"(%19379, %19389) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19391 = "placeholder.addressof"() {global_name = @Iterable2_hashtbl} : () -> !llvm.ptr
-      %19392 = "llvm.insertvalue"(%19390, %19391) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19393 = "placeholder.addressof"() {global_name = @Iterable2_offset_tbl} : () -> !llvm.ptr
-      %19394 = "llvm.insertvalue"(%19392, %19393) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19395 = "llvm.getelementptr"(%19378) <{elem_type = !llvm.struct<(ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %19396 = "llvm.insertvalue"(%19394, %19395) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19397 = "llvm.insertvalue"(%19388, %19396) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %19398 = "llvm.insertvalue"(%19397, %19377) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      "llvm.return"(%19398) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
+      %19563 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
+      %19564 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19565 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19566 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
+      %19567 = "llvm.mlir.constant"() <{value = 4611686018427388349 : i64}> : () -> i64
+      %19568 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19569 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %19570 = "llvm.mlir.constant"() <{value = 5693646204635713916 : i64}> : () -> i64
+      %19571 = "llvm.insertvalue"(%19569, %19570) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19572 = "llvm.insertvalue"(%19571, %19567) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19573 = "llvm.insertvalue"(%19572, %19566) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19574 = "llvm.insertvalue"(%19568, %19573) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19575 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %19576 = "llvm.insertvalue"(%19565, %19575) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19577 = "placeholder.addressof"() {global_name = @Iterable2_hashtbl} : () -> !llvm.ptr
+      %19578 = "llvm.insertvalue"(%19576, %19577) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19579 = "placeholder.addressof"() {global_name = @Iterable2_offset_tbl} : () -> !llvm.ptr
+      %19580 = "llvm.insertvalue"(%19578, %19579) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19581 = "llvm.getelementptr"(%19564) <{elem_type = !llvm.struct<(ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %19582 = "llvm.insertvalue"(%19580, %19581) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19583 = "llvm.insertvalue"(%19574, %19582) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %19584 = "llvm.insertvalue"(%19583, %19563) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      "llvm.return"(%19584) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Array_hashtbl"}> ({
-      %19368 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19369 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
-      %19370 = "llvm.insertvalue"(%19368, %19369) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19371 = "placeholder.addressof"() {global_name = @Array} : () -> !llvm.ptr
-      %19372 = "llvm.insertvalue"(%19370, %19371) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19373 = "placeholder.addressof"() {global_name = @Iterable2} : () -> !llvm.ptr
-      %19374 = "llvm.insertvalue"(%19372, %19373) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19375 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %19376 = "llvm.insertvalue"(%19374, %19375) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      "llvm.return"(%19376) : (!llvm.array<4 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Array_hashtbl"}> ({
+      %19548 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19549 = "llvm.mlir.undef"() : () -> !llvm.array<8 x ptr>
+      %19550 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
+      %19551 = "llvm.insertvalue"(%19549, %19550) <{position = array<i64: 0>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19552 = "llvm.insertvalue"(%19551, %19548) <{position = array<i64: 1>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19553 = "placeholder.addressof"() {global_name = @Iterable2} : () -> !llvm.ptr
+      %19554 = "llvm.insertvalue"(%19552, %19553) <{position = array<i64: 2>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19555 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %19556 = "llvm.insertvalue"(%19554, %19555) <{position = array<i64: 3>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19557 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %19558 = "llvm.insertvalue"(%19556, %19557) <{position = array<i64: 4>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19559 = "llvm.insertvalue"(%19558, %19548) <{position = array<i64: 5>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19560 = "llvm.insertvalue"(%19559, %19548) <{position = array<i64: 6>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19561 = "placeholder.addressof"() {global_name = @Array} : () -> !llvm.ptr
+      %19562 = "llvm.insertvalue"(%19560, %19561) <{position = array<i64: 7>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      "llvm.return"(%19562) : (!llvm.array<8 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Array_offset_tbl"}> ({
-      %19360 = "llvm.mlir.constant"() <{value = 53 : i32}> : () -> i32
-      %19361 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %19362 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
-      %19363 = "llvm.mlir.constant"() <{value = 76 : i32}> : () -> i32
-      %19364 = "llvm.insertvalue"(%19362, %19363) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %19365 = "llvm.insertvalue"(%19364, %19361) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %19366 = "llvm.insertvalue"(%19365, %19360) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %19367 = "llvm.insertvalue"(%19366, %19363) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      "llvm.return"(%19367) : (!llvm.array<4 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Array_offset_tbl"}> ({
+      %19535 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %19536 = "llvm.mlir.constant"() <{value = 53 : i32}> : () -> i32
+      %19537 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %19538 = "llvm.mlir.undef"() : () -> !llvm.array<8 x i32>
+      %19539 = "llvm.mlir.constant"() <{value = 76 : i32}> : () -> i32
+      %19540 = "llvm.insertvalue"(%19538, %19539) <{position = array<i64: 0>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19541 = "llvm.insertvalue"(%19540, %19537) <{position = array<i64: 1>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19542 = "llvm.insertvalue"(%19541, %19536) <{position = array<i64: 2>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19543 = "llvm.insertvalue"(%19542, %19539) <{position = array<i64: 3>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19544 = "llvm.insertvalue"(%19543, %19535) <{position = array<i64: 4>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19545 = "llvm.insertvalue"(%19544, %19537) <{position = array<i64: 5>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19546 = "llvm.insertvalue"(%19545, %19537) <{position = array<i64: 6>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19547 = "llvm.insertvalue"(%19546, %19535) <{position = array<i64: 7>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      "llvm.return"(%19547) : (!llvm.array<8 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<69 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "Array"}> ({
-      %19200 = "llvm.mlir.undef"() : () -> !llvm.array<69 x ptr>
-      %19201 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19202 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19203 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
-      %19204 = "llvm.mlir.constant"() <{value = 4611686018427388331 : i64}> : () -> i64
-      %19205 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<69 x ptr>)>
-      %19206 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19207 = "llvm.mlir.constant"() <{value = -5261542750394134544 : i64}> : () -> i64
-      %19208 = "llvm.insertvalue"(%19206, %19207) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19209 = "llvm.insertvalue"(%19208, %19204) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19210 = "llvm.insertvalue"(%19209, %19203) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19211 = "llvm.insertvalue"(%19205, %19210) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<69 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<69 x ptr>)>
-      %19212 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %19213 = "llvm.insertvalue"(%19202, %19212) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19214 = "placeholder.addressof"() {global_name = @Array_hashtbl} : () -> !llvm.ptr
-      %19215 = "llvm.insertvalue"(%19213, %19214) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19216 = "placeholder.addressof"() {global_name = @Array_offset_tbl} : () -> !llvm.ptr
-      %19217 = "llvm.insertvalue"(%19215, %19216) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19218 = "llvm.getelementptr"(%19201) <{elem_type = !llvm.struct<(struct<(ptr)>, i32, i32, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %19219 = "llvm.insertvalue"(%19217, %19218) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19220 = "llvm.insertvalue"(%19211, %19219) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<69 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<69 x ptr>)>
-      %19221 = "placeholder.addressof"() {global_name = @Array_field_buffer} : () -> !llvm.ptr
-      %19222 = "llvm.insertvalue"(%19200, %19221) <{position = array<i64: 0>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19223 = "placeholder.addressof"() {global_name = @Array_field_length} : () -> !llvm.ptr
-      %19224 = "llvm.insertvalue"(%19222, %19223) <{position = array<i64: 1>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19225 = "placeholder.addressof"() {global_name = @Array_field_capacity} : () -> !llvm.ptr
-      %19226 = "llvm.insertvalue"(%19224, %19225) <{position = array<i64: 2>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19227 = "placeholder.addressof"() {global_name = @Array_field_Array_0} : () -> !llvm.ptr
-      %19228 = "llvm.insertvalue"(%19226, %19227) <{position = array<i64: 3>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19229 = "placeholder.addressof"() {global_name = @Array_B__Self_from_iterable_iterableIterable2T} : () -> !llvm.ptr
-      %19230 = "llvm.insertvalue"(%19228, %19229) <{position = array<i64: 4>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19231 = "placeholder.addressof"() {global_name = @Array_B_init_} : () -> !llvm.ptr
-      %19232 = "llvm.insertvalue"(%19230, %19231) <{position = array<i64: 5>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19233 = "placeholder.addressof"() {global_name = @Array_B_init_capacityPtri32} : () -> !llvm.ptr
-      %19234 = "llvm.insertvalue"(%19232, %19233) <{position = array<i64: 6>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19235 = "placeholder.addressof"() {global_name = @Array_B_length_} : () -> !llvm.ptr
-      %19236 = "llvm.insertvalue"(%19234, %19235) <{position = array<i64: 7>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19237 = "placeholder.addressof"() {global_name = @Array_B_capacity_} : () -> !llvm.ptr
-      %19238 = "llvm.insertvalue"(%19236, %19237) <{position = array<i64: 8>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19239 = "placeholder.addressof"() {global_name = @Array_B_append_xT} : () -> !llvm.ptr
-      %19240 = "llvm.insertvalue"(%19238, %19239) <{position = array<i64: 9>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19241 = "placeholder.addressof"() {global_name = @Array_B_grow_} : () -> !llvm.ptr
-      %19242 = "llvm.insertvalue"(%19240, %19241) <{position = array<i64: 10>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19243 = "placeholder.addressof"() {global_name = @Array_B__index_xPtri32} : () -> !llvm.ptr
-      %19244 = "llvm.insertvalue"(%19242, %19243) <{position = array<i64: 11>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19245 = "placeholder.addressof"() {global_name = @Array_B_throw_oob_xPtri32} : () -> !llvm.ptr
-      %19246 = "llvm.insertvalue"(%19244, %19245) <{position = array<i64: 12>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19247 = "placeholder.addressof"() {global_name = @Array_B_unsafe_index_xPtri32} : () -> !llvm.ptr
-      %19248 = "llvm.insertvalue"(%19246, %19247) <{position = array<i64: 13>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19249 = "placeholder.addressof"() {global_name = @Array_B_iterator_} : () -> !llvm.ptr
-      %19250 = "llvm.insertvalue"(%19248, %19249) <{position = array<i64: 14>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19251 = "placeholder.addressof"() {global_name = @Array_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %19252 = "llvm.insertvalue"(%19250, %19251) <{position = array<i64: 15>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19253 = "placeholder.addressof"() {global_name = @Array_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %19254 = "llvm.insertvalue"(%19252, %19253) <{position = array<i64: 16>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19255 = "placeholder.addressof"() {global_name = @Array_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19256 = "llvm.insertvalue"(%19254, %19255) <{position = array<i64: 17>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19257 = "placeholder.addressof"() {global_name = @Array_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19258 = "llvm.insertvalue"(%19256, %19257) <{position = array<i64: 18>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19259 = "placeholder.addressof"() {global_name = @Array_B_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %19260 = "llvm.insertvalue"(%19258, %19259) <{position = array<i64: 19>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19261 = "placeholder.addressof"() {global_name = @Array_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19262 = "llvm.insertvalue"(%19260, %19261) <{position = array<i64: 20>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19263 = "placeholder.addressof"() {global_name = @Array_B_chain_otherIterable2T} : () -> !llvm.ptr
-      %19264 = "llvm.insertvalue"(%19262, %19263) <{position = array<i64: 21>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19265 = "placeholder.addressof"() {global_name = @Array_B_interleave_otherIterable2T} : () -> !llvm.ptr
-      %19266 = "llvm.insertvalue"(%19264, %19265) <{position = array<i64: 22>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19267 = "placeholder.addressof"() {global_name = @Array_B_zip_otherIterable2U} : () -> !llvm.ptr
-      %19268 = "llvm.insertvalue"(%19266, %19267) <{position = array<i64: 23>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19269 = "placeholder.addressof"() {global_name = @Array_B_product_otherIterable2U} : () -> !llvm.ptr
-      %19270 = "llvm.insertvalue"(%19268, %19269) <{position = array<i64: 24>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19271 = "placeholder.addressof"() {global_name = @Array__Self_from_iterable_iterableIterable2T} : () -> !llvm.ptr
-      %19272 = "llvm.insertvalue"(%19270, %19271) <{position = array<i64: 25>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19273 = "placeholder.addressof"() {global_name = @Array_init_} : () -> !llvm.ptr
-      %19274 = "llvm.insertvalue"(%19272, %19273) <{position = array<i64: 26>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19275 = "placeholder.addressof"() {global_name = @Array_init_capacityPtri32} : () -> !llvm.ptr
-      %19276 = "llvm.insertvalue"(%19274, %19275) <{position = array<i64: 27>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19277 = "placeholder.addressof"() {global_name = @Array_length_} : () -> !llvm.ptr
-      %19278 = "llvm.insertvalue"(%19276, %19277) <{position = array<i64: 28>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19279 = "placeholder.addressof"() {global_name = @Array_capacity_} : () -> !llvm.ptr
-      %19280 = "llvm.insertvalue"(%19278, %19279) <{position = array<i64: 29>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19281 = "placeholder.addressof"() {global_name = @Array_append_xT} : () -> !llvm.ptr
-      %19282 = "llvm.insertvalue"(%19280, %19281) <{position = array<i64: 30>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19283 = "placeholder.addressof"() {global_name = @Array_grow_} : () -> !llvm.ptr
-      %19284 = "llvm.insertvalue"(%19282, %19283) <{position = array<i64: 31>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19285 = "placeholder.addressof"() {global_name = @Array__index_xPtri32} : () -> !llvm.ptr
-      %19286 = "llvm.insertvalue"(%19284, %19285) <{position = array<i64: 32>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19287 = "placeholder.addressof"() {global_name = @Array_throw_oob_xPtri32} : () -> !llvm.ptr
-      %19288 = "llvm.insertvalue"(%19286, %19287) <{position = array<i64: 33>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19289 = "placeholder.addressof"() {global_name = @Array_unsafe_index_xPtri32} : () -> !llvm.ptr
-      %19290 = "llvm.insertvalue"(%19288, %19289) <{position = array<i64: 34>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19291 = "placeholder.addressof"() {global_name = @Array_iterator_} : () -> !llvm.ptr
-      %19292 = "llvm.insertvalue"(%19290, %19291) <{position = array<i64: 35>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19293 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %19294 = "llvm.insertvalue"(%19292, %19293) <{position = array<i64: 36>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19295 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %19296 = "llvm.insertvalue"(%19294, %19295) <{position = array<i64: 37>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19297 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19298 = "llvm.insertvalue"(%19296, %19297) <{position = array<i64: 38>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19299 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19300 = "llvm.insertvalue"(%19298, %19299) <{position = array<i64: 39>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19301 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %19302 = "llvm.insertvalue"(%19300, %19301) <{position = array<i64: 40>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19303 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19304 = "llvm.insertvalue"(%19302, %19303) <{position = array<i64: 41>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19305 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
-      %19306 = "llvm.insertvalue"(%19304, %19305) <{position = array<i64: 42>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19307 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
-      %19308 = "llvm.insertvalue"(%19306, %19307) <{position = array<i64: 43>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19309 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
-      %19310 = "llvm.insertvalue"(%19308, %19309) <{position = array<i64: 44>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19311 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
-      %19312 = "llvm.insertvalue"(%19310, %19311) <{position = array<i64: 45>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19313 = "placeholder.addressof"() {global_name = @Array_field_Array_0} : () -> !llvm.ptr
-      %19314 = "llvm.insertvalue"(%19312, %19313) <{position = array<i64: 46>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19315 = "placeholder.addressof"() {global_name = @Array_B_iterator_} : () -> !llvm.ptr
-      %19316 = "llvm.insertvalue"(%19314, %19315) <{position = array<i64: 47>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19317 = "placeholder.addressof"() {global_name = @Array_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %19318 = "llvm.insertvalue"(%19316, %19317) <{position = array<i64: 48>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19319 = "placeholder.addressof"() {global_name = @Array_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %19320 = "llvm.insertvalue"(%19318, %19319) <{position = array<i64: 49>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19321 = "placeholder.addressof"() {global_name = @Array_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19322 = "llvm.insertvalue"(%19320, %19321) <{position = array<i64: 50>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19323 = "placeholder.addressof"() {global_name = @Array_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19324 = "llvm.insertvalue"(%19322, %19323) <{position = array<i64: 51>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19325 = "placeholder.addressof"() {global_name = @Array_B_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %19326 = "llvm.insertvalue"(%19324, %19325) <{position = array<i64: 52>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19327 = "placeholder.addressof"() {global_name = @Array_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19328 = "llvm.insertvalue"(%19326, %19327) <{position = array<i64: 53>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19329 = "placeholder.addressof"() {global_name = @Array_B_chain_otherIterable2T} : () -> !llvm.ptr
-      %19330 = "llvm.insertvalue"(%19328, %19329) <{position = array<i64: 54>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19331 = "placeholder.addressof"() {global_name = @Array_B_interleave_otherIterable2T} : () -> !llvm.ptr
-      %19332 = "llvm.insertvalue"(%19330, %19331) <{position = array<i64: 55>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19333 = "placeholder.addressof"() {global_name = @Array_B_zip_otherIterable2U} : () -> !llvm.ptr
-      %19334 = "llvm.insertvalue"(%19332, %19333) <{position = array<i64: 56>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19335 = "placeholder.addressof"() {global_name = @Array_B_product_otherIterable2U} : () -> !llvm.ptr
-      %19336 = "llvm.insertvalue"(%19334, %19335) <{position = array<i64: 57>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19337 = "placeholder.addressof"() {global_name = @Array_iterator_} : () -> !llvm.ptr
-      %19338 = "llvm.insertvalue"(%19336, %19337) <{position = array<i64: 58>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19339 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %19340 = "llvm.insertvalue"(%19338, %19339) <{position = array<i64: 59>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19341 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %19342 = "llvm.insertvalue"(%19340, %19341) <{position = array<i64: 60>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19343 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19344 = "llvm.insertvalue"(%19342, %19343) <{position = array<i64: 61>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19345 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19346 = "llvm.insertvalue"(%19344, %19345) <{position = array<i64: 62>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19347 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %19348 = "llvm.insertvalue"(%19346, %19347) <{position = array<i64: 63>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19349 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19350 = "llvm.insertvalue"(%19348, %19349) <{position = array<i64: 64>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19351 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
-      %19352 = "llvm.insertvalue"(%19350, %19351) <{position = array<i64: 65>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19353 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
-      %19354 = "llvm.insertvalue"(%19352, %19353) <{position = array<i64: 66>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19355 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
-      %19356 = "llvm.insertvalue"(%19354, %19355) <{position = array<i64: 67>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19357 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
-      %19358 = "llvm.insertvalue"(%19356, %19357) <{position = array<i64: 68>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
-      %19359 = "llvm.insertvalue"(%19220, %19358) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<69 x ptr>)>, !llvm.array<69 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<69 x ptr>)>
-      "llvm.return"(%19359) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<69 x ptr>)>) -> ()
+      %19375 = "llvm.mlir.undef"() : () -> !llvm.array<69 x ptr>
+      %19376 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19377 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19378 = "llvm.mlir.constant"() <{value = 7 : i64}> : () -> i64
+      %19379 = "llvm.mlir.constant"() <{value = 4611686018427388289 : i64}> : () -> i64
+      %19380 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<69 x ptr>)>
+      %19381 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %19382 = "llvm.mlir.constant"() <{value = -5261542750394134544 : i64}> : () -> i64
+      %19383 = "llvm.insertvalue"(%19381, %19382) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19384 = "llvm.insertvalue"(%19383, %19379) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19385 = "llvm.insertvalue"(%19384, %19378) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19386 = "llvm.insertvalue"(%19380, %19385) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<69 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<69 x ptr>)>
+      %19387 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %19388 = "llvm.insertvalue"(%19377, %19387) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19389 = "placeholder.addressof"() {global_name = @Array_hashtbl} : () -> !llvm.ptr
+      %19390 = "llvm.insertvalue"(%19388, %19389) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19391 = "placeholder.addressof"() {global_name = @Array_offset_tbl} : () -> !llvm.ptr
+      %19392 = "llvm.insertvalue"(%19390, %19391) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19393 = "llvm.getelementptr"(%19376) <{elem_type = !llvm.struct<(struct<(ptr)>, i32, i32, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %19394 = "llvm.insertvalue"(%19392, %19393) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19395 = "llvm.insertvalue"(%19386, %19394) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<69 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<69 x ptr>)>
+      %19396 = "placeholder.addressof"() {global_name = @Array_field_buffer} : () -> !llvm.ptr
+      %19397 = "llvm.insertvalue"(%19375, %19396) <{position = array<i64: 0>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19398 = "placeholder.addressof"() {global_name = @Array_field_length} : () -> !llvm.ptr
+      %19399 = "llvm.insertvalue"(%19397, %19398) <{position = array<i64: 1>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19400 = "placeholder.addressof"() {global_name = @Array_field_capacity} : () -> !llvm.ptr
+      %19401 = "llvm.insertvalue"(%19399, %19400) <{position = array<i64: 2>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19402 = "placeholder.addressof"() {global_name = @Array_field_Array_0} : () -> !llvm.ptr
+      %19403 = "llvm.insertvalue"(%19401, %19402) <{position = array<i64: 3>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19404 = "placeholder.addressof"() {global_name = @Array_B__Self_from_iterable_iterableIterable2T} : () -> !llvm.ptr
+      %19405 = "llvm.insertvalue"(%19403, %19404) <{position = array<i64: 4>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19406 = "placeholder.addressof"() {global_name = @Array_B_init_} : () -> !llvm.ptr
+      %19407 = "llvm.insertvalue"(%19405, %19406) <{position = array<i64: 5>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19408 = "placeholder.addressof"() {global_name = @Array_B_init_capacityPtri32} : () -> !llvm.ptr
+      %19409 = "llvm.insertvalue"(%19407, %19408) <{position = array<i64: 6>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19410 = "placeholder.addressof"() {global_name = @Array_B_length_} : () -> !llvm.ptr
+      %19411 = "llvm.insertvalue"(%19409, %19410) <{position = array<i64: 7>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19412 = "placeholder.addressof"() {global_name = @Array_B_capacity_} : () -> !llvm.ptr
+      %19413 = "llvm.insertvalue"(%19411, %19412) <{position = array<i64: 8>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19414 = "placeholder.addressof"() {global_name = @Array_B_append_xT} : () -> !llvm.ptr
+      %19415 = "llvm.insertvalue"(%19413, %19414) <{position = array<i64: 9>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19416 = "placeholder.addressof"() {global_name = @Array_B_grow_} : () -> !llvm.ptr
+      %19417 = "llvm.insertvalue"(%19415, %19416) <{position = array<i64: 10>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19418 = "placeholder.addressof"() {global_name = @Array_B__index_xPtri32} : () -> !llvm.ptr
+      %19419 = "llvm.insertvalue"(%19417, %19418) <{position = array<i64: 11>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19420 = "placeholder.addressof"() {global_name = @Array_B_throw_oob_xPtri32} : () -> !llvm.ptr
+      %19421 = "llvm.insertvalue"(%19419, %19420) <{position = array<i64: 12>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19422 = "placeholder.addressof"() {global_name = @Array_B_unsafe_index_xPtri32} : () -> !llvm.ptr
+      %19423 = "llvm.insertvalue"(%19421, %19422) <{position = array<i64: 13>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19424 = "placeholder.addressof"() {global_name = @Array_B_iterator_} : () -> !llvm.ptr
+      %19425 = "llvm.insertvalue"(%19423, %19424) <{position = array<i64: 14>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19426 = "placeholder.addressof"() {global_name = @Array_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %19427 = "llvm.insertvalue"(%19425, %19426) <{position = array<i64: 15>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19428 = "placeholder.addressof"() {global_name = @Array_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %19429 = "llvm.insertvalue"(%19427, %19428) <{position = array<i64: 16>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19430 = "placeholder.addressof"() {global_name = @Array_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19431 = "llvm.insertvalue"(%19429, %19430) <{position = array<i64: 17>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19432 = "placeholder.addressof"() {global_name = @Array_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19433 = "llvm.insertvalue"(%19431, %19432) <{position = array<i64: 18>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19434 = "placeholder.addressof"() {global_name = @Array_B_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %19435 = "llvm.insertvalue"(%19433, %19434) <{position = array<i64: 19>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19436 = "placeholder.addressof"() {global_name = @Array_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19437 = "llvm.insertvalue"(%19435, %19436) <{position = array<i64: 20>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19438 = "placeholder.addressof"() {global_name = @Array_B_chain_otherIterable2T} : () -> !llvm.ptr
+      %19439 = "llvm.insertvalue"(%19437, %19438) <{position = array<i64: 21>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19440 = "placeholder.addressof"() {global_name = @Array_B_interleave_otherIterable2T} : () -> !llvm.ptr
+      %19441 = "llvm.insertvalue"(%19439, %19440) <{position = array<i64: 22>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19442 = "placeholder.addressof"() {global_name = @Array_B_zip_otherIterable2U} : () -> !llvm.ptr
+      %19443 = "llvm.insertvalue"(%19441, %19442) <{position = array<i64: 23>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19444 = "placeholder.addressof"() {global_name = @Array_B_product_otherIterable2U} : () -> !llvm.ptr
+      %19445 = "llvm.insertvalue"(%19443, %19444) <{position = array<i64: 24>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19446 = "placeholder.addressof"() {global_name = @Array__Self_from_iterable_iterableIterable2T} : () -> !llvm.ptr
+      %19447 = "llvm.insertvalue"(%19445, %19446) <{position = array<i64: 25>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19448 = "placeholder.addressof"() {global_name = @Array_init_} : () -> !llvm.ptr
+      %19449 = "llvm.insertvalue"(%19447, %19448) <{position = array<i64: 26>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19450 = "placeholder.addressof"() {global_name = @Array_init_capacityPtri32} : () -> !llvm.ptr
+      %19451 = "llvm.insertvalue"(%19449, %19450) <{position = array<i64: 27>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19452 = "placeholder.addressof"() {global_name = @Array_length_} : () -> !llvm.ptr
+      %19453 = "llvm.insertvalue"(%19451, %19452) <{position = array<i64: 28>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19454 = "placeholder.addressof"() {global_name = @Array_capacity_} : () -> !llvm.ptr
+      %19455 = "llvm.insertvalue"(%19453, %19454) <{position = array<i64: 29>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19456 = "placeholder.addressof"() {global_name = @Array_append_xT} : () -> !llvm.ptr
+      %19457 = "llvm.insertvalue"(%19455, %19456) <{position = array<i64: 30>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19458 = "placeholder.addressof"() {global_name = @Array_grow_} : () -> !llvm.ptr
+      %19459 = "llvm.insertvalue"(%19457, %19458) <{position = array<i64: 31>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19460 = "placeholder.addressof"() {global_name = @Array__index_xPtri32} : () -> !llvm.ptr
+      %19461 = "llvm.insertvalue"(%19459, %19460) <{position = array<i64: 32>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19462 = "placeholder.addressof"() {global_name = @Array_throw_oob_xPtri32} : () -> !llvm.ptr
+      %19463 = "llvm.insertvalue"(%19461, %19462) <{position = array<i64: 33>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19464 = "placeholder.addressof"() {global_name = @Array_unsafe_index_xPtri32} : () -> !llvm.ptr
+      %19465 = "llvm.insertvalue"(%19463, %19464) <{position = array<i64: 34>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19466 = "placeholder.addressof"() {global_name = @Array_iterator_} : () -> !llvm.ptr
+      %19467 = "llvm.insertvalue"(%19465, %19466) <{position = array<i64: 35>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19468 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %19469 = "llvm.insertvalue"(%19467, %19468) <{position = array<i64: 36>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19470 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %19471 = "llvm.insertvalue"(%19469, %19470) <{position = array<i64: 37>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19472 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19473 = "llvm.insertvalue"(%19471, %19472) <{position = array<i64: 38>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19474 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19475 = "llvm.insertvalue"(%19473, %19474) <{position = array<i64: 39>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19476 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %19477 = "llvm.insertvalue"(%19475, %19476) <{position = array<i64: 40>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19478 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19479 = "llvm.insertvalue"(%19477, %19478) <{position = array<i64: 41>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19480 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
+      %19481 = "llvm.insertvalue"(%19479, %19480) <{position = array<i64: 42>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19482 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
+      %19483 = "llvm.insertvalue"(%19481, %19482) <{position = array<i64: 43>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19484 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
+      %19485 = "llvm.insertvalue"(%19483, %19484) <{position = array<i64: 44>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19486 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
+      %19487 = "llvm.insertvalue"(%19485, %19486) <{position = array<i64: 45>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19488 = "placeholder.addressof"() {global_name = @Array_field_Array_0} : () -> !llvm.ptr
+      %19489 = "llvm.insertvalue"(%19487, %19488) <{position = array<i64: 46>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19490 = "placeholder.addressof"() {global_name = @Array_B_iterator_} : () -> !llvm.ptr
+      %19491 = "llvm.insertvalue"(%19489, %19490) <{position = array<i64: 47>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19492 = "placeholder.addressof"() {global_name = @Array_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %19493 = "llvm.insertvalue"(%19491, %19492) <{position = array<i64: 48>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19494 = "placeholder.addressof"() {global_name = @Array_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %19495 = "llvm.insertvalue"(%19493, %19494) <{position = array<i64: 49>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19496 = "placeholder.addressof"() {global_name = @Array_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19497 = "llvm.insertvalue"(%19495, %19496) <{position = array<i64: 50>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19498 = "placeholder.addressof"() {global_name = @Array_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19499 = "llvm.insertvalue"(%19497, %19498) <{position = array<i64: 51>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19500 = "placeholder.addressof"() {global_name = @Array_B_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %19501 = "llvm.insertvalue"(%19499, %19500) <{position = array<i64: 52>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19502 = "placeholder.addressof"() {global_name = @Array_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19503 = "llvm.insertvalue"(%19501, %19502) <{position = array<i64: 53>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19504 = "placeholder.addressof"() {global_name = @Array_B_chain_otherIterable2T} : () -> !llvm.ptr
+      %19505 = "llvm.insertvalue"(%19503, %19504) <{position = array<i64: 54>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19506 = "placeholder.addressof"() {global_name = @Array_B_interleave_otherIterable2T} : () -> !llvm.ptr
+      %19507 = "llvm.insertvalue"(%19505, %19506) <{position = array<i64: 55>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19508 = "placeholder.addressof"() {global_name = @Array_B_zip_otherIterable2U} : () -> !llvm.ptr
+      %19509 = "llvm.insertvalue"(%19507, %19508) <{position = array<i64: 56>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19510 = "placeholder.addressof"() {global_name = @Array_B_product_otherIterable2U} : () -> !llvm.ptr
+      %19511 = "llvm.insertvalue"(%19509, %19510) <{position = array<i64: 57>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19512 = "placeholder.addressof"() {global_name = @Array_iterator_} : () -> !llvm.ptr
+      %19513 = "llvm.insertvalue"(%19511, %19512) <{position = array<i64: 58>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19514 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %19515 = "llvm.insertvalue"(%19513, %19514) <{position = array<i64: 59>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19516 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %19517 = "llvm.insertvalue"(%19515, %19516) <{position = array<i64: 60>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19518 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19519 = "llvm.insertvalue"(%19517, %19518) <{position = array<i64: 61>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19520 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19521 = "llvm.insertvalue"(%19519, %19520) <{position = array<i64: 62>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19522 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %19523 = "llvm.insertvalue"(%19521, %19522) <{position = array<i64: 63>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19524 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19525 = "llvm.insertvalue"(%19523, %19524) <{position = array<i64: 64>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19526 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
+      %19527 = "llvm.insertvalue"(%19525, %19526) <{position = array<i64: 65>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19528 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
+      %19529 = "llvm.insertvalue"(%19527, %19528) <{position = array<i64: 66>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19530 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
+      %19531 = "llvm.insertvalue"(%19529, %19530) <{position = array<i64: 67>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19532 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
+      %19533 = "llvm.insertvalue"(%19531, %19532) <{position = array<i64: 68>}> : (!llvm.array<69 x ptr>, !llvm.ptr) -> !llvm.array<69 x ptr>
+      %19534 = "llvm.insertvalue"(%19395, %19533) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<69 x ptr>)>, !llvm.array<69 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<69 x ptr>)>
+      "llvm.return"(%19534) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<69 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ArrayIterator_hashtbl"}> ({
-      %19191 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19192 = "placeholder.addressof"() {global_name = @ArrayIterator} : () -> !llvm.ptr
-      %19193 = "llvm.insertvalue"(%19191, %19192) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19194 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %19195 = "llvm.insertvalue"(%19193, %19194) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19196 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
-      %19197 = "llvm.insertvalue"(%19195, %19196) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19198 = "placeholder.addressof"() {global_name = @Iterator2} : () -> !llvm.ptr
-      %19199 = "llvm.insertvalue"(%19197, %19198) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      "llvm.return"(%19199) : (!llvm.array<4 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ArrayIterator_hashtbl"}> ({
+      %19360 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19361 = "llvm.mlir.undef"() : () -> !llvm.array<8 x ptr>
+      %19362 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %19363 = "llvm.insertvalue"(%19361, %19362) <{position = array<i64: 0>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19364 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %19365 = "llvm.insertvalue"(%19363, %19364) <{position = array<i64: 1>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19366 = "llvm.insertvalue"(%19365, %19360) <{position = array<i64: 2>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19367 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
+      %19368 = "llvm.insertvalue"(%19366, %19367) <{position = array<i64: 3>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19369 = "placeholder.addressof"() {global_name = @ArrayIterator} : () -> !llvm.ptr
+      %19370 = "llvm.insertvalue"(%19368, %19369) <{position = array<i64: 4>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19371 = "llvm.insertvalue"(%19370, %19360) <{position = array<i64: 5>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19372 = "placeholder.addressof"() {global_name = @Iterator2} : () -> !llvm.ptr
+      %19373 = "llvm.insertvalue"(%19371, %19372) <{position = array<i64: 6>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19374 = "llvm.insertvalue"(%19373, %19360) <{position = array<i64: 7>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      "llvm.return"(%19374) : (!llvm.array<8 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ArrayIterator_offset_tbl"}> ({
-      %19183 = "llvm.mlir.constant"() <{value = 14 : i32}> : () -> i32
-      %19184 = "llvm.mlir.constant"() <{value = 17 : i32}> : () -> i32
-      %19185 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
-      %19186 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %19187 = "llvm.insertvalue"(%19185, %19186) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %19188 = "llvm.insertvalue"(%19187, %19184) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %19189 = "llvm.insertvalue"(%19188, %19184) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %19190 = "llvm.insertvalue"(%19189, %19183) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      "llvm.return"(%19190) : (!llvm.array<4 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ArrayIterator_offset_tbl"}> ({
+      %19347 = "llvm.mlir.constant"() <{value = 14 : i32}> : () -> i32
+      %19348 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %19349 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %19350 = "llvm.mlir.undef"() : () -> !llvm.array<8 x i32>
+      %19351 = "llvm.mlir.constant"() <{value = 17 : i32}> : () -> i32
+      %19352 = "llvm.insertvalue"(%19350, %19351) <{position = array<i64: 0>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19353 = "llvm.insertvalue"(%19352, %19349) <{position = array<i64: 1>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19354 = "llvm.insertvalue"(%19353, %19348) <{position = array<i64: 2>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19355 = "llvm.insertvalue"(%19354, %19351) <{position = array<i64: 3>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19356 = "llvm.insertvalue"(%19355, %19349) <{position = array<i64: 4>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19357 = "llvm.insertvalue"(%19356, %19348) <{position = array<i64: 5>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19358 = "llvm.insertvalue"(%19357, %19347) <{position = array<i64: 6>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19359 = "llvm.insertvalue"(%19358, %19348) <{position = array<i64: 7>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      "llvm.return"(%19359) : (!llvm.array<8 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "ArrayIterator"}> ({
-      %19141 = "llvm.mlir.undef"() : () -> !llvm.array<10 x ptr>
-      %19142 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19143 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19144 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
-      %19145 = "llvm.mlir.constant"() <{value = 4611686018427388181 : i64}> : () -> i64
-      %19146 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
-      %19147 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19148 = "llvm.mlir.constant"() <{value = 3447345754186651411 : i64}> : () -> i64
-      %19149 = "llvm.insertvalue"(%19147, %19148) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19150 = "llvm.insertvalue"(%19149, %19145) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19151 = "llvm.insertvalue"(%19150, %19144) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19152 = "llvm.insertvalue"(%19146, %19151) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
-      %19153 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %19154 = "llvm.insertvalue"(%19143, %19153) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19155 = "placeholder.addressof"() {global_name = @ArrayIterator_hashtbl} : () -> !llvm.ptr
-      %19156 = "llvm.insertvalue"(%19154, %19155) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19157 = "placeholder.addressof"() {global_name = @ArrayIterator_offset_tbl} : () -> !llvm.ptr
-      %19158 = "llvm.insertvalue"(%19156, %19157) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19159 = "llvm.getelementptr"(%19142) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, i32, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %19160 = "llvm.insertvalue"(%19158, %19159) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19161 = "llvm.insertvalue"(%19152, %19160) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
-      %19162 = "placeholder.addressof"() {global_name = @ArrayIterator_field_array} : () -> !llvm.ptr
-      %19163 = "llvm.insertvalue"(%19141, %19162) <{position = array<i64: 0>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %19164 = "placeholder.addressof"() {global_name = @ArrayIterator_field_index} : () -> !llvm.ptr
-      %19165 = "llvm.insertvalue"(%19163, %19164) <{position = array<i64: 1>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %19166 = "placeholder.addressof"() {global_name = @ArrayIterator_field_ArrayIterator_0} : () -> !llvm.ptr
-      %19167 = "llvm.insertvalue"(%19165, %19166) <{position = array<i64: 2>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %19168 = "placeholder.addressof"() {global_name = @ArrayIterator_B_init_arrayArrayT} : () -> !llvm.ptr
-      %19169 = "llvm.insertvalue"(%19167, %19168) <{position = array<i64: 3>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %19170 = "placeholder.addressof"() {global_name = @ArrayIterator_B_next_} : () -> !llvm.ptr
-      %19171 = "llvm.insertvalue"(%19169, %19170) <{position = array<i64: 4>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %19172 = "placeholder.addressof"() {global_name = @ArrayIterator_init_arrayArrayT} : () -> !llvm.ptr
-      %19173 = "llvm.insertvalue"(%19171, %19172) <{position = array<i64: 5>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %19174 = "placeholder.addressof"() {global_name = @ArrayIterator_next_} : () -> !llvm.ptr
-      %19175 = "llvm.insertvalue"(%19173, %19174) <{position = array<i64: 6>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %19176 = "placeholder.addressof"() {global_name = @ArrayIterator_field_ArrayIterator_0} : () -> !llvm.ptr
-      %19177 = "llvm.insertvalue"(%19175, %19176) <{position = array<i64: 7>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %19178 = "placeholder.addressof"() {global_name = @ArrayIterator_B_next_} : () -> !llvm.ptr
-      %19179 = "llvm.insertvalue"(%19177, %19178) <{position = array<i64: 8>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %19180 = "placeholder.addressof"() {global_name = @ArrayIterator_next_} : () -> !llvm.ptr
-      %19181 = "llvm.insertvalue"(%19179, %19180) <{position = array<i64: 9>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %19182 = "llvm.insertvalue"(%19161, %19181) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, !llvm.array<10 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
-      "llvm.return"(%19182) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>) -> ()
+      %19305 = "llvm.mlir.undef"() : () -> !llvm.array<10 x ptr>
+      %19306 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19307 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19308 = "llvm.mlir.constant"() <{value = 7 : i64}> : () -> i64
+      %19309 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %19310 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
+      %19311 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %19312 = "llvm.mlir.constant"() <{value = 3447345754186651411 : i64}> : () -> i64
+      %19313 = "llvm.insertvalue"(%19311, %19312) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19314 = "llvm.insertvalue"(%19313, %19309) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19315 = "llvm.insertvalue"(%19314, %19308) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19316 = "llvm.insertvalue"(%19310, %19315) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
+      %19317 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %19318 = "llvm.insertvalue"(%19307, %19317) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19319 = "placeholder.addressof"() {global_name = @ArrayIterator_hashtbl} : () -> !llvm.ptr
+      %19320 = "llvm.insertvalue"(%19318, %19319) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19321 = "placeholder.addressof"() {global_name = @ArrayIterator_offset_tbl} : () -> !llvm.ptr
+      %19322 = "llvm.insertvalue"(%19320, %19321) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19323 = "llvm.getelementptr"(%19306) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, i32, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %19324 = "llvm.insertvalue"(%19322, %19323) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19325 = "llvm.insertvalue"(%19316, %19324) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
+      %19326 = "placeholder.addressof"() {global_name = @ArrayIterator_field_array} : () -> !llvm.ptr
+      %19327 = "llvm.insertvalue"(%19305, %19326) <{position = array<i64: 0>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %19328 = "placeholder.addressof"() {global_name = @ArrayIterator_field_index} : () -> !llvm.ptr
+      %19329 = "llvm.insertvalue"(%19327, %19328) <{position = array<i64: 1>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %19330 = "placeholder.addressof"() {global_name = @ArrayIterator_field_ArrayIterator_0} : () -> !llvm.ptr
+      %19331 = "llvm.insertvalue"(%19329, %19330) <{position = array<i64: 2>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %19332 = "placeholder.addressof"() {global_name = @ArrayIterator_B_init_arrayArrayT} : () -> !llvm.ptr
+      %19333 = "llvm.insertvalue"(%19331, %19332) <{position = array<i64: 3>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %19334 = "placeholder.addressof"() {global_name = @ArrayIterator_B_next_} : () -> !llvm.ptr
+      %19335 = "llvm.insertvalue"(%19333, %19334) <{position = array<i64: 4>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %19336 = "placeholder.addressof"() {global_name = @ArrayIterator_init_arrayArrayT} : () -> !llvm.ptr
+      %19337 = "llvm.insertvalue"(%19335, %19336) <{position = array<i64: 5>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %19338 = "placeholder.addressof"() {global_name = @ArrayIterator_next_} : () -> !llvm.ptr
+      %19339 = "llvm.insertvalue"(%19337, %19338) <{position = array<i64: 6>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %19340 = "placeholder.addressof"() {global_name = @ArrayIterator_field_ArrayIterator_0} : () -> !llvm.ptr
+      %19341 = "llvm.insertvalue"(%19339, %19340) <{position = array<i64: 7>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %19342 = "placeholder.addressof"() {global_name = @ArrayIterator_B_next_} : () -> !llvm.ptr
+      %19343 = "llvm.insertvalue"(%19341, %19342) <{position = array<i64: 8>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %19344 = "placeholder.addressof"() {global_name = @ArrayIterator_next_} : () -> !llvm.ptr
+      %19345 = "llvm.insertvalue"(%19343, %19344) <{position = array<i64: 9>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %19346 = "llvm.insertvalue"(%19325, %19345) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, !llvm.array<10 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
+      "llvm.return"(%19346) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "MapIterable2_hashtbl"}> ({
-      %19132 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19133 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %19134 = "llvm.insertvalue"(%19132, %19133) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19135 = "placeholder.addressof"() {global_name = @Iterable2} : () -> !llvm.ptr
-      %19136 = "llvm.insertvalue"(%19134, %19135) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19137 = "placeholder.addressof"() {global_name = @MapIterable2} : () -> !llvm.ptr
-      %19138 = "llvm.insertvalue"(%19136, %19137) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19139 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
-      %19140 = "llvm.insertvalue"(%19138, %19139) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      "llvm.return"(%19140) : (!llvm.array<4 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "MapIterable2_hashtbl"}> ({
+      %19290 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19291 = "llvm.mlir.undef"() : () -> !llvm.array<8 x ptr>
+      %19292 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %19293 = "llvm.insertvalue"(%19291, %19292) <{position = array<i64: 0>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19294 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %19295 = "llvm.insertvalue"(%19293, %19294) <{position = array<i64: 1>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19296 = "placeholder.addressof"() {global_name = @MapIterable2} : () -> !llvm.ptr
+      %19297 = "llvm.insertvalue"(%19295, %19296) <{position = array<i64: 2>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19298 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
+      %19299 = "llvm.insertvalue"(%19297, %19298) <{position = array<i64: 3>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19300 = "llvm.insertvalue"(%19299, %19290) <{position = array<i64: 4>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19301 = "placeholder.addressof"() {global_name = @Iterable2} : () -> !llvm.ptr
+      %19302 = "llvm.insertvalue"(%19300, %19301) <{position = array<i64: 5>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19303 = "llvm.insertvalue"(%19302, %19290) <{position = array<i64: 6>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19304 = "llvm.insertvalue"(%19303, %19290) <{position = array<i64: 7>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      "llvm.return"(%19304) : (!llvm.array<8 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "MapIterable2_offset_tbl"}> ({
-      %19124 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %19125 = "llvm.mlir.constant"() <{value = 35 : i32}> : () -> i32
-      %19126 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
-      %19127 = "llvm.mlir.constant"() <{value = 58 : i32}> : () -> i32
-      %19128 = "llvm.insertvalue"(%19126, %19127) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %19129 = "llvm.insertvalue"(%19128, %19125) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %19130 = "llvm.insertvalue"(%19129, %19124) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %19131 = "llvm.insertvalue"(%19130, %19127) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      "llvm.return"(%19131) : (!llvm.array<4 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "MapIterable2_offset_tbl"}> ({
+      %19277 = "llvm.mlir.constant"() <{value = 35 : i32}> : () -> i32
+      %19278 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %19279 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %19280 = "llvm.mlir.undef"() : () -> !llvm.array<8 x i32>
+      %19281 = "llvm.mlir.constant"() <{value = 58 : i32}> : () -> i32
+      %19282 = "llvm.insertvalue"(%19280, %19281) <{position = array<i64: 0>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19283 = "llvm.insertvalue"(%19282, %19279) <{position = array<i64: 1>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19284 = "llvm.insertvalue"(%19283, %19279) <{position = array<i64: 2>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19285 = "llvm.insertvalue"(%19284, %19281) <{position = array<i64: 3>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19286 = "llvm.insertvalue"(%19285, %19278) <{position = array<i64: 4>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19287 = "llvm.insertvalue"(%19286, %19277) <{position = array<i64: 5>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19288 = "llvm.insertvalue"(%19287, %19278) <{position = array<i64: 6>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19289 = "llvm.insertvalue"(%19288, %19278) <{position = array<i64: 7>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      "llvm.return"(%19289) : (!llvm.array<8 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<51 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "MapIterable2"}> ({
-      %19000 = "llvm.mlir.undef"() : () -> !llvm.array<51 x ptr>
-      %19001 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %19002 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %19003 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
-      %19004 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
-      %19005 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<51 x ptr>)>
-      %19006 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %19007 = "llvm.mlir.constant"() <{value = -1724859134596891929 : i64}> : () -> i64
-      %19008 = "llvm.insertvalue"(%19006, %19007) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19009 = "llvm.insertvalue"(%19008, %19004) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19010 = "llvm.insertvalue"(%19009, %19003) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %19011 = "llvm.insertvalue"(%19005, %19010) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<51 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<51 x ptr>)>
-      %19012 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %19013 = "llvm.insertvalue"(%19002, %19012) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19014 = "placeholder.addressof"() {global_name = @MapIterable2_hashtbl} : () -> !llvm.ptr
-      %19015 = "llvm.insertvalue"(%19013, %19014) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19016 = "placeholder.addressof"() {global_name = @MapIterable2_offset_tbl} : () -> !llvm.ptr
-      %19017 = "llvm.insertvalue"(%19015, %19016) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19018 = "llvm.getelementptr"(%19001) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr)>, ptr, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %19019 = "llvm.insertvalue"(%19017, %19018) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %19020 = "llvm.insertvalue"(%19011, %19019) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<51 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<51 x ptr>)>
-      %19021 = "placeholder.addressof"() {global_name = @MapIterable2_field_iterable} : () -> !llvm.ptr
-      %19022 = "llvm.insertvalue"(%19000, %19021) <{position = array<i64: 0>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19023 = "placeholder.addressof"() {global_name = @MapIterable2_field_f} : () -> !llvm.ptr
-      %19024 = "llvm.insertvalue"(%19022, %19023) <{position = array<i64: 1>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19025 = "placeholder.addressof"() {global_name = @MapIterable2_field_MapIterable2_0} : () -> !llvm.ptr
-      %19026 = "llvm.insertvalue"(%19024, %19025) <{position = array<i64: 2>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19027 = "placeholder.addressof"() {global_name = @MapIterable2_field_MapIterable2_1} : () -> !llvm.ptr
-      %19028 = "llvm.insertvalue"(%19026, %19027) <{position = array<i64: 3>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19029 = "placeholder.addressof"() {global_name = @MapIterable2_B_init_iterableIterable2T_fFunctionT_to_U} : () -> !llvm.ptr
-      %19030 = "llvm.insertvalue"(%19028, %19029) <{position = array<i64: 4>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19031 = "placeholder.addressof"() {global_name = @MapIterable2_B_iterator_} : () -> !llvm.ptr
-      %19032 = "llvm.insertvalue"(%19030, %19031) <{position = array<i64: 5>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19033 = "placeholder.addressof"() {global_name = @MapIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %19034 = "llvm.insertvalue"(%19032, %19033) <{position = array<i64: 6>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19035 = "placeholder.addressof"() {global_name = @MapIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %19036 = "llvm.insertvalue"(%19034, %19035) <{position = array<i64: 7>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19037 = "placeholder.addressof"() {global_name = @MapIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19038 = "llvm.insertvalue"(%19036, %19037) <{position = array<i64: 8>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19039 = "placeholder.addressof"() {global_name = @MapIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19040 = "llvm.insertvalue"(%19038, %19039) <{position = array<i64: 9>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19041 = "placeholder.addressof"() {global_name = @MapIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %19042 = "llvm.insertvalue"(%19040, %19041) <{position = array<i64: 10>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19043 = "placeholder.addressof"() {global_name = @MapIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19044 = "llvm.insertvalue"(%19042, %19043) <{position = array<i64: 11>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19045 = "placeholder.addressof"() {global_name = @MapIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
-      %19046 = "llvm.insertvalue"(%19044, %19045) <{position = array<i64: 12>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19047 = "placeholder.addressof"() {global_name = @MapIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
-      %19048 = "llvm.insertvalue"(%19046, %19047) <{position = array<i64: 13>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19049 = "placeholder.addressof"() {global_name = @MapIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
-      %19050 = "llvm.insertvalue"(%19048, %19049) <{position = array<i64: 14>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19051 = "placeholder.addressof"() {global_name = @MapIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
-      %19052 = "llvm.insertvalue"(%19050, %19051) <{position = array<i64: 15>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19053 = "placeholder.addressof"() {global_name = @MapIterable2_init_iterableIterable2T_fFunctionT_to_U} : () -> !llvm.ptr
-      %19054 = "llvm.insertvalue"(%19052, %19053) <{position = array<i64: 16>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19055 = "placeholder.addressof"() {global_name = @MapIterable2_iterator_} : () -> !llvm.ptr
-      %19056 = "llvm.insertvalue"(%19054, %19055) <{position = array<i64: 17>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19057 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %19058 = "llvm.insertvalue"(%19056, %19057) <{position = array<i64: 18>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19059 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %19060 = "llvm.insertvalue"(%19058, %19059) <{position = array<i64: 19>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19061 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19062 = "llvm.insertvalue"(%19060, %19061) <{position = array<i64: 20>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19063 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19064 = "llvm.insertvalue"(%19062, %19063) <{position = array<i64: 21>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19065 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %19066 = "llvm.insertvalue"(%19064, %19065) <{position = array<i64: 22>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19067 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19068 = "llvm.insertvalue"(%19066, %19067) <{position = array<i64: 23>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19069 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
-      %19070 = "llvm.insertvalue"(%19068, %19069) <{position = array<i64: 24>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19071 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
-      %19072 = "llvm.insertvalue"(%19070, %19071) <{position = array<i64: 25>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19073 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
-      %19074 = "llvm.insertvalue"(%19072, %19073) <{position = array<i64: 26>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19075 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
-      %19076 = "llvm.insertvalue"(%19074, %19075) <{position = array<i64: 27>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19077 = "placeholder.addressof"() {global_name = @MapIterable2_field_MapIterable2_1} : () -> !llvm.ptr
-      %19078 = "llvm.insertvalue"(%19076, %19077) <{position = array<i64: 28>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19079 = "placeholder.addressof"() {global_name = @MapIterable2_B_iterator_} : () -> !llvm.ptr
-      %19080 = "llvm.insertvalue"(%19078, %19079) <{position = array<i64: 29>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19081 = "placeholder.addressof"() {global_name = @MapIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %19082 = "llvm.insertvalue"(%19080, %19081) <{position = array<i64: 30>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19083 = "placeholder.addressof"() {global_name = @MapIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %19084 = "llvm.insertvalue"(%19082, %19083) <{position = array<i64: 31>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19085 = "placeholder.addressof"() {global_name = @MapIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19086 = "llvm.insertvalue"(%19084, %19085) <{position = array<i64: 32>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19087 = "placeholder.addressof"() {global_name = @MapIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19088 = "llvm.insertvalue"(%19086, %19087) <{position = array<i64: 33>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19089 = "placeholder.addressof"() {global_name = @MapIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %19090 = "llvm.insertvalue"(%19088, %19089) <{position = array<i64: 34>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19091 = "placeholder.addressof"() {global_name = @MapIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19092 = "llvm.insertvalue"(%19090, %19091) <{position = array<i64: 35>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19093 = "placeholder.addressof"() {global_name = @MapIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
-      %19094 = "llvm.insertvalue"(%19092, %19093) <{position = array<i64: 36>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19095 = "placeholder.addressof"() {global_name = @MapIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
-      %19096 = "llvm.insertvalue"(%19094, %19095) <{position = array<i64: 37>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19097 = "placeholder.addressof"() {global_name = @MapIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
-      %19098 = "llvm.insertvalue"(%19096, %19097) <{position = array<i64: 38>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19099 = "placeholder.addressof"() {global_name = @MapIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
-      %19100 = "llvm.insertvalue"(%19098, %19099) <{position = array<i64: 39>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19101 = "placeholder.addressof"() {global_name = @MapIterable2_iterator_} : () -> !llvm.ptr
-      %19102 = "llvm.insertvalue"(%19100, %19101) <{position = array<i64: 40>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19103 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %19104 = "llvm.insertvalue"(%19102, %19103) <{position = array<i64: 41>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19105 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %19106 = "llvm.insertvalue"(%19104, %19105) <{position = array<i64: 42>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19107 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19108 = "llvm.insertvalue"(%19106, %19107) <{position = array<i64: 43>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19109 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19110 = "llvm.insertvalue"(%19108, %19109) <{position = array<i64: 44>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19111 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %19112 = "llvm.insertvalue"(%19110, %19111) <{position = array<i64: 45>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19113 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %19114 = "llvm.insertvalue"(%19112, %19113) <{position = array<i64: 46>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19115 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
-      %19116 = "llvm.insertvalue"(%19114, %19115) <{position = array<i64: 47>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19117 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
-      %19118 = "llvm.insertvalue"(%19116, %19117) <{position = array<i64: 48>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19119 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
-      %19120 = "llvm.insertvalue"(%19118, %19119) <{position = array<i64: 49>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19121 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
-      %19122 = "llvm.insertvalue"(%19120, %19121) <{position = array<i64: 50>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
-      %19123 = "llvm.insertvalue"(%19020, %19122) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<51 x ptr>)>, !llvm.array<51 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<51 x ptr>)>
-      "llvm.return"(%19123) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<51 x ptr>)>) -> ()
+      %19153 = "llvm.mlir.undef"() : () -> !llvm.array<51 x ptr>
+      %19154 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19155 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19156 = "llvm.mlir.constant"() <{value = 7 : i64}> : () -> i64
+      %19157 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %19158 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<51 x ptr>)>
+      %19159 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %19160 = "llvm.mlir.constant"() <{value = -1724859134596891929 : i64}> : () -> i64
+      %19161 = "llvm.insertvalue"(%19159, %19160) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19162 = "llvm.insertvalue"(%19161, %19157) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19163 = "llvm.insertvalue"(%19162, %19156) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19164 = "llvm.insertvalue"(%19158, %19163) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<51 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<51 x ptr>)>
+      %19165 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %19166 = "llvm.insertvalue"(%19155, %19165) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19167 = "placeholder.addressof"() {global_name = @MapIterable2_hashtbl} : () -> !llvm.ptr
+      %19168 = "llvm.insertvalue"(%19166, %19167) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19169 = "placeholder.addressof"() {global_name = @MapIterable2_offset_tbl} : () -> !llvm.ptr
+      %19170 = "llvm.insertvalue"(%19168, %19169) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19171 = "llvm.getelementptr"(%19154) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr)>, ptr, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %19172 = "llvm.insertvalue"(%19170, %19171) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19173 = "llvm.insertvalue"(%19164, %19172) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<51 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<51 x ptr>)>
+      %19174 = "placeholder.addressof"() {global_name = @MapIterable2_field_iterable} : () -> !llvm.ptr
+      %19175 = "llvm.insertvalue"(%19153, %19174) <{position = array<i64: 0>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19176 = "placeholder.addressof"() {global_name = @MapIterable2_field_f} : () -> !llvm.ptr
+      %19177 = "llvm.insertvalue"(%19175, %19176) <{position = array<i64: 1>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19178 = "placeholder.addressof"() {global_name = @MapIterable2_field_MapIterable2_0} : () -> !llvm.ptr
+      %19179 = "llvm.insertvalue"(%19177, %19178) <{position = array<i64: 2>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19180 = "placeholder.addressof"() {global_name = @MapIterable2_field_MapIterable2_1} : () -> !llvm.ptr
+      %19181 = "llvm.insertvalue"(%19179, %19180) <{position = array<i64: 3>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19182 = "placeholder.addressof"() {global_name = @MapIterable2_B_init_iterableIterable2T_fFunctionT_to_U} : () -> !llvm.ptr
+      %19183 = "llvm.insertvalue"(%19181, %19182) <{position = array<i64: 4>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19184 = "placeholder.addressof"() {global_name = @MapIterable2_B_iterator_} : () -> !llvm.ptr
+      %19185 = "llvm.insertvalue"(%19183, %19184) <{position = array<i64: 5>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19186 = "placeholder.addressof"() {global_name = @MapIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %19187 = "llvm.insertvalue"(%19185, %19186) <{position = array<i64: 6>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19188 = "placeholder.addressof"() {global_name = @MapIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %19189 = "llvm.insertvalue"(%19187, %19188) <{position = array<i64: 7>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19190 = "placeholder.addressof"() {global_name = @MapIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19191 = "llvm.insertvalue"(%19189, %19190) <{position = array<i64: 8>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19192 = "placeholder.addressof"() {global_name = @MapIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19193 = "llvm.insertvalue"(%19191, %19192) <{position = array<i64: 9>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19194 = "placeholder.addressof"() {global_name = @MapIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %19195 = "llvm.insertvalue"(%19193, %19194) <{position = array<i64: 10>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19196 = "placeholder.addressof"() {global_name = @MapIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19197 = "llvm.insertvalue"(%19195, %19196) <{position = array<i64: 11>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19198 = "placeholder.addressof"() {global_name = @MapIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
+      %19199 = "llvm.insertvalue"(%19197, %19198) <{position = array<i64: 12>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19200 = "placeholder.addressof"() {global_name = @MapIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
+      %19201 = "llvm.insertvalue"(%19199, %19200) <{position = array<i64: 13>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19202 = "placeholder.addressof"() {global_name = @MapIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
+      %19203 = "llvm.insertvalue"(%19201, %19202) <{position = array<i64: 14>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19204 = "placeholder.addressof"() {global_name = @MapIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
+      %19205 = "llvm.insertvalue"(%19203, %19204) <{position = array<i64: 15>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19206 = "placeholder.addressof"() {global_name = @MapIterable2_init_iterableIterable2T_fFunctionT_to_U} : () -> !llvm.ptr
+      %19207 = "llvm.insertvalue"(%19205, %19206) <{position = array<i64: 16>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19208 = "placeholder.addressof"() {global_name = @MapIterable2_iterator_} : () -> !llvm.ptr
+      %19209 = "llvm.insertvalue"(%19207, %19208) <{position = array<i64: 17>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19210 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %19211 = "llvm.insertvalue"(%19209, %19210) <{position = array<i64: 18>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19212 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %19213 = "llvm.insertvalue"(%19211, %19212) <{position = array<i64: 19>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19214 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19215 = "llvm.insertvalue"(%19213, %19214) <{position = array<i64: 20>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19216 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19217 = "llvm.insertvalue"(%19215, %19216) <{position = array<i64: 21>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19218 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %19219 = "llvm.insertvalue"(%19217, %19218) <{position = array<i64: 22>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19220 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19221 = "llvm.insertvalue"(%19219, %19220) <{position = array<i64: 23>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19222 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
+      %19223 = "llvm.insertvalue"(%19221, %19222) <{position = array<i64: 24>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19224 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
+      %19225 = "llvm.insertvalue"(%19223, %19224) <{position = array<i64: 25>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19226 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
+      %19227 = "llvm.insertvalue"(%19225, %19226) <{position = array<i64: 26>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19228 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
+      %19229 = "llvm.insertvalue"(%19227, %19228) <{position = array<i64: 27>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19230 = "placeholder.addressof"() {global_name = @MapIterable2_field_MapIterable2_1} : () -> !llvm.ptr
+      %19231 = "llvm.insertvalue"(%19229, %19230) <{position = array<i64: 28>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19232 = "placeholder.addressof"() {global_name = @MapIterable2_B_iterator_} : () -> !llvm.ptr
+      %19233 = "llvm.insertvalue"(%19231, %19232) <{position = array<i64: 29>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19234 = "placeholder.addressof"() {global_name = @MapIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %19235 = "llvm.insertvalue"(%19233, %19234) <{position = array<i64: 30>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19236 = "placeholder.addressof"() {global_name = @MapIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %19237 = "llvm.insertvalue"(%19235, %19236) <{position = array<i64: 31>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19238 = "placeholder.addressof"() {global_name = @MapIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19239 = "llvm.insertvalue"(%19237, %19238) <{position = array<i64: 32>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19240 = "placeholder.addressof"() {global_name = @MapIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19241 = "llvm.insertvalue"(%19239, %19240) <{position = array<i64: 33>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19242 = "placeholder.addressof"() {global_name = @MapIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %19243 = "llvm.insertvalue"(%19241, %19242) <{position = array<i64: 34>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19244 = "placeholder.addressof"() {global_name = @MapIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19245 = "llvm.insertvalue"(%19243, %19244) <{position = array<i64: 35>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19246 = "placeholder.addressof"() {global_name = @MapIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
+      %19247 = "llvm.insertvalue"(%19245, %19246) <{position = array<i64: 36>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19248 = "placeholder.addressof"() {global_name = @MapIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
+      %19249 = "llvm.insertvalue"(%19247, %19248) <{position = array<i64: 37>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19250 = "placeholder.addressof"() {global_name = @MapIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
+      %19251 = "llvm.insertvalue"(%19249, %19250) <{position = array<i64: 38>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19252 = "placeholder.addressof"() {global_name = @MapIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
+      %19253 = "llvm.insertvalue"(%19251, %19252) <{position = array<i64: 39>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19254 = "placeholder.addressof"() {global_name = @MapIterable2_iterator_} : () -> !llvm.ptr
+      %19255 = "llvm.insertvalue"(%19253, %19254) <{position = array<i64: 40>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19256 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %19257 = "llvm.insertvalue"(%19255, %19256) <{position = array<i64: 41>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19258 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %19259 = "llvm.insertvalue"(%19257, %19258) <{position = array<i64: 42>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19260 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19261 = "llvm.insertvalue"(%19259, %19260) <{position = array<i64: 43>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19262 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19263 = "llvm.insertvalue"(%19261, %19262) <{position = array<i64: 44>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19264 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %19265 = "llvm.insertvalue"(%19263, %19264) <{position = array<i64: 45>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19266 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19267 = "llvm.insertvalue"(%19265, %19266) <{position = array<i64: 46>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19268 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
+      %19269 = "llvm.insertvalue"(%19267, %19268) <{position = array<i64: 47>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19270 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
+      %19271 = "llvm.insertvalue"(%19269, %19270) <{position = array<i64: 48>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19272 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
+      %19273 = "llvm.insertvalue"(%19271, %19272) <{position = array<i64: 49>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19274 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
+      %19275 = "llvm.insertvalue"(%19273, %19274) <{position = array<i64: 50>}> : (!llvm.array<51 x ptr>, !llvm.ptr) -> !llvm.array<51 x ptr>
+      %19276 = "llvm.insertvalue"(%19173, %19275) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<51 x ptr>)>, !llvm.array<51 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<51 x ptr>)>
+      "llvm.return"(%19276) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<51 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "MapIterator2_hashtbl"}> ({
-      %18991 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %18992 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %18993 = "llvm.insertvalue"(%18991, %18992) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18994 = "placeholder.addressof"() {global_name = @MapIterator2} : () -> !llvm.ptr
-      %18995 = "llvm.insertvalue"(%18993, %18994) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18996 = "placeholder.addressof"() {global_name = @Iterator2} : () -> !llvm.ptr
-      %18997 = "llvm.insertvalue"(%18995, %18996) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18998 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
-      %18999 = "llvm.insertvalue"(%18997, %18998) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      "llvm.return"(%18999) : (!llvm.array<4 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "MapIterator2_hashtbl"}> ({
+      %19138 = "llvm.mlir.undef"() : () -> !llvm.array<8 x ptr>
+      %19139 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19140 = "llvm.insertvalue"(%19138, %19139) <{position = array<i64: 0>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19141 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
+      %19142 = "llvm.insertvalue"(%19140, %19141) <{position = array<i64: 1>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19143 = "placeholder.addressof"() {global_name = @MapIterator2} : () -> !llvm.ptr
+      %19144 = "llvm.insertvalue"(%19142, %19143) <{position = array<i64: 2>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19145 = "llvm.insertvalue"(%19144, %19139) <{position = array<i64: 3>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19146 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %19147 = "llvm.insertvalue"(%19145, %19146) <{position = array<i64: 4>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19148 = "placeholder.addressof"() {global_name = @Iterator2} : () -> !llvm.ptr
+      %19149 = "llvm.insertvalue"(%19147, %19148) <{position = array<i64: 5>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19150 = "llvm.insertvalue"(%19149, %19139) <{position = array<i64: 6>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19151 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %19152 = "llvm.insertvalue"(%19150, %19151) <{position = array<i64: 7>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      "llvm.return"(%19152) : (!llvm.array<8 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "MapIterator2_offset_tbl"}> ({
-      %18983 = "llvm.mlir.constant"() <{value = 15 : i32}> : () -> i32
-      %18984 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %18985 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
-      %18986 = "llvm.mlir.constant"() <{value = 18 : i32}> : () -> i32
-      %18987 = "llvm.insertvalue"(%18985, %18986) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18988 = "llvm.insertvalue"(%18987, %18984) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18989 = "llvm.insertvalue"(%18988, %18983) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18990 = "llvm.insertvalue"(%18989, %18986) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      "llvm.return"(%18990) : (!llvm.array<4 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "MapIterator2_offset_tbl"}> ({
+      %19125 = "llvm.mlir.constant"() <{value = 15 : i32}> : () -> i32
+      %19126 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %19127 = "llvm.mlir.constant"() <{value = 18 : i32}> : () -> i32
+      %19128 = "llvm.mlir.undef"() : () -> !llvm.array<8 x i32>
+      %19129 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %19130 = "llvm.insertvalue"(%19128, %19129) <{position = array<i64: 0>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19131 = "llvm.insertvalue"(%19130, %19127) <{position = array<i64: 1>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19132 = "llvm.insertvalue"(%19131, %19126) <{position = array<i64: 2>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19133 = "llvm.insertvalue"(%19132, %19129) <{position = array<i64: 3>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19134 = "llvm.insertvalue"(%19133, %19127) <{position = array<i64: 4>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19135 = "llvm.insertvalue"(%19134, %19125) <{position = array<i64: 5>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19136 = "llvm.insertvalue"(%19135, %19129) <{position = array<i64: 6>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19137 = "llvm.insertvalue"(%19136, %19126) <{position = array<i64: 7>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      "llvm.return"(%19137) : (!llvm.array<8 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "MapIterator2"}> ({
-      %18939 = "llvm.mlir.undef"() : () -> !llvm.array<11 x ptr>
-      %18940 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %18941 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %18942 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
-      %18943 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
-      %18944 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
-      %18945 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %18946 = "llvm.mlir.constant"() <{value = -10255947709272500 : i64}> : () -> i64
-      %18947 = "llvm.insertvalue"(%18945, %18946) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18948 = "llvm.insertvalue"(%18947, %18943) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18949 = "llvm.insertvalue"(%18948, %18942) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18950 = "llvm.insertvalue"(%18944, %18949) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
-      %18951 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %18952 = "llvm.insertvalue"(%18941, %18951) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18953 = "placeholder.addressof"() {global_name = @MapIterator2_hashtbl} : () -> !llvm.ptr
-      %18954 = "llvm.insertvalue"(%18952, %18953) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18955 = "placeholder.addressof"() {global_name = @MapIterator2_offset_tbl} : () -> !llvm.ptr
-      %18956 = "llvm.insertvalue"(%18954, %18955) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18957 = "llvm.getelementptr"(%18940) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr)>, ptr, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %18958 = "llvm.insertvalue"(%18956, %18957) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18959 = "llvm.insertvalue"(%18950, %18958) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
-      %18960 = "placeholder.addressof"() {global_name = @MapIterator2_field_iterator} : () -> !llvm.ptr
-      %18961 = "llvm.insertvalue"(%18939, %18960) <{position = array<i64: 0>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18962 = "placeholder.addressof"() {global_name = @MapIterator2_field_f} : () -> !llvm.ptr
-      %18963 = "llvm.insertvalue"(%18961, %18962) <{position = array<i64: 1>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18964 = "placeholder.addressof"() {global_name = @MapIterator2_field_MapIterator2_0} : () -> !llvm.ptr
-      %18965 = "llvm.insertvalue"(%18963, %18964) <{position = array<i64: 2>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18966 = "placeholder.addressof"() {global_name = @MapIterator2_field_MapIterator2_1} : () -> !llvm.ptr
-      %18967 = "llvm.insertvalue"(%18965, %18966) <{position = array<i64: 3>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18968 = "placeholder.addressof"() {global_name = @MapIterator2_B_init_iteratorIterator2T_fFunctionT_to_U} : () -> !llvm.ptr
-      %18969 = "llvm.insertvalue"(%18967, %18968) <{position = array<i64: 4>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18970 = "placeholder.addressof"() {global_name = @MapIterator2_B_next_} : () -> !llvm.ptr
-      %18971 = "llvm.insertvalue"(%18969, %18970) <{position = array<i64: 5>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18972 = "placeholder.addressof"() {global_name = @MapIterator2_init_iteratorIterator2T_fFunctionT_to_U} : () -> !llvm.ptr
-      %18973 = "llvm.insertvalue"(%18971, %18972) <{position = array<i64: 6>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18974 = "placeholder.addressof"() {global_name = @MapIterator2_next_} : () -> !llvm.ptr
-      %18975 = "llvm.insertvalue"(%18973, %18974) <{position = array<i64: 7>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18976 = "placeholder.addressof"() {global_name = @MapIterator2_field_MapIterator2_1} : () -> !llvm.ptr
-      %18977 = "llvm.insertvalue"(%18975, %18976) <{position = array<i64: 8>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18978 = "placeholder.addressof"() {global_name = @MapIterator2_B_next_} : () -> !llvm.ptr
-      %18979 = "llvm.insertvalue"(%18977, %18978) <{position = array<i64: 9>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18980 = "placeholder.addressof"() {global_name = @MapIterator2_next_} : () -> !llvm.ptr
-      %18981 = "llvm.insertvalue"(%18979, %18980) <{position = array<i64: 10>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18982 = "llvm.insertvalue"(%18959, %18981) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, !llvm.array<11 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
-      "llvm.return"(%18982) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>) -> ()
+      %19081 = "llvm.mlir.undef"() : () -> !llvm.array<11 x ptr>
+      %19082 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19083 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %19084 = "llvm.mlir.constant"() <{value = 7 : i64}> : () -> i64
+      %19085 = "llvm.mlir.constant"() <{value = 4611686018427388279 : i64}> : () -> i64
+      %19086 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
+      %19087 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %19088 = "llvm.mlir.constant"() <{value = -10255947709272500 : i64}> : () -> i64
+      %19089 = "llvm.insertvalue"(%19087, %19088) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19090 = "llvm.insertvalue"(%19089, %19085) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19091 = "llvm.insertvalue"(%19090, %19084) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %19092 = "llvm.insertvalue"(%19086, %19091) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
+      %19093 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %19094 = "llvm.insertvalue"(%19083, %19093) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19095 = "placeholder.addressof"() {global_name = @MapIterator2_hashtbl} : () -> !llvm.ptr
+      %19096 = "llvm.insertvalue"(%19094, %19095) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19097 = "placeholder.addressof"() {global_name = @MapIterator2_offset_tbl} : () -> !llvm.ptr
+      %19098 = "llvm.insertvalue"(%19096, %19097) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19099 = "llvm.getelementptr"(%19082) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr)>, ptr, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %19100 = "llvm.insertvalue"(%19098, %19099) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %19101 = "llvm.insertvalue"(%19092, %19100) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
+      %19102 = "placeholder.addressof"() {global_name = @MapIterator2_field_iterator} : () -> !llvm.ptr
+      %19103 = "llvm.insertvalue"(%19081, %19102) <{position = array<i64: 0>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %19104 = "placeholder.addressof"() {global_name = @MapIterator2_field_f} : () -> !llvm.ptr
+      %19105 = "llvm.insertvalue"(%19103, %19104) <{position = array<i64: 1>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %19106 = "placeholder.addressof"() {global_name = @MapIterator2_field_MapIterator2_0} : () -> !llvm.ptr
+      %19107 = "llvm.insertvalue"(%19105, %19106) <{position = array<i64: 2>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %19108 = "placeholder.addressof"() {global_name = @MapIterator2_field_MapIterator2_1} : () -> !llvm.ptr
+      %19109 = "llvm.insertvalue"(%19107, %19108) <{position = array<i64: 3>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %19110 = "placeholder.addressof"() {global_name = @MapIterator2_B_init_iteratorIterator2T_fFunctionT_to_U} : () -> !llvm.ptr
+      %19111 = "llvm.insertvalue"(%19109, %19110) <{position = array<i64: 4>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %19112 = "placeholder.addressof"() {global_name = @MapIterator2_B_next_} : () -> !llvm.ptr
+      %19113 = "llvm.insertvalue"(%19111, %19112) <{position = array<i64: 5>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %19114 = "placeholder.addressof"() {global_name = @MapIterator2_init_iteratorIterator2T_fFunctionT_to_U} : () -> !llvm.ptr
+      %19115 = "llvm.insertvalue"(%19113, %19114) <{position = array<i64: 6>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %19116 = "placeholder.addressof"() {global_name = @MapIterator2_next_} : () -> !llvm.ptr
+      %19117 = "llvm.insertvalue"(%19115, %19116) <{position = array<i64: 7>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %19118 = "placeholder.addressof"() {global_name = @MapIterator2_field_MapIterator2_1} : () -> !llvm.ptr
+      %19119 = "llvm.insertvalue"(%19117, %19118) <{position = array<i64: 8>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %19120 = "placeholder.addressof"() {global_name = @MapIterator2_B_next_} : () -> !llvm.ptr
+      %19121 = "llvm.insertvalue"(%19119, %19120) <{position = array<i64: 9>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %19122 = "placeholder.addressof"() {global_name = @MapIterator2_next_} : () -> !llvm.ptr
+      %19123 = "llvm.insertvalue"(%19121, %19122) <{position = array<i64: 10>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %19124 = "llvm.insertvalue"(%19101, %19123) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, !llvm.array<11 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
+      "llvm.return"(%19124) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "FilterIterable2_hashtbl"}> ({
-      %18930 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %18931 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %18932 = "llvm.insertvalue"(%18930, %18931) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18933 = "placeholder.addressof"() {global_name = @Iterable2} : () -> !llvm.ptr
-      %18934 = "llvm.insertvalue"(%18932, %18933) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18935 = "placeholder.addressof"() {global_name = @FilterIterable2} : () -> !llvm.ptr
-      %18936 = "llvm.insertvalue"(%18934, %18935) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18937 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
-      %18938 = "llvm.insertvalue"(%18936, %18937) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      "llvm.return"(%18938) : (!llvm.array<4 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "FilterIterable2_hashtbl"}> ({
+      %19066 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %19067 = "llvm.mlir.undef"() : () -> !llvm.array<8 x ptr>
+      %19068 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %19069 = "llvm.insertvalue"(%19067, %19068) <{position = array<i64: 0>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19070 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %19071 = "llvm.insertvalue"(%19069, %19070) <{position = array<i64: 1>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19072 = "llvm.insertvalue"(%19071, %19066) <{position = array<i64: 2>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19073 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
+      %19074 = "llvm.insertvalue"(%19072, %19073) <{position = array<i64: 3>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19075 = "llvm.insertvalue"(%19074, %19066) <{position = array<i64: 4>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19076 = "placeholder.addressof"() {global_name = @Iterable2} : () -> !llvm.ptr
+      %19077 = "llvm.insertvalue"(%19075, %19076) <{position = array<i64: 5>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19078 = "placeholder.addressof"() {global_name = @FilterIterable2} : () -> !llvm.ptr
+      %19079 = "llvm.insertvalue"(%19077, %19078) <{position = array<i64: 6>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %19080 = "llvm.insertvalue"(%19079, %19066) <{position = array<i64: 7>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      "llvm.return"(%19080) : (!llvm.array<8 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "FilterIterable2_offset_tbl"}> ({
-      %18922 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %18923 = "llvm.mlir.constant"() <{value = 34 : i32}> : () -> i32
-      %18924 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
-      %18925 = "llvm.mlir.constant"() <{value = 57 : i32}> : () -> i32
-      %18926 = "llvm.insertvalue"(%18924, %18925) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18927 = "llvm.insertvalue"(%18926, %18923) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18928 = "llvm.insertvalue"(%18927, %18922) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18929 = "llvm.insertvalue"(%18928, %18925) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      "llvm.return"(%18929) : (!llvm.array<4 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "FilterIterable2_offset_tbl"}> ({
+      %19053 = "llvm.mlir.constant"() <{value = 34 : i32}> : () -> i32
+      %19054 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %19055 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %19056 = "llvm.mlir.undef"() : () -> !llvm.array<8 x i32>
+      %19057 = "llvm.mlir.constant"() <{value = 57 : i32}> : () -> i32
+      %19058 = "llvm.insertvalue"(%19056, %19057) <{position = array<i64: 0>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19059 = "llvm.insertvalue"(%19058, %19055) <{position = array<i64: 1>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19060 = "llvm.insertvalue"(%19059, %19054) <{position = array<i64: 2>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19061 = "llvm.insertvalue"(%19060, %19057) <{position = array<i64: 3>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19062 = "llvm.insertvalue"(%19061, %19054) <{position = array<i64: 4>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19063 = "llvm.insertvalue"(%19062, %19053) <{position = array<i64: 5>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19064 = "llvm.insertvalue"(%19063, %19055) <{position = array<i64: 6>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %19065 = "llvm.insertvalue"(%19064, %19054) <{position = array<i64: 7>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      "llvm.return"(%19065) : (!llvm.array<8 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "FilterIterable2"}> ({
-      %18800 = "llvm.mlir.undef"() : () -> !llvm.array<50 x ptr>
-      %18801 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %18802 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %18803 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
-      %18804 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
-      %18805 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
-      %18806 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %18807 = "llvm.mlir.constant"() <{value = 1178467452958968374 : i64}> : () -> i64
-      %18808 = "llvm.insertvalue"(%18806, %18807) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18809 = "llvm.insertvalue"(%18808, %18804) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18810 = "llvm.insertvalue"(%18809, %18803) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18811 = "llvm.insertvalue"(%18805, %18810) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
-      %18812 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %18813 = "llvm.insertvalue"(%18802, %18812) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18814 = "placeholder.addressof"() {global_name = @FilterIterable2_hashtbl} : () -> !llvm.ptr
-      %18815 = "llvm.insertvalue"(%18813, %18814) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18816 = "placeholder.addressof"() {global_name = @FilterIterable2_offset_tbl} : () -> !llvm.ptr
-      %18817 = "llvm.insertvalue"(%18815, %18816) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18818 = "llvm.getelementptr"(%18801) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr)>, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %18819 = "llvm.insertvalue"(%18817, %18818) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18820 = "llvm.insertvalue"(%18811, %18819) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
-      %18821 = "placeholder.addressof"() {global_name = @FilterIterable2_field_iterable} : () -> !llvm.ptr
-      %18822 = "llvm.insertvalue"(%18800, %18821) <{position = array<i64: 0>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18823 = "placeholder.addressof"() {global_name = @FilterIterable2_field_f} : () -> !llvm.ptr
-      %18824 = "llvm.insertvalue"(%18822, %18823) <{position = array<i64: 1>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18825 = "placeholder.addressof"() {global_name = @FilterIterable2_field_FilterIterable2_0} : () -> !llvm.ptr
-      %18826 = "llvm.insertvalue"(%18824, %18825) <{position = array<i64: 2>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18827 = "placeholder.addressof"() {global_name = @FilterIterable2_B_init_iterableIterable2T_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18828 = "llvm.insertvalue"(%18826, %18827) <{position = array<i64: 3>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18829 = "placeholder.addressof"() {global_name = @FilterIterable2_B_iterator_} : () -> !llvm.ptr
-      %18830 = "llvm.insertvalue"(%18828, %18829) <{position = array<i64: 4>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18831 = "placeholder.addressof"() {global_name = @FilterIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %18832 = "llvm.insertvalue"(%18830, %18831) <{position = array<i64: 5>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18833 = "placeholder.addressof"() {global_name = @FilterIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %18834 = "llvm.insertvalue"(%18832, %18833) <{position = array<i64: 6>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18835 = "placeholder.addressof"() {global_name = @FilterIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18836 = "llvm.insertvalue"(%18834, %18835) <{position = array<i64: 7>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18837 = "placeholder.addressof"() {global_name = @FilterIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18838 = "llvm.insertvalue"(%18836, %18837) <{position = array<i64: 8>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18839 = "placeholder.addressof"() {global_name = @FilterIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %18840 = "llvm.insertvalue"(%18838, %18839) <{position = array<i64: 9>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18841 = "placeholder.addressof"() {global_name = @FilterIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18842 = "llvm.insertvalue"(%18840, %18841) <{position = array<i64: 10>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18843 = "placeholder.addressof"() {global_name = @FilterIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
-      %18844 = "llvm.insertvalue"(%18842, %18843) <{position = array<i64: 11>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18845 = "placeholder.addressof"() {global_name = @FilterIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
-      %18846 = "llvm.insertvalue"(%18844, %18845) <{position = array<i64: 12>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18847 = "placeholder.addressof"() {global_name = @FilterIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
-      %18848 = "llvm.insertvalue"(%18846, %18847) <{position = array<i64: 13>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18849 = "placeholder.addressof"() {global_name = @FilterIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
-      %18850 = "llvm.insertvalue"(%18848, %18849) <{position = array<i64: 14>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18851 = "placeholder.addressof"() {global_name = @FilterIterable2_init_iterableIterable2T_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18852 = "llvm.insertvalue"(%18850, %18851) <{position = array<i64: 15>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18853 = "placeholder.addressof"() {global_name = @FilterIterable2_iterator_} : () -> !llvm.ptr
-      %18854 = "llvm.insertvalue"(%18852, %18853) <{position = array<i64: 16>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18855 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %18856 = "llvm.insertvalue"(%18854, %18855) <{position = array<i64: 17>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18857 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %18858 = "llvm.insertvalue"(%18856, %18857) <{position = array<i64: 18>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18859 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18860 = "llvm.insertvalue"(%18858, %18859) <{position = array<i64: 19>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18861 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18862 = "llvm.insertvalue"(%18860, %18861) <{position = array<i64: 20>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18863 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %18864 = "llvm.insertvalue"(%18862, %18863) <{position = array<i64: 21>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18865 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18866 = "llvm.insertvalue"(%18864, %18865) <{position = array<i64: 22>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18867 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
-      %18868 = "llvm.insertvalue"(%18866, %18867) <{position = array<i64: 23>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18869 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
-      %18870 = "llvm.insertvalue"(%18868, %18869) <{position = array<i64: 24>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18871 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
-      %18872 = "llvm.insertvalue"(%18870, %18871) <{position = array<i64: 25>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18873 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
-      %18874 = "llvm.insertvalue"(%18872, %18873) <{position = array<i64: 26>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18875 = "placeholder.addressof"() {global_name = @FilterIterable2_field_FilterIterable2_0} : () -> !llvm.ptr
-      %18876 = "llvm.insertvalue"(%18874, %18875) <{position = array<i64: 27>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18877 = "placeholder.addressof"() {global_name = @FilterIterable2_B_iterator_} : () -> !llvm.ptr
-      %18878 = "llvm.insertvalue"(%18876, %18877) <{position = array<i64: 28>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18879 = "placeholder.addressof"() {global_name = @FilterIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %18880 = "llvm.insertvalue"(%18878, %18879) <{position = array<i64: 29>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18881 = "placeholder.addressof"() {global_name = @FilterIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %18882 = "llvm.insertvalue"(%18880, %18881) <{position = array<i64: 30>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18883 = "placeholder.addressof"() {global_name = @FilterIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18884 = "llvm.insertvalue"(%18882, %18883) <{position = array<i64: 31>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18885 = "placeholder.addressof"() {global_name = @FilterIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18886 = "llvm.insertvalue"(%18884, %18885) <{position = array<i64: 32>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18887 = "placeholder.addressof"() {global_name = @FilterIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %18888 = "llvm.insertvalue"(%18886, %18887) <{position = array<i64: 33>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18889 = "placeholder.addressof"() {global_name = @FilterIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18890 = "llvm.insertvalue"(%18888, %18889) <{position = array<i64: 34>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18891 = "placeholder.addressof"() {global_name = @FilterIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
-      %18892 = "llvm.insertvalue"(%18890, %18891) <{position = array<i64: 35>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18893 = "placeholder.addressof"() {global_name = @FilterIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
-      %18894 = "llvm.insertvalue"(%18892, %18893) <{position = array<i64: 36>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18895 = "placeholder.addressof"() {global_name = @FilterIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
-      %18896 = "llvm.insertvalue"(%18894, %18895) <{position = array<i64: 37>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18897 = "placeholder.addressof"() {global_name = @FilterIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
-      %18898 = "llvm.insertvalue"(%18896, %18897) <{position = array<i64: 38>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18899 = "placeholder.addressof"() {global_name = @FilterIterable2_iterator_} : () -> !llvm.ptr
-      %18900 = "llvm.insertvalue"(%18898, %18899) <{position = array<i64: 39>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18901 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %18902 = "llvm.insertvalue"(%18900, %18901) <{position = array<i64: 40>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18903 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %18904 = "llvm.insertvalue"(%18902, %18903) <{position = array<i64: 41>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18905 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18906 = "llvm.insertvalue"(%18904, %18905) <{position = array<i64: 42>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18907 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18908 = "llvm.insertvalue"(%18906, %18907) <{position = array<i64: 43>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18909 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %18910 = "llvm.insertvalue"(%18908, %18909) <{position = array<i64: 44>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18911 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18912 = "llvm.insertvalue"(%18910, %18911) <{position = array<i64: 45>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18913 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
-      %18914 = "llvm.insertvalue"(%18912, %18913) <{position = array<i64: 46>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18915 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
-      %18916 = "llvm.insertvalue"(%18914, %18915) <{position = array<i64: 47>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18917 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
-      %18918 = "llvm.insertvalue"(%18916, %18917) <{position = array<i64: 48>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18919 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
-      %18920 = "llvm.insertvalue"(%18918, %18919) <{position = array<i64: 49>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18921 = "llvm.insertvalue"(%18820, %18920) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, !llvm.array<50 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
-      "llvm.return"(%18921) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>) -> ()
+      %18931 = "llvm.mlir.undef"() : () -> !llvm.array<50 x ptr>
+      %18932 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %18933 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %18934 = "llvm.mlir.constant"() <{value = 7 : i64}> : () -> i64
+      %18935 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %18936 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
+      %18937 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %18938 = "llvm.mlir.constant"() <{value = 1178467452958968374 : i64}> : () -> i64
+      %18939 = "llvm.insertvalue"(%18937, %18938) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18940 = "llvm.insertvalue"(%18939, %18935) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18941 = "llvm.insertvalue"(%18940, %18934) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18942 = "llvm.insertvalue"(%18936, %18941) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
+      %18943 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %18944 = "llvm.insertvalue"(%18933, %18943) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18945 = "placeholder.addressof"() {global_name = @FilterIterable2_hashtbl} : () -> !llvm.ptr
+      %18946 = "llvm.insertvalue"(%18944, %18945) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18947 = "placeholder.addressof"() {global_name = @FilterIterable2_offset_tbl} : () -> !llvm.ptr
+      %18948 = "llvm.insertvalue"(%18946, %18947) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18949 = "llvm.getelementptr"(%18932) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr)>, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %18950 = "llvm.insertvalue"(%18948, %18949) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18951 = "llvm.insertvalue"(%18942, %18950) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
+      %18952 = "placeholder.addressof"() {global_name = @FilterIterable2_field_iterable} : () -> !llvm.ptr
+      %18953 = "llvm.insertvalue"(%18931, %18952) <{position = array<i64: 0>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18954 = "placeholder.addressof"() {global_name = @FilterIterable2_field_f} : () -> !llvm.ptr
+      %18955 = "llvm.insertvalue"(%18953, %18954) <{position = array<i64: 1>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18956 = "placeholder.addressof"() {global_name = @FilterIterable2_field_FilterIterable2_0} : () -> !llvm.ptr
+      %18957 = "llvm.insertvalue"(%18955, %18956) <{position = array<i64: 2>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18958 = "placeholder.addressof"() {global_name = @FilterIterable2_B_init_iterableIterable2T_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18959 = "llvm.insertvalue"(%18957, %18958) <{position = array<i64: 3>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18960 = "placeholder.addressof"() {global_name = @FilterIterable2_B_iterator_} : () -> !llvm.ptr
+      %18961 = "llvm.insertvalue"(%18959, %18960) <{position = array<i64: 4>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18962 = "placeholder.addressof"() {global_name = @FilterIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %18963 = "llvm.insertvalue"(%18961, %18962) <{position = array<i64: 5>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18964 = "placeholder.addressof"() {global_name = @FilterIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %18965 = "llvm.insertvalue"(%18963, %18964) <{position = array<i64: 6>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18966 = "placeholder.addressof"() {global_name = @FilterIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18967 = "llvm.insertvalue"(%18965, %18966) <{position = array<i64: 7>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18968 = "placeholder.addressof"() {global_name = @FilterIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18969 = "llvm.insertvalue"(%18967, %18968) <{position = array<i64: 8>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18970 = "placeholder.addressof"() {global_name = @FilterIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %18971 = "llvm.insertvalue"(%18969, %18970) <{position = array<i64: 9>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18972 = "placeholder.addressof"() {global_name = @FilterIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18973 = "llvm.insertvalue"(%18971, %18972) <{position = array<i64: 10>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18974 = "placeholder.addressof"() {global_name = @FilterIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
+      %18975 = "llvm.insertvalue"(%18973, %18974) <{position = array<i64: 11>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18976 = "placeholder.addressof"() {global_name = @FilterIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
+      %18977 = "llvm.insertvalue"(%18975, %18976) <{position = array<i64: 12>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18978 = "placeholder.addressof"() {global_name = @FilterIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
+      %18979 = "llvm.insertvalue"(%18977, %18978) <{position = array<i64: 13>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18980 = "placeholder.addressof"() {global_name = @FilterIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
+      %18981 = "llvm.insertvalue"(%18979, %18980) <{position = array<i64: 14>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18982 = "placeholder.addressof"() {global_name = @FilterIterable2_init_iterableIterable2T_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18983 = "llvm.insertvalue"(%18981, %18982) <{position = array<i64: 15>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18984 = "placeholder.addressof"() {global_name = @FilterIterable2_iterator_} : () -> !llvm.ptr
+      %18985 = "llvm.insertvalue"(%18983, %18984) <{position = array<i64: 16>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18986 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %18987 = "llvm.insertvalue"(%18985, %18986) <{position = array<i64: 17>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18988 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %18989 = "llvm.insertvalue"(%18987, %18988) <{position = array<i64: 18>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18990 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18991 = "llvm.insertvalue"(%18989, %18990) <{position = array<i64: 19>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18992 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18993 = "llvm.insertvalue"(%18991, %18992) <{position = array<i64: 20>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18994 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %18995 = "llvm.insertvalue"(%18993, %18994) <{position = array<i64: 21>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18996 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18997 = "llvm.insertvalue"(%18995, %18996) <{position = array<i64: 22>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18998 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
+      %18999 = "llvm.insertvalue"(%18997, %18998) <{position = array<i64: 23>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19000 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
+      %19001 = "llvm.insertvalue"(%18999, %19000) <{position = array<i64: 24>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19002 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
+      %19003 = "llvm.insertvalue"(%19001, %19002) <{position = array<i64: 25>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19004 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
+      %19005 = "llvm.insertvalue"(%19003, %19004) <{position = array<i64: 26>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19006 = "placeholder.addressof"() {global_name = @FilterIterable2_field_FilterIterable2_0} : () -> !llvm.ptr
+      %19007 = "llvm.insertvalue"(%19005, %19006) <{position = array<i64: 27>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19008 = "placeholder.addressof"() {global_name = @FilterIterable2_B_iterator_} : () -> !llvm.ptr
+      %19009 = "llvm.insertvalue"(%19007, %19008) <{position = array<i64: 28>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19010 = "placeholder.addressof"() {global_name = @FilterIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %19011 = "llvm.insertvalue"(%19009, %19010) <{position = array<i64: 29>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19012 = "placeholder.addressof"() {global_name = @FilterIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %19013 = "llvm.insertvalue"(%19011, %19012) <{position = array<i64: 30>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19014 = "placeholder.addressof"() {global_name = @FilterIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19015 = "llvm.insertvalue"(%19013, %19014) <{position = array<i64: 31>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19016 = "placeholder.addressof"() {global_name = @FilterIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19017 = "llvm.insertvalue"(%19015, %19016) <{position = array<i64: 32>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19018 = "placeholder.addressof"() {global_name = @FilterIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %19019 = "llvm.insertvalue"(%19017, %19018) <{position = array<i64: 33>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19020 = "placeholder.addressof"() {global_name = @FilterIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19021 = "llvm.insertvalue"(%19019, %19020) <{position = array<i64: 34>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19022 = "placeholder.addressof"() {global_name = @FilterIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
+      %19023 = "llvm.insertvalue"(%19021, %19022) <{position = array<i64: 35>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19024 = "placeholder.addressof"() {global_name = @FilterIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
+      %19025 = "llvm.insertvalue"(%19023, %19024) <{position = array<i64: 36>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19026 = "placeholder.addressof"() {global_name = @FilterIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
+      %19027 = "llvm.insertvalue"(%19025, %19026) <{position = array<i64: 37>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19028 = "placeholder.addressof"() {global_name = @FilterIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
+      %19029 = "llvm.insertvalue"(%19027, %19028) <{position = array<i64: 38>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19030 = "placeholder.addressof"() {global_name = @FilterIterable2_iterator_} : () -> !llvm.ptr
+      %19031 = "llvm.insertvalue"(%19029, %19030) <{position = array<i64: 39>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19032 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %19033 = "llvm.insertvalue"(%19031, %19032) <{position = array<i64: 40>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19034 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %19035 = "llvm.insertvalue"(%19033, %19034) <{position = array<i64: 41>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19036 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19037 = "llvm.insertvalue"(%19035, %19036) <{position = array<i64: 42>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19038 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19039 = "llvm.insertvalue"(%19037, %19038) <{position = array<i64: 43>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19040 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %19041 = "llvm.insertvalue"(%19039, %19040) <{position = array<i64: 44>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19042 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %19043 = "llvm.insertvalue"(%19041, %19042) <{position = array<i64: 45>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19044 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
+      %19045 = "llvm.insertvalue"(%19043, %19044) <{position = array<i64: 46>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19046 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
+      %19047 = "llvm.insertvalue"(%19045, %19046) <{position = array<i64: 47>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19048 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
+      %19049 = "llvm.insertvalue"(%19047, %19048) <{position = array<i64: 48>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19050 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
+      %19051 = "llvm.insertvalue"(%19049, %19050) <{position = array<i64: 49>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %19052 = "llvm.insertvalue"(%18951, %19051) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, !llvm.array<50 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
+      "llvm.return"(%19052) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "FilterIterator2_hashtbl"}> ({
-      %18791 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %18792 = "placeholder.addressof"() {global_name = @Iterator2} : () -> !llvm.ptr
-      %18793 = "llvm.insertvalue"(%18791, %18792) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18794 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %18795 = "llvm.insertvalue"(%18793, %18794) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18796 = "placeholder.addressof"() {global_name = @FilterIterator2} : () -> !llvm.ptr
-      %18797 = "llvm.insertvalue"(%18795, %18796) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18798 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
-      %18799 = "llvm.insertvalue"(%18797, %18798) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      "llvm.return"(%18799) : (!llvm.array<4 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "FilterIterator2_hashtbl"}> ({
+      %18916 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %18917 = "llvm.mlir.undef"() : () -> !llvm.array<8 x ptr>
+      %18918 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %18919 = "llvm.insertvalue"(%18917, %18918) <{position = array<i64: 0>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18920 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %18921 = "llvm.insertvalue"(%18919, %18920) <{position = array<i64: 1>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18922 = "placeholder.addressof"() {global_name = @FilterIterator2} : () -> !llvm.ptr
+      %18923 = "llvm.insertvalue"(%18921, %18922) <{position = array<i64: 2>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18924 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
+      %18925 = "llvm.insertvalue"(%18923, %18924) <{position = array<i64: 3>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18926 = "llvm.insertvalue"(%18925, %18916) <{position = array<i64: 4>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18927 = "llvm.insertvalue"(%18926, %18916) <{position = array<i64: 5>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18928 = "placeholder.addressof"() {global_name = @Iterator2} : () -> !llvm.ptr
+      %18929 = "llvm.insertvalue"(%18927, %18928) <{position = array<i64: 6>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18930 = "llvm.insertvalue"(%18929, %18916) <{position = array<i64: 7>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      "llvm.return"(%18930) : (!llvm.array<8 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "FilterIterator2_offset_tbl"}> ({
-      %18783 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %18784 = "llvm.mlir.constant"() <{value = 17 : i32}> : () -> i32
-      %18785 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
-      %18786 = "llvm.mlir.constant"() <{value = 14 : i32}> : () -> i32
-      %18787 = "llvm.insertvalue"(%18785, %18786) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18788 = "llvm.insertvalue"(%18787, %18784) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18789 = "llvm.insertvalue"(%18788, %18783) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18790 = "llvm.insertvalue"(%18789, %18784) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      "llvm.return"(%18790) : (!llvm.array<4 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "FilterIterator2_offset_tbl"}> ({
+      %18903 = "llvm.mlir.constant"() <{value = 14 : i32}> : () -> i32
+      %18904 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %18905 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %18906 = "llvm.mlir.undef"() : () -> !llvm.array<8 x i32>
+      %18907 = "llvm.mlir.constant"() <{value = 17 : i32}> : () -> i32
+      %18908 = "llvm.insertvalue"(%18906, %18907) <{position = array<i64: 0>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18909 = "llvm.insertvalue"(%18908, %18905) <{position = array<i64: 1>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18910 = "llvm.insertvalue"(%18909, %18905) <{position = array<i64: 2>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18911 = "llvm.insertvalue"(%18910, %18907) <{position = array<i64: 3>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18912 = "llvm.insertvalue"(%18911, %18904) <{position = array<i64: 4>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18913 = "llvm.insertvalue"(%18912, %18904) <{position = array<i64: 5>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18914 = "llvm.insertvalue"(%18913, %18903) <{position = array<i64: 6>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18915 = "llvm.insertvalue"(%18914, %18904) <{position = array<i64: 7>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      "llvm.return"(%18915) : (!llvm.array<8 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "FilterIterator2"}> ({
-      %18741 = "llvm.mlir.undef"() : () -> !llvm.array<10 x ptr>
-      %18742 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %18743 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %18744 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
-      %18745 = "llvm.mlir.constant"() <{value = 4611686018427388207 : i64}> : () -> i64
-      %18746 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
-      %18747 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %18748 = "llvm.mlir.constant"() <{value = 8213847504843366470 : i64}> : () -> i64
-      %18749 = "llvm.insertvalue"(%18747, %18748) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18750 = "llvm.insertvalue"(%18749, %18745) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18751 = "llvm.insertvalue"(%18750, %18744) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18752 = "llvm.insertvalue"(%18746, %18751) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
-      %18753 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %18754 = "llvm.insertvalue"(%18743, %18753) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18755 = "placeholder.addressof"() {global_name = @FilterIterator2_hashtbl} : () -> !llvm.ptr
-      %18756 = "llvm.insertvalue"(%18754, %18755) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18757 = "placeholder.addressof"() {global_name = @FilterIterator2_offset_tbl} : () -> !llvm.ptr
-      %18758 = "llvm.insertvalue"(%18756, %18757) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18759 = "llvm.getelementptr"(%18742) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr)>, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %18760 = "llvm.insertvalue"(%18758, %18759) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18761 = "llvm.insertvalue"(%18752, %18760) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
-      %18762 = "placeholder.addressof"() {global_name = @FilterIterator2_field_iterator} : () -> !llvm.ptr
-      %18763 = "llvm.insertvalue"(%18741, %18762) <{position = array<i64: 0>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %18764 = "placeholder.addressof"() {global_name = @FilterIterator2_field_f} : () -> !llvm.ptr
-      %18765 = "llvm.insertvalue"(%18763, %18764) <{position = array<i64: 1>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %18766 = "placeholder.addressof"() {global_name = @FilterIterator2_field_FilterIterator2_0} : () -> !llvm.ptr
-      %18767 = "llvm.insertvalue"(%18765, %18766) <{position = array<i64: 2>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %18768 = "placeholder.addressof"() {global_name = @FilterIterator2_B_init_iteratorIterator2T_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18769 = "llvm.insertvalue"(%18767, %18768) <{position = array<i64: 3>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %18770 = "placeholder.addressof"() {global_name = @FilterIterator2_B_next_} : () -> !llvm.ptr
-      %18771 = "llvm.insertvalue"(%18769, %18770) <{position = array<i64: 4>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %18772 = "placeholder.addressof"() {global_name = @FilterIterator2_init_iteratorIterator2T_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18773 = "llvm.insertvalue"(%18771, %18772) <{position = array<i64: 5>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %18774 = "placeholder.addressof"() {global_name = @FilterIterator2_next_} : () -> !llvm.ptr
-      %18775 = "llvm.insertvalue"(%18773, %18774) <{position = array<i64: 6>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %18776 = "placeholder.addressof"() {global_name = @FilterIterator2_field_FilterIterator2_0} : () -> !llvm.ptr
-      %18777 = "llvm.insertvalue"(%18775, %18776) <{position = array<i64: 7>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %18778 = "placeholder.addressof"() {global_name = @FilterIterator2_B_next_} : () -> !llvm.ptr
-      %18779 = "llvm.insertvalue"(%18777, %18778) <{position = array<i64: 8>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %18780 = "placeholder.addressof"() {global_name = @FilterIterator2_next_} : () -> !llvm.ptr
-      %18781 = "llvm.insertvalue"(%18779, %18780) <{position = array<i64: 9>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
-      %18782 = "llvm.insertvalue"(%18761, %18781) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, !llvm.array<10 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
-      "llvm.return"(%18782) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>) -> ()
+      %18861 = "llvm.mlir.undef"() : () -> !llvm.array<10 x ptr>
+      %18862 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %18863 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %18864 = "llvm.mlir.constant"() <{value = 7 : i64}> : () -> i64
+      %18865 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %18866 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
+      %18867 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %18868 = "llvm.mlir.constant"() <{value = 8213847504843366470 : i64}> : () -> i64
+      %18869 = "llvm.insertvalue"(%18867, %18868) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18870 = "llvm.insertvalue"(%18869, %18865) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18871 = "llvm.insertvalue"(%18870, %18864) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18872 = "llvm.insertvalue"(%18866, %18871) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
+      %18873 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %18874 = "llvm.insertvalue"(%18863, %18873) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18875 = "placeholder.addressof"() {global_name = @FilterIterator2_hashtbl} : () -> !llvm.ptr
+      %18876 = "llvm.insertvalue"(%18874, %18875) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18877 = "placeholder.addressof"() {global_name = @FilterIterator2_offset_tbl} : () -> !llvm.ptr
+      %18878 = "llvm.insertvalue"(%18876, %18877) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18879 = "llvm.getelementptr"(%18862) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr)>, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %18880 = "llvm.insertvalue"(%18878, %18879) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18881 = "llvm.insertvalue"(%18872, %18880) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
+      %18882 = "placeholder.addressof"() {global_name = @FilterIterator2_field_iterator} : () -> !llvm.ptr
+      %18883 = "llvm.insertvalue"(%18861, %18882) <{position = array<i64: 0>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %18884 = "placeholder.addressof"() {global_name = @FilterIterator2_field_f} : () -> !llvm.ptr
+      %18885 = "llvm.insertvalue"(%18883, %18884) <{position = array<i64: 1>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %18886 = "placeholder.addressof"() {global_name = @FilterIterator2_field_FilterIterator2_0} : () -> !llvm.ptr
+      %18887 = "llvm.insertvalue"(%18885, %18886) <{position = array<i64: 2>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %18888 = "placeholder.addressof"() {global_name = @FilterIterator2_B_init_iteratorIterator2T_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18889 = "llvm.insertvalue"(%18887, %18888) <{position = array<i64: 3>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %18890 = "placeholder.addressof"() {global_name = @FilterIterator2_B_next_} : () -> !llvm.ptr
+      %18891 = "llvm.insertvalue"(%18889, %18890) <{position = array<i64: 4>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %18892 = "placeholder.addressof"() {global_name = @FilterIterator2_init_iteratorIterator2T_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18893 = "llvm.insertvalue"(%18891, %18892) <{position = array<i64: 5>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %18894 = "placeholder.addressof"() {global_name = @FilterIterator2_next_} : () -> !llvm.ptr
+      %18895 = "llvm.insertvalue"(%18893, %18894) <{position = array<i64: 6>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %18896 = "placeholder.addressof"() {global_name = @FilterIterator2_field_FilterIterator2_0} : () -> !llvm.ptr
+      %18897 = "llvm.insertvalue"(%18895, %18896) <{position = array<i64: 7>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %18898 = "placeholder.addressof"() {global_name = @FilterIterator2_B_next_} : () -> !llvm.ptr
+      %18899 = "llvm.insertvalue"(%18897, %18898) <{position = array<i64: 8>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %18900 = "placeholder.addressof"() {global_name = @FilterIterator2_next_} : () -> !llvm.ptr
+      %18901 = "llvm.insertvalue"(%18899, %18900) <{position = array<i64: 9>}> : (!llvm.array<10 x ptr>, !llvm.ptr) -> !llvm.array<10 x ptr>
+      %18902 = "llvm.insertvalue"(%18881, %18901) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>, !llvm.array<10 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>
+      "llvm.return"(%18902) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<10 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ChainIterable2_hashtbl"}> ({
-      %18732 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %18733 = "placeholder.addressof"() {global_name = @Iterable2} : () -> !llvm.ptr
-      %18734 = "llvm.insertvalue"(%18732, %18733) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18735 = "placeholder.addressof"() {global_name = @ChainIterable2} : () -> !llvm.ptr
-      %18736 = "llvm.insertvalue"(%18734, %18735) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18737 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
-      %18738 = "llvm.insertvalue"(%18736, %18737) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18739 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %18740 = "llvm.insertvalue"(%18738, %18739) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      "llvm.return"(%18740) : (!llvm.array<4 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ChainIterable2_hashtbl"}> ({
+      %18846 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %18847 = "llvm.mlir.undef"() : () -> !llvm.array<8 x ptr>
+      %18848 = "placeholder.addressof"() {global_name = @ChainIterable2} : () -> !llvm.ptr
+      %18849 = "llvm.insertvalue"(%18847, %18848) <{position = array<i64: 0>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18850 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %18851 = "llvm.insertvalue"(%18849, %18850) <{position = array<i64: 1>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18852 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %18853 = "llvm.insertvalue"(%18851, %18852) <{position = array<i64: 2>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18854 = "llvm.insertvalue"(%18853, %18846) <{position = array<i64: 3>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18855 = "llvm.insertvalue"(%18854, %18846) <{position = array<i64: 4>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18856 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
+      %18857 = "llvm.insertvalue"(%18855, %18856) <{position = array<i64: 5>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18858 = "llvm.insertvalue"(%18857, %18846) <{position = array<i64: 6>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18859 = "placeholder.addressof"() {global_name = @Iterable2} : () -> !llvm.ptr
+      %18860 = "llvm.insertvalue"(%18858, %18859) <{position = array<i64: 7>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      "llvm.return"(%18860) : (!llvm.array<8 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ChainIterable2_offset_tbl"}> ({
-      %18724 = "llvm.mlir.constant"() <{value = 57 : i32}> : () -> i32
-      %18725 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %18726 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
-      %18727 = "llvm.mlir.constant"() <{value = 34 : i32}> : () -> i32
-      %18728 = "llvm.insertvalue"(%18726, %18727) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18729 = "llvm.insertvalue"(%18728, %18725) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18730 = "llvm.insertvalue"(%18729, %18724) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18731 = "llvm.insertvalue"(%18730, %18724) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      "llvm.return"(%18731) : (!llvm.array<4 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ChainIterable2_offset_tbl"}> ({
+      %18833 = "llvm.mlir.constant"() <{value = 34 : i32}> : () -> i32
+      %18834 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %18835 = "llvm.mlir.constant"() <{value = 57 : i32}> : () -> i32
+      %18836 = "llvm.mlir.undef"() : () -> !llvm.array<8 x i32>
+      %18837 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %18838 = "llvm.insertvalue"(%18836, %18837) <{position = array<i64: 0>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18839 = "llvm.insertvalue"(%18838, %18835) <{position = array<i64: 1>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18840 = "llvm.insertvalue"(%18839, %18837) <{position = array<i64: 2>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18841 = "llvm.insertvalue"(%18840, %18834) <{position = array<i64: 3>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18842 = "llvm.insertvalue"(%18841, %18834) <{position = array<i64: 4>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18843 = "llvm.insertvalue"(%18842, %18835) <{position = array<i64: 5>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18844 = "llvm.insertvalue"(%18843, %18834) <{position = array<i64: 6>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18845 = "llvm.insertvalue"(%18844, %18833) <{position = array<i64: 7>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      "llvm.return"(%18845) : (!llvm.array<8 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "ChainIterable2"}> ({
-      %18602 = "llvm.mlir.undef"() : () -> !llvm.array<50 x ptr>
-      %18603 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %18604 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %18605 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
-      %18606 = "llvm.mlir.constant"() <{value = 4611686018427388349 : i64}> : () -> i64
-      %18607 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
-      %18608 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %18609 = "llvm.mlir.constant"() <{value = -5233298072945030060 : i64}> : () -> i64
-      %18610 = "llvm.insertvalue"(%18608, %18609) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18611 = "llvm.insertvalue"(%18610, %18606) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18612 = "llvm.insertvalue"(%18611, %18605) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18613 = "llvm.insertvalue"(%18607, %18612) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
-      %18614 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %18615 = "llvm.insertvalue"(%18604, %18614) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18616 = "placeholder.addressof"() {global_name = @ChainIterable2_hashtbl} : () -> !llvm.ptr
-      %18617 = "llvm.insertvalue"(%18615, %18616) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18618 = "placeholder.addressof"() {global_name = @ChainIterable2_offset_tbl} : () -> !llvm.ptr
-      %18619 = "llvm.insertvalue"(%18617, %18618) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18620 = "llvm.getelementptr"(%18603) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr, ptr, ptr, i32)>, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %18621 = "llvm.insertvalue"(%18619, %18620) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18622 = "llvm.insertvalue"(%18613, %18621) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
-      %18623 = "placeholder.addressof"() {global_name = @ChainIterable2_field_first} : () -> !llvm.ptr
-      %18624 = "llvm.insertvalue"(%18602, %18623) <{position = array<i64: 0>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18625 = "placeholder.addressof"() {global_name = @ChainIterable2_field_second} : () -> !llvm.ptr
-      %18626 = "llvm.insertvalue"(%18624, %18625) <{position = array<i64: 1>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18627 = "placeholder.addressof"() {global_name = @ChainIterable2_field_ChainIterable2_0} : () -> !llvm.ptr
-      %18628 = "llvm.insertvalue"(%18626, %18627) <{position = array<i64: 2>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18629 = "placeholder.addressof"() {global_name = @ChainIterable2_B_init_firstIterable2T_secondIterable2T} : () -> !llvm.ptr
-      %18630 = "llvm.insertvalue"(%18628, %18629) <{position = array<i64: 3>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18631 = "placeholder.addressof"() {global_name = @ChainIterable2_B_iterator_} : () -> !llvm.ptr
-      %18632 = "llvm.insertvalue"(%18630, %18631) <{position = array<i64: 4>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18633 = "placeholder.addressof"() {global_name = @ChainIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %18634 = "llvm.insertvalue"(%18632, %18633) <{position = array<i64: 5>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18635 = "placeholder.addressof"() {global_name = @ChainIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %18636 = "llvm.insertvalue"(%18634, %18635) <{position = array<i64: 6>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18637 = "placeholder.addressof"() {global_name = @ChainIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18638 = "llvm.insertvalue"(%18636, %18637) <{position = array<i64: 7>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18639 = "placeholder.addressof"() {global_name = @ChainIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18640 = "llvm.insertvalue"(%18638, %18639) <{position = array<i64: 8>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18641 = "placeholder.addressof"() {global_name = @ChainIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %18642 = "llvm.insertvalue"(%18640, %18641) <{position = array<i64: 9>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18643 = "placeholder.addressof"() {global_name = @ChainIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18644 = "llvm.insertvalue"(%18642, %18643) <{position = array<i64: 10>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18645 = "placeholder.addressof"() {global_name = @ChainIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
-      %18646 = "llvm.insertvalue"(%18644, %18645) <{position = array<i64: 11>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18647 = "placeholder.addressof"() {global_name = @ChainIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
-      %18648 = "llvm.insertvalue"(%18646, %18647) <{position = array<i64: 12>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18649 = "placeholder.addressof"() {global_name = @ChainIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
-      %18650 = "llvm.insertvalue"(%18648, %18649) <{position = array<i64: 13>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18651 = "placeholder.addressof"() {global_name = @ChainIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
-      %18652 = "llvm.insertvalue"(%18650, %18651) <{position = array<i64: 14>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18653 = "placeholder.addressof"() {global_name = @ChainIterable2_init_firstIterable2T_secondIterable2T} : () -> !llvm.ptr
-      %18654 = "llvm.insertvalue"(%18652, %18653) <{position = array<i64: 15>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18655 = "placeholder.addressof"() {global_name = @ChainIterable2_iterator_} : () -> !llvm.ptr
-      %18656 = "llvm.insertvalue"(%18654, %18655) <{position = array<i64: 16>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18657 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %18658 = "llvm.insertvalue"(%18656, %18657) <{position = array<i64: 17>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18659 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %18660 = "llvm.insertvalue"(%18658, %18659) <{position = array<i64: 18>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18661 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18662 = "llvm.insertvalue"(%18660, %18661) <{position = array<i64: 19>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18663 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18664 = "llvm.insertvalue"(%18662, %18663) <{position = array<i64: 20>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18665 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %18666 = "llvm.insertvalue"(%18664, %18665) <{position = array<i64: 21>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18667 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18668 = "llvm.insertvalue"(%18666, %18667) <{position = array<i64: 22>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18669 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
-      %18670 = "llvm.insertvalue"(%18668, %18669) <{position = array<i64: 23>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18671 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
-      %18672 = "llvm.insertvalue"(%18670, %18671) <{position = array<i64: 24>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18673 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
-      %18674 = "llvm.insertvalue"(%18672, %18673) <{position = array<i64: 25>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18675 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
-      %18676 = "llvm.insertvalue"(%18674, %18675) <{position = array<i64: 26>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18677 = "placeholder.addressof"() {global_name = @ChainIterable2_field_ChainIterable2_0} : () -> !llvm.ptr
-      %18678 = "llvm.insertvalue"(%18676, %18677) <{position = array<i64: 27>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18679 = "placeholder.addressof"() {global_name = @ChainIterable2_B_iterator_} : () -> !llvm.ptr
-      %18680 = "llvm.insertvalue"(%18678, %18679) <{position = array<i64: 28>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18681 = "placeholder.addressof"() {global_name = @ChainIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %18682 = "llvm.insertvalue"(%18680, %18681) <{position = array<i64: 29>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18683 = "placeholder.addressof"() {global_name = @ChainIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %18684 = "llvm.insertvalue"(%18682, %18683) <{position = array<i64: 30>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18685 = "placeholder.addressof"() {global_name = @ChainIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18686 = "llvm.insertvalue"(%18684, %18685) <{position = array<i64: 31>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18687 = "placeholder.addressof"() {global_name = @ChainIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18688 = "llvm.insertvalue"(%18686, %18687) <{position = array<i64: 32>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18689 = "placeholder.addressof"() {global_name = @ChainIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %18690 = "llvm.insertvalue"(%18688, %18689) <{position = array<i64: 33>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18691 = "placeholder.addressof"() {global_name = @ChainIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18692 = "llvm.insertvalue"(%18690, %18691) <{position = array<i64: 34>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18693 = "placeholder.addressof"() {global_name = @ChainIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
-      %18694 = "llvm.insertvalue"(%18692, %18693) <{position = array<i64: 35>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18695 = "placeholder.addressof"() {global_name = @ChainIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
-      %18696 = "llvm.insertvalue"(%18694, %18695) <{position = array<i64: 36>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18697 = "placeholder.addressof"() {global_name = @ChainIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
-      %18698 = "llvm.insertvalue"(%18696, %18697) <{position = array<i64: 37>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18699 = "placeholder.addressof"() {global_name = @ChainIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
-      %18700 = "llvm.insertvalue"(%18698, %18699) <{position = array<i64: 38>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18701 = "placeholder.addressof"() {global_name = @ChainIterable2_iterator_} : () -> !llvm.ptr
-      %18702 = "llvm.insertvalue"(%18700, %18701) <{position = array<i64: 39>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18703 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %18704 = "llvm.insertvalue"(%18702, %18703) <{position = array<i64: 40>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18705 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %18706 = "llvm.insertvalue"(%18704, %18705) <{position = array<i64: 41>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18707 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18708 = "llvm.insertvalue"(%18706, %18707) <{position = array<i64: 42>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18709 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18710 = "llvm.insertvalue"(%18708, %18709) <{position = array<i64: 43>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18711 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %18712 = "llvm.insertvalue"(%18710, %18711) <{position = array<i64: 44>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18713 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18714 = "llvm.insertvalue"(%18712, %18713) <{position = array<i64: 45>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18715 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
-      %18716 = "llvm.insertvalue"(%18714, %18715) <{position = array<i64: 46>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18717 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
-      %18718 = "llvm.insertvalue"(%18716, %18717) <{position = array<i64: 47>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18719 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
-      %18720 = "llvm.insertvalue"(%18718, %18719) <{position = array<i64: 48>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18721 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
-      %18722 = "llvm.insertvalue"(%18720, %18721) <{position = array<i64: 49>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18723 = "llvm.insertvalue"(%18622, %18722) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, !llvm.array<50 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
-      "llvm.return"(%18723) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>) -> ()
+      %18711 = "llvm.mlir.undef"() : () -> !llvm.array<50 x ptr>
+      %18712 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %18713 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %18714 = "llvm.mlir.constant"() <{value = 7 : i64}> : () -> i64
+      %18715 = "llvm.mlir.constant"() <{value = 4611686018427388319 : i64}> : () -> i64
+      %18716 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
+      %18717 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %18718 = "llvm.mlir.constant"() <{value = -5233298072945030060 : i64}> : () -> i64
+      %18719 = "llvm.insertvalue"(%18717, %18718) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18720 = "llvm.insertvalue"(%18719, %18715) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18721 = "llvm.insertvalue"(%18720, %18714) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18722 = "llvm.insertvalue"(%18716, %18721) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
+      %18723 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %18724 = "llvm.insertvalue"(%18713, %18723) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18725 = "placeholder.addressof"() {global_name = @ChainIterable2_hashtbl} : () -> !llvm.ptr
+      %18726 = "llvm.insertvalue"(%18724, %18725) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18727 = "placeholder.addressof"() {global_name = @ChainIterable2_offset_tbl} : () -> !llvm.ptr
+      %18728 = "llvm.insertvalue"(%18726, %18727) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18729 = "llvm.getelementptr"(%18712) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr, ptr, ptr, i32)>, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %18730 = "llvm.insertvalue"(%18728, %18729) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18731 = "llvm.insertvalue"(%18722, %18730) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
+      %18732 = "placeholder.addressof"() {global_name = @ChainIterable2_field_first} : () -> !llvm.ptr
+      %18733 = "llvm.insertvalue"(%18711, %18732) <{position = array<i64: 0>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18734 = "placeholder.addressof"() {global_name = @ChainIterable2_field_second} : () -> !llvm.ptr
+      %18735 = "llvm.insertvalue"(%18733, %18734) <{position = array<i64: 1>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18736 = "placeholder.addressof"() {global_name = @ChainIterable2_field_ChainIterable2_0} : () -> !llvm.ptr
+      %18737 = "llvm.insertvalue"(%18735, %18736) <{position = array<i64: 2>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18738 = "placeholder.addressof"() {global_name = @ChainIterable2_B_init_firstIterable2T_secondIterable2T} : () -> !llvm.ptr
+      %18739 = "llvm.insertvalue"(%18737, %18738) <{position = array<i64: 3>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18740 = "placeholder.addressof"() {global_name = @ChainIterable2_B_iterator_} : () -> !llvm.ptr
+      %18741 = "llvm.insertvalue"(%18739, %18740) <{position = array<i64: 4>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18742 = "placeholder.addressof"() {global_name = @ChainIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %18743 = "llvm.insertvalue"(%18741, %18742) <{position = array<i64: 5>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18744 = "placeholder.addressof"() {global_name = @ChainIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %18745 = "llvm.insertvalue"(%18743, %18744) <{position = array<i64: 6>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18746 = "placeholder.addressof"() {global_name = @ChainIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18747 = "llvm.insertvalue"(%18745, %18746) <{position = array<i64: 7>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18748 = "placeholder.addressof"() {global_name = @ChainIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18749 = "llvm.insertvalue"(%18747, %18748) <{position = array<i64: 8>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18750 = "placeholder.addressof"() {global_name = @ChainIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %18751 = "llvm.insertvalue"(%18749, %18750) <{position = array<i64: 9>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18752 = "placeholder.addressof"() {global_name = @ChainIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18753 = "llvm.insertvalue"(%18751, %18752) <{position = array<i64: 10>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18754 = "placeholder.addressof"() {global_name = @ChainIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
+      %18755 = "llvm.insertvalue"(%18753, %18754) <{position = array<i64: 11>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18756 = "placeholder.addressof"() {global_name = @ChainIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
+      %18757 = "llvm.insertvalue"(%18755, %18756) <{position = array<i64: 12>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18758 = "placeholder.addressof"() {global_name = @ChainIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
+      %18759 = "llvm.insertvalue"(%18757, %18758) <{position = array<i64: 13>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18760 = "placeholder.addressof"() {global_name = @ChainIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
+      %18761 = "llvm.insertvalue"(%18759, %18760) <{position = array<i64: 14>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18762 = "placeholder.addressof"() {global_name = @ChainIterable2_init_firstIterable2T_secondIterable2T} : () -> !llvm.ptr
+      %18763 = "llvm.insertvalue"(%18761, %18762) <{position = array<i64: 15>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18764 = "placeholder.addressof"() {global_name = @ChainIterable2_iterator_} : () -> !llvm.ptr
+      %18765 = "llvm.insertvalue"(%18763, %18764) <{position = array<i64: 16>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18766 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %18767 = "llvm.insertvalue"(%18765, %18766) <{position = array<i64: 17>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18768 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %18769 = "llvm.insertvalue"(%18767, %18768) <{position = array<i64: 18>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18770 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18771 = "llvm.insertvalue"(%18769, %18770) <{position = array<i64: 19>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18772 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18773 = "llvm.insertvalue"(%18771, %18772) <{position = array<i64: 20>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18774 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %18775 = "llvm.insertvalue"(%18773, %18774) <{position = array<i64: 21>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18776 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18777 = "llvm.insertvalue"(%18775, %18776) <{position = array<i64: 22>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18778 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
+      %18779 = "llvm.insertvalue"(%18777, %18778) <{position = array<i64: 23>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18780 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
+      %18781 = "llvm.insertvalue"(%18779, %18780) <{position = array<i64: 24>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18782 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
+      %18783 = "llvm.insertvalue"(%18781, %18782) <{position = array<i64: 25>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18784 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
+      %18785 = "llvm.insertvalue"(%18783, %18784) <{position = array<i64: 26>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18786 = "placeholder.addressof"() {global_name = @ChainIterable2_field_ChainIterable2_0} : () -> !llvm.ptr
+      %18787 = "llvm.insertvalue"(%18785, %18786) <{position = array<i64: 27>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18788 = "placeholder.addressof"() {global_name = @ChainIterable2_B_iterator_} : () -> !llvm.ptr
+      %18789 = "llvm.insertvalue"(%18787, %18788) <{position = array<i64: 28>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18790 = "placeholder.addressof"() {global_name = @ChainIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %18791 = "llvm.insertvalue"(%18789, %18790) <{position = array<i64: 29>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18792 = "placeholder.addressof"() {global_name = @ChainIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %18793 = "llvm.insertvalue"(%18791, %18792) <{position = array<i64: 30>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18794 = "placeholder.addressof"() {global_name = @ChainIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18795 = "llvm.insertvalue"(%18793, %18794) <{position = array<i64: 31>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18796 = "placeholder.addressof"() {global_name = @ChainIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18797 = "llvm.insertvalue"(%18795, %18796) <{position = array<i64: 32>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18798 = "placeholder.addressof"() {global_name = @ChainIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %18799 = "llvm.insertvalue"(%18797, %18798) <{position = array<i64: 33>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18800 = "placeholder.addressof"() {global_name = @ChainIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18801 = "llvm.insertvalue"(%18799, %18800) <{position = array<i64: 34>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18802 = "placeholder.addressof"() {global_name = @ChainIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
+      %18803 = "llvm.insertvalue"(%18801, %18802) <{position = array<i64: 35>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18804 = "placeholder.addressof"() {global_name = @ChainIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
+      %18805 = "llvm.insertvalue"(%18803, %18804) <{position = array<i64: 36>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18806 = "placeholder.addressof"() {global_name = @ChainIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
+      %18807 = "llvm.insertvalue"(%18805, %18806) <{position = array<i64: 37>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18808 = "placeholder.addressof"() {global_name = @ChainIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
+      %18809 = "llvm.insertvalue"(%18807, %18808) <{position = array<i64: 38>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18810 = "placeholder.addressof"() {global_name = @ChainIterable2_iterator_} : () -> !llvm.ptr
+      %18811 = "llvm.insertvalue"(%18809, %18810) <{position = array<i64: 39>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18812 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %18813 = "llvm.insertvalue"(%18811, %18812) <{position = array<i64: 40>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18814 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %18815 = "llvm.insertvalue"(%18813, %18814) <{position = array<i64: 41>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18816 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18817 = "llvm.insertvalue"(%18815, %18816) <{position = array<i64: 42>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18818 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18819 = "llvm.insertvalue"(%18817, %18818) <{position = array<i64: 43>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18820 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %18821 = "llvm.insertvalue"(%18819, %18820) <{position = array<i64: 44>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18822 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18823 = "llvm.insertvalue"(%18821, %18822) <{position = array<i64: 45>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18824 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
+      %18825 = "llvm.insertvalue"(%18823, %18824) <{position = array<i64: 46>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18826 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
+      %18827 = "llvm.insertvalue"(%18825, %18826) <{position = array<i64: 47>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18828 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
+      %18829 = "llvm.insertvalue"(%18827, %18828) <{position = array<i64: 48>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18830 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
+      %18831 = "llvm.insertvalue"(%18829, %18830) <{position = array<i64: 49>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18832 = "llvm.insertvalue"(%18731, %18831) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, !llvm.array<50 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
+      "llvm.return"(%18832) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ChainIterator2_hashtbl"}> ({
-      %18593 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %18594 = "placeholder.addressof"() {global_name = @Iterator2} : () -> !llvm.ptr
-      %18595 = "llvm.insertvalue"(%18593, %18594) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18596 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %18597 = "llvm.insertvalue"(%18595, %18596) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18598 = "placeholder.addressof"() {global_name = @ChainIterator2} : () -> !llvm.ptr
-      %18599 = "llvm.insertvalue"(%18597, %18598) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18600 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
-      %18601 = "llvm.insertvalue"(%18599, %18600) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      "llvm.return"(%18601) : (!llvm.array<4 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ChainIterator2_hashtbl"}> ({
+      %18696 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %18697 = "llvm.mlir.undef"() : () -> !llvm.array<8 x ptr>
+      %18698 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %18699 = "llvm.insertvalue"(%18697, %18698) <{position = array<i64: 0>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18700 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %18701 = "llvm.insertvalue"(%18699, %18700) <{position = array<i64: 1>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18702 = "llvm.insertvalue"(%18701, %18696) <{position = array<i64: 2>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18703 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
+      %18704 = "llvm.insertvalue"(%18702, %18703) <{position = array<i64: 3>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18705 = "llvm.insertvalue"(%18704, %18696) <{position = array<i64: 4>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18706 = "llvm.insertvalue"(%18705, %18696) <{position = array<i64: 5>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18707 = "placeholder.addressof"() {global_name = @Iterator2} : () -> !llvm.ptr
+      %18708 = "llvm.insertvalue"(%18706, %18707) <{position = array<i64: 6>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18709 = "placeholder.addressof"() {global_name = @ChainIterator2} : () -> !llvm.ptr
+      %18710 = "llvm.insertvalue"(%18708, %18709) <{position = array<i64: 7>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      "llvm.return"(%18710) : (!llvm.array<8 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ChainIterator2_offset_tbl"}> ({
-      %18585 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %18586 = "llvm.mlir.constant"() <{value = 18 : i32}> : () -> i32
-      %18587 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
-      %18588 = "llvm.mlir.constant"() <{value = 15 : i32}> : () -> i32
-      %18589 = "llvm.insertvalue"(%18587, %18588) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18590 = "llvm.insertvalue"(%18589, %18586) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18591 = "llvm.insertvalue"(%18590, %18585) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18592 = "llvm.insertvalue"(%18591, %18586) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      "llvm.return"(%18592) : (!llvm.array<4 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ChainIterator2_offset_tbl"}> ({
+      %18683 = "llvm.mlir.constant"() <{value = 15 : i32}> : () -> i32
+      %18684 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %18685 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %18686 = "llvm.mlir.undef"() : () -> !llvm.array<8 x i32>
+      %18687 = "llvm.mlir.constant"() <{value = 18 : i32}> : () -> i32
+      %18688 = "llvm.insertvalue"(%18686, %18687) <{position = array<i64: 0>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18689 = "llvm.insertvalue"(%18688, %18685) <{position = array<i64: 1>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18690 = "llvm.insertvalue"(%18689, %18684) <{position = array<i64: 2>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18691 = "llvm.insertvalue"(%18690, %18687) <{position = array<i64: 3>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18692 = "llvm.insertvalue"(%18691, %18684) <{position = array<i64: 4>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18693 = "llvm.insertvalue"(%18692, %18684) <{position = array<i64: 5>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18694 = "llvm.insertvalue"(%18693, %18683) <{position = array<i64: 6>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18695 = "llvm.insertvalue"(%18694, %18685) <{position = array<i64: 7>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      "llvm.return"(%18695) : (!llvm.array<8 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "ChainIterator2"}> ({
-      %18541 = "llvm.mlir.undef"() : () -> !llvm.array<11 x ptr>
-      %18542 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %18543 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %18544 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
-      %18545 = "llvm.mlir.constant"() <{value = 4611686018427388207 : i64}> : () -> i64
-      %18546 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
-      %18547 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %18548 = "llvm.mlir.constant"() <{value = -228267985060461774 : i64}> : () -> i64
-      %18549 = "llvm.insertvalue"(%18547, %18548) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18550 = "llvm.insertvalue"(%18549, %18545) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18551 = "llvm.insertvalue"(%18550, %18544) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18552 = "llvm.insertvalue"(%18546, %18551) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
-      %18553 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %18554 = "llvm.insertvalue"(%18543, %18553) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18555 = "placeholder.addressof"() {global_name = @ChainIterator2_hashtbl} : () -> !llvm.ptr
-      %18556 = "llvm.insertvalue"(%18554, %18555) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18557 = "placeholder.addressof"() {global_name = @ChainIterator2_offset_tbl} : () -> !llvm.ptr
-      %18558 = "llvm.insertvalue"(%18556, %18557) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18559 = "llvm.getelementptr"(%18542) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr, ptr, ptr, i32)>, i1, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %18560 = "llvm.insertvalue"(%18558, %18559) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18561 = "llvm.insertvalue"(%18552, %18560) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
-      %18562 = "placeholder.addressof"() {global_name = @ChainIterator2_field_first} : () -> !llvm.ptr
-      %18563 = "llvm.insertvalue"(%18541, %18562) <{position = array<i64: 0>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18564 = "placeholder.addressof"() {global_name = @ChainIterator2_field_second} : () -> !llvm.ptr
-      %18565 = "llvm.insertvalue"(%18563, %18564) <{position = array<i64: 1>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18566 = "placeholder.addressof"() {global_name = @ChainIterator2_field_on_first} : () -> !llvm.ptr
-      %18567 = "llvm.insertvalue"(%18565, %18566) <{position = array<i64: 2>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18568 = "placeholder.addressof"() {global_name = @ChainIterator2_field_ChainIterator2_0} : () -> !llvm.ptr
-      %18569 = "llvm.insertvalue"(%18567, %18568) <{position = array<i64: 3>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18570 = "placeholder.addressof"() {global_name = @ChainIterator2_B_init_firstIterator2T_secondIterator2T} : () -> !llvm.ptr
-      %18571 = "llvm.insertvalue"(%18569, %18570) <{position = array<i64: 4>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18572 = "placeholder.addressof"() {global_name = @ChainIterator2_B_next_} : () -> !llvm.ptr
-      %18573 = "llvm.insertvalue"(%18571, %18572) <{position = array<i64: 5>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18574 = "placeholder.addressof"() {global_name = @ChainIterator2_init_firstIterator2T_secondIterator2T} : () -> !llvm.ptr
-      %18575 = "llvm.insertvalue"(%18573, %18574) <{position = array<i64: 6>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18576 = "placeholder.addressof"() {global_name = @ChainIterator2_next_} : () -> !llvm.ptr
-      %18577 = "llvm.insertvalue"(%18575, %18576) <{position = array<i64: 7>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18578 = "placeholder.addressof"() {global_name = @ChainIterator2_field_ChainIterator2_0} : () -> !llvm.ptr
-      %18579 = "llvm.insertvalue"(%18577, %18578) <{position = array<i64: 8>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18580 = "placeholder.addressof"() {global_name = @ChainIterator2_B_next_} : () -> !llvm.ptr
-      %18581 = "llvm.insertvalue"(%18579, %18580) <{position = array<i64: 9>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18582 = "placeholder.addressof"() {global_name = @ChainIterator2_next_} : () -> !llvm.ptr
-      %18583 = "llvm.insertvalue"(%18581, %18582) <{position = array<i64: 10>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18584 = "llvm.insertvalue"(%18561, %18583) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, !llvm.array<11 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
-      "llvm.return"(%18584) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>) -> ()
+      %18639 = "llvm.mlir.undef"() : () -> !llvm.array<11 x ptr>
+      %18640 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %18641 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %18642 = "llvm.mlir.constant"() <{value = 7 : i64}> : () -> i64
+      %18643 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %18644 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
+      %18645 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %18646 = "llvm.mlir.constant"() <{value = -228267985060461774 : i64}> : () -> i64
+      %18647 = "llvm.insertvalue"(%18645, %18646) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18648 = "llvm.insertvalue"(%18647, %18643) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18649 = "llvm.insertvalue"(%18648, %18642) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18650 = "llvm.insertvalue"(%18644, %18649) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
+      %18651 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %18652 = "llvm.insertvalue"(%18641, %18651) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18653 = "placeholder.addressof"() {global_name = @ChainIterator2_hashtbl} : () -> !llvm.ptr
+      %18654 = "llvm.insertvalue"(%18652, %18653) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18655 = "placeholder.addressof"() {global_name = @ChainIterator2_offset_tbl} : () -> !llvm.ptr
+      %18656 = "llvm.insertvalue"(%18654, %18655) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18657 = "llvm.getelementptr"(%18640) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr, ptr, ptr, i32)>, i1, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %18658 = "llvm.insertvalue"(%18656, %18657) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18659 = "llvm.insertvalue"(%18650, %18658) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
+      %18660 = "placeholder.addressof"() {global_name = @ChainIterator2_field_first} : () -> !llvm.ptr
+      %18661 = "llvm.insertvalue"(%18639, %18660) <{position = array<i64: 0>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18662 = "placeholder.addressof"() {global_name = @ChainIterator2_field_second} : () -> !llvm.ptr
+      %18663 = "llvm.insertvalue"(%18661, %18662) <{position = array<i64: 1>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18664 = "placeholder.addressof"() {global_name = @ChainIterator2_field_on_first} : () -> !llvm.ptr
+      %18665 = "llvm.insertvalue"(%18663, %18664) <{position = array<i64: 2>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18666 = "placeholder.addressof"() {global_name = @ChainIterator2_field_ChainIterator2_0} : () -> !llvm.ptr
+      %18667 = "llvm.insertvalue"(%18665, %18666) <{position = array<i64: 3>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18668 = "placeholder.addressof"() {global_name = @ChainIterator2_B_init_firstIterator2T_secondIterator2T} : () -> !llvm.ptr
+      %18669 = "llvm.insertvalue"(%18667, %18668) <{position = array<i64: 4>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18670 = "placeholder.addressof"() {global_name = @ChainIterator2_B_next_} : () -> !llvm.ptr
+      %18671 = "llvm.insertvalue"(%18669, %18670) <{position = array<i64: 5>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18672 = "placeholder.addressof"() {global_name = @ChainIterator2_init_firstIterator2T_secondIterator2T} : () -> !llvm.ptr
+      %18673 = "llvm.insertvalue"(%18671, %18672) <{position = array<i64: 6>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18674 = "placeholder.addressof"() {global_name = @ChainIterator2_next_} : () -> !llvm.ptr
+      %18675 = "llvm.insertvalue"(%18673, %18674) <{position = array<i64: 7>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18676 = "placeholder.addressof"() {global_name = @ChainIterator2_field_ChainIterator2_0} : () -> !llvm.ptr
+      %18677 = "llvm.insertvalue"(%18675, %18676) <{position = array<i64: 8>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18678 = "placeholder.addressof"() {global_name = @ChainIterator2_B_next_} : () -> !llvm.ptr
+      %18679 = "llvm.insertvalue"(%18677, %18678) <{position = array<i64: 9>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18680 = "placeholder.addressof"() {global_name = @ChainIterator2_next_} : () -> !llvm.ptr
+      %18681 = "llvm.insertvalue"(%18679, %18680) <{position = array<i64: 10>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18682 = "llvm.insertvalue"(%18659, %18681) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, !llvm.array<11 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
+      "llvm.return"(%18682) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "InterleaveIterable2_hashtbl"}> ({
-      %18532 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %18533 = "placeholder.addressof"() {global_name = @Iterable2} : () -> !llvm.ptr
-      %18534 = "llvm.insertvalue"(%18532, %18533) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18535 = "placeholder.addressof"() {global_name = @InterleaveIterable2} : () -> !llvm.ptr
-      %18536 = "llvm.insertvalue"(%18534, %18535) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18537 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
-      %18538 = "llvm.insertvalue"(%18536, %18537) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18539 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %18540 = "llvm.insertvalue"(%18538, %18539) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      "llvm.return"(%18540) : (!llvm.array<4 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "InterleaveIterable2_hashtbl"}> ({
+      %18624 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %18625 = "llvm.mlir.undef"() : () -> !llvm.array<8 x ptr>
+      %18626 = "placeholder.addressof"() {global_name = @Iterable2} : () -> !llvm.ptr
+      %18627 = "llvm.insertvalue"(%18625, %18626) <{position = array<i64: 0>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18628 = "llvm.insertvalue"(%18627, %18624) <{position = array<i64: 1>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18629 = "llvm.insertvalue"(%18628, %18624) <{position = array<i64: 2>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18630 = "placeholder.addressof"() {global_name = @InterleaveIterable2} : () -> !llvm.ptr
+      %18631 = "llvm.insertvalue"(%18629, %18630) <{position = array<i64: 3>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18632 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %18633 = "llvm.insertvalue"(%18631, %18632) <{position = array<i64: 4>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18634 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %18635 = "llvm.insertvalue"(%18633, %18634) <{position = array<i64: 5>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18636 = "llvm.insertvalue"(%18635, %18624) <{position = array<i64: 6>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18637 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
+      %18638 = "llvm.insertvalue"(%18636, %18637) <{position = array<i64: 7>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      "llvm.return"(%18638) : (!llvm.array<8 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "InterleaveIterable2_offset_tbl"}> ({
-      %18524 = "llvm.mlir.constant"() <{value = 57 : i32}> : () -> i32
-      %18525 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %18526 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
-      %18527 = "llvm.mlir.constant"() <{value = 34 : i32}> : () -> i32
-      %18528 = "llvm.insertvalue"(%18526, %18527) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18529 = "llvm.insertvalue"(%18528, %18525) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18530 = "llvm.insertvalue"(%18529, %18524) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18531 = "llvm.insertvalue"(%18530, %18524) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      "llvm.return"(%18531) : (!llvm.array<4 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "InterleaveIterable2_offset_tbl"}> ({
+      %18611 = "llvm.mlir.constant"() <{value = 57 : i32}> : () -> i32
+      %18612 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %18613 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %18614 = "llvm.mlir.undef"() : () -> !llvm.array<8 x i32>
+      %18615 = "llvm.mlir.constant"() <{value = 34 : i32}> : () -> i32
+      %18616 = "llvm.insertvalue"(%18614, %18615) <{position = array<i64: 0>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18617 = "llvm.insertvalue"(%18616, %18613) <{position = array<i64: 1>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18618 = "llvm.insertvalue"(%18617, %18613) <{position = array<i64: 2>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18619 = "llvm.insertvalue"(%18618, %18612) <{position = array<i64: 3>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18620 = "llvm.insertvalue"(%18619, %18612) <{position = array<i64: 4>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18621 = "llvm.insertvalue"(%18620, %18611) <{position = array<i64: 5>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18622 = "llvm.insertvalue"(%18621, %18613) <{position = array<i64: 6>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18623 = "llvm.insertvalue"(%18622, %18611) <{position = array<i64: 7>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      "llvm.return"(%18623) : (!llvm.array<8 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "InterleaveIterable2"}> ({
-      %18402 = "llvm.mlir.undef"() : () -> !llvm.array<50 x ptr>
-      %18403 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %18404 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %18405 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
-      %18406 = "llvm.mlir.constant"() <{value = 4611686018427388093 : i64}> : () -> i64
-      %18407 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
-      %18408 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %18409 = "llvm.mlir.constant"() <{value = -6258231685215461775 : i64}> : () -> i64
-      %18410 = "llvm.insertvalue"(%18408, %18409) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18411 = "llvm.insertvalue"(%18410, %18406) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18412 = "llvm.insertvalue"(%18411, %18405) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18413 = "llvm.insertvalue"(%18407, %18412) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
-      %18414 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %18415 = "llvm.insertvalue"(%18404, %18414) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18416 = "placeholder.addressof"() {global_name = @InterleaveIterable2_hashtbl} : () -> !llvm.ptr
-      %18417 = "llvm.insertvalue"(%18415, %18416) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18418 = "placeholder.addressof"() {global_name = @InterleaveIterable2_offset_tbl} : () -> !llvm.ptr
-      %18419 = "llvm.insertvalue"(%18417, %18418) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18420 = "llvm.getelementptr"(%18403) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr, ptr, ptr, i32)>, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %18421 = "llvm.insertvalue"(%18419, %18420) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18422 = "llvm.insertvalue"(%18413, %18421) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
-      %18423 = "placeholder.addressof"() {global_name = @InterleaveIterable2_field_first} : () -> !llvm.ptr
-      %18424 = "llvm.insertvalue"(%18402, %18423) <{position = array<i64: 0>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18425 = "placeholder.addressof"() {global_name = @InterleaveIterable2_field_second} : () -> !llvm.ptr
-      %18426 = "llvm.insertvalue"(%18424, %18425) <{position = array<i64: 1>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18427 = "placeholder.addressof"() {global_name = @InterleaveIterable2_field_InterleaveIterable2_0} : () -> !llvm.ptr
-      %18428 = "llvm.insertvalue"(%18426, %18427) <{position = array<i64: 2>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18429 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_init_firstIterable2T_secondIterable2T} : () -> !llvm.ptr
-      %18430 = "llvm.insertvalue"(%18428, %18429) <{position = array<i64: 3>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18431 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_iterator_} : () -> !llvm.ptr
-      %18432 = "llvm.insertvalue"(%18430, %18431) <{position = array<i64: 4>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18433 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %18434 = "llvm.insertvalue"(%18432, %18433) <{position = array<i64: 5>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18435 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %18436 = "llvm.insertvalue"(%18434, %18435) <{position = array<i64: 6>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18437 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18438 = "llvm.insertvalue"(%18436, %18437) <{position = array<i64: 7>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18439 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18440 = "llvm.insertvalue"(%18438, %18439) <{position = array<i64: 8>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18441 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %18442 = "llvm.insertvalue"(%18440, %18441) <{position = array<i64: 9>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18443 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18444 = "llvm.insertvalue"(%18442, %18443) <{position = array<i64: 10>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18445 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
-      %18446 = "llvm.insertvalue"(%18444, %18445) <{position = array<i64: 11>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18447 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
-      %18448 = "llvm.insertvalue"(%18446, %18447) <{position = array<i64: 12>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18449 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
-      %18450 = "llvm.insertvalue"(%18448, %18449) <{position = array<i64: 13>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18451 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
-      %18452 = "llvm.insertvalue"(%18450, %18451) <{position = array<i64: 14>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18453 = "placeholder.addressof"() {global_name = @InterleaveIterable2_init_firstIterable2T_secondIterable2T} : () -> !llvm.ptr
-      %18454 = "llvm.insertvalue"(%18452, %18453) <{position = array<i64: 15>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18455 = "placeholder.addressof"() {global_name = @InterleaveIterable2_iterator_} : () -> !llvm.ptr
-      %18456 = "llvm.insertvalue"(%18454, %18455) <{position = array<i64: 16>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18457 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %18458 = "llvm.insertvalue"(%18456, %18457) <{position = array<i64: 17>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18459 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %18460 = "llvm.insertvalue"(%18458, %18459) <{position = array<i64: 18>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18461 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18462 = "llvm.insertvalue"(%18460, %18461) <{position = array<i64: 19>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18463 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18464 = "llvm.insertvalue"(%18462, %18463) <{position = array<i64: 20>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18465 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %18466 = "llvm.insertvalue"(%18464, %18465) <{position = array<i64: 21>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18467 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18468 = "llvm.insertvalue"(%18466, %18467) <{position = array<i64: 22>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18469 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
-      %18470 = "llvm.insertvalue"(%18468, %18469) <{position = array<i64: 23>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18471 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
-      %18472 = "llvm.insertvalue"(%18470, %18471) <{position = array<i64: 24>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18473 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
-      %18474 = "llvm.insertvalue"(%18472, %18473) <{position = array<i64: 25>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18475 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
-      %18476 = "llvm.insertvalue"(%18474, %18475) <{position = array<i64: 26>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18477 = "placeholder.addressof"() {global_name = @InterleaveIterable2_field_InterleaveIterable2_0} : () -> !llvm.ptr
-      %18478 = "llvm.insertvalue"(%18476, %18477) <{position = array<i64: 27>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18479 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_iterator_} : () -> !llvm.ptr
-      %18480 = "llvm.insertvalue"(%18478, %18479) <{position = array<i64: 28>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18481 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %18482 = "llvm.insertvalue"(%18480, %18481) <{position = array<i64: 29>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18483 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %18484 = "llvm.insertvalue"(%18482, %18483) <{position = array<i64: 30>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18485 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18486 = "llvm.insertvalue"(%18484, %18485) <{position = array<i64: 31>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18487 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18488 = "llvm.insertvalue"(%18486, %18487) <{position = array<i64: 32>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18489 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %18490 = "llvm.insertvalue"(%18488, %18489) <{position = array<i64: 33>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18491 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18492 = "llvm.insertvalue"(%18490, %18491) <{position = array<i64: 34>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18493 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
-      %18494 = "llvm.insertvalue"(%18492, %18493) <{position = array<i64: 35>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18495 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
-      %18496 = "llvm.insertvalue"(%18494, %18495) <{position = array<i64: 36>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18497 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
-      %18498 = "llvm.insertvalue"(%18496, %18497) <{position = array<i64: 37>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18499 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
-      %18500 = "llvm.insertvalue"(%18498, %18499) <{position = array<i64: 38>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18501 = "placeholder.addressof"() {global_name = @InterleaveIterable2_iterator_} : () -> !llvm.ptr
-      %18502 = "llvm.insertvalue"(%18500, %18501) <{position = array<i64: 39>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18503 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %18504 = "llvm.insertvalue"(%18502, %18503) <{position = array<i64: 40>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18505 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %18506 = "llvm.insertvalue"(%18504, %18505) <{position = array<i64: 41>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18507 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18508 = "llvm.insertvalue"(%18506, %18507) <{position = array<i64: 42>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18509 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18510 = "llvm.insertvalue"(%18508, %18509) <{position = array<i64: 43>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18511 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %18512 = "llvm.insertvalue"(%18510, %18511) <{position = array<i64: 44>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18513 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18514 = "llvm.insertvalue"(%18512, %18513) <{position = array<i64: 45>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18515 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
-      %18516 = "llvm.insertvalue"(%18514, %18515) <{position = array<i64: 46>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18517 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
-      %18518 = "llvm.insertvalue"(%18516, %18517) <{position = array<i64: 47>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18519 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
-      %18520 = "llvm.insertvalue"(%18518, %18519) <{position = array<i64: 48>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18521 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
-      %18522 = "llvm.insertvalue"(%18520, %18521) <{position = array<i64: 49>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
-      %18523 = "llvm.insertvalue"(%18422, %18522) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, !llvm.array<50 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
-      "llvm.return"(%18523) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>) -> ()
+      %18489 = "llvm.mlir.undef"() : () -> !llvm.array<50 x ptr>
+      %18490 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %18491 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %18492 = "llvm.mlir.constant"() <{value = 7 : i64}> : () -> i64
+      %18493 = "llvm.mlir.constant"() <{value = 4611686018427388207 : i64}> : () -> i64
+      %18494 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
+      %18495 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %18496 = "llvm.mlir.constant"() <{value = -6258231685215461775 : i64}> : () -> i64
+      %18497 = "llvm.insertvalue"(%18495, %18496) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18498 = "llvm.insertvalue"(%18497, %18493) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18499 = "llvm.insertvalue"(%18498, %18492) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18500 = "llvm.insertvalue"(%18494, %18499) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
+      %18501 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %18502 = "llvm.insertvalue"(%18491, %18501) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18503 = "placeholder.addressof"() {global_name = @InterleaveIterable2_hashtbl} : () -> !llvm.ptr
+      %18504 = "llvm.insertvalue"(%18502, %18503) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18505 = "placeholder.addressof"() {global_name = @InterleaveIterable2_offset_tbl} : () -> !llvm.ptr
+      %18506 = "llvm.insertvalue"(%18504, %18505) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18507 = "llvm.getelementptr"(%18490) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr, ptr, ptr, i32)>, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %18508 = "llvm.insertvalue"(%18506, %18507) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18509 = "llvm.insertvalue"(%18500, %18508) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
+      %18510 = "placeholder.addressof"() {global_name = @InterleaveIterable2_field_first} : () -> !llvm.ptr
+      %18511 = "llvm.insertvalue"(%18489, %18510) <{position = array<i64: 0>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18512 = "placeholder.addressof"() {global_name = @InterleaveIterable2_field_second} : () -> !llvm.ptr
+      %18513 = "llvm.insertvalue"(%18511, %18512) <{position = array<i64: 1>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18514 = "placeholder.addressof"() {global_name = @InterleaveIterable2_field_InterleaveIterable2_0} : () -> !llvm.ptr
+      %18515 = "llvm.insertvalue"(%18513, %18514) <{position = array<i64: 2>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18516 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_init_firstIterable2T_secondIterable2T} : () -> !llvm.ptr
+      %18517 = "llvm.insertvalue"(%18515, %18516) <{position = array<i64: 3>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18518 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_iterator_} : () -> !llvm.ptr
+      %18519 = "llvm.insertvalue"(%18517, %18518) <{position = array<i64: 4>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18520 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %18521 = "llvm.insertvalue"(%18519, %18520) <{position = array<i64: 5>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18522 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %18523 = "llvm.insertvalue"(%18521, %18522) <{position = array<i64: 6>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18524 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18525 = "llvm.insertvalue"(%18523, %18524) <{position = array<i64: 7>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18526 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18527 = "llvm.insertvalue"(%18525, %18526) <{position = array<i64: 8>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18528 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %18529 = "llvm.insertvalue"(%18527, %18528) <{position = array<i64: 9>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18530 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18531 = "llvm.insertvalue"(%18529, %18530) <{position = array<i64: 10>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18532 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
+      %18533 = "llvm.insertvalue"(%18531, %18532) <{position = array<i64: 11>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18534 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
+      %18535 = "llvm.insertvalue"(%18533, %18534) <{position = array<i64: 12>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18536 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
+      %18537 = "llvm.insertvalue"(%18535, %18536) <{position = array<i64: 13>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18538 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
+      %18539 = "llvm.insertvalue"(%18537, %18538) <{position = array<i64: 14>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18540 = "placeholder.addressof"() {global_name = @InterleaveIterable2_init_firstIterable2T_secondIterable2T} : () -> !llvm.ptr
+      %18541 = "llvm.insertvalue"(%18539, %18540) <{position = array<i64: 15>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18542 = "placeholder.addressof"() {global_name = @InterleaveIterable2_iterator_} : () -> !llvm.ptr
+      %18543 = "llvm.insertvalue"(%18541, %18542) <{position = array<i64: 16>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18544 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %18545 = "llvm.insertvalue"(%18543, %18544) <{position = array<i64: 17>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18546 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %18547 = "llvm.insertvalue"(%18545, %18546) <{position = array<i64: 18>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18548 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18549 = "llvm.insertvalue"(%18547, %18548) <{position = array<i64: 19>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18550 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18551 = "llvm.insertvalue"(%18549, %18550) <{position = array<i64: 20>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18552 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %18553 = "llvm.insertvalue"(%18551, %18552) <{position = array<i64: 21>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18554 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18555 = "llvm.insertvalue"(%18553, %18554) <{position = array<i64: 22>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18556 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
+      %18557 = "llvm.insertvalue"(%18555, %18556) <{position = array<i64: 23>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18558 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
+      %18559 = "llvm.insertvalue"(%18557, %18558) <{position = array<i64: 24>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18560 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
+      %18561 = "llvm.insertvalue"(%18559, %18560) <{position = array<i64: 25>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18562 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
+      %18563 = "llvm.insertvalue"(%18561, %18562) <{position = array<i64: 26>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18564 = "placeholder.addressof"() {global_name = @InterleaveIterable2_field_InterleaveIterable2_0} : () -> !llvm.ptr
+      %18565 = "llvm.insertvalue"(%18563, %18564) <{position = array<i64: 27>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18566 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_iterator_} : () -> !llvm.ptr
+      %18567 = "llvm.insertvalue"(%18565, %18566) <{position = array<i64: 28>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18568 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %18569 = "llvm.insertvalue"(%18567, %18568) <{position = array<i64: 29>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18570 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %18571 = "llvm.insertvalue"(%18569, %18570) <{position = array<i64: 30>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18572 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18573 = "llvm.insertvalue"(%18571, %18572) <{position = array<i64: 31>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18574 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18575 = "llvm.insertvalue"(%18573, %18574) <{position = array<i64: 32>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18576 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %18577 = "llvm.insertvalue"(%18575, %18576) <{position = array<i64: 33>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18578 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18579 = "llvm.insertvalue"(%18577, %18578) <{position = array<i64: 34>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18580 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
+      %18581 = "llvm.insertvalue"(%18579, %18580) <{position = array<i64: 35>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18582 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
+      %18583 = "llvm.insertvalue"(%18581, %18582) <{position = array<i64: 36>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18584 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
+      %18585 = "llvm.insertvalue"(%18583, %18584) <{position = array<i64: 37>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18586 = "placeholder.addressof"() {global_name = @InterleaveIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
+      %18587 = "llvm.insertvalue"(%18585, %18586) <{position = array<i64: 38>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18588 = "placeholder.addressof"() {global_name = @InterleaveIterable2_iterator_} : () -> !llvm.ptr
+      %18589 = "llvm.insertvalue"(%18587, %18588) <{position = array<i64: 39>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18590 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %18591 = "llvm.insertvalue"(%18589, %18590) <{position = array<i64: 40>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18592 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %18593 = "llvm.insertvalue"(%18591, %18592) <{position = array<i64: 41>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18594 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18595 = "llvm.insertvalue"(%18593, %18594) <{position = array<i64: 42>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18596 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18597 = "llvm.insertvalue"(%18595, %18596) <{position = array<i64: 43>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18598 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %18599 = "llvm.insertvalue"(%18597, %18598) <{position = array<i64: 44>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18600 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18601 = "llvm.insertvalue"(%18599, %18600) <{position = array<i64: 45>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18602 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
+      %18603 = "llvm.insertvalue"(%18601, %18602) <{position = array<i64: 46>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18604 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
+      %18605 = "llvm.insertvalue"(%18603, %18604) <{position = array<i64: 47>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18606 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
+      %18607 = "llvm.insertvalue"(%18605, %18606) <{position = array<i64: 48>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18608 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
+      %18609 = "llvm.insertvalue"(%18607, %18608) <{position = array<i64: 49>}> : (!llvm.array<50 x ptr>, !llvm.ptr) -> !llvm.array<50 x ptr>
+      %18610 = "llvm.insertvalue"(%18509, %18609) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>, !llvm.array<50 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>
+      "llvm.return"(%18610) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<50 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "InterleaveIterator2_hashtbl"}> ({
-      %18393 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %18394 = "placeholder.addressof"() {global_name = @Iterator2} : () -> !llvm.ptr
-      %18395 = "llvm.insertvalue"(%18393, %18394) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18396 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %18397 = "llvm.insertvalue"(%18395, %18396) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18398 = "placeholder.addressof"() {global_name = @InterleaveIterator2} : () -> !llvm.ptr
-      %18399 = "llvm.insertvalue"(%18397, %18398) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18400 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
-      %18401 = "llvm.insertvalue"(%18399, %18400) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      "llvm.return"(%18401) : (!llvm.array<4 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "InterleaveIterator2_hashtbl"}> ({
+      %18474 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %18475 = "llvm.mlir.undef"() : () -> !llvm.array<8 x ptr>
+      %18476 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %18477 = "llvm.insertvalue"(%18475, %18476) <{position = array<i64: 0>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18478 = "llvm.insertvalue"(%18477, %18474) <{position = array<i64: 1>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18479 = "llvm.insertvalue"(%18478, %18474) <{position = array<i64: 2>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18480 = "placeholder.addressof"() {global_name = @InterleaveIterator2} : () -> !llvm.ptr
+      %18481 = "llvm.insertvalue"(%18479, %18480) <{position = array<i64: 3>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18482 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
+      %18483 = "llvm.insertvalue"(%18481, %18482) <{position = array<i64: 4>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18484 = "llvm.insertvalue"(%18483, %18474) <{position = array<i64: 5>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18485 = "placeholder.addressof"() {global_name = @Iterator2} : () -> !llvm.ptr
+      %18486 = "llvm.insertvalue"(%18484, %18485) <{position = array<i64: 6>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18487 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %18488 = "llvm.insertvalue"(%18486, %18487) <{position = array<i64: 7>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      "llvm.return"(%18488) : (!llvm.array<8 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "InterleaveIterator2_offset_tbl"}> ({
-      %18385 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %18386 = "llvm.mlir.constant"() <{value = 18 : i32}> : () -> i32
-      %18387 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
-      %18388 = "llvm.mlir.constant"() <{value = 15 : i32}> : () -> i32
-      %18389 = "llvm.insertvalue"(%18387, %18388) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18390 = "llvm.insertvalue"(%18389, %18386) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18391 = "llvm.insertvalue"(%18390, %18385) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18392 = "llvm.insertvalue"(%18391, %18386) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      "llvm.return"(%18392) : (!llvm.array<4 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "InterleaveIterator2_offset_tbl"}> ({
+      %18461 = "llvm.mlir.constant"() <{value = 15 : i32}> : () -> i32
+      %18462 = "llvm.mlir.constant"() <{value = 18 : i32}> : () -> i32
+      %18463 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %18464 = "llvm.mlir.undef"() : () -> !llvm.array<8 x i32>
+      %18465 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %18466 = "llvm.insertvalue"(%18464, %18465) <{position = array<i64: 0>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18467 = "llvm.insertvalue"(%18466, %18463) <{position = array<i64: 1>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18468 = "llvm.insertvalue"(%18467, %18463) <{position = array<i64: 2>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18469 = "llvm.insertvalue"(%18468, %18465) <{position = array<i64: 3>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18470 = "llvm.insertvalue"(%18469, %18462) <{position = array<i64: 4>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18471 = "llvm.insertvalue"(%18470, %18463) <{position = array<i64: 5>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18472 = "llvm.insertvalue"(%18471, %18461) <{position = array<i64: 6>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18473 = "llvm.insertvalue"(%18472, %18462) <{position = array<i64: 7>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      "llvm.return"(%18473) : (!llvm.array<8 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "InterleaveIterator2"}> ({
-      %18341 = "llvm.mlir.undef"() : () -> !llvm.array<11 x ptr>
-      %18342 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %18343 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %18344 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
-      %18345 = "llvm.mlir.constant"() <{value = 4611686018427388207 : i64}> : () -> i64
-      %18346 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
-      %18347 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %18348 = "llvm.mlir.constant"() <{value = 6709847746581360093 : i64}> : () -> i64
-      %18349 = "llvm.insertvalue"(%18347, %18348) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18350 = "llvm.insertvalue"(%18349, %18345) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18351 = "llvm.insertvalue"(%18350, %18344) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18352 = "llvm.insertvalue"(%18346, %18351) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
-      %18353 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %18354 = "llvm.insertvalue"(%18343, %18353) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18355 = "placeholder.addressof"() {global_name = @InterleaveIterator2_hashtbl} : () -> !llvm.ptr
-      %18356 = "llvm.insertvalue"(%18354, %18355) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18357 = "placeholder.addressof"() {global_name = @InterleaveIterator2_offset_tbl} : () -> !llvm.ptr
-      %18358 = "llvm.insertvalue"(%18356, %18357) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18359 = "llvm.getelementptr"(%18342) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr, ptr, ptr, i32)>, i1, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %18360 = "llvm.insertvalue"(%18358, %18359) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18361 = "llvm.insertvalue"(%18352, %18360) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
-      %18362 = "placeholder.addressof"() {global_name = @InterleaveIterator2_field_first} : () -> !llvm.ptr
-      %18363 = "llvm.insertvalue"(%18341, %18362) <{position = array<i64: 0>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18364 = "placeholder.addressof"() {global_name = @InterleaveIterator2_field_second} : () -> !llvm.ptr
-      %18365 = "llvm.insertvalue"(%18363, %18364) <{position = array<i64: 1>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18366 = "placeholder.addressof"() {global_name = @InterleaveIterator2_field_on_first} : () -> !llvm.ptr
-      %18367 = "llvm.insertvalue"(%18365, %18366) <{position = array<i64: 2>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18368 = "placeholder.addressof"() {global_name = @InterleaveIterator2_field_InterleaveIterator2_0} : () -> !llvm.ptr
-      %18369 = "llvm.insertvalue"(%18367, %18368) <{position = array<i64: 3>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18370 = "placeholder.addressof"() {global_name = @InterleaveIterator2_B_init_firstIterator2T_secondIterator2T} : () -> !llvm.ptr
-      %18371 = "llvm.insertvalue"(%18369, %18370) <{position = array<i64: 4>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18372 = "placeholder.addressof"() {global_name = @InterleaveIterator2_B_next_} : () -> !llvm.ptr
-      %18373 = "llvm.insertvalue"(%18371, %18372) <{position = array<i64: 5>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18374 = "placeholder.addressof"() {global_name = @InterleaveIterator2_init_firstIterator2T_secondIterator2T} : () -> !llvm.ptr
-      %18375 = "llvm.insertvalue"(%18373, %18374) <{position = array<i64: 6>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18376 = "placeholder.addressof"() {global_name = @InterleaveIterator2_next_} : () -> !llvm.ptr
-      %18377 = "llvm.insertvalue"(%18375, %18376) <{position = array<i64: 7>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18378 = "placeholder.addressof"() {global_name = @InterleaveIterator2_field_InterleaveIterator2_0} : () -> !llvm.ptr
-      %18379 = "llvm.insertvalue"(%18377, %18378) <{position = array<i64: 8>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18380 = "placeholder.addressof"() {global_name = @InterleaveIterator2_B_next_} : () -> !llvm.ptr
-      %18381 = "llvm.insertvalue"(%18379, %18380) <{position = array<i64: 9>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18382 = "placeholder.addressof"() {global_name = @InterleaveIterator2_next_} : () -> !llvm.ptr
-      %18383 = "llvm.insertvalue"(%18381, %18382) <{position = array<i64: 10>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
-      %18384 = "llvm.insertvalue"(%18361, %18383) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, !llvm.array<11 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
-      "llvm.return"(%18384) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>) -> ()
+      %18417 = "llvm.mlir.undef"() : () -> !llvm.array<11 x ptr>
+      %18418 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %18419 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %18420 = "llvm.mlir.constant"() <{value = 7 : i64}> : () -> i64
+      %18421 = "llvm.mlir.constant"() <{value = 4611686018427388247 : i64}> : () -> i64
+      %18422 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
+      %18423 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %18424 = "llvm.mlir.constant"() <{value = 6709847746581360093 : i64}> : () -> i64
+      %18425 = "llvm.insertvalue"(%18423, %18424) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18426 = "llvm.insertvalue"(%18425, %18421) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18427 = "llvm.insertvalue"(%18426, %18420) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18428 = "llvm.insertvalue"(%18422, %18427) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
+      %18429 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %18430 = "llvm.insertvalue"(%18419, %18429) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18431 = "placeholder.addressof"() {global_name = @InterleaveIterator2_hashtbl} : () -> !llvm.ptr
+      %18432 = "llvm.insertvalue"(%18430, %18431) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18433 = "placeholder.addressof"() {global_name = @InterleaveIterator2_offset_tbl} : () -> !llvm.ptr
+      %18434 = "llvm.insertvalue"(%18432, %18433) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18435 = "llvm.getelementptr"(%18418) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr, ptr, ptr, i32)>, i1, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %18436 = "llvm.insertvalue"(%18434, %18435) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18437 = "llvm.insertvalue"(%18428, %18436) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
+      %18438 = "placeholder.addressof"() {global_name = @InterleaveIterator2_field_first} : () -> !llvm.ptr
+      %18439 = "llvm.insertvalue"(%18417, %18438) <{position = array<i64: 0>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18440 = "placeholder.addressof"() {global_name = @InterleaveIterator2_field_second} : () -> !llvm.ptr
+      %18441 = "llvm.insertvalue"(%18439, %18440) <{position = array<i64: 1>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18442 = "placeholder.addressof"() {global_name = @InterleaveIterator2_field_on_first} : () -> !llvm.ptr
+      %18443 = "llvm.insertvalue"(%18441, %18442) <{position = array<i64: 2>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18444 = "placeholder.addressof"() {global_name = @InterleaveIterator2_field_InterleaveIterator2_0} : () -> !llvm.ptr
+      %18445 = "llvm.insertvalue"(%18443, %18444) <{position = array<i64: 3>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18446 = "placeholder.addressof"() {global_name = @InterleaveIterator2_B_init_firstIterator2T_secondIterator2T} : () -> !llvm.ptr
+      %18447 = "llvm.insertvalue"(%18445, %18446) <{position = array<i64: 4>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18448 = "placeholder.addressof"() {global_name = @InterleaveIterator2_B_next_} : () -> !llvm.ptr
+      %18449 = "llvm.insertvalue"(%18447, %18448) <{position = array<i64: 5>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18450 = "placeholder.addressof"() {global_name = @InterleaveIterator2_init_firstIterator2T_secondIterator2T} : () -> !llvm.ptr
+      %18451 = "llvm.insertvalue"(%18449, %18450) <{position = array<i64: 6>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18452 = "placeholder.addressof"() {global_name = @InterleaveIterator2_next_} : () -> !llvm.ptr
+      %18453 = "llvm.insertvalue"(%18451, %18452) <{position = array<i64: 7>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18454 = "placeholder.addressof"() {global_name = @InterleaveIterator2_field_InterleaveIterator2_0} : () -> !llvm.ptr
+      %18455 = "llvm.insertvalue"(%18453, %18454) <{position = array<i64: 8>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18456 = "placeholder.addressof"() {global_name = @InterleaveIterator2_B_next_} : () -> !llvm.ptr
+      %18457 = "llvm.insertvalue"(%18455, %18456) <{position = array<i64: 9>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18458 = "placeholder.addressof"() {global_name = @InterleaveIterator2_next_} : () -> !llvm.ptr
+      %18459 = "llvm.insertvalue"(%18457, %18458) <{position = array<i64: 10>}> : (!llvm.array<11 x ptr>, !llvm.ptr) -> !llvm.array<11 x ptr>
+      %18460 = "llvm.insertvalue"(%18437, %18459) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>, !llvm.array<11 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>
+      "llvm.return"(%18460) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<11 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ZipIterable2_hashtbl"}> ({
-      %18332 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %18333 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %18334 = "llvm.insertvalue"(%18332, %18333) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18335 = "placeholder.addressof"() {global_name = @Iterable2} : () -> !llvm.ptr
-      %18336 = "llvm.insertvalue"(%18334, %18335) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18337 = "placeholder.addressof"() {global_name = @ZipIterable2} : () -> !llvm.ptr
-      %18338 = "llvm.insertvalue"(%18336, %18337) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18339 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
-      %18340 = "llvm.insertvalue"(%18338, %18339) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      "llvm.return"(%18340) : (!llvm.array<4 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ZipIterable2_hashtbl"}> ({
+      %18402 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %18403 = "llvm.mlir.undef"() : () -> !llvm.array<8 x ptr>
+      %18404 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %18405 = "llvm.insertvalue"(%18403, %18404) <{position = array<i64: 0>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18406 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %18407 = "llvm.insertvalue"(%18405, %18406) <{position = array<i64: 1>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18408 = "placeholder.addressof"() {global_name = @ZipIterable2} : () -> !llvm.ptr
+      %18409 = "llvm.insertvalue"(%18407, %18408) <{position = array<i64: 2>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18410 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
+      %18411 = "llvm.insertvalue"(%18409, %18410) <{position = array<i64: 3>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18412 = "llvm.insertvalue"(%18411, %18402) <{position = array<i64: 4>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18413 = "placeholder.addressof"() {global_name = @Iterable2} : () -> !llvm.ptr
+      %18414 = "llvm.insertvalue"(%18412, %18413) <{position = array<i64: 5>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18415 = "llvm.insertvalue"(%18414, %18402) <{position = array<i64: 6>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18416 = "llvm.insertvalue"(%18415, %18402) <{position = array<i64: 7>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      "llvm.return"(%18416) : (!llvm.array<8 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ZipIterable2_offset_tbl"}> ({
-      %18324 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %18325 = "llvm.mlir.constant"() <{value = 36 : i32}> : () -> i32
-      %18326 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
-      %18327 = "llvm.mlir.constant"() <{value = 59 : i32}> : () -> i32
-      %18328 = "llvm.insertvalue"(%18326, %18327) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18329 = "llvm.insertvalue"(%18328, %18325) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18330 = "llvm.insertvalue"(%18329, %18324) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18331 = "llvm.insertvalue"(%18330, %18327) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      "llvm.return"(%18331) : (!llvm.array<4 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ZipIterable2_offset_tbl"}> ({
+      %18389 = "llvm.mlir.constant"() <{value = 36 : i32}> : () -> i32
+      %18390 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %18391 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %18392 = "llvm.mlir.undef"() : () -> !llvm.array<8 x i32>
+      %18393 = "llvm.mlir.constant"() <{value = 59 : i32}> : () -> i32
+      %18394 = "llvm.insertvalue"(%18392, %18393) <{position = array<i64: 0>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18395 = "llvm.insertvalue"(%18394, %18391) <{position = array<i64: 1>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18396 = "llvm.insertvalue"(%18395, %18391) <{position = array<i64: 2>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18397 = "llvm.insertvalue"(%18396, %18393) <{position = array<i64: 3>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18398 = "llvm.insertvalue"(%18397, %18390) <{position = array<i64: 4>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18399 = "llvm.insertvalue"(%18398, %18389) <{position = array<i64: 5>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18400 = "llvm.insertvalue"(%18399, %18390) <{position = array<i64: 6>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18401 = "llvm.insertvalue"(%18400, %18390) <{position = array<i64: 7>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      "llvm.return"(%18401) : (!llvm.array<8 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "ZipIterable2"}> ({
-      %18198 = "llvm.mlir.undef"() : () -> !llvm.array<52 x ptr>
-      %18199 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %18200 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %18201 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
-      %18202 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
-      %18203 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>
-      %18204 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %18205 = "llvm.mlir.constant"() <{value = -3218950579047519815 : i64}> : () -> i64
-      %18206 = "llvm.insertvalue"(%18204, %18205) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18207 = "llvm.insertvalue"(%18206, %18202) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18208 = "llvm.insertvalue"(%18207, %18201) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18209 = "llvm.insertvalue"(%18203, %18208) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>
-      %18210 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %18211 = "llvm.insertvalue"(%18200, %18210) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18212 = "placeholder.addressof"() {global_name = @ZipIterable2_hashtbl} : () -> !llvm.ptr
-      %18213 = "llvm.insertvalue"(%18211, %18212) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18214 = "placeholder.addressof"() {global_name = @ZipIterable2_offset_tbl} : () -> !llvm.ptr
-      %18215 = "llvm.insertvalue"(%18213, %18214) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18216 = "llvm.getelementptr"(%18199) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr, ptr, ptr, i32)>, ptr, ptr, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %18217 = "llvm.insertvalue"(%18215, %18216) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18218 = "llvm.insertvalue"(%18209, %18217) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>
-      %18219 = "placeholder.addressof"() {global_name = @ZipIterable2_field_first} : () -> !llvm.ptr
-      %18220 = "llvm.insertvalue"(%18198, %18219) <{position = array<i64: 0>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18221 = "placeholder.addressof"() {global_name = @ZipIterable2_field_second} : () -> !llvm.ptr
-      %18222 = "llvm.insertvalue"(%18220, %18221) <{position = array<i64: 1>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18223 = "placeholder.addressof"() {global_name = @ZipIterable2_field_ZipIterable2_0} : () -> !llvm.ptr
-      %18224 = "llvm.insertvalue"(%18222, %18223) <{position = array<i64: 2>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18225 = "placeholder.addressof"() {global_name = @ZipIterable2_field_ZipIterable2_1} : () -> !llvm.ptr
-      %18226 = "llvm.insertvalue"(%18224, %18225) <{position = array<i64: 3>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18227 = "placeholder.addressof"() {global_name = @ZipIterable2_field_ZipIterable2_2} : () -> !llvm.ptr
-      %18228 = "llvm.insertvalue"(%18226, %18227) <{position = array<i64: 4>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18229 = "placeholder.addressof"() {global_name = @ZipIterable2_B_init_firstIterable2T_secondIterable2U} : () -> !llvm.ptr
-      %18230 = "llvm.insertvalue"(%18228, %18229) <{position = array<i64: 5>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18231 = "placeholder.addressof"() {global_name = @ZipIterable2_B_iterator_} : () -> !llvm.ptr
-      %18232 = "llvm.insertvalue"(%18230, %18231) <{position = array<i64: 6>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18233 = "placeholder.addressof"() {global_name = @ZipIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %18234 = "llvm.insertvalue"(%18232, %18233) <{position = array<i64: 7>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18235 = "placeholder.addressof"() {global_name = @ZipIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %18236 = "llvm.insertvalue"(%18234, %18235) <{position = array<i64: 8>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18237 = "placeholder.addressof"() {global_name = @ZipIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18238 = "llvm.insertvalue"(%18236, %18237) <{position = array<i64: 9>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18239 = "placeholder.addressof"() {global_name = @ZipIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18240 = "llvm.insertvalue"(%18238, %18239) <{position = array<i64: 10>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18241 = "placeholder.addressof"() {global_name = @ZipIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %18242 = "llvm.insertvalue"(%18240, %18241) <{position = array<i64: 11>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18243 = "placeholder.addressof"() {global_name = @ZipIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18244 = "llvm.insertvalue"(%18242, %18243) <{position = array<i64: 12>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18245 = "placeholder.addressof"() {global_name = @ZipIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
-      %18246 = "llvm.insertvalue"(%18244, %18245) <{position = array<i64: 13>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18247 = "placeholder.addressof"() {global_name = @ZipIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
-      %18248 = "llvm.insertvalue"(%18246, %18247) <{position = array<i64: 14>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18249 = "placeholder.addressof"() {global_name = @ZipIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
-      %18250 = "llvm.insertvalue"(%18248, %18249) <{position = array<i64: 15>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18251 = "placeholder.addressof"() {global_name = @ZipIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
-      %18252 = "llvm.insertvalue"(%18250, %18251) <{position = array<i64: 16>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18253 = "placeholder.addressof"() {global_name = @ZipIterable2_init_firstIterable2T_secondIterable2U} : () -> !llvm.ptr
-      %18254 = "llvm.insertvalue"(%18252, %18253) <{position = array<i64: 17>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18255 = "placeholder.addressof"() {global_name = @ZipIterable2_iterator_} : () -> !llvm.ptr
-      %18256 = "llvm.insertvalue"(%18254, %18255) <{position = array<i64: 18>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18257 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %18258 = "llvm.insertvalue"(%18256, %18257) <{position = array<i64: 19>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18259 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %18260 = "llvm.insertvalue"(%18258, %18259) <{position = array<i64: 20>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18261 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18262 = "llvm.insertvalue"(%18260, %18261) <{position = array<i64: 21>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18263 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18264 = "llvm.insertvalue"(%18262, %18263) <{position = array<i64: 22>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18265 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %18266 = "llvm.insertvalue"(%18264, %18265) <{position = array<i64: 23>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18267 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18268 = "llvm.insertvalue"(%18266, %18267) <{position = array<i64: 24>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18269 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
-      %18270 = "llvm.insertvalue"(%18268, %18269) <{position = array<i64: 25>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18271 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
-      %18272 = "llvm.insertvalue"(%18270, %18271) <{position = array<i64: 26>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18273 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
-      %18274 = "llvm.insertvalue"(%18272, %18273) <{position = array<i64: 27>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18275 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
-      %18276 = "llvm.insertvalue"(%18274, %18275) <{position = array<i64: 28>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18277 = "placeholder.addressof"() {global_name = @ZipIterable2_field_ZipIterable2_2} : () -> !llvm.ptr
-      %18278 = "llvm.insertvalue"(%18276, %18277) <{position = array<i64: 29>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18279 = "placeholder.addressof"() {global_name = @ZipIterable2_B_iterator_} : () -> !llvm.ptr
-      %18280 = "llvm.insertvalue"(%18278, %18279) <{position = array<i64: 30>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18281 = "placeholder.addressof"() {global_name = @ZipIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %18282 = "llvm.insertvalue"(%18280, %18281) <{position = array<i64: 31>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18283 = "placeholder.addressof"() {global_name = @ZipIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %18284 = "llvm.insertvalue"(%18282, %18283) <{position = array<i64: 32>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18285 = "placeholder.addressof"() {global_name = @ZipIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18286 = "llvm.insertvalue"(%18284, %18285) <{position = array<i64: 33>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18287 = "placeholder.addressof"() {global_name = @ZipIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18288 = "llvm.insertvalue"(%18286, %18287) <{position = array<i64: 34>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18289 = "placeholder.addressof"() {global_name = @ZipIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %18290 = "llvm.insertvalue"(%18288, %18289) <{position = array<i64: 35>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18291 = "placeholder.addressof"() {global_name = @ZipIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18292 = "llvm.insertvalue"(%18290, %18291) <{position = array<i64: 36>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18293 = "placeholder.addressof"() {global_name = @ZipIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
-      %18294 = "llvm.insertvalue"(%18292, %18293) <{position = array<i64: 37>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18295 = "placeholder.addressof"() {global_name = @ZipIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
-      %18296 = "llvm.insertvalue"(%18294, %18295) <{position = array<i64: 38>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18297 = "placeholder.addressof"() {global_name = @ZipIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
-      %18298 = "llvm.insertvalue"(%18296, %18297) <{position = array<i64: 39>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18299 = "placeholder.addressof"() {global_name = @ZipIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
-      %18300 = "llvm.insertvalue"(%18298, %18299) <{position = array<i64: 40>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18301 = "placeholder.addressof"() {global_name = @ZipIterable2_iterator_} : () -> !llvm.ptr
-      %18302 = "llvm.insertvalue"(%18300, %18301) <{position = array<i64: 41>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18303 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %18304 = "llvm.insertvalue"(%18302, %18303) <{position = array<i64: 42>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18305 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %18306 = "llvm.insertvalue"(%18304, %18305) <{position = array<i64: 43>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18307 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18308 = "llvm.insertvalue"(%18306, %18307) <{position = array<i64: 44>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18309 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18310 = "llvm.insertvalue"(%18308, %18309) <{position = array<i64: 45>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18311 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %18312 = "llvm.insertvalue"(%18310, %18311) <{position = array<i64: 46>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18313 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18314 = "llvm.insertvalue"(%18312, %18313) <{position = array<i64: 47>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18315 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
-      %18316 = "llvm.insertvalue"(%18314, %18315) <{position = array<i64: 48>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18317 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
-      %18318 = "llvm.insertvalue"(%18316, %18317) <{position = array<i64: 49>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18319 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
-      %18320 = "llvm.insertvalue"(%18318, %18319) <{position = array<i64: 50>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18321 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
-      %18322 = "llvm.insertvalue"(%18320, %18321) <{position = array<i64: 51>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18323 = "llvm.insertvalue"(%18218, %18322) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>, !llvm.array<52 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>
-      "llvm.return"(%18323) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>) -> ()
+      %18263 = "llvm.mlir.undef"() : () -> !llvm.array<52 x ptr>
+      %18264 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %18265 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %18266 = "llvm.mlir.constant"() <{value = 7 : i64}> : () -> i64
+      %18267 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %18268 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>
+      %18269 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %18270 = "llvm.mlir.constant"() <{value = -3218950579047519815 : i64}> : () -> i64
+      %18271 = "llvm.insertvalue"(%18269, %18270) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18272 = "llvm.insertvalue"(%18271, %18267) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18273 = "llvm.insertvalue"(%18272, %18266) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18274 = "llvm.insertvalue"(%18268, %18273) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>
+      %18275 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %18276 = "llvm.insertvalue"(%18265, %18275) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18277 = "placeholder.addressof"() {global_name = @ZipIterable2_hashtbl} : () -> !llvm.ptr
+      %18278 = "llvm.insertvalue"(%18276, %18277) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18279 = "placeholder.addressof"() {global_name = @ZipIterable2_offset_tbl} : () -> !llvm.ptr
+      %18280 = "llvm.insertvalue"(%18278, %18279) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18281 = "llvm.getelementptr"(%18264) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr, ptr, ptr, i32)>, ptr, ptr, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %18282 = "llvm.insertvalue"(%18280, %18281) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18283 = "llvm.insertvalue"(%18274, %18282) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>
+      %18284 = "placeholder.addressof"() {global_name = @ZipIterable2_field_first} : () -> !llvm.ptr
+      %18285 = "llvm.insertvalue"(%18263, %18284) <{position = array<i64: 0>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18286 = "placeholder.addressof"() {global_name = @ZipIterable2_field_second} : () -> !llvm.ptr
+      %18287 = "llvm.insertvalue"(%18285, %18286) <{position = array<i64: 1>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18288 = "placeholder.addressof"() {global_name = @ZipIterable2_field_ZipIterable2_0} : () -> !llvm.ptr
+      %18289 = "llvm.insertvalue"(%18287, %18288) <{position = array<i64: 2>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18290 = "placeholder.addressof"() {global_name = @ZipIterable2_field_ZipIterable2_1} : () -> !llvm.ptr
+      %18291 = "llvm.insertvalue"(%18289, %18290) <{position = array<i64: 3>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18292 = "placeholder.addressof"() {global_name = @ZipIterable2_field_ZipIterable2_2} : () -> !llvm.ptr
+      %18293 = "llvm.insertvalue"(%18291, %18292) <{position = array<i64: 4>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18294 = "placeholder.addressof"() {global_name = @ZipIterable2_B_init_firstIterable2T_secondIterable2U} : () -> !llvm.ptr
+      %18295 = "llvm.insertvalue"(%18293, %18294) <{position = array<i64: 5>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18296 = "placeholder.addressof"() {global_name = @ZipIterable2_B_iterator_} : () -> !llvm.ptr
+      %18297 = "llvm.insertvalue"(%18295, %18296) <{position = array<i64: 6>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18298 = "placeholder.addressof"() {global_name = @ZipIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %18299 = "llvm.insertvalue"(%18297, %18298) <{position = array<i64: 7>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18300 = "placeholder.addressof"() {global_name = @ZipIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %18301 = "llvm.insertvalue"(%18299, %18300) <{position = array<i64: 8>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18302 = "placeholder.addressof"() {global_name = @ZipIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18303 = "llvm.insertvalue"(%18301, %18302) <{position = array<i64: 9>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18304 = "placeholder.addressof"() {global_name = @ZipIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18305 = "llvm.insertvalue"(%18303, %18304) <{position = array<i64: 10>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18306 = "placeholder.addressof"() {global_name = @ZipIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %18307 = "llvm.insertvalue"(%18305, %18306) <{position = array<i64: 11>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18308 = "placeholder.addressof"() {global_name = @ZipIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18309 = "llvm.insertvalue"(%18307, %18308) <{position = array<i64: 12>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18310 = "placeholder.addressof"() {global_name = @ZipIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
+      %18311 = "llvm.insertvalue"(%18309, %18310) <{position = array<i64: 13>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18312 = "placeholder.addressof"() {global_name = @ZipIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
+      %18313 = "llvm.insertvalue"(%18311, %18312) <{position = array<i64: 14>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18314 = "placeholder.addressof"() {global_name = @ZipIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
+      %18315 = "llvm.insertvalue"(%18313, %18314) <{position = array<i64: 15>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18316 = "placeholder.addressof"() {global_name = @ZipIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
+      %18317 = "llvm.insertvalue"(%18315, %18316) <{position = array<i64: 16>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18318 = "placeholder.addressof"() {global_name = @ZipIterable2_init_firstIterable2T_secondIterable2U} : () -> !llvm.ptr
+      %18319 = "llvm.insertvalue"(%18317, %18318) <{position = array<i64: 17>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18320 = "placeholder.addressof"() {global_name = @ZipIterable2_iterator_} : () -> !llvm.ptr
+      %18321 = "llvm.insertvalue"(%18319, %18320) <{position = array<i64: 18>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18322 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %18323 = "llvm.insertvalue"(%18321, %18322) <{position = array<i64: 19>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18324 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %18325 = "llvm.insertvalue"(%18323, %18324) <{position = array<i64: 20>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18326 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18327 = "llvm.insertvalue"(%18325, %18326) <{position = array<i64: 21>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18328 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18329 = "llvm.insertvalue"(%18327, %18328) <{position = array<i64: 22>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18330 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %18331 = "llvm.insertvalue"(%18329, %18330) <{position = array<i64: 23>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18332 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18333 = "llvm.insertvalue"(%18331, %18332) <{position = array<i64: 24>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18334 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
+      %18335 = "llvm.insertvalue"(%18333, %18334) <{position = array<i64: 25>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18336 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
+      %18337 = "llvm.insertvalue"(%18335, %18336) <{position = array<i64: 26>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18338 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
+      %18339 = "llvm.insertvalue"(%18337, %18338) <{position = array<i64: 27>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18340 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
+      %18341 = "llvm.insertvalue"(%18339, %18340) <{position = array<i64: 28>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18342 = "placeholder.addressof"() {global_name = @ZipIterable2_field_ZipIterable2_2} : () -> !llvm.ptr
+      %18343 = "llvm.insertvalue"(%18341, %18342) <{position = array<i64: 29>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18344 = "placeholder.addressof"() {global_name = @ZipIterable2_B_iterator_} : () -> !llvm.ptr
+      %18345 = "llvm.insertvalue"(%18343, %18344) <{position = array<i64: 30>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18346 = "placeholder.addressof"() {global_name = @ZipIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %18347 = "llvm.insertvalue"(%18345, %18346) <{position = array<i64: 31>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18348 = "placeholder.addressof"() {global_name = @ZipIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %18349 = "llvm.insertvalue"(%18347, %18348) <{position = array<i64: 32>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18350 = "placeholder.addressof"() {global_name = @ZipIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18351 = "llvm.insertvalue"(%18349, %18350) <{position = array<i64: 33>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18352 = "placeholder.addressof"() {global_name = @ZipIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18353 = "llvm.insertvalue"(%18351, %18352) <{position = array<i64: 34>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18354 = "placeholder.addressof"() {global_name = @ZipIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %18355 = "llvm.insertvalue"(%18353, %18354) <{position = array<i64: 35>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18356 = "placeholder.addressof"() {global_name = @ZipIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18357 = "llvm.insertvalue"(%18355, %18356) <{position = array<i64: 36>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18358 = "placeholder.addressof"() {global_name = @ZipIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
+      %18359 = "llvm.insertvalue"(%18357, %18358) <{position = array<i64: 37>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18360 = "placeholder.addressof"() {global_name = @ZipIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
+      %18361 = "llvm.insertvalue"(%18359, %18360) <{position = array<i64: 38>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18362 = "placeholder.addressof"() {global_name = @ZipIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
+      %18363 = "llvm.insertvalue"(%18361, %18362) <{position = array<i64: 39>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18364 = "placeholder.addressof"() {global_name = @ZipIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
+      %18365 = "llvm.insertvalue"(%18363, %18364) <{position = array<i64: 40>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18366 = "placeholder.addressof"() {global_name = @ZipIterable2_iterator_} : () -> !llvm.ptr
+      %18367 = "llvm.insertvalue"(%18365, %18366) <{position = array<i64: 41>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18368 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %18369 = "llvm.insertvalue"(%18367, %18368) <{position = array<i64: 42>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18370 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %18371 = "llvm.insertvalue"(%18369, %18370) <{position = array<i64: 43>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18372 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18373 = "llvm.insertvalue"(%18371, %18372) <{position = array<i64: 44>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18374 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18375 = "llvm.insertvalue"(%18373, %18374) <{position = array<i64: 45>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18376 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %18377 = "llvm.insertvalue"(%18375, %18376) <{position = array<i64: 46>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18378 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18379 = "llvm.insertvalue"(%18377, %18378) <{position = array<i64: 47>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18380 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
+      %18381 = "llvm.insertvalue"(%18379, %18380) <{position = array<i64: 48>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18382 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
+      %18383 = "llvm.insertvalue"(%18381, %18382) <{position = array<i64: 49>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18384 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
+      %18385 = "llvm.insertvalue"(%18383, %18384) <{position = array<i64: 50>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18386 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
+      %18387 = "llvm.insertvalue"(%18385, %18386) <{position = array<i64: 51>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18388 = "llvm.insertvalue"(%18283, %18387) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>, !llvm.array<52 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>
+      "llvm.return"(%18388) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ZipIterator2_hashtbl"}> ({
-      %18189 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %18190 = "placeholder.addressof"() {global_name = @ZipIterator2} : () -> !llvm.ptr
-      %18191 = "llvm.insertvalue"(%18189, %18190) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18192 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %18193 = "llvm.insertvalue"(%18191, %18192) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18194 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
-      %18195 = "llvm.insertvalue"(%18193, %18194) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18196 = "placeholder.addressof"() {global_name = @Iterator2} : () -> !llvm.ptr
-      %18197 = "llvm.insertvalue"(%18195, %18196) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      "llvm.return"(%18197) : (!llvm.array<4 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ZipIterator2_hashtbl"}> ({
+      %18248 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %18249 = "llvm.mlir.undef"() : () -> !llvm.array<8 x ptr>
+      %18250 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %18251 = "llvm.insertvalue"(%18249, %18250) <{position = array<i64: 0>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18252 = "llvm.insertvalue"(%18251, %18248) <{position = array<i64: 1>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18253 = "llvm.insertvalue"(%18252, %18248) <{position = array<i64: 2>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18254 = "placeholder.addressof"() {global_name = @ZipIterator2} : () -> !llvm.ptr
+      %18255 = "llvm.insertvalue"(%18253, %18254) <{position = array<i64: 3>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18256 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
+      %18257 = "llvm.insertvalue"(%18255, %18256) <{position = array<i64: 4>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18258 = "llvm.insertvalue"(%18257, %18248) <{position = array<i64: 5>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18259 = "placeholder.addressof"() {global_name = @Iterator2} : () -> !llvm.ptr
+      %18260 = "llvm.insertvalue"(%18258, %18259) <{position = array<i64: 6>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18261 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %18262 = "llvm.insertvalue"(%18260, %18261) <{position = array<i64: 7>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      "llvm.return"(%18262) : (!llvm.array<8 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ZipIterator2_offset_tbl"}> ({
-      %18181 = "llvm.mlir.constant"() <{value = 16 : i32}> : () -> i32
-      %18182 = "llvm.mlir.constant"() <{value = 19 : i32}> : () -> i32
-      %18183 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
-      %18184 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %18185 = "llvm.insertvalue"(%18183, %18184) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18186 = "llvm.insertvalue"(%18185, %18182) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18187 = "llvm.insertvalue"(%18186, %18182) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18188 = "llvm.insertvalue"(%18187, %18181) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      "llvm.return"(%18188) : (!llvm.array<4 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ZipIterator2_offset_tbl"}> ({
+      %18235 = "llvm.mlir.constant"() <{value = 16 : i32}> : () -> i32
+      %18236 = "llvm.mlir.constant"() <{value = 19 : i32}> : () -> i32
+      %18237 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %18238 = "llvm.mlir.undef"() : () -> !llvm.array<8 x i32>
+      %18239 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %18240 = "llvm.insertvalue"(%18238, %18239) <{position = array<i64: 0>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18241 = "llvm.insertvalue"(%18240, %18237) <{position = array<i64: 1>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18242 = "llvm.insertvalue"(%18241, %18237) <{position = array<i64: 2>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18243 = "llvm.insertvalue"(%18242, %18239) <{position = array<i64: 3>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18244 = "llvm.insertvalue"(%18243, %18236) <{position = array<i64: 4>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18245 = "llvm.insertvalue"(%18244, %18237) <{position = array<i64: 5>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18246 = "llvm.insertvalue"(%18245, %18235) <{position = array<i64: 6>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18247 = "llvm.insertvalue"(%18246, %18236) <{position = array<i64: 7>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      "llvm.return"(%18247) : (!llvm.array<8 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<12 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "ZipIterator2"}> ({
-      %18135 = "llvm.mlir.undef"() : () -> !llvm.array<12 x ptr>
-      %18136 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %18137 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %18138 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
-      %18139 = "llvm.mlir.constant"() <{value = 4611686018427388181 : i64}> : () -> i64
-      %18140 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<12 x ptr>)>
-      %18141 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %18142 = "llvm.mlir.constant"() <{value = 5502728639611621286 : i64}> : () -> i64
-      %18143 = "llvm.insertvalue"(%18141, %18142) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18144 = "llvm.insertvalue"(%18143, %18139) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18145 = "llvm.insertvalue"(%18144, %18138) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18146 = "llvm.insertvalue"(%18140, %18145) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<12 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<12 x ptr>)>
-      %18147 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %18148 = "llvm.insertvalue"(%18137, %18147) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18149 = "placeholder.addressof"() {global_name = @ZipIterator2_hashtbl} : () -> !llvm.ptr
-      %18150 = "llvm.insertvalue"(%18148, %18149) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18151 = "placeholder.addressof"() {global_name = @ZipIterator2_offset_tbl} : () -> !llvm.ptr
-      %18152 = "llvm.insertvalue"(%18150, %18151) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18153 = "llvm.getelementptr"(%18136) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr, ptr, ptr, i32)>, ptr, ptr, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %18154 = "llvm.insertvalue"(%18152, %18153) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18155 = "llvm.insertvalue"(%18146, %18154) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<12 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<12 x ptr>)>
-      %18156 = "placeholder.addressof"() {global_name = @ZipIterator2_field_first} : () -> !llvm.ptr
-      %18157 = "llvm.insertvalue"(%18135, %18156) <{position = array<i64: 0>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
-      %18158 = "placeholder.addressof"() {global_name = @ZipIterator2_field_second} : () -> !llvm.ptr
-      %18159 = "llvm.insertvalue"(%18157, %18158) <{position = array<i64: 1>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
-      %18160 = "placeholder.addressof"() {global_name = @ZipIterator2_field_ZipIterator2_0} : () -> !llvm.ptr
-      %18161 = "llvm.insertvalue"(%18159, %18160) <{position = array<i64: 2>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
-      %18162 = "placeholder.addressof"() {global_name = @ZipIterator2_field_ZipIterator2_1} : () -> !llvm.ptr
-      %18163 = "llvm.insertvalue"(%18161, %18162) <{position = array<i64: 3>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
-      %18164 = "placeholder.addressof"() {global_name = @ZipIterator2_field_ZipIterator2_2} : () -> !llvm.ptr
-      %18165 = "llvm.insertvalue"(%18163, %18164) <{position = array<i64: 4>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
-      %18166 = "placeholder.addressof"() {global_name = @ZipIterator2_B_init_firstIterator2T_secondIterator2U} : () -> !llvm.ptr
-      %18167 = "llvm.insertvalue"(%18165, %18166) <{position = array<i64: 5>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
-      %18168 = "placeholder.addressof"() {global_name = @ZipIterator2_B_next_} : () -> !llvm.ptr
-      %18169 = "llvm.insertvalue"(%18167, %18168) <{position = array<i64: 6>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
-      %18170 = "placeholder.addressof"() {global_name = @ZipIterator2_init_firstIterator2T_secondIterator2U} : () -> !llvm.ptr
-      %18171 = "llvm.insertvalue"(%18169, %18170) <{position = array<i64: 7>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
-      %18172 = "placeholder.addressof"() {global_name = @ZipIterator2_next_} : () -> !llvm.ptr
-      %18173 = "llvm.insertvalue"(%18171, %18172) <{position = array<i64: 8>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
-      %18174 = "placeholder.addressof"() {global_name = @ZipIterator2_field_ZipIterator2_2} : () -> !llvm.ptr
-      %18175 = "llvm.insertvalue"(%18173, %18174) <{position = array<i64: 9>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
-      %18176 = "placeholder.addressof"() {global_name = @ZipIterator2_B_next_} : () -> !llvm.ptr
-      %18177 = "llvm.insertvalue"(%18175, %18176) <{position = array<i64: 10>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
-      %18178 = "placeholder.addressof"() {global_name = @ZipIterator2_next_} : () -> !llvm.ptr
-      %18179 = "llvm.insertvalue"(%18177, %18178) <{position = array<i64: 11>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
-      %18180 = "llvm.insertvalue"(%18155, %18179) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<12 x ptr>)>, !llvm.array<12 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<12 x ptr>)>
-      "llvm.return"(%18180) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<12 x ptr>)>) -> ()
+      %18189 = "llvm.mlir.undef"() : () -> !llvm.array<12 x ptr>
+      %18190 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %18191 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %18192 = "llvm.mlir.constant"() <{value = 7 : i64}> : () -> i64
+      %18193 = "llvm.mlir.constant"() <{value = 4611686018427388247 : i64}> : () -> i64
+      %18194 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<12 x ptr>)>
+      %18195 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %18196 = "llvm.mlir.constant"() <{value = 5502728639611621286 : i64}> : () -> i64
+      %18197 = "llvm.insertvalue"(%18195, %18196) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18198 = "llvm.insertvalue"(%18197, %18193) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18199 = "llvm.insertvalue"(%18198, %18192) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18200 = "llvm.insertvalue"(%18194, %18199) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<12 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<12 x ptr>)>
+      %18201 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %18202 = "llvm.insertvalue"(%18191, %18201) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18203 = "placeholder.addressof"() {global_name = @ZipIterator2_hashtbl} : () -> !llvm.ptr
+      %18204 = "llvm.insertvalue"(%18202, %18203) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18205 = "placeholder.addressof"() {global_name = @ZipIterator2_offset_tbl} : () -> !llvm.ptr
+      %18206 = "llvm.insertvalue"(%18204, %18205) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18207 = "llvm.getelementptr"(%18190) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr, ptr, ptr, i32)>, ptr, ptr, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %18208 = "llvm.insertvalue"(%18206, %18207) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18209 = "llvm.insertvalue"(%18200, %18208) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<12 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<12 x ptr>)>
+      %18210 = "placeholder.addressof"() {global_name = @ZipIterator2_field_first} : () -> !llvm.ptr
+      %18211 = "llvm.insertvalue"(%18189, %18210) <{position = array<i64: 0>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
+      %18212 = "placeholder.addressof"() {global_name = @ZipIterator2_field_second} : () -> !llvm.ptr
+      %18213 = "llvm.insertvalue"(%18211, %18212) <{position = array<i64: 1>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
+      %18214 = "placeholder.addressof"() {global_name = @ZipIterator2_field_ZipIterator2_0} : () -> !llvm.ptr
+      %18215 = "llvm.insertvalue"(%18213, %18214) <{position = array<i64: 2>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
+      %18216 = "placeholder.addressof"() {global_name = @ZipIterator2_field_ZipIterator2_1} : () -> !llvm.ptr
+      %18217 = "llvm.insertvalue"(%18215, %18216) <{position = array<i64: 3>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
+      %18218 = "placeholder.addressof"() {global_name = @ZipIterator2_field_ZipIterator2_2} : () -> !llvm.ptr
+      %18219 = "llvm.insertvalue"(%18217, %18218) <{position = array<i64: 4>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
+      %18220 = "placeholder.addressof"() {global_name = @ZipIterator2_B_init_firstIterator2T_secondIterator2U} : () -> !llvm.ptr
+      %18221 = "llvm.insertvalue"(%18219, %18220) <{position = array<i64: 5>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
+      %18222 = "placeholder.addressof"() {global_name = @ZipIterator2_B_next_} : () -> !llvm.ptr
+      %18223 = "llvm.insertvalue"(%18221, %18222) <{position = array<i64: 6>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
+      %18224 = "placeholder.addressof"() {global_name = @ZipIterator2_init_firstIterator2T_secondIterator2U} : () -> !llvm.ptr
+      %18225 = "llvm.insertvalue"(%18223, %18224) <{position = array<i64: 7>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
+      %18226 = "placeholder.addressof"() {global_name = @ZipIterator2_next_} : () -> !llvm.ptr
+      %18227 = "llvm.insertvalue"(%18225, %18226) <{position = array<i64: 8>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
+      %18228 = "placeholder.addressof"() {global_name = @ZipIterator2_field_ZipIterator2_2} : () -> !llvm.ptr
+      %18229 = "llvm.insertvalue"(%18227, %18228) <{position = array<i64: 9>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
+      %18230 = "placeholder.addressof"() {global_name = @ZipIterator2_B_next_} : () -> !llvm.ptr
+      %18231 = "llvm.insertvalue"(%18229, %18230) <{position = array<i64: 10>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
+      %18232 = "placeholder.addressof"() {global_name = @ZipIterator2_next_} : () -> !llvm.ptr
+      %18233 = "llvm.insertvalue"(%18231, %18232) <{position = array<i64: 11>}> : (!llvm.array<12 x ptr>, !llvm.ptr) -> !llvm.array<12 x ptr>
+      %18234 = "llvm.insertvalue"(%18209, %18233) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<12 x ptr>)>, !llvm.array<12 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<12 x ptr>)>
+      "llvm.return"(%18234) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<12 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ProductIterable2_hashtbl"}> ({
-      %18126 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %18127 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %18128 = "llvm.insertvalue"(%18126, %18127) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18129 = "placeholder.addressof"() {global_name = @Iterable2} : () -> !llvm.ptr
-      %18130 = "llvm.insertvalue"(%18128, %18129) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18131 = "placeholder.addressof"() {global_name = @ProductIterable2} : () -> !llvm.ptr
-      %18132 = "llvm.insertvalue"(%18130, %18131) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18133 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
-      %18134 = "llvm.insertvalue"(%18132, %18133) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      "llvm.return"(%18134) : (!llvm.array<4 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ProductIterable2_hashtbl"}> ({
+      %18174 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %18175 = "llvm.mlir.undef"() : () -> !llvm.array<8 x ptr>
+      %18176 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %18177 = "llvm.insertvalue"(%18175, %18176) <{position = array<i64: 0>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18178 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %18179 = "llvm.insertvalue"(%18177, %18178) <{position = array<i64: 1>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18180 = "llvm.insertvalue"(%18179, %18174) <{position = array<i64: 2>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18181 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
+      %18182 = "llvm.insertvalue"(%18180, %18181) <{position = array<i64: 3>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18183 = "llvm.insertvalue"(%18182, %18174) <{position = array<i64: 4>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18184 = "placeholder.addressof"() {global_name = @Iterable2} : () -> !llvm.ptr
+      %18185 = "llvm.insertvalue"(%18183, %18184) <{position = array<i64: 5>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18186 = "placeholder.addressof"() {global_name = @ProductIterable2} : () -> !llvm.ptr
+      %18187 = "llvm.insertvalue"(%18185, %18186) <{position = array<i64: 6>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18188 = "llvm.insertvalue"(%18187, %18174) <{position = array<i64: 7>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      "llvm.return"(%18188) : (!llvm.array<8 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ProductIterable2_offset_tbl"}> ({
-      %18118 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %18119 = "llvm.mlir.constant"() <{value = 36 : i32}> : () -> i32
-      %18120 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
-      %18121 = "llvm.mlir.constant"() <{value = 59 : i32}> : () -> i32
-      %18122 = "llvm.insertvalue"(%18120, %18121) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18123 = "llvm.insertvalue"(%18122, %18119) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18124 = "llvm.insertvalue"(%18123, %18118) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %18125 = "llvm.insertvalue"(%18124, %18121) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      "llvm.return"(%18125) : (!llvm.array<4 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ProductIterable2_offset_tbl"}> ({
+      %18161 = "llvm.mlir.constant"() <{value = 36 : i32}> : () -> i32
+      %18162 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %18163 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %18164 = "llvm.mlir.undef"() : () -> !llvm.array<8 x i32>
+      %18165 = "llvm.mlir.constant"() <{value = 59 : i32}> : () -> i32
+      %18166 = "llvm.insertvalue"(%18164, %18165) <{position = array<i64: 0>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18167 = "llvm.insertvalue"(%18166, %18163) <{position = array<i64: 1>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18168 = "llvm.insertvalue"(%18167, %18162) <{position = array<i64: 2>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18169 = "llvm.insertvalue"(%18168, %18165) <{position = array<i64: 3>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18170 = "llvm.insertvalue"(%18169, %18162) <{position = array<i64: 4>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18171 = "llvm.insertvalue"(%18170, %18161) <{position = array<i64: 5>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18172 = "llvm.insertvalue"(%18171, %18163) <{position = array<i64: 6>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18173 = "llvm.insertvalue"(%18172, %18162) <{position = array<i64: 7>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      "llvm.return"(%18173) : (!llvm.array<8 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "ProductIterable2"}> ({
-      %17992 = "llvm.mlir.undef"() : () -> !llvm.array<52 x ptr>
-      %17993 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %17994 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %17995 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
-      %17996 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
-      %17997 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>
-      %17998 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %17999 = "llvm.mlir.constant"() <{value = 7827074759551300494 : i64}> : () -> i64
-      %18000 = "llvm.insertvalue"(%17998, %17999) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18001 = "llvm.insertvalue"(%18000, %17996) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18002 = "llvm.insertvalue"(%18001, %17995) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %18003 = "llvm.insertvalue"(%17997, %18002) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>
-      %18004 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %18005 = "llvm.insertvalue"(%17994, %18004) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18006 = "placeholder.addressof"() {global_name = @ProductIterable2_hashtbl} : () -> !llvm.ptr
-      %18007 = "llvm.insertvalue"(%18005, %18006) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18008 = "placeholder.addressof"() {global_name = @ProductIterable2_offset_tbl} : () -> !llvm.ptr
-      %18009 = "llvm.insertvalue"(%18007, %18008) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18010 = "llvm.getelementptr"(%17993) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr, ptr, ptr, i32)>, ptr, ptr, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %18011 = "llvm.insertvalue"(%18009, %18010) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %18012 = "llvm.insertvalue"(%18003, %18011) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>
-      %18013 = "placeholder.addressof"() {global_name = @ProductIterable2_field_first} : () -> !llvm.ptr
-      %18014 = "llvm.insertvalue"(%17992, %18013) <{position = array<i64: 0>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18015 = "placeholder.addressof"() {global_name = @ProductIterable2_field_second} : () -> !llvm.ptr
-      %18016 = "llvm.insertvalue"(%18014, %18015) <{position = array<i64: 1>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18017 = "placeholder.addressof"() {global_name = @ProductIterable2_field_ProductIterable2_0} : () -> !llvm.ptr
-      %18018 = "llvm.insertvalue"(%18016, %18017) <{position = array<i64: 2>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18019 = "placeholder.addressof"() {global_name = @ProductIterable2_field_ProductIterable2_1} : () -> !llvm.ptr
-      %18020 = "llvm.insertvalue"(%18018, %18019) <{position = array<i64: 3>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18021 = "placeholder.addressof"() {global_name = @ProductIterable2_field_ProductIterable2_2} : () -> !llvm.ptr
-      %18022 = "llvm.insertvalue"(%18020, %18021) <{position = array<i64: 4>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18023 = "placeholder.addressof"() {global_name = @ProductIterable2_B_init_firstIterable2T_secondIterable2U} : () -> !llvm.ptr
-      %18024 = "llvm.insertvalue"(%18022, %18023) <{position = array<i64: 5>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18025 = "placeholder.addressof"() {global_name = @ProductIterable2_B_iterator_} : () -> !llvm.ptr
-      %18026 = "llvm.insertvalue"(%18024, %18025) <{position = array<i64: 6>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18027 = "placeholder.addressof"() {global_name = @ProductIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %18028 = "llvm.insertvalue"(%18026, %18027) <{position = array<i64: 7>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18029 = "placeholder.addressof"() {global_name = @ProductIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %18030 = "llvm.insertvalue"(%18028, %18029) <{position = array<i64: 8>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18031 = "placeholder.addressof"() {global_name = @ProductIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18032 = "llvm.insertvalue"(%18030, %18031) <{position = array<i64: 9>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18033 = "placeholder.addressof"() {global_name = @ProductIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18034 = "llvm.insertvalue"(%18032, %18033) <{position = array<i64: 10>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18035 = "placeholder.addressof"() {global_name = @ProductIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %18036 = "llvm.insertvalue"(%18034, %18035) <{position = array<i64: 11>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18037 = "placeholder.addressof"() {global_name = @ProductIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18038 = "llvm.insertvalue"(%18036, %18037) <{position = array<i64: 12>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18039 = "placeholder.addressof"() {global_name = @ProductIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
-      %18040 = "llvm.insertvalue"(%18038, %18039) <{position = array<i64: 13>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18041 = "placeholder.addressof"() {global_name = @ProductIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
-      %18042 = "llvm.insertvalue"(%18040, %18041) <{position = array<i64: 14>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18043 = "placeholder.addressof"() {global_name = @ProductIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
-      %18044 = "llvm.insertvalue"(%18042, %18043) <{position = array<i64: 15>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18045 = "placeholder.addressof"() {global_name = @ProductIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
-      %18046 = "llvm.insertvalue"(%18044, %18045) <{position = array<i64: 16>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18047 = "placeholder.addressof"() {global_name = @ProductIterable2_init_firstIterable2T_secondIterable2U} : () -> !llvm.ptr
-      %18048 = "llvm.insertvalue"(%18046, %18047) <{position = array<i64: 17>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18049 = "placeholder.addressof"() {global_name = @ProductIterable2_iterator_} : () -> !llvm.ptr
-      %18050 = "llvm.insertvalue"(%18048, %18049) <{position = array<i64: 18>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18051 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %18052 = "llvm.insertvalue"(%18050, %18051) <{position = array<i64: 19>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18053 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %18054 = "llvm.insertvalue"(%18052, %18053) <{position = array<i64: 20>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18055 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18056 = "llvm.insertvalue"(%18054, %18055) <{position = array<i64: 21>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18057 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18058 = "llvm.insertvalue"(%18056, %18057) <{position = array<i64: 22>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18059 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %18060 = "llvm.insertvalue"(%18058, %18059) <{position = array<i64: 23>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18061 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18062 = "llvm.insertvalue"(%18060, %18061) <{position = array<i64: 24>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18063 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
-      %18064 = "llvm.insertvalue"(%18062, %18063) <{position = array<i64: 25>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18065 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
-      %18066 = "llvm.insertvalue"(%18064, %18065) <{position = array<i64: 26>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18067 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
-      %18068 = "llvm.insertvalue"(%18066, %18067) <{position = array<i64: 27>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18069 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
-      %18070 = "llvm.insertvalue"(%18068, %18069) <{position = array<i64: 28>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18071 = "placeholder.addressof"() {global_name = @ProductIterable2_field_ProductIterable2_2} : () -> !llvm.ptr
-      %18072 = "llvm.insertvalue"(%18070, %18071) <{position = array<i64: 29>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18073 = "placeholder.addressof"() {global_name = @ProductIterable2_B_iterator_} : () -> !llvm.ptr
-      %18074 = "llvm.insertvalue"(%18072, %18073) <{position = array<i64: 30>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18075 = "placeholder.addressof"() {global_name = @ProductIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %18076 = "llvm.insertvalue"(%18074, %18075) <{position = array<i64: 31>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18077 = "placeholder.addressof"() {global_name = @ProductIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %18078 = "llvm.insertvalue"(%18076, %18077) <{position = array<i64: 32>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18079 = "placeholder.addressof"() {global_name = @ProductIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18080 = "llvm.insertvalue"(%18078, %18079) <{position = array<i64: 33>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18081 = "placeholder.addressof"() {global_name = @ProductIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18082 = "llvm.insertvalue"(%18080, %18081) <{position = array<i64: 34>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18083 = "placeholder.addressof"() {global_name = @ProductIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %18084 = "llvm.insertvalue"(%18082, %18083) <{position = array<i64: 35>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18085 = "placeholder.addressof"() {global_name = @ProductIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18086 = "llvm.insertvalue"(%18084, %18085) <{position = array<i64: 36>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18087 = "placeholder.addressof"() {global_name = @ProductIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
-      %18088 = "llvm.insertvalue"(%18086, %18087) <{position = array<i64: 37>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18089 = "placeholder.addressof"() {global_name = @ProductIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
-      %18090 = "llvm.insertvalue"(%18088, %18089) <{position = array<i64: 38>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18091 = "placeholder.addressof"() {global_name = @ProductIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
-      %18092 = "llvm.insertvalue"(%18090, %18091) <{position = array<i64: 39>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18093 = "placeholder.addressof"() {global_name = @ProductIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
-      %18094 = "llvm.insertvalue"(%18092, %18093) <{position = array<i64: 40>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18095 = "placeholder.addressof"() {global_name = @ProductIterable2_iterator_} : () -> !llvm.ptr
-      %18096 = "llvm.insertvalue"(%18094, %18095) <{position = array<i64: 41>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18097 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
-      %18098 = "llvm.insertvalue"(%18096, %18097) <{position = array<i64: 42>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18099 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
-      %18100 = "llvm.insertvalue"(%18098, %18099) <{position = array<i64: 43>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18101 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18102 = "llvm.insertvalue"(%18100, %18101) <{position = array<i64: 44>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18103 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18104 = "llvm.insertvalue"(%18102, %18103) <{position = array<i64: 45>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18105 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
-      %18106 = "llvm.insertvalue"(%18104, %18105) <{position = array<i64: 46>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18107 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
-      %18108 = "llvm.insertvalue"(%18106, %18107) <{position = array<i64: 47>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18109 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
-      %18110 = "llvm.insertvalue"(%18108, %18109) <{position = array<i64: 48>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18111 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
-      %18112 = "llvm.insertvalue"(%18110, %18111) <{position = array<i64: 49>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18113 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
-      %18114 = "llvm.insertvalue"(%18112, %18113) <{position = array<i64: 50>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18115 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
-      %18116 = "llvm.insertvalue"(%18114, %18115) <{position = array<i64: 51>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
-      %18117 = "llvm.insertvalue"(%18012, %18116) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>, !llvm.array<52 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>
-      "llvm.return"(%18117) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>) -> ()
+      %18035 = "llvm.mlir.undef"() : () -> !llvm.array<52 x ptr>
+      %18036 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %18037 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %18038 = "llvm.mlir.constant"() <{value = 7 : i64}> : () -> i64
+      %18039 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %18040 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>
+      %18041 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %18042 = "llvm.mlir.constant"() <{value = 7827074759551300494 : i64}> : () -> i64
+      %18043 = "llvm.insertvalue"(%18041, %18042) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18044 = "llvm.insertvalue"(%18043, %18039) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18045 = "llvm.insertvalue"(%18044, %18038) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %18046 = "llvm.insertvalue"(%18040, %18045) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>
+      %18047 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %18048 = "llvm.insertvalue"(%18037, %18047) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18049 = "placeholder.addressof"() {global_name = @ProductIterable2_hashtbl} : () -> !llvm.ptr
+      %18050 = "llvm.insertvalue"(%18048, %18049) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18051 = "placeholder.addressof"() {global_name = @ProductIterable2_offset_tbl} : () -> !llvm.ptr
+      %18052 = "llvm.insertvalue"(%18050, %18051) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18053 = "llvm.getelementptr"(%18036) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr, ptr, ptr, i32)>, ptr, ptr, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %18054 = "llvm.insertvalue"(%18052, %18053) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %18055 = "llvm.insertvalue"(%18046, %18054) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>
+      %18056 = "placeholder.addressof"() {global_name = @ProductIterable2_field_first} : () -> !llvm.ptr
+      %18057 = "llvm.insertvalue"(%18035, %18056) <{position = array<i64: 0>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18058 = "placeholder.addressof"() {global_name = @ProductIterable2_field_second} : () -> !llvm.ptr
+      %18059 = "llvm.insertvalue"(%18057, %18058) <{position = array<i64: 1>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18060 = "placeholder.addressof"() {global_name = @ProductIterable2_field_ProductIterable2_0} : () -> !llvm.ptr
+      %18061 = "llvm.insertvalue"(%18059, %18060) <{position = array<i64: 2>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18062 = "placeholder.addressof"() {global_name = @ProductIterable2_field_ProductIterable2_1} : () -> !llvm.ptr
+      %18063 = "llvm.insertvalue"(%18061, %18062) <{position = array<i64: 3>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18064 = "placeholder.addressof"() {global_name = @ProductIterable2_field_ProductIterable2_2} : () -> !llvm.ptr
+      %18065 = "llvm.insertvalue"(%18063, %18064) <{position = array<i64: 4>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18066 = "placeholder.addressof"() {global_name = @ProductIterable2_B_init_firstIterable2T_secondIterable2U} : () -> !llvm.ptr
+      %18067 = "llvm.insertvalue"(%18065, %18066) <{position = array<i64: 5>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18068 = "placeholder.addressof"() {global_name = @ProductIterable2_B_iterator_} : () -> !llvm.ptr
+      %18069 = "llvm.insertvalue"(%18067, %18068) <{position = array<i64: 6>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18070 = "placeholder.addressof"() {global_name = @ProductIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %18071 = "llvm.insertvalue"(%18069, %18070) <{position = array<i64: 7>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18072 = "placeholder.addressof"() {global_name = @ProductIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %18073 = "llvm.insertvalue"(%18071, %18072) <{position = array<i64: 8>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18074 = "placeholder.addressof"() {global_name = @ProductIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18075 = "llvm.insertvalue"(%18073, %18074) <{position = array<i64: 9>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18076 = "placeholder.addressof"() {global_name = @ProductIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18077 = "llvm.insertvalue"(%18075, %18076) <{position = array<i64: 10>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18078 = "placeholder.addressof"() {global_name = @ProductIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %18079 = "llvm.insertvalue"(%18077, %18078) <{position = array<i64: 11>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18080 = "placeholder.addressof"() {global_name = @ProductIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18081 = "llvm.insertvalue"(%18079, %18080) <{position = array<i64: 12>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18082 = "placeholder.addressof"() {global_name = @ProductIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
+      %18083 = "llvm.insertvalue"(%18081, %18082) <{position = array<i64: 13>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18084 = "placeholder.addressof"() {global_name = @ProductIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
+      %18085 = "llvm.insertvalue"(%18083, %18084) <{position = array<i64: 14>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18086 = "placeholder.addressof"() {global_name = @ProductIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
+      %18087 = "llvm.insertvalue"(%18085, %18086) <{position = array<i64: 15>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18088 = "placeholder.addressof"() {global_name = @ProductIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
+      %18089 = "llvm.insertvalue"(%18087, %18088) <{position = array<i64: 16>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18090 = "placeholder.addressof"() {global_name = @ProductIterable2_init_firstIterable2T_secondIterable2U} : () -> !llvm.ptr
+      %18091 = "llvm.insertvalue"(%18089, %18090) <{position = array<i64: 17>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18092 = "placeholder.addressof"() {global_name = @ProductIterable2_iterator_} : () -> !llvm.ptr
+      %18093 = "llvm.insertvalue"(%18091, %18092) <{position = array<i64: 18>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18094 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %18095 = "llvm.insertvalue"(%18093, %18094) <{position = array<i64: 19>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18096 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %18097 = "llvm.insertvalue"(%18095, %18096) <{position = array<i64: 20>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18098 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18099 = "llvm.insertvalue"(%18097, %18098) <{position = array<i64: 21>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18100 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18101 = "llvm.insertvalue"(%18099, %18100) <{position = array<i64: 22>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18102 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %18103 = "llvm.insertvalue"(%18101, %18102) <{position = array<i64: 23>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18104 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18105 = "llvm.insertvalue"(%18103, %18104) <{position = array<i64: 24>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18106 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
+      %18107 = "llvm.insertvalue"(%18105, %18106) <{position = array<i64: 25>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18108 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
+      %18109 = "llvm.insertvalue"(%18107, %18108) <{position = array<i64: 26>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18110 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
+      %18111 = "llvm.insertvalue"(%18109, %18110) <{position = array<i64: 27>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18112 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
+      %18113 = "llvm.insertvalue"(%18111, %18112) <{position = array<i64: 28>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18114 = "placeholder.addressof"() {global_name = @ProductIterable2_field_ProductIterable2_2} : () -> !llvm.ptr
+      %18115 = "llvm.insertvalue"(%18113, %18114) <{position = array<i64: 29>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18116 = "placeholder.addressof"() {global_name = @ProductIterable2_B_iterator_} : () -> !llvm.ptr
+      %18117 = "llvm.insertvalue"(%18115, %18116) <{position = array<i64: 30>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18118 = "placeholder.addressof"() {global_name = @ProductIterable2_B_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %18119 = "llvm.insertvalue"(%18117, %18118) <{position = array<i64: 31>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18120 = "placeholder.addressof"() {global_name = @ProductIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %18121 = "llvm.insertvalue"(%18119, %18120) <{position = array<i64: 32>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18122 = "placeholder.addressof"() {global_name = @ProductIterable2_B_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18123 = "llvm.insertvalue"(%18121, %18122) <{position = array<i64: 33>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18124 = "placeholder.addressof"() {global_name = @ProductIterable2_B_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18125 = "llvm.insertvalue"(%18123, %18124) <{position = array<i64: 34>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18126 = "placeholder.addressof"() {global_name = @ProductIterable2_B_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %18127 = "llvm.insertvalue"(%18125, %18126) <{position = array<i64: 35>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18128 = "placeholder.addressof"() {global_name = @ProductIterable2_B_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18129 = "llvm.insertvalue"(%18127, %18128) <{position = array<i64: 36>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18130 = "placeholder.addressof"() {global_name = @ProductIterable2_B_chain_otherIterable2T} : () -> !llvm.ptr
+      %18131 = "llvm.insertvalue"(%18129, %18130) <{position = array<i64: 37>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18132 = "placeholder.addressof"() {global_name = @ProductIterable2_B_interleave_otherIterable2T} : () -> !llvm.ptr
+      %18133 = "llvm.insertvalue"(%18131, %18132) <{position = array<i64: 38>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18134 = "placeholder.addressof"() {global_name = @ProductIterable2_B_zip_otherIterable2U} : () -> !llvm.ptr
+      %18135 = "llvm.insertvalue"(%18133, %18134) <{position = array<i64: 39>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18136 = "placeholder.addressof"() {global_name = @ProductIterable2_B_product_otherIterable2U} : () -> !llvm.ptr
+      %18137 = "llvm.insertvalue"(%18135, %18136) <{position = array<i64: 40>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18138 = "placeholder.addressof"() {global_name = @ProductIterable2_iterator_} : () -> !llvm.ptr
+      %18139 = "llvm.insertvalue"(%18137, %18138) <{position = array<i64: 41>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18140 = "placeholder.addressof"() {global_name = @Iterable2_each_fFunctionT_to_Nothing} : () -> !llvm.ptr
+      %18141 = "llvm.insertvalue"(%18139, %18140) <{position = array<i64: 42>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18142 = "placeholder.addressof"() {global_name = @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T} : () -> !llvm.ptr
+      %18143 = "llvm.insertvalue"(%18141, %18142) <{position = array<i64: 43>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18144 = "placeholder.addressof"() {global_name = @Iterable2_all_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18145 = "llvm.insertvalue"(%18143, %18144) <{position = array<i64: 44>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18146 = "placeholder.addressof"() {global_name = @Iterable2_any_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18147 = "llvm.insertvalue"(%18145, %18146) <{position = array<i64: 45>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18148 = "placeholder.addressof"() {global_name = @Iterable2_map_fFunctionT_to_U} : () -> !llvm.ptr
+      %18149 = "llvm.insertvalue"(%18147, %18148) <{position = array<i64: 46>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18150 = "placeholder.addressof"() {global_name = @Iterable2_filter_fFunctionT_to_Ptri1} : () -> !llvm.ptr
+      %18151 = "llvm.insertvalue"(%18149, %18150) <{position = array<i64: 47>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18152 = "placeholder.addressof"() {global_name = @Iterable2_chain_otherIterable2T} : () -> !llvm.ptr
+      %18153 = "llvm.insertvalue"(%18151, %18152) <{position = array<i64: 48>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18154 = "placeholder.addressof"() {global_name = @Iterable2_interleave_otherIterable2T} : () -> !llvm.ptr
+      %18155 = "llvm.insertvalue"(%18153, %18154) <{position = array<i64: 49>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18156 = "placeholder.addressof"() {global_name = @Iterable2_zip_otherIterable2U} : () -> !llvm.ptr
+      %18157 = "llvm.insertvalue"(%18155, %18156) <{position = array<i64: 50>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18158 = "placeholder.addressof"() {global_name = @Iterable2_product_otherIterable2U} : () -> !llvm.ptr
+      %18159 = "llvm.insertvalue"(%18157, %18158) <{position = array<i64: 51>}> : (!llvm.array<52 x ptr>, !llvm.ptr) -> !llvm.array<52 x ptr>
+      %18160 = "llvm.insertvalue"(%18055, %18159) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>, !llvm.array<52 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>
+      "llvm.return"(%18160) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<52 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ProductIterator2_hashtbl"}> ({
-      %17983 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %17984 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %17985 = "llvm.insertvalue"(%17983, %17984) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17986 = "placeholder.addressof"() {global_name = @ProductIterator2} : () -> !llvm.ptr
-      %17987 = "llvm.insertvalue"(%17985, %17986) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17988 = "placeholder.addressof"() {global_name = @Iterator2} : () -> !llvm.ptr
-      %17989 = "llvm.insertvalue"(%17987, %17988) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17990 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
-      %17991 = "llvm.insertvalue"(%17989, %17990) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      "llvm.return"(%17991) : (!llvm.array<4 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ProductIterator2_hashtbl"}> ({
+      %18020 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %18021 = "llvm.mlir.undef"() : () -> !llvm.array<8 x ptr>
+      %18022 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %18023 = "llvm.insertvalue"(%18021, %18022) <{position = array<i64: 0>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18024 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %18025 = "llvm.insertvalue"(%18023, %18024) <{position = array<i64: 1>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18026 = "llvm.insertvalue"(%18025, %18020) <{position = array<i64: 2>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18027 = "placeholder.addressof"() {global_name = @Container} : () -> !llvm.ptr
+      %18028 = "llvm.insertvalue"(%18026, %18027) <{position = array<i64: 3>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18029 = "llvm.insertvalue"(%18028, %18020) <{position = array<i64: 4>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18030 = "placeholder.addressof"() {global_name = @ProductIterator2} : () -> !llvm.ptr
+      %18031 = "llvm.insertvalue"(%18029, %18030) <{position = array<i64: 5>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18032 = "placeholder.addressof"() {global_name = @Iterator2} : () -> !llvm.ptr
+      %18033 = "llvm.insertvalue"(%18031, %18032) <{position = array<i64: 6>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %18034 = "llvm.insertvalue"(%18033, %18020) <{position = array<i64: 7>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      "llvm.return"(%18034) : (!llvm.array<8 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ProductIterator2_offset_tbl"}> ({
-      %17975 = "llvm.mlir.constant"() <{value = 18 : i32}> : () -> i32
-      %17976 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %17977 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
-      %17978 = "llvm.mlir.constant"() <{value = 21 : i32}> : () -> i32
-      %17979 = "llvm.insertvalue"(%17977, %17978) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %17980 = "llvm.insertvalue"(%17979, %17976) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %17981 = "llvm.insertvalue"(%17980, %17975) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %17982 = "llvm.insertvalue"(%17981, %17978) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      "llvm.return"(%17982) : (!llvm.array<4 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "ProductIterator2_offset_tbl"}> ({
+      %18007 = "llvm.mlir.constant"() <{value = 18 : i32}> : () -> i32
+      %18008 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %18009 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %18010 = "llvm.mlir.undef"() : () -> !llvm.array<8 x i32>
+      %18011 = "llvm.mlir.constant"() <{value = 21 : i32}> : () -> i32
+      %18012 = "llvm.insertvalue"(%18010, %18011) <{position = array<i64: 0>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18013 = "llvm.insertvalue"(%18012, %18009) <{position = array<i64: 1>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18014 = "llvm.insertvalue"(%18013, %18008) <{position = array<i64: 2>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18015 = "llvm.insertvalue"(%18014, %18011) <{position = array<i64: 3>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18016 = "llvm.insertvalue"(%18015, %18008) <{position = array<i64: 4>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18017 = "llvm.insertvalue"(%18016, %18009) <{position = array<i64: 5>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18018 = "llvm.insertvalue"(%18017, %18007) <{position = array<i64: 6>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %18019 = "llvm.insertvalue"(%18018, %18008) <{position = array<i64: 7>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      "llvm.return"(%18019) : (!llvm.array<8 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<14 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "ProductIterator2"}> ({
-      %17925 = "llvm.mlir.undef"() : () -> !llvm.array<14 x ptr>
-      %17926 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %17927 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %17928 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
-      %17929 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
-      %17930 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<14 x ptr>)>
-      %17931 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %17932 = "llvm.mlir.constant"() <{value = 4440657219728359865 : i64}> : () -> i64
-      %17933 = "llvm.insertvalue"(%17931, %17932) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %17934 = "llvm.insertvalue"(%17933, %17929) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %17935 = "llvm.insertvalue"(%17934, %17928) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %17936 = "llvm.insertvalue"(%17930, %17935) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<14 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<14 x ptr>)>
-      %17937 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %17938 = "llvm.insertvalue"(%17927, %17937) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17939 = "placeholder.addressof"() {global_name = @ProductIterator2_hashtbl} : () -> !llvm.ptr
-      %17940 = "llvm.insertvalue"(%17938, %17939) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17941 = "placeholder.addressof"() {global_name = @ProductIterator2_offset_tbl} : () -> !llvm.ptr
-      %17942 = "llvm.insertvalue"(%17940, %17941) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17943 = "llvm.getelementptr"(%17926) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr, ptr, ptr, i32)>, struct<(ptr, ptr, ptr, i32)>, struct<(ptr, i160)>, ptr, ptr, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %17944 = "llvm.insertvalue"(%17942, %17943) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17945 = "llvm.insertvalue"(%17936, %17944) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<14 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<14 x ptr>)>
-      %17946 = "placeholder.addressof"() {global_name = @ProductIterator2_field_first_iterator} : () -> !llvm.ptr
-      %17947 = "llvm.insertvalue"(%17925, %17946) <{position = array<i64: 0>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
-      %17948 = "placeholder.addressof"() {global_name = @ProductIterator2_field_second_iterator} : () -> !llvm.ptr
-      %17949 = "llvm.insertvalue"(%17947, %17948) <{position = array<i64: 1>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
-      %17950 = "placeholder.addressof"() {global_name = @ProductIterator2_field_second_iterable} : () -> !llvm.ptr
-      %17951 = "llvm.insertvalue"(%17949, %17950) <{position = array<i64: 2>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
-      %17952 = "placeholder.addressof"() {global_name = @ProductIterator2_field_current_first} : () -> !llvm.ptr
-      %17953 = "llvm.insertvalue"(%17951, %17952) <{position = array<i64: 3>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
-      %17954 = "placeholder.addressof"() {global_name = @ProductIterator2_field_ProductIterator2_0} : () -> !llvm.ptr
-      %17955 = "llvm.insertvalue"(%17953, %17954) <{position = array<i64: 4>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
-      %17956 = "placeholder.addressof"() {global_name = @ProductIterator2_field_ProductIterator2_1} : () -> !llvm.ptr
-      %17957 = "llvm.insertvalue"(%17955, %17956) <{position = array<i64: 5>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
-      %17958 = "placeholder.addressof"() {global_name = @ProductIterator2_field_ProductIterator2_2} : () -> !llvm.ptr
-      %17959 = "llvm.insertvalue"(%17957, %17958) <{position = array<i64: 6>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
-      %17960 = "placeholder.addressof"() {global_name = @ProductIterator2_B_init_first_iteratorIterator2T_second_iterableIterable2U} : () -> !llvm.ptr
-      %17961 = "llvm.insertvalue"(%17959, %17960) <{position = array<i64: 7>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
-      %17962 = "placeholder.addressof"() {global_name = @ProductIterator2_B_next_} : () -> !llvm.ptr
-      %17963 = "llvm.insertvalue"(%17961, %17962) <{position = array<i64: 8>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
-      %17964 = "placeholder.addressof"() {global_name = @ProductIterator2_init_first_iteratorIterator2T_second_iterableIterable2U} : () -> !llvm.ptr
-      %17965 = "llvm.insertvalue"(%17963, %17964) <{position = array<i64: 9>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
-      %17966 = "placeholder.addressof"() {global_name = @ProductIterator2_next_} : () -> !llvm.ptr
-      %17967 = "llvm.insertvalue"(%17965, %17966) <{position = array<i64: 10>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
-      %17968 = "placeholder.addressof"() {global_name = @ProductIterator2_field_ProductIterator2_2} : () -> !llvm.ptr
-      %17969 = "llvm.insertvalue"(%17967, %17968) <{position = array<i64: 11>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
-      %17970 = "placeholder.addressof"() {global_name = @ProductIterator2_B_next_} : () -> !llvm.ptr
-      %17971 = "llvm.insertvalue"(%17969, %17970) <{position = array<i64: 12>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
-      %17972 = "placeholder.addressof"() {global_name = @ProductIterator2_next_} : () -> !llvm.ptr
-      %17973 = "llvm.insertvalue"(%17971, %17972) <{position = array<i64: 13>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
-      %17974 = "llvm.insertvalue"(%17945, %17973) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<14 x ptr>)>, !llvm.array<14 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<14 x ptr>)>
-      "llvm.return"(%17974) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<14 x ptr>)>) -> ()
+      %17957 = "llvm.mlir.undef"() : () -> !llvm.array<14 x ptr>
+      %17958 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %17959 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %17960 = "llvm.mlir.constant"() <{value = 7 : i64}> : () -> i64
+      %17961 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %17962 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<14 x ptr>)>
+      %17963 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %17964 = "llvm.mlir.constant"() <{value = 4440657219728359865 : i64}> : () -> i64
+      %17965 = "llvm.insertvalue"(%17963, %17964) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %17966 = "llvm.insertvalue"(%17965, %17961) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %17967 = "llvm.insertvalue"(%17966, %17960) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %17968 = "llvm.insertvalue"(%17962, %17967) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<14 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<14 x ptr>)>
+      %17969 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %17970 = "llvm.insertvalue"(%17959, %17969) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17971 = "placeholder.addressof"() {global_name = @ProductIterator2_hashtbl} : () -> !llvm.ptr
+      %17972 = "llvm.insertvalue"(%17970, %17971) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17973 = "placeholder.addressof"() {global_name = @ProductIterator2_offset_tbl} : () -> !llvm.ptr
+      %17974 = "llvm.insertvalue"(%17972, %17973) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17975 = "llvm.getelementptr"(%17958) <{elem_type = !llvm.struct<(struct<(ptr, ptr, ptr, i32)>, struct<(ptr, ptr, ptr, i32)>, struct<(ptr, ptr, ptr, i32)>, struct<(ptr, i160)>, ptr, ptr, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %17976 = "llvm.insertvalue"(%17974, %17975) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17977 = "llvm.insertvalue"(%17968, %17976) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<14 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<14 x ptr>)>
+      %17978 = "placeholder.addressof"() {global_name = @ProductIterator2_field_first_iterator} : () -> !llvm.ptr
+      %17979 = "llvm.insertvalue"(%17957, %17978) <{position = array<i64: 0>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
+      %17980 = "placeholder.addressof"() {global_name = @ProductIterator2_field_second_iterator} : () -> !llvm.ptr
+      %17981 = "llvm.insertvalue"(%17979, %17980) <{position = array<i64: 1>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
+      %17982 = "placeholder.addressof"() {global_name = @ProductIterator2_field_second_iterable} : () -> !llvm.ptr
+      %17983 = "llvm.insertvalue"(%17981, %17982) <{position = array<i64: 2>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
+      %17984 = "placeholder.addressof"() {global_name = @ProductIterator2_field_current_first} : () -> !llvm.ptr
+      %17985 = "llvm.insertvalue"(%17983, %17984) <{position = array<i64: 3>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
+      %17986 = "placeholder.addressof"() {global_name = @ProductIterator2_field_ProductIterator2_0} : () -> !llvm.ptr
+      %17987 = "llvm.insertvalue"(%17985, %17986) <{position = array<i64: 4>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
+      %17988 = "placeholder.addressof"() {global_name = @ProductIterator2_field_ProductIterator2_1} : () -> !llvm.ptr
+      %17989 = "llvm.insertvalue"(%17987, %17988) <{position = array<i64: 5>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
+      %17990 = "placeholder.addressof"() {global_name = @ProductIterator2_field_ProductIterator2_2} : () -> !llvm.ptr
+      %17991 = "llvm.insertvalue"(%17989, %17990) <{position = array<i64: 6>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
+      %17992 = "placeholder.addressof"() {global_name = @ProductIterator2_B_init_first_iteratorIterator2T_second_iterableIterable2U} : () -> !llvm.ptr
+      %17993 = "llvm.insertvalue"(%17991, %17992) <{position = array<i64: 7>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
+      %17994 = "placeholder.addressof"() {global_name = @ProductIterator2_B_next_} : () -> !llvm.ptr
+      %17995 = "llvm.insertvalue"(%17993, %17994) <{position = array<i64: 8>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
+      %17996 = "placeholder.addressof"() {global_name = @ProductIterator2_init_first_iteratorIterator2T_second_iterableIterable2U} : () -> !llvm.ptr
+      %17997 = "llvm.insertvalue"(%17995, %17996) <{position = array<i64: 9>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
+      %17998 = "placeholder.addressof"() {global_name = @ProductIterator2_next_} : () -> !llvm.ptr
+      %17999 = "llvm.insertvalue"(%17997, %17998) <{position = array<i64: 10>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
+      %18000 = "placeholder.addressof"() {global_name = @ProductIterator2_field_ProductIterator2_2} : () -> !llvm.ptr
+      %18001 = "llvm.insertvalue"(%17999, %18000) <{position = array<i64: 11>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
+      %18002 = "placeholder.addressof"() {global_name = @ProductIterator2_B_next_} : () -> !llvm.ptr
+      %18003 = "llvm.insertvalue"(%18001, %18002) <{position = array<i64: 12>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
+      %18004 = "placeholder.addressof"() {global_name = @ProductIterator2_next_} : () -> !llvm.ptr
+      %18005 = "llvm.insertvalue"(%18003, %18004) <{position = array<i64: 13>}> : (!llvm.array<14 x ptr>, !llvm.ptr) -> !llvm.array<14 x ptr>
+      %18006 = "llvm.insertvalue"(%17977, %18005) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<14 x ptr>)>, !llvm.array<14 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<14 x ptr>)>
+      "llvm.return"(%18006) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<14 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Addable_hashtbl"}> ({
-      %17920 = "llvm.mlir.undef"() : () -> !llvm.array<2 x ptr>
-      %17921 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %17922 = "llvm.insertvalue"(%17920, %17921) <{position = array<i64: 0>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      %17923 = "placeholder.addressof"() {global_name = @Addable} : () -> !llvm.ptr
-      %17924 = "llvm.insertvalue"(%17922, %17923) <{position = array<i64: 1>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      "llvm.return"(%17924) : (!llvm.array<2 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Addable_hashtbl"}> ({
+      %17948 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %17949 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %17950 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17951 = "llvm.insertvalue"(%17949, %17950) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17952 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %17953 = "llvm.insertvalue"(%17951, %17952) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17954 = "llvm.insertvalue"(%17953, %17948) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17955 = "placeholder.addressof"() {global_name = @Addable} : () -> !llvm.ptr
+      %17956 = "llvm.insertvalue"(%17954, %17955) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      "llvm.return"(%17956) : (!llvm.array<4 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Addable_offset_tbl"}> ({
-      %17915 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %17916 = "llvm.mlir.undef"() : () -> !llvm.array<2 x i32>
-      %17917 = "llvm.mlir.constant"() <{value = 11 : i32}> : () -> i32
-      %17918 = "llvm.insertvalue"(%17916, %17917) <{position = array<i64: 0>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      %17919 = "llvm.insertvalue"(%17918, %17915) <{position = array<i64: 1>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      "llvm.return"(%17919) : (!llvm.array<2 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Addable_offset_tbl"}> ({
+      %17940 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %17941 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %17942 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
+      %17943 = "llvm.mlir.constant"() <{value = 11 : i32}> : () -> i32
+      %17944 = "llvm.insertvalue"(%17942, %17943) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %17945 = "llvm.insertvalue"(%17944, %17941) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %17946 = "llvm.insertvalue"(%17945, %17940) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %17947 = "llvm.insertvalue"(%17946, %17941) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      "llvm.return"(%17947) : (!llvm.array<4 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "Addable"}> ({
-      %17893 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
-      %17894 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %17895 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %17896 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i64
-      %17897 = "llvm.mlir.constant"() <{value = 4611686018427388073 : i64}> : () -> i64
-      %17898 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %17899 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %17900 = "llvm.mlir.constant"() <{value = -6395308389776465871 : i64}> : () -> i64
-      %17901 = "llvm.insertvalue"(%17899, %17900) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %17902 = "llvm.insertvalue"(%17901, %17897) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %17903 = "llvm.insertvalue"(%17902, %17896) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %17904 = "llvm.insertvalue"(%17898, %17903) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %17905 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %17906 = "llvm.insertvalue"(%17895, %17905) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17907 = "placeholder.addressof"() {global_name = @Addable_hashtbl} : () -> !llvm.ptr
-      %17908 = "llvm.insertvalue"(%17906, %17907) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17909 = "placeholder.addressof"() {global_name = @Addable_offset_tbl} : () -> !llvm.ptr
-      %17910 = "llvm.insertvalue"(%17908, %17909) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17911 = "llvm.getelementptr"(%17894) <{elem_type = !llvm.struct<(ptr, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %17912 = "llvm.insertvalue"(%17910, %17911) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17913 = "llvm.insertvalue"(%17904, %17912) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      %17914 = "llvm.insertvalue"(%17913, %17893) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
-      "llvm.return"(%17914) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
+      %17918 = "llvm.mlir.undef"() : () -> !llvm.array<0 x ptr>
+      %17919 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %17920 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %17921 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
+      %17922 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %17923 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %17924 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %17925 = "llvm.mlir.constant"() <{value = -6395308389776465871 : i64}> : () -> i64
+      %17926 = "llvm.insertvalue"(%17924, %17925) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %17927 = "llvm.insertvalue"(%17926, %17922) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %17928 = "llvm.insertvalue"(%17927, %17921) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %17929 = "llvm.insertvalue"(%17923, %17928) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %17930 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %17931 = "llvm.insertvalue"(%17920, %17930) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17932 = "placeholder.addressof"() {global_name = @Addable_hashtbl} : () -> !llvm.ptr
+      %17933 = "llvm.insertvalue"(%17931, %17932) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17934 = "placeholder.addressof"() {global_name = @Addable_offset_tbl} : () -> !llvm.ptr
+      %17935 = "llvm.insertvalue"(%17933, %17934) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17936 = "llvm.getelementptr"(%17919) <{elem_type = !llvm.struct<(ptr, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %17937 = "llvm.insertvalue"(%17935, %17936) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17938 = "llvm.insertvalue"(%17929, %17937) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      %17939 = "llvm.insertvalue"(%17938, %17918) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>, !llvm.array<0 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>
+      "llvm.return"(%17939) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<0 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Float64_hashtbl"}> ({
-      %17884 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %17885 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %17886 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %17887 = "llvm.insertvalue"(%17885, %17886) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17888 = "placeholder.addressof"() {global_name = @Addable} : () -> !llvm.ptr
-      %17889 = "llvm.insertvalue"(%17887, %17888) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17890 = "llvm.insertvalue"(%17889, %17884) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17891 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
-      %17892 = "llvm.insertvalue"(%17890, %17891) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      "llvm.return"(%17892) : (!llvm.array<4 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Float64_hashtbl"}> ({
+      %17904 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %17905 = "llvm.mlir.undef"() : () -> !llvm.array<8 x ptr>
+      %17906 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17907 = "llvm.insertvalue"(%17905, %17906) <{position = array<i64: 0>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %17908 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %17909 = "llvm.insertvalue"(%17907, %17908) <{position = array<i64: 1>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %17910 = "llvm.insertvalue"(%17909, %17904) <{position = array<i64: 2>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %17911 = "placeholder.addressof"() {global_name = @Addable} : () -> !llvm.ptr
+      %17912 = "llvm.insertvalue"(%17910, %17911) <{position = array<i64: 3>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %17913 = "llvm.insertvalue"(%17912, %17904) <{position = array<i64: 4>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %17914 = "llvm.insertvalue"(%17913, %17904) <{position = array<i64: 5>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %17915 = "llvm.insertvalue"(%17914, %17904) <{position = array<i64: 6>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %17916 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
+      %17917 = "llvm.insertvalue"(%17915, %17916) <{position = array<i64: 7>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      "llvm.return"(%17917) : (!llvm.array<8 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Float64_offset_tbl"}> ({
-      %17875 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %17876 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
-      %17877 = "llvm.mlir.constant"() <{value = 17 : i32}> : () -> i32
-      %17878 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
-      %17879 = "llvm.mlir.constant"() <{value = 21 : i32}> : () -> i32
-      %17880 = "llvm.insertvalue"(%17878, %17879) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %17881 = "llvm.insertvalue"(%17880, %17877) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %17882 = "llvm.insertvalue"(%17881, %17876) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %17883 = "llvm.insertvalue"(%17882, %17875) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      "llvm.return"(%17883) : (!llvm.array<4 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Float64_offset_tbl"}> ({
+      %17891 = "llvm.mlir.constant"() <{value = 17 : i32}> : () -> i32
+      %17892 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %17893 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %17894 = "llvm.mlir.undef"() : () -> !llvm.array<8 x i32>
+      %17895 = "llvm.mlir.constant"() <{value = 21 : i32}> : () -> i32
+      %17896 = "llvm.insertvalue"(%17894, %17895) <{position = array<i64: 0>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %17897 = "llvm.insertvalue"(%17896, %17893) <{position = array<i64: 1>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %17898 = "llvm.insertvalue"(%17897, %17892) <{position = array<i64: 2>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %17899 = "llvm.insertvalue"(%17898, %17891) <{position = array<i64: 3>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %17900 = "llvm.insertvalue"(%17899, %17892) <{position = array<i64: 4>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %17901 = "llvm.insertvalue"(%17900, %17892) <{position = array<i64: 5>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %17902 = "llvm.insertvalue"(%17901, %17892) <{position = array<i64: 6>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %17903 = "llvm.insertvalue"(%17902, %17893) <{position = array<i64: 7>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      "llvm.return"(%17903) : (!llvm.array<8 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<18 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "Float64"}> ({
-      %17817 = "llvm.mlir.undef"() : () -> !llvm.array<18 x ptr>
-      %17818 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %17819 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %17820 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
-      %17821 = "llvm.mlir.constant"() <{value = 4611686018427388091 : i64}> : () -> i64
-      %17822 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<18 x ptr>)>
-      %17823 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %17824 = "llvm.mlir.constant"() <{value = 8748823673944961442 : i64}> : () -> i64
-      %17825 = "llvm.insertvalue"(%17823, %17824) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %17826 = "llvm.insertvalue"(%17825, %17821) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %17827 = "llvm.insertvalue"(%17826, %17820) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %17828 = "llvm.insertvalue"(%17822, %17827) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<18 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<18 x ptr>)>
-      %17829 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %17830 = "llvm.insertvalue"(%17819, %17829) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17831 = "placeholder.addressof"() {global_name = @Float64_hashtbl} : () -> !llvm.ptr
-      %17832 = "llvm.insertvalue"(%17830, %17831) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17833 = "placeholder.addressof"() {global_name = @Float64_offset_tbl} : () -> !llvm.ptr
-      %17834 = "llvm.insertvalue"(%17832, %17833) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17835 = "llvm.getelementptr"(%17818) <{elem_type = !llvm.struct<(f64)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %17836 = "llvm.insertvalue"(%17834, %17835) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17837 = "llvm.insertvalue"(%17828, %17836) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<18 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<18 x ptr>)>
-      %17838 = "placeholder.addressof"() {global_name = @Float64_field_value} : () -> !llvm.ptr
-      %17839 = "llvm.insertvalue"(%17817, %17838) <{position = array<i64: 0>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
-      %17840 = "placeholder.addressof"() {global_name = @Float64_field_Float64_0} : () -> !llvm.ptr
-      %17841 = "llvm.insertvalue"(%17839, %17840) <{position = array<i64: 1>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
-      %17842 = "placeholder.addressof"() {global_name = @Float64_field_Float64_1} : () -> !llvm.ptr
-      %17843 = "llvm.insertvalue"(%17841, %17842) <{position = array<i64: 2>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
-      %17844 = "placeholder.addressof"() {global_name = @Float64_B_init_valuePtrf64} : () -> !llvm.ptr
-      %17845 = "llvm.insertvalue"(%17843, %17844) <{position = array<i64: 3>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
-      %17846 = "placeholder.addressof"() {global_name = @Float64_B_value_} : () -> !llvm.ptr
-      %17847 = "llvm.insertvalue"(%17845, %17846) <{position = array<i64: 4>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
-      %17848 = "placeholder.addressof"() {global_name = @Float64_B__ADD_otherInt32__ADD_otherFloat64} : () -> !llvm.ptr
-      %17849 = "llvm.insertvalue"(%17847, %17848) <{position = array<i64: 5>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
-      %17850 = "placeholder.addressof"() {global_name = @Float64_init_valuePtrf64} : () -> !llvm.ptr
-      %17851 = "llvm.insertvalue"(%17849, %17850) <{position = array<i64: 6>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
-      %17852 = "placeholder.addressof"() {global_name = @Float64_value_} : () -> !llvm.ptr
-      %17853 = "llvm.insertvalue"(%17851, %17852) <{position = array<i64: 7>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
-      %17854 = "placeholder.addressof"() {global_name = @Float64__ADD_otherInt32} : () -> !llvm.ptr
-      %17855 = "llvm.insertvalue"(%17853, %17854) <{position = array<i64: 8>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
-      %17856 = "placeholder.addressof"() {global_name = @Float64__ADD_otherFloat64} : () -> !llvm.ptr
-      %17857 = "llvm.insertvalue"(%17855, %17856) <{position = array<i64: 9>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
-      %17858 = "placeholder.addressof"() {global_name = @Float64_field_Float64_0} : () -> !llvm.ptr
-      %17859 = "llvm.insertvalue"(%17857, %17858) <{position = array<i64: 10>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
-      %17860 = "placeholder.addressof"() {global_name = @Float64_field_Float64_1} : () -> !llvm.ptr
-      %17861 = "llvm.insertvalue"(%17859, %17860) <{position = array<i64: 11>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
-      %17862 = "placeholder.addressof"() {global_name = @Float64_B__ADD_otherInt32__ADD_otherFloat64} : () -> !llvm.ptr
-      %17863 = "llvm.insertvalue"(%17861, %17862) <{position = array<i64: 12>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
-      %17864 = "placeholder.addressof"() {global_name = @Float64_init_valuePtrf64} : () -> !llvm.ptr
-      %17865 = "llvm.insertvalue"(%17863, %17864) <{position = array<i64: 13>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
-      %17866 = "placeholder.addressof"() {global_name = @Float64_field_Float64_0} : () -> !llvm.ptr
-      %17867 = "llvm.insertvalue"(%17865, %17866) <{position = array<i64: 14>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
-      %17868 = "placeholder.addressof"() {global_name = @Float64_field_Float64_1} : () -> !llvm.ptr
-      %17869 = "llvm.insertvalue"(%17867, %17868) <{position = array<i64: 15>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
-      %17870 = "placeholder.addressof"() {global_name = @Float64_B__ADD_otherInt32__ADD_otherFloat64} : () -> !llvm.ptr
-      %17871 = "llvm.insertvalue"(%17869, %17870) <{position = array<i64: 16>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
-      %17872 = "placeholder.addressof"() {global_name = @Float64_init_valuePtrf64} : () -> !llvm.ptr
-      %17873 = "llvm.insertvalue"(%17871, %17872) <{position = array<i64: 17>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
-      %17874 = "llvm.insertvalue"(%17837, %17873) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<18 x ptr>)>, !llvm.array<18 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<18 x ptr>)>
-      "llvm.return"(%17874) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<18 x ptr>)>) -> ()
+      %17833 = "llvm.mlir.undef"() : () -> !llvm.array<18 x ptr>
+      %17834 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %17835 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %17836 = "llvm.mlir.constant"() <{value = 7 : i64}> : () -> i64
+      %17837 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %17838 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<18 x ptr>)>
+      %17839 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %17840 = "llvm.mlir.constant"() <{value = 8748823673944961442 : i64}> : () -> i64
+      %17841 = "llvm.insertvalue"(%17839, %17840) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %17842 = "llvm.insertvalue"(%17841, %17837) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %17843 = "llvm.insertvalue"(%17842, %17836) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %17844 = "llvm.insertvalue"(%17838, %17843) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<18 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<18 x ptr>)>
+      %17845 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %17846 = "llvm.insertvalue"(%17835, %17845) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17847 = "placeholder.addressof"() {global_name = @Float64_hashtbl} : () -> !llvm.ptr
+      %17848 = "llvm.insertvalue"(%17846, %17847) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17849 = "placeholder.addressof"() {global_name = @Float64_offset_tbl} : () -> !llvm.ptr
+      %17850 = "llvm.insertvalue"(%17848, %17849) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17851 = "llvm.getelementptr"(%17834) <{elem_type = !llvm.struct<(f64)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %17852 = "llvm.insertvalue"(%17850, %17851) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17853 = "llvm.insertvalue"(%17844, %17852) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<18 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<18 x ptr>)>
+      %17854 = "placeholder.addressof"() {global_name = @Float64_field_value} : () -> !llvm.ptr
+      %17855 = "llvm.insertvalue"(%17833, %17854) <{position = array<i64: 0>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
+      %17856 = "placeholder.addressof"() {global_name = @Float64_field_Float64_0} : () -> !llvm.ptr
+      %17857 = "llvm.insertvalue"(%17855, %17856) <{position = array<i64: 1>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
+      %17858 = "placeholder.addressof"() {global_name = @Float64_field_Float64_1} : () -> !llvm.ptr
+      %17859 = "llvm.insertvalue"(%17857, %17858) <{position = array<i64: 2>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
+      %17860 = "placeholder.addressof"() {global_name = @Float64_B_init_valuePtrf64} : () -> !llvm.ptr
+      %17861 = "llvm.insertvalue"(%17859, %17860) <{position = array<i64: 3>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
+      %17862 = "placeholder.addressof"() {global_name = @Float64_B_value_} : () -> !llvm.ptr
+      %17863 = "llvm.insertvalue"(%17861, %17862) <{position = array<i64: 4>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
+      %17864 = "placeholder.addressof"() {global_name = @Float64_B__ADD_otherFloat64__ADD_otherInt32} : () -> !llvm.ptr
+      %17865 = "llvm.insertvalue"(%17863, %17864) <{position = array<i64: 5>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
+      %17866 = "placeholder.addressof"() {global_name = @Float64_init_valuePtrf64} : () -> !llvm.ptr
+      %17867 = "llvm.insertvalue"(%17865, %17866) <{position = array<i64: 6>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
+      %17868 = "placeholder.addressof"() {global_name = @Float64_value_} : () -> !llvm.ptr
+      %17869 = "llvm.insertvalue"(%17867, %17868) <{position = array<i64: 7>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
+      %17870 = "placeholder.addressof"() {global_name = @Float64__ADD_otherFloat64} : () -> !llvm.ptr
+      %17871 = "llvm.insertvalue"(%17869, %17870) <{position = array<i64: 8>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
+      %17872 = "placeholder.addressof"() {global_name = @Float64__ADD_otherInt32} : () -> !llvm.ptr
+      %17873 = "llvm.insertvalue"(%17871, %17872) <{position = array<i64: 9>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
+      %17874 = "placeholder.addressof"() {global_name = @Float64_field_Float64_0} : () -> !llvm.ptr
+      %17875 = "llvm.insertvalue"(%17873, %17874) <{position = array<i64: 10>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
+      %17876 = "placeholder.addressof"() {global_name = @Float64_field_Float64_1} : () -> !llvm.ptr
+      %17877 = "llvm.insertvalue"(%17875, %17876) <{position = array<i64: 11>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
+      %17878 = "placeholder.addressof"() {global_name = @Float64_B__ADD_otherFloat64__ADD_otherInt32} : () -> !llvm.ptr
+      %17879 = "llvm.insertvalue"(%17877, %17878) <{position = array<i64: 12>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
+      %17880 = "placeholder.addressof"() {global_name = @Float64_init_valuePtrf64} : () -> !llvm.ptr
+      %17881 = "llvm.insertvalue"(%17879, %17880) <{position = array<i64: 13>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
+      %17882 = "placeholder.addressof"() {global_name = @Float64_field_Float64_0} : () -> !llvm.ptr
+      %17883 = "llvm.insertvalue"(%17881, %17882) <{position = array<i64: 14>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
+      %17884 = "placeholder.addressof"() {global_name = @Float64_field_Float64_1} : () -> !llvm.ptr
+      %17885 = "llvm.insertvalue"(%17883, %17884) <{position = array<i64: 15>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
+      %17886 = "placeholder.addressof"() {global_name = @Float64_B__ADD_otherFloat64__ADD_otherInt32} : () -> !llvm.ptr
+      %17887 = "llvm.insertvalue"(%17885, %17886) <{position = array<i64: 16>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
+      %17888 = "placeholder.addressof"() {global_name = @Float64_init_valuePtrf64} : () -> !llvm.ptr
+      %17889 = "llvm.insertvalue"(%17887, %17888) <{position = array<i64: 17>}> : (!llvm.array<18 x ptr>, !llvm.ptr) -> !llvm.array<18 x ptr>
+      %17890 = "llvm.insertvalue"(%17853, %17889) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<18 x ptr>)>, !llvm.array<18 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<18 x ptr>)>
+      "llvm.return"(%17890) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<18 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Int32_hashtbl"}> ({
-      %17808 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %17809 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %17810 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %17811 = "llvm.insertvalue"(%17809, %17810) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17812 = "llvm.insertvalue"(%17811, %17808) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17813 = "placeholder.addressof"() {global_name = @Int32} : () -> !llvm.ptr
-      %17814 = "llvm.insertvalue"(%17812, %17813) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17815 = "placeholder.addressof"() {global_name = @Addable} : () -> !llvm.ptr
-      %17816 = "llvm.insertvalue"(%17814, %17815) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      "llvm.return"(%17816) : (!llvm.array<4 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Int32_hashtbl"}> ({
+      %17819 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %17820 = "llvm.mlir.undef"() : () -> !llvm.array<8 x ptr>
+      %17821 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17822 = "llvm.insertvalue"(%17820, %17821) <{position = array<i64: 0>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %17823 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %17824 = "llvm.insertvalue"(%17822, %17823) <{position = array<i64: 1>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %17825 = "llvm.insertvalue"(%17824, %17819) <{position = array<i64: 2>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %17826 = "placeholder.addressof"() {global_name = @Addable} : () -> !llvm.ptr
+      %17827 = "llvm.insertvalue"(%17825, %17826) <{position = array<i64: 3>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %17828 = "llvm.insertvalue"(%17827, %17819) <{position = array<i64: 4>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %17829 = "llvm.insertvalue"(%17828, %17819) <{position = array<i64: 5>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %17830 = "placeholder.addressof"() {global_name = @Int32} : () -> !llvm.ptr
+      %17831 = "llvm.insertvalue"(%17829, %17830) <{position = array<i64: 6>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      %17832 = "llvm.insertvalue"(%17831, %17819) <{position = array<i64: 7>}> : (!llvm.array<8 x ptr>, !llvm.ptr) -> !llvm.array<8 x ptr>
+      "llvm.return"(%17832) : (!llvm.array<8 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Int32_offset_tbl"}> ({
-      %17799 = "llvm.mlir.constant"() <{value = 16 : i32}> : () -> i32
-      %17800 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %17801 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
-      %17802 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
-      %17803 = "llvm.mlir.constant"() <{value = 20 : i32}> : () -> i32
-      %17804 = "llvm.insertvalue"(%17802, %17803) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %17805 = "llvm.insertvalue"(%17804, %17801) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %17806 = "llvm.insertvalue"(%17805, %17800) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      %17807 = "llvm.insertvalue"(%17806, %17799) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
-      "llvm.return"(%17807) : (!llvm.array<4 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<8 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Int32_offset_tbl"}> ({
+      %17806 = "llvm.mlir.constant"() <{value = 16 : i32}> : () -> i32
+      %17807 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %17808 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %17809 = "llvm.mlir.undef"() : () -> !llvm.array<8 x i32>
+      %17810 = "llvm.mlir.constant"() <{value = 20 : i32}> : () -> i32
+      %17811 = "llvm.insertvalue"(%17809, %17810) <{position = array<i64: 0>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %17812 = "llvm.insertvalue"(%17811, %17808) <{position = array<i64: 1>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %17813 = "llvm.insertvalue"(%17812, %17807) <{position = array<i64: 2>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %17814 = "llvm.insertvalue"(%17813, %17806) <{position = array<i64: 3>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %17815 = "llvm.insertvalue"(%17814, %17807) <{position = array<i64: 4>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %17816 = "llvm.insertvalue"(%17815, %17807) <{position = array<i64: 5>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %17817 = "llvm.insertvalue"(%17816, %17808) <{position = array<i64: 6>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      %17818 = "llvm.insertvalue"(%17817, %17807) <{position = array<i64: 7>}> : (!llvm.array<8 x i32>, i32) -> !llvm.array<8 x i32>
+      "llvm.return"(%17818) : (!llvm.array<8 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<17 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "Int32"}> ({
-      %17743 = "llvm.mlir.undef"() : () -> !llvm.array<17 x ptr>
-      %17744 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %17745 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %17746 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
-      %17747 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
-      %17748 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<17 x ptr>)>
-      %17749 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
-      %17750 = "llvm.mlir.constant"() <{value = -3157560240565274503 : i64}> : () -> i64
-      %17751 = "llvm.insertvalue"(%17749, %17750) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %17752 = "llvm.insertvalue"(%17751, %17747) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %17753 = "llvm.insertvalue"(%17752, %17746) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
-      %17754 = "llvm.insertvalue"(%17748, %17753) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<17 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<17 x ptr>)>
-      %17755 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
-      %17756 = "llvm.insertvalue"(%17745, %17755) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17757 = "placeholder.addressof"() {global_name = @Int32_hashtbl} : () -> !llvm.ptr
-      %17758 = "llvm.insertvalue"(%17756, %17757) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17759 = "placeholder.addressof"() {global_name = @Int32_offset_tbl} : () -> !llvm.ptr
-      %17760 = "llvm.insertvalue"(%17758, %17759) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17761 = "llvm.getelementptr"(%17744) <{elem_type = !llvm.struct<(i32)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %17762 = "llvm.insertvalue"(%17760, %17761) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
-      %17763 = "llvm.insertvalue"(%17754, %17762) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<17 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<17 x ptr>)>
-      %17764 = "placeholder.addressof"() {global_name = @Int32_field_value} : () -> !llvm.ptr
-      %17765 = "llvm.insertvalue"(%17743, %17764) <{position = array<i64: 0>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %17766 = "placeholder.addressof"() {global_name = @Int32_field_Int32_0} : () -> !llvm.ptr
-      %17767 = "llvm.insertvalue"(%17765, %17766) <{position = array<i64: 1>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %17768 = "placeholder.addressof"() {global_name = @Int32_B_init_valuePtri32} : () -> !llvm.ptr
-      %17769 = "llvm.insertvalue"(%17767, %17768) <{position = array<i64: 2>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %17770 = "placeholder.addressof"() {global_name = @Int32_B_value_} : () -> !llvm.ptr
-      %17771 = "llvm.insertvalue"(%17769, %17770) <{position = array<i64: 3>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %17772 = "placeholder.addressof"() {global_name = @Int32_B__ADD_otherInt32__ADD_otherFloat64} : () -> !llvm.ptr
-      %17773 = "llvm.insertvalue"(%17771, %17772) <{position = array<i64: 4>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %17774 = "placeholder.addressof"() {global_name = @Int32_init_valuePtri32} : () -> !llvm.ptr
-      %17775 = "llvm.insertvalue"(%17773, %17774) <{position = array<i64: 5>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %17776 = "placeholder.addressof"() {global_name = @Int32_value_} : () -> !llvm.ptr
-      %17777 = "llvm.insertvalue"(%17775, %17776) <{position = array<i64: 6>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %17778 = "placeholder.addressof"() {global_name = @Int32__ADD_otherInt32} : () -> !llvm.ptr
-      %17779 = "llvm.insertvalue"(%17777, %17778) <{position = array<i64: 7>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %17780 = "placeholder.addressof"() {global_name = @Int32__ADD_otherFloat64} : () -> !llvm.ptr
-      %17781 = "llvm.insertvalue"(%17779, %17780) <{position = array<i64: 8>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %17782 = "placeholder.addressof"() {global_name = @Int32_field_Int32_0} : () -> !llvm.ptr
-      %17783 = "llvm.insertvalue"(%17781, %17782) <{position = array<i64: 9>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %17784 = "placeholder.addressof"() {global_name = @Int32_field_Int32_0} : () -> !llvm.ptr
-      %17785 = "llvm.insertvalue"(%17783, %17784) <{position = array<i64: 10>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %17786 = "placeholder.addressof"() {global_name = @Int32_B__ADD_otherInt32__ADD_otherFloat64} : () -> !llvm.ptr
-      %17787 = "llvm.insertvalue"(%17785, %17786) <{position = array<i64: 11>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %17788 = "placeholder.addressof"() {global_name = @Int32_init_valuePtri32} : () -> !llvm.ptr
-      %17789 = "llvm.insertvalue"(%17787, %17788) <{position = array<i64: 12>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %17790 = "placeholder.addressof"() {global_name = @Int32_field_Int32_0} : () -> !llvm.ptr
-      %17791 = "llvm.insertvalue"(%17789, %17790) <{position = array<i64: 13>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %17792 = "placeholder.addressof"() {global_name = @Int32_field_Int32_0} : () -> !llvm.ptr
-      %17793 = "llvm.insertvalue"(%17791, %17792) <{position = array<i64: 14>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %17794 = "placeholder.addressof"() {global_name = @Int32_B__ADD_otherInt32__ADD_otherFloat64} : () -> !llvm.ptr
-      %17795 = "llvm.insertvalue"(%17793, %17794) <{position = array<i64: 15>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %17796 = "placeholder.addressof"() {global_name = @Int32_init_valuePtri32} : () -> !llvm.ptr
-      %17797 = "llvm.insertvalue"(%17795, %17796) <{position = array<i64: 16>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
-      %17798 = "llvm.insertvalue"(%17763, %17797) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<17 x ptr>)>, !llvm.array<17 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<17 x ptr>)>
-      "llvm.return"(%17798) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<17 x ptr>)>) -> ()
+      %17750 = "llvm.mlir.undef"() : () -> !llvm.array<17 x ptr>
+      %17751 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %17752 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %17753 = "llvm.mlir.constant"() <{value = 7 : i64}> : () -> i64
+      %17754 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
+      %17755 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<17 x ptr>)>
+      %17756 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
+      %17757 = "llvm.mlir.constant"() <{value = -3157560240565274503 : i64}> : () -> i64
+      %17758 = "llvm.insertvalue"(%17756, %17757) <{position = array<i64: 0>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %17759 = "llvm.insertvalue"(%17758, %17754) <{position = array<i64: 1>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %17760 = "llvm.insertvalue"(%17759, %17753) <{position = array<i64: 2>}> : (!llvm.array<3 x i64>, i64) -> !llvm.array<3 x i64>
+      %17761 = "llvm.insertvalue"(%17755, %17760) <{position = array<i64: 0>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<17 x ptr>)>, !llvm.array<3 x i64>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<17 x ptr>)>
+      %17762 = "placeholder.addressof"() {global_name = @subtype_test} : () -> !llvm.ptr
+      %17763 = "llvm.insertvalue"(%17752, %17762) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17764 = "placeholder.addressof"() {global_name = @Int32_hashtbl} : () -> !llvm.ptr
+      %17765 = "llvm.insertvalue"(%17763, %17764) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17766 = "placeholder.addressof"() {global_name = @Int32_offset_tbl} : () -> !llvm.ptr
+      %17767 = "llvm.insertvalue"(%17765, %17766) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17768 = "llvm.getelementptr"(%17751) <{elem_type = !llvm.struct<(i32)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %17769 = "llvm.insertvalue"(%17767, %17768) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17770 = "llvm.insertvalue"(%17761, %17769) <{position = array<i64: 1>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<17 x ptr>)>, !llvm.array<4 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<17 x ptr>)>
+      %17771 = "placeholder.addressof"() {global_name = @Int32_field_value} : () -> !llvm.ptr
+      %17772 = "llvm.insertvalue"(%17750, %17771) <{position = array<i64: 0>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
+      %17773 = "placeholder.addressof"() {global_name = @Int32_field_Int32_0} : () -> !llvm.ptr
+      %17774 = "llvm.insertvalue"(%17772, %17773) <{position = array<i64: 1>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
+      %17775 = "placeholder.addressof"() {global_name = @Int32_B_init_valuePtri32} : () -> !llvm.ptr
+      %17776 = "llvm.insertvalue"(%17774, %17775) <{position = array<i64: 2>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
+      %17777 = "placeholder.addressof"() {global_name = @Int32_B_value_} : () -> !llvm.ptr
+      %17778 = "llvm.insertvalue"(%17776, %17777) <{position = array<i64: 3>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
+      %17779 = "placeholder.addressof"() {global_name = @Int32_B__ADD_otherInt32__ADD_otherFloat64} : () -> !llvm.ptr
+      %17780 = "llvm.insertvalue"(%17778, %17779) <{position = array<i64: 4>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
+      %17781 = "placeholder.addressof"() {global_name = @Int32_init_valuePtri32} : () -> !llvm.ptr
+      %17782 = "llvm.insertvalue"(%17780, %17781) <{position = array<i64: 5>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
+      %17783 = "placeholder.addressof"() {global_name = @Int32_value_} : () -> !llvm.ptr
+      %17784 = "llvm.insertvalue"(%17782, %17783) <{position = array<i64: 6>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
+      %17785 = "placeholder.addressof"() {global_name = @Int32__ADD_otherInt32} : () -> !llvm.ptr
+      %17786 = "llvm.insertvalue"(%17784, %17785) <{position = array<i64: 7>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
+      %17787 = "placeholder.addressof"() {global_name = @Int32__ADD_otherFloat64} : () -> !llvm.ptr
+      %17788 = "llvm.insertvalue"(%17786, %17787) <{position = array<i64: 8>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
+      %17789 = "placeholder.addressof"() {global_name = @Int32_field_Int32_0} : () -> !llvm.ptr
+      %17790 = "llvm.insertvalue"(%17788, %17789) <{position = array<i64: 9>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
+      %17791 = "placeholder.addressof"() {global_name = @Int32_field_Int32_0} : () -> !llvm.ptr
+      %17792 = "llvm.insertvalue"(%17790, %17791) <{position = array<i64: 10>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
+      %17793 = "placeholder.addressof"() {global_name = @Int32_B__ADD_otherInt32__ADD_otherFloat64} : () -> !llvm.ptr
+      %17794 = "llvm.insertvalue"(%17792, %17793) <{position = array<i64: 11>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
+      %17795 = "placeholder.addressof"() {global_name = @Int32_init_valuePtri32} : () -> !llvm.ptr
+      %17796 = "llvm.insertvalue"(%17794, %17795) <{position = array<i64: 12>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
+      %17797 = "placeholder.addressof"() {global_name = @Int32_field_Int32_0} : () -> !llvm.ptr
+      %17798 = "llvm.insertvalue"(%17796, %17797) <{position = array<i64: 13>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
+      %17799 = "placeholder.addressof"() {global_name = @Int32_field_Int32_0} : () -> !llvm.ptr
+      %17800 = "llvm.insertvalue"(%17798, %17799) <{position = array<i64: 14>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
+      %17801 = "placeholder.addressof"() {global_name = @Int32_B__ADD_otherInt32__ADD_otherFloat64} : () -> !llvm.ptr
+      %17802 = "llvm.insertvalue"(%17800, %17801) <{position = array<i64: 15>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
+      %17803 = "placeholder.addressof"() {global_name = @Int32_init_valuePtri32} : () -> !llvm.ptr
+      %17804 = "llvm.insertvalue"(%17802, %17803) <{position = array<i64: 16>}> : (!llvm.array<17 x ptr>, !llvm.ptr) -> !llvm.array<17 x ptr>
+      %17805 = "llvm.insertvalue"(%17770, %17804) <{position = array<i64: 2>}> : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<17 x ptr>)>, !llvm.array<17 x ptr>) -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<17 x ptr>)>
+      "llvm.return"(%17805) : (!llvm.struct<(array<3 x i64>, array<4 x ptr>, array<17 x ptr>)>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Holder_hashtbl"}> ({
-      %17738 = "llvm.mlir.undef"() : () -> !llvm.array<2 x ptr>
-      %17739 = "placeholder.addressof"() {global_name = @Holder} : () -> !llvm.ptr
-      %17740 = "llvm.insertvalue"(%17738, %17739) <{position = array<i64: 0>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      %17741 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
-      %17742 = "llvm.insertvalue"(%17740, %17741) <{position = array<i64: 1>}> : (!llvm.array<2 x ptr>, !llvm.ptr) -> !llvm.array<2 x ptr>
-      "llvm.return"(%17742) : (!llvm.array<2 x ptr>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x ptr>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Holder_hashtbl"}> ({
+      %17741 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %17742 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
+      %17743 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17744 = "llvm.insertvalue"(%17742, %17743) <{position = array<i64: 0>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17745 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
+      %17746 = "llvm.insertvalue"(%17744, %17745) <{position = array<i64: 1>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17747 = "placeholder.addressof"() {global_name = @Holder} : () -> !llvm.ptr
+      %17748 = "llvm.insertvalue"(%17746, %17747) <{position = array<i64: 2>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      %17749 = "llvm.insertvalue"(%17748, %17741) <{position = array<i64: 3>}> : (!llvm.array<4 x ptr>, !llvm.ptr) -> !llvm.array<4 x ptr>
+      "llvm.return"(%17749) : (!llvm.array<4 x ptr>) -> ()
     }) : () -> ()
-    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<2 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Holder_offset_tbl"}> ({
-      %17733 = "llvm.mlir.constant"() <{value = 13 : i32}> : () -> i32
-      %17734 = "llvm.mlir.undef"() : () -> !llvm.array<2 x i32>
-      %17735 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %17736 = "llvm.insertvalue"(%17734, %17735) <{position = array<i64: 0>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      %17737 = "llvm.insertvalue"(%17736, %17733) <{position = array<i64: 1>}> : (!llvm.array<2 x i32>, i32) -> !llvm.array<2 x i32>
-      "llvm.return"(%17737) : (!llvm.array<2 x i32>) -> ()
+    "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.array<4 x i32>, linkage = #llvm.linkage<linkonce_odr>, sym_name = "Holder_offset_tbl"}> ({
+      %17733 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
+      %17734 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %17735 = "llvm.mlir.undef"() : () -> !llvm.array<4 x i32>
+      %17736 = "llvm.mlir.constant"() <{value = 13 : i32}> : () -> i32
+      %17737 = "llvm.insertvalue"(%17735, %17736) <{position = array<i64: 0>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %17738 = "llvm.insertvalue"(%17737, %17734) <{position = array<i64: 1>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %17739 = "llvm.insertvalue"(%17738, %17734) <{position = array<i64: 2>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      %17740 = "llvm.insertvalue"(%17739, %17733) <{position = array<i64: 3>}> : (!llvm.array<4 x i32>, i32) -> !llvm.array<4 x i32>
+      "llvm.return"(%17740) : (!llvm.array<4 x i32>) -> ()
     }) : () -> ()
     "placeholder.global"() <{addr_space = 0 : i32, constant, global_type = !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<6 x ptr>)>, linkage = #llvm.linkage<external>, sym_name = "Holder"}> ({
       %17699 = "llvm.mlir.undef"() : () -> !llvm.array<6 x ptr>
       %17700 = "llvm.mlir.zero"() : () -> !llvm.ptr
       %17701 = "llvm.mlir.undef"() : () -> !llvm.array<4 x ptr>
-      %17702 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i64
-      %17703 = "llvm.mlir.constant"() <{value = 4611686018427388093 : i64}> : () -> i64
+      %17702 = "llvm.mlir.constant"() <{value = 3 : i64}> : () -> i64
+      %17703 = "llvm.mlir.constant"() <{value = 4611686018427388081 : i64}> : () -> i64
       %17704 = "llvm.mlir.undef"() : () -> !llvm.struct<(array<3 x i64>, array<4 x ptr>, array<6 x ptr>)>
       %17705 = "llvm.mlir.undef"() : () -> !llvm.array<3 x i64>
       %17706 = "llvm.mlir.constant"() <{value = -261997465778736657 : i64}> : () -> i64
@@ -3070,7 +3389,7 @@
       %17588 = "llvm.getelementptr"(%17583) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %17589 = "llvm.load"(%17587) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%17589, %17588) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %17590 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17590 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%17583, %17590) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %17591 = "llvm.alloca"(%17565) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
       %17592 = "llvm.getelementptr"(%17583) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -3081,7 +3400,7 @@
       %17596 = "llvm.getelementptr"(%17591) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %17597 = "llvm.load"(%17595) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%17597, %17596) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %17598 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17598 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%17591, %17598) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %17599 = "llvm.getelementptr"(%17568) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %17600 = "llvm.load"(%17599) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -3112,7 +3431,7 @@
       %17622 = "llvm.getelementptr"(%17617) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %17623 = "llvm.load"(%17621) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%17623, %17622) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %17624 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17624 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%17617, %17624) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %17625 = "llvm.alloca"(%17565) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
       %17626 = "llvm.getelementptr"(%17617) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -3123,7 +3442,7 @@
       %17630 = "llvm.getelementptr"(%17625) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %17631 = "llvm.load"(%17629) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%17631, %17630) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %17632 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17632 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%17625, %17632) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %17633 = "llvm.getelementptr"(%17568) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %17634 = "llvm.load"(%17633) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -3151,7 +3470,7 @@
     "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>, !llvm.struct<(ptr, i160)>) -> !llvm.ptr, sym_name = "Pair_B_init_firstT_secondU"}> ({
     ^bb0(%arg779: !llvm.struct<(ptr, ptr, ptr, i32)>, %arg780: !llvm.ptr, %arg781: !llvm.struct<(ptr, i160)>, %arg782: !llvm.struct<(ptr, i160)>):
       %17525 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
-      %17526 = "llvm.mlir.constant"() <{value = 3282773614056351330 : i64}> : () -> i64
+      %17526 = "llvm.mlir.constant"() <{value = 3084208142191802847 : i64}> : () -> i64
       %17527 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
       %17528 = "llvm.mlir.constant"() <{value = 16 : i64}> : () -> i64
       %17529 = "llvm.call_intrinsic"(%17528, %arg780) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
@@ -3171,7 +3490,7 @@
       %17538 = "llvm.load"(%17534) <{ordering = 0 : i64}> : (!llvm.ptr) -> i64
       %17539 = "llvm.load"(%17535) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %17540 = "llvm.load"(%17536) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %17541 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17541 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       %17542 = "llvm.ptrtoint"(%17541) : (!llvm.ptr) -> i64
       %17543 = "llvm.call"(%17539, %17538, %17537, %17526, %17542, %17540) {callee = @subtype_test_wrapper, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 6, 0>} : (!llvm.ptr, i64, i64, i64, i64, !llvm.ptr) -> i1
       "cf.cond_br"(%17543)[^bb1, ^bb1] <{operandSegmentSizes = array<i32: 1, 0, 0>}> : (i1) -> ()
@@ -3186,7 +3505,7 @@
       %17551 = "llvm.load"(%17547) <{ordering = 0 : i64}> : (!llvm.ptr) -> i64
       %17552 = "llvm.load"(%17548) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %17553 = "llvm.load"(%17549) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %17554 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17554 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       %17555 = "llvm.ptrtoint"(%17554) : (!llvm.ptr) -> i64
       %17556 = "llvm.call"(%17552, %17551, %17550, %17526, %17555, %17553) {callee = @subtype_test_wrapper, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 6, 0>} : (!llvm.ptr, i64, i64, i64, i64, !llvm.ptr) -> i1
       "cf.cond_br"(%17556)[^bb2, ^bb2] <{operandSegmentSizes = array<i32: 1, 0, 0>}> : (i1) -> ()
@@ -3242,7 +3561,7 @@
       %17508 = "func.call_indirect"(%17507, %17498) : ((!llvm.ptr) -> !llvm.struct<(ptr, i160)>, !llvm.ptr) -> !llvm.struct<(ptr, i160)>
       %17509 = "llvm.alloca"(%17480) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
       "llvm.store"(%17508, %17509) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> ()
-      %17510 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17510 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%17509, %17510) <{CConv = #llvm.cconv<ccc>, callee = @assume_offset, callee_type = !llvm.func<void (ptr, ptr)>, fastmathFlags = #llvm.fastmath<none>, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>}> : (!llvm.ptr, !llvm.ptr) -> ()
       %17511 = "llvm.alloca"(%17480) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
       %17512 = "llvm.getelementptr"(%17509) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -3253,7 +3572,7 @@
       %17516 = "llvm.getelementptr"(%17511) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %17517 = "llvm.load"(%17515) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%17517, %17516) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %17518 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17518 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%17511, %17518) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %17519 = "llvm.getelementptr"(%17511) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %17520 = "llvm.load"(%17519) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -3329,7 +3648,7 @@
       %17450 = "func.call_indirect"(%17449, %17439) : ((!llvm.ptr) -> !llvm.struct<(ptr, i160)>, !llvm.ptr) -> !llvm.struct<(ptr, i160)>
       %17451 = "llvm.alloca"(%17421) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
       "llvm.store"(%17450, %17451) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> ()
-      %17452 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17452 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%17451, %17452) <{CConv = #llvm.cconv<ccc>, callee = @assume_offset, callee_type = !llvm.func<void (ptr, ptr)>, fastmathFlags = #llvm.fastmath<none>, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>}> : (!llvm.ptr, !llvm.ptr) -> ()
       %17453 = "llvm.alloca"(%17421) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
       %17454 = "llvm.getelementptr"(%17451) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -3340,7 +3659,7 @@
       %17458 = "llvm.getelementptr"(%17453) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %17459 = "llvm.load"(%17457) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%17459, %17458) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %17460 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17460 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%17453, %17460) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %17461 = "llvm.getelementptr"(%17453) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %17462 = "llvm.load"(%17461) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -3405,7 +3724,7 @@
       "llvm.store"(%17399, %17385) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %17400 = "llvm.call_intrinsic"(%17378, %17384) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
       "llvm.store"(%17384, %17386) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %17401 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17401 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%17385, %17401) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %17402 = "llvm.getelementptr"(%17385) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %17403 = "llvm.load"(%17402) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -3477,7 +3796,7 @@
       "llvm.store"(%17333, %17331) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %17334 = "llvm.load"(%17330) <{ordering = 0 : i64}> {type = f64} : (!llvm.ptr) -> f64
       "llvm.store"(%17334, %17332) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %17335 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17335 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%17331, %17335) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %17336 = "llvm.getelementptr"(%17331) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %17337 = "llvm.load"(%17336) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -3595,7 +3914,7 @@
       "llvm.store"(%17267, %17253) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %17268 = "llvm.call_intrinsic"(%17214, %17252) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
       "llvm.store"(%17252, %17254) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %17269 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17269 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%17253, %17269) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %17270 = "llvm.getelementptr"(%17220) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %17271 = "llvm.load"(%17270) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -3627,7 +3946,7 @@
       "llvm.store"(%17293, %17291) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %17294 = "llvm.load"(%17288) <{ordering = 0 : i64}> {type = f64} : (!llvm.ptr) -> f64
       "llvm.store"(%17294, %17292) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %17295 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17295 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%17291, %17295) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %17296 = "llvm.getelementptr"(%17220) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %17297 = "llvm.load"(%17296) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -3769,7 +4088,7 @@
       %17147 = "func.call_indirect"(%17146, %17136) : ((!llvm.ptr) -> !llvm.struct<(ptr, i160)>, !llvm.ptr) -> !llvm.struct<(ptr, i160)>
       %17148 = "llvm.alloca"(%17118) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
       "llvm.store"(%17147, %17148) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> ()
-      %17149 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17149 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%17148, %17149) <{CConv = #llvm.cconv<ccc>, callee = @assume_offset, callee_type = !llvm.func<void (ptr, ptr)>, fastmathFlags = #llvm.fastmath<none>, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>}> : (!llvm.ptr, !llvm.ptr) -> ()
       %17150 = "llvm.alloca"(%17118) <{elem_type = f64}> : (i32) -> !llvm.ptr
       %17151 = "llvm.getelementptr"(%17148) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
@@ -3781,7 +4100,7 @@
       "llvm.store"(%17155, %17153) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %17156 = "llvm.load"(%17150) <{ordering = 0 : i64}> {type = f64} : (!llvm.ptr) -> f64
       "llvm.store"(%17156, %17154) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %17157 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17157 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%17153, %17157) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %17158 = "llvm.getelementptr"(%17153) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %17159 = "llvm.load"(%17158) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -4057,7 +4376,7 @@
       %17050 = "llvm.getelementptr"(%17045) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %17051 = "llvm.load"(%17049) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%17051, %17050) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %17052 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17052 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%17045, %17052) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %17053 = "llvm.alloca"(%16902) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
       %17054 = "llvm.getelementptr"(%17045) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -4068,7 +4387,7 @@
       %17058 = "llvm.getelementptr"(%17053) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %17059 = "llvm.load"(%17057) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%17059, %17058) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %17060 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17060 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%17053, %17060) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %17061 = "llvm.getelementptr"(%17053) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %17062 = "llvm.load"(%17061) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -4088,7 +4407,7 @@
       %17074 = "llvm.getelementptr"(%17069) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %17075 = "llvm.load"(%17073) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%17075, %17074) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %17076 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %17076 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%17069, %17076) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %17077 = "llvm.getelementptr"(%17069) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %17078 = "llvm.getelementptr"(%17030) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -4185,7 +4504,7 @@
       %16659 = "llvm.getelementptr"(%16654) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %16660 = "llvm.load"(%16658) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%16660, %16659) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %16661 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %16661 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%16654, %16661) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %16662 = "llvm.alloca"(%16636) <{elem_type = !llvm.struct<(ptr)>}> : (i32) -> !llvm.ptr
       "llvm.store"(%arg731, %16662) <{ordering = 0 : i64}> : (!llvm.struct<(ptr)>, !llvm.ptr) -> ()
@@ -4345,7 +4664,7 @@
       %16793 = "llvm.getelementptr"(%16788) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %16794 = "llvm.load"(%16792) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%16794, %16793) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %16795 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %16795 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%16788, %16795) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %16796 = "llvm.alloca"(%16636) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
       %16797 = "llvm.getelementptr"(%16654) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -4356,7 +4675,7 @@
       %16801 = "llvm.getelementptr"(%16796) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %16802 = "llvm.load"(%16800) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%16802, %16801) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %16803 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %16803 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%16796, %16803) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %16804 = "llvm.getelementptr"(%16796) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %16805 = "llvm.load"(%16804) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -4373,7 +4692,7 @@
       %16815 = "llvm.getelementptr"(%16810) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %16816 = "llvm.load"(%16814) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%16816, %16815) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %16817 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %16817 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%16810, %16817) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %16818 = "llvm.getelementptr"(%16810) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %16819 = "llvm.load"(%16818) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -4395,7 +4714,7 @@
       %16833 = "llvm.getelementptr"(%16828) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %16834 = "llvm.load"(%16832) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%16834, %16833) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %16835 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %16835 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%16828, %16835) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %16836 = "llvm.getelementptr"(%16828) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %16837 = "llvm.getelementptr"(%16654) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -4414,7 +4733,7 @@
       %16847 = "llvm.getelementptr"(%16842) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %16848 = "llvm.load"(%16846) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%16848, %16847) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %16849 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %16849 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%16842, %16849) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %16850 = "llvm.getelementptr"(%16842) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %16851 = "llvm.getelementptr"(%16773) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -4435,7 +4754,7 @@
       %16861 = "llvm.getelementptr"(%16856) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %16862 = "llvm.load"(%16860) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%16862, %16861) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %16863 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %16863 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%16856, %16863) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %16864 = "llvm.getelementptr"(%16856) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %16865 = "llvm.load"(%16864) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -4450,7 +4769,7 @@
     "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>, !llvm.struct<(ptr)>) -> !llvm.ptr, sym_name = "Iterable2_B_reduce_accumulatorT_fFunctionT._T_to_T"}> ({
     ^bb0(%arg723: !llvm.struct<(ptr, ptr, ptr, i32)>, %arg724: !llvm.ptr, %arg725: !llvm.struct<(ptr, i160)>, %arg726: !llvm.struct<(ptr)>):
       %16590 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
-      %16591 = "llvm.mlir.constant"() <{value = 3282773614056351330 : i64}> : () -> i64
+      %16591 = "llvm.mlir.constant"() <{value = 3084208142191802847 : i64}> : () -> i64
       %16592 = "llvm.mlir.constant"() <{value = 7927147055246173914 : i64}> : () -> i64
       %16593 = "llvm.mlir.constant"() <{value = 14 : i32}> : () -> i32
       %16594 = "llvm.mlir.constant"() <{value = 16 : i64}> : () -> i64
@@ -4486,7 +4805,7 @@
       %16617 = "llvm.load"(%16613) <{ordering = 0 : i64}> : (!llvm.ptr) -> i64
       %16618 = "llvm.load"(%16614) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %16619 = "llvm.load"(%16615) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %16620 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %16620 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       %16621 = "llvm.ptrtoint"(%16620) : (!llvm.ptr) -> i64
       %16622 = "llvm.call"(%16618, %16617, %16616, %16591, %16621, %16619) {callee = @subtype_test_wrapper, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 6, 0>} : (!llvm.ptr, i64, i64, i64, i64, !llvm.ptr) -> i1
       "cf.cond_br"(%16622)[^bb2, ^bb2] <{operandSegmentSizes = array<i32: 1, 0, 0>}> : (i1) -> ()
@@ -4692,7 +5011,7 @@
       %16546 = "llvm.getelementptr"(%16541) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %16547 = "llvm.load"(%16545) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%16547, %16546) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %16548 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %16548 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%16541, %16548) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %16549 = "llvm.alloca"(%16398) <{elem_type = i1}> : (i32) -> !llvm.ptr
       "llvm.store"(%16396, %16549) <{ordering = 0 : i64}> : (i1, !llvm.ptr) -> ()
@@ -4705,7 +5024,7 @@
       %16555 = "llvm.getelementptr"(%16550) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %16556 = "llvm.load"(%16554) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%16556, %16555) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %16557 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %16557 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%16550, %16557) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %16558 = "llvm.getelementptr"(%16550) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %16559 = "llvm.load"(%16558) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -4740,7 +5059,7 @@
       %16581 = "llvm.getelementptr"(%16576) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %16582 = "llvm.load"(%16580) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%16582, %16581) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %16583 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %16583 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%16576, %16583) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %16584 = "llvm.getelementptr"(%16576) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %16585 = "llvm.getelementptr"(%16526) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -4983,7 +5302,7 @@
       %16326 = "llvm.getelementptr"(%16321) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %16327 = "llvm.load"(%16325) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%16327, %16326) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %16328 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %16328 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%16321, %16328) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %16329 = "llvm.alloca"(%16178) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
       %16330 = "llvm.getelementptr"(%16321) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -4994,7 +5313,7 @@
       %16334 = "llvm.getelementptr"(%16329) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %16335 = "llvm.load"(%16333) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%16335, %16334) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %16336 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %16336 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%16329, %16336) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %16337 = "llvm.getelementptr"(%16329) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %16338 = "llvm.load"(%16337) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -5024,7 +5343,7 @@
       %16356 = "llvm.getelementptr"(%16351) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %16357 = "llvm.load"(%16355) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%16357, %16356) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %16358 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %16358 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%16351, %16358) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %16359 = "llvm.getelementptr"(%16351) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %16360 = "llvm.getelementptr"(%16306) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -6796,7 +7115,7 @@
       %14578 = "llvm.ptrtoint"(%14577) {type = i64} : (!llvm.ptr) -> i64
       %14579 = "llvm.call"(%14578) {callee = @bump_malloc, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (i64) -> !llvm.ptr
       %14580 = "llvm.call_intrinsic"(%14555, %14579) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %14581 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %14581 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.store"(%14581, %14579) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %14582 = "llvm.getelementptr"(%14556) <{elem_type = !llvm.struct<(struct<(ptr)>, i32, i32, ptr)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
       %14583 = "llvm.ptrtoint"(%14582) {type = i64} : (!llvm.ptr) -> i64
@@ -7009,7 +7328,7 @@
       %14753 = "llvm.getelementptr"(%14748) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %14754 = "llvm.load"(%14752) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%14754, %14753) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %14755 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %14755 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%14748, %14755) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %14756 = "llvm.alloca"(%14560) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
       %14757 = "llvm.getelementptr"(%14748) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -7020,7 +7339,7 @@
       %14761 = "llvm.getelementptr"(%14756) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %14762 = "llvm.load"(%14760) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%14762, %14761) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %14763 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %14763 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%14756, %14763) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %14764 = "llvm.getelementptr"(%14756) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %14765 = "llvm.load"(%14764) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -7044,7 +7363,7 @@
       %14783 = "llvm.ptrtoint"(%14782) {type = i64} : (!llvm.ptr) -> i64
       %14784 = "llvm.call"(%14783) {callee = @bump_malloc, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (i64) -> !llvm.ptr
       %14785 = "llvm.call_intrinsic"(%14555, %14784) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %14786 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %14786 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.store"(%14786, %14784) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %14787 = "llvm.alloca"(%14560) <{elem_type = !llvm.array<1 x ptr>}> : (i32) -> !llvm.ptr
       %14788 = "llvm.getelementptr"(%14787) <{elem_type = !llvm.array<1 x ptr>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -7092,7 +7411,7 @@
       %14821 = "llvm.getelementptr"(%14816) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %14822 = "llvm.load"(%14820) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%14822, %14821) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %14823 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %14823 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%14816, %14823) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %14824 = "llvm.getelementptr"(%14816) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %14825 = "llvm.getelementptr"(%14733) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -7604,7 +7923,7 @@
       %14074 = "llvm.getelementptr"(%14069) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %14075 = "llvm.load"(%14073) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%14075, %14074) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %14076 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %14076 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%14069, %14076) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %14077 = "llvm.getelementptr"(%14054) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %14078 = "llvm.load"(%14077) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -7723,7 +8042,7 @@
       %14180 = "llvm.getelementptr"(%14175) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %14181 = "llvm.load"(%14179) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%14181, %14180) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %14182 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %14182 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%14175, %14182) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %14183 = "llvm.getelementptr"(%14175) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %14184 = "llvm.getelementptr"(%14174) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -7807,7 +8126,7 @@
     "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.ptr, sym_name = "Array_B_append_xT"}> ({
     ^bb0(%arg624: !llvm.struct<(ptr, ptr, ptr, i32)>, %arg625: !llvm.ptr, %arg626: !llvm.struct<(ptr, i160)>):
       %14021 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
-      %14022 = "llvm.mlir.constant"() <{value = 3282773614056351330 : i64}> : () -> i64
+      %14022 = "llvm.mlir.constant"() <{value = 3084208142191802847 : i64}> : () -> i64
       %14023 = "llvm.mlir.constant"() <{value = 30 : i32}> : () -> i32
       %14024 = "llvm.mlir.constant"() <{value = 8 : i64}> : () -> i64
       %14025 = "llvm.call_intrinsic"(%14024, %arg625) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
@@ -7827,7 +8146,7 @@
       %14034 = "llvm.load"(%14030) <{ordering = 0 : i64}> : (!llvm.ptr) -> i64
       %14035 = "llvm.load"(%14031) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %14036 = "llvm.load"(%14032) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %14037 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %14037 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       %14038 = "llvm.ptrtoint"(%14037) : (!llvm.ptr) -> i64
       %14039 = "llvm.call"(%14035, %14034, %14033, %14022, %14038, %14036) {callee = @subtype_test_wrapper, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 6, 0>} : (!llvm.ptr, i64, i64, i64, i64, !llvm.ptr) -> i1
       "cf.cond_br"(%14039)[^bb1, ^bb1] <{operandSegmentSizes = array<i32: 1, 0, 0>}> : (i1) -> ()
@@ -8025,7 +8344,7 @@
       %14006 = "llvm.getelementptr"(%14001) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %14007 = "llvm.load"(%14005) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%14007, %14006) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %14008 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %14008 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%14001, %14008) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %14009 = "llvm.getelementptr"(%14001) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %14010 = "llvm.getelementptr"(%14000) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -8296,7 +8615,7 @@
       %13824 = "llvm.getelementptr"(%13819) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %13825 = "llvm.load"(%13823) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%13825, %13824) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %13826 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %13826 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%13819, %13826) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %13827 = "llvm.alloca"(%13647) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
       %13828 = "llvm.getelementptr"(%13819) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -8307,7 +8626,7 @@
       %13832 = "llvm.getelementptr"(%13827) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %13833 = "llvm.load"(%13831) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%13833, %13832) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %13834 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %13834 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%13827, %13834) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %13835 = "llvm.getelementptr"(%13827) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %13836 = "llvm.load"(%13835) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -8373,7 +8692,7 @@
       %13393 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i32
       %13394 = "llvm.mlir.zero"() : () -> !llvm.ptr
       %13395 = "llvm.mlir.constant"() <{value = 13 : i32}> : () -> i32
-      %13396 = "llvm.mlir.constant"() <{value = 164 : i32}> : () -> i32
+      %13396 = "llvm.mlir.constant"() <{value = 163 : i32}> : () -> i32
       %13397 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
       %13398 = "llvm.alloca"(%13397) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
       "llvm.store"(%arg608, %13398) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> ()
@@ -8460,7 +8779,7 @@
       %13466 = "llvm.load"(%13464) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
       "llvm.store"(%13466, %13465) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %13467 = "llvm.call_intrinsic"(%13391, %13463) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %13468 = "placeholder.addressof"() {global_name = @bhfvu_genericmini} : () -> !llvm.ptr
+      %13468 = "placeholder.addressof"() {global_name = @xpvdv_genericmini} : () -> !llvm.ptr
       %13469 = "llvm.alloca"(%13397) <{elem_type = i32}> : (i32) -> !llvm.ptr
       "llvm.store"(%13393, %13469) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
       %13470 = "llvm.load"(%13463) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -8737,7 +9056,7 @@
       %13348 = "llvm.getelementptr"(%13343) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %13349 = "llvm.load"(%13347) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%13349, %13348) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %13350 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %13350 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%13343, %13350) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %13351 = "llvm.getelementptr"(%13343) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %13352 = "llvm.load"(%13351) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -9017,7 +9336,7 @@
     "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>, !llvm.struct<(ptr)>) -> !llvm.ptr, sym_name = "Array_B_reduce_accumulatorT_fFunctionT._T_to_T"}> ({
     ^bb0(%arg586: !llvm.struct<(ptr, ptr, ptr, i32)>, %arg587: !llvm.ptr, %arg588: !llvm.struct<(ptr, i160)>, %arg589: !llvm.struct<(ptr)>):
       %13068 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
-      %13069 = "llvm.mlir.constant"() <{value = 3282773614056351330 : i64}> : () -> i64
+      %13069 = "llvm.mlir.constant"() <{value = 3084208142191802847 : i64}> : () -> i64
       %13070 = "llvm.mlir.constant"() <{value = 7927147055246173914 : i64}> : () -> i64
       %13071 = "llvm.mlir.constant"() <{value = 37 : i32}> : () -> i32
       %13072 = "llvm.mlir.constant"() <{value = 16 : i64}> : () -> i64
@@ -9053,7 +9372,7 @@
       %13095 = "llvm.load"(%13091) <{ordering = 0 : i64}> : (!llvm.ptr) -> i64
       %13096 = "llvm.load"(%13092) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %13097 = "llvm.load"(%13093) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %13098 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %13098 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       %13099 = "llvm.ptrtoint"(%13098) : (!llvm.ptr) -> i64
       %13100 = "llvm.call"(%13096, %13095, %13094, %13069, %13099, %13097) {callee = @subtype_test_wrapper, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 6, 0>} : (!llvm.ptr, i64, i64, i64, i64, !llvm.ptr) -> i1
       "cf.cond_br"(%13100)[^bb2, ^bb2] <{operandSegmentSizes = array<i32: 1, 0, 0>}> : (i1) -> ()
@@ -9852,7 +10171,7 @@
       %12705 = "llvm.getelementptr"(%12700) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %12706 = "llvm.load"(%12704) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%12706, %12705) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %12707 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %12707 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%12700, %12707) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %12708 = "llvm.getelementptr"(%12700) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %12709 = "llvm.load"(%12708) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -10622,7 +10941,7 @@
     "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>, !llvm.struct<(ptr)>) -> !llvm.ptr, sym_name = "MapIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T"}> ({
     ^bb0(%arg514: !llvm.struct<(ptr, ptr, ptr, i32)>, %arg515: !llvm.ptr, %arg516: !llvm.struct<(ptr, i160)>, %arg517: !llvm.struct<(ptr)>):
       %11860 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
-      %11861 = "llvm.mlir.constant"() <{value = 3282773614056351330 : i64}> : () -> i64
+      %11861 = "llvm.mlir.constant"() <{value = 3084208142191802847 : i64}> : () -> i64
       %11862 = "llvm.mlir.constant"() <{value = 7927147055246173914 : i64}> : () -> i64
       %11863 = "llvm.mlir.constant"() <{value = 19 : i32}> : () -> i32
       %11864 = "llvm.mlir.constant"() <{value = 16 : i64}> : () -> i64
@@ -10658,7 +10977,7 @@
       %11887 = "llvm.load"(%11883) <{ordering = 0 : i64}> : (!llvm.ptr) -> i64
       %11888 = "llvm.load"(%11884) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %11889 = "llvm.load"(%11885) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %11890 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %11890 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       %11891 = "llvm.ptrtoint"(%11890) : (!llvm.ptr) -> i64
       %11892 = "llvm.call"(%11888, %11887, %11886, %11861, %11891, %11889) {callee = @subtype_test_wrapper, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 6, 0>} : (!llvm.ptr, i64, i64, i64, i64, !llvm.ptr) -> i1
       "cf.cond_br"(%11892)[^bb2, ^bb2] <{operandSegmentSizes = array<i32: 1, 0, 0>}> : (i1) -> ()
@@ -11354,7 +11673,7 @@
       %11427 = "llvm.getelementptr"(%11422) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %11428 = "llvm.load"(%11426) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%11428, %11427) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %11429 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %11429 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%11422, %11429) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %11430 = "llvm.alloca"(%11330) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
       %11431 = "llvm.getelementptr"(%11422) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -11365,7 +11684,7 @@
       %11435 = "llvm.getelementptr"(%11430) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %11436 = "llvm.load"(%11434) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%11436, %11435) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %11437 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %11437 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%11430, %11437) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %11438 = "llvm.getelementptr"(%11430) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %11439 = "llvm.load"(%11438) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -12131,7 +12450,7 @@
     "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>, !llvm.struct<(ptr)>) -> !llvm.ptr, sym_name = "FilterIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T"}> ({
     ^bb0(%arg440: !llvm.struct<(ptr, ptr, ptr, i32)>, %arg441: !llvm.ptr, %arg442: !llvm.struct<(ptr, i160)>, %arg443: !llvm.struct<(ptr)>):
       %10742 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
-      %10743 = "llvm.mlir.constant"() <{value = 3282773614056351330 : i64}> : () -> i64
+      %10743 = "llvm.mlir.constant"() <{value = 3084208142191802847 : i64}> : () -> i64
       %10744 = "llvm.mlir.constant"() <{value = 7927147055246173914 : i64}> : () -> i64
       %10745 = "llvm.mlir.constant"() <{value = 18 : i32}> : () -> i32
       %10746 = "llvm.mlir.constant"() <{value = 16 : i64}> : () -> i64
@@ -12167,7 +12486,7 @@
       %10769 = "llvm.load"(%10765) <{ordering = 0 : i64}> : (!llvm.ptr) -> i64
       %10770 = "llvm.load"(%10766) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %10771 = "llvm.load"(%10767) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %10772 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %10772 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       %10773 = "llvm.ptrtoint"(%10772) : (!llvm.ptr) -> i64
       %10774 = "llvm.call"(%10770, %10769, %10768, %10743, %10773, %10771) {callee = @subtype_test_wrapper, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 6, 0>} : (!llvm.ptr, i64, i64, i64, i64, !llvm.ptr) -> i1
       "cf.cond_br"(%10774)[^bb2, ^bb2] <{operandSegmentSizes = array<i32: 1, 0, 0>}> : (i1) -> ()
@@ -12848,7 +13167,7 @@
       %10254 = "llvm.getelementptr"(%10249) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %10255 = "llvm.load"(%10253) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%10255, %10254) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %10256 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %10256 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%10249, %10256) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %10257 = "llvm.alloca"(%10168) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
       %10258 = "llvm.getelementptr"(%10249) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -12859,7 +13178,7 @@
       %10262 = "llvm.getelementptr"(%10257) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %10263 = "llvm.load"(%10261) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%10263, %10262) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %10264 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %10264 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%10257, %10264) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %10265 = "llvm.getelementptr"(%10257) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %10266 = "llvm.load"(%10265) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -13900,7 +14219,7 @@
     "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>, !llvm.struct<(ptr)>) -> !llvm.ptr, sym_name = "ChainIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T"}> ({
     ^bb0(%arg367: !llvm.struct<(ptr, ptr, ptr, i32)>, %arg368: !llvm.ptr, %arg369: !llvm.struct<(ptr, i160)>, %arg370: !llvm.struct<(ptr)>):
       %9402 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
-      %9403 = "llvm.mlir.constant"() <{value = 3282773614056351330 : i64}> : () -> i64
+      %9403 = "llvm.mlir.constant"() <{value = 3084208142191802847 : i64}> : () -> i64
       %9404 = "llvm.mlir.constant"() <{value = 7927147055246173914 : i64}> : () -> i64
       %9405 = "llvm.mlir.constant"() <{value = 18 : i32}> : () -> i32
       %9406 = "llvm.mlir.constant"() <{value = 16 : i64}> : () -> i64
@@ -13936,7 +14255,7 @@
       %9429 = "llvm.load"(%9425) <{ordering = 0 : i64}> : (!llvm.ptr) -> i64
       %9430 = "llvm.load"(%9426) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %9431 = "llvm.load"(%9427) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %9432 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %9432 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       %9433 = "llvm.ptrtoint"(%9432) : (!llvm.ptr) -> i64
       %9434 = "llvm.call"(%9430, %9429, %9428, %9403, %9433, %9431) {callee = @subtype_test_wrapper, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 6, 0>} : (!llvm.ptr, i64, i64, i64, i64, !llvm.ptr) -> i1
       "cf.cond_br"(%9434)[^bb2, ^bb2] <{operandSegmentSizes = array<i32: 1, 0, 0>}> : (i1) -> ()
@@ -14812,7 +15131,7 @@
       %8922 = "llvm.getelementptr"(%8917) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %8923 = "llvm.load"(%8921) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%8923, %8922) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %8924 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %8924 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%8917, %8924) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %8925 = "llvm.getelementptr"(%8917) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %8926 = "llvm.load"(%8925) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -15759,7 +16078,7 @@
     "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>, !llvm.struct<(ptr)>) -> !llvm.ptr, sym_name = "InterleaveIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T"}> ({
     ^bb0(%arg291: !llvm.struct<(ptr, ptr, ptr, i32)>, %arg292: !llvm.ptr, %arg293: !llvm.struct<(ptr, i160)>, %arg294: !llvm.struct<(ptr)>):
       %7993 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
-      %7994 = "llvm.mlir.constant"() <{value = 3282773614056351330 : i64}> : () -> i64
+      %7994 = "llvm.mlir.constant"() <{value = 3084208142191802847 : i64}> : () -> i64
       %7995 = "llvm.mlir.constant"() <{value = 7927147055246173914 : i64}> : () -> i64
       %7996 = "llvm.mlir.constant"() <{value = 18 : i32}> : () -> i32
       %7997 = "llvm.mlir.constant"() <{value = 16 : i64}> : () -> i64
@@ -15795,7 +16114,7 @@
       %8020 = "llvm.load"(%8016) <{ordering = 0 : i64}> : (!llvm.ptr) -> i64
       %8021 = "llvm.load"(%8017) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %8022 = "llvm.load"(%8018) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %8023 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %8023 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       %8024 = "llvm.ptrtoint"(%8023) : (!llvm.ptr) -> i64
       %8025 = "llvm.call"(%8021, %8020, %8019, %7994, %8024, %8022) {callee = @subtype_test_wrapper, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 6, 0>} : (!llvm.ptr, i64, i64, i64, i64, !llvm.ptr) -> i1
       "cf.cond_br"(%8025)[^bb2, ^bb2] <{operandSegmentSizes = array<i32: 1, 0, 0>}> : (i1) -> ()
@@ -18565,7 +18884,7 @@
       %5920 = "llvm.getelementptr"(%5915) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %5921 = "llvm.load"(%5919) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%5921, %5920) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %5922 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %5922 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%5915, %5922) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %5923 = "llvm.getelementptr"(%5900) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %5924 = "llvm.alloca"(%5761) <{elem_type = i64}> : (i32) -> !llvm.ptr
@@ -18594,7 +18913,7 @@
       %5942 = "llvm.getelementptr"(%5937) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %5943 = "llvm.load"(%5941) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%5943, %5942) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %5944 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %5944 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%5937, %5944) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %5945 = "llvm.getelementptr"(%5764) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %5946 = "llvm.load"(%5945) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -18644,7 +18963,7 @@
       %5984 = "llvm.getelementptr"(%5979) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %5985 = "llvm.load"(%5983) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%5985, %5984) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %5986 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %5986 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%5979, %5986) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %5987 = "llvm.getelementptr"(%5979) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %5988 = "llvm.load"(%5987) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -18661,7 +18980,7 @@
       %5998 = "llvm.getelementptr"(%5993) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %5999 = "llvm.load"(%5997) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%5999, %5998) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %6000 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %6000 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%5993, %6000) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %6001 = "llvm.getelementptr"(%5993) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %6002 = "llvm.load"(%6001) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -20708,7 +21027,7 @@
       %3909 = "llvm.getelementptr"(%3904) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %3910 = "llvm.load"(%3908) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%3910, %3909) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %3911 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %3911 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%3904, %3911) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %3912 = "llvm.getelementptr"(%3862) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %3913 = "llvm.load"(%3912) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -20802,7 +21121,7 @@
       %3993 = "llvm.getelementptr"(%3988) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %3994 = "llvm.load"(%3992) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%3994, %3993) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %3995 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %3995 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%3988, %3995) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %3996 = "llvm.getelementptr"(%3862) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %3997 = "llvm.load"(%3996) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -20852,7 +21171,7 @@
       %4035 = "llvm.getelementptr"(%4030) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %4036 = "llvm.load"(%4034) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%4036, %4035) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %4037 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %4037 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%4030, %4037) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %4038 = "llvm.getelementptr"(%4030) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %4039 = "llvm.load"(%4038) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -20869,7 +21188,7 @@
       %4049 = "llvm.getelementptr"(%4044) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %4050 = "llvm.load"(%4048) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
       "llvm.store"(%4050, %4049) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %4051 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %4051 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%4044, %4051) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %4052 = "llvm.getelementptr"(%4044) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %4053 = "llvm.load"(%4052) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -21218,7 +21537,7 @@
     ^bb3:  // pred: ^bb2
       "func.return"(%3845) : (!llvm.ptr) -> ()
     }) : () -> ()
-    "func.func"() <{function_type = (i32, i32) -> i32, sym_name = "_functionliteral_lqdggtdryy"}> ({
+    "func.func"() <{function_type = (i32, i32) -> i32, sym_name = "_functionliteral_yjbzjcsnsa"}> ({
     ^bb0(%arg81: i32, %arg82: i32):
       %3828 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
       %3829 = "llvm.alloca"(%3828) <{elem_type = i32}> : (i32) -> !llvm.ptr
@@ -21235,7 +21554,7 @@
     ^bb1:  // pred: ^bb0
       "func.return"(%3835) : (i32) -> ()
     }) : () -> ()
-    "func.func"() <{function_type = (i32) -> i32, sym_name = "_functionliteral_ghvzijthjq"}> ({
+    "func.func"() <{function_type = (i32) -> i32, sym_name = "_functionliteral_ezbzfhfefq"}> ({
     ^bb0(%arg80: i32):
       %3819 = "llvm.mlir.constant"() <{value = 2 : i32}> : () -> i32
       %3820 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
@@ -21253,7 +21572,7 @@
     ^bb1:  // pred: ^bb0
       "func.return"(%3827) : (i32) -> ()
     }) : () -> ()
-    "func.func"() <{function_type = (f64) -> f64, sym_name = "_functionliteral_xxdcfxndqj"}> ({
+    "func.func"() <{function_type = (f64) -> f64, sym_name = "_functionliteral_tdagiokdwv"}> ({
     ^bb0(%arg79: f64):
       %3810 = "llvm.mlir.constant"() <{value = 2.000000e+00 : f64}> : () -> f64
       %3811 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
@@ -21271,7 +21590,7 @@
     ^bb1:  // pred: ^bb0
       "func.return"(%3818) : (f64) -> ()
     }) : () -> ()
-    "func.func"() <{function_type = (i32) -> i32, sym_name = "_functionliteral_zwhendnebz"}> ({
+    "func.func"() <{function_type = (i32) -> i32, sym_name = "_functionliteral_zxjtstewud"}> ({
     ^bb0(%arg78: i32):
       %3807 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
       %3808 = "llvm.alloca"(%3807) <{elem_type = i32}> : (i32) -> !llvm.ptr
@@ -21281,7 +21600,7 @@
     ^bb1:  // pred: ^bb0
       "func.return"(%3809) : (i32) -> ()
     }) : () -> ()
-    "func.func"() <{function_type = (i32) -> f64, sym_name = "_functionliteral_nzvifaiaig"}> ({
+    "func.func"() <{function_type = (i32) -> f64, sym_name = "_functionliteral_bjvgndmova"}> ({
     ^bb0(%arg77: i32):
       %3801 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
       %3802 = "llvm.alloca"(%3801) <{elem_type = i32}> : (i32) -> !llvm.ptr
@@ -21309,7 +21628,7 @@
     "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.ptr, sym_name = "Addable_B__ADD_otherT"}> ({
     ^bb0(%arg72: !llvm.struct<(ptr, ptr, ptr, i32)>, %arg73: !llvm.ptr, %arg74: !llvm.struct<(ptr, i160)>):
       %3774 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
-      %3775 = "llvm.mlir.constant"() <{value = 3282773614056351330 : i64}> : () -> i64
+      %3775 = "llvm.mlir.constant"() <{value = 3084208142191802847 : i64}> : () -> i64
       %3776 = "llvm.mlir.constant"() <{value = 3 : i32}> : () -> i32
       %3777 = "llvm.mlir.constant"() <{value = 8 : i64}> : () -> i64
       %3778 = "llvm.call_intrinsic"(%3777, %arg73) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
@@ -21329,7 +21648,7 @@
       %3787 = "llvm.load"(%3783) <{ordering = 0 : i64}> : (!llvm.ptr) -> i64
       %3788 = "llvm.load"(%3784) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %3789 = "llvm.load"(%3785) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3790 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %3790 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       %3791 = "llvm.ptrtoint"(%3790) : (!llvm.ptr) -> i64
       %3792 = "llvm.call"(%3788, %3787, %3786, %3775, %3791, %3789) {callee = @subtype_test_wrapper, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 6, 0>} : (!llvm.ptr, i64, i64, i64, i64, !llvm.ptr) -> i1
       "cf.cond_br"(%3792)[^bb1, ^bb1] <{operandSegmentSizes = array<i32: 1, 0, 0>}> : (i1) -> ()
@@ -21369,7 +21688,7 @@
     }) : () -> ()
     "func.func"() <{function_type = (!llvm.ptr) -> !llvm.ptr, sym_name = "Float64_field_Float64_0"}> ({
     ^bb0(%arg68: !llvm.ptr):
-      %3762 = "placeholder.addressof"() {global_name = @_parameterization_Float64_or_Int32} : () -> !llvm.ptr
+      %3762 = "placeholder.addressof"() {global_name = @_parameterization_Int32_or_Float64} : () -> !llvm.ptr
       "func.return"(%3762) : (!llvm.ptr) -> ()
     }) : () -> ()
     "func.func"() <{function_type = (!llvm.ptr) -> !llvm.ptr, sym_name = "Float64_field_Float64_1"}> ({
@@ -21527,153 +21846,173 @@
     ^bb3:  // pred: ^bb2
       "func.return"(%3671) : (!llvm.ptr) -> ()
     }) : () -> ()
-    "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, ptr, ptr, i32)>, sym_name = "Float64__ADD_otherInt32"}> ({
+    "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, ptr, ptr, i32)>, sym_name = "Float64__ADD_otherFloat64"}> ({
     ^bb0(%arg51: !llvm.struct<(ptr, ptr, ptr, i32)>, %arg52: !llvm.struct<(ptr, ptr, ptr, i32)>, %arg53: !llvm.ptr, %arg54: !llvm.struct<(ptr, i160)>):
-      %3506 = "llvm.mlir.constant"() <{value = 1 : i32}> : () -> i64
-      %3507 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
-      %3508 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %3509 = "llvm.mlir.constant"() <{value = 144 : i64}> : () -> i64
-      %3510 = "llvm.mlir.constant"() <{value = 136 : i64}> : () -> i64
-      %3511 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i64
-      %3512 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3513 = "llvm.mlir.constant"() <{value = 16 : i64}> : () -> i64
-      %3514 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
-      %3515 = "llvm.alloca"(%3514) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
-      "llvm.store"(%arg51, %3515) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> ()
-      %3516 = "llvm.call_intrinsic"(%3513, %3515) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3517 = "llvm.alloca"(%3514) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
-      %3518 = "llvm.getelementptr"(%3515) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %3519 = "llvm.getelementptr"(%3517) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %3520 = "llvm.load"(%3518) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%3520, %3519) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %3521 = "llvm.getelementptr"(%3515) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3522 = "llvm.getelementptr"(%3517) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3523 = "llvm.load"(%3521) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%3523, %3522) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %3524 = "llvm.getelementptr"(%3515) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
-      %3525 = "llvm.getelementptr"(%3517) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
-      %3526 = "llvm.load"(%3524) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%3526, %3525) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %3527 = "llvm.getelementptr"(%3515) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %3528 = "llvm.getelementptr"(%3517) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %3529 = "llvm.load"(%3527) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
-      "llvm.store"(%3529, %3528) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %3530 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
-      "llvm.call"(%3517, %3530) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
-      %3531 = "llvm.alloca"(%3514) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
-      "llvm.store"(%arg54, %3531) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> ()
-      %3532 = "llvm.alloca"(%3514) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
-      %3533 = "llvm.getelementptr"(%3531) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %3534 = "llvm.getelementptr"(%3532) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %3535 = "llvm.load"(%3533) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%3535, %3534) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %3536 = "llvm.getelementptr"(%3531) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3537 = "llvm.getelementptr"(%3532) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3538 = "llvm.load"(%3536) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
-      "llvm.store"(%3538, %3537) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %3539 = "placeholder.addressof"() {global_name = @Int32} : () -> !llvm.ptr
-      "llvm.call"(%3532, %3539) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
-      %3540 = "llvm.getelementptr"(%3532) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %3541 = "llvm.load"(%3540) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3542 = "llvm.insertvalue"(%3512, %3541) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3543 = "llvm.getelementptr"(%3532) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3544 = "llvm.load"(%3543) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3545 = "llvm.insertvalue"(%3542, %3544) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3546 = "llvm.getelementptr"(%3532) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
-      %3547 = "llvm.load"(%3546) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3548 = "llvm.insertvalue"(%3545, %3547) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3549 = "llvm.getelementptr"(%3532) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %3550 = "llvm.load"(%3549) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %3551 = "llvm.insertvalue"(%3548, %3550) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3552 = "llvm.alloca"(%3514) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
-      %3553 = "llvm.call_intrinsic"(%3511, %3552) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3554 = "llvm.call_intrinsic"(%3510, %3541) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3555 = "llvm.getelementptr"(%3541, %3550) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
-      %3556 = "llvm.getelementptr"(%3555) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %3557 = "llvm.load"(%3556) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3558 = "llvm.alloca"(%3514) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
-      %3559 = "builtin.unrealized_conversion_cast"(%3557) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr)
-      %3560 = "func.call_indirect"(%3559, %3551, %3558) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr
-      %3561 = "builtin.unrealized_conversion_cast"(%3560) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> i32)
-      %3562 = "func.call_indirect"(%3561, %3551, %3551, %3552) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> i32, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> i32
-      %3563 = "llvm.alloca"(%3514) <{elem_type = i32}> : (i32) -> !llvm.ptr
-      "llvm.store"(%3562, %3563) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %3564 = "llvm.alloca"(%3514) <{elem_type = f64}> : (i32) -> !llvm.ptr
-      %3565 = "llvm.load"(%3563) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %3566 = "arith.sitofp"(%3565) : (i32) -> f64
-      "llvm.store"(%3566, %3564) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %3567 = "llvm.getelementptr"(%3517) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3568 = "llvm.load"(%3567) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3569 = "llvm.load"(%3517) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3570 = "llvm.call_intrinsic"(%3509, %3569) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3571 = "llvm.getelementptr"(%3517) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %3572 = "llvm.load"(%3571) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %3573 = "llvm.getelementptr"(%3569, %3572) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
-      %3574 = "llvm.load"(%3573) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3575 = "llvm.getelementptr"(%3574) <{elem_type = !llvm.struct<(ptr, ptr)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %3576 = "llvm.load"(%3575) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3577 = "builtin.unrealized_conversion_cast"(%3576) : (!llvm.ptr) -> ((!llvm.ptr) -> f64)
-      %3578 = "func.call_indirect"(%3577, %3568) : ((!llvm.ptr) -> f64, !llvm.ptr) -> f64
-      %3579 = "llvm.alloca"(%3514) <{elem_type = f64}> : (i32) -> !llvm.ptr
-      "llvm.store"(%3578, %3579) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %3580 = "llvm.load"(%3579) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
-      %3581 = "llvm.load"(%3564) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
-      %3582 = "arith.addf"(%3580, %3581) <{fastmath = #arith.fastmath<none>}> : (f64, f64) -> f64
-      %3583 = "llvm.alloca"(%3514) <{elem_type = f64}> : (i32) -> !llvm.ptr
-      "llvm.store"(%3582, %3583) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %3584 = "llvm.getelementptr"(%3508) <{elem_type = !llvm.struct<(f64)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3585 = "llvm.ptrtoint"(%3584) {type = i64} : (!llvm.ptr) -> i64
-      %3586 = "llvm.call"(%3585) {callee = @bump_malloc, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (i64) -> !llvm.ptr
-      %3587 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
-      %3588 = "llvm.alloca"(%3514) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
-      %3589 = "llvm.getelementptr"(%3588) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3590 = "llvm.getelementptr"(%3588) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%3587, %3588) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      "llvm.store"(%3586, %3589) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      "llvm.store"(%3507, %3590) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %3591 = "llvm.call_intrinsic"(%3513, %3588) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3592 = "llvm.getelementptr"(%3517) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3593 = "llvm.load"(%3592) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3594 = "llvm.load"(%3517) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3595 = "llvm.call_intrinsic"(%3509, %3594) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3596 = "llvm.getelementptr"(%3517) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %3597 = "llvm.load"(%3596) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %3598 = "llvm.getelementptr"(%3594, %3597) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
-      %3599 = "llvm.load"(%3598) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3600 = "llvm.getelementptr"(%3599) <{elem_type = !llvm.struct<(ptr, ptr)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %3601 = "llvm.load"(%3600) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3602 = "builtin.unrealized_conversion_cast"(%3601) : (!llvm.ptr) -> ((!llvm.ptr) -> f64)
-      %3603 = "func.call_indirect"(%3602, %3593) : ((!llvm.ptr) -> f64, !llvm.ptr) -> f64
-      %3604 = "llvm.alloca"(%3514) <{elem_type = f64}> : (i32) -> !llvm.ptr
+      %3486 = "llvm.mlir.constant"() <{value = 1 : i32}> : () -> i64
+      %3487 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
+      %3488 = "llvm.mlir.zero"() : () -> !llvm.ptr
+      %3489 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i64
+      %3490 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3491 = "llvm.mlir.constant"() <{value = 144 : i64}> : () -> i64
+      %3492 = "llvm.mlir.constant"() <{value = 16 : i64}> : () -> i64
+      %3493 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
+      %3494 = "llvm.alloca"(%3493) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
+      "llvm.store"(%arg51, %3494) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> ()
+      %3495 = "llvm.call_intrinsic"(%3492, %3494) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3496 = "llvm.alloca"(%3493) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
+      %3497 = "llvm.getelementptr"(%3494) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3498 = "llvm.getelementptr"(%3496) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3499 = "llvm.load"(%3497) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%3499, %3498) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %3500 = "llvm.getelementptr"(%3494) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3501 = "llvm.getelementptr"(%3496) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3502 = "llvm.load"(%3500) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%3502, %3501) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %3503 = "llvm.getelementptr"(%3494) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
+      %3504 = "llvm.getelementptr"(%3496) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
+      %3505 = "llvm.load"(%3503) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%3505, %3504) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %3506 = "llvm.getelementptr"(%3494) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3507 = "llvm.getelementptr"(%3496) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3508 = "llvm.load"(%3506) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
+      "llvm.store"(%3508, %3507) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %3509 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
+      "llvm.call"(%3496, %3509) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
+      %3510 = "llvm.alloca"(%3493) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
+      "llvm.store"(%arg54, %3510) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> ()
+      %3511 = "llvm.alloca"(%3493) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
+      %3512 = "llvm.getelementptr"(%3510) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3513 = "llvm.getelementptr"(%3511) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3514 = "llvm.load"(%3512) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%3514, %3513) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %3515 = "llvm.getelementptr"(%3510) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3516 = "llvm.getelementptr"(%3511) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3517 = "llvm.load"(%3515) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
+      "llvm.store"(%3517, %3516) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
+      %3518 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
+      "llvm.call"(%3511, %3518) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
+      %3519 = "llvm.getelementptr"(%3496) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3520 = "llvm.load"(%3519) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3521 = "llvm.load"(%3496) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3522 = "llvm.call_intrinsic"(%3491, %3521) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3523 = "llvm.getelementptr"(%3496) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3524 = "llvm.load"(%3523) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %3525 = "llvm.getelementptr"(%3521, %3524) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
+      %3526 = "llvm.load"(%3525) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3527 = "llvm.getelementptr"(%3526) <{elem_type = !llvm.struct<(ptr, ptr)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3528 = "llvm.load"(%3527) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3529 = "builtin.unrealized_conversion_cast"(%3528) : (!llvm.ptr) -> ((!llvm.ptr) -> f64)
+      %3530 = "func.call_indirect"(%3529, %3520) : ((!llvm.ptr) -> f64, !llvm.ptr) -> f64
+      %3531 = "llvm.alloca"(%3493) <{elem_type = f64}> : (i32) -> !llvm.ptr
+      "llvm.store"(%3530, %3531) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
+      %3532 = "llvm.getelementptr"(%3511) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3533 = "llvm.load"(%3532) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3534 = "llvm.insertvalue"(%3490, %3533) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3535 = "llvm.getelementptr"(%3511) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3536 = "llvm.load"(%3535) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3537 = "llvm.insertvalue"(%3534, %3536) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3538 = "llvm.getelementptr"(%3511) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
+      %3539 = "llvm.load"(%3538) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3540 = "llvm.insertvalue"(%3537, %3539) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3541 = "llvm.getelementptr"(%3511) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3542 = "llvm.load"(%3541) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %3543 = "llvm.insertvalue"(%3540, %3542) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3544 = "llvm.alloca"(%3493) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
+      %3545 = "llvm.call_intrinsic"(%3489, %3544) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3546 = "llvm.call_intrinsic"(%3491, %3533) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3547 = "llvm.getelementptr"(%3533, %3542) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
+      %3548 = "llvm.getelementptr"(%3547) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 4>}> : (!llvm.ptr) -> !llvm.ptr
+      %3549 = "llvm.load"(%3548) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3550 = "llvm.alloca"(%3493) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
+      %3551 = "builtin.unrealized_conversion_cast"(%3549) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr)
+      %3552 = "func.call_indirect"(%3551, %3543, %3550) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr
+      %3553 = "builtin.unrealized_conversion_cast"(%3552) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64)
+      %3554 = "func.call_indirect"(%3553, %3543, %3543, %3544) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64
+      %3555 = "llvm.alloca"(%3493) <{elem_type = f64}> : (i32) -> !llvm.ptr
+      "llvm.store"(%3554, %3555) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
+      %3556 = "llvm.load"(%3531) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
+      %3557 = "llvm.load"(%3555) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
+      %3558 = "arith.addf"(%3556, %3557) <{fastmath = #arith.fastmath<none>}> : (f64, f64) -> f64
+      %3559 = "llvm.alloca"(%3493) <{elem_type = f64}> : (i32) -> !llvm.ptr
+      "llvm.store"(%3558, %3559) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
+      %3560 = "llvm.getelementptr"(%3488) <{elem_type = !llvm.struct<(f64)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3561 = "llvm.ptrtoint"(%3560) {type = i64} : (!llvm.ptr) -> i64
+      %3562 = "llvm.call"(%3561) {callee = @bump_malloc, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (i64) -> !llvm.ptr
+      %3563 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
+      %3564 = "llvm.alloca"(%3493) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
+      %3565 = "llvm.getelementptr"(%3564) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3566 = "llvm.getelementptr"(%3564) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%3563, %3564) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      "llvm.store"(%3562, %3565) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      "llvm.store"(%3487, %3566) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %3567 = "llvm.call_intrinsic"(%3492, %3564) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3568 = "llvm.getelementptr"(%3496) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3569 = "llvm.load"(%3568) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3570 = "llvm.load"(%3496) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3571 = "llvm.call_intrinsic"(%3491, %3570) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3572 = "llvm.getelementptr"(%3496) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3573 = "llvm.load"(%3572) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %3574 = "llvm.getelementptr"(%3570, %3573) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
+      %3575 = "llvm.load"(%3574) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3576 = "llvm.getelementptr"(%3575) <{elem_type = !llvm.struct<(ptr, ptr)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3577 = "llvm.load"(%3576) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3578 = "builtin.unrealized_conversion_cast"(%3577) : (!llvm.ptr) -> ((!llvm.ptr) -> f64)
+      %3579 = "func.call_indirect"(%3578, %3569) : ((!llvm.ptr) -> f64, !llvm.ptr) -> f64
+      %3580 = "llvm.alloca"(%3493) <{elem_type = f64}> : (i32) -> !llvm.ptr
+      "llvm.store"(%3579, %3580) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
+      %3581 = "llvm.getelementptr"(%3511) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3582 = "llvm.load"(%3581) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3583 = "llvm.insertvalue"(%3490, %3582) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3584 = "llvm.getelementptr"(%3511) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3585 = "llvm.load"(%3584) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3586 = "llvm.insertvalue"(%3583, %3585) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3587 = "llvm.getelementptr"(%3511) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
+      %3588 = "llvm.load"(%3587) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3589 = "llvm.insertvalue"(%3586, %3588) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3590 = "llvm.getelementptr"(%3511) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3591 = "llvm.load"(%3590) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %3592 = "llvm.insertvalue"(%3589, %3591) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3593 = "llvm.alloca"(%3493) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
+      %3594 = "llvm.call_intrinsic"(%3489, %3593) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3595 = "llvm.call_intrinsic"(%3491, %3582) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3596 = "llvm.getelementptr"(%3582, %3591) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
+      %3597 = "llvm.getelementptr"(%3596) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 4>}> : (!llvm.ptr) -> !llvm.ptr
+      %3598 = "llvm.load"(%3597) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3599 = "llvm.alloca"(%3493) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
+      %3600 = "builtin.unrealized_conversion_cast"(%3598) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr)
+      %3601 = "func.call_indirect"(%3600, %3592, %3599) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr
+      %3602 = "builtin.unrealized_conversion_cast"(%3601) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64)
+      %3603 = "func.call_indirect"(%3602, %3592, %3592, %3593) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64
+      %3604 = "llvm.alloca"(%3493) <{elem_type = f64}> : (i32) -> !llvm.ptr
       "llvm.store"(%3603, %3604) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %3605 = "llvm.load"(%3604) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
-      %3606 = "llvm.load"(%3564) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
+      %3605 = "llvm.load"(%3580) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
+      %3606 = "llvm.load"(%3604) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
       %3607 = "arith.addf"(%3605, %3606) <{fastmath = #arith.fastmath<none>}> : (f64, f64) -> f64
-      %3608 = "llvm.alloca"(%3514) <{elem_type = f64}> : (i32) -> !llvm.ptr
+      %3608 = "llvm.alloca"(%3493) <{elem_type = f64}> : (i32) -> !llvm.ptr
       "llvm.store"(%3607, %3608) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
       %3609 = "llvm.load"(%3608) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
-      %3610 = "llvm.getelementptr"(%3588) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3610 = "llvm.getelementptr"(%3564) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %3611 = "llvm.load"(%3610) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3612 = "llvm.insertvalue"(%3512, %3611) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3613 = "llvm.getelementptr"(%3588) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3612 = "llvm.insertvalue"(%3490, %3611) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3613 = "llvm.getelementptr"(%3564) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %3614 = "llvm.load"(%3613) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %3615 = "llvm.insertvalue"(%3612, %3614) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3616 = "llvm.getelementptr"(%3588) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
+      %3616 = "llvm.getelementptr"(%3564) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
       %3617 = "llvm.load"(%3616) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %3618 = "llvm.insertvalue"(%3615, %3617) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3619 = "llvm.getelementptr"(%3588) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3619 = "llvm.getelementptr"(%3564) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
       %3620 = "llvm.load"(%3619) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
       %3621 = "llvm.insertvalue"(%3618, %3620) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
       %3622 = "placeholder.addressof"() {global_name = @_parameterization_Ptrf64} : () -> !llvm.ptr
-      %3623 = "llvm.alloca"(%3514) <{elem_type = !llvm.array<1 x ptr>}> : (i32) -> !llvm.ptr
+      %3623 = "llvm.alloca"(%3493) <{elem_type = !llvm.array<1 x ptr>}> : (i32) -> !llvm.ptr
       %3624 = "llvm.getelementptr"(%3623) <{elem_type = !llvm.array<1 x ptr>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       "llvm.store"(%3622, %3624) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %3625 = "llvm.call_intrinsic"(%3506, %3623) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3626 = "llvm.call_intrinsic"(%3509, %3611) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3625 = "llvm.call_intrinsic"(%3486, %3623) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3626 = "llvm.call_intrinsic"(%3491, %3611) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
       %3627 = "llvm.getelementptr"(%3611, %3620) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
       %3628 = "llvm.getelementptr"(%3627) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 3>}> : (!llvm.ptr) -> !llvm.ptr
       %3629 = "llvm.load"(%3628) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3630 = "llvm.alloca"(%3514) <{elem_type = !llvm.array<1 x ptr>}> : (i32) -> !llvm.ptr
+      %3630 = "llvm.alloca"(%3493) <{elem_type = !llvm.array<1 x ptr>}> : (i32) -> !llvm.ptr
       %3631 = "builtin.unrealized_conversion_cast"(%3629) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> !llvm.ptr)
       %3632 = "placeholder.addressof"() {global_name = @f64_typ} : () -> !llvm.ptr
       %3633 = "llvm.getelementptr"(%3630) <{elem_type = !llvm.array<1 x ptr>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
@@ -21681,20 +22020,20 @@
       %3634 = "func.call_indirect"(%3631, %3621, %3630, %3609) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> !llvm.ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> !llvm.ptr
       %3635 = "builtin.unrealized_conversion_cast"(%3634) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> ())
       "func.call_indirect"(%3635, %3621, %3621, %3623, %3609) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> (), !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> ()
-      %3636 = "llvm.alloca"(%3514) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
-      %3637 = "llvm.getelementptr"(%3588) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3636 = "llvm.alloca"(%3493) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
+      %3637 = "llvm.getelementptr"(%3564) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %3638 = "llvm.getelementptr"(%3636) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %3639 = "llvm.load"(%3637) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
       "llvm.store"(%3639, %3638) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %3640 = "llvm.getelementptr"(%3588) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3640 = "llvm.getelementptr"(%3564) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %3641 = "llvm.getelementptr"(%3636) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %3642 = "llvm.load"(%3640) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
       "llvm.store"(%3642, %3641) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %3643 = "llvm.getelementptr"(%3588) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
+      %3643 = "llvm.getelementptr"(%3564) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
       %3644 = "llvm.getelementptr"(%3636) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
       %3645 = "llvm.load"(%3643) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
       "llvm.store"(%3645, %3644) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %3646 = "llvm.getelementptr"(%3588) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3646 = "llvm.getelementptr"(%3564) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
       %3647 = "llvm.getelementptr"(%3636) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
       %3648 = "llvm.load"(%3646) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
       "llvm.store"(%3648, %3647) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
@@ -21702,7 +22041,7 @@
       "llvm.call"(%3636, %3649) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %3650 = "llvm.getelementptr"(%3636) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %3651 = "llvm.load"(%3650) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3652 = "llvm.insertvalue"(%3512, %3651) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3652 = "llvm.insertvalue"(%3490, %3651) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
       %3653 = "llvm.getelementptr"(%3636) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
       %3654 = "llvm.load"(%3653) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       %3655 = "llvm.insertvalue"(%3652, %3654) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
@@ -21716,222 +22055,202 @@
     ^bb1:  // pred: ^bb0
       "func.return"(%3661) : (!llvm.struct<(ptr, ptr, ptr, i32)>) -> ()
     }) : () -> ()
-    "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, ptr, ptr, i32)>, sym_name = "Float64__ADD_otherFloat64"}> ({
+    "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.struct<(ptr, ptr, ptr, i32)>, sym_name = "Float64__ADD_otherInt32"}> ({
     ^bb0(%arg47: !llvm.struct<(ptr, ptr, ptr, i32)>, %arg48: !llvm.struct<(ptr, ptr, ptr, i32)>, %arg49: !llvm.ptr, %arg50: !llvm.struct<(ptr, i160)>):
       %3330 = "llvm.mlir.constant"() <{value = 1 : i32}> : () -> i64
       %3331 = "llvm.mlir.constant"() <{value = 7 : i32}> : () -> i32
       %3332 = "llvm.mlir.zero"() : () -> !llvm.ptr
-      %3333 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i64
-      %3334 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3335 = "llvm.mlir.constant"() <{value = 144 : i64}> : () -> i64
-      %3336 = "llvm.mlir.constant"() <{value = 16 : i64}> : () -> i64
-      %3337 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
-      %3338 = "llvm.alloca"(%3337) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
-      "llvm.store"(%arg47, %3338) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> ()
-      %3339 = "llvm.call_intrinsic"(%3336, %3338) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3340 = "llvm.alloca"(%3337) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
-      %3341 = "llvm.getelementptr"(%3338) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %3342 = "llvm.getelementptr"(%3340) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %3343 = "llvm.load"(%3341) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%3343, %3342) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %3344 = "llvm.getelementptr"(%3338) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3345 = "llvm.getelementptr"(%3340) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3346 = "llvm.load"(%3344) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%3346, %3345) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %3347 = "llvm.getelementptr"(%3338) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
-      %3348 = "llvm.getelementptr"(%3340) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
-      %3349 = "llvm.load"(%3347) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%3349, %3348) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %3350 = "llvm.getelementptr"(%3338) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %3351 = "llvm.getelementptr"(%3340) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %3352 = "llvm.load"(%3350) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
-      "llvm.store"(%3352, %3351) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %3353 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
-      "llvm.call"(%3340, %3353) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
-      %3354 = "llvm.alloca"(%3337) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
-      "llvm.store"(%arg50, %3354) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> ()
-      %3355 = "llvm.alloca"(%3337) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
-      %3356 = "llvm.getelementptr"(%3354) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3333 = "llvm.mlir.constant"() <{value = 144 : i64}> : () -> i64
+      %3334 = "llvm.mlir.constant"() <{value = 136 : i64}> : () -> i64
+      %3335 = "llvm.mlir.constant"() <{value = 0 : i32}> : () -> i64
+      %3336 = "llvm.mlir.undef"() : () -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3337 = "llvm.mlir.constant"() <{value = 16 : i64}> : () -> i64
+      %3338 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
+      %3339 = "llvm.alloca"(%3338) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
+      "llvm.store"(%arg47, %3339) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> ()
+      %3340 = "llvm.call_intrinsic"(%3337, %3339) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3341 = "llvm.alloca"(%3338) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
+      %3342 = "llvm.getelementptr"(%3339) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3343 = "llvm.getelementptr"(%3341) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3344 = "llvm.load"(%3342) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%3344, %3343) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %3345 = "llvm.getelementptr"(%3339) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3346 = "llvm.getelementptr"(%3341) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3347 = "llvm.load"(%3345) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%3347, %3346) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %3348 = "llvm.getelementptr"(%3339) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
+      %3349 = "llvm.getelementptr"(%3341) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
+      %3350 = "llvm.load"(%3348) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%3350, %3349) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %3351 = "llvm.getelementptr"(%3339) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3352 = "llvm.getelementptr"(%3341) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3353 = "llvm.load"(%3351) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
+      "llvm.store"(%3353, %3352) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %3354 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
+      "llvm.call"(%3341, %3354) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
+      %3355 = "llvm.alloca"(%3338) <{elem_type = !llvm.struct<(ptr, i160)>}> : (i32) -> !llvm.ptr
+      "llvm.store"(%arg50, %3355) <{ordering = 0 : i64}> : (!llvm.struct<(ptr, i160)>, !llvm.ptr) -> ()
+      %3356 = "llvm.alloca"(%3338) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
       %3357 = "llvm.getelementptr"(%3355) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %3358 = "llvm.load"(%3356) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%3358, %3357) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %3359 = "llvm.getelementptr"(%3354) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3358 = "llvm.getelementptr"(%3356) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3359 = "llvm.load"(%3357) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%3359, %3358) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %3360 = "llvm.getelementptr"(%3355) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3361 = "llvm.load"(%3359) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
-      "llvm.store"(%3361, %3360) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
-      %3362 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
-      "llvm.call"(%3355, %3362) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
-      %3363 = "llvm.getelementptr"(%3340) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3364 = "llvm.load"(%3363) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3365 = "llvm.load"(%3340) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3366 = "llvm.call_intrinsic"(%3335, %3365) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3367 = "llvm.getelementptr"(%3340) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %3368 = "llvm.load"(%3367) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %3369 = "llvm.getelementptr"(%3365, %3368) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
-      %3370 = "llvm.load"(%3369) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3371 = "llvm.getelementptr"(%3370) <{elem_type = !llvm.struct<(ptr, ptr)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %3372 = "llvm.load"(%3371) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3373 = "builtin.unrealized_conversion_cast"(%3372) : (!llvm.ptr) -> ((!llvm.ptr) -> f64)
-      %3374 = "func.call_indirect"(%3373, %3364) : ((!llvm.ptr) -> f64, !llvm.ptr) -> f64
-      %3375 = "llvm.alloca"(%3337) <{elem_type = f64}> : (i32) -> !llvm.ptr
-      "llvm.store"(%3374, %3375) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %3376 = "llvm.getelementptr"(%3355) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %3377 = "llvm.load"(%3376) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3378 = "llvm.insertvalue"(%3334, %3377) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3379 = "llvm.getelementptr"(%3355) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3380 = "llvm.load"(%3379) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3381 = "llvm.insertvalue"(%3378, %3380) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3382 = "llvm.getelementptr"(%3355) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
-      %3383 = "llvm.load"(%3382) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3384 = "llvm.insertvalue"(%3381, %3383) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3385 = "llvm.getelementptr"(%3355) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %3386 = "llvm.load"(%3385) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %3387 = "llvm.insertvalue"(%3384, %3386) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3388 = "llvm.alloca"(%3337) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
-      %3389 = "llvm.call_intrinsic"(%3333, %3388) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3390 = "llvm.call_intrinsic"(%3335, %3377) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3391 = "llvm.getelementptr"(%3377, %3386) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
-      %3392 = "llvm.getelementptr"(%3391) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 4>}> : (!llvm.ptr) -> !llvm.ptr
-      %3393 = "llvm.load"(%3392) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3394 = "llvm.alloca"(%3337) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
-      %3395 = "builtin.unrealized_conversion_cast"(%3393) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr)
-      %3396 = "func.call_indirect"(%3395, %3387, %3394) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr
-      %3397 = "builtin.unrealized_conversion_cast"(%3396) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64)
-      %3398 = "func.call_indirect"(%3397, %3387, %3387, %3388) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64
-      %3399 = "llvm.alloca"(%3337) <{elem_type = f64}> : (i32) -> !llvm.ptr
-      "llvm.store"(%3398, %3399) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %3400 = "llvm.load"(%3375) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
-      %3401 = "llvm.load"(%3399) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
-      %3402 = "arith.addf"(%3400, %3401) <{fastmath = #arith.fastmath<none>}> : (f64, f64) -> f64
-      %3403 = "llvm.alloca"(%3337) <{elem_type = f64}> : (i32) -> !llvm.ptr
+      %3361 = "llvm.getelementptr"(%3356) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3362 = "llvm.load"(%3360) <{ordering = 0 : i64}> {type = i160} : (!llvm.ptr) -> i160
+      "llvm.store"(%3362, %3361) <{ordering = 0 : i64}> : (i160, !llvm.ptr) -> ()
+      %3363 = "placeholder.addressof"() {global_name = @Int32} : () -> !llvm.ptr
+      "llvm.call"(%3356, %3363) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
+      %3364 = "llvm.getelementptr"(%3356) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3365 = "llvm.load"(%3364) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3366 = "llvm.insertvalue"(%3336, %3365) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3367 = "llvm.getelementptr"(%3356) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3368 = "llvm.load"(%3367) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3369 = "llvm.insertvalue"(%3366, %3368) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3370 = "llvm.getelementptr"(%3356) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
+      %3371 = "llvm.load"(%3370) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3372 = "llvm.insertvalue"(%3369, %3371) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3373 = "llvm.getelementptr"(%3356) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3374 = "llvm.load"(%3373) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %3375 = "llvm.insertvalue"(%3372, %3374) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3376 = "llvm.alloca"(%3338) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
+      %3377 = "llvm.call_intrinsic"(%3335, %3376) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3378 = "llvm.call_intrinsic"(%3334, %3365) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3379 = "llvm.getelementptr"(%3365, %3374) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
+      %3380 = "llvm.getelementptr"(%3379) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3381 = "llvm.load"(%3380) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3382 = "llvm.alloca"(%3338) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
+      %3383 = "builtin.unrealized_conversion_cast"(%3381) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr)
+      %3384 = "func.call_indirect"(%3383, %3375, %3382) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr
+      %3385 = "builtin.unrealized_conversion_cast"(%3384) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> i32)
+      %3386 = "func.call_indirect"(%3385, %3375, %3375, %3376) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> i32, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> i32
+      %3387 = "llvm.alloca"(%3338) <{elem_type = i32}> : (i32) -> !llvm.ptr
+      "llvm.store"(%3386, %3387) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %3388 = "llvm.alloca"(%3338) <{elem_type = f64}> : (i32) -> !llvm.ptr
+      %3389 = "llvm.load"(%3387) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %3390 = "arith.sitofp"(%3389) : (i32) -> f64
+      "llvm.store"(%3390, %3388) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
+      %3391 = "llvm.getelementptr"(%3341) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3392 = "llvm.load"(%3391) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3393 = "llvm.load"(%3341) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3394 = "llvm.call_intrinsic"(%3333, %3393) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3395 = "llvm.getelementptr"(%3341) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3396 = "llvm.load"(%3395) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %3397 = "llvm.getelementptr"(%3393, %3396) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
+      %3398 = "llvm.load"(%3397) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3399 = "llvm.getelementptr"(%3398) <{elem_type = !llvm.struct<(ptr, ptr)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3400 = "llvm.load"(%3399) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3401 = "builtin.unrealized_conversion_cast"(%3400) : (!llvm.ptr) -> ((!llvm.ptr) -> f64)
+      %3402 = "func.call_indirect"(%3401, %3392) : ((!llvm.ptr) -> f64, !llvm.ptr) -> f64
+      %3403 = "llvm.alloca"(%3338) <{elem_type = f64}> : (i32) -> !llvm.ptr
       "llvm.store"(%3402, %3403) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %3404 = "llvm.getelementptr"(%3332) <{elem_type = !llvm.struct<(f64)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3405 = "llvm.ptrtoint"(%3404) {type = i64} : (!llvm.ptr) -> i64
-      %3406 = "llvm.call"(%3405) {callee = @bump_malloc, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (i64) -> !llvm.ptr
-      %3407 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
-      %3408 = "llvm.alloca"(%3337) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
-      %3409 = "llvm.getelementptr"(%3408) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3410 = "llvm.getelementptr"(%3408) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%3407, %3408) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      "llvm.store"(%3406, %3409) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      "llvm.store"(%3331, %3410) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %3411 = "llvm.call_intrinsic"(%3336, %3408) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3412 = "llvm.getelementptr"(%3340) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3413 = "llvm.load"(%3412) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3414 = "llvm.load"(%3340) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3415 = "llvm.call_intrinsic"(%3335, %3414) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3416 = "llvm.getelementptr"(%3340) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %3417 = "llvm.load"(%3416) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %3418 = "llvm.getelementptr"(%3414, %3417) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
-      %3419 = "llvm.load"(%3418) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3420 = "llvm.getelementptr"(%3419) <{elem_type = !llvm.struct<(ptr, ptr)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %3421 = "llvm.load"(%3420) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3422 = "builtin.unrealized_conversion_cast"(%3421) : (!llvm.ptr) -> ((!llvm.ptr) -> f64)
-      %3423 = "func.call_indirect"(%3422, %3413) : ((!llvm.ptr) -> f64, !llvm.ptr) -> f64
-      %3424 = "llvm.alloca"(%3337) <{elem_type = f64}> : (i32) -> !llvm.ptr
-      "llvm.store"(%3423, %3424) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %3425 = "llvm.getelementptr"(%3355) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %3426 = "llvm.load"(%3425) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3427 = "llvm.insertvalue"(%3334, %3426) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3428 = "llvm.getelementptr"(%3355) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3429 = "llvm.load"(%3428) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3430 = "llvm.insertvalue"(%3427, %3429) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3431 = "llvm.getelementptr"(%3355) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
-      %3432 = "llvm.load"(%3431) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3433 = "llvm.insertvalue"(%3430, %3432) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3434 = "llvm.getelementptr"(%3355) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %3435 = "llvm.load"(%3434) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %3436 = "llvm.insertvalue"(%3433, %3435) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3437 = "llvm.alloca"(%3337) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
-      %3438 = "llvm.call_intrinsic"(%3333, %3437) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3439 = "llvm.call_intrinsic"(%3335, %3426) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3440 = "llvm.getelementptr"(%3426, %3435) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
-      %3441 = "llvm.getelementptr"(%3440) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 4>}> : (!llvm.ptr) -> !llvm.ptr
-      %3442 = "llvm.load"(%3441) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3443 = "llvm.alloca"(%3337) <{elem_type = !llvm.array<0 x ptr>}> : (i32) -> !llvm.ptr
-      %3444 = "builtin.unrealized_conversion_cast"(%3442) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr)
-      %3445 = "func.call_indirect"(%3444, %3436, %3443) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.ptr
-      %3446 = "builtin.unrealized_conversion_cast"(%3445) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64)
-      %3447 = "func.call_indirect"(%3446, %3436, %3436, %3437) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> f64
-      %3448 = "llvm.alloca"(%3337) <{elem_type = f64}> : (i32) -> !llvm.ptr
-      "llvm.store"(%3447, %3448) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %3449 = "llvm.load"(%3424) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
-      %3450 = "llvm.load"(%3448) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
-      %3451 = "arith.addf"(%3449, %3450) <{fastmath = #arith.fastmath<none>}> : (f64, f64) -> f64
-      %3452 = "llvm.alloca"(%3337) <{elem_type = f64}> : (i32) -> !llvm.ptr
-      "llvm.store"(%3451, %3452) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %3453 = "llvm.load"(%3452) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
-      %3454 = "llvm.getelementptr"(%3408) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %3455 = "llvm.load"(%3454) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3456 = "llvm.insertvalue"(%3334, %3455) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3457 = "llvm.getelementptr"(%3408) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3458 = "llvm.load"(%3457) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3459 = "llvm.insertvalue"(%3456, %3458) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3460 = "llvm.getelementptr"(%3408) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
-      %3461 = "llvm.load"(%3460) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3462 = "llvm.insertvalue"(%3459, %3461) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3463 = "llvm.getelementptr"(%3408) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %3464 = "llvm.load"(%3463) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %3465 = "llvm.insertvalue"(%3462, %3464) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3466 = "placeholder.addressof"() {global_name = @_parameterization_Ptrf64} : () -> !llvm.ptr
-      %3467 = "llvm.alloca"(%3337) <{elem_type = !llvm.array<1 x ptr>}> : (i32) -> !llvm.ptr
-      %3468 = "llvm.getelementptr"(%3467) <{elem_type = !llvm.array<1 x ptr>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%3466, %3468) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %3469 = "llvm.call_intrinsic"(%3330, %3467) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3470 = "llvm.call_intrinsic"(%3335, %3455) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
-      %3471 = "llvm.getelementptr"(%3455, %3464) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
-      %3472 = "llvm.getelementptr"(%3471) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %3473 = "llvm.load"(%3472) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3474 = "llvm.alloca"(%3337) <{elem_type = !llvm.array<1 x ptr>}> : (i32) -> !llvm.ptr
-      %3475 = "builtin.unrealized_conversion_cast"(%3473) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> !llvm.ptr)
-      %3476 = "placeholder.addressof"() {global_name = @f64_typ} : () -> !llvm.ptr
-      %3477 = "llvm.getelementptr"(%3474) <{elem_type = !llvm.array<1 x ptr>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%3476, %3477) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %3478 = "func.call_indirect"(%3475, %3465, %3474, %3453) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> !llvm.ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> !llvm.ptr
-      %3479 = "builtin.unrealized_conversion_cast"(%3478) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> ())
-      "func.call_indirect"(%3479, %3465, %3465, %3467, %3453) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> (), !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> ()
-      %3480 = "llvm.alloca"(%3337) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
-      %3481 = "llvm.getelementptr"(%3408) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %3482 = "llvm.getelementptr"(%3480) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %3483 = "llvm.load"(%3481) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%3483, %3482) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %3484 = "llvm.getelementptr"(%3408) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3485 = "llvm.getelementptr"(%3480) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3486 = "llvm.load"(%3484) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%3486, %3485) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %3487 = "llvm.getelementptr"(%3408) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
-      %3488 = "llvm.getelementptr"(%3480) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
-      %3489 = "llvm.load"(%3487) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
-      "llvm.store"(%3489, %3488) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %3490 = "llvm.getelementptr"(%3408) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %3491 = "llvm.getelementptr"(%3480) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %3492 = "llvm.load"(%3490) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
-      "llvm.store"(%3492, %3491) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %3493 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
-      "llvm.call"(%3480, %3493) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
-      %3494 = "llvm.getelementptr"(%3480) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
-      %3495 = "llvm.load"(%3494) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3496 = "llvm.insertvalue"(%3334, %3495) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3497 = "llvm.getelementptr"(%3480) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
-      %3498 = "llvm.load"(%3497) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3499 = "llvm.insertvalue"(%3496, %3498) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3500 = "llvm.getelementptr"(%3480) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
-      %3501 = "llvm.load"(%3500) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
-      %3502 = "llvm.insertvalue"(%3499, %3501) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
-      %3503 = "llvm.getelementptr"(%3480) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
-      %3504 = "llvm.load"(%3503) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
-      %3505 = "llvm.insertvalue"(%3502, %3504) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3404 = "llvm.load"(%3403) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
+      %3405 = "llvm.load"(%3388) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
+      %3406 = "arith.addf"(%3404, %3405) <{fastmath = #arith.fastmath<none>}> : (f64, f64) -> f64
+      %3407 = "llvm.alloca"(%3338) <{elem_type = f64}> : (i32) -> !llvm.ptr
+      "llvm.store"(%3406, %3407) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
+      %3408 = "llvm.getelementptr"(%3332) <{elem_type = !llvm.struct<(f64)>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3409 = "llvm.ptrtoint"(%3408) {type = i64} : (!llvm.ptr) -> i64
+      %3410 = "llvm.call"(%3409) {callee = @bump_malloc, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (i64) -> !llvm.ptr
+      %3411 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
+      %3412 = "llvm.alloca"(%3338) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
+      %3413 = "llvm.getelementptr"(%3412) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3414 = "llvm.getelementptr"(%3412) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%3411, %3412) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      "llvm.store"(%3410, %3413) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      "llvm.store"(%3331, %3414) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %3415 = "llvm.call_intrinsic"(%3337, %3412) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3416 = "llvm.getelementptr"(%3341) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3417 = "llvm.load"(%3416) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3418 = "llvm.load"(%3341) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3419 = "llvm.call_intrinsic"(%3333, %3418) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3420 = "llvm.getelementptr"(%3341) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3421 = "llvm.load"(%3420) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %3422 = "llvm.getelementptr"(%3418, %3421) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
+      %3423 = "llvm.load"(%3422) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3424 = "llvm.getelementptr"(%3423) <{elem_type = !llvm.struct<(ptr, ptr)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3425 = "llvm.load"(%3424) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3426 = "builtin.unrealized_conversion_cast"(%3425) : (!llvm.ptr) -> ((!llvm.ptr) -> f64)
+      %3427 = "func.call_indirect"(%3426, %3417) : ((!llvm.ptr) -> f64, !llvm.ptr) -> f64
+      %3428 = "llvm.alloca"(%3338) <{elem_type = f64}> : (i32) -> !llvm.ptr
+      "llvm.store"(%3427, %3428) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
+      %3429 = "llvm.load"(%3428) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
+      %3430 = "llvm.load"(%3388) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
+      %3431 = "arith.addf"(%3429, %3430) <{fastmath = #arith.fastmath<none>}> : (f64, f64) -> f64
+      %3432 = "llvm.alloca"(%3338) <{elem_type = f64}> : (i32) -> !llvm.ptr
+      "llvm.store"(%3431, %3432) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
+      %3433 = "llvm.load"(%3432) <{ordering = 0 : i64}> : (!llvm.ptr) -> f64
+      %3434 = "llvm.getelementptr"(%3412) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3435 = "llvm.load"(%3434) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3436 = "llvm.insertvalue"(%3336, %3435) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3437 = "llvm.getelementptr"(%3412) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3438 = "llvm.load"(%3437) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3439 = "llvm.insertvalue"(%3436, %3438) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3440 = "llvm.getelementptr"(%3412) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
+      %3441 = "llvm.load"(%3440) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3442 = "llvm.insertvalue"(%3439, %3441) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3443 = "llvm.getelementptr"(%3412) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3444 = "llvm.load"(%3443) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %3445 = "llvm.insertvalue"(%3442, %3444) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3446 = "placeholder.addressof"() {global_name = @_parameterization_Ptrf64} : () -> !llvm.ptr
+      %3447 = "llvm.alloca"(%3338) <{elem_type = !llvm.array<1 x ptr>}> : (i32) -> !llvm.ptr
+      %3448 = "llvm.getelementptr"(%3447) <{elem_type = !llvm.array<1 x ptr>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%3446, %3448) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %3449 = "llvm.call_intrinsic"(%3330, %3447) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3450 = "llvm.call_intrinsic"(%3333, %3435) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
+      %3451 = "llvm.getelementptr"(%3435, %3444) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: -2147483648>}> : (!llvm.ptr, i32) -> !llvm.ptr
+      %3452 = "llvm.getelementptr"(%3451) <{elem_type = !llvm.ptr, rawConstantIndices = array<i32: 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3453 = "llvm.load"(%3452) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3454 = "llvm.alloca"(%3338) <{elem_type = !llvm.array<1 x ptr>}> : (i32) -> !llvm.ptr
+      %3455 = "builtin.unrealized_conversion_cast"(%3453) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> !llvm.ptr)
+      %3456 = "placeholder.addressof"() {global_name = @f64_typ} : () -> !llvm.ptr
+      %3457 = "llvm.getelementptr"(%3454) <{elem_type = !llvm.array<1 x ptr>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%3456, %3457) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %3458 = "func.call_indirect"(%3455, %3445, %3454, %3433) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> !llvm.ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> !llvm.ptr
+      %3459 = "builtin.unrealized_conversion_cast"(%3458) : (!llvm.ptr) -> ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> ())
+      "func.call_indirect"(%3459, %3445, %3445, %3447, %3433) : ((!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> (), !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, f64) -> ()
+      %3460 = "llvm.alloca"(%3338) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>}> : (i32) -> !llvm.ptr
+      %3461 = "llvm.getelementptr"(%3412) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3462 = "llvm.getelementptr"(%3460) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3463 = "llvm.load"(%3461) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%3463, %3462) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %3464 = "llvm.getelementptr"(%3412) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3465 = "llvm.getelementptr"(%3460) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3466 = "llvm.load"(%3464) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%3466, %3465) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %3467 = "llvm.getelementptr"(%3412) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
+      %3468 = "llvm.getelementptr"(%3460) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
+      %3469 = "llvm.load"(%3467) <{ordering = 0 : i64}> {type = !llvm.ptr} : (!llvm.ptr) -> !llvm.ptr
+      "llvm.store"(%3469, %3468) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
+      %3470 = "llvm.getelementptr"(%3412) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3471 = "llvm.getelementptr"(%3460) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3472 = "llvm.load"(%3470) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
+      "llvm.store"(%3472, %3471) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
+      %3473 = "placeholder.addressof"() {global_name = @Float64} : () -> !llvm.ptr
+      "llvm.call"(%3460, %3473) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
+      %3474 = "llvm.getelementptr"(%3460) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
+      %3475 = "llvm.load"(%3474) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3476 = "llvm.insertvalue"(%3336, %3475) <{position = array<i64: 0>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3477 = "llvm.getelementptr"(%3460) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 1>}> : (!llvm.ptr) -> !llvm.ptr
+      %3478 = "llvm.load"(%3477) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3479 = "llvm.insertvalue"(%3476, %3478) <{position = array<i64: 1>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3480 = "llvm.getelementptr"(%3460) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 2>}> : (!llvm.ptr) -> !llvm.ptr
+      %3481 = "llvm.load"(%3480) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
+      %3482 = "llvm.insertvalue"(%3479, %3481) <{position = array<i64: 2>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr) -> !llvm.struct<(ptr, ptr, ptr, i32)>
+      %3483 = "llvm.getelementptr"(%3460) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
+      %3484 = "llvm.load"(%3483) <{ordering = 0 : i64}> : (!llvm.ptr) -> i32
+      %3485 = "llvm.insertvalue"(%3482, %3484) <{position = array<i64: 3>}> : (!llvm.struct<(ptr, ptr, ptr, i32)>, i32) -> !llvm.struct<(ptr, ptr, ptr, i32)>
       "cf.br"()[^bb1] : () -> ()
     ^bb1:  // pred: ^bb0
-      "func.return"(%3505) : (!llvm.struct<(ptr, ptr, ptr, i32)>) -> ()
+      "func.return"(%3485) : (!llvm.struct<(ptr, ptr, ptr, i32)>) -> ()
     }) : () -> ()
-    "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.ptr, sym_name = "Float64_B__ADD_otherInt32__ADD_otherFloat64"}> ({
+    "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.ptr, sym_name = "Float64_B__ADD_otherFloat64__ADD_otherInt32"}> ({
     ^bb0(%arg44: !llvm.struct<(ptr, ptr, ptr, i32)>, %arg45: !llvm.ptr, %arg46: !llvm.struct<(ptr, i160)>):
       %3264 = "llvm.mlir.constant"() <{value = 1 : i64}> : () -> i32
       %3265 = "llvm.mlir.constant"() <{value = 8748823673944961442 : i64}> : () -> i64
       %3266 = "llvm.mlir.constant"() <{value = -3157560240565274503 : i64}> : () -> i64
-      %3267 = "llvm.mlir.constant"() <{value = 9 : i32}> : () -> i32
-      %3268 = "llvm.mlir.constant"() <{value = 8 : i32}> : () -> i32
+      %3267 = "llvm.mlir.constant"() <{value = 8 : i32}> : () -> i32
+      %3268 = "llvm.mlir.constant"() <{value = 9 : i32}> : () -> i32
       %3269 = "llvm.mlir.constant"() <{value = 8 : i64}> : () -> i64
       %3270 = "llvm.call_intrinsic"(%3269, %arg45) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
       %3271 = "llvm.alloca"(%3264) <{elem_type = !llvm.ptr}> : (i32) -> !llvm.ptr
@@ -22035,7 +22354,7 @@
     }) : () -> ()
     "func.func"() <{function_type = (!llvm.ptr) -> !llvm.ptr, sym_name = "Int32_field_Int32_0"}> ({
     ^bb0(%arg40: !llvm.ptr):
-      %3252 = "placeholder.addressof"() {global_name = @_parameterization_Float64_or_Int32} : () -> !llvm.ptr
+      %3252 = "placeholder.addressof"() {global_name = @_parameterization_Int32_or_Float64} : () -> !llvm.ptr
       "func.return"(%3252) : (!llvm.ptr) -> ()
     }) : () -> ()
     "func.func"() <{function_type = (!llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.struct<(ptr, ptr, ptr, i32)>, !llvm.ptr, i32) -> (), sym_name = "Int32_init_valuePtri32"}> ({
@@ -22729,7 +23048,7 @@
       %2712 = "llvm.getelementptr"(%2701) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
       %2713 = "llvm.load"(%2711) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
       "llvm.store"(%2713, %2712) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %2714 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %2714 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%2701, %2714) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %2715 = "llvm.getelementptr"(%2701) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %2716 = "llvm.load"(%2715) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -23074,7 +23393,7 @@
       %2441 = "llvm.getelementptr"(%2430) <{elem_type = !llvm.struct<(ptr, ptr, ptr, i32)>, rawConstantIndices = array<i32: 0, 3>}> : (!llvm.ptr) -> !llvm.ptr
       %2442 = "llvm.load"(%2440) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
       "llvm.store"(%2442, %2441) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %2443 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %2443 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%2430, %2443) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %2444 = "llvm.getelementptr"(%2430) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %2445 = "llvm.load"(%2444) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -23291,7 +23610,7 @@
       "llvm.store"(%56, %54) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %57 = "llvm.load"(%52) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
       "llvm.store"(%57, %55) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %58 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %58 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%54, %58) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %59 = "llvm.getelementptr"(%54) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %60 = "llvm.load"(%59) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -23305,7 +23624,7 @@
       "llvm.store"(%67, %65) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %68 = "llvm.load"(%53) <{ordering = 0 : i64}> {type = f64} : (!llvm.ptr) -> f64
       "llvm.store"(%68, %66) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %69 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %69 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%65, %69) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %70 = "llvm.getelementptr"(%65) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %71 = "llvm.load"(%70) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -23478,7 +23797,7 @@
       "llvm.store"(%206, %204) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %207 = "llvm.load"(%202) <{ordering = 0 : i64}> {type = f64} : (!llvm.ptr) -> f64
       "llvm.store"(%207, %205) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %208 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %208 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%204, %208) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %209 = "llvm.getelementptr"(%204) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %210 = "llvm.load"(%209) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -23492,7 +23811,7 @@
       "llvm.store"(%217, %215) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %218 = "llvm.load"(%203) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
       "llvm.store"(%218, %216) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %219 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %219 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%215, %219) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %220 = "llvm.getelementptr"(%215) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %221 = "llvm.load"(%220) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -23722,7 +24041,7 @@
       "llvm.store"(%395, %381) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %396 = "llvm.call_intrinsic"(%12, %380) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
       "llvm.store"(%380, %382) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %397 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %397 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%381, %397) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %398 = "llvm.getelementptr"(%381) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %399 = "llvm.load"(%398) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -23736,7 +24055,7 @@
       "llvm.store"(%406, %404) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %407 = "llvm.load"(%377) <{ordering = 0 : i64}> {type = f64} : (!llvm.ptr) -> f64
       "llvm.store"(%407, %405) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %408 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %408 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%404, %408) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %409 = "llvm.getelementptr"(%404) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %410 = "llvm.load"(%409) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -23982,7 +24301,7 @@
       "llvm.store"(%591, %577) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %592 = "llvm.call_intrinsic"(%12, %576) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.invariant.start.p0", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 2, 0>}> : (i64, !llvm.ptr) -> !llvm.ptr
       "llvm.store"(%576, %578) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %593 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %593 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%577, %593) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %594 = "llvm.getelementptr"(%577) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %595 = "llvm.load"(%594) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -23996,7 +24315,7 @@
       "llvm.store"(%602, %600) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %603 = "llvm.load"(%573) <{ordering = 0 : i64}> {type = f64} : (!llvm.ptr) -> f64
       "llvm.store"(%603, %601) <{ordering = 0 : i64}> : (f64, !llvm.ptr) -> ()
-      %604 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %604 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%600, %604) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %605 = "llvm.getelementptr"(%600) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %606 = "llvm.load"(%605) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -24492,7 +24811,7 @@
       "llvm.store"(%786, %784) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %787 = "llvm.load"(%783) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
       "llvm.store"(%787, %785) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %788 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %788 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%784, %788) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %789 = "llvm.getelementptr"(%784) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %790 = "llvm.load"(%789) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -24508,7 +24827,7 @@
       "llvm.store"(%798, %796) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %799 = "llvm.load"(%795) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
       "llvm.store"(%799, %797) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %800 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %800 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%796, %800) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %801 = "llvm.getelementptr"(%796) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %802 = "llvm.load"(%801) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -24524,7 +24843,7 @@
       "llvm.store"(%810, %808) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %811 = "llvm.load"(%807) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
       "llvm.store"(%811, %809) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %812 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %812 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%808, %812) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %813 = "llvm.getelementptr"(%808) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %814 = "llvm.load"(%813) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -24540,7 +24859,7 @@
       "llvm.store"(%822, %820) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %823 = "llvm.load"(%819) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
       "llvm.store"(%823, %821) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %824 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %824 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%820, %824) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %825 = "llvm.getelementptr"(%820) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %826 = "llvm.load"(%825) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -24748,7 +25067,7 @@
       "llvm.store"(%997, %996) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
       %998 = "placeholder.addressof"() {global_name = @Array} : () -> !llvm.ptr
       "llvm.call"(%985, %998) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
-      %999 = "placeholder.addressof"() {global_name = @_functionliteral_lqdggtdryy} : () -> !llvm.ptr
+      %999 = "placeholder.addressof"() {global_name = @_functionliteral_yjbzjcsnsa} : () -> !llvm.ptr
       %1000 = "llvm.alloca"(%20) <{elem_type = !llvm.ptr}> : (i32) -> !llvm.ptr
       "llvm.store"(%999, %1000) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %1001 = "llvm.alloca"(%20) <{elem_type = i32}> : (i32) -> !llvm.ptr
@@ -24759,7 +25078,7 @@
       "llvm.store"(%1004, %1002) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %1005 = "llvm.load"(%1001) <{ordering = 0 : i64}> {type = i32} : (!llvm.ptr) -> i32
       "llvm.store"(%1005, %1003) <{ordering = 0 : i64}> : (i32, !llvm.ptr) -> ()
-      %1006 = "placeholder.addressof"() {global_name = @Object} : () -> !llvm.ptr
+      %1006 = "placeholder.addressof"() {global_name = @any_typ} : () -> !llvm.ptr
       "llvm.call"(%1002, %1006) {callee = @set_offset, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 2, 0>} : (!llvm.ptr, !llvm.ptr) -> ()
       %1007 = "llvm.getelementptr"(%1002) <{elem_type = !llvm.struct<(ptr, i160)>, rawConstantIndices = array<i32: 0, 0>}> : (!llvm.ptr) -> !llvm.ptr
       %1008 = "llvm.load"(%1007) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
@@ -24771,7 +25090,7 @@
       %1014 = "llvm.ptrtoint"(%1013) {type = i64} : (!llvm.ptr) -> i64
       %1015 = "llvm.call"(%1014) {callee = @bump_malloc, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (i64) -> !llvm.ptr
       "llvm.call"(%1015) {callee = @anoint_trampoline, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (!llvm.ptr) -> ()
-      %1016 = "placeholder.addressof"() {global_name = @ecxcuocsbx} : () -> !llvm.ptr
+      %1016 = "placeholder.addressof"() {global_name = @qnwveodguh} : () -> !llvm.ptr
       %1017 = "llvm.load"(%1000) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       "llvm.call_intrinsic"(%1015, %1016, %1017) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.init.trampoline", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 3, 0>}> : (!llvm.ptr, !llvm.ptr, !llvm.ptr) -> ()
       %1018 = "llvm.alloca"(%20) <{elem_type = !llvm.ptr}> : (i32) -> !llvm.ptr
@@ -24855,23 +25174,23 @@
       %1084 = "func.call_indirect"(%1082, %1081, %1072) : ((!llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.ptr, !llvm.ptr, !llvm.struct<(ptr, i160)>) -> !llvm.ptr
       %1085 = "builtin.unrealized_conversion_cast"(%1084) : (!llvm.ptr) -> ((!llvm.ptr, !llvm.struct<(ptr, i160)>) -> ())
       "func.call_indirect"(%1085, %1074, %1072) : ((!llvm.ptr, !llvm.struct<(ptr, i160)>) -> (), !llvm.ptr, !llvm.struct<(ptr, i160)>) -> ()
-      %1086 = "placeholder.addressof"() {global_name = @_functionliteral_ghvzijthjq} : () -> !llvm.ptr
+      %1086 = "placeholder.addressof"() {global_name = @_functionliteral_ezbzfhfefq} : () -> !llvm.ptr
       %1087 = "llvm.alloca"(%20) <{elem_type = !llvm.ptr}> : (i32) -> !llvm.ptr
       "llvm.store"(%1086, %1087) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %1088 = "placeholder.addressof"() {global_name = @_functionliteral_xxdcfxndqj} : () -> !llvm.ptr
+      %1088 = "placeholder.addressof"() {global_name = @_functionliteral_tdagiokdwv} : () -> !llvm.ptr
       %1089 = "llvm.alloca"(%20) <{elem_type = !llvm.ptr}> : (i32) -> !llvm.ptr
       "llvm.store"(%1088, %1089) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %1090 = "placeholder.addressof"() {global_name = @_functionliteral_zwhendnebz} : () -> !llvm.ptr
+      %1090 = "placeholder.addressof"() {global_name = @_functionliteral_zxjtstewud} : () -> !llvm.ptr
       %1091 = "llvm.alloca"(%20) <{elem_type = !llvm.ptr}> : (i32) -> !llvm.ptr
       "llvm.store"(%1090, %1091) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-      %1092 = "placeholder.addressof"() {global_name = @_functionliteral_nzvifaiaig} : () -> !llvm.ptr
+      %1092 = "placeholder.addressof"() {global_name = @_functionliteral_bjvgndmova} : () -> !llvm.ptr
       %1093 = "llvm.alloca"(%20) <{elem_type = !llvm.ptr}> : (i32) -> !llvm.ptr
       "llvm.store"(%1092, %1093) <{ordering = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %1094 = "llvm.getelementptr"(%19) <{elem_type = !llvm.array<24 x i8>, rawConstantIndices = array<i32: 1>}> : (!llvm.ptr) -> !llvm.ptr
       %1095 = "llvm.ptrtoint"(%1094) {type = i64} : (!llvm.ptr) -> i64
       %1096 = "llvm.call"(%1095) {callee = @bump_malloc, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (i64) -> !llvm.ptr
       "llvm.call"(%1096) {callee = @anoint_trampoline, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (!llvm.ptr) -> ()
-      %1097 = "placeholder.addressof"() {global_name = @fbjhobwwtn} : () -> !llvm.ptr
+      %1097 = "placeholder.addressof"() {global_name = @aavrewcafd} : () -> !llvm.ptr
       %1098 = "llvm.load"(%1087) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       "llvm.call_intrinsic"(%1096, %1097, %1098) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.init.trampoline", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 3, 0>}> : (!llvm.ptr, !llvm.ptr, !llvm.ptr) -> ()
       %1099 = "llvm.alloca"(%20) <{elem_type = !llvm.ptr}> : (i32) -> !llvm.ptr
@@ -24974,7 +25293,7 @@
       %1178 = "llvm.ptrtoint"(%1177) {type = i64} : (!llvm.ptr) -> i64
       %1179 = "llvm.call"(%1178) {callee = @bump_malloc, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (i64) -> !llvm.ptr
       "llvm.call"(%1179) {callee = @anoint_trampoline, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (!llvm.ptr) -> ()
-      %1180 = "placeholder.addressof"() {global_name = @smhjlgfzcp} : () -> !llvm.ptr
+      %1180 = "placeholder.addressof"() {global_name = @ihrxhpxshg} : () -> !llvm.ptr
       %1181 = "llvm.load"(%1093) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       "llvm.call_intrinsic"(%1179, %1180, %1181) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.init.trampoline", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 3, 0>}> : (!llvm.ptr, !llvm.ptr, !llvm.ptr) -> ()
       %1182 = "llvm.alloca"(%20) <{elem_type = !llvm.ptr}> : (i32) -> !llvm.ptr
@@ -24989,7 +25308,7 @@
       %1190 = "llvm.ptrtoint"(%1189) {type = i64} : (!llvm.ptr) -> i64
       %1191 = "llvm.call"(%1190) {callee = @bump_malloc, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (i64) -> !llvm.ptr
       "llvm.call"(%1191) {callee = @anoint_trampoline, op_bundle_sizes = array<i32>, operandSegmentSizes = array<i32: 1, 0>} : (!llvm.ptr) -> ()
-      %1192 = "placeholder.addressof"() {global_name = @ttjlvsyfyh} : () -> !llvm.ptr
+      %1192 = "placeholder.addressof"() {global_name = @smdlnssxgz} : () -> !llvm.ptr
       %1193 = "llvm.load"(%1091) <{ordering = 0 : i64}> : (!llvm.ptr) -> !llvm.ptr
       "llvm.call_intrinsic"(%1191, %1192, %1193) <{fastmathFlags = #llvm.fastmath<none>, intrin = "llvm.init.trampoline", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 3, 0>}> : (!llvm.ptr, !llvm.ptr, !llvm.ptr) -> ()
       %1194 = "llvm.alloca"(%20) <{elem_type = !llvm.ptr}> : (i32) -> !llvm.ptr
