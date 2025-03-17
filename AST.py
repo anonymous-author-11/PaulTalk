@@ -1176,6 +1176,7 @@ class ObjectCreation(Expression):
         input_types = [arg.exprtype(scope) for arg in self.arguments]
         behaviors = [behavior for behavior in cls.behaviors if behavior.applicable(simplified_type, scope, "init", input_types)]
         if len(behaviors) == 0:
+            print(cls.behaviors)
             raise Exception(f"Line {self.info.line_number}: No init method in class {simplified_type} matches the argument types {input_types}")
         if len(behaviors) > 1:
             raise Exception(f"Line {self.info.line_number}: invocation of {simplified_type}.{self.method} with argument types {arg_types} is ambiguous.")

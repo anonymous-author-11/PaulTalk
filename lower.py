@@ -331,7 +331,7 @@ class LowerCheckFlag(RewritePattern):
         candidate_ptr = UnwrapOp.create(operands=[typ_id.results[0]], result_types=[llvm.LLVMPointerType.opaque()])
         candidate = llvm.PtrToIntOp(candidate_ptr.results[0], IntegerType(64))
 
-        if op.typ_name.data in builtin_types.keys() and op.typ_name.data != "nil_typ":
+        if op.typ_name.data in builtin_types.keys() and op.typ_name.data not in ["nil_typ", "any_typ"]:
             eq = ComparisonOp.make(vptr_int.results[0], candidate.results[0], "EQ")
             rewriter.inline_block_before_matched_op(Block([get_flag, typ_id, vptr, vptr_int, candidate_ptr, candidate, eq]))
             wrap = WrapOp.make(eq.results[0])

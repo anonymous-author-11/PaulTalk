@@ -289,6 +289,11 @@ DONE:
 
 TODO:
 
+- Need to focus on assignments to method calls
+	- Translate into calls to setter methods
+	- Add setter methods to grammar properly
+	- Needed for hashtable to work
+- See if return values are unwrapped or loaded directly
 - See if hash compiles now
 	- no, because of problem below
 - Figure out relationship between Any, Object, Nil

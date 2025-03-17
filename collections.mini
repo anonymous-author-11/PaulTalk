@@ -1,8 +1,7 @@
 import core;
 import io;
 
-class Pair[T, U]
-    where T <: Object, U <: Object {
+class Pair[T, U] {
 
     @first : T
     @second : U
@@ -134,6 +133,13 @@ class Array[T] extends Iterable2[T] {
         if past_end or before_start { self.throw_oob(x); }
         if x < 0 { x = @length + x; }
         return self.unsafe_index(x);
+    }
+    def insert_at(elem : T, x : i32) {
+        past_end = x > (@length - 1);
+        before_start = (@length + x) < 0;
+        if past_end or before_start { self.throw_oob(x); }
+        if x < 0 { x = @length + x; }
+        @buffer.[x] = elem;
     }
     def throw_oob(x : i32) yields OutOfBounds {
         yield(Exception.new());

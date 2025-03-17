@@ -336,7 +336,7 @@ class Scope:
             simplified = {self.simplify(sub) for sub in typ.types.data} # recursive call
             flattened = {s for typ in simplified for s in (typ.types.data if isinstance(typ, Union) else [typ])}
             flattened = {s for s in flattened if not isinstance(s, Nothing)} # remove Nothing types
-            flattened = {s for s in flattened if isinstance(s, TypeParameter) or isinstance(s, Nil) or (not any(self.subtype(s, s2.bound) for s2 in flattened if isinstance(s2, TypeParameter)))}
+            flattened = {s for s in flattened if isinstance(s, TypeParameter) or isinstance(s, Nil) or (not any(s == s2.bound) for s2 in flattened if isinstance(s2, TypeParameter))}
             flattened = {s for s in flattened if (not any(((self.subtype(s, s2)) and (not self.subtype(s2, s))) for s2 in flattened))} # merge subtypes
             if len(list(flattened)) == 1: return list(flattened)[0] # A union of one type is just that type
             if len(list(flattened)) == 0: return Nothing()

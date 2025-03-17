@@ -139,7 +139,7 @@ def main(argv):
     ])
     mlir_translate = f"mlir-translate --mlir-to-llvmir -o {out_file_names[0]}"
     llvm_link = f"llvm-link -S {out_file_names[0]} {' '.join(ll_files)} utils.ll"
-    reg2mem = "opt -S --passes=reg2mem"
+    reg2mem = "opt -S --passes=reg2mem --disable-verify"
     hoist_allocas = "opt -S --bugpoint-enable-legacy-pm --alloca-hoisting -o out_reg2mem.ll"
     debug = "debugir out_reg2mem.ll"
     debug_extension = ".dbg" if debug_mode else ""
@@ -150,7 +150,7 @@ def main(argv):
     lld_link = ' '.join(["lld-link", f"/out:{out_file_names[2]}", out_file_names[1], debug_flag, "libcmt.lib"])
     lower_to_llvm = " | ".join([to_llvm_dialect, mlir_translate])
     preliminaries = " | ".join([llvm_link, reg2mem, hoist_allocas])
-
+    
     subprocess.run(lower_to_llvm, text=True, shell=True, input=module_str)
     after_translate = time.time()
     print(f"Time to lower to llvm ir: {after_translate - after_mlir_opt} seconds")

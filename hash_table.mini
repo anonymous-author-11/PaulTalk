@@ -23,7 +23,9 @@ class Entry[K,V] {
     @value: V | Tombstone
     @hash: i32
 
-    def init(@key: K, @value: V | Tombstone, @hash: i32) {}
+    def init(@key: K, @value: V, @hash: i32) {}
+
+    def init(@key: K, @value: Tombstone, @hash: i32) {}
     
     def key() -> K { return @key; }
     def value() -> V | Tombstone { return @value; }
@@ -39,6 +41,11 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
     
     def init(@hasher: (K) -> i32, @eq : (K, K) -> Bool) {
         @entries = Array[Entry[K,V] | Nil].new(16);
+        i = 0;
+        while i < 16 {
+            @entries.append(nil);
+            i = i + 1;
+        }
         @size = 0;
         @load = 0;
     }
@@ -49,7 +56,9 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
             entry = @entries.[i];
             if entry is Entry[K, V] {
             	if entry.hash() == hash {
-                	if @eq.call(entry.key(), key) { return i; }
+                	if @eq.call(entry.key(), key) {
+                        return i;
+                    }
             	}
             	i = (i + 1) bit_and (@entries.length() - 1);  // Linear probe
             }
@@ -75,8 +84,14 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
             entry = old_entries.[i];
             if entry is Entry[K,V] {
                 val = entry.value();
+                not_tomb = true;
+                if val is Tombstone {
+                    not_tomb = false;
+                }
                 if val is V {
-                    self.insert(entry.key(), val);
+                    if not_tomb {
+                        self.insert(entry.key(), val);
+                    }
                 }
             }
             i = i + 1;
@@ -95,18 +110,19 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
 
         if entry is Entry[K, V] {
         	val = entry.value();
+            if val is Tombstone {
+                // Was a tombstone
+                @entries.insert_at(Entry[K,V].new(key, value, hash), i);
+                @size = @size + 1;
+                return;
+            }
 	        if val is V {
-	            @entries.[i] = Entry[K,V].new(key, value, hash);
-	            return;
+	            @entries.insert_at(Entry[K,V].new(key, value, hash), i);
+                return;
 	        }
-
-	        // Was a tombstone
-	        @entries.[i] = Entry[K,V].new(key, value, hash);
-	        @size = @size + 1;
-	        return;
         }
 
-        @entries.[i] = Entry[K,V].new(key, value, hash);
+        @entries.insert_at(Entry[K,V].new(key, value, hash), i);
         @size = @size + 1;
         @load = @load + 1;
     }
@@ -115,11 +131,13 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         hash = @hasher.call(key);
         i = self.find_slot(key, hash);
         entry = @entries.[i];
-        
+
         if entry is Entry[K, V] {
         	val = entry.value();
+            if val is Tombstone { return nil; }
         	if val is V { return val; }
         }
+        print(77);
         return nil;
     }
 
@@ -130,8 +148,9 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
 
         if entry is Entry[K, V] {
         	val = entry.value();
+            if val is Tombstone { return nil; }
         	if val is V {
-        		@entries.[i] = Entry[K,V].new(key, Tombstone.new(), hash);
+        		@entries.insert_at(Entry[K,V].new(key, Tombstone.new(), hash), i);
         		@size = @size - 1;
         		return val;
         	}
