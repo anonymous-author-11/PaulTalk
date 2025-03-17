@@ -26,8 +26,7 @@ declare void @report_exception( {ptr} )
 @always_one = linkonce thread_local global i1 1
 
 ; Thread-local storage for our bump allocator state
-@region = internal thread_local global [8388608 x i8] zeroinitializer
-@current_ptr = internal thread_local global ptr @region
+@current_ptr = internal thread_local global ptr null
 
 define ptr @adjust_trampoline(ptr %tramp) {
   %ret = call ptr @llvm.adjust.trampoline(ptr %tramp) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: read)
@@ -100,6 +99,8 @@ define ptr @coroutine_create(ptr %func, ptr %arg_passer) {
 }
 
 define void @setup_landing_pad() {
+  %region = call noalias ptr @VirtualAlloc(ptr null, i64 8388608, i32 12288, i32 4) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(1) "alloc-family"="malloc"
+  store ptr %region, ptr @current_ptr
   %buf_first_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 0
   %buf_second_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 1
   %buf_third_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 2

@@ -4,7 +4,7 @@ source_filename = "LLVMDialectModule"
 @_parameterization_Ptri1 = linkonce_odr constant [1 x ptr] [ptr @bool_typ]
 @_parameterization_String = linkonce_odr constant [1 x ptr] [ptr @String]
 @_parameterization_BufferPtri8 = linkonce_odr constant [1 x ptr] [ptr @buffer_typ]
-@rfowx_not_an_i = internal constant [10 x i8] c"not an i32"
+@scpht_not_an_i = internal constant [10 x i8] c"not an i32"
 @_parameterization_FunctionPtri32._Ptri32_to_Ptri1 = linkonce_odr constant [4 x ptr] [ptr @function_typ, ptr @_parameterization_Ptri1, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptri32]
 @_parameterization_FunctionPtri32_to_Ptri32 = linkonce_odr constant [3 x ptr] [ptr @function_typ, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptri32]
 @_parameterization_PairPtri32._Ptri32 = linkonce_odr constant [3 x ptr] [ptr @Pair, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptri32]
@@ -102,7 +102,7 @@ source_filename = "LLVMDialectModule"
 @HashMap_field_hasher = internal constant { ptr, ptr } { ptr @HashMap_getter_hasher, ptr @HashMap_setter_hasher }
 @HashMap_field_eq = internal constant { ptr, ptr } { ptr @HashMap_getter_eq, ptr @HashMap_setter_eq }
 
-define i1 @pkvpqguycj(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @pnxfgbotdv(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -115,7 +115,7 @@ define i1 @pkvpqguycj(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %10
 }
 
-define i32 @emxmumtpba(ptr nest %0, { ptr, i160 } %1) {
+define i32 @yzzamiefkq(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
@@ -936,17 +936,17 @@ define void @HashMap_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ pt
   %68 = call ptr %67(ptr %60)
   %69 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([3 x ptr], ptr null, i32 1) to i64))
   %70 = call ptr @llvm.invariant.start.p0(i64 24, ptr %69)
-  %71 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([3 x ptr], ptr null, i32 1) to i64))
-  %72 = call ptr @llvm.invariant.start.p0(i64 24, ptr %71)
-  %73 = getelementptr [3 x ptr], ptr %71, i32 0, i32 2
-  store ptr %68, ptr %73, align 8
-  %74 = getelementptr [3 x ptr], ptr %71, i32 0, i32 1
-  store ptr %58, ptr %74, align 8
-  store ptr @Entry, ptr %71, align 8
-  %75 = getelementptr [3 x ptr], ptr %69, i32 0, i32 2
-  store ptr %71, ptr %75, align 8
+  %71 = getelementptr [3 x ptr], ptr %69, i32 0, i32 2
+  store ptr @_parameterization_Nil, ptr %71, align 8
+  %72 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([3 x ptr], ptr null, i32 1) to i64))
+  %73 = call ptr @llvm.invariant.start.p0(i64 24, ptr %72)
+  %74 = getelementptr [3 x ptr], ptr %72, i32 0, i32 2
+  store ptr %68, ptr %74, align 8
+  %75 = getelementptr [3 x ptr], ptr %72, i32 0, i32 1
+  store ptr %58, ptr %75, align 8
+  store ptr @Entry, ptr %72, align 8
   %76 = getelementptr [3 x ptr], ptr %69, i32 0, i32 1
-  store ptr @_parameterization_Nil, ptr %76, align 8
+  store ptr %72, ptr %76, align 8
   store ptr @union_typ, ptr %69, align 8
   %77 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32, ptr }, ptr null, i32 1) to i64))
   %78 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -1824,17 +1824,17 @@ define void @HashMap_resize_new_sizePtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %79 = call ptr %78(ptr %71)
   %80 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([3 x ptr], ptr null, i32 1) to i64))
   %81 = call ptr @llvm.invariant.start.p0(i64 24, ptr %80)
-  %82 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([3 x ptr], ptr null, i32 1) to i64))
-  %83 = call ptr @llvm.invariant.start.p0(i64 24, ptr %82)
-  %84 = getelementptr [3 x ptr], ptr %82, i32 0, i32 2
-  store ptr %79, ptr %84, align 8
-  %85 = getelementptr [3 x ptr], ptr %82, i32 0, i32 1
-  store ptr %69, ptr %85, align 8
-  store ptr @Entry, ptr %82, align 8
-  %86 = getelementptr [3 x ptr], ptr %80, i32 0, i32 2
-  store ptr %82, ptr %86, align 8
+  %82 = getelementptr [3 x ptr], ptr %80, i32 0, i32 2
+  store ptr @_parameterization_Nil, ptr %82, align 8
+  %83 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([3 x ptr], ptr null, i32 1) to i64))
+  %84 = call ptr @llvm.invariant.start.p0(i64 24, ptr %83)
+  %85 = getelementptr [3 x ptr], ptr %83, i32 0, i32 2
+  store ptr %79, ptr %85, align 8
+  %86 = getelementptr [3 x ptr], ptr %83, i32 0, i32 1
+  store ptr %69, ptr %86, align 8
+  store ptr @Entry, ptr %83, align 8
   %87 = getelementptr [3 x ptr], ptr %80, i32 0, i32 1
-  store ptr @_parameterization_Nil, ptr %87, align 8
+  store ptr %83, ptr %87, align 8
   store ptr @union_typ, ptr %80, align 8
   %88 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32, ptr }, ptr null, i32 1) to i64))
   %89 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -5131,17 +5131,17 @@ define void @HashMap_clear_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1
   %38 = call ptr %37(ptr %30)
   %39 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([3 x ptr], ptr null, i32 1) to i64))
   %40 = call ptr @llvm.invariant.start.p0(i64 24, ptr %39)
-  %41 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([3 x ptr], ptr null, i32 1) to i64))
-  %42 = call ptr @llvm.invariant.start.p0(i64 24, ptr %41)
-  %43 = getelementptr [3 x ptr], ptr %41, i32 0, i32 2
-  store ptr %38, ptr %43, align 8
-  %44 = getelementptr [3 x ptr], ptr %41, i32 0, i32 1
-  store ptr %28, ptr %44, align 8
-  store ptr @Entry, ptr %41, align 8
-  %45 = getelementptr [3 x ptr], ptr %39, i32 0, i32 2
-  store ptr %41, ptr %45, align 8
+  %41 = getelementptr [3 x ptr], ptr %39, i32 0, i32 2
+  store ptr @_parameterization_Nil, ptr %41, align 8
+  %42 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([3 x ptr], ptr null, i32 1) to i64))
+  %43 = call ptr @llvm.invariant.start.p0(i64 24, ptr %42)
+  %44 = getelementptr [3 x ptr], ptr %42, i32 0, i32 2
+  store ptr %38, ptr %44, align 8
+  %45 = getelementptr [3 x ptr], ptr %42, i32 0, i32 1
+  store ptr %28, ptr %45, align 8
+  store ptr @Entry, ptr %42, align 8
   %46 = getelementptr [3 x ptr], ptr %39, i32 0, i32 1
-  store ptr @_parameterization_Nil, ptr %46, align 8
+  store ptr %42, ptr %46, align 8
   store ptr @union_typ, ptr %39, align 8
   %47 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32, ptr }, ptr null, i32 1) to i64))
   %48 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -6039,7 +6039,7 @@ define i32 @main() {
   %10 = call ptr @llvm.invariant.start.p0(i64 9, ptr %6)
   %11 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %11)
-  call void @llvm.init.trampoline(ptr %11, ptr @emxmumtpba, ptr @i32_hasher)
+  call void @llvm.init.trampoline(ptr %11, ptr @yzzamiefkq, ptr @i32_hasher)
   %12 = alloca ptr, align 8
   %13 = call ptr @adjust_trampoline(ptr %11)
   store ptr %13, ptr %12, align 8
@@ -6050,7 +6050,7 @@ define i32 @main() {
   %18 = insertvalue { ptr } undef, ptr %17, 0
   %19 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %19)
-  call void @llvm.init.trampoline(ptr %19, ptr @pkvpqguycj, ptr @i32_eq)
+  call void @llvm.init.trampoline(ptr %19, ptr @pnxfgbotdv, ptr @i32_eq)
   %20 = alloca ptr, align 8
   %21 = call ptr @adjust_trampoline(ptr %19)
   store ptr %21, ptr %20, align 8
@@ -6394,7 +6394,7 @@ define i32 @main() {
   %284 = getelementptr [10 x i8], ptr null, i32 %283
   %285 = ptrtoint ptr %284 to i64
   %286 = getelementptr i8, ptr %282, i64 %285
-  %287 = load i80, ptr @rfowx_not_an_i, align 4
+  %287 = load i80, ptr @scpht_not_an_i, align 4
   store i80 %287, ptr %286, align 4
   %288 = alloca i32, align 4
   store i32 10, ptr %288, align 4
