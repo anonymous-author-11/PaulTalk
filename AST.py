@@ -1859,15 +1859,17 @@ class Behavior(Statement):
         blocks = {block.name:(block, Block([])) for block in chain.from_iterable(state.blocks() for state in self.automaton._states.values())}
 
         entry = Block([])
-        args = [entry.insert_arg(llvm.LLVMPointerType.opaque(), i) for (i, arg) in enumerate(args_types)]
+        arg = entry.insert_arg(llvm.LLVMPointerType.opaque(), 0)
         fat_ptr = self.fat_ptr(entry)
+        invariant = InvariantOp.make(arg, 8 * self.arity)
+        entry.add_op(invariant)
         offset_ptr = AllocateOp.make(llvm.LLVMPointerType.opaque())
         br = cf.Branch.create(successors=[blocks[self.automaton._initial_state_id][1]])
         entry.add_ops([offset_ptr, br])
 
         exit = self.setup_exit(offset_ptr, fat_ptr)
 
-        for name, (block, bblock) in blocks.items(): self.process_block(block, bblock, blocks, offset_ptr, args, exit, fat_ptr)
+        for name, (block, bblock) in blocks.items(): self.process_block(block, bblock, blocks, offset_ptr, arg, exit, fat_ptr)
 
         body = Region([entry, *[bblock for (block, bblock) in blocks.values()], exit])
         function = FunctionDefOp.create(attributes=attr_dict, regions=[body])
@@ -1895,10 +1897,10 @@ class Behavior(Statement):
         bblock.add_ops([offset, store, br])
         return True
 
-    def process_block(self, block, bblock, blocks, offset_ptr, args, exit, fat_ptr):
+    def process_block(self, block, bblock, blocks, offset_ptr, arg, exit, fat_ptr):
         if self.process_final_state(block, bblock, offset_ptr, exit, fat_ptr): return
 
-        hash_coef, tbl_size, subtype_test, hashtbl = self.retrieve_tools(block, args, bblock)
+        hash_coef, tbl_size, subtype_test, hashtbl = self.retrieve_tools(block, arg, bblock)
 
         cand_ptr = AddrOfOp.from_stringattr(type_id(block.typ))
         cand = llvm.PtrToIntOp(cand_ptr.results[0], IntegerType(64))
@@ -1908,13 +1910,15 @@ class Behavior(Statement):
         br = cf.ConditionalBranch(subtype_call.results[0], blocks[block.first_succ_name][1], [], blocks[block.second_succ_name][1], [])
         bblock.add_ops([cand_ptr, cand, cand_id, subtype_call, br])
 
-    def retrieve_tools(self, block, args, bblock):
-        arg = args[block.arg_position]
+    def retrieve_tools(self, block, arg, bblock):
+        ary_type = llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque() for i in range(self.arity)])
+        gep = llvm.GEPOp.from_mixed_indices(arg, [0, block.arg_position], pointee_type=ary_type)
+        load_gep = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
         
-        hash_coef_ptr = llvm.GEPOp(arg, [1], pointee_type=llvm.LLVMPointerType.opaque())
-        tbl_size_ptr = llvm.GEPOp(arg, [2], pointee_type=llvm.LLVMPointerType.opaque())
-        subtype_test_ptr = llvm.GEPOp(arg, [3], pointee_type=llvm.LLVMPointerType.opaque())
-        hashtbl_ptr = llvm.GEPOp(arg, [4], pointee_type=llvm.LLVMPointerType.opaque())
+        hash_coef_ptr = llvm.GEPOp(load_gep.results[0], [1], pointee_type=llvm.LLVMPointerType.opaque())
+        tbl_size_ptr = llvm.GEPOp(load_gep.results[0], [2], pointee_type=llvm.LLVMPointerType.opaque())
+        subtype_test_ptr = llvm.GEPOp(load_gep.results[0], [3], pointee_type=llvm.LLVMPointerType.opaque())
+        hashtbl_ptr = llvm.GEPOp(load_gep.results[0], [4], pointee_type=llvm.LLVMPointerType.opaque())
 
         hash_coef = llvm.LoadOp(hash_coef_ptr.results[0], IntegerType(64))
         tbl_size = llvm.LoadOp(tbl_size_ptr.results[0], IntegerType(64))
@@ -1922,6 +1926,7 @@ class Behavior(Statement):
         hashtbl = llvm.LoadOp(hashtbl_ptr.results[0], llvm.LLVMPointerType.opaque())
 
         bblock.add_ops([
+            gep, load_gep,
             hash_coef_ptr, tbl_size_ptr, subtype_test_ptr, hashtbl_ptr,
             hash_coef, tbl_size, subtype_test, hashtbl
         ])

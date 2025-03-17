@@ -139,13 +139,12 @@ def main(argv):
     hoist_allocas = "opt -S --bugpoint-enable-legacy-pm --alloca-hoisting -o out_reg2mem.ll"
     debug = "debugir out_reg2mem.ll"
     debug_extension = ".dbg" if debug_mode else ""
-    opt = f"opt -S out_reg2mem{debug_extension}.ll --passes=\"default<O3>\" --enable-heap-to-stack-conversion --max-devirt-iterations=100 --inline-threshold=10000 --abort-on-max-devirt-iterations-reached -o out_optimized.ll"
+    opt = f"opt -S out_reg2mem{debug_extension}.ll --passes=\"default<O3>\" --enable-dfa-jump-thread --enable-heap-to-stack-conversion --max-devirt-iterations=100 --inline-threshold=10000 --abort-on-max-devirt-iterations-reached -o out_optimized.ll"
+    #opt2 = f"opt -S out_reg2mem{debug_extension}.ll --passes=\"default<O2>\" --print-after-all --enable-heap-to-stack-conversion --max-devirt-iterations=100 --inline-threshold=10000 --abort-on-max-devirt-iterations-reached -o out_optimized.ll"
     #opt2 = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
     clang = "clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=-1000 -Xclang -triple=x86_64-pc-windows-msvc"
-    llc = [
-        "llc", "-filetype=obj", "out_optimized.ll", "-O=3", "--enable-machine-outliner", "-machine-outliner-reruns=2",
-        "-exception-model=sjlj","-o", out_file_names[1], "-mtriple=x86_64-pc-windows-msvc"
-    ]
+    llc = ["llc", "-filetype=obj", "out_optimized.ll", "-O=3","-o", out_file_names[1], "-mtriple=x86_64-pc-windows-msvc"]
+    # "--enable-machine-outliner", "-machine-outliner-reruns=2"
     debug_flag = "/debug" if debug_mode else ""
     #lld_link = ' '.join(["lld-link", f"/out:{out_file_names[2]}", out_file_names[1], debug_flag, "libcmt.lib"])
     lld_link = ' '.join(["lld-link", f"/out:{out_file_names[2]}", out_file_names[1], debug_flag, "msvcrt.lib", "legacy_stdio_definitions.lib"])
@@ -165,7 +164,7 @@ def main(argv):
     #    f.seek(0)
     #    f.write(out_reg2mem.replace("preserve_nonecc",""))
     #    f.truncate()
-    #clang_out = subprocess.run(clang, text=True, shell=True, capture_output=True)
+    #clang_out = subprocess.run(opt2, text=True, shell=True, capture_output=True)
     #with open("opt_passes.txt", "w") as outfile: outfile.write(clang_out.stderr)
     after_opt = time.time()
     print(f"Time to opt: {after_opt - after_prelims} seconds")

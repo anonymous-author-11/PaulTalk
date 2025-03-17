@@ -621,8 +621,8 @@ class MethodCallOp(MethodCallLike, IRDLOperation):
         dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [3])
         return llvm.ExtractValueOp(dense_ary, self.fat_ptr, IntegerType(32))
 
-    def behavior_args(self, types):
-        return [self.fat_ptr, *types]
+    def behavior_args(self, ptr):
+        return [self.fat_ptr, ptr]
 
     def method_args(self):
         return [self.fat_ptr, self.fat_ptr, self.parameterizations, *self.args]
@@ -643,8 +643,8 @@ class ClassMethodCallOp(MethodCallLike, IRDLOperation):
     def adjustment(self, vtable_buffer_size):
         return llvm.ConstantOp(IntegerAttr.from_int_and_width(vtable_buffer_size, 32), IntegerType(32))
 
-    def behavior_args(self, types):
-        return [*types]
+    def behavior_args(self, ptr):
+        return [ptr]
 
     def method_args(self):
         return [self.parameterizations, *self.args]
