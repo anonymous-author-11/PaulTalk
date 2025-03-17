@@ -21,8 +21,8 @@ declare void @report_exception( {ptr} )
 @string_string = internal constant [4 x i8] c"%s\0A\00"
 @float_string = linkonce_odr constant [4 x i8] c"%f\0A\00"
 @exception_message = internal constant [45 x i8] c"Error: uncaught exception. Program aborted.\0A\00"
-@into_caller_buf = internal thread_local global [3 x ptr] zeroinitializer
-@current_coroutine = internal thread_local global ptr null
+@into_caller_buf = linkonce_odr thread_local global [3 x ptr] zeroinitializer
+@current_coroutine = linkonce_odr thread_local global ptr null
 @always_one = linkonce thread_local global i1 1
 
 ; Thread-local storage for our bump allocator state
@@ -203,29 +203,7 @@ define void @arg_buffer_filler(ptr %coroutine) {
   ret void
 }
 
-define void @coroutine_trampoline(ptr %into_callee_second_word) noinline {
-
-  ; Store the trampoline pointer in the instruction pointer slot of the jump buffer
-  store ptr blockaddress(@coroutine_trampoline, %trampoline), ptr %into_callee_second_word
-  %result = call i1 @returns_one()
-  %sp = call ptr @llvm.stacksave() mustprogress nocallback nofree nosync nounwind willreturn
-  br i1 %result, label %exit, label %trampoline
-
-trampoline:
-
-  %current_coroutine = load ptr, ptr @current_coroutine
-  %arg_passer_ptr = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %current_coroutine, i32 0, i32 2
-  %arg_passer = load ptr, ptr %arg_passer_ptr
-  call void %arg_passer(ptr %current_coroutine)
-  %current_coroutine2 = load ptr, ptr @current_coroutine
-  %is_finished_ptr = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %current_coroutine2, i32 0, i32 3
-  store i1 true, ptr %is_finished_ptr
-  call void @llvm.eh.sjlj.longjmp(ptr @into_caller_buf) noreturn nounwind
-  unreachable
-
-exit:
-  ret void
-}
+declare void @coroutine_trampoline(ptr %into_callee_second_word)
 
 define i1 @returns_one() {
   %retval = load i1, ptr @always_one
