@@ -814,25 +814,7 @@ module @patterns {
       %opbundlesize = pdl.attribute = array<i32>
       %call = pdl.operation "placeholder.call"(%malloc_size_result : !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%ptr_type : !pdl.type)
       %call_result = pdl.result 0 of %call
-      // %dereferenceable = pdl.operation "mini.dereferenceable"(%call_result, %malloc_size_result : !pdl.value, !pdl.value)
       pdl.replace %root with (%call_result : !pdl.value)
-    }
-  }
-  pdl.pattern @LowerDereferenceable : benefit(1) {
-    %ptr = pdl.operand
-    %size = pdl.operand
-    %root = pdl.operation "mini.dereferenceable"(%ptr, %size : !pdl.value, !pdl.value)
-    pdl.rewrite %root {
-      %true = pdl.attribute = true
-      %i1_type = pdl.type : i1
-      %op_bundle_tags = pdl.attribute = ["deferenceable_or_null"]
-      %op_bundle_sizes = pdl.attribute = array<i32>
-      %opsegsize = pdl.attribute = array<i32: 3, 0>
-      %true_const = pdl.operation "llvm.mlir.constant" {"value" = %true} -> (%i1_type : !pdl.type)
-      %true_result = pdl.result 0 of %true_const
-      %intrin = pdl.attribute = "llvm.assume"
-      %assume = pdl.operation "llvm.call_intrinsic"(%true_result, %ptr, %size : !pdl.value, !pdl.value, !pdl.value) {"intrin" = %intrin, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %op_bundle_sizes, "op_bundle_tags" = %op_bundle_tags}
-      pdl.replace %root with %assume
     }
   }
   pdl.pattern @LowerFree : benefit(1) {

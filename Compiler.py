@@ -105,12 +105,8 @@ def main(argv):
         Printer(stringio).print(cmd_out.stdout.replace("\\","\\\\"))
         module_str = stringio.getvalue().encode().decode('unicode_escape')
 
-    #bad_string = 'intrin = "llvm.assume", op_bundle_sizes = array<i32>, op_bundle_tags = [], operandSegmentSizes = array<i32: 3, 0>}> {op_bundle_tags = ["deferenceable_or_null"]}'
-    #good_string = 'intrin = "llvm.assume", op_bundle_sizes = array<i32: 2>, op_bundle_tags = ["dereferenceable"], operandSegmentSizes = array<i32: 1, 2>}>'
-
     module_str = module_str[23:-16]
     module_str = module_str.replace("placeholder.call", "llvm.call")
-    #module_str = module_str.replace(bad_string, good_string)
     with open("out.mlir", "w") as outfile: outfile.write(module_str)
 
     cmd = " ".join([
@@ -139,13 +135,16 @@ def main(argv):
     ])
     mlir_translate = f"mlir-translate --mlir-to-llvmir -o {out_file_names[0]}"
     llvm_link = f"llvm-link -S {out_file_names[0]} {' '.join(ll_files)} utils.ll"
-    reg2mem = "opt -S --passes=reg2mem --disable-verify"
+    reg2mem = "opt -S --passes=reg2mem"
     hoist_allocas = "opt -S --bugpoint-enable-legacy-pm --alloca-hoisting -o out_reg2mem.ll"
     debug = "debugir out_reg2mem.ll"
     debug_extension = ".dbg" if debug_mode else ""
     opt = f"opt -S out_reg2mem{debug_extension}.ll --passes=\"default<O3>\" --enable-heap-to-stack-conversion --max-devirt-iterations=100 --abort-on-max-devirt-iterations-reached --inline-threshold=10000 -o out_optimized.ll"
     clang = "clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -Xclang -triple=x86_64-pc-windows-msvc"
-    llc = ["llc", "-filetype=obj", "out_optimized.ll", "-O=3", "-o", out_file_names[1], "-mtriple=x86_64-pc-windows-msvc"]
+    llc = [
+        "llc", "-filetype=obj", "out_optimized.ll", "-O=3","--enable-machine-outliner", "machine-outliner-reruns=2", "-exception-model=sjlj",
+        "-o", out_file_names[1], "-mtriple=x86_64-pc-windows-msvc"
+    ]
     debug_flag = "/debug" if debug_mode else ""
     lld_link = ' '.join(["lld-link", f"/out:{out_file_names[2]}", out_file_names[1], debug_flag, "libcmt.lib"])
     lower_to_llvm = " | ".join([to_llvm_dialect, mlir_translate])
