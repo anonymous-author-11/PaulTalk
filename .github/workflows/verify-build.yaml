@@ -1,11 +1,5 @@
 name: Verify Build Environment
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
 jobs:
   verify:
     runs-on: windows-latest
