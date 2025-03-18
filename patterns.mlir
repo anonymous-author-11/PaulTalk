@@ -402,7 +402,7 @@ module @patterns {
       pdl.erase %root
     }
   }
-  pdl.pattern @LowerBufferIndexation : benefit(1) {
+  pdl.pattern @LowerBufferIndexationStatic : benefit(1) {
     %ptr_type = pdl.type : !llvm.ptr
     %receiver = pdl.operand : %ptr_type
     %index = pdl.operand : %ptr_type
@@ -413,20 +413,77 @@ module @patterns {
     %i8_attr = pdl.attribute = i8
     %root = pdl.operation "mini.buffer_indexation"(%receiver, %index : !pdl.value, !pdl.value) {"typ" = %element_type_attr} -> (%result_type : !pdl.type)
     pdl.rewrite %root {
+      %type_size = pdl.operation "mini.type_size" {"typ" = %element_type_attr} -> (%i64_type : !pdl.type)
+      %type_size_result = pdl.result 0 of %type_size
+      %dynamic = pdl.operation "mini.buffer_indexation"(%receiver, %index, %type_size_result : !pdl.value, !pdl.value, !pdl.value) -> (%result_type : !pdl.type)
+      pdl.replace %root with %dynamic
+    }
+  }
+  pdl.pattern @LowerBufferIndexationDynamic : benefit(2) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %result_type = pdl.type : !llvm.ptr
+    %i32_type = pdl.type : i32
+    %i64_type = pdl.type : i64
+    %i8_attr = pdl.attribute = i8
+    %receiver = pdl.operand : %ptr_type
+    %index = pdl.operand : %ptr_type
+    %type_size = pdl.operand : %i64_type
+    %root = pdl.operation "mini.buffer_indexation"(%receiver, %index, %type_size : !pdl.value, !pdl.value, !pdl.value) -> (%result_type : !pdl.type)
+    pdl.rewrite %root {
       %buf_ptr = pdl.operation "llvm.load"(%receiver : !pdl.value) -> (%ptr_type : !pdl.type)
       %buf_ptr_result = pdl.result 0 of %buf_ptr
       %idx = pdl.operation "llvm.load"(%index : !pdl.value) -> (%i32_type : !pdl.type)
       %idx_result = pdl.result 0 of %idx
-      %null = pdl.operation "llvm.mlir.zero" -> (%ptr_type : !pdl.type)
-      %null_result = pdl.result 0 of %null
-      %indices = pdl.attribute = array<i32: -2147483648>
-      %gep0 = pdl.operation "llvm.getelementptr"(%null_result, %idx_result : !pdl.value, !pdl.value) {"elem_type" = %element_type_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
-      %gep0_result = pdl.result 0 of %gep0
-      %idx_bytes = pdl.operation "llvm.ptrtoint"(%gep0_result : !pdl.value) -> (%i64_type : !pdl.type)
+      %idx_64 = pdl.operation "arith.extsi"(%idx_result : !pdl.value) -> (%i64_type : !pdl.type)
+      %idx_64_result = pdl.result 0 of %idx_64
+      %idx_bytes = pdl.operation "arith.muli"(%type_size, %idx_64_result : !pdl.value, !pdl.value) -> (%i64_type : !pdl.type)
       %idx_bytes_result = pdl.result 0 of %idx_bytes
+      %indices = pdl.attribute = array<i32: -2147483648>
       %gep1 = pdl.operation "llvm.getelementptr"(%buf_ptr_result, %idx_bytes_result : !pdl.value, !pdl.value) {"elem_type" = %i8_attr, "rawConstantIndices" = %indices} -> (%result_type : !pdl.type)
       %gep1_result = pdl.result 0 of %gep1
       pdl.replace %root with (%gep1_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerCreateBufferStatic : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %i64_type = pdl.type : i64
+    %i32_type = pdl.type : i32
+    %size = pdl.operand : %ptr_type
+    %typ_attr = pdl.attribute
+    %region = pdl.attribute
+    %root = pdl.operation "mini.create_buffer"(%size : !pdl.value) {"typ" = %typ_attr, "region_id" = %region} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %type_size = pdl.operation "mini.type_size" {"typ" = %typ_attr} -> (%i64_type : !pdl.type)
+      %type_size_result = pdl.result 0 of %type_size
+      %dynamic = pdl.operation "mini.create_buffer"(%size, %type_size_result : !pdl.value, !pdl.value) {"region_id" = %region} -> (%ptr_type : !pdl.type)
+      pdl.replace %root with %dynamic
+    }
+  }
+  pdl.pattern @LowerCreateBufferDynamic : benefit(2) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %i64_type = pdl.type : i64
+    %i32_type = pdl.type : i32
+    %size = pdl.operand : %ptr_type
+    %type_size = pdl.operand : %i64_type
+    %region = pdl.attribute
+    %root = pdl.operation "mini.create_buffer"(%size, %type_size : !pdl.value, !pdl.value) {"region_id" = %region} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %load = pdl.operation "llvm.load"(%size : !pdl.value) -> (%i32_type : !pdl.type)
+      %load_result = pdl.result 0 of %load
+      %load_64 = pdl.operation "arith.extsi"(%load_result : !pdl.value) -> (%i64_type : !pdl.type)
+      %load_64_result = pdl.result 0 of %load_64
+      %ptr_type_attr = pdl.attribute = !llvm.ptr
+      %alloca = pdl.operation "mini.alloc" {"typ" = %ptr_type_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %malloc_size = pdl.operation "arith.muli"(%load_64_result, %type_size : !pdl.value, !pdl.value) -> (%i64_type : !pdl.type)
+      %malloc_size_result = pdl.result 0 of %malloc_size
+      %callee = pdl.attribute = @bump_malloc
+      %opsegsize = pdl.attribute = array<i32: 1, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "placeholder.call"(%malloc_size_result : !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%ptr_type : !pdl.type)
+      %call_result = pdl.result 0 of %call
+      %store = pdl.operation "llvm.store"(%call_result, %alloca_result : !pdl.value, !pdl.value)
+      pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
   pdl.pattern @LowerOr : benefit(1) {

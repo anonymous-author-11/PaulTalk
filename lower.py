@@ -91,7 +91,7 @@ class SecondPass(ModulePass):
                 LowerBreak(),
                 LowerContinue(),
                 LowerMethodCall(),
-                LowerCreateBuffer(),
+                #LowerCreateBuffer(),
             ]),
             apply_recursively=True
         )
@@ -406,11 +406,11 @@ class LowerBufferIndexation(RewritePattern):
 
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: BufferIndexationOp, rewriter: PatternRewriter):
+        type_size = TypeSizeOp.create(attributes={"typ":op.typ}, result_types=[IntegerType(64)])
         buf_ptr = llvm.LoadOp(op.receiver, llvm.LLVMPointerType.opaque())
-        null = llvm.ZeroOp.create(result_types=[llvm.LLVMPointerType.opaque()])
         idx = llvm.LoadOp(op.index, IntegerType(32))
-        gep0 = llvm.GEPOp.from_mixed_indices(null.results[0], [idx.results[0]], pointee_type=op.typ)
-        idx_bytes = llvm.PtrToIntOp(gep0.results[0], IntegerType(64))
+        idx_64 = arith.ExtSIOp(idx.results[0], IntegerType(64))
+        idx_bytes = arith.Muli(idx_64.results[0], type_size.results[0])
         gep1 = llvm.GEPOp.from_mixed_indices(buf_ptr.results[0], [idx_bytes.results[0]], pointee_type=IntegerType(8))
         rewriter.inline_block_before_matched_op(Block([buf_ptr, idx, null, gep0, idx_bytes]))
         rewriter.replace_matched_op(gep1)
@@ -424,11 +424,11 @@ class LowerTupleIndexation(RewritePattern):
 class LowerCreateBuffer(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: CreateBufferOp, rewriter: PatternRewriter):
-        null = llvm.ZeroOp.create(result_types=[llvm.LLVMPointerType.opaque()])
-        unwrap = UnwrapOp.create(operands=[op.size], result_types=[IntegerType(32)])
-        gep = llvm.GEPOp.from_mixed_indices(null.results[0], [unwrap.results[0]], pointee_type=op.typ)
+        type_size = TypeSizeOp.create(attributes={"typ":op.typ}, result_types=[IntegerType(64)])
+        load = llvm.LoadOp(op.size, IntegerType(32))
+        load_64 = arith.ExtSIOp(load.results[0], IntegerType(64))
         alloca = AllocateOp.make(llvm.LLVMPointerType.opaque())
-        malloc_size = llvm.PtrToIntOp(gep.results[0], IntegerType(64))
+        malloc_size = arith.Muli(load_64.results[0], type_size.results[0])
         malloc = llvm.CallOp("bump_malloc", malloc_size.results[0], return_type=llvm.LLVMPointerType.opaque())
         operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
         malloc.properties["operandSegmentSizes"] = operandSegmentSizes
@@ -445,7 +445,7 @@ class LowerCreateBuffer(RewritePattern):
         #memset.properties["operandSegmentSizes"] = operandSegmentSizes
         #memset.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
 
-        rewriter.inline_block_before_matched_op(Block([null, unwrap, gep, malloc_size]))
+        rewriter.inline_block_before_matched_op(Block([type_size, load, load_64, malloc_size]))
         rewriter.inline_block_after_matched_op(Block([malloc, store]))
         #rewriter.inline_block_after_matched_op(Block([false, zero, memset]))
         rewriter.replace_matched_op(alloca)

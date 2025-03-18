@@ -174,7 +174,7 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
 }
 
 // Default string hasher
-def string_hasher(s: String) -> i32 {
+def string_hasher(s : String) -> i32 {
     hash : i32 = 0;
     seed : i32 = 31;
     
@@ -183,6 +183,10 @@ def string_hasher(s: String) -> i32 {
         hash = hash * seed + cast;
     }
     return hash;
+}
+
+def string_eq(a : String, b : String) -> Bool {
+    return a == b;
 }
 
 map = HashMap[i32, i32].new(i32_hasher, i32_eq);
@@ -195,3 +199,8 @@ if val is i32 {
 } else {
     IO.print("not an i32");
 }
+stringmap = HashMap[String, String].new(string_hasher, string_eq);
+stringmap.insert("foo","bar");
+stringmap.insert("baz","qux");
+stringmap.insert("hello","world");
+IO.print(stringmap.get("hello"));

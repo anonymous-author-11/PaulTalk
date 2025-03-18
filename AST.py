@@ -2940,7 +2940,8 @@ class CreateBuffer(Expression):
 
     def codegen(self, scope):
         size = self.size.codegen(scope)
-        attr_dict = {"typ":scope.simplify(self.buf.elem_type).base_typ(), "region_id":StringAttr(self.region)}
+        region_id = StringAttr(self.region) if self.region else StringAttr("")
+        attr_dict = {"typ":scope.simplify(self.buf.elem_type).base_typ(), "region_id":region_id}
         create_buffer = CreateBufferOp.create(operands=[size], attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
         scope.region.last_block.add_op(create_buffer)
         return create_buffer.results[0]

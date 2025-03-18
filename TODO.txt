@@ -286,6 +286,10 @@ DONE:
 - Fix FancyPair [check!]
 - Need to fix access of specialized fields [check!]
 	- Right, this is why I was thinking about generating setters [check!]
+- See if hash compiles now [check!]
+	- no, because of problem below [check!]
+- Figure out relationship between Any, Object, Nil [check!]
+	- Need for Foo[Bar | Nil] and for T <: Any [check!]
 - Simplify behavior signature [check!]
 - Enable machine outlining [check!]
 - Move string handling to vector<i8> [check!]
@@ -297,14 +301,18 @@ DONE:
 
 TODO:
 
-- Zero-as-nil is clearly not working correctly
 - Generic buffer size and indexing
-- See if return values are unwrapped or loaded directly
-- See if hash compiles now
-	- no, because of problem below
-- Figure out relationship between Any, Object, Nil
-	- Need for Foo[Bar | Nil] and for T <: Any
+	- First just change bufferindexationop to take a dynamic type size [check!]
+	- Change createbuffer to take dynamic size as well [check!]
+	- We should rework how parameterizations are retrieved
+		- Doing way too much work
+		- Shouldn't generate parameterizations just to throw them away
+	- And createtuple and tupleindexation
+		- Actually a little more complicated
+	- For buffer creation we will need to get type size from ambient parameterizations
+- Zero-as-nil is clearly not working correctly
 - Polymorphic construction could just be conservatively aliased
+	- i.e. T.new(a, b, c)
 	- Very interesting idea
 - I really want to get generics fully working first
 	- Would really like for fields to be specialized size
