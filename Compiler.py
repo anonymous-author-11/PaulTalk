@@ -23,57 +23,14 @@ def print_dependency_graph(included_files, file_name):
     text_repr = stringio.getvalue().replace("╾","<─").replace("╼",">")
     print(text_repr)
 
-def main(argv):
-    after_imports = time.time()
-    print(f"Time to import: {after_imports - start_time} seconds")
-    if len(argv) < 2: raise Exception("Please provide a file to compile")
-    file_name = argv[1]
-    print(f"compiling {file_name}")
-    if "-o" not in argv: raise Exception("Please provide an output file.")
-    debug_mode = "--debug" in argv
-    show_dependencies = "--dependencies" in argv
-    for i, arg in enumerate(argv):
-        if arg == "-o":
-            if len(argv) < i + 2: raise Exception("Please provide an output file.")
-            output_name = argv[i + 1]
-            break
-    if "." not in output_name: raise Exception("Please provide an file extension in the output name.")
-    output_name_short = output_name.split(".")[0]
-
-    ast = parse(file_name)
-    #print(tree.pretty())
-    module = ast.codegen()
-
-    if show_dependencies: print_dependency_graph(included_files, file_name)
-        
-    ll_files = [file.split(".")[0] + ".ll" for file in included_files.nodes() if file != file_name]
-
-    # check that all dependencies have already been compiled
-    for file in ll_files:
-        with open(file, "r") as infile: pass
-
-    print(ll_files)
+def run_python_lowering(module):
+    lowered_module = first_pass(module)
     stringio = StringIO()
-    Printer(stringio).print(module)
-    module_str = stringio.getvalue().encode().decode('unicode_escape')
-    with open("in.mlir", "w") as outfile: outfile.write(module_str)
-    after_codegen = time.time()
-    print(f"Time to type check + codegen: {after_codegen - after_imports} seconds")
-
-    module = first_pass(module)
-
-    stringio = StringIO()
-    Printer(stringio).print(module)
+    Printer(stringio).print(lowered_module)
     module_str = stringio.getvalue().encode().decode('unicode_escape').replace("#llvm.memory_effects","#llvm.memory_effects<other = none, argMem = read, inaccessibleMem = none>")
-    out_file_names = [
-        argv[1].split(".")[0] + ".ll",
-        output_name_short + ".obj",
-        output_name_short + ".exe",
-    ]
+    return module_str
 
-    after_firstpass = time.time()
-    print(f"Time to lower custom IR: {after_firstpass - after_codegen} seconds")
-
+def run_pdl_lowering(module_str):
     with open("patterns.mlir", "r") as patterns_file: patterns = patterns_file.read()
 
     to_pdl_bytecode = "mlir-opt -allow-unregistered-dialect --mlir-print-op-generic --convert-pdl-to-pdl-interp"
@@ -108,7 +65,9 @@ def main(argv):
     module_str = module_str[23:-16]
     module_str = module_str.replace("placeholder.call", "llvm.call")
     with open("out.mlir", "w") as outfile: outfile.write(module_str)
+    return module_str
 
+def run_mlir_opt(module_str):
     cmd = " ".join([
         "mlir-opt","-allow-unregistered-dialect","--mlir-print-op-generic","--canonicalize=\"region-simplify=aggressive\"",
         "--mem2reg", "--sroa","--lift-cf-to-scf",
@@ -121,58 +80,124 @@ def main(argv):
     if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
     with open("liveness_log.txt", "w") as outfile: outfile.write(cmd_out.stderr)
     module_str = cmd_out.stdout.replace("\\","\\\\")
-    after_mlir_opt = time.time()
-    print(f"Time to do mlir-opt: {after_mlir_opt - after_firstpass} seconds")
     
     module_str = module_str.replace("placeholder", "llvm.mlir")
     stringio = StringIO()
     Printer(stringio).print(module_str)
     module_str = stringio.getvalue().encode().decode('unicode_escape')
-    
+    return module_str
+
+def lower_to_llvm(module_str, out_file_names):
     to_llvm_dialect = " ".join(["mlir-opt","--convert-scf-to-cf", "--convert-arith-to-llvm","--convert-func-to-llvm","--convert-index-to-llvm",
         "--finalize-memref-to-llvm","--convert-cf-to-llvm","--convert-ub-to-llvm","--reconcile-unrealized-casts",
         "--emit-bytecode"
     ])
     mlir_translate = f"mlir-translate --mlir-to-llvmir -o {out_file_names[0]}"
+    cmd = " | ".join([to_llvm_dialect, mlir_translate])
+    subprocess.run(cmd, text=True, shell=True, input=module_str)
+
+def do_preliminaries(out_file_names, ll_files):
     llvm_link = f"llvm-link -S {out_file_names[0]} {' '.join(ll_files)} utils.ll"
     reg2mem = "opt -S --passes=reg2mem"
     hoist_allocas = "opt -S --bugpoint-enable-legacy-pm --alloca-hoisting -o out_reg2mem.ll"
+    preliminaries = " | ".join([llvm_link, reg2mem, hoist_allocas])
+    subprocess.run(preliminaries, shell=True)
+
+def record_all_passes():
+    clang = "clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=-1000 -Xclang -triple=x86_64-pc-windows-msvc"
+    opt = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
+    with open("out_reg2mem.ll", "r+") as f:
+        out_reg2mem = f.read()
+        f.seek(0)
+        f.write(out_reg2mem.replace("preserve_nonecc",""))
+        f.truncate()
+    opt_out = subprocess.run(opt, text=True, shell=True, capture_output=True)
+    with open("opt_passes.txt", "w") as outfile: outfile.write(opt_out.stderr)
+
+def run_opt(debug_mode):
     debug = "debugir out_reg2mem.ll"
     debug_extension = ".dbg" if debug_mode else ""
     opt = f"opt -S out_reg2mem{debug_extension}.ll --passes=\"default<O3>\" --enable-dfa-jump-thread --enable-heap-to-stack-conversion --max-devirt-iterations=100 --inline-threshold=10000 --abort-on-max-devirt-iterations-reached -o out_optimized.ll"
     #opt2 = f"opt -S out_reg2mem{debug_extension}.ll --passes=\"default<O2>\" --print-after-all --enable-heap-to-stack-conversion --max-devirt-iterations=100 --inline-threshold=10000 --abort-on-max-devirt-iterations-reached -o out_optimized.ll"
-    #opt2 = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
-    clang = "clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=-1000 -Xclang -triple=x86_64-pc-windows-msvc"
+    if debug_mode: subprocess.run(debug, text=True, shell=True)
+    subprocess.run(opt, text=True, shell=True)
+
+def run_llc(out_file_names):
     llc = f"llc -filetype=obj out_optimized.ll -O=3 -mtriple=x86_64-pc-windows-msvc -exception-model=sjlj -enable-machine-outliner -machine-outliner-reruns=2 -o {out_file_names[1]}"
+    subprocess.run(llc)
+
+def run_lld_link(debug_mode, out_file_names):
     debug_flag = "/debug" if debug_mode else ""
     #lld_link = ' '.join(["lld-link", f"/out:{out_file_names[2]}", out_file_names[1], debug_flag, "libcmt.lib"])
     lld_link = ' '.join(["lld-link", f"/out:{out_file_names[2]}", out_file_names[1], "trampoline.obj", debug_flag, "msvcrt.lib", "legacy_stdio_definitions.lib"])
-    lower_to_llvm = " | ".join([to_llvm_dialect, mlir_translate])
-    preliminaries = " | ".join([llvm_link, reg2mem, hoist_allocas])
+
+def main(argv):
+    after_imports = time.time()
+    print(f"Time to import: {after_imports - start_time} seconds")
+    if len(argv) < 2: raise Exception("Please provide a file to compile")
+    file_name = argv[1]
+    print(f"compiling {file_name}")
+    if "-o" not in argv: raise Exception("Please provide an output file.")
+    debug_mode = "--debug" in argv
+    show_dependencies = "--dependencies" in argv
+    for i, arg in enumerate(argv):
+        if arg == "-o":
+            if len(argv) < i + 2: raise Exception("Please provide an output file.")
+            output_name = argv[i + 1]
+            break
+    if "." not in output_name: raise Exception("Please provide an file extension in the output name.")
+    output_name_short = output_name.split(".")[0]
+    out_file_names = [
+        argv[1].split(".")[0] + ".ll",
+        output_name_short + ".obj",
+        output_name_short + ".exe",
+    ]
+
+    ast = parse(file_name)
+    #print(tree.pretty())
+    module = ast.codegen()
+
+    if show_dependencies: print_dependency_graph(included_files, file_name)
+        
+    # check that all dependencies have already been compiled
+    ll_files = [file.split(".")[0] + ".ll" for file in included_files.nodes() if file != file_name]
+    for file in ll_files:
+        with open(file, "r") as infile: pass
+
+    print(ll_files)
+    stringio = StringIO()
+    Printer(stringio).print(module)
+    module_str = stringio.getvalue().encode().decode('unicode_escape')
+    with open("in.mlir", "w") as outfile: outfile.write(module_str)
+    after_codegen = time.time()
+    print(f"Time to type check + codegen: {after_codegen - after_imports} seconds")
+
+    module_str = run_python_lowering(module)
+
+    after_firstpass = time.time()
+    print(f"Time to lower custom IR: {after_firstpass - after_codegen} seconds")
+
+    module_str = run_pdl_lowering(module_str)
+
+    module_str = run_mlir_opt(module_str)
+    after_mlir_opt = time.time()
+    print(f"Time to do mlir-opt: {after_mlir_opt - after_firstpass} seconds")
     
-    subprocess.run(lower_to_llvm, text=True, shell=True, input=module_str)
+    lower_to_llvm(module_str, out_file_names)
     after_translate = time.time()
     print(f"Time to lower to llvm ir: {after_translate - after_mlir_opt} seconds")
-    subprocess.run(preliminaries, shell=True)
+    do_preliminaries(out_file_names, ll_files)
     after_prelims = time.time()
     print(f"Time to run preliminary passes: {after_prelims - after_translate} seconds")
-    if debug_mode: subprocess.run(debug, text=True, shell=True)
-    opt_out = subprocess.run(opt, text=True, shell=True)
-    #with open("out_reg2mem.ll", "r+") as f:
-    #    out_reg2mem = f.read()
-    #    f.seek(0)
-    #    f.write(out_reg2mem.replace("preserve_nonecc",""))
-    #    f.truncate()
-    #clang_out = subprocess.run(opt2, text=True, shell=True, capture_output=True)
-    #with open("opt_passes.txt", "w") as outfile: outfile.write(clang_out.stderr)
+    run_opt(debug_mode)
     after_opt = time.time()
     print(f"Time to opt: {after_opt - after_prelims} seconds")
-    subprocess.run(llc)
+    run_llc(out_file_names)
     after_llc = time.time()
     final_time = after_llc
     print(f"Time to llc: {after_llc - after_opt} seconds")
     if ".exe" in output_name:
-        subprocess.run(lld_link, shell=True, text=True)
+        run_lld_link(debug_mode, out_file_names)
         after_lldlink = time.time()
         final_time = after_lldlink
         print(f"Time to lld-link: {after_lldlink - after_llc} seconds")
