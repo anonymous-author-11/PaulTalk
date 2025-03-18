@@ -249,6 +249,17 @@ static Type arrayToInt(PatternRewriter &rewriter, Attribute attr) {
   return mlir::cast<Type>(intType);
 }
 
+static Type arrayToVector(PatternRewriter &rewriter, Attribute attr) {
+  Type arrayType = mlir::cast<TypeAttr>(attr).getValue();
+  auto llvmArray = mlir::cast<LLVM::LLVMArrayType>(arrayType);
+  
+  uint64_t numElements = llvmArray.getNumElements();
+  Type elementType = llvmArray.getElementType();
+
+  auto vector = mlir::LLVM::getVectorType(elementType, numElements);
+  return mlir::cast<Type>(vector);
+}
+
 static Attribute mapCmpi(PatternRewriter &rewriter, Attribute attr) {
   static const llvm::StringMap<int64_t> predicateMap = {
     {"EQ",  0}, {"NEQ", 1}, {"LT",  2}, {"LE",  3}, {"GT",  4}, {"GE",  5}
@@ -640,6 +651,8 @@ struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> 
         "smaller_type", smallerType);
     patternList.getPDLPatterns().registerRewriteFunction(
         "array_to_int", arrayToInt);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "array_to_vector", arrayToVector);
     patternList.getPDLPatterns().registerRewriteFunction(
         "array_from_size_and_type", arrayFromSizeAndType);
     patternList.getPDLPatterns().registerRewriteFunction(

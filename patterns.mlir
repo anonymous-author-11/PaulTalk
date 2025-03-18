@@ -784,7 +784,7 @@ module @patterns {
     pdl.apply_native_constraint "is_llvm_array_attr"(%type_attr : !pdl.attribute)
     %root = pdl.operation "mini.assign"(%target, %value : !pdl.value, !pdl.value) {"typ" = %type_attr}
     pdl.rewrite %root {
-      %equivalent_int_type = pdl.apply_native_rewrite "array_to_int"(%type_attr : !pdl.attribute) : !pdl.type
+      %equivalent_int_type = pdl.apply_native_rewrite "array_to_vector"(%type_attr : !pdl.attribute) : !pdl.type
       %load = pdl.operation "llvm.load"(%value : !pdl.value) -> (%equivalent_int_type : !pdl.type)
       %load_result = pdl.result 0 of %load
       %store = pdl.operation "llvm.store"(%load_result, %target : !pdl.value, !pdl.value)

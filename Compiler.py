@@ -202,14 +202,18 @@ def main(argv):
     print(f"Time to type check + codegen: {after_codegen - after_imports} seconds")
 
     module_str = run_python_lowering(module)
-    module_str = run_pdl_lowering(module_str)
 
     after_firstpass = time.time()
-    print(f"Time to lower custom IR: {after_firstpass - after_codegen} seconds")
+    print(f"Time to do python lowering: {after_firstpass - after_codegen} seconds")
+
+    module_str = run_pdl_lowering(module_str)
+
+    after_pdl = time.time()
+    print(f"Time to do PDL lowering: {after_pdl - after_firstpass} seconds")
 
     module_str = run_mlir_opt(module_str)
     after_mlir_opt = time.time()
-    print(f"Time to do mlir-opt: {after_mlir_opt - after_firstpass} seconds")
+    print(f"Time to do mlir-opt: {after_mlir_opt - after_pdl} seconds")
     
     lower_to_llvm(module_str, out_file_names)
     after_translate = time.time()

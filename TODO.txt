@@ -295,6 +295,7 @@ TODO:
 	- Translate into calls to setter methods
 	- Add setter methods to grammar properly
 	- Needed for hashtable to work
+- Generic buffer size and indexing
 - See if return values are unwrapped or loaded directly
 - See if hash compiles now
 	- no, because of problem below

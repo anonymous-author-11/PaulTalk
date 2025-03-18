@@ -1,19 +1,19 @@
 ; ModuleID = 'LLVMDialectModule'
 source_filename = "LLVMDialectModule"
 
-@emnhy_ = internal constant [9 x i8] c"---------"
-@oevbi_With_message = internal constant [12 x i8] c"With message"
-@tscng_At_line = internal constant [7 x i8] c"At line"
-@xhhhv_Exception_thrown_from_file = internal constant [26 x i8] c"Exception thrown from file"
-@hwlms_ = internal constant [9 x i8] c"---------"
-@xfudi_ = internal constant [0 x i8] zeroinitializer
-@rsruf_None = internal constant [6 x i8] c"<None>"
-@artdh_ = internal constant [0 x i8] zeroinitializer
+@whvfm_ = internal constant [9 x i8] c"---------"
+@kvgnj_With_message = internal constant [12 x i8] c"With message"
+@iclyn_At_line = internal constant [7 x i8] c"At line"
+@ixsgx_Exception_thrown_from_file = internal constant [26 x i8] c"Exception thrown from file"
+@sgveh_ = internal constant [9 x i8] c"---------"
+@nsvhs_ = internal constant [0 x i8] zeroinitializer
+@matos_None = internal constant [6 x i8] c"<None>"
+@tociw_ = internal constant [0 x i8] zeroinitializer
 @_parameterization_Ptri8 = linkonce_odr constant [1 x ptr] [ptr @i8_typ]
 @_parameterization_String = linkonce_odr constant [1 x ptr] [ptr @String]
 @_parameterization_Ptri32 = linkonce_odr constant [1 x ptr] [ptr @i32_typ]
 @_parameterization_BufferPtri8 = linkonce_odr constant [1 x ptr] [ptr @buffer_typ]
-@vlprw_Object = internal constant [6 x i8] c"Object"
+@ckxih_Object = internal constant [6 x i8] c"Object"
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
 @float_string = linkonce_odr constant [4 x i8] c"%f\0A\00"
@@ -170,8 +170,8 @@ define { ptr, ptr, ptr, i32 } @Representable_repr_({ ptr, ptr, ptr, i32 } %0, { 
   %25 = call ptr @llvm.invariant.start.p0(i64 16, ptr %21)
   %26 = load ptr, ptr %21, align 8
   %27 = getelementptr i8, ptr %26, i64 0
-  %28 = load i48, ptr @vlprw_Object, align 4
-  store i48 %28, ptr %27, align 4
+  %28 = load <6 x i8>, ptr @ckxih_Object, align 8
+  store <6 x i8> %28, ptr %27, align 8
   %29 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %30 = alloca { ptr, ptr, ptr, i32 }, align 8
   %31 = getelementptr { ptr, ptr, ptr, i32 }, ptr %30, i32 0, i32 1
@@ -3630,8 +3630,8 @@ define void @Exception_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   %35 = call ptr @llvm.invariant.start.p0(i64 16, ptr %31)
   %36 = load ptr, ptr %31, align 8
   %37 = getelementptr i8, ptr %36, i64 0
-  %38 = load i48, ptr @rsruf_None, align 4
-  store i48 %38, ptr %37, align 4
+  %38 = load <6 x i8>, ptr @matos_None, align 8
+  store <6 x i8> %38, ptr %37, align 8
   %39 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %40 = alloca { ptr, ptr, ptr, i32 }, align 8
   %41 = getelementptr { ptr, ptr, ptr, i32 }, ptr %40, i32 0, i32 1
@@ -3988,8 +3988,8 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %25 = call ptr @llvm.invariant.start.p0(i64 16, ptr %21)
   %26 = load ptr, ptr %21, align 8
   %27 = getelementptr i8, ptr %26, i64 0
-  %28 = load i72, ptr @hwlms_, align 4
-  store i72 %28, ptr %27, align 4
+  %28 = load <9 x i8>, ptr @sgveh_, align 16
+  store <9 x i8> %28, ptr %27, align 16
   %29 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %30 = alloca { ptr, ptr, ptr, i32 }, align 8
   %31 = getelementptr { ptr, ptr, ptr, i32 }, ptr %30, i32 0, i32 1
@@ -4070,8 +4070,8 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %93 = call ptr @llvm.invariant.start.p0(i64 16, ptr %89)
   %94 = load ptr, ptr %89, align 8
   %95 = getelementptr i8, ptr %94, i64 0
-  %96 = load i208, ptr @xhhhv_Exception_thrown_from_file, align 4
-  store i208 %96, ptr %95, align 4
+  %96 = load <26 x i8>, ptr @ixsgx_Exception_thrown_from_file, align 32
+  store <26 x i8> %96, ptr %95, align 32
   %97 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %98 = alloca { ptr, ptr, ptr, i32 }, align 8
   %99 = getelementptr { ptr, ptr, ptr, i32 }, ptr %98, i32 0, i32 1
@@ -4193,8 +4193,8 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %199 = call ptr @llvm.invariant.start.p0(i64 16, ptr %195)
   %200 = load ptr, ptr %195, align 8
   %201 = getelementptr i8, ptr %200, i64 0
-  %202 = load i56, ptr @tscng_At_line, align 4
-  store i56 %202, ptr %201, align 4
+  %202 = load <7 x i8>, ptr @iclyn_At_line, align 8
+  store <7 x i8> %202, ptr %201, align 8
   %203 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %204 = alloca { ptr, ptr, ptr, i32 }, align 8
   %205 = getelementptr { ptr, ptr, ptr, i32 }, ptr %204, i32 0, i32 1
@@ -4287,8 +4287,8 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %279 = call ptr @llvm.invariant.start.p0(i64 16, ptr %275)
   %280 = load ptr, ptr %275, align 8
   %281 = getelementptr i8, ptr %280, i64 0
-  %282 = load i96, ptr @oevbi_With_message, align 4
-  store i96 %282, ptr %281, align 4
+  %282 = load <12 x i8>, ptr @kvgnj_With_message, align 16
+  store <12 x i8> %282, ptr %281, align 16
   %283 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %284 = alloca { ptr, ptr, ptr, i32 }, align 8
   %285 = getelementptr { ptr, ptr, ptr, i32 }, ptr %284, i32 0, i32 1
@@ -4390,8 +4390,8 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %367 = call ptr @llvm.invariant.start.p0(i64 16, ptr %363)
   %368 = load ptr, ptr %363, align 8
   %369 = getelementptr i8, ptr %368, i64 0
-  %370 = load i72, ptr @emnhy_, align 4
-  store i72 %370, ptr %369, align 4
+  %370 = load <9 x i8>, ptr @whvfm_, align 16
+  store <9 x i8> %370, ptr %369, align 16
   %371 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %372 = alloca { ptr, ptr, ptr, i32 }, align 8
   %373 = getelementptr { ptr, ptr, ptr, i32 }, ptr %372, i32 0, i32 1
