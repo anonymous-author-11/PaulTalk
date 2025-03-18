@@ -28,12 +28,14 @@ type_bound: IDENT "<:" typ
 
 ident_list: IDENT ("," IDENT)*
 
-extern_def: ["#["constraint_list"]"] "extern" "def" IDENT "(" param_list ")" ["->" typ] ["yields" typ]
-function_def: ["#["constraint_list"]"] "def" IDENT "(" param_list ")" ["->" typ] ["yields" typ] block
+extern_def: ["#["constraint_list"]"] "extern" DEF IDENT "(" param_list ")" ["->" typ] ["yields" typ]
+function_def: ["#["constraint_list"]"] DEF IDENT "(" param_list ")" ["->" typ] ["yields" typ] block
 abstract: "abstract"
-method_def: ["#["constraint_list"]"] [abstract] "def" IDENT ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
-operator_def: ["#["constraint_list"]"] [abstract] "def" (operator | BRACKETS) ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
-class_method_def: ["#["constraint_list"]"] [abstract] "def" "Self" "." IDENT ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
+method_def: ["#["constraint_list"]"] [abstract] DEF method_name ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
+operator_def: ["#["constraint_list"]"] [abstract] DEF operator ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
+class_method_def: ["#["constraint_list"]"] [abstract] DEF "Self" "." IDENT ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
+
+method_name: (IDENT | SETTER)
 
 param_list: (param ("," param)*)?
 method_param_list: (method_param ("," method_param)*)? -> param_list
@@ -89,8 +91,8 @@ and: comparison -> logical_single
           | and AND comparison -> logical
 
 comparison: arithmetic -> comparison_single
-          | comparison operator arithmetic
           | comparison NEQ arithmetic
+          | comparison EQ arithmetic
           | comparison LT arithmetic
           | comparison GT arithmetic
           | comparison LE arithmetic
@@ -141,7 +143,7 @@ function_call: IDENT "(" (expression ("," expression)*)? ")"
 method_call: (primary | parameterized_type) "." IDENT "(" (expression ("," expression)*)? ")"
 indexation: primary "." "[" expression "]"
 
-operator: PLUS | MINUS | TIMES | DIVIDE | NEQ | EQ | LE | GE | LT | GT
+operator: PLUS | MINUS | TIMES | DIVIDE | NEQ | EQ | LE | GE | LT | GT | BRACKETS | BRACKETS_SETTER
 
 ARROW: "=>"
 PLUS: "+"
@@ -166,6 +168,7 @@ AND: "and"
 LBRACKET: "["
 RBRACKET: "]"
 BRACKETS: "[]"
+BRACKETS_SETTER: "[]="
 PIPE: "|"
 TRUE: "true"
 FALSE: "false"
@@ -174,8 +177,10 @@ BREAK: "break"
 CONTINUE: "continue"
 RETURN: "return"
 YIELD: "yield"
+DEF: "def"
 CLASS: "class"
 ALIAS: "alias"
+SETTER: /[a-zA-Z][a-zA-Z0-9_]*=/
 FIELD: /@[a-zA-Z][a-zA-Z0-9_]*/
 IDENT: /[a-zA-Z][a-zA-Z0-9_]*/
 INT: /[0-9]+/

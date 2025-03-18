@@ -288,13 +288,16 @@ DONE:
 	- Right, this is why I was thinking about generating setters [check!]
 - Simplify behavior signature [check!]
 - Enable machine outlining [check!]
+- Move string handling to vector<i8> [check!]
+- Need to focus on assignments to method calls [check!]
+	- Translate into calls to setter methods [check!]
+	- Add setter methods to grammar properly [check!]
+	- Setter methods should take one parameter [check!]
+	- Except for index-setter which should take two [check!]
 
 TODO:
 
-- Need to focus on assignments to method calls
-	- Translate into calls to setter methods
-	- Add setter methods to grammar properly
-	- Needed for hashtable to work
+- Zero-as-nil is clearly not working correctly
 - Generic buffer size and indexing
 - See if return values are unwrapped or loaded directly
 - See if hash compiles now

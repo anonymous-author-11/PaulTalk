@@ -4,7 +4,7 @@ source_filename = "LLVMDialectModule"
 @_parameterization_Ptri1 = linkonce_odr constant [1 x ptr] [ptr @bool_typ]
 @_parameterization_String = linkonce_odr constant [1 x ptr] [ptr @String]
 @_parameterization_BufferPtri8 = linkonce_odr constant [1 x ptr] [ptr @buffer_typ]
-@zgtos_not_an_i = internal constant [10 x i8] c"not an i32"
+@tjppz_not_an_i = internal constant [10 x i8] c"not an i32"
 @_parameterization_FunctionPtri32._Ptri32_to_Ptri1 = linkonce_odr constant [4 x ptr] [ptr @function_typ, ptr @_parameterization_Ptri1, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptri32]
 @_parameterization_FunctionPtri32_to_Ptri32 = linkonce_odr constant [3 x ptr] [ptr @function_typ, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptri32]
 @_parameterization_PairPtri32._Ptri32 = linkonce_odr constant [3 x ptr] [ptr @Pair, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptri32]
@@ -102,7 +102,7 @@ source_filename = "LLVMDialectModule"
 @HashMap_field_hasher = internal constant { ptr, ptr } { ptr @HashMap_getter_hasher, ptr @HashMap_setter_hasher }
 @HashMap_field_eq = internal constant { ptr, ptr } { ptr @HashMap_getter_eq, ptr @HashMap_setter_eq }
 
-define i1 @tbvvqctjkf(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @gbrphvapfk(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -115,7 +115,7 @@ define i1 @tbvvqctjkf(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %10
 }
 
-define i32 @iwayamyhts(ptr nest %0, { ptr, i160 } %1) {
+define i32 @fiothbkyhc(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
@@ -532,8 +532,8 @@ define ptr @Entry_B_init_keyK_valueTombstone_hashPtri32_init_keyK_valueV_hashPtr
   %22 = load i64, ptr %18, align 4
   %23 = load ptr, ptr %19, align 8
   %24 = load ptr, ptr %20, align 8
-  %25 = call i1 @subtype_test_wrapper(ptr %23, i64 %22, i64 %21, i64 -8477883990763853851, i64 ptrtoint (ptr @Tombstone to i64), ptr %24)
-  %26 = select i1 %25, i32 9, i32 10
+  %25 = call i1 @subtype_test_wrapper(ptr %23, i64 %22, i64 %21, i64 3084208142191802847, i64 ptrtoint (ptr @any_typ to i64), ptr %24)
+  %26 = select i1 %25, i32 10, i32 9
   br i1 %25, label %27, label %28
 
 27:                                               ; preds = %2
@@ -550,7 +550,7 @@ define ptr @Entry_B_init_keyK_valueTombstone_hashPtri32_init_keyK_valueV_hashPtr
   %36 = load i64, ptr %32, align 4
   %37 = load ptr, ptr %33, align 8
   %38 = load ptr, ptr %34, align 8
-  %39 = call i1 @subtype_test_wrapper(ptr %37, i64 %36, i64 %35, i64 3084208142191802847, i64 ptrtoint (ptr @any_typ to i64), ptr %38)
+  %39 = call i1 @subtype_test_wrapper(ptr %37, i64 %36, i64 %35, i64 -8477883990763853851, i64 ptrtoint (ptr @Tombstone to i64), ptr %38)
   br label %40
 
 40:                                               ; preds = %27, %28
@@ -3162,31 +3162,31 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   store ptr @i32_typ, ptr %538, align 8
   %539 = call ptr %534({ ptr, ptr, ptr, i32 } %505, ptr %535)
   call void %539({ ptr, ptr, ptr, i32 } %505, { ptr, ptr, ptr, i32 } %505, ptr %526, { ptr, i160 } %486, { ptr, i160 } %492, i32 %493)
-  %540 = alloca { ptr, i160 }, align 8
-  %541 = getelementptr { ptr, ptr, ptr, i32 }, ptr %466, i32 0, i32 0
-  %542 = getelementptr { ptr, ptr, ptr, i32 }, ptr %540, i32 0, i32 0
-  %543 = load ptr, ptr %541, align 8
-  store ptr %543, ptr %542, align 8
-  %544 = getelementptr { ptr, ptr, ptr, i32 }, ptr %466, i32 0, i32 1
-  %545 = getelementptr { ptr, ptr, ptr, i32 }, ptr %540, i32 0, i32 1
-  %546 = load ptr, ptr %544, align 8
-  store ptr %546, ptr %545, align 8
-  %547 = getelementptr { ptr, ptr, ptr, i32 }, ptr %466, i32 0, i32 2
-  %548 = getelementptr { ptr, ptr, ptr, i32 }, ptr %540, i32 0, i32 2
-  %549 = load ptr, ptr %547, align 8
-  store ptr %549, ptr %548, align 8
-  %550 = getelementptr { ptr, ptr, ptr, i32 }, ptr %466, i32 0, i32 3
-  %551 = getelementptr { ptr, ptr, ptr, i32 }, ptr %540, i32 0, i32 3
-  %552 = load i32, ptr %550, align 4
-  store i32 %552, ptr %551, align 4
-  call void @set_offset(ptr %540, ptr @any_typ)
-  %553 = getelementptr { ptr, i160 }, ptr %540, i32 0, i32 0
-  %554 = load ptr, ptr %553, align 8
-  %555 = insertvalue { ptr, i160 } undef, ptr %554, 0
-  %556 = getelementptr { ptr, i160 }, ptr %540, i32 0, i32 1
-  %557 = load i160, ptr %556, align 4
-  %558 = insertvalue { ptr, i160 } %555, i160 %557, 1
-  %559 = load i32, ptr %299, align 4
+  %540 = load i32, ptr %299, align 4
+  %541 = alloca { ptr, i160 }, align 8
+  %542 = getelementptr { ptr, ptr, ptr, i32 }, ptr %466, i32 0, i32 0
+  %543 = getelementptr { ptr, ptr, ptr, i32 }, ptr %541, i32 0, i32 0
+  %544 = load ptr, ptr %542, align 8
+  store ptr %544, ptr %543, align 8
+  %545 = getelementptr { ptr, ptr, ptr, i32 }, ptr %466, i32 0, i32 1
+  %546 = getelementptr { ptr, ptr, ptr, i32 }, ptr %541, i32 0, i32 1
+  %547 = load ptr, ptr %545, align 8
+  store ptr %547, ptr %546, align 8
+  %548 = getelementptr { ptr, ptr, ptr, i32 }, ptr %466, i32 0, i32 2
+  %549 = getelementptr { ptr, ptr, ptr, i32 }, ptr %541, i32 0, i32 2
+  %550 = load ptr, ptr %548, align 8
+  store ptr %550, ptr %549, align 8
+  %551 = getelementptr { ptr, ptr, ptr, i32 }, ptr %466, i32 0, i32 3
+  %552 = getelementptr { ptr, ptr, ptr, i32 }, ptr %541, i32 0, i32 3
+  %553 = load i32, ptr %551, align 4
+  store i32 %553, ptr %552, align 4
+  call void @set_offset(ptr %541, ptr @any_typ)
+  %554 = getelementptr { ptr, i160 }, ptr %541, i32 0, i32 0
+  %555 = load ptr, ptr %554, align 8
+  %556 = insertvalue { ptr, i160 } undef, ptr %555, 0
+  %557 = getelementptr { ptr, i160 }, ptr %541, i32 0, i32 1
+  %558 = load i160, ptr %557, align 4
+  %559 = insertvalue { ptr, i160 } %556, i160 %558, 1
   %560 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 1
   %561 = load ptr, ptr %560, align 8
   %562 = load ptr, ptr %8, align 8
@@ -3243,9 +3243,9 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   store ptr @Entry, ptr %605, align 8
   %609 = alloca [2 x ptr], align 8
   %610 = getelementptr [2 x ptr], ptr %609, i32 0, i32 0
-  store ptr %605, ptr %610, align 8
+  store ptr @_parameterization_Ptri32, ptr %610, align 8
   %611 = getelementptr [2 x ptr], ptr %609, i32 0, i32 1
-  store ptr @_parameterization_Ptri32, ptr %611, align 8
+  store ptr %605, ptr %611, align 8
   %612 = call ptr @llvm.invariant.start.p0(i64 4, ptr %609)
   %613 = call ptr @llvm.invariant.start.p0(i64 568, ptr %574)
   %614 = getelementptr ptr, ptr %574, i32 %583
@@ -3253,11 +3253,11 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %616 = load ptr, ptr %615, align 8
   %617 = alloca { ptr, ptr }, align 8
   %618 = getelementptr { ptr, ptr }, ptr %617, i32 0, i32 0
-  store ptr %554, ptr %618, align 8
+  store ptr @i32_typ, ptr %618, align 8
   %619 = getelementptr { ptr, ptr }, ptr %617, i32 0, i32 1
-  store ptr @i32_typ, ptr %619, align 8
+  store ptr %555, ptr %619, align 8
   %620 = call ptr %616({ ptr, ptr, ptr, i32 } %584, ptr %617)
-  call void %620({ ptr, ptr, ptr, i32 } %584, { ptr, ptr, ptr, i32 } %584, ptr %609, { ptr, i160 } %558, i32 %559)
+  call void %620({ ptr, ptr, ptr, i32 } %584, { ptr, ptr, ptr, i32 } %584, ptr %609, i32 %540, { ptr, i160 } %559)
   %621 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 1
   %622 = load ptr, ptr %621, align 8
   %623 = load ptr, ptr %8, align 8
@@ -3439,31 +3439,31 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   store ptr @i32_typ, ptr %772, align 8
   %773 = call ptr %768({ ptr, ptr, ptr, i32 } %739, ptr %769)
   call void %773({ ptr, ptr, ptr, i32 } %739, { ptr, ptr, ptr, i32 } %739, ptr %760, { ptr, i160 } %720, { ptr, i160 } %726, i32 %727)
-  %774 = alloca { ptr, i160 }, align 8
-  %775 = getelementptr { ptr, ptr, ptr, i32 }, ptr %700, i32 0, i32 0
-  %776 = getelementptr { ptr, ptr, ptr, i32 }, ptr %774, i32 0, i32 0
-  %777 = load ptr, ptr %775, align 8
-  store ptr %777, ptr %776, align 8
-  %778 = getelementptr { ptr, ptr, ptr, i32 }, ptr %700, i32 0, i32 1
-  %779 = getelementptr { ptr, ptr, ptr, i32 }, ptr %774, i32 0, i32 1
-  %780 = load ptr, ptr %778, align 8
-  store ptr %780, ptr %779, align 8
-  %781 = getelementptr { ptr, ptr, ptr, i32 }, ptr %700, i32 0, i32 2
-  %782 = getelementptr { ptr, ptr, ptr, i32 }, ptr %774, i32 0, i32 2
-  %783 = load ptr, ptr %781, align 8
-  store ptr %783, ptr %782, align 8
-  %784 = getelementptr { ptr, ptr, ptr, i32 }, ptr %700, i32 0, i32 3
-  %785 = getelementptr { ptr, ptr, ptr, i32 }, ptr %774, i32 0, i32 3
-  %786 = load i32, ptr %784, align 4
-  store i32 %786, ptr %785, align 4
-  call void @set_offset(ptr %774, ptr @any_typ)
-  %787 = getelementptr { ptr, i160 }, ptr %774, i32 0, i32 0
-  %788 = load ptr, ptr %787, align 8
-  %789 = insertvalue { ptr, i160 } undef, ptr %788, 0
-  %790 = getelementptr { ptr, i160 }, ptr %774, i32 0, i32 1
-  %791 = load i160, ptr %790, align 4
-  %792 = insertvalue { ptr, i160 } %789, i160 %791, 1
-  %793 = load i32, ptr %299, align 4
+  %774 = load i32, ptr %299, align 4
+  %775 = alloca { ptr, i160 }, align 8
+  %776 = getelementptr { ptr, ptr, ptr, i32 }, ptr %700, i32 0, i32 0
+  %777 = getelementptr { ptr, ptr, ptr, i32 }, ptr %775, i32 0, i32 0
+  %778 = load ptr, ptr %776, align 8
+  store ptr %778, ptr %777, align 8
+  %779 = getelementptr { ptr, ptr, ptr, i32 }, ptr %700, i32 0, i32 1
+  %780 = getelementptr { ptr, ptr, ptr, i32 }, ptr %775, i32 0, i32 1
+  %781 = load ptr, ptr %779, align 8
+  store ptr %781, ptr %780, align 8
+  %782 = getelementptr { ptr, ptr, ptr, i32 }, ptr %700, i32 0, i32 2
+  %783 = getelementptr { ptr, ptr, ptr, i32 }, ptr %775, i32 0, i32 2
+  %784 = load ptr, ptr %782, align 8
+  store ptr %784, ptr %783, align 8
+  %785 = getelementptr { ptr, ptr, ptr, i32 }, ptr %700, i32 0, i32 3
+  %786 = getelementptr { ptr, ptr, ptr, i32 }, ptr %775, i32 0, i32 3
+  %787 = load i32, ptr %785, align 4
+  store i32 %787, ptr %786, align 4
+  call void @set_offset(ptr %775, ptr @any_typ)
+  %788 = getelementptr { ptr, i160 }, ptr %775, i32 0, i32 0
+  %789 = load ptr, ptr %788, align 8
+  %790 = insertvalue { ptr, i160 } undef, ptr %789, 0
+  %791 = getelementptr { ptr, i160 }, ptr %775, i32 0, i32 1
+  %792 = load i160, ptr %791, align 4
+  %793 = insertvalue { ptr, i160 } %790, i160 %792, 1
   %794 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 1
   %795 = load ptr, ptr %794, align 8
   %796 = load ptr, ptr %8, align 8
@@ -3520,9 +3520,9 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   store ptr @Entry, ptr %839, align 8
   %843 = alloca [2 x ptr], align 8
   %844 = getelementptr [2 x ptr], ptr %843, i32 0, i32 0
-  store ptr %839, ptr %844, align 8
+  store ptr @_parameterization_Ptri32, ptr %844, align 8
   %845 = getelementptr [2 x ptr], ptr %843, i32 0, i32 1
-  store ptr @_parameterization_Ptri32, ptr %845, align 8
+  store ptr %839, ptr %845, align 8
   %846 = call ptr @llvm.invariant.start.p0(i64 4, ptr %843)
   %847 = call ptr @llvm.invariant.start.p0(i64 568, ptr %808)
   %848 = getelementptr ptr, ptr %808, i32 %817
@@ -3530,11 +3530,11 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %850 = load ptr, ptr %849, align 8
   %851 = alloca { ptr, ptr }, align 8
   %852 = getelementptr { ptr, ptr }, ptr %851, i32 0, i32 0
-  store ptr %788, ptr %852, align 8
+  store ptr @i32_typ, ptr %852, align 8
   %853 = getelementptr { ptr, ptr }, ptr %851, i32 0, i32 1
-  store ptr @i32_typ, ptr %853, align 8
+  store ptr %789, ptr %853, align 8
   %854 = call ptr %850({ ptr, ptr, ptr, i32 } %818, ptr %851)
-  call void %854({ ptr, ptr, ptr, i32 } %818, { ptr, ptr, ptr, i32 } %818, ptr %843, { ptr, i160 } %792, i32 %793)
+  call void %854({ ptr, ptr, ptr, i32 } %818, { ptr, ptr, ptr, i32 } %818, ptr %843, i32 %774, { ptr, i160 } %793)
   br label %862
 
 855:                                              ; preds = %651
@@ -3686,31 +3686,31 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   store ptr @i32_typ, ptr %967, align 8
   %968 = call ptr %963({ ptr, ptr, ptr, i32 } %934, ptr %964)
   call void %968({ ptr, ptr, ptr, i32 } %934, { ptr, ptr, ptr, i32 } %934, ptr %955, { ptr, i160 } %915, { ptr, i160 } %921, i32 %922)
-  %969 = alloca { ptr, i160 }, align 8
-  %970 = getelementptr { ptr, ptr, ptr, i32 }, ptr %895, i32 0, i32 0
-  %971 = getelementptr { ptr, ptr, ptr, i32 }, ptr %969, i32 0, i32 0
-  %972 = load ptr, ptr %970, align 8
-  store ptr %972, ptr %971, align 8
-  %973 = getelementptr { ptr, ptr, ptr, i32 }, ptr %895, i32 0, i32 1
-  %974 = getelementptr { ptr, ptr, ptr, i32 }, ptr %969, i32 0, i32 1
-  %975 = load ptr, ptr %973, align 8
-  store ptr %975, ptr %974, align 8
-  %976 = getelementptr { ptr, ptr, ptr, i32 }, ptr %895, i32 0, i32 2
-  %977 = getelementptr { ptr, ptr, ptr, i32 }, ptr %969, i32 0, i32 2
-  %978 = load ptr, ptr %976, align 8
-  store ptr %978, ptr %977, align 8
-  %979 = getelementptr { ptr, ptr, ptr, i32 }, ptr %895, i32 0, i32 3
-  %980 = getelementptr { ptr, ptr, ptr, i32 }, ptr %969, i32 0, i32 3
-  %981 = load i32, ptr %979, align 4
-  store i32 %981, ptr %980, align 4
-  call void @set_offset(ptr %969, ptr @any_typ)
-  %982 = getelementptr { ptr, i160 }, ptr %969, i32 0, i32 0
-  %983 = load ptr, ptr %982, align 8
-  %984 = insertvalue { ptr, i160 } undef, ptr %983, 0
-  %985 = getelementptr { ptr, i160 }, ptr %969, i32 0, i32 1
-  %986 = load i160, ptr %985, align 4
-  %987 = insertvalue { ptr, i160 } %984, i160 %986, 1
-  %988 = load i32, ptr %299, align 4
+  %969 = load i32, ptr %299, align 4
+  %970 = alloca { ptr, i160 }, align 8
+  %971 = getelementptr { ptr, ptr, ptr, i32 }, ptr %895, i32 0, i32 0
+  %972 = getelementptr { ptr, ptr, ptr, i32 }, ptr %970, i32 0, i32 0
+  %973 = load ptr, ptr %971, align 8
+  store ptr %973, ptr %972, align 8
+  %974 = getelementptr { ptr, ptr, ptr, i32 }, ptr %895, i32 0, i32 1
+  %975 = getelementptr { ptr, ptr, ptr, i32 }, ptr %970, i32 0, i32 1
+  %976 = load ptr, ptr %974, align 8
+  store ptr %976, ptr %975, align 8
+  %977 = getelementptr { ptr, ptr, ptr, i32 }, ptr %895, i32 0, i32 2
+  %978 = getelementptr { ptr, ptr, ptr, i32 }, ptr %970, i32 0, i32 2
+  %979 = load ptr, ptr %977, align 8
+  store ptr %979, ptr %978, align 8
+  %980 = getelementptr { ptr, ptr, ptr, i32 }, ptr %895, i32 0, i32 3
+  %981 = getelementptr { ptr, ptr, ptr, i32 }, ptr %970, i32 0, i32 3
+  %982 = load i32, ptr %980, align 4
+  store i32 %982, ptr %981, align 4
+  call void @set_offset(ptr %970, ptr @any_typ)
+  %983 = getelementptr { ptr, i160 }, ptr %970, i32 0, i32 0
+  %984 = load ptr, ptr %983, align 8
+  %985 = insertvalue { ptr, i160 } undef, ptr %984, 0
+  %986 = getelementptr { ptr, i160 }, ptr %970, i32 0, i32 1
+  %987 = load i160, ptr %986, align 4
+  %988 = insertvalue { ptr, i160 } %985, i160 %987, 1
   %989 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 1
   %990 = load ptr, ptr %989, align 8
   %991 = load ptr, ptr %8, align 8
@@ -3767,9 +3767,9 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   store ptr @Entry, ptr %1034, align 8
   %1038 = alloca [2 x ptr], align 8
   %1039 = getelementptr [2 x ptr], ptr %1038, i32 0, i32 0
-  store ptr %1034, ptr %1039, align 8
+  store ptr @_parameterization_Ptri32, ptr %1039, align 8
   %1040 = getelementptr [2 x ptr], ptr %1038, i32 0, i32 1
-  store ptr @_parameterization_Ptri32, ptr %1040, align 8
+  store ptr %1034, ptr %1040, align 8
   %1041 = call ptr @llvm.invariant.start.p0(i64 4, ptr %1038)
   %1042 = call ptr @llvm.invariant.start.p0(i64 568, ptr %1003)
   %1043 = getelementptr ptr, ptr %1003, i32 %1012
@@ -3777,11 +3777,11 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %1045 = load ptr, ptr %1044, align 8
   %1046 = alloca { ptr, ptr }, align 8
   %1047 = getelementptr { ptr, ptr }, ptr %1046, i32 0, i32 0
-  store ptr %983, ptr %1047, align 8
+  store ptr @i32_typ, ptr %1047, align 8
   %1048 = getelementptr { ptr, ptr }, ptr %1046, i32 0, i32 1
-  store ptr @i32_typ, ptr %1048, align 8
+  store ptr %984, ptr %1048, align 8
   %1049 = call ptr %1045({ ptr, ptr, ptr, i32 } %1013, ptr %1046)
-  call void %1049({ ptr, ptr, ptr, i32 } %1013, { ptr, ptr, ptr, i32 } %1013, ptr %1038, { ptr, i160 } %987, i32 %988)
+  call void %1049({ ptr, ptr, ptr, i32 } %1013, { ptr, ptr, ptr, i32 } %1013, ptr %1038, i32 %969, { ptr, i160 } %988)
   %1050 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 1
   %1051 = load ptr, ptr %1050, align 8
   %1052 = load ptr, ptr %8, align 8
@@ -4945,9 +4945,9 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   store ptr @Entry, ptr %537, align 8
   %541 = alloca [2 x ptr], align 8
   %542 = getelementptr [2 x ptr], ptr %541, i32 0, i32 0
-  store ptr %537, ptr %542, align 8
+  store ptr @_parameterization_Ptri32, ptr %542, align 8
   %543 = getelementptr [2 x ptr], ptr %541, i32 0, i32 1
-  store ptr @_parameterization_Ptri32, ptr %543, align 8
+  store ptr %537, ptr %543, align 8
   %544 = call ptr @llvm.invariant.start.p0(i64 4, ptr %541)
   %545 = call ptr @llvm.invariant.start.p0(i64 568, ptr %506)
   %546 = getelementptr ptr, ptr %506, i32 %515
@@ -4955,11 +4955,11 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %548 = load ptr, ptr %547, align 8
   %549 = alloca { ptr, ptr }, align 8
   %550 = getelementptr { ptr, ptr }, ptr %549, i32 0, i32 0
-  store ptr %487, ptr %550, align 8
+  store ptr @i32_typ, ptr %550, align 8
   %551 = getelementptr { ptr, ptr }, ptr %549, i32 0, i32 1
-  store ptr @i32_typ, ptr %551, align 8
+  store ptr %487, ptr %551, align 8
   %552 = call ptr %548({ ptr, ptr, ptr, i32 } %516, ptr %549)
-  call void %552({ ptr, ptr, ptr, i32 } %516, { ptr, ptr, ptr, i32 } %516, ptr %541, { ptr, i160 } %491, i32 %113)
+  call void %552({ ptr, ptr, ptr, i32 } %516, { ptr, ptr, ptr, i32 } %516, ptr %541, i32 %113, { ptr, i160 } %491)
   %553 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 1
   %554 = load ptr, ptr %553, align 8
   %555 = load ptr, ptr %7, align 8
@@ -6039,7 +6039,7 @@ define i32 @main() {
   %10 = call ptr @llvm.invariant.start.p0(i64 9, ptr %6)
   %11 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %11)
-  call void @llvm.init.trampoline(ptr %11, ptr @iwayamyhts, ptr @i32_hasher)
+  call void @llvm.init.trampoline(ptr %11, ptr @fiothbkyhc, ptr @i32_hasher)
   %12 = alloca ptr, align 8
   %13 = call ptr @adjust_trampoline(ptr %11)
   store ptr %13, ptr %12, align 8
@@ -6050,7 +6050,7 @@ define i32 @main() {
   %18 = insertvalue { ptr } undef, ptr %17, 0
   %19 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %19)
-  call void @llvm.init.trampoline(ptr %19, ptr @tbvvqctjkf, ptr @i32_eq)
+  call void @llvm.init.trampoline(ptr %19, ptr @gbrphvapfk, ptr @i32_eq)
   %20 = alloca ptr, align 8
   %21 = call ptr @adjust_trampoline(ptr %19)
   store ptr %21, ptr %20, align 8
@@ -6394,8 +6394,8 @@ define i32 @main() {
   %284 = getelementptr [10 x i8], ptr null, i32 %283
   %285 = ptrtoint ptr %284 to i64
   %286 = getelementptr i8, ptr %282, i64 %285
-  %287 = load i80, ptr @zgtos_not_an_i, align 4
-  store i80 %287, ptr %286, align 4
+  %287 = load <10 x i8>, ptr @tjppz_not_an_i, align 16
+  store <10 x i8> %287, ptr %286, align 16
   %288 = alloca i32, align 4
   store i32 10, ptr %288, align 4
   %289 = alloca i32, align 4

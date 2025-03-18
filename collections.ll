@@ -4,7 +4,7 @@ source_filename = "LLVMDialectModule"
 @_parameterization_Ptri1 = linkonce_odr constant [1 x ptr] [ptr @bool_typ]
 @_parameterization_String = linkonce_odr constant [1 x ptr] [ptr @String]
 @_parameterization_BufferPtri8 = linkonce_odr constant [1 x ptr] [ptr @buffer_typ]
-@dblss_collectionsmini = internal constant [16 x i8] c"collections.mini"
+@bjkvr_collectionsmini = internal constant [16 x i8] c"collections.mini"
 @_parameterization_Ptri32 = linkonce_odr constant [1 x ptr] [ptr @i32_typ]
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
@@ -75,7 +75,7 @@ source_filename = "LLVMDialectModule"
 @Iterable2 = constant { [3 x i64], [4 x ptr], [0 x ptr] } { [3 x i64] [i64 5693646204635713916, i64 4611686018427388349, i64 3], [4 x ptr] [ptr @subtype_test, ptr @Iterable2_hashtbl, ptr @Iterable2_offset_tbl, ptr getelementptr ({ ptr }, ptr null, i32 1)], [0 x ptr] undef }
 @Array_hashtbl = linkonce_odr constant [8 x ptr] [ptr @Container, ptr null, ptr @Iterable2, ptr @Object, ptr @any_typ, ptr null, ptr null, ptr @Array]
 @Array_offset_tbl = linkonce_odr constant [8 x i32] [i32 78, i32 0, i32 55, i32 78, i32 7, i32 0, i32 0, i32 7]
-@Array = constant { [3 x i64], [4 x ptr], [71 x ptr] } { [3 x i64] [i64 -5261542750394134544, i64 4611686018427388289, i64 7], [4 x ptr] [ptr @subtype_test, ptr @Array_hashtbl, ptr @Array_offset_tbl, ptr getelementptr ({ { ptr }, i32, i32, ptr }, ptr null, i32 1)], [71 x ptr] [ptr @Array_field_buffer, ptr @Array_field_length, ptr @Array_field_capacity, ptr @Array_field_Array_0, ptr @Array_B__Self_from_iterable_iterableIterable2T, ptr @Array_B_init_, ptr @Array_B_init_capacityPtri32, ptr @Array_B_length_, ptr @Array_B_capacity_, ptr @Array_B_append_xT, ptr @Array_B_grow_, ptr @Array_B__index_xPtri32, ptr @Array_B_insert_at_elemT_xPtri32, ptr @Array_B_throw_oob_xPtri32, ptr @Array_B_unsafe_index_xPtri32, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Ptri1, ptr @Array_B_any_fFunctionT_to_Ptri1, ptr @Array_B_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Ptri1, ptr @Array_B_chain_otherIterable2T, ptr @Array_B_interleave_otherIterable2T, ptr @Array_B_zip_otherIterable2U, ptr @Array_B_product_otherIterable2U, ptr @Array__Self_from_iterable_iterableIterable2T, ptr @Array_init_, ptr @Array_init_capacityPtri32, ptr @Array_length_, ptr @Array_capacity_, ptr @Array_append_xT, ptr @Array_grow_, ptr @Array__index_xPtri32, ptr @Array_insert_at_elemT_xPtri32, ptr @Array_throw_oob_xPtri32, ptr @Array_unsafe_index_xPtri32, ptr @Array_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Ptri1, ptr @Array_B_any_fFunctionT_to_Ptri1, ptr @Array_B_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Ptri1, ptr @Array_B_chain_otherIterable2T, ptr @Array_B_interleave_otherIterable2T, ptr @Array_B_zip_otherIterable2U, ptr @Array_B_product_otherIterable2U, ptr @Array_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U] }
+@Array = constant { [3 x i64], [4 x ptr], [71 x ptr] } { [3 x i64] [i64 -5261542750394134544, i64 4611686018427388289, i64 7], [4 x ptr] [ptr @subtype_test, ptr @Array_hashtbl, ptr @Array_offset_tbl, ptr getelementptr ({ { ptr }, i32, i32, ptr }, ptr null, i32 1)], [71 x ptr] [ptr @Array_field_buffer, ptr @Array_field_length, ptr @Array_field_capacity, ptr @Array_field_Array_0, ptr @Array_B__Self_from_iterable_iterableIterable2T, ptr @Array_B_init_, ptr @Array_B_init_capacityPtri32, ptr @Array_B_length_, ptr @Array_B_capacity_, ptr @Array_B_append_xT, ptr @Array_B_grow_, ptr @Array_B__index_xPtri32, ptr @Array_B__set_index_xPtri32_valueT, ptr @Array_B_throw_oob_xPtri32, ptr @Array_B_unsafe_index_xPtri32, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Ptri1, ptr @Array_B_any_fFunctionT_to_Ptri1, ptr @Array_B_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Ptri1, ptr @Array_B_chain_otherIterable2T, ptr @Array_B_interleave_otherIterable2T, ptr @Array_B_zip_otherIterable2U, ptr @Array_B_product_otherIterable2U, ptr @Array__Self_from_iterable_iterableIterable2T, ptr @Array_init_, ptr @Array_init_capacityPtri32, ptr @Array_length_, ptr @Array_capacity_, ptr @Array_append_xT, ptr @Array_grow_, ptr @Array__index_xPtri32, ptr @Array__set_index_xPtri32_valueT, ptr @Array_throw_oob_xPtri32, ptr @Array_unsafe_index_xPtri32, ptr @Array_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Ptri1, ptr @Array_B_any_fFunctionT_to_Ptri1, ptr @Array_B_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Ptri1, ptr @Array_B_chain_otherIterable2T, ptr @Array_B_interleave_otherIterable2T, ptr @Array_B_zip_otherIterable2U, ptr @Array_B_product_otherIterable2U, ptr @Array_iterator_, ptr @Iterable2_each_fFunctionT_to_Nothing, ptr @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable2_all_fFunctionT_to_Ptri1, ptr @Iterable2_any_fFunctionT_to_Ptri1, ptr @Iterable2_map_fFunctionT_to_U, ptr @Iterable2_filter_fFunctionT_to_Ptri1, ptr @Iterable2_chain_otherIterable2T, ptr @Iterable2_interleave_otherIterable2T, ptr @Iterable2_zip_otherIterable2U, ptr @Iterable2_product_otherIterable2U] }
 @ArrayIterator_hashtbl = linkonce_odr constant [8 x ptr] [ptr @Object, ptr @any_typ, ptr null, ptr @Container, ptr @ArrayIterator, ptr null, ptr @Iterator2, ptr null]
 @ArrayIterator_offset_tbl = linkonce_odr constant [8 x i32] [i32 17, i32 7, i32 0, i32 17, i32 7, i32 0, i32 14, i32 0]
 @ArrayIterator = constant { [3 x i64], [4 x ptr], [10 x ptr] } { [3 x i64] [i64 3447345754186651411, i64 4611686018427388081, i64 7], [4 x ptr] [ptr @subtype_test, ptr @ArrayIterator_hashtbl, ptr @ArrayIterator_offset_tbl, ptr getelementptr ({ { ptr, ptr, ptr, i32 }, i32, ptr }, ptr null, i32 1)], [10 x ptr] [ptr @ArrayIterator_field_array, ptr @ArrayIterator_field_index, ptr @ArrayIterator_field_ArrayIterator_0, ptr @ArrayIterator_B_init_arrayArrayT, ptr @ArrayIterator_B_next_, ptr @ArrayIterator_init_arrayArrayT, ptr @ArrayIterator_next_, ptr @ArrayIterator_field_ArrayIterator_0, ptr @ArrayIterator_B_next_, ptr @ArrayIterator_next_] }
@@ -4266,7 +4266,7 @@ define ptr @Array_B__index_xPtri32({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   ret ptr %18
 }
 
-define void @Array_insert_at_elemT_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3, i32 %4) {
+define void @Array__set_index_xPtri32_valueT({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, i32 %3, { ptr, i160 } %4) {
   %6 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %0, ptr %6, align 8
   %7 = call ptr @llvm.invariant.start.p0(i64 16, ptr %6)
@@ -4289,7 +4289,7 @@ define void @Array_insert_at_elemT_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   store i32 %20, ptr %19, align 4
   call void @set_offset(ptr %8, ptr @Array)
   %21 = alloca { ptr, i160 }, align 8
-  store { ptr, i160 } %3, ptr %21, align 8
+  store { ptr, i160 } %4, ptr %21, align 8
   %22 = alloca { ptr, i160 }, align 8
   %23 = getelementptr { ptr, i160 }, ptr %21, i32 0, i32 0
   %24 = getelementptr { ptr, i160 }, ptr %22, i32 0, i32 0
@@ -4313,7 +4313,7 @@ define void @Array_insert_at_elemT_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %39 = load ptr, ptr %38, align 8
   %40 = call i32 %39(ptr %30)
   %41 = sub i32 %40, 1
-  %42 = icmp sgt i32 %4, %41
+  %42 = icmp sgt i32 %3, %41
   %43 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 1
   %44 = load ptr, ptr %43, align 8
   %45 = load ptr, ptr %8, align 8
@@ -4326,7 +4326,7 @@ define void @Array_insert_at_elemT_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %52 = getelementptr { ptr, ptr }, ptr %51, i32 0, i32 0
   %53 = load ptr, ptr %52, align 8
   %54 = call i32 %53(ptr %44)
-  %55 = add i32 %54, %4
+  %55 = add i32 %54, %3
   %56 = icmp slt i32 %55, 0
   %57 = or i1 %42, %56
   br i1 %57, label %58, label %91
@@ -4366,14 +4366,14 @@ define void @Array_insert_at_elemT_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %89 = getelementptr { ptr }, ptr %88, i32 0, i32 0
   store ptr @i32_typ, ptr %89, align 8
   %90 = call ptr %87({ ptr, ptr, ptr, i32 } %70, ptr %88)
-  call void %90({ ptr, ptr, ptr, i32 } %70, { ptr, ptr, ptr, i32 } %70, ptr %81, i32 %4)
+  call void %90({ ptr, ptr, ptr, i32 } %70, { ptr, ptr, ptr, i32 } %70, ptr %81, i32 %3)
   br label %91
 
 91:                                               ; preds = %58, %5
   %92 = alloca i32, align 4
   store i32 0, ptr %92, align 4
   %93 = load i32, ptr %92, align 4
-  %94 = icmp slt i32 %4, %93
+  %94 = icmp slt i32 %3, %93
   %95 = alloca i1, align 1
   store i1 %94, ptr %95, align 1
   %96 = load i1, ptr %95, align 1
@@ -4395,7 +4395,7 @@ define void @Array_insert_at_elemT_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %110 = alloca i32, align 4
   store i32 %109, ptr %110, align 4
   %111 = load i32, ptr %110, align 4
-  %112 = add i32 %111, %4
+  %112 = add i32 %111, %3
   %113 = alloca i32, align 4
   store i32 %112, ptr %113, align 4
   %114 = load i32, ptr %113, align 4
@@ -4405,7 +4405,7 @@ define void @Array_insert_at_elemT_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   br label %116
 
 116:                                              ; preds = %97, %115
-  %117 = phi i32 [ %4, %115 ], [ %114, %97 ]
+  %117 = phi i32 [ %3, %115 ], [ %114, %97 ]
   br label %118
 
 118:                                              ; preds = %116
@@ -4447,7 +4447,7 @@ define void @Array_insert_at_elemT_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   ret void
 }
 
-define ptr @Array_B_insert_at_elemT_xPtri32({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @Array_B__set_index_xPtri32_valueT({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1)
   %4 = getelementptr { ptr, ptr }, ptr %1, i32 0, i32 0
   %5 = load ptr, ptr %4, align 8
@@ -4459,7 +4459,7 @@ define ptr @Array_B_insert_at_elemT_xPtri32({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %11 = load i64, ptr %7, align 4
   %12 = load ptr, ptr %8, align 8
   %13 = load ptr, ptr %9, align 8
-  %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 3084208142191802847, i64 ptrtoint (ptr @any_typ to i64), ptr %13)
+  %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 -2253724949814257982, i64 ptrtoint (ptr @i32_typ to i64), ptr %13)
   %15 = getelementptr { ptr, ptr }, ptr %1, i32 0, i32 1
   %16 = load ptr, ptr %15, align 8
   %17 = getelementptr ptr, ptr %16, i32 1
@@ -4470,7 +4470,7 @@ define ptr @Array_B_insert_at_elemT_xPtri32({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %22 = load i64, ptr %18, align 4
   %23 = load ptr, ptr %19, align 8
   %24 = load ptr, ptr %20, align 8
-  %25 = call i1 @subtype_test_wrapper(ptr %23, i64 %22, i64 %21, i64 -2253724949814257982, i64 ptrtoint (ptr @i32_typ to i64), ptr %24)
+  %25 = call i1 @subtype_test_wrapper(ptr %23, i64 %22, i64 %21, i64 3084208142191802847, i64 ptrtoint (ptr @any_typ to i64), ptr %24)
   %26 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %27 = getelementptr [71 x ptr], ptr %26, i32 0, i32 34
   %28 = getelementptr ptr, ptr %27, i32 7
@@ -4550,8 +4550,8 @@ define void @Array_throw_oob_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr,
   %61 = call ptr @llvm.invariant.start.p0(i64 16, ptr %57)
   %62 = load ptr, ptr %57, align 8
   %63 = getelementptr i8, ptr %62, i64 0
-  %64 = load i128, ptr @dblss_collectionsmini, align 4
-  store i128 %64, ptr %63, align 4
+  %64 = load <16 x i8>, ptr @bjkvr_collectionsmini, align 16
+  store <16 x i8> %64, ptr %63, align 16
   %65 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %66 = alloca { ptr, ptr, ptr, i32 }, align 8
   %67 = getelementptr { ptr, ptr, ptr, i32 }, ptr %66, i32 0, i32 1

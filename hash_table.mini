@@ -112,17 +112,17 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         	val = entry.value();
             if val is Tombstone {
                 // Was a tombstone
-                @entries.insert_at(Entry[K,V].new(key, value, hash), i);
+                @entries.[i] = Entry[K,V].new(key, value, hash);
                 @size = @size + 1;
                 return;
             }
 	        if val is V {
-	            @entries.insert_at(Entry[K,V].new(key, value, hash), i);
+	            @entries.[i] = Entry[K,V].new(key, value, hash);
                 return;
 	        }
         }
 
-        @entries.insert_at(Entry[K,V].new(key, value, hash), i);
+        @entries.[i] = Entry[K,V].new(key, value, hash);
         @size = @size + 1;
         @load = @load + 1;
     }
@@ -150,7 +150,7 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         	val = entry.value();
             if val is Tombstone { return nil; }
         	if val is V {
-        		@entries.insert_at(Entry[K,V].new(key, Tombstone.new(), hash), i);
+        		@entries.[i] = Entry[K,V].new(key, Tombstone.new(), hash);
         		@size = @size - 1;
         		return val;
         	}

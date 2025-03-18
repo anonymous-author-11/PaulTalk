@@ -134,12 +134,12 @@ class Array[T] extends Iterable2[T] {
         if x < 0 { x = @length + x; }
         return self.unsafe_index(x);
     }
-    def insert_at(elem : T, x : i32) {
+    def []=(x : i32, value : T) yields OutOfBounds | Nil {
         past_end = x > (@length - 1);
         before_start = (@length + x) < 0;
         if past_end or before_start { self.throw_oob(x); }
         if x < 0 { x = @length + x; }
-        @buffer.[x] = elem;
+        @buffer.[x] = value;
     }
     def throw_oob(x : i32) yields OutOfBounds {
         yield(Exception.new());

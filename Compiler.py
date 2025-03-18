@@ -138,7 +138,7 @@ def run_opt(debug_mode):
     inline_settings = "--inline-threshold=10000"
     heap_to_stack = "--enable-heap-to-stack-conversion"
     in_file = f"out_reg2mem{debug_extension}.ll"
-    opt = f"opt -S {in_file} {o3} {devirtualization_settings} {inline_settings} {heap_to_stack} -o out_optimized.ll"
+    opt = f"opt -S {in_file} {o3} {devirtualization_settings} {inline_settings} -o out_optimized.ll"
     #opt2 = f"opt -S {in_file} {o2} --print-after-all {heap_to_stack} {devirtualization_settings} {inline_settings} -o out_optimized.ll"
     if debug_mode: subprocess.run(debug, text=True, shell=True)
     subprocess.run(opt, text=True, shell=True)

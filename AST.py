@@ -694,7 +694,11 @@ class MethodCall(Expression):
         if isinstance(rec_typ, TypeParameter): rec_typ = rec_typ.bound
         if isinstance(rec_typ, Coroutine): return CoroutineCall(self.info, self.receiver, self.method, self.arguments).codegen(scope)
         if isinstance(rec_typ, Function): return FunctionLiteralCall(self.info, self.receiver, self.method, self.arguments).codegen(scope)
+        if isinstance(rec_typ, Buffer) and self.method == "_set_index":
+            return BufferSetIndex(self.info, self.receiver, self.method, self.arguments).codegen(scope)
         if isinstance(rec_typ, Buffer): return BufferIndexation(self.info, self.receiver, self.method, self.arguments).codegen(scope)
+        if isinstance(rec_typ, Tuple) and self.method == "_set_index":
+            return TupleSetIndex(self.info, self.receiver, self.method, self.arguments).codegen(scope)
         if isinstance(rec_typ, Tuple): return TupleIndexation(self.info, self.receiver, self.method, self.arguments).codegen(scope)
         rec_class = scope.classes[rec_typ.cls.data]
 
@@ -791,7 +795,11 @@ class MethodCall(Expression):
     def exprtype(self, scope):
         rec_typ = self.receiver.exprtype(scope)
         if isinstance(rec_typ, TypeParameter): rec_typ = rec_typ.bound
+        if isinstance(rec_typ, Buffer) and self.method == "_set_index":
+            return BufferSetIndex(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
         if isinstance(rec_typ, Buffer): return BufferIndexation(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
+        if isinstance(rec_typ, Tuple) and self.method == "_set_index":
+            return TupleSetIndex(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
         if isinstance(rec_typ, Tuple): return TupleIndexation(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
         if isinstance(rec_typ, Coroutine): return CoroutineCall(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
         if isinstance(rec_typ, Function): return FunctionLiteralCall(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
@@ -928,6 +936,19 @@ class BufferIndexation(Indexation):
         return scope.simplify(rec_typ.elem_type)
 
 @dataclass
+class BufferSetIndex(MethodCall):
+
+    def codegen(self, scope):
+        indexation = BufferIndexation(self.info, self.receiver, "_index", [self.arguments[0]])
+        assign = Assignment(self.info, indexation, self.arguments[1])
+        return assign.codegen(scope)
+
+    def exprtype(self, scope):
+        indexation = BufferIndexation(self.info, self.receiver, "_index", [self.arguments[0]])
+        assign = Assignment(self.info, indexation, self.arguments[1])
+        assign.typeflow(scope)
+
+@dataclass
 class TupleIndexation(Indexation):
 
     def codegen(self, scope):
@@ -949,6 +970,19 @@ class TupleIndexation(Indexation):
             raise Exception(f"Line {self.info.line_number}: Tuple indexation currently only supported with integer literals.")
         self.apply_constraints(scope)
         return rec_typ.types.data[self.arguments[0].value]
+
+@dataclass
+class TupleSetIndex(MethodCall):
+
+    def codegen(self, scope):
+        indexation = TupleIndexation(self.info, self.receiver, "_index", [self.arguments[0]])
+        assign = Assignment(self.info, indexation, self.arguments[1])
+        return assign.codegen(scope)
+
+    def exprtype(self, scope):
+        indexation = TupleIndexation(self.info, self.receiver, "_index", [self.arguments[0]])
+        assign = Assignment(self.info, indexation, self.arguments[1])
+        assign.typeflow(scope)
 
 @dataclass
 class ClassMethodCall(MethodCall):
@@ -1485,11 +1519,21 @@ class MethodDef(Statement):
         body_scope.assign_regions(var_mapping1, param_names)
         if not ok: raise Exception(f"Line {self.info.line_number}: {comment}")
 
+    def check_setter_num_params(self):
+        if self.name[0:5] != "_set_": return
+        if self.name == "_set_index":
+            if len(self.params) == 2: return
+            raise Exception(f"Line {self.info.line_number}: Index setter method []= must take two parameters (index and value), not {len(self.params)}")
+        if len(self.params) == 1: return
+        raise Exception(f"Line {self.info.line_number}: Setter method {self.name.replace('_set_','') + '='} must take one parameter, not {len(self.params)}")
+
     def typeflow(self, scope):
         if self.name[0].isupper():
             raise Exception(f"Line {self.info.line_number}: Method names should not be capitalized.")
         if self.name == "init" and self.return_type():
             raise Exception(f'Line {self.info.line_number}: init should not return anything')
+
+        self.check_setter_num_params()
         body_scope = Scope(scope, method=self)
         for t in self.type_params: body_scope.add_alias(FatPtr.basic(t.label.data), t)
         self.enforce_override_rules(body_scope)

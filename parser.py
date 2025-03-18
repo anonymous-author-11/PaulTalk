@@ -47,12 +47,12 @@ class CSTTransformer(Transformer):
     def statement(self, stmt):
         return stmt
 
-    def extern_def(self, constraints, name, params, return_type, yield_type):
+    def extern_def(self, constraints, deff, name, params, return_type, yield_type):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         node_info = NodeInfo(random_letters(10), self.file_name, name.line)
         return ExternDef(node_info, name.value, constraints or [], params or [], len(params or []), return_type, yield_type or exception_or_nil)
 
-    def function_def(self, constraints, name, params, return_type, yield_type, body):
+    def function_def(self, constraints, deff, name, params, return_type, yield_type, body):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         node_info = NodeInfo(random_letters(10), self.file_name, name.line)
         return FunctionDef(node_info, name.value, constraints or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, False)
@@ -60,25 +60,32 @@ class CSTTransformer(Transformer):
     def abstract(self):
         return True
 
-    def method_def(self, constraints, abstract, name, type_params, params, return_type, yield_type, body):
+    def method_name(self, name):
+        if "=" in name.value: return "_set_" + name.value.replace("=","")
+        return name.value
+
+    def method_def(self, constraints, abstract, deff, name, type_params, params, return_type, yield_type, body):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractMethodDef if abstract else MethodDef
-        mangled_name = name.value + "_" + clean_param_names(params)
-        node_info = NodeInfo(random_letters(10), self.file_name, name.line)
-        return ty(node_info, name.value, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
+        mangled_name = name + "_" + clean_param_names(params)
+        node_info = NodeInfo(random_letters(10), self.file_name, deff.line)
+        return ty(node_info, name, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
 
-    def operator_def(self, constraints, abstract, op, type_params, params, return_type, yield_type, body):
-        exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
+    def operator(self, op):
         translated_op = "_" + {
             "+":"ADD","-":"SUB","*":"MUL","/":"DIV","%":"MOD","<<":"LSHIFT",">>":"RSHIFT",
-            "==":"EQ","!=":"NEQ","<":"LT",">":"GT","<=":"LE",">=":"GE","[]":"index"
+            "==":"EQ","!=":"NEQ","<":"LT",">":"GT","<=":"LE",">=":"GE","[]":"index","[]=":"set_index"
         }[op.value]
+        return translated_op
+
+    def operator_def(self, constraints, abstract, deff, translated_op, type_params, params, return_type, yield_type, body):
+        exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractMethodDef if abstract else MethodDef
         mangled_name = translated_op + "_" + clean_param_names(params)
-        node_info = NodeInfo(random_letters(10), self.file_name, op.line)
+        node_info = NodeInfo(random_letters(10), self.file_name, deff.line)
         return ty(node_info, translated_op, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
 
-    def class_method_def(self, constraints, abstract, name, type_params, params, return_type, yield_type, body):
+    def class_method_def(self, constraints, abstract, deff, name, type_params, params, return_type, yield_type, body):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractClassMethodDef if abstract else ClassMethodDef
         mangled_name = "_Self_" + name.value + "_" + clean_param_names(params)
@@ -168,6 +175,13 @@ class CSTTransformer(Transformer):
         return FieldDecl(node_info, name.value, typ, None)
 
     def assignment(self, target, value):
+        if isinstance(target, MethodCall) and not isinstance(target, Indexation):
+            if target.method == "_index": 
+                target.method = "_set" + target.method
+            else:
+                target.method = "_set_" + target.method
+            target.arguments = (*target.arguments, value)
+            return target
         node_info = NodeInfo(random_letters(10), self.file_name, target.info.line_number)
         return Assignment(node_info, target, value)
 
@@ -277,9 +291,6 @@ class CSTTransformer(Transformer):
     def bitwise(self, left, op, right):
         node_info = NodeInfo(random_letters(10), self.file_name, op.line)
         return Bitwise(node_info, left, op.value, right)
-
-    def operator(self, op):
-        return op
 
     def type_check(self, identifier, typ):
         node_info = NodeInfo(random_letters(10), self.file_name, identifier.line)

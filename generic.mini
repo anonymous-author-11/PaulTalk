@@ -159,6 +159,13 @@ class Array[T] extends Iterable2[T] {
         if x < 0 { x = @length + x; }
         return self.unsafe_index(x);
     }
+    def []=(x : i32, value : T) yields OutOfBounds | Nil {
+        past_end = x > (@length - 1);
+        before_start = (@length + x) < 0;
+        if past_end or before_start { self.throw_oob(x); }
+        if x < 0 { x = @length + x; }
+        @buffer.[x] = value;
+    }
     def throw_oob(x : i32) yields OutOfBounds {
     	yield(Exception.new());
     }
@@ -486,8 +493,13 @@ class Holder[T] where T <: Addable[Float64, Float64] {
 	def init(@held : T) {}
 	def value() -> Float64 {
 		return @held + Float64.new(45.0);
-	} 
+	}
+    def value=(x : T) {
+        @held = x;
+    }
 }
 
 holder = Holder[Int32].new(Int32.new(6));
+IO.print(holder.value().value());
+holder.value() = Int32.new(77);
 IO.print(holder.value().value());
