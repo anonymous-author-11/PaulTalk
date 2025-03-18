@@ -286,10 +286,11 @@ DONE:
 - Fix FancyPair [check!]
 - Need to fix access of specialized fields [check!]
 	- Right, this is why I was thinking about generating setters [check!]
+- Simplify behavior signature [check!]
+- Enable machine outlining [check!]
 
 TODO:
 
-- Behavior should probably take struct of vptrs instead of ptr to array
 - Need to focus on assignments to method calls
 	- Translate into calls to setter methods
 	- Add setter methods to grammar properly

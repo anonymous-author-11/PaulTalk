@@ -27,7 +27,7 @@ def run_python_lowering(module):
     lowered_module = first_pass(module)
     stringio = StringIO()
     Printer(stringio).print(lowered_module)
-    module_str = stringio.getvalue().encode().decode('unicode_escape').replace("#llvm.memory_effects","#llvm.memory_effects<other = none, argMem = read, inaccessibleMem = none>")
+    module_str = stringio.getvalue().encode().decode('unicode_escape')
     return module_str
 
 def run_pdl_lowering(module_str):
@@ -75,10 +75,9 @@ def run_mlir_opt(module_str):
         "--buffer-hoisting","--buffer-loop-hoisting","--control-flow-sink","--convert-func-to-llvm"
     ])
     
-    #module_str = subprocess.run(cmd, shell=True, text=True, input=module_str).stdout
     cmd_out = subprocess.run(cmd, capture_output=True, shell=True, text=True, input=module_str)
     if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
-    with open("liveness_log.txt", "w") as outfile: outfile.write(cmd_out.stderr)
+    #with open("liveness_log.txt", "w") as outfile: outfile.write(cmd_out.stderr)
     module_str = cmd_out.stdout.replace("\\","\\\\")
     
     module_str = module_str.replace("placeholder", "llvm.mlir")
@@ -97,9 +96,20 @@ def lower_to_llvm(module_str, out_file_names):
     subprocess.run(cmd, text=True, shell=True, input=module_str)
 
 def do_preliminaries(out_file_names, ll_files):
+
+    # put all the .ll files into one big file for optimization
+    # kind of like LTO but more simplistic
     llvm_link = f"llvm-link -S {out_file_names[0]} {' '.join(ll_files)} utils.ll"
+
+    # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
+    # this has shown to significantly improve the optimization potential
     reg2mem = "opt -S --passes=reg2mem"
+
+    # hoist allocas to entry blocks of functions
+    # frontend authors are *supposed* to only emit allocas in entry blocks
+    # this pass only works with the legacy pass manager, which can only be used via this trick
     hoist_allocas = "opt -S --bugpoint-enable-legacy-pm --alloca-hoisting -o out_reg2mem.ll"
+
     preliminaries = " | ".join([llvm_link, reg2mem, hoist_allocas])
     subprocess.run(preliminaries, shell=True)
 
@@ -109,6 +119,7 @@ def record_all_passes():
     with open("out_reg2mem.ll", "r+") as f:
         out_reg2mem = f.read()
         f.seek(0)
+        # clang can't handle the 'preserve_nonecc' attribute for some reason
         f.write(out_reg2mem.replace("preserve_nonecc",""))
         f.truncate()
     opt_out = subprocess.run(opt, text=True, shell=True, capture_output=True)
@@ -117,19 +128,37 @@ def record_all_passes():
 def run_opt(debug_mode):
     debug = "debugir out_reg2mem.ll"
     debug_extension = ".dbg" if debug_mode else ""
-    opt = f"opt -S out_reg2mem{debug_extension}.ll --passes=\"default<O3>\" --enable-dfa-jump-thread --enable-heap-to-stack-conversion --max-devirt-iterations=100 --inline-threshold=10000 --abort-on-max-devirt-iterations-reached -o out_optimized.ll"
-    #opt2 = f"opt -S out_reg2mem{debug_extension}.ll --passes=\"default<O2>\" --print-after-all --enable-heap-to-stack-conversion --max-devirt-iterations=100 --inline-threshold=10000 --abort-on-max-devirt-iterations-reached -o out_optimized.ll"
+    o3 = "--passes=\"default<O3>\""
+    o2 = "--passes=\"default<O3>\""
+
+    # this is the real optimization sauce for our language
+    # does another round of optimizations whenever an indirect callee is identified
+    devirtualization_settings = "--max-devirt-iterations=100 --abort-on-max-devirt-iterations-reached"
+    # inline everything possible, and let the machine outliner undo some of it
+    inline_settings = "--inline-threshold=10000"
+    heap_to_stack = "--enable-heap-to-stack-conversion"
+    in_file = f"out_reg2mem{debug_extension}.ll"
+    opt = f"opt -S {in_file} {o3} {devirtualization_settings} {inline_settings} {heap_to_stack} -o out_optimized.ll"
+    #opt2 = f"opt -S {in_file} {o2} --print-after-all {heap_to_stack} {devirtualization_settings} {inline_settings} -o out_optimized.ll"
     if debug_mode: subprocess.run(debug, text=True, shell=True)
     subprocess.run(opt, text=True, shell=True)
 
 def run_llc(out_file_names):
-    llc = f"llc -filetype=obj out_optimized.ll -O=3 -mtriple=x86_64-pc-windows-msvc -exception-model=sjlj -enable-machine-outliner -machine-outliner-reruns=2 -o {out_file_names[1]}"
+    target_triple = "-mtriple=x86_64-pc-windows-msvc"
+    # necessary so that the machine outliner doesn't break; default would be 'exception-model=wineh'
+    exception_model = "-exception-model=sjlj"
+    outliner_settings = "-enable-machine-outliner -machine-outliner-reruns=2"
+    llc = f"llc -filetype=obj out_optimized.ll -O=3 {target_triple} {exception_model} {outliner_settings} -o {out_file_names[1]}"
     subprocess.run(llc)
 
 def run_lld_link(debug_mode, out_file_names):
     debug_flag = "/debug" if debug_mode else ""
-    #lld_link = ' '.join(["lld-link", f"/out:{out_file_names[2]}", out_file_names[1], debug_flag, "libcmt.lib"])
-    lld_link = ' '.join(["lld-link", f"/out:{out_file_names[2]}", out_file_names[1], "trampoline.obj", debug_flag, "msvcrt.lib", "legacy_stdio_definitions.lib"])
+    dynamic_libc = "msvcrt.lib legacy_stdio_definitions.lib"
+    static_libc = "libcmt.lib"
+
+    # using dynamic linking:
+    lld_link = f"lld-link /out:{out_file_names[2]} {out_file_names[1]} trampoline.obj {debug_flag} {dynamic_libc}"
+    subprocess.run(lld_link)
 
 def main(argv):
     after_imports = time.time()
@@ -173,11 +202,10 @@ def main(argv):
     print(f"Time to type check + codegen: {after_codegen - after_imports} seconds")
 
     module_str = run_python_lowering(module)
+    module_str = run_pdl_lowering(module_str)
 
     after_firstpass = time.time()
     print(f"Time to lower custom IR: {after_firstpass - after_codegen} seconds")
-
-    module_str = run_pdl_lowering(module_str)
 
     module_str = run_mlir_opt(module_str)
     after_mlir_opt = time.time()
