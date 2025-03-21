@@ -1,19 +1,19 @@
 ; ModuleID = 'LLVMDialectModule'
 source_filename = "LLVMDialectModule"
 
-@vzsnf_ = internal constant [9 x i8] c"---------"
-@rdbmu_With_message = internal constant [12 x i8] c"With message"
-@vaxeo_At_line = internal constant [7 x i8] c"At line"
-@sxjeo_Exception_thrown_from_file = internal constant [26 x i8] c"Exception thrown from file"
-@xcjmt_ = internal constant [9 x i8] c"---------"
-@zsqij_ = internal constant [0 x i8] zeroinitializer
-@dqlxi_None = internal constant [6 x i8] c"<None>"
-@lpfku_ = internal constant [0 x i8] zeroinitializer
+@yfkzv_ = internal constant [9 x i8] c"---------"
+@vvrcj_With_message = internal constant [12 x i8] c"With message"
+@thmoa_At_line = internal constant [7 x i8] c"At line"
+@qihtp_Exception_thrown_from_file = internal constant [26 x i8] c"Exception thrown from file"
+@vmyaw_ = internal constant [9 x i8] c"---------"
+@nhumf_ = internal constant [0 x i8] zeroinitializer
+@hujtf_None = internal constant [6 x i8] c"<None>"
+@eruey_ = internal constant [0 x i8] zeroinitializer
 @_parameterization_Ptri8 = linkonce_odr constant [1 x ptr] [ptr @i8_typ]
 @_parameterization_String = linkonce_odr constant [1 x ptr] [ptr @String]
 @_parameterization_Ptri32 = linkonce_odr constant [1 x ptr] [ptr @i32_typ]
 @_parameterization_BufferPtri8 = linkonce_odr constant [1 x ptr] [ptr @buffer_typ]
-@tvdrc_Object = internal constant [6 x i8] c"Object"
+@eoion_Object = internal constant [6 x i8] c"Object"
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
 @float_string = linkonce_odr constant [4 x i8] c"%f\0A\00"
@@ -128,15 +128,15 @@ declare i1 @subtype_test_wrapper(ptr, i64, i64, i64, i64, ptr)
 
 declare void @coroutine_call(ptr)
 
-define internal { i64, i64 } @_size_Object(ptr %0) {
+define { i64, i64 } @_size_Object(ptr %0) {
   ret { i64, i64 } { i64 0, i64 1 }
 }
 
-define internal { i64, i64 } @_size_Iterator(ptr %0) {
+define { i64, i64 } @_size_Iterator(ptr %0) {
   ret { i64, i64 } { i64 0, i64 1 }
 }
 
-define internal { i64, i64 } @_size_Iterable(ptr %0) {
+define { i64, i64 } @_size_Iterable(ptr %0) {
   ret { i64, i64 } { i64 0, i64 1 }
 }
 
@@ -149,7 +149,7 @@ define ptr @Iterable_B_iterator_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   ret ptr %7
 }
 
-define internal { i64, i64 } @_size_Representable(ptr %0) {
+define { i64, i64 } @_size_Representable(ptr %0) {
   ret { i64, i64 } { i64 0, i64 1 }
 }
 
@@ -185,7 +185,7 @@ define { ptr, ptr, ptr, i32 } @Representable_repr_({ ptr, ptr, ptr, i32 } %0, { 
   store ptr %24, ptr %23, align 8
   %25 = call ptr @llvm.invariant.start.p0(i64 16, ptr %21)
   %26 = load ptr, ptr %21, align 8
-  %27 = load <6 x i8>, ptr @tvdrc_Object, align 8
+  %27 = load <6 x i8>, ptr @eoion_Object, align 8
   store <6 x i8> %27, ptr %26, align 8
   %28 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %29 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -273,7 +273,7 @@ define ptr @Representable_B_repr_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   ret ptr %7
 }
 
-define internal { i64, i64 } @_size_String(ptr %0) {
+define { i64, i64 } @_size_String(ptr %0) {
   %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), 1
   %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), i64 1
   %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), %3
@@ -2731,7 +2731,7 @@ define ptr @String_B_repr_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   ret ptr %7
 }
 
-define internal { i64, i64 } @_size_Character(ptr %0) {
+define { i64, i64 } @_size_Character(ptr %0) {
   %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, i8 }, ptr null, i32 0, i32 1) to i64), 1
   %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, i8 }, ptr null, i32 0, i32 1) to i64), i64 1
   %4 = urem i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), %3
@@ -2857,7 +2857,7 @@ define ptr @Character_B_init_bytePtri8({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   ret ptr %18
 }
 
-define internal { i64, i64 } @_size_StringIterator(ptr %0) {
+define { i64, i64 } @_size_StringIterator(ptr %0) {
   %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), 1
   %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 1
   %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), %3
@@ -3356,7 +3356,7 @@ define ptr @StringIterator_B_next_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   ret ptr %7
 }
 
-define internal { i64, i64 } @_size_Exception(ptr %0) {
+define { i64, i64 } @_size_Exception(ptr %0) {
   %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), 1
   %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), i64 1
   %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %3
@@ -3736,7 +3736,7 @@ define void @Exception_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   store ptr %34, ptr %33, align 8
   %35 = call ptr @llvm.invariant.start.p0(i64 16, ptr %31)
   %36 = load ptr, ptr %31, align 8
-  %37 = load <6 x i8>, ptr @dqlxi_None, align 8
+  %37 = load <6 x i8>, ptr @hujtf_None, align 8
   store <6 x i8> %37, ptr %36, align 8
   %38 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %39 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4093,7 +4093,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %24, ptr %23, align 8
   %25 = call ptr @llvm.invariant.start.p0(i64 16, ptr %21)
   %26 = load ptr, ptr %21, align 8
-  %27 = load <9 x i8>, ptr @xcjmt_, align 16
+  %27 = load <9 x i8>, ptr @vmyaw_, align 16
   store <9 x i8> %27, ptr %26, align 16
   %28 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %29 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4174,7 +4174,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %91, ptr %90, align 8
   %92 = call ptr @llvm.invariant.start.p0(i64 16, ptr %88)
   %93 = load ptr, ptr %88, align 8
-  %94 = load <26 x i8>, ptr @sxjeo_Exception_thrown_from_file, align 32
+  %94 = load <26 x i8>, ptr @qihtp_Exception_thrown_from_file, align 32
   store <26 x i8> %94, ptr %93, align 32
   %95 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %96 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4296,7 +4296,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %196, ptr %195, align 8
   %197 = call ptr @llvm.invariant.start.p0(i64 16, ptr %193)
   %198 = load ptr, ptr %193, align 8
-  %199 = load <7 x i8>, ptr @vaxeo_At_line, align 8
+  %199 = load <7 x i8>, ptr @thmoa_At_line, align 8
   store <7 x i8> %199, ptr %198, align 8
   %200 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %201 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4389,7 +4389,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %275, ptr %274, align 8
   %276 = call ptr @llvm.invariant.start.p0(i64 16, ptr %272)
   %277 = load ptr, ptr %272, align 8
-  %278 = load <12 x i8>, ptr @rdbmu_With_message, align 16
+  %278 = load <12 x i8>, ptr @vvrcj_With_message, align 16
   store <12 x i8> %278, ptr %277, align 16
   %279 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %280 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4491,7 +4491,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %362, ptr %361, align 8
   %363 = call ptr @llvm.invariant.start.p0(i64 16, ptr %359)
   %364 = load ptr, ptr %359, align 8
-  %365 = load <9 x i8>, ptr @vzsnf_, align 16
+  %365 = load <9 x i8>, ptr @yfkzv_, align 16
   store <9 x i8> %365, ptr %364, align 16
   %366 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %367 = alloca { ptr, ptr, ptr, i32 }, align 8
