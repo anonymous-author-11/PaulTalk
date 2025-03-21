@@ -114,7 +114,7 @@ def do_preliminaries(out_file_names, ll_files):
     subprocess.run(preliminaries, shell=True)
 
 def record_all_passes():
-    clang = "clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=-1000 -Xclang -triple=x86_64-pc-windows-msvc"
+    clang = "clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
     opt = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
     with open("out_reg2mem.ll", "r+") as f:
         out_reg2mem = f.read()
@@ -122,7 +122,7 @@ def record_all_passes():
         # clang can't handle the 'preserve_nonecc' attribute for some reason
         f.write(out_reg2mem.replace("preserve_nonecc",""))
         f.truncate()
-    opt_out = subprocess.run(opt, text=True, shell=True, capture_output=True)
+    opt_out = subprocess.run(clang, text=True, shell=True, capture_output=True)
     with open("opt_passes.txt", "w") as outfile: outfile.write(opt_out.stderr)
 
 def run_opt(debug_mode):
@@ -221,6 +221,7 @@ def main(argv):
     do_preliminaries(out_file_names, ll_files)
     after_prelims = time.time()
     print(f"Time to run preliminary passes: {after_prelims - after_translate} seconds")
+    #record_all_passes()
     run_opt(debug_mode)
     after_opt = time.time()
     print(f"Time to opt: {after_opt - after_prelims} seconds")

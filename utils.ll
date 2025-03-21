@@ -25,9 +25,6 @@ declare void @report_exception( {ptr} )
 @current_coroutine = linkonce_odr thread_local global ptr null
 @always_one = linkonce thread_local global i1 1
 
-@_parameterization_Ptrf64 = external constant [1 x ptr]
-declare i64 @_size_Pair(ptr)
-
 ; Thread-local storage for our bump allocator state
 @current_ptr = internal thread_local global ptr null
 

@@ -1802,13 +1802,14 @@ class LowerSizeInBytesDef(RewritePattern):
             if isinstance(t, IntegerAttr):
                 # not statically known size
                 gep = llvm.GEPOp(parameterization, [t.value.data + 1], pointee_type=llvm.LLVMPointerType.opaque())
-                load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
-                size_fn_ptr = llvm.GEPOp(load.results[0], [0, 6], pointee_type=llvm.LLVMArrayType.from_size_and_type(7, llvm.LLVMPointerType.opaque()))
+                load0 = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
+                load1 = llvm.LoadOp(load0.results[0], llvm.LLVMPointerType.opaque())
+                size_fn_ptr = llvm.GEPOp(load1.results[0], [0, 6], pointee_type=llvm.LLVMArrayType.from_size_and_type(7, llvm.LLVMPointerType.opaque()))
                 size_fn = llvm.LoadOp(size_fn_ptr.results[0], llvm.LLVMPointerType.opaque())
                 ftype2 = FunctionType.from_lists([llvm.LLVMPointerType.opaque()], [IntegerType(64)])
                 laundered = builtin.UnrealizedConversionCastOp(operands=[size_fn.results[0]], result_types=[ftype2])
-                size = func.CallIndirect(laundered.results[0], [load.results[0]], [IntegerType(64)])
-                body_block.add_ops([gep,load, size_fn_ptr, size_fn, laundered, size])
+                size = func.CallIndirect(laundered.results[0], [load0.results[0]], [IntegerType(64)])
+                body_block.add_ops([gep, load0, load1, size_fn_ptr, size_fn, laundered, size])
             else:
                 # a statically known field
                 size = TypeSizeOp.create(attributes={"typ":t}, result_types=[IntegerType(64)])
