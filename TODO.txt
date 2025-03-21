@@ -298,9 +298,16 @@ DONE:
 	- Add setter methods to grammar properly [check!]
 	- Setter methods should take one parameter [check!]
 	- Except for index-setter which should take two [check!]
+- Write a size_in_bytes function for each class; store in vtable prelude [check!]
+	- Should be passed a ptr to a parameterization of itself [check!]
+	- Then passes nested parameterizations to their own type size functions [check!]
+	- But still needs to know how to add up the results of recursive calls [check!]
+	- Returns an i64 [check!]
+	- Properly handles alignment [check!]
 
 TODO:
 
+- Disallow method type parameters having same name as class type parameters
 - Generic buffer size and indexing
 	- First just change bufferindexationop to take a dynamic type size [check!]
 	- Change createbuffer to take dynamic size as well [check!]

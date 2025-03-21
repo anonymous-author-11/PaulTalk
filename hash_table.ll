@@ -2,19 +2,19 @@
 source_filename = "LLVMDialectModule"
 
 @_parameterization_Ptri1 = linkonce_odr constant [1 x ptr] [ptr @bool_typ]
-@_parameterization_String_or_Nil = linkonce_odr constant [3 x ptr] [ptr @union_typ, ptr @_parameterization_String, ptr @_parameterization_Nil]
-@fhcwi_hello = internal constant [5 x i8] c"hello"
-@ucerc_world = internal constant [5 x i8] c"world"
-@xjpwt_hello = internal constant [5 x i8] c"hello"
-@mkjfi_qux = internal constant [3 x i8] c"qux"
-@vwlfg_baz = internal constant [3 x i8] c"baz"
-@uskfb_bar = internal constant [3 x i8] c"bar"
-@acbau_foo = internal constant [3 x i8] c"foo"
+@_parameterization_Nil_or_String = linkonce_odr constant [3 x ptr] [ptr @union_typ, ptr @_parameterization_Nil, ptr @_parameterization_String]
+@efxnl_hello = internal constant [5 x i8] c"hello"
+@zvfqt_world = internal constant [5 x i8] c"world"
+@nfedt_hello = internal constant [5 x i8] c"hello"
+@djlyl_qux = internal constant [3 x i8] c"qux"
+@mljjs_baz = internal constant [3 x i8] c"baz"
+@eyfxk_bar = internal constant [3 x i8] c"bar"
+@rvtgz_foo = internal constant [3 x i8] c"foo"
 @_parameterization_FunctionString._String_to_Ptri1 = linkonce_odr constant [4 x ptr] [ptr @function_typ, ptr @_parameterization_Ptri1, ptr @_parameterization_String, ptr @_parameterization_String]
 @_parameterization_FunctionString_to_Ptri32 = linkonce_odr constant [3 x ptr] [ptr @function_typ, ptr @_parameterization_Ptri32, ptr @_parameterization_String]
 @_parameterization_PairString._String = linkonce_odr constant [3 x ptr] [ptr @Pair, ptr @_parameterization_String, ptr @_parameterization_String]
 @_parameterization_BufferPtri8 = linkonce_odr constant [1 x ptr] [ptr @buffer_typ]
-@gfyhd_not_an_i = internal constant [10 x i8] c"not an i32"
+@llnqj_not_an_i = internal constant [10 x i8] c"not an i32"
 @_parameterization_FunctionPtri32._Ptri32_to_Ptri1 = linkonce_odr constant [4 x ptr] [ptr @function_typ, ptr @_parameterization_Ptri1, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptri32]
 @_parameterization_FunctionPtri32_to_Ptri32 = linkonce_odr constant [3 x ptr] [ptr @function_typ, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptri32]
 @_parameterization_PairPtri32._Ptri32 = linkonce_odr constant [3 x ptr] [ptr @Pair, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptri32]
@@ -113,7 +113,7 @@ source_filename = "LLVMDialectModule"
 @HashMap_field_hasher = internal constant { ptr, ptr } { ptr @HashMap_getter_hasher, ptr @HashMap_setter_hasher }
 @HashMap_field_eq = internal constant { ptr, ptr } { ptr @HashMap_getter_eq, ptr @HashMap_setter_eq }
 
-define i1 @ofxzttnplz(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @baftaolhvp(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -166,7 +166,7 @@ define i1 @ofxzttnplz(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %44
 }
 
-define i32 @jpjrdbmtoi(ptr nest %0, { ptr, i160 } %1) {
+define i32 @jtdmumqpby(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -195,7 +195,7 @@ define i32 @jpjrdbmtoi(ptr nest %0, { ptr, i160 } %1) {
   ret i32 %23
 }
 
-define i1 @hdgqdkxtus(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @siolnfktmn(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -208,7 +208,7 @@ define i1 @hdgqdkxtus(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %10
 }
 
-define i32 @jesjgimkip(ptr nest %0, { ptr, i160 } %1) {
+define i32 @mhutbdjoxy(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
@@ -625,8 +625,8 @@ define ptr @Entry_B_init_keyK_valueV_hashPtri32_init_keyK_valueTombstone_hashPtr
   %22 = load i64, ptr %18, align 4
   %23 = load ptr, ptr %19, align 8
   %24 = load ptr, ptr %20, align 8
-  %25 = call i1 @subtype_test_wrapper(ptr %23, i64 %22, i64 %21, i64 3084208142191802847, i64 ptrtoint (ptr @any_typ to i64), ptr %24)
-  %26 = select i1 %25, i32 9, i32 10
+  %25 = call i1 @subtype_test_wrapper(ptr %23, i64 %22, i64 %21, i64 -8477883990763853851, i64 ptrtoint (ptr @Tombstone to i64), ptr %24)
+  %26 = select i1 %25, i32 10, i32 9
   br i1 %25, label %27, label %28
 
 27:                                               ; preds = %2
@@ -643,7 +643,7 @@ define ptr @Entry_B_init_keyK_valueV_hashPtri32_init_keyK_valueTombstone_hashPtr
   %36 = load i64, ptr %32, align 4
   %37 = load ptr, ptr %33, align 8
   %38 = load ptr, ptr %34, align 8
-  %39 = call i1 @subtype_test_wrapper(ptr %37, i64 %36, i64 %35, i64 -8477883990763853851, i64 ptrtoint (ptr @Tombstone to i64), ptr %38)
+  %39 = call i1 @subtype_test_wrapper(ptr %37, i64 %36, i64 %35, i64 3084208142191802847, i64 ptrtoint (ptr @any_typ to i64), ptr %38)
   br label %40
 
 40:                                               ; preds = %27, %28
@@ -6233,7 +6233,7 @@ define i32 @main() {
   %10 = call ptr @llvm.invariant.start.p0(i64 9, ptr %6)
   %11 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %11)
-  call void @llvm.init.trampoline(ptr %11, ptr @jesjgimkip, ptr @i32_hasher)
+  call void @llvm.init.trampoline(ptr %11, ptr @mhutbdjoxy, ptr @i32_hasher)
   %12 = alloca ptr, align 8
   %13 = call ptr @adjust_trampoline(ptr %11)
   store ptr %13, ptr %12, align 8
@@ -6244,7 +6244,7 @@ define i32 @main() {
   %18 = insertvalue { ptr } undef, ptr %17, 0
   %19 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %19)
-  call void @llvm.init.trampoline(ptr %19, ptr @hdgqdkxtus, ptr @i32_eq)
+  call void @llvm.init.trampoline(ptr %19, ptr @siolnfktmn, ptr @i32_eq)
   %20 = alloca ptr, align 8
   %21 = call ptr @adjust_trampoline(ptr %19)
   store ptr %21, ptr %20, align 8
@@ -6570,13 +6570,13 @@ define i32 @main() {
   %270 = alloca i32, align 4
   store i32 11, ptr %270, align 4
   %271 = load i32, ptr %270, align 4
-  %272 = getelementptr i8, ptr null, i32 %271
-  %273 = ptrtoint ptr %272 to i64
-  %274 = alloca ptr, align 8
-  %275 = call ptr @bump_malloc(i64 %273)
-  store ptr %275, ptr %274, align 8
+  %272 = sext i32 %271 to i64
+  %273 = alloca ptr, align 8
+  %274 = mul i64 %272, ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64)
+  %275 = call ptr @bump_malloc(i64 %274)
+  store ptr %275, ptr %273, align 8
   %276 = alloca { ptr }, align 8
-  %277 = getelementptr { ptr }, ptr %274, i32 0, i32 0
+  %277 = getelementptr { ptr }, ptr %273, i32 0, i32 0
   %278 = getelementptr { ptr }, ptr %276, i32 0, i32 0
   %279 = load ptr, ptr %277, align 8
   store ptr %279, ptr %278, align 8
@@ -6585,10 +6585,10 @@ define i32 @main() {
   store i32 0, ptr %281, align 4
   %282 = load ptr, ptr %276, align 8
   %283 = load i32, ptr %281, align 4
-  %284 = getelementptr [10 x i8], ptr null, i32 %283
-  %285 = ptrtoint ptr %284 to i64
+  %284 = sext i32 %283 to i64
+  %285 = mul i64 ptrtoint (ptr getelementptr ([10 x i8], ptr null, i32 1) to i64), %284
   %286 = getelementptr i8, ptr %282, i64 %285
-  %287 = load <10 x i8>, ptr @gfyhd_not_an_i, align 16
+  %287 = load <10 x i8>, ptr @llnqj_not_an_i, align 16
   store <10 x i8> %287, ptr %286, align 16
   %288 = alloca i32, align 4
   store i32 10, ptr %288, align 4
@@ -6695,7 +6695,7 @@ define i32 @main() {
   %359 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %359)
   %360 = load ptr, ptr %357, align 8
-  call void @llvm.init.trampoline(ptr %359, ptr @jpjrdbmtoi, ptr %360)
+  call void @llvm.init.trampoline(ptr %359, ptr @jtdmumqpby, ptr %360)
   %361 = alloca ptr, align 8
   %362 = call ptr @adjust_trampoline(ptr %359)
   store ptr %362, ptr %361, align 8
@@ -6707,7 +6707,7 @@ define i32 @main() {
   %368 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %368)
   %369 = load ptr, ptr %358, align 8
-  call void @llvm.init.trampoline(ptr %368, ptr @ofxzttnplz, ptr %369)
+  call void @llvm.init.trampoline(ptr %368, ptr @baftaolhvp, ptr %369)
   %370 = alloca ptr, align 8
   %371 = call ptr @adjust_trampoline(ptr %368)
   store ptr %371, ptr %370, align 8
@@ -6784,13 +6784,13 @@ define i32 @main() {
   %428 = alloca i32, align 4
   store i32 4, ptr %428, align 4
   %429 = load i32, ptr %428, align 4
-  %430 = getelementptr i8, ptr null, i32 %429
-  %431 = ptrtoint ptr %430 to i64
-  %432 = alloca ptr, align 8
-  %433 = call ptr @bump_malloc(i64 %431)
-  store ptr %433, ptr %432, align 8
+  %430 = sext i32 %429 to i64
+  %431 = alloca ptr, align 8
+  %432 = mul i64 %430, ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64)
+  %433 = call ptr @bump_malloc(i64 %432)
+  store ptr %433, ptr %431, align 8
   %434 = alloca { ptr }, align 8
-  %435 = getelementptr { ptr }, ptr %432, i32 0, i32 0
+  %435 = getelementptr { ptr }, ptr %431, i32 0, i32 0
   %436 = getelementptr { ptr }, ptr %434, i32 0, i32 0
   %437 = load ptr, ptr %435, align 8
   store ptr %437, ptr %436, align 8
@@ -6799,10 +6799,10 @@ define i32 @main() {
   store i32 0, ptr %439, align 4
   %440 = load ptr, ptr %434, align 8
   %441 = load i32, ptr %439, align 4
-  %442 = getelementptr [3 x i8], ptr null, i32 %441
-  %443 = ptrtoint ptr %442 to i64
+  %442 = sext i32 %441 to i64
+  %443 = mul i64 ptrtoint (ptr getelementptr ([3 x i8], ptr null, i32 1) to i64), %442
   %444 = getelementptr i8, ptr %440, i64 %443
-  %445 = load <3 x i8>, ptr @acbau_foo, align 4
+  %445 = load <3 x i8>, ptr @rvtgz_foo, align 4
   store <3 x i8> %445, ptr %444, align 4
   %446 = alloca i32, align 4
   store i32 3, ptr %446, align 4
@@ -6861,13 +6861,13 @@ define i32 @main() {
   %486 = alloca i32, align 4
   store i32 4, ptr %486, align 4
   %487 = load i32, ptr %486, align 4
-  %488 = getelementptr i8, ptr null, i32 %487
-  %489 = ptrtoint ptr %488 to i64
-  %490 = alloca ptr, align 8
-  %491 = call ptr @bump_malloc(i64 %489)
-  store ptr %491, ptr %490, align 8
+  %488 = sext i32 %487 to i64
+  %489 = alloca ptr, align 8
+  %490 = mul i64 %488, ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64)
+  %491 = call ptr @bump_malloc(i64 %490)
+  store ptr %491, ptr %489, align 8
   %492 = alloca { ptr }, align 8
-  %493 = getelementptr { ptr }, ptr %490, i32 0, i32 0
+  %493 = getelementptr { ptr }, ptr %489, i32 0, i32 0
   %494 = getelementptr { ptr }, ptr %492, i32 0, i32 0
   %495 = load ptr, ptr %493, align 8
   store ptr %495, ptr %494, align 8
@@ -6876,10 +6876,10 @@ define i32 @main() {
   store i32 0, ptr %497, align 4
   %498 = load ptr, ptr %492, align 8
   %499 = load i32, ptr %497, align 4
-  %500 = getelementptr [3 x i8], ptr null, i32 %499
-  %501 = ptrtoint ptr %500 to i64
+  %500 = sext i32 %499 to i64
+  %501 = mul i64 ptrtoint (ptr getelementptr ([3 x i8], ptr null, i32 1) to i64), %500
   %502 = getelementptr i8, ptr %498, i64 %501
-  %503 = load <3 x i8>, ptr @uskfb_bar, align 4
+  %503 = load <3 x i8>, ptr @eyfxk_bar, align 4
   store <3 x i8> %503, ptr %502, align 4
   %504 = alloca i32, align 4
   store i32 3, ptr %504, align 4
@@ -7015,13 +7015,13 @@ define i32 @main() {
   %606 = alloca i32, align 4
   store i32 4, ptr %606, align 4
   %607 = load i32, ptr %606, align 4
-  %608 = getelementptr i8, ptr null, i32 %607
-  %609 = ptrtoint ptr %608 to i64
-  %610 = alloca ptr, align 8
-  %611 = call ptr @bump_malloc(i64 %609)
-  store ptr %611, ptr %610, align 8
+  %608 = sext i32 %607 to i64
+  %609 = alloca ptr, align 8
+  %610 = mul i64 %608, ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64)
+  %611 = call ptr @bump_malloc(i64 %610)
+  store ptr %611, ptr %609, align 8
   %612 = alloca { ptr }, align 8
-  %613 = getelementptr { ptr }, ptr %610, i32 0, i32 0
+  %613 = getelementptr { ptr }, ptr %609, i32 0, i32 0
   %614 = getelementptr { ptr }, ptr %612, i32 0, i32 0
   %615 = load ptr, ptr %613, align 8
   store ptr %615, ptr %614, align 8
@@ -7030,10 +7030,10 @@ define i32 @main() {
   store i32 0, ptr %617, align 4
   %618 = load ptr, ptr %612, align 8
   %619 = load i32, ptr %617, align 4
-  %620 = getelementptr [3 x i8], ptr null, i32 %619
-  %621 = ptrtoint ptr %620 to i64
+  %620 = sext i32 %619 to i64
+  %621 = mul i64 ptrtoint (ptr getelementptr ([3 x i8], ptr null, i32 1) to i64), %620
   %622 = getelementptr i8, ptr %618, i64 %621
-  %623 = load <3 x i8>, ptr @vwlfg_baz, align 4
+  %623 = load <3 x i8>, ptr @mljjs_baz, align 4
   store <3 x i8> %623, ptr %622, align 4
   %624 = alloca i32, align 4
   store i32 3, ptr %624, align 4
@@ -7092,13 +7092,13 @@ define i32 @main() {
   %664 = alloca i32, align 4
   store i32 4, ptr %664, align 4
   %665 = load i32, ptr %664, align 4
-  %666 = getelementptr i8, ptr null, i32 %665
-  %667 = ptrtoint ptr %666 to i64
-  %668 = alloca ptr, align 8
-  %669 = call ptr @bump_malloc(i64 %667)
-  store ptr %669, ptr %668, align 8
+  %666 = sext i32 %665 to i64
+  %667 = alloca ptr, align 8
+  %668 = mul i64 %666, ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64)
+  %669 = call ptr @bump_malloc(i64 %668)
+  store ptr %669, ptr %667, align 8
   %670 = alloca { ptr }, align 8
-  %671 = getelementptr { ptr }, ptr %668, i32 0, i32 0
+  %671 = getelementptr { ptr }, ptr %667, i32 0, i32 0
   %672 = getelementptr { ptr }, ptr %670, i32 0, i32 0
   %673 = load ptr, ptr %671, align 8
   store ptr %673, ptr %672, align 8
@@ -7107,10 +7107,10 @@ define i32 @main() {
   store i32 0, ptr %675, align 4
   %676 = load ptr, ptr %670, align 8
   %677 = load i32, ptr %675, align 4
-  %678 = getelementptr [3 x i8], ptr null, i32 %677
-  %679 = ptrtoint ptr %678 to i64
+  %678 = sext i32 %677 to i64
+  %679 = mul i64 ptrtoint (ptr getelementptr ([3 x i8], ptr null, i32 1) to i64), %678
   %680 = getelementptr i8, ptr %676, i64 %679
-  %681 = load <3 x i8>, ptr @mkjfi_qux, align 4
+  %681 = load <3 x i8>, ptr @djlyl_qux, align 4
   store <3 x i8> %681, ptr %680, align 4
   %682 = alloca i32, align 4
   store i32 3, ptr %682, align 4
@@ -7246,13 +7246,13 @@ define i32 @main() {
   %784 = alloca i32, align 4
   store i32 6, ptr %784, align 4
   %785 = load i32, ptr %784, align 4
-  %786 = getelementptr i8, ptr null, i32 %785
-  %787 = ptrtoint ptr %786 to i64
-  %788 = alloca ptr, align 8
-  %789 = call ptr @bump_malloc(i64 %787)
-  store ptr %789, ptr %788, align 8
+  %786 = sext i32 %785 to i64
+  %787 = alloca ptr, align 8
+  %788 = mul i64 %786, ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64)
+  %789 = call ptr @bump_malloc(i64 %788)
+  store ptr %789, ptr %787, align 8
   %790 = alloca { ptr }, align 8
-  %791 = getelementptr { ptr }, ptr %788, i32 0, i32 0
+  %791 = getelementptr { ptr }, ptr %787, i32 0, i32 0
   %792 = getelementptr { ptr }, ptr %790, i32 0, i32 0
   %793 = load ptr, ptr %791, align 8
   store ptr %793, ptr %792, align 8
@@ -7261,10 +7261,10 @@ define i32 @main() {
   store i32 0, ptr %795, align 4
   %796 = load ptr, ptr %790, align 8
   %797 = load i32, ptr %795, align 4
-  %798 = getelementptr [5 x i8], ptr null, i32 %797
-  %799 = ptrtoint ptr %798 to i64
+  %798 = sext i32 %797 to i64
+  %799 = mul i64 ptrtoint (ptr getelementptr ([5 x i8], ptr null, i32 1) to i64), %798
   %800 = getelementptr i8, ptr %796, i64 %799
-  %801 = load <5 x i8>, ptr @xjpwt_hello, align 8
+  %801 = load <5 x i8>, ptr @nfedt_hello, align 8
   store <5 x i8> %801, ptr %800, align 8
   %802 = alloca i32, align 4
   store i32 5, ptr %802, align 4
@@ -7323,13 +7323,13 @@ define i32 @main() {
   %842 = alloca i32, align 4
   store i32 6, ptr %842, align 4
   %843 = load i32, ptr %842, align 4
-  %844 = getelementptr i8, ptr null, i32 %843
-  %845 = ptrtoint ptr %844 to i64
-  %846 = alloca ptr, align 8
-  %847 = call ptr @bump_malloc(i64 %845)
-  store ptr %847, ptr %846, align 8
+  %844 = sext i32 %843 to i64
+  %845 = alloca ptr, align 8
+  %846 = mul i64 %844, ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64)
+  %847 = call ptr @bump_malloc(i64 %846)
+  store ptr %847, ptr %845, align 8
   %848 = alloca { ptr }, align 8
-  %849 = getelementptr { ptr }, ptr %846, i32 0, i32 0
+  %849 = getelementptr { ptr }, ptr %845, i32 0, i32 0
   %850 = getelementptr { ptr }, ptr %848, i32 0, i32 0
   %851 = load ptr, ptr %849, align 8
   store ptr %851, ptr %850, align 8
@@ -7338,10 +7338,10 @@ define i32 @main() {
   store i32 0, ptr %853, align 4
   %854 = load ptr, ptr %848, align 8
   %855 = load i32, ptr %853, align 4
-  %856 = getelementptr [5 x i8], ptr null, i32 %855
-  %857 = ptrtoint ptr %856 to i64
+  %856 = sext i32 %855 to i64
+  %857 = mul i64 ptrtoint (ptr getelementptr ([5 x i8], ptr null, i32 1) to i64), %856
   %858 = getelementptr i8, ptr %854, i64 %857
-  %859 = load <5 x i8>, ptr @ucerc_world, align 8
+  %859 = load <5 x i8>, ptr @zvfqt_world, align 8
   store <5 x i8> %859, ptr %858, align 8
   %860 = alloca i32, align 4
   store i32 5, ptr %860, align 4
@@ -7477,13 +7477,13 @@ define i32 @main() {
   %962 = alloca i32, align 4
   store i32 6, ptr %962, align 4
   %963 = load i32, ptr %962, align 4
-  %964 = getelementptr i8, ptr null, i32 %963
-  %965 = ptrtoint ptr %964 to i64
-  %966 = alloca ptr, align 8
-  %967 = call ptr @bump_malloc(i64 %965)
-  store ptr %967, ptr %966, align 8
+  %964 = sext i32 %963 to i64
+  %965 = alloca ptr, align 8
+  %966 = mul i64 %964, ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64)
+  %967 = call ptr @bump_malloc(i64 %966)
+  store ptr %967, ptr %965, align 8
   %968 = alloca { ptr }, align 8
-  %969 = getelementptr { ptr }, ptr %966, i32 0, i32 0
+  %969 = getelementptr { ptr }, ptr %965, i32 0, i32 0
   %970 = getelementptr { ptr }, ptr %968, i32 0, i32 0
   %971 = load ptr, ptr %969, align 8
   store ptr %971, ptr %970, align 8
@@ -7492,10 +7492,10 @@ define i32 @main() {
   store i32 0, ptr %973, align 4
   %974 = load ptr, ptr %968, align 8
   %975 = load i32, ptr %973, align 4
-  %976 = getelementptr [5 x i8], ptr null, i32 %975
-  %977 = ptrtoint ptr %976 to i64
+  %976 = sext i32 %975 to i64
+  %977 = mul i64 ptrtoint (ptr getelementptr ([5 x i8], ptr null, i32 1) to i64), %976
   %978 = getelementptr i8, ptr %974, i64 %977
-  %979 = load <5 x i8>, ptr @fhcwi_hello, align 8
+  %979 = load <5 x i8>, ptr @efxnl_hello, align 8
   store <5 x i8> %979, ptr %978, align 8
   %980 = alloca i32, align 4
   store i32 5, ptr %980, align 4
@@ -7610,7 +7610,7 @@ define i32 @main() {
   %1068 = insertvalue { ptr, i160 } %1065, i160 %1067, 1
   %1069 = alloca [1 x ptr], align 8
   %1070 = getelementptr [1 x ptr], ptr %1069, i32 0, i32 0
-  store ptr @_parameterization_String_or_Nil, ptr %1070, align 8
+  store ptr @_parameterization_Nil_or_String, ptr %1070, align 8
   %1071 = call ptr @llvm.invariant.start.p0(i64 1, ptr %1069)
   %1072 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
   %1073 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 7), align 8

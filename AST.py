@@ -40,6 +40,8 @@ class AST:
         class_ops = [op.parent_block().detach_op(op) for op in ops if isinstance(op, TypeDefOp) or isinstance(op, ExternalTypeDefOp)]
         typ_ops = []
         for typ_name, typ in builtin_types.items():
+            size_fn_name = StringAttr("_size_" + typ_name)
+            size_fn = SizeInBytesDefOp.create(attributes={"meth_name":size_fn_name, "types":ArrayAttr([typ.base_typ()])})
             hash_tbl, prime = global_scope.build_hashtable(typ)
             offset_tbl = global_scope.build_offset_table(typ)
             hashid = IntegerAttr.from_int_and_width(hash_id(typ_name), 64)
@@ -52,8 +54,10 @@ class AST:
                 "prime":prime,
                 "hash_id":hashid,
                 "linkage":linkage,
-                "base_typ":typ.base_typ()
+                "base_typ":typ.base_typ(),
+                "size_fn":size_fn_name
             }
+            func_ops.append(size_fn)
             typ_ops.append(TypeDefOp.create(attributes=attr_dict))
         main = MainOp.create(regions=[global_scope.region])
         module = ModuleOp([PreludeOp.create(), *typ_ops, *class_ops, *func_ops, main], {"sym_name":StringAttr("ir")})
@@ -2081,13 +2085,22 @@ class ClassDef(Statement):
 
     def codegen(self, scope):
         if self.name in codegenned: return
+
+        fields_types = ArrayAttr([t.base_typ() if not isinstance(t, TypeParameter) else IntegerAttr.from_int_and_width(self.type_parameters.index(t), 64) for t in self.fields_types()])
+        size_fn = SizeInBytesDefOp.create(attributes={"meth_name":StringAttr("_size_" + self.name),"types":fields_types})
+        scope.region.last_block.add_op(size_fn)
+        toplevel_ops.append(size_fn)
+
         not_instantiable = any(isinstance(elem.definition, AbstractMethodDef) for elem in self.vtable() if isinstance(elem, Method))
         combined = ArrayAttr([]) if not_instantiable else ArrayAttr([thing.symbol() for thing in self.vtable()])
         hash_tbl, prime = scope.build_hashtable(self.type())
         offset_tbl = scope.build_offset_table(self.type())
         hashid = IntegerAttr.from_int_and_width(hash_id(self.name), 64)
         class_name = StringAttr(self.name)
-        attr_dict = {"class_name":class_name, "methods":combined, "hash_tbl":hash_tbl,"offset_tbl":offset_tbl ,"prime":prime, "hash_id":hashid, "base_typ":self.base_typ()}
+        attr_dict = {
+            "class_name":class_name, "methods":combined, "hash_tbl":hash_tbl,"offset_tbl":offset_tbl,
+            "prime":prime, "hash_id":hashid, "base_typ":self.base_typ(), "size_fn":StringAttr("_size_" + self.name)
+        }
         class_def = TypeDefOp.create(attributes=attr_dict)
         scope.region.last_block.add_op(class_def)
         scope.classes[self.name] = self

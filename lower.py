@@ -131,7 +131,8 @@ class ThirdPass(ModulePass):
                 LowerVtable(),
                 LowerHashTable(),
                 LowerOffsetTable(),
-                LowerLiteral()
+                LowerLiteral(),
+                LowerSizeInBytesDef()
                 #LowerParameterizationIndexation(),
                 #LowerNew(),
                 #LowerParameterizationsArray(),
@@ -1235,10 +1236,9 @@ class LowerTypePtrsTable(RewritePattern):
         rewriter.inline_block_before_matched_op(Block([offset_tbl, second_tbl]))
 
         dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [3])
-        null = llvm.ZeroOp.create(result_types=[llvm.LLVMPointerType.opaque()])
-        gep = llvm.GEPOp(null.results[0], [1], pointee_type=op.base_typ)
-        second_tbl = llvm.InsertValueOp(dense_ary, second_tbl.results[0], gep.results[0])
-        rewriter.inline_block_before_matched_op(Block([null, gep]))
+        size_fn = AddrOfOp.from_stringattr(op.size_fn)
+        second_tbl = llvm.InsertValueOp(dense_ary, second_tbl.results[0], size_fn.results[0])
+        rewriter.inline_block_before_matched_op(Block([size_fn]))
 
         rewriter.replace_matched_op(second_tbl)
 
@@ -1299,7 +1299,10 @@ class LowerTypeDef(RewritePattern):
         vtable = llvm.InsertValueOp(dense_ary, vtable.results[0], first_tbl.results[0])
         vtable_block.add_ops([first_tbl, vtable])
 
-        attr_dict = {"subtype_test":StringAttr("subtype_test"), "hash_tbl":StringAttr(op.class_name.data + "_hashtbl"), "offset_tbl":StringAttr(op.class_name.data + "_offset_tbl"), "base_typ":op.base_typ}
+        attr_dict = {
+            "subtype_test":StringAttr("subtype_test"), "hash_tbl":StringAttr(op.class_name.data + "_hashtbl"),
+            "offset_tbl":StringAttr(op.class_name.data + "_offset_tbl"), "base_typ":op.base_typ, "size_fn":op.size_fn
+        }
         second_tbl = TypePtrsTableOp.create(attributes=attr_dict, result_types=[second_tbl_type])
         dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [1])
         vtable = llvm.InsertValueOp(dense_ary, vtable.results[0], second_tbl.results[0])
@@ -1778,6 +1781,73 @@ class LowerAccessorDef(RewritePattern):
         glob.regions = (body,)
         body.parent = glob
         rewriter.replace_matched_op(glob)
+
+class LowerSizeInBytesDef(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: SizeInBytesDefOp, rewriter: PatternRewriter):
+        ftype = ([llvm.LLVMPointerType.opaque()], [IntegerType(64)])
+        body_block = Block([])
+        parameterization = body_block.insert_arg(llvm.LLVMPointerType.opaque(), 0)
+        body = Region([body_block])
+
+        current_offset = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 64), IntegerType(64))
+        max_align = llvm.ConstantOp(IntegerAttr.from_int_and_width(1, 64), IntegerType(64))
+        false = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 1), IntegerType(1))
+        zero = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 64), IntegerType(64))
+        one = llvm.ConstantOp(IntegerAttr.from_int_and_width(1, 64), IntegerType(64))
+        sixty_three = llvm.ConstantOp(IntegerAttr.from_int_and_width(63, 64), IntegerType(64))
+        body_block.add_ops([current_offset, max_align, false, zero, one, sixty_three])
+
+        for i, t in enumerate(op.types.data):
+            if isinstance(t, IntegerAttr):
+                # not statically known size
+                gep = llvm.GEPOp(parameterization, [t.value.data + 1], pointee_type=llvm.LLVMPointerType.opaque())
+                load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
+                size_fn_ptr = llvm.GEPOp(load.results[0], [0, 6], pointee_type=llvm.LLVMArrayType.from_size_and_type(7, llvm.LLVMPointerType.opaque()))
+                size_fn = llvm.LoadOp(size_fn_ptr.results[0], llvm.LLVMPointerType.opaque())
+                ftype2 = FunctionType.from_lists([llvm.LLVMPointerType.opaque()], [IntegerType(64)])
+                laundered = builtin.UnrealizedConversionCastOp(operands=[size_fn.results[0]], result_types=[ftype2])
+                size = func.CallIndirect(laundered.results[0], [load.results[0]], [IntegerType(64)])
+                body_block.add_ops([gep,load, size_fn_ptr, size_fn, laundered, size])
+            else:
+                # a statically known field
+                size = TypeSizeOp.create(attributes={"typ":t}, result_types=[IntegerType(64)])
+                body_block.add_op(size)
+            is_zero = ComparisonOp.make(size.results[0], zero.results[0], "EQ")
+            ctlz = llvm.CallIntrinsicOp("llvm.ctlz.i64", [[size.results[0], false.results[0]]], [IntegerType(64)])
+            operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [2, 0])
+            ctlz.properties["operandSegmentSizes"] = operandSegmentSizes
+            ctlz.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+            highest_bit = arith.Subi(sixty_three.results[0], ctlz.results[0])
+            next_pow = arith.ShLI(one.results[0], highest_bit.results[0])
+            is_pow2 = ComparisonOp.make(next_pow.results[0], size.results[0], "EQ")
+            high_end_alignment = arith.ShLI(next_pow.results[0], one.results[0])
+            putative_alignment = arith.Select(is_pow2.results[0], next_pow.results[0], high_end_alignment.results[0])
+            alignment = arith.Select(is_zero.results[0], one.results[0], putative_alignment.results[0])
+            cmp_align = arith.Cmpi(alignment.results[0], max_align.results[0], "ugt")
+            max_align = arith.Select(cmp_align.results[0], alignment.results[0], max_align.results[0])
+            rem = arith.RemUI(current_offset.results[0], alignment.results[0])
+            cmp_rem = ComparisonOp.make(zero.results[0], rem.results[0], "EQ")
+            high_end_pad = arith.Subi(alignment.results[0], rem.results[0])
+            padding = arith.Select(cmp_rem.results[0], zero.results[0], high_end_pad.results[0])
+            padded_size = arith.Addi(size.results[0], padding.results[0])
+            current_offset = arith.Addi(current_offset.results[0], padded_size.results[0])
+            body_block.add_ops([
+                is_zero, ctlz, highest_bit, next_pow, is_pow2, high_end_alignment, putative_alignment, alignment, cmp_align, max_align,
+                rem, cmp_rem, high_end_pad, padding, padded_size, current_offset
+            ])
+
+        rem_final = arith.RemUI(current_offset.results[0], max_align.results[0])
+        cmp_rem_final = ComparisonOp.make(rem_final.results[0], zero.results[0], "EQ")
+        high_pad_final = arith.Subi(max_align.results[0], rem_final.results[0])
+        padding_final = arith.Select(cmp_rem_final.results[0], zero.results[0], high_pad_final.results[0])
+        final_size = arith.Addi(current_offset.results[0], padding_final.results[0])
+
+        ret = func.Return(final_size.results[0])
+        body_block.add_ops([rem_final, cmp_rem_final, high_pad_final, padding_final, final_size, ret])
+
+        func_op = func.FuncOp(name=op.meth_name.data, function_type=ftype, region=body)
+        rewriter.replace_matched_op(func_op)
 
 class LowerTypeAccessorDef(RewritePattern):
     @op_type_rewrite_pattern

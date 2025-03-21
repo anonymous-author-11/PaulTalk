@@ -367,6 +367,12 @@ class IdentifierOp(IRDLOperation):
     result: OpResult = result_def(Ptr([IntegerType(32)]))
 
 @irdl_op_definition
+class SizeInBytesDefOp(IRDLOperation):
+    name = "mini.size_in_bytes_def"
+    meth_name: StringAttr = attr_def(StringAttr)
+    types: ArrayAttr = attr_def(ArrayAttr)
+
+@irdl_op_definition
 class TypeDefOp(IRDLOperation):
     name = "mini.typedef"
     class_name: StringAttr = attr_def(StringAttr)
@@ -375,8 +381,9 @@ class TypeDefOp(IRDLOperation):
     offset_tbl: ArrayAttr = attr_def(ArrayAttr)
     prime: IntegerAttr = attr_def(IntegerAttr)
     hash_id: IntegerAttr = attr_def(IntegerAttr)
-    linkage: OptAttributeDef = opt_attr_def(StringAttr)
     base_typ: TypeAttribute = attr_def(TypeAttribute)
+    size_fn: StringAttr = attr_def(StringAttr)
+    linkage: OptAttributeDef = opt_attr_def(StringAttr)
 
 @irdl_op_definition
 class ExternalTypeDefOp(IRDLOperation):
@@ -412,8 +419,9 @@ class TypePtrsTableOp(IRDLOperation):
     subtype_test: StringAttr = attr_def(StringAttr)
     hash_tbl: StringAttr = attr_def(StringAttr)
     offset_tbl: StringAttr = attr_def(StringAttr)
-    result: OpResult = result_def()
     base_typ: TypeAttribute = attr_def(TypeAttribute)
+    size_fn: StringAttr = attr_def(StringAttr)
+    result: OpResult = result_def()
 
 @irdl_op_definition
 class VtableOp(IRDLOperation):

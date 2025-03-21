@@ -109,7 +109,6 @@ module @patterns {
     %typ_attr = pdl.attribute
     %i64_type = pdl.type : i64
     %ptr_type = pdl.type : !llvm.ptr
-    %struct = pdl.attribute = !llvm.struct<(!pdl.range<type>)>
     %result_type = pdl.type : i64
     %root = pdl.operation "mini.type_size" {"typ" = %typ_attr} -> (%result_type : !pdl.type)
     pdl.rewrite %root {
