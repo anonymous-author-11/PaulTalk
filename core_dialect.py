@@ -371,6 +371,7 @@ class SizeInBytesDefOp(IRDLOperation):
     name = "mini.size_in_bytes_def"
     meth_name: StringAttr = attr_def(StringAttr)
     types: ArrayAttr = attr_def(ArrayAttr)
+    linkage: OptAttributeDef = opt_attr_def(StringAttr)
 
 @irdl_op_definition
 class TypeDefOp(IRDLOperation):

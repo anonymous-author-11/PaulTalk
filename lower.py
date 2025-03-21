@@ -1785,7 +1785,8 @@ class LowerAccessorDef(RewritePattern):
 class LowerSizeInBytesDef(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: SizeInBytesDefOp, rewriter: PatternRewriter):
-        ftype = ([llvm.LLVMPointerType.opaque()], [IntegerType(64)])
+        #return_type = llvm.LLVMStructType.from_type_list([IntegerType(64), IntegerType(64)])
+        ftype = llvm.LLVMFunctionType([llvm.LLVMPointerType.opaque()], IntegerType(64))
         body_block = Block([])
         parameterization = body_block.insert_arg(llvm.LLVMPointerType.opaque(), 0)
         body = Region([body_block])
@@ -1844,10 +1845,13 @@ class LowerSizeInBytesDef(RewritePattern):
         padding_final = arith.Select(cmp_rem_final.results[0], zero.results[0], high_pad_final.results[0])
         final_size = arith.Addi(current_offset.results[0], padding_final.results[0])
 
-        ret = func.Return(final_size.results[0])
+        ret = llvm.ReturnOp.create(operands=[final_size.results[0]])
         body_block.add_ops([rem_final, cmp_rem_final, high_pad_final, padding_final, final_size, ret])
 
-        func_op = func.FuncOp(name=op.meth_name.data, function_type=ftype, region=body)
+        if op.linkage:
+            func_op = llvm.FuncOp(op.meth_name.data, ftype, body=body, linkage=llvm.LinkageAttr(op.linkage.data))
+        else:
+            func_op = llvm.FuncOp(op.meth_name.data, ftype, body=body)
         rewriter.replace_matched_op(func_op)
 
 class LowerTypeAccessorDef(RewritePattern):

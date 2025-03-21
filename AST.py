@@ -41,7 +41,11 @@ class AST:
         typ_ops = []
         for typ_name, typ in builtin_types.items():
             size_fn_name = StringAttr("_size_" + typ_name)
-            size_fn = SizeInBytesDefOp.create(attributes={"meth_name":size_fn_name, "types":ArrayAttr([typ.base_typ()])})
+            size_fn = SizeInBytesDefOp.create(attributes={
+                "meth_name":size_fn_name,
+                "types":ArrayAttr([typ.base_typ()]),
+                "linkage":StringAttr("linkonce_odr")
+            })
             hash_tbl, prime = global_scope.build_hashtable(typ)
             offset_tbl = global_scope.build_offset_table(typ)
             hashid = IntegerAttr.from_int_and_width(hash_id(typ_name), 64)
@@ -2294,10 +2298,11 @@ class ClassDef(Statement):
         # we could cheat and search for "subtype" in its cleaned name
         field_declarations = self.all_field_declarations()
         data_fields = [field for field in field_declarations if not isinstance(field, TypeFieldDecl)]
-        fixed_type_fields = [field for field in field_declarations if isinstance(field, TypeFieldDecl) and "subtype" in field.scoped_name(self._scope)]
-        unfixed_type_fields = [field for field in field_declarations if isinstance(field, TypeFieldDecl) and "subtype" not in field.scoped_name(self._scope)]
+        fixed_type_fields = [field for field in field_declarations if isinstance(field, TypeFieldDecl) and "subtype" not in field.scoped_name(self._scope)]
+        unfixed_type_fields = [field for field in field_declarations if isinstance(field, TypeFieldDecl) and "subtype" in field.scoped_name(self._scope)]
         field_declarations = [*data_fields, *unfixed_type_fields, *fixed_type_fields]
         fields = [Field(i, self, declaration) for (i, declaration) in enumerate(field_declarations)]
+        if len(fields) > 0: print(f"redux {self.name} fields are {[field.declaration.scoped_name(self._scope) for field in fields]}")
         self.initialize_behaviors()
         methods = [*chain.from_iterable(behavior.methods for behavior in self.behaviors)]
         superfluous_methods = [*chain.from_iterable(behavior.superfluous_methods for behavior in self.behaviors)]
