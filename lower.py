@@ -471,6 +471,16 @@ class LowerTypeSize(RewritePattern):
         rewriter.inline_block_before_matched_op(Block([null, gep]))
         rewriter.replace_matched_op(ptrtoint)
 
+class LowerTypeAlignment(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: TypeAlignmentOp, rewriter: PatternRewriter):
+        null = llvm.ZeroOp.create(result_types=[llvm.LLVMPointerType.opaque()])
+        struct_type = llvm.LLVMStructType.from_type_list([IntegerType(8), op.typ])
+        gep = llvm.GEPOp(null.results[0], [0, 1], pointee_type=struct_type)
+        ptrtoint = llvm.PtrToIntOp(gep.results[0], IntegerType(64))
+        rewriter.inline_block_before_matched_op(Block([null, gep]))
+        rewriter.replace_matched_op(ptrtoint)
+
 class LowerMalloc(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: MallocOp, rewriter: PatternRewriter):
@@ -1785,8 +1795,8 @@ class LowerAccessorDef(RewritePattern):
 class LowerSizeInBytesDef(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: SizeInBytesDefOp, rewriter: PatternRewriter):
-        #return_type = llvm.LLVMStructType.from_type_list([IntegerType(64), IntegerType(64)])
-        ftype = llvm.LLVMFunctionType([llvm.LLVMPointerType.opaque()], IntegerType(64))
+        return_type = llvm.LLVMStructType.from_type_list([IntegerType(64), IntegerType(64)])
+        ftype = llvm.LLVMFunctionType([llvm.LLVMPointerType.opaque()], return_type)
         body_block = Block([])
         parameterization = body_block.insert_arg(llvm.LLVMPointerType.opaque(), 0)
         body = Region([body_block])
@@ -1807,25 +1817,19 @@ class LowerSizeInBytesDef(RewritePattern):
                 load1 = llvm.LoadOp(load0.results[0], llvm.LLVMPointerType.opaque())
                 size_fn_ptr = llvm.GEPOp(load1.results[0], [0, 6], pointee_type=llvm.LLVMArrayType.from_size_and_type(7, llvm.LLVMPointerType.opaque()))
                 size_fn = llvm.LoadOp(size_fn_ptr.results[0], llvm.LLVMPointerType.opaque())
-                ftype2 = FunctionType.from_lists([llvm.LLVMPointerType.opaque()], [IntegerType(64)])
+                ftype2 = FunctionType.from_lists([llvm.LLVMPointerType.opaque()], [return_type])
                 laundered = builtin.UnrealizedConversionCastOp(operands=[size_fn.results[0]], result_types=[ftype2])
-                size = func.CallIndirect(laundered.results[0], [load0.results[0]], [IntegerType(64)])
-                body_block.add_ops([gep, load0, load1, size_fn_ptr, size_fn, laundered, size])
+                call = func.CallIndirect(laundered.results[0], [load0.results[0]], [return_type])
+                dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
+                size = llvm.ExtractValueOp(dense_ary, call.results[0], IntegerType(64))
+                dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [1])
+                alignment = llvm.ExtractValueOp(dense_ary, call.results[0], IntegerType(64))
+                body_block.add_ops([gep, load0, load1, size_fn_ptr, size_fn, laundered, call, size, alignment])
             else:
                 # a statically known field
                 size = TypeSizeOp.create(attributes={"typ":t}, result_types=[IntegerType(64)])
-                body_block.add_op(size)
-            is_zero = ComparisonOp.make(size.results[0], zero.results[0], "EQ")
-            ctlz = llvm.CallIntrinsicOp("llvm.ctlz.i64", [[size.results[0], false.results[0]]], [IntegerType(64)])
-            operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [2, 0])
-            ctlz.properties["operandSegmentSizes"] = operandSegmentSizes
-            ctlz.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
-            highest_bit = arith.Subi(sixty_three.results[0], ctlz.results[0])
-            next_pow = arith.ShLI(one.results[0], highest_bit.results[0])
-            is_pow2 = ComparisonOp.make(next_pow.results[0], size.results[0], "EQ")
-            high_end_alignment = arith.ShLI(next_pow.results[0], one.results[0])
-            putative_alignment = arith.Select(is_pow2.results[0], next_pow.results[0], high_end_alignment.results[0])
-            alignment = arith.Select(is_zero.results[0], one.results[0], putative_alignment.results[0])
+                alignment = TypeAlignmentOp.create(attributes={"typ":t}, result_types=[IntegerType(64)])
+                body_block.add_ops([size, alignment])
             cmp_align = arith.Cmpi(alignment.results[0], max_align.results[0], "ugt")
             max_align = arith.Select(cmp_align.results[0], alignment.results[0], max_align.results[0])
             rem = arith.RemUI(current_offset.results[0], alignment.results[0])
@@ -1835,7 +1839,7 @@ class LowerSizeInBytesDef(RewritePattern):
             padded_size = arith.Addi(size.results[0], padding.results[0])
             current_offset = arith.Addi(current_offset.results[0], padded_size.results[0])
             body_block.add_ops([
-                is_zero, ctlz, highest_bit, next_pow, is_pow2, high_end_alignment, putative_alignment, alignment, cmp_align, max_align,
+                cmp_align, max_align,
                 rem, cmp_rem, high_end_pad, padding, padded_size, current_offset
             ])
 
@@ -1845,13 +1849,16 @@ class LowerSizeInBytesDef(RewritePattern):
         padding_final = arith.Select(cmp_rem_final.results[0], zero.results[0], high_pad_final.results[0])
         final_size = arith.Addi(current_offset.results[0], padding_final.results[0])
 
-        ret = llvm.ReturnOp.create(operands=[final_size.results[0]])
-        body_block.add_ops([rem_final, cmp_rem_final, high_pad_final, padding_final, final_size, ret])
+        undef = llvm.UndefOp(return_type)
+        dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
+        insert1 = llvm.InsertValueOp(dense_ary, undef.results[0], final_size.results[0])
+        dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [1])
+        insert2 = llvm.InsertValueOp(dense_ary, insert1.results[0], max_align.results[0])
 
-        if op.linkage:
-            func_op = llvm.FuncOp(op.meth_name.data, ftype, body=body, linkage=llvm.LinkageAttr(op.linkage.data))
-        else:
-            func_op = llvm.FuncOp(op.meth_name.data, ftype, body=body)
+        ret = llvm.ReturnOp.create(operands=[insert2.results[0]])
+        body_block.add_ops([rem_final, cmp_rem_final, high_pad_final, padding_final, final_size, undef, insert1, insert2, ret])
+
+        func_op = llvm.FuncOp(op.meth_name.data, ftype, body=body, linkage=llvm.LinkageAttr(op.linkage.data if op.linkage else "external"))
         rewriter.replace_matched_op(func_op)
 
 class LowerTypeAccessorDef(RewritePattern):

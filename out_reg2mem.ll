@@ -11,7 +11,7 @@ source_filename = "llvm-link"
 @_parameterization_Tuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64_ = linkonce_odr constant [5 x ptr] [ptr @tuple_typ, ptr @_parameterization_Ptrf64, ptr @_parameterization_Ptrf64, ptr @_parameterization_Ptrf64, ptr @_parameterization_Ptrf64]
 @_parameterization_Float64 = linkonce_odr constant [1 x ptr] [ptr @Float64]
 @_parameterization_Ptrf64 = linkonce_odr constant [1 x ptr] [ptr @f64_typ]
-@lnaid_genericmini = internal constant [12 x i8] c"generic.mini"
+@zcgxc_genericmini = internal constant [12 x i8] c"generic.mini"
 @Pair_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @any_typ, ptr @Pair, ptr null]
 @Pair_offset_tbl = linkonce_odr constant [4 x i32] [i32 17, i32 7, i32 7, i32 0]
 @Pair = constant { [3 x i64], [4 x ptr], [10 x ptr] } { [3 x i64] [i64 9197944775169318296, i64 4611686018427388081, i64 3], [4 x ptr] [ptr @subtype_test, ptr @Pair_hashtbl, ptr @Pair_offset_tbl, ptr @_size_Pair], [10 x ptr] [ptr @Pair_field_first, ptr @Pair_field_second, ptr @Pair_field_Pair_0, ptr @Pair_field_Pair_1, ptr @Pair_B_init_firstT_secondU, ptr @Pair_B_first_, ptr @Pair_B_second_, ptr @Pair_init_firstT_secondU, ptr @Pair_first_, ptr @Pair_second_] }
@@ -121,15 +121,15 @@ source_filename = "llvm-link"
 @Float64_field_value = internal constant { ptr, ptr } { ptr @Float64_getter_value, ptr @Float64_setter_value }
 @Int32_field_value = internal constant { ptr, ptr } { ptr @Int32_getter_value, ptr @Int32_setter_value }
 @Holder_field_held = internal constant { ptr, ptr } { ptr @Holder_getter_held, ptr @Holder_setter_held }
-@pqtpm_ = internal constant [9 x i8] c"---------"
-@katzj_With_message = internal constant [12 x i8] c"With message"
-@pqshd_At_line = internal constant [7 x i8] c"At line"
-@zivcz_Exception_thrown_from_file = internal constant [26 x i8] c"Exception thrown from file"
-@wfkkm_ = internal constant [9 x i8] c"---------"
-@vjrkx_None = internal constant [6 x i8] c"<None>"
+@vzsnf_ = internal constant [9 x i8] c"---------"
+@rdbmu_With_message = internal constant [12 x i8] c"With message"
+@vaxeo_At_line = internal constant [7 x i8] c"At line"
+@sxjeo_Exception_thrown_from_file = internal constant [26 x i8] c"Exception thrown from file"
+@xcjmt_ = internal constant [9 x i8] c"---------"
+@dqlxi_None = internal constant [6 x i8] c"<None>"
 @_parameterization_Ptri8 = linkonce_odr constant [1 x ptr] [ptr @i8_typ]
 @_parameterization_String = linkonce_odr constant [1 x ptr] [ptr @String]
-@wuaoh_Object = internal constant [6 x i8] c"Object"
+@tvdrc_Object = internal constant [6 x i8] c"Object"
 @Object_hashtbl = linkonce_odr constant [2 x ptr] [ptr @Object, ptr @any_typ]
 @Object_offset_tbl = linkonce_odr constant [2 x i32] [i32 7, i32 7]
 @Iterator_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr null, ptr @any_typ, ptr @Iterator]
@@ -215,89 +215,63 @@ source_filename = "llvm-link"
 @always_one = linkonce thread_local global i1 true
 @current_ptr = internal thread_local global ptr null
 
-define internal i64 @_size_Pair(ptr %0) {
+define { i64, i64 } @_size_Pair(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
   %2 = getelementptr ptr, ptr %0, i32 1
   %3 = load ptr, ptr %2, align 8
   %4 = load ptr, ptr %3, align 8
   %5 = getelementptr [7 x ptr], ptr %4, i32 0, i32 6
   %6 = load ptr, ptr %5, align 8
-  %7 = call i64 %6(ptr %3)
-  %8 = icmp eq i64 %7, 0
-  %9 = call i64 @llvm.ctlz.i64(i64 %7, i1 false)
-  %10 = sub i64 63, %9
-  %11 = shl i64 1, %10
-  %12 = icmp eq i64 %11, %7
-  %13 = shl i64 %11, 1
-  %14 = select i1 %12, i64 %11, i64 %13
-  %15 = select i1 %8, i64 1, i64 %14
-  %16 = icmp ugt i64 %15, 1
-  %17 = select i1 %16, i64 %15, i64 1
-  %18 = urem i64 0, %15
-  %19 = icmp eq i64 %18, 0
-  %20 = sub i64 %15, %18
-  %21 = select i1 %19, i64 0, i64 %20
-  %22 = add i64 %7, %21
-  %23 = getelementptr ptr, ptr %0, i32 2
-  %24 = load ptr, ptr %23, align 8
-  %25 = load ptr, ptr %24, align 8
-  %26 = getelementptr [7 x ptr], ptr %25, i32 0, i32 6
-  %27 = load ptr, ptr %26, align 8
-  %28 = call i64 %27(ptr %24)
-  %29 = icmp eq i64 %28, 0
-  %30 = call i64 @llvm.ctlz.i64(i64 %28, i1 false)
-  %31 = sub i64 63, %30
-  %32 = shl i64 1, %31
-  %33 = icmp eq i64 %32, %28
-  %34 = shl i64 %32, 1
-  %35 = select i1 %33, i64 %32, i64 %34
-  %36 = select i1 %29, i64 1, i64 %35
-  %37 = icmp ugt i64 %36, %17
-  %38 = select i1 %37, i64 %36, i64 %17
-  %39 = urem i64 %22, %36
-  %40 = icmp eq i64 %39, 0
-  %41 = sub i64 %36, %39
-  %42 = select i1 %40, i64 0, i64 %41
-  %43 = add i64 %28, %42
-  %44 = add i64 %22, %43
-  %45 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %46 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %47 = sub i64 63, %46
-  %48 = shl i64 1, %47
-  %49 = icmp eq i64 %48, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %50 = shl i64 %48, 1
-  %51 = select i1 %49, i64 %48, i64 %50
-  %52 = select i1 %45, i64 1, i64 %51
-  %53 = icmp ugt i64 %52, %38
-  %54 = select i1 %53, i64 %52, i64 %38
-  %55 = urem i64 %44, %52
-  %56 = icmp eq i64 %55, 0
-  %57 = sub i64 %52, %55
-  %58 = select i1 %56, i64 0, i64 %57
-  %59 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %58
-  %60 = add i64 %44, %59
-  %61 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %62 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %63 = sub i64 63, %62
-  %64 = shl i64 1, %63
-  %65 = icmp eq i64 %64, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %66 = shl i64 %64, 1
-  %67 = select i1 %65, i64 %64, i64 %66
-  %68 = select i1 %61, i64 1, i64 %67
-  %69 = icmp ugt i64 %68, %54
-  %70 = select i1 %69, i64 %68, i64 %54
-  %71 = urem i64 %60, %68
-  %72 = icmp eq i64 %71, 0
-  %73 = sub i64 %68, %71
-  %74 = select i1 %72, i64 0, i64 %73
-  %75 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %74
-  %76 = add i64 %60, %75
-  %77 = urem i64 %76, %70
-  %78 = icmp eq i64 %77, 0
-  %79 = sub i64 %70, %77
-  %80 = select i1 %78, i64 0, i64 %79
-  %81 = add i64 %76, %80
-  ret i64 %81
+  %7 = call { i64, i64 } %6(ptr %3)
+  %8 = extractvalue { i64, i64 } %7, 0
+  %9 = extractvalue { i64, i64 } %7, 1
+  %10 = icmp ugt i64 %9, 1
+  %11 = select i1 %10, i64 %9, i64 1
+  %12 = urem i64 0, %9
+  %13 = icmp eq i64 %12, 0
+  %14 = sub i64 %9, %12
+  %15 = select i1 %13, i64 0, i64 %14
+  %16 = add i64 %8, %15
+  %17 = getelementptr ptr, ptr %0, i32 2
+  %18 = load ptr, ptr %17, align 8
+  %19 = load ptr, ptr %18, align 8
+  %20 = getelementptr [7 x ptr], ptr %19, i32 0, i32 6
+  %21 = load ptr, ptr %20, align 8
+  %22 = call { i64, i64 } %21(ptr %18)
+  %23 = extractvalue { i64, i64 } %22, 0
+  %24 = extractvalue { i64, i64 } %22, 1
+  %25 = icmp ugt i64 %24, %11
+  %26 = select i1 %25, i64 %24, i64 %11
+  %27 = urem i64 %16, %24
+  %28 = icmp eq i64 %27, 0
+  %29 = sub i64 %24, %27
+  %30 = select i1 %28, i64 0, i64 %29
+  %31 = add i64 %23, %30
+  %32 = add i64 %16, %31
+  %33 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %26
+  %34 = select i1 %33, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %26
+  %35 = urem i64 %32, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %36 = icmp eq i64 %35, 0
+  %37 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %35
+  %38 = select i1 %36, i64 0, i64 %37
+  %39 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %38
+  %40 = add i64 %32, %39
+  %41 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %34
+  %42 = select i1 %41, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %34
+  %43 = urem i64 %40, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %44 = icmp eq i64 %43, 0
+  %45 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %43
+  %46 = select i1 %44, i64 0, i64 %45
+  %47 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %46
+  %48 = add i64 %40, %47
+  %49 = urem i64 %48, %42
+  %50 = icmp eq i64 %49, 0
+  %51 = sub i64 %42, %49
+  %52 = select i1 %50, i64 0, i64 %51
+  %53 = add i64 %48, %52
+  %54 = insertvalue { i64, i64 } undef, i64 %53, 0
+  %55 = insertvalue { i64, i64 } %54, i64 %42, 1
+  ret { i64, i64 } %55
 }
 
 define ptr @Pair_field_Pair_0(ptr %0) {
@@ -587,33 +561,19 @@ define { ptr, i160 } @Pair_second_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i
 ; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
 declare ptr @llvm.invariant.start.p0(i64 immarg, ptr nocapture) #0
 
-define linkonce_odr i64 @_size_any_typ(ptr %0) {
+define linkonce_odr { i64, i64 } @_size_any_typ(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %15
-  %17 = urem i64 %16, %11
-  %18 = icmp eq i64 %17, 0
-  %19 = sub i64 %11, %17
-  %20 = select i1 %18, i64 0, i64 %19
-  %21 = add i64 %16, %20
-  ret i64 %21
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = urem i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %3
+  %5 = icmp eq i64 %4, 0
+  %6 = sub i64 %3, %4
+  %7 = select i1 %5, i64 0, i64 %6
+  %8 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %7
+  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
+  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
+  ret { i64, i64 } %10
 }
-
-; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
-declare i64 @llvm.ctlz.i64(i64, i1 immarg) #1
 
 define { ptr, i160 } @Pair_getter_second(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
@@ -671,45 +631,26 @@ define void @Pair_setter_first(ptr %0, { ptr, i160 } %1) {
   ret void
 }
 
-define internal i64 @_size_FancyPair(ptr %0) {
+define { i64, i64 } @_size_FancyPair(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ double, double, double, double }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ double, double, double, double }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ double, double, double, double }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { double, double, double, double } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { double, double, double, double } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, double }, ptr null, i32 0, i32 1) to i64), %3
+  %5 = select i1 %4, i64 ptrtoint (ptr getelementptr ({ i8, double }, ptr null, i32 0, i32 1) to i64), i64 %3
+  %6 = urem i64 ptrtoint (ptr getelementptr ({ double, double, double, double }, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, double }, ptr null, i32 0, i32 1) to i64)
+  %7 = icmp eq i64 %6, 0
+  %8 = sub i64 ptrtoint (ptr getelementptr ({ i8, double }, ptr null, i32 0, i32 1) to i64), %6
+  %9 = select i1 %7, i64 0, i64 %8
+  %10 = add i64 ptrtoint (ptr getelementptr (double, ptr null, i32 1) to i64), %9
+  %11 = add i64 ptrtoint (ptr getelementptr ({ double, double, double, double }, ptr null, i32 1) to i64), %10
+  %12 = urem i64 %11, %5
   %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
+  %14 = sub i64 %5, %12
   %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ double, double, double, double }, ptr null, i32 1) to i64), %15
-  %17 = icmp eq i64 ptrtoint (ptr getelementptr (double, ptr null, i32 1) to i64), 0
-  %18 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (double, ptr null, i32 1) to i64), i1 false)
-  %19 = sub i64 63, %18
-  %20 = shl i64 1, %19
-  %21 = icmp eq i64 %20, ptrtoint (ptr getelementptr (double, ptr null, i32 1) to i64)
-  %22 = shl i64 %20, 1
-  %23 = select i1 %21, i64 %20, i64 %22
-  %24 = select i1 %17, i64 1, i64 %23
-  %25 = icmp ugt i64 %24, %11
-  %26 = select i1 %25, i64 %24, i64 %11
-  %27 = urem i64 %16, %24
-  %28 = icmp eq i64 %27, 0
-  %29 = sub i64 %24, %27
-  %30 = select i1 %28, i64 0, i64 %29
-  %31 = add i64 ptrtoint (ptr getelementptr (double, ptr null, i32 1) to i64), %30
-  %32 = add i64 %16, %31
-  %33 = urem i64 %32, %26
-  %34 = icmp eq i64 %33, 0
-  %35 = sub i64 %26, %33
-  %36 = select i1 %34, i64 0, i64 %35
-  %37 = add i64 %32, %36
-  ret i64 %37
+  %16 = add i64 %11, %15
+  %17 = insertvalue { i64, i64 } undef, i64 %16, 0
+  %18 = insertvalue { i64, i64 } %17, i64 %5, 1
+  ret { i64, i64 } %18
 }
 
 define ptr @FancyPair_field_FancyPair_0(ptr %0) {
@@ -937,54 +878,32 @@ define { ptr, i160 } @FancyPair_second_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   ret { ptr, i160 } %41
 }
 
-define linkonce_odr i64 @_size_f64_typ(ptr %0) {
+define linkonce_odr { i64, i64 } @_size_f64_typ(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr (double, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (double, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr (double, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr (double, ptr null, i32 1) to i64), %15
-  %17 = urem i64 %16, %11
-  %18 = icmp eq i64 %17, 0
-  %19 = sub i64 %11, %17
-  %20 = select i1 %18, i64 0, i64 %19
-  %21 = add i64 %16, %20
-  ret i64 %21
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, double }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, double }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = urem i64 ptrtoint (ptr getelementptr (double, ptr null, i32 1) to i64), %3
+  %5 = icmp eq i64 %4, 0
+  %6 = sub i64 %3, %4
+  %7 = select i1 %5, i64 0, i64 %6
+  %8 = add i64 ptrtoint (ptr getelementptr (double, ptr null, i32 1) to i64), %7
+  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
+  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
+  ret { i64, i64 } %10
 }
 
-define linkonce_odr i64 @_size_tuple_typ(ptr %0) {
+define linkonce_odr { i64, i64 } @_size_tuple_typ(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({}, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({}, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({}, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({}, ptr null, i32 1) to i64), %15
-  %17 = urem i64 %16, %11
-  %18 = icmp eq i64 %17, 0
-  %19 = sub i64 %11, %17
-  %20 = select i1 %18, i64 0, i64 %19
-  %21 = add i64 %16, %20
-  ret i64 %21
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, {} }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, {} }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = urem i64 ptrtoint (ptr getelementptr ({}, ptr null, i32 1) to i64), %3
+  %5 = icmp eq i64 %4, 0
+  %6 = sub i64 %3, %4
+  %7 = select i1 %5, i64 0, i64 %6
+  %8 = add i64 ptrtoint (ptr getelementptr ({}, ptr null, i32 1) to i64), %7
+  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
+  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
+  ret { i64, i64 } %10
 }
 
 define { ptr, i160 } @FancyPair_getter_second(ptr %0) {
@@ -1089,132 +1008,75 @@ define void @FancyPair_setter_first(ptr %0, { ptr, i160 } %1) {
   ret void
 }
 
-define internal i64 @_size_Container(ptr %0) {
+define { i64, i64 } @_size_Container(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  ret i64 0
+  ret { i64, i64 } { i64 0, i64 1 }
 }
 
-define internal i64 @_size_Iterator2(ptr %0) {
+define { i64, i64 } @_size_Iterator2(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %15
-  %17 = urem i64 %16, %11
-  %18 = icmp eq i64 %17, 0
-  %19 = sub i64 %11, %17
-  %20 = select i1 %18, i64 0, i64 %19
-  %21 = add i64 %16, %20
-  ret i64 %21
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %3
+  %5 = icmp eq i64 %4, 0
+  %6 = sub i64 %3, %4
+  %7 = select i1 %5, i64 0, i64 %6
+  %8 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %7
+  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
+  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
+  ret { i64, i64 } %10
 }
 
-define internal i64 @_size_Iterable2(ptr %0) {
+define { i64, i64 } @_size_Iterable2(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %15
-  %17 = urem i64 %16, %11
-  %18 = icmp eq i64 %17, 0
-  %19 = sub i64 %11, %17
-  %20 = select i1 %18, i64 0, i64 %19
-  %21 = add i64 %16, %20
-  ret i64 %21
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %3
+  %5 = icmp eq i64 %4, 0
+  %6 = sub i64 %3, %4
+  %7 = select i1 %5, i64 0, i64 %6
+  %8 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %7
+  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
+  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
+  ret { i64, i64 } %10
 }
 
-define internal i64 @_size_Array(ptr %0) {
+define { i64, i64 } @_size_Array(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), %15
-  %17 = icmp eq i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), 0
-  %18 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), i1 false)
-  %19 = sub i64 63, %18
-  %20 = shl i64 1, %19
-  %21 = icmp eq i64 %20, ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64)
-  %22 = shl i64 %20, 1
-  %23 = select i1 %21, i64 %20, i64 %22
-  %24 = select i1 %17, i64 1, i64 %23
-  %25 = icmp ugt i64 %24, %11
-  %26 = select i1 %25, i64 %24, i64 %11
-  %27 = urem i64 %16, %24
-  %28 = icmp eq i64 %27, 0
-  %29 = sub i64 %24, %27
-  %30 = select i1 %28, i64 0, i64 %29
-  %31 = add i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %30
-  %32 = add i64 %16, %31
-  %33 = icmp eq i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), 0
-  %34 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), i1 false)
-  %35 = sub i64 63, %34
-  %36 = shl i64 1, %35
-  %37 = icmp eq i64 %36, ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64)
-  %38 = shl i64 %36, 1
-  %39 = select i1 %37, i64 %36, i64 %38
-  %40 = select i1 %33, i64 1, i64 %39
-  %41 = icmp ugt i64 %40, %26
-  %42 = select i1 %41, i64 %40, i64 %26
-  %43 = urem i64 %32, %40
-  %44 = icmp eq i64 %43, 0
-  %45 = sub i64 %40, %43
-  %46 = select i1 %44, i64 0, i64 %45
-  %47 = add i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %46
-  %48 = add i64 %32, %47
-  %49 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %50 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %51 = sub i64 63, %50
-  %52 = shl i64 1, %51
-  %53 = icmp eq i64 %52, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %54 = shl i64 %52, 1
-  %55 = select i1 %53, i64 %52, i64 %54
-  %56 = select i1 %49, i64 1, i64 %55
-  %57 = icmp ugt i64 %56, %42
-  %58 = select i1 %57, i64 %56, i64 %42
-  %59 = urem i64 %48, %56
-  %60 = icmp eq i64 %59, 0
-  %61 = sub i64 %56, %59
-  %62 = select i1 %60, i64 0, i64 %61
-  %63 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %62
-  %64 = add i64 %48, %63
-  %65 = urem i64 %64, %58
-  %66 = icmp eq i64 %65, 0
-  %67 = sub i64 %58, %65
-  %68 = select i1 %66, i64 0, i64 %67
-  %69 = add i64 %64, %68
-  ret i64 %69
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), %3
+  %5 = select i1 %4, i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), i64 %3
+  %6 = urem i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64)
+  %7 = icmp eq i64 %6, 0
+  %8 = sub i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), %6
+  %9 = select i1 %7, i64 0, i64 %8
+  %10 = add i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %9
+  %11 = add i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), %10
+  %12 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), %5
+  %13 = select i1 %12, i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), i64 %5
+  %14 = urem i64 %11, ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64)
+  %15 = icmp eq i64 %14, 0
+  %16 = sub i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), %14
+  %17 = select i1 %15, i64 0, i64 %16
+  %18 = add i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %17
+  %19 = add i64 %11, %18
+  %20 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %13
+  %21 = select i1 %20, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %13
+  %22 = urem i64 %19, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %23 = icmp eq i64 %22, 0
+  %24 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %22
+  %25 = select i1 %23, i64 0, i64 %24
+  %26 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %25
+  %27 = add i64 %19, %26
+  %28 = urem i64 %27, %21
+  %29 = icmp eq i64 %28, 0
+  %30 = sub i64 %21, %28
+  %31 = select i1 %29, i64 0, i64 %30
+  %32 = add i64 %27, %31
+  %33 = insertvalue { i64, i64 } undef, i64 %32, 0
+  %34 = insertvalue { i64, i64 } %33, i64 %21, 1
+  ret { i64, i64 } %34
 }
 
 define ptr @Array_field_Array_0(ptr %0) {
@@ -3161,7 +3023,7 @@ define void @Array_throw_oob_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr,
   store ptr %60, ptr %59, align 8
   %61 = call ptr @llvm.invariant.start.p0(i64 16, ptr %57)
   %62 = load ptr, ptr %57, align 8
-  %63 = load <12 x i8>, ptr @lnaid_genericmini, align 16
+  %63 = load <12 x i8>, ptr @zcgxc_genericmini, align 16
   store <12 x i8> %63, ptr %62, align 16
   %64 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %65 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -5873,93 +5735,50 @@ define { ptr, ptr, ptr, i32 } @Iterable2_product_otherIterable2U({ ptr, ptr, ptr
   ret { ptr, ptr, ptr, i32 } %179
 }
 
-define internal i64 @_size_ProductIterable2(ptr %0) {
+define { i64, i64 } @_size_ProductIterable2(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %15
-  %17 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %18 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %19 = sub i64 63, %18
-  %20 = shl i64 1, %19
-  %21 = icmp eq i64 %20, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %22 = shl i64 %20, 1
-  %23 = select i1 %21, i64 %20, i64 %22
-  %24 = select i1 %17, i64 1, i64 %23
-  %25 = icmp ugt i64 %24, %11
-  %26 = select i1 %25, i64 %24, i64 %11
-  %27 = urem i64 %16, %24
-  %28 = icmp eq i64 %27, 0
-  %29 = sub i64 %24, %27
-  %30 = select i1 %28, i64 0, i64 %29
-  %31 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %30
-  %32 = add i64 %16, %31
-  %33 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %34 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %35 = sub i64 63, %34
-  %36 = shl i64 1, %35
-  %37 = icmp eq i64 %36, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %38 = shl i64 %36, 1
-  %39 = select i1 %37, i64 %36, i64 %38
-  %40 = select i1 %33, i64 1, i64 %39
-  %41 = icmp ugt i64 %40, %26
-  %42 = select i1 %41, i64 %40, i64 %26
-  %43 = urem i64 %32, %40
-  %44 = icmp eq i64 %43, 0
-  %45 = sub i64 %40, %43
-  %46 = select i1 %44, i64 0, i64 %45
-  %47 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %46
-  %48 = add i64 %32, %47
-  %49 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %50 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %51 = sub i64 63, %50
-  %52 = shl i64 1, %51
-  %53 = icmp eq i64 %52, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %54 = shl i64 %52, 1
-  %55 = select i1 %53, i64 %52, i64 %54
-  %56 = select i1 %49, i64 1, i64 %55
-  %57 = icmp ugt i64 %56, %42
-  %58 = select i1 %57, i64 %56, i64 %42
-  %59 = urem i64 %48, %56
-  %60 = icmp eq i64 %59, 0
-  %61 = sub i64 %56, %59
-  %62 = select i1 %60, i64 0, i64 %61
-  %63 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %62
-  %64 = add i64 %48, %63
-  %65 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %66 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %67 = sub i64 63, %66
-  %68 = shl i64 1, %67
-  %69 = icmp eq i64 %68, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %70 = shl i64 %68, 1
-  %71 = select i1 %69, i64 %68, i64 %70
-  %72 = select i1 %65, i64 1, i64 %71
-  %73 = icmp ugt i64 %72, %58
-  %74 = select i1 %73, i64 %72, i64 %58
-  %75 = urem i64 %64, %72
-  %76 = icmp eq i64 %75, 0
-  %77 = sub i64 %72, %75
-  %78 = select i1 %76, i64 0, i64 %77
-  %79 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %78
-  %80 = add i64 %64, %79
-  %81 = urem i64 %80, %74
-  %82 = icmp eq i64 %81, 0
-  %83 = sub i64 %74, %81
-  %84 = select i1 %82, i64 0, i64 %83
-  %85 = add i64 %80, %84
-  ret i64 %85
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %3
+  %5 = select i1 %4, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 %3
+  %6 = urem i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64)
+  %7 = icmp eq i64 %6, 0
+  %8 = sub i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %6
+  %9 = select i1 %7, i64 0, i64 %8
+  %10 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %9
+  %11 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %10
+  %12 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %5
+  %13 = select i1 %12, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %5
+  %14 = urem i64 %11, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %15 = icmp eq i64 %14, 0
+  %16 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %14
+  %17 = select i1 %15, i64 0, i64 %16
+  %18 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %17
+  %19 = add i64 %11, %18
+  %20 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %13
+  %21 = select i1 %20, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %13
+  %22 = urem i64 %19, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %23 = icmp eq i64 %22, 0
+  %24 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %22
+  %25 = select i1 %23, i64 0, i64 %24
+  %26 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %25
+  %27 = add i64 %19, %26
+  %28 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %21
+  %29 = select i1 %28, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %21
+  %30 = urem i64 %27, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %31 = icmp eq i64 %30, 0
+  %32 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %30
+  %33 = select i1 %31, i64 0, i64 %32
+  %34 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %33
+  %35 = add i64 %27, %34
+  %36 = urem i64 %35, %29
+  %37 = icmp eq i64 %36, 0
+  %38 = sub i64 %29, %36
+  %39 = select i1 %37, i64 0, i64 %38
+  %40 = add i64 %35, %39
+  %41 = insertvalue { i64, i64 } undef, i64 %40, 0
+  %42 = insertvalue { i64, i64 } %41, i64 %29, 1
+  ret { i64, i64 } %42
 }
 
 define ptr @ProductIterable2_field_ProductIterable2_0(ptr %0) {
@@ -6801,125 +6620,66 @@ define { ptr, ptr, ptr, i32 } @ProductIterable2_iterator_({ ptr, ptr, ptr, i32 }
   ret { ptr, ptr, ptr, i32 } %343
 }
 
-define internal i64 @_size_ProductIterator2(ptr %0) {
+define { i64, i64 } @_size_ProductIterator2(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %15
-  %17 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %18 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %19 = sub i64 63, %18
-  %20 = shl i64 1, %19
-  %21 = icmp eq i64 %20, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %22 = shl i64 %20, 1
-  %23 = select i1 %21, i64 %20, i64 %22
-  %24 = select i1 %17, i64 1, i64 %23
-  %25 = icmp ugt i64 %24, %11
-  %26 = select i1 %25, i64 %24, i64 %11
-  %27 = urem i64 %16, %24
-  %28 = icmp eq i64 %27, 0
-  %29 = sub i64 %24, %27
-  %30 = select i1 %28, i64 0, i64 %29
-  %31 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %30
-  %32 = add i64 %16, %31
-  %33 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %34 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %35 = sub i64 63, %34
-  %36 = shl i64 1, %35
-  %37 = icmp eq i64 %36, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %38 = shl i64 %36, 1
-  %39 = select i1 %37, i64 %36, i64 %38
-  %40 = select i1 %33, i64 1, i64 %39
-  %41 = icmp ugt i64 %40, %26
-  %42 = select i1 %41, i64 %40, i64 %26
-  %43 = urem i64 %32, %40
-  %44 = icmp eq i64 %43, 0
-  %45 = sub i64 %40, %43
-  %46 = select i1 %44, i64 0, i64 %45
-  %47 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %46
-  %48 = add i64 %32, %47
-  %49 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, i160 }, ptr null, i32 1) to i64), 0
-  %50 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, i160 }, ptr null, i32 1) to i64), i1 false)
-  %51 = sub i64 63, %50
-  %52 = shl i64 1, %51
-  %53 = icmp eq i64 %52, ptrtoint (ptr getelementptr ({ ptr, i160 }, ptr null, i32 1) to i64)
-  %54 = shl i64 %52, 1
-  %55 = select i1 %53, i64 %52, i64 %54
-  %56 = select i1 %49, i64 1, i64 %55
-  %57 = icmp ugt i64 %56, %42
-  %58 = select i1 %57, i64 %56, i64 %42
-  %59 = urem i64 %48, %56
-  %60 = icmp eq i64 %59, 0
-  %61 = sub i64 %56, %59
-  %62 = select i1 %60, i64 0, i64 %61
-  %63 = add i64 ptrtoint (ptr getelementptr ({ ptr, i160 }, ptr null, i32 1) to i64), %62
-  %64 = add i64 %48, %63
-  %65 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %66 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %67 = sub i64 63, %66
-  %68 = shl i64 1, %67
-  %69 = icmp eq i64 %68, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %70 = shl i64 %68, 1
-  %71 = select i1 %69, i64 %68, i64 %70
-  %72 = select i1 %65, i64 1, i64 %71
-  %73 = icmp ugt i64 %72, %58
-  %74 = select i1 %73, i64 %72, i64 %58
-  %75 = urem i64 %64, %72
-  %76 = icmp eq i64 %75, 0
-  %77 = sub i64 %72, %75
-  %78 = select i1 %76, i64 0, i64 %77
-  %79 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %78
-  %80 = add i64 %64, %79
-  %81 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %82 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %83 = sub i64 63, %82
-  %84 = shl i64 1, %83
-  %85 = icmp eq i64 %84, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %86 = shl i64 %84, 1
-  %87 = select i1 %85, i64 %84, i64 %86
-  %88 = select i1 %81, i64 1, i64 %87
-  %89 = icmp ugt i64 %88, %74
-  %90 = select i1 %89, i64 %88, i64 %74
-  %91 = urem i64 %80, %88
-  %92 = icmp eq i64 %91, 0
-  %93 = sub i64 %88, %91
-  %94 = select i1 %92, i64 0, i64 %93
-  %95 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %94
-  %96 = add i64 %80, %95
-  %97 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %98 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %99 = sub i64 63, %98
-  %100 = shl i64 1, %99
-  %101 = icmp eq i64 %100, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %102 = shl i64 %100, 1
-  %103 = select i1 %101, i64 %100, i64 %102
-  %104 = select i1 %97, i64 1, i64 %103
-  %105 = icmp ugt i64 %104, %90
-  %106 = select i1 %105, i64 %104, i64 %90
-  %107 = urem i64 %96, %104
-  %108 = icmp eq i64 %107, 0
-  %109 = sub i64 %104, %107
-  %110 = select i1 %108, i64 0, i64 %109
-  %111 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %110
-  %112 = add i64 %96, %111
-  %113 = urem i64 %112, %106
-  %114 = icmp eq i64 %113, 0
-  %115 = sub i64 %106, %113
-  %116 = select i1 %114, i64 0, i64 %115
-  %117 = add i64 %112, %116
-  ret i64 %117
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %3
+  %5 = select i1 %4, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 %3
+  %6 = urem i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64)
+  %7 = icmp eq i64 %6, 0
+  %8 = sub i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %6
+  %9 = select i1 %7, i64 0, i64 %8
+  %10 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %9
+  %11 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %10
+  %12 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %5
+  %13 = select i1 %12, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 %5
+  %14 = urem i64 %11, ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64)
+  %15 = icmp eq i64 %14, 0
+  %16 = sub i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %14
+  %17 = select i1 %15, i64 0, i64 %16
+  %18 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %17
+  %19 = add i64 %11, %18
+  %20 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, i160 } }, ptr null, i32 0, i32 1) to i64), %13
+  %21 = select i1 %20, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, i160 } }, ptr null, i32 0, i32 1) to i64), i64 %13
+  %22 = urem i64 %19, ptrtoint (ptr getelementptr ({ i8, { ptr, i160 } }, ptr null, i32 0, i32 1) to i64)
+  %23 = icmp eq i64 %22, 0
+  %24 = sub i64 ptrtoint (ptr getelementptr ({ i8, { ptr, i160 } }, ptr null, i32 0, i32 1) to i64), %22
+  %25 = select i1 %23, i64 0, i64 %24
+  %26 = add i64 ptrtoint (ptr getelementptr ({ ptr, i160 }, ptr null, i32 1) to i64), %25
+  %27 = add i64 %19, %26
+  %28 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %21
+  %29 = select i1 %28, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %21
+  %30 = urem i64 %27, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %31 = icmp eq i64 %30, 0
+  %32 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %30
+  %33 = select i1 %31, i64 0, i64 %32
+  %34 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %33
+  %35 = add i64 %27, %34
+  %36 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %29
+  %37 = select i1 %36, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %29
+  %38 = urem i64 %35, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %39 = icmp eq i64 %38, 0
+  %40 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %38
+  %41 = select i1 %39, i64 0, i64 %40
+  %42 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %41
+  %43 = add i64 %35, %42
+  %44 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %37
+  %45 = select i1 %44, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %37
+  %46 = urem i64 %43, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %47 = icmp eq i64 %46, 0
+  %48 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %46
+  %49 = select i1 %47, i64 0, i64 %48
+  %50 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %49
+  %51 = add i64 %43, %50
+  %52 = urem i64 %51, %45
+  %53 = icmp eq i64 %52, 0
+  %54 = sub i64 %45, %52
+  %55 = select i1 %53, i64 0, i64 %54
+  %56 = add i64 %51, %55
+  %57 = insertvalue { i64, i64 } undef, i64 %56, 0
+  %58 = insertvalue { i64, i64 } %57, i64 %45, 1
+  ret { i64, i64 } %58
 }
 
 define ptr @ProductIterator2_field_ProductIterator2_0(ptr %0) {
@@ -7941,29 +7701,18 @@ define { ptr, i160 } @ProductIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, p
   ret { ptr, i160 } %.reload32
 }
 
-define linkonce_odr i64 @_size_nil_typ(ptr %0) {
+define linkonce_odr { i64, i64 } @_size_nil_typ(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ([0 x i8], ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ([0 x i8], ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ([0 x i8], ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ([0 x i8], ptr null, i32 1) to i64), %15
-  %17 = urem i64 %16, %11
-  %18 = icmp eq i64 %17, 0
-  %19 = sub i64 %11, %17
-  %20 = select i1 %18, i64 0, i64 %19
-  %21 = add i64 %16, %20
-  ret i64 %21
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, [0 x i8] }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, [0 x i8] }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = urem i64 ptrtoint (ptr getelementptr ([0 x i8], ptr null, i32 1) to i64), %3
+  %5 = icmp eq i64 %4, 0
+  %6 = sub i64 %3, %4
+  %7 = select i1 %5, i64 0, i64 %6
+  %8 = add i64 ptrtoint (ptr getelementptr ([0 x i8], ptr null, i32 1) to i64), %7
+  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
+  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
+  ret { i64, i64 } %10
 }
 
 define { ptr, i160 } @ProductIterator2_getter_current_first(ptr %0) {
@@ -8123,29 +7872,18 @@ define void @ProductIterator2_setter_first_iterator(ptr %0, { ptr, ptr, ptr, i32
   ret void
 }
 
-define linkonce_odr i64 @_size_function_typ(ptr %0) {
+define linkonce_odr { i64, i64 } @_size_function_typ(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), %15
-  %17 = urem i64 %16, %11
-  %18 = icmp eq i64 %17, 0
-  %19 = sub i64 %11, %17
-  %20 = select i1 %18, i64 0, i64 %19
-  %21 = add i64 %16, %20
-  ret i64 %21
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = urem i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), %3
+  %5 = icmp eq i64 %4, 0
+  %6 = sub i64 %3, %4
+  %7 = select i1 %5, i64 0, i64 %6
+  %8 = add i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), %7
+  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
+  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
+  ret { i64, i64 } %10
 }
 
 define { ptr, ptr, ptr, i32 } @ProductIterable2_getter_second(ptr %0) {
@@ -8234,93 +7972,50 @@ define void @ProductIterable2_setter_first(ptr %0, { ptr, ptr, ptr, i32 } %1) {
   ret void
 }
 
-define internal i64 @_size_ZipIterable2(ptr %0) {
+define { i64, i64 } @_size_ZipIterable2(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %15
-  %17 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %18 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %19 = sub i64 63, %18
-  %20 = shl i64 1, %19
-  %21 = icmp eq i64 %20, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %22 = shl i64 %20, 1
-  %23 = select i1 %21, i64 %20, i64 %22
-  %24 = select i1 %17, i64 1, i64 %23
-  %25 = icmp ugt i64 %24, %11
-  %26 = select i1 %25, i64 %24, i64 %11
-  %27 = urem i64 %16, %24
-  %28 = icmp eq i64 %27, 0
-  %29 = sub i64 %24, %27
-  %30 = select i1 %28, i64 0, i64 %29
-  %31 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %30
-  %32 = add i64 %16, %31
-  %33 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %34 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %35 = sub i64 63, %34
-  %36 = shl i64 1, %35
-  %37 = icmp eq i64 %36, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %38 = shl i64 %36, 1
-  %39 = select i1 %37, i64 %36, i64 %38
-  %40 = select i1 %33, i64 1, i64 %39
-  %41 = icmp ugt i64 %40, %26
-  %42 = select i1 %41, i64 %40, i64 %26
-  %43 = urem i64 %32, %40
-  %44 = icmp eq i64 %43, 0
-  %45 = sub i64 %40, %43
-  %46 = select i1 %44, i64 0, i64 %45
-  %47 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %46
-  %48 = add i64 %32, %47
-  %49 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %50 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %51 = sub i64 63, %50
-  %52 = shl i64 1, %51
-  %53 = icmp eq i64 %52, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %54 = shl i64 %52, 1
-  %55 = select i1 %53, i64 %52, i64 %54
-  %56 = select i1 %49, i64 1, i64 %55
-  %57 = icmp ugt i64 %56, %42
-  %58 = select i1 %57, i64 %56, i64 %42
-  %59 = urem i64 %48, %56
-  %60 = icmp eq i64 %59, 0
-  %61 = sub i64 %56, %59
-  %62 = select i1 %60, i64 0, i64 %61
-  %63 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %62
-  %64 = add i64 %48, %63
-  %65 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %66 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %67 = sub i64 63, %66
-  %68 = shl i64 1, %67
-  %69 = icmp eq i64 %68, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %70 = shl i64 %68, 1
-  %71 = select i1 %69, i64 %68, i64 %70
-  %72 = select i1 %65, i64 1, i64 %71
-  %73 = icmp ugt i64 %72, %58
-  %74 = select i1 %73, i64 %72, i64 %58
-  %75 = urem i64 %64, %72
-  %76 = icmp eq i64 %75, 0
-  %77 = sub i64 %72, %75
-  %78 = select i1 %76, i64 0, i64 %77
-  %79 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %78
-  %80 = add i64 %64, %79
-  %81 = urem i64 %80, %74
-  %82 = icmp eq i64 %81, 0
-  %83 = sub i64 %74, %81
-  %84 = select i1 %82, i64 0, i64 %83
-  %85 = add i64 %80, %84
-  ret i64 %85
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %3
+  %5 = select i1 %4, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 %3
+  %6 = urem i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64)
+  %7 = icmp eq i64 %6, 0
+  %8 = sub i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %6
+  %9 = select i1 %7, i64 0, i64 %8
+  %10 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %9
+  %11 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %10
+  %12 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %5
+  %13 = select i1 %12, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %5
+  %14 = urem i64 %11, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %15 = icmp eq i64 %14, 0
+  %16 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %14
+  %17 = select i1 %15, i64 0, i64 %16
+  %18 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %17
+  %19 = add i64 %11, %18
+  %20 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %13
+  %21 = select i1 %20, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %13
+  %22 = urem i64 %19, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %23 = icmp eq i64 %22, 0
+  %24 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %22
+  %25 = select i1 %23, i64 0, i64 %24
+  %26 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %25
+  %27 = add i64 %19, %26
+  %28 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %21
+  %29 = select i1 %28, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %21
+  %30 = urem i64 %27, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %31 = icmp eq i64 %30, 0
+  %32 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %30
+  %33 = select i1 %31, i64 0, i64 %32
+  %34 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %33
+  %35 = add i64 %27, %34
+  %36 = urem i64 %35, %29
+  %37 = icmp eq i64 %36, 0
+  %38 = sub i64 %29, %36
+  %39 = select i1 %37, i64 0, i64 %38
+  %40 = add i64 %35, %39
+  %41 = insertvalue { i64, i64 } undef, i64 %40, 0
+  %42 = insertvalue { i64, i64 } %41, i64 %29, 1
+  ret { i64, i64 } %42
 }
 
 define ptr @ZipIterable2_field_ZipIterable2_0(ptr %0) {
@@ -9286,93 +8981,50 @@ define { ptr, ptr, ptr, i32 } @ZipIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   ret { ptr, ptr, ptr, i32 } %455
 }
 
-define internal i64 @_size_ZipIterator2(ptr %0) {
+define { i64, i64 } @_size_ZipIterator2(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %15
-  %17 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %18 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %19 = sub i64 63, %18
-  %20 = shl i64 1, %19
-  %21 = icmp eq i64 %20, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %22 = shl i64 %20, 1
-  %23 = select i1 %21, i64 %20, i64 %22
-  %24 = select i1 %17, i64 1, i64 %23
-  %25 = icmp ugt i64 %24, %11
-  %26 = select i1 %25, i64 %24, i64 %11
-  %27 = urem i64 %16, %24
-  %28 = icmp eq i64 %27, 0
-  %29 = sub i64 %24, %27
-  %30 = select i1 %28, i64 0, i64 %29
-  %31 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %30
-  %32 = add i64 %16, %31
-  %33 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %34 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %35 = sub i64 63, %34
-  %36 = shl i64 1, %35
-  %37 = icmp eq i64 %36, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %38 = shl i64 %36, 1
-  %39 = select i1 %37, i64 %36, i64 %38
-  %40 = select i1 %33, i64 1, i64 %39
-  %41 = icmp ugt i64 %40, %26
-  %42 = select i1 %41, i64 %40, i64 %26
-  %43 = urem i64 %32, %40
-  %44 = icmp eq i64 %43, 0
-  %45 = sub i64 %40, %43
-  %46 = select i1 %44, i64 0, i64 %45
-  %47 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %46
-  %48 = add i64 %32, %47
-  %49 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %50 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %51 = sub i64 63, %50
-  %52 = shl i64 1, %51
-  %53 = icmp eq i64 %52, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %54 = shl i64 %52, 1
-  %55 = select i1 %53, i64 %52, i64 %54
-  %56 = select i1 %49, i64 1, i64 %55
-  %57 = icmp ugt i64 %56, %42
-  %58 = select i1 %57, i64 %56, i64 %42
-  %59 = urem i64 %48, %56
-  %60 = icmp eq i64 %59, 0
-  %61 = sub i64 %56, %59
-  %62 = select i1 %60, i64 0, i64 %61
-  %63 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %62
-  %64 = add i64 %48, %63
-  %65 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %66 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %67 = sub i64 63, %66
-  %68 = shl i64 1, %67
-  %69 = icmp eq i64 %68, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %70 = shl i64 %68, 1
-  %71 = select i1 %69, i64 %68, i64 %70
-  %72 = select i1 %65, i64 1, i64 %71
-  %73 = icmp ugt i64 %72, %58
-  %74 = select i1 %73, i64 %72, i64 %58
-  %75 = urem i64 %64, %72
-  %76 = icmp eq i64 %75, 0
-  %77 = sub i64 %72, %75
-  %78 = select i1 %76, i64 0, i64 %77
-  %79 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %78
-  %80 = add i64 %64, %79
-  %81 = urem i64 %80, %74
-  %82 = icmp eq i64 %81, 0
-  %83 = sub i64 %74, %81
-  %84 = select i1 %82, i64 0, i64 %83
-  %85 = add i64 %80, %84
-  ret i64 %85
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %3
+  %5 = select i1 %4, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 %3
+  %6 = urem i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64)
+  %7 = icmp eq i64 %6, 0
+  %8 = sub i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %6
+  %9 = select i1 %7, i64 0, i64 %8
+  %10 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %9
+  %11 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %10
+  %12 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %5
+  %13 = select i1 %12, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %5
+  %14 = urem i64 %11, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %15 = icmp eq i64 %14, 0
+  %16 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %14
+  %17 = select i1 %15, i64 0, i64 %16
+  %18 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %17
+  %19 = add i64 %11, %18
+  %20 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %13
+  %21 = select i1 %20, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %13
+  %22 = urem i64 %19, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %23 = icmp eq i64 %22, 0
+  %24 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %22
+  %25 = select i1 %23, i64 0, i64 %24
+  %26 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %25
+  %27 = add i64 %19, %26
+  %28 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %21
+  %29 = select i1 %28, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %21
+  %30 = urem i64 %27, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %31 = icmp eq i64 %30, 0
+  %32 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %30
+  %33 = select i1 %31, i64 0, i64 %32
+  %34 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %33
+  %35 = add i64 %27, %34
+  %36 = urem i64 %35, %29
+  %37 = icmp eq i64 %36, 0
+  %38 = sub i64 %29, %36
+  %39 = select i1 %37, i64 0, i64 %38
+  %40 = add i64 %35, %39
+  %41 = insertvalue { i64, i64 } undef, i64 %40, 0
+  %42 = insertvalue { i64, i64 } %41, i64 %29, 1
+  ret { i64, i64 } %42
 }
 
 define ptr @ZipIterator2_field_ZipIterator2_0(ptr %0) {
@@ -10169,61 +9821,34 @@ define void @ZipIterable2_setter_first(ptr %0, { ptr, ptr, ptr, i32 } %1) {
   ret void
 }
 
-define internal i64 @_size_InterleaveIterable2(ptr %0) {
+define { i64, i64 } @_size_InterleaveIterable2(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %15
-  %17 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %18 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %19 = sub i64 63, %18
-  %20 = shl i64 1, %19
-  %21 = icmp eq i64 %20, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %22 = shl i64 %20, 1
-  %23 = select i1 %21, i64 %20, i64 %22
-  %24 = select i1 %17, i64 1, i64 %23
-  %25 = icmp ugt i64 %24, %11
-  %26 = select i1 %25, i64 %24, i64 %11
-  %27 = urem i64 %16, %24
-  %28 = icmp eq i64 %27, 0
-  %29 = sub i64 %24, %27
-  %30 = select i1 %28, i64 0, i64 %29
-  %31 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %30
-  %32 = add i64 %16, %31
-  %33 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %34 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %35 = sub i64 63, %34
-  %36 = shl i64 1, %35
-  %37 = icmp eq i64 %36, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %38 = shl i64 %36, 1
-  %39 = select i1 %37, i64 %36, i64 %38
-  %40 = select i1 %33, i64 1, i64 %39
-  %41 = icmp ugt i64 %40, %26
-  %42 = select i1 %41, i64 %40, i64 %26
-  %43 = urem i64 %32, %40
-  %44 = icmp eq i64 %43, 0
-  %45 = sub i64 %40, %43
-  %46 = select i1 %44, i64 0, i64 %45
-  %47 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %46
-  %48 = add i64 %32, %47
-  %49 = urem i64 %48, %42
-  %50 = icmp eq i64 %49, 0
-  %51 = sub i64 %42, %49
-  %52 = select i1 %50, i64 0, i64 %51
-  %53 = add i64 %48, %52
-  ret i64 %53
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %3
+  %5 = select i1 %4, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 %3
+  %6 = urem i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64)
+  %7 = icmp eq i64 %6, 0
+  %8 = sub i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %6
+  %9 = select i1 %7, i64 0, i64 %8
+  %10 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %9
+  %11 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %10
+  %12 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %5
+  %13 = select i1 %12, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %5
+  %14 = urem i64 %11, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %15 = icmp eq i64 %14, 0
+  %16 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %14
+  %17 = select i1 %15, i64 0, i64 %16
+  %18 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %17
+  %19 = add i64 %11, %18
+  %20 = urem i64 %19, %13
+  %21 = icmp eq i64 %20, 0
+  %22 = sub i64 %13, %20
+  %23 = select i1 %21, i64 0, i64 %22
+  %24 = add i64 %19, %23
+  %25 = insertvalue { i64, i64 } undef, i64 %24, 0
+  %26 = insertvalue { i64, i64 } %25, i64 %13, 1
+  ret { i64, i64 } %26
 }
 
 define ptr @InterleaveIterable2_field_InterleaveIterable2_0(ptr %0) {
@@ -11104,77 +10729,42 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable2_iterator_({ ptr, ptr, ptr, i3
   ret { ptr, ptr, ptr, i32 } %389
 }
 
-define internal i64 @_size_InterleaveIterator2(ptr %0) {
+define { i64, i64 } @_size_InterleaveIterator2(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %15
-  %17 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %18 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %19 = sub i64 63, %18
-  %20 = shl i64 1, %19
-  %21 = icmp eq i64 %20, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %22 = shl i64 %20, 1
-  %23 = select i1 %21, i64 %20, i64 %22
-  %24 = select i1 %17, i64 1, i64 %23
-  %25 = icmp ugt i64 %24, %11
-  %26 = select i1 %25, i64 %24, i64 %11
-  %27 = urem i64 %16, %24
-  %28 = icmp eq i64 %27, 0
-  %29 = sub i64 %24, %27
-  %30 = select i1 %28, i64 0, i64 %29
-  %31 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %30
-  %32 = add i64 %16, %31
-  %33 = icmp eq i64 ptrtoint (ptr getelementptr (i1, ptr null, i32 1) to i64), 0
-  %34 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (i1, ptr null, i32 1) to i64), i1 false)
-  %35 = sub i64 63, %34
-  %36 = shl i64 1, %35
-  %37 = icmp eq i64 %36, ptrtoint (ptr getelementptr (i1, ptr null, i32 1) to i64)
-  %38 = shl i64 %36, 1
-  %39 = select i1 %37, i64 %36, i64 %38
-  %40 = select i1 %33, i64 1, i64 %39
-  %41 = icmp ugt i64 %40, %26
-  %42 = select i1 %41, i64 %40, i64 %26
-  %43 = urem i64 %32, %40
-  %44 = icmp eq i64 %43, 0
-  %45 = sub i64 %40, %43
-  %46 = select i1 %44, i64 0, i64 %45
-  %47 = add i64 ptrtoint (ptr getelementptr (i1, ptr null, i32 1) to i64), %46
-  %48 = add i64 %32, %47
-  %49 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %50 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %51 = sub i64 63, %50
-  %52 = shl i64 1, %51
-  %53 = icmp eq i64 %52, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %54 = shl i64 %52, 1
-  %55 = select i1 %53, i64 %52, i64 %54
-  %56 = select i1 %49, i64 1, i64 %55
-  %57 = icmp ugt i64 %56, %42
-  %58 = select i1 %57, i64 %56, i64 %42
-  %59 = urem i64 %48, %56
-  %60 = icmp eq i64 %59, 0
-  %61 = sub i64 %56, %59
-  %62 = select i1 %60, i64 0, i64 %61
-  %63 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %62
-  %64 = add i64 %48, %63
-  %65 = urem i64 %64, %58
-  %66 = icmp eq i64 %65, 0
-  %67 = sub i64 %58, %65
-  %68 = select i1 %66, i64 0, i64 %67
-  %69 = add i64 %64, %68
-  ret i64 %69
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %3
+  %5 = select i1 %4, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 %3
+  %6 = urem i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64)
+  %7 = icmp eq i64 %6, 0
+  %8 = sub i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %6
+  %9 = select i1 %7, i64 0, i64 %8
+  %10 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %9
+  %11 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %10
+  %12 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, i1 }, ptr null, i32 0, i32 1) to i64), %5
+  %13 = select i1 %12, i64 ptrtoint (ptr getelementptr ({ i8, i1 }, ptr null, i32 0, i32 1) to i64), i64 %5
+  %14 = urem i64 %11, ptrtoint (ptr getelementptr ({ i8, i1 }, ptr null, i32 0, i32 1) to i64)
+  %15 = icmp eq i64 %14, 0
+  %16 = sub i64 ptrtoint (ptr getelementptr ({ i8, i1 }, ptr null, i32 0, i32 1) to i64), %14
+  %17 = select i1 %15, i64 0, i64 %16
+  %18 = add i64 ptrtoint (ptr getelementptr (i1, ptr null, i32 1) to i64), %17
+  %19 = add i64 %11, %18
+  %20 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %13
+  %21 = select i1 %20, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %13
+  %22 = urem i64 %19, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %23 = icmp eq i64 %22, 0
+  %24 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %22
+  %25 = select i1 %23, i64 0, i64 %24
+  %26 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %25
+  %27 = add i64 %19, %26
+  %28 = urem i64 %27, %21
+  %29 = icmp eq i64 %28, 0
+  %30 = sub i64 %21, %28
+  %31 = select i1 %29, i64 0, i64 %30
+  %32 = add i64 %27, %31
+  %33 = insertvalue { i64, i64 } undef, i64 %32, 0
+  %34 = insertvalue { i64, i64 } %33, i64 %21, 1
+  ret { i64, i64 } %34
 }
 
 define ptr @InterleaveIterator2_field_InterleaveIterator2_0(ptr %0) {
@@ -11777,61 +11367,34 @@ define void @InterleaveIterable2_setter_first(ptr %0, { ptr, ptr, ptr, i32 } %1)
   ret void
 }
 
-define internal i64 @_size_ChainIterable2(ptr %0) {
+define { i64, i64 } @_size_ChainIterable2(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %15
-  %17 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %18 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %19 = sub i64 63, %18
-  %20 = shl i64 1, %19
-  %21 = icmp eq i64 %20, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %22 = shl i64 %20, 1
-  %23 = select i1 %21, i64 %20, i64 %22
-  %24 = select i1 %17, i64 1, i64 %23
-  %25 = icmp ugt i64 %24, %11
-  %26 = select i1 %25, i64 %24, i64 %11
-  %27 = urem i64 %16, %24
-  %28 = icmp eq i64 %27, 0
-  %29 = sub i64 %24, %27
-  %30 = select i1 %28, i64 0, i64 %29
-  %31 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %30
-  %32 = add i64 %16, %31
-  %33 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %34 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %35 = sub i64 63, %34
-  %36 = shl i64 1, %35
-  %37 = icmp eq i64 %36, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %38 = shl i64 %36, 1
-  %39 = select i1 %37, i64 %36, i64 %38
-  %40 = select i1 %33, i64 1, i64 %39
-  %41 = icmp ugt i64 %40, %26
-  %42 = select i1 %41, i64 %40, i64 %26
-  %43 = urem i64 %32, %40
-  %44 = icmp eq i64 %43, 0
-  %45 = sub i64 %40, %43
-  %46 = select i1 %44, i64 0, i64 %45
-  %47 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %46
-  %48 = add i64 %32, %47
-  %49 = urem i64 %48, %42
-  %50 = icmp eq i64 %49, 0
-  %51 = sub i64 %42, %49
-  %52 = select i1 %50, i64 0, i64 %51
-  %53 = add i64 %48, %52
-  ret i64 %53
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %3
+  %5 = select i1 %4, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 %3
+  %6 = urem i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64)
+  %7 = icmp eq i64 %6, 0
+  %8 = sub i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %6
+  %9 = select i1 %7, i64 0, i64 %8
+  %10 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %9
+  %11 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %10
+  %12 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %5
+  %13 = select i1 %12, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %5
+  %14 = urem i64 %11, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %15 = icmp eq i64 %14, 0
+  %16 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %14
+  %17 = select i1 %15, i64 0, i64 %16
+  %18 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %17
+  %19 = add i64 %11, %18
+  %20 = urem i64 %19, %13
+  %21 = icmp eq i64 %20, 0
+  %22 = sub i64 %13, %20
+  %23 = select i1 %21, i64 0, i64 %22
+  %24 = add i64 %19, %23
+  %25 = insertvalue { i64, i64 } undef, i64 %24, 0
+  %26 = insertvalue { i64, i64 } %25, i64 %13, 1
+  ret { i64, i64 } %26
 }
 
 define ptr @ChainIterable2_field_ChainIterable2_0(ptr %0) {
@@ -12712,77 +12275,42 @@ define { ptr, ptr, ptr, i32 } @ChainIterable2_iterator_({ ptr, ptr, ptr, i32 } %
   ret { ptr, ptr, ptr, i32 } %389
 }
 
-define internal i64 @_size_ChainIterator2(ptr %0) {
+define { i64, i64 } @_size_ChainIterator2(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %15
-  %17 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %18 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %19 = sub i64 63, %18
-  %20 = shl i64 1, %19
-  %21 = icmp eq i64 %20, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %22 = shl i64 %20, 1
-  %23 = select i1 %21, i64 %20, i64 %22
-  %24 = select i1 %17, i64 1, i64 %23
-  %25 = icmp ugt i64 %24, %11
-  %26 = select i1 %25, i64 %24, i64 %11
-  %27 = urem i64 %16, %24
-  %28 = icmp eq i64 %27, 0
-  %29 = sub i64 %24, %27
-  %30 = select i1 %28, i64 0, i64 %29
-  %31 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %30
-  %32 = add i64 %16, %31
-  %33 = icmp eq i64 ptrtoint (ptr getelementptr (i1, ptr null, i32 1) to i64), 0
-  %34 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (i1, ptr null, i32 1) to i64), i1 false)
-  %35 = sub i64 63, %34
-  %36 = shl i64 1, %35
-  %37 = icmp eq i64 %36, ptrtoint (ptr getelementptr (i1, ptr null, i32 1) to i64)
-  %38 = shl i64 %36, 1
-  %39 = select i1 %37, i64 %36, i64 %38
-  %40 = select i1 %33, i64 1, i64 %39
-  %41 = icmp ugt i64 %40, %26
-  %42 = select i1 %41, i64 %40, i64 %26
-  %43 = urem i64 %32, %40
-  %44 = icmp eq i64 %43, 0
-  %45 = sub i64 %40, %43
-  %46 = select i1 %44, i64 0, i64 %45
-  %47 = add i64 ptrtoint (ptr getelementptr (i1, ptr null, i32 1) to i64), %46
-  %48 = add i64 %32, %47
-  %49 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %50 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %51 = sub i64 63, %50
-  %52 = shl i64 1, %51
-  %53 = icmp eq i64 %52, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %54 = shl i64 %52, 1
-  %55 = select i1 %53, i64 %52, i64 %54
-  %56 = select i1 %49, i64 1, i64 %55
-  %57 = icmp ugt i64 %56, %42
-  %58 = select i1 %57, i64 %56, i64 %42
-  %59 = urem i64 %48, %56
-  %60 = icmp eq i64 %59, 0
-  %61 = sub i64 %56, %59
-  %62 = select i1 %60, i64 0, i64 %61
-  %63 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %62
-  %64 = add i64 %48, %63
-  %65 = urem i64 %64, %58
-  %66 = icmp eq i64 %65, 0
-  %67 = sub i64 %58, %65
-  %68 = select i1 %66, i64 0, i64 %67
-  %69 = add i64 %64, %68
-  ret i64 %69
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %3
+  %5 = select i1 %4, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 %3
+  %6 = urem i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64)
+  %7 = icmp eq i64 %6, 0
+  %8 = sub i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %6
+  %9 = select i1 %7, i64 0, i64 %8
+  %10 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %9
+  %11 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %10
+  %12 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, i1 }, ptr null, i32 0, i32 1) to i64), %5
+  %13 = select i1 %12, i64 ptrtoint (ptr getelementptr ({ i8, i1 }, ptr null, i32 0, i32 1) to i64), i64 %5
+  %14 = urem i64 %11, ptrtoint (ptr getelementptr ({ i8, i1 }, ptr null, i32 0, i32 1) to i64)
+  %15 = icmp eq i64 %14, 0
+  %16 = sub i64 ptrtoint (ptr getelementptr ({ i8, i1 }, ptr null, i32 0, i32 1) to i64), %14
+  %17 = select i1 %15, i64 0, i64 %16
+  %18 = add i64 ptrtoint (ptr getelementptr (i1, ptr null, i32 1) to i64), %17
+  %19 = add i64 %11, %18
+  %20 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %13
+  %21 = select i1 %20, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %13
+  %22 = urem i64 %19, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %23 = icmp eq i64 %22, 0
+  %24 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %22
+  %25 = select i1 %23, i64 0, i64 %24
+  %26 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %25
+  %27 = add i64 %19, %26
+  %28 = urem i64 %27, %21
+  %29 = icmp eq i64 %28, 0
+  %30 = sub i64 %21, %28
+  %31 = select i1 %29, i64 0, i64 %30
+  %32 = add i64 %27, %31
+  %33 = insertvalue { i64, i64 } undef, i64 %32, 0
+  %34 = insertvalue { i64, i64 } %33, i64 %21, 1
+  ret { i64, i64 } %34
 }
 
 define ptr @ChainIterator2_field_ChainIterator2_0(ptr %0) {
@@ -13464,86 +12992,48 @@ define void @ChainIterable2_setter_first(ptr %0, { ptr, ptr, ptr, i32 } %1) {
   ret void
 }
 
-define linkonce_odr i64 @_size_bool_typ(ptr %0) {
+define linkonce_odr { i64, i64 } @_size_bool_typ(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr (i1, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (i1, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr (i1, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr (i1, ptr null, i32 1) to i64), %15
-  %17 = urem i64 %16, %11
-  %18 = icmp eq i64 %17, 0
-  %19 = sub i64 %11, %17
-  %20 = select i1 %18, i64 0, i64 %19
-  %21 = add i64 %16, %20
-  ret i64 %21
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, i1 }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, i1 }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = urem i64 ptrtoint (ptr getelementptr (i1, ptr null, i32 1) to i64), %3
+  %5 = icmp eq i64 %4, 0
+  %6 = sub i64 %3, %4
+  %7 = select i1 %5, i64 0, i64 %6
+  %8 = add i64 ptrtoint (ptr getelementptr (i1, ptr null, i32 1) to i64), %7
+  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
+  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
+  ret { i64, i64 } %10
 }
 
-define internal i64 @_size_FilterIterable2(ptr %0) {
+define { i64, i64 } @_size_FilterIterable2(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %15
-  %17 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), 0
-  %18 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), i1 false)
-  %19 = sub i64 63, %18
-  %20 = shl i64 1, %19
-  %21 = icmp eq i64 %20, ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64)
-  %22 = shl i64 %20, 1
-  %23 = select i1 %21, i64 %20, i64 %22
-  %24 = select i1 %17, i64 1, i64 %23
-  %25 = icmp ugt i64 %24, %11
-  %26 = select i1 %25, i64 %24, i64 %11
-  %27 = urem i64 %16, %24
-  %28 = icmp eq i64 %27, 0
-  %29 = sub i64 %24, %27
-  %30 = select i1 %28, i64 0, i64 %29
-  %31 = add i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), %30
-  %32 = add i64 %16, %31
-  %33 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %34 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %35 = sub i64 63, %34
-  %36 = shl i64 1, %35
-  %37 = icmp eq i64 %36, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %38 = shl i64 %36, 1
-  %39 = select i1 %37, i64 %36, i64 %38
-  %40 = select i1 %33, i64 1, i64 %39
-  %41 = icmp ugt i64 %40, %26
-  %42 = select i1 %41, i64 %40, i64 %26
-  %43 = urem i64 %32, %40
-  %44 = icmp eq i64 %43, 0
-  %45 = sub i64 %40, %43
-  %46 = select i1 %44, i64 0, i64 %45
-  %47 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %46
-  %48 = add i64 %32, %47
-  %49 = urem i64 %48, %42
-  %50 = icmp eq i64 %49, 0
-  %51 = sub i64 %42, %49
-  %52 = select i1 %50, i64 0, i64 %51
-  %53 = add i64 %48, %52
-  ret i64 %53
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), %3
+  %5 = select i1 %4, i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), i64 %3
+  %6 = urem i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64)
+  %7 = icmp eq i64 %6, 0
+  %8 = sub i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), %6
+  %9 = select i1 %7, i64 0, i64 %8
+  %10 = add i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), %9
+  %11 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %10
+  %12 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %5
+  %13 = select i1 %12, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %5
+  %14 = urem i64 %11, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %15 = icmp eq i64 %14, 0
+  %16 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %14
+  %17 = select i1 %15, i64 0, i64 %16
+  %18 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %17
+  %19 = add i64 %11, %18
+  %20 = urem i64 %19, %13
+  %21 = icmp eq i64 %20, 0
+  %22 = sub i64 %13, %20
+  %23 = select i1 %21, i64 0, i64 %22
+  %24 = add i64 %19, %23
+  %25 = insertvalue { i64, i64 } undef, i64 %24, 0
+  %26 = insertvalue { i64, i64 } %25, i64 %13, 1
+  ret { i64, i64 } %26
 }
 
 define ptr @FilterIterable2_field_FilterIterable2_0(ptr %0) {
@@ -14241,61 +13731,34 @@ define { ptr, ptr, ptr, i32 } @FilterIterable2_iterator_({ ptr, ptr, ptr, i32 } 
   ret { ptr, ptr, ptr, i32 } %272
 }
 
-define internal i64 @_size_FilterIterator2(ptr %0) {
+define { i64, i64 } @_size_FilterIterator2(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %15
-  %17 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), 0
-  %18 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), i1 false)
-  %19 = sub i64 63, %18
-  %20 = shl i64 1, %19
-  %21 = icmp eq i64 %20, ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64)
-  %22 = shl i64 %20, 1
-  %23 = select i1 %21, i64 %20, i64 %22
-  %24 = select i1 %17, i64 1, i64 %23
-  %25 = icmp ugt i64 %24, %11
-  %26 = select i1 %25, i64 %24, i64 %11
-  %27 = urem i64 %16, %24
-  %28 = icmp eq i64 %27, 0
-  %29 = sub i64 %24, %27
-  %30 = select i1 %28, i64 0, i64 %29
-  %31 = add i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), %30
-  %32 = add i64 %16, %31
-  %33 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %34 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %35 = sub i64 63, %34
-  %36 = shl i64 1, %35
-  %37 = icmp eq i64 %36, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %38 = shl i64 %36, 1
-  %39 = select i1 %37, i64 %36, i64 %38
-  %40 = select i1 %33, i64 1, i64 %39
-  %41 = icmp ugt i64 %40, %26
-  %42 = select i1 %41, i64 %40, i64 %26
-  %43 = urem i64 %32, %40
-  %44 = icmp eq i64 %43, 0
-  %45 = sub i64 %40, %43
-  %46 = select i1 %44, i64 0, i64 %45
-  %47 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %46
-  %48 = add i64 %32, %47
-  %49 = urem i64 %48, %42
-  %50 = icmp eq i64 %49, 0
-  %51 = sub i64 %42, %49
-  %52 = select i1 %50, i64 0, i64 %51
-  %53 = add i64 %48, %52
-  ret i64 %53
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), %3
+  %5 = select i1 %4, i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), i64 %3
+  %6 = urem i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64)
+  %7 = icmp eq i64 %6, 0
+  %8 = sub i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), %6
+  %9 = select i1 %7, i64 0, i64 %8
+  %10 = add i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), %9
+  %11 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %10
+  %12 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %5
+  %13 = select i1 %12, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %5
+  %14 = urem i64 %11, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %15 = icmp eq i64 %14, 0
+  %16 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %14
+  %17 = select i1 %15, i64 0, i64 %16
+  %18 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %17
+  %19 = add i64 %11, %18
+  %20 = urem i64 %19, %13
+  %21 = icmp eq i64 %20, 0
+  %22 = sub i64 %13, %20
+  %23 = select i1 %21, i64 0, i64 %22
+  %24 = add i64 %19, %23
+  %25 = insertvalue { i64, i64 } undef, i64 %24, 0
+  %26 = insertvalue { i64, i64 } %25, i64 %13, 1
+  ret { i64, i64 } %26
 }
 
 define ptr @FilterIterator2_field_FilterIterator2_0(ptr %0) {
@@ -14883,77 +14346,42 @@ define void @FilterIterable2_setter_iterable(ptr %0, { ptr, ptr, ptr, i32 } %1) 
   ret void
 }
 
-define internal i64 @_size_MapIterable2(ptr %0) {
+define { i64, i64 } @_size_MapIterable2(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %15
-  %17 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), 0
-  %18 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), i1 false)
-  %19 = sub i64 63, %18
-  %20 = shl i64 1, %19
-  %21 = icmp eq i64 %20, ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64)
-  %22 = shl i64 %20, 1
-  %23 = select i1 %21, i64 %20, i64 %22
-  %24 = select i1 %17, i64 1, i64 %23
-  %25 = icmp ugt i64 %24, %11
-  %26 = select i1 %25, i64 %24, i64 %11
-  %27 = urem i64 %16, %24
-  %28 = icmp eq i64 %27, 0
-  %29 = sub i64 %24, %27
-  %30 = select i1 %28, i64 0, i64 %29
-  %31 = add i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), %30
-  %32 = add i64 %16, %31
-  %33 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %34 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %35 = sub i64 63, %34
-  %36 = shl i64 1, %35
-  %37 = icmp eq i64 %36, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %38 = shl i64 %36, 1
-  %39 = select i1 %37, i64 %36, i64 %38
-  %40 = select i1 %33, i64 1, i64 %39
-  %41 = icmp ugt i64 %40, %26
-  %42 = select i1 %41, i64 %40, i64 %26
-  %43 = urem i64 %32, %40
-  %44 = icmp eq i64 %43, 0
-  %45 = sub i64 %40, %43
-  %46 = select i1 %44, i64 0, i64 %45
-  %47 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %46
-  %48 = add i64 %32, %47
-  %49 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %50 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %51 = sub i64 63, %50
-  %52 = shl i64 1, %51
-  %53 = icmp eq i64 %52, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %54 = shl i64 %52, 1
-  %55 = select i1 %53, i64 %52, i64 %54
-  %56 = select i1 %49, i64 1, i64 %55
-  %57 = icmp ugt i64 %56, %42
-  %58 = select i1 %57, i64 %56, i64 %42
-  %59 = urem i64 %48, %56
-  %60 = icmp eq i64 %59, 0
-  %61 = sub i64 %56, %59
-  %62 = select i1 %60, i64 0, i64 %61
-  %63 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %62
-  %64 = add i64 %48, %63
-  %65 = urem i64 %64, %58
-  %66 = icmp eq i64 %65, 0
-  %67 = sub i64 %58, %65
-  %68 = select i1 %66, i64 0, i64 %67
-  %69 = add i64 %64, %68
-  ret i64 %69
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), %3
+  %5 = select i1 %4, i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), i64 %3
+  %6 = urem i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64)
+  %7 = icmp eq i64 %6, 0
+  %8 = sub i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), %6
+  %9 = select i1 %7, i64 0, i64 %8
+  %10 = add i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), %9
+  %11 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %10
+  %12 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %5
+  %13 = select i1 %12, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %5
+  %14 = urem i64 %11, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %15 = icmp eq i64 %14, 0
+  %16 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %14
+  %17 = select i1 %15, i64 0, i64 %16
+  %18 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %17
+  %19 = add i64 %11, %18
+  %20 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %13
+  %21 = select i1 %20, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %13
+  %22 = urem i64 %19, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %23 = icmp eq i64 %22, 0
+  %24 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %22
+  %25 = select i1 %23, i64 0, i64 %24
+  %26 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %25
+  %27 = add i64 %19, %26
+  %28 = urem i64 %27, %21
+  %29 = icmp eq i64 %28, 0
+  %30 = sub i64 %21, %28
+  %31 = select i1 %29, i64 0, i64 %30
+  %32 = add i64 %27, %31
+  %33 = insertvalue { i64, i64 } undef, i64 %32, 0
+  %34 = insertvalue { i64, i64 } %33, i64 %21, 1
+  ret { i64, i64 } %34
 }
 
 define ptr @MapIterable2_field_MapIterable2_0(ptr %0) {
@@ -15700,77 +15128,42 @@ define { ptr, ptr, ptr, i32 } @MapIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   ret { ptr, ptr, ptr, i32 } %313
 }
 
-define internal i64 @_size_MapIterator2(ptr %0) {
+define { i64, i64 } @_size_MapIterator2(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %15
-  %17 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), 0
-  %18 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), i1 false)
-  %19 = sub i64 63, %18
-  %20 = shl i64 1, %19
-  %21 = icmp eq i64 %20, ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64)
-  %22 = shl i64 %20, 1
-  %23 = select i1 %21, i64 %20, i64 %22
-  %24 = select i1 %17, i64 1, i64 %23
-  %25 = icmp ugt i64 %24, %11
-  %26 = select i1 %25, i64 %24, i64 %11
-  %27 = urem i64 %16, %24
-  %28 = icmp eq i64 %27, 0
-  %29 = sub i64 %24, %27
-  %30 = select i1 %28, i64 0, i64 %29
-  %31 = add i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), %30
-  %32 = add i64 %16, %31
-  %33 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %34 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %35 = sub i64 63, %34
-  %36 = shl i64 1, %35
-  %37 = icmp eq i64 %36, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %38 = shl i64 %36, 1
-  %39 = select i1 %37, i64 %36, i64 %38
-  %40 = select i1 %33, i64 1, i64 %39
-  %41 = icmp ugt i64 %40, %26
-  %42 = select i1 %41, i64 %40, i64 %26
-  %43 = urem i64 %32, %40
-  %44 = icmp eq i64 %43, 0
-  %45 = sub i64 %40, %43
-  %46 = select i1 %44, i64 0, i64 %45
-  %47 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %46
-  %48 = add i64 %32, %47
-  %49 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %50 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %51 = sub i64 63, %50
-  %52 = shl i64 1, %51
-  %53 = icmp eq i64 %52, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %54 = shl i64 %52, 1
-  %55 = select i1 %53, i64 %52, i64 %54
-  %56 = select i1 %49, i64 1, i64 %55
-  %57 = icmp ugt i64 %56, %42
-  %58 = select i1 %57, i64 %56, i64 %42
-  %59 = urem i64 %48, %56
-  %60 = icmp eq i64 %59, 0
-  %61 = sub i64 %56, %59
-  %62 = select i1 %60, i64 0, i64 %61
-  %63 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %62
-  %64 = add i64 %48, %63
-  %65 = urem i64 %64, %58
-  %66 = icmp eq i64 %65, 0
-  %67 = sub i64 %58, %65
-  %68 = select i1 %66, i64 0, i64 %67
-  %69 = add i64 %64, %68
-  ret i64 %69
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), %3
+  %5 = select i1 %4, i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), i64 %3
+  %6 = urem i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64)
+  %7 = icmp eq i64 %6, 0
+  %8 = sub i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), %6
+  %9 = select i1 %7, i64 0, i64 %8
+  %10 = add i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), %9
+  %11 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %10
+  %12 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %5
+  %13 = select i1 %12, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %5
+  %14 = urem i64 %11, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %15 = icmp eq i64 %14, 0
+  %16 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %14
+  %17 = select i1 %15, i64 0, i64 %16
+  %18 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %17
+  %19 = add i64 %11, %18
+  %20 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %13
+  %21 = select i1 %20, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %13
+  %22 = urem i64 %19, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %23 = icmp eq i64 %22, 0
+  %24 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %22
+  %25 = select i1 %23, i64 0, i64 %24
+  %26 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %25
+  %27 = add i64 %19, %26
+  %28 = urem i64 %27, %21
+  %29 = icmp eq i64 %28, 0
+  %30 = sub i64 %21, %28
+  %31 = select i1 %29, i64 0, i64 %30
+  %32 = add i64 %27, %31
+  %33 = insertvalue { i64, i64 } undef, i64 %32, 0
+  %34 = insertvalue { i64, i64 } %33, i64 %21, 1
+  ret { i64, i64 } %34
 }
 
 define ptr @MapIterator2_field_MapIterator2_0(ptr %0) {
@@ -16238,61 +15631,34 @@ define void @MapIterable2_setter_iterable(ptr %0, { ptr, ptr, ptr, i32 } %1) {
   ret void
 }
 
-define internal i64 @_size_ArrayIterator(ptr %0) {
+define { i64, i64 } @_size_ArrayIterator(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %15
-  %17 = icmp eq i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), 0
-  %18 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), i1 false)
-  %19 = sub i64 63, %18
-  %20 = shl i64 1, %19
-  %21 = icmp eq i64 %20, ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64)
-  %22 = shl i64 %20, 1
-  %23 = select i1 %21, i64 %20, i64 %22
-  %24 = select i1 %17, i64 1, i64 %23
-  %25 = icmp ugt i64 %24, %11
-  %26 = select i1 %25, i64 %24, i64 %11
-  %27 = urem i64 %16, %24
-  %28 = icmp eq i64 %27, 0
-  %29 = sub i64 %24, %27
-  %30 = select i1 %28, i64 0, i64 %29
-  %31 = add i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %30
-  %32 = add i64 %16, %31
-  %33 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %34 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %35 = sub i64 63, %34
-  %36 = shl i64 1, %35
-  %37 = icmp eq i64 %36, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %38 = shl i64 %36, 1
-  %39 = select i1 %37, i64 %36, i64 %38
-  %40 = select i1 %33, i64 1, i64 %39
-  %41 = icmp ugt i64 %40, %26
-  %42 = select i1 %41, i64 %40, i64 %26
-  %43 = urem i64 %32, %40
-  %44 = icmp eq i64 %43, 0
-  %45 = sub i64 %40, %43
-  %46 = select i1 %44, i64 0, i64 %45
-  %47 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %46
-  %48 = add i64 %32, %47
-  %49 = urem i64 %48, %42
-  %50 = icmp eq i64 %49, 0
-  %51 = sub i64 %42, %49
-  %52 = select i1 %50, i64 0, i64 %51
-  %53 = add i64 %48, %52
-  ret i64 %53
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), %3
+  %5 = select i1 %4, i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), i64 %3
+  %6 = urem i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64)
+  %7 = icmp eq i64 %6, 0
+  %8 = sub i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), %6
+  %9 = select i1 %7, i64 0, i64 %8
+  %10 = add i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %9
+  %11 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %10
+  %12 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %5
+  %13 = select i1 %12, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %5
+  %14 = urem i64 %11, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %15 = icmp eq i64 %14, 0
+  %16 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %14
+  %17 = select i1 %15, i64 0, i64 %16
+  %18 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %17
+  %19 = add i64 %11, %18
+  %20 = urem i64 %19, %13
+  %21 = icmp eq i64 %20, 0
+  %22 = sub i64 %13, %20
+  %23 = select i1 %21, i64 0, i64 %22
+  %24 = add i64 %19, %23
+  %25 = insertvalue { i64, i64 } undef, i64 %24, 0
+  %26 = insertvalue { i64, i64 } %25, i64 %13, 1
+  ret { i64, i64 } %26
 }
 
 define ptr @ArrayIterator_field_ArrayIterator_0(ptr %0) {
@@ -16680,29 +16046,18 @@ define { ptr, i160 } @ArrayIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   ret { ptr, i160 } %.reload
 }
 
-define linkonce_odr i64 @_size_i32_typ(ptr %0) {
+define linkonce_odr { i64, i64 } @_size_i32_typ(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %15
-  %17 = urem i64 %16, %11
-  %18 = icmp eq i64 %17, 0
-  %19 = sub i64 %11, %17
-  %20 = select i1 %18, i64 0, i64 %19
-  %21 = add i64 %16, %20
-  ret i64 %21
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = urem i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %3
+  %5 = icmp eq i64 %4, 0
+  %6 = sub i64 %3, %4
+  %7 = select i1 %5, i64 0, i64 %6
+  %8 = add i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %7
+  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
+  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
+  ret { i64, i64 } %10
 }
 
 define i32 @ArrayIterator_getter_index(ptr %0) {
@@ -16762,29 +16117,18 @@ define void @ArrayIterator_setter_array(ptr %0, { ptr, ptr, ptr, i32 } %1) {
   ret void
 }
 
-define linkonce_odr i64 @_size_buffer_typ(ptr %0) {
+define linkonce_odr { i64, i64 } @_size_buffer_typ(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), %15
-  %17 = urem i64 %16, %11
-  %18 = icmp eq i64 %17, 0
-  %19 = sub i64 %11, %17
-  %20 = select i1 %18, i64 0, i64 %19
-  %21 = add i64 %16, %20
-  ret i64 %21
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = urem i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), %3
+  %5 = icmp eq i64 %4, 0
+  %6 = sub i64 %3, %4
+  %7 = select i1 %5, i64 0, i64 %6
+  %8 = add i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), %7
+  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
+  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
+  ret { i64, i64 } %10
 }
 
 define i32 @Array_getter_capacity(ptr %0) {
@@ -16835,70 +16179,40 @@ define void @Array_setter_buffer(ptr %0, { ptr } %1) {
   ret void
 }
 
-define internal i64 @_size_Addable(ptr %0) {
+define { i64, i64 } @_size_Addable(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %3
+  %5 = select i1 %4, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %3
+  %6 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %7 = icmp eq i64 %6, 0
+  %8 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %6
+  %9 = select i1 %7, i64 0, i64 %8
+  %10 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %9
+  %11 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %10
+  %12 = urem i64 %11, %5
   %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
+  %14 = sub i64 %5, %12
   %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %15
-  %17 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %18 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %19 = sub i64 63, %18
-  %20 = shl i64 1, %19
-  %21 = icmp eq i64 %20, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %22 = shl i64 %20, 1
-  %23 = select i1 %21, i64 %20, i64 %22
-  %24 = select i1 %17, i64 1, i64 %23
-  %25 = icmp ugt i64 %24, %11
-  %26 = select i1 %25, i64 %24, i64 %11
-  %27 = urem i64 %16, %24
-  %28 = icmp eq i64 %27, 0
-  %29 = sub i64 %24, %27
-  %30 = select i1 %28, i64 0, i64 %29
-  %31 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %30
-  %32 = add i64 %16, %31
-  %33 = urem i64 %32, %26
-  %34 = icmp eq i64 %33, 0
-  %35 = sub i64 %26, %33
-  %36 = select i1 %34, i64 0, i64 %35
-  %37 = add i64 %32, %36
-  ret i64 %37
+  %16 = add i64 %11, %15
+  %17 = insertvalue { i64, i64 } undef, i64 %16, 0
+  %18 = insertvalue { i64, i64 } %17, i64 %5, 1
+  ret { i64, i64 } %18
 }
 
-define internal i64 @_size_Float64(ptr %0) {
+define { i64, i64 } @_size_Float64(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr (double, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (double, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr (double, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr (double, ptr null, i32 1) to i64), %15
-  %17 = urem i64 %16, %11
-  %18 = icmp eq i64 %17, 0
-  %19 = sub i64 %11, %17
-  %20 = select i1 %18, i64 0, i64 %19
-  %21 = add i64 %16, %20
-  ret i64 %21
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, double }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, double }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = urem i64 ptrtoint (ptr getelementptr (double, ptr null, i32 1) to i64), %3
+  %5 = icmp eq i64 %4, 0
+  %6 = sub i64 %3, %4
+  %7 = select i1 %5, i64 0, i64 %6
+  %8 = add i64 ptrtoint (ptr getelementptr (double, ptr null, i32 1) to i64), %7
+  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
+  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
+  ret { i64, i64 } %10
 }
 
 define ptr @Float64_field_Float64_0(ptr %0) {
@@ -16959,7 +16273,7 @@ define ptr @Float64_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %
   %11 = load i64, ptr %7, align 4
   %12 = load ptr, ptr %8, align 8
   %13 = load ptr, ptr %9, align 8
-  %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %13)
+  %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %13)
   br i1 %14, label %15, label %29
 
 15:                                               ; preds = %2
@@ -16973,7 +16287,7 @@ define ptr @Float64_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %
   %23 = load i64, ptr %19, align 4
   %24 = load ptr, ptr %20, align 8
   %25 = load ptr, ptr %21, align 8
-  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %25)
+  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %25)
   %27 = xor i1 %26, true
   %28 = zext i1 %27 to i32
   store i32 %28, ptr %.reg2mem1, align 4
@@ -17009,7 +16323,7 @@ define ptr @Float64_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %
   %42 = load i64, ptr %38, align 4
   %43 = load ptr, ptr %39, align 8
   %44 = load ptr, ptr %40, align 8
-  %45 = call i1 @subtype_test_wrapper(ptr %43, i64 %42, i64 %41, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %44)
+  %45 = call i1 @subtype_test_wrapper(ptr %43, i64 %42, i64 %41, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %44)
   br i1 %45, label %46, label %._crit_edge
 
 ._crit_edge:                                      ; preds = %34
@@ -17026,15 +16340,15 @@ define ptr @Float64_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %
   %54 = load i64, ptr %50, align 4
   %55 = load ptr, ptr %51, align 8
   %56 = load ptr, ptr %52, align 8
-  %57 = call i1 @subtype_test_wrapper(ptr %55, i64 %54, i64 %53, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %56)
+  %57 = call i1 @subtype_test_wrapper(ptr %55, i64 %54, i64 %53, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %56)
   br label %58
 
 58:                                               ; preds = %46, %._crit_edge
-  store i32 8, ptr %.reg2mem3, align 4
+  store i32 9, ptr %.reg2mem3, align 4
   br label %60
 
 59:                                               ; preds = %31
-  store i32 9, ptr %.reg2mem3, align 4
+  store i32 8, ptr %.reg2mem3, align 4
   br label %60
 
 60:                                               ; preds = %59, %58
@@ -17437,29 +16751,18 @@ define { ptr, ptr, ptr, i32 } @Float64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0
   ret { ptr, ptr, ptr, i32 } %124
 }
 
-define internal i64 @_size_Int32(ptr %0) {
+define { i64, i64 } @_size_Int32(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %15
-  %17 = urem i64 %16, %11
-  %18 = icmp eq i64 %17, 0
-  %19 = sub i64 %11, %17
-  %20 = select i1 %18, i64 0, i64 %19
-  %21 = add i64 %16, %20
-  ret i64 %21
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = urem i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %3
+  %5 = icmp eq i64 %4, 0
+  %6 = sub i64 %3, %4
+  %7 = select i1 %5, i64 0, i64 %6
+  %8 = add i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %7
+  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
+  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
+  ret { i64, i64 } %10
 }
 
 define ptr @Int32_field_Int32_0(ptr %0) {
@@ -17515,7 +16818,7 @@ define ptr @Int32_B__ADD_otherInt32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %0,
   %11 = load i64, ptr %7, align 4
   %12 = load ptr, ptr %8, align 8
   %13 = load ptr, ptr %9, align 8
-  %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %13)
+  %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %13)
   br i1 %14, label %15, label %29
 
 15:                                               ; preds = %2
@@ -17529,7 +16832,7 @@ define ptr @Int32_B__ADD_otherInt32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %0,
   %23 = load i64, ptr %19, align 4
   %24 = load ptr, ptr %20, align 8
   %25 = load ptr, ptr %21, align 8
-  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %25)
+  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %25)
   %27 = xor i1 %26, true
   %28 = zext i1 %27 to i32
   store i32 %28, ptr %.reg2mem1, align 4
@@ -17565,7 +16868,7 @@ define ptr @Int32_B__ADD_otherInt32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %0,
   %42 = load i64, ptr %38, align 4
   %43 = load ptr, ptr %39, align 8
   %44 = load ptr, ptr %40, align 8
-  %45 = call i1 @subtype_test_wrapper(ptr %43, i64 %42, i64 %41, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %44)
+  %45 = call i1 @subtype_test_wrapper(ptr %43, i64 %42, i64 %41, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %44)
   br i1 %45, label %46, label %._crit_edge
 
 ._crit_edge:                                      ; preds = %34
@@ -17582,15 +16885,15 @@ define ptr @Int32_B__ADD_otherInt32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %0,
   %54 = load i64, ptr %50, align 4
   %55 = load ptr, ptr %51, align 8
   %56 = load ptr, ptr %52, align 8
-  %57 = call i1 @subtype_test_wrapper(ptr %55, i64 %54, i64 %53, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %56)
+  %57 = call i1 @subtype_test_wrapper(ptr %55, i64 %54, i64 %53, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %56)
   br label %58
 
 58:                                               ; preds = %46, %._crit_edge
-  store i32 8, ptr %.reg2mem3, align 4
+  store i32 7, ptr %.reg2mem3, align 4
   br label %60
 
 59:                                               ; preds = %31
-  store i32 7, ptr %.reg2mem3, align 4
+  store i32 8, ptr %.reg2mem3, align 4
   br label %60
 
 60:                                               ; preds = %59, %58
@@ -17955,29 +17258,18 @@ define { ptr, i160 } @Int32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %0, { ptr, 
   ret { ptr, i160 } %115
 }
 
-define linkonce_odr i64 @_size_union_typ(ptr %0) {
+define linkonce_odr { i64, i64 } @_size_union_typ(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, i8 }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, i8 }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ ptr, i8 }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ ptr, i8 }, ptr null, i32 1) to i64), %15
-  %17 = urem i64 %16, %11
-  %18 = icmp eq i64 %17, 0
-  %19 = sub i64 %11, %17
-  %20 = select i1 %18, i64 0, i64 %19
-  %21 = add i64 %16, %20
-  ret i64 %21
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, i8 } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, i8 } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = urem i64 ptrtoint (ptr getelementptr ({ ptr, i8 }, ptr null, i32 1) to i64), %3
+  %5 = icmp eq i64 %4, 0
+  %6 = sub i64 %3, %4
+  %7 = select i1 %5, i64 0, i64 %6
+  %8 = add i64 ptrtoint (ptr getelementptr ({ ptr, i8 }, ptr null, i32 1) to i64), %7
+  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
+  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
+  ret { i64, i64 } %10
 }
 
 define i32 @Int32_getter_value(ptr %0) {
@@ -18008,51 +17300,39 @@ define void @Float64_setter_value(ptr %0, double %1) {
   ret void
 }
 
-define internal i64 @_size_Holder(ptr %0) {
+define { i64, i64 } @_size_Holder(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
   %2 = getelementptr ptr, ptr %0, i32 1
   %3 = load ptr, ptr %2, align 8
   %4 = load ptr, ptr %3, align 8
   %5 = getelementptr [7 x ptr], ptr %4, i32 0, i32 6
   %6 = load ptr, ptr %5, align 8
-  %7 = call i64 %6(ptr %3)
-  %8 = icmp eq i64 %7, 0
-  %9 = call i64 @llvm.ctlz.i64(i64 %7, i1 false)
-  %10 = sub i64 63, %9
-  %11 = shl i64 1, %10
-  %12 = icmp eq i64 %11, %7
-  %13 = shl i64 %11, 1
-  %14 = select i1 %12, i64 %11, i64 %13
-  %15 = select i1 %8, i64 1, i64 %14
-  %16 = icmp ugt i64 %15, 1
-  %17 = select i1 %16, i64 %15, i64 1
-  %18 = urem i64 0, %15
-  %19 = icmp eq i64 %18, 0
-  %20 = sub i64 %15, %18
-  %21 = select i1 %19, i64 0, i64 %20
-  %22 = add i64 %7, %21
-  %23 = icmp eq i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), 0
-  %24 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), i1 false)
-  %25 = sub i64 63, %24
-  %26 = shl i64 1, %25
-  %27 = icmp eq i64 %26, ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64)
-  %28 = shl i64 %26, 1
-  %29 = select i1 %27, i64 %26, i64 %28
-  %30 = select i1 %23, i64 1, i64 %29
-  %31 = icmp ugt i64 %30, %17
-  %32 = select i1 %31, i64 %30, i64 %17
-  %33 = urem i64 %22, %30
-  %34 = icmp eq i64 %33, 0
-  %35 = sub i64 %30, %33
-  %36 = select i1 %34, i64 0, i64 %35
-  %37 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %36
-  %38 = add i64 %22, %37
-  %39 = urem i64 %38, %32
-  %40 = icmp eq i64 %39, 0
-  %41 = sub i64 %32, %39
-  %42 = select i1 %40, i64 0, i64 %41
-  %43 = add i64 %38, %42
-  ret i64 %43
+  %7 = call { i64, i64 } %6(ptr %3)
+  %8 = extractvalue { i64, i64 } %7, 0
+  %9 = extractvalue { i64, i64 } %7, 1
+  %10 = icmp ugt i64 %9, 1
+  %11 = select i1 %10, i64 %9, i64 1
+  %12 = urem i64 0, %9
+  %13 = icmp eq i64 %12, 0
+  %14 = sub i64 %9, %12
+  %15 = select i1 %13, i64 0, i64 %14
+  %16 = add i64 %8, %15
+  %17 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %11
+  %18 = select i1 %17, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 %11
+  %19 = urem i64 %16, ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
+  %20 = icmp eq i64 %19, 0
+  %21 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %19
+  %22 = select i1 %20, i64 0, i64 %21
+  %23 = add i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), %22
+  %24 = add i64 %16, %23
+  %25 = urem i64 %24, %18
+  %26 = icmp eq i64 %25, 0
+  %27 = sub i64 %18, %25
+  %28 = select i1 %26, i64 0, i64 %27
+  %29 = add i64 %24, %28
+  %30 = insertvalue { i64, i64 } undef, i64 %29, 0
+  %31 = insertvalue { i64, i64 } %30, i64 %18, 1
+  ret { i64, i64 } %31
 }
 
 define ptr @Holder_field_Holder_0(ptr %0) {
@@ -18456,7 +17736,7 @@ define void @Holder_setter_held(ptr %0, { ptr, i160 } %1) {
   ret void
 }
 
-define { ptr, i160 } @exheetbrvb(ptr nest %0, { ptr, i160 } %1) {
+define { ptr, i160 } @pxsvgllxeg(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   %"reg2mem alloca point" = bitcast i32 0 to i32
   store { ptr, i160 } %1, ptr %3, align 8
@@ -18477,7 +17757,7 @@ define { ptr, i160 } @exheetbrvb(ptr nest %0, { ptr, i160 } %1) {
   ret { ptr, i160 } %14
 }
 
-define { ptr, i160 } @ceykaiisdb(ptr nest %0, { ptr, i160 } %1) {
+define { ptr, i160 } @inktsbtgiw(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   %"reg2mem alloca point" = bitcast i32 0 to i32
   store { ptr, i160 } %1, ptr %3, align 8
@@ -18498,7 +17778,7 @@ define { ptr, i160 } @ceykaiisdb(ptr nest %0, { ptr, i160 } %1) {
   ret { ptr, i160 } %14
 }
 
-define { ptr, i160 } @xjgtwlamaz(ptr nest %0, { ptr, i160 } %1) {
+define { ptr, i160 } @icybnoqnaw(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   %"reg2mem alloca point" = bitcast i32 0 to i32
   store { ptr, i160 } %1, ptr %3, align 8
@@ -18519,7 +17799,7 @@ define { ptr, i160 } @xjgtwlamaz(ptr nest %0, { ptr, i160 } %1) {
   ret { ptr, i160 } %14
 }
 
-define { ptr, i160 } @icdbvoimzr(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define { ptr, i160 } @bbkkudhwuf(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   %"reg2mem alloca point" = bitcast i32 0 to i32
   store { ptr, i160 } %1, ptr %4, align 8
@@ -18797,30 +18077,30 @@ define ptr @Iterable2_B_product_otherIterable2U({ ptr, ptr, ptr, i32 } %0, ptr %
   ret ptr %18
 }
 
-define i32 @_functionliteral_zpkavcbkrc(i32 %0, i32 %1) {
+define i32 @_functionliteral_fvpfyfjvmg(i32 %0, i32 %1) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
   %3 = add i32 %0, %1
   ret i32 %3
 }
 
-define i32 @_functionliteral_cvqfxxdwef(i32 %0) {
+define i32 @_functionliteral_ptrlpjtrot(i32 %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
   %2 = mul i32 %0, 2
   ret i32 %2
 }
 
-define double @_functionliteral_pwozdlcqah(double %0) {
+define double @_functionliteral_xmrbyolywm(double %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
   %2 = fmul double %0, 2.000000e+00
   ret double %2
 }
 
-define i32 @_functionliteral_gmaaictprs(i32 %0) {
+define i32 @_functionliteral_geaxbesrnz(i32 %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
   ret i32 %0
 }
 
-define double @_functionliteral_lkoxjtjfyw(i32 %0) {
+define double @_functionliteral_zfqudnduvz(i32 %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
   %2 = sitofp i32 %0 to double
   ret double %2
@@ -19987,7 +19267,7 @@ define i32 @main() {
   %748 = insertvalue { ptr, i160 } %745, i160 %747, 1
   %749 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %749)
-  call void @llvm.init.trampoline(ptr %749, ptr @icdbvoimzr, ptr @_functionliteral_zpkavcbkrc)
+  call void @llvm.init.trampoline(ptr %749, ptr @bbkkudhwuf, ptr @_functionliteral_fvpfyfjvmg)
   %750 = alloca ptr, align 8
   %751 = call ptr @adjust_trampoline(ptr %749)
   store ptr %751, ptr %750, align 8
@@ -20050,7 +19330,7 @@ define i32 @main() {
   call void %798(ptr %791, { ptr, i160 } %790)
   %799 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %799)
-  call void @llvm.init.trampoline(ptr %799, ptr @xjgtwlamaz, ptr @_functionliteral_cvqfxxdwef)
+  call void @llvm.init.trampoline(ptr %799, ptr @icybnoqnaw, ptr @_functionliteral_ptrlpjtrot)
   %800 = alloca ptr, align 8
   %801 = call ptr @adjust_trampoline(ptr %799)
   store ptr %801, ptr %800, align 8
@@ -20143,7 +19423,7 @@ define i32 @main() {
   %871 = call ptr @llvm.invariant.start.p0(i64 16, ptr %858)
   %872 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %872)
-  call void @llvm.init.trampoline(ptr %872, ptr @ceykaiisdb, ptr @_functionliteral_lkoxjtjfyw)
+  call void @llvm.init.trampoline(ptr %872, ptr @inktsbtgiw, ptr @_functionliteral_zfqudnduvz)
   %873 = alloca ptr, align 8
   %874 = call ptr @adjust_trampoline(ptr %872)
   store ptr %874, ptr %873, align 8
@@ -20154,7 +19434,7 @@ define i32 @main() {
   %879 = insertvalue { ptr } undef, ptr %878, 0
   %880 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %880)
-  call void @llvm.init.trampoline(ptr %880, ptr @exheetbrvb, ptr @_functionliteral_gmaaictprs)
+  call void @llvm.init.trampoline(ptr %880, ptr @pxsvgllxeg, ptr @_functionliteral_geaxbesrnz)
   %881 = alloca ptr, align 8
   %882 = call ptr @adjust_trampoline(ptr %880)
   store ptr %882, ptr %881, align 8
@@ -21642,24 +20922,24 @@ define i32 @main() {
 ; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
 declare void @llvm.init.trampoline(ptr nocapture writeonly, ptr readnone, ptr readnone) #0
 
-define internal i64 @_size_Object(ptr %0) {
+define internal { i64, i64 } @_size_Object(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  ret i64 0
+  ret { i64, i64 } { i64 0, i64 1 }
 }
 
-define internal i64 @_size_Iterator(ptr %0) {
+define internal { i64, i64 } @_size_Iterator(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  ret i64 0
+  ret { i64, i64 } { i64 0, i64 1 }
 }
 
-define internal i64 @_size_Iterable(ptr %0) {
+define internal { i64, i64 } @_size_Iterable(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  ret i64 0
+  ret { i64, i64 } { i64 0, i64 1 }
 }
 
-define internal i64 @_size_Representable(ptr %0) {
+define internal { i64, i64 } @_size_Representable(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  ret i64 0
+  ret { i64, i64 } { i64 0, i64 1 }
 }
 
 define ptr @Representable_B_repr_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
@@ -21705,7 +20985,7 @@ define { ptr, ptr, ptr, i32 } @Representable_repr_({ ptr, ptr, ptr, i32 } %0, { 
   store ptr %24, ptr %23, align 8
   %25 = call ptr @llvm.invariant.start.p0(i64 16, ptr %21)
   %26 = load ptr, ptr %21, align 8
-  %27 = load <6 x i8>, ptr @wuaoh_Object, align 8
+  %27 = load <6 x i8>, ptr @tvdrc_Object, align 8
   store <6 x i8> %27, ptr %26, align 8
   %28 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %29 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -21784,61 +21064,34 @@ define { ptr, ptr, ptr, i32 } @Representable_repr_({ ptr, ptr, ptr, i32 } %0, { 
   ret { ptr, ptr, ptr, i32 } %86
 }
 
-define internal i64 @_size_String(ptr %0) {
+define internal { i64, i64 } @_size_String(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), %15
-  %17 = icmp eq i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), 0
-  %18 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), i1 false)
-  %19 = sub i64 63, %18
-  %20 = shl i64 1, %19
-  %21 = icmp eq i64 %20, ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64)
-  %22 = shl i64 %20, 1
-  %23 = select i1 %21, i64 %20, i64 %22
-  %24 = select i1 %17, i64 1, i64 %23
-  %25 = icmp ugt i64 %24, %11
-  %26 = select i1 %25, i64 %24, i64 %11
-  %27 = urem i64 %16, %24
-  %28 = icmp eq i64 %27, 0
-  %29 = sub i64 %24, %27
-  %30 = select i1 %28, i64 0, i64 %29
-  %31 = add i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %30
-  %32 = add i64 %16, %31
-  %33 = icmp eq i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), 0
-  %34 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), i1 false)
-  %35 = sub i64 63, %34
-  %36 = shl i64 1, %35
-  %37 = icmp eq i64 %36, ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64)
-  %38 = shl i64 %36, 1
-  %39 = select i1 %37, i64 %36, i64 %38
-  %40 = select i1 %33, i64 1, i64 %39
-  %41 = icmp ugt i64 %40, %26
-  %42 = select i1 %41, i64 %40, i64 %26
-  %43 = urem i64 %32, %40
-  %44 = icmp eq i64 %43, 0
-  %45 = sub i64 %40, %43
-  %46 = select i1 %44, i64 0, i64 %45
-  %47 = add i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %46
-  %48 = add i64 %32, %47
-  %49 = urem i64 %48, %42
-  %50 = icmp eq i64 %49, 0
-  %51 = sub i64 %42, %49
-  %52 = select i1 %50, i64 0, i64 %51
-  %53 = add i64 %48, %52
-  ret i64 %53
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), %3
+  %5 = select i1 %4, i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), i64 %3
+  %6 = urem i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64)
+  %7 = icmp eq i64 %6, 0
+  %8 = sub i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), %6
+  %9 = select i1 %7, i64 0, i64 %8
+  %10 = add i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %9
+  %11 = add i64 ptrtoint (ptr getelementptr ({ ptr }, ptr null, i32 1) to i64), %10
+  %12 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), %5
+  %13 = select i1 %12, i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), i64 %5
+  %14 = urem i64 %11, ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64)
+  %15 = icmp eq i64 %14, 0
+  %16 = sub i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), %14
+  %17 = select i1 %15, i64 0, i64 %16
+  %18 = add i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %17
+  %19 = add i64 %11, %18
+  %20 = urem i64 %19, %13
+  %21 = icmp eq i64 %20, 0
+  %22 = sub i64 %13, %20
+  %23 = select i1 %21, i64 0, i64 %22
+  %24 = add i64 %19, %23
+  %25 = insertvalue { i64, i64 } undef, i64 %24, 0
+  %26 = insertvalue { i64, i64 } %25, i64 %13, 1
+  ret { i64, i64 } %26
 }
 
 define ptr @String_B_init_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
@@ -24484,45 +23737,26 @@ define { ptr, ptr, ptr, i32 } @String_repr_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   ret { ptr, ptr, ptr, i32 } %43
 }
 
-define internal i64 @_size_StringIterator(ptr %0) {
+define internal { i64, i64 } @_size_StringIterator(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), %3
+  %5 = select i1 %4, i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), i64 %3
+  %6 = urem i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64)
+  %7 = icmp eq i64 %6, 0
+  %8 = sub i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), %6
+  %9 = select i1 %7, i64 0, i64 %8
+  %10 = add i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %9
+  %11 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %10
+  %12 = urem i64 %11, %5
   %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
+  %14 = sub i64 %5, %12
   %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %15
-  %17 = icmp eq i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), 0
-  %18 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), i1 false)
-  %19 = sub i64 63, %18
-  %20 = shl i64 1, %19
-  %21 = icmp eq i64 %20, ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64)
-  %22 = shl i64 %20, 1
-  %23 = select i1 %21, i64 %20, i64 %22
-  %24 = select i1 %17, i64 1, i64 %23
-  %25 = icmp ugt i64 %24, %11
-  %26 = select i1 %25, i64 %24, i64 %11
-  %27 = urem i64 %16, %24
-  %28 = icmp eq i64 %27, 0
-  %29 = sub i64 %24, %27
-  %30 = select i1 %28, i64 0, i64 %29
-  %31 = add i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %30
-  %32 = add i64 %16, %31
-  %33 = urem i64 %32, %26
-  %34 = icmp eq i64 %33, 0
-  %35 = sub i64 %26, %33
-  %36 = select i1 %34, i64 0, i64 %35
-  %37 = add i64 %32, %36
-  ret i64 %37
+  %16 = add i64 %11, %15
+  %17 = insertvalue { i64, i64 } undef, i64 %16, 0
+  %18 = insertvalue { i64, i64 } %17, i64 %5, 1
+  ret { i64, i64 } %18
 }
 
 define ptr @StringIterator_B_init_strString({ ptr, ptr, ptr, i32 } %0, ptr %1) {
@@ -24966,54 +24200,32 @@ define { ptr, i160 } @StringIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   ret { ptr, i160 } %.reload
 }
 
-define linkonce_odr i64 @_size_i8_typ(ptr %0) {
+define linkonce_odr { i64, i64 } @_size_i8_typ(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), %15
-  %17 = urem i64 %16, %11
-  %18 = icmp eq i64 %17, 0
-  %19 = sub i64 %11, %17
-  %20 = select i1 %18, i64 0, i64 %19
-  %21 = add i64 %16, %20
-  ret i64 %21
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, i8 }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, i8 }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = urem i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), %3
+  %5 = icmp eq i64 %4, 0
+  %6 = sub i64 %3, %4
+  %7 = select i1 %5, i64 0, i64 %6
+  %8 = add i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), %7
+  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
+  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
+  ret { i64, i64 } %10
 }
 
-define internal i64 @_size_Character(ptr %0) {
+define internal { i64, i64 } @_size_Character(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), %15
-  %17 = urem i64 %16, %11
-  %18 = icmp eq i64 %17, 0
-  %19 = sub i64 %11, %17
-  %20 = select i1 %18, i64 0, i64 %19
-  %21 = add i64 %16, %20
-  ret i64 %21
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, i8 }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, i8 }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = urem i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), %3
+  %5 = icmp eq i64 %4, 0
+  %6 = sub i64 %3, %4
+  %7 = select i1 %5, i64 0, i64 %6
+  %8 = add i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), %7
+  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
+  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
+  ret { i64, i64 } %10
 }
 
 define ptr @Character_B_byte_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
@@ -25240,61 +24452,34 @@ define void @String_setter_bytes(ptr %0, { ptr } %1) {
   ret void
 }
 
-define internal i64 @_size_Exception(ptr %0) {
+define internal { i64, i64 } @_size_Exception(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %2 = icmp eq i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), 0
-  %3 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), i1 false)
-  %4 = sub i64 63, %3
-  %5 = shl i64 1, %4
-  %6 = icmp eq i64 %5, ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64)
-  %7 = shl i64 %5, 1
-  %8 = select i1 %6, i64 %5, i64 %7
-  %9 = select i1 %2, i64 1, i64 %8
-  %10 = icmp ugt i64 %9, 1
-  %11 = select i1 %10, i64 %9, i64 1
-  %12 = urem i64 0, %9
-  %13 = icmp eq i64 %12, 0
-  %14 = sub i64 %9, %12
-  %15 = select i1 %13, i64 0, i64 %14
-  %16 = add i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %15
-  %17 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %18 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %19 = sub i64 63, %18
-  %20 = shl i64 1, %19
-  %21 = icmp eq i64 %20, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %22 = shl i64 %20, 1
-  %23 = select i1 %21, i64 %20, i64 %22
-  %24 = select i1 %17, i64 1, i64 %23
-  %25 = icmp ugt i64 %24, %11
-  %26 = select i1 %25, i64 %24, i64 %11
-  %27 = urem i64 %16, %24
-  %28 = icmp eq i64 %27, 0
-  %29 = sub i64 %24, %27
-  %30 = select i1 %28, i64 0, i64 %29
-  %31 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %30
-  %32 = add i64 %16, %31
-  %33 = icmp eq i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), 0
-  %34 = call i64 @llvm.ctlz.i64(i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), i1 false)
-  %35 = sub i64 63, %34
-  %36 = shl i64 1, %35
-  %37 = icmp eq i64 %36, ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64)
-  %38 = shl i64 %36, 1
-  %39 = select i1 %37, i64 %36, i64 %38
-  %40 = select i1 %33, i64 1, i64 %39
-  %41 = icmp ugt i64 %40, %26
-  %42 = select i1 %41, i64 %40, i64 %26
-  %43 = urem i64 %32, %40
-  %44 = icmp eq i64 %43, 0
-  %45 = sub i64 %40, %43
-  %46 = select i1 %44, i64 0, i64 %45
-  %47 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %46
-  %48 = add i64 %32, %47
-  %49 = urem i64 %48, %42
-  %50 = icmp eq i64 %49, 0
-  %51 = sub i64 %42, %49
-  %52 = select i1 %50, i64 0, i64 %51
-  %53 = add i64 %48, %52
-  ret i64 %53
+  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), 1
+  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), i64 1
+  %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %3
+  %5 = select i1 %4, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 %3
+  %6 = urem i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64)
+  %7 = icmp eq i64 %6, 0
+  %8 = sub i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %6
+  %9 = select i1 %7, i64 0, i64 %8
+  %10 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %9
+  %11 = add i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %10
+  %12 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %5
+  %13 = select i1 %12, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 %5
+  %14 = urem i64 %11, ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64)
+  %15 = icmp eq i64 %14, 0
+  %16 = sub i64 ptrtoint (ptr getelementptr ({ i8, { ptr, ptr, ptr, i32 } }, ptr null, i32 0, i32 1) to i64), %14
+  %17 = select i1 %15, i64 0, i64 %16
+  %18 = add i64 ptrtoint (ptr getelementptr ({ ptr, ptr, ptr, i32 }, ptr null, i32 1) to i64), %17
+  %19 = add i64 %11, %18
+  %20 = urem i64 %19, %13
+  %21 = icmp eq i64 %20, 0
+  %22 = sub i64 %13, %20
+  %23 = select i1 %21, i64 0, i64 %22
+  %24 = add i64 %19, %23
+  %25 = insertvalue { i64, i64 } undef, i64 %24, 0
+  %26 = insertvalue { i64, i64 } %25, i64 %13, 1
+  ret { i64, i64 } %26
 }
 
 define ptr @Exception_B_init_messageString({ ptr, ptr, ptr, i32 } %0, ptr %1) {
@@ -25619,7 +24804,7 @@ define void @Exception_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   store ptr %34, ptr %33, align 8
   %35 = call ptr @llvm.invariant.start.p0(i64 16, ptr %31)
   %36 = load ptr, ptr %31, align 8
-  %37 = load <6 x i8>, ptr @vjrkx_None, align 8
+  %37 = load <6 x i8>, ptr @dqlxi_None, align 8
   store <6 x i8> %37, ptr %36, align 8
   %38 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %39 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -25938,7 +25123,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %24, ptr %23, align 8
   %25 = call ptr @llvm.invariant.start.p0(i64 16, ptr %21)
   %26 = load ptr, ptr %21, align 8
-  %27 = load <9 x i8>, ptr @wfkkm_, align 16
+  %27 = load <9 x i8>, ptr @xcjmt_, align 16
   store <9 x i8> %27, ptr %26, align 16
   %28 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %29 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -26019,7 +25204,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %91, ptr %90, align 8
   %92 = call ptr @llvm.invariant.start.p0(i64 16, ptr %88)
   %93 = load ptr, ptr %88, align 8
-  %94 = load <26 x i8>, ptr @zivcz_Exception_thrown_from_file, align 32
+  %94 = load <26 x i8>, ptr @sxjeo_Exception_thrown_from_file, align 32
   store <26 x i8> %94, ptr %93, align 32
   %95 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %96 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -26141,7 +25326,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %196, ptr %195, align 8
   %197 = call ptr @llvm.invariant.start.p0(i64 16, ptr %193)
   %198 = load ptr, ptr %193, align 8
-  %199 = load <7 x i8>, ptr @pqshd_At_line, align 8
+  %199 = load <7 x i8>, ptr @vaxeo_At_line, align 8
   store <7 x i8> %199, ptr %198, align 8
   %200 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %201 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -26234,7 +25419,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %275, ptr %274, align 8
   %276 = call ptr @llvm.invariant.start.p0(i64 16, ptr %272)
   %277 = load ptr, ptr %272, align 8
-  %278 = load <12 x i8>, ptr @katzj_With_message, align 16
+  %278 = load <12 x i8>, ptr @rdbmu_With_message, align 16
   store <12 x i8> %278, ptr %277, align 16
   %279 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %280 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -26336,7 +25521,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %362, ptr %361, align 8
   %363 = call ptr @llvm.invariant.start.p0(i64 16, ptr %359)
   %364 = load ptr, ptr %359, align 8
-  %365 = load <9 x i8>, ptr @pqtpm_, align 16
+  %365 = load <9 x i8>, ptr @vzsnf_, align 16
   store <9 x i8> %365, ptr %364, align 16
   %366 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %367 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -27593,22 +26778,22 @@ define void @IO__Self_print_xPtri8(ptr %0, { ptr, i160 } %1) {
 
 define ptr @adjust_trampoline(ptr %tramp) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %ret = call ptr @llvm.adjust.trampoline(ptr %tramp) #12
+  %ret = call ptr @llvm.adjust.trampoline(ptr %tramp) #11
   ret ptr %ret
 }
 
 ; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: read)
-declare ptr @llvm.adjust.trampoline(ptr) #2
+declare ptr @llvm.adjust.trampoline(ptr) #1
 
 ; Function Attrs: mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0)
-define noalias ptr @bump_malloc(i64 noundef %size) #3 {
+define noalias ptr @bump_malloc(i64 noundef %size) #2 {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %result = tail call noalias ptr @bump_malloc_inner(i64 noundef %size, ptr @current_ptr) #3
+  %result = tail call noalias ptr @bump_malloc_inner(i64 noundef %size, ptr @current_ptr) #2
   ret ptr %result
 }
 
 ; Function Attrs: mustprogress nofree noinline nounwind willreturn allockind("alloc,uninitialized") allocsize(0)
-define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) #4 {
+define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) #3 {
   %"reg2mem alloca point" = bitcast i32 0 to i32
   %size_plus_15 = add i64 %size, 15
   %aligned_size = and i64 %size_plus_15, -16
@@ -27621,16 +26806,16 @@ define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) #4 {
 define void @anoint_trampoline(ptr %tramp) {
   %oldProtect = alloca i32, align 4
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %result = call i32 @VirtualProtect(ptr %tramp, i64 16, i32 64, ptr %oldProtect) #5
+  %result = call i32 @VirtualProtect(ptr %tramp, i64 16, i32 64, ptr %oldProtect) #4
   ret void
 }
 
 ; Function Attrs: mustprogress nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare i32 @VirtualProtect(ptr, i64, i32, ptr) #5
+declare i32 @VirtualProtect(ptr, i64, i32, ptr) #4
 
 define ptr @coroutine_create(ptr %func, ptr %arg_passer) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %stack = call noalias ptr @VirtualAlloc(ptr null, i64 8388608, i32 12288, i32 4) #6
+  %stack = call noalias ptr @VirtualAlloc(ptr null, i64 8388608, i32 12288, i32 4) #5
   %func_ptr = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %stack, i32 0, i32 0
   store ptr %func, ptr %func_ptr, align 8
   %stack_top = getelementptr i8, ptr %stack, i64 8388608
@@ -27651,18 +26836,18 @@ define ptr @coroutine_create(ptr %func, ptr %arg_passer) {
 }
 
 ; Function Attrs: mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(1)
-declare noalias ptr @VirtualAlloc(ptr, i64, i32, i32) #6
+declare noalias ptr @VirtualAlloc(ptr, i64, i32, i32) #5
 
 declare void @coroutine_trampoline(ptr)
 
 define void @setup_landing_pad() {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %region = call noalias ptr @VirtualAlloc(ptr null, i64 8388608, i32 12288, i32 4) #6
+  %region = call noalias ptr @VirtualAlloc(ptr null, i64 8388608, i32 12288, i32 4) #5
   store ptr %region, ptr @current_ptr, align 8
   %buf_first_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 0
   %buf_second_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 1
   %buf_third_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 2
-  %sp = call ptr @llvm.stacksave.p0() #13
+  %sp = call ptr @llvm.stacksave.p0() #12
   store ptr %sp, ptr %buf_first_word, align 8
   store ptr blockaddress(@setup_landing_pad, %landing_pad), ptr %buf_second_word, align 8
   store ptr %sp, ptr %buf_third_word, align 8
@@ -27683,7 +26868,7 @@ exit:                                             ; preds = %0
 }
 
 ; Function Attrs: nocallback nofree nosync nounwind willreturn
-declare ptr @llvm.stacksave.p0() #7
+declare ptr @llvm.stacksave.p0() #6
 
 define void @arg_passer(ptr %current_coroutine) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
@@ -27738,12 +26923,12 @@ define void @assume_offset(ptr %fat_ptr, ptr %id_ptr) {
   store i32 %dest_value, ptr %slot, align 4
   %slotval = load i32, ptr %slot, align 4
   %eq = icmp eq i32 %slotval, %offset
-  call void @llvm.assume(i1 %eq) #14
+  call void @llvm.assume(i1 %eq) #13
   ret void
 }
 
 ; Function Attrs: nocallback nofree nosync nounwind willreturn memory(inaccessiblemem: write)
-declare void @llvm.assume(i1 noundef) #8
+declare void @llvm.assume(i1 noundef) #7
 
 define void @set_offset(ptr %fat_ptr, ptr %id_ptr) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
@@ -27756,7 +26941,7 @@ define void @set_offset(ptr %fat_ptr, ptr %id_ptr) {
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind speculatable willreturn memory(argmem: read)
-define i1 @subtype_test(i64 %tbl_size, i64 %hash_coef, i64 %cand_id, i64 %candidate, ptr %supertype_tbl) #9 {
+define i1 @subtype_test(i64 %tbl_size, i64 %hash_coef, i64 %cand_id, i64 %candidate, ptr %supertype_tbl) #8 {
   %"reg2mem alloca point" = bitcast i32 0 to i32
   %hash = call i64 @hash_to_index(i64 %tbl_size, i64 %hash_coef, i64 %cand_id)
   %gep = getelementptr i64, ptr %supertype_tbl, i64 %hash
@@ -27766,9 +26951,9 @@ define i1 @subtype_test(i64 %tbl_size, i64 %hash_coef, i64 %cand_id, i64 %candid
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind speculatable willreturn memory(argmem: read)
-define i1 @subtype_test_wrapper(ptr %f, i64 %tbl_size, i64 %hash_coef, i64 %cand_id, i64 %candidate, ptr %supertype_tbl) #9 {
+define i1 @subtype_test_wrapper(ptr %f, i64 %tbl_size, i64 %hash_coef, i64 %cand_id, i64 %candidate, ptr %supertype_tbl) #8 {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %result = call i1 %f(i64 %tbl_size, i64 %hash_coef, i64 %cand_id, i64 %candidate, ptr %supertype_tbl) #15
+  %result = call i1 %f(i64 %tbl_size, i64 %hash_coef, i64 %cand_id, i64 %candidate, ptr %supertype_tbl) #14
   ret i1 %result
 }
 
@@ -27784,20 +26969,20 @@ define ptr @get_current_coroutine() {
 }
 
 ; Function Attrs: noinline nounwind memory(readwrite)
-define preserve_nonecc void @context_switch(ptr nocapture writeonly %from_buf, ptr %to_buf) #10 {
+define preserve_nonecc void @context_switch(ptr nocapture writeonly %from_buf, ptr %to_buf) #9 {
   %"reg2mem alloca point" = bitcast i32 0 to i32
   %from_buf_first_word = getelementptr [3 x ptr], ptr %from_buf, i32 0, i32 0
   %from_buf_second_word = getelementptr [3 x ptr], ptr %from_buf, i32 0, i32 1
   %from_buf_third_word = getelementptr [3 x ptr], ptr %from_buf, i32 0, i32 2
   store ptr blockaddress(@context_switch, %return_from_switch), ptr %from_buf_second_word, align 8
-  %sp = call ptr @llvm.stacksave.p0() #13
+  %sp = call ptr @llvm.stacksave.p0() #12
   store ptr %sp, ptr %from_buf_first_word, align 8
   store ptr %sp, ptr %from_buf_third_word, align 8
   %is_first_time = call i1 @returns_one()
   br i1 %is_first_time, label %do_switch, label %return_from_switch
 
 do_switch:                                        ; preds = %0
-  call void @llvm.eh.sjlj.longjmp(ptr %to_buf) #11
+  call void @llvm.eh.sjlj.longjmp(ptr %to_buf) #10
   unreachable
 
 return_from_switch:                               ; preds = %0
@@ -27805,12 +26990,12 @@ return_from_switch:                               ; preds = %0
 }
 
 ; Function Attrs: noreturn nounwind
-declare void @llvm.eh.sjlj.longjmp(ptr) #11
+declare void @llvm.eh.sjlj.longjmp(ptr) #10
 
 define void @coroutine_yield(ptr %current_coroutine) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
   %into_callee_buf = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %current_coroutine, i32 0, i32 1
-  call preserve_nonecc void @context_switch(ptr nocapture writeonly %into_callee_buf, ptr @into_caller_buf) #16
+  call preserve_nonecc void @context_switch(ptr nocapture writeonly %into_callee_buf, ptr @into_caller_buf) #15
   ret void
 }
 
@@ -27820,29 +27005,28 @@ define void @coroutine_call(ptr %coroutine) {
   %old_coroutine = load ptr, ptr @current_coroutine, align 8
   store ptr %coroutine, ptr @current_coroutine, align 8
   %into_callee_buf = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %coroutine, i32 0, i32 1
-  call preserve_nonecc void @context_switch(ptr nocapture writeonly @into_caller_buf, ptr %into_callee_buf) #16
+  call preserve_nonecc void @context_switch(ptr nocapture writeonly @into_caller_buf, ptr %into_callee_buf) #15
   store ptr %old_coroutine, ptr @current_coroutine, align 8
   store [3 x ptr] %old_into_caller, ptr @into_caller_buf, align 8
   ret void
 }
 
 attributes #0 = { nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
-attributes #1 = { nocallback nofree nosync nounwind speculatable willreturn memory(none) }
-attributes #2 = { nocallback nofree nosync nounwind willreturn memory(argmem: read) }
-attributes #3 = { mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) "alloc-family"="malloc" }
-attributes #4 = { mustprogress nofree noinline nounwind willreturn allockind("alloc,uninitialized") allocsize(0) "alloc-family"="malloc" }
-attributes #5 = { mustprogress nofree nosync nounwind willreturn memory(argmem: readwrite) }
-attributes #6 = { mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(1) "alloc-family"="malloc" }
-attributes #7 = { nocallback nofree nosync nounwind willreturn }
-attributes #8 = { nocallback nofree nosync nounwind willreturn memory(inaccessiblemem: write) }
-attributes #9 = { mustprogress nofree norecurse nosync nounwind speculatable willreturn memory(argmem: read) }
-attributes #10 = { noinline nounwind memory(readwrite) }
-attributes #11 = { noreturn nounwind }
-attributes #12 = { mustprogress nofree nosync nounwind willreturn memory(argmem: read) }
-attributes #13 = { mustprogress nofree nosync nounwind willreturn }
-attributes #14 = { mustprogress nofree nosync nounwind willreturn memory(inaccessiblemem: write) }
-attributes #15 = { mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read) }
-attributes #16 = { nounwind memory(readwrite) }
+attributes #1 = { nocallback nofree nosync nounwind willreturn memory(argmem: read) }
+attributes #2 = { mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) "alloc-family"="malloc" }
+attributes #3 = { mustprogress nofree noinline nounwind willreturn allockind("alloc,uninitialized") allocsize(0) "alloc-family"="malloc" }
+attributes #4 = { mustprogress nofree nosync nounwind willreturn memory(argmem: readwrite) }
+attributes #5 = { mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(1) "alloc-family"="malloc" }
+attributes #6 = { nocallback nofree nosync nounwind willreturn }
+attributes #7 = { nocallback nofree nosync nounwind willreturn memory(inaccessiblemem: write) }
+attributes #8 = { mustprogress nofree norecurse nosync nounwind speculatable willreturn memory(argmem: read) }
+attributes #9 = { noinline nounwind memory(readwrite) }
+attributes #10 = { noreturn nounwind }
+attributes #11 = { mustprogress nofree nosync nounwind willreturn memory(argmem: read) }
+attributes #12 = { mustprogress nofree nosync nounwind willreturn }
+attributes #13 = { mustprogress nofree nosync nounwind willreturn memory(inaccessiblemem: write) }
+attributes #14 = { mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read) }
+attributes #15 = { nounwind memory(readwrite) }
 
 !llvm.module.flags = !{!0}
 

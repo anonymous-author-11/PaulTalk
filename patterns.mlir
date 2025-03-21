@@ -114,9 +114,28 @@ module @patterns {
     pdl.rewrite %root {
       %null = pdl.operation "llvm.mlir.zero" -> (%ptr_type : !pdl.type)
       %null_result = pdl.result 0 of %null
-      %one_attr = pdl.attribute = 1
       %indices = pdl.attribute = array<i32: 1>
       %gep = pdl.operation "llvm.getelementptr"(%null_result : !pdl.value) {"elem_type" = %typ_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
+      %gep_result = pdl.result 0 of %gep
+      %i64_attr = pdl.attribute = i64
+      %ptrtoint = pdl.operation "llvm.ptrtoint"(%gep_result : !pdl.value) {"type" = %i64_attr} -> (%result_type : !pdl.type)
+      %ptrtoint_result = pdl.result 0 of %ptrtoint
+      pdl.replace %root with (%ptrtoint_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerTypeAlignment : benefit(1) {
+    %typ_attr = pdl.attribute
+    %i64_type = pdl.type : i64
+    %ptr_type = pdl.type : !llvm.ptr
+    %result_type = pdl.type : i64
+    %root = pdl.operation "mini.type_alignment" {"typ" = %typ_attr} -> (%result_type : !pdl.type)
+    pdl.rewrite %root {
+      %byte = pdl.attribute = i8
+      %struct_type_attr = pdl.apply_native_rewrite "make_struct"(%byte, %typ_attr : !pdl.attribute, !pdl.attribute) : !pdl.attribute
+      %null = pdl.operation "llvm.mlir.zero" -> (%ptr_type : !pdl.type)
+      %null_result = pdl.result 0 of %null
+      %indices = pdl.attribute = array<i32: 0, 1>
+      %gep = pdl.operation "llvm.getelementptr"(%null_result : !pdl.value) {"elem_type" = %struct_type_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
       %gep_result = pdl.result 0 of %gep
       %i64_attr = pdl.attribute = i64
       %ptrtoint = pdl.operation "llvm.ptrtoint"(%gep_result : !pdl.value) {"type" = %i64_attr} -> (%result_type : !pdl.type)

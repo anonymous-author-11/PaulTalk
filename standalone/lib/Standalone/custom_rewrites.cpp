@@ -76,6 +76,22 @@ static Type functionType(PatternRewriter &rewriter, TypeRange inputTypes, TypeRa
   return FunctionType::get(rewriter.getContext(), inputTypes, outputTypes);
 }
 
+static LogicalResult makeStruct(PatternRewriter &rewriter, PDLResultList &results, ArrayRef<PDLValue> args) {
+
+  SmallVector<Type> structElements;
+  for (const PDLValue &arg : args) {
+    if (auto t = mlir::cast<TypeAttr>(arg).getValue()) {
+      structElements.push_back(t);
+    }
+  }
+  
+  // Create the LLVM struct type
+  auto structType = LLVM::LLVMStructType::getLiteral(rewriter.getContext(), structElements);
+  auto structAttr = TypeAttr::get(structType);
+  results.push_back(mlir::cast<Attribute>(structAttr));
+  return success();
+}
+
 static Attribute coroFrame(PatternRewriter &rewriter, Type inputType) {
   
   // Get the context
@@ -201,6 +217,7 @@ static LogicalResult arrayAttr(PatternRewriter &rewriter, PDLResultList &results
   results.push_back(attr);
   return success();
 }
+
 
 static Attribute countElements(PatternRewriter &rewriter, ValueRange values) {
   return IntegerAttr::get(rewriter.getI32Type(), values.getTypes().size());
@@ -643,6 +660,8 @@ struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> 
         "vtable_type", vtableType);
     patternList.getPDLPatterns().registerRewriteFunction(
         "function_type", functionType);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "make_struct", makeStruct);
     patternList.getPDLPatterns().registerRewriteFunction(
         "type_attr_to_type", typeAttrToType);
     patternList.getPDLPatterns().registerRewriteFunction(

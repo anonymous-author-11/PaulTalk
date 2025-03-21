@@ -588,6 +588,12 @@ class TypeSizeOp(IRDLOperation):
     result: OpResult = result_def()
 
 @irdl_op_definition
+class TypeAlignmentOp(IRDLOperation):
+    name = "mini.type_alignment"
+    typ: TypeAttribute = attr_def(TypeAttribute)
+    result: OpResult = result_def()
+
+@irdl_op_definition
 class CreateBufferOp(IRDLOperation):
     name = "mini.create_buffer"
     size: Operand = operand_def()
