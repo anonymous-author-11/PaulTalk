@@ -2272,7 +2272,11 @@ class ClassDef(Statement):
         return [*chain.from_iterable(cls.method_definitions for cls in self.my_ordering())]
 
     def fields(self):
-        return list(reversed({elem.declaration.name:elem for elem in reversed(self.vtable()) if isinstance(elem, Field)}.values()))
+        ret = list(reversed({elem.declaration.name:elem for elem in reversed(self.vtable()) if isinstance(elem, Field)}.values()))
+        unfixed_type_fields = (f for f in ret if isinstance(f.declaration, TypeFieldDecl) and f.needs_storage())
+        data_fields = (f for f in ret if not isinstance(f.declaration, TypeFieldDecl))
+        fixed_type_fields = (f for f in ret if isinstance(f.declaration, TypeFieldDecl) and not f.needs_storage())
+        return [*unfixed_type_fields, *data_fields, *fixed_type_fields]
 
     def stored_type_fields(self):
         return [f for f in self.fields() if isinstance(f.declaration, TypeFieldDecl) and f.needs_storage()]
@@ -2300,7 +2304,7 @@ class ClassDef(Statement):
         data_fields = [field for field in field_declarations if not isinstance(field, TypeFieldDecl)]
         fixed_type_fields = [field for field in field_declarations if isinstance(field, TypeFieldDecl) and "subtype" not in field.scoped_name(self._scope)]
         unfixed_type_fields = [field for field in field_declarations if isinstance(field, TypeFieldDecl) and "subtype" in field.scoped_name(self._scope)]
-        field_declarations = [*data_fields, *unfixed_type_fields, *fixed_type_fields]
+        field_declarations = [*unfixed_type_fields, *data_fields, *fixed_type_fields]
         fields = [Field(i, self, declaration) for (i, declaration) in enumerate(field_declarations)]
         if len(fields) > 0: print(f"redux {self.name} fields are {[field.declaration.scoped_name(self._scope) for field in fields]}")
         self.initialize_behaviors()

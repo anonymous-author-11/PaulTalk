@@ -1550,14 +1550,10 @@ module @patterns {
       %store2 = pdl.operation "llvm.store"(%offset_result, %gep1_result : !pdl.value, !pdl.value)
       %sixteen = pdl.attribute = 16
       %invariant0 = pdl.operation "mini.invariant"(%alloca_result : !pdl.value) {"num_bytes" = %sixteen} -> (%ptr_type : !pdl.type)
-      %zero = pdl.attribute = 0
-      %malloc_gep_indices = pdl.apply_native_rewrite "array_attr"(%zero, %num_data_fields : !pdl.attribute, !pdl.attribute) : !pdl.attribute
-      %malloc_gep = pdl.operation "llvm.getelementptr"(%malloc_result : !pdl.value) {"elem_type" = %typ_attr, "rawConstantIndices" = %malloc_gep_indices} -> (%ptr_type : !pdl.type)
-      %malloc_gep_result = pdl.result 0 of %malloc_gep
       %type_fields_type = pdl.apply_native_rewrite "array_from_size_and_type"(%num_parameterizations, %ptr_type : !pdl.attribute, !pdl.type) : !pdl.type
       %type_fields_attr = pdl.apply_native_rewrite "type_to_type_attr"(%type_fields_type : !pdl.type) : !pdl.attribute
-      pdl.apply_native_rewrite "store_operands_in_container"(%root, %type_fields_attr, %malloc_gep_result : !pdl.operation, !pdl.attribute, !pdl.value)
-      %invariant1 = pdl.operation "mini.invariant"(%malloc_gep_result : !pdl.value) {"num_bytes" = %type_fields_bytes} -> (%ptr_type : !pdl.type)
+      pdl.apply_native_rewrite "store_operands_in_container"(%root, %type_fields_attr, %malloc_result : !pdl.operation, !pdl.attribute, !pdl.value)
+      %invariant1 = pdl.operation "mini.invariant"(%malloc_result : !pdl.value) {"num_bytes" = %type_fields_bytes} -> (%ptr_type : !pdl.type)
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }

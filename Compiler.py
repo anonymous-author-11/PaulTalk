@@ -129,16 +129,18 @@ def run_opt(debug_mode):
     debug = "debugir out_reg2mem.ll"
     debug_extension = ".dbg" if debug_mode else ""
     o3 = "--passes=\"default<O3>\""
-    o2 = "--passes=\"default<O3>\""
+    o2 = "--passes=\"default<O2>\""
+    o1 = "--passes=\"default<O1>\""
+    opt_level = o1 if debug_mode else o3
 
     # this is the real optimization sauce for our language
     # does another round of optimizations whenever an indirect callee is identified
     devirtualization_settings = "--max-devirt-iterations=100 --abort-on-max-devirt-iterations-reached"
     # inline everything possible, and let the machine outliner undo some of it
-    inline_settings = "--inline-threshold=10000"
+    inline_settings = "--inline-threshold=-10000" if debug_mode else "--inline-threshold=10000"
     heap_to_stack = "--enable-heap-to-stack-conversion"
     in_file = f"out_reg2mem{debug_extension}.ll"
-    opt = f"opt -S {in_file} {o3} {devirtualization_settings} {inline_settings} -o out_optimized.ll"
+    opt = f"opt -S {in_file} {opt_level} {devirtualization_settings} {inline_settings} -o out_optimized.ll"
     #opt2 = f"opt -S {in_file} {o2} --print-after-all {heap_to_stack} {devirtualization_settings} {inline_settings} -o out_optimized.ll"
     if debug_mode: subprocess.run(debug, text=True, shell=True)
     subprocess.run(opt, text=True, shell=True)
@@ -148,7 +150,7 @@ def run_llc(out_file_names):
     # necessary so that the machine outliner doesn't break; default would be 'exception-model=wineh'
     exception_model = "-exception-model=sjlj"
     outliner_settings = "-enable-machine-outliner -machine-outliner-reruns=2"
-    llc = f"llc -filetype=obj out_optimized.ll -O=3 {target_triple} {exception_model} {outliner_settings} -o {out_file_names[1]}"
+    llc = f"llc -filetype=obj out_optimized.ll -O=3 {target_triple} {exception_model} -o {out_file_names[1]}"
     subprocess.run(llc)
 
 def run_lld_link(debug_mode, out_file_names):
