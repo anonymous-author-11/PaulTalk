@@ -2272,11 +2272,7 @@ class ClassDef(Statement):
         return [*chain.from_iterable(cls.method_definitions for cls in self.my_ordering())]
 
     def fields(self):
-        ret = list(reversed({elem.declaration.name:elem for elem in reversed(self.vtable()) if isinstance(elem, Field)}.values()))
-        unfixed_type_fields = (f for f in ret if isinstance(f.declaration, TypeFieldDecl) and f.needs_storage())
-        data_fields = (f for f in ret if not isinstance(f.declaration, TypeFieldDecl))
-        fixed_type_fields = (f for f in ret if isinstance(f.declaration, TypeFieldDecl) and not f.needs_storage())
-        return [*unfixed_type_fields, *data_fields, *fixed_type_fields]
+        return [v for k,v in sorted({elem.offset:elem for elem in self.vtable() if isinstance(elem, Field)}.items())]
 
     def stored_type_fields(self):
         return [f for f in self.fields() if isinstance(f.declaration, TypeFieldDecl) and f.needs_storage()]

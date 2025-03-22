@@ -8314,12 +8314,12 @@ define ptr @Float64_B__ADD_otherInt32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %
   %9 = load i64, ptr %5, align 4
   %10 = load ptr, ptr %6, align 8
   %11 = load ptr, ptr %7, align 8
-  %result.i = tail call i1 %10(i64 %9, i64 %8, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr readonly %11) #0
-  %result.i1 = tail call i1 %10(i64 %9, i64 %8, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr readonly %11) #0
+  %result.i = tail call i1 %10(i64 %9, i64 %8, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr readonly %11) #0
+  %result.i1 = tail call i1 %10(i64 %9, i64 %8, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr readonly %11) #0
   %not.result.i = xor i1 %result.i, true
   %.reg2mem5.0 = select i1 %not.result.i, i1 true, i1 %result.i1
   %12 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %13 = select i1 %.reg2mem5.0, i64 8, i64 9
+  %13 = select i1 %.reg2mem5.0, i64 9, i64 8
   %14 = getelementptr [18 x ptr], ptr %12, i64 0, i64 %13
   %15 = getelementptr i8, ptr %14, i64 56
   %16 = load ptr, ptr %15, align 8
@@ -9163,7 +9163,7 @@ define void @Holder_setter_held(ptr nocapture writeonly %0, { ptr, i160 } %1) #3
   ret void
 }
 
-define { ptr, i160 } @jrqesjykwq(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
+define { ptr, i160 } @ojefguwzod(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
@@ -9173,7 +9173,7 @@ define { ptr, i160 } @jrqesjykwq(ptr nest nocapture readonly %0, { ptr, i160 } %
   ret { ptr, i160 } %4
 }
 
-define { ptr, i160 } @kxfecsjdlv(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
+define { ptr, i160 } @oeaoqurqzq(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call double %0(i32 %.sroa.1.8.extract.trunc)
@@ -9184,7 +9184,7 @@ define { ptr, i160 } @kxfecsjdlv(ptr nest nocapture readonly %0, { ptr, i160 } %
   ret { ptr, i160 } %5
 }
 
-define { ptr, i160 } @qdakomhiiu(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
+define { ptr, i160 } @oycnqhzqsb(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
@@ -9194,7 +9194,7 @@ define { ptr, i160 } @qdakomhiiu(ptr nest nocapture readonly %0, { ptr, i160 } %
   ret { ptr, i160 } %4
 }
 
-define { ptr, i160 } @mhofcgbdnd(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define { ptr, i160 } @rapzrinasx(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %.fca.1.extract2 = extractvalue { ptr, i160 } %1, 1
   %.sroa.14.8.extract.trunc = trunc i160 %.fca.1.extract2 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -9327,30 +9327,30 @@ define ptr @Iterable2_B_product_otherIterable2U({ ptr, ptr, ptr, i32 } %0, ptr n
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define i32 @_functionliteral_lbbritlusf(i32 %0, i32 %1) #4 {
+define i32 @_functionliteral_vfwhfbmhlt(i32 %0, i32 %1) #4 {
   %3 = add i32 %1, %0
   ret i32 %3
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define range(i32 0, -1) i32 @_functionliteral_xvlrqxzkbj(i32 %0) #4 {
+define range(i32 0, -1) i32 @_functionliteral_tjyxdqtekb(i32 %0) #4 {
   %2 = shl i32 %0, 1
   ret i32 %2
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define double @_functionliteral_bptehzettb(double %0) local_unnamed_addr #4 {
+define double @_functionliteral_wvvpcdeivw(double %0) local_unnamed_addr #4 {
   %2 = fmul double %0, 2.000000e+00
   ret double %2
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define i32 @_functionliteral_ccfkajxcgv(i32 returned %0) #4 {
+define i32 @_functionliteral_xppdiaiqtl(i32 returned %0) #4 {
   ret i32 %0
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define double @_functionliteral_zxgsbspavq(i32 %0) #4 {
+define double @_functionliteral_iglbnsxkin(i32 %0) #4 {
   %2 = sitofp i32 %0 to double
   ret double %2
 }
@@ -9495,7 +9495,7 @@ ArrayIterator_next_.exit3151:
   call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %oldProtect.i)
   %result.i613 = call i32 @VirtualProtect(ptr %result.i612, i64 16, i32 64, ptr nonnull %oldProtect.i) #14
   call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %oldProtect.i)
-  call void @llvm.init.trampoline(ptr %result.i612, ptr nonnull @mhofcgbdnd, ptr nonnull @_functionliteral_lbbritlusf)
+  call void @llvm.init.trampoline(ptr %result.i612, ptr nonnull @rapzrinasx, ptr nonnull @_functionliteral_vfwhfbmhlt)
   %24 = call ptr @llvm.invariant.start.p0(i64 24, ptr %result.i612)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
@@ -9508,7 +9508,7 @@ ArrayIterator_next_.exit3151:
   call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %oldProtect.i634)
   %result.i635 = call i32 @VirtualProtect(ptr %result.i633, i64 16, i32 64, ptr nonnull %oldProtect.i634) #14
   call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %oldProtect.i634)
-  call void @llvm.init.trampoline(ptr %result.i633, ptr nonnull @qdakomhiiu, ptr nonnull @_functionliteral_xvlrqxzkbj)
+  call void @llvm.init.trampoline(ptr %result.i633, ptr nonnull @oycnqhzqsb, ptr nonnull @_functionliteral_tjyxdqtekb)
   %ret.i636 = call ptr @llvm.adjust.trampoline(ptr readonly %result.i633) #30
   %28 = call ptr @llvm.invariant.start.p0(i64 24, ptr %result.i633)
   %result.i.i1634 = call noalias dereferenceable_or_null(56) ptr @bump_malloc_inner(i64 noundef 56, ptr nonnull @current_ptr) #28
@@ -9528,13 +9528,13 @@ ArrayIterator_next_.exit3151:
   call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %oldProtect.i666)
   %result.i667 = call i32 @VirtualProtect(ptr %result.i665, i64 16, i32 64, ptr nonnull %oldProtect.i666) #14
   call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %oldProtect.i666)
-  call void @llvm.init.trampoline(ptr %result.i665, ptr nonnull @kxfecsjdlv, ptr nonnull @_functionliteral_zxgsbspavq)
+  call void @llvm.init.trampoline(ptr %result.i665, ptr nonnull @oeaoqurqzq, ptr nonnull @_functionliteral_iglbnsxkin)
   %35 = call ptr @llvm.invariant.start.p0(i64 24, ptr %result.i665)
   %result.i669 = call noalias dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nonnull @current_ptr) #28
   call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %oldProtect.i670)
   %result.i671 = call i32 @VirtualProtect(ptr %result.i669, i64 16, i32 64, ptr nonnull %oldProtect.i670) #14
   call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %oldProtect.i670)
-  call void @llvm.init.trampoline(ptr %result.i669, ptr nonnull @jrqesjykwq, ptr nonnull @_functionliteral_ccfkajxcgv)
+  call void @llvm.init.trampoline(ptr %result.i669, ptr nonnull @ojefguwzod, ptr nonnull @_functionliteral_xppdiaiqtl)
   %ret.i672 = call ptr @llvm.adjust.trampoline(ptr readonly %result.i669) #30
   %36 = call ptr @llvm.invariant.start.p0(i64 24, ptr %result.i669)
   %result.i.i1690 = call noalias dereferenceable_or_null(56) ptr @bump_malloc_inner(i64 noundef 56, ptr nonnull @current_ptr) #28
