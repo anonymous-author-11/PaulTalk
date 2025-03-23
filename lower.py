@@ -1915,7 +1915,8 @@ class LowerBoxDef(RewritePattern):
         memcpy0.properties["operandSegmentSizes"] = operandSegmentSizes
         memcpy0.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
         content_ptr = arith.Select(no_allocation.results[0], data_ptr, malloc.results[0])
-        args = [gep.results[0], content_ptr.results[0], data_size.results[0], false.results[0]]
+        destination = arith.Select(right_size.results[0], alloca.results[0], gep.results[0])
+        args = [destination.results[0], content_ptr.results[0], data_size.results[0], false.results[0]]
         memcpy1 = llvm.CallIntrinsicOp("llvm.memcpy.inline.p0.p0.i64", [args], [llvm.LLVMVoidType()])
         memcpy1.properties["operandSegmentSizes"] = operandSegmentSizes
         memcpy1.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
@@ -1923,7 +1924,7 @@ class LowerBoxDef(RewritePattern):
         ret = llvm.ReturnOp.create(operands=[unwrap.results[0]])
         body_block.add_ops([
             alloca, gep, vptr, store, size_fn, laundered, call, data_size, threshold, thirtytwo, small_struct, right_size,
-            no_allocation, malloc, false, memcpy0, content_ptr, memcpy1, unwrap, ret
+            no_allocation, malloc, false, memcpy0, content_ptr, destination, memcpy1, unwrap, ret
         ])
 
         dict_ary = ArrayAttr([DictionaryAttr({"llvm.nonnull":UnitAttr()}), DictionaryAttr({"llvm.nonnull":UnitAttr()})])
