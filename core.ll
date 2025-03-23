@@ -1,19 +1,19 @@
 ; ModuleID = 'LLVMDialectModule'
 source_filename = "LLVMDialectModule"
 
-@iakfk_ = internal constant [9 x i8] c"---------"
-@sdlyg_With_message = internal constant [12 x i8] c"With message"
-@mcpvv_At_line = internal constant [7 x i8] c"At line"
-@gacyn_Exception_thrown_from_file = internal constant [26 x i8] c"Exception thrown from file"
-@nznvm_ = internal constant [9 x i8] c"---------"
-@wvavu_ = internal constant [0 x i8] zeroinitializer
-@pgmhr_None = internal constant [6 x i8] c"<None>"
-@oropk_ = internal constant [0 x i8] zeroinitializer
-@_parameterization_Ptri8 = linkonce_odr constant [1 x ptr] [ptr @i8_typ]
-@_parameterization_String = linkonce_odr constant [1 x ptr] [ptr @String]
-@_parameterization_Ptri32 = linkonce_odr constant [1 x ptr] [ptr @i32_typ]
-@_parameterization_BufferPtri8 = linkonce_odr constant [1 x ptr] [ptr @buffer_typ]
-@tsoeh_Object = internal constant [6 x i8] c"Object"
+@cgnob_ = internal constant [9 x i8] c"---------"
+@puult_With_message = internal constant [12 x i8] c"With message"
+@iehsr_At_line = internal constant [7 x i8] c"At line"
+@wwcey_Exception_thrown_from_file = internal constant [26 x i8] c"Exception thrown from file"
+@obztf_ = internal constant [9 x i8] c"---------"
+@olgwn_ = internal constant [0 x i8] zeroinitializer
+@fwbko_None = internal constant [6 x i8] c"<None>"
+@marwy_ = internal constant [0 x i8] zeroinitializer
+@_parameterization_Ptri8 = linkonce_odr constant [2 x ptr] [ptr @i8_typ, ptr null]
+@_parameterization_String = linkonce_odr constant [2 x ptr] [ptr @String, ptr null]
+@_parameterization_Ptri32 = linkonce_odr constant [2 x ptr] [ptr @i32_typ, ptr null]
+@_parameterization_BufferPtri8 = linkonce_odr constant [2 x ptr] [ptr @buffer_typ, ptr null]
+@sfxrz_Object = internal constant [6 x i8] c"Object"
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
 @float_string = linkonce_odr constant [4 x i8] c"%f\0A\00"
@@ -122,6 +122,10 @@ declare void @assume_offset(ptr, ptr)
 
 declare { ptr, i160 } @_box_Default(ptr, ptr)
 
+declare { i64, i64 } @_size_tuple_typ(ptr)
+
+declare { i64, i64 } @_size_union_typ(ptr)
+
 declare i1 @subtype_test(i64, i64, i64, i64, ptr)
 
 declare i1 @subtype_test_wrapper(ptr, i64, i64, i64, i64, ptr)
@@ -185,7 +189,7 @@ define { ptr, ptr, ptr, i32 } @Representable_repr_({ ptr, ptr, ptr, i32 } %0, { 
   store ptr %24, ptr %23, align 8
   %25 = call ptr @llvm.invariant.start.p0(i64 16, ptr %21)
   %26 = load ptr, ptr %21, align 8
-  %27 = load <6 x i8>, ptr @tsoeh_Object, align 8
+  %27 = load <6 x i8>, ptr @sfxrz_Object, align 8
   store <6 x i8> %27, ptr %26, align 8
   %28 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %29 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -3736,7 +3740,7 @@ define void @Exception_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   store ptr %34, ptr %33, align 8
   %35 = call ptr @llvm.invariant.start.p0(i64 16, ptr %31)
   %36 = load ptr, ptr %31, align 8
-  %37 = load <6 x i8>, ptr @pgmhr_None, align 8
+  %37 = load <6 x i8>, ptr @fwbko_None, align 8
   store <6 x i8> %37, ptr %36, align 8
   %38 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %39 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4093,7 +4097,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %24, ptr %23, align 8
   %25 = call ptr @llvm.invariant.start.p0(i64 16, ptr %21)
   %26 = load ptr, ptr %21, align 8
-  %27 = load <9 x i8>, ptr @nznvm_, align 16
+  %27 = load <9 x i8>, ptr @obztf_, align 16
   store <9 x i8> %27, ptr %26, align 16
   %28 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %29 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4174,7 +4178,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %91, ptr %90, align 8
   %92 = call ptr @llvm.invariant.start.p0(i64 16, ptr %88)
   %93 = load ptr, ptr %88, align 8
-  %94 = load <26 x i8>, ptr @gacyn_Exception_thrown_from_file, align 32
+  %94 = load <26 x i8>, ptr @wwcey_Exception_thrown_from_file, align 32
   store <26 x i8> %94, ptr %93, align 32
   %95 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %96 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4296,7 +4300,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %196, ptr %195, align 8
   %197 = call ptr @llvm.invariant.start.p0(i64 16, ptr %193)
   %198 = load ptr, ptr %193, align 8
-  %199 = load <7 x i8>, ptr @mcpvv_At_line, align 8
+  %199 = load <7 x i8>, ptr @iehsr_At_line, align 8
   store <7 x i8> %199, ptr %198, align 8
   %200 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %201 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4389,7 +4393,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %275, ptr %274, align 8
   %276 = call ptr @llvm.invariant.start.p0(i64 16, ptr %272)
   %277 = load ptr, ptr %272, align 8
-  %278 = load <12 x i8>, ptr @sdlyg_With_message, align 16
+  %278 = load <12 x i8>, ptr @puult_With_message, align 16
   store <12 x i8> %278, ptr %277, align 16
   %279 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %280 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4491,7 +4495,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %362, ptr %361, align 8
   %363 = call ptr @llvm.invariant.start.p0(i64 16, ptr %359)
   %364 = load ptr, ptr %359, align 8
-  %365 = load <9 x i8>, ptr @iakfk_, align 16
+  %365 = load <9 x i8>, ptr @cgnob_, align 16
   store <9 x i8> %365, ptr %364, align 16
   %366 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %367 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -5132,19 +5136,6 @@ define linkonce_odr { ptr, i160 } @_box_buffer_typ(ptr nonnull %0, ptr nonnull %
   ret { ptr, i160 } %17
 }
 
-define linkonce_odr { i64, i64 } @_size_tuple_typ(ptr %0) {
-  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, {} }, ptr null, i32 0, i32 1) to i64), 1
-  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, {} }, ptr null, i32 0, i32 1) to i64), i64 1
-  %4 = urem i64 ptrtoint (ptr getelementptr ({}, ptr null, i32 1) to i64), %3
-  %5 = icmp eq i64 %4, 0
-  %6 = sub i64 %3, %4
-  %7 = select i1 %5, i64 0, i64 %6
-  %8 = add i64 ptrtoint (ptr getelementptr ({}, ptr null, i32 1) to i64), %7
-  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
-  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
-  ret { i64, i64 } %10
-}
-
 define linkonce_odr { ptr, i160 } @_box_tuple_typ(ptr nonnull %0, ptr nonnull %1) {
   %3 = alloca { ptr, i160 }, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
@@ -5165,19 +5156,6 @@ define linkonce_odr { ptr, i160 } @_box_tuple_typ(ptr nonnull %0, ptr nonnull %1
   %16 = load i160, ptr %15, align 4
   %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
   ret { ptr, i160 } %17
-}
-
-define linkonce_odr { i64, i64 } @_size_union_typ(ptr %0) {
-  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, i8 } }, ptr null, i32 0, i32 1) to i64), 1
-  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, i8 } }, ptr null, i32 0, i32 1) to i64), i64 1
-  %4 = urem i64 ptrtoint (ptr getelementptr ({ ptr, i8 }, ptr null, i32 1) to i64), %3
-  %5 = icmp eq i64 %4, 0
-  %6 = sub i64 %3, %4
-  %7 = select i1 %5, i64 0, i64 %6
-  %8 = add i64 ptrtoint (ptr getelementptr ({ ptr, i8 }, ptr null, i32 1) to i64), %7
-  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
-  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
-  ret { i64, i64 } %10
 }
 
 define linkonce_odr { ptr, i160 } @_box_union_typ(ptr nonnull %0, ptr nonnull %1) {

@@ -91,6 +91,10 @@ declare void @assume_offset(ptr, ptr)
 
 declare { ptr, i160 } @_box_Default(ptr, ptr)
 
+declare { i64, i64 } @_size_tuple_typ(ptr)
+
+declare { i64, i64 } @_size_union_typ(ptr)
+
 declare i1 @subtype_test(i64, i64, i64, i64, ptr)
 
 declare i1 @subtype_test_wrapper(ptr, i64, i64, i64, i64, ptr)
@@ -1010,19 +1014,6 @@ define linkonce_odr { ptr, i160 } @_box_buffer_typ(ptr nonnull %0, ptr nonnull %
   ret { ptr, i160 } %17
 }
 
-define linkonce_odr { i64, i64 } @_size_tuple_typ(ptr %0) {
-  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, {} }, ptr null, i32 0, i32 1) to i64), 1
-  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, {} }, ptr null, i32 0, i32 1) to i64), i64 1
-  %4 = urem i64 ptrtoint (ptr getelementptr ({}, ptr null, i32 1) to i64), %3
-  %5 = icmp eq i64 %4, 0
-  %6 = sub i64 %3, %4
-  %7 = select i1 %5, i64 0, i64 %6
-  %8 = add i64 ptrtoint (ptr getelementptr ({}, ptr null, i32 1) to i64), %7
-  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
-  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
-  ret { i64, i64 } %10
-}
-
 define linkonce_odr { ptr, i160 } @_box_tuple_typ(ptr nonnull %0, ptr nonnull %1) {
   %3 = alloca { ptr, i160 }, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
@@ -1043,19 +1034,6 @@ define linkonce_odr { ptr, i160 } @_box_tuple_typ(ptr nonnull %0, ptr nonnull %1
   %16 = load i160, ptr %15, align 4
   %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
   ret { ptr, i160 } %17
-}
-
-define linkonce_odr { i64, i64 } @_size_union_typ(ptr %0) {
-  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, i8 } }, ptr null, i32 0, i32 1) to i64), 1
-  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, i8 } }, ptr null, i32 0, i32 1) to i64), i64 1
-  %4 = urem i64 ptrtoint (ptr getelementptr ({ ptr, i8 }, ptr null, i32 1) to i64), %3
-  %5 = icmp eq i64 %4, 0
-  %6 = sub i64 %3, %4
-  %7 = select i1 %5, i64 0, i64 %6
-  %8 = add i64 ptrtoint (ptr getelementptr ({ ptr, i8 }, ptr null, i32 1) to i64), %7
-  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
-  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
-  ret { i64, i64 } %10
 }
 
 define linkonce_odr { ptr, i160 } @_box_union_typ(ptr nonnull %0, ptr nonnull %1) {

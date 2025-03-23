@@ -304,12 +304,14 @@ DONE:
 	- But still needs to know how to add up the results of recursive calls [check!]
 	- Returns an i64 [check!]
 	- Properly handles alignment [check!]
+- Have a _box_ method in every type's vtable [check!]
+- Null-terminate parameterizations [check!]
+- Write a special _size_ method for union and tuple [check!]
 
 TODO:
 
 - Maybe create offset & hash table separately and just give names to typedef
 - Then only have to pass getter, box, and subtype name to typeptrs
-- Have a _box_ method in every type's vtable
 - Disallow method type parameters having same name as class type parameters
 - Generic buffer size and indexing
 	- First just change bufferindexationop to take a dynamic type size [check!]

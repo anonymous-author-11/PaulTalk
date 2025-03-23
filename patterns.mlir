@@ -398,6 +398,18 @@ module @patterns {
       %box_decl = pdl.operation "llvm.func" {"sym_name" = %box, "function_type" = %func_type_attr9, "linkage" = %linkage}
       %box_with_region = pdl.apply_native_rewrite "add_region"(%box_decl : !pdl.operation) : !pdl.operation
       pdl.erase %box_decl
+
+      %tuple_size = pdl.attribute = "_size_tuple_typ"
+      %func_type_attr95 = pdl.attribute = !llvm.func<!llvm.struct<(i64, i64)> (ptr)>
+      %tuple_size_decl = pdl.operation "llvm.func" {"sym_name" = %tuple_size, "function_type" = %func_type_attr95, "linkage" = %linkage}
+      %tuple_size_with_region = pdl.apply_native_rewrite "add_region"(%tuple_size_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %tuple_size_decl
+
+      %union_size = pdl.attribute = "_size_union_typ"
+      %func_type_attr96 = pdl.attribute = !llvm.func<!llvm.struct<(i64, i64)> (ptr)>
+      %union_size_decl = pdl.operation "llvm.func" {"sym_name" = %union_size, "function_type" = %func_type_attr96, "linkage" = %linkage}
+      %union_size_with_region = pdl.apply_native_rewrite "add_region"(%union_size_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %union_size_decl
       
       %subtype = pdl.attribute = "subtype_test"
       %func_type_attr10 = pdl.attribute = !llvm.func<i1 (i64, i64, i64, i64, ptr)>

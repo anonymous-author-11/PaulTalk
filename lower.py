@@ -565,7 +565,7 @@ class LowerParameterization(RewritePattern):
         # "subtype" in name.data means that one of the nested types is an unresolved type parameter
         # parameterizations involving unresolved type parameters require dynamic allocations
         needs_dynamic_allocation = "subtype" in name.data
-        typ = llvm.LLVMArrayType.from_size_and_type(len(op.name_hierarchy.data), llvm.LLVMPointerType.opaque())
+        typ = llvm.LLVMArrayType.from_size_and_type(len(op.name_hierarchy.data) + 1, llvm.LLVMPointerType.opaque())
 
         if needs_dynamic_allocation:
             malloc = MallocOp.create(attributes={"typ":typ}, result_types=[llvm.LLVMPointerType.opaque()])
@@ -578,8 +578,11 @@ class LowerParameterization(RewritePattern):
                 gep = llvm.GEPOp(malloc.results[0], [0, i], pointee_type=typ)
                 store = llvm.StoreOp(parameterization.results[0], gep.results[0])
                 rewriter.inline_block_after_matched_op(Block([parameterization, gep, store]))
+            null = llvm.ZeroOp.create(result_types=[llvm.LLVMPointerType.opaque()])
+            gep = llvm.GEPOp(malloc.results[0], [0, len(op.name_hierarchy.data)], pointee_type=typ)
+            store = llvm.StoreOp(null.results[0], gep.results[0])
             invariant = InvariantOp.make(malloc.results[0], 8 * len(op.id_hierarchy.data))
-            rewriter.insert_op_after_matched_op(invariant)
+            rewriter.inline_block_after_matched_op(Block([null, gep, store, invariant]))
             rewriter.replace_matched_op(malloc)
             return
 
@@ -603,8 +606,11 @@ class LowerParameterization(RewritePattern):
             parameterization = ParameterizationOp.make([], id_i, op.name_hierarchy.data[i])
             ary = llvm.InsertValueOp(dense_ary, ary.results[0], parameterization.results[0])
             glob_block.add_ops([parameterization, ary])
+        null = llvm.ZeroOp.create(result_types=[llvm.LLVMPointerType.opaque()])
+        dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [len(op.id_hierarchy.data)])
+        ary = llvm.InsertValueOp(dense_ary, ary.results[0], null.results[0])
         ret = llvm.ReturnOp.create(operands=[ary.results[0]])
-        glob_block.add_op(ret)
+        glob_block.add_ops([null, ary, ret])
         glob_region = Region([glob_block])
         glob.regions = (glob_region,)
         glob_region.parent = glob

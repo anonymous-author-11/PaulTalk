@@ -25,6 +25,10 @@ declare void @report_exception( {ptr} )
 @current_coroutine = linkonce_odr thread_local global ptr null
 @always_one = linkonce thread_local global i1 1
 
+@_parameterization_Tuple_Ptrf64._Ptrf64._Ptrf64 = linkonce_odr constant [5 x ptr] [ptr @tuple_typ, ptr @_parameterization_Ptrf64, ptr @_parameterization_Ptrf64, ptr @_parameterization_Ptrf64, ptr null]
+@_parameterization_Ptrf64 = external constant [2 x ptr]
+@tuple_typ = external constant { [3 x i64], [5 x ptr], [0 x ptr] }
+
 ; Thread-local storage for our bump allocator state
 @current_ptr = internal thread_local global ptr null
 
@@ -58,6 +62,95 @@ define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) noinl
   ;call void @llvm.assume(i1 true) ["noalias"(ptr %current)]
 
   ret ptr %current 
+}
+
+define { i64, i64 } @_size_tuple_typ(ptr %0) {
+  %2 = getelementptr i8, ptr %0, i64 8
+  %3 = load i64, ptr %2, align 4
+  %4 = icmp eq i64 %3, 0
+  br i1 %4, label %._crit_edge, label %.lr.ph
+
+.lr.ph:                                           ; preds = %1, %.lr.ph
+  %.in = phi i64 [ %22, %.lr.ph ], [ %3, %1 ]
+  %5 = phi i64 [ %20, %.lr.ph ], [ 1, %1 ]
+  %.reg2mem22.011 = phi i64 [ %19, %.lr.ph ], [ 0, %1 ]
+  %.reg2mem20.010 = phi i64 [ %13, %.lr.ph ], [ 1, %1 ]
+  %6 = inttoptr i64 %.in to ptr
+  %7 = load ptr, ptr %6, align 8
+  %8 = getelementptr i8, ptr %7, i64 48
+  %9 = load ptr, ptr %8, align 8
+  %10 = tail call { i64, i64 } %9(ptr nonnull %6)
+  %11 = extractvalue { i64, i64 } %10, 0
+  %12 = extractvalue { i64, i64 } %10, 1
+  %13 = tail call i64 @llvm.umax.i64(i64 %12, i64 %.reg2mem20.010)
+  %14 = urem i64 %.reg2mem22.011, %12
+  %15 = icmp eq i64 %14, 0
+  %16 = sub i64 %12, %14
+  %17 = select i1 %15, i64 0, i64 %16
+  %18 = add i64 %11, %.reg2mem22.011
+  %19 = add i64 %18, %17
+  %20 = add i64 %5, 1
+  %21 = getelementptr ptr, ptr %0, i64 %20
+  %22 = load i64, ptr %21, align 4
+  %23 = icmp eq i64 %22, 0
+  br i1 %23, label %._crit_edge, label %.lr.ph
+
+._crit_edge:                                      ; preds = %.lr.ph, %1
+  %.reg2mem20.0.lcssa = phi i64 [ 1, %1 ], [ %13, %.lr.ph ]
+  %.reg2mem22.0.lcssa = phi i64 [ 0, %1 ], [ %19, %.lr.ph ]
+  %24 = urem i64 %.reg2mem22.0.lcssa, %.reg2mem20.0.lcssa
+  %25 = icmp eq i64 %24, 0
+  %26 = sub i64 %.reg2mem20.0.lcssa, %24
+  %27 = select i1 %25, i64 0, i64 %26
+  %28 = add i64 %27, %.reg2mem22.0.lcssa
+  %29 = insertvalue { i64, i64 } undef, i64 %28, 0
+  %30 = insertvalue { i64, i64 } %29, i64 %.reg2mem20.0.lcssa, 1
+  ret { i64, i64 } %30
+}
+
+define { i64, i64 } @_size_union_typ(ptr %0) {
+  %2 = getelementptr i8, ptr %0, i64 8
+  %3 = load i64, ptr %2, align 4
+  %4 = icmp eq i64 %3, 0
+  br i1 %4, label %._crit_edge, label %.lr.ph
+
+.lr.ph:                                           ; preds = %1, %.lr.ph
+  %.in = phi i64 [ %22, %.lr.ph ], [ %3, %1 ]
+  %5 = phi i64 [ %20, %.lr.ph ], [ 1, %1 ]
+  %.reg2mem22.011 = phi i64 [ %19, %.lr.ph ], [ 0, %1 ]
+  %.reg2mem20.010 = phi i64 [ %13, %.lr.ph ], [ 1, %1 ]
+  %6 = inttoptr i64 %.in to ptr
+  %7 = load ptr, ptr %6, align 8
+  %8 = getelementptr i8, ptr %7, i64 48
+  %9 = load ptr, ptr %8, align 8
+  %10 = tail call { i64, i64 } %9(ptr nonnull %6)
+  %11 = extractvalue { i64, i64 } %10, 0
+  %12 = extractvalue { i64, i64 } %10, 1
+  %13 = tail call i64 @llvm.umax.i64(i64 %12, i64 %.reg2mem20.010)
+  %14 = urem i64 %.reg2mem22.011, %12
+  %15 = icmp eq i64 %14, 0
+  %16 = sub i64 %12, %14
+  %17 = select i1 %15, i64 0, i64 %16
+  %18 = add i64 %11, %.reg2mem22.011
+  %19 = tail call i64 @llvm.umax.i64(i64 %18, i64 %17)
+  %20 = add i64 %5, 1
+  %21 = getelementptr ptr, ptr %0, i64 %20
+  %22 = load i64, ptr %21, align 4
+  %23 = icmp eq i64 %22, 0
+  br i1 %23, label %._crit_edge, label %.lr.ph
+
+._crit_edge:                                      ; preds = %.lr.ph, %1
+  %.reg2mem20.0.lcssa = phi i64 [ 1, %1 ], [ %13, %.lr.ph ]
+  %.reg2mem22.0.lcssa = phi i64 [ 0, %1 ], [ %19, %.lr.ph ]
+  %final_size = add i64 %.reg2mem22.0.lcssa, 8
+  %24 = urem i64 %final_size, %.reg2mem20.0.lcssa
+  %25 = icmp eq i64 %24, 0
+  %26 = sub i64 %.reg2mem20.0.lcssa, %24
+  %27 = select i1 %25, i64 0, i64 %26
+  %28 = add i64 %27, %final_size
+  %29 = insertvalue { i64, i64 } undef, i64 %28, 0
+  %30 = insertvalue { i64, i64 } %29, i64 %.reg2mem20.0.lcssa, 1
+  ret { i64, i64 } %30
 }
 
 define { ptr, i160 } @_box_Default(ptr nocapture readonly %fat_ptr, ptr %parameterization) {
@@ -108,6 +201,9 @@ define ptr @coroutine_create(ptr %func, ptr %arg_passer) {
 }
 
 define void @setup_landing_pad() {
+  %call = call { i64, i64 } @_size_tuple_typ(ptr @_parameterization_Tuple_Ptrf64._Ptrf64._Ptrf64)
+  %size = extractvalue { i64, i64 } %call, 0
+  %6 = call i32 (ptr, ...) @printf(ptr @i64_string, i64 %size)
   %region = call noalias ptr @VirtualAlloc(ptr null, i64 8388608, i32 12288, i32 4) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(1) "alloc-family"="malloc"
   store ptr %region, ptr @current_ptr
   %buf_first_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 0

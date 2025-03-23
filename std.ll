@@ -1,17 +1,17 @@
 ; ModuleID = 'LLVMDialectModule'
 source_filename = "LLVMDialectModule"
 
-@_parameterization_IntArray = linkonce_odr constant [1 x ptr] [ptr @IntArray]
-@ucplp_stdmini = internal constant [8 x i8] c"std.mini"
-@plmsg_stdmini = internal constant [8 x i8] c"std.mini"
-@_parameterization_BufferPtri32 = linkonce_odr constant [1 x ptr] [ptr @buffer_typ]
-@telsp_An_outofbounds_error_occurred_while_indexing_into_a_collection = internal constant [65 x i8] c"An out-of-bounds error occurred while indexing into a collection."
-@xuyhr_ = internal constant [0 x i8] zeroinitializer
-@ybwjd_The_indexing_argument_was = internal constant [25 x i8] c"The indexing argument was"
-@_parameterization_String = linkonce_odr constant [1 x ptr] [ptr @String]
-@_parameterization_Ptri32 = linkonce_odr constant [1 x ptr] [ptr @i32_typ]
-@_parameterization_BufferPtri8 = linkonce_odr constant [1 x ptr] [ptr @buffer_typ]
-@dkaqy_The_size_of_the_collection_being_indexed_was = internal constant [44 x i8] c"The size of the collection being indexed was"
+@_parameterization_IntArray = linkonce_odr constant [2 x ptr] [ptr @IntArray, ptr null]
+@mwrqp_stdmini = internal constant [8 x i8] c"std.mini"
+@pjoea_stdmini = internal constant [8 x i8] c"std.mini"
+@_parameterization_BufferPtri32 = linkonce_odr constant [2 x ptr] [ptr @buffer_typ, ptr null]
+@pqddo_An_outofbounds_error_occurred_while_indexing_into_a_collection = internal constant [65 x i8] c"An out-of-bounds error occurred while indexing into a collection."
+@mtqig_ = internal constant [0 x i8] zeroinitializer
+@qwrer_The_indexing_argument_was = internal constant [25 x i8] c"The indexing argument was"
+@_parameterization_String = linkonce_odr constant [2 x ptr] [ptr @String, ptr null]
+@_parameterization_Ptri32 = linkonce_odr constant [2 x ptr] [ptr @i32_typ, ptr null]
+@_parameterization_BufferPtri8 = linkonce_odr constant [2 x ptr] [ptr @buffer_typ, ptr null]
+@gludd_The_size_of_the_collection_being_indexed_was = internal constant [44 x i8] c"The size of the collection being indexed was"
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
 @float_string = linkonce_odr constant [4 x i8] c"%f\0A\00"
@@ -139,6 +139,10 @@ declare void @set_offset(ptr, ptr)
 declare void @assume_offset(ptr, ptr)
 
 declare { ptr, i160 } @_box_Default(ptr, ptr)
+
+declare { i64, i64 } @_size_tuple_typ(ptr)
+
+declare { i64, i64 } @_size_union_typ(ptr)
 
 declare i1 @subtype_test(i64, i64, i64, i64, ptr)
 
@@ -304,7 +308,7 @@ define void @OutOfBoundsDetails_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   store ptr %24, ptr %23, align 8
   %25 = call ptr @llvm.invariant.start.p0(i64 16, ptr %21)
   %26 = load ptr, ptr %21, align 8
-  %27 = load <44 x i8>, ptr @dkaqy_The_size_of_the_collection_being_indexed_was, align 64
+  %27 = load <44 x i8>, ptr @gludd_The_size_of_the_collection_being_indexed_was, align 64
   store <44 x i8> %27, ptr %26, align 64
   %28 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %29 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -407,7 +411,7 @@ define void @OutOfBoundsDetails_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   store ptr %106, ptr %105, align 8
   %107 = call ptr @llvm.invariant.start.p0(i64 16, ptr %103)
   %108 = load ptr, ptr %103, align 8
-  %109 = load <25 x i8>, ptr @ybwjd_The_indexing_argument_was, align 32
+  %109 = load <25 x i8>, ptr @qwrer_The_indexing_argument_was, align 32
   store <25 x i8> %109, ptr %108, align 32
   %110 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %111 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -863,7 +867,7 @@ define void @OutOfBounds_init_boundsPtri32_indexPtri32({ ptr, ptr, ptr, i32 } %0
   store ptr %159, ptr %158, align 8
   %160 = call ptr @llvm.invariant.start.p0(i64 16, ptr %156)
   %161 = load ptr, ptr %156, align 8
-  %162 = load <65 x i8>, ptr @telsp_An_outofbounds_error_occurred_while_indexing_into_a_collection, align 128
+  %162 = load <65 x i8>, ptr @pqddo_An_outofbounds_error_occurred_while_indexing_into_a_collection, align 128
   store <65 x i8> %162, ptr %161, align 128
   %163 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %164 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -2920,7 +2924,7 @@ define i32 @IntArray__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, 
   %106 = sext i32 %105 to i64
   %107 = mul i64 ptrtoint (ptr getelementptr ([8 x i8], ptr null, i32 1) to i64), %106
   %108 = getelementptr i8, ptr %104, i64 %107
-  %109 = load <8 x i8>, ptr @plmsg_stdmini, align 8
+  %109 = load <8 x i8>, ptr @pjoea_stdmini, align 8
   store <8 x i8> %109, ptr %108, align 8
   %110 = alloca i32, align 4
   store i32 8, ptr %110, align 4
@@ -3202,7 +3206,7 @@ define i32 @IntArray__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, 
   %330 = sext i32 %329 to i64
   %331 = mul i64 ptrtoint (ptr getelementptr ([8 x i8], ptr null, i32 1) to i64), %330
   %332 = getelementptr i8, ptr %328, i64 %331
-  %333 = load <8 x i8>, ptr @ucplp_stdmini, align 8
+  %333 = load <8 x i8>, ptr @mwrqp_stdmini, align 8
   store <8 x i8> %333, ptr %332, align 8
   %334 = alloca i32, align 4
   store i32 8, ptr %334, align 4
@@ -5338,19 +5342,6 @@ define linkonce_odr { ptr, i160 } @_box_buffer_typ(ptr nonnull %0, ptr nonnull %
   ret { ptr, i160 } %17
 }
 
-define linkonce_odr { i64, i64 } @_size_tuple_typ(ptr %0) {
-  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, {} }, ptr null, i32 0, i32 1) to i64), 1
-  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, {} }, ptr null, i32 0, i32 1) to i64), i64 1
-  %4 = urem i64 ptrtoint (ptr getelementptr ({}, ptr null, i32 1) to i64), %3
-  %5 = icmp eq i64 %4, 0
-  %6 = sub i64 %3, %4
-  %7 = select i1 %5, i64 0, i64 %6
-  %8 = add i64 ptrtoint (ptr getelementptr ({}, ptr null, i32 1) to i64), %7
-  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
-  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
-  ret { i64, i64 } %10
-}
-
 define linkonce_odr { ptr, i160 } @_box_tuple_typ(ptr nonnull %0, ptr nonnull %1) {
   %3 = alloca { ptr, i160 }, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
@@ -5371,19 +5362,6 @@ define linkonce_odr { ptr, i160 } @_box_tuple_typ(ptr nonnull %0, ptr nonnull %1
   %16 = load i160, ptr %15, align 4
   %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
   ret { ptr, i160 } %17
-}
-
-define linkonce_odr { i64, i64 } @_size_union_typ(ptr %0) {
-  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, i8 } }, ptr null, i32 0, i32 1) to i64), 1
-  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, i8 } }, ptr null, i32 0, i32 1) to i64), i64 1
-  %4 = urem i64 ptrtoint (ptr getelementptr ({ ptr, i8 }, ptr null, i32 1) to i64), %3
-  %5 = icmp eq i64 %4, 0
-  %6 = sub i64 %3, %4
-  %7 = select i1 %5, i64 0, i64 %6
-  %8 = add i64 ptrtoint (ptr getelementptr ({ ptr, i8 }, ptr null, i32 1) to i64), %7
-  %9 = insertvalue { i64, i64 } undef, i64 %8, 0
-  %10 = insertvalue { i64, i64 } %9, i64 %3, 1
-  ret { i64, i64 } %10
 }
 
 define linkonce_odr { ptr, i160 } @_box_union_typ(ptr nonnull %0, ptr nonnull %1) {

@@ -41,13 +41,16 @@ class AST:
         typ_ops = []
         for typ_name, typ in builtin_types.items():
             size_fn_name = StringAttr("_size_" + typ_name)
-            size_fn = SizeInBytesDefOp.create(attributes={
-                "meth_name":size_fn_name,
-                "types":ArrayAttr([typ.base_typ()]),
-                "linkage":StringAttr("linkonce_odr")
-            })
+            if typ_name not in ["tuple_typ", "union_typ"]:
+                size_fn = SizeInBytesDefOp.create(attributes={
+                    "meth_name":size_fn_name,
+                    "types":ArrayAttr([typ.base_typ()]),
+                    "linkage":StringAttr("linkonce_odr")
+                })
+                func_ops.append(size_fn)
             box_fn_name = StringAttr("_box_" + typ_name)
             box_fn = BoxDefOp.make("_box_" + typ_name)
+            func_ops.append(box_fn)
 
             hash_tbl, prime = global_scope.build_hashtable(typ)
             offset_tbl = global_scope.build_offset_table(typ)
@@ -65,7 +68,6 @@ class AST:
                 "size_fn":size_fn_name,
                 "box_fn":box_fn_name
             }
-            func_ops.extend([size_fn, box_fn])
             typ_ops.append(TypeDefOp.create(attributes=attr_dict))
         main = MainOp.create(regions=[global_scope.region])
         module = ModuleOp([PreludeOp.create(), *typ_ops, *class_ops, *func_ops, main], {"sym_name":StringAttr("ir")})
