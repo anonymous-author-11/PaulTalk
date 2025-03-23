@@ -393,11 +393,11 @@ module @patterns {
       %assume_offset_with_region = pdl.apply_native_rewrite "add_region"(%assume_offset_decl : !pdl.operation) : !pdl.operation
       pdl.erase %assume_offset_decl
 
-      %lub = pdl.attribute = "least_upper_bound"
-      %func_type_attr9 = pdl.attribute = !llvm.func<i32 (ptr, ptr, ptr, i32, i64, i64, ptr)>
-      %least_upper_bound_decl = pdl.operation "llvm.func" {"sym_name" = %lub, "function_type" = %func_type_attr9, "linkage" = %linkage}
-      %least_upper_bound_with_region = pdl.apply_native_rewrite "add_region"(%least_upper_bound_decl : !pdl.operation) : !pdl.operation
-      pdl.erase %least_upper_bound_decl
+      %box = pdl.attribute = "_box_Default"
+      %func_type_attr9 = pdl.attribute = !llvm.func<!llvm.struct<(ptr, i160)> (ptr, ptr)>
+      %box_decl = pdl.operation "llvm.func" {"sym_name" = %box, "function_type" = %func_type_attr9, "linkage" = %linkage}
+      %box_with_region = pdl.apply_native_rewrite "add_region"(%box_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %box_decl
       
       %subtype = pdl.attribute = "subtype_test"
       %func_type_attr10 = pdl.attribute = !llvm.func<i1 (i64, i64, i64, i64, ptr)>

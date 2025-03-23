@@ -44,7 +44,7 @@ def random_letters(n):
 # Return type size in bits
 def type_size(typ: TypeAttribute) -> int:
     result = 0
-    if typ == Nil(): return 0
+    if typ == Nil() or typ == Nothing(): return 0
     if typ == llvm.LLVMPointerType.opaque(): return 64
     if isinstance(typ, Union):
         result = typ.max_size().bitwidth + 64
@@ -384,6 +384,7 @@ class TypeDefOp(IRDLOperation):
     hash_id: IntegerAttr = attr_def(IntegerAttr)
     base_typ: TypeAttribute = attr_def(TypeAttribute)
     size_fn: StringAttr = attr_def(StringAttr)
+    box_fn: StringAttr = attr_def(StringAttr)
     linkage: OptAttributeDef = opt_attr_def(StringAttr)
 
 @irdl_op_definition
@@ -422,6 +423,7 @@ class TypePtrsTableOp(IRDLOperation):
     offset_tbl: StringAttr = attr_def(StringAttr)
     base_typ: TypeAttribute = attr_def(TypeAttribute)
     size_fn: StringAttr = attr_def(StringAttr)
+    box_fn: StringAttr = attr_def(StringAttr)
     result: OpResult = result_def()
 
 @irdl_op_definition
@@ -832,6 +834,15 @@ class NewOp(IRDLOperation):
         attr_dict = {"typ":typ, "class_name":class_name, "num_data_fields":num_data_fields, "region_id":StringAttr(region_id)}
         if len(typ.types.data) > num_data_fields.value.data: attr_dict["has_type_fields"] = UnitAttr()
         return NewOp.create(operands=parameterizations, attributes=attr_dict, result_types=[result_type])
+
+@irdl_op_definition
+class BoxDefOp(IRDLOperation):
+    name = "mini.box_def"
+    meth_name: StringAttr = attr_def(StringAttr)
+
+    @classmethod
+    def make(cls, meth_name):
+        return BoxDefOp.create(attributes={"meth_name":StringAttr(meth_name)})
 
 @irdl_op_definition
 class ReferOp(IRDLOperation):

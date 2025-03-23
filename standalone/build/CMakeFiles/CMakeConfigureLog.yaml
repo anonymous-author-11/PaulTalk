@@ -101,8 +101,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-he95gg"
-      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-he95gg"
+      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-u85aq0"
+      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-u85aq0"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/Llvm/x64/bin/clang-scan-deps.exe"
       CMAKE_CXX_FLAGS: ""
@@ -113,16 +113,16 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-he95gg'
+        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-u85aq0'
         
-        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_41cea
-        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE   -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -MD -MT CMakeFiles/cmTC_41cea.dir/CMakeCXXCompilerABI.cpp.obj -MF CMakeFiles\\cmTC_41cea.dir\\CMakeCXXCompilerABI.cpp.obj.d -o CMakeFiles/cmTC_41cea.dir/CMakeCXXCompilerABI.cpp.obj -c "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeCXXCompilerABI.cpp"
-        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -nostartfiles -nostdlib -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -v  -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_41cea.dir/CMakeCXXCompilerABI.cpp.obj -o cmTC_41cea.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_41cea.lib -Xlinker /pdb:cmTC_41cea.pdb -Xlinker /version:0.0     && cd ."
+        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_083d8
+        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE   -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -MD -MT CMakeFiles/cmTC_083d8.dir/CMakeCXXCompilerABI.cpp.obj -MF CMakeFiles\\cmTC_083d8.dir\\CMakeCXXCompilerABI.cpp.obj.d -o CMakeFiles/cmTC_083d8.dir/CMakeCXXCompilerABI.cpp.obj -c "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeCXXCompilerABI.cpp"
+        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -nostartfiles -nostdlib -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -v  -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_083d8.dir/CMakeCXXCompilerABI.cpp.obj -o cmTC_083d8.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_083d8.lib -Xlinker /pdb:cmTC_083d8.pdb -Xlinker /version:0.0     && cd ."
         clang version 18.1.8
         Target: x86_64-pc-windows-msvc
         Thread model: posix
         InstalledDir: C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin
-         "C:\\\\PROGRA~1\\\\MIB055~1\\\\2022\\\\COMMUN~1\\\\VC\\\\Tools\\\\Llvm\\\\x64\\\\bin\\\\lld-link" -out:cmTC_41cea.exe "-libpath:C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\VC\\\\Tools\\\\MSVC\\\\14.42.34433\\\\lib\\\\x64" "-libpath:C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\VC\\\\Tools\\\\MSVC\\\\14.42.34433\\\\atlmfc\\\\lib\\\\x64" "-libpath:C:\\\\Program Files (x86)\\\\Windows Kits\\\\10\\\\Lib\\\\10.0.22621.0\\\\ucrt\\\\x64" "-libpath:C:\\\\Program Files (x86)\\\\Windows Kits\\\\10\\\\Lib\\\\10.0.22621.0\\\\um\\\\x64" "-libpath:C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\VC\\\\Tools\\\\Llvm\\\\x64\\\\lib\\\\clang\\\\18\\\\lib\\\\windows" -nologo -debug /subsystem:console CMakeFiles/cmTC_41cea.dir/CMakeCXXCompilerABI.cpp.obj /MANIFEST:EMBED /implib:cmTC_41cea.lib /pdb:cmTC_41cea.pdb /version:0.0\x0d
+         "C:\\\\PROGRA~1\\\\MIB055~1\\\\2022\\\\COMMUN~1\\\\VC\\\\Tools\\\\Llvm\\\\x64\\\\bin\\\\lld-link" -out:cmTC_083d8.exe "-libpath:C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\VC\\\\Tools\\\\MSVC\\\\14.42.34433\\\\lib\\\\x64" "-libpath:C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\VC\\\\Tools\\\\MSVC\\\\14.42.34433\\\\atlmfc\\\\lib\\\\x64" "-libpath:C:\\\\Program Files (x86)\\\\Windows Kits\\\\10\\\\Lib\\\\10.0.22621.0\\\\ucrt\\\\x64" "-libpath:C:\\\\Program Files (x86)\\\\Windows Kits\\\\10\\\\Lib\\\\10.0.22621.0\\\\um\\\\x64" "-libpath:C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\VC\\\\Tools\\\\Llvm\\\\x64\\\\lib\\\\clang\\\\18\\\\lib\\\\windows" -nologo -debug /subsystem:console CMakeFiles/cmTC_083d8.dir/CMakeCXXCompilerABI.cpp.obj /MANIFEST:EMBED /implib:cmTC_083d8.lib /pdb:cmTC_083d8.pdb /version:0.0\x0d
         
       exitCode: 0
   -
@@ -186,8 +186,8 @@ events:
     checks:
       - "Detecting CXX compile features"
     directories:
-      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-leefhj"
-      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-leefhj"
+      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-3zifik"
+      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-3zifik"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/Llvm/x64/bin/clang-scan-deps.exe"
       CMAKE_CXX_FLAGS: ""
@@ -197,11 +197,11 @@ events:
       variable: "CMAKE_CXX_FEATURE_TEST"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-leefhj'
+        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-3zifik'
         
-        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_b1436
-        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE   -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd   -std=c++14 -MD -MT CMakeFiles/cmTC_b1436.dir/feature_tests.cxx.obj -MF CMakeFiles\\cmTC_b1436.dir\\feature_tests.cxx.obj.d -o CMakeFiles/cmTC_b1436.dir/feature_tests.cxx.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-leefhj/feature_tests.cxx
-        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -nostartfiles -nostdlib -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_b1436.dir/feature_tests.cxx.obj -o cmTC_b1436.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_b1436.lib -Xlinker /pdb:cmTC_b1436.pdb -Xlinker /version:0.0   -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -loldnames  && cd ."
+        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_1b5b2
+        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE   -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd   -std=c++14 -MD -MT CMakeFiles/cmTC_1b5b2.dir/feature_tests.cxx.obj -MF CMakeFiles\\cmTC_1b5b2.dir\\feature_tests.cxx.obj.d -o CMakeFiles/cmTC_1b5b2.dir/feature_tests.cxx.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-3zifik/feature_tests.cxx
+        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -nostartfiles -nostdlib -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_1b5b2.dir/feature_tests.cxx.obj -o cmTC_1b5b2.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_1b5b2.lib -Xlinker /pdb:cmTC_1b5b2.pdb -Xlinker /version:0.0   -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -loldnames  && cd ."
         
       exitCode: 0
   -
@@ -216,8 +216,8 @@ events:
     checks:
       - "Detecting CXX compile features"
     directories:
-      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-rrqyvr"
-      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-rrqyvr"
+      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-2yqllf"
+      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-2yqllf"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/Llvm/x64/bin/clang-scan-deps.exe"
       CMAKE_CXX_FLAGS: ""
@@ -227,11 +227,11 @@ events:
       variable: "CMAKE_CXX_FEATURE_TEST"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-rrqyvr'
+        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-2yqllf'
         
-        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_71f30
-        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE   -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd   -std=c++14 -MD -MT CMakeFiles/cmTC_71f30.dir/feature_tests.cxx.obj -MF CMakeFiles\\cmTC_71f30.dir\\feature_tests.cxx.obj.d -o CMakeFiles/cmTC_71f30.dir/feature_tests.cxx.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-rrqyvr/feature_tests.cxx
-        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -nostartfiles -nostdlib -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_71f30.dir/feature_tests.cxx.obj -o cmTC_71f30.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_71f30.lib -Xlinker /pdb:cmTC_71f30.pdb -Xlinker /version:0.0   -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -loldnames  && cd ."
+        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_1f4ba
+        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE   -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd   -std=c++14 -MD -MT CMakeFiles/cmTC_1f4ba.dir/feature_tests.cxx.obj -MF CMakeFiles\\cmTC_1f4ba.dir\\feature_tests.cxx.obj.d -o CMakeFiles/cmTC_1f4ba.dir/feature_tests.cxx.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-2yqllf/feature_tests.cxx
+        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -nostartfiles -nostdlib -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_1f4ba.dir/feature_tests.cxx.obj -o cmTC_1f4ba.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_1f4ba.lib -Xlinker /pdb:cmTC_1f4ba.pdb -Xlinker /version:0.0   -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -loldnames  && cd ."
         
       exitCode: 0
   -
@@ -243,8 +243,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-rnmfc3"
-      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-rnmfc3"
+      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-vnbnfx"
+      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-vnbnfx"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/Llvm/x64/bin/clang-scan-deps.exe"
       CMAKE_C_FLAGS: ""
@@ -254,16 +254,16 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-rnmfc3'
+        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-vnbnfx'
         
-        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_47e4b
-        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\clang.exe   -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -MD -MT CMakeFiles/cmTC_47e4b.dir/CMakeCCompilerABI.c.obj -MF CMakeFiles\\cmTC_47e4b.dir\\CMakeCCompilerABI.c.obj.d -o CMakeFiles/cmTC_47e4b.dir/CMakeCCompilerABI.c.obj -c "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeCCompilerABI.c"
-        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\clang.exe -nostartfiles -nostdlib -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -v  -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_47e4b.dir/CMakeCCompilerABI.c.obj -o cmTC_47e4b.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_47e4b.lib -Xlinker /pdb:cmTC_47e4b.pdb -Xlinker /version:0.0     && cd ."
+        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_a7562
+        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\clang.exe   -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -MD -MT CMakeFiles/cmTC_a7562.dir/CMakeCCompilerABI.c.obj -MF CMakeFiles\\cmTC_a7562.dir\\CMakeCCompilerABI.c.obj.d -o CMakeFiles/cmTC_a7562.dir/CMakeCCompilerABI.c.obj -c "C:/Program Files/CMake/share/cmake-3.29/Modules/CMakeCCompilerABI.c"
+        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\clang.exe -nostartfiles -nostdlib -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -v  -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_a7562.dir/CMakeCCompilerABI.c.obj -o cmTC_a7562.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_a7562.lib -Xlinker /pdb:cmTC_a7562.pdb -Xlinker /version:0.0     && cd ."
         clang version 18.1.8
         Target: x86_64-pc-windows-msvc
         Thread model: posix
         InstalledDir: C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin
-         "C:\\\\PROGRA~1\\\\MIB055~1\\\\2022\\\\COMMUN~1\\\\VC\\\\Tools\\\\Llvm\\\\x64\\\\bin\\\\lld-link" -out:cmTC_47e4b.exe "-libpath:C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\VC\\\\Tools\\\\MSVC\\\\14.42.34433\\\\lib\\\\x64" "-libpath:C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\VC\\\\Tools\\\\MSVC\\\\14.42.34433\\\\atlmfc\\\\lib\\\\x64" "-libpath:C:\\\\Program Files (x86)\\\\Windows Kits\\\\10\\\\Lib\\\\10.0.22621.0\\\\ucrt\\\\x64" "-libpath:C:\\\\Program Files (x86)\\\\Windows Kits\\\\10\\\\Lib\\\\10.0.22621.0\\\\um\\\\x64" "-libpath:C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\VC\\\\Tools\\\\Llvm\\\\x64\\\\lib\\\\clang\\\\18\\\\lib\\\\windows" -nologo -debug /subsystem:console CMakeFiles/cmTC_47e4b.dir/CMakeCCompilerABI.c.obj /MANIFEST:EMBED /implib:cmTC_47e4b.lib /pdb:cmTC_47e4b.pdb /version:0.0\x0d
+         "C:\\\\PROGRA~1\\\\MIB055~1\\\\2022\\\\COMMUN~1\\\\VC\\\\Tools\\\\Llvm\\\\x64\\\\bin\\\\lld-link" -out:cmTC_a7562.exe "-libpath:C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\VC\\\\Tools\\\\MSVC\\\\14.42.34433\\\\lib\\\\x64" "-libpath:C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\VC\\\\Tools\\\\MSVC\\\\14.42.34433\\\\atlmfc\\\\lib\\\\x64" "-libpath:C:\\\\Program Files (x86)\\\\Windows Kits\\\\10\\\\Lib\\\\10.0.22621.0\\\\ucrt\\\\x64" "-libpath:C:\\\\Program Files (x86)\\\\Windows Kits\\\\10\\\\Lib\\\\10.0.22621.0\\\\um\\\\x64" "-libpath:C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\VC\\\\Tools\\\\Llvm\\\\x64\\\\lib\\\\clang\\\\18\\\\lib\\\\windows" -nologo -debug /subsystem:console CMakeFiles/cmTC_a7562.dir/CMakeCCompilerABI.c.obj /MANIFEST:EMBED /implib:cmTC_a7562.lib /pdb:cmTC_a7562.pdb /version:0.0\x0d
         
       exitCode: 0
   -
@@ -326,8 +326,8 @@ events:
     checks:
       - "Performing Test CXX_SUPPORTS_SUGGEST_OVERRIDE_FLAG"
     directories:
-      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-mjhvhs"
-      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-mjhvhs"
+      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-7h60it"
+      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-7h60it"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/Llvm/x64/bin/clang-scan-deps.exe"
       CMAKE_CXX_FLAGS: " -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor"
@@ -338,11 +338,11 @@ events:
       variable: "CXX_SUPPORTS_SUGGEST_OVERRIDE_FLAG"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-mjhvhs'
+        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-7h60it'
         
-        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_f3f66
-        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -DCXX_SUPPORTS_SUGGEST_OVERRIDE_FLAG  -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -std=gnu++17   -Wsuggest-override -MD -MT CMakeFiles/cmTC_f3f66.dir/src.cxx.obj -MF CMakeFiles\\cmTC_f3f66.dir\\src.cxx.obj.d -o CMakeFiles/cmTC_f3f66.dir/src.cxx.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-mjhvhs/src.cxx
-        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -nostartfiles -nostdlib -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_f3f66.dir/src.cxx.obj -o cmTC_f3f66.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_f3f66.lib -Xlinker /pdb:cmTC_f3f66.pdb -Xlinker /version:0.0   -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -loldnames  && cd ."
+        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_70409
+        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -DCXX_SUPPORTS_SUGGEST_OVERRIDE_FLAG  -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -std=gnu++17   -Wsuggest-override -MD -MT CMakeFiles/cmTC_70409.dir/src.cxx.obj -MF CMakeFiles\\cmTC_70409.dir\\src.cxx.obj.d -o CMakeFiles/cmTC_70409.dir/src.cxx.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-7h60it/src.cxx
+        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -nostartfiles -nostdlib -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_70409.dir/src.cxx.obj -o cmTC_70409.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_70409.lib -Xlinker /pdb:cmTC_70409.pdb -Xlinker /version:0.0   -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -loldnames  && cd ."
         
       exitCode: 0
   -
@@ -355,8 +355,8 @@ events:
     checks:
       - "Performing Test CXX_WSUGGEST_OVERRIDE_ALLOWS_ONLY_FINAL"
     directories:
-      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-472ugy"
-      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-472ugy"
+      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-e06iry"
+      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-e06iry"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/Llvm/x64/bin/clang-scan-deps.exe"
       CMAKE_CXX_FLAGS: " -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor"
@@ -367,18 +367,18 @@ events:
       variable: "CXX_WSUGGEST_OVERRIDE_ALLOWS_ONLY_FINAL"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-472ugy'
+        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-e06iry'
         
-        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_74524
-        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -DCXX_WSUGGEST_OVERRIDE_ALLOWS_ONLY_FINAL  -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor  -Werror=suggest-override -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -std=gnu++17 -MD -MT CMakeFiles/cmTC_74524.dir/src.cxx.obj -MF CMakeFiles\\cmTC_74524.dir\\src.cxx.obj.d -o CMakeFiles/cmTC_74524.dir/src.cxx.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-472ugy/src.cxx
-        C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-472ugy/src.cxx:1:7: warning: 'base' has virtual functions but non-virtual destructor [-Wnon-virtual-dtor]
+        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_d63db
+        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -DCXX_WSUGGEST_OVERRIDE_ALLOWS_ONLY_FINAL  -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor  -Werror=suggest-override -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -std=gnu++17 -MD -MT CMakeFiles/cmTC_d63db.dir/src.cxx.obj -MF CMakeFiles\\cmTC_d63db.dir\\src.cxx.obj.d -o CMakeFiles/cmTC_d63db.dir/src.cxx.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-e06iry/src.cxx
+        C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-e06iry/src.cxx:1:7: warning: 'base' has virtual functions but non-virtual destructor [-Wnon-virtual-dtor]
             1 | class base {public: virtual void anchor();};
               |       ^
-        C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-472ugy/src.cxx:2:38: warning: 'derived' has virtual functions but non-virtual destructor [-Wnon-virtual-dtor]\x0d
+        C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-e06iry/src.cxx:2:38: warning: 'derived' has virtual functions but non-virtual destructor [-Wnon-virtual-dtor]\x0d
             2 |                                class derived : base {public: void anchor() final;};\x0d
               |                                      ^\x0d
         2 warnings generated.\x0d
-        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -nostartfiles -nostdlib -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor  -Werror=suggest-override -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_74524.dir/src.cxx.obj -o cmTC_74524.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_74524.lib -Xlinker /pdb:cmTC_74524.pdb -Xlinker /version:0.0   -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -loldnames  && cd ."
+        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -nostartfiles -nostdlib -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor  -Werror=suggest-override -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_d63db.dir/src.cxx.obj -o cmTC_d63db.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_d63db.lib -Xlinker /pdb:cmTC_d63db.pdb -Xlinker /version:0.0   -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -loldnames  && cd ."
         
       exitCode: 0
   -
@@ -391,8 +391,8 @@ events:
     checks:
       - "Performing Test C_WCOMMENT_ALLOWS_LINE_WRAP"
     directories:
-      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-77xbq3"
-      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-77xbq3"
+      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-z8ahq4"
+      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-z8ahq4"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/Llvm/x64/bin/clang-scan-deps.exe"
       CMAKE_C_FLAGS: " -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default"
@@ -403,11 +403,11 @@ events:
       variable: "C_WCOMMENT_ALLOWS_LINE_WRAP"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-77xbq3'
+        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-z8ahq4'
         
-        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_1f964
-        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\clang.exe -DC_WCOMMENT_ALLOWS_LINE_WRAP  -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default  -Werror -Wcomment -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -MD -MT CMakeFiles/cmTC_1f964.dir/src.c.obj -MF CMakeFiles\\cmTC_1f964.dir\\src.c.obj.d -o CMakeFiles/cmTC_1f964.dir/src.c.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-77xbq3/src.c
-        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\clang.exe -nostartfiles -nostdlib -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default  -Werror -Wcomment -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_1f964.dir/src.c.obj -o cmTC_1f964.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_1f964.lib -Xlinker /pdb:cmTC_1f964.pdb -Xlinker /version:0.0   -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -loldnames  && cd ."
+        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_b2fe5
+        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\clang.exe -DC_WCOMMENT_ALLOWS_LINE_WRAP  -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default  -Werror -Wcomment -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -MD -MT CMakeFiles/cmTC_b2fe5.dir/src.c.obj -MF CMakeFiles\\cmTC_b2fe5.dir\\src.c.obj.d -o CMakeFiles/cmTC_b2fe5.dir/src.c.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-z8ahq4/src.c
+        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\clang.exe -nostartfiles -nostdlib -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default  -Werror -Wcomment -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_b2fe5.dir/src.c.obj -o cmTC_b2fe5.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_b2fe5.lib -Xlinker /pdb:cmTC_b2fe5.pdb -Xlinker /version:0.0   -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -loldnames  && cd ."
         
       exitCode: 0
   -
@@ -422,8 +422,8 @@ events:
     checks:
       - "Performing Test C_SUPPORTS_MISLEADING_INDENTATION_FLAG"
     directories:
-      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-x7g9nu"
-      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-x7g9nu"
+      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-5b0p95"
+      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-5b0p95"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/Llvm/x64/bin/clang-scan-deps.exe"
       CMAKE_C_FLAGS: " -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wstring-conversion"
@@ -434,11 +434,11 @@ events:
       variable: "C_SUPPORTS_MISLEADING_INDENTATION_FLAG"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-x7g9nu'
+        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-5b0p95'
         
-        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_1e016
-        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\clang.exe -DC_SUPPORTS_MISLEADING_INDENTATION_FLAG  -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wstring-conversion  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd   -Werror -Wmisleading-indentation -MD -MT CMakeFiles/cmTC_1e016.dir/src.c.obj -MF CMakeFiles\\cmTC_1e016.dir\\src.c.obj.d -o CMakeFiles/cmTC_1e016.dir/src.c.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-x7g9nu/src.c
-        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\clang.exe -nostartfiles -nostdlib -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wstring-conversion  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_1e016.dir/src.c.obj -o cmTC_1e016.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_1e016.lib -Xlinker /pdb:cmTC_1e016.pdb -Xlinker /version:0.0   -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -loldnames  && cd ."
+        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_9fcbb
+        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\clang.exe -DC_SUPPORTS_MISLEADING_INDENTATION_FLAG  -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wstring-conversion  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd   -Werror -Wmisleading-indentation -MD -MT CMakeFiles/cmTC_9fcbb.dir/src.c.obj -MF CMakeFiles\\cmTC_9fcbb.dir\\src.c.obj.d -o CMakeFiles/cmTC_9fcbb.dir/src.c.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-5b0p95/src.c
+        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\clang.exe -nostartfiles -nostdlib -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wstring-conversion  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_9fcbb.dir/src.c.obj -o cmTC_9fcbb.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_9fcbb.lib -Xlinker /pdb:cmTC_9fcbb.pdb -Xlinker /version:0.0   -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -loldnames  && cd ."
         
       exitCode: 0
   -
@@ -453,8 +453,8 @@ events:
     checks:
       - "Performing Test CXX_SUPPORTS_MISLEADING_INDENTATION_FLAG"
     directories:
-      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-c8axxp"
-      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-c8axxp"
+      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-mspn5y"
+      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-mspn5y"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/Llvm/x64/bin/clang-scan-deps.exe"
       CMAKE_CXX_FLAGS: " -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor -Wsuggest-override -Wstring-conversion"
@@ -465,11 +465,11 @@ events:
       variable: "CXX_SUPPORTS_MISLEADING_INDENTATION_FLAG"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-c8axxp'
+        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-mspn5y'
         
-        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_68c1d
-        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -DCXX_SUPPORTS_MISLEADING_INDENTATION_FLAG  -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor -Wsuggest-override -Wstring-conversion  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -std=gnu++17   -Werror -Wmisleading-indentation -MD -MT CMakeFiles/cmTC_68c1d.dir/src.cxx.obj -MF CMakeFiles\\cmTC_68c1d.dir\\src.cxx.obj.d -o CMakeFiles/cmTC_68c1d.dir/src.cxx.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-c8axxp/src.cxx
-        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -nostartfiles -nostdlib -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor -Wsuggest-override -Wstring-conversion  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_68c1d.dir/src.cxx.obj -o cmTC_68c1d.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_68c1d.lib -Xlinker /pdb:cmTC_68c1d.pdb -Xlinker /version:0.0   -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -loldnames  && cd ."
+        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_75207
+        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -DCXX_SUPPORTS_MISLEADING_INDENTATION_FLAG  -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor -Wsuggest-override -Wstring-conversion  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -std=gnu++17   -Werror -Wmisleading-indentation -MD -MT CMakeFiles/cmTC_75207.dir/src.cxx.obj -MF CMakeFiles\\cmTC_75207.dir\\src.cxx.obj.d -o CMakeFiles/cmTC_75207.dir/src.cxx.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-mspn5y/src.cxx
+        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -nostartfiles -nostdlib -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor -Wsuggest-override -Wstring-conversion  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_75207.dir/src.cxx.obj -o cmTC_75207.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_75207.lib -Xlinker /pdb:cmTC_75207.pdb -Xlinker /version:0.0   -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -loldnames  && cd ."
         
       exitCode: 0
   -
@@ -484,8 +484,8 @@ events:
     checks:
       - "Performing Test C_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG"
     directories:
-      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-e1hd59"
-      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-e1hd59"
+      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-2fft3x"
+      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-2fft3x"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/Llvm/x64/bin/clang-scan-deps.exe"
       CMAKE_C_FLAGS: " -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wstring-conversion -Wmisleading-indentation"
@@ -496,11 +496,11 @@ events:
       variable: "C_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-e1hd59'
+        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-2fft3x'
         
-        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_a177e
-        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\clang.exe -DC_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG  -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wstring-conversion -Wmisleading-indentation  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd   -Werror -Wctad-maybe-unsupported -MD -MT CMakeFiles/cmTC_a177e.dir/src.c.obj -MF CMakeFiles\\cmTC_a177e.dir\\src.c.obj.d -o CMakeFiles/cmTC_a177e.dir/src.c.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-e1hd59/src.c
-        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\clang.exe -nostartfiles -nostdlib -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wstring-conversion -Wmisleading-indentation  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_a177e.dir/src.c.obj -o cmTC_a177e.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_a177e.lib -Xlinker /pdb:cmTC_a177e.pdb -Xlinker /version:0.0   -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -loldnames  && cd ."
+        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_e9b7b
+        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\clang.exe -DC_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG  -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wstring-conversion -Wmisleading-indentation  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd   -Werror -Wctad-maybe-unsupported -MD -MT CMakeFiles/cmTC_e9b7b.dir/src.c.obj -MF CMakeFiles\\cmTC_e9b7b.dir\\src.c.obj.d -o CMakeFiles/cmTC_e9b7b.dir/src.c.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-2fft3x/src.c
+        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\clang.exe -nostartfiles -nostdlib -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wstring-conversion -Wmisleading-indentation  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_e9b7b.dir/src.c.obj -o cmTC_e9b7b.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_e9b7b.lib -Xlinker /pdb:cmTC_e9b7b.pdb -Xlinker /version:0.0   -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -loldnames  && cd ."
         
       exitCode: 0
   -
@@ -515,8 +515,8 @@ events:
     checks:
       - "Performing Test CXX_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG"
     directories:
-      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-kw2rm4"
-      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-kw2rm4"
+      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-uwrd86"
+      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-uwrd86"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/Llvm/x64/bin/clang-scan-deps.exe"
       CMAKE_CXX_FLAGS: " -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor -Wsuggest-override -Wstring-conversion -Wmisleading-indentation"
@@ -527,11 +527,11 @@ events:
       variable: "CXX_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-kw2rm4'
+        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-uwrd86'
         
-        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_9e768
-        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -DCXX_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG  -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor -Wsuggest-override -Wstring-conversion -Wmisleading-indentation  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -std=gnu++17   -Werror -Wctad-maybe-unsupported -MD -MT CMakeFiles/cmTC_9e768.dir/src.cxx.obj -MF CMakeFiles\\cmTC_9e768.dir\\src.cxx.obj.d -o CMakeFiles/cmTC_9e768.dir/src.cxx.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-kw2rm4/src.cxx
-        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -nostartfiles -nostdlib -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor -Wsuggest-override -Wstring-conversion -Wmisleading-indentation  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_9e768.dir/src.cxx.obj -o cmTC_9e768.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_9e768.lib -Xlinker /pdb:cmTC_9e768.pdb -Xlinker /version:0.0   -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -loldnames  && cd ."
+        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_e5527
+        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -DCXX_SUPPORTS_CTAD_MAYBE_UNSPPORTED_FLAG  -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor -Wsuggest-override -Wstring-conversion -Wmisleading-indentation  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -std=gnu++17   -Werror -Wctad-maybe-unsupported -MD -MT CMakeFiles/cmTC_e5527.dir/src.cxx.obj -MF CMakeFiles\\cmTC_e5527.dir\\src.cxx.obj.d -o CMakeFiles/cmTC_e5527.dir/src.cxx.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-uwrd86/src.cxx
+        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\CLANG_~1.EXE -nostartfiles -nostdlib -Werror=date-time -Werror=unguarded-availability-new -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wno-noexcept-type -Wnon-virtual-dtor -Wdelete-non-virtual-dtor -Wsuggest-override -Wstring-conversion -Wmisleading-indentation  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -Xlinker /subsystem:console  -fuse-ld=lld-link CMakeFiles/cmTC_e5527.dir/src.cxx.obj -o cmTC_e5527.exe -Xlinker /MANIFEST:EMBED -Xlinker /implib:cmTC_e5527.lib -Xlinker /pdb:cmTC_e5527.pdb -Xlinker /version:0.0   -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -loldnames  && cd ."
         
       exitCode: 0
   -
@@ -544,8 +544,8 @@ events:
     checks:
       - "Looking for os_signpost_interval_begin"
     directories:
-      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-730eei"
-      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-730eei"
+      source: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-tfuuso"
+      binary: "C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-tfuuso"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/Llvm/x64/bin/clang-scan-deps.exe"
       CMAKE_C_FLAGS: "  -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wstring-conversion -Wmisleading-indentation -Wctad-maybe-unsupported -ffunction-sections -fdata-sections"
@@ -556,13 +556,13 @@ events:
       variable: "macos_signposts_available"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-730eei'
+        Change Dir: 'C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-tfuuso'
         
-        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_97cab
-        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\clang.exe   -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wstring-conversion -Wmisleading-indentation -Wctad-maybe-unsupported -ffunction-sections -fdata-sections  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -MD -MT CMakeFiles/cmTC_97cab.dir/CheckSymbolExists.c.obj -MF CMakeFiles\\cmTC_97cab.dir\\CheckSymbolExists.c.obj.d -o CMakeFiles/cmTC_97cab.dir/CheckSymbolExists.c.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-730eei/CheckSymbolExists.c
-        FAILED: CMakeFiles/cmTC_97cab.dir/CheckSymbolExists.c.obj 
-        C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\clang.exe   -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wstring-conversion -Wmisleading-indentation -Wctad-maybe-unsupported -ffunction-sections -fdata-sections  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -MD -MT CMakeFiles/cmTC_97cab.dir/CheckSymbolExists.c.obj -MF CMakeFiles\\cmTC_97cab.dir\\CheckSymbolExists.c.obj.d -o CMakeFiles/cmTC_97cab.dir/CheckSymbolExists.c.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-730eei/CheckSymbolExists.c
-        C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-730eei/CheckSymbolExists.c:2:10: fatal error: 'os/signpost.h' file not found\x0d
+        Run Build Command(s): C:/Users/PaulK/AppData/Local/Programs/Python/Python311/Scripts/ninja.exe -v cmTC_4c345
+        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\clang.exe   -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wstring-conversion -Wmisleading-indentation -Wctad-maybe-unsupported -ffunction-sections -fdata-sections  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -MD -MT CMakeFiles/cmTC_4c345.dir/CheckSymbolExists.c.obj -MF CMakeFiles\\cmTC_4c345.dir\\CheckSymbolExists.c.obj.d -o CMakeFiles/cmTC_4c345.dir/CheckSymbolExists.c.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-tfuuso/CheckSymbolExists.c
+        FAILED: CMakeFiles/cmTC_4c345.dir/CheckSymbolExists.c.obj 
+        C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\Llvm\\x64\\bin\\clang.exe   -Wextra -Wno-unused-parameter -Wwrite-strings -Wcast-qual -Wmissing-field-initializers -Wimplicit-fallthrough -Wcovered-switch-default -Wstring-conversion -Wmisleading-indentation -Wctad-maybe-unsupported -ffunction-sections -fdata-sections  -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -MD -MT CMakeFiles/cmTC_4c345.dir/CheckSymbolExists.c.obj -MF CMakeFiles\\cmTC_4c345.dir\\CheckSymbolExists.c.obj.d -o CMakeFiles/cmTC_4c345.dir/CheckSymbolExists.c.obj -c C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-tfuuso/CheckSymbolExists.c
+        C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/CMakeFiles/CMakeScratch/TryCompile-tfuuso/CheckSymbolExists.c:2:10: fatal error: 'os/signpost.h' file not found\x0d
             2 | #include <os/signpost.h>\x0d
               |          ^~~~~~~~~~~~~~~\x0d
         1 error generated.\x0d

@@ -60,6 +60,15 @@ define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) noinl
   ret ptr %current 
 }
 
+define { ptr, i160 } @_box_Default(ptr nocapture readonly %fat_ptr, ptr %parameterization) {
+  %vptr = load ptr, ptr %fat_ptr, align 8
+  %3 = insertvalue { ptr, i160 } undef, ptr %vptr, 0
+  %4 = getelementptr i8, ptr %fat_ptr, i64 8
+  %5 = load i160, ptr %4, align 4
+  %6 = insertvalue { ptr, i160 } %3, i160 %5, 1
+  ret { ptr, i160 } %6
+}
+
 define void @anoint_trampoline(ptr %tramp) {
   %oldProtect = alloca i32  
   %result = call i32 @VirtualProtect(ptr %tramp, i64 16, i32 64, ptr %oldProtect) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)

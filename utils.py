@@ -77,7 +77,7 @@ def hash_id(typ_name: str) -> int:
     return int.from_bytes(sha256(typ_name.encode('utf-8')).digest()[:8], 'little')
 
 def vtable_buffer_size():
-    return 7
+    return 8
 
 def is_builtin(typ):
     types = { Ptr, Nil, Any, Buffer, Coroutine, Function, Tuple }

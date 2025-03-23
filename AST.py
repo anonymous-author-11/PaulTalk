@@ -46,6 +46,9 @@ class AST:
                 "types":ArrayAttr([typ.base_typ()]),
                 "linkage":StringAttr("linkonce_odr")
             })
+            box_fn_name = StringAttr("_box_" + typ_name)
+            box_fn = BoxDefOp.make("_box_" + typ_name)
+
             hash_tbl, prime = global_scope.build_hashtable(typ)
             offset_tbl = global_scope.build_offset_table(typ)
             hashid = IntegerAttr.from_int_and_width(hash_id(typ_name), 64)
@@ -59,9 +62,10 @@ class AST:
                 "hash_id":hashid,
                 "linkage":linkage,
                 "base_typ":typ.base_typ(),
-                "size_fn":size_fn_name
+                "size_fn":size_fn_name,
+                "box_fn":box_fn_name
             }
-            func_ops.append(size_fn)
+            func_ops.extend([size_fn, box_fn])
             typ_ops.append(TypeDefOp.create(attributes=attr_dict))
         main = MainOp.create(regions=[global_scope.region])
         module = ModuleOp([PreludeOp.create(), *typ_ops, *class_ops, *func_ops, main], {"sym_name":StringAttr("ir")})
@@ -2103,7 +2107,8 @@ class ClassDef(Statement):
         class_name = StringAttr(self.name)
         attr_dict = {
             "class_name":class_name, "methods":combined, "hash_tbl":hash_tbl,"offset_tbl":offset_tbl,
-            "prime":prime, "hash_id":hashid, "base_typ":self.base_typ(), "size_fn":StringAttr("_size_" + self.name)
+            "prime":prime, "hash_id":hashid, "base_typ":self.base_typ(),
+            "size_fn":StringAttr("_size_" + self.name), "box_fn":StringAttr("_box_Default")
         }
         class_def = TypeDefOp.create(attributes=attr_dict)
         scope.region.last_block.add_op(class_def)
