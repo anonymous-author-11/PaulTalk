@@ -1,89 +1,89 @@
 ; ModuleID = 'LLVMDialectModule'
 source_filename = "LLVMDialectModule"
 
-@cgnob_ = internal constant [9 x i8] c"---------"
-@puult_With_message = internal constant [12 x i8] c"With message"
-@iehsr_At_line = internal constant [7 x i8] c"At line"
-@wwcey_Exception_thrown_from_file = internal constant [26 x i8] c"Exception thrown from file"
-@obztf_ = internal constant [9 x i8] c"---------"
-@olgwn_ = internal constant [0 x i8] zeroinitializer
-@fwbko_None = internal constant [6 x i8] c"<None>"
-@marwy_ = internal constant [0 x i8] zeroinitializer
+@cvdpw_ = internal constant [9 x i8] c"---------"
+@bakpf_With_message = internal constant [12 x i8] c"With message"
+@bqzvl_At_line = internal constant [7 x i8] c"At line"
+@ykpgk_Exception_thrown_from_file = internal constant [26 x i8] c"Exception thrown from file"
+@syquz_ = internal constant [9 x i8] c"---------"
+@gsgtx_ = internal constant [0 x i8] zeroinitializer
+@pfckg_None = internal constant [6 x i8] c"<None>"
+@gglyb_ = internal constant [0 x i8] zeroinitializer
 @_parameterization_Ptri8 = linkonce_odr constant [2 x ptr] [ptr @i8_typ, ptr null]
 @_parameterization_String = linkonce_odr constant [2 x ptr] [ptr @String, ptr null]
 @_parameterization_Ptri32 = linkonce_odr constant [2 x ptr] [ptr @i32_typ, ptr null]
 @_parameterization_BufferPtri8 = linkonce_odr constant [2 x ptr] [ptr @buffer_typ, ptr null]
-@sfxrz_Object = internal constant [6 x i8] c"Object"
+@qhkkg_Object = internal constant [6 x i8] c"Object"
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
 @float_string = linkonce_odr constant [4 x i8] c"%f\0A\00"
 @string_string = linkonce_odr constant [4 x i8] c"%s\0A\00"
 @bool_typ_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @any_typ, ptr null, ptr @bool_typ]
-@bool_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 8, i32 8, i32 0, i32 8]
-@bool_typ = linkonce_odr constant { [3 x i64], [5 x ptr], [0 x ptr] } { [3 x i64] [i64 5801531371504802705, i64 4611686018427388081, i64 3], [5 x ptr] [ptr @subtype_test, ptr @bool_typ_hashtbl, ptr @bool_typ_offset_tbl, ptr @_size_bool_typ, ptr @_box_bool_typ], [0 x ptr] undef }
+@bool_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 9, i32 9, i32 0, i32 9]
+@bool_typ = linkonce_odr constant { [3 x i64], [6 x ptr], [0 x ptr] } { [3 x i64] [i64 5801531371504802705, i64 4611686018427388081, i64 3], [6 x ptr] [ptr @subtype_test, ptr @bool_typ_hashtbl, ptr @bool_typ_offset_tbl, ptr @_size_bool_typ, ptr @_box_bool_typ, ptr @_unbox_bool_typ], [0 x ptr] undef }
 @i8_typ_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @any_typ, ptr null, ptr @i8_typ]
-@i8_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 8, i32 8, i32 0, i32 8]
-@i8_typ = linkonce_odr constant { [3 x i64], [5 x ptr], [0 x ptr] } { [3 x i64] [i64 2582149688529881115, i64 4611686018427388081, i64 3], [5 x ptr] [ptr @subtype_test, ptr @i8_typ_hashtbl, ptr @i8_typ_offset_tbl, ptr @_size_i8_typ, ptr @_box_i8_typ], [0 x ptr] undef }
+@i8_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 9, i32 9, i32 0, i32 9]
+@i8_typ = linkonce_odr constant { [3 x i64], [6 x ptr], [0 x ptr] } { [3 x i64] [i64 2582149688529881115, i64 4611686018427388081, i64 3], [6 x ptr] [ptr @subtype_test, ptr @i8_typ_hashtbl, ptr @i8_typ_offset_tbl, ptr @_size_i8_typ, ptr @_box_i8_typ, ptr @_unbox_i8_typ], [0 x ptr] undef }
 @i32_typ_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @any_typ, ptr @i32_typ, ptr null]
-@i32_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 8, i32 8, i32 8, i32 0]
-@i32_typ = linkonce_odr constant { [3 x i64], [5 x ptr], [0 x ptr] } { [3 x i64] [i64 -2253724949814257982, i64 4611686018427388081, i64 3], [5 x ptr] [ptr @subtype_test, ptr @i32_typ_hashtbl, ptr @i32_typ_offset_tbl, ptr @_size_i32_typ, ptr @_box_i32_typ], [0 x ptr] undef }
+@i32_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 9, i32 9, i32 9, i32 0]
+@i32_typ = linkonce_odr constant { [3 x i64], [6 x ptr], [0 x ptr] } { [3 x i64] [i64 -2253724949814257982, i64 4611686018427388081, i64 3], [6 x ptr] [ptr @subtype_test, ptr @i32_typ_hashtbl, ptr @i32_typ_offset_tbl, ptr @_size_i32_typ, ptr @_box_i32_typ, ptr @_unbox_i32_typ], [0 x ptr] undef }
 @i64_typ_hashtbl = linkonce_odr constant [4 x ptr] [ptr @any_typ, ptr @Object, ptr @i64_typ, ptr null]
-@i64_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 8, i32 8, i32 8, i32 0]
-@i64_typ = linkonce_odr constant { [3 x i64], [5 x ptr], [0 x ptr] } { [3 x i64] [i64 -7469797244461771922, i64 4611686018427388157, i64 3], [5 x ptr] [ptr @subtype_test, ptr @i64_typ_hashtbl, ptr @i64_typ_offset_tbl, ptr @_size_i64_typ, ptr @_box_i64_typ], [0 x ptr] undef }
+@i64_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 9, i32 9, i32 9, i32 0]
+@i64_typ = linkonce_odr constant { [3 x i64], [6 x ptr], [0 x ptr] } { [3 x i64] [i64 -7469797244461771922, i64 4611686018427388157, i64 3], [6 x ptr] [ptr @subtype_test, ptr @i64_typ_hashtbl, ptr @i64_typ_offset_tbl, ptr @_size_i64_typ, ptr @_box_i64_typ, ptr @_unbox_i64_typ], [0 x ptr] undef }
 @i128_typ_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @i128_typ, ptr @any_typ, ptr null]
-@i128_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 8, i32 8, i32 8, i32 0]
-@i128_typ = linkonce_odr constant { [3 x i64], [5 x ptr], [0 x ptr] } { [3 x i64] [i64 -8755878215469463641, i64 4611686018427388091, i64 3], [5 x ptr] [ptr @subtype_test, ptr @i128_typ_hashtbl, ptr @i128_typ_offset_tbl, ptr @_size_i128_typ, ptr @_box_i128_typ], [0 x ptr] undef }
+@i128_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 9, i32 9, i32 9, i32 0]
+@i128_typ = linkonce_odr constant { [3 x i64], [6 x ptr], [0 x ptr] } { [3 x i64] [i64 -8755878215469463641, i64 4611686018427388091, i64 3], [6 x ptr] [ptr @subtype_test, ptr @i128_typ_hashtbl, ptr @i128_typ_offset_tbl, ptr @_size_i128_typ, ptr @_box_i128_typ, ptr @_unbox_i128_typ], [0 x ptr] undef }
 @f64_typ_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @any_typ, ptr null, ptr @f64_typ]
-@f64_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 8, i32 8, i32 0, i32 8]
-@f64_typ = linkonce_odr constant { [3 x i64], [5 x ptr], [0 x ptr] } { [3 x i64] [i64 -757315540097298781, i64 4611686018427388081, i64 3], [5 x ptr] [ptr @subtype_test, ptr @f64_typ_hashtbl, ptr @f64_typ_offset_tbl, ptr @_size_f64_typ, ptr @_box_f64_typ], [0 x ptr] undef }
+@f64_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 9, i32 9, i32 0, i32 9]
+@f64_typ = linkonce_odr constant { [3 x i64], [6 x ptr], [0 x ptr] } { [3 x i64] [i64 -757315540097298781, i64 4611686018427388081, i64 3], [6 x ptr] [ptr @subtype_test, ptr @f64_typ_hashtbl, ptr @f64_typ_offset_tbl, ptr @_size_f64_typ, ptr @_box_f64_typ, ptr @_unbox_f64_typ], [0 x ptr] undef }
 @nil_typ_hashtbl = linkonce_odr constant [2 x ptr] [ptr @nil_typ, ptr @any_typ]
-@nil_typ_offset_tbl = linkonce_odr constant [2 x i32] [i32 8, i32 8]
-@nil_typ = linkonce_odr constant { [3 x i64], [5 x ptr], [0 x ptr] } { [3 x i64] [i64 -5126806859456325683, i64 4611686018427388081, i64 1], [5 x ptr] [ptr @subtype_test, ptr @nil_typ_hashtbl, ptr @nil_typ_offset_tbl, ptr @_size_nil_typ, ptr @_box_nil_typ], [0 x ptr] undef }
+@nil_typ_offset_tbl = linkonce_odr constant [2 x i32] [i32 9, i32 9]
+@nil_typ = linkonce_odr constant { [3 x i64], [6 x ptr], [0 x ptr] } { [3 x i64] [i64 -5126806859456325683, i64 4611686018427388081, i64 1], [6 x ptr] [ptr @subtype_test, ptr @nil_typ_hashtbl, ptr @nil_typ_offset_tbl, ptr @_size_nil_typ, ptr @_box_nil_typ, ptr @_unbox_nil_typ], [0 x ptr] undef }
 @any_typ_hashtbl = linkonce_odr constant [1 x ptr] [ptr @any_typ]
-@any_typ_offset_tbl = linkonce_odr constant [1 x i32] [i32 8]
-@any_typ = linkonce_odr constant { [3 x i64], [5 x ptr], [0 x ptr] } { [3 x i64] [i64 3084208142191802847, i64 4611686018427388073, i64 0], [5 x ptr] [ptr @subtype_test, ptr @any_typ_hashtbl, ptr @any_typ_offset_tbl, ptr @_size_any_typ, ptr @_box_any_typ], [0 x ptr] undef }
+@any_typ_offset_tbl = linkonce_odr constant [1 x i32] [i32 9]
+@any_typ = linkonce_odr constant { [3 x i64], [6 x ptr], [0 x ptr] } { [3 x i64] [i64 3084208142191802847, i64 4611686018427388073, i64 0], [6 x ptr] [ptr @subtype_test, ptr @any_typ_hashtbl, ptr @any_typ_offset_tbl, ptr @_size_any_typ, ptr @_box_any_typ, ptr @_unbox_any_typ], [0 x ptr] undef }
 @nothing_typ_hashtbl = linkonce_odr constant [4 x ptr] [ptr null, ptr @Object, ptr @any_typ, ptr @nothing_typ]
-@nothing_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 0, i32 8, i32 8, i32 8]
-@nothing_typ = linkonce_odr constant { [3 x i64], [5 x ptr], [0 x ptr] } { [3 x i64] [i64 -3334456163433371378, i64 4611686018427388097, i64 3], [5 x ptr] [ptr @subtype_test, ptr @nothing_typ_hashtbl, ptr @nothing_typ_offset_tbl, ptr @_size_nothing_typ, ptr @_box_nothing_typ], [0 x ptr] undef }
+@nothing_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 0, i32 9, i32 9, i32 9]
+@nothing_typ = linkonce_odr constant { [3 x i64], [6 x ptr], [0 x ptr] } { [3 x i64] [i64 -3334456163433371378, i64 4611686018427388097, i64 3], [6 x ptr] [ptr @subtype_test, ptr @nothing_typ_hashtbl, ptr @nothing_typ_offset_tbl, ptr @_size_nothing_typ, ptr @_box_nothing_typ, ptr @_unbox_nothing_typ], [0 x ptr] undef }
 @coroutine_typ_hashtbl = linkonce_odr constant [4 x ptr] [ptr null, ptr @Object, ptr @any_typ, ptr @coroutine_typ]
-@coroutine_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 0, i32 8, i32 8, i32 8]
-@coroutine_typ = linkonce_odr constant { [3 x i64], [5 x ptr], [0 x ptr] } { [3 x i64] [i64 7194361020959218064, i64 4611686018427388097, i64 3], [5 x ptr] [ptr @subtype_test, ptr @coroutine_typ_hashtbl, ptr @coroutine_typ_offset_tbl, ptr @_size_coroutine_typ, ptr @_box_coroutine_typ], [0 x ptr] undef }
+@coroutine_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 0, i32 9, i32 9, i32 9]
+@coroutine_typ = linkonce_odr constant { [3 x i64], [6 x ptr], [0 x ptr] } { [3 x i64] [i64 7194361020959218064, i64 4611686018427388097, i64 3], [6 x ptr] [ptr @subtype_test, ptr @coroutine_typ_hashtbl, ptr @coroutine_typ_offset_tbl, ptr @_size_coroutine_typ, ptr @_box_coroutine_typ, ptr @_unbox_coroutine_typ], [0 x ptr] undef }
 @function_typ_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @any_typ, ptr @function_typ, ptr null]
-@function_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 8, i32 8, i32 8, i32 0]
-@function_typ = linkonce_odr constant { [3 x i64], [5 x ptr], [0 x ptr] } { [3 x i64] [i64 7927147055246173914, i64 4611686018427388081, i64 3], [5 x ptr] [ptr @subtype_test, ptr @function_typ_hashtbl, ptr @function_typ_offset_tbl, ptr @_size_function_typ, ptr @_box_function_typ], [0 x ptr] undef }
+@function_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 9, i32 9, i32 9, i32 0]
+@function_typ = linkonce_odr constant { [3 x i64], [6 x ptr], [0 x ptr] } { [3 x i64] [i64 7927147055246173914, i64 4611686018427388081, i64 3], [6 x ptr] [ptr @subtype_test, ptr @function_typ_hashtbl, ptr @function_typ_offset_tbl, ptr @_size_function_typ, ptr @_box_function_typ, ptr @_unbox_function_typ], [0 x ptr] undef }
 @buffer_typ_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @buffer_typ, ptr @any_typ, ptr null]
-@buffer_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 8, i32 8, i32 8, i32 0]
-@buffer_typ = linkonce_odr constant { [3 x i64], [5 x ptr], [0 x ptr] } { [3 x i64] [i64 -318192747195410237, i64 4611686018427388091, i64 3], [5 x ptr] [ptr @subtype_test, ptr @buffer_typ_hashtbl, ptr @buffer_typ_offset_tbl, ptr @_size_buffer_typ, ptr @_box_buffer_typ], [0 x ptr] undef }
+@buffer_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 9, i32 9, i32 9, i32 0]
+@buffer_typ = linkonce_odr constant { [3 x i64], [6 x ptr], [0 x ptr] } { [3 x i64] [i64 -318192747195410237, i64 4611686018427388091, i64 3], [6 x ptr] [ptr @subtype_test, ptr @buffer_typ_hashtbl, ptr @buffer_typ_offset_tbl, ptr @_size_buffer_typ, ptr @_box_buffer_typ, ptr @_unbox_buffer_typ], [0 x ptr] undef }
 @tuple_typ_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr @any_typ, ptr null, ptr @tuple_typ]
-@tuple_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 8, i32 8, i32 0, i32 8]
-@tuple_typ = linkonce_odr constant { [3 x i64], [5 x ptr], [0 x ptr] } { [3 x i64] [i64 3422634369532007740, i64 4611686018427388081, i64 3], [5 x ptr] [ptr @subtype_test, ptr @tuple_typ_hashtbl, ptr @tuple_typ_offset_tbl, ptr @_size_tuple_typ, ptr @_box_tuple_typ], [0 x ptr] undef }
+@tuple_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 9, i32 9, i32 0, i32 9]
+@tuple_typ = linkonce_odr constant { [3 x i64], [6 x ptr], [0 x ptr] } { [3 x i64] [i64 3422634369532007740, i64 4611686018427388081, i64 3], [6 x ptr] [ptr @subtype_test, ptr @tuple_typ_hashtbl, ptr @tuple_typ_offset_tbl, ptr @_size_tuple_typ, ptr @_box_tuple_typ, ptr @_unbox_tuple_typ], [0 x ptr] undef }
 @union_typ_hashtbl = linkonce_odr constant [4 x ptr] [ptr @union_typ, ptr null, ptr @any_typ, ptr @Object]
-@union_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 8, i32 0, i32 8, i32 8]
-@union_typ = linkonce_odr constant { [3 x i64], [5 x ptr], [0 x ptr] } { [3 x i64] [i64 -7543233778997666740, i64 4611686018427388093, i64 3], [5 x ptr] [ptr @subtype_test, ptr @union_typ_hashtbl, ptr @union_typ_offset_tbl, ptr @_size_union_typ, ptr @_box_union_typ], [0 x ptr] undef }
+@union_typ_offset_tbl = linkonce_odr constant [4 x i32] [i32 9, i32 0, i32 9, i32 9]
+@union_typ = linkonce_odr constant { [3 x i64], [6 x ptr], [0 x ptr] } { [3 x i64] [i64 -7543233778997666740, i64 4611686018427388093, i64 3], [6 x ptr] [ptr @subtype_test, ptr @union_typ_hashtbl, ptr @union_typ_offset_tbl, ptr @_size_union_typ, ptr @_box_union_typ, ptr @_unbox_union_typ], [0 x ptr] undef }
 @Object_hashtbl = linkonce_odr constant [2 x ptr] [ptr @Object, ptr @any_typ]
-@Object_offset_tbl = linkonce_odr constant [2 x i32] [i32 8, i32 8]
-@Object = constant { [3 x i64], [5 x ptr], [0 x ptr] } { [3 x i64] [i64 3282773614056351330, i64 4611686018427388081, i64 1], [5 x ptr] [ptr @subtype_test, ptr @Object_hashtbl, ptr @Object_offset_tbl, ptr @_size_Object, ptr @_box_Default], [0 x ptr] undef }
+@Object_offset_tbl = linkonce_odr constant [2 x i32] [i32 9, i32 9]
+@Object = constant { [3 x i64], [6 x ptr], [0 x ptr] } { [3 x i64] [i64 3282773614056351330, i64 4611686018427388081, i64 1], [6 x ptr] [ptr @subtype_test, ptr @Object_hashtbl, ptr @Object_offset_tbl, ptr @_size_Object, ptr @_box_Default, ptr @_unbox_Default], [0 x ptr] undef }
 @Iterator_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr null, ptr @any_typ, ptr @Iterator]
-@Iterator_offset_tbl = linkonce_odr constant [4 x i32] [i32 8, i32 0, i32 8, i32 8]
-@Iterator = constant { [3 x i64], [5 x ptr], [0 x ptr] } { [3 x i64] [i64 8673632051301757104, i64 4611686018427388091, i64 3], [5 x ptr] [ptr @subtype_test, ptr @Iterator_hashtbl, ptr @Iterator_offset_tbl, ptr @_size_Iterator, ptr @_box_Default], [0 x ptr] undef }
+@Iterator_offset_tbl = linkonce_odr constant [4 x i32] [i32 9, i32 0, i32 9, i32 9]
+@Iterator = constant { [3 x i64], [6 x ptr], [0 x ptr] } { [3 x i64] [i64 8673632051301757104, i64 4611686018427388091, i64 3], [6 x ptr] [ptr @subtype_test, ptr @Iterator_hashtbl, ptr @Iterator_offset_tbl, ptr @_size_Iterator, ptr @_box_Default, ptr @_unbox_Default], [0 x ptr] undef }
 @Iterable_hashtbl = linkonce_odr constant [4 x ptr] [ptr null, ptr @Iterable, ptr @any_typ, ptr @Object]
-@Iterable_offset_tbl = linkonce_odr constant [4 x i32] [i32 0, i32 8, i32 8, i32 10]
-@Iterable = constant { [3 x i64], [5 x ptr], [0 x ptr] } { [3 x i64] [i64 3037712219555723519, i64 4611686018427388093, i64 3], [5 x ptr] [ptr @subtype_test, ptr @Iterable_hashtbl, ptr @Iterable_offset_tbl, ptr @_size_Iterable, ptr @_box_Default], [0 x ptr] undef }
+@Iterable_offset_tbl = linkonce_odr constant [4 x i32] [i32 0, i32 9, i32 9, i32 11]
+@Iterable = constant { [3 x i64], [6 x ptr], [0 x ptr] } { [3 x i64] [i64 3037712219555723519, i64 4611686018427388093, i64 3], [6 x ptr] [ptr @subtype_test, ptr @Iterable_hashtbl, ptr @Iterable_offset_tbl, ptr @_size_Iterable, ptr @_box_Default, ptr @_unbox_Default], [0 x ptr] undef }
 @Representable_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Representable, ptr null, ptr @any_typ, ptr @Object]
-@Representable_offset_tbl = linkonce_odr constant [4 x i32] [i32 8, i32 0, i32 8, i32 10]
-@Representable = constant { [3 x i64], [5 x ptr], [2 x ptr] } { [3 x i64] [i64 -7260840641129990118, i64 4611686018427388093, i64 3], [5 x ptr] [ptr @subtype_test, ptr @Representable_hashtbl, ptr @Representable_offset_tbl, ptr @_size_Representable, ptr @_box_Default], [2 x ptr] [ptr @Representable_B_repr_, ptr @Representable_repr_] }
+@Representable_offset_tbl = linkonce_odr constant [4 x i32] [i32 9, i32 0, i32 9, i32 11]
+@Representable = constant { [3 x i64], [6 x ptr], [2 x ptr] } { [3 x i64] [i64 -7260840641129990118, i64 4611686018427388093, i64 3], [6 x ptr] [ptr @subtype_test, ptr @Representable_hashtbl, ptr @Representable_offset_tbl, ptr @_size_Representable, ptr @_box_Default, ptr @_unbox_Default], [2 x ptr] [ptr @Representable_B_repr_, ptr @Representable_repr_] }
 @String_hashtbl = linkonce_odr constant [8 x ptr] [ptr @any_typ, ptr null, ptr @String, ptr @Representable, ptr @Object, ptr null, ptr null, ptr @Iterable]
-@String_offset_tbl = linkonce_odr constant [8 x i32] [i32 8, i32 0, i32 8, i32 41, i32 41, i32 0, i32 0, i32 39]
-@String = constant { [3 x i64], [5 x ptr], [35 x ptr] } { [3 x i64] [i64 6499063144389013426, i64 4611686018427388073, i64 7], [5 x ptr] [ptr @subtype_test, ptr @String_hashtbl, ptr @String_offset_tbl, ptr @_size_String, ptr @_box_Default], [35 x ptr] [ptr @String_field_bytes, ptr @String_field_length, ptr @String_field_capacity, ptr @String_B_init_, ptr @String_B_init_bytesBufferPtri8_lengthPtri32_capacityPtri32, ptr @String_B_length_, ptr @String_B_capacity_, ptr @String_B_bytes_, ptr @String_B_append_xPtri8, ptr @String_B_extend_strString, ptr @String_B__index_xPtri32, ptr @String_B__EQ_otherString, ptr @String_B_pop_, ptr @String_B_copy_, ptr @String_B_c_string_, ptr @String_B_iterator_, ptr @String_B_repr_, ptr @String_init_, ptr @String_init_bytesBufferPtri8_lengthPtri32_capacityPtri32, ptr @String_length_, ptr @String_capacity_, ptr @String_bytes_, ptr @String_append_xPtri8, ptr @String_extend_strString, ptr @String__index_xPtri32, ptr @String__EQ_otherString, ptr @String_pop_, ptr @String_copy_, ptr @String_c_string_, ptr @String_iterator_, ptr @String_repr_, ptr @String_B_iterator_, ptr @String_iterator_, ptr @String_B_repr_, ptr @String_repr_] }
+@String_offset_tbl = linkonce_odr constant [8 x i32] [i32 9, i32 0, i32 9, i32 42, i32 42, i32 0, i32 0, i32 40]
+@String = constant { [3 x i64], [6 x ptr], [35 x ptr] } { [3 x i64] [i64 6499063144389013426, i64 4611686018427388073, i64 7], [6 x ptr] [ptr @subtype_test, ptr @String_hashtbl, ptr @String_offset_tbl, ptr @_size_String, ptr @_box_Default, ptr @_unbox_Default], [35 x ptr] [ptr @String_field_bytes, ptr @String_field_length, ptr @String_field_capacity, ptr @String_B_init_, ptr @String_B_init_bytesBufferPtri8_lengthPtri32_capacityPtri32, ptr @String_B_length_, ptr @String_B_capacity_, ptr @String_B_bytes_, ptr @String_B_append_xPtri8, ptr @String_B_extend_strString, ptr @String_B__index_xPtri32, ptr @String_B__EQ_otherString, ptr @String_B_pop_, ptr @String_B_copy_, ptr @String_B_c_string_, ptr @String_B_iterator_, ptr @String_B_repr_, ptr @String_init_, ptr @String_init_bytesBufferPtri8_lengthPtri32_capacityPtri32, ptr @String_length_, ptr @String_capacity_, ptr @String_bytes_, ptr @String_append_xPtri8, ptr @String_extend_strString, ptr @String__index_xPtri32, ptr @String__EQ_otherString, ptr @String_pop_, ptr @String_copy_, ptr @String_c_string_, ptr @String_iterator_, ptr @String_repr_, ptr @String_B_iterator_, ptr @String_iterator_, ptr @String_B_repr_, ptr @String_repr_] }
 @Character_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr null, ptr @any_typ, ptr @Character]
-@Character_offset_tbl = linkonce_odr constant [4 x i32] [i32 13, i32 0, i32 8, i32 8]
-@Character = constant { [3 x i64], [5 x ptr], [5 x ptr] } { [3 x i64] [i64 6681222582356018452, i64 4611686018427388091, i64 3], [5 x ptr] [ptr @subtype_test, ptr @Character_hashtbl, ptr @Character_offset_tbl, ptr @_size_Character, ptr @_box_Default], [5 x ptr] [ptr @Character_field_byte, ptr @Character_B_byte_, ptr @Character_B_init_bytePtri8, ptr @Character_byte_, ptr @Character_init_bytePtri8] }
+@Character_offset_tbl = linkonce_odr constant [4 x i32] [i32 14, i32 0, i32 9, i32 9]
+@Character = constant { [3 x i64], [6 x ptr], [5 x ptr] } { [3 x i64] [i64 6681222582356018452, i64 4611686018427388091, i64 3], [6 x ptr] [ptr @subtype_test, ptr @Character_hashtbl, ptr @Character_offset_tbl, ptr @_size_Character, ptr @_box_Default, ptr @_unbox_Default], [5 x ptr] [ptr @Character_field_byte, ptr @Character_B_byte_, ptr @Character_B_init_bytePtri8, ptr @Character_byte_, ptr @Character_init_bytePtri8] }
 @StringIterator_hashtbl = linkonce_odr constant [4 x ptr] [ptr @StringIterator, ptr @Object, ptr @any_typ, ptr @Iterator]
-@StringIterator_offset_tbl = linkonce_odr constant [4 x i32] [i32 8, i32 14, i32 8, i32 14]
-@StringIterator = constant { [3 x i64], [5 x ptr], [6 x ptr] } { [3 x i64] [i64 -7260570988945952630, i64 4611686018427388097, i64 3], [5 x ptr] [ptr @subtype_test, ptr @StringIterator_hashtbl, ptr @StringIterator_offset_tbl, ptr @_size_StringIterator, ptr @_box_Default], [6 x ptr] [ptr @StringIterator_field_str, ptr @StringIterator_field_index, ptr @StringIterator_B_init_strString, ptr @StringIterator_B_next_, ptr @StringIterator_init_strString, ptr @StringIterator_next_] }
+@StringIterator_offset_tbl = linkonce_odr constant [4 x i32] [i32 9, i32 15, i32 9, i32 15]
+@StringIterator = constant { [3 x i64], [6 x ptr], [6 x ptr] } { [3 x i64] [i64 -7260570988945952630, i64 4611686018427388097, i64 3], [6 x ptr] [ptr @subtype_test, ptr @StringIterator_hashtbl, ptr @StringIterator_offset_tbl, ptr @_size_StringIterator, ptr @_box_Default, ptr @_unbox_Default], [6 x ptr] [ptr @StringIterator_field_str, ptr @StringIterator_field_index, ptr @StringIterator_B_init_strString, ptr @StringIterator_B_next_, ptr @StringIterator_init_strString, ptr @StringIterator_next_] }
 @Exception_hashtbl = linkonce_odr constant [4 x ptr] [ptr @Object, ptr null, ptr @any_typ, ptr @Exception]
-@Exception_offset_tbl = linkonce_odr constant [4 x i32] [i32 21, i32 0, i32 8, i32 8]
-@Exception = constant { [3 x i64], [5 x ptr], [13 x ptr] } { [3 x i64] [i64 9027164862567808692, i64 4611686018427388091, i64 3], [5 x ptr] [ptr @subtype_test, ptr @Exception_hashtbl, ptr @Exception_offset_tbl, ptr @_size_Exception, ptr @_box_Default], [13 x ptr] [ptr @Exception_field_line_number, ptr @Exception_field_file_name, ptr @Exception_field_message, ptr @Exception_B_init_messageString, ptr @Exception_B_init_, ptr @Exception_B_set_info_line_numberPtri32_file_nameString, ptr @Exception_B_report_, ptr @Exception_B_print_message_, ptr @Exception_init_messageString, ptr @Exception_init_, ptr @Exception_set_info_line_numberPtri32_file_nameString, ptr @Exception_report_, ptr @Exception_print_message_] }
+@Exception_offset_tbl = linkonce_odr constant [4 x i32] [i32 22, i32 0, i32 9, i32 9]
+@Exception = constant { [3 x i64], [6 x ptr], [13 x ptr] } { [3 x i64] [i64 9027164862567808692, i64 4611686018427388091, i64 3], [6 x ptr] [ptr @subtype_test, ptr @Exception_hashtbl, ptr @Exception_offset_tbl, ptr @_size_Exception, ptr @_box_Default, ptr @_unbox_Default], [13 x ptr] [ptr @Exception_field_line_number, ptr @Exception_field_file_name, ptr @Exception_field_message, ptr @Exception_B_init_messageString, ptr @Exception_B_init_, ptr @Exception_B_set_info_line_numberPtri32_file_nameString, ptr @Exception_B_report_, ptr @Exception_B_print_message_, ptr @Exception_init_messageString, ptr @Exception_init_, ptr @Exception_set_info_line_numberPtri32_file_nameString, ptr @Exception_report_, ptr @Exception_print_message_] }
 @String_field_bytes = internal constant { ptr, ptr } { ptr @String_getter_bytes, ptr @String_setter_bytes }
 @String_field_length = internal constant { ptr, ptr } { ptr @String_getter_length, ptr @String_setter_length }
 @String_field_capacity = internal constant { ptr, ptr } { ptr @String_getter_capacity, ptr @String_setter_capacity }
@@ -122,6 +122,8 @@ declare void @assume_offset(ptr, ptr)
 
 declare { ptr, i160 } @_box_Default(ptr, ptr)
 
+declare void @_unbox_Default({ ptr, i160 }, ptr, ptr)
+
 declare { i64, i64 } @_size_tuple_typ(ptr)
 
 declare { i64, i64 } @_size_union_typ(ptr)
@@ -148,7 +150,7 @@ define ptr @Iterable_B_iterator_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %5 = getelementptr [2 x ptr], ptr %4, i32 0, i32 1
-  %6 = getelementptr ptr, ptr %5, i32 8
+  %6 = getelementptr ptr, ptr %5, i32 9
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
 }
@@ -189,7 +191,7 @@ define { ptr, ptr, ptr, i32 } @Representable_repr_({ ptr, ptr, ptr, i32 } %0, { 
   store ptr %24, ptr %23, align 8
   %25 = call ptr @llvm.invariant.start.p0(i64 16, ptr %21)
   %26 = load ptr, ptr %21, align 8
-  %27 = load <6 x i8>, ptr @sfxrz_Object, align 8
+  %27 = load <6 x i8>, ptr @qhkkg_Object, align 8
   store <6 x i8> %27, ptr %26, align 8
   %28 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %29 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -197,7 +199,7 @@ define { ptr, ptr, ptr, i32 } @Representable_repr_({ ptr, ptr, ptr, i32 } %0, { 
   %31 = getelementptr { ptr, ptr, ptr, i32 }, ptr %29, i32 0, i32 3
   store ptr @String, ptr %29, align 8
   store ptr %28, ptr %30, align 8
-  store i32 8, ptr %31, align 4
+  store i32 9, ptr %31, align 4
   %32 = call ptr @llvm.invariant.start.p0(i64 16, ptr %29)
   %33 = getelementptr { ptr }, ptr %21, i32 0, i32 0
   %34 = load ptr, ptr %33, align 8
@@ -272,7 +274,7 @@ define ptr @Representable_B_repr_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %5 = getelementptr [2 x ptr], ptr %4, i32 0, i32 1
-  %6 = getelementptr ptr, ptr %5, i32 8
+  %6 = getelementptr ptr, ptr %5, i32 9
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
 }
@@ -418,7 +420,7 @@ define ptr @String_B_init_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %5 = getelementptr [35 x ptr], ptr %4, i32 0, i32 17
-  %6 = getelementptr ptr, ptr %5, i32 8
+  %6 = getelementptr ptr, ptr %5, i32 9
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
 }
@@ -524,7 +526,7 @@ define ptr @String_B_init_bytesBufferPtri8_lengthPtri32_capacityPtri32({ ptr, pt
   %36 = call i1 @subtype_test_wrapper(ptr %34, i64 %33, i64 %32, i64 -2253724949814257982, i64 ptrtoint (ptr @i32_typ to i64), ptr %35)
   %37 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %38 = getelementptr [35 x ptr], ptr %37, i32 0, i32 18
-  %39 = getelementptr ptr, ptr %38, i32 8
+  %39 = getelementptr ptr, ptr %38, i32 9
   %40 = load ptr, ptr %39, align 8
   ret ptr %40
 }
@@ -570,7 +572,7 @@ define ptr @String_B_length_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %5 = getelementptr [35 x ptr], ptr %4, i32 0, i32 19
-  %6 = getelementptr ptr, ptr %5, i32 8
+  %6 = getelementptr ptr, ptr %5, i32 9
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
 }
@@ -616,7 +618,7 @@ define ptr @String_B_capacity_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %5 = getelementptr [35 x ptr], ptr %4, i32 0, i32 20
-  %6 = getelementptr ptr, ptr %5, i32 8
+  %6 = getelementptr ptr, ptr %5, i32 9
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
 }
@@ -665,7 +667,7 @@ define ptr @String_B_bytes_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %5 = getelementptr [35 x ptr], ptr %4, i32 0, i32 21
-  %6 = getelementptr ptr, ptr %5, i32 8
+  %6 = getelementptr ptr, ptr %5, i32 9
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
 }
@@ -995,7 +997,7 @@ define ptr @String_B_append_xPtri8({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 2582149688529881115, i64 ptrtoint (ptr @i8_typ to i64), ptr %13)
   %15 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %16 = getelementptr [35 x ptr], ptr %15, i32 0, i32 22
-  %17 = getelementptr ptr, ptr %16, i32 8
+  %17 = getelementptr ptr, ptr %16, i32 9
   %18 = load ptr, ptr %17, align 8
   ret ptr %18
 }
@@ -1530,7 +1532,7 @@ define ptr @String_B_extend_strString({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr %13)
   %15 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %16 = getelementptr [35 x ptr], ptr %15, i32 0, i32 23
-  %17 = getelementptr ptr, ptr %16, i32 8
+  %17 = getelementptr ptr, ptr %16, i32 9
   %18 = load ptr, ptr %17, align 8
   ret ptr %18
 }
@@ -1706,7 +1708,7 @@ define ptr @String_B__index_xPtri32({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 -2253724949814257982, i64 ptrtoint (ptr @i32_typ to i64), ptr %13)
   %15 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %16 = getelementptr [35 x ptr], ptr %15, i32 0, i32 24
-  %17 = getelementptr ptr, ptr %16, i32 8
+  %17 = getelementptr ptr, ptr %16, i32 9
   %18 = load ptr, ptr %17, align 8
   ret ptr %18
 }
@@ -1941,7 +1943,7 @@ define ptr @String_B__EQ_otherString({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr %13)
   %15 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %16 = getelementptr [35 x ptr], ptr %15, i32 0, i32 25
-  %17 = getelementptr ptr, ptr %16, i32 8
+  %17 = getelementptr ptr, ptr %16, i32 9
   %18 = load ptr, ptr %17, align 8
   ret ptr %18
 }
@@ -2092,7 +2094,7 @@ define ptr @String_B_pop_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %5 = getelementptr [35 x ptr], ptr %4, i32 0, i32 26
-  %6 = getelementptr ptr, ptr %5, i32 8
+  %6 = getelementptr ptr, ptr %5, i32 9
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
 }
@@ -2245,7 +2247,7 @@ define { ptr, ptr, ptr, i32 } @String_copy_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %120 = getelementptr { ptr, ptr, ptr, i32 }, ptr %118, i32 0, i32 3
   store ptr @String, ptr %118, align 8
   store ptr %117, ptr %119, align 8
-  store i32 8, ptr %120, align 4
+  store i32 9, ptr %120, align 4
   %121 = call ptr @llvm.invariant.start.p0(i64 16, ptr %118)
   %122 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 1
   %123 = load ptr, ptr %122, align 8
@@ -2386,7 +2388,7 @@ define ptr @String_B_copy_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %5 = getelementptr [35 x ptr], ptr %4, i32 0, i32 27
-  %6 = getelementptr ptr, ptr %5, i32 8
+  %6 = getelementptr ptr, ptr %5, i32 9
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
 }
@@ -2539,7 +2541,7 @@ define ptr @String_B_c_string_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %5 = getelementptr [35 x ptr], ptr %4, i32 0, i32 28
-  %6 = getelementptr ptr, ptr %5, i32 8
+  %6 = getelementptr ptr, ptr %5, i32 9
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
 }
@@ -2572,7 +2574,7 @@ define { ptr, ptr, ptr, i32 } @String_iterator_({ ptr, ptr, ptr, i32 } %0, { ptr
   %22 = getelementptr { ptr, ptr, ptr, i32 }, ptr %20, i32 0, i32 3
   store ptr @StringIterator, ptr %20, align 8
   store ptr %19, ptr %21, align 8
-  store i32 8, ptr %22, align 4
+  store i32 9, ptr %22, align 4
   %23 = call ptr @llvm.invariant.start.p0(i64 16, ptr %20)
   %24 = alloca { ptr, ptr, ptr, i32 }, align 8
   %25 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 0
@@ -2666,7 +2668,7 @@ define ptr @String_B_iterator_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %5 = getelementptr [35 x ptr], ptr %4, i32 0, i32 29
-  %6 = getelementptr ptr, ptr %5, i32 8
+  %6 = getelementptr ptr, ptr %5, i32 9
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
 }
@@ -2730,7 +2732,7 @@ define ptr @String_B_repr_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %5 = getelementptr [35 x ptr], ptr %4, i32 0, i32 30
-  %6 = getelementptr ptr, ptr %5, i32 8
+  %6 = getelementptr ptr, ptr %5, i32 9
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
 }
@@ -2800,7 +2802,7 @@ define ptr @Character_B_byte_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %5 = getelementptr [5 x ptr], ptr %4, i32 0, i32 3
-  %6 = getelementptr ptr, ptr %5, i32 8
+  %6 = getelementptr ptr, ptr %5, i32 9
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
 }
@@ -2856,7 +2858,7 @@ define ptr @Character_B_init_bytePtri8({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 2582149688529881115, i64 ptrtoint (ptr @i8_typ to i64), ptr %13)
   %15 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %16 = getelementptr [5 x ptr], ptr %15, i32 0, i32 4
-  %17 = getelementptr ptr, ptr %16, i32 8
+  %17 = getelementptr ptr, ptr %16, i32 9
   %18 = load ptr, ptr %17, align 8
   ret ptr %18
 }
@@ -3049,7 +3051,7 @@ define ptr @StringIterator_B_init_strString({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr %13)
   %15 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %16 = getelementptr [6 x ptr], ptr %15, i32 0, i32 4
-  %17 = getelementptr ptr, ptr %16, i32 8
+  %17 = getelementptr ptr, ptr %16, i32 9
   %18 = load ptr, ptr %17, align 8
   ret ptr %18
 }
@@ -3227,7 +3229,7 @@ define { ptr, i160 } @StringIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %153 = getelementptr { ptr, ptr, ptr, i32 }, ptr %151, i32 0, i32 3
   store ptr @Character, ptr %151, align 8
   store ptr %150, ptr %152, align 8
-  store i32 8, ptr %153, align 4
+  store i32 9, ptr %153, align 4
   %154 = call ptr @llvm.invariant.start.p0(i64 16, ptr %151)
   %155 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 1
   %156 = load ptr, ptr %155, align 8
@@ -3355,7 +3357,7 @@ define ptr @StringIterator_B_next_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %5 = getelementptr [6 x ptr], ptr %4, i32 0, i32 5
-  %6 = getelementptr ptr, ptr %5, i32 8
+  %6 = getelementptr ptr, ptr %5, i32 9
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
 }
@@ -3594,7 +3596,7 @@ define void @Exception_init_messageString({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %91 = getelementptr { ptr, ptr, ptr, i32 }, ptr %89, i32 0, i32 3
   store ptr @String, ptr %89, align 8
   store ptr %88, ptr %90, align 8
-  store i32 8, ptr %91, align 4
+  store i32 9, ptr %91, align 4
   %92 = call ptr @llvm.invariant.start.p0(i64 16, ptr %89)
   %93 = getelementptr { ptr }, ptr %83, i32 0, i32 0
   %94 = load ptr, ptr %93, align 8
@@ -3692,7 +3694,7 @@ define ptr @Exception_B_init_messageString({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr %13)
   %15 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %16 = getelementptr [13 x ptr], ptr %15, i32 0, i32 8
-  %17 = getelementptr ptr, ptr %16, i32 8
+  %17 = getelementptr ptr, ptr %16, i32 9
   %18 = load ptr, ptr %17, align 8
   ret ptr %18
 }
@@ -3740,7 +3742,7 @@ define void @Exception_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   store ptr %34, ptr %33, align 8
   %35 = call ptr @llvm.invariant.start.p0(i64 16, ptr %31)
   %36 = load ptr, ptr %31, align 8
-  %37 = load <6 x i8>, ptr @fwbko_None, align 8
+  %37 = load <6 x i8>, ptr @pfckg_None, align 8
   store <6 x i8> %37, ptr %36, align 8
   %38 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %39 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -3748,7 +3750,7 @@ define void @Exception_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   %41 = getelementptr { ptr, ptr, ptr, i32 }, ptr %39, i32 0, i32 3
   store ptr @String, ptr %39, align 8
   store ptr %38, ptr %40, align 8
-  store i32 8, ptr %41, align 4
+  store i32 9, ptr %41, align 4
   %42 = call ptr @llvm.invariant.start.p0(i64 16, ptr %39)
   %43 = getelementptr { ptr }, ptr %31, i32 0, i32 0
   %44 = load ptr, ptr %43, align 8
@@ -3843,7 +3845,7 @@ define void @Exception_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   %118 = getelementptr { ptr, ptr, ptr, i32 }, ptr %116, i32 0, i32 3
   store ptr @String, ptr %116, align 8
   store ptr %115, ptr %117, align 8
-  store i32 8, ptr %118, align 4
+  store i32 9, ptr %118, align 4
   %119 = call ptr @llvm.invariant.start.p0(i64 16, ptr %116)
   %120 = getelementptr { ptr }, ptr %110, i32 0, i32 0
   %121 = load ptr, ptr %120, align 8
@@ -3930,7 +3932,7 @@ define ptr @Exception_B_init_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %5 = getelementptr [13 x ptr], ptr %4, i32 0, i32 9
-  %6 = getelementptr ptr, ptr %5, i32 8
+  %6 = getelementptr ptr, ptr %5, i32 9
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
 }
@@ -4060,7 +4062,7 @@ define ptr @Exception_B_set_info_line_numberPtri32_file_nameString({ ptr, ptr, p
   %25 = call i1 @subtype_test_wrapper(ptr %23, i64 %22, i64 %21, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr %24)
   %26 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %27 = getelementptr [13 x ptr], ptr %26, i32 0, i32 10
-  %28 = getelementptr ptr, ptr %27, i32 8
+  %28 = getelementptr ptr, ptr %27, i32 9
   %29 = load ptr, ptr %28, align 8
   ret ptr %29
 }
@@ -4097,7 +4099,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %24, ptr %23, align 8
   %25 = call ptr @llvm.invariant.start.p0(i64 16, ptr %21)
   %26 = load ptr, ptr %21, align 8
-  %27 = load <9 x i8>, ptr @obztf_, align 16
+  %27 = load <9 x i8>, ptr @syquz_, align 16
   store <9 x i8> %27, ptr %26, align 16
   %28 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %29 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4105,7 +4107,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %31 = getelementptr { ptr, ptr, ptr, i32 }, ptr %29, i32 0, i32 3
   store ptr @String, ptr %29, align 8
   store ptr %28, ptr %30, align 8
-  store i32 8, ptr %31, align 4
+  store i32 9, ptr %31, align 4
   %32 = call ptr @llvm.invariant.start.p0(i64 16, ptr %29)
   %33 = getelementptr { ptr }, ptr %21, i32 0, i32 0
   %34 = load ptr, ptr %33, align 8
@@ -4178,7 +4180,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %91, ptr %90, align 8
   %92 = call ptr @llvm.invariant.start.p0(i64 16, ptr %88)
   %93 = load ptr, ptr %88, align 8
-  %94 = load <26 x i8>, ptr @wwcey_Exception_thrown_from_file, align 32
+  %94 = load <26 x i8>, ptr @ykpgk_Exception_thrown_from_file, align 32
   store <26 x i8> %94, ptr %93, align 32
   %95 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %96 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4186,7 +4188,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %98 = getelementptr { ptr, ptr, ptr, i32 }, ptr %96, i32 0, i32 3
   store ptr @String, ptr %96, align 8
   store ptr %95, ptr %97, align 8
-  store i32 8, ptr %98, align 4
+  store i32 9, ptr %98, align 4
   %99 = call ptr @llvm.invariant.start.p0(i64 16, ptr %96)
   %100 = getelementptr { ptr }, ptr %88, i32 0, i32 0
   %101 = load ptr, ptr %100, align 8
@@ -4300,7 +4302,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %196, ptr %195, align 8
   %197 = call ptr @llvm.invariant.start.p0(i64 16, ptr %193)
   %198 = load ptr, ptr %193, align 8
-  %199 = load <7 x i8>, ptr @iehsr_At_line, align 8
+  %199 = load <7 x i8>, ptr @bqzvl_At_line, align 8
   store <7 x i8> %199, ptr %198, align 8
   %200 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %201 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4308,7 +4310,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %203 = getelementptr { ptr, ptr, ptr, i32 }, ptr %201, i32 0, i32 3
   store ptr @String, ptr %201, align 8
   store ptr %200, ptr %202, align 8
-  store i32 8, ptr %203, align 4
+  store i32 9, ptr %203, align 4
   %204 = call ptr @llvm.invariant.start.p0(i64 16, ptr %201)
   %205 = getelementptr { ptr }, ptr %193, i32 0, i32 0
   %206 = load ptr, ptr %205, align 8
@@ -4393,7 +4395,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %275, ptr %274, align 8
   %276 = call ptr @llvm.invariant.start.p0(i64 16, ptr %272)
   %277 = load ptr, ptr %272, align 8
-  %278 = load <12 x i8>, ptr @puult_With_message, align 16
+  %278 = load <12 x i8>, ptr @bakpf_With_message, align 16
   store <12 x i8> %278, ptr %277, align 16
   %279 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %280 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4401,7 +4403,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %282 = getelementptr { ptr, ptr, ptr, i32 }, ptr %280, i32 0, i32 3
   store ptr @String, ptr %280, align 8
   store ptr %279, ptr %281, align 8
-  store i32 8, ptr %282, align 4
+  store i32 9, ptr %282, align 4
   %283 = call ptr @llvm.invariant.start.p0(i64 16, ptr %280)
   %284 = getelementptr { ptr }, ptr %272, i32 0, i32 0
   %285 = load ptr, ptr %284, align 8
@@ -4495,7 +4497,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %362, ptr %361, align 8
   %363 = call ptr @llvm.invariant.start.p0(i64 16, ptr %359)
   %364 = load ptr, ptr %359, align 8
-  %365 = load <9 x i8>, ptr @cgnob_, align 16
+  %365 = load <9 x i8>, ptr @cvdpw_, align 16
   store <9 x i8> %365, ptr %364, align 16
   %366 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ({ { ptr }, i32, i32 }, ptr null, i32 1) to i64))
   %367 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4503,7 +4505,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %369 = getelementptr { ptr, ptr, ptr, i32 }, ptr %367, i32 0, i32 3
   store ptr @String, ptr %367, align 8
   store ptr %366, ptr %368, align 8
-  store i32 8, ptr %369, align 4
+  store i32 9, ptr %369, align 4
   %370 = call ptr @llvm.invariant.start.p0(i64 16, ptr %367)
   %371 = getelementptr { ptr }, ptr %359, i32 0, i32 0
   %372 = load ptr, ptr %371, align 8
@@ -4573,7 +4575,7 @@ define ptr @Exception_B_report_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %5 = getelementptr [13 x ptr], ptr %4, i32 0, i32 11
-  %6 = getelementptr ptr, ptr %5, i32 8
+  %6 = getelementptr ptr, ptr %5, i32 9
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
 }
@@ -4648,7 +4650,7 @@ define ptr @Exception_B_print_message_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %5 = getelementptr [13 x ptr], ptr %4, i32 0, i32 12
-  %6 = getelementptr ptr, ptr %5, i32 8
+  %6 = getelementptr ptr, ptr %5, i32 9
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
 }
@@ -4741,14 +4743,30 @@ define linkonce_odr { ptr, i160 } @_box_bool_typ(ptr nonnull %0, ptr nonnull %1)
   %10 = call ptr @bump_malloc(i64 %6)
   call void @llvm.memcpy.inline.p0.p0.i64(ptr %10, ptr %0, i64 %6, i1 false)
   %11 = select i1 %9, ptr %0, ptr %10
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %4, ptr %11, i64 %6, i1 false)
-  %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
-  %13 = load ptr, ptr %12, align 8
-  %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %12 = select i1 %8, ptr %3, ptr %4
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %12, ptr %11, i64 %6, i1 false)
+  %13 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, i160 } undef, ptr %14, 0
+  %16 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
+  %17 = load i160, ptr %16, align 4
+  %18 = insertvalue { ptr, i160 } %15, i160 %17, 1
+  ret { ptr, i160 } %18
+}
+
+define linkonce_odr void @_unbox_bool_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
+  %4 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %0, ptr %4, align 8
+  %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
+  %6 = load ptr, ptr %5, align 8
+  %7 = call { i64, i64 } @_size_bool_typ(ptr %1)
+  %8 = extractvalue { i64, i64 } %7, 0
+  %9 = icmp sle i64 %8, 16
+  %10 = icmp eq i64 %8, 32
+  %11 = select i1 %9, ptr %5, ptr %6
+  %12 = select i1 %10, ptr %4, ptr %11
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %2, ptr %12, i64 %8, i1 false)
+  ret void
 }
 
 define linkonce_odr { i64, i64 } @_size_i8_typ(ptr %0) {
@@ -4776,14 +4794,30 @@ define linkonce_odr { ptr, i160 } @_box_i8_typ(ptr nonnull %0, ptr nonnull %1) {
   %10 = call ptr @bump_malloc(i64 %6)
   call void @llvm.memcpy.inline.p0.p0.i64(ptr %10, ptr %0, i64 %6, i1 false)
   %11 = select i1 %9, ptr %0, ptr %10
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %4, ptr %11, i64 %6, i1 false)
-  %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
-  %13 = load ptr, ptr %12, align 8
-  %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %12 = select i1 %8, ptr %3, ptr %4
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %12, ptr %11, i64 %6, i1 false)
+  %13 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, i160 } undef, ptr %14, 0
+  %16 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
+  %17 = load i160, ptr %16, align 4
+  %18 = insertvalue { ptr, i160 } %15, i160 %17, 1
+  ret { ptr, i160 } %18
+}
+
+define linkonce_odr void @_unbox_i8_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
+  %4 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %0, ptr %4, align 8
+  %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
+  %6 = load ptr, ptr %5, align 8
+  %7 = call { i64, i64 } @_size_i8_typ(ptr %1)
+  %8 = extractvalue { i64, i64 } %7, 0
+  %9 = icmp sle i64 %8, 16
+  %10 = icmp eq i64 %8, 32
+  %11 = select i1 %9, ptr %5, ptr %6
+  %12 = select i1 %10, ptr %4, ptr %11
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %2, ptr %12, i64 %8, i1 false)
+  ret void
 }
 
 define linkonce_odr { i64, i64 } @_size_i32_typ(ptr %0) {
@@ -4811,14 +4845,30 @@ define linkonce_odr { ptr, i160 } @_box_i32_typ(ptr nonnull %0, ptr nonnull %1) 
   %10 = call ptr @bump_malloc(i64 %6)
   call void @llvm.memcpy.inline.p0.p0.i64(ptr %10, ptr %0, i64 %6, i1 false)
   %11 = select i1 %9, ptr %0, ptr %10
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %4, ptr %11, i64 %6, i1 false)
-  %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
-  %13 = load ptr, ptr %12, align 8
-  %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %12 = select i1 %8, ptr %3, ptr %4
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %12, ptr %11, i64 %6, i1 false)
+  %13 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, i160 } undef, ptr %14, 0
+  %16 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
+  %17 = load i160, ptr %16, align 4
+  %18 = insertvalue { ptr, i160 } %15, i160 %17, 1
+  ret { ptr, i160 } %18
+}
+
+define linkonce_odr void @_unbox_i32_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
+  %4 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %0, ptr %4, align 8
+  %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
+  %6 = load ptr, ptr %5, align 8
+  %7 = call { i64, i64 } @_size_i32_typ(ptr %1)
+  %8 = extractvalue { i64, i64 } %7, 0
+  %9 = icmp sle i64 %8, 16
+  %10 = icmp eq i64 %8, 32
+  %11 = select i1 %9, ptr %5, ptr %6
+  %12 = select i1 %10, ptr %4, ptr %11
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %2, ptr %12, i64 %8, i1 false)
+  ret void
 }
 
 define linkonce_odr { i64, i64 } @_size_i64_typ(ptr %0) {
@@ -4846,14 +4896,30 @@ define linkonce_odr { ptr, i160 } @_box_i64_typ(ptr nonnull %0, ptr nonnull %1) 
   %10 = call ptr @bump_malloc(i64 %6)
   call void @llvm.memcpy.inline.p0.p0.i64(ptr %10, ptr %0, i64 %6, i1 false)
   %11 = select i1 %9, ptr %0, ptr %10
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %4, ptr %11, i64 %6, i1 false)
-  %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
-  %13 = load ptr, ptr %12, align 8
-  %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %12 = select i1 %8, ptr %3, ptr %4
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %12, ptr %11, i64 %6, i1 false)
+  %13 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, i160 } undef, ptr %14, 0
+  %16 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
+  %17 = load i160, ptr %16, align 4
+  %18 = insertvalue { ptr, i160 } %15, i160 %17, 1
+  ret { ptr, i160 } %18
+}
+
+define linkonce_odr void @_unbox_i64_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
+  %4 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %0, ptr %4, align 8
+  %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
+  %6 = load ptr, ptr %5, align 8
+  %7 = call { i64, i64 } @_size_i64_typ(ptr %1)
+  %8 = extractvalue { i64, i64 } %7, 0
+  %9 = icmp sle i64 %8, 16
+  %10 = icmp eq i64 %8, 32
+  %11 = select i1 %9, ptr %5, ptr %6
+  %12 = select i1 %10, ptr %4, ptr %11
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %2, ptr %12, i64 %8, i1 false)
+  ret void
 }
 
 define linkonce_odr { i64, i64 } @_size_i128_typ(ptr %0) {
@@ -4881,14 +4947,30 @@ define linkonce_odr { ptr, i160 } @_box_i128_typ(ptr nonnull %0, ptr nonnull %1)
   %10 = call ptr @bump_malloc(i64 %6)
   call void @llvm.memcpy.inline.p0.p0.i64(ptr %10, ptr %0, i64 %6, i1 false)
   %11 = select i1 %9, ptr %0, ptr %10
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %4, ptr %11, i64 %6, i1 false)
-  %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
-  %13 = load ptr, ptr %12, align 8
-  %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %12 = select i1 %8, ptr %3, ptr %4
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %12, ptr %11, i64 %6, i1 false)
+  %13 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, i160 } undef, ptr %14, 0
+  %16 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
+  %17 = load i160, ptr %16, align 4
+  %18 = insertvalue { ptr, i160 } %15, i160 %17, 1
+  ret { ptr, i160 } %18
+}
+
+define linkonce_odr void @_unbox_i128_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
+  %4 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %0, ptr %4, align 8
+  %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
+  %6 = load ptr, ptr %5, align 8
+  %7 = call { i64, i64 } @_size_i128_typ(ptr %1)
+  %8 = extractvalue { i64, i64 } %7, 0
+  %9 = icmp sle i64 %8, 16
+  %10 = icmp eq i64 %8, 32
+  %11 = select i1 %9, ptr %5, ptr %6
+  %12 = select i1 %10, ptr %4, ptr %11
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %2, ptr %12, i64 %8, i1 false)
+  ret void
 }
 
 define linkonce_odr { i64, i64 } @_size_f64_typ(ptr %0) {
@@ -4916,14 +4998,30 @@ define linkonce_odr { ptr, i160 } @_box_f64_typ(ptr nonnull %0, ptr nonnull %1) 
   %10 = call ptr @bump_malloc(i64 %6)
   call void @llvm.memcpy.inline.p0.p0.i64(ptr %10, ptr %0, i64 %6, i1 false)
   %11 = select i1 %9, ptr %0, ptr %10
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %4, ptr %11, i64 %6, i1 false)
-  %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
-  %13 = load ptr, ptr %12, align 8
-  %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %12 = select i1 %8, ptr %3, ptr %4
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %12, ptr %11, i64 %6, i1 false)
+  %13 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, i160 } undef, ptr %14, 0
+  %16 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
+  %17 = load i160, ptr %16, align 4
+  %18 = insertvalue { ptr, i160 } %15, i160 %17, 1
+  ret { ptr, i160 } %18
+}
+
+define linkonce_odr void @_unbox_f64_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
+  %4 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %0, ptr %4, align 8
+  %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
+  %6 = load ptr, ptr %5, align 8
+  %7 = call { i64, i64 } @_size_f64_typ(ptr %1)
+  %8 = extractvalue { i64, i64 } %7, 0
+  %9 = icmp sle i64 %8, 16
+  %10 = icmp eq i64 %8, 32
+  %11 = select i1 %9, ptr %5, ptr %6
+  %12 = select i1 %10, ptr %4, ptr %11
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %2, ptr %12, i64 %8, i1 false)
+  ret void
 }
 
 define linkonce_odr { i64, i64 } @_size_nil_typ(ptr %0) {
@@ -4951,14 +5049,30 @@ define linkonce_odr { ptr, i160 } @_box_nil_typ(ptr nonnull %0, ptr nonnull %1) 
   %10 = call ptr @bump_malloc(i64 %6)
   call void @llvm.memcpy.inline.p0.p0.i64(ptr %10, ptr %0, i64 %6, i1 false)
   %11 = select i1 %9, ptr %0, ptr %10
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %4, ptr %11, i64 %6, i1 false)
-  %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
-  %13 = load ptr, ptr %12, align 8
-  %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %12 = select i1 %8, ptr %3, ptr %4
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %12, ptr %11, i64 %6, i1 false)
+  %13 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, i160 } undef, ptr %14, 0
+  %16 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
+  %17 = load i160, ptr %16, align 4
+  %18 = insertvalue { ptr, i160 } %15, i160 %17, 1
+  ret { ptr, i160 } %18
+}
+
+define linkonce_odr void @_unbox_nil_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
+  %4 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %0, ptr %4, align 8
+  %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
+  %6 = load ptr, ptr %5, align 8
+  %7 = call { i64, i64 } @_size_nil_typ(ptr %1)
+  %8 = extractvalue { i64, i64 } %7, 0
+  %9 = icmp sle i64 %8, 16
+  %10 = icmp eq i64 %8, 32
+  %11 = select i1 %9, ptr %5, ptr %6
+  %12 = select i1 %10, ptr %4, ptr %11
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %2, ptr %12, i64 %8, i1 false)
+  ret void
 }
 
 define linkonce_odr { i64, i64 } @_size_any_typ(ptr %0) {
@@ -4986,14 +5100,30 @@ define linkonce_odr { ptr, i160 } @_box_any_typ(ptr nonnull %0, ptr nonnull %1) 
   %10 = call ptr @bump_malloc(i64 %6)
   call void @llvm.memcpy.inline.p0.p0.i64(ptr %10, ptr %0, i64 %6, i1 false)
   %11 = select i1 %9, ptr %0, ptr %10
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %4, ptr %11, i64 %6, i1 false)
-  %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
-  %13 = load ptr, ptr %12, align 8
-  %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %12 = select i1 %8, ptr %3, ptr %4
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %12, ptr %11, i64 %6, i1 false)
+  %13 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, i160 } undef, ptr %14, 0
+  %16 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
+  %17 = load i160, ptr %16, align 4
+  %18 = insertvalue { ptr, i160 } %15, i160 %17, 1
+  ret { ptr, i160 } %18
+}
+
+define linkonce_odr void @_unbox_any_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
+  %4 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %0, ptr %4, align 8
+  %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
+  %6 = load ptr, ptr %5, align 8
+  %7 = call { i64, i64 } @_size_any_typ(ptr %1)
+  %8 = extractvalue { i64, i64 } %7, 0
+  %9 = icmp sle i64 %8, 16
+  %10 = icmp eq i64 %8, 32
+  %11 = select i1 %9, ptr %5, ptr %6
+  %12 = select i1 %10, ptr %4, ptr %11
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %2, ptr %12, i64 %8, i1 false)
+  ret void
 }
 
 define linkonce_odr { i64, i64 } @_size_nothing_typ(ptr %0) {
@@ -5021,14 +5151,30 @@ define linkonce_odr { ptr, i160 } @_box_nothing_typ(ptr nonnull %0, ptr nonnull 
   %10 = call ptr @bump_malloc(i64 %6)
   call void @llvm.memcpy.inline.p0.p0.i64(ptr %10, ptr %0, i64 %6, i1 false)
   %11 = select i1 %9, ptr %0, ptr %10
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %4, ptr %11, i64 %6, i1 false)
-  %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
-  %13 = load ptr, ptr %12, align 8
-  %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %12 = select i1 %8, ptr %3, ptr %4
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %12, ptr %11, i64 %6, i1 false)
+  %13 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, i160 } undef, ptr %14, 0
+  %16 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
+  %17 = load i160, ptr %16, align 4
+  %18 = insertvalue { ptr, i160 } %15, i160 %17, 1
+  ret { ptr, i160 } %18
+}
+
+define linkonce_odr void @_unbox_nothing_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
+  %4 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %0, ptr %4, align 8
+  %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
+  %6 = load ptr, ptr %5, align 8
+  %7 = call { i64, i64 } @_size_nothing_typ(ptr %1)
+  %8 = extractvalue { i64, i64 } %7, 0
+  %9 = icmp sle i64 %8, 16
+  %10 = icmp eq i64 %8, 32
+  %11 = select i1 %9, ptr %5, ptr %6
+  %12 = select i1 %10, ptr %4, ptr %11
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %2, ptr %12, i64 %8, i1 false)
+  ret void
 }
 
 define linkonce_odr { i64, i64 } @_size_coroutine_typ(ptr %0) {
@@ -5056,14 +5202,30 @@ define linkonce_odr { ptr, i160 } @_box_coroutine_typ(ptr nonnull %0, ptr nonnul
   %10 = call ptr @bump_malloc(i64 %6)
   call void @llvm.memcpy.inline.p0.p0.i64(ptr %10, ptr %0, i64 %6, i1 false)
   %11 = select i1 %9, ptr %0, ptr %10
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %4, ptr %11, i64 %6, i1 false)
-  %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
-  %13 = load ptr, ptr %12, align 8
-  %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %12 = select i1 %8, ptr %3, ptr %4
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %12, ptr %11, i64 %6, i1 false)
+  %13 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, i160 } undef, ptr %14, 0
+  %16 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
+  %17 = load i160, ptr %16, align 4
+  %18 = insertvalue { ptr, i160 } %15, i160 %17, 1
+  ret { ptr, i160 } %18
+}
+
+define linkonce_odr void @_unbox_coroutine_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
+  %4 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %0, ptr %4, align 8
+  %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
+  %6 = load ptr, ptr %5, align 8
+  %7 = call { i64, i64 } @_size_coroutine_typ(ptr %1)
+  %8 = extractvalue { i64, i64 } %7, 0
+  %9 = icmp sle i64 %8, 16
+  %10 = icmp eq i64 %8, 32
+  %11 = select i1 %9, ptr %5, ptr %6
+  %12 = select i1 %10, ptr %4, ptr %11
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %2, ptr %12, i64 %8, i1 false)
+  ret void
 }
 
 define linkonce_odr { i64, i64 } @_size_function_typ(ptr %0) {
@@ -5091,14 +5253,30 @@ define linkonce_odr { ptr, i160 } @_box_function_typ(ptr nonnull %0, ptr nonnull
   %10 = call ptr @bump_malloc(i64 %6)
   call void @llvm.memcpy.inline.p0.p0.i64(ptr %10, ptr %0, i64 %6, i1 false)
   %11 = select i1 %9, ptr %0, ptr %10
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %4, ptr %11, i64 %6, i1 false)
-  %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
-  %13 = load ptr, ptr %12, align 8
-  %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %12 = select i1 %8, ptr %3, ptr %4
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %12, ptr %11, i64 %6, i1 false)
+  %13 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, i160 } undef, ptr %14, 0
+  %16 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
+  %17 = load i160, ptr %16, align 4
+  %18 = insertvalue { ptr, i160 } %15, i160 %17, 1
+  ret { ptr, i160 } %18
+}
+
+define linkonce_odr void @_unbox_function_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
+  %4 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %0, ptr %4, align 8
+  %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
+  %6 = load ptr, ptr %5, align 8
+  %7 = call { i64, i64 } @_size_function_typ(ptr %1)
+  %8 = extractvalue { i64, i64 } %7, 0
+  %9 = icmp sle i64 %8, 16
+  %10 = icmp eq i64 %8, 32
+  %11 = select i1 %9, ptr %5, ptr %6
+  %12 = select i1 %10, ptr %4, ptr %11
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %2, ptr %12, i64 %8, i1 false)
+  ret void
 }
 
 define linkonce_odr { i64, i64 } @_size_buffer_typ(ptr %0) {
@@ -5126,14 +5304,30 @@ define linkonce_odr { ptr, i160 } @_box_buffer_typ(ptr nonnull %0, ptr nonnull %
   %10 = call ptr @bump_malloc(i64 %6)
   call void @llvm.memcpy.inline.p0.p0.i64(ptr %10, ptr %0, i64 %6, i1 false)
   %11 = select i1 %9, ptr %0, ptr %10
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %4, ptr %11, i64 %6, i1 false)
-  %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
-  %13 = load ptr, ptr %12, align 8
-  %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %12 = select i1 %8, ptr %3, ptr %4
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %12, ptr %11, i64 %6, i1 false)
+  %13 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, i160 } undef, ptr %14, 0
+  %16 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
+  %17 = load i160, ptr %16, align 4
+  %18 = insertvalue { ptr, i160 } %15, i160 %17, 1
+  ret { ptr, i160 } %18
+}
+
+define linkonce_odr void @_unbox_buffer_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
+  %4 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %0, ptr %4, align 8
+  %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
+  %6 = load ptr, ptr %5, align 8
+  %7 = call { i64, i64 } @_size_buffer_typ(ptr %1)
+  %8 = extractvalue { i64, i64 } %7, 0
+  %9 = icmp sle i64 %8, 16
+  %10 = icmp eq i64 %8, 32
+  %11 = select i1 %9, ptr %5, ptr %6
+  %12 = select i1 %10, ptr %4, ptr %11
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %2, ptr %12, i64 %8, i1 false)
+  ret void
 }
 
 define linkonce_odr { ptr, i160 } @_box_tuple_typ(ptr nonnull %0, ptr nonnull %1) {
@@ -5148,14 +5342,30 @@ define linkonce_odr { ptr, i160 } @_box_tuple_typ(ptr nonnull %0, ptr nonnull %1
   %10 = call ptr @bump_malloc(i64 %6)
   call void @llvm.memcpy.inline.p0.p0.i64(ptr %10, ptr %0, i64 %6, i1 false)
   %11 = select i1 %9, ptr %0, ptr %10
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %4, ptr %11, i64 %6, i1 false)
-  %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
-  %13 = load ptr, ptr %12, align 8
-  %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %12 = select i1 %8, ptr %3, ptr %4
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %12, ptr %11, i64 %6, i1 false)
+  %13 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, i160 } undef, ptr %14, 0
+  %16 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
+  %17 = load i160, ptr %16, align 4
+  %18 = insertvalue { ptr, i160 } %15, i160 %17, 1
+  ret { ptr, i160 } %18
+}
+
+define linkonce_odr void @_unbox_tuple_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
+  %4 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %0, ptr %4, align 8
+  %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
+  %6 = load ptr, ptr %5, align 8
+  %7 = call { i64, i64 } @_size_tuple_typ(ptr %1)
+  %8 = extractvalue { i64, i64 } %7, 0
+  %9 = icmp sle i64 %8, 16
+  %10 = icmp eq i64 %8, 32
+  %11 = select i1 %9, ptr %5, ptr %6
+  %12 = select i1 %10, ptr %4, ptr %11
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %2, ptr %12, i64 %8, i1 false)
+  ret void
 }
 
 define linkonce_odr { ptr, i160 } @_box_union_typ(ptr nonnull %0, ptr nonnull %1) {
@@ -5170,14 +5380,30 @@ define linkonce_odr { ptr, i160 } @_box_union_typ(ptr nonnull %0, ptr nonnull %1
   %10 = call ptr @bump_malloc(i64 %6)
   call void @llvm.memcpy.inline.p0.p0.i64(ptr %10, ptr %0, i64 %6, i1 false)
   %11 = select i1 %9, ptr %0, ptr %10
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %4, ptr %11, i64 %6, i1 false)
-  %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
-  %13 = load ptr, ptr %12, align 8
-  %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %12 = select i1 %8, ptr %3, ptr %4
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %12, ptr %11, i64 %6, i1 false)
+  %13 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, i160 } undef, ptr %14, 0
+  %16 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
+  %17 = load i160, ptr %16, align 4
+  %18 = insertvalue { ptr, i160 } %15, i160 %17, 1
+  ret { ptr, i160 } %18
+}
+
+define linkonce_odr void @_unbox_union_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
+  %4 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %0, ptr %4, align 8
+  %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
+  %6 = load ptr, ptr %5, align 8
+  %7 = call { i64, i64 } @_size_union_typ(ptr %1)
+  %8 = extractvalue { i64, i64 } %7, 0
+  %9 = icmp sle i64 %8, 16
+  %10 = icmp eq i64 %8, 32
+  %11 = select i1 %9, ptr %5, ptr %6
+  %12 = select i1 %10, ptr %4, ptr %11
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %2, ptr %12, i64 %8, i1 false)
+  ret void
 }
 
 ; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)

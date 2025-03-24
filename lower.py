@@ -133,7 +133,8 @@ class ThirdPass(ModulePass):
                 LowerOffsetTable(),
                 LowerLiteral(),
                 LowerSizeInBytesDef(),
-                LowerBoxDef()
+                LowerBoxDef(),
+                LowerUnboxDef()
                 #LowerParameterizationIndexation(),
                 #LowerNew(),
                 #LowerParameterizationsArray(),
@@ -1232,7 +1233,7 @@ class LowerTypeIntegersTable(RewritePattern):
 class LowerTypePtrsTable(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: TypePtrsTableOp, rewriter: PatternRewriter):
-        second_tbl_type = llvm.LLVMArrayType.from_size_and_type(5, llvm.LLVMPointerType.opaque())
+        second_tbl_type = llvm.LLVMArrayType.from_size_and_type(6, llvm.LLVMPointerType.opaque())
 
         second_tbl = llvm.UndefOp(second_tbl_type)
         rewriter.insert_op_before_matched_op(second_tbl)
@@ -1260,7 +1261,12 @@ class LowerTypePtrsTable(RewritePattern):
         dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [4])
         box_fn = AddrOfOp.from_stringattr(op.box_fn)
         second_tbl = llvm.InsertValueOp(dense_ary, second_tbl.results[0], box_fn.results[0])
-        rewriter.inline_block_before_matched_op(Block([box_fn]))
+        rewriter.inline_block_before_matched_op(Block([box_fn, second_tbl]))
+
+        dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [5])
+        unbox_fn = AddrOfOp.from_stringattr(op.unbox_fn)
+        second_tbl = llvm.InsertValueOp(dense_ary, second_tbl.results[0], unbox_fn.results[0])
+        rewriter.inline_block_before_matched_op(Block([unbox_fn]))
 
         rewriter.replace_matched_op(second_tbl)
 
@@ -1290,7 +1296,7 @@ class LowerExternalTypeDef(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: ExternalTypeDefOp, rewriter: PatternRewriter):
         first_tbl_type = llvm.LLVMArrayType.from_size_and_type(3, IntegerType(64))
-        second_tbl_type = llvm.LLVMArrayType.from_size_and_type(5, llvm.LLVMPointerType.opaque())
+        second_tbl_type = llvm.LLVMArrayType.from_size_and_type(6, llvm.LLVMPointerType.opaque())
         third_tbl_type = llvm.LLVMArrayType.from_size_and_type(op.vtbl_size.value.data, llvm.LLVMPointerType.opaque())
         vtbl_type = llvm.LLVMStructType.from_type_list([first_tbl_type, second_tbl_type, third_tbl_type])
         class_glob = GlobalOp(
@@ -1306,7 +1312,7 @@ class LowerTypeDef(RewritePattern):
     def match_and_rewrite(self, op: TypeDefOp, rewriter: PatternRewriter):
 
         first_tbl_type = llvm.LLVMArrayType.from_size_and_type(3, IntegerType(64))
-        second_tbl_type = llvm.LLVMArrayType.from_size_and_type(5, llvm.LLVMPointerType.opaque())
+        second_tbl_type = llvm.LLVMArrayType.from_size_and_type(6, llvm.LLVMPointerType.opaque())
         third_tbl_type = llvm.LLVMArrayType.from_size_and_type(len(op.methods.data), llvm.LLVMPointerType.opaque())
         vtbl_type = llvm.LLVMStructType.from_type_list([first_tbl_type, second_tbl_type, third_tbl_type])
         
@@ -1323,7 +1329,8 @@ class LowerTypeDef(RewritePattern):
 
         attr_dict = {
             "subtype_test":StringAttr("subtype_test"), "hash_tbl":StringAttr(op.class_name.data + "_hashtbl"),
-            "offset_tbl":StringAttr(op.class_name.data + "_offset_tbl"), "base_typ":op.base_typ, "size_fn":op.size_fn, "box_fn":op.box_fn
+            "offset_tbl":StringAttr(op.class_name.data + "_offset_tbl"), "base_typ":op.base_typ,
+            "size_fn":op.size_fn, "box_fn":op.box_fn, "unbox_fn":op.unbox_fn
         }
         second_tbl = TypePtrsTableOp.create(attributes=attr_dict, result_types=[second_tbl_type])
         dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [1])
@@ -1873,6 +1880,89 @@ class LowerSizeInBytesDef(RewritePattern):
         func_op = llvm.FuncOp(op.meth_name.data, ftype, body=body, linkage=llvm.LinkageAttr(op.linkage.data if op.linkage else "external"))
         rewriter.replace_matched_op(func_op)
 
+class LowerGetterDefDesign(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: GetterDefOp, rewriter: PatternRewriter):
+        size_alignment_tuple = llvm.LLVMStructType.from_type_list([IntegerType(64), IntegerType(64)])
+        body_block = Block([])
+        data_ptr = body_block.insert_arg(llvm.LLVMPointerType.opaque(), 0)
+        body = Region([body_block])
+
+        current_offset = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 64), IntegerType(64))
+        max_align = llvm.ConstantOp(IntegerAttr.from_int_and_width(1, 64), IntegerType(64))
+        false = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 1), IntegerType(1))
+        zero = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 64), IntegerType(64))
+        one = llvm.ConstantOp(IntegerAttr.from_int_and_width(1, 64), IntegerType(64))
+        sixty_three = llvm.ConstantOp(IntegerAttr.from_int_and_width(63, 64), IntegerType(64))
+        body_block.add_ops([current_offset, max_align, false, zero, one, sixty_three])
+
+        for i, t in enumerate(op.types.data):
+            if i == op.offset.value.data: break
+            if isinstance(t, IntegerAttr):
+                # not statically known size
+                gep = llvm.GEPOp(data_ptr, [t.value.data], pointee_type=llvm.LLVMPointerType.opaque())
+                load0 = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
+                load1 = llvm.LoadOp(load0.results[0], llvm.LLVMPointerType.opaque())
+                size_fn_ptr = llvm.GEPOp(load1.results[0], [6], pointee_type=llvm.LLVMPointerType.opaque())
+                size_fn = llvm.LoadOp(size_fn_ptr.results[0], llvm.LLVMPointerType.opaque())
+                ftype2 = FunctionType.from_lists([llvm.LLVMPointerType.opaque()], [size_alignment_tuple])
+                laundered = builtin.UnrealizedConversionCastOp(operands=[size_fn.results[0]], result_types=[ftype2])
+                call = func.CallIndirect(laundered.results[0], [load0.results[0]], [size_alignment_tuple])
+                dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
+                size = llvm.ExtractValueOp(dense_ary, call.results[0], IntegerType(64))
+                dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [1])
+                alignment = llvm.ExtractValueOp(dense_ary, call.results[0], IntegerType(64))
+                body_block.add_ops([gep, load0, load1, size_fn_ptr, size_fn, laundered, call, size, alignment])
+            else:
+                # a statically known field
+                size = TypeSizeOp.create(attributes={"typ":t}, result_types=[IntegerType(64)])
+                alignment = TypeAlignmentOp.create(attributes={"typ":t}, result_types=[IntegerType(64)])
+                body_block.add_ops([size, alignment])
+            cmp_align = arith.Cmpi(alignment.results[0], max_align.results[0], "ugt")
+            max_align = arith.Select(cmp_align.results[0], alignment.results[0], max_align.results[0])
+            rem = arith.RemUI(current_offset.results[0], alignment.results[0])
+            cmp_rem = ComparisonOp.make(zero.results[0], rem.results[0], "EQ")
+            high_end_pad = arith.Subi(alignment.results[0], rem.results[0])
+            padding = arith.Select(cmp_rem.results[0], zero.results[0], high_end_pad.results[0])
+            padded_size = arith.Addi(size.results[0], padding.results[0])
+            current_offset = arith.Addi(current_offset.results[0], padded_size.results[0])
+            body_block.add_ops([
+                cmp_align, max_align,
+                rem, cmp_rem, high_end_pad, padding, padded_size, current_offset
+            ])
+
+        rem_final = arith.RemUI(current_offset.results[0], max_align.results[0])
+        cmp_rem_final = ComparisonOp.make(rem_final.results[0], zero.results[0], "EQ")
+        high_pad_final = arith.Subi(max_align.results[0], rem_final.results[0])
+        padding_final = arith.Select(cmp_rem_final.results[0], zero.results[0], high_pad_final.results[0])
+        final_size = arith.Addi(current_offset.results[0], padding_final.results[0])
+
+        field_gep = llvm.GEPOp.from_mixed_indices(data_ptr, [final_size.results[0]], pointee_type=IntegerType(8))
+        body_block.add_ops([rem_final, cmp_rem_final, high_pad_final, padding_final, final_size, field_gep])
+        if op.box:
+            specialized = AddrOfOp.from_stringattr(op.specialized_name)
+            box_fn_ptr = llvm.GEPOp(specialized.results[0], [7], pointee_type=llvm.LLVMPointerType.opaque())
+            box_fn = llvm.LoadOp(box_fn_ptr.results[0], llvm.LLVMPointerType.opaque())
+            box_type = TypeParameter.make("", "").base_typ()
+            ftype = FunctionType.from_lists([llvm.LLVMPointerType.opaque(), llvm.LLVMPointerType.opaque()], [box_type])
+            laundered = builtin.UnrealizedConversionCastOp(operands=[box_fn.results[0]], result_types=[ftype])
+            body_block.add_ops([specialized, box_fn_ptr, box_fn, laundered])
+            if isinstance(op.types.data[op.offset.value.data], IntegerAttr):
+                parameterization_ptr = llvm.GEPOp(data_ptr, [op.types.data[op.offset.value.data].value.data], llvm.LLVMPointerType.opaque())
+                parameterization = llvm.LoadOp(parameterization_ptr.results[0], llvm.LLVMPointerType.opaque())
+                return_val = func.CallIndirect(laundered.results[0], [field_gep.results[0], parameterization.results[0]], [box_type])
+                body_block.add_ops(parameterization_ptr, parameterization)
+            else:
+                return_val = func.CallIndirect(laundered.results[0], [field_gep.results[0], field_gep.results[0]], [box_type])
+        else:
+            return_val = llvm.LoadOp(field_gep.results[0], op.original_type)
+
+        ret = llvm.ReturnOp.create(operands=[return_val.results[0]])
+        body_block.add_ops([return_val, ret])
+
+        func_op = func.FuncOp(op.meth_name.data, ([llvm.LLVMPointerType.opaque()], op.original_type), region=body)
+        rewriter.replace_matched_op(func_op)
+
 class LowerBoxDef(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: BoxDefOp, rewriter: PatternRewriter):
@@ -1931,6 +2021,54 @@ class LowerBoxDef(RewritePattern):
 
         func_op = llvm.FuncOp(op.meth_name.data, ftype, body=body, linkage=llvm.LinkageAttr("linkonce_odr"))
         func_op.properties["arg_attrs"] = dict_ary
+        rewriter.replace_matched_op(func_op)
+
+class LowerUnboxDef(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: UnboxDefOp, rewriter: PatternRewriter):
+        body_block = Block([])
+        box_type = TypeParameter.make("", "").base_typ()
+        body = Region([body_block])
+
+        ftype = llvm.LLVMFunctionType([box_type, llvm.LLVMPointerType.opaque(), llvm.LLVMPointerType.opaque()], llvm.LLVMVoidType())
+        input = body_block.insert_arg(box_type, 0)
+        parameterization = body_block.insert_arg(llvm.LLVMPointerType.opaque(), 1)
+        destination = body_block.insert_arg(llvm.LLVMPointerType.opaque(), 2)
+
+        wrapped = WrapOp.make(input)
+        data_ptr_ptr = llvm.GEPOp(wrapped.results[0], [0, 1], pointee_type=box_type)
+        data_ptr = llvm.LoadOp(data_ptr_ptr.results[0], llvm.LLVMPointerType.opaque())
+
+        size_fn = AddrOfOp.from_string(op.meth_name.data.replace("_unbox_","_size_"))
+
+        size_alignment_tuple = llvm.LLVMStructType.from_type_list([IntegerType(64), IntegerType(64)])
+        size_fn_type = FunctionType.from_lists([llvm.LLVMPointerType.opaque()], [size_alignment_tuple])
+        laundered = builtin.UnrealizedConversionCastOp(operands=[size_fn.results[0]], result_types=[size_fn_type])
+        call = func.CallIndirect(laundered.results[0], [parameterization], [size_alignment_tuple])
+        dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
+        data_size = llvm.ExtractValueOp(dense_ary, call.results[0], IntegerType(64))
+
+        threshold = llvm.ConstantOp(IntegerAttr.from_int_and_width(16, 64), IntegerType(64))
+        thirtytwo = llvm.ConstantOp(IntegerAttr.from_int_and_width(32, 64), IntegerType(64))
+        small_struct = ComparisonOp.make(data_size.results[0], threshold.results[0], "LE")
+        right_size = ComparisonOp.make(data_size.results[0], thirtytwo.results[0], "EQ")
+
+        source1 = arith.Select(small_struct.results[0], data_ptr_ptr.results[0], data_ptr.results[0])
+        source2 = arith.Select(right_size.results[0], wrapped.results[0], source1.results[0])
+
+        false = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 1), IntegerType(1))
+        args = [destination, source2.results[0], data_size.results[0], false.results[0]]
+        memcpy0 = llvm.CallIntrinsicOp("llvm.memcpy.inline.p0.p0.i64", [args], [llvm.LLVMVoidType()])
+        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [4, 0])
+        memcpy0.properties["operandSegmentSizes"] = operandSegmentSizes
+        memcpy0.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        ret = llvm.ReturnOp.create()
+        body_block.add_ops([
+            wrapped, data_ptr_ptr, data_ptr, size_fn, laundered, call, data_size, threshold, thirtytwo, small_struct, right_size,
+            source1, source2, false, memcpy0, ret
+        ])
+
+        func_op = llvm.FuncOp(op.meth_name.data, ftype, body=body, linkage=llvm.LinkageAttr("linkonce_odr"))
         rewriter.replace_matched_op(func_op)
 
 class LowerTypeAccessorDef(RewritePattern):

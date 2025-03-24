@@ -399,6 +399,12 @@ module @patterns {
       %box_with_region = pdl.apply_native_rewrite "add_region"(%box_decl : !pdl.operation) : !pdl.operation
       pdl.erase %box_decl
 
+      %unbox = pdl.attribute = "_unbox_Default"
+      %func_type_attr99 = pdl.attribute = !llvm.func<!llvm.void (!llvm.struct<(ptr, i160)>, ptr, ptr)>
+      %unbox_decl = pdl.operation "llvm.func" {"sym_name" = %unbox, "function_type" = %func_type_attr99, "linkage" = %linkage}
+      %unbox_with_region = pdl.apply_native_rewrite "add_region"(%unbox_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %unbox_decl
+
       %tuple_size = pdl.attribute = "_size_tuple_typ"
       %func_type_attr95 = pdl.attribute = !llvm.func<!llvm.struct<(i64, i64)> (ptr)>
       %tuple_size_decl = pdl.operation "llvm.func" {"sym_name" = %tuple_size, "function_type" = %func_type_attr95, "linkage" = %linkage}

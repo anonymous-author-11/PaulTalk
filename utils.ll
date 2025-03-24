@@ -153,13 +153,22 @@ define { i64, i64 } @_size_union_typ(ptr %0) {
   ret { i64, i64 } %30
 }
 
-define { ptr, i160 } @_box_Default(ptr nocapture readonly %fat_ptr, ptr %parameterization) {
+define { ptr, i160 } @_box_Default(ptr %fat_ptr, ptr %parameterization) {
   %vptr = load ptr, ptr %fat_ptr, align 8
   %3 = insertvalue { ptr, i160 } undef, ptr %vptr, 0
   %4 = getelementptr i8, ptr %fat_ptr, i64 8
   %5 = load i160, ptr %4, align 4
   %6 = insertvalue { ptr, i160 } %3, i160 %5, 1
   ret { ptr, i160 } %6
+}
+
+define void @_unbox_Default({ ptr, i160 } %fat_ptr, ptr %parameterization, ptr %destination) {
+  %vptr = extractvalue { ptr, i160 } %fat_ptr, 0
+  %data = extractvalue { ptr, i160 } %fat_ptr, 1
+  %dest_data = getelementptr i8, ptr %destination, i64 8
+  store ptr %vptr, ptr %destination
+  store i160 %data, ptr %dest_data
+  ret void
 }
 
 define void @anoint_trampoline(ptr %tramp) {

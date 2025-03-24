@@ -52,6 +52,10 @@ class AST:
             box_fn = BoxDefOp.make("_box_" + typ_name)
             func_ops.append(box_fn)
 
+            unbox_fn_name = StringAttr("_unbox_" + typ_name)
+            unbox_fn = UnboxDefOp.make("_unbox_" + typ_name)
+            func_ops.append(unbox_fn)
+
             hash_tbl, prime = global_scope.build_hashtable(typ)
             offset_tbl = global_scope.build_offset_table(typ)
             hashid = IntegerAttr.from_int_and_width(hash_id(typ_name), 64)
@@ -66,7 +70,8 @@ class AST:
                 "linkage":linkage,
                 "base_typ":typ.base_typ(),
                 "size_fn":size_fn_name,
-                "box_fn":box_fn_name
+                "box_fn":box_fn_name,
+                "unbox_fn":unbox_fn_name
             }
             typ_ops.append(TypeDefOp.create(attributes=attr_dict))
         main = MainOp.create(regions=[global_scope.region])
@@ -2110,7 +2115,7 @@ class ClassDef(Statement):
         attr_dict = {
             "class_name":class_name, "methods":combined, "hash_tbl":hash_tbl,"offset_tbl":offset_tbl,
             "prime":prime, "hash_id":hashid, "base_typ":self.base_typ(),
-            "size_fn":StringAttr("_size_" + self.name), "box_fn":StringAttr("_box_Default")
+            "size_fn":StringAttr("_size_" + self.name), "box_fn":StringAttr("_box_Default"), "unbox_fn":StringAttr("_unbox_Default")
         }
         class_def = TypeDefOp.create(attributes=attr_dict)
         scope.region.last_block.add_op(class_def)

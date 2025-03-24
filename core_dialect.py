@@ -385,6 +385,7 @@ class TypeDefOp(IRDLOperation):
     base_typ: TypeAttribute = attr_def(TypeAttribute)
     size_fn: StringAttr = attr_def(StringAttr)
     box_fn: StringAttr = attr_def(StringAttr)
+    unbox_fn: StringAttr = attr_def(StringAttr)
     linkage: OptAttributeDef = opt_attr_def(StringAttr)
 
 @irdl_op_definition
@@ -424,6 +425,7 @@ class TypePtrsTableOp(IRDLOperation):
     base_typ: TypeAttribute = attr_def(TypeAttribute)
     size_fn: StringAttr = attr_def(StringAttr)
     box_fn: StringAttr = attr_def(StringAttr)
+    unbox_fn: StringAttr = attr_def(StringAttr)
     result: OpResult = result_def()
 
 @irdl_op_definition
@@ -843,6 +845,15 @@ class BoxDefOp(IRDLOperation):
     @classmethod
     def make(cls, meth_name):
         return BoxDefOp.create(attributes={"meth_name":StringAttr(meth_name)})
+
+@irdl_op_definition
+class UnboxDefOp(IRDLOperation):
+    name = "mini.unbox_def"
+    meth_name: StringAttr = attr_def(StringAttr)
+
+    @classmethod
+    def make(cls, meth_name):
+        return UnboxDefOp.create(attributes={"meth_name":StringAttr(meth_name)})
 
 @irdl_op_definition
 class ReferOp(IRDLOperation):

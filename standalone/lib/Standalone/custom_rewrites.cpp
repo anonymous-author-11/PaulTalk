@@ -224,7 +224,7 @@ static Attribute countElements(PatternRewriter &rewriter, ValueRange values) {
 }
 
 static Attribute vtableBufferSize(PatternRewriter &rewriter) {
-  return IntegerAttr::get(rewriter.getI32Type(), 8);
+  return IntegerAttr::get(rewriter.getI32Type(), 9);
 }
 
 static Attribute multiply(PatternRewriter &rewriter, Attribute lhs, Attribute rhs) {
