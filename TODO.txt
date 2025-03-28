@@ -310,6 +310,7 @@ DONE:
 - Add an _unbox_ method for every type as well [check!]
 - Need to simultaneously change getter/setter/new to dynamically size generic fields [check!]
 - Correctly retrieve pameterizations from passed arrays [check!]
+- Move alloca hoisting to PDL [check!]
 
 TODO:
 

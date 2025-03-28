@@ -1983,7 +1983,7 @@ class LowerGetterDef(RewritePattern):
                 body_block.add_ops([specialized, box_fn_ptr, box_fn, laundered])
                 return_val = func.CallIndirect(laundered.results[0], [field_gep.results[0], field_gep.results[0]], [box_type])
         else:
-            return_val = llvm.LoadOp(field_gep.results[0], op.original_type)
+            return_val = UnwrapOp.create(operands=[field_gep.results[0]], result_types=[op.original_type])
 
         ret = llvm.ReturnOp.create(operands=[return_val.results[0]])
         body_block.add_ops([return_val, ret])
@@ -2082,7 +2082,9 @@ class LowerSetterDef(RewritePattern):
                 body_block.add_ops([specialized, unbox_fn_ptr, unbox_fn, laundered])
                 do_set = func.CallIndirect(laundered.results[0], [value, field_gep.results[0], field_gep.results[0]], [])
         else:
-            do_set = llvm.StoreOp(value, field_gep.results[0])
+            wrapped_value = WrapOp.make(value)
+            do_set = MemCpyOp.make(wrapped_value.results[0], field_gep.results[0], op.original_type)
+            body_block.add_op(wrapped_value)
 
         ret = llvm.ReturnOp.create()
         body_block.add_ops([do_set, ret])
