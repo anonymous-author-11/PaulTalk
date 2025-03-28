@@ -40,6 +40,7 @@ class AST:
         class_ops = [op.parent_block().detach_op(op) for op in ops if isinstance(op, TypeDefOp) or isinstance(op, ExternalTypeDefOp)]
         typ_ops = []
         for typ_name, typ in builtin_types.items():
+
             size_fn_name = StringAttr("_size_" + typ_name)
             if typ_name not in ["tuple_typ", "union_typ"]:
                 size_fn = SizeInBytesDefOp.create(attributes={
@@ -48,13 +49,16 @@ class AST:
                     "linkage":StringAttr("linkonce_odr")
                 })
                 func_ops.append(size_fn)
-            box_fn_name = StringAttr("_box_" + typ_name)
-            box_fn = BoxDefOp.make("_box_" + typ_name)
-            func_ops.append(box_fn)
 
+            box_fn_name = StringAttr("_box_" + typ_name)
             unbox_fn_name = StringAttr("_unbox_" + typ_name)
-            unbox_fn = UnboxDefOp.make("_unbox_" + typ_name)
-            func_ops.append(unbox_fn)
+            if typ_name == "any_typ":
+                box_fn_name = StringAttr("_box_Default")
+                unbox_fn_name = StringAttr("_unbox_Default")
+            if typ_name not in ["any_typ", "union_typ"]:
+                box_fn = BoxDefOp.make("_box_" + typ_name)
+                unbox_fn = UnboxDefOp.make("_unbox_" + typ_name)
+                func_ops.extend([box_fn, unbox_fn])
 
             hash_tbl, prime = global_scope.build_hashtable(typ)
             offset_tbl = global_scope.build_offset_table(typ)
@@ -564,14 +568,15 @@ class FieldIdentifier(Identifier):
         specialized_type = field.type()
         attr_dict = {"offset":offset, "vtable_bytes":vtable_bytes, "original_type":original_type.base_typ()}
         self_val = scope.symbol_table["self"]
-        
-        if isinstance(original_type, TypeParameter) or isinstance(original_type, FatPtr):
-                attr_dict["assumed_type"] = type_id(original_type)
+
+        if isinstance(original_type, FatPtr):
+            attr_dict["assumed_type"] = type_id(original_type)
 
         get = GetFieldOp.create(operands=[self_val], attributes=attr_dict, result_types=[original_type])
-        if original_type == specialized_type:
+        if not isinstance(original_type, TypeParameter):
             scope.region.last_block.add_op(get)
             return get.results[0]
+
         cast = CastOp.make(get.results[0], original_type, specialized_type, type_id)
         scope.region.last_block.add_ops([get, cast])
         return cast.results[0]
@@ -2463,8 +2468,12 @@ class Field:
             scope.region.last_block.add_op(accessor)
             return
 
-        getter = GetterDefOp.make(getter_name, struct_type, original_type, specialized, self.offset, type_id)
-        setter = SetterDefOp.make(setter_name, struct_type, original_type, specialized, self.offset, type_id)
+        # could very easily be incorrect; unsure if the field order is necessarily the same as self.cls.type_parameters.index(t)
+        fields_types = fields_types = [t.base_typ() if not isinstance(t, TypeParameter) else IntegerAttr.from_int_and_width([f.declaration.type_param for f in self.cls.fields() if isinstance(f.declaration, TypeFieldDecl)].index(t), 64) for t in self.cls.fields_types()]
+
+        parameterization = StringAttr("_parameterization_" + name_hierarchy(self.type()).data[0].data) if not isinstance(self.type(), TypeParameter) else None
+        getter = GetterDefOp.make(getter_name, fields_types, self.offset, original_type, specialized, parameterization, type_id)
+        setter = SetterDefOp.make(setter_name, fields_types, self.offset, original_type, specialized, parameterization, type_id)
 
         attr_dict = {"meth_name":accessor_name, "getter_name":getter_name, "setter_name":setter_name}
         accessor = AccessorDefOp.create(attributes=attr_dict)

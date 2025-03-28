@@ -405,6 +405,16 @@ module @patterns {
       %unbox_with_region = pdl.apply_native_rewrite "add_region"(%unbox_decl : !pdl.operation) : !pdl.operation
       pdl.erase %unbox_decl
 
+      %box_union = pdl.attribute = "_box_union_typ"
+      %box_union_decl = pdl.operation "llvm.func" {"sym_name" = %box_union, "function_type" = %func_type_attr9, "linkage" = %linkage}
+      %box_union_with_region = pdl.apply_native_rewrite "add_region"(%box_union_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %box_union_decl
+
+      %unbox_union = pdl.attribute = "_unbox_union_typ"
+      %unbox_union_decl = pdl.operation "llvm.func" {"sym_name" = %unbox_union, "function_type" = %func_type_attr99, "linkage" = %linkage}
+      %unbox_union_with_region = pdl.apply_native_rewrite "add_region"(%unbox_union_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %unbox_union_decl
+
       %tuple_size = pdl.attribute = "_size_tuple_typ"
       %func_type_attr95 = pdl.attribute = !llvm.func<!llvm.struct<(i64, i64)> (ptr)>
       %tuple_size_decl = pdl.operation "llvm.func" {"sym_name" = %tuple_size, "function_type" = %func_type_attr95, "linkage" = %linkage}

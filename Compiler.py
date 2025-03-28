@@ -103,7 +103,7 @@ def do_preliminaries(out_file_names, ll_files):
 
     # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
     # this has shown to significantly improve the optimization potential
-    reg2mem = "opt -S --passes=reg2mem"
+    reg2mem = "opt -S --passes=reg2mem "
 
     # hoist allocas to entry blocks of functions
     # frontend authors are *supposed* to only emit allocas in entry blocks
@@ -116,22 +116,26 @@ def do_preliminaries(out_file_names, ll_files):
 def record_all_passes():
     clang = "clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
     opt = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
+    opt = f"opt out_reg2mem.ll -S --passes=\"default<O2>\" --max-devirt-iterations=100 --inline-threshold=10000 --print-after-all"
     with open("out_reg2mem.ll", "r+") as f:
         out_reg2mem = f.read()
         f.seek(0)
         # clang can't handle the 'preserve_nonecc' attribute for some reason
         f.write(out_reg2mem.replace("preserve_nonecc",""))
         f.truncate()
-    opt_out = subprocess.run(clang, text=True, shell=True, capture_output=True)
+    opt_out = subprocess.run(opt, text=True, shell=True, capture_output=True)
     with open("opt_passes.txt", "w") as outfile: outfile.write(opt_out.stderr)
 
 def run_opt(debug_mode):
     debug = "debugir out_reg2mem.ll"
     debug_extension = ".dbg" if debug_mode else ""
+    target_triple = "-mtriple=x86_64-pc-windows-msvc"
     o3 = "--passes=\"default<O3>\""
     o2 = "--passes=\"default<O2>\""
     o1 = "--passes=\"default<O1>\""
     opt_level = o1 if debug_mode else o3
+
+    interesting = "--use-noalias-intrinsic-during-inlining --mem-intrinsic-expand-size=1024"
 
     # this is the real optimization sauce for our language
     # does another round of optimizations whenever an indirect callee is identified

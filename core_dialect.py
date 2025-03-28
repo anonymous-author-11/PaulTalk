@@ -737,56 +737,53 @@ class TypeAccessorDefOp(IRDLOperation):
 class GetterDefOp(IRDLOperation):
     name = "mini.getter_def"
     meth_name: StringAttr = attr_def(StringAttr)
+    types: ArrayAttr = attr_def(ArrayAttr)
+    offset: IntegerAttr = attr_def(IntegerAttr)
     original_type: TypeAttribute = attr_def(TypeAttribute)
-    body: Region = region_def()
+    specialized_name: StringAttr = attr_def(StringAttr)
+    parameterization: OptAttributeDef = opt_attr_def(StringAttr)
+    box: OptAttributeDef = opt_attr_def(UnitAttr)
 
     @classmethod
-    def make(cls, meth_name, struct_type, original_type, specialized_type, offset, id_fn):
-        body_block = Block([])
-        body = Region([body_block])
-        data_ptr = body.block.insert_arg(llvm.LLVMPointerType.opaque(), 0)
-        ftype = ([llvm.LLVMPointerType.opaque()], [original_type.base_typ()])
-        field = llvm.GEPOp(data_ptr, [0, offset], pointee_type=struct_type)
-        body_block.add_op(field)
-
-        if type_size(original_type.base_typ()) != type_size(specialized_type.base_typ()):
-            print(f"size of {original_type} ({type_size(original_type.base_typ())}) is not equal to size of specialized {specialized_type} ({type_size(specialized_type.base_typ())})")
-            field = CastOp.make(field.results[0], specialized_type, original_type, id_fn)
-            body_block.add_op(field)
+    def make(cls, meth_name, types, offset, original_type, specialized_type, parameterization, id_fn):
         
-        unwrap = UnwrapOp.create(operands=[field.results[0]], result_types=[original_type.base_typ()])
-        ret = func.Return(unwrap.results[0])
-        body_block.add_ops([unwrap, ret])
-        attr_dict = {"meth_name":meth_name, "original_type":original_type.base_typ()}
-        return GetterDefOp.create(attributes=attr_dict, regions=[body])
+        attr_dict = {
+            "meth_name":meth_name,
+            "types":ArrayAttr(types),
+            "offset":IntegerAttr.from_int_and_width(offset, 64),
+            "original_type":original_type.base_typ(),
+            "specialized_name":id_fn(specialized_type)
+        }
+        if parameterization: attr_dict["parameterization"] = parameterization
+        if isinstance(original_type, TypeParameter):
+            attr_dict["box"] = UnitAttr()
+        return GetterDefOp.create(attributes=attr_dict)
 
 @irdl_op_definition
 class SetterDefOp(IRDLOperation):
     name = "mini.setter_def"
     meth_name: StringAttr = attr_def(StringAttr)
+    types: ArrayAttr = attr_def(ArrayAttr)
+    offset: IntegerAttr = attr_def(IntegerAttr)
     original_type: TypeAttribute = attr_def(TypeAttribute)
-    body: Region = region_def()
+    specialized_name: StringAttr = attr_def(StringAttr)
+    parameterization: OptAttributeDef = opt_attr_def(StringAttr)
+    unbox: OptAttributeDef = opt_attr_def(UnitAttr)
 
     @classmethod
-    def make(cls, meth_name, struct_type, original_type, specialized_type, offset, id_fn):
-        body_block = Block([])
-        body = Region([body_block])
-        data_ptr = body.block.insert_arg(llvm.LLVMPointerType.opaque(), 0)
-        value = body.block.insert_arg(original_type.base_typ(), 1)
-        ftype = ([llvm.LLVMPointerType.opaque(), original_type.base_typ()], [])
-        field = llvm.GEPOp(data_ptr, [0, offset], pointee_type=struct_type)
-        wrap = WrapOp.make(value, original_type)
-        body_block.add_ops([field, wrap])
-
-        if type_size(original_type.base_typ()) != type_size(specialized_type.base_typ()):
-            wrap = CastOp.make(wrap.results[0], original_type, specialized_type, id_fn)
-            body_block.add_op(wrap)
+    def make(cls, meth_name, types, offset, original_type, specialized_type, parameterization, id_fn):
         
-        memcpy = MemCpyOp.make(wrap.results[0], field.results[0], specialized_type.base_typ())
-        ret = func.Return()
-        body_block.add_ops([memcpy, ret])
-        attr_dict = {"meth_name":meth_name, "original_type":original_type.base_typ()}
-        return SetterDefOp.create(attributes=attr_dict, regions=[body])
+        attr_dict = {
+            "meth_name":meth_name,
+            "types":ArrayAttr(types),
+            "offset":IntegerAttr.from_int_and_width(offset, 64),
+            "original_type":original_type.base_typ(),
+            "specialized_name":id_fn(specialized_type)
+        }
+        if parameterization: attr_dict["parameterization"] = parameterization
+        if isinstance(original_type, TypeParameter):
+            attr_dict["unbox"] = UnitAttr()
+        return SetterDefOp.create(attributes=attr_dict)
 
 @irdl_op_definition
 class ArgPasserOp(IRDLOperation):
@@ -803,6 +800,16 @@ class BufferFillerOp(IRDLOperation):
     func_name: StringAttr = attr_def(StringAttr)
     arg_types: ArrayAttr = attr_def(ArrayAttr)
     yield_type: TypeAttribute = attr_def(TypeAttribute)
+
+@irdl_op_definition
+class SizeAlignmentOp(IRDLOperation):
+    name = "mini.size_alignment"
+    parameterization: Operand = operand_def()
+    result: OpResult = result_def()
+
+    @classmethod
+    def make(cls, parameterization):
+        return SizeAlignmentOp.create(operands=[parameterization], result_types=[llvm.LLVMStructType.from_type_list([IntegerType(64), IntegerType(64)])])
 
 @irdl_op_definition
 class ParameterizationOp(IRDLOperation):

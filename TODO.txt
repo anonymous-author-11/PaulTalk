@@ -307,12 +307,12 @@ DONE:
 - Have a _box_ method in every type's vtable [check!]
 - Null-terminate parameterizations [check!]
 - Write a special _size_ method for union and tuple [check!]
+- Add an _unbox_ method for every type as well [check!]
+- Need to simultaneously change getter/setter/new to dynamically size generic fields
+	- [check!]
 
 TODO:
 
-- Add an _unbox_ method for every type as well
-- Need to simultaneously change getter/setter/new to dynamically size generic fields
-	- 
 - Maybe create offset & hash table separately and just give names to typedef
 - Then only have to pass getter, box, and subtype name to typeptrs
 - Disallow method type parameters having same name as class type parameters

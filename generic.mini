@@ -432,9 +432,10 @@ for x in ary3 {
 }
 
 ary4 = ary.zip(ary3);
-for pair in ary4 {
-	IO.print(pair.first());
-	IO.print(pair.second());
+iter = ary4.iterator();
+nxt = iter.next();
+if nxt is Pair[i32, f64] {
+    IO.print(nxt.second());
 }
 
 class Addable[T, U] {
@@ -479,10 +480,6 @@ class Int32 extends Addable[Int32, Int32], Addable[Float64, Float64] {
 	}
 }
 
-a = Int32.new(5);
-b = Int32.new(7);
-c = a + b;
-IO.print(add_five(c).value());
 
 def add_five(x : Addable[Float64, Float64]) -> Float64 {
 	return x + Float64.new(5.0);
@@ -498,8 +495,3 @@ class Holder[T] where T <: Addable[Float64, Float64] {
         @held = x;
     }
 }
-
-holder = Holder[Int32].new(Int32.new(6));
-IO.print(holder.value().value());
-holder.value() = Int32.new(77);
-IO.print(holder.value().value());
