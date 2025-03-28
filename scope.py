@@ -193,12 +193,33 @@ class Scope:
         class_scoped_type_params = self.cls.type_parameters if self.cls else []
         for t in self.method.type_params:
             i, first_arg_with_type = next((i, param_t) for (i, param_t) in enumerate([*self.method.param_types(), *class_scoped_type_params]) if f"{t}" in f"{param_t}")
-            indices = ArrayAttr([IntegerAttr.from_int_and_width(idx, 32) for idx in type_index(first_arg_with_type, t)])
-            ary_type = llvm.LLVMArrayType.from_size_and_type(i + 1, llvm.LLVMPointerType.opaque())
-            gep = llvm.GEPOp(scoped_parameterizations_array, [0, i], pointee_type=ary_type)
-            load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
-            parameterization = ParameterizationIndexationOp.create(operands=[load.results[0]], attributes={"indices":indices}, result_types=[llvm.LLVMPointerType.opaque()])
-            self.region.last_block.add_ops([gep, load, parameterization])
+            if not isinstance(first_arg_with_type, FatPtr):
+                indices = ArrayAttr([IntegerAttr.from_int_and_width(idx, 32) for idx in type_index(first_arg_with_type, t)])
+                gep = llvm.GEPOp(scoped_parameterizations_array, [i], pointee_type=llvm.LLVMPointerType.opaque())
+                load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
+                parameterization = ParameterizationIndexationOp.create(operands=[load.results[0]], attributes={"indices":indices}, result_types=[llvm.LLVMPointerType.opaque()])
+                self.region.last_block.add_ops([gep, load, parameterization])
+                scoped_parameterizations.append(parameterization.results[0])
+                continue
+            t_cls = self.classes[first_arg_with_type.cls.data]
+            if len(type_index(first_arg_with_type, t)) < 1:
+                print(first_arg_with_type)
+                print(t)
+                print(type_index(first_arg_with_type, t))
+                raise Exception()
+            corresponding_formal_tp = t_cls.type_parameters[type_index(first_arg_with_type, t)[0]]
+            t_field = t_cls.type_field_of(corresponding_formal_tp)
+            offset = IntegerAttr.from_int_and_width(t_field.offset, IntegerType(64))
+            wrapped = WrapOp.make(self.region.block.args[len(self.region.block.args) - len(self.method.param_types()) + i])
+            attr_dict = {"offset":offset, "vtable_bytes":IntegerAttr.from_int_and_width(self.cls.vtable_size() * 8, 32)}
+            field_acc = GetTypeFieldOp.create(operands=[wrapped.results[0]], attributes=attr_dict, result_types=[ReifiedType()])
+            self.region.last_block.add_ops([wrapped, field_acc])
+            if len(type_index(first_arg_with_type, t)) < 2:
+                scoped_parameterizations.append(field_acc.results[0])
+                continue
+            indices = ArrayAttr([IntegerAttr.from_int_and_width(idx, 32) for idx in type_index(first_arg_with_type, t)][1:])
+            parameterization = ParameterizationIndexationOp.create(operands=[field_acc.results[0]], attributes={"indices":indices}, result_types=[llvm.LLVMPointerType.opaque()])
+            self.region.last_block.add_op(parameterization)
             scoped_parameterizations.append(parameterization.results[0])
         return scoped_parameterizations
 

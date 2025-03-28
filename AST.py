@@ -2294,6 +2294,9 @@ class ClassDef(Statement):
     def stored_type_fields(self):
         return [f for f in self.fields() if isinstance(f.declaration, TypeFieldDecl) and f.needs_storage()]
 
+    def type_field_of(self, t):
+        return next(f for f in self.fields() if isinstance(f.declaration, TypeFieldDecl) and f.declaration.type_param == t)
+
     def initialize_behaviors(self):
         all_method_definitions = self.all_method_definitions()
         confusable_sets = list(reversed({tuple(definition.confusable_set(all_method_definitions, self._scope)):definition for definition in reversed(all_method_definitions)}.keys()))
