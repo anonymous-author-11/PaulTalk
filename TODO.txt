@@ -308,17 +308,11 @@ DONE:
 - Null-terminate parameterizations [check!]
 - Write a special _size_ method for union and tuple [check!]
 - Add an _unbox_ method for every type as well [check!]
-- Need to simultaneously change getter/setter/new to dynamically size generic fields
-	- [check!]
+- Need to simultaneously change getter/setter/new to dynamically size generic fields [check!]
+- Correctly retrieve pameterizations from passed arrays [check!]
 
 TODO:
 
-- Correctly retrieve pameterizations from passed arrays
-	- Generate a method to retrieve each type parameter from a parameterization of class
-	- Create a temporary fatptr with the vptr from the paramrterization; cast to parameter type
-	- Use the retriever method with the parameterization
-	- Retriever method should 
-	- Maybe to start with, just only retrieve immediately available type params
 - Maybe create offset & hash table separately and just give names to typedef
 - Then only have to pass getter, box, and subtype name to typeptrs
 - Disallow method type parameters having same name as class type parameters

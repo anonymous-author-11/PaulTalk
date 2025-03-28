@@ -65,16 +65,26 @@ module @patterns {
   }
   pdl.pattern @LowerAllocate : benefit(1) {
     %typ_attr = pdl.attribute
-    %result_type = pdl.type
-    %root = pdl.operation "mini.alloc" {"typ" = %typ_attr} -> (%result_type : !pdl.type)
+    %ptr_type = pdl.type : !llvm.ptr
+    %root = pdl.operation "mini.alloc" {"typ" = %typ_attr} -> (%ptr_type : !pdl.type)
     pdl.rewrite %root {
       %i32_type = pdl.type : i32
       %one_attr = pdl.attribute = 1
       %alloca_size = pdl.operation "llvm.mlir.constant" {"value" = %one_attr} -> (%i32_type : !pdl.type)
       %alloca_size_result = pdl.result 0 of %alloca_size
-      %alloca = pdl.operation "llvm.alloca"(%alloca_size_result : !pdl.value) {"elem_type" = %typ_attr} -> (%result_type : !pdl.type)
+      %alloca = pdl.operation "llvm.alloca"(%alloca_size_result : !pdl.value) {"elem_type" = %typ_attr} -> (%ptr_type : !pdl.type)
       %alloca_result = pdl.result 0 of %alloca
       pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
+  pdl.pattern @HoistAlloca : benefit(1) {
+    %typ_attr = pdl.attribute
+    %size = pdl.operand
+    %ptr_type = pdl.type : !llvm.ptr
+    %root = pdl.operation "llvm.alloca"(%size : !pdl.value) {"elem_type" = %typ_attr} -> (%ptr_type : !pdl.type)
+    pdl.apply_native_constraint "not_in_entry"(%root : !pdl.operation)
+    pdl.rewrite %root {
+      pdl.apply_native_rewrite "hoist_alloca"(%root : !pdl.operation)
     }
   }
   pdl.pattern @LowerAddrOf : benefit(1) {

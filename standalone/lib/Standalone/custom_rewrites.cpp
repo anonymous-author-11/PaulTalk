@@ -595,6 +595,30 @@ static void lowerContinue(PatternRewriter &rewriter, Operation *op) {
   rewriter.replaceOp(op, brOp);
 }
 
+static LogicalResult isNotInEntry(PatternRewriter &rewriter, Operation *op) {
+  // Find the enclosing FuncOp
+  func::FuncOp func = op->getParentOfType<func::FuncOp>();
+  if (!func) {
+    // No enclosing function means it's not in an entry block
+    return failure();
+  }
+  // Get the entry block
+  Block *entryBlock = &func.getBody().front();
+  // Get the block containing the operation
+  Block *opBlock = op->getBlock();
+  // Return success if not in entry block, failure if it is
+  return success(opBlock != entryBlock);
+}
+
+static void hoistAlloca(PatternRewriter &rewriter, Operation *op) {
+  // Find the enclosing FuncOp
+  func::FuncOp func = op->getParentOfType<func::FuncOp>();
+  // Get the entry block
+  Block *entryBlock = &func.getBody().front();
+  // Move operation to the beginning of the entry block
+  op->moveBefore(entryBlock, entryBlock->begin());
+}
+
 namespace {
 struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> {
   MLIR_DEFINE_EXPLICIT_INTERNAL_INLINE_TYPE_ID(MyCustomPass)
@@ -642,6 +666,8 @@ struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> 
         "is_llvm_array_attr", isLLVMArrayAttr);
     patternList.getPDLPatterns().registerConstraintFunction(
         "is_empty_llvm_array", isEmptyLLVMArray);
+    patternList.getPDLPatterns().registerConstraintFunction(
+        "not_in_entry", isNotInEntry);
     patternList.getPDLPatterns().registerRewriteFunction(
         "count_elements", countElements);
     patternList.getPDLPatterns().registerRewriteFunction(
@@ -702,6 +728,8 @@ struct MyCustomPass : public PassWrapper<MyCustomPass, OperationPass<ModuleOp>> 
         "lower_break", lowerBreak);
     patternList.getPDLPatterns().registerRewriteFunction(
         "lower_continue", lowerContinue);
+    patternList.getPDLPatterns().registerRewriteFunction(
+        "hoist_alloca", hoistAlloca);
 
     patternModule.getOperation()->remove();
     PDLPatternModule pdlPattern(patternModule);

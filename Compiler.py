@@ -103,14 +103,9 @@ def do_preliminaries(out_file_names, ll_files):
 
     # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
     # this has shown to significantly improve the optimization potential
-    reg2mem = "opt -S --passes=reg2mem "
+    reg2mem = "opt -S --passes=reg2mem -o out_reg2mem.ll"
 
-    # hoist allocas to entry blocks of functions
-    # frontend authors are *supposed* to only emit allocas in entry blocks
-    # this pass only works with the legacy pass manager, which can only be used via this trick
-    hoist_allocas = "opt -S --bugpoint-enable-legacy-pm --alloca-hoisting -o out_reg2mem.ll"
-
-    preliminaries = " | ".join([llvm_link, reg2mem, hoist_allocas])
+    preliminaries = " | ".join([llvm_link, reg2mem])
     subprocess.run(preliminaries, shell=True)
 
 def record_all_passes():
