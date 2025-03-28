@@ -134,6 +134,7 @@ class ThirdPass(ModulePass):
                 LowerLiteral(),
                 LowerSizeInBytesDef(),
                 LowerBoxDef(),
+                LowerBoxUnionDef(),
                 LowerNew(),
                 LowerUnboxDef(),
                 LowerSizeAlignment()
@@ -1902,12 +1903,11 @@ class LowerGetterDef(RewritePattern):
         body = Region([body_block])
 
         current_offset = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 64), IntegerType(64))
-        max_align = llvm.ConstantOp(IntegerAttr.from_int_and_width(1, 64), IntegerType(64))
         false = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 1), IntegerType(1))
         zero = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 64), IntegerType(64))
         one = llvm.ConstantOp(IntegerAttr.from_int_and_width(1, 64), IntegerType(64))
         sixty_three = llvm.ConstantOp(IntegerAttr.from_int_and_width(63, 64), IntegerType(64))
-        body_block.add_ops([current_offset, max_align, false, zero, one, sixty_three])
+        body_block.add_ops([current_offset, false, zero, one, sixty_three])
 
         for i, t in enumerate(op.types.data):
             if isinstance(t, IntegerAttr):
@@ -1925,27 +1925,18 @@ class LowerGetterDef(RewritePattern):
                 size = TypeSizeOp.create(attributes={"typ":t}, result_types=[IntegerType(64)])
                 alignment = TypeAlignmentOp.create(attributes={"typ":t}, result_types=[IntegerType(64)])
                 body_block.add_ops([size, alignment])
-            if i == op.offset.value.data:
-                cmp_align = arith.Cmpi(alignment.results[0], max_align.results[0], "ugt")
-                max_align = arith.Select(cmp_align.results[0], alignment.results[0], max_align.results[0])
-                body_block.add_ops([cmp_align, max_align])
-                break
-            cmp_align = arith.Cmpi(alignment.results[0], max_align.results[0], "ugt")
-            max_align = arith.Select(cmp_align.results[0], alignment.results[0], max_align.results[0])
+            if i == op.offset.value.data: break
             rem = arith.RemUI(current_offset.results[0], alignment.results[0])
             cmp_rem = ComparisonOp.make(zero.results[0], rem.results[0], "EQ")
             high_end_pad = arith.Subi(alignment.results[0], rem.results[0])
             padding = arith.Select(cmp_rem.results[0], zero.results[0], high_end_pad.results[0])
             padded_size = arith.Addi(size.results[0], padding.results[0])
             current_offset = arith.Addi(current_offset.results[0], padded_size.results[0])
-            body_block.add_ops([
-                cmp_align, max_align,
-                rem, cmp_rem, high_end_pad, padding, padded_size, current_offset
-            ])
+            body_block.add_ops([rem, cmp_rem, high_end_pad, padding, padded_size, current_offset])
 
-        rem_final = arith.RemUI(current_offset.results[0], max_align.results[0])
+        rem_final = arith.RemUI(current_offset.results[0], alignment.results[0])
         cmp_rem_final = ComparisonOp.make(rem_final.results[0], zero.results[0], "EQ")
-        high_pad_final = arith.Subi(max_align.results[0], rem_final.results[0])
+        high_pad_final = arith.Subi(alignment.results[0], rem_final.results[0])
         padding_final = arith.Select(cmp_rem_final.results[0], zero.results[0], high_pad_final.results[0])
         final_size = arith.Addi(current_offset.results[0], padding_final.results[0])
 
@@ -2001,12 +1992,11 @@ class LowerSetterDef(RewritePattern):
         body = Region([body_block])
 
         current_offset = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 64), IntegerType(64))
-        max_align = llvm.ConstantOp(IntegerAttr.from_int_and_width(1, 64), IntegerType(64))
         false = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 1), IntegerType(1))
         zero = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 64), IntegerType(64))
         one = llvm.ConstantOp(IntegerAttr.from_int_and_width(1, 64), IntegerType(64))
         sixty_three = llvm.ConstantOp(IntegerAttr.from_int_and_width(63, 64), IntegerType(64))
-        body_block.add_ops([current_offset, max_align, false, zero, one, sixty_three])
+        body_block.add_ops([current_offset, false, zero, one, sixty_three])
 
         for i, t in enumerate(op.types.data):
             if isinstance(t, IntegerAttr):
@@ -2024,27 +2014,18 @@ class LowerSetterDef(RewritePattern):
                 size = TypeSizeOp.create(attributes={"typ":t}, result_types=[IntegerType(64)])
                 alignment = TypeAlignmentOp.create(attributes={"typ":t}, result_types=[IntegerType(64)])
                 body_block.add_ops([size, alignment])
-            if i == op.offset.value.data:
-                cmp_align = arith.Cmpi(alignment.results[0], max_align.results[0], "ugt")
-                max_align = arith.Select(cmp_align.results[0], alignment.results[0], max_align.results[0])
-                body_block.add_ops([cmp_align, max_align])
-                break
-            cmp_align = arith.Cmpi(alignment.results[0], max_align.results[0], "ugt")
-            max_align = arith.Select(cmp_align.results[0], alignment.results[0], max_align.results[0])
+            if i == op.offset.value.data: break
             rem = arith.RemUI(current_offset.results[0], alignment.results[0])
             cmp_rem = ComparisonOp.make(zero.results[0], rem.results[0], "EQ")
             high_end_pad = arith.Subi(alignment.results[0], rem.results[0])
             padding = arith.Select(cmp_rem.results[0], zero.results[0], high_end_pad.results[0])
             padded_size = arith.Addi(size.results[0], padding.results[0])
             current_offset = arith.Addi(current_offset.results[0], padded_size.results[0])
-            body_block.add_ops([
-                cmp_align, max_align,
-                rem, cmp_rem, high_end_pad, padding, padded_size, current_offset
-            ])
+            body_block.add_ops([rem, cmp_rem, high_end_pad, padding, padded_size, current_offset])
 
-        rem_final = arith.RemUI(current_offset.results[0], max_align.results[0])
+        rem_final = arith.RemUI(current_offset.results[0], alignment.results[0])
         cmp_rem_final = ComparisonOp.make(rem_final.results[0], zero.results[0], "EQ")
-        high_pad_final = arith.Subi(max_align.results[0], rem_final.results[0])
+        high_pad_final = arith.Subi(alignment.results[0], rem_final.results[0])
         padding_final = arith.Select(cmp_rem_final.results[0], zero.results[0], high_pad_final.results[0])
         final_size = arith.Addi(current_offset.results[0], padding_final.results[0])
 
@@ -2153,6 +2134,86 @@ class LowerBoxDef(RewritePattern):
         exit.add_ops([unwrap, ret])
 
         body = Region([entry, box_block, no_box_block, exit])
+        func_op = llvm.FuncOp(op.meth_name.data, ftype, body=body, linkage=llvm.LinkageAttr("linkonce_odr"))
+        rewriter.replace_matched_op(func_op)
+
+class LowerBoxUnionDef(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: BoxUnionDefOp, rewriter: PatternRewriter):
+        entry = Block([])
+        to_typ = TypeParameter.make("", "").base_typ()
+
+        ftype = llvm.LLVMFunctionType([llvm.LLVMPointerType.opaque(), llvm.LLVMPointerType.opaque()], to_typ)
+        data_ptr = entry.insert_arg(llvm.LLVMPointerType.opaque(), 0)
+        parameterization = entry.insert_arg(llvm.LLVMPointerType.opaque(), 1)
+
+        alloca = AllocateOp.make(to_typ)
+        gep = llvm.GEPOp(alloca.results[0], [0, 1], pointee_type=to_typ)
+        vptr = AddrOfOp.from_string(op.meth_name.data.replace("_box_",""))
+        store = llvm.StoreOp(vptr.results[0], alloca.results[0])
+
+        size_fn = AddrOfOp.from_string(op.meth_name.data.replace("_box_","_size_"))
+
+        size_alignment_tuple = llvm.LLVMStructType.from_type_list([IntegerType(64), IntegerType(64)])
+        size_fn_type = FunctionType.from_lists([llvm.LLVMPointerType.opaque()], [size_alignment_tuple])
+        laundered = builtin.UnrealizedConversionCastOp(operands=[size_fn.results[0]], result_types=[size_fn_type])
+        call = func.CallIndirect(laundered.results[0], [parameterization], [size_alignment_tuple])
+        dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
+        data_size = llvm.ExtractValueOp(dense_ary, call.results[0], IntegerType(64))
+        false = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 1), IntegerType(1))
+
+        right_size_block = Block([])
+        box_decision_block = Block([])
+        box_block = Block([])
+        no_box_block = Block([])
+        exit = Block([])
+
+        
+        thirtytwo = llvm.ConstantOp(IntegerAttr.from_int_and_width(32, 64), IntegerType(64))
+        
+        right_size = ComparisonOp.make(data_size.results[0], thirtytwo.results[0], "EQ")
+        br = cf.ConditionalBranch(right_size.results[0], right_size_block, [], box_decision_block, [])
+        entry.add_ops([alloca, gep, vptr, store, size_fn, laundered, call, data_size, false, thirtytwo, right_size, br])
+
+        threshold = llvm.ConstantOp(IntegerAttr.from_int_and_width(16, 64), IntegerType(64))
+        small_struct = ComparisonOp.make(data_size.results[0], threshold.results[0], "LE")
+        br = cf.ConditionalBranch(small_struct.results[0], no_box_block, [], box_block, [])
+        box_decision_block.add_ops([threshold, small_struct, br])
+
+        args = [alloca.results[0], data_ptr, data_size.results[0], false.results[0]]
+        memcpy1 = llvm.CallIntrinsicOp("llvm.memcpy.inline.p0.p0.i64", [args], [llvm.LLVMVoidType()])
+        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [4, 0])
+        memcpy1.properties["operandSegmentSizes"] = operandSegmentSizes
+        memcpy1.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        br = cf.Branch(exit)
+        right_size_block.add_ops([memcpy1, br])
+        
+        malloc = llvm.CallOp("bump_malloc", data_size.results[0], return_type=llvm.LLVMPointerType.opaque())
+        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
+        malloc.properties["operandSegmentSizes"] = operandSegmentSizes
+        malloc.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        
+        args = [malloc.results[0], data_ptr, data_size.results[0], false.results[0]]
+        memcpy0 = llvm.CallIntrinsicOp("llvm.memcpy.inline.p0.p0.i64", [args], [llvm.LLVMVoidType()])
+        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [4, 0])
+        memcpy0.properties["operandSegmentSizes"] = operandSegmentSizes
+        memcpy0.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        store_malloc = llvm.StoreOp(malloc.results[0], gep.results[0])
+        br = cf.Branch(exit)
+        box_block.add_ops([malloc, memcpy0, store_malloc, br])
+
+        args = [gep.results[0], data_ptr, data_size.results[0], false.results[0]]
+        memcpy1 = llvm.CallIntrinsicOp("llvm.memcpy.inline.p0.p0.i64", [args], [llvm.LLVMVoidType()])
+        memcpy1.properties["operandSegmentSizes"] = operandSegmentSizes
+        memcpy1.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        br = cf.Branch(exit)
+        no_box_block.add_ops([memcpy1, br])
+
+        unwrap = UnwrapOp.create(operands=[alloca.results[0]], result_types=[to_typ])
+        ret = llvm.ReturnOp.create(operands=[unwrap.results[0]])
+        exit.add_ops([unwrap, ret])
+
+        body = Region([entry, right_size_block, box_decision_block, box_block, no_box_block, exit])
         func_op = llvm.FuncOp(op.meth_name.data, ftype, body=body, linkage=llvm.LinkageAttr("linkonce_odr"))
         rewriter.replace_matched_op(func_op)
 

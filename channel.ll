@@ -93,8 +93,6 @@ declare { ptr, i160 } @_box_Default(ptr, ptr)
 
 declare void @_unbox_Default({ ptr, i160 }, ptr, ptr)
 
-declare { ptr, i160 } @_box_union_typ(ptr, ptr)
-
 declare void @_unbox_union_typ({ ptr, i160 }, ptr, ptr)
 
 declare { i64, i64 } @_size_tuple_typ(ptr)
@@ -161,40 +159,28 @@ define { i64, i64 } @_size_Channel(ptr %0) {
 }
 
 define { ptr, i32 } @Channel_getter_value(ptr %0) {
-  %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, i32 } }, ptr null, i32 0, i32 1) to i64), 1
-  %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 1
-  %4 = urem i64 0, %3
-  %5 = icmp eq i64 %4, 0
-  %6 = sub i64 %3, %4
-  %7 = select i1 %5, i64 0, i64 %6
-  %8 = getelementptr i8, ptr %0, i64 %7
-  %9 = getelementptr { ptr, i32 }, ptr %8, i32 0, i32 0
-  %10 = load ptr, ptr %9, align 8
-  %11 = insertvalue { ptr, i32 } undef, ptr %10, 0
-  %12 = getelementptr { ptr, i32 }, ptr %8, i32 0, i32 1
-  %13 = load i32, ptr %12, align 4
-  %14 = insertvalue { ptr, i32 } %11, i32 %13, 1
-  ret { ptr, i32 } %14
+  %2 = getelementptr i8, ptr %0, i64 0
+  %3 = getelementptr { ptr, i32 }, ptr %2, i32 0, i32 0
+  %4 = load ptr, ptr %3, align 8
+  %5 = insertvalue { ptr, i32 } undef, ptr %4, 0
+  %6 = getelementptr { ptr, i32 }, ptr %2, i32 0, i32 1
+  %7 = load i32, ptr %6, align 4
+  %8 = insertvalue { ptr, i32 } %5, i32 %7, 1
+  ret { ptr, i32 } %8
 }
 
 define void @Channel_setter_value(ptr %0, { ptr, i32 } %1) {
-  %3 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, { ptr, i32 } }, ptr null, i32 0, i32 1) to i64), 1
-  %4 = select i1 %3, i64 ptrtoint (ptr getelementptr ({ i8, { ptr, i32 } }, ptr null, i32 0, i32 1) to i64), i64 1
-  %5 = urem i64 0, %4
-  %6 = icmp eq i64 %5, 0
-  %7 = sub i64 %4, %5
-  %8 = select i1 %6, i64 0, i64 %7
-  %9 = getelementptr i8, ptr %0, i64 %8
-  %10 = alloca { ptr, i32 }, align 8
-  store { ptr, i32 } %1, ptr %10, align 8
-  %11 = getelementptr { ptr, i32 }, ptr %10, i32 0, i32 0
-  %12 = getelementptr { ptr, i32 }, ptr %9, i32 0, i32 0
-  %13 = load ptr, ptr %11, align 8
-  store ptr %13, ptr %12, align 8
-  %14 = getelementptr { ptr, i32 }, ptr %10, i32 0, i32 1
-  %15 = getelementptr { ptr, i32 }, ptr %9, i32 0, i32 1
-  %16 = load i32, ptr %14, align 4
-  store i32 %16, ptr %15, align 4
+  %3 = getelementptr i8, ptr %0, i64 0
+  %4 = alloca { ptr, i32 }, align 8
+  store { ptr, i32 } %1, ptr %4, align 8
+  %5 = getelementptr { ptr, i32 }, ptr %4, i32 0, i32 0
+  %6 = getelementptr { ptr, i32 }, ptr %3, i32 0, i32 0
+  %7 = load ptr, ptr %5, align 8
+  store ptr %7, ptr %6, align 8
+  %8 = getelementptr { ptr, i32 }, ptr %4, i32 0, i32 1
+  %9 = getelementptr { ptr, i32 }, ptr %3, i32 0, i32 1
+  %10 = load i32, ptr %8, align 4
+  store i32 %10, ptr %9, align 4
   ret void
 }
 
@@ -1226,6 +1212,40 @@ define linkonce_odr void @_unbox_tuple_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
   %10 = select i1 %9, ptr %5, ptr %6
   call void @llvm.memcpy.inline.p0.p0.i64(ptr %2, ptr %10, i64 %8, i1 false)
   ret void
+}
+
+define linkonce_odr { ptr, i160 } @_box_union_typ(ptr %0, ptr %1) {
+  %3 = alloca { ptr, i160 }, align 8
+  %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
+  store ptr @union_typ, ptr %3, align 8
+  %5 = call { i64, i64 } @_size_union_typ(ptr %1)
+  %6 = extractvalue { i64, i64 } %5, 0
+  %7 = icmp eq i64 %6, 32
+  br i1 %7, label %8, label %10
+
+8:                                                ; preds = %10, %2
+  %9 = phi ptr [ %4, %10 ], [ %3, %2 ]
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %9, ptr %0, i64 %6, i1 false)
+  br label %14
+
+10:                                               ; preds = %2
+  %11 = icmp sle i64 %6, 16
+  br i1 %11, label %8, label %12
+
+12:                                               ; preds = %10
+  %13 = call ptr @bump_malloc(i64 %6)
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %13, ptr %0, i64 %6, i1 false)
+  store ptr %13, ptr %4, align 8
+  br label %14
+
+14:                                               ; preds = %8, %12
+  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
+  %16 = load ptr, ptr %15, align 8
+  %17 = insertvalue { ptr, i160 } undef, ptr %16, 0
+  %18 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
+  %19 = load i160, ptr %18, align 4
+  %20 = insertvalue { ptr, i160 } %17, i160 %19, 1
+  ret { ptr, i160 } %20
 }
 
 ; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)

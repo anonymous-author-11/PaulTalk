@@ -55,6 +55,9 @@ class AST:
             if typ_name == "any_typ":
                 box_fn_name = StringAttr("_box_Default")
                 unbox_fn_name = StringAttr("_unbox_Default")
+            if typ_name == "union_typ":
+                box_fn = BoxUnionDefOp.make("_box_" + typ_name)
+                func_ops.append(box_fn)
             if typ_name not in ["any_typ", "union_typ"]:
                 box_fn = BoxDefOp.make("_box_" + typ_name)
                 unbox_fn = UnboxDefOp.make("_unbox_" + typ_name)

@@ -415,11 +415,6 @@ module @patterns {
       %unbox_with_region = pdl.apply_native_rewrite "add_region"(%unbox_decl : !pdl.operation) : !pdl.operation
       pdl.erase %unbox_decl
 
-      %box_union = pdl.attribute = "_box_union_typ"
-      %box_union_decl = pdl.operation "llvm.func" {"sym_name" = %box_union, "function_type" = %func_type_attr9, "linkage" = %linkage}
-      %box_union_with_region = pdl.apply_native_rewrite "add_region"(%box_union_decl : !pdl.operation) : !pdl.operation
-      pdl.erase %box_union_decl
-
       %unbox_union = pdl.attribute = "_unbox_union_typ"
       %unbox_union_decl = pdl.operation "llvm.func" {"sym_name" = %unbox_union, "function_type" = %func_type_attr99, "linkage" = %linkage}
       %unbox_union_with_region = pdl.apply_native_rewrite "add_region"(%unbox_union_decl : !pdl.operation) : !pdl.operation

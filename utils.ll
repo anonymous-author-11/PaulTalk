@@ -25,15 +25,6 @@ declare void @report_exception( {ptr} )
 @current_coroutine = linkonce_odr thread_local global ptr null
 @always_one = linkonce thread_local global i1 1
 
-@_parameterization_Pair_Ptri32._Ptrf64 = linkonce_odr constant [4 x ptr] [ptr @Pair, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptrf64, ptr null]
-@_parameterization_Ptrf64 = external constant [2 x ptr]
-@_parameterization_Ptri32 = external constant [2 x ptr]
-@Pair = external constant { [3 x i64], [6 x ptr], [10 x ptr] }
-@tuple_typ = external constant { [3 x i64], [6 x ptr], [0 x ptr] }
-@union_typ = external constant { [3 x i64], [6 x ptr], [0 x ptr] }
-
-declare { i64, i64 } @_size_Pair(ptr)
-
 ; Thread-local storage for our bump allocator state
 @current_ptr = internal thread_local global ptr null
 
@@ -158,38 +149,6 @@ define { i64, i64 } @_size_union_typ(ptr %0) {
   ret { i64, i64 } %30
 }
 
-define { ptr, i160 } @_box_union_typ(ptr nonnull %0, ptr nonnull %1) {
-  %3 = alloca { ptr, i160 }, align 8
-  %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  store ptr @union_typ, ptr %3, align 8
-  %5 = call { i64, i64 } @_size_union_typ(ptr %1)
-  %6 = extractvalue { i64, i64 } %5, 0
-  %7 = icmp sle i64 %6, 16
-  %8 = icmp eq i64 %6, 32
-  br i1 %8, label %right_size, label %no_box
-right_size:
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %3, ptr %0, i64 %6, i1 false)
-  br label %exit
-wrong_size:
-  br i1 %7, label %no_box, label %box
-box:
-  %10 = call ptr @bump_malloc(i64 %6)
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %10, ptr %0, i64 %6, i1 false)
-  store ptr %10, ptr %4
-  br label %exit
-no_box:
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %4, ptr %0, i64 %6, i1 false)
-  br label %exit
-exit:
-  %13 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
-  %14 = load ptr, ptr %13, align 8
-  %15 = insertvalue { ptr, i160 } undef, ptr %14, 0
-  %16 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %17 = load i160, ptr %16, align 4
-  %18 = insertvalue { ptr, i160 } %15, i160 %17, 1
-  ret { ptr, i160 } %18
-}
-
 define void @_unbox_union_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %0, ptr %4, align 8
@@ -262,9 +221,6 @@ define ptr @coroutine_create(ptr %func, ptr %arg_passer) {
 }
 
 define void @setup_landing_pad() {
-  %call = call { i64, i64 } @_size_Pair(ptr @_parameterization_Pair_Ptri32._Ptrf64)
-  %size = extractvalue { i64, i64 } %call, 0
-  %6 = call i32 (ptr, ...) @printf(ptr @i64_string, i64 %size)
   %region = call noalias ptr @VirtualAlloc(ptr null, i64 8388608, i32 12288, i32 4) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(1) "alloc-family"="malloc"
   store ptr %region, ptr @current_ptr
   %buf_first_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 0

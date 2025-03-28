@@ -854,6 +854,15 @@ class BoxDefOp(IRDLOperation):
         return BoxDefOp.create(attributes={"meth_name":StringAttr(meth_name)})
 
 @irdl_op_definition
+class BoxUnionDefOp(IRDLOperation):
+    name = "mini.box_union_def"
+    meth_name: StringAttr = attr_def(StringAttr)
+
+    @classmethod
+    def make(cls, meth_name):
+        return BoxUnionDefOp.create(attributes={"meth_name":StringAttr(meth_name)})
+
+@irdl_op_definition
 class UnboxDefOp(IRDLOperation):
     name = "mini.unbox_def"
     meth_name: StringAttr = attr_def(StringAttr)
