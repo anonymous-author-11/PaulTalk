@@ -288,6 +288,7 @@ DONE:
 	- Right, this is why I was thinking about generating setters [check!]
 - See if hash compiles now [check!]
 	- no, because of problem below [check!]
+- Implement a hash table [check!]
 - Figure out relationship between Any, Object, Nil [check!]
 	- Need for Foo[Bar | Nil] and for T <: Any [check!]
 - Simplify behavior signature [check!]
@@ -314,6 +315,8 @@ DONE:
 
 TODO:
 
+- Write wrappers for box, unbox, size, getters, setters
+- Generic buffer!
 - Maybe create offset & hash table separately and just give names to typedef
 - Then only have to pass getter, box, and subtype name to typeptrs
 - Disallow method type parameters having same name as class type parameters
@@ -331,23 +334,13 @@ TODO:
 	- i.e. T.new(a, b, c)
 	- Very interesting idea
 - I really want to get generics fully working first
-	- Would really like for fields to be specialized size
-	- Will make field offsets more complicated
-	- Can you make type field getters for baked-in types more immediate
-		- Seems like this action never actually occurs
-		- Type field getters only ever get unbaked types
+	- Would really like for fields to be specialized size [check!]
+	- Will make field offsets more complicated [check!]
 	- On instance creation, store a mapping from formal offsets to real offsets
 	- Or even just store the sizes of the unbaked types
 	- 8 bits per size, add to invariant section
-	- For each of the fields prior to field in question which is dynamic size
-		- Get its size from the instance, subtract from 224 for adjustment
-		- Add them all together for total adjustment
-	- Then adjust the gep with the dynamic adjustment
-	- Alignment concerns: formal types will always be 8-byte aligned
-		- But concrete types might have smaller alignment
-		- In theory we can calculate also the adjustment due to realignment
 - Calloc will zero freshly allocated memory
-- Implement getters
+- Implement user-exposed getters
 	- Shouldn't be technically difficult
 	- Will significantly improve ergonomics
 	- Especially now with lifetime annotations
@@ -375,7 +368,6 @@ TODO:
 	- Type-check specific imports on-demand rather than upfront
 - Clean up compilation of files with no main() or no specified outfile
 - Think about initialization of buffers and nil checks
-- Implement a hash table
 - Think about how actually to handle union type parameters
 - Implement type parameter deduction from init()
 - Make sure that type bounds are applied generally
