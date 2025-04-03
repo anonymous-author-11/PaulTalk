@@ -1,0 +1,12 @@
+import core;
+import io;
+
+buf = Buffer[i32 | Nil].new(1);
+is_nil = buf.[0];
+IO.print(is_nil);
+if is_nil is Nil {
+	IO.print("it is nil");
+}
+if is_nil is i32 {
+	IO.print("it is i32");
+}

@@ -11,7 +11,7 @@ declare ptr @malloc(i64)
 declare void @free(ptr allocptr nocapture noundef)
 declare void @llvm.eh.sjlj.longjmp(ptr) noreturn nounwind
 declare ptr @llvm.stacksave() mustprogress nocallback nofree nosync nounwind willreturn
-declare noalias ptr @VirtualAlloc(ptr, i64, i32, i32) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(1) "alloc-family"="malloc"
+declare noalias ptr @VirtualAlloc(ptr, i64, i32, i32) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1) "alloc-family"="malloc"
 declare i32 @VirtualFree(ptr allocptr nocapture noundef, i64, i32) mustprogress nounwind willreturn allockind("free") memory(argmem: readwrite, inaccessiblemem: readwrite)
 declare i32 @VirtualProtect(ptr, i64, i32, ptr) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
 declare void @report_exception( {ptr} )
@@ -33,13 +33,13 @@ define ptr @adjust_trampoline(ptr %tramp) {
   ret ptr %ret
 }
 
-define noalias ptr @bump_malloc(i64 noundef %size) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) "alloc-family"="malloc" {
-  %result = tail call noalias ptr @bump_malloc_inner(i64 noundef %size, ptr @current_ptr) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) "alloc-family"="malloc"
+define noalias ptr @bump_malloc(i64 noundef %size) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
+  %result = tail call noalias ptr @bump_malloc_inner(i64 noundef %size, ptr @current_ptr) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
   ret ptr %result
 }
 
 ; Our malloc replacement 
-define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) noinline mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(0) "alloc-family"="malloc" {
+define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) noinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
   
   ; Calculate aligned size (align to 16 bytes)
   %size_plus_15 = add i64 %size, 15

@@ -312,14 +312,24 @@ DONE:
 - Need to simultaneously change getter/setter/new to dynamically size generic fields [check!]
 - Correctly retrieve pameterizations from passed arrays [check!]
 - Move alloca hoisting to PDL [check!]
+- Disallow method type parameters having same name as class type parameters [check!]
+- Fix Zero-as-nil [check!]
+	- We need to add null checks to method dispatch as well [check!]
+	- Use "zeroed" instead of "uninitialized" for bump_malloc [check!]
 
 TODO:
 
+- Separate out _size_ and _data_size_ methods
+	- Use _data_size_ on instance creation and (un)boxing
+	- Use _size_ for everything else
+- Think about inlining getters/setters of concretely typed fields
+	- So that uninlinable code is more optimized
 - Write wrappers for box, unbox, size, getters, setters
-- Generic buffer!
+	- Will help uninlined optimization
 - Maybe create offset & hash table separately and just give names to typedef
-- Then only have to pass getter, box, and subtype name to typeptrs
-- Disallow method type parameters having same name as class type parameters
+	- Question is whether they need passed-through information
+	- If they do, split them off; otherwise, keep bundled
+	- Then only have to pass getter, box, and subtype fn names to typeptrs
 - Generic buffer size and indexing
 	- First just change bufferindexationop to take a dynamic type size [check!]
 	- Change createbuffer to take dynamic size as well [check!]
@@ -329,7 +339,7 @@ TODO:
 	- And createtuple and tupleindexation
 		- Actually a little more complicated
 	- For buffer creation we will need to get type size from ambient parameterizations
-- Zero-as-nil is clearly not working correctly
+	- Retrieve parameterization and use its size_fn for creation and indexation
 - Polymorphic construction could just be conservatively aliased
 	- i.e. T.new(a, b, c)
 	- Very interesting idea

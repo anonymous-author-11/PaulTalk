@@ -1554,6 +1554,11 @@ class MethodDef(Statement):
         if len(self.params) == 1: return
         raise Exception(f"Line {self.info.line_number}: Setter method {self.name.replace('_set_','') + '='} must take one parameter, not {len(self.params)}")
 
+    def check_duplicate_type_params(self, scope):
+        for t in self.type_params:
+            if t in scope.cls.type_parameters:
+                raise Exception(f"Line {self.info.line_number}: Method-scoped type parameter {t.label.data} cannot have the same name as class-scoped type parameter {scope.cls.name}.{t.label.data}")
+
     def typeflow(self, scope):
         if self.name[0].isupper():
             raise Exception(f"Line {self.info.line_number}: Method names should not be capitalized.")
@@ -1561,6 +1566,7 @@ class MethodDef(Statement):
             raise Exception(f'Line {self.info.line_number}: init should not return anything')
 
         self.check_setter_num_params()
+        self.check_duplicate_type_params(scope)
         body_scope = Scope(scope, method=self)
         for t in self.type_params: body_scope.add_alias(FatPtr.basic(t.label.data), t)
         self.enforce_override_rules(body_scope)
@@ -1826,6 +1832,7 @@ class ClassMethodDef(MethodDef):
         if self.name[5].isupper():
             raise Exception(f"Line {self.info.line_number}: Method names should not be capitalized.")
         self.enforce_override_rules(scope)
+        self.check_duplicate_type_params(scope)
         body_scope = Scope(scope, method=self)
         body_scope.points_to_facts = ConstraintSet(set())
         if any("@" in param.name for param in self.params):
@@ -1971,25 +1978,35 @@ class Behavior(Statement):
     def process_block(self, block, bblock, blocks, offset_ptr, arg, exit, fat_ptr):
         if self.process_final_state(block, bblock, offset_ptr, exit, fat_ptr): return
 
-        hash_coef, tbl_size, subtype_test, hashtbl = self.retrieve_tools(block, arg, bblock)
+        hash_coef, tbl_size, subtype_test, hashtbl, vptr = self.retrieve_tools(block, arg, bblock)
 
         cand_ptr = AddrOfOp.from_stringattr(type_id(block.typ))
         cand = llvm.PtrToIntOp(cand_ptr.results[0], IntegerType(64))
         cand_id = llvm.ConstantOp(IntegerAttr.from_int_and_width(hash_id(type_id(block.typ).data), 64), IntegerType(64))
         operands = [subtype_test, tbl_size, hash_coef, cand_id.results[0], cand.results[0], hashtbl]
         subtype_call = SubtypeOp.create(operands=operands, result_types=[IntegerType(1)])
+        bblock.add_ops([cand_ptr, cand, cand_id, subtype_call])
+        # should probably make this internal to subtypeOp lowering
+        if block.typ == Nil():
+            null = llvm.ZeroOp.create(result_types=[IntegerType(64)])
+            vptr_i64 = llvm.PtrToIntOp(vptr, IntegerType(64))
+            null_check = ComparisonOp.make(vptr_i64.results[0], null.results[0], "EQ")
+            orr = arith.OrI(null_check.results[0], subtype_call.results[0])
+            bblock.add_ops([null, vptr_i64, null_check, orr])
+            subtype_call = orr
         br = cf.ConditionalBranch(subtype_call.results[0], blocks[block.first_succ_name][1], [], blocks[block.second_succ_name][1], [])
-        bblock.add_ops([cand_ptr, cand, cand_id, subtype_call, br])
+        bblock.add_op(br)
 
     def retrieve_tools(self, block, arg, bblock):
+        # in fact, should probably move all this into op lowering phase
         ary_type = llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque() for i in range(self.arity)])
         gep = llvm.GEPOp.from_mixed_indices(arg, [0, block.arg_position], pointee_type=ary_type)
-        load_gep = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
+        vptr = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
         
-        hash_coef_ptr = llvm.GEPOp(load_gep.results[0], [1], pointee_type=llvm.LLVMPointerType.opaque())
-        tbl_size_ptr = llvm.GEPOp(load_gep.results[0], [2], pointee_type=llvm.LLVMPointerType.opaque())
-        subtype_test_ptr = llvm.GEPOp(load_gep.results[0], [3], pointee_type=llvm.LLVMPointerType.opaque())
-        hashtbl_ptr = llvm.GEPOp(load_gep.results[0], [4], pointee_type=llvm.LLVMPointerType.opaque())
+        hash_coef_ptr = llvm.GEPOp(vptr.results[0], [1], pointee_type=llvm.LLVMPointerType.opaque())
+        tbl_size_ptr = llvm.GEPOp(vptr.results[0], [2], pointee_type=llvm.LLVMPointerType.opaque())
+        subtype_test_ptr = llvm.GEPOp(vptr.results[0], [3], pointee_type=llvm.LLVMPointerType.opaque())
+        hashtbl_ptr = llvm.GEPOp(vptr.results[0], [4], pointee_type=llvm.LLVMPointerType.opaque())
 
         hash_coef = llvm.LoadOp(hash_coef_ptr.results[0], IntegerType(64))
         tbl_size = llvm.LoadOp(tbl_size_ptr.results[0], IntegerType(64))
@@ -1997,12 +2014,12 @@ class Behavior(Statement):
         hashtbl = llvm.LoadOp(hashtbl_ptr.results[0], llvm.LLVMPointerType.opaque())
 
         bblock.add_ops([
-            gep, load_gep,
+            gep, vptr,
             hash_coef_ptr, tbl_size_ptr, subtype_test_ptr, hashtbl_ptr,
             hash_coef, tbl_size, subtype_test, hashtbl
         ])
 
-        return hash_coef.results[0], tbl_size.results[0], subtype_test.results[0], hashtbl.results[0]
+        return hash_coef.results[0], tbl_size.results[0], subtype_test.results[0], hashtbl.results[0], vptr.results[0]
 
     def typeflow(self, scope):
         if any(len(method.definition.params) != self.arity for method in self.methods):
