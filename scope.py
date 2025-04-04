@@ -354,7 +354,7 @@ class Scope:
             return Function([new_param_types, new_yield_type, new_return_type])
 
         if isinstance(typ, Union):
-            simplified = {self.simplify(sub) for sub in typ.types.data} # recursive call
+            simplified = {self.simplify(t) for t in typ.types.data} # recursive call
             flattened = {s for typ in simplified for s in (typ.types.data if isinstance(typ, Union) else [typ])}
             flattened = {s for s in flattened if not isinstance(s, Nothing)} # remove Nothing types
             flattened = {s for s in flattened if isinstance(s, TypeParameter) or isinstance(s, Nil) or (not any(s == s2.bound) for s2 in flattened if isinstance(s2, TypeParameter))}
@@ -364,13 +364,15 @@ class Scope:
             return Union.from_list(list(flattened)) # Union is associative
         
         if isinstance(typ, Intersection):
-            simplified = {self.simplify(sub) for sub in typ.types.data} # recursive call
-            simplified = {sub for sub in simplified if not isinstance(sub, Nothing)} # remove Nothing types
-            simplified = {sub for sub in simplified if not any(self.subtype(s2, sub) and (not self.subtype(sub, s2)) for s2 in simplified)}
-            if all(is_primitive(sub) for sub in simplified): # if all types in the intersection are primitive
+            simplified = {self.simplify(t) for t in typ.types.data} # recursive call
+            simplified = {t for t in simplified if not isinstance(t, Nothing)} # remove Nothing types
+            simplified = {t1 for t1 in simplified if not any(self.subtype(t2, t1) and (not self.subtype(t1, t2)) for t2 in simplified)}
+            builtins = [t for t in simplified if is_builtin(t) and t != Any()]
+            if len(builtins) == 1: return builtins[0]
+            if all(is_primitive(t) for t in simplified): # if all types in the intersection are primitive (not union or intersection)
                 if len(list(simplified)) == 1: return list(simplified)[0] # an intersection of one type is just that type
                 return Nothing() # an intersection of disjoint types is Nothing
-            unions = [sub.types.data if isinstance(sub, Union) else [sub] for sub in simplified]
+            unions = [t.types.data if isinstance(t, Union) else [t] for t in simplified]
             distributed = {Intersection.from_list(list(prod)) for prod in product(*unions)} # distribute intersections across unions
             flattened = {item for d in distributed for item in (d.types.data if len(d.types.data) == 1 else [d])}
             return self.simplify(Union.from_list(list(flattened)))

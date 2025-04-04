@@ -634,7 +634,7 @@ class TypeCheck(Expression):
             return const_op.results[0]
 
         attr_dict = {"typ_name":typ_id, "struct_typ": static_type.base_typ()}
-        if isinstance(static_type, Union) and len(static_type.types.data) == 2 and Nil() in static_type.types.data:
+        if isinstance(static_type, Union) and len(static_type.types.data) == 2 and Nil() in static_type.types.data and right_type != Nil():
             attr_dict["typ_name"] = StringAttr("nil_typ")
             attr_dict["neg"] = UnitAttr()
         check_flag = CheckFlagOp.create(operands=[leftval], attributes=attr_dict, result_types=[IntegerType(1)])
@@ -1487,6 +1487,7 @@ class MethodDef(Statement):
                 initialization = Assignment(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), field_id, NilLiteral(NodeInfo(random_letters(10), self.info.filename, self.info.line_number)))
                 self.body.statements.append(initialization)
                 continue
+            print(f"field name in body type table? {field.declaration.name in body_scope.type_table}")
             raise Exception(f"Line {self.info.line_number}: field {field.declaration.name} not properly initialized for class {body_scope.cls.name}. You may need to override this constructor.")
 
     def annotated_points_to_facts(self, body_scope, param_names):
@@ -1984,16 +1985,17 @@ class Behavior(Statement):
         cand = llvm.PtrToIntOp(cand_ptr.results[0], IntegerType(64))
         cand_id = llvm.ConstantOp(IntegerAttr.from_int_and_width(hash_id(type_id(block.typ).data), 64), IntegerType(64))
         operands = [subtype_test, tbl_size, hash_coef, cand_id.results[0], cand.results[0], hashtbl]
-        subtype_call = SubtypeOp.create(operands=operands, result_types=[IntegerType(1)])
-        bblock.add_ops([cand_ptr, cand, cand_id, subtype_call])
+        
+        bblock.add_ops([cand_ptr, cand, cand_id])
         # should probably make this internal to subtypeOp lowering
         if block.typ == Nil():
             null = llvm.ZeroOp.create(result_types=[IntegerType(64)])
             vptr_i64 = llvm.PtrToIntOp(vptr, IntegerType(64))
-            null_check = ComparisonOp.make(vptr_i64.results[0], null.results[0], "EQ")
-            orr = arith.OrI(null_check.results[0], subtype_call.results[0])
-            bblock.add_ops([null, vptr_i64, null_check, orr])
-            subtype_call = orr
+            subtype_call = ComparisonOp.make(vptr_i64.results[0], null.results[0], "EQ")
+            bblock.add_ops([null, vptr_i64, null_check])
+        else:
+            subtype_call = SubtypeOp.create(operands=operands, result_types=[IntegerType(1)])
+            bblock.add_op(subtype_call)
         br = cf.ConditionalBranch(subtype_call.results[0], blocks[block.first_succ_name][1], [], blocks[block.second_succ_name][1], [])
         bblock.add_op(br)
 
@@ -2689,8 +2691,8 @@ class Branch(Statement):
         right_type = then_scope.simplify(self.condition.right)
         intersection = Intersection.from_list([right_type, old_typ])
         new_typ = then_scope.simplify(intersection)
-        #if new_typ == Nothing():
-            #print(f'narrowed {old_typ} & {right_type} to nothing')
+        if new_typ == Nothing():
+            print(f'narrowed {old_typ} & {right_type} to nothing')
             #if then_scope.subtype(right_type, old_typ):
                 #print(f'{right_type} is a subtype of {old_typ}')
             #else:

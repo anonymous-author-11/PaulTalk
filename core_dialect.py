@@ -1157,12 +1157,7 @@ class UnionizeOp(CastOp, IRDLOperation):
         attr_dict = {
             "from_typ":from_typ.base_typ(),"to_typ":to_typ.base_typ(),"from_typ_name":id_fn(from_typ), "to_typ_name":id_fn(to_typ)
         }
-        regions = []
-        if not isinstance(to_typ, Union): raise Exception(f"{from_typ}, {to_typ}")
-        if from_typ not in to_typ.types.data:
-            cast = CastOp.make(operand, from_typ, FatPtr.basic("Object"), id_fn)
-            regions.append(Region([Block([cast])]))
-        return UnionizeOp.create(operands=[operand], attributes=attr_dict, result_types=[to_typ], regions=regions) 
+        return UnionizeOp.create(operands=[operand], attributes=attr_dict, result_types=[to_typ]) 
 
 @irdl_op_definition
 class ReUnionizeOp(CastOp, IRDLOperation):
@@ -1180,11 +1175,7 @@ class NarrowOp(CastOp, IRDLOperation):
         attr_dict = {
             "from_typ":from_typ.base_typ(),"to_typ":to_typ.base_typ(),"from_typ_name":id_fn(from_typ), "to_typ_name":id_fn(to_typ)
         }
-        regions = []
-        if to_typ not in from_typ.types.data:
-            cast = CastOp.make(operand, from_typ, FatPtr.basic("Object"), id_fn)
-            regions.append(Region([Block([cast])]))
-        return NarrowOp.create(operands=[operand], attributes=attr_dict, result_types=[to_typ], regions=regions) 
+        return NarrowOp.create(operands=[operand], attributes=attr_dict, result_types=[to_typ]) 
 
 @irdl_op_definition
 class ReabstractOp(CastOp, IRDLOperation):

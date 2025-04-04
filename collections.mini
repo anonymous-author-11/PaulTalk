@@ -101,6 +101,9 @@ class Array[T] extends Iterable2[T] {
         @buffer = Buffer[T].new(@capacity);
         @length = 0;
     }
+    def init(@length : i32, @capacity : i32) {
+        @buffer = Buffer[T].new(@capacity);
+    }
     #[ret == @length]
     def length() -> i32 {
         return @length;
@@ -111,13 +114,14 @@ class Array[T] extends Iterable2[T] {
     }
     #[ret == self, x == @elems_reg]
     def append(x : T) -> Array[T] {
-        if @length >= @capacity { self.grow(); }
+        if @length >= @capacity { self.reserve(@capacity * 2); }
         @buffer.[@length] = x;
         @length = @length + 1;
         return self;
     }
-    def grow() {
-        @capacity = @capacity * 2;
+    def reserve(new_capacity : i32) {
+        if new_capacity <= @capacity { return; }
+        @capacity = new_capacity;
         old_buffer = @buffer;
         @buffer = Buffer[T].new(@capacity);
         i = 0;
@@ -132,21 +136,26 @@ class Array[T] extends Iterable2[T] {
         before_start = (@length + x) < 0;
         if past_end or before_start { self.throw_oob(x); }
         if x < 0 { x = @length + x; }
-        return self.unsafe_index(x);
+        return self.unchecked_index(x);
     }
+    #[value == @elems_reg]
     def []=(x : i32, value : T) yields OutOfBounds | Nil {
         past_end = x > (@length - 1);
         before_start = (@length + x) < 0;
         if past_end or before_start { self.throw_oob(x); }
         if x < 0 { x = @length + x; }
-        @buffer.[x] = value;
+        self.unchecked_insert(x, value);
     }
     def throw_oob(x : i32) yields OutOfBounds {
         yield(Exception.new());
     }
     #[ret == @elems_reg]
-    def unsafe_index(x : i32) -> T {
+    def unchecked_index(x : i32) -> T {
         return @buffer.[x];
+    }
+    #[value == @elems_reg]
+    def unchecked_insert(x : i32, value : T) {
+        @buffer.[x] = value;
     }
     def iterator() -> ArrayIterator[T] {
         return ArrayIterator[T].new(self);
@@ -163,7 +172,7 @@ class ArrayIterator[T] extends Iterator2[T] {
     def next() -> T | Nil {
         if @index >= @array.length() { return nil; }
         @index = @index + 1;
-        return @array.unsafe_index(@index - 1);
+        return @array.unchecked_index(@index - 1);
     }
 }
 

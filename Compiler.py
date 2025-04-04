@@ -122,8 +122,7 @@ def record_all_passes():
     with open("opt_passes.txt", "w") as outfile: outfile.write(opt_out.stderr)
 
 def run_opt(debug_mode):
-    debug = "debugir out_reg2mem.ll"
-    debug_extension = ".dbg" if debug_mode else ""
+    debug = "debugir out_optimized.ll"
     target_triple = "-mtriple=x86_64-pc-windows-msvc"
     o3 = "--passes=\"default<O3>\""
     o2 = "--passes=\"default<O2>\""
@@ -138,18 +137,19 @@ def run_opt(debug_mode):
     # inline everything possible, and let the machine outliner undo some of it
     inline_settings = "--inline-threshold=-10000" if debug_mode else "--inline-threshold=10000"
     heap_to_stack = "--enable-heap-to-stack-conversion"
-    in_file = f"out_reg2mem{debug_extension}.ll"
+    in_file = f"out_reg2mem.ll"
     opt = f"opt -S {in_file} {opt_level} {devirtualization_settings} {inline_settings} -o out_optimized.ll"
     #opt2 = f"opt -S {in_file} {o2} --print-after-all {heap_to_stack} {devirtualization_settings} {inline_settings} -o out_optimized.ll"
-    if debug_mode: subprocess.run(debug, text=True, shell=True)
     subprocess.run(opt, text=True, shell=True)
+    if debug_mode: subprocess.run(debug, text=True, shell=True)
 
-def run_llc(out_file_names):
+def run_llc(out_file_names, debug_mode):
     target_triple = "-mtriple=x86_64-pc-windows-msvc"
+    debug_extension = ".dbg" if debug_mode else ""
     # necessary so that the machine outliner doesn't break; default would be 'exception-model=wineh'
     exception_model = "-exception-model=sjlj"
     outliner_settings = "-enable-machine-outliner -machine-outliner-reruns=2"
-    llc = f"llc -filetype=obj out_optimized.ll -O=3 {target_triple} {exception_model} -o {out_file_names[1]}"
+    llc = f"llc -filetype=obj out_optimized{debug_extension}.ll -O=3 {target_triple} {exception_model} -o {out_file_names[1]}"
     subprocess.run(llc)
 
 def run_lld_link(debug_mode, out_file_names):
@@ -226,7 +226,7 @@ def main(argv):
     run_opt(debug_mode)
     after_opt = time.time()
     print(f"Time to opt: {after_opt - after_prelims} seconds")
-    run_llc(out_file_names)
+    run_llc(out_file_names, debug_mode)
     after_llc = time.time()
     final_time = after_llc
     print(f"Time to llc: {after_llc - after_opt} seconds")

@@ -316,9 +316,21 @@ DONE:
 - Fix Zero-as-nil [check!]
 	- We need to add null checks to method dispatch as well [check!]
 	- Use "zeroed" instead of "uninitialized" for bump_malloc [check!]
+- Handle simplifying intersections between type parameters and builtin types [check!]
+	- Settled for a hack where if an intersection has a single builtin non-Any type it simplifies to that type [check!]
 
 TODO:
 
+- We should rework how parameterizations are retrieved
+	- Doing way too much work
+	- Shouldn't generate parameterizations just to throw them away
+	- Ideal interface: get_parameterization(type)
+- Properly do type checks of type parameters
+	- Start just one layer deep, don't worry about nested parameters
+	- Even for this I should want to rework parameterizations
+- Add assumes for unions of builtins?
+	- vptr must be equal to one of a set of possible
+- Figure out why I had to split Entry constructor into two and if it can be fixed
 - Separate out _size_ and _data_size_ methods
 	- Use _data_size_ on instance creation and (un)boxing
 	- Use _size_ for everything else
@@ -333,9 +345,6 @@ TODO:
 - Generic buffer size and indexing
 	- First just change bufferindexationop to take a dynamic type size [check!]
 	- Change createbuffer to take dynamic size as well [check!]
-	- We should rework how parameterizations are retrieved
-		- Doing way too much work
-		- Shouldn't generate parameterizations just to throw them away
 	- And createtuple and tupleindexation
 		- Actually a little more complicated
 	- For buffer creation we will need to get type size from ambient parameterizations

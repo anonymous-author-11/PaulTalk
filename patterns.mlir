@@ -952,6 +952,15 @@ module @patterns {
       pdl.replace %root with %call
     }
   }
+  pdl.pattern @LowerSetOffsetAny : benefit (2) {
+    %to_typ = pdl.attribute = "any_typ"
+    %ptr_type = pdl.type : !llvm.ptr
+    %fat_ptr = pdl.operand
+    %root = pdl.operation "mini.set_offset"(%fat_ptr : !pdl.value) {"to_typ" = %to_typ}
+    pdl.rewrite %root {
+      pdl.erase %root
+    }
+  }
   pdl.pattern @FreezeLoads : benefit(1) {
     %ptr = pdl.operand
     %return_type = pdl.type
@@ -1407,13 +1416,8 @@ module @patterns {
     pdl.apply_native_constraint "has_region"(%root : !pdl.operation)
     pdl.rewrite %root {
       %reg_last_val = pdl.apply_native_rewrite "inline_region_before"(%root : !pdl.operation) : !pdl.value
-      %alloca = pdl.operation "mini.alloc" {"typ" = %to_typ_attr} -> (%ptr_type : !pdl.type)
-      %alloca_result = pdl.result 0 of %alloca
-      %indices = pdl.attribute = array<i32: 0, 1>
-      %gep = pdl.operation "llvm.getelementptr"(%reg_last_val : !pdl.value) {"elem_type" = %from_typ_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
-      %gep_result = pdl.result 0 of %gep
-      %memcpy = pdl.operation "mini.memcpy"(%gep_result, %alloca_result : !pdl.value, !pdl.value) {"type" = %to_typ_attr}
-      pdl.replace %root with (%alloca_result : !pdl.value)
+      %replacement = pdl.operation "mini.narrow"(%reg_last_val : !pdl.value) {"from_typ" = %from_typ_attr, "to_typ" = %to_typ_attr, "from_typ_name" = %from_typ_name, "to_typ_name" = %to_typ_name} -> (%ptr_type : !pdl.type)
+      pdl.replace %root with %replacement
     }
   }
   pdl.pattern @LowerNarrow : benefit(1) {
