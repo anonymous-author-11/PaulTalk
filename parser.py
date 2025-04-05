@@ -397,7 +397,7 @@ class CSTTransformer(Transformer):
                 return CreateBuffer(node_info, receiver, args[0], None)
             if meth_name == "new":
                 return ObjectCreation(node_info, random_letters(10), receiver, args, None)
-            raise Exception("can't handle this yet")
+            raise Exception(f"Line {meth_name.line} can't handle this yet")
         return MethodCall(node_info, receiver, meth_name.value, args)
 
     def indexation(self, receiver, index):

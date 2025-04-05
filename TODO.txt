@@ -318,9 +318,15 @@ DONE:
 	- Use "zeroed" instead of "uninitialized" for bump_malloc [check!]
 - Handle simplifying intersections between type parameters and builtin types [check!]
 	- Settled for a hack where if an intersection has a single builtin non-Any type it simplifies to that type [check!]
+- Setting offset to Any is a no-op [check!]
 
 TODO:
 
+- I should be allowed to do ClassMethodCall with parameterized receiver
+- I should be allowed to do "if [expression] is T"
+- Buffer indexation bug
+	- Need to split out buffer indexation and set_index ops
+	- Can't return a pointer to the actual slot in the buffer
 - We should rework how parameterizations are retrieved
 	- Doing way too much work
 	- Shouldn't generate parameterizations just to throw them away
@@ -328,6 +334,7 @@ TODO:
 - Properly do type checks of type parameters
 	- Start just one layer deep, don't worry about nested parameters
 	- Even for this I should want to rework parameterizations
+- Lazy logical ops
 - Add assumes for unions of builtins?
 	- vptr must be equal to one of a set of possible
 - Figure out why I had to split Entry constructor into two and if it can be fixed

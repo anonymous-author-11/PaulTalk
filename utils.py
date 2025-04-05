@@ -20,27 +20,27 @@ def type_index(outer_type, inner_type):
     return [i, *type_index(t, inner_type)]
 
 def id_hierarchy(typ, ambient_types):
-        if isinstance(typ, TypeParameter):
-            if typ not in ambient_types: return id_hierarchy(typ.bound, ambient_types)
-            return ArrayAttr([IntegerAttr.from_int_and_width(ambient_types.index(typ), 32)])
-        if isinstance(typ, Union) or isinstance(typ, Tuple):
-            return ArrayAttr([type_id(typ), *[id_hierarchy(t, ambient_types) for t in typ.types.data]])
-        if isinstance(typ, Function):
-            types = [typ.return_type, *typ.param_types.data]
-            return ArrayAttr([type_id(typ), *[id_hierarchy(t, ambient_types) for t in types]])
-        if not isinstance(typ, FatPtr) or typ.type_params == NoneAttr():
-            return ArrayAttr([type_id(typ)])
-        return ArrayAttr([type_id(typ), *[id_hierarchy(t, ambient_types) for t in typ.type_params.data]])
+    if isinstance(typ, TypeParameter):
+        if typ not in ambient_types: return id_hierarchy(typ.bound, ambient_types)
+        return ArrayAttr([IntegerAttr.from_int_and_width(ambient_types.index(typ), 32)])
+    if isinstance(typ, Union) or isinstance(typ, Tuple):
+        return ArrayAttr([type_id(typ), *[id_hierarchy(t, ambient_types) for t in typ.types.data]])
+    if isinstance(typ, Function):
+        types = [typ.return_type, *typ.param_types.data]
+        return ArrayAttr([type_id(typ), *[id_hierarchy(t, ambient_types) for t in types]])
+    if not isinstance(typ, FatPtr) or typ.type_params == NoneAttr():
+        return ArrayAttr([type_id(typ)])
+    return ArrayAttr([type_id(typ), *[id_hierarchy(t, ambient_types) for t in typ.type_params.data]])
 
 def name_hierarchy(typ):
-        if isinstance(typ, Union) or isinstance(typ, Tuple):
-            return ArrayAttr([StringAttr(clean_name(f"{typ}")), *[name_hierarchy(t) for t in typ.types.data]])
-        if isinstance(typ, Function):
-            types = [typ.return_type, *typ.param_types.data]
-            return ArrayAttr([StringAttr(clean_name(f"{typ}")), *[name_hierarchy(t) for t in types]])
-        if not isinstance(typ, FatPtr) or typ.type_params == NoneAttr():
-            return ArrayAttr([StringAttr(clean_name(f"{typ}"))])
-        return ArrayAttr([StringAttr(clean_name(f"{typ}")), *[name_hierarchy(t) for t in typ.type_params.data]])
+    if isinstance(typ, Union) or isinstance(typ, Tuple):
+        return ArrayAttr([StringAttr(clean_name(f"{typ}")), *[name_hierarchy(t) for t in typ.types.data]])
+    if isinstance(typ, Function):
+        types = [typ.return_type, *typ.param_types.data]
+        return ArrayAttr([StringAttr(clean_name(f"{typ}")), *[name_hierarchy(t) for t in types]])
+    if not isinstance(typ, FatPtr) or typ.type_params == NoneAttr():
+        return ArrayAttr([StringAttr(clean_name(f"{typ}"))])
+    return ArrayAttr([StringAttr(clean_name(f"{typ}")), *[name_hierarchy(t) for t in typ.type_params.data]])
 
 def clean_param_names(params):
     joined = "_".join(["".join([param.name, param._type.__repr__()]) for param in params])

@@ -1,0 +1,784 @@
+import collections; // Assuming this provides Pair, Iterable2, Iterator2
+
+// --- Helper Functions and Classes (Unchanged) ---
+
+def i32_hasher(i : i32) -> i32 {
+    // Same fast bit-mixing hash function
+    i = (i + 0x7ed55d16) + (i << 12);
+    i = (i bit_xor 0xc761c23c) bit_xor (i >> 19);
+    i = (i + 0x165667b1) + (i << 5);
+    i = (i + 0xd3a2646c) bit_xor (i << 9);
+    i = (i + 0xfd7046c5) + (i << 3);
+    i = (i bit_xor 0xb55a4f09) bit_xor (i >> 16);
+    return i;
+}
+
+def i32_eq(a : i32, b : i32) -> Bool {
+    return a == b;
+}
+
+// --- Entry Class (Cuckoo) ---
+class Entry[K,V] {
+    @primary_hash: i32 // Store primary hash (h1)
+    @key: K
+    @value: V
+
+    def init(@key: K, @value: V, @primary_hash: i32) {}
+
+    def key() -> K { return @key; }
+    def value() -> V { return @value; }
+    def primary_hash() -> i32 { return @primary_hash; }
+}
+
+// --- Cuckoo HashMap Implementation ---
+
+class HashMap[K,V] extends Iterable2[Pair[K,V]] {
+    @table1: Array[Entry[K,V] | Nil]
+    @table2: Array[Entry[K,V] | Nil]
+    @size: i32
+    @hasher1_fn: (K) -> i32 // Primary user-provided hash function
+    @eq: (K, K) -> Bool
+    @max_displacements: i32 // Limit before resize
+
+    def init(@hasher1_fn: (K) -> i32, @eq : (K, K) -> Bool) {
+        initial_capacity_per_table = 8; // Start small, total capacity 16
+        @table1 = Array[Entry[K,V] | Nil].new(initial_capacity_per_table, initial_capacity_per_table);
+        @table2 = Array[Entry[K,V] | Nil].new(initial_capacity_per_table, initial_capacity_per_table);
+        @size = 0;
+        @max_displacements = 100; // Can be tuned
+    }
+
+    // --- Hashing and Indexing Helpers ---
+
+    def hash1(key: K) -> i32 {
+        return @hasher1_fn.call(key);
+    }
+
+    def hash2_from_primary(primary_hash: i32) -> i32 {
+        // Use a secondary, independent mixing hash function
+        return i32_hasher(primary_hash);
+    }
+
+    def index1(primary_hash: i32) -> i32 {
+        mask = @table1.length() - 1; // Assumes power-of-two length
+        return primary_hash bit_and mask;
+    }
+
+    def index2(secondary_hash: i32) -> i32 {
+        mask = @table2.length() - 1; // Assumes power-of-two length
+        return secondary_hash bit_and mask;
+    }
+
+    // --- Core Cuckoo Operations ---
+
+    // Attempts to place an entry, performing displacements.
+    // Returns Nil on success.
+    // Returns the Entry that failed placement if max displacements reached.
+    def place_entry_or_get_failed(entry_to_insert: Entry[K,V]) -> Entry[K,V] | Nil {
+        current_entry = entry_to_insert;
+        current_table_index = 1; // Start with table 1
+
+        loop_count = 0;
+        while loop_count < @max_displacements {
+            primary_hash = current_entry.primary_hash();
+
+            if current_table_index == 1 {
+                // Target table 1
+                idx = self.index1(primary_hash);
+                existing_entry_or_nil = @table1.unchecked_index(idx);
+                @table1.unchecked_insert(idx, current_entry); // Place current
+
+                if existing_entry_or_nil is Nil {
+                    @size = @size + 1;
+                    return nil; // Success: placed in empty slot
+                }
+                // Displacement occurred
+                if existing_entry_or_nil is Entry[K, V] {
+                    current_entry = existing_entry_or_nil; // Displaced item becomes current
+                    current_table_index = 2; // Try placing it in table 2 next
+                }
+            } else { // current_table_index == 2
+                // Target table 2
+                h2 = self.hash2_from_primary(primary_hash);
+                idx = self.index2(h2);
+                existing_entry_or_nil = @table2.unchecked_index(idx);
+                @table2.unchecked_insert(idx, current_entry); // Place current
+
+                if existing_entry_or_nil is Nil {
+                    @size = @size + 1;
+                    return nil; // Success: placed in empty slot
+                }
+                // Displacement occurred
+                 if existing_entry_or_nil is Entry[K, V] {
+                    current_entry = existing_entry_or_nil; // Displaced item becomes current
+                    current_table_index = 1; // Try placing it in table 1 next
+                 }
+            }
+            loop_count = loop_count + 1;
+        } // End while loop_count
+
+        // Max displacements reached. Return the entry that couldn't find a home.
+        return current_entry;
+    }
+
+    // Resizes both tables (doubling capacity) and rehashes all existing entries.
+    def resize() {
+        old_table1 = @table1;
+        old_table2 = @table2;
+        old_capacity_per_table = old_table1.length();
+        new_capacity_per_table = old_capacity_per_table * 2;
+        if new_capacity_per_table < 16 { new_capacity_per_table = 16; }
+
+        // Collect all existing entries BEFORE creating new tables
+        old_size = @size;
+        entries_to_rehash = Array[Entry[K,V]].new(old_size, old_size); // Pre-allocate based on known size
+        count = 0;
+        i = 0;
+        while i < old_capacity_per_table {
+            entry = old_table1.unchecked_index(i);
+            if entry is Entry[K,V] {
+                // Check array bounds against count just in case size was off
+                if count < entries_to_rehash.length() {
+                     entries_to_rehash.unchecked_insert(count, entry);
+                }
+                count = count + 1;
+            }
+            i = i + 1;
+        }
+        i = 0;
+        while i < old_capacity_per_table {
+             entry = old_table2.unchecked_index(i);
+             if entry is Entry[K,V] {
+                 // Check array bounds against count
+                 if count < entries_to_rehash.length() {
+                     entries_to_rehash.unchecked_insert(count, entry);
+                 }
+                 count = count + 1;
+             }
+             i = i + 1;
+        }
+
+        // Verify collected count matches original size
+        if count != old_size {
+             //IO.print("Warning: Collected "); IO.print(count); IO.print(" entries during resize, but size was "); IO.print(old_size);
+             old_size = count; // Use the actual count for the loop below
+        }
+
+        // Create new tables and reset state
+        @table1 = Array[Entry[K,V] | Nil].new(new_capacity_per_table, new_capacity_per_table);
+        @table2 = Array[Entry[K,V] | Nil].new(new_capacity_per_table, new_capacity_per_table);
+        @size = 0; // Reset size, place_entry_or_get_failed will increment it
+
+        // Rehash elements into the new tables
+        i = 0;
+        while i < old_size { // Iterate up to the number of collected entries
+            entry = entries_to_rehash.unchecked_index(i);
+            failed_entry_during_rehash = self.place_entry_or_get_failed(entry);
+            i = i + 1;
+        }
+    }
+
+    // Public insert method
+    def insert(key: K, value: V) {
+        h1 = self.hash1(key);
+
+        // --- Check if key already exists (update value) ---
+        // Must check both potential locations before deciding it's a new insert.
+        idx1 = self.index1(h1);
+        entry1 = @table1.unchecked_index(idx1);
+        if entry1 is Entry[K,V] {
+            // Check primary hash first (quick), then key equality (potentially slow)
+            if entry1.primary_hash() == h1 and @eq.call(entry1.key(), key) {
+                // Found in table 1, update in place
+                updated_entry = Entry[K,V].new(key, value, h1);
+                @table1.unchecked_insert(idx1, updated_entry);
+                return; // Update done, size doesn't change
+            }
+        }
+
+        // Check table 2 as well if not found/updated in table 1
+        h2 = self.hash2_from_primary(h1);
+        idx2 = self.index2(h2);
+        entry2 = @table2.unchecked_index(idx2);
+        if entry2 is Entry[K,V] {
+             // Check primary hash (stored in entry) first, then key equality
+             if entry2.primary_hash() == h1 and @eq.call(entry2.key(), key) {
+                 // Found in table 2, update in place
+                 updated_entry = Entry[K,V].new(key, value, h1);
+                 @table2.unchecked_insert(idx2, updated_entry);
+                 return; // Update done, size doesn't change
+             }
+        }
+
+        // --- Key not found, proceed with insertion ---
+
+        // Check load factor: Resize if total size reaches half the total capacity
+        // (i.e., size >= capacity of one table). Check BEFORE attempting placement.
+        capacity_per_table = @table1.length();
+        if @size >= capacity_per_table {
+            self.resize();
+            // Recalculate indices based on potentially new capacity after resize
+            // Note: place_entry_or_get_failed called below will use the new table sizes.
+        }
+
+        // Create the new entry to insert
+        entry_to_insert = Entry[K,V].new(key, value, h1);
+        failed_entry: Entry[K,V] | Nil = nil; // Tracks failure across resize attempts
+
+        // --- Loop to handle insertion attempts and potential resize ---
+        // Allow one resize cycle if the initial placement fails.
+        max_placement_attempts = 2; // Attempt -> Resize -> Attempt
+        placement_attempt = 0;
+        while placement_attempt < max_placement_attempts {
+            // Attempt to place the current entry_to_insert
+            failed_entry = self.place_entry_or_get_failed(entry_to_insert);
+
+            if failed_entry is Nil {
+                // Success! Entry placed (potentially after displacements).
+                return;
+            }
+
+            // Placement failed (max displacements reached for 'failed_entry')
+            // Trigger resize before the next attempt
+            self.resize();
+
+            // The entry that failed placement becomes the one to try inserting next cycle
+            entry_to_insert = failed_entry;
+
+            placement_attempt = placement_attempt + 1;
+        } // end while placement_attempt
+
+        // If we exit the loop, it means placement failed even after resize and retry.
+    }
+
+
+    // Get value associated with key
+    def get(key: K) -> V | Nil {
+        h1 = self.hash1(key);
+        idx1 = self.index1(h1);
+
+        // Check table 1
+        entry1 = @table1.unchecked_index(idx1);
+        if entry1 is Entry[K,V] {
+            // Check hash first, then equality
+            if entry1.primary_hash() == h1 and @eq.call(entry1.key(), key) {
+                return entry1.value();
+            }
+        }
+
+        // Check table 2 only if not found in table 1
+        h2 = self.hash2_from_primary(h1);
+        idx2 = self.index2(h2);
+        entry2 = @table2.unchecked_index(idx2);
+        if entry2 is Entry[K,V] {
+            // Check hash first, then equality
+            if entry2.primary_hash() == h1 and @eq.call(entry2.key(), key) {
+                 return entry2.value();
+            }
+        }
+
+        // Key not found in either potential location
+        return nil;
+    }
+
+    // Remove key and return its value, or Nil if not found.
+    def remove(key: K) -> V | Nil {
+        h1 = self.hash1(key);
+        idx1 = self.index1(h1);
+
+        // Check table 1
+        entry1 = @table1.unchecked_index(idx1);
+        if entry1 is Entry[K,V] {
+            if entry1.primary_hash() == h1 and @eq.call(entry1.key(), key) {
+                value_to_return = entry1.value();
+                @table1.unchecked_insert(idx1, nil); // Mark slot as empty
+                @size = @size - 1;
+                return value_to_return;
+            }
+        }
+
+        // Check table 2 only if not found in table 1
+        h2 = self.hash2_from_primary(h1);
+        idx2 = self.index2(h2);
+        entry2 = @table2.unchecked_index(idx2);
+        if entry2 is Entry[K,V] {
+             if entry2.primary_hash() == h1 and @eq.call(entry2.key(), key) {
+                 value_to_return = entry2.value();
+                 @table2.unchecked_insert(idx2, nil); // Mark slot as empty
+                 @size = @size - 1;
+                 return value_to_return;
+             }
+        }
+
+        // Key not found to remove
+        return nil;
+    }
+
+    // Clear the map
+    def clear() {
+        initial_capacity_per_table = 8;
+        @table1 = Array[Entry[K,V] | Nil].new(initial_capacity_per_table, initial_capacity_per_table);
+        @table2 = Array[Entry[K,V] | Nil].new(initial_capacity_per_table, initial_capacity_per_table);
+        @size = 0;
+    }
+
+    // Return number of active key-value pairs
+    def size() -> i32 {
+        return @size;
+    }
+
+    // --- Iterator Implementation ---
+    def iterator() -> HashMapIterator[K,V] {
+        // Pass both tables to the iterator
+        return HashMapIterator[K,V].new(@table1, @table2);
+    }
+}
+
+// --- Custom Iterator Class for Cuckoo HashMap ---
+class HashMapIterator[K,V] extends Iterator2[Pair[K,V]] {
+    @map_table1: Array[Entry[K,V] | Nil]
+    @map_table2: Array[Entry[K,V] | Nil]
+    @current_table: i32 // 1 or 2, tracks which table is being iterated
+    @index: i32       // Index within the current table
+    @len1: i32        // Cached length of table 1
+    @len2: i32        // Cached length of table 2
+
+    def init(@map_table1: Array[Entry[K,V] | Nil], @map_table2: Array[Entry[K,V] | Nil]) {
+        @index = 0;
+        @current_table = 1; // Start with table 1
+        @len1 = @map_table1.length();
+        @len2 = @map_table2.length();
+    }
+
+    def next() -> Pair[K, V] | Nil {
+        while true {
+            if @current_table == 1 {
+                // Iterate through table 1
+                while @index < @len1 {
+                    entry_or_nil = @map_table1.unchecked_index(@index);
+                    @index = @index + 1; // Increment index for next call
+
+                    if entry_or_nil is Entry[K, V] {
+                        // Found a valid entry
+                        return Pair[K, V].new(entry_or_nil.key(), entry_or_nil.value());
+                    }
+                    // Continue loop if slot is Nil
+                }
+                // Finished table 1, switch to table 2
+                @current_table = 2;
+                @index = 0; // Reset index for table 2
+            }
+
+            if @current_table == 2 {
+                // Iterate through table 2
+                 while @index < @len2 {
+                    entry_or_nil = @map_table2.unchecked_index(@index);
+                    @index = @index + 1; // Increment index for next call
+
+                    if entry_or_nil is Entry[K, V] {
+                        // Found a valid entry
+                        return Pair[K, V].new(entry_or_nil.key(), entry_or_nil.value());
+                    }
+                    // Continue loop if slot is Nil
+                }
+                // Finished table 2, iteration is complete
+                return nil;
+            }
+            // If current_table is neither 1 nor 2, something is wrong, exit loop
+            if @current_table != 1 and @current_table != 2 {
+                 IO.print("Iterator Error: Invalid table state");
+                 return nil;
+            }
+        }
+        // Should be unreachable if logic is correct
+        return nil;
+    }
+}
+
+// --- Helper Functions for String (Unchanged) ---
+def string_hasher(s : String) -> i32 {
+    hash : i32 = 0;
+    seed : i32 = 31;
+    for c in s {
+        cast_val : i32 = c.byte();
+        hash = (hash * seed + cast_val) bit_and 0x7FFFFFFF;
+    }
+    return hash;
+}
+
+def string_eq(a : String, b : String) -> Bool {
+    return a == b;
+}
+
+// --- Additions for Benchmarking (Unchanged) ---
+extern def clock() -> i64
+
+// --- PRNG Class (Unchanged) ---
+class PRNG {
+    @seed: i32
+    def init(initial_seed: i32) {
+        if initial_seed <= 0 { @seed = 1; return; }
+        @seed = initial_seed bit_and 0x7FFFFFFF;
+    }
+    def next() -> i32 {
+        a : i32 = 1103515245; c : i32 = 12345;
+        @seed = (@seed * a + c) bit_and 0x7FFFFFFF;
+        return @seed;
+    }
+}
+
+// --- Helper to print benchmark results (Unchanged) ---
+def print_benchmark_result(test_name: String, n: i32, duration: i64) {
+    IO.print(test_name);
+    IO.print("  Operations: "); IO.print(n);
+    IO.print("  Total Time: "); IO.print(duration); IO.print(" ms");
+    if n > 0 {
+        ns_per_op : i64 = 0;
+        n_i64 : i64 = n;
+        zero : i64 = 0;
+        million : i64 = 1000000;
+        if duration > zero and n_i64 > zero {
+             ns_per_op = (duration * million) / n_i64;
+        }
+        IO.print("  Time/Op:    ~"); IO.print(ns_per_op); IO.print(" ns");
+    }
+}
+
+// --- Benchmarking Functions (Mostly Unchanged, ensure verification logic is correct) ---
+
+def benchmark_insert_sequential(n: i32) {
+    map = HashMap[i32, i32].new(i32_hasher, i32_eq);
+    start_time: i64 = clock();
+    i = 0;
+    while i < n {
+        map.insert(i, i + 1);
+        i = i + 1;
+    }
+    end_time: i64 = clock();
+
+    verification_passed = true;
+    if n > 0 {
+        // Verify last element
+        last_val = map.get(n - 1);
+        if last_val is Nil { verification_passed = false; }
+        if last_val is i32 { if last_val != n { verification_passed = false; } }
+        else { if not (last_val is Nil) { verification_passed = false; } } // Must be Nil or i32
+
+        // Verify size
+        if map.size() != n { verification_passed = false; }
+    } else {
+         if map.size() != 0 { verification_passed = false; }
+    }
+    print_benchmark_result("Insert Sequential", n, end_time - start_time);
+    IO.print("    Verification: ");
+    if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
+}
+
+def benchmark_insert_random(n: i32) {
+    map = HashMap[i32, i32].new(i32_hasher, i32_eq);
+    rng = PRNG.new(123);
+    keys_to_insert = Array[i32].new(n);
+    expected_size = 0;
+    // Use a separate map instance just for counting expected unique keys
+    temp_map_for_size_check = HashMap[i32, Bool].new(i32_hasher, i32_eq);
+    i = 0;
+    last_key = -1;
+    while i < n {
+        key = rng.next();
+        keys_to_insert.unchecked_insert(i, key);
+        if i == n-1 { last_key = key; }
+        temp_map_for_size_check.insert(key, true); // Value doesn't matter
+        i = i + 1;
+    }
+    expected_size = temp_map_for_size_check.size();
+    temp_map_for_size_check = nil; // Release memory
+
+    start_time: i64 = clock();
+    i = 0;
+    while i < n {
+        key = keys_to_insert.unchecked_index(i);
+        map.insert(key, key + 1);
+        i = i + 1;
+    }
+    end_time: i64 = clock();
+
+    verification_passed = true;
+    if n > 0 {
+        // Verify one of the inserted elements (e.g., the last one)
+         last_val = map.get(last_key);
+         if last_val is Nil { verification_passed = false; }
+         if last_val is i32 { if last_val != (last_key + 1) { verification_passed = false; } }
+         else { if not (last_val is Nil) { verification_passed = false; } }
+
+        // Verify size matches expected unique count
+         actual_size = map.size();
+         if actual_size != expected_size {
+              verification_passed = false;
+         }
+    } else {
+         if map.size() != 0 { verification_passed = false; }
+    }
+    print_benchmark_result("Insert Random", n, end_time - start_time);
+    IO.print("    Verification: ");
+    if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
+    IO.print("    (Expected unique size: "); IO.print(expected_size); IO.print(")");
+}
+
+
+def benchmark_get_sequential_hit(n: i32) {
+    map = HashMap[i32, i32].new(i32_hasher, i32_eq);
+    expected_sum: i64 = 0;
+    i = 0;
+    while i < n {
+        value_to_insert = i + 1;
+        value_i64 : i64 = value_to_insert;
+        map.insert(i, value_to_insert);
+        expected_sum = expected_sum + value_i64;
+        i = i + 1;
+    }
+
+    start_time: i64 = clock();
+    actual_sum: i64 = 0;
+    verification_passed = true; // Assume pass initially
+    i = 0;
+    while i < n {
+        val = map.get(i);
+        if val is i32 {
+            val_i64 : i64 = val;
+            actual_sum = actual_sum + val_i64;
+        } else {
+             // If Nil is returned, it's an error for a hit test
+             verification_passed = false;
+             // Optionally print error for debugging, but avoid flooding console
+             IO.print("Error: Nil returned during sequential hit test for key "); IO.print(i);
+        }
+        i = i + 1;
+    }
+    end_time: i64 = clock();
+
+    // Final check on the sum
+    if actual_sum != expected_sum {
+         verification_passed = false;
+    }
+    print_benchmark_result("Get Sequential Hit", n, end_time - start_time);
+    IO.print("    Verification: "); if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
+}
+
+def benchmark_get_random_hit(n: i32) {
+    map = HashMap[i32, i32].new(i32_hasher, i32_eq);
+    rng = PRNG.new(456);
+    keys_present = Array[i32].new(n);
+    expected_sum: i64 = 0;
+    // Use temp map to ensure N unique keys are inserted and tracked
+    temp_map_for_setup = HashMap[i32, Bool].new(i32_hasher, i32_eq);
+    keys_added_count = 0;
+    attempts = 0;
+    max_attempts = n * 10; // Safety break
+
+    while keys_added_count < n and attempts < max_attempts {
+        key = rng.next();
+        val = temp_map_for_setup.get(key);
+        if val is Nil { // Key not yet inserted
+            value_to_insert = key + 1;
+            map.insert(key, value_to_insert);
+            keys_present.unchecked_insert(keys_added_count, key);
+            temp_map_for_setup.insert(key, true); // Mark as added
+            key_inc : i64 = value_to_insert;
+            expected_sum = expected_sum + key_inc;
+            keys_added_count = keys_added_count + 1;
+        }
+        attempts = attempts + 1;
+    }
+    temp_map_for_setup = nil; // Release memory
+
+    // Adjust n if we couldn't generate enough unique keys
+    if keys_added_count < n {
+        // IO.print("Warning: Could only generate "); IO.print(keys_added_count); IO.print(" unique keys for random hit test.");
+        n = keys_added_count;
+    }
+
+    start_time: i64 = clock();
+    actual_sum: i64 = 0;
+    verification_passed = true; // Assume pass initially
+    i = 0;
+    while i < n { // Iterate up to actual number of unique keys added
+        key = keys_present.unchecked_index(i);
+        val = map.get(key);
+        if val is i32 {
+            val_i64 : i64 = val;
+            actual_sum = actual_sum + val_i64;
+        } else {
+             // Nil returned is an error for hit test
+             verification_passed = false;
+             // Optionally print error
+             IO.print("Error: Nil returned during random hit test for key "); IO.print(key);
+        }
+        i = i + 1;
+    }
+    end_time: i64 = clock();
+
+    // Final sum check
+    if actual_sum != expected_sum {
+         verification_passed = false;
+    }
+    print_benchmark_result("Get Random Hit", n, end_time - start_time);
+    IO.print("    Verification: "); if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
+}
+
+def benchmark_get_random_miss(n: i32) {
+    map = HashMap[i32, i32].new(i32_hasher, i32_eq);
+    rng_setup = PRNG.new(789);
+    rng_miss = PRNG.new(987);
+    // Insert N unique keys
+    temp_map_for_setup = HashMap[i32, Bool].new(i32_hasher, i32_eq);
+    keys_added_count = 0;
+    attempts = 0;
+    max_attempts_setup = n * 10;
+
+    while keys_added_count < n and attempts < max_attempts_setup {
+         key = rng_setup.next();
+         val = temp_map_for_setup.get(key);
+         if val is Nil {
+             map.insert(key, key + 1);
+             temp_map_for_setup.insert(key, true);
+             keys_added_count = keys_added_count + 1;
+         }
+         attempts = attempts + 1;
+    }
+
+    // Generate N keys for miss test, ensuring they aren't in the setup map
+    keys_to_miss = Array[i32].new(n);
+    miss_keys_generated = 0;
+    attempts = 0;
+    max_attempts_miss = n * 20; // Need more attempts potentially
+
+    while miss_keys_generated < n and attempts < max_attempts_miss {
+        key = rng_miss.next();
+        // Check if this key happens to be one we inserted during setup
+        val = temp_map_for_setup.get(key);
+        if val is Nil { // Good, this key is likely a miss
+             keys_to_miss.unchecked_insert(miss_keys_generated, key);
+             miss_keys_generated = miss_keys_generated + 1;
+        }
+        attempts = attempts + 1;
+    }
+    temp_map_for_setup = nil; // Release memory
+
+    // Adjust n if we couldn't generate enough guaranteed miss keys
+    if miss_keys_generated < n {
+        // IO.print("Warning: Could only generate "); IO.print(miss_keys_generated); IO.print(" guaranteed miss keys.");
+        n = miss_keys_generated;
+    }
+
+    start_time: i64 = clock();
+    miss_count = 0;
+    hit_count = 0;
+    i = 0;
+    while i < n { // Test with generated miss keys
+        key = keys_to_miss.unchecked_index(i);
+        val = map.get(key);
+        if val is Nil { miss_count = miss_count + 1; }
+        else { hit_count = hit_count + 1; }
+        i = i + 1;
+    }
+    end_time: i64 = clock();
+
+    // Verification: Expect nearly all lookups to be misses. Allow < 5% accidental hits.
+    verification_passed = true;
+    if n > 0 {
+         // Check if hit count exceeds threshold
+         if (hit_count * 100 / n) >= 5 { verification_passed = false; }
+    } else {
+         if hit_count != 0 { verification_passed = false; } // No hits if n=0
+    }
+
+    print_benchmark_result("Get Random Miss", n, end_time - start_time);
+    IO.print("    Verification: "); if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
+    IO.print("    (Misses: "); IO.print(miss_count); IO.print(", Hits: "); IO.print(hit_count); IO.print(")");
+}
+
+
+def benchmark_remove_random(n: i32) {
+    map = HashMap[i32, i32].new(i32_hasher, i32_eq);
+    rng = PRNG.new(101112);
+    keys_to_remove = Array[i32].new(n);
+    // Use a temporary map to ensure we add N unique keys
+    temp_map_keys = HashMap[i32, Bool].new(i32_hasher, i32_eq);
+    keys_added_count = 0;
+    attempts = 0;
+    max_attempts = n * 10;
+
+    while keys_added_count < n and attempts < max_attempts {
+        key = rng.next();
+        val = temp_map_keys.get(key);
+        if val is Nil { // If key is not already added
+            map.insert(key, key + 1);
+            keys_to_remove.unchecked_insert(keys_added_count, key);
+            temp_map_keys.insert(key, true); // Mark key as added
+            keys_added_count = keys_added_count + 1;
+        }
+        attempts = attempts + 1;
+    }
+    temp_map_keys = nil; // Release memory
+
+    // Adjust n if we couldn't add enough unique keys
+    if keys_added_count < n {
+        // IO.print("Warning: Could only generate "); IO.print(keys_added_count); IO.print(" unique keys for remove test.");
+        n = keys_added_count;
+    }
+
+    start_time: i64 = clock();
+    remove_count = 0;
+    verification_passed = true; // Assume pass
+    i = 0;
+    while i < n { // Remove the actual number of keys added
+        key = keys_to_remove.unchecked_index(i);
+        val = map.remove(key);
+        if val is i32 { // Check if remove returned a value
+             expected_val = key + 1;
+             if val != expected_val {
+                  // Value mismatch is a form of failure
+                  verification_passed = false;
+                  // IO.print("Warning: Remove returned wrong value for key "); IO.print(key);
+             }
+             remove_count = remove_count + 1;
+        } else {
+             // Remove returning Nil for a key that should exist is an error
+             verification_passed = false;
+             // IO.print("Warning: Remove returned Nil for key "); IO.print(key);
+        }
+        i = i + 1;
+    }
+    end_time: i64 = clock();
+
+    // Final checks
+    if remove_count != n { verification_passed = false; } // Should have removed exactly n items
+    actual_size = map.size();
+    if actual_size != 0 { verification_passed = false; } // Map should be empty
+
+    // Double check: try getting one of the removed keys
+    if n > 0 {
+         key_to_check = keys_to_remove.unchecked_index(0);
+         val_after_remove = map.get(key_to_check);
+         if val_after_remove is i32 { // Should be Nil if removal worked
+             verification_passed = false;
+         }
+    }
+    print_benchmark_result("Remove Random", n, end_time - start_time);
+    IO.print("    Verification: "); if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
+    IO.print("    (Items removed: "); IO.print(remove_count); IO.print(")");
+}
+
+// --- Main Execution ---
+
+IO.print("--- HashMap Benchmarks (Cuckoo Hashing - Rev 3 Cleaned) ---");
+n = 1000000; // Benchmark size
+
+benchmark_insert_sequential(n);
+benchmark_insert_random(n);
+benchmark_get_sequential_hit(n);
+benchmark_get_random_hit(n);
+benchmark_get_random_miss(n);
+benchmark_remove_random(n);
+
+IO.print("--- Benchmarks Complete ---");
