@@ -36,14 +36,14 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
     @table1: Array[Entry[K,V] | Nil]
     @table2: Array[Entry[K,V] | Nil]
     @size: i32
-    @hasher1_fn: (K) -> i32 // Primary user-provided hash function
+    @hasher: (K) -> i32 // Primary user-provided hash function
     @eq: (K, K) -> Bool
     @max_displacements: i32 // Limit before resize
 
-    def init(@hasher1_fn: (K) -> i32, @eq : (K, K) -> Bool) {
-        initial_capacity_per_table = 8; // Start small, total capacity 16
-        @table1 = Array[Entry[K,V] | Nil].new(initial_capacity_per_table, initial_capacity_per_table);
-        @table2 = Array[Entry[K,V] | Nil].new(initial_capacity_per_table, initial_capacity_per_table);
+    def init(@hasher: (K) -> i32, @eq : (K, K) -> Bool) {
+        tbl_capacity = 8; // Start small, total capacity 16
+        @table1 = Array[Entry[K,V] | Nil].new(tbl_capacity, tbl_capacity);
+        @table2 = Array[Entry[K,V] | Nil].new(tbl_capacity, tbl_capacity);
         @size = 0;
         @max_displacements = 100; // Can be tuned
     }
@@ -51,7 +51,7 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
     // --- Hashing and Indexing Helpers ---
 
     def hash1(key: K) -> i32 {
-        return @hasher1_fn.call(key);
+        return @hasher.call(key);
     }
 
     def hash2_from_primary(primary_hash: i32) -> i32 {
@@ -121,6 +121,17 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         return current_entry;
     }
 
+    def move_entries(old_table : Array[Entry[K,V] | Nil], old_capacity_per_table : i32) {
+        i = 0;
+        while i < old_capacity_per_table {
+            entry = old_table.unchecked_index(i);
+            if entry is Entry[K,V] {
+                failed_entry_during_rehash = self.place_entry_or_get_failed(entry);
+            }
+            i = i + 1;
+        }
+    }
+
     // Resizes both tables (doubling capacity) and rehashes all existing entries.
     def resize() {
         old_table1 = @table1;
@@ -129,53 +140,13 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         new_capacity_per_table = old_capacity_per_table * 2;
         if new_capacity_per_table < 16 { new_capacity_per_table = 16; }
 
-        // Collect all existing entries BEFORE creating new tables
-        old_size = @size;
-        entries_to_rehash = Array[Entry[K,V]].new(old_size, old_size); // Pre-allocate based on known size
-        count = 0;
-        i = 0;
-        while i < old_capacity_per_table {
-            entry = old_table1.unchecked_index(i);
-            if entry is Entry[K,V] {
-                // Check array bounds against count just in case size was off
-                if count < entries_to_rehash.length() {
-                     entries_to_rehash.unchecked_insert(count, entry);
-                }
-                count = count + 1;
-            }
-            i = i + 1;
-        }
-        i = 0;
-        while i < old_capacity_per_table {
-             entry = old_table2.unchecked_index(i);
-             if entry is Entry[K,V] {
-                 // Check array bounds against count
-                 if count < entries_to_rehash.length() {
-                     entries_to_rehash.unchecked_insert(count, entry);
-                 }
-                 count = count + 1;
-             }
-             i = i + 1;
-        }
-
-        // Verify collected count matches original size
-        if count != old_size {
-             //IO.print("Warning: Collected "); IO.print(count); IO.print(" entries during resize, but size was "); IO.print(old_size);
-             old_size = count; // Use the actual count for the loop below
-        }
-
         // Create new tables and reset state
         @table1 = Array[Entry[K,V] | Nil].new(new_capacity_per_table, new_capacity_per_table);
         @table2 = Array[Entry[K,V] | Nil].new(new_capacity_per_table, new_capacity_per_table);
         @size = 0; // Reset size, place_entry_or_get_failed will increment it
 
-        // Rehash elements into the new tables
-        i = 0;
-        while i < old_size { // Iterate up to the number of collected entries
-            entry = entries_to_rehash.unchecked_index(i);
-            failed_entry_during_rehash = self.place_entry_or_get_failed(entry);
-            i = i + 1;
-        }
+        self.move_entries(old_table1, old_capacity_per_table);
+        self.move_entries(old_table2, old_capacity_per_table);
     }
 
     // Public insert method
@@ -188,11 +159,13 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         entry1 = @table1.unchecked_index(idx1);
         if entry1 is Entry[K,V] {
             // Check primary hash first (quick), then key equality (potentially slow)
-            if entry1.primary_hash() == h1 and @eq.call(entry1.key(), key) {
-                // Found in table 1, update in place
-                updated_entry = Entry[K,V].new(key, value, h1);
-                @table1.unchecked_insert(idx1, updated_entry);
-                return; // Update done, size doesn't change
+            if entry1.primary_hash() == h1 {
+                if @eq.call(entry1.key(), key) {
+                    // Found in table 1, update in place
+                    updated_entry = Entry[K,V].new(key, value, h1);
+                    @table1.unchecked_insert(idx1, updated_entry);
+                    return; // Update done, size doesn't change
+                }
             }
         }
 
@@ -202,11 +175,13 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         entry2 = @table2.unchecked_index(idx2);
         if entry2 is Entry[K,V] {
              // Check primary hash (stored in entry) first, then key equality
-             if entry2.primary_hash() == h1 and @eq.call(entry2.key(), key) {
-                 // Found in table 2, update in place
-                 updated_entry = Entry[K,V].new(key, value, h1);
-                 @table2.unchecked_insert(idx2, updated_entry);
-                 return; // Update done, size doesn't change
+             if entry2.primary_hash() == h1 {
+                if @eq.call(entry2.key(), key) {
+                    // Found in table 2, update in place
+                    updated_entry = Entry[K,V].new(key, value, h1);
+                    @table2.unchecked_insert(idx2, updated_entry);
+                    return; // Update done, size doesn't change
+                }
              }
         }
 
@@ -316,9 +291,9 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
 
     // Clear the map
     def clear() {
-        initial_capacity_per_table = 8;
-        @table1 = Array[Entry[K,V] | Nil].new(initial_capacity_per_table, initial_capacity_per_table);
-        @table2 = Array[Entry[K,V] | Nil].new(initial_capacity_per_table, initial_capacity_per_table);
+        tbl_capacity = 8;
+        @table1 = Array[Entry[K,V] | Nil].new(tbl_capacity, tbl_capacity);
+        @table2 = Array[Entry[K,V] | Nil].new(tbl_capacity, tbl_capacity);
         @size = 0;
     }
 
@@ -384,14 +359,7 @@ class HashMapIterator[K,V] extends Iterator2[Pair[K,V]] {
                 // Finished table 2, iteration is complete
                 return nil;
             }
-            // If current_table is neither 1 nor 2, something is wrong, exit loop
-            if @current_table != 1 and @current_table != 2 {
-                 IO.print("Iterator Error: Invalid table state");
-                 return nil;
-            }
         }
-        // Should be unreachable if logic is correct
-        return nil;
     }
 }
 
@@ -421,7 +389,8 @@ class PRNG {
         @seed = initial_seed bit_and 0x7FFFFFFF;
     }
     def next() -> i32 {
-        a : i32 = 1103515245; c : i32 = 12345;
+        a : i32 = 1103515245;
+        c : i32 = 12345;
         @seed = (@seed * a + c) bit_and 0x7FFFFFFF;
         return @seed;
     }
@@ -593,7 +562,7 @@ def benchmark_get_random_hit(n: i32) {
 
     // Adjust n if we couldn't generate enough unique keys
     if keys_added_count < n {
-        // IO.print("Warning: Could only generate "); IO.print(keys_added_count); IO.print(" unique keys for random hit test.");
+        IO.print("Warning: Could only generate "); IO.print(keys_added_count); IO.print(" unique keys for random hit test.");
         n = keys_added_count;
     }
 
@@ -666,7 +635,7 @@ def benchmark_get_random_miss(n: i32) {
 
     // Adjust n if we couldn't generate enough guaranteed miss keys
     if miss_keys_generated < n {
-        // IO.print("Warning: Could only generate "); IO.print(miss_keys_generated); IO.print(" guaranteed miss keys.");
+        IO.print("Warning: Could only generate "); IO.print(miss_keys_generated); IO.print(" guaranteed miss keys.");
         n = miss_keys_generated;
     }
 
@@ -723,7 +692,7 @@ def benchmark_remove_random(n: i32) {
 
     // Adjust n if we couldn't add enough unique keys
     if keys_added_count < n {
-        // IO.print("Warning: Could only generate "); IO.print(keys_added_count); IO.print(" unique keys for remove test.");
+        IO.print("Warning: Could only generate "); IO.print(keys_added_count); IO.print(" unique keys for remove test.");
         n = keys_added_count;
     }
 
@@ -739,13 +708,13 @@ def benchmark_remove_random(n: i32) {
              if val != expected_val {
                   // Value mismatch is a form of failure
                   verification_passed = false;
-                  // IO.print("Warning: Remove returned wrong value for key "); IO.print(key);
+                  IO.print("Warning: Remove returned wrong value for key "); IO.print(key);
              }
              remove_count = remove_count + 1;
         } else {
              // Remove returning Nil for a key that should exist is an error
              verification_passed = false;
-             // IO.print("Warning: Remove returned Nil for key "); IO.print(key);
+             IO.print("Warning: Remove returned Nil for key "); IO.print(key);
         }
         i = i + 1;
     }

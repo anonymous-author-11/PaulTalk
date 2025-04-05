@@ -1,0 +1,555 @@
+import collections; // Assuming this provides Pair, Iterable2, Iterator2
+
+// --- Helper Functions and Classes (Unchanged) ---
+
+def i32_hasher(i : i32) -> i32 {
+    // Same fast bit-mixing hash function
+    i = (i + 0x7ed55d16) + (i << 12);
+    i = (i bit_xor 0xc761c23c) bit_xor (i >> 19);
+    i = (i + 0x165667b1) + (i << 5);
+    i = (i + 0xd3a2646c) bit_xor (i << 9);
+    i = (i + 0xfd7046c5) + (i << 3);
+    i = (i bit_xor 0xb55a4f09) bit_xor (i >> 16);
+    return i;
+}
+
+def i32_eq(a : i32, b : i32) -> Bool {
+    return a == b;
+}
+
+class Tombstone {
+    def init() {}
+}
+
+class Entry[K,V] {
+    @hash: i32 // Store hash to avoid recomputing during probes
+    @key: K
+    @value: V | Tombstone
+
+    def init(@key: K, @value: V, @hash: i32) {}
+    def init(@key: K, @value: Tombstone, @hash: i32) {}
+
+    def key() -> K { return @key; }
+    def value() -> V | Tombstone { return @value; }
+    def hash() -> i32 { return @hash; }
+}
+
+// --- HashMap Implementation (Optimized) ---
+
+class HashMap[K,V] extends Iterable2[Pair[K,V]] {
+    @entries: Array[Entry[K,V] | Nil]
+    @size: i32      // number of actual entries (key -> V)
+    @load: i32      // number of occupied slots (key -> V or key -> Tombstone)
+    @hasher: (K) -> i32
+    @eq: (K, K) -> Bool
+
+    def init(@hasher: (K) -> i32, @eq : (K, K) -> Bool) {
+        // Ensure initial capacity is a power of 2
+        @entries = Array[Entry[K,V] | Nil].new(16, 16);
+        @size = 0;
+        @load = 0;
+        // @hasher and @eq are initialized by the parameter syntax
+    }
+
+    // Finds the slot index for a key using QUADRATIC PROBING (Optimized Step Calculation).
+    // Returns the index where the key is located, OR
+    // Returns the index where the key should be inserted (first tombstone or nil).
+    // Precondition: @entries.length() is a power of 2.
+    def find_slot(key: K, hash: i32) -> i32 {
+        capacity = @entries.length();
+        mask = capacity - 1; // For power-of-two capacity modulo
+        initial_index = hash bit_and mask;
+        first_tombstone_idx = -1; // Index of first tombstone found
+
+        probe_step = 0; // How many steps taken *beyond* the initial index
+        probe_offset = 0; // The quadratic offset (0, 1, 3, 6, 10...)
+        current_index = initial_index;
+
+        while true {
+            entry = @entries.unchecked_index(current_index);
+
+            if entry is Nil {
+                // Empty slot found. Key is not present beyond this point.
+                if first_tombstone_idx == -1 { return current_index; }
+                return first_tombstone_idx;
+            }
+
+            // entry must be Entry[K,V] here
+            if entry is Entry[K, V] {
+                // Key found? Check hash first (cheap), then equality (potentially expensive).
+                if entry.hash() == hash {
+                    if @eq.call(entry.key(), key) { return current_index; }
+                } 
+
+                // If it's an entry for a *different* key, check if it's a tombstone
+                value_in_entry = entry.value();
+                if value_in_entry is Tombstone {
+                    if first_tombstone_idx == -1 {
+                        first_tombstone_idx = current_index; // Record the first tombstone spot
+                    }
+                }
+                // Else (it's an active entry for a different key), continue probing.
+            }
+
+            // --- Optimized Incremental Quadratic Probing Step ---
+            probe_step = probe_step + 1;
+            // Increment offset: 0+1=1, 1+2=3, 3+3=6, ... (equivalent to (step*step + step)/2)
+            probe_offset = probe_offset + probe_step;
+            current_index = (initial_index + probe_offset) bit_and mask; // Apply mask for wrap-around
+
+            // Loop termination is guaranteed because load factor < 1 ensures at least one nil slot
+            // and quadratic probing (with this sequence and power-of-two capacity) visits all slots.
+        }
+    }
+
+    // Ensures capacity is a power of two, doubles if needed
+    def ensure_capacity(required_load: i32) {
+         current_length = @entries.length();
+         // Check load factor: required_load / current_length >= 0.6
+         // Multiply: required_load * DEN >= current_length * NUM
+         needs_resize = current_length == 0 or required_load * 10 >= current_length * 6;
+
+        if needs_resize {
+             new_capacity = current_length * 2;
+             // Ensure minimum capacity and power-of-two
+             if new_capacity < 16 { new_capacity = 16; }
+             // Optional: More robust power-of-two calculation if needed,
+             // but doubling preserves power-of-two if starting with one.
+             self.resize(new_capacity);
+        }
+    }
+
+
+    // Resizes the internal array and rehashes all existing entries.
+    // Crucially clears out tombstones.
+    def resize(new_capacity: i32) {
+        // Assume new_capacity is a power of 2
+        old_entries = @entries;
+        @entries = Array[Entry[K,V] | Nil].new(new_capacity, new_capacity); // Array of Nil with size + capacity equal
+        @size = 0; // Reset size and load for the new table
+        @load = 0;
+
+        i = 0;
+        old_len = old_entries.length();
+        while i < old_len { // Iterate only up to old length
+            entry = old_entries.unchecked_index(i);
+            // Re-insert only if it's a valid entry with a non-tombstone value
+            if entry is Entry[K,V] {
+                val = entry.value();
+                // Check directly against Tombstone type, slightly cleaner
+                if not (val is Tombstone) {
+                    // We know the entry's hash, reuse it.
+                    if val is V { self.insert_internal(entry.key(), val, entry.hash()); }
+                }
+            }
+            i = i + 1;
+        }
+    }
+
+    // Internal insert function used by resize and public insert.
+    // Assumes capacity check already done OR is called during resize.
+    // Handles updating size and load correctly.
+    def insert_internal(key: K, value: V, hash: i32) {
+         i = self.find_slot(key, hash);
+         current_entry_or_nil = @entries.unchecked_index(i); // Use a more descriptive name
+
+         // Create new entry regardless of what was there
+         new_entry = Entry[K,V].new(key, value, hash);
+         @entries.unchecked_insert(i, new_entry);
+
+         // Update size and load based on the *previous* state of the slot
+         if current_entry_or_nil is Nil {
+            // Inserted into an empty slot
+            @size = @size + 1;
+            @load = @load + 1;
+         }
+         if current_entry_or_nil is Entry[K, V] {
+             // Slot was occupied, check if it was a tombstone
+             old_value = current_entry_or_nil.value();
+             if old_value is Tombstone {
+                 // Replaced a tombstone
+                 @size = @size + 1; // Now holds a real value
+                 // @load doesn't change (slot was already occupied)
+             } else {
+                 // Replaced an existing, active value.
+                 // @size doesn't change (still one active value)
+                 // @load doesn't change (slot was already occupied)
+             }
+         }
+         // else case should not happen if find_slot works correctly
+    }
+
+    // Public insert method
+    def insert(key: K, value: V) {
+        // Check capacity *before* hashing and finding slot
+        // We need space for potentially one more *load* item.
+        self.ensure_capacity(@load + 1);
+        hash = @hasher.call(key);
+        self.insert_internal(key, value, hash);
+    }
+
+    // Get value associated with key
+    def get(key: K) -> V | Nil {
+        // No need to check capacity here
+        hash = @hasher.call(key);
+        i = self.find_slot(key, hash);
+        entry_or_nil = @entries.unchecked_index(i);
+
+        // find_slot guarantees that if an entry is returned, hash/key match.
+        // We only need to check if it's Nil or a Tombstone.
+        if entry_or_nil is Entry[K, V] {
+            val = entry_or_nil.value();
+            if not (val is Tombstone) { if val is V { return val; } }
+            // If val is Tombstone, the key was deleted
+        }
+        // If entry_or_nil is Nil, or it was a Tombstone entry for this key
+        return nil;
+    }
+
+    // Remove key and return its value, or Nil if not found.
+    def remove(key: K) -> V | Nil {
+        // No need to check capacity here
+        hash = @hasher.call(key);
+        i = self.find_slot(key, hash);
+        entry_or_nil = @entries.unchecked_index(i);
+
+        if entry_or_nil is Entry[K, V] {
+            val = entry_or_nil.value();
+            // Only remove if it's an active entry (not already a tombstone)
+            if not (val is Tombstone) {
+                // Create Tombstone entry, preserving key and hash for probing continuity
+                tombstone_entry = Entry[K,V].new(entry_or_nil.key(), Tombstone.new(), entry_or_nil.hash());
+                @entries.unchecked_insert(i, tombstone_entry);
+                @size = @size - 1; // Active element count decreases
+                // @load remains the same (slot still occupied by tombstone)
+
+                // Return the removed value (which we know is not Tombstone)
+                if val is V { return val; }
+            }
+            // If val is Tombstone, key was already removed effectively
+        }
+        // If entry_or_nil is Nil or holds a Tombstone for the key
+        return nil;
+    }
+
+    // Clear the map
+    def clear() {
+        // Re-initialize with default capacity
+        @entries = Array[Entry[K,V] | Nil].new(16, 16);
+        @size = 0;
+        @load = 0;
+    }
+
+    // Return number of active key-value pairs
+    def size() -> i32 { return @size; }
+
+    // --- Iterator Implementation ---
+    // Conforms to Iterable2 by providing iterator()
+    def iterator() -> HashMapIterator[K,V] {
+        return HashMapIterator[K,V].new(@entries);
+    }
+}
+
+// --- Custom Iterator Class (Unchanged from original logic) ---
+// Conforms to Iterator2 interface
+class HashMapIterator[K,V] extends Iterator2[Pair[K,V]] {
+    @map_entries: Array[Entry[K,V] | Nil]
+    @index: i32
+    @length: i32 // Cache length for minor optimization
+
+    def init(@map_entries: Array[Entry[K,V] | Nil]) {
+        @index = 0;
+        @length = @map_entries.length(); // Cache length
+    }
+
+    def next() -> Pair[K, V] | Nil {
+        while @index < @length { // Use cached length
+            entry_or_nil = @map_entries.unchecked_index(@index);
+            @index = @index + 1; // Increment index for next call
+
+            if entry_or_nil is Entry[K, V] {
+                val = entry_or_nil.value();
+                if not (val is Tombstone) {
+                    if val is V { return Pair[K, V].new(entry_or_nil.key(), val); }
+                 }
+            }
+            // Continue loop if Nil or Tombstone
+        }
+        return nil; // End of iteration
+    }
+}
+
+// --- Helper Functions for String (Unchanged) ---
+def string_hasher(s : String) -> i32 {
+    hash : i32 = 0;
+    seed : i32 = 31;
+    for c in s {
+        cast_val : i32 = c.byte();
+        hash = (hash * seed + cast_val) bit_and 0x7FFFFFFF;
+    }
+    return hash;
+}
+
+def string_eq(a : String, b : String) -> Bool {
+    return a == b;
+}
+
+// --- Additions for Benchmarking (Unchanged) ---
+extern def clock() -> i64
+
+// --- PRNG Class (Unchanged) ---
+class PRNG {
+    @seed: i32
+    def init(initial_seed: i32) {
+        if initial_seed <= 0 { @seed = 1; return; }
+        @seed = initial_seed bit_and 0x7FFFFFFF;
+    }
+    def next() -> i32 {
+        a : i32 = 1103515245; c : i32 = 12345;
+        @seed = (@seed * a + c) bit_and 0x7FFFFFFF;
+        return @seed;
+    }
+}
+
+// --- Helper to print benchmark results (Unchanged) ---
+def print_benchmark_result(test_name: String, n: i32, duration: i64) {
+    IO.print(test_name);
+    IO.print("  Operations: "); IO.print(n);
+    IO.print("  Total Time: "); IO.print(duration); IO.print(" ms");
+    if n > 0 {
+        ns_per_op : i64 = 0;
+        n_i64 : i64 = n;
+        zero : i64 = 0;
+        million : i64 = 1000000;
+        if duration > zero and n_i64 > zero {
+             ns_per_op = (duration * million) / n_i64;
+        }
+        IO.print("  Time/Op:    ~"); IO.print(ns_per_op); IO.print(" ns");
+    }
+}
+
+// --- Benchmarking Functions (Unchanged - Verification logic assumes map works) ---
+
+def benchmark_insert_sequential(n: i32) {
+    map = HashMap[i32, i32].new(i32_hasher, i32_eq);
+    start_time: i64 = clock();
+    i = 0;
+    while i < n {
+        map.insert(i, i + 1);
+        i = i + 1;
+    }
+    end_time: i64 = clock();
+    verification_passed = true;
+    if n > 0 {
+        last_val = map.get(n - 1);
+        if last_val is Nil { verification_passed = false; }
+        if last_val is i32 { if last_val != n { verification_passed = false; } }
+        if map.size() != n { verification_passed = false; }
+    } else {
+         if map.size() != 0 { verification_passed = false; }
+    }
+    print_benchmark_result("Insert Sequential", n, end_time - start_time);
+    IO.print("    Verification: ");
+    if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
+}
+
+def benchmark_insert_random(n: i32) {
+    map = HashMap[i32, i32].new(i32_hasher, i32_eq);
+    rng = PRNG.new(123);
+    keys_to_insert = Array[i32].new(n);
+    expected_size = 0;
+    temp_map_for_size_check = HashMap[i32, i32].new(i32_hasher, i32_eq);
+    i = 0;
+    last_key = -1;
+    while i < n {
+        key = rng.next();
+        keys_to_insert.unchecked_insert(i, key);
+        if i == n-1 { last_key = key; }
+        temp_map_for_size_check.insert(key, 1);
+        i = i + 1;
+    }
+    expected_size = temp_map_for_size_check.size();
+    temp_map_for_size_check = nil;
+    start_time: i64 = clock();
+    i = 0;
+    while i < n {
+        key = keys_to_insert.unchecked_index(i);
+        map.insert(key, key + 1);
+        i = i + 1;
+    }
+    end_time: i64 = clock();
+    verification_passed = true;
+    if n > 0 {
+         last_val = map.get(last_key);
+         if last_val is Nil { verification_passed = false; }
+         if last_val is i32 { if last_val != (last_key + 1) { verification_passed = false; } }
+         if map.size() != expected_size { verification_passed = false; }
+    } else {
+         if map.size() != 0 { verification_passed = false; }
+    }
+    print_benchmark_result("Insert Random", n, end_time - start_time);
+    IO.print("    Verification: ");
+    if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
+    IO.print("    (Expected unique size: "); IO.print(expected_size); IO.print(")");
+}
+
+
+def benchmark_get_sequential_hit(n: i32) {
+    map = HashMap[i32, i32].new(i32_hasher, i32_eq);
+    expected_sum: i64 = 0;
+    i = 0;
+    while i < n {
+        value_to_insert = i + 1;
+        value_i64 : i64 = value_to_insert;
+        map.insert(i, value_to_insert);
+        expected_sum = expected_sum + value_i64;
+        i = i + 1;
+    }
+    start_time: i64 = clock();
+    actual_sum: i64 = 0;
+    i = 0;
+    while i < n {
+        val = map.get(i);
+        if val is i32 {
+            val_i64 : i64 = val;
+            actual_sum = actual_sum + val_i64;
+        }
+        i = i + 1;
+    }
+    end_time: i64 = clock();
+    verification_passed = (actual_sum == expected_sum);
+    print_benchmark_result("Get Sequential Hit", n, end_time - start_time);
+    IO.print("    Verification: "); if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
+}
+
+def benchmark_get_random_hit(n: i32) {
+    map = HashMap[i32, i32].new(i32_hasher, i32_eq);
+    rng = PRNG.new(456);
+    keys_present = Array[i32].new(n);
+    expected_sum: i64 = 0;
+    i = 0;
+    while i < n {
+        key = rng.next();
+        value_to_insert = key + 1;
+        map.insert(key, value_to_insert);
+        keys_present.unchecked_insert(i, key);
+        i = i + 1;
+    }
+    i = 0;
+    while i < n {
+         key = keys_present.unchecked_index(i);
+         key_inc : i64 = key + 1;
+         expected_sum = expected_sum + key_inc;
+         i = i + 1;
+    }
+    start_time: i64 = clock();
+    actual_sum: i64 = 0;
+    i = 0;
+    while i < n {
+        key = keys_present.unchecked_index(i);
+        val = map.get(key);
+        if val is i32 {
+            val_i64 : i64 = val;
+            actual_sum = actual_sum + val_i64;
+        }
+        i = i + 1;
+    }
+    end_time: i64 = clock();
+    verification_passed = (actual_sum == expected_sum);
+    print_benchmark_result("Get Random Hit", n, end_time - start_time);
+     IO.print("    Verification: "); if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
+}
+
+def benchmark_get_random_miss(n: i32) {
+    map = HashMap[i32, i32].new(i32_hasher, i32_eq);
+    rng_setup = PRNG.new(789);
+    rng_miss = PRNG.new(987);
+    i = 0;
+    while i < n {
+        key = rng_setup.next();
+        map.insert(key, key + 1);
+        i = i + 1;
+    }
+    keys_to_miss = Array[i32].new(n);
+    i = 0;
+    while i < n {
+        keys_to_miss.unchecked_insert(i, rng_miss.next());
+        i = i + 1;
+    }
+    start_time: i64 = clock();
+    miss_count = 0;
+    hit_count = 0;
+    i = 0;
+    while i < n {
+        key = keys_to_miss.unchecked_index(i);
+        val = map.get(key);
+        if val is Nil { miss_count = miss_count + 1;}
+        else { hit_count = hit_count + 1; }
+        i = i + 1;
+    }
+    end_time: i64 = clock();
+     verification_passed = (hit_count * 100 / n < 5); // Allow a few accidental hits
+     print_benchmark_result("Get Random Miss", n, end_time - start_time);
+    IO.print("    Verification: "); if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
+    IO.print("    (Misses: "); IO.print(miss_count); IO.print(", Hits: "); IO.print(hit_count); IO.print(")");
+}
+
+def benchmark_remove_random(n: i32) {
+    map = HashMap[i32, i32].new(i32_hasher, i32_eq);
+    rng = PRNG.new(101112);
+    keys_to_remove = Array[i32].new(n);
+    temp_map_keys = HashMap[i32, Bool].new(i32_hasher, i32_eq);
+    i = 0;
+    keys_added_count = 0;
+    while keys_added_count < n {
+        key = rng.next();
+        val = temp_map_keys.get(key);
+        if val is Nil {
+            map.insert(key, key + 1);
+            keys_to_remove.unchecked_insert(keys_added_count, key);
+            temp_map_keys.insert(key, true);
+            keys_added_count = keys_added_count + 1;
+        }
+         i = i+1; if i > n * 10 { break; } // Safety break
+    }
+    n = keys_added_count;
+    temp_map_keys = nil;
+    start_time: i64 = clock();
+    remove_count = 0;
+    i = 0;
+    while i < n {
+        key = keys_to_remove.unchecked_index(i);
+        val = map.remove(key);
+        if val is i32 { remove_count = remove_count + 1; }
+        i = i + 1;
+    }
+    end_time: i64 = clock();
+     verification_passed = true;
+     if remove_count != n { verification_passed = false; }
+     if map.size() != 0 { verification_passed = false; }
+     if n > 0 {
+         key_to_check = keys_to_remove.unchecked_index(0);
+         val = map.get(key_to_check);
+         if val is i32 { verification_passed = false; }
+     }
+     print_benchmark_result("Remove Random", n, end_time - start_time);
+    IO.print("    Verification: "); if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
+    IO.print("    (Items removed: "); IO.print(remove_count); IO.print(")");
+}
+
+// --- Main Execution ---
+
+IO.print("--- HashMap Benchmarks (Quadratic Probing) ---");
+
+//n = 100000;
+//n = 500000;
+n = 1000000; // Use i64 for timing
+
+benchmark_insert_sequential(n);
+benchmark_insert_random(n);
+benchmark_get_sequential_hit(n);
+benchmark_get_random_hit(n);
+benchmark_get_random_miss(n);
+benchmark_remove_random(n);
+
+IO.print("--- Benchmarks Complete ---");
