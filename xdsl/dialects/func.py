@@ -35,6 +35,7 @@ from xdsl.irdl import (
     VarOpResult,
     irdl_op_definition,
     opt_prop_def,
+    opt_attr_def,
     prop_def,
     region_def,
     operand_def,
@@ -323,6 +324,8 @@ class CallIndirect(IRDLOperation):
     name = "func.call_indirect"
     callee: Operand = operand_def()
     arguments: VarOperand = var_operand_def(AnyAttr())
+    arg_attrs = opt_attr_def(ArrayAttr[DictionaryAttr])
+    res_attrs = opt_attr_def(ArrayAttr[DictionaryAttr])
 
     # Note: naming this results triggers an ArgumentError
     res: VarOpResult = var_result_def(AnyAttr())
@@ -333,20 +336,13 @@ class CallIndirect(IRDLOperation):
         callee: SSAValue,
         arguments: Sequence[SSAValue | Operation],
         return_types: Sequence[Attribute],
+        arg_attrs: ArrayAttr[DictionaryAttr] | None = None,
+        res_attrs: ArrayAttr[DictionaryAttr] | None = None,
     ):
         super().__init__(
             operands=[callee, arguments],
-            result_types=[return_types]
-        )
-
-    def print(self, printer: Printer):
-        print_indirect_call(
-            printer,
-            self,
-            self.callee,
-            self.arguments,
-            self.attributes,
-            reserved_attr_names=("callee",),
+            result_types=[return_types],
+            attributes={"arg_attrs":arg_attrs, "res_attrs":res_attrs}
         )
 
     @classmethod

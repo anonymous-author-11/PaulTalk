@@ -1097,6 +1097,13 @@ class CallingConventionAttr(ParametrizedAttribute):
 class MemEffectsAttr(ParametrizedAttribute):
 
     name = "llvm.memory_effects"
+    effects: ParameterDef[StringAttr]
+
+    def __init__(self, effects: str):
+        super().__init__([StringAttr(effects)])
+
+    def print_parameters(self, printer: Printer) -> None:
+        printer.print_string("<" + self.effects.data + ">")
 
 @irdl_attr_definition
 class TailCallKindAttr(ParametrizedAttribute):
@@ -1337,6 +1344,8 @@ class CallOp(IRDLOperation):
             SSAValue.get(arg).type for arg in args[: len(args) - variadic_args]
         ]
         callee_type = LLVMFunctionType(input_types, return_type, variadic_args > 0)
+        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [len(args), 0])
+        op_bundle_sizes = DenseArrayBase.from_list(IntegerType(32), [])
         super().__init__(
             operands=[args],
             properties={
@@ -1344,10 +1353,52 @@ class CallOp(IRDLOperation):
                 "callee_type": callee_type,
                 "fastmathFlags": fastmath,
                 "CConv": calling_convention,
+                "operandSegmentSizes":operandSegmentSizes,
+                "op_bundle_sizes":op_bundle_sizes
             },
             result_types=op_result_type,
         )
 
+@irdl_op_definition
+class CallIndirectOp(IRDLOperation):
+    name = "llvm.call"
+
+    args: VarOperand = var_operand_def()
+
+    callee_type: LLVMFunctionType | None = opt_prop_def(LLVMFunctionType)
+    fastmathFlags: FastMathAttr = prop_def(FastMathAttr)
+    CConv: CallingConventionAttr = prop_def(CallingConventionAttr)
+    returned = opt_result_def()
+
+    def __init__(
+        self,
+        callee: SSAValue | Operation,
+        *args: SSAValue | Operation,
+        return_type: Attribute | None = None,
+        calling_convention: CallingConventionAttr = CallingConventionAttr("ccc"),
+        fastmath: FastMathAttr = FastMathAttr(None),
+        variadic_args: int = 0,
+    ):
+        op_result_type = [return_type]
+        if return_type is None:
+            return_type = LLVMVoidType()
+        input_types = [
+            SSAValue.get(arg).type for arg in args[: len(args) - variadic_args]
+        ]
+        callee_type = LLVMFunctionType(input_types, return_type, variadic_args > 0)
+        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1 + len(args), 0])
+        op_bundle_sizes = DenseArrayBase.from_list(IntegerType(32), [])
+        super().__init__(
+            operands=[[callee, *args]],
+            properties={
+                "callee_type": callee_type,
+                "fastmathFlags": fastmath,
+                "CConv": calling_convention,
+                "operandSegmentSizes":operandSegmentSizes,
+                "op_bundle_sizes":op_bundle_sizes
+            },
+            result_types=op_result_type,
+        )
 
 LLVMType = (
     LLVMStructType | LLVMPointerType | LLVMArrayType | LLVMVoidType | LLVMFunctionType

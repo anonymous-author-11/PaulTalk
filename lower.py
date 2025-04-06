@@ -2400,11 +2400,13 @@ class LowerGetField(RewritePattern):
         
         getter_ptr = llvm.GEPOp(pair_addr.results[0], [0, 0], pointee_type=pair_type)
         getter = llvm.LoadOp(getter_ptr.results[0], llvm.LLVMPointerType.opaque())
-        ftype = FunctionType.from_lists([llvm.LLVMPointerType.opaque()], [op.original_type])
-        cast1 = builtin.UnrealizedConversionCastOp.create(operands=[getter.results[0]], result_types=[ftype])
-        field = func.CallIndirect(cast1.results[0], [data_ptr.results[0]], [op.original_type])
+        #dict_ary = ArrayAttr([DictionaryAttr({"llvm.readonly":UnitAttr()})])
+        field = llvm.CallIndirectOp(getter.results[0], data_ptr.results[0], return_type=op.original_type)
+        field.properties["no_unwind"] = UnitAttr()
+        field.properties["will_return"] = UnitAttr()
+        field.properties["memory_effects"] = llvm.MemEffectsAttr("other = none, argMem = read, inaccessibleMem = readwrite")
         wrap = WrapOp.make(field.results[0])
-        rewriter.inline_block_before_matched_op(Block([data_ptr_ptr, data_ptr, pair_addr, getter_ptr, getter, cast1, field]))
+        rewriter.inline_block_before_matched_op(Block([data_ptr_ptr, data_ptr, pair_addr, getter_ptr, getter, field]))
         if op.assumed_type:
             assumed_type = AddrOfOp.from_stringattr(op.assumed_type)
             assume = llvm.CallOp("assume_offset", wrap.results[0], assumed_type.results[0])
@@ -2445,11 +2447,13 @@ class LowerSetField(RewritePattern):
         
         setter_ptr = llvm.GEPOp(pair_addr.results[0], [0, 1], pointee_type=pair_type)
         setter = llvm.LoadOp(setter_ptr.results[0], llvm.LLVMPointerType.opaque())
-        ftype = FunctionType.from_lists([llvm.LLVMPointerType.opaque(), op.original_type], [])
-        cast1 = builtin.UnrealizedConversionCastOp.create(operands=[setter.results[0]], result_types=[ftype])
         unwrap = UnwrapOp.create(operands=[op.value], result_types=[op.original_type])
-        set_field = func.CallIndirect(cast1.results[0], [data_ptr.results[0], unwrap.results[0]], [])
-        rewriter.inline_block_before_matched_op(Block([data_ptr_ptr, data_ptr, pair_addr, setter_ptr, setter, cast1, unwrap]))
+        #dict_ary = ArrayAttr([DictionaryAttr({"llvm.writeonly":UnitAttr()}), DictionaryAttr({})])
+        set_field = llvm.CallIndirectOp(setter.results[0], data_ptr.results[0], unwrap.results[0])
+        set_field.properties["no_unwind"] = UnitAttr()
+        set_field.properties["will_return"] = UnitAttr()
+        set_field.properties["memory_effects"] = llvm.MemEffectsAttr("other = none, argMem = readwrite, inaccessibleMem = none")
+        rewriter.inline_block_before_matched_op(Block([data_ptr_ptr, data_ptr, pair_addr, setter_ptr, setter, unwrap]))
         rewriter.replace_matched_op(set_field)
 
 class LowerCall(RewritePattern):

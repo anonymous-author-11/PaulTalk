@@ -49,7 +49,7 @@ def print_indirect_call(
     args: Sequence[SSAValue],
     attributes: dict[str, Attribute],
     *,
-    reserved_attr_names: Sequence[str],
+    reserved_attr_names: Sequence[str]
 ):
     printer.print_string(" ")
     printer.print_ssa_value(callee)

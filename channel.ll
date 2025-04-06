@@ -204,7 +204,7 @@ define void @Channel_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1,
   %32 = insertvalue { ptr, i32 } undef, ptr %31, 0
   %33 = load i32, ptr %19, align 4
   %34 = insertvalue { ptr, i32 } %32, i32 %33, 1
-  call void %30(ptr %22, { ptr, i32 } %34)
+  call void %30(ptr %22, { ptr, i32 } %34) #1
   ret void
 }
 
@@ -260,7 +260,7 @@ define i32 @Channel_get_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, p
   %35 = load ptr, ptr %34, align 8
   %36 = getelementptr { ptr, ptr }, ptr %35, i32 0, i32 0
   %37 = load ptr, ptr %36, align 8
-  %38 = call { ptr, i32 } %37(ptr %30)
+  %38 = call { ptr, i32 } %37(ptr %30) #2
   store { ptr, i32 } %38, ptr %4, align 8
   %39 = load ptr, ptr %28, align 8
   %40 = ptrtoint ptr %39 to i64
@@ -352,7 +352,7 @@ define i32 @Channel_get_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, p
   %103 = insertvalue { ptr, i32 } undef, ptr %102, 0
   %104 = load i32, ptr %5, align 4
   %105 = insertvalue { ptr, i32 } %103, i32 %104, 1
-  call void %101(ptr %93, { ptr, i32 } %105)
+  call void %101(ptr %93, { ptr, i32 } %105) #1
   br label %107
 
 106:                                              ; preds = %86
@@ -411,7 +411,7 @@ define void @Channel_put_new_valuePtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
   %34 = load ptr, ptr %33, align 8
   %35 = getelementptr { ptr, ptr }, ptr %34, i32 0, i32 0
   %36 = load ptr, ptr %35, align 8
-  %37 = call { ptr, i32 } %36(ptr %28)
+  %37 = call { ptr, i32 } %36(ptr %28) #2
   %38 = alloca { ptr, i32 }, align 8
   store { ptr, i32 } %37, ptr %38, align 8
   %39 = getelementptr { ptr, i32 }, ptr %38, i32 0, i32 0
@@ -478,7 +478,7 @@ define void @Channel_put_new_valuePtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
   %89 = load ptr, ptr %88, align 8
   %90 = getelementptr { ptr, ptr }, ptr %89, i32 0, i32 0
   %91 = load ptr, ptr %90, align 8
-  %92 = call { ptr, i32 } %91(ptr %83)
+  %92 = call { ptr, i32 } %91(ptr %83) #2
   store { ptr, i32 } %92, ptr %9, align 8
   %93 = getelementptr { ptr, i32 }, ptr %9, i32 0, i32 0
   %94 = getelementptr { ptr, i32 }, ptr %38, i32 0, i32 0
@@ -510,7 +510,7 @@ define void @Channel_put_new_valuePtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
   %112 = insertvalue { ptr, i32 } undef, ptr %111, 0
   %113 = load i32, ptr %10, align 4
   %114 = insertvalue { ptr, i32 } %112, i32 %113, 1
-  call void %110(ptr %102, { ptr, i32 } %114)
+  call void %110(ptr %102, { ptr, i32 } %114) #1
   ret void
 }
 
@@ -538,6 +538,8 @@ define ptr @Channel_B_put_new_valuePtri32({ ptr, ptr, ptr, i32 } %0, ptr %1) {
 declare ptr @llvm.invariant.start.p0(i64 immarg, ptr nocapture) #0
 
 attributes #0 = { nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
+attributes #1 = { nounwind willreturn memory(argmem: readwrite) }
+attributes #2 = { nounwind willreturn memory(argmem: read, inaccessiblemem: readwrite) }
 
 !llvm.module.flags = !{!0}
 
