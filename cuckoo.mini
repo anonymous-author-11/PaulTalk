@@ -28,6 +28,10 @@ class Entry[K,V] {
     def key() -> K { return @key; }
     def value() -> V { return @value; }
     def primary_hash() -> i32 { return @primary_hash; }
+
+    def to_pair() -> Pair[K, V] {
+        return Pair[K, V].new(@key, @value);
+    }
 }
 
 // --- Cuckoo HashMap Implementation ---
@@ -64,7 +68,8 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         return primary_hash bit_and mask;
     }
 
-    def index2(secondary_hash: i32) -> i32 {
+    def index2(primary_hash: i32) -> i32 {
+        secondary_hash = self.hash2_from_primary(primary_hash);
         mask = @table2.length() - 1; // Assumes power-of-two length
         return secondary_hash bit_and mask;
     }
@@ -76,13 +81,14 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
     // Returns the Entry that failed placement if max displacements reached.
     def place_entry_or_get_failed(entry_to_insert: Entry[K,V]) -> Entry[K,V] | Nil {
         current_entry = entry_to_insert;
-        current_table_index = 1; // Start with table 1
+        on_first = true; // Start with table 1
 
         loop_count = 0;
         while loop_count < @max_displacements {
+            loop_count = loop_count + 1;
             primary_hash = current_entry.primary_hash();
 
-            if current_table_index == 1 {
+            if on_first {
                 // Target table 1
                 idx = self.index1(primary_hash);
                 existing_entry_or_nil = @table1.unchecked_index(idx);
@@ -95,26 +101,24 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
                 // Displacement occurred
                 if existing_entry_or_nil is Entry[K, V] {
                     current_entry = existing_entry_or_nil; // Displaced item becomes current
-                    current_table_index = 2; // Try placing it in table 2 next
+                    on_first = false; // Try placing it in table 2 next
                 }
-            } else { // current_table_index == 2
-                // Target table 2
-                h2 = self.hash2_from_primary(primary_hash);
-                idx = self.index2(h2);
-                existing_entry_or_nil = @table2.unchecked_index(idx);
-                @table2.unchecked_insert(idx, current_entry); // Place current
-
-                if existing_entry_or_nil is Nil {
-                    @size = @size + 1;
-                    return nil; // Success: placed in empty slot
-                }
-                // Displacement occurred
-                 if existing_entry_or_nil is Entry[K, V] {
-                    current_entry = existing_entry_or_nil; // Displaced item becomes current
-                    current_table_index = 1; // Try placing it in table 1 next
-                 }
+                continue;
             }
-            loop_count = loop_count + 1;
+            // Target table 2
+            idx = self.index2(primary_hash);
+            existing_entry_or_nil = @table2.unchecked_index(idx);
+            @table2.unchecked_insert(idx, current_entry); // Place current
+
+            if existing_entry_or_nil is Nil {
+                @size = @size + 1;
+                return nil; // Success: placed in empty slot
+            }
+            // Displacement occurred
+             if existing_entry_or_nil is Entry[K, V] {
+                current_entry = existing_entry_or_nil; // Displaced item becomes current
+                on_first = true; // Try placing it in table 1 next
+             }
         } // End while loop_count
 
         // Max displacements reached. Return the entry that couldn't find a home.
@@ -149,6 +153,22 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         self.move_entries(old_table2, old_capacity_per_table);
     }
 
+    def replace_in_table(key : K, value : V, h1 : i32, idx : i32, table : Array[Entry[K,V] | Nil]) -> Bool {
+        entry = table.unchecked_index(idx);
+        if entry is Entry[K,V] {
+            // Check primary hash first (quick), then key equality (potentially slow)
+            if entry.primary_hash() == h1 {
+                if @eq.call(entry.key(), key) {
+                    // Found in table 1, update in place
+                    updated_entry = Entry[K,V].new(key, value, h1);
+                    table.unchecked_insert(idx, updated_entry);
+                    return true; // Update done, size doesn't change
+                }
+            }
+        }
+        return false;
+    }
+
     // Public insert method
     def insert(key: K, value: V) {
         h1 = self.hash1(key);
@@ -156,22 +176,13 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         // --- Check if key already exists (update value) ---
         // Must check both potential locations before deciding it's a new insert.
         idx1 = self.index1(h1);
-        entry1 = @table1.unchecked_index(idx1);
-        if entry1 is Entry[K,V] {
-            // Check primary hash first (quick), then key equality (potentially slow)
-            if entry1.primary_hash() == h1 {
-                if @eq.call(entry1.key(), key) {
-                    // Found in table 1, update in place
-                    updated_entry = Entry[K,V].new(key, value, h1);
-                    @table1.unchecked_insert(idx1, updated_entry);
-                    return; // Update done, size doesn't change
-                }
-            }
-        }
+        existing = self.replace_in_table(key, value, h1, idx1, @table1);
+        if existing { return; }
 
         // Check table 2 as well if not found/updated in table 1
-        h2 = self.hash2_from_primary(h1);
-        idx2 = self.index2(h2);
+        idx2 = self.index2(h1);
+
+        // for some reason I have to manually inline replace_in_table here??
         entry2 = @table2.unchecked_index(idx2);
         if entry2 is Entry[K,V] {
              // Check primary hash (stored in entry) first, then key equality
@@ -226,6 +237,16 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         // If we exit the loop, it means placement failed even after resize and retry.
     }
 
+    def get_from_table(key : K, h1 : i32, idx : i32, table : Array[Entry[K,V] | Nil]) -> V | Nil {
+        entry = table.unchecked_index(idx);
+        if entry is Entry[K,V] {
+            // Check hash first, then equality
+            if entry.primary_hash() == h1 {
+                if @eq.call(entry.key(), key) { return entry.value(); }
+            }
+        }
+        return nil;
+    }
 
     // Get value associated with key
     def get(key: K) -> V | Nil {
@@ -233,26 +254,30 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         idx1 = self.index1(h1);
 
         // Check table 1
-        entry1 = @table1.unchecked_index(idx1);
-        if entry1 is Entry[K,V] {
-            // Check hash first, then equality
-            if entry1.primary_hash() == h1 and @eq.call(entry1.key(), key) {
-                return entry1.value();
-            }
-        }
+        val1 = self.get_from_table(key, h1, idx1, @table1);
+        if val1 is V { return val1; }
 
         // Check table 2 only if not found in table 1
-        h2 = self.hash2_from_primary(h1);
-        idx2 = self.index2(h2);
-        entry2 = @table2.unchecked_index(idx2);
-        if entry2 is Entry[K,V] {
-            // Check hash first, then equality
-            if entry2.primary_hash() == h1 and @eq.call(entry2.key(), key) {
-                 return entry2.value();
-            }
-        }
+        idx2 = self.index2(h1);
+        val2 = self.get_from_table(key, h1, idx2, @table2);
+        if val2 is V { return val2; }
 
         // Key not found in either potential location
+        return nil;
+    }
+
+    def remove_from_table(key : K, h1 : i32, idx : i32, table : Array[Entry[K,V] | Nil]) -> V | Nil {
+        entry = table.unchecked_index(idx);
+        if entry is Entry[K,V] {
+            if entry.primary_hash() == h1 {
+                if @eq.call(entry.key(), key) {
+                    value_to_return = entry.value();
+                    table.unchecked_insert(idx, nil); // Mark slot as empty
+                    @size = @size - 1;
+                    return value_to_return;
+                }
+            }
+        }
         return nil;
     }
 
@@ -262,28 +287,13 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         idx1 = self.index1(h1);
 
         // Check table 1
-        entry1 = @table1.unchecked_index(idx1);
-        if entry1 is Entry[K,V] {
-            if entry1.primary_hash() == h1 and @eq.call(entry1.key(), key) {
-                value_to_return = entry1.value();
-                @table1.unchecked_insert(idx1, nil); // Mark slot as empty
-                @size = @size - 1;
-                return value_to_return;
-            }
-        }
+        val1 = self.remove_from_table(key, h1, idx1, @table1);
+        if val1 is V { return val1; }
 
         // Check table 2 only if not found in table 1
-        h2 = self.hash2_from_primary(h1);
-        idx2 = self.index2(h2);
-        entry2 = @table2.unchecked_index(idx2);
-        if entry2 is Entry[K,V] {
-             if entry2.primary_hash() == h1 and @eq.call(entry2.key(), key) {
-                 value_to_return = entry2.value();
-                 @table2.unchecked_insert(idx2, nil); // Mark slot as empty
-                 @size = @size - 1;
-                 return value_to_return;
-             }
-        }
+        idx2 = self.index2(h1);
+        val2 = self.remove_from_table(key, h1, idx2, @table2);
+        if val2 is V { return val2; }
 
         // Key not found to remove
         return nil;
@@ -313,53 +323,29 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
 class HashMapIterator[K,V] extends Iterator2[Pair[K,V]] {
     @map_table1: Array[Entry[K,V] | Nil]
     @map_table2: Array[Entry[K,V] | Nil]
-    @current_table: i32 // 1 or 2, tracks which table is being iterated
     @index: i32       // Index within the current table
-    @len1: i32        // Cached length of table 1
-    @len2: i32        // Cached length of table 2
+    @on_second : Bool // whether on second table
 
     def init(@map_table1: Array[Entry[K,V] | Nil], @map_table2: Array[Entry[K,V] | Nil]) {
         @index = 0;
-        @current_table = 1; // Start with table 1
-        @len1 = @map_table1.length();
-        @len2 = @map_table2.length();
+        @on_second = false; // Start with table 1
+    }
+
+    def next_from_table(table : Array[Entry[K,V] | Nil]) -> Pair[K, V] | Nil {
+        while @index < table.length() {
+            entry = table.unchecked_index(@index);
+            @index = @index + 1;
+            if entry is Entry[K, V] { return entry.to_pair(); }
+        }
+        return nil;
     }
 
     def next() -> Pair[K, V] | Nil {
-        while true {
-            if @current_table == 1 {
-                // Iterate through table 1
-                while @index < @len1 {
-                    entry_or_nil = @map_table1.unchecked_index(@index);
-                    @index = @index + 1; // Increment index for next call
-
-                    if entry_or_nil is Entry[K, V] {
-                        // Found a valid entry
-                        return Pair[K, V].new(entry_or_nil.key(), entry_or_nil.value());
-                    }
-                    // Continue loop if slot is Nil
-                }
-                // Finished table 1, switch to table 2
-                @current_table = 2;
-                @index = 0; // Reset index for table 2
-            }
-
-            if @current_table == 2 {
-                // Iterate through table 2
-                 while @index < @len2 {
-                    entry_or_nil = @map_table2.unchecked_index(@index);
-                    @index = @index + 1; // Increment index for next call
-
-                    if entry_or_nil is Entry[K, V] {
-                        // Found a valid entry
-                        return Pair[K, V].new(entry_or_nil.key(), entry_or_nil.value());
-                    }
-                    // Continue loop if slot is Nil
-                }
-                // Finished table 2, iteration is complete
-                return nil;
-            }
-        }
+        if @on_second { return self.next_from_table(@map_table2); }
+        nxt = self.next_from_table(@map_table1);
+        if nxt is Pair[K, V] { return nxt; }
+        @index = 0;
+        @on_second = true;        
     }
 }
 

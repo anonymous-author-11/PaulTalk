@@ -322,8 +322,6 @@ DONE:
 
 TODO:
 
-- I should be allowed to do ClassMethodCall with parameterized receiver
-- I should be allowed to do "if [expression] is T"
 - Buffer indexation bug
 	- Need to split out buffer indexation and set_index ops
 	- Can't return a pointer to the actual slot in the buffer
@@ -334,15 +332,16 @@ TODO:
 - Properly do type checks of type parameters
 	- Start just one layer deep, don't worry about nested parameters
 	- Even for this I should want to rework parameterizations
+- I should be allowed to do ClassMethodCall with parameterized receiver
+- I should be allowed to do "if [expression] is T"
 - Lazy logical ops
+- Add asserts
 - Add assumes for unions of builtins?
 	- vptr must be equal to one of a set of possible
 - Figure out why I had to split Entry constructor into two and if it can be fixed
 - Separate out _size_ and _data_size_ methods
 	- Use _data_size_ on instance creation and (un)boxing
 	- Use _size_ for everything else
-- Think about inlining getters/setters of concretely typed fields
-	- So that uninlinable code is more optimized
 - Write wrappers for box, unbox, size, getters, setters
 	- Will help uninlined optimization
 - Maybe create offset & hash table separately and just give names to typedef
