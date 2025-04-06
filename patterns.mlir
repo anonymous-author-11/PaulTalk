@@ -456,6 +456,18 @@ module @patterns {
       %typegetter_with_region = pdl.apply_native_rewrite "add_region"(%typegetter_decl : !pdl.operation) : !pdl.operation
       pdl.erase %typegetter_decl
 
+      %box_wrapper = pdl.attribute = "box_wrapper"
+      %func_type_attr807 = pdl.attribute = !llvm.func<!llvm.struct<(ptr, i160)> (ptr, ptr, ptr)>
+      %box_wrapper_decl = pdl.operation "llvm.func" {"sym_name" = %box_wrapper, "function_type" = %func_type_attr807, "linkage" = %linkage}
+      %box_wrapper_with_region = pdl.apply_native_rewrite "add_region"(%box_wrapper_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %box_wrapper_decl
+
+      %unbox_wrapper = pdl.attribute = "unbox_wrapper"
+      %func_type_attr808 = pdl.attribute = !llvm.func<void (ptr, !llvm.struct<(ptr, i160)>, ptr, ptr)>
+      %unbox_wrapper_decl = pdl.operation "llvm.func" {"sym_name" = %unbox_wrapper, "function_type" = %func_type_attr808, "linkage" = %linkage}
+      %unbox_wrapper_with_region = pdl.apply_native_rewrite "add_region"(%unbox_wrapper_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %unbox_wrapper_decl
+
       %coro_call = pdl.attribute = "coroutine_call"
       %func_type_attr12 = pdl.attribute = !llvm.func<void (ptr)>
       %coroutine_call_decl = pdl.operation "llvm.func" {"sym_name" = %coro_call, "function_type" = %func_type_attr12, "linkage" = %linkage}

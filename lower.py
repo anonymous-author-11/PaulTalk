@@ -1959,10 +1959,13 @@ class LowerGetterDef(RewritePattern):
                 box_fn_ptr = llvm.GEPOp(specialized.results[0], [7], pointee_type=llvm.LLVMPointerType.opaque())
                 box_fn = llvm.LoadOp(box_fn_ptr.results[0], llvm.LLVMPointerType.opaque())
                 box_type = TypeParameter.make("", "").base_typ()
-                ftype = FunctionType.from_lists([llvm.LLVMPointerType.opaque(), llvm.LLVMPointerType.opaque()], [box_type])
-                laundered = builtin.UnrealizedConversionCastOp(operands=[box_fn.results[0]], result_types=[ftype])
-                body_block.add_ops([parameterization, specialized, box_fn_ptr, box_fn, laundered])
-                return_val = func.CallIndirect(laundered.results[0], [field_gep.results[0], parameterization.results[0]], [box_type])
+                body_block.add_ops([parameterization, specialized, box_fn_ptr, box_fn])
+
+                return_val = llvm.CallOp("box_wrapper", box_fn.results[0], field_gep.results[0], parameterization.results[0], return_type=box_type)
+                operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [3, 0])
+                return_val.properties["operandSegmentSizes"] = operandSegmentSizes
+                return_val.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+
             if not op.parameterization and isinstance(op.types.data[op.offset.value.data], IntegerAttr):
                 parameterization_ptr = llvm.GEPOp(data_ptr, [op.types.data[op.offset.value.data].value.data], pointee_type=llvm.LLVMPointerType.opaque())
                 parameterization = llvm.LoadOp(parameterization_ptr.results[0], llvm.LLVMPointerType.opaque())
@@ -1970,19 +1973,22 @@ class LowerGetterDef(RewritePattern):
                 box_fn_ptr = llvm.GEPOp(specialized.results[0], [7], pointee_type=llvm.LLVMPointerType.opaque())
                 box_fn = llvm.LoadOp(box_fn_ptr.results[0], llvm.LLVMPointerType.opaque())
                 box_type = TypeParameter.make("", "").base_typ()
-                ftype = FunctionType.from_lists([llvm.LLVMPointerType.opaque(), llvm.LLVMPointerType.opaque()], [box_type])
-                laundered = builtin.UnrealizedConversionCastOp(operands=[box_fn.results[0]], result_types=[ftype])
-                body_block.add_ops([parameterization_ptr, parameterization, specialized, box_fn_ptr, box_fn, laundered])
-                return_val = func.CallIndirect(laundered.results[0], [field_gep.results[0], parameterization.results[0]], [box_type])
+                body_block.add_ops([parameterization_ptr, parameterization, specialized, box_fn_ptr, box_fn])
+
+                return_val = llvm.CallOp("box_wrapper", box_fn.results[0], field_gep.results[0], parameterization.results[0], return_type=box_type)
+                operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [3, 0])
+                return_val.properties["operandSegmentSizes"] = operandSegmentSizes
+                return_val.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
             if not op.parameterization and not isinstance(op.types.data[op.offset.value.data], IntegerAttr):
                 specialized = AddrOfOp.from_stringattr(op.specialized_name)
                 box_fn_ptr = llvm.GEPOp(specialized.results[0], [7], pointee_type=llvm.LLVMPointerType.opaque())
                 box_fn = llvm.LoadOp(box_fn_ptr.results[0], llvm.LLVMPointerType.opaque())
                 box_type = TypeParameter.make("", "").base_typ()
-                ftype = FunctionType.from_lists([llvm.LLVMPointerType.opaque(), llvm.LLVMPointerType.opaque()], [box_type])
-                laundered = builtin.UnrealizedConversionCastOp(operands=[box_fn.results[0]], result_types=[ftype])
-                body_block.add_ops([specialized, box_fn_ptr, box_fn, laundered])
-                return_val = func.CallIndirect(laundered.results[0], [field_gep.results[0], field_gep.results[0]], [box_type])
+                body_block.add_ops([specialized, box_fn_ptr, box_fn])
+                return_val = llvm.CallOp("box_wrapper", box_fn.results[0], field_gep.results[0], field_gep.results[0], return_type=box_type)
+                operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [3, 0])
+                return_val.properties["operandSegmentSizes"] = operandSegmentSizes
+                return_val.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
         else:
             return_val = UnwrapOp.create(operands=[field_gep.results[0]], result_types=[op.original_type])
 
@@ -2047,31 +2053,32 @@ class LowerSetterDef(RewritePattern):
                 specialized = llvm.LoadOp(parameterization.results[0], llvm.LLVMPointerType.opaque())
                 unbox_fn_ptr = llvm.GEPOp(specialized.results[0], [8], pointee_type=llvm.LLVMPointerType.opaque())
                 unbox_fn = llvm.LoadOp(unbox_fn_ptr.results[0], llvm.LLVMPointerType.opaque())
-                box_type = TypeParameter.make("", "").base_typ()
-                ftype = FunctionType.from_lists([box_type, llvm.LLVMPointerType.opaque(), llvm.LLVMPointerType.opaque()], [])
-                laundered = builtin.UnrealizedConversionCastOp(operands=[unbox_fn.results[0]], result_types=[ftype])
-                body_block.add_ops([parameterization, specialized, unbox_fn_ptr, unbox_fn, laundered])
-                do_set = func.CallIndirect(laundered.results[0], [value, parameterization.results[0], field_gep.results[0]], [])
+                body_block.add_ops([parameterization, specialized, unbox_fn_ptr, unbox_fn])
+
+                do_set = llvm.CallOp("unbox_wrapper", unbox_fn.results[0], value, parameterization.results[0], field_gep.results[0])
+                operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [4, 0])
+                do_set.properties["operandSegmentSizes"] = operandSegmentSizes
+                do_set.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
             if not op.parameterization and isinstance(op.types.data[op.offset.value.data], IntegerAttr):
                 parameterization_ptr = llvm.GEPOp(data_ptr, [op.types.data[op.offset.value.data].value.data], pointee_type=llvm.LLVMPointerType.opaque())
                 parameterization = llvm.LoadOp(parameterization_ptr.results[0], llvm.LLVMPointerType.opaque())
                 specialized = llvm.LoadOp(parameterization.results[0], llvm.LLVMPointerType.opaque())
                 unbox_fn_ptr = llvm.GEPOp(specialized.results[0], [8], pointee_type=llvm.LLVMPointerType.opaque())
                 unbox_fn = llvm.LoadOp(unbox_fn_ptr.results[0], llvm.LLVMPointerType.opaque())
-                box_type = TypeParameter.make("", "").base_typ()
-                ftype = FunctionType.from_lists([box_type, llvm.LLVMPointerType.opaque(), llvm.LLVMPointerType.opaque()], [])
-                laundered = builtin.UnrealizedConversionCastOp(operands=[unbox_fn.results[0]], result_types=[ftype])
-                body_block.add_ops([parameterization_ptr, parameterization, specialized, unbox_fn_ptr, unbox_fn, laundered])
-                do_set = func.CallIndirect(laundered.results[0], [value, parameterization.results[0], field_gep.results[0]], [])
+                body_block.add_ops([parameterization_ptr, parameterization, specialized, unbox_fn_ptr, unbox_fn])
+                do_set = llvm.CallOp("unbox_wrapper", unbox_fn.results[0], value, parameterization.results[0], field_gep.results[0])
+                operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [4, 0])
+                do_set.properties["operandSegmentSizes"] = operandSegmentSizes
+                do_set.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
             if not op.parameterization and not isinstance(op.types.data[op.offset.value.data], IntegerAttr):
                 specialized = AddrOfOp.from_stringattr(op.specialized_name)
                 unbox_fn_ptr = llvm.GEPOp(specialized.results[0], [8], pointee_type=llvm.LLVMPointerType.opaque())
                 unbox_fn = llvm.LoadOp(unbox_fn_ptr.results[0], llvm.LLVMPointerType.opaque())
-                box_type = TypeParameter.make("", "").base_typ()
-                ftype = FunctionType.from_lists([box_type, llvm.LLVMPointerType.opaque(), llvm.LLVMPointerType.opaque()], [])
-                laundered = builtin.UnrealizedConversionCastOp(operands=[unbox_fn.results[0]], result_types=[ftype])
-                body_block.add_ops([specialized, unbox_fn_ptr, unbox_fn, laundered])
-                do_set = func.CallIndirect(laundered.results[0], [value, field_gep.results[0], field_gep.results[0]], [])
+                body_block.add_ops([specialized, unbox_fn_ptr, unbox_fn])
+                do_set = llvm.CallOp("unbox_wrapper", unbox_fn.results[0], value, field_gep.results[0], field_gep.results[0])
+                operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [4, 0])
+                do_set.properties["operandSegmentSizes"] = operandSegmentSizes
+                do_set.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
         else:
             wrapped_value = WrapOp.make(value)
             do_set = MemCpyOp.make(wrapped_value.results[0], field_gep.results[0], op.original_type)

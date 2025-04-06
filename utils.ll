@@ -38,6 +38,16 @@ define { i64, i64 } @size_wrapper(ptr %f, ptr nocapture nofree readonly %0) spec
   ret { i64, i64 } %result
 }
 
+define { ptr, i160 } @box_wrapper(ptr %f, ptr nocapture nofree readonly %0, ptr nocapture nofree readonly %1) speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: write) {
+  %result = call { ptr, i160 } %f(ptr nocapture nofree readonly %0, ptr nocapture nofree readonly %1) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: write)
+  ret { ptr, i160 } %result
+}
+
+define void @unbox_wrapper(ptr %f, { ptr, i160 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: readwrite) {
+  call void %f({ ptr, i160 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: readwrite)
+  ret void
+}
+
 define ptr @adjust_trampoline(ptr %tramp) {
   %ret = call ptr @llvm.adjust.trampoline(ptr %tramp) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: read)
   ret ptr %ret
