@@ -341,11 +341,13 @@ class HashMapIterator[K,V] extends Iterator2[Pair[K,V]] {
     }
 
     def next() -> Pair[K, V] | Nil {
-        if @on_second { return self.next_from_table(@map_table2); }
-        nxt = self.next_from_table(@map_table1);
-        if nxt is Pair[K, V] { return nxt; }
-        @index = 0;
-        @on_second = true;        
+        if not @on_second {
+            nxt = self.next_from_table(@map_table1);
+            if nxt is Pair[K, V] { return nxt; }
+            @index = 0;
+            @on_second = true;
+        }
+        return self.next_from_table(@map_table2);
     }
 }
 
