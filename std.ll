@@ -2,16 +2,16 @@
 source_filename = "LLVMDialectModule"
 
 @_parameterization_IntArray = linkonce_odr constant [2 x ptr] [ptr @IntArray, ptr null]
-@jqujx_stdmini = internal constant [8 x i8] c"std.mini"
-@rmtex_stdmini = internal constant [8 x i8] c"std.mini"
+@auqtf_stdmini = internal constant [8 x i8] c"std.mini"
+@hqxyq_stdmini = internal constant [8 x i8] c"std.mini"
 @_parameterization_BufferPtri32 = linkonce_odr constant [2 x ptr] [ptr @buffer_typ, ptr null]
-@bquyt_An_outofbounds_error_occurred_while_indexing_into_a_collection = internal constant [65 x i8] c"An out-of-bounds error occurred while indexing into a collection."
-@twtff_ = internal constant [0 x i8] zeroinitializer
-@lsptz_The_indexing_argument_was = internal constant [25 x i8] c"The indexing argument was"
+@myovl_An_outofbounds_error_occurred_while_indexing_into_a_collection = internal constant [65 x i8] c"An out-of-bounds error occurred while indexing into a collection."
+@pxfvf_ = internal constant [0 x i8] zeroinitializer
+@zhxkq_The_indexing_argument_was = internal constant [25 x i8] c"The indexing argument was"
 @_parameterization_String = linkonce_odr constant [2 x ptr] [ptr @String, ptr null]
 @_parameterization_Ptri32 = linkonce_odr constant [2 x ptr] [ptr @i32_typ, ptr null]
 @_parameterization_BufferPtri8 = linkonce_odr constant [2 x ptr] [ptr @buffer_typ, ptr null]
-@vacdz_The_size_of_the_collection_being_indexed_was = internal constant [44 x i8] c"The size of the collection being indexed was"
+@jrbbi_The_size_of_the_collection_being_indexed_was = internal constant [44 x i8] c"The size of the collection being indexed was"
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
 @float_string = linkonce_odr constant [4 x i8] c"%f\0A\00"
@@ -123,6 +123,10 @@ declare { i64, i64 } @_size_union_typ(ptr)
 declare i1 @subtype_test(i64, i64, i64, i64, ptr)
 
 declare i1 @subtype_test_wrapper(ptr, i64, i64, i64, i64, ptr)
+
+declare { i64, i64 } @size_wrapper(ptr, ptr)
+
+declare ptr @typegetter_wrapper(ptr, ptr)
 
 declare void @coroutine_call(ptr)
 
@@ -294,14 +298,14 @@ define void @OutOfBoundsDetails_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   store ptr %24, ptr %23, align 8
   %25 = call ptr @llvm.invariant.start.p0(i64 16, ptr %21)
   %26 = load ptr, ptr %21, align 8
-  %27 = load <44 x i8>, ptr @vacdz_The_size_of_the_collection_being_indexed_was, align 64
+  %27 = load <44 x i8>, ptr @jrbbi_The_size_of_the_collection_being_indexed_was, align 64
   store <44 x i8> %27, ptr %26, align 64
   %28 = alloca [1 x ptr], align 8
   store ptr @String, ptr %28, align 8
   %29 = load ptr, ptr %28, align 8
   %30 = getelementptr ptr, ptr %29, i32 6
   %31 = load ptr, ptr %30, align 8
-  %32 = call { i64, i64 } %31(ptr %28)
+  %32 = call { i64, i64 } @size_wrapper(ptr %31, ptr %28)
   %33 = extractvalue { i64, i64 } %32, 0
   %34 = call ptr @bump_malloc(i64 %33)
   %35 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -404,14 +408,14 @@ define void @OutOfBoundsDetails_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   store ptr %112, ptr %111, align 8
   %113 = call ptr @llvm.invariant.start.p0(i64 16, ptr %109)
   %114 = load ptr, ptr %109, align 8
-  %115 = load <25 x i8>, ptr @lsptz_The_indexing_argument_was, align 32
+  %115 = load <25 x i8>, ptr @zhxkq_The_indexing_argument_was, align 32
   store <25 x i8> %115, ptr %114, align 32
   %116 = alloca [1 x ptr], align 8
   store ptr @String, ptr %116, align 8
   %117 = load ptr, ptr %116, align 8
   %118 = getelementptr ptr, ptr %117, i32 6
   %119 = load ptr, ptr %118, align 8
-  %120 = call { i64, i64 } %119(ptr %116)
+  %120 = call { i64, i64 } @size_wrapper(ptr %119, ptr %116)
   %121 = extractvalue { i64, i64 } %120, 0
   %122 = call ptr @bump_malloc(i64 %121)
   %123 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -767,7 +771,7 @@ define void @OutOfBounds_init_boundsPtri32_indexPtri32({ ptr, ptr, ptr, i32 } %0
   %22 = load ptr, ptr %21, align 8
   %23 = getelementptr ptr, ptr %22, i32 6
   %24 = load ptr, ptr %23, align 8
-  %25 = call { i64, i64 } %24(ptr %21)
+  %25 = call { i64, i64 } @size_wrapper(ptr %24, ptr %21)
   %26 = extractvalue { i64, i64 } %25, 0
   %27 = call ptr @bump_malloc(i64 %26)
   %28 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -849,7 +853,7 @@ define void @OutOfBounds_init_boundsPtri32_indexPtri32({ ptr, ptr, ptr, i32 } %0
   %91 = load ptr, ptr %90, align 8
   %92 = getelementptr ptr, ptr %91, i32 6
   %93 = load ptr, ptr %92, align 8
-  %94 = call { i64, i64 } %93(ptr %90)
+  %94 = call { i64, i64 } @size_wrapper(ptr %93, ptr %90)
   %95 = extractvalue { i64, i64 } %94, 0
   %96 = call ptr @bump_malloc(i64 %95)
   %97 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -947,14 +951,14 @@ define void @OutOfBounds_init_boundsPtri32_indexPtri32({ ptr, ptr, ptr, i32 } %0
   store ptr %171, ptr %170, align 8
   %172 = call ptr @llvm.invariant.start.p0(i64 16, ptr %168)
   %173 = load ptr, ptr %168, align 8
-  %174 = load <65 x i8>, ptr @bquyt_An_outofbounds_error_occurred_while_indexing_into_a_collection, align 128
+  %174 = load <65 x i8>, ptr @myovl_An_outofbounds_error_occurred_while_indexing_into_a_collection, align 128
   store <65 x i8> %174, ptr %173, align 128
   %175 = alloca [1 x ptr], align 8
   store ptr @String, ptr %175, align 8
   %176 = load ptr, ptr %175, align 8
   %177 = getelementptr ptr, ptr %176, i32 6
   %178 = load ptr, ptr %177, align 8
-  %179 = call { i64, i64 } %178(ptr %175)
+  %179 = call { i64, i64 } @size_wrapper(ptr %178, ptr %175)
   %180 = extractvalue { i64, i64 } %179, 0
   %181 = call ptr @bump_malloc(i64 %180)
   %182 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -1432,7 +1436,7 @@ define { ptr, ptr, ptr, i32 } @IntArray__Self_from_iterable_iterableIntIterable(
   %34 = load ptr, ptr %33, align 8
   %35 = getelementptr ptr, ptr %34, i32 6
   %36 = load ptr, ptr %35, align 8
-  %37 = call { i64, i64 } %36(ptr %33)
+  %37 = call { i64, i64 } @size_wrapper(ptr %36, ptr %33)
   %38 = extractvalue { i64, i64 } %37, 0
   %39 = call ptr @bump_malloc(i64 %38)
   %40 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -2924,7 +2928,7 @@ define i32 @IntArray__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, 
   %75 = load ptr, ptr %5, align 8
   %76 = getelementptr ptr, ptr %75, i32 6
   %77 = load ptr, ptr %76, align 8
-  %78 = call { i64, i64 } %77(ptr %5)
+  %78 = call { i64, i64 } @size_wrapper(ptr %77, ptr %5)
   %79 = extractvalue { i64, i64 } %78, 0
   %80 = call ptr @bump_malloc(i64 %79)
   %81 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 1
@@ -2980,13 +2984,13 @@ define i32 @IntArray__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, 
   store ptr %121, ptr %120, align 8
   %122 = call ptr @llvm.invariant.start.p0(i64 16, ptr %10)
   %123 = load ptr, ptr %10, align 8
-  %124 = load <8 x i8>, ptr @rmtex_stdmini, align 8
+  %124 = load <8 x i8>, ptr @hqxyq_stdmini, align 8
   store <8 x i8> %124, ptr %123, align 8
   store ptr @String, ptr %11, align 8
   %125 = load ptr, ptr %11, align 8
   %126 = getelementptr ptr, ptr %125, i32 6
   %127 = load ptr, ptr %126, align 8
-  %128 = call { i64, i64 } %127(ptr %11)
+  %128 = call { i64, i64 } @size_wrapper(ptr %127, ptr %11)
   %129 = extractvalue { i64, i64 } %128, 0
   %130 = call ptr @bump_malloc(i64 %129)
   %131 = getelementptr { ptr, ptr, ptr, i32 }, ptr %12, i32 0, i32 1
@@ -3155,7 +3159,7 @@ define i32 @IntArray__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, 
   %262 = load ptr, ptr %19, align 8
   %263 = getelementptr ptr, ptr %262, i32 6
   %264 = load ptr, ptr %263, align 8
-  %265 = call { i64, i64 } %264(ptr %19)
+  %265 = call { i64, i64 } @size_wrapper(ptr %264, ptr %19)
   %266 = extractvalue { i64, i64 } %265, 0
   %267 = call ptr @bump_malloc(i64 %266)
   %268 = getelementptr { ptr, ptr, ptr, i32 }, ptr %20, i32 0, i32 1
@@ -3211,13 +3215,13 @@ define i32 @IntArray__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, 
   store ptr %308, ptr %307, align 8
   %309 = call ptr @llvm.invariant.start.p0(i64 16, ptr %24)
   %310 = load ptr, ptr %24, align 8
-  %311 = load <8 x i8>, ptr @jqujx_stdmini, align 8
+  %311 = load <8 x i8>, ptr @auqtf_stdmini, align 8
   store <8 x i8> %311, ptr %310, align 8
   store ptr @String, ptr %25, align 8
   %312 = load ptr, ptr %25, align 8
   %313 = getelementptr ptr, ptr %312, i32 6
   %314 = load ptr, ptr %313, align 8
-  %315 = call { i64, i64 } %314(ptr %25)
+  %315 = call { i64, i64 } @size_wrapper(ptr %314, ptr %25)
   %316 = extractvalue { i64, i64 } %315, 0
   %317 = call ptr @bump_malloc(i64 %316)
   %318 = getelementptr { ptr, ptr, ptr, i32 }, ptr %26, i32 0, i32 1
@@ -3657,7 +3661,7 @@ define { ptr, ptr, ptr, i32 } @IntArray_copy_({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %114 = load ptr, ptr %5, align 8
   %115 = getelementptr ptr, ptr %114, i32 6
   %116 = load ptr, ptr %115, align 8
-  %117 = call { i64, i64 } %116(ptr %5)
+  %117 = call { i64, i64 } @size_wrapper(ptr %116, ptr %5)
   %118 = extractvalue { i64, i64 } %117, 0
   %119 = call ptr @bump_malloc(i64 %118)
   %120 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 1
@@ -4039,7 +4043,7 @@ define { ptr, ptr, ptr, i32 } @IntArray_map_fFunctionPtri32_to_Ptri32({ ptr, ptr
   %118 = load ptr, ptr %6, align 8
   %119 = getelementptr ptr, ptr %118, i32 6
   %120 = load ptr, ptr %119, align 8
-  %121 = call { i64, i64 } %120(ptr %6)
+  %121 = call { i64, i64 } @size_wrapper(ptr %120, ptr %6)
   %122 = extractvalue { i64, i64 } %121, 0
   %123 = call ptr @bump_malloc(i64 %122)
   %124 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 1
@@ -4329,7 +4333,7 @@ define { ptr, ptr, ptr, i32 } @IntArray_iterator_({ ptr, ptr, ptr, i32 } %0, { p
   %20 = load ptr, ptr %19, align 8
   %21 = getelementptr ptr, ptr %20, i32 6
   %22 = load ptr, ptr %21, align 8
-  %23 = call { i64, i64 } %22(ptr %19)
+  %23 = call { i64, i64 } @size_wrapper(ptr %22, ptr %19)
   %24 = extractvalue { i64, i64 } %23, 0
   %25 = call ptr @bump_malloc(i64 %24)
   %26 = alloca { ptr, ptr, ptr, i32 }, align 8

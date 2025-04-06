@@ -1,19 +1,19 @@
 ; ModuleID = 'LLVMDialectModule'
 source_filename = "LLVMDialectModule"
 
-@gkrvx_ = internal constant [9 x i8] c"---------"
-@zmiyr_With_message = internal constant [12 x i8] c"With message"
-@adhij_At_line = internal constant [7 x i8] c"At line"
-@rflwt_Exception_thrown_from_file = internal constant [26 x i8] c"Exception thrown from file"
-@fogii_ = internal constant [9 x i8] c"---------"
-@gnlyp_ = internal constant [0 x i8] zeroinitializer
-@sdsak_None = internal constant [6 x i8] c"<None>"
-@pfeio_ = internal constant [0 x i8] zeroinitializer
+@otubz_ = internal constant [9 x i8] c"---------"
+@xkhiq_With_message = internal constant [12 x i8] c"With message"
+@yxcrv_At_line = internal constant [7 x i8] c"At line"
+@dppcs_Exception_thrown_from_file = internal constant [26 x i8] c"Exception thrown from file"
+@xhbhz_ = internal constant [9 x i8] c"---------"
+@nhzhm_ = internal constant [0 x i8] zeroinitializer
+@vvtmk_None = internal constant [6 x i8] c"<None>"
+@kvnxf_ = internal constant [0 x i8] zeroinitializer
 @_parameterization_Ptri8 = linkonce_odr constant [2 x ptr] [ptr @i8_typ, ptr null]
 @_parameterization_String = linkonce_odr constant [2 x ptr] [ptr @String, ptr null]
 @_parameterization_Ptri32 = linkonce_odr constant [2 x ptr] [ptr @i32_typ, ptr null]
 @_parameterization_BufferPtri8 = linkonce_odr constant [2 x ptr] [ptr @buffer_typ, ptr null]
-@uolcg_Object = internal constant [6 x i8] c"Object"
+@tolwl_Object = internal constant [6 x i8] c"Object"
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
 @float_string = linkonce_odr constant [4 x i8] c"%f\0A\00"
@@ -104,6 +104,10 @@ declare i1 @subtype_test(i64, i64, i64, i64, ptr)
 
 declare i1 @subtype_test_wrapper(ptr, i64, i64, i64, i64, ptr)
 
+declare { i64, i64 } @size_wrapper(ptr, ptr)
+
+declare ptr @typegetter_wrapper(ptr, ptr)
+
 declare void @coroutine_call(ptr)
 
 define { i64, i64 } @_size_Iterator(ptr %0) {
@@ -159,14 +163,14 @@ define { ptr, ptr, ptr, i32 } @Representable_repr_({ ptr, ptr, ptr, i32 } %0, { 
   store ptr %24, ptr %23, align 8
   %25 = call ptr @llvm.invariant.start.p0(i64 16, ptr %21)
   %26 = load ptr, ptr %21, align 8
-  %27 = load <6 x i8>, ptr @uolcg_Object, align 8
+  %27 = load <6 x i8>, ptr @tolwl_Object, align 8
   store <6 x i8> %27, ptr %26, align 8
   %28 = alloca [1 x ptr], align 8
   store ptr @String, ptr %28, align 8
   %29 = load ptr, ptr %28, align 8
   %30 = getelementptr ptr, ptr %29, i32 6
   %31 = load ptr, ptr %30, align 8
-  %32 = call { i64, i64 } %31(ptr %28)
+  %32 = call { i64, i64 } @size_wrapper(ptr %31, ptr %28)
   %33 = extractvalue { i64, i64 } %32, 0
   %34 = call ptr @bump_malloc(i64 %33)
   %35 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -2119,7 +2123,7 @@ define { ptr, ptr, ptr, i32 } @String_copy_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %114 = load ptr, ptr %5, align 8
   %115 = getelementptr ptr, ptr %114, i32 6
   %116 = load ptr, ptr %115, align 8
-  %117 = call { i64, i64 } %116(ptr %5)
+  %117 = call { i64, i64 } @size_wrapper(ptr %116, ptr %5)
   %118 = extractvalue { i64, i64 } %117, 0
   %119 = call ptr @bump_malloc(i64 %118)
   %120 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 1
@@ -2423,7 +2427,7 @@ define { ptr, ptr, ptr, i32 } @String_iterator_({ ptr, ptr, ptr, i32 } %0, { ptr
   %20 = load ptr, ptr %19, align 8
   %21 = getelementptr ptr, ptr %20, i32 6
   %22 = load ptr, ptr %21, align 8
-  %23 = call { i64, i64 } %22(ptr %19)
+  %23 = call { i64, i64 } @size_wrapper(ptr %22, ptr %19)
   %24 = extractvalue { i64, i64 } %23, 0
   %25 = call ptr @bump_malloc(i64 %24)
   %26 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -3084,7 +3088,7 @@ define { ptr, i160 } @StringIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %147 = load ptr, ptr %7, align 8
   %148 = getelementptr ptr, ptr %147, i32 6
   %149 = load ptr, ptr %148, align 8
-  %150 = call { i64, i64 } %149(ptr %7)
+  %150 = call { i64, i64 } @size_wrapper(ptr %149, ptr %7)
   %151 = extractvalue { i64, i64 } %150, 0
   %152 = call ptr @bump_malloc(i64 %151)
   %153 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 1
@@ -3467,7 +3471,7 @@ define void @Exception_init_messageString({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %89 = load ptr, ptr %88, align 8
   %90 = getelementptr ptr, ptr %89, i32 6
   %91 = load ptr, ptr %90, align 8
-  %92 = call { i64, i64 } %91(ptr %88)
+  %92 = call { i64, i64 } @size_wrapper(ptr %91, ptr %88)
   %93 = extractvalue { i64, i64 } %92, 0
   %94 = call ptr @bump_malloc(i64 %93)
   %95 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -3621,14 +3625,14 @@ define void @Exception_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   store ptr %34, ptr %33, align 8
   %35 = call ptr @llvm.invariant.start.p0(i64 16, ptr %31)
   %36 = load ptr, ptr %31, align 8
-  %37 = load <6 x i8>, ptr @sdsak_None, align 8
+  %37 = load <6 x i8>, ptr @vvtmk_None, align 8
   store <6 x i8> %37, ptr %36, align 8
   %38 = alloca [1 x ptr], align 8
   store ptr @String, ptr %38, align 8
   %39 = load ptr, ptr %38, align 8
   %40 = getelementptr ptr, ptr %39, i32 6
   %41 = load ptr, ptr %40, align 8
-  %42 = call { i64, i64 } %41(ptr %38)
+  %42 = call { i64, i64 } @size_wrapper(ptr %41, ptr %38)
   %43 = extractvalue { i64, i64 } %42, 0
   %44 = call ptr @bump_malloc(i64 %43)
   %45 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -3730,7 +3734,7 @@ define void @Exception_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   %122 = load ptr, ptr %121, align 8
   %123 = getelementptr ptr, ptr %122, i32 6
   %124 = load ptr, ptr %123, align 8
-  %125 = call { i64, i64 } %124(ptr %121)
+  %125 = call { i64, i64 } @size_wrapper(ptr %124, ptr %121)
   %126 = extractvalue { i64, i64 } %125, 0
   %127 = call ptr @bump_malloc(i64 %126)
   %128 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -3992,14 +3996,14 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %24, ptr %23, align 8
   %25 = call ptr @llvm.invariant.start.p0(i64 16, ptr %21)
   %26 = load ptr, ptr %21, align 8
-  %27 = load <9 x i8>, ptr @fogii_, align 16
+  %27 = load <9 x i8>, ptr @xhbhz_, align 16
   store <9 x i8> %27, ptr %26, align 16
   %28 = alloca [1 x ptr], align 8
   store ptr @String, ptr %28, align 8
   %29 = load ptr, ptr %28, align 8
   %30 = getelementptr ptr, ptr %29, i32 6
   %31 = load ptr, ptr %30, align 8
-  %32 = call { i64, i64 } %31(ptr %28)
+  %32 = call { i64, i64 } @size_wrapper(ptr %31, ptr %28)
   %33 = extractvalue { i64, i64 } %32, 0
   %34 = call ptr @bump_malloc(i64 %33)
   %35 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4080,14 +4084,14 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %97, ptr %96, align 8
   %98 = call ptr @llvm.invariant.start.p0(i64 16, ptr %94)
   %99 = load ptr, ptr %94, align 8
-  %100 = load <26 x i8>, ptr @rflwt_Exception_thrown_from_file, align 32
+  %100 = load <26 x i8>, ptr @dppcs_Exception_thrown_from_file, align 32
   store <26 x i8> %100, ptr %99, align 32
   %101 = alloca [1 x ptr], align 8
   store ptr @String, ptr %101, align 8
   %102 = load ptr, ptr %101, align 8
   %103 = getelementptr ptr, ptr %102, i32 6
   %104 = load ptr, ptr %103, align 8
-  %105 = call { i64, i64 } %104(ptr %101)
+  %105 = call { i64, i64 } @size_wrapper(ptr %104, ptr %101)
   %106 = extractvalue { i64, i64 } %105, 0
   %107 = call ptr @bump_malloc(i64 %106)
   %108 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4209,14 +4213,14 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %208, ptr %207, align 8
   %209 = call ptr @llvm.invariant.start.p0(i64 16, ptr %205)
   %210 = load ptr, ptr %205, align 8
-  %211 = load <7 x i8>, ptr @adhij_At_line, align 8
+  %211 = load <7 x i8>, ptr @yxcrv_At_line, align 8
   store <7 x i8> %211, ptr %210, align 8
   %212 = alloca [1 x ptr], align 8
   store ptr @String, ptr %212, align 8
   %213 = load ptr, ptr %212, align 8
   %214 = getelementptr ptr, ptr %213, i32 6
   %215 = load ptr, ptr %214, align 8
-  %216 = call { i64, i64 } %215(ptr %212)
+  %216 = call { i64, i64 } @size_wrapper(ptr %215, ptr %212)
   %217 = extractvalue { i64, i64 } %216, 0
   %218 = call ptr @bump_malloc(i64 %217)
   %219 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4309,14 +4313,14 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %293, ptr %292, align 8
   %294 = call ptr @llvm.invariant.start.p0(i64 16, ptr %290)
   %295 = load ptr, ptr %290, align 8
-  %296 = load <12 x i8>, ptr @zmiyr_With_message, align 16
+  %296 = load <12 x i8>, ptr @xkhiq_With_message, align 16
   store <12 x i8> %296, ptr %295, align 16
   %297 = alloca [1 x ptr], align 8
   store ptr @String, ptr %297, align 8
   %298 = load ptr, ptr %297, align 8
   %299 = getelementptr ptr, ptr %298, i32 6
   %300 = load ptr, ptr %299, align 8
-  %301 = call { i64, i64 } %300(ptr %297)
+  %301 = call { i64, i64 } @size_wrapper(ptr %300, ptr %297)
   %302 = extractvalue { i64, i64 } %301, 0
   %303 = call ptr @bump_malloc(i64 %302)
   %304 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4418,14 +4422,14 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   store ptr %386, ptr %385, align 8
   %387 = call ptr @llvm.invariant.start.p0(i64 16, ptr %383)
   %388 = load ptr, ptr %383, align 8
-  %389 = load <9 x i8>, ptr @gkrvx_, align 16
+  %389 = load <9 x i8>, ptr @otubz_, align 16
   store <9 x i8> %389, ptr %388, align 16
   %390 = alloca [1 x ptr], align 8
   store ptr @String, ptr %390, align 8
   %391 = load ptr, ptr %390, align 8
   %392 = getelementptr ptr, ptr %391, i32 6
   %393 = load ptr, ptr %392, align 8
-  %394 = call { i64, i64 } %393(ptr %390)
+  %394 = call { i64, i64 } @size_wrapper(ptr %393, ptr %390)
   %395 = extractvalue { i64, i64 } %394, 0
   %396 = call ptr @bump_malloc(i64 %395)
   %397 = alloca { ptr, ptr, ptr, i32 }, align 8

@@ -75,6 +75,10 @@ declare i1 @subtype_test(i64, i64, i64, i64, ptr)
 
 declare i1 @subtype_test_wrapper(ptr, i64, i64, i64, i64, ptr)
 
+declare { i64, i64 } @size_wrapper(ptr, ptr)
+
+declare ptr @typegetter_wrapper(ptr, ptr)
+
 declare void @coroutine_call(ptr)
 
 declare void @report_exception({ ptr })
@@ -272,7 +276,7 @@ define i32 @Channel_get_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, p
   %49 = load ptr, ptr %7, align 8
   %50 = getelementptr ptr, ptr %49, i32 6
   %51 = load ptr, ptr %50, align 8
-  %52 = call { i64, i64 } %51(ptr %7)
+  %52 = call { i64, i64 } @size_wrapper(ptr %51, ptr %7)
   %53 = extractvalue { i64, i64 } %52, 0
   %54 = call ptr @bump_malloc(i64 %53)
   %55 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 1
@@ -423,7 +427,7 @@ define void @Channel_put_new_valuePtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
   %48 = load ptr, ptr %5, align 8
   %49 = getelementptr ptr, ptr %48, i32 6
   %50 = load ptr, ptr %49, align 8
-  %51 = call { i64, i64 } %50(ptr %5)
+  %51 = call { i64, i64 } @size_wrapper(ptr %50, ptr %5)
   %52 = extractvalue { i64, i64 } %51, 0
   %53 = call ptr @bump_malloc(i64 %52)
   %54 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 1

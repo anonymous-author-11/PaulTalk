@@ -162,6 +162,10 @@ declare i1 @subtype_test(i64, i64, i64, i64, ptr)
 
 declare i1 @subtype_test_wrapper(ptr, i64, i64, i64, i64, ptr)
 
+declare { i64, i64 } @size_wrapper(ptr, ptr)
+
+declare ptr @typegetter_wrapper(ptr, ptr)
+
 declare void @coroutine_call(ptr)
 
 declare void @report_exception({ ptr })
@@ -968,7 +972,7 @@ define { ptr, ptr, ptr, i32 } @IntIterable_map_fFunctionPtri32_to_Ptri32({ ptr, 
   %22 = load ptr, ptr %21, align 8
   %23 = getelementptr ptr, ptr %22, i32 6
   %24 = load ptr, ptr %23, align 8
-  %25 = call { i64, i64 } %24(ptr %21)
+  %25 = call { i64, i64 } @size_wrapper(ptr %24, ptr %21)
   %26 = extractvalue { i64, i64 } %25, 0
   %27 = call ptr @bump_malloc(i64 %26)
   %28 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -1121,7 +1125,7 @@ define { ptr, ptr, ptr, i32 } @IntIterable_filter_fFunctionPtri32_to_Ptri1({ ptr
   %22 = load ptr, ptr %21, align 8
   %23 = getelementptr ptr, ptr %22, i32 6
   %24 = load ptr, ptr %23, align 8
-  %25 = call { i64, i64 } %24(ptr %21)
+  %25 = call { i64, i64 } @size_wrapper(ptr %24, ptr %21)
   %26 = extractvalue { i64, i64 } %25, 0
   %27 = call ptr @bump_malloc(i64 %26)
   %28 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -1293,7 +1297,7 @@ define { ptr, ptr, ptr, i32 } @IntIterable_chain_otherIntIterable({ ptr, ptr, pt
   %36 = load ptr, ptr %35, align 8
   %37 = getelementptr ptr, ptr %36, i32 6
   %38 = load ptr, ptr %37, align 8
-  %39 = call { i64, i64 } %38(ptr %35)
+  %39 = call { i64, i64 } @size_wrapper(ptr %38, ptr %35)
   %40 = extractvalue { i64, i64 } %39, 0
   %41 = call ptr @bump_malloc(i64 %40)
   %42 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -1493,7 +1497,7 @@ define { ptr, ptr, ptr, i32 } @IntIterable_interleave_otherIntIterable({ ptr, pt
   %36 = load ptr, ptr %35, align 8
   %37 = getelementptr ptr, ptr %36, i32 6
   %38 = load ptr, ptr %37, align 8
-  %39 = call { i64, i64 } %38(ptr %35)
+  %39 = call { i64, i64 } @size_wrapper(ptr %38, ptr %35)
   %40 = extractvalue { i64, i64 } %39, 0
   %41 = call ptr @bump_malloc(i64 %40)
   %42 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -1693,7 +1697,7 @@ define { ptr, ptr, ptr, i32 } @IntIterable_zip_otherIntIterable({ ptr, ptr, ptr,
   %36 = load ptr, ptr %35, align 8
   %37 = getelementptr ptr, ptr %36, i32 6
   %38 = load ptr, ptr %37, align 8
-  %39 = call { i64, i64 } %38(ptr %35)
+  %39 = call { i64, i64 } @size_wrapper(ptr %38, ptr %35)
   %40 = extractvalue { i64, i64 } %39, 0
   %41 = call ptr @bump_malloc(i64 %40)
   %42 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -1893,7 +1897,7 @@ define { ptr, ptr, ptr, i32 } @IntIterable_product_otherIntIterable({ ptr, ptr, 
   %36 = load ptr, ptr %35, align 8
   %37 = getelementptr ptr, ptr %36, i32 6
   %38 = load ptr, ptr %37, align 8
-  %39 = call { i64, i64 } %38(ptr %35)
+  %39 = call { i64, i64 } @size_wrapper(ptr %38, ptr %35)
   %40 = extractvalue { i64, i64 } %39, 0
   %41 = call ptr @bump_malloc(i64 %40)
   %42 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -2585,7 +2589,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable_iterator_({ ptr, ptr, ptr, i32 } %0, 
   %81 = load ptr, ptr %80, align 8
   %82 = getelementptr ptr, ptr %81, i32 6
   %83 = load ptr, ptr %82, align 8
-  %84 = call { i64, i64 } %83(ptr %80)
+  %84 = call { i64, i64 } @size_wrapper(ptr %83, ptr %80)
   %85 = extractvalue { i64, i64 } %84, 0
   %86 = call ptr @bump_malloc(i64 %85)
   %87 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -3649,7 +3653,7 @@ define { ptr, ptr, ptr, i32 } @FilterIterable_iterator_({ ptr, ptr, ptr, i32 } %
   %81 = load ptr, ptr %80, align 8
   %82 = getelementptr ptr, ptr %81, i32 6
   %83 = load ptr, ptr %82, align 8
-  %84 = call { i64, i64 } %83(ptr %80)
+  %84 = call { i64, i64 } @size_wrapper(ptr %83, ptr %80)
   %85 = extractvalue { i64, i64 } %84, 0
   %86 = call ptr @bump_malloc(i64 %85)
   %87 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4914,7 +4918,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable_iterator_({ ptr, ptr, ptr, i32 } %0
   %119 = load ptr, ptr %118, align 8
   %120 = getelementptr ptr, ptr %119, i32 6
   %121 = load ptr, ptr %120, align 8
-  %122 = call { i64, i64 } %121(ptr %118)
+  %122 = call { i64, i64 } @size_wrapper(ptr %121, ptr %118)
   %123 = extractvalue { i64, i64 } %122, 0
   %124 = call ptr @bump_malloc(i64 %123)
   %125 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -6364,7 +6368,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable_iterator_({ ptr, ptr, ptr, i32
   %119 = load ptr, ptr %118, align 8
   %120 = getelementptr ptr, ptr %119, i32 6
   %121 = load ptr, ptr %120, align 8
-  %122 = call { i64, i64 } %121(ptr %118)
+  %122 = call { i64, i64 } @size_wrapper(ptr %121, ptr %118)
   %123 = extractvalue { i64, i64 } %122, 0
   %124 = call ptr @bump_malloc(i64 %123)
   %125 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -7600,7 +7604,7 @@ define { ptr, ptr, ptr, i32 } @ZipIterable_iterator_({ ptr, ptr, ptr, i32 } %0, 
   %119 = load ptr, ptr %118, align 8
   %120 = getelementptr ptr, ptr %119, i32 6
   %121 = load ptr, ptr %120, align 8
-  %122 = call { i64, i64 } %121(ptr %118)
+  %122 = call { i64, i64 } @size_wrapper(ptr %121, ptr %118)
   %123 = extractvalue { i64, i64 } %122, 0
   %124 = call ptr @bump_malloc(i64 %123)
   %125 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -8707,7 +8711,7 @@ define { ptr, ptr, ptr, i32 } @ProductIterable_iterator_({ ptr, ptr, ptr, i32 } 
   %47 = load ptr, ptr %46, align 8
   %48 = getelementptr ptr, ptr %47, i32 6
   %49 = load ptr, ptr %48, align 8
-  %50 = call { i64, i64 } %49(ptr %46)
+  %50 = call { i64, i64 } @size_wrapper(ptr %49, ptr %46)
   %51 = extractvalue { i64, i64 } %50, 0
   %52 = call ptr @bump_malloc(i64 %51)
   %53 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -10496,7 +10500,7 @@ define { ptr, ptr, ptr, i32 } @Range_iterator_({ ptr, ptr, ptr, i32 } %0, { ptr,
   %55 = load ptr, ptr %54, align 8
   %56 = getelementptr ptr, ptr %55, i32 6
   %57 = load ptr, ptr %56, align 8
-  %58 = call { i64, i64 } %57(ptr %54)
+  %58 = call { i64, i64 } @size_wrapper(ptr %57, ptr %54)
   %59 = extractvalue { i64, i64 } %58, 0
   %60 = call ptr @bump_malloc(i64 %59)
   %61 = alloca { ptr, ptr, ptr, i32 }, align 8

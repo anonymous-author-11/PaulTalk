@@ -629,9 +629,15 @@ class LowerSizeAlignment(RewritePattern):
         size_alignment_tuple = llvm.LLVMStructType.from_type_list([IntegerType(64), IntegerType(64)])
         ftype = FunctionType.from_lists([llvm.LLVMPointerType.opaque()], [size_alignment_tuple])
         size_fn = llvm.LoadOp(size_fn_ptr.results[0], llvm.LLVMPointerType.opaque())
-        laundered = builtin.UnrealizedConversionCastOp(operands=[size_fn.results[0]], result_types=[ftype])
-        call = func.CallIndirect(laundered.results[0], [op.parameterization], [size_alignment_tuple])
-        rewriter.inline_block_before_matched_op(Block([vptr, size_fn_ptr, size_fn, laundered]))
+        #laundered = builtin.UnrealizedConversionCastOp(operands=[size_fn.results[0]], result_types=[ftype])
+        #call = func.CallIndirect(laundered.results[0], [op.parameterization], [size_alignment_tuple])
+
+        call = llvm.CallOp("size_wrapper", size_fn.results[0], op.parameterization, return_type=size_alignment_tuple)
+        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [2, 0])
+        call.properties["operandSegmentSizes"] = operandSegmentSizes
+        call.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+
+        rewriter.inline_block_before_matched_op(Block([vptr, size_fn_ptr, size_fn]))
         rewriter.replace_matched_op(call)
 
 class LowerNew(RewritePattern):
@@ -1850,14 +1856,18 @@ class LowerSizeInBytesDef(RewritePattern):
                 load1 = llvm.LoadOp(load0.results[0], llvm.LLVMPointerType.opaque())
                 size_fn_ptr = llvm.GEPOp(load1.results[0], [0, 6], pointee_type=llvm.LLVMArrayType.from_size_and_type(7, llvm.LLVMPointerType.opaque()))
                 size_fn = llvm.LoadOp(size_fn_ptr.results[0], llvm.LLVMPointerType.opaque())
-                ftype2 = FunctionType.from_lists([llvm.LLVMPointerType.opaque()], [return_type])
-                laundered = builtin.UnrealizedConversionCastOp(operands=[size_fn.results[0]], result_types=[ftype2])
-                call = func.CallIndirect(laundered.results[0], [load0.results[0]], [return_type])
+
+                size_alignment_tuple = llvm.LLVMStructType.from_type_list([IntegerType(64), IntegerType(64)])
+                call = llvm.CallOp("size_wrapper", size_fn.results[0], load0.results[0], return_type=size_alignment_tuple)
+                operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [2, 0])
+                call.properties["operandSegmentSizes"] = operandSegmentSizes
+                call.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+
                 dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
                 size = llvm.ExtractValueOp(dense_ary, call.results[0], IntegerType(64))
                 dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [1])
                 alignment = llvm.ExtractValueOp(dense_ary, call.results[0], IntegerType(64))
-                body_block.add_ops([gep, load0, load1, size_fn_ptr, size_fn, laundered, call, size, alignment])
+                body_block.add_ops([gep, load0, load1, size_fn_ptr, size_fn, call, size, alignment])
             else:
                 # a statically known field
                 size = TypeSizeOp.create(attributes={"typ":t}, result_types=[IntegerType(64)])
@@ -2091,9 +2101,12 @@ class LowerBoxDef(RewritePattern):
         size_fn = AddrOfOp.from_string(op.meth_name.data.replace("_box_","_size_"))
 
         size_alignment_tuple = llvm.LLVMStructType.from_type_list([IntegerType(64), IntegerType(64)])
-        size_fn_type = FunctionType.from_lists([llvm.LLVMPointerType.opaque()], [size_alignment_tuple])
-        laundered = builtin.UnrealizedConversionCastOp(operands=[size_fn.results[0]], result_types=[size_fn_type])
-        call = func.CallIndirect(laundered.results[0], [parameterization], [size_alignment_tuple])
+
+        call = llvm.CallOp("size_wrapper", size_fn.results[0], parameterization, return_type=size_alignment_tuple)
+        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [2, 0])
+        call.properties["operandSegmentSizes"] = operandSegmentSizes
+        call.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+
         dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
         data_size = llvm.ExtractValueOp(dense_ary, call.results[0], IntegerType(64))
         false = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 1), IntegerType(1))
@@ -2106,7 +2119,7 @@ class LowerBoxDef(RewritePattern):
         small_struct = ComparisonOp.make(data_size.results[0], threshold.results[0], "LE")
         br = cf.ConditionalBranch(small_struct.results[0], no_box_block, [], box_block, [])
 
-        entry.add_ops([alloca, gep, vptr, store, size_fn, laundered, call, data_size, false, threshold, small_struct, br])
+        entry.add_ops([alloca, gep, vptr, store, size_fn, call, data_size, false, threshold, small_struct, br])
 
         malloc = llvm.CallOp("bump_malloc", data_size.results[0], return_type=llvm.LLVMPointerType.opaque())
         operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
@@ -2155,9 +2168,12 @@ class LowerBoxUnionDef(RewritePattern):
         size_fn = AddrOfOp.from_string(op.meth_name.data.replace("_box_","_size_"))
 
         size_alignment_tuple = llvm.LLVMStructType.from_type_list([IntegerType(64), IntegerType(64)])
-        size_fn_type = FunctionType.from_lists([llvm.LLVMPointerType.opaque()], [size_alignment_tuple])
-        laundered = builtin.UnrealizedConversionCastOp(operands=[size_fn.results[0]], result_types=[size_fn_type])
-        call = func.CallIndirect(laundered.results[0], [parameterization], [size_alignment_tuple])
+
+        call = llvm.CallOp("size_wrapper", size_fn.results[0], parameterization, return_type=size_alignment_tuple)
+        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [2, 0])
+        call.properties["operandSegmentSizes"] = operandSegmentSizes
+        call.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+
         dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
         data_size = llvm.ExtractValueOp(dense_ary, call.results[0], IntegerType(64))
         false = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 1), IntegerType(1))
@@ -2173,7 +2189,7 @@ class LowerBoxUnionDef(RewritePattern):
         
         right_size = ComparisonOp.make(data_size.results[0], thirtytwo.results[0], "EQ")
         br = cf.ConditionalBranch(right_size.results[0], right_size_block, [], box_decision_block, [])
-        entry.add_ops([alloca, gep, vptr, store, size_fn, laundered, call, data_size, false, thirtytwo, right_size, br])
+        entry.add_ops([alloca, gep, vptr, store, size_fn, call, data_size, false, thirtytwo, right_size, br])
 
         threshold = llvm.ConstantOp(IntegerAttr.from_int_and_width(16, 64), IntegerType(64))
         small_struct = ComparisonOp.make(data_size.results[0], threshold.results[0], "LE")
@@ -2236,9 +2252,12 @@ class LowerUnboxDef(RewritePattern):
         size_fn = AddrOfOp.from_string(op.meth_name.data.replace("_unbox_","_size_"))
 
         size_alignment_tuple = llvm.LLVMStructType.from_type_list([IntegerType(64), IntegerType(64)])
-        size_fn_type = FunctionType.from_lists([llvm.LLVMPointerType.opaque()], [size_alignment_tuple])
-        laundered = builtin.UnrealizedConversionCastOp(operands=[size_fn.results[0]], result_types=[size_fn_type])
-        call = func.CallIndirect(laundered.results[0], [parameterization], [size_alignment_tuple])
+
+        call = llvm.CallOp("size_wrapper", size_fn.results[0], parameterization, return_type=size_alignment_tuple)
+        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [2, 0])
+        call.properties["operandSegmentSizes"] = operandSegmentSizes
+        call.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+
         dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
         data_size = llvm.ExtractValueOp(dense_ary, call.results[0], IntegerType(64))
 
@@ -2254,7 +2273,7 @@ class LowerUnboxDef(RewritePattern):
         memcpy0.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
         ret = llvm.ReturnOp.create()
         body_block.add_ops([
-            wrapped, data_ptr_ptr, data_ptr, size_fn, laundered, call, data_size, threshold, small_struct,
+            wrapped, data_ptr_ptr, data_ptr, size_fn, call, data_size, threshold, small_struct,
             source, false, memcpy0, ret
         ])
 
@@ -2397,12 +2416,14 @@ class LowerGetTypeField(RewritePattern):
         data_ptr = llvm.LoadOp(data_ptr_ptr.results[0], llvm.LLVMPointerType.opaque())
         attr_dict = {"vtable_bytes":op.vtable_bytes, "offset":op.offset}
         accessor = FieldAccessOp.create(operands=[op.fat_ptr], attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
-        
-        ftype = FunctionType.from_lists([llvm.LLVMPointerType.opaque()], [llvm.LLVMPointerType.opaque()])
-        cast0 = builtin.UnrealizedConversionCastOp.create(operands=[accessor.results[0]], result_types=[ftype])
-        result = func.CallIndirect(cast0.results[0], [data_ptr.results[0]], [llvm.LLVMPointerType.opaque()])
-        rewriter.inline_block_before_matched_op(Block([data_ptr_ptr, data_ptr, accessor, cast0]))
-        rewriter.replace_matched_op(result)
+
+        call = llvm.CallOp("typegetter_wrapper", accessor.results[0], data_ptr.results[0], return_type=llvm.LLVMPointerType.opaque())
+        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [2, 0])
+        call.properties["operandSegmentSizes"] = operandSegmentSizes
+        call.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+    
+        rewriter.inline_block_before_matched_op(Block([data_ptr_ptr, data_ptr, accessor]))
+        rewriter.replace_matched_op(call)
 
 class LowerSetField(RewritePattern):
     @op_type_rewrite_pattern

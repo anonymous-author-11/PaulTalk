@@ -10,6 +10,7 @@ from utils import *
 def parse(file_name) -> AST:
     try:
         with open(file_name) as source: import_text = source.read()
+        if file_name != "builtins.mini": import_text = "import builtins;\n\n" + import_text
         parser = Lark.open("grammar.lark", parser='lalr', propagate_positions=True)
         tree = parser.parse(import_text)
         tree = CSTTransformer(file_name).transform(tree)

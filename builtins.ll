@@ -91,6 +91,10 @@ declare i1 @subtype_test(i64, i64, i64, i64, ptr)
 
 declare i1 @subtype_test_wrapper(ptr, i64, i64, i64, i64, ptr)
 
+declare { i64, i64 } @size_wrapper(ptr, ptr)
+
+declare ptr @typegetter_wrapper(ptr, ptr)
+
 declare void @coroutine_call(ptr)
 
 define { i64, i64 } @_size_Object(ptr %0) {
@@ -114,7 +118,7 @@ define { ptr, i160 } @_box_bool_typ(ptr %0, ptr %1) {
   %3 = alloca { ptr, i160 }, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
   store ptr @bool_typ, ptr %3, align 8
-  %5 = call { i64, i64 } @_size_bool_typ(ptr %1)
+  %5 = call { i64, i64 } @size_wrapper(ptr @_size_bool_typ, ptr %1)
   %6 = extractvalue { i64, i64 } %5, 0
   %7 = icmp sle i64 %6, 16
   br i1 %7, label %10, label %8
@@ -144,7 +148,7 @@ define void @_unbox_bool_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
   store { ptr, i160 } %0, ptr %4, align 8
   %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
   %6 = load ptr, ptr %5, align 8
-  %7 = call { i64, i64 } @_size_bool_typ(ptr %1)
+  %7 = call { i64, i64 } @size_wrapper(ptr @_size_bool_typ, ptr %1)
   %8 = extractvalue { i64, i64 } %7, 0
   %9 = icmp sle i64 %8, 16
   %10 = select i1 %9, ptr %5, ptr %6
@@ -169,7 +173,7 @@ define { ptr, i160 } @_box_i8_typ(ptr %0, ptr %1) {
   %3 = alloca { ptr, i160 }, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
   store ptr @i8_typ, ptr %3, align 8
-  %5 = call { i64, i64 } @_size_i8_typ(ptr %1)
+  %5 = call { i64, i64 } @size_wrapper(ptr @_size_i8_typ, ptr %1)
   %6 = extractvalue { i64, i64 } %5, 0
   %7 = icmp sle i64 %6, 16
   br i1 %7, label %10, label %8
@@ -199,7 +203,7 @@ define void @_unbox_i8_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
   store { ptr, i160 } %0, ptr %4, align 8
   %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
   %6 = load ptr, ptr %5, align 8
-  %7 = call { i64, i64 } @_size_i8_typ(ptr %1)
+  %7 = call { i64, i64 } @size_wrapper(ptr @_size_i8_typ, ptr %1)
   %8 = extractvalue { i64, i64 } %7, 0
   %9 = icmp sle i64 %8, 16
   %10 = select i1 %9, ptr %5, ptr %6
@@ -224,7 +228,7 @@ define { ptr, i160 } @_box_i32_typ(ptr %0, ptr %1) {
   %3 = alloca { ptr, i160 }, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
   store ptr @i32_typ, ptr %3, align 8
-  %5 = call { i64, i64 } @_size_i32_typ(ptr %1)
+  %5 = call { i64, i64 } @size_wrapper(ptr @_size_i32_typ, ptr %1)
   %6 = extractvalue { i64, i64 } %5, 0
   %7 = icmp sle i64 %6, 16
   br i1 %7, label %10, label %8
@@ -254,7 +258,7 @@ define void @_unbox_i32_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
   store { ptr, i160 } %0, ptr %4, align 8
   %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
   %6 = load ptr, ptr %5, align 8
-  %7 = call { i64, i64 } @_size_i32_typ(ptr %1)
+  %7 = call { i64, i64 } @size_wrapper(ptr @_size_i32_typ, ptr %1)
   %8 = extractvalue { i64, i64 } %7, 0
   %9 = icmp sle i64 %8, 16
   %10 = select i1 %9, ptr %5, ptr %6
@@ -279,7 +283,7 @@ define { ptr, i160 } @_box_i64_typ(ptr %0, ptr %1) {
   %3 = alloca { ptr, i160 }, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
   store ptr @i64_typ, ptr %3, align 8
-  %5 = call { i64, i64 } @_size_i64_typ(ptr %1)
+  %5 = call { i64, i64 } @size_wrapper(ptr @_size_i64_typ, ptr %1)
   %6 = extractvalue { i64, i64 } %5, 0
   %7 = icmp sle i64 %6, 16
   br i1 %7, label %10, label %8
@@ -309,7 +313,7 @@ define void @_unbox_i64_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
   store { ptr, i160 } %0, ptr %4, align 8
   %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
   %6 = load ptr, ptr %5, align 8
-  %7 = call { i64, i64 } @_size_i64_typ(ptr %1)
+  %7 = call { i64, i64 } @size_wrapper(ptr @_size_i64_typ, ptr %1)
   %8 = extractvalue { i64, i64 } %7, 0
   %9 = icmp sle i64 %8, 16
   %10 = select i1 %9, ptr %5, ptr %6
@@ -334,7 +338,7 @@ define { ptr, i160 } @_box_i128_typ(ptr %0, ptr %1) {
   %3 = alloca { ptr, i160 }, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
   store ptr @i128_typ, ptr %3, align 8
-  %5 = call { i64, i64 } @_size_i128_typ(ptr %1)
+  %5 = call { i64, i64 } @size_wrapper(ptr @_size_i128_typ, ptr %1)
   %6 = extractvalue { i64, i64 } %5, 0
   %7 = icmp sle i64 %6, 16
   br i1 %7, label %10, label %8
@@ -364,7 +368,7 @@ define void @_unbox_i128_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
   store { ptr, i160 } %0, ptr %4, align 8
   %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
   %6 = load ptr, ptr %5, align 8
-  %7 = call { i64, i64 } @_size_i128_typ(ptr %1)
+  %7 = call { i64, i64 } @size_wrapper(ptr @_size_i128_typ, ptr %1)
   %8 = extractvalue { i64, i64 } %7, 0
   %9 = icmp sle i64 %8, 16
   %10 = select i1 %9, ptr %5, ptr %6
@@ -389,7 +393,7 @@ define { ptr, i160 } @_box_f64_typ(ptr %0, ptr %1) {
   %3 = alloca { ptr, i160 }, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
   store ptr @f64_typ, ptr %3, align 8
-  %5 = call { i64, i64 } @_size_f64_typ(ptr %1)
+  %5 = call { i64, i64 } @size_wrapper(ptr @_size_f64_typ, ptr %1)
   %6 = extractvalue { i64, i64 } %5, 0
   %7 = icmp sle i64 %6, 16
   br i1 %7, label %10, label %8
@@ -419,7 +423,7 @@ define void @_unbox_f64_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
   store { ptr, i160 } %0, ptr %4, align 8
   %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
   %6 = load ptr, ptr %5, align 8
-  %7 = call { i64, i64 } @_size_f64_typ(ptr %1)
+  %7 = call { i64, i64 } @size_wrapper(ptr @_size_f64_typ, ptr %1)
   %8 = extractvalue { i64, i64 } %7, 0
   %9 = icmp sle i64 %8, 16
   %10 = select i1 %9, ptr %5, ptr %6
@@ -444,7 +448,7 @@ define { ptr, i160 } @_box_nil_typ(ptr %0, ptr %1) {
   %3 = alloca { ptr, i160 }, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
   store ptr @nil_typ, ptr %3, align 8
-  %5 = call { i64, i64 } @_size_nil_typ(ptr %1)
+  %5 = call { i64, i64 } @size_wrapper(ptr @_size_nil_typ, ptr %1)
   %6 = extractvalue { i64, i64 } %5, 0
   %7 = icmp sle i64 %6, 16
   br i1 %7, label %10, label %8
@@ -474,7 +478,7 @@ define void @_unbox_nil_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
   store { ptr, i160 } %0, ptr %4, align 8
   %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
   %6 = load ptr, ptr %5, align 8
-  %7 = call { i64, i64 } @_size_nil_typ(ptr %1)
+  %7 = call { i64, i64 } @size_wrapper(ptr @_size_nil_typ, ptr %1)
   %8 = extractvalue { i64, i64 } %7, 0
   %9 = icmp sle i64 %8, 16
   %10 = select i1 %9, ptr %5, ptr %6
@@ -512,7 +516,7 @@ define { ptr, i160 } @_box_nothing_typ(ptr %0, ptr %1) {
   %3 = alloca { ptr, i160 }, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
   store ptr @nothing_typ, ptr %3, align 8
-  %5 = call { i64, i64 } @_size_nothing_typ(ptr %1)
+  %5 = call { i64, i64 } @size_wrapper(ptr @_size_nothing_typ, ptr %1)
   %6 = extractvalue { i64, i64 } %5, 0
   %7 = icmp sle i64 %6, 16
   br i1 %7, label %10, label %8
@@ -542,7 +546,7 @@ define void @_unbox_nothing_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
   store { ptr, i160 } %0, ptr %4, align 8
   %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
   %6 = load ptr, ptr %5, align 8
-  %7 = call { i64, i64 } @_size_nothing_typ(ptr %1)
+  %7 = call { i64, i64 } @size_wrapper(ptr @_size_nothing_typ, ptr %1)
   %8 = extractvalue { i64, i64 } %7, 0
   %9 = icmp sle i64 %8, 16
   %10 = select i1 %9, ptr %5, ptr %6
@@ -567,7 +571,7 @@ define { ptr, i160 } @_box_coroutine_typ(ptr %0, ptr %1) {
   %3 = alloca { ptr, i160 }, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
   store ptr @coroutine_typ, ptr %3, align 8
-  %5 = call { i64, i64 } @_size_coroutine_typ(ptr %1)
+  %5 = call { i64, i64 } @size_wrapper(ptr @_size_coroutine_typ, ptr %1)
   %6 = extractvalue { i64, i64 } %5, 0
   %7 = icmp sle i64 %6, 16
   br i1 %7, label %10, label %8
@@ -597,7 +601,7 @@ define void @_unbox_coroutine_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
   store { ptr, i160 } %0, ptr %4, align 8
   %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
   %6 = load ptr, ptr %5, align 8
-  %7 = call { i64, i64 } @_size_coroutine_typ(ptr %1)
+  %7 = call { i64, i64 } @size_wrapper(ptr @_size_coroutine_typ, ptr %1)
   %8 = extractvalue { i64, i64 } %7, 0
   %9 = icmp sle i64 %8, 16
   %10 = select i1 %9, ptr %5, ptr %6
@@ -622,7 +626,7 @@ define { ptr, i160 } @_box_function_typ(ptr %0, ptr %1) {
   %3 = alloca { ptr, i160 }, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
   store ptr @function_typ, ptr %3, align 8
-  %5 = call { i64, i64 } @_size_function_typ(ptr %1)
+  %5 = call { i64, i64 } @size_wrapper(ptr @_size_function_typ, ptr %1)
   %6 = extractvalue { i64, i64 } %5, 0
   %7 = icmp sle i64 %6, 16
   br i1 %7, label %10, label %8
@@ -652,7 +656,7 @@ define void @_unbox_function_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
   store { ptr, i160 } %0, ptr %4, align 8
   %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
   %6 = load ptr, ptr %5, align 8
-  %7 = call { i64, i64 } @_size_function_typ(ptr %1)
+  %7 = call { i64, i64 } @size_wrapper(ptr @_size_function_typ, ptr %1)
   %8 = extractvalue { i64, i64 } %7, 0
   %9 = icmp sle i64 %8, 16
   %10 = select i1 %9, ptr %5, ptr %6
@@ -677,7 +681,7 @@ define { ptr, i160 } @_box_buffer_typ(ptr %0, ptr %1) {
   %3 = alloca { ptr, i160 }, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
   store ptr @buffer_typ, ptr %3, align 8
-  %5 = call { i64, i64 } @_size_buffer_typ(ptr %1)
+  %5 = call { i64, i64 } @size_wrapper(ptr @_size_buffer_typ, ptr %1)
   %6 = extractvalue { i64, i64 } %5, 0
   %7 = icmp sle i64 %6, 16
   br i1 %7, label %10, label %8
@@ -707,7 +711,7 @@ define void @_unbox_buffer_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
   store { ptr, i160 } %0, ptr %4, align 8
   %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
   %6 = load ptr, ptr %5, align 8
-  %7 = call { i64, i64 } @_size_buffer_typ(ptr %1)
+  %7 = call { i64, i64 } @size_wrapper(ptr @_size_buffer_typ, ptr %1)
   %8 = extractvalue { i64, i64 } %7, 0
   %9 = icmp sle i64 %8, 16
   %10 = select i1 %9, ptr %5, ptr %6
@@ -719,7 +723,7 @@ define { ptr, i160 } @_box_tuple_typ(ptr %0, ptr %1) {
   %3 = alloca { ptr, i160 }, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
   store ptr @tuple_typ, ptr %3, align 8
-  %5 = call { i64, i64 } @_size_tuple_typ(ptr %1)
+  %5 = call { i64, i64 } @size_wrapper(ptr @_size_tuple_typ, ptr %1)
   %6 = extractvalue { i64, i64 } %5, 0
   %7 = icmp sle i64 %6, 16
   br i1 %7, label %10, label %8
@@ -749,7 +753,7 @@ define void @_unbox_tuple_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
   store { ptr, i160 } %0, ptr %4, align 8
   %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
   %6 = load ptr, ptr %5, align 8
-  %7 = call { i64, i64 } @_size_tuple_typ(ptr %1)
+  %7 = call { i64, i64 } @size_wrapper(ptr @_size_tuple_typ, ptr %1)
   %8 = extractvalue { i64, i64 } %7, 0
   %9 = icmp sle i64 %8, 16
   %10 = select i1 %9, ptr %5, ptr %6
@@ -761,7 +765,7 @@ define { ptr, i160 } @_box_union_typ(ptr %0, ptr %1) {
   %3 = alloca { ptr, i160 }, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
   store ptr @union_typ, ptr %3, align 8
-  %5 = call { i64, i64 } @_size_union_typ(ptr %1)
+  %5 = call { i64, i64 } @size_wrapper(ptr @_size_union_typ, ptr %1)
   %6 = extractvalue { i64, i64 } %5, 0
   %7 = icmp eq i64 %6, 32
   br i1 %7, label %8, label %10

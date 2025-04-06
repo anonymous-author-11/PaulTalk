@@ -438,11 +438,23 @@ module @patterns {
       %subtype_test_with_region = pdl.apply_native_rewrite "add_region"(%subtype_test_decl : !pdl.operation) : !pdl.operation
       pdl.erase %subtype_test_decl
       
-      %wrapper = pdl.attribute = "subtype_test_wrapper"
+      %subtype_wrapper = pdl.attribute = "subtype_test_wrapper"
       %func_type_attr11 = pdl.attribute = !llvm.func<i1 (ptr, i64, i64, i64, i64, ptr)>
-      %subtype_test_wrapper_decl = pdl.operation "llvm.func" {"sym_name" = %wrapper, "function_type" = %func_type_attr11, "linkage" = %linkage}
+      %subtype_test_wrapper_decl = pdl.operation "llvm.func" {"sym_name" = %subtype_wrapper, "function_type" = %func_type_attr11, "linkage" = %linkage}
       %subtype_test_wrapper_with_region = pdl.apply_native_rewrite "add_region"(%subtype_test_wrapper_decl : !pdl.operation) : !pdl.operation
       pdl.erase %subtype_test_wrapper_decl
+
+      %size_wrapper = pdl.attribute = "size_wrapper"
+      %func_type_attr5153 = pdl.attribute = !llvm.func<!llvm.struct<(i64, i64)> (ptr, ptr)>
+      %size_wrapper_decl = pdl.operation "llvm.func" {"sym_name" = %size_wrapper, "function_type" = %func_type_attr5153, "linkage" = %linkage}
+      %size_wrapper_with_region = pdl.apply_native_rewrite "add_region"(%size_wrapper_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %size_wrapper_decl
+
+      %typegetter = pdl.attribute = "typegetter_wrapper"
+      %func_type_attr5154 = pdl.attribute = !llvm.func<ptr (ptr, ptr)>
+      %typegetter_decl = pdl.operation "llvm.func" {"sym_name" = %typegetter, "function_type" = %func_type_attr5154, "linkage" = %linkage}
+      %typegetter_with_region = pdl.apply_native_rewrite "add_region"(%typegetter_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %typegetter_decl
 
       %coro_call = pdl.attribute = "coroutine_call"
       %func_type_attr12 = pdl.attribute = !llvm.func<void (ptr)>
