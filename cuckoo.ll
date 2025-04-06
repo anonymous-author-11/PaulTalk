@@ -116,6 +116,14 @@ declare { i64, i64 } @size_wrapper(ptr, ptr)
 
 declare ptr @typegetter_wrapper(ptr, ptr)
 
+declare { ptr, i160 } @box_wrapper(ptr, ptr, ptr)
+
+declare void @unbox_wrapper(ptr, { ptr, i160 }, ptr, ptr)
+
+declare ptr @behavior_wrapper(ptr, { ptr, ptr, ptr, i32 }, ptr)
+
+declare ptr @class_behavior_wrapper(ptr, ptr)
+
 declare void @coroutine_call(ptr)
 
 declare void @report_exception({ ptr })
@@ -282,7 +290,7 @@ define { ptr, i160 } @Entry_getter_key(ptr %0) {
   %27 = load ptr, ptr %26, align 8
   %28 = getelementptr ptr, ptr %27, i32 7
   %29 = load ptr, ptr %28, align 8
-  %30 = call { ptr, i160 } %29(ptr %25, ptr %26)
+  %30 = call { ptr, i160 } @box_wrapper(ptr %29, ptr %25, ptr %26)
   ret { ptr, i160 } %30
 }
 
@@ -315,7 +323,7 @@ define void @Entry_setter_key(ptr %0, { ptr, i160 } %1) {
   %28 = load ptr, ptr %27, align 8
   %29 = getelementptr ptr, ptr %28, i32 8
   %30 = load ptr, ptr %29, align 8
-  call void %30({ ptr, i160 } %1, ptr %27, ptr %26)
+  call void @unbox_wrapper(ptr %30, { ptr, i160 } %1, ptr %27, ptr %26)
   ret void
 }
 
@@ -363,7 +371,7 @@ define { ptr, i160 } @Entry_getter_value(ptr %0) {
   %42 = load ptr, ptr %41, align 8
   %43 = getelementptr ptr, ptr %42, i32 7
   %44 = load ptr, ptr %43, align 8
-  %45 = call { ptr, i160 } %44(ptr %39, ptr %41)
+  %45 = call { ptr, i160 } @box_wrapper(ptr %44, ptr %39, ptr %41)
   ret { ptr, i160 } %45
 }
 
@@ -411,7 +419,7 @@ define void @Entry_setter_value(ptr %0, { ptr, i160 } %1) {
   %43 = load ptr, ptr %42, align 8
   %44 = getelementptr ptr, ptr %43, i32 8
   %45 = load ptr, ptr %44, align 8
-  call void %45({ ptr, i160 } %1, ptr %42, ptr %40)
+  call void @unbox_wrapper(ptr %45, { ptr, i160 } %1, ptr %42, ptr %40)
   ret void
 }
 
@@ -468,7 +476,7 @@ define void @Entry_init_keyK_valueV_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0
   %45 = insertvalue { ptr, i160 } undef, ptr %44, 0
   %46 = load i160, ptr %29, align 4
   %47 = insertvalue { ptr, i160 } %45, i160 %46, 1
-  call void %43(ptr %34, { ptr, i160 } %47)
+  call void %43(ptr %34, { ptr, i160 } %47) #1
   %48 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %4, ptr %48, align 8
   %49 = alloca i160, align 8
@@ -500,7 +508,7 @@ define void @Entry_init_keyK_valueV_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0
   %71 = insertvalue { ptr, i160 } undef, ptr %70, 0
   %72 = load i160, ptr %55, align 4
   %73 = insertvalue { ptr, i160 } %71, i160 %72, 1
-  call void %69(ptr %60, { ptr, i160 } %73)
+  call void %69(ptr %60, { ptr, i160 } %73) #1
   %74 = getelementptr { ptr, ptr, ptr, i32 }, ptr %9, i32 0, i32 1
   %75 = load ptr, ptr %74, align 8
   %76 = load ptr, ptr %9, align 8
@@ -512,7 +520,7 @@ define void @Entry_init_keyK_valueV_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0
   %82 = load ptr, ptr %81, align 8
   %83 = getelementptr { ptr, ptr }, ptr %82, i32 0, i32 1
   %84 = load ptr, ptr %83, align 8
-  call void %84(ptr %75, i32 %5)
+  call void %84(ptr %75, i32 %5) #1
   ret void
 }
 
@@ -591,7 +599,7 @@ define { ptr, i160 } @Entry_key_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32
   %27 = load ptr, ptr %26, align 8
   %28 = getelementptr { ptr, ptr }, ptr %27, i32 0, i32 0
   %29 = load ptr, ptr %28, align 8
-  %30 = call { ptr, i160 } %29(ptr %20)
+  %30 = call { ptr, i160 } %29(ptr %20) #2
   %31 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %30, ptr %31, align 8
   %32 = alloca i160, align 8
@@ -657,7 +665,7 @@ define { ptr, i160 } @Entry_value_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i
   %27 = load ptr, ptr %26, align 8
   %28 = getelementptr { ptr, ptr }, ptr %27, i32 0, i32 0
   %29 = load ptr, ptr %28, align 8
-  %30 = call { ptr, i160 } %29(ptr %20)
+  %30 = call { ptr, i160 } %29(ptr %20) #2
   %31 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %30, ptr %31, align 8
   %32 = alloca i160, align 8
@@ -723,7 +731,7 @@ define i32 @Entry_primary_hash_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 
   %27 = load ptr, ptr %26, align 8
   %28 = getelementptr { ptr, ptr }, ptr %27, i32 0, i32 0
   %29 = load ptr, ptr %28, align 8
-  %30 = call i32 %29(ptr %20)
+  %30 = call i32 %29(ptr %20) #2
   ret i32 %30
 }
 
@@ -769,7 +777,7 @@ define { ptr, ptr, ptr, i32 } @Entry_to_pair_({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %27 = load ptr, ptr %26, align 8
   %28 = getelementptr { ptr, ptr }, ptr %27, i32 0, i32 0
   %29 = load ptr, ptr %28, align 8
-  %30 = call { ptr, i160 } %29(ptr %20)
+  %30 = call { ptr, i160 } %29(ptr %20) #2
   %31 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %30, ptr %31, align 8
   %32 = alloca i160, align 8
@@ -791,7 +799,7 @@ define { ptr, ptr, ptr, i32 } @Entry_to_pair_({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %46 = load ptr, ptr %45, align 8
   %47 = getelementptr { ptr, ptr }, ptr %46, i32 0, i32 0
   %48 = load ptr, ptr %47, align 8
-  %49 = call { ptr, i160 } %48(ptr %39)
+  %49 = call { ptr, i160 } %48(ptr %39) #2
   %50 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %49, ptr %50, align 8
   %51 = alloca i160, align 8
@@ -855,7 +863,7 @@ define { ptr, ptr, ptr, i32 } @Entry_to_pair_({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %99 = load ptr, ptr %98, align 8
   %100 = getelementptr { ptr, ptr }, ptr %99, i32 0, i32 0
   %101 = load ptr, ptr %100, align 8
-  %102 = call { ptr, i160 } %101(ptr %92)
+  %102 = call { ptr, i160 } %101(ptr %92) #2
   %103 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %102, ptr %103, align 8
   %104 = alloca i160, align 8
@@ -877,7 +885,7 @@ define { ptr, ptr, ptr, i32 } @Entry_to_pair_({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %118 = load ptr, ptr %117, align 8
   %119 = getelementptr { ptr, ptr }, ptr %118, i32 0, i32 0
   %120 = load ptr, ptr %119, align 8
-  %121 = call { ptr, i160 } %120(ptr %111)
+  %121 = call { ptr, i160 } %120(ptr %111) #2
   %122 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %121, ptr %122, align 8
   %123 = alloca i160, align 8
@@ -954,7 +962,7 @@ define { ptr, ptr, ptr, i32 } @Entry_to_pair_({ ptr, ptr, ptr, i32 } %0, { ptr, 
   store ptr %133, ptr %185, align 8
   %186 = getelementptr { ptr, ptr }, ptr %184, i32 0, i32 1
   store ptr %141, ptr %186, align 8
-  %187 = call ptr %183({ ptr, ptr, ptr, i32 } %156, ptr %184)
+  %187 = call ptr @behavior_wrapper(ptr %183, { ptr, ptr, ptr, i32 } %156, ptr %184)
   call void %187({ ptr, ptr, ptr, i32 } %156, { ptr, ptr, ptr, i32 } %156, ptr %176, { ptr, i160 } %136, { ptr, i160 } %144)
   %188 = alloca { ptr, ptr, ptr, i32 }, align 8
   %189 = getelementptr { ptr, ptr, ptr, i32 }, ptr %87, i32 0, i32 0
@@ -1655,7 +1663,7 @@ define void @HashMap_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ pt
   %32 = load ptr, ptr %31, align 8
   %33 = load ptr, ptr %21, align 8
   %34 = insertvalue { ptr } undef, ptr %33, 0
-  call void %32(ptr %23, { ptr } %34)
+  call void %32(ptr %23, { ptr } %34) #1
   %35 = alloca ptr, align 8
   store { ptr } %4, ptr %35, align 8
   %36 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 1
@@ -1671,7 +1679,7 @@ define void @HashMap_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ pt
   %46 = load ptr, ptr %45, align 8
   %47 = load ptr, ptr %35, align 8
   %48 = insertvalue { ptr } undef, ptr %47, 0
-  call void %46(ptr %37, { ptr } %48)
+  call void %46(ptr %37, { ptr } %48) #1
   %49 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 1
   %50 = load ptr, ptr %49, align 8
   %51 = load ptr, ptr %8, align 8
@@ -1774,7 +1782,7 @@ define void @HashMap_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ pt
   store ptr @i32_typ, ptr %131, align 8
   %132 = getelementptr { ptr, ptr }, ptr %130, i32 0, i32 1
   store ptr @i32_typ, ptr %132, align 8
-  %133 = call ptr %129({ ptr, ptr, ptr, i32 } %102, ptr %130)
+  %133 = call ptr @behavior_wrapper(ptr %129, { ptr, ptr, ptr, i32 } %102, ptr %130)
   call void %133({ ptr, ptr, ptr, i32 } %102, { ptr, ptr, ptr, i32 } %102, ptr %122, i32 8, i32 8)
   %134 = alloca { ptr, ptr, ptr, i32 }, align 8
   %135 = getelementptr { ptr, ptr, ptr, i32 }, ptr %87, i32 0, i32 0
@@ -1817,7 +1825,7 @@ define void @HashMap_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ pt
   %167 = getelementptr { ptr, ptr, ptr, i32 }, ptr %134, i32 0, i32 3
   %168 = load i32, ptr %167, align 4
   %169 = insertvalue { ptr, ptr, ptr, i32 } %166, i32 %168, 3
-  call void %157(ptr %148, { ptr, ptr, ptr, i32 } %169)
+  call void %157(ptr %148, { ptr, ptr, ptr, i32 } %169) #1
   %170 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 1
   %171 = load ptr, ptr %170, align 8
   %172 = load ptr, ptr %8, align 8
@@ -1920,7 +1928,7 @@ define void @HashMap_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ pt
   store ptr @i32_typ, ptr %252, align 8
   %253 = getelementptr { ptr, ptr }, ptr %251, i32 0, i32 1
   store ptr @i32_typ, ptr %253, align 8
-  %254 = call ptr %250({ ptr, ptr, ptr, i32 } %223, ptr %251)
+  %254 = call ptr @behavior_wrapper(ptr %250, { ptr, ptr, ptr, i32 } %223, ptr %251)
   call void %254({ ptr, ptr, ptr, i32 } %223, { ptr, ptr, ptr, i32 } %223, ptr %243, i32 8, i32 8)
   %255 = alloca { ptr, ptr, ptr, i32 }, align 8
   %256 = getelementptr { ptr, ptr, ptr, i32 }, ptr %208, i32 0, i32 0
@@ -1963,7 +1971,7 @@ define void @HashMap_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ pt
   %288 = getelementptr { ptr, ptr, ptr, i32 }, ptr %255, i32 0, i32 3
   %289 = load i32, ptr %288, align 4
   %290 = insertvalue { ptr, ptr, ptr, i32 } %287, i32 %289, 3
-  call void %278(ptr %269, { ptr, ptr, ptr, i32 } %290)
+  call void %278(ptr %269, { ptr, ptr, ptr, i32 } %290) #1
   %291 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 1
   %292 = load ptr, ptr %291, align 8
   %293 = load ptr, ptr %8, align 8
@@ -1975,7 +1983,7 @@ define void @HashMap_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ pt
   %299 = load ptr, ptr %298, align 8
   %300 = getelementptr { ptr, ptr }, ptr %299, i32 0, i32 1
   %301 = load ptr, ptr %300, align 8
-  call void %301(ptr %292, i32 0)
+  call void %301(ptr %292, i32 0) #1
   %302 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 1
   %303 = load ptr, ptr %302, align 8
   %304 = load ptr, ptr %8, align 8
@@ -1987,7 +1995,7 @@ define void @HashMap_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ pt
   %310 = load ptr, ptr %309, align 8
   %311 = getelementptr { ptr, ptr }, ptr %310, i32 0, i32 1
   %312 = load ptr, ptr %311, align 8
-  call void %312(ptr %303, i32 100)
+  call void %312(ptr %303, i32 100) #1
   ret void
 }
 
@@ -2075,7 +2083,7 @@ define i32 @HashMap_hash1_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %43 = load ptr, ptr %42, align 8
   %44 = getelementptr { ptr, ptr }, ptr %43, i32 0, i32 0
   %45 = load ptr, ptr %44, align 8
-  %46 = call { ptr } %45(ptr %36)
+  %46 = call { ptr } %45(ptr %36) #2
   %47 = alloca ptr, align 8
   store { ptr } %46, ptr %47, align 8
   %48 = load ptr, ptr %47, align 8
@@ -2182,7 +2190,7 @@ define i32 @HashMap_index1_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %28 = load ptr, ptr %27, align 8
   %29 = getelementptr { ptr, ptr }, ptr %28, i32 0, i32 0
   %30 = load ptr, ptr %29, align 8
-  %31 = call { ptr, ptr, ptr, i32 } %30(ptr %21)
+  %31 = call { ptr, ptr, ptr, i32 } %30(ptr %21) #2
   %32 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %31, ptr %32, align 8
   %33 = call ptr @llvm.invariant.start.p0(i64 16, ptr %32)
@@ -2225,7 +2233,7 @@ define i32 @HashMap_index1_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %69 = getelementptr ptr, ptr %68, i32 8
   %70 = load ptr, ptr %69, align 8
   %71 = alloca {}, align 8
-  %72 = call ptr %70({ ptr, ptr, ptr, i32 } %45, ptr %71)
+  %72 = call ptr @behavior_wrapper(ptr %70, { ptr, ptr, ptr, i32 } %45, ptr %71)
   %73 = call i32 %72({ ptr, ptr, ptr, i32 } %45, { ptr, ptr, ptr, i32 } %45, ptr %65)
   %74 = sub i32 %73, 1
   %75 = and i32 %3, %74
@@ -2316,7 +2324,7 @@ define i32 @HashMap_index2_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %58 = alloca { ptr }, align 8
   %59 = getelementptr { ptr }, ptr %58, i32 0, i32 0
   store ptr @i32_typ, ptr %59, align 8
-  %60 = call ptr %57({ ptr, ptr, ptr, i32 } %31, ptr %58)
+  %60 = call ptr @behavior_wrapper(ptr %57, { ptr, ptr, ptr, i32 } %31, ptr %58)
   %61 = call i32 %60({ ptr, ptr, ptr, i32 } %31, { ptr, ptr, ptr, i32 } %31, ptr %51, i32 %3)
   %62 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 1
   %63 = load ptr, ptr %62, align 8
@@ -2329,7 +2337,7 @@ define i32 @HashMap_index2_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %70 = load ptr, ptr %69, align 8
   %71 = getelementptr { ptr, ptr }, ptr %70, i32 0, i32 0
   %72 = load ptr, ptr %71, align 8
-  %73 = call { ptr, ptr, ptr, i32 } %72(ptr %63)
+  %73 = call { ptr, ptr, ptr, i32 } %72(ptr %63) #2
   %74 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %73, ptr %74, align 8
   %75 = call ptr @llvm.invariant.start.p0(i64 16, ptr %74)
@@ -2372,7 +2380,7 @@ define i32 @HashMap_index2_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %111 = getelementptr ptr, ptr %110, i32 8
   %112 = load ptr, ptr %111, align 8
   %113 = alloca {}, align 8
-  %114 = call ptr %112({ ptr, ptr, ptr, i32 } %87, ptr %113)
+  %114 = call ptr @behavior_wrapper(ptr %112, { ptr, ptr, ptr, i32 } %87, ptr %113)
   %115 = call i32 %114({ ptr, ptr, ptr, i32 } %87, { ptr, ptr, ptr, i32 } %87, ptr %107)
   %116 = sub i32 %115, 1
   %117 = and i32 %61, %116
@@ -2542,7 +2550,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   %121 = load ptr, ptr %120, align 8
   %122 = getelementptr { ptr, ptr }, ptr %121, i32 0, i32 0
   %123 = load ptr, ptr %122, align 8
-  %124 = call i32 %123(ptr %115)
+  %124 = call i32 %123(ptr %115) #2
   %125 = icmp slt i32 %114, %124
   br i1 %125, label %126, label %603
 
@@ -2583,7 +2591,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   %160 = getelementptr ptr, ptr %128, i32 %137
   %161 = getelementptr ptr, ptr %160, i32 8
   %162 = load ptr, ptr %161, align 8
-  %163 = call ptr %162({ ptr, ptr, ptr, i32 } %138, ptr %6)
+  %163 = call ptr @behavior_wrapper(ptr %162, { ptr, ptr, ptr, i32 } %138, ptr %6)
   %164 = call i32 %163({ ptr, ptr, ptr, i32 } %138, { ptr, ptr, ptr, i32 } %138, ptr %5)
   br i1 %113, label %165, label %340
 
@@ -2628,7 +2636,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   %202 = load ptr, ptr %201, align 8
   %203 = getelementptr { ptr }, ptr %8, i32 0, i32 0
   store ptr @i32_typ, ptr %203, align 8
-  %204 = call ptr %202({ ptr, ptr, ptr, i32 } %177, ptr %8)
+  %204 = call ptr @behavior_wrapper(ptr %202, { ptr, ptr, ptr, i32 } %177, ptr %8)
   %205 = call i32 %204({ ptr, ptr, ptr, i32 } %177, { ptr, ptr, ptr, i32 } %177, ptr %7, i32 %164)
   %206 = getelementptr { ptr, ptr, ptr, i32 }, ptr %55, i32 0, i32 1
   %207 = load ptr, ptr %206, align 8
@@ -2641,7 +2649,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   %214 = load ptr, ptr %213, align 8
   %215 = getelementptr { ptr, ptr }, ptr %214, i32 0, i32 0
   %216 = load ptr, ptr %215, align 8
-  %217 = call { ptr, ptr, ptr, i32 } %216(ptr %207)
+  %217 = call { ptr, ptr, ptr, i32 } %216(ptr %207) #2
   store { ptr, ptr, ptr, i32 } %217, ptr %9, align 8
   %218 = call ptr @llvm.invariant.start.p0(i64 16, ptr %9)
   call void @assume_offset(ptr %9, ptr @Array)
@@ -2685,7 +2693,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   %255 = load ptr, ptr %254, align 8
   %256 = getelementptr { ptr }, ptr %11, i32 0, i32 0
   store ptr @i32_typ, ptr %256, align 8
-  %257 = call ptr %255({ ptr, ptr, ptr, i32 } %230, ptr %11)
+  %257 = call ptr @behavior_wrapper(ptr %255, { ptr, ptr, ptr, i32 } %230, ptr %11)
   %258 = call { ptr, i160 } %257({ ptr, ptr, ptr, i32 } %230, { ptr, ptr, ptr, i32 } %230, ptr %10, i32 %205)
   store { ptr, i160 } %258, ptr %12, align 8
   %259 = getelementptr { ptr, ptr, ptr, i32 }, ptr %96, i32 0, i32 0
@@ -2717,7 +2725,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   %281 = load ptr, ptr %280, align 8
   %282 = getelementptr { ptr, ptr }, ptr %281, i32 0, i32 0
   %283 = load ptr, ptr %282, align 8
-  %284 = call { ptr, ptr, ptr, i32 } %283(ptr %274)
+  %284 = call { ptr, ptr, ptr, i32 } %283(ptr %274) #2
   store { ptr, ptr, ptr, i32 } %284, ptr %15, align 8
   %285 = call ptr @llvm.invariant.start.p0(i64 16, ptr %15)
   call void @assume_offset(ptr %15, ptr @Array)
@@ -2774,7 +2782,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   store ptr @i32_typ, ptr %329, align 8
   %330 = getelementptr { ptr, ptr }, ptr %17, i32 0, i32 1
   store ptr %269, ptr %330, align 8
-  %331 = call ptr %328({ ptr, ptr, ptr, i32 } %297, ptr %17)
+  %331 = call ptr @behavior_wrapper(ptr %328, { ptr, ptr, ptr, i32 } %297, ptr %17)
   call void %331({ ptr, ptr, ptr, i32 } %297, { ptr, ptr, ptr, i32 } %297, ptr %16, i32 %205, { ptr, i160 } %272)
   %332 = getelementptr { ptr, i160 }, ptr %12, i32 0, i32 0
   %333 = load ptr, ptr %332, align 8
@@ -2827,7 +2835,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   %377 = load ptr, ptr %376, align 8
   %378 = getelementptr { ptr }, ptr %31, i32 0, i32 0
   store ptr @i32_typ, ptr %378, align 8
-  %379 = call ptr %377({ ptr, ptr, ptr, i32 } %352, ptr %31)
+  %379 = call ptr @behavior_wrapper(ptr %377, { ptr, ptr, ptr, i32 } %352, ptr %31)
   %380 = call i32 %379({ ptr, ptr, ptr, i32 } %352, { ptr, ptr, ptr, i32 } %352, ptr %30, i32 %164)
   %381 = getelementptr { ptr, ptr, ptr, i32 }, ptr %55, i32 0, i32 1
   %382 = load ptr, ptr %381, align 8
@@ -2840,7 +2848,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   %389 = load ptr, ptr %388, align 8
   %390 = getelementptr { ptr, ptr }, ptr %389, i32 0, i32 0
   %391 = load ptr, ptr %390, align 8
-  %392 = call { ptr, ptr, ptr, i32 } %391(ptr %382)
+  %392 = call { ptr, ptr, ptr, i32 } %391(ptr %382) #2
   store { ptr, ptr, ptr, i32 } %392, ptr %32, align 8
   %393 = call ptr @llvm.invariant.start.p0(i64 16, ptr %32)
   call void @assume_offset(ptr %32, ptr @Array)
@@ -2884,7 +2892,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   %430 = load ptr, ptr %429, align 8
   %431 = getelementptr { ptr }, ptr %34, i32 0, i32 0
   store ptr @i32_typ, ptr %431, align 8
-  %432 = call ptr %430({ ptr, ptr, ptr, i32 } %405, ptr %34)
+  %432 = call ptr @behavior_wrapper(ptr %430, { ptr, ptr, ptr, i32 } %405, ptr %34)
   %433 = call { ptr, i160 } %432({ ptr, ptr, ptr, i32 } %405, { ptr, ptr, ptr, i32 } %405, ptr %33, i32 %380)
   store { ptr, i160 } %433, ptr %35, align 8
   %434 = getelementptr { ptr, ptr, ptr, i32 }, ptr %96, i32 0, i32 0
@@ -2916,7 +2924,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   %456 = load ptr, ptr %455, align 8
   %457 = getelementptr { ptr, ptr }, ptr %456, i32 0, i32 0
   %458 = load ptr, ptr %457, align 8
-  %459 = call { ptr, ptr, ptr, i32 } %458(ptr %449)
+  %459 = call { ptr, ptr, ptr, i32 } %458(ptr %449) #2
   store { ptr, ptr, ptr, i32 } %459, ptr %38, align 8
   %460 = call ptr @llvm.invariant.start.p0(i64 16, ptr %38)
   call void @assume_offset(ptr %38, ptr @Array)
@@ -2973,7 +2981,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   store ptr @i32_typ, ptr %504, align 8
   %505 = getelementptr { ptr, ptr }, ptr %40, i32 0, i32 1
   store ptr %444, ptr %505, align 8
-  %506 = call ptr %503({ ptr, ptr, ptr, i32 } %472, ptr %40)
+  %506 = call ptr @behavior_wrapper(ptr %503, { ptr, ptr, ptr, i32 } %472, ptr %40)
   call void %506({ ptr, ptr, ptr, i32 } %472, { ptr, ptr, ptr, i32 } %472, ptr %39, i32 %380, { ptr, i160 } %447)
   %507 = getelementptr { ptr, i160 }, ptr %35, i32 0, i32 0
   %508 = load ptr, ptr %507, align 8
@@ -3168,7 +3176,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   %645 = load ptr, ptr %644, align 8
   %646 = getelementptr { ptr, ptr }, ptr %645, i32 0, i32 0
   %647 = load ptr, ptr %646, align 8
-  %648 = call i32 %647(ptr %638)
+  %648 = call i32 %647(ptr %638) #2
   store i32 %648, ptr %609, align 4
   store i32 1, ptr %610, align 4
   %649 = load i32, ptr %609, align 4
@@ -3187,7 +3195,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   %661 = getelementptr { ptr, ptr }, ptr %660, i32 0, i32 1
   %662 = load ptr, ptr %661, align 8
   %663 = load i32, ptr %611, align 4
-  call void %662(ptr %653, i32 %663)
+  call void %662(ptr %653, i32 %663) #1
   %664 = getelementptr { ptr, i160 }, ptr %612, i32 0, i32 1
   %665 = load [0 x i8], ptr %613, align 1
   store [0 x i8] %665, ptr %664, align 1
@@ -3335,7 +3343,7 @@ define void @HashMap_move_entries_old_tableArrayEntryK._V_or_Nil_old_capacity_pe
   %83 = load ptr, ptr %82, align 8
   %84 = getelementptr { ptr }, ptr %7, i32 0, i32 0
   store ptr @i32_typ, ptr %84, align 8
-  %85 = call ptr %83({ ptr, ptr, ptr, i32 } %58, ptr %7)
+  %85 = call ptr @behavior_wrapper(ptr %83, { ptr, ptr, ptr, i32 } %58, ptr %7)
   %86 = call { ptr, i160 } %85({ ptr, ptr, ptr, i32 } %58, { ptr, ptr, ptr, i32 } %58, ptr %6, i32 %44)
   store { ptr, i160 } %86, ptr %8, align 8
   %87 = getelementptr { ptr, i160 }, ptr %8, i32 0, i32 0
@@ -3435,7 +3443,7 @@ define void @HashMap_move_entries_old_tableArrayEntryK._V_or_Nil_old_capacity_pe
   %166 = load ptr, ptr %165, align 8
   %167 = getelementptr { ptr }, ptr %12, i32 0, i32 0
   store ptr %114, ptr %167, align 8
-  %168 = call ptr %166({ ptr, ptr, ptr, i32 } %136, ptr %12)
+  %168 = call ptr @behavior_wrapper(ptr %166, { ptr, ptr, ptr, i32 } %136, ptr %12)
   %169 = call { ptr, i160 } %168({ ptr, ptr, ptr, i32 } %136, { ptr, ptr, ptr, i32 } %136, ptr %11, { ptr, ptr, ptr, i32 } %124)
   %170 = getelementptr { ptr, i160 }, ptr %9, i32 0, i32 0
   %171 = getelementptr { ptr, i160 }, ptr %8, i32 0, i32 0
@@ -3545,7 +3553,7 @@ define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   %43 = load ptr, ptr %42, align 8
   %44 = getelementptr { ptr, ptr }, ptr %43, i32 0, i32 0
   %45 = load ptr, ptr %44, align 8
-  %46 = call { ptr, ptr, ptr, i32 } %45(ptr %36)
+  %46 = call { ptr, ptr, ptr, i32 } %45(ptr %36) #2
   %47 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %46, ptr %47, align 8
   %48 = call ptr @llvm.invariant.start.p0(i64 16, ptr %47)
@@ -3597,7 +3605,7 @@ define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   %84 = load ptr, ptr %83, align 8
   %85 = getelementptr { ptr, ptr }, ptr %84, i32 0, i32 0
   %86 = load ptr, ptr %85, align 8
-  %87 = call { ptr, ptr, ptr, i32 } %86(ptr %77)
+  %87 = call { ptr, ptr, ptr, i32 } %86(ptr %77) #2
   %88 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %87, ptr %88, align 8
   %89 = call ptr @llvm.invariant.start.p0(i64 16, ptr %88)
@@ -3676,7 +3684,7 @@ define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   %152 = getelementptr ptr, ptr %151, i32 8
   %153 = load ptr, ptr %152, align 8
   %154 = alloca {}, align 8
-  %155 = call ptr %153({ ptr, ptr, ptr, i32 } %128, ptr %154)
+  %155 = call ptr @behavior_wrapper(ptr %153, { ptr, ptr, ptr, i32 } %128, ptr %154)
   %156 = call i32 %155({ ptr, ptr, ptr, i32 } %128, { ptr, ptr, ptr, i32 } %128, ptr %148)
   %157 = mul i32 %156, 2
   %158 = icmp slt i32 %157, 16
@@ -3779,7 +3787,7 @@ define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   store ptr @i32_typ, ptr %238, align 8
   %239 = getelementptr { ptr, ptr }, ptr %7, i32 0, i32 1
   store ptr @i32_typ, ptr %239, align 8
-  %240 = call ptr %237({ ptr, ptr, ptr, i32 } %211, ptr %7)
+  %240 = call ptr @behavior_wrapper(ptr %237, { ptr, ptr, ptr, i32 } %211, ptr %7)
   call void %240({ ptr, ptr, ptr, i32 } %211, { ptr, ptr, ptr, i32 } %211, ptr %6, i32 %159, i32 %159)
   %241 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 0
   %242 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 0
@@ -3821,7 +3829,7 @@ define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   %273 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 3
   %274 = load i32, ptr %273, align 4
   %275 = insertvalue { ptr, ptr, ptr, i32 } %272, i32 %274, 3
-  call void %263(ptr %254, { ptr, ptr, ptr, i32 } %275)
+  call void %263(ptr %254, { ptr, ptr, ptr, i32 } %275) #1
   %276 = getelementptr { ptr, ptr, ptr, i32 }, ptr %22, i32 0, i32 1
   %277 = load ptr, ptr %276, align 8
   %278 = load ptr, ptr %22, align 8
@@ -3920,7 +3928,7 @@ define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   store ptr @i32_typ, ptr %354, align 8
   %355 = getelementptr { ptr, ptr }, ptr %12, i32 0, i32 1
   store ptr @i32_typ, ptr %355, align 8
-  %356 = call ptr %353({ ptr, ptr, ptr, i32 } %327, ptr %12)
+  %356 = call ptr @behavior_wrapper(ptr %353, { ptr, ptr, ptr, i32 } %327, ptr %12)
   call void %356({ ptr, ptr, ptr, i32 } %327, { ptr, ptr, ptr, i32 } %327, ptr %11, i32 %159, i32 %159)
   %357 = getelementptr { ptr, ptr, ptr, i32 }, ptr %10, i32 0, i32 0
   %358 = getelementptr { ptr, ptr, ptr, i32 }, ptr %13, i32 0, i32 0
@@ -3962,7 +3970,7 @@ define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   %389 = getelementptr { ptr, ptr, ptr, i32 }, ptr %13, i32 0, i32 3
   %390 = load i32, ptr %389, align 4
   %391 = insertvalue { ptr, ptr, ptr, i32 } %388, i32 %390, 3
-  call void %379(ptr %370, { ptr, ptr, ptr, i32 } %391)
+  call void %379(ptr %370, { ptr, ptr, ptr, i32 } %391) #1
   %392 = getelementptr { ptr, ptr, ptr, i32 }, ptr %22, i32 0, i32 1
   %393 = load ptr, ptr %392, align 8
   %394 = load ptr, ptr %22, align 8
@@ -3974,7 +3982,7 @@ define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   %400 = load ptr, ptr %399, align 8
   %401 = getelementptr { ptr, ptr }, ptr %400, i32 0, i32 1
   %402 = load ptr, ptr %401, align 8
-  call void %402(ptr %393, i32 0)
+  call void %402(ptr %393, i32 0) #1
   %403 = getelementptr { ptr, ptr, ptr, i32 }, ptr %62, i32 0, i32 0
   %404 = getelementptr { ptr, ptr, ptr, i32 }, ptr %14, i32 0, i32 0
   %405 = load ptr, ptr %403, align 8
@@ -4073,7 +4081,7 @@ define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   store ptr %416, ptr %479, align 8
   %480 = getelementptr { ptr, ptr }, ptr %16, i32 0, i32 1
   store ptr @i32_typ, ptr %480, align 8
-  %481 = call ptr %478({ ptr, ptr, ptr, i32 } %438, ptr %16)
+  %481 = call ptr @behavior_wrapper(ptr %478, { ptr, ptr, ptr, i32 } %438, ptr %16)
   call void %481({ ptr, ptr, ptr, i32 } %438, { ptr, ptr, ptr, i32 } %438, ptr %15, { ptr, ptr, ptr, i32 } %426, i32 %156)
   %482 = getelementptr { ptr, ptr, ptr, i32 }, ptr %103, i32 0, i32 0
   %483 = getelementptr { ptr, ptr, ptr, i32 }, ptr %17, i32 0, i32 0
@@ -4173,7 +4181,7 @@ define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   store ptr %495, ptr %558, align 8
   %559 = getelementptr { ptr, ptr }, ptr %19, i32 0, i32 1
   store ptr @i32_typ, ptr %559, align 8
-  %560 = call ptr %557({ ptr, ptr, ptr, i32 } %517, ptr %19)
+  %560 = call ptr @behavior_wrapper(ptr %557, { ptr, ptr, ptr, i32 } %517, ptr %19)
   call void %560({ ptr, ptr, ptr, i32 } %517, { ptr, ptr, ptr, i32 } %517, ptr %18, { ptr, ptr, ptr, i32 } %505, i32 %156)
   ret void
 }
@@ -4319,7 +4327,7 @@ define i1 @HashMap_replace_in_table_keyK_valueV_h1Ptri32_idxPtri32_tableArrayEnt
   %118 = alloca { ptr }, align 8
   %119 = getelementptr { ptr }, ptr %118, i32 0, i32 0
   store ptr @i32_typ, ptr %119, align 8
-  %120 = call ptr %117({ ptr, ptr, ptr, i32 } %91, ptr %118)
+  %120 = call ptr @behavior_wrapper(ptr %117, { ptr, ptr, ptr, i32 } %91, ptr %118)
   %121 = call { ptr, i160 } %120({ ptr, ptr, ptr, i32 } %91, { ptr, ptr, ptr, i32 } %91, ptr %111, i32 %6)
   %122 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %121, ptr %122, align 8
@@ -4378,7 +4386,7 @@ define i1 @HashMap_replace_in_table_keyK_valueV_h1Ptri32_idxPtri32_tableArrayEnt
   %170 = getelementptr ptr, ptr %138, i32 %147
   %171 = getelementptr ptr, ptr %170, i32 8
   %172 = load ptr, ptr %171, align 8
-  %173 = call ptr %172({ ptr, ptr, ptr, i32 } %148, ptr %11)
+  %173 = call ptr @behavior_wrapper(ptr %172, { ptr, ptr, ptr, i32 } %148, ptr %11)
   %174 = call i32 %173({ ptr, ptr, ptr, i32 } %148, { ptr, ptr, ptr, i32 } %148, ptr %10)
   %175 = icmp eq i32 %174, %5
   br i1 %175, label %176, label %420
@@ -4420,7 +4428,7 @@ define i1 @HashMap_replace_in_table_keyK_valueV_h1Ptri32_idxPtri32_tableArrayEnt
   %210 = getelementptr ptr, ptr %178, i32 %187
   %211 = getelementptr ptr, ptr %210, i32 6
   %212 = load ptr, ptr %211, align 8
-  %213 = call ptr %212({ ptr, ptr, ptr, i32 } %188, ptr %13)
+  %213 = call ptr @behavior_wrapper(ptr %212, { ptr, ptr, ptr, i32 } %188, ptr %13)
   %214 = call { ptr, i160 } %213({ ptr, ptr, ptr, i32 } %188, { ptr, ptr, ptr, i32 } %188, ptr %12)
   store { ptr, i160 } %214, ptr %14, align 8
   %215 = getelementptr { ptr, i160 }, ptr %14, i32 0, i32 0
@@ -4456,7 +4464,7 @@ define i1 @HashMap_replace_in_table_keyK_valueV_h1Ptri32_idxPtri32_tableArrayEnt
   %239 = load ptr, ptr %238, align 8
   %240 = getelementptr { ptr, ptr }, ptr %239, i32 0, i32 0
   %241 = load ptr, ptr %240, align 8
-  %242 = call { ptr } %241(ptr %232)
+  %242 = call { ptr } %241(ptr %232) #2
   store { ptr } %242, ptr %21, align 8
   %243 = load ptr, ptr %21, align 8
   %244 = call i1 %243({ ptr, i160 } %224, { ptr, i160 } %230)
@@ -4568,7 +4576,7 @@ define i1 @HashMap_replace_in_table_keyK_valueV_h1Ptri32_idxPtri32_tableArrayEnt
   store ptr %287, ptr %331, align 8
   %332 = getelementptr { ptr, ptr, ptr }, ptr %29, i32 0, i32 2
   store ptr @i32_typ, ptr %332, align 8
-  %333 = call ptr %329({ ptr, ptr, ptr, i32 } %302, ptr %29)
+  %333 = call ptr @behavior_wrapper(ptr %329, { ptr, ptr, ptr, i32 } %302, ptr %29)
   call void %333({ ptr, ptr, ptr, i32 } %302, { ptr, ptr, ptr, i32 } %302, ptr %28, { ptr, i160 } %284, { ptr, i160 } %290, i32 %5)
   %334 = getelementptr { ptr, ptr, ptr, i32 }, ptr %23, i32 0, i32 0
   %335 = getelementptr { ptr, ptr, ptr, i32 }, ptr %30, i32 0, i32 0
@@ -4675,7 +4683,7 @@ define i1 @HashMap_replace_in_table_keyK_valueV_h1Ptri32_idxPtri32_tableArrayEnt
   store ptr @i32_typ, ptr %416, align 8
   %417 = getelementptr { ptr, ptr }, ptr %35, i32 0, i32 1
   store ptr %369, ptr %417, align 8
-  %418 = call ptr %415({ ptr, ptr, ptr, i32 } %384, ptr %35)
+  %418 = call ptr @behavior_wrapper(ptr %415, { ptr, ptr, ptr, i32 } %384, ptr %35)
   call void %418({ ptr, ptr, ptr, i32 } %384, { ptr, ptr, ptr, i32 } %384, ptr %34, i32 %6, { ptr, i160 } %372)
   br label %419
 
@@ -4956,7 +4964,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %138 = alloca { ptr }, align 8
   %139 = getelementptr { ptr }, ptr %138, i32 0, i32 0
   store ptr %96, ptr %139, align 8
-  %140 = call ptr %137({ ptr, ptr, ptr, i32 } %111, ptr %138)
+  %140 = call ptr @behavior_wrapper(ptr %137, { ptr, ptr, ptr, i32 } %111, ptr %138)
   %141 = call i32 %140({ ptr, ptr, ptr, i32 } %111, { ptr, ptr, ptr, i32 } %111, ptr %131, { ptr, i160 } %99)
   %142 = getelementptr { ptr, ptr, ptr, i32 }, ptr %65, i32 0, i32 0
   %143 = load ptr, ptr %142, align 8
@@ -5000,7 +5008,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %180 = alloca { ptr }, align 8
   %181 = getelementptr { ptr }, ptr %180, i32 0, i32 0
   store ptr @i32_typ, ptr %181, align 8
-  %182 = call ptr %179({ ptr, ptr, ptr, i32 } %153, ptr %180)
+  %182 = call ptr @behavior_wrapper(ptr %179, { ptr, ptr, ptr, i32 } %153, ptr %180)
   %183 = call i32 %182({ ptr, ptr, ptr, i32 } %153, { ptr, ptr, ptr, i32 } %153, ptr %173, i32 %141)
   %184 = getelementptr { ptr, ptr, ptr, i32 }, ptr %65, i32 0, i32 1
   %185 = load ptr, ptr %184, align 8
@@ -5013,7 +5021,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %192 = load ptr, ptr %191, align 8
   %193 = getelementptr { ptr, ptr }, ptr %192, i32 0, i32 0
   %194 = load ptr, ptr %193, align 8
-  %195 = call { ptr, ptr, ptr, i32 } %194(ptr %185)
+  %195 = call { ptr, ptr, ptr, i32 } %194(ptr %185) #2
   %196 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %195, ptr %196, align 8
   %197 = call ptr @llvm.invariant.start.p0(i64 16, ptr %196)
@@ -5151,7 +5159,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   store ptr @i32_typ, ptr %299, align 8
   %300 = getelementptr { ptr, ptr, ptr, ptr, ptr }, ptr %295, i32 0, i32 4
   store ptr %228, ptr %300, align 8
-  %301 = call ptr %294({ ptr, ptr, ptr, i32 } %250, ptr %295)
+  %301 = call ptr @behavior_wrapper(ptr %294, { ptr, ptr, ptr, i32 } %250, ptr %295)
   %302 = call i1 %301({ ptr, ptr, ptr, i32 } %250, { ptr, ptr, ptr, i32 } %250, ptr %284, { ptr, i160 } %205, { ptr, i160 } %213, i32 %141, i32 %183, { ptr, ptr, ptr, i32 } %238)
   br i1 %302, label %303, label %304
 
@@ -5199,7 +5207,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %341 = load ptr, ptr %340, align 8
   %342 = getelementptr { ptr }, ptr %7, i32 0, i32 0
   store ptr @i32_typ, ptr %342, align 8
-  %343 = call ptr %341({ ptr, ptr, ptr, i32 } %316, ptr %7)
+  %343 = call ptr @behavior_wrapper(ptr %341, { ptr, ptr, ptr, i32 } %316, ptr %7)
   %344 = call i32 %343({ ptr, ptr, ptr, i32 } %316, { ptr, ptr, ptr, i32 } %316, ptr %6, i32 %141)
   %345 = getelementptr { ptr, ptr, ptr, i32 }, ptr %65, i32 0, i32 1
   %346 = load ptr, ptr %345, align 8
@@ -5212,7 +5220,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %353 = load ptr, ptr %352, align 8
   %354 = getelementptr { ptr, ptr }, ptr %353, i32 0, i32 0
   %355 = load ptr, ptr %354, align 8
-  %356 = call { ptr, ptr, ptr, i32 } %355(ptr %346)
+  %356 = call { ptr, ptr, ptr, i32 } %355(ptr %346) #2
   store { ptr, ptr, ptr, i32 } %356, ptr %8, align 8
   %357 = call ptr @llvm.invariant.start.p0(i64 16, ptr %8)
   call void @assume_offset(ptr %8, ptr @Array)
@@ -5256,7 +5264,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %394 = load ptr, ptr %393, align 8
   %395 = getelementptr { ptr }, ptr %10, i32 0, i32 0
   store ptr @i32_typ, ptr %395, align 8
-  %396 = call ptr %394({ ptr, ptr, ptr, i32 } %369, ptr %10)
+  %396 = call ptr @behavior_wrapper(ptr %394, { ptr, ptr, ptr, i32 } %369, ptr %10)
   %397 = call { ptr, i160 } %396({ ptr, ptr, ptr, i32 } %369, { ptr, ptr, ptr, i32 } %369, ptr %9, i32 %344)
   store { ptr, i160 } %397, ptr %11, align 8
   %398 = getelementptr { ptr, i160 }, ptr %11, i32 0, i32 0
@@ -5314,7 +5322,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %445 = getelementptr ptr, ptr %413, i32 %422
   %446 = getelementptr ptr, ptr %445, i32 8
   %447 = load ptr, ptr %446, align 8
-  %448 = call ptr %447({ ptr, ptr, ptr, i32 } %423, ptr %14)
+  %448 = call ptr @behavior_wrapper(ptr %447, { ptr, ptr, ptr, i32 } %423, ptr %14)
   %449 = call i32 %448({ ptr, ptr, ptr, i32 } %423, { ptr, ptr, ptr, i32 } %423, ptr %13)
   %450 = icmp eq i32 %449, %141
   br i1 %450, label %451, label %708
@@ -5356,7 +5364,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %485 = getelementptr ptr, ptr %453, i32 %462
   %486 = getelementptr ptr, ptr %485, i32 6
   %487 = load ptr, ptr %486, align 8
-  %488 = call ptr %487({ ptr, ptr, ptr, i32 } %463, ptr %16)
+  %488 = call ptr @behavior_wrapper(ptr %487, { ptr, ptr, ptr, i32 } %463, ptr %16)
   %489 = call { ptr, i160 } %488({ ptr, ptr, ptr, i32 } %463, { ptr, ptr, ptr, i32 } %463, ptr %15)
   store { ptr, i160 } %489, ptr %17, align 8
   %490 = getelementptr { ptr, i160 }, ptr %17, i32 0, i32 0
@@ -5392,7 +5400,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %514 = load ptr, ptr %513, align 8
   %515 = getelementptr { ptr, ptr }, ptr %514, i32 0, i32 0
   %516 = load ptr, ptr %515, align 8
-  %517 = call { ptr } %516(ptr %507)
+  %517 = call { ptr } %516(ptr %507) #2
   store { ptr } %517, ptr %24, align 8
   %518 = load ptr, ptr %24, align 8
   %519 = call i1 %518({ ptr, i160 } %499, { ptr, i160 } %505)
@@ -5504,7 +5512,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   store ptr %562, ptr %606, align 8
   %607 = getelementptr { ptr, ptr, ptr }, ptr %32, i32 0, i32 2
   store ptr @i32_typ, ptr %607, align 8
-  %608 = call ptr %604({ ptr, ptr, ptr, i32 } %577, ptr %32)
+  %608 = call ptr @behavior_wrapper(ptr %604, { ptr, ptr, ptr, i32 } %577, ptr %32)
   call void %608({ ptr, ptr, ptr, i32 } %577, { ptr, ptr, ptr, i32 } %577, ptr %31, { ptr, i160 } %559, { ptr, i160 } %565, i32 %141)
   %609 = getelementptr { ptr, ptr, ptr, i32 }, ptr %26, i32 0, i32 0
   %610 = getelementptr { ptr, ptr, ptr, i32 }, ptr %33, i32 0, i32 0
@@ -5569,7 +5577,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %656 = load ptr, ptr %655, align 8
   %657 = getelementptr { ptr, ptr }, ptr %656, i32 0, i32 0
   %658 = load ptr, ptr %657, align 8
-  %659 = call { ptr, ptr, ptr, i32 } %658(ptr %649)
+  %659 = call { ptr, ptr, ptr, i32 } %658(ptr %649) #2
   store { ptr, ptr, ptr, i32 } %659, ptr %37, align 8
   %660 = call ptr @llvm.invariant.start.p0(i64 16, ptr %37)
   call void @assume_offset(ptr %37, ptr @Array)
@@ -5626,7 +5634,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   store ptr @i32_typ, ptr %704, align 8
   %705 = getelementptr { ptr, ptr }, ptr %39, i32 0, i32 1
   store ptr %644, ptr %705, align 8
-  %706 = call ptr %703({ ptr, ptr, ptr, i32 } %672, ptr %39)
+  %706 = call ptr @behavior_wrapper(ptr %703, { ptr, ptr, ptr, i32 } %672, ptr %39)
   call void %706({ ptr, ptr, ptr, i32 } %672, { ptr, ptr, ptr, i32 } %672, ptr %38, i32 %344, { ptr, i160 } %647)
   br label %707
 
@@ -5694,7 +5702,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %740 = load ptr, ptr %739, align 8
   %741 = getelementptr { ptr, ptr }, ptr %740, i32 0, i32 0
   %742 = load ptr, ptr %741, align 8
-  %743 = call { ptr, ptr, ptr, i32 } %742(ptr %733)
+  %743 = call { ptr, ptr, ptr, i32 } %742(ptr %733) #2
   store { ptr, ptr, ptr, i32 } %743, ptr %40, align 8
   %744 = call ptr @llvm.invariant.start.p0(i64 16, ptr %40)
   call void @assume_offset(ptr %40, ptr @Array)
@@ -5734,7 +5742,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %778 = getelementptr ptr, ptr %746, i32 %755
   %779 = getelementptr ptr, ptr %778, i32 8
   %780 = load ptr, ptr %779, align 8
-  %781 = call ptr %780({ ptr, ptr, ptr, i32 } %756, ptr %42)
+  %781 = call ptr @behavior_wrapper(ptr %780, { ptr, ptr, ptr, i32 } %756, ptr %42)
   %782 = call i32 %781({ ptr, ptr, ptr, i32 } %756, { ptr, ptr, ptr, i32 } %756, ptr %41)
   %783 = getelementptr { ptr, ptr, ptr, i32 }, ptr %65, i32 0, i32 1
   %784 = load ptr, ptr %783, align 8
@@ -5747,7 +5755,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %791 = load ptr, ptr %790, align 8
   %792 = getelementptr { ptr, ptr }, ptr %791, i32 0, i32 0
   %793 = load ptr, ptr %792, align 8
-  %794 = call i32 %793(ptr %784)
+  %794 = call i32 %793(ptr %784) #2
   %795 = icmp sge i32 %794, %782
   br i1 %795, label %796, label %834
 
@@ -5788,7 +5796,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %830 = getelementptr ptr, ptr %798, i32 %807
   %831 = getelementptr ptr, ptr %830, i32 16
   %832 = load ptr, ptr %831, align 8
-  %833 = call ptr %832({ ptr, ptr, ptr, i32 } %808, ptr %44)
+  %833 = call ptr @behavior_wrapper(ptr %832, { ptr, ptr, ptr, i32 } %808, ptr %44)
   call void %833({ ptr, ptr, ptr, i32 } %808, { ptr, ptr, ptr, i32 } %808, ptr %43)
   br label %834
 
@@ -5897,7 +5905,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   store ptr %875, ptr %919, align 8
   %920 = getelementptr { ptr, ptr, ptr }, ptr %52, i32 0, i32 2
   store ptr @i32_typ, ptr %920, align 8
-  %921 = call ptr %917({ ptr, ptr, ptr, i32 } %890, ptr %52)
+  %921 = call ptr @behavior_wrapper(ptr %917, { ptr, ptr, ptr, i32 } %890, ptr %52)
   call void %921({ ptr, ptr, ptr, i32 } %890, { ptr, ptr, ptr, i32 } %890, ptr %51, { ptr, i160 } %872, { ptr, i160 } %878, i32 %141)
   %922 = getelementptr { ptr, ptr, ptr, i32 }, ptr %46, i32 0, i32 0
   %923 = getelementptr { ptr, ptr, ptr, i32 }, ptr %53, i32 0, i32 0
@@ -6022,7 +6030,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %1015 = load ptr, ptr %1014, align 8
   %1016 = getelementptr { ptr }, ptr %59, i32 0, i32 0
   store ptr @union_typ, ptr %1016, align 8
-  %1017 = call ptr %1015({ ptr, ptr, ptr, i32 } %980, ptr %59)
+  %1017 = call ptr @behavior_wrapper(ptr %1015, { ptr, ptr, ptr, i32 } %980, ptr %59)
   %1018 = call { ptr, i160 } %1017({ ptr, ptr, ptr, i32 } %980, { ptr, ptr, ptr, i32 } %980, ptr %58, { ptr, ptr, ptr, i32 } %968)
   store { ptr, i160 } %1018, ptr %60, align 8
   %1019 = getelementptr { ptr, i160 }, ptr %60, i32 0, i32 0
@@ -6080,7 +6088,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %1065 = getelementptr ptr, ptr %1033, i32 %1042
   %1066 = getelementptr ptr, ptr %1065, i32 16
   %1067 = load ptr, ptr %1066, align 8
-  %1068 = call ptr %1067({ ptr, ptr, ptr, i32 } %1043, ptr %62)
+  %1068 = call ptr @behavior_wrapper(ptr %1067, { ptr, ptr, ptr, i32 } %1043, ptr %62)
   call void %1068({ ptr, ptr, ptr, i32 } %1043, { ptr, ptr, ptr, i32 } %1043, ptr %61)
   %1069 = getelementptr { ptr, i160 }, ptr %54, i32 0, i32 0
   %1070 = load ptr, ptr %56, align 8
@@ -6274,7 +6282,7 @@ define { ptr, i160 } @HashMap_get_from_table_keyK_h1Ptri32_idxPtri32_tableArrayE
   %103 = alloca { ptr }, align 8
   %104 = getelementptr { ptr }, ptr %103, i32 0, i32 0
   store ptr @i32_typ, ptr %104, align 8
-  %105 = call ptr %102({ ptr, ptr, ptr, i32 } %76, ptr %103)
+  %105 = call ptr @behavior_wrapper(ptr %102, { ptr, ptr, ptr, i32 } %76, ptr %103)
   %106 = call { ptr, i160 } %105({ ptr, ptr, ptr, i32 } %76, { ptr, ptr, ptr, i32 } %76, ptr %96, i32 %5)
   %107 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %106, ptr %107, align 8
@@ -6333,7 +6341,7 @@ define { ptr, i160 } @HashMap_get_from_table_keyK_h1Ptri32_idxPtri32_tableArrayE
   %155 = getelementptr ptr, ptr %123, i32 %132
   %156 = getelementptr ptr, ptr %155, i32 8
   %157 = load ptr, ptr %156, align 8
-  %158 = call ptr %157({ ptr, ptr, ptr, i32 } %133, ptr %10)
+  %158 = call ptr @behavior_wrapper(ptr %157, { ptr, ptr, ptr, i32 } %133, ptr %10)
   %159 = call i32 %158({ ptr, ptr, ptr, i32 } %133, { ptr, ptr, ptr, i32 } %133, ptr %9)
   %160 = icmp eq i32 %159, %4
   br i1 %160, label %161, label %282
@@ -6375,7 +6383,7 @@ define { ptr, i160 } @HashMap_get_from_table_keyK_h1Ptri32_idxPtri32_tableArrayE
   %195 = getelementptr ptr, ptr %163, i32 %172
   %196 = getelementptr ptr, ptr %195, i32 6
   %197 = load ptr, ptr %196, align 8
-  %198 = call ptr %197({ ptr, ptr, ptr, i32 } %173, ptr %12)
+  %198 = call ptr @behavior_wrapper(ptr %197, { ptr, ptr, ptr, i32 } %173, ptr %12)
   %199 = call { ptr, i160 } %198({ ptr, ptr, ptr, i32 } %173, { ptr, ptr, ptr, i32 } %173, ptr %11)
   store { ptr, i160 } %199, ptr %13, align 8
   %200 = getelementptr { ptr, i160 }, ptr %13, i32 0, i32 0
@@ -6411,7 +6419,7 @@ define { ptr, i160 } @HashMap_get_from_table_keyK_h1Ptri32_idxPtri32_tableArrayE
   %224 = load ptr, ptr %223, align 8
   %225 = getelementptr { ptr, ptr }, ptr %224, i32 0, i32 0
   %226 = load ptr, ptr %225, align 8
-  %227 = call { ptr } %226(ptr %217)
+  %227 = call { ptr } %226(ptr %217) #2
   store { ptr } %227, ptr %20, align 8
   %228 = load ptr, ptr %20, align 8
   %229 = call i1 %228({ ptr, i160 } %209, { ptr, i160 } %215)
@@ -6455,7 +6463,7 @@ define { ptr, i160 } @HashMap_get_from_table_keyK_h1Ptri32_idxPtri32_tableArrayE
   %265 = getelementptr ptr, ptr %233, i32 %242
   %266 = getelementptr ptr, ptr %265, i32 7
   %267 = load ptr, ptr %266, align 8
-  %268 = call ptr %267({ ptr, ptr, ptr, i32 } %243, ptr %22)
+  %268 = call ptr @behavior_wrapper(ptr %267, { ptr, ptr, ptr, i32 } %243, ptr %22)
   %269 = call { ptr, i160 } %268({ ptr, ptr, ptr, i32 } %243, { ptr, ptr, ptr, i32 } %243, ptr %21)
   store { ptr, i160 } %269, ptr %23, align 8
   %270 = getelementptr { ptr, i160 }, ptr %23, i32 0, i32 0
@@ -6696,7 +6704,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   %86 = alloca { ptr }, align 8
   %87 = getelementptr { ptr }, ptr %86, i32 0, i32 0
   store ptr %44, ptr %87, align 8
-  %88 = call ptr %85({ ptr, ptr, ptr, i32 } %59, ptr %86)
+  %88 = call ptr @behavior_wrapper(ptr %85, { ptr, ptr, ptr, i32 } %59, ptr %86)
   %89 = call i32 %88({ ptr, ptr, ptr, i32 } %59, { ptr, ptr, ptr, i32 } %59, ptr %79, { ptr, i160 } %47)
   %90 = getelementptr { ptr, ptr, ptr, i32 }, ptr %20, i32 0, i32 0
   %91 = load ptr, ptr %90, align 8
@@ -6740,7 +6748,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   %128 = alloca { ptr }, align 8
   %129 = getelementptr { ptr }, ptr %128, i32 0, i32 0
   store ptr @i32_typ, ptr %129, align 8
-  %130 = call ptr %127({ ptr, ptr, ptr, i32 } %101, ptr %128)
+  %130 = call ptr @behavior_wrapper(ptr %127, { ptr, ptr, ptr, i32 } %101, ptr %128)
   %131 = call i32 %130({ ptr, ptr, ptr, i32 } %101, { ptr, ptr, ptr, i32 } %101, ptr %121, i32 %89)
   %132 = getelementptr { ptr, ptr, ptr, i32 }, ptr %20, i32 0, i32 1
   %133 = load ptr, ptr %132, align 8
@@ -6753,7 +6761,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   %140 = load ptr, ptr %139, align 8
   %141 = getelementptr { ptr, ptr }, ptr %140, i32 0, i32 0
   %142 = load ptr, ptr %141, align 8
-  %143 = call { ptr, ptr, ptr, i32 } %142(ptr %133)
+  %143 = call { ptr, ptr, ptr, i32 } %142(ptr %133) #2
   %144 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %143, ptr %144, align 8
   %145 = call ptr @llvm.invariant.start.p0(i64 16, ptr %144)
@@ -6877,7 +6885,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   store ptr @i32_typ, ptr %237, align 8
   %238 = getelementptr { ptr, ptr, ptr, ptr }, ptr %234, i32 0, i32 3
   store ptr %168, ptr %238, align 8
-  %239 = call ptr %233({ ptr, ptr, ptr, i32 } %190, ptr %234)
+  %239 = call ptr @behavior_wrapper(ptr %233, { ptr, ptr, ptr, i32 } %190, ptr %234)
   %240 = call { ptr, i160 } %239({ ptr, ptr, ptr, i32 } %190, { ptr, ptr, ptr, i32 } %190, ptr %224, { ptr, i160 } %153, i32 %89, i32 %131, { ptr, ptr, ptr, i32 } %178)
   %241 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %240, ptr %241, align 8
@@ -6934,7 +6942,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   %287 = load ptr, ptr %286, align 8
   %288 = getelementptr { ptr }, ptr %7, i32 0, i32 0
   store ptr @i32_typ, ptr %288, align 8
-  %289 = call ptr %287({ ptr, ptr, ptr, i32 } %262, ptr %7)
+  %289 = call ptr @behavior_wrapper(ptr %287, { ptr, ptr, ptr, i32 } %262, ptr %7)
   %290 = call i32 %289({ ptr, ptr, ptr, i32 } %262, { ptr, ptr, ptr, i32 } %262, ptr %6, i32 %89)
   %291 = getelementptr { ptr, ptr, ptr, i32 }, ptr %20, i32 0, i32 1
   %292 = load ptr, ptr %291, align 8
@@ -6947,7 +6955,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   %299 = load ptr, ptr %298, align 8
   %300 = getelementptr { ptr, ptr }, ptr %299, i32 0, i32 0
   %301 = load ptr, ptr %300, align 8
-  %302 = call { ptr, ptr, ptr, i32 } %301(ptr %292)
+  %302 = call { ptr, ptr, ptr, i32 } %301(ptr %292) #2
   store { ptr, ptr, ptr, i32 } %302, ptr %8, align 8
   %303 = call ptr @llvm.invariant.start.p0(i64 16, ptr %8)
   call void @assume_offset(ptr %8, ptr @Array)
@@ -7065,7 +7073,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   store ptr @i32_typ, ptr %390, align 8
   %391 = getelementptr { ptr, ptr, ptr, ptr }, ptr %13, i32 0, i32 3
   store ptr %323, ptr %391, align 8
-  %392 = call ptr %387({ ptr, ptr, ptr, i32 } %345, ptr %13)
+  %392 = call ptr @behavior_wrapper(ptr %387, { ptr, ptr, ptr, i32 } %345, ptr %13)
   %393 = call { ptr, i160 } %392({ ptr, ptr, ptr, i32 } %345, { ptr, ptr, ptr, i32 } %345, ptr %12, { ptr, i160 } %309, i32 %89, i32 %290, { ptr, ptr, ptr, i32 } %333)
   store { ptr, i160 } %393, ptr %14, align 8
   %394 = getelementptr { ptr, i160 }, ptr %14, i32 0, i32 0
@@ -7276,7 +7284,7 @@ define { ptr, i160 } @HashMap_remove_from_table_keyK_h1Ptri32_idxPtri32_tableArr
   %107 = alloca { ptr }, align 8
   %108 = getelementptr { ptr }, ptr %107, i32 0, i32 0
   store ptr @i32_typ, ptr %108, align 8
-  %109 = call ptr %106({ ptr, ptr, ptr, i32 } %80, ptr %107)
+  %109 = call ptr @behavior_wrapper(ptr %106, { ptr, ptr, ptr, i32 } %80, ptr %107)
   %110 = call { ptr, i160 } %109({ ptr, ptr, ptr, i32 } %80, { ptr, ptr, ptr, i32 } %80, ptr %100, i32 %5)
   %111 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %110, ptr %111, align 8
@@ -7335,7 +7343,7 @@ define { ptr, i160 } @HashMap_remove_from_table_keyK_h1Ptri32_idxPtri32_tableArr
   %159 = getelementptr ptr, ptr %127, i32 %136
   %160 = getelementptr ptr, ptr %159, i32 8
   %161 = load ptr, ptr %160, align 8
-  %162 = call ptr %161({ ptr, ptr, ptr, i32 } %137, ptr %10)
+  %162 = call ptr @behavior_wrapper(ptr %161, { ptr, ptr, ptr, i32 } %137, ptr %10)
   %163 = call i32 %162({ ptr, ptr, ptr, i32 } %137, { ptr, ptr, ptr, i32 } %137, ptr %9)
   %164 = icmp eq i32 %163, %4
   br i1 %164, label %165, label %355
@@ -7377,7 +7385,7 @@ define { ptr, i160 } @HashMap_remove_from_table_keyK_h1Ptri32_idxPtri32_tableArr
   %199 = getelementptr ptr, ptr %167, i32 %176
   %200 = getelementptr ptr, ptr %199, i32 6
   %201 = load ptr, ptr %200, align 8
-  %202 = call ptr %201({ ptr, ptr, ptr, i32 } %177, ptr %12)
+  %202 = call ptr @behavior_wrapper(ptr %201, { ptr, ptr, ptr, i32 } %177, ptr %12)
   %203 = call { ptr, i160 } %202({ ptr, ptr, ptr, i32 } %177, { ptr, ptr, ptr, i32 } %177, ptr %11)
   store { ptr, i160 } %203, ptr %13, align 8
   %204 = getelementptr { ptr, i160 }, ptr %13, i32 0, i32 0
@@ -7413,7 +7421,7 @@ define { ptr, i160 } @HashMap_remove_from_table_keyK_h1Ptri32_idxPtri32_tableArr
   %228 = load ptr, ptr %227, align 8
   %229 = getelementptr { ptr, ptr }, ptr %228, i32 0, i32 0
   %230 = load ptr, ptr %229, align 8
-  %231 = call { ptr } %230(ptr %221)
+  %231 = call { ptr } %230(ptr %221) #2
   store { ptr } %231, ptr %20, align 8
   %232 = load ptr, ptr %20, align 8
   %233 = call i1 %232({ ptr, i160 } %213, { ptr, i160 } %219)
@@ -7457,7 +7465,7 @@ define { ptr, i160 } @HashMap_remove_from_table_keyK_h1Ptri32_idxPtri32_tableArr
   %269 = getelementptr ptr, ptr %237, i32 %246
   %270 = getelementptr ptr, ptr %269, i32 7
   %271 = load ptr, ptr %270, align 8
-  %272 = call ptr %271({ ptr, ptr, ptr, i32 } %247, ptr %22)
+  %272 = call ptr @behavior_wrapper(ptr %271, { ptr, ptr, ptr, i32 } %247, ptr %22)
   %273 = call { ptr, i160 } %272({ ptr, ptr, ptr, i32 } %247, { ptr, ptr, ptr, i32 } %247, ptr %21)
   store { ptr, i160 } %273, ptr %23, align 8
   %274 = getelementptr { ptr, i160 }, ptr %23, i32 0, i32 0
@@ -7516,7 +7524,7 @@ define { ptr, i160 } @HashMap_remove_from_table_keyK_h1Ptri32_idxPtri32_tableArr
   store ptr @i32_typ, ptr %320, align 8
   %321 = getelementptr { ptr, ptr }, ptr %29, i32 0, i32 1
   store ptr %278, ptr %321, align 8
-  %322 = call ptr %319({ ptr, ptr, ptr, i32 } %293, ptr %29)
+  %322 = call ptr @behavior_wrapper(ptr %319, { ptr, ptr, ptr, i32 } %293, ptr %29)
   call void %322({ ptr, ptr, ptr, i32 } %293, { ptr, ptr, ptr, i32 } %293, ptr %28, i32 %5, { ptr, i160 } %281)
   %323 = getelementptr { ptr, ptr, ptr, i32 }, ptr %34, i32 0, i32 1
   %324 = load ptr, ptr %323, align 8
@@ -7529,7 +7537,7 @@ define { ptr, i160 } @HashMap_remove_from_table_keyK_h1Ptri32_idxPtri32_tableArr
   %331 = load ptr, ptr %330, align 8
   %332 = getelementptr { ptr, ptr }, ptr %331, i32 0, i32 0
   %333 = load ptr, ptr %332, align 8
-  %334 = call i32 %333(ptr %324)
+  %334 = call i32 %333(ptr %324) #2
   %335 = sub i32 %334, 1
   %336 = getelementptr { ptr, ptr, ptr, i32 }, ptr %34, i32 0, i32 1
   %337 = load ptr, ptr %336, align 8
@@ -7542,7 +7550,7 @@ define { ptr, i160 } @HashMap_remove_from_table_keyK_h1Ptri32_idxPtri32_tableArr
   %344 = load ptr, ptr %343, align 8
   %345 = getelementptr { ptr, ptr }, ptr %344, i32 0, i32 1
   %346 = load ptr, ptr %345, align 8
-  call void %346(ptr %337, i32 %335)
+  call void %346(ptr %337, i32 %335) #1
   %347 = load ptr, ptr %25, align 8
   %348 = insertvalue { ptr, i160 } undef, ptr %347, 0
   %349 = load i160, ptr %24, align 4
@@ -7775,7 +7783,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %86 = alloca { ptr }, align 8
   %87 = getelementptr { ptr }, ptr %86, i32 0, i32 0
   store ptr %44, ptr %87, align 8
-  %88 = call ptr %85({ ptr, ptr, ptr, i32 } %59, ptr %86)
+  %88 = call ptr @behavior_wrapper(ptr %85, { ptr, ptr, ptr, i32 } %59, ptr %86)
   %89 = call i32 %88({ ptr, ptr, ptr, i32 } %59, { ptr, ptr, ptr, i32 } %59, ptr %79, { ptr, i160 } %47)
   %90 = getelementptr { ptr, ptr, ptr, i32 }, ptr %20, i32 0, i32 0
   %91 = load ptr, ptr %90, align 8
@@ -7819,7 +7827,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %128 = alloca { ptr }, align 8
   %129 = getelementptr { ptr }, ptr %128, i32 0, i32 0
   store ptr @i32_typ, ptr %129, align 8
-  %130 = call ptr %127({ ptr, ptr, ptr, i32 } %101, ptr %128)
+  %130 = call ptr @behavior_wrapper(ptr %127, { ptr, ptr, ptr, i32 } %101, ptr %128)
   %131 = call i32 %130({ ptr, ptr, ptr, i32 } %101, { ptr, ptr, ptr, i32 } %101, ptr %121, i32 %89)
   %132 = getelementptr { ptr, ptr, ptr, i32 }, ptr %20, i32 0, i32 1
   %133 = load ptr, ptr %132, align 8
@@ -7832,7 +7840,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %140 = load ptr, ptr %139, align 8
   %141 = getelementptr { ptr, ptr }, ptr %140, i32 0, i32 0
   %142 = load ptr, ptr %141, align 8
-  %143 = call { ptr, ptr, ptr, i32 } %142(ptr %133)
+  %143 = call { ptr, ptr, ptr, i32 } %142(ptr %133) #2
   %144 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %143, ptr %144, align 8
   %145 = call ptr @llvm.invariant.start.p0(i64 16, ptr %144)
@@ -7956,7 +7964,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   store ptr @i32_typ, ptr %237, align 8
   %238 = getelementptr { ptr, ptr, ptr, ptr }, ptr %234, i32 0, i32 3
   store ptr %168, ptr %238, align 8
-  %239 = call ptr %233({ ptr, ptr, ptr, i32 } %190, ptr %234)
+  %239 = call ptr @behavior_wrapper(ptr %233, { ptr, ptr, ptr, i32 } %190, ptr %234)
   %240 = call { ptr, i160 } %239({ ptr, ptr, ptr, i32 } %190, { ptr, ptr, ptr, i32 } %190, ptr %224, { ptr, i160 } %153, i32 %89, i32 %131, { ptr, ptr, ptr, i32 } %178)
   %241 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %240, ptr %241, align 8
@@ -8013,7 +8021,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %287 = load ptr, ptr %286, align 8
   %288 = getelementptr { ptr }, ptr %7, i32 0, i32 0
   store ptr @i32_typ, ptr %288, align 8
-  %289 = call ptr %287({ ptr, ptr, ptr, i32 } %262, ptr %7)
+  %289 = call ptr @behavior_wrapper(ptr %287, { ptr, ptr, ptr, i32 } %262, ptr %7)
   %290 = call i32 %289({ ptr, ptr, ptr, i32 } %262, { ptr, ptr, ptr, i32 } %262, ptr %6, i32 %89)
   %291 = getelementptr { ptr, ptr, ptr, i32 }, ptr %20, i32 0, i32 1
   %292 = load ptr, ptr %291, align 8
@@ -8026,7 +8034,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %299 = load ptr, ptr %298, align 8
   %300 = getelementptr { ptr, ptr }, ptr %299, i32 0, i32 0
   %301 = load ptr, ptr %300, align 8
-  %302 = call { ptr, ptr, ptr, i32 } %301(ptr %292)
+  %302 = call { ptr, ptr, ptr, i32 } %301(ptr %292) #2
   store { ptr, ptr, ptr, i32 } %302, ptr %8, align 8
   %303 = call ptr @llvm.invariant.start.p0(i64 16, ptr %8)
   call void @assume_offset(ptr %8, ptr @Array)
@@ -8144,7 +8152,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   store ptr @i32_typ, ptr %390, align 8
   %391 = getelementptr { ptr, ptr, ptr, ptr }, ptr %13, i32 0, i32 3
   store ptr %323, ptr %391, align 8
-  %392 = call ptr %387({ ptr, ptr, ptr, i32 } %345, ptr %13)
+  %392 = call ptr @behavior_wrapper(ptr %387, { ptr, ptr, ptr, i32 } %345, ptr %13)
   %393 = call { ptr, i160 } %392({ ptr, ptr, ptr, i32 } %345, { ptr, ptr, ptr, i32 } %345, ptr %12, { ptr, i160 } %309, i32 %89, i32 %290, { ptr, ptr, ptr, i32 } %333)
   store { ptr, i160 } %393, ptr %14, align 8
   %394 = getelementptr { ptr, i160 }, ptr %14, i32 0, i32 0
@@ -8360,7 +8368,7 @@ define void @HashMap_clear_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1
   store ptr @i32_typ, ptr %101, align 8
   %102 = getelementptr { ptr, ptr }, ptr %100, i32 0, i32 1
   store ptr @i32_typ, ptr %102, align 8
-  %103 = call ptr %99({ ptr, ptr, ptr, i32 } %72, ptr %100)
+  %103 = call ptr @behavior_wrapper(ptr %99, { ptr, ptr, ptr, i32 } %72, ptr %100)
   call void %103({ ptr, ptr, ptr, i32 } %72, { ptr, ptr, ptr, i32 } %72, ptr %92, i32 8, i32 8)
   %104 = alloca { ptr, ptr, ptr, i32 }, align 8
   %105 = getelementptr { ptr, ptr, ptr, i32 }, ptr %57, i32 0, i32 0
@@ -8403,7 +8411,7 @@ define void @HashMap_clear_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1
   %137 = getelementptr { ptr, ptr, ptr, i32 }, ptr %104, i32 0, i32 3
   %138 = load i32, ptr %137, align 4
   %139 = insertvalue { ptr, ptr, ptr, i32 } %136, i32 %138, 3
-  call void %127(ptr %118, { ptr, ptr, ptr, i32 } %139)
+  call void %127(ptr %118, { ptr, ptr, ptr, i32 } %139) #1
   %140 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 1
   %141 = load ptr, ptr %140, align 8
   %142 = load ptr, ptr %6, align 8
@@ -8506,7 +8514,7 @@ define void @HashMap_clear_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1
   store ptr @i32_typ, ptr %222, align 8
   %223 = getelementptr { ptr, ptr }, ptr %221, i32 0, i32 1
   store ptr @i32_typ, ptr %223, align 8
-  %224 = call ptr %220({ ptr, ptr, ptr, i32 } %193, ptr %221)
+  %224 = call ptr @behavior_wrapper(ptr %220, { ptr, ptr, ptr, i32 } %193, ptr %221)
   call void %224({ ptr, ptr, ptr, i32 } %193, { ptr, ptr, ptr, i32 } %193, ptr %213, i32 8, i32 8)
   %225 = alloca { ptr, ptr, ptr, i32 }, align 8
   %226 = getelementptr { ptr, ptr, ptr, i32 }, ptr %178, i32 0, i32 0
@@ -8549,7 +8557,7 @@ define void @HashMap_clear_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1
   %258 = getelementptr { ptr, ptr, ptr, i32 }, ptr %225, i32 0, i32 3
   %259 = load i32, ptr %258, align 4
   %260 = insertvalue { ptr, ptr, ptr, i32 } %257, i32 %259, 3
-  call void %248(ptr %239, { ptr, ptr, ptr, i32 } %260)
+  call void %248(ptr %239, { ptr, ptr, ptr, i32 } %260) #1
   %261 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 1
   %262 = load ptr, ptr %261, align 8
   %263 = load ptr, ptr %6, align 8
@@ -8561,7 +8569,7 @@ define void @HashMap_clear_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1
   %269 = load ptr, ptr %268, align 8
   %270 = getelementptr { ptr, ptr }, ptr %269, i32 0, i32 1
   %271 = load ptr, ptr %270, align 8
-  call void %271(ptr %262, i32 0)
+  call void %271(ptr %262, i32 0) #1
   ret void
 }
 
@@ -8607,7 +8615,7 @@ define i32 @HashMap_size_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, 
   %27 = load ptr, ptr %26, align 8
   %28 = getelementptr { ptr, ptr }, ptr %27, i32 0, i32 0
   %29 = load ptr, ptr %28, align 8
-  %30 = call i32 %29(ptr %20)
+  %30 = call i32 %29(ptr %20) #2
   ret i32 %30
 }
 
@@ -8653,7 +8661,7 @@ define { ptr, ptr, ptr, i32 } @HashMap_iterator_({ ptr, ptr, ptr, i32 } %0, { pt
   %27 = load ptr, ptr %26, align 8
   %28 = getelementptr { ptr, ptr }, ptr %27, i32 0, i32 0
   %29 = load ptr, ptr %28, align 8
-  %30 = call { ptr, ptr, ptr, i32 } %29(ptr %20)
+  %30 = call { ptr, ptr, ptr, i32 } %29(ptr %20) #2
   %31 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %30, ptr %31, align 8
   %32 = call ptr @llvm.invariant.start.p0(i64 16, ptr %31)
@@ -8669,7 +8677,7 @@ define { ptr, ptr, ptr, i32 } @HashMap_iterator_({ ptr, ptr, ptr, i32 } %0, { pt
   %41 = load ptr, ptr %40, align 8
   %42 = getelementptr { ptr, ptr }, ptr %41, i32 0, i32 0
   %43 = load ptr, ptr %42, align 8
-  %44 = call { ptr, ptr, ptr, i32 } %43(ptr %34)
+  %44 = call { ptr, ptr, ptr, i32 } %43(ptr %34) #2
   %45 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %44, ptr %45, align 8
   %46 = call ptr @llvm.invariant.start.p0(i64 16, ptr %45)
@@ -8740,7 +8748,7 @@ define { ptr, ptr, ptr, i32 } @HashMap_iterator_({ ptr, ptr, ptr, i32 } %0, { pt
   %96 = load ptr, ptr %95, align 8
   %97 = getelementptr { ptr, ptr }, ptr %96, i32 0, i32 0
   %98 = load ptr, ptr %97, align 8
-  %99 = call { ptr, ptr, ptr, i32 } %98(ptr %89)
+  %99 = call { ptr, ptr, ptr, i32 } %98(ptr %89) #2
   %100 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %99, ptr %100, align 8
   %101 = call ptr @llvm.invariant.start.p0(i64 16, ptr %100)
@@ -8756,7 +8764,7 @@ define { ptr, ptr, ptr, i32 } @HashMap_iterator_({ ptr, ptr, ptr, i32 } %0, { pt
   %110 = load ptr, ptr %109, align 8
   %111 = getelementptr { ptr, ptr }, ptr %110, i32 0, i32 0
   %112 = load ptr, ptr %111, align 8
-  %113 = call { ptr, ptr, ptr, i32 } %112(ptr %103)
+  %113 = call { ptr, ptr, ptr, i32 } %112(ptr %103) #2
   %114 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %113, ptr %114, align 8
   %115 = call ptr @llvm.invariant.start.p0(i64 16, ptr %114)
@@ -8917,7 +8925,7 @@ define { ptr, ptr, ptr, i32 } @HashMap_iterator_({ ptr, ptr, ptr, i32 } %0, { pt
   store ptr %130, ptr %234, align 8
   %235 = getelementptr { ptr, ptr }, ptr %233, i32 0, i32 1
   store ptr %155, ptr %235, align 8
-  %236 = call ptr %232({ ptr, ptr, ptr, i32 } %177, ptr %233)
+  %236 = call ptr @behavior_wrapper(ptr %232, { ptr, ptr, ptr, i32 } %177, ptr %233)
   call void %236({ ptr, ptr, ptr, i32 } %177, { ptr, ptr, ptr, i32 } %177, ptr %225, { ptr, ptr, ptr, i32 } %140, { ptr, ptr, ptr, i32 } %165)
   %237 = alloca { ptr, ptr, ptr, i32 }, align 8
   %238 = getelementptr { ptr, ptr, ptr, i32 }, ptr %84, i32 0, i32 0
@@ -9668,7 +9676,7 @@ define void @HashMapIterator_init_map_table1ArrayEntryK._V_or_Nil_map_table2Arra
   %69 = getelementptr { ptr, ptr, ptr, i32 }, ptr %36, i32 0, i32 3
   %70 = load i32, ptr %69, align 4
   %71 = insertvalue { ptr, ptr, ptr, i32 } %68, i32 %70, 3
-  call void %59(ptr %50, { ptr, ptr, ptr, i32 } %71)
+  call void %59(ptr %50, { ptr, ptr, ptr, i32 } %71) #1
   %72 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %4, ptr %72, align 8
   %73 = call ptr @llvm.invariant.start.p0(i64 16, ptr %72)
@@ -9731,7 +9739,7 @@ define void @HashMapIterator_init_map_table1ArrayEntryK._V_or_Nil_map_table2Arra
   %120 = getelementptr { ptr, ptr, ptr, i32 }, ptr %87, i32 0, i32 3
   %121 = load i32, ptr %120, align 4
   %122 = insertvalue { ptr, ptr, ptr, i32 } %119, i32 %121, 3
-  call void %110(ptr %101, { ptr, ptr, ptr, i32 } %122)
+  call void %110(ptr %101, { ptr, ptr, ptr, i32 } %122) #1
   %123 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 1
   %124 = load ptr, ptr %123, align 8
   %125 = load ptr, ptr %8, align 8
@@ -9743,7 +9751,7 @@ define void @HashMapIterator_init_map_table1ArrayEntryK._V_or_Nil_map_table2Arra
   %131 = load ptr, ptr %130, align 8
   %132 = getelementptr { ptr, ptr }, ptr %131, i32 0, i32 1
   %133 = load ptr, ptr %132, align 8
-  call void %133(ptr %124, i32 0)
+  call void %133(ptr %124, i32 0) #1
   %134 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 1
   %135 = load ptr, ptr %134, align 8
   %136 = load ptr, ptr %8, align 8
@@ -9755,7 +9763,7 @@ define void @HashMapIterator_init_map_table1ArrayEntryK._V_or_Nil_map_table2Arra
   %142 = load ptr, ptr %141, align 8
   %143 = getelementptr { ptr, ptr }, ptr %142, i32 0, i32 1
   %144 = load ptr, ptr %143, align 8
-  call void %144(ptr %135, i1 false)
+  call void %144(ptr %135, i1 false) #1
   ret void
 }
 
@@ -9867,7 +9875,7 @@ define { ptr, i160 } @HashMapIterator_next_from_table_tableArrayEntryK._V_or_Nil
   %64 = load ptr, ptr %63, align 8
   %65 = getelementptr { ptr, ptr }, ptr %64, i32 0, i32 0
   %66 = load ptr, ptr %65, align 8
-  %67 = call i32 %66(ptr %58)
+  %67 = call i32 %66(ptr %58) #2
   %68 = load ptr, ptr %49, align 8
   %69 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %68, 0
   %70 = load ptr, ptr %50, align 8
@@ -9896,7 +9904,7 @@ define { ptr, i160 } @HashMapIterator_next_from_table_tableArrayEntryK._V_or_Nil
   %93 = getelementptr ptr, ptr %68, i32 %74
   %94 = getelementptr ptr, ptr %93, i32 8
   %95 = load ptr, ptr %94, align 8
-  %96 = call ptr %95({ ptr, ptr, ptr, i32 } %75, ptr %6)
+  %96 = call ptr @behavior_wrapper(ptr %95, { ptr, ptr, ptr, i32 } %75, ptr %6)
   %97 = call i32 %96({ ptr, ptr, ptr, i32 } %75, { ptr, ptr, ptr, i32 } %75, ptr %5)
   %98 = icmp slt i32 %67, %97
   br i1 %98, label %99, label %186
@@ -9913,7 +9921,7 @@ define { ptr, i160 } @HashMapIterator_next_from_table_tableArrayEntryK._V_or_Nil
   %108 = load ptr, ptr %107, align 8
   %109 = getelementptr { ptr, ptr }, ptr %108, i32 0, i32 0
   %110 = load ptr, ptr %109, align 8
-  %111 = call i32 %110(ptr %101)
+  %111 = call i32 %110(ptr %101) #2
   %112 = getelementptr { ptr, ptr, ptr, i32 }, ptr %34, i32 0, i32 0
   %113 = load ptr, ptr %112, align 8
   %114 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %113, 0
@@ -9954,7 +9962,7 @@ define { ptr, i160 } @HashMapIterator_next_from_table_tableArrayEntryK._V_or_Nil
   %148 = load ptr, ptr %147, align 8
   %149 = getelementptr { ptr }, ptr %8, i32 0, i32 0
   store ptr @i32_typ, ptr %149, align 8
-  %150 = call ptr %148({ ptr, ptr, ptr, i32 } %123, ptr %8)
+  %150 = call ptr @behavior_wrapper(ptr %148, { ptr, ptr, ptr, i32 } %123, ptr %8)
   %151 = call { ptr, i160 } %150({ ptr, ptr, ptr, i32 } %123, { ptr, ptr, ptr, i32 } %123, ptr %7, i32 %111)
   store { ptr, i160 } %151, ptr %9, align 8
   %152 = getelementptr { ptr, ptr, ptr, i32 }, ptr %19, i32 0, i32 1
@@ -9968,7 +9976,7 @@ define { ptr, i160 } @HashMapIterator_next_from_table_tableArrayEntryK._V_or_Nil
   %160 = load ptr, ptr %159, align 8
   %161 = getelementptr { ptr, ptr }, ptr %160, i32 0, i32 0
   %162 = load ptr, ptr %161, align 8
-  %163 = call i32 %162(ptr %153)
+  %163 = call i32 %162(ptr %153) #2
   %164 = add i32 %163, 1
   %165 = getelementptr { ptr, ptr, ptr, i32 }, ptr %19, i32 0, i32 1
   %166 = load ptr, ptr %165, align 8
@@ -9981,7 +9989,7 @@ define { ptr, i160 } @HashMapIterator_next_from_table_tableArrayEntryK._V_or_Nil
   %173 = load ptr, ptr %172, align 8
   %174 = getelementptr { ptr, ptr }, ptr %173, i32 0, i32 1
   %175 = load ptr, ptr %174, align 8
-  call void %175(ptr %166, i32 %164)
+  call void %175(ptr %166, i32 %164) #1
   %176 = getelementptr { ptr, i160 }, ptr %9, i32 0, i32 0
   %177 = load ptr, ptr %176, align 8
   %178 = ptrtoint ptr %177 to i64
@@ -10063,7 +10071,7 @@ define { ptr, i160 } @HashMapIterator_next_from_table_tableArrayEntryK._V_or_Nil
   %237 = getelementptr ptr, ptr %205, i32 %214
   %238 = getelementptr ptr, ptr %237, i32 9
   %239 = load ptr, ptr %238, align 8
-  %240 = call ptr %239({ ptr, ptr, ptr, i32 } %215, ptr %12)
+  %240 = call ptr @behavior_wrapper(ptr %239, { ptr, ptr, ptr, i32 } %215, ptr %12)
   %241 = call { ptr, ptr, ptr, i32 } %240({ ptr, ptr, ptr, i32 } %215, { ptr, ptr, ptr, i32 } %215, ptr %11)
   store { ptr, ptr, ptr, i32 } %241, ptr %13, align 8
   %242 = call ptr @llvm.invariant.start.p0(i64 16, ptr %13)
@@ -10170,7 +10178,7 @@ define { ptr, i160 } @HashMapIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %38 = load ptr, ptr %37, align 8
   %39 = getelementptr { ptr, ptr }, ptr %38, i32 0, i32 0
   %40 = load ptr, ptr %39, align 8
-  %41 = call i1 %40(ptr %31)
+  %41 = call i1 %40(ptr %31) #2
   br i1 %41, label %42, label %140
 
 42:                                               ; preds = %3
@@ -10185,7 +10193,7 @@ define { ptr, i160 } @HashMapIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %51 = load ptr, ptr %50, align 8
   %52 = getelementptr { ptr, ptr }, ptr %51, i32 0, i32 0
   %53 = load ptr, ptr %52, align 8
-  %54 = call { ptr, ptr, ptr, i32 } %53(ptr %44)
+  %54 = call { ptr, ptr, ptr, i32 } %53(ptr %44) #2
   store { ptr, ptr, ptr, i32 } %54, ptr %4, align 8
   %55 = call ptr @llvm.invariant.start.p0(i64 16, ptr %4)
   call void @assume_offset(ptr %4, ptr @Array)
@@ -10283,7 +10291,7 @@ define { ptr, i160 } @HashMapIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %130 = load ptr, ptr %129, align 8
   %131 = getelementptr { ptr }, ptr %7, i32 0, i32 0
   store ptr %69, ptr %131, align 8
-  %132 = call ptr %130({ ptr, ptr, ptr, i32 } %91, ptr %7)
+  %132 = call ptr @behavior_wrapper(ptr %130, { ptr, ptr, ptr, i32 } %91, ptr %7)
   %133 = call { ptr, i160 } %132({ ptr, ptr, ptr, i32 } %91, { ptr, ptr, ptr, i32 } %91, ptr %6, { ptr, ptr, ptr, i32 } %79)
   store { ptr, i160 } %133, ptr %8, align 8
   %134 = getelementptr { ptr, i160 }, ptr %8, i32 0, i32 0
@@ -10306,7 +10314,7 @@ define { ptr, i160 } @HashMapIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %149 = load ptr, ptr %148, align 8
   %150 = getelementptr { ptr, ptr }, ptr %149, i32 0, i32 0
   %151 = load ptr, ptr %150, align 8
-  %152 = call { ptr, ptr, ptr, i32 } %151(ptr %142)
+  %152 = call { ptr, ptr, ptr, i32 } %151(ptr %142) #2
   store { ptr, ptr, ptr, i32 } %152, ptr %9, align 8
   %153 = call ptr @llvm.invariant.start.p0(i64 16, ptr %9)
   call void @assume_offset(ptr %9, ptr @Array)
@@ -10404,7 +10412,7 @@ define { ptr, i160 } @HashMapIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %228 = load ptr, ptr %227, align 8
   %229 = getelementptr { ptr }, ptr %12, i32 0, i32 0
   store ptr %167, ptr %229, align 8
-  %230 = call ptr %228({ ptr, ptr, ptr, i32 } %189, ptr %12)
+  %230 = call ptr @behavior_wrapper(ptr %228, { ptr, ptr, ptr, i32 } %189, ptr %12)
   %231 = call { ptr, i160 } %230({ ptr, ptr, ptr, i32 } %189, { ptr, ptr, ptr, i32 } %189, ptr %11, { ptr, ptr, ptr, i32 } %177)
   store { ptr, i160 } %231, ptr %13, align 8
   %232 = getelementptr { ptr, i160 }, ptr %13, i32 0, i32 0
@@ -10453,7 +10461,7 @@ define { ptr, i160 } @HashMapIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %266 = load ptr, ptr %265, align 8
   %267 = getelementptr { ptr, ptr }, ptr %266, i32 0, i32 1
   %268 = load ptr, ptr %267, align 8
-  call void %268(ptr %260, i32 0)
+  call void %268(ptr %260, i32 0) #1
   %269 = load ptr, ptr %257, align 8
   %270 = load ptr, ptr %17, align 8
   %271 = call ptr @llvm.invariant.start.p0(i64 128, ptr %270)
@@ -10463,7 +10471,7 @@ define { ptr, i160 } @HashMapIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %275 = load ptr, ptr %274, align 8
   %276 = getelementptr { ptr, ptr }, ptr %275, i32 0, i32 1
   %277 = load ptr, ptr %276, align 8
-  call void %277(ptr %269, i1 true)
+  call void %277(ptr %269, i1 true) #1
   br i1 true, label %259, label %278
 
 278:                                              ; preds = %259
@@ -10556,7 +10564,7 @@ define i32 @string_hasher({ ptr, ptr, ptr, i32 } %0) {
   %40 = getelementptr ptr, ptr %39, i32 15
   %41 = load ptr, ptr %40, align 8
   %42 = alloca {}, align 8
-  %43 = call ptr %41({ ptr, ptr, ptr, i32 } %35, ptr %42)
+  %43 = call ptr @behavior_wrapper(ptr %41, { ptr, ptr, ptr, i32 } %35, ptr %42)
   %44 = call { ptr, ptr, ptr, i32 } %43({ ptr, ptr, ptr, i32 } %35, { ptr, ptr, ptr, i32 } %35, ptr %36)
   %45 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %44, ptr %45, align 8
@@ -10637,7 +10645,7 @@ define i32 @string_hasher({ ptr, ptr, ptr, i32 } %0) {
   %104 = getelementptr ptr, ptr %94, i32 %100
   %105 = getelementptr ptr, ptr %104, i32 3
   %106 = load ptr, ptr %105, align 8
-  %107 = call ptr %106({ ptr, ptr, ptr, i32 } %101, ptr %3)
+  %107 = call ptr @behavior_wrapper(ptr %106, { ptr, ptr, ptr, i32 } %101, ptr %3)
   %108 = call { ptr, i160 } %107({ ptr, ptr, ptr, i32 } %101, { ptr, ptr, ptr, i32 } %101, ptr %2)
   store { ptr, i160 } %108, ptr %4, align 8
   %109 = load ptr, ptr %91, align 8
@@ -10675,7 +10683,7 @@ define i32 @string_hasher({ ptr, ptr, ptr, i32 } %0) {
   %136 = getelementptr ptr, ptr %123, i32 %132
   %137 = getelementptr ptr, ptr %136, i32 1
   %138 = load ptr, ptr %137, align 8
-  %139 = call ptr %138({ ptr, ptr, ptr, i32 } %133, ptr %7)
+  %139 = call ptr @behavior_wrapper(ptr %138, { ptr, ptr, ptr, i32 } %133, ptr %7)
   %140 = call i8 %139({ ptr, ptr, ptr, i32 } %133, { ptr, ptr, ptr, i32 } %133, ptr %6)
   %141 = sext i8 %140 to i32
   %142 = mul i32 %93, 31
@@ -10831,7 +10839,7 @@ define i1 @string_eq({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1) {
   %77 = alloca { ptr }, align 8
   %78 = getelementptr { ptr }, ptr %77, i32 0, i32 0
   store ptr %47, ptr %78, align 8
-  %79 = call ptr %76({ ptr, ptr, ptr, i32 } %69, ptr %77)
+  %79 = call ptr @behavior_wrapper(ptr %76, { ptr, ptr, ptr, i32 } %69, ptr %77)
   %80 = call i1 %79({ ptr, ptr, ptr, i32 } %69, { ptr, ptr, ptr, i32 } %69, ptr %70, { ptr, ptr, ptr, i32 } %57)
   ret i1 %80
 }
@@ -10840,6 +10848,8 @@ define i1 @string_eq({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1) {
 declare ptr @llvm.invariant.start.p0(i64 immarg, ptr nocapture) #0
 
 attributes #0 = { nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
+attributes #1 = { nounwind willreturn memory(argmem: readwrite) }
+attributes #2 = { nounwind willreturn memory(argmem: read, inaccessiblemem: readwrite) }
 
 !llvm.module.flags = !{!0}
 

@@ -48,6 +48,16 @@ define void @unbox_wrapper(ptr %f, { ptr, i160 } %0, ptr nocapture nofree readon
   ret void
 }
 
+define ptr @behavior_wrapper(ptr %f, { ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull %1) speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: read, inaccessiblemem: none) {
+  %result = call ptr %f({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull %1) mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: read, inaccessiblemem: none)
+  ret ptr %result
+}
+  
+define ptr @class_behavior_wrapper(ptr %f, ptr nocapture nofree noundef nonnull %1) speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: read, inaccessiblemem: none) {
+  %result = call ptr %f(ptr nocapture nofree noundef nonnull %1) mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: read, inaccessiblemem: none)
+  ret ptr %result
+}
+
 define ptr @adjust_trampoline(ptr %tramp) {
   %ret = call ptr @llvm.adjust.trampoline(ptr %tramp) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: read)
   ret ptr %ret

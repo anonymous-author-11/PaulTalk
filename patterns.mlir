@@ -468,6 +468,18 @@ module @patterns {
       %unbox_wrapper_with_region = pdl.apply_native_rewrite "add_region"(%unbox_wrapper_decl : !pdl.operation) : !pdl.operation
       pdl.erase %unbox_wrapper_decl
 
+      %behavior_wrapper = pdl.attribute = "behavior_wrapper"
+      %func_type_attr834 = pdl.attribute = !llvm.func<ptr (ptr, !llvm.struct<(ptr, ptr, ptr, i32)>, ptr)>
+      %behavior_wrapper_decl = pdl.operation "llvm.func" {"sym_name" = %behavior_wrapper, "function_type" = %func_type_attr834, "linkage" = %linkage}
+      %behavior_wrapper_with_region = pdl.apply_native_rewrite "add_region"(%behavior_wrapper_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %behavior_wrapper_decl
+
+      %class_behavior_wrapper = pdl.attribute = "class_behavior_wrapper"
+      %func_type_attr2834 = pdl.attribute = !llvm.func<ptr (ptr, ptr)>
+      %class_behavior_wrapper_decl = pdl.operation "llvm.func" {"sym_name" = %class_behavior_wrapper, "function_type" = %func_type_attr2834, "linkage" = %linkage}
+      %class_behavior_wrapper_with_region = pdl.apply_native_rewrite "add_region"(%class_behavior_wrapper_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %class_behavior_wrapper_decl
+
       %coro_call = pdl.attribute = "coroutine_call"
       %func_type_attr12 = pdl.attribute = !llvm.func<void (ptr)>
       %coroutine_call_decl = pdl.operation "llvm.func" {"sym_name" = %coro_call, "function_type" = %func_type_attr12, "linkage" = %linkage}

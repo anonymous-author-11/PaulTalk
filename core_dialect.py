@@ -646,6 +646,9 @@ class MethodCallOp(MethodCallLike, IRDLOperation):
     def method_args(self):
         return [self.fat_ptr, self.fat_ptr, self.parameterizations, *self.args]
 
+    def wrapper_name(self):
+        return "behavior_wrapper"
+
 @irdl_op_definition
 class ClassMethodCallOp(MethodCallLike, IRDLOperation):
     name = "mini.class_method_call"
@@ -667,6 +670,9 @@ class ClassMethodCallOp(MethodCallLike, IRDLOperation):
 
     def method_args(self):
         return [self.parameterizations, *self.args]
+
+    def wrapper_name(self):
+        return "class_behavior_wrapper"
 
 @irdl_op_definition
 class FieldAccessOp(IRDLOperation):

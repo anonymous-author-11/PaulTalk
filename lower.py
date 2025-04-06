@@ -1747,9 +1747,10 @@ class LowerParameterizationIndexation(RewritePattern):
             index = index_attr.value.data + 1
             ary_type = llvm.LLVMArrayType.from_size_and_type(len(indices) - i, llvm.LLVMPointerType.opaque())
             gep = llvm.GEPOp.from_mixed_indices(current_param, [0, index], pointee_type=ary_type)
+            invariant = InvariantOp.make(current_param, 8 * (index + 1))
             load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
             current_param = load.results[0]
-            rewriter.inline_block_before_matched_op(Block([gep, load]))
+            rewriter.inline_block_before_matched_op(Block([gep, invariant, load]))
 
         cast = builtin.UnrealizedConversionCastOp.create(operands=[current_param], result_types=[llvm.LLVMPointerType.opaque()])
         rewriter.replace_matched_op(cast)
@@ -1772,9 +1773,7 @@ class LowerMethodCall(RewritePattern):
         fptr = llvm.LoadOp(fptr_ptr.results[0], llvm.LLVMPointerType.opaque())
         concrete_ary = llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque() for t in op.vptrs.data])
         concrete_types = AllocateOp.make(concrete_ary)
-        method_typ0 = FunctionType.from_lists([arg.type for arg in op.behavior_args(concrete_types.results[0])], [llvm.LLVMPointerType.opaque()])
-        laundered0 = builtin.UnrealizedConversionCastOp(operands=[fptr.results[0]], result_types=[method_typ0])
-        ops = [vptr, invariant2, adjustment, offsetted, fptr_ptr, fptr, concrete_types, laundered0]
+        ops = [vptr, invariant2, adjustment, offsetted, fptr_ptr, fptr, concrete_types]
 
         ary_0 = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
         for (i, element) in enumerate(op.vptrs.data):
@@ -1790,7 +1789,7 @@ class LowerMethodCall(RewritePattern):
             store = llvm.StoreOp(v.results[0], gep1.results[0])
             ops.extend([v, gep1, store])
 
-        behavior_call = func.CallIndirect(laundered0.results[0], [*op.behavior_args(concrete_types.results[0])], llvm.LLVMPointerType.opaque())
+        behavior_call = llvm.CallOp(op.wrapper_name(), fptr.results[0], *op.behavior_args(concrete_types.results[0]), return_type=llvm.LLVMPointerType.opaque())
 
         method_typ1 = FunctionType.from_lists([arg.type for arg in op.method_args()], result_types)
         laundered1 = builtin.UnrealizedConversionCastOp(operands=[behavior_call.results[0]], result_types=[method_typ1])
