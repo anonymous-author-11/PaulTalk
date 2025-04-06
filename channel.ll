@@ -83,6 +83,10 @@ declare { ptr, i160 } @box_wrapper(ptr, ptr, ptr)
 
 declare void @unbox_wrapper(ptr, { ptr, i160 }, ptr, ptr)
 
+declare ptr @behavior_wrapper(ptr, { ptr, ptr, ptr, i32 }, ptr)
+
+declare ptr @class_behavior_wrapper(ptr, ptr)
+
 declare void @coroutine_call(ptr)
 
 declare void @report_exception({ ptr })
@@ -305,7 +309,7 @@ define i32 @Channel_get_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, p
   %71 = call ptr @llvm.invariant.start.p0(i64 16, ptr %59)
   %72 = getelementptr ptr, ptr %59, i32 %68
   %73 = load ptr, ptr %72, align 8
-  %74 = call ptr %73({ ptr, ptr, ptr, i32 } %69, ptr %10)
+  %74 = call ptr @behavior_wrapper(ptr %73, { ptr, ptr, ptr, i32 } %69, ptr %10)
   call void %74({ ptr, ptr, ptr, i32 } %69, { ptr, ptr, ptr, i32 } %69, ptr %9)
   %75 = getelementptr { ptr, i160 }, ptr %8, i32 0, i32 0
   %76 = load ptr, ptr %75, align 8
@@ -456,7 +460,7 @@ define void @Channel_put_new_valuePtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
   %70 = call ptr @llvm.invariant.start.p0(i64 16, ptr %58)
   %71 = getelementptr ptr, ptr %58, i32 %67
   %72 = load ptr, ptr %71, align 8
-  %73 = call ptr %72({ ptr, ptr, ptr, i32 } %68, ptr %8)
+  %73 = call ptr @behavior_wrapper(ptr %72, { ptr, ptr, ptr, i32 } %68, ptr %8)
   call void %73({ ptr, ptr, ptr, i32 } %68, { ptr, ptr, ptr, i32 } %68, ptr %7)
   %74 = getelementptr { ptr, i160 }, ptr %6, i32 0, i32 0
   %75 = load ptr, ptr %74, align 8

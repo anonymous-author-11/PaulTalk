@@ -319,12 +319,14 @@ DONE:
 - Handle simplifying intersections between type parameters and builtin types [check!]
 	- Settled for a hack where if an intersection has a single builtin non-Any type it simplifies to that type [check!]
 - Setting offset to Any is a no-op [check!]
+- Write wrappers for box, unbox, size, getters, setters [check!]
+	- Will help uninlined optimization [check!]
+- Buffer indexation bug [check!]
+	- Need to split out buffer_get and buffer_set ops [check!]
+	- Can't return a pointer to the actual slot in the buffer [check!]
 
 TODO:
 
-- Buffer indexation bug
-	- Need to split out buffer indexation and set_index ops
-	- Can't return a pointer to the actual slot in the buffer
 - We should rework how parameterizations are retrieved
 	- Doing way too much work
 	- Shouldn't generate parameterizations just to throw them away
@@ -336,6 +338,7 @@ TODO:
 - I should be allowed to do "if [expression] is T"
 - Lazy logical ops
 - Add asserts
+	- There's mlir functionality for this
 - Allow underscores in numbers
 - Add assumes for unions of builtins?
 	- vptr must be equal to one of a set of possible
@@ -343,8 +346,6 @@ TODO:
 - Separate out _size_ and _data_size_ methods
 	- Use _data_size_ on instance creation and (un)boxing
 	- Use _size_ for everything else
-- Write wrappers for box, unbox, size, getters, setters
-	- Will help uninlined optimization
 - Maybe create offset & hash table separately and just give names to typedef
 	- Question is whether they need passed-through information
 	- If they do, split them off; otherwise, keep bundled

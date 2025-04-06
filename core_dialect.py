@@ -494,9 +494,24 @@ class BufferIndexationOp(IRDLOperation):
     name = "mini.buffer_indexation"
     receiver: Operand = operand_def()
     index: Operand = operand_def()
-    type_size_arg: OptOperandDef = opt_operand_def()
+    type_size_arg: Operand = operand_def()
     result: OpResult = result_def()
-    typ: OptAttributeDef = opt_attr_def(TypeAttribute)
+
+@irdl_op_definition
+class BufferGetOp(IRDLOperation):
+    name = "mini.buffer_get"
+    receiver: Operand = operand_def()
+    index: Operand = operand_def()
+    typ: TypeAttribute = attr_def(TypeAttribute)
+    result: OpResult = result_def()
+
+@irdl_op_definition
+class BufferSetOp(IRDLOperation):
+    name = "mini.buffer_set"
+    receiver: Operand = operand_def()
+    index: Operand = operand_def()
+    value: Operand = operand_def()
+    typ: TypeAttribute = attr_def(TypeAttribute)
 
 @irdl_op_definition
 class TupleIndexationOp(IRDLOperation):

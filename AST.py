@@ -408,10 +408,9 @@ class StringLiteral(Expression):
         lit = LiteralOp.create(attributes={"typ":llvmtype, "value":StringAttr(self.value)}, result_types=[llvm.LLVMPointerType.opaque()])
         attr_dict = {"typ":IntegerType(32), "value":IntegerAttr.from_int_and_width(0, 32)}
         zero = LiteralOp.create(attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
-        operands = [temp_var.codegen(scope), zero.results[0]]
-        index = BufferIndexationOp.create(operands=operands, attributes={"typ": llvmtype}, result_types=[llvm.LLVMPointerType.opaque()])
-        assign = AssignOp.create(operands=[index.results[0], lit.results[0]], attributes={"typ":llvmtype})
-        scope.region.last_block.add_ops([lit, zero, index, assign])
+        operands = [temp_var.codegen(scope), zero.results[0], lit.results[0]]
+        buffer_set = BufferSetOp.create(operands=operands, attributes={"typ": llvmtype})
+        scope.region.last_block.add_ops([lit, zero, buffer_set])
         string = ObjectCreation(self.info, random_letters(10), FatPtr.basic("String"), [temp_var, sizelit, capacitylit], None)
         return string.codegen(scope)
 
@@ -950,7 +949,7 @@ class BufferIndexation(Indexation):
         self_typ = self.exprtype(scope)
         operands = [self.receiver.codegen(scope), self.arguments[0].codegen(scope)]
         attr_dict = {"typ":self_typ.base_typ()}
-        idx = BufferIndexationOp.create(operands=operands, result_types=[self_typ], attributes=attr_dict)
+        idx = BufferGetOp.create(operands=operands, result_types=[self_typ], attributes=attr_dict)
         scope.region.last_block.add_op(idx)
         return idx.results[0]
 
@@ -971,14 +970,27 @@ class BufferIndexation(Indexation):
 class BufferSetIndex(MethodCall):
 
     def codegen(self, scope):
-        indexation = BufferIndexation(self.info, self.receiver, "_index", [self.arguments[0]])
-        assign = Assignment(self.info, indexation, self.arguments[1])
-        return assign.codegen(scope)
+        rec_typ = self.receiver.exprtype(scope)
+        elem_type = scope.simplify(rec_typ.elem_type)
+        cast = CastOp.make(self.arguments[1].codegen(scope), self.arguments[1].exprtype(scope), elem_type, type_id)
+        operands = [self.receiver.codegen(scope), self.arguments[0].codegen(scope), cast.results[0]]
+        attr_dict = {"typ":elem_type.base_typ()}
+        idx = BufferSetOp.create(operands=operands, attributes=attr_dict)
+        scope.region.last_block.add_ops([cast, idx])
+
+    def apply_constraints(self, scope):
+        scope.points_to_facts.add((self.receiver.info.id + ".elems_reg", "==", self.info.id))
+        scope.points_to_facts.add((self.receiver.info.id, "<", self.receiver.info.id + ".elems_reg"))
 
     def exprtype(self, scope):
-        indexation = BufferIndexation(self.info, self.receiver, "_index", [self.arguments[0]])
-        assign = Assignment(self.info, indexation, self.arguments[1])
-        assign.typeflow(scope)
+        rec_typ = self.receiver.exprtype(scope)
+        id_typ = self.arguments[0].exprtype(scope)
+        if id_typ != Ptr([IntegerType(32)]):
+            raise Exception(f"Line {self.info.line_number}: Indexation currently only supported with integers.")
+        value_type = self.arguments[1].exprtype(scope)
+        if not scope.subtype(value_type, rec_typ.elem_type):
+            raise Exception(f"Line {self.info.line_number}: Value being placed in buffer is of type {value_type}, but buffer is of type {rec_typ}.")
+        self.apply_constraints(scope)
 
 @dataclass
 class TupleIndexation(Indexation):

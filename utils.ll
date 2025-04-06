@@ -28,23 +28,23 @@ declare void @report_exception( {ptr} )
 ; Thread-local storage for our bump allocator state
 @current_ptr = internal thread_local global ptr null
 
-define ptr @typegetter_wrapper(ptr %f, ptr nocapture nofree noundef nonnull readonly %0) speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read) {
-  %result = call ptr %f(ptr nocapture nofree noundef nonnull readonly %0) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define ptr @typegetter_wrapper(ptr %f, ptr nocapture nofree noundef nonnull readonly %0) speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none) {
+  %result = call ptr %f(ptr nocapture nofree noundef nonnull readonly %0) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none)
   ret ptr %result
 }
 
-define { i64, i64 } @size_wrapper(ptr %f, ptr nocapture nofree readonly %0) speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read) {
-  %result = call { i64, i64 } %f(ptr nocapture nofree readonly %0) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define { i64, i64 } @size_wrapper(ptr %f, ptr nocapture nofree readonly %0) speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none) {
+  %result = call { i64, i64 } %f(ptr nocapture nofree readonly %0) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none)
   ret { i64, i64 } %result
 }
 
-define { ptr, i160 } @box_wrapper(ptr %f, ptr nocapture nofree readonly %0, ptr nocapture nofree readonly %1) speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: write) {
-  %result = call { ptr, i160 } %f(ptr nocapture nofree readonly %0, ptr nocapture nofree readonly %1) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: write)
+define { ptr, i160 } @box_wrapper(ptr %f, ptr nocapture nofree readonly %0, ptr nocapture nofree readonly %1) speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none) {
+  %result = call { ptr, i160 } %f(ptr nocapture nofree readonly %0, ptr nocapture nofree readonly %1) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none)
   ret { ptr, i160 } %result
 }
 
-define void @unbox_wrapper(ptr %f, { ptr, i160 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: readwrite) {
-  call void %f({ ptr, i160 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: readwrite)
+define void @unbox_wrapper(ptr %f, { ptr, i160 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: readwrite, inaccessiblemem: none) {
+  call void %f({ ptr, i160 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: readwrite, inaccessiblemem: none)
   ret void
 }
 
