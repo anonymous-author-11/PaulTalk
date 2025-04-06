@@ -336,6 +336,7 @@ TODO:
 - I should be allowed to do "if [expression] is T"
 - Lazy logical ops
 - Add asserts
+- Allow underscores in numbers
 - Add assumes for unions of builtins?
 	- vptr must be equal to one of a set of possible
 - Figure out why I had to split Entry constructor into two and if it can be fixed

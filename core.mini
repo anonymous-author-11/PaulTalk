@@ -1,4 +1,4 @@
-class Object {}
+import builtins;
 
 class Iterator {
 }

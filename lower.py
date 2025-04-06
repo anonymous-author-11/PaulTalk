@@ -1375,7 +1375,7 @@ class LowerTypeDef(RewritePattern):
         class_glob = GlobalOp(
             sym_name=op.class_name,
             global_type=vtbl_type,
-            linkage=llvm.LinkageAttr("linkonce_odr") if op.linkage else llvm.LinkageAttr("external"),
+            linkage=llvm.LinkageAttr("external"),
             constant=True
         )
         class_glob.regions = (Region([vtable_block]),)
@@ -1392,7 +1392,7 @@ class LowerHashTable(RewritePattern):
         class_tbl = GlobalOp(
             sym_name=op.class_name.data + "_hashtbl",
             global_type=tbl_typ,
-            linkage=llvm.LinkageAttr("linkonce_odr"),
+            linkage=llvm.LinkageAttr("external"),
             constant=True
         )
 
@@ -1422,7 +1422,7 @@ class LowerOffsetTable(RewritePattern):
         class_tbl = GlobalOp(
             sym_name=op.class_name.data + "_offset_tbl",
             global_type=tbl_typ,
-            linkage=llvm.LinkageAttr("linkonce_odr"),
+            linkage=llvm.LinkageAttr("external"),
             constant=True
         )
 
@@ -1891,7 +1891,7 @@ class LowerSizeInBytesDef(RewritePattern):
         ret = llvm.ReturnOp.create(operands=[insert2.results[0]])
         body_block.add_ops([rem_final, cmp_rem_final, high_pad_final, padding_final, final_size, undef, insert1, insert2, ret])
 
-        func_op = llvm.FuncOp(op.meth_name.data, ftype, body=body, linkage=llvm.LinkageAttr(op.linkage.data if op.linkage else "external"))
+        func_op = llvm.FuncOp(op.meth_name.data, ftype, body=body, linkage=llvm.LinkageAttr("external"))
         rewriter.replace_matched_op(func_op)
 
 class LowerGetterDef(RewritePattern):
@@ -2134,7 +2134,7 @@ class LowerBoxDef(RewritePattern):
         exit.add_ops([unwrap, ret])
 
         body = Region([entry, box_block, no_box_block, exit])
-        func_op = llvm.FuncOp(op.meth_name.data, ftype, body=body, linkage=llvm.LinkageAttr("linkonce_odr"))
+        func_op = llvm.FuncOp(op.meth_name.data, ftype, body=body, linkage=llvm.LinkageAttr("external"))
         rewriter.replace_matched_op(func_op)
 
 class LowerBoxUnionDef(RewritePattern):
@@ -2214,7 +2214,7 @@ class LowerBoxUnionDef(RewritePattern):
         exit.add_ops([unwrap, ret])
 
         body = Region([entry, right_size_block, box_decision_block, box_block, no_box_block, exit])
-        func_op = llvm.FuncOp(op.meth_name.data, ftype, body=body, linkage=llvm.LinkageAttr("linkonce_odr"))
+        func_op = llvm.FuncOp(op.meth_name.data, ftype, body=body, linkage=llvm.LinkageAttr("external"))
         rewriter.replace_matched_op(func_op)
 
 class LowerUnboxDef(RewritePattern):
@@ -2258,7 +2258,7 @@ class LowerUnboxDef(RewritePattern):
             source, false, memcpy0, ret
         ])
 
-        func_op = llvm.FuncOp(op.meth_name.data, ftype, body=body, linkage=llvm.LinkageAttr("linkonce_odr"))
+        func_op = llvm.FuncOp(op.meth_name.data, ftype, body=body, linkage=llvm.LinkageAttr("external"))
         rewriter.replace_matched_op(func_op)
 
 class LowerTypeAccessorDef(RewritePattern):

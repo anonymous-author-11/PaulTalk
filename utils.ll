@@ -25,6 +25,16 @@ declare void @report_exception( {ptr} )
 @current_coroutine = linkonce_odr thread_local global ptr null
 @always_one = linkonce thread_local global i1 1
 
+define ptr @field_wrapper(ptr %f, ptr nocapture nofree noundef nonnull readonly %0) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read) {
+  %result = call ptr %f(ptr nocapture nofree noundef nonnull readonly %0) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+  ret ptr %result
+}
+
+define { i64, i64 } @size_wrapper(ptr %f, ptr nocapture nofree readonly %0) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read) {
+  %result = call { i64, i64 } %f(ptr nocapture nofree readonly %0) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+  ret { i64, i64 } %result
+}
+
 ; Thread-local storage for our bump allocator state
 @current_ptr = internal thread_local global ptr null
 

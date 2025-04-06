@@ -41,12 +41,19 @@ class AST:
         typ_ops = []
         for typ_name, typ in builtin_types.items():
 
+            if self.root.info.filename != "builtins.mini":
+                attr_dict = {
+                    "class_name":StringAttr(typ_name),
+                    "vtbl_size":IntegerAttr.from_int_and_width(0, 32)
+                }
+                typ_ops.append(ExternalTypeDefOp.create(attributes=attr_dict))
+                continue
+
             size_fn_name = StringAttr("_size_" + typ_name)
             if typ_name not in ["tuple_typ", "union_typ"]:
                 size_fn = SizeInBytesDefOp.create(attributes={
                     "meth_name":size_fn_name,
-                    "types":ArrayAttr([typ.base_typ()]),
-                    "linkage":StringAttr("linkonce_odr")
+                    "types":ArrayAttr([typ.base_typ()])
                 })
                 func_ops.append(size_fn)
 
@@ -66,7 +73,6 @@ class AST:
             hash_tbl, prime = global_scope.build_hashtable(typ)
             offset_tbl = global_scope.build_offset_table(typ)
             hashid = IntegerAttr.from_int_and_width(hash_id(typ_name), 64)
-            linkage = StringAttr("linkonce_odr")
             attr_dict = {
                 "class_name":StringAttr(typ_name),
                 "methods":ArrayAttr([]),
@@ -74,7 +80,6 @@ class AST:
                 "offset_tbl":offset_tbl,
                 "prime":prime,
                 "hash_id":hashid,
-                "linkage":linkage,
                 "base_typ":typ.base_typ(),
                 "size_fn":size_fn_name,
                 "box_fn":box_fn_name,
@@ -1992,7 +1997,7 @@ class Behavior(Statement):
             null = llvm.ZeroOp.create(result_types=[IntegerType(64)])
             vptr_i64 = llvm.PtrToIntOp(vptr, IntegerType(64))
             subtype_call = ComparisonOp.make(vptr_i64.results[0], null.results[0], "EQ")
-            bblock.add_ops([null, vptr_i64, null_check])
+            bblock.add_ops([null, vptr_i64, subtype_call])
         else:
             subtype_call = SubtypeOp.create(operands=operands, result_types=[IntegerType(1)])
             bblock.add_op(subtype_call)
@@ -2344,7 +2349,6 @@ class ClassDef(Statement):
         unfixed_type_fields = [field for field in field_declarations if isinstance(field, TypeFieldDecl) and "subtype" in field.scoped_name(self._scope)]
         field_declarations = [*unfixed_type_fields, *data_fields, *fixed_type_fields]
         fields = [Field(i, self, declaration) for (i, declaration) in enumerate(field_declarations)]
-        if len(fields) > 0: print(f"redux {self.name} fields are {[field.declaration.scoped_name(self._scope) for field in fields]}")
         self.initialize_behaviors()
         methods = [*chain.from_iterable(behavior.methods for behavior in self.behaviors)]
         superfluous_methods = [*chain.from_iterable(behavior.superfluous_methods for behavior in self.behaviors)]
