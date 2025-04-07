@@ -1,6 +1,7 @@
 ; ModuleID = '<stdin>'
 source_filename = "llvm-link"
 
+@_parameterization_Int32_or_Float64 = linkonce_odr constant [4 x ptr] [ptr @union_typ, ptr @_parameterization_Int32, ptr @_parameterization_Float64, ptr null]
 @_parameterization_Float64_or_Int32 = linkonce_odr constant [4 x ptr] [ptr @union_typ, ptr @_parameterization_Float64, ptr @_parameterization_Int32, ptr null]
 @_parameterization_Ptri1 = linkonce_odr constant [2 x ptr] [ptr @bool_typ, ptr null]
 @_parameterization_Int32 = linkonce_odr constant [2 x ptr] [ptr @Int32, ptr null]
@@ -11,7 +12,7 @@ source_filename = "llvm-link"
 @_parameterization_Tuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64_ = linkonce_odr constant [6 x ptr] [ptr @tuple_typ, ptr @_parameterization_Ptrf64, ptr @_parameterization_Ptrf64, ptr @_parameterization_Ptrf64, ptr @_parameterization_Ptrf64, ptr null]
 @_parameterization_Float64 = linkonce_odr constant [2 x ptr] [ptr @Float64, ptr null]
 @_parameterization_Ptrf64 = linkonce_odr constant [2 x ptr] [ptr @f64_typ, ptr null]
-@azyrw_genericmini = internal constant [12 x i8] c"generic.mini"
+@jflje_genericmini = internal constant [12 x i8] c"generic.mini"
 @Pair_hashtbl = constant [4 x ptr] [ptr @Object, ptr @any_typ, ptr @Pair, ptr null]
 @Pair_offset_tbl = constant [4 x i32] [i32 19, i32 9, i32 9, i32 0]
 @Pair = constant { [3 x i64], [6 x ptr], [10 x ptr] } { [3 x i64] [i64 9197944775169318296, i64 4611686018427388081, i64 3], [6 x ptr] [ptr @subtype_test, ptr @Pair_hashtbl, ptr @Pair_offset_tbl, ptr @_size_Pair, ptr @_box_Default, ptr @_unbox_Default], [10 x ptr] [ptr @Pair_field_Pair_0, ptr @Pair_field_Pair_1, ptr @Pair_field_first, ptr @Pair_field_second, ptr @Pair_B_init_firstT_secondU, ptr @Pair_B_first_, ptr @Pair_B_second_, ptr @Pair_init_firstT_secondU, ptr @Pair_first_, ptr @Pair_second_] }
@@ -1632,7 +1633,7 @@ define { ptr, ptr, ptr, i32 } @Array__Self_from_iterable_iterableIterable2T(ptr 
   %60 = load ptr, ptr %59, align 8
   %61 = alloca {}, align 8
   %62 = call ptr @behavior_wrapper(ptr %60, { ptr, ptr, ptr, i32 } %54, ptr %61)
-  call void %62({ ptr, ptr, ptr, i32 } %54, { ptr, ptr, ptr, i32 } %54, ptr %55)
+  call void %62({ ptr, ptr, ptr, i32 } %54, { ptr, ptr, ptr, i32 } %54, ptr %55) #17
   %63 = alloca { ptr, ptr, ptr, i32 }, align 8
   %64 = getelementptr { ptr, ptr, ptr, i32 }, ptr %63, i32 0, i32 0
   %65 = load ptr, ptr %46, align 8
@@ -1683,7 +1684,7 @@ define { ptr, ptr, ptr, i32 } @Array__Self_from_iterable_iterableIterable2T(ptr 
   %101 = load ptr, ptr %100, align 8
   %102 = alloca {}, align 8
   %103 = call ptr @behavior_wrapper(ptr %101, { ptr, ptr, ptr, i32 } %95, ptr %102)
-  %104 = call { ptr, ptr, ptr, i32 } %103({ ptr, ptr, ptr, i32 } %95, { ptr, ptr, ptr, i32 } %95, ptr %96)
+  %104 = call { ptr, ptr, ptr, i32 } %103({ ptr, ptr, ptr, i32 } %95, { ptr, ptr, ptr, i32 } %95, ptr %96) #17
   %105 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %104, ptr %105, align 8
   %106 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -1757,7 +1758,7 @@ define { ptr, ptr, ptr, i32 } @Array__Self_from_iterable_iterableIterable2T(ptr 
   %157 = getelementptr ptr, ptr %156, i32 1
   %158 = load ptr, ptr %157, align 8
   %159 = call ptr @behavior_wrapper(ptr %158, { ptr, ptr, ptr, i32 } %153, ptr %4)
-  %160 = call { ptr, i160 } %159({ ptr, ptr, ptr, i32 } %153, { ptr, ptr, ptr, i32 } %153, ptr %3)
+  %160 = call { ptr, i160 } %159({ ptr, ptr, ptr, i32 } %153, { ptr, ptr, ptr, i32 } %153, ptr %3) #17
   store { ptr, i160 } %160, ptr %5, align 8
   %.reload4 = load ptr, ptr %.reg2mem3, align 8
   %161 = load ptr, ptr %.reload4, align 8
@@ -1811,7 +1812,7 @@ define { ptr, ptr, ptr, i32 } @Array__Self_from_iterable_iterableIterable2T(ptr 
   %195 = getelementptr { ptr }, ptr %11, i32 0, i32 0
   store ptr %174, ptr %195, align 8
   %196 = call ptr @behavior_wrapper(ptr %194, { ptr, ptr, ptr, i32 } %185, ptr %11)
-  %197 = call { ptr, ptr, ptr, i32 } %196({ ptr, ptr, ptr, i32 } %185, { ptr, ptr, ptr, i32 } %185, ptr %10, { ptr, i160 } %177)
+  %197 = call { ptr, ptr, ptr, i32 } %196({ ptr, ptr, ptr, i32 } %185, { ptr, ptr, ptr, i32 } %185, ptr %10, { ptr, i160 } %177) #17
   store { ptr, ptr, ptr, i32 } %197, ptr %12, align 8
   %198 = getelementptr { ptr, ptr, ptr, i32 }, ptr %12, i32 0, i32 0
   %199 = getelementptr { ptr, ptr, ptr, i32 }, ptr %13, i32 0, i32 0
@@ -2294,7 +2295,7 @@ define { ptr, ptr, ptr, i32 } @Array_append_xT({ ptr, ptr, ptr, i32 } %0, { ptr,
   %98 = getelementptr { ptr }, ptr %6, i32 0, i32 0
   store ptr @i32_typ, ptr %98, align 8
   %99 = call ptr @behavior_wrapper(ptr %97, { ptr, ptr, ptr, i32 } %82, ptr %6)
-  call void %99({ ptr, ptr, ptr, i32 } %82, { ptr, ptr, ptr, i32 } %82, ptr %5, i32 %70)
+  call void %99({ ptr, ptr, ptr, i32 } %82, { ptr, ptr, ptr, i32 } %82, ptr %5, i32 %70) #17
   br label %100
 
 100:                                              ; preds = %._crit_edge, %57
@@ -2709,7 +2710,7 @@ define { ptr, i160 } @Array__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %85 = getelementptr { ptr }, ptr %6, i32 0, i32 0
   store ptr @i32_typ, ptr %85, align 8
   %86 = call ptr @behavior_wrapper(ptr %84, { ptr, ptr, ptr, i32 } %69, ptr %6)
-  call void %86({ ptr, ptr, ptr, i32 } %69, { ptr, ptr, ptr, i32 } %69, ptr %5, i32 %3)
+  call void %86({ ptr, ptr, ptr, i32 } %69, { ptr, ptr, ptr, i32 } %69, ptr %5, i32 %3) #17
   br label %87
 
 87:                                               ; preds = %._crit_edge, %57
@@ -2777,7 +2778,7 @@ define { ptr, i160 } @Array__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   store ptr @i32_typ, ptr %133, align 8
   %134 = call ptr @behavior_wrapper(ptr %132, { ptr, ptr, ptr, i32 } %117, ptr %8)
   %.reload = load i32, ptr %.reg2mem, align 4
-  %135 = call { ptr, i160 } %134({ ptr, ptr, ptr, i32 } %117, { ptr, ptr, ptr, i32 } %117, ptr %7, i32 %.reload)
+  %135 = call { ptr, i160 } %134({ ptr, ptr, ptr, i32 } %117, { ptr, ptr, ptr, i32 } %117, ptr %7, i32 %.reload) #17
   store { ptr, i160 } %135, ptr %9, align 8
   %136 = getelementptr { ptr, i160 }, ptr %9, i32 0, i32 0
   %137 = load ptr, ptr %136, align 8
@@ -2903,7 +2904,7 @@ define void @Array__set_index_xPtri32_valueT({ ptr, ptr, ptr, i32 } %0, { ptr, p
   %90 = getelementptr { ptr }, ptr %7, i32 0, i32 0
   store ptr @i32_typ, ptr %90, align 8
   %91 = call ptr @behavior_wrapper(ptr %89, { ptr, ptr, ptr, i32 } %74, ptr %7)
-  call void %91({ ptr, ptr, ptr, i32 } %74, { ptr, ptr, ptr, i32 } %74, ptr %6, i32 %3)
+  call void %91({ ptr, ptr, ptr, i32 } %74, { ptr, ptr, ptr, i32 } %74, ptr %6, i32 %3) #17
   br label %92
 
 92:                                               ; preds = %._crit_edge, %62
@@ -2983,7 +2984,7 @@ define void @Array__set_index_xPtri32_valueT({ ptr, ptr, ptr, i32 } %0, { ptr, p
   store ptr %113, ptr %146, align 8
   %147 = call ptr @behavior_wrapper(ptr %144, { ptr, ptr, ptr, i32 } %128, ptr %11)
   %.reload = load i32, ptr %.reg2mem, align 4
-  call void %147({ ptr, ptr, ptr, i32 } %128, { ptr, ptr, ptr, i32 } %128, ptr %10, i32 %.reload, { ptr, i160 } %116)
+  call void %147({ ptr, ptr, ptr, i32 } %128, { ptr, ptr, ptr, i32 } %128, ptr %10, i32 %.reload, { ptr, i160 } %116) #17
   ret void
 }
 
@@ -3052,7 +3053,7 @@ define void @Array_throw_oob_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr,
   %55 = load ptr, ptr %54, align 8
   %56 = alloca {}, align 8
   %57 = call ptr @behavior_wrapper(ptr %55, { ptr, ptr, ptr, i32 } %40, ptr %56)
-  call void %57({ ptr, ptr, ptr, i32 } %40, { ptr, ptr, ptr, i32 } %40, ptr %50)
+  call void %57({ ptr, ptr, ptr, i32 } %40, { ptr, ptr, ptr, i32 } %40, ptr %50) #17
   %58 = alloca ptr, align 8
   %59 = call ptr @bump_malloc(i64 mul (i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), i64 13))
   store ptr %59, ptr %58, align 8
@@ -3061,7 +3062,7 @@ define void @Array_throw_oob_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr,
   %62 = load ptr, ptr %61, align 8
   store ptr %62, ptr %60, align 8
   %63 = load ptr, ptr %60, align 8
-  %64 = load <12 x i8>, ptr @azyrw_genericmini, align 16
+  %64 = load <12 x i8>, ptr @jflje_genericmini, align 16
   store <12 x i8> %64, ptr %63, align 16
   %65 = alloca [1 x ptr], align 8
   store ptr @String, ptr %65, align 8
@@ -3117,7 +3118,7 @@ define void @Array_throw_oob_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr,
   %107 = getelementptr { ptr, ptr, ptr }, ptr %104, i32 0, i32 2
   store ptr @i32_typ, ptr %107, align 8
   %108 = call ptr @behavior_wrapper(ptr %103, { ptr, ptr, ptr, i32 } %85, ptr %104)
-  call void %108({ ptr, ptr, ptr, i32 } %85, { ptr, ptr, ptr, i32 } %85, ptr %95, { ptr } %77, i32 12, i32 13)
+  call void %108({ ptr, ptr, ptr, i32 } %85, { ptr, ptr, ptr, i32 } %85, ptr %95, { ptr } %77, i32 12, i32 13) #17
   %109 = alloca { ptr, ptr, ptr, i32 }, align 8
   %110 = getelementptr { ptr, ptr, ptr, i32 }, ptr %109, i32 0, i32 0
   %111 = load ptr, ptr %75, align 8
@@ -3181,7 +3182,7 @@ define void @Array_throw_oob_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr,
   %161 = getelementptr { ptr, ptr }, ptr %159, i32 0, i32 1
   store ptr %119, ptr %161, align 8
   %162 = call ptr @behavior_wrapper(ptr %158, { ptr, ptr, ptr, i32 } %141, ptr %159)
-  call void %162({ ptr, ptr, ptr, i32 } %141, { ptr, ptr, ptr, i32 } %141, ptr %151, i32 177, { ptr, ptr, ptr, i32 } %129)
+  call void %162({ ptr, ptr, ptr, i32 } %141, { ptr, ptr, ptr, i32 } %141, ptr %151, i32 177, { ptr, ptr, ptr, i32 } %129) #17
   %163 = getelementptr { ptr, i160 }, ptr %26, i32 0, i32 0
   %164 = load ptr, ptr %163, align 8
   %165 = insertvalue { ptr, i160 } undef, ptr %164, 0
@@ -3437,7 +3438,7 @@ define { ptr, ptr, ptr, i32 } @Array_iterator_({ ptr, ptr, ptr, i32 } %0, { ptr,
   %94 = getelementptr { ptr }, ptr %93, i32 0, i32 0
   store ptr %54, ptr %94, align 8
   %95 = call ptr @behavior_wrapper(ptr %92, { ptr, ptr, ptr, i32 } %72, ptr %93)
-  call void %95({ ptr, ptr, ptr, i32 } %72, { ptr, ptr, ptr, i32 } %72, ptr %86, { ptr, ptr, ptr, i32 } %64)
+  call void %95({ ptr, ptr, ptr, i32 } %72, { ptr, ptr, ptr, i32 } %72, ptr %86, { ptr, ptr, ptr, i32 } %64) #17
   %96 = alloca { ptr, ptr, ptr, i32 }, align 8
   %97 = getelementptr { ptr, ptr, ptr, i32 }, ptr %96, i32 0, i32 0
   %98 = load ptr, ptr %39, align 8
@@ -3533,7 +3534,7 @@ define void @Iterable2_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 } %0, { p
   %55 = load ptr, ptr %54, align 8
   %56 = alloca {}, align 8
   %57 = call ptr @behavior_wrapper(ptr %55, { ptr, ptr, ptr, i32 } %40, ptr %56)
-  %58 = call { ptr, ptr, ptr, i32 } %57({ ptr, ptr, ptr, i32 } %40, { ptr, ptr, ptr, i32 } %40, ptr %50)
+  %58 = call { ptr, ptr, ptr, i32 } %57({ ptr, ptr, ptr, i32 } %40, { ptr, ptr, ptr, i32 } %40, ptr %50) #17
   %59 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %58, ptr %59, align 8
   %60 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -3620,7 +3621,7 @@ define void @Iterable2_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 } %0, { p
   %120 = getelementptr ptr, ptr %119, i32 1
   %121 = load ptr, ptr %120, align 8
   %122 = call ptr @behavior_wrapper(ptr %121, { ptr, ptr, ptr, i32 } %109, ptr %6)
-  %123 = call { ptr, i160 } %122({ ptr, ptr, ptr, i32 } %109, { ptr, ptr, ptr, i32 } %109, ptr %5)
+  %123 = call { ptr, i160 } %122({ ptr, ptr, ptr, i32 } %109, { ptr, ptr, ptr, i32 } %109, ptr %5) #17
   store { ptr, i160 } %123, ptr %7, align 8
   %.reload4 = load ptr, ptr %.reg2mem3, align 8
   %124 = load ptr, ptr %.reload4, align 8
@@ -3759,7 +3760,7 @@ define { ptr, i160 } @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, pt
   %70 = load ptr, ptr %69, align 8
   %71 = alloca {}, align 8
   %72 = call ptr @behavior_wrapper(ptr %70, { ptr, ptr, ptr, i32 } %55, ptr %71)
-  %73 = call { ptr, ptr, ptr, i32 } %72({ ptr, ptr, ptr, i32 } %55, { ptr, ptr, ptr, i32 } %55, ptr %65)
+  %73 = call { ptr, ptr, ptr, i32 } %72({ ptr, ptr, ptr, i32 } %55, { ptr, ptr, ptr, i32 } %55, ptr %65) #17
   %74 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %73, ptr %74, align 8
   %75 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -3846,7 +3847,7 @@ define { ptr, i160 } @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, pt
   %135 = getelementptr ptr, ptr %134, i32 1
   %136 = load ptr, ptr %135, align 8
   %137 = call ptr @behavior_wrapper(ptr %136, { ptr, ptr, ptr, i32 } %124, ptr %7)
-  %138 = call { ptr, i160 } %137({ ptr, ptr, ptr, i32 } %124, { ptr, ptr, ptr, i32 } %124, ptr %6)
+  %138 = call { ptr, i160 } %137({ ptr, ptr, ptr, i32 } %124, { ptr, ptr, ptr, i32 } %124, ptr %6) #17
   store { ptr, i160 } %138, ptr %8, align 8
   %.reload4 = load ptr, ptr %.reg2mem3, align 8
   %139 = load ptr, ptr %.reload4, align 8
@@ -4001,7 +4002,7 @@ define i1 @Iterable2_all_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, { ptr, p
   %57 = load ptr, ptr %56, align 8
   %58 = alloca {}, align 8
   %59 = call ptr @behavior_wrapper(ptr %57, { ptr, ptr, ptr, i32 } %42, ptr %58)
-  %60 = call { ptr, ptr, ptr, i32 } %59({ ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %42, ptr %52)
+  %60 = call { ptr, ptr, ptr, i32 } %59({ ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %42, ptr %52) #17
   %61 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %60, ptr %61, align 8
   %62 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4088,7 +4089,7 @@ define i1 @Iterable2_all_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, { ptr, p
   %122 = getelementptr ptr, ptr %121, i32 1
   %123 = load ptr, ptr %122, align 8
   %124 = call ptr @behavior_wrapper(ptr %123, { ptr, ptr, ptr, i32 } %111, ptr %6)
-  %125 = call { ptr, i160 } %124({ ptr, ptr, ptr, i32 } %111, { ptr, ptr, ptr, i32 } %111, ptr %5)
+  %125 = call { ptr, i160 } %124({ ptr, ptr, ptr, i32 } %111, { ptr, ptr, ptr, i32 } %111, ptr %5) #17
   store { ptr, i160 } %125, ptr %7, align 8
   %.reload11 = load ptr, ptr %.reg2mem10, align 8
   %126 = load ptr, ptr %.reload11, align 8
@@ -4247,7 +4248,7 @@ define i1 @Iterable2_any_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, { ptr, p
   %57 = load ptr, ptr %56, align 8
   %58 = alloca {}, align 8
   %59 = call ptr @behavior_wrapper(ptr %57, { ptr, ptr, ptr, i32 } %42, ptr %58)
-  %60 = call { ptr, ptr, ptr, i32 } %59({ ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %42, ptr %52)
+  %60 = call { ptr, ptr, ptr, i32 } %59({ ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %42, ptr %52) #17
   %61 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %60, ptr %61, align 8
   %62 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -4334,7 +4335,7 @@ define i1 @Iterable2_any_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, { ptr, p
   %122 = getelementptr ptr, ptr %121, i32 1
   %123 = load ptr, ptr %122, align 8
   %124 = call ptr @behavior_wrapper(ptr %123, { ptr, ptr, ptr, i32 } %111, ptr %6)
-  %125 = call { ptr, i160 } %124({ ptr, ptr, ptr, i32 } %111, { ptr, ptr, ptr, i32 } %111, ptr %5)
+  %125 = call { ptr, i160 } %124({ ptr, ptr, ptr, i32 } %111, { ptr, ptr, ptr, i32 } %111, ptr %5) #17
   store { ptr, i160 } %125, ptr %7, align 8
   %.reload13 = load ptr, ptr %.reg2mem12, align 8
   %126 = load ptr, ptr %.reload13, align 8
@@ -4564,7 +4565,7 @@ define { ptr, ptr, ptr, i32 } @Iterable2_map_fFunctionT_to_U({ ptr, ptr, ptr, i3
   %113 = getelementptr { ptr, ptr }, ptr %111, i32 0, i32 1
   store ptr @function_typ, ptr %113, align 8
   %114 = call ptr @behavior_wrapper(ptr %110, { ptr, ptr, ptr, i32 } %81, ptr %111)
-  call void %114({ ptr, ptr, ptr, i32 } %81, { ptr, ptr, ptr, i32 } %81, ptr %103, { ptr, ptr, ptr, i32 } %71, { ptr } %73)
+  call void %114({ ptr, ptr, ptr, i32 } %81, { ptr, ptr, ptr, i32 } %81, ptr %103, { ptr, ptr, ptr, i32 } %71, { ptr } %73) #17
   %115 = alloca { ptr, ptr, ptr, i32 }, align 8
   %116 = getelementptr { ptr, ptr, ptr, i32 }, ptr %115, i32 0, i32 0
   %117 = load ptr, ptr %46, align 8
@@ -4727,7 +4728,7 @@ define { ptr, ptr, ptr, i32 } @Iterable2_filter_fFunctionT_to_Ptri1({ ptr, ptr, 
   %105 = getelementptr { ptr, ptr }, ptr %103, i32 0, i32 1
   store ptr @function_typ, ptr %105, align 8
   %106 = call ptr @behavior_wrapper(ptr %102, { ptr, ptr, ptr, i32 } %76, ptr %103)
-  call void %106({ ptr, ptr, ptr, i32 } %76, { ptr, ptr, ptr, i32 } %76, ptr %95, { ptr, ptr, ptr, i32 } %66, { ptr } %68)
+  call void %106({ ptr, ptr, ptr, i32 } %76, { ptr, ptr, ptr, i32 } %76, ptr %95, { ptr, ptr, ptr, i32 } %66, { ptr } %68) #17
   %107 = alloca { ptr, ptr, ptr, i32 }, align 8
   %108 = getelementptr { ptr, ptr, ptr, i32 }, ptr %107, i32 0, i32 0
   %109 = load ptr, ptr %41, align 8
@@ -4934,7 +4935,7 @@ define { ptr, ptr, ptr, i32 } @Iterable2_chain_otherIterable2T({ ptr, ptr, ptr, 
   %140 = getelementptr { ptr, ptr }, ptr %138, i32 0, i32 1
   store ptr %94, ptr %140, align 8
   %141 = call ptr @behavior_wrapper(ptr %137, { ptr, ptr, ptr, i32 } %112, ptr %138)
-  call void %141({ ptr, ptr, ptr, i32 } %112, { ptr, ptr, ptr, i32 } %112, ptr %130, { ptr, ptr, ptr, i32 } %79, { ptr, ptr, ptr, i32 } %104)
+  call void %141({ ptr, ptr, ptr, i32 } %112, { ptr, ptr, ptr, i32 } %112, ptr %130, { ptr, ptr, ptr, i32 } %79, { ptr, ptr, ptr, i32 } %104) #17
   %142 = alloca { ptr, ptr, ptr, i32 }, align 8
   %143 = getelementptr { ptr, ptr, ptr, i32 }, ptr %142, i32 0, i32 0
   %144 = load ptr, ptr %54, align 8
@@ -5141,7 +5142,7 @@ define { ptr, ptr, ptr, i32 } @Iterable2_interleave_otherIterable2T({ ptr, ptr, 
   %140 = getelementptr { ptr, ptr }, ptr %138, i32 0, i32 1
   store ptr %94, ptr %140, align 8
   %141 = call ptr @behavior_wrapper(ptr %137, { ptr, ptr, ptr, i32 } %112, ptr %138)
-  call void %141({ ptr, ptr, ptr, i32 } %112, { ptr, ptr, ptr, i32 } %112, ptr %130, { ptr, ptr, ptr, i32 } %79, { ptr, ptr, ptr, i32 } %104)
+  call void %141({ ptr, ptr, ptr, i32 } %112, { ptr, ptr, ptr, i32 } %112, ptr %130, { ptr, ptr, ptr, i32 } %79, { ptr, ptr, ptr, i32 } %104) #17
   %142 = alloca { ptr, ptr, ptr, i32 }, align 8
   %143 = getelementptr { ptr, ptr, ptr, i32 }, ptr %142, i32 0, i32 0
   %144 = load ptr, ptr %54, align 8
@@ -5387,7 +5388,7 @@ define { ptr, ptr, ptr, i32 } @Iterable2_zip_otherIterable2U({ ptr, ptr, ptr, i3
   %169 = getelementptr { ptr, ptr }, ptr %167, i32 0, i32 1
   store ptr %113, ptr %169, align 8
   %170 = call ptr @behavior_wrapper(ptr %166, { ptr, ptr, ptr, i32 } %131, ptr %167)
-  call void %170({ ptr, ptr, ptr, i32 } %131, { ptr, ptr, ptr, i32 } %131, ptr %159, { ptr, ptr, ptr, i32 } %98, { ptr, ptr, ptr, i32 } %123)
+  call void %170({ ptr, ptr, ptr, i32 } %131, { ptr, ptr, ptr, i32 } %131, ptr %159, { ptr, ptr, ptr, i32 } %98, { ptr, ptr, ptr, i32 } %123) #17
   %171 = alloca { ptr, ptr, ptr, i32 }, align 8
   %172 = getelementptr { ptr, ptr, ptr, i32 }, ptr %171, i32 0, i32 0
   %173 = load ptr, ptr %73, align 8
@@ -5633,7 +5634,7 @@ define { ptr, ptr, ptr, i32 } @Iterable2_product_otherIterable2U({ ptr, ptr, ptr
   %169 = getelementptr { ptr, ptr }, ptr %167, i32 0, i32 1
   store ptr %113, ptr %169, align 8
   %170 = call ptr @behavior_wrapper(ptr %166, { ptr, ptr, ptr, i32 } %131, ptr %167)
-  call void %170({ ptr, ptr, ptr, i32 } %131, { ptr, ptr, ptr, i32 } %131, ptr %159, { ptr, ptr, ptr, i32 } %98, { ptr, ptr, ptr, i32 } %123)
+  call void %170({ ptr, ptr, ptr, i32 } %131, { ptr, ptr, ptr, i32 } %131, ptr %159, { ptr, ptr, ptr, i32 } %98, { ptr, ptr, ptr, i32 } %123) #17
   %171 = alloca { ptr, ptr, ptr, i32 }, align 8
   %172 = getelementptr { ptr, ptr, ptr, i32 }, ptr %171, i32 0, i32 0
   %173 = load ptr, ptr %73, align 8
@@ -6217,7 +6218,7 @@ define { ptr, ptr, ptr, i32 } @ProductIterable2_iterator_({ ptr, ptr, ptr, i32 }
   %67 = load ptr, ptr %66, align 8
   %68 = alloca {}, align 8
   %69 = call ptr @behavior_wrapper(ptr %67, { ptr, ptr, ptr, i32 } %42, ptr %68)
-  %70 = call { ptr, ptr, ptr, i32 } %69({ ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %42, ptr %62)
+  %70 = call { ptr, ptr, ptr, i32 } %69({ ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %42, ptr %62) #17
   %71 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %70, ptr %71, align 8
   %72 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -6362,7 +6363,7 @@ define { ptr, ptr, ptr, i32 } @ProductIterable2_iterator_({ ptr, ptr, ptr, i32 }
   %188 = load ptr, ptr %187, align 8
   %189 = alloca {}, align 8
   %190 = call ptr @behavior_wrapper(ptr %188, { ptr, ptr, ptr, i32 } %163, ptr %189)
-  %191 = call { ptr, ptr, ptr, i32 } %190({ ptr, ptr, ptr, i32 } %163, { ptr, ptr, ptr, i32 } %163, ptr %183)
+  %191 = call { ptr, ptr, ptr, i32 } %190({ ptr, ptr, ptr, i32 } %163, { ptr, ptr, ptr, i32 } %163, ptr %183) #17
   %192 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %191, ptr %192, align 8
   %193 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -6515,7 +6516,7 @@ define { ptr, ptr, ptr, i32 } @ProductIterable2_iterator_({ ptr, ptr, ptr, i32 }
   %314 = getelementptr { ptr, ptr }, ptr %312, i32 0, i32 1
   store ptr %258, ptr %314, align 8
   %315 = call ptr @behavior_wrapper(ptr %311, { ptr, ptr, ptr, i32 } %276, ptr %312)
-  call void %315({ ptr, ptr, ptr, i32 } %276, { ptr, ptr, ptr, i32 } %276, ptr %304, { ptr, ptr, ptr, i32 } %243, { ptr, ptr, ptr, i32 } %268)
+  call void %315({ ptr, ptr, ptr, i32 } %276, { ptr, ptr, ptr, i32 } %276, ptr %304, { ptr, ptr, ptr, i32 } %243, { ptr, ptr, ptr, i32 } %268) #17
   %316 = alloca { ptr, ptr, ptr, i32 }, align 8
   %317 = getelementptr { ptr, ptr, ptr, i32 }, ptr %316, i32 0, i32 0
   %318 = load ptr, ptr %138, align 8
@@ -6869,7 +6870,7 @@ define void @ProductIterator2_init_first_iteratorIterator2T_second_iterableItera
   %169 = load ptr, ptr %168, align 8
   %170 = alloca {}, align 8
   %171 = call ptr @behavior_wrapper(ptr %169, { ptr, ptr, ptr, i32 } %144, ptr %170)
-  %172 = call { ptr, ptr, ptr, i32 } %171({ ptr, ptr, ptr, i32 } %144, { ptr, ptr, ptr, i32 } %144, ptr %164)
+  %172 = call { ptr, ptr, ptr, i32 } %171({ ptr, ptr, ptr, i32 } %144, { ptr, ptr, ptr, i32 } %144, ptr %164) #17
   %173 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %172, ptr %173, align 8
   %174 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -6986,7 +6987,7 @@ define void @ProductIterator2_init_first_iteratorIterator2T_second_iterableItera
   %272 = load ptr, ptr %271, align 8
   %273 = alloca {}, align 8
   %274 = call ptr @behavior_wrapper(ptr %272, { ptr, ptr, ptr, i32 } %247, ptr %273)
-  %275 = call { ptr, i160 } %274({ ptr, ptr, ptr, i32 } %247, { ptr, ptr, ptr, i32 } %247, ptr %267)
+  %275 = call { ptr, i160 } %274({ ptr, ptr, ptr, i32 } %247, { ptr, ptr, ptr, i32 } %247, ptr %267) #17
   %276 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %275, ptr %276, align 8
   %277 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 1
@@ -7157,7 +7158,7 @@ define { ptr, i160 } @ProductIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, p
   %119 = getelementptr ptr, ptr %118, i32 1
   %120 = load ptr, ptr %119, align 8
   %121 = call ptr @behavior_wrapper(ptr %120, { ptr, ptr, ptr, i32 } %96, ptr %8)
-  %122 = call { ptr, i160 } %121({ ptr, ptr, ptr, i32 } %96, { ptr, ptr, ptr, i32 } %96, ptr %7)
+  %122 = call { ptr, i160 } %121({ ptr, ptr, ptr, i32 } %96, { ptr, ptr, ptr, i32 } %96, ptr %7) #17
   store { ptr, i160 } %122, ptr %9, align 8
   %123 = getelementptr { ptr, i160 }, ptr %9, i32 0, i32 0
   %124 = load ptr, ptr %123, align 8
@@ -7228,7 +7229,7 @@ define { ptr, i160 } @ProductIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, p
   %181 = getelementptr ptr, ptr %180, i32 1
   %182 = load ptr, ptr %181, align 8
   %183 = call ptr @behavior_wrapper(ptr %182, { ptr, ptr, ptr, i32 } %158, ptr %22)
-  %184 = call { ptr, i160 } %183({ ptr, ptr, ptr, i32 } %158, { ptr, ptr, ptr, i32 } %158, ptr %21)
+  %184 = call { ptr, i160 } %183({ ptr, ptr, ptr, i32 } %158, { ptr, ptr, ptr, i32 } %158, ptr %21) #17
   store { ptr, i160 } %184, ptr %23, align 8
   %185 = getelementptr { ptr, ptr, ptr, i32 }, ptr %34, i32 0, i32 1
   %186 = load ptr, ptr %185, align 8
@@ -7299,7 +7300,7 @@ define { ptr, i160 } @ProductIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, p
   %248 = getelementptr ptr, ptr %247, i32 1
   %249 = load ptr, ptr %248, align 8
   %250 = call ptr @behavior_wrapper(ptr %249, { ptr, ptr, ptr, i32 } %225, ptr %26)
-  %251 = call { ptr, ptr, ptr, i32 } %250({ ptr, ptr, ptr, i32 } %225, { ptr, ptr, ptr, i32 } %225, ptr %25)
+  %251 = call { ptr, ptr, ptr, i32 } %250({ ptr, ptr, ptr, i32 } %225, { ptr, ptr, ptr, i32 } %225, ptr %25) #17
   store { ptr, ptr, ptr, i32 } %251, ptr %27, align 8
   %252 = getelementptr { ptr, ptr, ptr, i32 }, ptr %27, i32 0, i32 0
   %253 = getelementptr { ptr, ptr, ptr, i32 }, ptr %28, i32 0, i32 0
@@ -7525,7 +7526,7 @@ define { ptr, i160 } @ProductIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, p
   %413 = getelementptr { ptr, ptr }, ptr %19, i32 0, i32 1
   store ptr %370, ptr %413, align 8
   %414 = call ptr @behavior_wrapper(ptr %411, { ptr, ptr, ptr, i32 } %385, ptr %19)
-  call void %414({ ptr, ptr, ptr, i32 } %385, { ptr, ptr, ptr, i32 } %385, ptr %18, { ptr, i160 } %367, { ptr, i160 } %373)
+  call void %414({ ptr, ptr, ptr, i32 } %385, { ptr, ptr, ptr, i32 } %385, ptr %18, { ptr, i160 } %367, { ptr, i160 } %373) #17
   %415 = getelementptr { ptr, i160 }, ptr %13, i32 0, i32 0
   %416 = load ptr, ptr %415, align 8
   %417 = insertvalue { ptr, i160 } undef, ptr %416, 0
@@ -8634,7 +8635,7 @@ define { ptr, ptr, ptr, i32 } @ZipIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   %67 = load ptr, ptr %66, align 8
   %68 = alloca {}, align 8
   %69 = call ptr @behavior_wrapper(ptr %67, { ptr, ptr, ptr, i32 } %42, ptr %68)
-  %70 = call { ptr, ptr, ptr, i32 } %69({ ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %42, ptr %62)
+  %70 = call { ptr, ptr, ptr, i32 } %69({ ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %42, ptr %62) #17
   %71 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %70, ptr %71, align 8
   %72 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -8709,7 +8710,7 @@ define { ptr, ptr, ptr, i32 } @ZipIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   %134 = load ptr, ptr %133, align 8
   %135 = alloca {}, align 8
   %136 = call ptr @behavior_wrapper(ptr %134, { ptr, ptr, ptr, i32 } %109, ptr %135)
-  %137 = call { ptr, ptr, ptr, i32 } %136({ ptr, ptr, ptr, i32 } %109, { ptr, ptr, ptr, i32 } %109, ptr %129)
+  %137 = call { ptr, ptr, ptr, i32 } %136({ ptr, ptr, ptr, i32 } %109, { ptr, ptr, ptr, i32 } %109, ptr %129) #17
   %138 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %137, ptr %138, align 8
   %139 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -8839,7 +8840,7 @@ define { ptr, ptr, ptr, i32 } @ZipIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   %242 = load ptr, ptr %241, align 8
   %243 = alloca {}, align 8
   %244 = call ptr @behavior_wrapper(ptr %242, { ptr, ptr, ptr, i32 } %217, ptr %243)
-  %245 = call { ptr, ptr, ptr, i32 } %244({ ptr, ptr, ptr, i32 } %217, { ptr, ptr, ptr, i32 } %217, ptr %237)
+  %245 = call { ptr, ptr, ptr, i32 } %244({ ptr, ptr, ptr, i32 } %217, { ptr, ptr, ptr, i32 } %217, ptr %237) #17
   %246 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %245, ptr %246, align 8
   %247 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -8914,7 +8915,7 @@ define { ptr, ptr, ptr, i32 } @ZipIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   %309 = load ptr, ptr %308, align 8
   %310 = alloca {}, align 8
   %311 = call ptr @behavior_wrapper(ptr %309, { ptr, ptr, ptr, i32 } %284, ptr %310)
-  %312 = call { ptr, ptr, ptr, i32 } %311({ ptr, ptr, ptr, i32 } %284, { ptr, ptr, ptr, i32 } %284, ptr %304)
+  %312 = call { ptr, ptr, ptr, i32 } %311({ ptr, ptr, ptr, i32 } %284, { ptr, ptr, ptr, i32 } %284, ptr %304) #17
   %313 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %312, ptr %313, align 8
   %314 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -9052,7 +9053,7 @@ define { ptr, ptr, ptr, i32 } @ZipIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   %422 = getelementptr { ptr, ptr }, ptr %420, i32 0, i32 1
   store ptr %366, ptr %422, align 8
   %423 = call ptr @behavior_wrapper(ptr %419, { ptr, ptr, ptr, i32 } %384, ptr %420)
-  call void %423({ ptr, ptr, ptr, i32 } %384, { ptr, ptr, ptr, i32 } %384, ptr %412, { ptr, ptr, ptr, i32 } %351, { ptr, ptr, ptr, i32 } %376)
+  call void %423({ ptr, ptr, ptr, i32 } %384, { ptr, ptr, ptr, i32 } %384, ptr %412, { ptr, ptr, ptr, i32 } %351, { ptr, ptr, ptr, i32 } %376) #17
   %424 = alloca { ptr, ptr, ptr, i32 }, align 8
   %425 = getelementptr { ptr, ptr, ptr, i32 }, ptr %424, i32 0, i32 0
   %426 = load ptr, ptr %192, align 8
@@ -9439,7 +9440,7 @@ define { ptr, i160 } @ZipIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
   %81 = load ptr, ptr %80, align 8
   %82 = alloca {}, align 8
   %83 = call ptr @behavior_wrapper(ptr %81, { ptr, ptr, ptr, i32 } %56, ptr %82)
-  %84 = call { ptr, i160 } %83({ ptr, ptr, ptr, i32 } %56, { ptr, ptr, ptr, i32 } %56, ptr %76)
+  %84 = call { ptr, i160 } %83({ ptr, ptr, ptr, i32 } %56, { ptr, ptr, ptr, i32 } %56, ptr %76) #17
   %85 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %84, ptr %85, align 8
   %86 = getelementptr { ptr, ptr, ptr, i32 }, ptr %19, i32 0, i32 1
@@ -9496,7 +9497,7 @@ define { ptr, i160 } @ZipIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
   %135 = load ptr, ptr %134, align 8
   %136 = alloca {}, align 8
   %137 = call ptr @behavior_wrapper(ptr %135, { ptr, ptr, ptr, i32 } %110, ptr %136)
-  %138 = call { ptr, i160 } %137({ ptr, ptr, ptr, i32 } %110, { ptr, ptr, ptr, i32 } %110, ptr %130)
+  %138 = call { ptr, i160 } %137({ ptr, ptr, ptr, i32 } %110, { ptr, ptr, ptr, i32 } %110, ptr %130) #17
   %139 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %138, ptr %139, align 8
   %140 = getelementptr { ptr, i160 }, ptr %85, i32 0, i32 0
@@ -9634,7 +9635,7 @@ define { ptr, i160 } @ZipIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
   %248 = getelementptr { ptr, ptr }, ptr %15, i32 0, i32 1
   store ptr %205, ptr %248, align 8
   %249 = call ptr @behavior_wrapper(ptr %246, { ptr, ptr, ptr, i32 } %220, ptr %15)
-  call void %249({ ptr, ptr, ptr, i32 } %220, { ptr, ptr, ptr, i32 } %220, ptr %14, { ptr, i160 } %202, { ptr, i160 } %208)
+  call void %249({ ptr, ptr, ptr, i32 } %220, { ptr, ptr, ptr, i32 } %220, ptr %14, { ptr, i160 } %202, { ptr, i160 } %208) #17
   %250 = getelementptr { ptr, i160 }, ptr %9, i32 0, i32 0
   %251 = load ptr, ptr %250, align 8
   %252 = insertvalue { ptr, i160 } undef, ptr %251, 0
@@ -10552,7 +10553,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable2_iterator_({ ptr, ptr, ptr, i3
   %57 = load ptr, ptr %56, align 8
   %58 = alloca {}, align 8
   %59 = call ptr @behavior_wrapper(ptr %57, { ptr, ptr, ptr, i32 } %42, ptr %58)
-  %60 = call { ptr, ptr, ptr, i32 } %59({ ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %42, ptr %52)
+  %60 = call { ptr, ptr, ptr, i32 } %59({ ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %42, ptr %52) #17
   %61 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %60, ptr %61, align 8
   %62 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -10617,7 +10618,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable2_iterator_({ ptr, ptr, ptr, i3
   %114 = load ptr, ptr %113, align 8
   %115 = alloca {}, align 8
   %116 = call ptr @behavior_wrapper(ptr %114, { ptr, ptr, ptr, i32 } %99, ptr %115)
-  %117 = call { ptr, ptr, ptr, i32 } %116({ ptr, ptr, ptr, i32 } %99, { ptr, ptr, ptr, i32 } %99, ptr %109)
+  %117 = call { ptr, ptr, ptr, i32 } %116({ ptr, ptr, ptr, i32 } %99, { ptr, ptr, ptr, i32 } %99, ptr %109) #17
   %118 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %117, ptr %118, align 8
   %119 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -10710,7 +10711,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable2_iterator_({ ptr, ptr, ptr, i3
   %193 = load ptr, ptr %192, align 8
   %194 = alloca {}, align 8
   %195 = call ptr @behavior_wrapper(ptr %193, { ptr, ptr, ptr, i32 } %178, ptr %194)
-  %196 = call { ptr, ptr, ptr, i32 } %195({ ptr, ptr, ptr, i32 } %178, { ptr, ptr, ptr, i32 } %178, ptr %188)
+  %196 = call { ptr, ptr, ptr, i32 } %195({ ptr, ptr, ptr, i32 } %178, { ptr, ptr, ptr, i32 } %178, ptr %188) #17
   %197 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %196, ptr %197, align 8
   %198 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -10775,7 +10776,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable2_iterator_({ ptr, ptr, ptr, i3
   %250 = load ptr, ptr %249, align 8
   %251 = alloca {}, align 8
   %252 = call ptr @behavior_wrapper(ptr %250, { ptr, ptr, ptr, i32 } %235, ptr %251)
-  %253 = call { ptr, ptr, ptr, i32 } %252({ ptr, ptr, ptr, i32 } %235, { ptr, ptr, ptr, i32 } %235, ptr %245)
+  %253 = call { ptr, ptr, ptr, i32 } %252({ ptr, ptr, ptr, i32 } %235, { ptr, ptr, ptr, i32 } %235, ptr %245) #17
   %254 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %253, ptr %254, align 8
   %255 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -10903,7 +10904,7 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable2_iterator_({ ptr, ptr, ptr, i3
   %353 = getelementptr { ptr, ptr }, ptr %351, i32 0, i32 1
   store ptr %307, ptr %353, align 8
   %354 = call ptr @behavior_wrapper(ptr %350, { ptr, ptr, ptr, i32 } %325, ptr %351)
-  call void %354({ ptr, ptr, ptr, i32 } %325, { ptr, ptr, ptr, i32 } %325, ptr %343, { ptr, ptr, ptr, i32 } %292, { ptr, ptr, ptr, i32 } %317)
+  call void %354({ ptr, ptr, ptr, i32 } %325, { ptr, ptr, ptr, i32 } %325, ptr %343, { ptr, ptr, ptr, i32 } %292, { ptr, ptr, ptr, i32 } %317) #17
   %355 = alloca { ptr, ptr, ptr, i32 }, align 8
   %356 = getelementptr { ptr, ptr, ptr, i32 }, ptr %355, i32 0, i32 0
   %357 = load ptr, ptr %153, align 8
@@ -11282,7 +11283,7 @@ define { ptr, i160 } @InterleaveIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr
   %86 = getelementptr ptr, ptr %85, i32 1
   %87 = load ptr, ptr %86, align 8
   %88 = call ptr @behavior_wrapper(ptr %87, { ptr, ptr, ptr, i32 } %73, ptr %6)
-  %89 = call { ptr, i160 } %88({ ptr, ptr, ptr, i32 } %73, { ptr, ptr, ptr, i32 } %73, ptr %5)
+  %89 = call { ptr, i160 } %88({ ptr, ptr, ptr, i32 } %73, { ptr, ptr, ptr, i32 } %73, ptr %5) #17
   store { ptr, i160 } %89, ptr %7, align 8
   %90 = getelementptr { ptr, i160 }, ptr %7, i32 0, i32 0
   %91 = load ptr, ptr %90, align 8
@@ -11349,7 +11350,7 @@ define { ptr, i160 } @InterleaveIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr
   %144 = getelementptr ptr, ptr %143, i32 1
   %145 = load ptr, ptr %144, align 8
   %146 = call ptr @behavior_wrapper(ptr %145, { ptr, ptr, ptr, i32 } %131, ptr %10)
-  %147 = call { ptr, i160 } %146({ ptr, ptr, ptr, i32 } %131, { ptr, ptr, ptr, i32 } %131, ptr %9)
+  %147 = call { ptr, i160 } %146({ ptr, ptr, ptr, i32 } %131, { ptr, ptr, ptr, i32 } %131, ptr %9) #17
   store { ptr, i160 } %147, ptr %11, align 8
   %148 = getelementptr { ptr, i160 }, ptr %11, i32 0, i32 0
   %149 = load ptr, ptr %148, align 8
@@ -12166,7 +12167,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable2_iterator_({ ptr, ptr, ptr, i32 } %
   %57 = load ptr, ptr %56, align 8
   %58 = alloca {}, align 8
   %59 = call ptr @behavior_wrapper(ptr %57, { ptr, ptr, ptr, i32 } %42, ptr %58)
-  %60 = call { ptr, ptr, ptr, i32 } %59({ ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %42, ptr %52)
+  %60 = call { ptr, ptr, ptr, i32 } %59({ ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %42, ptr %52) #17
   %61 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %60, ptr %61, align 8
   %62 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -12231,7 +12232,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable2_iterator_({ ptr, ptr, ptr, i32 } %
   %114 = load ptr, ptr %113, align 8
   %115 = alloca {}, align 8
   %116 = call ptr @behavior_wrapper(ptr %114, { ptr, ptr, ptr, i32 } %99, ptr %115)
-  %117 = call { ptr, ptr, ptr, i32 } %116({ ptr, ptr, ptr, i32 } %99, { ptr, ptr, ptr, i32 } %99, ptr %109)
+  %117 = call { ptr, ptr, ptr, i32 } %116({ ptr, ptr, ptr, i32 } %99, { ptr, ptr, ptr, i32 } %99, ptr %109) #17
   %118 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %117, ptr %118, align 8
   %119 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -12324,7 +12325,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable2_iterator_({ ptr, ptr, ptr, i32 } %
   %193 = load ptr, ptr %192, align 8
   %194 = alloca {}, align 8
   %195 = call ptr @behavior_wrapper(ptr %193, { ptr, ptr, ptr, i32 } %178, ptr %194)
-  %196 = call { ptr, ptr, ptr, i32 } %195({ ptr, ptr, ptr, i32 } %178, { ptr, ptr, ptr, i32 } %178, ptr %188)
+  %196 = call { ptr, ptr, ptr, i32 } %195({ ptr, ptr, ptr, i32 } %178, { ptr, ptr, ptr, i32 } %178, ptr %188) #17
   %197 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %196, ptr %197, align 8
   %198 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -12389,7 +12390,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable2_iterator_({ ptr, ptr, ptr, i32 } %
   %250 = load ptr, ptr %249, align 8
   %251 = alloca {}, align 8
   %252 = call ptr @behavior_wrapper(ptr %250, { ptr, ptr, ptr, i32 } %235, ptr %251)
-  %253 = call { ptr, ptr, ptr, i32 } %252({ ptr, ptr, ptr, i32 } %235, { ptr, ptr, ptr, i32 } %235, ptr %245)
+  %253 = call { ptr, ptr, ptr, i32 } %252({ ptr, ptr, ptr, i32 } %235, { ptr, ptr, ptr, i32 } %235, ptr %245) #17
   %254 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %253, ptr %254, align 8
   %255 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -12517,7 +12518,7 @@ define { ptr, ptr, ptr, i32 } @ChainIterable2_iterator_({ ptr, ptr, ptr, i32 } %
   %353 = getelementptr { ptr, ptr }, ptr %351, i32 0, i32 1
   store ptr %307, ptr %353, align 8
   %354 = call ptr @behavior_wrapper(ptr %350, { ptr, ptr, ptr, i32 } %325, ptr %351)
-  call void %354({ ptr, ptr, ptr, i32 } %325, { ptr, ptr, ptr, i32 } %325, ptr %343, { ptr, ptr, ptr, i32 } %292, { ptr, ptr, ptr, i32 } %317)
+  call void %354({ ptr, ptr, ptr, i32 } %325, { ptr, ptr, ptr, i32 } %325, ptr %343, { ptr, ptr, ptr, i32 } %292, { ptr, ptr, ptr, i32 } %317) #17
   %355 = alloca { ptr, ptr, ptr, i32 }, align 8
   %356 = getelementptr { ptr, ptr, ptr, i32 }, ptr %355, i32 0, i32 0
   %357 = load ptr, ptr %153, align 8
@@ -12895,7 +12896,7 @@ define { ptr, i160 } @ChainIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %78 = getelementptr ptr, ptr %77, i32 1
   %79 = load ptr, ptr %78, align 8
   %80 = call ptr @behavior_wrapper(ptr %79, { ptr, ptr, ptr, i32 } %65, ptr %6)
-  %81 = call { ptr, i160 } %80({ ptr, ptr, ptr, i32 } %65, { ptr, ptr, ptr, i32 } %65, ptr %5)
+  %81 = call { ptr, i160 } %80({ ptr, ptr, ptr, i32 } %65, { ptr, ptr, ptr, i32 } %65, ptr %5) #17
   store { ptr, i160 } %81, ptr %7, align 8
   %82 = getelementptr { ptr, i160 }, ptr %7, i32 0, i32 0
   %83 = load ptr, ptr %82, align 8
@@ -12951,7 +12952,7 @@ define { ptr, i160 } @ChainIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %125 = getelementptr ptr, ptr %124, i32 1
   %126 = load ptr, ptr %125, align 8
   %127 = call ptr @behavior_wrapper(ptr %126, { ptr, ptr, ptr, i32 } %112, ptr %10)
-  %128 = call { ptr, i160 } %127({ ptr, ptr, ptr, i32 } %112, { ptr, ptr, ptr, i32 } %112, ptr %9)
+  %128 = call { ptr, i160 } %127({ ptr, ptr, ptr, i32 } %112, { ptr, ptr, ptr, i32 } %112, ptr %9) #17
   store { ptr, i160 } %128, ptr %11, align 8
   %129 = getelementptr { ptr, i160 }, ptr %11, i32 0, i32 0
   %130 = load ptr, ptr %129, align 8
@@ -13799,7 +13800,7 @@ define { ptr, ptr, ptr, i32 } @FilterIterable2_iterator_({ ptr, ptr, ptr, i32 } 
   %57 = load ptr, ptr %56, align 8
   %58 = alloca {}, align 8
   %59 = call ptr @behavior_wrapper(ptr %57, { ptr, ptr, ptr, i32 } %42, ptr %58)
-  %60 = call { ptr, ptr, ptr, i32 } %59({ ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %42, ptr %52)
+  %60 = call { ptr, ptr, ptr, i32 } %59({ ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %42, ptr %52) #17
   %61 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %60, ptr %61, align 8
   %62 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -13904,7 +13905,7 @@ define { ptr, ptr, ptr, i32 } @FilterIterable2_iterator_({ ptr, ptr, ptr, i32 } 
   %148 = load ptr, ptr %147, align 8
   %149 = alloca {}, align 8
   %150 = call ptr @behavior_wrapper(ptr %148, { ptr, ptr, ptr, i32 } %133, ptr %149)
-  %151 = call { ptr, ptr, ptr, i32 } %150({ ptr, ptr, ptr, i32 } %133, { ptr, ptr, ptr, i32 } %133, ptr %143)
+  %151 = call { ptr, ptr, ptr, i32 } %150({ ptr, ptr, ptr, i32 } %133, { ptr, ptr, ptr, i32 } %133, ptr %143) #17
   %152 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %151, ptr %152, align 8
   %153 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -14020,7 +14021,7 @@ define { ptr, ptr, ptr, i32 } @FilterIterable2_iterator_({ ptr, ptr, ptr, i32 } 
   %242 = getelementptr { ptr, ptr }, ptr %240, i32 0, i32 1
   store ptr @function_typ, ptr %242, align 8
   %243 = call ptr @behavior_wrapper(ptr %239, { ptr, ptr, ptr, i32 } %213, ptr %240)
-  call void %243({ ptr, ptr, ptr, i32 } %213, { ptr, ptr, ptr, i32 } %213, ptr %232, { ptr, ptr, ptr, i32 } %203, { ptr } %205)
+  call void %243({ ptr, ptr, ptr, i32 } %213, { ptr, ptr, ptr, i32 } %213, ptr %232, { ptr, ptr, ptr, i32 } %203, { ptr } %205) #17
   %244 = alloca { ptr, ptr, ptr, i32 }, align 8
   %245 = getelementptr { ptr, ptr, ptr, i32 }, ptr %244, i32 0, i32 0
   %246 = load ptr, ptr %108, align 8
@@ -14318,7 +14319,7 @@ define { ptr, i160 } @FilterIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %68 = load ptr, ptr %67, align 8
   %69 = alloca {}, align 8
   %70 = call ptr @behavior_wrapper(ptr %68, { ptr, ptr, ptr, i32 } %53, ptr %69)
-  %71 = call { ptr, i160 } %70({ ptr, ptr, ptr, i32 } %53, { ptr, ptr, ptr, i32 } %53, ptr %63)
+  %71 = call { ptr, i160 } %70({ ptr, ptr, ptr, i32 } %53, { ptr, ptr, ptr, i32 } %53, ptr %63) #17
   %72 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %71, ptr %72, align 8
   %73 = getelementptr { ptr, i160 }, ptr %72, i32 0, i32 0
@@ -14417,7 +14418,7 @@ define { ptr, i160 } @FilterIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %147 = getelementptr ptr, ptr %146, i32 1
   %148 = load ptr, ptr %147, align 8
   %149 = call ptr @behavior_wrapper(ptr %148, { ptr, ptr, ptr, i32 } %134, ptr %11)
-  %150 = call { ptr, i160 } %149({ ptr, ptr, ptr, i32 } %134, { ptr, ptr, ptr, i32 } %134, ptr %10)
+  %150 = call { ptr, i160 } %149({ ptr, ptr, ptr, i32 } %134, { ptr, ptr, ptr, i32 } %134, ptr %10) #17
   store { ptr, i160 } %150, ptr %12, align 8
   %151 = getelementptr { ptr, i160 }, ptr %12, i32 0, i32 0
   %152 = getelementptr { ptr, i160 }, ptr %72, i32 0, i32 0
@@ -15173,7 +15174,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   %67 = load ptr, ptr %66, align 8
   %68 = alloca {}, align 8
   %69 = call ptr @behavior_wrapper(ptr %67, { ptr, ptr, ptr, i32 } %42, ptr %68)
-  %70 = call { ptr, ptr, ptr, i32 } %69({ ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %42, ptr %62)
+  %70 = call { ptr, ptr, ptr, i32 } %69({ ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %42, ptr %62) #17
   %71 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %70, ptr %71, align 8
   %72 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -15302,7 +15303,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   %180 = load ptr, ptr %179, align 8
   %181 = alloca {}, align 8
   %182 = call ptr @behavior_wrapper(ptr %180, { ptr, ptr, ptr, i32 } %155, ptr %181)
-  %183 = call { ptr, ptr, ptr, i32 } %182({ ptr, ptr, ptr, i32 } %155, { ptr, ptr, ptr, i32 } %155, ptr %175)
+  %183 = call { ptr, ptr, ptr, i32 } %182({ ptr, ptr, ptr, i32 } %155, { ptr, ptr, ptr, i32 } %155, ptr %175) #17
   %184 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %183, ptr %184, align 8
   %185 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -15428,7 +15429,7 @@ define { ptr, ptr, ptr, i32 } @MapIterable2_iterator_({ ptr, ptr, ptr, i32 } %0,
   %284 = getelementptr { ptr, ptr }, ptr %282, i32 0, i32 1
   store ptr @function_typ, ptr %284, align 8
   %285 = call ptr @behavior_wrapper(ptr %281, { ptr, ptr, ptr, i32 } %245, ptr %282)
-  call void %285({ ptr, ptr, ptr, i32 } %245, { ptr, ptr, ptr, i32 } %245, ptr %274, { ptr, ptr, ptr, i32 } %235, { ptr } %237)
+  call void %285({ ptr, ptr, ptr, i32 } %245, { ptr, ptr, ptr, i32 } %245, ptr %274, { ptr, ptr, ptr, i32 } %235, { ptr } %237) #17
   %286 = alloca { ptr, ptr, ptr, i32 }, align 8
   %287 = getelementptr { ptr, ptr, ptr, i32 }, ptr %286, i32 0, i32 0
   %288 = load ptr, ptr %130, align 8
@@ -15742,7 +15743,7 @@ define { ptr, i160 } @MapIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
   %75 = load ptr, ptr %74, align 8
   %76 = alloca {}, align 8
   %77 = call ptr @behavior_wrapper(ptr %75, { ptr, ptr, ptr, i32 } %50, ptr %76)
-  %78 = call { ptr, i160 } %77({ ptr, ptr, ptr, i32 } %50, { ptr, ptr, ptr, i32 } %50, ptr %70)
+  %78 = call { ptr, i160 } %77({ ptr, ptr, ptr, i32 } %50, { ptr, ptr, ptr, i32 } %50, ptr %70) #17
   %79 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %78, ptr %79, align 8
   %80 = getelementptr { ptr, i160 }, ptr %79, i32 0, i32 0
@@ -16310,7 +16311,7 @@ define { ptr, i160 } @ArrayIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %77 = load ptr, ptr %76, align 8
   %78 = alloca {}, align 8
   %79 = call ptr @behavior_wrapper(ptr %77, { ptr, ptr, ptr, i32 } %62, ptr %78)
-  %80 = call i32 %79({ ptr, ptr, ptr, i32 } %62, { ptr, ptr, ptr, i32 } %62, ptr %72)
+  %80 = call i32 %79({ ptr, ptr, ptr, i32 } %62, { ptr, ptr, ptr, i32 } %62, ptr %72) #17
   %81 = icmp sge i32 %37, %80
   br i1 %81, label %82, label %87
 
@@ -16410,7 +16411,7 @@ define { ptr, i160 } @ArrayIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %164 = getelementptr { ptr }, ptr %8, i32 0, i32 0
   store ptr @i32_typ, ptr %164, align 8
   %165 = call ptr @behavior_wrapper(ptr %163, { ptr, ptr, ptr, i32 } %148, ptr %8)
-  %166 = call { ptr, i160 } %165({ ptr, ptr, ptr, i32 } %148, { ptr, ptr, ptr, i32 } %148, ptr %7, i32 %124)
+  %166 = call { ptr, i160 } %165({ ptr, ptr, ptr, i32 } %148, { ptr, ptr, ptr, i32 } %148, ptr %7, i32 %124) #17
   store { ptr, i160 } %166, ptr %9, align 8
   %167 = getelementptr { ptr, i160 }, ptr %9, i32 0, i32 0
   %168 = load ptr, ptr %167, align 8
@@ -16733,7 +16734,7 @@ define ptr @Float64_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %
   %11 = load i64, ptr %7, align 4
   %12 = load ptr, ptr %8, align 8
   %13 = load ptr, ptr %9, align 8
-  %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %13)
+  %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %13)
   br i1 %14, label %15, label %29
 
 15:                                               ; preds = %2
@@ -16747,7 +16748,7 @@ define ptr @Float64_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %
   %23 = load i64, ptr %19, align 4
   %24 = load ptr, ptr %20, align 8
   %25 = load ptr, ptr %21, align 8
-  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %25)
+  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %25)
   %27 = xor i1 %26, true
   %28 = zext i1 %27 to i32
   store i32 %28, ptr %.reg2mem1, align 4
@@ -16783,7 +16784,7 @@ define ptr @Float64_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %
   %42 = load i64, ptr %38, align 4
   %43 = load ptr, ptr %39, align 8
   %44 = load ptr, ptr %40, align 8
-  %45 = call i1 @subtype_test_wrapper(ptr %43, i64 %42, i64 %41, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %44)
+  %45 = call i1 @subtype_test_wrapper(ptr %43, i64 %42, i64 %41, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %44)
   br i1 %45, label %46, label %._crit_edge
 
 ._crit_edge:                                      ; preds = %34
@@ -16800,15 +16801,15 @@ define ptr @Float64_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %
   %54 = load i64, ptr %50, align 4
   %55 = load ptr, ptr %51, align 8
   %56 = load ptr, ptr %52, align 8
-  %57 = call i1 @subtype_test_wrapper(ptr %55, i64 %54, i64 %53, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %56)
+  %57 = call i1 @subtype_test_wrapper(ptr %55, i64 %54, i64 %53, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %56)
   br label %58
 
 58:                                               ; preds = %._crit_edge, %46
-  store i32 8, ptr %.reg2mem3, align 4
+  store i32 9, ptr %.reg2mem3, align 4
   br label %60
 
 59:                                               ; preds = %31
-  store i32 9, ptr %.reg2mem3, align 4
+  store i32 8, ptr %.reg2mem3, align 4
   br label %60
 
 60:                                               ; preds = %59, %58
@@ -16962,7 +16963,7 @@ define { ptr, ptr, ptr, i32 } @Float64__ADD_otherFloat64({ ptr, ptr, ptr, i32 } 
   %55 = load ptr, ptr %54, align 8
   %56 = alloca {}, align 8
   %57 = call ptr @behavior_wrapper(ptr %55, { ptr, ptr, ptr, i32 } %49, ptr %56)
-  %58 = call double %57({ ptr, ptr, ptr, i32 } %49, { ptr, ptr, ptr, i32 } %49, ptr %50)
+  %58 = call double %57({ ptr, ptr, ptr, i32 } %49, { ptr, ptr, ptr, i32 } %49, ptr %50) #17
   %59 = alloca [1 x ptr], align 8
   store ptr @Float64, ptr %59, align 8
   %60 = load ptr, ptr %59, align 8
@@ -17009,7 +17010,7 @@ define { ptr, ptr, ptr, i32 } @Float64__ADD_otherFloat64({ ptr, ptr, ptr, i32 } 
   %98 = load ptr, ptr %97, align 8
   %99 = alloca {}, align 8
   %100 = call ptr @behavior_wrapper(ptr %98, { ptr, ptr, ptr, i32 } %92, ptr %99)
-  %101 = call double %100({ ptr, ptr, ptr, i32 } %92, { ptr, ptr, ptr, i32 } %92, ptr %93)
+  %101 = call double %100({ ptr, ptr, ptr, i32 } %92, { ptr, ptr, ptr, i32 } %92, ptr %93) #17
   %102 = fadd double %80, %101
   %103 = load ptr, ptr %69, align 8
   %104 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %103, 0
@@ -17031,7 +17032,7 @@ define { ptr, ptr, ptr, i32 } @Float64__ADD_otherFloat64({ ptr, ptr, ptr, i32 } 
   %119 = getelementptr { ptr }, ptr %118, i32 0, i32 0
   store ptr @f64_typ, ptr %119, align 8
   %120 = call ptr @behavior_wrapper(ptr %117, { ptr, ptr, ptr, i32 } %110, ptr %118)
-  call void %120({ ptr, ptr, ptr, i32 } %110, { ptr, ptr, ptr, i32 } %110, ptr %111, double %102)
+  call void %120({ ptr, ptr, ptr, i32 } %110, { ptr, ptr, ptr, i32 } %110, ptr %111, double %102) #17
   %121 = alloca { ptr, ptr, ptr, i32 }, align 8
   %122 = getelementptr { ptr, ptr, ptr, i32 }, ptr %121, i32 0, i32 0
   %123 = load ptr, ptr %69, align 8
@@ -17115,7 +17116,7 @@ define { ptr, ptr, ptr, i32 } @Float64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0
   %44 = load ptr, ptr %43, align 8
   %45 = alloca {}, align 8
   %46 = call ptr @behavior_wrapper(ptr %44, { ptr, ptr, ptr, i32 } %38, ptr %45)
-  %47 = call i32 %46({ ptr, ptr, ptr, i32 } %38, { ptr, ptr, ptr, i32 } %38, ptr %39)
+  %47 = call i32 %46({ ptr, ptr, ptr, i32 } %38, { ptr, ptr, ptr, i32 } %38, ptr %39) #17
   %48 = sitofp i32 %47 to double
   %49 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 1
   %50 = load ptr, ptr %49, align 8
@@ -17175,7 +17176,7 @@ define { ptr, ptr, ptr, i32 } @Float64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0
   %99 = getelementptr { ptr }, ptr %98, i32 0, i32 0
   store ptr @f64_typ, ptr %99, align 8
   %100 = call ptr @behavior_wrapper(ptr %97, { ptr, ptr, ptr, i32 } %90, ptr %98)
-  call void %100({ ptr, ptr, ptr, i32 } %90, { ptr, ptr, ptr, i32 } %90, ptr %91, double %82)
+  call void %100({ ptr, ptr, ptr, i32 } %90, { ptr, ptr, ptr, i32 } %90, ptr %91, double %82) #17
   %101 = alloca { ptr, ptr, ptr, i32 }, align 8
   %102 = getelementptr { ptr, ptr, ptr, i32 }, ptr %101, i32 0, i32 0
   %103 = load ptr, ptr %70, align 8
@@ -17221,7 +17222,7 @@ define { i64, i64 } @_size_Int32(ptr %0) {
 
 define ptr @Int32_field_Int32_0(ptr %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  ret ptr @_parameterization_Float64_or_Int32
+  ret ptr @_parameterization_Int32_or_Float64
 }
 
 define ptr @Int32_B_init_valuePtri32({ ptr, ptr, ptr, i32 } %0, ptr %1) {
@@ -17272,7 +17273,7 @@ define ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0,
   %11 = load i64, ptr %7, align 4
   %12 = load ptr, ptr %8, align 8
   %13 = load ptr, ptr %9, align 8
-  %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %13)
+  %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %13)
   br i1 %14, label %15, label %29
 
 15:                                               ; preds = %2
@@ -17286,7 +17287,7 @@ define ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0,
   %23 = load i64, ptr %19, align 4
   %24 = load ptr, ptr %20, align 8
   %25 = load ptr, ptr %21, align 8
-  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %25)
+  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %25)
   %27 = xor i1 %26, true
   %28 = zext i1 %27 to i32
   store i32 %28, ptr %.reg2mem1, align 4
@@ -17322,7 +17323,7 @@ define ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0,
   %42 = load i64, ptr %38, align 4
   %43 = load ptr, ptr %39, align 8
   %44 = load ptr, ptr %40, align 8
-  %45 = call i1 @subtype_test_wrapper(ptr %43, i64 %42, i64 %41, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %44)
+  %45 = call i1 @subtype_test_wrapper(ptr %43, i64 %42, i64 %41, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %44)
   br i1 %45, label %46, label %._crit_edge
 
 ._crit_edge:                                      ; preds = %34
@@ -17339,15 +17340,15 @@ define ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0,
   %54 = load i64, ptr %50, align 4
   %55 = load ptr, ptr %51, align 8
   %56 = load ptr, ptr %52, align 8
-  %57 = call i1 @subtype_test_wrapper(ptr %55, i64 %54, i64 %53, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %56)
+  %57 = call i1 @subtype_test_wrapper(ptr %55, i64 %54, i64 %53, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %56)
   br label %58
 
 58:                                               ; preds = %._crit_edge, %46
-  store i32 8, ptr %.reg2mem3, align 4
+  store i32 7, ptr %.reg2mem3, align 4
   br label %60
 
 59:                                               ; preds = %31
-  store i32 7, ptr %.reg2mem3, align 4
+  store i32 8, ptr %.reg2mem3, align 4
   br label %60
 
 60:                                               ; preds = %59, %58
@@ -17502,7 +17503,7 @@ define { ptr, i160 } @Int32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %56 = load ptr, ptr %55, align 8
   %57 = alloca {}, align 8
   %58 = call ptr @behavior_wrapper(ptr %56, { ptr, ptr, ptr, i32 } %50, ptr %57)
-  %59 = call double %58({ ptr, ptr, ptr, i32 } %50, { ptr, ptr, ptr, i32 } %50, ptr %51)
+  %59 = call double %58({ ptr, ptr, ptr, i32 } %50, { ptr, ptr, ptr, i32 } %50, ptr %51) #17
   %60 = alloca [1 x ptr], align 8
   store ptr @Float64, ptr %60, align 8
   %61 = load ptr, ptr %60, align 8
@@ -17537,7 +17538,7 @@ define { ptr, i160 } @Int32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %87 = load ptr, ptr %86, align 8
   %88 = alloca {}, align 8
   %89 = call ptr @behavior_wrapper(ptr %87, { ptr, ptr, ptr, i32 } %81, ptr %88)
-  %90 = call double %89({ ptr, ptr, ptr, i32 } %81, { ptr, ptr, ptr, i32 } %81, ptr %82)
+  %90 = call double %89({ ptr, ptr, ptr, i32 } %81, { ptr, ptr, ptr, i32 } %81, ptr %82) #17
   %91 = fadd double %38, %90
   %92 = getelementptr { ptr, ptr, ptr, i32 }, ptr %67, i32 0, i32 0
   %93 = load ptr, ptr %92, align 8
@@ -17563,7 +17564,7 @@ define { ptr, i160 } @Int32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %112 = getelementptr { ptr }, ptr %111, i32 0, i32 0
   store ptr @f64_typ, ptr %112, align 8
   %113 = call ptr @behavior_wrapper(ptr %110, { ptr, ptr, ptr, i32 } %103, ptr %111)
-  call void %113({ ptr, ptr, ptr, i32 } %103, { ptr, ptr, ptr, i32 } %103, ptr %104, double %91)
+  call void %113({ ptr, ptr, ptr, i32 } %103, { ptr, ptr, ptr, i32 } %103, ptr %104, double %91) #17
   %114 = getelementptr { ptr, i160 }, ptr %67, i32 0, i32 0
   %115 = load ptr, ptr %114, align 8
   %116 = insertvalue { ptr, i160 } undef, ptr %115, 0
@@ -17638,7 +17639,7 @@ define { ptr, i160 } @Int32__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %55 = load ptr, ptr %54, align 8
   %56 = alloca {}, align 8
   %57 = call ptr @behavior_wrapper(ptr %55, { ptr, ptr, ptr, i32 } %49, ptr %56)
-  %58 = call i32 %57({ ptr, ptr, ptr, i32 } %49, { ptr, ptr, ptr, i32 } %49, ptr %50)
+  %58 = call i32 %57({ ptr, ptr, ptr, i32 } %49, { ptr, ptr, ptr, i32 } %49, ptr %50) #17
   %59 = alloca [1 x ptr], align 8
   store ptr @Int32, ptr %59, align 8
   %60 = load ptr, ptr %59, align 8
@@ -17684,7 +17685,7 @@ define { ptr, i160 } @Int32__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %97 = load ptr, ptr %96, align 8
   %98 = alloca {}, align 8
   %99 = call ptr @behavior_wrapper(ptr %97, { ptr, ptr, ptr, i32 } %91, ptr %98)
-  %100 = call i32 %99({ ptr, ptr, ptr, i32 } %91, { ptr, ptr, ptr, i32 } %91, ptr %92)
+  %100 = call i32 %99({ ptr, ptr, ptr, i32 } %91, { ptr, ptr, ptr, i32 } %91, ptr %92) #17
   %101 = add i32 %79, %100
   %102 = getelementptr { ptr, ptr, ptr, i32 }, ptr %66, i32 0, i32 0
   %103 = load ptr, ptr %102, align 8
@@ -17710,7 +17711,7 @@ define { ptr, i160 } @Int32__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %122 = getelementptr { ptr }, ptr %121, i32 0, i32 0
   store ptr @i32_typ, ptr %122, align 8
   %123 = call ptr @behavior_wrapper(ptr %120, { ptr, ptr, ptr, i32 } %113, ptr %121)
-  call void %123({ ptr, ptr, ptr, i32 } %113, { ptr, ptr, ptr, i32 } %113, ptr %114, i32 %101)
+  call void %123({ ptr, ptr, ptr, i32 } %113, { ptr, ptr, ptr, i32 } %113, ptr %114, i32 %101) #17
   %124 = getelementptr { ptr, i160 }, ptr %66, i32 0, i32 0
   %125 = load ptr, ptr %124, align 8
   %126 = insertvalue { ptr, i160 } undef, ptr %125, 0
@@ -17967,7 +17968,7 @@ define { ptr, ptr, ptr, i32 } @Holder_value_({ ptr, ptr, ptr, i32 } %0, { ptr, p
   %54 = getelementptr { ptr }, ptr %53, i32 0, i32 0
   store ptr @f64_typ, ptr %54, align 8
   %55 = call ptr @behavior_wrapper(ptr %52, { ptr, ptr, ptr, i32 } %36, ptr %53)
-  call void %55({ ptr, ptr, ptr, i32 } %36, { ptr, ptr, ptr, i32 } %36, ptr %46, double 4.500000e+01)
+  call void %55({ ptr, ptr, ptr, i32 } %36, { ptr, ptr, ptr, i32 } %36, ptr %46, double 4.500000e+01) #17
   %56 = alloca i160, align 8
   %57 = alloca ptr, align 8
   %58 = load ptr, ptr %28, align 8
@@ -18041,7 +18042,7 @@ define { ptr, ptr, ptr, i32 } @Holder_value_({ ptr, ptr, ptr, i32 } %0, { ptr, p
   %117 = getelementptr { ptr }, ptr %116, i32 0, i32 0
   store ptr %64, ptr %117, align 8
   %118 = call ptr @behavior_wrapper(ptr %115, { ptr, ptr, ptr, i32 } %99, ptr %116)
-  %119 = call { ptr, i160 } %118({ ptr, ptr, ptr, i32 } %99, { ptr, ptr, ptr, i32 } %99, ptr %109, { ptr, i160 } %67)
+  %119 = call { ptr, i160 } %118({ ptr, ptr, ptr, i32 } %99, { ptr, ptr, ptr, i32 } %99, ptr %109, { ptr, i160 } %67) #17
   %120 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %119, ptr %120, align 8
   %121 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -18196,7 +18197,7 @@ define void @Holder_setter_held(ptr %0, { ptr, i160 } %1) {
   ret void
 }
 
-define { ptr, i160 } @dapeerirdq(ptr nest %0, { ptr, i160 } %1) {
+define { ptr, i160 } @bgpwalyuav(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   %"reg2mem alloca point" = bitcast i32 0 to i32
   store { ptr, i160 } %1, ptr %3, align 8
@@ -18214,7 +18215,7 @@ define { ptr, i160 } @dapeerirdq(ptr nest %0, { ptr, i160 } %1) {
   ret { ptr, i160 } %12
 }
 
-define { ptr, i160 } @szvtxlzqsp(ptr nest %0, { ptr, i160 } %1) {
+define { ptr, i160 } @gkpzwglkno(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   %"reg2mem alloca point" = bitcast i32 0 to i32
   store { ptr, i160 } %1, ptr %3, align 8
@@ -18232,7 +18233,7 @@ define { ptr, i160 } @szvtxlzqsp(ptr nest %0, { ptr, i160 } %1) {
   ret { ptr, i160 } %12
 }
 
-define { ptr, i160 } @fokrkorguu(ptr nest %0, { ptr, i160 } %1) {
+define { ptr, i160 } @ognzrelzpf(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   %"reg2mem alloca point" = bitcast i32 0 to i32
   store { ptr, i160 } %1, ptr %3, align 8
@@ -18250,7 +18251,7 @@ define { ptr, i160 } @fokrkorguu(ptr nest %0, { ptr, i160 } %1) {
   ret { ptr, i160 } %12
 }
 
-define { ptr, i160 } @msbkwmvmsw(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define { ptr, i160 } @gknvtrlicz(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   %"reg2mem alloca point" = bitcast i32 0 to i32
   store { ptr, i160 } %1, ptr %4, align 8
@@ -18525,30 +18526,30 @@ define ptr @Iterable2_B_product_otherIterable2U({ ptr, ptr, ptr, i32 } %0, ptr %
   ret ptr %18
 }
 
-define i32 @_functionliteral_bhmxlfuede(i32 %0, i32 %1) {
+define i32 @_functionliteral_jrkttneacd(i32 %0, i32 %1) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
   %3 = add i32 %0, %1
   ret i32 %3
 }
 
-define i32 @_functionliteral_aoowxizxse(i32 %0) {
+define i32 @_functionliteral_lahdyezddr(i32 %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
   %2 = mul i32 %0, 2
   ret i32 %2
 }
 
-define double @_functionliteral_tqznfpampx(double %0) {
+define double @_functionliteral_yrakukoigg(double %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
   %2 = fmul double %0, 2.000000e+00
   ret double %2
 }
 
-define i32 @_functionliteral_seawzozoak(i32 %0) {
+define i32 @_functionliteral_tuxtulnidu(i32 %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
   ret i32 %0
 }
 
-define double @_functionliteral_ghmaqedhql(i32 %0) {
+define double @_functionliteral_mqrfiecjhf(i32 %0) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
   %2 = sitofp i32 %0 to double
   ret double %2
@@ -18645,7 +18646,7 @@ define { ptr, ptr, ptr, i32 } @add_five({ ptr, ptr, ptr, i32 } %0) {
   %43 = getelementptr { ptr }, ptr %42, i32 0, i32 0
   store ptr @f64_typ, ptr %43, align 8
   %44 = call ptr @behavior_wrapper(ptr %41, { ptr, ptr, ptr, i32 } %34, ptr %42)
-  call void %44({ ptr, ptr, ptr, i32 } %34, { ptr, ptr, ptr, i32 } %34, ptr %35, double 5.000000e+00)
+  call void %44({ ptr, ptr, ptr, i32 } %34, { ptr, ptr, ptr, i32 } %34, ptr %35, double 5.000000e+00) #17
   %45 = alloca i160, align 8
   %46 = alloca ptr, align 8
   %47 = load ptr, ptr %26, align 8
@@ -18686,7 +18687,7 @@ define { ptr, ptr, ptr, i32 } @add_five({ ptr, ptr, ptr, i32 } %0) {
   %77 = getelementptr { ptr }, ptr %76, i32 0, i32 0
   store ptr %53, ptr %77, align 8
   %78 = call ptr @behavior_wrapper(ptr %75, { ptr, ptr, ptr, i32 } %68, ptr %76)
-  %79 = call { ptr, i160 } %78({ ptr, ptr, ptr, i32 } %68, { ptr, ptr, ptr, i32 } %68, ptr %69, { ptr, i160 } %56)
+  %79 = call { ptr, i160 } %78({ ptr, ptr, ptr, i32 } %68, { ptr, ptr, ptr, i32 } %68, ptr %69, { ptr, i160 } %56) #17
   %80 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %79, ptr %80, align 8
   %81 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -19129,7 +19130,7 @@ define i32 @main() {
   %372 = getelementptr { ptr, ptr }, ptr %11, i32 0, i32 1
   store ptr %352, ptr %372, align 8
   %373 = call ptr @behavior_wrapper(ptr %370, { ptr, ptr, ptr, i32 } %363, ptr %11)
-  call void %373({ ptr, ptr, ptr, i32 } %363, { ptr, ptr, ptr, i32 } %363, ptr %10, { ptr, i160 } %351, { ptr, i160 } %355)
+  call void %373({ ptr, ptr, ptr, i32 } %363, { ptr, ptr, ptr, i32 } %363, ptr %10, { ptr, i160 } %351, { ptr, i160 } %355) #17
   %374 = getelementptr { ptr, ptr, ptr, i32 }, ptr %12, i32 0, i32 0
   %375 = load ptr, ptr %5, align 8
   store ptr %375, ptr %374, align 8
@@ -19169,7 +19170,7 @@ define i32 @main() {
   %401 = getelementptr ptr, ptr %400, i32 6
   %402 = load ptr, ptr %401, align 8
   %403 = call ptr @behavior_wrapper(ptr %402, { ptr, ptr, ptr, i32 } %397, ptr %18)
-  %404 = call { ptr, i160 } %403({ ptr, ptr, ptr, i32 } %397, { ptr, ptr, ptr, i32 } %397, ptr %17)
+  %404 = call { ptr, i160 } %403({ ptr, ptr, ptr, i32 } %397, { ptr, ptr, ptr, i32 } %397, ptr %17) #17
   store { ptr, i160 } %404, ptr %19, align 8
   %405 = getelementptr { ptr, i160 }, ptr %19, i32 0, i32 1
   %406 = load double, ptr %405, align 8
@@ -19187,7 +19188,7 @@ define i32 @main() {
   %415 = getelementptr { ptr }, ptr %23, i32 0, i32 0
   store ptr %407, ptr %415, align 8
   %416 = call ptr @class_behavior_wrapper(ptr %414, ptr %23)
-  call void %416(ptr %22, { ptr, i160 } %410)
+  call void %416(ptr %22, { ptr, i160 } %410) #17
   store ptr @Pair, ptr %24, align 8
   %417 = getelementptr ptr, ptr %24, i32 1
   store ptr @_parameterization_Ptrf64, ptr %417, align 8
@@ -19240,7 +19241,7 @@ define i32 @main() {
   %451 = getelementptr { ptr, ptr }, ptr %34, i32 0, i32 1
   store ptr %431, ptr %451, align 8
   %452 = call ptr @behavior_wrapper(ptr %449, { ptr, ptr, ptr, i32 } %442, ptr %34)
-  call void %452({ ptr, ptr, ptr, i32 } %442, { ptr, ptr, ptr, i32 } %442, ptr %33, { ptr, i160 } %430, { ptr, i160 } %434)
+  call void %452({ ptr, ptr, ptr, i32 } %442, { ptr, ptr, ptr, i32 } %442, ptr %33, { ptr, i160 } %430, { ptr, i160 } %434) #17
   %453 = getelementptr { ptr, ptr, ptr, i32 }, ptr %35, i32 0, i32 0
   %454 = load ptr, ptr %28, align 8
   store ptr %454, ptr %453, align 8
@@ -19280,7 +19281,7 @@ define i32 @main() {
   %480 = getelementptr ptr, ptr %479, i32 6
   %481 = load ptr, ptr %480, align 8
   %482 = call ptr @behavior_wrapper(ptr %481, { ptr, ptr, ptr, i32 } %476, ptr %41)
-  %483 = call { ptr, i160 } %482({ ptr, ptr, ptr, i32 } %476, { ptr, ptr, ptr, i32 } %476, ptr %40)
+  %483 = call { ptr, i160 } %482({ ptr, ptr, ptr, i32 } %476, { ptr, ptr, ptr, i32 } %476, ptr %40) #17
   store { ptr, i160 } %483, ptr %42, align 8
   %484 = getelementptr { ptr, i160 }, ptr %42, i32 0, i32 1
   %485 = load i32, ptr %484, align 4
@@ -19298,7 +19299,7 @@ define i32 @main() {
   %494 = getelementptr { ptr }, ptr %46, i32 0, i32 0
   store ptr %486, ptr %494, align 8
   %495 = call ptr @class_behavior_wrapper(ptr %493, ptr %46)
-  call void %495(ptr %45, { ptr, i160 } %489)
+  call void %495(ptr %45, { ptr, i160 } %489) #17
   store double 1.000000e+00, ptr %50, align 8
   store double 2.000000e+00, ptr %49, align 8
   store double 3.000000e+00, ptr %48, align 8
@@ -19373,7 +19374,7 @@ define i32 @main() {
   %540 = getelementptr { ptr, ptr }, ptr %65, i32 0, i32 1
   store ptr %520, ptr %540, align 8
   %541 = call ptr @behavior_wrapper(ptr %538, { ptr, ptr, ptr, i32 } %531, ptr %65)
-  call void %541({ ptr, ptr, ptr, i32 } %531, { ptr, ptr, ptr, i32 } %531, ptr %64, { ptr, i160 } %519, { ptr, i160 } %523)
+  call void %541({ ptr, ptr, ptr, i32 } %531, { ptr, ptr, ptr, i32 } %531, ptr %64, { ptr, i160 } %519, { ptr, i160 } %523) #17
   %542 = getelementptr { ptr, ptr, ptr, i32 }, ptr %66, i32 0, i32 0
   %543 = load ptr, ptr %55, align 8
   store ptr %543, ptr %542, align 8
@@ -19413,7 +19414,7 @@ define i32 @main() {
   %569 = getelementptr ptr, ptr %568, i32 5
   %570 = load ptr, ptr %569, align 8
   %571 = call ptr @behavior_wrapper(ptr %570, { ptr, ptr, ptr, i32 } %565, ptr %72)
-  %572 = call { ptr, i160 } %571({ ptr, ptr, ptr, i32 } %565, { ptr, ptr, ptr, i32 } %565, ptr %71)
+  %572 = call { ptr, i160 } %571({ ptr, ptr, ptr, i32 } %565, { ptr, ptr, ptr, i32 } %565, ptr %71) #17
   store { ptr, i160 } %572, ptr %73, align 8
   %573 = getelementptr { ptr, i160 }, ptr %73, i32 0, i32 1
   %574 = load ptr, ptr %573, align 8
@@ -19444,7 +19445,7 @@ define i32 @main() {
   %592 = getelementptr { ptr }, ptr %81, i32 0, i32 0
   store ptr %584, ptr %592, align 8
   %593 = call ptr @class_behavior_wrapper(ptr %591, ptr %81)
-  call void %593(ptr %80, { ptr, i160 } %587)
+  call void %593(ptr %80, { ptr, i160 } %587) #17
   store double 1.000000e+00, ptr %85, align 8
   store double 2.000000e+00, ptr %84, align 8
   store double 3.000000e+00, ptr %83, align 8
@@ -19511,7 +19512,7 @@ define i32 @main() {
   %634 = getelementptr { ptr, ptr }, ptr %100, i32 0, i32 1
   store ptr %614, ptr %634, align 8
   %635 = call ptr @behavior_wrapper(ptr %632, { ptr, ptr, ptr, i32 } %625, ptr %100)
-  call void %635({ ptr, ptr, ptr, i32 } %625, { ptr, ptr, ptr, i32 } %625, ptr %99, { ptr, i160 } %613, { ptr, i160 } %617)
+  call void %635({ ptr, ptr, ptr, i32 } %625, { ptr, ptr, ptr, i32 } %625, ptr %99, { ptr, i160 } %613, { ptr, i160 } %617) #17
   %636 = getelementptr { ptr, ptr, ptr, i32 }, ptr %101, i32 0, i32 0
   %637 = load ptr, ptr %90, align 8
   store ptr %637, ptr %636, align 8
@@ -19551,7 +19552,7 @@ define i32 @main() {
   %663 = getelementptr ptr, ptr %662, i32 6
   %664 = load ptr, ptr %663, align 8
   %665 = call ptr @behavior_wrapper(ptr %664, { ptr, ptr, ptr, i32 } %659, ptr %107)
-  %666 = call { ptr, i160 } %665({ ptr, ptr, ptr, i32 } %659, { ptr, ptr, ptr, i32 } %659, ptr %106)
+  %666 = call { ptr, i160 } %665({ ptr, ptr, ptr, i32 } %659, { ptr, ptr, ptr, i32 } %659, ptr %106) #17
   store { ptr, i160 } %666, ptr %108, align 8
   %667 = getelementptr { ptr, i160 }, ptr %108, i32 0, i32 1
   %668 = load double, ptr %667, align 8
@@ -19569,7 +19570,7 @@ define i32 @main() {
   %677 = getelementptr { ptr }, ptr %112, i32 0, i32 0
   store ptr %669, ptr %677, align 8
   %678 = call ptr @class_behavior_wrapper(ptr %676, ptr %112)
-  call void %678(ptr %111, { ptr, i160 } %672)
+  call void %678(ptr %111, { ptr, i160 } %672) #17
   store ptr @Array, ptr %113, align 8
   %679 = getelementptr ptr, ptr %113, i32 1
   store ptr @_parameterization_Ptri32, ptr %679, align 8
@@ -19598,7 +19599,7 @@ define i32 @main() {
   %698 = getelementptr ptr, ptr %697, i32 5
   %699 = load ptr, ptr %698, align 8
   %700 = call ptr @behavior_wrapper(ptr %699, { ptr, ptr, ptr, i32 } %694, ptr %119)
-  call void %700({ ptr, ptr, ptr, i32 } %694, { ptr, ptr, ptr, i32 } %694, ptr %118)
+  call void %700({ ptr, ptr, ptr, i32 } %694, { ptr, ptr, ptr, i32 } %694, ptr %118) #17
   %701 = getelementptr { ptr, ptr, ptr, i32 }, ptr %120, i32 0, i32 0
   %702 = load ptr, ptr %117, align 8
   store ptr %702, ptr %701, align 8
@@ -19666,7 +19667,7 @@ define i32 @main() {
   %747 = getelementptr { ptr }, ptr %134, i32 0, i32 0
   store ptr %729, ptr %747, align 8
   %748 = call ptr @behavior_wrapper(ptr %746, { ptr, ptr, ptr, i32 } %740, ptr %134)
-  %749 = call { ptr, ptr, ptr, i32 } %748({ ptr, ptr, ptr, i32 } %740, { ptr, ptr, ptr, i32 } %740, ptr %133, { ptr, i160 } %732)
+  %749 = call { ptr, ptr, ptr, i32 } %748({ ptr, ptr, ptr, i32 } %740, { ptr, ptr, ptr, i32 } %740, ptr %133, { ptr, i160 } %732) #17
   store { ptr, ptr, ptr, i32 } %749, ptr %135, align 8
   %750 = getelementptr { ptr, ptr, ptr, i32 }, ptr %135, i32 0, i32 0
   %751 = getelementptr { ptr, ptr, ptr, i32 }, ptr %136, i32 0, i32 0
@@ -19707,7 +19708,7 @@ define i32 @main() {
   %780 = getelementptr { ptr }, ptr %138, i32 0, i32 0
   store ptr %725, ptr %780, align 8
   %781 = call ptr @behavior_wrapper(ptr %779, { ptr, ptr, ptr, i32 } %773, ptr %138)
-  %782 = call { ptr, ptr, ptr, i32 } %781({ ptr, ptr, ptr, i32 } %773, { ptr, ptr, ptr, i32 } %773, ptr %137, { ptr, i160 } %728)
+  %782 = call { ptr, ptr, ptr, i32 } %781({ ptr, ptr, ptr, i32 } %773, { ptr, ptr, ptr, i32 } %773, ptr %137, { ptr, i160 } %728) #17
   store { ptr, ptr, ptr, i32 } %782, ptr %139, align 8
   %783 = getelementptr { ptr, ptr, ptr, i32 }, ptr %139, i32 0, i32 0
   %784 = getelementptr { ptr, ptr, ptr, i32 }, ptr %140, i32 0, i32 0
@@ -19748,7 +19749,7 @@ define i32 @main() {
   %813 = getelementptr { ptr }, ptr %142, i32 0, i32 0
   store ptr %721, ptr %813, align 8
   %814 = call ptr @behavior_wrapper(ptr %812, { ptr, ptr, ptr, i32 } %806, ptr %142)
-  %815 = call { ptr, ptr, ptr, i32 } %814({ ptr, ptr, ptr, i32 } %806, { ptr, ptr, ptr, i32 } %806, ptr %141, { ptr, i160 } %724)
+  %815 = call { ptr, ptr, ptr, i32 } %814({ ptr, ptr, ptr, i32 } %806, { ptr, ptr, ptr, i32 } %806, ptr %141, { ptr, i160 } %724) #17
   store { ptr, ptr, ptr, i32 } %815, ptr %143, align 8
   %816 = getelementptr { ptr, ptr, ptr, i32 }, ptr %143, i32 0, i32 0
   %817 = getelementptr { ptr, ptr, ptr, i32 }, ptr %144, i32 0, i32 0
@@ -19789,7 +19790,7 @@ define i32 @main() {
   %846 = getelementptr { ptr }, ptr %146, i32 0, i32 0
   store ptr %717, ptr %846, align 8
   %847 = call ptr @behavior_wrapper(ptr %845, { ptr, ptr, ptr, i32 } %839, ptr %146)
-  %848 = call { ptr, ptr, ptr, i32 } %847({ ptr, ptr, ptr, i32 } %839, { ptr, ptr, ptr, i32 } %839, ptr %145, { ptr, i160 } %720)
+  %848 = call { ptr, ptr, ptr, i32 } %847({ ptr, ptr, ptr, i32 } %839, { ptr, ptr, ptr, i32 } %839, ptr %145, { ptr, i160 } %720) #17
   store { ptr, ptr, ptr, i32 } %848, ptr %147, align 8
   %849 = getelementptr { ptr, ptr, ptr, i32 }, ptr %147, i32 0, i32 0
   %850 = getelementptr { ptr, ptr, ptr, i32 }, ptr %148, i32 0, i32 0
@@ -19816,7 +19817,7 @@ define i32 @main() {
   %864 = insertvalue { ptr, i160 } %862, i160 %863, 1
   %865 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %865)
-  call void @llvm.init.trampoline(ptr %865, ptr @msbkwmvmsw, ptr @_functionliteral_bhmxlfuede)
+  call void @llvm.init.trampoline(ptr %865, ptr @gknvtrlicz, ptr @_functionliteral_jrkttneacd)
   %866 = call ptr @adjust_trampoline(ptr %865)
   store ptr %866, ptr %151, align 8
   %867 = call ptr @llvm.invariant.start.p0(i64 24, ptr %865)
@@ -19845,7 +19846,7 @@ define i32 @main() {
   %887 = getelementptr { ptr, ptr }, ptr %153, i32 0, i32 1
   store ptr @function_typ, ptr %887, align 8
   %888 = call ptr @behavior_wrapper(ptr %885, { ptr, ptr, ptr, i32 } %878, ptr %153)
-  %889 = call { ptr, i160 } %888({ ptr, ptr, ptr, i32 } %878, { ptr, ptr, ptr, i32 } %878, ptr %152, { ptr, i160 } %864, { ptr } %870)
+  %889 = call { ptr, i160 } %888({ ptr, ptr, ptr, i32 } %878, { ptr, ptr, ptr, i32 } %878, ptr %152, { ptr, i160 } %864, { ptr } %870) #17
   store { ptr, i160 } %889, ptr %154, align 8
   %890 = getelementptr { ptr, i160 }, ptr %154, i32 0, i32 1
   %891 = load i32, ptr %890, align 4
@@ -19863,10 +19864,10 @@ define i32 @main() {
   %900 = getelementptr { ptr }, ptr %158, i32 0, i32 0
   store ptr %892, ptr %900, align 8
   %901 = call ptr @class_behavior_wrapper(ptr %899, ptr %158)
-  call void %901(ptr %157, { ptr, i160 } %895)
+  call void %901(ptr %157, { ptr, i160 } %895) #17
   %902 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %902)
-  call void @llvm.init.trampoline(ptr %902, ptr @fokrkorguu, ptr @_functionliteral_aoowxizxse)
+  call void @llvm.init.trampoline(ptr %902, ptr @ognzrelzpf, ptr @_functionliteral_lahdyezddr)
   %903 = call ptr @adjust_trampoline(ptr %902)
   store ptr %903, ptr %159, align 8
   %904 = call ptr @llvm.invariant.start.p0(i64 24, ptr %902)
@@ -19891,7 +19892,7 @@ define i32 @main() {
   %922 = getelementptr { ptr }, ptr %161, i32 0, i32 0
   store ptr @function_typ, ptr %922, align 8
   %923 = call ptr @behavior_wrapper(ptr %921, { ptr, ptr, ptr, i32 } %915, ptr %161)
-  %924 = call { ptr, ptr, ptr, i32 } %923({ ptr, ptr, ptr, i32 } %915, { ptr, ptr, ptr, i32 } %915, ptr %160, { ptr } %907)
+  %924 = call { ptr, ptr, ptr, i32 } %923({ ptr, ptr, ptr, i32 } %915, { ptr, ptr, ptr, i32 } %915, ptr %160, { ptr } %907) #17
   store { ptr, ptr, ptr, i32 } %924, ptr %162, align 8
   %925 = getelementptr { ptr, ptr, ptr, i32 }, ptr %162, i32 0, i32 0
   %926 = getelementptr { ptr, ptr, ptr, i32 }, ptr %163, i32 0, i32 0
@@ -19941,7 +19942,7 @@ define i32 @main() {
   store i32 %956, ptr %165, align 4
   %957 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %957)
-  call void @llvm.init.trampoline(ptr %957, ptr @szvtxlzqsp, ptr @_functionliteral_ghmaqedhql)
+  call void @llvm.init.trampoline(ptr %957, ptr @gkpzwglkno, ptr @_functionliteral_mqrfiecjhf)
   %958 = call ptr @adjust_trampoline(ptr %957)
   store ptr %958, ptr %169, align 8
   %959 = call ptr @llvm.invariant.start.p0(i64 24, ptr %957)
@@ -19950,7 +19951,7 @@ define i32 @main() {
   %962 = insertvalue { ptr } undef, ptr %961, 0
   %963 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %963)
-  call void @llvm.init.trampoline(ptr %963, ptr @dapeerirdq, ptr @_functionliteral_seawzozoak)
+  call void @llvm.init.trampoline(ptr %963, ptr @bgpwalyuav, ptr @_functionliteral_tuxtulnidu)
   %964 = call ptr @adjust_trampoline(ptr %963)
   store ptr %964, ptr %170, align 8
   %965 = call ptr @llvm.invariant.start.p0(i64 24, ptr %963)
@@ -19975,7 +19976,7 @@ define i32 @main() {
   %983 = getelementptr { ptr }, ptr %172, i32 0, i32 0
   store ptr @function_typ, ptr %983, align 8
   %984 = call ptr @behavior_wrapper(ptr %982, { ptr, ptr, ptr, i32 } %976, ptr %172)
-  %985 = call { ptr, ptr, ptr, i32 } %984({ ptr, ptr, ptr, i32 } %976, { ptr, ptr, ptr, i32 } %976, ptr %171, { ptr } %968)
+  %985 = call { ptr, ptr, ptr, i32 } %984({ ptr, ptr, ptr, i32 } %976, { ptr, ptr, ptr, i32 } %976, ptr %171, { ptr } %968) #17
   store { ptr, ptr, ptr, i32 } %985, ptr %173, align 8
   %986 = getelementptr { ptr, ptr, ptr, i32 }, ptr %173, i32 0, i32 0
   %987 = getelementptr { ptr, ptr, ptr, i32 }, ptr %174, i32 0, i32 0
@@ -20016,7 +20017,7 @@ define i32 @main() {
   %1016 = getelementptr { ptr }, ptr %176, i32 0, i32 0
   store ptr @function_typ, ptr %1016, align 8
   %1017 = call ptr @behavior_wrapper(ptr %1015, { ptr, ptr, ptr, i32 } %1009, ptr %176)
-  %1018 = call { ptr, ptr, ptr, i32 } %1017({ ptr, ptr, ptr, i32 } %1009, { ptr, ptr, ptr, i32 } %1009, ptr %175, { ptr } %962)
+  %1018 = call { ptr, ptr, ptr, i32 } %1017({ ptr, ptr, ptr, i32 } %1009, { ptr, ptr, ptr, i32 } %1009, ptr %175, { ptr } %962) #17
   store { ptr, ptr, ptr, i32 } %1018, ptr %177, align 8
   %1019 = getelementptr { ptr, ptr, ptr, i32 }, ptr %177, i32 0, i32 0
   %1020 = getelementptr { ptr, ptr, ptr, i32 }, ptr %178, i32 0, i32 0
@@ -20078,7 +20079,7 @@ define i32 @main() {
   %1062 = getelementptr ptr, ptr %1061, i32 5
   %1063 = load ptr, ptr %1062, align 8
   %1064 = call ptr @behavior_wrapper(ptr %1063, { ptr, ptr, ptr, i32 } %1058, ptr %185)
-  %1065 = call { ptr, ptr, ptr, i32 } %1064({ ptr, ptr, ptr, i32 } %1058, { ptr, ptr, ptr, i32 } %1058, ptr %184)
+  %1065 = call { ptr, ptr, ptr, i32 } %1064({ ptr, ptr, ptr, i32 } %1058, { ptr, ptr, ptr, i32 } %1058, ptr %184) #17
   store { ptr, ptr, ptr, i32 } %1065, ptr %186, align 8
   %1066 = getelementptr { ptr, ptr, ptr, i32 }, ptr %186, i32 0, i32 0
   %1067 = getelementptr { ptr, ptr, ptr, i32 }, ptr %187, i32 0, i32 0
@@ -20147,7 +20148,7 @@ define i32 @main() {
   %1112 = getelementptr ptr, ptr %1111, i32 5
   %1113 = load ptr, ptr %1112, align 8
   %1114 = call ptr @behavior_wrapper(ptr %1113, { ptr, ptr, ptr, i32 } %1108, ptr %194)
-  %1115 = call { ptr, i160 } %1114({ ptr, ptr, ptr, i32 } %1108, { ptr, ptr, ptr, i32 } %1108, ptr %193)
+  %1115 = call { ptr, i160 } %1114({ ptr, ptr, ptr, i32 } %1108, { ptr, ptr, ptr, i32 } %1108, ptr %193) #17
   store { ptr, i160 } %1115, ptr %195, align 8
   %.reload13 = load ptr, ptr %.reg2mem12, align 8
   %1116 = load ptr, ptr %.reload13, align 8
@@ -20184,7 +20185,7 @@ define i32 @main() {
   %1134 = getelementptr { ptr }, ptr %201, i32 0, i32 0
   store ptr %1126, ptr %1134, align 8
   %1135 = call ptr @class_behavior_wrapper(ptr %1133, ptr %201)
-  call void %1135(ptr %200, { ptr, i160 } %1129)
+  call void %1135(ptr %200, { ptr, i160 } %1129) #17
   store double %1125, ptr %202, align 8
   store i64 ptrtoint (ptr @f64_typ to i64), ptr %203, align 4
   %1136 = load ptr, ptr %203, align 8
@@ -20199,7 +20200,7 @@ define i32 @main() {
   %1144 = getelementptr { ptr }, ptr %205, i32 0, i32 0
   store ptr %1136, ptr %1144, align 8
   %1145 = call ptr @class_behavior_wrapper(ptr %1143, ptr %205)
-  call void %1145(ptr %204, { ptr, i160 } %1139)
+  call void %1145(ptr %204, { ptr, i160 } %1139) #17
   store double %1125, ptr %196, align 8
   br label %1146
 
@@ -20254,7 +20255,7 @@ define i32 @main() {
   %1182 = getelementptr { ptr }, ptr %208, i32 0, i32 0
   store ptr %1157, ptr %1182, align 8
   %1183 = call ptr @behavior_wrapper(ptr %1181, { ptr, ptr, ptr, i32 } %1175, ptr %208)
-  %1184 = call { ptr, ptr, ptr, i32 } %1183({ ptr, ptr, ptr, i32 } %1175, { ptr, ptr, ptr, i32 } %1175, ptr %207, { ptr, ptr, ptr, i32 } %1167)
+  %1184 = call { ptr, ptr, ptr, i32 } %1183({ ptr, ptr, ptr, i32 } %1175, { ptr, ptr, ptr, i32 } %1175, ptr %207, { ptr, ptr, ptr, i32 } %1167) #17
   store { ptr, ptr, ptr, i32 } %1184, ptr %209, align 8
   %1185 = getelementptr { ptr, ptr, ptr, i32 }, ptr %209, i32 0, i32 0
   %1186 = getelementptr { ptr, ptr, ptr, i32 }, ptr %210, i32 0, i32 0
@@ -20316,7 +20317,7 @@ define i32 @main() {
   %1228 = getelementptr ptr, ptr %1227, i32 6
   %1229 = load ptr, ptr %1228, align 8
   %1230 = call ptr @behavior_wrapper(ptr %1229, { ptr, ptr, ptr, i32 } %1224, ptr %217)
-  %1231 = call { ptr, ptr, ptr, i32 } %1230({ ptr, ptr, ptr, i32 } %1224, { ptr, ptr, ptr, i32 } %1224, ptr %216)
+  %1231 = call { ptr, ptr, ptr, i32 } %1230({ ptr, ptr, ptr, i32 } %1224, { ptr, ptr, ptr, i32 } %1224, ptr %216) #17
   store { ptr, ptr, ptr, i32 } %1231, ptr %218, align 8
   %1232 = getelementptr { ptr, ptr, ptr, i32 }, ptr %218, i32 0, i32 0
   %1233 = getelementptr { ptr, ptr, ptr, i32 }, ptr %219, i32 0, i32 0
@@ -20383,7 +20384,7 @@ define i32 @main() {
   %1277 = getelementptr ptr, ptr %1276, i32 6
   %1278 = load ptr, ptr %1277, align 8
   %1279 = call ptr @behavior_wrapper(ptr %1278, { ptr, ptr, ptr, i32 } %1273, ptr %226)
-  %1280 = call { ptr, i160 } %1279({ ptr, ptr, ptr, i32 } %1273, { ptr, ptr, ptr, i32 } %1273, ptr %225)
+  %1280 = call { ptr, i160 } %1279({ ptr, ptr, ptr, i32 } %1273, { ptr, ptr, ptr, i32 } %1273, ptr %225) #17
   store { ptr, i160 } %1280, ptr %227, align 8
   %.reload6 = load ptr, ptr %.reg2mem5, align 8
   %1281 = load ptr, ptr %.reload6, align 8
@@ -20427,7 +20428,7 @@ define i32 @main() {
   %1309 = getelementptr ptr, ptr %1308, i32 5
   %1310 = load ptr, ptr %1309, align 8
   %1311 = call ptr @behavior_wrapper(ptr %1310, { ptr, ptr, ptr, i32 } %1305, ptr %230)
-  %1312 = call { ptr, i160 } %1311({ ptr, ptr, ptr, i32 } %1305, { ptr, ptr, ptr, i32 } %1305, ptr %229)
+  %1312 = call { ptr, i160 } %1311({ ptr, ptr, ptr, i32 } %1305, { ptr, ptr, ptr, i32 } %1305, ptr %229) #17
   store { ptr, i160 } %1312, ptr %231, align 8
   %1313 = getelementptr { ptr, i160 }, ptr %231, i32 0, i32 1
   %1314 = load i32, ptr %1313, align 4
@@ -20445,7 +20446,7 @@ define i32 @main() {
   %1323 = getelementptr { ptr }, ptr %235, i32 0, i32 0
   store ptr %1315, ptr %1323, align 8
   %1324 = call ptr @class_behavior_wrapper(ptr %1322, ptr %235)
-  call void %1324(ptr %234, { ptr, i160 } %1318)
+  call void %1324(ptr %234, { ptr, i160 } %1318) #17
   %1325 = getelementptr { ptr, ptr, ptr, i32 }, ptr %228, i32 0, i32 0
   %1326 = load ptr, ptr %1325, align 8
   %1327 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1326, 0
@@ -20464,7 +20465,7 @@ define i32 @main() {
   %1340 = getelementptr ptr, ptr %1339, i32 6
   %1341 = load ptr, ptr %1340, align 8
   %1342 = call ptr @behavior_wrapper(ptr %1341, { ptr, ptr, ptr, i32 } %1336, ptr %237)
-  %1343 = call { ptr, i160 } %1342({ ptr, ptr, ptr, i32 } %1336, { ptr, ptr, ptr, i32 } %1336, ptr %236)
+  %1343 = call { ptr, i160 } %1342({ ptr, ptr, ptr, i32 } %1336, { ptr, ptr, ptr, i32 } %1336, ptr %236) #17
   store { ptr, i160 } %1343, ptr %238, align 8
   %1344 = getelementptr { ptr, i160 }, ptr %238, i32 0, i32 1
   %1345 = load double, ptr %1344, align 8
@@ -20482,7 +20483,7 @@ define i32 @main() {
   %1354 = getelementptr { ptr }, ptr %242, i32 0, i32 0
   store ptr %1346, ptr %1354, align 8
   %1355 = call ptr @class_behavior_wrapper(ptr %1353, ptr %242)
-  call void %1355(ptr %241, { ptr, i160 } %1349)
+  call void %1355(ptr %241, { ptr, i160 } %1349) #17
   %1356 = getelementptr { ptr, ptr, ptr, i32 }, ptr %228, i32 0, i32 0
   %1357 = getelementptr { ptr, ptr, ptr, i32 }, ptr %243, i32 0, i32 0
   %1358 = load ptr, ptr %1356, align 8
@@ -20554,7 +20555,7 @@ define i32 @main() {
   %1402 = getelementptr { ptr }, ptr %250, i32 0, i32 0
   store ptr @i32_typ, ptr %1402, align 8
   %1403 = call ptr @behavior_wrapper(ptr %1401, { ptr, ptr, ptr, i32 } %1395, ptr %250)
-  call void %1403({ ptr, ptr, ptr, i32 } %1395, { ptr, ptr, ptr, i32 } %1395, ptr %249, i32 5)
+  call void %1403({ ptr, ptr, ptr, i32 } %1395, { ptr, ptr, ptr, i32 } %1395, ptr %249, i32 5) #17
   %1404 = getelementptr { ptr, ptr, ptr, i32 }, ptr %251, i32 0, i32 0
   %1405 = load ptr, ptr %248, align 8
   store ptr %1405, ptr %1404, align 8
@@ -20608,7 +20609,7 @@ define i32 @main() {
   %1440 = getelementptr { ptr }, ptr %262, i32 0, i32 0
   store ptr @i32_typ, ptr %1440, align 8
   %1441 = call ptr @behavior_wrapper(ptr %1439, { ptr, ptr, ptr, i32 } %1433, ptr %262)
-  call void %1441({ ptr, ptr, ptr, i32 } %1433, { ptr, ptr, ptr, i32 } %1433, ptr %261, i32 7)
+  call void %1441({ ptr, ptr, ptr, i32 } %1433, { ptr, ptr, ptr, i32 } %1433, ptr %261, i32 7) #17
   %1442 = getelementptr { ptr, ptr, ptr, i32 }, ptr %263, i32 0, i32 0
   %1443 = load ptr, ptr %260, align 8
   store ptr %1443, ptr %1442, align 8
@@ -20662,7 +20663,7 @@ define i32 @main() {
   %1482 = getelementptr { ptr }, ptr %266, i32 0, i32 0
   store ptr %1463, ptr %1482, align 8
   %1483 = call ptr @behavior_wrapper(ptr %1481, { ptr, ptr, ptr, i32 } %1475, ptr %266)
-  %1484 = call { ptr, i160 } %1483({ ptr, ptr, ptr, i32 } %1475, { ptr, ptr, ptr, i32 } %1475, ptr %265, { ptr, i160 } %1467)
+  %1484 = call { ptr, i160 } %1483({ ptr, ptr, ptr, i32 } %1475, { ptr, ptr, ptr, i32 } %1475, ptr %265, { ptr, i160 } %1467) #17
   store { ptr, i160 } %1484, ptr %267, align 8
   %1485 = getelementptr { ptr, i160 }, ptr %267, i32 0, i32 0
   %1486 = getelementptr { ptr, i160 }, ptr %268, i32 0, i32 0
@@ -20730,7 +20731,7 @@ define i32 @main() {
   %1535 = getelementptr ptr, ptr %1534, i32 4
   %1536 = load ptr, ptr %1535, align 8
   %1537 = call ptr @behavior_wrapper(ptr %1536, { ptr, ptr, ptr, i32 } %1531, ptr %276)
-  %1538 = call double %1537({ ptr, ptr, ptr, i32 } %1531, { ptr, ptr, ptr, i32 } %1531, ptr %275)
+  %1538 = call double %1537({ ptr, ptr, ptr, i32 } %1531, { ptr, ptr, ptr, i32 } %1531, ptr %275) #17
   store double %1538, ptr %277, align 8
   store i64 ptrtoint (ptr @f64_typ to i64), ptr %278, align 4
   %1539 = load ptr, ptr %278, align 8
@@ -20745,7 +20746,7 @@ define i32 @main() {
   %1547 = getelementptr { ptr }, ptr %280, i32 0, i32 0
   store ptr %1539, ptr %1547, align 8
   %1548 = call ptr @class_behavior_wrapper(ptr %1546, ptr %280)
-  call void %1548(ptr %279, { ptr, i160 } %1542)
+  call void %1548(ptr %279, { ptr, i160 } %1542) #17
   store ptr @Int32, ptr %281, align 8
   %1549 = load ptr, ptr %281, align 8
   %1550 = getelementptr ptr, ptr %1549, i32 6
@@ -20774,7 +20775,7 @@ define i32 @main() {
   %1569 = getelementptr { ptr }, ptr %287, i32 0, i32 0
   store ptr @i32_typ, ptr %1569, align 8
   %1570 = call ptr @behavior_wrapper(ptr %1568, { ptr, ptr, ptr, i32 } %1562, ptr %287)
-  call void %1570({ ptr, ptr, ptr, i32 } %1562, { ptr, ptr, ptr, i32 } %1562, ptr %286, i32 6)
+  call void %1570({ ptr, ptr, ptr, i32 } %1562, { ptr, ptr, ptr, i32 } %1562, ptr %286, i32 6) #17
   store ptr @Holder, ptr %288, align 8
   %1571 = getelementptr ptr, ptr %288, i32 1
   store ptr @_parameterization_Int32, ptr %1571, align 8
@@ -20817,7 +20818,7 @@ define i32 @main() {
   %1599 = getelementptr { ptr }, ptr %299, i32 0, i32 0
   store ptr @i32_typ, ptr %1599, align 8
   %1600 = call ptr @behavior_wrapper(ptr %1598, { ptr, ptr, ptr, i32 } %1592, ptr %299)
-  call void %1600({ ptr, ptr, ptr, i32 } %1592, { ptr, ptr, ptr, i32 } %1592, ptr %298, i32 6)
+  call void %1600({ ptr, ptr, ptr, i32 } %1592, { ptr, ptr, ptr, i32 } %1592, ptr %298, i32 6) #17
   %1601 = getelementptr { ptr, ptr, ptr, i32 }, ptr %300, i32 0, i32 0
   %1602 = load ptr, ptr %297, align 8
   store ptr %1602, ptr %1601, align 8
@@ -20855,7 +20856,7 @@ define i32 @main() {
   %1629 = getelementptr { ptr }, ptr %302, i32 0, i32 0
   store ptr %1610, ptr %1629, align 8
   %1630 = call ptr @behavior_wrapper(ptr %1628, { ptr, ptr, ptr, i32 } %1622, ptr %302)
-  call void %1630({ ptr, ptr, ptr, i32 } %1622, { ptr, ptr, ptr, i32 } %1622, ptr %301, { ptr, i160 } %1614)
+  call void %1630({ ptr, ptr, ptr, i32 } %1622, { ptr, ptr, ptr, i32 } %1622, ptr %301, { ptr, i160 } %1614) #17
   %1631 = getelementptr { ptr, ptr, ptr, i32 }, ptr %303, i32 0, i32 0
   %1632 = load ptr, ptr %292, align 8
   store ptr %1632, ptr %1631, align 8
@@ -20895,7 +20896,7 @@ define i32 @main() {
   %1658 = getelementptr ptr, ptr %1657, i32 3
   %1659 = load ptr, ptr %1658, align 8
   %1660 = call ptr @behavior_wrapper(ptr %1659, { ptr, ptr, ptr, i32 } %1654, ptr %309)
-  %1661 = call { ptr, ptr, ptr, i32 } %1660({ ptr, ptr, ptr, i32 } %1654, { ptr, ptr, ptr, i32 } %1654, ptr %308)
+  %1661 = call { ptr, ptr, ptr, i32 } %1660({ ptr, ptr, ptr, i32 } %1654, { ptr, ptr, ptr, i32 } %1654, ptr %308) #17
   store { ptr, ptr, ptr, i32 } %1661, ptr %310, align 8
   %1662 = getelementptr { ptr, ptr, ptr, i32 }, ptr %310, i32 0, i32 0
   %1663 = getelementptr { ptr, ptr, ptr, i32 }, ptr %311, i32 0, i32 0
@@ -20932,7 +20933,7 @@ define i32 @main() {
   %1689 = getelementptr ptr, ptr %1688, i32 4
   %1690 = load ptr, ptr %1689, align 8
   %1691 = call ptr @behavior_wrapper(ptr %1690, { ptr, ptr, ptr, i32 } %1685, ptr %313)
-  %1692 = call double %1691({ ptr, ptr, ptr, i32 } %1685, { ptr, ptr, ptr, i32 } %1685, ptr %312)
+  %1692 = call double %1691({ ptr, ptr, ptr, i32 } %1685, { ptr, ptr, ptr, i32 } %1685, ptr %312) #17
   store double %1692, ptr %314, align 8
   store i64 ptrtoint (ptr @f64_typ to i64), ptr %315, align 4
   %1693 = load ptr, ptr %315, align 8
@@ -20947,7 +20948,7 @@ define i32 @main() {
   %1701 = getelementptr { ptr }, ptr %317, i32 0, i32 0
   store ptr %1693, ptr %1701, align 8
   %1702 = call ptr @class_behavior_wrapper(ptr %1700, ptr %317)
-  call void %1702(ptr %316, { ptr, i160 } %1696)
+  call void %1702(ptr %316, { ptr, i160 } %1696) #17
   store ptr @Int32, ptr %318, align 8
   %1703 = load ptr, ptr %318, align 8
   %1704 = getelementptr ptr, ptr %1703, i32 6
@@ -20976,7 +20977,7 @@ define i32 @main() {
   %1723 = getelementptr { ptr }, ptr %324, i32 0, i32 0
   store ptr @i32_typ, ptr %1723, align 8
   %1724 = call ptr @behavior_wrapper(ptr %1722, { ptr, ptr, ptr, i32 } %1716, ptr %324)
-  call void %1724({ ptr, ptr, ptr, i32 } %1716, { ptr, ptr, ptr, i32 } %1716, ptr %323, i32 77)
+  call void %1724({ ptr, ptr, ptr, i32 } %1716, { ptr, ptr, ptr, i32 } %1716, ptr %323, i32 77) #17
   %1725 = getelementptr { ptr, ptr, ptr, i32 }, ptr %325, i32 0, i32 0
   %1726 = load ptr, ptr %322, align 8
   store ptr %1726, ptr %1725, align 8
@@ -21014,7 +21015,7 @@ define i32 @main() {
   %1753 = getelementptr { ptr }, ptr %327, i32 0, i32 0
   store ptr %1734, ptr %1753, align 8
   %1754 = call ptr @behavior_wrapper(ptr %1752, { ptr, ptr, ptr, i32 } %1746, ptr %327)
-  call void %1754({ ptr, ptr, ptr, i32 } %1746, { ptr, ptr, ptr, i32 } %1746, ptr %326, { ptr, i160 } %1738)
+  call void %1754({ ptr, ptr, ptr, i32 } %1746, { ptr, ptr, ptr, i32 } %1746, ptr %326, { ptr, i160 } %1738) #17
   %1755 = load ptr, ptr %307, align 8
   %1756 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %1755, 0
   %1757 = load ptr, ptr %306, align 8
@@ -21029,7 +21030,7 @@ define i32 @main() {
   %1766 = getelementptr ptr, ptr %1765, i32 3
   %1767 = load ptr, ptr %1766, align 8
   %1768 = call ptr @behavior_wrapper(ptr %1767, { ptr, ptr, ptr, i32 } %1762, ptr %329)
-  %1769 = call { ptr, ptr, ptr, i32 } %1768({ ptr, ptr, ptr, i32 } %1762, { ptr, ptr, ptr, i32 } %1762, ptr %328)
+  %1769 = call { ptr, ptr, ptr, i32 } %1768({ ptr, ptr, ptr, i32 } %1762, { ptr, ptr, ptr, i32 } %1762, ptr %328) #17
   store { ptr, ptr, ptr, i32 } %1769, ptr %330, align 8
   %1770 = getelementptr { ptr, ptr, ptr, i32 }, ptr %330, i32 0, i32 0
   %1771 = getelementptr { ptr, ptr, ptr, i32 }, ptr %331, i32 0, i32 0
@@ -21066,7 +21067,7 @@ define i32 @main() {
   %1797 = getelementptr ptr, ptr %1796, i32 4
   %1798 = load ptr, ptr %1797, align 8
   %1799 = call ptr @behavior_wrapper(ptr %1798, { ptr, ptr, ptr, i32 } %1793, ptr %333)
-  %1800 = call double %1799({ ptr, ptr, ptr, i32 } %1793, { ptr, ptr, ptr, i32 } %1793, ptr %332)
+  %1800 = call double %1799({ ptr, ptr, ptr, i32 } %1793, { ptr, ptr, ptr, i32 } %1793, ptr %332) #17
   store double %1800, ptr %334, align 8
   store i64 ptrtoint (ptr @f64_typ to i64), ptr %335, align 4
   %1801 = load ptr, ptr %335, align 8
@@ -21081,7 +21082,7 @@ define i32 @main() {
   %1809 = getelementptr { ptr }, ptr %337, i32 0, i32 0
   store ptr %1801, ptr %1809, align 8
   %1810 = call ptr @class_behavior_wrapper(ptr %1808, ptr %337)
-  call void %1810(ptr %336, { ptr, i160 } %1804)
+  call void %1810(ptr %336, { ptr, i160 } %1804) #17
   ret i32 0
 }
 
@@ -27640,48 +27641,48 @@ define void @IO__Self_print_xRepresentable(ptr %0, { ptr, i160 } %1) {
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind speculatable willreturn memory(argmem: read)
 define ptr @typegetter_wrapper(ptr %f, ptr nocapture nofree noundef nonnull readonly %0) #2 {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %result = call ptr %f(ptr nocapture nofree noundef nonnull readonly %0) #17
+  %result = call ptr %f(ptr nocapture nofree noundef nonnull readonly %0) #18
   ret ptr %result
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind speculatable willreturn memory(argmem: read)
 define { i64, i64 } @size_wrapper(ptr %f, ptr nocapture nofree readonly %0) #2 {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %result = call { i64, i64 } %f(ptr nocapture nofree readonly %0) #17
+  %result = call { i64, i64 } %f(ptr nocapture nofree readonly %0) #18
   ret { i64, i64 } %result
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind speculatable willreturn memory(argmem: read)
 define { ptr, i160 } @box_wrapper(ptr %f, ptr nocapture nofree readonly %0, ptr nocapture nofree readonly %1) #2 {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %result = call { ptr, i160 } %f(ptr nocapture nofree readonly %0, ptr nocapture nofree readonly %1) #17
+  %result = call { ptr, i160 } %f(ptr nocapture nofree readonly %0, ptr nocapture nofree readonly %1) #18
   ret { ptr, i160 } %result
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind speculatable willreturn memory(argmem: readwrite)
 define void @unbox_wrapper(ptr %f, { ptr, i160 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) #3 {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  call void %f({ ptr, i160 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) #18
+  call void %f({ ptr, i160 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) #19
   ret void
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind speculatable willreturn memory(read, inaccessiblemem: none)
 define ptr @behavior_wrapper(ptr %f, { ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull %1) #4 {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %result = call ptr %f({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull %1) #19
+  %result = call ptr %f({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull %1) #20
   ret ptr %result
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind speculatable willreturn memory(read, inaccessiblemem: none)
 define ptr @class_behavior_wrapper(ptr %f, ptr nocapture nofree noundef nonnull %0) #4 {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %result = call ptr %f(ptr nocapture nofree noundef nonnull %0) #19
+  %result = call ptr %f(ptr nocapture nofree noundef nonnull %0) #20
   ret ptr %result
 }
 
 define ptr @adjust_trampoline(ptr %tramp) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %ret = call ptr @llvm.adjust.trampoline(ptr %tramp) #20
+  %ret = call ptr @llvm.adjust.trampoline(ptr %tramp) #21
   ret ptr %ret
 }
 
@@ -27948,7 +27949,7 @@ declare i32 @VirtualProtect(ptr, i64, i32, ptr) #9
 
 define ptr @coroutine_create(ptr %func, ptr %arg_passer) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %stack = call noalias ptr @VirtualAlloc(ptr null, i64 8388608, i32 12288, i32 4) #21
+  %stack = call noalias ptr @VirtualAlloc(ptr null, i64 8388608, i32 12288, i32 4) #22
   %func_ptr = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %stack, i32 0, i32 0
   store ptr %func, ptr %func_ptr, align 8
   %stack_top = getelementptr i8, ptr %stack, i64 8388608
@@ -27975,12 +27976,12 @@ declare void @coroutine_trampoline(ptr)
 
 define void @setup_landing_pad() {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %region = call noalias ptr @VirtualAlloc(ptr null, i64 21474836480, i32 12288, i32 4) #21
+  %region = call noalias ptr @VirtualAlloc(ptr null, i64 21474836480, i32 12288, i32 4) #22
   store ptr %region, ptr @current_ptr, align 8
   %buf_first_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 0
   %buf_second_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 1
   %buf_third_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 2
-  %sp = call ptr @llvm.stacksave.p0() #22
+  %sp = call ptr @llvm.stacksave.p0() #23
   store ptr %sp, ptr %buf_first_word, align 8
   store ptr blockaddress(@setup_landing_pad, %landing_pad), ptr %buf_second_word, align 8
   store ptr %sp, ptr %buf_third_word, align 8
@@ -28056,7 +28057,7 @@ define void @assume_offset(ptr %fat_ptr, ptr %id_ptr) {
   store i32 %dest_value, ptr %slot, align 4
   %slotval = load i32, ptr %slot, align 4
   %eq = icmp eq i32 %slotval, %offset
-  call void @llvm.assume(i1 %eq) #23
+  call void @llvm.assume(i1 %eq) #24
   ret void
 }
 
@@ -28086,7 +28087,7 @@ define i1 @subtype_test(i64 %tbl_size, i64 %hash_coef, i64 %cand_id, i64 %candid
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind speculatable willreturn memory(argmem: read)
 define i1 @subtype_test_wrapper(ptr %f, i64 %tbl_size, i64 %hash_coef, i64 %cand_id, i64 %candidate, ptr %supertype_tbl) #2 {
   %"reg2mem alloca point" = bitcast i32 0 to i32
-  %result = call i1 %f(i64 %tbl_size, i64 %hash_coef, i64 %cand_id, i64 %candidate, ptr %supertype_tbl) #17
+  %result = call i1 %f(i64 %tbl_size, i64 %hash_coef, i64 %cand_id, i64 %candidate, ptr %supertype_tbl) #18
   ret i1 %result
 }
 
@@ -28108,7 +28109,7 @@ define preserve_nonecc void @context_switch(ptr nocapture writeonly %from_buf, p
   %from_buf_second_word = getelementptr [3 x ptr], ptr %from_buf, i32 0, i32 1
   %from_buf_third_word = getelementptr [3 x ptr], ptr %from_buf, i32 0, i32 2
   store ptr blockaddress(@context_switch, %return_from_switch), ptr %from_buf_second_word, align 8
-  %sp = call ptr @llvm.stacksave.p0() #22
+  %sp = call ptr @llvm.stacksave.p0() #23
   store ptr %sp, ptr %from_buf_first_word, align 8
   store ptr %sp, ptr %from_buf_third_word, align 8
   %is_first_time = call i1 @returns_one()
@@ -28128,7 +28129,7 @@ declare void @llvm.eh.sjlj.longjmp(ptr) #14
 define void @coroutine_yield(ptr %current_coroutine) {
   %"reg2mem alloca point" = bitcast i32 0 to i32
   %into_callee_buf = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %current_coroutine, i32 0, i32 1
-  call preserve_nonecc void @context_switch(ptr nocapture writeonly %into_callee_buf, ptr @into_caller_buf) #24
+  call preserve_nonecc void @context_switch(ptr nocapture writeonly %into_callee_buf, ptr @into_caller_buf) #25
   ret void
 }
 
@@ -28138,7 +28139,7 @@ define void @coroutine_call(ptr %coroutine) {
   %old_coroutine = load ptr, ptr @current_coroutine, align 8
   store ptr %coroutine, ptr @current_coroutine, align 8
   %into_callee_buf = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %coroutine, i32 0, i32 1
-  call preserve_nonecc void @context_switch(ptr nocapture writeonly @into_caller_buf, ptr %into_callee_buf) #24
+  call preserve_nonecc void @context_switch(ptr nocapture writeonly @into_caller_buf, ptr %into_callee_buf) #25
   store ptr %old_coroutine, ptr @current_coroutine, align 8
   store [3 x ptr] %old_into_caller, ptr @into_caller_buf, align 8
   ret void
@@ -28161,14 +28162,15 @@ attributes #13 = { noinline nounwind memory(readwrite) }
 attributes #14 = { noreturn nounwind }
 attributes #15 = { nounwind willreturn memory(argmem: readwrite) }
 attributes #16 = { nounwind willreturn memory(argmem: read, inaccessiblemem: readwrite) }
-attributes #17 = { mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read) }
-attributes #18 = { mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: readwrite) }
-attributes #19 = { mustprogress nofree norecurse nosync nounwind willreturn memory(read, inaccessiblemem: none) }
-attributes #20 = { mustprogress nofree nosync nounwind willreturn memory(argmem: read) }
-attributes #21 = { mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(1) "alloc-family"="malloc" }
-attributes #22 = { mustprogress nofree nosync nounwind willreturn }
-attributes #23 = { mustprogress nofree nosync nounwind willreturn memory(inaccessiblemem: write) }
-attributes #24 = { nounwind memory(readwrite) }
+attributes #17 = { nounwind }
+attributes #18 = { mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read) }
+attributes #19 = { mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: readwrite) }
+attributes #20 = { mustprogress nofree norecurse nosync nounwind willreturn memory(read, inaccessiblemem: none) }
+attributes #21 = { mustprogress nofree nosync nounwind willreturn memory(argmem: read) }
+attributes #22 = { mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(1) "alloc-family"="malloc" }
+attributes #23 = { mustprogress nofree nosync nounwind willreturn }
+attributes #24 = { mustprogress nofree nosync nounwind willreturn memory(inaccessiblemem: write) }
+attributes #25 = { nounwind memory(readwrite) }
 
 !llvm.module.flags = !{!0}
 

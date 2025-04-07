@@ -1027,9 +1027,6 @@ class LowerWrap(RewritePattern):
         alloca = AllocateOp.make(op.operand.type)
         store = llvm.StoreOp(op.operand, alloca.results[0])
         fat_base = FatPtr.basic("").base_typ()
-        if op.operand.type == fat_base:
-            invariant = InvariantOp.make(alloca.results[0], 16)
-            rewriter.insert_op_after_matched_op(invariant)
         rewriter.insert_op_after_matched_op(store)
         rewriter.replace_matched_op(alloca)
 
@@ -1118,9 +1115,6 @@ class LowerToFatPtr(RewritePattern):
         memcpy = MemCpyOp.make(op.operand, alloca.results[0], op.from_typ)
         set_offset = SetOffsetOp.create(operands=[alloca.results[0]], attributes={"to_typ":op.to_typ_name})
         ops = [memcpy, set_offset]
-        if op.invariant:
-            invariant = InvariantOp.make(alloca.results[0], 24)
-            ops.append(invariant)
         rewriter.inline_block_after_matched_op(Block(ops))
         rewriter.replace_matched_op(alloca)
 
@@ -1755,7 +1749,7 @@ class LowerMethodCall(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: MethodCallLike, rewriter: PatternRewriter):
 
-        result_types = [] if op.ret_type_unq == llvm.LLVMVoidType() else [op.ret_type_unq]
+        result_type = None if op.ret_type_unq == llvm.LLVMVoidType() else op.ret_type_unq
         
         dense_ary_0 = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
         dense_ary_1 = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [3])
@@ -1787,17 +1781,16 @@ class LowerMethodCall(RewritePattern):
 
         behavior_call = llvm.CallOp(op.wrapper_name(), fptr.results[0], *op.behavior_args(concrete_types.results[0]), return_type=llvm.LLVMPointerType.opaque())
 
-        method_typ1 = FunctionType.from_lists([arg.type for arg in op.method_args()], result_types)
-        laundered1 = builtin.UnrealizedConversionCastOp(operands=[behavior_call.results[0]], result_types=[method_typ1])
-        call_indirect = func.CallIndirect(laundered1.results[0], [*op.method_args()], result_types)
+        call_indirect = llvm.CallIndirectOp(behavior_call.results[0], *op.method_args(), return_type=result_type)
+        call_indirect.properties["no_unwind"] = UnitAttr()
 
         if(op.ret_type == llvm.LLVMVoidType()):
-            rewriter.inline_block_before_matched_op(Block([*ops, behavior_call, laundered1]))
+            rewriter.inline_block_before_matched_op(Block([*ops, behavior_call]))
             rewriter.replace_matched_op(call_indirect)
             return
 
         wrap = WrapOp.make(call_indirect.results[0])
-        rewriter.inline_block_before_matched_op(Block([*ops, behavior_call, laundered1, call_indirect]))
+        rewriter.inline_block_before_matched_op(Block([*ops, behavior_call, call_indirect]))
         rewriter.replace_matched_op(wrap)
 
 class LowerAccessorDef(RewritePattern):

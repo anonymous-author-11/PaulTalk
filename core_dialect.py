@@ -1103,7 +1103,6 @@ class CastOp(IRDLOperation):
         if needs_reabstraction: return ReabstractOp.make(operand, from_typ, to_typ, id_fn)
         
         if isinstance(to_typ, FatPtr) or isinstance(to_typ, TypeParameter):
-            if isinstance(to_typ, FatPtr): attr_dict["invariant"] = UnitAttr()
             return ToFatPtrOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
 
         same_type = from_typ.base_typ() == to_typ.base_typ()
@@ -1162,7 +1161,6 @@ class UnboxOp(CastOp, IRDLOperation):
 @irdl_op_definition
 class ToFatPtrOp(CastOp, IRDLOperation):
     name = "mini.to_fat_ptr"
-    invariant: OptAttributeDef = opt_attr_def(UnitAttr)
     traits = frozenset()
 
 @irdl_op_definition

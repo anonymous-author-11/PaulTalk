@@ -169,6 +169,32 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         return false;
     }
 
+    def get_from_table(key : K, h1 : i32, idx : i32, table : Array[Entry[K,V] | Nil]) -> V | Nil {
+        entry = table.unchecked_index(idx);
+        if entry is Entry[K,V] {
+            // Check hash first, then equality
+            if entry.primary_hash() == h1 {
+                if @eq.call(entry.key(), key) { return entry.value(); }
+            }
+        }
+        return nil;
+    }
+
+    def remove_from_table(key : K, h1 : i32, idx : i32, table : Array[Entry[K,V] | Nil]) -> V | Nil {
+        entry = table.unchecked_index(idx);
+        if entry is Entry[K,V] {
+            if entry.primary_hash() == h1 {
+                if @eq.call(entry.key(), key) {
+                    value_to_return = entry.value();
+                    table.unchecked_insert(idx, nil); // Mark slot as empty
+                    @size = @size - 1;
+                    return value_to_return;
+                }
+            }
+        }
+        return nil;
+    }
+
     // Public insert method
     def insert(key: K, value: V) {
         h1 = self.hash1(key);
@@ -225,17 +251,6 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         // If we exit the loop, it means placement failed even after resize and retry.
     }
 
-    def get_from_table(key : K, h1 : i32, idx : i32, table : Array[Entry[K,V] | Nil]) -> V | Nil {
-        entry = table.unchecked_index(idx);
-        if entry is Entry[K,V] {
-            // Check hash first, then equality
-            if entry.primary_hash() == h1 {
-                if @eq.call(entry.key(), key) { return entry.value(); }
-            }
-        }
-        return nil;
-    }
-
     // Get value associated with key
     def get(key: K) -> V | Nil {
         h1 = self.hash1(key);
@@ -251,21 +266,6 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         if val2 is V { return val2; }
 
         // Key not found in either potential location
-        return nil;
-    }
-
-    def remove_from_table(key : K, h1 : i32, idx : i32, table : Array[Entry[K,V] | Nil]) -> V | Nil {
-        entry = table.unchecked_index(idx);
-        if entry is Entry[K,V] {
-            if entry.primary_hash() == h1 {
-                if @eq.call(entry.key(), key) {
-                    value_to_return = entry.value();
-                    table.unchecked_insert(idx, nil); // Mark slot as empty
-                    @size = @size - 1;
-                    return value_to_return;
-                }
-            }
-        }
         return nil;
     }
 

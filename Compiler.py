@@ -136,7 +136,7 @@ def run_opt(debug_mode):
     devirtualization_settings = "--max-devirt-iterations=100 --abort-on-max-devirt-iterations-reached"
     # inline everything possible, and let the machine outliner undo some of it
     inline_settings = "--inline-threshold=-10000" if debug_mode else "--inline-threshold=10000"
-    attributor_settings = "--attributor-enable=module --attributor-annotate-decl-cs --max-heap-to-stack-size=-1 --attributor-manifest-internal"
+    attributor_settings = "--attributor-enable=module --attributor-annotate-decl-cs --max-heap-to-stack-size=-1 --attributor-manifest-internal --attributor-assume-closed-world=false"
     in_file = f"out_reg2mem.ll"
     opt = f"opt -S {in_file} {opt_level} {devirtualization_settings} {inline_settings} {attributor_settings} -o out_optimized.ll"
     #opt2 = f"opt -S {in_file} {o2} --print-after-all {heap_to_stack} {devirtualization_settings} {inline_settings} -o out_optimized.ll"
