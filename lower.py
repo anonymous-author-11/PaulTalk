@@ -683,7 +683,6 @@ class LowerNew(RewritePattern):
         store0 = llvm.StoreOp(vptr.results[0], alloca.results[0])
         store1 = llvm.StoreOp(malloc.results[0], gep0.results[0])
         store2 = llvm.StoreOp(offset.results[0], gep1.results[0])
-        invariant0 = InvariantOp.make(alloca.results[0], 16)
         rewriter.inline_block_before_matched_op(Block([size_align, malloc_size, malloc, offset]))
 
         if op.has_type_fields:
@@ -693,7 +692,7 @@ class LowerNew(RewritePattern):
                 rewriter.inline_block_before_matched_op(Block([gep_i, store_i]))
             invariant1 = InvariantOp.make(malloc.results[0], 8 * (len(op.typ.types.data) - op.num_data_fields.value.data))
             rewriter.insert_op_before_matched_op(invariant1)
-        rewriter.inline_block_after_matched_op(Block([gep0, gep1, store0, store1, store2, invariant0]))
+        rewriter.inline_block_after_matched_op(Block([gep0, gep1, store0, store1, store2]))
         rewriter.replace_matched_op(alloca)
 
 class LowerLiteral(RewritePattern):
@@ -1198,10 +1197,9 @@ class LowerReabstract(RewritePattern):
         alloca = AllocateOp.make(llvm.LLVMPointerType.opaque())
         store = llvm.StoreOp(adjust_trampoline.results[0], alloca.results[0])
         invariant0 = InvariantOp.make(tramp.results[0], 24)
-        invariant1 = InvariantOp.make(alloca.results[0], 8)
         rewriter.insert_op_before(func_def, top_level.body.block.first_op)
         rewriter.inline_block_before_matched_op(block)
-        rewriter.inline_block_after_matched_op(Block([adjust_trampoline, store, invariant0, invariant1]))
+        rewriter.inline_block_after_matched_op(Block([adjust_trampoline, store, invariant0]))
         rewriter.replace_matched_op(alloca)
 
 class LowerTupleCast(RewritePattern):
@@ -1720,8 +1718,7 @@ class LowerRefer(RewritePattern):
     def match_and_rewrite(self, op: ReferOp, rewriter: PatternRewriter):
         alloca = AllocateOp.make(op.typ)
         memcpy = MemCpyOp.make(op.value, alloca.results[0], op.typ)
-        invariant = InvariantOp.make(alloca.results[0], 16)
-        rewriter.inline_block_after_matched_op(Block([memcpy, invariant]))
+        rewriter.insert_op_after_matched_op(memcpy)
         rewriter.replace_matched_op(alloca)
 
 class LowerParameterizationsArray(RewritePattern):
@@ -1763,7 +1760,7 @@ class LowerMethodCall(RewritePattern):
         dense_ary_0 = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
         dense_ary_1 = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [3])
         vptr = op.vptr()
-        invariant2 = InvariantOp.make(vptr.results[0], op.vtable_size.value.data * 8)
+        invariant1 = InvariantOp.make(vptr.results[0], op.vtable_size.value.data * 8)
         vtbl_type = llvm.LLVMArrayType.from_size_and_type(op.vtable_size.value, llvm.LLVMPointerType.opaque())
         adjustment = op.adjustment(vtable_buffer_size())
         offsetted = llvm.GEPOp.from_mixed_indices(vptr.results[0], [adjustment.results[0]], pointee_type=llvm.LLVMPointerType.opaque())
@@ -1772,7 +1769,7 @@ class LowerMethodCall(RewritePattern):
         fptr = llvm.LoadOp(fptr_ptr.results[0], llvm.LLVMPointerType.opaque())
         concrete_ary = llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque() for t in op.vptrs.data])
         concrete_types = AllocateOp.make(concrete_ary)
-        ops = [vptr, invariant2, adjustment, offsetted, fptr_ptr, fptr, concrete_types]
+        ops = [vptr, invariant1, adjustment, offsetted, fptr_ptr, fptr, concrete_types]
 
         ary_0 = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
         for (i, element) in enumerate(op.vptrs.data):

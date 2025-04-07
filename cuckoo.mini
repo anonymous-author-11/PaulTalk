@@ -181,20 +181,8 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
 
         // Check table 2 as well if not found/updated in table 1
         idx2 = self.index2(h1);
-
-        // for some reason I have to manually inline replace_in_table here??
-        entry2 = @table2.unchecked_index(idx2);
-        if entry2 is Entry[K,V] {
-             // Check primary hash (stored in entry) first, then key equality
-             if entry2.primary_hash() == h1 {
-                if @eq.call(entry2.key(), key) {
-                    // Found in table 2, update in place
-                    updated_entry = Entry[K,V].new(key, value, h1);
-                    @table2.unchecked_insert(idx2, updated_entry);
-                    return; // Update done, size doesn't change
-                }
-             }
-        }
+        existing = self.replace_in_table(key, value, h1, idx2, @table2);
+        if existing { return; }
 
         // --- Key not found, proceed with insertion ---
 
