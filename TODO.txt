@@ -328,18 +328,20 @@ DONE:
 	- Shouldn't generate parameterizations just to throw them away [check!]
 	- Ideal interface: get_parameterization(type) [check!]
 	- Cache previously generated parameterizations [check!]
+- Properly do type checks of type parameters [check!]
+	- Start just one layer deep, don't worry about nested parameters [check!]
+	- Even for this I should want to rework parameterizations [check!]
+- Allow underscores in numbers [check!]
 
 TODO:
 
-- Properly do type checks of type parameters
-	- Start just one layer deep, don't worry about nested parameters
-	- Even for this I should want to rework parameterizations
 - I should be allowed to do ClassMethodCall with parameterized receiver
 - I should be allowed to do "if [expression] is T"
 - Lazy logical ops
 - Add asserts
-	- There's mlir functionality for this
-- Allow underscores in numbers
+	- There's mlir functionality (cf.assert) for this
+	- Compile to llvm.assume in release; branch to abort in debug
+
 - Add assumes for unions of builtins?
 	- vptr must be equal to one of a set of possible
 - Figure out why I had to split Entry constructor into two and if it can be fixed

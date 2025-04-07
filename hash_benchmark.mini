@@ -27,7 +27,7 @@ def print_benchmark_result(test_name: String, n: i32, duration: i64) {
         ns_per_op : i64 = 0;
         n_i64 : i64 = n;
         zero : i64 = 0;
-        million : i64 = 1000000;
+        million : i64 = 1_000_000;
         if duration > zero and n_i64 > zero {
              ns_per_op = (duration * million) / n_i64;
         }
@@ -362,7 +362,7 @@ def benchmark_remove_random(n: i32) {
 // --- Main Execution ---
 
 IO.print("--- HashMap Benchmarks ---");
-n = 1000000; // Benchmark size
+n = 1_000_000; // Benchmark size
 
 benchmark_insert_sequential(n);
 benchmark_insert_random(n);

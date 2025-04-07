@@ -183,9 +183,9 @@ ALIAS: "alias"
 SETTER: /[a-zA-Z][a-zA-Z0-9_]*=/
 FIELD: /@[a-zA-Z][a-zA-Z0-9_]*/
 IDENT: /[a-zA-Z][a-zA-Z0-9_]*/
-INT: /[0-9]+/
-HEX: /0x[0-9a-fA-F]+/
-FLOAT: /[0-9]+\.[0-9]+/
+INT:   /[0-9]+(_[0-9]+)*/
+HEX:   /0x[0-9a-fA-F]+(_[0-9a-fA-F]+)*/
+FLOAT: /[0-9]+(_[0-9]+)*\.[0-9]+(_[0-9]+)*/
 STRING: /".*?"/
 
 COMMENT: "//" /[^\n]*/

@@ -324,15 +324,15 @@ class CSTTransformer(Transformer):
 
     def int_literal(self, token):
         node_info = NodeInfo(random_letters(10), self.file_name, token.line)
-        return IntegerLiteral(node_info, int(token.value), 32)
+        return IntegerLiteral(node_info, int(token.value.replace("_","")), 32)
 
     def hex_literal(self, token):
         node_info = NodeInfo(random_letters(10), self.file_name, token.line)
-        return IntegerLiteral(node_info, int(token.value, 16), 32)
+        return IntegerLiteral(node_info, int(token.value.replace("_",""), 16), 32)
 
     def float_literal(self, token):
         node_info = NodeInfo(random_letters(10), self.file_name, token.line)
-        return DoubleLiteral(node_info, float(token.value))
+        return DoubleLiteral(node_info, float(token.value.replace("_","")))
 
     def string_literal(self, token):
         node_info = NodeInfo(random_letters(10), self.file_name, token.line)
