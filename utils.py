@@ -19,6 +19,16 @@ def type_index(outer_type, inner_type):
     #print(f"index of {inner_type} in {outer_type} is {[i, *type_index(t, inner_type)]}")
     return [i, *type_index(t, inner_type)]
 
+def get_nested_type_parameters(typ):
+    if isinstance(typ, TypeParameter): return [typ]
+    if isinstance(typ, Union) or isinstance(typ, Tuple):
+        return [*chain.from_iterable(get_nested_type_parameters(t) for t in typ.types.data)]
+    if isinstance(typ, Function):
+        types = [typ.return_type, *typ.param_types.data]
+        return [*chain.from_iterable(get_nested_type_parameters(t) for t in types)]
+    if not isinstance(typ, FatPtr) or typ.type_params == NoneAttr(): return []
+    return [*chain.from_iterable(get_nested_type_parameters(t) for t in typ.type_params.data)]
+
 def id_hierarchy(typ, ambient_types):
     if isinstance(typ, TypeParameter):
         if typ not in ambient_types: return id_hierarchy(typ.bound, ambient_types)

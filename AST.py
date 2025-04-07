@@ -772,18 +772,9 @@ class MethodCall(Expression):
         return cast.results[0]
 
     def parameterizations(self, arg_types, scope):
-        available_parameterizations = scope.available_parameterizations()
-        ambient_types = scope.cls.type_parameters if "self" in scope.symbol_table else []
-        if "local_parameterizations" in scope.symbol_table.keys(): ambient_types = [*ambient_types, *scope.method.type_params]
 
         # for each passed argument, add a parameterization representing its static type to the parameterizations array
-        parameterizations = []
-        for t in arg_types:
-            t_name_hierarchy = name_hierarchy(t)
-            t_id_hierarchy = id_hierarchy(t, ambient_types)
-            parameterization = ParameterizationOp.make(available_parameterizations, t_id_hierarchy, t_name_hierarchy)
-            scope.region.last_block.add_op(parameterization)
-            parameterizations.append(parameterization.results[0])
+        parameterizations = [scope.get_parameterization(t) for t in arg_types]
         ary = ParameterizationsArrayOp.create(operands=parameterizations, result_types=[llvm.LLVMPointerType.opaque()])
         scope.region.last_block.add_op(ary)
         return ary.results[0]
@@ -1079,27 +1070,14 @@ class ClassMethodCall(MethodCall):
         return cast.results[0]
 
     def parameterizations(self, arg_types, scope):
-        available_parameterizations = scope.available_parameterizations()
-        ambient_types = scope.cls.type_parameters if "self" in scope.symbol_table else []
-        if "local_parameterizations" in scope.symbol_table.keys(): ambient_types = [*ambient_types, *scope.method.type_params]
 
         # for each passed argument, add a parameterization representing its static type to the parameterizations array
-        parameterizations = []
-        for t in arg_types:
-            t_name_hierarchy = name_hierarchy(t)
-            t_id_hierarchy = id_hierarchy(t, ambient_types)
-            parameterization = ParameterizationOp.make(available_parameterizations, t_id_hierarchy, t_name_hierarchy)
-            scope.region.last_block.add_op(parameterization)
-            parameterizations.append(parameterization.results[0])
+        parameterizations = [scope.get_parameterization(t) for t in arg_types]
 
         rec_typ = scope.simplify(FatPtr.basic(self.receiver.name))
         if rec_typ.type_params != NoneAttr():
             for t in rec_typ.type_params:
-                t_name_hierarchy = name_hierarchy(t)
-                t_id_hierarchy = id_hierarchy(t, ambient_types)
-                parameterization = ParameterizationOp.make(available_parameterizations, t_id_hierarchy, t_name_hierarchy)
-                scope.region.last_block.add_op(parameterization)
-                parameterizations.append(parameterization.results[0])
+                parameterizations.append(scope.get_parameterization(t))
 
         ary = ParameterizationsArrayOp.create(operands=parameterizations, result_types=[llvm.LLVMPointerType.opaque()])
         scope.region.last_block.add_op(ary)
@@ -1214,22 +1192,14 @@ class ObjectCreation(Expression):
 
     def parameterizations(self, created_cls, self_type, scope):
         if self_type.type_params == NoneAttr(): return []
-        available_parameterizations = scope.available_parameterizations()
 
         temp_scope = Scope(scope)
         for t1, t2 in zip(created_cls.type_parameters, self_type.type_params.data): temp_scope.add_alias(t1, t2)
 
-        ambient_types = scope.cls.type_parameters if "self" in scope.symbol_table else []
-        if "local_parameterizations" in scope.symbol_table.keys(): ambient_types = [*ambient_types, *scope.method.type_params]
-
         parameterizations = []
         for new_instance_type_field in created_cls.stored_type_fields():
             field_formal_type = temp_scope.simplify(new_instance_type_field.declaration.type_param)
-            field_id_hierarchy = id_hierarchy(field_formal_type, ambient_types)
-            field_name_hierarchy = name_hierarchy(field_formal_type)
-            parameterization = ParameterizationOp.make(available_parameterizations, field_id_hierarchy, field_name_hierarchy)
-            scope.region.last_block.add_op(parameterization)
-            parameterizations.append(parameterization.results[0])
+            parameterizations.append(scope.get_parameterization(field_formal_type))
 
         return parameterizations
 

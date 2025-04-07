@@ -54,6 +54,7 @@ class Scope:
         self.aliases = parent.aliases.copy() if parent else {}
         self.allocations = parent.allocations.copy() if parent else {}
         self.points_to_facts = parent.points_to_facts.copy() if parent else ConstraintSet(set())
+        self.parameterization_cache = parent.parameterization_cache.copy() if parent and parent.method else {}
         self.classes = parent.classes if parent else {}
         self.functions = parent.functions if parent else {}
         self.subtype_cache = parent.subtype_cache if parent else {}
@@ -171,24 +172,19 @@ class Scope:
         raise Exception(f"not implemented yet for types {from_typ} and {to_typ}")
 
     def get_parameterization(self, typ):
+        if typ in self.parameterization_cache: return self.parameterization_cache[typ]
         self_types = self.cls.type_parameters if "self" in self.symbol_table else []
-        scoped_types = self.method.type_params if "local_parameterizations" in self.symbol_table.keys() else []
-        ambient_types = [*self_types, *scoped_types]
+        scoped_types = self.method.param_types() if "local_parameterizations" in self.symbol_table.keys() else []
+        if self.cls: scoped_types = [*scoped_types, *self.cls.type_parameters]
         t_name_hierarchy = name_hierarchy(typ)
 
         statically_known = "subtype" not in t_name_hierarchy.data[0].data
-
-        # the idea is that ambient_types and available_parameterizations line up one-to-one
-        # and id_hierarchy tells you how to get the constituents of typ from available_parameterizations based on its position in ambient_types
-        # instead we could recursively get_parameterization for the constituent types in typ
-        # need to add op to region for recursive call to work
-        # base case: typ is among ambient_types; can retrieve it directly
-        # also base case: typ has no type parameters
 
         if statically_known:
             t_id_hierarchy = id_hierarchy(typ, [])
             parameterization = ParameterizationOp.make([], t_id_hierarchy, t_name_hierarchy)
             self.region.last_block.add_op(parameterization)
+            self.parameterization_cache[typ] = parameterization.results[0]
             return parameterization.results[0]
 
         if typ in self_types:
@@ -198,104 +194,60 @@ class Scope:
             attr_dict = {"offset":offset, "vtable_bytes":IntegerAttr.from_int_and_width(self.cls.vtable_size() * 8, 32)}
             field_acc = GetTypeFieldOp.create(operands=local_self, attributes=attr_dict, result_types=[ReifiedType()])
             self.region.last_block.add_op(field_acc)
+            self.parameterization_cache[typ] = field_acc.results[0]
             return field_acc.results[0]
 
-        if typ in scoped_types:
+        if isinstance(typ, TypeParameter) and any(f"{typ}" in f"{param_t}" for param_t in scoped_types):
             scoped_parameterizations_array = self.symbol_table["local_parameterizations"]
-            class_scoped_type_params = self.cls.type_parameters if self.cls else []
-            i, first_arg_with_type = next((i, param_t) for (i, param_t) in enumerate([*self.method.param_types(), *class_scoped_type_params]) if f"{typ}" in f"{param_t}")
+            i, first_arg_with_type = next((i, param_t) for (i, param_t) in enumerate(scoped_types) if f"{typ}" in f"{param_t}")
             if not isinstance(first_arg_with_type, FatPtr):
-                indices = ArrayAttr([IntegerAttr.from_int_and_width(idx, 32) for idx in type_index(first_arg_with_type, t)])
+                indices = ArrayAttr([IntegerAttr.from_int_and_width(idx, 32) for idx in type_index(first_arg_with_type, typ)])
                 gep = llvm.GEPOp(scoped_parameterizations_array, [i], pointee_type=llvm.LLVMPointerType.opaque())
                 load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
                 parameterization = ParameterizationIndexationOp.create(operands=[load.results[0]], attributes={"indices":indices}, result_types=[llvm.LLVMPointerType.opaque()])
                 self.region.last_block.add_ops([gep, load, parameterization])
+                self.parameterization_cache[typ] = parameterization.results[0]
                 return parameterization.results[0]
             t_cls = self.classes[first_arg_with_type.cls.data]
-            if len(type_index(first_arg_with_type, t)) < 1:
+            if len(type_index(first_arg_with_type, typ)) < 1:
                 print(first_arg_with_type)
-                print(t)
-                print(type_index(first_arg_with_type, t))
+                print(typ)
+                print(type_index(first_arg_with_type, typ))
                 raise Exception()
             corresponding_formal_tp = t_cls.type_parameters[type_index(first_arg_with_type, typ)[0]]
             t_field = t_cls.type_field_of(corresponding_formal_tp)
             offset = IntegerAttr.from_int_and_width(t_field.offset, IntegerType(64))
-            wrapped = WrapOp.make(self.region.block.args[len(self.region.block.args) - len(self.method.param_types()) + i])
+            method_scope = self
+            while method_scope.parent and method_scope.parent.method and method_scope.parent.method == self.method:
+                method_scope = method_scope.parent
+            wrapped = WrapOp.make(method_scope.region.block.args[len(method_scope.region.block.args) - len(self.method.param_types()) + i])
             attr_dict = {"offset":offset, "vtable_bytes":IntegerAttr.from_int_and_width(self.cls.vtable_size() * 8, 32)}
             field_acc = GetTypeFieldOp.create(operands=[wrapped.results[0]], attributes=attr_dict, result_types=[ReifiedType()])
             self.region.last_block.add_ops([wrapped, field_acc])
-            if len(type_index(first_arg_with_type, t)) < 2: return field_acc.results[0]
-            indices = ArrayAttr([IntegerAttr.from_int_and_width(idx, 32) for idx in type_index(first_arg_with_type, t)][1:])
+            if len(type_index(first_arg_with_type, typ)) < 2: return field_acc.results[0]
+            indices = ArrayAttr([IntegerAttr.from_int_and_width(idx, 32) for idx in type_index(first_arg_with_type, typ)][1:])
             parameterization = ParameterizationIndexationOp.create(operands=[field_acc.results[0]], attributes={"indices":indices}, result_types=[llvm.LLVMPointerType.opaque()])
             self.region.last_block.add_op(parameterization)
+            self.parameterization_cache[typ] = parameterization.results[0]
             return parameterization.results[0]
+
+        if isinstance(typ, TypeParameter):
+            print(self_types)
+            print(scoped_types)
+            print("self" in self.symbol_table)
+            print("local_parameterizations" in self.symbol_table.keys())
+            print(f"{self.cls.name}.{self.method.name}")
+            raise Exception(f"should have found parameterization for {typ} already")
         
-        # now we need to do recursive calls
-        types = []
-        if isinstance(typ, FatPtr):
-            types = typ.type_params.data
-        if isinstance(typ, Union) or isinstance(typ, Intersection) or isinstance(typ, Tuple):
-            types = typ.types.data
-        if isinstance(typ, Function) or isinstance(typ, Coroutine):
-            types = [typ.return_type, *typ.param_types.data]
-        nested = [self.get_parameterization(t) for t in types]
-        t_id_hierarchy = id_hierarchy(typ, types)
-        parameterization = ParameterizationOp.make(nested, t_id_hierarchy, t_name_hierarchy)
+        # the type involves a type parameter but is not itself a type paramete
+        # we need to get the locations and parameterizations of the type parameters involved
+        nested_type_parameters = get_nested_type_parameters(typ)
+        t_id_hierarchy = id_hierarchy(typ, nested_type_parameters)
+        nested_parameterizations = [self.get_parameterization(t) for t in nested_type_parameters]
+        parameterization = ParameterizationOp.make(nested_parameterizations, t_id_hierarchy, t_name_hierarchy)
         self.region.last_block.add_op(parameterization)
+        self.parameterization_cache[typ] = parameterization.results[0]
         return parameterization.results[0]
-
-    def available_parameterizations(self):
-        return [*self.extract_self_parameterizations(), *self.extract_scoped_parameterizations()]
-
-    def extract_self_parameterizations(self):
-        self_parameterizations = []
-        if not "self" in self.symbol_table: return self_parameterizations
-        ambient_type_fields = [field for field in self.cls.stored_type_fields() if field.declaration.type_param in self.cls.type_parameters]
-        for ambient_type_field in ambient_type_fields:
-            offset = IntegerAttr.from_int_and_width(ambient_type_field.offset, IntegerType(64))
-            local_self = [self.symbol_table["self"]]
-            attr_dict = {"offset":offset, "vtable_bytes":IntegerAttr.from_int_and_width(self.cls.vtable_size() * 8, 32)}
-            field_acc = GetTypeFieldOp.create(operands=local_self, attributes=attr_dict, result_types=[ReifiedType()])
-            self.region.last_block.add_op(field_acc)
-            self_parameterizations.append(field_acc.results[0])
-        return self_parameterizations
-
-    def extract_scoped_parameterizations(self):
-        scoped_parameterizations = []
-        if not "local_parameterizations" in self.symbol_table.keys(): return scoped_parameterizations
-        scoped_parameterizations_array = self.symbol_table["local_parameterizations"]
-        class_scoped_type_params = self.cls.type_parameters if self.cls else []
-        for t in self.method.type_params:
-            i, first_arg_with_type = next((i, param_t) for (i, param_t) in enumerate([*self.method.param_types(), *class_scoped_type_params]) if f"{t}" in f"{param_t}")
-            if not isinstance(first_arg_with_type, FatPtr):
-                indices = ArrayAttr([IntegerAttr.from_int_and_width(idx, 32) for idx in type_index(first_arg_with_type, t)])
-                gep = llvm.GEPOp(scoped_parameterizations_array, [i], pointee_type=llvm.LLVMPointerType.opaque())
-                load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
-                parameterization = ParameterizationIndexationOp.create(operands=[load.results[0]], attributes={"indices":indices}, result_types=[llvm.LLVMPointerType.opaque()])
-                self.region.last_block.add_ops([gep, load, parameterization])
-                scoped_parameterizations.append(parameterization.results[0])
-                continue
-            t_cls = self.classes[first_arg_with_type.cls.data]
-            if len(type_index(first_arg_with_type, t)) < 1:
-                print(first_arg_with_type)
-                print(t)
-                print(type_index(first_arg_with_type, t))
-                raise Exception()
-            corresponding_formal_tp = t_cls.type_parameters[type_index(first_arg_with_type, t)[0]]
-            t_field = t_cls.type_field_of(corresponding_formal_tp)
-            offset = IntegerAttr.from_int_and_width(t_field.offset, IntegerType(64))
-            wrapped = WrapOp.make(self.region.block.args[len(self.region.block.args) - len(self.method.param_types()) + i])
-            attr_dict = {"offset":offset, "vtable_bytes":IntegerAttr.from_int_and_width(self.cls.vtable_size() * 8, 32)}
-            field_acc = GetTypeFieldOp.create(operands=[wrapped.results[0]], attributes=attr_dict, result_types=[ReifiedType()])
-            self.region.last_block.add_ops([wrapped, field_acc])
-            if len(type_index(first_arg_with_type, t)) < 2:
-                scoped_parameterizations.append(field_acc.results[0])
-                continue
-            indices = ArrayAttr([IntegerAttr.from_int_and_width(idx, 32) for idx in type_index(first_arg_with_type, t)][1:])
-            parameterization = ParameterizationIndexationOp.create(operands=[field_acc.results[0]], attributes={"indices":indices}, result_types=[llvm.LLVMPointerType.opaque()])
-            self.region.last_block.add_op(parameterization)
-            scoped_parameterizations.append(parameterization.results[0])
-        return scoped_parameterizations
 
     def build_hashtable(self, typ):
         EMPTY = 2**64 - 1

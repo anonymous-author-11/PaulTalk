@@ -324,13 +324,13 @@ DONE:
 - Buffer indexation bug [check!]
 	- Need to split out buffer_get and buffer_set ops [check!]
 	- Can't return a pointer to the actual slot in the buffer [check!]
+- We should rework how parameterizations are retrieved [check!]
+	- Shouldn't generate parameterizations just to throw them away [check!]
+	- Ideal interface: get_parameterization(type) [check!]
+	- Cache previously generated parameterizations [check!]
 
 TODO:
 
-- We should rework how parameterizations are retrieved
-	- Doing way too much work
-	- Shouldn't generate parameterizations just to throw them away
-	- Ideal interface: get_parameterization(type)
 - Properly do type checks of type parameters
 	- Start just one layer deep, don't worry about nested parameters
 	- Even for this I should want to rework parameterizations
