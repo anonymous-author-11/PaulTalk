@@ -1,19 +1,19 @@
 ; ModuleID = 'LLVMDialectModule'
 source_filename = "LLVMDialectModule"
 
-@rzntd_ = internal constant [9 x i8] c"---------"
-@kzqlg_With_message = internal constant [12 x i8] c"With message"
-@mmfce_At_line = internal constant [7 x i8] c"At line"
-@bzdej_Exception_thrown_from_file = internal constant [26 x i8] c"Exception thrown from file"
-@pexli_ = internal constant [9 x i8] c"---------"
-@kulta_ = internal constant [0 x i8] zeroinitializer
-@nrvew_None = internal constant [6 x i8] c"<None>"
-@kpyio_ = internal constant [0 x i8] zeroinitializer
+@tkvny_ = internal constant [9 x i8] c"---------"
+@holdo_With_message = internal constant [12 x i8] c"With message"
+@ctags_At_line = internal constant [7 x i8] c"At line"
+@ttloq_Exception_thrown_from_file = internal constant [26 x i8] c"Exception thrown from file"
+@fkvrj_ = internal constant [9 x i8] c"---------"
+@msygj_ = internal constant [0 x i8] zeroinitializer
+@fylvm_None = internal constant [6 x i8] c"<None>"
+@ltoop_ = internal constant [0 x i8] zeroinitializer
 @_parameterization_Ptri8 = linkonce_odr constant [2 x ptr] [ptr @i8_typ, ptr null]
 @_parameterization_String = linkonce_odr constant [2 x ptr] [ptr @String, ptr null]
 @_parameterization_Ptri32 = linkonce_odr constant [2 x ptr] [ptr @i32_typ, ptr null]
 @_parameterization_BufferPtri8 = linkonce_odr constant [2 x ptr] [ptr @buffer_typ, ptr null]
-@ochyh_Object = internal constant [6 x i8] c"Object"
+@utfyk_Object = internal constant [6 x i8] c"Object"
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
 @float_string = linkonce_odr constant [4 x i8] c"%f\0A\00"
@@ -168,7 +168,7 @@ define { ptr, ptr, ptr, i32 } @Representable_repr_({ ptr, ptr, ptr, i32 } %0, { 
   %22 = load ptr, ptr %21, align 8
   store ptr %22, ptr %20, align 8
   %23 = load ptr, ptr %20, align 8
-  %24 = load <6 x i8>, ptr @ochyh_Object, align 8
+  %24 = load <6 x i8>, ptr @utfyk_Object, align 8
   store <6 x i8> %24, ptr %23, align 8
   %25 = alloca [1 x ptr], align 8
   store ptr @String, ptr %25, align 8
@@ -215,7 +215,7 @@ define { ptr, ptr, ptr, i32 } @Representable_repr_({ ptr, ptr, ptr, i32 } %0, { 
   %58 = getelementptr { ptr, ptr, ptr }, ptr %55, i32 0, i32 2
   store ptr @i32_typ, ptr %58, align 8
   %59 = call ptr @behavior_wrapper(ptr %54, { ptr, ptr, ptr, i32 } %45, ptr %55)
-  call void %59({ ptr, ptr, ptr, i32 } %45, { ptr, ptr, ptr, i32 } %45, ptr %46, { ptr } %37, i32 6, i32 7)
+  call void %59({ ptr, ptr, ptr, i32 } %45, { ptr, ptr, ptr, i32 } %45, ptr %46, { ptr } %37, i32 6, i32 7) #1
   %60 = alloca { ptr, ptr, ptr, i32 }, align 8
   %61 = getelementptr { ptr, ptr, ptr, i32 }, ptr %60, i32 0, i32 0
   %62 = load ptr, ptr %35, align 8
@@ -394,7 +394,7 @@ define void @String_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, 
   %30 = getelementptr { ptr }, ptr %18, i32 0, i32 0
   %31 = load ptr, ptr %30, align 8
   %32 = insertvalue { ptr } undef, ptr %31, 0
-  call void %29(ptr %21, { ptr } %32) #1
+  call void %29(ptr %21, { ptr } %32) #2
   %33 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 1
   %34 = load ptr, ptr %33, align 8
   %35 = load ptr, ptr %5, align 8
@@ -406,7 +406,7 @@ define void @String_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, 
   %41 = load ptr, ptr %40, align 8
   %42 = getelementptr { ptr, ptr }, ptr %41, i32 0, i32 1
   %43 = load ptr, ptr %42, align 8
-  call void %43(ptr %34, i32 1) #1
+  call void %43(ptr %34, i32 1) #2
   %44 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 1
   %45 = load ptr, ptr %44, align 8
   %46 = load ptr, ptr %5, align 8
@@ -418,7 +418,7 @@ define void @String_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, 
   %52 = load ptr, ptr %51, align 8
   %53 = getelementptr { ptr, ptr }, ptr %52, i32 0, i32 1
   %54 = load ptr, ptr %53, align 8
-  call void %54(ptr %45, i32 0) #1
+  call void %54(ptr %45, i32 0) #2
   ret void
 }
 
@@ -466,7 +466,7 @@ define void @String_init_bytesBufferPtri8_lengthPtri32_capacityPtri32({ ptr, ptr
   %31 = load ptr, ptr %30, align 8
   %32 = load ptr, ptr %21, align 8
   %33 = insertvalue { ptr } undef, ptr %32, 0
-  call void %31(ptr %23, { ptr } %33) #1
+  call void %31(ptr %23, { ptr } %33) #2
   %34 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 1
   %35 = load ptr, ptr %34, align 8
   %36 = load ptr, ptr %8, align 8
@@ -478,7 +478,7 @@ define void @String_init_bytesBufferPtri8_lengthPtri32_capacityPtri32({ ptr, ptr
   %42 = load ptr, ptr %41, align 8
   %43 = getelementptr { ptr, ptr }, ptr %42, i32 0, i32 1
   %44 = load ptr, ptr %43, align 8
-  call void %44(ptr %35, i32 %4) #1
+  call void %44(ptr %35, i32 %4) #2
   %45 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 1
   %46 = load ptr, ptr %45, align 8
   %47 = load ptr, ptr %8, align 8
@@ -490,7 +490,7 @@ define void @String_init_bytesBufferPtri8_lengthPtri32_capacityPtri32({ ptr, ptr
   %53 = load ptr, ptr %52, align 8
   %54 = getelementptr { ptr, ptr }, ptr %53, i32 0, i32 1
   %55 = load ptr, ptr %54, align 8
-  call void %55(ptr %46, i32 %5) #1
+  call void %55(ptr %46, i32 %5) #2
   ret void
 }
 
@@ -568,7 +568,7 @@ define i32 @String_length_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1,
   %26 = load ptr, ptr %25, align 8
   %27 = getelementptr { ptr, ptr }, ptr %26, i32 0, i32 0
   %28 = load ptr, ptr %27, align 8
-  %29 = call i32 %28(ptr %19) #2
+  %29 = call i32 %28(ptr %19) #3
   ret i32 %29
 }
 
@@ -613,7 +613,7 @@ define i32 @String_capacity_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   %26 = load ptr, ptr %25, align 8
   %27 = getelementptr { ptr, ptr }, ptr %26, i32 0, i32 0
   %28 = load ptr, ptr %27, align 8
-  %29 = call i32 %28(ptr %19) #2
+  %29 = call i32 %28(ptr %19) #3
   ret i32 %29
 }
 
@@ -657,7 +657,7 @@ define { ptr } @String_bytes_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } 
   %25 = load ptr, ptr %24, align 8
   %26 = getelementptr { ptr, ptr }, ptr %25, i32 0, i32 0
   %27 = load ptr, ptr %26, align 8
-  %28 = call { ptr } %27(ptr %19) #2
+  %28 = call { ptr } %27(ptr %19) #3
   %29 = alloca ptr, align 8
   store { ptr } %28, ptr %29, align 8
   %30 = load ptr, ptr %29, align 8
@@ -722,7 +722,7 @@ define { ptr, ptr, ptr, i32 } @String_append_xPtri8({ ptr, ptr, ptr, i32 } %0, {
   %43 = load ptr, ptr %42, align 8
   %44 = getelementptr { ptr, ptr }, ptr %43, i32 0, i32 0
   %45 = load ptr, ptr %44, align 8
-  %46 = call i32 %45(ptr %36) #2
+  %46 = call i32 %45(ptr %36) #3
   %47 = getelementptr { ptr, ptr, ptr, i32 }, ptr %22, i32 0, i32 1
   %48 = load ptr, ptr %47, align 8
   %49 = load ptr, ptr %22, align 8
@@ -734,7 +734,7 @@ define { ptr, ptr, ptr, i32 } @String_append_xPtri8({ ptr, ptr, ptr, i32 } %0, {
   %55 = load ptr, ptr %54, align 8
   %56 = getelementptr { ptr, ptr }, ptr %55, i32 0, i32 0
   %57 = load ptr, ptr %56, align 8
-  %58 = call i32 %57(ptr %48) #2
+  %58 = call i32 %57(ptr %48) #3
   %59 = icmp slt i32 %46, %58
   %60 = select i1 %59, ptr %5, ptr %15
   %61 = select i1 %59, ptr %6, ptr %16
@@ -759,7 +759,7 @@ define { ptr, ptr, ptr, i32 } @String_append_xPtri8({ ptr, ptr, ptr, i32 } %0, {
   %76 = load ptr, ptr %75, align 8
   %77 = getelementptr { ptr, ptr }, ptr %76, i32 0, i32 0
   %78 = load ptr, ptr %77, align 8
-  %79 = call i32 %78(ptr %69) #2
+  %79 = call i32 %78(ptr %69) #3
   %80 = mul i32 %79, 2
   %81 = getelementptr { ptr, ptr, ptr, i32 }, ptr %22, i32 0, i32 1
   %82 = load ptr, ptr %81, align 8
@@ -772,7 +772,7 @@ define { ptr, ptr, ptr, i32 } @String_append_xPtri8({ ptr, ptr, ptr, i32 } %0, {
   %89 = load ptr, ptr %88, align 8
   %90 = getelementptr { ptr, ptr }, ptr %89, i32 0, i32 1
   %91 = load ptr, ptr %90, align 8
-  call void %91(ptr %82, i32 %80) #1
+  call void %91(ptr %82, i32 %80) #2
   %92 = getelementptr { ptr, ptr, ptr, i32 }, ptr %22, i32 0, i32 1
   %93 = load ptr, ptr %92, align 8
   %94 = load ptr, ptr %22, align 8
@@ -783,7 +783,7 @@ define { ptr, ptr, ptr, i32 } @String_append_xPtri8({ ptr, ptr, ptr, i32 } %0, {
   %99 = load ptr, ptr %98, align 8
   %100 = getelementptr { ptr, ptr }, ptr %99, i32 0, i32 0
   %101 = load ptr, ptr %100, align 8
-  %102 = call { ptr } %101(ptr %93) #2
+  %102 = call { ptr } %101(ptr %93) #3
   store { ptr } %102, ptr %11, align 8
   %103 = load ptr, ptr %11, align 8
   store ptr %103, ptr %12, align 8
@@ -798,7 +798,7 @@ define { ptr, ptr, ptr, i32 } @String_append_xPtri8({ ptr, ptr, ptr, i32 } %0, {
   %112 = load ptr, ptr %111, align 8
   %113 = getelementptr { ptr, ptr }, ptr %112, i32 0, i32 0
   %114 = load ptr, ptr %113, align 8
-  %115 = call i32 %114(ptr %105) #2
+  %115 = call i32 %114(ptr %105) #3
   %116 = sext i32 %115 to i64
   %117 = mul i64 %116, ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64)
   %118 = call ptr @bump_malloc(i64 %117)
@@ -816,7 +816,7 @@ define { ptr, ptr, ptr, i32 } @String_append_xPtri8({ ptr, ptr, ptr, i32 } %0, {
   %129 = getelementptr { ptr }, ptr %13, i32 0, i32 0
   %130 = load ptr, ptr %129, align 8
   %131 = insertvalue { ptr } undef, ptr %130, 0
-  call void %128(ptr %120, { ptr } %131) #1
+  call void %128(ptr %120, { ptr } %131) #2
   %132 = getelementptr { ptr, ptr, ptr, i32 }, ptr %22, i32 0, i32 1
   %133 = getelementptr { ptr, ptr, ptr, i32 }, ptr %22, i32 0, i32 3
   br label %134
@@ -832,7 +832,7 @@ define { ptr, ptr, ptr, i32 } @String_append_xPtri8({ ptr, ptr, ptr, i32 } %0, {
   %142 = load ptr, ptr %141, align 8
   %143 = getelementptr { ptr, ptr }, ptr %142, i32 0, i32 0
   %144 = load ptr, ptr %143, align 8
-  %145 = call i32 %144(ptr %136) #2
+  %145 = call i32 %144(ptr %136) #3
   %146 = icmp slt i32 %135, %145
   br i1 %146, label %147, label %169
 
@@ -852,7 +852,7 @@ define { ptr, ptr, ptr, i32 } @String_append_xPtri8({ ptr, ptr, ptr, i32 } %0, {
   %160 = load ptr, ptr %159, align 8
   %161 = getelementptr { ptr, ptr }, ptr %160, i32 0, i32 0
   %162 = load ptr, ptr %161, align 8
-  %163 = call { ptr } %162(ptr %154) #2
+  %163 = call { ptr } %162(ptr %154) #3
   store { ptr } %163, ptr %14, align 8
   %164 = load ptr, ptr %14, align 8
   %165 = sext i32 %135 to i64
@@ -886,7 +886,7 @@ define { ptr, ptr, ptr, i32 } @String_append_xPtri8({ ptr, ptr, ptr, i32 } %0, {
   %182 = load ptr, ptr %181, align 8
   %183 = getelementptr { ptr, ptr }, ptr %182, i32 0, i32 0
   %184 = load ptr, ptr %183, align 8
-  %185 = call { ptr } %184(ptr %176) #2
+  %185 = call { ptr } %184(ptr %176) #3
   store { ptr } %185, ptr %60, align 8
   %186 = getelementptr { ptr, ptr, ptr, i32 }, ptr %22, i32 0, i32 1
   %187 = load ptr, ptr %186, align 8
@@ -899,7 +899,7 @@ define { ptr, ptr, ptr, i32 } @String_append_xPtri8({ ptr, ptr, ptr, i32 } %0, {
   %194 = load ptr, ptr %193, align 8
   %195 = getelementptr { ptr, ptr }, ptr %194, i32 0, i32 0
   %196 = load ptr, ptr %195, align 8
-  %197 = call i32 %196(ptr %187) #2
+  %197 = call i32 %196(ptr %187) #3
   store i32 %197, ptr %61, align 4
   %198 = load ptr, ptr %60, align 8
   %199 = load i32, ptr %61, align 4
@@ -918,7 +918,7 @@ define { ptr, ptr, ptr, i32 } @String_append_xPtri8({ ptr, ptr, ptr, i32 } %0, {
   %211 = load ptr, ptr %210, align 8
   %212 = getelementptr { ptr, ptr }, ptr %211, i32 0, i32 0
   %213 = load ptr, ptr %212, align 8
-  %214 = call i32 %213(ptr %204) #2
+  %214 = call i32 %213(ptr %204) #3
   store i32 %214, ptr %62, align 4
   store i32 1, ptr %63, align 4
   %215 = load i32, ptr %62, align 4
@@ -937,7 +937,7 @@ define { ptr, ptr, ptr, i32 } @String_append_xPtri8({ ptr, ptr, ptr, i32 } %0, {
   %227 = getelementptr { ptr, ptr }, ptr %226, i32 0, i32 1
   %228 = load ptr, ptr %227, align 8
   %229 = load i32, ptr %64, align 4
-  call void %228(ptr %219, i32 %229) #1
+  call void %228(ptr %219, i32 %229) #2
   %230 = getelementptr { ptr, ptr, ptr, i32 }, ptr %22, i32 0, i32 0
   %231 = getelementptr { ptr, ptr, ptr, i32 }, ptr %65, i32 0, i32 0
   %232 = load ptr, ptr %230, align 8
@@ -1063,7 +1063,7 @@ define { ptr, ptr, ptr, i32 } @String_extend_strString({ ptr, ptr, ptr, i32 } %0
   %62 = load ptr, ptr %61, align 8
   %63 = alloca {}, align 8
   %64 = call ptr @behavior_wrapper(ptr %62, { ptr, ptr, ptr, i32 } %56, ptr %63)
-  %65 = call { ptr } %64({ ptr, ptr, ptr, i32 } %56, { ptr, ptr, ptr, i32 } %56, ptr %57)
+  %65 = call { ptr } %64({ ptr, ptr, ptr, i32 } %56, { ptr, ptr, ptr, i32 } %56, ptr %57) #1
   %66 = alloca ptr, align 8
   store { ptr } %65, ptr %66, align 8
   %67 = alloca ptr, align 8
@@ -1089,7 +1089,7 @@ define { ptr, ptr, ptr, i32 } @String_extend_strString({ ptr, ptr, ptr, i32 } %0
   %86 = load ptr, ptr %85, align 8
   %87 = alloca {}, align 8
   %88 = call ptr @behavior_wrapper(ptr %86, { ptr, ptr, ptr, i32 } %80, ptr %87)
-  %89 = call i32 %88({ ptr, ptr, ptr, i32 } %80, { ptr, ptr, ptr, i32 } %80, ptr %81)
+  %89 = call i32 %88({ ptr, ptr, ptr, i32 } %80, { ptr, ptr, ptr, i32 } %80, ptr %81) #1
   %90 = getelementptr { ptr, ptr, ptr, i32 }, ptr %18, i32 0, i32 1
   %91 = load ptr, ptr %90, align 8
   %92 = load ptr, ptr %18, align 8
@@ -1101,7 +1101,7 @@ define { ptr, ptr, ptr, i32 } @String_extend_strString({ ptr, ptr, ptr, i32 } %0
   %98 = load ptr, ptr %97, align 8
   %99 = getelementptr { ptr, ptr }, ptr %98, i32 0, i32 0
   %100 = load ptr, ptr %99, align 8
-  %101 = call i32 %100(ptr %91) #2
+  %101 = call i32 %100(ptr %91) #3
   %102 = add i32 %101, %89
   %103 = getelementptr { ptr, ptr, ptr, i32 }, ptr %18, i32 0, i32 1
   %104 = load ptr, ptr %103, align 8
@@ -1114,7 +1114,7 @@ define { ptr, ptr, ptr, i32 } @String_extend_strString({ ptr, ptr, ptr, i32 } %0
   %111 = load ptr, ptr %110, align 8
   %112 = getelementptr { ptr, ptr }, ptr %111, i32 0, i32 0
   %113 = load ptr, ptr %112, align 8
-  %114 = call i32 %113(ptr %104) #2
+  %114 = call i32 %113(ptr %104) #3
   %115 = icmp slt i32 %102, %114
   %116 = select i1 %115, ptr %6, ptr %14
   %117 = select i1 %115, ptr %7, ptr %15
@@ -1133,7 +1133,7 @@ define { ptr, ptr, ptr, i32 } @String_extend_strString({ ptr, ptr, ptr, i32 } %0
   %128 = load ptr, ptr %127, align 8
   %129 = getelementptr { ptr, ptr }, ptr %128, i32 0, i32 0
   %130 = load ptr, ptr %129, align 8
-  %131 = call i32 %130(ptr %121) #2
+  %131 = call i32 %130(ptr %121) #3
   %132 = getelementptr { ptr, ptr, ptr, i32 }, ptr %18, i32 0, i32 1
   %133 = getelementptr { ptr, ptr, ptr, i32 }, ptr %18, i32 0, i32 3
   br label %134
@@ -1150,7 +1150,7 @@ define { ptr, ptr, ptr, i32 } @String_extend_strString({ ptr, ptr, ptr, i32 } %0
   %143 = load ptr, ptr %142, align 8
   %144 = getelementptr { ptr, ptr }, ptr %143, i32 0, i32 0
   %145 = load ptr, ptr %144, align 8
-  %146 = call i32 %145(ptr %137) #2
+  %146 = call i32 %145(ptr %137) #3
   %147 = add i32 %146, %89
   %148 = icmp slt i32 %135, %147
   br i1 %148, label %149, label %172
@@ -1171,7 +1171,7 @@ define { ptr, ptr, ptr, i32 } @String_extend_strString({ ptr, ptr, ptr, i32 } %0
   %162 = load ptr, ptr %161, align 8
   %163 = getelementptr { ptr, ptr }, ptr %162, i32 0, i32 0
   %164 = load ptr, ptr %163, align 8
-  %165 = call { ptr } %164(ptr %156) #2
+  %165 = call { ptr } %164(ptr %156) #3
   store { ptr } %165, ptr %5, align 8
   %166 = load ptr, ptr %5, align 8
   %167 = sext i32 %135 to i64
@@ -1208,7 +1208,7 @@ define { ptr, ptr, ptr, i32 } @String_extend_strString({ ptr, ptr, ptr, i32 } %0
   %187 = load ptr, ptr %186, align 8
   %188 = getelementptr { ptr, ptr }, ptr %187, i32 0, i32 0
   %189 = load ptr, ptr %188, align 8
-  %190 = call i32 %189(ptr %180) #2
+  %190 = call i32 %189(ptr %180) #3
   %191 = add i32 %190, %89
   %192 = getelementptr { ptr, ptr, ptr, i32 }, ptr %18, i32 0, i32 1
   %193 = load ptr, ptr %192, align 8
@@ -1221,7 +1221,7 @@ define { ptr, ptr, ptr, i32 } @String_extend_strString({ ptr, ptr, ptr, i32 } %0
   %200 = load ptr, ptr %199, align 8
   %201 = getelementptr { ptr, ptr }, ptr %200, i32 0, i32 1
   %202 = load ptr, ptr %201, align 8
-  call void %202(ptr %193, i32 %191) #1
+  call void %202(ptr %193, i32 %191) #2
   %203 = getelementptr { ptr, ptr, ptr, i32 }, ptr %18, i32 0, i32 1
   %204 = load ptr, ptr %203, align 8
   %205 = load ptr, ptr %18, align 8
@@ -1232,7 +1232,7 @@ define { ptr, ptr, ptr, i32 } @String_extend_strString({ ptr, ptr, ptr, i32 } %0
   %210 = load ptr, ptr %209, align 8
   %211 = getelementptr { ptr, ptr }, ptr %210, i32 0, i32 0
   %212 = load ptr, ptr %211, align 8
-  %213 = call { ptr } %212(ptr %204) #2
+  %213 = call { ptr } %212(ptr %204) #3
   store { ptr } %213, ptr %9, align 8
   %214 = load ptr, ptr %9, align 8
   store ptr %214, ptr %10, align 8
@@ -1247,7 +1247,7 @@ define { ptr, ptr, ptr, i32 } @String_extend_strString({ ptr, ptr, ptr, i32 } %0
   %223 = load ptr, ptr %222, align 8
   %224 = getelementptr { ptr, ptr }, ptr %223, i32 0, i32 0
   %225 = load ptr, ptr %224, align 8
-  %226 = call i32 %225(ptr %216) #2
+  %226 = call i32 %225(ptr %216) #3
   %227 = sext i32 %226 to i64
   %228 = mul i64 %227, ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64)
   %229 = call ptr @bump_malloc(i64 %228)
@@ -1265,7 +1265,7 @@ define { ptr, ptr, ptr, i32 } @String_extend_strString({ ptr, ptr, ptr, i32 } %0
   %240 = getelementptr { ptr }, ptr %11, i32 0, i32 0
   %241 = load ptr, ptr %240, align 8
   %242 = insertvalue { ptr } undef, ptr %241, 0
-  call void %239(ptr %231, { ptr } %242) #1
+  call void %239(ptr %231, { ptr } %242) #2
   %243 = getelementptr { ptr, ptr, ptr, i32 }, ptr %18, i32 0, i32 1
   %244 = getelementptr { ptr, ptr, ptr, i32 }, ptr %18, i32 0, i32 3
   br label %245
@@ -1282,7 +1282,7 @@ define { ptr, ptr, ptr, i32 } @String_extend_strString({ ptr, ptr, ptr, i32 } %0
   %254 = load ptr, ptr %253, align 8
   %255 = getelementptr { ptr, ptr }, ptr %254, i32 0, i32 0
   %256 = load ptr, ptr %255, align 8
-  %257 = call i32 %256(ptr %248) #2
+  %257 = call i32 %256(ptr %248) #3
   %258 = add i32 %257, %89
   %259 = icmp slt i32 %246, %258
   br i1 %259, label %260, label %323
@@ -1299,7 +1299,7 @@ define { ptr, ptr, ptr, i32 } @String_extend_strString({ ptr, ptr, ptr, i32 } %0
   %269 = load ptr, ptr %268, align 8
   %270 = getelementptr { ptr, ptr }, ptr %269, i32 0, i32 0
   %271 = load ptr, ptr %270, align 8
-  %272 = call i32 %271(ptr %262) #2
+  %272 = call i32 %271(ptr %262) #3
   %273 = icmp slt i32 %246, %272
   br i1 %273, label %274, label %296
 
@@ -1319,7 +1319,7 @@ define { ptr, ptr, ptr, i32 } @String_extend_strString({ ptr, ptr, ptr, i32 } %0
   %287 = load ptr, ptr %286, align 8
   %288 = getelementptr { ptr, ptr }, ptr %287, i32 0, i32 0
   %289 = load ptr, ptr %288, align 8
-  %290 = call { ptr } %289(ptr %281) #2
+  %290 = call { ptr } %289(ptr %281) #3
   store { ptr } %290, ptr %12, align 8
   %291 = load ptr, ptr %12, align 8
   %292 = sext i32 %246 to i64
@@ -1345,7 +1345,7 @@ define { ptr, ptr, ptr, i32 } @String_extend_strString({ ptr, ptr, ptr, i32 } %0
   %309 = load ptr, ptr %308, align 8
   %310 = getelementptr { ptr, ptr }, ptr %309, i32 0, i32 0
   %311 = load ptr, ptr %310, align 8
-  %312 = call { ptr } %311(ptr %303) #2
+  %312 = call { ptr } %311(ptr %303) #3
   store { ptr } %312, ptr %13, align 8
   %313 = load ptr, ptr %13, align 8
   %314 = sext i32 %246 to i64
@@ -1390,7 +1390,7 @@ define { ptr, ptr, ptr, i32 } @String_extend_strString({ ptr, ptr, ptr, i32 } %0
   %338 = load ptr, ptr %337, align 8
   %339 = getelementptr { ptr, ptr }, ptr %338, i32 0, i32 0
   %340 = load ptr, ptr %339, align 8
-  %341 = call i32 %340(ptr %331) #2
+  %341 = call i32 %340(ptr %331) #3
   store i32 %341, ptr %116, align 4
   %342 = load i32, ptr %116, align 4
   %343 = add i32 %342, %89
@@ -1407,7 +1407,7 @@ define { ptr, ptr, ptr, i32 } @String_extend_strString({ ptr, ptr, ptr, i32 } %0
   %353 = getelementptr { ptr, ptr }, ptr %352, i32 0, i32 1
   %354 = load ptr, ptr %353, align 8
   %355 = load i32, ptr %117, align 4
-  call void %354(ptr %345, i32 %355) #1
+  call void %354(ptr %345, i32 %355) #2
   %356 = getelementptr { ptr, ptr, ptr, i32 }, ptr %18, i32 0, i32 0
   %357 = getelementptr { ptr, ptr, ptr, i32 }, ptr %118, i32 0, i32 0
   %358 = load ptr, ptr %356, align 8
@@ -1494,7 +1494,7 @@ define i8 @String__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32
   %29 = load ptr, ptr %28, align 8
   %30 = getelementptr { ptr, ptr }, ptr %29, i32 0, i32 0
   %31 = load ptr, ptr %30, align 8
-  %32 = call i32 %31(ptr %22) #2
+  %32 = call i32 %31(ptr %22) #3
   %33 = sub i32 %32, 1
   %34 = icmp sgt i32 %3, %33
   br i1 %34, label %35, label %37
@@ -1519,7 +1519,7 @@ define i8 @String__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32
   %47 = load ptr, ptr %46, align 8
   %48 = getelementptr { ptr, ptr }, ptr %47, i32 0, i32 0
   %49 = load ptr, ptr %48, align 8
-  %50 = call { ptr } %49(ptr %41) #2
+  %50 = call { ptr } %49(ptr %41) #3
   store { ptr } %50, ptr %5, align 8
   %51 = load ptr, ptr %5, align 8
   %52 = sext i32 %3 to i64
@@ -1540,7 +1540,7 @@ define i8 @String__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32
   %65 = load ptr, ptr %64, align 8
   %66 = getelementptr { ptr, ptr }, ptr %65, i32 0, i32 0
   %67 = load ptr, ptr %66, align 8
-  %68 = call i32 %67(ptr %58) #2
+  %68 = call i32 %67(ptr %58) #3
   %69 = add i32 %68, %3
   %70 = icmp slt i32 %69, 0
   br i1 %70, label %71, label %73
@@ -1561,7 +1561,7 @@ define i8 @String__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32
   %81 = load ptr, ptr %80, align 8
   %82 = getelementptr { ptr, ptr }, ptr %81, i32 0, i32 0
   %83 = load ptr, ptr %82, align 8
-  %84 = call { ptr } %83(ptr %75) #2
+  %84 = call { ptr } %83(ptr %75) #3
   store { ptr } %84, ptr %6, align 8
   %85 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 1
   %86 = load ptr, ptr %85, align 8
@@ -1574,7 +1574,7 @@ define i8 @String__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32
   %93 = load ptr, ptr %92, align 8
   %94 = getelementptr { ptr, ptr }, ptr %93, i32 0, i32 0
   %95 = load ptr, ptr %94, align 8
-  %96 = call i32 %95(ptr %86) #2
+  %96 = call i32 %95(ptr %86) #3
   %97 = add i32 %96, %3
   %98 = load ptr, ptr %6, align 8
   %99 = sext i32 %97 to i64
@@ -1670,7 +1670,7 @@ define i1 @String__EQ_otherString({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i3
   %48 = load ptr, ptr %47, align 8
   %49 = getelementptr { ptr, ptr }, ptr %48, i32 0, i32 0
   %50 = load ptr, ptr %49, align 8
-  %51 = call i32 %50(ptr %41) #2
+  %51 = call i32 %50(ptr %41) #3
   %52 = getelementptr { ptr, ptr, ptr, i32 }, ptr %27, i32 0, i32 0
   %53 = load ptr, ptr %52, align 8
   %54 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %53, 0
@@ -1691,7 +1691,7 @@ define i1 @String__EQ_otherString({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i3
   %69 = load ptr, ptr %68, align 8
   %70 = alloca {}, align 8
   %71 = call ptr @behavior_wrapper(ptr %69, { ptr, ptr, ptr, i32 } %63, ptr %70)
-  %72 = call i32 %71({ ptr, ptr, ptr, i32 } %63, { ptr, ptr, ptr, i32 } %63, ptr %64)
+  %72 = call i32 %71({ ptr, ptr, ptr, i32 } %63, { ptr, ptr, ptr, i32 } %63, ptr %64) #1
   %73 = icmp ne i32 %51, %72
   br i1 %73, label %74, label %75
 
@@ -1714,7 +1714,7 @@ define i1 @String__EQ_otherString({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i3
   %86 = load ptr, ptr %85, align 8
   %87 = getelementptr { ptr, ptr }, ptr %86, i32 0, i32 0
   %88 = load ptr, ptr %87, align 8
-  %89 = call i32 %88(ptr %80) #2
+  %89 = call i32 %88(ptr %80) #3
   %90 = icmp slt i32 %79, %89
   %91 = icmp sge i32 %79, %89
   %92 = select i1 %90, ptr %10, ptr %11
@@ -1731,7 +1731,7 @@ define i1 @String__EQ_otherString({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i3
   %101 = load ptr, ptr %100, align 8
   %102 = getelementptr { ptr, ptr }, ptr %101, i32 0, i32 0
   %103 = load ptr, ptr %102, align 8
-  %104 = call { ptr } %103(ptr %95) #2
+  %104 = call { ptr } %103(ptr %95) #3
   store { ptr } %104, ptr %6, align 8
   %105 = load ptr, ptr %6, align 8
   %106 = sext i32 %79 to i64
@@ -1756,7 +1756,7 @@ define i1 @String__EQ_otherString({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i3
   %125 = getelementptr ptr, ptr %124, i32 7
   %126 = load ptr, ptr %125, align 8
   %127 = call ptr @behavior_wrapper(ptr %126, { ptr, ptr, ptr, i32 } %121, ptr %8)
-  %128 = call { ptr } %127({ ptr, ptr, ptr, i32 } %121, { ptr, ptr, ptr, i32 } %121, ptr %7)
+  %128 = call { ptr } %127({ ptr, ptr, ptr, i32 } %121, { ptr, ptr, ptr, i32 } %121, ptr %7) #1
   store { ptr } %128, ptr %9, align 8
   %129 = load ptr, ptr %9, align 8
   %130 = sext i32 %79 to i64
@@ -1871,7 +1871,7 @@ define { ptr, i8 } @String_pop_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 
   %31 = load ptr, ptr %30, align 8
   %32 = getelementptr { ptr, ptr }, ptr %31, i32 0, i32 0
   %33 = load ptr, ptr %32, align 8
-  %34 = call i32 %33(ptr %24) #2
+  %34 = call i32 %33(ptr %24) #3
   %35 = icmp eq i32 %34, 0
   br i1 %35, label %36, label %41
 
@@ -1896,7 +1896,7 @@ define { ptr, i8 } @String_pop_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 
   %50 = load ptr, ptr %49, align 8
   %51 = getelementptr { ptr, ptr }, ptr %50, i32 0, i32 0
   %52 = load ptr, ptr %51, align 8
-  %53 = call i32 %52(ptr %43) #2
+  %53 = call i32 %52(ptr %43) #3
   %54 = sub i32 %53, 1
   %55 = getelementptr { ptr, ptr, ptr, i32 }, ptr %10, i32 0, i32 1
   %56 = load ptr, ptr %55, align 8
@@ -1909,7 +1909,7 @@ define { ptr, i8 } @String_pop_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 
   %63 = load ptr, ptr %62, align 8
   %64 = getelementptr { ptr, ptr }, ptr %63, i32 0, i32 1
   %65 = load ptr, ptr %64, align 8
-  call void %65(ptr %56, i32 %54) #1
+  call void %65(ptr %56, i32 %54) #2
   %66 = getelementptr { ptr, ptr, ptr, i32 }, ptr %10, i32 0, i32 1
   %67 = load ptr, ptr %66, align 8
   %68 = load ptr, ptr %10, align 8
@@ -1920,7 +1920,7 @@ define { ptr, i8 } @String_pop_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 
   %73 = load ptr, ptr %72, align 8
   %74 = getelementptr { ptr, ptr }, ptr %73, i32 0, i32 0
   %75 = load ptr, ptr %74, align 8
-  %76 = call { ptr } %75(ptr %67) #2
+  %76 = call { ptr } %75(ptr %67) #3
   store { ptr } %76, ptr %6, align 8
   %77 = getelementptr { ptr, ptr, ptr, i32 }, ptr %10, i32 0, i32 1
   %78 = load ptr, ptr %77, align 8
@@ -1933,7 +1933,7 @@ define { ptr, i8 } @String_pop_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 
   %85 = load ptr, ptr %84, align 8
   %86 = getelementptr { ptr, ptr }, ptr %85, i32 0, i32 0
   %87 = load ptr, ptr %86, align 8
-  %88 = call i32 %87(ptr %78) #2
+  %88 = call i32 %87(ptr %78) #3
   %89 = load ptr, ptr %6, align 8
   %90 = sext i32 %88 to i64
   %91 = mul i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), %90
@@ -2010,7 +2010,7 @@ define { ptr, ptr, ptr, i32 } @String_copy_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %40 = load ptr, ptr %39, align 8
   %41 = getelementptr { ptr, ptr }, ptr %40, i32 0, i32 0
   %42 = load ptr, ptr %41, align 8
-  %43 = call i32 %42(ptr %33) #2
+  %43 = call i32 %42(ptr %33) #3
   %44 = sext i32 %43 to i64
   %45 = alloca ptr, align 8
   %46 = mul i64 %44, ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64)
@@ -2035,7 +2035,7 @@ define { ptr, ptr, ptr, i32 } @String_copy_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %61 = load ptr, ptr %60, align 8
   %62 = getelementptr { ptr, ptr }, ptr %61, i32 0, i32 0
   %63 = load ptr, ptr %62, align 8
-  %64 = call i32 %63(ptr %55) #2
+  %64 = call i32 %63(ptr %55) #3
   %65 = icmp slt i32 %54, %64
   br i1 %65, label %66, label %88
 
@@ -2050,7 +2050,7 @@ define { ptr, ptr, ptr, i32 } @String_copy_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %74 = load ptr, ptr %73, align 8
   %75 = getelementptr { ptr, ptr }, ptr %74, i32 0, i32 0
   %76 = load ptr, ptr %75, align 8
-  %77 = call { ptr } %76(ptr %68) #2
+  %77 = call { ptr } %76(ptr %68) #3
   store { ptr } %77, ptr %4, align 8
   %78 = load ptr, ptr %4, align 8
   %79 = sext i32 %54 to i64
@@ -2087,7 +2087,7 @@ define { ptr, ptr, ptr, i32 } @String_copy_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %101 = load ptr, ptr %100, align 8
   %102 = getelementptr { ptr, ptr }, ptr %101, i32 0, i32 0
   %103 = load ptr, ptr %102, align 8
-  %104 = call i32 %103(ptr %94) #2
+  %104 = call i32 %103(ptr %94) #3
   %105 = getelementptr { ptr, ptr, ptr, i32 }, ptr %19, i32 0, i32 1
   %106 = load ptr, ptr %105, align 8
   %107 = load ptr, ptr %19, align 8
@@ -2099,7 +2099,7 @@ define { ptr, ptr, ptr, i32 } @String_copy_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %113 = load ptr, ptr %112, align 8
   %114 = getelementptr { ptr, ptr }, ptr %113, i32 0, i32 0
   %115 = load ptr, ptr %114, align 8
-  %116 = call i32 %115(ptr %106) #2
+  %116 = call i32 %115(ptr %106) #3
   store ptr @String, ptr %5, align 8
   %117 = load ptr, ptr %5, align 8
   %118 = getelementptr ptr, ptr %117, i32 6
@@ -2121,7 +2121,7 @@ define { ptr, ptr, ptr, i32 } @String_copy_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %131 = load ptr, ptr %130, align 8
   %132 = getelementptr { ptr, ptr }, ptr %131, i32 0, i32 0
   %133 = load ptr, ptr %132, align 8
-  %134 = call i32 %133(ptr %124) #2
+  %134 = call i32 %133(ptr %124) #3
   %135 = getelementptr { ptr, ptr, ptr, i32 }, ptr %19, i32 0, i32 1
   %136 = load ptr, ptr %135, align 8
   %137 = load ptr, ptr %19, align 8
@@ -2133,7 +2133,7 @@ define { ptr, ptr, ptr, i32 } @String_copy_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %143 = load ptr, ptr %142, align 8
   %144 = getelementptr { ptr, ptr }, ptr %143, i32 0, i32 0
   %145 = load ptr, ptr %144, align 8
-  %146 = call i32 %145(ptr %136) #2
+  %146 = call i32 %145(ptr %136) #3
   %147 = load ptr, ptr %48, align 8
   %148 = insertvalue { ptr } undef, ptr %147, 0
   %149 = load ptr, ptr %9, align 8
@@ -2162,7 +2162,7 @@ define { ptr, ptr, ptr, i32 } @String_copy_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %167 = getelementptr { ptr, ptr, ptr }, ptr %11, i32 0, i32 2
   store ptr @i32_typ, ptr %167, align 8
   %168 = call ptr @behavior_wrapper(ptr %164, { ptr, ptr, ptr, i32 } %156, ptr %11)
-  call void %168({ ptr, ptr, ptr, i32 } %156, { ptr, ptr, ptr, i32 } %156, ptr %10, { ptr } %148, i32 %134, i32 %146)
+  call void %168({ ptr, ptr, ptr, i32 } %156, { ptr, ptr, ptr, i32 } %156, ptr %10, { ptr } %148, i32 %134, i32 %146) #1
   %169 = getelementptr { ptr, ptr, ptr, i32 }, ptr %12, i32 0, i32 0
   %170 = load ptr, ptr %9, align 8
   store ptr %170, ptr %169, align 8
@@ -2258,7 +2258,7 @@ define { ptr } @String_c_string_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32
   %27 = load ptr, ptr %26, align 8
   %28 = getelementptr { ptr, ptr }, ptr %27, i32 0, i32 0
   %29 = load ptr, ptr %28, align 8
-  %30 = call i32 %29(ptr %20) #2
+  %30 = call i32 %29(ptr %20) #3
   %31 = add i32 %30, 1
   %32 = sext i32 %31 to i64
   %33 = alloca ptr, align 8
@@ -2284,7 +2284,7 @@ define { ptr } @String_c_string_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32
   %49 = load ptr, ptr %48, align 8
   %50 = getelementptr { ptr, ptr }, ptr %49, i32 0, i32 0
   %51 = load ptr, ptr %50, align 8
-  %52 = call i32 %51(ptr %43) #2
+  %52 = call i32 %51(ptr %43) #3
   %53 = icmp slt i32 %42, %52
   br i1 %53, label %54, label %76
 
@@ -2299,7 +2299,7 @@ define { ptr } @String_c_string_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32
   %62 = load ptr, ptr %61, align 8
   %63 = getelementptr { ptr, ptr }, ptr %62, i32 0, i32 0
   %64 = load ptr, ptr %63, align 8
-  %65 = call { ptr } %64(ptr %56) #2
+  %65 = call { ptr } %64(ptr %56) #3
   store { ptr } %65, ptr %4, align 8
   %66 = load ptr, ptr %4, align 8
   %67 = sext i32 %42 to i64
@@ -2336,7 +2336,7 @@ define { ptr } @String_c_string_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32
   %89 = load ptr, ptr %88, align 8
   %90 = getelementptr { ptr, ptr }, ptr %89, i32 0, i32 0
   %91 = load ptr, ptr %90, align 8
-  %92 = call i32 %91(ptr %82) #2
+  %92 = call i32 %91(ptr %82) #3
   %93 = load ptr, ptr %36, align 8
   %94 = sext i32 %92 to i64
   %95 = mul i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), %94
@@ -2442,7 +2442,7 @@ define { ptr, ptr, ptr, i32 } @String_iterator_({ ptr, ptr, ptr, i32 } %0, { ptr
   %70 = getelementptr { ptr }, ptr %69, i32 0, i32 0
   store ptr %43, ptr %70, align 8
   %71 = call ptr @behavior_wrapper(ptr %68, { ptr, ptr, ptr, i32 } %61, ptr %69)
-  call void %71({ ptr, ptr, ptr, i32 } %61, { ptr, ptr, ptr, i32 } %61, ptr %62, { ptr, ptr, ptr, i32 } %53)
+  call void %71({ ptr, ptr, ptr, i32 } %61, { ptr, ptr, ptr, i32 } %61, ptr %62, { ptr, ptr, ptr, i32 } %53) #1
   %72 = alloca { ptr, ptr, ptr, i32 }, align 8
   %73 = getelementptr { ptr, ptr, ptr, i32 }, ptr %72, i32 0, i32 0
   %74 = load ptr, ptr %28, align 8
@@ -2600,7 +2600,7 @@ define i8 @Character_byte_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1,
   %25 = load ptr, ptr %24, align 8
   %26 = getelementptr { ptr, ptr }, ptr %25, i32 0, i32 0
   %27 = load ptr, ptr %26, align 8
-  %28 = call i8 %27(ptr %19) #2
+  %28 = call i8 %27(ptr %19) #3
   ret i8 %28
 }
 
@@ -2644,7 +2644,7 @@ define void @Character_init_bytePtri8({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr
   %26 = load ptr, ptr %25, align 8
   %27 = getelementptr { ptr, ptr }, ptr %26, i32 0, i32 1
   %28 = load ptr, ptr %27, align 8
-  call void %28(ptr %20, i8 %3) #1
+  call void %28(ptr %20, i8 %3) #2
   ret void
 }
 
@@ -2832,7 +2832,7 @@ define void @StringIterator_init_strString({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %65 = getelementptr { ptr, ptr, ptr, i32 }, ptr %33, i32 0, i32 3
   %66 = load i32, ptr %65, align 4
   %67 = insertvalue { ptr, ptr, ptr, i32 } %64, i32 %66, 3
-  call void %55(ptr %47, { ptr, ptr, ptr, i32 } %67) #1
+  call void %55(ptr %47, { ptr, ptr, ptr, i32 } %67) #2
   %68 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 1
   %69 = load ptr, ptr %68, align 8
   %70 = load ptr, ptr %6, align 8
@@ -2844,7 +2844,7 @@ define void @StringIterator_init_strString({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %76 = load ptr, ptr %75, align 8
   %77 = getelementptr { ptr, ptr }, ptr %76, i32 0, i32 1
   %78 = load ptr, ptr %77, align 8
-  call void %78(ptr %69, i32 0) #1
+  call void %78(ptr %69, i32 0) #2
   ret void
 }
 
@@ -2914,7 +2914,7 @@ define { ptr, i160 } @StringIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %40 = load ptr, ptr %39, align 8
   %41 = getelementptr { ptr, ptr }, ptr %40, i32 0, i32 0
   %42 = load ptr, ptr %41, align 8
-  %43 = call i32 %42(ptr %33) #2
+  %43 = call i32 %42(ptr %33) #3
   %44 = getelementptr { ptr, ptr, ptr, i32 }, ptr %19, i32 0, i32 1
   %45 = load ptr, ptr %44, align 8
   %46 = load ptr, ptr %19, align 8
@@ -2925,7 +2925,7 @@ define { ptr, i160 } @StringIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %51 = load ptr, ptr %50, align 8
   %52 = getelementptr { ptr, ptr }, ptr %51, i32 0, i32 0
   %53 = load ptr, ptr %52, align 8
-  %54 = call { ptr, ptr, ptr, i32 } %53(ptr %45) #2
+  %54 = call { ptr, ptr, ptr, i32 } %53(ptr %45) #3
   %55 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %54, ptr %55, align 8
   call void @assume_offset(ptr %55, ptr @String)
@@ -2949,7 +2949,7 @@ define { ptr, i160 } @StringIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %73 = load ptr, ptr %72, align 8
   %74 = alloca {}, align 8
   %75 = call ptr @behavior_wrapper(ptr %73, { ptr, ptr, ptr, i32 } %67, ptr %74)
-  %76 = call i32 %75({ ptr, ptr, ptr, i32 } %67, { ptr, ptr, ptr, i32 } %67, ptr %68)
+  %76 = call i32 %75({ ptr, ptr, ptr, i32 } %67, { ptr, ptr, ptr, i32 } %67, ptr %68) #1
   %77 = icmp slt i32 %43, %76
   br i1 %77, label %78, label %227
 
@@ -2965,7 +2965,7 @@ define { ptr, i160 } @StringIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %87 = load ptr, ptr %86, align 8
   %88 = getelementptr { ptr, ptr }, ptr %87, i32 0, i32 0
   %89 = load ptr, ptr %88, align 8
-  %90 = call i32 %89(ptr %80) #2
+  %90 = call i32 %89(ptr %80) #3
   %91 = add i32 %90, 1
   %92 = getelementptr { ptr, ptr, ptr, i32 }, ptr %19, i32 0, i32 1
   %93 = load ptr, ptr %92, align 8
@@ -2978,7 +2978,7 @@ define { ptr, i160 } @StringIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %100 = load ptr, ptr %99, align 8
   %101 = getelementptr { ptr, ptr }, ptr %100, i32 0, i32 1
   %102 = load ptr, ptr %101, align 8
-  call void %102(ptr %93, i32 %91) #1
+  call void %102(ptr %93, i32 %91) #2
   %103 = getelementptr { ptr, ptr, ptr, i32 }, ptr %19, i32 0, i32 1
   %104 = load ptr, ptr %103, align 8
   %105 = load ptr, ptr %19, align 8
@@ -2989,7 +2989,7 @@ define { ptr, i160 } @StringIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %110 = load ptr, ptr %109, align 8
   %111 = getelementptr { ptr, ptr }, ptr %110, i32 0, i32 0
   %112 = load ptr, ptr %111, align 8
-  %113 = call { ptr, ptr, ptr, i32 } %112(ptr %104) #2
+  %113 = call { ptr, ptr, ptr, i32 } %112(ptr %104) #3
   store { ptr, ptr, ptr, i32 } %113, ptr %4, align 8
   call void @assume_offset(ptr %4, ptr @String)
   %114 = getelementptr { ptr, ptr, ptr, i32 }, ptr %4, i32 0, i32 0
@@ -3010,7 +3010,7 @@ define { ptr, i160 } @StringIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %129 = getelementptr ptr, ptr %128, i32 7
   %130 = load ptr, ptr %129, align 8
   %131 = call ptr @behavior_wrapper(ptr %130, { ptr, ptr, ptr, i32 } %125, ptr %6)
-  %132 = call { ptr } %131({ ptr, ptr, ptr, i32 } %125, { ptr, ptr, ptr, i32 } %125, ptr %5)
+  %132 = call { ptr } %131({ ptr, ptr, ptr, i32 } %125, { ptr, ptr, ptr, i32 } %125, ptr %5) #1
   store { ptr } %132, ptr %7, align 8
   %133 = getelementptr { ptr, ptr, ptr, i32 }, ptr %19, i32 0, i32 1
   %134 = load ptr, ptr %133, align 8
@@ -3023,7 +3023,7 @@ define { ptr, i160 } @StringIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %141 = load ptr, ptr %140, align 8
   %142 = getelementptr { ptr, ptr }, ptr %141, i32 0, i32 0
   %143 = load ptr, ptr %142, align 8
-  %144 = call i32 %143(ptr %134) #2
+  %144 = call i32 %143(ptr %134) #3
   store ptr @Character, ptr %8, align 8
   %145 = load ptr, ptr %8, align 8
   %146 = getelementptr ptr, ptr %145, i32 6
@@ -3046,7 +3046,7 @@ define { ptr, i160 } @StringIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %160 = load ptr, ptr %159, align 8
   %161 = getelementptr { ptr, ptr }, ptr %160, i32 0, i32 0
   %162 = load ptr, ptr %161, align 8
-  %163 = call { ptr, ptr, ptr, i32 } %162(ptr %154) #2
+  %163 = call { ptr, ptr, ptr, i32 } %162(ptr %154) #3
   store { ptr, ptr, ptr, i32 } %163, ptr %10, align 8
   call void @assume_offset(ptr %10, ptr @String)
   %164 = getelementptr { ptr, ptr, ptr, i32 }, ptr %10, i32 0, i32 0
@@ -3067,7 +3067,7 @@ define { ptr, i160 } @StringIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %179 = getelementptr ptr, ptr %178, i32 7
   %180 = load ptr, ptr %179, align 8
   %181 = call ptr @behavior_wrapper(ptr %180, { ptr, ptr, ptr, i32 } %175, ptr %12)
-  %182 = call { ptr } %181({ ptr, ptr, ptr, i32 } %175, { ptr, ptr, ptr, i32 } %175, ptr %11)
+  %182 = call { ptr } %181({ ptr, ptr, ptr, i32 } %175, { ptr, ptr, ptr, i32 } %175, ptr %11) #1
   store { ptr } %182, ptr %13, align 8
   %183 = getelementptr { ptr, ptr, ptr, i32 }, ptr %19, i32 0, i32 1
   %184 = load ptr, ptr %183, align 8
@@ -3080,7 +3080,7 @@ define { ptr, i160 } @StringIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %191 = load ptr, ptr %190, align 8
   %192 = getelementptr { ptr, ptr }, ptr %191, i32 0, i32 0
   %193 = load ptr, ptr %192, align 8
-  %194 = call i32 %193(ptr %184) #2
+  %194 = call i32 %193(ptr %184) #3
   %195 = sub i32 %194, 1
   %196 = load ptr, ptr %13, align 8
   %197 = sext i32 %195 to i64
@@ -3109,7 +3109,7 @@ define { ptr, i160 } @StringIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %219 = getelementptr { ptr }, ptr %15, i32 0, i32 0
   store ptr @i8_typ, ptr %219, align 8
   %220 = call ptr @behavior_wrapper(ptr %218, { ptr, ptr, ptr, i32 } %212, ptr %15)
-  call void %220({ ptr, ptr, ptr, i32 } %212, { ptr, ptr, ptr, i32 } %212, ptr %14, i8 %200)
+  call void %220({ ptr, ptr, ptr, i32 } %212, { ptr, ptr, ptr, i32 } %212, ptr %14, i8 %200) #1
   %221 = getelementptr { ptr, i160 }, ptr %9, i32 0, i32 0
   %222 = load ptr, ptr %221, align 8
   %223 = insertvalue { ptr, i160 } undef, ptr %222, 0
@@ -3379,7 +3379,7 @@ define void @Exception_init_messageString({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %66 = getelementptr { ptr, ptr, ptr, i32 }, ptr %33, i32 0, i32 3
   %67 = load i32, ptr %66, align 4
   %68 = insertvalue { ptr, ptr, ptr, i32 } %65, i32 %67, 3
-  call void %56(ptr %47, { ptr, ptr, ptr, i32 } %68) #1
+  call void %56(ptr %47, { ptr, ptr, ptr, i32 } %68) #2
   %69 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 1
   %70 = load ptr, ptr %69, align 8
   %71 = load ptr, ptr %6, align 8
@@ -3390,7 +3390,7 @@ define void @Exception_init_messageString({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %76 = load ptr, ptr %75, align 8
   %77 = getelementptr { ptr, ptr }, ptr %76, i32 0, i32 1
   %78 = load ptr, ptr %77, align 8
-  call void %78(ptr %70, i32 0) #1
+  call void %78(ptr %70, i32 0) #2
   %79 = alloca ptr, align 8
   %80 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64))
   store ptr %80, ptr %79, align 8
@@ -3443,7 +3443,7 @@ define void @Exception_init_messageString({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %117 = getelementptr { ptr, ptr, ptr }, ptr %114, i32 0, i32 2
   store ptr @i32_typ, ptr %117, align 8
   %118 = call ptr @behavior_wrapper(ptr %113, { ptr, ptr, ptr, i32 } %104, ptr %114)
-  call void %118({ ptr, ptr, ptr, i32 } %104, { ptr, ptr, ptr, i32 } %104, ptr %105, { ptr } %96, i32 0, i32 1)
+  call void %118({ ptr, ptr, ptr, i32 } %104, { ptr, ptr, ptr, i32 } %104, ptr %105, { ptr } %96, i32 0, i32 1) #1
   %119 = alloca { ptr, ptr, ptr, i32 }, align 8
   %120 = getelementptr { ptr, ptr, ptr, i32 }, ptr %119, i32 0, i32 0
   %121 = load ptr, ptr %94, align 8
@@ -3481,7 +3481,7 @@ define void @Exception_init_messageString({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %148 = getelementptr { ptr, ptr, ptr, i32 }, ptr %119, i32 0, i32 3
   %149 = load i32, ptr %148, align 4
   %150 = insertvalue { ptr, ptr, ptr, i32 } %147, i32 %149, 3
-  call void %138(ptr %129, { ptr, ptr, ptr, i32 } %150) #1
+  call void %138(ptr %129, { ptr, ptr, ptr, i32 } %150) #2
   ret void
 }
 
@@ -3536,7 +3536,7 @@ define void @Exception_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   %25 = load ptr, ptr %24, align 8
   %26 = getelementptr { ptr, ptr }, ptr %25, i32 0, i32 1
   %27 = load ptr, ptr %26, align 8
-  call void %27(ptr %19, i32 0) #1
+  call void %27(ptr %19, i32 0) #2
   %28 = alloca ptr, align 8
   %29 = call ptr @bump_malloc(i64 mul (i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), i64 7))
   store ptr %29, ptr %28, align 8
@@ -3545,7 +3545,7 @@ define void @Exception_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   %32 = load ptr, ptr %31, align 8
   store ptr %32, ptr %30, align 8
   %33 = load ptr, ptr %30, align 8
-  %34 = load <6 x i8>, ptr @nrvew_None, align 8
+  %34 = load <6 x i8>, ptr @fylvm_None, align 8
   store <6 x i8> %34, ptr %33, align 8
   %35 = alloca [1 x ptr], align 8
   store ptr @String, ptr %35, align 8
@@ -3592,7 +3592,7 @@ define void @Exception_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   %68 = getelementptr { ptr, ptr, ptr }, ptr %65, i32 0, i32 2
   store ptr @i32_typ, ptr %68, align 8
   %69 = call ptr @behavior_wrapper(ptr %64, { ptr, ptr, ptr, i32 } %55, ptr %65)
-  call void %69({ ptr, ptr, ptr, i32 } %55, { ptr, ptr, ptr, i32 } %55, ptr %56, { ptr } %47, i32 6, i32 7)
+  call void %69({ ptr, ptr, ptr, i32 } %55, { ptr, ptr, ptr, i32 } %55, ptr %56, { ptr } %47, i32 6, i32 7) #1
   %70 = alloca { ptr, ptr, ptr, i32 }, align 8
   %71 = getelementptr { ptr, ptr, ptr, i32 }, ptr %70, i32 0, i32 0
   %72 = load ptr, ptr %45, align 8
@@ -3630,7 +3630,7 @@ define void @Exception_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   %99 = getelementptr { ptr, ptr, ptr, i32 }, ptr %70, i32 0, i32 3
   %100 = load i32, ptr %99, align 4
   %101 = insertvalue { ptr, ptr, ptr, i32 } %98, i32 %100, 3
-  call void %89(ptr %80, { ptr, ptr, ptr, i32 } %101) #1
+  call void %89(ptr %80, { ptr, ptr, ptr, i32 } %101) #2
   %102 = alloca ptr, align 8
   %103 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64))
   store ptr %103, ptr %102, align 8
@@ -3683,7 +3683,7 @@ define void @Exception_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   %140 = getelementptr { ptr, ptr, ptr }, ptr %137, i32 0, i32 2
   store ptr @i32_typ, ptr %140, align 8
   %141 = call ptr @behavior_wrapper(ptr %136, { ptr, ptr, ptr, i32 } %127, ptr %137)
-  call void %141({ ptr, ptr, ptr, i32 } %127, { ptr, ptr, ptr, i32 } %127, ptr %128, { ptr } %119, i32 0, i32 1)
+  call void %141({ ptr, ptr, ptr, i32 } %127, { ptr, ptr, ptr, i32 } %127, ptr %128, { ptr } %119, i32 0, i32 1) #1
   %142 = alloca { ptr, ptr, ptr, i32 }, align 8
   %143 = getelementptr { ptr, ptr, ptr, i32 }, ptr %142, i32 0, i32 0
   %144 = load ptr, ptr %117, align 8
@@ -3721,7 +3721,7 @@ define void @Exception_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   %171 = getelementptr { ptr, ptr, ptr, i32 }, ptr %142, i32 0, i32 3
   %172 = load i32, ptr %171, align 4
   %173 = insertvalue { ptr, ptr, ptr, i32 } %170, i32 %172, 3
-  call void %161(ptr %152, { ptr, ptr, ptr, i32 } %173) #1
+  call void %161(ptr %152, { ptr, ptr, ptr, i32 } %173) #2
   ret void
 }
 
@@ -3765,7 +3765,7 @@ define void @Exception_set_info_line_numberPtri32_file_nameString({ ptr, ptr, pt
   %27 = load ptr, ptr %26, align 8
   %28 = getelementptr { ptr, ptr }, ptr %27, i32 0, i32 1
   %29 = load ptr, ptr %28, align 8
-  call void %29(ptr %21, i32 %3) #1
+  call void %29(ptr %21, i32 %3) #2
   %30 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %4, ptr %30, align 8
   %31 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -3827,7 +3827,7 @@ define void @Exception_set_info_line_numberPtri32_file_nameString({ ptr, ptr, pt
   %77 = getelementptr { ptr, ptr, ptr, i32 }, ptr %44, i32 0, i32 3
   %78 = load i32, ptr %77, align 4
   %79 = insertvalue { ptr, ptr, ptr, i32 } %76, i32 %78, 3
-  call void %67(ptr %58, { ptr, ptr, ptr, i32 } %79) #1
+  call void %67(ptr %58, { ptr, ptr, ptr, i32 } %79) #2
   ret void
 }
 
@@ -3891,7 +3891,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %22 = load ptr, ptr %21, align 8
   store ptr %22, ptr %20, align 8
   %23 = load ptr, ptr %20, align 8
-  %24 = load <9 x i8>, ptr @pexli_, align 16
+  %24 = load <9 x i8>, ptr @fkvrj_, align 16
   store <9 x i8> %24, ptr %23, align 16
   %25 = alloca [1 x ptr], align 8
   store ptr @String, ptr %25, align 8
@@ -3938,7 +3938,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %58 = getelementptr { ptr, ptr, ptr }, ptr %55, i32 0, i32 2
   store ptr @i32_typ, ptr %58, align 8
   %59 = call ptr @behavior_wrapper(ptr %54, { ptr, ptr, ptr, i32 } %45, ptr %55)
-  call void %59({ ptr, ptr, ptr, i32 } %45, { ptr, ptr, ptr, i32 } %45, ptr %46, { ptr } %37, i32 9, i32 10)
+  call void %59({ ptr, ptr, ptr, i32 } %45, { ptr, ptr, ptr, i32 } %45, ptr %46, { ptr } %37, i32 9, i32 10) #1
   %60 = load ptr, ptr %35, align 8
   %61 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %60, 0
   %62 = load ptr, ptr %34, align 8
@@ -3955,7 +3955,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %73 = load ptr, ptr %72, align 8
   %74 = alloca {}, align 8
   %75 = call ptr @behavior_wrapper(ptr %73, { ptr, ptr, ptr, i32 } %67, ptr %74)
-  %76 = call { ptr } %75({ ptr, ptr, ptr, i32 } %67, { ptr, ptr, ptr, i32 } %67, ptr %68)
+  %76 = call { ptr } %75({ ptr, ptr, ptr, i32 } %67, { ptr, ptr, ptr, i32 } %67, ptr %68) #1
   %77 = alloca ptr, align 8
   store { ptr } %76, ptr %77, align 8
   %78 = load ptr, ptr %77, align 8
@@ -3968,7 +3968,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %84 = load ptr, ptr %83, align 8
   store ptr %84, ptr %82, align 8
   %85 = load ptr, ptr %82, align 8
-  %86 = load <26 x i8>, ptr @bzdej_Exception_thrown_from_file, align 32
+  %86 = load <26 x i8>, ptr @ttloq_Exception_thrown_from_file, align 32
   store <26 x i8> %86, ptr %85, align 32
   %87 = alloca [1 x ptr], align 8
   store ptr @String, ptr %87, align 8
@@ -4015,7 +4015,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %120 = getelementptr { ptr, ptr, ptr }, ptr %117, i32 0, i32 2
   store ptr @i32_typ, ptr %120, align 8
   %121 = call ptr @behavior_wrapper(ptr %116, { ptr, ptr, ptr, i32 } %107, ptr %117)
-  call void %121({ ptr, ptr, ptr, i32 } %107, { ptr, ptr, ptr, i32 } %107, ptr %108, { ptr } %99, i32 26, i32 27)
+  call void %121({ ptr, ptr, ptr, i32 } %107, { ptr, ptr, ptr, i32 } %107, ptr %108, { ptr } %99, i32 26, i32 27) #1
   %122 = load ptr, ptr %97, align 8
   %123 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %122, 0
   %124 = load ptr, ptr %96, align 8
@@ -4032,7 +4032,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %135 = load ptr, ptr %134, align 8
   %136 = alloca {}, align 8
   %137 = call ptr @behavior_wrapper(ptr %135, { ptr, ptr, ptr, i32 } %129, ptr %136)
-  %138 = call { ptr } %137({ ptr, ptr, ptr, i32 } %129, { ptr, ptr, ptr, i32 } %129, ptr %130)
+  %138 = call { ptr } %137({ ptr, ptr, ptr, i32 } %129, { ptr, ptr, ptr, i32 } %129, ptr %130) #1
   %139 = alloca ptr, align 8
   store { ptr } %138, ptr %139, align 8
   %140 = load ptr, ptr %139, align 8
@@ -4048,7 +4048,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %150 = load ptr, ptr %149, align 8
   %151 = getelementptr { ptr, ptr }, ptr %150, i32 0, i32 0
   %152 = load ptr, ptr %151, align 8
-  %153 = call { ptr, ptr, ptr, i32 } %152(ptr %143) #2
+  %153 = call { ptr, ptr, ptr, i32 } %152(ptr %143) #3
   %154 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %153, ptr %154, align 8
   call void @assume_offset(ptr %154, ptr @String)
@@ -4072,7 +4072,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %172 = load ptr, ptr %171, align 8
   %173 = alloca {}, align 8
   %174 = call ptr @behavior_wrapper(ptr %172, { ptr, ptr, ptr, i32 } %166, ptr %173)
-  %175 = call { ptr } %174({ ptr, ptr, ptr, i32 } %166, { ptr, ptr, ptr, i32 } %166, ptr %167)
+  %175 = call { ptr } %174({ ptr, ptr, ptr, i32 } %166, { ptr, ptr, ptr, i32 } %166, ptr %167) #1
   %176 = alloca ptr, align 8
   store { ptr } %175, ptr %176, align 8
   %177 = load ptr, ptr %176, align 8
@@ -4085,7 +4085,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %183 = load ptr, ptr %182, align 8
   store ptr %183, ptr %181, align 8
   %184 = load ptr, ptr %181, align 8
-  %185 = load <7 x i8>, ptr @mmfce_At_line, align 8
+  %185 = load <7 x i8>, ptr @ctags_At_line, align 8
   store <7 x i8> %185, ptr %184, align 8
   %186 = alloca [1 x ptr], align 8
   store ptr @String, ptr %186, align 8
@@ -4132,7 +4132,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %219 = getelementptr { ptr, ptr, ptr }, ptr %216, i32 0, i32 2
   store ptr @i32_typ, ptr %219, align 8
   %220 = call ptr @behavior_wrapper(ptr %215, { ptr, ptr, ptr, i32 } %206, ptr %216)
-  call void %220({ ptr, ptr, ptr, i32 } %206, { ptr, ptr, ptr, i32 } %206, ptr %207, { ptr } %198, i32 7, i32 8)
+  call void %220({ ptr, ptr, ptr, i32 } %206, { ptr, ptr, ptr, i32 } %206, ptr %207, { ptr } %198, i32 7, i32 8) #1
   %221 = load ptr, ptr %196, align 8
   %222 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %221, 0
   %223 = load ptr, ptr %195, align 8
@@ -4149,7 +4149,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %234 = load ptr, ptr %233, align 8
   %235 = alloca {}, align 8
   %236 = call ptr @behavior_wrapper(ptr %234, { ptr, ptr, ptr, i32 } %228, ptr %235)
-  %237 = call { ptr } %236({ ptr, ptr, ptr, i32 } %228, { ptr, ptr, ptr, i32 } %228, ptr %229)
+  %237 = call { ptr } %236({ ptr, ptr, ptr, i32 } %228, { ptr, ptr, ptr, i32 } %228, ptr %229) #1
   %238 = alloca ptr, align 8
   store { ptr } %237, ptr %238, align 8
   %239 = load ptr, ptr %238, align 8
@@ -4164,7 +4164,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %248 = load ptr, ptr %247, align 8
   %249 = getelementptr { ptr, ptr }, ptr %248, i32 0, i32 0
   %250 = load ptr, ptr %249, align 8
-  %251 = call i32 %250(ptr %242) #2
+  %251 = call i32 %250(ptr %242) #3
   %252 = call i32 (ptr, ...) @printf(ptr @i32_string, i32 %251)
   %253 = alloca ptr, align 8
   %254 = call ptr @bump_malloc(i64 mul (i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), i64 13))
@@ -4174,7 +4174,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %257 = load ptr, ptr %256, align 8
   store ptr %257, ptr %255, align 8
   %258 = load ptr, ptr %255, align 8
-  %259 = load <12 x i8>, ptr @kzqlg_With_message, align 16
+  %259 = load <12 x i8>, ptr @holdo_With_message, align 16
   store <12 x i8> %259, ptr %258, align 16
   %260 = alloca [1 x ptr], align 8
   store ptr @String, ptr %260, align 8
@@ -4221,7 +4221,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %293 = getelementptr { ptr, ptr, ptr }, ptr %290, i32 0, i32 2
   store ptr @i32_typ, ptr %293, align 8
   %294 = call ptr @behavior_wrapper(ptr %289, { ptr, ptr, ptr, i32 } %280, ptr %290)
-  call void %294({ ptr, ptr, ptr, i32 } %280, { ptr, ptr, ptr, i32 } %280, ptr %281, { ptr } %272, i32 12, i32 13)
+  call void %294({ ptr, ptr, ptr, i32 } %280, { ptr, ptr, ptr, i32 } %280, ptr %281, { ptr } %272, i32 12, i32 13) #1
   %295 = load ptr, ptr %270, align 8
   %296 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %295, 0
   %297 = load ptr, ptr %269, align 8
@@ -4238,7 +4238,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %308 = load ptr, ptr %307, align 8
   %309 = alloca {}, align 8
   %310 = call ptr @behavior_wrapper(ptr %308, { ptr, ptr, ptr, i32 } %302, ptr %309)
-  %311 = call { ptr } %310({ ptr, ptr, ptr, i32 } %302, { ptr, ptr, ptr, i32 } %302, ptr %303)
+  %311 = call { ptr } %310({ ptr, ptr, ptr, i32 } %302, { ptr, ptr, ptr, i32 } %302, ptr %303) #1
   %312 = alloca ptr, align 8
   store { ptr } %311, ptr %312, align 8
   %313 = load ptr, ptr %312, align 8
@@ -4263,7 +4263,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %332 = load ptr, ptr %331, align 8
   %333 = alloca {}, align 8
   %334 = call ptr @behavior_wrapper(ptr %332, { ptr, ptr, ptr, i32 } %326, ptr %333)
-  call void %334({ ptr, ptr, ptr, i32 } %326, { ptr, ptr, ptr, i32 } %326, ptr %327)
+  call void %334({ ptr, ptr, ptr, i32 } %326, { ptr, ptr, ptr, i32 } %326, ptr %327) #1
   %335 = alloca ptr, align 8
   %336 = call ptr @bump_malloc(i64 mul (i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), i64 10))
   store ptr %336, ptr %335, align 8
@@ -4272,7 +4272,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %339 = load ptr, ptr %338, align 8
   store ptr %339, ptr %337, align 8
   %340 = load ptr, ptr %337, align 8
-  %341 = load <9 x i8>, ptr @rzntd_, align 16
+  %341 = load <9 x i8>, ptr @tkvny_, align 16
   store <9 x i8> %341, ptr %340, align 16
   %342 = alloca [1 x ptr], align 8
   store ptr @String, ptr %342, align 8
@@ -4319,7 +4319,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %375 = getelementptr { ptr, ptr, ptr }, ptr %372, i32 0, i32 2
   store ptr @i32_typ, ptr %375, align 8
   %376 = call ptr @behavior_wrapper(ptr %371, { ptr, ptr, ptr, i32 } %362, ptr %372)
-  call void %376({ ptr, ptr, ptr, i32 } %362, { ptr, ptr, ptr, i32 } %362, ptr %363, { ptr } %354, i32 9, i32 10)
+  call void %376({ ptr, ptr, ptr, i32 } %362, { ptr, ptr, ptr, i32 } %362, ptr %363, { ptr } %354, i32 9, i32 10) #1
   %377 = load ptr, ptr %352, align 8
   %378 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %377, 0
   %379 = load ptr, ptr %351, align 8
@@ -4336,7 +4336,7 @@ define void @Exception_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %390 = load ptr, ptr %389, align 8
   %391 = alloca {}, align 8
   %392 = call ptr @behavior_wrapper(ptr %390, { ptr, ptr, ptr, i32 } %384, ptr %391)
-  %393 = call { ptr } %392({ ptr, ptr, ptr, i32 } %384, { ptr, ptr, ptr, i32 } %384, ptr %385)
+  %393 = call { ptr } %392({ ptr, ptr, ptr, i32 } %384, { ptr, ptr, ptr, i32 } %384, ptr %385) #1
   %394 = alloca ptr, align 8
   store { ptr } %393, ptr %394, align 8
   %395 = load ptr, ptr %394, align 8
@@ -4385,7 +4385,7 @@ define void @Exception_print_message_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr
   %26 = load ptr, ptr %25, align 8
   %27 = getelementptr { ptr, ptr }, ptr %26, i32 0, i32 0
   %28 = load ptr, ptr %27, align 8
-  %29 = call { ptr, ptr, ptr, i32 } %28(ptr %19) #2
+  %29 = call { ptr, ptr, ptr, i32 } %28(ptr %19) #3
   %30 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %29, ptr %30, align 8
   call void @assume_offset(ptr %30, ptr @String)
@@ -4409,7 +4409,7 @@ define void @Exception_print_message_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr
   %48 = load ptr, ptr %47, align 8
   %49 = alloca {}, align 8
   %50 = call ptr @behavior_wrapper(ptr %48, { ptr, ptr, ptr, i32 } %42, ptr %49)
-  %51 = call { ptr } %50({ ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %42, ptr %43)
+  %51 = call { ptr } %50({ ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %42, ptr %43) #1
   %52 = alloca ptr, align 8
   store { ptr } %51, ptr %52, align 8
   %53 = load ptr, ptr %52, align 8
@@ -4437,55 +4437,54 @@ define void @report_exception({ ptr } %0) {
   %8 = load { ptr, i160 }, ptr %7, align 8
   %9 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %8, ptr %9, align 8
-  %10 = getelementptr { ptr, i160 }, ptr %9, i32 0, i32 0
-  %11 = load ptr, ptr %10, align 8
-  %12 = ptrtoint ptr %11 to i64
-  %13 = icmp eq i64 %12, ptrtoint (ptr @nil_typ to i64)
-  %14 = icmp eq i64 %12, 0
-  %15 = or i1 %13, %14
-  %16 = icmp eq i1 %15, false
-  br i1 %16, label %17, label %48
+  %10 = load ptr, ptr %9, align 8
+  %11 = ptrtoint ptr %10 to i64
+  %12 = icmp eq i64 %11, ptrtoint (ptr @nil_typ to i64)
+  %13 = icmp eq i64 %11, 0
+  %14 = or i1 %12, %13
+  %15 = icmp eq i1 %14, false
+  br i1 %15, label %16, label %47
 
-17:                                               ; preds = %1
-  %18 = getelementptr { ptr, i160 }, ptr %9, i32 0, i32 0
-  %19 = getelementptr { ptr, i160 }, ptr %2, i32 0, i32 0
-  %20 = load ptr, ptr %18, align 8
-  store ptr %20, ptr %19, align 8
-  %21 = getelementptr { ptr, i160 }, ptr %9, i32 0, i32 1
-  %22 = getelementptr { ptr, i160 }, ptr %2, i32 0, i32 1
-  %23 = load i160, ptr %21, align 4
-  store i160 %23, ptr %22, align 4
+16:                                               ; preds = %1
+  %17 = getelementptr { ptr, i160 }, ptr %9, i32 0, i32 0
+  %18 = getelementptr { ptr, i160 }, ptr %2, i32 0, i32 0
+  %19 = load ptr, ptr %17, align 8
+  store ptr %19, ptr %18, align 8
+  %20 = getelementptr { ptr, i160 }, ptr %9, i32 0, i32 1
+  %21 = getelementptr { ptr, i160 }, ptr %2, i32 0, i32 1
+  %22 = load i160, ptr %20, align 4
+  store i160 %22, ptr %21, align 4
   call void @set_offset(ptr %2, ptr @Exception)
-  %24 = getelementptr { ptr, ptr, ptr, i32 }, ptr %2, i32 0, i32 0
-  %25 = load ptr, ptr %24, align 8
-  %26 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %25, 0
-  %27 = getelementptr { ptr, ptr, ptr, i32 }, ptr %2, i32 0, i32 1
-  %28 = load ptr, ptr %27, align 8
-  %29 = insertvalue { ptr, ptr, ptr, i32 } %26, ptr %28, 1
-  %30 = getelementptr { ptr, ptr, ptr, i32 }, ptr %2, i32 0, i32 2
-  %31 = load ptr, ptr %30, align 8
-  %32 = insertvalue { ptr, ptr, ptr, i32 } %29, ptr %31, 2
-  %33 = getelementptr { ptr, ptr, ptr, i32 }, ptr %2, i32 0, i32 3
-  %34 = load i32, ptr %33, align 4
-  %35 = insertvalue { ptr, ptr, ptr, i32 } %32, i32 %34, 3
-  %36 = call ptr @llvm.invariant.start.p0(i64 0, ptr %3)
-  %37 = call ptr @llvm.invariant.start.p0(i64 104, ptr %25)
-  %38 = getelementptr ptr, ptr %25, i32 %34
-  %39 = getelementptr ptr, ptr %38, i32 6
-  %40 = load ptr, ptr %39, align 8
-  %41 = call ptr @behavior_wrapper(ptr %40, { ptr, ptr, ptr, i32 } %35, ptr %4)
-  call void %41({ ptr, ptr, ptr, i32 } %35, { ptr, ptr, ptr, i32 } %35, ptr %3)
-  %42 = getelementptr { ptr, i160 }, ptr %2, i32 0, i32 0
-  %43 = getelementptr { ptr, i160 }, ptr %9, i32 0, i32 0
-  %44 = load ptr, ptr %42, align 8
-  store ptr %44, ptr %43, align 8
-  %45 = getelementptr { ptr, i160 }, ptr %2, i32 0, i32 1
-  %46 = getelementptr { ptr, i160 }, ptr %9, i32 0, i32 1
-  %47 = load i160, ptr %45, align 4
-  store i160 %47, ptr %46, align 4
-  br label %48
+  %23 = getelementptr { ptr, ptr, ptr, i32 }, ptr %2, i32 0, i32 0
+  %24 = load ptr, ptr %23, align 8
+  %25 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %24, 0
+  %26 = getelementptr { ptr, ptr, ptr, i32 }, ptr %2, i32 0, i32 1
+  %27 = load ptr, ptr %26, align 8
+  %28 = insertvalue { ptr, ptr, ptr, i32 } %25, ptr %27, 1
+  %29 = getelementptr { ptr, ptr, ptr, i32 }, ptr %2, i32 0, i32 2
+  %30 = load ptr, ptr %29, align 8
+  %31 = insertvalue { ptr, ptr, ptr, i32 } %28, ptr %30, 2
+  %32 = getelementptr { ptr, ptr, ptr, i32 }, ptr %2, i32 0, i32 3
+  %33 = load i32, ptr %32, align 4
+  %34 = insertvalue { ptr, ptr, ptr, i32 } %31, i32 %33, 3
+  %35 = call ptr @llvm.invariant.start.p0(i64 0, ptr %3)
+  %36 = call ptr @llvm.invariant.start.p0(i64 104, ptr %24)
+  %37 = getelementptr ptr, ptr %24, i32 %33
+  %38 = getelementptr ptr, ptr %37, i32 6
+  %39 = load ptr, ptr %38, align 8
+  %40 = call ptr @behavior_wrapper(ptr %39, { ptr, ptr, ptr, i32 } %34, ptr %4)
+  call void %40({ ptr, ptr, ptr, i32 } %34, { ptr, ptr, ptr, i32 } %34, ptr %3) #1
+  %41 = getelementptr { ptr, i160 }, ptr %2, i32 0, i32 0
+  %42 = getelementptr { ptr, i160 }, ptr %9, i32 0, i32 0
+  %43 = load ptr, ptr %41, align 8
+  store ptr %43, ptr %42, align 8
+  %44 = getelementptr { ptr, i160 }, ptr %2, i32 0, i32 1
+  %45 = getelementptr { ptr, i160 }, ptr %9, i32 0, i32 1
+  %46 = load i160, ptr %44, align 4
+  store i160 %46, ptr %45, align 4
+  br label %47
 
-48:                                               ; preds = %17, %1
+47:                                               ; preds = %16, %1
   ret void
 }
 
@@ -4493,8 +4492,9 @@ define void @report_exception({ ptr } %0) {
 declare ptr @llvm.invariant.start.p0(i64 immarg, ptr nocapture) #0
 
 attributes #0 = { nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
-attributes #1 = { nounwind willreturn memory(argmem: readwrite) }
-attributes #2 = { nounwind willreturn memory(argmem: read, inaccessiblemem: readwrite) }
+attributes #1 = { nounwind }
+attributes #2 = { nounwind willreturn memory(argmem: readwrite) }
+attributes #3 = { nounwind willreturn memory(argmem: read, inaccessiblemem: readwrite) }
 
 !llvm.module.flags = !{!0}
 

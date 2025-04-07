@@ -29,7 +29,7 @@ source_filename = "LLVMDialectModule"
 @Exception = external constant { [3 x i64], [4 x ptr], [13 x ptr] }
 @Math_hashtbl = constant [4 x ptr] [ptr @Object, ptr null, ptr @any_typ, ptr @Math]
 @Math_offset_tbl = constant [4 x i32] [i32 26, i32 0, i32 9, i32 9]
-@Math = constant { [3 x i64], [6 x ptr], [17 x ptr] } { [3 x i64] [i64 8094150130346788308, i64 4611686018427388091, i64 3], [6 x ptr] [ptr @subtype_test, ptr @Math_hashtbl, ptr @Math_offset_tbl, ptr @_size_Math, ptr @_box_Default, ptr @_unbox_Default], [17 x ptr] [ptr @Math_B__Self_sqrt_xPtrf64, ptr @Math_B__Self_abs_xPtri32__Self_abs_xPtrf64, ptr @Math_B__Self_max_aPtri32_bPtri32__Self_max_aPtrf64_bPtrf64, ptr @Math_B__Self_min_aPtrf64_bPtrf64__Self_min_aPtri32_bPtri32, ptr @Math_B__Self_round_xPtrf64, ptr @Math_B__Self_floor_xPtrf64, ptr @Math_B__Self_ceiling_xPtrf64, ptr @Math__Self_sqrt_xPtrf64, ptr @Math__Self_abs_xPtri32, ptr @Math__Self_abs_xPtrf64, ptr @Math__Self_max_aPtri32_bPtri32, ptr @Math__Self_max_aPtrf64_bPtrf64, ptr @Math__Self_min_aPtrf64_bPtrf64, ptr @Math__Self_min_aPtri32_bPtri32, ptr @Math__Self_round_xPtrf64, ptr @Math__Self_floor_xPtrf64, ptr @Math__Self_ceiling_xPtrf64] }
+@Math = constant { [3 x i64], [6 x ptr], [17 x ptr] } { [3 x i64] [i64 8094150130346788308, i64 4611686018427388091, i64 3], [6 x ptr] [ptr @subtype_test, ptr @Math_hashtbl, ptr @Math_offset_tbl, ptr @_size_Math, ptr @_box_Default, ptr @_unbox_Default], [17 x ptr] [ptr @Math_B__Self_sqrt_xPtrf64, ptr @Math_B__Self_abs_xPtrf64__Self_abs_xPtri32, ptr @Math_B__Self_max_aPtri32_bPtri32__Self_max_aPtrf64_bPtrf64, ptr @Math_B__Self_min_aPtrf64_bPtrf64__Self_min_aPtri32_bPtri32, ptr @Math_B__Self_round_xPtrf64, ptr @Math_B__Self_floor_xPtrf64, ptr @Math_B__Self_ceiling_xPtrf64, ptr @Math__Self_sqrt_xPtrf64, ptr @Math__Self_abs_xPtrf64, ptr @Math__Self_abs_xPtri32, ptr @Math__Self_max_aPtri32_bPtri32, ptr @Math__Self_max_aPtrf64_bPtrf64, ptr @Math__Self_min_aPtrf64_bPtrf64, ptr @Math__Self_min_aPtri32_bPtri32, ptr @Math__Self_round_xPtrf64, ptr @Math__Self_floor_xPtrf64, ptr @Math__Self_ceiling_xPtrf64] }
 
 declare i32 @printf(ptr, ...)
 
@@ -113,45 +113,6 @@ define ptr @Math_B__Self_sqrt_xPtrf64(ptr %0) {
   ret ptr %14
 }
 
-define { ptr, i64 } @Math__Self_abs_xPtri32(ptr %0, { ptr, i64 } %1) {
-  %3 = alloca i64, align 8
-  %4 = alloca ptr, align 8
-  %5 = alloca i64, align 8
-  %6 = alloca ptr, align 8
-  %7 = alloca { ptr, i64 }, align 8
-  store { ptr, i64 } %1, ptr %7, align 8
-  %8 = getelementptr { ptr, i64 }, ptr %7, i32 0, i32 1
-  %9 = load i32, ptr %8, align 4
-  %10 = icmp sge i32 %9, 0
-  br i1 %10, label %11, label %16
-
-11:                                               ; preds = %2
-  store i32 %9, ptr %3, align 4
-  store i64 ptrtoint (ptr @i32_typ to i64), ptr %4, align 4
-  %12 = load ptr, ptr %4, align 8
-  %13 = insertvalue { ptr, i64 } undef, ptr %12, 0
-  %14 = load i64, ptr %3, align 4
-  %15 = insertvalue { ptr, i64 } %13, i64 %14, 1
-  br label %22
-
-16:                                               ; preds = %2
-  %17 = mul i32 %9, -1
-  store i32 %17, ptr %5, align 4
-  store i64 ptrtoint (ptr @i32_typ to i64), ptr %6, align 4
-  %18 = load ptr, ptr %6, align 8
-  %19 = insertvalue { ptr, i64 } undef, ptr %18, 0
-  %20 = load i64, ptr %5, align 4
-  %21 = insertvalue { ptr, i64 } %19, i64 %20, 1
-  br label %22
-
-22:                                               ; preds = %11, %16
-  %23 = phi { ptr, i64 } [ %21, %16 ], [ %15, %11 ]
-  br label %24
-
-24:                                               ; preds = %22
-  ret { ptr, i64 } %23
-}
-
 define { ptr, i64 } @Math__Self_abs_xPtrf64(ptr %0, { ptr, i64 } %1) {
   %3 = alloca i64, align 8
   %4 = alloca ptr, align 8
@@ -191,7 +152,46 @@ define { ptr, i64 } @Math__Self_abs_xPtrf64(ptr %0, { ptr, i64 } %1) {
   ret { ptr, i64 } %23
 }
 
-define ptr @Math_B__Self_abs_xPtri32__Self_abs_xPtrf64(ptr %0) {
+define { ptr, i64 } @Math__Self_abs_xPtri32(ptr %0, { ptr, i64 } %1) {
+  %3 = alloca i64, align 8
+  %4 = alloca ptr, align 8
+  %5 = alloca i64, align 8
+  %6 = alloca ptr, align 8
+  %7 = alloca { ptr, i64 }, align 8
+  store { ptr, i64 } %1, ptr %7, align 8
+  %8 = getelementptr { ptr, i64 }, ptr %7, i32 0, i32 1
+  %9 = load i32, ptr %8, align 4
+  %10 = icmp sge i32 %9, 0
+  br i1 %10, label %11, label %16
+
+11:                                               ; preds = %2
+  store i32 %9, ptr %3, align 4
+  store i64 ptrtoint (ptr @i32_typ to i64), ptr %4, align 4
+  %12 = load ptr, ptr %4, align 8
+  %13 = insertvalue { ptr, i64 } undef, ptr %12, 0
+  %14 = load i64, ptr %3, align 4
+  %15 = insertvalue { ptr, i64 } %13, i64 %14, 1
+  br label %22
+
+16:                                               ; preds = %2
+  %17 = mul i32 %9, -1
+  store i32 %17, ptr %5, align 4
+  store i64 ptrtoint (ptr @i32_typ to i64), ptr %6, align 4
+  %18 = load ptr, ptr %6, align 8
+  %19 = insertvalue { ptr, i64 } undef, ptr %18, 0
+  %20 = load i64, ptr %5, align 4
+  %21 = insertvalue { ptr, i64 } %19, i64 %20, 1
+  br label %22
+
+22:                                               ; preds = %11, %16
+  %23 = phi { ptr, i64 } [ %21, %16 ], [ %15, %11 ]
+  br label %24
+
+24:                                               ; preds = %22
+  ret { ptr, i64 } %23
+}
+
+define ptr @Math_B__Self_abs_xPtrf64__Self_abs_xPtri32(ptr %0) {
   %2 = call ptr @llvm.invariant.start.p0(i64 8, ptr %0)
   %3 = getelementptr { ptr }, ptr %0, i32 0, i32 0
   %4 = load ptr, ptr %3, align 8
@@ -204,7 +204,7 @@ define ptr @Math_B__Self_abs_xPtri32__Self_abs_xPtrf64(ptr %0) {
   %11 = load ptr, ptr %7, align 8
   %12 = load ptr, ptr %8, align 8
   %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 -2253724949814257982, i64 ptrtoint (ptr @i32_typ to i64), ptr %12)
-  %14 = select i1 %13, i32 8, i32 9
+  %14 = select i1 %13, i32 9, i32 8
   br i1 %13, label %15, label %16
 
 15:                                               ; preds = %1
@@ -326,8 +326,8 @@ define ptr @Math_B__Self_max_aPtri32_bPtri32__Self_max_aPtrf64_bPtrf64(ptr %0) {
   %10 = load i64, ptr %6, align 4
   %11 = load ptr, ptr %7, align 8
   %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 -2253724949814257982, i64 ptrtoint (ptr @i32_typ to i64), ptr %12)
-  %14 = select i1 %13, i32 10, i32 11
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 -757315540097298781, i64 ptrtoint (ptr @f64_typ to i64), ptr %12)
+  %14 = select i1 %13, i32 11, i32 10
   br i1 %13, label %15, label %27
 
 15:                                               ; preds = %1
@@ -341,7 +341,7 @@ define ptr @Math_B__Self_max_aPtri32_bPtri32__Self_max_aPtrf64_bPtrf64(ptr %0) {
   %23 = load i64, ptr %19, align 4
   %24 = load ptr, ptr %20, align 8
   %25 = load ptr, ptr %21, align 8
-  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 -2253724949814257982, i64 ptrtoint (ptr @i32_typ to i64), ptr %25)
+  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 -757315540097298781, i64 ptrtoint (ptr @f64_typ to i64), ptr %25)
   br label %50
 
 27:                                               ; preds = %1
@@ -355,7 +355,7 @@ define ptr @Math_B__Self_max_aPtri32_bPtri32__Self_max_aPtrf64_bPtrf64(ptr %0) {
   %35 = load i64, ptr %31, align 4
   %36 = load ptr, ptr %32, align 8
   %37 = load ptr, ptr %33, align 8
-  %38 = call i1 @subtype_test_wrapper(ptr %36, i64 %35, i64 %34, i64 -757315540097298781, i64 ptrtoint (ptr @f64_typ to i64), ptr %37)
+  %38 = call i1 @subtype_test_wrapper(ptr %36, i64 %35, i64 %34, i64 -2253724949814257982, i64 ptrtoint (ptr @i32_typ to i64), ptr %37)
   %39 = getelementptr { ptr, ptr }, ptr %0, i32 0, i32 1
   %40 = load ptr, ptr %39, align 8
   %41 = getelementptr ptr, ptr %40, i32 1
@@ -366,7 +366,7 @@ define ptr @Math_B__Self_max_aPtri32_bPtri32__Self_max_aPtrf64_bPtrf64(ptr %0) {
   %46 = load i64, ptr %42, align 4
   %47 = load ptr, ptr %43, align 8
   %48 = load ptr, ptr %44, align 8
-  %49 = call i1 @subtype_test_wrapper(ptr %47, i64 %46, i64 %45, i64 -757315540097298781, i64 ptrtoint (ptr @f64_typ to i64), ptr %48)
+  %49 = call i1 @subtype_test_wrapper(ptr %47, i64 %46, i64 %45, i64 -2253724949814257982, i64 ptrtoint (ptr @i32_typ to i64), ptr %48)
   br label %50
 
 50:                                               ; preds = %15, %27

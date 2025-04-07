@@ -627,20 +627,17 @@ class TypeCheck(Expression):
         leftval = self.left.codegen(scope)
 
         right_type = scope.simplify(self.right)
-        typ_id = type_id(right_type)
 
         if static_type in builtin_types.values():
-            result = 1 if static_type == right_type else 0
+            result = 1 if scope.subtype(static_type, right_type) else 0
             attr_dict = {"value": IntegerAttr.from_int_and_width(result, 1), "typ":IntegerType(1)}
             const_op = LiteralOp.create(result_types=[Ptr([IntegerType(1)])], attributes=attr_dict)
             scope.region.last_block.add_op(const_op)
             return const_op.results[0]
 
-        attr_dict = {"typ_name":typ_id, "struct_typ": static_type.base_typ()}
-        if isinstance(static_type, Union) and len(static_type.types.data) == 2 and Nil() in static_type.types.data and right_type != Nil():
-            attr_dict["typ_name"] = StringAttr("nil_typ")
-            attr_dict["neg"] = UnitAttr()
-        check_flag = CheckFlagOp.create(operands=[leftval], attributes=attr_dict, result_types=[IntegerType(1)])
+        parameterization = None
+        if isinstance(right_type, TypeParameter): parameterization = scope.get_parameterization(right_type)
+        check_flag = CheckFlagOp.make(leftval, static_type, right_type, type_id, parameterization)
         scope.region.last_block.add_op(check_flag)
         return check_flag.results[0]
 

@@ -933,10 +933,20 @@ class SetFlagOp(IRDLOperation):
 class CheckFlagOp(IRDLOperation):
     name = "mini.checkflag"
     ptr: Operand = operand_def(Ptr)
+    parameterization: OptOperandDef = opt_operand_def(Ptr)
     typ_name: Attribute = attr_def(StringAttr)
-    struct_typ: TypeAttribute = attr_def(TypeAttribute)
     result: OpResult = result_def(Ptr)
     neg: OptAttributeDef = opt_attr_def(UnitAttr)
+
+    @classmethod
+    def make(cls, ptr, lhs_type, rhs_type, id_fn, parameterization=None):
+        attr_dict = {"typ_name":id_fn(rhs_type)}
+        if isinstance(lhs_type, Union) and len(lhs_type.types.data) == 2 and Nil() in lhs_type.types.data and rhs_type != Nil():
+            attr_dict["typ_name"] = StringAttr("nil_typ")
+            attr_dict["neg"] = UnitAttr()
+            parameterization = None
+        operands = [ptr, parameterization] if parameterization else [ptr]
+        return CheckFlagOp.create(operands=operands, attributes=attr_dict, result_types=[Ptr([IntegerType(1)])])
 
 @irdl_op_definition
 class AssignOp(IRDLOperation):

@@ -136,11 +136,8 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
             // Re-insert only if it's a valid entry with a non-tombstone value
             if entry is Entry[K,V] {
                 val = entry.value();
-                // Check directly against Tombstone type, slightly cleaner
-                if not (val is Tombstone) {
-                    // We know the entry's hash, reuse it.
-                    if val is V { self.insert_internal(entry.key(), val, entry.hash()); }
-                }
+                // We know the entry's hash, reuse it.
+                if val is V { self.insert_internal(entry.key(), val, entry.hash()); }
             }
             i = i + 1;
         }
@@ -199,7 +196,7 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         // We only need to check if it's Nil or a Tombstone.
         if entry_or_nil is Entry[K, V] {
             val = entry_or_nil.value();
-            if not (val is Tombstone) { if val is V { return val; } }
+            if val is V { return val; }
             // If val is Tombstone, the key was deleted
         }
         // If entry_or_nil is Nil, or it was a Tombstone entry for this key
@@ -216,7 +213,7 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         if entry_or_nil is Entry[K, V] {
             val = entry_or_nil.value();
             // Only remove if it's an active entry (not already a tombstone)
-            if not (val is Tombstone) {
+            if val is V {
                 // Create Tombstone entry, preserving key and hash for probing continuity
                 tombstone_entry = Entry[K,V].new(entry_or_nil.key(), Tombstone.new(), entry_or_nil.hash());
                 @entries.unchecked_insert(i, tombstone_entry);
@@ -224,7 +221,7 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
                 // @load remains the same (slot still occupied by tombstone)
 
                 // Return the removed value (which we know is not Tombstone)
-                if val is V { return val; }
+                return val;
             }
             // If val is Tombstone, key was already removed effectively
         }
@@ -269,9 +266,7 @@ class HashMapIterator[K,V] extends Iterator2[Pair[K,V]] {
 
             if entry_or_nil is Entry[K, V] {
                 val = entry_or_nil.value();
-                if not (val is Tombstone) {
-                    if val is V { return Pair[K, V].new(entry_or_nil.key(), val); }
-                 }
+                if val is V { return Pair[K, V].new(entry_or_nil.key(), val); }
             }
             // Continue loop if Nil or Tombstone
         }

@@ -328,17 +328,18 @@ class LowerCheckFlag(RewritePattern):
     """
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: CheckFlagOp, rewriter: PatternRewriter):
-        if not isinstance(op.struct_typ, llvm.LLVMStructType): raise Exception("not good!")
-        get_flag = GetFlagOp.create(operands=[op.ptr],attributes={"struct_typ":op.struct_typ}, result_types=[llvm.LLVMPointerType.opaque()])
-        typ_id = TypIDOp.create(result_types=[llvm.LLVMPointerType.opaque()], attributes={"typ_name":op.typ_name})
-        vptr = UnwrapOp.create(operands=[get_flag.results[0]], result_types=[llvm.LLVMPointerType.opaque()])
+
+        vptr = llvm.LoadOp(op.ptr, llvm.LLVMPointerType.opaque())
         vptr_int = llvm.PtrToIntOp(vptr.results[0], IntegerType(64))
-        candidate_ptr = UnwrapOp.create(operands=[typ_id.results[0]], result_types=[llvm.LLVMPointerType.opaque()])
+        if op.parameterization:
+            candidate_ptr = llvm.LoadOp(op.parameterization, llvm.LLVMPointerType.opaque())
+        else:
+            candidate_ptr = AddrOfOp.from_stringattr(op.typ_name)
         candidate = llvm.PtrToIntOp(candidate_ptr.results[0], IntegerType(64))
 
         if op.typ_name.data in builtin_types.keys() and op.typ_name.data not in ["nil_typ", "any_typ"]:
             eq = ComparisonOp.make(vptr_int.results[0], candidate.results[0], "EQ")
-            rewriter.inline_block_before_matched_op(Block([get_flag, typ_id, vptr, vptr_int, candidate_ptr, candidate, eq]))
+            rewriter.inline_block_before_matched_op(Block([vptr, vptr_int, candidate_ptr, candidate, eq]))
             wrap = WrapOp.make(eq.results[0])
             rewriter.replace_matched_op(wrap)
             return
@@ -348,7 +349,7 @@ class LowerCheckFlag(RewritePattern):
             zero = llvm.ZeroOp.create(result_types=[IntegerType(64)])
             extra_cmp = ComparisonOp.make(vptr_int.results[0], zero.results[0], "EQ")
             either = arith.OrI(eq.results[0], extra_cmp.results[0])
-            rewriter.inline_block_before_matched_op(Block([get_flag, typ_id, vptr, vptr_int, candidate_ptr, candidate, eq, zero, extra_cmp, either]))
+            rewriter.inline_block_before_matched_op(Block([vptr, vptr_int, candidate_ptr, candidate, eq, zero, extra_cmp, either]))
             if op.neg: 
                 false = llvm.ZeroOp.create(result_types=[IntegerType(1)])
                 either = ComparisonOp.make(either.results[0], false.results[0], "EQ")
@@ -384,7 +385,7 @@ class LowerCheckFlag(RewritePattern):
         call = func.CallIndirect(laundered.results[0], args, [IntegerType(1)])
 
         rewriter.inline_block_before_matched_op(Block([
-            get_flag, typ_id, vptr, vptr_int, candidate_ptr, candidate,
+            vptr, vptr_int, candidate_ptr, candidate,
             prime_ptr, tbl_size_ptr, subtype_test_ptr, hash_tbl_ptr_ptr,prime, tbl_size, subtype_test, wrapper, hash_tbl_ptr,
             cand_id, laundered, call
         ]))

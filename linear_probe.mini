@@ -148,12 +148,9 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
             // Re-insert only if it's a valid entry with a non-tombstone value
             if entry is Entry[K,V] {
                 val = entry.value();
-                // Check directly against Tombstone type
-                if not (val is Tombstone) {
-                    // We know the entry's hash, reuse it.
-                    // Ensure val is V before calling insert_internal
-                    if val is V { self.insert_internal(entry.key(), val, entry.hash()); }
-                }
+                // We know the entry's hash, reuse it.
+                // Ensure val is V before calling insert_internal
+                if val is V { self.insert_internal(entry.key(), val, entry.hash()); }
             }
             i = i + 1;
         }
@@ -217,9 +214,7 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
             // (find_slot guarantees this if it didn't return an empty/tombstone insertion slot)
             // AND ensure it's not a tombstone
             if entry_or_nil.hash() == hash and @eq.call(entry_or_nil.key(), key) {
-                if not (val is Tombstone) {
-                    if val is V { return val; } // Make sure type matches V
-                }
+                if val is V { return val; } // Make sure type matches V
             }
             // If hash/key didn't match OR it was a tombstone, the key is effectively absent
         }
@@ -239,7 +234,7 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
             // Check if the entry found actually matches the key and is not already a tombstone
             if entry_or_nil.hash() == hash and @eq.call(entry_or_nil.key(), key) {
                 val = entry_or_nil.value();
-                if not (val is Tombstone) {
+                if val is V {
                     // Create Tombstone entry, preserving key and hash for probing continuity
                     tombstone_entry = Entry[K,V].new(entry_or_nil.key(), Tombstone.new(), entry_or_nil.hash());
                     @entries.unchecked_insert(i, tombstone_entry);
@@ -247,7 +242,7 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
                     // @load remains the same (slot still occupied by tombstone)
 
                     // Return the removed value (which we know is not Tombstone)
-                    if val is V { return val; }
+                    return val;
                 }
                 // If val is Tombstone, key was already removed effectively
             }
@@ -295,10 +290,8 @@ class HashMapIterator[K,V] extends Iterator2[Pair[K,V]] {
 
             if entry_or_nil is Entry[K, V] {
                 val = entry_or_nil.value();
-                if not (val is Tombstone) {
-                    // Ensure type matches V before creating Pair
-                    if val is V { return Pair[K, V].new(entry_or_nil.key(), val); }
-                 }
+                // Ensure type matches V before creating Pair
+                if val is V { return Pair[K, V].new(entry_or_nil.key(), val); }
             }
             // Continue loop if Nil or Tombstone
         }
