@@ -380,9 +380,8 @@ class ArrayLiteral(Expression):
         assign.codegen(scope);
         for i, elem in enumerate(self.elements):
             iliteral = IntegerLiteral(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), i, 32)
-            indexation = MethodCall(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), temp_var, "_index", [iliteral])
-            assign_i = Assignment(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), indexation, elem)
-            assign_i.codegen(scope)
+            indexation = MethodCall(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), temp_var, "_set_index", [iliteral, elem])
+            indexation.codegen(scope)
         ary = ObjectCreation(self.info, random_letters(10), FatPtr.basic("IntArray"), [temp_var, sizelit, capacitylit], None)
         return ary.codegen(scope)
 

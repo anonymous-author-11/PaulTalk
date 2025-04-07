@@ -506,7 +506,7 @@ module @patterns {
       %type_size_result = pdl.result 0 of %type_size
       %indexation = pdl.operation "mini.buffer_indexation"(%receiver, %index, %type_size_result : !pdl.value, !pdl.value, !pdl.value) -> (%ptr_type : !pdl.type)
       %indexation_result = pdl.result 0 of %indexation
-      %memcpy = pdl.operation "mini.memcpy"(%indexation_result, %alloca_result : !pdl.value, !pdl.value) {"type" = %elem_type_attr}
+      %assign = pdl.operation "mini.assign"(%alloca_result, %indexation_result : !pdl.value, !pdl.value) {"typ" = %elem_type_attr}
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
@@ -526,8 +526,8 @@ module @patterns {
       %type_size_result = pdl.result 0 of %type_size
       %indexation = pdl.operation "mini.buffer_indexation"(%receiver, %index, %type_size_result : !pdl.value, !pdl.value, !pdl.value) -> (%ptr_type : !pdl.type)
       %indexation_result = pdl.result 0 of %indexation
-      %memcpy = pdl.operation "mini.memcpy"(%value_ptr, %indexation_result : !pdl.value, !pdl.value) {"type" = %elem_type_attr}
-      pdl.replace %root with %memcpy
+      %assign = pdl.operation "mini.assign"(%indexation_result, %value_ptr : !pdl.value, !pdl.value) {"typ" = %elem_type_attr}
+      pdl.replace %root with %assign
     }
   }
   pdl.pattern @LowerBufferIndexation : benefit(1) {

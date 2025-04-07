@@ -1747,10 +1747,9 @@ class LowerParameterizationIndexation(RewritePattern):
             index = index_attr.value.data + 1
             ary_type = llvm.LLVMArrayType.from_size_and_type(len(indices) - i, llvm.LLVMPointerType.opaque())
             gep = llvm.GEPOp.from_mixed_indices(current_param, [0, index], pointee_type=ary_type)
-            invariant = InvariantOp.make(current_param, 8 * (index + 1))
             load = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
             current_param = load.results[0]
-            rewriter.inline_block_before_matched_op(Block([gep, invariant, load]))
+            rewriter.inline_block_before_matched_op(Block([gep, load]))
 
         cast = builtin.UnrealizedConversionCastOp.create(operands=[current_param], result_types=[llvm.LLVMPointerType.opaque()])
         rewriter.replace_matched_op(cast)

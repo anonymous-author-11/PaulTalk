@@ -1,4 +1,4 @@
-import cuckoo;
+import quadratic_probe;
 
 map = HashMap[i32, i32].new(i32_hasher, i32_eq);
 map.insert(5,77);
