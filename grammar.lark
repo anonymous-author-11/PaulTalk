@@ -98,7 +98,7 @@ comparison: arithmetic -> comparison_single
           | comparison LE arithmetic
           | comparison GE arithmetic
           | comparison ":" arithmetic -> range_literal
-          | IDENT "is" typ -> type_check
+          | comparison "is" typ -> type_check
 
 arithmetic: term -> arithmetic_single
           | arithmetic PLUS term

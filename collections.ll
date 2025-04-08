@@ -4,7 +4,7 @@ source_filename = "LLVMDialectModule"
 @_parameterization_Ptri1 = linkonce_odr constant [2 x ptr] [ptr @bool_typ, ptr null]
 @_parameterization_String = linkonce_odr constant [2 x ptr] [ptr @String, ptr null]
 @_parameterization_BufferPtri8 = linkonce_odr constant [2 x ptr] [ptr @buffer_typ, ptr null]
-@tvtrt_collectionsmini = internal constant [16 x i8] c"collections.mini"
+@jaslg_collectionsmini = internal constant [16 x i8] c"collections.mini"
 @_parameterization_Ptri32 = linkonce_odr constant [2 x ptr] [ptr @i32_typ, ptr null]
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
@@ -4644,7 +4644,7 @@ define void @Array_throw_oob_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr,
   %53 = load ptr, ptr %52, align 8
   store ptr %53, ptr %51, align 8
   %54 = load ptr, ptr %51, align 8
-  %55 = load <16 x i8>, ptr @tvtrt_collectionsmini, align 16
+  %55 = load <16 x i8>, ptr @jaslg_collectionsmini, align 16
   store <16 x i8> %55, ptr %54, align 16
   %56 = alloca [1 x ptr], align 8
   store ptr @String, ptr %56, align 8

@@ -619,11 +619,11 @@ class Alias(Statement):
 
 @dataclass
 class TypeCheck(Expression):
-    left: Identifier
+    left: Expression
     right: TypeAttribute
 
     def codegen(self, scope):
-        static_type = scope.type_table[self.left.name]
+        static_type = self.left.exprtype(scope)
         leftval = self.left.codegen(scope)
 
         right_type = scope.simplify(self.right)
@@ -641,16 +641,11 @@ class TypeCheck(Expression):
         scope.region.last_block.add_op(check_flag)
         return check_flag.results[0]
 
-    def ensure_lhs_identifier(self):
-        if not isinstance(self.left, Identifier):
-            raise Exception(f"Line {self.info.line_number}: lhs in type check is not an identifier!")
-
     def ensure_rhs_simple(self):
         if isinstance(self.right, Union) or isinstance(self.right, Intersection):
             raise Exception(f"Line {self.info.line_number}: Cannot type-check {self.right} yet.")
 
     def exprtype(self, scope):
-        self.ensure_lhs_identifier()
         self.ensure_rhs_simple()
         return Ptr([IntegerType(1)])
 
@@ -1019,9 +1014,9 @@ class TupleSetIndex(MethodCall):
 class ClassMethodCall(MethodCall):
 
     def codegen(self, scope):
-        if isinstance(self.receiver, Identifier) and "Intrinsic" in self.receiver.name:
-            return IntrinsicCall(self.info, self.receiver, self.method, self.arguments).codegen(scope)
-        rec_typ = scope.simplify(FatPtr.basic(self.receiver.name))
+        if "Intrinsic" in self.receiver.cls.data:
+            return IntrinsicCall(self.info, self.receiver.cls.data, self.method, self.arguments).codegen(scope)
+        rec_typ = scope.simplify(self.receiver)
         rec_class = scope.classes[rec_typ.cls.data]
 
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
@@ -1042,7 +1037,7 @@ class ClassMethodCall(MethodCall):
         ret_schema = broad.base_typ() if broad else llvm.LLVMVoidType()
         attr_dict = {
             "offset":offset,"vptrs":vptrs, "vtable_size":vtable_size,
-            "ret_type":ret_schema, "ret_type_unq":ret_schema, "class_name":StringAttr(self.receiver.name)
+            "ret_type":ret_schema, "ret_type_unq":ret_schema, "class_name":rec_typ.cls
         }
         result_types = [broad] if broad else []
         ary_type = llvm.LLVMArrayType.from_size_and_type(len(args), llvm.LLVMPointerType.opaque())
@@ -1071,7 +1066,7 @@ class ClassMethodCall(MethodCall):
         # for each passed argument, add a parameterization representing its static type to the parameterizations array
         parameterizations = [scope.get_parameterization(t) for t in arg_types]
 
-        rec_typ = scope.simplify(FatPtr.basic(self.receiver.name))
+        rec_typ = scope.simplify(self.receiver)
         if rec_typ.type_params != NoneAttr():
             for t in rec_typ.type_params:
                 parameterizations.append(scope.get_parameterization(t))
@@ -1088,31 +1083,31 @@ class ClassMethodCall(MethodCall):
         scope.points_to_facts = scope.points_to_facts.union(formal_constraints)
 
     def simple_exprtype(self, scope):
-        if self.receiver == "Self":
+        if self.receiver.cls.data == "Self":
             if not scope.cls:
                 raise Exception(f"Line {self.info.line_number}: Self type can only be used within a class.")
-            self.receiver = scope.cls.name
+            self.receiver = scope.cls.type()
         
-        if self.receiver.name not in scope.classes.keys(): raise Exception(f"class {self.receiver.name} not declared.")
-        rec_class = scope.classes[self.receiver.name]
+        if self.receiver.cls.data not in scope.classes.keys(): raise Exception(f"class {self.receiver.cls.data} not declared.")
+        rec_class = scope.classes[self.receiver.cls.data]
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
-        rec_typ = FatPtr.basic(self.receiver.name)
+        rec_typ = scope.simplify(self.receiver)
         behaviors = [behavior for behavior in rec_class.behaviors if behavior.applicable(rec_typ, scope, "_Self_" + self.method, arg_types)]
         if len(behaviors) == 0:
-            raise Exception(f"Line {self.info.line_number}: there exists no overload of class method {self.receiver.name}.{self.method} compatible with argument types {arg_types}")
+            raise Exception(f"Line {self.info.line_number}: there exists no overload of class method {self.receiver.cls.data}.{self.method} compatible with argument types {arg_types}")
         if len(behaviors) > 1:
-            raise Exception(f"Line {self.info.line_number}: invocation of {self.receiver.name}.{self.method} with argument types {arg_types} is ambiguous.")
+            raise Exception(f"Line {self.info.line_number}: invocation of {self.receiver.cls.data}.{self.method} with argument types {arg_types} is ambiguous.")
         behavior_decl = behaviors[0]
         if any(isinstance(method.definition, AbstractMethodDef) for method in behavior_decl.methods):
-            raise Exception(f"Line {self.info.line_number}: Class method {self.receiver.name}.{self.method} has an abstract overload, and cannot be called directly.")
+            raise Exception(f"Line {self.info.line_number}: Class method {self.receiver.cls.data}.{self.method} has an abstract overload, and cannot be called directly.")
         self.apply_constraints(scope, behaviors[0])
         broad = behavior_decl.broad_return_type()
         specialized = behavior_decl.specialized_return_type(rec_typ, arg_types, scope)
         return broad, specialized
 
     def exprtype(self, scope):
-        if "Intrinsic" in self.receiver.name:
-            return IntrinsicCall(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
+        if "Intrinsic" in self.receiver.cls.data:
+            return IntrinsicCall(self.info, self.receiver.cls.data, self.method, self.arguments).exprtype(scope)
         broad, specialized = self.simple_exprtype(scope)
         return specialized
 

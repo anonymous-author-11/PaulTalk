@@ -293,10 +293,9 @@ class CSTTransformer(Transformer):
         node_info = NodeInfo(random_letters(10), self.file_name, op.line)
         return Bitwise(node_info, left, op.value, right)
 
-    def type_check(self, identifier, typ):
-        node_info = NodeInfo(random_letters(10), self.file_name, identifier.line)
-        identifier_node_info = NodeInfo(random_letters(10), self.file_name, identifier.line)
-        return TypeCheck(node_info, Identifier(identifier_node_info, identifier.value), typ)
+    def type_check(self, lhs, typ):
+        node_info = NodeInfo(random_letters(10), self.file_name, lhs.info.line_number)
+        return TypeCheck(node_info, lhs, typ)
 
     def term_single(self, factor):
         return factor
@@ -391,14 +390,14 @@ class CSTTransformer(Transformer):
                 return CoCreate(node_info, "coroutine_" + random_letters(10), args)
             if meth_name == "new":
                 return ObjectCreation(node_info, random_letters(10), FatPtr.basic(receiver.name), args, None)
-            return ClassMethodCall(node_info, receiver, meth_name.value, args)
+            return ClassMethodCall(node_info, FatPtr.basic(receiver.name), meth_name.value, args)
         if isinstance(receiver, ParametrizedAttribute):
             if isinstance(receiver, Buffer):
                 node_info = NodeInfo(random_letters(10), self.file_name, args[0].info.line_number)
                 return CreateBuffer(node_info, receiver, args[0], None)
             if meth_name == "new":
                 return ObjectCreation(node_info, random_letters(10), receiver, args, None)
-            raise Exception(f"Line {meth_name.line} can't handle this yet")
+            return ClassMethodCall(node_info, receiver, meth_name.value, args)
         return MethodCall(node_info, receiver, meth_name.value, args)
 
     def indexation(self, receiver, index):

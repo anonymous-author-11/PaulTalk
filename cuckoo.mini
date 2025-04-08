@@ -42,14 +42,16 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
     @size: i32
     @hasher: (K) -> i32 // Primary user-provided hash function
     @eq: (K, K) -> Bool
-    @max_displacements: i32 // Limit before resize
+
+    def Self.max_displacements() -> i32 {
+        return 100;
+    }
 
     def init(@hasher: (K) -> i32, @eq : (K, K) -> Bool) {
         tbl_capacity = 8; // Start small, total capacity 16
         @table1 = Array[Entry[K,V] | Nil].new(tbl_capacity, tbl_capacity);
         @table2 = Array[Entry[K,V] | Nil].new(tbl_capacity, tbl_capacity);
         @size = 0;
-        @max_displacements = 100; // Can be tuned
     }
 
     // --- Hashing and Indexing Helpers ---
@@ -84,7 +86,7 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         on_first = true; // Start with table 1
 
         loop_count = 0;
-        while loop_count < @max_displacements {
+        while loop_count < HashMap[K,V].max_displacements() {
             loop_count = loop_count + 1;
             primary_hash = current_entry.primary_hash();
 
