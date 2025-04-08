@@ -159,13 +159,11 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         entry = table.unchecked_index(idx);
         if entry is Entry[K,V] {
             // Check primary hash first (quick), then key equality (potentially slow)
-            if entry.primary_hash() == h1 {
-                if @eq.call(entry.key(), key) {
-                    // Found in table 1, update in place
-                    updated_entry = Entry[K,V].new(key, value, h1);
-                    table.unchecked_insert(idx, updated_entry);
-                    return true; // Update done, size doesn't change
-                }
+            if entry.primary_hash() == h1 and @eq.call(entry.key(), key) {
+                // Found in table 1, update in place
+                updated_entry = Entry[K,V].new(key, value, h1);
+                table.unchecked_insert(idx, updated_entry);
+                return true; // Update done, size doesn't change
             }
         }
         return false;
@@ -175,8 +173,8 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         entry = table.unchecked_index(idx);
         if entry is Entry[K,V] {
             // Check hash first, then equality
-            if entry.primary_hash() == h1 {
-                if @eq.call(entry.key(), key) { return entry.value(); }
+            if entry.primary_hash() == h1 and @eq.call(entry.key(), key) {
+                return entry.value();
             }
         }
         return nil;
@@ -185,13 +183,11 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
     def remove_from_table(key : K, h1 : i32, idx : i32, table : Array[Entry[K,V] | Nil]) -> V | Nil {
         entry = table.unchecked_index(idx);
         if entry is Entry[K,V] {
-            if entry.primary_hash() == h1 {
-                if @eq.call(entry.key(), key) {
-                    value_to_return = entry.value();
-                    table.unchecked_insert(idx, nil); // Mark slot as empty
-                    @size = @size - 1;
-                    return value_to_return;
-                }
+            if entry.primary_hash() == h1 and @eq.call(entry.key(), key) {
+                value_to_return = entry.value();
+                table.unchecked_insert(idx, nil); // Mark slot as empty
+                @size = @size - 1;
+                return value_to_return;
             }
         }
         return nil;

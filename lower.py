@@ -137,7 +137,8 @@ class ThirdPass(ModulePass):
                 LowerBoxUnionDef(),
                 LowerNew(),
                 LowerUnboxDef(),
-                LowerSizeAlignment()
+                LowerSizeAlignment(),
+                LowerLogical()
                 #LowerParameterizationIndexation(),
                 #LowerParameterizationsArray(),
                 #LowerGlobalFptr(),
@@ -776,12 +777,33 @@ class LowerLogical(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: LogicalOp, rewriter: PatternRewriter):
         debug_code(op)
+        
+        rhs_region = op.detach_region(op.rhs_region)
+        
+        result = AllocateOp.make(IntegerType(1))
+        store1 = llvm.StoreOp(op.lhs, result.results[0])
+        rewriter.insert_op_before_matched_op(result)
+        rewriter.insert_op_before_matched_op(store1)
+        surrounding_block = op.parent_block()
+        after_block = surrounding_block.split_before(op)
+
+        if op.op.data == "and":
+            cbr = cf.ConditionalBranch(op.lhs, rhs_region.block, [], after_block, [])
         if op.op.data == "or":
-            cmp_op = arith.OrI(op.lhs, op.rhs)
-            rewriter.replace_matched_op(cmp_op)
-            return
-        cmp_op = cmp_op = arith.AndI(op.lhs, op.rhs)
-        rewriter.replace_matched_op(cmp_op)
+            cbr = cf.ConditionalBranch(op.lhs, after_block, [], rhs_region.block, [])
+        surrounding_block.add_op(cbr)
+        
+        rhs_value = rhs_region.block.last_op.operands[0]
+        load1 = llvm.LoadOp(rhs_value, IntegerType(1))
+        store2 = llvm.StoreOp(load1.results[0], result.results[0])
+        br = cf.Branch(after_block)
+        rewriter.erase_op(rhs_region.block.last_op)
+        rhs_region.block.add_ops([load1, store2, br])
+        rhs_region.move_blocks_before(after_block)
+
+        load2 = llvm.LoadOp(result.results[0], IntegerType(1))
+        rewriter.replace_matched_op(load2)
+        
         debug_code(op)
 
 class LowerNext(RewritePattern):

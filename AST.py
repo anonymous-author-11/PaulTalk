@@ -250,9 +250,30 @@ class Comparison(BinaryOp):
 
 @dataclass
 class Logical(BinaryOp):
-    def concrete_op(self, operands, attributes, result_types):
-        return LogicalOp.create(operands=operands, attributes=attributes, result_types=[IntegerType(1)])
-    def concrete_exprtype(self, left_type, right_type):
+
+    def codegen(self, scope):
+        left_type = self.left.exprtype(scope)
+        right_type = self.right.exprtype(scope)
+        left_unwrap = UnwrapOp.create(operands=[self.left.codegen(scope)], result_types=[left_type.base_typ()])
+        right_scope = Scope(scope)
+        right_value = self.right.codegen(right_scope)
+        right_scope.region.block.add_op(func.Return(right_value))
+        operands = [left_unwrap.results[0]]
+        attr_dict = {"op":StringAttr(self.operator)}
+        regions = [right_scope.region]
+        binop = LogicalOp.create(operands=operands, attributes=attr_dict, result_types=[IntegerType(1)], regions=regions)
+        wrap = WrapOp.make(binop.results[0], left_type)
+        scope.region.last_block.add_ops([left_unwrap, binop, wrap])
+        return wrap.results[0]
+
+    def ensure_compatible_types(self, left_type, right_type):
+        if left_type != right_type:
+            raise Exception(f"Line {self.info.line_number}: tried to use {self.operator} on different types: {left_type} and {right_type}")
+
+    def exprtype(self, scope):
+        left_type = self.left.exprtype(scope)
+        right_type = self.right.exprtype(scope)
+        self.ensure_compatible_types(left_type, right_type)
         if left_type != Ptr([IntegerType(1)]):
             raise Exception(f"Operator {self.operator} not available for type {left_type}")
         return Ptr([IntegerType(1)])
@@ -1052,7 +1073,6 @@ class ClassMethodCall(MethodCall):
         #    call_op = FunctionCallOp.create(operands=operands, attributes=attr_dict, result_types=result_types)
         #    scope.region.last_block.add_op(call_op)
         #    return call_op.results[0] if len(call_op.results) > 0 else None
-
 
         call_op = ClassMethodCallOp.create(operands=operands, attributes=attr_dict, result_types=result_types)
         scope.region.last_block.add_op(call_op)

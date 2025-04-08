@@ -77,13 +77,12 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
             // entry must be Entry[K,V] here
             if entry is Entry[K, V] {
                 // Key found? Check hash first (cheap), then equality (potentially expensive).
-                if entry.hash() == hash {
-                    if @eq.call(entry.key(), key) { return current_index; }
+                if entry.hash() == hash and @eq.call(entry.key(), key) {
+                    return current_index;
                 } 
 
                 // If it's an entry for a *different* key, check if it's a tombstone
-                value_in_entry = entry.value();
-                if value_in_entry is Tombstone {
+                if entry.value() is Tombstone {
                     if first_tombstone_idx == -1 {
                         first_tombstone_idx = current_index; // Record the first tombstone spot
                     }

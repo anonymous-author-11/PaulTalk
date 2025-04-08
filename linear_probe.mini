@@ -83,16 +83,13 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
             if entry is Entry[K, V] {
                 // Check if this slot contains the key we're looking for.
                 // Check hash first (cheap), then equality (potentially expensive).
-                if entry.hash() == hash {
-                    if @eq.call(entry.key(), key) {
-                        // Key found! Whether it's active or a tombstone, this is its slot.
-                        return current_index;
-                    }
+                if entry.hash() == hash and @eq.call(entry.key(), key) {
+                    // Key found! Whether it's active or a tombstone, this is its slot.
+                    return current_index;
                 }
 
                 // If it's an entry for a *different* key OR a tombstone for *our* key...
-                value_in_entry = entry.value();
-                if value_in_entry is Tombstone {
+                if entry.value() is Tombstone {
                     // Found a tombstone. Record the *first* one encountered during this probe.
                     // This is a potential insertion spot if the key isn't found later.
                     if first_tombstone_idx == -1 {

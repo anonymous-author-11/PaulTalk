@@ -1005,7 +1005,7 @@ class ComparisonOp(IRDLOperation):
 class LogicalOp(IRDLOperation):
     name = "mini.logical"
     lhs : Operand = operand_def(IntegerType)
-    rhs : Operand = operand_def(IntegerType)
+    rhs_region : Region = region_def()
     result : OpResult = result_def(IntegerType(1))
     op : StringAttr = attr_def(StringAttr)
 

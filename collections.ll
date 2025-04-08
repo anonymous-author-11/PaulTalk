@@ -4,7 +4,7 @@ source_filename = "LLVMDialectModule"
 @_parameterization_Ptri1 = linkonce_odr constant [2 x ptr] [ptr @bool_typ, ptr null]
 @_parameterization_String = linkonce_odr constant [2 x ptr] [ptr @String, ptr null]
 @_parameterization_BufferPtri8 = linkonce_odr constant [2 x ptr] [ptr @buffer_typ, ptr null]
-@jaslg_collectionsmini = internal constant [16 x i8] c"collections.mini"
+@blsdl_collectionsmini = internal constant [16 x i8] c"collections.mini"
 @_parameterization_Ptri32 = linkonce_odr constant [2 x ptr] [ptr @i32_typ, ptr null]
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
@@ -4262,7 +4262,7 @@ define { ptr, i160 } @Array__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %53 = call i32 %52(ptr %43) #2
   %54 = add i32 %53, %3
   %55 = icmp slt i32 %54, 0
-  %56 = or i1 %41, %55
+  %56 = select i1 %41, i1 true, i1 %55
   br i1 %56, label %57, label %78
 
 57:                                               ; preds = %4
@@ -4445,7 +4445,7 @@ define void @Array__set_index_xPtri32_valueT({ ptr, ptr, ptr, i32 } %0, { ptr, p
   %58 = call i32 %57(ptr %48) #2
   %59 = add i32 %58, %3
   %60 = icmp slt i32 %59, 0
-  %61 = or i1 %46, %60
+  %61 = select i1 %46, i1 true, i1 %60
   br i1 %61, label %62, label %83
 
 62:                                               ; preds = %5
@@ -4644,7 +4644,7 @@ define void @Array_throw_oob_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr,
   %53 = load ptr, ptr %52, align 8
   store ptr %53, ptr %51, align 8
   %54 = load ptr, ptr %51, align 8
-  %55 = load <16 x i8>, ptr @jaslg_collectionsmini, align 16
+  %55 = load <16 x i8>, ptr @blsdl_collectionsmini, align 16
   store <16 x i8> %55, ptr %54, align 16
   %56 = alloca [1 x ptr], align 8
   store ptr @String, ptr %56, align 8
