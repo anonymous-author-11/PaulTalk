@@ -137,9 +137,9 @@ class ThirdPass(ModulePass):
                 LowerBoxUnionDef(),
                 LowerNew(),
                 LowerUnboxDef(),
-                LowerDataSize(),
-                LowerSize(),
                 LowerLogical()
+                #LowerDataSize(),
+                #LowerSize(),
                 #LowerParameterizationIndexation(),
                 #LowerParameterizationsArray(),
                 #LowerGlobalFptr(),

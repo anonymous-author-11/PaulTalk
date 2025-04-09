@@ -64,6 +64,8 @@ def run_pdl_lowering(module_str):
 
     module_str = module_str[23:-16]
     module_str = module_str.replace("placeholder.call", "llvm.call")
+    module_str = module_str.replace("placeholder.extractvalue", "llvm.extractvalue")
+    #module_str = module_str.replace('{"position" = array<i64: 0>}','<{"position" = array<i64: 0>}>')
     with open("out.mlir", "w") as outfile: outfile.write(module_str)
     return module_str
 

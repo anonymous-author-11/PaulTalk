@@ -118,6 +118,93 @@ module @patterns {
       pdl.replace %root with (%ptrtoint_result : !pdl.value)
     }
   }
+  pdl.pattern @LowerSize : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %ptr_type_attr = pdl.attribute = !llvm.ptr
+    %size_alignment_tuple = pdl.type : !llvm.struct<(i64, i64)>
+    %parameterization = pdl.operand
+    %root = pdl.operation "mini.size"(%parameterization : !pdl.value) -> (%size_alignment_tuple : !pdl.type)
+    pdl.rewrite %root {
+      %vptr = pdl.operation "llvm.load"(%parameterization : !pdl.value) -> (%ptr_type : !pdl.type)
+      %vptr_result = pdl.result 0 of %vptr
+      %indices = pdl.attribute = array<i32: 9>
+      %gep = pdl.operation "llvm.getelementptr"(%vptr_result : !pdl.value) {"elem_type" = %ptr_type_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
+      %gep_result = pdl.result 0 of %gep
+      %size_fn = pdl.operation "llvm.load"(%gep_result : !pdl.value) -> (%ptr_type : !pdl.type)
+      %size_fn_result = pdl.result 0 of %size_fn
+      %callee = pdl.attribute = @size_wrapper
+      %opsegsize = pdl.attribute = array<i32: 2, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "placeholder.call"(%size_fn_result, %parameterization : !pdl.value, !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%size_alignment_tuple : !pdl.type)
+      pdl.replace %root with %call
+    }
+  }
+  pdl.pattern @LowerDataSize : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %ptr_type_attr = pdl.attribute = !llvm.ptr
+    %size_alignment_tuple = pdl.type : !llvm.struct<(i64, i64)>
+    %parameterization = pdl.operand
+    %root = pdl.operation "mini.data_size"(%parameterization : !pdl.value) -> (%size_alignment_tuple : !pdl.type)
+    pdl.rewrite %root {
+      %vptr = pdl.operation "llvm.load"(%parameterization : !pdl.value) -> (%ptr_type : !pdl.type)
+      %vptr_result = pdl.result 0 of %vptr
+      %indices = pdl.attribute = array<i32: 6>
+      %gep = pdl.operation "llvm.getelementptr"(%vptr_result : !pdl.value) {"elem_type" = %ptr_type_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
+      %gep_result = pdl.result 0 of %gep
+      %data_size_fn = pdl.operation "llvm.load"(%gep_result : !pdl.value) -> (%ptr_type : !pdl.type)
+      %data_size_fn_result = pdl.result 0 of %data_size_fn
+      %callee = pdl.attribute = @size_wrapper
+      %opsegsize = pdl.attribute = array<i32: 2, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "placeholder.call"(%data_size_fn_result, %parameterization : !pdl.value, !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%size_alignment_tuple : !pdl.type)
+      pdl.replace %root with %call
+    }
+  }
+  pdl.pattern @LowerBoxCall : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %ptr_type_attr = pdl.attribute = !llvm.ptr
+    %box_type = pdl.type : !llvm.struct<(ptr, i160)>
+    %ptr = pdl.operand : %ptr_type
+    %parameterization = pdl.operand : %ptr_type
+    %root = pdl.operation "mini.box_call"(%ptr, %parameterization : !pdl.value, !pdl.value) -> (%box_type : !pdl.type)
+    pdl.rewrite %root {
+      %vptr = pdl.operation "llvm.load"(%parameterization : !pdl.value) -> (%ptr_type : !pdl.type)
+      %vptr_result = pdl.result 0 of %vptr
+      %indices = pdl.attribute = array<i32: 7>
+      %gep = pdl.operation "llvm.getelementptr"(%vptr_result : !pdl.value) {"elem_type" = %ptr_type_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
+      %gep_result = pdl.result 0 of %gep
+      %box_fn = pdl.operation "llvm.load"(%gep_result : !pdl.value) -> (%ptr_type : !pdl.type)
+      %box_fn_result = pdl.result 0 of %box_fn
+      %callee = pdl.attribute = @box_wrapper
+      %opsegsize = pdl.attribute = array<i32: 3, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "placeholder.call"(%box_fn_result, %ptr, %parameterization : !pdl.value, !pdl.value, !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%box_type : !pdl.type)
+      pdl.replace %root with %call
+    }
+  }
+  pdl.pattern @LowerUnboxCall : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %ptr_type_attr = pdl.attribute = !llvm.ptr
+    %box_type = pdl.type : !llvm.struct<(ptr, i160)>
+    %value = pdl.operand : %box_type
+    %ptr = pdl.operand : %ptr_type
+    %parameterization = pdl.operand : %ptr_type
+    %root = pdl.operation "mini.unbox_call"(%value, %parameterization, %ptr : !pdl.value, !pdl.value, !pdl.value)
+    pdl.rewrite %root {
+      %vptr = pdl.operation "llvm.load"(%parameterization : !pdl.value) -> (%ptr_type : !pdl.type)
+      %vptr_result = pdl.result 0 of %vptr
+      %indices = pdl.attribute = array<i32: 8>
+      %gep = pdl.operation "llvm.getelementptr"(%vptr_result : !pdl.value) {"elem_type" = %ptr_type_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
+      %gep_result = pdl.result 0 of %gep
+      %unbox_fn = pdl.operation "llvm.load"(%gep_result : !pdl.value) -> (%ptr_type : !pdl.type)
+      %unbox_fn_result = pdl.result 0 of %unbox_fn
+      %callee = pdl.attribute = @unbox_wrapper
+      %opsegsize = pdl.attribute = array<i32: 4, 0>
+      %opbundlesize = pdl.attribute = array<i32>
+      %call = pdl.operation "placeholder.call"(%unbox_fn_result, %value, %parameterization, %ptr : !pdl.value, !pdl.value, !pdl.value, !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize}
+      pdl.replace %root with %call
+    }
+  }
   pdl.pattern @LowerTypeAlignment : benefit(1) {
     %typ_attr = pdl.attribute
     %i64_type = pdl.type : i64
@@ -480,6 +567,32 @@ module @patterns {
       pdl.erase %root
     }
   }
+  pdl.pattern @LowerBufferGetParameterized : benefit(2) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %receiver = pdl.operand : %ptr_type
+    %index = pdl.operand : %ptr_type
+    %parameterization = pdl.operand : %ptr_type
+    %elem_type_attr = pdl.attribute
+    %elem_type = pdl.type
+    %i64_type = pdl.type : i64
+    %root = pdl.operation "mini.buffer_get"(%receiver, %index, %parameterization : !pdl.value, !pdl.value, !pdl.value) {"typ" = %elem_type_attr} -> (%elem_type : !pdl.type)
+    pdl.rewrite %root {
+      %size_align_tuple = pdl.type : !llvm.struct<(i64, i64)>
+      %type_size_align = pdl.operation "mini.size"(%parameterization : !pdl.value) -> (%size_align_tuple : !pdl.type)
+      %type_size_align_result = pdl.result 0 of %type_size_align
+      %position = pdl.attribute = array<i64: 0>
+      %type_size = pdl.operation "placeholder.extractvalue"(%type_size_align_result : !pdl.value) {"position" = %position} -> (%i64_type : !pdl.type)
+      %type_size_result = pdl.result 0 of %type_size
+
+      %indexation = pdl.operation "mini.buffer_indexation"(%receiver, %index, %type_size_result : !pdl.value, !pdl.value, !pdl.value) -> (%ptr_type : !pdl.type)
+      %indexation_result = pdl.result 0 of %indexation
+      %box_type = pdl.type : !llvm.struct<(ptr, i160)>
+      %box = pdl.operation "mini.box_call"(%indexation_result, %parameterization : !pdl.value, !pdl.value) -> (%box_type : !pdl.type)
+      %box_result = pdl.result 0 of %box
+      %wrap = pdl.operation "mini.wrap"(%box_result : !pdl.value)
+      pdl.replace %root with %wrap
+    }
+  }
   pdl.pattern @LowerBufferGet : benefit(1) {
     %ptr_type = pdl.type : !llvm.ptr
     %receiver = pdl.operand : %ptr_type
@@ -501,15 +614,39 @@ module @patterns {
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
+  pdl.pattern @LowerBufferSetParameterized : benefit(2) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %receiver = pdl.operand : %ptr_type
+    %value_ptr = pdl.operand : %ptr_type
+    %index = pdl.operand : %ptr_type
+    %parameterization = pdl.operand : %ptr_type
+    %elem_type_attr = pdl.attribute
+    %i64_type = pdl.type : i64
+    %root = pdl.operation "mini.buffer_set"(%receiver, %index, %value_ptr, %parameterization : !pdl.value, !pdl.value, !pdl.value, !pdl.value) {"typ" = %elem_type_attr}
+    pdl.rewrite %root {
+      %size_align_tuple = pdl.type : !llvm.struct<(i64, i64)>
+      %type_size_align = pdl.operation "mini.size"(%parameterization : !pdl.value) -> (%size_align_tuple : !pdl.type)
+      %type_size_align_result = pdl.result 0 of %type_size_align
+      %position = pdl.attribute = array<i64: 0>
+      %type_size = pdl.operation "placeholder.extractvalue"(%type_size_align_result : !pdl.value) {"position" = %position} -> (%i64_type : !pdl.type)
+      %type_size_result = pdl.result 0 of %type_size
+
+      %indexation = pdl.operation "mini.buffer_indexation"(%receiver, %index, %type_size_result : !pdl.value, !pdl.value, !pdl.value) -> (%ptr_type : !pdl.type)
+      %indexation_result = pdl.result 0 of %indexation
+      %box_type = pdl.type : !llvm.struct<(ptr, i160)>
+      %unwrap = pdl.operation "mini.unwrap"(%value_ptr : !pdl.value) -> (%box_type : !pdl.type)
+      %unwrap_result = pdl.result 0 of %unwrap
+      %unbox = pdl.operation "mini.unbox_call"(%unwrap_result, %parameterization, %indexation_result : !pdl.value, !pdl.value, !pdl.value)
+      pdl.replace %root with %unbox
+    }
+  }
   pdl.pattern @LowerBufferSet : benefit(1) {
     %ptr_type = pdl.type : !llvm.ptr
     %receiver = pdl.operand : %ptr_type
     %value_ptr = pdl.operand : %ptr_type
     %index = pdl.operand : %ptr_type
     %elem_type_attr = pdl.attribute
-    %i32_type = pdl.type : i32
     %i64_type = pdl.type : i64
-    %i8_attr = pdl.attribute = i8
     %root = pdl.operation "mini.buffer_set"(%receiver, %index, %value_ptr : !pdl.value, !pdl.value, !pdl.value) {"typ" = %elem_type_attr}
     pdl.rewrite %root {
       %elem_type = pdl.apply_native_rewrite "type_attr_to_type"(%elem_type_attr : !pdl.attribute) : !pdl.type
@@ -545,6 +682,27 @@ module @patterns {
       pdl.replace %root with (%gep1_result : !pdl.value)
     }
   }
+  pdl.pattern @LowerCreateBufferParameterized : benefit(2) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %i64_type = pdl.type : i64
+    %i32_type = pdl.type : i32
+    %size = pdl.operand : %ptr_type
+    %parameterization = pdl.operand : %ptr_type
+    %typ_attr = pdl.attribute
+    %region = pdl.attribute
+    %root = pdl.operation "mini.create_buffer"(%size, %parameterization : !pdl.value, !pdl.value) {"typ" = %typ_attr, "region_id" = %region} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %size_align_tuple = pdl.type : !llvm.struct<(i64, i64)>
+      %type_size_align = pdl.operation "mini.size"(%parameterization : !pdl.value) -> (%size_align_tuple : !pdl.type)
+      %type_size_align_result = pdl.result 0 of %type_size_align
+      %position = pdl.attribute = array<i64: 0>
+      %type_size = pdl.operation "placeholder.extractvalue"(%type_size_align_result : !pdl.value) {"position" = %position} -> (%i64_type : !pdl.type)
+      %type_size_result = pdl.result 0 of %type_size
+
+      %dynamic = pdl.operation "mini.create_buffer_dynamic"(%size, %type_size_result : !pdl.value, !pdl.value) {"region_id" = %region} -> (%ptr_type : !pdl.type)
+      pdl.replace %root with %dynamic
+    }
+  }
   pdl.pattern @LowerCreateBufferStatic : benefit(1) {
     %ptr_type = pdl.type : !llvm.ptr
     %i64_type = pdl.type : i64
@@ -556,18 +714,18 @@ module @patterns {
     pdl.rewrite %root {
       %type_size = pdl.operation "mini.type_size" {"typ" = %typ_attr} -> (%i64_type : !pdl.type)
       %type_size_result = pdl.result 0 of %type_size
-      %dynamic = pdl.operation "mini.create_buffer"(%size, %type_size_result : !pdl.value, !pdl.value) {"region_id" = %region} -> (%ptr_type : !pdl.type)
+      %dynamic = pdl.operation "mini.create_buffer_dynamic"(%size, %type_size_result : !pdl.value, !pdl.value) {"region_id" = %region} -> (%ptr_type : !pdl.type)
       pdl.replace %root with %dynamic
     }
   }
-  pdl.pattern @LowerCreateBufferDynamic : benefit(2) {
+  pdl.pattern @LowerCreateBufferDynamic : benefit(1) {
     %ptr_type = pdl.type : !llvm.ptr
     %i64_type = pdl.type : i64
     %i32_type = pdl.type : i32
     %size = pdl.operand : %ptr_type
     %type_size = pdl.operand : %i64_type
     %region = pdl.attribute
-    %root = pdl.operation "mini.create_buffer"(%size, %type_size : !pdl.value, !pdl.value) {"region_id" = %region} -> (%ptr_type : !pdl.type)
+    %root = pdl.operation "mini.create_buffer_dynamic"(%size, %type_size : !pdl.value, !pdl.value) {"region_id" = %region} -> (%ptr_type : !pdl.type)
     pdl.rewrite %root {
       %load = pdl.operation "llvm.load"(%size : !pdl.value) -> (%i32_type : !pdl.type)
       %load_result = pdl.result 0 of %load
@@ -1009,29 +1167,6 @@ module @patterns {
     %root = pdl.operation "mini.set_offset"(%fat_ptr : !pdl.value) {"to_typ" = %to_typ}
     pdl.rewrite %root {
       pdl.erase %root
-    }
-  }
-  pdl.pattern @FreezeLoads : benefit(1) {
-    %ptr = pdl.operand
-    %return_type = pdl.type
-    %root = pdl.operation "placeholder.load"(%ptr : !pdl.value) -> (%return_type : !pdl.type)
-    pdl.rewrite %root {
-      %load = pdl.operation "llvm.load"(%ptr : !pdl.value) -> (%return_type : !pdl.type)
-      %load_result = pdl.result 0 of %load
-      %freeze = pdl.operation "llvm.freeze"(%load_result : !pdl.value) -> (%return_type : !pdl.type)
-      pdl.replace %root with %freeze
-    }
-  }
-  pdl.pattern @FreezeExtracts : benefit(1) {
-    %operand = pdl.operand
-    %return_type = pdl.type
-    %position = pdl.attribute
-    %root = pdl.operation "placeholder.extractvalue"(%operand : !pdl.value) {"position" = %position} -> (%return_type : !pdl.type)
-    pdl.rewrite %root {
-      %extract = pdl.operation "llvm.extractvalue"(%operand : !pdl.value) {"position" = %position} -> (%return_type : !pdl.type)
-      %extract_result = pdl.result 0 of %extract
-      %freeze = pdl.operation "llvm.freeze"(%extract_result : !pdl.value) -> (%return_type : !pdl.type)
-      pdl.replace %root with %freeze
     }
   }
   pdl.pattern @LowerRefer : benefit (1) {

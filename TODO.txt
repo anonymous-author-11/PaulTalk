@@ -347,10 +347,10 @@ TODO:
 - Generic buffer size and indexing
 	- First just change bufferindexationop to take a dynamic type size [check!]
 	- Change createbuffer to take dynamic size as well [check!]
-	- And createtuple and tupleindexation
-		- Actually a little more complicated
 	- For buffer creation we will need to get type size from ambient parameterizations
 	- Retrieve parameterization and use its size_fn for creation and indexation
+	- Need to modify create, buffer_get, and buffer_set concurrently
+- Generic tuple creation and indexing
 - Add file name to error messages
 - Make intrinsics better
 - Make sure abstract methods don't override concrete methods

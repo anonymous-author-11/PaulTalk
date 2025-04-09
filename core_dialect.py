@@ -504,6 +504,7 @@ class BufferGetOp(IRDLOperation):
     name = "mini.buffer_get"
     receiver: Operand = operand_def()
     index: Operand = operand_def()
+    parameterization: OptOperandDef = opt_operand_def()
     typ: TypeAttribute = attr_def(TypeAttribute)
     result: OpResult = result_def()
 
@@ -513,6 +514,7 @@ class BufferSetOp(IRDLOperation):
     receiver: Operand = operand_def()
     index: Operand = operand_def()
     value: Operand = operand_def()
+    parameterization: OptOperandDef = opt_operand_def()
     typ: TypeAttribute = attr_def(TypeAttribute)
 
 @irdl_op_definition
@@ -616,9 +618,9 @@ class TypeAlignmentOp(IRDLOperation):
 class CreateBufferOp(IRDLOperation):
     name = "mini.create_buffer"
     size: Operand = operand_def()
-    type_size: OptOperandDef = opt_operand_def()
+    parameterization: OptOperandDef = opt_operand_def()
     region_id: StringAttr = attr_def(StringAttr)
-    typ: OptAttributeDef = opt_attr_def(TypeAttribute)
+    typ: Attribute = attr_def(TypeAttribute)
     result: OpResult = result_def()
 
 @irdl_op_definition

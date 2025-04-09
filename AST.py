@@ -952,6 +952,9 @@ class BufferIndexation(Indexation):
     def codegen(self, scope):
         self_typ = self.exprtype(scope)
         operands = [self.receiver.codegen(scope), self.arguments[0].codegen(scope)]
+        if isinstance(self_typ, TypeParameter):
+            parameterization = scope.get_parameterization(self_typ)
+            operands.append(parameterization)
         attr_dict = {"typ":self_typ.base_typ()}
         idx = BufferGetOp.create(operands=operands, result_types=[self_typ], attributes=attr_dict)
         scope.region.last_block.add_op(idx)
@@ -978,6 +981,9 @@ class BufferSetIndex(MethodCall):
         elem_type = scope.simplify(rec_typ.elem_type)
         cast = CastOp.make(self.arguments[1].codegen(scope), self.arguments[1].exprtype(scope), elem_type, type_id)
         operands = [self.receiver.codegen(scope), self.arguments[0].codegen(scope), cast.results[0]]
+        if isinstance(elem_type, TypeParameter):
+            parameterization = scope.get_parameterization(elem_type)
+            operands.append(parameterization)
         attr_dict = {"typ":elem_type.base_typ()}
         idx = BufferSetOp.create(operands=operands, attributes=attr_dict)
         scope.region.last_block.add_ops([cast, idx])
@@ -3005,8 +3011,13 @@ class CreateBuffer(Expression):
     def codegen(self, scope):
         size = self.size.codegen(scope)
         region_id = StringAttr(self.region) if self.region else StringAttr("")
-        attr_dict = {"typ":scope.simplify(self.buf.elem_type).base_typ(), "region_id":region_id}
-        create_buffer = CreateBufferOp.create(operands=[size], attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
+        elem_type = scope.simplify(self.buf.elem_type)
+        attr_dict = {"typ":elem_type.base_typ(), "region_id":region_id}
+        operands = [size]
+        if isinstance(elem_type, TypeParameter):
+            parameterization = scope.get_parameterization(elem_type)
+            operands.append(parameterization)
+        create_buffer = CreateBufferOp.create(operands=operands, attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
         scope.region.last_block.add_op(create_buffer)
         return create_buffer.results[0]
 
