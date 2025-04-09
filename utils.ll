@@ -90,7 +90,7 @@ define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) noinl
   ret ptr %current 
 }
 
-define { i64, i64 } @_size_tuple_typ(ptr %0) {
+define { i64, i64 } @_data_size_tuple_typ(ptr %0) {
   %2 = getelementptr i8, ptr %0, i64 8
   %3 = load i64, ptr %2, align 4
   %4 = icmp eq i64 %3, 0
@@ -103,7 +103,7 @@ define { i64, i64 } @_size_tuple_typ(ptr %0) {
   %.reg2mem20.010 = phi i64 [ %13, %.lr.ph ], [ 1, %1 ]
   %6 = inttoptr i64 %.in to ptr
   %7 = load ptr, ptr %6, align 8
-  %8 = getelementptr i8, ptr %7, i64 48
+  %8 = getelementptr i8, ptr %7, i64 72
   %9 = load ptr, ptr %8, align 8
   %10 = tail call { i64, i64 } %9(ptr nonnull %6)
   %11 = extractvalue { i64, i64 } %10, 0
@@ -134,7 +134,7 @@ define { i64, i64 } @_size_tuple_typ(ptr %0) {
   ret { i64, i64 } %30
 }
 
-define { i64, i64 } @_size_union_typ(ptr %0) {
+define { i64, i64 } @_data_size_union_typ(ptr %0) {
   %2 = getelementptr i8, ptr %0, i64 8
   %3 = load i64, ptr %2, align 4
   %4 = icmp eq i64 %3, 0
@@ -147,7 +147,7 @@ define { i64, i64 } @_size_union_typ(ptr %0) {
   %.reg2mem20.010 = phi i64 [ %13, %.lr.ph ], [ 1, %1 ]
   %6 = inttoptr i64 %.in to ptr
   %7 = load ptr, ptr %6, align 8
-  %8 = getelementptr i8, ptr %7, i64 48
+  %8 = getelementptr i8, ptr %7, i64 72
   %9 = load ptr, ptr %8, align 8
   %10 = tail call { i64, i64 } %9(ptr nonnull %6)
   %11 = extractvalue { i64, i64 } %10, 0
@@ -184,7 +184,7 @@ define void @_unbox_union_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
   store { ptr, i160 } %0, ptr %4, align 8
   %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
   %6 = load ptr, ptr %5, align 8
-  %7 = call { i64, i64 } @_size_union_typ(ptr %1)
+  %7 = call { i64, i64 } @_data_size_union_typ(ptr %1)
   %8 = extractvalue { i64, i64 } %7, 0
   %9 = icmp sle i64 %8, 16
   %10 = icmp eq i64 %8, 32
@@ -192,6 +192,10 @@ define void @_unbox_union_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
   %12 = select i1 %10, ptr %4, ptr %11
   call void @llvm.memcpy.inline.p0.p0.i64(ptr %2, ptr %12, i64 %8, i1 false)
   ret void
+}
+
+define { i64, i64 } @_size_Default(ptr %parameterization) {
+  ret {i64, i64} { i64 32, i64 8 }
 }
 
 define { ptr, i160 } @_box_Default(ptr %fat_ptr, ptr %parameterization) {

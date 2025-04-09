@@ -49,13 +49,13 @@ class AST:
                 typ_ops.append(ExternalTypeDefOp.create(attributes=attr_dict))
                 continue
 
-            size_fn_name = StringAttr("_size_" + typ_name)
+            data_size_fn_name = StringAttr("_data_size_" + typ_name)
             if typ_name not in ["tuple_typ", "union_typ"]:
-                size_fn = SizeInBytesDefOp.create(attributes={
-                    "meth_name":size_fn_name,
+                data_size_fn = DataSizeDefOp.create(attributes={
+                    "meth_name":data_size_fn_name,
                     "types":ArrayAttr([typ.base_typ()])
                 })
-                func_ops.append(size_fn)
+                func_ops.append(data_size_fn)
 
             box_fn_name = StringAttr("_box_" + typ_name)
             unbox_fn_name = StringAttr("_unbox_" + typ_name)
@@ -81,9 +81,10 @@ class AST:
                 "prime":prime,
                 "hash_id":hashid,
                 "base_typ":typ.base_typ(),
-                "size_fn":size_fn_name,
+                "data_size_fn":data_size_fn_name,
                 "box_fn":box_fn_name,
-                "unbox_fn":unbox_fn_name
+                "unbox_fn":unbox_fn_name,
+                "size_fn":data_size_fn_name
             }
             typ_ops.append(TypeDefOp.create(attributes=attr_dict))
         main = MainOp.create(regions=[global_scope.region])
@@ -2127,9 +2128,10 @@ class ClassDef(Statement):
         if self.name in codegenned: return
 
         fields_types = ArrayAttr([t.base_typ() if not isinstance(t, TypeParameter) else IntegerAttr.from_int_and_width(self.type_parameters.index(t), 64) for t in self.fields_types()])
-        size_fn = SizeInBytesDefOp.create(attributes={"meth_name":StringAttr("_size_" + self.name),"types":fields_types})
-        scope.region.last_block.add_op(size_fn)
-        toplevel_ops.append(size_fn)
+        data_size_fn_name = StringAttr("_data_size_" + self.name)
+        data_size_fn = DataSizeDefOp.create(attributes={"meth_name":data_size_fn_name,"types":fields_types})
+        scope.region.last_block.add_op(data_size_fn)
+        toplevel_ops.append(data_size_fn)
 
         not_instantiable = any(isinstance(elem.definition, AbstractMethodDef) for elem in self.vtable() if isinstance(elem, Method))
         combined = ArrayAttr([]) if not_instantiable else ArrayAttr([thing.symbol() for thing in self.vtable()])
@@ -2140,7 +2142,8 @@ class ClassDef(Statement):
         attr_dict = {
             "class_name":class_name, "methods":combined, "hash_tbl":hash_tbl,"offset_tbl":offset_tbl,
             "prime":prime, "hash_id":hashid, "base_typ":self.base_typ(),
-            "size_fn":StringAttr("_size_" + self.name), "box_fn":StringAttr("_box_Default"), "unbox_fn":StringAttr("_unbox_Default")
+            "data_size_fn":data_size_fn_name, "box_fn":StringAttr("_box_Default"),
+            "unbox_fn":StringAttr("_unbox_Default"), "size_fn":StringAttr("_size_Default")
         }
         class_def = TypeDefOp.create(attributes=attr_dict)
         scope.region.last_block.add_op(class_def)

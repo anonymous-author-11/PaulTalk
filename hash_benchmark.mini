@@ -1,4 +1,4 @@
-import cuckoo;
+import quadratic_probe;
 
 // --- Additions for Benchmarking (Unchanged) ---
 extern def clock() -> i64

@@ -367,8 +367,8 @@ class IdentifierOp(IRDLOperation):
     result: OpResult = result_def(Ptr([IntegerType(32)]))
 
 @irdl_op_definition
-class SizeInBytesDefOp(IRDLOperation):
-    name = "mini.size_in_bytes_def"
+class DataSizeDefOp(IRDLOperation):
+    name = "mini.data_size_def"
     meth_name: StringAttr = attr_def(StringAttr)
     types: ArrayAttr = attr_def(ArrayAttr)
 
@@ -382,6 +382,7 @@ class TypeDefOp(IRDLOperation):
     prime: IntegerAttr = attr_def(IntegerAttr)
     hash_id: IntegerAttr = attr_def(IntegerAttr)
     base_typ: TypeAttribute = attr_def(TypeAttribute)
+    data_size_fn: StringAttr = attr_def(StringAttr)
     size_fn: StringAttr = attr_def(StringAttr)
     box_fn: StringAttr = attr_def(StringAttr)
     unbox_fn: StringAttr = attr_def(StringAttr)
@@ -421,6 +422,7 @@ class TypePtrsTableOp(IRDLOperation):
     hash_tbl: StringAttr = attr_def(StringAttr)
     offset_tbl: StringAttr = attr_def(StringAttr)
     base_typ: TypeAttribute = attr_def(TypeAttribute)
+    data_size_fn: StringAttr = attr_def(StringAttr)
     size_fn: StringAttr = attr_def(StringAttr)
     box_fn: StringAttr = attr_def(StringAttr)
     unbox_fn: StringAttr = attr_def(StringAttr)
@@ -821,14 +823,24 @@ class BufferFillerOp(IRDLOperation):
     yield_type: TypeAttribute = attr_def(TypeAttribute)
 
 @irdl_op_definition
-class SizeAlignmentOp(IRDLOperation):
-    name = "mini.size_alignment"
+class DataSizeOp(IRDLOperation):
+    name = "mini.data_size"
     parameterization: Operand = operand_def()
     result: OpResult = result_def()
 
     @classmethod
     def make(cls, parameterization):
-        return SizeAlignmentOp.create(operands=[parameterization], result_types=[llvm.LLVMStructType.from_type_list([IntegerType(64), IntegerType(64)])])
+        return DataSizeOp.create(operands=[parameterization], result_types=[llvm.LLVMStructType.from_type_list([IntegerType(64), IntegerType(64)])])
+
+@irdl_op_definition
+class SizeOp(IRDLOperation):
+    name = "mini.size"
+    parameterization: Operand = operand_def()
+    result: OpResult = result_def()
+
+    @classmethod
+    def make(cls, parameterization):
+        return SizeOp.create(operands=[parameterization], result_types=[llvm.LLVMStructType.from_type_list([IntegerType(64), IntegerType(64)])])
 
 @irdl_op_definition
 class ParameterizationOp(IRDLOperation):

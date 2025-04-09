@@ -111,7 +111,7 @@ build mlir-doc: phony include/Standalone/StandaloneDialectDocGen include/Standal
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && "C:\Program Files\CMake\bin\cmake-gui.exe" -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && "C:\Program Files\CMake\bin\cmake-gui.exe" -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
@@ -123,7 +123,7 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && "C:\Program Files\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && "C:\Program Files\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -141,7 +141,7 @@ build list_install_components: phony
 # Utility command for install
 
 build CMakeFiles/install.util: CUSTOM_COMMAND all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && "C:\Program Files\CMake\bin\cmake.exe" -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && "C:\Program Files\CMake\bin\cmake.exe" -P cmake_install.cmake"
   DESC = Install the project...
   pool = console
   restat = 1
@@ -153,7 +153,7 @@ build install: phony CMakeFiles/install.util
 # Utility command for install/local
 
 build CMakeFiles/install/local.util: CUSTOM_COMMAND all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
   DESC = Installing only the local directory...
   pool = console
   restat = 1
@@ -165,7 +165,7 @@ build install/local: phony CMakeFiles/install/local.util
 # Utility command for install/strip
 
 build CMakeFiles/install/strip.util: CUSTOM_COMMAND all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake"
   DESC = Installing the project stripped...
   pool = console
   restat = 1
@@ -182,7 +182,7 @@ build install/strip: phony CMakeFiles/install/strip.util
 # Utility command for edit_cache
 
 build include/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include && "C:\Program Files\CMake\bin\cmake-gui.exe" -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include && "C:\Program Files\CMake\bin\cmake-gui.exe" -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
@@ -194,7 +194,7 @@ build include/edit_cache: phony include/CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build include/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include && "C:\Program Files\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include && "C:\Program Files\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -212,7 +212,7 @@ build include/list_install_components: phony
 # Utility command for install
 
 build include/CMakeFiles/install.util: CUSTOM_COMMAND include/all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include && "C:\Program Files\CMake\bin\cmake.exe" -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include && "C:\Program Files\CMake\bin\cmake.exe" -P cmake_install.cmake"
   DESC = Install the project...
   pool = console
   restat = 1
@@ -224,7 +224,7 @@ build include/install: phony include/CMakeFiles/install.util
 # Utility command for install/local
 
 build include/CMakeFiles/install/local.util: CUSTOM_COMMAND include/all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
   DESC = Installing only the local directory...
   pool = console
   restat = 1
@@ -236,7 +236,7 @@ build include/install/local: phony include/CMakeFiles/install/local.util
 # Utility command for install/strip
 
 build include/CMakeFiles/install/strip.util: CUSTOM_COMMAND include/all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake"
   DESC = Installing the project stripped...
   pool = console
   restat = 1
@@ -271,7 +271,7 @@ build include/Standalone/StandaloneOpsDocGen: phony include/Standalone/CMakeFile
 # Utility command for edit_cache
 
 build include/Standalone/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include\Standalone && "C:\Program Files\CMake\bin\cmake-gui.exe" -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include\Standalone && "C:\Program Files\CMake\bin\cmake-gui.exe" -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
@@ -283,7 +283,7 @@ build include/Standalone/edit_cache: phony include/Standalone/CMakeFiles/edit_ca
 # Utility command for rebuild_cache
 
 build include/Standalone/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include\Standalone && "C:\Program Files\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include\Standalone && "C:\Program Files\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -301,7 +301,7 @@ build include/Standalone/list_install_components: phony
 # Utility command for install
 
 build include/Standalone/CMakeFiles/install.util: CUSTOM_COMMAND include/Standalone/all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include\Standalone && "C:\Program Files\CMake\bin\cmake.exe" -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include\Standalone && "C:\Program Files\CMake\bin\cmake.exe" -P cmake_install.cmake"
   DESC = Install the project...
   pool = console
   restat = 1
@@ -313,7 +313,7 @@ build include/Standalone/install: phony include/Standalone/CMakeFiles/install.ut
 # Utility command for install/local
 
 build include/Standalone/CMakeFiles/install/local.util: CUSTOM_COMMAND include/Standalone/all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include\Standalone && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include\Standalone && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
   DESC = Installing only the local directory...
   pool = console
   restat = 1
@@ -325,7 +325,7 @@ build include/Standalone/install/local: phony include/Standalone/CMakeFiles/inst
 # Utility command for install/strip
 
 build include/Standalone/CMakeFiles/install/strip.util: CUSTOM_COMMAND include/Standalone/all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include\Standalone && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include\Standalone && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake"
   DESC = Installing the project stripped...
   pool = console
   restat = 1
@@ -343,7 +343,7 @@ build include/Standalone/CMakeFiles/MLIRStandaloneOpsIncGen | ${cmake_ninja_work
 # Custom command for include\Standalone\StandaloneOps.cpp.inc
 
 build include/Standalone/StandaloneOps.cpp.inc | ${cmake_ninja_workdir}include/Standalone/StandaloneOps.cpp.inc: CUSTOM_COMMAND C$:/llvm-project/build/bin/mlir-tblgen.exe C$:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && C:\llvm-project\build\bin\mlir-tblgen.exe -gen-op-defs -I C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone -IC:/llvm-project/llvm/include -IC:/llvm-project/build/include -IC:/llvm-project/mlir/include -IC:/llvm-project/build/tools/mlir/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/include C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td --write-if-changed -o include/Standalone/StandaloneOps.cpp.inc -d include/Standalone/StandaloneOps.cpp.inc.d"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && C:\llvm-project\build\bin\mlir-tblgen.exe -gen-op-defs -I C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone -IC:/llvm-project/llvm/include -IC:/llvm-project/build/include -IC:/llvm-project/mlir/include -IC:/llvm-project/build/tools/mlir/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/include C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td --write-if-changed -o include/Standalone/StandaloneOps.cpp.inc -d include/Standalone/StandaloneOps.cpp.inc.d"
   DESC = Building StandaloneOps.cpp.inc...
   depfile = include\Standalone\StandaloneOps.cpp.inc.d
   deps = gcc
@@ -354,7 +354,7 @@ build include/Standalone/StandaloneOps.cpp.inc | ${cmake_ninja_workdir}include/S
 # Custom command for include\Standalone\StandaloneOps.h.inc
 
 build include/Standalone/StandaloneOps.h.inc | ${cmake_ninja_workdir}include/Standalone/StandaloneOps.h.inc: CUSTOM_COMMAND C$:/llvm-project/build/bin/mlir-tblgen.exe C$:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && C:\llvm-project\build\bin\mlir-tblgen.exe -gen-op-decls -I C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone -IC:/llvm-project/llvm/include -IC:/llvm-project/build/include -IC:/llvm-project/mlir/include -IC:/llvm-project/build/tools/mlir/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/include C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td --write-if-changed -o include/Standalone/StandaloneOps.h.inc -d include/Standalone/StandaloneOps.h.inc.d"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && C:\llvm-project\build\bin\mlir-tblgen.exe -gen-op-decls -I C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone -IC:/llvm-project/llvm/include -IC:/llvm-project/build/include -IC:/llvm-project/mlir/include -IC:/llvm-project/build/tools/mlir/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/include C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td --write-if-changed -o include/Standalone/StandaloneOps.h.inc -d include/Standalone/StandaloneOps.h.inc.d"
   DESC = Building StandaloneOps.h.inc...
   depfile = include\Standalone\StandaloneOps.h.inc.d
   deps = gcc
@@ -365,7 +365,7 @@ build include/Standalone/StandaloneOps.h.inc | ${cmake_ninja_workdir}include/Sta
 # Custom command for include\Standalone\StandaloneOpsDialect.cpp.inc
 
 build include/Standalone/StandaloneOpsDialect.cpp.inc | ${cmake_ninja_workdir}include/Standalone/StandaloneOpsDialect.cpp.inc: CUSTOM_COMMAND C$:/llvm-project/build/bin/mlir-tblgen.exe C$:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && C:\llvm-project\build\bin\mlir-tblgen.exe -gen-dialect-defs -dialect=standalone -I C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone -IC:/llvm-project/llvm/include -IC:/llvm-project/build/include -IC:/llvm-project/mlir/include -IC:/llvm-project/build/tools/mlir/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/include C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td --write-if-changed -o include/Standalone/StandaloneOpsDialect.cpp.inc -d include/Standalone/StandaloneOpsDialect.cpp.inc.d"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && C:\llvm-project\build\bin\mlir-tblgen.exe -gen-dialect-defs -dialect=standalone -I C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone -IC:/llvm-project/llvm/include -IC:/llvm-project/build/include -IC:/llvm-project/mlir/include -IC:/llvm-project/build/tools/mlir/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/include C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td --write-if-changed -o include/Standalone/StandaloneOpsDialect.cpp.inc -d include/Standalone/StandaloneOpsDialect.cpp.inc.d"
   DESC = Building StandaloneOpsDialect.cpp.inc...
   depfile = include\Standalone\StandaloneOpsDialect.cpp.inc.d
   deps = gcc
@@ -376,7 +376,7 @@ build include/Standalone/StandaloneOpsDialect.cpp.inc | ${cmake_ninja_workdir}in
 # Custom command for include\Standalone\StandaloneOpsDialect.h.inc
 
 build include/Standalone/StandaloneOpsDialect.h.inc | ${cmake_ninja_workdir}include/Standalone/StandaloneOpsDialect.h.inc: CUSTOM_COMMAND C$:/llvm-project/build/bin/mlir-tblgen.exe C$:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && C:\llvm-project\build\bin\mlir-tblgen.exe -gen-dialect-decls -dialect=standalone -I C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone -IC:/llvm-project/llvm/include -IC:/llvm-project/build/include -IC:/llvm-project/mlir/include -IC:/llvm-project/build/tools/mlir/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/include C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td --write-if-changed -o include/Standalone/StandaloneOpsDialect.h.inc -d include/Standalone/StandaloneOpsDialect.h.inc.d"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && C:\llvm-project\build\bin\mlir-tblgen.exe -gen-dialect-decls -dialect=standalone -I C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone -IC:/llvm-project/llvm/include -IC:/llvm-project/build/include -IC:/llvm-project/mlir/include -IC:/llvm-project/build/tools/mlir/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/include C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td --write-if-changed -o include/Standalone/StandaloneOpsDialect.h.inc -d include/Standalone/StandaloneOpsDialect.h.inc.d"
   DESC = Building StandaloneOpsDialect.h.inc...
   depfile = include\Standalone\StandaloneOpsDialect.h.inc.d
   deps = gcc
@@ -387,7 +387,7 @@ build include/Standalone/StandaloneOpsDialect.h.inc | ${cmake_ninja_workdir}incl
 # Custom command for include\Standalone\StandaloneOpsTypes.cpp.inc
 
 build include/Standalone/StandaloneOpsTypes.cpp.inc | ${cmake_ninja_workdir}include/Standalone/StandaloneOpsTypes.cpp.inc: CUSTOM_COMMAND C$:/llvm-project/build/bin/mlir-tblgen.exe C$:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && C:\llvm-project\build\bin\mlir-tblgen.exe -gen-typedef-defs -typedefs-dialect=standalone -I C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone -IC:/llvm-project/llvm/include -IC:/llvm-project/build/include -IC:/llvm-project/mlir/include -IC:/llvm-project/build/tools/mlir/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/include C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td --write-if-changed -o include/Standalone/StandaloneOpsTypes.cpp.inc -d include/Standalone/StandaloneOpsTypes.cpp.inc.d"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && C:\llvm-project\build\bin\mlir-tblgen.exe -gen-typedef-defs -typedefs-dialect=standalone -I C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone -IC:/llvm-project/llvm/include -IC:/llvm-project/build/include -IC:/llvm-project/mlir/include -IC:/llvm-project/build/tools/mlir/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/include C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td --write-if-changed -o include/Standalone/StandaloneOpsTypes.cpp.inc -d include/Standalone/StandaloneOpsTypes.cpp.inc.d"
   DESC = Building StandaloneOpsTypes.cpp.inc...
   depfile = include\Standalone\StandaloneOpsTypes.cpp.inc.d
   deps = gcc
@@ -398,7 +398,7 @@ build include/Standalone/StandaloneOpsTypes.cpp.inc | ${cmake_ninja_workdir}incl
 # Custom command for include\Standalone\StandaloneOpsTypes.h.inc
 
 build include/Standalone/StandaloneOpsTypes.h.inc | ${cmake_ninja_workdir}include/Standalone/StandaloneOpsTypes.h.inc: CUSTOM_COMMAND C$:/llvm-project/build/bin/mlir-tblgen.exe C$:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && C:\llvm-project\build\bin\mlir-tblgen.exe -gen-typedef-decls -typedefs-dialect=standalone -I C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone -IC:/llvm-project/llvm/include -IC:/llvm-project/build/include -IC:/llvm-project/mlir/include -IC:/llvm-project/build/tools/mlir/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/include C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td --write-if-changed -o include/Standalone/StandaloneOpsTypes.h.inc -d include/Standalone/StandaloneOpsTypes.h.inc.d"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && C:\llvm-project\build\bin\mlir-tblgen.exe -gen-typedef-decls -typedefs-dialect=standalone -I C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone -IC:/llvm-project/llvm/include -IC:/llvm-project/build/include -IC:/llvm-project/mlir/include -IC:/llvm-project/build/tools/mlir/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/include C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td --write-if-changed -o include/Standalone/StandaloneOpsTypes.h.inc -d include/Standalone/StandaloneOpsTypes.h.inc.d"
   DESC = Building StandaloneOpsTypes.h.inc...
   depfile = include\Standalone\StandaloneOpsTypes.h.inc.d
   deps = gcc
@@ -415,7 +415,7 @@ build include/Standalone/CMakeFiles/StandaloneDialectDocGen | ${cmake_ninja_work
 # Custom command for docs\Standalone\StandaloneDialect.md
 
 build docs/Standalone/StandaloneDialect.md | ${cmake_ninja_workdir}docs/Standalone/StandaloneDialect.md: CUSTOM_COMMAND include/Standalone/StandaloneDialect.md
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include\Standalone && "C:\Program Files\CMake\bin\cmake.exe" -E copy C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/include/Standalone/StandaloneDialect.md C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/docs/Standalone/StandaloneDialect.md"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include\Standalone && "C:\Program Files\CMake\bin\cmake.exe" -E copy C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/include/Standalone/StandaloneDialect.md C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/docs/Standalone/StandaloneDialect.md"
   DESC = Generating ../../docs/Standalone/StandaloneDialect.md
   restat = 1
 
@@ -424,7 +424,7 @@ build docs/Standalone/StandaloneDialect.md | ${cmake_ninja_workdir}docs/Standalo
 # Custom command for include\Standalone\StandaloneDialect.md
 
 build include/Standalone/StandaloneDialect.md | ${cmake_ninja_workdir}include/Standalone/StandaloneDialect.md: CUSTOM_COMMAND C$:/llvm-project/build/bin/mlir-tblgen.exe C$:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneDialect.td
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && C:\llvm-project\build\bin\mlir-tblgen.exe -gen-dialect-doc -allow-hugo-specific-features -I C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone -IC:/llvm-project/llvm/include -IC:/llvm-project/build/include -IC:/llvm-project/mlir/include -IC:/llvm-project/build/tools/mlir/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/include C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneDialect.td --write-if-changed -o include/Standalone/StandaloneDialect.md -d include/Standalone/StandaloneDialect.md.d"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && C:\llvm-project\build\bin\mlir-tblgen.exe -gen-dialect-doc -allow-hugo-specific-features -I C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone -IC:/llvm-project/llvm/include -IC:/llvm-project/build/include -IC:/llvm-project/mlir/include -IC:/llvm-project/build/tools/mlir/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/include C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneDialect.td --write-if-changed -o include/Standalone/StandaloneDialect.md -d include/Standalone/StandaloneDialect.md.d"
   DESC = Building StandaloneDialect.md...
   depfile = include\Standalone\StandaloneDialect.md.d
   deps = gcc
@@ -441,7 +441,7 @@ build include/Standalone/CMakeFiles/StandaloneOpsDocGen | ${cmake_ninja_workdir}
 # Custom command for docs\Standalone\StandaloneOps.md
 
 build docs/Standalone/StandaloneOps.md | ${cmake_ninja_workdir}docs/Standalone/StandaloneOps.md: CUSTOM_COMMAND include/Standalone/StandaloneOps.md
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include\Standalone && "C:\Program Files\CMake\bin\cmake.exe" -E copy C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/include/Standalone/StandaloneOps.md C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/docs/Standalone/StandaloneOps.md"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\include\Standalone && "C:\Program Files\CMake\bin\cmake.exe" -E copy C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/include/Standalone/StandaloneOps.md C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/docs/Standalone/StandaloneOps.md"
   DESC = Generating ../../docs/Standalone/StandaloneOps.md
   restat = 1
 
@@ -450,7 +450,7 @@ build docs/Standalone/StandaloneOps.md | ${cmake_ninja_workdir}docs/Standalone/S
 # Custom command for include\Standalone\StandaloneOps.md
 
 build include/Standalone/StandaloneOps.md | ${cmake_ninja_workdir}include/Standalone/StandaloneOps.md: CUSTOM_COMMAND C$:/llvm-project/build/bin/mlir-tblgen.exe C$:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && C:\llvm-project\build\bin\mlir-tblgen.exe -gen-op-doc -allow-hugo-specific-features -I C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone -IC:/llvm-project/llvm/include -IC:/llvm-project/build/include -IC:/llvm-project/mlir/include -IC:/llvm-project/build/tools/mlir/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/include C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td --write-if-changed -o include/Standalone/StandaloneOps.md -d include/Standalone/StandaloneOps.md.d"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build && C:\llvm-project\build\bin\mlir-tblgen.exe -gen-op-doc -allow-hugo-specific-features -I C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone -IC:/llvm-project/llvm/include -IC:/llvm-project/build/include -IC:/llvm-project/mlir/include -IC:/llvm-project/build/tools/mlir/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include -IC:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/include C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/include/Standalone/StandaloneOps.td --write-if-changed -o include/Standalone/StandaloneOps.md -d include/Standalone/StandaloneOps.md.d"
   DESC = Building StandaloneOps.md...
   depfile = include\Standalone\StandaloneOps.md.d
   deps = gcc
@@ -466,7 +466,7 @@ build include/Standalone/StandaloneOps.md | ${cmake_ninja_workdir}include/Standa
 # Utility command for edit_cache
 
 build lib/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib && "C:\Program Files\CMake\bin\cmake-gui.exe" -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib && "C:\Program Files\CMake\bin\cmake-gui.exe" -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
@@ -478,7 +478,7 @@ build lib/edit_cache: phony lib/CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build lib/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib && "C:\Program Files\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib && "C:\Program Files\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -496,7 +496,7 @@ build lib/list_install_components: phony
 # Utility command for install
 
 build lib/CMakeFiles/install.util: CUSTOM_COMMAND lib/all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib && "C:\Program Files\CMake\bin\cmake.exe" -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib && "C:\Program Files\CMake\bin\cmake.exe" -P cmake_install.cmake"
   DESC = Install the project...
   pool = console
   restat = 1
@@ -508,7 +508,7 @@ build lib/install: phony lib/CMakeFiles/install.util
 # Utility command for install/local
 
 build lib/CMakeFiles/install/local.util: CUSTOM_COMMAND lib/all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
   DESC = Installing only the local directory...
   pool = console
   restat = 1
@@ -520,7 +520,7 @@ build lib/install/local: phony lib/CMakeFiles/install/local.util
 # Utility command for install/strip
 
 build lib/CMakeFiles/install/strip.util: CUSTOM_COMMAND lib/all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake"
   DESC = Installing the project stripped...
   pool = console
   restat = 1
@@ -631,7 +631,7 @@ build lib/Standalone/install-MLIRStandalone-stripped: phony lib/Standalone/CMake
 # Utility command for edit_cache
 
 build lib/Standalone/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib\Standalone && "C:\Program Files\CMake\bin\cmake-gui.exe" -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib\Standalone && "C:\Program Files\CMake\bin\cmake-gui.exe" -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
@@ -643,7 +643,7 @@ build lib/Standalone/edit_cache: phony lib/Standalone/CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build lib/Standalone/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib\Standalone && "C:\Program Files\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib\Standalone && "C:\Program Files\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -661,7 +661,7 @@ build lib/Standalone/list_install_components: phony
 # Utility command for install
 
 build lib/Standalone/CMakeFiles/install.util: CUSTOM_COMMAND lib/Standalone/all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib\Standalone && "C:\Program Files\CMake\bin\cmake.exe" -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib\Standalone && "C:\Program Files\CMake\bin\cmake.exe" -P cmake_install.cmake"
   DESC = Install the project...
   pool = console
   restat = 1
@@ -673,7 +673,7 @@ build lib/Standalone/install: phony lib/Standalone/CMakeFiles/install.util
 # Utility command for install/local
 
 build lib/Standalone/CMakeFiles/install/local.util: CUSTOM_COMMAND lib/Standalone/all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib\Standalone && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib\Standalone && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
   DESC = Installing only the local directory...
   pool = console
   restat = 1
@@ -685,7 +685,7 @@ build lib/Standalone/install/local: phony lib/Standalone/CMakeFiles/install/loca
 # Utility command for install/strip
 
 build lib/Standalone/CMakeFiles/install/strip.util: CUSTOM_COMMAND lib/Standalone/all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib\Standalone && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib\Standalone && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake"
   DESC = Installing the project stripped...
   pool = console
   restat = 1
@@ -697,7 +697,7 @@ build lib/Standalone/install/strip: phony lib/Standalone/CMakeFiles/install/stri
 # Custom command for lib\Standalone\CMakeFiles\install-MLIRStandalone
 
 build lib/Standalone/CMakeFiles/install-MLIRStandalone | ${cmake_ninja_workdir}lib/Standalone/CMakeFiles/install-MLIRStandalone: CUSTOM_COMMAND || include/Standalone/MLIRStandaloneOpsIncGen lib/MLIRStandalone.lib lib/Standalone/obj.MLIRStandalone mlir-generic-headers mlir-headers
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib\Standalone && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_COMPONENT="MLIRStandalone" -P C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib\Standalone && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_COMPONENT="MLIRStandalone" -P C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/cmake_install.cmake"
   pool = console
 
 
@@ -705,7 +705,7 @@ build lib/Standalone/CMakeFiles/install-MLIRStandalone | ${cmake_ninja_workdir}l
 # Custom command for lib\Standalone\CMakeFiles\install-MLIRStandalone-stripped
 
 build lib/Standalone/CMakeFiles/install-MLIRStandalone-stripped | ${cmake_ninja_workdir}lib/Standalone/CMakeFiles/install-MLIRStandalone-stripped: CUSTOM_COMMAND || include/Standalone/MLIRStandaloneOpsIncGen lib/MLIRStandalone.lib lib/Standalone/obj.MLIRStandalone mlir-generic-headers mlir-headers
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib\Standalone && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_COMPONENT="MLIRStandalone" -DCMAKE_INSTALL_DO_STRIP=1 -P C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\lib\Standalone && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_COMPONENT="MLIRStandalone" -DCMAKE_INSTALL_DO_STRIP=1 -P C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/cmake_install.cmake"
   pool = console
 
 # =============================================================================
@@ -730,7 +730,7 @@ build test/check-standalone_opt-standalone: phony test/CMakeFiles/check-standalo
 # Utility command for edit_cache
 
 build test/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\test && "C:\Program Files\CMake\bin\cmake-gui.exe" -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\test && "C:\Program Files\CMake\bin\cmake-gui.exe" -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
@@ -742,7 +742,7 @@ build test/edit_cache: phony test/CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build test/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\test && "C:\Program Files\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\test && "C:\Program Files\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -760,7 +760,7 @@ build test/list_install_components: phony
 # Utility command for install
 
 build test/CMakeFiles/install.util: CUSTOM_COMMAND test/all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\test && "C:\Program Files\CMake\bin\cmake.exe" -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\test && "C:\Program Files\CMake\bin\cmake.exe" -P cmake_install.cmake"
   DESC = Install the project...
   pool = console
   restat = 1
@@ -772,7 +772,7 @@ build test/install: phony test/CMakeFiles/install.util
 # Utility command for install/local
 
 build test/CMakeFiles/install/local.util: CUSTOM_COMMAND test/all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\test && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\test && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
   DESC = Installing only the local directory...
   pool = console
   restat = 1
@@ -784,7 +784,7 @@ build test/install/local: phony test/CMakeFiles/install/local.util
 # Utility command for install/strip
 
 build test/CMakeFiles/install/strip.util: CUSTOM_COMMAND test/all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\test && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\test && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake"
   DESC = Installing the project stripped...
   pool = console
   restat = 1
@@ -796,7 +796,7 @@ build test/install/strip: phony test/CMakeFiles/install/strip.util
 # Custom command for test\CMakeFiles\check-standalone-opt
 
 build test/CMakeFiles/check-standalone-opt | ${cmake_ninja_workdir}test/CMakeFiles/check-standalone-opt: CUSTOM_COMMAND || bin/standalone-opt.exe include/Standalone/MLIRStandaloneOpsIncGen lib/MLIRStandalone.lib lib/Standalone/obj.MLIRStandalone mlir-generic-headers mlir-headers
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\test && C:\llvm-project\build\bin\llvm-lit.py -sv C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/test"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\test && C:\llvm-project\build\bin\llvm-lit.py -sv C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/build/test"
   DESC = Running the standalone-opt regression tests
   pool = console
 
@@ -805,7 +805,7 @@ build test/CMakeFiles/check-standalone-opt | ${cmake_ninja_workdir}test/CMakeFil
 # Custom command for test\CMakeFiles\check-standalone_opt-standalone
 
 build test/CMakeFiles/check-standalone_opt-standalone | ${cmake_ninja_workdir}test/CMakeFiles/check-standalone_opt-standalone: CUSTOM_COMMAND || bin/standalone-opt.exe include/Standalone/MLIRStandaloneOpsIncGen lib/MLIRStandalone.lib lib/Standalone/obj.MLIRStandalone mlir-generic-headers mlir-headers
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\test && C:\llvm-project\build\bin\llvm-lit.py -sv C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/test/Standalone"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\test && C:\llvm-project\build\bin\llvm-lit.py -sv C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/test/Standalone"
   DESC = Running lit suite C:/Users/PaulK/OneDrive/Documents/PL/PyPL/standalone/test/Standalone
   pool = console
 
@@ -860,7 +860,7 @@ build bin/standalone-opt.exe: CXX_EXECUTABLE_LINKER__standalone-opt_Release stan
 # Utility command for edit_cache
 
 build standalone-opt/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\standalone-opt && "C:\Program Files\CMake\bin\cmake-gui.exe" -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\standalone-opt && "C:\Program Files\CMake\bin\cmake-gui.exe" -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
@@ -872,7 +872,7 @@ build standalone-opt/edit_cache: phony standalone-opt/CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build standalone-opt/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\standalone-opt && "C:\Program Files\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\standalone-opt && "C:\Program Files\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone -BC:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build"
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -890,7 +890,7 @@ build standalone-opt/list_install_components: phony
 # Utility command for install
 
 build standalone-opt/CMakeFiles/install.util: CUSTOM_COMMAND standalone-opt/all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\standalone-opt && "C:\Program Files\CMake\bin\cmake.exe" -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\standalone-opt && "C:\Program Files\CMake\bin\cmake.exe" -P cmake_install.cmake"
   DESC = Install the project...
   pool = console
   restat = 1
@@ -902,7 +902,7 @@ build standalone-opt/install: phony standalone-opt/CMakeFiles/install.util
 # Utility command for install/local
 
 build standalone-opt/CMakeFiles/install/local.util: CUSTOM_COMMAND standalone-opt/all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\standalone-opt && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\standalone-opt && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
   DESC = Installing only the local directory...
   pool = console
   restat = 1
@@ -914,7 +914,7 @@ build standalone-opt/install/local: phony standalone-opt/CMakeFiles/install/loca
 # Utility command for install/strip
 
 build standalone-opt/CMakeFiles/install/strip.util: CUSTOM_COMMAND standalone-opt/all
-  COMMAND = C:\Windows\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\standalone-opt && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\PaulK\OneDrive\Documents\PL\PyPL\standalone\build\standalone-opt && "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake"
   DESC = Installing the project stripped...
   pool = console
   restat = 1

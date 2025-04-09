@@ -23,32 +23,32 @@ builtin.module attributes  {"sym_name" = "ir"} {
   "mini.external_typedef"() {"class_name" = "StringIterator", "vtbl_size" = 6 : i32} : () -> ()
   "mini.external_typedef"() {"class_name" = "Exception", "vtbl_size" = 13 : i32} : () -> ()
   "mini.external_typedef"() {"class_name" = "IO", "vtbl_size" = 10 : i32} : () -> ()
-  "mini.typedef"() {"class_name" = "Pair", "methods" = [@Pair_field_Pair_0, @Pair_field_Pair_1, @Pair_field_first, @Pair_field_second, @Pair_B_init_firstT_secondU, @Pair_B_first_, @Pair_B_second_, @Pair_init_firstT_secondU, @Pair_first_, @Pair_second_], "hash_tbl" = [@Object, @any_typ, @Pair, 18446744073709551615 : i64], "offset_tbl" = [19 : i32, 9 : i32, 9 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 9197944775169318296 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>, !llvm.struct<(!llvm.ptr, i160)>)>, "size_fn" = "_size_Pair", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "FancyPair", "methods" = [@FancyPair_field_first, @FancyPair_field_second, @FancyPair_field_FancyPair_0, @FancyPair_field_FancyPair_1, @FancyPair_B_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64, @FancyPair_B_first_, @FancyPair_B_second_, @FancyPair_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64, @Pair_first_, @FancyPair_second_, @FancyPair_field_FancyPair_0, @FancyPair_field_FancyPair_1, @FancyPair_field_first, @FancyPair_field_second, @FancyPair_B_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64, @FancyPair_B_first_, @FancyPair_B_second_, @FancyPair_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64, @Pair_first_, @FancyPair_second_], "hash_tbl" = [@Object, @Pair, @any_typ, @FancyPair], "offset_tbl" = [29 : i32, 19 : i32, 9 : i32, 9 : i32], "prime" = 4611686018427388091 : i64, "hash_id" = 14681361437102936765 : i64, "base_typ" = !llvm.struct<(!llvm.struct<(f64, f64, f64, f64)>, f64)>, "size_fn" = "_size_FancyPair", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "Container", "methods" = [], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Container], "offset_tbl" = [9 : i32, 9 : i32, 0 : i32, 9 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 9056556090793359372 : i64, "base_typ" = !llvm.struct<()>, "size_fn" = "_size_Container", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "Iterator2", "methods" = [], "hash_tbl" = [@Object, @any_typ, @Iterator2, @Container], "offset_tbl" = [12 : i32, 9 : i32, 9 : i32, 12 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 4189192806087951739 : i64, "base_typ" = !llvm.struct<(!llvm.ptr)>, "size_fn" = "_size_Iterator2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "Iterable2", "methods" = [], "hash_tbl" = [@Iterable2, @any_typ, @Container, @Object], "offset_tbl" = [9 : i32, 9 : i32, 32 : i32, 32 : i32], "prime" = 4611686018427388349 : i64, "hash_id" = 5693646204635713916 : i64, "base_typ" = !llvm.struct<(!llvm.ptr)>, "size_fn" = "_size_Iterable2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "Array", "methods" = [@Array_field_Array_0, @Array_field_buffer, @Array_field_length, @Array_field_capacity, @Array_B__Self_from_iterable_iterableIterable2T, @Array_B_init_, @Array_B_init_capacityPtri32, @Array_B_init_lengthPtri32_capacityPtri32, @Array_B_length_, @Array_B_capacity_, @Array_B_append_xT, @Array_B_reserve_new_capacityPtri32, @Array_B__index_xPtri32, @Array_B__set_index_xPtri32_valueT, @Array_B_throw_oob_xPtri32, @Array_B_unchecked_index_xPtri32, @Array_B_unchecked_insert_xPtri32_valueT, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Ptri1, @Array_B_any_fFunctionT_to_Ptri1, @Array_B_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Ptri1, @Array_B_chain_otherIterable2T, @Array_B_interleave_otherIterable2T, @Array_B_zip_otherIterable2U, @Array_B_product_otherIterable2U, @Array__Self_from_iterable_iterableIterable2T, @Array_init_, @Array_init_capacityPtri32, @Array_init_lengthPtri32_capacityPtri32, @Array_length_, @Array_capacity_, @Array_append_xT, @Array_reserve_new_capacityPtri32, @Array__index_xPtri32, @Array__set_index_xPtri32_valueT, @Array_throw_oob_xPtri32, @Array_unchecked_index_xPtri32, @Array_unchecked_insert_xPtri32_valueT, @Array_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U, @Array_field_Array_0, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Ptri1, @Array_B_any_fFunctionT_to_Ptri1, @Array_B_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Ptri1, @Array_B_chain_otherIterable2T, @Array_B_interleave_otherIterable2T, @Array_B_zip_otherIterable2U, @Array_B_product_otherIterable2U, @Array_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U], "hash_tbl" = [@Container, 18446744073709551615 : i64, @Iterable2, @Object, @any_typ, 18446744073709551615 : i64, 18446744073709551615 : i64, @Array], "offset_tbl" = [84 : i32, 0 : i32, 61 : i32, 84 : i32, 9 : i32, 0 : i32, 0 : i32, 9 : i32], "prime" = 4611686018427388289 : i64, "hash_id" = 13185201323315417072 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr)>, i32, i32)>, "size_fn" = "_size_Array", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "ArrayIterator", "methods" = [@ArrayIterator_field_ArrayIterator_0, @ArrayIterator_field_array, @ArrayIterator_field_index, @ArrayIterator_B_init_arrayArrayT, @ArrayIterator_B_next_, @ArrayIterator_init_arrayArrayT, @ArrayIterator_next_, @ArrayIterator_field_ArrayIterator_0, @ArrayIterator_B_next_, @ArrayIterator_next_], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Container, @ArrayIterator, 18446744073709551615 : i64, @Iterator2, 18446744073709551615 : i64], "offset_tbl" = [19 : i32, 9 : i32, 0 : i32, 19 : i32, 9 : i32, 0 : i32, 16 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 3447345754186651411 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i32)>, "size_fn" = "_size_ArrayIterator", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "MapIterable2", "methods" = [@MapIterable2_field_MapIterable2_0, @MapIterable2_field_MapIterable2_1, @MapIterable2_field_iterable, @MapIterable2_field_f, @MapIterable2_B_init_iterableIterable2T_fFunctionT_to_U, @MapIterable2_B_iterator_, @MapIterable2_B_each_fFunctionT_to_Nothing, @MapIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @MapIterable2_B_all_fFunctionT_to_Ptri1, @MapIterable2_B_any_fFunctionT_to_Ptri1, @MapIterable2_B_map_fFunctionT_to_U, @MapIterable2_B_filter_fFunctionT_to_Ptri1, @MapIterable2_B_chain_otherIterable2T, @MapIterable2_B_interleave_otherIterable2T, @MapIterable2_B_zip_otherIterable2U, @MapIterable2_B_product_otherIterable2U, @MapIterable2_init_iterableIterable2T_fFunctionT_to_U, @MapIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U, @MapIterable2_field_MapIterable2_1, @MapIterable2_B_iterator_, @MapIterable2_B_each_fFunctionT_to_Nothing, @MapIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @MapIterable2_B_all_fFunctionT_to_Ptri1, @MapIterable2_B_any_fFunctionT_to_Ptri1, @MapIterable2_B_map_fFunctionT_to_U, @MapIterable2_B_filter_fFunctionT_to_Ptri1, @MapIterable2_B_chain_otherIterable2T, @MapIterable2_B_interleave_otherIterable2T, @MapIterable2_B_zip_otherIterable2U, @MapIterable2_B_product_otherIterable2U, @MapIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U], "hash_tbl" = [@Object, @any_typ, @MapIterable2, @Container, 18446744073709551615 : i64, @Iterable2, 18446744073709551615 : i64, 18446744073709551615 : i64], "offset_tbl" = [60 : i32, 9 : i32, 9 : i32, 60 : i32, 0 : i32, 37 : i32, 0 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 16721884939112659687 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>)>, "size_fn" = "_size_MapIterable2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "MapIterator2", "methods" = [@MapIterator2_field_MapIterator2_0, @MapIterator2_field_MapIterator2_1, @MapIterator2_field_iterator, @MapIterator2_field_f, @MapIterator2_B_init_iteratorIterator2T_fFunctionT_to_U, @MapIterator2_B_next_, @MapIterator2_init_iteratorIterator2T_fFunctionT_to_U, @MapIterator2_next_, @MapIterator2_field_MapIterator2_1, @MapIterator2_B_next_, @MapIterator2_next_], "hash_tbl" = [18446744073709551615 : i64, @Container, @MapIterator2, 18446744073709551615 : i64, @Object, @Iterator2, 18446744073709551615 : i64, @any_typ], "offset_tbl" = [0 : i32, 20 : i32, 9 : i32, 0 : i32, 20 : i32, 17 : i32, 0 : i32, 9 : i32], "prime" = 4611686018427388279 : i64, "hash_id" = 18436488126000279116 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>)>, "size_fn" = "_size_MapIterator2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "FilterIterable2", "methods" = [@FilterIterable2_field_FilterIterable2_0, @FilterIterable2_field_iterable, @FilterIterable2_field_f, @FilterIterable2_B_init_iterableIterable2T_fFunctionT_to_Ptri1, @FilterIterable2_B_iterator_, @FilterIterable2_B_each_fFunctionT_to_Nothing, @FilterIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @FilterIterable2_B_all_fFunctionT_to_Ptri1, @FilterIterable2_B_any_fFunctionT_to_Ptri1, @FilterIterable2_B_map_fFunctionT_to_U, @FilterIterable2_B_filter_fFunctionT_to_Ptri1, @FilterIterable2_B_chain_otherIterable2T, @FilterIterable2_B_interleave_otherIterable2T, @FilterIterable2_B_zip_otherIterable2U, @FilterIterable2_B_product_otherIterable2U, @FilterIterable2_init_iterableIterable2T_fFunctionT_to_Ptri1, @FilterIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U, @FilterIterable2_field_FilterIterable2_0, @FilterIterable2_B_iterator_, @FilterIterable2_B_each_fFunctionT_to_Nothing, @FilterIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @FilterIterable2_B_all_fFunctionT_to_Ptri1, @FilterIterable2_B_any_fFunctionT_to_Ptri1, @FilterIterable2_B_map_fFunctionT_to_U, @FilterIterable2_B_filter_fFunctionT_to_Ptri1, @FilterIterable2_B_chain_otherIterable2T, @FilterIterable2_B_interleave_otherIterable2T, @FilterIterable2_B_zip_otherIterable2U, @FilterIterable2_B_product_otherIterable2U, @FilterIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Container, 18446744073709551615 : i64, @Iterable2, @FilterIterable2, 18446744073709551615 : i64], "offset_tbl" = [59 : i32, 9 : i32, 0 : i32, 59 : i32, 0 : i32, 36 : i32, 9 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 1178467452958968374 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>)>, "size_fn" = "_size_FilterIterable2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "FilterIterator2", "methods" = [@FilterIterator2_field_FilterIterator2_0, @FilterIterator2_field_iterator, @FilterIterator2_field_f, @FilterIterator2_B_init_iteratorIterator2T_fFunctionT_to_Ptri1, @FilterIterator2_B_next_, @FilterIterator2_init_iteratorIterator2T_fFunctionT_to_Ptri1, @FilterIterator2_next_, @FilterIterator2_field_FilterIterator2_0, @FilterIterator2_B_next_, @FilterIterator2_next_], "hash_tbl" = [@Object, @any_typ, @FilterIterator2, @Container, 18446744073709551615 : i64, 18446744073709551615 : i64, @Iterator2, 18446744073709551615 : i64], "offset_tbl" = [19 : i32, 9 : i32, 9 : i32, 19 : i32, 0 : i32, 0 : i32, 16 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 8213847504843366470 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>)>, "size_fn" = "_size_FilterIterator2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "ChainIterable2", "methods" = [@ChainIterable2_field_ChainIterable2_0, @ChainIterable2_field_first, @ChainIterable2_field_second, @ChainIterable2_B_init_firstIterable2T_secondIterable2T, @ChainIterable2_B_iterator_, @ChainIterable2_B_each_fFunctionT_to_Nothing, @ChainIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @ChainIterable2_B_all_fFunctionT_to_Ptri1, @ChainIterable2_B_any_fFunctionT_to_Ptri1, @ChainIterable2_B_map_fFunctionT_to_U, @ChainIterable2_B_filter_fFunctionT_to_Ptri1, @ChainIterable2_B_chain_otherIterable2T, @ChainIterable2_B_interleave_otherIterable2T, @ChainIterable2_B_zip_otherIterable2U, @ChainIterable2_B_product_otherIterable2U, @ChainIterable2_init_firstIterable2T_secondIterable2T, @ChainIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U, @ChainIterable2_field_ChainIterable2_0, @ChainIterable2_B_iterator_, @ChainIterable2_B_each_fFunctionT_to_Nothing, @ChainIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @ChainIterable2_B_all_fFunctionT_to_Ptri1, @ChainIterable2_B_any_fFunctionT_to_Ptri1, @ChainIterable2_B_map_fFunctionT_to_U, @ChainIterable2_B_filter_fFunctionT_to_Ptri1, @ChainIterable2_B_chain_otherIterable2T, @ChainIterable2_B_interleave_otherIterable2T, @ChainIterable2_B_zip_otherIterable2U, @ChainIterable2_B_product_otherIterable2U, @ChainIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U], "hash_tbl" = [@ChainIterable2, @Object, @any_typ, 18446744073709551615 : i64, 18446744073709551615 : i64, @Container, 18446744073709551615 : i64, @Iterable2], "offset_tbl" = [9 : i32, 59 : i32, 9 : i32, 0 : i32, 0 : i32, 59 : i32, 0 : i32, 36 : i32], "prime" = 4611686018427388319 : i64, "hash_id" = 13213446000764521556 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "size_fn" = "_size_ChainIterable2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "ChainIterator2", "methods" = [@ChainIterator2_field_ChainIterator2_0, @ChainIterator2_field_first, @ChainIterator2_field_second, @ChainIterator2_field_on_first, @ChainIterator2_B_init_firstIterator2T_secondIterator2T, @ChainIterator2_B_next_, @ChainIterator2_init_firstIterator2T_secondIterator2T, @ChainIterator2_next_, @ChainIterator2_field_ChainIterator2_0, @ChainIterator2_B_next_, @ChainIterator2_next_], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Container, 18446744073709551615 : i64, 18446744073709551615 : i64, @Iterator2, @ChainIterator2], "offset_tbl" = [20 : i32, 9 : i32, 0 : i32, 20 : i32, 0 : i32, 0 : i32, 17 : i32, 9 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 18218476088649089842 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i1)>, "size_fn" = "_size_ChainIterator2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "InterleaveIterable2", "methods" = [@InterleaveIterable2_field_InterleaveIterable2_0, @InterleaveIterable2_field_first, @InterleaveIterable2_field_second, @InterleaveIterable2_B_init_firstIterable2T_secondIterable2T, @InterleaveIterable2_B_iterator_, @InterleaveIterable2_B_each_fFunctionT_to_Nothing, @InterleaveIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @InterleaveIterable2_B_all_fFunctionT_to_Ptri1, @InterleaveIterable2_B_any_fFunctionT_to_Ptri1, @InterleaveIterable2_B_map_fFunctionT_to_U, @InterleaveIterable2_B_filter_fFunctionT_to_Ptri1, @InterleaveIterable2_B_chain_otherIterable2T, @InterleaveIterable2_B_interleave_otherIterable2T, @InterleaveIterable2_B_zip_otherIterable2U, @InterleaveIterable2_B_product_otherIterable2U, @InterleaveIterable2_init_firstIterable2T_secondIterable2T, @InterleaveIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U, @InterleaveIterable2_field_InterleaveIterable2_0, @InterleaveIterable2_B_iterator_, @InterleaveIterable2_B_each_fFunctionT_to_Nothing, @InterleaveIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @InterleaveIterable2_B_all_fFunctionT_to_Ptri1, @InterleaveIterable2_B_any_fFunctionT_to_Ptri1, @InterleaveIterable2_B_map_fFunctionT_to_U, @InterleaveIterable2_B_filter_fFunctionT_to_Ptri1, @InterleaveIterable2_B_chain_otherIterable2T, @InterleaveIterable2_B_interleave_otherIterable2T, @InterleaveIterable2_B_zip_otherIterable2U, @InterleaveIterable2_B_product_otherIterable2U, @InterleaveIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U], "hash_tbl" = [@Iterable2, 18446744073709551615 : i64, 18446744073709551615 : i64, @InterleaveIterable2, @any_typ, @Object, 18446744073709551615 : i64, @Container], "offset_tbl" = [36 : i32, 0 : i32, 0 : i32, 9 : i32, 9 : i32, 59 : i32, 0 : i32, 59 : i32], "prime" = 4611686018427388207 : i64, "hash_id" = 12188512388494089841 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "size_fn" = "_size_InterleaveIterable2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "InterleaveIterator2", "methods" = [@InterleaveIterator2_field_InterleaveIterator2_0, @InterleaveIterator2_field_first, @InterleaveIterator2_field_second, @InterleaveIterator2_field_on_first, @InterleaveIterator2_B_init_firstIterator2T_secondIterator2T, @InterleaveIterator2_B_next_, @InterleaveIterator2_init_firstIterator2T_secondIterator2T, @InterleaveIterator2_next_, @InterleaveIterator2_field_InterleaveIterator2_0, @InterleaveIterator2_B_next_, @InterleaveIterator2_next_], "hash_tbl" = [@any_typ, 18446744073709551615 : i64, 18446744073709551615 : i64, @InterleaveIterator2, @Container, 18446744073709551615 : i64, @Iterator2, @Object], "offset_tbl" = [9 : i32, 0 : i32, 0 : i32, 9 : i32, 20 : i32, 0 : i32, 17 : i32, 20 : i32], "prime" = 4611686018427388247 : i64, "hash_id" = 6709847746581360093 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i1)>, "size_fn" = "_size_InterleaveIterator2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "ZipIterable2", "methods" = [@ZipIterable2_field_ZipIterable2_0, @ZipIterable2_field_ZipIterable2_1, @ZipIterable2_field_ZipIterable2_2, @ZipIterable2_field_first, @ZipIterable2_field_second, @ZipIterable2_B_init_firstIterable2T_secondIterable2U, @ZipIterable2_B_iterator_, @ZipIterable2_B_each_fFunctionT_to_Nothing, @ZipIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @ZipIterable2_B_all_fFunctionT_to_Ptri1, @ZipIterable2_B_any_fFunctionT_to_Ptri1, @ZipIterable2_B_map_fFunctionT_to_U, @ZipIterable2_B_filter_fFunctionT_to_Ptri1, @ZipIterable2_B_chain_otherIterable2T, @ZipIterable2_B_interleave_otherIterable2T, @ZipIterable2_B_zip_otherIterable2U, @ZipIterable2_B_product_otherIterable2U, @ZipIterable2_init_firstIterable2T_secondIterable2U, @ZipIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U, @ZipIterable2_field_ZipIterable2_2, @ZipIterable2_B_iterator_, @ZipIterable2_B_each_fFunctionT_to_Nothing, @ZipIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @ZipIterable2_B_all_fFunctionT_to_Ptri1, @ZipIterable2_B_any_fFunctionT_to_Ptri1, @ZipIterable2_B_map_fFunctionT_to_U, @ZipIterable2_B_filter_fFunctionT_to_Ptri1, @ZipIterable2_B_chain_otherIterable2T, @ZipIterable2_B_interleave_otherIterable2T, @ZipIterable2_B_zip_otherIterable2U, @ZipIterable2_B_product_otherIterable2U, @ZipIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U], "hash_tbl" = [@Object, @any_typ, @ZipIterable2, @Container, 18446744073709551615 : i64, @Iterable2, 18446744073709551615 : i64, 18446744073709551615 : i64], "offset_tbl" = [61 : i32, 9 : i32, 9 : i32, 61 : i32, 0 : i32, 38 : i32, 0 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 15227793494662031801 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "size_fn" = "_size_ZipIterable2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "ZipIterator2", "methods" = [@ZipIterator2_field_ZipIterator2_0, @ZipIterator2_field_ZipIterator2_1, @ZipIterator2_field_ZipIterator2_2, @ZipIterator2_field_first, @ZipIterator2_field_second, @ZipIterator2_B_init_firstIterator2T_secondIterator2U, @ZipIterator2_B_next_, @ZipIterator2_init_firstIterator2T_secondIterator2U, @ZipIterator2_next_, @ZipIterator2_field_ZipIterator2_2, @ZipIterator2_B_next_, @ZipIterator2_next_], "hash_tbl" = [@any_typ, 18446744073709551615 : i64, 18446744073709551615 : i64, @ZipIterator2, @Container, 18446744073709551615 : i64, @Iterator2, @Object], "offset_tbl" = [9 : i32, 0 : i32, 0 : i32, 9 : i32, 21 : i32, 0 : i32, 18 : i32, 21 : i32], "prime" = 4611686018427388247 : i64, "hash_id" = 5502728639611621286 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "size_fn" = "_size_ZipIterator2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "ProductIterable2", "methods" = [@ProductIterable2_field_ProductIterable2_0, @ProductIterable2_field_ProductIterable2_1, @ProductIterable2_field_ProductIterable2_2, @ProductIterable2_field_first, @ProductIterable2_field_second, @ProductIterable2_B_init_firstIterable2T_secondIterable2U, @ProductIterable2_B_iterator_, @ProductIterable2_B_each_fFunctionT_to_Nothing, @ProductIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @ProductIterable2_B_all_fFunctionT_to_Ptri1, @ProductIterable2_B_any_fFunctionT_to_Ptri1, @ProductIterable2_B_map_fFunctionT_to_U, @ProductIterable2_B_filter_fFunctionT_to_Ptri1, @ProductIterable2_B_chain_otherIterable2T, @ProductIterable2_B_interleave_otherIterable2T, @ProductIterable2_B_zip_otherIterable2U, @ProductIterable2_B_product_otherIterable2U, @ProductIterable2_init_firstIterable2T_secondIterable2U, @ProductIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U, @ProductIterable2_field_ProductIterable2_2, @ProductIterable2_B_iterator_, @ProductIterable2_B_each_fFunctionT_to_Nothing, @ProductIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @ProductIterable2_B_all_fFunctionT_to_Ptri1, @ProductIterable2_B_any_fFunctionT_to_Ptri1, @ProductIterable2_B_map_fFunctionT_to_U, @ProductIterable2_B_filter_fFunctionT_to_Ptri1, @ProductIterable2_B_chain_otherIterable2T, @ProductIterable2_B_interleave_otherIterable2T, @ProductIterable2_B_zip_otherIterable2U, @ProductIterable2_B_product_otherIterable2U, @ProductIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Container, 18446744073709551615 : i64, @Iterable2, @ProductIterable2, 18446744073709551615 : i64], "offset_tbl" = [61 : i32, 9 : i32, 0 : i32, 61 : i32, 0 : i32, 38 : i32, 9 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 7827074759551300494 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "size_fn" = "_size_ProductIterable2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "ProductIterator2", "methods" = [@ProductIterator2_field_ProductIterator2_0, @ProductIterator2_field_ProductIterator2_1, @ProductIterator2_field_ProductIterator2_2, @ProductIterator2_field_first_iterator, @ProductIterator2_field_second_iterator, @ProductIterator2_field_second_iterable, @ProductIterator2_field_current_first, @ProductIterator2_B_init_first_iteratorIterator2T_second_iterableIterable2U, @ProductIterator2_B_next_, @ProductIterator2_init_first_iteratorIterator2T_second_iterableIterable2U, @ProductIterator2_next_, @ProductIterator2_field_ProductIterator2_2, @ProductIterator2_B_next_, @ProductIterator2_next_], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Container, 18446744073709551615 : i64, @ProductIterator2, @Iterator2, 18446744073709551615 : i64], "offset_tbl" = [23 : i32, 9 : i32, 0 : i32, 23 : i32, 0 : i32, 9 : i32, 20 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 4440657219728359865 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>)>, "size_fn" = "_size_ProductIterator2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "Addable", "methods" = [], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Addable], "offset_tbl" = [13 : i32, 9 : i32, 0 : i32, 9 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 12051435683933085745 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr)>, "size_fn" = "_size_Addable", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "Float64", "methods" = [@Float64_field_value, @Float64_field_Float64_0, @Float64_field_Float64_1, @Float64_B_init_valuePtrf64, @Float64_B_value_, @Float64_B__ADD_otherInt32__ADD_otherFloat64, @Float64_init_valuePtrf64, @Float64_value_, @Float64__ADD_otherInt32, @Float64__ADD_otherFloat64, @Float64_field_Float64_0, @Float64_field_Float64_1, @Float64_B__ADD_otherInt32__ADD_otherFloat64, @Float64_init_valuePtrf64, @Float64_field_Float64_0, @Float64_field_Float64_1, @Float64_B__ADD_otherInt32__ADD_otherFloat64, @Float64_init_valuePtrf64], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Addable, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, @Float64], "offset_tbl" = [23 : i32, 9 : i32, 0 : i32, 19 : i32, 0 : i32, 0 : i32, 0 : i32, 9 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 8748823673944961442 : i64, "base_typ" = !llvm.struct<(f64)>, "size_fn" = "_size_Float64", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "Int32", "methods" = [@Int32_field_value, @Int32_field_Int32_0, @Int32_B_init_valuePtri32, @Int32_B_value_, @Int32_B__ADD_otherFloat64__ADD_otherInt32, @Int32_init_valuePtri32, @Int32_value_, @Int32__ADD_otherFloat64, @Int32__ADD_otherInt32, @Int32_field_Int32_0, @Int32_field_Int32_0, @Int32_B__ADD_otherFloat64__ADD_otherInt32, @Int32_init_valuePtri32, @Int32_field_Int32_0, @Int32_field_Int32_0, @Int32_B__ADD_otherFloat64__ADD_otherInt32, @Int32_init_valuePtri32], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Addable, 18446744073709551615 : i64, 18446744073709551615 : i64, @Int32, 18446744073709551615 : i64], "offset_tbl" = [22 : i32, 9 : i32, 0 : i32, 18 : i32, 0 : i32, 0 : i32, 9 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 15289183833144277113 : i64, "base_typ" = !llvm.struct<(i32)>, "size_fn" = "_size_Int32", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
-  "mini.typedef"() {"class_name" = "Holder", "methods" = [@Holder_field_Holder_0, @Holder_field_held, @Holder_B_init_heldT, @Holder_B_value_, @Holder_B__set_value_xT, @Holder_init_heldT, @Holder_value_, @Holder__set_value_xT], "hash_tbl" = [@Object, @any_typ, @Holder, 18446744073709551615 : i64], "offset_tbl" = [17 : i32, 9 : i32, 9 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 18184746607930814959 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>)>, "size_fn" = "_size_Holder", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "Pair", "methods" = [@Pair_field_Pair_0, @Pair_field_Pair_1, @Pair_field_first, @Pair_field_second, @Pair_B_init_firstT_secondU, @Pair_B_first_, @Pair_B_second_, @Pair_init_firstT_secondU, @Pair_first_, @Pair_second_], "hash_tbl" = [@Object, @any_typ, @Pair, 18446744073709551615 : i64], "offset_tbl" = [20 : i32, 10 : i32, 10 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 9197944775169318296 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>, !llvm.struct<(!llvm.ptr, i160)>)>, "data_size_fn" = "_data_size_Pair", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "FancyPair", "methods" = [@FancyPair_field_first, @FancyPair_field_second, @FancyPair_field_FancyPair_0, @FancyPair_field_FancyPair_1, @FancyPair_B_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64, @FancyPair_B_first_, @FancyPair_B_second_, @FancyPair_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64, @Pair_first_, @FancyPair_second_, @FancyPair_field_FancyPair_0, @FancyPair_field_FancyPair_1, @FancyPair_field_first, @FancyPair_field_second, @FancyPair_B_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64, @FancyPair_B_first_, @FancyPair_B_second_, @FancyPair_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64, @Pair_first_, @FancyPair_second_], "hash_tbl" = [@Object, @Pair, @any_typ, @FancyPair], "offset_tbl" = [30 : i32, 20 : i32, 10 : i32, 10 : i32], "prime" = 4611686018427388091 : i64, "hash_id" = 14681361437102936765 : i64, "base_typ" = !llvm.struct<(!llvm.struct<(f64, f64, f64, f64)>, f64)>, "data_size_fn" = "_data_size_FancyPair", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "Container", "methods" = [], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Container], "offset_tbl" = [10 : i32, 10 : i32, 0 : i32, 10 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 9056556090793359372 : i64, "base_typ" = !llvm.struct<()>, "data_size_fn" = "_data_size_Container", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "Iterator2", "methods" = [], "hash_tbl" = [@Object, @any_typ, @Iterator2, @Container], "offset_tbl" = [13 : i32, 10 : i32, 10 : i32, 13 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 4189192806087951739 : i64, "base_typ" = !llvm.struct<(!llvm.ptr)>, "data_size_fn" = "_data_size_Iterator2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "Iterable2", "methods" = [], "hash_tbl" = [@Iterable2, @any_typ, @Container, @Object], "offset_tbl" = [10 : i32, 10 : i32, 33 : i32, 33 : i32], "prime" = 4611686018427388349 : i64, "hash_id" = 5693646204635713916 : i64, "base_typ" = !llvm.struct<(!llvm.ptr)>, "data_size_fn" = "_data_size_Iterable2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "Array", "methods" = [@Array_field_Array_0, @Array_field_buffer, @Array_field_length, @Array_field_capacity, @Array_B__Self_from_iterable_iterableIterable2T, @Array_B_init_, @Array_B_init_capacityPtri32, @Array_B_init_lengthPtri32_capacityPtri32, @Array_B_length_, @Array_B_capacity_, @Array_B_append_xT, @Array_B_reserve_new_capacityPtri32, @Array_B__index_xPtri32, @Array_B__set_index_xPtri32_valueT, @Array_B_throw_oob_xPtri32, @Array_B_unchecked_index_xPtri32, @Array_B_unchecked_insert_xPtri32_valueT, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Ptri1, @Array_B_any_fFunctionT_to_Ptri1, @Array_B_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Ptri1, @Array_B_chain_otherIterable2T, @Array_B_interleave_otherIterable2T, @Array_B_zip_otherIterable2U, @Array_B_product_otherIterable2U, @Array__Self_from_iterable_iterableIterable2T, @Array_init_, @Array_init_capacityPtri32, @Array_init_lengthPtri32_capacityPtri32, @Array_length_, @Array_capacity_, @Array_append_xT, @Array_reserve_new_capacityPtri32, @Array__index_xPtri32, @Array__set_index_xPtri32_valueT, @Array_throw_oob_xPtri32, @Array_unchecked_index_xPtri32, @Array_unchecked_insert_xPtri32_valueT, @Array_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U, @Array_field_Array_0, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Ptri1, @Array_B_any_fFunctionT_to_Ptri1, @Array_B_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Ptri1, @Array_B_chain_otherIterable2T, @Array_B_interleave_otherIterable2T, @Array_B_zip_otherIterable2U, @Array_B_product_otherIterable2U, @Array_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U], "hash_tbl" = [@Container, 18446744073709551615 : i64, @Iterable2, @Object, @any_typ, 18446744073709551615 : i64, 18446744073709551615 : i64, @Array], "offset_tbl" = [85 : i32, 0 : i32, 62 : i32, 85 : i32, 10 : i32, 0 : i32, 0 : i32, 10 : i32], "prime" = 4611686018427388289 : i64, "hash_id" = 13185201323315417072 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr)>, i32, i32)>, "data_size_fn" = "_data_size_Array", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "ArrayIterator", "methods" = [@ArrayIterator_field_ArrayIterator_0, @ArrayIterator_field_array, @ArrayIterator_field_index, @ArrayIterator_B_init_arrayArrayT, @ArrayIterator_B_next_, @ArrayIterator_init_arrayArrayT, @ArrayIterator_next_, @ArrayIterator_field_ArrayIterator_0, @ArrayIterator_B_next_, @ArrayIterator_next_], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Container, @ArrayIterator, 18446744073709551615 : i64, @Iterator2, 18446744073709551615 : i64], "offset_tbl" = [20 : i32, 10 : i32, 0 : i32, 20 : i32, 10 : i32, 0 : i32, 17 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 3447345754186651411 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i32)>, "data_size_fn" = "_data_size_ArrayIterator", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "MapIterable2", "methods" = [@MapIterable2_field_MapIterable2_0, @MapIterable2_field_MapIterable2_1, @MapIterable2_field_iterable, @MapIterable2_field_f, @MapIterable2_B_init_iterableIterable2T_fFunctionT_to_U, @MapIterable2_B_iterator_, @MapIterable2_B_each_fFunctionT_to_Nothing, @MapIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @MapIterable2_B_all_fFunctionT_to_Ptri1, @MapIterable2_B_any_fFunctionT_to_Ptri1, @MapIterable2_B_map_fFunctionT_to_U, @MapIterable2_B_filter_fFunctionT_to_Ptri1, @MapIterable2_B_chain_otherIterable2T, @MapIterable2_B_interleave_otherIterable2T, @MapIterable2_B_zip_otherIterable2U, @MapIterable2_B_product_otherIterable2U, @MapIterable2_init_iterableIterable2T_fFunctionT_to_U, @MapIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U, @MapIterable2_field_MapIterable2_1, @MapIterable2_B_iterator_, @MapIterable2_B_each_fFunctionT_to_Nothing, @MapIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @MapIterable2_B_all_fFunctionT_to_Ptri1, @MapIterable2_B_any_fFunctionT_to_Ptri1, @MapIterable2_B_map_fFunctionT_to_U, @MapIterable2_B_filter_fFunctionT_to_Ptri1, @MapIterable2_B_chain_otherIterable2T, @MapIterable2_B_interleave_otherIterable2T, @MapIterable2_B_zip_otherIterable2U, @MapIterable2_B_product_otherIterable2U, @MapIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U], "hash_tbl" = [@Object, @any_typ, @MapIterable2, @Container, 18446744073709551615 : i64, @Iterable2, 18446744073709551615 : i64, 18446744073709551615 : i64], "offset_tbl" = [61 : i32, 10 : i32, 10 : i32, 61 : i32, 0 : i32, 38 : i32, 0 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 16721884939112659687 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>)>, "data_size_fn" = "_data_size_MapIterable2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "MapIterator2", "methods" = [@MapIterator2_field_MapIterator2_0, @MapIterator2_field_MapIterator2_1, @MapIterator2_field_iterator, @MapIterator2_field_f, @MapIterator2_B_init_iteratorIterator2T_fFunctionT_to_U, @MapIterator2_B_next_, @MapIterator2_init_iteratorIterator2T_fFunctionT_to_U, @MapIterator2_next_, @MapIterator2_field_MapIterator2_1, @MapIterator2_B_next_, @MapIterator2_next_], "hash_tbl" = [18446744073709551615 : i64, @Container, @MapIterator2, 18446744073709551615 : i64, @Object, @Iterator2, 18446744073709551615 : i64, @any_typ], "offset_tbl" = [0 : i32, 21 : i32, 10 : i32, 0 : i32, 21 : i32, 18 : i32, 0 : i32, 10 : i32], "prime" = 4611686018427388279 : i64, "hash_id" = 18436488126000279116 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>)>, "data_size_fn" = "_data_size_MapIterator2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "FilterIterable2", "methods" = [@FilterIterable2_field_FilterIterable2_0, @FilterIterable2_field_iterable, @FilterIterable2_field_f, @FilterIterable2_B_init_iterableIterable2T_fFunctionT_to_Ptri1, @FilterIterable2_B_iterator_, @FilterIterable2_B_each_fFunctionT_to_Nothing, @FilterIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @FilterIterable2_B_all_fFunctionT_to_Ptri1, @FilterIterable2_B_any_fFunctionT_to_Ptri1, @FilterIterable2_B_map_fFunctionT_to_U, @FilterIterable2_B_filter_fFunctionT_to_Ptri1, @FilterIterable2_B_chain_otherIterable2T, @FilterIterable2_B_interleave_otherIterable2T, @FilterIterable2_B_zip_otherIterable2U, @FilterIterable2_B_product_otherIterable2U, @FilterIterable2_init_iterableIterable2T_fFunctionT_to_Ptri1, @FilterIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U, @FilterIterable2_field_FilterIterable2_0, @FilterIterable2_B_iterator_, @FilterIterable2_B_each_fFunctionT_to_Nothing, @FilterIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @FilterIterable2_B_all_fFunctionT_to_Ptri1, @FilterIterable2_B_any_fFunctionT_to_Ptri1, @FilterIterable2_B_map_fFunctionT_to_U, @FilterIterable2_B_filter_fFunctionT_to_Ptri1, @FilterIterable2_B_chain_otherIterable2T, @FilterIterable2_B_interleave_otherIterable2T, @FilterIterable2_B_zip_otherIterable2U, @FilterIterable2_B_product_otherIterable2U, @FilterIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Container, 18446744073709551615 : i64, @Iterable2, @FilterIterable2, 18446744073709551615 : i64], "offset_tbl" = [60 : i32, 10 : i32, 0 : i32, 60 : i32, 0 : i32, 37 : i32, 10 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 1178467452958968374 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>)>, "data_size_fn" = "_data_size_FilterIterable2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "FilterIterator2", "methods" = [@FilterIterator2_field_FilterIterator2_0, @FilterIterator2_field_iterator, @FilterIterator2_field_f, @FilterIterator2_B_init_iteratorIterator2T_fFunctionT_to_Ptri1, @FilterIterator2_B_next_, @FilterIterator2_init_iteratorIterator2T_fFunctionT_to_Ptri1, @FilterIterator2_next_, @FilterIterator2_field_FilterIterator2_0, @FilterIterator2_B_next_, @FilterIterator2_next_], "hash_tbl" = [@Object, @any_typ, @FilterIterator2, @Container, 18446744073709551615 : i64, 18446744073709551615 : i64, @Iterator2, 18446744073709551615 : i64], "offset_tbl" = [20 : i32, 10 : i32, 10 : i32, 20 : i32, 0 : i32, 0 : i32, 17 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 8213847504843366470 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>)>, "data_size_fn" = "_data_size_FilterIterator2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "ChainIterable2", "methods" = [@ChainIterable2_field_ChainIterable2_0, @ChainIterable2_field_first, @ChainIterable2_field_second, @ChainIterable2_B_init_firstIterable2T_secondIterable2T, @ChainIterable2_B_iterator_, @ChainIterable2_B_each_fFunctionT_to_Nothing, @ChainIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @ChainIterable2_B_all_fFunctionT_to_Ptri1, @ChainIterable2_B_any_fFunctionT_to_Ptri1, @ChainIterable2_B_map_fFunctionT_to_U, @ChainIterable2_B_filter_fFunctionT_to_Ptri1, @ChainIterable2_B_chain_otherIterable2T, @ChainIterable2_B_interleave_otherIterable2T, @ChainIterable2_B_zip_otherIterable2U, @ChainIterable2_B_product_otherIterable2U, @ChainIterable2_init_firstIterable2T_secondIterable2T, @ChainIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U, @ChainIterable2_field_ChainIterable2_0, @ChainIterable2_B_iterator_, @ChainIterable2_B_each_fFunctionT_to_Nothing, @ChainIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @ChainIterable2_B_all_fFunctionT_to_Ptri1, @ChainIterable2_B_any_fFunctionT_to_Ptri1, @ChainIterable2_B_map_fFunctionT_to_U, @ChainIterable2_B_filter_fFunctionT_to_Ptri1, @ChainIterable2_B_chain_otherIterable2T, @ChainIterable2_B_interleave_otherIterable2T, @ChainIterable2_B_zip_otherIterable2U, @ChainIterable2_B_product_otherIterable2U, @ChainIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U], "hash_tbl" = [@ChainIterable2, @Object, @any_typ, 18446744073709551615 : i64, 18446744073709551615 : i64, @Container, 18446744073709551615 : i64, @Iterable2], "offset_tbl" = [10 : i32, 60 : i32, 10 : i32, 0 : i32, 0 : i32, 60 : i32, 0 : i32, 37 : i32], "prime" = 4611686018427388319 : i64, "hash_id" = 13213446000764521556 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_ChainIterable2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "ChainIterator2", "methods" = [@ChainIterator2_field_ChainIterator2_0, @ChainIterator2_field_first, @ChainIterator2_field_second, @ChainIterator2_field_on_first, @ChainIterator2_B_init_firstIterator2T_secondIterator2T, @ChainIterator2_B_next_, @ChainIterator2_init_firstIterator2T_secondIterator2T, @ChainIterator2_next_, @ChainIterator2_field_ChainIterator2_0, @ChainIterator2_B_next_, @ChainIterator2_next_], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Container, 18446744073709551615 : i64, 18446744073709551615 : i64, @Iterator2, @ChainIterator2], "offset_tbl" = [21 : i32, 10 : i32, 0 : i32, 21 : i32, 0 : i32, 0 : i32, 18 : i32, 10 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 18218476088649089842 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i1)>, "data_size_fn" = "_data_size_ChainIterator2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "InterleaveIterable2", "methods" = [@InterleaveIterable2_field_InterleaveIterable2_0, @InterleaveIterable2_field_first, @InterleaveIterable2_field_second, @InterleaveIterable2_B_init_firstIterable2T_secondIterable2T, @InterleaveIterable2_B_iterator_, @InterleaveIterable2_B_each_fFunctionT_to_Nothing, @InterleaveIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @InterleaveIterable2_B_all_fFunctionT_to_Ptri1, @InterleaveIterable2_B_any_fFunctionT_to_Ptri1, @InterleaveIterable2_B_map_fFunctionT_to_U, @InterleaveIterable2_B_filter_fFunctionT_to_Ptri1, @InterleaveIterable2_B_chain_otherIterable2T, @InterleaveIterable2_B_interleave_otherIterable2T, @InterleaveIterable2_B_zip_otherIterable2U, @InterleaveIterable2_B_product_otherIterable2U, @InterleaveIterable2_init_firstIterable2T_secondIterable2T, @InterleaveIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U, @InterleaveIterable2_field_InterleaveIterable2_0, @InterleaveIterable2_B_iterator_, @InterleaveIterable2_B_each_fFunctionT_to_Nothing, @InterleaveIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @InterleaveIterable2_B_all_fFunctionT_to_Ptri1, @InterleaveIterable2_B_any_fFunctionT_to_Ptri1, @InterleaveIterable2_B_map_fFunctionT_to_U, @InterleaveIterable2_B_filter_fFunctionT_to_Ptri1, @InterleaveIterable2_B_chain_otherIterable2T, @InterleaveIterable2_B_interleave_otherIterable2T, @InterleaveIterable2_B_zip_otherIterable2U, @InterleaveIterable2_B_product_otherIterable2U, @InterleaveIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U], "hash_tbl" = [@Iterable2, 18446744073709551615 : i64, 18446744073709551615 : i64, @InterleaveIterable2, @any_typ, @Object, 18446744073709551615 : i64, @Container], "offset_tbl" = [37 : i32, 0 : i32, 0 : i32, 10 : i32, 10 : i32, 60 : i32, 0 : i32, 60 : i32], "prime" = 4611686018427388207 : i64, "hash_id" = 12188512388494089841 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_InterleaveIterable2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "InterleaveIterator2", "methods" = [@InterleaveIterator2_field_InterleaveIterator2_0, @InterleaveIterator2_field_first, @InterleaveIterator2_field_second, @InterleaveIterator2_field_on_first, @InterleaveIterator2_B_init_firstIterator2T_secondIterator2T, @InterleaveIterator2_B_next_, @InterleaveIterator2_init_firstIterator2T_secondIterator2T, @InterleaveIterator2_next_, @InterleaveIterator2_field_InterleaveIterator2_0, @InterleaveIterator2_B_next_, @InterleaveIterator2_next_], "hash_tbl" = [@any_typ, 18446744073709551615 : i64, 18446744073709551615 : i64, @InterleaveIterator2, @Container, 18446744073709551615 : i64, @Iterator2, @Object], "offset_tbl" = [10 : i32, 0 : i32, 0 : i32, 10 : i32, 21 : i32, 0 : i32, 18 : i32, 21 : i32], "prime" = 4611686018427388247 : i64, "hash_id" = 6709847746581360093 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i1)>, "data_size_fn" = "_data_size_InterleaveIterator2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "ZipIterable2", "methods" = [@ZipIterable2_field_ZipIterable2_0, @ZipIterable2_field_ZipIterable2_1, @ZipIterable2_field_ZipIterable2_2, @ZipIterable2_field_first, @ZipIterable2_field_second, @ZipIterable2_B_init_firstIterable2T_secondIterable2U, @ZipIterable2_B_iterator_, @ZipIterable2_B_each_fFunctionT_to_Nothing, @ZipIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @ZipIterable2_B_all_fFunctionT_to_Ptri1, @ZipIterable2_B_any_fFunctionT_to_Ptri1, @ZipIterable2_B_map_fFunctionT_to_U, @ZipIterable2_B_filter_fFunctionT_to_Ptri1, @ZipIterable2_B_chain_otherIterable2T, @ZipIterable2_B_interleave_otherIterable2T, @ZipIterable2_B_zip_otherIterable2U, @ZipIterable2_B_product_otherIterable2U, @ZipIterable2_init_firstIterable2T_secondIterable2U, @ZipIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U, @ZipIterable2_field_ZipIterable2_2, @ZipIterable2_B_iterator_, @ZipIterable2_B_each_fFunctionT_to_Nothing, @ZipIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @ZipIterable2_B_all_fFunctionT_to_Ptri1, @ZipIterable2_B_any_fFunctionT_to_Ptri1, @ZipIterable2_B_map_fFunctionT_to_U, @ZipIterable2_B_filter_fFunctionT_to_Ptri1, @ZipIterable2_B_chain_otherIterable2T, @ZipIterable2_B_interleave_otherIterable2T, @ZipIterable2_B_zip_otherIterable2U, @ZipIterable2_B_product_otherIterable2U, @ZipIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U], "hash_tbl" = [@Object, @any_typ, @ZipIterable2, @Container, 18446744073709551615 : i64, @Iterable2, 18446744073709551615 : i64, 18446744073709551615 : i64], "offset_tbl" = [62 : i32, 10 : i32, 10 : i32, 62 : i32, 0 : i32, 39 : i32, 0 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 15227793494662031801 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_ZipIterable2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "ZipIterator2", "methods" = [@ZipIterator2_field_ZipIterator2_0, @ZipIterator2_field_ZipIterator2_1, @ZipIterator2_field_ZipIterator2_2, @ZipIterator2_field_first, @ZipIterator2_field_second, @ZipIterator2_B_init_firstIterator2T_secondIterator2U, @ZipIterator2_B_next_, @ZipIterator2_init_firstIterator2T_secondIterator2U, @ZipIterator2_next_, @ZipIterator2_field_ZipIterator2_2, @ZipIterator2_B_next_, @ZipIterator2_next_], "hash_tbl" = [@any_typ, 18446744073709551615 : i64, 18446744073709551615 : i64, @ZipIterator2, @Container, 18446744073709551615 : i64, @Iterator2, @Object], "offset_tbl" = [10 : i32, 0 : i32, 0 : i32, 10 : i32, 22 : i32, 0 : i32, 19 : i32, 22 : i32], "prime" = 4611686018427388247 : i64, "hash_id" = 5502728639611621286 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_ZipIterator2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "ProductIterable2", "methods" = [@ProductIterable2_field_ProductIterable2_0, @ProductIterable2_field_ProductIterable2_1, @ProductIterable2_field_ProductIterable2_2, @ProductIterable2_field_first, @ProductIterable2_field_second, @ProductIterable2_B_init_firstIterable2T_secondIterable2U, @ProductIterable2_B_iterator_, @ProductIterable2_B_each_fFunctionT_to_Nothing, @ProductIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @ProductIterable2_B_all_fFunctionT_to_Ptri1, @ProductIterable2_B_any_fFunctionT_to_Ptri1, @ProductIterable2_B_map_fFunctionT_to_U, @ProductIterable2_B_filter_fFunctionT_to_Ptri1, @ProductIterable2_B_chain_otherIterable2T, @ProductIterable2_B_interleave_otherIterable2T, @ProductIterable2_B_zip_otherIterable2U, @ProductIterable2_B_product_otherIterable2U, @ProductIterable2_init_firstIterable2T_secondIterable2U, @ProductIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U, @ProductIterable2_field_ProductIterable2_2, @ProductIterable2_B_iterator_, @ProductIterable2_B_each_fFunctionT_to_Nothing, @ProductIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T, @ProductIterable2_B_all_fFunctionT_to_Ptri1, @ProductIterable2_B_any_fFunctionT_to_Ptri1, @ProductIterable2_B_map_fFunctionT_to_U, @ProductIterable2_B_filter_fFunctionT_to_Ptri1, @ProductIterable2_B_chain_otherIterable2T, @ProductIterable2_B_interleave_otherIterable2T, @ProductIterable2_B_zip_otherIterable2U, @ProductIterable2_B_product_otherIterable2U, @ProductIterable2_iterator_, @Iterable2_each_fFunctionT_to_Nothing, @Iterable2_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable2_all_fFunctionT_to_Ptri1, @Iterable2_any_fFunctionT_to_Ptri1, @Iterable2_map_fFunctionT_to_U, @Iterable2_filter_fFunctionT_to_Ptri1, @Iterable2_chain_otherIterable2T, @Iterable2_interleave_otherIterable2T, @Iterable2_zip_otherIterable2U, @Iterable2_product_otherIterable2U], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Container, 18446744073709551615 : i64, @Iterable2, @ProductIterable2, 18446744073709551615 : i64], "offset_tbl" = [62 : i32, 10 : i32, 0 : i32, 62 : i32, 0 : i32, 39 : i32, 10 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 7827074759551300494 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_ProductIterable2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "ProductIterator2", "methods" = [@ProductIterator2_field_ProductIterator2_0, @ProductIterator2_field_ProductIterator2_1, @ProductIterator2_field_ProductIterator2_2, @ProductIterator2_field_first_iterator, @ProductIterator2_field_second_iterator, @ProductIterator2_field_second_iterable, @ProductIterator2_field_current_first, @ProductIterator2_B_init_first_iteratorIterator2T_second_iterableIterable2U, @ProductIterator2_B_next_, @ProductIterator2_init_first_iteratorIterator2T_second_iterableIterable2U, @ProductIterator2_next_, @ProductIterator2_field_ProductIterator2_2, @ProductIterator2_B_next_, @ProductIterator2_next_], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Container, 18446744073709551615 : i64, @ProductIterator2, @Iterator2, 18446744073709551615 : i64], "offset_tbl" = [24 : i32, 10 : i32, 0 : i32, 24 : i32, 0 : i32, 10 : i32, 21 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 4440657219728359865 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>)>, "data_size_fn" = "_data_size_ProductIterator2", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "Addable", "methods" = [], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Addable], "offset_tbl" = [14 : i32, 10 : i32, 0 : i32, 10 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 12051435683933085745 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr)>, "data_size_fn" = "_data_size_Addable", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "Float64", "methods" = [@Float64_field_value, @Float64_field_Float64_0, @Float64_field_Float64_1, @Float64_B_init_valuePtrf64, @Float64_B_value_, @Float64_B__ADD_otherFloat64__ADD_otherInt32, @Float64_init_valuePtrf64, @Float64_value_, @Float64__ADD_otherFloat64, @Float64__ADD_otherInt32, @Float64_field_Float64_0, @Float64_field_Float64_1, @Float64_B__ADD_otherFloat64__ADD_otherInt32, @Float64_init_valuePtrf64, @Float64_field_Float64_0, @Float64_field_Float64_1, @Float64_B__ADD_otherFloat64__ADD_otherInt32, @Float64_init_valuePtrf64], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Addable, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, @Float64], "offset_tbl" = [24 : i32, 10 : i32, 0 : i32, 20 : i32, 0 : i32, 0 : i32, 0 : i32, 10 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 8748823673944961442 : i64, "base_typ" = !llvm.struct<(f64)>, "data_size_fn" = "_data_size_Float64", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "Int32", "methods" = [@Int32_field_value, @Int32_field_Int32_0, @Int32_B_init_valuePtri32, @Int32_B_value_, @Int32_B__ADD_otherFloat64__ADD_otherInt32, @Int32_init_valuePtri32, @Int32_value_, @Int32__ADD_otherFloat64, @Int32__ADD_otherInt32, @Int32_field_Int32_0, @Int32_field_Int32_0, @Int32_B__ADD_otherFloat64__ADD_otherInt32, @Int32_init_valuePtri32, @Int32_field_Int32_0, @Int32_field_Int32_0, @Int32_B__ADD_otherFloat64__ADD_otherInt32, @Int32_init_valuePtri32], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Addable, 18446744073709551615 : i64, 18446744073709551615 : i64, @Int32, 18446744073709551615 : i64], "offset_tbl" = [23 : i32, 10 : i32, 0 : i32, 19 : i32, 0 : i32, 0 : i32, 10 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 15289183833144277113 : i64, "base_typ" = !llvm.struct<(i32)>, "data_size_fn" = "_data_size_Int32", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+  "mini.typedef"() {"class_name" = "Holder", "methods" = [@Holder_field_Holder_0, @Holder_field_held, @Holder_B_init_heldT, @Holder_B_value_, @Holder_B__set_value_xT, @Holder_init_heldT, @Holder_value_, @Holder__set_value_xT], "hash_tbl" = [@Object, @any_typ, @Holder, 18446744073709551615 : i64], "offset_tbl" = [18 : i32, 10 : i32, 10 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 18184746607930814959 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>)>, "data_size_fn" = "_data_size_Holder", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
   "llvm.func"() <{"sym_name" = "report_exception", "function_type" = !llvm.func<void (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
   }) : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_Pair", "types" = [!llvm.ptr, !llvm.ptr, 0 : i64, 1 : i64]} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_Pair", "types" = [!llvm.ptr, !llvm.ptr, 0 : i64, 1 : i64]} : () -> ()
   "mini.type_accessor_def"() {"offset" = 0 : i32, "meth_name" = "Pair_field_Pair_0"} : () -> ()
   "mini.type_accessor_def"() {"offset" = 1 : i32, "meth_name" = "Pair_field_Pair_1"} : () -> ()
   "mini.getter_def"() {"meth_name" = "Pair_getter_first", "types" = [!llvm.ptr, !llvm.ptr, 0 : i64, 1 : i64], "offset" = 2 : i64, "original_type" = !llvm.struct<(!llvm.ptr, i160)>, "specialized_name" = "any_typ", "box"} : () -> ()
@@ -115,7 +115,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %46 = "llvm.extractvalue"(%13) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %47 = "llvm.load"(%16) : (!llvm.ptr) -> i32
     %48 = "llvm.getelementptr"(%46, %47) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<10 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %49 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %49 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %50 = "llvm.getelementptr"(%48, %49) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%50) : (!llvm.ptr) -> ()
   }) {"func_name" = "Pair_B_init_firstT_secondU", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -141,7 +141,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %64 = "llvm.extractvalue"(%59) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %65 = "llvm.load"(%62) : (!llvm.ptr) -> i32
     %66 = "llvm.getelementptr"(%64, %65) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<10 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %67 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %67 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %68 = "llvm.getelementptr"(%66, %67) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%68) : (!llvm.ptr) -> ()
   }) {"func_name" = "Pair_B_first_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -167,11 +167,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %82 = "llvm.extractvalue"(%77) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %83 = "llvm.load"(%80) : (!llvm.ptr) -> i32
     %84 = "llvm.getelementptr"(%82, %83) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<10 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %85 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %85 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %86 = "llvm.getelementptr"(%84, %85) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%86) : (!llvm.ptr) -> ()
   }) {"func_name" = "Pair_B_second_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_FancyPair", "types" = [!llvm.struct<(f64, f64, f64, f64)>, f64]} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_FancyPair", "types" = [!llvm.struct<(f64, f64, f64, f64)>, f64]} : () -> ()
   "mini.getter_def"() {"meth_name" = "FancyPair_getter_first", "types" = [!llvm.struct<(f64, f64, f64, f64)>, f64], "offset" = 0 : i64, "original_type" = !llvm.struct<(!llvm.ptr, i160)>, "specialized_name" = "tuple_typ", "parameterization" = "_parameterization_Tuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64_", "box"} : () -> ()
   "mini.setter_def"() {"meth_name" = "FancyPair_setter_first", "types" = [!llvm.struct<(f64, f64, f64, f64)>, f64], "offset" = 0 : i64, "original_type" = !llvm.struct<(!llvm.ptr, i160)>, "specialized_name" = "tuple_typ", "parameterization" = "_parameterization_Tuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64_", "unbox"} : () -> ()
   "mini.accessor_def"() {"meth_name" = "FancyPair_field_first", "getter_name" = "FancyPair_getter_first", "setter_name" = "FancyPair_setter_first"} : () -> ()
@@ -238,7 +238,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %133 = "llvm.extractvalue"(%100) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %134 = "llvm.load"(%103) : (!llvm.ptr) -> i32
     %135 = "llvm.getelementptr"(%133, %134) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<20 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %136 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %136 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %137 = "llvm.getelementptr"(%135, %136) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%137) : (!llvm.ptr) -> ()
   }) {"func_name" = "FancyPair_B_init_firstTuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64__secondPtrf64", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -255,7 +255,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %143 = "llvm.extractvalue"(%138) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %144 = "llvm.load"(%141) : (!llvm.ptr) -> i32
     %145 = "llvm.getelementptr"(%143, %144) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<20 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %146 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %146 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %147 = "llvm.getelementptr"(%145, %146) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%147) : (!llvm.ptr) -> ()
   }) {"func_name" = "FancyPair_B_first_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -281,12 +281,12 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %161 = "llvm.extractvalue"(%156) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %162 = "llvm.load"(%159) : (!llvm.ptr) -> i32
     %163 = "llvm.getelementptr"(%161, %162) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<20 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %164 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %164 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %165 = "llvm.getelementptr"(%163, %164) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%165) : (!llvm.ptr) -> ()
   }) {"func_name" = "FancyPair_B_second_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_Container", "types" = []} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_Iterator2", "types" = [!llvm.ptr]} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_Container", "types" = []} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_Iterator2", "types" = [!llvm.ptr]} : () -> ()
   "mini.type_accessor_def"() {"offset" = 0 : i32, "meth_name" = "Iterator2_field_Iterator2_0"} : () -> ()
   "mini.func"() ({
   ^bb27(%166 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %167 : !llvm.ptr):
@@ -301,11 +301,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %171 = "llvm.extractvalue"(%166) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %172 = "llvm.load"(%169) : (!llvm.ptr) -> i32
     %173 = "llvm.getelementptr"(%171, %172) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<3 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %174 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %174 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %175 = "llvm.getelementptr"(%173, %174) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%175) : (!llvm.ptr) -> ()
   }) {"func_name" = "Iterator2_B_next_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_Iterable2", "types" = [!llvm.ptr]} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_Iterable2", "types" = [!llvm.ptr]} : () -> ()
   "mini.type_accessor_def"() {"offset" = 0 : i32, "meth_name" = "Iterable2_field_Iterable2_0"} : () -> ()
   "mini.func"() ({
   ^bb30(%176 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %177 : !llvm.ptr):
@@ -320,7 +320,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %181 = "llvm.extractvalue"(%176) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %182 = "llvm.load"(%179) : (!llvm.ptr) -> i32
     %183 = "llvm.getelementptr"(%181, %182) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<23 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %184 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %184 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %185 = "llvm.getelementptr"(%183, %184) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%185) : (!llvm.ptr) -> ()
   }) {"func_name" = "Iterable2_B_iterator_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -384,7 +384,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %231 = "llvm.extractvalue"(%212) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %232 = "llvm.load"(%215) : (!llvm.ptr) -> i32
     %233 = "llvm.getelementptr"(%231, %232) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<23 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %234 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %234 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %235 = "llvm.getelementptr"(%233, %234) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%235) : (!llvm.ptr) -> ()
   }) {"func_name" = "Iterable2_B_each_fFunctionT_to_Nothing", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -473,7 +473,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %303 = "llvm.extractvalue"(%270) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %304 = "llvm.load"(%273) : (!llvm.ptr) -> i32
     %305 = "llvm.getelementptr"(%303, %304) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<23 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %306 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %306 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %307 = "llvm.getelementptr"(%305, %306) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%307) : (!llvm.ptr) -> ()
   }) {"func_name" = "Iterable2_B_reduce_accumulatorT_fFunctionT._T_to_T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -551,7 +551,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %364 = "llvm.extractvalue"(%345) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %365 = "llvm.load"(%348) : (!llvm.ptr) -> i32
     %366 = "llvm.getelementptr"(%364, %365) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<23 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %367 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %367 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %368 = "llvm.getelementptr"(%366, %367) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%368) : (!llvm.ptr) -> ()
   }) {"func_name" = "Iterable2_B_all_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -624,7 +624,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %420 = "llvm.extractvalue"(%401) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %421 = "llvm.load"(%404) : (!llvm.ptr) -> i32
     %422 = "llvm.getelementptr"(%420, %421) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<23 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %423 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %423 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %424 = "llvm.getelementptr"(%422, %423) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%424) : (!llvm.ptr) -> ()
   }) {"func_name" = "Iterable2_B_any_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -682,7 +682,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %468 = "llvm.extractvalue"(%449) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %469 = "llvm.load"(%452) : (!llvm.ptr) -> i32
     %470 = "llvm.getelementptr"(%468, %469) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<23 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %471 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %471 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %472 = "llvm.getelementptr"(%470, %471) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%472) : (!llvm.ptr) -> ()
   }) {"func_name" = "Iterable2_B_map_fFunctionT_to_U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -737,7 +737,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %513 = "llvm.extractvalue"(%494) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %514 = "llvm.load"(%497) : (!llvm.ptr) -> i32
     %515 = "llvm.getelementptr"(%513, %514) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<23 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %516 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %516 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %517 = "llvm.getelementptr"(%515, %516) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%517) : (!llvm.ptr) -> ()
   }) {"func_name" = "Iterable2_B_filter_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -791,7 +791,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %557 = "llvm.extractvalue"(%538) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %558 = "llvm.load"(%541) : (!llvm.ptr) -> i32
     %559 = "llvm.getelementptr"(%557, %558) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<23 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %560 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %560 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %561 = "llvm.getelementptr"(%559, %560) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%561) : (!llvm.ptr) -> ()
   }) {"func_name" = "Iterable2_B_chain_otherIterable2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -845,7 +845,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %601 = "llvm.extractvalue"(%582) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %602 = "llvm.load"(%585) : (!llvm.ptr) -> i32
     %603 = "llvm.getelementptr"(%601, %602) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<23 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %604 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %604 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %605 = "llvm.getelementptr"(%603, %604) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%605) : (!llvm.ptr) -> ()
   }) {"func_name" = "Iterable2_B_interleave_otherIterable2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -907,7 +907,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %653 = "llvm.extractvalue"(%634) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %654 = "llvm.load"(%637) : (!llvm.ptr) -> i32
     %655 = "llvm.getelementptr"(%653, %654) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<23 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %656 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %656 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %657 = "llvm.getelementptr"(%655, %656) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%657) : (!llvm.ptr) -> ()
   }) {"func_name" = "Iterable2_B_zip_otherIterable2U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -969,11 +969,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %705 = "llvm.extractvalue"(%686) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %706 = "llvm.load"(%689) : (!llvm.ptr) -> i32
     %707 = "llvm.getelementptr"(%705, %706) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<23 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %708 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %708 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %709 = "llvm.getelementptr"(%707, %708) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%709) : (!llvm.ptr) -> ()
   }) {"func_name" = "Iterable2_B_product_otherIterable2U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_Array", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr)>, i32, i32]} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_Array", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr)>, i32, i32]} : () -> ()
   "mini.type_accessor_def"() {"offset" = 0 : i32, "meth_name" = "Array_field_Array_0"} : () -> ()
   "mini.getter_def"() {"meth_name" = "Array_getter_buffer", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr)>, i32, i32], "offset" = 1 : i64, "original_type" = !llvm.struct<(!llvm.ptr)>, "specialized_name" = "buffer_typ", "parameterization" = "_parameterization_BufferT"} : () -> ()
   "mini.setter_def"() {"meth_name" = "Array_setter_buffer", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr)>, i32, i32], "offset" = 1 : i64, "original_type" = !llvm.struct<(!llvm.ptr)>, "specialized_name" = "buffer_typ", "parameterization" = "_parameterization_BufferT"} : () -> ()
@@ -1057,7 +1057,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %764 = "mini.addr_of"() {"global_name" = @Array} : () -> !llvm.ptr
     %765 = "llvm.load"(%748) : (!llvm.ptr) -> i32
     %766 = "llvm.getelementptr"(%764, %765) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %767 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %767 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %768 = "llvm.getelementptr"(%766, %767) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%768) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B__Self_from_iterable_iterableIterable2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -1089,7 +1089,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %786 = "llvm.extractvalue"(%781) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %787 = "llvm.load"(%784) : (!llvm.ptr) -> i32
     %788 = "llvm.getelementptr"(%786, %787) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %789 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %789 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %790 = "llvm.getelementptr"(%788, %789) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%790) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_init_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -1138,7 +1138,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %824 = "llvm.extractvalue"(%805) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %825 = "llvm.load"(%808) : (!llvm.ptr) -> i32
     %826 = "llvm.getelementptr"(%824, %825) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %827 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %827 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %828 = "llvm.getelementptr"(%826, %827) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%828) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_init_capacityPtri32", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -1204,7 +1204,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %878 = "llvm.extractvalue"(%845) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %879 = "llvm.load"(%848) : (!llvm.ptr) -> i32
     %880 = "llvm.getelementptr"(%878, %879) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %881 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %881 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %882 = "llvm.getelementptr"(%880, %881) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%882) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_init_lengthPtri32_capacityPtri32", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -1229,7 +1229,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %895 = "llvm.extractvalue"(%890) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %896 = "llvm.load"(%893) : (!llvm.ptr) -> i32
     %897 = "llvm.getelementptr"(%895, %896) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %898 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %898 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %899 = "llvm.getelementptr"(%897, %898) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%899) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_length_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -1254,7 +1254,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %912 = "llvm.extractvalue"(%907) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %913 = "llvm.load"(%910) : (!llvm.ptr) -> i32
     %914 = "llvm.getelementptr"(%912, %913) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %915 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %915 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %916 = "llvm.getelementptr"(%914, %915) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%916) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_capacity_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -1329,7 +1329,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %973 = "llvm.extractvalue"(%954) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %974 = "llvm.load"(%957) : (!llvm.ptr) -> i32
     %975 = "llvm.getelementptr"(%973, %974) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %976 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %976 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %977 = "llvm.getelementptr"(%975, %976) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%977) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_append_xT", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -1409,7 +1409,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1034 = "llvm.extractvalue"(%1015) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1035 = "llvm.load"(%1018) : (!llvm.ptr) -> i32
     %1036 = "llvm.getelementptr"(%1034, %1035) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1037 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1037 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1038 = "llvm.getelementptr"(%1036, %1037) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1038) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_reserve_new_capacityPtri32", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -1508,7 +1508,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1115 = "llvm.extractvalue"(%1096) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1116 = "llvm.load"(%1099) : (!llvm.ptr) -> i32
     %1117 = "llvm.getelementptr"(%1115, %1116) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1118 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1118 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1119 = "llvm.getelementptr"(%1117, %1118) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1119) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B__index_xPtri32", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -1625,7 +1625,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1213 = "llvm.extractvalue"(%1180) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1214 = "llvm.load"(%1183) : (!llvm.ptr) -> i32
     %1215 = "llvm.getelementptr"(%1213, %1214) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1216 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1216 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1217 = "llvm.getelementptr"(%1215, %1216) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1217) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B__set_index_xPtri32_valueT", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -1677,7 +1677,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1261 = builtin.unrealized_conversion_cast %1226 : !mini.fatptr<"Exception"> to !mini.union<[!mini.fatptr<"OutOfBounds">, !mini.nil]>
     %1262 = "mini.unwrap"(%1261) : (!mini.union<[!mini.fatptr<"OutOfBounds">, !mini.nil]>) -> !llvm.struct<(!llvm.ptr, i160)>
     %1263 = "mini.coro_yield"(%1262) : (!llvm.struct<(!llvm.ptr, i160)>) -> !llvm.struct<(!llvm.ptr, i160)>
-    %1264 = "mini.wrap"(%1263) : (!llvm.struct<(!llvm.ptr, i160)>) -> !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>
+    %1264 = "mini.wrap"(%1263) : (!llvm.struct<(!llvm.ptr, i160)>) -> !mini.union<[!mini.nil, !mini.fatptr<"Exception">]>
   }) {"func_name" = "Array_throw_oob_xPtri32", "result_type" = !llvm.void, "yield_type" = !mini.fatptr<"OutOfBounds">} : () -> ()
   "mini.func"() ({
   ^bb134(%1265 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1266 : !llvm.ptr):
@@ -1708,7 +1708,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1284 = "llvm.extractvalue"(%1265) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1285 = "llvm.load"(%1268) : (!llvm.ptr) -> i32
     %1286 = "llvm.getelementptr"(%1284, %1285) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1287 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1287 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1288 = "llvm.getelementptr"(%1286, %1287) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1288) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_throw_oob_xPtri32", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -1752,7 +1752,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1319 = "llvm.extractvalue"(%1300) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1320 = "llvm.load"(%1303) : (!llvm.ptr) -> i32
     %1321 = "llvm.getelementptr"(%1319, %1320) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1322 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1322 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1323 = "llvm.getelementptr"(%1321, %1322) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1323) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_unchecked_index_xPtri32", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -1813,7 +1813,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1370 = "llvm.extractvalue"(%1337) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1371 = "llvm.load"(%1340) : (!llvm.ptr) -> i32
     %1372 = "llvm.getelementptr"(%1370, %1371) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1373 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1373 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1374 = "llvm.getelementptr"(%1372, %1373) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1374) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_unchecked_insert_xPtri32_valueT", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -1846,7 +1846,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1394 = "llvm.extractvalue"(%1389) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1395 = "llvm.load"(%1392) : (!llvm.ptr) -> i32
     %1396 = "llvm.getelementptr"(%1394, %1395) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1397 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1397 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1398 = "llvm.getelementptr"(%1396, %1397) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1398) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_iterator_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -1879,7 +1879,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1418 = "llvm.extractvalue"(%1399) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1419 = "llvm.load"(%1402) : (!llvm.ptr) -> i32
     %1420 = "llvm.getelementptr"(%1418, %1419) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1421 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1421 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1422 = "llvm.getelementptr"(%1420, %1421) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1422) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_each_fFunctionT_to_Nothing", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -1928,7 +1928,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1456 = "llvm.extractvalue"(%1423) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1457 = "llvm.load"(%1426) : (!llvm.ptr) -> i32
     %1458 = "llvm.getelementptr"(%1456, %1457) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1459 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1459 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1460 = "llvm.getelementptr"(%1458, %1459) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1460) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_reduce_accumulatorT_fFunctionT._T_to_T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -1961,7 +1961,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1480 = "llvm.extractvalue"(%1461) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1481 = "llvm.load"(%1464) : (!llvm.ptr) -> i32
     %1482 = "llvm.getelementptr"(%1480, %1481) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1483 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1483 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1484 = "llvm.getelementptr"(%1482, %1483) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1484) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_all_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -1994,7 +1994,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1504 = "llvm.extractvalue"(%1485) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1505 = "llvm.load"(%1488) : (!llvm.ptr) -> i32
     %1506 = "llvm.getelementptr"(%1504, %1505) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1507 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1507 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1508 = "llvm.getelementptr"(%1506, %1507) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1508) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_any_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -2027,7 +2027,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1528 = "llvm.extractvalue"(%1509) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1529 = "llvm.load"(%1512) : (!llvm.ptr) -> i32
     %1530 = "llvm.getelementptr"(%1528, %1529) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1531 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1531 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1532 = "llvm.getelementptr"(%1530, %1531) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1532) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_map_fFunctionT_to_U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -2060,7 +2060,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1552 = "llvm.extractvalue"(%1533) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1553 = "llvm.load"(%1536) : (!llvm.ptr) -> i32
     %1554 = "llvm.getelementptr"(%1552, %1553) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1555 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1555 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1556 = "llvm.getelementptr"(%1554, %1555) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1556) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_filter_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -2093,7 +2093,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1576 = "llvm.extractvalue"(%1557) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1577 = "llvm.load"(%1560) : (!llvm.ptr) -> i32
     %1578 = "llvm.getelementptr"(%1576, %1577) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1579 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1579 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1580 = "llvm.getelementptr"(%1578, %1579) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1580) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_chain_otherIterable2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -2126,7 +2126,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1600 = "llvm.extractvalue"(%1581) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1601 = "llvm.load"(%1584) : (!llvm.ptr) -> i32
     %1602 = "llvm.getelementptr"(%1600, %1601) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1603 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1603 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1604 = "llvm.getelementptr"(%1602, %1603) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1604) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_interleave_otherIterable2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -2159,7 +2159,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1624 = "llvm.extractvalue"(%1605) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1625 = "llvm.load"(%1608) : (!llvm.ptr) -> i32
     %1626 = "llvm.getelementptr"(%1624, %1625) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1627 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1627 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1628 = "llvm.getelementptr"(%1626, %1627) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1628) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_zip_otherIterable2U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -2192,11 +2192,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1648 = "llvm.extractvalue"(%1629) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1649 = "llvm.load"(%1632) : (!llvm.ptr) -> i32
     %1650 = "llvm.getelementptr"(%1648, %1649) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<75 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1651 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1651 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1652 = "llvm.getelementptr"(%1650, %1651) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1652) : (!llvm.ptr) -> ()
   }) {"func_name" = "Array_B_product_otherIterable2U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_ArrayIterator", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i32]} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_ArrayIterator", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i32]} : () -> ()
   "mini.type_accessor_def"() {"offset" = 0 : i32, "meth_name" = "ArrayIterator_field_ArrayIterator_0"} : () -> ()
   "mini.getter_def"() {"meth_name" = "ArrayIterator_getter_array", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i32], "offset" = 1 : i64, "original_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "specialized_name" = "Array", "parameterization" = "_parameterization_ArrayArrayIterator.T_subtype_Any"} : () -> ()
   "mini.setter_def"() {"meth_name" = "ArrayIterator_setter_array", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i32], "offset" = 1 : i64, "original_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "specialized_name" = "Array", "parameterization" = "_parameterization_ArrayArrayIterator.T_subtype_Any"} : () -> ()
@@ -2245,7 +2245,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1683 = "llvm.extractvalue"(%1664) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1684 = "llvm.load"(%1667) : (!llvm.ptr) -> i32
     %1685 = "llvm.getelementptr"(%1683, %1684) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<10 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1686 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1686 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1687 = "llvm.getelementptr"(%1685, %1686) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1687) : (!llvm.ptr) -> ()
   }) {"func_name" = "ArrayIterator_B_init_arrayArrayT", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -2307,11 +2307,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1733 = "llvm.extractvalue"(%1728) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1734 = "llvm.load"(%1731) : (!llvm.ptr) -> i32
     %1735 = "llvm.getelementptr"(%1733, %1734) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<10 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1736 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1736 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1737 = "llvm.getelementptr"(%1735, %1736) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1737) : (!llvm.ptr) -> ()
   }) {"func_name" = "ArrayIterator_B_next_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_MapIterable2", "types" = [!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>]} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_MapIterable2", "types" = [!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>]} : () -> ()
   "mini.type_accessor_def"() {"offset" = 0 : i32, "meth_name" = "MapIterable2_field_MapIterable2_0"} : () -> ()
   "mini.type_accessor_def"() {"offset" = 1 : i32, "meth_name" = "MapIterable2_field_MapIterable2_1"} : () -> ()
   "mini.getter_def"() {"meth_name" = "MapIterable2_getter_iterable", "types" = [!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>], "offset" = 2 : i64, "original_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "specialized_name" = "Iterable2", "parameterization" = "_parameterization_Iterable2MapIterable2.T_subtype_Any"} : () -> ()
@@ -2378,7 +2378,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1784 = "llvm.extractvalue"(%1751) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1785 = "llvm.load"(%1754) : (!llvm.ptr) -> i32
     %1786 = "llvm.getelementptr"(%1784, %1785) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<51 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1787 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1787 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1788 = "llvm.getelementptr"(%1786, %1787) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1788) : (!llvm.ptr) -> ()
   }) {"func_name" = "MapIterable2_B_init_iterableIterable2T_fFunctionT_to_U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -2428,7 +2428,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1825 = "llvm.extractvalue"(%1820) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1826 = "llvm.load"(%1823) : (!llvm.ptr) -> i32
     %1827 = "llvm.getelementptr"(%1825, %1826) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<51 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1828 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1828 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1829 = "llvm.getelementptr"(%1827, %1828) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1829) : (!llvm.ptr) -> ()
   }) {"func_name" = "MapIterable2_B_iterator_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -2461,7 +2461,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1849 = "llvm.extractvalue"(%1830) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1850 = "llvm.load"(%1833) : (!llvm.ptr) -> i32
     %1851 = "llvm.getelementptr"(%1849, %1850) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<51 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1852 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1852 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1853 = "llvm.getelementptr"(%1851, %1852) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1853) : (!llvm.ptr) -> ()
   }) {"func_name" = "MapIterable2_B_each_fFunctionT_to_Nothing", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -2510,7 +2510,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1887 = "llvm.extractvalue"(%1854) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1888 = "llvm.load"(%1857) : (!llvm.ptr) -> i32
     %1889 = "llvm.getelementptr"(%1887, %1888) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<51 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1890 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1890 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1891 = "llvm.getelementptr"(%1889, %1890) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1891) : (!llvm.ptr) -> ()
   }) {"func_name" = "MapIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -2543,7 +2543,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1911 = "llvm.extractvalue"(%1892) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1912 = "llvm.load"(%1895) : (!llvm.ptr) -> i32
     %1913 = "llvm.getelementptr"(%1911, %1912) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<51 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1914 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1914 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1915 = "llvm.getelementptr"(%1913, %1914) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1915) : (!llvm.ptr) -> ()
   }) {"func_name" = "MapIterable2_B_all_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -2576,7 +2576,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1935 = "llvm.extractvalue"(%1916) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1936 = "llvm.load"(%1919) : (!llvm.ptr) -> i32
     %1937 = "llvm.getelementptr"(%1935, %1936) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<51 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1938 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1938 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1939 = "llvm.getelementptr"(%1937, %1938) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1939) : (!llvm.ptr) -> ()
   }) {"func_name" = "MapIterable2_B_any_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -2609,7 +2609,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1959 = "llvm.extractvalue"(%1940) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1960 = "llvm.load"(%1943) : (!llvm.ptr) -> i32
     %1961 = "llvm.getelementptr"(%1959, %1960) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<51 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1962 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1962 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1963 = "llvm.getelementptr"(%1961, %1962) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1963) : (!llvm.ptr) -> ()
   }) {"func_name" = "MapIterable2_B_map_fFunctionT_to_U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -2642,7 +2642,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %1983 = "llvm.extractvalue"(%1964) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %1984 = "llvm.load"(%1967) : (!llvm.ptr) -> i32
     %1985 = "llvm.getelementptr"(%1983, %1984) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<51 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %1986 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %1986 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %1987 = "llvm.getelementptr"(%1985, %1986) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%1987) : (!llvm.ptr) -> ()
   }) {"func_name" = "MapIterable2_B_filter_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -2675,7 +2675,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2007 = "llvm.extractvalue"(%1988) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2008 = "llvm.load"(%1991) : (!llvm.ptr) -> i32
     %2009 = "llvm.getelementptr"(%2007, %2008) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<51 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2010 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2010 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2011 = "llvm.getelementptr"(%2009, %2010) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2011) : (!llvm.ptr) -> ()
   }) {"func_name" = "MapIterable2_B_chain_otherIterable2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -2708,7 +2708,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2031 = "llvm.extractvalue"(%2012) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2032 = "llvm.load"(%2015) : (!llvm.ptr) -> i32
     %2033 = "llvm.getelementptr"(%2031, %2032) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<51 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2034 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2034 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2035 = "llvm.getelementptr"(%2033, %2034) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2035) : (!llvm.ptr) -> ()
   }) {"func_name" = "MapIterable2_B_interleave_otherIterable2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -2741,7 +2741,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2055 = "llvm.extractvalue"(%2036) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2056 = "llvm.load"(%2039) : (!llvm.ptr) -> i32
     %2057 = "llvm.getelementptr"(%2055, %2056) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<51 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2058 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2058 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2059 = "llvm.getelementptr"(%2057, %2058) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2059) : (!llvm.ptr) -> ()
   }) {"func_name" = "MapIterable2_B_zip_otherIterable2U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -2774,11 +2774,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2079 = "llvm.extractvalue"(%2060) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2080 = "llvm.load"(%2063) : (!llvm.ptr) -> i32
     %2081 = "llvm.getelementptr"(%2079, %2080) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<51 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2082 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2082 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2083 = "llvm.getelementptr"(%2081, %2082) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2083) : (!llvm.ptr) -> ()
   }) {"func_name" = "MapIterable2_B_product_otherIterable2U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_MapIterator2", "types" = [!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>]} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_MapIterator2", "types" = [!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>]} : () -> ()
   "mini.type_accessor_def"() {"offset" = 0 : i32, "meth_name" = "MapIterator2_field_MapIterator2_0"} : () -> ()
   "mini.type_accessor_def"() {"offset" = 1 : i32, "meth_name" = "MapIterator2_field_MapIterator2_1"} : () -> ()
   "mini.getter_def"() {"meth_name" = "MapIterator2_getter_iterator", "types" = [!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>], "offset" = 2 : i64, "original_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "specialized_name" = "Iterator2", "parameterization" = "_parameterization_Iterator2MapIterator2.T_subtype_Any"} : () -> ()
@@ -2845,7 +2845,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2130 = "llvm.extractvalue"(%2097) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2131 = "llvm.load"(%2100) : (!llvm.ptr) -> i32
     %2132 = "llvm.getelementptr"(%2130, %2131) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<11 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2133 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2133 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2134 = "llvm.getelementptr"(%2132, %2133) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2134) : (!llvm.ptr) -> ()
   }) {"func_name" = "MapIterator2_B_init_iteratorIterator2T_fFunctionT_to_U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -2892,11 +2892,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2164 = "llvm.extractvalue"(%2159) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2165 = "llvm.load"(%2162) : (!llvm.ptr) -> i32
     %2166 = "llvm.getelementptr"(%2164, %2165) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<11 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2167 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2167 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2168 = "llvm.getelementptr"(%2166, %2167) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2168) : (!llvm.ptr) -> ()
   }) {"func_name" = "MapIterator2_B_next_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_FilterIterable2", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>]} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_FilterIterable2", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>]} : () -> ()
   "mini.type_accessor_def"() {"offset" = 0 : i32, "meth_name" = "FilterIterable2_field_FilterIterable2_0"} : () -> ()
   "mini.getter_def"() {"meth_name" = "FilterIterable2_getter_iterable", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>], "offset" = 1 : i64, "original_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "specialized_name" = "Iterable2", "parameterization" = "_parameterization_Iterable2FilterIterable2.T_subtype_Any"} : () -> ()
   "mini.setter_def"() {"meth_name" = "FilterIterable2_setter_iterable", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>], "offset" = 1 : i64, "original_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "specialized_name" = "Iterable2", "parameterization" = "_parameterization_Iterable2FilterIterable2.T_subtype_Any"} : () -> ()
@@ -2962,7 +2962,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2215 = "llvm.extractvalue"(%2182) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2216 = "llvm.load"(%2185) : (!llvm.ptr) -> i32
     %2217 = "llvm.getelementptr"(%2215, %2216) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2218 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2218 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2219 = "llvm.getelementptr"(%2217, %2218) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2219) : (!llvm.ptr) -> ()
   }) {"func_name" = "FilterIterable2_B_init_iterableIterable2T_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3011,7 +3011,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2255 = "llvm.extractvalue"(%2250) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2256 = "llvm.load"(%2253) : (!llvm.ptr) -> i32
     %2257 = "llvm.getelementptr"(%2255, %2256) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2258 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2258 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2259 = "llvm.getelementptr"(%2257, %2258) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2259) : (!llvm.ptr) -> ()
   }) {"func_name" = "FilterIterable2_B_iterator_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3044,7 +3044,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2279 = "llvm.extractvalue"(%2260) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2280 = "llvm.load"(%2263) : (!llvm.ptr) -> i32
     %2281 = "llvm.getelementptr"(%2279, %2280) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2282 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2282 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2283 = "llvm.getelementptr"(%2281, %2282) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2283) : (!llvm.ptr) -> ()
   }) {"func_name" = "FilterIterable2_B_each_fFunctionT_to_Nothing", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3093,7 +3093,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2317 = "llvm.extractvalue"(%2284) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2318 = "llvm.load"(%2287) : (!llvm.ptr) -> i32
     %2319 = "llvm.getelementptr"(%2317, %2318) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2320 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2320 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2321 = "llvm.getelementptr"(%2319, %2320) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2321) : (!llvm.ptr) -> ()
   }) {"func_name" = "FilterIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3126,7 +3126,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2341 = "llvm.extractvalue"(%2322) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2342 = "llvm.load"(%2325) : (!llvm.ptr) -> i32
     %2343 = "llvm.getelementptr"(%2341, %2342) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2344 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2344 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2345 = "llvm.getelementptr"(%2343, %2344) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2345) : (!llvm.ptr) -> ()
   }) {"func_name" = "FilterIterable2_B_all_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3159,7 +3159,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2365 = "llvm.extractvalue"(%2346) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2366 = "llvm.load"(%2349) : (!llvm.ptr) -> i32
     %2367 = "llvm.getelementptr"(%2365, %2366) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2368 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2368 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2369 = "llvm.getelementptr"(%2367, %2368) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2369) : (!llvm.ptr) -> ()
   }) {"func_name" = "FilterIterable2_B_any_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3192,7 +3192,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2389 = "llvm.extractvalue"(%2370) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2390 = "llvm.load"(%2373) : (!llvm.ptr) -> i32
     %2391 = "llvm.getelementptr"(%2389, %2390) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2392 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2392 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2393 = "llvm.getelementptr"(%2391, %2392) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2393) : (!llvm.ptr) -> ()
   }) {"func_name" = "FilterIterable2_B_map_fFunctionT_to_U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3225,7 +3225,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2413 = "llvm.extractvalue"(%2394) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2414 = "llvm.load"(%2397) : (!llvm.ptr) -> i32
     %2415 = "llvm.getelementptr"(%2413, %2414) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2416 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2416 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2417 = "llvm.getelementptr"(%2415, %2416) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2417) : (!llvm.ptr) -> ()
   }) {"func_name" = "FilterIterable2_B_filter_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3258,7 +3258,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2437 = "llvm.extractvalue"(%2418) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2438 = "llvm.load"(%2421) : (!llvm.ptr) -> i32
     %2439 = "llvm.getelementptr"(%2437, %2438) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2440 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2440 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2441 = "llvm.getelementptr"(%2439, %2440) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2441) : (!llvm.ptr) -> ()
   }) {"func_name" = "FilterIterable2_B_chain_otherIterable2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3291,7 +3291,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2461 = "llvm.extractvalue"(%2442) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2462 = "llvm.load"(%2445) : (!llvm.ptr) -> i32
     %2463 = "llvm.getelementptr"(%2461, %2462) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2464 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2464 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2465 = "llvm.getelementptr"(%2463, %2464) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2465) : (!llvm.ptr) -> ()
   }) {"func_name" = "FilterIterable2_B_interleave_otherIterable2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3324,7 +3324,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2485 = "llvm.extractvalue"(%2466) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2486 = "llvm.load"(%2469) : (!llvm.ptr) -> i32
     %2487 = "llvm.getelementptr"(%2485, %2486) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2488 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2488 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2489 = "llvm.getelementptr"(%2487, %2488) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2489) : (!llvm.ptr) -> ()
   }) {"func_name" = "FilterIterable2_B_zip_otherIterable2U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3357,11 +3357,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2509 = "llvm.extractvalue"(%2490) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2510 = "llvm.load"(%2493) : (!llvm.ptr) -> i32
     %2511 = "llvm.getelementptr"(%2509, %2510) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2512 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2512 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2513 = "llvm.getelementptr"(%2511, %2512) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2513) : (!llvm.ptr) -> ()
   }) {"func_name" = "FilterIterable2_B_product_otherIterable2U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_FilterIterator2", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>]} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_FilterIterator2", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>]} : () -> ()
   "mini.type_accessor_def"() {"offset" = 0 : i32, "meth_name" = "FilterIterator2_field_FilterIterator2_0"} : () -> ()
   "mini.getter_def"() {"meth_name" = "FilterIterator2_getter_iterator", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>], "offset" = 1 : i64, "original_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "specialized_name" = "Iterator2", "parameterization" = "_parameterization_Iterator2FilterIterator2.T_subtype_Any"} : () -> ()
   "mini.setter_def"() {"meth_name" = "FilterIterator2_setter_iterator", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>], "offset" = 1 : i64, "original_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "specialized_name" = "Iterator2", "parameterization" = "_parameterization_Iterator2FilterIterator2.T_subtype_Any"} : () -> ()
@@ -3427,7 +3427,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2560 = "llvm.extractvalue"(%2527) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2561 = "llvm.load"(%2530) : (!llvm.ptr) -> i32
     %2562 = "llvm.getelementptr"(%2560, %2561) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<10 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2563 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2563 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2564 = "llvm.getelementptr"(%2562, %2563) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2564) : (!llvm.ptr) -> ()
   }) {"func_name" = "FilterIterator2_B_init_iteratorIterator2T_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3483,11 +3483,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2600 = "llvm.extractvalue"(%2595) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2601 = "llvm.load"(%2598) : (!llvm.ptr) -> i32
     %2602 = "llvm.getelementptr"(%2600, %2601) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<10 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2603 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2603 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2604 = "llvm.getelementptr"(%2602, %2603) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2604) : (!llvm.ptr) -> ()
   }) {"func_name" = "FilterIterator2_B_next_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_ChainIterable2", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>]} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_ChainIterable2", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>]} : () -> ()
   "mini.type_accessor_def"() {"offset" = 0 : i32, "meth_name" = "ChainIterable2_field_ChainIterable2_0"} : () -> ()
   "mini.getter_def"() {"meth_name" = "ChainIterable2_getter_first", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>], "offset" = 1 : i64, "original_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "specialized_name" = "Iterable2", "parameterization" = "_parameterization_Iterable2ChainIterable2.T_subtype_Any"} : () -> ()
   "mini.setter_def"() {"meth_name" = "ChainIterable2_setter_first", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>], "offset" = 1 : i64, "original_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "specialized_name" = "Iterable2", "parameterization" = "_parameterization_Iterable2ChainIterable2.T_subtype_Any"} : () -> ()
@@ -3553,7 +3553,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2651 = "llvm.extractvalue"(%2618) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2652 = "llvm.load"(%2621) : (!llvm.ptr) -> i32
     %2653 = "llvm.getelementptr"(%2651, %2652) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2654 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2654 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2655 = "llvm.getelementptr"(%2653, %2654) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2655) : (!llvm.ptr) -> ()
   }) {"func_name" = "ChainIterable2_B_init_firstIterable2T_secondIterable2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3609,7 +3609,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2698 = "llvm.extractvalue"(%2693) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2699 = "llvm.load"(%2696) : (!llvm.ptr) -> i32
     %2700 = "llvm.getelementptr"(%2698, %2699) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2701 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2701 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2702 = "llvm.getelementptr"(%2700, %2701) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2702) : (!llvm.ptr) -> ()
   }) {"func_name" = "ChainIterable2_B_iterator_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3642,7 +3642,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2722 = "llvm.extractvalue"(%2703) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2723 = "llvm.load"(%2706) : (!llvm.ptr) -> i32
     %2724 = "llvm.getelementptr"(%2722, %2723) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2725 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2725 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2726 = "llvm.getelementptr"(%2724, %2725) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2726) : (!llvm.ptr) -> ()
   }) {"func_name" = "ChainIterable2_B_each_fFunctionT_to_Nothing", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3691,7 +3691,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2760 = "llvm.extractvalue"(%2727) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2761 = "llvm.load"(%2730) : (!llvm.ptr) -> i32
     %2762 = "llvm.getelementptr"(%2760, %2761) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2763 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2763 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2764 = "llvm.getelementptr"(%2762, %2763) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2764) : (!llvm.ptr) -> ()
   }) {"func_name" = "ChainIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3724,7 +3724,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2784 = "llvm.extractvalue"(%2765) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2785 = "llvm.load"(%2768) : (!llvm.ptr) -> i32
     %2786 = "llvm.getelementptr"(%2784, %2785) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2787 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2787 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2788 = "llvm.getelementptr"(%2786, %2787) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2788) : (!llvm.ptr) -> ()
   }) {"func_name" = "ChainIterable2_B_all_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3757,7 +3757,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2808 = "llvm.extractvalue"(%2789) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2809 = "llvm.load"(%2792) : (!llvm.ptr) -> i32
     %2810 = "llvm.getelementptr"(%2808, %2809) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2811 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2811 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2812 = "llvm.getelementptr"(%2810, %2811) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2812) : (!llvm.ptr) -> ()
   }) {"func_name" = "ChainIterable2_B_any_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3790,7 +3790,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2832 = "llvm.extractvalue"(%2813) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2833 = "llvm.load"(%2816) : (!llvm.ptr) -> i32
     %2834 = "llvm.getelementptr"(%2832, %2833) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2835 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2835 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2836 = "llvm.getelementptr"(%2834, %2835) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2836) : (!llvm.ptr) -> ()
   }) {"func_name" = "ChainIterable2_B_map_fFunctionT_to_U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3823,7 +3823,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2856 = "llvm.extractvalue"(%2837) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2857 = "llvm.load"(%2840) : (!llvm.ptr) -> i32
     %2858 = "llvm.getelementptr"(%2856, %2857) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2859 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2859 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2860 = "llvm.getelementptr"(%2858, %2859) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2860) : (!llvm.ptr) -> ()
   }) {"func_name" = "ChainIterable2_B_filter_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3856,7 +3856,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2880 = "llvm.extractvalue"(%2861) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2881 = "llvm.load"(%2864) : (!llvm.ptr) -> i32
     %2882 = "llvm.getelementptr"(%2880, %2881) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2883 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2883 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2884 = "llvm.getelementptr"(%2882, %2883) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2884) : (!llvm.ptr) -> ()
   }) {"func_name" = "ChainIterable2_B_chain_otherIterable2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3889,7 +3889,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2904 = "llvm.extractvalue"(%2885) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2905 = "llvm.load"(%2888) : (!llvm.ptr) -> i32
     %2906 = "llvm.getelementptr"(%2904, %2905) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2907 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2907 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2908 = "llvm.getelementptr"(%2906, %2907) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2908) : (!llvm.ptr) -> ()
   }) {"func_name" = "ChainIterable2_B_interleave_otherIterable2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3922,7 +3922,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2928 = "llvm.extractvalue"(%2909) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2929 = "llvm.load"(%2912) : (!llvm.ptr) -> i32
     %2930 = "llvm.getelementptr"(%2928, %2929) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2931 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2931 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2932 = "llvm.getelementptr"(%2930, %2931) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2932) : (!llvm.ptr) -> ()
   }) {"func_name" = "ChainIterable2_B_zip_otherIterable2U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -3955,11 +3955,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %2952 = "llvm.extractvalue"(%2933) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %2953 = "llvm.load"(%2936) : (!llvm.ptr) -> i32
     %2954 = "llvm.getelementptr"(%2952, %2953) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %2955 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %2955 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %2956 = "llvm.getelementptr"(%2954, %2955) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%2956) : (!llvm.ptr) -> ()
   }) {"func_name" = "ChainIterable2_B_product_otherIterable2U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_ChainIterator2", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i1]} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_ChainIterator2", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i1]} : () -> ()
   "mini.type_accessor_def"() {"offset" = 0 : i32, "meth_name" = "ChainIterator2_field_ChainIterator2_0"} : () -> ()
   "mini.getter_def"() {"meth_name" = "ChainIterator2_getter_first", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i1], "offset" = 1 : i64, "original_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "specialized_name" = "Iterator2", "parameterization" = "_parameterization_Iterator2ChainIterator2.T_subtype_Any"} : () -> ()
   "mini.setter_def"() {"meth_name" = "ChainIterator2_setter_first", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i1], "offset" = 1 : i64, "original_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "specialized_name" = "Iterator2", "parameterization" = "_parameterization_Iterator2ChainIterator2.T_subtype_Any"} : () -> ()
@@ -4031,7 +4031,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3005 = "llvm.extractvalue"(%2972) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3006 = "llvm.load"(%2975) : (!llvm.ptr) -> i32
     %3007 = "llvm.getelementptr"(%3005, %3006) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<11 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3008 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3008 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3009 = "llvm.getelementptr"(%3007, %3008) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3009) : (!llvm.ptr) -> ()
   }) {"func_name" = "ChainIterator2_B_init_firstIterator2T_secondIterator2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -4089,11 +4089,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3047 = "llvm.extractvalue"(%3042) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3048 = "llvm.load"(%3045) : (!llvm.ptr) -> i32
     %3049 = "llvm.getelementptr"(%3047, %3048) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<11 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3050 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3050 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3051 = "llvm.getelementptr"(%3049, %3050) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3051) : (!llvm.ptr) -> ()
   }) {"func_name" = "ChainIterator2_B_next_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_InterleaveIterable2", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>]} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_InterleaveIterable2", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>]} : () -> ()
   "mini.type_accessor_def"() {"offset" = 0 : i32, "meth_name" = "InterleaveIterable2_field_InterleaveIterable2_0"} : () -> ()
   "mini.getter_def"() {"meth_name" = "InterleaveIterable2_getter_first", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>], "offset" = 1 : i64, "original_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "specialized_name" = "Iterable2", "parameterization" = "_parameterization_Iterable2InterleaveIterable2.T_subtype_Any"} : () -> ()
   "mini.setter_def"() {"meth_name" = "InterleaveIterable2_setter_first", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>], "offset" = 1 : i64, "original_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "specialized_name" = "Iterable2", "parameterization" = "_parameterization_Iterable2InterleaveIterable2.T_subtype_Any"} : () -> ()
@@ -4159,7 +4159,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3098 = "llvm.extractvalue"(%3065) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3099 = "llvm.load"(%3068) : (!llvm.ptr) -> i32
     %3100 = "llvm.getelementptr"(%3098, %3099) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3101 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3101 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3102 = "llvm.getelementptr"(%3100, %3101) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3102) : (!llvm.ptr) -> ()
   }) {"func_name" = "InterleaveIterable2_B_init_firstIterable2T_secondIterable2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -4215,7 +4215,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3145 = "llvm.extractvalue"(%3140) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3146 = "llvm.load"(%3143) : (!llvm.ptr) -> i32
     %3147 = "llvm.getelementptr"(%3145, %3146) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3148 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3148 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3149 = "llvm.getelementptr"(%3147, %3148) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3149) : (!llvm.ptr) -> ()
   }) {"func_name" = "InterleaveIterable2_B_iterator_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -4248,7 +4248,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3169 = "llvm.extractvalue"(%3150) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3170 = "llvm.load"(%3153) : (!llvm.ptr) -> i32
     %3171 = "llvm.getelementptr"(%3169, %3170) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3172 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3172 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3173 = "llvm.getelementptr"(%3171, %3172) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3173) : (!llvm.ptr) -> ()
   }) {"func_name" = "InterleaveIterable2_B_each_fFunctionT_to_Nothing", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -4297,7 +4297,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3207 = "llvm.extractvalue"(%3174) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3208 = "llvm.load"(%3177) : (!llvm.ptr) -> i32
     %3209 = "llvm.getelementptr"(%3207, %3208) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3210 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3210 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3211 = "llvm.getelementptr"(%3209, %3210) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3211) : (!llvm.ptr) -> ()
   }) {"func_name" = "InterleaveIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -4330,7 +4330,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3231 = "llvm.extractvalue"(%3212) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3232 = "llvm.load"(%3215) : (!llvm.ptr) -> i32
     %3233 = "llvm.getelementptr"(%3231, %3232) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3234 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3234 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3235 = "llvm.getelementptr"(%3233, %3234) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3235) : (!llvm.ptr) -> ()
   }) {"func_name" = "InterleaveIterable2_B_all_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -4363,7 +4363,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3255 = "llvm.extractvalue"(%3236) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3256 = "llvm.load"(%3239) : (!llvm.ptr) -> i32
     %3257 = "llvm.getelementptr"(%3255, %3256) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3258 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3258 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3259 = "llvm.getelementptr"(%3257, %3258) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3259) : (!llvm.ptr) -> ()
   }) {"func_name" = "InterleaveIterable2_B_any_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -4396,7 +4396,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3279 = "llvm.extractvalue"(%3260) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3280 = "llvm.load"(%3263) : (!llvm.ptr) -> i32
     %3281 = "llvm.getelementptr"(%3279, %3280) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3282 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3282 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3283 = "llvm.getelementptr"(%3281, %3282) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3283) : (!llvm.ptr) -> ()
   }) {"func_name" = "InterleaveIterable2_B_map_fFunctionT_to_U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -4429,7 +4429,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3303 = "llvm.extractvalue"(%3284) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3304 = "llvm.load"(%3287) : (!llvm.ptr) -> i32
     %3305 = "llvm.getelementptr"(%3303, %3304) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3306 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3306 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3307 = "llvm.getelementptr"(%3305, %3306) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3307) : (!llvm.ptr) -> ()
   }) {"func_name" = "InterleaveIterable2_B_filter_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -4462,7 +4462,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3327 = "llvm.extractvalue"(%3308) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3328 = "llvm.load"(%3311) : (!llvm.ptr) -> i32
     %3329 = "llvm.getelementptr"(%3327, %3328) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3330 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3330 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3331 = "llvm.getelementptr"(%3329, %3330) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3331) : (!llvm.ptr) -> ()
   }) {"func_name" = "InterleaveIterable2_B_chain_otherIterable2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -4495,7 +4495,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3351 = "llvm.extractvalue"(%3332) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3352 = "llvm.load"(%3335) : (!llvm.ptr) -> i32
     %3353 = "llvm.getelementptr"(%3351, %3352) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3354 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3354 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3355 = "llvm.getelementptr"(%3353, %3354) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3355) : (!llvm.ptr) -> ()
   }) {"func_name" = "InterleaveIterable2_B_interleave_otherIterable2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -4528,7 +4528,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3375 = "llvm.extractvalue"(%3356) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3376 = "llvm.load"(%3359) : (!llvm.ptr) -> i32
     %3377 = "llvm.getelementptr"(%3375, %3376) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3378 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3378 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3379 = "llvm.getelementptr"(%3377, %3378) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3379) : (!llvm.ptr) -> ()
   }) {"func_name" = "InterleaveIterable2_B_zip_otherIterable2U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -4561,11 +4561,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3399 = "llvm.extractvalue"(%3380) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3400 = "llvm.load"(%3383) : (!llvm.ptr) -> i32
     %3401 = "llvm.getelementptr"(%3399, %3400) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<50 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3402 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3402 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3403 = "llvm.getelementptr"(%3401, %3402) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3403) : (!llvm.ptr) -> ()
   }) {"func_name" = "InterleaveIterable2_B_product_otherIterable2U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_InterleaveIterator2", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i1]} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_InterleaveIterator2", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i1]} : () -> ()
   "mini.type_accessor_def"() {"offset" = 0 : i32, "meth_name" = "InterleaveIterator2_field_InterleaveIterator2_0"} : () -> ()
   "mini.getter_def"() {"meth_name" = "InterleaveIterator2_getter_first", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i1], "offset" = 1 : i64, "original_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "specialized_name" = "Iterator2", "parameterization" = "_parameterization_Iterator2InterleaveIterator2.T_subtype_Any"} : () -> ()
   "mini.setter_def"() {"meth_name" = "InterleaveIterator2_setter_first", "types" = [!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i1], "offset" = 1 : i64, "original_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "specialized_name" = "Iterator2", "parameterization" = "_parameterization_Iterator2InterleaveIterator2.T_subtype_Any"} : () -> ()
@@ -4637,7 +4637,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3452 = "llvm.extractvalue"(%3419) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3453 = "llvm.load"(%3422) : (!llvm.ptr) -> i32
     %3454 = "llvm.getelementptr"(%3452, %3453) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<11 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3455 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3455 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3456 = "llvm.getelementptr"(%3454, %3455) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3456) : (!llvm.ptr) -> ()
   }) {"func_name" = "InterleaveIterator2_B_init_firstIterator2T_secondIterator2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -4655,8 +4655,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %3467 = "mini.unwrap"(%3466) : (!mini.fatptr<"Iterator2", [!mini.type_param<"T", !mini.any, "InterleaveIterator2">]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %3468 = "mini.parameterizations_array"() : () -> !llvm.ptr
       %3469 = "mini.method_call"(%3468, %3467) {"offset" = 1 : i32, "vptrs" = [], "vtable_size" = 3 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.union<[!mini.type_param<"T", !mini.any, "Iterator2">, !mini.nil]>
-      %3470 = builtin.unrealized_conversion_cast %3469 : !mini.union<[!mini.type_param<"T", !mini.any, "Iterator2">, !mini.nil]> to !mini.union<[!mini.nil, !mini.type_param<"T", !mini.any, "InterleaveIterator2">]>
-      %3471 = builtin.unrealized_conversion_cast %3470 : !mini.union<[!mini.nil, !mini.type_param<"T", !mini.any, "InterleaveIterator2">]> to !mini.union<[!mini.type_param<"T", !mini.any, "Iterator2">, !mini.nil]>
+      %3470 = builtin.unrealized_conversion_cast %3469 : !mini.union<[!mini.type_param<"T", !mini.any, "Iterator2">, !mini.nil]> to !mini.union<[!mini.type_param<"T", !mini.any, "InterleaveIterator2">, !mini.nil]>
+      %3471 = builtin.unrealized_conversion_cast %3470 : !mini.union<[!mini.type_param<"T", !mini.any, "InterleaveIterator2">, !mini.nil]> to !mini.union<[!mini.type_param<"T", !mini.any, "Iterator2">, !mini.nil]>
       "mini.return"(%3471) : (!mini.union<[!mini.type_param<"T", !mini.any, "Iterator2">, !mini.nil]>) -> ()
     }) : (i1) -> ()
     %3472 = "mini.literal"() {"value" = true, "typ" = i1} : () -> !mini.ptr<i1>
@@ -4666,8 +4666,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3475 = "mini.unwrap"(%3474) : (!mini.fatptr<"Iterator2", [!mini.type_param<"T", !mini.any, "InterleaveIterator2">]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
     %3476 = "mini.parameterizations_array"() : () -> !llvm.ptr
     %3477 = "mini.method_call"(%3476, %3475) {"offset" = 1 : i32, "vptrs" = [], "vtable_size" = 3 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.union<[!mini.type_param<"T", !mini.any, "Iterator2">, !mini.nil]>
-    %3478 = builtin.unrealized_conversion_cast %3477 : !mini.union<[!mini.type_param<"T", !mini.any, "Iterator2">, !mini.nil]> to !mini.union<[!mini.nil, !mini.type_param<"T", !mini.any, "InterleaveIterator2">]>
-    %3479 = builtin.unrealized_conversion_cast %3478 : !mini.union<[!mini.nil, !mini.type_param<"T", !mini.any, "InterleaveIterator2">]> to !mini.union<[!mini.type_param<"T", !mini.any, "Iterator2">, !mini.nil]>
+    %3478 = builtin.unrealized_conversion_cast %3477 : !mini.union<[!mini.type_param<"T", !mini.any, "Iterator2">, !mini.nil]> to !mini.union<[!mini.type_param<"T", !mini.any, "InterleaveIterator2">, !mini.nil]>
+    %3479 = builtin.unrealized_conversion_cast %3478 : !mini.union<[!mini.type_param<"T", !mini.any, "InterleaveIterator2">, !mini.nil]> to !mini.union<[!mini.type_param<"T", !mini.any, "Iterator2">, !mini.nil]>
     "mini.return"(%3479) : (!mini.union<[!mini.type_param<"T", !mini.any, "Iterator2">, !mini.nil]>) -> ()
   }) {"func_name" = "InterleaveIterator2_next_", "result_type" = !llvm.struct<(!llvm.ptr, i160)>, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
   "mini.func"() ({
@@ -4683,11 +4683,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3485 = "llvm.extractvalue"(%3480) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3486 = "llvm.load"(%3483) : (!llvm.ptr) -> i32
     %3487 = "llvm.getelementptr"(%3485, %3486) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<11 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3488 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3488 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3489 = "llvm.getelementptr"(%3487, %3488) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3489) : (!llvm.ptr) -> ()
   }) {"func_name" = "InterleaveIterator2_B_next_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_ZipIterable2", "types" = [!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>]} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_ZipIterable2", "types" = [!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>]} : () -> ()
   "mini.type_accessor_def"() {"offset" = 0 : i32, "meth_name" = "ZipIterable2_field_ZipIterable2_0"} : () -> ()
   "mini.type_accessor_def"() {"offset" = 1 : i32, "meth_name" = "ZipIterable2_field_ZipIterable2_1"} : () -> ()
   "mini.type_accessor_def"() {"offset" = 2 : i32, "meth_name" = "ZipIterable2_field_ZipIterable2_2"} : () -> ()
@@ -4755,7 +4755,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3536 = "llvm.extractvalue"(%3503) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3537 = "llvm.load"(%3506) : (!llvm.ptr) -> i32
     %3538 = "llvm.getelementptr"(%3536, %3537) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3539 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3539 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3540 = "llvm.getelementptr"(%3538, %3539) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3540) : (!llvm.ptr) -> ()
   }) {"func_name" = "ZipIterable2_B_init_firstIterable2T_secondIterable2U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -4814,7 +4814,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3586 = "llvm.extractvalue"(%3581) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3587 = "llvm.load"(%3584) : (!llvm.ptr) -> i32
     %3588 = "llvm.getelementptr"(%3586, %3587) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3589 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3589 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3590 = "llvm.getelementptr"(%3588, %3589) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3590) : (!llvm.ptr) -> ()
   }) {"func_name" = "ZipIterable2_B_iterator_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -4847,7 +4847,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3610 = "llvm.extractvalue"(%3591) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3611 = "llvm.load"(%3594) : (!llvm.ptr) -> i32
     %3612 = "llvm.getelementptr"(%3610, %3611) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3613 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3613 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3614 = "llvm.getelementptr"(%3612, %3613) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3614) : (!llvm.ptr) -> ()
   }) {"func_name" = "ZipIterable2_B_each_fFunctionT_to_Nothing", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -4896,7 +4896,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3648 = "llvm.extractvalue"(%3615) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3649 = "llvm.load"(%3618) : (!llvm.ptr) -> i32
     %3650 = "llvm.getelementptr"(%3648, %3649) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3651 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3651 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3652 = "llvm.getelementptr"(%3650, %3651) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3652) : (!llvm.ptr) -> ()
   }) {"func_name" = "ZipIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -4929,7 +4929,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3672 = "llvm.extractvalue"(%3653) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3673 = "llvm.load"(%3656) : (!llvm.ptr) -> i32
     %3674 = "llvm.getelementptr"(%3672, %3673) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3675 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3675 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3676 = "llvm.getelementptr"(%3674, %3675) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3676) : (!llvm.ptr) -> ()
   }) {"func_name" = "ZipIterable2_B_all_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -4962,7 +4962,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3696 = "llvm.extractvalue"(%3677) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3697 = "llvm.load"(%3680) : (!llvm.ptr) -> i32
     %3698 = "llvm.getelementptr"(%3696, %3697) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3699 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3699 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3700 = "llvm.getelementptr"(%3698, %3699) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3700) : (!llvm.ptr) -> ()
   }) {"func_name" = "ZipIterable2_B_any_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -4995,7 +4995,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3720 = "llvm.extractvalue"(%3701) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3721 = "llvm.load"(%3704) : (!llvm.ptr) -> i32
     %3722 = "llvm.getelementptr"(%3720, %3721) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3723 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3723 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3724 = "llvm.getelementptr"(%3722, %3723) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3724) : (!llvm.ptr) -> ()
   }) {"func_name" = "ZipIterable2_B_map_fFunctionT_to_U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -5028,7 +5028,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3744 = "llvm.extractvalue"(%3725) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3745 = "llvm.load"(%3728) : (!llvm.ptr) -> i32
     %3746 = "llvm.getelementptr"(%3744, %3745) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3747 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3747 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3748 = "llvm.getelementptr"(%3746, %3747) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3748) : (!llvm.ptr) -> ()
   }) {"func_name" = "ZipIterable2_B_filter_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -5061,7 +5061,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3768 = "llvm.extractvalue"(%3749) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3769 = "llvm.load"(%3752) : (!llvm.ptr) -> i32
     %3770 = "llvm.getelementptr"(%3768, %3769) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3771 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3771 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3772 = "llvm.getelementptr"(%3770, %3771) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3772) : (!llvm.ptr) -> ()
   }) {"func_name" = "ZipIterable2_B_chain_otherIterable2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -5094,7 +5094,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3792 = "llvm.extractvalue"(%3773) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3793 = "llvm.load"(%3776) : (!llvm.ptr) -> i32
     %3794 = "llvm.getelementptr"(%3792, %3793) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3795 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3795 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3796 = "llvm.getelementptr"(%3794, %3795) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3796) : (!llvm.ptr) -> ()
   }) {"func_name" = "ZipIterable2_B_interleave_otherIterable2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -5127,7 +5127,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3816 = "llvm.extractvalue"(%3797) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3817 = "llvm.load"(%3800) : (!llvm.ptr) -> i32
     %3818 = "llvm.getelementptr"(%3816, %3817) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3819 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3819 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3820 = "llvm.getelementptr"(%3818, %3819) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3820) : (!llvm.ptr) -> ()
   }) {"func_name" = "ZipIterable2_B_zip_otherIterable2U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -5160,11 +5160,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3840 = "llvm.extractvalue"(%3821) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3841 = "llvm.load"(%3824) : (!llvm.ptr) -> i32
     %3842 = "llvm.getelementptr"(%3840, %3841) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3843 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3843 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3844 = "llvm.getelementptr"(%3842, %3843) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3844) : (!llvm.ptr) -> ()
   }) {"func_name" = "ZipIterable2_B_product_otherIterable2U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_ZipIterator2", "types" = [!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>]} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_ZipIterator2", "types" = [!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>]} : () -> ()
   "mini.type_accessor_def"() {"offset" = 0 : i32, "meth_name" = "ZipIterator2_field_ZipIterator2_0"} : () -> ()
   "mini.type_accessor_def"() {"offset" = 1 : i32, "meth_name" = "ZipIterator2_field_ZipIterator2_1"} : () -> ()
   "mini.type_accessor_def"() {"offset" = 2 : i32, "meth_name" = "ZipIterator2_field_ZipIterator2_2"} : () -> ()
@@ -5232,7 +5232,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3891 = "llvm.extractvalue"(%3858) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3892 = "llvm.load"(%3861) : (!llvm.ptr) -> i32
     %3893 = "llvm.getelementptr"(%3891, %3892) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<12 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3894 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3894 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3895 = "llvm.getelementptr"(%3893, %3894) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3895) : (!llvm.ptr) -> ()
   }) {"func_name" = "ZipIterator2_B_init_firstIterator2T_secondIterator2U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -5249,7 +5249,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3907 = "mini.unwrap"(%3906) : (!mini.fatptr<"Iterator2", [!mini.type_param<"U", !mini.any, "ZipIterator2">]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
     %3908 = "mini.parameterizations_array"() : () -> !llvm.ptr
     %3909 = "mini.method_call"(%3908, %3907) {"offset" = 1 : i32, "vptrs" = [], "vtable_size" = 3 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.union<[!mini.type_param<"T", !mini.any, "Iterator2">, !mini.nil]>
-    %3910 = builtin.unrealized_conversion_cast %3909 : !mini.union<[!mini.type_param<"T", !mini.any, "Iterator2">, !mini.nil]> to !mini.union<[!mini.type_param<"U", !mini.any, "ZipIterator2">, !mini.nil]>
+    %3910 = builtin.unrealized_conversion_cast %3909 : !mini.union<[!mini.type_param<"T", !mini.any, "Iterator2">, !mini.nil]> to !mini.union<[!mini.nil, !mini.type_param<"U", !mini.any, "ZipIterator2">]>
     %3911 = "mini.get_type_field"(%3900) {"offset" = 0 : i64, "vtable_bytes" = 96 : i32} : (!mini.fatptr<"ZipIterator2", [!mini.type_param<"T", !mini.any, "ZipIterator2">, !mini.type_param<"U", !mini.any, "ZipIterator2">]>) -> !mini.reified_type
     %3912 = "mini.checkflag"(%3905) {"typ_name" = "nil_typ", "neg"} : (!mini.union<[!mini.type_param<"T", !mini.any, "ZipIterator2">, !mini.nil]>) -> !mini.ptr<i1>
     %3913 = "mini.unwrap"(%3912) : (!mini.ptr<i1>) -> i1
@@ -5257,11 +5257,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
     "mini.if"(%3913) ({
       %3915 = "mini.to_fat_ptr"(%3914) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "any_typ"} : (!mini.union<[!mini.type_param<"T", !mini.any, "ZipIterator2">, !mini.nil]>) -> !mini.type_param<"T", !mini.any, "ZipIterator2">
       %3916 = "mini.get_type_field"(%3900) {"offset" = 1 : i64, "vtable_bytes" = 96 : i32} : (!mini.fatptr<"ZipIterator2", [!mini.type_param<"T", !mini.any, "ZipIterator2">, !mini.type_param<"U", !mini.any, "ZipIterator2">]>) -> !mini.reified_type
-      %3917 = "mini.checkflag"(%3910) {"typ_name" = "nil_typ", "neg"} : (!mini.union<[!mini.type_param<"U", !mini.any, "ZipIterator2">, !mini.nil]>) -> !mini.ptr<i1>
+      %3917 = "mini.checkflag"(%3910) {"typ_name" = "nil_typ", "neg"} : (!mini.union<[!mini.nil, !mini.type_param<"U", !mini.any, "ZipIterator2">]>) -> !mini.ptr<i1>
       %3918 = "mini.unwrap"(%3917) : (!mini.ptr<i1>) -> i1
-      %3919 = builtin.unrealized_conversion_cast %3910 : !mini.union<[!mini.type_param<"U", !mini.any, "ZipIterator2">, !mini.nil]> to !mini.union<[!mini.type_param<"U", !mini.any, "ZipIterator2">, !mini.nil]>
+      %3919 = builtin.unrealized_conversion_cast %3910 : !mini.union<[!mini.nil, !mini.type_param<"U", !mini.any, "ZipIterator2">]> to !mini.union<[!mini.nil, !mini.type_param<"U", !mini.any, "ZipIterator2">]>
       "mini.if"(%3918) ({
-        %3920 = "mini.to_fat_ptr"(%3919) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "any_typ"} : (!mini.union<[!mini.type_param<"U", !mini.any, "ZipIterator2">, !mini.nil]>) -> !mini.type_param<"U", !mini.any, "ZipIterator2">
+        %3920 = "mini.to_fat_ptr"(%3919) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "union_typ", "to_typ_name" = "any_typ"} : (!mini.union<[!mini.nil, !mini.type_param<"U", !mini.any, "ZipIterator2">]>) -> !mini.type_param<"U", !mini.any, "ZipIterator2">
         %3921 = "mini.unwrap"(%3915) : (!mini.type_param<"T", !mini.any, "ZipIterator2">) -> !llvm.struct<(!llvm.ptr, i160)>
         %3922 = "mini.unwrap"(%3920) : (!mini.type_param<"U", !mini.any, "ZipIterator2">) -> !llvm.struct<(!llvm.ptr, i160)>
         %3923 = "mini.new"(%3911, %3916) {"typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>, !llvm.struct<(!llvm.ptr, i160)>)>, "class_name" = "Pair", "num_data_fields" = 2 : i32, "region_id" = "none", "has_type_fields"} : (!mini.reified_type, !mini.reified_type) -> !mini.fatptr<"Pair", [!mini.type_param<"T", !mini.any, "ZipIterator2">, !mini.type_param<"U", !mini.any, "ZipIterator2">]>
@@ -5275,8 +5275,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %3930 = builtin.unrealized_conversion_cast %3923 : !mini.fatptr<"Pair", [!mini.type_param<"T", !mini.any, "ZipIterator2">, !mini.type_param<"U", !mini.any, "ZipIterator2">]> to !mini.union<[!mini.type_param<"T", !mini.any, "Iterator2">, !mini.nil]>
         "mini.return"(%3930) : (!mini.union<[!mini.type_param<"T", !mini.any, "Iterator2">, !mini.nil]>) -> ()
         "mini.castassign"(%3919, %3920) ({
-          %3931 = builtin.unrealized_conversion_cast %3920 : !mini.type_param<"U", !mini.any, "ZipIterator2"> to !mini.union<[!mini.type_param<"U", !mini.any, "ZipIterator2">, !mini.nil]>
-        }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ", "should_offset"} : (!mini.union<[!mini.type_param<"U", !mini.any, "ZipIterator2">, !mini.nil]>, !mini.type_param<"U", !mini.any, "ZipIterator2">) -> ()
+          %3931 = builtin.unrealized_conversion_cast %3920 : !mini.type_param<"U", !mini.any, "ZipIterator2"> to !mini.union<[!mini.nil, !mini.type_param<"U", !mini.any, "ZipIterator2">]>
+        }) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ", "should_offset"} : (!mini.union<[!mini.nil, !mini.type_param<"U", !mini.any, "ZipIterator2">]>, !mini.type_param<"U", !mini.any, "ZipIterator2">) -> ()
       }) : (i1) -> ()
       "mini.castassign"(%3914, %3915) ({
         %3932 = builtin.unrealized_conversion_cast %3915 : !mini.type_param<"T", !mini.any, "ZipIterator2"> to !mini.union<[!mini.type_param<"T", !mini.any, "ZipIterator2">, !mini.nil]>
@@ -5299,11 +5299,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3940 = "llvm.extractvalue"(%3935) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3941 = "llvm.load"(%3938) : (!llvm.ptr) -> i32
     %3942 = "llvm.getelementptr"(%3940, %3941) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<12 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3943 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3943 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3944 = "llvm.getelementptr"(%3942, %3943) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3944) : (!llvm.ptr) -> ()
   }) {"func_name" = "ZipIterator2_B_next_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_ProductIterable2", "types" = [!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>]} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_ProductIterable2", "types" = [!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>]} : () -> ()
   "mini.type_accessor_def"() {"offset" = 0 : i32, "meth_name" = "ProductIterable2_field_ProductIterable2_0"} : () -> ()
   "mini.type_accessor_def"() {"offset" = 1 : i32, "meth_name" = "ProductIterable2_field_ProductIterable2_1"} : () -> ()
   "mini.type_accessor_def"() {"offset" = 2 : i32, "meth_name" = "ProductIterable2_field_ProductIterable2_2"} : () -> ()
@@ -5371,7 +5371,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %3991 = "llvm.extractvalue"(%3958) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %3992 = "llvm.load"(%3961) : (!llvm.ptr) -> i32
     %3993 = "llvm.getelementptr"(%3991, %3992) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %3994 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %3994 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %3995 = "llvm.getelementptr"(%3993, %3994) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%3995) : (!llvm.ptr) -> ()
   }) {"func_name" = "ProductIterable2_B_init_firstIterable2T_secondIterable2U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -5422,7 +5422,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4033 = "llvm.extractvalue"(%4028) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4034 = "llvm.load"(%4031) : (!llvm.ptr) -> i32
     %4035 = "llvm.getelementptr"(%4033, %4034) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4036 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4036 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4037 = "llvm.getelementptr"(%4035, %4036) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4037) : (!llvm.ptr) -> ()
   }) {"func_name" = "ProductIterable2_B_iterator_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -5455,7 +5455,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4057 = "llvm.extractvalue"(%4038) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4058 = "llvm.load"(%4041) : (!llvm.ptr) -> i32
     %4059 = "llvm.getelementptr"(%4057, %4058) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4060 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4060 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4061 = "llvm.getelementptr"(%4059, %4060) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4061) : (!llvm.ptr) -> ()
   }) {"func_name" = "ProductIterable2_B_each_fFunctionT_to_Nothing", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -5504,7 +5504,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4095 = "llvm.extractvalue"(%4062) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4096 = "llvm.load"(%4065) : (!llvm.ptr) -> i32
     %4097 = "llvm.getelementptr"(%4095, %4096) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4098 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4098 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4099 = "llvm.getelementptr"(%4097, %4098) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4099) : (!llvm.ptr) -> ()
   }) {"func_name" = "ProductIterable2_B_reduce_accumulatorT_fFunctionT._T_to_T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -5537,7 +5537,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4119 = "llvm.extractvalue"(%4100) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4120 = "llvm.load"(%4103) : (!llvm.ptr) -> i32
     %4121 = "llvm.getelementptr"(%4119, %4120) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4122 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4122 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4123 = "llvm.getelementptr"(%4121, %4122) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4123) : (!llvm.ptr) -> ()
   }) {"func_name" = "ProductIterable2_B_all_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -5570,7 +5570,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4143 = "llvm.extractvalue"(%4124) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4144 = "llvm.load"(%4127) : (!llvm.ptr) -> i32
     %4145 = "llvm.getelementptr"(%4143, %4144) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4146 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4146 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4147 = "llvm.getelementptr"(%4145, %4146) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4147) : (!llvm.ptr) -> ()
   }) {"func_name" = "ProductIterable2_B_any_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -5603,7 +5603,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4167 = "llvm.extractvalue"(%4148) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4168 = "llvm.load"(%4151) : (!llvm.ptr) -> i32
     %4169 = "llvm.getelementptr"(%4167, %4168) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4170 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4170 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4171 = "llvm.getelementptr"(%4169, %4170) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4171) : (!llvm.ptr) -> ()
   }) {"func_name" = "ProductIterable2_B_map_fFunctionT_to_U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -5636,7 +5636,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4191 = "llvm.extractvalue"(%4172) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4192 = "llvm.load"(%4175) : (!llvm.ptr) -> i32
     %4193 = "llvm.getelementptr"(%4191, %4192) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4194 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4194 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4195 = "llvm.getelementptr"(%4193, %4194) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4195) : (!llvm.ptr) -> ()
   }) {"func_name" = "ProductIterable2_B_filter_fFunctionT_to_Ptri1", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -5669,7 +5669,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4215 = "llvm.extractvalue"(%4196) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4216 = "llvm.load"(%4199) : (!llvm.ptr) -> i32
     %4217 = "llvm.getelementptr"(%4215, %4216) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4218 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4218 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4219 = "llvm.getelementptr"(%4217, %4218) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4219) : (!llvm.ptr) -> ()
   }) {"func_name" = "ProductIterable2_B_chain_otherIterable2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -5702,7 +5702,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4239 = "llvm.extractvalue"(%4220) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4240 = "llvm.load"(%4223) : (!llvm.ptr) -> i32
     %4241 = "llvm.getelementptr"(%4239, %4240) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4242 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4242 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4243 = "llvm.getelementptr"(%4241, %4242) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4243) : (!llvm.ptr) -> ()
   }) {"func_name" = "ProductIterable2_B_interleave_otherIterable2T", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -5735,7 +5735,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4263 = "llvm.extractvalue"(%4244) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4264 = "llvm.load"(%4247) : (!llvm.ptr) -> i32
     %4265 = "llvm.getelementptr"(%4263, %4264) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4266 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4266 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4267 = "llvm.getelementptr"(%4265, %4266) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4267) : (!llvm.ptr) -> ()
   }) {"func_name" = "ProductIterable2_B_zip_otherIterable2U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -5768,11 +5768,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4287 = "llvm.extractvalue"(%4268) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4288 = "llvm.load"(%4271) : (!llvm.ptr) -> i32
     %4289 = "llvm.getelementptr"(%4287, %4288) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<52 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4290 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4290 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4291 = "llvm.getelementptr"(%4289, %4290) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4291) : (!llvm.ptr) -> ()
   }) {"func_name" = "ProductIterable2_B_product_otherIterable2U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_ProductIterator2", "types" = [!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>]} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_ProductIterator2", "types" = [!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>]} : () -> ()
   "mini.type_accessor_def"() {"offset" = 0 : i32, "meth_name" = "ProductIterator2_field_ProductIterator2_0"} : () -> ()
   "mini.type_accessor_def"() {"offset" = 1 : i32, "meth_name" = "ProductIterator2_field_ProductIterator2_1"} : () -> ()
   "mini.type_accessor_def"() {"offset" = 2 : i32, "meth_name" = "ProductIterator2_field_ProductIterator2_2"} : () -> ()
@@ -5860,7 +5860,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4350 = "llvm.extractvalue"(%4317) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4351 = "llvm.load"(%4320) : (!llvm.ptr) -> i32
     %4352 = "llvm.getelementptr"(%4350, %4351) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<14 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4353 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4353 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4354 = "llvm.getelementptr"(%4352, %4353) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4354) : (!llvm.ptr) -> ()
   }) {"func_name" = "ProductIterator2_B_init_first_iteratorIterator2T_second_iterableIterable2U", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -5940,7 +5940,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4409 = "llvm.extractvalue"(%4404) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4410 = "llvm.load"(%4407) : (!llvm.ptr) -> i32
     %4411 = "llvm.getelementptr"(%4409, %4410) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<14 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4412 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4412 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4413 = "llvm.getelementptr"(%4411, %4412) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4413) : (!llvm.ptr) -> ()
   }) {"func_name" = "ProductIterator2_B_next_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -5954,7 +5954,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4421 = "mini.wrap"(%4420) : (i32) -> !mini.ptr<i32>
     %4422 = builtin.unrealized_conversion_cast %4421 : !mini.ptr<i32> to !mini.ptr<i32>
     "mini.return"(%4422) : (!mini.ptr<i32>) -> ()
-  }) {"func_name" = "_functionliteral_fmglrkmsok", "result_type" = i32, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
+  }) {"func_name" = "_functionliteral_rdmlnfecpd", "result_type" = i32, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
   "mini.func"() ({
   ^bb570(%4423 : i32):
     %4424 = "mini.wrap"(%4423) : (i32) -> !mini.ptr<i32>
@@ -5965,7 +5965,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4429 = "mini.wrap"(%4428) : (i32) -> !mini.ptr<i32>
     %4430 = builtin.unrealized_conversion_cast %4429 : !mini.ptr<i32> to !mini.ptr<i32>
     "mini.return"(%4430) : (!mini.ptr<i32>) -> ()
-  }) {"func_name" = "_functionliteral_wocooykmvw", "result_type" = i32, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
+  }) {"func_name" = "_functionliteral_zmddhrdqvt", "result_type" = i32, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
   "mini.func"() ({
   ^bb571(%4431 : f64):
     %4432 = "mini.wrap"(%4431) : (f64) -> !mini.ptr<f64>
@@ -5976,21 +5976,21 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4437 = "mini.wrap"(%4436) : (f64) -> !mini.ptr<f64>
     %4438 = builtin.unrealized_conversion_cast %4437 : !mini.ptr<f64> to !mini.ptr<f64>
     "mini.return"(%4438) : (!mini.ptr<f64>) -> ()
-  }) {"func_name" = "_functionliteral_faymbggzev", "result_type" = f64, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
+  }) {"func_name" = "_functionliteral_hnxkfurute", "result_type" = f64, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
   "mini.func"() ({
   ^bb572(%4439 : i32):
     %4440 = "mini.wrap"(%4439) : (i32) -> !mini.ptr<i32>
     %4441 = builtin.unrealized_conversion_cast %4440 : !mini.ptr<i32> to !mini.ptr<i32>
     "mini.return"(%4441) : (!mini.ptr<i32>) -> ()
-  }) {"func_name" = "_functionliteral_lgyxqgbmoo", "result_type" = i32, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
+  }) {"func_name" = "_functionliteral_ohtjwomxxc", "result_type" = i32, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
   "mini.func"() ({
   ^bb573(%4442 : i32):
     %4443 = "mini.wrap"(%4442) : (i32) -> !mini.ptr<i32>
     %4444 = "mini.int_to_float"(%4443) {"from_typ" = i32, "to_typ" = f64, "from_typ_name" = "i32_typ", "to_typ_name" = "f64_typ"} : (!mini.ptr<i32>) -> !mini.ptr<f64>
     %4445 = builtin.unrealized_conversion_cast %4444 : !mini.ptr<f64> to !mini.ptr<f64>
     "mini.return"(%4445) : (!mini.ptr<f64>) -> ()
-  }) {"func_name" = "_functionliteral_wafvedxhbt", "result_type" = f64, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_Addable", "types" = [!llvm.ptr, !llvm.ptr]} : () -> ()
+  }) {"func_name" = "_functionliteral_iuzkcseley", "result_type" = f64, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_Addable", "types" = [!llvm.ptr, !llvm.ptr]} : () -> ()
   "mini.type_accessor_def"() {"offset" = 0 : i32, "meth_name" = "Addable_field_Addable_0"} : () -> ()
   "mini.type_accessor_def"() {"offset" = 1 : i32, "meth_name" = "Addable_field_Addable_1"} : () -> ()
   "mini.func"() ({
@@ -6022,11 +6022,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4465 = "llvm.extractvalue"(%4446) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4466 = "llvm.load"(%4449) : (!llvm.ptr) -> i32
     %4467 = "llvm.getelementptr"(%4465, %4466) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<4 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4468 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4468 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4469 = "llvm.getelementptr"(%4467, %4468) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4469) : (!llvm.ptr) -> ()
   }) {"func_name" = "Addable_B__ADD_otherT", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_Float64", "types" = [f64]} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_Float64", "types" = [f64]} : () -> ()
   "mini.getter_def"() {"meth_name" = "Float64_getter_value", "types" = [f64], "offset" = 0 : i64, "original_type" = f64, "specialized_name" = "f64_typ", "parameterization" = "_parameterization_Ptrf64"} : () -> ()
   "mini.setter_def"() {"meth_name" = "Float64_setter_value", "types" = [f64], "offset" = 0 : i64, "original_type" = f64, "specialized_name" = "f64_typ", "parameterization" = "_parameterization_Ptrf64"} : () -> ()
   "mini.accessor_def"() {"meth_name" = "Float64_field_value", "getter_name" = "Float64_getter_value", "setter_name" = "Float64_setter_value"} : () -> ()
@@ -6070,7 +6070,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4498 = "llvm.extractvalue"(%4479) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4499 = "llvm.load"(%4482) : (!llvm.ptr) -> i32
     %4500 = "llvm.getelementptr"(%4498, %4499) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<18 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4501 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4501 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4502 = "llvm.getelementptr"(%4500, %4501) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4502) : (!llvm.ptr) -> ()
   }) {"func_name" = "Float64_B_init_valuePtrf64", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -6095,7 +6095,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4515 = "llvm.extractvalue"(%4510) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4516 = "llvm.load"(%4513) : (!llvm.ptr) -> i32
     %4517 = "llvm.getelementptr"(%4515, %4516) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<18 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4518 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4518 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4519 = "llvm.getelementptr"(%4517, %4518) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4519) : (!llvm.ptr) -> ()
   }) {"func_name" = "Float64_B_value_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -6104,68 +6104,68 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4524 = "mini.wrap"(%4520) : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.fatptr<"Float64">
     %4525 = "mini.to_fat_ptr"(%4524) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Float64", "to_typ_name" = "Float64"} : (!mini.fatptr<"Float64">) -> !mini.fatptr<"Float64">
     %4526 = "mini.wrap"(%4523) : (!llvm.struct<(!llvm.ptr, i160)>) -> !mini.union<[!mini.fatptr<"Float64">, !mini.fatptr<"Int32">]>
-    %4527 = "mini.to_fat_ptr"(%4526) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "union_typ", "to_typ_name" = "Int32"} : (!mini.union<[!mini.fatptr<"Float64">, !mini.fatptr<"Int32">]>) -> !mini.fatptr<"Int32">
-    %4528 = "mini.unwrap"(%4527) : (!mini.fatptr<"Int32">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
-    %4529 = "mini.parameterizations_array"() : () -> !llvm.ptr
-    %4530 = "mini.method_call"(%4529, %4528) {"offset" = 3 : i32, "vptrs" = [], "vtable_size" = 17 : i64, "ret_type" = i32, "ret_type_unq" = i32} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.ptr<i32>
-    %4531 = builtin.unrealized_conversion_cast %4530 : !mini.ptr<i32> to !mini.ptr<i32>
-    %4532 = "mini.int_to_float"(%4531) {"from_typ" = i32, "to_typ" = f64, "from_typ_name" = "i32_typ", "to_typ_name" = "f64_typ"} : (!mini.ptr<i32>) -> !mini.ptr<f64>
-    %4533 = "mini.get_field"(%4525) {"offset" = 0 : i64, "vtable_bytes" = 144 : i32, "original_type" = f64} : (!mini.fatptr<"Float64">) -> !mini.ptr<f64>
-    %4534 = "mini.unwrap"(%4533) : (!mini.ptr<f64>) -> f64
-    %4535 = "mini.unwrap"(%4532) : (!mini.ptr<f64>) -> f64
-    %4536 = "mini.arithmetic"(%4534, %4535) {"op" = "ADD"} : (f64, f64) -> f64
-    %4537 = "mini.wrap"(%4536) : (f64) -> !mini.ptr<f64>
-    %4538 = "mini.unwrap"(%4537) : (!mini.ptr<f64>) -> f64
-    %4539 = "mini.new"() {"typ" = !llvm.struct<(f64)>, "class_name" = "Float64", "num_data_fields" = 1 : i32, "region_id" = "none"} : () -> !mini.fatptr<"Float64">
-    %4540 = "mini.get_field"(%4525) {"offset" = 0 : i64, "vtable_bytes" = 144 : i32, "original_type" = f64} : (!mini.fatptr<"Float64">) -> !mini.ptr<f64>
-    %4541 = "mini.unwrap"(%4540) : (!mini.ptr<f64>) -> f64
-    %4542 = "mini.unwrap"(%4532) : (!mini.ptr<f64>) -> f64
-    %4543 = "mini.arithmetic"(%4541, %4542) {"op" = "ADD"} : (f64, f64) -> f64
-    %4544 = "mini.wrap"(%4543) : (f64) -> !mini.ptr<f64>
-    %4545 = builtin.unrealized_conversion_cast %4544 : !mini.ptr<f64> to !mini.ptr<f64>
-    %4546 = "mini.unwrap"(%4545) : (!mini.ptr<f64>) -> f64
-    %4547 = "mini.unwrap"(%4539) : (!mini.fatptr<"Float64">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
-    %4548 = "mini.parameterization"() {"id_hierarchy" = ["f64_typ"], "name_hierarchy" = ["Ptrf64"]} : () -> !llvm.ptr
-    %4549 = "mini.parameterizations_array"(%4548) : (!llvm.ptr) -> !llvm.ptr
-    "mini.method_call"(%4549, %4547, %4546) {"offset" = 3 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 18 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, f64) -> ()
-    %4550 = "mini.to_fat_ptr"(%4539) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Float64", "to_typ_name" = "Float64"} : (!mini.fatptr<"Float64">) -> !mini.fatptr<"Float64">
-    "mini.return"(%4550) : (!mini.fatptr<"Float64">) -> ()
-  }) {"func_name" = "Float64__ADD_otherInt32", "result_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
+    %4527 = "mini.to_fat_ptr"(%4526) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "union_typ", "to_typ_name" = "Float64"} : (!mini.union<[!mini.fatptr<"Float64">, !mini.fatptr<"Int32">]>) -> !mini.fatptr<"Float64">
+    %4528 = "mini.get_field"(%4525) {"offset" = 0 : i64, "vtable_bytes" = 144 : i32, "original_type" = f64} : (!mini.fatptr<"Float64">) -> !mini.ptr<f64>
+    %4529 = "mini.unwrap"(%4527) : (!mini.fatptr<"Float64">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
+    %4530 = "mini.parameterizations_array"() : () -> !llvm.ptr
+    %4531 = "mini.method_call"(%4530, %4529) {"offset" = 4 : i32, "vptrs" = [], "vtable_size" = 18 : i64, "ret_type" = f64, "ret_type_unq" = f64} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.ptr<f64>
+    %4532 = builtin.unrealized_conversion_cast %4531 : !mini.ptr<f64> to !mini.ptr<f64>
+    %4533 = "mini.unwrap"(%4528) : (!mini.ptr<f64>) -> f64
+    %4534 = "mini.unwrap"(%4532) : (!mini.ptr<f64>) -> f64
+    %4535 = "mini.arithmetic"(%4533, %4534) {"op" = "ADD"} : (f64, f64) -> f64
+    %4536 = "mini.wrap"(%4535) : (f64) -> !mini.ptr<f64>
+    %4537 = "mini.unwrap"(%4536) : (!mini.ptr<f64>) -> f64
+    %4538 = "mini.new"() {"typ" = !llvm.struct<(f64)>, "class_name" = "Float64", "num_data_fields" = 1 : i32, "region_id" = "none"} : () -> !mini.fatptr<"Float64">
+    %4539 = "mini.get_field"(%4525) {"offset" = 0 : i64, "vtable_bytes" = 144 : i32, "original_type" = f64} : (!mini.fatptr<"Float64">) -> !mini.ptr<f64>
+    %4540 = "mini.unwrap"(%4527) : (!mini.fatptr<"Float64">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
+    %4541 = "mini.parameterizations_array"() : () -> !llvm.ptr
+    %4542 = "mini.method_call"(%4541, %4540) {"offset" = 4 : i32, "vptrs" = [], "vtable_size" = 18 : i64, "ret_type" = f64, "ret_type_unq" = f64} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.ptr<f64>
+    %4543 = builtin.unrealized_conversion_cast %4542 : !mini.ptr<f64> to !mini.ptr<f64>
+    %4544 = "mini.unwrap"(%4539) : (!mini.ptr<f64>) -> f64
+    %4545 = "mini.unwrap"(%4543) : (!mini.ptr<f64>) -> f64
+    %4546 = "mini.arithmetic"(%4544, %4545) {"op" = "ADD"} : (f64, f64) -> f64
+    %4547 = "mini.wrap"(%4546) : (f64) -> !mini.ptr<f64>
+    %4548 = builtin.unrealized_conversion_cast %4547 : !mini.ptr<f64> to !mini.ptr<f64>
+    %4549 = "mini.unwrap"(%4548) : (!mini.ptr<f64>) -> f64
+    %4550 = "mini.unwrap"(%4538) : (!mini.fatptr<"Float64">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
+    %4551 = "mini.parameterization"() {"id_hierarchy" = ["f64_typ"], "name_hierarchy" = ["Ptrf64"]} : () -> !llvm.ptr
+    %4552 = "mini.parameterizations_array"(%4551) : (!llvm.ptr) -> !llvm.ptr
+    "mini.method_call"(%4552, %4550, %4549) {"offset" = 3 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 18 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, f64) -> ()
+    %4553 = "mini.to_fat_ptr"(%4538) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Float64", "to_typ_name" = "Float64"} : (!mini.fatptr<"Float64">) -> !mini.fatptr<"Float64">
+    "mini.return"(%4553) : (!mini.fatptr<"Float64">) -> ()
+  }) {"func_name" = "Float64__ADD_otherFloat64", "result_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
   "mini.func"() ({
-  ^bb588(%4551 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %4552 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %4553 : !llvm.ptr, %4554 : !llvm.struct<(!llvm.ptr, i160)>):
-    %4555 = "mini.wrap"(%4551) : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.fatptr<"Float64">
-    %4556 = "mini.to_fat_ptr"(%4555) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Float64", "to_typ_name" = "Float64"} : (!mini.fatptr<"Float64">) -> !mini.fatptr<"Float64">
-    %4557 = "mini.wrap"(%4554) : (!llvm.struct<(!llvm.ptr, i160)>) -> !mini.union<[!mini.fatptr<"Float64">, !mini.fatptr<"Int32">]>
-    %4558 = "mini.to_fat_ptr"(%4557) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "union_typ", "to_typ_name" = "Float64"} : (!mini.union<[!mini.fatptr<"Float64">, !mini.fatptr<"Int32">]>) -> !mini.fatptr<"Float64">
-    %4559 = "mini.get_field"(%4556) {"offset" = 0 : i64, "vtable_bytes" = 144 : i32, "original_type" = f64} : (!mini.fatptr<"Float64">) -> !mini.ptr<f64>
-    %4560 = "mini.unwrap"(%4558) : (!mini.fatptr<"Float64">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
-    %4561 = "mini.parameterizations_array"() : () -> !llvm.ptr
-    %4562 = "mini.method_call"(%4561, %4560) {"offset" = 4 : i32, "vptrs" = [], "vtable_size" = 18 : i64, "ret_type" = f64, "ret_type_unq" = f64} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.ptr<f64>
-    %4563 = builtin.unrealized_conversion_cast %4562 : !mini.ptr<f64> to !mini.ptr<f64>
-    %4564 = "mini.unwrap"(%4559) : (!mini.ptr<f64>) -> f64
-    %4565 = "mini.unwrap"(%4563) : (!mini.ptr<f64>) -> f64
-    %4566 = "mini.arithmetic"(%4564, %4565) {"op" = "ADD"} : (f64, f64) -> f64
-    %4567 = "mini.wrap"(%4566) : (f64) -> !mini.ptr<f64>
+  ^bb588(%4554 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %4555 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %4556 : !llvm.ptr, %4557 : !llvm.struct<(!llvm.ptr, i160)>):
+    %4558 = "mini.wrap"(%4554) : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.fatptr<"Float64">
+    %4559 = "mini.to_fat_ptr"(%4558) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Float64", "to_typ_name" = "Float64"} : (!mini.fatptr<"Float64">) -> !mini.fatptr<"Float64">
+    %4560 = "mini.wrap"(%4557) : (!llvm.struct<(!llvm.ptr, i160)>) -> !mini.union<[!mini.fatptr<"Float64">, !mini.fatptr<"Int32">]>
+    %4561 = "mini.to_fat_ptr"(%4560) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "union_typ", "to_typ_name" = "Int32"} : (!mini.union<[!mini.fatptr<"Float64">, !mini.fatptr<"Int32">]>) -> !mini.fatptr<"Int32">
+    %4562 = "mini.unwrap"(%4561) : (!mini.fatptr<"Int32">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
+    %4563 = "mini.parameterizations_array"() : () -> !llvm.ptr
+    %4564 = "mini.method_call"(%4563, %4562) {"offset" = 3 : i32, "vptrs" = [], "vtable_size" = 17 : i64, "ret_type" = i32, "ret_type_unq" = i32} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.ptr<i32>
+    %4565 = builtin.unrealized_conversion_cast %4564 : !mini.ptr<i32> to !mini.ptr<i32>
+    %4566 = "mini.int_to_float"(%4565) {"from_typ" = i32, "to_typ" = f64, "from_typ_name" = "i32_typ", "to_typ_name" = "f64_typ"} : (!mini.ptr<i32>) -> !mini.ptr<f64>
+    %4567 = "mini.get_field"(%4559) {"offset" = 0 : i64, "vtable_bytes" = 144 : i32, "original_type" = f64} : (!mini.fatptr<"Float64">) -> !mini.ptr<f64>
     %4568 = "mini.unwrap"(%4567) : (!mini.ptr<f64>) -> f64
-    %4569 = "mini.new"() {"typ" = !llvm.struct<(f64)>, "class_name" = "Float64", "num_data_fields" = 1 : i32, "region_id" = "none"} : () -> !mini.fatptr<"Float64">
-    %4570 = "mini.get_field"(%4556) {"offset" = 0 : i64, "vtable_bytes" = 144 : i32, "original_type" = f64} : (!mini.fatptr<"Float64">) -> !mini.ptr<f64>
-    %4571 = "mini.unwrap"(%4558) : (!mini.fatptr<"Float64">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
-    %4572 = "mini.parameterizations_array"() : () -> !llvm.ptr
-    %4573 = "mini.method_call"(%4572, %4571) {"offset" = 4 : i32, "vptrs" = [], "vtable_size" = 18 : i64, "ret_type" = f64, "ret_type_unq" = f64} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.ptr<f64>
-    %4574 = builtin.unrealized_conversion_cast %4573 : !mini.ptr<f64> to !mini.ptr<f64>
-    %4575 = "mini.unwrap"(%4570) : (!mini.ptr<f64>) -> f64
-    %4576 = "mini.unwrap"(%4574) : (!mini.ptr<f64>) -> f64
+    %4569 = "mini.unwrap"(%4566) : (!mini.ptr<f64>) -> f64
+    %4570 = "mini.arithmetic"(%4568, %4569) {"op" = "ADD"} : (f64, f64) -> f64
+    %4571 = "mini.wrap"(%4570) : (f64) -> !mini.ptr<f64>
+    %4572 = "mini.unwrap"(%4571) : (!mini.ptr<f64>) -> f64
+    %4573 = "mini.new"() {"typ" = !llvm.struct<(f64)>, "class_name" = "Float64", "num_data_fields" = 1 : i32, "region_id" = "none"} : () -> !mini.fatptr<"Float64">
+    %4574 = "mini.get_field"(%4559) {"offset" = 0 : i64, "vtable_bytes" = 144 : i32, "original_type" = f64} : (!mini.fatptr<"Float64">) -> !mini.ptr<f64>
+    %4575 = "mini.unwrap"(%4574) : (!mini.ptr<f64>) -> f64
+    %4576 = "mini.unwrap"(%4566) : (!mini.ptr<f64>) -> f64
     %4577 = "mini.arithmetic"(%4575, %4576) {"op" = "ADD"} : (f64, f64) -> f64
     %4578 = "mini.wrap"(%4577) : (f64) -> !mini.ptr<f64>
     %4579 = builtin.unrealized_conversion_cast %4578 : !mini.ptr<f64> to !mini.ptr<f64>
     %4580 = "mini.unwrap"(%4579) : (!mini.ptr<f64>) -> f64
-    %4581 = "mini.unwrap"(%4569) : (!mini.fatptr<"Float64">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
+    %4581 = "mini.unwrap"(%4573) : (!mini.fatptr<"Float64">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
     %4582 = "mini.parameterization"() {"id_hierarchy" = ["f64_typ"], "name_hierarchy" = ["Ptrf64"]} : () -> !llvm.ptr
     %4583 = "mini.parameterizations_array"(%4582) : (!llvm.ptr) -> !llvm.ptr
     "mini.method_call"(%4583, %4581, %4580) {"offset" = 3 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 18 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, f64) -> ()
-    %4584 = "mini.to_fat_ptr"(%4569) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Float64", "to_typ_name" = "Float64"} : (!mini.fatptr<"Float64">) -> !mini.fatptr<"Float64">
+    %4584 = "mini.to_fat_ptr"(%4573) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Float64", "to_typ_name" = "Float64"} : (!mini.fatptr<"Float64">) -> !mini.fatptr<"Float64">
     "mini.return"(%4584) : (!mini.fatptr<"Float64">) -> ()
-  }) {"func_name" = "Float64__ADD_otherFloat64", "result_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
+  }) {"func_name" = "Float64__ADD_otherInt32", "result_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
   "mini.func"() ({
   ^bb589(%4585 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %4586 : !llvm.ptr):
     %4587 = "mini.invariant"(%4586) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
@@ -6190,9 +6190,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4598 = "llvm.load"(%4594) : (!llvm.ptr) -> i64
     %4599 = "llvm.load"(%4595) : (!llvm.ptr) -> !llvm.ptr
     %4600 = "llvm.load"(%4596) : (!llvm.ptr) -> !llvm.ptr
-    %4601 = "mini.addr_of"() {"global_name" = @Float64} : () -> !llvm.ptr
+    %4601 = "mini.addr_of"() {"global_name" = @Int32} : () -> !llvm.ptr
     %4602 = "llvm.ptrtoint"(%4601) : (!llvm.ptr) -> i64
-    %4603 = "llvm.mlir.constant"() <{"value" = 8748823673944961442 : i64}> : () -> i64
+    %4603 = "llvm.mlir.constant"() <{"value" = 15289183833144277113 : i64}> : () -> i64
     %4604 = "mini.subtype"(%4599, %4598, %4597, %4603, %4602, %4600) : (!llvm.ptr, i64, i64, i64, i64, !llvm.ptr) -> i1
     "cf.cond_br"(%4604) [^bb594, ^bb595] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
   ^bb594:
@@ -6206,9 +6206,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4612 = "llvm.load"(%4608) : (!llvm.ptr) -> i64
     %4613 = "llvm.load"(%4609) : (!llvm.ptr) -> !llvm.ptr
     %4614 = "llvm.load"(%4610) : (!llvm.ptr) -> !llvm.ptr
-    %4615 = "mini.addr_of"() {"global_name" = @Int32} : () -> !llvm.ptr
+    %4615 = "mini.addr_of"() {"global_name" = @Float64} : () -> !llvm.ptr
     %4616 = "llvm.ptrtoint"(%4615) : (!llvm.ptr) -> i64
-    %4617 = "llvm.mlir.constant"() <{"value" = 15289183833144277113 : i64}> : () -> i64
+    %4617 = "llvm.mlir.constant"() <{"value" = 8748823673944961442 : i64}> : () -> i64
     %4618 = "mini.subtype"(%4613, %4612, %4611, %4617, %4616, %4614) : (!llvm.ptr, i64, i64, i64, i64, !llvm.ptr) -> i1
     "cf.cond_br"(%4618) [^bb595, ^bb591] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
   ^bb595:
@@ -6222,9 +6222,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4626 = "llvm.load"(%4622) : (!llvm.ptr) -> i64
     %4627 = "llvm.load"(%4623) : (!llvm.ptr) -> !llvm.ptr
     %4628 = "llvm.load"(%4624) : (!llvm.ptr) -> !llvm.ptr
-    %4629 = "mini.addr_of"() {"global_name" = @Int32} : () -> !llvm.ptr
+    %4629 = "mini.addr_of"() {"global_name" = @Float64} : () -> !llvm.ptr
     %4630 = "llvm.ptrtoint"(%4629) : (!llvm.ptr) -> i64
-    %4631 = "llvm.mlir.constant"() <{"value" = 15289183833144277113 : i64}> : () -> i64
+    %4631 = "llvm.mlir.constant"() <{"value" = 8748823673944961442 : i64}> : () -> i64
     %4632 = "mini.subtype"(%4627, %4626, %4625, %4631, %4630, %4628) : (!llvm.ptr, i64, i64, i64, i64, !llvm.ptr) -> i1
     "cf.cond_br"(%4632) [^bb596, ^bb593] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
   ^bb596:
@@ -6238,20 +6238,20 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4640 = "llvm.load"(%4636) : (!llvm.ptr) -> i64
     %4641 = "llvm.load"(%4637) : (!llvm.ptr) -> !llvm.ptr
     %4642 = "llvm.load"(%4638) : (!llvm.ptr) -> !llvm.ptr
-    %4643 = "mini.addr_of"() {"global_name" = @Float64} : () -> !llvm.ptr
+    %4643 = "mini.addr_of"() {"global_name" = @Int32} : () -> !llvm.ptr
     %4644 = "llvm.ptrtoint"(%4643) : (!llvm.ptr) -> i64
-    %4645 = "llvm.mlir.constant"() <{"value" = 8748823673944961442 : i64}> : () -> i64
+    %4645 = "llvm.mlir.constant"() <{"value" = 15289183833144277113 : i64}> : () -> i64
     %4646 = "mini.subtype"(%4641, %4640, %4639, %4645, %4644, %4642) : (!llvm.ptr, i64, i64, i64, i64, !llvm.ptr) -> i1
     "cf.cond_br"(%4646) [^bb593, ^bb593] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
   ^bb592:
     %4647 = "llvm.extractvalue"(%4585) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4648 = "llvm.load"(%4588) : (!llvm.ptr) -> i32
     %4649 = "llvm.getelementptr"(%4647, %4648) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<18 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4650 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4650 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4651 = "llvm.getelementptr"(%4649, %4650) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4651) : (!llvm.ptr) -> ()
-  }) {"func_name" = "Float64_B__ADD_otherInt32__ADD_otherFloat64", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_Int32", "types" = [i32]} : () -> ()
+  }) {"func_name" = "Float64_B__ADD_otherFloat64__ADD_otherInt32", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_Int32", "types" = [i32]} : () -> ()
   "mini.getter_def"() {"meth_name" = "Int32_getter_value", "types" = [i32], "offset" = 0 : i64, "original_type" = i32, "specialized_name" = "i32_typ", "parameterization" = "_parameterization_Ptri32"} : () -> ()
   "mini.setter_def"() {"meth_name" = "Int32_setter_value", "types" = [i32], "offset" = 0 : i64, "original_type" = i32, "specialized_name" = "i32_typ", "parameterization" = "_parameterization_Ptri32"} : () -> ()
   "mini.accessor_def"() {"meth_name" = "Int32_field_value", "getter_name" = "Int32_getter_value", "setter_name" = "Int32_setter_value"} : () -> ()
@@ -6294,7 +6294,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4680 = "llvm.extractvalue"(%4661) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4681 = "llvm.load"(%4664) : (!llvm.ptr) -> i32
     %4682 = "llvm.getelementptr"(%4680, %4681) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<17 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4683 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4683 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4684 = "llvm.getelementptr"(%4682, %4683) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4684) : (!llvm.ptr) -> ()
   }) {"func_name" = "Int32_B_init_valuePtri32", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -6319,7 +6319,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4697 = "llvm.extractvalue"(%4692) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4698 = "llvm.load"(%4695) : (!llvm.ptr) -> i32
     %4699 = "llvm.getelementptr"(%4697, %4698) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<17 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4700 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4700 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4701 = "llvm.getelementptr"(%4699, %4700) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4701) : (!llvm.ptr) -> ()
   }) {"func_name" = "Int32_B_value_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -6474,7 +6474,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4832 = "llvm.extractvalue"(%4770) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4833 = "llvm.load"(%4773) : (!llvm.ptr) -> i32
     %4834 = "llvm.getelementptr"(%4832, %4833) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<17 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4835 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4835 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4836 = "llvm.getelementptr"(%4834, %4835) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4836) : (!llvm.ptr) -> ()
   }) {"func_name" = "Int32_B__ADD_otherFloat64__ADD_otherInt32", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -6502,7 +6502,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4856 = "mini.to_fat_ptr"(%4855) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Float64", "to_typ_name" = "Float64"} : (!mini.fatptr<"Float64">) -> !mini.fatptr<"Float64">
     "mini.return"(%4856) : (!mini.fatptr<"Float64">) -> ()
   }) {"func_name" = "add_five", "result_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "yield_type" = !mini.union<[!mini.fatptr<"Exception">, !mini.nil]>} : () -> ()
-  "mini.size_in_bytes_def"() {"meth_name" = "_size_Holder", "types" = [!llvm.ptr, 0 : i64]} : () -> ()
+  "mini.data_size_def"() {"meth_name" = "_data_size_Holder", "types" = [!llvm.ptr, 0 : i64]} : () -> ()
   "mini.type_accessor_def"() {"offset" = 0 : i32, "meth_name" = "Holder_field_Holder_0"} : () -> ()
   "mini.getter_def"() {"meth_name" = "Holder_getter_held", "types" = [!llvm.ptr, 0 : i64], "offset" = 1 : i64, "original_type" = !llvm.struct<(!llvm.ptr, i160)>, "specialized_name" = "Addable", "box"} : () -> ()
   "mini.setter_def"() {"meth_name" = "Holder_setter_held", "types" = [!llvm.ptr, 0 : i64], "offset" = 1 : i64, "original_type" = !llvm.struct<(!llvm.ptr, i160)>, "specialized_name" = "Addable", "unbox"} : () -> ()
@@ -6545,7 +6545,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4885 = "llvm.extractvalue"(%4866) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4886 = "llvm.load"(%4869) : (!llvm.ptr) -> i32
     %4887 = "llvm.getelementptr"(%4885, %4886) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<8 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4888 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4888 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4889 = "llvm.getelementptr"(%4887, %4888) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4889) : (!llvm.ptr) -> ()
   }) {"func_name" = "Holder_B_init_heldT", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -6588,7 +6588,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4919 = "llvm.extractvalue"(%4914) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4920 = "llvm.load"(%4917) : (!llvm.ptr) -> i32
     %4921 = "llvm.getelementptr"(%4919, %4920) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<8 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4922 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4922 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4923 = "llvm.getelementptr"(%4921, %4922) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4923) : (!llvm.ptr) -> ()
   }) {"func_name" = "Holder_B_value_", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -6630,7 +6630,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4952 = "llvm.extractvalue"(%4933) <{"position" = array<i64: 0>}> : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !llvm.ptr
     %4953 = "llvm.load"(%4936) : (!llvm.ptr) -> i32
     %4954 = "llvm.getelementptr"(%4952, %4953) <{"rawConstantIndices" = array<i32: 0, -2147483648>, "elem_type" = !llvm.array<8 x !llvm.ptr>}> : (!llvm.ptr, i32) -> !llvm.ptr
-    %4955 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+    %4955 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
     %4956 = "llvm.getelementptr"(%4954, %4955) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
     "mini.return"(%4956) : (!llvm.ptr) -> ()
   }) {"func_name" = "Holder_B__set_value_xT", "result_type" = !llvm.ptr, "yield_type" = !mini.nil} : () -> ()
@@ -6679,8 +6679,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4975 = "mini.parameterizations_array"() : () -> !llvm.ptr
     %4976 = "mini.method_call"(%4975, %4974) {"offset" = 6 : i32, "vptrs" = [], "vtable_size" = 10 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.type_param<"U", !mini.any, "Pair">
     %4977 = "mini.unbox"(%4976) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = f64, "from_typ_name" = "any_typ", "to_typ_name" = "f64_typ", "to_typ_size" = 64 : i32} : (!mini.type_param<"U", !mini.any, "Pair">) -> !mini.ptr<f64>
-    %4978 = "mini.unionize"(%4977) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>
-    %4979 = "mini.unwrap"(%4978) : (!mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+    %4978 = "mini.unionize"(%4977) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>
+    %4979 = "mini.unwrap"(%4978) : (!mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>) -> !llvm.struct<(!llvm.ptr, i160)>
     %4980 = "mini.parameterizations_array"(%4962) : (!llvm.ptr) -> !llvm.ptr
     "mini.class_method_call"(%4980, %4979) {"offset" = 0 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
     %4981 = "mini.literal"() {"value" = 7.000000e+00 : f64, "typ" = f64} : () -> !mini.ptr<f64>
@@ -6703,8 +6703,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %4997 = "mini.parameterizations_array"() : () -> !llvm.ptr
     %4998 = "mini.method_call"(%4997, %4996) {"offset" = 6 : i32, "vptrs" = [], "vtable_size" = 10 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.type_param<"U", !mini.any, "Pair">
     %4999 = "mini.unbox"(%4998) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = i32, "from_typ_name" = "any_typ", "to_typ_name" = "i32_typ", "to_typ_size" = 32 : i32} : (!mini.type_param<"U", !mini.any, "Pair">) -> !mini.ptr<i32>
-    %5000 = "mini.unionize"(%4999) {"from_typ" = i32, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<i32>) -> !mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>
-    %5001 = "mini.unwrap"(%5000) : (!mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+    %5000 = "mini.unionize"(%4999) {"from_typ" = i32, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<i32>) -> !mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>
+    %5001 = "mini.unwrap"(%5000) : (!mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>) -> !llvm.struct<(!llvm.ptr, i160)>
     %5002 = "mini.parameterizations_array"(%4961) : (!llvm.ptr) -> !llvm.ptr
     "mini.class_method_call"(%5002, %5001) {"offset" = 0 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
     %5003 = "mini.literal"() {"value" = 1.000000e+00 : f64, "typ" = f64} : () -> !mini.ptr<f64>
@@ -6745,8 +6745,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %5037 = "mini.method_call"(%5036, %5035) {"offset" = 5 : i32, "vptrs" = [], "vtable_size" = 10 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.type_param<"T", !mini.any, "Pair">
     %5038 = "mini.unbox"(%5037) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = !llvm.struct<(f64, f64, f64, f64)>, "from_typ_name" = "any_typ", "to_typ_name" = "tuple_typ", "to_typ_size" = 256 : i32} : (!mini.type_param<"T", !mini.any, "Pair">) -> !mini.tuple<[!mini.ptr<f64>, !mini.ptr<f64>, !mini.ptr<f64>, !mini.ptr<f64>]>
     %5039 = "mini.tuple_indexation"(%5038) {"typ" = !llvm.struct<(f64, f64, f64, f64)>, "index" = 3 : i32} : (!mini.tuple<[!mini.ptr<f64>, !mini.ptr<f64>, !mini.ptr<f64>, !mini.ptr<f64>]>) -> !mini.ptr<f64>
-    %5040 = "mini.unionize"(%5039) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>
-    %5041 = "mini.unwrap"(%5040) : (!mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+    %5040 = "mini.unionize"(%5039) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>
+    %5041 = "mini.unwrap"(%5040) : (!mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>) -> !llvm.struct<(!llvm.ptr, i160)>
     %5042 = "mini.parameterizations_array"(%4962) : (!llvm.ptr) -> !llvm.ptr
     "mini.class_method_call"(%5042, %5041) {"offset" = 0 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
     "cf.br"() [^bb642] : () -> ()
@@ -6793,8 +6793,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %5075 = "mini.parameterizations_array"() : () -> !llvm.ptr
     %5076 = "mini.method_call"(%5075, %5074) {"offset" = 6 : i32, "vptrs" = [], "vtable_size" = 20 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.type_param<"U", !mini.any, "Pair">
     %5077 = "mini.unbox"(%5076) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = f64, "from_typ_name" = "any_typ", "to_typ_name" = "f64_typ", "to_typ_size" = 64 : i32} : (!mini.type_param<"U", !mini.any, "Pair">) -> !mini.ptr<f64>
-    %5078 = "mini.unionize"(%5077) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>
-    %5079 = "mini.unwrap"(%5078) : (!mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+    %5078 = "mini.unionize"(%5077) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>
+    %5079 = "mini.unwrap"(%5078) : (!mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>) -> !llvm.struct<(!llvm.ptr, i160)>
     %5080 = "mini.parameterizations_array"(%4962) : (!llvm.ptr) -> !llvm.ptr
     "mini.class_method_call"(%5080, %5079) {"offset" = 0 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
     "cf.br"() [^bb646] : () -> ()
@@ -7109,14 +7109,14 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %5111 = "mini.parameterizations_array"(%4961) : (!llvm.ptr) -> !llvm.ptr
     %5112 = "mini.method_call"(%5111, %5110, %5088) {"offset" = 10 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 75 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !mini.fatptr<"Array", [!mini.type_param<"T", !mini.any, "Array">]>
     %5113 = "mini.to_fat_ptr"(%5112) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "Array", "to_typ_name" = "Array"} : (!mini.fatptr<"Array", [!mini.type_param<"T", !mini.any, "Array">]>) -> !mini.fatptr<"Array", [!mini.ptr<i32>]>
-    %5114 = "mini.addr_of"() {"global_name" = @_functionliteral_fmglrkmsok} : () -> !llvm.ptr
+    %5114 = "mini.addr_of"() {"global_name" = @_functionliteral_rdmlnfecpd} : () -> !llvm.ptr
     %5115 = "mini.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
     "llvm.store"(%5114, %5115) <{"ordering" = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
     %5116 = "mini.literal"() {"value" = 0 : i32, "typ" = i32} : () -> !mini.ptr<i32>
     %5117 = "mini.box"(%5116) {"from_typ" = i32, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "i32_typ", "to_typ_name" = "any_typ", "from_typ_size" = 32 : i32} : (!mini.ptr<i32>) -> !mini.type_param<"T", !mini.any, "Iterable2">
     %5118 = "mini.unwrap"(%5117) : (!mini.type_param<"T", !mini.any, "Iterable2">) -> !llvm.struct<(!llvm.ptr, i160)>
     %5119 = "mini.reabstract"(%5115) ({
-      func.func @gpemafqztx(%5120 : !llvm.ptr {"llvm.nest"}, %5121 : !llvm.struct<(!llvm.ptr, i160)>, %5122 : !llvm.struct<(!llvm.ptr, i160)>) -> !llvm.struct<(!llvm.ptr, i160)> {
+      func.func @yccbcyoqrm(%5120 : !llvm.ptr {"llvm.nest"}, %5121 : !llvm.struct<(!llvm.ptr, i160)>, %5122 : !llvm.struct<(!llvm.ptr, i160)>) -> !llvm.struct<(!llvm.ptr, i160)> {
         %5123 = "mini.wrap"(%5121) : (!llvm.struct<(!llvm.ptr, i160)>) -> !mini.type_param<"T", !mini.any, "Iterable2">
         %5124 = "mini.wrap"(%5122) : (!llvm.struct<(!llvm.ptr, i160)>) -> !mini.type_param<"T", !mini.any, "Iterable2">
         %5125 = "mini.unbox"(%5123) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = i32, "from_typ_name" = "any_typ", "to_typ_name" = "i32_typ", "to_typ_size" = 32 : i32} : (!mini.type_param<"T", !mini.any, "Iterable2">) -> !mini.ptr<i32>
@@ -7130,7 +7130,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       }
       %5120 = "mini.malloc"() {"typ" = !llvm.array<24 x i8>} : () -> !llvm.ptr
       "mini.anoint_trampoline"(%5120) : (!llvm.ptr) -> ()
-      %5121 = "mini.addr_of"() {"global_name" = @gpemafqztx} : () -> !llvm.ptr
+      %5121 = "mini.addr_of"() {"global_name" = @yccbcyoqrm} : () -> !llvm.ptr
       %5122 = "llvm.load"(%5115) : (!llvm.ptr) -> !llvm.ptr
       "llvm.call_intrinsic"(%5120, %5121, %5122) <{"intrin" = "llvm.init.trampoline", "operandSegmentSizes" = array<i32: 3, 0>, "op_bundle_sizes" = array<i32>}> : (!llvm.ptr, !llvm.ptr, !llvm.ptr) -> ()
     }) {"ret_type" = i32} : (!llvm.ptr) -> !mini.function<[!mini.type_param<"T", !mini.any, "Iterable2">, !mini.type_param<"T", !mini.any, "Iterable2">], !mini.any, !mini.type_param<"T", !mini.any, "Iterable2">>
@@ -7140,24 +7140,24 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %5126 = "mini.parameterizations_array"(%4961, %5125) : (!llvm.ptr, !llvm.ptr) -> !llvm.ptr
     %5127 = "mini.method_call"(%5126, %5124, %5118, %5123) {"offset" = 19 : i32, "vptrs" = ["i32_typ", "function_typ"], "vtable_size" = 75 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>, !llvm.struct<(!llvm.ptr)>) -> !mini.type_param<"T", !mini.any, "Iterable2">
     %5128 = "mini.unbox"(%5127) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = i32, "from_typ_name" = "any_typ", "to_typ_name" = "i32_typ", "to_typ_size" = 32 : i32} : (!mini.type_param<"T", !mini.any, "Iterable2">) -> !mini.ptr<i32>
-    %5129 = "mini.unionize"(%5128) {"from_typ" = i32, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<i32>) -> !mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>
-    %5130 = "mini.unwrap"(%5129) : (!mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+    %5129 = "mini.unionize"(%5128) {"from_typ" = i32, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<i32>) -> !mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>
+    %5130 = "mini.unwrap"(%5129) : (!mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>) -> !llvm.struct<(!llvm.ptr, i160)>
     %5131 = "mini.parameterizations_array"(%4961) : (!llvm.ptr) -> !llvm.ptr
     "mini.class_method_call"(%5131, %5130) {"offset" = 0 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-    %5132 = "mini.addr_of"() {"global_name" = @_functionliteral_wocooykmvw} : () -> !llvm.ptr
+    %5132 = "mini.addr_of"() {"global_name" = @_functionliteral_zmddhrdqvt} : () -> !llvm.ptr
     %5133 = "mini.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
     "llvm.store"(%5132, %5133) <{"ordering" = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-    %5134 = "mini.addr_of"() {"global_name" = @_functionliteral_faymbggzev} : () -> !llvm.ptr
+    %5134 = "mini.addr_of"() {"global_name" = @_functionliteral_hnxkfurute} : () -> !llvm.ptr
     %5135 = "mini.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
     "llvm.store"(%5134, %5135) <{"ordering" = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-    %5136 = "mini.addr_of"() {"global_name" = @_functionliteral_lgyxqgbmoo} : () -> !llvm.ptr
+    %5136 = "mini.addr_of"() {"global_name" = @_functionliteral_ohtjwomxxc} : () -> !llvm.ptr
     %5137 = "mini.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
     "llvm.store"(%5136, %5137) <{"ordering" = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
-    %5138 = "mini.addr_of"() {"global_name" = @_functionliteral_wafvedxhbt} : () -> !llvm.ptr
+    %5138 = "mini.addr_of"() {"global_name" = @_functionliteral_iuzkcseley} : () -> !llvm.ptr
     %5139 = "mini.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
     "llvm.store"(%5138, %5139) <{"ordering" = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
     %5140 = "mini.reabstract"(%5133) ({
-      func.func @ewhvwspcyj(%5141 : !llvm.ptr {"llvm.nest"}, %5142 : !llvm.struct<(!llvm.ptr, i160)>) -> !llvm.struct<(!llvm.ptr, i160)> {
+      func.func @imbtqoyeav(%5141 : !llvm.ptr {"llvm.nest"}, %5142 : !llvm.struct<(!llvm.ptr, i160)>) -> !llvm.struct<(!llvm.ptr, i160)> {
         %5143 = "mini.wrap"(%5142) : (!llvm.struct<(!llvm.ptr, i160)>) -> !mini.type_param<"T", !mini.any, "Iterable2">
         %5144 = "mini.unbox"(%5143) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = i32, "from_typ_name" = "any_typ", "to_typ_name" = "i32_typ", "to_typ_size" = 32 : i32} : (!mini.type_param<"T", !mini.any, "Iterable2">) -> !mini.ptr<i32>
         %5145 = "mini.unwrap"(%5144) : (!mini.ptr<i32>) -> i32
@@ -7168,7 +7168,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       }
       %5141 = "mini.malloc"() {"typ" = !llvm.array<24 x i8>} : () -> !llvm.ptr
       "mini.anoint_trampoline"(%5141) : (!llvm.ptr) -> ()
-      %5142 = "mini.addr_of"() {"global_name" = @ewhvwspcyj} : () -> !llvm.ptr
+      %5142 = "mini.addr_of"() {"global_name" = @imbtqoyeav} : () -> !llvm.ptr
       %5143 = "llvm.load"(%5133) : (!llvm.ptr) -> !llvm.ptr
       "llvm.call_intrinsic"(%5141, %5142, %5143) <{"intrin" = "llvm.init.trampoline", "operandSegmentSizes" = array<i32: 3, 0>, "op_bundle_sizes" = array<i32>}> : (!llvm.ptr, !llvm.ptr, !llvm.ptr) -> ()
     }) {"ret_type" = i32} : (!llvm.ptr) -> !mini.function<[!mini.type_param<"T", !mini.any, "Iterable2">], !mini.any, !mini.type_param<"U", !mini.any, "Iterable2">>
@@ -7181,7 +7181,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %5150 = "mini.to_fat_ptr"(%5149) {"from_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "to_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "from_typ_name" = "MapIterable2", "to_typ_name" = "MapIterable2"} : (!mini.fatptr<"MapIterable2", [!mini.ptr<i32>, !mini.ptr<i32>]>) -> !mini.fatptr<"MapIterable2", [!mini.ptr<i32>, !mini.ptr<i32>]>
     %5151 = "mini.refer"(%5150) {"typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>} : (!mini.fatptr<"MapIterable2", [!mini.ptr<i32>, !mini.ptr<i32>]>) -> !mini.fatptr<"MapIterable2", [!mini.ptr<i32>, !mini.ptr<i32>]>
     %5152 = "mini.reabstract"(%5139) ({
-      func.func @mfvjwkepma(%5153 : !llvm.ptr {"llvm.nest"}, %5154 : !llvm.struct<(!llvm.ptr, i160)>) -> !llvm.struct<(!llvm.ptr, i160)> {
+      func.func @klkivxaary(%5153 : !llvm.ptr {"llvm.nest"}, %5154 : !llvm.struct<(!llvm.ptr, i160)>) -> !llvm.struct<(!llvm.ptr, i160)> {
         %5155 = "mini.wrap"(%5154) : (!llvm.struct<(!llvm.ptr, i160)>) -> !mini.type_param<"T", !mini.any, "Iterable2">
         %5156 = "mini.unbox"(%5155) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = i32, "from_typ_name" = "any_typ", "to_typ_name" = "i32_typ", "to_typ_size" = 32 : i32} : (!mini.type_param<"T", !mini.any, "Iterable2">) -> !mini.ptr<i32>
         %5157 = "mini.unwrap"(%5156) : (!mini.ptr<i32>) -> i32
@@ -7192,13 +7192,13 @@ builtin.module attributes  {"sym_name" = "ir"} {
       }
       %5153 = "mini.malloc"() {"typ" = !llvm.array<24 x i8>} : () -> !llvm.ptr
       "mini.anoint_trampoline"(%5153) : (!llvm.ptr) -> ()
-      %5154 = "mini.addr_of"() {"global_name" = @mfvjwkepma} : () -> !llvm.ptr
+      %5154 = "mini.addr_of"() {"global_name" = @klkivxaary} : () -> !llvm.ptr
       %5155 = "llvm.load"(%5139) : (!llvm.ptr) -> !llvm.ptr
       "llvm.call_intrinsic"(%5153, %5154, %5155) <{"intrin" = "llvm.init.trampoline", "operandSegmentSizes" = array<i32: 3, 0>, "op_bundle_sizes" = array<i32>}> : (!llvm.ptr, !llvm.ptr, !llvm.ptr) -> ()
     }) {"ret_type" = f64} : (!llvm.ptr) -> !mini.function<[!mini.type_param<"T", !mini.any, "Iterable2">], !mini.any, !mini.type_param<"U", !mini.any, "Iterable2">>
     %5156 = "mini.unwrap"(%5152) : (!mini.function<[!mini.type_param<"T", !mini.any, "Iterable2">], !mini.any, !mini.type_param<"U", !mini.any, "Iterable2">>) -> !llvm.struct<(!llvm.ptr)>
     %5157 = "mini.reabstract"(%5137) ({
-      func.func @gemrydrlmh(%5158 : !llvm.ptr {"llvm.nest"}, %5159 : !llvm.struct<(!llvm.ptr, i160)>) -> !llvm.struct<(!llvm.ptr, i160)> {
+      func.func @tocuozmhdt(%5158 : !llvm.ptr {"llvm.nest"}, %5159 : !llvm.struct<(!llvm.ptr, i160)>) -> !llvm.struct<(!llvm.ptr, i160)> {
         %5160 = "mini.wrap"(%5159) : (!llvm.struct<(!llvm.ptr, i160)>) -> !mini.type_param<"T", !mini.any, "Iterable2">
         %5161 = "mini.unbox"(%5160) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = i32, "from_typ_name" = "any_typ", "to_typ_name" = "i32_typ", "to_typ_size" = 32 : i32} : (!mini.type_param<"T", !mini.any, "Iterable2">) -> !mini.ptr<i32>
         %5162 = "mini.unwrap"(%5161) : (!mini.ptr<i32>) -> i32
@@ -7209,7 +7209,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       }
       %5158 = "mini.malloc"() {"typ" = !llvm.array<24 x i8>} : () -> !llvm.ptr
       "mini.anoint_trampoline"(%5158) : (!llvm.ptr) -> ()
-      %5159 = "mini.addr_of"() {"global_name" = @gemrydrlmh} : () -> !llvm.ptr
+      %5159 = "mini.addr_of"() {"global_name" = @tocuozmhdt} : () -> !llvm.ptr
       %5160 = "llvm.load"(%5137) : (!llvm.ptr) -> !llvm.ptr
       "llvm.call_intrinsic"(%5158, %5159, %5160) <{"intrin" = "llvm.init.trampoline", "operandSegmentSizes" = array<i32: 3, 0>, "op_bundle_sizes" = array<i32>}> : (!llvm.ptr, !llvm.ptr, !llvm.ptr) -> ()
     }) {"ret_type" = i32} : (!llvm.ptr) -> !mini.function<[!mini.type_param<"T", !mini.any, "Iterable2">], !mini.any, !mini.type_param<"U", !mini.any, "Iterable2">>
@@ -7241,13 +7241,13 @@ builtin.module attributes  {"sym_name" = "ir"} {
     }, {
       %5185 = "mini.narrow"(%5182) {"from_typ" = !llvm.struct<(!llvm.ptr, i64)>, "to_typ" = f64, "from_typ_name" = "union_typ", "to_typ_name" = "f64_typ"} : (!mini.union<[!mini.ptr<f64>, !mini.nil]>) -> !mini.ptr<f64>
       %5186 = "mini.literal"() {"value" = 55 : i32, "typ" = i32} : () -> !mini.ptr<i32>
-      %5187 = "mini.unionize"(%5186) {"from_typ" = i32, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<i32>) -> !mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>
-      %5188 = "mini.unwrap"(%5187) : (!mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %5187 = "mini.unionize"(%5186) {"from_typ" = i32, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<i32>) -> !mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>
+      %5188 = "mini.unwrap"(%5187) : (!mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %5189 = "mini.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["Ptri32"]} : () -> !llvm.ptr
       %5190 = "mini.parameterizations_array"(%5189) : (!llvm.ptr) -> !llvm.ptr
       "mini.class_method_call"(%5190, %5188) {"offset" = 0 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-      %5191 = "mini.unionize"(%5185) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>
-      %5192 = "mini.unwrap"(%5191) : (!mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %5191 = "mini.unionize"(%5185) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>
+      %5192 = "mini.unwrap"(%5191) : (!mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %5193 = "mini.parameterization"() {"id_hierarchy" = ["f64_typ"], "name_hierarchy" = ["Ptrf64"]} : () -> !llvm.ptr
       %5194 = "mini.parameterizations_array"(%5193) : (!llvm.ptr) -> !llvm.ptr
       "mini.class_method_call"(%5194, %5192) {"offset" = 0 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -7283,8 +7283,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %5219 = "mini.parameterizations_array"() : () -> !llvm.ptr
       %5220 = "mini.method_call"(%5219, %5218) {"offset" = 5 : i32, "vptrs" = [], "vtable_size" = 10 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.type_param<"T", !mini.any, "Pair">
       %5221 = "mini.unbox"(%5220) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = i32, "from_typ_name" = "any_typ", "to_typ_name" = "i32_typ", "to_typ_size" = 32 : i32} : (!mini.type_param<"T", !mini.any, "Pair">) -> !mini.ptr<i32>
-      %5222 = "mini.unionize"(%5221) {"from_typ" = i32, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<i32>) -> !mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>
-      %5223 = "mini.unwrap"(%5222) : (!mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %5222 = "mini.unionize"(%5221) {"from_typ" = i32, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<i32>) -> !mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>
+      %5223 = "mini.unwrap"(%5222) : (!mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %5224 = "mini.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["Ptri32"]} : () -> !llvm.ptr
       %5225 = "mini.parameterizations_array"(%5224) : (!llvm.ptr) -> !llvm.ptr
       "mini.class_method_call"(%5225, %5223) {"offset" = 0 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -7292,8 +7292,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %5227 = "mini.parameterizations_array"() : () -> !llvm.ptr
       %5228 = "mini.method_call"(%5227, %5226) {"offset" = 6 : i32, "vptrs" = [], "vtable_size" = 10 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.type_param<"U", !mini.any, "Pair">
       %5229 = "mini.unbox"(%5228) {"from_typ" = !llvm.struct<(!llvm.ptr, i160)>, "to_typ" = f64, "from_typ_name" = "any_typ", "to_typ_name" = "f64_typ", "to_typ_size" = 64 : i32} : (!mini.type_param<"U", !mini.any, "Pair">) -> !mini.ptr<f64>
-      %5230 = "mini.unionize"(%5229) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>
-      %5231 = "mini.unwrap"(%5230) : (!mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %5230 = "mini.unionize"(%5229) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>
+      %5231 = "mini.unwrap"(%5230) : (!mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %5232 = "mini.parameterization"() {"id_hierarchy" = ["f64_typ"], "name_hierarchy" = ["Ptrf64"]} : () -> !llvm.ptr
       %5233 = "mini.parameterizations_array"(%5232) : (!llvm.ptr) -> !llvm.ptr
       "mini.class_method_call"(%5233, %5231) {"offset" = 0 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -7358,8 +7358,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %5267 = "mini.parameterizations_array"() : () -> !llvm.ptr
     %5268 = "mini.method_call"(%5267, %5266) {"offset" = 4 : i32, "vptrs" = [], "vtable_size" = 18 : i64, "ret_type" = f64, "ret_type_unq" = f64} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.ptr<f64>
     %5269 = builtin.unrealized_conversion_cast %5268 : !mini.ptr<f64> to !mini.ptr<f64>
-    %5270 = "mini.unionize"(%5269) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>
-    %5271 = "mini.unwrap"(%5270) : (!mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+    %5270 = "mini.unionize"(%5269) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>
+    %5271 = "mini.unwrap"(%5270) : (!mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>) -> !llvm.struct<(!llvm.ptr, i160)>
     %5272 = "mini.parameterizations_array"(%4962) : (!llvm.ptr) -> !llvm.ptr
     "mini.class_method_call"(%5272, %5271) {"offset" = 0 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
     "cf.br"() [^bb795] : () -> ()
@@ -7405,8 +7405,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %5302 = "mini.parameterizations_array"() : () -> !llvm.ptr
     %5303 = "mini.method_call"(%5302, %5301) {"offset" = 4 : i32, "vptrs" = [], "vtable_size" = 18 : i64, "ret_type" = f64, "ret_type_unq" = f64} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.ptr<f64>
     %5304 = builtin.unrealized_conversion_cast %5303 : !mini.ptr<f64> to !mini.ptr<f64>
-    %5305 = "mini.unionize"(%5304) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>
-    %5306 = "mini.unwrap"(%5305) : (!mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+    %5305 = "mini.unionize"(%5304) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>
+    %5306 = "mini.unwrap"(%5305) : (!mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>) -> !llvm.struct<(!llvm.ptr, i160)>
     %5307 = "mini.parameterizations_array"(%4962) : (!llvm.ptr) -> !llvm.ptr
     "mini.class_method_call"(%5307, %5306) {"offset" = 0 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
     %5308 = "mini.literal"() {"value" = 77 : i32, "typ" = i32} : () -> !mini.ptr<i32>
@@ -7431,8 +7431,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
     %5325 = "mini.parameterizations_array"() : () -> !llvm.ptr
     %5326 = "mini.method_call"(%5325, %5324) {"offset" = 4 : i32, "vptrs" = [], "vtable_size" = 18 : i64, "ret_type" = f64, "ret_type_unq" = f64} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !mini.ptr<f64>
     %5327 = builtin.unrealized_conversion_cast %5326 : !mini.ptr<f64> to !mini.ptr<f64>
-    %5328 = "mini.unionize"(%5327) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>
-    %5329 = "mini.unwrap"(%5328) : (!mini.union<[!mini.fatptr<"Representable">, !mini.ptr<i1>, !mini.ptr<i8>, !mini.ptr<i64>, !mini.ptr<f64>, !mini.ptr<i32>, !mini.nil, !mini.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+    %5328 = "mini.unionize"(%5327) {"from_typ" = f64, "to_typ" = !llvm.struct<(!llvm.ptr, i160)>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!mini.ptr<f64>) -> !mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>
+    %5329 = "mini.unwrap"(%5328) : (!mini.union<[!mini.ptr<i64>, !mini.ptr<i8>, !mini.ptr<i1>, !mini.ptr<i32>, !mini.fatptr<"Representable">, !mini.ptr<f64>, !mini.fatptr<"Character">, !mini.nil]>) -> !llvm.struct<(!llvm.ptr, i160)>
     %5330 = "mini.parameterizations_array"(%4962) : (!llvm.ptr) -> !llvm.ptr
     "mini.class_method_call"(%5330, %5329) {"offset" = 0 : i32, "vptrs" = ["f64_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
   }) : () -> ()

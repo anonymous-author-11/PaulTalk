@@ -1,62 +1,62 @@
 ; ModuleID = 'LLVMDialectModule'
 source_filename = "LLVMDialectModule"
 
-@uoyvt__Benchmarks_Complete_ = internal constant [27 x i8] c"--- Benchmarks Complete ---"
-@nglko__HashMap_Benchmarks_ = internal constant [26 x i8] c"--- HashMap Benchmarks ---"
-@ryfxd_ = internal constant [1 x i8] c")"
-@cnrox_____Items_removed_ = internal constant [20 x i8] c"    (Items removed: "
-@ihhff_FAIL = internal constant [4 x i8] c"FAIL"
-@ioznx_PASS = internal constant [4 x i8] c"PASS"
-@wbnfj_____Verification_ = internal constant [18 x i8] c"    Verification: "
-@lgvui_Remove_Random = internal constant [13 x i8] c"Remove Random"
-@kiriz_Warning_Remove_returned_Nil_for_key_ = internal constant [37 x i8] c"Warning: Remove returned Nil for key "
-@pyqur_Warning_Remove_returned_wrong_value_for_key_ = internal constant [45 x i8] c"Warning: Remove returned wrong value for key "
-@doact__unique_keys_for_remove_test = internal constant [29 x i8] c" unique keys for remove test."
-@etoio_Warning_Could_only_generate_ = internal constant [29 x i8] c"Warning: Could only generate "
-@xoamy_ = internal constant [1 x i8] c")"
-@uanur__Hits_ = internal constant [8 x i8] c", Hits: "
-@dfvdw_____Misses_ = internal constant [13 x i8] c"    (Misses: "
-@zouug_FAIL = internal constant [4 x i8] c"FAIL"
-@sbftz_PASS = internal constant [4 x i8] c"PASS"
-@xsxhf_____Verification_ = internal constant [18 x i8] c"    Verification: "
-@wbfzs_Get_Random_Miss = internal constant [15 x i8] c"Get Random Miss"
-@eehsc__guaranteed_miss_keys = internal constant [22 x i8] c" guaranteed miss keys."
-@yrhdm_Warning_Could_only_generate_ = internal constant [29 x i8] c"Warning: Could only generate "
-@iavev_FAIL = internal constant [4 x i8] c"FAIL"
-@sqaix_PASS = internal constant [4 x i8] c"PASS"
-@ziqtn_____Verification_ = internal constant [18 x i8] c"    Verification: "
-@fhvkc_Get_Random_Hit = internal constant [14 x i8] c"Get Random Hit"
-@azvkf_Error_Nil_returned_during_random_hit_test_for_key_ = internal constant [51 x i8] c"Error: Nil returned during random hit test for key "
-@rpidr__unique_keys_for_random_hit_test = internal constant [33 x i8] c" unique keys for random hit test."
-@difnk_Warning_Could_only_generate_ = internal constant [29 x i8] c"Warning: Could only generate "
-@hfqvv_FAIL = internal constant [4 x i8] c"FAIL"
-@oyraw_PASS = internal constant [4 x i8] c"PASS"
-@fngtu_____Verification_ = internal constant [18 x i8] c"    Verification: "
-@qriux_Get_Sequential_Hit = internal constant [18 x i8] c"Get Sequential Hit"
-@dngyh_Error_Nil_returned_during_sequential_hit_test_for_key_ = internal constant [55 x i8] c"Error: Nil returned during sequential hit test for key "
-@yjrqg_ = internal constant [1 x i8] c")"
-@mcknf_____Expected_unique_size_ = internal constant [27 x i8] c"    (Expected unique size: "
-@lvogm_FAIL = internal constant [4 x i8] c"FAIL"
-@ukxpx_PASS = internal constant [4 x i8] c"PASS"
-@iwjkv_____Verification_ = internal constant [18 x i8] c"    Verification: "
-@zsqig_Insert_Random = internal constant [13 x i8] c"Insert Random"
+@sgpjc__Benchmarks_Complete_ = internal constant [27 x i8] c"--- Benchmarks Complete ---"
+@gqgqc__HashMap_Benchmarks_ = internal constant [26 x i8] c"--- HashMap Benchmarks ---"
+@oeeek_ = internal constant [1 x i8] c")"
+@ggrre_____Items_removed_ = internal constant [20 x i8] c"    (Items removed: "
+@xfwqp_FAIL = internal constant [4 x i8] c"FAIL"
+@mhjcp_PASS = internal constant [4 x i8] c"PASS"
+@yjrcv_____Verification_ = internal constant [18 x i8] c"    Verification: "
+@fslpt_Remove_Random = internal constant [13 x i8] c"Remove Random"
+@lkpii_Warning_Remove_returned_Nil_for_key_ = internal constant [37 x i8] c"Warning: Remove returned Nil for key "
+@xbdpe_Warning_Remove_returned_wrong_value_for_key_ = internal constant [45 x i8] c"Warning: Remove returned wrong value for key "
+@lnvrv__unique_keys_for_remove_test = internal constant [29 x i8] c" unique keys for remove test."
+@nnrdw_Warning_Could_only_generate_ = internal constant [29 x i8] c"Warning: Could only generate "
+@jnkwq_ = internal constant [1 x i8] c")"
+@zoipp__Hits_ = internal constant [8 x i8] c", Hits: "
+@qzyen_____Misses_ = internal constant [13 x i8] c"    (Misses: "
+@yzjue_FAIL = internal constant [4 x i8] c"FAIL"
+@wiiks_PASS = internal constant [4 x i8] c"PASS"
+@jucej_____Verification_ = internal constant [18 x i8] c"    Verification: "
+@ilvhp_Get_Random_Miss = internal constant [15 x i8] c"Get Random Miss"
+@dhndo__guaranteed_miss_keys = internal constant [22 x i8] c" guaranteed miss keys."
+@cdehy_Warning_Could_only_generate_ = internal constant [29 x i8] c"Warning: Could only generate "
+@cvdxy_FAIL = internal constant [4 x i8] c"FAIL"
+@yclho_PASS = internal constant [4 x i8] c"PASS"
+@hdiiz_____Verification_ = internal constant [18 x i8] c"    Verification: "
+@jgcpm_Get_Random_Hit = internal constant [14 x i8] c"Get Random Hit"
+@axejv_Error_Nil_returned_during_random_hit_test_for_key_ = internal constant [51 x i8] c"Error: Nil returned during random hit test for key "
+@xegzg__unique_keys_for_random_hit_test = internal constant [33 x i8] c" unique keys for random hit test."
+@soody_Warning_Could_only_generate_ = internal constant [29 x i8] c"Warning: Could only generate "
+@rxprl_FAIL = internal constant [4 x i8] c"FAIL"
+@sfwlt_PASS = internal constant [4 x i8] c"PASS"
+@cbozi_____Verification_ = internal constant [18 x i8] c"    Verification: "
+@oicht_Get_Sequential_Hit = internal constant [18 x i8] c"Get Sequential Hit"
+@uwcly_Error_Nil_returned_during_sequential_hit_test_for_key_ = internal constant [55 x i8] c"Error: Nil returned during sequential hit test for key "
+@zjhph_ = internal constant [1 x i8] c")"
+@qmrvk_____Expected_unique_size_ = internal constant [27 x i8] c"    (Expected unique size: "
+@tsfgx_FAIL = internal constant [4 x i8] c"FAIL"
+@xtrqk_PASS = internal constant [4 x i8] c"PASS"
+@zgmrw_____Verification_ = internal constant [18 x i8] c"    Verification: "
+@iulzj_Insert_Random = internal constant [13 x i8] c"Insert Random"
 @_parameterization_PairPtri32._Ptri1 = linkonce_odr constant [4 x ptr] [ptr @Pair, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptri1, ptr null]
 @_parameterization_Ptri1 = linkonce_odr constant [2 x ptr] [ptr @bool_typ, ptr null]
-@gmbap_FAIL = internal constant [4 x i8] c"FAIL"
-@hplqp_PASS = internal constant [4 x i8] c"PASS"
-@bqjcq_____Verification_ = internal constant [18 x i8] c"    Verification: "
-@omekq_Insert_Sequential = internal constant [17 x i8] c"Insert Sequential"
+@ycxnw_FAIL = internal constant [4 x i8] c"FAIL"
+@zbhnv_PASS = internal constant [4 x i8] c"PASS"
+@kylim_____Verification_ = internal constant [18 x i8] c"    Verification: "
+@erhjy_Insert_Sequential = internal constant [17 x i8] c"Insert Sequential"
 @_parameterization_FunctionPtri32._Ptri32_to_Ptri1 = linkonce_odr constant [5 x ptr] [ptr @function_typ, ptr @_parameterization_Ptri1, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptri32, ptr null]
 @_parameterization_FunctionPtri32_to_Ptri32 = linkonce_odr constant [4 x ptr] [ptr @function_typ, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptri32, ptr null]
 @_parameterization_PairPtri32._Ptri32 = linkonce_odr constant [4 x ptr] [ptr @Pair, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptri32, ptr null]
-@ucahr__ns = internal constant [3 x i8] c" ns"
-@klfhr___TimeOp____ = internal constant [15 x i8] c"  Time/Op:    ~"
-@oppbg__ms = internal constant [3 x i8] c" ms"
+@ylnwp__ns = internal constant [3 x i8] c" ns"
+@qtfzj___TimeOp____ = internal constant [15 x i8] c"  Time/Op:    ~"
+@zdzur__ms = internal constant [3 x i8] c" ms"
 @_parameterization_Ptri64 = linkonce_odr constant [2 x ptr] [ptr @i64_typ, ptr null]
-@flhzh___Total_Time_ = internal constant [14 x i8] c"  Total Time: "
+@wgeel___Total_Time_ = internal constant [14 x i8] c"  Total Time: "
 @_parameterization_Ptri32 = linkonce_odr constant [2 x ptr] [ptr @i32_typ, ptr null]
 @_parameterization_BufferPtri8 = linkonce_odr constant [2 x ptr] [ptr @buffer_typ, ptr null]
-@weoyg___Operations_ = internal constant [14 x i8] c"  Operations: "
+@mwxxq___Operations_ = internal constant [14 x i8] c"  Operations: "
 @_parameterization_String = linkonce_odr constant [2 x ptr] [ptr @String, ptr null]
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
@@ -103,15 +103,16 @@ source_filename = "LLVMDialectModule"
 @ZipIterator2 = external constant { [3 x i64], [4 x ptr], [12 x ptr] }
 @ProductIterable2 = external constant { [3 x i64], [4 x ptr], [52 x ptr] }
 @ProductIterator2 = external constant { [3 x i64], [4 x ptr], [14 x ptr] }
-@Entry = external constant { [3 x i64], [4 x ptr], [15 x ptr] }
-@HashMap = external constant { [3 x i64], [4 x ptr], [87 x ptr] }
-@HashMapIterator = external constant { [3 x i64], [4 x ptr], [16 x ptr] }
+@Tombstone = external constant { [3 x i64], [4 x ptr], [2 x ptr] }
+@Entry = external constant { [3 x i64], [4 x ptr], [14 x ptr] }
+@HashMap = external constant { [3 x i64], [4 x ptr], [73 x ptr] }
+@HashMapIterator = external constant { [3 x i64], [4 x ptr], [13 x ptr] }
 @PRNG_hashtbl = constant [4 x ptr] [ptr @Object, ptr @any_typ, ptr @PRNG, ptr null]
-@PRNG_offset_tbl = constant [4 x i32] [i32 14, i32 9, i32 9, i32 0]
-@PRNG = constant { [3 x i64], [6 x ptr], [5 x ptr] } { [3 x i64] [i64 -4401938362882229211, i64 4611686018427388081, i64 3], [6 x ptr] [ptr @subtype_test, ptr @PRNG_hashtbl, ptr @PRNG_offset_tbl, ptr @_size_PRNG, ptr @_box_Default, ptr @_unbox_Default], [5 x ptr] [ptr @PRNG_field_seed, ptr @PRNG_B_init_initial_seedPtri32, ptr @PRNG_B_next_, ptr @PRNG_init_initial_seedPtri32, ptr @PRNG_next_] }
+@PRNG_offset_tbl = constant [4 x i32] [i32 15, i32 10, i32 10, i32 0]
+@PRNG = constant { [3 x i64], [7 x ptr], [5 x ptr] } { [3 x i64] [i64 -4401938362882229211, i64 4611686018427388081, i64 3], [7 x ptr] [ptr @subtype_test, ptr @PRNG_hashtbl, ptr @PRNG_offset_tbl, ptr @_data_size_PRNG, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [5 x ptr] [ptr @PRNG_field_seed, ptr @PRNG_B_init_initial_seedPtri32, ptr @PRNG_B_next_, ptr @PRNG_init_initial_seedPtri32, ptr @PRNG_next_] }
 @PRNG_field_seed = internal constant { ptr, ptr } { ptr @PRNG_getter_seed, ptr @PRNG_setter_seed }
 
-define i1 @blytnjoxue(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @bvnqsqgzpi(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -124,7 +125,7 @@ define i1 @blytnjoxue(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %10
 }
 
-define i32 @odnyrftkdt(ptr nest %0, { ptr, i160 } %1) {
+define i32 @eprnbvvmmo(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
@@ -133,7 +134,7 @@ define i32 @odnyrftkdt(ptr nest %0, { ptr, i160 } %1) {
   ret i32 %6
 }
 
-define i1 @mqswqvfyti(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @imwvoqzaro(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -146,7 +147,7 @@ define i1 @mqswqvfyti(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %10
 }
 
-define i32 @mmudiitrfg(ptr nest %0, { ptr, i160 } %1) {
+define i32 @wduremrguj(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
@@ -155,7 +156,7 @@ define i32 @mmudiitrfg(ptr nest %0, { ptr, i160 } %1) {
   ret i32 %6
 }
 
-define i1 @vovzwzbfax(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @zsqbhbwvxl(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -168,7 +169,7 @@ define i1 @vovzwzbfax(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %10
 }
 
-define i32 @kfjdgwekao(ptr nest %0, { ptr, i160 } %1) {
+define i32 @gmzrobvomq(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
@@ -177,7 +178,7 @@ define i32 @kfjdgwekao(ptr nest %0, { ptr, i160 } %1) {
   ret i32 %6
 }
 
-define i1 @rfjoogquzl(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @qodznppfks(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -190,7 +191,7 @@ define i1 @rfjoogquzl(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %10
 }
 
-define i32 @ndjpyegyfb(ptr nest %0, { ptr, i160 } %1) {
+define i32 @tbbalqjumv(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
@@ -199,7 +200,7 @@ define i32 @ndjpyegyfb(ptr nest %0, { ptr, i160 } %1) {
   ret i32 %6
 }
 
-define i1 @jpzledvqfy(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @zrrwolsxjr(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -212,7 +213,7 @@ define i1 @jpzledvqfy(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %10
 }
 
-define i32 @xmbnfljnfp(ptr nest %0, { ptr, i160 } %1) {
+define i32 @rrsjmzanxw(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
@@ -221,7 +222,7 @@ define i32 @xmbnfljnfp(ptr nest %0, { ptr, i160 } %1) {
   ret i32 %6
 }
 
-define i1 @benqavvtpz(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @gnpqnfdmky(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -234,7 +235,7 @@ define i1 @benqavvtpz(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %10
 }
 
-define i32 @dhkfqgrjxa(ptr nest %0, { ptr, i160 } %1) {
+define i32 @qqwrgogphe(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
@@ -243,7 +244,7 @@ define i32 @dhkfqgrjxa(ptr nest %0, { ptr, i160 } %1) {
   ret i32 %6
 }
 
-define i1 @mpcbxrnuez(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @baxgalolep(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -256,7 +257,7 @@ define i1 @mpcbxrnuez(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %10
 }
 
-define i32 @iwxnpimmgh(ptr nest %0, { ptr, i160 } %1) {
+define i32 @yxkxbqlndq(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
@@ -265,7 +266,7 @@ define i32 @iwxnpimmgh(ptr nest %0, { ptr, i160 } %1) {
   ret i32 %6
 }
 
-define i1 @dhhkcolfom(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @ixziwzqlnw(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -278,7 +279,7 @@ define i1 @dhhkcolfom(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %10
 }
 
-define i32 @ebvrnddrno(ptr nest %0, { ptr, i160 } %1) {
+define i32 @itiosxlbmn(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
@@ -287,7 +288,7 @@ define i32 @ebvrnddrno(ptr nest %0, { ptr, i160 } %1) {
   ret i32 %6
 }
 
-define i1 @trrudyclok(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @hsiqjlgidg(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -300,7 +301,7 @@ define i1 @trrudyclok(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %10
 }
 
-define i32 @nytpcdwffn(ptr nest %0, { ptr, i160 } %1) {
+define i32 @tmamxxwayj(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
@@ -309,7 +310,7 @@ define i32 @nytpcdwffn(ptr nest %0, { ptr, i160 } %1) {
   ret i32 %6
 }
 
-define i1 @xlrhldycuu(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @mbdyyfzkxr(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -322,7 +323,7 @@ define i1 @xlrhldycuu(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %10
 }
 
-define i32 @docljsorfa(ptr nest %0, { ptr, i160 } %1) {
+define i32 @eceqwllosa(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
@@ -361,11 +362,13 @@ declare { ptr, i160 } @_box_Default(ptr, ptr)
 
 declare void @_unbox_Default({ ptr, i160 }, ptr, ptr)
 
+declare { i64, i64 } @_size_Default(ptr)
+
 declare void @_unbox_union_typ({ ptr, i160 }, ptr, ptr)
 
-declare { i64, i64 } @_size_tuple_typ(ptr)
+declare { i64, i64 } @_data_size_tuple_typ(ptr)
 
-declare { i64, i64 } @_size_union_typ(ptr)
+declare { i64, i64 } @_data_size_union_typ(ptr)
 
 declare i1 @subtype_test(i64, i64, i64, i64, ptr)
 
@@ -397,7 +400,7 @@ declare i1 @string_eq({ ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 })
 
 declare i64 @clock()
 
-define { i64, i64 } @_size_PRNG(ptr %0) {
+define { i64, i64 } @_data_size_PRNG(ptr %0) {
   %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), 1
   %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, i32 }, ptr null, i32 0, i32 1) to i64), i64 1
   %4 = urem i64 ptrtoint (ptr getelementptr (i32, ptr null, i32 1) to i64), %3
@@ -494,7 +497,7 @@ define ptr @PRNG_B_init_initial_seedPtri32({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %14 = call i1 @subtype_test_wrapper(ptr %12, i64 %11, i64 %10, i64 -2253724949814257982, i64 ptrtoint (ptr @i32_typ to i64), ptr %13)
   %15 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %16 = getelementptr [5 x ptr], ptr %15, i32 0, i32 3
-  %17 = getelementptr ptr, ptr %16, i32 9
+  %17 = getelementptr ptr, ptr %16, i32 10
   %18 = load ptr, ptr %17, align 8
   ret ptr %18
 }
@@ -563,7 +566,7 @@ define ptr @PRNG_B_next_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %5 = getelementptr [5 x ptr], ptr %4, i32 0, i32 4
-  %6 = getelementptr ptr, ptr %5, i32 9
+  %6 = getelementptr ptr, ptr %5, i32 10
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
 }
@@ -620,7 +623,7 @@ define void @print_benchmark_result({ ptr, ptr, ptr, i32 } %0, i32 %1, i64 %2) {
   store ptr @_parameterization_String, ptr %45, align 8
   %46 = call ptr @llvm.invariant.start.p0(i64 1, ptr %44)
   %47 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %48 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %48 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %49 = alloca { ptr }, align 8
   %50 = getelementptr { ptr }, ptr %49, i32 0, i32 0
   store ptr %39, ptr %50, align 8
@@ -634,7 +637,7 @@ define void @print_benchmark_result({ ptr, ptr, ptr, i32 } %0, i32 %1, i64 %2) {
   %56 = load ptr, ptr %55, align 8
   store ptr %56, ptr %54, align 8
   %57 = load ptr, ptr %54, align 8
-  %58 = load <14 x i8>, ptr @weoyg___Operations_, align 16
+  %58 = load <14 x i8>, ptr @mwxxq___Operations_, align 16
   store <14 x i8> %58, ptr %57, align 16
   %59 = alloca [1 x ptr], align 8
   store ptr @String, ptr %59, align 8
@@ -649,7 +652,7 @@ define void @print_benchmark_result({ ptr, ptr, ptr, i32 } %0, i32 %1, i64 %2) {
   %68 = getelementptr { ptr, ptr, ptr, i32 }, ptr %66, i32 0, i32 3
   store ptr @String, ptr %66, align 8
   store ptr %65, ptr %67, align 8
-  store i32 9, ptr %68, align 4
+  store i32 10, ptr %68, align 4
   %69 = load ptr, ptr %54, align 8
   %70 = insertvalue { ptr } undef, ptr %69, 0
   %71 = getelementptr { ptr, ptr, ptr, i32 }, ptr %66, i32 0, i32 0
@@ -696,7 +699,7 @@ define void @print_benchmark_result({ ptr, ptr, ptr, i32 } %0, i32 %1, i64 %2) {
   store ptr @_parameterization_String, ptr %104, align 8
   %105 = call ptr @llvm.invariant.start.p0(i64 1, ptr %103)
   %106 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %107 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %107 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %108 = alloca { ptr }, align 8
   %109 = getelementptr { ptr }, ptr %108, i32 0, i32 0
   store ptr %98, ptr %109, align 8
@@ -715,7 +718,7 @@ define void @print_benchmark_result({ ptr, ptr, ptr, i32 } %0, i32 %1, i64 %2) {
   store ptr @_parameterization_Ptri32, ptr %118, align 8
   %119 = call ptr @llvm.invariant.start.p0(i64 1, ptr %117)
   %120 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %121 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %121 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %122 = alloca { ptr }, align 8
   %123 = getelementptr { ptr }, ptr %122, i32 0, i32 0
   store ptr %113, ptr %123, align 8
@@ -729,7 +732,7 @@ define void @print_benchmark_result({ ptr, ptr, ptr, i32 } %0, i32 %1, i64 %2) {
   %129 = load ptr, ptr %128, align 8
   store ptr %129, ptr %127, align 8
   %130 = load ptr, ptr %127, align 8
-  %131 = load <14 x i8>, ptr @flhzh___Total_Time_, align 16
+  %131 = load <14 x i8>, ptr @wgeel___Total_Time_, align 16
   store <14 x i8> %131, ptr %130, align 16
   %132 = alloca [1 x ptr], align 8
   store ptr @String, ptr %132, align 8
@@ -744,7 +747,7 @@ define void @print_benchmark_result({ ptr, ptr, ptr, i32 } %0, i32 %1, i64 %2) {
   %141 = getelementptr { ptr, ptr, ptr, i32 }, ptr %139, i32 0, i32 3
   store ptr @String, ptr %139, align 8
   store ptr %138, ptr %140, align 8
-  store i32 9, ptr %141, align 4
+  store i32 10, ptr %141, align 4
   %142 = load ptr, ptr %127, align 8
   %143 = insertvalue { ptr } undef, ptr %142, 0
   %144 = getelementptr { ptr, ptr, ptr, i32 }, ptr %139, i32 0, i32 0
@@ -791,7 +794,7 @@ define void @print_benchmark_result({ ptr, ptr, ptr, i32 } %0, i32 %1, i64 %2) {
   store ptr @_parameterization_String, ptr %177, align 8
   %178 = call ptr @llvm.invariant.start.p0(i64 1, ptr %176)
   %179 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %180 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %180 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %181 = alloca { ptr }, align 8
   %182 = getelementptr { ptr }, ptr %181, i32 0, i32 0
   store ptr %171, ptr %182, align 8
@@ -810,7 +813,7 @@ define void @print_benchmark_result({ ptr, ptr, ptr, i32 } %0, i32 %1, i64 %2) {
   store ptr @_parameterization_Ptri64, ptr %191, align 8
   %192 = call ptr @llvm.invariant.start.p0(i64 1, ptr %190)
   %193 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %194 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %194 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %195 = alloca { ptr }, align 8
   %196 = getelementptr { ptr }, ptr %195, i32 0, i32 0
   store ptr %186, ptr %196, align 8
@@ -824,7 +827,7 @@ define void @print_benchmark_result({ ptr, ptr, ptr, i32 } %0, i32 %1, i64 %2) {
   %202 = load ptr, ptr %201, align 8
   store ptr %202, ptr %200, align 8
   %203 = load ptr, ptr %200, align 8
-  %204 = load <3 x i8>, ptr @oppbg__ms, align 4
+  %204 = load <3 x i8>, ptr @zdzur__ms, align 4
   store <3 x i8> %204, ptr %203, align 4
   %205 = alloca [1 x ptr], align 8
   store ptr @String, ptr %205, align 8
@@ -839,7 +842,7 @@ define void @print_benchmark_result({ ptr, ptr, ptr, i32 } %0, i32 %1, i64 %2) {
   %214 = getelementptr { ptr, ptr, ptr, i32 }, ptr %212, i32 0, i32 3
   store ptr @String, ptr %212, align 8
   store ptr %211, ptr %213, align 8
-  store i32 9, ptr %214, align 4
+  store i32 10, ptr %214, align 4
   %215 = load ptr, ptr %200, align 8
   %216 = insertvalue { ptr } undef, ptr %215, 0
   %217 = getelementptr { ptr, ptr, ptr, i32 }, ptr %212, i32 0, i32 0
@@ -886,7 +889,7 @@ define void @print_benchmark_result({ ptr, ptr, ptr, i32 } %0, i32 %1, i64 %2) {
   store ptr @_parameterization_String, ptr %250, align 8
   %251 = call ptr @llvm.invariant.start.p0(i64 1, ptr %249)
   %252 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %253 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %253 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %254 = alloca { ptr }, align 8
   %255 = getelementptr { ptr }, ptr %254, i32 0, i32 0
   store ptr %244, ptr %255, align 8
@@ -933,7 +936,7 @@ define void @print_benchmark_result({ ptr, ptr, ptr, i32 } %0, i32 %1, i64 %2) {
   %276 = load ptr, ptr %275, align 8
   store ptr %276, ptr %5, align 8
   %277 = load ptr, ptr %5, align 8
-  %278 = load <15 x i8>, ptr @klfhr___TimeOp____, align 16
+  %278 = load <15 x i8>, ptr @qtfzj___TimeOp____, align 16
   store <15 x i8> %278, ptr %277, align 16
   store ptr @String, ptr %6, align 8
   %279 = load ptr, ptr %6, align 8
@@ -946,7 +949,7 @@ define void @print_benchmark_result({ ptr, ptr, ptr, i32 } %0, i32 %1, i64 %2) {
   %286 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 3
   store ptr @String, ptr %7, align 8
   store ptr %284, ptr %285, align 8
-  store i32 9, ptr %286, align 4
+  store i32 10, ptr %286, align 4
   %287 = load ptr, ptr %5, align 8
   %288 = insertvalue { ptr } undef, ptr %287, 0
   %289 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 0
@@ -990,7 +993,7 @@ define void @print_benchmark_result({ ptr, ptr, ptr, i32 } %0, i32 %1, i64 %2) {
   store ptr @_parameterization_String, ptr %319, align 8
   %320 = call ptr @llvm.invariant.start.p0(i64 1, ptr %10)
   %321 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %322 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %322 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %323 = getelementptr { ptr }, ptr %11, i32 0, i32 0
   store ptr %314, ptr %323, align 8
   %324 = call ptr @class_behavior_wrapper(ptr %322, ptr %11)
@@ -1005,7 +1008,7 @@ define void @print_benchmark_result({ ptr, ptr, ptr, i32 } %0, i32 %1, i64 %2) {
   store ptr @_parameterization_Ptri64, ptr %329, align 8
   %330 = call ptr @llvm.invariant.start.p0(i64 1, ptr %14)
   %331 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %332 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %332 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %333 = getelementptr { ptr }, ptr %15, i32 0, i32 0
   store ptr %325, ptr %333, align 8
   %334 = call ptr @class_behavior_wrapper(ptr %332, ptr %15)
@@ -1016,7 +1019,7 @@ define void @print_benchmark_result({ ptr, ptr, ptr, i32 } %0, i32 %1, i64 %2) {
   %337 = load ptr, ptr %336, align 8
   store ptr %337, ptr %17, align 8
   %338 = load ptr, ptr %17, align 8
-  %339 = load <3 x i8>, ptr @ucahr__ns, align 4
+  %339 = load <3 x i8>, ptr @ylnwp__ns, align 4
   store <3 x i8> %339, ptr %338, align 4
   store ptr @String, ptr %18, align 8
   %340 = load ptr, ptr %18, align 8
@@ -1029,7 +1032,7 @@ define void @print_benchmark_result({ ptr, ptr, ptr, i32 } %0, i32 %1, i64 %2) {
   %347 = getelementptr { ptr, ptr, ptr, i32 }, ptr %19, i32 0, i32 3
   store ptr @String, ptr %19, align 8
   store ptr %345, ptr %346, align 8
-  store i32 9, ptr %347, align 4
+  store i32 10, ptr %347, align 4
   %348 = load ptr, ptr %17, align 8
   %349 = insertvalue { ptr } undef, ptr %348, 0
   %350 = getelementptr { ptr, ptr, ptr, i32 }, ptr %19, i32 0, i32 0
@@ -1073,7 +1076,7 @@ define void @print_benchmark_result({ ptr, ptr, ptr, i32 } %0, i32 %1, i64 %2) {
   store ptr @_parameterization_String, ptr %380, align 8
   %381 = call ptr @llvm.invariant.start.p0(i64 1, ptr %22)
   %382 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %383 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %383 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %384 = getelementptr { ptr }, ptr %23, i32 0, i32 0
   store ptr %375, ptr %384, align 8
   %385 = call ptr @class_behavior_wrapper(ptr %383, ptr %23)
@@ -1167,10 +1170,10 @@ define void @benchmark_insert_sequential(i32 %0) {
   %74 = alloca ptr, align 8
   store ptr @HashMap, ptr %74, align 8
   store ptr %67, ptr %73, align 8
-  store i32 9, ptr %71, align 4
+  store i32 10, ptr %71, align 4
   %75 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %75)
-  call void @llvm.init.trampoline(ptr %75, ptr @docljsorfa, ptr @i32_hasher)
+  call void @llvm.init.trampoline(ptr %75, ptr @eceqwllosa, ptr @i32_hasher)
   %76 = alloca ptr, align 8
   %77 = call ptr @adjust_trampoline(ptr %75)
   store ptr %77, ptr %76, align 8
@@ -1180,7 +1183,7 @@ define void @benchmark_insert_sequential(i32 %0) {
   %81 = insertvalue { ptr } undef, ptr %80, 0
   %82 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %82)
-  call void @llvm.init.trampoline(ptr %82, ptr @xlrhldycuu, ptr @i32_eq)
+  call void @llvm.init.trampoline(ptr %82, ptr @mbdyyfzkxr, ptr @i32_eq)
   %83 = alloca ptr, align 8
   %84 = call ptr @adjust_trampoline(ptr %82)
   store ptr %84, ptr %83, align 8
@@ -1202,9 +1205,9 @@ define void @benchmark_insert_sequential(i32 %0) {
   %99 = getelementptr [2 x ptr], ptr %97, i32 0, i32 1
   store ptr @_parameterization_FunctionPtri32._Ptri32_to_Ptri1, ptr %99, align 8
   %100 = call ptr @llvm.invariant.start.p0(i64 4, ptr %97)
-  %101 = call ptr @llvm.invariant.start.p0(i64 696, ptr %89)
+  %101 = call ptr @llvm.invariant.start.p0(i64 584, ptr %89)
   %102 = getelementptr ptr, ptr %89, i32 %95
-  %103 = getelementptr ptr, ptr %102, i32 9
+  %103 = getelementptr ptr, ptr %102, i32 8
   %104 = load ptr, ptr %103, align 8
   %105 = alloca { ptr, ptr }, align 8
   %106 = getelementptr { ptr, ptr }, ptr %105, i32 0, i32 0
@@ -1278,9 +1281,9 @@ define void @benchmark_insert_sequential(i32 %0) {
   %153 = getelementptr [2 x ptr], ptr %6, i32 0, i32 1
   store ptr @_parameterization_Ptri32, ptr %153, align 8
   %154 = call ptr @llvm.invariant.start.p0(i64 4, ptr %6)
-  %155 = call ptr @llvm.invariant.start.p0(i64 696, ptr %144)
+  %155 = call ptr @llvm.invariant.start.p0(i64 584, ptr %144)
   %156 = getelementptr ptr, ptr %144, i32 %150
-  %157 = getelementptr ptr, ptr %156, i32 20
+  %157 = getelementptr ptr, ptr %156, i32 13
   %158 = load ptr, ptr %157, align 8
   %159 = getelementptr { ptr, ptr }, ptr %7, i32 0, i32 0
   store ptr %136, ptr %159, align 8
@@ -1325,9 +1328,9 @@ define void @benchmark_insert_sequential(i32 %0) {
   %184 = getelementptr [1 x ptr], ptr %10, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %184, align 8
   %185 = call ptr @llvm.invariant.start.p0(i64 1, ptr %10)
-  %186 = call ptr @llvm.invariant.start.p0(i64 696, ptr %176)
+  %186 = call ptr @llvm.invariant.start.p0(i64 584, ptr %176)
   %187 = getelementptr ptr, ptr %176, i32 %182
-  %188 = getelementptr ptr, ptr %187, i32 21
+  %188 = getelementptr ptr, ptr %187, i32 14
   %189 = load ptr, ptr %188, align 8
   %190 = getelementptr { ptr }, ptr %11, i32 0, i32 0
   store ptr %172, ptr %190, align 8
@@ -1407,9 +1410,9 @@ define void @benchmark_insert_sequential(i32 %0) {
   %239 = load i32, ptr %118, align 4
   %240 = insertvalue { ptr, ptr, ptr, i32 } %238, i32 %239, 3
   %241 = call ptr @llvm.invariant.start.p0(i64 0, ptr %19)
-  %242 = call ptr @llvm.invariant.start.p0(i64 696, ptr %233)
+  %242 = call ptr @llvm.invariant.start.p0(i64 584, ptr %233)
   %243 = getelementptr ptr, ptr %233, i32 %239
-  %244 = getelementptr ptr, ptr %243, i32 24
+  %244 = getelementptr ptr, ptr %243, i32 17
   %245 = load ptr, ptr %244, align 8
   %246 = call ptr @behavior_wrapper(ptr %245, { ptr, ptr, ptr, i32 } %240, ptr %20)
   %247 = call i32 %246({ ptr, ptr, ptr, i32 } %240, { ptr, ptr, ptr, i32 } %240, ptr %19) #3
@@ -1427,9 +1430,9 @@ define void @benchmark_insert_sequential(i32 %0) {
   %257 = load i32, ptr %118, align 4
   %258 = insertvalue { ptr, ptr, ptr, i32 } %256, i32 %257, 3
   %259 = call ptr @llvm.invariant.start.p0(i64 0, ptr %22)
-  %260 = call ptr @llvm.invariant.start.p0(i64 696, ptr %251)
+  %260 = call ptr @llvm.invariant.start.p0(i64 584, ptr %251)
   %261 = getelementptr ptr, ptr %251, i32 %257
-  %262 = getelementptr ptr, ptr %261, i32 24
+  %262 = getelementptr ptr, ptr %261, i32 17
   %263 = load ptr, ptr %262, align 8
   %264 = call ptr @behavior_wrapper(ptr %263, { ptr, ptr, ptr, i32 } %258, ptr %23)
   %265 = call i32 %264({ ptr, ptr, ptr, i32 } %258, { ptr, ptr, ptr, i32 } %258, ptr %22) #3
@@ -1466,7 +1469,7 @@ define void @benchmark_insert_sequential(i32 %0) {
   %282 = load ptr, ptr %281, align 8
   store ptr %282, ptr %26, align 8
   %283 = load ptr, ptr %26, align 8
-  %284 = load <17 x i8>, ptr @omekq_Insert_Sequential, align 32
+  %284 = load <17 x i8>, ptr @erhjy_Insert_Sequential, align 32
   store <17 x i8> %284, ptr %283, align 32
   store ptr @String, ptr %27, align 8
   %285 = load ptr, ptr %27, align 8
@@ -1477,7 +1480,7 @@ define void @benchmark_insert_sequential(i32 %0) {
   %290 = call ptr @bump_malloc(i64 %289)
   store ptr @String, ptr %31, align 8
   store ptr %290, ptr %30, align 8
-  store i32 9, ptr %28, align 4
+  store i32 10, ptr %28, align 4
   %291 = load ptr, ptr %26, align 8
   %292 = insertvalue { ptr } undef, ptr %291, 0
   %293 = load ptr, ptr %31, align 8
@@ -1523,7 +1526,7 @@ define void @benchmark_insert_sequential(i32 %0) {
   %324 = load ptr, ptr %323, align 8
   store ptr %324, ptr %35, align 8
   %325 = load ptr, ptr %35, align 8
-  %326 = load <18 x i8>, ptr @bqjcq_____Verification_, align 32
+  %326 = load <18 x i8>, ptr @kylim_____Verification_, align 32
   store <18 x i8> %326, ptr %325, align 32
   store ptr @String, ptr %36, align 8
   %327 = load ptr, ptr %36, align 8
@@ -1536,7 +1539,7 @@ define void @benchmark_insert_sequential(i32 %0) {
   %334 = getelementptr { ptr, ptr, ptr, i32 }, ptr %37, i32 0, i32 3
   store ptr @String, ptr %37, align 8
   store ptr %332, ptr %333, align 8
-  store i32 9, ptr %334, align 4
+  store i32 10, ptr %334, align 4
   %335 = load ptr, ptr %35, align 8
   %336 = insertvalue { ptr } undef, ptr %335, 0
   %337 = getelementptr { ptr, ptr, ptr, i32 }, ptr %37, i32 0, i32 0
@@ -1580,7 +1583,7 @@ define void @benchmark_insert_sequential(i32 %0) {
   store ptr @_parameterization_String, ptr %367, align 8
   %368 = call ptr @llvm.invariant.start.p0(i64 1, ptr %40)
   %369 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %370 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %370 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %371 = getelementptr { ptr }, ptr %41, i32 0, i32 0
   store ptr %362, ptr %371, align 8
   %372 = call ptr @class_behavior_wrapper(ptr %370, ptr %41)
@@ -1594,7 +1597,7 @@ define void @benchmark_insert_sequential(i32 %0) {
   %376 = load ptr, ptr %375, align 8
   store ptr %376, ptr %43, align 8
   %377 = load ptr, ptr %43, align 8
-  %378 = load <4 x i8>, ptr @hplqp_PASS, align 4
+  %378 = load <4 x i8>, ptr @zbhnv_PASS, align 4
   store <4 x i8> %378, ptr %377, align 4
   store ptr @String, ptr %44, align 8
   %379 = load ptr, ptr %44, align 8
@@ -1607,7 +1610,7 @@ define void @benchmark_insert_sequential(i32 %0) {
   %386 = getelementptr { ptr, ptr, ptr, i32 }, ptr %45, i32 0, i32 3
   store ptr @String, ptr %45, align 8
   store ptr %384, ptr %385, align 8
-  store i32 9, ptr %386, align 4
+  store i32 10, ptr %386, align 4
   %387 = load ptr, ptr %43, align 8
   %388 = insertvalue { ptr } undef, ptr %387, 0
   %389 = getelementptr { ptr, ptr, ptr, i32 }, ptr %45, i32 0, i32 0
@@ -1651,7 +1654,7 @@ define void @benchmark_insert_sequential(i32 %0) {
   store ptr @_parameterization_String, ptr %419, align 8
   %420 = call ptr @llvm.invariant.start.p0(i64 1, ptr %48)
   %421 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %422 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %422 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %423 = getelementptr { ptr }, ptr %49, i32 0, i32 0
   store ptr %414, ptr %423, align 8
   %424 = call ptr @class_behavior_wrapper(ptr %422, ptr %49)
@@ -1665,7 +1668,7 @@ define void @benchmark_insert_sequential(i32 %0) {
   %428 = load ptr, ptr %427, align 8
   store ptr %428, ptr %51, align 8
   %429 = load ptr, ptr %51, align 8
-  %430 = load <4 x i8>, ptr @gmbap_FAIL, align 4
+  %430 = load <4 x i8>, ptr @ycxnw_FAIL, align 4
   store <4 x i8> %430, ptr %429, align 4
   store ptr @String, ptr %52, align 8
   %431 = load ptr, ptr %52, align 8
@@ -1678,7 +1681,7 @@ define void @benchmark_insert_sequential(i32 %0) {
   %438 = getelementptr { ptr, ptr, ptr, i32 }, ptr %53, i32 0, i32 3
   store ptr @String, ptr %53, align 8
   store ptr %436, ptr %437, align 8
-  store i32 9, ptr %438, align 4
+  store i32 10, ptr %438, align 4
   %439 = load ptr, ptr %51, align 8
   %440 = insertvalue { ptr } undef, ptr %439, 0
   %441 = getelementptr { ptr, ptr, ptr, i32 }, ptr %53, i32 0, i32 0
@@ -1722,7 +1725,7 @@ define void @benchmark_insert_sequential(i32 %0) {
   store ptr @_parameterization_String, ptr %471, align 8
   %472 = call ptr @llvm.invariant.start.p0(i64 1, ptr %56)
   %473 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %474 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %474 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %475 = getelementptr { ptr }, ptr %57, i32 0, i32 0
   store ptr %466, ptr %475, align 8
   %476 = call ptr @class_behavior_wrapper(ptr %474, ptr %57)
@@ -1853,10 +1856,10 @@ define void @benchmark_insert_random(i32 %0) {
   %111 = alloca ptr, align 8
   store ptr @HashMap, ptr %111, align 8
   store ptr %104, ptr %110, align 8
-  store i32 9, ptr %108, align 4
+  store i32 10, ptr %108, align 4
   %112 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %112)
-  call void @llvm.init.trampoline(ptr %112, ptr @nytpcdwffn, ptr @i32_hasher)
+  call void @llvm.init.trampoline(ptr %112, ptr @tmamxxwayj, ptr @i32_hasher)
   %113 = alloca ptr, align 8
   %114 = call ptr @adjust_trampoline(ptr %112)
   store ptr %114, ptr %113, align 8
@@ -1866,7 +1869,7 @@ define void @benchmark_insert_random(i32 %0) {
   %118 = insertvalue { ptr } undef, ptr %117, 0
   %119 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %119)
-  call void @llvm.init.trampoline(ptr %119, ptr @trrudyclok, ptr @i32_eq)
+  call void @llvm.init.trampoline(ptr %119, ptr @hsiqjlgidg, ptr @i32_eq)
   %120 = alloca ptr, align 8
   %121 = call ptr @adjust_trampoline(ptr %119)
   store ptr %121, ptr %120, align 8
@@ -1888,9 +1891,9 @@ define void @benchmark_insert_random(i32 %0) {
   %136 = getelementptr [2 x ptr], ptr %134, i32 0, i32 1
   store ptr @_parameterization_FunctionPtri32._Ptri32_to_Ptri1, ptr %136, align 8
   %137 = call ptr @llvm.invariant.start.p0(i64 4, ptr %134)
-  %138 = call ptr @llvm.invariant.start.p0(i64 696, ptr %126)
+  %138 = call ptr @llvm.invariant.start.p0(i64 584, ptr %126)
   %139 = getelementptr ptr, ptr %126, i32 %132
-  %140 = getelementptr ptr, ptr %139, i32 9
+  %140 = getelementptr ptr, ptr %139, i32 8
   %141 = load ptr, ptr %140, align 8
   %142 = alloca { ptr, ptr }, align 8
   %143 = getelementptr { ptr, ptr }, ptr %142, i32 0, i32 0
@@ -1943,7 +1946,7 @@ define void @benchmark_insert_random(i32 %0) {
   %177 = alloca ptr, align 8
   store ptr @PRNG, ptr %177, align 8
   store ptr %173, ptr %176, align 8
-  store i32 9, ptr %174, align 4
+  store i32 10, ptr %174, align 4
   %178 = load ptr, ptr %177, align 8
   %179 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %178, 0
   %180 = load ptr, ptr %176, align 8
@@ -2013,7 +2016,7 @@ define void @benchmark_insert_random(i32 %0) {
   %229 = alloca ptr, align 8
   store ptr @Array, ptr %229, align 8
   store ptr %224, ptr %228, align 8
-  store i32 9, ptr %226, align 4
+  store i32 10, ptr %226, align 4
   %230 = load ptr, ptr %229, align 8
   %231 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %230, 0
   %232 = load ptr, ptr %228, align 8
@@ -2091,10 +2094,10 @@ define void @benchmark_insert_random(i32 %0) {
   %285 = alloca ptr, align 8
   store ptr @HashMap, ptr %285, align 8
   store ptr %278, ptr %284, align 8
-  store i32 9, ptr %282, align 4
+  store i32 10, ptr %282, align 4
   %286 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %286)
-  call void @llvm.init.trampoline(ptr %286, ptr @ebvrnddrno, ptr @i32_hasher)
+  call void @llvm.init.trampoline(ptr %286, ptr @itiosxlbmn, ptr @i32_hasher)
   %287 = alloca ptr, align 8
   %288 = call ptr @adjust_trampoline(ptr %286)
   store ptr %288, ptr %287, align 8
@@ -2104,7 +2107,7 @@ define void @benchmark_insert_random(i32 %0) {
   %292 = insertvalue { ptr } undef, ptr %291, 0
   %293 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %293)
-  call void @llvm.init.trampoline(ptr %293, ptr @dhhkcolfom, ptr @i32_eq)
+  call void @llvm.init.trampoline(ptr %293, ptr @ixziwzqlnw, ptr @i32_eq)
   %294 = alloca ptr, align 8
   %295 = call ptr @adjust_trampoline(ptr %293)
   store ptr %295, ptr %294, align 8
@@ -2126,9 +2129,9 @@ define void @benchmark_insert_random(i32 %0) {
   %310 = getelementptr [2 x ptr], ptr %308, i32 0, i32 1
   store ptr @_parameterization_FunctionPtri32._Ptri32_to_Ptri1, ptr %310, align 8
   %311 = call ptr @llvm.invariant.start.p0(i64 4, ptr %308)
-  %312 = call ptr @llvm.invariant.start.p0(i64 696, ptr %300)
+  %312 = call ptr @llvm.invariant.start.p0(i64 584, ptr %300)
   %313 = getelementptr ptr, ptr %300, i32 %306
-  %314 = getelementptr ptr, ptr %313, i32 9
+  %314 = getelementptr ptr, ptr %313, i32 8
   %315 = load ptr, ptr %314, align 8
   %316 = alloca { ptr, ptr }, align 8
   %317 = getelementptr { ptr, ptr }, ptr %316, i32 0, i32 0
@@ -2248,9 +2251,9 @@ define void @benchmark_insert_random(i32 %0) {
   %403 = getelementptr [2 x ptr], ptr %12, i32 0, i32 1
   store ptr @_parameterization_Ptri1, ptr %403, align 8
   %404 = call ptr @llvm.invariant.start.p0(i64 4, ptr %12)
-  %405 = call ptr @llvm.invariant.start.p0(i64 696, ptr %394)
+  %405 = call ptr @llvm.invariant.start.p0(i64 584, ptr %394)
   %406 = getelementptr ptr, ptr %394, i32 %400
-  %407 = getelementptr ptr, ptr %406, i32 20
+  %407 = getelementptr ptr, ptr %406, i32 13
   %408 = load ptr, ptr %407, align 8
   %409 = getelementptr { ptr, ptr }, ptr %13, i32 0, i32 0
   store ptr %386, ptr %409, align 8
@@ -2288,9 +2291,9 @@ define void @benchmark_insert_random(i32 %0) {
   %429 = load i32, ptr %329, align 4
   %430 = insertvalue { ptr, ptr, ptr, i32 } %428, i32 %429, 3
   %431 = call ptr @llvm.invariant.start.p0(i64 0, ptr %14)
-  %432 = call ptr @llvm.invariant.start.p0(i64 696, ptr %423)
+  %432 = call ptr @llvm.invariant.start.p0(i64 584, ptr %423)
   %433 = getelementptr ptr, ptr %423, i32 %429
-  %434 = getelementptr ptr, ptr %433, i32 24
+  %434 = getelementptr ptr, ptr %433, i32 17
   %435 = load ptr, ptr %434, align 8
   %436 = call ptr @behavior_wrapper(ptr %435, { ptr, ptr, ptr, i32 } %430, ptr %15)
   %437 = call i32 %436({ ptr, ptr, ptr, i32 } %430, { ptr, ptr, ptr, i32 } %430, ptr %14) #3
@@ -2351,9 +2354,9 @@ define void @benchmark_insert_random(i32 %0) {
   %480 = getelementptr [2 x ptr], ptr %23, i32 0, i32 1
   store ptr @_parameterization_Ptri32, ptr %480, align 8
   %481 = call ptr @llvm.invariant.start.p0(i64 4, ptr %23)
-  %482 = call ptr @llvm.invariant.start.p0(i64 696, ptr %471)
+  %482 = call ptr @llvm.invariant.start.p0(i64 584, ptr %471)
   %483 = getelementptr ptr, ptr %471, i32 %477
-  %484 = getelementptr ptr, ptr %483, i32 20
+  %484 = getelementptr ptr, ptr %483, i32 13
   %485 = load ptr, ptr %484, align 8
   %486 = getelementptr { ptr, ptr }, ptr %24, i32 0, i32 0
   store ptr %463, ptr %486, align 8
@@ -2397,9 +2400,9 @@ define void @benchmark_insert_random(i32 %0) {
   %510 = getelementptr [1 x ptr], ptr %27, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %510, align 8
   %511 = call ptr @llvm.invariant.start.p0(i64 1, ptr %27)
-  %512 = call ptr @llvm.invariant.start.p0(i64 696, ptr %502)
+  %512 = call ptr @llvm.invariant.start.p0(i64 584, ptr %502)
   %513 = getelementptr ptr, ptr %502, i32 %508
-  %514 = getelementptr ptr, ptr %513, i32 21
+  %514 = getelementptr ptr, ptr %513, i32 14
   %515 = load ptr, ptr %514, align 8
   %516 = getelementptr { ptr }, ptr %28, i32 0, i32 0
   store ptr %498, ptr %516, align 8
@@ -2480,9 +2483,9 @@ define void @benchmark_insert_random(i32 %0) {
   %566 = load i32, ptr %155, align 4
   %567 = insertvalue { ptr, ptr, ptr, i32 } %565, i32 %566, 3
   %568 = call ptr @llvm.invariant.start.p0(i64 0, ptr %36)
-  %569 = call ptr @llvm.invariant.start.p0(i64 696, ptr %560)
+  %569 = call ptr @llvm.invariant.start.p0(i64 584, ptr %560)
   %570 = getelementptr ptr, ptr %560, i32 %566
-  %571 = getelementptr ptr, ptr %570, i32 24
+  %571 = getelementptr ptr, ptr %570, i32 17
   %572 = load ptr, ptr %571, align 8
   %573 = call ptr @behavior_wrapper(ptr %572, { ptr, ptr, ptr, i32 } %567, ptr %37)
   %574 = call i32 %573({ ptr, ptr, ptr, i32 } %567, { ptr, ptr, ptr, i32 } %567, ptr %36) #3
@@ -2500,9 +2503,9 @@ define void @benchmark_insert_random(i32 %0) {
   %584 = load i32, ptr %155, align 4
   %585 = insertvalue { ptr, ptr, ptr, i32 } %583, i32 %584, 3
   %586 = call ptr @llvm.invariant.start.p0(i64 0, ptr %39)
-  %587 = call ptr @llvm.invariant.start.p0(i64 696, ptr %578)
+  %587 = call ptr @llvm.invariant.start.p0(i64 584, ptr %578)
   %588 = getelementptr ptr, ptr %578, i32 %584
-  %589 = getelementptr ptr, ptr %588, i32 24
+  %589 = getelementptr ptr, ptr %588, i32 17
   %590 = load ptr, ptr %589, align 8
   %591 = call ptr @behavior_wrapper(ptr %590, { ptr, ptr, ptr, i32 } %585, ptr %40)
   %592 = call i32 %591({ ptr, ptr, ptr, i32 } %585, { ptr, ptr, ptr, i32 } %585, ptr %39) #3
@@ -2539,7 +2542,7 @@ define void @benchmark_insert_random(i32 %0) {
   %609 = load ptr, ptr %608, align 8
   store ptr %609, ptr %43, align 8
   %610 = load ptr, ptr %43, align 8
-  %611 = load <13 x i8>, ptr @zsqig_Insert_Random, align 16
+  %611 = load <13 x i8>, ptr @iulzj_Insert_Random, align 16
   store <13 x i8> %611, ptr %610, align 16
   store ptr @String, ptr %44, align 8
   %612 = load ptr, ptr %44, align 8
@@ -2550,7 +2553,7 @@ define void @benchmark_insert_random(i32 %0) {
   %617 = call ptr @bump_malloc(i64 %616)
   store ptr @String, ptr %48, align 8
   store ptr %617, ptr %47, align 8
-  store i32 9, ptr %45, align 4
+  store i32 10, ptr %45, align 4
   %618 = load ptr, ptr %43, align 8
   %619 = insertvalue { ptr } undef, ptr %618, 0
   %620 = load ptr, ptr %48, align 8
@@ -2596,7 +2599,7 @@ define void @benchmark_insert_random(i32 %0) {
   %651 = load ptr, ptr %650, align 8
   store ptr %651, ptr %52, align 8
   %652 = load ptr, ptr %52, align 8
-  %653 = load <18 x i8>, ptr @iwjkv_____Verification_, align 32
+  %653 = load <18 x i8>, ptr @zgmrw_____Verification_, align 32
   store <18 x i8> %653, ptr %652, align 32
   store ptr @String, ptr %53, align 8
   %654 = load ptr, ptr %53, align 8
@@ -2609,7 +2612,7 @@ define void @benchmark_insert_random(i32 %0) {
   %661 = getelementptr { ptr, ptr, ptr, i32 }, ptr %54, i32 0, i32 3
   store ptr @String, ptr %54, align 8
   store ptr %659, ptr %660, align 8
-  store i32 9, ptr %661, align 4
+  store i32 10, ptr %661, align 4
   %662 = load ptr, ptr %52, align 8
   %663 = insertvalue { ptr } undef, ptr %662, 0
   %664 = getelementptr { ptr, ptr, ptr, i32 }, ptr %54, i32 0, i32 0
@@ -2653,7 +2656,7 @@ define void @benchmark_insert_random(i32 %0) {
   store ptr @_parameterization_String, ptr %694, align 8
   %695 = call ptr @llvm.invariant.start.p0(i64 1, ptr %57)
   %696 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %697 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %697 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %698 = getelementptr { ptr }, ptr %58, i32 0, i32 0
   store ptr %689, ptr %698, align 8
   %699 = call ptr @class_behavior_wrapper(ptr %697, ptr %58)
@@ -2667,7 +2670,7 @@ define void @benchmark_insert_random(i32 %0) {
   %703 = load ptr, ptr %702, align 8
   store ptr %703, ptr %60, align 8
   %704 = load ptr, ptr %60, align 8
-  %705 = load <4 x i8>, ptr @ukxpx_PASS, align 4
+  %705 = load <4 x i8>, ptr @xtrqk_PASS, align 4
   store <4 x i8> %705, ptr %704, align 4
   store ptr @String, ptr %61, align 8
   %706 = load ptr, ptr %61, align 8
@@ -2680,7 +2683,7 @@ define void @benchmark_insert_random(i32 %0) {
   %713 = getelementptr { ptr, ptr, ptr, i32 }, ptr %62, i32 0, i32 3
   store ptr @String, ptr %62, align 8
   store ptr %711, ptr %712, align 8
-  store i32 9, ptr %713, align 4
+  store i32 10, ptr %713, align 4
   %714 = load ptr, ptr %60, align 8
   %715 = insertvalue { ptr } undef, ptr %714, 0
   %716 = getelementptr { ptr, ptr, ptr, i32 }, ptr %62, i32 0, i32 0
@@ -2724,7 +2727,7 @@ define void @benchmark_insert_random(i32 %0) {
   store ptr @_parameterization_String, ptr %746, align 8
   %747 = call ptr @llvm.invariant.start.p0(i64 1, ptr %65)
   %748 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %749 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %749 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %750 = getelementptr { ptr }, ptr %66, i32 0, i32 0
   store ptr %741, ptr %750, align 8
   %751 = call ptr @class_behavior_wrapper(ptr %749, ptr %66)
@@ -2738,7 +2741,7 @@ define void @benchmark_insert_random(i32 %0) {
   %755 = load ptr, ptr %754, align 8
   store ptr %755, ptr %68, align 8
   %756 = load ptr, ptr %68, align 8
-  %757 = load <4 x i8>, ptr @lvogm_FAIL, align 4
+  %757 = load <4 x i8>, ptr @tsfgx_FAIL, align 4
   store <4 x i8> %757, ptr %756, align 4
   store ptr @String, ptr %69, align 8
   %758 = load ptr, ptr %69, align 8
@@ -2751,7 +2754,7 @@ define void @benchmark_insert_random(i32 %0) {
   %765 = getelementptr { ptr, ptr, ptr, i32 }, ptr %70, i32 0, i32 3
   store ptr @String, ptr %70, align 8
   store ptr %763, ptr %764, align 8
-  store i32 9, ptr %765, align 4
+  store i32 10, ptr %765, align 4
   %766 = load ptr, ptr %68, align 8
   %767 = insertvalue { ptr } undef, ptr %766, 0
   %768 = getelementptr { ptr, ptr, ptr, i32 }, ptr %70, i32 0, i32 0
@@ -2795,7 +2798,7 @@ define void @benchmark_insert_random(i32 %0) {
   store ptr @_parameterization_String, ptr %798, align 8
   %799 = call ptr @llvm.invariant.start.p0(i64 1, ptr %73)
   %800 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %801 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %801 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %802 = getelementptr { ptr }, ptr %74, i32 0, i32 0
   store ptr %793, ptr %802, align 8
   %803 = call ptr @class_behavior_wrapper(ptr %801, ptr %74)
@@ -2809,7 +2812,7 @@ define void @benchmark_insert_random(i32 %0) {
   %807 = load ptr, ptr %806, align 8
   store ptr %807, ptr %76, align 8
   %808 = load ptr, ptr %76, align 8
-  %809 = load <27 x i8>, ptr @mcknf_____Expected_unique_size_, align 32
+  %809 = load <27 x i8>, ptr @qmrvk_____Expected_unique_size_, align 32
   store <27 x i8> %809, ptr %808, align 32
   store ptr @String, ptr %77, align 8
   %810 = load ptr, ptr %77, align 8
@@ -2822,7 +2825,7 @@ define void @benchmark_insert_random(i32 %0) {
   %817 = getelementptr { ptr, ptr, ptr, i32 }, ptr %78, i32 0, i32 3
   store ptr @String, ptr %78, align 8
   store ptr %815, ptr %816, align 8
-  store i32 9, ptr %817, align 4
+  store i32 10, ptr %817, align 4
   %818 = load ptr, ptr %76, align 8
   %819 = insertvalue { ptr } undef, ptr %818, 0
   %820 = getelementptr { ptr, ptr, ptr, i32 }, ptr %78, i32 0, i32 0
@@ -2866,7 +2869,7 @@ define void @benchmark_insert_random(i32 %0) {
   store ptr @_parameterization_String, ptr %850, align 8
   %851 = call ptr @llvm.invariant.start.p0(i64 1, ptr %81)
   %852 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %853 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %853 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %854 = getelementptr { ptr }, ptr %82, i32 0, i32 0
   store ptr %845, ptr %854, align 8
   %855 = call ptr @class_behavior_wrapper(ptr %853, ptr %82)
@@ -2881,7 +2884,7 @@ define void @benchmark_insert_random(i32 %0) {
   store ptr @_parameterization_Ptri32, ptr %860, align 8
   %861 = call ptr @llvm.invariant.start.p0(i64 1, ptr %85)
   %862 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %863 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %863 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %864 = getelementptr { ptr }, ptr %86, i32 0, i32 0
   store ptr %856, ptr %864, align 8
   %865 = call ptr @class_behavior_wrapper(ptr %863, ptr %86)
@@ -2892,7 +2895,7 @@ define void @benchmark_insert_random(i32 %0) {
   %868 = load ptr, ptr %867, align 8
   store ptr %868, ptr %88, align 8
   %869 = load ptr, ptr %88, align 8
-  %870 = load <1 x i8>, ptr @yjrqg_, align 1
+  %870 = load <1 x i8>, ptr @zjhph_, align 1
   store <1 x i8> %870, ptr %869, align 1
   store ptr @String, ptr %89, align 8
   %871 = load ptr, ptr %89, align 8
@@ -2905,7 +2908,7 @@ define void @benchmark_insert_random(i32 %0) {
   %878 = getelementptr { ptr, ptr, ptr, i32 }, ptr %90, i32 0, i32 3
   store ptr @String, ptr %90, align 8
   store ptr %876, ptr %877, align 8
-  store i32 9, ptr %878, align 4
+  store i32 10, ptr %878, align 4
   %879 = load ptr, ptr %88, align 8
   %880 = insertvalue { ptr } undef, ptr %879, 0
   %881 = getelementptr { ptr, ptr, ptr, i32 }, ptr %90, i32 0, i32 0
@@ -2949,7 +2952,7 @@ define void @benchmark_insert_random(i32 %0) {
   store ptr @_parameterization_String, ptr %911, align 8
   %912 = call ptr @llvm.invariant.start.p0(i64 1, ptr %93)
   %913 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %914 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %914 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %915 = getelementptr { ptr }, ptr %94, i32 0, i32 0
   store ptr %906, ptr %915, align 8
   %916 = call ptr @class_behavior_wrapper(ptr %914, ptr %94)
@@ -3044,10 +3047,10 @@ define void @benchmark_get_sequential_hit(i32 %0) {
   %78 = alloca ptr, align 8
   store ptr @HashMap, ptr %78, align 8
   store ptr %71, ptr %77, align 8
-  store i32 9, ptr %75, align 4
+  store i32 10, ptr %75, align 4
   %79 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %79)
-  call void @llvm.init.trampoline(ptr %79, ptr @iwxnpimmgh, ptr @i32_hasher)
+  call void @llvm.init.trampoline(ptr %79, ptr @yxkxbqlndq, ptr @i32_hasher)
   %80 = alloca ptr, align 8
   %81 = call ptr @adjust_trampoline(ptr %79)
   store ptr %81, ptr %80, align 8
@@ -3057,7 +3060,7 @@ define void @benchmark_get_sequential_hit(i32 %0) {
   %85 = insertvalue { ptr } undef, ptr %84, 0
   %86 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %86)
-  call void @llvm.init.trampoline(ptr %86, ptr @mpcbxrnuez, ptr @i32_eq)
+  call void @llvm.init.trampoline(ptr %86, ptr @baxgalolep, ptr @i32_eq)
   %87 = alloca ptr, align 8
   %88 = call ptr @adjust_trampoline(ptr %86)
   store ptr %88, ptr %87, align 8
@@ -3079,9 +3082,9 @@ define void @benchmark_get_sequential_hit(i32 %0) {
   %103 = getelementptr [2 x ptr], ptr %101, i32 0, i32 1
   store ptr @_parameterization_FunctionPtri32._Ptri32_to_Ptri1, ptr %103, align 8
   %104 = call ptr @llvm.invariant.start.p0(i64 4, ptr %101)
-  %105 = call ptr @llvm.invariant.start.p0(i64 696, ptr %93)
+  %105 = call ptr @llvm.invariant.start.p0(i64 584, ptr %93)
   %106 = getelementptr ptr, ptr %93, i32 %99
-  %107 = getelementptr ptr, ptr %106, i32 9
+  %107 = getelementptr ptr, ptr %106, i32 8
   %108 = load ptr, ptr %107, align 8
   %109 = alloca { ptr, ptr }, align 8
   %110 = getelementptr { ptr, ptr }, ptr %109, i32 0, i32 0
@@ -3156,9 +3159,9 @@ define void @benchmark_get_sequential_hit(i32 %0) {
   %158 = getelementptr [2 x ptr], ptr %6, i32 0, i32 1
   store ptr @_parameterization_Ptri32, ptr %158, align 8
   %159 = call ptr @llvm.invariant.start.p0(i64 4, ptr %6)
-  %160 = call ptr @llvm.invariant.start.p0(i64 696, ptr %149)
+  %160 = call ptr @llvm.invariant.start.p0(i64 584, ptr %149)
   %161 = getelementptr ptr, ptr %149, i32 %155
-  %162 = getelementptr ptr, ptr %161, i32 20
+  %162 = getelementptr ptr, ptr %161, i32 13
   %163 = load ptr, ptr %162, align 8
   %164 = getelementptr { ptr, ptr }, ptr %7, i32 0, i32 0
   store ptr %141, ptr %164, align 8
@@ -3216,9 +3219,9 @@ define void @benchmark_get_sequential_hit(i32 %0) {
   %198 = getelementptr [1 x ptr], ptr %10, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %198, align 8
   %199 = call ptr @llvm.invariant.start.p0(i64 1, ptr %10)
-  %200 = call ptr @llvm.invariant.start.p0(i64 696, ptr %190)
+  %200 = call ptr @llvm.invariant.start.p0(i64 584, ptr %190)
   %201 = getelementptr ptr, ptr %190, i32 %196
-  %202 = getelementptr ptr, ptr %201, i32 21
+  %202 = getelementptr ptr, ptr %201, i32 14
   %203 = load ptr, ptr %202, align 8
   %204 = getelementptr { ptr }, ptr %11, i32 0, i32 0
   store ptr %186, ptr %204, align 8
@@ -3259,7 +3262,7 @@ define void @benchmark_get_sequential_hit(i32 %0) {
   %227 = load ptr, ptr %226, align 8
   store ptr %227, ptr %18, align 8
   %228 = load ptr, ptr %18, align 8
-  %229 = load <55 x i8>, ptr @dngyh_Error_Nil_returned_during_sequential_hit_test_for_key_, align 64
+  %229 = load <55 x i8>, ptr @uwcly_Error_Nil_returned_during_sequential_hit_test_for_key_, align 64
   store <55 x i8> %229, ptr %228, align 64
   store ptr @String, ptr %19, align 8
   %230 = load ptr, ptr %19, align 8
@@ -3272,7 +3275,7 @@ define void @benchmark_get_sequential_hit(i32 %0) {
   %237 = getelementptr { ptr, ptr, ptr, i32 }, ptr %20, i32 0, i32 3
   store ptr @String, ptr %20, align 8
   store ptr %235, ptr %236, align 8
-  store i32 9, ptr %237, align 4
+  store i32 10, ptr %237, align 4
   %238 = load ptr, ptr %18, align 8
   %239 = insertvalue { ptr } undef, ptr %238, 0
   %240 = getelementptr { ptr, ptr, ptr, i32 }, ptr %20, i32 0, i32 0
@@ -3316,7 +3319,7 @@ define void @benchmark_get_sequential_hit(i32 %0) {
   store ptr @_parameterization_String, ptr %270, align 8
   %271 = call ptr @llvm.invariant.start.p0(i64 1, ptr %23)
   %272 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %273 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %273 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %274 = getelementptr { ptr }, ptr %24, i32 0, i32 0
   store ptr %265, ptr %274, align 8
   %275 = call ptr @class_behavior_wrapper(ptr %273, ptr %24)
@@ -3331,7 +3334,7 @@ define void @benchmark_get_sequential_hit(i32 %0) {
   store ptr @_parameterization_Ptri32, ptr %280, align 8
   %281 = call ptr @llvm.invariant.start.p0(i64 1, ptr %27)
   %282 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %283 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %283 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %284 = getelementptr { ptr }, ptr %28, i32 0, i32 0
   store ptr %276, ptr %284, align 8
   %285 = call ptr @class_behavior_wrapper(ptr %283, ptr %28)
@@ -3380,7 +3383,7 @@ define void @benchmark_get_sequential_hit(i32 %0) {
   %310 = load ptr, ptr %309, align 8
   store ptr %310, ptr %30, align 8
   %311 = load ptr, ptr %30, align 8
-  %312 = load <18 x i8>, ptr @qriux_Get_Sequential_Hit, align 32
+  %312 = load <18 x i8>, ptr @oicht_Get_Sequential_Hit, align 32
   store <18 x i8> %312, ptr %311, align 32
   store ptr @String, ptr %31, align 8
   %313 = load ptr, ptr %31, align 8
@@ -3391,7 +3394,7 @@ define void @benchmark_get_sequential_hit(i32 %0) {
   %318 = call ptr @bump_malloc(i64 %317)
   store ptr @String, ptr %35, align 8
   store ptr %318, ptr %34, align 8
-  store i32 9, ptr %32, align 4
+  store i32 10, ptr %32, align 4
   %319 = load ptr, ptr %30, align 8
   %320 = insertvalue { ptr } undef, ptr %319, 0
   %321 = load ptr, ptr %35, align 8
@@ -3437,7 +3440,7 @@ define void @benchmark_get_sequential_hit(i32 %0) {
   %352 = load ptr, ptr %351, align 8
   store ptr %352, ptr %39, align 8
   %353 = load ptr, ptr %39, align 8
-  %354 = load <18 x i8>, ptr @fngtu_____Verification_, align 32
+  %354 = load <18 x i8>, ptr @cbozi_____Verification_, align 32
   store <18 x i8> %354, ptr %353, align 32
   store ptr @String, ptr %40, align 8
   %355 = load ptr, ptr %40, align 8
@@ -3450,7 +3453,7 @@ define void @benchmark_get_sequential_hit(i32 %0) {
   %362 = getelementptr { ptr, ptr, ptr, i32 }, ptr %41, i32 0, i32 3
   store ptr @String, ptr %41, align 8
   store ptr %360, ptr %361, align 8
-  store i32 9, ptr %362, align 4
+  store i32 10, ptr %362, align 4
   %363 = load ptr, ptr %39, align 8
   %364 = insertvalue { ptr } undef, ptr %363, 0
   %365 = getelementptr { ptr, ptr, ptr, i32 }, ptr %41, i32 0, i32 0
@@ -3494,7 +3497,7 @@ define void @benchmark_get_sequential_hit(i32 %0) {
   store ptr @_parameterization_String, ptr %395, align 8
   %396 = call ptr @llvm.invariant.start.p0(i64 1, ptr %44)
   %397 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %398 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %398 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %399 = getelementptr { ptr }, ptr %45, i32 0, i32 0
   store ptr %390, ptr %399, align 8
   %400 = call ptr @class_behavior_wrapper(ptr %398, ptr %45)
@@ -3508,7 +3511,7 @@ define void @benchmark_get_sequential_hit(i32 %0) {
   %404 = load ptr, ptr %403, align 8
   store ptr %404, ptr %47, align 8
   %405 = load ptr, ptr %47, align 8
-  %406 = load <4 x i8>, ptr @oyraw_PASS, align 4
+  %406 = load <4 x i8>, ptr @sfwlt_PASS, align 4
   store <4 x i8> %406, ptr %405, align 4
   store ptr @String, ptr %48, align 8
   %407 = load ptr, ptr %48, align 8
@@ -3521,7 +3524,7 @@ define void @benchmark_get_sequential_hit(i32 %0) {
   %414 = getelementptr { ptr, ptr, ptr, i32 }, ptr %49, i32 0, i32 3
   store ptr @String, ptr %49, align 8
   store ptr %412, ptr %413, align 8
-  store i32 9, ptr %414, align 4
+  store i32 10, ptr %414, align 4
   %415 = load ptr, ptr %47, align 8
   %416 = insertvalue { ptr } undef, ptr %415, 0
   %417 = getelementptr { ptr, ptr, ptr, i32 }, ptr %49, i32 0, i32 0
@@ -3565,7 +3568,7 @@ define void @benchmark_get_sequential_hit(i32 %0) {
   store ptr @_parameterization_String, ptr %447, align 8
   %448 = call ptr @llvm.invariant.start.p0(i64 1, ptr %52)
   %449 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %450 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %450 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %451 = getelementptr { ptr }, ptr %53, i32 0, i32 0
   store ptr %442, ptr %451, align 8
   %452 = call ptr @class_behavior_wrapper(ptr %450, ptr %53)
@@ -3579,7 +3582,7 @@ define void @benchmark_get_sequential_hit(i32 %0) {
   %456 = load ptr, ptr %455, align 8
   store ptr %456, ptr %55, align 8
   %457 = load ptr, ptr %55, align 8
-  %458 = load <4 x i8>, ptr @hfqvv_FAIL, align 4
+  %458 = load <4 x i8>, ptr @rxprl_FAIL, align 4
   store <4 x i8> %458, ptr %457, align 4
   store ptr @String, ptr %56, align 8
   %459 = load ptr, ptr %56, align 8
@@ -3592,7 +3595,7 @@ define void @benchmark_get_sequential_hit(i32 %0) {
   %466 = getelementptr { ptr, ptr, ptr, i32 }, ptr %57, i32 0, i32 3
   store ptr @String, ptr %57, align 8
   store ptr %464, ptr %465, align 8
-  store i32 9, ptr %466, align 4
+  store i32 10, ptr %466, align 4
   %467 = load ptr, ptr %55, align 8
   %468 = insertvalue { ptr } undef, ptr %467, 0
   %469 = getelementptr { ptr, ptr, ptr, i32 }, ptr %57, i32 0, i32 0
@@ -3636,7 +3639,7 @@ define void @benchmark_get_sequential_hit(i32 %0) {
   store ptr @_parameterization_String, ptr %499, align 8
   %500 = call ptr @llvm.invariant.start.p0(i64 1, ptr %60)
   %501 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %502 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %502 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %503 = getelementptr { ptr }, ptr %61, i32 0, i32 0
   store ptr %494, ptr %503, align 8
   %504 = call ptr @class_behavior_wrapper(ptr %502, ptr %61)
@@ -3776,10 +3779,10 @@ define void @benchmark_get_random_hit(i32 %0) {
   %120 = alloca ptr, align 8
   store ptr @HashMap, ptr %120, align 8
   store ptr %113, ptr %119, align 8
-  store i32 9, ptr %117, align 4
+  store i32 10, ptr %117, align 4
   %121 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %121)
-  call void @llvm.init.trampoline(ptr %121, ptr @dhkfqgrjxa, ptr @i32_hasher)
+  call void @llvm.init.trampoline(ptr %121, ptr @qqwrgogphe, ptr @i32_hasher)
   %122 = alloca ptr, align 8
   %123 = call ptr @adjust_trampoline(ptr %121)
   store ptr %123, ptr %122, align 8
@@ -3789,7 +3792,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   %127 = insertvalue { ptr } undef, ptr %126, 0
   %128 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %128)
-  call void @llvm.init.trampoline(ptr %128, ptr @benqavvtpz, ptr @i32_eq)
+  call void @llvm.init.trampoline(ptr %128, ptr @gnpqnfdmky, ptr @i32_eq)
   %129 = alloca ptr, align 8
   %130 = call ptr @adjust_trampoline(ptr %128)
   store ptr %130, ptr %129, align 8
@@ -3811,9 +3814,9 @@ define void @benchmark_get_random_hit(i32 %0) {
   %145 = getelementptr [2 x ptr], ptr %143, i32 0, i32 1
   store ptr @_parameterization_FunctionPtri32._Ptri32_to_Ptri1, ptr %145, align 8
   %146 = call ptr @llvm.invariant.start.p0(i64 4, ptr %143)
-  %147 = call ptr @llvm.invariant.start.p0(i64 696, ptr %135)
+  %147 = call ptr @llvm.invariant.start.p0(i64 584, ptr %135)
   %148 = getelementptr ptr, ptr %135, i32 %141
-  %149 = getelementptr ptr, ptr %148, i32 9
+  %149 = getelementptr ptr, ptr %148, i32 8
   %150 = load ptr, ptr %149, align 8
   %151 = alloca { ptr, ptr }, align 8
   %152 = getelementptr { ptr, ptr }, ptr %151, i32 0, i32 0
@@ -3866,7 +3869,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   %186 = alloca ptr, align 8
   store ptr @PRNG, ptr %186, align 8
   store ptr %182, ptr %185, align 8
-  store i32 9, ptr %183, align 4
+  store i32 10, ptr %183, align 4
   %187 = load ptr, ptr %186, align 8
   %188 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %187, 0
   %189 = load ptr, ptr %185, align 8
@@ -3936,7 +3939,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   %238 = alloca ptr, align 8
   store ptr @Array, ptr %238, align 8
   store ptr %233, ptr %237, align 8
-  store i32 9, ptr %235, align 4
+  store i32 10, ptr %235, align 4
   %239 = load ptr, ptr %238, align 8
   %240 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %239, 0
   %241 = load ptr, ptr %237, align 8
@@ -4014,10 +4017,10 @@ define void @benchmark_get_random_hit(i32 %0) {
   %294 = alloca ptr, align 8
   store ptr @HashMap, ptr %294, align 8
   store ptr %287, ptr %293, align 8
-  store i32 9, ptr %291, align 4
+  store i32 10, ptr %291, align 4
   %295 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %295)
-  call void @llvm.init.trampoline(ptr %295, ptr @xmbnfljnfp, ptr @i32_hasher)
+  call void @llvm.init.trampoline(ptr %295, ptr @rrsjmzanxw, ptr @i32_hasher)
   %296 = alloca ptr, align 8
   %297 = call ptr @adjust_trampoline(ptr %295)
   store ptr %297, ptr %296, align 8
@@ -4027,7 +4030,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   %301 = insertvalue { ptr } undef, ptr %300, 0
   %302 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %302)
-  call void @llvm.init.trampoline(ptr %302, ptr @jpzledvqfy, ptr @i32_eq)
+  call void @llvm.init.trampoline(ptr %302, ptr @zrrwolsxjr, ptr @i32_eq)
   %303 = alloca ptr, align 8
   %304 = call ptr @adjust_trampoline(ptr %302)
   store ptr %304, ptr %303, align 8
@@ -4049,9 +4052,9 @@ define void @benchmark_get_random_hit(i32 %0) {
   %319 = getelementptr [2 x ptr], ptr %317, i32 0, i32 1
   store ptr @_parameterization_FunctionPtri32._Ptri32_to_Ptri1, ptr %319, align 8
   %320 = call ptr @llvm.invariant.start.p0(i64 4, ptr %317)
-  %321 = call ptr @llvm.invariant.start.p0(i64 696, ptr %309)
+  %321 = call ptr @llvm.invariant.start.p0(i64 584, ptr %309)
   %322 = getelementptr ptr, ptr %309, i32 %315
-  %323 = getelementptr ptr, ptr %322, i32 9
+  %323 = getelementptr ptr, ptr %322, i32 8
   %324 = load ptr, ptr %323, align 8
   %325 = alloca { ptr, ptr }, align 8
   %326 = getelementptr { ptr, ptr }, ptr %325, i32 0, i32 0
@@ -4147,9 +4150,9 @@ define void @benchmark_get_random_hit(i32 %0) {
   %390 = getelementptr [1 x ptr], ptr %6, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %390, align 8
   %391 = call ptr @llvm.invariant.start.p0(i64 1, ptr %6)
-  %392 = call ptr @llvm.invariant.start.p0(i64 696, ptr %382)
+  %392 = call ptr @llvm.invariant.start.p0(i64 584, ptr %382)
   %393 = getelementptr ptr, ptr %382, i32 %388
-  %394 = getelementptr ptr, ptr %393, i32 21
+  %394 = getelementptr ptr, ptr %393, i32 14
   %395 = load ptr, ptr %394, align 8
   %396 = getelementptr { ptr }, ptr %7, i32 0, i32 0
   store ptr %378, ptr %396, align 8
@@ -4196,9 +4199,9 @@ define void @benchmark_get_random_hit(i32 %0) {
   %427 = getelementptr [2 x ptr], ptr %15, i32 0, i32 1
   store ptr @_parameterization_Ptri32, ptr %427, align 8
   %428 = call ptr @llvm.invariant.start.p0(i64 4, ptr %15)
-  %429 = call ptr @llvm.invariant.start.p0(i64 696, ptr %418)
+  %429 = call ptr @llvm.invariant.start.p0(i64 584, ptr %418)
   %430 = getelementptr ptr, ptr %418, i32 %424
-  %431 = getelementptr ptr, ptr %430, i32 20
+  %431 = getelementptr ptr, ptr %430, i32 13
   %432 = load ptr, ptr %431, align 8
   %433 = getelementptr { ptr, ptr }, ptr %16, i32 0, i32 0
   store ptr %410, ptr %433, align 8
@@ -4260,9 +4263,9 @@ define void @benchmark_get_random_hit(i32 %0) {
   %475 = getelementptr [2 x ptr], ptr %25, i32 0, i32 1
   store ptr @_parameterization_Ptri1, ptr %475, align 8
   %476 = call ptr @llvm.invariant.start.p0(i64 4, ptr %25)
-  %477 = call ptr @llvm.invariant.start.p0(i64 696, ptr %466)
+  %477 = call ptr @llvm.invariant.start.p0(i64 584, ptr %466)
   %478 = getelementptr ptr, ptr %466, i32 %472
-  %479 = getelementptr ptr, ptr %478, i32 20
+  %479 = getelementptr ptr, ptr %478, i32 13
   %480 = load ptr, ptr %479, align 8
   %481 = getelementptr { ptr, ptr }, ptr %26, i32 0, i32 0
   store ptr %458, ptr %481, align 8
@@ -4319,7 +4322,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   %511 = load ptr, ptr %510, align 8
   store ptr %511, ptr %28, align 8
   %512 = load ptr, ptr %28, align 8
-  %513 = load <29 x i8>, ptr @difnk_Warning_Could_only_generate_, align 32
+  %513 = load <29 x i8>, ptr @soody_Warning_Could_only_generate_, align 32
   store <29 x i8> %513, ptr %512, align 32
   store ptr @String, ptr %29, align 8
   %514 = load ptr, ptr %29, align 8
@@ -4332,7 +4335,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   %521 = getelementptr { ptr, ptr, ptr, i32 }, ptr %30, i32 0, i32 3
   store ptr @String, ptr %30, align 8
   store ptr %519, ptr %520, align 8
-  store i32 9, ptr %521, align 4
+  store i32 10, ptr %521, align 4
   %522 = load ptr, ptr %28, align 8
   %523 = insertvalue { ptr } undef, ptr %522, 0
   %524 = getelementptr { ptr, ptr, ptr, i32 }, ptr %30, i32 0, i32 0
@@ -4376,7 +4379,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   store ptr @_parameterization_String, ptr %554, align 8
   %555 = call ptr @llvm.invariant.start.p0(i64 1, ptr %33)
   %556 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %557 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %557 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %558 = getelementptr { ptr }, ptr %34, i32 0, i32 0
   store ptr %549, ptr %558, align 8
   %559 = call ptr @class_behavior_wrapper(ptr %557, ptr %34)
@@ -4391,7 +4394,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   store ptr @_parameterization_Ptri32, ptr %564, align 8
   %565 = call ptr @llvm.invariant.start.p0(i64 1, ptr %37)
   %566 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %567 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %567 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %568 = getelementptr { ptr }, ptr %38, i32 0, i32 0
   store ptr %560, ptr %568, align 8
   %569 = call ptr @class_behavior_wrapper(ptr %567, ptr %38)
@@ -4402,7 +4405,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   %572 = load ptr, ptr %571, align 8
   store ptr %572, ptr %40, align 8
   %573 = load ptr, ptr %40, align 8
-  %574 = load <33 x i8>, ptr @rpidr__unique_keys_for_random_hit_test, align 64
+  %574 = load <33 x i8>, ptr @xegzg__unique_keys_for_random_hit_test, align 64
   store <33 x i8> %574, ptr %573, align 64
   store ptr @String, ptr %41, align 8
   %575 = load ptr, ptr %41, align 8
@@ -4415,7 +4418,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   %582 = getelementptr { ptr, ptr, ptr, i32 }, ptr %42, i32 0, i32 3
   store ptr @String, ptr %42, align 8
   store ptr %580, ptr %581, align 8
-  store i32 9, ptr %582, align 4
+  store i32 10, ptr %582, align 4
   %583 = load ptr, ptr %40, align 8
   %584 = insertvalue { ptr } undef, ptr %583, 0
   %585 = getelementptr { ptr, ptr, ptr, i32 }, ptr %42, i32 0, i32 0
@@ -4459,7 +4462,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   store ptr @_parameterization_String, ptr %615, align 8
   %616 = call ptr @llvm.invariant.start.p0(i64 1, ptr %45)
   %617 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %618 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %618 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %619 = getelementptr { ptr }, ptr %46, i32 0, i32 0
   store ptr %610, ptr %619, align 8
   %620 = call ptr @class_behavior_wrapper(ptr %618, ptr %46)
@@ -4517,9 +4520,9 @@ define void @benchmark_get_random_hit(i32 %0) {
   %660 = getelementptr [1 x ptr], ptr %52, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %660, align 8
   %661 = call ptr @llvm.invariant.start.p0(i64 1, ptr %52)
-  %662 = call ptr @llvm.invariant.start.p0(i64 696, ptr %652)
+  %662 = call ptr @llvm.invariant.start.p0(i64 584, ptr %652)
   %663 = getelementptr ptr, ptr %652, i32 %658
-  %664 = getelementptr ptr, ptr %663, i32 21
+  %664 = getelementptr ptr, ptr %663, i32 14
   %665 = load ptr, ptr %664, align 8
   %666 = getelementptr { ptr }, ptr %53, i32 0, i32 0
   store ptr %648, ptr %666, align 8
@@ -4560,7 +4563,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   %689 = load ptr, ptr %688, align 8
   store ptr %689, ptr %60, align 8
   %690 = load ptr, ptr %60, align 8
-  %691 = load <51 x i8>, ptr @azvkf_Error_Nil_returned_during_random_hit_test_for_key_, align 64
+  %691 = load <51 x i8>, ptr @axejv_Error_Nil_returned_during_random_hit_test_for_key_, align 64
   store <51 x i8> %691, ptr %690, align 64
   store ptr @String, ptr %61, align 8
   %692 = load ptr, ptr %61, align 8
@@ -4573,7 +4576,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   %699 = getelementptr { ptr, ptr, ptr, i32 }, ptr %62, i32 0, i32 3
   store ptr @String, ptr %62, align 8
   store ptr %697, ptr %698, align 8
-  store i32 9, ptr %699, align 4
+  store i32 10, ptr %699, align 4
   %700 = load ptr, ptr %60, align 8
   %701 = insertvalue { ptr } undef, ptr %700, 0
   %702 = getelementptr { ptr, ptr, ptr, i32 }, ptr %62, i32 0, i32 0
@@ -4617,7 +4620,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   store ptr @_parameterization_String, ptr %732, align 8
   %733 = call ptr @llvm.invariant.start.p0(i64 1, ptr %65)
   %734 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %735 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %735 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %736 = getelementptr { ptr }, ptr %66, i32 0, i32 0
   store ptr %727, ptr %736, align 8
   %737 = call ptr @class_behavior_wrapper(ptr %735, ptr %66)
@@ -4632,7 +4635,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   store ptr @_parameterization_Ptri32, ptr %742, align 8
   %743 = call ptr @llvm.invariant.start.p0(i64 1, ptr %69)
   %744 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %745 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %745 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %746 = getelementptr { ptr }, ptr %70, i32 0, i32 0
   store ptr %738, ptr %746, align 8
   %747 = call ptr @class_behavior_wrapper(ptr %745, ptr %70)
@@ -4681,7 +4684,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   %772 = load ptr, ptr %771, align 8
   store ptr %772, ptr %72, align 8
   %773 = load ptr, ptr %72, align 8
-  %774 = load <14 x i8>, ptr @fhvkc_Get_Random_Hit, align 16
+  %774 = load <14 x i8>, ptr @jgcpm_Get_Random_Hit, align 16
   store <14 x i8> %774, ptr %773, align 16
   store ptr @String, ptr %73, align 8
   %775 = load ptr, ptr %73, align 8
@@ -4692,7 +4695,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   %780 = call ptr @bump_malloc(i64 %779)
   store ptr @String, ptr %77, align 8
   store ptr %780, ptr %76, align 8
-  store i32 9, ptr %74, align 4
+  store i32 10, ptr %74, align 4
   %781 = load ptr, ptr %72, align 8
   %782 = insertvalue { ptr } undef, ptr %781, 0
   %783 = load ptr, ptr %77, align 8
@@ -4738,7 +4741,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   %814 = load ptr, ptr %813, align 8
   store ptr %814, ptr %81, align 8
   %815 = load ptr, ptr %81, align 8
-  %816 = load <18 x i8>, ptr @ziqtn_____Verification_, align 32
+  %816 = load <18 x i8>, ptr @hdiiz_____Verification_, align 32
   store <18 x i8> %816, ptr %815, align 32
   store ptr @String, ptr %82, align 8
   %817 = load ptr, ptr %82, align 8
@@ -4751,7 +4754,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   %824 = getelementptr { ptr, ptr, ptr, i32 }, ptr %83, i32 0, i32 3
   store ptr @String, ptr %83, align 8
   store ptr %822, ptr %823, align 8
-  store i32 9, ptr %824, align 4
+  store i32 10, ptr %824, align 4
   %825 = load ptr, ptr %81, align 8
   %826 = insertvalue { ptr } undef, ptr %825, 0
   %827 = getelementptr { ptr, ptr, ptr, i32 }, ptr %83, i32 0, i32 0
@@ -4795,7 +4798,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   store ptr @_parameterization_String, ptr %857, align 8
   %858 = call ptr @llvm.invariant.start.p0(i64 1, ptr %86)
   %859 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %860 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %860 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %861 = getelementptr { ptr }, ptr %87, i32 0, i32 0
   store ptr %852, ptr %861, align 8
   %862 = call ptr @class_behavior_wrapper(ptr %860, ptr %87)
@@ -4809,7 +4812,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   %866 = load ptr, ptr %865, align 8
   store ptr %866, ptr %89, align 8
   %867 = load ptr, ptr %89, align 8
-  %868 = load <4 x i8>, ptr @sqaix_PASS, align 4
+  %868 = load <4 x i8>, ptr @yclho_PASS, align 4
   store <4 x i8> %868, ptr %867, align 4
   store ptr @String, ptr %90, align 8
   %869 = load ptr, ptr %90, align 8
@@ -4822,7 +4825,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   %876 = getelementptr { ptr, ptr, ptr, i32 }, ptr %91, i32 0, i32 3
   store ptr @String, ptr %91, align 8
   store ptr %874, ptr %875, align 8
-  store i32 9, ptr %876, align 4
+  store i32 10, ptr %876, align 4
   %877 = load ptr, ptr %89, align 8
   %878 = insertvalue { ptr } undef, ptr %877, 0
   %879 = getelementptr { ptr, ptr, ptr, i32 }, ptr %91, i32 0, i32 0
@@ -4866,7 +4869,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   store ptr @_parameterization_String, ptr %909, align 8
   %910 = call ptr @llvm.invariant.start.p0(i64 1, ptr %94)
   %911 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %912 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %912 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %913 = getelementptr { ptr }, ptr %95, i32 0, i32 0
   store ptr %904, ptr %913, align 8
   %914 = call ptr @class_behavior_wrapper(ptr %912, ptr %95)
@@ -4880,7 +4883,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   %918 = load ptr, ptr %917, align 8
   store ptr %918, ptr %97, align 8
   %919 = load ptr, ptr %97, align 8
-  %920 = load <4 x i8>, ptr @iavev_FAIL, align 4
+  %920 = load <4 x i8>, ptr @cvdxy_FAIL, align 4
   store <4 x i8> %920, ptr %919, align 4
   store ptr @String, ptr %98, align 8
   %921 = load ptr, ptr %98, align 8
@@ -4893,7 +4896,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   %928 = getelementptr { ptr, ptr, ptr, i32 }, ptr %99, i32 0, i32 3
   store ptr @String, ptr %99, align 8
   store ptr %926, ptr %927, align 8
-  store i32 9, ptr %928, align 4
+  store i32 10, ptr %928, align 4
   %929 = load ptr, ptr %97, align 8
   %930 = insertvalue { ptr } undef, ptr %929, 0
   %931 = getelementptr { ptr, ptr, ptr, i32 }, ptr %99, i32 0, i32 0
@@ -4937,7 +4940,7 @@ define void @benchmark_get_random_hit(i32 %0) {
   store ptr @_parameterization_String, ptr %961, align 8
   %962 = call ptr @llvm.invariant.start.p0(i64 1, ptr %102)
   %963 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %964 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %964 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %965 = getelementptr { ptr }, ptr %103, i32 0, i32 0
   store ptr %956, ptr %965, align 8
   %966 = call ptr @class_behavior_wrapper(ptr %964, ptr %103)
@@ -5124,10 +5127,10 @@ define void @benchmark_get_random_miss(i32 %0) {
   %167 = alloca ptr, align 8
   store ptr @HashMap, ptr %167, align 8
   store ptr %160, ptr %166, align 8
-  store i32 9, ptr %164, align 4
+  store i32 10, ptr %164, align 4
   %168 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %168)
-  call void @llvm.init.trampoline(ptr %168, ptr @ndjpyegyfb, ptr @i32_hasher)
+  call void @llvm.init.trampoline(ptr %168, ptr @tbbalqjumv, ptr @i32_hasher)
   %169 = alloca ptr, align 8
   %170 = call ptr @adjust_trampoline(ptr %168)
   store ptr %170, ptr %169, align 8
@@ -5137,7 +5140,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %174 = insertvalue { ptr } undef, ptr %173, 0
   %175 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %175)
-  call void @llvm.init.trampoline(ptr %175, ptr @rfjoogquzl, ptr @i32_eq)
+  call void @llvm.init.trampoline(ptr %175, ptr @qodznppfks, ptr @i32_eq)
   %176 = alloca ptr, align 8
   %177 = call ptr @adjust_trampoline(ptr %175)
   store ptr %177, ptr %176, align 8
@@ -5159,9 +5162,9 @@ define void @benchmark_get_random_miss(i32 %0) {
   %192 = getelementptr [2 x ptr], ptr %190, i32 0, i32 1
   store ptr @_parameterization_FunctionPtri32._Ptri32_to_Ptri1, ptr %192, align 8
   %193 = call ptr @llvm.invariant.start.p0(i64 4, ptr %190)
-  %194 = call ptr @llvm.invariant.start.p0(i64 696, ptr %182)
+  %194 = call ptr @llvm.invariant.start.p0(i64 584, ptr %182)
   %195 = getelementptr ptr, ptr %182, i32 %188
-  %196 = getelementptr ptr, ptr %195, i32 9
+  %196 = getelementptr ptr, ptr %195, i32 8
   %197 = load ptr, ptr %196, align 8
   %198 = alloca { ptr, ptr }, align 8
   %199 = getelementptr { ptr, ptr }, ptr %198, i32 0, i32 0
@@ -5214,7 +5217,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %233 = alloca ptr, align 8
   store ptr @PRNG, ptr %233, align 8
   store ptr %229, ptr %232, align 8
-  store i32 9, ptr %230, align 4
+  store i32 10, ptr %230, align 4
   %234 = load ptr, ptr %233, align 8
   %235 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %234, 0
   %236 = load ptr, ptr %232, align 8
@@ -5280,7 +5283,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %283 = alloca ptr, align 8
   store ptr @PRNG, ptr %283, align 8
   store ptr %279, ptr %282, align 8
-  store i32 9, ptr %280, align 4
+  store i32 10, ptr %280, align 4
   %284 = load ptr, ptr %283, align 8
   %285 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %284, 0
   %286 = load ptr, ptr %282, align 8
@@ -5358,10 +5361,10 @@ define void @benchmark_get_random_miss(i32 %0) {
   %339 = alloca ptr, align 8
   store ptr @HashMap, ptr %339, align 8
   store ptr %332, ptr %338, align 8
-  store i32 9, ptr %336, align 4
+  store i32 10, ptr %336, align 4
   %340 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %340)
-  call void @llvm.init.trampoline(ptr %340, ptr @kfjdgwekao, ptr @i32_hasher)
+  call void @llvm.init.trampoline(ptr %340, ptr @gmzrobvomq, ptr @i32_hasher)
   %341 = alloca ptr, align 8
   %342 = call ptr @adjust_trampoline(ptr %340)
   store ptr %342, ptr %341, align 8
@@ -5371,7 +5374,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %346 = insertvalue { ptr } undef, ptr %345, 0
   %347 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %347)
-  call void @llvm.init.trampoline(ptr %347, ptr @vovzwzbfax, ptr @i32_eq)
+  call void @llvm.init.trampoline(ptr %347, ptr @zsqbhbwvxl, ptr @i32_eq)
   %348 = alloca ptr, align 8
   %349 = call ptr @adjust_trampoline(ptr %347)
   store ptr %349, ptr %348, align 8
@@ -5393,9 +5396,9 @@ define void @benchmark_get_random_miss(i32 %0) {
   %364 = getelementptr [2 x ptr], ptr %362, i32 0, i32 1
   store ptr @_parameterization_FunctionPtri32._Ptri32_to_Ptri1, ptr %364, align 8
   %365 = call ptr @llvm.invariant.start.p0(i64 4, ptr %362)
-  %366 = call ptr @llvm.invariant.start.p0(i64 696, ptr %354)
+  %366 = call ptr @llvm.invariant.start.p0(i64 584, ptr %354)
   %367 = getelementptr ptr, ptr %354, i32 %360
-  %368 = getelementptr ptr, ptr %367, i32 9
+  %368 = getelementptr ptr, ptr %367, i32 8
   %369 = load ptr, ptr %368, align 8
   %370 = alloca { ptr, ptr }, align 8
   %371 = getelementptr { ptr, ptr }, ptr %370, i32 0, i32 0
@@ -5490,9 +5493,9 @@ define void @benchmark_get_random_miss(i32 %0) {
   %434 = getelementptr [1 x ptr], ptr %6, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %434, align 8
   %435 = call ptr @llvm.invariant.start.p0(i64 1, ptr %6)
-  %436 = call ptr @llvm.invariant.start.p0(i64 696, ptr %426)
+  %436 = call ptr @llvm.invariant.start.p0(i64 584, ptr %426)
   %437 = getelementptr ptr, ptr %426, i32 %432
-  %438 = getelementptr ptr, ptr %437, i32 21
+  %438 = getelementptr ptr, ptr %437, i32 14
   %439 = load ptr, ptr %438, align 8
   %440 = getelementptr { ptr }, ptr %7, i32 0, i32 0
   store ptr %422, ptr %440, align 8
@@ -5539,9 +5542,9 @@ define void @benchmark_get_random_miss(i32 %0) {
   %471 = getelementptr [2 x ptr], ptr %15, i32 0, i32 1
   store ptr @_parameterization_Ptri32, ptr %471, align 8
   %472 = call ptr @llvm.invariant.start.p0(i64 4, ptr %15)
-  %473 = call ptr @llvm.invariant.start.p0(i64 696, ptr %462)
+  %473 = call ptr @llvm.invariant.start.p0(i64 584, ptr %462)
   %474 = getelementptr ptr, ptr %462, i32 %468
-  %475 = getelementptr ptr, ptr %474, i32 20
+  %475 = getelementptr ptr, ptr %474, i32 13
   %476 = load ptr, ptr %475, align 8
   %477 = getelementptr { ptr, ptr }, ptr %16, i32 0, i32 0
   store ptr %454, ptr %477, align 8
@@ -5574,9 +5577,9 @@ define void @benchmark_get_random_miss(i32 %0) {
   %497 = getelementptr [2 x ptr], ptr %21, i32 0, i32 1
   store ptr @_parameterization_Ptri1, ptr %497, align 8
   %498 = call ptr @llvm.invariant.start.p0(i64 4, ptr %21)
-  %499 = call ptr @llvm.invariant.start.p0(i64 696, ptr %488)
+  %499 = call ptr @llvm.invariant.start.p0(i64 584, ptr %488)
   %500 = getelementptr ptr, ptr %488, i32 %494
-  %501 = getelementptr ptr, ptr %500, i32 20
+  %501 = getelementptr ptr, ptr %500, i32 13
   %502 = load ptr, ptr %501, align 8
   %503 = getelementptr { ptr, ptr }, ptr %22, i32 0, i32 0
   store ptr %480, ptr %503, align 8
@@ -5623,7 +5626,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %525 = call ptr @llvm.invariant.start.p0(i64 8, ptr %524)
   store ptr @Array, ptr %27, align 8
   store ptr %524, ptr %26, align 8
-  store i32 9, ptr %24, align 4
+  store i32 10, ptr %24, align 4
   %526 = load ptr, ptr %27, align 8
   %527 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %526, 0
   %528 = load ptr, ptr %26, align 8
@@ -5724,9 +5727,9 @@ define void @benchmark_get_random_miss(i32 %0) {
   %597 = getelementptr [1 x ptr], ptr %39, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %597, align 8
   %598 = call ptr @llvm.invariant.start.p0(i64 1, ptr %39)
-  %599 = call ptr @llvm.invariant.start.p0(i64 696, ptr %589)
+  %599 = call ptr @llvm.invariant.start.p0(i64 584, ptr %589)
   %600 = getelementptr ptr, ptr %589, i32 %595
-  %601 = getelementptr ptr, ptr %600, i32 21
+  %601 = getelementptr ptr, ptr %600, i32 14
   %602 = load ptr, ptr %601, align 8
   %603 = getelementptr { ptr }, ptr %40, i32 0, i32 0
   store ptr %585, ptr %603, align 8
@@ -5819,7 +5822,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %659 = load ptr, ptr %658, align 8
   store ptr %659, ptr %49, align 8
   %660 = load ptr, ptr %49, align 8
-  %661 = load <29 x i8>, ptr @yrhdm_Warning_Could_only_generate_, align 32
+  %661 = load <29 x i8>, ptr @cdehy_Warning_Could_only_generate_, align 32
   store <29 x i8> %661, ptr %660, align 32
   store ptr @String, ptr %50, align 8
   %662 = load ptr, ptr %50, align 8
@@ -5832,7 +5835,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %669 = getelementptr { ptr, ptr, ptr, i32 }, ptr %51, i32 0, i32 3
   store ptr @String, ptr %51, align 8
   store ptr %667, ptr %668, align 8
-  store i32 9, ptr %669, align 4
+  store i32 10, ptr %669, align 4
   %670 = load ptr, ptr %49, align 8
   %671 = insertvalue { ptr } undef, ptr %670, 0
   %672 = getelementptr { ptr, ptr, ptr, i32 }, ptr %51, i32 0, i32 0
@@ -5876,7 +5879,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   store ptr @_parameterization_String, ptr %702, align 8
   %703 = call ptr @llvm.invariant.start.p0(i64 1, ptr %54)
   %704 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %705 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %705 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %706 = getelementptr { ptr }, ptr %55, i32 0, i32 0
   store ptr %697, ptr %706, align 8
   %707 = call ptr @class_behavior_wrapper(ptr %705, ptr %55)
@@ -5891,7 +5894,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   store ptr @_parameterization_Ptri32, ptr %712, align 8
   %713 = call ptr @llvm.invariant.start.p0(i64 1, ptr %58)
   %714 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %715 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %715 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %716 = getelementptr { ptr }, ptr %59, i32 0, i32 0
   store ptr %708, ptr %716, align 8
   %717 = call ptr @class_behavior_wrapper(ptr %715, ptr %59)
@@ -5902,7 +5905,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %720 = load ptr, ptr %719, align 8
   store ptr %720, ptr %61, align 8
   %721 = load ptr, ptr %61, align 8
-  %722 = load <22 x i8>, ptr @eehsc__guaranteed_miss_keys, align 32
+  %722 = load <22 x i8>, ptr @dhndo__guaranteed_miss_keys, align 32
   store <22 x i8> %722, ptr %721, align 32
   store ptr @String, ptr %62, align 8
   %723 = load ptr, ptr %62, align 8
@@ -5915,7 +5918,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %730 = getelementptr { ptr, ptr, ptr, i32 }, ptr %63, i32 0, i32 3
   store ptr @String, ptr %63, align 8
   store ptr %728, ptr %729, align 8
-  store i32 9, ptr %730, align 4
+  store i32 10, ptr %730, align 4
   %731 = load ptr, ptr %61, align 8
   %732 = insertvalue { ptr } undef, ptr %731, 0
   %733 = getelementptr { ptr, ptr, ptr, i32 }, ptr %63, i32 0, i32 0
@@ -5959,7 +5962,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   store ptr @_parameterization_String, ptr %763, align 8
   %764 = call ptr @llvm.invariant.start.p0(i64 1, ptr %66)
   %765 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %766 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %766 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %767 = getelementptr { ptr }, ptr %67, i32 0, i32 0
   store ptr %758, ptr %767, align 8
   %768 = call ptr @class_behavior_wrapper(ptr %766, ptr %67)
@@ -6017,9 +6020,9 @@ define void @benchmark_get_random_miss(i32 %0) {
   %806 = getelementptr [1 x ptr], ptr %75, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %806, align 8
   %807 = call ptr @llvm.invariant.start.p0(i64 1, ptr %75)
-  %808 = call ptr @llvm.invariant.start.p0(i64 696, ptr %798)
+  %808 = call ptr @llvm.invariant.start.p0(i64 584, ptr %798)
   %809 = getelementptr ptr, ptr %798, i32 %804
-  %810 = getelementptr ptr, ptr %809, i32 21
+  %810 = getelementptr ptr, ptr %809, i32 14
   %811 = load ptr, ptr %810, align 8
   %812 = getelementptr { ptr }, ptr %76, i32 0, i32 0
   store ptr %794, ptr %812, align 8
@@ -6107,7 +6110,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %862 = load ptr, ptr %861, align 8
   store ptr %862, ptr %87, align 8
   %863 = load ptr, ptr %87, align 8
-  %864 = load <15 x i8>, ptr @wbfzs_Get_Random_Miss, align 16
+  %864 = load <15 x i8>, ptr @ilvhp_Get_Random_Miss, align 16
   store <15 x i8> %864, ptr %863, align 16
   store ptr @String, ptr %88, align 8
   %865 = load ptr, ptr %88, align 8
@@ -6118,7 +6121,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %870 = call ptr @bump_malloc(i64 %869)
   store ptr @String, ptr %92, align 8
   store ptr %870, ptr %91, align 8
-  store i32 9, ptr %89, align 4
+  store i32 10, ptr %89, align 4
   %871 = load ptr, ptr %87, align 8
   %872 = insertvalue { ptr } undef, ptr %871, 0
   %873 = load ptr, ptr %92, align 8
@@ -6164,7 +6167,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %904 = load ptr, ptr %903, align 8
   store ptr %904, ptr %96, align 8
   %905 = load ptr, ptr %96, align 8
-  %906 = load <18 x i8>, ptr @xsxhf_____Verification_, align 32
+  %906 = load <18 x i8>, ptr @jucej_____Verification_, align 32
   store <18 x i8> %906, ptr %905, align 32
   store ptr @String, ptr %97, align 8
   %907 = load ptr, ptr %97, align 8
@@ -6177,7 +6180,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %914 = getelementptr { ptr, ptr, ptr, i32 }, ptr %98, i32 0, i32 3
   store ptr @String, ptr %98, align 8
   store ptr %912, ptr %913, align 8
-  store i32 9, ptr %914, align 4
+  store i32 10, ptr %914, align 4
   %915 = load ptr, ptr %96, align 8
   %916 = insertvalue { ptr } undef, ptr %915, 0
   %917 = getelementptr { ptr, ptr, ptr, i32 }, ptr %98, i32 0, i32 0
@@ -6221,7 +6224,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   store ptr @_parameterization_String, ptr %947, align 8
   %948 = call ptr @llvm.invariant.start.p0(i64 1, ptr %101)
   %949 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %950 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %950 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %951 = getelementptr { ptr }, ptr %102, i32 0, i32 0
   store ptr %942, ptr %951, align 8
   %952 = call ptr @class_behavior_wrapper(ptr %950, ptr %102)
@@ -6235,7 +6238,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %956 = load ptr, ptr %955, align 8
   store ptr %956, ptr %104, align 8
   %957 = load ptr, ptr %104, align 8
-  %958 = load <4 x i8>, ptr @sbftz_PASS, align 4
+  %958 = load <4 x i8>, ptr @wiiks_PASS, align 4
   store <4 x i8> %958, ptr %957, align 4
   store ptr @String, ptr %105, align 8
   %959 = load ptr, ptr %105, align 8
@@ -6248,7 +6251,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %966 = getelementptr { ptr, ptr, ptr, i32 }, ptr %106, i32 0, i32 3
   store ptr @String, ptr %106, align 8
   store ptr %964, ptr %965, align 8
-  store i32 9, ptr %966, align 4
+  store i32 10, ptr %966, align 4
   %967 = load ptr, ptr %104, align 8
   %968 = insertvalue { ptr } undef, ptr %967, 0
   %969 = getelementptr { ptr, ptr, ptr, i32 }, ptr %106, i32 0, i32 0
@@ -6292,7 +6295,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   store ptr @_parameterization_String, ptr %999, align 8
   %1000 = call ptr @llvm.invariant.start.p0(i64 1, ptr %109)
   %1001 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %1002 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %1002 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %1003 = getelementptr { ptr }, ptr %110, i32 0, i32 0
   store ptr %994, ptr %1003, align 8
   %1004 = call ptr @class_behavior_wrapper(ptr %1002, ptr %110)
@@ -6306,7 +6309,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %1008 = load ptr, ptr %1007, align 8
   store ptr %1008, ptr %112, align 8
   %1009 = load ptr, ptr %112, align 8
-  %1010 = load <4 x i8>, ptr @zouug_FAIL, align 4
+  %1010 = load <4 x i8>, ptr @yzjue_FAIL, align 4
   store <4 x i8> %1010, ptr %1009, align 4
   store ptr @String, ptr %113, align 8
   %1011 = load ptr, ptr %113, align 8
@@ -6319,7 +6322,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %1018 = getelementptr { ptr, ptr, ptr, i32 }, ptr %114, i32 0, i32 3
   store ptr @String, ptr %114, align 8
   store ptr %1016, ptr %1017, align 8
-  store i32 9, ptr %1018, align 4
+  store i32 10, ptr %1018, align 4
   %1019 = load ptr, ptr %112, align 8
   %1020 = insertvalue { ptr } undef, ptr %1019, 0
   %1021 = getelementptr { ptr, ptr, ptr, i32 }, ptr %114, i32 0, i32 0
@@ -6363,7 +6366,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   store ptr @_parameterization_String, ptr %1051, align 8
   %1052 = call ptr @llvm.invariant.start.p0(i64 1, ptr %117)
   %1053 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %1054 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %1054 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %1055 = getelementptr { ptr }, ptr %118, i32 0, i32 0
   store ptr %1046, ptr %1055, align 8
   %1056 = call ptr @class_behavior_wrapper(ptr %1054, ptr %118)
@@ -6377,7 +6380,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %1060 = load ptr, ptr %1059, align 8
   store ptr %1060, ptr %120, align 8
   %1061 = load ptr, ptr %120, align 8
-  %1062 = load <13 x i8>, ptr @dfvdw_____Misses_, align 16
+  %1062 = load <13 x i8>, ptr @qzyen_____Misses_, align 16
   store <13 x i8> %1062, ptr %1061, align 16
   store ptr @String, ptr %121, align 8
   %1063 = load ptr, ptr %121, align 8
@@ -6390,7 +6393,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %1070 = getelementptr { ptr, ptr, ptr, i32 }, ptr %122, i32 0, i32 3
   store ptr @String, ptr %122, align 8
   store ptr %1068, ptr %1069, align 8
-  store i32 9, ptr %1070, align 4
+  store i32 10, ptr %1070, align 4
   %1071 = load ptr, ptr %120, align 8
   %1072 = insertvalue { ptr } undef, ptr %1071, 0
   %1073 = getelementptr { ptr, ptr, ptr, i32 }, ptr %122, i32 0, i32 0
@@ -6434,7 +6437,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   store ptr @_parameterization_String, ptr %1103, align 8
   %1104 = call ptr @llvm.invariant.start.p0(i64 1, ptr %125)
   %1105 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %1106 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %1106 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %1107 = getelementptr { ptr }, ptr %126, i32 0, i32 0
   store ptr %1098, ptr %1107, align 8
   %1108 = call ptr @class_behavior_wrapper(ptr %1106, ptr %126)
@@ -6450,7 +6453,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   store ptr @_parameterization_Ptri32, ptr %1114, align 8
   %1115 = call ptr @llvm.invariant.start.p0(i64 1, ptr %129)
   %1116 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %1117 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %1117 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %1118 = getelementptr { ptr }, ptr %130, i32 0, i32 0
   store ptr %1110, ptr %1118, align 8
   %1119 = call ptr @class_behavior_wrapper(ptr %1117, ptr %130)
@@ -6461,7 +6464,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %1122 = load ptr, ptr %1121, align 8
   store ptr %1122, ptr %132, align 8
   %1123 = load ptr, ptr %132, align 8
-  %1124 = load <8 x i8>, ptr @uanur__Hits_, align 8
+  %1124 = load <8 x i8>, ptr @zoipp__Hits_, align 8
   store <8 x i8> %1124, ptr %1123, align 8
   store ptr @String, ptr %133, align 8
   %1125 = load ptr, ptr %133, align 8
@@ -6474,7 +6477,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %1132 = getelementptr { ptr, ptr, ptr, i32 }, ptr %134, i32 0, i32 3
   store ptr @String, ptr %134, align 8
   store ptr %1130, ptr %1131, align 8
-  store i32 9, ptr %1132, align 4
+  store i32 10, ptr %1132, align 4
   %1133 = load ptr, ptr %132, align 8
   %1134 = insertvalue { ptr } undef, ptr %1133, 0
   %1135 = getelementptr { ptr, ptr, ptr, i32 }, ptr %134, i32 0, i32 0
@@ -6518,7 +6521,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   store ptr @_parameterization_String, ptr %1165, align 8
   %1166 = call ptr @llvm.invariant.start.p0(i64 1, ptr %137)
   %1167 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %1168 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %1168 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %1169 = getelementptr { ptr }, ptr %138, i32 0, i32 0
   store ptr %1160, ptr %1169, align 8
   %1170 = call ptr @class_behavior_wrapper(ptr %1168, ptr %138)
@@ -6534,7 +6537,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   store ptr @_parameterization_Ptri32, ptr %1176, align 8
   %1177 = call ptr @llvm.invariant.start.p0(i64 1, ptr %141)
   %1178 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %1179 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %1179 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %1180 = getelementptr { ptr }, ptr %142, i32 0, i32 0
   store ptr %1172, ptr %1180, align 8
   %1181 = call ptr @class_behavior_wrapper(ptr %1179, ptr %142)
@@ -6545,7 +6548,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %1184 = load ptr, ptr %1183, align 8
   store ptr %1184, ptr %144, align 8
   %1185 = load ptr, ptr %144, align 8
-  %1186 = load <1 x i8>, ptr @xoamy_, align 1
+  %1186 = load <1 x i8>, ptr @jnkwq_, align 1
   store <1 x i8> %1186, ptr %1185, align 1
   store ptr @String, ptr %145, align 8
   %1187 = load ptr, ptr %145, align 8
@@ -6558,7 +6561,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   %1194 = getelementptr { ptr, ptr, ptr, i32 }, ptr %146, i32 0, i32 3
   store ptr @String, ptr %146, align 8
   store ptr %1192, ptr %1193, align 8
-  store i32 9, ptr %1194, align 4
+  store i32 10, ptr %1194, align 4
   %1195 = load ptr, ptr %144, align 8
   %1196 = insertvalue { ptr } undef, ptr %1195, 0
   %1197 = getelementptr { ptr, ptr, ptr, i32 }, ptr %146, i32 0, i32 0
@@ -6602,7 +6605,7 @@ define void @benchmark_get_random_miss(i32 %0) {
   store ptr @_parameterization_String, ptr %1227, align 8
   %1228 = call ptr @llvm.invariant.start.p0(i64 1, ptr %149)
   %1229 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %1230 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %1230 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %1231 = getelementptr { ptr }, ptr %150, i32 0, i32 0
   store ptr %1222, ptr %1231, align 8
   %1232 = call ptr @class_behavior_wrapper(ptr %1230, ptr %150)
@@ -6785,10 +6788,10 @@ define void @benchmark_remove_random(i32 %0) {
   %166 = alloca ptr, align 8
   store ptr @HashMap, ptr %166, align 8
   store ptr %159, ptr %165, align 8
-  store i32 9, ptr %163, align 4
+  store i32 10, ptr %163, align 4
   %167 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %167)
-  call void @llvm.init.trampoline(ptr %167, ptr @mmudiitrfg, ptr @i32_hasher)
+  call void @llvm.init.trampoline(ptr %167, ptr @wduremrguj, ptr @i32_hasher)
   %168 = alloca ptr, align 8
   %169 = call ptr @adjust_trampoline(ptr %167)
   store ptr %169, ptr %168, align 8
@@ -6798,7 +6801,7 @@ define void @benchmark_remove_random(i32 %0) {
   %173 = insertvalue { ptr } undef, ptr %172, 0
   %174 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %174)
-  call void @llvm.init.trampoline(ptr %174, ptr @mqswqvfyti, ptr @i32_eq)
+  call void @llvm.init.trampoline(ptr %174, ptr @imwvoqzaro, ptr @i32_eq)
   %175 = alloca ptr, align 8
   %176 = call ptr @adjust_trampoline(ptr %174)
   store ptr %176, ptr %175, align 8
@@ -6820,9 +6823,9 @@ define void @benchmark_remove_random(i32 %0) {
   %191 = getelementptr [2 x ptr], ptr %189, i32 0, i32 1
   store ptr @_parameterization_FunctionPtri32._Ptri32_to_Ptri1, ptr %191, align 8
   %192 = call ptr @llvm.invariant.start.p0(i64 4, ptr %189)
-  %193 = call ptr @llvm.invariant.start.p0(i64 696, ptr %181)
+  %193 = call ptr @llvm.invariant.start.p0(i64 584, ptr %181)
   %194 = getelementptr ptr, ptr %181, i32 %187
-  %195 = getelementptr ptr, ptr %194, i32 9
+  %195 = getelementptr ptr, ptr %194, i32 8
   %196 = load ptr, ptr %195, align 8
   %197 = alloca { ptr, ptr }, align 8
   %198 = getelementptr { ptr, ptr }, ptr %197, i32 0, i32 0
@@ -6875,7 +6878,7 @@ define void @benchmark_remove_random(i32 %0) {
   %232 = alloca ptr, align 8
   store ptr @PRNG, ptr %232, align 8
   store ptr %228, ptr %231, align 8
-  store i32 9, ptr %229, align 4
+  store i32 10, ptr %229, align 4
   %233 = load ptr, ptr %232, align 8
   %234 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %233, 0
   %235 = load ptr, ptr %231, align 8
@@ -6945,7 +6948,7 @@ define void @benchmark_remove_random(i32 %0) {
   %284 = alloca ptr, align 8
   store ptr @Array, ptr %284, align 8
   store ptr %279, ptr %283, align 8
-  store i32 9, ptr %281, align 4
+  store i32 10, ptr %281, align 4
   %285 = load ptr, ptr %284, align 8
   %286 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %285, 0
   %287 = load ptr, ptr %283, align 8
@@ -7023,10 +7026,10 @@ define void @benchmark_remove_random(i32 %0) {
   %340 = alloca ptr, align 8
   store ptr @HashMap, ptr %340, align 8
   store ptr %333, ptr %339, align 8
-  store i32 9, ptr %337, align 4
+  store i32 10, ptr %337, align 4
   %341 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %341)
-  call void @llvm.init.trampoline(ptr %341, ptr @odnyrftkdt, ptr @i32_hasher)
+  call void @llvm.init.trampoline(ptr %341, ptr @eprnbvvmmo, ptr @i32_hasher)
   %342 = alloca ptr, align 8
   %343 = call ptr @adjust_trampoline(ptr %341)
   store ptr %343, ptr %342, align 8
@@ -7036,7 +7039,7 @@ define void @benchmark_remove_random(i32 %0) {
   %347 = insertvalue { ptr } undef, ptr %346, 0
   %348 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %348)
-  call void @llvm.init.trampoline(ptr %348, ptr @blytnjoxue, ptr @i32_eq)
+  call void @llvm.init.trampoline(ptr %348, ptr @bvnqsqgzpi, ptr @i32_eq)
   %349 = alloca ptr, align 8
   %350 = call ptr @adjust_trampoline(ptr %348)
   store ptr %350, ptr %349, align 8
@@ -7058,9 +7061,9 @@ define void @benchmark_remove_random(i32 %0) {
   %365 = getelementptr [2 x ptr], ptr %363, i32 0, i32 1
   store ptr @_parameterization_FunctionPtri32._Ptri32_to_Ptri1, ptr %365, align 8
   %366 = call ptr @llvm.invariant.start.p0(i64 4, ptr %363)
-  %367 = call ptr @llvm.invariant.start.p0(i64 696, ptr %355)
+  %367 = call ptr @llvm.invariant.start.p0(i64 584, ptr %355)
   %368 = getelementptr ptr, ptr %355, i32 %361
-  %369 = getelementptr ptr, ptr %368, i32 9
+  %369 = getelementptr ptr, ptr %368, i32 8
   %370 = load ptr, ptr %369, align 8
   %371 = alloca { ptr, ptr }, align 8
   %372 = getelementptr { ptr, ptr }, ptr %371, i32 0, i32 0
@@ -7155,9 +7158,9 @@ define void @benchmark_remove_random(i32 %0) {
   %435 = getelementptr [1 x ptr], ptr %6, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %435, align 8
   %436 = call ptr @llvm.invariant.start.p0(i64 1, ptr %6)
-  %437 = call ptr @llvm.invariant.start.p0(i64 696, ptr %427)
+  %437 = call ptr @llvm.invariant.start.p0(i64 584, ptr %427)
   %438 = getelementptr ptr, ptr %427, i32 %433
-  %439 = getelementptr ptr, ptr %438, i32 21
+  %439 = getelementptr ptr, ptr %438, i32 14
   %440 = load ptr, ptr %439, align 8
   %441 = getelementptr { ptr }, ptr %7, i32 0, i32 0
   store ptr %423, ptr %441, align 8
@@ -7204,9 +7207,9 @@ define void @benchmark_remove_random(i32 %0) {
   %472 = getelementptr [2 x ptr], ptr %15, i32 0, i32 1
   store ptr @_parameterization_Ptri32, ptr %472, align 8
   %473 = call ptr @llvm.invariant.start.p0(i64 4, ptr %15)
-  %474 = call ptr @llvm.invariant.start.p0(i64 696, ptr %463)
+  %474 = call ptr @llvm.invariant.start.p0(i64 584, ptr %463)
   %475 = getelementptr ptr, ptr %463, i32 %469
-  %476 = getelementptr ptr, ptr %475, i32 20
+  %476 = getelementptr ptr, ptr %475, i32 13
   %477 = load ptr, ptr %476, align 8
   %478 = getelementptr { ptr, ptr }, ptr %16, i32 0, i32 0
   store ptr %455, ptr %478, align 8
@@ -7268,9 +7271,9 @@ define void @benchmark_remove_random(i32 %0) {
   %520 = getelementptr [2 x ptr], ptr %25, i32 0, i32 1
   store ptr @_parameterization_Ptri1, ptr %520, align 8
   %521 = call ptr @llvm.invariant.start.p0(i64 4, ptr %25)
-  %522 = call ptr @llvm.invariant.start.p0(i64 696, ptr %511)
+  %522 = call ptr @llvm.invariant.start.p0(i64 584, ptr %511)
   %523 = getelementptr ptr, ptr %511, i32 %517
-  %524 = getelementptr ptr, ptr %523, i32 20
+  %524 = getelementptr ptr, ptr %523, i32 13
   %525 = load ptr, ptr %524, align 8
   %526 = getelementptr { ptr, ptr }, ptr %26, i32 0, i32 0
   store ptr %503, ptr %526, align 8
@@ -7321,7 +7324,7 @@ define void @benchmark_remove_random(i32 %0) {
   %550 = load ptr, ptr %549, align 8
   store ptr %550, ptr %28, align 8
   %551 = load ptr, ptr %28, align 8
-  %552 = load <29 x i8>, ptr @etoio_Warning_Could_only_generate_, align 32
+  %552 = load <29 x i8>, ptr @nnrdw_Warning_Could_only_generate_, align 32
   store <29 x i8> %552, ptr %551, align 32
   store ptr @String, ptr %29, align 8
   %553 = load ptr, ptr %29, align 8
@@ -7334,7 +7337,7 @@ define void @benchmark_remove_random(i32 %0) {
   %560 = getelementptr { ptr, ptr, ptr, i32 }, ptr %30, i32 0, i32 3
   store ptr @String, ptr %30, align 8
   store ptr %558, ptr %559, align 8
-  store i32 9, ptr %560, align 4
+  store i32 10, ptr %560, align 4
   %561 = load ptr, ptr %28, align 8
   %562 = insertvalue { ptr } undef, ptr %561, 0
   %563 = getelementptr { ptr, ptr, ptr, i32 }, ptr %30, i32 0, i32 0
@@ -7378,7 +7381,7 @@ define void @benchmark_remove_random(i32 %0) {
   store ptr @_parameterization_String, ptr %593, align 8
   %594 = call ptr @llvm.invariant.start.p0(i64 1, ptr %33)
   %595 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %596 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %596 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %597 = getelementptr { ptr }, ptr %34, i32 0, i32 0
   store ptr %588, ptr %597, align 8
   %598 = call ptr @class_behavior_wrapper(ptr %596, ptr %34)
@@ -7393,7 +7396,7 @@ define void @benchmark_remove_random(i32 %0) {
   store ptr @_parameterization_Ptri32, ptr %603, align 8
   %604 = call ptr @llvm.invariant.start.p0(i64 1, ptr %37)
   %605 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %606 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %606 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %607 = getelementptr { ptr }, ptr %38, i32 0, i32 0
   store ptr %599, ptr %607, align 8
   %608 = call ptr @class_behavior_wrapper(ptr %606, ptr %38)
@@ -7404,7 +7407,7 @@ define void @benchmark_remove_random(i32 %0) {
   %611 = load ptr, ptr %610, align 8
   store ptr %611, ptr %40, align 8
   %612 = load ptr, ptr %40, align 8
-  %613 = load <29 x i8>, ptr @doact__unique_keys_for_remove_test, align 32
+  %613 = load <29 x i8>, ptr @lnvrv__unique_keys_for_remove_test, align 32
   store <29 x i8> %613, ptr %612, align 32
   store ptr @String, ptr %41, align 8
   %614 = load ptr, ptr %41, align 8
@@ -7417,7 +7420,7 @@ define void @benchmark_remove_random(i32 %0) {
   %621 = getelementptr { ptr, ptr, ptr, i32 }, ptr %42, i32 0, i32 3
   store ptr @String, ptr %42, align 8
   store ptr %619, ptr %620, align 8
-  store i32 9, ptr %621, align 4
+  store i32 10, ptr %621, align 4
   %622 = load ptr, ptr %40, align 8
   %623 = insertvalue { ptr } undef, ptr %622, 0
   %624 = getelementptr { ptr, ptr, ptr, i32 }, ptr %42, i32 0, i32 0
@@ -7461,7 +7464,7 @@ define void @benchmark_remove_random(i32 %0) {
   store ptr @_parameterization_String, ptr %654, align 8
   %655 = call ptr @llvm.invariant.start.p0(i64 1, ptr %45)
   %656 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %657 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %657 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %658 = getelementptr { ptr }, ptr %46, i32 0, i32 0
   store ptr %649, ptr %658, align 8
   %659 = call ptr @class_behavior_wrapper(ptr %657, ptr %46)
@@ -7519,9 +7522,9 @@ define void @benchmark_remove_random(i32 %0) {
   %699 = getelementptr [1 x ptr], ptr %52, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %699, align 8
   %700 = call ptr @llvm.invariant.start.p0(i64 1, ptr %52)
-  %701 = call ptr @llvm.invariant.start.p0(i64 696, ptr %691)
+  %701 = call ptr @llvm.invariant.start.p0(i64 584, ptr %691)
   %702 = getelementptr ptr, ptr %691, i32 %697
-  %703 = getelementptr ptr, ptr %702, i32 22
+  %703 = getelementptr ptr, ptr %702, i32 15
   %704 = load ptr, ptr %703, align 8
   %705 = getelementptr { ptr }, ptr %53, i32 0, i32 0
   store ptr %687, ptr %705, align 8
@@ -7556,7 +7559,7 @@ define void @benchmark_remove_random(i32 %0) {
   %726 = load ptr, ptr %725, align 8
   store ptr %726, ptr %58, align 8
   %727 = load ptr, ptr %58, align 8
-  %728 = load <45 x i8>, ptr @pyqur_Warning_Remove_returned_wrong_value_for_key_, align 64
+  %728 = load <45 x i8>, ptr @xbdpe_Warning_Remove_returned_wrong_value_for_key_, align 64
   store <45 x i8> %728, ptr %727, align 64
   store ptr @String, ptr %59, align 8
   %729 = load ptr, ptr %59, align 8
@@ -7569,7 +7572,7 @@ define void @benchmark_remove_random(i32 %0) {
   %736 = getelementptr { ptr, ptr, ptr, i32 }, ptr %60, i32 0, i32 3
   store ptr @String, ptr %60, align 8
   store ptr %734, ptr %735, align 8
-  store i32 9, ptr %736, align 4
+  store i32 10, ptr %736, align 4
   %737 = load ptr, ptr %58, align 8
   %738 = insertvalue { ptr } undef, ptr %737, 0
   %739 = getelementptr { ptr, ptr, ptr, i32 }, ptr %60, i32 0, i32 0
@@ -7613,7 +7616,7 @@ define void @benchmark_remove_random(i32 %0) {
   store ptr @_parameterization_String, ptr %769, align 8
   %770 = call ptr @llvm.invariant.start.p0(i64 1, ptr %63)
   %771 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %772 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %772 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %773 = getelementptr { ptr }, ptr %64, i32 0, i32 0
   store ptr %764, ptr %773, align 8
   %774 = call ptr @class_behavior_wrapper(ptr %772, ptr %64)
@@ -7628,7 +7631,7 @@ define void @benchmark_remove_random(i32 %0) {
   store ptr @_parameterization_Ptri32, ptr %779, align 8
   %780 = call ptr @llvm.invariant.start.p0(i64 1, ptr %67)
   %781 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %782 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %782 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %783 = getelementptr { ptr }, ptr %68, i32 0, i32 0
   store ptr %775, ptr %783, align 8
   %784 = call ptr @class_behavior_wrapper(ptr %782, ptr %68)
@@ -7652,7 +7655,7 @@ define void @benchmark_remove_random(i32 %0) {
   %792 = load ptr, ptr %791, align 8
   store ptr %792, ptr %72, align 8
   %793 = load ptr, ptr %72, align 8
-  %794 = load <37 x i8>, ptr @kiriz_Warning_Remove_returned_Nil_for_key_, align 64
+  %794 = load <37 x i8>, ptr @lkpii_Warning_Remove_returned_Nil_for_key_, align 64
   store <37 x i8> %794, ptr %793, align 64
   store ptr @String, ptr %73, align 8
   %795 = load ptr, ptr %73, align 8
@@ -7665,7 +7668,7 @@ define void @benchmark_remove_random(i32 %0) {
   %802 = getelementptr { ptr, ptr, ptr, i32 }, ptr %74, i32 0, i32 3
   store ptr @String, ptr %74, align 8
   store ptr %800, ptr %801, align 8
-  store i32 9, ptr %802, align 4
+  store i32 10, ptr %802, align 4
   %803 = load ptr, ptr %72, align 8
   %804 = insertvalue { ptr } undef, ptr %803, 0
   %805 = getelementptr { ptr, ptr, ptr, i32 }, ptr %74, i32 0, i32 0
@@ -7709,7 +7712,7 @@ define void @benchmark_remove_random(i32 %0) {
   store ptr @_parameterization_String, ptr %835, align 8
   %836 = call ptr @llvm.invariant.start.p0(i64 1, ptr %77)
   %837 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %838 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %838 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %839 = getelementptr { ptr }, ptr %78, i32 0, i32 0
   store ptr %830, ptr %839, align 8
   %840 = call ptr @class_behavior_wrapper(ptr %838, ptr %78)
@@ -7724,7 +7727,7 @@ define void @benchmark_remove_random(i32 %0) {
   store ptr @_parameterization_Ptri32, ptr %845, align 8
   %846 = call ptr @llvm.invariant.start.p0(i64 1, ptr %81)
   %847 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %848 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %848 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %849 = getelementptr { ptr }, ptr %82, i32 0, i32 0
   store ptr %841, ptr %849, align 8
   %850 = call ptr @class_behavior_wrapper(ptr %848, ptr %82)
@@ -7777,9 +7780,9 @@ define void @benchmark_remove_random(i32 %0) {
   %880 = load i32, ptr %210, align 4
   %881 = insertvalue { ptr, ptr, ptr, i32 } %879, i32 %880, 3
   %882 = call ptr @llvm.invariant.start.p0(i64 0, ptr %83)
-  %883 = call ptr @llvm.invariant.start.p0(i64 696, ptr %874)
+  %883 = call ptr @llvm.invariant.start.p0(i64 584, ptr %874)
   %884 = getelementptr ptr, ptr %874, i32 %880
-  %885 = getelementptr ptr, ptr %884, i32 24
+  %885 = getelementptr ptr, ptr %884, i32 17
   %886 = load ptr, ptr %885, align 8
   %887 = call ptr @behavior_wrapper(ptr %886, { ptr, ptr, ptr, i32 } %881, ptr %84)
   %888 = call i32 %887({ ptr, ptr, ptr, i32 } %881, { ptr, ptr, ptr, i32 } %881, ptr %83) #3
@@ -7828,9 +7831,9 @@ define void @benchmark_remove_random(i32 %0) {
   %924 = getelementptr [1 x ptr], ptr %90, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %924, align 8
   %925 = call ptr @llvm.invariant.start.p0(i64 1, ptr %90)
-  %926 = call ptr @llvm.invariant.start.p0(i64 696, ptr %916)
+  %926 = call ptr @llvm.invariant.start.p0(i64 584, ptr %916)
   %927 = getelementptr ptr, ptr %916, i32 %922
-  %928 = getelementptr ptr, ptr %927, i32 21
+  %928 = getelementptr ptr, ptr %927, i32 14
   %929 = load ptr, ptr %928, align 8
   %930 = getelementptr { ptr }, ptr %91, i32 0, i32 0
   store ptr %912, ptr %930, align 8
@@ -7879,7 +7882,7 @@ define void @benchmark_remove_random(i32 %0) {
   %955 = load ptr, ptr %954, align 8
   store ptr %955, ptr %98, align 8
   %956 = load ptr, ptr %98, align 8
-  %957 = load <13 x i8>, ptr @lgvui_Remove_Random, align 16
+  %957 = load <13 x i8>, ptr @fslpt_Remove_Random, align 16
   store <13 x i8> %957, ptr %956, align 16
   store ptr @String, ptr %99, align 8
   %958 = load ptr, ptr %99, align 8
@@ -7890,7 +7893,7 @@ define void @benchmark_remove_random(i32 %0) {
   %963 = call ptr @bump_malloc(i64 %962)
   store ptr @String, ptr %103, align 8
   store ptr %963, ptr %102, align 8
-  store i32 9, ptr %100, align 4
+  store i32 10, ptr %100, align 4
   %964 = load ptr, ptr %98, align 8
   %965 = insertvalue { ptr } undef, ptr %964, 0
   %966 = load ptr, ptr %103, align 8
@@ -7936,7 +7939,7 @@ define void @benchmark_remove_random(i32 %0) {
   %997 = load ptr, ptr %996, align 8
   store ptr %997, ptr %107, align 8
   %998 = load ptr, ptr %107, align 8
-  %999 = load <18 x i8>, ptr @wbnfj_____Verification_, align 32
+  %999 = load <18 x i8>, ptr @yjrcv_____Verification_, align 32
   store <18 x i8> %999, ptr %998, align 32
   store ptr @String, ptr %108, align 8
   %1000 = load ptr, ptr %108, align 8
@@ -7949,7 +7952,7 @@ define void @benchmark_remove_random(i32 %0) {
   %1007 = getelementptr { ptr, ptr, ptr, i32 }, ptr %109, i32 0, i32 3
   store ptr @String, ptr %109, align 8
   store ptr %1005, ptr %1006, align 8
-  store i32 9, ptr %1007, align 4
+  store i32 10, ptr %1007, align 4
   %1008 = load ptr, ptr %107, align 8
   %1009 = insertvalue { ptr } undef, ptr %1008, 0
   %1010 = getelementptr { ptr, ptr, ptr, i32 }, ptr %109, i32 0, i32 0
@@ -7993,7 +7996,7 @@ define void @benchmark_remove_random(i32 %0) {
   store ptr @_parameterization_String, ptr %1040, align 8
   %1041 = call ptr @llvm.invariant.start.p0(i64 1, ptr %112)
   %1042 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %1043 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %1043 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %1044 = getelementptr { ptr }, ptr %113, i32 0, i32 0
   store ptr %1035, ptr %1044, align 8
   %1045 = call ptr @class_behavior_wrapper(ptr %1043, ptr %113)
@@ -8007,7 +8010,7 @@ define void @benchmark_remove_random(i32 %0) {
   %1049 = load ptr, ptr %1048, align 8
   store ptr %1049, ptr %115, align 8
   %1050 = load ptr, ptr %115, align 8
-  %1051 = load <4 x i8>, ptr @ioznx_PASS, align 4
+  %1051 = load <4 x i8>, ptr @mhjcp_PASS, align 4
   store <4 x i8> %1051, ptr %1050, align 4
   store ptr @String, ptr %116, align 8
   %1052 = load ptr, ptr %116, align 8
@@ -8020,7 +8023,7 @@ define void @benchmark_remove_random(i32 %0) {
   %1059 = getelementptr { ptr, ptr, ptr, i32 }, ptr %117, i32 0, i32 3
   store ptr @String, ptr %117, align 8
   store ptr %1057, ptr %1058, align 8
-  store i32 9, ptr %1059, align 4
+  store i32 10, ptr %1059, align 4
   %1060 = load ptr, ptr %115, align 8
   %1061 = insertvalue { ptr } undef, ptr %1060, 0
   %1062 = getelementptr { ptr, ptr, ptr, i32 }, ptr %117, i32 0, i32 0
@@ -8064,7 +8067,7 @@ define void @benchmark_remove_random(i32 %0) {
   store ptr @_parameterization_String, ptr %1092, align 8
   %1093 = call ptr @llvm.invariant.start.p0(i64 1, ptr %120)
   %1094 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %1095 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %1095 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %1096 = getelementptr { ptr }, ptr %121, i32 0, i32 0
   store ptr %1087, ptr %1096, align 8
   %1097 = call ptr @class_behavior_wrapper(ptr %1095, ptr %121)
@@ -8078,7 +8081,7 @@ define void @benchmark_remove_random(i32 %0) {
   %1101 = load ptr, ptr %1100, align 8
   store ptr %1101, ptr %123, align 8
   %1102 = load ptr, ptr %123, align 8
-  %1103 = load <4 x i8>, ptr @ihhff_FAIL, align 4
+  %1103 = load <4 x i8>, ptr @xfwqp_FAIL, align 4
   store <4 x i8> %1103, ptr %1102, align 4
   store ptr @String, ptr %124, align 8
   %1104 = load ptr, ptr %124, align 8
@@ -8091,7 +8094,7 @@ define void @benchmark_remove_random(i32 %0) {
   %1111 = getelementptr { ptr, ptr, ptr, i32 }, ptr %125, i32 0, i32 3
   store ptr @String, ptr %125, align 8
   store ptr %1109, ptr %1110, align 8
-  store i32 9, ptr %1111, align 4
+  store i32 10, ptr %1111, align 4
   %1112 = load ptr, ptr %123, align 8
   %1113 = insertvalue { ptr } undef, ptr %1112, 0
   %1114 = getelementptr { ptr, ptr, ptr, i32 }, ptr %125, i32 0, i32 0
@@ -8135,7 +8138,7 @@ define void @benchmark_remove_random(i32 %0) {
   store ptr @_parameterization_String, ptr %1144, align 8
   %1145 = call ptr @llvm.invariant.start.p0(i64 1, ptr %128)
   %1146 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %1147 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %1147 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %1148 = getelementptr { ptr }, ptr %129, i32 0, i32 0
   store ptr %1139, ptr %1148, align 8
   %1149 = call ptr @class_behavior_wrapper(ptr %1147, ptr %129)
@@ -8149,7 +8152,7 @@ define void @benchmark_remove_random(i32 %0) {
   %1153 = load ptr, ptr %1152, align 8
   store ptr %1153, ptr %131, align 8
   %1154 = load ptr, ptr %131, align 8
-  %1155 = load <20 x i8>, ptr @cnrox_____Items_removed_, align 32
+  %1155 = load <20 x i8>, ptr @ggrre_____Items_removed_, align 32
   store <20 x i8> %1155, ptr %1154, align 32
   store ptr @String, ptr %132, align 8
   %1156 = load ptr, ptr %132, align 8
@@ -8162,7 +8165,7 @@ define void @benchmark_remove_random(i32 %0) {
   %1163 = getelementptr { ptr, ptr, ptr, i32 }, ptr %133, i32 0, i32 3
   store ptr @String, ptr %133, align 8
   store ptr %1161, ptr %1162, align 8
-  store i32 9, ptr %1163, align 4
+  store i32 10, ptr %1163, align 4
   %1164 = load ptr, ptr %131, align 8
   %1165 = insertvalue { ptr } undef, ptr %1164, 0
   %1166 = getelementptr { ptr, ptr, ptr, i32 }, ptr %133, i32 0, i32 0
@@ -8206,7 +8209,7 @@ define void @benchmark_remove_random(i32 %0) {
   store ptr @_parameterization_String, ptr %1196, align 8
   %1197 = call ptr @llvm.invariant.start.p0(i64 1, ptr %136)
   %1198 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %1199 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %1199 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %1200 = getelementptr { ptr }, ptr %137, i32 0, i32 0
   store ptr %1191, ptr %1200, align 8
   %1201 = call ptr @class_behavior_wrapper(ptr %1199, ptr %137)
@@ -8221,7 +8224,7 @@ define void @benchmark_remove_random(i32 %0) {
   store ptr @_parameterization_Ptri32, ptr %1206, align 8
   %1207 = call ptr @llvm.invariant.start.p0(i64 1, ptr %140)
   %1208 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %1209 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %1209 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %1210 = getelementptr { ptr }, ptr %141, i32 0, i32 0
   store ptr %1202, ptr %1210, align 8
   %1211 = call ptr @class_behavior_wrapper(ptr %1209, ptr %141)
@@ -8232,7 +8235,7 @@ define void @benchmark_remove_random(i32 %0) {
   %1214 = load ptr, ptr %1213, align 8
   store ptr %1214, ptr %143, align 8
   %1215 = load ptr, ptr %143, align 8
-  %1216 = load <1 x i8>, ptr @ryfxd_, align 1
+  %1216 = load <1 x i8>, ptr @oeeek_, align 1
   store <1 x i8> %1216, ptr %1215, align 1
   store ptr @String, ptr %144, align 8
   %1217 = load ptr, ptr %144, align 8
@@ -8245,7 +8248,7 @@ define void @benchmark_remove_random(i32 %0) {
   %1224 = getelementptr { ptr, ptr, ptr, i32 }, ptr %145, i32 0, i32 3
   store ptr @String, ptr %145, align 8
   store ptr %1222, ptr %1223, align 8
-  store i32 9, ptr %1224, align 4
+  store i32 10, ptr %1224, align 4
   %1225 = load ptr, ptr %143, align 8
   %1226 = insertvalue { ptr } undef, ptr %1225, 0
   %1227 = getelementptr { ptr, ptr, ptr, i32 }, ptr %145, i32 0, i32 0
@@ -8289,7 +8292,7 @@ define void @benchmark_remove_random(i32 %0) {
   store ptr @_parameterization_String, ptr %1257, align 8
   %1258 = call ptr @llvm.invariant.start.p0(i64 1, ptr %148)
   %1259 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %1260 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %1260 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %1261 = getelementptr { ptr }, ptr %149, i32 0, i32 0
   store ptr %1252, ptr %1261, align 8
   %1262 = call ptr @class_behavior_wrapper(ptr %1260, ptr %149)
@@ -8321,7 +8324,7 @@ define i32 @main() {
   %19 = load ptr, ptr %18, align 8
   store ptr %19, ptr %2, align 8
   %20 = load ptr, ptr %2, align 8
-  %21 = load <26 x i8>, ptr @nglko__HashMap_Benchmarks_, align 32
+  %21 = load <26 x i8>, ptr @gqgqc__HashMap_Benchmarks_, align 32
   store <26 x i8> %21, ptr %20, align 32
   store ptr @String, ptr %3, align 8
   %22 = load ptr, ptr %3, align 8
@@ -8334,7 +8337,7 @@ define i32 @main() {
   %29 = getelementptr { ptr, ptr, ptr, i32 }, ptr %4, i32 0, i32 3
   store ptr @String, ptr %4, align 8
   store ptr %27, ptr %28, align 8
-  store i32 9, ptr %29, align 4
+  store i32 10, ptr %29, align 4
   %30 = load ptr, ptr %2, align 8
   %31 = insertvalue { ptr } undef, ptr %30, 0
   %32 = getelementptr { ptr, ptr, ptr, i32 }, ptr %4, i32 0, i32 0
@@ -8378,7 +8381,7 @@ define i32 @main() {
   store ptr @_parameterization_String, ptr %62, align 8
   %63 = call ptr @llvm.invariant.start.p0(i64 1, ptr %7)
   %64 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %65 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %65 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %66 = getelementptr { ptr }, ptr %8, i32 0, i32 0
   store ptr %57, ptr %66, align 8
   %67 = call ptr @class_behavior_wrapper(ptr %65, ptr %8)
@@ -8395,7 +8398,7 @@ define i32 @main() {
   %70 = load ptr, ptr %69, align 8
   store ptr %70, ptr %10, align 8
   %71 = load ptr, ptr %10, align 8
-  %72 = load <27 x i8>, ptr @uoyvt__Benchmarks_Complete_, align 32
+  %72 = load <27 x i8>, ptr @sgpjc__Benchmarks_Complete_, align 32
   store <27 x i8> %72, ptr %71, align 32
   store ptr @String, ptr %11, align 8
   %73 = load ptr, ptr %11, align 8
@@ -8408,7 +8411,7 @@ define i32 @main() {
   %80 = getelementptr { ptr, ptr, ptr, i32 }, ptr %12, i32 0, i32 3
   store ptr @String, ptr %12, align 8
   store ptr %78, ptr %79, align 8
-  store i32 9, ptr %80, align 4
+  store i32 10, ptr %80, align 4
   %81 = load ptr, ptr %10, align 8
   %82 = insertvalue { ptr } undef, ptr %81, 0
   %83 = getelementptr { ptr, ptr, ptr, i32 }, ptr %12, i32 0, i32 0
@@ -8452,7 +8455,7 @@ define i32 @main() {
   store ptr @_parameterization_String, ptr %113, align 8
   %114 = call ptr @llvm.invariant.start.p0(i64 1, ptr %15)
   %115 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %116 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 9), align 8
+  %116 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
   %117 = getelementptr { ptr }, ptr %16, i32 0, i32 0
   store ptr %108, ptr %117, align 8
   %118 = call ptr @class_behavior_wrapper(ptr %116, ptr %16)

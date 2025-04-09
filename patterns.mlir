@@ -400,22 +400,28 @@ module @patterns {
       %unbox_with_region = pdl.apply_native_rewrite "add_region"(%unbox_decl : !pdl.operation) : !pdl.operation
       pdl.erase %unbox_decl
 
+      %size = pdl.attribute = "_size_Default"
+      %func_type_attr777 = pdl.attribute = !llvm.func<!llvm.struct<(i64, i64)> (ptr)>
+      %size_decl = pdl.operation "llvm.func" {"sym_name" = %size, "function_type" = %func_type_attr777, "linkage" = %linkage}
+      %size_with_region = pdl.apply_native_rewrite "add_region"(%size_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %size_decl
+
       %unbox_union = pdl.attribute = "_unbox_union_typ"
       %unbox_union_decl = pdl.operation "llvm.func" {"sym_name" = %unbox_union, "function_type" = %func_type_attr99, "linkage" = %linkage}
       %unbox_union_with_region = pdl.apply_native_rewrite "add_region"(%unbox_union_decl : !pdl.operation) : !pdl.operation
       pdl.erase %unbox_union_decl
 
-      %tuple_size = pdl.attribute = "_size_tuple_typ"
+      %tuple_data_size = pdl.attribute = "_data_size_tuple_typ"
       %func_type_attr95 = pdl.attribute = !llvm.func<!llvm.struct<(i64, i64)> (ptr)>
-      %tuple_size_decl = pdl.operation "llvm.func" {"sym_name" = %tuple_size, "function_type" = %func_type_attr95, "linkage" = %linkage}
-      %tuple_size_with_region = pdl.apply_native_rewrite "add_region"(%tuple_size_decl : !pdl.operation) : !pdl.operation
-      pdl.erase %tuple_size_decl
+      %tuple_data_size_decl = pdl.operation "llvm.func" {"sym_name" = %tuple_data_size, "function_type" = %func_type_attr95, "linkage" = %linkage}
+      %tuple_data_size_with_region = pdl.apply_native_rewrite "add_region"(%tuple_data_size_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %tuple_data_size_decl
 
-      %union_size = pdl.attribute = "_size_union_typ"
+      %union_data_size = pdl.attribute = "_data_size_union_typ"
       %func_type_attr96 = pdl.attribute = !llvm.func<!llvm.struct<(i64, i64)> (ptr)>
-      %union_size_decl = pdl.operation "llvm.func" {"sym_name" = %union_size, "function_type" = %func_type_attr96, "linkage" = %linkage}
-      %union_size_with_region = pdl.apply_native_rewrite "add_region"(%union_size_decl : !pdl.operation) : !pdl.operation
-      pdl.erase %union_size_decl
+      %union_data_size_decl = pdl.operation "llvm.func" {"sym_name" = %union_data_size, "function_type" = %func_type_attr96, "linkage" = %linkage}
+      %union_data_size_with_region = pdl.apply_native_rewrite "add_region"(%union_data_size_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %union_data_size_decl
       
       %subtype = pdl.attribute = "subtype_test"
       %func_type_attr10 = pdl.attribute = !llvm.func<i1 (i64, i64, i64, i64, ptr)>

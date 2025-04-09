@@ -33,7 +33,7 @@ rule CXX_COMPILER__obj.2eMLIRStandalone_unscanned_Release
 # Rule for linking CXX static library.
 
 rule CXX_STATIC_LIBRARY_LINKER__MLIRStandalone_Release
-  command = C:\Windows\system32\cmd.exe /C "$PRE_LINK && "C:\Program Files\CMake\bin\cmake.exe" -E rm -f $TARGET_FILE && C:\PROGRA~1\MIB055~1\2022\COMMUN~1\VC\Tools\Llvm\x64\bin\llvm-ar.exe qc $TARGET_FILE $LINK_FLAGS $in && C:\PROGRA~1\MIB055~1\2022\COMMUN~1\VC\Tools\Llvm\x64\bin\LLVM-R~1.EXE $TARGET_FILE && $POST_BUILD"
+  command = C:\WINDOWS\system32\cmd.exe /C "$PRE_LINK && "C:\Program Files\CMake\bin\cmake.exe" -E rm -f $TARGET_FILE && C:\PROGRA~1\MIB055~1\2022\COMMUN~1\VC\Tools\Llvm\x64\bin\llvm-ar.exe qc $TARGET_FILE $LINK_FLAGS $in && C:\PROGRA~1\MIB055~1\2022\COMMUN~1\VC\Tools\Llvm\x64\bin\LLVM-R~1.EXE $TARGET_FILE && $POST_BUILD"
   description = Linking CXX static library $TARGET_FILE
   restat = $RESTAT
 
@@ -52,7 +52,7 @@ rule CXX_COMPILER__standalone-opt_unscanned_Release
 # Rule for linking CXX executable.
 
 rule CXX_EXECUTABLE_LINKER__standalone-opt_Release
-  command = C:\Windows\system32\cmd.exe /C "$PRE_LINK && C:\PROGRA~1\MIB055~1\2022\COMMUN~1\VC\Tools\Llvm\x64\bin\CLANG_~1.EXE -nostartfiles -nostdlib $FLAGS $LINK_FLAGS @$RSP_FILE -o $TARGET_FILE -Xlinker /MANIFEST:EMBED -Xlinker /implib:$TARGET_IMPLIB -Xlinker /pdb:$TARGET_PDB -Xlinker /version:0.0  $MANIFESTS && $POST_BUILD"
+  command = C:\WINDOWS\system32\cmd.exe /C "$PRE_LINK && C:\PROGRA~1\MIB055~1\2022\COMMUN~1\VC\Tools\Llvm\x64\bin\CLANG_~1.EXE -nostartfiles -nostdlib $FLAGS $LINK_FLAGS @$RSP_FILE -o $TARGET_FILE -Xlinker /MANIFEST:EMBED -Xlinker /implib:$TARGET_IMPLIB -Xlinker /pdb:$TARGET_PDB -Xlinker /version:0.0  $MANIFESTS && $POST_BUILD"
   description = Linking CXX executable $TARGET_FILE
   rspfile = $RSP_FILE
   rspfile_content = $in $LINK_PATH $LINK_LIBRARIES

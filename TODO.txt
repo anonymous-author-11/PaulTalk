@@ -291,6 +291,7 @@ DONE:
 - Implement a hash table [check!]
 - Figure out relationship between Any, Object, Nil [check!]
 	- Need for Foo[Bar | Nil] and for T <: Any [check!]
+	- Make nil its own ancestor [check!]
 - Simplify behavior signature [check!]
 - Enable machine outlining [check!]
 - Move string handling to vector<i8> [check!]
@@ -334,23 +335,15 @@ DONE:
 - Allow underscores in numbers [check!]
 - I should be allowed to do "if [expression] is T" [check!]
 - I should be allowed to do ClassMethodCall with parameterized receiver [check!]
+- Lazy logical ops [check!]
+- Separate out _size_ and _data_size_ methods [check!]
+	- Rename current _size_ methods to _data_size_ [check!]
+	- Use the same wrapper for both [check!]
+	- Use _data_size_ on instance creation [check!]
+	- Use _size_ for everything else [check!]
 
 TODO:
 
-- Lazy logical ops
-- Add asserts
-	- There's mlir functionality (cf.assert) for this
-	- Compile to llvm.assume in release; branch to abort in debug
-- Add assumes for unions of builtins?
-	- vptr must be equal to one of a set of possible
-- Figure out why I had to split Entry constructor into two and if it can be fixed
-- Separate out _size_ and _data_size_ methods
-	- Use _data_size_ on instance creation and (un)boxing
-	- Use _size_ for everything else
-- Maybe create offset & hash table separately and just give names to typedef
-	- Question is whether they need passed-through information
-	- If they do, split them off; otherwise, keep bundled
-	- Then only have to pass getter, box, and subtype fn names to typeptrs
 - Generic buffer size and indexing
 	- First just change bufferindexationop to take a dynamic type size [check!]
 	- Change createbuffer to take dynamic size as well [check!]
@@ -358,6 +351,19 @@ TODO:
 		- Actually a little more complicated
 	- For buffer creation we will need to get type size from ambient parameterizations
 	- Retrieve parameterization and use its size_fn for creation and indexation
+- Add file name to error messages
+- Make intrinsics better
+- Make sure abstract methods don't override concrete methods
+- Add asserts
+	- There's mlir functionality (cf.assert) for this
+	- Compile to llvm.assume in release; branch to abort in debug
+- Add assumes for unions of builtins?
+	- vptr must be equal to one of a set of possible
+- Figure out why I had to split Entry constructor into two and if it can be fixed
+- Maybe create offset & hash table separately and just give names to typedef
+	- Question is whether they need passed-through information
+	- If they do, split them off; otherwise, keep bundled
+	- Then only have to pass getter, box, and subtype fn names to typeptrs
 - Polymorphic construction could just be conservatively aliased
 	- i.e. T.new(a, b, c)
 	- Very interesting idea
@@ -409,26 +415,11 @@ TODO:
 	- Will need to do buffer optimization first for array
 	- And to do buffer optimization we need stored type parameters
 	- Which we do now have
-- Add file name to error messages
-- Make nil its own ancestor
-- Make intrinsics better
-- Buffer! Buffer! Buffer!
-- Think generally about the ordering of outlining and inlining
-- Make sure abstract methods don't override concrete methods
-
-- Think about how Buffer[T] works
-	- Take the generic vptr from the self fatptr to get the size_in_bytes
-- Implement generic buffer operations
-
 - Magic buffer methods
 	- store_in_buffer and create_from_buffer just need that size_in_bytes to work
 	- Store generic fields as boxed
 	- Just use unboxed for actually storing in buffer
 	- assignments with T in rhs would codegen directly to store_in_buffer
-
-- Inheriting from an instantiated generic might require storing that type parameter at runtime
-	- We could instead store it in the vtable or modify the stored subtype functions
-	- Modifying the subtype function may be the most reasonable way to do it
 
 - Allow multiple type checks in one condition
 - Tighten up return type inference for function literals
@@ -538,7 +529,7 @@ TODO:
 	- Would significantly improve optimizations across context switches
 	- Would need to manually maintain live variables across yields and calls
 	- Maybe the outlined call would have some prelude retrieving old variables?
-	- 
+	- Probably best to leverage LLVM coroutine tech for tracking live variables
 - Freelist of coroutine stacks?
 	- Ring buffer LIFO stack
 	- Fixed capacity
@@ -569,8 +560,6 @@ TODO:
 	- Making all toplevel functions methods of a file-wide class?
 - Propagate type information backwards?
 	- Probably just in certain easy circumstances
-- Switch statements?
-- Enums?
 - Enable copying of coroutines
 	- Would have to copy the whole stack
 	- Would also have to know the actual stack size
