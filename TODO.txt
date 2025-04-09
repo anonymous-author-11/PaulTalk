@@ -341,15 +341,19 @@ DONE:
 	- Use the same wrapper for both [check!]
 	- Use _data_size_ on instance creation [check!]
 	- Use _size_ for everything else [check!]
+- Generic buffer size and indexing [check!]
+	- First just change bufferindexationop to take a dynamic type size [check!]
+	- Change createbuffer to take dynamic size as well [check!]
+	- For buffer creation we will need to get type size from ambient parameterizations [check!]
+	- Retrieve parameterization and use its size_fn for creation and indexation [check!]
+	- Need to modify create, buffer_get, and buffer_set concurrently [check!]
+	- Unbox into buffer and box out of buffer [check!]
 
 TODO:
 
-- Generic buffer size and indexing
-	- First just change bufferindexationop to take a dynamic type size [check!]
-	- Change createbuffer to take dynamic size as well [check!]
-	- For buffer creation we will need to get type size from ambient parameterizations
-	- Retrieve parameterization and use its size_fn for creation and indexation
-	- Need to modify create, buffer_get, and buffer_set concurrently
+- Use Checkflag on method dispatch checks instead of raw SubtypeTest
+	- Will use simple pointer equality checks for builtin types
+	- Will handle parameterizations
 - Generic tuple creation and indexing
 - Add file name to error messages
 - Make intrinsics better
