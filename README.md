@@ -8,10 +8,10 @@
 PaulTalk is an experimental, statically-typed, **unabashedly object-oriented** programming language featuring:
 
 *   **Multiple Dispatch:** Methods are chosen at runtime based on the dynamic types of *multiple* arguments, enabling flexible and expressive code, especially for operator overloading and functions like `print`.
-*   **Generics:** Define reusable classes and methods with type parameters (`Class[T]`) and constraints (`where T <: Constraint`), supporting separate compilation.
-*   **Stackful Coroutines:** Lightweight concurrency using `yield` for cooperative multitasking, exception handling, and creating generators or asynchronous patterns.
-*   **Advanced Type System:** Includes union types (`A | B`), type inference, type checking (`is`), and a `Nil` type.
-*   **Region-Based Memory Management (Planned):** Aims for safe and efficient memory management using static analysis (points-to analysis), although deallocation is not yet implemented.
+*   **Non-monomorphized Generics:** Define reusable classes and methods with type parameters (`Class[T]`) and constraints (`where T <: Constraint`), supporting separate compilation and dynamic linking.
+*   **Stackful Asymmetric Coroutines:** Lightweight concurrency using `yield` for cooperative multitasking, exception handling, and creating generators or asynchronous patterns.
+*   **Advanced Type System:** Includes union types (`A | B`), local flow-sensitive type inference, and nilable types.
+*   **Region-Based Memory Management (In Progress):** Aims for safe and efficient memory management using static analysis (points-to analysis), although the liveness analysis necessary for region deallocation is not yet implemented.
 
 The compiler translates PaulTalk code through several stages, leveraging MLIR (Multi-Level Intermediate Representation) and LLVM for optimization and code generation.
 
@@ -19,24 +19,32 @@ The compiler translates PaulTalk code through several stages, leveraging MLIR (M
 
 **⚠️ Warning:** PaulTalk is currently in a very early, experimental stage (pre-1.0). It is **not suitable for production use.**
 
-*   **Memory Management:** The region-based memory system is incomplete. Memory is allocated (using a bump allocator) but **never freed**, leading to memory leaks in any non-trivial program.
-*   **Platform:** Currently targets **x64 Windows only**.
-*   **Setup:** The build process, especially for the C++ components, is complex and not documented for general users.
-*   **Standard Library:** Very minimal.
+*   **Memory Management:** The region-based memory system is incomplete. Memory is allocated (using a fast bump allocator) but **never freed**, leading to memory leaks in any non-trivial program.
+*   **Platform:** Currently targets **x64 Windows only**. Aims to be multiplatform in the future.
+*   **Setup:** The build process, especially for the C++ components, is complex and not documented for general users. Makes use of in-tree versions of the xDSL and debugir projects.
+*   **Standard Library:** Currently very minimal, involving core facilities for string manipulation, IO, and iteration.
 *   **Language Features:** While many core features are implemented, expect bugs, rough edges, and potential breaking changes.
+
+## Language Introduction
+
+*   `intro.mini`: Provides a basic introduction to the language syntax and features. Note that it might be slightly outdated compared to the latest language features.
+*   `generic.mini`: Demonstrates more advanced features, particularly generics, region syntax, and the iterator protocols, reflecting the current state more accurately but is not tutorial-oriented.
 
 ## Features Overview
 
 *   **Object-Oriented:** Classes, multiple inheritance, `@field` syntax, `init` constructors.
 *   **Multiple Dispatch:** Implemented via efficient dispatch automata. Used for standard functions (`IO.print`) and operator overloading.
 *   **Generics:** Parameterized types (`Class[T, U]`), type bounds (`where K <: Hashable`).
+*   **First-Class Functions** Convenient anonymous functions with (a : i32, a : i32) => ( a\*b; ) syntax.
 *   **Coroutines:** `Coroutine.new(func, args...)`, `yield(value)`, `coro.call(arg?)`, `coro.result()`. Can yield exceptions for non-local control flow.
-*   **Type System:** Static typing, inference, Unions (`|`), Intersections (`&` - internal?), `Nil`, `Any`, `is` type checks.
-*   **Iteration:** `for..in` loops, range literals (`start:end`), `Iterable2`/`Iterator2` protocols.
+*   **Type System:** Static typing, flow-sensitive inference, Unions (`|`), `Nil`, `Any`, `is` type checks.
+*   **Iteration:** `for..in` loops, range literals (`start:end`), `Iterable`/`Iterator` protocols.
 *   **FFI:** `extern def` to link C functions, `Buffer[T]` for raw memory access.
 *   **Operator Overloading:** Define custom behavior for operators like `+`, `-`, `*`, `/`, `[]`.
 
 ## Compilation Pipeline
+
+The compiler driver can be found in `compiler.py`.
 
 1.  **Parsing:** `.mini` source files are parsed into an Abstract Syntax Tree (AST) using `lark`.
 2.  **Type Checking & Analysis:** The AST is type-checked, and points-to analysis is performed (`scope.py`, `constraint_graph.py`).
@@ -54,7 +62,7 @@ The compiler translates PaulTalk code through several stages, leveraging MLIR (M
 *   **Python:** 3.11
 *   **LLVM/MLIR:** 20.0.0 (including `mlir-opt`, `mlir-translate`, `opt`, `llc`, `lld-link`)
 *   **OS:** Windows (x64)
-*   **C++ Compiler:** Required for building the `standalone-opt` component (specific version/toolchain TBD).
+*   **C++ Compiler:** Required for building the `standalone-opt` and `debugir-master` components (specific version/toolchain TBD).
 
 ## Building & Running (Experimental)
 
@@ -63,11 +71,6 @@ As mentioned, the setup process is currently complex and tailored for the develo
 ```bash
 python Compiler.py <input_file>.mini -o <output_file>.exe [--debug] [--dependencies]
 ```
-
-## Language Introduction
-
-*   `intro.mini`: Provides a basic introduction to the language syntax and features. Note that it might be slightly outdated compared to the latest compiler changes.
-*   `generic.mini`: Demonstrates more advanced features, particularly generics and the iterator protocols, reflecting the current state more accurately but is less tutorial-focused.
 
 ## Standard Library (Minimal)
 
@@ -85,7 +88,7 @@ This project is intended to be released under the MIT License.
 ```
 MIT License
 
-Copyright (c) [Year] [Your Name/Organization]
+Copyright (c) 2025 Paul Keenan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
