@@ -347,13 +347,14 @@ DONE:
 	- Retrieve parameterization and use its size_fn for creation and indexation [check!]
 	- Need to modify create, buffer_get, and buffer_set concurrently [check!]
 	- Unbox into buffer and box out of buffer [check!]
+- Use Checkflag on method dispatch checks instead of raw SubtypeTest [check!]
+	- Will use simple pointer equality checks for builtin types [check!]
+- Add file name to error messages [check!]
 
 TODO:
 
-- Use Checkflag on method dispatch checks instead of raw SubtypeTest
-	- Will use simple pointer equality checks for builtin types
-	- Will handle parameterizations naturally
-- Add file name to error messages
+- Dispatch on parameterizations
+	- Would need to pass parameterizations into the behavior call
 - Make intrinsics better
 	- Let me have periods in extern def names
 	- Externally declare intrinsics

@@ -4,9 +4,9 @@ source_filename = "llvm-link"
 @_parameterization_Nil = linkonce_odr constant [2 x ptr] [ptr @nil_typ, ptr null]
 @_parameterization_Ptri32_or_Nil = linkonce_odr constant [4 x ptr] [ptr @union_typ, ptr @_parameterization_Ptri32, ptr @_parameterization_Nil, ptr null]
 @_parameterization_ListNode = linkonce_odr constant [2 x ptr] [ptr @ListNode, ptr null]
-@bknxo_CUsersPaulKOneDriveDocumentsPLPyPLtmpgjbyyomini = internal unnamed_addr constant [58 x i8] c"C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\tmpgj9by2yo.mini"
-@vmgvw_An_outofbounds_error_occurred_while_indexing_into_a_collection = internal unnamed_addr constant [65 x i8] c"An out-of-bounds error occurred while indexing into a collection."
-@bnara_The_size_of_the_collection_being_indexed_was = internal unnamed_addr constant [44 x i8] c"The size of the collection being indexed was"
+@syiyn_CUsersPaulKOneDriveDocumentsPLPyPLtmpnjjh_xmini = internal unnamed_addr constant [58 x i8] c"C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\tmpnjjh5_8x.mini"
+@nvleu_An_outofbounds_error_occurred_while_indexing_into_a_collection = internal unnamed_addr constant [65 x i8] c"An out-of-bounds error occurred while indexing into a collection."
+@uctyq_The_size_of_the_collection_being_indexed_was = internal unnamed_addr constant [44 x i8] c"The size of the collection being indexed was"
 @_parameterization_String = linkonce_odr constant [2 x ptr] [ptr @String, ptr null]
 @_parameterization_Ptri32 = linkonce_odr constant [2 x ptr] [ptr @i32_typ, ptr null]
 @Iterator_hashtbl = constant [4 x ptr] [ptr @Object, ptr null, ptr @any_typ, ptr @Iterator]
@@ -32,7 +32,7 @@ source_filename = "llvm-link"
 @Exception = constant { [3 x i64], [7 x ptr], [13 x ptr] } { [3 x i64] [i64 9027164862567808692, i64 4611686018427388091, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Exception_hashtbl, ptr @Exception_offset_tbl, ptr @_data_size_Exception, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [13 x ptr] [ptr @Exception_field_line_number, ptr @Exception_field_file_name, ptr @Exception_field_message, ptr @Exception_B_init_messageString, ptr @Exception_B_init_, ptr @Exception_B_set_info_line_numberPtri32_file_nameString, ptr @Exception_B_report_, ptr @Exception_B_print_message_, ptr @Exception_init_messageString, ptr @Exception_init_, ptr @Exception_set_info_line_numberPtri32_file_nameString, ptr @Exception_report_, ptr @Exception_print_message_] }
 @IO_hashtbl = constant [4 x ptr] [ptr @any_typ, ptr @IO, ptr null, ptr @Object]
 @IO_offset_tbl = constant [4 x i32] [i32 10, i32 10, i32 0, i32 20]
-@IO = constant { [3 x i64], [7 x ptr], [10 x ptr] } { [3 x i64] [i64 5359822646784595218, i64 4611686018427388247, i64 3], [7 x ptr] [ptr @subtype_test, ptr @IO_hashtbl, ptr @IO_offset_tbl, ptr @_data_size_IO, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [10 x ptr] [ptr @IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64, ptr @IO__Self_print_xRepresentable, ptr @IO__Self_print_xPtri64, ptr @IO__Self_print_xString, ptr @IO__Self_print_xPtri32, ptr @IO__Self_print_xCharacter, ptr @IO__Self_print_xPtri8, ptr @IO__Self_print_xPtri1, ptr @IO__Self_print_xNil, ptr @IO__Self_print_xPtrf64] }
+@IO = constant { [3 x i64], [7 x ptr], [10 x ptr] } { [3 x i64] [i64 5359822646784595218, i64 4611686018427388247, i64 3], [7 x ptr] [ptr @subtype_test, ptr @IO_hashtbl, ptr @IO_offset_tbl, ptr @_data_size_IO, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [10 x ptr] [ptr @IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64, ptr @IO__Self_print_xPtrf64, ptr @IO__Self_print_xPtri8, ptr @IO__Self_print_xRepresentable, ptr @IO__Self_print_xCharacter, ptr @IO__Self_print_xPtri32, ptr @IO__Self_print_xString, ptr @IO__Self_print_xNil, ptr @IO__Self_print_xPtri1, ptr @IO__Self_print_xPtri64] }
 @Blocking_hashtbl = constant [4 x ptr] [ptr @Object, ptr @any_typ, ptr @Blocking, ptr null]
 @Blocking_offset_tbl = constant [4 x i32] [i32 12, i32 10, i32 10, i32 0]
 @Blocking = constant { [3 x i64], [7 x ptr], [2 x ptr] } { [3 x i64] [i64 847773162914674935, i64 4611686018427388081, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Blocking_hashtbl, ptr @Blocking_offset_tbl, ptr @_data_size_Blocking, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [2 x ptr] [ptr @Blocking_B_init_, ptr @Blocking_init_] }
@@ -158,7 +158,7 @@ source_filename = "llvm-link"
 @ProductIterator2 = constant { [3 x i64], [7 x ptr], [14 x ptr] } { [3 x i64] [i64 4440657219728359865, i64 4611686018427388093, i64 3], [7 x ptr] [ptr @subtype_test, ptr @ProductIterator2_hashtbl, ptr @ProductIterator2_offset_tbl, ptr @_data_size_ProductIterator2, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [14 x ptr] [ptr @ProductIterator2_field_ProductIterator2_0, ptr @ProductIterator2_field_ProductIterator2_1, ptr @ProductIterator2_field_ProductIterator2_2, ptr @ProductIterator2_field_first_iterator, ptr @ProductIterator2_field_second_iterator, ptr @ProductIterator2_field_second_iterable, ptr @ProductIterator2_field_current_first, ptr @ProductIterator2_B_init_first_iterableIterable2T_second_iterableIterable2U, ptr @ProductIterator2_B_next_, ptr @ProductIterator2_init_first_iterableIterable2T_second_iterableIterable2U, ptr @ProductIterator2_next_, ptr @ProductIterator2_field_ProductIterator2_2, ptr @ProductIterator2_B_next_, ptr @ProductIterator2_next_] }
 @Math_hashtbl = constant [4 x ptr] [ptr @Object, ptr null, ptr @any_typ, ptr @Math]
 @Math_offset_tbl = constant [4 x i32] [i32 27, i32 0, i32 10, i32 10]
-@Math = constant { [3 x i64], [7 x ptr], [17 x ptr] } { [3 x i64] [i64 8094150130346788308, i64 4611686018427388091, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Math_hashtbl, ptr @Math_offset_tbl, ptr @_data_size_Math, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [17 x ptr] [ptr @Math_B__Self_sqrt_xPtrf64, ptr @Math_B__Self_abs_xPtri32__Self_abs_xPtrf64, ptr @Math_B__Self_max_aPtri32_bPtri32__Self_max_aPtrf64_bPtrf64, ptr @Math_B__Self_min_aPtri32_bPtri32__Self_min_aPtrf64_bPtrf64, ptr @Math_B__Self_round_xPtrf64, ptr @Math_B__Self_floor_xPtrf64, ptr @Math_B__Self_ceiling_xPtrf64, ptr @Math__Self_sqrt_xPtrf64, ptr @Math__Self_abs_xPtri32, ptr @Math__Self_abs_xPtrf64, ptr @Math__Self_max_aPtri32_bPtri32, ptr @Math__Self_max_aPtrf64_bPtrf64, ptr @Math__Self_min_aPtri32_bPtri32, ptr @Math__Self_min_aPtrf64_bPtrf64, ptr @Math__Self_round_xPtrf64, ptr @Math__Self_floor_xPtrf64, ptr @Math__Self_ceiling_xPtrf64] }
+@Math = constant { [3 x i64], [7 x ptr], [17 x ptr] } { [3 x i64] [i64 8094150130346788308, i64 4611686018427388091, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Math_hashtbl, ptr @Math_offset_tbl, ptr @_data_size_Math, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [17 x ptr] [ptr @Math_B__Self_sqrt_xPtrf64, ptr @Math_B__Self_abs_xPtrf64__Self_abs_xPtri32, ptr @Math_B__Self_max_aPtri32_bPtri32__Self_max_aPtrf64_bPtrf64, ptr @Math_B__Self_min_aPtri32_bPtri32__Self_min_aPtrf64_bPtrf64, ptr @Math_B__Self_round_xPtrf64, ptr @Math_B__Self_floor_xPtrf64, ptr @Math_B__Self_ceiling_xPtrf64, ptr @Math__Self_sqrt_xPtrf64, ptr @Math__Self_abs_xPtrf64, ptr @Math__Self_abs_xPtri32, ptr @Math__Self_max_aPtri32_bPtri32, ptr @Math__Self_max_aPtrf64_bPtrf64, ptr @Math__Self_min_aPtri32_bPtri32, ptr @Math__Self_min_aPtrf64_bPtrf64, ptr @Math__Self_round_xPtrf64, ptr @Math__Self_floor_xPtrf64, ptr @Math__Self_ceiling_xPtrf64] }
 @Integer_hashtbl = constant [4 x ptr] [ptr @Object, ptr @any_typ, ptr null, ptr @Integer]
 @Integer_offset_tbl = constant [4 x i32] [i32 23, i32 10, i32 0, i32 10]
 @Integer = constant { [3 x i64], [7 x ptr], [13 x ptr] } { [3 x i64] [i64 -735147942809078232, i64 4611686018427388081, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Integer_hashtbl, ptr @Integer_offset_tbl, ptr @_data_size_Integer, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [13 x ptr] [ptr @Integer_field_value, ptr @Integer_B_init_valuePtri32, ptr @Integer_B__ADD_otherPtri32, ptr @Integer_B__SUB_otherPtri32, ptr @Integer_B__MUL_otherPtri32, ptr @Integer_B__DIV_otherPtri32, ptr @Integer_B_print_, ptr @Integer_init_valuePtri32, ptr @Integer__ADD_otherPtri32, ptr @Integer__SUB_otherPtri32, ptr @Integer__MUL_otherPtri32, ptr @Integer__DIV_otherPtri32, ptr @Integer_print_] }
@@ -182,7 +182,7 @@ source_filename = "llvm-link"
 @ListIterator = constant { [3 x i64], [7 x ptr], [5 x ptr] } { [3 x i64] [i64 -5838699946612561379, i64 4611686018427388081, i64 3], [7 x ptr] [ptr @subtype_test, ptr @ListIterator_hashtbl, ptr @ListIterator_offset_tbl, ptr @_data_size_ListIterator, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [5 x ptr] [ptr @ListIterator_field_node, ptr @ListIterator_B_init_nodeListNode, ptr @ListIterator_B_next_, ptr @ListIterator_init_nodeListNode, ptr @ListIterator_next_] }
 @Bard_hashtbl = constant [4 x ptr] [ptr @Object, ptr @any_typ, ptr @Bard, ptr null]
 @Bard_offset_tbl = constant [4 x i32] [i32 17, i32 10, i32 10, i32 0]
-@Bard = constant { [3 x i64], [7 x ptr], [7 x ptr] } { [3 x i64] [i64 -7979915337087193093, i64 4611686018427388081, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Bard_hashtbl, ptr @Bard_offset_tbl, ptr @_data_size_Bard, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [7 x ptr] [ptr @Bard_B_init_, ptr @Bard_B_take_aPtri32_bPtrf64_take_aPtri32_bPtri32_take_aAnimal_bBeaver_take_aPtrf64_bPtrf64, ptr @Bard_init_, ptr @Bard_take_aPtri32_bPtrf64, ptr @Bard_take_aPtri32_bPtri32, ptr @Bard_take_aAnimal_bBeaver, ptr @Bard_take_aPtrf64_bPtrf64] }
+@Bard = constant { [3 x i64], [7 x ptr], [7 x ptr] } { [3 x i64] [i64 -7979915337087193093, i64 4611686018427388081, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Bard_hashtbl, ptr @Bard_offset_tbl, ptr @_data_size_Bard, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [7 x ptr] [ptr @Bard_B_init_, ptr @Bard_B_take_aPtri32_bPtri32_take_aAnimal_bBeaver_take_aPtrf64_bPtrf64_take_aPtri32_bPtrf64, ptr @Bard_init_, ptr @Bard_take_aPtri32_bPtri32, ptr @Bard_take_aAnimal_bBeaver, ptr @Bard_take_aPtrf64_bPtrf64, ptr @Bard_take_aPtri32_bPtrf64] }
 @String_field_bytes = internal constant { ptr, ptr } { ptr @String_getter_bytes, ptr @String_setter_bytes }
 @String_field_length = internal constant { ptr, ptr } { ptr @String_getter_length, ptr @String_setter_length }
 @String_field_capacity = internal constant { ptr, ptr } { ptr @String_getter_capacity, ptr @String_setter_capacity }
@@ -2310,63 +2310,80 @@ define { i64, i64 } @_data_size_IO(ptr nocapture nofree readnone %0) #0 {
 }
 
 ; Function Attrs: mustprogress nofree nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64(ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %0) #12 {
+define ptr @IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64(ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %0) #12 {
   %2 = tail call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %0) #36
   %3 = load ptr, ptr %0, align 8
   %4 = icmp eq ptr %3, @nil_typ
   %5 = icmp eq ptr %3, null
   %6 = or i1 %4, %5
-  br i1 %6, label %26, label %7
+  br i1 %6, label %._crit_edge, label %7
 
 7:                                                ; preds = %1
-  %8 = icmp eq ptr %3, @i64_typ
-  br i1 %8, label %26, label %9
+  %8 = icmp eq ptr %3, @bool_typ
+  br i1 %8, label %._crit_edge, label %9
 
 9:                                                ; preds = %7
-  %10 = getelementptr i8, ptr %3, i64 8
-  %11 = getelementptr i8, ptr %3, i64 16
-  %12 = getelementptr i8, ptr %3, i64 24
-  %13 = getelementptr i8, ptr %3, i64 32
-  %14 = load i64, ptr %10, align 4
-  %15 = load i64, ptr %11, align 4
-  %16 = load ptr, ptr %12, align 8
-  %17 = load ptr, ptr %13, align 8
-  %result.i = tail call i1 %16(i64 %15, i64 %14, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr readonly %17) #9
-  %result.i14 = tail call i1 %16(i64 %15, i64 %14, i64 6681222582356018452, i64 ptrtoint (ptr @Character to i64), ptr readonly %17) #9
+  %10 = icmp eq ptr %3, @i64_typ
+  br i1 %10, label %._crit_edge, label %11
+
+11:                                               ; preds = %9
+  %12 = icmp eq ptr %3, @i8_typ
+  br i1 %12, label %._crit_edge, label %13
+
+13:                                               ; preds = %11
+  %14 = icmp eq ptr %3, @i32_typ
+  br i1 %14, label %._crit_edge, label %15
+
+15:                                               ; preds = %13
+  %16 = getelementptr i8, ptr %3, i64 8
+  %17 = getelementptr i8, ptr %3, i64 16
+  %18 = getelementptr i8, ptr %3, i64 24
+  %19 = getelementptr i8, ptr %3, i64 32
+  %20 = load i64, ptr %16, align 4
+  %21 = load i64, ptr %17, align 4
+  %22 = load ptr, ptr %18, align 8
+  %23 = load ptr, ptr %19, align 8
+  %result.i = tail call i1 %22(i64 %21, i64 %20, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr readonly %23) #9
+  %result.i13 = tail call i1 %22(i64 %21, i64 %20, i64 6681222582356018452, i64 ptrtoint (ptr @Character to i64), ptr readonly %23) #9
   %not.result.i = xor i1 %result.i, true
-  %.reg2mem49.0 = select i1 %not.result.i, i1 true, i1 %result.i14
-  br i1 %.reg2mem49.0, label %18, label %26
+  %.reg2mem41.0 = select i1 %not.result.i, i1 true, i1 %result.i13
+  br i1 %.reg2mem41.0, label %24, label %._crit_edge
 
-18:                                               ; preds = %9
-  %not.result.i14 = xor i1 %result.i14, true
-  %.reg2mem47.0 = or i1 %result.i, %not.result.i14
-  br i1 %.reg2mem47.0, label %19, label %26
+24:                                               ; preds = %15
+  %25 = icmp eq ptr %3, @f64_typ
+  br i1 %25, label %._crit_edge, label %26
 
-19:                                               ; preds = %18
-  %20 = icmp eq ptr %3, @bool_typ
-  br i1 %20, label %26, label %21
+26:                                               ; preds = %24
+  %not.result.i13 = xor i1 %result.i13, true
+  %.reg2mem39.0 = or i1 %result.i, %not.result.i13
+  %spec.select = select i1 %.reg2mem39.0, i32 3, i32 4
+  br label %._crit_edge
 
-21:                                               ; preds = %19
-  %result.i17 = tail call i1 %16(i64 %15, i64 %14, i64 -7260840641129990118, i64 ptrtoint (ptr @Representable to i64), ptr readonly %17) #9
-  %result.i17.not = xor i1 %result.i17, true
-  %22 = or i1 %result.i, %result.i17.not
-  %or.cond = select i1 %22, i1 true, i1 %result.i14
-  br i1 %or.cond, label %.critedge, label %26
-
-.critedge:                                        ; preds = %21
-  %23 = icmp eq ptr %3, @f64_typ
-  %24 = icmp eq ptr %3, @i32_typ
-  %25 = select i1 %24, i32 4, i32 6
-  %.reg2mem41.0 = select i1 %23, i32 9, i32 %25
-  br label %26
-
-26:                                               ; preds = %21, %7, %9, %.critedge, %19, %18, %1
-  %.reg2mem29.0 = phi i32 [ 8, %1 ], [ 2, %7 ], [ 7, %19 ], [ %.reg2mem41.0, %.critedge ], [ 5, %18 ], [ 3, %9 ], [ 1, %21 ]
-  %27 = zext nneg i32 %.reg2mem29.0 to i64
+._crit_edge:                                      ; preds = %26, %7, %11, %24, %15, %13, %9, %1
+  %.reg2mem23.0 = phi i32 [ 7, %1 ], [ 8, %7 ], [ 9, %9 ], [ 2, %11 ], [ 5, %13 ], [ 1, %24 ], [ 6, %15 ], [ %spec.select, %26 ]
+  %27 = zext nneg i32 %.reg2mem23.0 to i64
   %28 = getelementptr [10 x ptr], ptr @IO, i64 0, i64 %27
   %29 = getelementptr i8, ptr %28, i64 80
   %30 = load ptr, ptr %29, align 8
   ret ptr %30
+}
+
+; Function Attrs: nofree nounwind
+define void @IO__Self_print_xPtrf64(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #11 {
+  %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
+  %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i64
+  %3 = bitcast i64 %.sroa.1.8.extract.trunc to double
+  %4 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @float_string, double %3) #11
+  ret void
+}
+
+; Function Attrs: nofree nounwind
+define void @IO__Self_print_xPtri8(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #11 {
+  %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
+  %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i8
+  %3 = sext i8 %.sroa.1.8.extract.trunc to i32
+  %4 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %3) #11
+  ret void
 }
 
 ; Function Attrs: nounwind
@@ -2434,61 +2451,6 @@ define void @IO__Self_print_xRepresentable(ptr nocapture nofree readnone %0, { p
   ret void
 }
 
-; Function Attrs: nofree nounwind
-define void @IO__Self_print_xPtri64(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #11 {
-  %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
-  %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i64
-  %3 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(6) @i64_string, i64 %.sroa.1.8.extract.trunc) #11
-  ret void
-}
-
-; Function Attrs: nounwind
-define void @IO__Self_print_xString(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #6 {
-  %3 = alloca [0 x ptr], align 8
-  %.fca.0.extract1 = extractvalue { ptr, i160 } %1, 0
-  %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
-  %.sroa.3.8.extract.trunc = trunc i160 %.fca.1.extract to i64
-  %4 = inttoptr i64 %.sroa.3.8.extract.trunc to ptr
-  %.sroa.5.8.extract.shift = lshr i160 %.fca.1.extract, 64
-  %.sroa.5.8.extract.trunc = trunc i160 %.sroa.5.8.extract.shift to i64
-  %5 = inttoptr i64 %.sroa.5.8.extract.trunc to ptr
-  %hash_coef_ptr.i.i = getelementptr i8, ptr %.fca.0.extract1, i64 8
-  %tbl_size_ptr.i.i = getelementptr i8, ptr %.fca.0.extract1, i64 16
-  %offset_tbl_ptr.i.i = getelementptr i8, ptr %.fca.0.extract1, i64 40
-  %hash_coef.i.i = load i64, ptr %hash_coef_ptr.i.i, align 4, !noalias !74
-  %tbl_size.i.i = load i64, ptr %tbl_size_ptr.i.i, align 4, !noalias !74
-  %offset_tbl.i.i = load ptr, ptr %offset_tbl_ptr.i.i, align 8, !noalias !74
-  %product.i.i.i = mul i64 %hash_coef.i.i, 6499063144389013426
-  %shifted.i.i.i = lshr i64 %product.i.i.i, 32
-  %xored.i.i.i = xor i64 %shifted.i.i.i, %product.i.i.i
-  %hash.i.i.i = and i64 %xored.i.i.i, %tbl_size.i.i
-  %offset_ptr.i.i = getelementptr i32, ptr %offset_tbl.i.i, i64 %hash.i.i.i
-  %offset.i.i = load i32, ptr %offset_ptr.i.i, align 4, !noalias !74
-  %6 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract1, 0
-  %7 = insertvalue { ptr, ptr, ptr, i32 } %6, ptr %4, 1
-  %8 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %5, 2
-  %9 = insertvalue { ptr, ptr, ptr, i32 } %8, i32 %offset.i.i, 3
-  %10 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %3) #36
-  %11 = tail call ptr @llvm.invariant.start.p0(i64 noundef 280, ptr nocapture nofree noundef %.fca.0.extract1) #36
-  %12 = sext i32 %offset.i.i to i64
-  %13 = getelementptr ptr, ptr %.fca.0.extract1, i64 %12
-  %14 = getelementptr i8, ptr %13, i64 112
-  %15 = load ptr, ptr %14, align 8
-  %result.i = call ptr %15({ ptr, ptr, ptr, i32 } %9, ptr nocapture nofree noundef nonnull readonly %3) #8
-  %16 = call { ptr } %result.i({ ptr, ptr, ptr, i32 } %9, { ptr, ptr, ptr, i32 } %9, ptr nonnull align 8 %3) #6
-  %.fca.0.extract = extractvalue { ptr } %16, 0
-  %puts = call i32 @puts(ptr nonnull dereferenceable(1) %.fca.0.extract)
-  ret void
-}
-
-; Function Attrs: nofree nounwind
-define void @IO__Self_print_xPtri32(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #11 {
-  %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
-  %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
-  %3 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %.sroa.1.8.extract.trunc) #11
-  ret void
-}
-
 ; Function Attrs: nounwind
 define void @IO__Self_print_xCharacter(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #6 {
   %3 = alloca [0 x ptr], align 8
@@ -2502,15 +2464,15 @@ define void @IO__Self_print_xCharacter(ptr nocapture nofree readnone %0, { ptr, 
   %hash_coef_ptr.i.i = getelementptr i8, ptr %.fca.0.extract, i64 8
   %tbl_size_ptr.i.i = getelementptr i8, ptr %.fca.0.extract, i64 16
   %offset_tbl_ptr.i.i = getelementptr i8, ptr %.fca.0.extract, i64 40
-  %hash_coef.i.i = load i64, ptr %hash_coef_ptr.i.i, align 4, !noalias !77
-  %tbl_size.i.i = load i64, ptr %tbl_size_ptr.i.i, align 4, !noalias !77
-  %offset_tbl.i.i = load ptr, ptr %offset_tbl_ptr.i.i, align 8, !noalias !77
+  %hash_coef.i.i = load i64, ptr %hash_coef_ptr.i.i, align 4, !noalias !74
+  %tbl_size.i.i = load i64, ptr %tbl_size_ptr.i.i, align 4, !noalias !74
+  %offset_tbl.i.i = load ptr, ptr %offset_tbl_ptr.i.i, align 8, !noalias !74
   %product.i.i.i = mul i64 %hash_coef.i.i, 6681222582356018452
   %shifted.i.i.i = lshr i64 %product.i.i.i, 32
   %xored.i.i.i = xor i64 %shifted.i.i.i, %product.i.i.i
   %hash.i.i.i = and i64 %xored.i.i.i, %tbl_size.i.i
   %offset_ptr.i.i = getelementptr i32, ptr %offset_tbl.i.i, i64 %hash.i.i.i
-  %offset.i.i = load i32, ptr %offset_ptr.i.i, align 4, !noalias !77
+  %offset.i.i = load i32, ptr %offset_ptr.i.i, align 4, !noalias !74
   %result.i = tail call noalias dereferenceable_or_null(2) ptr @bump_malloc_inner(i64 noundef 2, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   %6 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
   %7 = insertvalue { ptr, ptr, ptr, i32 } %6, ptr %4, 1
@@ -2530,11 +2492,61 @@ define void @IO__Self_print_xCharacter(ptr nocapture nofree readnone %0, { ptr, 
 }
 
 ; Function Attrs: nofree nounwind
-define void @IO__Self_print_xPtri8(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #11 {
+define void @IO__Self_print_xPtri32(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #11 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
-  %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i8
-  %3 = sext i8 %.sroa.1.8.extract.trunc to i32
-  %4 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %3) #11
+  %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
+  %3 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %.sroa.1.8.extract.trunc) #11
+  ret void
+}
+
+; Function Attrs: nounwind
+define void @IO__Self_print_xString(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #6 {
+  %3 = alloca [0 x ptr], align 8
+  %.fca.0.extract1 = extractvalue { ptr, i160 } %1, 0
+  %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
+  %.sroa.3.8.extract.trunc = trunc i160 %.fca.1.extract to i64
+  %4 = inttoptr i64 %.sroa.3.8.extract.trunc to ptr
+  %.sroa.5.8.extract.shift = lshr i160 %.fca.1.extract, 64
+  %.sroa.5.8.extract.trunc = trunc i160 %.sroa.5.8.extract.shift to i64
+  %5 = inttoptr i64 %.sroa.5.8.extract.trunc to ptr
+  %hash_coef_ptr.i.i = getelementptr i8, ptr %.fca.0.extract1, i64 8
+  %tbl_size_ptr.i.i = getelementptr i8, ptr %.fca.0.extract1, i64 16
+  %offset_tbl_ptr.i.i = getelementptr i8, ptr %.fca.0.extract1, i64 40
+  %hash_coef.i.i = load i64, ptr %hash_coef_ptr.i.i, align 4, !noalias !77
+  %tbl_size.i.i = load i64, ptr %tbl_size_ptr.i.i, align 4, !noalias !77
+  %offset_tbl.i.i = load ptr, ptr %offset_tbl_ptr.i.i, align 8, !noalias !77
+  %product.i.i.i = mul i64 %hash_coef.i.i, 6499063144389013426
+  %shifted.i.i.i = lshr i64 %product.i.i.i, 32
+  %xored.i.i.i = xor i64 %shifted.i.i.i, %product.i.i.i
+  %hash.i.i.i = and i64 %xored.i.i.i, %tbl_size.i.i
+  %offset_ptr.i.i = getelementptr i32, ptr %offset_tbl.i.i, i64 %hash.i.i.i
+  %offset.i.i = load i32, ptr %offset_ptr.i.i, align 4, !noalias !77
+  %6 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract1, 0
+  %7 = insertvalue { ptr, ptr, ptr, i32 } %6, ptr %4, 1
+  %8 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %5, 2
+  %9 = insertvalue { ptr, ptr, ptr, i32 } %8, i32 %offset.i.i, 3
+  %10 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %3) #36
+  %11 = tail call ptr @llvm.invariant.start.p0(i64 noundef 280, ptr nocapture nofree noundef %.fca.0.extract1) #36
+  %12 = sext i32 %offset.i.i to i64
+  %13 = getelementptr ptr, ptr %.fca.0.extract1, i64 %12
+  %14 = getelementptr i8, ptr %13, i64 112
+  %15 = load ptr, ptr %14, align 8
+  %result.i = call ptr %15({ ptr, ptr, ptr, i32 } %9, ptr nocapture nofree noundef nonnull readonly %3) #8
+  %16 = call { ptr } %result.i({ ptr, ptr, ptr, i32 } %9, { ptr, ptr, ptr, i32 } %9, ptr nonnull align 8 %3) #6
+  %.fca.0.extract = extractvalue { ptr } %16, 0
+  %puts = call i32 @puts(ptr nonnull dereferenceable(1) %.fca.0.extract)
+  ret void
+}
+
+; Function Attrs: nofree nounwind
+define void @IO__Self_print_xNil(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #11 {
+._crit_edge.lr.ph.i:
+  %result.i = tail call noalias align 4 dereferenceable_or_null(4) ptr @bump_malloc_inner(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  store <3 x i8> <i8 110, i8 105, i8 108>, ptr %result.i, align 4
+  %result.i.i = tail call noalias dereferenceable_or_null(4) ptr @bump_malloc_inner(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  tail call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(3) %result.i.i, ptr noundef nonnull align 4 dereferenceable(3) %result.i, i64 3, i1 false)
+  %2 = tail call ptr @llvm.invariant.start.p0(i64 noundef 280, ptr nocapture nofree noundef nonnull @String)
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i)
   ret void
 }
 
@@ -2568,23 +2580,10 @@ String_c_string_.exit:                            ; preds = %._crit_edge.lr.ph.i
 }
 
 ; Function Attrs: nofree nounwind
-define void @IO__Self_print_xNil(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #11 {
-._crit_edge.lr.ph.i:
-  %result.i = tail call noalias align 4 dereferenceable_or_null(4) ptr @bump_malloc_inner(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  store <3 x i8> <i8 110, i8 105, i8 108>, ptr %result.i, align 4
-  %result.i.i = tail call noalias dereferenceable_or_null(4) ptr @bump_malloc_inner(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  tail call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(3) %result.i.i, ptr noundef nonnull align 4 dereferenceable(3) %result.i, i64 3, i1 false)
-  %2 = tail call ptr @llvm.invariant.start.p0(i64 noundef 280, ptr nocapture nofree noundef nonnull @String)
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i)
-  ret void
-}
-
-; Function Attrs: nofree nounwind
-define void @IO__Self_print_xPtrf64(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #11 {
+define void @IO__Self_print_xPtri64(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #11 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i64
-  %3 = bitcast i64 %.sroa.1.8.extract.trunc to double
-  %4 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @float_string, double %3) #11
+  %3 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(6) @i64_string, i64 %.sroa.1.8.extract.trunc) #11
   ret void
 }
 
@@ -7724,7 +7723,7 @@ define void @OutOfBoundsDetails_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %offset_ptr.i.i = getelementptr i32, ptr %offset_tbl.i.i, i64 %hash.i.i.i
   %offset.i.i = load i32, ptr %offset_ptr.i.i, align 4, !noalias !296
   %result.i = tail call noalias align 64 dereferenceable_or_null(45) ptr @bump_malloc_inner(i64 noundef 45, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  %3 = load <44 x i8>, ptr @bnara_The_size_of_the_collection_being_indexed_was, align 64
+  %3 = load <44 x i8>, ptr @uctyq_The_size_of_the_collection_being_indexed_was, align 64
   store <44 x i8> %3, ptr %result.i, align 64
   %4 = tail call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
   %result.i.i = tail call noalias dereferenceable_or_null(45) ptr @bump_malloc_inner(i64 noundef 45, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
@@ -7742,10 +7741,10 @@ define void @OutOfBoundsDetails_report_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %result.i41 = tail call noalias align 32 dereferenceable_or_null(26) ptr @bump_malloc_inner(i64 noundef 26, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   store <25 x i8> <i8 84, i8 104, i8 101, i8 32, i8 105, i8 110, i8 100, i8 101, i8 120, i8 105, i8 110, i8 103, i8 32, i8 97, i8 114, i8 103, i8 117, i8 109, i8 101, i8 110, i8 116, i8 32, i8 119, i8 97, i8 115>, ptr %result.i41, align 32
   %13 = tail call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
-  %result.i.i139 = tail call noalias dereferenceable_or_null(26) ptr @bump_malloc_inner(i64 noundef 26, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  tail call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(25) %result.i.i139, ptr noundef nonnull align 32 dereferenceable(25) %result.i41, i64 25, i1 false)
+  %result.i.i124 = tail call noalias dereferenceable_or_null(26) ptr @bump_malloc_inner(i64 noundef 26, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  tail call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(25) %result.i.i124, ptr noundef nonnull align 32 dereferenceable(25) %result.i41, i64 25, i1 false)
   %14 = tail call ptr @llvm.invariant.start.p0(i64 noundef 280, ptr nocapture nofree noundef nonnull @String)
-  %puts.i124 = tail call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i139)
+  %puts.i109 = tail call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i124)
   %15 = tail call ptr @llvm.invariant.start.p0(i64 noundef 48, ptr nocapture nofree noundef nonnull %.fca.0.extract)
   %16 = getelementptr i8, ptr %8, i64 8
   %17 = load ptr, ptr %16, align 8
@@ -7897,7 +7896,7 @@ define void @OutOfBounds_init_boundsPtri32_indexPtri32({ ptr, ptr, ptr, i32 } %0
   %31 = load ptr, ptr %30, align 8
   tail call void %31(ptr %.fca.1.extract, { ptr, ptr, ptr, i32 } %23) #38
   %result.i54 = tail call noalias align 128 dereferenceable_or_null(66) ptr @bump_malloc_inner(i64 noundef 66, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  %32 = load <65 x i8>, ptr @vmgvw_An_outofbounds_error_occurred_while_indexing_into_a_collection, align 128
+  %32 = load <65 x i8>, ptr @nvleu_An_outofbounds_error_occurred_while_indexing_into_a_collection, align 128
   store <65 x i8> %32, ptr %result.i54, align 128
   %result.i56 = tail call noalias dereferenceable_or_null(16) ptr @bump_malloc_inner(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   %33 = insertvalue { ptr, ptr, ptr, i32 } { ptr @String, ptr undef, ptr undef, i32 undef }, ptr %result.i56, 1
@@ -7964,74 +7963,73 @@ define void @OutOfBounds_print_message_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %19 = icmp eq ptr %.fca.0.extract2, @nil_typ
   %20 = icmp eq ptr %.fca.0.extract2, null
   %21 = or i1 %19, %20
-  br i1 %21, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit, label %22
+  br i1 %21, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit, label %22
 
 22:                                               ; preds = %3
-  %23 = icmp eq ptr %.fca.0.extract2, @i64_typ
-  br i1 %23, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit, label %24
+  %23 = icmp eq ptr %.fca.0.extract2, @bool_typ
+  br i1 %23, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit, label %24
 
 24:                                               ; preds = %22
-  %25 = getelementptr i8, ptr %.fca.0.extract2, i64 8
-  %26 = getelementptr i8, ptr %.fca.0.extract2, i64 16
-  %27 = getelementptr i8, ptr %.fca.0.extract2, i64 24
-  %28 = getelementptr i8, ptr %.fca.0.extract2, i64 32
-  %29 = load i64, ptr %25, align 4
-  %30 = load i64, ptr %26, align 4
-  %31 = load ptr, ptr %27, align 8
-  %32 = load ptr, ptr %28, align 8
-  %result.i.i = tail call i1 %31(i64 %30, i64 %29, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr readonly %32) #9
-  %result.i14.i = tail call i1 %31(i64 %30, i64 %29, i64 6681222582356018452, i64 ptrtoint (ptr @Character to i64), ptr readonly %32) #9
+  %25 = icmp eq ptr %.fca.0.extract2, @i64_typ
+  br i1 %25, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit, label %26
+
+26:                                               ; preds = %24
+  %27 = icmp eq ptr %.fca.0.extract2, @i8_typ
+  br i1 %27, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit, label %28
+
+28:                                               ; preds = %26
+  %29 = icmp eq ptr %.fca.0.extract2, @i32_typ
+  br i1 %29, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit, label %30
+
+30:                                               ; preds = %28
+  %31 = getelementptr i8, ptr %.fca.0.extract2, i64 8
+  %32 = getelementptr i8, ptr %.fca.0.extract2, i64 16
+  %33 = getelementptr i8, ptr %.fca.0.extract2, i64 24
+  %34 = getelementptr i8, ptr %.fca.0.extract2, i64 32
+  %35 = load i64, ptr %31, align 4
+  %36 = load i64, ptr %32, align 4
+  %37 = load ptr, ptr %33, align 8
+  %38 = load ptr, ptr %34, align 8
+  %result.i.i = tail call i1 %37(i64 %36, i64 %35, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr readonly %38) #9
+  %result.i13.i = tail call i1 %37(i64 %36, i64 %35, i64 6681222582356018452, i64 ptrtoint (ptr @Character to i64), ptr readonly %38) #9
   %not.result.i.i = xor i1 %result.i.i, true
-  %.reg2mem49.0.i = select i1 %not.result.i.i, i1 true, i1 %result.i14.i
-  br i1 %.reg2mem49.0.i, label %33, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit
+  %.reg2mem41.0.i = select i1 %not.result.i.i, i1 true, i1 %result.i13.i
+  br i1 %.reg2mem41.0.i, label %39, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit
 
-33:                                               ; preds = %24
-  %not.result.i14.i = xor i1 %result.i14.i, true
-  %.reg2mem47.0.i = or i1 %result.i.i, %not.result.i14.i
-  br i1 %.reg2mem47.0.i, label %34, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit
+39:                                               ; preds = %30
+  %40 = icmp eq ptr %.fca.0.extract2, @f64_typ
+  br i1 %40, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit, label %41
 
-34:                                               ; preds = %33
-  %35 = icmp eq ptr %.fca.0.extract2, @bool_typ
-  br i1 %35, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit, label %36
+41:                                               ; preds = %39
+  %not.result.i13.i = xor i1 %result.i13.i, true
+  %.reg2mem39.0.i = or i1 %result.i.i, %not.result.i13.i
+  %spec.select.i = select i1 %.reg2mem39.0.i, i32 3, i32 4
+  br label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit
 
-36:                                               ; preds = %34
-  %result.i17.i = tail call i1 %31(i64 %30, i64 %29, i64 -7260840641129990118, i64 ptrtoint (ptr @Representable to i64), ptr readonly %32) #9
-  %result.i17.not.i = xor i1 %result.i17.i, true
-  %37 = or i1 %result.i.i, %result.i17.not.i
-  %or.cond.i = select i1 %37, i1 true, i1 %result.i14.i
-  br i1 %or.cond.i, label %.critedge.i, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit
+IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit: ; preds = %3, %22, %24, %26, %28, %30, %39, %41
+  %.reg2mem23.0.i = phi i32 [ 7, %3 ], [ 8, %22 ], [ 9, %24 ], [ 2, %26 ], [ 5, %28 ], [ 1, %39 ], [ 6, %30 ], [ %spec.select.i, %41 ]
+  %42 = zext nneg i32 %.reg2mem23.0.i to i64
+  %43 = getelementptr [10 x ptr], ptr @IO, i64 0, i64 %42
+  %44 = getelementptr i8, ptr %43, i64 80
+  %45 = load ptr, ptr %44, align 8
+  call void %45(ptr nonnull align 8 dereferenceable(8) %16, { ptr, i160 } %15) #6
+  %46 = call ptr @llvm.invariant.start.p0(i64 noundef 232, ptr nocapture nofree noundef nonnull %.fca.0.extract4)
+  %47 = load ptr, ptr %7, align 8
+  %48 = load ptr, ptr %47, align 8
+  %49 = call { ptr, i160 } %48(ptr %.fca.1.extract6) #39
+  %.fca.0.extract = extractvalue { ptr, i160 } %49, 0
+  %50 = icmp ne ptr %.fca.0.extract, @nil_typ
+  %51 = icmp ne ptr %.fca.0.extract, null
+  %.not15 = and i1 %50, %51
+  br i1 %.not15, label %52, label %._crit_edge
 
-.critedge.i:                                      ; preds = %36
-  %38 = icmp eq ptr %.fca.0.extract2, @f64_typ
-  %39 = icmp eq ptr %.fca.0.extract2, @i32_typ
-  %40 = select i1 %39, i32 4, i32 6
-  %.reg2mem41.0.i = select i1 %38, i32 9, i32 %40
-  br label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit
-
-IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit: ; preds = %3, %22, %24, %33, %34, %36, %.critedge.i
-  %.reg2mem29.0.i = phi i32 [ 8, %3 ], [ 2, %22 ], [ 7, %34 ], [ %.reg2mem41.0.i, %.critedge.i ], [ 5, %33 ], [ 3, %24 ], [ 1, %36 ]
-  %41 = zext nneg i32 %.reg2mem29.0.i to i64
-  %42 = getelementptr [10 x ptr], ptr @IO, i64 0, i64 %41
-  %43 = getelementptr i8, ptr %42, i64 80
-  %44 = load ptr, ptr %43, align 8
-  call void %44(ptr nonnull align 8 dereferenceable(8) %16, { ptr, i160 } %15) #6
-  %45 = call ptr @llvm.invariant.start.p0(i64 noundef 232, ptr nocapture nofree noundef nonnull %.fca.0.extract4)
-  %46 = load ptr, ptr %7, align 8
-  %47 = load ptr, ptr %46, align 8
-  %48 = call { ptr, i160 } %47(ptr %.fca.1.extract6) #39
-  %.fca.0.extract = extractvalue { ptr, i160 } %48, 0
-  %49 = icmp ne ptr %.fca.0.extract, @nil_typ
-  %50 = icmp ne ptr %.fca.0.extract, null
-  %.not15 = and i1 %49, %50
-  br i1 %.not15, label %51, label %._crit_edge
-
-51:                                               ; preds = %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit
-  %.fca.1.extract = extractvalue { ptr, i160 } %48, 1
+52:                                               ; preds = %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit
+  %.fca.1.extract = extractvalue { ptr, i160 } %49, 1
   %.sroa.3.8.extract.trunc = trunc i160 %.fca.1.extract to i64
-  %52 = inttoptr i64 %.sroa.3.8.extract.trunc to ptr
+  %53 = inttoptr i64 %.sroa.3.8.extract.trunc to ptr
   %.sroa.537.8.extract.shift = lshr i160 %.fca.1.extract, 64
   %.sroa.537.8.extract.trunc = trunc i160 %.sroa.537.8.extract.shift to i64
-  %53 = inttoptr i64 %.sroa.537.8.extract.trunc to ptr
+  %54 = inttoptr i64 %.sroa.537.8.extract.trunc to ptr
   %hash_coef_ptr.i.i17 = getelementptr i8, ptr %.fca.0.extract, i64 8
   %tbl_size_ptr.i.i18 = getelementptr i8, ptr %.fca.0.extract, i64 16
   %offset_tbl_ptr.i.i19 = getelementptr i8, ptr %.fca.0.extract, i64 40
@@ -8044,21 +8042,21 @@ IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_pr
   %hash.i.i.i26 = and i64 %xored.i.i.i25, %tbl_size.i.i21
   %offset_ptr.i.i27 = getelementptr i32, ptr %offset_tbl.i.i22, i64 %hash.i.i.i26
   %offset.i.i28 = load i32, ptr %offset_ptr.i.i27, align 4, !noalias !305
-  %54 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
-  %55 = insertvalue { ptr, ptr, ptr, i32 } %54, ptr %52, 1
-  %56 = insertvalue { ptr, ptr, ptr, i32 } %55, ptr %53, 2
-  %57 = insertvalue { ptr, ptr, ptr, i32 } %56, i32 %offset.i.i28, 3
-  %58 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %59 = call ptr @llvm.invariant.start.p0(i64 noundef 48, ptr nocapture nofree noundef nonnull %.fca.0.extract)
-  %60 = sext i32 %offset.i.i28 to i64
-  %61 = getelementptr ptr, ptr %.fca.0.extract, i64 %60
-  %62 = getelementptr i8, ptr %61, i64 24
-  %63 = load ptr, ptr %62, align 8
-  %result.i30 = call ptr %63({ ptr, ptr, ptr, i32 } %57, ptr nocapture nofree noundef nonnull readonly %4) #8
-  call void %result.i30({ ptr, ptr, ptr, i32 } %57, { ptr, ptr, ptr, i32 } %57, ptr nonnull align 8 %4) #6
+  %55 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
+  %56 = insertvalue { ptr, ptr, ptr, i32 } %55, ptr %53, 1
+  %57 = insertvalue { ptr, ptr, ptr, i32 } %56, ptr %54, 2
+  %58 = insertvalue { ptr, ptr, ptr, i32 } %57, i32 %offset.i.i28, 3
+  %59 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %60 = call ptr @llvm.invariant.start.p0(i64 noundef 48, ptr nocapture nofree noundef nonnull %.fca.0.extract)
+  %61 = sext i32 %offset.i.i28 to i64
+  %62 = getelementptr ptr, ptr %.fca.0.extract, i64 %61
+  %63 = getelementptr i8, ptr %62, i64 24
+  %64 = load ptr, ptr %63, align 8
+  %result.i30 = call ptr %64({ ptr, ptr, ptr, i32 } %58, ptr nocapture nofree noundef nonnull readonly %4) #8
+  call void %result.i30({ ptr, ptr, ptr, i32 } %58, { ptr, ptr, ptr, i32 } %58, ptr nonnull align 8 %4) #6
   br label %._crit_edge
 
-._crit_edge:                                      ; preds = %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit, %51
+._crit_edge:                                      ; preds = %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit, %52
   ret void
 }
 
@@ -9141,7 +9139,7 @@ define i32 @IntArray__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, 
   %27 = getelementptr i8, ptr %result.i83, i64 48
   %28 = getelementptr i8, ptr %result.i83, i64 64
   %result.i54.i = tail call noalias align 128 dereferenceable_or_null(66) ptr @bump_malloc_inner(i64 noundef 66, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  %29 = load <65 x i8>, ptr @vmgvw_An_outofbounds_error_occurred_while_indexing_into_a_collection, align 128
+  %29 = load <65 x i8>, ptr @nvleu_An_outofbounds_error_occurred_while_indexing_into_a_collection, align 128
   store <65 x i8> %29, ptr %result.i54.i, align 128
   %result.i56.i = tail call noalias dereferenceable_or_null(16) ptr @bump_malloc_inner(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   store ptr %result.i54.i, ptr %result.i56.i, align 8
@@ -9156,7 +9154,7 @@ define i32 @IntArray__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, 
   %34 = getelementptr i8, ptr %result.i83, i64 96
   store i32 10, ptr %34, align 4
   %result.i85 = tail call noalias align 64 dereferenceable_or_null(59) ptr @bump_malloc_inner(i64 noundef 59, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  %35 = load <58 x i8>, ptr @bknxo_CUsersPaulKOneDriveDocumentsPLPyPLtmpgjbyyomini, align 64
+  %35 = load <58 x i8>, ptr @syiyn_CUsersPaulKOneDriveDocumentsPLPyPLtmpnjjh_xmini, align 64
   store <58 x i8> %35, ptr %result.i85, align 64
   %result.i87 = tail call noalias dereferenceable_or_null(16) ptr @bump_malloc_inner(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   store ptr %result.i85, ptr %result.i87, align 8
@@ -9226,7 +9224,7 @@ define i32 @IntArray__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, 
   %70 = getelementptr i8, ptr %result.i105, i64 48
   %71 = getelementptr i8, ptr %result.i105, i64 64
   %result.i54.i206 = tail call noalias align 128 dereferenceable_or_null(66) ptr @bump_malloc_inner(i64 noundef 66, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  %72 = load <65 x i8>, ptr @vmgvw_An_outofbounds_error_occurred_while_indexing_into_a_collection, align 128
+  %72 = load <65 x i8>, ptr @nvleu_An_outofbounds_error_occurred_while_indexing_into_a_collection, align 128
   store <65 x i8> %72, ptr %result.i54.i206, align 128
   %result.i56.i207 = tail call noalias dereferenceable_or_null(16) ptr @bump_malloc_inner(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   store ptr %result.i54.i206, ptr %result.i56.i207, align 8
@@ -9241,7 +9239,7 @@ define i32 @IntArray__index_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, 
   %77 = getelementptr i8, ptr %result.i105, i64 96
   store i32 10, ptr %77, align 4
   %result.i107 = tail call noalias align 64 dereferenceable_or_null(59) ptr @bump_malloc_inner(i64 noundef 59, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  %78 = load <58 x i8>, ptr @bknxo_CUsersPaulKOneDriveDocumentsPLPyPLtmpgjbyyomini, align 64
+  %78 = load <58 x i8>, ptr @syiyn_CUsersPaulKOneDriveDocumentsPLPyPLtmpnjjh_xmini, align 64
   store <58 x i8> %78, ptr %result.i107, align 64
   %result.i109 = tail call noalias dereferenceable_or_null(16) ptr @bump_malloc_inner(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   store ptr %result.i107, ptr %result.i109, align 8
@@ -10942,7 +10940,7 @@ define void @Array_throw_oob_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr,
   %22 = getelementptr i8, ptr %result.i28, i64 48
   %23 = getelementptr i8, ptr %result.i28, i64 64
   %result.i54.i = tail call noalias align 128 dereferenceable_or_null(66) ptr @bump_malloc_inner(i64 noundef 66, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  %24 = load <65 x i8>, ptr @vmgvw_An_outofbounds_error_occurred_while_indexing_into_a_collection, align 128
+  %24 = load <65 x i8>, ptr @nvleu_An_outofbounds_error_occurred_while_indexing_into_a_collection, align 128
   store <65 x i8> %24, ptr %result.i54.i, align 128
   %result.i56.i = tail call noalias dereferenceable_or_null(16) ptr @bump_malloc_inner(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   store ptr %result.i54.i, ptr %result.i56.i, align 8
@@ -10957,7 +10955,7 @@ define void @Array_throw_oob_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr,
   %29 = getelementptr i8, ptr %result.i28, i64 96
   store i32 10, ptr %29, align 4
   %result.i30 = tail call noalias align 64 dereferenceable_or_null(59) ptr @bump_malloc_inner(i64 noundef 59, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  %30 = load <58 x i8>, ptr @bknxo_CUsersPaulKOneDriveDocumentsPLPyPLtmpgjbyyomini, align 64
+  %30 = load <58 x i8>, ptr @syiyn_CUsersPaulKOneDriveDocumentsPLPyPLtmpnjjh_xmini, align 64
   store <58 x i8> %30, ptr %result.i30, align 64
   %result.i32 = tail call noalias dereferenceable_or_null(16) ptr @bump_malloc_inner(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   store ptr %result.i30, ptr %result.i32, align 8
@@ -16456,11 +16454,11 @@ define noundef nonnull ptr @Math_B__Self_sqrt_xPtrf64(ptr nocapture nofree nound
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: readwrite)
-define ptr @Math_B__Self_abs_xPtri32__Self_abs_xPtrf64(ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %0) #13 {
+define ptr @Math_B__Self_abs_xPtrf64__Self_abs_xPtri32(ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %0) #13 {
   %2 = tail call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %0) #36
   %3 = load ptr, ptr %0, align 8
   %4 = icmp eq ptr %3, @i32_typ
-  %5 = select i1 %4, i64 8, i64 9
+  %5 = select i1 %4, i64 9, i64 8
   %6 = getelementptr [17 x ptr], ptr @Math, i64 0, i64 %5
   %7 = getelementptr i8, ptr %6, i64 80
   %8 = load ptr, ptr %7, align 8
@@ -16483,8 +16481,8 @@ define ptr @Math_B__Self_max_aPtri32_bPtri32__Self_max_aPtrf64_bPtrf64(ptr nocap
 define ptr @Math_B__Self_min_aPtri32_bPtri32__Self_min_aPtrf64_bPtrf64(ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %0) #13 {
   %2 = tail call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %0) #36
   %3 = load ptr, ptr %0, align 8
-  %4 = icmp eq ptr %3, @f64_typ
-  %5 = select i1 %4, i64 13, i64 12
+  %4 = icmp eq ptr %3, @i32_typ
+  %5 = select i1 %4, i64 12, i64 13
   %6 = getelementptr [17 x ptr], ptr @Math, i64 0, i64 %5
   %7 = getelementptr i8, ptr %6, i64 80
   %8 = load ptr, ptr %7, align 8
@@ -16516,6 +16514,18 @@ define nofpclass(ninf nsub nnorm) double @Math__Self_sqrt_xPtrf64(ptr nocapture 
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
+define { ptr, i64 } @Math__Self_abs_xPtrf64(ptr nocapture nofree readnone %0, { ptr, i64 } %1) #0 {
+  %.fca.1.extract8 = extractvalue { ptr, i64 } %1, 1
+  %3 = bitcast i64 %.fca.1.extract8 to double
+  %4 = fcmp ult double %3, 0.000000e+00
+  %5 = fneg double %3
+  %6 = bitcast double %5 to i64
+  %.reg2mem5.sroa.3.0 = select i1 %4, i64 %6, i64 %.fca.1.extract8
+  %.reload6.fca.1.insert = insertvalue { ptr, i64 } { ptr @f64_typ, i64 undef }, i64 %.reg2mem5.sroa.3.0, 1
+  ret { ptr, i64 } %.reload6.fca.1.insert
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
 define { ptr, i64 } @Math__Self_abs_xPtri32(ptr nocapture nofree readnone %0, { ptr, i64 } %1) #0 {
   %.fca.1.extract7 = extractvalue { ptr, i64 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i64 %.fca.1.extract7 to i32
@@ -16525,18 +16535,6 @@ define { ptr, i64 } @Math__Self_abs_xPtri32(ptr nocapture nofree readnone %0, { 
   %4 = icmp slt i32 %.sroa.1.8.extract.trunc, 0
   %.reg2mem5.sroa.3.0 = select i1 %4, i64 %.sroa.010.0.insert.ext, i64 %.sroa.015.0.insert.ext
   %.reload6.fca.1.insert = insertvalue { ptr, i64 } { ptr @i32_typ, i64 undef }, i64 %.reg2mem5.sroa.3.0, 1
-  ret { ptr, i64 } %.reload6.fca.1.insert
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define { ptr, i64 } @Math__Self_abs_xPtrf64(ptr nocapture nofree readnone %0, { ptr, i64 } %1) #0 {
-  %.fca.1.extract8 = extractvalue { ptr, i64 } %1, 1
-  %3 = bitcast i64 %.fca.1.extract8 to double
-  %4 = fcmp ult double %3, 0.000000e+00
-  %5 = fneg double %3
-  %6 = bitcast double %5 to i64
-  %.reg2mem5.sroa.3.0 = select i1 %4, i64 %6, i64 %.fca.1.extract8
-  %.reload6.fca.1.insert = insertvalue { ptr, i64 } { ptr @f64_typ, i64 undef }, i64 %.reg2mem5.sroa.3.0, 1
   ret { ptr, i64 } %.reload6.fca.1.insert
 }
 
@@ -16855,7 +16853,7 @@ define { ptr, ptr, ptr, i32 } @Integer__DIV_otherPtri32({ ptr, ptr, ptr, i32 } %
 
 ; Function Attrs: nounwind
 define void @Integer_print_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #6 {
-IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit:
+IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit:
   %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %0, 1
   %hash_coef_ptr.i.i = getelementptr i8, ptr %.fca.0.extract, i64 8
@@ -17212,7 +17210,7 @@ define void @Animal_say_age_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
 
 ; Function Attrs: nounwind
 define void @Animal_say_skill_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #6 {
-IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit:
+IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit:
   %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %0, 1
   %hash_coef_ptr.i.i = getelementptr i8, ptr %.fca.0.extract, i64 8
@@ -17241,7 +17239,7 @@ IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_pr
 
 ; Function Attrs: nofree nounwind
 define void @Animal_say_messagePtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, i32 %3) #11 {
-IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit:
+IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit:
   %4 = tail call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO) #36
   %5 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %3) #11
   ret void
@@ -17399,7 +17397,7 @@ define void @Beaver__ADD_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32
 
 ; Function Attrs: nounwind
 define void @Beaver_say_color_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #6 {
-IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit:
+IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit:
   %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %0, 1
   %hash_coef_ptr.i.i = getelementptr i8, ptr %.fca.0.extract, i64 8
@@ -17946,7 +17944,7 @@ define ptr @Bard_B_init_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #1 
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @Bard_B_take_aPtri32_bPtrf64_take_aPtri32_bPtri32_take_aAnimal_bBeaver_take_aPtrf64_bPtrf64({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #1 {
+define ptr @Bard_B_take_aPtri32_bPtri32_take_aAnimal_bBeaver_take_aPtrf64_bPtrf64_take_aPtri32_bPtrf64({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #1 {
   %3 = tail call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #36
   %4 = load ptr, ptr %1, align 8
   %5 = icmp eq ptr %4, @f64_typ
@@ -17960,11 +17958,11 @@ define ptr @Bard_B_take_aPtri32_bPtrf64_take_aPtri32_bPtri32_take_aAnimal_bBeave
   %9 = getelementptr inbounds i8, ptr %1, i64 8
   %10 = load ptr, ptr %9, align 8
   %11 = icmp eq ptr %10, @f64_typ
-  %12 = select i1 %11, i32 3, i32 4
+  %12 = select i1 %11, i32 6, i32 3
   br label %13
 
 13:                                               ; preds = %8, %6, %2
-  %.reg2mem8.0 = phi i32 [ 6, %2 ], [ %12, %8 ], [ 5, %6 ]
+  %.reg2mem8.0 = phi i32 [ 5, %2 ], [ %12, %8 ], [ 4, %6 ]
   %14 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %15 = zext nneg i32 %.reg2mem8.0 to i64
   %16 = getelementptr [7 x ptr], ptr %14, i64 0, i64 %15
@@ -17979,29 +17977,15 @@ define void @Bard_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, pt
 }
 
 ; Function Attrs: nofree nounwind
-define void @Bard_take_aPtri32_bPtrf64({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, i160 } %3, { ptr, i160 } %4) #11 {
-IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit35:
-  %.fca.1.extract13 = extractvalue { ptr, i160 } %3, 1
-  %.sroa.1.8.extract.trunc.i = trunc i160 %.fca.1.extract13 to i32
-  %5 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %.sroa.1.8.extract.trunc.i) #11
-  %6 = tail call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
-  %.fca.1.extract = extractvalue { ptr, i160 } %4, 1
-  %.sroa.1.8.extract.trunc.i37 = trunc i160 %.fca.1.extract to i64
-  %7 = bitcast i64 %.sroa.1.8.extract.trunc.i37 to double
-  %8 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @float_string, double %7) #11
-  ret void
-}
-
-; Function Attrs: nofree nounwind
 define void @Bard_take_aPtri32_bPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, i160 } %3, { ptr, i160 } %4) #11 {
-IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit35:
+IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit31:
   %.fca.1.extract13 = extractvalue { ptr, i160 } %3, 1
+  %.fca.1.extract = extractvalue { ptr, i160 } %4, 1
   %.sroa.1.8.extract.trunc.i = trunc i160 %.fca.1.extract13 to i32
   %5 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %.sroa.1.8.extract.trunc.i) #11
   %6 = tail call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
-  %.fca.1.extract = extractvalue { ptr, i160 } %4, 1
-  %.sroa.1.8.extract.trunc.i37 = trunc i160 %.fca.1.extract to i32
-  %7 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %.sroa.1.8.extract.trunc.i37) #11
+  %.sroa.1.8.extract.trunc.i32 = trunc i160 %.fca.1.extract to i32
+  %7 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %.sroa.1.8.extract.trunc.i32) #11
   ret void
 }
 
@@ -18016,25 +18000,39 @@ define void @Bard_take_aAnimal_bBeaver({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   %result.i63 = tail call noalias align 8 dereferenceable_or_null(8) ptr @bump_malloc_inner(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   store <7 x i8> <i8 98, i8 101, i8 97, i8 118, i8 101, i8 114, i8 33>, ptr %result.i63, align 8
   %5 = tail call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
-  %result.i.i134 = tail call noalias dereferenceable_or_null(8) ptr @bump_malloc_inner(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  tail call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(7) %result.i.i134, ptr noundef nonnull align 8 dereferenceable(7) %result.i63, i64 7, i1 false)
+  %result.i.i129 = tail call noalias dereferenceable_or_null(8) ptr @bump_malloc_inner(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  tail call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(7) %result.i.i129, ptr noundef nonnull align 8 dereferenceable(7) %result.i63, i64 7, i1 false)
   %6 = tail call ptr @llvm.invariant.start.p0(i64 noundef 280, ptr nocapture nofree noundef nonnull @String)
-  %puts.i119 = tail call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i134)
+  %puts.i114 = tail call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i129)
   ret void
 }
 
 ; Function Attrs: nofree nounwind
 define void @Bard_take_aPtrf64_bPtrf64({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, i160 } %3, { ptr, i160 } %4) #11 {
-IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit35:
+IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit31:
   %.fca.1.extract13 = extractvalue { ptr, i160 } %3, 1
+  %.fca.1.extract = extractvalue { ptr, i160 } %4, 1
   %.sroa.1.8.extract.trunc.i = trunc i160 %.fca.1.extract13 to i64
   %5 = bitcast i64 %.sroa.1.8.extract.trunc.i to double
   %6 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @float_string, double %5) #11
   %7 = tail call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
-  %.fca.1.extract = extractvalue { ptr, i160 } %4, 1
-  %.sroa.1.8.extract.trunc.i37 = trunc i160 %.fca.1.extract to i64
-  %8 = bitcast i64 %.sroa.1.8.extract.trunc.i37 to double
+  %.sroa.1.8.extract.trunc.i32 = trunc i160 %.fca.1.extract to i64
+  %8 = bitcast i64 %.sroa.1.8.extract.trunc.i32 to double
   %9 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @float_string, double %8) #11
+  ret void
+}
+
+; Function Attrs: nofree nounwind
+define void @Bard_take_aPtri32_bPtrf64({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, i160 } %3, { ptr, i160 } %4) #11 {
+IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit31:
+  %.fca.1.extract13 = extractvalue { ptr, i160 } %3, 1
+  %.fca.1.extract = extractvalue { ptr, i160 } %4, 1
+  %.sroa.1.8.extract.trunc.i = trunc i160 %.fca.1.extract13 to i32
+  %5 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %.sroa.1.8.extract.trunc.i) #11
+  %6 = tail call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
+  %.sroa.1.8.extract.trunc.i32 = trunc i160 %.fca.1.extract to i64
+  %7 = bitcast i64 %.sroa.1.8.extract.trunc.i32 to double
+  %8 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @float_string, double %7) #11
   ret void
 }
 
@@ -18460,7 +18458,7 @@ define void @throw() local_unnamed_addr #6 {
   %7 = getelementptr i8, ptr %result.i22, i64 16
   %8 = getelementptr i8, ptr %result.i22, i64 32
   %result.i24 = tail call noalias align 64 dereferenceable_or_null(59) ptr @bump_malloc_inner(i64 noundef 59, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  %9 = load <58 x i8>, ptr @bknxo_CUsersPaulKOneDriveDocumentsPLPyPLtmpgjbyyomini, align 64
+  %9 = load <58 x i8>, ptr @syiyn_CUsersPaulKOneDriveDocumentsPLPyPLtmpnjjh_xmini, align 64
   store <58 x i8> %9, ptr %result.i24, align 64
   %result.i26 = tail call noalias dereferenceable_or_null(16) ptr @bump_malloc_inner(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   store ptr %result.i24, ptr %result.i26, align 8
@@ -18488,7 +18486,7 @@ define void @throw() local_unnamed_addr #6 {
 
 ; Function Attrs: nounwind
 define void @print88() #6 {
-IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit24:
+IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit20:
   %0 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 88) #11
   %current_coroutine.i = load ptr, ptr @current_coroutine, align 8
   %into_callee_buf.i = getelementptr i8, ptr %current_coroutine.i, i64 8
@@ -18498,14 +18496,14 @@ IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_pr
   ret void
 }
 
-define void @coroutine_zhdmrpsinq_passer(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) {
+define void @coroutine_dhmcdbolhw_passer(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) {
   %2 = load ptr, ptr %0, align 8
   tail call void %2()
   ret void
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define void @coroutine_zhdmrpsinq_buffer_filler(ptr nocapture nofree readnone %0) local_unnamed_addr #0 {
+define void @coroutine_dhmcdbolhw_buffer_filler(ptr nocapture nofree readnone %0) local_unnamed_addr #0 {
   ret void
 }
 
@@ -18523,25 +18521,25 @@ define void @grabo() local_unnamed_addr #11 {
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define i32 @_functionliteral_bnzhunqefr(i32 %0, i32 %1) local_unnamed_addr #0 {
+define i32 @_functionliteral_bhurvujjdr(i32 %0, i32 %1) local_unnamed_addr #0 {
   %3 = add i32 %1, %0
   ret i32 %3
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define range(i32 0, -1) i32 @_functionliteral_sajmqyzgff(i32 %0) local_unnamed_addr #0 {
+define range(i32 0, -1) i32 @_functionliteral_avxssgxxhx(i32 %0) local_unnamed_addr #0 {
   %2 = shl i32 %0, 1
   ret i32 %2
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define noundef i32 @_functionliteral_wzqxsoskrj() #0 {
+define noundef i32 @_functionliteral_llsldaffsn() #0 {
   ret i32 5
 }
 
 ; Function Attrs: nofree nounwind
-define void @_functionliteral_atwhrfvhau(i32 %0) local_unnamed_addr #11 {
-IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit:
+define void @_functionliteral_efzdvhclja(i32 %0) local_unnamed_addr #11 {
+IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit:
   %1 = tail call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO) #36
   %2 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %0) #11
   ret void
@@ -18785,22 +18783,22 @@ String_c_string_.exit:
 declare i32 @fprintf({ ptr }, { ptr }) local_unnamed_addr
 
 ; Function Attrs: nofree nounwind
-define void @_functionliteral_xwqjhjpryd(i32 %0) local_unnamed_addr #11 {
-IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit:
-  %1 = tail call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO) #36
-  %2 = mul i32 %0, %0
-  %3 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %2) #11
+define void @_functionliteral_ivemcbsovo(i32 %0) local_unnamed_addr #11 {
+IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit:
+  %1 = mul i32 %0, %0
+  %2 = tail call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO) #36
+  %3 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %1) #11
   ret void
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define i32 @_functionliteral_fqpyolvewo(i32 %0, i32 %1) local_unnamed_addr #0 {
+define i32 @_functionliteral_ffjfutvhxc(i32 %0, i32 %1) local_unnamed_addr #0 {
   %3 = add i32 %1, %0
   ret i32 %3
 }
 
 ; Function Attrs: noreturn nounwind
-define void @_functionliteral_zcwfishgpw(i32 %0, i32 %1) #19 {
+define void @_functionliteral_nhyvdnbhld(i32 %0, i32 %1) #19 {
   %3 = add i32 %1, %0
   br label %._crit_edge2
 
@@ -18824,7 +18822,7 @@ define void @_functionliteral_zcwfishgpw(i32 %0, i32 %1) #19 {
   br label %._crit_edge2
 }
 
-define void @coroutine_zerlfaimah_passer(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) {
+define void @coroutine_dowemmegum_passer(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) {
   %2 = getelementptr i8, ptr %0, i64 64
   %3 = getelementptr i8, ptr %0, i64 68
   %4 = load i32, ptr %2, align 8
@@ -18835,7 +18833,7 @@ define void @coroutine_zerlfaimah_passer(ptr nocapture nofree noundef nonnull re
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define void @coroutine_zerlfaimah_buffer_filler(ptr nocapture nofree writeonly align 4 %0, i32 %1, i32 %2) local_unnamed_addr #10 {
+define void @coroutine_dowemmegum_buffer_filler(ptr nocapture nofree writeonly align 4 %0, i32 %1, i32 %2) local_unnamed_addr #10 {
   %4 = getelementptr i8, ptr %0, i64 64
   %5 = getelementptr i8, ptr %0, i64 68
   store i32 %1, ptr %4, align 4
@@ -18843,7 +18841,7 @@ define void @coroutine_zerlfaimah_buffer_filler(ptr nocapture nofree writeonly a
   ret void
 }
 
-define void @coroutine_lxaqpmihnb_passer(ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %0) {
+define void @coroutine_akfqpqfxun_passer(ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %0) {
   %2 = load ptr, ptr %0, align 8
   %3 = tail call i32 %2()
   %4 = getelementptr i8, ptr %0, i64 56
@@ -18854,11 +18852,11 @@ define void @coroutine_lxaqpmihnb_passer(ptr nocapture nofree noundef nonnull al
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define void @coroutine_lxaqpmihnb_buffer_filler(ptr nocapture nofree readnone %0) local_unnamed_addr #0 {
+define void @coroutine_akfqpqfxun_buffer_filler(ptr nocapture nofree readnone %0) local_unnamed_addr #0 {
   ret void
 }
 
-define void @coroutine_xkuywylxja_passer(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) {
+define void @coroutine_bcvlnaxceh_passer(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) {
   %2 = getelementptr i8, ptr %0, i64 80
   %3 = load { ptr, ptr, ptr, i32 }, ptr %2, align 8
   %4 = load ptr, ptr %0, align 8
@@ -18867,14 +18865,14 @@ define void @coroutine_xkuywylxja_passer(ptr nocapture nofree noundef nonnull re
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define void @coroutine_xkuywylxja_buffer_filler(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) local_unnamed_addr #10 {
+define void @coroutine_bcvlnaxceh_buffer_filler(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) local_unnamed_addr #10 {
   %3 = getelementptr i8, ptr %0, i64 80
   store { ptr, ptr, ptr, i32 } %1, ptr %3, align 8
   ret void
 }
 
 ; Function Attrs: nounwind
-define void @_functionliteral_dhyzoofutg({ ptr, ptr, ptr, i32 } %0) #6 {
+define void @_functionliteral_stnvqtrzkz({ ptr, ptr, ptr, i32 } %0) #6 {
   %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %0, 1
   %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %0, 2
@@ -18899,20 +18897,20 @@ define void @_functionliteral_dhyzoofutg({ ptr, ptr, ptr, i32 } %0) #6 {
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define i1 @_functionliteral_qpqtvtqzif(i32 %0) local_unnamed_addr #0 {
+define i1 @_functionliteral_wdjcpetwqf(i32 %0) local_unnamed_addr #0 {
   %2 = and i32 %0, 1
   %3 = icmp eq i32 %2, 0
   ret i1 %3
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define i32 @_functionliteral_papvnxfhfl(i32 %0) local_unnamed_addr #0 {
+define i32 @_functionliteral_wssjpxcmkl(i32 %0) local_unnamed_addr #0 {
   %2 = mul i32 %0, %0
   ret i32 %2
 }
 
 define noundef i32 @main() local_unnamed_addr {
-._crit_edge.lr.ph.i4182:
+._crit_edge.lr.ph.i4018:
   %0 = alloca [0 x ptr], align 8
   %.sroa.091.i.i = alloca ptr, align 8
   %1 = alloca i32, align 4
@@ -18936,34 +18934,34 @@ define noundef i32 @main() local_unnamed_addr {
   store <13 x i8> <i8 72, i8 101, i8 108, i8 108, i8 111, i8 44, i8 32, i8 87, i8 111, i8 114, i8 108, i8 100, i8 33>, ptr %result.i1093, align 16
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   %9 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  %result.i.i4181 = tail call noalias dereferenceable_or_null(14) ptr @bump_malloc_inner(i64 noundef 14, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  tail call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(13) %result.i.i4181, ptr noundef nonnull align 16 dereferenceable(13) %result.i1093, i64 13, i1 false)
-  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4181)
+  %result.i.i4017 = tail call noalias dereferenceable_or_null(14) ptr @bump_malloc_inner(i64 noundef 14, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  tail call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(13) %result.i.i4017, ptr noundef nonnull align 16 dereferenceable(13) %result.i1093, i64 13, i1 false)
+  %puts.i3158 = tail call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4017)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   store i1 false, ptr %.sroa.01032.sroa.0, align 8
   %.sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.0. = load i8, ptr %.sroa.01032.sroa.0, align 8
   %10 = trunc i8 %.sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.sroa.0.0..sroa.01032.0. to i1
   br i1 %10, label %._crit_edge.lr.ph.i.i, label %._crit_edge.lr.ph.i84.i
 
-._crit_edge.lr.ph.i.i:                            ; preds = %._crit_edge.lr.ph.i4182
-  %result.i.i.i3310 = tail call noalias dereferenceable_or_null(5) ptr @bump_malloc_inner(i64 noundef 5, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  store i32 1702195828, ptr %result.i.i.i3310, align 1
-  br label %._crit_edge.lr.ph.i4198
+._crit_edge.lr.ph.i.i:                            ; preds = %._crit_edge.lr.ph.i4018
+  %result.i.i.i2595 = tail call noalias dereferenceable_or_null(5) ptr @bump_malloc_inner(i64 noundef 5, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  store i32 1702195828, ptr %result.i.i.i2595, align 1
+  br label %._crit_edge.lr.ph.i4034
 
-._crit_edge.lr.ph.i84.i:                          ; preds = %._crit_edge.lr.ph.i4182
+._crit_edge.lr.ph.i84.i:                          ; preds = %._crit_edge.lr.ph.i4018
   %result.i39.i = tail call noalias align 8 dereferenceable_or_null(6) ptr @bump_malloc_inner(i64 noundef 6, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   store <5 x i8> <i8 102, i8 97, i8 108, i8 115, i8 101>, ptr %result.i39.i, align 8
   %result.i.i83.i = tail call noalias dereferenceable_or_null(6) ptr @bump_malloc_inner(i64 noundef 6, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   tail call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(5) %result.i.i83.i, ptr noundef nonnull align 8 dereferenceable(5) %result.i39.i, i64 5, i1 false)
-  br label %._crit_edge.lr.ph.i4198
+  br label %._crit_edge.lr.ph.i4034
 
-._crit_edge.lr.ph.i4198:                          ; preds = %._crit_edge.lr.ph.i84.i, %._crit_edge.lr.ph.i.i
+._crit_edge.lr.ph.i4034:                          ; preds = %._crit_edge.lr.ph.i.i, %._crit_edge.lr.ph.i84.i
   %11 = phi i32 [ 4, %._crit_edge.lr.ph.i.i ], [ 5, %._crit_edge.lr.ph.i84.i ]
-  %result.i.i83.sink.i = phi ptr [ %result.i.i.i3310, %._crit_edge.lr.ph.i.i ], [ %result.i.i83.i, %._crit_edge.lr.ph.i84.i ]
+  %result.i.i83.sink.i = phi ptr [ %result.i.i.i2595, %._crit_edge.lr.ph.i.i ], [ %result.i.i83.i, %._crit_edge.lr.ph.i84.i ]
   %12 = zext nneg i32 %11 to i64
   %13 = getelementptr i8, ptr %result.i.i83.sink.i, i64 %12
   store i8 0, ptr %13, align 1
-  %puts.i3309 = tail call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i83.sink.i)
+  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i83.sink.i)
   %14 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   %15 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 5) #11
   %16 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 10) #11
@@ -18973,28 +18971,28 @@ define noundef i32 @main() local_unnamed_addr {
   store <5 x i8> <i8 115, i8 116, i8 97, i8 114, i8 116>, ptr %result.i1104, align 8
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   %19 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  %result.i.i4197 = tail call noalias dereferenceable_or_null(6) ptr @bump_malloc_inner(i64 noundef 6, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  tail call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(5) %result.i.i4197, ptr noundef nonnull align 8 dereferenceable(5) %result.i1104, i64 5, i1 false)
-  %puts.i3331 = tail call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4197)
+  %result.i.i4033 = tail call noalias dereferenceable_or_null(6) ptr @bump_malloc_inner(i64 noundef 6, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  tail call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(5) %result.i.i4033, ptr noundef nonnull align 8 dereferenceable(5) %result.i1104, i64 5, i1 false)
+  %puts.i3179 = tail call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4033)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   %result.i1126 = tail call noalias align 16 dereferenceable_or_null(14) ptr @bump_malloc_inner(i64 noundef 14, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   store <13 x i8> <i8 100, i8 105, i8 100, i8 32, i8 103, i8 101, i8 116, i8 32, i8 104, i8 101, i8 114, i8 101, i8 33>, ptr %result.i1126, align 16
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   %20 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  %result.i.i4216 = tail call noalias dereferenceable_or_null(14) ptr @bump_malloc_inner(i64 noundef 14, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  tail call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(13) %result.i.i4216, ptr noundef nonnull align 16 dereferenceable(13) %result.i1126, i64 13, i1 false)
-  %puts.i3352 = tail call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4216)
+  %result.i.i4052 = tail call noalias dereferenceable_or_null(14) ptr @bump_malloc_inner(i64 noundef 14, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  tail call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(13) %result.i.i4052, ptr noundef nonnull align 16 dereferenceable(13) %result.i1126, i64 13, i1 false)
+  %puts.i3200 = tail call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4052)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
-  %result.i.i3354 = tail call noalias align 8 dereferenceable_or_null(8) ptr @bump_malloc_inner(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  store <7 x i8> <i8 97, i8 110, i8 105, i8 109, i8 97, i8 108, i8 33>, ptr %result.i.i3354, align 8
-  %result.i.i.i3355 = tail call noalias dereferenceable_or_null(8) ptr @bump_malloc_inner(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  tail call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(7) %result.i.i.i3355, ptr noundef nonnull align 8 dereferenceable(7) %result.i.i3354, i64 7, i1 false)
-  %puts.i.i3356 = tail call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i.i3355)
+  %result.i.i3202 = tail call noalias align 8 dereferenceable_or_null(8) ptr @bump_malloc_inner(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  store <7 x i8> <i8 97, i8 110, i8 105, i8 109, i8 97, i8 108, i8 33>, ptr %result.i.i3202, align 8
+  %result.i.i.i3203 = tail call noalias dereferenceable_or_null(8) ptr @bump_malloc_inner(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  tail call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(7) %result.i.i.i3203, ptr noundef nonnull align 8 dereferenceable(7) %result.i.i3202, i64 7, i1 false)
+  %puts.i.i3204 = tail call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i.i3203)
   %result.i63.i = tail call noalias align 8 dereferenceable_or_null(8) ptr @bump_malloc_inner(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   store <7 x i8> <i8 98, i8 101, i8 97, i8 118, i8 101, i8 114, i8 33>, ptr %result.i63.i, align 8
-  %result.i.i134.i = tail call noalias dereferenceable_or_null(8) ptr @bump_malloc_inner(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  tail call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(7) %result.i.i134.i, ptr noundef nonnull align 8 dereferenceable(7) %result.i63.i, i64 7, i1 false)
-  %puts.i119.i = tail call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i134.i)
+  %result.i.i129.i = tail call noalias dereferenceable_or_null(8) ptr @bump_malloc_inner(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  tail call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(7) %result.i.i129.i, ptr noundef nonnull align 8 dereferenceable(7) %result.i63.i, i64 7, i1 false)
+  %puts.i114.i = tail call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i129.i)
   %21 = tail call ptr @llvm.invariant.start.p0(i64 noundef 56, ptr nocapture nofree noundef nonnull @Bard)
   %22 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 7) #11
   %23 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @float_string, double 7.000000e+00) #11
@@ -19002,10 +19000,10 @@ define noundef i32 @main() local_unnamed_addr {
   store <16 x i8> <i8 98, i8 97, i8 114, i8 114, i8 121, i8 39, i8 115, i8 32, i8 99, i8 111, i8 108, i8 111, i8 114, i8 32, i8 105, i8 115>, ptr %result.i1150, align 16
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   %24 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  %result.i.i4235 = tail call noalias dereferenceable_or_null(17) ptr @bump_malloc_inner(i64 noundef 17, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  tail call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(16) %result.i.i4235, ptr noundef nonnull align 16 dereferenceable(16) %result.i1150, i64 16, i1 false)
+  %result.i.i4071 = tail call noalias dereferenceable_or_null(17) ptr @bump_malloc_inner(i64 noundef 17, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  tail call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(16) %result.i.i4071, ptr noundef nonnull align 16 dereferenceable(16) %result.i1150, i64 16, i1 false)
   %25 = tail call ptr @llvm.invariant.start.p0(i64 noundef 280, ptr nocapture nofree noundef nonnull @String)
-  %puts.i3377 = tail call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4235)
+  %puts.i3225 = tail call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4071)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   %26 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   %27 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 10) #11
@@ -19048,30 +19046,30 @@ define noundef i32 @main() local_unnamed_addr {
   %57 = tail call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef nonnull @RangeIterator) #42
   br label %._crit_edge6
 
-._crit_edge6:                                     ; preds = %RangeIterator_next_.exit3862, %._crit_edge.lr.ph.i4198
-  %58 = phi i32 [ %78, %RangeIterator_next_.exit3862 ], [ 2, %._crit_edge.lr.ph.i4198 ]
-  %.pn4158 = phi i32 [ %58, %RangeIterator_next_.exit3862 ], [ 1, %._crit_edge.lr.ph.i4198 ]
-  %.010602694 = phi i32 [ %offset.i.i1352, %RangeIterator_next_.exit3862 ], [ 10, %._crit_edge.lr.ph.i4198 ]
-  %.010622693 = phi ptr [ %.fca.2.extract724, %RangeIterator_next_.exit3862 ], [ undef, %._crit_edge.lr.ph.i4198 ]
-  %.010642692 = phi ptr [ %.fca.1.extract723, %RangeIterator_next_.exit3862 ], [ %result.i1245, %._crit_edge.lr.ph.i4198 ]
-  %.010662691 = phi ptr [ %.fca.0.extract722, %RangeIterator_next_.exit3862 ], [ @ListNode, %._crit_edge.lr.ph.i4198 ]
+._crit_edge6:                                     ; preds = %RangeIterator_next_.exit3699, %._crit_edge.lr.ph.i4034
+  %58 = phi i32 [ %78, %RangeIterator_next_.exit3699 ], [ 2, %._crit_edge.lr.ph.i4034 ]
+  %.pn3995 = phi i32 [ %58, %RangeIterator_next_.exit3699 ], [ 1, %._crit_edge.lr.ph.i4034 ]
+  %.010602562 = phi i32 [ %offset.i.i1352, %RangeIterator_next_.exit3699 ], [ 10, %._crit_edge.lr.ph.i4034 ]
+  %.010622561 = phi ptr [ %.fca.2.extract724, %RangeIterator_next_.exit3699 ], [ undef, %._crit_edge.lr.ph.i4034 ]
+  %.010642560 = phi ptr [ %.fca.1.extract723, %RangeIterator_next_.exit3699 ], [ %result.i1245, %._crit_edge.lr.ph.i4034 ]
+  %.010662559 = phi ptr [ %.fca.0.extract722, %RangeIterator_next_.exit3699 ], [ @ListNode, %._crit_edge.lr.ph.i4034 ]
   %result.i1309 = call noalias dereferenceable_or_null(40) ptr @bump_malloc_inner(i64 noundef 40, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   %59 = insertvalue { ptr, ptr, ptr, i32 } { ptr @ListNode, ptr undef, ptr undef, i32 undef }, ptr %result.i1309, 1
   %60 = insertvalue { ptr, ptr, ptr, i32 } %59, ptr undef, 2
   %61 = insertvalue { ptr, ptr, ptr, i32 } %60, i32 10, 3
-  store i32 %.pn4158, ptr %result.i1309, align 4
+  store i32 %.pn3995, ptr %result.i1309, align 4
   %62 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef nonnull @ListNode) #36
   %63 = getelementptr i8, ptr %result.i1309, i64 8
   store ptr @nil_typ, ptr %63, align 8
-  %64 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.010662691, 0
-  %65 = insertvalue { ptr, ptr, ptr, i32 } %64, ptr %.010642692, 1
-  %66 = insertvalue { ptr, ptr, ptr, i32 } %65, ptr %.010622693, 2
-  %67 = insertvalue { ptr, ptr, ptr, i32 } %66, i32 %.010602694, 3
+  %64 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.010662559, 0
+  %65 = insertvalue { ptr, ptr, ptr, i32 } %64, ptr %.010642560, 1
+  %66 = insertvalue { ptr, ptr, ptr, i32 } %65, ptr %.010622561, 2
+  %67 = insertvalue { ptr, ptr, ptr, i32 } %66, i32 %.010602562, 3
   store ptr @_parameterization_ListNode, ptr %3, align 8
   %68 = call ptr @llvm.invariant.start.p0(i64 noundef 1, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %3)
-  %69 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef nonnull %.010662691)
-  %70 = sext i32 %.010602694 to i64
-  %71 = getelementptr ptr, ptr %.010662691, i64 %70
+  %69 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef nonnull %.010662559)
+  %70 = sext i32 %.010602562 to i64
+  %71 = getelementptr ptr, ptr %.010662559, i64 %70
   %72 = getelementptr i8, ptr %71, i64 24
   %73 = load ptr, ptr %72, align 8
   store ptr @ListNode, ptr %4, align 8
@@ -19093,16 +19091,16 @@ define noundef i32 @main() local_unnamed_addr {
   %75 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   %76 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef nonnull @RangeIterator) #36
   %77 = icmp ugt i32 %58, 10
-  br i1 %77, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2103, label %RangeIterator_next_.exit3862
+  br i1 %77, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2074, label %RangeIterator_next_.exit3699
 
-RangeIterator_next_.exit3862:                     ; preds = %._crit_edge6
+RangeIterator_next_.exit3699:                     ; preds = %._crit_edge6
   %.fca.2.extract724 = extractvalue { ptr, ptr, ptr, i32 } %74, 2
   %.fca.1.extract723 = extractvalue { ptr, ptr, ptr, i32 } %74, 1
   %78 = add nuw nsw i32 %58, 1
   %79 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef nonnull @RangeIterator) #42
   br label %._crit_edge6
 
-IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2103: ; preds = %._crit_edge6
+IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2074: ; preds = %._crit_edge6
   %.pre = load i32, ptr %result.i1245, align 4
   %80 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
   %81 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
@@ -19117,17 +19115,17 @@ IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_pr
   %89 = call ptr @llvm.invariant.start.p0(i64 noundef 40, ptr nocapture nofree noundef nonnull @ListIterator)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   %90 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
-  br label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2116
+  br label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2084
 
-IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2116: ; preds = %ListIterator_next_.exit4320, %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2103
-  %offset_tbl.i.i1392 = phi ptr [ @ListNode_offset_tbl, %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2103 ], [ %offset_tbl.i.i39.i4302, %ListIterator_next_.exit4320 ]
-  %tbl_size.i.i1391 = phi i64 [ 3, %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2103 ], [ %tbl_size.i.i38.i4301, %ListIterator_next_.exit4320 ]
-  %hash_coef.i.i1390 = phi i64 [ 4611686018427388081, %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2103 ], [ %hash_coef.i.i37.i4300, %ListIterator_next_.exit4320 ]
-  %91 = phi i32 [ 10, %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2103 ], [ %offset.i.i59.i4308, %ListIterator_next_.exit4320 ]
-  %92 = phi ptr [ @ListNode, %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2103 ], [ %.fca.0.extract.i4287, %ListIterator_next_.exit4320 ]
-  %.in = phi i64 [ %88, %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2103 ], [ %.sroa.374.8.extract.trunc.i4294, %ListIterator_next_.exit4320 ]
-  %.in4684 = phi i64 [ 0, %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2103 ], [ %.sroa.575.8.extract.trunc.i4296, %ListIterator_next_.exit4320 ]
-  %93 = inttoptr i64 %.in4684 to ptr
+IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2084: ; preds = %ListIterator_next_.exit4156, %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2074
+  %offset_tbl.i.i1392 = phi ptr [ @ListNode_offset_tbl, %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2074 ], [ %offset_tbl.i.i39.i4138, %ListIterator_next_.exit4156 ]
+  %tbl_size.i.i1391 = phi i64 [ 3, %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2074 ], [ %tbl_size.i.i38.i4137, %ListIterator_next_.exit4156 ]
+  %hash_coef.i.i1390 = phi i64 [ 4611686018427388081, %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2074 ], [ %hash_coef.i.i37.i4136, %ListIterator_next_.exit4156 ]
+  %91 = phi i32 [ 10, %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2074 ], [ %offset.i.i59.i4144, %ListIterator_next_.exit4156 ]
+  %92 = phi ptr [ @ListNode, %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2074 ], [ %.fca.0.extract.i4123, %ListIterator_next_.exit4156 ]
+  %.in = phi i64 [ %88, %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2074 ], [ %.sroa.374.8.extract.trunc.i4130, %ListIterator_next_.exit4156 ]
+  %.in4520 = phi i64 [ 0, %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2074 ], [ %.sroa.575.8.extract.trunc.i4132, %ListIterator_next_.exit4156 ]
+  %93 = inttoptr i64 %.in4520 to ptr
   %94 = inttoptr i64 %.in to ptr
   %product.i.i.i1393 = mul i64 %hash_coef.i.i1390, -1756024950533091476
   %shifted.i.i.i1394 = lshr i64 %product.i.i.i1393, 32
@@ -19158,36 +19156,36 @@ IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_pr
   %113 = getelementptr ptr, ptr %92, i64 %112
   %114 = getelementptr i8, ptr %113, i64 32
   %115 = load ptr, ptr %114, align 8
-  %result.i.i4286 = call ptr %115({ ptr, ptr, ptr, i32 } %109, ptr nocapture nofree noundef nonnull readonly %0) #8
-  %116 = call { ptr, i160 } %result.i.i4286({ ptr, ptr, ptr, i32 } %109, { ptr, ptr, ptr, i32 } %109, ptr nonnull align 8 %0) #6
-  %.fca.0.extract.i4287 = extractvalue { ptr, i160 } %116, 0
-  %117 = icmp ne ptr %.fca.0.extract.i4287, @nil_typ
-  %118 = icmp ne ptr %.fca.0.extract.i4287, null
-  %.not32.i4288 = and i1 %117, %118
-  br i1 %.not32.i4288, label %ListIterator_next_.exit4320, label %IntArrayIterator_next_.exit4924.lr.ph
+  %result.i.i4122 = call ptr %115({ ptr, ptr, ptr, i32 } %109, ptr nocapture nofree noundef nonnull readonly %0) #8
+  %116 = call { ptr, i160 } %result.i.i4122({ ptr, ptr, ptr, i32 } %109, { ptr, ptr, ptr, i32 } %109, ptr nonnull align 8 %0) #6
+  %.fca.0.extract.i4123 = extractvalue { ptr, i160 } %116, 0
+  %117 = icmp ne ptr %.fca.0.extract.i4123, @nil_typ
+  %118 = icmp ne ptr %.fca.0.extract.i4123, null
+  %.not32.i4124 = and i1 %117, %118
+  br i1 %.not32.i4124, label %ListIterator_next_.exit4156, label %IntArrayIterator_next_.exit4760.lr.ph
 
-ListIterator_next_.exit4320:                      ; preds = %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2116
-  %.fca.1.extract.i4293 = extractvalue { ptr, i160 } %116, 1
-  %.sroa.374.8.extract.trunc.i4294 = trunc i160 %.fca.1.extract.i4293 to i64
-  %.sroa.575.8.extract.shift.i4295 = lshr i160 %.fca.1.extract.i4293, 64
-  %.sroa.575.8.extract.trunc.i4296 = trunc i160 %.sroa.575.8.extract.shift.i4295 to i64
-  %hash_coef_ptr.i.i34.i4297 = getelementptr i8, ptr %.fca.0.extract.i4287, i64 8
-  %tbl_size_ptr.i.i35.i4298 = getelementptr i8, ptr %.fca.0.extract.i4287, i64 16
-  %offset_tbl_ptr.i.i36.i4299 = getelementptr i8, ptr %.fca.0.extract.i4287, i64 40
-  %hash_coef.i.i37.i4300 = load i64, ptr %hash_coef_ptr.i.i34.i4297, align 4
-  %tbl_size.i.i38.i4301 = load i64, ptr %tbl_size_ptr.i.i35.i4298, align 4
-  %offset_tbl.i.i39.i4302 = load ptr, ptr %offset_tbl_ptr.i.i36.i4299, align 8
-  %product.i.i.i40.i4303 = mul i64 %hash_coef.i.i37.i4300, -1756024950533091476
-  %shifted.i.i.i41.i4304 = lshr i64 %product.i.i.i40.i4303, 32
-  %xored.i.i.i42.i4305 = xor i64 %shifted.i.i.i41.i4304, %product.i.i.i40.i4303
-  %hash.i.i.i43.i4306 = and i64 %xored.i.i.i42.i4305, %tbl_size.i.i38.i4301
-  %offset_ptr.i.i44.i4307 = getelementptr i32, ptr %offset_tbl.i.i39.i4302, i64 %hash.i.i.i43.i4306
-  %offset.i.i59.i4308 = load i32, ptr %offset_ptr.i.i44.i4307, align 4, !noalias !689
+ListIterator_next_.exit4156:                      ; preds = %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2084
+  %.fca.1.extract.i4129 = extractvalue { ptr, i160 } %116, 1
+  %.sroa.374.8.extract.trunc.i4130 = trunc i160 %.fca.1.extract.i4129 to i64
+  %.sroa.575.8.extract.shift.i4131 = lshr i160 %.fca.1.extract.i4129, 64
+  %.sroa.575.8.extract.trunc.i4132 = trunc i160 %.sroa.575.8.extract.shift.i4131 to i64
+  %hash_coef_ptr.i.i34.i4133 = getelementptr i8, ptr %.fca.0.extract.i4123, i64 8
+  %tbl_size_ptr.i.i35.i4134 = getelementptr i8, ptr %.fca.0.extract.i4123, i64 16
+  %offset_tbl_ptr.i.i36.i4135 = getelementptr i8, ptr %.fca.0.extract.i4123, i64 40
+  %hash_coef.i.i37.i4136 = load i64, ptr %hash_coef_ptr.i.i34.i4133, align 4
+  %tbl_size.i.i38.i4137 = load i64, ptr %tbl_size_ptr.i.i35.i4134, align 4
+  %offset_tbl.i.i39.i4138 = load ptr, ptr %offset_tbl_ptr.i.i36.i4135, align 8
+  %product.i.i.i40.i4139 = mul i64 %hash_coef.i.i37.i4136, -1756024950533091476
+  %shifted.i.i.i41.i4140 = lshr i64 %product.i.i.i40.i4139, 32
+  %xored.i.i.i42.i4141 = xor i64 %shifted.i.i.i41.i4140, %product.i.i.i40.i4139
+  %hash.i.i.i43.i4142 = and i64 %xored.i.i.i42.i4141, %tbl_size.i.i38.i4137
+  %offset_ptr.i.i44.i4143 = getelementptr i32, ptr %offset_tbl.i.i39.i4138, i64 %hash.i.i.i43.i4142
+  %offset.i.i59.i4144 = load i32, ptr %offset_ptr.i.i44.i4143, align 4, !noalias !689
   %119 = call ptr @llvm.invariant.start.p0(i64 noundef 40, ptr nocapture nofree noundef nonnull @ListIterator)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
-  br label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2116
+  br label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2084
 
-IntArrayIterator_next_.exit4924.lr.ph:            ; preds = %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2116
+IntArrayIterator_next_.exit4760.lr.ph:            ; preds = %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2084
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   %stack.i = call noalias noundef nonnull align 8 dereferenceable(8388608) ptr @VirtualAlloc(ptr nofree noundef align 4294967296 null, i64 noundef 8388608, i32 noundef 12288, i32 noundef 4) #44
   store ptr @print88, ptr %stack.i, align 8
@@ -19200,7 +19198,7 @@ IntArrayIterator_next_.exit4924.lr.ph:            ; preds = %IO_B__Self_print_xR
   %into_callee_third_word.i = getelementptr inbounds i8, ptr %stack.i, i64 24
   store i64 %stack_top_aligned.i, ptr %into_callee_buf.i, align 8
   store i64 %stack_top_aligned.i, ptr %into_callee_third_word.i, align 8
-  store ptr @coroutine_zhdmrpsinq_passer, ptr %arg_passer_slot.i, align 8
+  store ptr @coroutine_dhmcdbolhw_passer, ptr %arg_passer_slot.i, align 8
   %is_finished.i = getelementptr inbounds i8, ptr %stack.i, i64 40
   store i1 false, ptr %is_finished.i, align 8
   call void @coroutine_trampoline(ptr noundef nonnull %into_callee_second_word.i)
@@ -19252,14 +19250,14 @@ IntArrayIterator_next_.exit4924.lr.ph:            ; preds = %IO_B__Self_print_xR
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   %138 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   %139 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  %result.i89.i3581 = call noalias dereferenceable_or_null(16) ptr @bump_malloc_inner(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  store i32 8, ptr %result.i89.i3581, align 4
-  %scevgep = getelementptr i8, ptr %result.i89.i3581, i64 4
+  %result.i89.i3425 = call noalias dereferenceable_or_null(16) ptr @bump_malloc_inner(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  store i32 8, ptr %result.i89.i3425, align 4
+  %scevgep = getelementptr i8, ptr %result.i89.i3425, i64 4
   call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 4 dereferenceable(12) %scevgep, ptr noundef nonnull align 4 dereferenceable(12) %135, i64 12, i1 false)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
-  %.phi.trans.insert4681 = getelementptr i8, ptr %result.i89.i3581, i64 12
-  %.reg2mem28.0.i3624.pre = load i32, ptr %.phi.trans.insert4681, align 4
-  %140 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %.reg2mem28.0.i3624.pre) #11
+  %.phi.trans.insert4517 = getelementptr i8, ptr %result.i89.i3425, i64 12
+  %.reg2mem28.0.i3468.pre = load i32, ptr %.phi.trans.insert4517, align 4
+  %140 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %.reg2mem28.0.i3468.pre) #11
   %result.i.i1563 = call noalias align 4 dereferenceable_or_null(4) ptr @bump_malloc_inner(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   store <3 x i8> <i8 111, i8 110, i8 101>, ptr %result.i.i1563, align 4
   %result.i.i.i = call noalias dereferenceable_or_null(4) ptr @bump_malloc_inner(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
@@ -19312,11 +19310,11 @@ IntArrayIterator_next_.exit4924.lr.ph:            ; preds = %IO_B__Self_print_xR
   %176 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %result.i.i44524954 = call noalias dereferenceable_or_null(2) ptr @bump_malloc_inner(i64 noundef 2, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  %result.i.i42884790 = call noalias dereferenceable_or_null(2) ptr @bump_malloc_inner(i64 noundef 2, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   %177 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0) #36
   %178 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  store i8 98, ptr %result.i.i44524954, align 1
-  %puts.i44534955 = call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i44524954)
+  store i8 98, ptr %result.i.i42884790, align 1
+  %puts.i42894791 = call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i42884790)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   %179 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
@@ -19325,45 +19323,45 @@ IntArrayIterator_next_.exit4924.lr.ph:            ; preds = %IO_B__Self_print_xR
   %182 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %result.i.i4452 = call noalias dereferenceable_or_null(2) ptr @bump_malloc_inner(i64 noundef 2, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  %result.i.i4288 = call noalias dereferenceable_or_null(2) ptr @bump_malloc_inner(i64 noundef 2, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   %183 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0) #36
   %184 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  store i8 111, ptr %result.i.i4452, align 1
-  %puts.i4453 = call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4452)
+  store i8 111, ptr %result.i.i4288, align 1
+  %puts.i4289 = call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4288)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   %185 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   %186 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %result.i.i4452.1 = call noalias dereferenceable_or_null(2) ptr @bump_malloc_inner(i64 noundef 2, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  %result.i.i4288.1 = call noalias dereferenceable_or_null(2) ptr @bump_malloc_inner(i64 noundef 2, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   %187 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0) #36
   %188 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  store i8 111, ptr %result.i.i4452.1, align 1
-  %puts.i4453.1 = call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4452.1)
+  store i8 111, ptr %result.i.i4288.1, align 1
+  %puts.i4289.1 = call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4288.1)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   %189 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   %190 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %result.i.i4452.2 = call noalias dereferenceable_or_null(2) ptr @bump_malloc_inner(i64 noundef 2, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  %result.i.i4288.2 = call noalias dereferenceable_or_null(2) ptr @bump_malloc_inner(i64 noundef 2, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   %191 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0) #36
   %192 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  store i8 109, ptr %result.i.i4452.2, align 1
-  %puts.i4453.2 = call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4452.2)
+  store i8 109, ptr %result.i.i4288.2, align 1
+  %puts.i4289.2 = call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4288.2)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   %193 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   %194 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %result.i.i4452.3 = call noalias dereferenceable_or_null(2) ptr @bump_malloc_inner(i64 noundef 2, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  %result.i.i4288.3 = call noalias dereferenceable_or_null(2) ptr @bump_malloc_inner(i64 noundef 2, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   %195 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0) #36
   %196 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   %197 = call ptr @llvm.invariant.start.p0(i64 noundef 40, ptr nocapture nofree noundef nonnull @Character) #36
-  store i8 33, ptr %result.i.i4452.3, align 1
-  %puts.i4453.3 = call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4452.3)
+  store i8 33, ptr %result.i.i4288.3, align 1
+  %puts.i4289.3 = call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4288.3)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   %198 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
@@ -19376,11 +19374,11 @@ IntArrayIterator_next_.exit4924.lr.ph:            ; preds = %IO_B__Self_print_xR
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   %202 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0) #36
   %203 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  %result.i.i4468 = call noalias dereferenceable_or_null(7) ptr @bump_malloc_inner(i64 noundef 7, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(6) %result.i.i4468, ptr noundef nonnull align 8 dereferenceable(6) %result.i.i, i64 6, i1 false)
-  %204 = getelementptr i8, ptr %result.i.i4468, i64 6
+  %result.i.i4304 = call noalias dereferenceable_or_null(7) ptr @bump_malloc_inner(i64 noundef 7, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(6) %result.i.i4304, ptr noundef nonnull align 8 dereferenceable(6) %result.i.i, i64 6, i1 false)
+  %204 = getelementptr i8, ptr %result.i.i4304, i64 6
   store i8 0, ptr %204, align 1
-  %puts.i4053 = call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4468)
+  %puts.i3890 = call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4304)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   %205 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
   %206 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
@@ -19389,20 +19387,20 @@ IntArrayIterator_next_.exit4924.lr.ph:            ; preds = %IO_B__Self_print_xR
   %208 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   %209 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
   %210 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  %result.i.i4841 = call noalias dereferenceable_or_null(9) ptr @bump_malloc_inner(i64 noundef 9, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  store i64 3635079343999577673, ptr %result.i.i4841, align 1
-  %211 = getelementptr i8, ptr %result.i.i4841, i64 8
+  %result.i.i4677 = call noalias dereferenceable_or_null(9) ptr @bump_malloc_inner(i64 noundef 9, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  store i64 3635079343999577673, ptr %result.i.i4677, align 1
+  %211 = getelementptr i8, ptr %result.i.i4677, i64 8
   store i8 0, ptr %211, align 1
-  %puts.i3725 = call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4841)
+  %puts.i3566 = call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4677)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   %212 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
   %213 = call ptr @llvm.invariant.start.p0(i64 noundef 320, ptr nocapture nofree noundef nonnull @Integer2)
   %214 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  %result.i.i3727 = call noalias align 16 dereferenceable_or_null(11) ptr @bump_malloc_inner(i64 noundef 11, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  store <10 x i8> <i8 72, i8 101, i8 114, i8 101, i8 32, i8 73, i8 32, i8 97, i8 109, i8 33>, ptr %result.i.i3727, align 16
-  %result.i.i.i3728 = call noalias dereferenceable_or_null(11) ptr @bump_malloc_inner(i64 noundef 11, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(10) %result.i.i.i3728, ptr noundef nonnull align 16 dereferenceable(10) %result.i.i3727, i64 10, i1 false)
-  %puts.i.i3729 = call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i.i3728)
+  %result.i.i3568 = call noalias align 16 dereferenceable_or_null(11) ptr @bump_malloc_inner(i64 noundef 11, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  store <10 x i8> <i8 72, i8 101, i8 114, i8 101, i8 32, i8 73, i8 32, i8 97, i8 109, i8 33>, ptr %result.i.i3568, align 16
+  %result.i.i.i3569 = call noalias dereferenceable_or_null(11) ptr @bump_malloc_inner(i64 noundef 11, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(10) %result.i.i.i3569, ptr noundef nonnull align 16 dereferenceable(10) %result.i.i3568, i64 10, i1 false)
+  %puts.i.i3570 = call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i.i3569)
   %215 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   %216 = call ptr @llvm.invariant.start.p0(i64 noundef 456, ptr nocapture nofree noundef nonnull @Range) #36
   %217 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
@@ -19481,11 +19479,11 @@ IntArrayIterator_next_.exit4924.lr.ph:            ; preds = %IO_B__Self_print_xR
   store <20 x i8> <i8 116, i8 104, i8 105, i8 115, i8 10, i8 105, i8 115, i8 32, i8 104, i8 111, i8 119, i8 10, i8 119, i8 101, i8 32, i8 100, i8 111, i8 10, i8 105, i8 116>, ptr %result.i1825, align 32
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   %263 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  %result.i.i3750 = call noalias dereferenceable_or_null(13) ptr @bump_malloc_inner(i64 noundef 13, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(12) %result.i.i3750, ptr noundef nonnull align 16 dereferenceable(12) %result.i1821, i64 12, i1 false)
-  %264 = getelementptr i8, ptr %result.i.i3750, i64 12
+  %result.i.i3589 = call noalias dereferenceable_or_null(13) ptr @bump_malloc_inner(i64 noundef 13, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(12) %result.i.i3589, ptr noundef nonnull align 16 dereferenceable(12) %result.i1821, i64 12, i1 false)
+  %264 = getelementptr i8, ptr %result.i.i3589, i64 12
   store i8 0, ptr %264, align 1
-  %265 = insertvalue { ptr } undef, ptr %result.i.i3750, 0
+  %265 = insertvalue { ptr } undef, ptr %result.i.i3589, 0
   %266 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
   %267 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   %result.i.i.i1842 = call noalias dereferenceable_or_null(2) ptr @bump_malloc_inner(i64 noundef 2, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
@@ -19495,12 +19493,12 @@ IntArrayIterator_next_.exit4924.lr.ph:            ; preds = %IO_B__Self_print_xR
   %270 = call { ptr } @fopen({ ptr } %265, { ptr } %269)
   %271 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
   %272 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  %result.i.i3767 = call noalias dereferenceable_or_null(21) ptr @bump_malloc_inner(i64 noundef 21, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(20) %result.i.i3767, ptr noundef nonnull align 32 dereferenceable(20) %result.i1825, i64 20, i1 false)
+  %result.i.i3606 = call noalias dereferenceable_or_null(21) ptr @bump_malloc_inner(i64 noundef 21, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(20) %result.i.i3606, ptr noundef nonnull align 32 dereferenceable(20) %result.i1825, i64 20, i1 false)
   %273 = call ptr @llvm.invariant.start.p0(i64 noundef 280, ptr nocapture nofree noundef nonnull @String)
-  %274 = getelementptr i8, ptr %result.i.i3767, i64 20
+  %274 = getelementptr i8, ptr %result.i.i3606, i64 20
   store i8 0, ptr %274, align 1
-  %275 = insertvalue { ptr } undef, ptr %result.i.i3767, 0
+  %275 = insertvalue { ptr } undef, ptr %result.i.i3606, 0
   %276 = call i32 @fprintf({ ptr } %270, { ptr } %275)
   %277 = call i32 @fclose({ ptr } %270)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
@@ -19513,11 +19511,11 @@ IntArrayIterator_next_.exit4924.lr.ph:            ; preds = %IO_B__Self_print_xR
   %278 = getelementptr i8, ptr %result.i58.i, i64 12
   store i32 1, ptr %278, align 4
   %279 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  %result.i.i3788 = call noalias dereferenceable_or_null(13) ptr @bump_malloc_inner(i64 noundef 13, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(12) %result.i.i3788, ptr noundef nonnull align 16 dereferenceable(12) %result.i1843, i64 12, i1 false)
-  %280 = getelementptr i8, ptr %result.i.i3788, i64 12
+  %result.i.i3627 = call noalias dereferenceable_or_null(13) ptr @bump_malloc_inner(i64 noundef 13, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  call void @llvm.memcpy.p0.p0.i64(ptr noundef nonnull align 1 dereferenceable(12) %result.i.i3627, ptr noundef nonnull align 16 dereferenceable(12) %result.i1843, i64 12, i1 false)
+  %280 = getelementptr i8, ptr %result.i.i3627, i64 12
   store i8 0, ptr %280, align 1
-  %281 = insertvalue { ptr } undef, ptr %result.i.i3788, 0
+  %281 = insertvalue { ptr } undef, ptr %result.i.i3627, 0
   %282 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
   %283 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   %result.i.i.i1860 = call noalias dereferenceable_or_null(2) ptr @bump_malloc_inner(i64 noundef 2, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
@@ -19527,9 +19525,9 @@ IntArrayIterator_next_.exit4924.lr.ph:            ; preds = %IO_B__Self_print_xR
   %286 = call { ptr } @fopen({ ptr } %281, { ptr } %285)
   %287 = call i32 @fgetc({ ptr } %286)
   %.not117.i = icmp eq i32 %287, -1
-  br i1 %.not117.i, label %.critedge.i2322, label %._crit_edge.preheader.i
+  br i1 %.not117.i, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2254, label %._crit_edge.preheader.i
 
-._crit_edge.preheader.i:                          ; preds = %IntArrayIterator_next_.exit4924.lr.ph
+._crit_edge.preheader.i:                          ; preds = %IntArrayIterator_next_.exit4760.lr.ph
   %288 = getelementptr i8, ptr %result.i58.i, i64 8
   br label %._crit_edge.i
 
@@ -19615,9 +19613,9 @@ String_append_xPtri8.exit.i:                      ; preds = %String_append_xPtri
   call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %.sroa.3.i.i)
   %317 = call i32 @fgetc({ ptr } %286)
   %.not.i = icmp eq i32 %317, -1
-  br i1 %.not.i, label %.critedge.i2322, label %._crit_edge.i
+  br i1 %.not.i, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2254, label %._crit_edge.i
 
-.critedge.i2322:                                  ; preds = %String_append_xPtri8.exit.i, %IntArrayIterator_next_.exit4924.lr.ph
+IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2254: ; preds = %String_append_xPtri8.exit.i, %IntArrayIterator_next_.exit4760.lr.ph
   %318 = call i32 @fclose({ ptr } %286)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
@@ -19627,22 +19625,22 @@ String_append_xPtri8.exit.i:                      ; preds = %String_append_xPtri
   %322 = load i32, ptr %321, align 4
   %323 = add i32 %322, 1
   %324 = sext i32 %323 to i64
-  %result.i.i4412 = call noalias ptr @bump_malloc_inner(i64 noundef %324, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
+  %result.i.i4248 = call noalias ptr @bump_malloc_inner(i64 noundef %324, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
   %325 = icmp sgt i32 %322, 0
-  br i1 %325, label %._crit_edge.lr.ph.i4413, label %._crit_edge.i3251.preheader
+  br i1 %325, label %._crit_edge.lr.ph.i4249, label %._crit_edge.i3112.preheader
 
-._crit_edge.lr.ph.i4413:                          ; preds = %.critedge.i2322
+._crit_edge.lr.ph.i4249:                          ; preds = %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2254
   %326 = load ptr, ptr %result.i58.i, align 8
   %327 = zext nneg i32 %322 to i64
-  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i4412, ptr align 1 %326, i64 %327, i1 false)
-  br label %._crit_edge.i3251.preheader
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %result.i.i4248, ptr align 1 %326, i64 %327, i1 false)
+  br label %._crit_edge.i3112.preheader
 
-._crit_edge.i3251.preheader:                      ; preds = %.critedge.i2322, %._crit_edge.lr.ph.i4413
+._crit_edge.i3112.preheader:                      ; preds = %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2254, %._crit_edge.lr.ph.i4249
   %328 = call ptr @llvm.invariant.start.p0(i64 noundef 280, ptr nocapture nofree noundef nonnull @String)
   %329 = sext i32 %322 to i64
-  %330 = getelementptr i8, ptr %result.i.i4412, i64 %329
+  %330 = getelementptr i8, ptr %result.i.i4248, i64 %329
   store i8 0, ptr %330, align 1
-  %puts.i3813 = call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4412)
+  %puts.i3652 = call i32 @puts(ptr nonnull dereferenceable(1) %result.i.i4248)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   %331 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
@@ -19662,7 +19660,7 @@ String_append_xPtri8.exit.i:                      ; preds = %String_append_xPtri
   %344 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
   %345 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 5) #11
   %stack.i1867 = call noalias noundef nonnull align 8 dereferenceable(8388608) ptr @VirtualAlloc(ptr nofree noundef align 4294967296 null, i64 noundef 8388608, i32 noundef 12288, i32 noundef 4) #44
-  store ptr @_functionliteral_zcwfishgpw, ptr %stack.i1867, align 8
+  store ptr @_functionliteral_nhyvdnbhld, ptr %stack.i1867, align 8
   %stack_top.i1868 = getelementptr inbounds i8, ptr %stack.i1867, i64 8388608
   %stack_top_i64.i1869 = ptrtoint ptr %stack_top.i1868 to i64
   %stack_top_aligned.i1870 = and i64 %stack_top_i64.i1869, -16
@@ -19672,7 +19670,7 @@ String_append_xPtri8.exit.i:                      ; preds = %String_append_xPtri
   %into_callee_third_word.i1874 = getelementptr inbounds i8, ptr %stack.i1867, i64 24
   store i64 %stack_top_aligned.i1870, ptr %into_callee_buf.i1871, align 8
   store i64 %stack_top_aligned.i1870, ptr %into_callee_third_word.i1874, align 8
-  store ptr @coroutine_zerlfaimah_passer, ptr %arg_passer_slot.i1872, align 8
+  store ptr @coroutine_dowemmegum_passer, ptr %arg_passer_slot.i1872, align 8
   %is_finished.i1875 = getelementptr inbounds i8, ptr %stack.i1867, i64 40
   store i1 false, ptr %is_finished.i1875, align 8
   call void @coroutine_trampoline(ptr noundef nonnull %into_callee_second_word.i1873)
@@ -19704,57 +19702,56 @@ String_append_xPtri8.exit.i:                      ; preds = %String_append_xPtri
   %354 = icmp eq ptr %.fca.0.extract100, @nil_typ
   %355 = icmp eq ptr %.fca.0.extract100, null
   %356 = or i1 %354, %355
-  br i1 %356, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2350, label %357
+  br i1 %356, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2264, label %357
 
-357:                                              ; preds = %._crit_edge.i3251.preheader
-  %358 = icmp eq ptr %.fca.0.extract100, @i64_typ
-  br i1 %358, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2350, label %359
+357:                                              ; preds = %._crit_edge.i3112.preheader
+  %358 = icmp eq ptr %.fca.0.extract100, @bool_typ
+  br i1 %358, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2264, label %359
 
 359:                                              ; preds = %357
-  %360 = getelementptr i8, ptr %.fca.0.extract100, i64 8
-  %361 = getelementptr i8, ptr %.fca.0.extract100, i64 16
-  %362 = getelementptr i8, ptr %.fca.0.extract100, i64 24
-  %363 = getelementptr i8, ptr %.fca.0.extract100, i64 32
-  %364 = load i64, ptr %360, align 4
-  %365 = load i64, ptr %361, align 4
-  %366 = load ptr, ptr %362, align 8
-  %367 = load ptr, ptr %363, align 8
-  %result.i.i2338 = call i1 %366(i64 %365, i64 %364, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr readonly %367) #9
-  %result.i14.i2339 = call i1 %366(i64 %365, i64 %364, i64 6681222582356018452, i64 ptrtoint (ptr @Character to i64), ptr readonly %367) #9
-  %not.result.i.i2340 = xor i1 %result.i.i2338, true
-  %.reg2mem49.0.i2341 = select i1 %not.result.i.i2340, i1 true, i1 %result.i14.i2339
-  br i1 %.reg2mem49.0.i2341, label %368, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2350
+  %360 = icmp eq ptr %.fca.0.extract100, @i64_typ
+  br i1 %360, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2264, label %361
 
-368:                                              ; preds = %359
-  %not.result.i14.i2343 = xor i1 %result.i14.i2339, true
-  %.reg2mem47.0.i2344 = or i1 %result.i.i2338, %not.result.i14.i2343
-  br i1 %.reg2mem47.0.i2344, label %369, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2350
+361:                                              ; preds = %359
+  %362 = icmp eq ptr %.fca.0.extract100, @i8_typ
+  br i1 %362, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2264, label %363
 
-369:                                              ; preds = %368
-  %370 = icmp eq ptr %.fca.0.extract100, @bool_typ
-  br i1 %370, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2350, label %371
+363:                                              ; preds = %361
+  %364 = icmp eq ptr %.fca.0.extract100, @i32_typ
+  br i1 %364, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2264, label %365
 
-371:                                              ; preds = %369
-  %result.i17.i2345 = call i1 %366(i64 %365, i64 %364, i64 -7260840641129990118, i64 ptrtoint (ptr @Representable to i64), ptr readonly %367) #9
-  %result.i17.not.i2346 = xor i1 %result.i17.i2345, true
-  %372 = or i1 %result.i.i2338, %result.i17.not.i2346
-  %or.cond.i2347 = select i1 %372, i1 true, i1 %result.i14.i2339
-  br i1 %or.cond.i2347, label %.critedge.i2348, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2350
+365:                                              ; preds = %363
+  %366 = getelementptr i8, ptr %.fca.0.extract100, i64 8
+  %367 = getelementptr i8, ptr %.fca.0.extract100, i64 16
+  %368 = getelementptr i8, ptr %.fca.0.extract100, i64 24
+  %369 = getelementptr i8, ptr %.fca.0.extract100, i64 32
+  %370 = load i64, ptr %366, align 4
+  %371 = load i64, ptr %367, align 4
+  %372 = load ptr, ptr %368, align 8
+  %373 = load ptr, ptr %369, align 8
+  %result.i.i2255 = call i1 %372(i64 %371, i64 %370, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr readonly %373) #9
+  %result.i13.i2256 = call i1 %372(i64 %371, i64 %370, i64 6681222582356018452, i64 ptrtoint (ptr @Character to i64), ptr readonly %373) #9
+  %not.result.i.i2257 = xor i1 %result.i.i2255, true
+  %.reg2mem41.0.i2258 = select i1 %not.result.i.i2257, i1 true, i1 %result.i13.i2256
+  br i1 %.reg2mem41.0.i2258, label %374, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2264
 
-.critedge.i2348:                                  ; preds = %371
-  %373 = icmp eq ptr %.fca.0.extract100, @f64_typ
-  %374 = icmp eq ptr %.fca.0.extract100, @i32_typ
-  %375 = select i1 %374, i32 4, i32 6
-  %.reg2mem41.0.i2349 = select i1 %373, i32 9, i32 %375
-  br label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2350
+374:                                              ; preds = %365
+  %375 = icmp eq ptr %.fca.0.extract100, @f64_typ
+  br i1 %375, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2264, label %376
 
-IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2350: ; preds = %._crit_edge.i3251.preheader, %357, %359, %368, %369, %371, %.critedge.i2348
-  %.reg2mem29.0.i2342 = phi i32 [ 8, %._crit_edge.i3251.preheader ], [ 2, %357 ], [ 7, %369 ], [ %.reg2mem41.0.i2349, %.critedge.i2348 ], [ 5, %368 ], [ 3, %359 ], [ 1, %371 ]
-  %376 = zext nneg i32 %.reg2mem29.0.i2342 to i64
-  %377 = getelementptr [10 x ptr], ptr @IO, i64 0, i64 %376
-  %378 = getelementptr i8, ptr %377, i64 80
-  %379 = load ptr, ptr %378, align 8
-  call void %379(ptr nonnull align 8 dereferenceable(8) %5, { ptr, i160 } %351) #6
+376:                                              ; preds = %374
+  %not.result.i13.i2261 = xor i1 %result.i13.i2256, true
+  %.reg2mem39.0.i2262 = or i1 %result.i.i2255, %not.result.i13.i2261
+  %spec.select.i2263 = select i1 %.reg2mem39.0.i2262, i32 3, i32 4
+  br label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2264
+
+IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2264: ; preds = %._crit_edge.i3112.preheader, %357, %359, %361, %363, %365, %374, %376
+  %.reg2mem23.0.i2260 = phi i32 [ 7, %._crit_edge.i3112.preheader ], [ 8, %357 ], [ 9, %359 ], [ 2, %361 ], [ 5, %363 ], [ 1, %374 ], [ 6, %365 ], [ %spec.select.i2263, %376 ]
+  %377 = zext nneg i32 %.reg2mem23.0.i2260 to i64
+  %378 = getelementptr [10 x ptr], ptr @IO, i64 0, i64 %377
+  %379 = getelementptr i8, ptr %378, i64 80
+  %380 = load ptr, ptr %379, align 8
+  call void %380(ptr nonnull align 8 dereferenceable(8) %5, { ptr, i160 } %351) #6
   store { ptr, i32 } { ptr @i32_typ, i32 3 }, ptr %348, align 8
   %old_into_caller.unpack.i1882 = load ptr, ptr @into_caller_buf, align 8
   %old_into_caller.unpack1.i1883 = load ptr, ptr getelementptr inbounds (i8, ptr @into_caller_buf, i64 8), align 8
@@ -19766,71 +19763,70 @@ IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_pr
   store ptr %old_into_caller.unpack.i1882, ptr @into_caller_buf, align 8
   store ptr %old_into_caller.unpack1.i1883, ptr getelementptr inbounds (i8, ptr @into_caller_buf, i64 8), align 8
   store ptr %old_into_caller.unpack2.i1884, ptr getelementptr inbounds (i8, ptr @into_caller_buf, i64 16), align 8
-  %380 = load { ptr, i32 }, ptr %348, align 8
-  %.fca.0.extract89 = extractvalue { ptr, i32 } %380, 0
-  %.fca.1.extract90 = extractvalue { ptr, i32 } %380, 1
-  %381 = insertvalue { ptr, i160 } undef, ptr %.fca.0.extract89, 0
+  %381 = load { ptr, i32 }, ptr %348, align 8
+  %.fca.0.extract89 = extractvalue { ptr, i32 } %381, 0
+  %.fca.1.extract90 = extractvalue { ptr, i32 } %381, 1
+  %382 = insertvalue { ptr, i160 } undef, ptr %.fca.0.extract89, 0
   %.sroa.287.8.insert.ext = zext i32 %.fca.1.extract90 to i160
-  %382 = insertvalue { ptr, i160 } %381, i160 %.sroa.287.8.insert.ext, 1
+  %383 = insertvalue { ptr, i160 } %382, i160 %.sroa.287.8.insert.ext, 1
   store ptr @_parameterization_Ptri32_or_Nil, ptr %6, align 8
-  %383 = call ptr @llvm.invariant.start.p0(i64 noundef 1, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %6)
-  %384 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
-  %385 = icmp eq ptr %.fca.0.extract89, @nil_typ
-  %386 = icmp eq ptr %.fca.0.extract89, null
-  %387 = or i1 %385, %386
-  br i1 %387, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2363, label %388
+  %384 = call ptr @llvm.invariant.start.p0(i64 noundef 1, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %6)
+  %385 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
+  %386 = icmp eq ptr %.fca.0.extract89, @nil_typ
+  %387 = icmp eq ptr %.fca.0.extract89, null
+  %388 = or i1 %386, %387
+  br i1 %388, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2274, label %389
 
-388:                                              ; preds = %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2350
-  %389 = icmp eq ptr %.fca.0.extract89, @i64_typ
-  br i1 %389, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2363, label %390
+389:                                              ; preds = %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2264
+  %390 = icmp eq ptr %.fca.0.extract89, @bool_typ
+  br i1 %390, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2274, label %391
 
-390:                                              ; preds = %388
-  %391 = getelementptr i8, ptr %.fca.0.extract89, i64 8
-  %392 = getelementptr i8, ptr %.fca.0.extract89, i64 16
-  %393 = getelementptr i8, ptr %.fca.0.extract89, i64 24
-  %394 = getelementptr i8, ptr %.fca.0.extract89, i64 32
-  %395 = load i64, ptr %391, align 4
-  %396 = load i64, ptr %392, align 4
-  %397 = load ptr, ptr %393, align 8
-  %398 = load ptr, ptr %394, align 8
-  %result.i.i2351 = call i1 %397(i64 %396, i64 %395, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr readonly %398) #9
-  %result.i14.i2352 = call i1 %397(i64 %396, i64 %395, i64 6681222582356018452, i64 ptrtoint (ptr @Character to i64), ptr readonly %398) #9
-  %not.result.i.i2353 = xor i1 %result.i.i2351, true
-  %.reg2mem49.0.i2354 = select i1 %not.result.i.i2353, i1 true, i1 %result.i14.i2352
-  br i1 %.reg2mem49.0.i2354, label %399, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2363
+391:                                              ; preds = %389
+  %392 = icmp eq ptr %.fca.0.extract89, @i64_typ
+  br i1 %392, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2274, label %393
 
-399:                                              ; preds = %390
-  %not.result.i14.i2356 = xor i1 %result.i14.i2352, true
-  %.reg2mem47.0.i2357 = or i1 %result.i.i2351, %not.result.i14.i2356
-  br i1 %.reg2mem47.0.i2357, label %400, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2363
+393:                                              ; preds = %391
+  %394 = icmp eq ptr %.fca.0.extract89, @i8_typ
+  br i1 %394, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2274, label %395
 
-400:                                              ; preds = %399
-  %401 = icmp eq ptr %.fca.0.extract89, @bool_typ
-  br i1 %401, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2363, label %402
+395:                                              ; preds = %393
+  %396 = icmp eq ptr %.fca.0.extract89, @i32_typ
+  br i1 %396, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2274, label %397
 
-402:                                              ; preds = %400
-  %result.i17.i2358 = call i1 %397(i64 %396, i64 %395, i64 -7260840641129990118, i64 ptrtoint (ptr @Representable to i64), ptr readonly %398) #9
-  %result.i17.not.i2359 = xor i1 %result.i17.i2358, true
-  %403 = or i1 %result.i.i2351, %result.i17.not.i2359
-  %or.cond.i2360 = select i1 %403, i1 true, i1 %result.i14.i2352
-  br i1 %or.cond.i2360, label %.critedge.i2361, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2363
+397:                                              ; preds = %395
+  %398 = getelementptr i8, ptr %.fca.0.extract89, i64 8
+  %399 = getelementptr i8, ptr %.fca.0.extract89, i64 16
+  %400 = getelementptr i8, ptr %.fca.0.extract89, i64 24
+  %401 = getelementptr i8, ptr %.fca.0.extract89, i64 32
+  %402 = load i64, ptr %398, align 4
+  %403 = load i64, ptr %399, align 4
+  %404 = load ptr, ptr %400, align 8
+  %405 = load ptr, ptr %401, align 8
+  %result.i.i2265 = call i1 %404(i64 %403, i64 %402, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr readonly %405) #9
+  %result.i13.i2266 = call i1 %404(i64 %403, i64 %402, i64 6681222582356018452, i64 ptrtoint (ptr @Character to i64), ptr readonly %405) #9
+  %not.result.i.i2267 = xor i1 %result.i.i2265, true
+  %.reg2mem41.0.i2268 = select i1 %not.result.i.i2267, i1 true, i1 %result.i13.i2266
+  br i1 %.reg2mem41.0.i2268, label %406, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2274
 
-.critedge.i2361:                                  ; preds = %402
-  %404 = icmp eq ptr %.fca.0.extract89, @f64_typ
-  %405 = icmp eq ptr %.fca.0.extract89, @i32_typ
-  %406 = select i1 %405, i32 4, i32 6
-  %.reg2mem41.0.i2362 = select i1 %404, i32 9, i32 %406
-  br label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2363
+406:                                              ; preds = %397
+  %407 = icmp eq ptr %.fca.0.extract89, @f64_typ
+  br i1 %407, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2274, label %408
 
-IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2363: ; preds = %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2350, %388, %390, %399, %400, %402, %.critedge.i2361
-  %.reg2mem29.0.i2355 = phi i32 [ 8, %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2350 ], [ 2, %388 ], [ 7, %400 ], [ %.reg2mem41.0.i2362, %.critedge.i2361 ], [ 5, %399 ], [ 3, %390 ], [ 1, %402 ]
-  %407 = zext nneg i32 %.reg2mem29.0.i2355 to i64
-  %408 = getelementptr [10 x ptr], ptr @IO, i64 0, i64 %407
-  %409 = getelementptr i8, ptr %408, i64 80
-  %410 = load ptr, ptr %409, align 8
-  call void %410(ptr nonnull align 8 dereferenceable(8) %6, { ptr, i160 } %382) #6
+408:                                              ; preds = %406
+  %not.result.i13.i2271 = xor i1 %result.i13.i2266, true
+  %.reg2mem39.0.i2272 = or i1 %result.i.i2265, %not.result.i13.i2271
+  %spec.select.i2273 = select i1 %.reg2mem39.0.i2272, i32 3, i32 4
+  br label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2274
+
+IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2274: ; preds = %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2264, %389, %391, %393, %395, %397, %406, %408
+  %.reg2mem23.0.i2270 = phi i32 [ 7, %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2264 ], [ 8, %389 ], [ 9, %391 ], [ 2, %393 ], [ 5, %395 ], [ 1, %406 ], [ 6, %397 ], [ %spec.select.i2273, %408 ]
+  %409 = zext nneg i32 %.reg2mem23.0.i2270 to i64
+  %410 = getelementptr [10 x ptr], ptr @IO, i64 0, i64 %409
+  %411 = getelementptr i8, ptr %410, i64 80
+  %412 = load ptr, ptr %411, align 8
+  call void %412(ptr nonnull align 8 dereferenceable(8) %6, { ptr, i160 } %383) #6
   %stack.i1888 = call noalias noundef nonnull align 8 dereferenceable(8388608) ptr @VirtualAlloc(ptr nofree noundef align 4294967296 null, i64 noundef 8388608, i32 noundef 12288, i32 noundef 4) #44
-  store ptr @_functionliteral_wzqxsoskrj, ptr %stack.i1888, align 8
+  store ptr @_functionliteral_llsldaffsn, ptr %stack.i1888, align 8
   %stack_top.i1889 = getelementptr inbounds i8, ptr %stack.i1888, i64 8388608
   %stack_top_i64.i1890 = ptrtoint ptr %stack_top.i1889 to i64
   %stack_top_aligned.i1891 = and i64 %stack_top_i64.i1890, -16
@@ -19840,7 +19836,7 @@ IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_pr
   %into_callee_third_word.i1895 = getelementptr inbounds i8, ptr %stack.i1888, i64 24
   store i64 %stack_top_aligned.i1891, ptr %into_callee_buf.i1892, align 8
   store i64 %stack_top_aligned.i1891, ptr %into_callee_third_word.i1895, align 8
-  store ptr @coroutine_lxaqpmihnb_passer, ptr %arg_passer_slot.i1893, align 8
+  store ptr @coroutine_akfqpqfxun_passer, ptr %arg_passer_slot.i1893, align 8
   %is_finished.i1896 = getelementptr inbounds i8, ptr %stack.i1888, i64 40
   store i1 false, ptr %is_finished.i1896, align 8
   call void @coroutine_trampoline(ptr noundef nonnull %into_callee_second_word.i1894)
@@ -19854,80 +19850,79 @@ IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_pr
   store ptr %old_into_caller.unpack.i1897, ptr @into_caller_buf, align 8
   store ptr %old_into_caller.unpack1.i1898, ptr getelementptr inbounds (i8, ptr @into_caller_buf, i64 8), align 8
   store ptr %old_into_caller.unpack2.i1899, ptr getelementptr inbounds (i8, ptr @into_caller_buf, i64 16), align 8
-  %411 = getelementptr inbounds i8, ptr %stack.i1888, i64 48
-  %412 = load { ptr, i32 }, ptr %411, align 8
-  %.fca.0.extract75 = extractvalue { ptr, i32 } %412, 0
+  %413 = getelementptr inbounds i8, ptr %stack.i1888, i64 48
+  %414 = load { ptr, i32 }, ptr %413, align 8
+  %.fca.0.extract75 = extractvalue { ptr, i32 } %414, 0
   store ptr @_parameterization_Ptri32_or_Nil, ptr %7, align 8
-  %413 = call ptr @llvm.invariant.start.p0(i64 noundef 1, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %7)
-  %414 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
-  %415 = icmp eq ptr %.fca.0.extract75, @nil_typ
-  %416 = icmp eq ptr %.fca.0.extract75, null
-  %417 = or i1 %415, %416
-  br i1 %417, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2428, label %418
+  %415 = call ptr @llvm.invariant.start.p0(i64 noundef 1, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %7)
+  %416 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
+  %417 = icmp eq ptr %.fca.0.extract75, @nil_typ
+  %418 = icmp eq ptr %.fca.0.extract75, null
+  %419 = or i1 %417, %418
+  br i1 %419, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2324, label %420
 
-418:                                              ; preds = %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2363
-  %419 = icmp eq ptr %.fca.0.extract75, @i64_typ
-  br i1 %419, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2428, label %420
+420:                                              ; preds = %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2274
+  %421 = icmp eq ptr %.fca.0.extract75, @bool_typ
+  br i1 %421, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2324, label %422
 
-420:                                              ; preds = %418
-  %421 = getelementptr i8, ptr %.fca.0.extract75, i64 8
-  %422 = getelementptr i8, ptr %.fca.0.extract75, i64 16
-  %423 = getelementptr i8, ptr %.fca.0.extract75, i64 24
-  %424 = getelementptr i8, ptr %.fca.0.extract75, i64 32
-  %425 = load i64, ptr %421, align 4
-  %426 = load i64, ptr %422, align 4
-  %427 = load ptr, ptr %423, align 8
-  %428 = load ptr, ptr %424, align 8
-  %result.i.i2364 = call i1 %427(i64 %426, i64 %425, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr readonly %428) #9
-  %result.i14.i2365 = call i1 %427(i64 %426, i64 %425, i64 6681222582356018452, i64 ptrtoint (ptr @Character to i64), ptr readonly %428) #9
-  %not.result.i.i2366 = xor i1 %result.i.i2364, true
-  %.reg2mem49.0.i2367 = select i1 %not.result.i.i2366, i1 true, i1 %result.i14.i2365
-  br i1 %.reg2mem49.0.i2367, label %429, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2428
+422:                                              ; preds = %420
+  %423 = icmp eq ptr %.fca.0.extract75, @i64_typ
+  br i1 %423, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2324, label %424
 
-429:                                              ; preds = %420
-  %not.result.i14.i2369 = xor i1 %result.i14.i2365, true
-  %.reg2mem47.0.i2370 = or i1 %result.i.i2364, %not.result.i14.i2369
-  br i1 %.reg2mem47.0.i2370, label %430, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2428
+424:                                              ; preds = %422
+  %425 = icmp eq ptr %.fca.0.extract75, @i8_typ
+  br i1 %425, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2324, label %426
 
-430:                                              ; preds = %429
-  %431 = icmp eq ptr %.fca.0.extract75, @bool_typ
-  br i1 %431, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2428, label %432
+426:                                              ; preds = %424
+  %427 = icmp eq ptr %.fca.0.extract75, @i32_typ
+  br i1 %427, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2324, label %428
 
-432:                                              ; preds = %430
-  %result.i17.i2371 = call i1 %427(i64 %426, i64 %425, i64 -7260840641129990118, i64 ptrtoint (ptr @Representable to i64), ptr readonly %428) #9
-  %result.i17.not.i2372 = xor i1 %result.i17.i2371, true
-  %433 = or i1 %result.i.i2364, %result.i17.not.i2372
-  %or.cond.i2373 = select i1 %433, i1 true, i1 %result.i14.i2365
-  br i1 %or.cond.i2373, label %.critedge.i2374, label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2428
+428:                                              ; preds = %426
+  %429 = getelementptr i8, ptr %.fca.0.extract75, i64 8
+  %430 = getelementptr i8, ptr %.fca.0.extract75, i64 16
+  %431 = getelementptr i8, ptr %.fca.0.extract75, i64 24
+  %432 = getelementptr i8, ptr %.fca.0.extract75, i64 32
+  %433 = load i64, ptr %429, align 4
+  %434 = load i64, ptr %430, align 4
+  %435 = load ptr, ptr %431, align 8
+  %436 = load ptr, ptr %432, align 8
+  %result.i.i2275 = call i1 %435(i64 %434, i64 %433, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr readonly %436) #9
+  %result.i13.i2276 = call i1 %435(i64 %434, i64 %433, i64 6681222582356018452, i64 ptrtoint (ptr @Character to i64), ptr readonly %436) #9
+  %not.result.i.i2277 = xor i1 %result.i.i2275, true
+  %.reg2mem41.0.i2278 = select i1 %not.result.i.i2277, i1 true, i1 %result.i13.i2276
+  br i1 %.reg2mem41.0.i2278, label %437, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2324
 
-.critedge.i2374:                                  ; preds = %432
-  %434 = icmp eq ptr %.fca.0.extract75, @f64_typ
-  %435 = icmp eq ptr %.fca.0.extract75, @i32_typ
-  %436 = select i1 %435, i32 4, i32 6
-  %.reg2mem41.0.i2375 = select i1 %434, i32 9, i32 %436
-  br label %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2428
+437:                                              ; preds = %428
+  %438 = icmp eq ptr %.fca.0.extract75, @f64_typ
+  br i1 %438, label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2324, label %439
 
-IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2428: ; preds = %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2363, %418, %420, %429, %430, %432, %.critedge.i2374
-  %.reg2mem29.0.i2368 = phi i32 [ 8, %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2363 ], [ 2, %418 ], [ 7, %430 ], [ %.reg2mem41.0.i2375, %.critedge.i2374 ], [ 5, %429 ], [ 3, %420 ], [ 1, %432 ]
-  %437 = insertvalue { ptr, i160 } undef, ptr %.fca.0.extract75, 0
-  %.fca.1.extract76 = extractvalue { ptr, i32 } %412, 1
+439:                                              ; preds = %437
+  %not.result.i13.i2281 = xor i1 %result.i13.i2276, true
+  %.reg2mem39.0.i2282 = or i1 %result.i.i2275, %not.result.i13.i2281
+  %spec.select.i2283 = select i1 %.reg2mem39.0.i2282, i32 3, i32 4
+  br label %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2324
+
+IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2324: ; preds = %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2274, %420, %422, %424, %426, %428, %437, %439
+  %.reg2mem23.0.i2280 = phi i32 [ 7, %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2274 ], [ 8, %420 ], [ 9, %422 ], [ 2, %424 ], [ 5, %426 ], [ 1, %437 ], [ 6, %428 ], [ %spec.select.i2283, %439 ]
+  %440 = insertvalue { ptr, i160 } undef, ptr %.fca.0.extract75, 0
+  %.fca.1.extract76 = extractvalue { ptr, i32 } %414, 1
   %.sroa.273.8.insert.ext = zext i32 %.fca.1.extract76 to i160
-  %438 = insertvalue { ptr, i160 } %437, i160 %.sroa.273.8.insert.ext, 1
-  %439 = zext nneg i32 %.reg2mem29.0.i2368 to i64
-  %440 = getelementptr [10 x ptr], ptr @IO, i64 0, i64 %439
-  %441 = getelementptr i8, ptr %440, i64 80
-  %442 = load ptr, ptr %441, align 8
-  call void %442(ptr nonnull align 8 dereferenceable(8) %7, { ptr, i160 } %438) #6
+  %441 = insertvalue { ptr, i160 } %440, i160 %.sroa.273.8.insert.ext, 1
+  %442 = zext nneg i32 %.reg2mem23.0.i2280 to i64
+  %443 = getelementptr [10 x ptr], ptr @IO, i64 0, i64 %442
+  %444 = getelementptr i8, ptr %443, i64 80
+  %445 = load ptr, ptr %444, align 8
+  call void %445(ptr nonnull align 8 dereferenceable(8) %7, { ptr, i160 } %441) #6
   %result.i1904 = call noalias dereferenceable_or_null(16) ptr @bump_malloc_inner(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  %443 = insertvalue { ptr, ptr, ptr, i32 } { ptr @Channel, ptr undef, ptr undef, i32 undef }, ptr %result.i1904, 1
-  %444 = insertvalue { ptr, ptr, ptr, i32 } %443, ptr undef, 2
-  %445 = insertvalue { ptr, ptr, ptr, i32 } %444, i32 10, 3
-  %446 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
-  %447 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  %448 = call ptr @llvm.invariant.start.p0(i64 noundef 56, ptr nocapture nofree noundef nonnull @Channel) #36
+  %446 = insertvalue { ptr, ptr, ptr, i32 } { ptr @Channel, ptr undef, ptr undef, i32 undef }, ptr %result.i1904, 1
+  %447 = insertvalue { ptr, ptr, ptr, i32 } %446, ptr undef, 2
+  %448 = insertvalue { ptr, ptr, ptr, i32 } %447, i32 10, 3
+  %449 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %450 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
+  %451 = call ptr @llvm.invariant.start.p0(i64 noundef 56, ptr nocapture nofree noundef nonnull @Channel) #36
   store ptr @nil_typ, ptr %result.i1904, align 8
   %stack.i1920 = call noalias noundef nonnull align 8 dereferenceable(8388608) ptr @VirtualAlloc(ptr nofree noundef align 4294967296 null, i64 noundef 8388608, i32 noundef 12288, i32 noundef 4) #44
-  store ptr @_functionliteral_dhyzoofutg, ptr %stack.i1920, align 8
+  store ptr @_functionliteral_stnvqtrzkz, ptr %stack.i1920, align 8
   %stack_top.i1921 = getelementptr inbounds i8, ptr %stack.i1920, i64 8388608
   %stack_top_i64.i1922 = ptrtoint ptr %stack_top.i1921 to i64
   %stack_top_aligned.i1923 = and i64 %stack_top_i64.i1922, -16
@@ -19937,12 +19932,12 @@ IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_pr
   %into_callee_third_word.i1927 = getelementptr inbounds i8, ptr %stack.i1920, i64 24
   store i64 %stack_top_aligned.i1923, ptr %into_callee_buf.i1924, align 8
   store i64 %stack_top_aligned.i1923, ptr %into_callee_third_word.i1927, align 8
-  store ptr @coroutine_xkuywylxja_passer, ptr %arg_passer_slot.i1925, align 8
+  store ptr @coroutine_bcvlnaxceh_passer, ptr %arg_passer_slot.i1925, align 8
   %is_finished.i1928 = getelementptr inbounds i8, ptr %stack.i1920, i64 40
   store i1 false, ptr %is_finished.i1928, align 8
   call void @coroutine_trampoline(ptr noundef nonnull %into_callee_second_word.i1926)
-  %449 = getelementptr inbounds i8, ptr %stack.i1920, i64 80
-  store { ptr, ptr, ptr, i32 } %445, ptr %449, align 8
+  %452 = getelementptr inbounds i8, ptr %stack.i1920, i64 80
+  store { ptr, ptr, ptr, i32 } %448, ptr %452, align 8
   %old_into_caller.unpack.i1929 = load ptr, ptr @into_caller_buf, align 8
   %old_into_caller.unpack1.i1930 = load ptr, ptr getelementptr inbounds (i8, ptr @into_caller_buf, i64 8), align 8
   %old_into_caller.unpack2.i1931 = load ptr, ptr getelementptr inbounds (i8, ptr @into_caller_buf, i64 16), align 8
@@ -19953,140 +19948,140 @@ IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_pr
   store ptr %old_into_caller.unpack.i1929, ptr @into_caller_buf, align 8
   store ptr %old_into_caller.unpack1.i1930, ptr getelementptr inbounds (i8, ptr @into_caller_buf, i64 8), align 8
   store ptr %old_into_caller.unpack2.i1931, ptr getelementptr inbounds (i8, ptr @into_caller_buf, i64 16), align 8
-  %450 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
-  %451 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  %452 = load ptr, ptr %result.i1904, align 8
-  %453 = icmp ne ptr %452, @nil_typ
-  %454 = icmp ne ptr %452, null
-  %.not1828.i = and i1 %453, %454
-  br i1 %.not1828.i, label %.lr.ph.i5048.lr.ph, label %.lr.ph.i3828
+  %453 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %454 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
+  %455 = load ptr, ptr %result.i1904, align 8
+  %456 = icmp ne ptr %455, @nil_typ
+  %457 = icmp ne ptr %455, null
+  %.not1828.i = and i1 %456, %457
+  br i1 %.not1828.i, label %.lr.ph.i4884.lr.ph, label %.lr.ph.i3667
 
-.lr.ph.i3828:                                     ; preds = %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2428, %.lr.ph.i3828
+.lr.ph.i3667:                                     ; preds = %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2324, %.lr.ph.i3667
   %result.i21.i = call noalias ptr @bump_malloc_inner(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #37
-  %455 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 16 dereferenceable(96) @Blocking)
-  %456 = ptrtoint ptr %result.i21.i to i64
-  %.sroa.3.8.insert.ext.i3829 = zext i64 %456 to i160
-  %.sroa.3.8.insert.insert.i3830 = or disjoint i160 %.sroa.3.8.insert.ext.i3829, 3402823669209384634633746074317682114560
-  %457 = insertvalue { ptr, i160 } { ptr @Blocking, i160 undef }, i160 %.sroa.3.8.insert.insert.i3830, 1
-  %current_coroutine.i.i3831 = load ptr, ptr @current_coroutine, align 8
-  %458 = getelementptr i8, ptr %current_coroutine.i.i3831, i64 48
-  store { ptr, i160 } %457, ptr %458, align 8
-  %into_callee_buf.i.i3832 = getelementptr i8, ptr %current_coroutine.i.i3831, i64 8
-  call preserve_nonecc void @context_switch(ptr nocapture nofree noundef writeonly align 8 %into_callee_buf.i.i3832, ptr noundef nonnull align 8 dereferenceable(24) @into_caller_buf) #41
-  %459 = load ptr, ptr %result.i1904, align 8
-  %460 = icmp ne ptr %459, @nil_typ
-  %461 = icmp ne ptr %459, null
-  %.not18.i = and i1 %460, %461
-  br i1 %.not18.i, label %.lr.ph.i5048.lr.ph, label %.lr.ph.i3828
+  %458 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 16 dereferenceable(96) @Blocking)
+  %459 = ptrtoint ptr %result.i21.i to i64
+  %.sroa.3.8.insert.ext.i3668 = zext i64 %459 to i160
+  %.sroa.3.8.insert.insert.i3669 = or disjoint i160 %.sroa.3.8.insert.ext.i3668, 3402823669209384634633746074317682114560
+  %460 = insertvalue { ptr, i160 } { ptr @Blocking, i160 undef }, i160 %.sroa.3.8.insert.insert.i3669, 1
+  %current_coroutine.i.i3670 = load ptr, ptr @current_coroutine, align 8
+  %461 = getelementptr i8, ptr %current_coroutine.i.i3670, i64 48
+  store { ptr, i160 } %460, ptr %461, align 8
+  %into_callee_buf.i.i3671 = getelementptr i8, ptr %current_coroutine.i.i3670, i64 8
+  call preserve_nonecc void @context_switch(ptr nocapture nofree noundef writeonly align 8 %into_callee_buf.i.i3671, ptr noundef nonnull align 8 dereferenceable(24) @into_caller_buf) #41
+  %462 = load ptr, ptr %result.i1904, align 8
+  %463 = icmp ne ptr %462, @nil_typ
+  %464 = icmp ne ptr %462, null
+  %.not18.i = and i1 %463, %464
+  br i1 %.not18.i, label %.lr.ph.i4884.lr.ph, label %.lr.ph.i3667
 
-.lr.ph.i5048.lr.ph:                               ; preds = %.lr.ph.i3828, %IO_B__Self_print_xRepresentable__Self_print_xPtri64__Self_print_xString__Self_print_xPtri32__Self_print_xCharacter__Self_print_xPtri8__Self_print_xPtri1__Self_print_xNil__Self_print_xPtrf64.exit2428
-  %462 = getelementptr inbounds i8, ptr %result.i1904, i64 8
-  %.pn4162 = load i32, ptr %462, align 4
-  %463 = call ptr @llvm.invariant.start.p0(i64 noundef 56, ptr nocapture nofree noundef nonnull @Channel)
+.lr.ph.i4884.lr.ph:                               ; preds = %.lr.ph.i3667, %IO_B__Self_print_xPtrf64__Self_print_xPtri8__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xPtri32__Self_print_xString__Self_print_xNil__Self_print_xPtri1__Self_print_xPtri64.exit2324
+  %465 = getelementptr inbounds i8, ptr %result.i1904, i64 8
+  %.pn3999 = load i32, ptr %465, align 4
+  %466 = call ptr @llvm.invariant.start.p0(i64 noundef 56, ptr nocapture nofree noundef nonnull @Channel)
   store ptr @nil_typ, ptr %result.i1904, align 8
-  %464 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %.pn4162) #11
+  %467 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %.pn3999) #11
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %465 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %466 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %467 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   %468 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
+  call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   %469 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   %470 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   %471 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  %472 = call ptr @llvm.invariant.start.p0(i64 noundef 456, ptr nocapture nofree noundef nonnull @Range) #36
-  %473 = call ptr @llvm.invariant.start.p0(i64 noundef 416, ptr nocapture nofree noundef nonnull @MapIterable)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
-  %474 = call ptr @llvm.invariant.start.p0(i64 noundef 416, ptr nocapture nofree noundef nonnull @FilterIterable)
+  %472 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
+  call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
+  %473 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
+  %474 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
+  %475 = call ptr @llvm.invariant.start.p0(i64 noundef 456, ptr nocapture nofree noundef nonnull @Range) #36
+  %476 = call ptr @llvm.invariant.start.p0(i64 noundef 416, ptr nocapture nofree noundef nonnull @MapIterable)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
-  %475 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %476 = call ptr @llvm.invariant.start.p0(i64 noundef 64, ptr nocapture nofree noundef nonnull @FilterIterator) #40
-  %477 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
+  %477 = call ptr @llvm.invariant.start.p0(i64 noundef 416, ptr nocapture nofree noundef nonnull @FilterIterable)
+  call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   %478 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  %479 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef nonnull @RangeIterator) #42
-  %480 = call ptr @llvm.invariant.start.p0(i64 noundef 64, ptr nocapture nofree noundef nonnull @MapIterator)
-  call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
+  call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
+  %479 = call ptr @llvm.invariant.start.p0(i64 noundef 64, ptr nocapture nofree noundef nonnull @FilterIterator) #40
+  %480 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
+  call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   %481 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %482 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
+  %482 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef nonnull @RangeIterator) #42
+  %483 = call ptr @llvm.invariant.start.p0(i64 noundef 64, ptr nocapture nofree noundef nonnull @MapIterator)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
-  call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
-  %483 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   %484 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
   %485 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  br label %.lr.ph.i5048
-
-.lr.ph.i5048:                                     ; preds = %MapIterator_next_.exit5367, %.lr.ph.i5048.lr.ph
-  %result.i10.i5455.promoted5625 = phi i32 [ 4, %.lr.ph.i5048.lr.ph ], [ %511, %MapIterator_next_.exit5367 ]
-  %.pn5391 = phi i32 [ 9, %.lr.ph.i5048.lr.ph ], [ %514, %MapIterator_next_.exit5367 ]
-  %486 = phi i32 [ 4, %.lr.ph.i5048.lr.ph ], [ %504, %MapIterator_next_.exit5367 ]
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
-  %487 = and i32 %.pn5391, 1
-  %488 = icmp eq i32 %487, 0
-  br i1 %488, label %FilterIterator_next_.exit5059, label %.lr.ph5397
-
-.lr.ph5397:                                       ; preds = %.lr.ph.i5048
-  %489 = call ptr @llvm.invariant.start.p0(i64 noundef 64, ptr nocapture nofree noundef nonnull @FilterIterator)
-  %490 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  br label %491
-
-491:                                              ; preds = %.lr.ph5397, %MapIterator_next_.exit5340
-  %492 = phi i32 [ %result.i10.i5455.promoted5625, %.lr.ph5397 ], [ %497, %MapIterator_next_.exit5340 ]
+  call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
+  %486 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %493 = call ptr @llvm.invariant.start.p0(i64 noundef 64, ptr nocapture nofree noundef nonnull @MapIterator) #36
-  %494 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  %495 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef nonnull @RangeIterator) #36
-  %496 = icmp sgt i32 %492, 15
-  br i1 %496, label %IntIterable_reduce_initial_valPtri32_fFunctionPtri32._Ptri32_to_Ptri32.exit4631, label %MapIterator_next_.exit5340
-
-MapIterator_next_.exit5340:                       ; preds = %491
-  %497 = add nsw i32 %492, 1
-  %498 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef nonnull @RangeIterator) #42
-  %499 = call ptr @llvm.invariant.start.p0(i64 noundef 64, ptr nocapture nofree noundef nonnull @MapIterator)
-  %500 = mul i32 %492, %492
-  call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
-  %501 = and i32 %500, 1
-  %502 = icmp eq i32 %501, 0
-  br i1 %502, label %FilterIterator_next_.exit5059, label %491
-
-FilterIterator_next_.exit5059:                    ; preds = %MapIterator_next_.exit5340, %.lr.ph.i5048
-  %503 = phi i32 [ %result.i10.i5455.promoted5625, %.lr.ph.i5048 ], [ %497, %MapIterator_next_.exit5340 ]
-  %.pn5391.pn.lcssa = phi i32 [ %.pn5391, %.lr.ph.i5048 ], [ %500, %MapIterator_next_.exit5340 ]
-  call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
-  %504 = add i32 %.pn5391.pn.lcssa, %486
+  %487 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %505 = call ptr @llvm.invariant.start.p0(i64 noundef 64, ptr nocapture nofree noundef nonnull @FilterIterator) #40
-  %506 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
+  %488 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
+  br label %.lr.ph.i4884
+
+.lr.ph.i4884:                                     ; preds = %MapIterator_next_.exit5203, %.lr.ph.i4884.lr.ph
+  %result.i10.i5291.promoted5461 = phi i32 [ 4, %.lr.ph.i4884.lr.ph ], [ %514, %MapIterator_next_.exit5203 ]
+  %.pn5227 = phi i32 [ 9, %.lr.ph.i4884.lr.ph ], [ %517, %MapIterator_next_.exit5203 ]
+  %489 = phi i32 [ 4, %.lr.ph.i4884.lr.ph ], [ %507, %MapIterator_next_.exit5203 ]
+  call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
+  %490 = and i32 %.pn5227, 1
+  %491 = icmp eq i32 %490, 0
+  br i1 %491, label %FilterIterator_next_.exit4895, label %.lr.ph5233
+
+.lr.ph5233:                                       ; preds = %.lr.ph.i4884
+  %492 = call ptr @llvm.invariant.start.p0(i64 noundef 64, ptr nocapture nofree noundef nonnull @FilterIterator)
+  %493 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
+  br label %494
+
+494:                                              ; preds = %.lr.ph5233, %MapIterator_next_.exit5176
+  %495 = phi i32 [ %result.i10.i5291.promoted5461, %.lr.ph5233 ], [ %500, %MapIterator_next_.exit5176 ]
   call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
-  %507 = call ptr @llvm.invariant.start.p0(i64 noundef 64, ptr nocapture nofree noundef nonnull @MapIterator) #36
-  %508 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
-  %509 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef nonnull @RangeIterator) #36
-  %510 = icmp sgt i32 %503, 15
-  br i1 %510, label %IntIterable_reduce_initial_valPtri32_fFunctionPtri32._Ptri32_to_Ptri32.exit4631, label %MapIterator_next_.exit5367
+  %496 = call ptr @llvm.invariant.start.p0(i64 noundef 64, ptr nocapture nofree noundef nonnull @MapIterator) #36
+  %497 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
+  %498 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef nonnull @RangeIterator) #36
+  %499 = icmp sgt i32 %495, 15
+  br i1 %499, label %IntIterable_reduce_initial_valPtri32_fFunctionPtri32._Ptri32_to_Ptri32.exit4467, label %MapIterator_next_.exit5176
 
-MapIterator_next_.exit5367:                       ; preds = %FilterIterator_next_.exit5059
-  %511 = add nsw i32 %503, 1
-  %512 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef nonnull @RangeIterator) #42
-  %513 = call ptr @llvm.invariant.start.p0(i64 noundef 64, ptr nocapture nofree noundef nonnull @MapIterator)
-  %514 = mul i32 %503, %503
-  br label %.lr.ph.i5048
+MapIterator_next_.exit5176:                       ; preds = %494
+  %500 = add nsw i32 %495, 1
+  %501 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef nonnull @RangeIterator) #42
+  %502 = call ptr @llvm.invariant.start.p0(i64 noundef 64, ptr nocapture nofree noundef nonnull @MapIterator)
+  %503 = mul i32 %495, %495
+  call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
+  %504 = and i32 %503, 1
+  %505 = icmp eq i32 %504, 0
+  br i1 %505, label %FilterIterator_next_.exit4895, label %494
 
-IntIterable_reduce_initial_valPtri32_fFunctionPtri32._Ptri32_to_Ptri32.exit4631: ; preds = %FilterIterator_next_.exit5059, %491
-  %.0.lcssa.i4624 = phi i32 [ %486, %491 ], [ %504, %FilterIterator_next_.exit5059 ]
+FilterIterator_next_.exit4895:                    ; preds = %MapIterator_next_.exit5176, %.lr.ph.i4884
+  %506 = phi i32 [ %result.i10.i5291.promoted5461, %.lr.ph.i4884 ], [ %500, %MapIterator_next_.exit5176 ]
+  %.pn5227.pn.lcssa = phi i32 [ %.pn5227, %.lr.ph.i4884 ], [ %503, %MapIterator_next_.exit5176 ]
+  call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
+  %507 = add i32 %.pn5227.pn.lcssa, %489
+  call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
+  %508 = call ptr @llvm.invariant.start.p0(i64 noundef 64, ptr nocapture nofree noundef nonnull @FilterIterator) #40
+  %509 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
+  call void @llvm.lifetime.start.p0(i64 0, ptr nonnull %0)
+  %510 = call ptr @llvm.invariant.start.p0(i64 noundef 64, ptr nocapture nofree noundef nonnull @MapIterator) #36
+  %511 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree nonnull readonly %0) #36
+  %512 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef nonnull @RangeIterator) #36
+  %513 = icmp sgt i32 %506, 15
+  br i1 %513, label %IntIterable_reduce_initial_valPtri32_fFunctionPtri32._Ptri32_to_Ptri32.exit4467, label %MapIterator_next_.exit5203
+
+MapIterator_next_.exit5203:                       ; preds = %FilterIterator_next_.exit4895
+  %514 = add nsw i32 %506, 1
+  %515 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef nonnull @RangeIterator) #42
+  %516 = call ptr @llvm.invariant.start.p0(i64 noundef 64, ptr nocapture nofree noundef nonnull @MapIterator)
+  %517 = mul i32 %506, %506
+  br label %.lr.ph.i4884
+
+IntIterable_reduce_initial_valPtri32_fFunctionPtri32._Ptri32_to_Ptri32.exit4467: ; preds = %FilterIterator_next_.exit4895, %494
+  %.0.lcssa.i4460 = phi i32 [ %489, %494 ], [ %507, %FilterIterator_next_.exit4895 ]
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
   call void @llvm.lifetime.end.p0(i64 0, ptr nonnull %0)
-  %515 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %.0.lcssa.i4624) #11
-  %516 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 256) #11
-  %517 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
-  %518 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 5) #11
+  %518 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %.0.lcssa.i4460) #11
+  %519 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 256) #11
+  %520 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
+  %521 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 5) #11
   ret i32 0
 }
 

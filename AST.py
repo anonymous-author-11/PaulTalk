@@ -97,6 +97,12 @@ class NodeInfo:
     filename: str
     line_number: int
 
+    def __repr__(self):
+        return f"File {self.filename}, line {self.line_number}"
+
+    def __format__(self, format_spec):
+        return f"File {self.filename}, line {self.line_number}"
+
 @dataclass
 class Node:
     info: NodeInfo
@@ -139,12 +145,12 @@ class Program(Node):
         for stmt in self.statements:
             if isinstance(stmt, ClassDef):
                 if stmt.name in scope.classes:
-                    raise Exception(f"Line {stmt.info.line_number}: Class {stmt.name} already declared in this scope")
+                    raise Exception(f"{stmt.info}: Class {stmt.name} already declared in this scope")
                 scope.classes[stmt.name] = stmt
                 stmt.register_scope(scope)
             if isinstance(stmt, FunctionDef):
                 if stmt.name in scope.functions:
-                    raise Exception(f"Line {stmt.info.line_number}: Function {stmt.name} already declared in this scope")
+                    raise Exception(f"{stmt.info}: Function {stmt.name} already declared in this scope")
                 scope.functions[stmt.name] = stmt
             if isinstance(stmt, Alias): scope.add_alias(stmt.alias, stmt.meaning)
         for stmt in self.statements:
@@ -212,11 +218,11 @@ class BinaryOp(Expression):
 
     def ensure_compatible_types(self, left_type, right_type):
         if left_type != right_type:
-            raise Exception(f"Line {self.info.line_number}: tried to use {self.operator} on different types: {left_type} and {right_type}")
+            raise Exception(f"{self.info}: tried to use {self.operator} on different types: {left_type} and {right_type}")
         needs_integers = self.operator in ["MOD", "LSHIFT", "RSHIFT", "bit_and", "bit_or", "bit_xor"]
         uses_integers = isinstance(left_type, Ptr) and isinstance(left_type.type, IntegerType)
         if needs_integers and not uses_integers:
-            raise Exception(f"Line {self.info.line_number}: {self.operator} only works on integers, not {left_type} and {right_type}")
+            raise Exception(f"{self.info}: {self.operator} only works on integers, not {left_type} and {right_type}")
 
     def exprtype(self, scope):
         left_type = self.left.exprtype(scope)
@@ -237,7 +243,7 @@ class Arithmetic(BinaryOp):
         return ArithmeticOp.create(operands=operands, attributes=attributes, result_types=result_types)
     def concrete_exprtype(self, left_type, right_type):
         if not (isinstance(left_type, Ptr) and (isinstance(left_type.type, IntegerType) or left_type.type == Float64Type())):
-            raise Exception(f"Operator {self.operator} not available for type {left_type}")
+            raise Exception(f"{self.info} Operator {self.operator} not available for type {left_type}")
         return left_type
 
 @dataclass
@@ -246,7 +252,7 @@ class Comparison(BinaryOp):
         return ComparisonOp.create(operands=operands, attributes=attributes, result_types=[IntegerType(1)])
     def concrete_exprtype(self, left_type, right_type):
         if not (isinstance(left_type, Ptr) and (isinstance(left_type.type, IntegerType) or left_type.type == Float64Type())):
-            raise Exception(f"Operator {self.operator} not available for type {left_type}")
+            raise Exception(f"{self.info} Operator {self.operator} not available for type {left_type}")
         return Ptr([IntegerType(1)])
 
 @dataclass
@@ -269,14 +275,14 @@ class Logical(BinaryOp):
 
     def ensure_compatible_types(self, left_type, right_type):
         if left_type != right_type:
-            raise Exception(f"Line {self.info.line_number}: tried to use {self.operator} on different types: {left_type} and {right_type}")
+            raise Exception(f"{self.info}: tried to use {self.operator} on different types: {left_type} and {right_type}")
 
     def exprtype(self, scope):
         left_type = self.left.exprtype(scope)
         right_type = self.right.exprtype(scope)
         self.ensure_compatible_types(left_type, right_type)
         if left_type != Ptr([IntegerType(1)]):
-            raise Exception(f"Operator {self.operator} not available for type {left_type}")
+            raise Exception(f"{self.info} Operator {self.operator} not available for type {left_type}")
         return Ptr([IntegerType(1)])
 
 @dataclass
@@ -296,15 +302,15 @@ class OverloadedBinaryOp(BinaryOp):
 
     def ensure_object_receiver(self, scope, left_type):
         if not isinstance(left_type, FatPtr):
-            raise Exception(f"Line {self.info.line_number}: no overloaded operators for non-object {left_type}")
+            raise Exception(f"{self.info}: no overloaded operators for non-object {left_type}")
         if left_type.cls.data not in scope.classes.keys():
-            raise Exception(f"Line {self.info.line_number}: non existent class {left_type.cls.data}")
+            raise Exception(f"{self.info}: non existent class {left_type.cls.data}")
 
     def ensure_existing_overload(self, scope, left_type, mangled_operator, right_type):
         left_class = scope.classes[left_type.cls.data]
         matching_behavior = any(behavior.applicable(left_type, scope, mangled_operator, [right_type]) for behavior in left_class.behaviors)
         if not matching_behavior:
-            raise Exception(f"Line {self.info.line_number}: class {left_class.name} has no overload for operator {self.operator}")
+            raise Exception(f"{self.info}: class {left_class.name} has no overload for operator {self.operator}")
 
     def exprtype(self, scope):
         left_type = self.left.exprtype(scope)
@@ -327,7 +333,7 @@ class NegativeOp(Expression):
 
     def ensure_is_number(self, t):
         if not isinstance(t, Ptr):
-            raise Exception(f"Line {self.info.line_number}: cannot negate type {t}; can only negate integers and floats.")
+            raise Exception(f"{self.info}: cannot negate type {t}; can only negate integers and floats.")
 
     def exprtype(self, scope):
         t = self.operand.exprtype(scope)
@@ -451,7 +457,7 @@ class RangeLiteral(Expression):
     
     def ensure_i32_args(self, start_type, end_type):
         if start_type != Ptr([IntegerType(32)]) or end_type != Ptr([IntegerType(32)]):
-            raise Exception(f"Line {self.info.line_number}: Range literals take i32 arguments, not {start_type} and {end_type}")
+            raise Exception(f"{self.info}: Range literals take i32 arguments, not {start_type} and {end_type}")
 
     def exprtype(self, scope):
         start_type = self.start.exprtype(scope)
@@ -571,11 +577,11 @@ class Identifier(Expression):
 
     def disallow_self_in_init(self, scope):
         if self.name == "self" and scope.method and scope.method.name == "init":
-            raise Exception(f"Line {self.info.line_number}: Cannot refer to 'self' within .init() method, as self is not yet initialized")
+            raise Exception(f"{self.info}: Cannot refer to 'self' within .init() method, as self is not yet initialized")
 
     def ensure_previously_declared(self, scope):
         if (self.name not in scope.type_table) and (self.name not in scope.functions):
-            raise Exception(f"Line {self.info.line_number}: identifier {self.name} not previously declared!")
+            raise Exception(f"{self.info}: identifier {self.name} not previously declared!")
 
     def exprtype(self, scope):
         self.disallow_self_in_init(scope)
@@ -611,7 +617,7 @@ class FieldIdentifier(Identifier):
 
     def ensured_field_declared(self, scope, field):
         if not field:
-            raise Exception(f"Line {self.info.line_number}: field {self.name} used but not declared in class {scope.cls}")
+            raise Exception(f"{self.info}: field {self.name} used but not declared in class {scope.cls}")
 
     def exprtype(self, scope):
         field = next(iter(field for field in scope.cls.fields() if field.declaration.name == self.name), None)
@@ -665,7 +671,7 @@ class TypeCheck(Expression):
 
     def ensure_rhs_simple(self):
         if isinstance(self.right, Union) or isinstance(self.right, Intersection):
-            raise Exception(f"Line {self.info.line_number}: Cannot type-check {self.right} yet.")
+            raise Exception(f"{self.info}: Cannot type-check {self.right} yet.")
 
     def exprtype(self, scope):
         self.ensure_rhs_simple()
@@ -697,12 +703,12 @@ class FunctionCall(Expression):
 
     def ensure_declared(self, scope):
         if self.function not in scope.functions.keys():
-            raise Exception(f"Line {self.info.line_number}: function name {self.function} not found!") 
+            raise Exception(f"{self.info}: function name {self.function} not found!") 
 
     def ensure_valid_arg_types(self, scope):
         for i, param in enumerate(scope.functions[self.function].params):
             if(scope.subtype(self.arguments[i].exprtype(scope), param.type(scope))): continue
-            raise Exception(f"Line {self.info.line_number}: argument type {self.arguments[i].exprtype(scope)} not subtype of declared parameter type {param.type(scope)} for parameter {param.name}")
+            raise Exception(f"{self.info}: argument type {self.arguments[i].exprtype(scope)} not subtype of declared parameter type {param.type(scope)} for parameter {param.name}")
 
     def apply_constraints(self, scope):
         func = scope.functions[self.function]
@@ -809,16 +815,16 @@ class MethodCall(Expression):
     def simple_exprtype(self, scope, rec_typ):
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
         if not isinstance(rec_typ, FatPtr):
-            raise Exception(f"Line {self.info.line_number}: receiver type {rec_typ} is not an object!")
+            raise Exception(f"{self.info}: receiver type {rec_typ} is not an object!")
         if not rec_typ.cls.data in scope.classes.keys():
             print(scope.classes.keys())
-            raise Exception(f"Line {self.info.line_number}: class {rec_typ.cls.data} not declared (temporary).")
+            raise Exception(f"{self.info}: class {rec_typ.cls.data} not declared (temporary).")
         rec_class = scope.classes[rec_typ.cls.data]
         behaviors = [behavior for behavior in rec_class.behaviors if behavior.applicable(rec_typ, scope, self.method, arg_types)]
         if len(behaviors) == 0:
-            raise Exception(f"Line {self.info.line_number}: there exists no overload of method {rec_typ}.{self.method} compatible with argument types {arg_types}")
+            raise Exception(f"{self.info}: there exists no overload of method {rec_typ}.{self.method} compatible with argument types {arg_types}")
         if len(behaviors) > 1:
-            raise Exception(f"Line {self.info.line_number}: invocation of {self.method} with argument types {arg_types} is ambiguous.")
+            raise Exception(f"{self.info}: invocation of {self.method} with argument types {arg_types} is ambiguous.")
         broad = behaviors[0].broad_return_type()
         specialized = behaviors[0].specialized_return_type(rec_typ, arg_types, scope)
         self.apply_constraints(scope, behaviors[0], specialized)
@@ -882,21 +888,21 @@ class CoroutineCall(MethodCall):
     def exprtype(self, scope):
         if self.method == "call":
             if len(self.arguments) > 1:
-                raise Exception(f"Line {self.info.line_number}: Coroutine.call() takes only one argument.")
+                raise Exception(f"{self.info}: Coroutine.call() takes only one argument.")
             yield_type = self.receiver.exprtype(scope).yield_type
             union = scope.simplify(Union.from_list([Nil(), yield_type]))
             if len(self.arguments) > 0:
                 arg_type = self.arguments[0].exprtype(scope)
                 if not scope.subtype(arg_type, union):
-                    raise Exception(f"Line {self.info.line_number}: Coroutine.call() expects a {union}, not a {arg_type}")
+                    raise Exception(f"{self.info}: Coroutine.call() expects a {union}, not a {arg_type}")
             return union
         if self.method != "result":
-            raise Exception(f"Line {self.info.line_number}: Method {self.method} not available for type Coroutine.")
+            raise Exception(f"{self.info}: Method {self.method} not available for type Coroutine.")
         self_type = self.receiver.exprtype(scope).return_type
         if self_type == Nothing():
-            raise Exception(f"Line {self.info.line_number}: Coroutine has no return type.")
+            raise Exception(f"{self.info}: Coroutine has no return type.")
         if len(self.arguments) > 0:
-            raise Exception(f"Line {self.info.line_number}: Coroutine.result() takes no arguments.")
+            raise Exception(f"{self.info}: Coroutine.result() takes no arguments.")
         union = scope.simplify(Union.from_list([Nil(), self_type]))
         return union
 
@@ -925,12 +931,12 @@ class FunctionLiteralCall(MethodCall):
     def exprtype(self, scope):
         rec_typ = self.receiver.exprtype(scope)
         if self.method != "call":
-            raise Exception(f"Line {self.info.line_number}: Method {self.method} not available for type {rec_typ}.")
+            raise Exception(f"{self.info}: Method {self.method} not available for type {rec_typ}.")
         if len(rec_typ.param_types.data) != len(self.arguments):
-            raise Exception(f"Line {self.info.line_number}: number of arguments to .call() ({len(self.arguments)}) incompatible with reciever type {rec_typ}.")
+            raise Exception(f"{self.info}: number of arguments to .call() ({len(self.arguments)}) incompatible with reciever type {rec_typ}.")
         for i, param in enumerate(rec_typ.param_types.data):
             if not scope.subtype(self.arguments[i].exprtype(scope), param):
-                raise Exception(f"Line {self.info.line_number}: argument type {self.arguments[i].exprtype(scope)} not subtype of declared parameter type {param} for parameter #{i + 1}")
+                raise Exception(f"{self.info}: argument type {self.arguments[i].exprtype(scope)} not subtype of declared parameter type {param} for parameter #{i + 1}")
         return None if rec_typ.return_type == Nothing() else rec_typ.return_type
 
     def typeflow(self, scope):
@@ -941,10 +947,10 @@ class Indexation(MethodCall):
 
     def ensure_prereqs(self, scope, rec_typ):
         if self.method != "_index":
-            raise Exception(f"Line {self.info.line_number}: Method {self.method} not available for {rec_typ}")
+            raise Exception(f"{self.info}: Method {self.method} not available for {rec_typ}")
         num_args = len(self.arguments)
         if num_args != 1:
-            raise Exception(f"Line {self.info.line_number}: Indexation only suppports one argument")
+            raise Exception(f"{self.info}: Indexation only suppports one argument")
 
 @dataclass
 class BufferIndexation(Indexation):
@@ -969,7 +975,7 @@ class BufferIndexation(Indexation):
         self.ensure_prereqs(scope, rec_typ)
         id_typ = self.arguments[0].exprtype(scope)
         if id_typ != Ptr([IntegerType(32)]):
-            raise Exception(f"Line {self.info.line_number}: Indexation currently only supported with integers.")
+            raise Exception(f"{self.info}: Indexation currently only supported with integers.")
         self.apply_constraints(scope)
         return scope.simplify(rec_typ.elem_type)
 
@@ -996,10 +1002,10 @@ class BufferSetIndex(MethodCall):
         rec_typ = self.receiver.exprtype(scope)
         id_typ = self.arguments[0].exprtype(scope)
         if id_typ != Ptr([IntegerType(32)]):
-            raise Exception(f"Line {self.info.line_number}: Indexation currently only supported with integers.")
+            raise Exception(f"{self.info}: Indexation currently only supported with integers.")
         value_type = self.arguments[1].exprtype(scope)
         if not scope.subtype(value_type, rec_typ.elem_type):
-            raise Exception(f"Line {self.info.line_number}: Value being placed in buffer is of type {value_type}, but buffer is of type {rec_typ}.")
+            raise Exception(f"{self.info}: Value being placed in buffer is of type {value_type}, but buffer is of type {rec_typ}.")
         self.apply_constraints(scope)
 
 @dataclass
@@ -1021,7 +1027,7 @@ class TupleIndexation(Indexation):
         rec_typ = self.receiver.exprtype(scope)
         self.ensure_prereqs(scope, rec_typ)
         if not isinstance(self.arguments[0], IntegerLiteral):
-            raise Exception(f"Line {self.info.line_number}: Tuple indexation currently only supported with integer literals.")
+            raise Exception(f"{self.info}: Tuple indexation currently only supported with integer literals.")
         self.apply_constraints(scope)
         return rec_typ.types.data[self.arguments[0].value]
 
@@ -1112,7 +1118,7 @@ class ClassMethodCall(MethodCall):
     def simple_exprtype(self, scope):
         if self.receiver.cls.data == "Self":
             if not scope.cls:
-                raise Exception(f"Line {self.info.line_number}: Self type can only be used within a class.")
+                raise Exception(f"{self.info}: Self type can only be used within a class.")
             self.receiver = scope.cls.type()
         
         if self.receiver.cls.data not in scope.classes.keys(): raise Exception(f"class {self.receiver.cls.data} not declared.")
@@ -1121,12 +1127,12 @@ class ClassMethodCall(MethodCall):
         rec_typ = scope.simplify(self.receiver)
         behaviors = [behavior for behavior in rec_class.behaviors if behavior.applicable(rec_typ, scope, "_Self_" + self.method, arg_types)]
         if len(behaviors) == 0:
-            raise Exception(f"Line {self.info.line_number}: there exists no overload of class method {self.receiver.cls.data}.{self.method} compatible with argument types {arg_types}")
+            raise Exception(f"{self.info}: there exists no overload of class method {self.receiver.cls.data}.{self.method} compatible with argument types {arg_types}")
         if len(behaviors) > 1:
-            raise Exception(f"Line {self.info.line_number}: invocation of {self.receiver.cls.data}.{self.method} with argument types {arg_types} is ambiguous.")
+            raise Exception(f"{self.info}: invocation of {self.receiver.cls.data}.{self.method} with argument types {arg_types} is ambiguous.")
         behavior_decl = behaviors[0]
         if any(isinstance(method.definition, AbstractMethodDef) for method in behavior_decl.methods):
-            raise Exception(f"Line {self.info.line_number}: Class method {self.receiver.cls.data}.{self.method} has an abstract overload, and cannot be called directly.")
+            raise Exception(f"{self.info}: Class method {self.receiver.cls.data}.{self.method} has an abstract overload, and cannot be called directly.")
         self.apply_constraints(scope, behaviors[0])
         broad = behavior_decl.broad_return_type()
         specialized = behavior_decl.specialized_return_type(rec_typ, arg_types, scope)
@@ -1160,7 +1166,7 @@ class IntrinsicCall(ClassMethodCall):
         if "i32" in self.method: return Ptr([IntegerType(32)])
         if "i64" in self.method: return Ptr([IntegerType(64)])
         if "i1" in self.method: return Ptr([IntegerType(1)])
-        raise Exception(f"Line {self.info.line_number}: not implemented intrinsic {self.method} for type yet")
+        raise Exception(f"{self.info}: not implemented intrinsic {self.method} for type yet")
 
 @dataclass
 class PrintCall(Expression):
@@ -1228,28 +1234,28 @@ class ObjectCreation(Expression):
     def exprtype(self, scope):
         if self.type.cls.data == "Self":
             if not scope.cls:
-                raise Exception(f"Line {self.info.line_number}: Self type can only be used within a class.")
+                raise Exception(f"{self.info}: Self type can only be used within a class.")
             self.type = scope.cls.type()
         simplified_type = scope.simplify(self.type)
         if simplified_type.cls.data not in scope.classes.keys():
-            raise Exception(f"Line {self.info.line_number}: class {simplified_type.cls.data} not declared!")
+            raise Exception(f"{self.info}: class {simplified_type.cls.data} not declared!")
         cls = scope.classes[simplified_type.cls.data]
         if simplified_type.type_params != NoneAttr():
             zipped = zip(simplified_type.type_params.data, cls.type_parameters)
             if not all(scope.matches(a,b) for a,b in zipped):
-                raise Exception(f"Line {self.info.line_number}: Class {cls.name} cannot be instantiated with types {[*simplified_type.type_params.data]}")
+                raise Exception(f"{self.info}: Class {cls.name} cannot be instantiated with types {[*simplified_type.type_params.data]}")
         
         input_types = [arg.exprtype(scope) for arg in self.arguments]
         behaviors = [behavior for behavior in cls.behaviors if behavior.applicable(simplified_type, scope, "init", input_types)]
         if len(behaviors) == 0:
             print(cls.behaviors)
-            raise Exception(f"Line {self.info.line_number}: No init method in class {simplified_type} matches the argument types {input_types}")
+            raise Exception(f"{self.info}: No init method in class {simplified_type} matches the argument types {input_types}")
         if len(behaviors) > 1:
-            raise Exception(f"Line {self.info.line_number}: invocation of {simplified_type}.{self.method} with argument types {arg_types} is ambiguous.")
+            raise Exception(f"{self.info}: invocation of {simplified_type}.{self.method} with argument types {arg_types} is ambiguous.")
         behavior = behaviors[0]
         if any(isinstance(elem.definition, AbstractMethodDef) for elem in cls.vtable() if isinstance(elem, Method)):
             offender = next(elem for elem in cls.vtable() if isinstance(elem, Method) and isinstance(elem.definition, AbstractMethodDef))
-            raise Exception(f"Line {self.info.line_number}: Cannot instantiate class {simplified_type} with abstract method {offender.definition.name} defined in class {offender.definition.defining_class.name}")
+            raise Exception(f"{self.info}: Cannot instantiate class {simplified_type} with abstract method {offender.definition.name} defined in class {offender.definition.defining_class.name}")
         scope.type_table[self.anon_name] = simplified_type
         anon_id = Identifier(self.info, self.anon_name)
         MethodCall(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), anon_id, "init", self.arguments).exprtype(scope)
@@ -1293,7 +1299,7 @@ class ExternDef(Statement):
 
     def typeflow(self, scope):
         if self.name[0].isupper():
-            raise Exception(f"Line {self.info.line_number}: Function names should not be capitalized.")
+            raise Exception(f"{self.info}: Function names should not be capitalized.")
         scope.functions[self.name] = self
         for i, param in enumerate(self.params): param.typeflow(scope)
 
@@ -1352,7 +1358,7 @@ class FunctionDef(Statement):
 
     def typeflow(self, scope):
         if self.name[0].isupper():
-            raise Exception(f"Line {self.info.line_number}: Function names should not be capitalized.")
+            raise Exception(f"{self.info}: Function names should not be capitalized.")
         scope.functions[self.name] = self
         body_scope = Scope(scope, method=self)
         body_scope.type_table = {}
@@ -1363,7 +1369,7 @@ class FunctionDef(Statement):
             body_scope.type_table[param.name] = param_type
         self.body.debug_typeflow(body_scope)
         if not self.hasreturn and self.return_type():
-            raise Exception(f"Line {self.info.line_number}: Function declares return type {self.return_type()} yet has no return statement.")
+            raise Exception(f"{self.info}: Function declares return type {self.return_type()} yet has no return statement.")
 
 @dataclass
 class MethodDef(Statement):
@@ -1465,22 +1471,22 @@ class MethodDef(Statement):
         overridden_arg_types = [scope.simplify(Union.from_list([self.defining_class._scope.simplify(meth.param_types()[k]) for meth in overridden_methods])) for k in range(self.arity)]
         if len(overridden_methods) > 0 and any(not scope.subtype(param.type(scope), overridden_arg_types[k]) for (k, param) in enumerate(self.params)):
             k, offender = next((k, param) for (k, param) in enumerate(self.params) if not scope.subtype(param.type(scope), overridden_arg_types[k]))
-            raise Exception(f"Line {self.info.line_number}: Overriding method {self.name} in class {self.defining_class}: parameter {offender.name} with type {offender.type(scope)} is not a subtype of overridden methods' parameters {overridden_arg_types[k]}.")
+            raise Exception(f"{self.info}: Overriding method {self.name} in class {self.defining_class}: parameter {offender.name} with type {offender.type(scope)} is not a subtype of overridden methods' parameters {overridden_arg_types[k]}.")
         if self.return_type() and any(not meth.return_type() for meth in overridden_methods):
-            raise Exception(f"Line {self.info.line_number}: Overriding method {self.name} in class {self.defining_class} should not have a return type.")
+            raise Exception(f"{self.info}: Overriding method {self.name} in class {self.defining_class} should not have a return type.")
         if not self.return_type() and any(meth.return_type() for meth in overridden_methods):
-            raise Exception(f"Line {self.info.line_number}: Overriding method {self.name} in class {self.defining_class} should have a return type.")
+            raise Exception(f"{self.info}: Overriding method {self.name} in class {self.defining_class} should have a return type.")
         if not self.return_type(): return
         overridden_ret_type = scope.simplify(Union.from_list([self.defining_class._scope.simplify(meth.return_type()) for meth in overridden_methods]))
         if len(overridden_methods) > 0 and not (scope.subtype(self.return_type(), overridden_ret_type) or any(scope.matches(anc, overridden_ret_type) for anc in scope.ancestors(self.return_type()))):
             #print(scope.ancestors(self.return_type())[1].type_params.data[0])
             print(self.defining_class._scope.aliases)
             #print(overridden_ret_type.type_params.data[0])
-            raise Exception(f"Line {self.info.line_number}: Overriding method {self.name} in class {self.defining_class}: return type {self.return_type()} not a subtype of overridden methods' return types {overridden_ret_type}.")
+            raise Exception(f"{self.info}: Overriding method {self.name} in class {self.defining_class}: return type {self.return_type()} not a subtype of overridden methods' return types {overridden_ret_type}.")
 
     def ensure_return_type(self, scope):
         if not self.hasreturn and self.return_type():
-            raise Exception(f"Line {self.info.line_number}: Method declares return type {self.return_type()} yet has no return statement.")
+            raise Exception(f"{self.info}: Method declares return type {self.return_type()} yet has no return statement.")
 
     def ensure_proper_init(self, body_scope):
         for field in self.defining_class.fields():
@@ -1493,7 +1499,7 @@ class MethodDef(Statement):
                 self.body.statements.append(initialization)
                 continue
             print(f"field name in body type table? {field.declaration.name in body_scope.type_table}")
-            raise Exception(f"Line {self.info.line_number}: field {field.declaration.name} not properly initialized for class {body_scope.cls.name}. You may need to override this constructor.")
+            raise Exception(f"{self.info}: field {field.declaration.name} not properly initialized for class {body_scope.cls.name}. You may need to override this constructor.")
 
     def annotated_points_to_facts(self, body_scope, param_names):
         annotated_facts = self.defining_class.all_constraints()
@@ -1510,7 +1516,7 @@ class MethodDef(Statement):
             if (c.rhs, "==", c.lhs) in annotated_facts:
                 annotated_facts.remove((c.rhs, "==", c.lhs))
             if c.op == "==" and ((c.lhs, "<", c.rhs) in annotated_facts or (c.rhs, "<", c.lhs) in annotated_facts):
-                raise Exception(f"Line {self.info.line_number}: Constraint {c.lhs} {c.op} {c.rhs} is less precise than constraints from overridden methods.")
+                raise Exception(f"{self.info}: Constraint {c.lhs} {c.op} {c.rhs} is less precise than constraints from overridden methods.")
             annotated_facts.add((c.lhs, c.op, c.rhs))
 
         original_method = (self, *self.overridden_methods())[-1]
@@ -1550,26 +1556,26 @@ class MethodDef(Statement):
         #print(pretty_print_graph(G0, var_mapping0, param_names))
         ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
         body_scope.assign_regions(var_mapping1, param_names)
-        if not ok: raise Exception(f"Line {self.info.line_number}: {comment}")
+        if not ok: raise Exception(f"{self.info}: {comment}")
 
     def check_setter_num_params(self):
         if self.name[0:5] != "_set_": return
         if self.name == "_set_index":
             if len(self.params) == 2: return
-            raise Exception(f"Line {self.info.line_number}: Index setter method []= must take two parameters (index and value), not {len(self.params)}")
+            raise Exception(f"{self.info}: Index setter method []= must take two parameters (index and value), not {len(self.params)}")
         if len(self.params) == 1: return
-        raise Exception(f"Line {self.info.line_number}: Setter method {self.name.replace('_set_','') + '='} must take one parameter, not {len(self.params)}")
+        raise Exception(f"{self.info}: Setter method {self.name.replace('_set_','') + '='} must take one parameter, not {len(self.params)}")
 
     def check_duplicate_type_params(self, scope):
         for t in self.type_params:
             if t in scope.cls.type_parameters:
-                raise Exception(f"Line {self.info.line_number}: Method-scoped type parameter {t.label.data} cannot have the same name as class-scoped type parameter {scope.cls.name}.{t.label.data}")
+                raise Exception(f"{self.info}: Method-scoped type parameter {t.label.data} cannot have the same name as class-scoped type parameter {scope.cls.name}.{t.label.data}")
 
     def typeflow(self, scope):
         if self.name[0].isupper():
-            raise Exception(f"Line {self.info.line_number}: Method names should not be capitalized.")
+            raise Exception(f"{self.info}: Method names should not be capitalized.")
         if self.name == "init" and self.return_type():
-            raise Exception(f'Line {self.info.line_number}: init should not return anything')
+            raise Exception(f'{self.info}: init should not return anything')
 
         self.check_setter_num_params()
         self.check_duplicate_type_params(scope)
@@ -1589,9 +1595,9 @@ class MethodDef(Statement):
                 continue
             field = next((field.declaration for field in self.defining_class.fields() if field.declaration.name == param.name), None)
             if not field:
-                raise Exception(f"Line {self.info.line_number}: field {param.name} does not exist in class {self.defining_class.name}")
+                raise Exception(f"{self.info}: field {param.name} does not exist in class {self.defining_class.name}")
             if not scope.subtype(param.type(self.defining_class._scope), field.type(body_scope)):
-                raise Exception(f"Line {self.info.line_number}: field {param.name} has type {field.type(body_scope)}, not {param.type(body_scope)}")
+                raise Exception(f"{self.info}: field {param.name} has type {field.type(body_scope)}, not {param.type(body_scope)}")
             body_scope.type_table[param.name] = param.type(self.defining_class._scope)
         self.body.debug_typeflow(body_scope)
         if self.name == "init": self.ensure_proper_init(body_scope)
@@ -1630,7 +1636,7 @@ class MethodDef(Statement):
 class AbstractMethodDef(MethodDef):
     def ensure_return_type(self, scope):
         if len(self.body.statements) > 0:
-            raise Exception(f"Line {self.info.line_number}: Abstract method {self.name} should not have any statements in its body.")
+            raise Exception(f"{self.info}: Abstract method {self.name} should not have any statements in its body.")
     def codegen(self, scope):
         return
     def __hash__(self):
@@ -1798,7 +1804,7 @@ class ClassMethodDef(MethodDef):
             if (c.rhs, "==", c.lhs) in annotated_facts:
                 annotated_facts.remove((c.rhs, "==", c.lhs))
             if c.op == "==" and ((c.lhs, "<", c.rhs) in annotated_facts or (c.rhs, "<", c.lhs) in annotated_facts):
-                raise Exception(f"Line {self.info.line_number}: Constraint {c.lhs} {c.op} {c.rhs} is less precise than constraints from overridden methods.")
+                raise Exception(f"{self.info}: Constraint {c.lhs} {c.op} {c.rhs} is less precise than constraints from overridden methods.")
             annotated_facts.add((c.lhs, c.op, c.rhs))
         return_cls = None
         original_method = (self, *self.overridden_methods())[-1]
@@ -1832,17 +1838,17 @@ class ClassMethodDef(MethodDef):
         #print(pretty_print_graph(G0, var_mapping0, param_names))
         ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
         body_scope.assign_regions(var_mapping1, param_names)
-        if not ok: raise Exception(f"Line {self.info.line_number}: {comment}")
+        if not ok: raise Exception(f"{self.info}: {comment}")
 
     def typeflow(self, scope):
         if self.name[5].isupper():
-            raise Exception(f"Line {self.info.line_number}: Method names should not be capitalized.")
+            raise Exception(f"{self.info}: Method names should not be capitalized.")
         self.enforce_override_rules(scope)
         self.check_duplicate_type_params(scope)
         body_scope = Scope(scope, method=self)
         body_scope.points_to_facts = ConstraintSet(set())
         if any("@" in param.name for param in self.params):
-            raise Exception(f"Line {self.info.line_number}: cannot access instance fields ({param.name}) in class methods")
+            raise Exception(f"{self.info}: cannot access instance fields ({param.name}) in class methods")
         for i, param in enumerate(self.params):
             param.typeflow(body_scope)
         self.body.debug_typeflow(body_scope)
@@ -1985,7 +1991,8 @@ class Behavior(Statement):
         if self.process_final_state(block, bblock, offset_ptr, exit, fat_ptr): return
 
         gep = llvm.GEPOp.from_mixed_indices(arg, [block.arg_position], pointee_type=llvm.LLVMPointerType.opaque())
-        check_flag = CheckFlagOp.create(operands=[gep.results[0]], attributes={"typ_name":type_id(block.typ)}, result_types=[Ptr([IntegerType(1)])])
+        operands = [gep.results[0]]
+        check_flag = CheckFlagOp.create(operands=operands, attributes={"typ_name":type_id(block.typ)}, result_types=[Ptr([IntegerType(1)])])
         is_subtype = llvm.LoadOp(check_flag.results[0], IntegerType(1))
 
         br = cf.ConditionalBranch(is_subtype.results[0], blocks[block.first_succ_name][1], [], blocks[block.second_succ_name][1], [])
@@ -1993,13 +2000,13 @@ class Behavior(Statement):
 
     def typeflow(self, scope):
         if any(len(method.definition.params) != self.arity for method in self.methods):
-            raise Exception(f"Line {self.info.line_number}: not all overloads of {self.name} have the same arity")
+            raise Exception(f"{self.info}: not all overloads of {self.name} have the same arity")
         if any(method.definition.return_type() == None for method in self.methods) and not all(method.definition.return_type() == None for method in self.methods):
-            raise Exception(f"Line {self.info.line_number}: not all overloads of {self.name} have the same number of return values")
+            raise Exception(f"{self.info}: not all overloads of {self.name} have the same number of return values")
         name_sets = [set([meth.definition.params[k].name for meth in self.methods]) for k in range(self.arity)]
         if any(len(name_set) > 1 for name_set in name_sets):
             k, offender = next((k, name_set) for (k, name_set) in enumerate(name_sets) if len(name_set) > 1 )
-            raise Exception(f"Line {self.info.line_number}: For overloads of method {self.name} with arity {self.arity}, parameter {k} has multiple names ({offender}).")
+            raise Exception(f"{self.info}: For overloads of method {self.name} with arity {self.arity}, parameter {k} has multiple names ({offender}).")
         
         behavior_scope = Scope(scope, behavior=self)
         for method in self.methods:
@@ -2136,7 +2143,7 @@ class ClassDef(Statement):
 
     def typeflow(self, scope):
         if not self.name[0].isupper():
-            raise Exception(f"Line {self.info.line_number}: Class names should be capitalized.")
+            raise Exception(f"{self.info}: Class names should be capitalized.")
         scope.classes[self.name] = self
         self._scope.points_to_facts.add(("self","==","self"))
         for reg in self.all_regions():
@@ -2150,7 +2157,7 @@ class ClassDef(Statement):
         field_type_sets = [set([f.type(scope) for f in unpruned if f.name == name]) for name in field_names]
         if any(len(type_set) > 1 for type_set in field_type_sets):
             type_set, name = next((field_type_sets[k], name) for (k, name) in enumerate(field_names) if len(field_type_sets[k]) > 1)
-            raise Exception(f"Line {self.info.line_number}: Field {name} in class {self.name} has more than one declared type: ({type_set}).")
+            raise Exception(f"{self.info}: Field {name} in class {self.name} has more than one declared type: ({type_set}).")
         for behavior in self.behaviors:
             behavior.debug_typeflow(self._scope)
 
@@ -2406,7 +2413,7 @@ class VarDecl(Statement):
 
     def ensure_capitalization(self):
         if self.name[0].isupper():
-            raise Exception(f"Line {self.info.line_number}: Variables should not be capitalized.")
+            raise Exception(f"{self.info}: Variables should not be capitalized.")
 
     def type(self, scope):
         return scope.simplify(self._type)
@@ -2424,7 +2431,7 @@ class FieldDecl(VarDecl):
 
     def ensure_capitalization(self):
         if self.name[1].isupper():
-            raise Exception(f"Line {self.info.line_number}: Fields should not be capitalized.")
+            raise Exception(f"{self.info}: Fields should not be capitalized.")
 
     def scoped_name(self, scope):
         return self.name
@@ -2511,16 +2518,16 @@ class VarInit(VarDecl):
             self.initial_value.width = self_type.type.width.data
         value_type = self.initial_value.exprtype(scope)
         if not value_type or value_type == llvm.LLVMVoidType():
-            raise Exception(f"Line {self.info.line_number}: Assignment impossible: right hand side expression does not return anything.")
+            raise Exception(f"{self.info}: Assignment impossible: right hand side expression does not return anything.")
         scope.points_to_facts.add((self.name, "==", self.initial_value.info.id))
         # obviously needs work
         if self.initial_value and not scope.subtype(value_type, self_type):
             if not isinstance(value_type, Ptr) or not isinstance(self_type, Ptr):
-                raise Exception(f"Line {self.info.line_number}: rhs type {value_type} not subtype of declared type {self_type}!")
+                raise Exception(f"{self.info}: rhs type {value_type} not subtype of declared type {self_type}!")
             if not isinstance(value_type.type, IntegerType):
-                raise Exception(f"Line {self.info.line_number}: rhs type {value_type} not subtype of declared type {self_type}!")
+                raise Exception(f"{self.info}: rhs type {value_type} not subtype of declared type {self_type}!")
             if isinstance(self_type.type, IntegerType) and value_type.type.bitwidth > self_type.type.bitwidth:
-                raise Exception(f"Line {self.info.line_number}: rhs type {value_type} not subtype of declared type {self_type}!")
+                raise Exception(f"{self.info}: rhs type {value_type} not subtype of declared type {self_type}!")
         self.initial_value.typeflow(scope)
         scope.type_table[self.name] = self_type
 
@@ -2547,16 +2554,16 @@ class Assignment(Statement):
     def typeflow(self, scope):
         value_type = self.value.exprtype(scope)
         if not value_type or value_type == llvm.LLVMVoidType():
-            raise Exception(f"Line {self.info.line_number}: Assignment impossible: right hand side expression does not return anything.")
+            raise Exception(f"{self.info}: Assignment impossible: right hand side expression does not return anything.")
         scope.points_to_facts.add((self.target.info.id, "==", self.value.info.id))
         if isinstance(self.target, Identifier) and "@" in self.target.name:
             return FieldAssignment(self.info, self.target, self.value).typeflow(scope)
         if isinstance(self.target, MethodCall):
             return CallAssignment(self.info, self.target, self.value).typeflow(scope)
         if(not isinstance(self.target, Identifier)):
-            raise Exception(f"Line {self.info.line_number}: lhs in assignment is not an identifier!")
+            raise Exception(f"{self.info}: lhs in assignment is not an identifier!")
         if self.target.name[0].isupper():
-            raise Exception(f"Line {self.info.line_number}: Variables should not be capitalized.")
+            raise Exception(f"{self.info}: Variables should not be capitalized.")
         scope.type_table[self.target.name] = value_type
 
 @dataclass
@@ -2604,11 +2611,11 @@ class FieldAssignment(Assignment):
         typ = self.value.exprtype(scope)
         field = next(iter(field for field in scope.cls.fields() if field.declaration.name == self.target.name), None)
         if not field:
-            raise Exception(f"Line {self.info.line_number}: field {self.target.name} not in class {scope.cls.name}!")
+            raise Exception(f"{self.info}: field {self.target.name} not in class {scope.cls.name}!")
         declared_type = field.type()
         if not scope.subtype(typ, declared_type):
             if typ != Ptr([IntegerType(32)]) or declared_type not in [Ptr([Float64Type()]), Ptr([IntegerType(64)])]:
-                raise Exception(f"Line {self.info.line_number}: cannot assign to field {self.target.name}: {typ} is not a subtype of {declared_type}")
+                raise Exception(f"{self.info}: cannot assign to field {self.target.name}: {typ} is not a subtype of {declared_type}")
         self.target.typeflow(scope)
         scope.type_table[self.target.name] = typ
 
@@ -2810,12 +2817,12 @@ class For(Statement):
     def typeflow(self, scope):
         iterable_type = self.iterable.exprtype(scope)
         if not isinstance(iterable_type, FatPtr):
-            raise Exception(f"Line {self.info.line_number}: For-loop iterable must be an object with a .iterator() method, not {iterable_type}")
+            raise Exception(f"{self.info}: For-loop iterable must be an object with a .iterator() method, not {iterable_type}")
         temp = Identifier(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), self.temp_name)
         iterator = MethodCall(NodeInfo("_iterator_" + random_letters(10), self.info.filename, self.info.line_number), self.iterable, "iterator", [])
         iterator_type = iterator.exprtype(scope)
         if not isinstance(iterator_type, FatPtr):
-            raise Exception(f"Line {self.info.line_number}: For-loop iterator must be an object with a .next() method, not {iterator_type}")
+            raise Exception(f"{self.info}: For-loop iterator must be an object with a .next() method, not {iterator_type}")
         assign0 = Assignment(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), temp, iterator)
         assign0.typeflow(scope)
 
@@ -2823,10 +2830,10 @@ class For(Statement):
         nxt_type = nxt_call.exprtype(scope)
         if not isinstance(nxt_type, Union):
             print(nxt_type)
-            raise Exception(f"Line {self.info.line_number}: For-loop would never terminate.")
+            raise Exception(f"{self.info}: For-loop would never terminate.")
         continue_type = scope.simplify(Union.from_list([t for t in nxt_type.types.data if t != Nil()]))
         if continue_type == Nothing():
-            raise Exception(f"Line {self.info.line_number}: For-loop would never enter.")
+            raise Exception(f"{self.info}: For-loop would never enter.")
 
         inductee = Identifier(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), self.inductee)
         assign1 = Assignment(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), inductee, nxt_call)
@@ -2843,9 +2850,9 @@ class Return(Statement):
 
     def typeflow(self, scope):
         if(not scope.method):
-            raise Exception(f"Line {self.info.line_number}: can only have return statements in functions")
+            raise Exception(f"{self.info}: can only have return statements in functions")
         if(scope.method.return_type()):
-            raise Exception(f"Line {self.info.line_number}: function declares a return type but returns no values")
+            raise Exception(f"{self.info}: function declares a return type but returns no values")
         scope.method.hasreturn = True
 
 @dataclass
@@ -2861,12 +2868,12 @@ class ReturnValue(Return):
 
     def typeflow(self, scope):
         if not scope.method:
-            raise Exception(f"Line {self.info.line_number}: can only have return statements in functions")
+            raise Exception(f"{self.info}: can only have return statements in functions")
         if not scope.method.return_type():
-            raise Exception(f"Line {self.info.line_number}: function returns a value but does not declare a return type")
+            raise Exception(f"{self.info}: function returns a value but does not declare a return type")
         ret_typ = self.value.exprtype(scope)
         if not scope.subtype(ret_typ, scope.method.return_type()):
-            raise Exception(f"Line {self.info.line_number}: returned value of invalid type: {ret_typ}. Should be subtype of {scope.method.return_type()}.")
+            raise Exception(f"{self.info}: returned value of invalid type: {ret_typ}. Should be subtype of {scope.method.return_type()}.")
         scope.points_to_facts.add(("ret", "==", self.value.info.id))
         scope.method.hasreturn = True
 
@@ -2910,12 +2917,12 @@ class CoCreate(Expression):
     def exprtype(self, scope):
         arg_types = [arg.exprtype(scope) for arg in self.args]
         if not isinstance(arg_types[0], Function):
-            raise Exception(f"Line {self.info.line_number}: The first argument to Coroutine.new should be a function, not a {arg_zero_type}")
+            raise Exception(f"{self.info}: The first argument to Coroutine.new should be a function, not a {arg_zero_type}")
         if len(arg_types[1:]) != len(arg_types[0].param_types):
-            raise Exception(f"Line {self.info.line_number}: Function {self.args[0].name} expect {len(arg_types[0].param_types)} arguments, not {len(arg_types[1:])}")
+            raise Exception(f"{self.info}: Function {self.args[0].name} expect {len(arg_types[0].param_types)} arguments, not {len(arg_types[1:])}")
         if len(arg_types) > 1 and any(not scope.subtype(a, b) for (a,b) in zip(arg_types[1:], arg_types[0].param_types)):
             a,b = next(iter((a, b) for (a,b) in zip(arg_types[1:], arg_types[0].param_types) if not scope.subtype(a, b)))
-            raise Exception(f"Line {self.info.line_number}: Coroutine argument type {a} is not a subtype of declared parameter type {b} for function {self.args[0].name}")
+            raise Exception(f"{self.info}: Coroutine argument type {a} is not a subtype of declared parameter type {b} for function {self.args[0].name}")
         ret_type = arg_types[0].return_type if arg_types[0].return_type == Nothing() else scope.simplify(Union.from_list([Nil(), arg_types[0].return_type]))
         param_type = scope.simplify(Union.from_list([Nil(), arg_types[0].yield_type]))
         return Coroutine([ArrayAttr([param_type]), arg_types[0].yield_type, ret_type])
@@ -2953,7 +2960,7 @@ class Break(Statement):
         scope.region.last_block.add_op(br)
 
     def typeflow(self, scope):
-        if not scope.wile: raise Exception(f"Line {self.info.line_number}: Can't break when not in loop")
+        if not scope.wile: raise Exception(f"{self.info}: Can't break when not in loop")
 
 @dataclass
 class Continue(Statement):
@@ -2963,7 +2970,7 @@ class Continue(Statement):
         scope.region.last_block.add_op(cont)
 
     def typeflow(self, scope):
-        if not scope.wile: raise Exception(f"Line {self.info.line_number}: Can't continue when not in loop")
+        if not scope.wile: raise Exception(f"{self.info}: Can't continue when not in loop")
 
 @dataclass
 class CreateBuffer(Expression):
@@ -2987,7 +2994,7 @@ class CreateBuffer(Expression):
     def exprtype(self, scope):
         size_typ = self.size.exprtype(scope)
         if size_typ != Ptr([IntegerType(32)]):
-            raise Exception(f"Line {self.info.line_number}: Buffer creation takes i32 as argument, not {size_typ}.")
+            raise Exception(f"{self.info}: Buffer creation takes i32 as argument, not {size_typ}.")
         scope.allocations[self.info.id] = self
         return scope.simplify(self.buf)
 
@@ -3002,7 +3009,7 @@ class Import(Statement):
         if next(nx.simple_cycles(included_files), None):
             print("Dependency graph:")
             nx.write_network_text(included_files)
-            raise Exception(f"Line {self.info.line_number}: Import of {self.import_filename} from {self.info.filename} creates a cycle in the dependency graph.")
+            raise Exception(f"{self.info}: Import of {self.import_filename} from {self.info.filename} creates a cycle in the dependency graph.")
         self.program.interface_typeflow(self.sandbox)
         for k, v in self.sandbox.classes.items():
             if k not in scope.classes.keys(): scope.classes[k] = v
