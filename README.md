@@ -8,12 +8,14 @@
 PaulTalk is an experimental, statically-typed, **unabashedly object-oriented** programming language featuring:
 
 *   **Multiple Dispatch:** Methods are chosen at runtime based on the dynamic types of *multiple* arguments, enabling flexible and expressive code, especially for operator overloading and functions like `print`.
-*   **Non-monomorphized Generics:** Define reusable classes and methods with type parameters (`Class[T]`) and constraints (`where T <: Constraint`), supporting separate compilation and dynamic linking.
+*   **Non-monomorphized Generics:** Define reusable classes and methods with type parameters (`Class[T]`) and constraints (`where T <: Constraint`), enabling separate compilation and potentially more efficient dynamic linking compared to template-based approaches.
 *   **Stackful Asymmetric Coroutines:** Lightweight concurrency using `yield` for cooperative multitasking, exception handling, and creating generators or asynchronous patterns.
 *   **Advanced Type System:** Includes union types (`A | B`), local flow-sensitive type inference, and nilable types.
-*   **Region-Based Memory Management (In Progress):** Aims for safe and efficient memory management using static analysis (points-to analysis), although the liveness analysis necessary for region deallocation is not yet implemented.
+*   **Region-Based Memory Management (In Progress):** Aims for safe and efficient memory management *without garbage collection or reference counting* using static analysis (points-to analysis), although the liveness analysis necessary for region deallocation is not yet implemented.
 
 The compiler translates PaulTalk code through several stages, leveraging MLIR (Multi-Level Intermediate Representation) and LLVM for optimization and code generation.
+
+PaulTalk aims to combine the flexibility of multiple dispatch and dynamic linking with the potential for high performance and memory safety through its type system and planned region management.
 
 ## Status: Highly Experimental (Pre-1.0)
 
@@ -24,6 +26,14 @@ The compiler translates PaulTalk code through several stages, leveraging MLIR (M
 *   **Setup:** The build process, especially for the C++ components, is complex and not documented for general users. Makes use of in-tree versions of the `xDSL` and `debugir` projects.
 *   **Standard Library:** Currently very minimal, involving core facilities for string manipulation, IO, and iteration.
 *   **Language Features:** While many core features are implemented, expect bugs, rough edges, and potential breaking changes.
+
+### Future Work
+
+*   Complete the region-based memory management system (liveness analysis and deallocation).
+*   Expand the standard library.
+*   Improve error reporting and diagnostics.
+*   Add support for more platforms (Linux, macOS).
+*   Refine the build and setup process for easier adoption.
 
 ## Language Introduction
 
@@ -88,7 +98,7 @@ This project is intended to be released under the MIT License.
 ```
 MIT License
 
-Copyright (c) 2025 Paul Keenan
+Copyright (c) 2024 Paul Keenan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
