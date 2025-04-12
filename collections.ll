@@ -4,7 +4,7 @@ source_filename = "LLVMDialectModule"
 @_parameterization_Ptri1 = linkonce_odr constant [2 x ptr] [ptr @bool_typ, ptr null]
 @_parameterization_String = linkonce_odr constant [2 x ptr] [ptr @String, ptr null]
 @_parameterization_BufferPtri8 = linkonce_odr constant [2 x ptr] [ptr @buffer_typ, ptr null]
-@rdojm_collectionsmini = internal constant [16 x i8] c"collections.mini"
+@mttvj_collectionsmini = internal constant [16 x i8] c"collections.mini"
 @_parameterization_Ptri32 = linkonce_odr constant [2 x ptr] [ptr @i32_typ, ptr null]
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
@@ -4682,7 +4682,7 @@ define void @Array_throw_oob_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr,
   %61 = sext i32 %60 to i64
   %62 = mul i64 ptrtoint (ptr getelementptr ([16 x i8], ptr null, i32 1) to i64), %61
   %63 = getelementptr i8, ptr %59, i64 %62
-  %64 = load <16 x i8>, ptr @rdojm_collectionsmini, align 16
+  %64 = load <16 x i8>, ptr @mttvj_collectionsmini, align 16
   store <16 x i8> %64, ptr %63, align 16
   %65 = alloca i32, align 4
   store i32 16, ptr %65, align 4
@@ -5607,9 +5607,9 @@ define ptr @ArrayIterator_B_init_arrayArrayT({ ptr, ptr, ptr, i32 } %0, ptr %1) 
 }
 
 define { ptr, i160 } @ArrayIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2) {
-  %4 = alloca i160, align 8
-  %5 = alloca ptr, align 8
-  %6 = alloca i64, align 8
+  %4 = alloca [0 x i8], align 1
+  %5 = alloca i160, align 8
+  %6 = alloca ptr, align 8
   %7 = alloca i32, align 4
   %8 = alloca i32, align 4
   %9 = alloca i32, align 4
@@ -5699,12 +5699,12 @@ define { ptr, i160 } @ArrayIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   br i1 %81, label %82, label %88
 
 82:                                               ; preds = %3
-  store i64 ptrtoint (ptr @nil_typ to i64), ptr %6, align 4
-  %83 = load i64, ptr %6, align 4
-  store i64 %83, ptr %5, align 4
-  %84 = load ptr, ptr %5, align 8
+  %83 = load [0 x i8], ptr %4, align 1
+  store [0 x i8] %83, ptr %5, align 1
+  store ptr @nil_typ, ptr %6, align 8
+  %84 = load ptr, ptr %6, align 8
   %85 = insertvalue { ptr, i160 } undef, ptr %84, 0
-  %86 = load i160, ptr %4, align 4
+  %86 = load i160, ptr %5, align 4
   %87 = insertvalue { ptr, i160 } %85, i160 %86, 1
   br label %165
 
@@ -6903,9 +6903,9 @@ define { ptr, i160 } @MapIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
   %7 = alloca ptr, align 8
   %8 = alloca ptr, align 8
   %9 = alloca { ptr, i160 }, align 8
-  %10 = alloca i160, align 8
-  %11 = alloca ptr, align 8
-  %12 = alloca i64, align 8
+  %10 = alloca [0 x i8], align 1
+  %11 = alloca i160, align 8
+  %12 = alloca ptr, align 8
   %13 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %0, ptr %13, align 8
   %14 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -7018,12 +7018,12 @@ define { ptr, i160 } @MapIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
   br label %110
 
 104:                                              ; preds = %3
-  store i64 ptrtoint (ptr @nil_typ to i64), ptr %12, align 4
-  %105 = load i64, ptr %12, align 4
-  store i64 %105, ptr %11, align 4
-  %106 = load ptr, ptr %11, align 8
+  %105 = load [0 x i8], ptr %10, align 1
+  store [0 x i8] %105, ptr %11, align 1
+  store ptr @nil_typ, ptr %12, align 8
+  %106 = load ptr, ptr %12, align 8
   %107 = insertvalue { ptr, i160 } undef, ptr %106, 0
-  %108 = load i160, ptr %10, align 4
+  %108 = load i160, ptr %11, align 4
   %109 = insertvalue { ptr, i160 } %107, i160 %108, 1
   br label %110
 
@@ -8046,9 +8046,9 @@ define { ptr, i160 } @FilterIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %12 = alloca [0 x ptr], align 8
   %13 = alloca {}, align 8
   %14 = alloca { ptr, i160 }, align 8
-  %15 = alloca i160, align 8
-  %16 = alloca ptr, align 8
-  %17 = alloca i64, align 8
+  %15 = alloca [0 x i8], align 1
+  %16 = alloca i160, align 8
+  %17 = alloca ptr, align 8
   %18 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %0, ptr %18, align 8
   %19 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -8238,12 +8238,12 @@ define { ptr, i160 } @FilterIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   br label %165
 
 159:                                              ; preds = %151
-  store i64 ptrtoint (ptr @nil_typ to i64), ptr %17, align 4
-  %160 = load i64, ptr %17, align 4
-  store i64 %160, ptr %16, align 4
-  %161 = load ptr, ptr %16, align 8
+  %160 = load [0 x i8], ptr %15, align 1
+  store [0 x i8] %160, ptr %16, align 1
+  store ptr @nil_typ, ptr %17, align 8
+  %161 = load ptr, ptr %17, align 8
   %162 = insertvalue { ptr, i160 } undef, ptr %161, 0
-  %163 = load i160, ptr %15, align 4
+  %163 = load i160, ptr %16, align 4
   %164 = insertvalue { ptr, i160 } %162, i160 %163, 1
   br label %165
 
@@ -12652,9 +12652,9 @@ define { ptr, i160 } @ZipIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
   %14 = alloca ptr, align 8
   %15 = alloca [2 x ptr], align 8
   %16 = alloca { ptr, ptr }, align 8
-  %17 = alloca i160, align 8
-  %18 = alloca ptr, align 8
-  %19 = alloca i64, align 8
+  %17 = alloca [0 x i8], align 1
+  %18 = alloca i160, align 8
+  %19 = alloca ptr, align 8
   %20 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %0, ptr %20, align 8
   %21 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -12901,12 +12901,12 @@ define { ptr, i160 } @ZipIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, 
   br label %212
 
 206:                                              ; preds = %202
-  store i64 ptrtoint (ptr @nil_typ to i64), ptr %19, align 4
-  %207 = load i64, ptr %19, align 4
-  store i64 %207, ptr %18, align 4
-  %208 = load ptr, ptr %18, align 8
+  %207 = load [0 x i8], ptr %17, align 1
+  store [0 x i8] %207, ptr %18, align 1
+  store ptr @nil_typ, ptr %19, align 8
+  %208 = load ptr, ptr %19, align 8
   %209 = insertvalue { ptr, i160 } undef, ptr %208, 0
-  %210 = load i160, ptr %17, align 4
+  %210 = load i160, ptr %18, align 4
   %211 = insertvalue { ptr, i160 } %209, i160 %210, 1
   br label %212
 
@@ -14629,9 +14629,9 @@ define { ptr, i160 } @ProductIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, p
   %30 = alloca { ptr, ptr, ptr, i32 }, align 8
   %31 = alloca { ptr, ptr, ptr, i32 }, align 8
   %32 = alloca { ptr, i160 }, align 8
-  %33 = alloca i160, align 8
-  %34 = alloca ptr, align 8
-  %35 = alloca i64, align 8
+  %33 = alloca [0 x i8], align 1
+  %34 = alloca i160, align 8
+  %35 = alloca ptr, align 8
   %36 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %0, ptr %36, align 8
   %37 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -15007,12 +15007,12 @@ define { ptr, i160 } @ProductIterator2_next_({ ptr, ptr, ptr, i32 } %0, { ptr, p
   br label %336
 
 330:                                              ; preds = %265
-  store i64 ptrtoint (ptr @nil_typ to i64), ptr %35, align 4
-  %331 = load i64, ptr %35, align 4
-  store i64 %331, ptr %34, align 4
-  %332 = load ptr, ptr %34, align 8
+  %331 = load [0 x i8], ptr %33, align 1
+  store [0 x i8] %331, ptr %34, align 1
+  store ptr @nil_typ, ptr %35, align 8
+  %332 = load ptr, ptr %35, align 8
   %333 = insertvalue { ptr, i160 } undef, ptr %332, 0
-  %334 = load i160, ptr %33, align 4
+  %334 = load i160, ptr %34, align 4
   %335 = insertvalue { ptr, i160 } %333, i160 %334, 1
   br label %336
 

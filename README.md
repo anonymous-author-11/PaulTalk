@@ -27,16 +27,6 @@ PaulTalk aims to combine high-level ergonomics with high performance and memory 
 *   **Standard Library:** Currently very minimal, involving core facilities for string manipulation, IO, and iteration.
 *   **Language Features:** While many core features are implemented, expect bugs, rough edges, and potential breaking changes.
 
-### Future Work
-
-*   Complete the region-based memory management system (liveness analysis and deallocation).
-*   Expand the standard library.
-*   Improve error reporting and diagnostics.
-*   Add support for more platforms (Linux, macOS).
-*   Refine the build and setup process for easier adoption.
-
-You can find a disorganized but informative roadmap in `TODO.txt`.
-
 ## Language Introduction
 
 *   `intro.mini`: Provides a basic introduction to the language syntax and features. Note that it might be slightly outdated compared to the latest language features.
@@ -92,6 +82,16 @@ The standard library (`std.mini`) is currently very basic and includes modules l
 *   `io.mini`
 *   `math.mini`
 *   `channel.mini`
+
+### Future Work
+
+*   Complete the region-based memory management system (liveness analysis and deallocation).
+*   Expand the standard library.
+*   Improve error reporting and diagnostics.
+*   Add support for more platforms (Linux, macOS).
+*   Refine the build and setup process for easier adoption.
+
+You can find a disorganized but informative roadmap in `TODO.txt`.
 
 ## License
 

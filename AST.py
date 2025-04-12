@@ -1183,6 +1183,24 @@ class PrintCall(Expression):
         self.args[0].typeflow(scope)
 
 @dataclass
+class SizeOfCall(Expression):
+    typ: TypeAttribute
+
+    def codegen(self, scope):
+        typ = scope.simplify(self.typ)
+        parameterization = scope.get_parameterization(typ)
+        size_alignment_tuple = llvm.LLVMStructType.from_type_list([IntegerType(64), IntegerType(64)])
+        sizeop = SizeOp.create(operands=[parameterization], result_types=[size_alignment_tuple])
+        ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
+        size = llvm.ExtractValueOp(ary, sizeop.results[0], IntegerType(64))
+        wrap = WrapOp.make(size.results[0])
+        scope.region.last_block.add_ops([sizeop, size, wrap])
+        return wrap.results[0]
+
+    def exprtype(self, scope):
+        return Ptr([IntegerType(64)])
+
+@dataclass
 class ObjectCreation(Expression):
     anon_name: str
     type: TypeAttribute

@@ -512,3 +512,13 @@ holder = Holder[Int32].new(Int32.new(6));
 IO.print(holder.value().value());
 holder.value() = Int32.new(77);
 IO.print(holder.value().value());
+
+class Temp[T] {
+    def init() {}
+    def print() {
+        IO.print(sizeof(T));
+    }
+}
+
+temp = Temp[String | Nil].new();
+temp.print();

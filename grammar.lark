@@ -130,6 +130,7 @@ primary: "(" expression ")" -> paren_expr
        | array_literal
        | tuple_literal
        | print_call
+       | sizeof_call
        | yield_call
        | assignable
 
@@ -138,6 +139,7 @@ array_literal: LBRACKET (expression ("," expression)*)? "]"
 tuple_literal: "(" expression "," expression ("," expression)* ")"
 dictionary_literal: "{" (expression "::" ("," expression "::" expression)*)? "}"
 print_call: "print" "(" (expression ("," expression)*)? ")"
+sizeof_call: "sizeof" "(" typ ")"
 yield_call: YIELD "(" [expression] ")"
 function_call: IDENT "(" (expression ("," expression)*)? ")"
 method_call: (primary | parameterized_type) "." IDENT "(" (expression ("," expression)*)? ")"

@@ -168,7 +168,9 @@ define { i64, i64 } @_data_size_union_typ(ptr %0) {
 ._crit_edge:                                      ; preds = %.lr.ph, %1
   %.reg2mem20.0.lcssa = phi i64 [ 1, %1 ], [ %13, %.lr.ph ]
   %.reg2mem22.0.lcssa = phi i64 [ 0, %1 ], [ %19, %.lr.ph ]
-  %final_size = add i64 %.reg2mem22.0.lcssa, 8
+  %right_size = icmp eq i64 %.reg2mem22.0.lcssa, 32
+  %flag_size = select i1 %right_size, i64 0, i64 8
+  %final_size = add i64 %.reg2mem22.0.lcssa, %flag_size
   %24 = urem i64 %final_size, %.reg2mem20.0.lcssa
   %25 = icmp eq i64 %24, 0
   %26 = sub i64 %.reg2mem20.0.lcssa, %24

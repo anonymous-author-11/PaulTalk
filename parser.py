@@ -379,6 +379,10 @@ class CSTTransformer(Transformer):
         node_info = NodeInfo(random_letters(10), self.file_name, args[0].info.line_number if len(args) > 0 else 0)
         return PrintCall(node_info, args)
 
+    def sizeof_call(self, typ):
+        node_info = NodeInfo(random_letters(10), self.file_name, 0)
+        return SizeOfCall(node_info, typ)
+
     def function_call(self, func_name, *args):
         node_info = NodeInfo(random_letters(10), self.file_name, func_name.line)
         return FunctionCall(node_info, func_name.value, args)
