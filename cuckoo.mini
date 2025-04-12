@@ -37,20 +37,22 @@ class Entry[K,V] {
 // --- Cuckoo HashMap Implementation ---
 
 class HashMap[K,V] extends Iterable2[Pair[K,V]] {
-    @table1: Array[Entry[K,V] | Nil]
-    @table2: Array[Entry[K,V] | Nil]
-    @size: i32
-    @hasher: (K) -> i32 // Primary user-provided hash function
-    @eq: (K, K) -> Bool
+    @table1 : Buffer[Entry[K,V] | Nil]
+    @table2 : Buffer[Entry[K,V] | Nil]
+    @table_len : i32
+    @size : i32
+    @hasher : (K) -> i32 // Primary user-provided hash function
+    @eq : (K, K) -> Bool
 
     def Self.max_displacements() -> i32 {
         return 100;
     }
 
-    def init(@hasher: (K) -> i32, @eq : (K, K) -> Bool) {
-        tbl_capacity = 8; // Start small, total capacity 16
-        @table1 = Array[Entry[K,V] | Nil].new(tbl_capacity, tbl_capacity);
-        @table2 = Array[Entry[K,V] | Nil].new(tbl_capacity, tbl_capacity);
+    def init(@hasher : (K) -> i32, @eq : (K, K) -> Bool) {
+        tbl_capacity = 8;
+        @table_len = tbl_capacity; // Start small, total capacity 16
+        @table1 = Buffer[Entry[K,V] | Nil].new(tbl_capacity);
+        @table2 = Buffer[Entry[K,V] | Nil].new(tbl_capacity);
         @size = 0;
     }
 
@@ -66,13 +68,13 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
     }
 
     def index1(primary_hash: i32) -> i32 {
-        mask = @table1.length() - 1; // Assumes power-of-two length
+        mask = @table_len - 1; // Assumes power-of-two length
         return primary_hash bit_and mask;
     }
 
     def index2(primary_hash: i32) -> i32 {
         secondary_hash = self.hash2_from_primary(primary_hash);
-        mask = @table2.length() - 1; // Assumes power-of-two length
+        mask = @table_len - 1; // Assumes power-of-two length
         return secondary_hash bit_and mask;
     }
 
@@ -93,8 +95,8 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
             if on_first {
                 // Target table 1
                 idx = self.index1(primary_hash);
-                existing_entry_or_nil = @table1.unchecked_index(idx);
-                @table1.unchecked_insert(idx, current_entry); // Place current
+                existing_entry_or_nil = @table1.[idx];
+                @table1.[idx] = current_entry; // Place current
 
                 if existing_entry_or_nil is Nil {
                     @size = @size + 1;
@@ -109,8 +111,8 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
             }
             // Target table 2
             idx = self.index2(primary_hash);
-            existing_entry_or_nil = @table2.unchecked_index(idx);
-            @table2.unchecked_insert(idx, current_entry); // Place current
+            existing_entry_or_nil = @table2.[idx];
+            @table2.[idx] = current_entry; // Place current
 
             if existing_entry_or_nil is Nil {
                 @size = @size + 1;
@@ -127,10 +129,10 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         return current_entry;
     }
 
-    def move_entries(old_table : Array[Entry[K,V] | Nil], old_capacity_per_table : i32) {
+    def move_entries(old_table : Buffer[Entry[K,V] | Nil], old_capacity_per_table : i32) {
         i = 0;
         while i < old_capacity_per_table {
-            entry = old_table.unchecked_index(i);
+            entry = old_table.[i];
             if entry is Entry[K,V] {
                 failed_entry_during_rehash = self.place_entry_or_get_failed(entry);
             }
@@ -142,35 +144,36 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
     def resize() {
         old_table1 = @table1;
         old_table2 = @table2;
-        old_capacity_per_table = old_table1.length();
+        old_capacity_per_table = @table_len;
         new_capacity_per_table = old_capacity_per_table * 2;
         if new_capacity_per_table < 16 { new_capacity_per_table = 16; }
 
         // Create new tables and reset state
-        @table1 = Array[Entry[K,V] | Nil].new(new_capacity_per_table, new_capacity_per_table);
-        @table2 = Array[Entry[K,V] | Nil].new(new_capacity_per_table, new_capacity_per_table);
+        @table_len = new_capacity_per_table;
+        @table1 = Buffer[Entry[K,V] | Nil].new(new_capacity_per_table);
+        @table2 = Buffer[Entry[K,V] | Nil].new(new_capacity_per_table);
         @size = 0; // Reset size, place_entry_or_get_failed will increment it
 
         self.move_entries(old_table1, old_capacity_per_table);
         self.move_entries(old_table2, old_capacity_per_table);
     }
 
-    def replace_in_table(key : K, value : V, h1 : i32, idx : i32, table : Array[Entry[K,V] | Nil]) -> Bool {
-        entry = table.unchecked_index(idx);
+    def replace_in_table(key : K, value : V, h1 : i32, idx : i32, table : Buffer[Entry[K,V] | Nil]) -> Bool {
+        entry = table.[idx];
         if entry is Entry[K,V] {
             // Check primary hash first (quick), then key equality (potentially slow)
             if entry.primary_hash() == h1 and @eq.call(entry.key(), key) {
                 // Found in table 1, update in place
                 updated_entry = Entry[K,V].new(key, value, h1);
-                table.unchecked_insert(idx, updated_entry);
+                table.[idx] = updated_entry;
                 return true; // Update done, size doesn't change
             }
         }
         return false;
     }
 
-    def get_from_table(key : K, h1 : i32, idx : i32, table : Array[Entry[K,V] | Nil]) -> V | Nil {
-        entry = table.unchecked_index(idx);
+    def get_from_table(key : K, h1 : i32, idx : i32, table : Buffer[Entry[K,V] | Nil]) -> V | Nil {
+        entry = table.[idx];
         if entry is Entry[K,V] {
             // Check hash first, then equality
             if entry.primary_hash() == h1 and @eq.call(entry.key(), key) {
@@ -180,12 +183,12 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         return nil;
     }
 
-    def remove_from_table(key : K, h1 : i32, idx : i32, table : Array[Entry[K,V] | Nil]) -> V | Nil {
-        entry = table.unchecked_index(idx);
+    def remove_from_table(key : K, h1 : i32, idx : i32, table : Buffer[Entry[K,V] | Nil]) -> V | Nil {
+        entry = table.[idx];
         if entry is Entry[K,V] {
             if entry.primary_hash() == h1 and @eq.call(entry.key(), key) {
                 value_to_return = entry.value();
-                table.unchecked_insert(idx, nil); // Mark slot as empty
+                table.[idx] = nil; // Mark slot as empty
                 @size = @size - 1;
                 return value_to_return;
             }
@@ -212,8 +215,7 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
 
         // Check load factor: Resize if total size reaches half the total capacity
         // (i.e., size >= capacity of one table). Check BEFORE attempting placement.
-        capacity_per_table = @table1.length();
-        if @size >= capacity_per_table {
+        if @size >= @table_len {
             self.resize();
             // Recalculate indices based on potentially new capacity after resize
             // Note: place_entry_or_get_failed called below will use the new table sizes.
@@ -288,8 +290,9 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
     // Clear the map
     def clear() {
         tbl_capacity = 8;
-        @table1 = Array[Entry[K,V] | Nil].new(tbl_capacity, tbl_capacity);
-        @table2 = Array[Entry[K,V] | Nil].new(tbl_capacity, tbl_capacity);
+        @table_len = tbl_capacity;
+        @table1 = Buffer[Entry[K,V] | Nil].new(tbl_capacity);
+        @table2 = Buffer[Entry[K,V] | Nil].new(tbl_capacity);
         @size = 0;
     }
 
@@ -301,25 +304,26 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
     // --- Iterator Implementation ---
     def iterator() -> HashMapIterator[K,V] {
         // Pass both tables to the iterator
-        return HashMapIterator[K,V].new(@table1, @table2);
+        return HashMapIterator[K,V].new(@table1, @table2, @table_len);
     }
 }
 
 // --- Custom Iterator Class for Cuckoo HashMap ---
 class HashMapIterator[K,V] extends Iterator2[Pair[K,V]] {
-    @map_table1: Array[Entry[K,V] | Nil]
-    @map_table2: Array[Entry[K,V] | Nil]
+    @map_table1: Buffer[Entry[K,V] | Nil]
+    @map_table2: Buffer[Entry[K,V] | Nil]
+    @table_len : i32
     @index: i32       // Index within the current table
     @on_second : Bool // whether on second table
 
-    def init(@map_table1: Array[Entry[K,V] | Nil], @map_table2: Array[Entry[K,V] | Nil]) {
+    def init(@map_table1: Buffer[Entry[K,V] | Nil], @map_table2: Buffer[Entry[K,V] | Nil], @table_len : i32) {
         @index = 0;
         @on_second = false; // Start with table 1
     }
 
-    def next_from_table(table : Array[Entry[K,V] | Nil]) -> Pair[K, V] | Nil {
-        while @index < table.length() {
-            entry = table.unchecked_index(@index);
+    def next_from_table(table : Buffer[Entry[K,V] | Nil]) -> Pair[K, V] | Nil {
+        while @index < @table_len {
+            entry = table.[@index];
             @index = @index + 1;
             if entry is Entry[K, V] { return entry.to_pair(); }
         }

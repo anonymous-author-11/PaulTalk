@@ -1,4 +1,4 @@
-import cuckoo;
+import linear_probe;
 
 // --- Additions for Benchmarking (Unchanged) ---
 extern def clock() -> i64

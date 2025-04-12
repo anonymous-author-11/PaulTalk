@@ -37,7 +37,8 @@ class Entry[K,V] {
 // --- HashMap Implementation (Optimized) ---
 
 class HashMap[K,V] extends Iterable2[Pair[K,V]] {
-    @entries: Array[Entry[K,V] | Nil]
+    @entries: Buffer[Entry[K,V] | Nil]
+    @entries_len : i32
     @size: i32      // number of actual entries (key -> V)
     @load: i32      // number of occupied slots (key -> V or key -> Tombstone)
     @hasher: (K) -> i32
@@ -45,7 +46,8 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
 
     def init(@hasher: (K) -> i32, @eq : (K, K) -> Bool) {
         // Ensure initial capacity is a power of 2
-        @entries = Array[Entry[K,V] | Nil].new(16, 16);
+        @entries = Buffer[Entry[K,V] | Nil].new(16);
+        @entries_len = 16;
         @size = 0;
         @load = 0;
         // @hasher and @eq are initialized by the parameter syntax
@@ -54,9 +56,9 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
     // Finds the slot index for a key using QUADRATIC PROBING (Optimized Step Calculation).
     // Returns the index where the key is located, OR
     // Returns the index where the key should be inserted (first tombstone or nil).
-    // Precondition: @entries.length() is a power of 2.
+    // Precondition: @entries_len is a power of 2.
     def find_slot(key: K, hash: i32) -> i32 {
-        capacity = @entries.length();
+        capacity = @entries_len;
         mask = capacity - 1; // For power-of-two capacity modulo
         initial_index = hash bit_and mask;
         first_tombstone_idx = -1; // Index of first tombstone found
@@ -66,7 +68,7 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         current_index = initial_index;
 
         while true {
-            entry = @entries.unchecked_index(current_index);
+            entry = @entries.[current_index];
 
             if entry is Nil {
                 // Empty slot found. Key is not present beyond this point.
@@ -103,7 +105,7 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
 
     // Ensures capacity is a power of two, doubles if needed
     def ensure_capacity(required_load: i32) {
-         current_length = @entries.length();
+         current_length = @entries_len;
          // Check load factor: required_load / current_length >= 0.6
          // Multiply: required_load * DEN >= current_length * NUM
          needs_resize = current_length == 0 or required_load * 10 >= current_length * 6;
@@ -124,14 +126,15 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
     def resize(new_capacity: i32) {
         // Assume new_capacity is a power of 2
         old_entries = @entries;
-        @entries = Array[Entry[K,V] | Nil].new(new_capacity, new_capacity); // Array of Nil with size + capacity equal
+        old_len = @entries_len;
+        @entries = Buffer[Entry[K,V] | Nil].new(new_capacity); // Buffer of Nil
+        @entries_len = new_capacity;
         @size = 0; // Reset size and load for the new table
         @load = 0;
 
         i = 0;
-        old_len = old_entries.length();
         while i < old_len { // Iterate only up to old length
-            entry = old_entries.unchecked_index(i);
+            entry = old_entries.[i];
             // Re-insert only if it's a valid entry with a non-tombstone value
             if entry is Entry[K,V] {
                 val = entry.value();
@@ -147,11 +150,11 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
     // Handles updating size and load correctly.
     def insert_internal(key: K, value: V, hash: i32) {
          i = self.find_slot(key, hash);
-         current_entry_or_nil = @entries.unchecked_index(i); // Use a more descriptive name
+         current_entry_or_nil = @entries.[i]; // Use a more descriptive name
 
          // Create new entry regardless of what was there
          new_entry = Entry[K,V].new(key, value, hash);
-         @entries.unchecked_insert(i, new_entry);
+         @entries.[i] = new_entry;
 
          // Update size and load based on the *previous* state of the slot
          if current_entry_or_nil is Nil {
@@ -189,7 +192,7 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         // No need to check capacity here
         hash = @hasher.call(key);
         i = self.find_slot(key, hash);
-        entry_or_nil = @entries.unchecked_index(i);
+        entry_or_nil = @entries.[i];
 
         // find_slot guarantees that if an entry is returned, hash/key match.
         // We only need to check if it's Nil or a Tombstone.
@@ -207,7 +210,7 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
         // No need to check capacity here
         hash = @hasher.call(key);
         i = self.find_slot(key, hash);
-        entry_or_nil = @entries.unchecked_index(i);
+        entry_or_nil = @entries.[i];
 
         if entry_or_nil is Entry[K, V] {
             val = entry_or_nil.value();
@@ -215,7 +218,7 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
             if val is V {
                 // Create Tombstone entry, preserving key and hash for probing continuity
                 tombstone_entry = Entry[K,V].new(entry_or_nil.key(), Tombstone.new(), entry_or_nil.hash());
-                @entries.unchecked_insert(i, tombstone_entry);
+                @entries.[i] = tombstone_entry;
                 @size = @size - 1; // Active element count decreases
                 // @load remains the same (slot still occupied by tombstone)
 
@@ -231,7 +234,7 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
     // Clear the map
     def clear() {
         // Re-initialize with default capacity
-        @entries = Array[Entry[K,V] | Nil].new(16, 16);
+        @entries = Buffer[Entry[K,V] | Nil].new(16);
         @size = 0;
         @load = 0;
     }
@@ -242,25 +245,24 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
     // --- Iterator Implementation ---
     // Conforms to Iterable2 by providing iterator()
     def iterator() -> HashMapIterator[K,V] {
-        return HashMapIterator[K,V].new(@entries);
+        return HashMapIterator[K,V].new(@entries, @entries_len);
     }
 }
 
 // --- Custom Iterator Class (Unchanged from original logic) ---
 // Conforms to Iterator2 interface
 class HashMapIterator[K,V] extends Iterator2[Pair[K,V]] {
-    @map_entries: Array[Entry[K,V] | Nil]
+    @map_entries: Buffer[Entry[K,V] | Nil]
     @index: i32
     @length: i32 // Cache length for minor optimization
 
-    def init(@map_entries: Array[Entry[K,V] | Nil]) {
+    def init(@map_entries: Buffer[Entry[K,V] | Nil], @length : i32) {
         @index = 0;
-        @length = @map_entries.length(); // Cache length
     }
 
     def next() -> Pair[K, V] | Nil {
         while @index < @length { // Use cached length
-            entry_or_nil = @map_entries.unchecked_index(@index);
+            entry_or_nil = @map_entries.[@index];
             @index = @index + 1; // Increment index for next call
 
             if entry_or_nil is Entry[K, V] {

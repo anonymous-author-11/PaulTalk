@@ -83,7 +83,7 @@ The standard library (`std.mini`) is currently very basic and includes modules l
 *   `math.mini`
 *   `channel.mini`
 
-### Future Work
+## Future Work
 
 *   Complete the region-based memory management system (liveness analysis and deallocation).
 *   Expand the standard library.
