@@ -1984,49 +1984,12 @@ class Behavior(Statement):
     def process_block(self, block, bblock, blocks, offset_ptr, arg, exit, fat_ptr):
         if self.process_final_state(block, bblock, offset_ptr, exit, fat_ptr): return
 
-        hash_coef, tbl_size, subtype_test, hashtbl, vptr = self.retrieve_tools(block, arg, bblock)
+        gep = llvm.GEPOp.from_mixed_indices(arg, [block.arg_position], pointee_type=llvm.LLVMPointerType.opaque())
+        check_flag = CheckFlagOp.create(operands=[gep.results[0]], attributes={"typ_name":type_id(block.typ)}, result_types=[Ptr([IntegerType(1)])])
+        is_subtype = llvm.LoadOp(check_flag.results[0], IntegerType(1))
 
-        cand_ptr = AddrOfOp.from_stringattr(type_id(block.typ))
-        cand = llvm.PtrToIntOp(cand_ptr.results[0], IntegerType(64))
-        cand_id = llvm.ConstantOp(IntegerAttr.from_int_and_width(hash_id(type_id(block.typ).data), 64), IntegerType(64))
-        operands = [subtype_test, tbl_size, hash_coef, cand_id.results[0], cand.results[0], hashtbl]
-        
-        bblock.add_ops([cand_ptr, cand, cand_id])
-        # should probably make this internal to subtypeOp lowering
-        if block.typ == Nil():
-            null = llvm.ZeroOp.create(result_types=[IntegerType(64)])
-            vptr_i64 = llvm.PtrToIntOp(vptr, IntegerType(64))
-            subtype_call = ComparisonOp.make(vptr_i64.results[0], null.results[0], "EQ")
-            bblock.add_ops([null, vptr_i64, subtype_call])
-        else:
-            subtype_call = SubtypeOp.create(operands=operands, result_types=[IntegerType(1)])
-            bblock.add_op(subtype_call)
-        br = cf.ConditionalBranch(subtype_call.results[0], blocks[block.first_succ_name][1], [], blocks[block.second_succ_name][1], [])
-        bblock.add_op(br)
-
-    def retrieve_tools(self, block, arg, bblock):
-        # in fact, should probably move all this into op lowering phase
-        ary_type = llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque() for i in range(self.arity)])
-        gep = llvm.GEPOp.from_mixed_indices(arg, [0, block.arg_position], pointee_type=ary_type)
-        vptr = llvm.LoadOp(gep.results[0], llvm.LLVMPointerType.opaque())
-        
-        hash_coef_ptr = llvm.GEPOp(vptr.results[0], [1], pointee_type=llvm.LLVMPointerType.opaque())
-        tbl_size_ptr = llvm.GEPOp(vptr.results[0], [2], pointee_type=llvm.LLVMPointerType.opaque())
-        subtype_test_ptr = llvm.GEPOp(vptr.results[0], [3], pointee_type=llvm.LLVMPointerType.opaque())
-        hashtbl_ptr = llvm.GEPOp(vptr.results[0], [4], pointee_type=llvm.LLVMPointerType.opaque())
-
-        hash_coef = llvm.LoadOp(hash_coef_ptr.results[0], IntegerType(64))
-        tbl_size = llvm.LoadOp(tbl_size_ptr.results[0], IntegerType(64))
-        subtype_test = llvm.LoadOp(subtype_test_ptr.results[0], llvm.LLVMPointerType.opaque())
-        hashtbl = llvm.LoadOp(hashtbl_ptr.results[0], llvm.LLVMPointerType.opaque())
-
-        bblock.add_ops([
-            gep, vptr,
-            hash_coef_ptr, tbl_size_ptr, subtype_test_ptr, hashtbl_ptr,
-            hash_coef, tbl_size, subtype_test, hashtbl
-        ])
-
-        return hash_coef.results[0], tbl_size.results[0], subtype_test.results[0], hashtbl.results[0], vptr.results[0]
+        br = cf.ConditionalBranch(is_subtype.results[0], blocks[block.first_succ_name][1], [], blocks[block.second_succ_name][1], [])
+        bblock.add_ops([gep, check_flag, is_subtype, br])
 
     def typeflow(self, scope):
         if any(len(method.definition.params) != self.arity for method in self.methods):

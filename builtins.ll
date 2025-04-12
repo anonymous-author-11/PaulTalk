@@ -147,10 +147,9 @@ define { ptr, i160 } @_box_bool_typ(ptr %0, ptr %1) {
   %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
   %13 = load ptr, ptr %12, align 8
   %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %15 = load i160, ptr %4, align 4
+  %16 = insertvalue { ptr, i160 } %14, i160 %15, 1
+  ret { ptr, i160 } %16
 }
 
 define void @_unbox_bool_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
@@ -202,10 +201,9 @@ define { ptr, i160 } @_box_i8_typ(ptr %0, ptr %1) {
   %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
   %13 = load ptr, ptr %12, align 8
   %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %15 = load i160, ptr %4, align 4
+  %16 = insertvalue { ptr, i160 } %14, i160 %15, 1
+  ret { ptr, i160 } %16
 }
 
 define void @_unbox_i8_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
@@ -257,10 +255,9 @@ define { ptr, i160 } @_box_i32_typ(ptr %0, ptr %1) {
   %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
   %13 = load ptr, ptr %12, align 8
   %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %15 = load i160, ptr %4, align 4
+  %16 = insertvalue { ptr, i160 } %14, i160 %15, 1
+  ret { ptr, i160 } %16
 }
 
 define void @_unbox_i32_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
@@ -312,10 +309,9 @@ define { ptr, i160 } @_box_i64_typ(ptr %0, ptr %1) {
   %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
   %13 = load ptr, ptr %12, align 8
   %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %15 = load i160, ptr %4, align 4
+  %16 = insertvalue { ptr, i160 } %14, i160 %15, 1
+  ret { ptr, i160 } %16
 }
 
 define void @_unbox_i64_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
@@ -367,10 +363,9 @@ define { ptr, i160 } @_box_i128_typ(ptr %0, ptr %1) {
   %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
   %13 = load ptr, ptr %12, align 8
   %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %15 = load i160, ptr %4, align 4
+  %16 = insertvalue { ptr, i160 } %14, i160 %15, 1
+  ret { ptr, i160 } %16
 }
 
 define void @_unbox_i128_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
@@ -422,10 +417,9 @@ define { ptr, i160 } @_box_f64_typ(ptr %0, ptr %1) {
   %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
   %13 = load ptr, ptr %12, align 8
   %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %15 = load i160, ptr %4, align 4
+  %16 = insertvalue { ptr, i160 } %14, i160 %15, 1
+  ret { ptr, i160 } %16
 }
 
 define void @_unbox_f64_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
@@ -477,10 +471,9 @@ define { ptr, i160 } @_box_nil_typ(ptr %0, ptr %1) {
   %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
   %13 = load ptr, ptr %12, align 8
   %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %15 = load i160, ptr %4, align 4
+  %16 = insertvalue { ptr, i160 } %14, i160 %15, 1
+  ret { ptr, i160 } %16
 }
 
 define void @_unbox_nil_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
@@ -545,10 +538,9 @@ define { ptr, i160 } @_box_nothing_typ(ptr %0, ptr %1) {
   %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
   %13 = load ptr, ptr %12, align 8
   %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %15 = load i160, ptr %4, align 4
+  %16 = insertvalue { ptr, i160 } %14, i160 %15, 1
+  ret { ptr, i160 } %16
 }
 
 define void @_unbox_nothing_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
@@ -600,10 +592,9 @@ define { ptr, i160 } @_box_coroutine_typ(ptr %0, ptr %1) {
   %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
   %13 = load ptr, ptr %12, align 8
   %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %15 = load i160, ptr %4, align 4
+  %16 = insertvalue { ptr, i160 } %14, i160 %15, 1
+  ret { ptr, i160 } %16
 }
 
 define void @_unbox_coroutine_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
@@ -655,10 +646,9 @@ define { ptr, i160 } @_box_function_typ(ptr %0, ptr %1) {
   %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
   %13 = load ptr, ptr %12, align 8
   %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %15 = load i160, ptr %4, align 4
+  %16 = insertvalue { ptr, i160 } %14, i160 %15, 1
+  ret { ptr, i160 } %16
 }
 
 define void @_unbox_function_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
@@ -710,10 +700,9 @@ define { ptr, i160 } @_box_buffer_typ(ptr %0, ptr %1) {
   %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
   %13 = load ptr, ptr %12, align 8
   %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %15 = load i160, ptr %4, align 4
+  %16 = insertvalue { ptr, i160 } %14, i160 %15, 1
+  ret { ptr, i160 } %16
 }
 
 define void @_unbox_buffer_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
@@ -752,10 +741,9 @@ define { ptr, i160 } @_box_tuple_typ(ptr %0, ptr %1) {
   %12 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
   %13 = load ptr, ptr %12, align 8
   %14 = insertvalue { ptr, i160 } undef, ptr %13, 0
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %16 = load i160, ptr %15, align 4
-  %17 = insertvalue { ptr, i160 } %14, i160 %16, 1
-  ret { ptr, i160 } %17
+  %15 = load i160, ptr %4, align 4
+  %16 = insertvalue { ptr, i160 } %14, i160 %15, 1
+  ret { ptr, i160 } %16
 }
 
 define void @_unbox_tuple_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
@@ -799,10 +787,9 @@ define { ptr, i160 } @_box_union_typ(ptr %0, ptr %1) {
   %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
   %16 = load ptr, ptr %15, align 8
   %17 = insertvalue { ptr, i160 } undef, ptr %16, 0
-  %18 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 1
-  %19 = load i160, ptr %18, align 4
-  %20 = insertvalue { ptr, i160 } %17, i160 %19, 1
-  ret { ptr, i160 } %20
+  %18 = load i160, ptr %4, align 4
+  %19 = insertvalue { ptr, i160 } %17, i160 %18, 1
+  ret { ptr, i160 } %19
 }
 
 ; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)

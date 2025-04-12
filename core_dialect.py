@@ -47,7 +47,7 @@ def type_size(typ: TypeAttribute) -> int:
     if typ == Nil() or typ == Nothing(): return 0
     if typ == llvm.LLVMPointerType.opaque(): return 64
     if isinstance(typ, Union):
-        result = typ.max_size().bitwidth + 64
+        result = typ.max_size() + 64
         return result
     if isinstance(typ, Buffer) or isinstance(typ, Coroutine) or isinstance(typ, Function):
         return 64
@@ -266,10 +266,10 @@ class Union(ParametrizedAttribute, TypeAttribute):
 
     def base_typ(self) -> TypeAttribute:
         if len(self.types.data) == 0: return llvm.LLVMVoidType()
-        return llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque(), self.max_size()])
+        return llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque(), IntegerType(self.max_size())])
 
-    def max_size(self) -> IntegerType:
-        return IntegerType(max(type_size(typ) for typ in self.types.data))
+    def max_size(self) -> int:
+        return max(type_size(typ) for typ in self.types.data)
     
     @classmethod
     def from_list(cls, list):

@@ -72,9 +72,9 @@ def run_pdl_lowering(module_str):
 def run_mlir_opt(module_str):
     cmd = " ".join([
         "mlir-opt","-allow-unregistered-dialect","--mlir-print-op-generic","--canonicalize=\"region-simplify=aggressive\"",
-        "--mem2reg", "--sroa","--lift-cf-to-scf",
-        "--canonicalize=\"region-simplify=aggressive\"", "--loop-invariant-code-motion","--loop-invariant-subset-hoisting",
-        "--buffer-hoisting","--buffer-loop-hoisting","--control-flow-sink","--convert-func-to-llvm"
+        "--sroa","--lift-cf-to-scf",
+        "--canonicalize=\"region-simplify=aggressive\"", "--sccp", "--loop-invariant-code-motion","--loop-invariant-subset-hoisting",
+        "--cse","--control-flow-sink","--convert-func-to-llvm"
     ])
     
     cmd_out = subprocess.run(cmd, capture_output=True, shell=True, text=True, input=module_str)

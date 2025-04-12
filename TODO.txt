@@ -139,7 +139,6 @@ DONE:
 - Implement hex literals [check!]
 - Require that unitialized variables be nullable types [check!]
 - Coroutine type should reflect call parameters [check!]
-- Require that uninitialized variables be nilable [check!]
 - Add a tuple type [check!]
 	- Add to IR [check!]
 	- Add to grammar [check!]
@@ -353,10 +352,12 @@ TODO:
 
 - Use Checkflag on method dispatch checks instead of raw SubtypeTest
 	- Will use simple pointer equality checks for builtin types
-	- Will handle parameterizations
-- Generic tuple creation and indexing
+	- Will handle parameterizations naturally
 - Add file name to error messages
 - Make intrinsics better
+	- Let me have periods in extern def names
+	- Externally declare intrinsics
+	- Extern def llvm.sqrt.i64(x : i64) -> i64
 - Make sure abstract methods don't override concrete methods
 - Add asserts
 	- There's mlir functionality (cf.assert) for this
@@ -405,7 +406,6 @@ TODO:
 	- Decrease work done in interface_codegen
 	- Type-check specific imports on-demand rather than upfront
 - Clean up compilation of files with no main() or no specified outfile
-- Think about initialization of buffers and nil checks
 - Think about how actually to handle union type parameters
 - Implement type parameter deduction from init()
 - Make sure that type bounds are applied generally
@@ -416,14 +416,9 @@ TODO:
 	- Define intrinsics for operations on boxed interfaces
 	- PrimitiveDef subtype of ClassDef?
 - Shift array and range literals to new generics
-	- Will need to do buffer optimization first for array
-	- And to do buffer optimization we need stored type parameters
+	- Will need to do buffer optimization first for array [check!]
+	- And to do buffer optimization we need stored type parameters [check!]
 	- Which we do now have
-- Magic buffer methods
-	- store_in_buffer and create_from_buffer just need that size_in_bytes to work
-	- Store generic fields as boxed
-	- Just use unboxed for actually storing in buffer
-	- assignments with T in rhs would codegen directly to store_in_buffer
 
 - Allow multiple type checks in one condition
 - Tighten up return type inference for function literals
@@ -458,6 +453,9 @@ TODO:
 
 # --- Known Bugs ---
 
+- I have a feeling that the current handling of tuples is not strictly correct
+	- In particular, casting Tuple[i32, i32] | Nil to Tuple[Any, Any] | Nil will be incorrect
+	- Generally subtyping between value types of different size is fraught
 - Interface codegenning a method may create a signature mismatch with the original due to different behavior signatures
 - There's a bug in lowering early returns in else clauses [fixed!]
 - Casting to/from Object in unions is not correct [fixed!]
@@ -528,12 +526,24 @@ TODO:
 - Assume call return value offsets
 - Expect reciever static types
 
+- Generic tuple creation and indexing
+	- Will have to use dynamic allocas
+	- Hoisting dynamic allocas would require hoisting their inputs
+	- Or guaranteeing that their inputs are in the entry block (easier)
+	- Need to ensure that these dynamic allocas are inlineable
+	- Making them arrays might be a hack to enable inlining
+	- Should probably use llvm.stacksave and llvm.stackrestore
+	- Would have to pass and return as pointers
+
 - You could inline context switches by breaking functions into sections upon yields and calls
-	- Would require significant ingenuity but would secure your glory forever
+	- Would require significant ingenuity
 	- Would significantly improve optimizations across context switches
-	- Would need to manually maintain live variables across yields and calls
-	- Maybe the outlined call would have some prelude retrieving old variables?
-	- Probably best to leverage LLVM coroutine tech for tracking live variables
+	- Would need to maintain live variables across yields and calls
+	- Probably best to leverage existing facilities for tracking live variables
+	- Idea: use MLIR OpenMP outlining pass to outline coroutine continuations and pass live variables
+	- Then just textually replace call @____kmpc_fork_call(ptr @outlined, args) with call @outlined(args)
+- Lower loops without break/continue to scf.for or omp.loop constructs
+	- Would interfere with mlir-opt mem2reg (but not sroa?)
 - Freelist of coroutine stacks?
 	- Ring buffer LIFO stack
 	- Fixed capacity
@@ -544,6 +554,7 @@ TODO:
 			- Abstract bounded polymorphic associated regions (god mode)
 	- Will probably need to store ptrs to virtual regions in fields
 		- Wait, why? Do we actually?
+		- Or store a method in the vtable that can retrieve the virtual region
 	- Unclear if boxed types will need to carry regions
 
 - Manual memory management combines four questions

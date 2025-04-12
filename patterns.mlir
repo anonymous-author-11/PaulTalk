@@ -745,30 +745,6 @@ module @patterns {
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
-  pdl.pattern @LowerOr : benefit(1) {
-    %bool = pdl.type : i1
-    %lhs = pdl.operand : %bool
-    %rhs = pdl.operand : %bool
-    %op_name_attr = pdl.attribute = "or"
-    %root = pdl.operation "mini.logical"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%bool : !pdl.type)
-    pdl.rewrite %root {
-      %or_op = pdl.operation "arith.ori"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%bool : !pdl.type)
-      %or_result = pdl.result 0 of %or_op
-      pdl.replace %root with (%or_result : !pdl.value)
-    }
-  }
-  pdl.pattern @LowerAnd : benefit(1) {
-    %bool = pdl.type : i1
-    %lhs = pdl.operand : %bool
-    %rhs = pdl.operand : %bool
-    %op_name_attr = pdl.attribute = "and"
-    %root = pdl.operation "mini.logical"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%bool : !pdl.type)
-    pdl.rewrite %root {
-      %and_op = pdl.operation "arith.andi"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%bool : !pdl.type)
-      %and_result = pdl.result 0 of %and_op
-      pdl.replace %root with (%and_result : !pdl.value)
-    }
-  }
   pdl.pattern @LowerFloatArithmetic : benefit(1) {
     %op_type = pdl.type
     pdl.apply_native_constraint "is_float"(%op_type : !pdl.type)
@@ -1055,6 +1031,17 @@ module @patterns {
     pdl.rewrite %root {
       %result = pdl.apply_native_rewrite "lower_parameterization_indexation"(%root : !pdl.operation) : !pdl.value
       pdl.replace %root with (%result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerMemcpyEmptyArray : benefit(2) {
+    %type_attr = pdl.attribute
+    %ptr_type = pdl.type : !llvm.ptr
+    %source = pdl.operand : %ptr_type
+    %dest = pdl.operand : %ptr_type
+    pdl.apply_native_constraint "is_empty_llvm_array"(%type_attr : !pdl.attribute)
+    %root = pdl.operation "mini.memcpy"(%source, %dest : !pdl.value, !pdl.value) {"type" = %type_attr}
+    pdl.rewrite %root {
+      pdl.erase %root
     }
   }
   pdl.pattern @LowerMemCpyStruct : benefit(2) {

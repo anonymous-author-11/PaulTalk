@@ -90,7 +90,8 @@ class SecondPass(ModulePass):
                 LowerWhile(),
                 LowerBreak(),
                 LowerContinue(),
-                LowerMethodCall(),
+                LowerLogical(),
+                LowerMethodCall()
                 #LowerCreateBuffer(),
             ]),
             apply_recursively=True
@@ -136,8 +137,7 @@ class ThirdPass(ModulePass):
                 LowerBoxDef(),
                 LowerBoxUnionDef(),
                 LowerNew(),
-                LowerUnboxDef(),
-                LowerLogical()
+                LowerUnboxDef()
                 #LowerDataSize(),
                 #LowerSize(),
                 #LowerParameterizationIndexation(),
