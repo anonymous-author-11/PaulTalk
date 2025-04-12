@@ -21,7 +21,7 @@ The compiler translates PaulTalk code through several stages, leveraging MLIR (M
 
 *   **Memory Management:** The region-based memory system is incomplete. Memory is allocated (using a fast bump allocator) but **never freed**, leading to memory leaks in any non-trivial program.
 *   **Platform:** Currently targets **x64 Windows only**. Aims to be multiplatform in the future.
-*   **Setup:** The build process, especially for the C++ components, is complex and not documented for general users. Makes use of in-tree versions of the xDSL and debugir projects.
+*   **Setup:** The build process, especially for the C++ components, is complex and not documented for general users. Makes use of in-tree versions of the `xDSL` and `debugir` projects.
 *   **Standard Library:** Currently very minimal, involving core facilities for string manipulation, IO, and iteration.
 *   **Language Features:** While many core features are implemented, expect bugs, rough edges, and potential breaking changes.
 
@@ -35,7 +35,7 @@ The compiler translates PaulTalk code through several stages, leveraging MLIR (M
 *   **Object-Oriented:** Classes, multiple inheritance, `@field` syntax, `init` constructors.
 *   **Multiple Dispatch:** Implemented via efficient dispatch automata. Used for standard functions (`IO.print`) and operator overloading.
 *   **Generics:** Parameterized types (`Class[T, U]`), type bounds (`where K <: Hashable`).
-*   **First-Class Functions** Convenient anonymous functions with (a : i32, a : i32) => ( a\*b; ) syntax.
+*   **First-Class Functions:** Convenient anonymous functions with `(a : i32, a : i32) => ( a*b; )` syntax.
 *   **Coroutines:** `Coroutine.new(func, args...)`, `yield(value)`, `coro.call(arg?)`, `coro.result()`. Can yield exceptions for non-local control flow.
 *   **Type System:** Static typing, flow-sensitive inference, Unions (`|`), `Nil`, `Any`, `is` type checks.
 *   **Iteration:** `for..in` loops, range literals (`start:end`), `Iterable`/`Iterator` protocols.
@@ -47,7 +47,7 @@ The compiler translates PaulTalk code through several stages, leveraging MLIR (M
 The compiler driver can be found in `compiler.py`.
 
 1.  **Parsing:** `.mini` source files are parsed into an Abstract Syntax Tree (AST) using `lark`.
-2.  **Type Checking & Analysis:** The AST is type-checked, and points-to analysis is performed (`scope.py`, `constraint_graph.py`).
+2.  **Type Checking & Analysis:** The AST is type-checked, and points-to analysis is performed (`ast.py`, `scope.py`, `constraint_graph.py`).
 3.  **MLIR Generation:** The AST is lowered to a custom MLIR dialect (`core_dialect.py`).
 4.  **Lowering (Python):** Initial lowering passes are applied (`lower.py`).
 5.  **Lowering (PDL & C++):** Further lowering occurs using PDL (Pattern Description Language) patterns (`patterns.mlir`) and custom C++ rewrite rules (`standalone/lib/Standalone/custom_rewrites.cpp`).
