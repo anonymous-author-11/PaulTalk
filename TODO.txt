@@ -379,7 +379,6 @@ TODO:
 	- On instance creation, store a mapping from formal offsets to real offsets
 	- Or even just store the sizes of the unbaked types
 	- 8 bits per size, add to invariant section
-- Calloc will zero freshly allocated memory
 - Implement user-exposed getters
 	- Shouldn't be technically difficult
 	- Will significantly improve ergonomics

@@ -225,20 +225,6 @@ module @patterns {
       pdl.replace %root with (%ptrtoint_result : !pdl.value)
     }
   }
-  pdl.pattern @LowerGetFlag : benefit(1) {
-    %ptr_type = pdl.type : !llvm.ptr
-    %ptr = pdl.operand : %ptr_type
-    %struct_typ_attr = pdl.attribute
-    %result_type = pdl.type : !llvm.ptr
-    %root = pdl.operation "mini.getflag"(%ptr : !pdl.value) {"struct_typ" = %struct_typ_attr} -> (%result_type : !pdl.type)
-    pdl.rewrite %root {
-      %c0_attr = pdl.attribute = 0
-      %indices = pdl.attribute = array<i32: 0, 0>
-      %gep_op = pdl.operation "llvm.getelementptr"(%ptr : !pdl.value) {"elem_type" = %struct_typ_attr, "rawConstantIndices" = %indices} -> (%result_type : !pdl.type)
-      %gep_result = pdl.result 0 of %gep_op
-      pdl.replace %root with (%gep_result : !pdl.value)
-    }
-  }
   pdl.pattern  @LowerSetupException: benefit(1) {
     %root = pdl.operation "mini.setup_exception"
     pdl.rewrite %root {
@@ -1033,17 +1019,6 @@ module @patterns {
       pdl.replace %root with (%result : !pdl.value)
     }
   }
-  pdl.pattern @LowerMemcpyEmptyArray : benefit(2) {
-    %type_attr = pdl.attribute
-    %ptr_type = pdl.type : !llvm.ptr
-    %source = pdl.operand : %ptr_type
-    %dest = pdl.operand : %ptr_type
-    pdl.apply_native_constraint "is_empty_llvm_array"(%type_attr : !pdl.attribute)
-    %root = pdl.operation "mini.memcpy"(%source, %dest : !pdl.value, !pdl.value) {"type" = %type_attr}
-    pdl.rewrite %root {
-      pdl.erase %root
-    }
-  }
   pdl.pattern @LowerMemCpyStruct : benefit(2) {
     %struct_type_attr = pdl.attribute
     pdl.apply_native_constraint "is_struct_attr"(%struct_type_attr : !pdl.attribute)
@@ -1166,24 +1141,6 @@ module @patterns {
       %alloca_result = pdl.result 0 of %alloca
       %memcpy = pdl.operation "mini.memcpy"(%value, %alloca_result : !pdl.value, !pdl.value) {"type" = %typ_attr}
       %sixteen = pdl.attribute = 16
-      pdl.replace %root with (%alloca_result : !pdl.value)
-    }
-  }
-  pdl.pattern @LowerTypID : benefit(1) {
-    %typ_name = pdl.attribute
-    %ptr_type = pdl.type : !llvm.ptr
-    %i64_type = pdl.type : i64
-    %i64_type_attr = pdl.attribute = i64
-    %root = pdl.operation "mini.typid" {"typ_name" = %typ_name} -> (%ptr_type : !pdl.type)
-    pdl.rewrite %root {
-      %symbol = pdl.apply_native_rewrite "string_to_symbol"(%typ_name: !pdl.attribute) : !pdl.attribute
-      %alloca = pdl.operation "mini.alloc" {"typ" = %i64_type_attr} -> (%ptr_type : !pdl.type)
-      %alloca_result = pdl.result 0 of %alloca
-      %global_ptr = pdl.operation "mini.addr_of" {"global_name" = %symbol} -> (%ptr_type : !pdl.type)
-      %global_ptr_result = pdl.result 0 of %global_ptr
-      %ptr_to_int = pdl.operation "llvm.ptrtoint"(%global_ptr_result : !pdl.value) -> (%i64_type : !pdl.type)
-      %ptr_to_int_result = pdl.result 0 of %ptr_to_int
-      %store = pdl.operation "llvm.store"(%ptr_to_int_result, %alloca_result : !pdl.value, !pdl.value)
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
@@ -1890,7 +1847,7 @@ pdl.pattern @LowerBoxSmall : benefit(1) {
         pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
-  pdl.pattern @LowerSetFlagWithOperand : benefit(1) {
+  pdl.pattern @LowerSetFlagWithOperand : benefit(2) {
     %ptr_type = pdl.type : !llvm.ptr
     %struct_typ_attr = pdl.attribute
     %ptr = pdl.operand
@@ -1898,9 +1855,7 @@ pdl.pattern @LowerBoxSmall : benefit(1) {
     %i64_attr = pdl.attribute = i64
     %root = pdl.operation "mini.setflag"(%ptr, %new_flag : !pdl.value, !pdl.value) {"struct_typ" = %struct_typ_attr}
     pdl.rewrite %root {
-      %get_flag = pdl.operation "mini.get_flag"(%ptr : !pdl.value) {"struct_typ" = %struct_typ_attr} -> (%ptr_type : !pdl.type)
-      %get_flag_result = pdl.result 0 of %get_flag
-      %assign = pdl.operation "mini.assign"(%get_flag_result, %new_flag : !pdl.value, !pdl.value) {"typ" = %i64_attr}
+      %assign = pdl.operation "mini.assign"(%ptr, %new_flag : !pdl.value, !pdl.value) {"typ" = %i64_attr}
       pdl.replace %root with %assign
     }
   }
@@ -1912,12 +1867,11 @@ pdl.pattern @LowerBoxSmall : benefit(1) {
     %i64_attr = pdl.attribute = i64
     %root = pdl.operation "mini.setflag"(%ptr : !pdl.value) {"struct_typ" = %struct_typ_attr, "typ_name" = %typ_name}
     pdl.rewrite %root {
-      %get_flag = pdl.operation "mini.getflag"(%ptr : !pdl.value) {"struct_typ" = %struct_typ_attr} -> (%ptr_type : !pdl.type)
-      %get_flag_result = pdl.result 0 of %get_flag
-      %typ_id = pdl.operation "mini.typid" {"typ_name" = %typ_name} -> (%ptr_type : !pdl.type)
+      %typ_symbol = pdl.apply_native_rewrite "string_to_symbol"(%typ_name : !pdl.attribute) : !pdl.attribute
+      %typ_id = pdl.operation "mini.addr_of" {"global_name" = %typ_symbol} -> (%ptr_type : !pdl.type)
       %typ_id_result = pdl.result 0 of %typ_id
-      %assign = pdl.operation "mini.assign"(%get_flag_result, %typ_id_result : !pdl.value, !pdl.value) {"typ" = %i64_attr}
-      pdl.replace %root with %assign
+      %store = pdl.operation "llvm.store"(%typ_id_result, %ptr : !pdl.value, !pdl.value)
+      pdl.replace %root with %store
     }
   }
 }
