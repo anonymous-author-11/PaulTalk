@@ -720,7 +720,7 @@ class LowerLiteral(RewritePattern):
         if isinstance(op.value, StringAttr):
             alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             alphabet = alphabet + alphabet.lower() + "_"
-            raw_string = "".join(char for char in op.value.data.replace(" ", "_") if char in alphabet) 
+            raw_string = "".join(char for char in op.value.data.replace(" ", "_") if char in alphabet)
             global_name = random_letters(5) + "_" + raw_string
             str_glob = GlobalOp(
                 sym_name=StringAttr(global_name),
@@ -1588,16 +1588,6 @@ class LowerAssign(RewritePattern):
         store = llvm.StoreOp(load.results[0], op.target)
         rewriter.insert_op_before_matched_op(load)
         rewriter.replace_matched_op(store)
-        #data_size = llvm.ConstantOp(IntegerAttr.from_int_and_width(op.typ.size.data, 64), IntegerType(64))
-        #false = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 1), IntegerType(1))
-        #args = [op.target, op.value, data_size.results[0], false.results[0]]
-        # declare void @llvm.memcpy.inline.p0.p0.i64(ptr <dest>, ptr <src>, i64 <len>, i1 <isvolatile>)
-        #memcpy = llvm.CallIntrinsicOp("llvm.memcpy.inline.p0.p0.i64", [args], [])
-        #operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [4, 0])
-        #memcpy.properties["operandSegmentSizes"] = operandSegmentSizes
-        #memcpy.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
-        #rewriter.inline_block_before_matched_op(Block([data_size, false]))
-        #rewriter.replace_matched_op(memcpy)
         debug_code(op)
 
 class LowerAddrOf(RewritePattern):

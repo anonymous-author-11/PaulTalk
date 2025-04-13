@@ -4690,19 +4690,19 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %406 = load i32, ptr %63, align 4
   %407 = insertvalue { ptr, ptr, ptr, i32 } %405, i32 %406, 3
   %408 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([4 x ptr], ptr null, i32 1) to i64))
-  %409 = getelementptr [4 x ptr], ptr %408, i32 0, i32 2
-  store ptr @_parameterization_Nil, ptr %409, align 8
-  %410 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([4 x ptr], ptr null, i32 1) to i64))
-  %411 = getelementptr [4 x ptr], ptr %410, i32 0, i32 2
-  store ptr %179, ptr %411, align 8
-  %412 = getelementptr [4 x ptr], ptr %410, i32 0, i32 1
-  store ptr %100, ptr %412, align 8
-  %413 = getelementptr [4 x ptr], ptr %410, i32 0, i32 3
-  store ptr null, ptr %413, align 8
-  %414 = call ptr @llvm.invariant.start.p0(i64 24, ptr %410)
-  store ptr @Entry, ptr %410, align 8
+  %409 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([4 x ptr], ptr null, i32 1) to i64))
+  %410 = getelementptr [4 x ptr], ptr %409, i32 0, i32 2
+  store ptr %179, ptr %410, align 8
+  %411 = getelementptr [4 x ptr], ptr %409, i32 0, i32 1
+  store ptr %100, ptr %411, align 8
+  %412 = getelementptr [4 x ptr], ptr %409, i32 0, i32 3
+  store ptr null, ptr %412, align 8
+  %413 = call ptr @llvm.invariant.start.p0(i64 24, ptr %409)
+  store ptr @Entry, ptr %409, align 8
+  %414 = getelementptr [4 x ptr], ptr %408, i32 0, i32 2
+  store ptr %409, ptr %414, align 8
   %415 = getelementptr [4 x ptr], ptr %408, i32 0, i32 1
-  store ptr %410, ptr %415, align 8
+  store ptr @_parameterization_Nil, ptr %415, align 8
   %416 = getelementptr [4 x ptr], ptr %408, i32 0, i32 3
   store ptr null, ptr %416, align 8
   %417 = call ptr @llvm.invariant.start.p0(i64 24, ptr %408)

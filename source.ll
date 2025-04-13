@@ -5,43 +5,43 @@ source_filename = "LLVMDialectModule"
 @_parameterization_Nil = linkonce_odr constant [2 x ptr] [ptr @nil_typ, ptr null]
 @_parameterization_Ptri1 = linkonce_odr constant [2 x ptr] [ptr @bool_typ, ptr null]
 @_parameterization_FunctionPtri32_to_Ptri1 = linkonce_odr constant [4 x ptr] [ptr @function_typ, ptr @_parameterization_Ptri1, ptr @_parameterization_Ptri32, ptr null]
-@_parameterization_Nil_or_Ptri32 = linkonce_odr constant [4 x ptr] [ptr @union_typ, ptr @_parameterization_Nil, ptr @_parameterization_Ptri32, ptr null]
-@fjknz_bigtingstxt = internal constant [12 x i8] c"bigtings.txt"
-@pdznk_thisnis_hownwe_donit = internal constant [20 x i8] c"this\0Ais how\0Awe do\0Ait"
-@iakfk_bigtingstxt = internal constant [12 x i8] c"bigtings.txt"
+@_parameterization_Ptri32_or_Nil = linkonce_odr constant [4 x ptr] [ptr @union_typ, ptr @_parameterization_Ptri32, ptr @_parameterization_Nil, ptr null]
+@mdtrz_bigtingstxt = internal constant [12 x i8] c"bigtings.txt"
+@renke_thisnis_hownwe_donit = internal constant [20 x i8] c"this\0Ais how\0Awe do\0Ait"
+@cccrf_bigtingstxt = internal constant [12 x i8] c"bigtings.txt"
 @_parameterization_FunctionPtri32_to_Nothing = linkonce_odr constant [4 x ptr] [ptr @function_typ, ptr @_parameterization_Nothing, ptr @_parameterization_Ptri32, ptr null]
 @_parameterization_FunctionPtri32._Ptri32_to_Ptri32 = linkonce_odr constant [5 x ptr] [ptr @function_typ, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptri32, ptr null]
 @_parameterization_FunctionPtri32_to_Ptri32 = linkonce_odr constant [4 x ptr] [ptr @function_typ, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptri32, ptr null]
 @_parameterization_Integer2 = linkonce_odr constant [2 x ptr] [ptr @Integer2, ptr null]
 @_parameterization_Character = linkonce_odr constant [2 x ptr] [ptr @Character, ptr null]
-@klmuc_boom = internal constant [5 x i8] c"boom!"
-@nduvc_so_it_is_true = internal constant [14 x i8] c"so it is true!"
+@fggbo_boom = internal constant [5 x i8] c"boom!"
+@chuzf_so_it_is_true = internal constant [14 x i8] c"so it is true!"
 @_parameterization_IntArray = linkonce_odr constant [2 x ptr] [ptr @IntArray, ptr null]
 @_parameterization_BufferPtri32 = linkonce_odr constant [2 x ptr] [ptr @buffer_typ, ptr null]
-@ipvrd_barrys_color_is = internal constant [16 x i8] c"barry's color is"
+@acecv_barrys_color_is = internal constant [16 x i8] c"barry's color is"
 @_parameterization_Beaver = linkonce_odr constant [2 x ptr] [ptr @Beaver, ptr null]
 @_parameterization_Animal = linkonce_odr constant [2 x ptr] [ptr @Animal, ptr null]
-@iczdt_did_get_here = internal constant [13 x i8] c"did get here!"
-@lodsm_start = internal constant [5 x i8] c"start"
-@_parameterization_Ptrf64_or_Ptri32 = linkonce_odr constant [4 x ptr] [ptr @union_typ, ptr @_parameterization_Ptrf64, ptr @_parameterization_Ptri32, ptr null]
+@pvnvt_did_get_here = internal constant [13 x i8] c"did get here!"
+@fabfk_start = internal constant [5 x i8] c"start"
+@_parameterization_Ptri32_or_Ptrf64 = linkonce_odr constant [4 x ptr] [ptr @union_typ, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptrf64, ptr null]
 @_parameterization_Ptri64 = linkonce_odr constant [2 x ptr] [ptr @i64_typ, ptr null]
-@hdmsy_w = internal constant [1 x i8] c"w"
+@eknld_w = internal constant [1 x i8] c"w"
 @_parameterization_Ptri8 = linkonce_odr constant [2 x ptr] [ptr @i8_typ, ptr null]
-@uacvp_r = internal constant [1 x i8] c"r"
-@nlwwl_ = internal constant [0 x i8] zeroinitializer
-@kurte_two = internal constant [3 x i8] c"two"
-@awumj_one = internal constant [3 x i8] c"one"
-@tidqg_sourcemini = internal constant [11 x i8] c"source.mini"
-@ddoaj_beaver = internal constant [7 x i8] c"beaver!"
-@owovk_animal = internal constant [7 x i8] c"animal!"
+@nwefb_r = internal constant [1 x i8] c"r"
+@mlzrf_ = internal constant [0 x i8] zeroinitializer
+@afwtk_two = internal constant [3 x i8] c"two"
+@szcct_one = internal constant [3 x i8] c"one"
+@qajuw_sourcemini = internal constant [11 x i8] c"source.mini"
+@tmaun_beaver = internal constant [7 x i8] c"beaver!"
+@mojhy_animal = internal constant [7 x i8] c"animal!"
 @_parameterization_ListNode = linkonce_odr constant [2 x ptr] [ptr @ListNode, ptr null]
 @_parameterization_Ptrf64 = linkonce_odr constant [2 x ptr] [ptr @f64_typ, ptr null]
-@essok_Integer = internal constant [8 x i8] c"Integer2"
+@xutoe_Integer = internal constant [8 x i8] c"Integer2"
 @_parameterization_String = linkonce_odr constant [2 x ptr] [ptr @String, ptr null]
-@djahc_Here_I_am = internal constant [10 x i8] c"Here I am!"
+@ltney_Here_I_am = internal constant [10 x i8] c"Here I am!"
 @_parameterization_Ptri32 = linkonce_odr constant [2 x ptr] [ptr @i32_typ, ptr null]
 @_parameterization_BufferPtri8 = linkonce_odr constant [2 x ptr] [ptr @buffer_typ, ptr null]
-@ekdzd_number = internal constant [6 x i8] c"number"
+@daswd_number = internal constant [6 x i8] c"number"
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
 @float_string = linkonce_odr constant [4 x i8] c"%f\0A\00"
@@ -117,7 +117,7 @@ source_filename = "LLVMDialectModule"
 @ListIterator = constant { [3 x i64], [7 x ptr], [5 x ptr] } { [3 x i64] [i64 -5838699946612561379, i64 4611686018427388081, i64 3], [7 x ptr] [ptr @subtype_test, ptr @ListIterator_hashtbl, ptr @ListIterator_offset_tbl, ptr @_data_size_ListIterator, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [5 x ptr] [ptr @ListIterator_field_node, ptr @ListIterator_B_init_nodeListNode, ptr @ListIterator_B_next_, ptr @ListIterator_init_nodeListNode, ptr @ListIterator_next_] }
 @Bard_hashtbl = constant [4 x ptr] [ptr @Object, ptr @any_typ, ptr @Bard, ptr null]
 @Bard_offset_tbl = constant [4 x i32] [i32 17, i32 10, i32 10, i32 0]
-@Bard = constant { [3 x i64], [7 x ptr], [7 x ptr] } { [3 x i64] [i64 -7979915337087193093, i64 4611686018427388081, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Bard_hashtbl, ptr @Bard_offset_tbl, ptr @_data_size_Bard, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [7 x ptr] [ptr @Bard_B_init_, ptr @Bard_B_take_aPtri32_bPtrf64_take_aPtri32_bPtri32_take_aPtrf64_bPtrf64_take_aAnimal_bBeaver, ptr @Bard_init_, ptr @Bard_take_aPtri32_bPtrf64, ptr @Bard_take_aPtri32_bPtri32, ptr @Bard_take_aPtrf64_bPtrf64, ptr @Bard_take_aAnimal_bBeaver] }
+@Bard = constant { [3 x i64], [7 x ptr], [7 x ptr] } { [3 x i64] [i64 -7979915337087193093, i64 4611686018427388081, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Bard_hashtbl, ptr @Bard_offset_tbl, ptr @_data_size_Bard, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [7 x ptr] [ptr @Bard_B_init_, ptr @Bard_B_take_aAnimal_bBeaver_take_aPtri32_bPtrf64_take_aPtrf64_bPtrf64_take_aPtri32_bPtri32, ptr @Bard_init_, ptr @Bard_take_aAnimal_bBeaver, ptr @Bard_take_aPtri32_bPtrf64, ptr @Bard_take_aPtrf64_bPtrf64, ptr @Bard_take_aPtri32_bPtri32] }
 @Integer_field_value = internal constant { ptr, ptr } { ptr @Integer_getter_value, ptr @Integer_setter_value }
 @Integer2_field_value = internal constant { ptr, ptr } { ptr @Integer2_getter_value, ptr @Integer2_setter_value }
 @Animal_field_age = internal constant { ptr, ptr } { ptr @Animal_getter_age, ptr @Animal_setter_age }
@@ -223,7 +223,7 @@ define void @number_taker({ ptr, i64 } %0) {
   %15 = sext i32 %14 to i64
   %16 = mul i64 ptrtoint (ptr getelementptr ([6 x i8], ptr null, i32 1) to i64), %15
   %17 = getelementptr i8, ptr %13, i64 %16
-  %18 = load <6 x i8>, ptr @ekdzd_number, align 8
+  %18 = load <6 x i8>, ptr @daswd_number, align 8
   store <6 x i8> %18, ptr %17, align 8
   %19 = alloca i32, align 4
   store i32 6, ptr %19, align 4
@@ -1035,7 +1035,7 @@ define void @BigBoy_introduce_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %30 = sext i32 %29 to i64
   %31 = mul i64 ptrtoint (ptr getelementptr ([10 x i8], ptr null, i32 1) to i64), %30
   %32 = getelementptr i8, ptr %28, i64 %31
-  %33 = load <10 x i8>, ptr @djahc_Here_I_am, align 16
+  %33 = load <10 x i8>, ptr @ltney_Here_I_am, align 16
   store <10 x i8> %33, ptr %32, align 16
   %34 = alloca i32, align 4
   store i32 10, ptr %34, align 4
@@ -1365,7 +1365,7 @@ define { ptr, ptr, ptr, i32 } @Integer2_repr_({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %30 = sext i32 %29 to i64
   %31 = mul i64 ptrtoint (ptr getelementptr ([8 x i8], ptr null, i32 1) to i64), %30
   %32 = getelementptr i8, ptr %28, i64 %31
-  %33 = load <8 x i8>, ptr @essok_Integer, align 8
+  %33 = load <8 x i8>, ptr @xutoe_Integer, align 8
   store <8 x i8> %33, ptr %32, align 8
   %34 = alloca i32, align 4
   store i32 8, ptr %34, align 4
@@ -3375,6 +3375,244 @@ define ptr @Bard_B_init_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   ret ptr %9
 }
 
+define void @Bard_take_aAnimal_bBeaver({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3, { ptr, i160 } %4) {
+  %6 = alloca { ptr, ptr, ptr, i32 }, align 8
+  store { ptr, ptr, ptr, i32 } %0, ptr %6, align 8
+  %7 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %8 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 0
+  %9 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 0
+  %10 = load ptr, ptr %8, align 8
+  store ptr %10, ptr %9, align 8
+  %11 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 1
+  %12 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 1
+  %13 = load ptr, ptr %11, align 8
+  store ptr %13, ptr %12, align 8
+  %14 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 2
+  %15 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 2
+  %16 = load ptr, ptr %14, align 8
+  store ptr %16, ptr %15, align 8
+  %17 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 3
+  %18 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 3
+  %19 = load i32, ptr %17, align 4
+  store i32 %19, ptr %18, align 4
+  call void @set_offset(ptr %7, ptr @Bard)
+  %20 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %3, ptr %20, align 8
+  %21 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %22 = getelementptr { ptr, i160 }, ptr %20, i32 0, i32 0
+  %23 = getelementptr { ptr, i160 }, ptr %21, i32 0, i32 0
+  %24 = load ptr, ptr %22, align 8
+  store ptr %24, ptr %23, align 8
+  %25 = getelementptr { ptr, i160 }, ptr %20, i32 0, i32 1
+  %26 = getelementptr { ptr, i160 }, ptr %21, i32 0, i32 1
+  %27 = load i160, ptr %25, align 4
+  store i160 %27, ptr %26, align 4
+  call void @set_offset(ptr %21, ptr @Animal)
+  %28 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %4, ptr %28, align 8
+  %29 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %30 = getelementptr { ptr, i160 }, ptr %28, i32 0, i32 0
+  %31 = getelementptr { ptr, i160 }, ptr %29, i32 0, i32 0
+  %32 = load ptr, ptr %30, align 8
+  store ptr %32, ptr %31, align 8
+  %33 = getelementptr { ptr, i160 }, ptr %28, i32 0, i32 1
+  %34 = getelementptr { ptr, i160 }, ptr %29, i32 0, i32 1
+  %35 = load i160, ptr %33, align 4
+  store i160 %35, ptr %34, align 4
+  call void @set_offset(ptr %29, ptr @Beaver)
+  %36 = alloca i32, align 4
+  store i32 8, ptr %36, align 4
+  %37 = load i32, ptr %36, align 4
+  %38 = sext i32 %37 to i64
+  %39 = alloca ptr, align 8
+  %40 = mul i64 %38, ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64)
+  %41 = call ptr @bump_malloc(i64 %40)
+  store ptr %41, ptr %39, align 8
+  %42 = alloca ptr, align 8
+  %43 = getelementptr { ptr }, ptr %39, i32 0, i32 0
+  %44 = load ptr, ptr %43, align 8
+  store ptr %44, ptr %42, align 8
+  %45 = alloca i32, align 4
+  store i32 0, ptr %45, align 4
+  %46 = load ptr, ptr %42, align 8
+  %47 = load i32, ptr %45, align 4
+  %48 = sext i32 %47 to i64
+  %49 = mul i64 ptrtoint (ptr getelementptr ([7 x i8], ptr null, i32 1) to i64), %48
+  %50 = getelementptr i8, ptr %46, i64 %49
+  %51 = load <7 x i8>, ptr @mojhy_animal, align 8
+  store <7 x i8> %51, ptr %50, align 8
+  %52 = alloca i32, align 4
+  store i32 7, ptr %52, align 4
+  %53 = alloca i32, align 4
+  store i32 8, ptr %53, align 4
+  %54 = alloca [1 x ptr], align 8
+  store ptr @String, ptr %54, align 8
+  %55 = load ptr, ptr %54, align 8
+  %56 = getelementptr ptr, ptr %55, i32 6
+  %57 = load ptr, ptr %56, align 8
+  %58 = call { i64, i64 } @size_wrapper(ptr %57, ptr %54)
+  %59 = extractvalue { i64, i64 } %58, 0
+  %60 = call ptr @bump_malloc(i64 %59)
+  %61 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %62 = getelementptr { ptr, ptr, ptr, i32 }, ptr %61, i32 0, i32 1
+  %63 = getelementptr { ptr, ptr, ptr, i32 }, ptr %61, i32 0, i32 3
+  store ptr @String, ptr %61, align 8
+  store ptr %60, ptr %62, align 8
+  store i32 10, ptr %63, align 4
+  %64 = alloca i32, align 4
+  store i32 7, ptr %64, align 4
+  %65 = alloca i32, align 4
+  store i32 8, ptr %65, align 4
+  %66 = load ptr, ptr %42, align 8
+  %67 = insertvalue { ptr } undef, ptr %66, 0
+  %68 = load i32, ptr %64, align 4
+  %69 = load i32, ptr %65, align 4
+  %70 = getelementptr { ptr, ptr, ptr, i32 }, ptr %61, i32 0, i32 0
+  %71 = load ptr, ptr %70, align 8
+  %72 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %71, 0
+  %73 = load ptr, ptr %62, align 8
+  %74 = insertvalue { ptr, ptr, ptr, i32 } %72, ptr %73, 1
+  %75 = getelementptr { ptr, ptr, ptr, i32 }, ptr %61, i32 0, i32 2
+  %76 = load ptr, ptr %75, align 8
+  %77 = insertvalue { ptr, ptr, ptr, i32 } %74, ptr %76, 2
+  %78 = load i32, ptr %63, align 4
+  %79 = insertvalue { ptr, ptr, ptr, i32 } %77, i32 %78, 3
+  %80 = alloca [3 x ptr], align 8
+  %81 = getelementptr [3 x ptr], ptr %80, i32 0, i32 0
+  store ptr @_parameterization_BufferPtri8, ptr %81, align 8
+  %82 = getelementptr [3 x ptr], ptr %80, i32 0, i32 1
+  store ptr @_parameterization_Ptri32, ptr %82, align 8
+  %83 = getelementptr [3 x ptr], ptr %80, i32 0, i32 2
+  store ptr @_parameterization_Ptri32, ptr %83, align 8
+  %84 = call ptr @llvm.invariant.start.p0(i64 9, ptr %80)
+  %85 = call ptr @llvm.invariant.start.p0(i64 280, ptr %71)
+  %86 = getelementptr ptr, ptr %71, i32 %78
+  %87 = getelementptr ptr, ptr %86, i32 4
+  %88 = load ptr, ptr %87, align 8
+  %89 = alloca { ptr, ptr, ptr }, align 8
+  %90 = getelementptr { ptr, ptr, ptr }, ptr %89, i32 0, i32 0
+  store ptr @buffer_typ, ptr %90, align 8
+  %91 = getelementptr { ptr, ptr, ptr }, ptr %89, i32 0, i32 1
+  store ptr @i32_typ, ptr %91, align 8
+  %92 = getelementptr { ptr, ptr, ptr }, ptr %89, i32 0, i32 2
+  store ptr @i32_typ, ptr %92, align 8
+  %93 = call ptr @behavior_wrapper(ptr %88, { ptr, ptr, ptr, i32 } %79, ptr %89)
+  call void %93({ ptr, ptr, ptr, i32 } %79, { ptr, ptr, ptr, i32 } %79, ptr %80, { ptr } %67, i32 %68, i32 %69) #1
+  %94 = getelementptr { ptr, i160 }, ptr %61, i32 0, i32 0
+  %95 = load ptr, ptr %94, align 8
+  %96 = insertvalue { ptr, i160 } undef, ptr %95, 0
+  %97 = getelementptr { ptr, i160 }, ptr %61, i32 0, i32 1
+  %98 = load i160, ptr %97, align 4
+  %99 = insertvalue { ptr, i160 } %96, i160 %98, 1
+  %100 = alloca [1 x ptr], align 8
+  %101 = getelementptr [1 x ptr], ptr %100, i32 0, i32 0
+  store ptr @_parameterization_String, ptr %101, align 8
+  %102 = call ptr @llvm.invariant.start.p0(i64 1, ptr %100)
+  %103 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
+  %104 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
+  %105 = alloca { ptr }, align 8
+  %106 = getelementptr { ptr }, ptr %105, i32 0, i32 0
+  store ptr %95, ptr %106, align 8
+  %107 = call ptr @class_behavior_wrapper(ptr %104, ptr %105)
+  call void %107(ptr %100, { ptr, i160 } %99) #1
+  %108 = alloca i32, align 4
+  store i32 8, ptr %108, align 4
+  %109 = load i32, ptr %108, align 4
+  %110 = sext i32 %109 to i64
+  %111 = alloca ptr, align 8
+  %112 = mul i64 %110, ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64)
+  %113 = call ptr @bump_malloc(i64 %112)
+  store ptr %113, ptr %111, align 8
+  %114 = alloca ptr, align 8
+  %115 = getelementptr { ptr }, ptr %111, i32 0, i32 0
+  %116 = load ptr, ptr %115, align 8
+  store ptr %116, ptr %114, align 8
+  %117 = alloca i32, align 4
+  store i32 0, ptr %117, align 4
+  %118 = load ptr, ptr %114, align 8
+  %119 = load i32, ptr %117, align 4
+  %120 = sext i32 %119 to i64
+  %121 = mul i64 ptrtoint (ptr getelementptr ([7 x i8], ptr null, i32 1) to i64), %120
+  %122 = getelementptr i8, ptr %118, i64 %121
+  %123 = load <7 x i8>, ptr @tmaun_beaver, align 8
+  store <7 x i8> %123, ptr %122, align 8
+  %124 = alloca i32, align 4
+  store i32 7, ptr %124, align 4
+  %125 = alloca i32, align 4
+  store i32 8, ptr %125, align 4
+  %126 = alloca [1 x ptr], align 8
+  store ptr @String, ptr %126, align 8
+  %127 = load ptr, ptr %126, align 8
+  %128 = getelementptr ptr, ptr %127, i32 6
+  %129 = load ptr, ptr %128, align 8
+  %130 = call { i64, i64 } @size_wrapper(ptr %129, ptr %126)
+  %131 = extractvalue { i64, i64 } %130, 0
+  %132 = call ptr @bump_malloc(i64 %131)
+  %133 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %134 = getelementptr { ptr, ptr, ptr, i32 }, ptr %133, i32 0, i32 1
+  %135 = getelementptr { ptr, ptr, ptr, i32 }, ptr %133, i32 0, i32 3
+  store ptr @String, ptr %133, align 8
+  store ptr %132, ptr %134, align 8
+  store i32 10, ptr %135, align 4
+  %136 = alloca i32, align 4
+  store i32 7, ptr %136, align 4
+  %137 = alloca i32, align 4
+  store i32 8, ptr %137, align 4
+  %138 = load ptr, ptr %114, align 8
+  %139 = insertvalue { ptr } undef, ptr %138, 0
+  %140 = load i32, ptr %136, align 4
+  %141 = load i32, ptr %137, align 4
+  %142 = getelementptr { ptr, ptr, ptr, i32 }, ptr %133, i32 0, i32 0
+  %143 = load ptr, ptr %142, align 8
+  %144 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %143, 0
+  %145 = load ptr, ptr %134, align 8
+  %146 = insertvalue { ptr, ptr, ptr, i32 } %144, ptr %145, 1
+  %147 = getelementptr { ptr, ptr, ptr, i32 }, ptr %133, i32 0, i32 2
+  %148 = load ptr, ptr %147, align 8
+  %149 = insertvalue { ptr, ptr, ptr, i32 } %146, ptr %148, 2
+  %150 = load i32, ptr %135, align 4
+  %151 = insertvalue { ptr, ptr, ptr, i32 } %149, i32 %150, 3
+  %152 = alloca [3 x ptr], align 8
+  %153 = getelementptr [3 x ptr], ptr %152, i32 0, i32 0
+  store ptr @_parameterization_BufferPtri8, ptr %153, align 8
+  %154 = getelementptr [3 x ptr], ptr %152, i32 0, i32 1
+  store ptr @_parameterization_Ptri32, ptr %154, align 8
+  %155 = getelementptr [3 x ptr], ptr %152, i32 0, i32 2
+  store ptr @_parameterization_Ptri32, ptr %155, align 8
+  %156 = call ptr @llvm.invariant.start.p0(i64 9, ptr %152)
+  %157 = call ptr @llvm.invariant.start.p0(i64 280, ptr %143)
+  %158 = getelementptr ptr, ptr %143, i32 %150
+  %159 = getelementptr ptr, ptr %158, i32 4
+  %160 = load ptr, ptr %159, align 8
+  %161 = alloca { ptr, ptr, ptr }, align 8
+  %162 = getelementptr { ptr, ptr, ptr }, ptr %161, i32 0, i32 0
+  store ptr @buffer_typ, ptr %162, align 8
+  %163 = getelementptr { ptr, ptr, ptr }, ptr %161, i32 0, i32 1
+  store ptr @i32_typ, ptr %163, align 8
+  %164 = getelementptr { ptr, ptr, ptr }, ptr %161, i32 0, i32 2
+  store ptr @i32_typ, ptr %164, align 8
+  %165 = call ptr @behavior_wrapper(ptr %160, { ptr, ptr, ptr, i32 } %151, ptr %161)
+  call void %165({ ptr, ptr, ptr, i32 } %151, { ptr, ptr, ptr, i32 } %151, ptr %152, { ptr } %139, i32 %140, i32 %141) #1
+  %166 = getelementptr { ptr, i160 }, ptr %133, i32 0, i32 0
+  %167 = load ptr, ptr %166, align 8
+  %168 = insertvalue { ptr, i160 } undef, ptr %167, 0
+  %169 = getelementptr { ptr, i160 }, ptr %133, i32 0, i32 1
+  %170 = load i160, ptr %169, align 4
+  %171 = insertvalue { ptr, i160 } %168, i160 %170, 1
+  %172 = alloca [1 x ptr], align 8
+  %173 = getelementptr [1 x ptr], ptr %172, i32 0, i32 0
+  store ptr @_parameterization_String, ptr %173, align 8
+  %174 = call ptr @llvm.invariant.start.p0(i64 1, ptr %172)
+  %175 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
+  %176 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
+  %177 = alloca { ptr }, align 8
+  %178 = getelementptr { ptr }, ptr %177, i32 0, i32 0
+  store ptr %167, ptr %178, align 8
+  %179 = call ptr @class_behavior_wrapper(ptr %176, ptr %177)
+  call void %179(ptr %172, { ptr, i160 } %171) #1
+  ret void
+}
+
 define void @Bard_take_aPtri32_bPtrf64({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3, { ptr, i160 } %4) {
   %6 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %0, ptr %6, align 8
@@ -3420,6 +3658,82 @@ define void @Bard_take_aPtri32_bPtrf64({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   %35 = alloca [1 x ptr], align 8
   %36 = getelementptr [1 x ptr], ptr %35, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %36, align 8
+  %37 = call ptr @llvm.invariant.start.p0(i64 1, ptr %35)
+  %38 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
+  %39 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
+  %40 = alloca { ptr }, align 8
+  %41 = getelementptr { ptr }, ptr %40, i32 0, i32 0
+  store ptr %31, ptr %41, align 8
+  %42 = call ptr @class_behavior_wrapper(ptr %39, ptr %40)
+  call void %42(ptr %35, { ptr, i160 } %34) #1
+  %43 = alloca i160, align 8
+  %44 = alloca ptr, align 8
+  %45 = load double, ptr %25, align 8
+  store double %45, ptr %43, align 8
+  store ptr @f64_typ, ptr %44, align 8
+  %46 = load ptr, ptr %44, align 8
+  %47 = insertvalue { ptr, i160 } undef, ptr %46, 0
+  %48 = load i160, ptr %43, align 4
+  %49 = insertvalue { ptr, i160 } %47, i160 %48, 1
+  %50 = alloca [1 x ptr], align 8
+  %51 = getelementptr [1 x ptr], ptr %50, i32 0, i32 0
+  store ptr @_parameterization_Ptrf64, ptr %51, align 8
+  %52 = call ptr @llvm.invariant.start.p0(i64 1, ptr %50)
+  %53 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
+  %54 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
+  %55 = alloca { ptr }, align 8
+  %56 = getelementptr { ptr }, ptr %55, i32 0, i32 0
+  store ptr %46, ptr %56, align 8
+  %57 = call ptr @class_behavior_wrapper(ptr %54, ptr %55)
+  call void %57(ptr %50, { ptr, i160 } %49) #1
+  ret void
+}
+
+define void @Bard_take_aPtrf64_bPtrf64({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3, { ptr, i160 } %4) {
+  %6 = alloca { ptr, ptr, ptr, i32 }, align 8
+  store { ptr, ptr, ptr, i32 } %0, ptr %6, align 8
+  %7 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %8 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 0
+  %9 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 0
+  %10 = load ptr, ptr %8, align 8
+  store ptr %10, ptr %9, align 8
+  %11 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 1
+  %12 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 1
+  %13 = load ptr, ptr %11, align 8
+  store ptr %13, ptr %12, align 8
+  %14 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 2
+  %15 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 2
+  %16 = load ptr, ptr %14, align 8
+  store ptr %16, ptr %15, align 8
+  %17 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 3
+  %18 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 3
+  %19 = load i32, ptr %17, align 4
+  store i32 %19, ptr %18, align 4
+  call void @set_offset(ptr %7, ptr @Bard)
+  %20 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %3, ptr %20, align 8
+  %21 = alloca double, align 8
+  %22 = getelementptr { ptr, i160 }, ptr %20, i32 0, i32 1
+  %23 = load double, ptr %22, align 8
+  store double %23, ptr %21, align 8
+  %24 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %4, ptr %24, align 8
+  %25 = alloca double, align 8
+  %26 = getelementptr { ptr, i160 }, ptr %24, i32 0, i32 1
+  %27 = load double, ptr %26, align 8
+  store double %27, ptr %25, align 8
+  %28 = alloca i160, align 8
+  %29 = alloca ptr, align 8
+  %30 = load double, ptr %21, align 8
+  store double %30, ptr %28, align 8
+  store ptr @f64_typ, ptr %29, align 8
+  %31 = load ptr, ptr %29, align 8
+  %32 = insertvalue { ptr, i160 } undef, ptr %31, 0
+  %33 = load i160, ptr %28, align 4
+  %34 = insertvalue { ptr, i160 } %32, i160 %33, 1
+  %35 = alloca [1 x ptr], align 8
+  %36 = getelementptr [1 x ptr], ptr %35, i32 0, i32 0
+  store ptr @_parameterization_Ptrf64, ptr %36, align 8
   %37 = call ptr @llvm.invariant.start.p0(i64 1, ptr %35)
   %38 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
   %39 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
@@ -3527,321 +3841,7 @@ define void @Bard_take_aPtri32_bPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   ret void
 }
 
-define void @Bard_take_aPtrf64_bPtrf64({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3, { ptr, i160 } %4) {
-  %6 = alloca { ptr, ptr, ptr, i32 }, align 8
-  store { ptr, ptr, ptr, i32 } %0, ptr %6, align 8
-  %7 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %8 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 0
-  %9 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 0
-  %10 = load ptr, ptr %8, align 8
-  store ptr %10, ptr %9, align 8
-  %11 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 1
-  %12 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 1
-  %13 = load ptr, ptr %11, align 8
-  store ptr %13, ptr %12, align 8
-  %14 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 2
-  %15 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 2
-  %16 = load ptr, ptr %14, align 8
-  store ptr %16, ptr %15, align 8
-  %17 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 3
-  %18 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 3
-  %19 = load i32, ptr %17, align 4
-  store i32 %19, ptr %18, align 4
-  call void @set_offset(ptr %7, ptr @Bard)
-  %20 = alloca { ptr, i160 }, align 8
-  store { ptr, i160 } %3, ptr %20, align 8
-  %21 = alloca double, align 8
-  %22 = getelementptr { ptr, i160 }, ptr %20, i32 0, i32 1
-  %23 = load double, ptr %22, align 8
-  store double %23, ptr %21, align 8
-  %24 = alloca { ptr, i160 }, align 8
-  store { ptr, i160 } %4, ptr %24, align 8
-  %25 = alloca double, align 8
-  %26 = getelementptr { ptr, i160 }, ptr %24, i32 0, i32 1
-  %27 = load double, ptr %26, align 8
-  store double %27, ptr %25, align 8
-  %28 = alloca i160, align 8
-  %29 = alloca ptr, align 8
-  %30 = load double, ptr %21, align 8
-  store double %30, ptr %28, align 8
-  store ptr @f64_typ, ptr %29, align 8
-  %31 = load ptr, ptr %29, align 8
-  %32 = insertvalue { ptr, i160 } undef, ptr %31, 0
-  %33 = load i160, ptr %28, align 4
-  %34 = insertvalue { ptr, i160 } %32, i160 %33, 1
-  %35 = alloca [1 x ptr], align 8
-  %36 = getelementptr [1 x ptr], ptr %35, i32 0, i32 0
-  store ptr @_parameterization_Ptrf64, ptr %36, align 8
-  %37 = call ptr @llvm.invariant.start.p0(i64 1, ptr %35)
-  %38 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %39 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
-  %40 = alloca { ptr }, align 8
-  %41 = getelementptr { ptr }, ptr %40, i32 0, i32 0
-  store ptr %31, ptr %41, align 8
-  %42 = call ptr @class_behavior_wrapper(ptr %39, ptr %40)
-  call void %42(ptr %35, { ptr, i160 } %34) #1
-  %43 = alloca i160, align 8
-  %44 = alloca ptr, align 8
-  %45 = load double, ptr %25, align 8
-  store double %45, ptr %43, align 8
-  store ptr @f64_typ, ptr %44, align 8
-  %46 = load ptr, ptr %44, align 8
-  %47 = insertvalue { ptr, i160 } undef, ptr %46, 0
-  %48 = load i160, ptr %43, align 4
-  %49 = insertvalue { ptr, i160 } %47, i160 %48, 1
-  %50 = alloca [1 x ptr], align 8
-  %51 = getelementptr [1 x ptr], ptr %50, i32 0, i32 0
-  store ptr @_parameterization_Ptrf64, ptr %51, align 8
-  %52 = call ptr @llvm.invariant.start.p0(i64 1, ptr %50)
-  %53 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %54 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
-  %55 = alloca { ptr }, align 8
-  %56 = getelementptr { ptr }, ptr %55, i32 0, i32 0
-  store ptr %46, ptr %56, align 8
-  %57 = call ptr @class_behavior_wrapper(ptr %54, ptr %55)
-  call void %57(ptr %50, { ptr, i160 } %49) #1
-  ret void
-}
-
-define void @Bard_take_aAnimal_bBeaver({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3, { ptr, i160 } %4) {
-  %6 = alloca { ptr, ptr, ptr, i32 }, align 8
-  store { ptr, ptr, ptr, i32 } %0, ptr %6, align 8
-  %7 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %8 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 0
-  %9 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 0
-  %10 = load ptr, ptr %8, align 8
-  store ptr %10, ptr %9, align 8
-  %11 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 1
-  %12 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 1
-  %13 = load ptr, ptr %11, align 8
-  store ptr %13, ptr %12, align 8
-  %14 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 2
-  %15 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 2
-  %16 = load ptr, ptr %14, align 8
-  store ptr %16, ptr %15, align 8
-  %17 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 3
-  %18 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 3
-  %19 = load i32, ptr %17, align 4
-  store i32 %19, ptr %18, align 4
-  call void @set_offset(ptr %7, ptr @Bard)
-  %20 = alloca { ptr, i160 }, align 8
-  store { ptr, i160 } %3, ptr %20, align 8
-  %21 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %22 = getelementptr { ptr, i160 }, ptr %20, i32 0, i32 0
-  %23 = getelementptr { ptr, i160 }, ptr %21, i32 0, i32 0
-  %24 = load ptr, ptr %22, align 8
-  store ptr %24, ptr %23, align 8
-  %25 = getelementptr { ptr, i160 }, ptr %20, i32 0, i32 1
-  %26 = getelementptr { ptr, i160 }, ptr %21, i32 0, i32 1
-  %27 = load i160, ptr %25, align 4
-  store i160 %27, ptr %26, align 4
-  call void @set_offset(ptr %21, ptr @Animal)
-  %28 = alloca { ptr, i160 }, align 8
-  store { ptr, i160 } %4, ptr %28, align 8
-  %29 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %30 = getelementptr { ptr, i160 }, ptr %28, i32 0, i32 0
-  %31 = getelementptr { ptr, i160 }, ptr %29, i32 0, i32 0
-  %32 = load ptr, ptr %30, align 8
-  store ptr %32, ptr %31, align 8
-  %33 = getelementptr { ptr, i160 }, ptr %28, i32 0, i32 1
-  %34 = getelementptr { ptr, i160 }, ptr %29, i32 0, i32 1
-  %35 = load i160, ptr %33, align 4
-  store i160 %35, ptr %34, align 4
-  call void @set_offset(ptr %29, ptr @Beaver)
-  %36 = alloca i32, align 4
-  store i32 8, ptr %36, align 4
-  %37 = load i32, ptr %36, align 4
-  %38 = sext i32 %37 to i64
-  %39 = alloca ptr, align 8
-  %40 = mul i64 %38, ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64)
-  %41 = call ptr @bump_malloc(i64 %40)
-  store ptr %41, ptr %39, align 8
-  %42 = alloca ptr, align 8
-  %43 = getelementptr { ptr }, ptr %39, i32 0, i32 0
-  %44 = load ptr, ptr %43, align 8
-  store ptr %44, ptr %42, align 8
-  %45 = alloca i32, align 4
-  store i32 0, ptr %45, align 4
-  %46 = load ptr, ptr %42, align 8
-  %47 = load i32, ptr %45, align 4
-  %48 = sext i32 %47 to i64
-  %49 = mul i64 ptrtoint (ptr getelementptr ([7 x i8], ptr null, i32 1) to i64), %48
-  %50 = getelementptr i8, ptr %46, i64 %49
-  %51 = load <7 x i8>, ptr @owovk_animal, align 8
-  store <7 x i8> %51, ptr %50, align 8
-  %52 = alloca i32, align 4
-  store i32 7, ptr %52, align 4
-  %53 = alloca i32, align 4
-  store i32 8, ptr %53, align 4
-  %54 = alloca [1 x ptr], align 8
-  store ptr @String, ptr %54, align 8
-  %55 = load ptr, ptr %54, align 8
-  %56 = getelementptr ptr, ptr %55, i32 6
-  %57 = load ptr, ptr %56, align 8
-  %58 = call { i64, i64 } @size_wrapper(ptr %57, ptr %54)
-  %59 = extractvalue { i64, i64 } %58, 0
-  %60 = call ptr @bump_malloc(i64 %59)
-  %61 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %62 = getelementptr { ptr, ptr, ptr, i32 }, ptr %61, i32 0, i32 1
-  %63 = getelementptr { ptr, ptr, ptr, i32 }, ptr %61, i32 0, i32 3
-  store ptr @String, ptr %61, align 8
-  store ptr %60, ptr %62, align 8
-  store i32 10, ptr %63, align 4
-  %64 = alloca i32, align 4
-  store i32 7, ptr %64, align 4
-  %65 = alloca i32, align 4
-  store i32 8, ptr %65, align 4
-  %66 = load ptr, ptr %42, align 8
-  %67 = insertvalue { ptr } undef, ptr %66, 0
-  %68 = load i32, ptr %64, align 4
-  %69 = load i32, ptr %65, align 4
-  %70 = getelementptr { ptr, ptr, ptr, i32 }, ptr %61, i32 0, i32 0
-  %71 = load ptr, ptr %70, align 8
-  %72 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %71, 0
-  %73 = load ptr, ptr %62, align 8
-  %74 = insertvalue { ptr, ptr, ptr, i32 } %72, ptr %73, 1
-  %75 = getelementptr { ptr, ptr, ptr, i32 }, ptr %61, i32 0, i32 2
-  %76 = load ptr, ptr %75, align 8
-  %77 = insertvalue { ptr, ptr, ptr, i32 } %74, ptr %76, 2
-  %78 = load i32, ptr %63, align 4
-  %79 = insertvalue { ptr, ptr, ptr, i32 } %77, i32 %78, 3
-  %80 = alloca [3 x ptr], align 8
-  %81 = getelementptr [3 x ptr], ptr %80, i32 0, i32 0
-  store ptr @_parameterization_BufferPtri8, ptr %81, align 8
-  %82 = getelementptr [3 x ptr], ptr %80, i32 0, i32 1
-  store ptr @_parameterization_Ptri32, ptr %82, align 8
-  %83 = getelementptr [3 x ptr], ptr %80, i32 0, i32 2
-  store ptr @_parameterization_Ptri32, ptr %83, align 8
-  %84 = call ptr @llvm.invariant.start.p0(i64 9, ptr %80)
-  %85 = call ptr @llvm.invariant.start.p0(i64 280, ptr %71)
-  %86 = getelementptr ptr, ptr %71, i32 %78
-  %87 = getelementptr ptr, ptr %86, i32 4
-  %88 = load ptr, ptr %87, align 8
-  %89 = alloca { ptr, ptr, ptr }, align 8
-  %90 = getelementptr { ptr, ptr, ptr }, ptr %89, i32 0, i32 0
-  store ptr @buffer_typ, ptr %90, align 8
-  %91 = getelementptr { ptr, ptr, ptr }, ptr %89, i32 0, i32 1
-  store ptr @i32_typ, ptr %91, align 8
-  %92 = getelementptr { ptr, ptr, ptr }, ptr %89, i32 0, i32 2
-  store ptr @i32_typ, ptr %92, align 8
-  %93 = call ptr @behavior_wrapper(ptr %88, { ptr, ptr, ptr, i32 } %79, ptr %89)
-  call void %93({ ptr, ptr, ptr, i32 } %79, { ptr, ptr, ptr, i32 } %79, ptr %80, { ptr } %67, i32 %68, i32 %69) #1
-  %94 = getelementptr { ptr, i160 }, ptr %61, i32 0, i32 0
-  %95 = load ptr, ptr %94, align 8
-  %96 = insertvalue { ptr, i160 } undef, ptr %95, 0
-  %97 = getelementptr { ptr, i160 }, ptr %61, i32 0, i32 1
-  %98 = load i160, ptr %97, align 4
-  %99 = insertvalue { ptr, i160 } %96, i160 %98, 1
-  %100 = alloca [1 x ptr], align 8
-  %101 = getelementptr [1 x ptr], ptr %100, i32 0, i32 0
-  store ptr @_parameterization_String, ptr %101, align 8
-  %102 = call ptr @llvm.invariant.start.p0(i64 1, ptr %100)
-  %103 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %104 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
-  %105 = alloca { ptr }, align 8
-  %106 = getelementptr { ptr }, ptr %105, i32 0, i32 0
-  store ptr %95, ptr %106, align 8
-  %107 = call ptr @class_behavior_wrapper(ptr %104, ptr %105)
-  call void %107(ptr %100, { ptr, i160 } %99) #1
-  %108 = alloca i32, align 4
-  store i32 8, ptr %108, align 4
-  %109 = load i32, ptr %108, align 4
-  %110 = sext i32 %109 to i64
-  %111 = alloca ptr, align 8
-  %112 = mul i64 %110, ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64)
-  %113 = call ptr @bump_malloc(i64 %112)
-  store ptr %113, ptr %111, align 8
-  %114 = alloca ptr, align 8
-  %115 = getelementptr { ptr }, ptr %111, i32 0, i32 0
-  %116 = load ptr, ptr %115, align 8
-  store ptr %116, ptr %114, align 8
-  %117 = alloca i32, align 4
-  store i32 0, ptr %117, align 4
-  %118 = load ptr, ptr %114, align 8
-  %119 = load i32, ptr %117, align 4
-  %120 = sext i32 %119 to i64
-  %121 = mul i64 ptrtoint (ptr getelementptr ([7 x i8], ptr null, i32 1) to i64), %120
-  %122 = getelementptr i8, ptr %118, i64 %121
-  %123 = load <7 x i8>, ptr @ddoaj_beaver, align 8
-  store <7 x i8> %123, ptr %122, align 8
-  %124 = alloca i32, align 4
-  store i32 7, ptr %124, align 4
-  %125 = alloca i32, align 4
-  store i32 8, ptr %125, align 4
-  %126 = alloca [1 x ptr], align 8
-  store ptr @String, ptr %126, align 8
-  %127 = load ptr, ptr %126, align 8
-  %128 = getelementptr ptr, ptr %127, i32 6
-  %129 = load ptr, ptr %128, align 8
-  %130 = call { i64, i64 } @size_wrapper(ptr %129, ptr %126)
-  %131 = extractvalue { i64, i64 } %130, 0
-  %132 = call ptr @bump_malloc(i64 %131)
-  %133 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %134 = getelementptr { ptr, ptr, ptr, i32 }, ptr %133, i32 0, i32 1
-  %135 = getelementptr { ptr, ptr, ptr, i32 }, ptr %133, i32 0, i32 3
-  store ptr @String, ptr %133, align 8
-  store ptr %132, ptr %134, align 8
-  store i32 10, ptr %135, align 4
-  %136 = alloca i32, align 4
-  store i32 7, ptr %136, align 4
-  %137 = alloca i32, align 4
-  store i32 8, ptr %137, align 4
-  %138 = load ptr, ptr %114, align 8
-  %139 = insertvalue { ptr } undef, ptr %138, 0
-  %140 = load i32, ptr %136, align 4
-  %141 = load i32, ptr %137, align 4
-  %142 = getelementptr { ptr, ptr, ptr, i32 }, ptr %133, i32 0, i32 0
-  %143 = load ptr, ptr %142, align 8
-  %144 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %143, 0
-  %145 = load ptr, ptr %134, align 8
-  %146 = insertvalue { ptr, ptr, ptr, i32 } %144, ptr %145, 1
-  %147 = getelementptr { ptr, ptr, ptr, i32 }, ptr %133, i32 0, i32 2
-  %148 = load ptr, ptr %147, align 8
-  %149 = insertvalue { ptr, ptr, ptr, i32 } %146, ptr %148, 2
-  %150 = load i32, ptr %135, align 4
-  %151 = insertvalue { ptr, ptr, ptr, i32 } %149, i32 %150, 3
-  %152 = alloca [3 x ptr], align 8
-  %153 = getelementptr [3 x ptr], ptr %152, i32 0, i32 0
-  store ptr @_parameterization_BufferPtri8, ptr %153, align 8
-  %154 = getelementptr [3 x ptr], ptr %152, i32 0, i32 1
-  store ptr @_parameterization_Ptri32, ptr %154, align 8
-  %155 = getelementptr [3 x ptr], ptr %152, i32 0, i32 2
-  store ptr @_parameterization_Ptri32, ptr %155, align 8
-  %156 = call ptr @llvm.invariant.start.p0(i64 9, ptr %152)
-  %157 = call ptr @llvm.invariant.start.p0(i64 280, ptr %143)
-  %158 = getelementptr ptr, ptr %143, i32 %150
-  %159 = getelementptr ptr, ptr %158, i32 4
-  %160 = load ptr, ptr %159, align 8
-  %161 = alloca { ptr, ptr, ptr }, align 8
-  %162 = getelementptr { ptr, ptr, ptr }, ptr %161, i32 0, i32 0
-  store ptr @buffer_typ, ptr %162, align 8
-  %163 = getelementptr { ptr, ptr, ptr }, ptr %161, i32 0, i32 1
-  store ptr @i32_typ, ptr %163, align 8
-  %164 = getelementptr { ptr, ptr, ptr }, ptr %161, i32 0, i32 2
-  store ptr @i32_typ, ptr %164, align 8
-  %165 = call ptr @behavior_wrapper(ptr %160, { ptr, ptr, ptr, i32 } %151, ptr %161)
-  call void %165({ ptr, ptr, ptr, i32 } %151, { ptr, ptr, ptr, i32 } %151, ptr %152, { ptr } %139, i32 %140, i32 %141) #1
-  %166 = getelementptr { ptr, i160 }, ptr %133, i32 0, i32 0
-  %167 = load ptr, ptr %166, align 8
-  %168 = insertvalue { ptr, i160 } undef, ptr %167, 0
-  %169 = getelementptr { ptr, i160 }, ptr %133, i32 0, i32 1
-  %170 = load i160, ptr %169, align 4
-  %171 = insertvalue { ptr, i160 } %168, i160 %170, 1
-  %172 = alloca [1 x ptr], align 8
-  %173 = getelementptr [1 x ptr], ptr %172, i32 0, i32 0
-  store ptr @_parameterization_String, ptr %173, align 8
-  %174 = call ptr @llvm.invariant.start.p0(i64 1, ptr %172)
-  %175 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
-  %176 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
-  %177 = alloca { ptr }, align 8
-  %178 = getelementptr { ptr }, ptr %177, i32 0, i32 0
-  store ptr %167, ptr %178, align 8
-  %179 = call ptr @class_behavior_wrapper(ptr %176, ptr %177)
-  call void %179(ptr %172, { ptr, i160 } %171) #1
-  ret void
-}
-
-define ptr @Bard_B_take_aPtri32_bPtrf64_take_aPtri32_bPtri32_take_aPtrf64_bPtrf64_take_aAnimal_bBeaver({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @Bard_B_take_aAnimal_bBeaver_take_aPtri32_bPtrf64_take_aPtrf64_bPtrf64_take_aPtri32_bPtri32({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = alloca i1, align 1
   %5 = alloca i1, align 1
@@ -3853,97 +3853,99 @@ define ptr @Bard_B_take_aPtri32_bPtrf64_take_aPtri32_bPtri32_take_aPtrf64_bPtrf6
   %11 = alloca ptr, align 8
   %12 = load ptr, ptr %1, align 8
   %13 = ptrtoint ptr %12 to i64
-  %14 = icmp eq i64 %13, ptrtoint (ptr @f64_typ to i64)
+  %14 = icmp eq i64 %13, ptrtoint (ptr @i32_typ to i64)
   store i1 %14, ptr %7, align 1
   %15 = load i1, ptr %7, align 1
-  br i1 %15, label %16, label %21
+  br i1 %15, label %16, label %24
 
 16:                                               ; preds = %2
   %17 = getelementptr ptr, ptr %1, i32 1
   %18 = load ptr, ptr %17, align 8
   %19 = ptrtoint ptr %18 to i64
-  %20 = icmp eq i64 %19, ptrtoint (ptr @f64_typ to i64)
+  %20 = icmp eq i64 %19, ptrtoint (ptr @i32_typ to i64)
   store i1 %20, ptr %3, align 1
-  br label %66
+  %21 = load i1, ptr %3, align 1
+  %22 = xor i1 %21, true
+  %23 = zext i1 %22 to i32
+  br label %56
 
-21:                                               ; preds = %2
-  %22 = load ptr, ptr %1, align 8
-  %23 = ptrtoint ptr %22 to i64
-  %24 = icmp eq i64 %23, ptrtoint (ptr @i32_typ to i64)
-  store i1 %24, ptr %8, align 1
-  %25 = load i1, ptr %8, align 1
-  br i1 %25, label %26, label %39
+24:                                               ; preds = %2
+  %25 = load ptr, ptr %1, align 8
+  %26 = ptrtoint ptr %25 to i64
+  %27 = icmp eq i64 %26, ptrtoint (ptr @f64_typ to i64)
+  store i1 %27, ptr %8, align 1
+  %28 = load i1, ptr %8, align 1
+  %29 = zext i1 %28 to i32
+  br i1 %28, label %30, label %31
 
-26:                                               ; preds = %21
-  %27 = getelementptr ptr, ptr %1, i32 1
-  %28 = load ptr, ptr %27, align 8
-  %29 = ptrtoint ptr %28 to i64
-  %30 = icmp eq i64 %29, ptrtoint (ptr @f64_typ to i64)
-  store i1 %30, ptr %4, align 1
-  %31 = load i1, ptr %4, align 1
-  %32 = select i1 %31, i32 3, i32 4
-  br i1 %31, label %33, label %34
+30:                                               ; preds = %24
+  br label %55
 
-33:                                               ; preds = %26
-  br label %38
+31:                                               ; preds = %24
+  %32 = load ptr, ptr %1, align 8
+  %33 = getelementptr { [3 x i64], [3 x ptr] }, ptr %32, i32 0, i32 0, i32 1
+  %34 = getelementptr { [3 x i64], [3 x ptr] }, ptr %32, i32 0, i32 0, i32 2
+  %35 = getelementptr { [3 x i64], [3 x ptr] }, ptr %32, i32 0, i32 1, i32 0
+  %36 = getelementptr { [3 x i64], [3 x ptr] }, ptr %32, i32 0, i32 1, i32 1
+  %37 = load i64, ptr %33, align 4
+  %38 = load i64, ptr %34, align 4
+  %39 = load ptr, ptr %35, align 8
+  %40 = load ptr, ptr %36, align 8
+  %41 = load i64, ptr @Animal, align 4
+  %42 = call i1 @subtype_test_wrapper(ptr %39, i64 %38, i64 %37, i64 %41, i64 ptrtoint (ptr @Animal to i64), ptr %40)
+  store i1 %42, ptr %9, align 1
+  %43 = getelementptr ptr, ptr %1, i32 1
+  %44 = load ptr, ptr %43, align 8
+  %45 = getelementptr { [3 x i64], [3 x ptr] }, ptr %44, i32 0, i32 0, i32 1
+  %46 = getelementptr { [3 x i64], [3 x ptr] }, ptr %44, i32 0, i32 0, i32 2
+  %47 = getelementptr { [3 x i64], [3 x ptr] }, ptr %44, i32 0, i32 1, i32 0
+  %48 = getelementptr { [3 x i64], [3 x ptr] }, ptr %44, i32 0, i32 1, i32 1
+  %49 = load i64, ptr %45, align 4
+  %50 = load i64, ptr %46, align 4
+  %51 = load ptr, ptr %47, align 8
+  %52 = load ptr, ptr %48, align 8
+  %53 = load i64, ptr @Beaver, align 4
+  %54 = call i1 @subtype_test_wrapper(ptr %51, i64 %50, i64 %49, i64 %53, i64 ptrtoint (ptr @Beaver to i64), ptr %52)
+  store i1 %54, ptr %6, align 1
+  br label %55
 
-34:                                               ; preds = %26
-  %35 = load ptr, ptr %27, align 8
-  %36 = ptrtoint ptr %35 to i64
-  %37 = icmp eq i64 %36, ptrtoint (ptr @i32_typ to i64)
-  store i1 %37, ptr %5, align 1
-  br label %38
+55:                                               ; preds = %30, %31
+  br label %56
 
-38:                                               ; preds = %33, %34
-  br label %63
+56:                                               ; preds = %16, %55
+  %57 = phi i32 [ %29, %55 ], [ %23, %16 ]
+  br label %58
 
-39:                                               ; preds = %21
-  %40 = load ptr, ptr %1, align 8
-  %41 = getelementptr { [3 x i64], [3 x ptr] }, ptr %40, i32 0, i32 0, i32 1
-  %42 = getelementptr { [3 x i64], [3 x ptr] }, ptr %40, i32 0, i32 0, i32 2
-  %43 = getelementptr { [3 x i64], [3 x ptr] }, ptr %40, i32 0, i32 1, i32 0
-  %44 = getelementptr { [3 x i64], [3 x ptr] }, ptr %40, i32 0, i32 1, i32 1
-  %45 = load i64, ptr %41, align 4
-  %46 = load i64, ptr %42, align 4
-  %47 = load ptr, ptr %43, align 8
-  %48 = load ptr, ptr %44, align 8
-  %49 = load i64, ptr @Animal, align 4
-  %50 = call i1 @subtype_test_wrapper(ptr %47, i64 %46, i64 %45, i64 %49, i64 ptrtoint (ptr @Animal to i64), ptr %48)
-  store i1 %50, ptr %9, align 1
-  %51 = getelementptr ptr, ptr %1, i32 1
-  %52 = load ptr, ptr %51, align 8
-  %53 = getelementptr { [3 x i64], [3 x ptr] }, ptr %52, i32 0, i32 0, i32 1
-  %54 = getelementptr { [3 x i64], [3 x ptr] }, ptr %52, i32 0, i32 0, i32 2
-  %55 = getelementptr { [3 x i64], [3 x ptr] }, ptr %52, i32 0, i32 1, i32 0
-  %56 = getelementptr { [3 x i64], [3 x ptr] }, ptr %52, i32 0, i32 1, i32 1
-  %57 = load i64, ptr %53, align 4
-  %58 = load i64, ptr %54, align 4
-  %59 = load ptr, ptr %55, align 8
-  %60 = load ptr, ptr %56, align 8
-  %61 = load i64, ptr @Beaver, align 4
-  %62 = call i1 @subtype_test_wrapper(ptr %59, i64 %58, i64 %57, i64 %61, i64 ptrtoint (ptr @Beaver to i64), ptr %60)
-  store i1 %62, ptr %6, align 1
-  br label %63
+58:                                               ; preds = %56
+  %59 = zext i32 %57 to i64
+  %60 = trunc i64 %59 to i32
+  switch i32 %60, label %63 [
+    i32 0, label %61
+  ]
 
-63:                                               ; preds = %38, %39
-  %64 = phi i32 [ 6, %39 ], [ %32, %38 ]
-  br label %65
+61:                                               ; preds = %58
+  %62 = select i1 %15, i32 6, i32 3
+  br label %70
 
-65:                                               ; preds = %63
-  br label %66
+63:                                               ; preds = %58
+  %64 = select i1 %15, ptr %4, ptr %5
+  %65 = select i1 %15, i32 4, i32 5
+  %66 = getelementptr ptr, ptr %1, i32 1
+  %67 = load ptr, ptr %66, align 8
+  %68 = ptrtoint ptr %67 to i64
+  %69 = icmp eq i64 %68, ptrtoint (ptr @f64_typ to i64)
+  store i1 %69, ptr %64, align 1
+  br label %70
 
-66:                                               ; preds = %16, %65
-  %67 = phi i32 [ %64, %65 ], [ 5, %16 ]
-  br label %68
-
-68:                                               ; preds = %66
-  store i32 %67, ptr %11, align 4
-  %69 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %70 = load i32, ptr %11, align 4
-  %71 = getelementptr [7 x ptr], ptr %69, i32 0, i32 %70
-  %72 = getelementptr ptr, ptr %71, i32 10
-  %73 = load ptr, ptr %72, align 8
-  ret ptr %73
+70:                                               ; preds = %63, %61
+  %71 = phi i32 [ %65, %63 ], [ %62, %61 ]
+  store i32 %71, ptr %11, align 4
+  %72 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %73 = load i32, ptr %11, align 4
+  %74 = getelementptr [7 x ptr], ptr %72, i32 0, i32 %73
+  %75 = getelementptr ptr, ptr %74, i32 10
+  %76 = load ptr, ptr %75, align 8
+  ret ptr %76
 }
 
 define void @throw() {
@@ -4001,7 +4003,7 @@ define void @throw() {
   %42 = sext i32 %41 to i64
   %43 = mul i64 ptrtoint (ptr getelementptr ([11 x i8], ptr null, i32 1) to i64), %42
   %44 = getelementptr i8, ptr %40, i64 %43
-  %45 = load <11 x i8>, ptr @tidqg_sourcemini, align 16
+  %45 = load <11 x i8>, ptr @qajuw_sourcemini, align 16
   store <11 x i8> %45, ptr %44, align 16
   %46 = alloca i32, align 4
   store i32 11, ptr %46, align 4
@@ -4173,13 +4175,13 @@ define void @print88() {
   ret void
 }
 
-define void @coroutine_corkirxlxr_passer(ptr %0) {
+define void @coroutine_aiwhezpkza_passer(ptr %0) {
   %2 = load ptr, ptr %0, align 8
   call void %2()
   ret void
 }
 
-define void @coroutine_corkirxlxr_buffer_filler(ptr %0) {
+define void @coroutine_aiwhezpkza_buffer_filler(ptr %0) {
   ret void
 }
 
@@ -4203,7 +4205,7 @@ define void @grabo() {
   %13 = sext i32 %12 to i64
   %14 = mul i64 ptrtoint (ptr getelementptr ([3 x i8], ptr null, i32 1) to i64), %13
   %15 = getelementptr i8, ptr %11, i64 %14
-  %16 = load <3 x i8>, ptr @awumj_one, align 4
+  %16 = load <3 x i8>, ptr @szcct_one, align 4
   store <3 x i8> %16, ptr %15, align 4
   %17 = alloca i32, align 4
   store i32 3, ptr %17, align 4
@@ -4282,7 +4284,7 @@ define void @grabo() {
   ret void
 }
 
-define i32 @_functionliteral_olskngxzau(i32 %0, i32 %1) {
+define i32 @_functionliteral_kopsplhgla(i32 %0, i32 %1) {
   %3 = alloca i32, align 4
   store i32 %0, ptr %3, align 4
   %4 = alloca i32, align 4
@@ -4296,7 +4298,7 @@ define i32 @_functionliteral_olskngxzau(i32 %0, i32 %1) {
   ret i32 %9
 }
 
-define i32 @_functionliteral_qobfptpdhv(i32 %0) {
+define i32 @_functionliteral_tsradnygft(i32 %0) {
   %2 = alloca i32, align 4
   store i32 %0, ptr %2, align 4
   %3 = alloca i32, align 4
@@ -4310,14 +4312,14 @@ define i32 @_functionliteral_qobfptpdhv(i32 %0) {
   ret i32 %8
 }
 
-define i32 @_functionliteral_lrmtukrofi() {
+define i32 @_functionliteral_zvfvhjrguy() {
   %1 = alloca i32, align 4
   store i32 5, ptr %1, align 4
   %2 = load i32, ptr %1, align 4
   ret i32 %2
 }
 
-define void @_functionliteral_jguwlcqyyk(i32 %0) {
+define void @_functionliteral_zbhwynowem(i32 %0) {
   %2 = alloca i32, align 4
   store i32 %0, ptr %2, align 4
   %3 = alloca i160, align 8
@@ -4556,7 +4558,7 @@ define { ptr, ptr, ptr, i32 } @read_file({ ptr, ptr, ptr, i32 } %0) {
   %125 = sext i32 %124 to i64
   %126 = mul i64 ptrtoint (ptr getelementptr ([1 x i8], ptr null, i32 1) to i64), %125
   %127 = getelementptr i8, ptr %123, i64 %126
-  %128 = load <1 x i8>, ptr @uacvp_r, align 1
+  %128 = load <1 x i8>, ptr @nwefb_r, align 1
   store <1 x i8> %128, ptr %127, align 1
   %129 = alloca i32, align 4
   store i32 1, ptr %129, align 4
@@ -4834,7 +4836,7 @@ define void @write_file({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1) {
   %61 = sext i32 %60 to i64
   %62 = mul i64 ptrtoint (ptr getelementptr ([1 x i8], ptr null, i32 1) to i64), %61
   %63 = getelementptr i8, ptr %59, i64 %62
-  %64 = load <1 x i8>, ptr @hdmsy_w, align 1
+  %64 = load <1 x i8>, ptr @eknld_w, align 1
   store <1 x i8> %64, ptr %63, align 1
   %65 = alloca i32, align 4
   store i32 1, ptr %65, align 4
@@ -4955,7 +4957,7 @@ define void @write_file({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1) {
   ret void
 }
 
-define void @_functionliteral_ctxzchqoix(i32 %0) {
+define void @_functionliteral_kvyjkxaltu(i32 %0) {
   %2 = alloca i32, align 4
   store i32 %0, ptr %2, align 4
   %3 = load i32, ptr %2, align 4
@@ -4985,7 +4987,7 @@ define void @_functionliteral_ctxzchqoix(i32 %0) {
   ret void
 }
 
-define i32 @_functionliteral_ewglstztjl(i32 %0, i32 %1) {
+define i32 @_functionliteral_ekugcstjfi(i32 %0, i32 %1) {
   %3 = alloca i32, align 4
   store i32 %0, ptr %3, align 4
   %4 = alloca i32, align 4
@@ -4999,7 +5001,7 @@ define i32 @_functionliteral_ewglstztjl(i32 %0, i32 %1) {
   ret i32 %9
 }
 
-define void @_functionliteral_iikjeoqqcb(i32 %0, i32 %1) {
+define void @_functionliteral_oljwwmffcx(i32 %0, i32 %1) {
   %3 = alloca i1, align 1
   %4 = alloca i32, align 4
   %5 = alloca i32, align 4
@@ -5018,7 +5020,7 @@ define void @_functionliteral_iikjeoqqcb(i32 %0, i32 %1) {
   %16 = alloca i32, align 4
   store i32 7, ptr %16, align 4
   %17 = alloca ptr, align 8
-  store ptr @_functionliteral_ewglstztjl, ptr %17, align 8
+  store ptr @_functionliteral_ekugcstjfi, ptr %17, align 8
   br label %18
 
 18:                                               ; preds = %55, %2
@@ -5089,7 +5091,7 @@ define void @_functionliteral_iikjeoqqcb(i32 %0, i32 %1) {
   ret void
 }
 
-define void @coroutine_sjtjiibvwc_passer(ptr %0) {
+define void @coroutine_fcuzejhmpu_passer(ptr %0) {
   %2 = getelementptr { ptr, [3 x ptr], ptr, i1, { { ptr, i32 }, i32, i32 } }, ptr %0, i32 0, i32 4, i32 1
   %3 = getelementptr { ptr, [3 x ptr], ptr, i1, { { ptr, i32 }, i32, i32 } }, ptr %0, i32 0, i32 4, i32 2
   %4 = load i32, ptr %2, align 4
@@ -5099,7 +5101,7 @@ define void @coroutine_sjtjiibvwc_passer(ptr %0) {
   ret void
 }
 
-define void @coroutine_sjtjiibvwc_buffer_filler(ptr %0, i32 %1, i32 %2) {
+define void @coroutine_fcuzejhmpu_buffer_filler(ptr %0, i32 %1, i32 %2) {
   %4 = getelementptr { ptr, [3 x ptr], ptr, i1, { { ptr, i32 }, i32, i32 } }, ptr %0, i32 0, i32 4, i32 1
   %5 = getelementptr { ptr, [3 x ptr], ptr, i1, { { ptr, i32 }, i32, i32 } }, ptr %0, i32 0, i32 4, i32 2
   store i32 %1, ptr %4, align 4
@@ -5107,7 +5109,7 @@ define void @coroutine_sjtjiibvwc_buffer_filler(ptr %0, i32 %1, i32 %2) {
   ret void
 }
 
-define void @coroutine_hrbtumhonb_passer(ptr %0) {
+define void @coroutine_gcyfphlqey_passer(ptr %0) {
   %2 = load ptr, ptr %0, align 8
   %3 = call i32 %2()
   %4 = getelementptr { ptr, [3 x ptr], ptr, i1, { ptr, i32 } }, ptr %0, i32 0, i32 4, i32 1
@@ -5117,11 +5119,11 @@ define void @coroutine_hrbtumhonb_passer(ptr %0) {
   ret void
 }
 
-define void @coroutine_hrbtumhonb_buffer_filler(ptr %0) {
+define void @coroutine_gcyfphlqey_buffer_filler(ptr %0) {
   ret void
 }
 
-define void @coroutine_zufguwzxns_passer(ptr %0) {
+define void @coroutine_kvggzgximh_passer(ptr %0) {
   %2 = getelementptr { ptr, [3 x ptr], ptr, i1, { { ptr, i160 }, { ptr, ptr, ptr, i32 } } }, ptr %0, i32 0, i32 4, i32 1
   %3 = load { ptr, ptr, ptr, i32 }, ptr %2, align 8
   %4 = load ptr, ptr %0, align 8
@@ -5129,13 +5131,13 @@ define void @coroutine_zufguwzxns_passer(ptr %0) {
   ret void
 }
 
-define void @coroutine_zufguwzxns_buffer_filler(ptr %0, { ptr, ptr, ptr, i32 } %1) {
+define void @coroutine_kvggzgximh_buffer_filler(ptr %0, { ptr, ptr, ptr, i32 } %1) {
   %3 = getelementptr { ptr, [3 x ptr], ptr, i1, { { ptr, i160 }, { ptr, ptr, ptr, i32 } } }, ptr %0, i32 0, i32 4, i32 1
   store { ptr, ptr, ptr, i32 } %1, ptr %3, align 8
   ret void
 }
 
-define void @_functionliteral_eyzzgakenp({ ptr, ptr, ptr, i32 } %0) {
+define void @_functionliteral_zfrnqoumhm({ ptr, ptr, ptr, i32 } %0) {
   %2 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %0, ptr %2, align 8
   %3 = alloca i32, align 4
@@ -5169,7 +5171,7 @@ define void @_functionliteral_eyzzgakenp({ ptr, ptr, ptr, i32 } %0) {
   ret void
 }
 
-define i1 @_functionliteral_vpllsmxame(i32 %0) {
+define i1 @_functionliteral_okhizqorym(i32 %0) {
   %2 = alloca i32, align 4
   store i32 %0, ptr %2, align 4
   %3 = alloca i32, align 4
@@ -5190,7 +5192,7 @@ define i1 @_functionliteral_vpllsmxame(i32 %0) {
   ret i1 %13
 }
 
-define i32 @_functionliteral_phaaubuyzl(i32 %0) {
+define i32 @_functionliteral_uhkrhxzmyy(i32 %0) {
   %2 = alloca i32, align 4
   store i32 %0, ptr %2, align 4
   %3 = load i32, ptr %2, align 4
@@ -6257,7 +6259,7 @@ define i32 @main() {
   %1013 = load i32, ptr %14, align 4
   %1014 = insertvalue { ptr, ptr, ptr, i32 } %1012, i32 %1013, 3
   %1015 = getelementptr [2 x ptr], ptr %33, i32 0, i32 0
-  store ptr @_parameterization_Ptrf64_or_Ptri32, ptr %1015, align 8
+  store ptr @_parameterization_Ptri32_or_Ptrf64, ptr %1015, align 8
   %1016 = getelementptr [2 x ptr], ptr %33, i32 0, i32 1
   store ptr @_parameterization_Ptrf64, ptr %1016, align 8
   %1017 = call ptr @llvm.invariant.start.p0(i64 4, ptr %33)
@@ -6286,7 +6288,7 @@ define i32 @main() {
   %1033 = sext i32 %1032 to i64
   %1034 = mul i64 ptrtoint (ptr getelementptr ([5 x i8], ptr null, i32 1) to i64), %1033
   %1035 = getelementptr i8, ptr %1031, i64 %1034
-  %1036 = load <5 x i8>, ptr @lodsm_start, align 8
+  %1036 = load <5 x i8>, ptr @fabfk_start, align 8
   store <5 x i8> %1036, ptr %1035, align 8
   store i32 5, ptr %39, align 4
   store i32 6, ptr %40, align 4
@@ -6438,7 +6440,7 @@ define i32 @main() {
   %1136 = sext i32 %1135 to i64
   %1137 = mul i64 ptrtoint (ptr getelementptr ([13 x i8], ptr null, i32 1) to i64), %1136
   %1138 = getelementptr i8, ptr %1134, i64 %1137
-  %1139 = load <13 x i8>, ptr @iczdt_did_get_here, align 16
+  %1139 = load <13 x i8>, ptr @pvnvt_did_get_here, align 16
   store <13 x i8> %1139, ptr %1138, align 16
   store i32 13, ptr %68, align 4
   store i32 14, ptr %69, align 4
@@ -6634,7 +6636,7 @@ define i32 @main() {
   %1281 = getelementptr [2 x ptr], ptr %97, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %1281, align 8
   %1282 = getelementptr [2 x ptr], ptr %97, i32 0, i32 1
-  store ptr @_parameterization_Ptrf64_or_Ptri32, ptr %1282, align 8
+  store ptr @_parameterization_Ptri32_or_Ptrf64, ptr %1282, align 8
   %1283 = call ptr @llvm.invariant.start.p0(i64 4, ptr %97)
   %1284 = call ptr @llvm.invariant.start.p0(i64 56, ptr %1273)
   %1285 = getelementptr ptr, ptr %1273, i32 %1279
@@ -6661,7 +6663,7 @@ define i32 @main() {
   %1299 = sext i32 %1298 to i64
   %1300 = mul i64 ptrtoint (ptr getelementptr ([16 x i8], ptr null, i32 1) to i64), %1299
   %1301 = getelementptr i8, ptr %1297, i64 %1300
-  %1302 = load <16 x i8>, ptr @ipvrd_barrys_color_is, align 16
+  %1302 = load <16 x i8>, ptr @acecv_barrys_color_is, align 16
   store <16 x i8> %1302, ptr %1301, align 16
   store i32 16, ptr %103, align 4
   store i32 17, ptr %104, align 4
@@ -7722,8 +7724,8 @@ define i32 @main() {
 2053:                                             ; preds = %2052
   store ptr @print88, ptr %291, align 8
   %2054 = load ptr, ptr %291, align 8
-  %2055 = call ptr @coroutine_create(ptr %2054, ptr @coroutine_corkirxlxr_passer)
-  call void @coroutine_corkirxlxr_buffer_filler(ptr %2055)
+  %2055 = call ptr @coroutine_create(ptr %2054, ptr @coroutine_aiwhezpkza_passer)
+  call void @coroutine_aiwhezpkza_buffer_filler(ptr %2055)
   store ptr %2055, ptr %292, align 8
   %2056 = getelementptr { ptr }, ptr %292, i32 0, i32 0
   %2057 = load ptr, ptr %2056, align 8
@@ -8577,7 +8579,7 @@ define i32 @main() {
   %2640 = sext i32 %2639 to i64
   %2641 = mul i64 ptrtoint (ptr getelementptr ([14 x i8], ptr null, i32 1) to i64), %2640
   %2642 = getelementptr i8, ptr %2638, i64 %2641
-  %2643 = load <14 x i8>, ptr @nduvc_so_it_is_true, align 16
+  %2643 = load <14 x i8>, ptr @chuzf_so_it_is_true, align 16
   store <14 x i8> %2643, ptr %2642, align 16
   store i32 14, ptr %465, align 4
   store i32 15, ptr %466, align 4
@@ -9075,7 +9077,7 @@ define i32 @main() {
   %2984 = sext i32 %2983 to i64
   %2985 = mul i64 ptrtoint (ptr getelementptr ([5 x i8], ptr null, i32 1) to i64), %2984
   %2986 = getelementptr i8, ptr %2982, i64 %2985
-  %2987 = load <5 x i8>, ptr @klmuc_boom, align 8
+  %2987 = load <5 x i8>, ptr @fggbo_boom, align 8
   store <5 x i8> %2987, ptr %2986, align 8
   store i32 5, ptr %567, align 4
   store i32 6, ptr %568, align 4
@@ -9683,9 +9685,9 @@ define i32 @main() {
   br i1 %3408, label %3386, label %3425
 
 3425:                                             ; preds = %3424
-  store ptr @_functionliteral_olskngxzau, ptr %672, align 8
-  store ptr @_functionliteral_qobfptpdhv, ptr %673, align 8
-  store ptr @_functionliteral_lrmtukrofi, ptr %674, align 8
+  store ptr @_functionliteral_kopsplhgla, ptr %672, align 8
+  store ptr @_functionliteral_tsradnygft, ptr %673, align 8
+  store ptr @_functionliteral_zvfvhjrguy, ptr %674, align 8
   store i32 0, ptr %675, align 4
   %3426 = load i32, ptr %675, align 4
   %3427 = getelementptr { ptr }, ptr %672, i32 0, i32 0
@@ -9861,7 +9863,7 @@ define i32 @main() {
   store ptr %3542, ptr %3550, align 8
   %3551 = call ptr @class_behavior_wrapper(ptr %3549, ptr %708)
   call void %3551(ptr %707, { ptr, i160 } %3545) #1
-  store ptr @_functionliteral_jguwlcqyyk, ptr %709, align 8
+  store ptr @_functionliteral_zbhwynowem, ptr %709, align 8
   %3552 = getelementptr { ptr }, ptr %709, i32 0, i32 0
   %3553 = load ptr, ptr %3552, align 8
   %3554 = insertvalue { ptr } undef, ptr %3553, 0
@@ -9989,7 +9991,7 @@ define i32 @main() {
   %3639 = sext i32 %3638 to i64
   %3640 = mul i64 ptrtoint (ptr getelementptr ([12 x i8], ptr null, i32 1) to i64), %3639
   %3641 = getelementptr i8, ptr %3637, i64 %3640
-  %3642 = load <12 x i8>, ptr @iakfk_bigtingstxt, align 16
+  %3642 = load <12 x i8>, ptr @cccrf_bigtingstxt, align 16
   store <12 x i8> %3642, ptr %3641, align 16
   store i32 12, ptr %738, align 4
   store i32 13, ptr %739, align 4
@@ -10051,7 +10053,7 @@ define i32 @main() {
   %3681 = sext i32 %3680 to i64
   %3682 = mul i64 ptrtoint (ptr getelementptr ([20 x i8], ptr null, i32 1) to i64), %3681
   %3683 = getelementptr i8, ptr %3679, i64 %3682
-  %3684 = load <20 x i8>, ptr @pdznk_thisnis_hownwe_donit, align 32
+  %3684 = load <20 x i8>, ptr @renke_thisnis_hownwe_donit, align 32
   store <20 x i8> %3684, ptr %3683, align 32
   store i32 20, ptr %753, align 4
   store i32 21, ptr %754, align 4
@@ -10130,7 +10132,7 @@ define i32 @main() {
   %3739 = sext i32 %3738 to i64
   %3740 = mul i64 ptrtoint (ptr getelementptr ([12 x i8], ptr null, i32 1) to i64), %3739
   %3741 = getelementptr i8, ptr %3737, i64 %3740
-  %3742 = load <12 x i8>, ptr @fjknz_bigtingstxt, align 16
+  %3742 = load <12 x i8>, ptr @mdtrz_bigtingstxt, align 16
   store <12 x i8> %3742, ptr %3741, align 16
   store i32 12, ptr %768, align 4
   store i32 13, ptr %769, align 4
@@ -10202,7 +10204,7 @@ define i32 @main() {
   store ptr %3783, ptr %3792, align 8
   %3793 = call ptr @class_behavior_wrapper(ptr %3791, ptr %781)
   call void %3793(ptr %780, { ptr, i160 } %3787) #1
-  store ptr @_functionliteral_ctxzchqoix, ptr %782, align 8
+  store ptr @_functionliteral_kvyjkxaltu, ptr %782, align 8
   %3794 = getelementptr { ptr }, ptr %782, i32 0, i32 0
   %3795 = load ptr, ptr %3794, align 8
   %3796 = insertvalue { ptr } undef, ptr %3795, 0
@@ -10286,14 +10288,14 @@ define i32 @main() {
   store ptr %3843, ptr %3851, align 8
   %3852 = call ptr @class_behavior_wrapper(ptr %3850, ptr %802)
   call void %3852(ptr %801, { ptr, i160 } %3846) #1
-  store ptr @_functionliteral_iikjeoqqcb, ptr %803, align 8
+  store ptr @_functionliteral_oljwwmffcx, ptr %803, align 8
   store i32 6, ptr %804, align 4
   store i32 4, ptr %805, align 4
   %3853 = load i32, ptr %804, align 4
   %3854 = load i32, ptr %805, align 4
   %3855 = load ptr, ptr %803, align 8
-  %3856 = call ptr @coroutine_create(ptr %3855, ptr @coroutine_sjtjiibvwc_passer)
-  call void @coroutine_sjtjiibvwc_buffer_filler(ptr %3856, i32 %3853, i32 %3854)
+  %3856 = call ptr @coroutine_create(ptr %3855, ptr @coroutine_fcuzejhmpu_passer)
+  call void @coroutine_fcuzejhmpu_buffer_filler(ptr %3856, i32 %3853, i32 %3854)
   store ptr %3856, ptr %806, align 8
   %3857 = getelementptr { ptr }, ptr %806, i32 0, i32 0
   %3858 = load ptr, ptr %3857, align 8
@@ -10329,7 +10331,7 @@ define i32 @main() {
   %3879 = load i160, ptr %3878, align 4
   %3880 = insertvalue { ptr, i160 } %3877, i160 %3879, 1
   %3881 = getelementptr [1 x ptr], ptr %813, i32 0, i32 0
-  store ptr @_parameterization_Nil_or_Ptri32, ptr %3881, align 8
+  store ptr @_parameterization_Ptri32_or_Nil, ptr %3881, align 8
   %3882 = call ptr @llvm.invariant.start.p0(i64 1, ptr %813)
   %3883 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
   %3884 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
@@ -10368,7 +10370,7 @@ define i32 @main() {
   %3907 = load i160, ptr %3906, align 4
   %3908 = insertvalue { ptr, i160 } %3905, i160 %3907, 1
   %3909 = getelementptr [1 x ptr], ptr %820, i32 0, i32 0
-  store ptr @_parameterization_Nil_or_Ptri32, ptr %3909, align 8
+  store ptr @_parameterization_Ptri32_or_Nil, ptr %3909, align 8
   %3910 = call ptr @llvm.invariant.start.p0(i64 1, ptr %820)
   %3911 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
   %3912 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
@@ -10377,8 +10379,8 @@ define i32 @main() {
   %3914 = call ptr @class_behavior_wrapper(ptr %3912, ptr %821)
   call void %3914(ptr %820, { ptr, i160 } %3908) #1
   %3915 = load ptr, ptr %674, align 8
-  %3916 = call ptr @coroutine_create(ptr %3915, ptr @coroutine_hrbtumhonb_passer)
-  call void @coroutine_hrbtumhonb_buffer_filler(ptr %3916)
+  %3916 = call ptr @coroutine_create(ptr %3915, ptr @coroutine_gcyfphlqey_passer)
+  call void @coroutine_gcyfphlqey_buffer_filler(ptr %3916)
   store ptr %3916, ptr %822, align 8
   %3917 = getelementptr { ptr }, ptr %822, i32 0, i32 0
   %3918 = load ptr, ptr %3917, align 8
@@ -10407,7 +10409,7 @@ define i32 @main() {
   %3935 = load i160, ptr %3934, align 4
   %3936 = insertvalue { ptr, i160 } %3933, i160 %3935, 1
   %3937 = getelementptr [1 x ptr], ptr %827, i32 0, i32 0
-  store ptr @_parameterization_Nil_or_Ptri32, ptr %3937, align 8
+  store ptr @_parameterization_Ptri32_or_Nil, ptr %3937, align 8
   %3938 = call ptr @llvm.invariant.start.p0(i64 1, ptr %827)
   %3939 = call ptr @llvm.invariant.start.p0(i64 80, ptr @IO)
   %3940 = load ptr, ptr getelementptr (ptr, ptr @IO, i32 10), align 8
@@ -10461,7 +10463,7 @@ define i32 @main() {
   store ptr %3973, ptr %838, align 8
   %3974 = load i32, ptr %3969, align 4
   store i32 %3974, ptr %837, align 4
-  store ptr @_functionliteral_eyzzgakenp, ptr %841, align 8
+  store ptr @_functionliteral_zfrnqoumhm, ptr %841, align 8
   %3975 = load ptr, ptr %840, align 8
   %3976 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3975, 0
   %3977 = load ptr, ptr %839, align 8
@@ -10471,8 +10473,8 @@ define i32 @main() {
   %3981 = load i32, ptr %837, align 4
   %3982 = insertvalue { ptr, ptr, ptr, i32 } %3980, i32 %3981, 3
   %3983 = load ptr, ptr %841, align 8
-  %3984 = call ptr @coroutine_create(ptr %3983, ptr @coroutine_zufguwzxns_passer)
-  call void @coroutine_zufguwzxns_buffer_filler(ptr %3984, { ptr, ptr, ptr, i32 } %3982)
+  %3984 = call ptr @coroutine_create(ptr %3983, ptr @coroutine_kvggzgximh_passer)
+  call void @coroutine_kvggzgximh_buffer_filler(ptr %3984, { ptr, ptr, ptr, i32 } %3982)
   store ptr %3984, ptr %842, align 8
   %3985 = getelementptr { ptr }, ptr %842, i32 0, i32 0
   %3986 = load ptr, ptr %3985, align 8
@@ -10518,11 +10520,11 @@ define i32 @main() {
   %4016 = load i32, ptr %852, align 4
   %4017 = load ptr, ptr %3427, align 8
   %4018 = insertvalue { ptr } undef, ptr %4017, 0
-  store ptr @_functionliteral_vpllsmxame, ptr %853, align 8
+  store ptr @_functionliteral_okhizqorym, ptr %853, align 8
   %4019 = getelementptr { ptr }, ptr %853, i32 0, i32 0
   %4020 = load ptr, ptr %4019, align 8
   %4021 = insertvalue { ptr } undef, ptr %4020, 0
-  store ptr @_functionliteral_phaaubuyzl, ptr %854, align 8
+  store ptr @_functionliteral_uhkrhxzmyy, ptr %854, align 8
   %4022 = getelementptr { ptr }, ptr %854, i32 0, i32 0
   %4023 = load ptr, ptr %4022, align 8
   %4024 = insertvalue { ptr } undef, ptr %4023, 0

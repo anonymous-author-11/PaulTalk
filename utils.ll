@@ -43,8 +43,8 @@ define { ptr, i160 } @box_wrapper(ptr %f, ptr nocapture nofree readonly %0, ptr 
   ret { ptr, i160 } %result
 }
 
-define void @unbox_wrapper(ptr %f, { ptr, i160 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: readwrite, inaccessiblemem: none) {
-  call void %f({ ptr, i160 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: readwrite, inaccessiblemem: none)
+define void @unbox_wrapper(ptr %f, { ptr, i160 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none) {
+  call void %f({ ptr, i160 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
   ret void
 }
 

@@ -111,10 +111,11 @@ def do_preliminaries(out_file_names, ll_files):
     subprocess.run(preliminaries, shell=True)
 
 def record_all_passes():
-    clang = "clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
-    opt = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
-    opt = f"opt out_reg2mem.ll -S --passes=\"default<O2>\" --max-devirt-iterations=100 --inline-threshold=10000 --print-after-all"
-    with open("out_reg2mem.ll", "r+") as f:
+    #clang = "clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
+    attributor_settings = "--attributor-enable=module --attributor-annotate-decl-cs --max-heap-to-stack-size=-1 --attributor-manifest-internal --attributor-assume-closed-world=false"
+    #opt = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
+    opt = f"opt out_optimized.ll -S --passes=\"default<O1>\" {attributor_settings} --max-devirt-iterations=100 --inline-threshold=10000 --print-after-all"
+    with open("out_optimized.ll", "r+") as f:
         out_reg2mem = f.read()
         f.seek(0)
         # clang can't handle the 'preserve_nonecc' attribute for some reason
@@ -141,7 +142,10 @@ def run_opt(debug_mode):
     attributor_settings = "--attributor-enable=module --attributor-annotate-decl-cs --max-heap-to-stack-size=-1 --attributor-manifest-internal --attributor-assume-closed-world=false"
     in_file = f"out_reg2mem.ll"
     opt = f"opt -S {in_file} {opt_level} {devirtualization_settings} {inline_settings} {attributor_settings} -o out_optimized.ll"
+    #opt2 = f"opt -S --passes=\"attributor,mem2reg,sroa,instcombine\" {devirtualization_settings} {inline_settings} {attributor_settings} -o out_optimized.ll"
     #opt2 = f"opt -S {in_file} {o2} --print-after-all {heap_to_stack} {devirtualization_settings} {inline_settings} -o out_optimized.ll"
+    #out = subprocess.run(opt1, text=True, shell=True, capture_output=True)
+    #out = out.stdout #.replace("call void @llvm.memcpy.p0.p0.i64","call void @llvm.memcpy.inline.p0.p0.i64")
     subprocess.run(opt, text=True, shell=True)
     if debug_mode: subprocess.run(debug, text=True, shell=True)
 
@@ -224,8 +228,8 @@ def main(argv):
     do_preliminaries(out_file_names, ll_files)
     after_prelims = time.time()
     print(f"Time to run preliminary passes: {after_prelims - after_translate} seconds")
-    #record_all_passes()
     run_opt(debug_mode)
+    #record_all_passes()
     after_opt = time.time()
     print(f"Time to opt: {after_opt - after_prelims} seconds")
     run_llc(out_file_names, debug_mode)
