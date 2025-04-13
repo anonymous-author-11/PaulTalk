@@ -24,7 +24,7 @@ PaulTalk aims to combine high-level ergonomics with high performance and memory 
 *   **Memory Management:** The region-based memory system is incomplete. Memory is allocated (using a fast bump allocator) but **never freed**, leading to memory leaks in any non-trivial program.
 *   **Platform:** Currently targets **x64 Windows only**. Aims to be multiplatform in the future.
 *   **Setup:** The build process, especially for the C++ components, is complex and not documented for general users. Makes use of in-tree versions of the `xDSL` and `debugir` projects.
-*   **Standard Library:** Currently very minimal, involving core facilities for string manipulation, IO, and iteration.
+*   **Standard Library:** Currently minimal, involving core facilities for string manipulation, arrays, I/O, and iteration.
 *   **Language Features:** While many core features are implemented, expect bugs, rough edges, and potential breaking changes.
 
 ## Language Introduction
@@ -78,7 +78,10 @@ python Compiler.py <input_file>.mini -o <output_file>.exe [--debug] [--dependenc
 
 The standard library (`std.mini`) is currently very basic and includes modules like:
 
+*   `iteration.mini`
 *   `core.mini`
+*   `array.mini`
+*   `range.mini`
 *   `io.mini`
 *   `math.mini`
 *   `channel.mini`
