@@ -85,6 +85,7 @@ The standard library (`std.mini`) is currently very basic and includes modules l
 *   `io.mini`
 *   `math.mini`
 *   `channel.mini`
+*   `files.mini`
 
 ## Future Work
 

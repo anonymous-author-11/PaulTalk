@@ -2,10 +2,6 @@ import std;
 
 extern def clock() -> i64
 extern def getchar() -> i32
-extern def fopen(name : Buffer[i8], mode : Buffer[i8]) -> Buffer[i32]
-extern def fclose(file : Buffer[i32]) -> i32
-extern def fgetc(file : Buffer[i32]) -> i32
-extern def fprintf(file : Buffer[i32], text : Buffer[i8]) -> i32
 extern def system(string : Buffer[i8]) -> i32
 
 alias number = i32 | f64;
@@ -282,37 +278,8 @@ returns_five = () => { 5; };
 IO.print([1,2,3,4].map(times_two).reduce(0, add));
 [5,6,7,8].each((x : i32) => { IO.print(x); });
 
-def i32toi8(x : i32) -> i8 {
-    i = 0;
-    sum : i8 = 0;
-    one : i8 = 1;
-    while i < x {
-        sum = sum + one;
-        i = i + 1;
-    }
-    return sum;
-}
-
-def read_file(file_name : String) -> String {
-    content = "";
-    file = fopen(file_name.c_string(), "r".c_string());
-    while true {
-        int = fgetc(file);
-        if int == -1 { break; }
-        content.append(i32toi8(int));
-    }
-    fclose(file);
-    return content;
-}
-
-def write_file(file_name : String, text: String) {
-    file = fopen(file_name.c_string(), "w".c_string());
-    fprintf(file, text.c_string());
-    fclose(file);
-}
-
-write_file("bigtings.txt", "this\nis how\nwe do\nit");
-IO.print(read_file("bigtings.txt"));
+FileSystem.write_file("bigtings.txt", "this\nis how\nwe do\nit");
+IO.print(FileSystem.read_file("bigtings.txt"));
 
 //system("dir".c_string());
 

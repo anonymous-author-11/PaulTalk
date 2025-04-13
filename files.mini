@@ -1,0 +1,115 @@
+
+import core;
+import io;
+
+extern def fopen(name : Buffer[i8], mode : Buffer[i8]) -> Buffer[i32]
+extern def fprintf(file : Buffer[i32], text : Buffer[i8]) -> i32
+extern def fclose(file : Buffer[i32]) -> i32
+extern def fgetc(file : Buffer[i32]) -> i32
+extern def ferror(file : Buffer[i32]) -> i32
+
+// don't worry, this compiles down to umax + trunci
+// obviously once we implement good casting this will be unecessary
+def i32toi8(x : i32) -> i8 {
+    i = 0;
+    sum : i8 = 0;
+    one : i8 = 1;
+    while i < x {
+        sum = sum + one;
+        i = i + 1;
+    }
+    return sum;
+}
+
+class FileSystemError extends Exception {}
+
+class File {
+	@name : String
+	@mode : String
+	@handle : Buffer[i32]
+	@open : Bool
+
+	def init(@name : String, @mode : String) {
+		@handle = fopen(@name.c_string(), @mode.c_string());
+		@open = true;
+	}
+	def close() yields FileSystemError {
+		if not @open { return; }
+		int = fclose(@handle);
+		@open = false;
+		if int == -1 { yield(FileSystemError.new()); }
+	}
+	def reopen() {
+		if @open { return; }
+		@handle = fopen(@name.c_string(), @mode.c_string());
+		@open = true;
+	}
+	def get_byte() -> i8 | Nil yields FileSystemError {
+		if not @open { return nil; }
+		int = fgetc(@handle);
+    	if int == -1 {
+    		if ferror(@handle) != 0 { yield(FileSystemError.new()); }
+    		return nil;
+    	}
+    	return i32toi8(int);
+	}
+	def write(text : String) -> i32 yields FileSystemError {
+		if not @open { return -1; }
+		int = fprintf(@handle, text.c_string());
+		if int < 0 { yield(FileSystemError.new()); }
+		return int;
+	}
+	def mode=(@mode : String) yields FileSystemError {
+		if not @open { return; }
+		int = fclose(@handle);
+		if int == -1 { yield(FileSystemError.new()); }
+		@handle = fopen(@name.c_string(), @mode.c_string());
+	}
+}
+
+class FileProcessor[T] {
+	abstract def process(file : File) -> T yields FileSystemError {
+	}
+}
+
+class FileReader extends FileProcessor[String] {
+	def init() {}
+	def process(file : File) -> String {
+		content = "";
+		byte = file.get_byte();
+		while byte is i8 {
+			content.append(byte);
+			byte = file.get_byte();
+		}
+	    return content;
+	}
+}
+
+class FileWriter extends FileProcessor[i32] {
+	@text : String
+	def init(@text : String) {}
+	def process(file : File) -> i32 {
+		return file.write(@text);
+	}
+}
+
+class FileSystem {
+	def Self.process_file[T](file_name : String, mode: String, processor: FileProcessor[T]) -> T yields FileSystemError {
+		file = File.new(file_name, mode);
+		result = processor.process(file);
+		file.close();
+		return result;
+	}
+	def Self.process_file[T](file_name : String, mode: String, processor: (File) -> T) -> T yields FileSystemError {
+		file = File.new(file_name, mode);
+		result = processor.call(file);
+		file.close();
+		return result;
+	}
+	def Self.read_file(file_name : String) -> String yields FileSystemError {
+		return FileSystem.process_file(file_name, "r", FileReader.new());
+	}
+	def Self.write_file(file_name : String, text : String) yields FileSystemError {
+		FileSystem.process_file(file_name, "w", FileWriter.new(text));
+	}
+}

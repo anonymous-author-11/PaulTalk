@@ -353,6 +353,7 @@ DONE:
 
 TODO:
 
+- Special case "if Buffer is Nil" to check for nullptr
 - Better error for incorrectly parameterized reciever
 - Rewrite the standard library with generics
 - Implement Records
