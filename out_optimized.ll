@@ -1,7 +1,7 @@
 ; ModuleID = 'out_reg2mem.ll'
 source_filename = "llvm-link"
 
-@_parameterization_Int32_or_Float64 = linkonce_odr constant [4 x ptr] [ptr @union_typ, ptr @_parameterization_Int32, ptr @_parameterization_Float64, ptr null]
+@_parameterization_Float64_or_Int32 = linkonce_odr constant [4 x ptr] [ptr @union_typ, ptr @_parameterization_Float64, ptr @_parameterization_Int32, ptr null]
 @_parameterization_Int32 = linkonce_odr constant [2 x ptr] [ptr @Int32, ptr null]
 @_parameterization_Tuple_Ptrf64._Ptrf64._Ptrf64._Ptrf64_ = linkonce_odr constant [6 x ptr] [ptr @tuple_typ, ptr @_parameterization_Ptrf64, ptr @_parameterization_Ptrf64, ptr @_parameterization_Ptrf64, ptr @_parameterization_Ptrf64, ptr null]
 @_parameterization_Float64 = linkonce_odr constant [2 x ptr] [ptr @Float64, ptr null]
@@ -17,7 +17,7 @@ source_filename = "llvm-link"
 @Float64 = constant { [3 x i64], [7 x ptr], [18 x ptr] } { [3 x i64] [i64 8748823673944961442, i64 4611686018427388081, i64 7], [7 x ptr] [ptr @subtype_test, ptr @Float64_hashtbl, ptr @Float64_offset_tbl, ptr @_data_size_Float64, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [18 x ptr] [ptr @Float64_field_value, ptr @Float64_field_Float64_0, ptr @Float64_field_Float64_1, ptr @Float64_B_init_valuePtrf64, ptr @Float64_B_value_, ptr @Float64_B__ADD_otherInt32__ADD_otherFloat64, ptr @Float64_init_valuePtrf64, ptr @Float64_value_, ptr @Float64__ADD_otherInt32, ptr @Float64__ADD_otherFloat64, ptr @Float64_field_Float64_0, ptr @Float64_field_Float64_1, ptr @Float64_B__ADD_otherInt32__ADD_otherFloat64, ptr @Float64_init_valuePtrf64, ptr @Float64_field_Float64_0, ptr @Float64_field_Float64_1, ptr @Float64_B__ADD_otherInt32__ADD_otherFloat64, ptr @Float64_init_valuePtrf64] }
 @Int32_hashtbl = constant [8 x ptr] [ptr @Object, ptr @any_typ, ptr null, ptr @Addable, ptr null, ptr null, ptr @Int32, ptr null]
 @Int32_offset_tbl = constant [8 x i32] [i32 23, i32 10, i32 0, i32 19, i32 0, i32 0, i32 10, i32 0]
-@Int32 = constant { [3 x i64], [7 x ptr], [17 x ptr] } { [3 x i64] [i64 -3157560240565274503, i64 4611686018427388081, i64 7], [7 x ptr] [ptr @subtype_test, ptr @Int32_hashtbl, ptr @Int32_offset_tbl, ptr @_data_size_Int32, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [17 x ptr] [ptr @Int32_field_value, ptr @Int32_field_Int32_0, ptr @Int32_B_init_valuePtri32, ptr @Int32_B_value_, ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32, ptr @Int32_init_valuePtri32, ptr @Int32_value_, ptr @Int32__ADD_otherFloat64, ptr @Int32__ADD_otherInt32, ptr @Int32_field_Int32_0, ptr @Int32_field_Int32_0, ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32, ptr @Int32_init_valuePtri32, ptr @Int32_field_Int32_0, ptr @Int32_field_Int32_0, ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32, ptr @Int32_init_valuePtri32] }
+@Int32 = constant { [3 x i64], [7 x ptr], [17 x ptr] } { [3 x i64] [i64 -3157560240565274503, i64 4611686018427388081, i64 7], [7 x ptr] [ptr @subtype_test, ptr @Int32_hashtbl, ptr @Int32_offset_tbl, ptr @_data_size_Int32, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [17 x ptr] [ptr @Int32_field_value, ptr @Int32_field_Int32_0, ptr @Int32_B_init_valuePtri32, ptr @Int32_B_value_, ptr @Int32_B__ADD_otherInt32__ADD_otherFloat64, ptr @Int32_init_valuePtri32, ptr @Int32_value_, ptr @Int32__ADD_otherInt32, ptr @Int32__ADD_otherFloat64, ptr @Int32_field_Int32_0, ptr @Int32_field_Int32_0, ptr @Int32_B__ADD_otherInt32__ADD_otherFloat64, ptr @Int32_init_valuePtri32, ptr @Int32_field_Int32_0, ptr @Int32_field_Int32_0, ptr @Int32_B__ADD_otherInt32__ADD_otherFloat64, ptr @Int32_init_valuePtri32] }
 @Holder_hashtbl = constant [4 x ptr] [ptr @Object, ptr @any_typ, ptr @Holder, ptr null]
 @Holder_offset_tbl = constant [4 x i32] [i32 18, i32 10, i32 10, i32 0]
 @Holder = constant { [3 x i64], [7 x ptr], [8 x ptr] } { [3 x i64] [i64 -261997465778736657, i64 4611686018427388081, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Holder_hashtbl, ptr @Holder_offset_tbl, ptr @_data_size_Holder, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [8 x ptr] [ptr @Holder_field_Holder_0, ptr @Holder_field_held, ptr @Holder_B_init_heldT, ptr @Holder_B_value_, ptr @Holder_B__set_value_xT, ptr @Holder_init_heldT, ptr @Holder_value_, ptr @Holder__set_value_xT] }
@@ -384,7 +384,7 @@ define { i64, i64 } @_data_size_Float64(ptr nocapture nofree readnone %0) #0 {
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
 define noundef nonnull align 8 dereferenceable(32) ptr @Float64_field_Float64_0(ptr nocapture nofree readnone %0) #0 {
-  ret ptr @_parameterization_Int32_or_Float64
+  ret ptr @_parameterization_Float64_or_Int32
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
@@ -423,12 +423,12 @@ define ptr @Float64_B__ADD_otherInt32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %
   %9 = load i64, ptr %5, align 4
   %10 = load ptr, ptr %6, align 8
   %11 = load ptr, ptr %7, align 8
-  %result.i = tail call i1 %10(i64 %9, i64 %8, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr readonly %11) #5
-  %result.i3 = tail call i1 %10(i64 %9, i64 %8, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr readonly %11) #5
+  %result.i = tail call i1 %10(i64 %9, i64 %8, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr readonly %11) #5
+  %result.i3 = tail call i1 %10(i64 %9, i64 %8, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr readonly %11) #5
   %not.result.i = xor i1 %result.i, true
   %.reg2mem5.0 = select i1 %not.result.i, i1 true, i1 %result.i3
   %12 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %13 = select i1 %.reg2mem5.0, i64 9, i64 8
+  %13 = select i1 %.reg2mem5.0, i64 8, i64 9
   %14 = getelementptr [18 x ptr], ptr %12, i64 0, i64 %13
   %15 = getelementptr i8, ptr %14, i64 80
   %16 = load ptr, ptr %15, align 8
@@ -635,7 +635,7 @@ define { i64, i64 } @_data_size_Int32(ptr nocapture nofree readnone %0) #0 {
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
 define noundef nonnull align 8 dereferenceable(32) ptr @Int32_field_Int32_0(ptr nocapture nofree readnone %0) #0 {
-  ret ptr @_parameterization_Int32_or_Float64
+  ret ptr @_parameterization_Float64_or_Int32
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
@@ -657,7 +657,7 @@ define ptr @Int32_B_value_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #
 }
 
 ; Function Attrs: mustprogress nofree nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #9 {
+define ptr @Int32_B__ADD_otherInt32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #9 {
 ._crit_edge:
   %2 = tail call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #34
   %3 = load ptr, ptr %1, align 8
@@ -674,7 +674,7 @@ define ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0,
   %not.result.i = xor i1 %result.i, true
   %.reg2mem5.0 = select i1 %not.result.i, i1 true, i1 %result.i3
   %12 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %13 = select i1 %.reg2mem5.0, i64 7, i64 8
+  %13 = select i1 %.reg2mem5.0, i64 8, i64 7
   %14 = getelementptr [17 x ptr], ptr %12, i64 0, i64 %13
   %15 = getelementptr i8, ptr %14, i64 80
   %16 = load ptr, ptr %15, align 8
@@ -733,7 +733,7 @@ define i32 @Int32_value_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, p
 }
 
 ; Function Attrs: nounwind
-define { ptr, i160 } @Int32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, i160 } %3) #10 {
+define { ptr, i160 } @Int32__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, i160 } %3) #10 {
   %5 = alloca [0 x ptr], align 8
   %.fca.0.extract8 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %.fca.1.extract9 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
@@ -762,83 +762,12 @@ define { ptr, i160 } @Int32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %hash_coef.i.i17 = load i64, ptr %hash_coef_ptr.i.i14, align 4, !noalias !34
   %tbl_size.i.i18 = load i64, ptr %tbl_size_ptr.i.i15, align 4, !noalias !34
   %offset_tbl.i.i19 = load ptr, ptr %offset_tbl_ptr.i.i16, align 8, !noalias !34
-  %product.i.i.i20 = mul i64 %hash_coef.i.i17, 8748823673944961442
-  %shifted.i.i.i21 = lshr i64 %product.i.i.i20, 32
-  %xored.i.i.i22 = xor i64 %shifted.i.i.i21, %product.i.i.i20
-  %hash.i.i.i23 = and i64 %xored.i.i.i22, %tbl_size.i.i18
-  %offset_ptr.i.i24 = getelementptr i32, ptr %offset_tbl.i.i19, i64 %hash.i.i.i23
-  %offset.i.i25 = load i32, ptr %offset_ptr.i.i24, align 4, !noalias !34
-  %8 = tail call ptr @llvm.invariant.start.p0(i64 noundef 136, ptr nocapture nofree noundef %.fca.0.extract8) #34
-  %9 = sext i32 %offset.i.i to i64
-  %10 = getelementptr ptr, ptr %.fca.0.extract8, i64 %9
-  %11 = load ptr, ptr %10, align 8
-  %12 = load ptr, ptr %11, align 8
-  %13 = tail call i32 %12(ptr %.fca.1.extract9) #37
-  %14 = sitofp i32 %13 to double
-  %15 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
-  %16 = insertvalue { ptr, ptr, ptr, i32 } %15, ptr %6, 1
-  %17 = insertvalue { ptr, ptr, ptr, i32 } %16, ptr %7, 2
-  %18 = insertvalue { ptr, ptr, ptr, i32 } %17, i32 %offset.i.i25, 3
-  %19 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %5) #38
-  %20 = tail call ptr @llvm.invariant.start.p0(i64 noundef 144, ptr nocapture nofree noundef %.fca.0.extract) #38
-  %21 = sext i32 %offset.i.i25 to i64
-  %22 = getelementptr ptr, ptr %.fca.0.extract, i64 %21
-  %23 = getelementptr i8, ptr %22, i64 32
-  %24 = load ptr, ptr %23, align 8
-  %result.i = call ptr %24({ ptr, ptr, ptr, i32 } %18, ptr nocapture nofree noundef nonnull readonly %5) #7
-  %25 = call double %result.i({ ptr, ptr, ptr, i32 } %18, { ptr, ptr, ptr, i32 } %18, ptr nonnull align 8 %5) #10
-  %result.i28 = call noalias dereferenceable_or_null(8) ptr @bump_malloc_inner(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #35
-  %26 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %5)
-  %27 = call ptr @llvm.invariant.start.p0(i64 noundef 144, ptr nocapture nofree noundef %.fca.0.extract)
-  %28 = load ptr, ptr %23, align 8
-  %result.i29 = call ptr %28({ ptr, ptr, ptr, i32 } %18, ptr nocapture nofree noundef nonnull readonly %5) #7
-  %29 = call double %result.i29({ ptr, ptr, ptr, i32 } %18, { ptr, ptr, ptr, i32 } %18, ptr nonnull align 8 %5) #10
-  %30 = fadd double %29, %14
-  %31 = call ptr @llvm.invariant.start.p0(i64 noundef 144, ptr nocapture nofree noundef nonnull @Float64) #34
-  store double %30, ptr %result.i28, align 8
-  %32 = ptrtoint ptr %result.i28 to i64
-  %.sroa.3.8.insert.ext = zext i64 %32 to i160
-  %.sroa.3.8.insert.insert = or disjoint i160 %.sroa.3.8.insert.ext, 3402823669209384634633746074317682114560
-  %33 = insertvalue { ptr, i160 } { ptr @Float64, i160 undef }, i160 %.sroa.3.8.insert.insert, 1
-  ret { ptr, i160 } %33
-}
-
-; Function Attrs: nounwind
-define { ptr, i160 } @Int32__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, i160 } %3) #10 {
-  %5 = alloca [0 x ptr], align 8
-  %.fca.0.extract8 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract9 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %hash_coef_ptr.i.i = getelementptr i8, ptr %.fca.0.extract8, i64 8
-  %tbl_size_ptr.i.i = getelementptr i8, ptr %.fca.0.extract8, i64 16
-  %offset_tbl_ptr.i.i = getelementptr i8, ptr %.fca.0.extract8, i64 40
-  %hash_coef.i.i = load i64, ptr %hash_coef_ptr.i.i, align 4, !noalias !37
-  %tbl_size.i.i = load i64, ptr %tbl_size_ptr.i.i, align 4, !noalias !37
-  %offset_tbl.i.i = load ptr, ptr %offset_tbl_ptr.i.i, align 8, !noalias !37
-  %product.i.i.i = mul i64 %hash_coef.i.i, -3157560240565274503
-  %shifted.i.i.i = lshr i64 %product.i.i.i, 32
-  %xored.i.i.i = xor i64 %shifted.i.i.i, %product.i.i.i
-  %hash.i.i.i = and i64 %xored.i.i.i, %tbl_size.i.i
-  %offset_ptr.i.i = getelementptr i32, ptr %offset_tbl.i.i, i64 %hash.i.i.i
-  %offset.i.i = load i32, ptr %offset_ptr.i.i, align 4, !noalias !37
-  %.fca.0.extract = extractvalue { ptr, i160 } %3, 0
-  %.fca.1.extract = extractvalue { ptr, i160 } %3, 1
-  %.sroa.4.8.extract.trunc = trunc i160 %.fca.1.extract to i64
-  %6 = inttoptr i64 %.sroa.4.8.extract.trunc to ptr
-  %.sroa.7.8.extract.shift = lshr i160 %.fca.1.extract, 64
-  %.sroa.7.8.extract.trunc = trunc i160 %.sroa.7.8.extract.shift to i64
-  %7 = inttoptr i64 %.sroa.7.8.extract.trunc to ptr
-  %hash_coef_ptr.i.i14 = getelementptr i8, ptr %.fca.0.extract, i64 8
-  %tbl_size_ptr.i.i15 = getelementptr i8, ptr %.fca.0.extract, i64 16
-  %offset_tbl_ptr.i.i16 = getelementptr i8, ptr %.fca.0.extract, i64 40
-  %hash_coef.i.i17 = load i64, ptr %hash_coef_ptr.i.i14, align 4, !noalias !40
-  %tbl_size.i.i18 = load i64, ptr %tbl_size_ptr.i.i15, align 4, !noalias !40
-  %offset_tbl.i.i19 = load ptr, ptr %offset_tbl_ptr.i.i16, align 8, !noalias !40
   %product.i.i.i20 = mul i64 %hash_coef.i.i17, -3157560240565274503
   %shifted.i.i.i21 = lshr i64 %product.i.i.i20, 32
   %xored.i.i.i22 = xor i64 %shifted.i.i.i21, %product.i.i.i20
   %hash.i.i.i23 = and i64 %xored.i.i.i22, %tbl_size.i.i18
   %offset_ptr.i.i24 = getelementptr i32, ptr %offset_tbl.i.i19, i64 %hash.i.i.i23
-  %offset.i.i25 = load i32, ptr %offset_ptr.i.i24, align 4, !noalias !40
+  %offset.i.i25 = load i32, ptr %offset_ptr.i.i24, align 4, !noalias !34
   %8 = tail call ptr @llvm.invariant.start.p0(i64 noundef 136, ptr nocapture nofree noundef %.fca.0.extract8) #34
   %9 = sext i32 %offset.i.i to i64
   %10 = getelementptr ptr, ptr %.fca.0.extract8, i64 %9
@@ -875,6 +804,77 @@ define { ptr, i160 } @Int32__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %.sroa.3.8.insert.insert = or disjoint i160 %.sroa.3.8.insert.ext, 3402823669209384634633746074317682114560
   %36 = insertvalue { ptr, i160 } { ptr @Int32, i160 undef }, i160 %.sroa.3.8.insert.insert, 1
   ret { ptr, i160 } %36
+}
+
+; Function Attrs: nounwind
+define { ptr, i160 } @Int32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, i160 } %3) #10 {
+  %5 = alloca [0 x ptr], align 8
+  %.fca.0.extract8 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract9 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %hash_coef_ptr.i.i = getelementptr i8, ptr %.fca.0.extract8, i64 8
+  %tbl_size_ptr.i.i = getelementptr i8, ptr %.fca.0.extract8, i64 16
+  %offset_tbl_ptr.i.i = getelementptr i8, ptr %.fca.0.extract8, i64 40
+  %hash_coef.i.i = load i64, ptr %hash_coef_ptr.i.i, align 4, !noalias !37
+  %tbl_size.i.i = load i64, ptr %tbl_size_ptr.i.i, align 4, !noalias !37
+  %offset_tbl.i.i = load ptr, ptr %offset_tbl_ptr.i.i, align 8, !noalias !37
+  %product.i.i.i = mul i64 %hash_coef.i.i, -3157560240565274503
+  %shifted.i.i.i = lshr i64 %product.i.i.i, 32
+  %xored.i.i.i = xor i64 %shifted.i.i.i, %product.i.i.i
+  %hash.i.i.i = and i64 %xored.i.i.i, %tbl_size.i.i
+  %offset_ptr.i.i = getelementptr i32, ptr %offset_tbl.i.i, i64 %hash.i.i.i
+  %offset.i.i = load i32, ptr %offset_ptr.i.i, align 4, !noalias !37
+  %.fca.0.extract = extractvalue { ptr, i160 } %3, 0
+  %.fca.1.extract = extractvalue { ptr, i160 } %3, 1
+  %.sroa.4.8.extract.trunc = trunc i160 %.fca.1.extract to i64
+  %6 = inttoptr i64 %.sroa.4.8.extract.trunc to ptr
+  %.sroa.7.8.extract.shift = lshr i160 %.fca.1.extract, 64
+  %.sroa.7.8.extract.trunc = trunc i160 %.sroa.7.8.extract.shift to i64
+  %7 = inttoptr i64 %.sroa.7.8.extract.trunc to ptr
+  %hash_coef_ptr.i.i14 = getelementptr i8, ptr %.fca.0.extract, i64 8
+  %tbl_size_ptr.i.i15 = getelementptr i8, ptr %.fca.0.extract, i64 16
+  %offset_tbl_ptr.i.i16 = getelementptr i8, ptr %.fca.0.extract, i64 40
+  %hash_coef.i.i17 = load i64, ptr %hash_coef_ptr.i.i14, align 4, !noalias !40
+  %tbl_size.i.i18 = load i64, ptr %tbl_size_ptr.i.i15, align 4, !noalias !40
+  %offset_tbl.i.i19 = load ptr, ptr %offset_tbl_ptr.i.i16, align 8, !noalias !40
+  %product.i.i.i20 = mul i64 %hash_coef.i.i17, 8748823673944961442
+  %shifted.i.i.i21 = lshr i64 %product.i.i.i20, 32
+  %xored.i.i.i22 = xor i64 %shifted.i.i.i21, %product.i.i.i20
+  %hash.i.i.i23 = and i64 %xored.i.i.i22, %tbl_size.i.i18
+  %offset_ptr.i.i24 = getelementptr i32, ptr %offset_tbl.i.i19, i64 %hash.i.i.i23
+  %offset.i.i25 = load i32, ptr %offset_ptr.i.i24, align 4, !noalias !40
+  %8 = tail call ptr @llvm.invariant.start.p0(i64 noundef 136, ptr nocapture nofree noundef %.fca.0.extract8) #34
+  %9 = sext i32 %offset.i.i to i64
+  %10 = getelementptr ptr, ptr %.fca.0.extract8, i64 %9
+  %11 = load ptr, ptr %10, align 8
+  %12 = load ptr, ptr %11, align 8
+  %13 = tail call i32 %12(ptr %.fca.1.extract9) #37
+  %14 = sitofp i32 %13 to double
+  %15 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
+  %16 = insertvalue { ptr, ptr, ptr, i32 } %15, ptr %6, 1
+  %17 = insertvalue { ptr, ptr, ptr, i32 } %16, ptr %7, 2
+  %18 = insertvalue { ptr, ptr, ptr, i32 } %17, i32 %offset.i.i25, 3
+  %19 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %5) #38
+  %20 = tail call ptr @llvm.invariant.start.p0(i64 noundef 144, ptr nocapture nofree noundef %.fca.0.extract) #38
+  %21 = sext i32 %offset.i.i25 to i64
+  %22 = getelementptr ptr, ptr %.fca.0.extract, i64 %21
+  %23 = getelementptr i8, ptr %22, i64 32
+  %24 = load ptr, ptr %23, align 8
+  %result.i = call ptr %24({ ptr, ptr, ptr, i32 } %18, ptr nocapture nofree noundef nonnull readonly %5) #7
+  %25 = call double %result.i({ ptr, ptr, ptr, i32 } %18, { ptr, ptr, ptr, i32 } %18, ptr nonnull align 8 %5) #10
+  %result.i28 = call noalias dereferenceable_or_null(8) ptr @bump_malloc_inner(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #35
+  %26 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %5)
+  %27 = call ptr @llvm.invariant.start.p0(i64 noundef 144, ptr nocapture nofree noundef %.fca.0.extract)
+  %28 = load ptr, ptr %23, align 8
+  %result.i29 = call ptr %28({ ptr, ptr, ptr, i32 } %18, ptr nocapture nofree noundef nonnull readonly %5) #7
+  %29 = call double %result.i29({ ptr, ptr, ptr, i32 } %18, { ptr, ptr, ptr, i32 } %18, ptr nonnull align 8 %5) #10
+  %30 = fadd double %29, %14
+  %31 = call ptr @llvm.invariant.start.p0(i64 noundef 144, ptr nocapture nofree noundef nonnull @Float64) #34
+  store double %30, ptr %result.i28, align 8
+  %32 = ptrtoint ptr %result.i28 to i64
+  %.sroa.3.8.insert.ext = zext i64 %32 to i160
+  %.sroa.3.8.insert.insert = or disjoint i160 %.sroa.3.8.insert.ext, 3402823669209384634633746074317682114560
+  %33 = insertvalue { ptr, i160 } { ptr @Float64, i160 undef }, i160 %.sroa.3.8.insert.insert, 1
+  ret { ptr, i160 } %33
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
@@ -1252,7 +1252,7 @@ IO_B__Self_print_xNil__Self_print_xPtri1__Self_print_xPtrf64__Self_print_xString
   ret void
 }
 
-define { ptr, i160 } @suouztipal(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) {
+define { ptr, i160 } @vmnaapzlkj(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
@@ -1261,7 +1261,7 @@ define { ptr, i160 } @suouztipal(ptr nest nocapture nofree noundef nonnull reado
   ret { ptr, i160 } %4
 }
 
-define { ptr, i160 } @cpevfoqxii(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) {
+define { ptr, i160 } @pagmscemdg(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call double %0(i32 %.sroa.1.8.extract.trunc)
@@ -1271,7 +1271,7 @@ define { ptr, i160 } @cpevfoqxii(ptr nest nocapture nofree noundef nonnull reado
   ret { ptr, i160 } %5
 }
 
-define { ptr, i160 } @djedfuwlun(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) {
+define { ptr, i160 } @lftcsyhcts(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
@@ -1280,7 +1280,7 @@ define { ptr, i160 } @djedfuwlun(ptr nest nocapture nofree noundef nonnull reado
   ret { ptr, i160 } %4
 }
 
-define { ptr, i160 } @pxexhzkagn(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define { ptr, i160 } @camznqrtnj(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %.fca.1.extract5 = extractvalue { ptr, i160 } %1, 1
   %.sroa.17.8.extract.trunc = trunc i160 %.fca.1.extract5 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -1292,30 +1292,30 @@ define { ptr, i160 } @pxexhzkagn(ptr nest nocapture nofree noundef nonnull reado
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define i32 @_functionliteral_irartpwwes(i32 %0, i32 %1) #0 {
+define i32 @_functionliteral_oefzmivxic(i32 %0, i32 %1) #0 {
   %3 = add i32 %1, %0
   ret i32 %3
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define range(i32 0, -1) i32 @_functionliteral_rxibqjugjf(i32 %0) #0 {
+define range(i32 0, -1) i32 @_functionliteral_tkqcgafnhq(i32 %0) #0 {
   %2 = shl i32 %0, 1
   ret i32 %2
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define double @_functionliteral_ozkryccoii(double %0) local_unnamed_addr #0 {
+define double @_functionliteral_afyyntnrsz(double %0) local_unnamed_addr #0 {
   %2 = fmul double %0, 2.000000e+00
   ret double %2
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define i32 @_functionliteral_mqhielauio(i32 returned %0) #0 {
+define i32 @_functionliteral_zfipfawuiy(i32 returned %0) #0 {
   ret i32 %0
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define nofpclass(nan inf nzero sub) double @_functionliteral_gakydhkxrq(i32 %0) #0 {
+define nofpclass(nan inf nzero sub) double @_functionliteral_pbfcoifbod(i32 %0) #0 {
   %2 = sitofp i32 %0 to double
   ret double %2
 }
@@ -1426,9 +1426,9 @@ IO_B__Self_print_xNil__Self_print_xPtri1__Self_print_xPtrf64__Self_print_xString
   %4 = getelementptr inbounds i8, ptr %result.i524, i64 24
   store double 4.000000e+00, ptr %4, align 8
   %5 = tail call ptr @llvm.invariant.start.p0(i64 noundef 1, ptr nocapture nofree noundef nonnull align 8 dereferenceable(32) %result.i524)
-  %result.i4.i2068 = tail call noalias dereferenceable_or_null(32) ptr @bump_malloc_inner(i64 noundef 32, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #35
-  tail call void @llvm.memcpy.inline.p0.p0.i64(ptr align 1 %result.i4.i2068, ptr nonnull align 8 %result.i524, i64 32, i1 false)
-  %6 = getelementptr i8, ptr %result.i4.i2068, i64 24
+  %result.i4.i2070 = tail call noalias dereferenceable_or_null(32) ptr @bump_malloc_inner(i64 noundef 32, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #35
+  tail call void @llvm.memcpy.inline.p0.p0.i64(ptr align 1 %result.i4.i2070, ptr nonnull align 8 %result.i524, i64 32, i1 false)
+  %6 = getelementptr i8, ptr %result.i4.i2070, i64 24
   %7 = load double, ptr %6, align 8
   %8 = tail call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @float_string, double %7) #18
   %9 = tail call ptr @llvm.invariant.start.p0(i64 noundef 160, ptr nocapture nofree noundef nonnull @FancyPair) #34
@@ -1437,26 +1437,26 @@ IO_B__Self_print_xNil__Self_print_xPtri1__Self_print_xPtrf64__Self_print_xString
   call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %oldProtect.i)
   %result.i640 = call i32 @VirtualProtect(ptr nofree %result.i639, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i) #26
   call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %oldProtect.i)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %result.i639, ptr noalias nofree noundef nonnull readnone @pxexhzkagn, ptr noalias nofree noundef nonnull readnone @_functionliteral_irartpwwes)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %result.i639, ptr noalias nofree noundef nonnull readnone @camznqrtnj, ptr noalias nofree noundef nonnull readnone @_functionliteral_oefzmivxic)
   %11 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %result.i639)
   %12 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 26) #18
   %result.i643 = call noalias dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #35
   call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %oldProtect.i644)
   %result.i645 = call i32 @VirtualProtect(ptr nofree %result.i643, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i644) #26
   call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %oldProtect.i644)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %result.i643, ptr noalias nofree noundef nonnull readnone @djedfuwlun, ptr noalias nofree noundef nonnull readnone @_functionliteral_rxibqjugjf)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %result.i643, ptr noalias nofree noundef nonnull readnone @lftcsyhcts, ptr noalias nofree noundef nonnull readnone @_functionliteral_tkqcgafnhq)
   %13 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %result.i643)
   %result.i676 = call noalias dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #35
   call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %oldProtect.i677)
   %result.i678 = call i32 @VirtualProtect(ptr nofree %result.i676, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i677) #26
   call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %oldProtect.i677)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %result.i676, ptr noalias nofree noundef nonnull readnone @cpevfoqxii, ptr noalias nofree noundef nonnull readnone @_functionliteral_gakydhkxrq)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %result.i676, ptr noalias nofree noundef nonnull readnone @pagmscemdg, ptr noalias nofree noundef nonnull readnone @_functionliteral_pbfcoifbod)
   %14 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %result.i676)
   %result.i680 = call noalias dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #35
   call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %oldProtect.i681)
   %result.i682 = call i32 @VirtualProtect(ptr nofree %result.i680, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i681) #26
   call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %oldProtect.i681)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %result.i680, ptr noalias nofree noundef nonnull readnone @suouztipal, ptr noalias nofree noundef nonnull readnone @_functionliteral_mqhielauio)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %result.i680, ptr noalias nofree noundef nonnull readnone @vmnaapzlkj, ptr noalias nofree noundef nonnull readnone @_functionliteral_zfipfawuiy)
   %15 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %result.i680)
   %16 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 55) #18
   %17 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @float_string, double 1.000000e+01) #18
@@ -1488,20 +1488,8 @@ IO_B__Self_print_xNil__Self_print_xPtri1__Self_print_xPtrf64__Self_print_xString
   %43 = call ptr @llvm.invariant.start.p0(i64 noundef 144, ptr nocapture nofree noundef nonnull @Float64) #34
   %44 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @float_string, double 1.220000e+02) #18
   %45 = call ptr @llvm.invariant.start.p0(i64 noundef 40, ptr nocapture nofree noundef nonnull @Temp) #34
-  %.fr = freeze { i64, i64 } { i64 32, i64 8 }
-  %46 = extractvalue { i64, i64 } %.fr, 0
-  %47 = extractvalue { i64, i64 } %.fr, 1
-  %48 = call i64 @llvm.umax.i64(i64 %47, i64 1)
-  %right_size.i = icmp eq i64 %46, 32
-  %spec.select.i = select i1 %right_size.i, i64 0, i64 8
-  %49 = add i64 %spec.select.i, %46
-  %50 = urem i64 %49, %48
-  %51 = icmp eq i64 %50, 0
-  %52 = sub i64 %48, %50
-  %53 = select i1 %51, i64 0, i64 %52
-  %54 = add i64 %53, %49
-  %55 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO) #34
-  %56 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(6) @i64_string, i64 %54) #18
+  %46 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO) #34
+  %47 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(6) @i64_string, i64 32) #18
   ret i32 0
 }
 
@@ -1864,7 +1852,7 @@ define { ptr, i160 } @_box_union_typ(ptr nocapture nofree readonly %0, ptr nocap
 
 .lr.ph.i:                                         ; preds = %2, %.lr.ph.i
   %.reg2mem20.010.reg2mem.0.i = phi i64 [ %15, %.lr.ph.i ], [ 1, %2 ]
-  %.reg2mem22.011.reg2mem.0.i = phi i64 [ %.fr.i, %.lr.ph.i ], [ 0, %2 ]
+  %.reg2mem22.011.reg2mem.0.i = phi i64 [ %21, %.lr.ph.i ], [ 0, %2 ]
   %.reg2mem14.0.i = phi i64 [ %22, %.lr.ph.i ], [ 1, %2 ]
   %.in.reg2mem.0.i = phi i64 [ %24, %.lr.ph.i ], [ %6, %2 ]
   %8 = inttoptr i64 %.in.reg2mem.0.i to ptr
@@ -1874,14 +1862,13 @@ define { ptr, i160 } @_box_union_typ(ptr nocapture nofree readonly %0, ptr nocap
   %12 = tail call { i64, i64 } %11(ptr nonnull align 8 %8) #10
   %13 = extractvalue { i64, i64 } %12, 0
   %14 = extractvalue { i64, i64 } %12, 1
-  %15 = tail call i64 @llvm.umax.i64(i64 %14, i64 %.reg2mem20.010.reg2mem.0.i)
+  %15 = tail call i64 @llvm.umax.i64(i64 noundef %14, i64 noundef %.reg2mem20.010.reg2mem.0.i)
   %16 = urem i64 %.reg2mem22.011.reg2mem.0.i, %14
   %17 = icmp eq i64 %16, 0
   %18 = sub i64 %14, %16
   %19 = select i1 %17, i64 0, i64 %18
   %20 = add i64 %13, %.reg2mem22.011.reg2mem.0.i
-  %21 = tail call i64 @llvm.umax.i64(i64 %20, i64 %19)
-  %.fr.i = freeze i64 %21
+  %21 = tail call i64 @llvm.umax.i64(i64 noundef %20, i64 noundef %19)
   %22 = add i64 %.reg2mem14.0.i, 1
   %23 = getelementptr ptr, ptr %1, i64 %22
   %24 = load i64, ptr %23, align 4
@@ -1889,17 +1876,17 @@ define { ptr, i160 } @_box_union_typ(ptr nocapture nofree readonly %0, ptr nocap
   br i1 %25, label %._crit_edge.i, label %.lr.ph.i
 
 ._crit_edge.i:                                    ; preds = %.lr.ph.i
-  %right_size.i = icmp eq i64 %.fr.i, 32
-  %spec.select.i = select i1 %right_size.i, i64 0, i64 8
-  %26 = add i64 %spec.select.i, %.fr.i
+  %right_size.i = icmp eq i64 %21, 32
+  %spec.select12.i = select i1 %right_size.i, i64 0, i64 8
+  %26 = add i64 %spec.select12.i, %21
   br label %_data_size_union_typ.exit
 
 _data_size_union_typ.exit:                        ; preds = %2, %._crit_edge.i
-  %.reg2mem20.0.lcssa.reg2mem.012.i = phi i64 [ 1, %2 ], [ %15, %._crit_edge.i ]
+  %.reg2mem20.0.lcssa.reg2mem.011.i = phi i64 [ 1, %2 ], [ %15, %._crit_edge.i ]
   %final_size.i = phi i64 [ 8, %2 ], [ %26, %._crit_edge.i ]
-  %27 = urem i64 %final_size.i, %.reg2mem20.0.lcssa.reg2mem.012.i
+  %27 = urem i64 %final_size.i, %.reg2mem20.0.lcssa.reg2mem.011.i
   %28 = icmp eq i64 %27, 0
-  %29 = sub i64 %.reg2mem20.0.lcssa.reg2mem.012.i, %27
+  %29 = sub i64 %.reg2mem20.0.lcssa.reg2mem.011.i, %27
   %30 = select i1 %28, i64 0, i64 %29
   %31 = add i64 %30, %final_size.i
   %32 = icmp eq i64 %31, 32
@@ -11594,7 +11581,7 @@ define { i64, i64 } @_data_size_union_typ(ptr nocapture nofree readonly align 4 
 
 .lr.ph:                                           ; preds = %1, %.lr.ph
   %.reg2mem20.010.reg2mem.0 = phi i64 [ %12, %.lr.ph ], [ 1, %1 ]
-  %.reg2mem22.011.reg2mem.0 = phi i64 [ %.fr, %.lr.ph ], [ 0, %1 ]
+  %.reg2mem22.011.reg2mem.0 = phi i64 [ %18, %.lr.ph ], [ 0, %1 ]
   %.reg2mem14.0 = phi i64 [ %19, %.lr.ph ], [ 1, %1 ]
   %.in.reg2mem.0 = phi i64 [ %21, %.lr.ph ], [ %3, %1 ]
   %5 = inttoptr i64 %.in.reg2mem.0 to ptr
@@ -11604,14 +11591,13 @@ define { i64, i64 } @_data_size_union_typ(ptr nocapture nofree readonly align 4 
   %9 = tail call { i64, i64 } %8(ptr nonnull align 8 %5)
   %10 = extractvalue { i64, i64 } %9, 0
   %11 = extractvalue { i64, i64 } %9, 1
-  %12 = tail call i64 @llvm.umax.i64(i64 %11, i64 %.reg2mem20.010.reg2mem.0)
+  %12 = tail call i64 @llvm.umax.i64(i64 noundef %11, i64 noundef %.reg2mem20.010.reg2mem.0)
   %13 = urem i64 %.reg2mem22.011.reg2mem.0, %11
   %14 = icmp eq i64 %13, 0
   %15 = sub i64 %11, %13
   %16 = select i1 %14, i64 0, i64 %15
   %17 = add i64 %10, %.reg2mem22.011.reg2mem.0
-  %18 = tail call i64 @llvm.umax.i64(i64 %17, i64 %16)
-  %.fr = freeze i64 %18
+  %18 = tail call i64 @llvm.umax.i64(i64 noundef %17, i64 noundef %16)
   %19 = add i64 %.reg2mem14.0, 1
   %20 = getelementptr ptr, ptr %0, i64 %19
   %21 = load i64, ptr %20, align 4
@@ -11619,21 +11605,21 @@ define { i64, i64 } @_data_size_union_typ(ptr nocapture nofree readonly align 4 
   br i1 %22, label %._crit_edge, label %.lr.ph
 
 ._crit_edge:                                      ; preds = %.lr.ph
-  %right_size = icmp eq i64 %.fr, 32
-  %spec.select = select i1 %right_size, i64 0, i64 8
-  %23 = add i64 %spec.select, %.fr
+  %right_size = icmp eq i64 %18, 32
+  %spec.select12 = select i1 %right_size, i64 0, i64 8
+  %23 = add i64 %spec.select12, %18
   br label %._crit_edge.thread
 
 ._crit_edge.thread:                               ; preds = %._crit_edge, %1
-  %.reg2mem20.0.lcssa.reg2mem.012 = phi i64 [ 1, %1 ], [ %12, %._crit_edge ]
+  %.reg2mem20.0.lcssa.reg2mem.011 = phi i64 [ 1, %1 ], [ %12, %._crit_edge ]
   %final_size = phi i64 [ 8, %1 ], [ %23, %._crit_edge ]
-  %24 = urem i64 %final_size, %.reg2mem20.0.lcssa.reg2mem.012
+  %24 = urem i64 %final_size, %.reg2mem20.0.lcssa.reg2mem.011
   %25 = icmp eq i64 %24, 0
-  %26 = sub i64 %.reg2mem20.0.lcssa.reg2mem.012, %24
+  %26 = sub i64 %.reg2mem20.0.lcssa.reg2mem.011, %24
   %27 = select i1 %25, i64 0, i64 %26
   %28 = add i64 %27, %final_size
   %29 = insertvalue { i64, i64 } undef, i64 %28, 0
-  %30 = insertvalue { i64, i64 } %29, i64 %.reg2mem20.0.lcssa.reg2mem.012, 1
+  %30 = insertvalue { i64, i64 } %29, i64 %.reg2mem20.0.lcssa.reg2mem.011, 1
   ret { i64, i64 } %30
 }
 
@@ -11651,7 +11637,7 @@ define void @_unbox_union_typ({ ptr, i160 } %0, ptr nocapture nofree readonly al
 
 .lr.ph.i:                                         ; preds = %3, %.lr.ph.i
   %.reg2mem20.010.reg2mem.0.i = phi i64 [ %15, %.lr.ph.i ], [ 1, %3 ]
-  %.reg2mem22.011.reg2mem.0.i = phi i64 [ %.fr.i, %.lr.ph.i ], [ 0, %3 ]
+  %.reg2mem22.011.reg2mem.0.i = phi i64 [ %21, %.lr.ph.i ], [ 0, %3 ]
   %.reg2mem14.0.i = phi i64 [ %22, %.lr.ph.i ], [ 1, %3 ]
   %.in.reg2mem.0.i = phi i64 [ %24, %.lr.ph.i ], [ %6, %3 ]
   %8 = inttoptr i64 %.in.reg2mem.0.i to ptr
@@ -11661,14 +11647,13 @@ define void @_unbox_union_typ({ ptr, i160 } %0, ptr nocapture nofree readonly al
   %12 = tail call { i64, i64 } %11(ptr nonnull align 8 %8)
   %13 = extractvalue { i64, i64 } %12, 0
   %14 = extractvalue { i64, i64 } %12, 1
-  %15 = tail call i64 @llvm.umax.i64(i64 %14, i64 %.reg2mem20.010.reg2mem.0.i)
+  %15 = tail call i64 @llvm.umax.i64(i64 noundef %14, i64 noundef %.reg2mem20.010.reg2mem.0.i)
   %16 = urem i64 %.reg2mem22.011.reg2mem.0.i, %14
   %17 = icmp eq i64 %16, 0
   %18 = sub i64 %14, %16
   %19 = select i1 %17, i64 0, i64 %18
   %20 = add i64 %13, %.reg2mem22.011.reg2mem.0.i
-  %21 = tail call i64 @llvm.umax.i64(i64 %20, i64 %19)
-  %.fr.i = freeze i64 %21
+  %21 = tail call i64 @llvm.umax.i64(i64 noundef %20, i64 noundef %19)
   %22 = add i64 %.reg2mem14.0.i, 1
   %23 = getelementptr ptr, ptr %1, i64 %22
   %24 = load i64, ptr %23, align 4
@@ -11676,19 +11661,19 @@ define void @_unbox_union_typ({ ptr, i160 } %0, ptr nocapture nofree readonly al
   br i1 %25, label %._crit_edge.i, label %.lr.ph.i
 
 ._crit_edge.i:                                    ; preds = %.lr.ph.i
-  %right_size.i = icmp eq i64 %.fr.i, 32
-  %spec.select.i = select i1 %right_size.i, i64 0, i64 8
-  %26 = add i64 %spec.select.i, %.fr.i
+  %right_size.i = icmp eq i64 %21, 32
+  %spec.select12.i = select i1 %right_size.i, i64 0, i64 8
+  %26 = add i64 %spec.select12.i, %21
   br label %_data_size_union_typ.exit
 
 _data_size_union_typ.exit:                        ; preds = %3, %._crit_edge.i
-  %.reg2mem20.0.lcssa.reg2mem.012.i = phi i64 [ 1, %3 ], [ %15, %._crit_edge.i ]
+  %.reg2mem20.0.lcssa.reg2mem.011.i = phi i64 [ 1, %3 ], [ %15, %._crit_edge.i ]
   %final_size.i = phi i64 [ 8, %3 ], [ %26, %._crit_edge.i ]
   %27 = trunc i160 %.fca.1.extract to i64
   %28 = inttoptr i64 %27 to ptr
-  %29 = urem i64 %final_size.i, %.reg2mem20.0.lcssa.reg2mem.012.i
+  %29 = urem i64 %final_size.i, %.reg2mem20.0.lcssa.reg2mem.011.i
   %30 = icmp eq i64 %29, 0
-  %31 = sub i64 %.reg2mem20.0.lcssa.reg2mem.012.i, %29
+  %31 = sub i64 %.reg2mem20.0.lcssa.reg2mem.011.i, %29
   %32 = select i1 %30, i64 0, i64 %31
   %33 = add i64 %32, %final_size.i
   %34 = icmp slt i64 %33, 17

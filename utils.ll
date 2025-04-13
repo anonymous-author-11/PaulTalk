@@ -152,13 +152,13 @@ define { i64, i64 } @_data_size_union_typ(ptr %0) {
   %10 = tail call { i64, i64 } %9(ptr nonnull %6)
   %11 = extractvalue { i64, i64 } %10, 0
   %12 = extractvalue { i64, i64 } %10, 1
-  %13 = tail call i64 @llvm.umax.i64(i64 %12, i64 %.reg2mem20.010)
+  %13 = tail call i64 @llvm.umax.i64(i64 noundef %12, i64 noundef %.reg2mem20.010)
   %14 = urem i64 %.reg2mem22.011, %12
   %15 = icmp eq i64 %14, 0
   %16 = sub i64 %12, %14
   %17 = select i1 %15, i64 0, i64 %16
   %18 = add i64 %11, %.reg2mem22.011
-  %19 = tail call i64 @llvm.umax.i64(i64 %18, i64 %17)
+  %19 = tail call i64 @llvm.umax.i64(i64 noundef %18, i64 noundef %17)
   %20 = add i64 %5, 1
   %21 = getelementptr ptr, ptr %0, i64 %20
   %22 = load i64, ptr %21, align 4
