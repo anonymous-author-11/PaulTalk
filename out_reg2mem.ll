@@ -2245,7 +2245,7 @@ define void @Temp_print_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, p
   ret void
 }
 
-define { ptr, i160 } @wmxhqtijmt(ptr nest %0, { ptr, i160 } %1) {
+define { ptr, i160 } @suouztipal(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   %"reg2mem alloca point" = bitcast i32 0 to i32
   store { ptr, i160 } %1, ptr %3, align 8
@@ -2269,7 +2269,7 @@ define { ptr, i160 } @wmxhqtijmt(ptr nest %0, { ptr, i160 } %1) {
   ret { ptr, i160 } %16
 }
 
-define { ptr, i160 } @wzqyanzdtn(ptr nest %0, { ptr, i160 } %1) {
+define { ptr, i160 } @cpevfoqxii(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   %"reg2mem alloca point" = bitcast i32 0 to i32
   store { ptr, i160 } %1, ptr %3, align 8
@@ -2293,7 +2293,7 @@ define { ptr, i160 } @wzqyanzdtn(ptr nest %0, { ptr, i160 } %1) {
   ret { ptr, i160 } %16
 }
 
-define { ptr, i160 } @qavashrnzl(ptr nest %0, { ptr, i160 } %1) {
+define { ptr, i160 } @djedfuwlun(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   %"reg2mem alloca point" = bitcast i32 0 to i32
   store { ptr, i160 } %1, ptr %3, align 8
@@ -2317,7 +2317,7 @@ define { ptr, i160 } @qavashrnzl(ptr nest %0, { ptr, i160 } %1) {
   ret { ptr, i160 } %16
 }
 
-define { ptr, i160 } @uydkitgkvt(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define { ptr, i160 } @pxexhzkagn(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   %"reg2mem alloca point" = bitcast i32 0 to i32
   store { ptr, i160 } %1, ptr %4, align 8
@@ -2348,7 +2348,7 @@ define { ptr, i160 } @uydkitgkvt(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2
   ret { ptr, i160 } %22
 }
 
-define i32 @_functionliteral_ctkfswqqlk(i32 %0, i32 %1) {
+define i32 @_functionliteral_irartpwwes(i32 %0, i32 %1) {
   %3 = alloca i32, align 4
   %"reg2mem alloca point" = bitcast i32 0 to i32
   store i32 %0, ptr %3, align 4
@@ -2363,7 +2363,7 @@ define i32 @_functionliteral_ctkfswqqlk(i32 %0, i32 %1) {
   ret i32 %9
 }
 
-define i32 @_functionliteral_olgvxjwzlz(i32 %0) {
+define i32 @_functionliteral_rxibqjugjf(i32 %0) {
   %2 = alloca i32, align 4
   %"reg2mem alloca point" = bitcast i32 0 to i32
   store i32 %0, ptr %2, align 4
@@ -2378,7 +2378,7 @@ define i32 @_functionliteral_olgvxjwzlz(i32 %0) {
   ret i32 %8
 }
 
-define double @_functionliteral_izwnachhwi(double %0) {
+define double @_functionliteral_ozkryccoii(double %0) {
   %2 = alloca double, align 8
   %"reg2mem alloca point" = bitcast i32 0 to i32
   store double %0, ptr %2, align 8
@@ -2393,7 +2393,7 @@ define double @_functionliteral_izwnachhwi(double %0) {
   ret double %8
 }
 
-define i32 @_functionliteral_nmppseexex(i32 %0) {
+define i32 @_functionliteral_mqhielauio(i32 %0) {
   %2 = alloca i32, align 4
   %"reg2mem alloca point" = bitcast i32 0 to i32
   store i32 %0, ptr %2, align 4
@@ -2401,7 +2401,7 @@ define i32 @_functionliteral_nmppseexex(i32 %0) {
   ret i32 %3
 }
 
-define double @_functionliteral_cmhpuofokq(i32 %0) {
+define double @_functionliteral_gakydhkxrq(i32 %0) {
   %2 = alloca i32, align 4
   %"reg2mem alloca point" = bitcast i32 0 to i32
   store i32 %0, ptr %2, align 4
@@ -3775,7 +3775,7 @@ define i32 @main() {
   %932 = load i32, ptr %930, align 4
   store i32 %932, ptr %931, align 4
   call void @set_offset(ptr %183, ptr @Array)
-  store ptr @_functionliteral_ctkfswqqlk, ptr %184, align 8
+  store ptr @_functionliteral_irartpwwes, ptr %184, align 8
   store i32 0, ptr %185, align 4
   store ptr @i32_typ, ptr %187, align 8
   %933 = load i32, ptr %185, align 4
@@ -3787,7 +3787,7 @@ define i32 @main() {
   %938 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %938)
   %939 = load ptr, ptr %184, align 8
-  call void @llvm.init.trampoline(ptr %938, ptr @uydkitgkvt, ptr %939)
+  call void @llvm.init.trampoline(ptr %938, ptr @pxexhzkagn, ptr %939)
   %940 = call ptr @adjust_trampoline(ptr %938)
   store ptr %940, ptr %188, align 8
   %941 = call ptr @llvm.invariant.start.p0(i64 24, ptr %938)
@@ -3837,14 +3837,14 @@ define i32 @main() {
   store ptr %967, ptr %975, align 8
   %976 = call ptr @class_behavior_wrapper(ptr %974, ptr %196)
   call void %976(ptr %195, { ptr, i160 } %970) #17
-  store ptr @_functionliteral_olgvxjwzlz, ptr %197, align 8
-  store ptr @_functionliteral_izwnachhwi, ptr %198, align 8
-  store ptr @_functionliteral_nmppseexex, ptr %199, align 8
-  store ptr @_functionliteral_cmhpuofokq, ptr %200, align 8
+  store ptr @_functionliteral_rxibqjugjf, ptr %197, align 8
+  store ptr @_functionliteral_ozkryccoii, ptr %198, align 8
+  store ptr @_functionliteral_mqhielauio, ptr %199, align 8
+  store ptr @_functionliteral_gakydhkxrq, ptr %200, align 8
   %977 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %977)
   %978 = load ptr, ptr %197, align 8
-  call void @llvm.init.trampoline(ptr %977, ptr @qavashrnzl, ptr %978)
+  call void @llvm.init.trampoline(ptr %977, ptr @djedfuwlun, ptr %978)
   %979 = call ptr @adjust_trampoline(ptr %977)
   store ptr %979, ptr %201, align 8
   %980 = call ptr @llvm.invariant.start.p0(i64 24, ptr %977)
@@ -3912,7 +3912,7 @@ define i32 @main() {
   %1025 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %1025)
   %1026 = load ptr, ptr %200, align 8
-  call void @llvm.init.trampoline(ptr %1025, ptr @wzqyanzdtn, ptr %1026)
+  call void @llvm.init.trampoline(ptr %1025, ptr @cpevfoqxii, ptr %1026)
   %1027 = call ptr @adjust_trampoline(ptr %1025)
   store ptr %1027, ptr %211, align 8
   %1028 = call ptr @llvm.invariant.start.p0(i64 24, ptr %1025)
@@ -3922,7 +3922,7 @@ define i32 @main() {
   %1032 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %1032)
   %1033 = load ptr, ptr %199, align 8
-  call void @llvm.init.trampoline(ptr %1032, ptr @wmxhqtijmt, ptr %1033)
+  call void @llvm.init.trampoline(ptr %1032, ptr @suouztipal, ptr %1033)
   %1034 = call ptr @adjust_trampoline(ptr %1032)
   store ptr %1034, ptr %212, align 8
   %1035 = call ptr @llvm.invariant.start.p0(i64 24, ptr %1032)

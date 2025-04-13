@@ -30,7 +30,7 @@ PaulTalk aims to combine high-level ergonomics with high performance and memory 
 ## Language Introduction
 
 *   `intro.mini`: Provides a basic introduction to the language syntax and features. Note that it might be slightly outdated compared to the latest language features.
-*   `generic.mini`: Demonstrates more advanced features, particularly generics, region syntax, and the iterator protocols, reflecting the current state more accurately but is not tutorial-oriented.
+*   `iteration.mini`: Demonstrates more advanced features, particularly generics, region syntax, and the iterator protocols, reflecting the current state of the language more accurately but is not tutorial-oriented.
 
 ## Features Overview
 
