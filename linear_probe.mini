@@ -1,4 +1,4 @@
-import collections; // Assuming this provides Pair, Iterable2, Iterator2
+import std; // Assuming this provides Pair, Iterable, Iterator
 
 // --- Helper Functions and Classes (Unchanged) ---
 
@@ -36,7 +36,7 @@ class Entry[K,V] {
 
 // --- HashMap Implementation (Using Linear Probing) ---
 
-class HashMap[K,V] extends Iterable2[Pair[K,V]] {
+class HashMap[K,V] extends Iterable[Pair[K,V]] {
     @entries: Buffer[Entry[K,V] | Nil]
     @entries_len : i32
     @size: i32      // number of actual entries (key -> V)
@@ -264,15 +264,15 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
     def size() -> i32 { return @size; }
 
     // --- Iterator Implementation ---
-    // Conforms to Iterable2 by providing iterator() (Unchanged logic)
+    // Conforms to Iterable by providing iterator() (Unchanged logic)
     def iterator() -> HashMapIterator[K,V] {
         return HashMapIterator[K,V].new(@entries, @entries_len);
     }
 }
 
 // --- Custom Iterator Class (Unchanged) ---
-// Conforms to Iterator2 interface
-class HashMapIterator[K,V] extends Iterator2[Pair[K,V]] {
+// Conforms to Iterator interface
+class HashMapIterator[K,V] extends Iterator[Pair[K,V]] {
     @map_entries: Buffer[Entry[K,V] | Nil]
     @index: i32
     @length: i32 // Cache length for minor optimization

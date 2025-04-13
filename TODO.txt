@@ -353,6 +353,10 @@ DONE:
 
 TODO:
 
+- Better error for incorrectly parameterized reciever
+- Rewrite the standard library with generics
+- Implement Records
+	- Will require a utility method for finding field offsets for generic records
 - Dispatch on parameterizations
 	- Would need to pass parameterizations into the behavior call
 - Make intrinsics better
@@ -389,7 +393,6 @@ TODO:
 	- Do we actually?
 	- What about automatic downcast upon multi-dispatch?
 - Conservatively alias parameters for first-class functions
-
 - Implement more precise lifetimes for tuples
 	- Use .1, .2, .3 pseudo-fields
 - Make sure regions and fields don't have conflicting names
@@ -397,9 +400,6 @@ TODO:
 	- Do we really need to generate all-new behaviors for every new subclass?
 	- Why not just new behaviors for the ones that have actually changed?
 	- Will make vtables significantly smaller
-- Implement Records
-	- Should actually be relatively straightforward
-	- Record-to-tuple is also straightforward
 - Reduce number of redundant type fields
 - Do less work for imports
 	- Make .lib archives of .bc files and --link-only-needed

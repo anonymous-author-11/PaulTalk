@@ -1,4 +1,4 @@
-import collections; // Assuming this provides Pair, Iterable2, Iterator2
+import std; // Assuming this provides Pair, Iterable, Iterator
 
 // --- Helper Functions and Classes (Unchanged) ---
 
@@ -36,7 +36,7 @@ class Entry[K,V] {
 
 // --- Cuckoo HashMap Implementation ---
 
-class HashMap[K,V] extends Iterable2[Pair[K,V]] {
+class HashMap[K,V] extends Iterable[Pair[K,V]] {
     @table1 : Buffer[Entry[K,V] | Nil]
     @table2 : Buffer[Entry[K,V] | Nil]
     @table_len : i32
@@ -309,7 +309,7 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
 }
 
 // --- Custom Iterator Class for Cuckoo HashMap ---
-class HashMapIterator[K,V] extends Iterator2[Pair[K,V]] {
+class HashMapIterator[K,V] extends Iterator[Pair[K,V]] {
     @map_table1: Buffer[Entry[K,V] | Nil]
     @map_table2: Buffer[Entry[K,V] | Nil]
     @table_len : i32

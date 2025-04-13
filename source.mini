@@ -250,7 +250,7 @@ empty = [];
 empty.extend([8,7,6,5]);
 IO.print(empty.[3]);
 grabo();
-if ary is IntArray and ary.[0] == 5 {
+if ary is Array[i32] and ary.[0] == 5 {
     IO.print("so it is true!");
 }
 
@@ -338,8 +338,8 @@ coro_returns_five = Coroutine.new(returns_five);
 coro_returns_five.call();
 IO.print(coro_returns_five.result());
 
-chan = Channel.new();
-producer = Coroutine.new((chan : Channel) => { chan.put(88); }, chan);
+chan = Channel[i32].new();
+producer = Coroutine.new((chan : Channel[i32]) => { chan.put(88); }, chan);
 producer.call();
 IO.print(chan.get());
 

@@ -1,16 +1,11 @@
 
-class Iterator {
-}
-
-class Iterable {
-    abstract def iterator() -> Iterator {}
-}
+import iteration;
 
 class Representable {
     def repr() -> String { return "Object"; }
 }
 
-class String extends Iterable, Representable {
+class String extends Iterable[Character], Representable {
     @bytes : Buffer[i8]
     @length : i32
     @capacity: i32
@@ -136,7 +131,7 @@ class Character {
 
 }
 
-class StringIterator extends Iterator {
+class StringIterator extends Iterator[Character] {
     @str : String
     @index : i32
     def init(@str : String) { @index = 0; }

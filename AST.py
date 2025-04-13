@@ -410,11 +410,11 @@ class ArrayLiteral(Expression):
             iliteral = IntegerLiteral(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), i, 32)
             indexation = MethodCall(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), temp_var, "_set_index", [iliteral, elem])
             indexation.codegen(scope)
-        ary = ObjectCreation(self.info, random_letters(10), FatPtr.basic("IntArray"), [temp_var, sizelit, capacitylit], None)
+        ary = ObjectCreation(self.info, random_letters(10), FatPtr.generic("Array", [Ptr([IntegerType(32)])]), [temp_var, sizelit, capacitylit], None)
         return ary.codegen(scope)
 
     def exprtype(self, scope):
-        return FatPtr.basic("IntArray")
+        return FatPtr.generic("Array", [Ptr([IntegerType(32)])])
 
     def typeflow(self, scope):
         for elem in self.elements: elem.typeflow(scope)
@@ -2101,7 +2101,7 @@ class ClassBehavior(Behavior):
         return args
 
     def __repr__(self):
-        return f"ClassBehavior({self.name}, {self.param_types()}, {self.offset})"
+        return f"ClassBehavior({self.name}, {self.broad_param_types()}, {self.offset})"
 
 @dataclass
 class ClassDef(Statement):

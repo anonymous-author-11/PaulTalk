@@ -2,8 +2,8 @@ import subprocess
 import time
 
 files = [
-	"builtins","core","io","math","channel","int","std",
-	"collections","source","tests",
+	"builtins","iteration","core","io","math","channel","range","array","std",
+	"source","tests",
 	"cuckoo","linear_probe","quadratic_probe",
 	"hash_benchmark","hash_table", "generic"
 ]

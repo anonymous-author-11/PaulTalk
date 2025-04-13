@@ -1,4 +1,4 @@
-import collections; // Assuming this provides Pair, Iterable2, Iterator2
+import std; // Assuming this provides Pair, Iterable, Iterator
 
 // --- Helper Functions and Classes (Unchanged) ---
 
@@ -36,7 +36,7 @@ class Entry[K,V] {
 
 // --- HashMap Implementation (Robin Hood Probing) ---
 
-class HashMap[K,V] extends Iterable2[Pair[K,V]] {
+class HashMap[K,V] extends Iterable[Pair[K,V]] {
     @entries: Array[Entry[K,V] | Nil]
     @size: i32      // number of actual entries (key -> V)
     @load: i32      // number of occupied slots (key -> V or key -> Tombstone)
@@ -296,7 +296,7 @@ class HashMap[K,V] extends Iterable2[Pair[K,V]] {
 }
 
 // --- Custom Iterator Class (Unchanged from original) ---
-class HashMapIterator[K,V] extends Iterator2[Pair[K,V]] {
+class HashMapIterator[K,V] extends Iterator[Pair[K,V]] {
     @map_entries: Array[Entry[K,V] | Nil]
     @index: i32
     @length: i32 // Cache length for minor optimization

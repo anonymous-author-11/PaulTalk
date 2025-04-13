@@ -1,28 +1,27 @@
-import core;
 
 class Blocking {
     def init() {}
 }
 
-class Channel {
-    @value : i32 | Nil
+class Channel[T] {
+    @value : T | Nil
 
     def init() {
         @value = nil;
     }
-    def get() -> i32 yields Blocking {
+    def get() -> T yields Blocking {
         while true {
             value = @value;
-            if value is i32 {
+            if value is T {
                 @value = nil;
                 return value;
             }
             yield(Blocking.new());
         }
     }
-    def put(new_value : i32) yields Blocking {
+    def put(new_value : T) yields Blocking {
         old_value = @value;
-        while old_value is i32 {
+        while old_value is T {
             yield(Blocking.new());
             old_value = @value;
         }

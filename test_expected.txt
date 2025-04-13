@@ -63,7 +63,7 @@ o
 o
 m
 !
-Object
+Array
 77
 Integer2
 Here I am!

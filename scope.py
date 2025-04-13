@@ -147,6 +147,7 @@ class Scope:
 
     def matches(self, left, right):
         if isinstance(left, FatPtr) and isinstance(right, FatPtr): return left.cls == right.cls
+        if isinstance(left, Buffer): return isinstance(right, Buffer)
         if isinstance(right, TypeParameter): return self.subtype(left, right.bound)
         if isinstance(left, Tuple) and isinstance(right, Tuple):
             same_len = len(left.types.data) == len(right.types.data)
@@ -158,6 +159,7 @@ class Scope:
 
     def substitute(self, left, right):
         if isinstance(right, TypeParameter) and left != right: return self.add_alias(right, left)
+        if isinstance(right, Buffer): return self.substitute(left.elem_type, right.elem_type)
         if isinstance(right, FatPtr) and right.type_params == NoneAttr(): return None
         if isinstance(right, FatPtr): return [self.substitute(l,r) for (l,r) in zip(left.type_params.data, right.type_params.data)]
         if isinstance(right, Tuple): return [self.substitute(l,r) for (l,r) in zip(left.types.data, right.types.data)]
@@ -232,6 +234,7 @@ class Scope:
             return parameterization.results[0]
 
         if isinstance(typ, TypeParameter):
+            print(typ)
             print(self_types)
             print(scoped_types)
             print("self" in self.symbol_table)
@@ -365,6 +368,8 @@ class Scope:
 
         if isinstance(typ, FatPtr) and typ.type_params != NoneAttr():
             return FatPtr.generic(typ.cls.data, [self.simplify(t) for t in typ.type_params.data])
+
+        if isinstance(typ, Buffer): return Buffer([self.simplify(typ.elem_type)])
 
         if isinstance(typ, TypeParameter) and isinstance(typ.bound, TypeParameter):
             return self.simplify(typ.bound)
