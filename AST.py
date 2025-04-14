@@ -656,7 +656,8 @@ class TypeCheck(Expression):
 
         right_type = scope.simplify(self.right)
 
-        if static_type in builtin_types.values():
+        nil_buffer_check = isinstance(static_type, Buffer) and right_type == Nil()
+        if not nil_buffer_check and static_type in builtin_types.values():
             result = 1 if scope.subtype(static_type, right_type) else 0
             attr_dict = {"value": IntegerAttr.from_int_and_width(result, 1), "typ":IntegerType(1)}
             const_op = LiteralOp.create(result_types=[Ptr([IntegerType(1)])], attributes=attr_dict)

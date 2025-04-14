@@ -31,7 +31,9 @@ class File {
 	@open : Bool
 
 	def init(@name : String, @mode : String) {
+		@open = false;
 		@handle = fopen(@name.c_string(), @mode.c_string());
+		if @handle is Nil { yield(FileSystemError.new()); }
 		@open = true;
 	}
 	def mode=(@mode : String) {
@@ -41,6 +43,7 @@ class File {
 	def reopen() {
 		self.close();
 		@handle = fopen(@name.c_string(), @mode.c_string());
+		if @handle is Nil { yield(FileSystemError.new()); }
 		@open = true;
 	}
 	def close() {
@@ -124,6 +127,3 @@ class FileSystem {
 	}
 
 }
-
-FileSystem.write_file("bigtings.txt", "this\nis how\nwe do\nit");
-IO.print(FileSystem.read_file("bigtings.txt"));

@@ -257,7 +257,7 @@ define ptr @coroutine_create(ptr %func, ptr %arg_passer) {
 }
 
 define void @setup_landing_pad() {
-  %region = call noalias ptr @VirtualAlloc(ptr null, i64 21474836480, i32 12288, i32 4) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(1) "alloc-family"="malloc"
+  %region = call noalias ptr @VirtualAlloc(ptr null, i64 5368709120, i32 12288, i32 4) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(1) "alloc-family"="malloc"
   store ptr %region, ptr @current_ptr
   %buf_first_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 0
   %buf_second_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 1

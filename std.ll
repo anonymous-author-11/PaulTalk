@@ -49,6 +49,12 @@ source_filename = "LLVMDialectModule"
 @Channel = external constant { [3 x i64], [4 x ptr], [8 x ptr] }
 @Array = external constant { [3 x i64], [4 x ptr], [83 x ptr] }
 @ArrayIterator = external constant { [3 x i64], [4 x ptr], [10 x ptr] }
+@FileSystemError = external constant { [3 x i64], [4 x ptr], [26 x ptr] }
+@File = external constant { [3 x i64], [4 x ptr], [16 x ptr] }
+@FileProcessor = external constant { [3 x i64], [4 x ptr], [0 x ptr] }
+@FileReader = external constant { [3 x i64], [4 x ptr], [8 x ptr] }
+@FileWriter = external constant { [3 x i64], [4 x ptr], [9 x ptr] }
+@FileSystem = external constant { [3 x i64], [4 x ptr], [7 x ptr] }
 
 declare i32 @printf(ptr, ...)
 
@@ -107,6 +113,20 @@ declare ptr @class_behavior_wrapper(ptr, ptr)
 declare void @coroutine_call(ptr)
 
 declare void @report_exception({ ptr })
+
+declare { ptr } @fopen({ ptr }, { ptr })
+
+declare i32 @fprintf({ ptr }, { ptr })
+
+declare i32 @fclose({ ptr })
+
+declare i32 @fgetc({ ptr })
+
+declare i32 @ferror({ ptr })
+
+declare void @perror(i64)
+
+declare i8 @i32toi8(i32)
 
 !llvm.module.flags = !{!0}
 
