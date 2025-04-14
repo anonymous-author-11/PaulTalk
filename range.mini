@@ -33,7 +33,8 @@ class RangeIterator extends Iterator[i32] {
 
     def next() -> i32 | Nil {
         if @counter > @end { return nil; }
+        old_counter = @counter;
         @counter = @counter + @step;
-        return @counter - @step;
+        return old_counter;
     }
 }

@@ -953,9 +953,9 @@ class CheckFlagOp(IRDLOperation):
     neg: OptAttributeDef = opt_attr_def(UnitAttr)
 
     @classmethod
-    def make(cls, ptr, lhs_type, rhs_type, id_fn, parameterization=None):
+    def make(cls, ptr, lhs_type, rhs_type, id_fn, parameterization=None, simplify=True):
         attr_dict = {"typ_name":id_fn(rhs_type)}
-        if isinstance(lhs_type, Union) and len(lhs_type.types.data) == 2 and Nil() in lhs_type.types.data and rhs_type != Nil():
+        if simplify and isinstance(lhs_type, Union) and len(lhs_type.types.data) == 2 and Nil() in lhs_type.types.data and rhs_type != Nil():
             attr_dict["typ_name"] = StringAttr("nil_typ")
             attr_dict["neg"] = UnitAttr()
             parameterization = None

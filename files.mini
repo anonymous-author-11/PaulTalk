@@ -7,6 +7,7 @@ extern def fprintf(file : Buffer[i32], text : Buffer[i8]) -> i32
 extern def fclose(file : Buffer[i32]) -> i32
 extern def fgetc(file : Buffer[i32]) -> i32
 extern def ferror(file : Buffer[i32]) -> i32
+extern def perror(null : i64)
 
 // don't worry, this compiles down to umax + trunci
 // obviously once we implement good casting this will be unecessary
@@ -33,18 +34,22 @@ class File {
 		@handle = fopen(@name.c_string(), @mode.c_string());
 		@open = true;
 	}
-	def close() yields FileSystemError {
+	def mode=(@mode : String) {
+		if not @open { return; }
+		self.reopen();
+	}
+	def reopen() {
+		self.close();
+		@handle = fopen(@name.c_string(), @mode.c_string());
+		@open = true;
+	}
+	def close() {
 		if not @open { return; }
 		int = fclose(@handle);
 		@open = false;
 		if int == -1 { yield(FileSystemError.new()); }
 	}
-	def reopen() {
-		if @open { return; }
-		@handle = fopen(@name.c_string(), @mode.c_string());
-		@open = true;
-	}
-	def get_byte() -> i8 | Nil yields FileSystemError {
+	def get_byte() -> i8 | Nil {
 		if not @open { return nil; }
 		int = fgetc(@handle);
     	if int == -1 {
@@ -53,22 +58,16 @@ class File {
     	}
     	return i32toi8(int);
 	}
-	def write(text : String) -> i32 yields FileSystemError {
+	def write(text : String) -> i32 {
 		if not @open { return -1; }
 		int = fprintf(@handle, text.c_string());
 		if int < 0 { yield(FileSystemError.new()); }
 		return int;
 	}
-	def mode=(@mode : String) yields FileSystemError {
-		if not @open { return; }
-		int = fclose(@handle);
-		if int == -1 { yield(FileSystemError.new()); }
-		@handle = fopen(@name.c_string(), @mode.c_string());
-	}
 }
 
 class FileProcessor[T] {
-	abstract def process(file : File) -> T yields FileSystemError {
+	abstract def process(file : File) -> T {
 	}
 }
 
@@ -94,22 +93,37 @@ class FileWriter extends FileProcessor[i32] {
 }
 
 class FileSystem {
-	def Self.process_file[T](file_name : String, mode: String, processor: FileProcessor[T]) -> T yields FileSystemError {
+
+	def Self.process_file[T](file_name : String, mode: String, processor: FileProcessor[T]) -> T {
 		file = File.new(file_name, mode);
-		result = processor.process(file);
+		fn = (p : FileProcessor[T], f : File) => { p.process(f); };
+		coro = Coroutine.new(fn, processor, file);
+		possible_exception = coro.call();
 		file.close();
-		return result;
+		if possible_exception is Exception { yield(possible_exception); }
+		result = coro.result();
+		if result is T { return result; }
 	}
-	def Self.process_file[T](file_name : String, mode: String, processor: (File) -> T) -> T yields FileSystemError {
+
+	def Self.process_file[T](file_name : String, mode: String, processor: (File) -> T) -> T {
 		file = File.new(file_name, mode);
-		result = processor.call(file);
+		coro = Coroutine.new(processor, file);
+		possible_exception = coro.call();
 		file.close();
-		return result;
+		if possible_exception is Exception { yield(possible_exception); }
+		result = coro.result();
+		if result is T { return result; }
 	}
-	def Self.read_file(file_name : String) -> String yields FileSystemError {
+
+	def Self.read_file(file_name : String) -> String {
 		return FileSystem.process_file(file_name, "r", FileReader.new());
 	}
-	def Self.write_file(file_name : String, text : String) yields FileSystemError {
+
+	def Self.write_file(file_name : String, text : String) {
 		FileSystem.process_file(file_name, "w", FileWriter.new(text));
 	}
+
 }
+
+FileSystem.write_file("bigtings.txt", "this\nis how\nwe do\nit");
+IO.print(FileSystem.read_file("bigtings.txt"));

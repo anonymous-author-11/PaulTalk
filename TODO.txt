@@ -350,10 +350,14 @@ DONE:
 - Use Checkflag on method dispatch checks instead of raw SubtypeTest [check!]
 	- Will use simple pointer equality checks for builtin types [check!]
 - Add file name to error messages [check!]
+- Write FileSystem utilities [check!]
 
 TODO:
 
-- Special case "if Buffer is Nil" to check for nullptr
+- Should ensure that all branches must return if return value declared
+- What's the type of coro.return()?
+- Putting coroutine yields and returns in the same slot is asking for bugs
+- Special case "if buffer is Nil" to check for C nullptr
 - Better error for incorrectly parameterized reciever
 - Rewrite the standard library with generics
 - Implement Records

@@ -665,7 +665,8 @@ class TypeCheck(Expression):
 
         parameterization = None
         if isinstance(right_type, TypeParameter): parameterization = scope.get_parameterization(right_type)
-        check_flag = CheckFlagOp.make(leftval, static_type, right_type, type_id, parameterization)
+        simplify = not scope.subtype(right_type, FatPtr.basic("Exception"))
+        check_flag = CheckFlagOp.make(leftval, static_type, right_type, type_id, parameterization, simplify)
         scope.region.last_block.add_op(check_flag)
         return check_flag.results[0]
 
@@ -2918,7 +2919,8 @@ class CoCreate(Expression):
         attr_dict = {"func_name":StringAttr(self.name + "_passer"), "arg_types":ArrayAttr([t.base_typ() for t in arg_types[1:]])}
         if func_type.return_type != Nothing():
             attr_dict["ret_type"] = func_type.return_type.base_typ()
-            if not isinstance(func_type.return_type, Union): attr_dict["ret_flag"] = type_id(func_type.return_type)
+            union_like = isinstance(func_type.return_type, Union) or isinstance(func_type.return_type, FatPtr) or isinstance(func_type.return_type, TypeParameter)
+            if not union_like: attr_dict["ret_flag"] = type_id(func_type.return_type)
         attr_dict["yield_type"] = scope.simplify(Union.from_list([Nil(), arg_types[0].yield_type])).base_typ()
         op = ArgPasserOp.create(attributes=attr_dict)
         toplevel_ops.append(op)

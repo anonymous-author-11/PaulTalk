@@ -62,6 +62,7 @@ class FirstPass(ModulePass):
                 LowerPtr(),
                 LowerNil(),
                 LowerFatPtr(),
+                LowerAny(),
                 LowerReifiedType(),
                 LowerTuple(),
                 LowerTypeParam(),
@@ -212,6 +213,11 @@ class LowerNil(TypeConversionPattern):
 class LowerFatPtr(TypeConversionPattern):
     @attr_type_rewrite_pattern
     def convert_type(self, typ: FatPtr):
+        return llvm.LLVMPointerType.opaque()
+
+class LowerAny(TypeConversionPattern):
+    @attr_type_rewrite_pattern
+    def convert_type(self, typ: Any):
         return llvm.LLVMPointerType.opaque()
 
 class LowerTypeParam(TypeConversionPattern):
@@ -2346,14 +2352,18 @@ class LowerArgPasser(RewritePattern):
         call_indirect = func.CallIndirect(laundered.results[0], [load.results[0] for load in loads], base_ret_types)
         body.add_ops([*geps, *loads, func_ptr, laundered, call_indirect])
         if op.ret_type:
-            result_gep = llvm.GEPOp(current_coroutine, [0, 4, 1], pointee_type=ret_struct)
-            store = llvm.StoreOp(call_indirect.results[0], result_gep.results[0])
-            body.add_ops([result_gep, store])
             if op.ret_flag:
+                result_gep = llvm.GEPOp(current_coroutine, [0, 4, 1], pointee_type=ret_struct)
+                store = llvm.StoreOp(call_indirect.results[0], result_gep.results[0])
+                body.add_ops([result_gep, store])
                 flag_gep = llvm.GEPOp(current_coroutine, [0, 4, 0], pointee_type=ret_struct)
                 flag = AddrOfOp.from_stringattr(op.ret_flag)
                 store = llvm.StoreOp(flag.results[0], flag_gep.results[0])
                 body.add_ops([flag_gep, flag, store])
+            else:
+                result_gep = llvm.GEPOp(current_coroutine, [0, 4, 0], pointee_type=ret_struct)
+                store = llvm.StoreOp(call_indirect.results[0], result_gep.results[0])
+                body.add_ops([result_gep, store])
         ret = func.Return()
         body.add_op(ret)
         

@@ -47,7 +47,7 @@ class Array[T] extends Iterable[T], Representable {
         other_len = other.length();
         old_len = @length;
         new_len = old_len + other_len;
-        if new_len >= @capacity { self.reserve(new_len); }
+        self.reserve(new_len);
         i = 0;
         while i < other_len {
             self.unchecked_insert(i + old_len, other.unchecked_index(i));

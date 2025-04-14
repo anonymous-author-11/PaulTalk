@@ -174,7 +174,7 @@ class Scope:
         raise Exception(f"not implemented yet for types {from_typ} and {to_typ}")
 
     def get_parameterization(self, typ):
-        if typ in self.parameterization_cache: return self.parameterization_cache[typ]
+        # if typ in self.parameterization_cache: return self.parameterization_cache[typ]
         self_types = self.cls.type_parameters if "self" in self.symbol_table else []
         scoped_types = self.method.param_types() if "local_parameterizations" in self.symbol_table.keys() else []
         if self.cls: scoped_types = [*scoped_types, *self.cls.type_parameters]
