@@ -354,6 +354,8 @@ DONE:
 
 TODO:
 
+- Figure out more sane integer casting mechanics
+	- Maybe an 'as' operator
 - Should ensure that all branches must return if return value declared
 - What's the type of coro.return()?
 - Putting coroutine yields and returns in the same slot is asking for bugs

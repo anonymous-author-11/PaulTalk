@@ -37,7 +37,7 @@ source_filename = "LLVMDialectModule"
 @ProductIterable = external constant { [3 x i64], [4 x ptr], [52 x ptr] }
 @ProductIterator = external constant { [3 x i64], [4 x ptr], [14 x ptr] }
 @Representable = external constant { [3 x i64], [4 x ptr], [2 x ptr] }
-@String = external constant { [3 x i64], [4 x ptr], [77 x ptr] }
+@String = external constant { [3 x i64], [4 x ptr], [79 x ptr] }
 @Character = external constant { [3 x i64], [4 x ptr], [5 x ptr] }
 @StringIterator = external constant { [3 x i64], [4 x ptr], [10 x ptr] }
 @Exception = external constant { [3 x i64], [4 x ptr], [13 x ptr] }
@@ -50,7 +50,7 @@ source_filename = "LLVMDialectModule"
 @Array = external constant { [3 x i64], [4 x ptr], [83 x ptr] }
 @ArrayIterator = external constant { [3 x i64], [4 x ptr], [10 x ptr] }
 @FileSystemError = external constant { [3 x i64], [4 x ptr], [26 x ptr] }
-@File = external constant { [3 x i64], [4 x ptr], [16 x ptr] }
+@File = external constant { [3 x i64], [4 x ptr], [20 x ptr] }
 @FileProcessor = external constant { [3 x i64], [4 x ptr], [0 x ptr] }
 @FileReader = external constant { [3 x i64], [4 x ptr], [8 x ptr] }
 @FileWriter = external constant { [3 x i64], [4 x ptr], [9 x ptr] }
@@ -122,11 +122,17 @@ declare i32 @fclose({ ptr })
 
 declare i32 @fgetc({ ptr })
 
+declare { ptr } @fgets({ ptr }, i32, { ptr })
+
 declare i32 @ferror({ ptr })
 
-declare void @perror(i64)
+declare i32 @fseek({ ptr }, i64, i32)
 
-declare i8 @i32toi8(i32)
+declare i64 @ftell({ ptr })
+
+declare i64 @fread({ ptr }, i64, i64, { ptr })
+
+declare void @perror(i64)
 
 !llvm.module.flags = !{!0}
 

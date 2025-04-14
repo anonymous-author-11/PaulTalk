@@ -6,21 +6,12 @@ extern def fopen(name : Buffer[i8], mode : Buffer[i8]) -> Buffer[i32]
 extern def fprintf(file : Buffer[i32], text : Buffer[i8]) -> i32
 extern def fclose(file : Buffer[i32]) -> i32
 extern def fgetc(file : Buffer[i32]) -> i32
+extern def fgets(out : Buffer[i8], size : i32, file : Buffer[i32]) -> Buffer[i8]
 extern def ferror(file : Buffer[i32]) -> i32
+extern def fseek(file : Buffer[i32], offset : i64, whence : i32) -> i32
+extern def ftell(file : Buffer[i32]) -> i64
+extern def fread(out : Buffer[i8], size : i64, nmemb : i64, file : Buffer[i32]) -> i64
 extern def perror(null : i64)
-
-// don't worry, this compiles down to umax + trunci
-// obviously once we implement good casting this will be unecessary
-def i32toi8(x : i32) -> i8 {
-    i = 0;
-    sum : i8 = 0;
-    one : i8 = 1;
-    while i < x {
-        sum = sum + one;
-        i = i + 1;
-    }
-    return sum;
-}
 
 class FileSystemError extends Exception {}
 
@@ -52,19 +43,40 @@ class File {
 		@open = false;
 		if int == -1 { yield(FileSystemError.new()); }
 	}
-	def get_byte() -> i8 | Nil {
-		if not @open { return nil; }
+	def size() -> i64 {
+		if not @open { yield(FileSystemError.new()); }
+		offset = 0 as i64;
+		seek_end = 2;
+		current_pos = ftell(@handle);
+		fseek(@handle, offset, seek_end);
+		size = ftell(@handle);
+		fseek(@handle, current_pos - size, seek_end);
+		return size;
+	}
+	def read() -> String {
+		if not @open { yield(FileSystemError.new()); }
+		size = self.size();
+		capacity = size as i32 + 1;
+		buf = Buffer[i8].new(capacity);
+		elem_size = 1 as i64;
+		int = fread(buf, elem_size, size, @handle);
+		if int < size { yield(FileSystemError.new()); }
+		return String.new(buf, size as i32, capacity);
+	}
+	def read_byte() -> i8 | Nil {
+		if not @open { yield(FileSystemError.new()); }
 		int = fgetc(@handle);
     	if int == -1 {
     		if ferror(@handle) != 0 { yield(FileSystemError.new()); }
     		return nil;
     	}
-    	return i32toi8(int);
+    	return int as i8;
 	}
 	def write(text : String) -> i32 {
-		if not @open { return -1; }
+		if not @open { yield(FileSystemError.new()); }
+		text_len = text.length();
 		int = fprintf(@handle, text.c_string());
-		if int < 0 { yield(FileSystemError.new()); }
+		if int < text_len { yield(FileSystemError.new()); }
 		return int;
 	}
 }
@@ -78,10 +90,10 @@ class FileReader extends FileProcessor[String] {
 	def init() {}
 	def process(file : File) -> String {
 		content = "";
-		byte = file.get_byte();
+		byte = file.read_byte();
 		while byte is i8 {
 			content.append(byte);
-			byte = file.get_byte();
+			byte = file.read_byte();
 		}
 	    return content;
 	}

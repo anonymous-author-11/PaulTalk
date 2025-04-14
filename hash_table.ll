@@ -3,31 +3,31 @@ source_filename = "LLVMDialectModule"
 
 @_parameterization_Ptri1 = linkonce_odr constant [2 x ptr] [ptr @bool_typ, ptr null]
 @_parameterization_Nothing = linkonce_odr constant [2 x ptr] [ptr @nothing_typ, ptr null]
-@qsvft_c = internal constant [1 x i8] c"c"
-@duuwp_c = internal constant [1 x i8] c"c"
-@mbqsj_b = internal constant [1 x i8] c"b"
-@ipvbm_a = internal constant [1 x i8] c"a"
+@gbzyf_c = internal constant [1 x i8] c"c"
+@xyldv_c = internal constant [1 x i8] c"c"
+@cwgpw_b = internal constant [1 x i8] c"b"
+@xaavb_a = internal constant [1 x i8] c"a"
 @_parameterization_PairString._Function_to_Nothing = linkonce_odr constant [4 x ptr] [ptr @Pair, ptr @_parameterization_String, ptr @_parameterization_Function_to_Nothing, ptr null]
 @_parameterization_Function_to_Nothing = linkonce_odr constant [3 x ptr] [ptr @function_typ, ptr @_parameterization_Nothing, ptr null]
-@wuvdy_world = internal constant [5 x i8] c"world"
-@vrjix_hello = internal constant [5 x i8] c"hello"
-@wqjjh_qux = internal constant [3 x i8] c"qux"
-@gzbkt_baz = internal constant [3 x i8] c"baz"
-@nxodj_bar = internal constant [3 x i8] c"bar"
-@ngpuh_foo = internal constant [3 x i8] c"foo"
+@jbhhe_world = internal constant [5 x i8] c"world"
+@quhgf_hello = internal constant [5 x i8] c"hello"
+@jvbre_qux = internal constant [3 x i8] c"qux"
+@yrawk_baz = internal constant [3 x i8] c"baz"
+@lnvhj_bar = internal constant [3 x i8] c"bar"
+@yaknl_foo = internal constant [3 x i8] c"foo"
 @_parameterization_FunctionString._String_to_Ptri1 = linkonce_odr constant [5 x ptr] [ptr @function_typ, ptr @_parameterization_Ptri1, ptr @_parameterization_String, ptr @_parameterization_String, ptr null]
 @_parameterization_FunctionString_to_Ptri32 = linkonce_odr constant [4 x ptr] [ptr @function_typ, ptr @_parameterization_Ptri32, ptr @_parameterization_String, ptr null]
 @_parameterization_PairString._String = linkonce_odr constant [4 x ptr] [ptr @Pair, ptr @_parameterization_String, ptr @_parameterization_String, ptr null]
-@auxan_not_an_i = internal constant [10 x i8] c"not an i32"
+@hezmv_not_an_i = internal constant [10 x i8] c"not an i32"
 @_parameterization_FunctionPtri32._Ptri32_to_Ptri1 = linkonce_odr constant [5 x ptr] [ptr @function_typ, ptr @_parameterization_Ptri1, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptri32, ptr null]
 @_parameterization_FunctionPtri32_to_Ptri32 = linkonce_odr constant [4 x ptr] [ptr @function_typ, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptri32, ptr null]
 @_parameterization_PairPtri32._Ptri32 = linkonce_odr constant [4 x ptr] [ptr @Pair, ptr @_parameterization_Ptri32, ptr @_parameterization_Ptri32, ptr null]
-@eopkd_coconut = internal constant [7 x i8] c"coconut"
-@sxajt_banana = internal constant [6 x i8] c"banana"
+@owqmd_coconut = internal constant [7 x i8] c"coconut"
+@zmilm_banana = internal constant [6 x i8] c"banana"
 @_parameterization_String = linkonce_odr constant [2 x ptr] [ptr @String, ptr null]
 @_parameterization_Ptri32 = linkonce_odr constant [2 x ptr] [ptr @i32_typ, ptr null]
 @_parameterization_BufferPtri8 = linkonce_odr constant [2 x ptr] [ptr @buffer_typ, ptr null]
-@qhapc_apple = internal constant [5 x i8] c"apple"
+@vdqzu_apple = internal constant [5 x i8] c"apple"
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
 @float_string = linkonce_odr constant [4 x i8] c"%f\0A\00"
@@ -64,7 +64,7 @@ source_filename = "LLVMDialectModule"
 @ProductIterable = external constant { [3 x i64], [4 x ptr], [52 x ptr] }
 @ProductIterator = external constant { [3 x i64], [4 x ptr], [14 x ptr] }
 @Representable = external constant { [3 x i64], [4 x ptr], [2 x ptr] }
-@String = external constant { [3 x i64], [4 x ptr], [77 x ptr] }
+@String = external constant { [3 x i64], [4 x ptr], [79 x ptr] }
 @Character = external constant { [3 x i64], [4 x ptr], [5 x ptr] }
 @StringIterator = external constant { [3 x i64], [4 x ptr], [10 x ptr] }
 @Exception = external constant { [3 x i64], [4 x ptr], [13 x ptr] }
@@ -76,12 +76,18 @@ source_filename = "LLVMDialectModule"
 @Channel = external constant { [3 x i64], [4 x ptr], [8 x ptr] }
 @Array = external constant { [3 x i64], [4 x ptr], [83 x ptr] }
 @ArrayIterator = external constant { [3 x i64], [4 x ptr], [10 x ptr] }
+@FileSystemError = external constant { [3 x i64], [4 x ptr], [26 x ptr] }
+@File = external constant { [3 x i64], [4 x ptr], [20 x ptr] }
+@FileProcessor = external constant { [3 x i64], [4 x ptr], [0 x ptr] }
+@FileReader = external constant { [3 x i64], [4 x ptr], [8 x ptr] }
+@FileWriter = external constant { [3 x i64], [4 x ptr], [9 x ptr] }
+@FileSystem = external constant { [3 x i64], [4 x ptr], [7 x ptr] }
 @Tombstone = external constant { [3 x i64], [4 x ptr], [2 x ptr] }
 @Entry = external constant { [3 x i64], [4 x ptr], [14 x ptr] }
 @HashMap = external constant { [3 x i64], [4 x ptr], [74 x ptr] }
 @HashMapIterator = external constant { [3 x i64], [4 x ptr], [13 x ptr] }
 
-define i1 @wcomgcgbrt(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @oraoemgnmq(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -137,7 +143,7 @@ define i1 @wcomgcgbrt(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %46
 }
 
-define i32 @bjlvpglsvc(ptr nest %0, { ptr, i160 } %1) {
+define i32 @jqdgxifdlx(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -169,7 +175,7 @@ define i32 @bjlvpglsvc(ptr nest %0, { ptr, i160 } %1) {
   ret i32 %25
 }
 
-define i1 @orryktrypo(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @dcoxzbazoe(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -225,7 +231,7 @@ define i1 @orryktrypo(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %46
 }
 
-define i32 @esariwphav(ptr nest %0, { ptr, i160 } %1) {
+define i32 @vctfpzehhw(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -257,7 +263,7 @@ define i32 @esariwphav(ptr nest %0, { ptr, i160 } %1) {
   ret i32 %25
 }
 
-define i1 @icrvfqvywc(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @fcfgwzcjda(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -279,7 +285,7 @@ define i1 @icrvfqvywc(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %16
 }
 
-define i32 @jnkxufottd(ptr nest %0, { ptr, i160 } %1) {
+define i32 @vwplplqkhe(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = alloca i32, align 4
@@ -352,6 +358,26 @@ declare void @coroutine_call(ptr)
 
 declare void @report_exception({ ptr })
 
+declare { ptr } @fopen({ ptr }, { ptr })
+
+declare i32 @fprintf({ ptr }, { ptr })
+
+declare i32 @fclose({ ptr })
+
+declare i32 @fgetc({ ptr })
+
+declare { ptr } @fgets({ ptr }, i32, { ptr })
+
+declare i32 @ferror({ ptr })
+
+declare i32 @fseek({ ptr }, i64, i32)
+
+declare i64 @ftell({ ptr })
+
+declare i64 @fread({ ptr }, i64, i64, { ptr })
+
+declare void @perror(i64)
+
 declare i32 @i32_hasher(i32)
 
 declare i1 @i32_eq(i32, i32)
@@ -380,7 +406,7 @@ define void @say_apple() {
   %13 = sext i32 %12 to i64
   %14 = mul i64 ptrtoint (ptr getelementptr ([5 x i8], ptr null, i32 1) to i64), %13
   %15 = getelementptr i8, ptr %11, i64 %14
-  %16 = load <5 x i8>, ptr @qhapc_apple, align 8
+  %16 = load <5 x i8>, ptr @vdqzu_apple, align 8
   store <5 x i8> %16, ptr %15, align 8
   %17 = alloca i32, align 4
   store i32 5, ptr %17, align 4
@@ -426,9 +452,9 @@ define void @say_apple() {
   %48 = getelementptr [3 x ptr], ptr %45, i32 0, i32 2
   store ptr @_parameterization_Ptri32, ptr %48, align 8
   %49 = call ptr @llvm.invariant.start.p0(i64 9, ptr %45)
-  %50 = call ptr @llvm.invariant.start.p0(i64 616, ptr %36)
+  %50 = call ptr @llvm.invariant.start.p0(i64 632, ptr %36)
   %51 = getelementptr ptr, ptr %36, i32 %43
-  %52 = getelementptr ptr, ptr %51, i32 5
+  %52 = getelementptr ptr, ptr %51, i32 6
   %53 = load ptr, ptr %52, align 8
   %54 = alloca { ptr, ptr, ptr }, align 8
   %55 = getelementptr { ptr, ptr, ptr }, ptr %54, i32 0, i32 0
@@ -479,7 +505,7 @@ define void @say_banana() {
   %13 = sext i32 %12 to i64
   %14 = mul i64 ptrtoint (ptr getelementptr ([6 x i8], ptr null, i32 1) to i64), %13
   %15 = getelementptr i8, ptr %11, i64 %14
-  %16 = load <6 x i8>, ptr @sxajt_banana, align 8
+  %16 = load <6 x i8>, ptr @zmilm_banana, align 8
   store <6 x i8> %16, ptr %15, align 8
   %17 = alloca i32, align 4
   store i32 6, ptr %17, align 4
@@ -525,9 +551,9 @@ define void @say_banana() {
   %48 = getelementptr [3 x ptr], ptr %45, i32 0, i32 2
   store ptr @_parameterization_Ptri32, ptr %48, align 8
   %49 = call ptr @llvm.invariant.start.p0(i64 9, ptr %45)
-  %50 = call ptr @llvm.invariant.start.p0(i64 616, ptr %36)
+  %50 = call ptr @llvm.invariant.start.p0(i64 632, ptr %36)
   %51 = getelementptr ptr, ptr %36, i32 %43
-  %52 = getelementptr ptr, ptr %51, i32 5
+  %52 = getelementptr ptr, ptr %51, i32 6
   %53 = load ptr, ptr %52, align 8
   %54 = alloca { ptr, ptr, ptr }, align 8
   %55 = getelementptr { ptr, ptr, ptr }, ptr %54, i32 0, i32 0
@@ -578,7 +604,7 @@ define void @say_coconut() {
   %13 = sext i32 %12 to i64
   %14 = mul i64 ptrtoint (ptr getelementptr ([7 x i8], ptr null, i32 1) to i64), %13
   %15 = getelementptr i8, ptr %11, i64 %14
-  %16 = load <7 x i8>, ptr @eopkd_coconut, align 8
+  %16 = load <7 x i8>, ptr @owqmd_coconut, align 8
   store <7 x i8> %16, ptr %15, align 8
   %17 = alloca i32, align 4
   store i32 7, ptr %17, align 4
@@ -624,9 +650,9 @@ define void @say_coconut() {
   %48 = getelementptr [3 x ptr], ptr %45, i32 0, i32 2
   store ptr @_parameterization_Ptri32, ptr %48, align 8
   %49 = call ptr @llvm.invariant.start.p0(i64 9, ptr %45)
-  %50 = call ptr @llvm.invariant.start.p0(i64 616, ptr %36)
+  %50 = call ptr @llvm.invariant.start.p0(i64 632, ptr %36)
   %51 = getelementptr ptr, ptr %36, i32 %43
-  %52 = getelementptr ptr, ptr %51, i32 5
+  %52 = getelementptr ptr, ptr %51, i32 6
   %53 = load ptr, ptr %52, align 8
   %54 = alloca { ptr, ptr, ptr }, align 8
   %55 = getelementptr { ptr, ptr, ptr }, ptr %54, i32 0, i32 0
@@ -1023,7 +1049,7 @@ define i32 @main() {
   %348 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %348)
   %349 = load ptr, ptr %8, align 8
-  call void @llvm.init.trampoline(ptr %348, ptr @jnkxufottd, ptr %349)
+  call void @llvm.init.trampoline(ptr %348, ptr @vwplplqkhe, ptr %349)
   %350 = call ptr @adjust_trampoline(ptr %348)
   store ptr %350, ptr %10, align 8
   %351 = call ptr @llvm.invariant.start.p0(i64 24, ptr %348)
@@ -1033,7 +1059,7 @@ define i32 @main() {
   %355 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %355)
   %356 = load ptr, ptr %9, align 8
-  call void @llvm.init.trampoline(ptr %355, ptr @icrvfqvywc, ptr %356)
+  call void @llvm.init.trampoline(ptr %355, ptr @fcfgwzcjda, ptr %356)
   %357 = call ptr @adjust_trampoline(ptr %355)
   store ptr %357, ptr %11, align 8
   %358 = call ptr @llvm.invariant.start.p0(i64 24, ptr %355)
@@ -1289,7 +1315,7 @@ define i32 @main() {
   %534 = sext i32 %533 to i64
   %535 = mul i64 ptrtoint (ptr getelementptr ([10 x i8], ptr null, i32 1) to i64), %534
   %536 = getelementptr i8, ptr %532, i64 %535
-  %537 = load <10 x i8>, ptr @auxan_not_an_i, align 16
+  %537 = load <10 x i8>, ptr @hezmv_not_an_i, align 16
   store <10 x i8> %537, ptr %536, align 16
   store i32 10, ptr %63, align 4
   store i32 11, ptr %64, align 4
@@ -1328,9 +1354,9 @@ define i32 @main() {
   %562 = getelementptr [3 x ptr], ptr %69, i32 0, i32 2
   store ptr @_parameterization_Ptri32, ptr %562, align 8
   %563 = call ptr @llvm.invariant.start.p0(i64 9, ptr %69)
-  %564 = call ptr @llvm.invariant.start.p0(i64 616, ptr %551)
+  %564 = call ptr @llvm.invariant.start.p0(i64 632, ptr %551)
   %565 = getelementptr ptr, ptr %551, i32 %558
-  %566 = getelementptr ptr, ptr %565, i32 5
+  %566 = getelementptr ptr, ptr %565, i32 6
   %567 = load ptr, ptr %566, align 8
   %568 = getelementptr { ptr, ptr, ptr }, ptr %70, i32 0, i32 0
   store ptr @buffer_typ, ptr %568, align 8
@@ -1391,7 +1417,7 @@ define i32 @main() {
   %599 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %599)
   %600 = load ptr, ptr %80, align 8
-  call void @llvm.init.trampoline(ptr %599, ptr @esariwphav, ptr %600)
+  call void @llvm.init.trampoline(ptr %599, ptr @vctfpzehhw, ptr %600)
   %601 = call ptr @adjust_trampoline(ptr %599)
   store ptr %601, ptr %82, align 8
   %602 = call ptr @llvm.invariant.start.p0(i64 24, ptr %599)
@@ -1401,7 +1427,7 @@ define i32 @main() {
   %606 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %606)
   %607 = load ptr, ptr %81, align 8
-  call void @llvm.init.trampoline(ptr %606, ptr @orryktrypo, ptr %607)
+  call void @llvm.init.trampoline(ptr %606, ptr @dcoxzbazoe, ptr %607)
   %608 = call ptr @adjust_trampoline(ptr %606)
   store ptr %608, ptr %83, align 8
   %609 = call ptr @llvm.invariant.start.p0(i64 24, ptr %606)
@@ -1467,7 +1493,7 @@ define i32 @main() {
   %651 = sext i32 %650 to i64
   %652 = mul i64 ptrtoint (ptr getelementptr ([3 x i8], ptr null, i32 1) to i64), %651
   %653 = getelementptr i8, ptr %649, i64 %652
-  %654 = load <3 x i8>, ptr @ngpuh_foo, align 4
+  %654 = load <3 x i8>, ptr @yaknl_foo, align 4
   store <3 x i8> %654, ptr %653, align 4
   store i32 3, ptr %95, align 4
   store i32 4, ptr %96, align 4
@@ -1502,9 +1528,9 @@ define i32 @main() {
   %675 = getelementptr [3 x ptr], ptr %104, i32 0, i32 2
   store ptr @_parameterization_Ptri32, ptr %675, align 8
   %676 = call ptr @llvm.invariant.start.p0(i64 9, ptr %104)
-  %677 = call ptr @llvm.invariant.start.p0(i64 616, ptr %665)
+  %677 = call ptr @llvm.invariant.start.p0(i64 632, ptr %665)
   %678 = getelementptr ptr, ptr %665, i32 %671
-  %679 = getelementptr ptr, ptr %678, i32 5
+  %679 = getelementptr ptr, ptr %678, i32 6
   %680 = load ptr, ptr %679, align 8
   %681 = getelementptr { ptr, ptr, ptr }, ptr %105, i32 0, i32 0
   store ptr @buffer_typ, ptr %681, align 8
@@ -1529,7 +1555,7 @@ define i32 @main() {
   %693 = sext i32 %692 to i64
   %694 = mul i64 ptrtoint (ptr getelementptr ([3 x i8], ptr null, i32 1) to i64), %693
   %695 = getelementptr i8, ptr %691, i64 %694
-  %696 = load <3 x i8>, ptr @nxodj_bar, align 4
+  %696 = load <3 x i8>, ptr @lnvhj_bar, align 4
   store <3 x i8> %696, ptr %695, align 4
   store i32 3, ptr %110, align 4
   store i32 4, ptr %111, align 4
@@ -1564,9 +1590,9 @@ define i32 @main() {
   %717 = getelementptr [3 x ptr], ptr %119, i32 0, i32 2
   store ptr @_parameterization_Ptri32, ptr %717, align 8
   %718 = call ptr @llvm.invariant.start.p0(i64 9, ptr %119)
-  %719 = call ptr @llvm.invariant.start.p0(i64 616, ptr %707)
+  %719 = call ptr @llvm.invariant.start.p0(i64 632, ptr %707)
   %720 = getelementptr ptr, ptr %707, i32 %713
-  %721 = getelementptr ptr, ptr %720, i32 5
+  %721 = getelementptr ptr, ptr %720, i32 6
   %722 = load ptr, ptr %721, align 8
   %723 = getelementptr { ptr, ptr, ptr }, ptr %120, i32 0, i32 0
   store ptr @buffer_typ, ptr %723, align 8
@@ -1642,7 +1668,7 @@ define i32 @main() {
   %773 = sext i32 %772 to i64
   %774 = mul i64 ptrtoint (ptr getelementptr ([3 x i8], ptr null, i32 1) to i64), %773
   %775 = getelementptr i8, ptr %771, i64 %774
-  %776 = load <3 x i8>, ptr @gzbkt_baz, align 4
+  %776 = load <3 x i8>, ptr @yrawk_baz, align 4
   store <3 x i8> %776, ptr %775, align 4
   store i32 3, ptr %131, align 4
   store i32 4, ptr %132, align 4
@@ -1677,9 +1703,9 @@ define i32 @main() {
   %797 = getelementptr [3 x ptr], ptr %140, i32 0, i32 2
   store ptr @_parameterization_Ptri32, ptr %797, align 8
   %798 = call ptr @llvm.invariant.start.p0(i64 9, ptr %140)
-  %799 = call ptr @llvm.invariant.start.p0(i64 616, ptr %787)
+  %799 = call ptr @llvm.invariant.start.p0(i64 632, ptr %787)
   %800 = getelementptr ptr, ptr %787, i32 %793
-  %801 = getelementptr ptr, ptr %800, i32 5
+  %801 = getelementptr ptr, ptr %800, i32 6
   %802 = load ptr, ptr %801, align 8
   %803 = getelementptr { ptr, ptr, ptr }, ptr %141, i32 0, i32 0
   store ptr @buffer_typ, ptr %803, align 8
@@ -1704,7 +1730,7 @@ define i32 @main() {
   %815 = sext i32 %814 to i64
   %816 = mul i64 ptrtoint (ptr getelementptr ([3 x i8], ptr null, i32 1) to i64), %815
   %817 = getelementptr i8, ptr %813, i64 %816
-  %818 = load <3 x i8>, ptr @wqjjh_qux, align 4
+  %818 = load <3 x i8>, ptr @jvbre_qux, align 4
   store <3 x i8> %818, ptr %817, align 4
   store i32 3, ptr %146, align 4
   store i32 4, ptr %147, align 4
@@ -1739,9 +1765,9 @@ define i32 @main() {
   %839 = getelementptr [3 x ptr], ptr %155, i32 0, i32 2
   store ptr @_parameterization_Ptri32, ptr %839, align 8
   %840 = call ptr @llvm.invariant.start.p0(i64 9, ptr %155)
-  %841 = call ptr @llvm.invariant.start.p0(i64 616, ptr %829)
+  %841 = call ptr @llvm.invariant.start.p0(i64 632, ptr %829)
   %842 = getelementptr ptr, ptr %829, i32 %835
-  %843 = getelementptr ptr, ptr %842, i32 5
+  %843 = getelementptr ptr, ptr %842, i32 6
   %844 = load ptr, ptr %843, align 8
   %845 = getelementptr { ptr, ptr, ptr }, ptr %156, i32 0, i32 0
   store ptr @buffer_typ, ptr %845, align 8
@@ -1817,7 +1843,7 @@ define i32 @main() {
   %895 = sext i32 %894 to i64
   %896 = mul i64 ptrtoint (ptr getelementptr ([5 x i8], ptr null, i32 1) to i64), %895
   %897 = getelementptr i8, ptr %893, i64 %896
-  %898 = load <5 x i8>, ptr @vrjix_hello, align 8
+  %898 = load <5 x i8>, ptr @quhgf_hello, align 8
   store <5 x i8> %898, ptr %897, align 8
   store i32 5, ptr %167, align 4
   store i32 6, ptr %168, align 4
@@ -1852,9 +1878,9 @@ define i32 @main() {
   %919 = getelementptr [3 x ptr], ptr %176, i32 0, i32 2
   store ptr @_parameterization_Ptri32, ptr %919, align 8
   %920 = call ptr @llvm.invariant.start.p0(i64 9, ptr %176)
-  %921 = call ptr @llvm.invariant.start.p0(i64 616, ptr %909)
+  %921 = call ptr @llvm.invariant.start.p0(i64 632, ptr %909)
   %922 = getelementptr ptr, ptr %909, i32 %915
-  %923 = getelementptr ptr, ptr %922, i32 5
+  %923 = getelementptr ptr, ptr %922, i32 6
   %924 = load ptr, ptr %923, align 8
   %925 = getelementptr { ptr, ptr, ptr }, ptr %177, i32 0, i32 0
   store ptr @buffer_typ, ptr %925, align 8
@@ -1879,7 +1905,7 @@ define i32 @main() {
   %937 = sext i32 %936 to i64
   %938 = mul i64 ptrtoint (ptr getelementptr ([5 x i8], ptr null, i32 1) to i64), %937
   %939 = getelementptr i8, ptr %935, i64 %938
-  %940 = load <5 x i8>, ptr @wuvdy_world, align 8
+  %940 = load <5 x i8>, ptr @jbhhe_world, align 8
   store <5 x i8> %940, ptr %939, align 8
   store i32 5, ptr %182, align 4
   store i32 6, ptr %183, align 4
@@ -1914,9 +1940,9 @@ define i32 @main() {
   %961 = getelementptr [3 x ptr], ptr %191, i32 0, i32 2
   store ptr @_parameterization_Ptri32, ptr %961, align 8
   %962 = call ptr @llvm.invariant.start.p0(i64 9, ptr %191)
-  %963 = call ptr @llvm.invariant.start.p0(i64 616, ptr %951)
+  %963 = call ptr @llvm.invariant.start.p0(i64 632, ptr %951)
   %964 = getelementptr ptr, ptr %951, i32 %957
-  %965 = getelementptr ptr, ptr %964, i32 5
+  %965 = getelementptr ptr, ptr %964, i32 6
   %966 = load ptr, ptr %965, align 8
   %967 = getelementptr { ptr, ptr, ptr }, ptr %192, i32 0, i32 0
   store ptr @buffer_typ, ptr %967, align 8
@@ -2210,7 +2236,7 @@ define i32 @main() {
   %1174 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %1174)
   %1175 = load ptr, ptr %233, align 8
-  call void @llvm.init.trampoline(ptr %1174, ptr @bjlvpglsvc, ptr %1175)
+  call void @llvm.init.trampoline(ptr %1174, ptr @jqdgxifdlx, ptr %1175)
   %1176 = call ptr @adjust_trampoline(ptr %1174)
   store ptr %1176, ptr %235, align 8
   %1177 = call ptr @llvm.invariant.start.p0(i64 24, ptr %1174)
@@ -2220,7 +2246,7 @@ define i32 @main() {
   %1181 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %1181)
   %1182 = load ptr, ptr %234, align 8
-  call void @llvm.init.trampoline(ptr %1181, ptr @wcomgcgbrt, ptr %1182)
+  call void @llvm.init.trampoline(ptr %1181, ptr @oraoemgnmq, ptr %1182)
   %1183 = call ptr @adjust_trampoline(ptr %1181)
   store ptr %1183, ptr %236, align 8
   %1184 = call ptr @llvm.invariant.start.p0(i64 24, ptr %1181)
@@ -2286,7 +2312,7 @@ define i32 @main() {
   %1226 = sext i32 %1225 to i64
   %1227 = mul i64 ptrtoint (ptr getelementptr ([1 x i8], ptr null, i32 1) to i64), %1226
   %1228 = getelementptr i8, ptr %1224, i64 %1227
-  %1229 = load <1 x i8>, ptr @ipvbm_a, align 1
+  %1229 = load <1 x i8>, ptr @xaavb_a, align 1
   store <1 x i8> %1229, ptr %1228, align 1
   store i32 1, ptr %248, align 4
   store i32 2, ptr %249, align 4
@@ -2321,9 +2347,9 @@ define i32 @main() {
   %1250 = getelementptr [3 x ptr], ptr %257, i32 0, i32 2
   store ptr @_parameterization_Ptri32, ptr %1250, align 8
   %1251 = call ptr @llvm.invariant.start.p0(i64 9, ptr %257)
-  %1252 = call ptr @llvm.invariant.start.p0(i64 616, ptr %1240)
+  %1252 = call ptr @llvm.invariant.start.p0(i64 632, ptr %1240)
   %1253 = getelementptr ptr, ptr %1240, i32 %1246
-  %1254 = getelementptr ptr, ptr %1253, i32 5
+  %1254 = getelementptr ptr, ptr %1253, i32 6
   %1255 = load ptr, ptr %1254, align 8
   %1256 = getelementptr { ptr, ptr, ptr }, ptr %258, i32 0, i32 0
   store ptr @buffer_typ, ptr %1256, align 8
@@ -2395,7 +2421,7 @@ define i32 @main() {
   %1303 = sext i32 %1302 to i64
   %1304 = mul i64 ptrtoint (ptr getelementptr ([1 x i8], ptr null, i32 1) to i64), %1303
   %1305 = getelementptr i8, ptr %1301, i64 %1304
-  %1306 = load <1 x i8>, ptr @mbqsj_b, align 1
+  %1306 = load <1 x i8>, ptr @cwgpw_b, align 1
   store <1 x i8> %1306, ptr %1305, align 1
   store i32 1, ptr %270, align 4
   store i32 2, ptr %271, align 4
@@ -2430,9 +2456,9 @@ define i32 @main() {
   %1327 = getelementptr [3 x ptr], ptr %279, i32 0, i32 2
   store ptr @_parameterization_Ptri32, ptr %1327, align 8
   %1328 = call ptr @llvm.invariant.start.p0(i64 9, ptr %279)
-  %1329 = call ptr @llvm.invariant.start.p0(i64 616, ptr %1317)
+  %1329 = call ptr @llvm.invariant.start.p0(i64 632, ptr %1317)
   %1330 = getelementptr ptr, ptr %1317, i32 %1323
-  %1331 = getelementptr ptr, ptr %1330, i32 5
+  %1331 = getelementptr ptr, ptr %1330, i32 6
   %1332 = load ptr, ptr %1331, align 8
   %1333 = getelementptr { ptr, ptr, ptr }, ptr %280, i32 0, i32 0
   store ptr @buffer_typ, ptr %1333, align 8
@@ -2504,7 +2530,7 @@ define i32 @main() {
   %1380 = sext i32 %1379 to i64
   %1381 = mul i64 ptrtoint (ptr getelementptr ([1 x i8], ptr null, i32 1) to i64), %1380
   %1382 = getelementptr i8, ptr %1378, i64 %1381
-  %1383 = load <1 x i8>, ptr @duuwp_c, align 1
+  %1383 = load <1 x i8>, ptr @xyldv_c, align 1
   store <1 x i8> %1383, ptr %1382, align 1
   store i32 1, ptr %292, align 4
   store i32 2, ptr %293, align 4
@@ -2539,9 +2565,9 @@ define i32 @main() {
   %1404 = getelementptr [3 x ptr], ptr %301, i32 0, i32 2
   store ptr @_parameterization_Ptri32, ptr %1404, align 8
   %1405 = call ptr @llvm.invariant.start.p0(i64 9, ptr %301)
-  %1406 = call ptr @llvm.invariant.start.p0(i64 616, ptr %1394)
+  %1406 = call ptr @llvm.invariant.start.p0(i64 632, ptr %1394)
   %1407 = getelementptr ptr, ptr %1394, i32 %1400
-  %1408 = getelementptr ptr, ptr %1407, i32 5
+  %1408 = getelementptr ptr, ptr %1407, i32 6
   %1409 = load ptr, ptr %1408, align 8
   %1410 = getelementptr { ptr, ptr, ptr }, ptr %302, i32 0, i32 0
   store ptr @buffer_typ, ptr %1410, align 8
@@ -2613,7 +2639,7 @@ define i32 @main() {
   %1457 = sext i32 %1456 to i64
   %1458 = mul i64 ptrtoint (ptr getelementptr ([1 x i8], ptr null, i32 1) to i64), %1457
   %1459 = getelementptr i8, ptr %1455, i64 %1458
-  %1460 = load <1 x i8>, ptr @qsvft_c, align 1
+  %1460 = load <1 x i8>, ptr @gbzyf_c, align 1
   store <1 x i8> %1460, ptr %1459, align 1
   store i32 1, ptr %314, align 4
   store i32 2, ptr %315, align 4
@@ -2648,9 +2674,9 @@ define i32 @main() {
   %1481 = getelementptr [3 x ptr], ptr %323, i32 0, i32 2
   store ptr @_parameterization_Ptri32, ptr %1481, align 8
   %1482 = call ptr @llvm.invariant.start.p0(i64 9, ptr %323)
-  %1483 = call ptr @llvm.invariant.start.p0(i64 616, ptr %1471)
+  %1483 = call ptr @llvm.invariant.start.p0(i64 632, ptr %1471)
   %1484 = getelementptr ptr, ptr %1471, i32 %1477
-  %1485 = getelementptr ptr, ptr %1484, i32 5
+  %1485 = getelementptr ptr, ptr %1484, i32 6
   %1486 = load ptr, ptr %1485, align 8
   %1487 = getelementptr { ptr, ptr, ptr }, ptr %324, i32 0, i32 0
   store ptr @buffer_typ, ptr %1487, align 8

@@ -1142,9 +1142,12 @@ class CastOp(IRDLOperation):
         if from_union and to_union: return ReUnionizeOp.create(operands=[operand], attributes=attr_dict, result_types=[to_typ])
         if from_union: return NarrowOp.make(operand, from_typ, to_typ, id_fn)
         if to_union: return UnionizeOp.make(operand, from_typ, to_typ, id_fn)
-        ptr_to_ptr = isinstance(from_typ, Ptr) and isinstance(to_typ, Ptr)
-        if ptr_to_ptr and isinstance(from_typ.type, IntegerType) and isinstance(to_typ.type, IntegerType) and to_typ.type.bitwidth > from_typ.type.bitwidth:
+        from_integer = isinstance(from_typ, Ptr) and isinstance(from_typ.type, IntegerType)
+        to_integer = isinstance(to_typ, Ptr) and isinstance(to_typ.type, IntegerType)
+        if from_integer and to_integer and to_typ.type.bitwidth > from_typ.type.bitwidth:
             return WidenIntOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
+        if from_integer and to_integer and to_typ.type.bitwidth < from_typ.type.bitwidth:
+            return TruncateIntOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
         if from_typ == Ptr([IntegerType(32)]) and to_typ == Ptr([Float64Type()]):
             return IntToFloatOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
         raise Exception(f"cast from {from_typ} to {to_typ} not accounted for")
@@ -1294,6 +1297,11 @@ class TupleCastOp(IRDLOperation):
 @irdl_op_definition
 class WidenIntOp(CastOp, IRDLOperation):
     name = "mini.widen_int"
+    traits = frozenset()
+
+@irdl_op_definition
+class TruncateIntOp(CastOp, IRDLOperation):
+    name = "mini.truncate_int"
     traits = frozenset()
 
 @irdl_op_definition

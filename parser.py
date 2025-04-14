@@ -318,6 +318,10 @@ class CSTTransformer(Transformer):
         f = BoolLiteral(node_info, 0)
         return Comparison(node_info, f, "EQ", expr)
 
+    def as_op(self, operand, astoken, typ):
+        node_info = NodeInfo(random_letters(10), self.file_name, astoken.line)
+        return As(node_info, operand, typ);
+
     def paren_expr(self, expr):
         return expr
 

@@ -1187,6 +1187,27 @@ module @patterns {
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
+  pdl.pattern @LowerTruncateInt : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %operand = pdl.operand
+    %to_typ_attr = pdl.attribute
+    %from_typ_attr = pdl.attribute
+    %to_typ_name = pdl.attribute
+    %from_typ_name = pdl.attribute
+    %root = pdl.operation "mini.truncate_int"(%operand : !pdl.value) {"from_typ" = %from_typ_attr, "to_typ" = %to_typ_attr, "from_typ_name" = %from_typ_name, "to_typ_name" = %to_typ_name} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %from_typ = pdl.apply_native_rewrite "type_attr_to_type"(%from_typ_attr : !pdl.attribute) : !pdl.type
+      %to_typ = pdl.apply_native_rewrite "type_attr_to_type"(%to_typ_attr : !pdl.attribute) : !pdl.type
+      %alloca = pdl.operation "mini.alloc" {"typ" = %to_typ_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %unwrapped = pdl.operation "mini.unwrap"(%operand : !pdl.value) -> (%from_typ : !pdl.type)
+      %unwrapped_result = pdl.result 0 of %unwrapped
+      %truncated = pdl.operation "arith.trunci"(%unwrapped_result : !pdl.value) -> (%to_typ : !pdl.type)
+      %truncated_result = pdl.result 0 of %truncated
+      %store = pdl.operation "llvm.store"(%truncated_result, %alloca_result : !pdl.value, !pdl.value)
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
   pdl.pattern @LowerReUnionize : benefit(1) {
     %ptr_type = pdl.type : !llvm.ptr
     %operand = pdl.operand

@@ -116,6 +116,7 @@ term: factor -> term_single
 
 factor: MINUS factor -> neg_op
       | NOT factor -> not_op
+      | factor AS typ -> as_op
       | primary -> factor_single
 
 primary: "(" expression ")" -> paren_expr
@@ -164,6 +165,7 @@ LE: "<="
 GE: ">="
 LT: "<"
 GT: ">"
+AS: "as"
 NOT: "not"
 OR: "or"
 AND: "and"

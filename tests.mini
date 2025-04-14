@@ -733,25 +733,11 @@ class RangeIterator extends Iterator[i32] {
     }
 }
 
-
 extern def fopen(name : Buffer[i8], mode : Buffer[i8]) -> Buffer[i32]
 extern def fprintf(file : Buffer[i32], text : Buffer[i8]) -> i32
 extern def fclose(file : Buffer[i32]) -> i32
 extern def fgetc(file : Buffer[i32]) -> i32
 extern def ferror(file : Buffer[i32]) -> i32
-
-// don't worry, this compiles down to umax + trunci
-// obviously once we implement good casting this will be unecessary
-def i32toi8(x : i32) -> i8 {
-    i = 0;
-    sum : i8 = 0;
-    one : i8 = 1;
-    while i < x {
-        sum = sum + one;
-        i = i + 1;
-    }
-    return sum;
-}
 
 class FileSystemError extends Exception {}
 
@@ -1130,6 +1116,10 @@ IO.print(FileSystem.read_file("bigtings.txt"));
 //system("dir".c_string());
 
 (2:5).each((x : i32) => { IO.print(x*x); });
+
+def i32toi8(x : i32) -> i8 {
+    return x as i8;
+}
 
 captured = i32toi8;
 IO.print(captured.call(5));

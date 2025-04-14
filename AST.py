@@ -684,6 +684,42 @@ class TypeCheck(Expression):
         self.exprtype(scope)
 
 @dataclass
+class As(Expression):
+    operand: Expression
+    typ: TypeAttribute
+
+    def codegen(self, scope):
+
+        to_typ = self.exprtype(scope)
+        to_integer = isinstance(to_typ, Ptr) and isinstance(to_typ.type, IntegerType)
+        if isinstance(self.operand, IntegerLiteral) and to_integer:
+            self.operand.width = to_typ.type.width.data
+            operand = self.operand.codegen(scope)
+            return operand
+
+        operand_type = self.operand.exprtype(scope)
+        operand = self.operand.codegen(scope)
+        
+        if operand_type == to_typ: return operand
+        
+        cast = CastOp.make(operand, operand_type, to_typ, type_id)
+        scope.region.last_block.add_op(cast)
+        return cast.results[0]
+
+    def exprtype(self, scope):
+        operand_type = self.operand.exprtype(scope)
+        to_typ = scope.simplify(self.typ)
+        to_integer = isinstance(to_typ, Ptr) and isinstance(to_typ.type, IntegerType)
+        if isinstance(self.operand, IntegerLiteral) and to_integer:
+            self.operand.width = to_typ.type.width.data
+            return to_typ
+        from_integer = isinstance(operand_type, Ptr) and isinstance(operand_type.type, IntegerType)
+        if from_integer and to_integer: return to_typ
+        if not scope.subtype(operand_type, to_typ):
+            raise Exception(f"{self.info} Can't cast {operand_type} to {to_typ}")
+        return to_typ
+
+@dataclass
 class FunctionCall(Expression):
     function: str
     arguments: List[Expression]

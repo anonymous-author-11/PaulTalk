@@ -285,6 +285,10 @@ IO.print(FileSystem.read_file("bigtings.txt"));
 
 (2:5).each((x : i32) => { IO.print(x*x); });
 
+def i32toi8(x : i32) -> i8 {
+    return x as i8;
+}
+
 captured = i32toi8;
 IO.print(captured.call(5));
 
