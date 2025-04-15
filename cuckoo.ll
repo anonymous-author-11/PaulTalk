@@ -2,7 +2,6 @@
 source_filename = "LLVMDialectModule"
 
 @_parameterization_Nil = linkonce_odr constant [2 x ptr] [ptr @nil_typ, ptr null]
-@_parameterization_String = linkonce_odr constant [2 x ptr] [ptr @String, ptr null]
 @_parameterization_Ptri32 = linkonce_odr constant [2 x ptr] [ptr @i32_typ, ptr null]
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
@@ -44,43 +43,32 @@ source_filename = "LLVMDialectModule"
 @Character = external constant { [3 x i64], [4 x ptr], [5 x ptr] }
 @StringIterator = external constant { [3 x i64], [4 x ptr], [10 x ptr] }
 @Exception = external constant { [3 x i64], [4 x ptr], [13 x ptr] }
-@Math = external constant { [3 x i64], [4 x ptr], [17 x ptr] }
-@Range = external constant { [3 x i64], [4 x ptr], [55 x ptr] }
-@RangeIterator = external constant { [3 x i64], [4 x ptr], [11 x ptr] }
-@IO = external constant { [3 x i64], [4 x ptr], [10 x ptr] }
-@Blocking = external constant { [3 x i64], [4 x ptr], [2 x ptr] }
-@Channel = external constant { [3 x i64], [4 x ptr], [8 x ptr] }
-@Array = external constant { [3 x i64], [4 x ptr], [83 x ptr] }
-@ArrayIterator = external constant { [3 x i64], [4 x ptr], [10 x ptr] }
-@FileSystemError = external constant { [3 x i64], [4 x ptr], [26 x ptr] }
-@File = external constant { [3 x i64], [4 x ptr], [20 x ptr] }
-@FileProcessor = external constant { [3 x i64], [4 x ptr], [0 x ptr] }
-@FileReader = external constant { [3 x i64], [4 x ptr], [8 x ptr] }
-@FileWriter = external constant { [3 x i64], [4 x ptr], [9 x ptr] }
-@FileSystem = external constant { [3 x i64], [4 x ptr], [7 x ptr] }
+@KeyNotFound = external constant { [3 x i64], [4 x ptr], [26 x ptr] }
+@Map = external constant { [3 x i64], [4 x ptr], [0 x ptr] }
+@HashMap = external constant { [3 x i64], [4 x ptr], [0 x ptr] }
 @Entry_hashtbl = constant [4 x ptr] [ptr @Entry, ptr @Object, ptr @any_typ, ptr null]
 @Entry_offset_tbl = constant [4 x i32] [i32 10, i32 25, i32 10, i32 0]
 @Entry = constant { [3 x i64], [7 x ptr], [15 x ptr] } { [3 x i64] [i64 4015701072841558310, i64 4611686018427388181, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Entry_hashtbl, ptr @Entry_offset_tbl, ptr @_data_size_Entry, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [15 x ptr] [ptr @Entry_field_Entry_0, ptr @Entry_field_Entry_1, ptr @Entry_field_primary_hash, ptr @Entry_field_key, ptr @Entry_field_value, ptr @Entry_B_init_keyK_valueV_primary_hashPtri32, ptr @Entry_B_key_, ptr @Entry_B_value_, ptr @Entry_B_primary_hash_, ptr @Entry_B_to_pair_, ptr @Entry_init_keyK_valueV_primary_hashPtri32, ptr @Entry_key_, ptr @Entry_value_, ptr @Entry_primary_hash_, ptr @Entry_to_pair_] }
-@HashMap_hashtbl = constant [8 x ptr] [ptr @HashMap, ptr @Container, ptr null, ptr @Iterable, ptr @Object, ptr null, ptr null, ptr @any_typ]
-@HashMap_offset_tbl = constant [8 x i32] [i32 10, i32 98, i32 0, i32 75, i32 98, i32 0, i32 0, i32 10]
-@HashMap = constant { [3 x i64], [7 x ptr], [88 x ptr] } { [3 x i64] [i64 -2849643283898152329, i64 4611686018427388279, i64 7], [7 x ptr] [ptr @subtype_test, ptr @HashMap_hashtbl, ptr @HashMap_offset_tbl, ptr @_data_size_HashMap, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [88 x ptr] [ptr @HashMap_field_HashMap_0, ptr @HashMap_field_HashMap_1, ptr @HashMap_field_HashMap_2, ptr @HashMap_field_table1, ptr @HashMap_field_table2, ptr @HashMap_field_table_len, ptr @HashMap_field_size, ptr @HashMap_field_hasher, ptr @HashMap_field_eq, ptr @HashMap_B__Self_max_displacements_, ptr @HashMap_B_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1, ptr @HashMap_B_hash1_keyK, ptr @HashMap_B_hash2_from_primary_primary_hashPtri32, ptr @HashMap_B_index1_primary_hashPtri32, ptr @HashMap_B_index2_primary_hashPtri32, ptr @HashMap_B_place_entry_or_get_failed_entry_to_insertEntryK._V, ptr @HashMap_B_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_per_tablePtri32, ptr @HashMap_B_resize_, ptr @HashMap_B_replace_in_table_keyK_valueV_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil, ptr @HashMap_B_get_from_table_keyK_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil, ptr @HashMap_B_remove_from_table_keyK_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil, ptr @HashMap_B_insert_keyK_valueV, ptr @HashMap_B_get_keyK, ptr @HashMap_B_remove_keyK, ptr @HashMap_B_clear_, ptr @HashMap_B_size_, ptr @HashMap_B_iterator_, ptr @HashMap_B_each_fFunctionT_to_Nothing, ptr @HashMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @HashMap_B_all_fFunctionT_to_Ptri1, ptr @HashMap_B_any_fFunctionT_to_Ptri1, ptr @HashMap_B_map_fFunctionT_to_U, ptr @HashMap_B_filter_fFunctionT_to_Ptri1, ptr @HashMap_B_chain_otherIterableT, ptr @HashMap_B_interleave_otherIterableT, ptr @HashMap_B_zip_otherIterableU, ptr @HashMap_B_product_otherIterableU, ptr @HashMap__Self_max_displacements_, ptr @HashMap_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1, ptr @HashMap_hash1_keyK, ptr @HashMap_hash2_from_primary_primary_hashPtri32, ptr @HashMap_index1_primary_hashPtri32, ptr @HashMap_index2_primary_hashPtri32, ptr @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V, ptr @HashMap_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_per_tablePtri32, ptr @HashMap_resize_, ptr @HashMap_replace_in_table_keyK_valueV_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil, ptr @HashMap_get_from_table_keyK_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil, ptr @HashMap_remove_from_table_keyK_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil, ptr @HashMap_insert_keyK_valueV, ptr @HashMap_get_keyK, ptr @HashMap_remove_keyK, ptr @HashMap_clear_, ptr @HashMap_size_, ptr @HashMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Ptri1, ptr @Iterable_any_fFunctionT_to_Ptri1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Ptri1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @HashMap_field_HashMap_2, ptr @HashMap_B_iterator_, ptr @HashMap_B_each_fFunctionT_to_Nothing, ptr @HashMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @HashMap_B_all_fFunctionT_to_Ptri1, ptr @HashMap_B_any_fFunctionT_to_Ptri1, ptr @HashMap_B_map_fFunctionT_to_U, ptr @HashMap_B_filter_fFunctionT_to_Ptri1, ptr @HashMap_B_chain_otherIterableT, ptr @HashMap_B_interleave_otherIterableT, ptr @HashMap_B_zip_otherIterableU, ptr @HashMap_B_product_otherIterableU, ptr @HashMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Ptri1, ptr @Iterable_any_fFunctionT_to_Ptri1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Ptri1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
-@HashMapIterator_hashtbl = constant [8 x ptr] [ptr @Object, ptr @any_typ, ptr null, ptr @Container, ptr @HashMapIterator, ptr @Iterator, ptr null, ptr null]
-@HashMapIterator_offset_tbl = constant [8 x i32] [i32 27, i32 10, i32 0, i32 27, i32 10, i32 24, i32 0, i32 0]
-@HashMapIterator = constant { [3 x i64], [7 x ptr], [17 x ptr] } { [3 x i64] [i64 -704669437586349537, i64 4611686018427388081, i64 7], [7 x ptr] [ptr @subtype_test, ptr @HashMapIterator_hashtbl, ptr @HashMapIterator_offset_tbl, ptr @_data_size_HashMapIterator, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [17 x ptr] [ptr @HashMapIterator_field_HashMapIterator_0, ptr @HashMapIterator_field_HashMapIterator_1, ptr @HashMapIterator_field_HashMapIterator_2, ptr @HashMapIterator_field_map_table1, ptr @HashMapIterator_field_map_table2, ptr @HashMapIterator_field_table_len, ptr @HashMapIterator_field_index, ptr @HashMapIterator_field_on_second, ptr @HashMapIterator_B_init_map_table1BufferEntryK._V_or_Nil_map_table2BufferEntryK._V_or_Nil_table_lenPtri32, ptr @HashMapIterator_B_next_from_table_tableBufferEntryK._V_or_Nil, ptr @HashMapIterator_B_next_, ptr @HashMapIterator_init_map_table1BufferEntryK._V_or_Nil_map_table2BufferEntryK._V_or_Nil_table_lenPtri32, ptr @HashMapIterator_next_from_table_tableBufferEntryK._V_or_Nil, ptr @HashMapIterator_next_, ptr @HashMapIterator_field_HashMapIterator_2, ptr @HashMapIterator_B_next_, ptr @HashMapIterator_next_] }
+@CuckooMap_hashtbl = constant [8 x ptr] [ptr null, ptr @CuckooMap, ptr @Iterable, ptr @any_typ, ptr @Container, ptr @Map, ptr @HashMap, ptr @Object]
+@CuckooMap_offset_tbl = constant [8 x i32] [i32 0, i32 10, i32 259, i32 10, i32 282, i32 199, i32 79, i32 282]
+@CuckooMap = constant { [3 x i64], [7 x ptr], [272 x ptr] } { [3 x i64] [i64 3547150501766965522, i64 4611686018427388331, i64 7], [7 x ptr] [ptr @subtype_test, ptr @CuckooMap_hashtbl, ptr @CuckooMap_offset_tbl, ptr @_data_size_CuckooMap, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [272 x ptr] [ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_6, ptr @CuckooMap_field_table1, ptr @CuckooMap_field_table2, ptr @CuckooMap_field_table_len, ptr @CuckooMap_field_size, ptr @CuckooMap_field_hasher, ptr @CuckooMap_field_eq, ptr @CuckooMap_B__Self_max_displacements_, ptr @CuckooMap_B_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1, ptr @CuckooMap_B_hash1_keyK, ptr @CuckooMap_B_hash2_from_primary_primary_hashPtri32, ptr @CuckooMap_B_index1_primary_hashPtri32, ptr @CuckooMap_B_index2_primary_hashPtri32, ptr @CuckooMap_B_place_entry_or_get_failed_entry_to_insertEntryK._V, ptr @CuckooMap_B_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_per_tablePtri32, ptr @CuckooMap_B_resize_, ptr @CuckooMap_B_replace_in_table_keyK_valueV_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_B_get_from_table_keyK_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_B_remove_from_table_keyK_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_B_insert_keyK_valueV, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_get_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_remove_keyK, ptr @CuckooMap_B_clear_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Ptri1, ptr @CuckooMap_B_any_fFunctionT_to_Ptri1, ptr @CuckooMap_B_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Ptri1, ptr @CuckooMap_B_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherIterableU, ptr @CuckooMap_B_product_otherIterableU, ptr @CuckooMap__Self_max_displacements_, ptr @CuckooMap_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1, ptr @CuckooMap_hash1_keyK, ptr @CuckooMap_hash2_from_primary_primary_hashPtri32, ptr @CuckooMap_index1_primary_hashPtri32, ptr @CuckooMap_index2_primary_hashPtri32, ptr @CuckooMap_place_entry_or_get_failed_entry_to_insertEntryK._V, ptr @CuckooMap_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_per_tablePtri32, ptr @CuckooMap_resize_, ptr @CuckooMap_replace_in_table_keyK_valueV_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_get_from_table_keyK_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_remove_from_table_keyK_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_insert_keyK_valueV, ptr @CuckooMap_size_, ptr @CuckooMap_get_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_remove_keyK, ptr @CuckooMap_clear_, ptr @Map__index_keyK, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Ptri1, ptr @Iterable_any_fFunctionT_to_Ptri1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Ptri1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_6, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_get_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_remove_keyK, ptr @CuckooMap_B_clear_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Ptri1, ptr @CuckooMap_B_any_fFunctionT_to_Ptri1, ptr @CuckooMap_B_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Ptri1, ptr @CuckooMap_B_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherIterableU, ptr @CuckooMap_B_product_otherIterableU, ptr @CuckooMap_size_, ptr @CuckooMap_get_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_remove_keyK, ptr @CuckooMap_clear_, ptr @Map__index_keyK, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Ptri1, ptr @Iterable_any_fFunctionT_to_Ptri1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Ptri1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_6, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_get_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_remove_keyK, ptr @CuckooMap_B_clear_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Ptri1, ptr @CuckooMap_B_any_fFunctionT_to_Ptri1, ptr @CuckooMap_B_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Ptri1, ptr @CuckooMap_B_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherIterableU, ptr @CuckooMap_B_product_otherIterableU, ptr @CuckooMap_size_, ptr @CuckooMap_get_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_remove_keyK, ptr @CuckooMap_clear_, ptr @Map__index_keyK, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Ptri1, ptr @Iterable_any_fFunctionT_to_Ptri1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Ptri1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_6, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Ptri1, ptr @CuckooMap_B_any_fFunctionT_to_Ptri1, ptr @CuckooMap_B_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Ptri1, ptr @CuckooMap_B_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherIterableU, ptr @CuckooMap_B_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Ptri1, ptr @Iterable_any_fFunctionT_to_Ptri1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Ptri1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_6, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Ptri1, ptr @CuckooMap_B_any_fFunctionT_to_Ptri1, ptr @CuckooMap_B_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Ptri1, ptr @CuckooMap_B_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherIterableU, ptr @CuckooMap_B_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Ptri1, ptr @Iterable_any_fFunctionT_to_Ptri1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Ptri1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_6, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_get_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_remove_keyK, ptr @CuckooMap_B_clear_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Ptri1, ptr @CuckooMap_B_any_fFunctionT_to_Ptri1, ptr @CuckooMap_B_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Ptri1, ptr @CuckooMap_B_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherIterableU, ptr @CuckooMap_B_product_otherIterableU, ptr @CuckooMap_size_, ptr @CuckooMap_get_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_remove_keyK, ptr @CuckooMap_clear_, ptr @Map__index_keyK, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Ptri1, ptr @Iterable_any_fFunctionT_to_Ptri1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Ptri1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_6, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Ptri1, ptr @CuckooMap_B_any_fFunctionT_to_Ptri1, ptr @CuckooMap_B_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Ptri1, ptr @CuckooMap_B_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherIterableU, ptr @CuckooMap_B_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Ptri1, ptr @Iterable_any_fFunctionT_to_Ptri1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Ptri1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_6, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Ptri1, ptr @CuckooMap_B_any_fFunctionT_to_Ptri1, ptr @CuckooMap_B_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Ptri1, ptr @CuckooMap_B_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherIterableU, ptr @CuckooMap_B_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Ptri1, ptr @Iterable_any_fFunctionT_to_Ptri1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Ptri1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
+@CuckooMapIterator_hashtbl = constant [8 x ptr] [ptr @CuckooMapIterator, ptr null, ptr @Container, ptr @Iterator, ptr @Object, ptr null, ptr @any_typ, ptr null]
+@CuckooMapIterator_offset_tbl = constant [8 x i32] [i32 10, i32 0, i32 27, i32 24, i32 27, i32 0, i32 10, i32 0]
+@CuckooMapIterator = constant { [3 x i64], [7 x ptr], [17 x ptr] } { [3 x i64] [i64 -1975748647346050920, i64 4611686018427388091, i64 7], [7 x ptr] [ptr @subtype_test, ptr @CuckooMapIterator_hashtbl, ptr @CuckooMapIterator_offset_tbl, ptr @_data_size_CuckooMapIterator, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [17 x ptr] [ptr @CuckooMapIterator_field_CuckooMapIterator_0, ptr @CuckooMapIterator_field_CuckooMapIterator_1, ptr @CuckooMapIterator_field_CuckooMapIterator_2, ptr @CuckooMapIterator_field_map_table1, ptr @CuckooMapIterator_field_map_table2, ptr @CuckooMapIterator_field_table_len, ptr @CuckooMapIterator_field_index, ptr @CuckooMapIterator_field_on_second, ptr @CuckooMapIterator_B_init_map_table1BufferEntryK._V_or_Nil_map_table2BufferEntryK._V_or_Nil_table_lenPtri32, ptr @CuckooMapIterator_B_next_from_table_tableBufferEntryK._V_or_Nil, ptr @CuckooMapIterator_B_next_, ptr @CuckooMapIterator_init_map_table1BufferEntryK._V_or_Nil_map_table2BufferEntryK._V_or_Nil_table_lenPtri32, ptr @CuckooMapIterator_next_from_table_tableBufferEntryK._V_or_Nil, ptr @CuckooMapIterator_next_, ptr @CuckooMapIterator_field_CuckooMapIterator_2, ptr @CuckooMapIterator_B_next_, ptr @CuckooMapIterator_next_] }
 @Entry_field_primary_hash = internal constant { ptr, ptr } { ptr @Entry_getter_primary_hash, ptr @Entry_setter_primary_hash }
 @Entry_field_key = internal constant { ptr, ptr } { ptr @Entry_getter_key, ptr @Entry_setter_key }
 @Entry_field_value = internal constant { ptr, ptr } { ptr @Entry_getter_value, ptr @Entry_setter_value }
-@HashMap_field_table1 = internal constant { ptr, ptr } { ptr @HashMap_getter_table1, ptr @HashMap_setter_table1 }
-@HashMap_field_table2 = internal constant { ptr, ptr } { ptr @HashMap_getter_table2, ptr @HashMap_setter_table2 }
-@HashMap_field_table_len = internal constant { ptr, ptr } { ptr @HashMap_getter_table_len, ptr @HashMap_setter_table_len }
-@HashMap_field_size = internal constant { ptr, ptr } { ptr @HashMap_getter_size, ptr @HashMap_setter_size }
-@HashMap_field_hasher = internal constant { ptr, ptr } { ptr @HashMap_getter_hasher, ptr @HashMap_setter_hasher }
-@HashMap_field_eq = internal constant { ptr, ptr } { ptr @HashMap_getter_eq, ptr @HashMap_setter_eq }
-@HashMapIterator_field_map_table1 = internal constant { ptr, ptr } { ptr @HashMapIterator_getter_map_table1, ptr @HashMapIterator_setter_map_table1 }
-@HashMapIterator_field_map_table2 = internal constant { ptr, ptr } { ptr @HashMapIterator_getter_map_table2, ptr @HashMapIterator_setter_map_table2 }
-@HashMapIterator_field_table_len = internal constant { ptr, ptr } { ptr @HashMapIterator_getter_table_len, ptr @HashMapIterator_setter_table_len }
-@HashMapIterator_field_index = internal constant { ptr, ptr } { ptr @HashMapIterator_getter_index, ptr @HashMapIterator_setter_index }
-@HashMapIterator_field_on_second = internal constant { ptr, ptr } { ptr @HashMapIterator_getter_on_second, ptr @HashMapIterator_setter_on_second }
+@CuckooMap_field_table1 = internal constant { ptr, ptr } { ptr @CuckooMap_getter_table1, ptr @CuckooMap_setter_table1 }
+@CuckooMap_field_table2 = internal constant { ptr, ptr } { ptr @CuckooMap_getter_table2, ptr @CuckooMap_setter_table2 }
+@CuckooMap_field_table_len = internal constant { ptr, ptr } { ptr @CuckooMap_getter_table_len, ptr @CuckooMap_setter_table_len }
+@CuckooMap_field_size = internal constant { ptr, ptr } { ptr @CuckooMap_getter_size, ptr @CuckooMap_setter_size }
+@CuckooMap_field_hasher = internal constant { ptr, ptr } { ptr @CuckooMap_getter_hasher, ptr @CuckooMap_setter_hasher }
+@CuckooMap_field_eq = internal constant { ptr, ptr } { ptr @CuckooMap_getter_eq, ptr @CuckooMap_setter_eq }
+@CuckooMapIterator_field_map_table1 = internal constant { ptr, ptr } { ptr @CuckooMapIterator_getter_map_table1, ptr @CuckooMapIterator_setter_map_table1 }
+@CuckooMapIterator_field_map_table2 = internal constant { ptr, ptr } { ptr @CuckooMapIterator_getter_map_table2, ptr @CuckooMapIterator_setter_map_table2 }
+@CuckooMapIterator_field_table_len = internal constant { ptr, ptr } { ptr @CuckooMapIterator_getter_table_len, ptr @CuckooMapIterator_setter_table_len }
+@CuckooMapIterator_field_index = internal constant { ptr, ptr } { ptr @CuckooMapIterator_getter_index, ptr @CuckooMapIterator_setter_index }
+@CuckooMapIterator_field_on_second = internal constant { ptr, ptr } { ptr @CuckooMapIterator_getter_on_second, ptr @CuckooMapIterator_setter_on_second }
 
 declare i32 @printf(ptr, ...)
 
@@ -140,172 +128,13 @@ declare void @coroutine_call(ptr)
 
 declare void @report_exception({ ptr })
 
-declare { ptr } @fopen({ ptr }, { ptr })
+declare i32 @i32_hasher(i32)
 
-declare i32 @fprintf({ ptr }, { ptr })
+declare i1 @i32_eq(i32, i32)
 
-declare i32 @fclose({ ptr })
+declare i32 @string_hasher({ ptr, ptr, ptr, i32 })
 
-declare i32 @fgetc({ ptr })
-
-declare { ptr } @fgets({ ptr }, i32, { ptr })
-
-declare i32 @ferror({ ptr })
-
-declare i32 @fseek({ ptr }, i64, i32)
-
-declare i64 @ftell({ ptr })
-
-declare i64 @fread({ ptr }, i64, i64, { ptr })
-
-declare void @perror(i64)
-
-define i32 @i32_hasher(i32 %0) {
-  %2 = alloca i32, align 4
-  store i32 %0, ptr %2, align 4
-  %3 = alloca i32, align 4
-  store i32 2127912214, ptr %3, align 4
-  %4 = load i32, ptr %2, align 4
-  %5 = load i32, ptr %3, align 4
-  %6 = add i32 %4, %5
-  %7 = alloca i32, align 4
-  store i32 %6, ptr %7, align 4
-  %8 = alloca i32, align 4
-  store i32 12, ptr %8, align 4
-  %9 = load i32, ptr %2, align 4
-  %10 = load i32, ptr %8, align 4
-  %11 = shl i32 %9, %10
-  %12 = alloca i32, align 4
-  store i32 %11, ptr %12, align 4
-  %13 = load i32, ptr %7, align 4
-  %14 = load i32, ptr %12, align 4
-  %15 = add i32 %13, %14
-  %16 = alloca i32, align 4
-  store i32 %15, ptr %16, align 4
-  %17 = load i32, ptr %16, align 4
-  store i32 %17, ptr %2, align 4
-  %18 = alloca i32, align 4
-  store i32 -949894596, ptr %18, align 4
-  %19 = load i32, ptr %2, align 4
-  %20 = load i32, ptr %18, align 4
-  %21 = xor i32 %19, %20
-  %22 = alloca i32, align 4
-  store i32 %21, ptr %22, align 4
-  %23 = alloca i32, align 4
-  store i32 19, ptr %23, align 4
-  %24 = load i32, ptr %2, align 4
-  %25 = load i32, ptr %23, align 4
-  %26 = ashr i32 %24, %25
-  %27 = alloca i32, align 4
-  store i32 %26, ptr %27, align 4
-  %28 = load i32, ptr %22, align 4
-  %29 = load i32, ptr %27, align 4
-  %30 = xor i32 %28, %29
-  %31 = alloca i32, align 4
-  store i32 %30, ptr %31, align 4
-  %32 = load i32, ptr %31, align 4
-  store i32 %32, ptr %2, align 4
-  %33 = alloca i32, align 4
-  store i32 374761393, ptr %33, align 4
-  %34 = load i32, ptr %2, align 4
-  %35 = load i32, ptr %33, align 4
-  %36 = add i32 %34, %35
-  %37 = alloca i32, align 4
-  store i32 %36, ptr %37, align 4
-  %38 = alloca i32, align 4
-  store i32 5, ptr %38, align 4
-  %39 = load i32, ptr %2, align 4
-  %40 = load i32, ptr %38, align 4
-  %41 = shl i32 %39, %40
-  %42 = alloca i32, align 4
-  store i32 %41, ptr %42, align 4
-  %43 = load i32, ptr %37, align 4
-  %44 = load i32, ptr %42, align 4
-  %45 = add i32 %43, %44
-  %46 = alloca i32, align 4
-  store i32 %45, ptr %46, align 4
-  %47 = load i32, ptr %46, align 4
-  store i32 %47, ptr %2, align 4
-  %48 = alloca i32, align 4
-  store i32 -744332180, ptr %48, align 4
-  %49 = load i32, ptr %2, align 4
-  %50 = load i32, ptr %48, align 4
-  %51 = add i32 %49, %50
-  %52 = alloca i32, align 4
-  store i32 %51, ptr %52, align 4
-  %53 = alloca i32, align 4
-  store i32 9, ptr %53, align 4
-  %54 = load i32, ptr %2, align 4
-  %55 = load i32, ptr %53, align 4
-  %56 = shl i32 %54, %55
-  %57 = alloca i32, align 4
-  store i32 %56, ptr %57, align 4
-  %58 = load i32, ptr %52, align 4
-  %59 = load i32, ptr %57, align 4
-  %60 = xor i32 %58, %59
-  %61 = alloca i32, align 4
-  store i32 %60, ptr %61, align 4
-  %62 = load i32, ptr %61, align 4
-  store i32 %62, ptr %2, align 4
-  %63 = alloca i32, align 4
-  store i32 -42973499, ptr %63, align 4
-  %64 = load i32, ptr %2, align 4
-  %65 = load i32, ptr %63, align 4
-  %66 = add i32 %64, %65
-  %67 = alloca i32, align 4
-  store i32 %66, ptr %67, align 4
-  %68 = alloca i32, align 4
-  store i32 3, ptr %68, align 4
-  %69 = load i32, ptr %2, align 4
-  %70 = load i32, ptr %68, align 4
-  %71 = shl i32 %69, %70
-  %72 = alloca i32, align 4
-  store i32 %71, ptr %72, align 4
-  %73 = load i32, ptr %67, align 4
-  %74 = load i32, ptr %72, align 4
-  %75 = add i32 %73, %74
-  %76 = alloca i32, align 4
-  store i32 %75, ptr %76, align 4
-  %77 = load i32, ptr %76, align 4
-  store i32 %77, ptr %2, align 4
-  %78 = alloca i32, align 4
-  store i32 -1252372727, ptr %78, align 4
-  %79 = load i32, ptr %2, align 4
-  %80 = load i32, ptr %78, align 4
-  %81 = xor i32 %79, %80
-  %82 = alloca i32, align 4
-  store i32 %81, ptr %82, align 4
-  %83 = alloca i32, align 4
-  store i32 16, ptr %83, align 4
-  %84 = load i32, ptr %2, align 4
-  %85 = load i32, ptr %83, align 4
-  %86 = ashr i32 %84, %85
-  %87 = alloca i32, align 4
-  store i32 %86, ptr %87, align 4
-  %88 = load i32, ptr %82, align 4
-  %89 = load i32, ptr %87, align 4
-  %90 = xor i32 %88, %89
-  %91 = alloca i32, align 4
-  store i32 %90, ptr %91, align 4
-  %92 = load i32, ptr %91, align 4
-  store i32 %92, ptr %2, align 4
-  %93 = load i32, ptr %2, align 4
-  ret i32 %93
-}
-
-define i1 @i32_eq(i32 %0, i32 %1) {
-  %3 = alloca i32, align 4
-  store i32 %0, ptr %3, align 4
-  %4 = alloca i32, align 4
-  store i32 %1, ptr %4, align 4
-  %5 = load i32, ptr %3, align 4
-  %6 = load i32, ptr %4, align 4
-  %7 = icmp eq i32 %5, %6
-  %8 = alloca i1, align 1
-  store i1 %7, ptr %8, align 1
-  %9 = load i1, ptr %8, align 1
-  ret i1 %9
-}
+declare i1 @string_eq({ ptr, ptr, ptr, i32 }, { ptr, ptr, ptr, i32 })
 
 define { i64, i64 } @_data_size_Entry(ptr %0) {
   %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), 1
@@ -1135,7 +964,7 @@ define ptr @Entry_B_to_pair_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   ret ptr %9
 }
 
-define { i64, i64 } @_data_size_HashMap(ptr %0) {
+define { i64, i64 } @_data_size_CuckooMap(ptr %0) {
   %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), 1
   %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 1
   %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %3
@@ -1212,24 +1041,24 @@ define { i64, i64 } @_data_size_HashMap(ptr %0) {
   ret { i64, i64 } %74
 }
 
-define ptr @HashMap_field_HashMap_0(ptr %0) {
+define ptr @CuckooMap_field_CuckooMap_0(ptr %0) {
   %2 = load ptr, ptr %0, align 8
   ret ptr %2
 }
 
-define ptr @HashMap_field_HashMap_1(ptr %0) {
+define ptr @CuckooMap_field_CuckooMap_1(ptr %0) {
   %2 = getelementptr ptr, ptr %0, i32 1
   %3 = load ptr, ptr %2, align 8
   ret ptr %3
 }
 
-define ptr @HashMap_field_HashMap_2(ptr %0) {
+define ptr @CuckooMap_field_CuckooMap_6(ptr %0) {
   %2 = getelementptr ptr, ptr %0, i32 2
   %3 = load ptr, ptr %2, align 8
   ret ptr %3
 }
 
-define { ptr } @HashMap_getter_table1(ptr %0) {
+define { ptr } @CuckooMap_getter_table1(ptr %0) {
   %2 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %3 = icmp eq i64 %2, 0
   %4 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %2
@@ -1254,7 +1083,7 @@ define { ptr } @HashMap_getter_table1(ptr %0) {
   ret { ptr } %22
 }
 
-define void @HashMap_setter_table1(ptr %0, { ptr } %1) {
+define void @CuckooMap_setter_table1(ptr %0, { ptr } %1) {
   %3 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %4 = icmp eq i64 %3, 0
   %5 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %3
@@ -1281,7 +1110,7 @@ define void @HashMap_setter_table1(ptr %0, { ptr } %1) {
   ret void
 }
 
-define { ptr } @HashMap_getter_table2(ptr %0) {
+define { ptr } @CuckooMap_getter_table2(ptr %0) {
   %2 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %3 = icmp eq i64 %2, 0
   %4 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %2
@@ -1312,7 +1141,7 @@ define { ptr } @HashMap_getter_table2(ptr %0) {
   ret { ptr } %28
 }
 
-define void @HashMap_setter_table2(ptr %0, { ptr } %1) {
+define void @CuckooMap_setter_table2(ptr %0, { ptr } %1) {
   %3 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %4 = icmp eq i64 %3, 0
   %5 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %3
@@ -1345,7 +1174,7 @@ define void @HashMap_setter_table2(ptr %0, { ptr } %1) {
   ret void
 }
 
-define i32 @HashMap_getter_table_len(ptr %0) {
+define i32 @CuckooMap_getter_table_len(ptr %0) {
   %2 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %3 = icmp eq i64 %2, 0
   %4 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %2
@@ -1380,7 +1209,7 @@ define i32 @HashMap_getter_table_len(ptr %0) {
   ret i32 %32
 }
 
-define void @HashMap_setter_table_len(ptr %0, i32 %1) {
+define void @CuckooMap_setter_table_len(ptr %0, i32 %1) {
   %3 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %4 = icmp eq i64 %3, 0
   %5 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %3
@@ -1418,7 +1247,7 @@ define void @HashMap_setter_table_len(ptr %0, i32 %1) {
   ret void
 }
 
-define i32 @HashMap_getter_size(ptr %0) {
+define i32 @CuckooMap_getter_size(ptr %0) {
   %2 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %3 = icmp eq i64 %2, 0
   %4 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %2
@@ -1459,7 +1288,7 @@ define i32 @HashMap_getter_size(ptr %0) {
   ret i32 %38
 }
 
-define void @HashMap_setter_size(ptr %0, i32 %1) {
+define void @CuckooMap_setter_size(ptr %0, i32 %1) {
   %3 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %4 = icmp eq i64 %3, 0
   %5 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %3
@@ -1503,7 +1332,7 @@ define void @HashMap_setter_size(ptr %0, i32 %1) {
   ret void
 }
 
-define { ptr } @HashMap_getter_hasher(ptr %0) {
+define { ptr } @CuckooMap_getter_hasher(ptr %0) {
   %2 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %3 = icmp eq i64 %2, 0
   %4 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %2
@@ -1552,7 +1381,7 @@ define { ptr } @HashMap_getter_hasher(ptr %0) {
   ret { ptr } %46
 }
 
-define void @HashMap_setter_hasher(ptr %0, { ptr } %1) {
+define void @CuckooMap_setter_hasher(ptr %0, { ptr } %1) {
   %3 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %4 = icmp eq i64 %3, 0
   %5 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %3
@@ -1603,7 +1432,7 @@ define void @HashMap_setter_hasher(ptr %0, { ptr } %1) {
   ret void
 }
 
-define { ptr } @HashMap_getter_eq(ptr %0) {
+define { ptr } @CuckooMap_getter_eq(ptr %0) {
   %2 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %3 = icmp eq i64 %2, 0
   %4 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %2
@@ -1658,7 +1487,7 @@ define { ptr } @HashMap_getter_eq(ptr %0) {
   ret { ptr } %52
 }
 
-define void @HashMap_setter_eq(ptr %0, { ptr } %1) {
+define void @CuckooMap_setter_eq(ptr %0, { ptr } %1) {
   %3 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %4 = icmp eq i64 %3, 0
   %5 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %3
@@ -1715,25 +1544,25 @@ define void @HashMap_setter_eq(ptr %0, { ptr } %1) {
   ret void
 }
 
-define i32 @HashMap__Self_max_displacements_(ptr %0) {
+define i32 @CuckooMap__Self_max_displacements_(ptr %0) {
   %2 = alloca i32, align 4
   store i32 100, ptr %2, align 4
   %3 = load i32, ptr %2, align 4
   ret i32 %3
 }
 
-define ptr @HashMap_B__Self_max_displacements_(ptr %0) {
+define ptr @CuckooMap_B__Self_max_displacements_(ptr %0) {
   %2 = call ptr @llvm.invariant.start.p0(i64 0, ptr %0)
   %3 = alloca ptr, align 8
-  store i32 37, ptr %3, align 4
+  store i32 39, ptr %3, align 4
   %4 = load i32, ptr %3, align 4
-  %5 = getelementptr [88 x ptr], ptr @HashMap, i32 0, i32 %4
+  %5 = getelementptr [272 x ptr], ptr @CuckooMap, i32 0, i32 %4
   %6 = getelementptr ptr, ptr %5, i32 10
   %7 = load ptr, ptr %6, align 8
   ret ptr %7
 }
 
-define void @HashMap_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr } %3, { ptr } %4) {
+define void @CuckooMap_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr } %3, { ptr } %4) {
   %6 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %0, ptr %6, align 8
   %7 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -1753,12 +1582,12 @@ define void @HashMap_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ pt
   %18 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 3
   %19 = load i32, ptr %17, align 4
   store i32 %19, ptr %18, align 4
-  call void @set_offset(ptr %7, ptr @HashMap)
+  call void @set_offset(ptr %7, ptr @CuckooMap)
   %20 = alloca ptr, align 8
   store { ptr } %3, ptr %20, align 8
   %21 = load ptr, ptr %12, align 8
   %22 = load ptr, ptr %7, align 8
-  %23 = call ptr @llvm.invariant.start.p0(i64 704, ptr %22)
+  %23 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %22)
   %24 = load i32, ptr %18, align 4
   %25 = getelementptr ptr, ptr %22, i32 %24
   %26 = getelementptr ptr, ptr %25, i32 7
@@ -1772,7 +1601,7 @@ define void @HashMap_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ pt
   store { ptr } %4, ptr %32, align 8
   %33 = load ptr, ptr %12, align 8
   %34 = load ptr, ptr %7, align 8
-  %35 = call ptr @llvm.invariant.start.p0(i64 704, ptr %34)
+  %35 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %34)
   %36 = load i32, ptr %18, align 4
   %37 = getelementptr ptr, ptr %34, i32 %36
   %38 = getelementptr ptr, ptr %37, i32 8
@@ -1786,7 +1615,7 @@ define void @HashMap_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ pt
   store i32 8, ptr %44, align 4
   %45 = load ptr, ptr %12, align 8
   %46 = load ptr, ptr %7, align 8
-  %47 = call ptr @llvm.invariant.start.p0(i64 704, ptr %46)
+  %47 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %46)
   %48 = load i32, ptr %18, align 4
   %49 = getelementptr ptr, ptr %46, i32 %48
   %50 = getelementptr ptr, ptr %49, i32 5
@@ -1803,7 +1632,7 @@ define void @HashMap_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ pt
   store ptr %59, ptr %57, align 8
   %60 = load ptr, ptr %12, align 8
   %61 = load ptr, ptr %7, align 8
-  %62 = call ptr @llvm.invariant.start.p0(i64 704, ptr %61)
+  %62 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %61)
   %63 = load i32, ptr %18, align 4
   %64 = getelementptr ptr, ptr %61, i32 %63
   %65 = getelementptr ptr, ptr %64, i32 3
@@ -1822,7 +1651,7 @@ define void @HashMap_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ pt
   store ptr %76, ptr %74, align 8
   %77 = load ptr, ptr %12, align 8
   %78 = load ptr, ptr %7, align 8
-  %79 = call ptr @llvm.invariant.start.p0(i64 704, ptr %78)
+  %79 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %78)
   %80 = load i32, ptr %18, align 4
   %81 = getelementptr ptr, ptr %78, i32 %80
   %82 = getelementptr ptr, ptr %81, i32 4
@@ -1837,7 +1666,7 @@ define void @HashMap_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ pt
   store i32 0, ptr %89, align 4
   %90 = load ptr, ptr %12, align 8
   %91 = load ptr, ptr %7, align 8
-  %92 = call ptr @llvm.invariant.start.p0(i64 704, ptr %91)
+  %92 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %91)
   %93 = load i32, ptr %18, align 4
   %94 = getelementptr ptr, ptr %91, i32 %93
   %95 = getelementptr ptr, ptr %94, i32 6
@@ -1849,7 +1678,7 @@ define void @HashMap_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ pt
   ret void
 }
 
-define ptr @HashMap_B_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = alloca i1, align 1
   %5 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1)
@@ -1863,16 +1692,16 @@ define ptr @HashMap_B_init_hasherFunctionK_to_Ptri32_eqFunctionK._K_to_Ptri1({ p
   %12 = ptrtoint ptr %11 to i64
   %13 = icmp eq i64 %12, ptrtoint (ptr @function_typ to i64)
   store i1 %13, ptr %3, align 1
-  store i32 38, ptr %6, align 4
+  store i32 40, ptr %6, align 4
   %14 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %15 = load i32, ptr %6, align 4
-  %16 = getelementptr [88 x ptr], ptr %14, i32 0, i32 %15
+  %16 = getelementptr [272 x ptr], ptr %14, i32 0, i32 %15
   %17 = getelementptr ptr, ptr %16, i32 10
   %18 = load ptr, ptr %17, align 8
   ret ptr %18
 }
 
-define i32 @HashMap_hash1_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3) {
+define i32 @CuckooMap_hash1_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3) {
   %5 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %0, ptr %5, align 8
   %6 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -1892,7 +1721,7 @@ define i32 @HashMap_hash1_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %17 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 3
   %18 = load i32, ptr %16, align 4
   store i32 %18, ptr %17, align 4
-  call void @set_offset(ptr %6, ptr @HashMap)
+  call void @set_offset(ptr %6, ptr @CuckooMap)
   %19 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %3, ptr %19, align 8
   %20 = alloca i160, align 8
@@ -1915,7 +1744,7 @@ define i32 @HashMap_hash1_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   %33 = insertvalue { ptr, i160 } %31, i160 %32, 1
   %34 = load ptr, ptr %11, align 8
   %35 = load ptr, ptr %6, align 8
-  %36 = call ptr @llvm.invariant.start.p0(i64 704, ptr %35)
+  %36 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %35)
   %37 = load i32, ptr %17, align 4
   %38 = getelementptr ptr, ptr %35, i32 %37
   %39 = getelementptr ptr, ptr %38, i32 7
@@ -1933,7 +1762,7 @@ define i32 @HashMap_hash1_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 }
   ret i32 %48
 }
 
-define ptr @HashMap_B_hash1_keyK({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_hash1_keyK({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
   %5 = alloca ptr, align 8
@@ -1949,16 +1778,16 @@ define ptr @HashMap_B_hash1_keyK({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %15 = load i64, ptr @any_typ, align 4
   %16 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 %15, i64 ptrtoint (ptr @any_typ to i64), ptr %14)
   store i1 %16, ptr %3, align 1
-  store i32 39, ptr %5, align 4
+  store i32 41, ptr %5, align 4
   %17 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %18 = load i32, ptr %5, align 4
-  %19 = getelementptr [88 x ptr], ptr %17, i32 0, i32 %18
+  %19 = getelementptr [272 x ptr], ptr %17, i32 0, i32 %18
   %20 = getelementptr ptr, ptr %19, i32 10
   %21 = load ptr, ptr %20, align 8
   ret ptr %21
 }
 
-define i32 @HashMap_hash2_from_primary_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, i32 %3) {
+define i32 @CuckooMap_hash2_from_primary_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, i32 %3) {
   %5 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %0, ptr %5, align 8
   %6 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -1978,7 +1807,7 @@ define i32 @HashMap_hash2_from_primary_primary_hashPtri32({ ptr, ptr, ptr, i32 }
   %17 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 3
   %18 = load i32, ptr %16, align 4
   store i32 %18, ptr %17, align 4
-  call void @set_offset(ptr %6, ptr @HashMap)
+  call void @set_offset(ptr %6, ptr @CuckooMap)
   %19 = alloca i32, align 4
   store i32 %3, ptr %19, align 4
   %20 = load i32, ptr %19, align 4
@@ -1989,7 +1818,7 @@ define i32 @HashMap_hash2_from_primary_primary_hashPtri32({ ptr, ptr, ptr, i32 }
   ret i32 %23
 }
 
-define ptr @HashMap_B_hash2_from_primary_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_hash2_from_primary_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
   %5 = alloca ptr, align 8
@@ -1997,16 +1826,16 @@ define ptr @HashMap_B_hash2_from_primary_primary_hashPtri32({ ptr, ptr, ptr, i32
   %7 = ptrtoint ptr %6 to i64
   %8 = icmp eq i64 %7, ptrtoint (ptr @i32_typ to i64)
   store i1 %8, ptr %3, align 1
-  store i32 40, ptr %5, align 4
+  store i32 42, ptr %5, align 4
   %9 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %10 = load i32, ptr %5, align 4
-  %11 = getelementptr [88 x ptr], ptr %9, i32 0, i32 %10
+  %11 = getelementptr [272 x ptr], ptr %9, i32 0, i32 %10
   %12 = getelementptr ptr, ptr %11, i32 10
   %13 = load ptr, ptr %12, align 8
   ret ptr %13
 }
 
-define i32 @HashMap_index1_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, i32 %3) {
+define i32 @CuckooMap_index1_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, i32 %3) {
   %5 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %0, ptr %5, align 8
   %6 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -2026,12 +1855,12 @@ define i32 @HashMap_index1_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %17 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 3
   %18 = load i32, ptr %16, align 4
   store i32 %18, ptr %17, align 4
-  call void @set_offset(ptr %6, ptr @HashMap)
+  call void @set_offset(ptr %6, ptr @CuckooMap)
   %19 = alloca i32, align 4
   store i32 %3, ptr %19, align 4
   %20 = load ptr, ptr %11, align 8
   %21 = load ptr, ptr %6, align 8
-  %22 = call ptr @llvm.invariant.start.p0(i64 704, ptr %21)
+  %22 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %21)
   %23 = load i32, ptr %17, align 4
   %24 = getelementptr ptr, ptr %21, i32 %23
   %25 = getelementptr ptr, ptr %24, i32 5
@@ -2057,7 +1886,7 @@ define i32 @HashMap_index1_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, 
   ret i32 %40
 }
 
-define ptr @HashMap_B_index1_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_index1_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
   %5 = alloca ptr, align 8
@@ -2065,16 +1894,16 @@ define ptr @HashMap_B_index1_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, ptr %
   %7 = ptrtoint ptr %6 to i64
   %8 = icmp eq i64 %7, ptrtoint (ptr @i32_typ to i64)
   store i1 %8, ptr %3, align 1
-  store i32 41, ptr %5, align 4
+  store i32 43, ptr %5, align 4
   %9 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %10 = load i32, ptr %5, align 4
-  %11 = getelementptr [88 x ptr], ptr %9, i32 0, i32 %10
+  %11 = getelementptr [272 x ptr], ptr %9, i32 0, i32 %10
   %12 = getelementptr ptr, ptr %11, i32 10
   %13 = load ptr, ptr %12, align 8
   ret ptr %13
 }
 
-define i32 @HashMap_index2_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, i32 %3) {
+define i32 @CuckooMap_index2_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, i32 %3) {
   %5 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %0, ptr %5, align 8
   %6 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -2094,7 +1923,7 @@ define i32 @HashMap_index2_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %17 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 3
   %18 = load i32, ptr %16, align 4
   store i32 %18, ptr %17, align 4
-  call void @set_offset(ptr %6, ptr @HashMap)
+  call void @set_offset(ptr %6, ptr @CuckooMap)
   %19 = alloca i32, align 4
   store i32 %3, ptr %19, align 4
   %20 = load i32, ptr %19, align 4
@@ -2110,7 +1939,7 @@ define i32 @HashMap_index2_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %30 = getelementptr [1 x ptr], ptr %29, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %30, align 8
   %31 = call ptr @llvm.invariant.start.p0(i64 1, ptr %29)
-  %32 = call ptr @llvm.invariant.start.p0(i64 704, ptr %21)
+  %32 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %21)
   %33 = getelementptr ptr, ptr %21, i32 %27
   %34 = getelementptr ptr, ptr %33, i32 12
   %35 = load ptr, ptr %34, align 8
@@ -2123,7 +1952,7 @@ define i32 @HashMap_index2_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, 
   store i32 %39, ptr %40, align 4
   %41 = load ptr, ptr %11, align 8
   %42 = load ptr, ptr %6, align 8
-  %43 = call ptr @llvm.invariant.start.p0(i64 704, ptr %42)
+  %43 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %42)
   %44 = load i32, ptr %17, align 4
   %45 = getelementptr ptr, ptr %42, i32 %44
   %46 = getelementptr ptr, ptr %45, i32 5
@@ -2149,7 +1978,7 @@ define i32 @HashMap_index2_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, 
   ret i32 %61
 }
 
-define ptr @HashMap_B_index2_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_index2_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
   %5 = alloca ptr, align 8
@@ -2157,16 +1986,16 @@ define ptr @HashMap_B_index2_primary_hashPtri32({ ptr, ptr, ptr, i32 } %0, ptr %
   %7 = ptrtoint ptr %6 to i64
   %8 = icmp eq i64 %7, ptrtoint (ptr @i32_typ to i64)
   store i1 %8, ptr %3, align 1
-  store i32 42, ptr %5, align 4
+  store i32 44, ptr %5, align 4
   %9 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %10 = load i32, ptr %5, align 4
-  %11 = getelementptr [88 x ptr], ptr %9, i32 0, i32 %10
+  %11 = getelementptr [272 x ptr], ptr %9, i32 0, i32 %10
   %12 = getelementptr ptr, ptr %11, i32 10
   %13 = load ptr, ptr %12, align 8
   ret ptr %13
 }
 
-define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, ptr, ptr, i32 } %3) {
+define { ptr, i160 } @CuckooMap_place_entry_or_get_failed_entry_to_insertEntryK._V({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, ptr, ptr, i32 } %3) {
   %5 = alloca [2 x ptr], align 8
   %6 = alloca {}, align 8
   %7 = alloca i32, align 4
@@ -2229,7 +2058,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   %60 = getelementptr { ptr, ptr, ptr, i32 }, ptr %49, i32 0, i32 3
   %61 = load i32, ptr %59, align 4
   store i32 %61, ptr %60, align 4
-  call void @set_offset(ptr %49, ptr @HashMap)
+  call void @set_offset(ptr %49, ptr @CuckooMap)
   %62 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %3, ptr %62, align 8
   %63 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -2288,14 +2117,14 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
 98:                                               ; preds = %358, %4
   %99 = load ptr, ptr %54, align 8
   %100 = load ptr, ptr %49, align 8
-  %101 = call ptr @llvm.invariant.start.p0(i64 704, ptr %100)
+  %101 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %100)
   %102 = load i32, ptr %60, align 4
   %103 = getelementptr ptr, ptr %100, i32 %102
   %104 = load ptr, ptr %103, align 8
   %105 = call ptr @typegetter_wrapper(ptr %104, ptr %99)
   %106 = load ptr, ptr %54, align 8
   %107 = load ptr, ptr %49, align 8
-  %108 = call ptr @llvm.invariant.start.p0(i64 704, ptr %107)
+  %108 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %107)
   %109 = load i32, ptr %60, align 4
   %110 = getelementptr ptr, ptr %107, i32 %109
   %111 = getelementptr ptr, ptr %110, i32 1
@@ -2304,8 +2133,8 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   store ptr %105, ptr %96, align 8
   store ptr %113, ptr %97, align 8
   %114 = call ptr @llvm.invariant.start.p0(i64 4, ptr %5)
-  %115 = call ptr @llvm.invariant.start.p0(i64 704, ptr @HashMap)
-  %116 = load ptr, ptr getelementptr (ptr, ptr getelementptr (ptr, ptr @HashMap, i32 10), i32 9), align 8
+  %115 = call ptr @llvm.invariant.start.p0(i64 2176, ptr @CuckooMap)
+  %116 = load ptr, ptr getelementptr (ptr, ptr getelementptr (ptr, ptr @CuckooMap, i32 10), i32 9), align 8
   %117 = call ptr @class_behavior_wrapper(ptr %116, ptr %6)
   %118 = call i32 %117(ptr %5) #3
   store i32 %118, ptr %7, align 4
@@ -2357,7 +2186,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   %155 = getelementptr [1 x ptr], ptr %14, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %155, align 8
   %156 = call ptr @llvm.invariant.start.p0(i64 1, ptr %14)
-  %157 = call ptr @llvm.invariant.start.p0(i64 704, ptr %147)
+  %157 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %147)
   %158 = getelementptr ptr, ptr %147, i32 %153
   %159 = getelementptr ptr, ptr %158, i32 13
   %160 = load ptr, ptr %159, align 8
@@ -2368,7 +2197,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   store i32 %163, ptr %16, align 4
   %164 = load ptr, ptr %54, align 8
   %165 = load ptr, ptr %49, align 8
-  %166 = call ptr @llvm.invariant.start.p0(i64 704, ptr %165)
+  %166 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %165)
   %167 = load i32, ptr %60, align 4
   %168 = getelementptr ptr, ptr %165, i32 %167
   %169 = getelementptr ptr, ptr %168, i32 3
@@ -2392,7 +2221,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   store i160 %184, ptr %183, align 4
   %185 = load ptr, ptr %54, align 8
   %186 = load ptr, ptr %49, align 8
-  %187 = call ptr @llvm.invariant.start.p0(i64 704, ptr %186)
+  %187 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %186)
   %188 = load i32, ptr %60, align 4
   %189 = getelementptr ptr, ptr %186, i32 %188
   %190 = getelementptr ptr, ptr %189, i32 3
@@ -2438,7 +2267,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   %224 = getelementptr [1 x ptr], ptr %31, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %224, align 8
   %225 = call ptr @llvm.invariant.start.p0(i64 1, ptr %31)
-  %226 = call ptr @llvm.invariant.start.p0(i64 704, ptr %216)
+  %226 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %216)
   %227 = getelementptr ptr, ptr %216, i32 %222
   %228 = getelementptr ptr, ptr %227, i32 14
   %229 = load ptr, ptr %228, align 8
@@ -2449,7 +2278,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   store i32 %232, ptr %33, align 4
   %233 = load ptr, ptr %54, align 8
   %234 = load ptr, ptr %49, align 8
-  %235 = call ptr @llvm.invariant.start.p0(i64 704, ptr %234)
+  %235 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %234)
   %236 = load i32, ptr %60, align 4
   %237 = getelementptr ptr, ptr %234, i32 %236
   %238 = getelementptr ptr, ptr %237, i32 4
@@ -2473,7 +2302,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   store i160 %253, ptr %252, align 4
   %254 = load ptr, ptr %54, align 8
   %255 = load ptr, ptr %49, align 8
-  %256 = call ptr @llvm.invariant.start.p0(i64 704, ptr %255)
+  %256 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %255)
   %257 = load i32, ptr %60, align 4
   %258 = getelementptr ptr, ptr %255, i32 %257
   %259 = getelementptr ptr, ptr %258, i32 4
@@ -2644,7 +2473,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   store [0 x i8] %372, ptr %348, align 1
   %373 = load ptr, ptr %54, align 8
   %374 = load ptr, ptr %49, align 8
-  %375 = call ptr @llvm.invariant.start.p0(i64 704, ptr %374)
+  %375 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %374)
   %376 = load i32, ptr %60, align 4
   %377 = getelementptr ptr, ptr %374, i32 %376
   %378 = getelementptr ptr, ptr %377, i32 6
@@ -2660,7 +2489,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   store i32 %385, ptr %351, align 4
   %386 = load ptr, ptr %54, align 8
   %387 = load ptr, ptr %49, align 8
-  %388 = call ptr @llvm.invariant.start.p0(i64 704, ptr %387)
+  %388 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %387)
   %389 = load i32, ptr %60, align 4
   %390 = getelementptr ptr, ptr %387, i32 %389
   %391 = getelementptr ptr, ptr %390, i32 6
@@ -2694,7 +2523,7 @@ define { ptr, i160 } @HashMap_place_entry_or_get_failed_entry_to_insertEntryK._V
   ret { ptr, i160 } %411
 }
 
-define ptr @HashMap_B_place_entry_or_get_failed_entry_to_insertEntryK._V({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_place_entry_or_get_failed_entry_to_insertEntryK._V({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
   %5 = alloca ptr, align 8
@@ -2710,16 +2539,16 @@ define ptr @HashMap_B_place_entry_or_get_failed_entry_to_insertEntryK._V({ ptr, 
   %15 = load i64, ptr @Entry, align 4
   %16 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 %15, i64 ptrtoint (ptr @Entry to i64), ptr %14)
   store i1 %16, ptr %3, align 1
-  store i32 43, ptr %5, align 4
+  store i32 45, ptr %5, align 4
   %17 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %18 = load i32, ptr %5, align 4
-  %19 = getelementptr [88 x ptr], ptr %17, i32 0, i32 %18
+  %19 = getelementptr [272 x ptr], ptr %17, i32 0, i32 %18
   %20 = getelementptr ptr, ptr %19, i32 10
   %21 = load ptr, ptr %20, align 8
   ret ptr %21
 }
 
-define void @HashMap_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_per_tablePtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr } %3, i32 %4) {
+define void @CuckooMap_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_per_tablePtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr } %3, i32 %4) {
   %6 = alloca i1, align 1
   %7 = alloca i160, align 8
   %8 = alloca ptr, align 8
@@ -2750,7 +2579,7 @@ define void @HashMap_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_p
   %29 = getelementptr { ptr, ptr, ptr, i32 }, ptr %18, i32 0, i32 3
   %30 = load i32, ptr %28, align 4
   store i32 %30, ptr %29, align 4
-  call void @set_offset(ptr %18, ptr @HashMap)
+  call void @set_offset(ptr %18, ptr @CuckooMap)
   %31 = alloca ptr, align 8
   store { ptr } %3, ptr %31, align 8
   %32 = alloca i32, align 4
@@ -2831,14 +2660,14 @@ define void @HashMap_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_p
   %87 = load i32, ptr %29, align 4
   %88 = insertvalue { ptr, ptr, ptr, i32 } %86, i32 %87, 3
   %89 = load ptr, ptr %18, align 8
-  %90 = call ptr @llvm.invariant.start.p0(i64 704, ptr %89)
+  %90 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %89)
   %91 = load i32, ptr %29, align 4
   %92 = getelementptr ptr, ptr %89, i32 %91
   %93 = load ptr, ptr %92, align 8
   %94 = call ptr @typegetter_wrapper(ptr %93, ptr %83)
   %95 = load ptr, ptr %23, align 8
   %96 = load ptr, ptr %18, align 8
-  %97 = call ptr @llvm.invariant.start.p0(i64 704, ptr %96)
+  %97 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %96)
   %98 = load i32, ptr %29, align 4
   %99 = getelementptr ptr, ptr %96, i32 %98
   %100 = getelementptr ptr, ptr %99, i32 1
@@ -2856,7 +2685,7 @@ define void @HashMap_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_p
   %108 = getelementptr [1 x ptr], ptr %12, i32 0, i32 0
   store ptr %103, ptr %108, align 8
   %109 = call ptr @llvm.invariant.start.p0(i64 1, ptr %12)
-  %110 = call ptr @llvm.invariant.start.p0(i64 704, ptr %81)
+  %110 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %81)
   %111 = getelementptr ptr, ptr %81, i32 %87
   %112 = getelementptr ptr, ptr %111, i32 15
   %113 = load ptr, ptr %112, align 8
@@ -2888,7 +2717,7 @@ define void @HashMap_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_p
   ret void
 }
 
-define ptr @HashMap_B_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_per_tablePtri32({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_per_tablePtri32({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = alloca i1, align 1
   %5 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1)
@@ -2902,16 +2731,16 @@ define ptr @HashMap_B_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_
   %12 = ptrtoint ptr %11 to i64
   %13 = icmp eq i64 %12, ptrtoint (ptr @i32_typ to i64)
   store i1 %13, ptr %3, align 1
-  store i32 44, ptr %6, align 4
+  store i32 46, ptr %6, align 4
   %14 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %15 = load i32, ptr %6, align 4
-  %16 = getelementptr [88 x ptr], ptr %14, i32 0, i32 %15
+  %16 = getelementptr [272 x ptr], ptr %14, i32 0, i32 %15
   %17 = getelementptr ptr, ptr %16, i32 10
   %18 = load ptr, ptr %17, align 8
   ret ptr %18
 }
 
-define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2) {
+define void @CuckooMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2) {
   %4 = alloca i32, align 4
   %5 = alloca ptr, align 8
   %6 = alloca ptr, align 8
@@ -2939,10 +2768,10 @@ define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   %24 = getelementptr { ptr, ptr, ptr, i32 }, ptr %13, i32 0, i32 3
   %25 = load i32, ptr %23, align 4
   store i32 %25, ptr %24, align 4
-  call void @set_offset(ptr %13, ptr @HashMap)
+  call void @set_offset(ptr %13, ptr @CuckooMap)
   %26 = load ptr, ptr %18, align 8
   %27 = load ptr, ptr %13, align 8
-  %28 = call ptr @llvm.invariant.start.p0(i64 704, ptr %27)
+  %28 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %27)
   %29 = load i32, ptr %24, align 4
   %30 = getelementptr ptr, ptr %27, i32 %29
   %31 = getelementptr ptr, ptr %30, i32 3
@@ -2957,7 +2786,7 @@ define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   store ptr %38, ptr %37, align 8
   %39 = load ptr, ptr %18, align 8
   %40 = load ptr, ptr %13, align 8
-  %41 = call ptr @llvm.invariant.start.p0(i64 704, ptr %40)
+  %41 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %40)
   %42 = load i32, ptr %24, align 4
   %43 = getelementptr ptr, ptr %40, i32 %42
   %44 = getelementptr ptr, ptr %43, i32 4
@@ -2972,7 +2801,7 @@ define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   store ptr %51, ptr %50, align 8
   %52 = load ptr, ptr %18, align 8
   %53 = load ptr, ptr %13, align 8
-  %54 = call ptr @llvm.invariant.start.p0(i64 704, ptr %53)
+  %54 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %53)
   %55 = load i32, ptr %24, align 4
   %56 = getelementptr ptr, ptr %53, i32 %55
   %57 = getelementptr ptr, ptr %56, i32 5
@@ -3008,7 +2837,7 @@ define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
 76:                                               ; preds = %74, %3
   %77 = load ptr, ptr %18, align 8
   %78 = load ptr, ptr %13, align 8
-  %79 = call ptr @llvm.invariant.start.p0(i64 704, ptr %78)
+  %79 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %78)
   %80 = load i32, ptr %24, align 4
   %81 = getelementptr ptr, ptr %78, i32 %80
   %82 = getelementptr ptr, ptr %81, i32 5
@@ -3024,7 +2853,7 @@ define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   store ptr %90, ptr %5, align 8
   %91 = load ptr, ptr %18, align 8
   %92 = load ptr, ptr %13, align 8
-  %93 = call ptr @llvm.invariant.start.p0(i64 704, ptr %92)
+  %93 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %92)
   %94 = load i32, ptr %24, align 4
   %95 = getelementptr ptr, ptr %92, i32 %94
   %96 = getelementptr ptr, ptr %95, i32 3
@@ -3042,7 +2871,7 @@ define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   store ptr %106, ptr %6, align 8
   %107 = load ptr, ptr %18, align 8
   %108 = load ptr, ptr %13, align 8
-  %109 = call ptr @llvm.invariant.start.p0(i64 704, ptr %108)
+  %109 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %108)
   %110 = load i32, ptr %24, align 4
   %111 = getelementptr ptr, ptr %108, i32 %110
   %112 = getelementptr ptr, ptr %111, i32 4
@@ -3056,7 +2885,7 @@ define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   store i32 0, ptr %7, align 4
   %119 = load ptr, ptr %18, align 8
   %120 = load ptr, ptr %13, align 8
-  %121 = call ptr @llvm.invariant.start.p0(i64 704, ptr %120)
+  %121 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %120)
   %122 = load i32, ptr %24, align 4
   %123 = getelementptr ptr, ptr %120, i32 %122
   %124 = getelementptr ptr, ptr %123, i32 6
@@ -3086,7 +2915,7 @@ define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   %144 = getelementptr [2 x ptr], ptr %8, i32 0, i32 1
   store ptr @_parameterization_Ptri32, ptr %144, align 8
   %145 = call ptr @llvm.invariant.start.p0(i64 4, ptr %8)
-  %146 = call ptr @llvm.invariant.start.p0(i64 704, ptr %132)
+  %146 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %132)
   %147 = getelementptr ptr, ptr %132, i32 %138
   %148 = getelementptr ptr, ptr %147, i32 16
   %149 = load ptr, ptr %148, align 8
@@ -3117,7 +2946,7 @@ define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   %168 = getelementptr [2 x ptr], ptr %10, i32 0, i32 1
   store ptr @_parameterization_Ptri32, ptr %168, align 8
   %169 = call ptr @llvm.invariant.start.p0(i64 4, ptr %10)
-  %170 = call ptr @llvm.invariant.start.p0(i64 704, ptr %156)
+  %170 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %156)
   %171 = getelementptr ptr, ptr %156, i32 %162
   %172 = getelementptr ptr, ptr %171, i32 16
   %173 = load ptr, ptr %172, align 8
@@ -3130,19 +2959,19 @@ define void @HashMap_resize_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %
   ret void
 }
 
-define ptr @HashMap_B_resize_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_resize_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = alloca ptr, align 8
-  store i32 45, ptr %4, align 4
+  store i32 47, ptr %4, align 4
   %5 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %6 = load i32, ptr %4, align 4
-  %7 = getelementptr [88 x ptr], ptr %5, i32 0, i32 %6
+  %7 = getelementptr [272 x ptr], ptr %5, i32 0, i32 %6
   %8 = getelementptr ptr, ptr %7, i32 10
   %9 = load ptr, ptr %8, align 8
   ret ptr %9
 }
 
-define i1 @HashMap_replace_in_table_keyK_valueV_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3, { ptr, i160 } %4, i32 %5, i32 %6, { ptr } %7) {
+define i1 @CuckooMap_replace_in_table_keyK_valueV_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3, { ptr, i160 } %4, i32 %5, i32 %6, { ptr } %7) {
   %9 = alloca { ptr, ptr, ptr, i32 }, align 8
   %10 = alloca [0 x ptr], align 8
   %11 = alloca {}, align 8
@@ -3195,7 +3024,7 @@ define i1 @HashMap_replace_in_table_keyK_valueV_h1Ptri32_idxPtri32_tableBufferEn
   %54 = getelementptr { ptr, ptr, ptr, i32 }, ptr %43, i32 0, i32 3
   %55 = load i32, ptr %53, align 4
   store i32 %55, ptr %54, align 4
-  call void @set_offset(ptr %43, ptr @HashMap)
+  call void @set_offset(ptr %43, ptr @CuckooMap)
   %56 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %3, ptr %56, align 8
   %57 = alloca i160, align 8
@@ -3323,7 +3152,7 @@ define i1 @HashMap_replace_in_table_keyK_valueV_h1Ptri32_idxPtri32_tableBufferEn
   %151 = insertvalue { ptr, i160 } %149, i160 %150, 1
   %152 = load ptr, ptr %48, align 8
   %153 = load ptr, ptr %43, align 8
-  %154 = call ptr @llvm.invariant.start.p0(i64 704, ptr %153)
+  %154 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %153)
   %155 = load i32, ptr %54, align 4
   %156 = getelementptr ptr, ptr %153, i32 %155
   %157 = getelementptr ptr, ptr %156, i32 8
@@ -3350,14 +3179,14 @@ define i1 @HashMap_replace_in_table_keyK_valueV_h1Ptri32_idxPtri32_tableBufferEn
 170:                                              ; preds = %165
   %171 = load ptr, ptr %48, align 8
   %172 = load ptr, ptr %43, align 8
-  %173 = call ptr @llvm.invariant.start.p0(i64 704, ptr %172)
+  %173 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %172)
   %174 = load i32, ptr %54, align 4
   %175 = getelementptr ptr, ptr %172, i32 %174
   %176 = load ptr, ptr %175, align 8
   %177 = call ptr @typegetter_wrapper(ptr %176, ptr %171)
   %178 = load ptr, ptr %48, align 8
   %179 = load ptr, ptr %43, align 8
-  %180 = call ptr @llvm.invariant.start.p0(i64 704, ptr %179)
+  %180 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %179)
   %181 = load i32, ptr %54, align 4
   %182 = getelementptr ptr, ptr %179, i32 %181
   %183 = getelementptr ptr, ptr %182, i32 1
@@ -3408,14 +3237,14 @@ define i1 @HashMap_replace_in_table_keyK_valueV_h1Ptri32_idxPtri32_tableBufferEn
   %216 = insertvalue { ptr, ptr, ptr, i32 } %214, i32 %215, 3
   %217 = load ptr, ptr %48, align 8
   %218 = load ptr, ptr %43, align 8
-  %219 = call ptr @llvm.invariant.start.p0(i64 704, ptr %218)
+  %219 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %218)
   %220 = load i32, ptr %54, align 4
   %221 = getelementptr ptr, ptr %218, i32 %220
   %222 = load ptr, ptr %221, align 8
   %223 = call ptr @typegetter_wrapper(ptr %222, ptr %217)
   %224 = load ptr, ptr %48, align 8
   %225 = load ptr, ptr %43, align 8
-  %226 = call ptr @llvm.invariant.start.p0(i64 704, ptr %225)
+  %226 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %225)
   %227 = load i32, ptr %54, align 4
   %228 = getelementptr ptr, ptr %225, i32 %227
   %229 = getelementptr ptr, ptr %228, i32 1
@@ -3524,7 +3353,7 @@ define i1 @HashMap_replace_in_table_keyK_valueV_h1Ptri32_idxPtri32_tableBufferEn
   ret i1 %289
 }
 
-define ptr @HashMap_B_replace_in_table_keyK_valueV_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_replace_in_table_keyK_valueV_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = alloca i1, align 1
   %5 = alloca i1, align 1
@@ -3572,16 +3401,16 @@ define ptr @HashMap_B_replace_in_table_keyK_valueV_h1Ptri32_idxPtri32_tableBuffe
   %43 = ptrtoint ptr %42 to i64
   %44 = icmp eq i64 %43, ptrtoint (ptr @buffer_typ to i64)
   store i1 %44, ptr %3, align 1
-  store i32 46, ptr %9, align 4
+  store i32 48, ptr %9, align 4
   %45 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %46 = load i32, ptr %9, align 4
-  %47 = getelementptr [88 x ptr], ptr %45, i32 0, i32 %46
+  %47 = getelementptr [272 x ptr], ptr %45, i32 0, i32 %46
   %48 = getelementptr ptr, ptr %47, i32 10
   %49 = load ptr, ptr %48, align 8
   ret ptr %49
 }
 
-define { ptr, i160 } @HashMap_get_from_table_keyK_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3, i32 %4, i32 %5, { ptr } %6) {
+define { ptr, i160 } @CuckooMap_get_from_table_keyK_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3, i32 %4, i32 %5, { ptr } %6) {
   %8 = alloca { ptr, ptr, ptr, i32 }, align 8
   %9 = alloca [0 x ptr], align 8
   %10 = alloca {}, align 8
@@ -3627,7 +3456,7 @@ define { ptr, i160 } @HashMap_get_from_table_keyK_h1Ptri32_idxPtri32_tableBuffer
   %46 = getelementptr { ptr, ptr, ptr, i32 }, ptr %35, i32 0, i32 3
   %47 = load i32, ptr %45, align 4
   store i32 %47, ptr %46, align 4
-  call void @set_offset(ptr %35, ptr @HashMap)
+  call void @set_offset(ptr %35, ptr @CuckooMap)
   %48 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %3, ptr %48, align 8
   %49 = alloca i160, align 8
@@ -3745,7 +3574,7 @@ define { ptr, i160 } @HashMap_get_from_table_keyK_h1Ptri32_idxPtri32_tableBuffer
   %136 = insertvalue { ptr, i160 } %134, i160 %135, 1
   %137 = load ptr, ptr %40, align 8
   %138 = load ptr, ptr %35, align 8
-  %139 = call ptr @llvm.invariant.start.p0(i64 704, ptr %138)
+  %139 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %138)
   %140 = load i32, ptr %46, align 4
   %141 = getelementptr ptr, ptr %138, i32 %140
   %142 = getelementptr ptr, ptr %141, i32 8
@@ -3845,7 +3674,7 @@ define { ptr, i160 } @HashMap_get_from_table_keyK_h1Ptri32_idxPtri32_tableBuffer
   ret { ptr, i160 } %200
 }
 
-define ptr @HashMap_B_get_from_table_keyK_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_get_from_table_keyK_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = alloca i1, align 1
   %5 = alloca i1, align 1
@@ -3879,16 +3708,16 @@ define ptr @HashMap_B_get_from_table_keyK_h1Ptri32_idxPtri32_tableBufferEntryK._
   %30 = ptrtoint ptr %29 to i64
   %31 = icmp eq i64 %30, ptrtoint (ptr @buffer_typ to i64)
   store i1 %31, ptr %3, align 1
-  store i32 47, ptr %8, align 4
+  store i32 49, ptr %8, align 4
   %32 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %33 = load i32, ptr %8, align 4
-  %34 = getelementptr [88 x ptr], ptr %32, i32 0, i32 %33
+  %34 = getelementptr [272 x ptr], ptr %32, i32 0, i32 %33
   %35 = getelementptr ptr, ptr %34, i32 10
   %36 = load ptr, ptr %35, align 8
   ret ptr %36
 }
 
-define { ptr, i160 } @HashMap_remove_from_table_keyK_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3, i32 %4, i32 %5, { ptr } %6) {
+define { ptr, i160 } @CuckooMap_remove_from_table_keyK_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3, i32 %4, i32 %5, { ptr } %6) {
   %8 = alloca { ptr, ptr, ptr, i32 }, align 8
   %9 = alloca [0 x ptr], align 8
   %10 = alloca {}, align 8
@@ -3940,7 +3769,7 @@ define { ptr, i160 } @HashMap_remove_from_table_keyK_h1Ptri32_idxPtri32_tableBuf
   %52 = getelementptr { ptr, ptr, ptr, i32 }, ptr %41, i32 0, i32 3
   %53 = load i32, ptr %51, align 4
   store i32 %53, ptr %52, align 4
-  call void @set_offset(ptr %41, ptr @HashMap)
+  call void @set_offset(ptr %41, ptr @CuckooMap)
   %54 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %3, ptr %54, align 8
   %55 = alloca i160, align 8
@@ -4058,7 +3887,7 @@ define { ptr, i160 } @HashMap_remove_from_table_keyK_h1Ptri32_idxPtri32_tableBuf
   %142 = insertvalue { ptr, i160 } %140, i160 %141, 1
   %143 = load ptr, ptr %46, align 8
   %144 = load ptr, ptr %41, align 8
-  %145 = call ptr @llvm.invariant.start.p0(i64 704, ptr %144)
+  %145 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %144)
   %146 = load i32, ptr %52, align 4
   %147 = getelementptr ptr, ptr %144, i32 %146
   %148 = getelementptr ptr, ptr %147, i32 8
@@ -4121,7 +3950,7 @@ define { ptr, i160 } @HashMap_remove_from_table_keyK_h1Ptri32_idxPtri32_tableBuf
   store i160 %190, ptr %189, align 4
   %191 = load ptr, ptr %46, align 8
   %192 = load ptr, ptr %41, align 8
-  %193 = call ptr @llvm.invariant.start.p0(i64 704, ptr %192)
+  %193 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %192)
   %194 = load i32, ptr %52, align 4
   %195 = getelementptr ptr, ptr %192, i32 %194
   %196 = getelementptr ptr, ptr %195, i32 6
@@ -4137,7 +3966,7 @@ define { ptr, i160 } @HashMap_remove_from_table_keyK_h1Ptri32_idxPtri32_tableBuf
   store i32 %203, ptr %36, align 4
   %204 = load ptr, ptr %46, align 8
   %205 = load ptr, ptr %41, align 8
-  %206 = call ptr @llvm.invariant.start.p0(i64 704, ptr %205)
+  %206 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %205)
   %207 = load i32, ptr %52, align 4
   %208 = getelementptr ptr, ptr %205, i32 %207
   %209 = getelementptr ptr, ptr %208, i32 6
@@ -4199,7 +4028,7 @@ define { ptr, i160 } @HashMap_remove_from_table_keyK_h1Ptri32_idxPtri32_tableBuf
   ret { ptr, i160 } %239
 }
 
-define ptr @HashMap_B_remove_from_table_keyK_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_remove_from_table_keyK_h1Ptri32_idxPtri32_tableBufferEntryK._V_or_Nil({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = alloca i1, align 1
   %5 = alloca i1, align 1
@@ -4233,16 +4062,16 @@ define ptr @HashMap_B_remove_from_table_keyK_h1Ptri32_idxPtri32_tableBufferEntry
   %30 = ptrtoint ptr %29 to i64
   %31 = icmp eq i64 %30, ptrtoint (ptr @buffer_typ to i64)
   store i1 %31, ptr %3, align 1
-  store i32 48, ptr %8, align 4
+  store i32 50, ptr %8, align 4
   %32 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %33 = load i32, ptr %8, align 4
-  %34 = getelementptr [88 x ptr], ptr %32, i32 0, i32 %33
+  %34 = getelementptr [272 x ptr], ptr %32, i32 0, i32 %33
   %35 = getelementptr ptr, ptr %34, i32 10
   %36 = load ptr, ptr %35, align 8
   ret ptr %36
 }
 
-define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3, { ptr, i160 } %4) {
+define void @CuckooMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3, { ptr, i160 } %4) {
   %6 = alloca [1 x ptr], align 8
   %7 = alloca { ptr }, align 8
   %8 = alloca i32, align 4
@@ -4307,7 +4136,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %63 = getelementptr { ptr, ptr, ptr, i32 }, ptr %52, i32 0, i32 3
   %64 = load i32, ptr %62, align 4
   store i32 %64, ptr %63, align 4
-  call void @set_offset(ptr %52, ptr @HashMap)
+  call void @set_offset(ptr %52, ptr @CuckooMap)
   %65 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %3, ptr %65, align 8
   %66 = alloca i160, align 8
@@ -4347,7 +4176,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %93 = load i32, ptr %63, align 4
   %94 = insertvalue { ptr, ptr, ptr, i32 } %92, i32 %93, 3
   %95 = load ptr, ptr %52, align 8
-  %96 = call ptr @llvm.invariant.start.p0(i64 704, ptr %95)
+  %96 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %95)
   %97 = load i32, ptr %63, align 4
   %98 = getelementptr ptr, ptr %95, i32 %97
   %99 = load ptr, ptr %98, align 8
@@ -4356,7 +4185,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %102 = getelementptr [1 x ptr], ptr %101, i32 0, i32 0
   store ptr %100, ptr %102, align 8
   %103 = call ptr @llvm.invariant.start.p0(i64 1, ptr %101)
-  %104 = call ptr @llvm.invariant.start.p0(i64 704, ptr %87)
+  %104 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %87)
   %105 = getelementptr ptr, ptr %87, i32 %93
   %106 = getelementptr ptr, ptr %105, i32 11
   %107 = load ptr, ptr %106, align 8
@@ -4380,7 +4209,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %123 = getelementptr [1 x ptr], ptr %122, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %123, align 8
   %124 = call ptr @llvm.invariant.start.p0(i64 1, ptr %122)
-  %125 = call ptr @llvm.invariant.start.p0(i64 704, ptr %114)
+  %125 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %114)
   %126 = getelementptr ptr, ptr %114, i32 %120
   %127 = getelementptr ptr, ptr %126, i32 13
   %128 = load ptr, ptr %127, align 8
@@ -4393,7 +4222,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   store i32 %132, ptr %133, align 4
   %134 = load ptr, ptr %57, align 8
   %135 = load ptr, ptr %52, align 8
-  %136 = call ptr @llvm.invariant.start.p0(i64 704, ptr %135)
+  %136 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %135)
   %137 = load i32, ptr %63, align 4
   %138 = getelementptr ptr, ptr %135, i32 %137
   %139 = getelementptr ptr, ptr %138, i32 3
@@ -4436,14 +4265,14 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %171 = load i32, ptr %63, align 4
   %172 = insertvalue { ptr, ptr, ptr, i32 } %170, i32 %171, 3
   %173 = load ptr, ptr %52, align 8
-  %174 = call ptr @llvm.invariant.start.p0(i64 704, ptr %173)
+  %174 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %173)
   %175 = load i32, ptr %63, align 4
   %176 = getelementptr ptr, ptr %173, i32 %175
   %177 = load ptr, ptr %176, align 8
   %178 = call ptr @typegetter_wrapper(ptr %177, ptr %167)
   %179 = load ptr, ptr %57, align 8
   %180 = load ptr, ptr %52, align 8
-  %181 = call ptr @llvm.invariant.start.p0(i64 704, ptr %180)
+  %181 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %180)
   %182 = load i32, ptr %63, align 4
   %183 = getelementptr ptr, ptr %180, i32 %182
   %184 = getelementptr ptr, ptr %183, i32 1
@@ -4466,7 +4295,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %195 = getelementptr [5 x ptr], ptr %190, i32 0, i32 4
   store ptr %187, ptr %195, align 8
   %196 = call ptr @llvm.invariant.start.p0(i64 25, ptr %190)
-  %197 = call ptr @llvm.invariant.start.p0(i64 704, ptr %165)
+  %197 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %165)
   %198 = getelementptr ptr, ptr %165, i32 %171
   %199 = getelementptr ptr, ptr %198, i32 18
   %200 = load ptr, ptr %199, align 8
@@ -4504,7 +4333,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %222 = getelementptr [1 x ptr], ptr %6, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %222, align 8
   %223 = call ptr @llvm.invariant.start.p0(i64 1, ptr %6)
-  %224 = call ptr @llvm.invariant.start.p0(i64 704, ptr %214)
+  %224 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %214)
   %225 = getelementptr ptr, ptr %214, i32 %220
   %226 = getelementptr ptr, ptr %225, i32 14
   %227 = load ptr, ptr %226, align 8
@@ -4515,7 +4344,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   store i32 %230, ptr %8, align 4
   %231 = load ptr, ptr %57, align 8
   %232 = load ptr, ptr %52, align 8
-  %233 = call ptr @llvm.invariant.start.p0(i64 704, ptr %232)
+  %233 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %232)
   %234 = load i32, ptr %63, align 4
   %235 = getelementptr ptr, ptr %232, i32 %234
   %236 = getelementptr ptr, ptr %235, i32 4
@@ -4553,14 +4382,14 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %263 = load i32, ptr %63, align 4
   %264 = insertvalue { ptr, ptr, ptr, i32 } %262, i32 %263, 3
   %265 = load ptr, ptr %52, align 8
-  %266 = call ptr @llvm.invariant.start.p0(i64 704, ptr %265)
+  %266 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %265)
   %267 = load i32, ptr %63, align 4
   %268 = getelementptr ptr, ptr %265, i32 %267
   %269 = load ptr, ptr %268, align 8
   %270 = call ptr @typegetter_wrapper(ptr %269, ptr %259)
   %271 = load ptr, ptr %57, align 8
   %272 = load ptr, ptr %52, align 8
-  %273 = call ptr @llvm.invariant.start.p0(i64 704, ptr %272)
+  %273 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %272)
   %274 = load i32, ptr %63, align 4
   %275 = getelementptr ptr, ptr %272, i32 %274
   %276 = getelementptr ptr, ptr %275, i32 1
@@ -4582,7 +4411,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %286 = getelementptr [5 x ptr], ptr %14, i32 0, i32 4
   store ptr %279, ptr %286, align 8
   %287 = call ptr @llvm.invariant.start.p0(i64 25, ptr %14)
-  %288 = call ptr @llvm.invariant.start.p0(i64 704, ptr %257)
+  %288 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %257)
   %289 = getelementptr ptr, ptr %257, i32 %263
   %290 = getelementptr ptr, ptr %289, i32 18
   %291 = load ptr, ptr %290, align 8
@@ -4610,7 +4439,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
 302:                                              ; preds = %212
   %303 = load ptr, ptr %57, align 8
   %304 = load ptr, ptr %52, align 8
-  %305 = call ptr @llvm.invariant.start.p0(i64 704, ptr %304)
+  %305 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %304)
   %306 = load i32, ptr %63, align 4
   %307 = getelementptr ptr, ptr %304, i32 %306
   %308 = getelementptr ptr, ptr %307, i32 6
@@ -4621,7 +4450,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   store i32 %312, ptr %17, align 4
   %313 = load ptr, ptr %57, align 8
   %314 = load ptr, ptr %52, align 8
-  %315 = call ptr @llvm.invariant.start.p0(i64 704, ptr %314)
+  %315 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %314)
   %316 = load i32, ptr %63, align 4
   %317 = getelementptr ptr, ptr %314, i32 %316
   %318 = getelementptr ptr, ptr %317, i32 5
@@ -4647,7 +4476,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %334 = load i32, ptr %63, align 4
   %335 = insertvalue { ptr, ptr, ptr, i32 } %333, i32 %334, 3
   %336 = call ptr @llvm.invariant.start.p0(i64 0, ptr %20)
-  %337 = call ptr @llvm.invariant.start.p0(i64 704, ptr %328)
+  %337 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %328)
   %338 = getelementptr ptr, ptr %328, i32 %334
   %339 = getelementptr ptr, ptr %338, i32 17
   %340 = load ptr, ptr %339, align 8
@@ -4658,14 +4487,14 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
 342:                                              ; preds = %327, %302
   %343 = load ptr, ptr %57, align 8
   %344 = load ptr, ptr %52, align 8
-  %345 = call ptr @llvm.invariant.start.p0(i64 704, ptr %344)
+  %345 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %344)
   %346 = load i32, ptr %63, align 4
   %347 = getelementptr ptr, ptr %344, i32 %346
   %348 = load ptr, ptr %347, align 8
   %349 = call ptr @typegetter_wrapper(ptr %348, ptr %343)
   %350 = load ptr, ptr %57, align 8
   %351 = load ptr, ptr %52, align 8
-  %352 = call ptr @llvm.invariant.start.p0(i64 704, ptr %351)
+  %352 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %351)
   %353 = load i32, ptr %63, align 4
   %354 = getelementptr ptr, ptr %351, i32 %353
   %355 = getelementptr ptr, ptr %354, i32 1
@@ -4716,14 +4545,14 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %388 = insertvalue { ptr, ptr, ptr, i32 } %386, i32 %387, 3
   %389 = load ptr, ptr %57, align 8
   %390 = load ptr, ptr %52, align 8
-  %391 = call ptr @llvm.invariant.start.p0(i64 704, ptr %390)
+  %391 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %390)
   %392 = load i32, ptr %63, align 4
   %393 = getelementptr ptr, ptr %390, i32 %392
   %394 = load ptr, ptr %393, align 8
   %395 = call ptr @typegetter_wrapper(ptr %394, ptr %389)
   %396 = load ptr, ptr %57, align 8
   %397 = load ptr, ptr %52, align 8
-  %398 = call ptr @llvm.invariant.start.p0(i64 704, ptr %397)
+  %398 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %397)
   %399 = load i32, ptr %63, align 4
   %400 = getelementptr ptr, ptr %397, i32 %399
   %401 = getelementptr ptr, ptr %400, i32 1
@@ -4819,14 +4648,14 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %463 = load i32, ptr %63, align 4
   %464 = insertvalue { ptr, ptr, ptr, i32 } %462, i32 %463, 3
   %465 = load ptr, ptr %52, align 8
-  %466 = call ptr @llvm.invariant.start.p0(i64 704, ptr %465)
+  %466 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %465)
   %467 = load i32, ptr %63, align 4
   %468 = getelementptr ptr, ptr %465, i32 %467
   %469 = load ptr, ptr %468, align 8
   %470 = call ptr @typegetter_wrapper(ptr %469, ptr %459)
   %471 = load ptr, ptr %57, align 8
   %472 = load ptr, ptr %52, align 8
-  %473 = call ptr @llvm.invariant.start.p0(i64 704, ptr %472)
+  %473 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %472)
   %474 = load i32, ptr %63, align 4
   %475 = getelementptr ptr, ptr %472, i32 %474
   %476 = getelementptr ptr, ptr %475, i32 1
@@ -4853,7 +4682,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %489 = getelementptr [1 x ptr], ptr %42, i32 0, i32 0
   store ptr %479, ptr %489, align 8
   %490 = call ptr @llvm.invariant.start.p0(i64 1, ptr %42)
-  %491 = call ptr @llvm.invariant.start.p0(i64 704, ptr %457)
+  %491 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %457)
   %492 = getelementptr ptr, ptr %457, i32 %463
   %493 = getelementptr ptr, ptr %492, i32 15
   %494 = load ptr, ptr %493, align 8
@@ -4893,7 +4722,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %519 = load i32, ptr %63, align 4
   %520 = insertvalue { ptr, ptr, ptr, i32 } %518, i32 %519, 3
   %521 = call ptr @llvm.invariant.start.p0(i64 0, ptr %47)
-  %522 = call ptr @llvm.invariant.start.p0(i64 704, ptr %513)
+  %522 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %513)
   %523 = getelementptr ptr, ptr %513, i32 %519
   %524 = getelementptr ptr, ptr %523, i32 17
   %525 = load ptr, ptr %524, align 8
@@ -4960,7 +4789,7 @@ define void @HashMap_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   ret void
 }
 
-define ptr @HashMap_B_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = alloca i1, align 1
   %5 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1)
@@ -4990,16 +4819,65 @@ define ptr @HashMap_B_insert_keyK_valueV({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %28 = load i64, ptr @any_typ, align 4
   %29 = call i1 @subtype_test_wrapper(ptr %26, i64 %25, i64 %24, i64 %28, i64 ptrtoint (ptr @any_typ to i64), ptr %27)
   store i1 %29, ptr %3, align 1
-  store i32 49, ptr %6, align 4
+  store i32 51, ptr %6, align 4
   %30 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %31 = load i32, ptr %6, align 4
-  %32 = getelementptr [88 x ptr], ptr %30, i32 0, i32 %31
+  %32 = getelementptr [272 x ptr], ptr %30, i32 0, i32 %31
   %33 = getelementptr ptr, ptr %32, i32 10
   %34 = load ptr, ptr %33, align 8
   ret ptr %34
 }
 
-define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3) {
+define i32 @CuckooMap_size_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2) {
+  %4 = alloca { ptr, ptr, ptr, i32 }, align 8
+  store { ptr, ptr, ptr, i32 } %0, ptr %4, align 8
+  %5 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %6 = getelementptr { ptr, ptr, ptr, i32 }, ptr %4, i32 0, i32 0
+  %7 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 0
+  %8 = load ptr, ptr %6, align 8
+  store ptr %8, ptr %7, align 8
+  %9 = getelementptr { ptr, ptr, ptr, i32 }, ptr %4, i32 0, i32 1
+  %10 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 1
+  %11 = load ptr, ptr %9, align 8
+  store ptr %11, ptr %10, align 8
+  %12 = getelementptr { ptr, ptr, ptr, i32 }, ptr %4, i32 0, i32 2
+  %13 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 2
+  %14 = load ptr, ptr %12, align 8
+  store ptr %14, ptr %13, align 8
+  %15 = getelementptr { ptr, ptr, ptr, i32 }, ptr %4, i32 0, i32 3
+  %16 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 3
+  %17 = load i32, ptr %15, align 4
+  store i32 %17, ptr %16, align 4
+  call void @set_offset(ptr %5, ptr @CuckooMap)
+  %18 = load ptr, ptr %10, align 8
+  %19 = load ptr, ptr %5, align 8
+  %20 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %19)
+  %21 = load i32, ptr %16, align 4
+  %22 = getelementptr ptr, ptr %19, i32 %21
+  %23 = getelementptr ptr, ptr %22, i32 6
+  %24 = load ptr, ptr %23, align 8
+  %25 = getelementptr { ptr, ptr }, ptr %24, i32 0, i32 0
+  %26 = load ptr, ptr %25, align 8
+  %27 = call i32 %26(ptr %18) #2
+  %28 = alloca i32, align 4
+  store i32 %27, ptr %28, align 4
+  %29 = load i32, ptr %28, align 4
+  ret i32 %29
+}
+
+define ptr @CuckooMap_B_size_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+  %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
+  %4 = alloca ptr, align 8
+  store i32 52, ptr %4, align 4
+  %5 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %6 = load i32, ptr %4, align 4
+  %7 = getelementptr [272 x ptr], ptr %5, i32 0, i32 %6
+  %8 = getelementptr ptr, ptr %7, i32 10
+  %9 = load ptr, ptr %8, align 8
+  ret ptr %9
+}
+
+define { ptr, i160 } @CuckooMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3) {
   %5 = alloca { ptr, i160 }, align 8
   %6 = alloca [1 x ptr], align 8
   %7 = alloca { ptr }, align 8
@@ -5034,7 +4912,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   %32 = getelementptr { ptr, ptr, ptr, i32 }, ptr %21, i32 0, i32 3
   %33 = load i32, ptr %31, align 4
   store i32 %33, ptr %32, align 4
-  call void @set_offset(ptr %21, ptr @HashMap)
+  call void @set_offset(ptr %21, ptr @CuckooMap)
   %34 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %3, ptr %34, align 8
   %35 = alloca i160, align 8
@@ -5064,7 +4942,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   %55 = load i32, ptr %32, align 4
   %56 = insertvalue { ptr, ptr, ptr, i32 } %54, i32 %55, 3
   %57 = load ptr, ptr %21, align 8
-  %58 = call ptr @llvm.invariant.start.p0(i64 704, ptr %57)
+  %58 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %57)
   %59 = load i32, ptr %32, align 4
   %60 = getelementptr ptr, ptr %57, i32 %59
   %61 = load ptr, ptr %60, align 8
@@ -5073,7 +4951,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   %64 = getelementptr [1 x ptr], ptr %63, i32 0, i32 0
   store ptr %62, ptr %64, align 8
   %65 = call ptr @llvm.invariant.start.p0(i64 1, ptr %63)
-  %66 = call ptr @llvm.invariant.start.p0(i64 704, ptr %49)
+  %66 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %49)
   %67 = getelementptr ptr, ptr %49, i32 %55
   %68 = getelementptr ptr, ptr %67, i32 11
   %69 = load ptr, ptr %68, align 8
@@ -5097,7 +4975,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   %85 = getelementptr [1 x ptr], ptr %84, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %85, align 8
   %86 = call ptr @llvm.invariant.start.p0(i64 1, ptr %84)
-  %87 = call ptr @llvm.invariant.start.p0(i64 704, ptr %76)
+  %87 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %76)
   %88 = getelementptr ptr, ptr %76, i32 %82
   %89 = getelementptr ptr, ptr %88, i32 13
   %90 = load ptr, ptr %89, align 8
@@ -5110,7 +4988,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   store i32 %94, ptr %95, align 4
   %96 = load ptr, ptr %26, align 8
   %97 = load ptr, ptr %21, align 8
-  %98 = call ptr @llvm.invariant.start.p0(i64 704, ptr %97)
+  %98 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %97)
   %99 = load i32, ptr %32, align 4
   %100 = getelementptr ptr, ptr %97, i32 %99
   %101 = getelementptr ptr, ptr %100, i32 3
@@ -5143,7 +5021,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   %125 = load i32, ptr %32, align 4
   %126 = insertvalue { ptr, ptr, ptr, i32 } %124, i32 %125, 3
   %127 = load ptr, ptr %21, align 8
-  %128 = call ptr @llvm.invariant.start.p0(i64 704, ptr %127)
+  %128 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %127)
   %129 = load i32, ptr %32, align 4
   %130 = getelementptr ptr, ptr %127, i32 %129
   %131 = load ptr, ptr %130, align 8
@@ -5163,7 +5041,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   %140 = getelementptr [4 x ptr], ptr %136, i32 0, i32 3
   store ptr %133, ptr %140, align 8
   %141 = call ptr @llvm.invariant.start.p0(i64 16, ptr %136)
-  %142 = call ptr @llvm.invariant.start.p0(i64 704, ptr %119)
+  %142 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %119)
   %143 = getelementptr ptr, ptr %119, i32 %125
   %144 = getelementptr ptr, ptr %143, i32 19
   %145 = load ptr, ptr %144, align 8
@@ -5182,7 +5060,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   store { ptr, i160 } %152, ptr %153, align 8
   %154 = load ptr, ptr %26, align 8
   %155 = load ptr, ptr %21, align 8
-  %156 = call ptr @llvm.invariant.start.p0(i64 704, ptr %155)
+  %156 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %155)
   %157 = load i32, ptr %32, align 4
   %158 = getelementptr ptr, ptr %155, i32 %157
   %159 = getelementptr ptr, ptr %158, i32 1
@@ -5215,7 +5093,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   %181 = getelementptr [1 x ptr], ptr %6, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %181, align 8
   %182 = call ptr @llvm.invariant.start.p0(i64 1, ptr %6)
-  %183 = call ptr @llvm.invariant.start.p0(i64 704, ptr %173)
+  %183 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %173)
   %184 = getelementptr ptr, ptr %173, i32 %179
   %185 = getelementptr ptr, ptr %184, i32 14
   %186 = load ptr, ptr %185, align 8
@@ -5226,7 +5104,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   store i32 %189, ptr %8, align 4
   %190 = load ptr, ptr %26, align 8
   %191 = load ptr, ptr %21, align 8
-  %192 = call ptr @llvm.invariant.start.p0(i64 704, ptr %191)
+  %192 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %191)
   %193 = load i32, ptr %32, align 4
   %194 = getelementptr ptr, ptr %191, i32 %193
   %195 = getelementptr ptr, ptr %194, i32 4
@@ -5256,7 +5134,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   %216 = load i32, ptr %32, align 4
   %217 = insertvalue { ptr, ptr, ptr, i32 } %215, i32 %216, 3
   %218 = load ptr, ptr %21, align 8
-  %219 = call ptr @llvm.invariant.start.p0(i64 704, ptr %218)
+  %219 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %218)
   %220 = load i32, ptr %32, align 4
   %221 = getelementptr ptr, ptr %218, i32 %220
   %222 = load ptr, ptr %221, align 8
@@ -5275,7 +5153,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   %230 = getelementptr [4 x ptr], ptr %12, i32 0, i32 3
   store ptr %224, ptr %230, align 8
   %231 = call ptr @llvm.invariant.start.p0(i64 16, ptr %12)
-  %232 = call ptr @llvm.invariant.start.p0(i64 704, ptr %210)
+  %232 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %210)
   %233 = getelementptr ptr, ptr %210, i32 %216
   %234 = getelementptr ptr, ptr %233, i32 19
   %235 = load ptr, ptr %234, align 8
@@ -5292,7 +5170,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   store { ptr, i160 } %241, ptr %14, align 8
   %242 = load ptr, ptr %26, align 8
   %243 = load ptr, ptr %21, align 8
-  %244 = call ptr @llvm.invariant.start.p0(i64 704, ptr %243)
+  %244 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %243)
   %245 = load i32, ptr %32, align 4
   %246 = getelementptr ptr, ptr %243, i32 %245
   %247 = getelementptr ptr, ptr %246, i32 1
@@ -5367,7 +5245,7 @@ define { ptr, i160 } @HashMap_get_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   ret { ptr, i160 } %290
 }
 
-define ptr @HashMap_B_get_keyK({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_get_keyK({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
   %5 = alloca ptr, align 8
@@ -5383,16 +5261,158 @@ define ptr @HashMap_B_get_keyK({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %15 = load i64, ptr @any_typ, align 4
   %16 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 %15, i64 ptrtoint (ptr @any_typ to i64), ptr %14)
   store i1 %16, ptr %3, align 1
-  store i32 50, ptr %5, align 4
+  store i32 53, ptr %5, align 4
   %17 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %18 = load i32, ptr %5, align 4
-  %19 = getelementptr [88 x ptr], ptr %17, i32 0, i32 %18
+  %19 = getelementptr [272 x ptr], ptr %17, i32 0, i32 %18
   %20 = getelementptr ptr, ptr %19, i32 10
   %21 = load ptr, ptr %20, align 8
   ret ptr %21
 }
 
-define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3) {
+define void @CuckooMap__set_index_keyK_valueV({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3, { ptr, i160 } %4) {
+  %6 = alloca { ptr, ptr, ptr, i32 }, align 8
+  store { ptr, ptr, ptr, i32 } %0, ptr %6, align 8
+  %7 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %8 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 0
+  %9 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 0
+  %10 = load ptr, ptr %8, align 8
+  store ptr %10, ptr %9, align 8
+  %11 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 1
+  %12 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 1
+  %13 = load ptr, ptr %11, align 8
+  store ptr %13, ptr %12, align 8
+  %14 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 2
+  %15 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 2
+  %16 = load ptr, ptr %14, align 8
+  store ptr %16, ptr %15, align 8
+  %17 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 3
+  %18 = getelementptr { ptr, ptr, ptr, i32 }, ptr %7, i32 0, i32 3
+  %19 = load i32, ptr %17, align 4
+  store i32 %19, ptr %18, align 4
+  call void @set_offset(ptr %7, ptr @CuckooMap)
+  %20 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %3, ptr %20, align 8
+  %21 = alloca i160, align 8
+  %22 = alloca ptr, align 8
+  %23 = getelementptr { ptr, i160 }, ptr %20, i32 0, i32 0
+  %24 = load ptr, ptr %23, align 8
+  store ptr %24, ptr %22, align 8
+  %25 = getelementptr { ptr, i160 }, ptr %20, i32 0, i32 1
+  %26 = load i160, ptr %25, align 4
+  store i160 %26, ptr %21, align 4
+  %27 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %4, ptr %27, align 8
+  %28 = alloca i160, align 8
+  %29 = alloca ptr, align 8
+  %30 = getelementptr { ptr, i160 }, ptr %27, i32 0, i32 0
+  %31 = load ptr, ptr %30, align 8
+  store ptr %31, ptr %29, align 8
+  %32 = getelementptr { ptr, i160 }, ptr %27, i32 0, i32 1
+  %33 = load i160, ptr %32, align 4
+  store i160 %33, ptr %28, align 4
+  %34 = alloca i160, align 8
+  %35 = alloca ptr, align 8
+  %36 = load ptr, ptr %22, align 8
+  store ptr %36, ptr %35, align 8
+  %37 = load i160, ptr %21, align 4
+  store i160 %37, ptr %34, align 4
+  %38 = load ptr, ptr %35, align 8
+  %39 = insertvalue { ptr, i160 } undef, ptr %38, 0
+  %40 = load i160, ptr %34, align 4
+  %41 = insertvalue { ptr, i160 } %39, i160 %40, 1
+  %42 = alloca i160, align 8
+  %43 = alloca ptr, align 8
+  %44 = load ptr, ptr %29, align 8
+  store ptr %44, ptr %43, align 8
+  %45 = load i160, ptr %28, align 4
+  store i160 %45, ptr %42, align 4
+  %46 = load ptr, ptr %43, align 8
+  %47 = insertvalue { ptr, i160 } undef, ptr %46, 0
+  %48 = load i160, ptr %42, align 4
+  %49 = insertvalue { ptr, i160 } %47, i160 %48, 1
+  %50 = load ptr, ptr %9, align 8
+  %51 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %50, 0
+  %52 = load ptr, ptr %12, align 8
+  %53 = insertvalue { ptr, ptr, ptr, i32 } %51, ptr %52, 1
+  %54 = load ptr, ptr %15, align 8
+  %55 = insertvalue { ptr, ptr, ptr, i32 } %53, ptr %54, 2
+  %56 = load i32, ptr %18, align 4
+  %57 = insertvalue { ptr, ptr, ptr, i32 } %55, i32 %56, 3
+  %58 = load ptr, ptr %7, align 8
+  %59 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %58)
+  %60 = load i32, ptr %18, align 4
+  %61 = getelementptr ptr, ptr %58, i32 %60
+  %62 = load ptr, ptr %61, align 8
+  %63 = call ptr @typegetter_wrapper(ptr %62, ptr %52)
+  %64 = load ptr, ptr %12, align 8
+  %65 = load ptr, ptr %7, align 8
+  %66 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %65)
+  %67 = load i32, ptr %18, align 4
+  %68 = getelementptr ptr, ptr %65, i32 %67
+  %69 = getelementptr ptr, ptr %68, i32 1
+  %70 = load ptr, ptr %69, align 8
+  %71 = call ptr @typegetter_wrapper(ptr %70, ptr %64)
+  %72 = alloca [2 x ptr], align 8
+  %73 = getelementptr [2 x ptr], ptr %72, i32 0, i32 0
+  store ptr %63, ptr %73, align 8
+  %74 = getelementptr [2 x ptr], ptr %72, i32 0, i32 1
+  store ptr %71, ptr %74, align 8
+  %75 = call ptr @llvm.invariant.start.p0(i64 4, ptr %72)
+  %76 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %50)
+  %77 = getelementptr ptr, ptr %50, i32 %56
+  %78 = getelementptr ptr, ptr %77, i32 21
+  %79 = load ptr, ptr %78, align 8
+  %80 = alloca { ptr, ptr }, align 8
+  %81 = getelementptr { ptr, ptr }, ptr %80, i32 0, i32 0
+  store ptr %38, ptr %81, align 8
+  %82 = getelementptr { ptr, ptr }, ptr %80, i32 0, i32 1
+  store ptr %46, ptr %82, align 8
+  %83 = call ptr @behavior_wrapper(ptr %79, { ptr, ptr, ptr, i32 } %57, ptr %80)
+  call void %83({ ptr, ptr, ptr, i32 } %57, { ptr, ptr, ptr, i32 } %57, ptr %72, { ptr, i160 } %41, { ptr, i160 } %49) #3
+  ret void
+}
+
+define ptr @CuckooMap_B__set_index_keyK_valueV({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+  %3 = alloca i1, align 1
+  %4 = alloca i1, align 1
+  %5 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1)
+  %6 = alloca ptr, align 8
+  %7 = load ptr, ptr %1, align 8
+  %8 = getelementptr { [3 x i64], [3 x ptr] }, ptr %7, i32 0, i32 0, i32 1
+  %9 = getelementptr { [3 x i64], [3 x ptr] }, ptr %7, i32 0, i32 0, i32 2
+  %10 = getelementptr { [3 x i64], [3 x ptr] }, ptr %7, i32 0, i32 1, i32 0
+  %11 = getelementptr { [3 x i64], [3 x ptr] }, ptr %7, i32 0, i32 1, i32 1
+  %12 = load i64, ptr %8, align 4
+  %13 = load i64, ptr %9, align 4
+  %14 = load ptr, ptr %10, align 8
+  %15 = load ptr, ptr %11, align 8
+  %16 = load i64, ptr @any_typ, align 4
+  %17 = call i1 @subtype_test_wrapper(ptr %14, i64 %13, i64 %12, i64 %16, i64 ptrtoint (ptr @any_typ to i64), ptr %15)
+  store i1 %17, ptr %4, align 1
+  %18 = getelementptr ptr, ptr %1, i32 1
+  %19 = load ptr, ptr %18, align 8
+  %20 = getelementptr { [3 x i64], [3 x ptr] }, ptr %19, i32 0, i32 0, i32 1
+  %21 = getelementptr { [3 x i64], [3 x ptr] }, ptr %19, i32 0, i32 0, i32 2
+  %22 = getelementptr { [3 x i64], [3 x ptr] }, ptr %19, i32 0, i32 1, i32 0
+  %23 = getelementptr { [3 x i64], [3 x ptr] }, ptr %19, i32 0, i32 1, i32 1
+  %24 = load i64, ptr %20, align 4
+  %25 = load i64, ptr %21, align 4
+  %26 = load ptr, ptr %22, align 8
+  %27 = load ptr, ptr %23, align 8
+  %28 = load i64, ptr @any_typ, align 4
+  %29 = call i1 @subtype_test_wrapper(ptr %26, i64 %25, i64 %24, i64 %28, i64 ptrtoint (ptr @any_typ to i64), ptr %27)
+  store i1 %29, ptr %3, align 1
+  store i32 54, ptr %6, align 4
+  %30 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %31 = load i32, ptr %6, align 4
+  %32 = getelementptr [272 x ptr], ptr %30, i32 0, i32 %31
+  %33 = getelementptr ptr, ptr %32, i32 10
+  %34 = load ptr, ptr %33, align 8
+  ret ptr %34
+}
+
+define { ptr, i160 } @CuckooMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr, i160 } %3) {
   %5 = alloca { ptr, i160 }, align 8
   %6 = alloca [1 x ptr], align 8
   %7 = alloca { ptr }, align 8
@@ -5427,7 +5447,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %32 = getelementptr { ptr, ptr, ptr, i32 }, ptr %21, i32 0, i32 3
   %33 = load i32, ptr %31, align 4
   store i32 %33, ptr %32, align 4
-  call void @set_offset(ptr %21, ptr @HashMap)
+  call void @set_offset(ptr %21, ptr @CuckooMap)
   %34 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %3, ptr %34, align 8
   %35 = alloca i160, align 8
@@ -5457,7 +5477,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %55 = load i32, ptr %32, align 4
   %56 = insertvalue { ptr, ptr, ptr, i32 } %54, i32 %55, 3
   %57 = load ptr, ptr %21, align 8
-  %58 = call ptr @llvm.invariant.start.p0(i64 704, ptr %57)
+  %58 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %57)
   %59 = load i32, ptr %32, align 4
   %60 = getelementptr ptr, ptr %57, i32 %59
   %61 = load ptr, ptr %60, align 8
@@ -5466,7 +5486,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %64 = getelementptr [1 x ptr], ptr %63, i32 0, i32 0
   store ptr %62, ptr %64, align 8
   %65 = call ptr @llvm.invariant.start.p0(i64 1, ptr %63)
-  %66 = call ptr @llvm.invariant.start.p0(i64 704, ptr %49)
+  %66 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %49)
   %67 = getelementptr ptr, ptr %49, i32 %55
   %68 = getelementptr ptr, ptr %67, i32 11
   %69 = load ptr, ptr %68, align 8
@@ -5490,7 +5510,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %85 = getelementptr [1 x ptr], ptr %84, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %85, align 8
   %86 = call ptr @llvm.invariant.start.p0(i64 1, ptr %84)
-  %87 = call ptr @llvm.invariant.start.p0(i64 704, ptr %76)
+  %87 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %76)
   %88 = getelementptr ptr, ptr %76, i32 %82
   %89 = getelementptr ptr, ptr %88, i32 13
   %90 = load ptr, ptr %89, align 8
@@ -5503,7 +5523,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   store i32 %94, ptr %95, align 4
   %96 = load ptr, ptr %26, align 8
   %97 = load ptr, ptr %21, align 8
-  %98 = call ptr @llvm.invariant.start.p0(i64 704, ptr %97)
+  %98 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %97)
   %99 = load i32, ptr %32, align 4
   %100 = getelementptr ptr, ptr %97, i32 %99
   %101 = getelementptr ptr, ptr %100, i32 3
@@ -5536,7 +5556,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %125 = load i32, ptr %32, align 4
   %126 = insertvalue { ptr, ptr, ptr, i32 } %124, i32 %125, 3
   %127 = load ptr, ptr %21, align 8
-  %128 = call ptr @llvm.invariant.start.p0(i64 704, ptr %127)
+  %128 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %127)
   %129 = load i32, ptr %32, align 4
   %130 = getelementptr ptr, ptr %127, i32 %129
   %131 = load ptr, ptr %130, align 8
@@ -5556,7 +5576,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %140 = getelementptr [4 x ptr], ptr %136, i32 0, i32 3
   store ptr %133, ptr %140, align 8
   %141 = call ptr @llvm.invariant.start.p0(i64 16, ptr %136)
-  %142 = call ptr @llvm.invariant.start.p0(i64 704, ptr %119)
+  %142 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %119)
   %143 = getelementptr ptr, ptr %119, i32 %125
   %144 = getelementptr ptr, ptr %143, i32 20
   %145 = load ptr, ptr %144, align 8
@@ -5575,7 +5595,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   store { ptr, i160 } %152, ptr %153, align 8
   %154 = load ptr, ptr %26, align 8
   %155 = load ptr, ptr %21, align 8
-  %156 = call ptr @llvm.invariant.start.p0(i64 704, ptr %155)
+  %156 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %155)
   %157 = load i32, ptr %32, align 4
   %158 = getelementptr ptr, ptr %155, i32 %157
   %159 = getelementptr ptr, ptr %158, i32 1
@@ -5608,7 +5628,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %181 = getelementptr [1 x ptr], ptr %6, i32 0, i32 0
   store ptr @_parameterization_Ptri32, ptr %181, align 8
   %182 = call ptr @llvm.invariant.start.p0(i64 1, ptr %6)
-  %183 = call ptr @llvm.invariant.start.p0(i64 704, ptr %173)
+  %183 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %173)
   %184 = getelementptr ptr, ptr %173, i32 %179
   %185 = getelementptr ptr, ptr %184, i32 14
   %186 = load ptr, ptr %185, align 8
@@ -5619,7 +5639,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   store i32 %189, ptr %8, align 4
   %190 = load ptr, ptr %26, align 8
   %191 = load ptr, ptr %21, align 8
-  %192 = call ptr @llvm.invariant.start.p0(i64 704, ptr %191)
+  %192 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %191)
   %193 = load i32, ptr %32, align 4
   %194 = getelementptr ptr, ptr %191, i32 %193
   %195 = getelementptr ptr, ptr %194, i32 4
@@ -5649,7 +5669,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %216 = load i32, ptr %32, align 4
   %217 = insertvalue { ptr, ptr, ptr, i32 } %215, i32 %216, 3
   %218 = load ptr, ptr %21, align 8
-  %219 = call ptr @llvm.invariant.start.p0(i64 704, ptr %218)
+  %219 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %218)
   %220 = load i32, ptr %32, align 4
   %221 = getelementptr ptr, ptr %218, i32 %220
   %222 = load ptr, ptr %221, align 8
@@ -5668,7 +5688,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %230 = getelementptr [4 x ptr], ptr %12, i32 0, i32 3
   store ptr %224, ptr %230, align 8
   %231 = call ptr @llvm.invariant.start.p0(i64 16, ptr %12)
-  %232 = call ptr @llvm.invariant.start.p0(i64 704, ptr %210)
+  %232 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %210)
   %233 = getelementptr ptr, ptr %210, i32 %216
   %234 = getelementptr ptr, ptr %233, i32 20
   %235 = load ptr, ptr %234, align 8
@@ -5685,7 +5705,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   store { ptr, i160 } %241, ptr %14, align 8
   %242 = load ptr, ptr %26, align 8
   %243 = load ptr, ptr %21, align 8
-  %244 = call ptr @llvm.invariant.start.p0(i64 704, ptr %243)
+  %244 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %243)
   %245 = load i32, ptr %32, align 4
   %246 = getelementptr ptr, ptr %243, i32 %245
   %247 = getelementptr ptr, ptr %246, i32 1
@@ -5760,7 +5780,7 @@ define { ptr, i160 } @HashMap_remove_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   ret { ptr, i160 } %290
 }
 
-define ptr @HashMap_B_remove_keyK({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_remove_keyK({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
   %5 = alloca ptr, align 8
@@ -5776,16 +5796,16 @@ define ptr @HashMap_B_remove_keyK({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %15 = load i64, ptr @any_typ, align 4
   %16 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 %15, i64 ptrtoint (ptr @any_typ to i64), ptr %14)
   store i1 %16, ptr %3, align 1
-  store i32 51, ptr %5, align 4
+  store i32 55, ptr %5, align 4
   %17 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %18 = load i32, ptr %5, align 4
-  %19 = getelementptr [88 x ptr], ptr %17, i32 0, i32 %18
+  %19 = getelementptr [272 x ptr], ptr %17, i32 0, i32 %18
   %20 = getelementptr ptr, ptr %19, i32 10
   %21 = load ptr, ptr %20, align 8
   ret ptr %21
 }
 
-define void @HashMap_clear_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2) {
+define void @CuckooMap_clear_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2) {
   %4 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %0, ptr %4, align 8
   %5 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -5805,12 +5825,12 @@ define void @HashMap_clear_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1
   %16 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 3
   %17 = load i32, ptr %15, align 4
   store i32 %17, ptr %16, align 4
-  call void @set_offset(ptr %5, ptr @HashMap)
+  call void @set_offset(ptr %5, ptr @CuckooMap)
   %18 = alloca i32, align 4
   store i32 8, ptr %18, align 4
   %19 = load ptr, ptr %10, align 8
   %20 = load ptr, ptr %5, align 8
-  %21 = call ptr @llvm.invariant.start.p0(i64 704, ptr %20)
+  %21 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %20)
   %22 = load i32, ptr %16, align 4
   %23 = getelementptr ptr, ptr %20, i32 %22
   %24 = getelementptr ptr, ptr %23, i32 5
@@ -5827,7 +5847,7 @@ define void @HashMap_clear_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1
   store ptr %33, ptr %31, align 8
   %34 = load ptr, ptr %10, align 8
   %35 = load ptr, ptr %5, align 8
-  %36 = call ptr @llvm.invariant.start.p0(i64 704, ptr %35)
+  %36 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %35)
   %37 = load i32, ptr %16, align 4
   %38 = getelementptr ptr, ptr %35, i32 %37
   %39 = getelementptr ptr, ptr %38, i32 3
@@ -5846,7 +5866,7 @@ define void @HashMap_clear_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1
   store ptr %50, ptr %48, align 8
   %51 = load ptr, ptr %10, align 8
   %52 = load ptr, ptr %5, align 8
-  %53 = call ptr @llvm.invariant.start.p0(i64 704, ptr %52)
+  %53 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %52)
   %54 = load i32, ptr %16, align 4
   %55 = getelementptr ptr, ptr %52, i32 %54
   %56 = getelementptr ptr, ptr %55, i32 4
@@ -5861,7 +5881,7 @@ define void @HashMap_clear_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1
   store i32 0, ptr %63, align 4
   %64 = load ptr, ptr %10, align 8
   %65 = load ptr, ptr %5, align 8
-  %66 = call ptr @llvm.invariant.start.p0(i64 704, ptr %65)
+  %66 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %65)
   %67 = load i32, ptr %16, align 4
   %68 = getelementptr ptr, ptr %65, i32 %67
   %69 = getelementptr ptr, ptr %68, i32 6
@@ -5873,19 +5893,46 @@ define void @HashMap_clear_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1
   ret void
 }
 
-define ptr @HashMap_B_clear_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_clear_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = alloca ptr, align 8
-  store i32 52, ptr %4, align 4
+  store i32 56, ptr %4, align 4
   %5 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %6 = load i32, ptr %4, align 4
-  %7 = getelementptr [88 x ptr], ptr %5, i32 0, i32 %6
+  %7 = getelementptr [272 x ptr], ptr %5, i32 0, i32 %6
   %8 = getelementptr ptr, ptr %7, i32 10
   %9 = load ptr, ptr %8, align 8
   ret ptr %9
 }
 
-define i32 @HashMap_size_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2) {
+declare { ptr, i160 } @Map__index_keyK({ ptr, i160 })
+
+define ptr @CuckooMap_B__index_keyK({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+  %3 = alloca i1, align 1
+  %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
+  %5 = alloca ptr, align 8
+  %6 = load ptr, ptr %1, align 8
+  %7 = getelementptr { [3 x i64], [3 x ptr] }, ptr %6, i32 0, i32 0, i32 1
+  %8 = getelementptr { [3 x i64], [3 x ptr] }, ptr %6, i32 0, i32 0, i32 2
+  %9 = getelementptr { [3 x i64], [3 x ptr] }, ptr %6, i32 0, i32 1, i32 0
+  %10 = getelementptr { [3 x i64], [3 x ptr] }, ptr %6, i32 0, i32 1, i32 1
+  %11 = load i64, ptr %7, align 4
+  %12 = load i64, ptr %8, align 4
+  %13 = load ptr, ptr %9, align 8
+  %14 = load ptr, ptr %10, align 8
+  %15 = load i64, ptr @any_typ, align 4
+  %16 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 %15, i64 ptrtoint (ptr @any_typ to i64), ptr %14)
+  store i1 %16, ptr %3, align 1
+  store i32 57, ptr %5, align 4
+  %17 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %18 = load i32, ptr %5, align 4
+  %19 = getelementptr [272 x ptr], ptr %17, i32 0, i32 %18
+  %20 = getelementptr ptr, ptr %19, i32 10
+  %21 = load ptr, ptr %20, align 8
+  ret ptr %21
+}
+
+define { ptr, ptr, ptr, i32 } @CuckooMap_iterator_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2) {
   %4 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %0, ptr %4, align 8
   %5 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -5905,59 +5952,10 @@ define i32 @HashMap_size_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, 
   %16 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 3
   %17 = load i32, ptr %15, align 4
   store i32 %17, ptr %16, align 4
-  call void @set_offset(ptr %5, ptr @HashMap)
+  call void @set_offset(ptr %5, ptr @CuckooMap)
   %18 = load ptr, ptr %10, align 8
   %19 = load ptr, ptr %5, align 8
-  %20 = call ptr @llvm.invariant.start.p0(i64 704, ptr %19)
-  %21 = load i32, ptr %16, align 4
-  %22 = getelementptr ptr, ptr %19, i32 %21
-  %23 = getelementptr ptr, ptr %22, i32 6
-  %24 = load ptr, ptr %23, align 8
-  %25 = getelementptr { ptr, ptr }, ptr %24, i32 0, i32 0
-  %26 = load ptr, ptr %25, align 8
-  %27 = call i32 %26(ptr %18) #2
-  %28 = alloca i32, align 4
-  store i32 %27, ptr %28, align 4
-  %29 = load i32, ptr %28, align 4
-  ret i32 %29
-}
-
-define ptr @HashMap_B_size_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
-  %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
-  %4 = alloca ptr, align 8
-  store i32 53, ptr %4, align 4
-  %5 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %6 = load i32, ptr %4, align 4
-  %7 = getelementptr [88 x ptr], ptr %5, i32 0, i32 %6
-  %8 = getelementptr ptr, ptr %7, i32 10
-  %9 = load ptr, ptr %8, align 8
-  ret ptr %9
-}
-
-define { ptr, ptr, ptr, i32 } @HashMap_iterator_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2) {
-  %4 = alloca { ptr, ptr, ptr, i32 }, align 8
-  store { ptr, ptr, ptr, i32 } %0, ptr %4, align 8
-  %5 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %6 = getelementptr { ptr, ptr, ptr, i32 }, ptr %4, i32 0, i32 0
-  %7 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 0
-  %8 = load ptr, ptr %6, align 8
-  store ptr %8, ptr %7, align 8
-  %9 = getelementptr { ptr, ptr, ptr, i32 }, ptr %4, i32 0, i32 1
-  %10 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 1
-  %11 = load ptr, ptr %9, align 8
-  store ptr %11, ptr %10, align 8
-  %12 = getelementptr { ptr, ptr, ptr, i32 }, ptr %4, i32 0, i32 2
-  %13 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 2
-  %14 = load ptr, ptr %12, align 8
-  store ptr %14, ptr %13, align 8
-  %15 = getelementptr { ptr, ptr, ptr, i32 }, ptr %4, i32 0, i32 3
-  %16 = getelementptr { ptr, ptr, ptr, i32 }, ptr %5, i32 0, i32 3
-  %17 = load i32, ptr %15, align 4
-  store i32 %17, ptr %16, align 4
-  call void @set_offset(ptr %5, ptr @HashMap)
-  %18 = load ptr, ptr %10, align 8
-  %19 = load ptr, ptr %5, align 8
-  %20 = call ptr @llvm.invariant.start.p0(i64 704, ptr %19)
+  %20 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %19)
   %21 = load i32, ptr %16, align 4
   %22 = getelementptr ptr, ptr %19, i32 %21
   %23 = getelementptr ptr, ptr %22, i32 3
@@ -5969,7 +5967,7 @@ define { ptr, ptr, ptr, i32 } @HashMap_iterator_({ ptr, ptr, ptr, i32 } %0, { pt
   store { ptr } %27, ptr %28, align 8
   %29 = load ptr, ptr %10, align 8
   %30 = load ptr, ptr %5, align 8
-  %31 = call ptr @llvm.invariant.start.p0(i64 704, ptr %30)
+  %31 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %30)
   %32 = load i32, ptr %16, align 4
   %33 = getelementptr ptr, ptr %30, i32 %32
   %34 = getelementptr ptr, ptr %33, i32 4
@@ -5981,7 +5979,7 @@ define { ptr, ptr, ptr, i32 } @HashMap_iterator_({ ptr, ptr, ptr, i32 } %0, { pt
   store { ptr } %38, ptr %39, align 8
   %40 = load ptr, ptr %10, align 8
   %41 = load ptr, ptr %5, align 8
-  %42 = call ptr @llvm.invariant.start.p0(i64 704, ptr %41)
+  %42 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %41)
   %43 = load i32, ptr %16, align 4
   %44 = getelementptr ptr, ptr %41, i32 %43
   %45 = getelementptr ptr, ptr %44, i32 5
@@ -5993,14 +5991,14 @@ define { ptr, ptr, ptr, i32 } @HashMap_iterator_({ ptr, ptr, ptr, i32 } %0, { pt
   store i32 %49, ptr %50, align 4
   %51 = load ptr, ptr %10, align 8
   %52 = load ptr, ptr %5, align 8
-  %53 = call ptr @llvm.invariant.start.p0(i64 704, ptr %52)
+  %53 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %52)
   %54 = load i32, ptr %16, align 4
   %55 = getelementptr ptr, ptr %52, i32 %54
   %56 = load ptr, ptr %55, align 8
   %57 = call ptr @typegetter_wrapper(ptr %56, ptr %51)
   %58 = load ptr, ptr %10, align 8
   %59 = load ptr, ptr %5, align 8
-  %60 = call ptr @llvm.invariant.start.p0(i64 704, ptr %59)
+  %60 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %59)
   %61 = load i32, ptr %16, align 4
   %62 = getelementptr ptr, ptr %59, i32 %61
   %63 = getelementptr ptr, ptr %62, i32 1
@@ -6008,14 +6006,14 @@ define { ptr, ptr, ptr, i32 } @HashMap_iterator_({ ptr, ptr, ptr, i32 } %0, { pt
   %65 = call ptr @typegetter_wrapper(ptr %64, ptr %58)
   %66 = load ptr, ptr %10, align 8
   %67 = load ptr, ptr %5, align 8
-  %68 = call ptr @llvm.invariant.start.p0(i64 704, ptr %67)
+  %68 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %67)
   %69 = load i32, ptr %16, align 4
   %70 = getelementptr ptr, ptr %67, i32 %69
   %71 = load ptr, ptr %70, align 8
   %72 = call ptr @typegetter_wrapper(ptr %71, ptr %66)
   %73 = load ptr, ptr %10, align 8
   %74 = load ptr, ptr %5, align 8
-  %75 = call ptr @llvm.invariant.start.p0(i64 704, ptr %74)
+  %75 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %74)
   %76 = load i32, ptr %16, align 4
   %77 = getelementptr ptr, ptr %74, i32 %76
   %78 = getelementptr ptr, ptr %77, i32 1
@@ -6031,7 +6029,7 @@ define { ptr, ptr, ptr, i32 } @HashMap_iterator_({ ptr, ptr, ptr, i32 } %0, { pt
   %85 = call ptr @llvm.invariant.start.p0(i64 24, ptr %81)
   store ptr @Pair, ptr %81, align 8
   %86 = alloca [4 x ptr], align 8
-  store ptr @HashMapIterator, ptr %86, align 8
+  store ptr @CuckooMapIterator, ptr %86, align 8
   %87 = getelementptr ptr, ptr %86, i32 1
   store ptr %57, ptr %87, align 8
   %88 = getelementptr ptr, ptr %86, i32 2
@@ -6054,12 +6052,12 @@ define { ptr, ptr, ptr, i32 } @HashMap_iterator_({ ptr, ptr, ptr, i32 } %0, { pt
   %100 = alloca ptr, align 8
   %101 = alloca ptr, align 8
   %102 = alloca ptr, align 8
-  store ptr @HashMapIterator, ptr %102, align 8
+  store ptr @CuckooMapIterator, ptr %102, align 8
   store ptr %95, ptr %101, align 8
   store i32 10, ptr %99, align 4
   %103 = load ptr, ptr %10, align 8
   %104 = load ptr, ptr %5, align 8
-  %105 = call ptr @llvm.invariant.start.p0(i64 704, ptr %104)
+  %105 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %104)
   %106 = load i32, ptr %16, align 4
   %107 = getelementptr ptr, ptr %104, i32 %106
   %108 = getelementptr ptr, ptr %107, i32 3
@@ -6071,7 +6069,7 @@ define { ptr, ptr, ptr, i32 } @HashMap_iterator_({ ptr, ptr, ptr, i32 } %0, { pt
   store { ptr } %112, ptr %113, align 8
   %114 = load ptr, ptr %10, align 8
   %115 = load ptr, ptr %5, align 8
-  %116 = call ptr @llvm.invariant.start.p0(i64 704, ptr %115)
+  %116 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %115)
   %117 = load i32, ptr %16, align 4
   %118 = getelementptr ptr, ptr %115, i32 %117
   %119 = getelementptr ptr, ptr %118, i32 4
@@ -6083,7 +6081,7 @@ define { ptr, ptr, ptr, i32 } @HashMap_iterator_({ ptr, ptr, ptr, i32 } %0, { pt
   store { ptr } %123, ptr %124, align 8
   %125 = load ptr, ptr %10, align 8
   %126 = load ptr, ptr %5, align 8
-  %127 = call ptr @llvm.invariant.start.p0(i64 704, ptr %126)
+  %127 = call ptr @llvm.invariant.start.p0(i64 2176, ptr %126)
   %128 = load i32, ptr %16, align 4
   %129 = getelementptr ptr, ptr %126, i32 %128
   %130 = getelementptr ptr, ptr %129, i32 5
@@ -6162,13 +6160,13 @@ define { ptr, ptr, ptr, i32 } @HashMap_iterator_({ ptr, ptr, ptr, i32 } %0, { pt
   ret { ptr, ptr, ptr, i32 } %185
 }
 
-define ptr @HashMap_B_iterator_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_iterator_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = alloca ptr, align 8
-  store i32 54, ptr %4, align 4
+  store i32 58, ptr %4, align 4
   %5 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %6 = load i32, ptr %4, align 4
-  %7 = getelementptr [88 x ptr], ptr %5, i32 0, i32 %6
+  %7 = getelementptr [272 x ptr], ptr %5, i32 0, i32 %6
   %8 = getelementptr ptr, ptr %7, i32 10
   %9 = load ptr, ptr %8, align 8
   ret ptr %9
@@ -6176,7 +6174,7 @@ define ptr @HashMap_B_iterator_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
 
 declare void @Iterable_each_fFunctionT_to_Nothing({ ptr })
 
-define ptr @HashMap_B_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
   %5 = alloca ptr, align 8
@@ -6184,10 +6182,10 @@ define ptr @HashMap_B_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 } %0, ptr 
   %7 = ptrtoint ptr %6 to i64
   %8 = icmp eq i64 %7, ptrtoint (ptr @function_typ to i64)
   store i1 %8, ptr %3, align 1
-  store i32 55, ptr %5, align 4
+  store i32 59, ptr %5, align 4
   %9 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %10 = load i32, ptr %5, align 4
-  %11 = getelementptr [88 x ptr], ptr %9, i32 0, i32 %10
+  %11 = getelementptr [272 x ptr], ptr %9, i32 0, i32 %10
   %12 = getelementptr ptr, ptr %11, i32 10
   %13 = load ptr, ptr %12, align 8
   ret ptr %13
@@ -6195,7 +6193,7 @@ define ptr @HashMap_B_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 } %0, ptr 
 
 declare { ptr, i160 } @Iterable_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, i160 }, { ptr })
 
-define ptr @HashMap_B_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = alloca i1, align 1
   %5 = call ptr @llvm.invariant.start.p0(i64 16, ptr %1)
@@ -6217,10 +6215,10 @@ define ptr @HashMap_B_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, ptr, ptr, i3
   %20 = ptrtoint ptr %19 to i64
   %21 = icmp eq i64 %20, ptrtoint (ptr @function_typ to i64)
   store i1 %21, ptr %3, align 1
-  store i32 56, ptr %6, align 4
+  store i32 60, ptr %6, align 4
   %22 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %23 = load i32, ptr %6, align 4
-  %24 = getelementptr [88 x ptr], ptr %22, i32 0, i32 %23
+  %24 = getelementptr [272 x ptr], ptr %22, i32 0, i32 %23
   %25 = getelementptr ptr, ptr %24, i32 10
   %26 = load ptr, ptr %25, align 8
   ret ptr %26
@@ -6228,7 +6226,7 @@ define ptr @HashMap_B_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, ptr, ptr, i3
 
 declare i1 @Iterable_all_fFunctionT_to_Ptri1({ ptr })
 
-define ptr @HashMap_B_all_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_all_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
   %5 = alloca ptr, align 8
@@ -6236,10 +6234,10 @@ define ptr @HashMap_B_all_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, ptr %1)
   %7 = ptrtoint ptr %6 to i64
   %8 = icmp eq i64 %7, ptrtoint (ptr @function_typ to i64)
   store i1 %8, ptr %3, align 1
-  store i32 57, ptr %5, align 4
+  store i32 61, ptr %5, align 4
   %9 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %10 = load i32, ptr %5, align 4
-  %11 = getelementptr [88 x ptr], ptr %9, i32 0, i32 %10
+  %11 = getelementptr [272 x ptr], ptr %9, i32 0, i32 %10
   %12 = getelementptr ptr, ptr %11, i32 10
   %13 = load ptr, ptr %12, align 8
   ret ptr %13
@@ -6247,7 +6245,7 @@ define ptr @HashMap_B_all_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, ptr %1)
 
 declare i1 @Iterable_any_fFunctionT_to_Ptri1({ ptr })
 
-define ptr @HashMap_B_any_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_any_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
   %5 = alloca ptr, align 8
@@ -6255,10 +6253,10 @@ define ptr @HashMap_B_any_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, ptr %1)
   %7 = ptrtoint ptr %6 to i64
   %8 = icmp eq i64 %7, ptrtoint (ptr @function_typ to i64)
   store i1 %8, ptr %3, align 1
-  store i32 58, ptr %5, align 4
+  store i32 62, ptr %5, align 4
   %9 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %10 = load i32, ptr %5, align 4
-  %11 = getelementptr [88 x ptr], ptr %9, i32 0, i32 %10
+  %11 = getelementptr [272 x ptr], ptr %9, i32 0, i32 %10
   %12 = getelementptr ptr, ptr %11, i32 10
   %13 = load ptr, ptr %12, align 8
   ret ptr %13
@@ -6266,7 +6264,7 @@ define ptr @HashMap_B_any_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, ptr %1)
 
 declare { ptr, ptr, ptr, i32 } @Iterable_map_fFunctionT_to_U({ ptr })
 
-define ptr @HashMap_B_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
   %5 = alloca ptr, align 8
@@ -6274,10 +6272,10 @@ define ptr @HashMap_B_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %7 = ptrtoint ptr %6 to i64
   %8 = icmp eq i64 %7, ptrtoint (ptr @function_typ to i64)
   store i1 %8, ptr %3, align 1
-  store i32 59, ptr %5, align 4
+  store i32 63, ptr %5, align 4
   %9 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %10 = load i32, ptr %5, align 4
-  %11 = getelementptr [88 x ptr], ptr %9, i32 0, i32 %10
+  %11 = getelementptr [272 x ptr], ptr %9, i32 0, i32 %10
   %12 = getelementptr ptr, ptr %11, i32 10
   %13 = load ptr, ptr %12, align 8
   ret ptr %13
@@ -6285,7 +6283,7 @@ define ptr @HashMap_B_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr %1) {
 
 declare { ptr, ptr, ptr, i32 } @Iterable_filter_fFunctionT_to_Ptri1({ ptr })
 
-define ptr @HashMap_B_filter_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_filter_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
   %5 = alloca ptr, align 8
@@ -6293,10 +6291,10 @@ define ptr @HashMap_B_filter_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, ptr 
   %7 = ptrtoint ptr %6 to i64
   %8 = icmp eq i64 %7, ptrtoint (ptr @function_typ to i64)
   store i1 %8, ptr %3, align 1
-  store i32 60, ptr %5, align 4
+  store i32 64, ptr %5, align 4
   %9 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %10 = load i32, ptr %5, align 4
-  %11 = getelementptr [88 x ptr], ptr %9, i32 0, i32 %10
+  %11 = getelementptr [272 x ptr], ptr %9, i32 0, i32 %10
   %12 = getelementptr ptr, ptr %11, i32 10
   %13 = load ptr, ptr %12, align 8
   ret ptr %13
@@ -6304,7 +6302,7 @@ define ptr @HashMap_B_filter_fFunctionT_to_Ptri1({ ptr, ptr, ptr, i32 } %0, ptr 
 
 declare { ptr, ptr, ptr, i32 } @Iterable_chain_otherIterableT({ ptr, ptr, ptr, i32 })
 
-define ptr @HashMap_B_chain_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_chain_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
   %5 = alloca ptr, align 8
@@ -6320,10 +6318,10 @@ define ptr @HashMap_B_chain_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %15 = load i64, ptr @Iterable, align 4
   %16 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 %15, i64 ptrtoint (ptr @Iterable to i64), ptr %14)
   store i1 %16, ptr %3, align 1
-  store i32 61, ptr %5, align 4
+  store i32 65, ptr %5, align 4
   %17 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %18 = load i32, ptr %5, align 4
-  %19 = getelementptr [88 x ptr], ptr %17, i32 0, i32 %18
+  %19 = getelementptr [272 x ptr], ptr %17, i32 0, i32 %18
   %20 = getelementptr ptr, ptr %19, i32 10
   %21 = load ptr, ptr %20, align 8
   ret ptr %21
@@ -6331,7 +6329,7 @@ define ptr @HashMap_B_chain_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr %1) {
 
 declare { ptr, ptr, ptr, i32 } @Iterable_interleave_otherIterableT({ ptr, ptr, ptr, i32 })
 
-define ptr @HashMap_B_interleave_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_interleave_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
   %5 = alloca ptr, align 8
@@ -6347,10 +6345,10 @@ define ptr @HashMap_B_interleave_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr %
   %15 = load i64, ptr @Iterable, align 4
   %16 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 %15, i64 ptrtoint (ptr @Iterable to i64), ptr %14)
   store i1 %16, ptr %3, align 1
-  store i32 62, ptr %5, align 4
+  store i32 66, ptr %5, align 4
   %17 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %18 = load i32, ptr %5, align 4
-  %19 = getelementptr [88 x ptr], ptr %17, i32 0, i32 %18
+  %19 = getelementptr [272 x ptr], ptr %17, i32 0, i32 %18
   %20 = getelementptr ptr, ptr %19, i32 10
   %21 = load ptr, ptr %20, align 8
   ret ptr %21
@@ -6358,7 +6356,7 @@ define ptr @HashMap_B_interleave_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr %
 
 declare { ptr, ptr, ptr, i32 } @Iterable_zip_otherIterableU({ ptr, ptr, ptr, i32 })
 
-define ptr @HashMap_B_zip_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_zip_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
   %5 = alloca ptr, align 8
@@ -6374,10 +6372,10 @@ define ptr @HashMap_B_zip_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %15 = load i64, ptr @Iterable, align 4
   %16 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 %15, i64 ptrtoint (ptr @Iterable to i64), ptr %14)
   store i1 %16, ptr %3, align 1
-  store i32 63, ptr %5, align 4
+  store i32 67, ptr %5, align 4
   %17 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %18 = load i32, ptr %5, align 4
-  %19 = getelementptr [88 x ptr], ptr %17, i32 0, i32 %18
+  %19 = getelementptr [272 x ptr], ptr %17, i32 0, i32 %18
   %20 = getelementptr ptr, ptr %19, i32 10
   %21 = load ptr, ptr %20, align 8
   ret ptr %21
@@ -6385,7 +6383,7 @@ define ptr @HashMap_B_zip_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr %1) {
 
 declare { ptr, ptr, ptr, i32 } @Iterable_product_otherIterableU({ ptr, ptr, ptr, i32 })
 
-define ptr @HashMap_B_product_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMap_B_product_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
   %5 = alloca ptr, align 8
@@ -6401,16 +6399,16 @@ define ptr @HashMap_B_product_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr %1) 
   %15 = load i64, ptr @Iterable, align 4
   %16 = call i1 @subtype_test_wrapper(ptr %13, i64 %12, i64 %11, i64 %15, i64 ptrtoint (ptr @Iterable to i64), ptr %14)
   store i1 %16, ptr %3, align 1
-  store i32 64, ptr %5, align 4
+  store i32 68, ptr %5, align 4
   %17 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %18 = load i32, ptr %5, align 4
-  %19 = getelementptr [88 x ptr], ptr %17, i32 0, i32 %18
+  %19 = getelementptr [272 x ptr], ptr %17, i32 0, i32 %18
   %20 = getelementptr ptr, ptr %19, i32 10
   %21 = load ptr, ptr %20, align 8
   ret ptr %21
 }
 
-define { i64, i64 } @_data_size_HashMapIterator(ptr %0) {
+define { i64, i64 } @_data_size_CuckooMapIterator(ptr %0) {
   %2 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), 1
   %3 = select i1 %2, i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), i64 1
   %4 = icmp ugt i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %3
@@ -6479,24 +6477,24 @@ define { i64, i64 } @_data_size_HashMapIterator(ptr %0) {
   ret { i64, i64 } %66
 }
 
-define ptr @HashMapIterator_field_HashMapIterator_0(ptr %0) {
+define ptr @CuckooMapIterator_field_CuckooMapIterator_0(ptr %0) {
   %2 = load ptr, ptr %0, align 8
   ret ptr %2
 }
 
-define ptr @HashMapIterator_field_HashMapIterator_1(ptr %0) {
+define ptr @CuckooMapIterator_field_CuckooMapIterator_1(ptr %0) {
   %2 = getelementptr ptr, ptr %0, i32 1
   %3 = load ptr, ptr %2, align 8
   ret ptr %3
 }
 
-define ptr @HashMapIterator_field_HashMapIterator_2(ptr %0) {
+define ptr @CuckooMapIterator_field_CuckooMapIterator_2(ptr %0) {
   %2 = getelementptr ptr, ptr %0, i32 2
   %3 = load ptr, ptr %2, align 8
   ret ptr %3
 }
 
-define { ptr } @HashMapIterator_getter_map_table1(ptr %0) {
+define { ptr } @CuckooMapIterator_getter_map_table1(ptr %0) {
   %2 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %3 = icmp eq i64 %2, 0
   %4 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %2
@@ -6521,7 +6519,7 @@ define { ptr } @HashMapIterator_getter_map_table1(ptr %0) {
   ret { ptr } %22
 }
 
-define void @HashMapIterator_setter_map_table1(ptr %0, { ptr } %1) {
+define void @CuckooMapIterator_setter_map_table1(ptr %0, { ptr } %1) {
   %3 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %4 = icmp eq i64 %3, 0
   %5 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %3
@@ -6548,7 +6546,7 @@ define void @HashMapIterator_setter_map_table1(ptr %0, { ptr } %1) {
   ret void
 }
 
-define { ptr } @HashMapIterator_getter_map_table2(ptr %0) {
+define { ptr } @CuckooMapIterator_getter_map_table2(ptr %0) {
   %2 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %3 = icmp eq i64 %2, 0
   %4 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %2
@@ -6579,7 +6577,7 @@ define { ptr } @HashMapIterator_getter_map_table2(ptr %0) {
   ret { ptr } %28
 }
 
-define void @HashMapIterator_setter_map_table2(ptr %0, { ptr } %1) {
+define void @CuckooMapIterator_setter_map_table2(ptr %0, { ptr } %1) {
   %3 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %4 = icmp eq i64 %3, 0
   %5 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %3
@@ -6612,7 +6610,7 @@ define void @HashMapIterator_setter_map_table2(ptr %0, { ptr } %1) {
   ret void
 }
 
-define i32 @HashMapIterator_getter_table_len(ptr %0) {
+define i32 @CuckooMapIterator_getter_table_len(ptr %0) {
   %2 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %3 = icmp eq i64 %2, 0
   %4 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %2
@@ -6647,7 +6645,7 @@ define i32 @HashMapIterator_getter_table_len(ptr %0) {
   ret i32 %32
 }
 
-define void @HashMapIterator_setter_table_len(ptr %0, i32 %1) {
+define void @CuckooMapIterator_setter_table_len(ptr %0, i32 %1) {
   %3 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %4 = icmp eq i64 %3, 0
   %5 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %3
@@ -6685,7 +6683,7 @@ define void @HashMapIterator_setter_table_len(ptr %0, i32 %1) {
   ret void
 }
 
-define i32 @HashMapIterator_getter_index(ptr %0) {
+define i32 @CuckooMapIterator_getter_index(ptr %0) {
   %2 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %3 = icmp eq i64 %2, 0
   %4 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %2
@@ -6726,7 +6724,7 @@ define i32 @HashMapIterator_getter_index(ptr %0) {
   ret i32 %38
 }
 
-define void @HashMapIterator_setter_index(ptr %0, i32 %1) {
+define void @CuckooMapIterator_setter_index(ptr %0, i32 %1) {
   %3 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %4 = icmp eq i64 %3, 0
   %5 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %3
@@ -6770,7 +6768,7 @@ define void @HashMapIterator_setter_index(ptr %0, i32 %1) {
   ret void
 }
 
-define i1 @HashMapIterator_getter_on_second(ptr %0) {
+define i1 @CuckooMapIterator_getter_on_second(ptr %0) {
   %2 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %3 = icmp eq i64 %2, 0
   %4 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %2
@@ -6817,7 +6815,7 @@ define i1 @HashMapIterator_getter_on_second(ptr %0) {
   ret i1 %44
 }
 
-define void @HashMapIterator_setter_on_second(ptr %0, i1 %1) {
+define void @CuckooMapIterator_setter_on_second(ptr %0, i1 %1) {
   %3 = urem i64 ptrtoint (ptr getelementptr (ptr, ptr null, i32 1) to i64), ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64)
   %4 = icmp eq i64 %3, 0
   %5 = sub i64 ptrtoint (ptr getelementptr ({ i8, ptr }, ptr null, i32 0, i32 1) to i64), %3
@@ -6867,7 +6865,7 @@ define void @HashMapIterator_setter_on_second(ptr %0, i1 %1) {
   ret void
 }
 
-define void @HashMapIterator_init_map_table1BufferEntryK._V_or_Nil_map_table2BufferEntryK._V_or_Nil_table_lenPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr } %3, { ptr } %4, i32 %5) {
+define void @CuckooMapIterator_init_map_table1BufferEntryK._V_or_Nil_map_table2BufferEntryK._V_or_Nil_table_lenPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr } %3, { ptr } %4, i32 %5) {
   %7 = alloca { ptr, ptr, ptr, i32 }, align 8
   store { ptr, ptr, ptr, i32 } %0, ptr %7, align 8
   %8 = alloca { ptr, ptr, ptr, i32 }, align 8
@@ -6887,7 +6885,7 @@ define void @HashMapIterator_init_map_table1BufferEntryK._V_or_Nil_map_table2Buf
   %19 = getelementptr { ptr, ptr, ptr, i32 }, ptr %8, i32 0, i32 3
   %20 = load i32, ptr %18, align 4
   store i32 %20, ptr %19, align 4
-  call void @set_offset(ptr %8, ptr @HashMapIterator)
+  call void @set_offset(ptr %8, ptr @CuckooMapIterator)
   %21 = alloca ptr, align 8
   store { ptr } %3, ptr %21, align 8
   %22 = load ptr, ptr %13, align 8
@@ -6958,7 +6956,7 @@ define void @HashMapIterator_init_map_table1BufferEntryK._V_or_Nil_map_table2Buf
   ret void
 }
 
-define ptr @HashMapIterator_B_init_map_table1BufferEntryK._V_or_Nil_map_table2BufferEntryK._V_or_Nil_table_lenPtri32({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMapIterator_B_init_map_table1BufferEntryK._V_or_Nil_map_table2BufferEntryK._V_or_Nil_table_lenPtri32({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = alloca i1, align 1
   %5 = alloca i1, align 1
@@ -6987,7 +6985,7 @@ define ptr @HashMapIterator_B_init_map_table1BufferEntryK._V_or_Nil_map_table2Bu
   ret ptr %23
 }
 
-define { ptr, i160 } @HashMapIterator_next_from_table_tableBufferEntryK._V_or_Nil({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr } %3) {
+define { ptr, i160 } @CuckooMapIterator_next_from_table_tableBufferEntryK._V_or_Nil({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2, { ptr } %3) {
   %5 = alloca i32, align 4
   %6 = alloca i32, align 4
   %7 = alloca i1, align 1
@@ -7025,7 +7023,7 @@ define { ptr, i160 } @HashMapIterator_next_from_table_tableBufferEntryK._V_or_Ni
   %35 = getelementptr { ptr, ptr, ptr, i32 }, ptr %24, i32 0, i32 3
   %36 = load i32, ptr %34, align 4
   store i32 %36, ptr %35, align 4
-  call void @set_offset(ptr %24, ptr @HashMapIterator)
+  call void @set_offset(ptr %24, ptr @CuckooMapIterator)
   %37 = alloca ptr, align 8
   store { ptr } %3, ptr %37, align 8
   br label %38
@@ -7214,7 +7212,7 @@ define { ptr, i160 } @HashMapIterator_next_from_table_tableBufferEntryK._V_or_Ni
   ret { ptr, i160 } %176
 }
 
-define ptr @HashMapIterator_B_next_from_table_tableBufferEntryK._V_or_Nil({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMapIterator_B_next_from_table_tableBufferEntryK._V_or_Nil({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %1)
   %5 = alloca ptr, align 8
@@ -7231,7 +7229,7 @@ define ptr @HashMapIterator_B_next_from_table_tableBufferEntryK._V_or_Nil({ ptr,
   ret ptr %13
 }
 
-define { ptr, i160 } @HashMapIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2) {
+define { ptr, i160 } @CuckooMapIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr %2) {
   %4 = alloca ptr, align 8
   %5 = alloca [1 x ptr], align 8
   %6 = alloca { ptr }, align 8
@@ -7263,7 +7261,7 @@ define { ptr, i160 } @HashMapIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %28 = getelementptr { ptr, ptr, ptr, i32 }, ptr %17, i32 0, i32 3
   %29 = load i32, ptr %27, align 4
   store i32 %29, ptr %28, align 4
-  call void @set_offset(ptr %17, ptr @HashMapIterator)
+  call void @set_offset(ptr %17, ptr @CuckooMapIterator)
   %30 = alloca i1, align 1
   store i1 false, ptr %30, align 1
   %31 = load ptr, ptr %22, align 8
@@ -7457,7 +7455,7 @@ define { ptr, i160 } @HashMapIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   ret { ptr, i160 } %172
 }
 
-define ptr @HashMapIterator_B_next_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+define ptr @CuckooMapIterator_B_next_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = call ptr @llvm.invariant.start.p0(i64 0, ptr %1)
   %4 = alloca ptr, align 8
   store i32 13, ptr %4, align 4
@@ -7467,310 +7465,6 @@ define ptr @HashMapIterator_B_next_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %8 = getelementptr ptr, ptr %7, i32 10
   %9 = load ptr, ptr %8, align 8
   ret ptr %9
-}
-
-define i32 @string_hasher({ ptr, ptr, ptr, i32 } %0) {
-  %2 = alloca [0 x ptr], align 8
-  %3 = alloca {}, align 8
-  %4 = alloca { ptr, i160 }, align 8
-  %5 = alloca i1, align 1
-  %6 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %7 = alloca [0 x ptr], align 8
-  %8 = alloca {}, align 8
-  %9 = alloca i8, align 1
-  %10 = alloca i32, align 4
-  %11 = alloca i32, align 4
-  %12 = alloca i32, align 4
-  %13 = alloca i32, align 4
-  %14 = alloca i32, align 4
-  %15 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %16 = alloca { ptr, ptr, ptr, i32 }, align 8
-  store { ptr, ptr, ptr, i32 } %0, ptr %16, align 8
-  %17 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %18 = getelementptr { ptr, ptr, ptr, i32 }, ptr %16, i32 0, i32 0
-  %19 = getelementptr { ptr, ptr, ptr, i32 }, ptr %17, i32 0, i32 0
-  %20 = load ptr, ptr %18, align 8
-  store ptr %20, ptr %19, align 8
-  %21 = getelementptr { ptr, ptr, ptr, i32 }, ptr %16, i32 0, i32 1
-  %22 = getelementptr { ptr, ptr, ptr, i32 }, ptr %17, i32 0, i32 1
-  %23 = load ptr, ptr %21, align 8
-  store ptr %23, ptr %22, align 8
-  %24 = getelementptr { ptr, ptr, ptr, i32 }, ptr %16, i32 0, i32 2
-  %25 = getelementptr { ptr, ptr, ptr, i32 }, ptr %17, i32 0, i32 2
-  %26 = load ptr, ptr %24, align 8
-  store ptr %26, ptr %25, align 8
-  %27 = getelementptr { ptr, ptr, ptr, i32 }, ptr %16, i32 0, i32 3
-  %28 = getelementptr { ptr, ptr, ptr, i32 }, ptr %17, i32 0, i32 3
-  %29 = load i32, ptr %27, align 4
-  store i32 %29, ptr %28, align 4
-  call void @set_offset(ptr %17, ptr @String)
-  %30 = alloca i32, align 4
-  store i32 0, ptr %30, align 4
-  %31 = alloca i32, align 4
-  store i32 31, ptr %31, align 4
-  %32 = load ptr, ptr %19, align 8
-  %33 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %32, 0
-  %34 = load ptr, ptr %22, align 8
-  %35 = insertvalue { ptr, ptr, ptr, i32 } %33, ptr %34, 1
-  %36 = load ptr, ptr %25, align 8
-  %37 = insertvalue { ptr, ptr, ptr, i32 } %35, ptr %36, 2
-  %38 = load i32, ptr %28, align 4
-  %39 = insertvalue { ptr, ptr, ptr, i32 } %37, i32 %38, 3
-  %40 = alloca [0 x ptr], align 8
-  %41 = call ptr @llvm.invariant.start.p0(i64 0, ptr %40)
-  %42 = call ptr @llvm.invariant.start.p0(i64 632, ptr %32)
-  %43 = getelementptr ptr, ptr %32, i32 %38
-  %44 = getelementptr ptr, ptr %43, i32 17
-  %45 = load ptr, ptr %44, align 8
-  %46 = alloca {}, align 8
-  %47 = call ptr @behavior_wrapper(ptr %45, { ptr, ptr, ptr, i32 } %39, ptr %46)
-  %48 = call { ptr, ptr, ptr, i32 } %47({ ptr, ptr, ptr, i32 } %39, { ptr, ptr, ptr, i32 } %39, ptr %40) #3
-  %49 = alloca { ptr, ptr, ptr, i32 }, align 8
-  store { ptr, ptr, ptr, i32 } %48, ptr %49, align 8
-  %50 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %51 = getelementptr { ptr, ptr, ptr, i32 }, ptr %49, i32 0, i32 0
-  %52 = getelementptr { ptr, ptr, ptr, i32 }, ptr %50, i32 0, i32 0
-  %53 = load ptr, ptr %51, align 8
-  store ptr %53, ptr %52, align 8
-  %54 = getelementptr { ptr, ptr, ptr, i32 }, ptr %49, i32 0, i32 1
-  %55 = getelementptr { ptr, ptr, ptr, i32 }, ptr %50, i32 0, i32 1
-  %56 = load ptr, ptr %54, align 8
-  store ptr %56, ptr %55, align 8
-  %57 = getelementptr { ptr, ptr, ptr, i32 }, ptr %49, i32 0, i32 2
-  %58 = getelementptr { ptr, ptr, ptr, i32 }, ptr %50, i32 0, i32 2
-  %59 = load ptr, ptr %57, align 8
-  store ptr %59, ptr %58, align 8
-  %60 = getelementptr { ptr, ptr, ptr, i32 }, ptr %49, i32 0, i32 3
-  %61 = getelementptr { ptr, ptr, ptr, i32 }, ptr %50, i32 0, i32 3
-  %62 = load i32, ptr %60, align 4
-  store i32 %62, ptr %61, align 4
-  call void @set_offset(ptr %50, ptr @StringIterator)
-  %63 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %64 = getelementptr { ptr, ptr, ptr, i32 }, ptr %63, i32 0, i32 0
-  %65 = load ptr, ptr %52, align 8
-  store ptr %65, ptr %64, align 8
-  %66 = getelementptr { ptr, ptr, ptr, i32 }, ptr %63, i32 0, i32 1
-  %67 = load ptr, ptr %55, align 8
-  store ptr %67, ptr %66, align 8
-  %68 = getelementptr { ptr, ptr, ptr, i32 }, ptr %63, i32 0, i32 2
-  %69 = load ptr, ptr %58, align 8
-  store ptr %69, ptr %68, align 8
-  %70 = getelementptr { ptr, ptr, ptr, i32 }, ptr %63, i32 0, i32 3
-  %71 = load i32, ptr %61, align 4
-  store i32 %71, ptr %70, align 4
-  call void @set_offset(ptr %63, ptr @StringIterator)
-  %72 = alloca i32, align 4
-  %73 = alloca ptr, align 8
-  %74 = alloca ptr, align 8
-  %75 = alloca ptr, align 8
-  %76 = load ptr, ptr %64, align 8
-  store ptr %76, ptr %75, align 8
-  %77 = load ptr, ptr %66, align 8
-  store ptr %77, ptr %74, align 8
-  %78 = load ptr, ptr %68, align 8
-  store ptr %78, ptr %73, align 8
-  %79 = load i32, ptr %70, align 4
-  store i32 %79, ptr %72, align 4
-  br label %80
-
-80:                                               ; preds = %157, %1
-  %81 = load ptr, ptr %75, align 8
-  %82 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %81, 0
-  %83 = load ptr, ptr %74, align 8
-  %84 = insertvalue { ptr, ptr, ptr, i32 } %82, ptr %83, 1
-  %85 = load ptr, ptr %73, align 8
-  %86 = insertvalue { ptr, ptr, ptr, i32 } %84, ptr %85, 2
-  %87 = load i32, ptr %72, align 4
-  %88 = insertvalue { ptr, ptr, ptr, i32 } %86, i32 %87, 3
-  %89 = call ptr @llvm.invariant.start.p0(i64 0, ptr %2)
-  %90 = call ptr @llvm.invariant.start.p0(i64 80, ptr %81)
-  %91 = getelementptr ptr, ptr %81, i32 %87
-  %92 = getelementptr ptr, ptr %91, i32 4
-  %93 = load ptr, ptr %92, align 8
-  %94 = call ptr @behavior_wrapper(ptr %93, { ptr, ptr, ptr, i32 } %88, ptr %3)
-  %95 = call { ptr, i160 } %94({ ptr, ptr, ptr, i32 } %88, { ptr, ptr, ptr, i32 } %88, ptr %2) #3
-  store { ptr, i160 } %95, ptr %4, align 8
-  %96 = load ptr, ptr %4, align 8
-  %97 = ptrtoint ptr %96 to i64
-  %98 = icmp eq i64 %97, ptrtoint (ptr @nil_typ to i64)
-  %99 = icmp eq i64 %97, 0
-  %100 = or i1 %98, %99
-  %101 = icmp eq i1 %100, false
-  store i1 %101, ptr %5, align 1
-  %102 = load i1, ptr %5, align 1
-  br i1 %102, label %103, label %157
-
-103:                                              ; preds = %80
-  %104 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 0
-  %105 = getelementptr { ptr, i160 }, ptr %6, i32 0, i32 0
-  %106 = load ptr, ptr %104, align 8
-  store ptr %106, ptr %105, align 8
-  %107 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
-  %108 = getelementptr { ptr, i160 }, ptr %6, i32 0, i32 1
-  %109 = load i160, ptr %107, align 4
-  store i160 %109, ptr %108, align 4
-  call void @set_offset(ptr %6, ptr @Character)
-  %110 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 0
-  %111 = load ptr, ptr %110, align 8
-  %112 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %111, 0
-  %113 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 1
-  %114 = load ptr, ptr %113, align 8
-  %115 = insertvalue { ptr, ptr, ptr, i32 } %112, ptr %114, 1
-  %116 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 2
-  %117 = load ptr, ptr %116, align 8
-  %118 = insertvalue { ptr, ptr, ptr, i32 } %115, ptr %117, 2
-  %119 = getelementptr { ptr, ptr, ptr, i32 }, ptr %6, i32 0, i32 3
-  %120 = load i32, ptr %119, align 4
-  %121 = insertvalue { ptr, ptr, ptr, i32 } %118, i32 %120, 3
-  %122 = call ptr @llvm.invariant.start.p0(i64 0, ptr %7)
-  %123 = call ptr @llvm.invariant.start.p0(i64 40, ptr %111)
-  %124 = getelementptr ptr, ptr %111, i32 %120
-  %125 = getelementptr ptr, ptr %124, i32 1
-  %126 = load ptr, ptr %125, align 8
-  %127 = call ptr @behavior_wrapper(ptr %126, { ptr, ptr, ptr, i32 } %121, ptr %8)
-  %128 = call i8 %127({ ptr, ptr, ptr, i32 } %121, { ptr, ptr, ptr, i32 } %121, ptr %7) #3
-  store i8 %128, ptr %9, align 1
-  %129 = load i8, ptr %9, align 1
-  %130 = sext i8 %129 to i32
-  store i32 %130, ptr %10, align 4
-  %131 = load i32, ptr %30, align 4
-  %132 = load i32, ptr %31, align 4
-  %133 = mul i32 %131, %132
-  store i32 %133, ptr %11, align 4
-  %134 = load i32, ptr %11, align 4
-  %135 = load i32, ptr %10, align 4
-  %136 = add i32 %134, %135
-  store i32 %136, ptr %12, align 4
-  store i32 2147483647, ptr %13, align 4
-  %137 = load i32, ptr %12, align 4
-  %138 = load i32, ptr %13, align 4
-  %139 = and i32 %137, %138
-  store i32 %139, ptr %14, align 4
-  %140 = load i32, ptr %14, align 4
-  store i32 %140, ptr %30, align 4
-  %141 = getelementptr { ptr, ptr, ptr, i32 }, ptr %15, i32 0, i32 0
-  %142 = load ptr, ptr %110, align 8
-  store ptr %142, ptr %141, align 8
-  %143 = getelementptr { ptr, ptr, ptr, i32 }, ptr %15, i32 0, i32 1
-  %144 = load ptr, ptr %113, align 8
-  store ptr %144, ptr %143, align 8
-  %145 = getelementptr { ptr, ptr, ptr, i32 }, ptr %15, i32 0, i32 2
-  %146 = load ptr, ptr %116, align 8
-  store ptr %146, ptr %145, align 8
-  %147 = getelementptr { ptr, ptr, ptr, i32 }, ptr %15, i32 0, i32 3
-  %148 = load i32, ptr %119, align 4
-  store i32 %148, ptr %147, align 4
-  call void @set_offset(ptr %15, ptr @Character)
-  %149 = getelementptr { ptr, ptr, ptr, i32 }, ptr %4, i32 0, i32 0
-  %150 = load ptr, ptr %141, align 8
-  store ptr %150, ptr %149, align 8
-  %151 = getelementptr { ptr, ptr, ptr, i32 }, ptr %4, i32 0, i32 1
-  %152 = load ptr, ptr %143, align 8
-  store ptr %152, ptr %151, align 8
-  %153 = getelementptr { ptr, ptr, ptr, i32 }, ptr %4, i32 0, i32 2
-  %154 = load ptr, ptr %145, align 8
-  store ptr %154, ptr %153, align 8
-  %155 = getelementptr { ptr, ptr, ptr, i32 }, ptr %4, i32 0, i32 3
-  %156 = load i32, ptr %147, align 4
-  store i32 %156, ptr %155, align 4
-  br label %157
-
-157:                                              ; preds = %103, %80
-  br i1 %102, label %80, label %158
-
-158:                                              ; preds = %157
-  %159 = load i32, ptr %30, align 4
-  ret i32 %159
-}
-
-define i1 @string_eq({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1) {
-  %3 = alloca { ptr, ptr, ptr, i32 }, align 8
-  store { ptr, ptr, ptr, i32 } %0, ptr %3, align 8
-  %4 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %5 = getelementptr { ptr, ptr, ptr, i32 }, ptr %3, i32 0, i32 0
-  %6 = getelementptr { ptr, ptr, ptr, i32 }, ptr %4, i32 0, i32 0
-  %7 = load ptr, ptr %5, align 8
-  store ptr %7, ptr %6, align 8
-  %8 = getelementptr { ptr, ptr, ptr, i32 }, ptr %3, i32 0, i32 1
-  %9 = getelementptr { ptr, ptr, ptr, i32 }, ptr %4, i32 0, i32 1
-  %10 = load ptr, ptr %8, align 8
-  store ptr %10, ptr %9, align 8
-  %11 = getelementptr { ptr, ptr, ptr, i32 }, ptr %3, i32 0, i32 2
-  %12 = getelementptr { ptr, ptr, ptr, i32 }, ptr %4, i32 0, i32 2
-  %13 = load ptr, ptr %11, align 8
-  store ptr %13, ptr %12, align 8
-  %14 = getelementptr { ptr, ptr, ptr, i32 }, ptr %3, i32 0, i32 3
-  %15 = getelementptr { ptr, ptr, ptr, i32 }, ptr %4, i32 0, i32 3
-  %16 = load i32, ptr %14, align 4
-  store i32 %16, ptr %15, align 4
-  call void @set_offset(ptr %4, ptr @String)
-  %17 = alloca { ptr, ptr, ptr, i32 }, align 8
-  store { ptr, ptr, ptr, i32 } %1, ptr %17, align 8
-  %18 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %19 = getelementptr { ptr, ptr, ptr, i32 }, ptr %17, i32 0, i32 0
-  %20 = getelementptr { ptr, ptr, ptr, i32 }, ptr %18, i32 0, i32 0
-  %21 = load ptr, ptr %19, align 8
-  store ptr %21, ptr %20, align 8
-  %22 = getelementptr { ptr, ptr, ptr, i32 }, ptr %17, i32 0, i32 1
-  %23 = getelementptr { ptr, ptr, ptr, i32 }, ptr %18, i32 0, i32 1
-  %24 = load ptr, ptr %22, align 8
-  store ptr %24, ptr %23, align 8
-  %25 = getelementptr { ptr, ptr, ptr, i32 }, ptr %17, i32 0, i32 2
-  %26 = getelementptr { ptr, ptr, ptr, i32 }, ptr %18, i32 0, i32 2
-  %27 = load ptr, ptr %25, align 8
-  store ptr %27, ptr %26, align 8
-  %28 = getelementptr { ptr, ptr, ptr, i32 }, ptr %17, i32 0, i32 3
-  %29 = getelementptr { ptr, ptr, ptr, i32 }, ptr %18, i32 0, i32 3
-  %30 = load i32, ptr %28, align 4
-  store i32 %30, ptr %29, align 4
-  call void @set_offset(ptr %18, ptr @String)
-  %31 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %32 = getelementptr { ptr, ptr, ptr, i32 }, ptr %31, i32 0, i32 0
-  %33 = load ptr, ptr %20, align 8
-  store ptr %33, ptr %32, align 8
-  %34 = getelementptr { ptr, ptr, ptr, i32 }, ptr %31, i32 0, i32 1
-  %35 = load ptr, ptr %23, align 8
-  store ptr %35, ptr %34, align 8
-  %36 = getelementptr { ptr, ptr, ptr, i32 }, ptr %31, i32 0, i32 2
-  %37 = load ptr, ptr %26, align 8
-  store ptr %37, ptr %36, align 8
-  %38 = getelementptr { ptr, ptr, ptr, i32 }, ptr %31, i32 0, i32 3
-  %39 = load i32, ptr %29, align 4
-  store i32 %39, ptr %38, align 4
-  call void @set_offset(ptr %31, ptr @String)
-  %40 = load ptr, ptr %32, align 8
-  %41 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %40, 0
-  %42 = load ptr, ptr %34, align 8
-  %43 = insertvalue { ptr, ptr, ptr, i32 } %41, ptr %42, 1
-  %44 = load ptr, ptr %36, align 8
-  %45 = insertvalue { ptr, ptr, ptr, i32 } %43, ptr %44, 2
-  %46 = load i32, ptr %38, align 4
-  %47 = insertvalue { ptr, ptr, ptr, i32 } %45, i32 %46, 3
-  %48 = load ptr, ptr %6, align 8
-  %49 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %48, 0
-  %50 = load ptr, ptr %9, align 8
-  %51 = insertvalue { ptr, ptr, ptr, i32 } %49, ptr %50, 1
-  %52 = load ptr, ptr %12, align 8
-  %53 = insertvalue { ptr, ptr, ptr, i32 } %51, ptr %52, 2
-  %54 = load i32, ptr %15, align 4
-  %55 = insertvalue { ptr, ptr, ptr, i32 } %53, i32 %54, 3
-  %56 = alloca [1 x ptr], align 8
-  %57 = getelementptr [1 x ptr], ptr %56, i32 0, i32 0
-  store ptr @_parameterization_String, ptr %57, align 8
-  %58 = call ptr @llvm.invariant.start.p0(i64 1, ptr %56)
-  %59 = call ptr @llvm.invariant.start.p0(i64 632, ptr %48)
-  %60 = getelementptr ptr, ptr %48, i32 %54
-  %61 = getelementptr ptr, ptr %60, i32 14
-  %62 = load ptr, ptr %61, align 8
-  %63 = alloca { ptr }, align 8
-  %64 = getelementptr { ptr }, ptr %63, i32 0, i32 0
-  store ptr %40, ptr %64, align 8
-  %65 = call ptr @behavior_wrapper(ptr %62, { ptr, ptr, ptr, i32 } %55, ptr %63)
-  %66 = call i1 %65({ ptr, ptr, ptr, i32 } %55, { ptr, ptr, ptr, i32 } %55, ptr %56, { ptr, ptr, ptr, i32 } %47) #3
-  %67 = alloca i1, align 1
-  store i1 %66, ptr %67, align 1
-  %68 = load i1, ptr %67, align 1
-  ret i1 %68
 }
 
 ; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)

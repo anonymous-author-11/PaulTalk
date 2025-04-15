@@ -351,11 +351,12 @@ DONE:
 	- Will use simple pointer equality checks for builtin types [check!]
 - Add file name to error messages [check!]
 - Write FileSystem utilities [check!]
+- Figure out more sane integer casting mechanics [check!]
+	- Maybe an 'as' operator [check!]
+- Make sure abstract methods don't override concrete methods [check!]
 
 TODO:
 
-- Figure out more sane integer casting mechanics
-	- Maybe an 'as' operator
 - Should ensure that all branches must return if return value declared
 - What's the type of coro.return()?
 - Putting coroutine yields and returns in the same slot is asking for bugs
@@ -370,7 +371,6 @@ TODO:
 	- Let me have periods in extern def names
 	- Externally declare intrinsics
 	- Extern def llvm.sqrt.i64(x : i64) -> i64
-- Make sure abstract methods don't override concrete methods
 - Add asserts
 	- There's mlir functionality (cf.assert) for this
 	- Compile to llvm.assume in release; branch to abort in debug

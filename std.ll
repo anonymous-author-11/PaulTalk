@@ -122,7 +122,7 @@ declare i32 @fclose({ ptr })
 
 declare i32 @fgetc({ ptr })
 
-declare { ptr } @fgets({ ptr }, i32, { ptr })
+declare i64 @fgets({ ptr }, i32, { ptr })
 
 declare i32 @ferror({ ptr })
 
@@ -131,6 +131,8 @@ declare i32 @fseek({ ptr }, i64, i32)
 declare i64 @ftell({ ptr })
 
 declare i64 @fread({ ptr }, i64, i64, { ptr })
+
+declare i64 @fwrite({ ptr }, i64, i64, { ptr })
 
 declare void @perror(i64)
 

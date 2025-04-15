@@ -4,7 +4,7 @@ import time
 files = [
 	"builtins","iteration","core","io","math","channel","range","array","files","std",
 	"source","tests",
-	"cuckoo","linear_probe","quadratic_probe",
+	"map","open_addressing","cuckoo","linear_probe","quadratic_probe",
 	"hash_benchmark","hash_table", "generic"
 ]
 

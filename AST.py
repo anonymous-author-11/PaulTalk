@@ -1518,8 +1518,9 @@ class MethodDef(Statement):
             body_block.add_ops([cast, set_field])
 
     def overridden_methods(self):
-        parents_methods = [meth for meth in self.defining_class.parents_methods() if meth.name == self.name]
+        parents_methods = (meth for meth in self.defining_class.parents_methods() if meth.name == self.name)
         overridden_methods = [meth for meth in parents_methods if meth.arity == self.arity]
+        if isinstance(self, AbstractMethodDef): overridden_methods = [x for x in overridden_methods if isinstance(x, AbstractMethodDef)]
         return overridden_methods
 
     def enforce_override_rules(self, scope):
@@ -1775,10 +1776,12 @@ class Method:
 
     def overridden_methods(self):
         if self._overridden_methods: return self._overridden_methods
-        candidates = (definition for definition in self.cls.parents_methods() if definition.name == self.definition.name and definition.arity == self.definition.arity)
+        candidates = (definition for definition in self.cls.parents_methods() if definition.name == self.definition.name)
+        candidates = (definition for definition in candidates if definition.arity == self.definition.arity)
         candidates = (candidate for candidate in candidates if self.definition.arity == 0 or all(a == self.cls._scope.simplify(candidate.defining_class._scope.simplify(b)) for (a,b) in zip(self.param_types(), candidate.param_types())))
+        if isinstance(self.definition, AbstractMethodDef):
+            candidates = (candidate for candidate in candidates if isinstance(candidate, AbstractMethodDef))
         self._overridden_methods = [*candidates]
-        #print(f"{self.cls.name}.{self.definition.name} overrides {len(self._overridden_methods)} methods")
         return self._overridden_methods
 
     def is_override_of(self, other):
@@ -2010,6 +2013,10 @@ class Behavior(Statement):
         invariant = InvariantOp.make(arg, 8 * self.arity)
         entry.add_op(invariant)
         offset_ptr = AllocateOp.make(llvm.LLVMPointerType.opaque())
+        if self.automaton._initial_state_id not in blocks:
+            print(self.methods)
+            print(self.name)
+            raise Exception()
         br = cf.Branch.create(successors=[blocks[self.automaton._initial_state_id][1]])
         entry.add_ops([offset_ptr, br])
 
@@ -2093,12 +2100,13 @@ class Behavior(Statement):
     def remove_superfluous_methods(self):
         methods = [*self.methods]
         for method in methods:
-            others = [*methods]
+            others = [*self.methods]
             others.remove(method)
-            if any(other.is_override_of(method) for other in others): self.methods.remove(method)
+            if any(other.is_override_of(method) for other in others):
+                self.methods.remove(method)
         methods = [*self.methods]
         for method in methods:
-            others = [*methods]
+            others = [*self.methods]
             others.remove(method)
             if method.is_superfluous(others):
                 self.superfluous_methods.append(method.definition)
@@ -2166,6 +2174,10 @@ class ClassDef(Statement):
         toplevel_ops.append(data_size_fn)
 
         not_instantiable = any(isinstance(elem.definition, AbstractMethodDef) for elem in self.vtable() if isinstance(elem, Method))
+        if not_instantiable:
+            offender = next(elem for elem in self.vtable() if isinstance(elem, Method) and isinstance(elem.definition, AbstractMethodDef))
+            print(any(m for m in self.vtable() if isinstance(m, Method) and m.is_override_of(offender)))
+            print(f"{self.name} is not instantiable because of abstract method {self.name}.{offender.definition.name}")
         combined = ArrayAttr([]) if not_instantiable else ArrayAttr([thing.symbol() for thing in self.vtable()])
         hash_tbl, prime = scope.build_hashtable(self.type())
         offset_tbl = scope.build_offset_table(self.type())

@@ -1,10 +1,10 @@
 ; ModuleID = 'LLVMDialectModule'
 source_filename = "LLVMDialectModule"
 
-@ymavu_Array = internal constant [5 x i8] c"Array"
+@fbmal_Array = internal constant [5 x i8] c"Array"
 @_parameterization_String = linkonce_odr constant [2 x ptr] [ptr @String, ptr null]
 @_parameterization_BufferPtri8 = linkonce_odr constant [2 x ptr] [ptr @buffer_typ, ptr null]
-@tgwth_arraymini = internal constant [10 x i8] c"array.mini"
+@rxhre_arraymini = internal constant [10 x i8] c"array.mini"
 @_parameterization_Ptri32 = linkonce_odr constant [2 x ptr] [ptr @i32_typ, ptr null]
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
@@ -2407,7 +2407,7 @@ define void @Array_throw_oob_xPtri32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr,
   %61 = sext i32 %60 to i64
   %62 = mul i64 ptrtoint (ptr getelementptr ([10 x i8], ptr null, i32 1) to i64), %61
   %63 = getelementptr i8, ptr %59, i64 %62
-  %64 = load <10 x i8>, ptr @tgwth_arraymini, align 16
+  %64 = load <10 x i8>, ptr @rxhre_arraymini, align 16
   store <10 x i8> %64, ptr %63, align 16
   %65 = alloca i32, align 4
   store i32 10, ptr %65, align 4
@@ -3163,7 +3163,7 @@ define { ptr, ptr, ptr, i32 } @Array_repr_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %30 = sext i32 %29 to i64
   %31 = mul i64 ptrtoint (ptr getelementptr ([5 x i8], ptr null, i32 1) to i64), %30
   %32 = getelementptr i8, ptr %28, i64 %31
-  %33 = load <5 x i8>, ptr @ymavu_Array, align 8
+  %33 = load <5 x i8>, ptr @fbmal_Array, align 8
   store <5 x i8> %33, ptr %32, align 8
   %34 = alloca i32, align 4
   store i32 5, ptr %34, align 4

@@ -1,104 +1,41 @@
-import std; // Assuming this provides Pair, Iterable, Iterator
 
-// --- Helper Functions and Classes (Unchanged) ---
+import open_addressing;
 
-def i32_hasher(i : i32) -> i32 {
-    // Same fast bit-mixing hash function
-    i = (i + 0x7ed55d16) + (i << 12);
-    i = (i bit_xor 0xc761c23c) bit_xor (i >> 19);
-    i = (i + 0x165667b1) + (i << 5);
-    i = (i + 0xd3a2646c) bit_xor (i << 9);
-    i = (i + 0xfd7046c5) + (i << 3);
-    i = (i bit_xor 0xb55a4f09) bit_xor (i >> 16);
-    return i;
-}
-
-def i32_eq(a : i32, b : i32) -> Bool {
-    return a == b;
-}
-
-class Tombstone {
-    def init() {}
-}
-
-class Entry[K,V] {
-    @hash: i32 // Store hash to avoid recomputing during probes
-    @key: K
-    @value: V | Tombstone
-
-    def init(@key: K, @value: V, @hash: i32) {}
-    def init(@key: K, @value: Tombstone, @hash: i32) {}
-
-    def key() -> K { return @key; }
-    def value() -> V | Tombstone { return @value; }
-    def hash() -> i32 { return @hash; }
-}
-
-// --- HashMap Implementation (Using Linear Probing) ---
-
-class HashMap[K,V] extends Iterable[Pair[K,V]] {
-    @entries: Buffer[Entry[K,V] | Nil]
-    @entries_len : i32
-    @size: i32      // number of actual entries (key -> V)
-    @load: i32      // number of occupied slots (key -> V or key -> Tombstone)
-    @hasher: (K) -> i32
-    @eq: (K, K) -> Bool
-
-    def init(@hasher: (K) -> i32, @eq : (K, K) -> Bool) {
-        // Ensure initial capacity is a power of 2
-        @entries = Buffer[Entry[K,V] | Nil].new(16);
-        @entries_len = 16;
-        @size = 0;
-        @load = 0;
-        // @hasher and @eq are initialized by the parameter syntax
-    }
+class LinearProbeMap[K, V] extends OpenAddressMap[K, V] {
 
     // Finds the slot index for a key using LINEAR PROBING.
     // Returns the index where the key is located, OR
     // Returns the index where the key should be inserted (first tombstone or nil).
     // Precondition: @entries_len is a power of 2.
     def find_slot(key: K, hash: i32) -> i32 {
-        mask = @entries_len - 1; // For power-of-two capacity modulo
-        current_index = hash bit_and mask; // Initial index based on hash
+        capacity = @entries_len;
+        mask = capacity - 1; // For power-of-two capacity modulo
+        current_index = hash bit_and mask;
         first_tombstone_idx = -1; // Index of first tombstone found
 
-        // probe_count = 0; // Optional: Safety check against infinite loops if load factor > 1
-
         while true {
-            // if probe_count > capacity { System.panic("Probe exceeded capacity!"); } // Safety
-            // probe_count = probe_count + 1; // Safety
-
             entry = @entries.[current_index];
 
             if entry is Nil {
-                // Empty slot found. Key is not present beyond this point in the probe sequence.
-                // If we passed a tombstone earlier, insertion should happen there.
-                if first_tombstone_idx == -1 {
-                    return current_index; // Insert here (no tombstones found)
-                } else {
-                    return first_tombstone_idx; // Insert at the first tombstone found
-                }
+                // Empty slot found. Key is not present beyond this point.
+                if first_tombstone_idx == -1 { return current_index; }
+                return first_tombstone_idx;
             }
 
             // entry must be Entry[K,V] here
             if entry is Entry[K, V] {
-                // Check if this slot contains the key we're looking for.
-                // Check hash first (cheap), then equality (potentially expensive).
+                // Key found? Check hash first (cheap), then equality (potentially expensive).
                 if entry.hash() == hash and @eq.call(entry.key(), key) {
-                    // Key found! Whether it's active or a tombstone, this is its slot.
                     return current_index;
-                }
+                } 
 
-                // If it's an entry for a *different* key OR a tombstone for *our* key...
+                // If it's an entry for a *different* key, check if it's a tombstone
                 if entry.value() is Tombstone {
-                    // Found a tombstone. Record the *first* one encountered during this probe.
-                    // This is a potential insertion spot if the key isn't found later.
                     if first_tombstone_idx == -1 {
-                        first_tombstone_idx = current_index;
+                        first_tombstone_idx = current_index; // Record the first tombstone spot
                     }
-                    // Continue probing, the key (if it exists) might be further along.
                 }
-                // Else (it's an active entry for a different key), just continue probing.
+                // Else (it's an active entry for a different key), continue probing.
             }
 
             // --- Linear Probing Step ---
@@ -107,207 +44,4 @@ class HashMap[K,V] extends Iterable[Pair[K,V]] {
             // Loop termination is guaranteed because load factor < 1 ensures at least one nil slot.
         }
     }
-
-
-    // Ensures capacity is a power of two, doubles if needed
-    // Load factor threshold might be adjusted for linear probing (often lower, e.g., 0.5)
-    // Keeping 0.6 for direct comparison with the original quadratic code.
-    def ensure_capacity(required_load: i32) {
-         current_length = @entries_len;
-         // Check load factor: required_load / current_length >= 0.6
-         // Multiply: required_load * DEN >= current_length * NUM
-         // Using same 0.6 threshold as original quadratic example.
-         // Consider lowering to 0.5 for better linear probing performance.
-         needs_resize = current_length == 0 or required_load * 10 >= current_length * 6;
-
-        if needs_resize {
-             new_capacity = current_length * 2;
-             // Ensure minimum capacity and power-of-two
-             if new_capacity < 16 { new_capacity = 16; }
-             // Assumes doubling preserves power-of-two if starting with one.
-             self.resize(new_capacity);
-        }
-    }
-
-
-    // Resizes the internal array and rehashes all existing entries.
-    // Crucially clears out tombstones. (Unchanged logic)
-    def resize(new_capacity: i32) {
-        // Assume new_capacity is a power of 2
-        old_entries = @entries;
-        old_len = @entries_len;
-        @entries = Buffer[Entry[K,V] | Nil].new(new_capacity); // Buffer of Nil
-        @entries_len = new_capacity;
-        @size = 0; // Reset size and load for the new table
-        @load = 0;
-
-        i = 0;
-        while i < old_len { // Iterate only up to old length
-            entry = old_entries.[i];
-            // Re-insert only if it's a valid entry with a non-tombstone value
-            if entry is Entry[K,V] {
-                val = entry.value();
-                // We know the entry's hash, reuse it.
-                // Ensure val is V before calling insert_internal
-                if val is V { self.insert_internal(entry.key(), val, entry.hash()); }
-            }
-            i = i + 1;
-        }
-    }
-
-    // Internal insert function used by resize and public insert.
-    // Assumes capacity check already done OR is called during resize.
-    // Handles updating size and load correctly. (Unchanged logic)
-    def insert_internal(key: K, value: V, hash: i32) {
-         i = self.find_slot(key, hash); // Uses the NEW linear probing find_slot
-         current_entry_or_nil = @entries.[i];
-
-         // Create new entry regardless of what was there
-         new_entry = Entry[K,V].new(key, value, hash);
-         @entries.[i] = new_entry;
-
-         // Update size and load based on the *previous* state of the slot
-         if current_entry_or_nil is Nil {
-            // Inserted into an empty slot
-            @size = @size + 1;
-            @load = @load + 1;
-         } else { // Must be Entry[K, V]
-             if current_entry_or_nil is Entry[K, V] {
-                 // Slot was occupied, check if it was a tombstone
-                 old_value = current_entry_or_nil.value();
-                 if old_value is Tombstone {
-                     // Replaced a tombstone
-                     @size = @size + 1; // Now holds a real value
-                     // @load doesn't change (slot was already occupied)
-                 } else {
-                     // Replaced an existing, active value (key must have matched).
-                     // @size doesn't change (still one active value)
-                     // @load doesn't change (slot was already occupied)
-                 }
-             }
-             // else case shouldn't happen if find_slot is correct
-         }
-    }
-
-    // Public insert method (Unchanged logic)
-    def insert(key: K, value: V) {
-        // Check capacity *before* hashing and finding slot
-        // We need space for potentially one more *load* item.
-        self.ensure_capacity(@load + 1);
-        hash = @hasher.call(key);
-        self.insert_internal(key, value, hash);
-    }
-
-    // Get value associated with key (Unchanged logic)
-    def get(key: K) -> V | Nil {
-        // No need to check capacity here
-        hash = @hasher.call(key);
-        i = self.find_slot(key, hash); // Uses the NEW linear probing find_slot
-        entry_or_nil = @entries.[i];
-
-        // find_slot returns the correct index if the key exists.
-        // We need to check if the entry at that index is Nil or a Tombstone.
-        if entry_or_nil is Entry[K, V] {
-            val = entry_or_nil.value();
-            // Check hash and key equality again to be sure find_slot returned the right item
-            // (find_slot guarantees this if it didn't return an empty/tombstone insertion slot)
-            // AND ensure it's not a tombstone
-            if entry_or_nil.hash() == hash and @eq.call(entry_or_nil.key(), key) {
-                if val is V { return val; } // Make sure type matches V
-            }
-            // If hash/key didn't match OR it was a tombstone, the key is effectively absent
-        }
-        // If entry_or_nil is Nil, or if it was a tombstone/different key at the found slot
-        return nil;
-    }
-
-
-    // Remove key and return its value, or Nil if not found. (Unchanged logic)
-    def remove(key: K) -> V | Nil {
-        // No need to check capacity here
-        hash = @hasher.call(key);
-        i = self.find_slot(key, hash); // Uses the NEW linear probing find_slot
-        entry_or_nil = @entries.[i];
-
-        if entry_or_nil is Entry[K, V] {
-            // Check if the entry found actually matches the key and is not already a tombstone
-            if entry_or_nil.hash() == hash and @eq.call(entry_or_nil.key(), key) {
-                val = entry_or_nil.value();
-                if val is V {
-                    // Create Tombstone entry, preserving key and hash for probing continuity
-                    tombstone_entry = Entry[K,V].new(entry_or_nil.key(), Tombstone.new(), entry_or_nil.hash());
-                    @entries.[i] = tombstone_entry;
-                    @size = @size - 1; // Active element count decreases
-                    // @load remains the same (slot still occupied by tombstone)
-
-                    // Return the removed value (which we know is not Tombstone)
-                    return val;
-                }
-                // If val is Tombstone, key was already removed effectively
-            }
-             // If key/hash didn't match (shouldn't happen if find_slot works right for existing keys)
-        }
-        // If entry_or_nil is Nil, or no matching active entry found at index i
-        return nil;
-    }
-
-
-    // Clear the map (Unchanged logic)
-    def clear() {
-        // Re-initialize with default capacity
-        @entries = Buffer[Entry[K,V] | Nil].new(16);
-        @size = 0;
-        @load = 0;
-    }
-
-    // Return number of active key-value pairs (Unchanged logic)
-    def size() -> i32 { return @size; }
-
-    // --- Iterator Implementation ---
-    // Conforms to Iterable by providing iterator() (Unchanged logic)
-    def iterator() -> HashMapIterator[K,V] {
-        return HashMapIterator[K,V].new(@entries, @entries_len);
-    }
-}
-
-// --- Custom Iterator Class (Unchanged) ---
-// Conforms to Iterator interface
-class HashMapIterator[K,V] extends Iterator[Pair[K,V]] {
-    @map_entries: Buffer[Entry[K,V] | Nil]
-    @index: i32
-    @length: i32 // Cache length for minor optimization
-
-    def init(@map_entries: Buffer[Entry[K,V] | Nil], @length : i32) {
-        @index = 0;
-    }
-
-    def next() -> Pair[K, V] | Nil {
-        while @index < @length { // Use cached length
-            entry_or_nil = @map_entries.[@index];
-            @index = @index + 1; // Increment index for next call
-
-            if entry_or_nil is Entry[K, V] {
-                val = entry_or_nil.value();
-                // Ensure type matches V before creating Pair
-                if val is V { return Pair[K, V].new(entry_or_nil.key(), val); }
-            }
-            // Continue loop if Nil or Tombstone
-        }
-        return nil; // End of iteration
-    }
-}
-
-// --- Helper Functions for String (Unchanged) ---
-def string_hasher(s : String) -> i32 {
-    hash : i32 = 0;
-    seed : i32 = 31;
-    for c in s {
-        cast_val : i32 = c.byte();
-        hash = (hash * seed + cast_val) bit_and 0x7FFFFFFF;
-    }
-    return hash;
-}
-
-def string_eq(a : String, b : String) -> Bool {
-    return a == b;
 }
