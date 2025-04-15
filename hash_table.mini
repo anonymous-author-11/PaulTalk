@@ -1,7 +1,9 @@
 import quadratic_probe;
 import io;
 
-map = QuadraticProbeMap[i32, i32].new(i32_hasher, i32_eq);
+alias Map = QuadraticProbeMap;
+
+map = Map[i32, i32].new(i32_hasher, i32_eq);
 map.insert(5,77);
 map.insert(8,34);
 map.insert(15,99);
@@ -11,7 +13,7 @@ if val is i32 {
 } else {
     IO.print("not an i32");
 }
-stringmap = QuadraticProbeMap[String, String].new(string_hasher, string_eq);
+stringmap = Map[String, String].new(string_hasher, string_eq);
 stringmap.insert("foo","bar");
 stringmap.insert("baz","qux");
 stringmap.insert("hello","world");
@@ -32,7 +34,7 @@ def say_coconut() {
     IO.print("coconut");
 }
 
-fmap = QuadraticProbeMap[String, ()].new(string_hasher, string_eq);
+fmap = Map[String, ()].new(string_hasher, string_eq);
 fmap.insert("a", say_apple);
 fmap.insert("b", say_banana);
 fmap.insert("c", say_coconut);

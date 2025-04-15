@@ -1,6 +1,8 @@
 import cuckoo;
 import std;
 
+alias Map = CuckooMap;
+
 // --- Additions for Benchmarking (Unchanged) ---
 extern def clock() -> i64
 
@@ -26,11 +28,10 @@ def print_benchmark_result(test_name: String, n: i32, duration: i64) {
     IO.print("  Total Time: "); IO.print(duration); IO.print(" ms");
     if n > 0 {
         ns_per_op : i64 = 0;
-        n_i64 : i64 = n;
         zero : i64 = 0;
         million : i64 = 1_000_000;
-        if duration > zero and n_i64 > zero {
-             ns_per_op = (duration * million) / n_i64;
+        if duration > zero and (n as i64) > zero {
+             ns_per_op = (duration * million) / (n as i64);
         }
         IO.print("  Time/Op:    ~"); IO.print(ns_per_op); IO.print(" ns");
     }
@@ -39,7 +40,7 @@ def print_benchmark_result(test_name: String, n: i32, duration: i64) {
 // --- Benchmarking Functions (Mostly Unchanged, ensure verification logic is correct) ---
 
 def benchmark_insert_sequential(n: i32) {
-    map = CuckooMap[i32, i32].new(i32_hasher, i32_eq);
+    map = Map[i32, i32].new(i32_hasher, i32_eq);
     start_time: i64 = clock();
     i = 0;
     while i < n {
@@ -67,12 +68,12 @@ def benchmark_insert_sequential(n: i32) {
 }
 
 def benchmark_insert_random(n: i32) {
-    map = CuckooMap[i32, i32].new(i32_hasher, i32_eq);
+    map = Map[i32, i32].new(i32_hasher, i32_eq);
     rng = PRNG.new(123);
     keys_to_insert = Array[i32].new(n);
     expected_size = 0;
     // Use a separate map instance just for counting expected unique keys
-    temp_map_for_size_check = CuckooMap[i32, Bool].new(i32_hasher, i32_eq);
+    temp_map_for_size_check = Map[i32, Bool].new(i32_hasher, i32_eq);
     i = 0;
     last_key = -1;
     while i < n {
@@ -118,14 +119,13 @@ def benchmark_insert_random(n: i32) {
 
 
 def benchmark_get_sequential_hit(n: i32) {
-    map = CuckooMap[i32, i32].new(i32_hasher, i32_eq);
+    map = Map[i32, i32].new(i32_hasher, i32_eq);
     expected_sum: i64 = 0;
     i = 0;
     while i < n {
         value_to_insert = i + 1;
-        value_i64 : i64 = value_to_insert;
         map.insert(i, value_to_insert);
-        expected_sum = expected_sum + value_i64;
+        expected_sum = expected_sum + value_to_insert as i64;
         i = i + 1;
     }
 
@@ -136,8 +136,7 @@ def benchmark_get_sequential_hit(n: i32) {
     while i < n {
         val = map.get(i);
         if val is i32 {
-            val_i64 : i64 = val;
-            actual_sum = actual_sum + val_i64;
+            actual_sum = actual_sum + val as i64;
         } else {
              // If Nil is returned, it's an error for a hit test
              verification_passed = false;
@@ -157,12 +156,12 @@ def benchmark_get_sequential_hit(n: i32) {
 }
 
 def benchmark_get_random_hit(n: i32) {
-    map = CuckooMap[i32, i32].new(i32_hasher, i32_eq);
+    map = Map[i32, i32].new(i32_hasher, i32_eq);
     rng = PRNG.new(456);
     keys_present = Array[i32].new(n);
     expected_sum: i64 = 0;
     // Use temp map to ensure N unique keys are inserted and tracked
-    temp_map_for_setup = CuckooMap[i32, Bool].new(i32_hasher, i32_eq);
+    temp_map_for_setup = Map[i32, Bool].new(i32_hasher, i32_eq);
     keys_added_count = 0;
     attempts = 0;
     max_attempts = n * 10; // Safety break
@@ -174,8 +173,7 @@ def benchmark_get_random_hit(n: i32) {
             map.insert(key, value_to_insert);
             keys_present.unchecked_insert(keys_added_count, key);
             temp_map_for_setup.insert(key, true); // Mark as added
-            key_inc : i64 = value_to_insert;
-            expected_sum = expected_sum + key_inc;
+            expected_sum = expected_sum + value_to_insert as i64;
             keys_added_count = keys_added_count + 1;
         }
         attempts = attempts + 1;
@@ -196,8 +194,7 @@ def benchmark_get_random_hit(n: i32) {
         key = keys_present.unchecked_index(i);
         val = map.get(key);
         if val is i32 {
-            val_i64 : i64 = val;
-            actual_sum = actual_sum + val_i64;
+            actual_sum = actual_sum + val as i64;
         } else {
              // Nil returned is an error for hit test
              verification_passed = false;
@@ -217,11 +214,11 @@ def benchmark_get_random_hit(n: i32) {
 }
 
 def benchmark_get_random_miss(n: i32) {
-    map = CuckooMap[i32, i32].new(i32_hasher, i32_eq);
+    map = Map[i32, i32].new(i32_hasher, i32_eq);
     rng_setup = PRNG.new(789);
     rng_miss = PRNG.new(987);
     // Insert N unique keys
-    temp_map_for_setup = CuckooMap[i32, Bool].new(i32_hasher, i32_eq);
+    temp_map_for_setup = Map[i32, Bool].new(i32_hasher, i32_eq);
     keys_added_count = 0;
     attempts = 0;
     max_attempts_setup = n * 10;
@@ -286,11 +283,11 @@ def benchmark_get_random_miss(n: i32) {
 }
 
 def benchmark_remove_random(n: i32) {
-    map = CuckooMap[i32, i32].new(i32_hasher, i32_eq);
+    map = Map[i32, i32].new(i32_hasher, i32_eq);
     rng = PRNG.new(101112);
     keys_to_remove = Array[i32].new(n);
     // Use a temporary map to ensure we add N unique keys
-    temp_map_keys = CuckooMap[i32, Bool].new(i32_hasher, i32_eq);
+    temp_map_keys = Map[i32, Bool].new(i32_hasher, i32_eq);
     keys_added_count = 0;
     attempts = 0;
     max_attempts = n * 10;
@@ -357,7 +354,7 @@ def benchmark_remove_random(n: i32) {
 
 // --- Main Execution ---
 
-IO.print("--- CuckooMap Benchmarks ---");
+IO.print("--- Map Benchmarks ---");
 n = 1_000_000; // Benchmark size
 
 benchmark_insert_sequential(n);

@@ -354,9 +354,22 @@ DONE:
 - Figure out more sane integer casting mechanics [check!]
 	- Maybe an 'as' operator [check!]
 - Make sure abstract methods don't override concrete methods [check!]
+- Make aliases smarter [check!]
+	- I should be able to do "alias Map = CuckooMap;" [check!]
+	- This should make Map[i32, String] equivalent to CuckooMap[i32, String] [check!]
 
 TODO:
 
+- Allow array literals to be of any type
+- Improve namespacing
+- Do less work for imports
+	- Make .lib archives of .bc files and --link-only-needed
+	- Decrease work done in interface_codegen
+	- Type-check specific imports on-demand rather than upfront
+	- std.mini should compile near instantly
+- Make aliases even smarter
+	- "alias Foo[A] = Bar[A, i32];"
+	- This is more complex
 - Should ensure that all branches must return if return value declared
 - What's the type of coro.return()?
 - Putting coroutine yields and returns in the same slot is asking for bugs
@@ -408,10 +421,6 @@ TODO:
 	- Why not just new behaviors for the ones that have actually changed?
 	- Will make vtables significantly smaller
 - Reduce number of redundant type fields
-- Do less work for imports
-	- Make .lib archives of .bc files and --link-only-needed
-	- Decrease work done in interface_codegen
-	- Type-check specific imports on-demand rather than upfront
 - Clean up compilation of files with no main() or no specified outfile
 - Think about how actually to handle union type parameters
 - Implement type parameter deduction from init()
@@ -460,6 +469,7 @@ TODO:
 
 # --- Known Bugs ---
 
+- Method.overridden_methods() probably has a subtle bug
 - I have a feeling that the current handling of tuples is not strictly correct
 	- In particular, casting Tuple[i32, i32] | Nil to Tuple[Any, Any] | Nil will be incorrect
 	- Generally subtyping between value types of different size is fraught

@@ -368,6 +368,9 @@ class Scope:
 
         if typ in self.aliases.keys(): return self.simplify(self.aliases[typ])
 
+        if isinstance(typ, FatPtr) and FatPtr.basic(typ.cls.data) in self.aliases.keys():
+            return FatPtr([self.aliases[FatPtr.basic(typ.cls.data)].cls, typ.type_params])
+
         if isinstance(typ, FatPtr) and typ.type_params != NoneAttr():
             return FatPtr.generic(typ.cls.data, [self.simplify(t) for t in typ.type_params.data])
 
