@@ -11,6 +11,7 @@ from lower import do_lowering
 import sys
 from parser import CSTTransformer, parse
 import subprocess
+import os
 import re
 import networkx as nx
 from AST import included_files, generate_main_for
@@ -123,6 +124,8 @@ def llvm_link(in_file_stem, bc_files):
 
     link2 = f"llvm-link -S out_linked.ll {in_file_stem}.lib -o out_reg2mem.ll --only-needed"
     subprocess.run(link2, shell=True)
+    os.remove(f"{in_file_stem}.lib")
+    os.remove("out_linked.ll")
 
 def record_all_passes():
     #clang = "clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"

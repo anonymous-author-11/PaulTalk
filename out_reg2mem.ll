@@ -1,7 +1,7 @@
 ; ModuleID = 'llvm-link'
 source_filename = "llvm-link"
 
-@_parameterization_Int32_or_Float64 = linkonce_odr constant [4 x ptr] [ptr @union_typ, ptr @_parameterization_Int32, ptr @_parameterization_Float64, ptr null]
+@_parameterization_Float64_or_Int32 = linkonce_odr constant [4 x ptr] [ptr @union_typ, ptr @_parameterization_Float64, ptr @_parameterization_Int32, ptr null]
 @_parameterization_Nil = linkonce_odr constant [2 x ptr] [ptr @nil_typ, ptr null]
 @_parameterization_String_or_Nil = linkonce_odr constant [4 x ptr] [ptr @union_typ, ptr @_parameterization_String, ptr @_parameterization_Nil, ptr null]
 @_parameterization_Int32 = linkonce_odr constant [2 x ptr] [ptr @Int32, ptr null]
@@ -472,7 +472,7 @@ define { i64, i64 } @_data_size_Float64(ptr nocapture readnone %0) #1 {
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
 define noundef nonnull ptr @Float64_field_Float64_0(ptr nocapture readnone %0) #1 {
-  ret ptr @_parameterization_Int32_or_Float64
+  ret ptr @_parameterization_Float64_or_Int32
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
@@ -509,7 +509,7 @@ define ptr @Float64_B__ADD_otherInt32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %
   %10 = load i64, ptr %6, align 4
   %11 = load ptr, ptr %7, align 8
   %12 = load ptr, ptr %8, align 8
-  %13 = tail call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %12)
+  %13 = tail call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %12)
   br i1 %13, label %14, label %.critedge
 
 14:                                               ; preds = %2
@@ -517,7 +517,7 @@ define ptr @Float64_B__ADD_otherInt32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %
   %16 = load i64, ptr %6, align 4
   %17 = load ptr, ptr %7, align 8
   %18 = load ptr, ptr %8, align 8
-  %19 = tail call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %18)
+  %19 = tail call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %18)
   br i1 %19, label %.critedge, label %._crit_edge
 
 .critedge:                                        ; preds = %14, %2
@@ -525,7 +525,7 @@ define ptr @Float64_B__ADD_otherInt32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %
   %21 = load i64, ptr %6, align 4
   %22 = load ptr, ptr %7, align 8
   %23 = load ptr, ptr %8, align 8
-  %24 = tail call i1 @subtype_test_wrapper(ptr %22, i64 %21, i64 %20, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %23)
+  %24 = tail call i1 @subtype_test_wrapper(ptr %22, i64 %21, i64 %20, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %23)
   br i1 %24, label %25, label %._crit_edge
 
 25:                                               ; preds = %.critedge
@@ -533,11 +533,11 @@ define ptr @Float64_B__ADD_otherInt32__ADD_otherFloat64({ ptr, ptr, ptr, i32 } %
   %27 = load i64, ptr %6, align 4
   %28 = load ptr, ptr %7, align 8
   %29 = load ptr, ptr %8, align 8
-  %30 = tail call i1 @subtype_test_wrapper(ptr %28, i64 %27, i64 %26, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %29)
+  %30 = tail call i1 @subtype_test_wrapper(ptr %28, i64 %27, i64 %26, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %29)
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %25, %.critedge, %14
-  %.reg2mem3.0 = phi i32 [ 8, %.critedge ], [ 8, %25 ], [ 9, %14 ]
+  %.reg2mem3.0 = phi i32 [ 9, %.critedge ], [ 9, %25 ], [ 8, %14 ]
   %31 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %32 = zext nneg i32 %.reg2mem3.0 to i64
   %33 = getelementptr [18 x ptr], ptr %31, i64 0, i64 %32
@@ -823,7 +823,7 @@ define { i64, i64 } @_data_size_Int32(ptr nocapture readnone %0) #1 {
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
 define noundef nonnull ptr @Int32_field_Int32_0(ptr nocapture readnone %0) #1 {
-  ret ptr @_parameterization_Int32_or_Float64
+  ret ptr @_parameterization_Float64_or_Int32
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
@@ -855,7 +855,7 @@ define ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0,
   %10 = load i64, ptr %6, align 4
   %11 = load ptr, ptr %7, align 8
   %12 = load ptr, ptr %8, align 8
-  %13 = tail call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %12)
+  %13 = tail call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %12)
   br i1 %13, label %14, label %.critedge
 
 14:                                               ; preds = %2
@@ -863,7 +863,7 @@ define ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0,
   %16 = load i64, ptr %6, align 4
   %17 = load ptr, ptr %7, align 8
   %18 = load ptr, ptr %8, align 8
-  %19 = tail call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %18)
+  %19 = tail call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %18)
   br i1 %19, label %.critedge, label %._crit_edge
 
 .critedge:                                        ; preds = %14, %2
@@ -871,7 +871,7 @@ define ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0,
   %21 = load i64, ptr %6, align 4
   %22 = load ptr, ptr %7, align 8
   %23 = load ptr, ptr %8, align 8
-  %24 = tail call i1 @subtype_test_wrapper(ptr %22, i64 %21, i64 %20, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %23)
+  %24 = tail call i1 @subtype_test_wrapper(ptr %22, i64 %21, i64 %20, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %23)
   br i1 %24, label %25, label %._crit_edge
 
 25:                                               ; preds = %.critedge
@@ -879,11 +879,11 @@ define ptr @Int32_B__ADD_otherFloat64__ADD_otherInt32({ ptr, ptr, ptr, i32 } %0,
   %27 = load i64, ptr %6, align 4
   %28 = load ptr, ptr %7, align 8
   %29 = load ptr, ptr %8, align 8
-  %30 = tail call i1 @subtype_test_wrapper(ptr %28, i64 %27, i64 %26, i64 8748823673944961442, i64 ptrtoint (ptr @Float64 to i64), ptr %29)
+  %30 = tail call i1 @subtype_test_wrapper(ptr %28, i64 %27, i64 %26, i64 -3157560240565274503, i64 ptrtoint (ptr @Int32 to i64), ptr %29)
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %25, %.critedge, %14
-  %.reg2mem3.0 = phi i32 [ 8, %.critedge ], [ 8, %25 ], [ 7, %14 ]
+  %.reg2mem3.0 = phi i32 [ 7, %.critedge ], [ 7, %25 ], [ 8, %14 ]
   %31 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %32 = zext nneg i32 %.reg2mem3.0 to i64
   %33 = getelementptr [17 x ptr], ptr %31, i64 0, i64 %32
@@ -1582,7 +1582,7 @@ define ptr @class_behavior_wrapper(ptr %f, ptr nocapture nofree noundef nonnull 
   ret ptr %result
 }
 
-define { ptr, i160 } @ammxjfjdwd(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
+define { ptr, i160 } @zhrkozzpsl(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
@@ -1591,7 +1591,7 @@ define { ptr, i160 } @ammxjfjdwd(ptr nest nocapture readonly %0, { ptr, i160 } %
   ret { ptr, i160 } %4
 }
 
-define { ptr, i160 } @ysbxupgpip(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
+define { ptr, i160 } @bszpiaobzk(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call double %0(i32 %.sroa.1.8.extract.trunc)
@@ -1601,7 +1601,7 @@ define { ptr, i160 } @ysbxupgpip(ptr nest nocapture readonly %0, { ptr, i160 } %
   ret { ptr, i160 } %5
 }
 
-define { ptr, i160 } @aykjlzrgfb(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
+define { ptr, i160 } @fubmgejbiw(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
@@ -1610,7 +1610,7 @@ define { ptr, i160 } @aykjlzrgfb(ptr nest nocapture readonly %0, { ptr, i160 } %
   ret { ptr, i160 } %4
 }
 
-define { ptr, i160 } @cbetpxyklu(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define { ptr, i160 } @uszotywyhg(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %.fca.1.extract5 = extractvalue { ptr, i160 } %1, 1
   %.sroa.17.8.extract.trunc = trunc i160 %.fca.1.extract5 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -1622,30 +1622,30 @@ define { ptr, i160 } @cbetpxyklu(ptr nest nocapture readonly %0, { ptr, i160 } %
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define i32 @_functionliteral_jxycwsvokr(i32 %0, i32 %1) #1 {
+define i32 @_functionliteral_pquanuqsvg(i32 %0, i32 %1) #1 {
   %3 = add i32 %1, %0
   ret i32 %3
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define range(i32 0, -1) i32 @_functionliteral_lejpmqwegj(i32 %0) #1 {
+define range(i32 0, -1) i32 @_functionliteral_ktvoxjnvad(i32 %0) #1 {
   %2 = shl i32 %0, 1
   ret i32 %2
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define double @_functionliteral_qjzywvdtri(double %0) local_unnamed_addr #1 {
+define double @_functionliteral_fjfssasvhh(double %0) local_unnamed_addr #1 {
   %2 = fmul double %0, 2.000000e+00
   ret double %2
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define i32 @_functionliteral_llhvyripuu(i32 returned %0) #1 {
+define i32 @_functionliteral_tyicpxducj(i32 returned %0) #1 {
   ret i32 %0
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define double @_functionliteral_trgdirnlnk(i32 %0) #1 {
+define double @_functionliteral_jkwggbwdan(i32 %0) #1 {
   %2 = sitofp i32 %0 to double
   ret double %2
 }
@@ -2280,7 +2280,7 @@ define noundef i32 @main() local_unnamed_addr {
   call void @set_offset(ptr nonnull %39, ptr nonnull @Array)
   %373 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %373)
-  call void @llvm.init.trampoline(ptr %373, ptr nonnull @cbetpxyklu, ptr nonnull @_functionliteral_jxycwsvokr)
+  call void @llvm.init.trampoline(ptr %373, ptr nonnull @uszotywyhg, ptr nonnull @_functionliteral_pquanuqsvg)
   %374 = call ptr @adjust_trampoline(ptr %373)
   %375 = call ptr @llvm.invariant.start.p0(i64 24, ptr %373)
   %376 = insertvalue { ptr } undef, ptr %374, 0
@@ -2307,7 +2307,7 @@ define noundef i32 @main() local_unnamed_addr {
   call void %388(ptr nonnull %42, { ptr, i160 } %385) #23
   %389 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %389)
-  call void @llvm.init.trampoline(ptr %389, ptr nonnull @aykjlzrgfb, ptr nonnull @_functionliteral_lejpmqwegj)
+  call void @llvm.init.trampoline(ptr %389, ptr nonnull @fubmgejbiw, ptr nonnull @_functionliteral_ktvoxjnvad)
   %390 = call ptr @adjust_trampoline(ptr %389)
   %391 = call ptr @llvm.invariant.start.p0(i64 24, ptr %389)
   %392 = insertvalue { ptr } undef, ptr %390, 0
@@ -2349,13 +2349,13 @@ define noundef i32 @main() local_unnamed_addr {
   %412 = load i32, ptr %407, align 8
   %413 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %413)
-  call void @llvm.init.trampoline(ptr %413, ptr nonnull @ysbxupgpip, ptr nonnull @_functionliteral_trgdirnlnk)
+  call void @llvm.init.trampoline(ptr %413, ptr nonnull @bszpiaobzk, ptr nonnull @_functionliteral_jkwggbwdan)
   %414 = call ptr @adjust_trampoline(ptr %413)
   %415 = call ptr @llvm.invariant.start.p0(i64 24, ptr %413)
   %416 = insertvalue { ptr } undef, ptr %414, 0
   %417 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %417)
-  call void @llvm.init.trampoline(ptr %417, ptr nonnull @ammxjfjdwd, ptr nonnull @_functionliteral_llhvyripuu)
+  call void @llvm.init.trampoline(ptr %417, ptr nonnull @zhrkozzpsl, ptr nonnull @_functionliteral_tyicpxducj)
   %418 = call ptr @adjust_trampoline(ptr %417)
   %419 = call ptr @llvm.invariant.start.p0(i64 24, ptr %417)
   %420 = insertvalue { ptr } undef, ptr %418, 0
