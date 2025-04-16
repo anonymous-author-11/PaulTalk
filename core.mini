@@ -189,6 +189,6 @@ class Exception {
 }
 
 def report_exception(current_coroutine : Coroutine[() -> Exception]) {
-	exception = current_coroutine.result();
-	if exception is Exception { exception.report(); }
+    exception = current_coroutine.result();
+    if exception is Exception { exception.report(); }
 }

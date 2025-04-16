@@ -1527,13 +1527,6 @@ module @patterns {
         pdl.replace %root with %memcpy
     }
   }
-  pdl.pattern @LowerMainEmpty : benefit(2) {
-    %root = pdl.operation "mini.main"
-    pdl.apply_native_constraint "is_region_empty"(%root : !pdl.operation)
-    pdl.rewrite %root {
-      pdl.erase %root
-    }
-  }
   pdl.pattern @LowerNarrowWithRegion : benefit(2) {
     %ptr_type = pdl.type : !llvm.ptr
     %operand = pdl.operand

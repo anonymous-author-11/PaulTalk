@@ -1,17 +1,3 @@
-"""
-This module implements the lowering pass of the PaulTalk compiler, which transforms high-level PaulTalk operations into LLVM IR.
-
-The file contains a collection of rewrite patterns that handle different aspects of the compilation process:
-- Type lowering patterns (LowerPtr, LowerFatPtr, etc.)
-- Operation lowering patterns (LowerAllocate, LowerFieldAccess, etc.)
-- Control flow lowering (LowerIf, LowerWhile, etc.)
-- Memory operations (LowerMemCpy, LowerMalloc, etc.)
-- Coroutine handling (LowerCoroCreate, LowerCoroYield, etc.)
-- Runtime type operations (LowerTypeDef, LowerVtable, etc.)
-
-Each pattern implements the match_and_rewrite method to transform its corresponding operation into LLVM IR.
-The patterns are organized into passes (FirstPass, SecondPass, etc.) that are applied in sequence.
-"""
 
 from xdsl.context import MLContext
 from xdsl.pattern_rewriter import (
@@ -49,8 +35,24 @@ import random
 def random_letters(n):
     return "".join(random.choices('abcdefghijklmnopqrstuvwxyz', k=n))
 
-class FirstPass(ModulePass):
-    name = "first-pass"
+class LowerHi(ModulePass):
+    name = "lower-hi"
+
+    def __init__(self):
+        self.context = MLContext()
+        self.context.load_dialect(llvm.LLVM)
+
+    def apply(self, ctx: MLContext, op: ModuleOp) -> None:
+        walker = PatternRewriteWalker(
+            GreedyRewritePatternApplier([
+                LowerCast()
+            ]),
+            apply_recursively=True
+        )
+        walker.rewrite_module(op)
+
+class LowerTypes(ModulePass):
+    name = "lower-types"
 
     def __init__(self):
         self.context = MLContext()
@@ -76,8 +78,8 @@ class FirstPass(ModulePass):
         )
         walker.rewrite_module(op)
 
-class SecondPass(ModulePass):
-    name = "second-pass"
+class LowerControlFlow(ModulePass):
+    name = "lower-control-flow"
 
     def __init__(self):
         self.context = MLContext()
@@ -91,7 +93,6 @@ class SecondPass(ModulePass):
                 LowerWhile(),
                 LowerBreak(),
                 LowerContinue(),
-                LowerLogical(),
                 LowerMethodCall()
                 #LowerCreateBuffer(),
             ]),
@@ -99,8 +100,8 @@ class SecondPass(ModulePass):
         )
         walker.rewrite_module(op)
 
-class ThirdPass(ModulePass):
-    name = "third-pass"
+class LowerMid(ModulePass):
+    name = "lower-mid"
 
     def __init__(self):
         self.context = MLContext()
@@ -109,6 +110,7 @@ class ThirdPass(ModulePass):
     def apply(self, ctx: MLContext, op: ModuleOp) -> None:
         walker = PatternRewriteWalker(
             GreedyRewritePatternApplier([
+                LowerLogical(),
                 LowerUnionize(),
                 LowerReabstract(),
                 LowerTupleCast(),
@@ -125,7 +127,6 @@ class ThirdPass(ModulePass):
                 LowerBufferFiller(),
                 LowerCheckFlag(),
                 LowerParameterization(),
-                LowerCastAssign(),
                 LowerPrint(),
                 LowerTypeDef(),
                 LowerTypeIntegersTable(),
@@ -259,6 +260,96 @@ class LowerIntersection(TypeConversionPattern):
     @attr_type_rewrite_pattern
     def convert_type(self, typ: Intersection):
         return llvm.LLVMPointerType.opaque()
+
+class LowerCast(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: CastOp, rewriter: PatternRewriter):
+        to_typ = op.to_typ
+        from_typ = op.from_typ
+        operand = op.operand
+        attr_dict = {
+            "from_typ":from_typ.base_typ(),"to_typ":to_typ.base_typ(),"from_typ_name":from_typ.symbol(), "to_typ_name":to_typ.symbol()
+        }
+
+        type_param_base = TypeParameter.make("", "").base_typ()
+        tp_like = lambda t: t.base_typ() == type_param_base or t.base_typ() == Union.from_list([FatPtr.basic("")]).base_typ()
+        should_box = (isinstance(to_typ, TypeParameter) or to_typ == FatPtr.basic("Object")) and (not isinstance(from_typ, FatPtr)) and not tp_like(from_typ)
+        should_unbox = (isinstance(from_typ, TypeParameter) or from_typ == FatPtr.basic("Object")) and (not isinstance(to_typ, FatPtr)) and not tp_like(to_typ)
+        
+        if should_box:
+            attr_dict["from_typ_size"] = IntegerAttr.from_int_and_width(type_size(from_typ), 32)
+            box_op = BoxOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
+            rewriter.replace_matched_op(box_op)
+            return
+        if should_unbox:
+            attr_dict["to_typ_size"] = IntegerAttr.from_int_and_width(type_size(to_typ), 32)
+            unbox_op = UnboxOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
+            rewriter.replace_matched_op(unbox_op)
+            return 
+        
+        function_to_function = isinstance(from_typ, Function) and isinstance(to_typ, Function)
+        not_substitutable = lambda a, b: (a != b) and (not (isinstance(a, TypeParameter) and isinstance(b, TypeParameter)))
+        different_param_types = function_to_function and any(not_substitutable(a,b) for a,b in zip(from_typ.param_types.data, to_typ.param_types.data))
+        needs_reabstraction = function_to_function and len(from_typ.param_types.data) and (different_param_types or not_substitutable(from_typ.return_type,to_typ.return_type))
+        
+        if needs_reabstraction:
+            reabstract_op = ReabstractOp.make(operand, from_typ, to_typ)
+            rewriter.replace_matched_op(reabstract_op)
+            return
+        
+        if isinstance(to_typ, FatPtr) or isinstance(to_typ, TypeParameter):
+            to_fat_ptr_op = ToFatPtrOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
+            rewriter.replace_matched_op(to_fat_ptr_op)
+            return 
+
+        same_type = from_typ.base_typ() == to_typ.base_typ()
+        from_union = isinstance(from_typ, Union) or isinstance(from_typ, TypeParameter)
+        to_union = isinstance(to_typ, Union)
+
+        if same_type or (isinstance(from_typ, FatPtr) and to_union):
+            cast_op = builtin.UnrealizedConversionCastOp.create(operands=[operand], result_types=[to_typ])
+            rewriter.replace_matched_op(cast_op)
+            return 
+
+        is_tuple_cast = isinstance(from_typ, Tuple) and isinstance(to_typ, Tuple)
+        if is_tuple_cast:
+            tuple_cast_op = TupleCastOp.make(operand, from_typ, to_typ)
+            rewriter.replace_matched_op(tuple_cast_op)
+            return 
+        
+        if from_union and to_union:
+            reunionize_op = ReUnionizeOp.create(operands=[operand], attributes=attr_dict, result_types=[to_typ])
+            rewriter.replace_matched_op(reunionize_op)
+            return 
+
+        if from_union:
+            narrow_op = NarrowOp.make(operand, from_typ, to_typ)
+            rewriter.replace_matched_op(narrow_op)
+            return 
+
+        if to_union:
+            unionize_op = UnionizeOp.make(operand, from_typ, to_typ)
+            rewriter.replace_matched_op(unionize_op)
+            return 
+
+        from_integer = isinstance(from_typ, Ptr) and isinstance(from_typ.type, IntegerType)
+        to_integer = isinstance(to_typ, Ptr) and isinstance(to_typ.type, IntegerType)
+        if from_integer and to_integer and to_typ.type.bitwidth > from_typ.type.bitwidth:
+            widen_op = WidenIntOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
+            rewriter.replace_matched_op(widen_op)
+            return 
+
+        if from_integer and to_integer and to_typ.type.bitwidth < from_typ.type.bitwidth:
+            truncate_op = TruncateIntOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
+            rewriter.replace_matched_op(truncate_op)
+            return
+
+        if from_typ == Ptr([IntegerType(32)]) and to_typ == Ptr([Float64Type()]):
+            to_float_op = IntToFloatOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
+            rewriter.replace_matched_op(to_float_op)
+            return 
+
+        raise Exception(f"cast from {from_typ} to {to_typ} not accounted for")
 
 class LowerPrelude(RewritePattern):
     @op_type_rewrite_pattern
@@ -1250,15 +1341,6 @@ class LowerTupleCast(RewritePattern):
         rewriter.inline_block_after_matched_op(block)
         rewriter.replace_matched_op(alloca)
 
-class LowerCastAssign(RewritePattern):
-    @op_type_rewrite_pattern
-    def match_and_rewrite(self, op: CastAssignOp, rewriter: PatternRewriter):
-        cast = op.region.block.last_op
-        op.region.block.detach_op(cast)
-        assign = AssignOp.create(operands=[op.target, cast.results[0]], attributes={"typ":op.to_typ})
-        rewriter.insert_op_before_matched_op(cast)
-        rewriter.replace_matched_op(assign)
-
 class LowerGlobal(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: GlobalOp, rewriter: PatternRewriter):
@@ -1563,11 +1645,13 @@ class LowerMain(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: MainOp, rewriter: PatternRewriter):
         debug_code(op)
-        if all(len([*block.ops]) < 2 for block in op.body.blocks):
-            rewriter.erase_matched_op()
-            return
         ret_val = llvm.ConstantOp(llvm.IntegerAttr.from_int_and_width(0,32), llvm.IntegerType(32))
         ret_op = func.Return(ret_val.results[0])
+        if all(len([*block.ops]) < 2 for block in op.body.blocks):
+            body = Region([Block([ret_val, ret_op])])
+            main_decl = func.FuncOp(op.main_name.data, FunctionType.from_lists([IntegerType(32), llvm.LLVMPointerType.opaque()], [IntegerType(32)]), region=body)
+            rewriter.replace_matched_op(main_decl)
+            return
         last_block = op.body.last_block
         first_block = op.body.first_block
         if not last_block or not first_block: raise Exception("no blocks!")
@@ -1575,7 +1659,7 @@ class LowerMain(RewritePattern):
         setup = SetupExceptionOp.create()
         rewriter.insert_op_before(setup, first_block.first_op)
         body = op.detach_region(op.body)
-        main_decl = func.FuncOp("main", FunctionType.from_lists([IntegerType(32), llvm.LLVMPointerType.opaque()], [IntegerType(32)]), region=body)
+        main_decl = func.FuncOp(op.main_name.data, FunctionType.from_lists([IntegerType(32), llvm.LLVMPointerType.opaque()], [IntegerType(32)]), region=body)
         rewriter.replace_matched_op(main_decl)
         debug_code(op)
 
@@ -2496,9 +2580,10 @@ class LowerCall(RewritePattern):
         rewriter.replace_matched_op(wrap)
         debug_code(op)
 
-def first_pass(module: ModuleOp) -> ModuleOp:
+def do_lowering(module: ModuleOp) -> ModuleOp:
     ctx = MLContext()
-    FirstPass().apply(ctx, module)
-    SecondPass().apply(ctx, module)
-    ThirdPass().apply(ctx, module)
+    LowerHi().apply(ctx, module)
+    LowerTypes().apply(ctx, module)
+    LowerControlFlow().apply(ctx, module)
+    LowerMid().apply(ctx, module)
     return module

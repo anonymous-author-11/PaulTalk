@@ -23,6 +23,7 @@ import time
 import networkx as nx
 
 codegenned = set()
+generate_main_for = set()
 toplevel_ops = []
 included_files = nx.DiGraph()
 tim = time.time()
@@ -87,8 +88,12 @@ class AST:
                 "size_fn":data_size_fn_name
             }
             typ_ops.append(TypeDefOp.create(attributes=attr_dict))
-        main = MainOp.create(regions=[global_scope.region])
-        module = ModuleOp([PreludeOp.create(), *typ_ops, *class_ops, *func_ops, main], {"sym_name":StringAttr("ir")})
+        if self.root.info.filename in generate_main_for:
+            main_name = StringAttr("_main_" + clean_name(self.root.info.filename.split(".")[0]))
+            main = MainOp.create(regions=[global_scope.region], attributes={"main_name":main_name})
+            module = ModuleOp([PreludeOp.create(), *typ_ops, *class_ops, *func_ops, main], {"sym_name":StringAttr("ir")})
+        else:
+            module = ModuleOp([PreludeOp.create(), *typ_ops, *class_ops, *func_ops], {"sym_name":StringAttr("ir")})
         return module
 
 @dataclass
@@ -608,14 +613,14 @@ class FieldIdentifier(Identifier):
         self_val = scope.symbol_table["self"]
 
         if isinstance(original_type, FatPtr):
-            attr_dict["assumed_type"] = type_id(original_type)
+            attr_dict["assumed_type"] = original_type.symbol()
 
         get = GetFieldOp.create(operands=[self_val], attributes=attr_dict, result_types=[original_type])
         if not isinstance(original_type, TypeParameter):
             scope.region.last_block.add_op(get)
             return get.results[0]
 
-        cast = CastOp.make(get.results[0], original_type, specialized_type, type_id)
+        cast = CastOp.make(get.results[0], original_type, specialized_type)
         scope.region.last_block.add_ops([get, cast])
         return cast.results[0]
 
@@ -671,7 +676,7 @@ class TypeCheck(Expression):
         parameterization = None
         if isinstance(right_type, TypeParameter): parameterization = scope.get_parameterization(right_type)
         simplify = not scope.subtype(right_type, FatPtr.basic("Exception"))
-        check_flag = CheckFlagOp.make(leftval, static_type, right_type, type_id, parameterization, simplify)
+        check_flag = CheckFlagOp.make(leftval, static_type, right_type, parameterization, simplify)
         scope.region.last_block.add_op(check_flag)
         return check_flag.results[0]
 
@@ -706,7 +711,7 @@ class As(Expression):
         
         if operand_type == to_typ: return operand
         
-        cast = CastOp.make(operand, operand_type, to_typ, type_id)
+        cast = CastOp.make(operand, operand_type, to_typ)
         scope.region.last_block.add_op(cast)
         return cast.results[0]
 
@@ -800,7 +805,7 @@ class MethodCall(Expression):
         
         args = [arg.codegen(scope) for arg in self.arguments]
         for (i, arg) in enumerate(args):
-            cast = CastOp.make(arg, arg_types[i], behavior_args[i], type_id)
+            cast = CastOp.make(arg, arg_types[i], behavior_args[i])
             unwrap = UnwrapOp(operands=[cast.results[0]], result_types=[behavior_args[i].base_typ()])
             scope.region.last_block.add_ops([cast, unwrap])
             args[i] = unwrap.results[0]
@@ -809,7 +814,7 @@ class MethodCall(Expression):
         vtable_size = IntegerAttr.from_int_and_width(rec_class.vtable_size(), 64)
 
         offset = IntegerAttr.from_int_and_width(behavior.offset, 32)
-        vptrs = ArrayAttr([type_id(t) if not isinstance(t, FatPtr) else NoneAttr() for t in arg_types])
+        vptrs = ArrayAttr([t.symbol() if not isinstance(t, FatPtr) else NoneAttr() for t in arg_types])
         ret_schema = ret_typ.base_typ() if ret_typ else llvm.LLVMVoidType()
         attr_dict = {
             "offset":offset,"vptrs":vptrs, "vtable_size":vtable_size,
@@ -829,7 +834,7 @@ class MethodCall(Expression):
         if not specialized:
             print(self)
             raise Exception()
-        cast = CastOp.make(call_op.results[0], broad, specialized, type_id)
+        cast = CastOp.make(call_op.results[0], broad, specialized)
         scope.region.last_block.add_op(cast)
         return cast.results[0]
 
@@ -905,7 +910,7 @@ class CoroutineCall(MethodCall):
         self_type = self.exprtype(scope)
         union = scope.simplify(Union.from_list([Nil(), self_type]))
         if len(self.arguments) > 0:
-            cast = CastOp.make(self.arguments[0].codegen(scope), self.arguments[0].exprtype(scope), union, type_id)
+            cast = CastOp.make(self.arguments[0].codegen(scope), self.arguments[0].exprtype(scope), union)
             unwrap = UnwrapOp.create(operands=[cast.results[0]], result_types=[union.base_typ()])
             scope.region.last_block.add_ops([cast, unwrap])
             operands = [coro, unwrap.results[0]]
@@ -956,7 +961,7 @@ class FunctionLiteralCall(MethodCall):
         args = [arg.codegen(scope) for arg in self.arguments]
         rec_typ = self.receiver.exprtype(scope)
         for (i, arg) in enumerate(args):
-            cast = CastOp.make(arg, arg_types[i], rec_typ.param_types.data[i], type_id)
+            cast = CastOp.make(arg, arg_types[i], rec_typ.param_types.data[i])
             unwrap = UnwrapOp(operands=[cast.results[0]], result_types=[rec_typ.param_types.data[i].base_typ()])
             scope.region.last_block.add_ops([cast, unwrap])
             args[i] = unwrap.results[0]
@@ -1027,7 +1032,7 @@ class BufferSetIndex(MethodCall):
     def codegen(self, scope):
         rec_typ = self.receiver.exprtype(scope)
         elem_type = scope.simplify(rec_typ.elem_type)
-        cast = CastOp.make(self.arguments[1].codegen(scope), self.arguments[1].exprtype(scope), elem_type, type_id)
+        cast = CastOp.make(self.arguments[1].codegen(scope), self.arguments[1].exprtype(scope), elem_type)
         operands = [self.receiver.codegen(scope), self.arguments[0].codegen(scope), cast.results[0]]
         if isinstance(elem_type, TypeParameter):
             parameterization = scope.get_parameterization(elem_type)
@@ -1101,7 +1106,7 @@ class ClassMethodCall(MethodCall):
         
         args = [arg.codegen(scope) for arg in self.arguments]
         for (i, arg) in enumerate(args):
-            cast = CastOp.make(arg, arg_types[i], behavior_args[i], type_id)
+            cast = CastOp.make(arg, arg_types[i], behavior_args[i])
             unwrap = UnwrapOp(operands=[cast.results[0]], result_types=[behavior_args[i].base_typ()])
             scope.region.last_block.add_ops([cast, unwrap])
             args[i] = unwrap.results[0]
@@ -1109,7 +1114,7 @@ class ClassMethodCall(MethodCall):
         vtable_size = IntegerAttr.from_int_and_width(rec_class.vtable_size(), 64)
 
         offset = IntegerAttr.from_int_and_width(behavior.offset, 32)
-        vptrs = ArrayAttr([type_id(t) if not isinstance(t, FatPtr) else NoneAttr() for t in arg_types])
+        vptrs = ArrayAttr([t.symbol() if not isinstance(t, FatPtr) else NoneAttr() for t in arg_types])
         ret_schema = broad.base_typ() if broad else llvm.LLVMVoidType()
         attr_dict = {
             "offset":offset,"vptrs":vptrs, "vtable_size":vtable_size,
@@ -1132,7 +1137,7 @@ class ClassMethodCall(MethodCall):
         call_op = ClassMethodCallOp.create(operands=operands, attributes=attr_dict, result_types=result_types)
         scope.region.last_block.add_op(call_op)
         if len(call_op.results) == 0: return None
-        cast = CastOp.make(call_op.results[0], broad, specialized, type_id)
+        cast = CastOp.make(call_op.results[0], broad, specialized)
         scope.region.last_block.add_op(cast)
         return cast.results[0]
 
@@ -1411,7 +1416,7 @@ class FunctionDef(Statement):
             param_type = param.type(body_scope)
             arg = body_block.insert_arg(param_type.base_typ(), i)            
             refer = WrapOp.make(body_block.args[i], param_type)
-            cast = CastOp.make(refer.results[0], param_type, param_type, type_id)
+            cast = CastOp.make(refer.results[0], param_type, param_type)
             body_block.add_ops([refer, cast])
             body_scope.symbol_table[param.name] = cast.results[0]
             body_scope.type_table[param.name] = param_type
@@ -1490,7 +1495,7 @@ class MethodDef(Statement):
         self_arg = body_block.insert_arg(self_typ.base_typ(), 0)
         unused = body_block.insert_arg(self_typ.base_typ(), 1)
         refer = WrapOp.make(self_arg, self_typ)
-        cast = CastOp.make(refer.results[0], self_typ, self_typ, type_id)
+        cast = CastOp.make(refer.results[0], self_typ, self_typ)
         body_block.add_ops([refer, cast])
         body_scope.symbol_table["self"] = cast.results[0]
         body_scope.type_table["self"] = self_typ
@@ -1504,7 +1509,7 @@ class MethodDef(Statement):
             param_type = body_scope.simplify(param.type(body_scope))
             arg = body_block.insert_arg(arg_types[i].base_typ(), i + 3)
             wrap = WrapOp.make(arg, arg_types[i])
-            cast = CastOp.make(wrap.results[0], arg_types[i], param_type, type_id)
+            cast = CastOp.make(wrap.results[0], arg_types[i], param_type)
             body_block.add_ops([wrap, cast])
             body_scope.symbol_table[param.name] = cast.results[0]
             body_scope.type_table[param.name] = param_type
@@ -1516,7 +1521,7 @@ class MethodDef(Statement):
             vtable_bytes = IntegerAttr.from_int_and_width(self.defining_class.vtable_size() * 8, 32)
             original_type = field.declaration.type(body_scope)
             attr_dict = {"offset":offset, "vtable_bytes":vtable_bytes, "original_type":original_type.base_typ()}
-            cast = CastOp.make(body_scope.symbol_table[param.name], param_type, original_type, type_id)
+            cast = CastOp.make(body_scope.symbol_table[param.name], param_type, original_type)
             operands = [body_scope.symbol_table["self"], cast.results[0]]
             set_field = SetFieldOp.create(operands=operands, attributes=attr_dict)
             body_block.add_ops([cast, set_field])
@@ -1847,7 +1852,7 @@ class ClassMethodDef(MethodDef):
             param_type = body_scope.simplify(param.type(body_scope))
             arg = body_block.insert_arg(arg_types[i].base_typ(), i + 1)
             wrap = WrapOp.make(arg, arg_types[i])
-            cast = CastOp.make(wrap.results[0], arg_types[i], param_type, type_id)
+            cast = CastOp.make(wrap.results[0], arg_types[i], param_type)
             body_block.add_ops([wrap, cast])
             body_scope.symbol_table[param.name] = cast.results[0]
             body_scope.type_table[param.name] = param_type
@@ -2059,7 +2064,7 @@ class Behavior(Statement):
 
         gep = llvm.GEPOp.from_mixed_indices(arg, [block.arg_position], pointee_type=llvm.LLVMPointerType.opaque())
         operands = [gep.results[0]]
-        check_flag = CheckFlagOp.create(operands=operands, attributes={"typ_name":type_id(block.typ)}, result_types=[Ptr([IntegerType(1)])])
+        check_flag = CheckFlagOp.create(operands=operands, attributes={"typ_name":block.typ.symbol()}, result_types=[Ptr([IntegerType(1)])])
         is_subtype = llvm.LoadOp(check_flag.results[0], IntegerType(1))
 
         br = cf.ConditionalBranch(is_subtype.results[0], blocks[block.first_succ_name][1], [], blocks[block.second_succ_name][1], [])
@@ -2545,8 +2550,8 @@ class Field:
         fields_types = fields_types = [t.base_typ() if not isinstance(t, TypeParameter) else IntegerAttr.from_int_and_width([f.declaration.type_param for f in self.cls.fields() if isinstance(f.declaration, TypeFieldDecl)].index(t), 64) for t in self.cls.fields_types()]
 
         parameterization = StringAttr("_parameterization_" + name_hierarchy(self.type()).data[0].data) if not isinstance(self.type(), TypeParameter) else None
-        getter = GetterDefOp.make(getter_name, fields_types, self.offset, original_type, specialized, parameterization, type_id)
-        setter = SetterDefOp.make(setter_name, fields_types, self.offset, original_type, specialized, parameterization, type_id)
+        getter = GetterDefOp.make(getter_name, fields_types, self.offset, original_type, specialized, parameterization)
+        setter = SetterDefOp.make(setter_name, fields_types, self.offset, original_type, specialized, parameterization)
 
         attr_dict = {"meth_name":accessor_name, "getter_name":getter_name, "setter_name":setter_name}
         accessor = AccessorDefOp.create(attributes=attr_dict)
@@ -2574,13 +2579,14 @@ class VarInit(VarDecl):
         from_typ = self.initial_value.exprtype(scope)
         new_val = self.initial_value.codegen(scope)
         if not should_reassign:
-            cast = CastOp.make(new_val, from_typ, self_type, type_id)
+            cast = CastOp.make(new_val, from_typ, self_type)
             scope.region.last_block.add_op(cast)
             scope.symbol_table[self.name] = cast.results[0]
             scope.type_table[self.name] = self_type
             return
-        assign_op = CastAssignOp.make(scope.symbol_table[self.name], new_val, from_typ, self_type, type_id)
-        scope.region.last_block.add_op(assign_op)
+        cast = CastOp.make(new_val, from_typ, self_type)
+        assign = AssignOp.make(scope.symbol_table[self.name], cast.results[0], self_type)
+        scope.region.last_block.add_ops([cast, assign])
         scope.type_table[self.name] = self_type
 
     def typeflow(self, scope):
@@ -2644,7 +2650,7 @@ class Reference(Assignment):
     def codegen(self, scope):
         typ = self.value.exprtype(scope)
         new_val = self.value.codegen(scope)
-        cast = CastOp.make(new_val, typ, typ, type_id)
+        cast = CastOp.make(new_val, typ, typ)
         refer_op = ReferOp.create(operands=[cast.results[0]], attributes={"typ":typ.base_typ()}, result_types=[typ])
         scope.region.last_block.add_ops([cast, refer_op])
         new_val = refer_op.results[0]
@@ -2658,8 +2664,9 @@ class Reassignment(Assignment):
         typ = self.value.exprtype(scope)
         new_val = self.value.codegen(scope)
         old_typ = scope.type_table[self.target.name]
-        cast_assign = CastAssignOp.make(scope.symbol_table[self.target.name], new_val, typ, old_typ, type_id)
-        scope.region.last_block.add_op(cast_assign)
+        cast = CastOp.make(new_val, typ, old_typ)
+        assign = AssignOp.make(scope.symbol_table[self.target.name], cast.results[0], old_typ)
+        scope.region.last_block.add_ops([cast, assign])
 
 @dataclass
 class FieldAssignment(Assignment):
@@ -2674,7 +2681,7 @@ class FieldAssignment(Assignment):
         offset = IntegerAttr.from_int_and_width(field.offset, IntegerType(64))
         vtable_bytes = IntegerAttr.from_int_and_width(scope.cls.vtable_size() * 8, 32)
         attr_dict = {"offset":offset, "vtable_bytes":vtable_bytes, "original_type":original_type.base_typ()}
-        cast = CastOp.make(new_val, typ, original_type, type_id)
+        cast = CastOp.make(new_val, typ, original_type)
         operands = [scope.symbol_table["self"], cast.results[0]]
         set_field = SetFieldOp.create(operands=operands, attributes=attr_dict)
         scope.region.last_block.add_ops([cast, set_field])
@@ -2698,8 +2705,9 @@ class CallAssignment(Assignment):
         typ = self.value.exprtype(scope)
         new_val = self.value.codegen(scope)
         target_type = self.target.exprtype(scope)
-        cast_assign = CastAssignOp.make(self.target.codegen(scope), new_val, typ, target_type, type_id)
-        scope.region.last_block.add_op(cast_assign)
+        cast = CastOp.make(new_val, typ, target_type)
+        assign = AssignOp.make(self.target.codegen(scope), cast.results[0], target_type)
+        scope.region.last_block.add_ops([cast, assign])
 
     def typeflow(self, scope):
         typ = self.value.exprtype(scope)
@@ -2719,7 +2727,7 @@ class Branch(Statement):
                 if not lhs_is_identifier: continue
                 if self.condition.left.name != key: continue
             mutated_vars[key] = union
-            cast = CastOp.make(scope.symbol_table[key], scope.type_table[key], union, type_id)
+            cast = CastOp.make(scope.symbol_table[key], scope.type_table[key], union)
             scope.symbol_table[key] = cast.results[0]
             scope.region.last_block.add_op(cast)
         return mutated_vars
@@ -2729,8 +2737,9 @@ class Branch(Statement):
             if "@" in key: continue
             local_type = branch_scope.type_table[key]
             local_var = branch_scope.symbol_table[key]
-            cast_assign = CastAssignOp.make(scope.symbol_table[key], local_var, local_type, value, type_id)
-            branch_scope.region.last_block.add_op(cast_assign)
+            cast = CastOp.make(local_var, local_type, value)
+            assign = AssignOp.make(scope.symbol_table[key], cast.results[0], value)
+            branch_scope.region.last_block.add_ops([cast, assign])
 
     def narrow_dry(self, then_scope):
         if not isinstance(self.condition, TypeCheck): return
@@ -2757,7 +2766,7 @@ class Branch(Statement):
         right_type = then_scope.simplify(self.condition.right)
         intersection = Intersection.from_list([right_type, old_typ])
         new_typ = scope.simplify(intersection)
-        cast = CastOp.make(scope.symbol_table[self.condition.left.name], old_typ, new_typ, type_id)
+        cast = CastOp.make(scope.symbol_table[self.condition.left.name], old_typ, new_typ)
         then_scope.region.first_block.add_op(cast)
         then_scope.symbol_table[self.condition.left.name] = cast.results[0]
         then_scope.type_table[self.condition.left.name] = new_typ
@@ -2934,7 +2943,7 @@ class ReturnValue(Return):
     def codegen(self, scope):
         retval_typ = self.value.exprtype(scope)
         broad_return_type = scope.behavior.broad_return_type() if scope.behavior else scope.method.return_type()
-        cast = CastOp.make(self.value.codegen(scope), retval_typ, broad_return_type, type_id)
+        cast = CastOp.make(self.value.codegen(scope), retval_typ, broad_return_type)
         ret_op = ReturnOp.create(operands=[cast.results[0]])
         scope.region.last_block.add_ops([cast, ret_op])
 
@@ -2973,7 +2982,7 @@ class CoCreate(Expression):
         if func_type.return_type != Nothing():
             attr_dict["ret_type"] = func_type.return_type.base_typ()
             union_like = isinstance(func_type.return_type, Union) or isinstance(func_type.return_type, FatPtr) or isinstance(func_type.return_type, TypeParameter)
-            if not union_like: attr_dict["ret_flag"] = type_id(func_type.return_type)
+            if not union_like: attr_dict["ret_flag"] = func_type.return_type.symbol()
         attr_dict["yield_type"] = scope.simplify(Union.from_list([Nil(), arg_types[0].yield_type])).base_typ()
         op = ArgPasserOp.create(attributes=attr_dict)
         toplevel_ops.append(op)
@@ -3015,7 +3024,7 @@ class CoYield(Expression):
         self_type = self.exprtype(scope)
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         to_type = exception_or_nil if not scope.method else scope.simplify(Union.from_list([scope.method.yield_type, Nil()]))
-        cast = CastOp.make(self.arg.codegen(scope), self.arg.exprtype(scope), to_type, type_id)
+        cast = CastOp.make(self.arg.codegen(scope), self.arg.exprtype(scope), to_type)
         unwrap = UnwrapOp.create(operands=[cast.results[0]], result_types=[to_type.base_typ()])
         yield_op = CoroYieldOp.create(operands=[unwrap.results[0]], result_types=[self_type.base_typ()])
         wrap = WrapOp.make(yield_op.results[0], self_type)

@@ -3,18 +3,17 @@ import time
 start_time = time.time()
 
 from lark import Lark
-from xdsl.dialects import llvm, cf, scf, builtin, arith, func, memref, pdl
-from core_dialect import MiniLang, Ub
+from utils import clean_name
 from xdsl.context import MLContext
 from xdsl.printer import Printer
 from io import StringIO
-from lower import first_pass
+from lower import do_lowering
 import sys
 from parser import CSTTransformer, parse
 import subprocess
 import re
 import networkx as nx
-from AST import included_files
+from AST import included_files, generate_main_for
 
 def print_dependency_graph(included_files, file_name):
     print("Dependency graph:")
@@ -24,7 +23,7 @@ def print_dependency_graph(included_files, file_name):
     print(text_repr)
 
 def run_python_lowering(module):
-    lowered_module = first_pass(module)
+    lowered_module = do_lowering(module)
     stringio = StringIO()
     Printer(stringio).print(lowered_module)
     module_str = stringio.getvalue().encode().decode('unicode_escape')
@@ -43,6 +42,7 @@ def run_pdl_lowering(module_str):
     if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
     patterns = cmd_out.stdout
 
+    # the verifier will complain about temporary symbol-table inconsistencies unless we use these placeholders
     replacements = {
         "mini.addressof": "placeholder.addressof",
         "\"mini.global\"": "\"placeholder.global\"",
@@ -55,6 +55,7 @@ def run_pdl_lowering(module_str):
     module_str = pattern.sub(lambda m: replacements[m.group()], module_str)
     module_str = patterns + module_str
 
+    # this should run only one iteration, but we use 'while' anyway
     while "\"mini." in module_str:
         cmd_out = subprocess.run(run_bytecode, capture_output=True, shell=True, text=True, input=module_str)
         if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
@@ -62,10 +63,11 @@ def run_pdl_lowering(module_str):
         Printer(stringio).print(cmd_out.stdout.replace("\\","\\\\"))
         module_str = stringio.getvalue().encode().decode('unicode_escape')
 
+    # trim off the residual PDL bytecode
     module_str = module_str[23:-16]
+
     module_str = module_str.replace("placeholder.call", "llvm.call")
     module_str = module_str.replace("placeholder.extractvalue", "llvm.extractvalue")
-    #module_str = module_str.replace('{"position" = array<i64: 0>}','<{"position" = array<i64: 0>}>')
     with open("out.mlir", "w") as outfile: outfile.write(module_str)
     return module_str
 
@@ -88,27 +90,39 @@ def run_mlir_opt(module_str):
     module_str = stringio.getvalue().encode().decode('unicode_escape')
     return module_str
 
-def lower_to_llvm(module_str, out_file_names):
+def lower_to_llvm(module_str, in_file_stem):
     to_llvm_dialect = " ".join(["mlir-opt","--convert-scf-to-cf", "--convert-arith-to-llvm","--convert-func-to-llvm","--convert-index-to-llvm",
         "--finalize-memref-to-llvm","--convert-cf-to-llvm","--convert-ub-to-llvm","--reconcile-unrealized-casts",
         "--emit-bytecode"
     ])
-    mlir_translate = f"mlir-translate --mlir-to-llvmir -o {out_file_names[0]}"
-    cmd = " | ".join([to_llvm_dialect, mlir_translate])
+    mlir_translate = f"mlir-translate --mlir-to-llvmir"
+
+    # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
+    # this has shown to improve the optimization potential for unclear reasons
+    opt1 = f"opt --passes=\"reg2mem\""
+    opt2 = f"opt --passes=\"default<O1>\" -o {in_file_stem}.bc"
+    cmd = " | ".join([to_llvm_dialect, mlir_translate, opt1, opt2])
     subprocess.run(cmd, text=True, shell=True, input=module_str)
 
-def do_preliminaries(out_file_names, ll_files):
+def llvm_link(in_file_stem, bc_files):
 
     # put all the .ll files into one big file for optimization
     # kind of like LTO but more simplistic
-    llvm_link = f"llvm-link -S {out_file_names[0]} {' '.join(ll_files)} utils.ll"
+    make_archive = f"llvm-ar cr {in_file_stem}.lib {' '.join(bc_files)}"
+    subprocess.run(make_archive, shell=True)
 
-    # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
-    # this has shown to significantly improve the optimization potential
-    reg2mem = "opt -S --passes=reg2mem -o out_reg2mem.ll"
+    link1 = f"llvm-link -S {in_file_stem}.bc utils.ll -o out_linked.ll"
+    subprocess.run(link1, shell=True)
 
-    preliminaries = " | ".join([llvm_link, reg2mem])
-    subprocess.run(preliminaries, shell=True)
+    # use the correct main function
+    with open("out_linked.ll", "r+") as f:
+        txt = f.read()
+        f.seek(0)
+        f.write(txt.replace(f"_main_{clean_name(in_file_stem)}", "main"))
+        f.truncate()
+
+    link2 = f"llvm-link -S out_linked.ll {in_file_stem}.lib -o out_reg2mem.ll --only-needed"
+    subprocess.run(link2, shell=True)
 
 def record_all_passes():
     #clang = "clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
@@ -135,9 +149,9 @@ def run_opt(debug_mode):
     interesting = "--use-noalias-intrinsic-during-inlining --mem-intrinsic-expand-size=1024"
 
     # this is the real optimization sauce for our language
-    # does another round of optimizations whenever an indirect callee is identified
+    # does another round of cgscc optimizations whenever an indirect callee is identified
     devirtualization_settings = "--max-devirt-iterations=100 --abort-on-max-devirt-iterations-reached"
-    # inline everything possible, and let the machine outliner undo some of it
+    # inline everything possible, and let the machine outliner undo some of it, if requested
     inline_settings = "--inline-threshold=-10000" if debug_mode else "--inline-threshold=10000"
     attributor_settings = "--attributor-enable=module --attributor-annotate-decl-cs --max-heap-to-stack-size=-1 --attributor-manifest-internal --attributor-assume-closed-world=false"
     in_file = f"out_reg2mem.ll"
@@ -149,22 +163,22 @@ def run_opt(debug_mode):
     subprocess.run(opt, text=True, shell=True)
     if debug_mode: subprocess.run(debug, text=True, shell=True)
 
-def run_llc(out_file_names, debug_mode):
+def run_llc(output_stem, debug_mode):
     target_triple = "-mtriple=x86_64-pc-windows-msvc"
     debug_extension = ".dbg" if debug_mode else ""
-    # necessary so that the machine outliner doesn't break; default would be 'exception-model=wineh'
+    # necessary so that the machine outliner doesn't break; default would otherwise be 'exception-model=wineh'
     exception_model = "-exception-model=sjlj"
     outliner_settings = "-enable-machine-outliner -machine-outliner-reruns=2"
-    llc = f"llc -filetype=obj out_optimized{debug_extension}.ll -O=3 {target_triple} {exception_model} -o {out_file_names[1]}"
+    llc = f"llc -filetype=obj out_optimized{debug_extension}.ll -O=3 {target_triple} {exception_model} -o {output_stem}.obj"
     subprocess.run(llc)
 
-def run_lld_link(debug_mode, out_file_names):
+def run_lld_link(debug_mode, output_stem):
     debug_flag = "/debug" if debug_mode else ""
     dynamic_libc = "msvcrt.lib legacy_stdio_definitions.lib"
     static_libc = "libcmt.lib"
 
     # using dynamic linking:
-    lld_link = f"lld-link /out:{out_file_names[2]} {out_file_names[1]} trampoline.obj {debug_flag} {dynamic_libc}"
+    lld_link = f"lld-link /out:{output_stem}.exe {output_stem}.obj trampoline.obj {debug_flag} {dynamic_libc}"
     subprocess.run(lld_link)
 
 def main(argv):
@@ -172,22 +186,21 @@ def main(argv):
     print(f"Time to import: {after_imports - start_time} seconds")
     if len(argv) < 2: raise Exception("Please provide a file to compile")
     file_name = argv[1]
+    in_file_stem = file_name.split(".")[0]
     print(f"compiling {file_name}")
-    if "-o" not in argv: raise Exception("Please provide an output file.")
     debug_mode = "--debug" in argv
     show_dependencies = "--dependencies" in argv
+    output_name = None
     for i, arg in enumerate(argv):
         if arg == "-o":
             if len(argv) < i + 2: raise Exception("Please provide an output file.")
             output_name = argv[i + 1]
+            if "." not in output_name: raise Exception("Please provide an file extension in the output name.")
+            generate_main_for.add(file_name)
+            output_stem = output_name.split(".")[0]
+            out_exe = f"{output_stem}.exe"
+            out_obj = f"{output_stem}.obj"
             break
-    if "." not in output_name: raise Exception("Please provide an file extension in the output name.")
-    output_name_short = output_name.split(".")[0]
-    out_file_names = [
-        argv[1].split(".")[0] + ".ll",
-        output_name_short + ".obj",
-        output_name_short + ".exe",
-    ]
 
     ast = parse(file_name)
     #print(tree.pretty())
@@ -196,11 +209,11 @@ def main(argv):
     if show_dependencies: print_dependency_graph(included_files, file_name)
         
     # check that all dependencies have already been compiled
-    ll_files = [file.split(".")[0] + ".ll" for file in included_files.nodes() if file != file_name]
-    for file in ll_files:
+    bc_files = [file.split(".")[0] + ".bc" for file in included_files.nodes() if file != file_name]
+    for file in bc_files:
         with open(file, "r") as infile: pass
 
-    print(ll_files)
+    print(bc_files)
     stringio = StringIO()
     Printer(stringio).print(module)
     module_str = stringio.getvalue().encode().decode('unicode_escape')
@@ -222,28 +235,37 @@ def main(argv):
     after_mlir_opt = time.time()
     print(f"Time to do mlir-opt: {after_mlir_opt - after_pdl} seconds")
     
-    lower_to_llvm(module_str, out_file_names)
+    lower_to_llvm(module_str, in_file_stem)
     after_translate = time.time()
     print(f"Time to lower to llvm ir: {after_translate - after_mlir_opt} seconds")
-    do_preliminaries(out_file_names, ll_files)
-    after_prelims = time.time()
-    print(f"Time to run preliminary passes: {after_prelims - after_translate} seconds")
+
+    if not output_name:
+        final_time = after_translate
+        print(f"Total time to compile: {final_time - start_time} seconds")
+        print("completed")
+        return
+
+    llvm_link(in_file_stem, bc_files)
+    after_llvm_link = time.time()
+    print(f"Time to llvm-link: {after_llvm_link - after_translate} seconds")
     run_opt(debug_mode)
     #record_all_passes()
     after_opt = time.time()
-    print(f"Time to opt: {after_opt - after_prelims} seconds")
-    run_llc(out_file_names, debug_mode)
+    print(f"Time to opt: {after_opt - after_llvm_link} seconds")
+    run_llc(output_stem, debug_mode)
     after_llc = time.time()
-    final_time = after_llc
     print(f"Time to llc: {after_llc - after_opt} seconds")
-    if ".exe" in output_name:
-        run_lld_link(debug_mode, out_file_names)
-        after_lldlink = time.time()
-        final_time = after_lldlink
-        print(f"Time to lld-link: {after_lldlink - after_llc} seconds")
+    if ".exe" not in output_name:
+        final_time = after_llc
+        print(f"Total time to compile: {final_time - start_time} seconds")
+        print("completed")
+        return
+    run_lld_link(debug_mode, output_stem)
+    after_lldlink = time.time()
+    final_time = after_lldlink
+    print(f"Time to lld-link: {after_lldlink - after_llc} seconds")
     print(f"Total time to compile: {final_time - start_time} seconds")
     print("completed")
-
 
 if __name__ == "__main__":
     main(sys.argv)

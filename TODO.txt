@@ -363,32 +363,42 @@ DONE:
 	- I should be able to do "alias Map = CuckooMap;" [check!]
 	- This should make Map[i32, String] equivalent to CuckooMap[i32, String] [check!]
 - Allow array literals to be of any type [check!]
+- Optimize individual .ll files before linking [check]
+- Clean up compilation of files with no main() or no specified outfile [check!]
+	- Stop early if no -o flag [check!]
+	- Stop early if .obj outfile [check!]
+	- Don't emit main function if no outfile [check!]
+	- Emit empty main function if specified outfile and no toplevel code [check!]
+	- Avoid duplicate main functions [check!]
+- Make .lib archives of .bc files and link --only-needed [check!]
 
 TODO:
 
-- Optimize individual .ll files before linking
+- Add multi-line comments and multi-line strings
+	- Multi-line comments
+	- Multi-line strings
 - Implement heterogenous-width and integer-float binary operations
-- Clean up compilation of files with no main() or no specified outfile
 - Split MLIR dialect into hi, mid, and lo dialects
 	- hi will use PaulTalk types
 	- types will be lowered in hi -> mid
 	- lo will only lower to other dialects
-- Refactor to use mini.call in PDL
+- Refactor to use lo.call in PDL
 - Add T? syntax for T | Nil
 - Move lowering logic in core_dialect to pre-type-lowering passes
-	- CastOp
+	- Move type_id to type.symbol() [check!]
+	- CastOp [check!]
+	- Remove CastAssignOp [check!]
 	- All CastOp variants
-	- CastAssignOp (which arguably shouldn't exist)
 	- TupleCastOp
 - Improve namespacing
 - Do less work for imports
 	- Type-check specific imports on-demand rather than upfront
 	- Decrease work done in interface_codegen
-	- Make .lib archives of .bc files and --link-only-needed
 	- std.mini should compile near instantly
 - Putting coroutine yields and returns in the same slot is asking for bugs
 - Better error for incorrectly parameterized reciever
 	- I.e. Array.new instead of Array[i32].new
+- Add 'of' syntax for array literals
 - Make aliases even smarter
 	- "alias Foo[A] = Bar[A, i32];"
 	- This is more complex

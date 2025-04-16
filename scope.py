@@ -264,7 +264,7 @@ class Scope:
             return True
         def insert_ancestors(ancestors, table_size):
             for ancestor in ancestors:
-                success = insert(hash_id(type_id(ancestor).data), SymbolRefAttr(type_id(ancestor)), prime_candidate, table_size)
+                success = insert(hash_id(ancestor.symbol().data), SymbolRefAttr(ancestor.symbol()), prime_candidate, table_size)
                 if not success: return False
             return True
         prime_candidate = nextprime(2**62)
@@ -272,7 +272,7 @@ class Scope:
             table_size = TABLE_SIZE * 2 if i > 50 else TABLE_SIZE
             table1 = [EMPTY] * table_size
             prime_candidate = nextprime(prime_candidate)
-            ancestors = {type_id(ancestor):ancestor for ancestor in self.ancestors(typ)}.values()
+            ancestors = {ancestor.symbol():ancestor for ancestor in self.ancestors(typ)}.values()
             success = insert_ancestors(ancestors, table_size)
             if not success: continue
             #print(f"built hashtable for type {typ}.")
@@ -294,7 +294,7 @@ class Scope:
             return True
         def insert_ancestors(ancestors, table_size):
             for ancestor in ancestors:
-                success = insert(hash_id(type_id(ancestor).data), self.offset_to(typ, ancestor) + vtable_buffer_size(), prime_candidate, table_size)
+                success = insert(hash_id(ancestor.symbol().data), self.offset_to(typ, ancestor) + vtable_buffer_size(), prime_candidate, table_size)
                 if not success: return False
             return True
         prime_candidate = nextprime(2**62)
@@ -302,7 +302,7 @@ class Scope:
             table_size = TABLE_SIZE * 2 if i > 50 else TABLE_SIZE
             table1 = [EMPTY] * table_size
             prime_candidate = nextprime(prime_candidate)
-            ancestors = {type_id(ancestor):ancestor for ancestor in self.ancestors(typ)}.values()
+            ancestors = {ancestor.symbol():ancestor for ancestor in self.ancestors(typ)}.values()
             success = insert_ancestors(ancestors, table_size)
             if not success: continue
             #print(f"built hashtable for type {typ}.")

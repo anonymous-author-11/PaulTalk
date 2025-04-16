@@ -90,6 +90,9 @@ class TypeParameter(ParametrizedAttribute, TypeAttribute):
             IntegerType(160)
         ])
 
+    def symbol(self):
+        return self.bound.symbol()
+
     def __repr__(self):
         return f"{self.defining_class.data}.{self.label.data} <: {self.bound}"
 
@@ -108,6 +111,15 @@ class Ptr(ParametrizedAttribute, TypeAttribute):
 
     def base_typ(self):
         return self.type
+
+    def symbol(self):
+        if self.type == IntegerType(1): return StringAttr("bool_typ")
+        if self.type == IntegerType(8): return StringAttr("i8_typ")
+        if self.type == IntegerType(32): return StringAttr("i32_typ")
+        if self.type == IntegerType(64): return StringAttr("i64_typ")
+        if self.type == IntegerType(128): return StringAttr("i128_typ")
+        if self.type == Float64Type(): return StringAttr("f64_typ")
+        raise Exception(f"no symbol for {self}")
 
     def __repr__(self):
         return f"Ptr[{self.type}]"
@@ -137,6 +149,9 @@ class FatPtr(ParametrizedAttribute, TypeAttribute):
             llvm.LLVMPointerType.opaque(),
             IntegerType(32)
         ])
+
+    def symbol(self):
+        return self.cls
 
     def __repr__(self):
         return f"{self.cls.data}" + ((f"{[*self.type_params.data]}") if not isinstance(self.type_params, NoneAttr) else "")
@@ -175,6 +190,9 @@ class Tuple(ParametrizedAttribute, TypeAttribute):
 
     def base_typ(self):
         return llvm.LLVMStructType.from_type_list([t.base_typ() for t in self.types.data])
+
+    def symbol(self):
+        return StringAttr("tuple_typ")
 
     def __repr__(self):
         return f"Tuple[{self.types.data}]"
@@ -216,6 +234,9 @@ class Coroutine(ParametrizedAttribute, TypeAttribute):
     def fname(self):
         return "Coroutine"
 
+    def symbol(self):
+        return StringAttr("coroutine_typ")
+
     def __repr__(self):
         params = ", ".join([f"{t}" for t in self.param_types.data])
         return self.fname() + f"[{params} -> {self.return_type}]"
@@ -237,6 +258,9 @@ class Function(ParametrizedAttribute, TypeAttribute):
     def fname(self):
         return "Function"
 
+    def symbol(self):
+        return StringAttr("function_typ")
+
     def __repr__(self):
         params = ", ".join([f"{t}" for t in self.param_types.data])
         return self.fname() + f"[{params} -> {self.return_type}]"
@@ -252,6 +276,9 @@ class Buffer(ParametrizedAttribute, TypeAttribute):
 
     def base_typ(self):
         return llvm.LLVMStructType.from_type_list([llvm.LLVMPointerType.opaque()])
+
+    def symbol(self):
+        return StringAttr("buffer_typ")
 
     def __repr__(self):
         return f"Buffer[{self.elem_type}]"
@@ -274,6 +301,9 @@ class Union(ParametrizedAttribute, TypeAttribute):
     @classmethod
     def from_list(cls, list):
         return Union([ArrayAttr(list)])
+
+    def symbol(self):
+        return StringAttr("union_typ")
 
     def __repr__(self):
         return " | ".join([f"{t}" for t in self.types.data])
@@ -316,6 +346,9 @@ class Nothing(ParametrizedAttribute, TypeAttribute):
     def base_typ(self):
         return llvm.LLVMArrayType.from_size_and_type(0, IntegerType(8))
 
+    def symbol(self):
+        return StringAttr("nothing_typ")
+
     def __repr__(self):
         return "Nothing"
 
@@ -332,6 +365,9 @@ class Any(ParametrizedAttribute, TypeAttribute):
     def __format__(self, format_spec):
         return "Any"
 
+    def symbol(self):
+        return StringAttr("any_typ")
+
     def base_typ(self):
         return llvm.LLVMStructType.from_type_list([
             llvm.LLVMPointerType.opaque(),
@@ -343,8 +379,12 @@ class Any(ParametrizedAttribute, TypeAttribute):
 @irdl_attr_definition
 class Nil(ParametrizedAttribute, TypeAttribute):
     name = "mini.nil"
+
     def base_typ(self):
         return llvm.LLVMArrayType.from_size_and_type(0, IntegerType(8))
+
+    def symbol(self):
+        return StringAttr("nil_typ")
 
     def __repr__(self):
         return "Nil"
@@ -359,6 +399,7 @@ class PreludeOp(IRDLOperation):
 @irdl_op_definition
 class MainOp(IRDLOperation):
     name = "mini.main"
+    main_name: StringAttr = attr_def(StringAttr)
     body : Region = region_def()
 
 @irdl_op_definition
@@ -768,14 +809,14 @@ class GetterDefOp(IRDLOperation):
     box: OptAttributeDef = opt_attr_def(UnitAttr)
 
     @classmethod
-    def make(cls, meth_name, types, offset, original_type, specialized_type, parameterization, id_fn):
+    def make(cls, meth_name, types, offset, original_type, specialized_type, parameterization):
         
         attr_dict = {
             "meth_name":meth_name,
             "types":ArrayAttr(types),
             "offset":IntegerAttr.from_int_and_width(offset, 64),
             "original_type":original_type.base_typ(),
-            "specialized_name":id_fn(specialized_type)
+            "specialized_name":specialized_type.symbol()
         }
         if parameterization: attr_dict["parameterization"] = parameterization
         if isinstance(original_type, TypeParameter):
@@ -794,14 +835,14 @@ class SetterDefOp(IRDLOperation):
     unbox: OptAttributeDef = opt_attr_def(UnitAttr)
 
     @classmethod
-    def make(cls, meth_name, types, offset, original_type, specialized_type, parameterization, id_fn):
+    def make(cls, meth_name, types, offset, original_type, specialized_type, parameterization):
         
         attr_dict = {
             "meth_name":meth_name,
             "types":ArrayAttr(types),
             "offset":IntegerAttr.from_int_and_width(offset, 64),
             "original_type":original_type.base_typ(),
-            "specialized_name":id_fn(specialized_type)
+            "specialized_name":specialized_type.symbol()
         }
         if parameterization: attr_dict["parameterization"] = parameterization
         if isinstance(original_type, TypeParameter):
@@ -953,8 +994,8 @@ class CheckFlagOp(IRDLOperation):
     neg: OptAttributeDef = opt_attr_def(UnitAttr)
 
     @classmethod
-    def make(cls, ptr, lhs_type, rhs_type, id_fn, parameterization=None, simplify=True):
-        attr_dict = {"typ_name":id_fn(rhs_type)}
+    def make(cls, ptr, lhs_type, rhs_type, parameterization=None, simplify=True):
+        attr_dict = {"typ_name":rhs_type.symbol()}
         if simplify and isinstance(lhs_type, Union) and len(lhs_type.types.data) == 2 and Nil() in lhs_type.types.data and rhs_type != Nil():
             attr_dict["typ_name"] = StringAttr("nil_typ")
             attr_dict["neg"] = UnitAttr()
@@ -968,6 +1009,10 @@ class AssignOp(IRDLOperation):
     target: Operand = operand_def()
     value: Operand = operand_def()
     typ: Attribute = attr_def(Attribute)
+
+    @classmethod
+    def make(cls, target, value, typ):
+        return AssignOp.create(operands=[target, value], attributes={"typ":typ.base_typ()})
 
 @irdl_op_definition
 class PrintfDeclOp(IRDLOperation):
@@ -1094,144 +1139,120 @@ class GlobalFptrOp(IRDLOperation):
 
 @irdl_op_definition
 class CastOp(IRDLOperation):
-    name = "mini.cast"
+    name = "hi.cast"
     operand: Operand = operand_def()
-    result: OpResult = result_def(Union)
+    result: OpResult = result_def()
     from_typ: TypeAttribute = attr_def(TypeAttribute)
     to_typ: TypeAttribute = attr_def(TypeAttribute)
     from_typ_name: StringAttr = attr_def(StringAttr)
     to_typ_name: StringAttr = attr_def(StringAttr)
 
     @classmethod
-    def make(cls, operand, from_typ, to_typ, id_fn):
-
-        attr_dict = {
-            "from_typ":from_typ.base_typ(),"to_typ":to_typ.base_typ(),"from_typ_name":id_fn(from_typ), "to_typ_name":id_fn(to_typ)
-        }
-
-        type_param_base = TypeParameter.make("", "").base_typ()
-        tp_like = lambda t: t.base_typ() == type_param_base or t.base_typ() == Union.from_list([FatPtr.basic("")]).base_typ()
-        should_box = (isinstance(to_typ, TypeParameter) or to_typ == FatPtr.basic("Object")) and (not isinstance(from_typ, FatPtr)) and not tp_like(from_typ)
-        should_unbox = (isinstance(from_typ, TypeParameter) or from_typ == FatPtr.basic("Object")) and (not isinstance(to_typ, FatPtr)) and not tp_like(to_typ)
-        if should_box:
-            attr_dict["from_typ_size"] = IntegerAttr.from_int_and_width(type_size(from_typ), 32)
-            return BoxOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
-        if should_unbox:
-            attr_dict["to_typ_size"] = IntegerAttr.from_int_and_width(type_size(to_typ), 32)
-            return UnboxOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
-        
-        function_to_function = isinstance(from_typ, Function) and isinstance(to_typ, Function)
-        not_substitutable = lambda a, b: (a != b) and (not (isinstance(a, TypeParameter) and isinstance(b, TypeParameter)))
-        different_param_types = function_to_function and any(not_substitutable(a,b) for a,b in zip(from_typ.param_types.data, to_typ.param_types.data))
-        needs_reabstraction = function_to_function and len(from_typ.param_types.data) and (different_param_types or not_substitutable(from_typ.return_type,to_typ.return_type))
-        if needs_reabstraction: return ReabstractOp.make(operand, from_typ, to_typ, id_fn)
-        
-        if isinstance(to_typ, FatPtr) or isinstance(to_typ, TypeParameter):
-            return ToFatPtrOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
-
-        same_type = from_typ.base_typ() == to_typ.base_typ()
-        from_union = isinstance(from_typ, Union) or isinstance(from_typ, TypeParameter)
-        to_union = isinstance(to_typ, Union)
-
-        if same_type or (isinstance(from_typ, FatPtr) and to_union):
-            return builtin.UnrealizedConversionCastOp.create(operands=[operand], result_types=[to_typ])
-
-        is_tuple_cast = isinstance(from_typ, Tuple) and isinstance(to_typ, Tuple)
-        if is_tuple_cast: return TupleCastOp.make(operand, from_typ, to_typ, id_fn)
-        
-        if from_union and to_union: return ReUnionizeOp.create(operands=[operand], attributes=attr_dict, result_types=[to_typ])
-        if from_union: return NarrowOp.make(operand, from_typ, to_typ, id_fn)
-        if to_union: return UnionizeOp.make(operand, from_typ, to_typ, id_fn)
-        from_integer = isinstance(from_typ, Ptr) and isinstance(from_typ.type, IntegerType)
-        to_integer = isinstance(to_typ, Ptr) and isinstance(to_typ.type, IntegerType)
-        if from_integer and to_integer and to_typ.type.bitwidth > from_typ.type.bitwidth:
-            return WidenIntOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
-        if from_integer and to_integer and to_typ.type.bitwidth < from_typ.type.bitwidth:
-            return TruncateIntOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
-        if from_typ == Ptr([IntegerType(32)]) and to_typ == Ptr([Float64Type()]):
-            return IntToFloatOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
-        raise Exception(f"cast from {from_typ} to {to_typ} not accounted for")
+    def make(cls, operand, from_typ, to_typ):
+        attr_dict = {"from_typ":from_typ,"to_typ":to_typ,"from_typ_name":from_typ.symbol(), "to_typ_name":to_typ.symbol()}
+        return CastOp.create(operands=[operand], attributes=attr_dict, result_types=[to_typ])
 
 @irdl_op_definition
-class CastAssignOp(IRDLOperation):
-    name = "mini.castassign"
-    target: Operand = operand_def()
-    value: Operand = operand_def()
-    from_typ: TypeAttribute = attr_def(TypeAttribute)
-    to_typ: TypeAttribute = attr_def(TypeAttribute)
-    from_typ_name: StringAttr = attr_def(StringAttr)
-    to_typ_name: StringAttr = attr_def(StringAttr)
-    region: Region = region_def(StringAttr)
-
-    @classmethod
-    def make(cls, target, value, from_typ, to_typ, id_fn):
-        region = Region([Block([CastOp.make(value, from_typ, to_typ, id_fn)])])
-        attr_dict = {
-            "from_typ":from_typ.base_typ(),"to_typ":to_typ.base_typ(),"from_typ_name":id_fn(from_typ),
-            "to_typ_name":id_fn(to_typ)
-        }
-        if not isinstance(to_typ, TypeParameter): attr_dict["should_offset"] = UnitAttr()
-        return CastAssignOp.create(operands=[target, value], attributes=attr_dict, regions=[region])
-
-@irdl_op_definition
-class BoxOp(CastOp, IRDLOperation):
+class BoxOp(IRDLOperation):
     name = "mini.box"
+    operand: Operand = operand_def()
+    result: OpResult = result_def()
+    from_typ: TypeAttribute = attr_def(TypeAttribute)
+    to_typ: TypeAttribute = attr_def(TypeAttribute)
+    from_typ_name: StringAttr = attr_def(StringAttr)
+    to_typ_name: StringAttr = attr_def(StringAttr)
     from_typ_size: IntegerAttr = attr_def(IntegerAttr)
     traits = frozenset()
 
 @irdl_op_definition
-class UnboxOp(CastOp, IRDLOperation):
+class UnboxOp(IRDLOperation):
     name = "mini.unbox"
+    operand: Operand = operand_def()
+    result: OpResult = result_def()
+    from_typ: TypeAttribute = attr_def(TypeAttribute)
+    to_typ: TypeAttribute = attr_def(TypeAttribute)
+    from_typ_name: StringAttr = attr_def(StringAttr)
+    to_typ_name: StringAttr = attr_def(StringAttr)
     to_typ_size: IntegerAttr = attr_def(IntegerAttr)
     traits = frozenset()
 
 @irdl_op_definition
-class ToFatPtrOp(CastOp, IRDLOperation):
+class ToFatPtrOp(IRDLOperation):
     name = "mini.to_fat_ptr"
+    operand: Operand = operand_def()
+    result: OpResult = result_def()
+    from_typ: TypeAttribute = attr_def(TypeAttribute)
+    to_typ: TypeAttribute = attr_def(TypeAttribute)
+    from_typ_name: StringAttr = attr_def(StringAttr)
+    to_typ_name: StringAttr = attr_def(StringAttr)
     traits = frozenset()
 
 @irdl_op_definition
-class UnionizeOp(CastOp, IRDLOperation):
+class UnionizeOp(IRDLOperation):
     name = "mini.unionize"
+    operand: Operand = operand_def()
+    result: OpResult = result_def()
+    from_typ: TypeAttribute = attr_def(TypeAttribute)
+    to_typ: TypeAttribute = attr_def(TypeAttribute)
+    from_typ_name: StringAttr = attr_def(StringAttr)
+    to_typ_name: StringAttr = attr_def(StringAttr)
     region: OptRegionDef = opt_region_def()
     traits = frozenset()
 
     @classmethod
-    def make(cls, operand, from_typ, to_typ, id_fn):
+    def make(cls, operand, from_typ, to_typ):
         attr_dict = {
-            "from_typ":from_typ.base_typ(),"to_typ":to_typ.base_typ(),"from_typ_name":id_fn(from_typ), "to_typ_name":id_fn(to_typ)
+            "from_typ":from_typ.base_typ(),"to_typ":to_typ.base_typ(),"from_typ_name":from_typ.symbol(), "to_typ_name":to_typ.symbol()
         }
         return UnionizeOp.create(operands=[operand], attributes=attr_dict, result_types=[to_typ]) 
 
 @irdl_op_definition
-class ReUnionizeOp(CastOp, IRDLOperation):
+class ReUnionizeOp(IRDLOperation):
     name = "mini.reunionize"
+    operand: Operand = operand_def()
+    result: OpResult = result_def()
+    from_typ: TypeAttribute = attr_def(TypeAttribute)
+    to_typ: TypeAttribute = attr_def(TypeAttribute)
+    from_typ_name: StringAttr = attr_def(StringAttr)
+    to_typ_name: StringAttr = attr_def(StringAttr)
     traits = frozenset()
 
 @irdl_op_definition
-class NarrowOp(CastOp, IRDLOperation):
+class NarrowOp(IRDLOperation):
     name = "mini.narrow"
+    operand: Operand = operand_def()
+    result: OpResult = result_def()
+    from_typ: TypeAttribute = attr_def(TypeAttribute)
+    to_typ: TypeAttribute = attr_def(TypeAttribute)
+    from_typ_name: StringAttr = attr_def(StringAttr)
+    to_typ_name: StringAttr = attr_def(StringAttr)
     region: OptRegionDef = opt_region_def()
     traits = frozenset()
 
     @classmethod
-    def make(cls, operand, from_typ, to_typ, id_fn):
+    def make(cls, operand, from_typ, to_typ):
         attr_dict = {
-            "from_typ":from_typ.base_typ(),"to_typ":to_typ.base_typ(),"from_typ_name":id_fn(from_typ), "to_typ_name":id_fn(to_typ)
+            "from_typ":from_typ.base_typ(),"to_typ":to_typ.base_typ(),"from_typ_name":from_typ.symbol(), "to_typ_name":to_typ.symbol()
         }
         return NarrowOp.create(operands=[operand], attributes=attr_dict, result_types=[to_typ]) 
 
 @irdl_op_definition
-class ReabstractOp(CastOp, IRDLOperation):
+class ReabstractOp(IRDLOperation):
     name = "mini.reabstract"
+    operand: Operand = operand_def()
+    result: OpResult = result_def()
+    from_typ: TypeAttribute = attr_def(TypeAttribute)
+    to_typ: TypeAttribute = attr_def(TypeAttribute)
+    from_typ_name: StringAttr = attr_def(StringAttr)
+    to_typ_name: StringAttr = attr_def(StringAttr)
     region: Region = region_def()
     traits = frozenset()
 
     @classmethod
-    def make(cls, operand, from_typ, to_typ, id_fn):
+    def make(cls, operand, from_typ, to_typ):
         #print(f"{from_typ} is not equal to {to_typ}")
         attr_dict = {
-            "from_typ":from_typ.base_typ(),"to_typ":to_typ.base_typ(),"from_typ_name":id_fn(from_typ), "to_typ_name":id_fn(to_typ)
+            "from_typ":from_typ.base_typ(),"to_typ":to_typ.base_typ(),"from_typ_name":from_typ.symbol(), "to_typ_name":to_typ.symbol()
         }
         wrapper_name = random_letters(10)
         f_block = Block([])
@@ -1241,7 +1262,7 @@ class ReabstractOp(CastOp, IRDLOperation):
         
         args = [f_block.insert_arg(t.base_typ(), i) for (i,t) in enumerate(to_typ.param_types.data)]
         wraps = [WrapOp.make(arg, to_typ.param_types.data[i]) for (i, arg) in enumerate(args)]
-        casts = [CastOp.make(wraps[i].results[0], to_typ.param_types.data[i], from_typ.param_types.data[i], id_fn) for (i, arg) in enumerate(args)]
+        casts = [CastOp.make(wraps[i].results[0], to_typ.param_types.data[i], from_typ.param_types.data[i]) for (i, arg) in enumerate(args)]
         unwraps = [UnwrapOp.create(operands=[casts[i].results[0]], result_types=[from_typ.param_types.data[i].base_typ()]) for (i, arg) in enumerate(args)]
         attr_dict = {"ret_type":from_typ.return_type.base_typ() if has_return else llvm.LLVMVoidType()}
         result_types = [] if not has_return else [from_typ.return_type]
@@ -1250,7 +1271,7 @@ class ReabstractOp(CastOp, IRDLOperation):
         call = FPtrCallOp.create(operands=operands, attributes=attr_dict, result_types=result_types)
         f_block.add_ops([*wraps, *casts, *unwraps, call])
         if has_return:
-            cast = CastOp.make(call.results[0], from_typ.return_type, to_typ.return_type, id_fn)
+            cast = CastOp.make(call.results[0], from_typ.return_type, to_typ.return_type)
             unwrap = UnwrapOp.create(operands=[cast.results[0]], result_types=[to_typ.return_type.base_typ()])
             ret = func.Return(unwrap.results[0])
             f_block.add_ops([cast, unwrap, ret])
@@ -1279,34 +1300,51 @@ class ReabstractOp(CastOp, IRDLOperation):
 @irdl_op_definition
 class TupleCastOp(IRDLOperation):
     name = "mini.tuple_cast"
-    region: Region = region_def()
     traits = frozenset()
 
     @classmethod
-    def make(cls, operand, from_typ, to_typ, id_fn):
+    def make(cls, operand, from_typ, to_typ):
         print(f"input type is {operand.type}")
         conversion = builtin.UnrealizedConversionCastOp.create(operands=[operand], result_types=[llvm.LLVMPointerType.opaque()])
         alloca = AllocateOp.create(attributes={"typ":to_typ.base_typ()}, result_types=[llvm.LLVMPointerType.opaque()])
         from_geps = [llvm.GEPOp(conversion.results[0], [0, i], pointee_type=from_typ.base_typ()) for (i, t) in enumerate(from_typ.types)]
         to_geps = [llvm.GEPOp(alloca.results[0], [0, i], pointee_type=to_typ.base_typ()) for (i, t) in enumerate(to_typ.types.data)]
-        casts = [CastOp.make(from_geps[i].results[0], a, b, id_fn) for (i, (a, b)) in enumerate(zip(from_typ.types.data, to_typ.types.data))]
+        casts = [CastOp.make(from_geps[i].results[0], a, b) for (i, (a, b)) in enumerate(zip(from_typ.types.data, to_typ.types.data))]
         stores = [llvm.StoreOp(casts[i].results[0], to_geps[i].results[0]) for (i, t) in enumerate(to_typ.types.data)]
         reg = Region([Block([alloca, conversion, *from_geps, *to_geps, *casts, *stores])])
         return TupleCastOp.create(operands=[operand], result_types=[to_typ], regions=[reg])
 
 @irdl_op_definition
-class WidenIntOp(CastOp, IRDLOperation):
+class WidenIntOp(IRDLOperation):
     name = "mini.widen_int"
+    operand: Operand = operand_def()
+    result: OpResult = result_def()
+    from_typ: TypeAttribute = attr_def(TypeAttribute)
+    to_typ: TypeAttribute = attr_def(TypeAttribute)
+    from_typ_name: StringAttr = attr_def(StringAttr)
+    to_typ_name: StringAttr = attr_def(StringAttr)
     traits = frozenset()
 
 @irdl_op_definition
-class TruncateIntOp(CastOp, IRDLOperation):
+class TruncateIntOp(IRDLOperation):
     name = "mini.truncate_int"
+    operand: Operand = operand_def()
+    result: OpResult = result_def()
+    from_typ: TypeAttribute = attr_def(TypeAttribute)
+    to_typ: TypeAttribute = attr_def(TypeAttribute)
+    from_typ_name: StringAttr = attr_def(StringAttr)
+    to_typ_name: StringAttr = attr_def(StringAttr)
     traits = frozenset()
 
 @irdl_op_definition
-class IntToFloatOp(CastOp, IRDLOperation):
+class IntToFloatOp(IRDLOperation):
     name = "mini.int_to_float"
+    operand: Operand = operand_def()
+    result: OpResult = result_def()
+    from_typ: TypeAttribute = attr_def(TypeAttribute)
+    to_typ: TypeAttribute = attr_def(TypeAttribute)
+    from_typ_name: StringAttr = attr_def(StringAttr)
+    to_typ_name: StringAttr = attr_def(StringAttr)
     traits = frozenset()
 
 @irdl_op_definition
@@ -1364,8 +1402,14 @@ class PoisonAttr(ParametrizedAttribute):
 
 Ub = Dialect("ub", [PoisonOp], [PoisonAttr])
 
-MiniLang = Dialect(
-    "mini",
+Hi = Dialect(
+    "hi",
+    [CastOp],
+    []
+)
+
+Mid = Dialect(
+    "mid",
     [
         MainOp,
         IdentifierOp,
@@ -1396,7 +1440,6 @@ MiniLang = Dialect(
         FieldAccessOp,
         WrapOp,
         UnwrapOp,
-        CastOp,
         BoxOp,
         UnboxOp,
         IntToFloatOp,
@@ -1405,7 +1448,6 @@ MiniLang = Dialect(
         NarrowOp,
         ToFatPtrOp,
         ReabstractOp,
-        CastAssignOp,
         ReferOp,
         UtilsAPIOp,
         CoroCreateOp,

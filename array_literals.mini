@@ -1,6 +1,10 @@
 import array;
 import io;
 
-intstrary = [1, "b"];
+intary = [1,2,3,4,5];
 
-IO.print(intstrary.[1]);
+strary = ["a","b","c","d"];
+
+intstrary = [1, "b", 3, "d"];
+
+IO.print(intstrary.[2]);

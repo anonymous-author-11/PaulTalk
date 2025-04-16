@@ -34,13 +34,13 @@ def id_hierarchy(typ, ambient_types):
         if typ not in ambient_types: return id_hierarchy(typ.bound, ambient_types)
         return ArrayAttr([IntegerAttr.from_int_and_width(ambient_types.index(typ), 32)])
     if isinstance(typ, Union) or isinstance(typ, Tuple):
-        return ArrayAttr([type_id(typ), *[id_hierarchy(t, ambient_types) for t in typ.types.data]])
+        return ArrayAttr([typ.symbol(), *[id_hierarchy(t, ambient_types) for t in typ.types.data]])
     if isinstance(typ, Function):
         types = [typ.return_type, *typ.param_types.data]
-        return ArrayAttr([type_id(typ), *[id_hierarchy(t, ambient_types) for t in types]])
+        return ArrayAttr([typ.symbol(), *[id_hierarchy(t, ambient_types) for t in types]])
     if not isinstance(typ, FatPtr) or typ.type_params == NoneAttr():
-        return ArrayAttr([type_id(typ)])
-    return ArrayAttr([type_id(typ), *[id_hierarchy(t, ambient_types) for t in typ.type_params.data]])
+        return ArrayAttr([typ.symbol()])
+    return ArrayAttr([typ.symbol(), *[id_hierarchy(t, ambient_types) for t in typ.type_params.data]])
 
 def name_hierarchy(typ):
     if isinstance(typ, Union) or isinstance(typ, Tuple):
@@ -57,31 +57,12 @@ def clean_param_names(params):
     return clean_name(joined)
 
 def clean_name(name):
-    map = {" ":"_", "@":"","[":"","]":"",",":".","->":"to","|":"or","(":"_",")":"_","<:":"subtype"}
+    map = {" ":"_", "@":"","[":"","]":"",",":".","->":"to","|":"or","(":"_",")":"_","<:":"subtype","\\":"_bslash_","C:":"C"}
     for k, v in map.items(): name = name.replace(k, v)
     return name
 
 def random_letters(n):
     return "".join(random.choices('abcdefghijklmnopqrstuvwxyz', k=n))
-
-def type_id(typ: TypeAttribute) -> int:
-    if typ == Nil(): return StringAttr("nil_typ")
-    if typ == Nothing(): return StringAttr("nothing_typ")
-    if typ == Any(): return StringAttr("any_typ")
-    if typ == Ptr([IntegerType(1)]): return StringAttr("bool_typ")
-    if typ == Ptr([IntegerType(8)]): return StringAttr("i8_typ")
-    if typ == Ptr([IntegerType(32)]): return StringAttr("i32_typ")
-    if typ == Ptr([IntegerType(64)]): return StringAttr("i64_typ")
-    if typ == Ptr([IntegerType(128)]): return StringAttr("i128_typ")
-    if typ == Ptr([Float64Type()]): return StringAttr("f64_typ")
-    if isinstance(typ, Buffer): return StringAttr("buffer_typ")
-    if isinstance(typ, Tuple): return StringAttr("tuple_typ")
-    if isinstance(typ, TypeParameter): return type_id(typ.bound)
-    if isinstance(typ, FatPtr): return typ.cls
-    if isinstance(typ, Union): return StringAttr("union_typ")
-    if isinstance(typ, Function): return StringAttr("function_typ")
-    if isinstance(typ, Coroutine): return StringAttr("coroutine_typ")
-    raise Exception(f"can't find type id for type {typ}")
 
 def hash_id(typ_name: str) -> int:
     return int.from_bytes(sha256(typ_name.encode('utf-8')).digest()[:8], 'little')
