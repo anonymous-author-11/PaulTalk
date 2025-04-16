@@ -400,9 +400,11 @@ class ArrayLiteral(Expression):
     elements: tuple[Expression]
 
     def codegen(self, scope):
+        self_type = self.exprtype(scope)
+        elem_type = self_type.type_params.data[0]
         sizelit = IntegerLiteral(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), len(self.elements), 32)
         capacitylit = IntegerLiteral(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), len(self.elements) + 1, 32)
-        buf = CreateBuffer(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), Buffer([Ptr([IntegerType(32)])]), capacitylit, None)
+        buf = CreateBuffer(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), Buffer([elem_type]), capacitylit, None)
         temp_var = Identifier(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), "_temp_buf" + random_letters(10))
         assign = Assignment(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), temp_var, buf)
         assign.codegen(scope);
@@ -410,11 +412,13 @@ class ArrayLiteral(Expression):
             iliteral = IntegerLiteral(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), i, 32)
             indexation = MethodCall(NodeInfo(random_letters(10), self.info.filename, self.info.line_number), temp_var, "_set_index", [iliteral, elem])
             indexation.codegen(scope)
-        ary = ObjectCreation(self.info, random_letters(10), FatPtr.generic("Array", [Ptr([IntegerType(32)])]), [temp_var, sizelit, capacitylit], None)
+        ary = ObjectCreation(self.info, random_letters(10), self_type, [temp_var, sizelit, capacitylit], None)
         return ary.codegen(scope)
 
     def exprtype(self, scope):
-        return FatPtr.generic("Array", [Ptr([IntegerType(32)])])
+        elem_types = [elem.exprtype(scope) for elem in self.elements]
+        elem_type = scope.simplify(Union.from_list(elem_types)) if len(elem_types) > 0 else Ptr([IntegerType(32)])
+        return FatPtr.generic("Array", [elem_type])
 
     def typeflow(self, scope):
         for elem in self.elements: elem.typeflow(scope)

@@ -4,7 +4,7 @@ source_filename = "LLVMDialectModule"
 @_parameterization_String = linkonce_odr constant [2 x ptr] [ptr @String, ptr null]
 @_parameterization_Ptri32 = linkonce_odr constant [2 x ptr] [ptr @i32_typ, ptr null]
 @_parameterization_BufferPtri8 = linkonce_odr constant [2 x ptr] [ptr @buffer_typ, ptr null]
-@xzxzd_mapmini = internal constant [8 x i8] c"map.mini"
+@vzjvp_mapmini = internal constant [8 x i8] c"map.mini"
 @i32_string = linkonce_odr constant [4 x i8] c"%d\0A\00"
 @i64_string = linkonce_odr constant [6 x i8] c"%lld\0A\00"
 @float_string = linkonce_odr constant [4 x i8] c"%f\0A\00"
@@ -694,7 +694,7 @@ define { ptr, i160 } @Map__index_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr
   %134 = sext i32 %133 to i64
   %135 = mul i64 ptrtoint (ptr getelementptr ([8 x i8], ptr null, i32 1) to i64), %134
   %136 = getelementptr i8, ptr %132, i64 %135
-  %137 = load <8 x i8>, ptr @xzxzd_mapmini, align 8
+  %137 = load <8 x i8>, ptr @vzjvp_mapmini, align 8
   store <8 x i8> %137, ptr %136, align 8
   store i32 8, ptr %15, align 4
   store i32 9, ptr %16, align 4

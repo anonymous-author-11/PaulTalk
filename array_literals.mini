@@ -1,0 +1,6 @@
+import array;
+import io;
+
+intstrary = [1, "b"];
+
+IO.print(intstrary.[1]);

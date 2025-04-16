@@ -114,8 +114,8 @@ def record_all_passes():
     #clang = "clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
     attributor_settings = "--attributor-enable=module --attributor-annotate-decl-cs --max-heap-to-stack-size=-1 --attributor-manifest-internal --attributor-assume-closed-world=false"
     #opt = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
-    opt = f"opt out_optimized.ll -S --passes=\"default<O1>\" {attributor_settings} --max-devirt-iterations=100 --inline-threshold=10000 --print-after-all"
-    with open("out_optimized.ll", "r+") as f:
+    opt = f"opt out_reg2mem.ll -S --passes=\"default<O1>\" {attributor_settings} --max-devirt-iterations=100 --inline-threshold=10000 --print-after-all"
+    with open("out_reg2mem.ll", "r+") as f:
         out_reg2mem = f.read()
         f.seek(0)
         # clang can't handle the 'preserve_nonecc' attribute for some reason

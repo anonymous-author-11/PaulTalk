@@ -22,7 +22,7 @@ source_filename = "LLVMDialectModule"
 @Object = external constant { [3 x i64], [4 x ptr], [0 x ptr] }
 @Math_hashtbl = constant [4 x ptr] [ptr @Object, ptr null, ptr @any_typ, ptr @Math]
 @Math_offset_tbl = constant [4 x i32] [i32 27, i32 0, i32 10, i32 10]
-@Math = constant { [3 x i64], [7 x ptr], [17 x ptr] } { [3 x i64] [i64 8094150130346788308, i64 4611686018427388091, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Math_hashtbl, ptr @Math_offset_tbl, ptr @_data_size_Math, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [17 x ptr] [ptr @Math_B__Self_sqrt_xPtrf64, ptr @Math_B__Self_abs_xPtrf64__Self_abs_xPtri32, ptr @Math_B__Self_max_aPtrf64_bPtrf64__Self_max_aPtri32_bPtri32, ptr @Math_B__Self_min_aPtrf64_bPtrf64__Self_min_aPtri32_bPtri32, ptr @Math_B__Self_round_xPtrf64, ptr @Math_B__Self_floor_xPtrf64, ptr @Math_B__Self_ceiling_xPtrf64, ptr @Math__Self_sqrt_xPtrf64, ptr @Math__Self_abs_xPtrf64, ptr @Math__Self_abs_xPtri32, ptr @Math__Self_max_aPtrf64_bPtrf64, ptr @Math__Self_max_aPtri32_bPtri32, ptr @Math__Self_min_aPtrf64_bPtrf64, ptr @Math__Self_min_aPtri32_bPtri32, ptr @Math__Self_round_xPtrf64, ptr @Math__Self_floor_xPtrf64, ptr @Math__Self_ceiling_xPtrf64] }
+@Math = constant { [3 x i64], [7 x ptr], [17 x ptr] } { [3 x i64] [i64 8094150130346788308, i64 4611686018427388091, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Math_hashtbl, ptr @Math_offset_tbl, ptr @_data_size_Math, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [17 x ptr] [ptr @Math_B__Self_sqrt_xPtrf64, ptr @Math_B__Self_abs_xPtri32__Self_abs_xPtrf64, ptr @Math_B__Self_max_aPtri32_bPtri32__Self_max_aPtrf64_bPtrf64, ptr @Math_B__Self_min_aPtrf64_bPtrf64__Self_min_aPtri32_bPtri32, ptr @Math_B__Self_round_xPtrf64, ptr @Math_B__Self_floor_xPtrf64, ptr @Math_B__Self_ceiling_xPtrf64, ptr @Math__Self_sqrt_xPtrf64, ptr @Math__Self_abs_xPtri32, ptr @Math__Self_abs_xPtrf64, ptr @Math__Self_max_aPtri32_bPtri32, ptr @Math__Self_max_aPtrf64_bPtrf64, ptr @Math__Self_min_aPtrf64_bPtrf64, ptr @Math__Self_min_aPtri32_bPtri32, ptr @Math__Self_round_xPtrf64, ptr @Math__Self_floor_xPtrf64, ptr @Math__Self_ceiling_xPtrf64] }
 
 declare i32 @printf(ptr, ...)
 
@@ -111,6 +111,62 @@ define ptr @Math_B__Self_sqrt_xPtrf64(ptr %0) {
   ret ptr %11
 }
 
+define { ptr, i64 } @Math__Self_abs_xPtri32(ptr %0, { ptr, i64 } %1) {
+  %3 = alloca i64, align 8
+  %4 = alloca ptr, align 8
+  %5 = alloca i32, align 4
+  %6 = alloca i32, align 4
+  %7 = alloca i64, align 8
+  %8 = alloca ptr, align 8
+  %9 = alloca { ptr, i64 }, align 8
+  store { ptr, i64 } %1, ptr %9, align 8
+  %10 = alloca i32, align 4
+  %11 = getelementptr { ptr, i64 }, ptr %9, i32 0, i32 1
+  %12 = load i32, ptr %11, align 4
+  store i32 %12, ptr %10, align 4
+  %13 = alloca i32, align 4
+  store i32 0, ptr %13, align 4
+  %14 = load i32, ptr %10, align 4
+  %15 = load i32, ptr %13, align 4
+  %16 = icmp sge i32 %14, %15
+  %17 = alloca i1, align 1
+  store i1 %16, ptr %17, align 1
+  %18 = load i1, ptr %17, align 1
+  br i1 %18, label %19, label %25
+
+19:                                               ; preds = %2
+  %20 = load i32, ptr %10, align 4
+  store i32 %20, ptr %3, align 4
+  store ptr @i32_typ, ptr %4, align 8
+  %21 = load ptr, ptr %4, align 8
+  %22 = insertvalue { ptr, i64 } undef, ptr %21, 0
+  %23 = load i64, ptr %3, align 4
+  %24 = insertvalue { ptr, i64 } %22, i64 %23, 1
+  br label %34
+
+25:                                               ; preds = %2
+  store i32 -1, ptr %5, align 4
+  %26 = load i32, ptr %5, align 4
+  %27 = load i32, ptr %10, align 4
+  %28 = mul i32 %26, %27
+  store i32 %28, ptr %6, align 4
+  %29 = load i32, ptr %6, align 4
+  store i32 %29, ptr %7, align 4
+  store ptr @i32_typ, ptr %8, align 8
+  %30 = load ptr, ptr %8, align 8
+  %31 = insertvalue { ptr, i64 } undef, ptr %30, 0
+  %32 = load i64, ptr %7, align 4
+  %33 = insertvalue { ptr, i64 } %31, i64 %32, 1
+  br label %34
+
+34:                                               ; preds = %19, %25
+  %35 = phi { ptr, i64 } [ %33, %25 ], [ %24, %19 ]
+  br label %36
+
+36:                                               ; preds = %34
+  ret { ptr, i64 } %35
+}
+
 define { ptr, i64 } @Math__Self_abs_xPtrf64(ptr %0, { ptr, i64 } %1) {
   %3 = alloca i64, align 8
   %4 = alloca ptr, align 8
@@ -174,63 +230,7 @@ define { ptr, i64 } @Math__Self_abs_xPtrf64(ptr %0, { ptr, i64 } %1) {
   ret { ptr, i64 } %40
 }
 
-define { ptr, i64 } @Math__Self_abs_xPtri32(ptr %0, { ptr, i64 } %1) {
-  %3 = alloca i64, align 8
-  %4 = alloca ptr, align 8
-  %5 = alloca i32, align 4
-  %6 = alloca i32, align 4
-  %7 = alloca i64, align 8
-  %8 = alloca ptr, align 8
-  %9 = alloca { ptr, i64 }, align 8
-  store { ptr, i64 } %1, ptr %9, align 8
-  %10 = alloca i32, align 4
-  %11 = getelementptr { ptr, i64 }, ptr %9, i32 0, i32 1
-  %12 = load i32, ptr %11, align 4
-  store i32 %12, ptr %10, align 4
-  %13 = alloca i32, align 4
-  store i32 0, ptr %13, align 4
-  %14 = load i32, ptr %10, align 4
-  %15 = load i32, ptr %13, align 4
-  %16 = icmp sge i32 %14, %15
-  %17 = alloca i1, align 1
-  store i1 %16, ptr %17, align 1
-  %18 = load i1, ptr %17, align 1
-  br i1 %18, label %19, label %25
-
-19:                                               ; preds = %2
-  %20 = load i32, ptr %10, align 4
-  store i32 %20, ptr %3, align 4
-  store ptr @i32_typ, ptr %4, align 8
-  %21 = load ptr, ptr %4, align 8
-  %22 = insertvalue { ptr, i64 } undef, ptr %21, 0
-  %23 = load i64, ptr %3, align 4
-  %24 = insertvalue { ptr, i64 } %22, i64 %23, 1
-  br label %34
-
-25:                                               ; preds = %2
-  store i32 -1, ptr %5, align 4
-  %26 = load i32, ptr %5, align 4
-  %27 = load i32, ptr %10, align 4
-  %28 = mul i32 %26, %27
-  store i32 %28, ptr %6, align 4
-  %29 = load i32, ptr %6, align 4
-  store i32 %29, ptr %7, align 4
-  store ptr @i32_typ, ptr %8, align 8
-  %30 = load ptr, ptr %8, align 8
-  %31 = insertvalue { ptr, i64 } undef, ptr %30, 0
-  %32 = load i64, ptr %7, align 4
-  %33 = insertvalue { ptr, i64 } %31, i64 %32, 1
-  br label %34
-
-34:                                               ; preds = %19, %25
-  %35 = phi { ptr, i64 } [ %33, %25 ], [ %24, %19 ]
-  br label %36
-
-36:                                               ; preds = %34
-  ret { ptr, i64 } %35
-}
-
-define ptr @Math_B__Self_abs_xPtrf64__Self_abs_xPtri32(ptr %0) {
+define ptr @Math_B__Self_abs_xPtri32__Self_abs_xPtrf64(ptr %0) {
   %2 = alloca i1, align 1
   %3 = alloca i1, align 1
   %4 = call ptr @llvm.invariant.start.p0(i64 8, ptr %0)
@@ -240,7 +240,7 @@ define ptr @Math_B__Self_abs_xPtrf64__Self_abs_xPtri32(ptr %0) {
   %8 = icmp eq i64 %7, ptrtoint (ptr @i32_typ to i64)
   store i1 %8, ptr %2, align 1
   %9 = load i1, ptr %2, align 1
-  %10 = select i1 %9, i32 9, i32 8
+  %10 = select i1 %9, i32 8, i32 9
   br i1 %9, label %11, label %12
 
 11:                                               ; preds = %1
@@ -260,41 +260,6 @@ define ptr @Math_B__Self_abs_xPtrf64__Self_abs_xPtri32(ptr %0) {
   %19 = getelementptr ptr, ptr %18, i32 10
   %20 = load ptr, ptr %19, align 8
   ret ptr %20
-}
-
-define { ptr, i64 } @Math__Self_max_aPtrf64_bPtrf64(ptr %0, { ptr, i64 } %1, { ptr, i64 } %2) {
-  %4 = alloca { ptr, i64 }, align 8
-  %5 = alloca { ptr, i64 }, align 8
-  %6 = alloca { ptr, i64 }, align 8
-  store { ptr, i64 } %1, ptr %6, align 8
-  %7 = alloca double, align 8
-  %8 = getelementptr { ptr, i64 }, ptr %6, i32 0, i32 1
-  %9 = load double, ptr %8, align 8
-  store double %9, ptr %7, align 8
-  %10 = alloca { ptr, i64 }, align 8
-  store { ptr, i64 } %2, ptr %10, align 8
-  %11 = alloca double, align 8
-  %12 = getelementptr { ptr, i64 }, ptr %10, i32 0, i32 1
-  %13 = load double, ptr %12, align 8
-  store double %13, ptr %11, align 8
-  %14 = load double, ptr %7, align 8
-  %15 = load double, ptr %11, align 8
-  %16 = fcmp ogt double %14, %15
-  %17 = alloca i1, align 1
-  store i1 %16, ptr %17, align 1
-  %18 = load i1, ptr %17, align 1
-  %19 = select i1 %18, ptr %4, ptr %5
-  %20 = select i1 %18, ptr %7, ptr %11
-  %21 = getelementptr { ptr, i64 }, ptr %19, i32 0, i32 1
-  %22 = load double, ptr %20, align 8
-  store double %22, ptr %21, align 8
-  store ptr @f64_typ, ptr %19, align 8
-  %23 = getelementptr { ptr, i64 }, ptr %19, i32 0, i32 0
-  %24 = load ptr, ptr %23, align 8
-  %25 = insertvalue { ptr, i64 } undef, ptr %24, 0
-  %26 = load i64, ptr %21, align 4
-  %27 = insertvalue { ptr, i64 } %25, i64 %26, 1
-  ret { ptr, i64 } %27
 }
 
 define { ptr, i64 } @Math__Self_max_aPtri32_bPtri32(ptr %0, { ptr, i64 } %1, { ptr, i64 } %2) {
@@ -332,7 +297,42 @@ define { ptr, i64 } @Math__Self_max_aPtri32_bPtri32(ptr %0, { ptr, i64 } %1, { p
   ret { ptr, i64 } %27
 }
 
-define ptr @Math_B__Self_max_aPtrf64_bPtrf64__Self_max_aPtri32_bPtri32(ptr %0) {
+define { ptr, i64 } @Math__Self_max_aPtrf64_bPtrf64(ptr %0, { ptr, i64 } %1, { ptr, i64 } %2) {
+  %4 = alloca { ptr, i64 }, align 8
+  %5 = alloca { ptr, i64 }, align 8
+  %6 = alloca { ptr, i64 }, align 8
+  store { ptr, i64 } %1, ptr %6, align 8
+  %7 = alloca double, align 8
+  %8 = getelementptr { ptr, i64 }, ptr %6, i32 0, i32 1
+  %9 = load double, ptr %8, align 8
+  store double %9, ptr %7, align 8
+  %10 = alloca { ptr, i64 }, align 8
+  store { ptr, i64 } %2, ptr %10, align 8
+  %11 = alloca double, align 8
+  %12 = getelementptr { ptr, i64 }, ptr %10, i32 0, i32 1
+  %13 = load double, ptr %12, align 8
+  store double %13, ptr %11, align 8
+  %14 = load double, ptr %7, align 8
+  %15 = load double, ptr %11, align 8
+  %16 = fcmp ogt double %14, %15
+  %17 = alloca i1, align 1
+  store i1 %16, ptr %17, align 1
+  %18 = load i1, ptr %17, align 1
+  %19 = select i1 %18, ptr %4, ptr %5
+  %20 = select i1 %18, ptr %7, ptr %11
+  %21 = getelementptr { ptr, i64 }, ptr %19, i32 0, i32 1
+  %22 = load double, ptr %20, align 8
+  store double %22, ptr %21, align 8
+  store ptr @f64_typ, ptr %19, align 8
+  %23 = getelementptr { ptr, i64 }, ptr %19, i32 0, i32 0
+  %24 = load ptr, ptr %23, align 8
+  %25 = insertvalue { ptr, i64 } undef, ptr %24, 0
+  %26 = load i64, ptr %21, align 4
+  %27 = insertvalue { ptr, i64 } %25, i64 %26, 1
+  ret { ptr, i64 } %27
+}
+
+define ptr @Math_B__Self_max_aPtri32_bPtri32__Self_max_aPtrf64_bPtrf64(ptr %0) {
   %2 = alloca i1, align 1
   %3 = alloca i1, align 1
   %4 = alloca i1, align 1
@@ -344,7 +344,7 @@ define ptr @Math_B__Self_max_aPtrf64_bPtrf64__Self_max_aPtri32_bPtri32(ptr %0) {
   %10 = icmp eq i64 %9, ptrtoint (ptr @i32_typ to i64)
   store i1 %10, ptr %4, align 1
   %11 = load i1, ptr %4, align 1
-  %12 = select i1 %11, i32 11, i32 10
+  %12 = select i1 %11, i32 10, i32 11
   br i1 %11, label %13, label %18
 
 13:                                               ; preds = %1

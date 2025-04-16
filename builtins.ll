@@ -766,30 +766,39 @@ define { ptr, i160 } @_box_union_typ(ptr %0, ptr %1) {
   %5 = call { i64, i64 } @size_wrapper(ptr @_data_size_union_typ, ptr %1)
   %6 = extractvalue { i64, i64 } %5, 0
   %7 = icmp eq i64 %6, 32
-  br i1 %7, label %8, label %10
+  br i1 %7, label %8, label %14
 
-8:                                                ; preds = %10, %2
-  %9 = phi ptr [ %4, %10 ], [ %3, %2 ]
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %9, ptr %0, i64 %6, i1 false)
-  br label %14
+8:                                                ; preds = %2
+  %9 = getelementptr { ptr, i160 }, ptr %0, i32 0, i32 0
+  %10 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
+  %11 = load ptr, ptr %9, align 8
+  store ptr %11, ptr %10, align 8
+  %12 = getelementptr { ptr, i160 }, ptr %0, i32 0, i32 1
+  %13 = load i160, ptr %12, align 4
+  store i160 %13, ptr %4, align 4
+  br label %19
 
-10:                                               ; preds = %2
-  %11 = icmp sle i64 %6, 16
-  br i1 %11, label %8, label %12
+14:                                               ; preds = %2
+  %15 = icmp sle i64 %6, 16
+  br i1 %15, label %18, label %16
 
-12:                                               ; preds = %10
-  %13 = call ptr @bump_malloc(i64 %6)
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %13, ptr %0, i64 %6, i1 false)
-  store ptr %13, ptr %4, align 8
-  br label %14
+16:                                               ; preds = %14
+  %17 = call ptr @bump_malloc(i64 %6)
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %17, ptr %0, i64 %6, i1 false)
+  store ptr %17, ptr %4, align 8
+  br label %19
 
-14:                                               ; preds = %8, %12
-  %15 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
-  %16 = load ptr, ptr %15, align 8
-  %17 = insertvalue { ptr, i160 } undef, ptr %16, 0
-  %18 = load i160, ptr %4, align 4
-  %19 = insertvalue { ptr, i160 } %17, i160 %18, 1
-  ret { ptr, i160 } %19
+18:                                               ; preds = %14
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %4, ptr %0, i64 %6, i1 false)
+  br label %19
+
+19:                                               ; preds = %8, %18, %16
+  %20 = getelementptr { ptr, i160 }, ptr %3, i32 0, i32 0
+  %21 = load ptr, ptr %20, align 8
+  %22 = insertvalue { ptr, i160 } undef, ptr %21, 0
+  %23 = load i160, ptr %4, align 4
+  %24 = insertvalue { ptr, i160 } %22, i160 %23, 1
+  ret { ptr, i160 } %24
 }
 
 ; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)

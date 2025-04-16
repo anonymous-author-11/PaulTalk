@@ -2189,10 +2189,10 @@ class LowerBoxUnionDef(RewritePattern):
 
         alloca = AllocateOp.make(to_typ)
         gep = llvm.GEPOp(alloca.results[0], [0, 1], pointee_type=to_typ)
-        vptr = AddrOfOp.from_string(op.meth_name.data.replace("_box_",""))
+        vptr = AddrOfOp.from_string("union_typ")
         store = llvm.StoreOp(vptr.results[0], alloca.results[0])
 
-        data_size_fn = AddrOfOp.from_string(op.meth_name.data.replace("_box_","_data_size_"))
+        data_size_fn = AddrOfOp.from_string("_data_size_union_typ")
 
         size_alignment_tuple = llvm.LLVMStructType.from_type_list([IntegerType(64), IntegerType(64)])
 
@@ -2222,13 +2222,9 @@ class LowerBoxUnionDef(RewritePattern):
         br = cf.ConditionalBranch(small_struct.results[0], no_box_block, [], box_block, [])
         box_decision_block.add_ops([threshold, small_struct, br])
 
-        args = [alloca.results[0], data_ptr, data_size.results[0], false.results[0]]
-        memcpy1 = llvm.CallIntrinsicOp("llvm.memcpy.inline.p0.p0.i64", [args], [llvm.LLVMVoidType()])
-        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [4, 0])
-        memcpy1.properties["operandSegmentSizes"] = operandSegmentSizes
-        memcpy1.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        memcpy = MemCpyOp.make(data_ptr, alloca.results[0], to_typ)
         br = cf.Branch(exit)
-        right_size_block.add_ops([memcpy1, br])
+        right_size_block.add_ops([memcpy, br])
         
         malloc = llvm.CallOp("bump_malloc", data_size.results[0], return_type=llvm.LLVMPointerType.opaque())
         operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
@@ -2236,20 +2232,20 @@ class LowerBoxUnionDef(RewritePattern):
         malloc.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
         
         args = [malloc.results[0], data_ptr, data_size.results[0], false.results[0]]
-        memcpy0 = llvm.CallIntrinsicOp("llvm.memcpy.inline.p0.p0.i64", [args], [llvm.LLVMVoidType()])
+        memcpy = llvm.CallIntrinsicOp("llvm.memcpy.inline.p0.p0.i64", [args], [llvm.LLVMVoidType()])
         operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [4, 0])
-        memcpy0.properties["operandSegmentSizes"] = operandSegmentSizes
-        memcpy0.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        memcpy.properties["operandSegmentSizes"] = operandSegmentSizes
+        memcpy.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
         store_malloc = llvm.StoreOp(malloc.results[0], gep.results[0])
         br = cf.Branch(exit)
-        box_block.add_ops([malloc, memcpy0, store_malloc, br])
+        box_block.add_ops([malloc, memcpy, store_malloc, br])
 
         args = [gep.results[0], data_ptr, data_size.results[0], false.results[0]]
-        memcpy1 = llvm.CallIntrinsicOp("llvm.memcpy.inline.p0.p0.i64", [args], [llvm.LLVMVoidType()])
-        memcpy1.properties["operandSegmentSizes"] = operandSegmentSizes
-        memcpy1.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        memcpy = llvm.CallIntrinsicOp("llvm.memcpy.inline.p0.p0.i64", [args], [llvm.LLVMVoidType()])
+        memcpy.properties["operandSegmentSizes"] = operandSegmentSizes
+        memcpy.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
         br = cf.Branch(exit)
-        no_box_block.add_ops([memcpy1, br])
+        no_box_block.add_ops([memcpy, br])
 
         unwrap = UnwrapOp.create(operands=[alloca.results[0]], result_types=[to_typ])
         ret = llvm.ReturnOp.create(operands=[unwrap.results[0]])

@@ -221,6 +221,7 @@ class CSTTransformer(Transformer):
             "i64":Ptr([IntegerType(64)]),
             "i128":Ptr([IntegerType(128)]),
             "f64":Ptr([Float64Type()]),
+            "Any":Any(),
             "Nil":Nil()
         }
         return type_map[type_name.value] if type_name.value in type_map else FatPtr.basic(type_name.value)

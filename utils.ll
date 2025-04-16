@@ -157,7 +157,7 @@ define { i64, i64 } @_data_size_union_typ(ptr %0) {
   %15 = icmp eq i64 %14, 0
   %16 = sub i64 %12, %14
   %17 = select i1 %15, i64 0, i64 %16
-  %18 = add i64 %11, %.reg2mem22.011
+  %18 = tail call i64 @llvm.umax.i64(i64 noundef %11, i64 noundef %.reg2mem22.011)
   %19 = tail call i64 @llvm.umax.i64(i64 noundef %18, i64 noundef %17)
   %20 = add i64 %5, 1
   %21 = getelementptr ptr, ptr %0, i64 %20
@@ -181,18 +181,18 @@ define { i64, i64 } @_data_size_union_typ(ptr %0) {
   ret { i64, i64 } %30
 }
 
-define void @_unbox_union_typ({ ptr, i160 } %0, ptr %1, ptr %2) {
+define void @_unbox_union_typ({ ptr, i160 } %0, ptr %1, ptr %dest) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %0, ptr %4, align 8
   %5 = getelementptr { ptr, i160 }, ptr %4, i32 0, i32 1
   %6 = load ptr, ptr %5, align 8
   %7 = call { i64, i64 } @_data_size_union_typ(ptr %1)
-  %8 = extractvalue { i64, i64 } %7, 0
-  %9 = icmp sle i64 %8, 16
-  %10 = icmp eq i64 %8, 32
+  %size = extractvalue { i64, i64 } %7, 0
+  %9 = icmp sle i64 %size, 16
+  %10 = icmp eq i64 %size, 32
   %11 = select i1 %9, ptr %5, ptr %6
-  %12 = select i1 %10, ptr %4, ptr %11
-  call void @llvm.memcpy.inline.p0.p0.i64(ptr %2, ptr %12, i64 %8, i1 false)
+  %source = select i1 %10, ptr %4, ptr %11
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr %dest, ptr %source, i64 %size, i1 false)
   ret void
 }
 

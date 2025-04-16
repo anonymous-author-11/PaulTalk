@@ -350,6 +350,11 @@ DONE:
 - Use Checkflag on method dispatch checks instead of raw SubtypeTest [check!]
 	- Will use simple pointer equality checks for builtin types [check!]
 - Add file name to error messages [check!]
+- Rewrite the standard library with generics [check!]
+- Shift array and range literals to new generics [check!]
+	- Will need to do buffer optimization first for array [check!]
+	- And to do buffer optimization we need stored type parameters [check!]
+	- Which we do now have [check!]
 - Write FileSystem utilities [check!]
 - Figure out more sane integer casting mechanics [check!]
 	- Maybe an 'as' operator [check!]
@@ -357,25 +362,40 @@ DONE:
 - Make aliases smarter [check!]
 	- I should be able to do "alias Map = CuckooMap;" [check!]
 	- This should make Map[i32, String] equivalent to CuckooMap[i32, String] [check!]
+- Allow array literals to be of any type [check!]
 
 TODO:
 
-- Allow array literals to be of any type
+- Optimize individual .ll files before linking
+- Implement heterogenous-width and integer-float binary operations
+- Clean up compilation of files with no main() or no specified outfile
+- Split MLIR dialect into hi, mid, and lo dialects
+	- hi will use PaulTalk types
+	- types will be lowered in hi -> mid
+	- lo will only lower to other dialects
+- Refactor to use mini.call in PDL
+- Add T? syntax for T | Nil
+- Move lowering logic in core_dialect to pre-type-lowering passes
+	- CastOp
+	- All CastOp variants
+	- CastAssignOp (which arguably shouldn't exist)
+	- TupleCastOp
 - Improve namespacing
 - Do less work for imports
-	- Make .lib archives of .bc files and --link-only-needed
-	- Decrease work done in interface_codegen
 	- Type-check specific imports on-demand rather than upfront
+	- Decrease work done in interface_codegen
+	- Make .lib archives of .bc files and --link-only-needed
 	- std.mini should compile near instantly
+- Putting coroutine yields and returns in the same slot is asking for bugs
+- Better error for incorrectly parameterized reciever
+	- I.e. Array.new instead of Array[i32].new
 - Make aliases even smarter
 	- "alias Foo[A] = Bar[A, i32];"
 	- This is more complex
 - Should ensure that all branches must return if return value declared
-- What's the type of coro.return()?
-- Putting coroutine yields and returns in the same slot is asking for bugs
 - Special case "if buffer is Nil" to check for C nullptr
-- Better error for incorrectly parameterized reciever
-- Rewrite the standard library with generics
+	- Special case in TypeCheck [check!]
+	- Need to ensure intersection of Buffer & Nil doesn't reduce to Nothing
 - Implement Records
 	- Will require a utility method for finding field offsets for generic records
 - Dispatch on parameterizations
@@ -395,7 +415,7 @@ TODO:
 	- If they do, split them off; otherwise, keep bundled
 	- Then only have to pass getter, box, and subtype fn names to typeptrs
 - Polymorphic construction could just be conservatively aliased
-	- i.e. T.new(a, b, c)
+	- i.e. T.new(a, b, c) or Self.new(a, b, c)
 	- Very interesting idea
 - I really want to get generics fully working first
 	- Would really like for fields to be specialized size [check!]
@@ -419,9 +439,7 @@ TODO:
 - Minimize number of behaviors
 	- Do we really need to generate all-new behaviors for every new subclass?
 	- Why not just new behaviors for the ones that have actually changed?
-	- Will make vtables significantly smaller
 - Reduce number of redundant type fields
-- Clean up compilation of files with no main() or no specified outfile
 - Think about how actually to handle union type parameters
 - Implement type parameter deduction from init()
 - Make sure that type bounds are applied generally
@@ -431,10 +449,6 @@ TODO:
 - Figure out a way to get methods into builtin vtables
 	- Define intrinsics for operations on boxed interfaces
 	- PrimitiveDef subtype of ClassDef?
-- Shift array and range literals to new generics
-	- Will need to do buffer optimization first for array [check!]
-	- And to do buffer optimization we need stored type parameters [check!]
-	- Which we do now have
 
 - Allow multiple type checks in one condition
 - Tighten up return type inference for function literals
@@ -447,7 +461,6 @@ TODO:
 	- A.b will also denote module-qualified names
 - Shift Functions and Coroutines to FatPtr interface
 	- Store the fptr in the second word
-- Don't unnecessarily duplicate behaviors
 - Cast literals when passing as arguments
 - Narrow alternate path in branches
 	- The main motivation is to be able to pare off nil with "while x is Nil { yield(Exception); }"
@@ -456,7 +469,6 @@ TODO:
 	- Therefore we know that 'if x is Nil' implies that it is non-nil in the other branch
 	- We know the intersection of a union with a negation of one of its members
 - Make sure that c3 linearization interacts properly with imports
-- Implement integer-float binary operations
 - When call is statically known, narrow result types
 	- Casting is needed (from behavior return type to narrowed return type)
 	- If the intersection of the argument/parameter types is uninhabitable, that overload is ruled out
@@ -534,6 +546,7 @@ TODO:
 		- Could disallow all ambiguity between delegates
 - Constructors
 	- There's the Self.new() design choice to work with
+	- I'd like to be able to define constructor overloads which return subtypes
 	- T.alloc could return Uninitialized[T], which has one method, init
 	- Uninitialized[T].init() -> T
 	- Uninitialized would need to be a builtin type that forwards .init() calls
@@ -545,13 +558,14 @@ TODO:
 
 - Mem2reg apparently does heaptostack, and sroa apparently converts memcpy.inline to memcpy, and instcombine reduces memcpy to loads/stores
 	- Have to run attributor before mem2reg
+	- Running attributor twice causes bugs
 
 - Generic tuple creation and indexing
-	- Will have to use dynamic allocas
+	- Would have to use dynamic allocas
 	- Hoisting dynamic allocas would require hoisting their inputs
 	- Or guaranteeing that their inputs are in the entry block (easier)
 	- Need to ensure that these dynamic allocas are inlineable
-	- Making them arrays might be a hack to enable inlining
+	- Making them arrays might help to enable inlining
 	- Should probably use llvm.stacksave and llvm.stackrestore
 	- Would have to pass and return as pointers
 
@@ -569,9 +583,9 @@ TODO:
 	- Fixed capacity
 	- Much faster than VirtualAlloc
 - Memory regions
-	- Abstract memory regions (oh boy I'm cookin)
-		- Abstract associated regions (oh god!)
-			- Abstract bounded polymorphic associated regions (god mode)
+	- Abstract memory regions
+		- Abstract associated regions
+			- Abstract bounded polymorphic associated regions
 	- Will probably need to store ptrs to virtual regions in fields
 		- Wait, why? Do we actually?
 		- Or store a method in the vtable that can retrieve the virtual region
@@ -588,7 +602,7 @@ TODO:
 		- The compiler decides when memory is allocated and deallocated
 
 - Inheriting from Sentinel (or do Struct types solve this)
-- Bare 'yield();' should yield the coroutine itself?
+- Bare 'yield();' should yield the coroutine itself? or nil?
 - Specifying that a class cannot be inherited alongside another class
 - Recursive aliases?
 - Overloading *functions*
