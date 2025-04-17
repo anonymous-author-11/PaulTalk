@@ -1352,8 +1352,25 @@ Ub = Dialect("ub", [PoisonOp], [PoisonAttr])
 
 Hi = Dialect(
     "hi",
-    [CastOp, ReabstractOp, TupleCastOp],
-    []
+    [
+        CastOp,
+        ReabstractOp,
+        TupleCastOp
+    ],
+    [
+        Ptr,
+        FatPtr,
+        ReifiedType,
+        Tuple,
+        Coroutine,
+        Function,
+        Buffer,
+        Union,
+        Intersection,
+        Nothing,
+        Nil,
+        TypeParameter
+    ]
 )
 
 Mid = Dialect(
@@ -1432,18 +1449,5 @@ Mid = Dialect(
         SubtypeOp,
         ParameterizationOp
     ],
-    [
-        Ptr,
-        FatPtr,
-        ReifiedType,
-        Tuple,
-        Coroutine,
-        Function,
-        Buffer,
-        Union,
-        Intersection,
-        Nothing,
-        Nil,
-        TypeParameter
-    ],
+    []
 )

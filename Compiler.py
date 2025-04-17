@@ -209,7 +209,6 @@ def main(argv):
     ast = parse(file_name)
 
     after_parse = time.time()
-    print(f"Time to parse: {after_parse - after_imports} seconds")
 
     #print(tree.pretty())
     module = ast.codegen()
@@ -226,6 +225,9 @@ def main(argv):
     Printer(stringio).print(module)
     module_str = stringio.getvalue().encode().decode('unicode_escape')
     with open("in.mlir", "w") as outfile: outfile.write(module_str)
+    
+    print(f"Time to parse: {after_parse - after_imports} seconds")
+
     after_codegen = time.time()
     print(f"Time to type check + codegen: {after_codegen - after_parse} seconds")
 

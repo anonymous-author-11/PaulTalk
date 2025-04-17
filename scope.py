@@ -145,6 +145,20 @@ class Scope:
             best_label = (*param_labels, "stack")[0]
             allocation.region = best_label
 
+    def validate_type(self, node_info, typ):
+        if not isinstance(typ, FatPtr): return
+        if typ.cls.data not in self.classes:
+            raise Exception(f"{node_info}: Class {typ.cls.data} has not been declared.")
+        cls = self.classes[typ.cls.data]
+        if typ.type_params == NoneAttr() and len(cls.type_parameters) != 0:
+            raise Exception(f"{node_info}: Wrong number of type parameters for {typ.cls.data}: expected {len(cls.type_parameters)}.")
+        if typ.type_params != NoneAttr():
+            if len(typ.type_params.data) != len(cls.type_parameters):
+                raise Exception(f"{node_info}: Wrong number of type parameters for {typ.cls.data}: expected {len(cls.type_parameters)}.")
+            zipped = zip(typ.type_params.data, cls.type_parameters)
+            if not all(self.matches(a,b) for a,b in zipped):
+                raise Exception(f"{node_info}: Class {cls.name} cannot be instantiated with types {[*typ.type_params.data]}")
+
     def matches(self, left, right):
         if isinstance(left, FatPtr) and isinstance(right, FatPtr): return left.cls == right.cls
         if isinstance(left, Buffer): return isinstance(right, Buffer)

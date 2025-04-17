@@ -686,10 +686,12 @@ class TypeCheck(Expression):
 
     def exprtype(self, scope):
         self.ensure_rhs_simple()
+        self.left.exprtype(scope)
+        right_type = scope.simplify(self.right)
+        scope.validate_type(self.info, right_type)
         return Ptr([IntegerType(1)])
 
     def typeflow(self, scope):
-        self.left.exprtype(scope)
         self.exprtype(scope)
 
 @dataclass
@@ -718,6 +720,7 @@ class As(Expression):
     def exprtype(self, scope):
         operand_type = self.operand.exprtype(scope)
         to_typ = scope.simplify(self.typ)
+        scope.validate_type(self.info, to_typ)
         to_integer = isinstance(to_typ, Ptr) and isinstance(to_typ.type, IntegerType)
         if isinstance(self.operand, IntegerLiteral) and to_integer:
             self.operand.width = to_typ.type.width.data
@@ -1168,18 +1171,21 @@ class ClassMethodCall(MethodCall):
                 raise Exception(f"{self.info}: Self type can only be used within a class.")
             self.receiver = scope.cls.type()
         
-        if self.receiver.cls.data not in scope.classes.keys(): raise Exception(f"class {self.receiver.cls.data} not declared.")
-        rec_class = scope.classes[self.receiver.cls.data]
-        arg_types = [arg.exprtype(scope) for arg in self.arguments]
         rec_typ = scope.simplify(self.receiver)
+        if rec_typ.cls.data not in scope.classes.keys(): raise Exception(f"class {rec_typ.cls.data} not declared.")
+        rec_class = scope.classes[rec_typ.cls.data]
+
+        scope.validate_type(self.info, rec_typ)
+
+        arg_types = [arg.exprtype(scope) for arg in self.arguments]
         behaviors = [behavior for behavior in rec_class.behaviors if behavior.applicable(rec_typ, scope, "_Self_" + self.method, arg_types)]
         if len(behaviors) == 0:
-            raise Exception(f"{self.info}: there exists no overload of class method {self.receiver.cls.data}.{self.method} compatible with argument types {arg_types}")
+            raise Exception(f"{self.info}: there exists no overload of class method {rec_typ.cls.data}.{self.method} compatible with argument types {arg_types}")
         if len(behaviors) > 1:
-            raise Exception(f"{self.info}: invocation of {self.receiver.cls.data}.{self.method} with argument types {arg_types} is ambiguous.")
+            raise Exception(f"{self.info}: invocation of {rec_typ.cls.data}.{self.method} with argument types {arg_types} is ambiguous.")
         behavior_decl = behaviors[0]
         if any(isinstance(method.definition, AbstractMethodDef) for method in behavior_decl.methods):
-            raise Exception(f"{self.info}: Class method {self.receiver.cls.data}.{self.method} has an abstract overload, and cannot be called directly.")
+            raise Exception(f"{self.info}: Class method {rec_typ.cls.data}.{self.method} has an abstract overload, and cannot be called directly.")
         self.apply_constraints(scope, behaviors[0])
         broad = behavior_decl.broad_return_type()
         specialized = behavior_decl.specialized_return_type(rec_typ, arg_types, scope)
@@ -1305,10 +1311,7 @@ class ObjectCreation(Expression):
         if simplified_type.cls.data not in scope.classes.keys():
             raise Exception(f"{self.info}: class {simplified_type.cls.data} not declared!")
         cls = scope.classes[simplified_type.cls.data]
-        if simplified_type.type_params != NoneAttr():
-            zipped = zip(simplified_type.type_params.data, cls.type_parameters)
-            if not all(scope.matches(a,b) for a,b in zipped):
-                raise Exception(f"{self.info}: Class {cls.name} cannot be instantiated with types {[*simplified_type.type_params.data]}")
+        scope.validate_type(self.info, simplified_type)
         
         input_types = [arg.exprtype(scope) for arg in self.arguments]
         behaviors = [behavior for behavior in cls.behaviors if behavior.applicable(simplified_type, scope, "init", input_types)]
@@ -1487,7 +1490,9 @@ class MethodDef(Statement):
     def return_type(self):
         temp_scope = self.defining_class._scope
         for t in self.type_params: temp_scope.add_alias(FatPtr.basic(t.label.data), t)
-        return temp_scope.simplify(self._return_type)
+        ret_type = temp_scope.simplify(self._return_type)
+        temp_scope.validate_type(self.info, ret_type)
+        return ret_type
 
     def wrap_self(self, body_scope):
         body_block = body_scope.region.block
@@ -2503,6 +2508,8 @@ class VarDecl(Statement):
 
     def typeflow(self, scope):
         self.ensure_capitalization()
+        self_type = self.type(scope)
+        scope.validate_type(self.info, self_type)
         scope.type_table[self.name] = self.type(scope)
 
 @dataclass
@@ -2598,6 +2605,7 @@ class VarInit(VarDecl):
     def typeflow(self, scope):
         self_type = self.type(scope)
         self.ensure_capitalization()
+        scope.validate_type(self.info, self_type)
         if isinstance(self.initial_value, IntegerLiteral) and isinstance(self_type, Ptr) and isinstance(self_type.type, IntegerType):
             self.initial_value.width = self_type.type.width.data
         value_type = self.initial_value.exprtype(scope)
@@ -3084,7 +3092,9 @@ class CreateBuffer(Expression):
         if size_typ != Ptr([IntegerType(32)]):
             raise Exception(f"{self.info}: Buffer creation takes i32 as argument, not {size_typ}.")
         scope.allocations[self.info.id] = self
-        return scope.simplify(self.buf)
+        buf_type = scope.simplify(self.buf)
+        scope.validate_type(self.info, buf_type.elem_type)
+        return buf_type
 
 @dataclass
 class Import(Statement):
