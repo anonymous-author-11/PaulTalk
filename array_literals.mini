@@ -7,4 +7,6 @@ strary = ["a","b","c","d"];
 
 intstrary = [1, "b", 3, "d"];
 
-IO.print(intstrary.[2]);
+IO.print(intstrary.[3]);
+
+IO.print("look at this!");

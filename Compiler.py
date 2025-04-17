@@ -131,8 +131,8 @@ def record_all_passes():
     #clang = "clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
     attributor_settings = "--attributor-enable=module --attributor-annotate-decl-cs --max-heap-to-stack-size=-1 --attributor-manifest-internal --attributor-assume-closed-world=false"
     #opt = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
-    opt = f"opt out_reg2mem.ll -S --passes=\"default<O1>\" {attributor_settings} --max-devirt-iterations=100 --inline-threshold=10000 --print-after-all"
-    with open("out_reg2mem.ll", "r+") as f:
+    opt = f"opt out_optimized.ll -S --passes=\"default<O3>\" {attributor_settings} --max-devirt-iterations=100 --inline-threshold=10000 --print-after-all"
+    with open("out_optimized.ll", "r+") as f:
         out_reg2mem = f.read()
         f.seek(0)
         # clang can't handle the 'preserve_nonecc' attribute for some reason
@@ -144,7 +144,7 @@ def record_all_passes():
 def run_opt(debug_mode):
     debug = "debugir out_optimized.ll"
     target_triple = "-mtriple=x86_64-pc-windows-msvc"
-    o3 = "--passes=\"default<O3>\""
+    o3 = "--passes=\"default<O3>,default<O3>\""
     o2 = "--passes=\"default<O2>\""
     o1 = "--passes=\"default<O1>\""
     opt_level = o1 if debug_mode else o3
@@ -156,7 +156,11 @@ def run_opt(debug_mode):
     devirtualization_settings = "--max-devirt-iterations=100 --abort-on-max-devirt-iterations-reached"
     # inline everything possible, and let the machine outliner undo some of it, if requested
     inline_settings = "--inline-threshold=-10000" if debug_mode else "--inline-threshold=10000"
-    attributor_settings = "--attributor-enable=module --attributor-annotate-decl-cs --max-heap-to-stack-size=-1 --attributor-manifest-internal --attributor-assume-closed-world=false"
+
+    # We disable tail calls for the following reason:
+    # It is considered UB for a tail call to read or write to an alloca
+    # Heap-to-stack will convert malloc to alloca, retroactively creating UB if used in a tail call
+    attributor_settings = "--attributor-enable=module --attributor-annotate-decl-cs --max-heap-to-stack-size=1024 --disable-tail-calls --attributor-manifest-internal --attributor-assume-closed-world=false"
     in_file = f"out_reg2mem.ll"
     opt = f"opt -S {in_file} {opt_level} {devirtualization_settings} {inline_settings} {attributor_settings} -o out_optimized.ll"
     #opt2 = f"opt -S --passes=\"attributor,mem2reg,sroa,instcombine\" {devirtualization_settings} {inline_settings} {attributor_settings} -o out_optimized.ll"
