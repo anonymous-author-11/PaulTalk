@@ -34,7 +34,7 @@ class CompilerTestCase(unittest.TestCase):
         completed_process = subprocess.run(exe_command, capture_output=True, text=True, check=True)
         actual_output = completed_process.stdout.strip()
         os.remove(self.temp_input_file.name.replace(".mini",".bc"))
-        os.remove(self.temp_input_file.name.replace(".mini",".obj"))
+        os.remove(self.output_file_name.split(".")[0] + ".obj")
         os.remove(self.output_file_name)
 
         # Split the actual output into lines for comparison

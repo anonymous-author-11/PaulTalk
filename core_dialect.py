@@ -1238,81 +1238,29 @@ class NarrowOp(IRDLOperation):
 
 @irdl_op_definition
 class ReabstractOp(IRDLOperation):
-    name = "mini.reabstract"
+    name = "hi.reabstract"
     operand: Operand = operand_def()
     result: OpResult = result_def()
     from_typ: TypeAttribute = attr_def(TypeAttribute)
     to_typ: TypeAttribute = attr_def(TypeAttribute)
-    from_typ_name: StringAttr = attr_def(StringAttr)
-    to_typ_name: StringAttr = attr_def(StringAttr)
-    region: Region = region_def()
     traits = frozenset()
 
     @classmethod
     def make(cls, operand, from_typ, to_typ):
-        #print(f"{from_typ} is not equal to {to_typ}")
-        attr_dict = {
-            "from_typ":from_typ.base_typ(),"to_typ":to_typ.base_typ(),"from_typ_name":from_typ.symbol(), "to_typ_name":to_typ.symbol()
-        }
-        wrapper_name = random_letters(10)
-        f_block = Block([])
-
-        has_return = to_typ.return_type != Nothing()
-        ret_type = [to_typ.return_type.base_typ()] if has_return else []
-        
-        args = [f_block.insert_arg(t.base_typ(), i) for (i,t) in enumerate(to_typ.param_types.data)]
-        wraps = [WrapOp.make(arg, to_typ.param_types.data[i]) for (i, arg) in enumerate(args)]
-        casts = [CastOp.make(wraps[i].results[0], to_typ.param_types.data[i], from_typ.param_types.data[i]) for (i, arg) in enumerate(args)]
-        unwraps = [UnwrapOp.create(operands=[casts[i].results[0]], result_types=[from_typ.param_types.data[i].base_typ()]) for (i, arg) in enumerate(args)]
-        attr_dict = {"ret_type":from_typ.return_type.base_typ() if has_return else llvm.LLVMVoidType()}
-        result_types = [] if not has_return else [from_typ.return_type]
-        fptr = f_block.insert_arg(llvm.LLVMPointerType.opaque(), 0)
-        operands = [fptr, *[x.results[0] for x in unwraps]]
-        call = FPtrCallOp.create(operands=operands, attributes=attr_dict, result_types=result_types)
-        f_block.add_ops([*wraps, *casts, *unwraps, call])
-        if has_return:
-            cast = CastOp.make(call.results[0], from_typ.return_type, to_typ.return_type)
-            unwrap = UnwrapOp.create(operands=[cast.results[0]], result_types=[to_typ.return_type.base_typ()])
-            ret = func.Return(unwrap.results[0])
-            f_block.add_ops([cast, unwrap, ret])
-        else:
-            f_block.add_op(func.Return())
-        f_body = Region([f_block])
-        dict_ary = ArrayAttr([DictionaryAttr({"llvm.nest":UnitAttr()}), *[DictionaryAttr({}) for arg in to_typ.param_types.data]])
-        func_def = func.FuncOp(wrapper_name, FunctionType.from_lists([t.base_typ() for t in to_typ.param_types.data], ret_type), f_body, arg_attrs=dict_ary)
-
-        tramp = MallocOp.create(attributes={"typ":llvm.LLVMArrayType.from_size_and_type(24, IntegerType(8))}, result_types=[llvm.LLVMPointerType.opaque()])
-        anoint = AnointTrampolineOp.create(operands=[tramp.results[0]])
-        wrapper = AddrOfOp.from_string(wrapper_name)
-        fptr = llvm.LoadOp(operand, llvm.LLVMPointerType.opaque())
-        init_trampoline = llvm.CallIntrinsicOp(
-            "llvm.init.trampoline",
-            [[tramp.results[0], wrapper.results[0], fptr.results[0]]], 
-            []
-        )
-        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [3, 0])
-        init_trampoline.properties["operandSegmentSizes"] = operandSegmentSizes
-        init_trampoline.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
-        
-        region = Region([Block([func_def, tramp, anoint, wrapper, fptr, init_trampoline])])
-        return ReabstractOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict, regions=[region])
+        attr_dict = {"from_typ":from_typ,"to_typ":to_typ}
+        return ReabstractOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
 
 @irdl_op_definition
 class TupleCastOp(IRDLOperation):
     name = "mini.tuple_cast"
+    from_typ: TypeAttribute = attr_def(TypeAttribute)
+    to_typ: TypeAttribute = attr_def(TypeAttribute)
     traits = frozenset()
 
     @classmethod
     def make(cls, operand, from_typ, to_typ):
-        print(f"input type is {operand.type}")
-        conversion = builtin.UnrealizedConversionCastOp.create(operands=[operand], result_types=[llvm.LLVMPointerType.opaque()])
-        alloca = AllocateOp.create(attributes={"typ":to_typ.base_typ()}, result_types=[llvm.LLVMPointerType.opaque()])
-        from_geps = [llvm.GEPOp(conversion.results[0], [0, i], pointee_type=from_typ.base_typ()) for (i, t) in enumerate(from_typ.types)]
-        to_geps = [llvm.GEPOp(alloca.results[0], [0, i], pointee_type=to_typ.base_typ()) for (i, t) in enumerate(to_typ.types.data)]
-        casts = [CastOp.make(from_geps[i].results[0], a, b) for (i, (a, b)) in enumerate(zip(from_typ.types.data, to_typ.types.data))]
-        stores = [llvm.StoreOp(casts[i].results[0], to_geps[i].results[0]) for (i, t) in enumerate(to_typ.types.data)]
-        reg = Region([Block([alloca, conversion, *from_geps, *to_geps, *casts, *stores])])
-        return TupleCastOp.create(operands=[operand], result_types=[to_typ], regions=[reg])
+        attr_dict = {"from_typ":from_typ,"to_typ":to_typ}
+        return TupleCastOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
 
 @irdl_op_definition
 class WidenIntOp(IRDLOperation):
@@ -1404,7 +1352,7 @@ Ub = Dialect("ub", [PoisonOp], [PoisonAttr])
 
 Hi = Dialect(
     "hi",
-    [CastOp],
+    [CastOp, ReabstractOp, TupleCastOp],
     []
 )
 
@@ -1447,7 +1395,6 @@ Mid = Dialect(
         UnionizeOp,
         NarrowOp,
         ToFatPtrOp,
-        ReabstractOp,
         ReferOp,
         UtilsAPIOp,
         CoroCreateOp,

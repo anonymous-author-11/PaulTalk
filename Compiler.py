@@ -2,7 +2,6 @@ import time
 
 start_time = time.time()
 
-from lark import Lark
 from utils import clean_name
 from xdsl.context import MLContext
 from xdsl.printer import Printer
@@ -43,7 +42,7 @@ def run_pdl_lowering(module_str):
     if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
     patterns = cmd_out.stdout
 
-    # the verifier will complain about temporary symbol-table inconsistencies unless we use these placeholders
+    # the IR verifier will complain about temporary symbol-table inconsistencies unless we use these placeholders
     replacements = {
         "mini.addressof": "placeholder.addressof",
         "\"mini.global\"": "\"placeholder.global\"",
@@ -112,8 +111,8 @@ def llvm_link(in_file_stem, bc_files):
     make_archive = f"llvm-ar cr {in_file_stem}.lib {' '.join(bc_files)}"
     subprocess.run(make_archive, shell=True)
 
-    link1 = f"llvm-link -S {in_file_stem}.bc utils.ll -o out_linked.ll"
-    subprocess.run(link1, shell=True)
+    link_utils = f"llvm-link -S {in_file_stem}.bc utils.ll -o out_linked.ll"
+    subprocess.run(link_utils, shell=True)
 
     # use the correct main function
     with open("out_linked.ll", "r+") as f:
@@ -122,8 +121,9 @@ def llvm_link(in_file_stem, bc_files):
         f.write(txt.replace(f"_main_{clean_name(in_file_stem)}", "main"))
         f.truncate()
 
-    link2 = f"llvm-link -S out_linked.ll {in_file_stem}.lib -o out_reg2mem.ll --only-needed"
-    subprocess.run(link2, shell=True)
+    # using --only-needed cuts out a lot of unnecessary imports
+    link_imports = f"llvm-link -S out_linked.ll {in_file_stem}.lib -o out_reg2mem.ll --only-needed"
+    subprocess.run(link_imports, shell=True)
     os.remove(f"{in_file_stem}.lib")
     os.remove("out_linked.ll")
 
@@ -131,12 +131,12 @@ def record_all_passes():
     #clang = "clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
     attributor_settings = "--attributor-enable=module --attributor-annotate-decl-cs --max-heap-to-stack-size=-1 --attributor-manifest-internal --attributor-assume-closed-world=false"
     #opt = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
-    opt = f"opt out_optimized.ll -S --passes=\"default<O3>\" {attributor_settings} --max-devirt-iterations=100 --inline-threshold=10000 --print-after-all"
-    with open("out_optimized.ll", "r+") as f:
-        out_reg2mem = f.read()
+    opt = f"opt out_reg2mem.ll -S --passes=\"default<O1>\" {attributor_settings} --max-devirt-iterations=100 --inline-threshold=10000 --print-after-all"
+    with open("out_reg2mem.ll", "r+") as f:
+        txt = f.read()
         f.seek(0)
         # clang can't handle the 'preserve_nonecc' attribute for some reason
-        f.write(out_reg2mem.replace("preserve_nonecc",""))
+        f.write(txt.replace("preserve_nonecc",""))
         f.truncate()
     opt_out = subprocess.run(opt, text=True, shell=True, capture_output=True)
     with open("opt_passes.txt", "w") as outfile: outfile.write(opt_out.stderr)
@@ -152,9 +152,9 @@ def run_opt(debug_mode):
     interesting = "--use-noalias-intrinsic-during-inlining --mem-intrinsic-expand-size=1024"
 
     # this is the real optimization sauce for our language
-    # does another round of cgscc optimizations whenever an indirect callee is identified
+    # does another round of cg-scc optimizations whenever an indirect callee is identified
     devirtualization_settings = "--max-devirt-iterations=100 --abort-on-max-devirt-iterations-reached"
-    # inline everything possible, and let the machine outliner undo some of it, if requested
+    # inline everything at o3, and nothing at debug. let the machine outliner undo some of it later, if requested
     inline_settings = "--inline-threshold=-10000" if debug_mode else "--inline-threshold=10000"
 
     # We disable tail calls for the following reason:
@@ -163,10 +163,6 @@ def run_opt(debug_mode):
     attributor_settings = "--attributor-enable=module --attributor-annotate-decl-cs --max-heap-to-stack-size=1024 --disable-tail-calls --attributor-manifest-internal --attributor-assume-closed-world=false"
     in_file = f"out_reg2mem.ll"
     opt = f"opt -S {in_file} {opt_level} {devirtualization_settings} {inline_settings} {attributor_settings} -o out_optimized.ll"
-    #opt2 = f"opt -S --passes=\"attributor,mem2reg,sroa,instcombine\" {devirtualization_settings} {inline_settings} {attributor_settings} -o out_optimized.ll"
-    #opt2 = f"opt -S {in_file} {o2} --print-after-all {heap_to_stack} {devirtualization_settings} {inline_settings} -o out_optimized.ll"
-    #out = subprocess.run(opt1, text=True, shell=True, capture_output=True)
-    #out = out.stdout #.replace("call void @llvm.memcpy.p0.p0.i64","call void @llvm.memcpy.inline.p0.p0.i64")
     subprocess.run(opt, text=True, shell=True)
     if debug_mode: subprocess.run(debug, text=True, shell=True)
 
@@ -197,19 +193,24 @@ def main(argv):
     print(f"compiling {file_name}")
     debug_mode = "--debug" in argv
     show_dependencies = "--dependencies" in argv
+
     output_name = None
     for i, arg in enumerate(argv):
-        if arg == "-o":
-            if len(argv) < i + 2: raise Exception("Please provide an output file.")
-            output_name = argv[i + 1]
-            if "." not in output_name: raise Exception("Please provide an file extension in the output name.")
-            generate_main_for.add(file_name)
-            output_stem = output_name.split(".")[0]
-            out_exe = f"{output_stem}.exe"
-            out_obj = f"{output_stem}.obj"
-            break
+        if arg != "-o": continue
+        if len(argv) < i + 2: raise Exception("Please provide an output file.")
+        output_name = argv[i + 1]
+        if "." not in output_name: raise Exception("Please provide an file extension in the output name.")
+        if ".exe" in output_name: generate_main_for.add(file_name)
+        output_stem = output_name.split(".")[0]
+        out_exe = f"{output_stem}.exe"
+        out_obj = f"{output_stem}.obj"
+        break
 
     ast = parse(file_name)
+
+    after_parse = time.time()
+    print(f"Time to parse: {after_parse - after_imports} seconds")
+
     #print(tree.pretty())
     module = ast.codegen()
 
@@ -226,7 +227,7 @@ def main(argv):
     module_str = stringio.getvalue().encode().decode('unicode_escape')
     with open("in.mlir", "w") as outfile: outfile.write(module_str)
     after_codegen = time.time()
-    print(f"Time to type check + codegen: {after_codegen - after_imports} seconds")
+    print(f"Time to type check + codegen: {after_codegen - after_parse} seconds")
 
     module_str = run_python_lowering(module)
 

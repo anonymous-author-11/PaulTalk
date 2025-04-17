@@ -1,4 +1,5 @@
 from lark import Transformer, v_args, Lark
+import lark_cython
 from AST import *
 from core_dialect import *
 from lark import Transformer
@@ -6,14 +7,17 @@ from lark.exceptions import UnexpectedToken
 from xdsl.ir import Block, Region
 from xdsl.dialects.builtin import IntegerType, IntegerAttr, StringAttr, NoneAttr
 from utils import *
+import copy
+
+parsed = {}
 
 def parse(file_name) -> AST:
     try:
-        with open(file_name) as source: import_text = source.read()
+        with open(file_name) as f: import_text = f.read()
+        with open("grammar.lark") as f: grammar = f.read()
         if file_name != "builtins.mini": import_text = "import builtins;\n\n" + import_text
-        parser = Lark.open("grammar.lark", parser='lalr', propagate_positions=True)
+        parser = Lark(grammar, parser='lalr', propagate_positions=True, _plugins=lark_cython.plugins, transformer=CSTTransformer(file_name))
         tree = parser.parse(import_text)
-        tree = CSTTransformer(file_name).transform(tree)
         return tree
     except UnexpectedToken as e:
         error_message = format_parser_error(e, file_name)
@@ -118,7 +122,7 @@ class CSTTransformer(Transformer):
         direct_supertypes = [typ for typ in supertype_list] if supertype_list else [FatPtr.basic("Object")]
         if class_name == "Object": direct_supertypes = [Any()]
         node_info = NodeInfo(random_letters(10), self.file_name, cls.line)
-        class_def = ClassDef(node_info, class_name, type_parameters, direct_supertypes, None, fields, regions, region_constraints, methods, [], None, None, None)
+        class_def = ClassDef(node_info, class_name, type_parameters, direct_supertypes, None, fields, regions, region_constraints, methods, None, None, None, None)
         for field in fields: field.defining_class = class_def
         for method in methods:
             method.defining_class = class_def
@@ -152,7 +156,11 @@ class CSTTransformer(Transformer):
 
     def import_statement(self, *names):
         file_str = "/".join([name.value for name in names]) + ".mini"
-        ast = parse(file_str)
+        if file_str in parsed:
+            ast = copy.deepcopy(parsed[file_str])
+        else:
+            ast = parse(file_str)
+            parsed[file_str] = ast
         node_info = NodeInfo(random_letters(10), self.file_name, names[0].line)
         return Import(node_info, file_str, ast.root, Scope())
 

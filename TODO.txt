@@ -371,9 +371,18 @@ DONE:
 	- Emit empty main function if specified outfile and no toplevel code [check!]
 	- Avoid duplicate main functions [check!]
 - Make .lib archives of .bc files and link --only-needed [check!]
+- Move lowering logic in core_dialect to pre-type-lowering passes [check!]
+	- Move type_id to type.symbol() [check!]
+	- CastOp [check!]
+	- Remove CastAssignOp [check!]
+	- TupleCastOp [check!]
 
 TODO:
 
+- Do less work for imports
+	- Type-check specific imports on-demand rather than upfront
+	- Decrease work done in interface_codegen
+	- std.mini should compile near instantly
 - Add multi-line comments and multi-line strings
 	- Multi-line comments
 	- Multi-line strings
@@ -384,17 +393,9 @@ TODO:
 	- lo will only lower to other dialects
 - Refactor to use lo.call in PDL
 - Add T? syntax for T | Nil
-- Move lowering logic in core_dialect to pre-type-lowering passes
-	- Move type_id to type.symbol() [check!]
-	- CastOp [check!]
-	- Remove CastAssignOp [check!]
-	- All CastOp variants
-	- TupleCastOp
 - Improve namespacing
-- Do less work for imports
-	- Type-check specific imports on-demand rather than upfront
-	- Decrease work done in interface_codegen
-	- std.mini should compile near instantly
+	- Should only have to disambiguate if an ambiguous entity is actually used
+	- Dot syntax for namespacing
 - Putting coroutine yields and returns in the same slot is asking for bugs
 - Better error for incorrectly parameterized reciever
 	- I.e. Array.new instead of Array[i32].new
@@ -565,10 +566,6 @@ TODO:
 
 - Assume call return value offsets
 - Expect reciever static types
-
-- Mem2reg apparently does heaptostack, and sroa apparently converts memcpy.inline to memcpy, and instcombine reduces memcpy to loads/stores
-	- Have to run attributor before mem2reg
-	- Running attributor twice causes bugs
 
 - Generic tuple creation and indexing
 	- Would have to use dynamic allocas

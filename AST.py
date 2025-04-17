@@ -116,10 +116,6 @@ class Node:
         pass
     def interface_codegen(self, scope):
         pass
-    def debug_typeflow(self, scope):
-        #print(f"typeflow for {self.info.line_number} {type(self)} starting; time passed: {time.time() - tim}")
-        self.typeflow(scope)
-        #print(f"typeflow for {self.info.line_number} {type(self)} finished; time passed: {time.time() - tim}")
     def typeflow(self, scope):
         pass
 
@@ -134,7 +130,7 @@ class BlockNode(Node):
     def codegen(self, scope):
         for stmt in self.statements: stmt.codegen(scope)
     def typeflow(self, scope):
-        for stmt in self.statements: stmt.debug_typeflow(scope)
+        for stmt in self.statements: stmt.typeflow(scope)
 
 @dataclass
 class Program(Node):
@@ -147,29 +143,29 @@ class Program(Node):
         for stmt in self.statements: stmt.interface_codegen(scope)
 
     def interface_typeflow(self, scope):
-        for stmt in self.statements:
-            if isinstance(stmt, ClassDef):
-                if stmt.name in scope.classes:
-                    raise Exception(f"{stmt.info}: Class {stmt.name} already declared in this scope")
-                scope.classes[stmt.name] = stmt
-                stmt.register_scope(scope)
-            if isinstance(stmt, FunctionDef):
-                if stmt.name in scope.functions:
-                    raise Exception(f"{stmt.info}: Function {stmt.name} already declared in this scope")
-                scope.functions[stmt.name] = stmt
-            if isinstance(stmt, Alias): scope.add_alias(stmt.alias, stmt.meaning)
-        for stmt in self.statements:
-            if isinstance(stmt, Import): stmt.debug_typeflow(scope)
-        for stmt in self.statements:
-            if isinstance(stmt, ClassDef):
-                stmt.compute_aliases()
-                stmt.compute_vtable()
+
+        classes = (stmt for stmt in self.statements if isinstance(stmt, ClassDef))
+        functions = (stmt for stmt in self.statements if isinstance(stmt, FunctionDef))
+        aliases = (stmt for stmt in self.statements if isinstance(stmt, Alias))
+        imports = (stmt for stmt in self.statements if isinstance(stmt, Import))
+
+        for cls in classes:
+            if cls.name in scope.classes:
+                raise Exception(f"{cls.info}: Class {cls.name} already declared in this scope")
+            scope.classes[cls.name] = cls
+            cls.register_scope(scope)
+        for fn in functions:
+            if fn.name in scope.functions:
+                raise Exception(f"{fn.info}: Function {fn.name} already declared in this scope")
+            scope.functions[fn.name] = fn
+        for alias in aliases: scope.add_alias(alias.alias, alias.meaning)
+        for imp in imports: imp.typeflow(scope)
 
     def typeflow(self, scope):
         self.interface_typeflow(scope)
         for stmt in self.statements:
             if isinstance(stmt, Import): continue
-            stmt.debug_typeflow(scope)
+            stmt.typeflow(scope)
         #G0, var_mapping0 = create_constraint_graph(scope.points_to_facts._set)
         #G0, var_mapping0 = transform_until_stable(G0, var_mapping0, set())
         #print(f"Transformed points-to graph for main:")
@@ -561,7 +557,7 @@ class FunctionLiteral(Expression):
         for i, param in enumerate(self.params):
             param.typeflow(scope)
             body_scope.type_table[param.name] = param_types[i]
-        self.body.debug_typeflow(body_scope)
+        self.body.typeflow(body_scope)
         self.insert_implicit_return(body_scope)
         last_stmt = self.body.statements[-1]
         return_type = None
@@ -638,11 +634,10 @@ class FieldIdentifier(Identifier):
 class FunctionIdentifier(Identifier):
 
     def codegen(self, scope):
-        alloca = AllocateOp.make(llvm.LLVMPointerType.opaque())
         addr_of = AddrOfOp.from_string(self.name)
-        store = llvm.StoreOp(addr_of.results[0], alloca.results[0])
-        scope.region.last_block.add_ops([alloca, addr_of, store])
-        return alloca.results[0]
+        wrap = WrapOp.make(addr_of.results[0])
+        scope.region.last_block.add_ops([addr_of, wrap])
+        return wrap.results[0]
 
     def exprtype(self, scope):
         func = scope.functions[self.name]
@@ -1432,7 +1427,7 @@ class FunctionDef(Statement):
             param_type = param.type(scope)
             param.typeflow(scope)
             body_scope.type_table[param.name] = param_type
-        self.body.debug_typeflow(body_scope)
+        self.body.typeflow(body_scope)
         if not self.hasreturn and self.return_type():
             raise Exception(f"{self.info}: Function declares return type {self.return_type()} yet has no return statement.")
 
@@ -1665,7 +1660,7 @@ class MethodDef(Statement):
             if not scope.subtype(param.type(self.defining_class._scope), field.type(body_scope)):
                 raise Exception(f"{self.info}: field {param.name} has type {field.type(body_scope)}, not {param.type(body_scope)}")
             body_scope.type_table[param.name] = param.type(self.defining_class._scope)
-        self.body.debug_typeflow(body_scope)
+        self.body.typeflow(body_scope)
         if self.name == "init": self.ensure_proper_init(body_scope)
         #self.check_lifetime_constraints(body_scope)
         self.ensure_return_type(scope)
@@ -1919,7 +1914,7 @@ class ClassMethodDef(MethodDef):
             raise Exception(f"{self.info}: cannot access instance fields ({param.name}) in class methods")
         for i, param in enumerate(self.params):
             param.typeflow(body_scope)
-        self.body.debug_typeflow(body_scope)
+        self.body.typeflow(body_scope)
         #self.check_lifetime_constraints(body_scope)
         self.ensure_return_type(scope)
 
@@ -2083,7 +2078,7 @@ class Behavior(Statement):
         behavior_scope = Scope(scope, behavior=self)
         for method in self.methods:
             if method.definition.defining_class != self.cls: continue
-            method.definition.debug_typeflow(behavior_scope)
+            method.definition.typeflow(behavior_scope)
 
         #print(f"Constructing Automaton for behavior {self.name}")
         self.automaton = Automaton.build(set(self.methods), self.cls._scope)
@@ -2168,7 +2163,7 @@ class ClassDef(Statement):
     virtual_regions: List[str]
     region_constraints: List[Constraint]
     method_definitions: List[MethodDef]
-    behaviors: List[Behavior]
+    _behaviors: List[Behavior]
     _scope: Scope
     _vtable: List[Method | Behavior]
     _my_ordering: List["ClassDef"]
@@ -2236,7 +2231,7 @@ class ClassDef(Statement):
             type_set, name = next((field_type_sets[k], name) for (k, name) in enumerate(field_names) if len(field_type_sets[k]) > 1)
             raise Exception(f"{self.info}: Field {name} in class {self.name} has more than one declared type: ({type_set}).")
         for behavior in self.behaviors:
-            behavior.debug_typeflow(self._scope)
+            behavior.typeflow(self._scope)
 
     def register_scope(self, scope):
         class_scope = Scope(scope, cls=self)
@@ -2373,10 +2368,15 @@ class ClassDef(Statement):
     def type_field_of(self, t):
         return next(f for f in self.fields() if isinstance(f.declaration, TypeFieldDecl) and f.declaration.type_param == t)
 
+    @property
+    def behaviors(self):
+        if not isinstance(self._behaviors, list): self.compute_vtable()
+        return self._behaviors
+
     def initialize_behaviors(self):
         all_method_definitions = self.all_method_definitions()
         confusable_sets = list(reversed({tuple(definition.confusable_set(all_method_definitions, self._scope)):definition for definition in reversed(all_method_definitions)}.keys()))
-        self.behaviors = []
+        self._behaviors = []
         for confusable_set in confusable_sets:
             belonging_methods = [Method(definition, self, 0, None) for definition in confusable_set]
             meth_name = belonging_methods[0].definition.name
@@ -2385,9 +2385,10 @@ class ClassDef(Statement):
             node_info = NodeInfo(random_letters(10), self.info.filename, self.info.line_number)
             behavior = ty(node_info, meth_name, 0, belonging_methods, meth_arity, None, self, [])
             behavior.remove_superfluous_methods()
-            self.behaviors.append(behavior)
+            self._behaviors.append(behavior)
 
     def compute_vtable(self):
+        self.compute_aliases()
         vtables = [*chain.from_iterable(cls.vtable() for cls in self.my_ordering())]
         # divide type fields into fixed and unfixed depending on whether a type parameter appears anywhere in them
         # need a utility method to determine if a type is fully concrete
@@ -2790,7 +2791,7 @@ class IfStatement(Branch):
             print(offender[0])
             print(offender[1])
             return
-        for (b_block, b_scope) in zip(branch_blocks, branch_scopes): b_block.debug_typeflow(b_scope)
+        for (b_block, b_scope) in zip(branch_blocks, branch_scopes): b_block.typeflow(b_scope)
 
         # allocate and initialize variables whose types morph during the branching
         route_scopes = branch_scopes if self.else_block else [branch_scopes[0], scope]
@@ -2812,10 +2813,10 @@ class IfStatement(Branch):
         branch_blocks = [self.then_block] if (not self.else_block) else [self.then_block, self.else_block]
         branch_scopes = [Scope(scope) for block in branch_blocks]
         self.narrow_dry(branch_scopes[0])
-        for (b_block, b_scope) in zip(branch_blocks, branch_scopes): b_block.debug_typeflow(b_scope)
+        for (b_block, b_scope) in zip(branch_blocks, branch_scopes): b_block.typeflow(b_scope)
         branch_scopes = [Scope(scope) for block in branch_blocks]
         self.narrow_dry(branch_scopes[0])
-        for (b_scope, b_block) in zip(branch_scopes, branch_blocks): b_block.debug_typeflow(b_scope)
+        for (b_scope, b_block) in zip(branch_scopes, branch_blocks): b_block.typeflow(b_scope)
         for b_scope in branch_scopes: scope.merge(b_scope)
 
 @dataclass
@@ -3088,7 +3089,8 @@ class Import(Statement):
 
     def typeflow(self, scope):
         included_files.add_edge(self.info.filename, self.import_filename)
-        if next(nx.simple_cycles(included_files), None):
+        dependency_cycle = next(nx.simple_cycles(included_files), None)
+        if dependency_cycle:
             print("Dependency graph:")
             nx.write_network_text(included_files)
             raise Exception(f"{self.info}: Import of {self.import_filename} from {self.info.filename} creates a cycle in the dependency graph.")

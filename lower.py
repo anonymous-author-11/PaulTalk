@@ -45,6 +45,8 @@ class LowerHi(ModulePass):
     def apply(self, ctx: MLContext, op: ModuleOp) -> None:
         walker = PatternRewriteWalker(
             GreedyRewritePatternApplier([
+                LowerReabstract(),
+                LowerTupleCast(),
                 LowerCast()
             ]),
             apply_recursively=True
@@ -112,8 +114,6 @@ class LowerMid(ModulePass):
             GreedyRewritePatternApplier([
                 LowerLogical(),
                 LowerUnionize(),
-                LowerReabstract(),
-                LowerTupleCast(),
                 LowerFuncDef(),
                 LowerGetterDef(),
                 LowerSetterDef(),
@@ -350,6 +350,86 @@ class LowerCast(RewritePattern):
             return 
 
         raise Exception(f"cast from {from_typ} to {to_typ} not accounted for")
+
+class LowerReabstract(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: ReabstractOp, rewriter: PatternRewriter):
+
+        from_typ = op.from_typ
+        to_typ = op.to_typ
+        operand = op.operand
+
+        attr_dict = {
+            "from_typ":from_typ.base_typ(),"to_typ":to_typ.base_typ(),"from_typ_name":from_typ.symbol(), "to_typ_name":to_typ.symbol()
+        }
+        wrapper_name = random_letters(10)
+        f_block = Block([])
+
+        has_return = to_typ.return_type != Nothing()
+        ret_type = [to_typ.return_type.base_typ()] if has_return else []
+        
+        args = [f_block.insert_arg(t.base_typ(), i) for (i,t) in enumerate(to_typ.param_types.data)]
+        wraps = [WrapOp.make(arg, to_typ.param_types.data[i]) for (i, arg) in enumerate(args)]
+        casts = [CastOp.make(wraps[i].results[0], to_typ.param_types.data[i], from_typ.param_types.data[i]) for (i, arg) in enumerate(args)]
+        unwraps = [UnwrapOp.create(operands=[casts[i].results[0]], result_types=[from_typ.param_types.data[i].base_typ()]) for (i, arg) in enumerate(args)]
+        attr_dict = {"ret_type":from_typ.return_type.base_typ() if has_return else llvm.LLVMVoidType()}
+        result_types = [] if not has_return else [from_typ.return_type]
+        fptr = f_block.insert_arg(llvm.LLVMPointerType.opaque(), 0)
+        operands = [fptr, *[x.results[0] for x in unwraps]]
+        call = FPtrCallOp.create(operands=operands, attributes=attr_dict, result_types=result_types)
+        f_block.add_ops([*wraps, *casts, *unwraps, call])
+        if has_return:
+            cast = CastOp.make(call.results[0], from_typ.return_type, to_typ.return_type)
+            unwrap = UnwrapOp.create(operands=[cast.results[0]], result_types=[to_typ.return_type.base_typ()])
+            ret = func.Return(unwrap.results[0])
+            f_block.add_ops([cast, unwrap, ret])
+        else:
+            f_block.add_op(func.Return())
+        f_body = Region([f_block])
+        dict_ary = ArrayAttr([DictionaryAttr({"llvm.nest":UnitAttr()}), *[DictionaryAttr({}) for arg in to_typ.param_types.data]])
+        func_def = func.FuncOp(wrapper_name, FunctionType.from_lists([t.base_typ() for t in to_typ.param_types.data], ret_type), f_body, arg_attrs=dict_ary)
+        top_level = op.get_toplevel_object()
+        rewriter.insert_op_before(func_def, top_level.body.block.first_op)
+
+        tramp = MallocOp.create(attributes={"typ":llvm.LLVMArrayType.from_size_and_type(24, IntegerType(8))}, result_types=[llvm.LLVMPointerType.opaque()])
+        anoint = AnointTrampolineOp.create(operands=[tramp.results[0]])
+        wrapper = AddrOfOp.from_string(wrapper_name)
+        fptr = llvm.LoadOp(operand, llvm.LLVMPointerType.opaque())
+        init_trampoline = llvm.CallIntrinsicOp(
+            "llvm.init.trampoline",
+            [[tramp.results[0], wrapper.results[0], fptr.results[0]]], 
+            []
+        )
+        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [3, 0])
+        init_trampoline.properties["operandSegmentSizes"] = operandSegmentSizes
+        init_trampoline.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        
+        adjust_trampoline = llvm.CallOp("adjust_trampoline", tramp.results[0], return_type=llvm.LLVMPointerType.opaque())
+        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
+        adjust_trampoline.properties["operandSegmentSizes"] = operandSegmentSizes
+        adjust_trampoline.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
+        alloca = AllocateOp.make(llvm.LLVMPointerType.opaque())
+        store = llvm.StoreOp(adjust_trampoline.results[0], alloca.results[0])
+        invariant0 = InvariantOp.make(tramp.results[0], 24)
+        
+        rewriter.inline_block_before_matched_op(Block([tramp, anoint, wrapper, fptr, init_trampoline, adjust_trampoline]))
+        rewriter.inline_block_after_matched_op(Block([store, invariant0]))
+        rewriter.replace_matched_op(alloca)
+
+class LowerTupleCast(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: TupleCastOp, rewriter: PatternRewriter):
+        to_typ = op.to_typ
+        from_typ = op.from_typ
+        conversion = builtin.UnrealizedConversionCastOp.create(operands=[op.operand], result_types=[llvm.LLVMPointerType.opaque()])
+        alloca = AllocateOp.create(attributes={"typ":to_typ.base_typ()}, result_types=[llvm.LLVMPointerType.opaque()])
+        from_geps = [llvm.GEPOp(conversion.results[0], [0, i], pointee_type=from_typ.base_typ()) for (i, t) in enumerate(from_typ.types)]
+        to_geps = [llvm.GEPOp(alloca.results[0], [0, i], pointee_type=to_typ.base_typ()) for (i, t) in enumerate(to_typ.types.data)]
+        casts = [CastOp.make(from_geps[i].results[0], a, b) for (i, (a, b)) in enumerate(zip(from_typ.types.data, to_typ.types.data))]
+        stores = [llvm.StoreOp(casts[i].results[0], to_geps[i].results[0]) for (i, t) in enumerate(to_typ.types.data)]
+        rewriter.inline_block_before_matched_op([Block([conversion, *from_geps, *to_geps, *casts])])
+        rewriter.inline_block_after_matched_op(Block([*stores]))
+        rewriter.replace_matched_op(alloca)
 
 class LowerPrelude(RewritePattern):
     @op_type_rewrite_pattern
@@ -1310,35 +1390,6 @@ class LowerReUnionize(RewritePattern):
         alloca = AllocateOp.make(op.to_typ)
         memcpy = MemCpyOp.make(op.operand, alloca.results[0], smaller)
         rewriter.inline_block_after_matched_op(Block([memcpy]))
-        rewriter.replace_matched_op(alloca)
-
-class LowerReabstract(RewritePattern):
-    @op_type_rewrite_pattern
-    def match_and_rewrite(self, op: ReabstractOp, rewriter: PatternRewriter):
-        block = op.region.detach_block(op.region.first_block)
-        func_def = block.first_op
-        tramp = func_def.next_op
-        top_level = op.get_toplevel_object()
-        block.detach_op(func_def)
-        adjust_trampoline = llvm.CallOp("adjust_trampoline", tramp.results[0], return_type=llvm.LLVMPointerType.opaque())
-        operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
-        adjust_trampoline.properties["operandSegmentSizes"] = operandSegmentSizes
-        adjust_trampoline.properties["op_bundle_sizes"] = DenseArrayBase.from_list(IntegerType(32), [])
-        alloca = AllocateOp.make(llvm.LLVMPointerType.opaque())
-        store = llvm.StoreOp(adjust_trampoline.results[0], alloca.results[0])
-        invariant0 = InvariantOp.make(tramp.results[0], 24)
-        rewriter.insert_op_before(func_def, top_level.body.block.first_op)
-        rewriter.inline_block_before_matched_op(block)
-        rewriter.inline_block_after_matched_op(Block([adjust_trampoline, store, invariant0]))
-        rewriter.replace_matched_op(alloca)
-
-class LowerTupleCast(RewritePattern):
-    @op_type_rewrite_pattern
-    def match_and_rewrite(self, op: TupleCastOp, rewriter: PatternRewriter):
-        block = op.region.detach_block(op.region.block)
-        alloca = block.first_op
-        block.detach_op(alloca)
-        rewriter.inline_block_after_matched_op(block)
         rewriter.replace_matched_op(alloca)
 
 class LowerGlobal(RewritePattern):
