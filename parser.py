@@ -16,13 +16,10 @@ parsed = {}
 
 def parse(file_name) -> AST:
     try:
-        start_time = time.time()
         with open(file_name) as f: import_text = f.read()
         if file_name != "builtins.mini": import_text = "import builtins;\n\n" + import_text
         tree = parser.parse(import_text)
         tree = CSTTransformer(file_name).transform(tree)
-        end_time = time.time()
-        print(f"parsed {file_name} in {end_time - start_time} seconds")
         return tree
     except UnexpectedToken as e:
         error_message = format_parser_error(e, file_name)

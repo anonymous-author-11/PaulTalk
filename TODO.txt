@@ -376,13 +376,10 @@ DONE:
 	- CastOp [check!]
 	- Remove CastAssignOp [check!]
 	- TupleCastOp [check!]
+- Make parsing way faster [check!]
 
 TODO:
 
-- Do less work for imports
-	- Type-check specific imports on-demand rather than upfront
-	- Decrease work done in interface_codegen
-	- std.mini should compile near instantly
 - Add multi-line comments and multi-line strings
 	- Multi-line comments
 	- Multi-line strings
@@ -407,6 +404,10 @@ TODO:
 - Special case "if buffer is Nil" to check for C nullptr
 	- Special case in TypeCheck [check!]
 	- Need to ensure intersection of Buffer & Nil doesn't reduce to Nothing
+- Do less work for imports
+	- Type-check specific imports on-demand rather than upfront
+	- Decrease work done in interface_codegen
+	- std.mini should compile near instantly
 - Implement Records
 	- Will require a utility method for finding field offsets for generic records
 - Dispatch on parameterizations
