@@ -122,10 +122,10 @@ class Ptr(ParametrizedAttribute, TypeAttribute):
         raise Exception(f"no symbol for {self}")
 
     def __repr__(self):
-        return f"Ptr[{self.type}]"
+        return f"{self.type}"
 
     def __format__(self, format_spec):
-        return f"Ptr[{self.type}]"
+        return f"{self.type}"
 
 @irdl_attr_definition
 class FatPtr(ParametrizedAttribute, TypeAttribute):

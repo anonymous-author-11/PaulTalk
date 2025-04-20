@@ -1,6 +1,10 @@
 import array;
 import io;
 
+/*
+This is a multi-line comment!
+*/
+
 pair1 = Pair[i32, f64].new(5, 7.0);
 t = pair1.second();
 IO.print(t);

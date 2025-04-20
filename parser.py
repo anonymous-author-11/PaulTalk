@@ -11,7 +11,7 @@ import copy
 import time
 
 with open("grammar.lark") as f: grammar = f.read()
-parser = parser = Lark(grammar, parser='lalr', propagate_positions=True, _plugins=lark_cython.plugins)
+parser = parser = Lark(grammar, parser='lalr', propagate_positions=True)
 parsed = {}
 
 def parse(file_name) -> AST:

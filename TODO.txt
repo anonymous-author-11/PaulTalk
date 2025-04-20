@@ -377,12 +377,88 @@ DONE:
 	- Remove CastAssignOp [check!]
 	- TupleCastOp [check!]
 - Make parsing way faster [check!]
+- Better error for incorrectly parameterized reciever [check!]
+	- I.e. Array.new instead of Array[i32].new [check!]
+- Add multi-line comments [check!]
+	- To grammar [check!]
+	- To syntax highlighting [check!]
 
 TODO:
 
-- Add multi-line comments and multi-line strings
-	- Multi-line comments
-	- Multi-line strings
+- Build system
+	- The compile command should take in
+		- The source directory
+		- The directory for the final product
+		- The directory to produce temporary files in
+	- The build tool will create and pass in these directories to the compiler
+	- The compiler should also know about all included directories
+		- Does the build tool pass these in?
+		- Or are these expected to be in environment variables?
+
+- We should distinguish between the input/output *paths* and the input/output *filenames* [check!]
+	- And we should create the output directory if it doesn't exist [check!]
+	- Add option for build directory; default to current directory
+	- All files other than the output file should be created into optional 'build' directory
+		- in.mlir, out.mlir, bitcode file, out_reg2mem.ll, out_optimized.ll, sometimes .obj file
+		- Arguably keep the .lib archive as well
+	- If compiling an exe, the obj should go in 'build'; if compiling an obj, into the out-directory
+
+- Package manager
+	- Search upwards until you find a manifest
+	- Use latest versions in default folder if no manifest found
+	- Use a simple accessible file format for the manifest
+
+- What do I really need for 1.0?
+	- A way to distribute and adopt code (packages)
+		- Ideally use something existing and portable
+		- I like 0install and think I should adapt it
+		- I'd need to write some wrappers around it
+		- I'd like to be able to use GitHub repos as packages
+	- Namespacing is even more necessary with packages
+	- Determine what kind of file/directory structure is expected
+	- Region memory management
+		- Liveness analysis
+			- Two backward passes over AST
+		- Allocating from regions
+		- Storing region ptrs in fatptrs
+			- Here be dragons
+			- Probably must require that generic fields be in the same region as self
+			- Because they might not be fatptrs in which case they can't carry a region
+			- This will leave the third word free for small struct optimization thankfully
+			- And generic method parameters should have to be bound to something with a region
+		- Aliasing rules for first class functions, coroutines, polymorphic constructors
+			- Just conservatively alias them all. Spare none of them.
+	- Support 3 major platforms (Windows, iOS, Linux)
+		- Have alternative utils.ll files for different platforms
+		- Make sure the compiler filesystem handling is portable
+		- Standalone-opt and debugir usage, ugh
+	- You have to get ahead of breaking changes, esp. ABI
+		- Function / coroutine base_typ
+	- A less meager stdlib
+		- Set, LinkedList
+		- JSON?
+	- A way to read program arguments (argc, argv)
+		- Make it a nice interface
+		- argv() -> Indexable[i32, String]
+	- Stack traces for exceptions
+
+- Tighten up return type inference for function literals
+	- You can't have a bare return and a return value in the same literal
+	- Should we disallow all return statements in literals?
+	- That's actually smart-- only one implicit return allowed
+- Overloading *functions*
+	- Reuse the behavior code as much as possible
+- Get rid of Ptr type and split into Int and Float
+- Where clauses for method type parameters
+- Should i32 be a subtype of i64?
+- Cast literals when passing as arguments
+- Implement user-exposed getters
+	- Shouldn't be technically difficult
+	- Will significantly improve ergonomics
+	- Especially now with lifetime annotations
+	- May actually technically be more efficient
+	- Not needing to cast self twice
+- Add multi-line strings
 - Implement heterogenous-width and integer-float binary operations
 - Split MLIR dialect into hi, mid, and lo dialects
 	- hi will use PaulTalk types
@@ -394,8 +470,6 @@ TODO:
 	- Should only have to disambiguate if an ambiguous entity is actually used
 	- Dot syntax for namespacing
 - Putting coroutine yields and returns in the same slot is asking for bugs
-- Better error for incorrectly parameterized reciever
-	- I.e. Array.new instead of Array[i32].new
 - Add 'of' syntax for array literals
 - Make aliases even smarter
 	- "alias Foo[A] = Bar[A, i32];"
@@ -435,12 +509,6 @@ TODO:
 	- On instance creation, store a mapping from formal offsets to real offsets
 	- Or even just store the sizes of the unbaked types
 	- 8 bits per size, add to invariant section
-- Implement user-exposed getters
-	- Shouldn't be technically difficult
-	- Will significantly improve ergonomics
-	- Especially now with lifetime annotations
-	- May actually technically be more efficient
-	- Not needing to cast self twice
 - Will need to apply class region constraints upon downcast
 	- Do we actually?
 	- What about automatic downcast upon multi-dispatch?
@@ -456,24 +524,19 @@ TODO:
 - Implement type parameter deduction from init()
 - Make sure that type bounds are applied generally
 	- What does this mean?
-- Where clauses for method type parameters
 - Figure out signature compatibility of overrides of generic parameters
 - Figure out a way to get methods into builtin vtables
 	- Define intrinsics for operations on boxed interfaces
 	- PrimitiveDef subtype of ClassDef?
 
 - Allow multiple type checks in one condition
-- Tighten up return type inference for function literals
-	- You can't have a bare return and a return value in the same literal
-	- Should we disallow all return statements in literals?
 - Add tuple destructuring
 - Check for mismatched yield types
 - Allow capturing class methods
 	- Will introduce A.b syntax
 	- A.b will also denote module-qualified names
-- Shift Functions and Coroutines to FatPtr interface
+- Shift Functions and Coroutines to FatPtr interface [ABI breaking]
 	- Store the fptr in the second word
-- Cast literals when passing as arguments
 - Narrow alternate path in branches
 	- The main motivation is to be able to pare off nil with "while x is Nil { yield(Exception); }"
 	- If the condition of a while is a type check then that type can be pared off after the loop
@@ -494,6 +557,7 @@ TODO:
 # --- Known Bugs ---
 
 - Method.overridden_methods() probably has a subtle bug
+	- Which I've hidden for now by mandating that abstract methods not override concrete ones
 - I have a feeling that the current handling of tuples is not strictly correct
 	- In particular, casting Tuple[i32, i32] | Nil to Tuple[Any, Any] | Nil will be incorrect
 	- Generally subtyping between value types of different size is fraught
@@ -613,8 +677,6 @@ TODO:
 - Bare 'yield();' should yield the coroutine itself? or nil?
 - Specifying that a class cannot be inherited alongside another class
 - Recursive aliases?
-- Overloading *functions*
-	- Making all toplevel functions methods of a file-wide class?
 - Propagate type information backwards?
 	- Probably just in certain easy circumstances
 - Enable copying of coroutines
