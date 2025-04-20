@@ -21,24 +21,27 @@ def hash_file(filepath) -> bytes:
     with open(filepath, 'rb') as f: hash_object = hashlib.file_digest(f, 'sha256')
     return hash_object.hexdigest().encode("utf-8")
 
+def already_perfect(source_path, build_dir) -> bool:
+    stem = os.path.basename(source_path).split(".")[0]
+    bc_file_path = os.path.join(build_dir, f"{stem}.bc")
+    hash_file_path = os.path.join(build_dir, f"{stem}.hash")
+    hash_file_exists = os.path.exists(hash_file_path)
+    bc_file_exists = os.path.exists(bc_file_path)
+    if not hash_file_exists: print(f"hash file doesn't exist for {source_path}")
+    if not bc_file_exists: print(f"bitcode file doesn't exist for {source_path}")
+    if not (hash_file_exists and bc_file_exists): return False
+    src_hash = hash_file(source_path)
+    with open(hash_file_path, "rb") as f: stored_hash = f.read()
+    if src_hash == stored_hash: return True
+    print(f"hash of {source_path} is not the same")
+    return False
+
 def recompile_set(input_path, dependency_list, dependency_graph, build_dir) -> set:
     to_recompile = set()
     for dependency in dependency_list:
         if dependency == input_path: continue
+        if already_perfect(dependency, build_dir): continue
         dependents = set(nx.ancestors(dependency_graph, dependency))
-        dependency_stem = os.path.basename(dependency).split(".")[0]
-        bc_file = f"{dependency_stem}.bc"
-        bc_path = os.path.join(build_dir, bc_file)
-        hash_file_path = os.path.join(build_dir, f"{dependency_stem}.hash")
-        hash_file_exists = os.path.exists(hash_file_path)
-        bc_file_exists = os.path.exists(bc_path)
-        if not hash_file_exists: print(f"hash file doesn't exist for {dependency}")
-        if not bc_file_exists: print(f"bitcode file doesn't exist for {dependency}")
-        if hash_file_exists and bc_file_exists:
-            src_hash = hash_file(dependency)
-            with open(hash_file_path, "rb") as f: stored_hash = f.read()
-            if src_hash == stored_hash: continue
-            print(f"hash of {dependency} is not the same")
         to_recompile.add(dependency)
         to_recompile = to_recompile.union(dependents)
     return to_recompile
@@ -50,14 +53,14 @@ def print_dependency_graph(included_files, file_name):
     text_repr = stringio.getvalue().replace("╾","<─").replace("╼",">")
     print(text_repr)
 
-def run_python_lowering(module):
+def run_python_lowering(module) -> str:
     lowered_module = do_lowering(module)
     stringio = StringIO()
     Printer(stringio).print(lowered_module)
     module_str = stringio.getvalue().encode().decode('unicode_escape')
     return module_str
 
-def run_pdl_lowering(module_str, build_dir):
+def run_pdl_lowering(module_str, build_dir) -> str:
     with open("patterns.mlir", "r") as patterns_file: patterns = patterns_file.read()
 
     to_pdl_bytecode = "mlir-opt -allow-unregistered-dialect --mlir-print-op-generic --convert-pdl-to-pdl-interp"
@@ -100,7 +103,7 @@ def run_pdl_lowering(module_str, build_dir):
     with open(out_mlir_path, "w") as outfile: outfile.write(module_str)
     return module_str
 
-def run_mlir_opt(module_str):
+def run_mlir_opt(module_str) -> str:
     cmd = " ".join([
         "mlir-opt","-allow-unregistered-dialect","--mlir-print-op-generic","--canonicalize=\"region-simplify=aggressive\"",
         "--sroa","--lift-cf-to-scf",
@@ -257,7 +260,7 @@ def main(argv):
     file_name = os.path.basename(input_path)
     in_dir = os.path.dirname(input_path)
     in_file_stem = file_name.split(".")[0]
-    print(f"compiling {file_name}")
+    print(f"Compiling {file_name}")
     debug_mode = "--debug" in argv
     show_dependencies = "--dependencies" in argv
     print_timings = "--no-timings" not in argv
@@ -289,6 +292,7 @@ def main(argv):
 
     #print(tree.pretty())
     module = ast.codegen()
+
     stringio = StringIO()
     Printer(stringio).print(module)
     module_str = stringio.getvalue().encode().decode('unicode_escape')
@@ -297,29 +301,33 @@ def main(argv):
     if show_dependencies: print_dependency_graph(dependency_graph, file_name)
     dependency_list = list(reversed(list(nx.topological_sort(dependency_graph))))
     reset_ast_globals()
-    if len(included_files.nodes()) > 0: raise Exception("ast globals not properly reset")
+    after_codegen = time.time()
 
     to_recompile = recompile_set(input_path, dependency_list, dependency_graph, build_dir)
+
+    if len(to_recompile) == 0 and already_perfect(input_path, build_dir):
+        # This input file already has a perfectly serviceable bitcode file
+        # TODO: skip all the passes needed to generate the bitcode file
+        pass
 
     # process in reverse-topological order, i.e. leaves first
     for dependency in dependency_list:
         if dependency == input_path: continue
         if not dependency in to_recompile: continue
-        print(f"recompiling {dependency}")
+        print(f"Recompiling {dependency}")
         # compile the dependency into the current build directory
         main(["", dependency, "--build-dir", build_dir, "--no-timings"])
 
     if print_timings: print(f"Time to parse: {after_parse - after_imports} seconds")
 
-    after_dependencies = time.time()
-    if print_timings: print(f"Time to verify / recompile dependencies: {after_dependencies - after_parse} seconds")
+    if print_timings: print(f"Time to type check + codegen: {after_codegen - after_parse} seconds")
 
-    after_codegen = time.time()
-    if print_timings: print(f"Time to type check + codegen: {after_codegen - after_dependencies} seconds")
+    after_dependencies = time.time()
+    if print_timings: print(f"Time to verify / recompile dependencies: {after_dependencies - after_codegen} seconds")
 
     module_str = run_python_lowering(module)
     after_firstpass = time.time()
-    if print_timings: print(f"Time to do python lowering: {after_firstpass - after_codegen} seconds")
+    if print_timings: print(f"Time to do python lowering: {after_firstpass - after_dependencies} seconds")
 
     module_str = run_pdl_lowering(module_str, build_dir)
     after_pdl = time.time()

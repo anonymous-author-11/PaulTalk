@@ -296,6 +296,7 @@ class CuckooMap[K,V] extends HashMap[K, V] {
 }
 
 // --- Custom Iterator Class for Cuckoo HashMap ---
+
 class CuckooMapIterator[K,V] extends Iterator[Pair[K,V]] {
     @map_table1: Buffer[Entry[K,V] | Nil]
     @map_table2: Buffer[Entry[K,V] | Nil]

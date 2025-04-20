@@ -402,7 +402,7 @@ TODO:
 		- in.mlir, out.mlir, bitcode file, out_reg2mem.ll, out_optimized.ll, sometimes .obj file [check!]
 		- Arguably keep the .lib archive as well
 	- If compiling an exe, the obj should go in 'build'; if compiling an obj, into the out-directory
-	- We can store hashes of source files in the build dir
+	- We can store hashes of source files in the build dir [check!]
 
 - Package manager
 	- Search upwards until you find a manifest
