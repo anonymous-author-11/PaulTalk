@@ -20,6 +20,7 @@ from xdsl.dialects.builtin import (
 from itertools import product, chain, combinations
 from functools import cmp_to_key
 import networkx as nx
+from pathlib import Path
 
 codegenned = set()
 generate_main_for = set()
@@ -46,7 +47,7 @@ class AST:
         typ_ops = []
         for typ_name, typ in builtin_types.items():
 
-            if self.root.info.filename != "builtins.mini":
+            if self.root.info.filepath.name != "builtins.mini":
                 attr_dict = {
                     "class_name":StringAttr(typ_name),
                     "vtbl_size":IntegerAttr.from_int_and_width(0, 32)
@@ -92,8 +93,8 @@ class AST:
                 "size_fn":data_size_fn_name
             }
             typ_ops.append(TypeDefOp.create(attributes=attr_dict))
-        if self.root.info.filename in generate_main_for:
-            main_name = StringAttr("_main_" + clean_name(self.root.info.filename.split(".")[0]))
+        if self.root.info.filepath in generate_main_for:
+            main_name = StringAttr("_main_" + clean_name(self.root.info.filepath.stem))
             main = MainOp.create(regions=[global_scope.region], attributes={"main_name":main_name})
             module = ModuleOp([PreludeOp.create(), *typ_ops, *class_ops, *func_ops, main], {"sym_name":StringAttr("ir")})
         else:
@@ -103,7 +104,7 @@ class AST:
 @dataclass
 class NodeInfo:
     _id: str
-    filename: str
+    filepath: Path
     line_number: int
 
     @property
@@ -112,10 +113,10 @@ class NodeInfo:
         return self._id
 
     def __repr__(self):
-        return f"File {self.filename}, line {self.line_number}"
+        return f"File {self.filepath}, line {self.line_number}"
 
     def __format__(self, format_spec):
-        return f"File {self.filename}, line {self.line_number}"
+        return f"File {self.filepath}, line {self.line_number}"
 
 @dataclass
 class Node:
@@ -307,7 +308,7 @@ class OverloadedBinaryOp(BinaryOp):
 
     def codegen(self, scope):
         mangled_operator = "_" + self.operator
-        method_call = MethodCall(NodeInfo(None, self.info.filename, self.info.line_number), self.left, mangled_operator, [self.right])
+        method_call = MethodCall(NodeInfo(None, self.info.filepath, self.info.line_number), self.left, mangled_operator, [self.right])
         return method_call.codegen(scope)
 
     def ensure_object_receiver(self, scope, left_type):
@@ -329,7 +330,7 @@ class OverloadedBinaryOp(BinaryOp):
         self.ensure_object_receiver(scope, left_type)
         mangled_operator = "_" + self.operator
         self.ensure_existing_overload(scope, left_type, mangled_operator, right_type)
-        method_call = MethodCall(NodeInfo(None, self.info.filename, self.info.line_number), self.left, mangled_operator, [self.right])
+        method_call = MethodCall(NodeInfo(None, self.info.filepath, self.info.line_number), self.left, mangled_operator, [self.right])
         return method_call.exprtype(scope)
 
 @dataclass
@@ -338,7 +339,7 @@ class NegativeOp(Expression):
 
     def codegen(self, scope):
         typ = self.exprtype(scope)
-        zero = IntegerLiteral(NodeInfo(None, self.info.filename, self.info.line_number), 0, 32) if typ == Ptr([IntegerType(32)]) else DoubleLiteral(NodeInfo(None, self.info.filename, self.info.line_number), 0.0)
+        zero = IntegerLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), 0, 32) if typ == Ptr([IntegerType(32)]) else DoubleLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), 0.0)
         return Arithmetic(self.info, zero, "SUB", self.operand).codegen(scope)
 
     def ensure_is_number(self, t):
@@ -412,15 +413,15 @@ class ArrayLiteral(Expression):
     def codegen(self, scope):
         self_type = self.exprtype(scope)
         elem_type = self_type.type_params.data[0]
-        sizelit = IntegerLiteral(NodeInfo(None, self.info.filename, self.info.line_number), len(self.elements), 32)
-        capacitylit = IntegerLiteral(NodeInfo(None, self.info.filename, self.info.line_number), len(self.elements) + 1, 32)
-        buf = CreateBuffer(NodeInfo(None, self.info.filename, self.info.line_number), Buffer([elem_type]), capacitylit, None)
-        temp_var = Identifier(NodeInfo(None, self.info.filename, self.info.line_number), "_temp_buf" + random_letters(10))
-        assign = Assignment(NodeInfo(None, self.info.filename, self.info.line_number), temp_var, buf)
+        sizelit = IntegerLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), len(self.elements), 32)
+        capacitylit = IntegerLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), len(self.elements) + 1, 32)
+        buf = CreateBuffer(NodeInfo(None, self.info.filepath, self.info.line_number), Buffer([elem_type]), capacitylit, None)
+        temp_var = Identifier(NodeInfo(None, self.info.filepath, self.info.line_number), "_temp_buf" + random_letters(10))
+        assign = Assignment(NodeInfo(None, self.info.filepath, self.info.line_number), temp_var, buf)
         assign.codegen(scope);
         for i, elem in enumerate(self.elements):
-            iliteral = IntegerLiteral(NodeInfo(None, self.info.filename, self.info.line_number), i, 32)
-            indexation = MethodCall(NodeInfo(None, self.info.filename, self.info.line_number), temp_var, "_set_index", [iliteral, elem])
+            iliteral = IntegerLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), i, 32)
+            indexation = MethodCall(NodeInfo(None, self.info.filepath, self.info.line_number), temp_var, "_set_index", [iliteral, elem])
             indexation.codegen(scope)
         ary = ObjectCreation(self.info, random_letters(10), self_type, [temp_var, sizelit, capacitylit], None)
         return ary.codegen(scope)
@@ -439,11 +440,11 @@ class StringLiteral(Expression):
 
     def codegen(self, scope):
         escaped_str = self.value.encode().decode('unicode_escape')
-        sizelit = IntegerLiteral(NodeInfo(None, self.info.filename, self.info.line_number), len(escaped_str), 32)
-        capacitylit = IntegerLiteral(NodeInfo(None, self.info.filename, self.info.line_number), len(escaped_str) + 1, 32)
-        buf = CreateBuffer(NodeInfo(None, self.info.filename, self.info.line_number), Buffer([Ptr([IntegerType(8)])]), capacitylit, None)
-        temp_var = Identifier(NodeInfo(None, self.info.filename, self.info.line_number), "_temp_buf" + random_letters(10))
-        assign = Assignment(NodeInfo(None, self.info.filename, self.info.line_number), temp_var, buf)
+        sizelit = IntegerLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), len(escaped_str), 32)
+        capacitylit = IntegerLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), len(escaped_str) + 1, 32)
+        buf = CreateBuffer(NodeInfo(None, self.info.filepath, self.info.line_number), Buffer([Ptr([IntegerType(8)])]), capacitylit, None)
+        temp_var = Identifier(NodeInfo(None, self.info.filepath, self.info.line_number), "_temp_buf" + random_letters(10))
+        assign = Assignment(NodeInfo(None, self.info.filepath, self.info.line_number), temp_var, buf)
         assign.codegen(scope);
         llvmtype = llvm.LLVMArrayType.from_size_and_type(len(escaped_str), IntegerType(8))
         lit = LiteralOp.create(attributes={"typ":llvmtype, "value":StringAttr(self.value)}, result_types=[llvm.LLVMPointerType.opaque()])
@@ -547,9 +548,9 @@ class FunctionLiteral(Expression):
         last_stmt = self.body.statements[-1]
         if isinstance(last_stmt, Return): return
         if isinstance(last_stmt, ExpressionStatement) and last_stmt.expr.exprtype(scope) and last_stmt.expr.exprtype(scope) != llvm.LLVMVoidType():
-            self.body.statements[-1] = ReturnValue(NodeInfo(None, self.info.filename, self.info.line_number), last_stmt.expr)
+            self.body.statements[-1] = ReturnValue(NodeInfo(None, self.info.filepath, self.info.line_number), last_stmt.expr)
             return
-        self.body.statements.append(Return(NodeInfo(None, self.info.filename, self.info.line_number)))
+        self.body.statements.append(Return(NodeInfo(None, self.info.filepath, self.info.line_number)))
 
     def typeflow(self, scope):
         self.exprtype(scope)
@@ -582,7 +583,7 @@ class Identifier(Expression):
     name: str
 
     def __post_init__(self):
-        self.info = NodeInfo(self.name, self.info.filename, self.info.line_number)
+        self.info = NodeInfo(self.name, self.info.filepath, self.info.line_number)
 
     def codegen(self, scope):
         if "@" in self.name and scope.cls and "self" in scope.symbol_table: return FieldIdentifier(self.info, self.name).codegen(scope)
@@ -1282,11 +1283,11 @@ class ObjectCreation(Expression):
         scope.type_table[self.anon_name] = self_type
 
         anon_id = Identifier(self.info, self.anon_name)
-        MethodCall(NodeInfo(None, self.info.filename, self.info.line_number), anon_id, "init", self.arguments).codegen(scope)
+        MethodCall(NodeInfo(None, self.info.filepath, self.info.line_number), anon_id, "init", self.arguments).codegen(scope)
         if scope.subtype(self_type, FatPtr.basic("Exception")):
-            file_name = StringLiteral(NodeInfo(None, self.info.filename, self.info.line_number), self.info.filename.replace("\\", "\\\\"))
-            line_number = IntegerLiteral(NodeInfo(None, self.info.filename, self.info.line_number), self.info.line_number, 32)
-            MethodCall(NodeInfo(None, self.info.filename, self.info.line_number), anon_id, "set_info", [line_number, file_name]).codegen(scope)
+            file_name = StringLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), str(self.info.filepath).replace("\\", "\\\\"))
+            line_number = IntegerLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), self.info.line_number, 32)
+            MethodCall(NodeInfo(None, self.info.filepath, self.info.line_number), anon_id, "set_info", [line_number, file_name]).codegen(scope)
         return new_op.results[0]
 
     def parameterizations(self, created_cls, self_type, scope):
@@ -1329,7 +1330,7 @@ class ObjectCreation(Expression):
             raise Exception(f"{self.info}: Cannot instantiate class {simplified_type} with abstract method {offender.definition.name} defined in class {offender.definition.defining_class.name}")
         scope.type_table[self.anon_name] = simplified_type
         anon_id = Identifier(self.info, self.anon_name)
-        MethodCall(NodeInfo(None, self.info.filename, self.info.line_number), anon_id, "init", self.arguments).exprtype(scope)
+        MethodCall(NodeInfo(None, self.info.filepath, self.info.line_number), anon_id, "init", self.arguments).exprtype(scope)
         scope.allocations[self.info.id] = self
         scope.points_to_facts.add((self.info.id, "==", self.anon_name))
         return simplified_type
@@ -1568,8 +1569,8 @@ class MethodDef(Statement):
             declared_type = field.type()
             if field.declaration.name in body_scope.type_table and body_scope.subtype(body_scope.type_table[field.declaration.name], declared_type): continue
             if declared_type == Nil () or isinstance(declared_type, Union) and Nil() in declared_type.types.data:
-                field_id = Identifier(NodeInfo(None, self.info.filename, self.info.line_number), field.declaration.name)
-                initialization = Assignment(NodeInfo(None, self.info.filename, self.info.line_number), field_id, NilLiteral(NodeInfo(None, self.info.filename, self.info.line_number)))
+                field_id = Identifier(NodeInfo(None, self.info.filepath, self.info.line_number), field.declaration.name)
+                initialization = Assignment(NodeInfo(None, self.info.filepath, self.info.line_number), field_id, NilLiteral(NodeInfo(None, self.info.filepath, self.info.line_number)))
                 self.body.statements.append(initialization)
                 continue
             print(f"field name in body type table? {field.declaration.name in body_scope.type_table}")
@@ -1743,7 +1744,7 @@ class Method:
         if isinstance(self.definition, ClassMethodDef): return constraints
         for param in self.definition.params:
             if "@" not in param.name: continue
-            node_info = NodeInfo(None, self.definition.info.filename, self.definition.info.line_number)
+            node_info = NodeInfo(None, self.definition.info.filepath, self.definition.info.line_number)
             constraints.append(Constraint(node_info, "self", "<", param.name))
         return constraints
 
@@ -2009,7 +2010,7 @@ class Behavior(Statement):
         behavior_scope = Scope(scope, behavior=self)
         for method in self.methods:
             if method.definition.defining_class == self.cls: method.definition.codegen(behavior_scope)
-            if method.definition.defining_class != self.cls and method.definition.defining_class.info.filename != self.cls.info.filename:
+            if method.definition.defining_class != self.cls and method.definition.defining_class.info.filepath != self.cls.info.filepath:
                 method.definition.interface_codegen(behavior_scope)
 
         scope.merge_blocks(behavior_scope)
@@ -2303,7 +2304,7 @@ class ClassDef(Statement):
         return flat_list
 
     def type_fields(self):
-        return [TypeFieldDecl(NodeInfo(None, self.info.filename, self.info.line_number), f"{self.name}_{i}", ReifiedType(), self, t) for i, t in enumerate(self.all_type_parameters())]
+        return [TypeFieldDecl(NodeInfo(None, self.info.filepath, self.info.line_number), f"{self.name}_{i}", ReifiedType(), self, t) for i, t in enumerate(self.all_type_parameters())]
 
     def base_typ(self):
         return llvm.LLVMStructType.from_type_list([t.base_typ() for t in self.fields_types()])
@@ -2395,7 +2396,7 @@ class ClassDef(Statement):
             meth_name = belonging_methods[0].definition.name
             meth_arity = belonging_methods[0].definition.arity
             ty = ClassBehavior if len(meth_name) > 6 and meth_name[0:6] == "_Self_" else Behavior
-            node_info = NodeInfo(None, self.info.filename, self.info.line_number)
+            node_info = NodeInfo(None, self.info.filepath, self.info.line_number)
             behavior = ty(node_info, meth_name, 0, belonging_methods, meth_arity, None, self, [])
             behavior.remove_superfluous_methods()
             self._behaviors.append(behavior)
@@ -2497,7 +2498,7 @@ class VarDecl(Statement):
     _type: TypeAttribute
 
     def __post_init__(self):
-        self.info = NodeInfo(self.name, self.info.filename, self.info.line_number)
+        self.info = NodeInfo(self.name, self.info.filepath, self.info.line_number)
 
     def codegen(self, scope):
         scope.type_table[self.name] = self.type(scope)
@@ -2899,32 +2900,32 @@ class For(Statement):
         _iterator_xyz = iterable.iterator();
         while (x := _iterator_xyz.next()) is not Nil { ... }
         """
-        temp = Identifier(NodeInfo(None, self.info.filename, self.info.line_number), self.temp_name)
-        iterator = MethodCall(NodeInfo("_iterator_" + random_letters(10), self.info.filename, self.info.line_number), self.iterable, "iterator", [])
-        assign0 = Assignment(NodeInfo(None, self.info.filename, self.info.line_number), temp, iterator)
+        temp = Identifier(NodeInfo(None, self.info.filepath, self.info.line_number), self.temp_name)
+        iterator = MethodCall(NodeInfo("_iterator_" + random_letters(10), self.info.filepath, self.info.line_number), self.iterable, "iterator", [])
+        assign0 = Assignment(NodeInfo(None, self.info.filepath, self.info.line_number), temp, iterator)
         assign0.codegen(scope)
-        nxt_call = MethodCall(NodeInfo(None, self.info.filename, self.info.line_number), temp, "next", [])
+        nxt_call = MethodCall(NodeInfo(None, self.info.filepath, self.info.line_number), temp, "next", [])
         nxt_type = nxt_call.exprtype(scope)
         continue_type = scope.simplify(Union.from_list([t for t in nxt_type.types.data if t != Nil()]))
-        inductee = Identifier(NodeInfo(None, self.info.filename, self.info.line_number), self.inductee)
-        assign1 = Assignment(NodeInfo(None, self.info.filename, self.info.line_number), inductee, nxt_call)
-        condition = TypeCheck(NodeInfo(None, self.info.filename, self.info.line_number), inductee, continue_type)
-        wile = WhileStatement(NodeInfo(None, self.info.filename, self.info.line_number), condition, assign1, self.body)
+        inductee = Identifier(NodeInfo(None, self.info.filepath, self.info.line_number), self.inductee)
+        assign1 = Assignment(NodeInfo(None, self.info.filepath, self.info.line_number), inductee, nxt_call)
+        condition = TypeCheck(NodeInfo(None, self.info.filepath, self.info.line_number), inductee, continue_type)
+        wile = WhileStatement(NodeInfo(None, self.info.filepath, self.info.line_number), condition, assign1, self.body)
         wile.codegen(scope)
 
     def typeflow(self, scope):
         iterable_type = self.iterable.exprtype(scope)
         if not isinstance(iterable_type, FatPtr):
             raise Exception(f"{self.info}: For-loop iterable must be an object with a .iterator() method, not {iterable_type}")
-        temp = Identifier(NodeInfo(None, self.info.filename, self.info.line_number), self.temp_name)
-        iterator = MethodCall(NodeInfo("_iterator_" + random_letters(10), self.info.filename, self.info.line_number), self.iterable, "iterator", [])
+        temp = Identifier(NodeInfo(None, self.info.filepath, self.info.line_number), self.temp_name)
+        iterator = MethodCall(NodeInfo("_iterator_" + random_letters(10), self.info.filepath, self.info.line_number), self.iterable, "iterator", [])
         iterator_type = iterator.exprtype(scope)
         if not isinstance(iterator_type, FatPtr):
             raise Exception(f"{self.info}: For-loop iterator must be an object with a .next() method, not {iterator_type}")
-        assign0 = Assignment(NodeInfo(None, self.info.filename, self.info.line_number), temp, iterator)
+        assign0 = Assignment(NodeInfo(None, self.info.filepath, self.info.line_number), temp, iterator)
         assign0.typeflow(scope)
 
-        nxt_call = MethodCall(NodeInfo(None, self.info.filename, self.info.line_number), temp, "next", [])
+        nxt_call = MethodCall(NodeInfo(None, self.info.filepath, self.info.line_number), temp, "next", [])
         nxt_type = nxt_call.exprtype(scope)
         if not isinstance(nxt_type, Union):
             print(nxt_type)
@@ -2933,10 +2934,10 @@ class For(Statement):
         if continue_type == Nothing():
             raise Exception(f"{self.info}: For-loop would never enter.")
 
-        inductee = Identifier(NodeInfo(None, self.info.filename, self.info.line_number), self.inductee)
-        assign1 = Assignment(NodeInfo(None, self.info.filename, self.info.line_number), inductee, nxt_call)
-        condition = TypeCheck(NodeInfo(None, self.info.filename, self.info.line_number), inductee, continue_type)
-        wile = WhileStatement(NodeInfo(None, self.info.filename, self.info.line_number), condition, assign1, self.body)
+        inductee = Identifier(NodeInfo(None, self.info.filepath, self.info.line_number), self.inductee)
+        assign1 = Assignment(NodeInfo(None, self.info.filepath, self.info.line_number), inductee, nxt_call)
+        condition = TypeCheck(NodeInfo(None, self.info.filepath, self.info.line_number), inductee, continue_type)
+        wile = WhileStatement(NodeInfo(None, self.info.filepath, self.info.line_number), condition, assign1, self.body)
         wile.typeflow(scope)
 
 @dataclass
@@ -3101,17 +3102,17 @@ class CreateBuffer(Expression):
 
 @dataclass
 class Import(Statement):
-    import_filename: str
+    import_filepath: Path
     program: Program
     sandbox: Scope
 
     def typeflow(self, scope):
-        included_files.add_edge(self.info.filename, self.import_filename)
+        included_files.add_edge(self.info.filepath, self.import_filepath)
         dependency_cycle = next(nx.simple_cycles(included_files), None)
         if dependency_cycle:
             print("Dependency graph:")
             nx.write_network_text(included_files)
-            raise Exception(f"{self.info}: Import of {self.import_filename} from {self.info.filename} creates a cycle in the dependency graph.")
+            raise Exception(f"{self.info}: Import of {self.import_filepath} from {self.info.filepath} creates a cycle in the dependency graph.")
         self.program.interface_typeflow(self.sandbox)
         for k, v in self.sandbox.classes.items():
             if k not in scope.classes.keys(): scope.classes[k] = v

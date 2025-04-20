@@ -1,11 +1,11 @@
 ; ModuleID = 'build\out_reg2mem.ll'
 source_filename = "llvm-link"
 
-@lszms_Warning_Remove_returned_Nil_for_key_ = internal unnamed_addr constant [37 x i8] c"Warning: Remove returned Nil for key "
-@kdyix_Warning_Remove_returned_wrong_value_for_key_ = internal unnamed_addr constant [45 x i8] c"Warning: Remove returned wrong value for key "
-@glqec_Error_Nil_returned_during_random_hit_test_for_key_ = internal unnamed_addr constant [51 x i8] c"Error: Nil returned during random hit test for key "
-@snfak__unique_keys_for_random_hit_test = internal unnamed_addr constant [33 x i8] c" unique keys for random hit test."
-@dzjlz_Error_Nil_returned_during_sequential_hit_test_for_key_ = internal unnamed_addr constant [55 x i8] c"Error: Nil returned during sequential hit test for key "
+@axwcw_Warning_Remove_returned_Nil_for_key_ = internal unnamed_addr constant [37 x i8] c"Warning: Remove returned Nil for key "
+@aqhsa_Warning_Remove_returned_wrong_value_for_key_ = internal unnamed_addr constant [45 x i8] c"Warning: Remove returned wrong value for key "
+@cwkdn_Error_Nil_returned_during_random_hit_test_for_key_ = internal unnamed_addr constant [51 x i8] c"Error: Nil returned during random hit test for key "
+@pzdlo__unique_keys_for_random_hit_test = internal unnamed_addr constant [33 x i8] c" unique keys for random hit test."
+@udrvf_Error_Nil_returned_during_sequential_hit_test_for_key_ = internal unnamed_addr constant [55 x i8] c"Error: Nil returned during sequential hit test for key "
 @PRNG_field_seed = internal constant { ptr, ptr } { ptr @PRNG_getter_seed, ptr @PRNG_setter_seed }
 @string_string = internal constant [4 x i8] c"%s\0A\00"
 @exception_message = internal constant [45 x i8] c"Error: uncaught exception. Program aborted.\0A\00"
@@ -401,7 +401,7 @@ define void @PRNG_setter_seed(ptr nocapture nofree noundef nonnull writeonly ali
   ret void
 }
 
-define i1 @hfthnvhxpl(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #10 {
+define i1 @hgluacjauc(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #10 {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -410,14 +410,14 @@ define i1 @hfthnvhxpl(ptr nest nocapture nofree noundef nonnull readonly %0, { p
   ret i1 %4
 }
 
-define i32 @fptgkrzbtv(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #10 {
+define i32 @frcjrwovvs(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #10 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @oncpeduqta(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #10 {
+define i1 @krnybiyvzt(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #10 {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -426,14 +426,14 @@ define i1 @oncpeduqta(ptr nest nocapture nofree noundef nonnull readonly %0, { p
   ret i1 %4
 }
 
-define i32 @kwrnwbeayx(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #10 {
+define i32 @rbjmfavhsn(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #10 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @jqwgoaibkh(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #10 {
+define i1 @yxxqfjpdvs(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #10 {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -442,14 +442,14 @@ define i1 @jqwgoaibkh(ptr nest nocapture nofree noundef nonnull readonly %0, { p
   ret i1 %4
 }
 
-define i32 @rgbffsnwix(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #10 {
+define i32 @ahtqskygkf(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #10 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @pkwiryckeq(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #10 {
+define i1 @ntcqrrevjk(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #10 {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -458,14 +458,14 @@ define i1 @pkwiryckeq(ptr nest nocapture nofree noundef nonnull readonly %0, { p
   ret i1 %4
 }
 
-define i32 @pvefpsearw(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #10 {
+define i32 @ociehowuex(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #10 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @elrmqcbkiu(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #10 {
+define i1 @dsllzqddzf(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #10 {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -474,14 +474,14 @@ define i1 @elrmqcbkiu(ptr nest nocapture nofree noundef nonnull readonly %0, { p
   ret i1 %4
 }
 
-define i32 @rtkeheablv(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #10 {
+define i32 @mmxscpjfyw(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #10 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @gsubqevlyw(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #10 {
+define i1 @qxmaedjoqb(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #10 {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -490,14 +490,14 @@ define i1 @gsubqevlyw(ptr nest nocapture nofree noundef nonnull readonly %0, { p
   ret i1 %4
 }
 
-define i32 @vycymggduy(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #10 {
+define i32 @stqzktgkgs(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #10 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @dkwyfwnusy(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #10 {
+define i1 @dwlqxfchfu(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #10 {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -506,14 +506,14 @@ define i1 @dkwyfwnusy(ptr nest nocapture nofree noundef nonnull readonly %0, { p
   ret i1 %4
 }
 
-define i32 @tczvpuxxnz(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #10 {
+define i32 @jiuxagihdy(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #10 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @zoqpyikhru(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #10 {
+define i1 @unolxjvxbl(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #10 {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -522,14 +522,14 @@ define i1 @zoqpyikhru(ptr nest nocapture nofree noundef nonnull readonly %0, { p
   ret i1 %4
 }
 
-define i32 @eycofwkkkb(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #10 {
+define i32 @rlmbelrxrh(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #10 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @ojlhzkidsz(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #10 {
+define i1 @rmtxzjhvvf(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #10 {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -538,14 +538,14 @@ define i1 @ojlhzkidsz(ptr nest nocapture nofree noundef nonnull readonly %0, { p
   ret i1 %4
 }
 
-define i32 @pvulqyjimt(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #10 {
+define i32 @rzudmolznm(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #10 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @jznqlqbaho(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #10 {
+define i1 @kguisaayac(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #10 {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -554,7 +554,7 @@ define i1 @jznqlqbaho(ptr nest nocapture nofree noundef nonnull readonly %0, { p
   ret i1 %4
 }
 
-define i32 @hmtpqzkpua(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #10 {
+define i32 @idrxeyqbki(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #10 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
@@ -799,14 +799,14 @@ define void @benchmark_insert_sequential(i32 %0) local_unnamed_addr #10 {
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i) #36
   %result.i11 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i10, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i) #36
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i10, ptr noalias nofree noundef nonnull readnone @hmtpqzkpua, ptr noalias nofree noundef nonnull readnone @i32_hasher) #36
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i10, ptr noalias nofree noundef nonnull readnone @idrxeyqbki, ptr noalias nofree noundef nonnull readnone @i32_hasher) #36
   %ret.i = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i10) #47
   %46 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i10) #36
   %result.i12 = call noalias dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #45
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i13) #36
   %result.i14 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i12, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i13) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i13) #36
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i12, ptr noalias nofree noundef nonnull readnone @jznqlqbaho, ptr noalias nofree noundef nonnull readnone @i32_eq) #36
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i12, ptr noalias nofree noundef nonnull readnone @kguisaayac, ptr noalias nofree noundef nonnull readnone @i32_eq) #36
   %ret.i15 = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i12) #47
   %47 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i12) #36
   %48 = getelementptr inbounds i8, ptr %result.i9, i64 48
@@ -2847,14 +2847,14 @@ define void @benchmark_insert_random(i32 %0) local_unnamed_addr #10 {
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i) #36
   %result.i11 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i10, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i) #36
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i10, ptr noalias nofree noundef nonnull readnone @pvulqyjimt, ptr noalias nofree noundef nonnull readnone @i32_hasher) #36
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i10, ptr noalias nofree noundef nonnull readnone @rzudmolznm, ptr noalias nofree noundef nonnull readnone @i32_hasher) #36
   %ret.i = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i10) #47
   %79 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i10) #36
   %result.i12 = call noalias dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #45
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i13) #36
   %result.i14 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i12, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i13) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i13) #36
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i12, ptr noalias nofree noundef nonnull readnone @ojlhzkidsz, ptr noalias nofree noundef nonnull readnone @i32_eq) #36
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i12, ptr noalias nofree noundef nonnull readnone @rmtxzjhvvf, ptr noalias nofree noundef nonnull readnone @i32_eq) #36
   %ret.i15 = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i12) #47
   %80 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i12) #36
   %81 = getelementptr inbounds i8, ptr %result.i9, i64 48
@@ -2891,14 +2891,14 @@ define void @benchmark_insert_random(i32 %0) local_unnamed_addr #10 {
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i54) #36
   %result.i55 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i53, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i54) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i54) #36
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i53, ptr noalias nofree noundef nonnull readnone @eycofwkkkb, ptr noalias nofree noundef nonnull readnone @i32_hasher) #36
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i53, ptr noalias nofree noundef nonnull readnone @rlmbelrxrh, ptr noalias nofree noundef nonnull readnone @i32_hasher) #36
   %ret.i56 = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i53) #47
   %96 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i53) #36
   %result.i57 = call noalias dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #45
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i58) #36
   %result.i59 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i57, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i58) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i58) #36
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i57, ptr noalias nofree noundef nonnull readnone @zoqpyikhru, ptr noalias nofree noundef nonnull readnone @i32_eq) #36
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i57, ptr noalias nofree noundef nonnull readnone @unolxjvxbl, ptr noalias nofree noundef nonnull readnone @i32_eq) #36
   %ret.i60 = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i57) #47
   %97 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i57) #36
   %98 = getelementptr inbounds i8, ptr %result.i52, i64 48
@@ -6496,14 +6496,14 @@ define void @benchmark_get_sequential_hit(i32 %0) local_unnamed_addr #10 {
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i) #36
   %result.i11 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i10, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i) #36
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i10, ptr noalias nofree noundef nonnull readnone @tczvpuxxnz, ptr noalias nofree noundef nonnull readnone @i32_hasher) #36
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i10, ptr noalias nofree noundef nonnull readnone @jiuxagihdy, ptr noalias nofree noundef nonnull readnone @i32_hasher) #36
   %ret.i = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i10) #47
   %46 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i10) #36
   %result.i12 = call noalias dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #45
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i13) #36
   %result.i14 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i12, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i13) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i13) #36
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i12, ptr noalias nofree noundef nonnull readnone @dkwyfwnusy, ptr noalias nofree noundef nonnull readnone @i32_eq) #36
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i12, ptr noalias nofree noundef nonnull readnone @dwlqxfchfu, ptr noalias nofree noundef nonnull readnone @i32_eq) #36
   %ret.i15 = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i12) #47
   %47 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i12) #36
   %48 = getelementptr inbounds i8, ptr %result.i9, i64 48
@@ -8319,7 +8319,7 @@ CuckooMap_get_keyK.exit:                          ; preds = %CuckooMap_get_from_
 ._crit_edge.lr.ph.i:                              ; preds = %CuckooMap_get_keyK.exit
   %result.i19.h2s1612 = alloca [56 x i8], align 64
   call void @llvm.memset.p0.i64(ptr noundef nonnull align 64 dereferenceable(56) %result.i19.h2s1612, i8 0, i64 56, i1 false)
-  %975 = load <55 x i8>, ptr @dzjlz_Error_Nil_returned_during_sequential_hit_test_for_key_, align 64
+  %975 = load <55 x i8>, ptr @udrvf_Error_Nil_returned_during_sequential_hit_test_for_key_, align 64
   store <55 x i8> %975, ptr %result.i19.h2s1612, align 64
   call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
   %976 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2) #36
@@ -8550,14 +8550,14 @@ define void @benchmark_get_random_hit(i32 %0) local_unnamed_addr #10 {
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i) #36
   %result.i10 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i9, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i) #36
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i9, ptr noalias nofree noundef nonnull readnone @vycymggduy, ptr noalias nofree noundef nonnull readnone @i32_hasher) #36
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i9, ptr noalias nofree noundef nonnull readnone @stqzktgkgs, ptr noalias nofree noundef nonnull readnone @i32_hasher) #36
   %ret.i = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i9) #47
   %79 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i9) #36
   %result.i11 = call noalias dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #45
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i12) #36
   %result.i13 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i11, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i12) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i12) #36
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i11, ptr noalias nofree noundef nonnull readnone @gsubqevlyw, ptr noalias nofree noundef nonnull readnone @i32_eq) #36
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i11, ptr noalias nofree noundef nonnull readnone @qxmaedjoqb, ptr noalias nofree noundef nonnull readnone @i32_eq) #36
   %ret.i14 = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i11) #47
   %80 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i11) #36
   %81 = getelementptr inbounds i8, ptr %result.i8, i64 48
@@ -8594,14 +8594,14 @@ define void @benchmark_get_random_hit(i32 %0) local_unnamed_addr #10 {
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i53) #36
   %result.i54 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i52, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i53) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i53) #36
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i52, ptr noalias nofree noundef nonnull readnone @rtkeheablv, ptr noalias nofree noundef nonnull readnone @i32_hasher) #36
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i52, ptr noalias nofree noundef nonnull readnone @mmxscpjfyw, ptr noalias nofree noundef nonnull readnone @i32_hasher) #36
   %ret.i55 = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i52) #47
   %96 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i52) #36
   %result.i56 = call noalias dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #45
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i57) #36
   %result.i58 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i56, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i57) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i57) #36
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i56, ptr noalias nofree noundef nonnull readnone @elrmqcbkiu, ptr noalias nofree noundef nonnull readnone @i32_eq) #36
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i56, ptr noalias nofree noundef nonnull readnone @dsllzqddzf, ptr noalias nofree noundef nonnull readnone @i32_eq) #36
   %ret.i59 = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i56) #47
   %97 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i56) #36
   %98 = getelementptr inbounds i8, ptr %result.i51, i64 48
@@ -12004,7 +12004,7 @@ CuckooMap_insert_keyK_valueV.exit518:             ; preds = %._crit_edge.i2179, 
   %puts.i = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly dereferenceable(30) %result.i.i1418.h2s3368) #41
   call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
   %1834 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %.0266.lcssa) #41
-  %1835 = load <33 x i8>, ptr @snfak__unique_keys_for_random_hit_test, align 64
+  %1835 = load <33 x i8>, ptr @pzdlo__unique_keys_for_random_hit_test, align 64
   %1836 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
   call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
   %1837 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2) #36
@@ -12244,7 +12244,7 @@ CuckooMap_get_keyK.exit604:                       ; preds = %CuckooMap_get_from_
 ._crit_edge.lr.ph.i1575:                          ; preds = %CuckooMap_get_keyK.exit604
   %result.i93.h2s3372 = alloca [52 x i8], align 64
   call void @llvm.memset.p0.i64(ptr noundef nonnull align 64 dereferenceable(52) %result.i93.h2s3372, i8 0, i64 52, i1 false)
-  %1970 = load <51 x i8>, ptr @glqec_Error_Nil_returned_during_random_hit_test_for_key_, align 64
+  %1970 = load <51 x i8>, ptr @cwkdn_Error_Nil_returned_during_random_hit_test_for_key_, align 64
   store <51 x i8> %1970, ptr %result.i93.h2s3372, align 64
   call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
   %1971 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2) #36
@@ -12476,14 +12476,14 @@ define void @benchmark_get_random_miss(i32 %0) local_unnamed_addr #10 {
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i) #36
   %result.i10 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i9, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i) #36
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i9, ptr noalias nofree noundef nonnull readnone @pvefpsearw, ptr noalias nofree noundef nonnull readnone @i32_hasher) #36
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i9, ptr noalias nofree noundef nonnull readnone @ociehowuex, ptr noalias nofree noundef nonnull readnone @i32_hasher) #36
   %ret.i = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i9) #47
   %78 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i9) #36
   %result.i11 = call noalias dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #45
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i12) #36
   %result.i13 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i11, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i12) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i12) #36
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i11, ptr noalias nofree noundef nonnull readnone @pkwiryckeq, ptr noalias nofree noundef nonnull readnone @i32_eq) #36
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i11, ptr noalias nofree noundef nonnull readnone @ntcqrrevjk, ptr noalias nofree noundef nonnull readnone @i32_eq) #36
   %ret.i14 = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i11) #47
   %79 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i11) #36
   %80 = getelementptr inbounds i8, ptr %result.i8, i64 48
@@ -12510,14 +12510,14 @@ define void @benchmark_get_random_miss(i32 %0) local_unnamed_addr #10 {
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i53) #36
   %result.i54 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i52, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i53) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i53) #36
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i52, ptr noalias nofree noundef nonnull readnone @rgbffsnwix, ptr noalias nofree noundef nonnull readnone @i32_hasher) #36
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i52, ptr noalias nofree noundef nonnull readnone @ahtqskygkf, ptr noalias nofree noundef nonnull readnone @i32_hasher) #36
   %ret.i55 = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i52) #47
   %89 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i52) #36
   %result.i56 = call noalias dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #45
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i57) #36
   %result.i58 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i56, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i57) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i57) #36
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i56, ptr noalias nofree noundef nonnull readnone @jqwgoaibkh, ptr noalias nofree noundef nonnull readnone @i32_eq) #36
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i56, ptr noalias nofree noundef nonnull readnone @yxxqfjpdvs, ptr noalias nofree noundef nonnull readnone @i32_eq) #36
   %ret.i59 = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i56) #47
   %90 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i56) #36
   %91 = getelementptr inbounds i8, ptr %result.i51, i64 48
@@ -16615,14 +16615,14 @@ define void @benchmark_remove_random(i32 %0) local_unnamed_addr #10 {
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i) #36
   %result.i10 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i9, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i) #36
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i9, ptr noalias nofree noundef nonnull readnone @kwrnwbeayx, ptr noalias nofree noundef nonnull readnone @i32_hasher) #36
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i9, ptr noalias nofree noundef nonnull readnone @rbjmfavhsn, ptr noalias nofree noundef nonnull readnone @i32_hasher) #36
   %ret.i = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i9) #47
   %79 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i9) #36
   %result.i11 = call noalias dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #45
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i12) #36
   %result.i13 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i11, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i12) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i12) #36
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i11, ptr noalias nofree noundef nonnull readnone @oncpeduqta, ptr noalias nofree noundef nonnull readnone @i32_eq) #36
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i11, ptr noalias nofree noundef nonnull readnone @krnybiyvzt, ptr noalias nofree noundef nonnull readnone @i32_eq) #36
   %ret.i14 = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i11) #47
   %80 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i11) #36
   %81 = getelementptr inbounds i8, ptr %result.i8, i64 48
@@ -16659,14 +16659,14 @@ define void @benchmark_remove_random(i32 %0) local_unnamed_addr #10 {
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i53) #36
   %result.i54 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i52, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i53) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i53) #36
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i52, ptr noalias nofree noundef nonnull readnone @fptgkrzbtv, ptr noalias nofree noundef nonnull readnone @i32_hasher) #36
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i52, ptr noalias nofree noundef nonnull readnone @frcjrwovvs, ptr noalias nofree noundef nonnull readnone @i32_hasher) #36
   %ret.i55 = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i52) #47
   %96 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i52) #36
   %result.i56 = call noalias dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #45
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i57) #36
   %result.i58 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i56, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i57) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i57) #36
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i56, ptr noalias nofree noundef nonnull readnone @hfthnvhxpl, ptr noalias nofree noundef nonnull readnone @i32_eq) #36
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i56, ptr noalias nofree noundef nonnull readnone @hgluacjauc, ptr noalias nofree noundef nonnull readnone @i32_eq) #36
   %ret.i59 = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i56) #47
   %97 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i56) #36
   %98 = getelementptr inbounds i8, ptr %result.i51, i64 48
@@ -20312,7 +20312,7 @@ CuckooMap_remove_keyK.exit:                       ; preds = %CuckooMap_remove_fr
 ._crit_edge.lr.ph.i1817:                          ; preds = %1968
   %result.i93.h2s3813 = alloca [46 x i8], align 64
   call void @llvm.memset.p0.i64(ptr noundef nonnull align 64 dereferenceable(46) %result.i93.h2s3813, i8 0, i64 46, i1 false)
-  %1971 = load <45 x i8>, ptr @kdyix_Warning_Remove_returned_wrong_value_for_key_, align 64
+  %1971 = load <45 x i8>, ptr @aqhsa_Warning_Remove_returned_wrong_value_for_key_, align 64
   store <45 x i8> %1971, ptr %result.i93.h2s3813, align 64
   call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
   %1972 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2) #36
@@ -20336,7 +20336,7 @@ CuckooMap_remove_keyK.exit:                       ; preds = %CuckooMap_remove_fr
 ._crit_edge.lr.ph.i1836:                          ; preds = %CuckooMap_remove_keyK.exit
   %result.i99.h2s3811 = alloca [38 x i8], align 64
   call void @llvm.memset.p0.i64(ptr noundef nonnull align 64 dereferenceable(38) %result.i99.h2s3811, i8 0, i64 38, i1 false)
-  %1979 = load <37 x i8>, ptr @lszms_Warning_Remove_returned_Nil_for_key_, align 64
+  %1979 = load <37 x i8>, ptr @axwcw_Warning_Remove_returned_Nil_for_key_, align 64
   store <37 x i8> %1979, ptr %result.i99.h2s3811, align 64
   call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
   %1980 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2) #36
@@ -20794,14 +20794,14 @@ define noundef i32 @main() local_unnamed_addr #10 {
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i.i)
   %result.i11.i = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i10.i, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i.i) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i.i)
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i10.i, ptr noalias nofree noundef nonnull readnone @hmtpqzkpua, ptr noalias nofree noundef nonnull readnone @i32_hasher) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i10.i, ptr noalias nofree noundef nonnull readnone @idrxeyqbki, ptr noalias nofree noundef nonnull readnone @i32_hasher) #43
   %ret.i.i = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i10.i) #47
   %88 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i10.i) #43
   %result.i12.i = call noalias dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #45
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i13.i)
   %result.i14.i = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i12.i, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i13.i) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i13.i)
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i12.i, ptr noalias nofree noundef nonnull readnone @jznqlqbaho, ptr noalias nofree noundef nonnull readnone @i32_eq) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i12.i, ptr noalias nofree noundef nonnull readnone @kguisaayac, ptr noalias nofree noundef nonnull readnone @i32_eq) #43
   %ret.i15.i = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i12.i) #47
   %89 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i12.i) #43
   %90 = getelementptr inbounds i8, ptr %result.i9.i, i64 48
@@ -22727,14 +22727,14 @@ benchmark_insert_sequential.exit:                 ; preds = %._crit_edge4.i, %10
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i.i6)
   %result.i11.i9 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i10.i8, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i.i6) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i.i6)
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i10.i8, ptr noalias nofree noundef nonnull readnone @tczvpuxxnz, ptr noalias nofree noundef nonnull readnone @i32_hasher) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i10.i8, ptr noalias nofree noundef nonnull readnone @jiuxagihdy, ptr noalias nofree noundef nonnull readnone @i32_hasher) #43
   %ret.i.i10 = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i10.i8) #47
   %1039 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i10.i8) #43
   %result.i12.i11 = call noalias dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #45
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i13.i5)
   %result.i14.i12 = call i32 @VirtualProtect(ptr nofree noundef dereferenceable_or_null(24) %result.i12.i11, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i13.i5) #46
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %oldProtect.i13.i5)
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i12.i11, ptr noalias nofree noundef nonnull readnone @dkwyfwnusy, ptr noalias nofree noundef nonnull readnone @i32_eq) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly dereferenceable_or_null(24) %result.i12.i11, ptr noalias nofree noundef nonnull readnone @dwlqxfchfu, ptr noalias nofree noundef nonnull readnone @i32_eq) #43
   %ret.i15.i13 = call ptr @llvm.adjust.trampoline(ptr nofree noundef readonly dereferenceable_or_null(24) %result.i12.i11) #47
   %1040 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef dereferenceable_or_null(24) %result.i12.i11) #43
   %1041 = getelementptr inbounds i8, ptr %result.i9.i7, i64 48
@@ -24537,7 +24537,7 @@ CuckooMap_get_keyK.exit.i48:                      ; preds = %CuckooMap_get_from_
 
 ._crit_edge.lr.ph.i.i:                            ; preds = %CuckooMap_get_keyK.exit.i48
   %result.i19.i = call noalias align 64 dereferenceable_or_null(56) ptr @bump_malloc_inner(i64 noundef 56, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #45
-  %1963 = load <55 x i8>, ptr @dzjlz_Error_Nil_returned_during_sequential_hit_test_for_key_, align 64
+  %1963 = load <55 x i8>, ptr @udrvf_Error_Nil_returned_during_sequential_hit_test_for_key_, align 64
   store <55 x i8> %1963, ptr %result.i19.i, align 64
   call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
   %1964 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0) #36

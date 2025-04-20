@@ -8,9 +8,10 @@ from xdsl.printer import Printer
 from io import StringIO
 from lower import do_lowering
 import sys
-from parser import CSTTransformer, parse
+from parser import CSTTransformer, parse, source_directories
 import subprocess
 import os
+from pathlib import Path
 import copy
 import re
 import networkx as nx
@@ -22,14 +23,11 @@ def hash_file(filepath) -> bytes:
     return hash_object.hexdigest().encode("utf-8")
 
 def already_perfect(source_path, build_dir) -> bool:
-    stem = os.path.basename(source_path).split(".")[0]
-    bc_file_path = os.path.join(build_dir, f"{stem}.bc")
-    hash_file_path = os.path.join(build_dir, f"{stem}.hash")
-    hash_file_exists = os.path.exists(hash_file_path)
-    bc_file_exists = os.path.exists(bc_file_path)
-    if not hash_file_exists: print(f"hash file doesn't exist for {source_path}")
-    if not bc_file_exists: print(f"bitcode file doesn't exist for {source_path}")
-    if not (hash_file_exists and bc_file_exists): return False
+    bc_file_path = build_dir.joinpath(f"{source_path.stem}.bc")
+    hash_file_path = build_dir.joinpath(f"{source_path.stem}.hash")
+    if not hash_file_path.exists(): print(f"hash file doesn't exist for {source_path}")
+    if not bc_file_path.exists(): print(f"bitcode file doesn't exist for {source_path}")
+    if not (hash_file_path.exists() and bc_file_path.exists()): return False
     src_hash = hash_file(source_path)
     with open(hash_file_path, "rb") as f: stored_hash = f.read()
     if src_hash == stored_hash: return True
@@ -46,10 +44,31 @@ def recompile_set(input_path, dependency_list, dependency_graph, build_dir) -> s
         to_recompile = to_recompile.union(dependents)
     return to_recompile
 
-def print_dependency_graph(included_files, file_name):
+def add_source_directories(input_path):
+
+    source_directories.add(input_path.parent)
+    ptalk_path = os.environ.get("PTALK_PATH")
+    if ptalk_path:
+        for dir in ptalk_path.split(os.pathsep):
+            path = Path(dir)
+            if not path.exists(): raise Exception(f"Directory added to PTALK_PATH {path} does not exist")
+            path.resolve()
+            source_directories.add(path)
+
+    lib_folder_1 = Path("./lib")
+    if lib_folder_1.exists():
+        lib_folder_1.resolve()
+        source_directories.add(lib_folder_1)
+
+    lib_folder_2 = input_path.parent.joinpath("/lib")
+    if lib_folder_2.exists():
+        lib_folder_2.resolve()
+        source_directories.add(lib_folder_2)
+
+def print_dependency_graph(included_files, root_path):
     print("Dependency graph:")
     stringio = StringIO()
-    nx.write_network_text(included_files, sources=[file_name], path=stringio)
+    nx.write_network_text(included_files, sources=[root_path], path=stringio)
     text_repr = stringio.getvalue().replace("╾","<─").replace("╼",">")
     print(text_repr)
 
@@ -67,7 +86,7 @@ def run_pdl_lowering(module_str, build_dir) -> str:
     standalone_opt = "c:/users/paulk/onedrive/documents/pl/pypl/standalone/build/bin/standalone-opt"
     run_bytecode = f"{standalone_opt} -allow-unregistered-dialect --mlir-print-op-generic --my-custom-pass"
     
-    out_mlir_path = os.path.join(build_dir,"out.mlir")
+    out_mlir_path = build_dir.joinpath("out.mlir")
     with open(out_mlir_path, "w") as outfile: outfile.write(module_str)
 
     cmd_out = subprocess.run(to_pdl_bytecode, capture_output=True, shell=True, text=True, input=patterns)
@@ -129,8 +148,7 @@ def lower_to_llvm(module_str, in_file_path, build_dir):
     ])
     mlir_translate = f"mlir-translate --mlir-to-llvmir"
 
-    in_file_stem = os.path.basename(in_file_path).split(".")[0]
-    bc_file_path = os.path.join(build_dir, f"{in_file_stem}.bc")
+    bc_file_path = build_dir.joinpath(f"{in_file_path.stem}.bc")
 
     # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
     # this has shown to improve the optimization potential for unclear reasons
@@ -140,20 +158,19 @@ def lower_to_llvm(module_str, in_file_path, build_dir):
     subprocess.run(cmd, text=True, shell=True, input=module_str)
 
     # store the hash of the source code file in the build directory
-    with open(os.path.join(build_dir, f"{in_file_stem}.hash"), "wb") as f: f.write(hash_file(in_file_path))
+    with open(build_dir.joinpath(f"{in_file_path.stem}.hash"), "wb") as f: f.write(hash_file(in_file_path))
 
-def llvm_link(in_file_stem, dependency_list, build_dir):
+def llvm_link(input_path, dependency_list, build_dir):
 
     # merge all the .bc files into one big .ll file for optimization
     # kind of like LTO but no pretense of being at "link-time"
-    stems = (os.path.basename(f).split(".")[0] for f in dependency_list)
-    bc_file_paths = [os.path.join(build_dir, f"{stem}.bc") for stem in stems]
-    lib_file_path = os.path.join(build_dir, f"{in_file_stem}.lib")
+    bc_file_paths = [str(build_dir.joinpath(f"{path.stem}.bc")) for path in dependency_list]
+    lib_file_path = build_dir.joinpath(f"{input_path.stem}.lib")
     make_archive = f"llvm-ar cr {lib_file_path} {' '.join(bc_file_paths)}"
     subprocess.run(make_archive, shell=True)
 
-    bc_file_path = os.path.join(build_dir, f"{in_file_stem}.bc")
-    out_linked_path = os.path.join(build_dir, "out_linked.ll")
+    bc_file_path = build_dir.joinpath(f"{input_path.stem}.bc")
+    out_linked_path = build_dir.joinpath("out_linked.ll")
     link_utils = f"llvm-link -S {bc_file_path} utils.ll -o {out_linked_path}"
     subprocess.run(link_utils, shell=True)
 
@@ -161,17 +178,17 @@ def llvm_link(in_file_stem, dependency_list, build_dir):
     with open(out_linked_path, "r+") as f:
         txt = f.read()
         f.seek(0)
-        f.write(txt.replace(f"_main_{clean_name(in_file_stem)}", "main"))
+        f.write(txt.replace(f"_main_{clean_name(input_path.stem)}", "main"))
         f.truncate()
 
     # using --only-needed cuts out a lot of unnecessary imports
-    out_reg2mem_path = os.path.join(build_dir, "out_reg2mem.ll")
+    out_reg2mem_path = build_dir.joinpath("out_reg2mem.ll")
     link_imports = f"llvm-link -S {out_linked_path} {lib_file_path} -o {out_reg2mem_path} --only-needed"
     subprocess.run(link_imports, shell=True)
     os.remove(lib_file_path)
     os.remove(out_linked_path)
 
-def record_all_passes():
+def record_all_passes(build_dir):
     #clang = "clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
     open_world = "--attributor-assume-closed-world=false"
     no_tail = "--disable-tail-calls"
@@ -181,19 +198,20 @@ def record_all_passes():
     attributor_settings = f"--attributor-enable=module {annotate_callsites} {heap_to_stack} {use_internal_attributes} {open_world} {no_tail}"
     opt_level = "--passes=\"default<O1>\""
     #opt = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
-    opt = f"opt out_reg2mem.ll -S {opt_level} {attributor_settings} --max-devirt-iterations=100 --inline-threshold=10000 --print-after-all"
-    with open("out_reg2mem.ll", "r+") as f:
+    out_reg2mem_path = build_dir.joinpath("out_reg2mem.ll")
+    opt = f"opt {out_reg2mem_path} -S {opt_level} {attributor_settings} --max-devirt-iterations=100 --inline-threshold=10000 --print-after-all"
+    with open(out_reg2mem_path, "r+") as f:
         txt = f.read()
         f.seek(0)
         # clang can't handle the 'preserve_nonecc' attribute for some reason
         f.write(txt.replace("preserve_nonecc",""))
         f.truncate()
     opt_out = subprocess.run(opt, text=True, shell=True, capture_output=True)
-    with open("opt_passes.txt", "w") as outfile: outfile.write(opt_out.stderr)
+    with open(build_dir.joinpath("opt_passes.txt"), "w") as outfile: outfile.write(opt_out.stderr)
 
 def run_opt(debug_mode, build_dir):
-    out_optimized_path = os.path.join(build_dir, "out_optimized.ll")
-    debug = f"debugir {out_optimized_path}"
+    out_optimized_path = build_dir.joinpath("out_optimized.ll")
+    out_reg2mem_path = build_dir.joinpath("out_reg2mem.ll")
     target_triple = "-mtriple=x86_64-pc-windows-msvc"
     o3 = "--passes=\"default<O3>,default<O3>\""
     o2 = "--passes=\"default<O2>\""
@@ -221,12 +239,13 @@ def run_opt(debug_mode, build_dir):
     # Using attributor-enable=cgscc or attributor-enable=all takes way too long, though it does generate faster code
     attributor_settings = f"--attributor-enable=module {annotate_callsites} {heap_to_stack} {use_internal_attributes} {open_world} {no_tail}"
 
-    in_file_path = os.path.join(build_dir, "out_reg2mem.ll")
-    opt = f"opt -S {in_file_path} {opt_level} {devirtualization_settings} {inline_settings} {attributor_settings} -o {out_optimized_path}"
+    opt = f"opt -S {out_reg2mem_path} {opt_level} {devirtualization_settings} {inline_settings} {attributor_settings} -o {out_optimized_path}"
     subprocess.run(opt, text=True, shell=True)
+
+    debug = f"debugir {out_optimized_path}"
     if debug_mode: subprocess.run(debug, text=True, shell=True)
 
-def run_llc(debug_mode, out_dir, output_stem, build_dir):
+def run_llc(debug_mode, output_path, build_dir):
     target_triple = "-mtriple=x86_64-pc-windows-msvc"
     debug_extension = ".dbg" if debug_mode else ""
 
@@ -234,18 +253,18 @@ def run_llc(debug_mode, out_dir, output_stem, build_dir):
     exception_model = "-exception-model=sjlj"
     outliner_settings = "-enable-machine-outliner -machine-outliner-reruns=2"
 
-    if out_dir != "": os.makedirs(out_dir, exist_ok=True)
-    obj_path = os.path.join(out_dir, f"{output_stem}.obj")
-    out_optimized_path = os.path.join(build_dir, f"out_optimized{debug_extension}.ll")
+    os.makedirs(output_path.parent, exist_ok=True)
+    obj_path = output_path.parent.joinpath(f"{output_path.stem}.obj")
+    out_optimized_path = build_dir.joinpath(f"out_optimized{debug_extension}.ll")
     llc = f"llc -filetype=obj {out_optimized_path} -O=3 {target_triple} {exception_model} -o {obj_path}"
     subprocess.run(llc)
 
-def run_lld_link(debug_mode, out_dir, output_stem, build_dir):
+def run_lld_link(debug_mode, output_path, build_dir):
     debug_flag = "/debug" if debug_mode else ""
     dynamic_libc = "msvcrt.lib legacy_stdio_definitions.lib"
     static_libc = "libcmt.lib"
-    obj_path = os.path.join(out_dir, f"{output_stem}.obj")
-    exe_path = os.path.join(out_dir, f"{output_stem}.exe")
+    obj_path = output_path.parent.joinpath(f"{output_path.stem}.obj")
+    exe_path = output_path.parent.joinpath(f"{output_path.stem}.exe")
     
     # using dynamic linking:
     lld_link = f"lld-link /out:{exe_path} {obj_path} trampoline.obj {debug_flag} {dynamic_libc}"
@@ -255,39 +274,37 @@ def main(argv):
     after_imports = time.time()
     
     if len(argv) < 2: raise Exception("Please provide a file to compile")
-    input_path = argv[1]
-    if not os.path.exists(input_path): raise Exception(f"Input path {input_path} does not exist.")
-    file_name = os.path.basename(input_path)
-    in_dir = os.path.dirname(input_path)
-    in_file_stem = file_name.split(".")[0]
-    print(f"Compiling {file_name}")
+    input_path = Path(argv[1])
+    if not input_path.exists(): raise Exception(f"Input path {input_path} does not exist.")
+    if not input_path.is_file(): raise Exception(f"Input path {input_path} should point to a .mini file.")
+    if input_path.suffix != ".mini": raise Exception(f"Input path {input_path} should point to a .mini file.")
+    input_path.resolve()
+    print(f"Compiling {input_path}")
     debug_mode = "--debug" in argv
     show_dependencies = "--dependencies" in argv
     print_timings = "--no-timings" not in argv
 
     if print_timings: print(f"Time to import: {after_imports - start_time} seconds")
 
-    output_name = None
+    output_path = None
     if "-o" in argv:
         i = argv.index("-o")
         if len(argv) < i + 2: raise Exception("Please provide an output file.")
-        output_path = argv[i + 1]
-        output_name = os.path.basename(output_path)
-        out_dir = os.path.dirname(output_path)
-        if "." not in output_name: raise Exception("Please provide an file extension in the output name.")
-        if ".exe" in output_name: generate_main_for.add(file_name)
-        output_stem = output_name.split(".")[0]
-        out_exe = f"{output_stem}.exe"
-        out_obj = f"{output_stem}.obj"
+        output_path = Path(argv[i + 1])
+        if not output_path.is_file(): raise Exception("Please provide an file extension in the output name.")
+        if output_path.suffix == ".exe": generate_main_for.add(input_path)
 
-    build_dir = ""
+    build_dir = Path(".")
     if "--build-dir" in argv:
         i = argv.index("--build-dir")
         if len(argv) < i + 2: raise Exception("Please provide a build directory.")
-        build_dir = argv[i + 1]
+        build_dir = Path(argv[i + 1])
         os.makedirs(build_dir, exist_ok=True)
+    build_dir.resolve()
 
-    ast = parse(file_name)
+    add_source_directories(input_path)
+
+    ast = parse(input_path)
     after_parse = time.time()
 
     #print(tree.pretty())
@@ -296,9 +313,9 @@ def main(argv):
     stringio = StringIO()
     Printer(stringio).print(module)
     module_str = stringio.getvalue().encode().decode('unicode_escape')
-    with open(os.path.join(build_dir,"in.mlir"), "w") as outfile: outfile.write(module_str)
+    with open(build_dir.joinpath("in.mlir"), "w") as outfile: outfile.write(module_str)
     dependency_graph = copy.deepcopy(included_files)
-    if show_dependencies: print_dependency_graph(dependency_graph, file_name)
+    if show_dependencies: print_dependency_graph(dependency_graph, input_path)
     dependency_list = list(reversed(list(nx.topological_sort(dependency_graph))))
     reset_ast_globals()
     after_codegen = time.time()
@@ -342,38 +359,38 @@ def main(argv):
     if print_timings: print(f"Time to lower to llvm ir: {after_translate - after_mlir_opt} seconds")
 
     # not creating an output file
-    if not output_name:
+    if not output_path:
         final_time = after_translate
         if print_timings: print(f"Total time to compile: {final_time - start_time} seconds")
         print(f"Finished compiling {file_name}")
         return
 
-    llvm_link(in_file_stem, dependency_list, build_dir)
+    llvm_link(input_path, dependency_list, build_dir)
     after_llvm_link = time.time()
     if print_timings: print(f"Time to llvm-link: {after_llvm_link - after_translate} seconds")
 
     run_opt(debug_mode, build_dir)
-    #record_all_passes()
+    #record_all_passes(build_dir)
     after_opt = time.time()
     if print_timings: print(f"Time to opt: {after_opt - after_llvm_link} seconds")
 
-    run_llc(debug_mode, out_dir, output_stem, build_dir)
+    run_llc(debug_mode, output_path, build_dir)
     after_llc = time.time()
     if print_timings: print(f"Time to llc: {after_llc - after_opt} seconds")
 
     # Only creating an object file
-    if ".exe" not in output_name:
+    if output_path.suffix == ".obj":
         final_time = after_llc
         print(f"Total time to compile: {final_time - start_time} seconds")
         print(f"Finished compiling {file_name}")
         return
 
-    run_lld_link(debug_mode, out_dir, output_stem, build_dir)
+    run_lld_link(debug_mode, output_path, build_dir)
     after_lldlink = time.time()
     final_time = after_lldlink
     if print_timings: print(f"Time to lld-link: {after_lldlink - after_llc} seconds")
     if print_timings: print(f"Total time to compile: {final_time - start_time} seconds")
-    print(f"Finished compiling {file_name}")
+    print(f"Finished compiling {input_path}")
 
 if __name__ == "__main__":
     main(sys.argv)
