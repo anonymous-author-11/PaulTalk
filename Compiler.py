@@ -7,6 +7,7 @@ from xdsl.context import MLContext
 from xdsl.printer import Printer
 from io import StringIO
 from lower import do_lowering
+from dataclasses import dataclass
 import sys
 from parser import CSTTransformer, parse, source_directories
 import subprocess
@@ -16,7 +17,15 @@ import copy
 import re
 import networkx as nx
 import hashlib
-from AST import included_files, generate_main_for, reset_ast_globals
+from AST import included_files, generate_main_for, reset_ast_globals, silent
+
+@dataclass
+class OptionalPrinter:
+    on: bool
+
+    def print(self, message):
+        if not self.on: return
+        print(message)
 
 def hash_file(filepath) -> bytes:
     with open(filepath, 'rb') as f: hash_object = hashlib.file_digest(f, 'sha256')
@@ -25,13 +34,10 @@ def hash_file(filepath) -> bytes:
 def already_perfect(source_path, build_dir) -> bool:
     bc_file_path = build_dir.joinpath(f"{source_path.stem}.bc")
     hash_file_path = build_dir.joinpath(f"{source_path.stem}.hash")
-    if not hash_file_path.exists(): print(f"hash file doesn't exist for {source_path}")
-    if not bc_file_path.exists(): print(f"bitcode file doesn't exist for {source_path}")
     if not (hash_file_path.exists() and bc_file_path.exists()): return False
     src_hash = hash_file(source_path)
     with open(hash_file_path, "rb") as f: stored_hash = f.read()
     if src_hash == stored_hash: return True
-    print(f"hash of {source_path} is not the same")
     return False
 
 def recompile_set(input_path, dependency_list, dependency_graph, build_dir) -> set:
@@ -270,7 +276,7 @@ def run_lld_link(debug_mode, output_path, build_dir):
     lld_link = f"lld-link /out:{exe_path} {obj_path} trampoline.obj {debug_flag} {dynamic_libc}"
     subprocess.run(lld_link)
 
-def main(argv):
+def compiler_driver_main(argv):
     after_imports = time.time()
     
     if len(argv) < 2: raise Exception("Please provide a file to compile")
@@ -279,19 +285,21 @@ def main(argv):
     if not input_path.is_file(): raise Exception(f"Input path {input_path} should point to a .mini file.")
     if input_path.suffix != ".mini": raise Exception(f"Input path {input_path} should point to a .mini file.")
     input_path.resolve()
-    print(f"Compiling {input_path}")
     debug_mode = "--debug" in argv
     show_dependencies = "--dependencies" in argv
     print_timings = "--no-timings" not in argv
+    time_printer = OptionalPrinter(print_timings)
+    status_printer = OptionalPrinter(not silent[0])
+    status_printer.print(f"Compiling {input_path}")
 
-    if print_timings: print(f"Time to import: {after_imports - start_time} seconds")
+    time_printer.print(f"Time to import: {after_imports - start_time} seconds")
 
     output_path = None
     if "-o" in argv:
         i = argv.index("-o")
         if len(argv) < i + 2: raise Exception("Please provide an output file.")
         output_path = Path(argv[i + 1])
-        if not output_path.is_file(): raise Exception("Please provide an file extension in the output name.")
+        if not "." in output_path.name: raise Exception("Please provide an file extension in the output name.")
         if output_path.suffix == ".exe": generate_main_for.add(input_path)
 
     build_dir = Path(".")
@@ -308,7 +316,11 @@ def main(argv):
     after_parse = time.time()
 
     #print(tree.pretty())
-    module = ast.codegen()
+    try:
+        module = ast.codegen()
+    except Exception as e:
+        reset_ast_globals()
+        raise e
 
     stringio = StringIO()
     Printer(stringio).print(module)
@@ -329,68 +341,69 @@ def main(argv):
 
     # process in reverse-topological order, i.e. leaves first
     for dependency in dependency_list:
-        if dependency == input_path: continue
+        if not dependency.exists(): raise Exception(f"{input_path}, {dependency}, {dependency_list}")
+        if dependency.samefile(input_path): continue
         if not dependency in to_recompile: continue
-        print(f"Recompiling {dependency}")
+        status_printer.print(f"Recompiling {dependency}")
         # compile the dependency into the current build directory
-        main(["", dependency, "--build-dir", build_dir, "--no-timings"])
+        compiler_driver_main(["", dependency, "--build-dir", build_dir, "--no-timings"])
 
-    if print_timings: print(f"Time to parse: {after_parse - after_imports} seconds")
+    time_printer.print(f"Time to parse: {after_parse - after_imports} seconds")
 
-    if print_timings: print(f"Time to type check + codegen: {after_codegen - after_parse} seconds")
+    time_printer.print(f"Time to type check + codegen: {after_codegen - after_parse} seconds")
 
     after_dependencies = time.time()
-    if print_timings: print(f"Time to verify / recompile dependencies: {after_dependencies - after_codegen} seconds")
+    time_printer.print(f"Time to verify / recompile dependencies: {after_dependencies - after_codegen} seconds")
 
     module_str = run_python_lowering(module)
     after_firstpass = time.time()
-    if print_timings: print(f"Time to do python lowering: {after_firstpass - after_dependencies} seconds")
+    time_printer.print(f"Time to do python lowering: {after_firstpass - after_dependencies} seconds")
 
     module_str = run_pdl_lowering(module_str, build_dir)
     after_pdl = time.time()
-    if print_timings: print(f"Time to do PDL lowering: {after_pdl - after_firstpass} seconds")
+    time_printer.print(f"Time to do PDL lowering: {after_pdl - after_firstpass} seconds")
 
     module_str = run_mlir_opt(module_str)
     after_mlir_opt = time.time()
-    if print_timings: print(f"Time to do mlir-opt: {after_mlir_opt - after_pdl} seconds")
+    time_printer.print(f"Time to do mlir-opt: {after_mlir_opt - after_pdl} seconds")
     
     lower_to_llvm(module_str, input_path, build_dir)
     after_translate = time.time()
-    if print_timings: print(f"Time to lower to llvm ir: {after_translate - after_mlir_opt} seconds")
+    time_printer.print(f"Time to lower to llvm ir: {after_translate - after_mlir_opt} seconds")
 
     # not creating an output file
     if not output_path:
         final_time = after_translate
-        if print_timings: print(f"Total time to compile: {final_time - start_time} seconds")
-        print(f"Finished compiling {file_name}")
+        time_printer.print(f"Total time to compile: {final_time - start_time} seconds")
+        status_printer.print(f"Finished compiling {input_path}")
         return
 
     llvm_link(input_path, dependency_list, build_dir)
     after_llvm_link = time.time()
-    if print_timings: print(f"Time to llvm-link: {after_llvm_link - after_translate} seconds")
+    time_printer.print(f"Time to llvm-link: {after_llvm_link - after_translate} seconds")
 
     run_opt(debug_mode, build_dir)
     #record_all_passes(build_dir)
     after_opt = time.time()
-    if print_timings: print(f"Time to opt: {after_opt - after_llvm_link} seconds")
+    time_printer.print(f"Time to opt: {after_opt - after_llvm_link} seconds")
 
     run_llc(debug_mode, output_path, build_dir)
     after_llc = time.time()
-    if print_timings: print(f"Time to llc: {after_llc - after_opt} seconds")
+    time_printer.print(f"Time to llc: {after_llc - after_opt} seconds")
 
     # Only creating an object file
     if output_path.suffix == ".obj":
         final_time = after_llc
-        print(f"Total time to compile: {final_time - start_time} seconds")
-        print(f"Finished compiling {file_name}")
+        time_printer.print(f"Total time to compile: {final_time - start_time} seconds")
+        status_printer.print(f"Finished compiling {input_path}")
         return
 
     run_lld_link(debug_mode, output_path, build_dir)
     after_lldlink = time.time()
     final_time = after_lldlink
-    if print_timings: print(f"Time to lld-link: {after_lldlink - after_llc} seconds")
-    if print_timings: print(f"Total time to compile: {final_time - start_time} seconds")
-    print(f"Finished compiling {input_path}")
+    time_printer.print(f"Time to lld-link: {after_lldlink - after_llc} seconds")
+    time_printer.print(f"Total time to compile: {final_time - start_time} seconds")
+    status_printer.print(f"Finished compiling {input_path}")
 
 if __name__ == "__main__":
-    main(sys.argv)
+    compiler_driver_main(sys.argv)

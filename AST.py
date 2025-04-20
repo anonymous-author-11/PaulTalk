@@ -26,6 +26,11 @@ codegenned = set()
 generate_main_for = set()
 toplevel_ops = []
 included_files = nx.DiGraph()
+silent = [False]
+
+def debug_print(message):
+    if silent[0]: return
+    print(message)
 
 def reset_ast_globals():
     codegenned.clear()
@@ -38,9 +43,9 @@ class AST:
     def codegen(self) -> ModuleOp:
         global_scope = Scope()
         self.root.typeflow(global_scope)
-        #print("typechecking complete")
+        #debug_print("typechecking complete")
         self.root.codegen(global_scope)
-        #print("codegen complete")
+        #debug_print("codegen complete")
         func_ops = [op.parent_block().detach_op(op) for op in toplevel_ops]
         ops = chain.from_iterable([block.ops for block in global_scope.region.blocks])
         class_ops = [op.parent_block().detach_op(op) for op in ops if isinstance(op, TypeDefOp) or isinstance(op, ExternalTypeDefOp)]
@@ -178,8 +183,8 @@ class Program(Node):
             stmt.typeflow(scope)
         #G0, var_mapping0 = create_constraint_graph(scope.points_to_facts._set)
         #G0, var_mapping0 = transform_until_stable(G0, var_mapping0, set())
-        #print(f"Transformed points-to graph for main:")
-        #print(pretty_print_graph(G0, var_mapping0, set()))
+        #debug_print(f"Transformed points-to graph for main:")
+        #debug_print(pretty_debug_print_graph(G0, var_mapping0, set()))
         #scope.assign_regions(var_mapping0, set())
 
 @dataclass
@@ -839,7 +844,7 @@ class MethodCall(Expression):
         scope.region.last_block.add_op(call_op)
         if len(call_op.results) == 0: return None
         if not specialized:
-            print(self)
+            debug_print(self)
             raise Exception()
         cast = CastOp.make(call_op.results[0], broad, specialized)
         scope.region.last_block.add_op(cast)
@@ -871,7 +876,7 @@ class MethodCall(Expression):
         if not isinstance(rec_typ, FatPtr):
             raise Exception(f"{self.info}: receiver type {rec_typ} is not an object!")
         if not rec_typ.cls.data in scope.classes.keys():
-            print(scope.classes.keys())
+            debug_print(scope.classes.keys())
             raise Exception(f"{self.info}: class {rec_typ.cls.data} not declared (temporary).")
         rec_class = scope.classes[rec_typ.cls.data]
         behaviors = [behavior for behavior in rec_class.behaviors if behavior.applicable(rec_typ, scope, self.method, arg_types)]
@@ -883,8 +888,8 @@ class MethodCall(Expression):
         specialized = behaviors[0].specialized_return_type(rec_typ, arg_types, scope)
         self.apply_constraints(scope, behaviors[0], specialized)
         
-        #print(f"unspecialized return type of {rec_typ}.{self.method} with args {arg_types} is {unspecialized}")
-        #print(f"specialized return type of {rec_typ}.{self.method} with args {arg_types} is {specialized}")
+        #debug_print(f"unspecialized return type of {rec_typ}.{self.method} with args {arg_types} is {unspecialized}")
+        #debug_print(f"specialized return type of {rec_typ}.{self.method} with args {arg_types} is {specialized}")
         return broad, specialized
 
     def exprtype(self, scope):
@@ -1134,7 +1139,7 @@ class ClassMethodCall(MethodCall):
 
         #if(all(t in builtin_types.values() for t in arg_types)):
         #    concrete_method = simulate_LUA(behavior.automaton, arg_types, scope)
-        #    print(concrete_method)
+        #    debug_print(concrete_method)
         #    call_name = StringAttr(concrete_method.defining_class.name + concrete_method.name + "_" + str(concrete_method.offset))
         #    attr_dict = {"func_name":call_name, "ret_type":ret_schema}
         #    call_op = FunctionCallOp.create(operands=operands, attributes=attr_dict, result_types=result_types)
@@ -1231,9 +1236,9 @@ class PrintCall(Expression):
 
     def codegen(self, scope):
         attr_dict = {"typ":self.args[0].exprtype(scope).base_typ()}
-        print_op = PrintOp.create(operands=[self.args[0].codegen(scope)], attributes=attr_dict, result_types=[IntegerType(32)])
-        scope.region.last_block.add_op(print_op)
-        return print_op.results[0]
+        debug_print_op = PrintOp.create(operands=[self.args[0].codegen(scope)], attributes=attr_dict, result_types=[IntegerType(32)])
+        scope.region.last_block.add_op(debug_print_op)
+        return debug_print_op.results[0]
 
     def typeflow(self, scope):
         self.args[0].exprtype(scope)
@@ -1320,7 +1325,7 @@ class ObjectCreation(Expression):
         input_types = [arg.exprtype(scope) for arg in self.arguments]
         behaviors = [behavior for behavior in cls.behaviors if behavior.applicable(simplified_type, scope, "init", input_types)]
         if len(behaviors) == 0:
-            print(cls.behaviors)
+            debug_print(cls.behaviors)
             raise Exception(f"{self.info}: No init method in class {simplified_type} matches the argument types {input_types}")
         if len(behaviors) > 1:
             raise Exception(f"{self.info}: invocation of {simplified_type}.{self.method} with argument types {arg_types} is ambiguous.")
@@ -1458,7 +1463,7 @@ class MethodDef(Statement):
     hasreturn: bool
 
     def codegen(self, scope):
-        #print(f"codegenning {self.defining_class.name}.{self.name}")
+        #debug_print(f"codegenning {self.defining_class.name}.{self.name}")
         if self.qualified_name() in codegenned: return
 
         body_scope = Scope(scope, method=self)
@@ -1479,7 +1484,7 @@ class MethodDef(Statement):
         codegenned.add(self.qualified_name())
 
     def interface_codegen(self, scope):
-        #print(f"interface codegenning {self.defining_class.name}.{self.name}")
+        #debug_print(f"interface codegenning {self.defining_class.name}.{self.name}")
         if self.qualified_name() in codegenned: return
         arg_types = [t.base_typ() for t in scope.behavior.broad_param_types()]
         result_type = scope.behavior.broad_return_type().base_typ() if scope.behavior.broad_return_type() else llvm.LLVMVoidType()
@@ -1554,9 +1559,9 @@ class MethodDef(Statement):
         if not self.return_type(): return
         overridden_ret_type = scope.simplify(Union.from_list([self.defining_class._scope.simplify(meth.return_type()) for meth in overridden_methods]))
         if len(overridden_methods) > 0 and not (scope.subtype(self.return_type(), overridden_ret_type) or any(scope.matches(anc, overridden_ret_type) for anc in scope.ancestors(self.return_type()))):
-            #print(scope.ancestors(self.return_type())[1].type_params.data[0])
-            print(self.defining_class._scope.aliases)
-            #print(overridden_ret_type.type_params.data[0])
+            #debug_print(scope.ancestors(self.return_type())[1].type_params.data[0])
+            debug_print(self.defining_class._scope.aliases)
+            #debug_print(overridden_ret_type.type_params.data[0])
             raise Exception(f"{self.info}: Overriding method {self.name} in class {self.defining_class}: return type {self.return_type()} not a subtype of overridden methods' return types {overridden_ret_type}.")
 
     def ensure_return_type(self, scope):
@@ -1573,7 +1578,7 @@ class MethodDef(Statement):
                 initialization = Assignment(NodeInfo(None, self.info.filepath, self.info.line_number), field_id, NilLiteral(NodeInfo(None, self.info.filepath, self.info.line_number)))
                 self.body.statements.append(initialization)
                 continue
-            print(f"field name in body type table? {field.declaration.name in body_scope.type_table}")
+            debug_print(f"field name in body type table? {field.declaration.name in body_scope.type_table}")
             raise Exception(f"{self.info}: field {field.declaration.name} not properly initialized for class {body_scope.cls.name}. You may need to override this constructor.")
 
     def annotated_points_to_facts(self, body_scope, param_names):
@@ -1619,16 +1624,16 @@ class MethodDef(Statement):
         G0, var_mapping0 = create_constraint_graph(annotated_facts._set)
         
         #visualize_graph_transformation(G1, var_mapping1, param_names)
-        #print(f"Original Points-to graph for {self.defining_class.name}.{self.name}:")
-        #print(pretty_print_graph(G1, var_mapping1, param_names))
-        #print(f"Original Annotation graph for {self.defining_class.name}.{self.name}:")
-        #print(pretty_print_graph(G0, var_mapping0, param_names))
+        #debug_print(f"Original Points-to graph for {self.defining_class.name}.{self.name}:")
+        #debug_print(pretty_debug_print_graph(G1, var_mapping1, param_names))
+        #debug_print(f"Original Annotation graph for {self.defining_class.name}.{self.name}:")
+        #debug_print(pretty_debug_print_graph(G0, var_mapping0, param_names))
         G0, var_mapping0 = transform_until_stable(G0, var_mapping0, param_names)
         G1, var_mapping1 = transform_until_stable(G1, var_mapping1, param_names)
-        #print(f"Transformed Points-to graph for {self.defining_class.name}.{self.name}:")
-        #print(pretty_print_graph(G1, var_mapping1, param_names))
-        #print(f"Transformed Annotation graph for {self.defining_class.name}.{self.name}:")
-        #print(pretty_print_graph(G0, var_mapping0, param_names))
+        #debug_print(f"Transformed Points-to graph for {self.defining_class.name}.{self.name}:")
+        #debug_print(pretty_debug_print_graph(G1, var_mapping1, param_names))
+        #debug_print(f"Transformed Annotation graph for {self.defining_class.name}.{self.name}:")
+        #debug_print(pretty_debug_print_graph(G0, var_mapping0, param_names))
         ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
         body_scope.assign_regions(var_mapping1, param_names)
         if not ok: raise Exception(f"{self.info}: {comment}")
@@ -1823,7 +1828,7 @@ class Method:
             others_types = [*chain.from_iterable(x.types.data if isinstance(x, Union) else [x] for x in others_x)]
             if all(tt in others_types for tt in types): continue
             return False
-        #print(f"{self} is superfluous")
+        #debug_print(f"{self} is superfluous")
         return True
 
     def __hash__(self):
@@ -1905,14 +1910,14 @@ class ClassMethodDef(MethodDef):
         G0, var_mapping0 = create_constraint_graph(annotated_facts._set)
         
         #visualize_graph_transformation(G1, var_mapping1, param_names)
-        #print(f"Original points-to graph for {self.defining_class.name}.{self.name}:")
-        #print(pretty_print_graph(G1, var_mapping1, param_names))
+        #debug_print(f"Original points-to graph for {self.defining_class.name}.{self.name}:")
+        #debug_print(pretty_debug_print_graph(G1, var_mapping1, param_names))
         G0, var_mapping0 = transform_until_stable(G0, var_mapping0, param_names)
         G1, var_mapping1 = transform_until_stable(G1, var_mapping1, param_names)
-        #print(f"Transformed points-to graph for {self.defining_class.name}.{self.name}:")
-        #print(pretty_print_graph(G1, var_mapping1, param_names))
-        #print(f"Annotation graph for {self.defining_class.name}.{self.name}:")
-        #print(pretty_print_graph(G0, var_mapping0, param_names))
+        #debug_print(f"Transformed points-to graph for {self.defining_class.name}.{self.name}:")
+        #debug_print(pretty_debug_print_graph(G1, var_mapping1, param_names))
+        #debug_print(f"Annotation graph for {self.defining_class.name}.{self.name}:")
+        #debug_print(pretty_debug_print_graph(G0, var_mapping0, param_names))
         ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
         body_scope.assign_regions(var_mapping1, param_names)
         if not ok: raise Exception(f"{self.info}: {comment}")
@@ -1971,7 +1976,7 @@ class Behavior(Statement):
 
     def specialized_return_type(self, rec_typ, arg_types, scope):
         all_return_types = [method.specialized_return_type(rec_typ, arg_types, scope) for method in self.methods if method.definition.return_type()]
-        #print(all_return_types)
+        #debug_print(all_return_types)
         all_return_types = [t for t in all_return_types if t]
         if len(all_return_types) == 0: return None
         return self.cls._scope.simplify(Union.from_list(all_return_types))
@@ -2032,8 +2037,8 @@ class Behavior(Statement):
         entry.add_op(invariant)
         offset_ptr = AllocateOp.make(llvm.LLVMPointerType.opaque())
         if self.automaton._initial_state_id not in blocks:
-            print(self.methods)
-            print(self.name)
+            debug_print(self.methods)
+            debug_print(self.name)
             raise Exception()
         br = cf.Branch.create(successors=[blocks[self.automaton._initial_state_id][1]])
         entry.add_ops([offset_ptr, br])
@@ -2094,12 +2099,12 @@ class Behavior(Statement):
             if method.definition.defining_class != self.cls: continue
             method.definition.typeflow(behavior_scope)
 
-        #print(f"Constructing Automaton for behavior {self.name}")
+        #debug_print(f"Constructing Automaton for behavior {self.name}")
         self.automaton = Automaton.build(set(self.methods), self.cls._scope)
 
         #for block in chain.from_iterable(state.blocks() for state in self.automaton._states.values()):
-        #    print(block)
-        #print(f"Lookup Automaton created with {len(self.automaton._states.items())} states")
+        #    debug_print(block)
+        #debug_print(f"Lookup Automaton created with {len(self.automaton._states.items())} states")
 
     def applicable(self, rec_typ, scope, name, arg_types):
         if name != self.name or len(arg_types) != self.arity: return False
@@ -2194,8 +2199,8 @@ class ClassDef(Statement):
         not_instantiable = any(isinstance(elem.definition, AbstractMethodDef) for elem in self.vtable() if isinstance(elem, Method))
         if not_instantiable:
             offender = next(elem for elem in self.vtable() if isinstance(elem, Method) and isinstance(elem.definition, AbstractMethodDef))
-            #print(any(m for m in self.vtable() if isinstance(m, Method) and m.is_override_of(offender)))
-            #print(f"{self.name} is not instantiable because of abstract method {self.name}.{offender.definition.name}")
+            #debug_print(any(m for m in self.vtable() if isinstance(m, Method) and m.is_override_of(offender)))
+            #debug_print(f"{self.name} is not instantiable because of abstract method {self.name}.{offender.definition.name}")
         combined = ArrayAttr([]) if not_instantiable else ArrayAttr([thing.symbol() for thing in self.vtable()])
         hash_tbl, prime = scope.build_hashtable(self.type())
         offset_tbl = scope.build_offset_table(self.type())
@@ -2212,7 +2217,7 @@ class ClassDef(Statement):
         scope.classes[self.name] = self
 
         for field in self.fields(): field.codegen(self._scope)
-        #print(f"{self.name} fields are {[field.declaration.scoped_name(self._scope) for field in self.fields()]}")
+        #debug_print(f"{self.name} fields are {[field.declaration.scoped_name(self._scope) for field in self.fields()]}")
         for elem in self.vtable():
             if isinstance(elem, Behavior): elem.codegen(self._scope)
         scope.merge_blocks(self._scope)
@@ -2431,7 +2436,7 @@ class ClassDef(Statement):
                 for method in methods:
                     if method.is_override_of(elem): combined[i] = method
                 if elem.definition in superfluous_methods:
-                    #print(f"replacing superfluous method {elem} with a random method {methods[0]}")
+                    #debug_print(f"replacing superfluous method {elem} with a random method {methods[0]}")
                     combined[i] = methods[0]
                 combined[i].offset = i
         self._vtable = combined
@@ -2767,13 +2772,13 @@ class Branch(Statement):
         intersection = Intersection.from_list([right_type, old_typ])
         new_typ = then_scope.simplify(intersection)
         if new_typ == Nothing():
-            print(f'narrowed {old_typ} & {right_type} to nothing')
+            debug_print(f'narrowed {old_typ} & {right_type} to nothing')
             #if then_scope.subtype(right_type, old_typ):
-                #print(f'{right_type} is a subtype of {old_typ}')
+                #debug_print(f'{right_type} is a subtype of {old_typ}')
             #else:
-                #print(f'{right_type} is not a subtype of {old_typ}')
-                #print(f'{right_type} ancestors: {then_scope.ancestors(right_type)}')
-                #print(old_typ in then_scope.ancestors(right_type))
+                #debug_print(f'{right_type} is not a subtype of {old_typ}')
+                #debug_print(f'{right_type} ancestors: {then_scope.ancestors(right_type)}')
+                #debug_print(old_typ in then_scope.ancestors(right_type))
         then_scope.type_table[self.condition.left.name] = new_typ
 
     def narrow(self, then_scope):
@@ -2803,10 +2808,10 @@ class IfStatement(Branch):
         branch_scopes = [Scope(scope) for block in branch_blocks]
         self.narrow_dry(branch_scopes[0])
         if Nothing() in branch_scopes[0].type_table.values():
-            print("would be impossible to enter then branch")
+            debug_print("would be impossible to enter then branch")
             offender = next((k,v) for k,v in branch_scopes[0].type_table.items() if v == Nothing())
-            print(offender[0])
-            print(offender[1])
+            debug_print(offender[0])
+            debug_print(offender[1])
             return
         for (b_block, b_scope) in zip(branch_blocks, branch_scopes): b_block.typeflow(b_scope)
 
@@ -2928,7 +2933,7 @@ class For(Statement):
         nxt_call = MethodCall(NodeInfo(None, self.info.filepath, self.info.line_number), temp, "next", [])
         nxt_type = nxt_call.exprtype(scope)
         if not isinstance(nxt_type, Union):
-            print(nxt_type)
+            debug_print(nxt_type)
             raise Exception(f"{self.info}: For-loop would never terminate.")
         continue_type = scope.simplify(Union.from_list([t for t in nxt_type.types.data if t != Nil()]))
         if continue_type == Nothing():
@@ -3017,7 +3022,7 @@ class CoCreate(Expression):
     def exprtype(self, scope):
         arg_types = [arg.exprtype(scope) for arg in self.args]
         if not isinstance(arg_types[0], Function):
-            raise Exception(f"{self.info}: The first argument to Coroutine.new should be a function, not a {arg_zero_type}")
+            raise Exception(f"{self.info}: The first argument to Coroutine.new should be a function, not a {arg_types[0]}")
         if len(arg_types[1:]) != len(arg_types[0].param_types):
             raise Exception(f"{self.info}: Function {self.args[0].name} expect {len(arg_types[0].param_types)} arguments, not {len(arg_types[1:])}")
         if len(arg_types) > 1 and any(not scope.subtype(a, b) for (a,b) in zip(arg_types[1:], arg_types[0].param_types)):
@@ -3107,10 +3112,11 @@ class Import(Statement):
     sandbox: Scope
 
     def typeflow(self, scope):
+        if self.info.filepath == self.import_filepath: raise Exception("a file should never import itself")
         included_files.add_edge(self.info.filepath, self.import_filepath)
         dependency_cycle = next(nx.simple_cycles(included_files), None)
         if dependency_cycle:
-            print("Dependency graph:")
+            debug_print("Dependency graph:")
             nx.write_network_text(included_files)
             raise Exception(f"{self.info}: Import of {self.import_filepath} from {self.info.filepath} creates a cycle in the dependency graph.")
         self.program.interface_typeflow(self.sandbox)

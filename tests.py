@@ -1,41 +1,36 @@
 import unittest
 import subprocess
 import tempfile
+import shutil
 import os
+from pathlib import Path
+from Compiler import compiler_driver_main
+from AST import silent
+from utils import random_letters
 
 class CompilerTestCase(unittest.TestCase):
     def setUp(self):
-        self.temp_input_file = tempfile.NamedTemporaryFile(suffix=".mini", mode="w", delete=False, dir=".")
-        self.output_file_name = None  # To be set in individual test methods
+        self.temp_input_file_name = random_letters(10) + ".mini"
+        self.output_path = None  # To be set in individual test methods
 
     def tearDown(self):
-        os.remove(self.temp_input_file.name)
+        os.remove(self.temp_input_file_name)
 
     def run_mini_code(self, mini_code, expected_output, output_file_name_base, expect_error=None):
-        self.temp_input_file.write(mini_code)
-        self.temp_input_file.close()
-        self.output_file_name = f"{output_file_name_base}.exe"
-        compiler_command = ["python", "Compiler.py", self.temp_input_file.name, "-o", self.output_file_name]
+        with open(self.temp_input_file_name, "w") as f: f.write(mini_code)
+        self.output_path = Path(f"./test_bin/{output_file_name_base}.exe")
 
-        # Run compiler and capture output
-        compile_process = subprocess.run(
-            compiler_command,
-            capture_output=True,
-            text=True
-        )
-
-        # Handle expected errors
-        if compile_process.returncode != 0:
-            error_msg = "Compilation failed:\n" + compile_process.stderr
+        try:
+            silent[0] = True
+            compiler_driver_main(["", self.temp_input_file_name, "-o", self.output_path, "--build-dir", "test_build", "--no-timings"])
+        except Exception as e:
+            error_msg = "Compilation failed:\n" + str(e)
             self.fail(error_msg)
 
         # Proceed to run executable if compilation succeeded
-        exe_command = [self.output_file_name]
+        exe_command = [f"./test_bin/{output_file_name_base}.exe"]
         completed_process = subprocess.run(exe_command, capture_output=True, text=True, check=True)
         actual_output = completed_process.stdout.strip()
-        os.remove(self.temp_input_file.name.replace(".mini",".bc"))
-        os.remove(self.output_file_name.split(".")[0] + ".obj")
-        os.remove(self.output_file_name)
 
         # Split the actual output into lines for comparison
         actual_lines = actual_output.split('\n')
@@ -52,7 +47,7 @@ class CompilerTestCase(unittest.TestCase):
 class CompilerTests(CompilerTestCase):
 
     def test_end_to_end(self):
-        with open("tests.mini", "r") as f: mini_code = f.read()
+        with open("lib/tests.mini", "r") as f: mini_code = f.read()
         with open("test_expected.txt", "r") as f: expected_output = f.read()
         self.run_mini_code(mini_code, expected_output, "end_to_end")
 
@@ -83,7 +78,7 @@ class CompilerTests(CompilerTestCase):
             x : i32 = 6.0; // Type mismatch
         }
         """
-        with self.assertRaisesRegex(Exception, "rhs type Ptr\\[f64\\] not subtype of declared type Ptr\\[i32\\]!"):
+        with self.assertRaisesRegex(Exception, "rhs type f64 not subtype of declared type i32!"):
             self.run_mini_code(mini_code, "", "assign_type_mismatch")
 
     def test_assign_void_expression(self):
@@ -104,7 +99,7 @@ class CompilerTests(CompilerTestCase):
             z = x + y; // Different types
         }
         """
-        with self.assertRaisesRegex(Exception, "tried to use ADD on different types: Ptr\\[i32\\] and Ptr\\[f64\\]"):
+        with self.assertRaisesRegex(Exception, "tried to use ADD on different types: i32 and f64"):
             self.run_mini_code(mini_code, "", "binary_op_different_types")
 
     def test_bitwise_op_non_integer_types(self):
@@ -115,7 +110,7 @@ class CompilerTests(CompilerTestCase):
             z = x bit_and y; // Non-integer types
         }
         """
-        with self.assertRaisesRegex(Exception, "bit_and only works on integers, not Ptr\\[f64\\] and Ptr\\[f64\\]"):
+        with self.assertRaisesRegex(Exception, "bit_and only works on integers, not f64 and f64"):
             self.run_mini_code(mini_code, "", "bitwise_op_non_integer_types")
 
     def test_class_def_lowercase_name(self):
@@ -183,7 +178,7 @@ class CompilerTests(CompilerTestCase):
             x = 5;
         }
         """
-        with self.assertRaisesRegex(Exception, "Function declares return type Ptr\\[i32\\] yet has no return statement."):
+        with self.assertRaisesRegex(Exception, "Function declares return type i32 yet has no return statement."):
             self.run_mini_code(mini_code, "", "func_missing_return")
 
     def test_init_method_arg_count_mismatch(self):
@@ -203,7 +198,7 @@ class CompilerTests(CompilerTestCase):
         def test() {
             foo(5.0); // Arg not subtype
         }"""
-        with self.assertRaisesRegex(Exception, "argument type Ptr\\[f64\\] not subtype of declared parameter type Ptr\\[i32\\] for parameter x"):
+        with self.assertRaisesRegex(Exception, "argument type f64 not subtype of declared parameter type i32 for parameter x"):
             self.run_mini_code(mini_code, "", "function_call_arg_not_subtype")
 
     def test_break_statement_outside_loop(self):
@@ -284,7 +279,7 @@ class CompilerTests(CompilerTestCase):
             x.method(); // Invalid receiver type
         }
         """
-        with self.assertRaisesRegex(Exception, "receiver type Ptr\\[i32\\] is not an object!"):
+        with self.assertRaisesRegex(Exception, "receiver type i32 is not an object!"):
             self.run_mini_code(mini_code, "", "method_call_invalid_receiver_type")
 
     def test_class_method_call_abstract_method(self):
@@ -394,7 +389,7 @@ class CompilerTests(CompilerTestCase):
         def test() {
             test_func.call("hello"); // Invalid arg type
         }"""
-        with self.assertRaisesRegex(Exception, "argument type String not subtype of declared parameter type Ptr\\[i32\\] for parameter #1"):
+        with self.assertRaisesRegex(Exception, "argument type String not subtype of declared parameter type i32 for parameter #1"):
             self.run_mini_code(mini_code, "", "function_literal_call_invalid_arg_type")
 
     def test_continue_statement_outside_loop(self):
@@ -422,7 +417,7 @@ class CompilerTests(CompilerTestCase):
         def test() {
             test_func.nonexistent_method(); // Invalid method
         }"""
-        with self.assertRaisesRegex(Exception, "Method nonexistent_method not available for type Function\\[Ptr\\[i32\\] -> Nothing\\]."):
+        with self.assertRaisesRegex(Exception, "Method nonexistent_method not available for type Function\\[i32 -> Nothing\\]."):
             self.run_mini_code(mini_code, "", "function_literal_call_invalid_method")
 
     def test_coroutine_call_invalid_arg_type(self):
@@ -444,7 +439,7 @@ class CompilerTests(CompilerTestCase):
             def speak(volume : i32) {} // Invalid param type
         }
         """
-        with self.assertRaisesRegex(Exception, "Overriding method speak in class Dog: parameter volume with type Ptr\\[i32\\] is not a subtype of overridden methods' parameters .*"):
+        with self.assertRaisesRegex(Exception, "Overriding method speak in class Dog: parameter volume with type i32 is not a subtype of overridden methods' parameters .*"):
             self.run_mini_code(mini_code, "", "override_invalid_param_type")
 
     def test_coroutine_call_too_many_args(self):
@@ -475,7 +470,7 @@ class CompilerTests(CompilerTestCase):
         def test() {
             test_func.call(); // Too few args
         }"""
-        with self.assertRaisesRegex(Exception, "number of arguments to .call\\(\\) \\(0\\) incompatible with reciever type Function\\[Ptr\\[i32\\] -> Nothing\\]"):
+        with self.assertRaisesRegex(Exception, "number of arguments to .call\\(\\) \\(0\\) incompatible with reciever type Function\\[i32 -> Nothing\\]"):
             self.run_mini_code(mini_code, "", "function_literal_call_too_few_args")
 
     def test_method_def_override_invalid_return_type_missing(self):
@@ -499,7 +494,7 @@ class CompilerTests(CompilerTestCase):
             def speak() -> i32 { return 0; } // Invalid return type not subtype
         }
         """
-        with self.assertRaisesRegex(Exception, "Overriding method speak in class Dog: return type Ptr\\[i32\\] not a subtype of overridden methods' return types .*"):
+        with self.assertRaisesRegex(Exception, "Overriding method speak in class Dog: return type i32 not a subtype of overridden methods' return types .*"):
             self.run_mini_code(mini_code, "", "override_invalid_return_type_subtype")
 
     def test_coroutine_call_invalid_method(self):
@@ -537,7 +532,7 @@ class CompilerTests(CompilerTestCase):
         def test() {
             buf : Buffer[i32] = Buffer[i32].new(5.0); // Invalid size type
         }"""
-        with self.assertRaisesRegex(Exception, "Buffer creation takes i32 as argument, not Ptr\\[f64\\]."):
+        with self.assertRaisesRegex(Exception, "Buffer creation takes i32 as argument, not f64."):
             self.run_mini_code(mini_code, "", "create_buffer_invalid_size_type")
 
     def test_method_def_missing_return(self):
@@ -548,7 +543,7 @@ class CompilerTests(CompilerTestCase):
             }
         }
         """
-        with self.assertRaisesRegex(Exception, "Method declares return type Ptr\\[i32\\] yet has no return statement."):
+        with self.assertRaisesRegex(Exception, "Method declares return type i32 yet has no return statement."):
             self.run_mini_code(mini_code, "", "method_missing_return")
 
     def test_range_literal_invalid_arg_type(self):
@@ -559,7 +554,7 @@ class CompilerTests(CompilerTestCase):
             r = x:10; // Invalid range arg type
         }
         """
-        with self.assertRaisesRegex(Exception, "Range literals take i32 arguments, not Ptr\\[f64\\] and Ptr\\[i32\\]"):
+        with self.assertRaisesRegex(Exception, "Range literals take i32 arguments, not f64 and i32"):
             self.run_mini_code(mini_code, "", "range_literal_invalid_arg_type")
 
     def test_if_statement_union_type_check_not_allowed(self):
@@ -568,7 +563,7 @@ class CompilerTests(CompilerTestCase):
             x : i32 | f64 = 5;
             if x is i32 | f64 {} // Union type check not allowed yet
         }"""
-        with self.assertRaisesRegex(Exception, "Cannot type-check Ptr\\[i32\\] \\| Ptr\\[f64\\] yet."):
+        with self.assertRaisesRegex(Exception, "Cannot type-check i32 \\| f64 yet."):
             self.run_mini_code(mini_code, "", "if_statement_union_type_check_not_allowed")
 
     def test_method_def_init_field_not_initialized(self):
@@ -588,7 +583,7 @@ class CompilerTests(CompilerTestCase):
             for i in x {} // Invalid iterable type
         }
         """
-        with self.assertRaisesRegex(Exception, "For-loop iterable must be an object with a .iterator\\(\\) method, not Ptr\\[i32\\]"):
+        with self.assertRaisesRegex(Exception, "For-loop iterable must be an object with a .iterator\\(\\) method, not i32"):
             self.run_mini_code(mini_code, "", "for_loop_invalid_iterable_type")
 
     def test_return_statement_outside_function(self):
