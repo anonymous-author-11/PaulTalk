@@ -19,23 +19,27 @@ from xdsl.dialects.builtin import (
 )
 from itertools import product, chain, combinations
 from functools import cmp_to_key
-import time
 import networkx as nx
 
 codegenned = set()
 generate_main_for = set()
 toplevel_ops = []
 included_files = nx.DiGraph()
-tim = time.time()
+
+def reset_ast_globals():
+    codegenned.clear()
+    generate_main_for.clear()
+    toplevel_ops.clear()
+    included_files.clear()
 
 class AST:
 
     def codegen(self) -> ModuleOp:
         global_scope = Scope()
         self.root.typeflow(global_scope)
-        print("typechecking complete")
+        #print("typechecking complete")
         self.root.codegen(global_scope)
-        print("codegen complete")
+        #print("codegen complete")
         func_ops = [op.parent_block().detach_op(op) for op in toplevel_ops]
         ops = chain.from_iterable([block.ops for block in global_scope.region.blocks])
         class_ops = [op.parent_block().detach_op(op) for op in ops if isinstance(op, TypeDefOp) or isinstance(op, ExternalTypeDefOp)]
@@ -632,7 +636,6 @@ class FieldIdentifier(Identifier):
     def exprtype(self, scope):
         field = next(iter(field for field in scope.cls.fields() if field.declaration.name == self.name), None)
         self.ensured_field_declared(scope, field)
-        if scope.cls.name == "FancyPair": print(f"field {field.declaration.name} type is {field.type()}")
         return field.type()
 
 @dataclass
@@ -1819,7 +1822,7 @@ class Method:
             others_types = [*chain.from_iterable(x.types.data if isinstance(x, Union) else [x] for x in others_x)]
             if all(tt in others_types for tt in types): continue
             return False
-        print(f"{self} is superfluous")
+        #print(f"{self} is superfluous")
         return True
 
     def __hash__(self):
@@ -2190,8 +2193,8 @@ class ClassDef(Statement):
         not_instantiable = any(isinstance(elem.definition, AbstractMethodDef) for elem in self.vtable() if isinstance(elem, Method))
         if not_instantiable:
             offender = next(elem for elem in self.vtable() if isinstance(elem, Method) and isinstance(elem.definition, AbstractMethodDef))
-            print(any(m for m in self.vtable() if isinstance(m, Method) and m.is_override_of(offender)))
-            print(f"{self.name} is not instantiable because of abstract method {self.name}.{offender.definition.name}")
+            #print(any(m for m in self.vtable() if isinstance(m, Method) and m.is_override_of(offender)))
+            #print(f"{self.name} is not instantiable because of abstract method {self.name}.{offender.definition.name}")
         combined = ArrayAttr([]) if not_instantiable else ArrayAttr([thing.symbol() for thing in self.vtable()])
         hash_tbl, prime = scope.build_hashtable(self.type())
         offset_tbl = scope.build_offset_table(self.type())
@@ -2208,7 +2211,7 @@ class ClassDef(Statement):
         scope.classes[self.name] = self
 
         for field in self.fields(): field.codegen(self._scope)
-        print(f"{self.name} fields are {[field.declaration.scoped_name(self._scope) for field in self.fields()]}")
+        #print(f"{self.name} fields are {[field.declaration.scoped_name(self._scope) for field in self.fields()]}")
         for elem in self.vtable():
             if isinstance(elem, Behavior): elem.codegen(self._scope)
         scope.merge_blocks(self._scope)
@@ -2427,7 +2430,7 @@ class ClassDef(Statement):
                 for method in methods:
                     if method.is_override_of(elem): combined[i] = method
                 if elem.definition in superfluous_methods:
-                    print(f"replacing superfluous method {elem} with a random method {methods[0]}")
+                    #print(f"replacing superfluous method {elem} with a random method {methods[0]}")
                     combined[i] = methods[0]
                 combined[i].offset = i
         self._vtable = combined

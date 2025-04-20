@@ -11,16 +11,18 @@ import copy
 import time
 
 with open("grammar.lark") as f: grammar = f.read()
-parser = parser = Lark(grammar, parser='lalr', propagate_positions=True)
+parser = parser = Lark(grammar, parser='lalr', propagate_positions=True, _plugins=lark_cython.plugins)
 parsed = {}
 
 def parse(file_name) -> AST:
     try:
+        if file_name in parsed: return copy.deepcopy(parsed[file_name])
         with open(file_name) as f: import_text = f.read()
         if file_name != "builtins.mini": import_text = "import builtins;\n\n" + import_text
         tree = parser.parse(import_text)
         tree = CSTTransformer(file_name).transform(tree)
-        return tree
+        parsed[file_name] = tree
+        return copy.deepcopy(tree)
     except UnexpectedToken as e:
         error_message = format_parser_error(e, file_name)
         raise Exception(f"Parsing Error:\n\n{error_message}") from None
@@ -158,11 +160,7 @@ class CSTTransformer(Transformer):
 
     def import_statement(self, *names):
         file_str = "/".join([name.value for name in names]) + ".mini"
-        if file_str in parsed:
-            ast = copy.deepcopy(parsed[file_str])
-        else:
-            ast = parse(file_str)
-            parsed[file_str] = ast
+        ast = parse(file_str)
         node_info = NodeInfo(None, self.file_name, names[0].line)
         return Import(node_info, file_str, ast.root, Scope())
 

@@ -11,9 +11,37 @@ import sys
 from parser import CSTTransformer, parse
 import subprocess
 import os
+import copy
 import re
 import networkx as nx
-from AST import included_files, generate_main_for
+import hashlib
+from AST import included_files, generate_main_for, reset_ast_globals
+
+def hash_file(filepath) -> bytes:
+    with open(filepath, 'rb') as f: hash_object = hashlib.file_digest(f, 'sha256')
+    return hash_object.hexdigest().encode("utf-8")
+
+def recompile_set(input_path, dependency_list, dependency_graph, build_dir) -> set:
+    to_recompile = set()
+    for dependency in dependency_list:
+        if dependency == input_path: continue
+        dependents = set(nx.ancestors(dependency_graph, dependency))
+        dependency_stem = os.path.basename(dependency).split(".")[0]
+        bc_file = f"{dependency_stem}.bc"
+        bc_path = os.path.join(build_dir, bc_file)
+        hash_file_path = os.path.join(build_dir, f"{dependency_stem}.hash")
+        hash_file_exists = os.path.exists(hash_file_path)
+        bc_file_exists = os.path.exists(bc_path)
+        if not hash_file_exists: print(f"hash file doesn't exist for {dependency}")
+        if not bc_file_exists: print(f"bitcode file doesn't exist for {dependency}")
+        if hash_file_exists and bc_file_exists:
+            src_hash = hash_file(dependency)
+            with open(hash_file_path, "rb") as f: stored_hash = f.read()
+            if src_hash == stored_hash: continue
+            print(f"hash of {dependency} is not the same")
+        to_recompile.add(dependency)
+        to_recompile = to_recompile.union(dependents)
+    return to_recompile
 
 def print_dependency_graph(included_files, file_name):
     print("Dependency graph:")
@@ -91,13 +119,14 @@ def run_mlir_opt(module_str):
     module_str = stringio.getvalue().encode().decode('unicode_escape')
     return module_str
 
-def lower_to_llvm(module_str, in_file_stem, build_dir):
+def lower_to_llvm(module_str, in_file_path, build_dir):
     to_llvm_dialect = " ".join(["mlir-opt","--convert-scf-to-cf", "--convert-arith-to-llvm","--convert-func-to-llvm","--convert-index-to-llvm",
         "--finalize-memref-to-llvm","--convert-cf-to-llvm","--convert-ub-to-llvm","--reconcile-unrealized-casts",
         "--emit-bytecode"
     ])
     mlir_translate = f"mlir-translate --mlir-to-llvmir"
 
+    in_file_stem = os.path.basename(in_file_path).split(".")[0]
     bc_file_path = os.path.join(build_dir, f"{in_file_stem}.bc")
 
     # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
@@ -107,11 +136,15 @@ def lower_to_llvm(module_str, in_file_stem, build_dir):
     cmd = " | ".join([to_llvm_dialect, mlir_translate, opt1, opt2])
     subprocess.run(cmd, text=True, shell=True, input=module_str)
 
-def llvm_link(in_file_stem, bc_files, build_dir):
+    # store the hash of the source code file in the build directory
+    with open(os.path.join(build_dir, f"{in_file_stem}.hash"), "wb") as f: f.write(hash_file(in_file_path))
+
+def llvm_link(in_file_stem, dependency_list, build_dir):
 
     # merge all the .bc files into one big .ll file for optimization
     # kind of like LTO but no pretense of being at "link-time"
-    bc_file_paths = [os.path.join(build_dir, f) for f in bc_files]
+    stems = (os.path.basename(f).split(".")[0] for f in dependency_list)
+    bc_file_paths = [os.path.join(build_dir, f"{stem}.bc") for stem in stems]
     lib_file_path = os.path.join(build_dir, f"{in_file_stem}.lib")
     make_archive = f"llvm-ar cr {lib_file_path} {' '.join(bc_file_paths)}"
     subprocess.run(make_archive, shell=True)
@@ -217,7 +250,7 @@ def run_lld_link(debug_mode, out_dir, output_stem, build_dir):
 
 def main(argv):
     after_imports = time.time()
-    print(f"Time to import: {after_imports - start_time} seconds")
+    
     if len(argv) < 2: raise Exception("Please provide a file to compile")
     input_path = argv[1]
     if not os.path.exists(input_path): raise Exception(f"Input path {input_path} does not exist.")
@@ -227,6 +260,9 @@ def main(argv):
     print(f"compiling {file_name}")
     debug_mode = "--debug" in argv
     show_dependencies = "--dependencies" in argv
+    print_timings = "--no-timings" not in argv
+
+    if print_timings: print(f"Time to import: {after_imports - start_time} seconds")
 
     output_name = None
     if "-o" in argv:
@@ -256,73 +292,80 @@ def main(argv):
     stringio = StringIO()
     Printer(stringio).print(module)
     module_str = stringio.getvalue().encode().decode('unicode_escape')
-        
-    # check that all dependencies have already been compiled into the build directory
-    bc_files = [file.split(".")[0] + ".bc" for file in included_files.nodes() if file != file_name]
-    for bc_file in bc_files:
-        bc_path = os.path.join(build_dir, bc_file)
-        if os.path.exists(bc_path): continue
-        print_dependency_graph(included_files, file_name)
-        raise Exception(f"Bitcode file for dependency {bc_file} does not exist in the build directory.")
-
-    if show_dependencies: print_dependency_graph(included_files, file_name)
-
     with open(os.path.join(build_dir,"in.mlir"), "w") as outfile: outfile.write(module_str)
+    dependency_graph = copy.deepcopy(included_files)
+    if show_dependencies: print_dependency_graph(dependency_graph, file_name)
+    dependency_list = list(reversed(list(nx.topological_sort(dependency_graph))))
+    reset_ast_globals()
+    if len(included_files.nodes()) > 0: raise Exception("ast globals not properly reset")
 
-    print(f"Time to parse: {after_parse - after_imports} seconds")
+    to_recompile = recompile_set(input_path, dependency_list, dependency_graph, build_dir)
+
+    # process in reverse-topological order, i.e. leaves first
+    for dependency in dependency_list:
+        if dependency == input_path: continue
+        if not dependency in to_recompile: continue
+        print(f"recompiling {dependency}")
+        # compile the dependency into the current build directory
+        main(["", dependency, "--build-dir", build_dir, "--no-timings"])
+
+    if print_timings: print(f"Time to parse: {after_parse - after_imports} seconds")
+
+    after_dependencies = time.time()
+    if print_timings: print(f"Time to verify / recompile dependencies: {after_dependencies - after_parse} seconds")
 
     after_codegen = time.time()
-    print(f"Time to type check + codegen: {after_codegen - after_parse} seconds")
+    if print_timings: print(f"Time to type check + codegen: {after_codegen - after_dependencies} seconds")
 
     module_str = run_python_lowering(module)
     after_firstpass = time.time()
-    print(f"Time to do python lowering: {after_firstpass - after_codegen} seconds")
+    if print_timings: print(f"Time to do python lowering: {after_firstpass - after_codegen} seconds")
 
     module_str = run_pdl_lowering(module_str, build_dir)
     after_pdl = time.time()
-    print(f"Time to do PDL lowering: {after_pdl - after_firstpass} seconds")
+    if print_timings: print(f"Time to do PDL lowering: {after_pdl - after_firstpass} seconds")
 
     module_str = run_mlir_opt(module_str)
     after_mlir_opt = time.time()
-    print(f"Time to do mlir-opt: {after_mlir_opt - after_pdl} seconds")
+    if print_timings: print(f"Time to do mlir-opt: {after_mlir_opt - after_pdl} seconds")
     
-    lower_to_llvm(module_str, in_file_stem, build_dir)
+    lower_to_llvm(module_str, input_path, build_dir)
     after_translate = time.time()
-    print(f"Time to lower to llvm ir: {after_translate - after_mlir_opt} seconds")
+    if print_timings: print(f"Time to lower to llvm ir: {after_translate - after_mlir_opt} seconds")
 
     # not creating an output file
     if not output_name:
         final_time = after_translate
-        print(f"Total time to compile: {final_time - start_time} seconds")
-        print("completed")
+        if print_timings: print(f"Total time to compile: {final_time - start_time} seconds")
+        print(f"Finished compiling {file_name}")
         return
 
-    llvm_link(in_file_stem, bc_files, build_dir)
+    llvm_link(in_file_stem, dependency_list, build_dir)
     after_llvm_link = time.time()
-    print(f"Time to llvm-link: {after_llvm_link - after_translate} seconds")
+    if print_timings: print(f"Time to llvm-link: {after_llvm_link - after_translate} seconds")
 
     run_opt(debug_mode, build_dir)
     #record_all_passes()
     after_opt = time.time()
-    print(f"Time to opt: {after_opt - after_llvm_link} seconds")
+    if print_timings: print(f"Time to opt: {after_opt - after_llvm_link} seconds")
 
     run_llc(debug_mode, out_dir, output_stem, build_dir)
     after_llc = time.time()
-    print(f"Time to llc: {after_llc - after_opt} seconds")
+    if print_timings: print(f"Time to llc: {after_llc - after_opt} seconds")
 
     # Only creating an object file
     if ".exe" not in output_name:
         final_time = after_llc
         print(f"Total time to compile: {final_time - start_time} seconds")
-        print("completed")
+        print(f"Finished compiling {file_name}")
         return
 
     run_lld_link(debug_mode, out_dir, output_stem, build_dir)
     after_lldlink = time.time()
     final_time = after_lldlink
-    print(f"Time to lld-link: {after_lldlink - after_llc} seconds")
-    print(f"Total time to compile: {final_time - start_time} seconds")
-    print("completed")
+    if print_timings: print(f"Time to lld-link: {after_lldlink - after_llc} seconds")
+    if print_timings: print(f"Total time to compile: {final_time - start_time} seconds")
+    print(f"Finished compiling {file_name}")
 
 if __name__ == "__main__":
     main(sys.argv)

@@ -397,11 +397,12 @@ TODO:
 
 - We should distinguish between the input/output *paths* and the input/output *filenames* [check!]
 	- And we should create the output directory if it doesn't exist [check!]
-	- Add option for build directory; default to current directory
-	- All files other than the output file should be created into optional 'build' directory
-		- in.mlir, out.mlir, bitcode file, out_reg2mem.ll, out_optimized.ll, sometimes .obj file
+	- Add option for build directory; default to current directory [check!]
+	- All files other than the output file should be created into optional 'build' directory [check!]
+		- in.mlir, out.mlir, bitcode file, out_reg2mem.ll, out_optimized.ll, sometimes .obj file [check!]
 		- Arguably keep the .lib archive as well
 	- If compiling an exe, the obj should go in 'build'; if compiling an obj, into the out-directory
+	- We can store hashes of source files in the build dir
 
 - Package manager
 	- Search upwards until you find a manifest
