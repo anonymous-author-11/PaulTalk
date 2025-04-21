@@ -5,6 +5,7 @@ import sys
 import yaml
 import shutil
 import stat
+import xml.etree.ElementTree as ET
 
 # 1. search upward and find manifest
 # 2. convert manifest into xml feed
@@ -22,10 +23,13 @@ def build_main(argv):
 	# find the manifest.yaml file specifying build options
 	manifest_data, manifest_path = find_manifest()
 	exe_stem, main_file_path = get_configuration(manifest_data, manifest_path)
+	xml_deps = xml_dependencies(manifest_data)
 
 	# generate a 0install .xml feed from the manifest information
 	with open(Path("c:/users/paulk/onedrive/documents/pl/pypl/template.xml"), "r") as f: xml_template = f.read()
-	xml_feed = xml_template.replace("BIN_NAME", exe_stem).replace("MAIN_FILE_PATH", f"{main_file_path.resolve()}")
+	xml_feed = xml_template.replace("BIN_NAME", exe_stem)
+	xml_feed = xml_feed.replace("MAIN_FILE_PATH", f"{main_file_path.resolve()}")
+	xml_feed = xml_feed.replace("DEPENDENCIES", xml_deps)
 	with open(Path(f"./build.xml"), "w") as f: f.write(xml_feed)
 
 	# set up the build directory
@@ -61,6 +65,38 @@ def find_manifest():
 	with open(manifest_path, "r") as f: yaml_text = f.read()
 	manifest_data = yaml.safe_load(yaml_text)
 	return manifest_data, manifest_path
+
+def xml_dependencies(manifest):
+	dependencies = []
+
+	# --- Dependencies ---
+	if 'requires' not in manifest: return ""
+	for req in manifest['requires']:
+		dep_interface_raw = req.get('interface')
+		if not dep_interface_raw: continue
+
+		dep_interface_url = dep_interface_raw
+
+		if dep_interface_raw.startswith("github://"):
+			dep_owner_repo = dep_interface_raw[len("github://"):]
+			dep_interface_url = f"http://localhost:8081/0install-github-feed/{dep_owner_repo}"
+
+		req_attrib = {"interface": dep_interface_url}
+		if 'version' in req: req_attrib['version'] = req['version']
+		requires = ET.Element("requires", req_attrib)
+
+		if 'bindings' not in req: continue
+		for bind in req['bindings']:
+			if bind.get('type') != 'environment': continue
+			bind_attrib = {"name": bind['name']}
+			if 'insert' in bind: bind_attrib['insert'] = bind['insert']
+			if 'mode' in bind: bind_attrib['mode'] = bind['mode']
+			if 'separator' in bind: bind_attrib['separator'] = bind['separator']
+			ET.SubElement(requires, "environment", bind_attrib)
+
+	dependencies.append(str(requires))
+
+	return "\n".join(dependencies)
 
 # Get the name of the end-result executable and the "main" source file from the 'build' section of the manifest
 def get_configuration(manifest, manifest_path):
