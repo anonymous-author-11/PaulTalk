@@ -4,5 +4,5 @@ homepage: https://example.com
 
 commands:
   build:
-    exe_name: compiled_executable.exe
+    exe_name: build.exe
     main: lib/hash_benchmark.mini

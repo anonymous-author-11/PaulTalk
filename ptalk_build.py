@@ -3,6 +3,8 @@ import subprocess
 from pathlib import Path
 import sys
 import yaml
+import shutil
+import stat
 
 # 1. search upward and find manifest
 # 2. convert manifest into xml feed
@@ -71,6 +73,10 @@ def build_main(argv):
 	os.chdir(Path(f".."))
 	os.remove(Path(f"./{exe_stem}.xml"))
 	if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
+
+	extra_folder_path = build_dir.joinpath(f"{exe_stem}-any-any/0install")
+	os.chmod(extra_folder_path, stat.S_IWRITE)
+	shutil.rmtree(extra_folder_path)
 
 if __name__ == "__main__":
 	build_main(sys.argv)

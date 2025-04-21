@@ -1,0 +1,31 @@
+Build log for DoCompile-1.0.1
+
+Built using 0compile-1.7
+
+Build system: Windows, x86_64, 10, 10.0.26100, AMD64, Intel64 Family 6 Model 140 Stepping 1, GenuineIntel
+
+0compile.properties:
+
+[compile]
+download-base-url = 
+version-modifier = 
+interface = C:\Users\PaulK\OneDrive\Documents\PL\PyPL\build.xml
+selections = 
+metadir = 0install
+distdir = 
+
+
+Executing: ['c:/windows/py.exe', 'c:/users/paulk/onedrive/documents/pl/pypl/compiler.py', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\hash_benchmark.mini', '-o', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build-any-any/build.exe', '--build-dir', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build']
+Compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\hash_benchmark.mini
+Time to import: 1.994218111038208 seconds
+Time to parse: 1.6732203960418701 seconds
+Time to type check + codegen: 3.5729217529296875 seconds
+Time to verify / recompile dependencies: 0.0 seconds
+Time to lower to llvm ir: 0.0 seconds
+Time to llvm-link: 0.23180460929870605 seconds
+Time to opt: 7.282444000244141 seconds
+Time to llc: 0.8658647537231445 seconds
+Time to lld-link: 0.037664175033569336 seconds
+Total time to compile: 15.658137798309326 seconds
+Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\hash_benchmark.mini
+Build successful

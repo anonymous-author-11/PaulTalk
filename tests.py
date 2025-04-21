@@ -7,6 +7,7 @@ from pathlib import Path
 from Compiler import compiler_driver_main
 from AST import silent
 from utils import random_letters
+import stat
 
 class CompilerTestCase(unittest.TestCase):
     def setUp(self):
@@ -15,6 +16,14 @@ class CompilerTestCase(unittest.TestCase):
 
     def tearDown(self):
         os.remove(self.temp_input_file_name)
+        test_bin = Path("./test_bin")
+        test_build = Path("./test_build")
+        if test_bin.exists():
+            os.chmod(test_bin, stat.S_IWRITE)
+            shutil.rmtree(test_bin)
+        if test_build.exists():
+            os.chmod(test_build, stat.S_IWRITE)
+            shutil.rmtree(test_build)
 
     def run_mini_code(self, mini_code, expected_output, output_file_name_base, expect_error=None):
         with open(self.temp_input_file_name, "w") as f: f.write(mini_code)
