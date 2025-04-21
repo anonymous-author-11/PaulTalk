@@ -22,12 +22,9 @@ import base64   # For handling signature format
 # --- Configuration ---
 PROXY_PORT = 8081
 PROXY_HOST = "localhost"
-GITHUB_API_TOKEN = os.environ.get("GITHUB_PAT")
-PROXY_GPG_KEY_ID = os.environ.get("PROXY_GPG_KEY_ID") # REQUIRED: GPG Key ID for signing
-if not GITHUB_API_TOKEN:
-    print("WARNING: GITHUB_PAT environment variable not set.")
-if not PROXY_GPG_KEY_ID:
-    raise ValueError("Please set the PROXY_GPG_KEY_ID environment variable with the GPG Key ID the proxy should use for signing.")
+with open(Path("../github_pat_for_proxy.txt"), "r") as f: git_api_tok = f.read()
+GITHUB_API_TOKEN = git_api_tok
+PROXY_GPG_KEY_ID = "362C65D7248082448700FF907D173BD8BF0813C7"
 
 CACHE_DIR = Path(tempfile.mkdtemp(prefix="0install_github_proxy_"))
 CACHE_EXPIRY_SECONDS = 3600
@@ -408,6 +405,30 @@ class GitHubFeedProxyHandler(http.server.SimpleHTTPRequestHandler):
             logging.exception(f"Unexpected error serving signed file {file_path}")
             self.send_error(500, "Internal Server Error")
 
+    # --- Helper to serve a file with 200 OK ---
+    def serve_file_content(self, file_path: Path, content_type: str):
+        """Sends a 200 OK response with the content of a local file."""
+        logging.info(f"Serving content of {file_path} as {content_type}")
+        try:
+            file_size = file_path.stat().st_size
+            self.send_response(200)
+            self.send_header('Content-Type', content_type)
+            self.send_header('Content-Length', str(file_size))
+            self.send_header('Cache-Control', 'no-cache')
+            self.end_headers()
+            with open(file_path, 'rb') as f:
+                shutil.copyfileobj(f, self.wfile)
+            logging.info(f"Successfully served {file_path}")
+        except FileNotFoundError:
+            logging.error(f"File not found when trying to serve: {file_path}")
+            self.send_error(404, "Not Found")
+        except PermissionError:
+            logging.error(f"Permission denied accessing file: {file_path}")
+            self.send_error(403, "Forbidden")
+        except Exception as e:
+            logging.exception(f"Unexpected error serving file {file_path}")
+            self.send_error(500, "Internal Server Error")
+
     def handle_github_feed_request(self):
         """Handles GitHub feed generation and serves SIGNED XML content."""
         logging.info(f"Handling GitHub feed request: {self.path}")
@@ -519,6 +540,11 @@ class GitHubFeedProxyHandler(http.server.SimpleHTTPRequestHandler):
 
     def do_GET(self):
         """Handle GET requests: GitHub feeds, local feeds, or standard proxy."""
+        if self.path.startswith(FEED_REQUEST_PREFIX) and self.path.lower().endswith(".gpg"):
+            logging.info(f"Handling GPG key request: {self.path}")
+            key_path = Path("./proxy_pub.gpg")
+            self.serve_file_content(key_path, 'application/pgp-keys') # Use standard GPG key MIME type
+
         if self.path.startswith(FEED_REQUEST_PREFIX):
             self.handle_github_feed_request()
         elif self.path.startswith(LOCAL_FEED_PREFIX):

@@ -5,7 +5,10 @@ import sys
 import yaml
 import shutil
 import stat
+import logging
+import threading
 import xml.etree.ElementTree as ET
+from zeroinstall_proxy import proxy_main
 
 # 1. search upward and find manifest
 # 2. convert manifest into xml feed
@@ -20,6 +23,10 @@ import xml.etree.ElementTree as ET
 
 def build_main(argv):
 
+	logging.disable(logging.CRITICAL + 1)
+	proxy_thread = threading.Thread(target=proxy_main, daemon=True)
+	proxy_thread.start()
+
 	# find the manifest.yaml file specifying build options
 	manifest_data, manifest_path = find_manifest()
 	exe_stem, main_file_path = get_configuration(manifest_data, manifest_path)
@@ -30,6 +37,7 @@ def build_main(argv):
 	xml_feed = xml_template.replace("BIN_NAME", exe_stem)
 	xml_feed = xml_feed.replace("MAIN_FILE_PATH", f"{main_file_path.resolve()}")
 	xml_feed = xml_feed.replace("DEPENDENCIES", xml_deps)
+
 	with open(Path(f"./build.xml"), "w") as f: f.write(xml_feed)
 
 	# set up the build directory
@@ -93,8 +101,7 @@ def xml_dependencies(manifest):
 			if 'mode' in bind: bind_attrib['mode'] = bind['mode']
 			if 'separator' in bind: bind_attrib['separator'] = bind['separator']
 			ET.SubElement(requires, "environment", bind_attrib)
-
-	dependencies.append(str(requires))
+		dependencies.append(ET.tostring(requires, encoding='unicode', method='xml'))
 
 	return "\n".join(dependencies)
 

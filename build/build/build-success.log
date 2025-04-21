@@ -17,7 +17,7 @@ distdir =
 
 Executing: ['c:/windows/py.exe', 'c:/users/paulk/onedrive/documents/pl/pypl/compiler.py', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\hash_benchmark.mini', '-o', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build-any-any/program.exe', '--build-dir', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build']
 Compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\hash_benchmark.mini
-Time to import: 2.233675956726074 seconds
+Time to import: 2.1284234523773193 seconds
 Recompiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\builtins.mini
 Compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\builtins.mini
 Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\builtins.mini
@@ -66,17 +66,17 @@ Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\std.mini
 Recompiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\cuckoo.mini
 Compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\cuckoo.mini
 Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\cuckoo.mini
-Time to parse: 1.5121710300445557 seconds
-Time to type check + codegen: 3.5706400871276855 seconds
-Time to verify / recompile dependencies: 22.009124994277954 seconds
-Time to do python lowering: 2.631382465362549 seconds
-Time to do PDL lowering: 0.22425246238708496 seconds
-Time to do mlir-opt: 0.18422198295593262 seconds
-Time to lower to llvm ir: 0.226060152053833 seconds
-Time to llvm-link: 0.24160289764404297 seconds
-Time to opt: 7.028685569763184 seconds
-Time to llc: 0.9083442687988281 seconds
-Time to lld-link: 0.05176997184753418 seconds
-Total time to compile: 40.82193183898926 seconds
+Time to parse: 1.5987703800201416 seconds
+Time to type check + codegen: 3.707885980606079 seconds
+Time to verify / recompile dependencies: 21.571226119995117 seconds
+Time to do python lowering: 2.4354512691497803 seconds
+Time to do PDL lowering: 0.23158049583435059 seconds
+Time to do mlir-opt: 0.1969139575958252 seconds
+Time to lower to llvm ir: 0.2332005500793457 seconds
+Time to llvm-link: 0.2191011905670166 seconds
+Time to opt: 7.63392186164856 seconds
+Time to llc: 0.8902812004089355 seconds
+Time to lld-link: 0.04777169227600098 seconds
+Total time to compile: 40.89452815055847 seconds
 Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\hash_benchmark.mini
 Build successful

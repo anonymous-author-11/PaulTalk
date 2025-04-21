@@ -6,3 +6,15 @@ commands:
   build:
     exe_name: program.exe
     main: lib/hash_benchmark.mini
+
+# Other dependencies
+requires:
+  - interface: github://anonymous-author-11/0install-testing # Another dependency
+    version: 0.1.6
+    # How this dependency is used (bindings)
+    bindings:
+      # Add the library's path to PYTHONPATH
+      - type: environment
+        name: PYTHONPATH
+        insert: lib # Assuming the library unpacks with code at the root
+        mode: prepend
