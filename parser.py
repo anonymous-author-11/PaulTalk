@@ -12,7 +12,7 @@ import time
 from pathlib import Path
 import os
 
-with open("grammar.lark") as f: grammar = f.read()
+with open(Path("c:/users/paulk/onedrive/documents/pl/pypl/grammar.lark")) as f: grammar = f.read()
 parser = parser = Lark(grammar, parser='lalr', propagate_positions=True, _plugins=lark_cython.plugins)
 source_directories = {Path(".")}
 parsed = {}

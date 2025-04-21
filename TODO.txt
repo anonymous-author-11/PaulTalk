@@ -382,35 +382,31 @@ DONE:
 - Add multi-line comments [check!]
 	- To grammar [check!]
 	- To syntax highlighting [check!]
-
-TODO:
-
-- Build system
-	- The compile command should take in
-		- The source directory
-		- The directory for the final product
-		- The directory to produce temporary files in
-	- The build tool will create and pass in these directories to the compiler
-	- The compiler should also know about all included directories
-		- Does the build tool pass these in?
-		- Or are these expected to be in environment variables?
-
 - We should distinguish between the input/output *paths* and the input/output *filenames* [check!]
 	- And we should create the output directory if it doesn't exist [check!]
 	- Add option for build directory; default to current directory [check!]
 	- All files other than the output file should be created into optional 'build' directory [check!]
 		- in.mlir, out.mlir, bitcode file, out_reg2mem.ll, out_optimized.ll, sometimes .obj file [check!]
-		- Arguably keep the .lib archive as well
-	- If compiling an exe, the obj should go in 'build'; if compiling an obj, into the out-directory
 - We can store hashes of source files in the build dir [check!]
 	- Incremental recompilation [check!]
-- Use paths rather than filenames for imports
-	- Check that the file exists among the avaiable directories
-	- Identify the file with a particular path
+- Use paths rather than filenames for imports [check!]
+	- Check that the file exists among the avaiable directories [check!]
+	- Identify the file with a particular path [check!]
+- Build system [check!]
+	- The compile command should take in
+		- The directory for the final product [check!]
+		- The directory to produce temporary files in [check!]
+	- The compiler should also know about all included directories [check!]
+		- In environment variables plus ./lib directories [check!]
+- If compiling an exe, the obj should go in 'build'; if compiling an obj, into the out-directory [check!]
+- 0compile will create and pass in source, build, and output directories to the compiler [check!]
+
+TODO:
+
 - Package manager
 	- Search upwards until you find a manifest
 	- Use latest versions in default folder if no manifest found
-	- Use a simple accessible file format for the manifest
+	- Use a simple accessible file format for the manifest (YAML)
 
 - What do I really need for 1.0?
 	- A way to distribute and adopt code (packages)
@@ -425,10 +421,9 @@ TODO:
 			- Two backward passes over AST
 		- Allocating from regions
 		- Storing region ptrs in fatptrs
-			- Here be dragons
-			- Probably must require that generic fields be in the same region as self
+			- Probably must require that generic fields be in the same region as 'self'
 			- Because they might not be fatptrs in which case they can't carry a region
-			- This will leave the third word free for small struct optimization thankfully
+			- This will leave the third word free for small-struct-optimization thankfully
 			- And generic method parameters should have to be bound to something with a region
 		- Aliasing rules for first class functions, coroutines, polymorphic constructors
 			- Just conservatively alias them all. Spare none of them.
@@ -438,6 +433,8 @@ TODO:
 		- Standalone-opt and debugir usage, ugh
 	- You have to get ahead of breaking changes, esp. ABI
 		- Function / coroutine base_typ
+		- Behavior ABI wrt overloads
+		- Already planned ahead for delegate passing
 	- A less meager stdlib
 		- Set, LinkedList
 		- JSON?
@@ -451,10 +448,12 @@ TODO:
 	- Should we disallow all return statements in literals?
 	- That's actually smart-- only one implicit return allowed
 - Overloading *functions*
-	- Reuse the behavior code as much as possible
-- Get rid of Ptr type and split into Int and Float
+	- Reuse the Behavior code as much as possible
+	- Only functions in the same file should count as overloads?
+- Get rid of Ptr type and split into Int and Float types
 - Where clauses for method type parameters
 - Should i32 be a subtype of i64?
+	- It can be trivially cast to it, so I don't see why not
 - Cast literals when passing as arguments
 - Implement user-exposed getters
 	- Shouldn't be technically difficult
@@ -471,10 +470,14 @@ TODO:
 - Refactor to use lo.call in PDL
 - Add T? syntax for T | Nil
 - Improve namespacing
+	- Right now import order implicitly resolves conflicts
+	- Instead one should have to explicitly disambiguate conflicts
 	- Should only have to disambiguate if an ambiguous entity is actually used
 	- Dot syntax for namespacing
 - Putting coroutine yields and returns in the same slot is asking for bugs
 - Add 'of' syntax for array literals
+	- [] of String
+	- [1, 2, 3] of i32 | f64
 - Make aliases even smarter
 	- "alias Foo[A] = Bar[A, i32];"
 	- This is more complex
@@ -532,7 +535,6 @@ TODO:
 - Figure out a way to get methods into builtin vtables
 	- Define intrinsics for operations on boxed interfaces
 	- PrimitiveDef subtype of ClassDef?
-
 - Allow multiple type checks in one condition
 - Add tuple destructuring
 - Check for mismatched yield types

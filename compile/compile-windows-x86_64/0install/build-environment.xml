@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<selections command="compile" interface="C:\Users\PaulK\OneDrive\Documents\PL\PyPL\compile.xml" xmlns="http://zero-install.sourceforge.net/2004/injector/interface">
+  <selection arch="*-src" id="C:\Users\PaulK\OneDrive\Documents\PL\PyPL" interface="C:\Users\PaulK\OneDrive\Documents\PL\PyPL\compile.xml" local-path="C:\Users\PaulK\OneDrive\Documents\PL\PyPL" version="1.0.1">
+    <command name="compile" path="c:/windows/py.exe">
+      <arg>c:/users/paulk/onedrive/documents/pl/pypl/compiler.py</arg>
+      <arg>c:/users/paulk/onedrive/documents/pl/pypl/lib/generic.mini</arg>
+      <arg>-o</arg>
+      <arg>$DISTDIR/compiled.exe</arg>
+      <arg>--build-dir</arg>
+      <arg>$BUILDDIR</arg>
+    </command>
+  </selection>
+  <build-info arch="Windows-AMD64" host="Paul-Laptop.myfiosgateway.com" time="2025-04-21 09:14" user="PaulK"/>
+</selections>

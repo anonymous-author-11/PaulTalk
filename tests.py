@@ -10,7 +10,7 @@ from utils import random_letters
 
 class CompilerTestCase(unittest.TestCase):
     def setUp(self):
-        self.temp_input_file_name = random_letters(10) + ".mini"
+        self.temp_input_file_name = f"{random_letters(10)}.mini"
         self.output_path = None  # To be set in individual test methods
 
     def tearDown(self):

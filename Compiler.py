@@ -2,6 +2,8 @@ import time
 
 start_time = time.time()
 
+from parser import CSTTransformer, parse, source_directories
+from AST import included_files, generate_main_for, reset_ast_globals, silent
 from utils import clean_name
 from xdsl.context import MLContext
 from xdsl.printer import Printer
@@ -9,7 +11,6 @@ from io import StringIO
 from lower import do_lowering
 from dataclasses import dataclass
 import sys
-from parser import CSTTransformer, parse, source_directories
 import subprocess
 import os
 from pathlib import Path
@@ -17,7 +18,6 @@ import copy
 import re
 import networkx as nx
 import hashlib
-from AST import included_files, generate_main_for, reset_ast_globals, silent
 
 @dataclass
 class OptionalPrinter:
@@ -86,7 +86,7 @@ def run_python_lowering(module) -> str:
     return module_str
 
 def run_pdl_lowering(module_str, build_dir) -> str:
-    with open("patterns.mlir", "r") as patterns_file: patterns = patterns_file.read()
+    with open(Path("c:/users/paulk/onedrive/documents/pl/pypl/patterns.mlir"), "r") as patterns_file: patterns = patterns_file.read()
 
     to_pdl_bytecode = "mlir-opt -allow-unregistered-dialect --mlir-print-op-generic --convert-pdl-to-pdl-interp"
     standalone_opt = "c:/users/paulk/onedrive/documents/pl/pypl/standalone/build/bin/standalone-opt"
@@ -177,7 +177,8 @@ def llvm_link(input_path, dependency_list, build_dir):
 
     bc_file_path = build_dir.joinpath(f"{input_path.stem}.bc")
     out_linked_path = build_dir.joinpath("out_linked.ll")
-    link_utils = f"llvm-link -S {bc_file_path} utils.ll -o {out_linked_path}"
+    utils_path = Path("c:/users/paulk/onedrive/documents/pl/pypl/utils.ll")
+    link_utils = f"llvm-link -S {bc_file_path} {utils_path} -o {out_linked_path}"
     subprocess.run(link_utils, shell=True)
 
     # use the correct main function
@@ -259,8 +260,9 @@ def run_llc(debug_mode, output_path, build_dir):
     exception_model = "-exception-model=sjlj"
     outliner_settings = "-enable-machine-outliner -machine-outliner-reruns=2"
 
-    os.makedirs(output_path.parent, exist_ok=True)
-    obj_path = output_path.parent.joinpath(f"{output_path.stem}.obj")
+    obj_dir = output_path.parent if output_path.suffix == ".obj" else build_dir
+    os.makedirs(obj_dir, exist_ok=True)
+    obj_path = obj_dir.joinpath(f"{output_path.stem}.obj")
     out_optimized_path = build_dir.joinpath(f"out_optimized{debug_extension}.ll")
     llc = f"llc -filetype=obj {out_optimized_path} -O=3 {target_triple} {exception_model} -o {obj_path}"
     subprocess.run(llc)
@@ -269,11 +271,13 @@ def run_lld_link(debug_mode, output_path, build_dir):
     debug_flag = "/debug" if debug_mode else ""
     dynamic_libc = "msvcrt.lib legacy_stdio_definitions.lib"
     static_libc = "libcmt.lib"
+    os.makedirs(output_path.parent, exist_ok=True)
     obj_path = output_path.parent.joinpath(f"{output_path.stem}.obj")
     exe_path = output_path.parent.joinpath(f"{output_path.stem}.exe")
+    trampoline_path = Path("c:/users/paulk/onedrive/documents/pl/pypl/trampoline.obj")
     
     # using dynamic linking:
-    lld_link = f"lld-link /out:{exe_path} {obj_path} trampoline.obj {debug_flag} {dynamic_libc}"
+    lld_link = f"lld-link /out:{exe_path} {obj_path} {trampoline_path} {debug_flag} {dynamic_libc}"
     subprocess.run(lld_link)
 
 def compiler_driver_main(argv):
