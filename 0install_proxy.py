@@ -538,8 +538,7 @@ class GitHubFeedProxyHandler(http.server.SimpleHTTPRequestHandler):
          logging.error("HTTPS (CONNECT) method not supported by this simple proxy.")
          self.send_error(501, "CONNECT method not implemented.")
 
-# --- Main Execution ---
-if __name__ == "__main__":
+def proxy_main():
     try:
         subprocess.run(['gpg', '--version'], check=True, capture_output=True)
         logging.info("GPG command found.")
@@ -569,3 +568,7 @@ if __name__ == "__main__":
             pass
         finally:
             logging.info("Shutting down proxy.")
+
+# --- Main Execution ---
+if __name__ == "__main__":
+    proxy_main()

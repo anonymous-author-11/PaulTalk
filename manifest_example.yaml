@@ -1,0 +1,31 @@
+# manifest.yaml in the repo root for a specific tag
+name: MyCoolApp                  # Will become <name>
+summary: Does cool things       # Will become <summary>
+homepage: https://example.com  # Optional, becomes <homepage>
+
+# How to run the default 'run' command
+runner:
+  # Dependency needed to run the code
+  interface: github://python/cpython # Use 'github://' scheme for deps
+  version: ^3.9                    # Constraint for the runner
+  # Command path *within* the unpacked archive
+  path: src/main.py
+
+# Other dependencies
+requires:
+  - interface: github://requests/requests # Another dependency
+    version: ^2.25.0
+    # How this dependency is used (bindings)
+    bindings:
+      # Add the library's path to PYTHONPATH
+      - type: environment
+        name: PYTHONPATH
+        insert: . # Assuming the library unpacks with code at the root
+
+# Optional: Add specific commands other than 'run'
+# commands:
+#   test:
+#     path: tests/run_tests.py
+#     runner:
+#       interface: github://python/cpython
+#       version: ^3.9

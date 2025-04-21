@@ -1,0 +1,8 @@
+name: PaulTalkCompiler
+summary: Compiler for the PaulTalk programming language
+homepage: https://example.com
+
+commands:
+  build:
+    exe_name: compiled_executable.exe
+    main: lib/hash_benchmark.mini

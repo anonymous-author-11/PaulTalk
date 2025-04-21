@@ -2,8 +2,8 @@
   <name>DoCompile</name>
   <summary>Compiles generic.mini into the directory</summary>
   <description/>
-  <feed-for interface="http://mycompany.example/myapp"/>
+  <feed-for interface="http://foo.bar/compiled_executable"/>
   <group>
-    <implementation id=".." released="2025-04-21" version="1.0.1"><command name="run" path="compiled.exe"/></implementation>
+    <implementation id=".." released="2025-04-21" version="1.0.1"><command name="run" path="compiled_executable.exe"/></implementation>
   </group>
 </interface>
