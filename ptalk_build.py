@@ -15,7 +15,33 @@ import stat
 # What is the name of the executable?
 # What is the "main" file?
 
-# We should be putting dependencies in the generated xml feed
+# Next step: put dependencies in the generated xml feed and let 0install track them all down
+
+def build_main(argv):
+
+	# find the manifest.yaml file specifying build options
+	manifest_data, manifest_path = find_manifest()
+	exe_stem, main_file_path = get_configuration(manifest_data, manifest_path)
+
+	# generate a 0install .xml feed from the manifest information
+	with open(Path("c:/users/paulk/onedrive/documents/pl/pypl/template.xml"), "r") as f: xml_template = f.read()
+	xml_feed = xml_template.replace("BIN_NAME", exe_stem).replace("MAIN_FILE_PATH", f"{main_file_path.resolve()}")
+	with open(Path(f"./build.xml"), "w") as f: f.write(xml_feed)
+
+	# set up the build directory
+	build_dir = Path(f"./build")
+	setup_build_dir()
+	
+	# run 0compile build
+	cmd_out = subprocess.run("0install run https://apps.0install.net/0install/0compile.xml build", shell=True, text=True, capture_output=True)
+	os.chdir(Path(f".."))
+	os.remove(Path(f"./build.xml"))
+	if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
+
+	# clean up unnecessary folder
+	extra_folder_path = build_dir.joinpath(f"build-any-any/0install")
+	os.chmod(extra_folder_path, stat.S_IWRITE)
+	shutil.rmtree(extra_folder_path)
 
 # search upward in the directory tree until you find a manifest.yaml
 def find_manifest():
@@ -47,36 +73,17 @@ def get_configuration(manifest, manifest_path):
 	if not main_path.exists(): raise Exception(f"Main file specified in manifest.yaml {main_path} does not exist")
 	return exe_stem, main_path
 
-def setup_build_dir(build_dir, exe_stem):
+# run 0compile setup if the build dir doesn't yet exist; or just cd into it if it does exist
+def setup_build_dir():
+	build_dir = Path(f"./build")
 	if build_dir.exists():
 		os.chdir(build_dir)
 		return
-	cmd_out = subprocess.run(f"0install run https://apps.0install.net/0install/0compile.xml setup {exe_stem}.xml", shell=True, text=True, capture_output=True)
+	cmd_out = subprocess.run(f"0install run https://apps.0install.net/0install/0compile.xml setup build.xml", shell=True, text=True, capture_output=True)
 	if cmd_out.returncode != 0:
-		os.remove(Path(f"./{exe_stem}.xml"))
+		os.remove(Path(f"./build.xml"))
 		raise Exception(cmd_out.stderr)
 	os.chdir(build_dir)
-
-def build_main(argv):
-
-	manifest_data, manifest_path = find_manifest()
-	exe_stem, main_file_path = get_configuration(manifest_data, manifest_path)
-
-	with open(Path("c:/users/paulk/onedrive/documents/pl/pypl/template.xml"), "r") as f: xml_template = f.read()
-	xml_feed = xml_template.replace("BIN_NAME", exe_stem).replace("MAIN_FILE_PATH", f"{main_file_path.resolve()}")
-	with open(Path(f"./{exe_stem}.xml"), "w") as f: f.write(xml_feed)
-
-	build_dir = Path(f"./{exe_stem}")
-	setup_build_dir(build_dir, exe_stem)
-	
-	cmd_out = subprocess.run("0install run https://apps.0install.net/0install/0compile.xml build", shell=True, text=True, capture_output=True)
-	os.chdir(Path(f".."))
-	os.remove(Path(f"./{exe_stem}.xml"))
-	if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
-
-	extra_folder_path = build_dir.joinpath(f"{exe_stem}-any-any/0install")
-	os.chmod(extra_folder_path, stat.S_IWRITE)
-	shutil.rmtree(extra_folder_path)
 
 if __name__ == "__main__":
 	build_main(sys.argv)

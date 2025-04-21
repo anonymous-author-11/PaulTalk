@@ -2,9 +2,9 @@
 <interface
   xmlns="http://zero-install.sourceforge.net/2004/injector/interface"
   xmlns:compile="http://zero-install.sourceforge.net/2006/namespaces/0compile"
-  uri="http://foo.bar/BIN_NAME">
+  uri="http://foo.bar/build">
   <name>DoCompile</name>
-  <summary>Compiles generic.mini into the directory</summary>
+  <summary>Runs the PaulTalk compiler on MAIN_FILE_PATH to produce BIN_NAME.exe</summary>
 
   <implementation id="." arch="*-src" version="1.0.1">
     <command name='compile' path='c:/windows/py.exe'>

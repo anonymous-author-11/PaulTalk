@@ -404,9 +404,9 @@ DONE:
 TODO:
 
 - Package manager
-	- Search upwards until you find a manifest
+	- Search upwards until you find a manifest [check!]
+	- Use a simple accessible file format for the manifest (YAML) [check!]
 	- Use latest versions in default folder if no manifest found
-	- Use a simple accessible file format for the manifest (YAML)
 
 - What do I really need for 1.0?
 	- A way to distribute and adopt code (packages)
