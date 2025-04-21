@@ -15,35 +15,17 @@ metadir = 0install
 distdir = 
 
 
-Executing: ['c:/windows/py.exe', 'c:/users/paulk/onedrive/documents/pl/pypl/compiler.py', 'c:/users/paulk/onedrive/documents/pl/pypl/lib/generic.mini', '-o', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\compile\\compile-windows-x86_64/compiled.exe', '--build-dir', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\compile\\build']
+Executing: ['c:/windows/py.exe', 'c:/users/paulk/onedrive/documents/pl/pypl/compiler.py', 'c:/users/paulk/onedrive/documents/pl/pypl/lib/generic.mini', '-o', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\compile\\compile-any-any/compiled.exe', '--build-dir', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\compile\\build']
 Compiling c:\users\paulk\onedrive\documents\pl\pypl\lib\generic.mini
-Time to import: 2.1085760593414307 seconds
-Recompiling c:\users\paulk\onedrive\documents\pl\pypl\lib\builtins.mini
-Compiling c:\users\paulk\onedrive\documents\pl\pypl\lib\builtins.mini
-Finished compiling c:\users\paulk\onedrive\documents\pl\pypl\lib\builtins.mini
-Recompiling c:\users\paulk\onedrive\documents\pl\pypl\lib\iteration.mini
-Compiling c:\users\paulk\onedrive\documents\pl\pypl\lib\iteration.mini
-Finished compiling c:\users\paulk\onedrive\documents\pl\pypl\lib\iteration.mini
-Recompiling c:\users\paulk\onedrive\documents\pl\pypl\lib\core.mini
-Compiling c:\users\paulk\onedrive\documents\pl\pypl\lib\core.mini
-Finished compiling c:\users\paulk\onedrive\documents\pl\pypl\lib\core.mini
-Recompiling c:\users\paulk\onedrive\documents\pl\pypl\lib\io.mini
-Compiling c:\users\paulk\onedrive\documents\pl\pypl\lib\io.mini
-Finished compiling c:\users\paulk\onedrive\documents\pl\pypl\lib\io.mini
-Recompiling c:\users\paulk\onedrive\documents\pl\pypl\lib\array.mini
-Compiling c:\users\paulk\onedrive\documents\pl\pypl\lib\array.mini
-Finished compiling c:\users\paulk\onedrive\documents\pl\pypl\lib\array.mini
-Time to parse: 0.4445490837097168 seconds
-Time to type check + codegen: 1.3040742874145508 seconds
-Time to verify / recompile dependencies: 11.476053953170776 seconds
-Time to do python lowering: 1.1968109607696533 seconds
-Time to do PDL lowering: 0.16796183586120605 seconds
-Time to do mlir-opt: 0.1167900562286377 seconds
-Time to lower to llvm ir: 0.16749835014343262 seconds
-Time to llvm-link: 0.18253564834594727 seconds
-Time to opt: 1.1899030208587646 seconds
-Time to llc: 0.34841060638427734 seconds
-Time to lld-link: 0.05738234519958496 seconds
-Total time to compile: 18.76054620742798 seconds
+Time to import: 3.718977689743042 seconds
+Time to parse: 0.4623725414276123 seconds
+Time to type check + codegen: 2.618638277053833 seconds
+Time to verify / recompile dependencies: 0.05719351768493652 seconds
+Time to lower to llvm ir: 0.0 seconds
+Time to llvm-link: 0.35004305839538574 seconds
+Time to opt: 1.3182156085968018 seconds
+Time to llc: 0.3883066177368164 seconds
+Time to lld-link: 0.13718152046203613 seconds
+Total time to compile: 9.050928831100464 seconds
 Finished compiling c:\users\paulk\onedrive\documents\pl\pypl\lib\generic.mini
 Build successful

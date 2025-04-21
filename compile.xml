@@ -1,5 +1,8 @@
 <?xml version="1.0" ?>
-<interface xmlns="http://zero-install.sourceforge.net/2004/injector/interface" uri="http://mycompany.example/myapp"> <!-- App's unique URI -->
+<interface
+  xmlns="http://zero-install.sourceforge.net/2004/injector/interface"
+  xmlns:compile="http://zero-install.sourceforge.net/2006/namespaces/0compile"
+  uri="http://mycompany.example/myapp">
   <name>DoCompile</name>
   <summary>Compiles generic.mini into the directory</summary>
 
@@ -11,6 +14,9 @@
       <arg>$DISTDIR/compiled.exe</arg>
       <arg>--build-dir</arg>
       <arg>$BUILDDIR</arg>
+      <compile:implementation arch='*-*'>
+        <command name='run' path='compiled.exe' />
+      </compile:implementation>
     </command>
   </implementation>
 </interface>

@@ -272,7 +272,7 @@ def run_lld_link(debug_mode, output_path, build_dir):
     dynamic_libc = "msvcrt.lib legacy_stdio_definitions.lib"
     static_libc = "libcmt.lib"
     os.makedirs(output_path.parent, exist_ok=True)
-    obj_path = output_path.parent.joinpath(f"{output_path.stem}.obj")
+    obj_path = build_dir.joinpath(f"{output_path.stem}.obj")
     exe_path = output_path.parent.joinpath(f"{output_path.stem}.exe")
     trampoline_path = Path("c:/users/paulk/onedrive/documents/pl/pypl/trampoline.obj")
     
@@ -338,10 +338,8 @@ def compiler_driver_main(argv):
 
     to_recompile = recompile_set(input_path, dependency_list, dependency_graph, build_dir)
 
-    if len(to_recompile) == 0 and already_perfect(input_path, build_dir):
-        # This input file already has a perfectly serviceable bitcode file
-        # TODO: skip all the passes needed to generate the bitcode file
-        pass
+    # Do we need to produce a bitcode file or does a good one already exist?
+    needs_lowering = len(to_recompile) > 0 or not already_perfect(input_path, build_dir)
 
     # process in reverse-topological order, i.e. leaves first
     for dependency in dependency_list:
@@ -359,21 +357,24 @@ def compiler_driver_main(argv):
     after_dependencies = time.time()
     time_printer.print(f"Time to verify / recompile dependencies: {after_dependencies - after_codegen} seconds")
 
-    module_str = run_python_lowering(module)
-    after_firstpass = time.time()
-    time_printer.print(f"Time to do python lowering: {after_firstpass - after_dependencies} seconds")
+    pre_lowering = after_dependencies
+    if needs_lowering:
+        module_str = run_python_lowering(module)
+        after_firstpass = time.time()
+        time_printer.print(f"Time to do python lowering: {after_firstpass - after_dependencies} seconds")
 
-    module_str = run_pdl_lowering(module_str, build_dir)
-    after_pdl = time.time()
-    time_printer.print(f"Time to do PDL lowering: {after_pdl - after_firstpass} seconds")
+        module_str = run_pdl_lowering(module_str, build_dir)
+        after_pdl = time.time()
+        time_printer.print(f"Time to do PDL lowering: {after_pdl - after_firstpass} seconds")
 
-    module_str = run_mlir_opt(module_str)
-    after_mlir_opt = time.time()
-    time_printer.print(f"Time to do mlir-opt: {after_mlir_opt - after_pdl} seconds")
-    
-    lower_to_llvm(module_str, input_path, build_dir)
+        module_str = run_mlir_opt(module_str)
+        pre_lowering = time.time()
+        time_printer.print(f"Time to do mlir-opt: {pre_lowering - after_pdl} seconds")
+        
+        lower_to_llvm(module_str, input_path, build_dir)
+
     after_translate = time.time()
-    time_printer.print(f"Time to lower to llvm ir: {after_translate - after_mlir_opt} seconds")
+    time_printer.print(f"Time to lower to llvm ir: {after_translate - pre_lowering} seconds")
 
     # not creating an output file
     if not output_path:

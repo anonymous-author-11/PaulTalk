@@ -3,7 +3,7 @@
   <summary>Compiles generic.mini into the directory</summary>
   <description/>
   <feed-for interface="http://mycompany.example/myapp"/>
-  <group arch="Windows-x86_64">
-    <implementation id=".." released="2025-04-21" version="1.0.1"/>
+  <group>
+    <implementation id=".." released="2025-04-21" version="1.0.1"><command name="run" path="compiled.exe"/></implementation>
   </group>
 </interface>
