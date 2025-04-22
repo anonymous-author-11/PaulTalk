@@ -20,15 +20,15 @@ import platform
 import networkx as nx
 import hashlib
 
-DEBUGIR_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/debugir-master/build/bin/debugir.exe")
-STANDALONE_OPT_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/standalone/build/bin/standalone-opt.exe")
-MLIR_OPT_PATH = Path("C:/llvm-project/build/bin/mlir-opt.exe")
-MLIR_TRANSLATE_PATH = Path("C:/llvm-project/build/bin/mlir-translate.exe")
-LLVM_AR_PATH = Path("C:/llvm-project/build/bin/llvm-ar.exe")
-LLVM_LINK_PATH = Path("C:/llvm-project/build/bin/llvm-link.exe")
-OPT_PATH = Path("C:/llvm-project/build/bin/opt.exe")
-LLC_PATH = Path("C:/llvm-project/build/bin/llc.exe")
-LLD_LINK_PATH = Path("C:/llvm-project/build/bin/lld-link.exe")
+DEBUGIR_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/executables/debugir.exe")
+STANDALONE_OPT_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/executables/standalone-opt.exe")
+MLIR_OPT_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/executables/mlir-opt.exe")
+MLIR_TRANSLATE_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/executables/mlir-translate.exe")
+LLVM_AR_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/executables/llvm-ar.exe")
+LLVM_LINK_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/executables/llvm-link.exe")
+OPT_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/executables/opt.exe")
+LLC_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/executables/llc.exe")
+LLD_LINK_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/executables/lld-link.exe")
 
 PDL_PATTERNS_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/data_files/patterns.mlir")
 UTILS_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/data_files/utils.ll")
