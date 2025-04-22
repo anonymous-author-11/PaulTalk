@@ -49,15 +49,13 @@ def build_main(argv):
 	build_dir = Path(f"./build")
 	setup_build_dir()
 	
-	# run 0compile build
+	# run 0compile build from inside the build directory
 	print("Running 0compile build")
 	command = ["0install","run","https://apps.0install.net/0install/0compile.xml","build"]
-	with subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT) as process:
+	with subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=build_dir.resolve()) as process:
 		for line in process.stdout: print(line.decode('utf8').rstrip("\n"))
 
-	os.chdir(Path(f".."))
 	os.remove(Path(f"./build.xml"))
-
 	if process.returncode != 0: raise Exception(process.stderr)
 
 	# clean up unnecessary folder
@@ -130,14 +128,12 @@ def get_configuration(manifest, manifest_path):
 # run 0compile setup if the build dir doesn't yet exist; or just cd into it if it does exist
 def setup_build_dir():
 	build_dir = Path(f"./build")
-	if build_dir.exists():
-		os.chdir(build_dir)
-		return
-	cmd_out = subprocess.run(f"0install run https://apps.0install.net/0install/0compile.xml setup build.xml", shell=True, text=True, capture_output=True)
+	if build_dir.exists(): return
+	command = ["0install","run","https://apps.0install.net/0install/0compile.xml","setup","build.xml"]
+	cmd_out = subprocess.run(command, text=True, capture_output=True)
 	if cmd_out.returncode != 0:
 		os.remove(Path(f"./build.xml"))
 		raise Exception(cmd_out.stderr)
-	os.chdir(build_dir)
 
 if __name__ == "__main__":
 	build_main(sys.argv)

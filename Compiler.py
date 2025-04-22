@@ -20,6 +20,22 @@ import platform
 import networkx as nx
 import hashlib
 
+DEBUGIR_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/debugir-master/build/bin/debugir.exe")
+STANDALONE_OPT_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/standalone/build/bin/standalone-opt.exe")
+MLIR_OPT_PATH = Path("C:/llvm-project/build/bin/mlir-opt.exe")
+MLIR_TRANSLATE_PATH = Path("C:/llvm-project/build/bin/mlir-translate.exe")
+LLVM_AR_PATH = Path("C:/llvm-project/build/bin/llvm-ar.exe")
+LLVM_LINK_PATH = Path("C:/llvm-project/build/bin/llvm-link.exe")
+OPT_PATH = Path("C:/llvm-project/build/bin/opt.exe")
+LLC_PATH = Path("C:/llvm-project/build/bin/llc.exe")
+LLD_LINK_PATH = Path("C:/llvm-project/build/bin/lld-link.exe")
+
+PDL_PATTERNS_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/data_files/patterns.mlir")
+UTILS_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/data_files/utils.ll")
+WIN_UTILS_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/data_files/win_utils.ll")
+POSIX_UTILS_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/data_files/posix_utils.ll")
+TRAMPOLINE_OBJ_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/data_files/trampoline.obj")
+
 def compiler_driver_main(argv):
     after_imports = time.time()
     
@@ -197,7 +213,7 @@ def add_source_directories(input_path):
         lib_folder_1.resolve()
         source_directories.add(lib_folder_1)
 
-    lib_folder_2 = input_path.parent.joinpath("/lib")
+    lib_folder_2 = input_path.parent.joinpath("lib")
     if lib_folder_2.exists():
         lib_folder_2.resolve()
         source_directories.add(lib_folder_2)
@@ -217,11 +233,10 @@ def run_python_lowering(module) -> str:
     return module_str
 
 def run_pdl_lowering(module_str, build_dir) -> str:
-    with open(Path("c:/users/paulk/onedrive/documents/pl/pypl/patterns.mlir"), "r") as patterns_file: patterns = patterns_file.read()
+    with open(PDL_PATTERNS_PATH, "r") as patterns_file: patterns = patterns_file.read()
 
-    to_pdl_bytecode = "mlir-opt -allow-unregistered-dialect --mlir-print-op-generic --convert-pdl-to-pdl-interp"
-    standalone_opt = "c:/users/paulk/onedrive/documents/pl/pypl/standalone/build/bin/standalone-opt"
-    run_bytecode = f"{standalone_opt} -allow-unregistered-dialect --mlir-print-op-generic --my-custom-pass"
+    to_pdl_bytecode = f"{MLIR_OPT_PATH} -allow-unregistered-dialect --mlir-print-op-generic --convert-pdl-to-pdl-interp"
+    run_bytecode = f"{STANDALONE_OPT_PATH} -allow-unregistered-dialect --mlir-print-op-generic --my-custom-pass"
     
     out_mlir_path = build_dir.joinpath("out.mlir")
     with open(out_mlir_path, "w") as outfile: outfile.write(module_str)
@@ -261,7 +276,7 @@ def run_pdl_lowering(module_str, build_dir) -> str:
 
 def run_mlir_opt(module_str) -> str:
     cmd = " ".join([
-        "mlir-opt","-allow-unregistered-dialect","--mlir-print-op-generic","--canonicalize=\"region-simplify=aggressive\"",
+        f"{MLIR_OPT_PATH}","-allow-unregistered-dialect","--mlir-print-op-generic","--canonicalize=\"region-simplify=aggressive\"",
         "--sroa","--lift-cf-to-scf",
         "--canonicalize=\"region-simplify=aggressive\"", "--sccp", "--loop-invariant-code-motion","--loop-invariant-subset-hoisting",
         "--cse","--control-flow-sink","--convert-func-to-llvm"
@@ -279,18 +294,18 @@ def run_mlir_opt(module_str) -> str:
     return module_str
 
 def lower_to_llvm(module_str, in_file_path, build_dir):
-    to_llvm_dialect = " ".join(["mlir-opt","--convert-scf-to-cf", "--convert-arith-to-llvm","--convert-func-to-llvm","--convert-index-to-llvm",
+    to_llvm_dialect = " ".join([f"{MLIR_OPT_PATH}","--convert-scf-to-cf", "--convert-arith-to-llvm","--convert-func-to-llvm","--convert-index-to-llvm",
         "--finalize-memref-to-llvm","--convert-cf-to-llvm","--convert-ub-to-llvm","--reconcile-unrealized-casts",
         "--emit-bytecode"
     ])
-    mlir_translate = f"mlir-translate --mlir-to-llvmir"
+    mlir_translate = f"{MLIR_TRANSLATE_PATH} --mlir-to-llvmir"
 
     bc_file_path = build_dir.joinpath(f"{in_file_path.stem}.bc")
 
     # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
     # this has shown to improve the optimization potential for unclear reasons
-    opt1 = f"opt --passes=\"reg2mem\""
-    opt2 = f"opt --passes=\"default<O1>\" -o {bc_file_path}"
+    opt1 = f"{OPT_PATH} --passes=\"reg2mem\""
+    opt2 = f"{OPT_PATH} --passes=\"default<O1>\" -o {bc_file_path}"
     cmd = " | ".join([to_llvm_dialect, mlir_translate, opt1, opt2])
     subprocess.run(cmd, text=True, shell=True, input=module_str)
 
@@ -303,16 +318,13 @@ def llvm_link(input_path, dependency_list, build_dir):
 
     bc_file_paths = [str(build_dir.joinpath(f"{path.stem}.bc")) for path in dependency_list]
     lib_file_path = build_dir.joinpath(f"{input_path.stem}.lib")
-    make_archive = f"llvm-ar cr {lib_file_path} {' '.join(bc_file_paths)}"
+    make_archive = f"{LLVM_AR_PATH} cr {lib_file_path} {' '.join(bc_file_paths)}"
     subprocess.run(make_archive, shell=True)
 
     bc_file_path = build_dir.joinpath(f"{input_path.stem}.bc")
     out_linked_path = build_dir.joinpath("out_linked.ll")
-    utils_path = Path("c:/users/paulk/onedrive/documents/pl/pypl/utils.ll")
-    win_utils_path = Path("c:/users/paulk/onedrive/documents/pl/pypl/win_utils.ll")
-    posix_utils_path = Path("c:/users/paulk/onedrive/documents/pl/pypl/posix_utils.ll")
-    os_utils_path = win_utils_path if platform.system() == "Windows" else posix_utils_path
-    link_utils = f"llvm-link -S {bc_file_path} {utils_path} {os_utils_path} -o {out_linked_path}"
+    os_utils_path = WIN_UTILS_PATH if platform.system() == "Windows" else POSIX_UTILS_PATH
+    link_utils = f"{LLVM_LINK_PATH} -S {bc_file_path} {UTILS_PATH} {os_utils_path} -o {out_linked_path}"
     subprocess.run(link_utils, shell=True)
 
     # use the correct main function
@@ -324,7 +336,7 @@ def llvm_link(input_path, dependency_list, build_dir):
 
     # using --only-needed cuts out a lot of unnecessary imports
     out_reg2mem_path = build_dir.joinpath("out_reg2mem.ll")
-    link_imports = f"llvm-link -S {out_linked_path} {lib_file_path} -o {out_reg2mem_path} --only-needed"
+    link_imports = f"{LLVM_LINK_PATH} -S {out_linked_path} {lib_file_path} -o {out_reg2mem_path} --only-needed"
     subprocess.run(link_imports, shell=True)
     os.remove(lib_file_path)
     os.remove(out_linked_path)
@@ -340,7 +352,7 @@ def record_all_passes(build_dir):
     opt_level = "--passes=\"default<O1>\""
     #opt = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
     out_reg2mem_path = build_dir.joinpath("out_reg2mem.ll")
-    opt = f"opt {out_reg2mem_path} -S {opt_level} {attributor_settings} --max-devirt-iterations=100 --inline-threshold=10000 --print-after-all"
+    opt = f"{OPT_PATH} {out_reg2mem_path} -S {opt_level} {attributor_settings} --max-devirt-iterations=100 --inline-threshold=10000 --print-after-all"
     with open(out_reg2mem_path, "r+") as f:
         txt = f.read()
         f.seek(0)
@@ -380,10 +392,10 @@ def run_opt(debug_mode, build_dir):
     # Using attributor-enable=cgscc or attributor-enable=all takes way too long, though it does generate faster code
     attributor_settings = f"--attributor-enable=module {annotate_callsites} {heap_to_stack} {use_internal_attributes} {open_world} {no_tail}"
 
-    opt = f"opt -S {out_reg2mem_path} {opt_level} {devirtualization_settings} {inline_settings} {attributor_settings} -o {out_optimized_path}"
+    opt = f"{OPT_PATH} -S {out_reg2mem_path} {opt_level} {devirtualization_settings} {inline_settings} {attributor_settings} -o {out_optimized_path}"
     subprocess.run(opt, text=True, shell=True)
 
-    debug = f"debugir {out_optimized_path}"
+    debug = f"{DEBUGIR_PATH} {out_optimized_path}"
     if debug_mode: subprocess.run(debug, text=True, shell=True)
 
 def run_llc(debug_mode, output_path, build_dir):
@@ -398,7 +410,7 @@ def run_llc(debug_mode, output_path, build_dir):
     os.makedirs(obj_dir, exist_ok=True)
     obj_path = obj_dir.joinpath(f"{output_path.stem}.obj")
     out_optimized_path = build_dir.joinpath(f"out_optimized{debug_extension}.ll")
-    llc = f"llc -filetype=obj {out_optimized_path} -O=3 {target_triple} {exception_model} -o {obj_path}"
+    llc = f"{LLC_PATH} -filetype=obj {out_optimized_path} -O=3 {target_triple} {exception_model} -o {obj_path}"
     subprocess.run(llc)
 
 def run_lld_link(debug_mode, output_path, build_dir):
@@ -408,10 +420,9 @@ def run_lld_link(debug_mode, output_path, build_dir):
     os.makedirs(output_path.parent, exist_ok=True)
     obj_path = build_dir.joinpath(f"{output_path.stem}.obj")
     exe_path = output_path.parent.joinpath(f"{output_path.stem}.exe")
-    trampoline_path = Path("c:/users/paulk/onedrive/documents/pl/pypl/trampoline.obj")
     
     # using dynamic linking:
-    lld_link = f"lld-link /out:{exe_path} {obj_path} {trampoline_path} {debug_flag} {dynamic_libc}"
+    lld_link = f"{LLD_LINK_PATH} /out:{exe_path} {obj_path} {TRAMPOLINE_OBJ_PATH} {debug_flag} {dynamic_libc}"
     subprocess.run(lld_link)
 
 if __name__ == "__main__":

@@ -432,7 +432,8 @@ TODO:
 		- And the main utils.ll calls OS-agnostic wrappers [check!]
 		- Trampoline object file also needs to have multiple versions
 		- Make sure the compiler filesystem handling is portable
-		- What is the object file extension?
+		- Link the C stdlib
+		- What is the object file / executable extension?
 		- Standalone-opt and debugir usage, ugh
 	- You have to get ahead of breaking changes, esp. ABI
 		- Function / coroutine base_typ
