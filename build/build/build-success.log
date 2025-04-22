@@ -17,66 +17,15 @@ distdir =
 
 Executing: ['c:/windows/py.exe', 'c:/users/paulk/onedrive/documents/pl/pypl/compiler.py', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\hash_benchmark.mini', '-o', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build-any-any/program.exe', '--build-dir', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build']
 Compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\hash_benchmark.mini
-Time to import: 2.1284234523773193 seconds
-Recompiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\builtins.mini
-Compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\builtins.mini
-Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\builtins.mini
-Recompiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\iteration.mini
-Compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\iteration.mini
-Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\iteration.mini
-Recompiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\core.mini
-Compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\core.mini
-Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\core.mini
-Recompiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\io.mini
-Compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\io.mini
-Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\io.mini
-Recompiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\files.mini
-Compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\files.mini
-narrowed Buffer[i32] & Nil to nothing
-narrowed Buffer[i32] & Nil to nothing
-narrowed Buffer[i32] & Nil to nothing
-narrowed Buffer[i32] & Nil to nothing
-narrowed Buffer[i32] & Nil to nothing
-would be impossible to enter then branch
-@handle
-!mini.nothing
-narrowed Buffer[i32] & Nil to nothing
-would be impossible to enter then branch
-@handle
-!mini.nothing
-Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\files.mini
-Recompiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\array.mini
-Compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\array.mini
-Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\array.mini
-Recompiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\channel.mini
-Compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\channel.mini
-Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\channel.mini
-Recompiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\range.mini
-Compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\range.mini
-Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\range.mini
-Recompiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\math.mini
-Compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\math.mini
-Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\math.mini
-Recompiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\map.mini
-Compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\map.mini
-Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\map.mini
-Recompiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\std.mini
-Compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\std.mini
-Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\std.mini
-Recompiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\cuckoo.mini
-Compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\cuckoo.mini
-Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\cuckoo.mini
-Time to parse: 1.5987703800201416 seconds
-Time to type check + codegen: 3.707885980606079 seconds
-Time to verify / recompile dependencies: 21.571226119995117 seconds
-Time to do python lowering: 2.4354512691497803 seconds
-Time to do PDL lowering: 0.23158049583435059 seconds
-Time to do mlir-opt: 0.1969139575958252 seconds
-Time to lower to llvm ir: 0.2332005500793457 seconds
-Time to llvm-link: 0.2191011905670166 seconds
-Time to opt: 7.63392186164856 seconds
-Time to llc: 0.8902812004089355 seconds
-Time to lld-link: 0.04777169227600098 seconds
-Total time to compile: 40.89452815055847 seconds
+Time to import: 2.0752766132354736 seconds
+Time to parse: 1.7331249713897705 seconds
+Time to type check + codegen: 3.279526710510254 seconds
+Time to verify / recompile dependencies: 0.015650510787963867 seconds
+Time to lower to llvm ir: 0.0 seconds
+Time to llvm-link: 0.20799851417541504 seconds
+Time to opt: 7.510815620422363 seconds
+Time to llc: 0.9681229591369629 seconds
+Time to lld-link: 0.05074262619018555 seconds
+Total time to compile: 15.841258525848389 seconds
 Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\hash_benchmark.mini
 Build successful

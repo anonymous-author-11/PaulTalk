@@ -400,22 +400,22 @@ DONE:
 		- In environment variables plus ./lib directories [check!]
 - If compiling an exe, the obj should go in 'build'; if compiling an obj, into the out-directory [check!]
 - 0compile will create and pass in source, build, and output directories to the compiler [check!]
+- Package management [check!]
+	- Search upwards until you find a manifest [check!]
+	- Use a simple accessible file format for the manifest (YAML) [check!]
 
 TODO:
 
-- Package manager
-	- Search upwards until you find a manifest [check!]
-	- Use a simple accessible file format for the manifest (YAML) [check!]
-	- Use latest versions in default folder if no manifest found
+- Improve proxy caching
 
 - What do I really need for 1.0?
-	- A way to distribute and adopt code (packages)
-		- Ideally use something existing and portable
-		- I like 0install and think I should adapt it
-		- I'd need to write some wrappers around it
-		- I'd like to be able to use GitHub repos as packages
+	- A way to distribute and adopt code (packages) [check!]
+		- Ideally use something existing and portable [check!]
+		- I like 0install and think I should adapt it [check!]
+		- I'd need to write some wrappers around it [check!]
+		- I'd like to be able to use GitHub repos as packages [check!]
 	- Namespacing is even more necessary with packages
-	- Determine what kind of file/directory structure is expected
+	- Determine what kind of file/directory structure is expected [check!]
 	- Region memory management
 		- Liveness analysis
 			- Two backward passes over AST
@@ -428,8 +428,11 @@ TODO:
 		- Aliasing rules for first class functions, coroutines, polymorphic constructors
 			- Just conservatively alias them all. Spare none of them.
 	- Support 3 major platforms (Windows, iOS, Linux)
-		- Have alternative utils.ll files for different platforms
+		- Have specialized utils.ll files for different platforms [check!]
+		- And the main utils.ll calls OS-agnostic wrappers [check!]
+		- Trampoline object file also needs to have multiple versions
 		- Make sure the compiler filesystem handling is portable
+		- What is the object file extension?
 		- Standalone-opt and debugir usage, ugh
 	- You have to get ahead of breaking changes, esp. ABI
 		- Function / coroutine base_typ

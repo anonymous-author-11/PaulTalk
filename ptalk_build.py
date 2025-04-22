@@ -23,37 +23,48 @@ from zeroinstall_proxy import proxy_main
 
 def build_main(argv):
 
+	# launch the http proxy server as a thread
+	# this will redirect 0install queries
+	print("Launching proxy server")
 	logging.disable(logging.CRITICAL + 1)
 	proxy_thread = threading.Thread(target=proxy_main, daemon=True)
 	proxy_thread.start()
 
 	# find the manifest.yaml file specifying build options
+	print("Extracting manifest info")
 	manifest_data, manifest_path = find_manifest()
 	exe_stem, main_file_path = get_configuration(manifest_data, manifest_path)
 	xml_deps = xml_dependencies(manifest_data)
 
 	# generate a 0install .xml feed from the manifest information
+	print("Generating xml feed")
 	with open(Path("c:/users/paulk/onedrive/documents/pl/pypl/template.xml"), "r") as f: xml_template = f.read()
 	xml_feed = xml_template.replace("BIN_NAME", exe_stem)
 	xml_feed = xml_feed.replace("MAIN_FILE_PATH", f"{main_file_path.resolve()}")
 	xml_feed = xml_feed.replace("DEPENDENCIES", xml_deps)
-
 	with open(Path(f"./build.xml"), "w") as f: f.write(xml_feed)
 
 	# set up the build directory
+	print("Setting up build directory")
 	build_dir = Path(f"./build")
 	setup_build_dir()
 	
 	# run 0compile build
-	cmd_out = subprocess.run("0install run https://apps.0install.net/0install/0compile.xml build", shell=True, text=True, capture_output=True)
+	print("Running 0compile build")
+	command = ["0install","run","https://apps.0install.net/0install/0compile.xml","build"]
+	with subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT) as process:
+		for line in process.stdout: print(line.decode('utf8').rstrip("\n"))
+
 	os.chdir(Path(f".."))
 	os.remove(Path(f"./build.xml"))
-	if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
+
+	if process.returncode != 0: raise Exception(process.stderr)
 
 	# clean up unnecessary folder
 	extra_folder_path = build_dir.joinpath(f"build-any-any/0install")
 	os.chmod(extra_folder_path, stat.S_IWRITE)
 	shutil.rmtree(extra_folder_path)
+	print("Build completed successfully")
 
 # search upward in the directory tree until you find a manifest.yaml
 def find_manifest():

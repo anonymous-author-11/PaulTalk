@@ -11,9 +11,7 @@ declare ptr @malloc(i64)
 declare void @free(ptr allocptr nocapture noundef)
 declare void @llvm.eh.sjlj.longjmp(ptr) noreturn nounwind
 declare ptr @llvm.stacksave() mustprogress nocallback nofree nosync nounwind willreturn
-declare noalias ptr @VirtualAlloc(ptr, i64, i32, i32) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1) "alloc-family"="malloc"
-declare i32 @VirtualFree(ptr allocptr nocapture noundef, i64, i32) mustprogress nounwind willreturn allockind("free") memory(argmem: readwrite, inaccessiblemem: readwrite)
-declare i32 @VirtualProtect(ptr, i64, i32, ptr) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
+
 declare void @report_exception( {ptr} )
 
 @i32_string = internal constant [4 x i8] c"%d\0A\00"
@@ -24,6 +22,12 @@ declare void @report_exception( {ptr} )
 @into_caller_buf = linkonce_odr thread_local global [3 x ptr] zeroinitializer
 @current_coroutine = linkonce_odr thread_local global ptr null
 @always_one = linkonce thread_local global i1 1
+
+; An OS-agnostic virtual-memory reservation API
+declare noalias ptr @virtual_reserve(i64) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
+
+; An OS-agnostic API to make trampoline code executable
+declare void @anoint_trampoline(ptr %tramp) mustprogress nofree nosync nounwind willreturn memory(argmem: readwrite)
 
 ; Thread-local storage for our bump allocator state
 @current_ptr = internal thread_local global ptr null
@@ -218,17 +222,11 @@ define void @_unbox_Default({ ptr, i160 } %fat_ptr, ptr %parameterization, ptr %
   ret void
 }
 
-define void @anoint_trampoline(ptr %tramp) {
-  %oldProtect = alloca i32  
-  %result = call i32 @VirtualProtect(ptr %tramp, i64 16, i32 64, ptr %oldProtect) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-  ret void
-}
-
 ; Function to create a new coroutine
 define ptr @coroutine_create(ptr %func, ptr %arg_passer) {
 
   ; Reserve a new stack (8MB == 8388608 bytes) for the coroutine (and put the coroutine itself on this stack)
-  %stack = call noalias ptr @VirtualAlloc(ptr null, i64 8388608, i32 12288, i32 4) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(1) "alloc-family"="malloc"
+  %stack = call noalias ptr @virtual_reserve(i64 8388608) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
 
   ; Store the passed function pointer in the coroutine
   %func_ptr = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %stack, i32 0, i32 0
@@ -257,7 +255,7 @@ define ptr @coroutine_create(ptr %func, ptr %arg_passer) {
 }
 
 define void @setup_landing_pad() {
-  %region = call noalias ptr @VirtualAlloc(ptr null, i64 5368709120, i32 12288, i32 4) mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(1) "alloc-family"="malloc"
+  %region = call noalias ptr @virtual_reserve(i64 5368709120) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
   store ptr %region, ptr @current_ptr
   %buf_first_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 0
   %buf_second_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 1

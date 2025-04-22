@@ -1160,9 +1160,10 @@ define void @benchmark_insert_sequential(i32 %0) local_unnamed_addr {
   ret void
 }
 
-define void @anoint_trampoline(ptr %tramp) {
+; Function Attrs: mustprogress nofree nosync nounwind willreturn memory(argmem: readwrite)
+define void @anoint_trampoline(ptr %tramp) #10 {
   %oldProtect = alloca i32, align 4
-  %result = call i32 @VirtualProtect(ptr %tramp, i64 16, i32 64, ptr %oldProtect) #11
+  %result = call i32 @VirtualProtect(ptr %tramp, i64 16, i32 64, ptr %oldProtect)
   ret void
 }
 
@@ -1177,10 +1178,10 @@ define ptr @adjust_trampoline(ptr %tramp) {
 declare i64 @clock() local_unnamed_addr
 
 ; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: read)
-declare ptr @llvm.adjust.trampoline(ptr) #10
+declare ptr @llvm.adjust.trampoline(ptr) #11
 
 ; Function Attrs: mustprogress nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare i32 @VirtualProtect(ptr, i64, i32, ptr) #11
+declare i32 @VirtualProtect(ptr, i64, i32, ptr) #10
 
 define void @benchmark_insert_random(i32 %0) local_unnamed_addr {
   %2 = alloca [0 x ptr], align 8
@@ -4599,12 +4600,12 @@ define noundef i32 @main() local_unnamed_addr {
 }
 
 define void @setup_landing_pad() {
-  %region = call noalias ptr @VirtualAlloc(ptr null, i64 5368709120, i32 12288, i32 4) #26
+  %region = call noalias ptr @virtual_reserve(i64 5368709120) #8
   store ptr %region, ptr @current_ptr, align 8
   %buf_first_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 0
   %buf_second_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 1
   %buf_third_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 2
-  %sp = call ptr @llvm.stacksave.p0() #27
+  %sp = call ptr @llvm.stacksave.p0() #26
   store ptr %sp, ptr %buf_first_word, align 8
   store ptr blockaddress(@setup_landing_pad, %landing_pad), ptr %buf_second_word, align 8
   store ptr %sp, ptr %buf_third_word, align 8
@@ -4624,11 +4625,14 @@ exit:                                             ; preds = %0
   ret void
 }
 
-; Function Attrs: mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1)
-declare noalias ptr @VirtualAlloc(ptr, i64, i32, i32) #12
+; Function Attrs: mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0)
+define noalias ptr @virtual_reserve(i64 %size) #8 {
+  %result = call noalias ptr @VirtualAlloc(ptr null, i64 %size, i32 12288, i32 4) #13
+  ret ptr %result
+}
 
 ; Function Attrs: nocallback nofree nosync nounwind willreturn
-declare ptr @llvm.stacksave.p0() #13
+declare ptr @llvm.stacksave.p0() #12
 
 define void @arg_passer(ptr %current_coroutine) {
   %func_ptr = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %current_coroutine, i32 0, i32 0
@@ -4638,7 +4642,7 @@ define void @arg_passer(ptr %current_coroutine) {
 }
 
 define ptr @coroutine_create(ptr %func, ptr %arg_passer) {
-  %stack = call noalias ptr @VirtualAlloc(ptr null, i64 8388608, i32 12288, i32 4) #26
+  %stack = call noalias ptr @virtual_reserve(i64 8388608) #8
   %func_ptr = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %stack, i32 0, i32 0
   store ptr %func, ptr %func_ptr, align 8
   %stack_top = getelementptr i8, ptr %stack, i64 8388608
@@ -4668,6 +4672,9 @@ declare i32 @printf(ptr, ...)
 declare void @exit()
 
 declare void @coroutine_trampoline(ptr)
+
+; Function Attrs: mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1)
+declare noalias ptr @VirtualAlloc(ptr, i64, i32, i32) #13
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind speculatable willreturn memory(argmem: read)
 define ptr @typegetter_wrapper(ptr %f, ptr nocapture nofree noundef nonnull readonly %0) #0 {
@@ -4809,7 +4816,7 @@ define void @assume_offset(ptr %fat_ptr, ptr %id_ptr) {
   store i32 %dest_value, ptr %slot, align 4
   %slotval = load i32, ptr %slot, align 4
   %eq = icmp eq i32 %slotval, %offset
-  call void @llvm.assume(i1 %eq) #28
+  call void @llvm.assume(i1 %eq) #27
   ret void
 }
 
@@ -4837,7 +4844,7 @@ define preserve_nonecc void @context_switch(ptr nocapture writeonly %from_buf, p
   %from_buf_second_word = getelementptr [3 x ptr], ptr %from_buf, i32 0, i32 1
   %from_buf_third_word = getelementptr [3 x ptr], ptr %from_buf, i32 0, i32 2
   store ptr blockaddress(@context_switch, %return_from_switch), ptr %from_buf_second_word, align 8
-  %sp = call ptr @llvm.stacksave.p0() #27
+  %sp = call ptr @llvm.stacksave.p0() #26
   store ptr %sp, ptr %from_buf_first_word, align 8
   store ptr %sp, ptr %from_buf_third_word, align 8
   %is_first_time = call i1 @returns_one()
@@ -4856,7 +4863,7 @@ declare void @llvm.eh.sjlj.longjmp(ptr) #18
 
 define void @coroutine_yield(ptr %current_coroutine) {
   %into_callee_buf = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %current_coroutine, i32 0, i32 1
-  call preserve_nonecc void @context_switch(ptr nocapture writeonly %into_callee_buf, ptr @into_caller_buf) #29
+  call preserve_nonecc void @context_switch(ptr nocapture writeonly %into_callee_buf, ptr @into_caller_buf) #28
   ret void
 }
 
@@ -4865,7 +4872,7 @@ define void @coroutine_call(ptr %coroutine) {
   %old_coroutine = load ptr, ptr @current_coroutine, align 8
   store ptr %coroutine, ptr @current_coroutine, align 8
   %into_callee_buf = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %coroutine, i32 0, i32 1
-  call preserve_nonecc void @context_switch(ptr nocapture writeonly @into_caller_buf, ptr %into_callee_buf) #29
+  call preserve_nonecc void @context_switch(ptr nocapture writeonly @into_caller_buf, ptr %into_callee_buf) #28
   store ptr %old_coroutine, ptr @current_coroutine, align 8
   store [3 x ptr] %old_into_caller, ptr @into_caller_buf, align 8
   ret void
@@ -23179,10 +23186,10 @@ attributes #6 = { mustprogress nofree norecurse nosync nounwind willreturn memor
 attributes #7 = { mustprogress nofree norecurse nosync nounwind speculatable willreturn memory(read, inaccessiblemem: none) }
 attributes #8 = { mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" }
 attributes #9 = { mustprogress nofree noinline nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" }
-attributes #10 = { nocallback nofree nosync nounwind willreturn memory(argmem: read) }
-attributes #11 = { mustprogress nofree nosync nounwind willreturn memory(argmem: readwrite) }
-attributes #12 = { mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1) "alloc-family"="malloc" }
-attributes #13 = { nocallback nofree nosync nounwind willreturn }
+attributes #10 = { mustprogress nofree nosync nounwind willreturn memory(argmem: readwrite) }
+attributes #11 = { nocallback nofree nosync nounwind willreturn memory(argmem: read) }
+attributes #12 = { nocallback nofree nosync nounwind willreturn }
+attributes #13 = { mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1) "alloc-family"="malloc" }
 attributes #14 = { mustprogress nofree norecurse nosync nounwind speculatable willreturn memory(read, argmem: readwrite, inaccessiblemem: none) }
 attributes #15 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
 attributes #16 = { nocallback nofree nosync nounwind willreturn memory(inaccessiblemem: write) }
@@ -23195,10 +23202,9 @@ attributes #22 = { nounwind willreturn memory(argmem: read, inaccessiblemem: rea
 attributes #23 = { nounwind }
 attributes #24 = { mustprogress nofree norecurse nosync nounwind willreturn memory(read, inaccessiblemem: none) }
 attributes #25 = { mustprogress nofree nosync nounwind willreturn memory(argmem: read) }
-attributes #26 = { mustprogress nofree nounwind willreturn allockind("alloc,uninitialized") allocsize(1) "alloc-family"="malloc" }
-attributes #27 = { mustprogress nofree nosync nounwind willreturn }
-attributes #28 = { mustprogress nofree nosync nounwind willreturn memory(inaccessiblemem: write) }
-attributes #29 = { nounwind memory(readwrite) }
+attributes #26 = { mustprogress nofree nosync nounwind willreturn }
+attributes #27 = { mustprogress nofree nosync nounwind willreturn memory(inaccessiblemem: write) }
+attributes #28 = { nounwind memory(readwrite) }
 
 !llvm.module.flags = !{!0}
 

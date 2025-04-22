@@ -3,7 +3,8 @@ summary: Compiler for the PaulTalk programming language
 homepage: https://example.com
 
 commands:
-  build:
+  # used by ptalk_build.py; compiles lib/hash_benchmark.main into program.exe
+  build: 
     exe_name: program.exe
     main: lib/hash_benchmark.mini
 
@@ -16,5 +17,5 @@ requires:
       # Add the library's path to PYTHONPATH
       - type: environment
         name: PYTHONPATH
-        insert: lib # Assuming the library unpacks with code at the root
-        mode: prepend
+        insert: lib # /lib is where the script is in the archive
+        mode: prepend # prepend to PYTHON_PATH
