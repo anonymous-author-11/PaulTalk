@@ -1,6 +1,5 @@
 import networkx as nx
 from networkx.utils import UnionFind
-import matplotlib.pyplot as plt
 from io import StringIO
 from collections import defaultdict
 
@@ -130,69 +129,6 @@ def transform_parameter_graph(G, var_mapping, parameter_names):
             new_G.add_edge(new_u, new_v, **data)
 
     return new_G, new_var_mapping
-
-def visualize_graph_transformation(G, var_mapping, parameter_names):
-    """Visualize the before and after of the parameter transformation."""
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 4))
-    
-    # Before transformation
-    ax1.set_title("Before Transformation")
-    
-    # Group variables by representative
-    rep_to_vars = {}
-    for var, rep in var_mapping.items():
-        rep_to_vars.setdefault(rep, []).append(var)
-    
-    # Mark parameter nodes with different color
-    param_reps = set()
-    for param in parameter_names:
-        if param in var_mapping:
-            param_reps.add(var_mapping[param])
-    
-    node_colors = ['lightgreen' if node in param_reps else 'lightblue' for node in G.nodes()]
-    
-    # Create node labels showing all merged variables
-    labels = {rep: f"{rep}\n{sorted(vars)}" for rep, vars in rep_to_vars.items()}
-    
-    # Draw original graph
-    pos = nx.spring_layout(G, seed=42)
-    nx.draw(G, pos, ax=ax1, with_labels=True, labels=labels, 
-            node_color=node_colors, node_size=2000, font_size=10)
-    
-    edge_labels = {(u, v): d.get('relation', '') for u, v, d in G.edges(data=True)}
-    nx.draw_networkx_edge_labels(G, pos, ax=ax1, edge_labels=edge_labels)
-    
-    # After transformation
-    new_G, new_var_mapping = transform_parameter_graph(G, var_mapping, parameter_names)
-    ax2.set_title("After Transformation")
-    
-    # Group variables by new representative
-    new_rep_to_vars = {}
-    for var, rep in new_var_mapping.items():
-        new_rep_to_vars.setdefault(rep, []).append(var)
-    
-    # Mark parameter nodes with different color
-    new_param_reps = set()
-    for param in parameter_names:
-        if param in new_var_mapping:
-            new_param_reps.add(new_var_mapping[param])
-    
-    new_node_colors = ['lightgreen' if node in new_param_reps else 'lightblue' 
-                        for node in new_G.nodes()]
-    
-    # Create node labels showing all merged variables
-    new_labels = {rep: f"{rep}\n{sorted(vars)}" for rep, vars in new_rep_to_vars.items()}
-    
-    # Draw transformed graph
-    new_pos = nx.spring_layout(new_G, seed=42)
-    nx.draw(new_G, new_pos, ax=ax2, with_labels=True, labels=new_labels, 
-            node_color=new_node_colors, node_size=2000, font_size=10)
-    
-    new_edge_labels = {(u, v): d.get('relation', '') for u, v, d in new_G.edges(data=True)}
-    nx.draw_networkx_edge_labels(new_G, new_pos, ax=ax2, edge_labels=new_edge_labels)
-    
-    plt.tight_layout()
-    plt.show()
 
 def check_graph_compatibility(G1, var_mapping1, G2, var_mapping2, parameter_names):
     """

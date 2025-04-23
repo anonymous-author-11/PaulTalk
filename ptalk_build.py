@@ -10,6 +10,9 @@ import threading
 import xml.etree.ElementTree as ET
 from zeroinstall_proxy import proxy_main
 
+# py -m nuitka Compiler.py --onefile --msvc=latest --user-package-configuration-file=my.nuitka-package.config.yml --include-data-dir=c:/users/paulk/onedrive/documents/pl/pypl/data_files=c:/users/paulk/onedrive/documents/pl/pypl/data_files
+# - module-name: 'pandas._libs'
+
 # 1. search upward and find manifest
 # 2. convert manifest into xml feed
 # 3. use 0compile on generated xml feed

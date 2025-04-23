@@ -20,21 +20,21 @@ import platform
 import networkx as nx
 import hashlib
 
-DEBUGIR_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/executables/debugir.exe")
-STANDALONE_OPT_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/executables/standalone-opt.exe")
-MLIR_OPT_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/executables/mlir-opt.exe")
-MLIR_TRANSLATE_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/executables/mlir-translate.exe")
-LLVM_AR_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/executables/llvm-ar.exe")
-LLVM_LINK_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/executables/llvm-link.exe")
-OPT_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/executables/opt.exe")
-LLC_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/executables/llc.exe")
-LLD_LINK_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/executables/lld-link.exe")
+DEBUGIR_PATH = Path(__file__).parent.joinpath("executables/debugir.exe")
+STANDALONE_OPT_PATH = Path(__file__).parent.joinpath("executables/standalone-opt.exe")
+MLIR_OPT_PATH = Path(__file__).parent.joinpath("executables/mlir-opt.exe")
+MLIR_TRANSLATE_PATH = Path(__file__).parent.joinpath("executables/mlir-translate.exe")
+LLVM_AR_PATH = Path(__file__).parent.joinpath("executables/llvm-ar.exe")
+LLVM_LINK_PATH = Path(__file__).parent.joinpath("executables/llvm-link.exe")
+OPT_PATH = Path(__file__).parent.joinpath("executables/opt.exe")
+LLC_PATH = Path(__file__).parent.joinpath("executables/llc.exe")
+LLD_LINK_PATH = Path(__file__).parent.joinpath("executables/lld-link.exe")
 
-PDL_PATTERNS_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/data_files/patterns.mlir")
-UTILS_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/data_files/utils.ll")
-WIN_UTILS_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/data_files/win_utils.ll")
-POSIX_UTILS_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/data_files/posix_utils.ll")
-TRAMPOLINE_OBJ_PATH = Path("c:/users/paulk/onedrive/documents/pl/pypl/data_files/trampoline.obj")
+PDL_PATTERNS_PATH = Path(__file__).parent.joinpath("data_files/patterns.mlir")
+UTILS_PATH = Path(__file__).parent.joinpath("data_files/utils.ll")
+WIN_UTILS_PATH = Path(__file__).parent.joinpath("data_files/win_utils.ll")
+POSIX_UTILS_PATH = Path(__file__).parent.joinpath("data_files/posix_utils.ll")
+TRAMPOLINE_OBJ_PATH = Path(__file__).parent.joinpath("data_files/trampoline.obj")
 
 def compiler_driver_main(argv):
     after_imports = time.time()

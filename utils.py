@@ -1,7 +1,6 @@
 from core_dialect import *
 from itertools import product, chain, combinations
 from hashlib import sha256
-from sympy import nextprime
 from xdsl.ir import Block, Region
 from xdsl.dialects import cf
 import random

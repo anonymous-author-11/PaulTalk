@@ -2,7 +2,7 @@ from core_dialect import *
 from utils import *
 from itertools import product, chain, combinations
 from hashlib import sha256
-from sympy import nextprime
+from gmpy2 import next_prime
 from xdsl.ir import Block, Region
 from xdsl.dialects import cf
 import random
@@ -281,11 +281,11 @@ class Scope:
                 success = insert(hash_id(ancestor.symbol().data), SymbolRefAttr(ancestor.symbol()), prime_candidate, table_size)
                 if not success: return False
             return True
-        prime_candidate = nextprime(2**62)
+        prime_candidate = int(next_prime(2**62))
         for i in range(100):
             table_size = TABLE_SIZE * 2 if i > 50 else TABLE_SIZE
             table1 = [EMPTY] * table_size
-            prime_candidate = nextprime(prime_candidate)
+            prime_candidate = int(next_prime(prime_candidate))
             ancestors = {ancestor.symbol():ancestor for ancestor in self.ancestors(typ)}.values()
             success = insert_ancestors(ancestors, table_size)
             if not success: continue
@@ -311,11 +311,11 @@ class Scope:
                 success = insert(hash_id(ancestor.symbol().data), self.offset_to(typ, ancestor) + vtable_buffer_size(), prime_candidate, table_size)
                 if not success: return False
             return True
-        prime_candidate = nextprime(2**62)
+        prime_candidate = int(next_prime(2**62))
         for i in range(100):
             table_size = TABLE_SIZE * 2 if i > 50 else TABLE_SIZE
             table1 = [EMPTY] * table_size
-            prime_candidate = nextprime(prime_candidate)
+            prime_candidate = int(next_prime(prime_candidate))
             ancestors = {ancestor.symbol():ancestor for ancestor in self.ancestors(typ)}.values()
             success = insert_ancestors(ancestors, table_size)
             if not success: continue
