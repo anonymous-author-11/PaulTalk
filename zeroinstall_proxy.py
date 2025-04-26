@@ -6,6 +6,8 @@ import urllib.parse
 import os
 import sys
 import tempfile
+import pgpy
+from pgpy.constants import HashAlgorithm, SignatureType
 import json
 import yaml
 import requests
@@ -20,11 +22,16 @@ import subprocess # For GPG signing
 import base64   # For handling signature format
 
 # --- Configuration ---
+
+DIST_DIR = Path(__file__).parent
+GPG_KEY_PATH = DIST_DIR.joinpath("data_files/proxy_pub.gpg")
+PRIV_KEY_PATH = DIST_DIR.joinpath("data_files/private_proxy_key.asc")
+
 PROXY_PORT = 8081
 PROXY_HOST = "localhost"
-with open(Path("../github_pat_for_proxy.txt"), "r") as f: git_api_tok = f.read()
+with open(Path("c:/users/paulk/onedrive/documents/pl/github_pat_for_proxy.txt"), "r") as f: git_api_tok = f.read()
 GITHUB_API_TOKEN = git_api_tok
-PROXY_GPG_KEY_ID = "362C65D7248082448700FF907D173BD8BF0813C7"
+GPG_KEY, _ = pgpy.PGPKey.from_file(PRIV_KEY_PATH)
 
 CACHE_DIR = Path(tempfile.mkdtemp(prefix="0install_github_proxy_"))
 CACHE_EXPIRY_SECONDS = 3600
@@ -39,141 +46,6 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %
 
 # --- In-Memory Cache ---
 feed_cache = {} # For generated GitHub feeds: maps repo_key -> (timestamp, file_path)
-
-# --- GPG Signing Function ---
-def sign_feed_content(xml_content_bytes: bytes, gpg_key_id: str) -> bytes:
-    """
-    Signs XML content using GPG and appends the 0install signature block.
-    Assumes the GPG key does not require a passphrase for non-interactive use.
-    Returns the original content if signing fails or GPG is not configured.
-    """
-    xml_content_bytes = xml_content_bytes + "\n".encode("utf-8")
-    if not gpg_key_id:
-        logging.warning("No GPG Key ID configured, returning unsigned content.")
-        return xml_content_bytes # Return unsigned if no key specified
-
-    logging.debug(f"Attempting to sign content using key ID: {gpg_key_id}")
-    # Use a temporary file for GPG input
-    try:
-        # Create a temporary file ensuring it's deleted afterwards
-        with tempfile.NamedTemporaryFile(mode='wb', delete=False) as tmp_xml_file:
-            tmp_xml_path = tmp_xml_file.name
-            tmp_xml_file.write(xml_content_bytes)
-            # Ensure file is written before GPG reads it
-            tmp_xml_file.flush()
-            os.fsync(tmp_xml_file.fileno())
-    except Exception as e:
-        logging.error(f"Failed to create temporary file for GPG signing: {e}")
-        return xml_content_bytes
-
-    signature_block = None # Initialize to None
-
-    try:
-        gpg_command = [
-            'gpg',
-            '--detach-sign',
-            '--armor',          # Create ASCII armored output
-            '--output', '-',    # Write signature to stdout
-            '--local-user', gpg_key_id, # Specify the key to use
-            '--batch',          # Ensure non-interactive operation
-            # '--pinentry-mode', 'loopback', # Useful for GPG >= 2.1 if passphrase needed, requires setup
-            tmp_xml_path        # The temporary file containing the content to sign
-        ]
-        # Note: Passphrase handling is omitted for simplicity in this prototype.
-        # Assumes the specified key requires no passphrase or gpg-agent is configured.
-
-        logging.debug(f"Running GPG command: {' '.join(gpg_command)}")
-        # Use UTF-8 for text mode, capture output, don't check exit code immediately
-        result = subprocess.run(gpg_command, capture_output=True, text=True, check=False, encoding='utf-8')
-
-        # --- Debugging GPG Output ---
-        logging.debug(f"GPG exit code: {result.returncode}")
-        logging.debug(f"GPG stdout:\n---\n{result.stdout}\n---")
-        logging.debug(f"GPG stderr:\n---\n{result.stderr}\n---")
-        # --- End Debugging ---
-
-        # Check GPG exit code *after* logging output
-        if result.returncode != 0:
-            logging.error(f"GPG signing failed (exit code {result.returncode}):")
-            logging.error(f"GPG stderr: {result.stderr.strip()}")
-            logging.warning("Returning unsigned content due to GPG error.")
-            return xml_content_bytes
-        elif not result.stdout or '-----BEGIN PGP SIGNATURE-----' not in result.stdout:
-            # Check if GPG succeeded but didn't output the expected signature block
-            logging.error("GPG exited successfully but did not produce expected signature in stdout.")
-            logging.warning("Returning unsigned content.")
-            return xml_content_bytes
-        else:
-            logging.info(f"GPG signing successful and signature found in stdout for key {gpg_key_id}")
-
-            # --- More Robust Parsing Logic - Exclude Checksum ---
-            armored_sig = result.stdout
-            base64_lines = []
-            in_base64_block = False
-            signature_found = False
-            for line in armored_sig.splitlines():
-                line_stripped = line.strip()
-
-                # Detect start and end blocks
-                if line_stripped == '-----BEGIN PGP SIGNATURE-----':
-                    in_base64_block = True
-                    signature_found = True
-                    continue # Skip the BEGIN line itself
-                if line_stripped == '-----END PGP SIGNATURE-----':
-                    in_base64_block = False
-                    break # Stop processing lines after END marker
-
-                # Process lines within the block
-                if not in_base64_block: continue
-                # Skip empty lines, known headers, AND the checksum line (starts with '=')
-                if not line_stripped: continue
-                if line_stripped.startswith("Version:"): continue
-                if line_stripped.startswith("Comment:"): continue
-                if line_stripped.startswith("="): continue # Checksum exclusion
-                base64_lines.append(line) # Keep original line ending
-            # --- End Parsing Logic ---
-
-            if not signature_found or not base64_lines:
-                 # This should be caught by the earlier check, but safeguard anyway
-                 logging.error("Could not extract valid Base64 block (excluding checksum) from GPG stdout after successful exit!")
-                 logging.warning("Returning unsigned content.")
-                 return xml_content_bytes # Return unsigned if parsing failed
-
-            # Join the collected lines, preserving their original endings from GPG output
-            # Then strip any final newline that might have been added unnecessarily
-            base64_sig = "".join(base64_lines).rstrip('\r\n')
-
-            # --- Precise 0install Signature Block Formatting ---
-            # Format: comment start, newline, content, newline, comment end, newline
-            signature_comment = f"<!-- Base64 Signature\n{base64_sig}\n-->\n"
-            signature_block = signature_comment.encode('utf-8')
-
-    except FileNotFoundError:
-        logging.error("GPG command not found. Please ensure GnuPG is installed and in PATH.")
-        logging.warning("Returning unsigned content.")
-        return xml_content_bytes
-    except Exception as e:
-         # Catch any other unexpected error during the process
-         logging.exception("Unexpected error during GPG signing process")
-         logging.warning("Returning unsigned content due to unexpected error.")
-         return xml_content_bytes
-    finally:
-        # Ensure temporary file is always deleted
-        try:
-            os.remove(tmp_xml_path)
-            logging.debug(f"Removed temporary GPG input file: {tmp_xml_path}")
-        except OSError as e:
-            # Log if deletion fails but don't prevent returning content
-            logging.warning(f"Could not remove temporary GPG input file {tmp_xml_path}: {e}")
-
-    if not signature_block:
-        # If signature_block is None here, it means something failed above
-        logging.warning("Signature block was not generated, returning unsigned content.")
-        return xml_content_bytes
-    
-    # Append the signature block ONLY if signing and parsing were successful
-    logging.debug("Appending signature block to XML content.")
-    return xml_content_bytes + signature_block
 
 # --- GitHub Interaction & Translation Logic ---
 def get_github_tags(owner, repo):
@@ -336,9 +208,6 @@ def generate_feed_for_repo(owner, repo) -> Path | None:
         # Write unsigned first to get bytes for signing
         unsigned_bytes = ET.tostring(root, encoding='utf-8', xml_declaration=True)
 
-        # Save signed content (function handles signing and appending)
-        # signed_bytes = sign_feed_content(unsigned_bytes, PROXY_GPG_KEY_ID) # Sign *before* writing
-
         # Write the final (potentially signed) content to the cache file
         with open(feed_path, 'wb') as f:
              # f.write(signed_bytes) # Write signed content if signing worked
@@ -368,7 +237,14 @@ class GitHubFeedProxyHandler(http.server.SimpleHTTPRequestHandler):
                 unsigned_xml_bytes = f.read()
 
             # Sign the content using the previously defined function
-            signed_xml_bytes = sign_feed_content(unsigned_xml_bytes, PROXY_GPG_KEY_ID)
+            signature = GPG_KEY.sign(
+                unsigned_xml_bytes, # The data to sign
+                hash=HashAlgorithm.SHA256, # Or another preferred algorithm
+                sigtype=SignatureType.BinaryDocument # Use 0x00 for detached binary sig
+            )
+            base64_sig_body = "\n".join(str(signature).splitlines()[2:-2])
+            signature_block = f"<!-- Base64 Signature\n{base64_sig_body}\n-->\n".encode('utf-8')
+            signed_xml_bytes = unsigned_xml_bytes + signature_block
 
             # --- Log the exact signed content being sent ---
             try:
@@ -542,8 +418,7 @@ class GitHubFeedProxyHandler(http.server.SimpleHTTPRequestHandler):
         """Handle GET requests: GitHub feeds, local feeds, or standard proxy."""
         if self.path.startswith(FEED_REQUEST_PREFIX) and self.path.lower().endswith(".gpg"):
             logging.info(f"Handling GPG key request: {self.path}")
-            key_path = Path("./proxy_pub.gpg")
-            self.serve_file_content(key_path, 'application/pgp-keys') # Use standard GPG key MIME type
+            self.serve_file_content(GPG_KEY_PATH, 'application/pgp-keys') # Use standard GPG key MIME type
 
         if self.path.startswith(FEED_REQUEST_PREFIX):
             self.handle_github_feed_request()
@@ -575,7 +450,6 @@ def proxy_main():
     socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer((PROXY_HOST, PROXY_PORT), GitHubFeedProxyHandler) as httpd:
         logging.info(f"GitHub Feed Proxy running on http://{PROXY_HOST}:{PROXY_PORT}")
-        logging.info(f"Using GPG Key ID for signing: {PROXY_GPG_KEY_ID}")
         logging.info(f"Cache directory: {CACHE_DIR}")
         logging.info("Configure 0install to use this proxy:")
         logging.info(f"  export http_proxy=http://{PROXY_HOST}:{PROXY_PORT}")
@@ -584,7 +458,6 @@ def proxy_main():
         logging.info("  Local feeds:    " + f"0install run http://{PROXY_HOST}:{PROXY_PORT}{LOCAL_FEED_PREFIX}<URL-encoded absolute path>")
         logging.info("  HTTP feeds:     " + f"0install run http://regular-domain.com/some_feed.xml")
         logging.info(" ")
-        logging.warning(f"*** IMPORTANT: You MUST configure 0install to trust GPG Key ID '{PROXY_GPG_KEY_ID}' ***")
         logging.warning(f"*** for the domain '{PROXY_HOST}' (or 'localhost') for this proxy to work! ***")
         logging.info("Press Ctrl+C to stop.")
 

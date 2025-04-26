@@ -20,21 +20,27 @@ import platform
 import networkx as nx
 import hashlib
 
-DEBUGIR_PATH = Path(__file__).parent.joinpath("executables/debugir.exe")
-STANDALONE_OPT_PATH = Path(__file__).parent.joinpath("executables/standalone-opt.exe")
-MLIR_OPT_PATH = Path(__file__).parent.joinpath("executables/mlir-opt.exe")
-MLIR_TRANSLATE_PATH = Path(__file__).parent.joinpath("executables/mlir-translate.exe")
-LLVM_AR_PATH = Path(__file__).parent.joinpath("executables/llvm-ar.exe")
-LLVM_LINK_PATH = Path(__file__).parent.joinpath("executables/llvm-link.exe")
-OPT_PATH = Path(__file__).parent.joinpath("executables/opt.exe")
-LLC_PATH = Path(__file__).parent.joinpath("executables/llc.exe")
-LLD_LINK_PATH = Path(__file__).parent.joinpath("executables/lld-link.exe")
+# to compile to standalone (executable with necssary files bundled alongside):
+# py -m nuitka Compiler.py --standalone --msvc=latest --include-data-dir=data_files=data_files --include-raw-dir=executables=executables --nofollow-import-to=sympy --nofollow-import-to=pandas --nofollow-import-to=numpy --nofollow-import-to=sqlalchemy --nofollow-import-to=scipy --nofollow-import-to=multiprocessing --nofollow-import-to=PIL --nofollow-import-to=pygments
 
-PDL_PATTERNS_PATH = Path(__file__).parent.joinpath("data_files/patterns.mlir")
-UTILS_PATH = Path(__file__).parent.joinpath("data_files/utils.ll")
-WIN_UTILS_PATH = Path(__file__).parent.joinpath("data_files/win_utils.ll")
-POSIX_UTILS_PATH = Path(__file__).parent.joinpath("data_files/posix_utils.ll")
-TRAMPOLINE_OBJ_PATH = Path(__file__).parent.joinpath("data_files/trampoline.obj")
+# When compiled with Nuitka, DIST_FOLDER will point to the Compiler.dist folder
+DIST_FOLDER = Path(__file__).parent
+
+DEBUGIR_PATH = DIST_FOLDER.joinpath("executables/debugir.exe")
+STANDALONE_OPT_PATH = DIST_FOLDER.joinpath("executables/standalone-opt.exe")
+MLIR_OPT_PATH = DIST_FOLDER.joinpath("executables/mlir-opt.exe")
+MLIR_TRANSLATE_PATH = DIST_FOLDER.joinpath("executables/mlir-translate.exe")
+LLVM_AR_PATH = DIST_FOLDER.joinpath("executables/llvm-ar.exe")
+LLVM_LINK_PATH = DIST_FOLDER.joinpath("executables/llvm-link.exe")
+OPT_PATH = DIST_FOLDER.joinpath("executables/opt.exe")
+LLC_PATH = DIST_FOLDER.joinpath("executables/llc.exe")
+LLD_LINK_PATH = DIST_FOLDER.joinpath("executables/lld-link.exe")
+
+PDL_PATTERNS_PATH = DIST_FOLDER.joinpath("data_files/patterns.mlir")
+UTILS_PATH = DIST_FOLDER.joinpath("data_files/utils.ll")
+WIN_UTILS_PATH = DIST_FOLDER.joinpath("data_files/win_utils.ll")
+POSIX_UTILS_PATH = DIST_FOLDER.joinpath("data_files/posix_utils.ll")
+TRAMPOLINE_OBJ_PATH = DIST_FOLDER.joinpath("data_files/trampoline.obj")
 
 def compiler_driver_main(argv):
     after_imports = time.time()

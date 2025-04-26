@@ -1,8 +1,0 @@
-immutabledict==4.2.1
-lark==1.1.9
-more_itertools==10.5.0
-ordered_set==4.1.0
-pefile==2024.8.26
-pydantic==2.10.1
-sympy==1.13.2
-typing_extensions==4.12.2

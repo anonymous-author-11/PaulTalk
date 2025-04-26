@@ -10,8 +10,8 @@ import threading
 import xml.etree.ElementTree as ET
 from zeroinstall_proxy import proxy_main
 
-# py -m nuitka Compiler.py --onefile --msvc=latest --user-package-configuration-file=my.nuitka-package.config.yml --include-data-dir=c:/users/paulk/onedrive/documents/pl/pypl/data_files=c:/users/paulk/onedrive/documents/pl/pypl/data_files
-# - module-name: 'pandas._libs'
+DIST_PATH = Path(__file__).parent
+XML_TEMPLATE_PATH = DIST_PATH.joinpath("data_files/template.xml")
 
 # 1. search upward and find manifest
 # 2. convert manifest into xml feed
@@ -36,29 +36,31 @@ def build_main(argv):
 	# find the manifest.yaml file specifying build options
 	print("Extracting manifest info")
 	manifest_data, manifest_path = find_manifest()
+	root_folder = manifest_path.parent
 	exe_stem, main_file_path = get_configuration(manifest_data, manifest_path)
 	xml_deps = xml_dependencies(manifest_data)
 
 	# generate a 0install .xml feed from the manifest information
 	print("Generating xml feed")
-	with open(Path("c:/users/paulk/onedrive/documents/pl/pypl/template.xml"), "r") as f: xml_template = f.read()
+	with open(XML_TEMPLATE_PATH, "r") as f: xml_template = f.read()
 	xml_feed = xml_template.replace("BIN_NAME", exe_stem)
 	xml_feed = xml_feed.replace("MAIN_FILE_PATH", f"{main_file_path.resolve()}")
 	xml_feed = xml_feed.replace("DEPENDENCIES", xml_deps)
-	with open(Path(f"./build.xml"), "w") as f: f.write(xml_feed)
+	build_dir = root_folder.joinpath("build")
+	with open(root_folder.joinpath("build.xml"), "w") as f: f.write(xml_feed)
 
 	# set up the build directory
 	print("Setting up build directory")
-	build_dir = Path(f"./build")
-	setup_build_dir()
+	setup_build_dir(build_dir, root_folder)
 	
 	# run 0compile build from inside the build directory
+	# We use subprocess.Popen in order to stream the process stdout line by line
 	print("Running 0compile build")
 	command = ["0install","run","https://apps.0install.net/0install/0compile.xml","build"]
 	with subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=build_dir.resolve()) as process:
 		for line in process.stdout: print(line.decode('utf8').rstrip("\n"))
 
-	os.remove(Path(f"./build.xml"))
+	os.remove(root_folder.joinpath("build.xml"))
 	if process.returncode != 0: raise Exception(process.stderr)
 
 	# clean up unnecessary folder
@@ -84,7 +86,7 @@ def find_manifest():
 	if not manifest_path: raise Exception("Could not find a manifest.yaml file in the directory tree")
 	with open(manifest_path, "r") as f: yaml_text = f.read()
 	manifest_data = yaml.safe_load(yaml_text)
-	return manifest_data, manifest_path
+	return manifest_data, manifest_path.resolve()
 
 def xml_dependencies(manifest):
 	dependencies = []
@@ -129,13 +131,12 @@ def get_configuration(manifest, manifest_path):
 	return exe_stem, main_path
 
 # run 0compile setup if the build dir doesn't yet exist; or just cd into it if it does exist
-def setup_build_dir():
-	build_dir = Path(f"./build")
+def setup_build_dir(build_dir, root_folder):
 	if build_dir.exists(): return
 	command = ["0install","run","https://apps.0install.net/0install/0compile.xml","setup","build.xml"]
 	cmd_out = subprocess.run(command, text=True, capture_output=True)
 	if cmd_out.returncode != 0:
-		os.remove(Path(f"./build.xml"))
+		os.remove(root_folder.joinpath("build.xml"))
 		raise Exception(cmd_out.stderr)
 
 if __name__ == "__main__":

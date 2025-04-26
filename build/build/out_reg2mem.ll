@@ -1,11 +1,11 @@
 ; ModuleID = 'llvm-link'
 source_filename = "llvm-link"
 
-@cpxxn_Warning_Remove_returned_Nil_for_key_ = internal unnamed_addr constant [37 x i8] c"Warning: Remove returned Nil for key "
-@pmtdl_Warning_Remove_returned_wrong_value_for_key_ = internal unnamed_addr constant [45 x i8] c"Warning: Remove returned wrong value for key "
-@frfld_Error_Nil_returned_during_random_hit_test_for_key_ = internal unnamed_addr constant [51 x i8] c"Error: Nil returned during random hit test for key "
-@sdwjd__unique_keys_for_random_hit_test = internal unnamed_addr constant [33 x i8] c" unique keys for random hit test."
-@bkfoh_Error_Nil_returned_during_sequential_hit_test_for_key_ = internal unnamed_addr constant [55 x i8] c"Error: Nil returned during sequential hit test for key "
+@nsurd_Warning_Remove_returned_Nil_for_key_ = internal unnamed_addr constant [37 x i8] c"Warning: Remove returned Nil for key "
+@rburm_Warning_Remove_returned_wrong_value_for_key_ = internal unnamed_addr constant [45 x i8] c"Warning: Remove returned wrong value for key "
+@jzpqw_Error_Nil_returned_during_random_hit_test_for_key_ = internal unnamed_addr constant [51 x i8] c"Error: Nil returned during random hit test for key "
+@etrai__unique_keys_for_random_hit_test = internal unnamed_addr constant [33 x i8] c" unique keys for random hit test."
+@latbw_Error_Nil_returned_during_sequential_hit_test_for_key_ = internal unnamed_addr constant [55 x i8] c"Error: Nil returned during sequential hit test for key "
 @PRNG_field_seed = internal constant { ptr, ptr } { ptr @PRNG_getter_seed, ptr @PRNG_setter_seed }
 @string_string = internal constant [4 x i8] c"%s\0A\00"
 @exception_message = internal constant [45 x i8] c"Error: uncaught exception. Program aborted.\0A\00"
@@ -21,6 +21,8 @@ source_filename = "llvm-link"
 @i32_typ_offset_tbl = constant [4 x i32] [i32 10, i32 10, i32 10, i32 0]
 @i64_typ_hashtbl = constant [4 x ptr] [ptr @any_typ, ptr @Object, ptr @i64_typ, ptr null]
 @i64_typ_offset_tbl = constant [4 x i32] [i32 10, i32 10, i32 10, i32 0]
+@f64_typ_hashtbl = constant [4 x ptr] [ptr @Object, ptr @any_typ, ptr null, ptr @f64_typ]
+@f64_typ_offset_tbl = constant [4 x i32] [i32 10, i32 10, i32 0, i32 10]
 @nil_typ_hashtbl = constant [2 x ptr] [ptr @nil_typ, ptr @any_typ]
 @nil_typ_offset_tbl = constant [2 x i32] [i32 10, i32 10]
 @any_typ_hashtbl = constant [1 x ptr] [ptr @any_typ]
@@ -134,7 +136,7 @@ source_filename = "llvm-link"
 @IO_hashtbl = constant [4 x ptr] [ptr @any_typ, ptr @IO, ptr null, ptr @Object]
 @IO_offset_tbl = constant [4 x i32] [i32 10, i32 10, i32 0, i32 20]
 @i8_typ = constant { [3 x i64], [7 x ptr], [0 x ptr] } { [3 x i64] [i64 2582149688529881115, i64 4611686018427388081, i64 3], [7 x ptr] [ptr @subtype_test, ptr @i8_typ_hashtbl, ptr @i8_typ_offset_tbl, ptr @_data_size_i8_typ, ptr @_box_i8_typ, ptr @_unbox_i8_typ, ptr @_data_size_i8_typ], [0 x ptr] undef }
-@garhv_CUsersPaulKOneDriveDocumentsPLPyPLlibarraymini = internal unnamed_addr constant [56 x i8] c"C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\array.mini"
+@tjdlc_CUsersPaulKOneDriveDocumentsPLPyPLlibarraymini = internal unnamed_addr constant [56 x i8] c"C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\array.mini"
 @Representable = constant { [3 x i64], [7 x ptr], [2 x ptr] } { [3 x i64] [i64 -7260840641129990118, i64 4611686018427388093, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Representable_hashtbl, ptr @Representable_offset_tbl, ptr @_data_size_Representable, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [2 x ptr] [ptr @Representable_B_repr_, ptr @Representable_repr_] }
 @Array_hashtbl = constant [8 x ptr] [ptr null, ptr null, ptr @Iterable, ptr @any_typ, ptr @Container, ptr @Array, ptr @Representable, ptr @Object]
 @Array_offset_tbl = constant [8 x i32] [i32 0, i32 0, i32 68, i32 10, i32 91, i32 10, i32 91, i32 91]
@@ -146,7 +148,8 @@ source_filename = "llvm-link"
 @Array_field_capacity = internal constant { ptr, ptr } { ptr @Array_getter_capacity, ptr @Array_setter_capacity }
 @ArrayIterator_field_array = internal constant { ptr, ptr } { ptr @ArrayIterator_getter_array, ptr @ArrayIterator_setter_array }
 @ArrayIterator_field_index = internal constant { ptr, ptr } { ptr @ArrayIterator_getter_index, ptr @ArrayIterator_setter_index }
-@ekiga_CUsersPaulKOneDriveDocumentsPLPyPLlibmapmini = internal unnamed_addr constant [54 x i8] c"C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\map.mini"
+@f64_typ = constant { [3 x i64], [7 x ptr], [0 x ptr] } { [3 x i64] [i64 -757315540097298781, i64 4611686018427388081, i64 3], [7 x ptr] [ptr @subtype_test, ptr @f64_typ_hashtbl, ptr @f64_typ_offset_tbl, ptr @_data_size_f64_typ, ptr @_box_f64_typ, ptr @_unbox_f64_typ, ptr @_data_size_f64_typ], [0 x ptr] undef }
+@qiggc_CUsersPaulKOneDriveDocumentsPLPyPLlibmapmini = internal unnamed_addr constant [54 x i8] c"C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\map.mini"
 @Character = constant { [3 x i64], [7 x ptr], [5 x ptr] } { [3 x i64] [i64 6681222582356018452, i64 4611686018427388091, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Character_hashtbl, ptr @Character_offset_tbl, ptr @_data_size_Character, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [5 x ptr] [ptr @Character_field_byte, ptr @Character_B_byte_, ptr @Character_B_init_bytei8, ptr @Character_byte_, ptr @Character_init_bytei8] }
 @StringIterator = constant { [3 x i64], [7 x ptr], [10 x ptr] } { [3 x i64] [i64 -7260570988945952630, i64 4611686018427388081, i64 7], [7 x ptr] [ptr @subtype_test, ptr @StringIterator_hashtbl, ptr @StringIterator_offset_tbl, ptr @_data_size_StringIterator, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [10 x ptr] [ptr @StringIterator_field_str, ptr @StringIterator_field_index, ptr @StringIterator_field_StringIterator_0, ptr @StringIterator_B_init_strString, ptr @StringIterator_B_next_, ptr @StringIterator_init_strString, ptr @StringIterator_next_, ptr @StringIterator_field_StringIterator_0, ptr @StringIterator_B_next_, ptr @StringIterator_next_] }
 @Exception = constant { [3 x i64], [7 x ptr], [13 x ptr] } { [3 x i64] [i64 9027164862567808692, i64 4611686018427388091, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Exception_hashtbl, ptr @Exception_offset_tbl, ptr @_data_size_Exception, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [13 x ptr] [ptr @Exception_field_line_number, ptr @Exception_field_file_name, ptr @Exception_field_message, ptr @Exception_B_init_messageString, ptr @Exception_B_init_, ptr @Exception_B_set_info_line_numberi32_file_nameString, ptr @Exception_B_report_, ptr @Exception_B_print_message_, ptr @Exception_init_messageString, ptr @Exception_init_, ptr @Exception_set_info_line_numberi32_file_nameString, ptr @Exception_report_, ptr @Exception_print_message_] }
@@ -209,7 +212,7 @@ source_filename = "llvm-link"
 @Pair = constant { [3 x i64], [7 x ptr], [10 x ptr] } { [3 x i64] [i64 9197944775169318296, i64 4611686018427388081, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Pair_hashtbl, ptr @Pair_offset_tbl, ptr @_data_size_Pair, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [10 x ptr] [ptr @Pair_field_Pair_0, ptr @Pair_field_Pair_1, ptr @Pair_field_first, ptr @Pair_field_second, ptr @Pair_B_init_firstT_secondU, ptr @Pair_B_first_, ptr @Pair_B_second_, ptr @Pair_init_firstT_secondU, ptr @Pair_first_, ptr @Pair_second_] }
 @String = constant { [3 x i64], [7 x ptr], [79 x ptr] } { [3 x i64] [i64 6499063144389013426, i64 4611686018427388601, i64 7], [7 x ptr] [ptr @subtype_test, ptr @String_hashtbl, ptr @String_offset_tbl, ptr @_data_size_String, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [79 x ptr] [ptr @String_field_bytes, ptr @String_field_length, ptr @String_field_capacity, ptr @String_field_String_0, ptr @String_B__Self_from_c_string_c_stringBufferi8, ptr @String_B_init_, ptr @String_B_init_bytesBufferi8_lengthi32_capacityi32, ptr @String_B_length_, ptr @String_B_capacity_, ptr @String_B_bytes_, ptr @String_B_c_string_, ptr @String_B_append_xi8, ptr @String_B_extend_strString, ptr @String_B__index_xi32, ptr @String_B__EQ_otherString, ptr @String_B_pop_, ptr @String_B_copy_, ptr @String_B_iterator_, ptr @String_B_each_fFunctionT_to_Nothing, ptr @String_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @String_B_all_fFunctionT_to_i1, ptr @String_B_any_fFunctionT_to_i1, ptr @String_B_map_fFunctionT_to_U, ptr @String_B_filter_fFunctionT_to_i1, ptr @String_B_chain_otherIterableT, ptr @String_B_interleave_otherIterableT, ptr @String_B_zip_otherIterableU, ptr @String_B_product_otherIterableU, ptr @String_B_repr_, ptr @String__Self_from_c_string_c_stringBufferi8, ptr @String_init_, ptr @String_init_bytesBufferi8_lengthi32_capacityi32, ptr @String_length_, ptr @String_capacity_, ptr @String_bytes_, ptr @String_c_string_, ptr @String_append_xi8, ptr @String_extend_strString, ptr @String__index_xi32, ptr @String__EQ_otherString, ptr @String_pop_, ptr @String_copy_, ptr @String_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_i1, ptr @Iterable_any_fFunctionT_to_i1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_i1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @String_repr_, ptr @String_field_String_0, ptr @String_B_iterator_, ptr @String_B_each_fFunctionT_to_Nothing, ptr @String_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @String_B_all_fFunctionT_to_i1, ptr @String_B_any_fFunctionT_to_i1, ptr @String_B_map_fFunctionT_to_U, ptr @String_B_filter_fFunctionT_to_i1, ptr @String_B_chain_otherIterableT, ptr @String_B_interleave_otherIterableT, ptr @String_B_zip_otherIterableU, ptr @String_B_product_otherIterableU, ptr @String_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_i1, ptr @Iterable_any_fFunctionT_to_i1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_i1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @String_B_repr_, ptr @String_repr_] }
 @CuckooMap = constant { [3 x i64], [7 x ptr], [272 x ptr] } { [3 x i64] [i64 3547150501766965522, i64 4611686018427388331, i64 7], [7 x ptr] [ptr @subtype_test, ptr @CuckooMap_hashtbl, ptr @CuckooMap_offset_tbl, ptr @_data_size_CuckooMap, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [272 x ptr] [ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_6, ptr @CuckooMap_field_table1, ptr @CuckooMap_field_table2, ptr @CuckooMap_field_table_len, ptr @CuckooMap_field_size, ptr @CuckooMap_field_hasher, ptr @CuckooMap_field_eq, ptr @CuckooMap_B__Self_max_displacements_, ptr @CuckooMap_B_init_hasherFunctionK_to_i32_eqFunctionK._K_to_i1, ptr @CuckooMap_B_hash1_keyK, ptr @CuckooMap_B_hash2_from_primary_primary_hashi32, ptr @CuckooMap_B_index1_primary_hashi32, ptr @CuckooMap_B_index2_primary_hashi32, ptr @CuckooMap_B_place_entry_or_get_failed_entry_to_insertEntryK._V, ptr @CuckooMap_B_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_per_tablei32, ptr @CuckooMap_B_resize_, ptr @CuckooMap_B_replace_in_table_keyK_valueV_h1i32_idxi32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_B_get_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_B_remove_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_B_insert_keyK_valueV, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_get_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_remove_keyK, ptr @CuckooMap_B_clear_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_i1, ptr @CuckooMap_B_any_fFunctionT_to_i1, ptr @CuckooMap_B_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_i1, ptr @CuckooMap_B_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherIterableU, ptr @CuckooMap_B_product_otherIterableU, ptr @CuckooMap__Self_max_displacements_, ptr @CuckooMap_init_hasherFunctionK_to_i32_eqFunctionK._K_to_i1, ptr @CuckooMap_hash1_keyK, ptr @CuckooMap_hash2_from_primary_primary_hashi32, ptr @CuckooMap_index1_primary_hashi32, ptr @CuckooMap_index2_primary_hashi32, ptr @CuckooMap_place_entry_or_get_failed_entry_to_insertEntryK._V, ptr @CuckooMap_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_per_tablei32, ptr @CuckooMap_resize_, ptr @CuckooMap_replace_in_table_keyK_valueV_h1i32_idxi32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_get_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_remove_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_insert_keyK_valueV, ptr @CuckooMap_size_, ptr @CuckooMap_get_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_remove_keyK, ptr @CuckooMap_clear_, ptr @Map__index_keyK, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_i1, ptr @Iterable_any_fFunctionT_to_i1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_i1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_6, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_get_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_remove_keyK, ptr @CuckooMap_B_clear_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_i1, ptr @CuckooMap_B_any_fFunctionT_to_i1, ptr @CuckooMap_B_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_i1, ptr @CuckooMap_B_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherIterableU, ptr @CuckooMap_B_product_otherIterableU, ptr @CuckooMap_size_, ptr @CuckooMap_get_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_remove_keyK, ptr @CuckooMap_clear_, ptr @Map__index_keyK, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_i1, ptr @Iterable_any_fFunctionT_to_i1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_i1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_6, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_get_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_remove_keyK, ptr @CuckooMap_B_clear_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_i1, ptr @CuckooMap_B_any_fFunctionT_to_i1, ptr @CuckooMap_B_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_i1, ptr @CuckooMap_B_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherIterableU, ptr @CuckooMap_B_product_otherIterableU, ptr @CuckooMap_size_, ptr @CuckooMap_get_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_remove_keyK, ptr @CuckooMap_clear_, ptr @Map__index_keyK, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_i1, ptr @Iterable_any_fFunctionT_to_i1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_i1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_6, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_i1, ptr @CuckooMap_B_any_fFunctionT_to_i1, ptr @CuckooMap_B_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_i1, ptr @CuckooMap_B_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherIterableU, ptr @CuckooMap_B_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_i1, ptr @Iterable_any_fFunctionT_to_i1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_i1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_6, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_i1, ptr @CuckooMap_B_any_fFunctionT_to_i1, ptr @CuckooMap_B_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_i1, ptr @CuckooMap_B_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherIterableU, ptr @CuckooMap_B_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_i1, ptr @Iterable_any_fFunctionT_to_i1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_i1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_6, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_get_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_remove_keyK, ptr @CuckooMap_B_clear_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_i1, ptr @CuckooMap_B_any_fFunctionT_to_i1, ptr @CuckooMap_B_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_i1, ptr @CuckooMap_B_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherIterableU, ptr @CuckooMap_B_product_otherIterableU, ptr @CuckooMap_size_, ptr @CuckooMap_get_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_remove_keyK, ptr @CuckooMap_clear_, ptr @Map__index_keyK, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_i1, ptr @Iterable_any_fFunctionT_to_i1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_i1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_6, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_i1, ptr @CuckooMap_B_any_fFunctionT_to_i1, ptr @CuckooMap_B_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_i1, ptr @CuckooMap_B_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherIterableU, ptr @CuckooMap_B_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_i1, ptr @Iterable_any_fFunctionT_to_i1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_i1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_6, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_i1, ptr @CuckooMap_B_any_fFunctionT_to_i1, ptr @CuckooMap_B_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_i1, ptr @CuckooMap_B_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherIterableU, ptr @CuckooMap_B_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_i1, ptr @Iterable_any_fFunctionT_to_i1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_i1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
-@IO = constant { [3 x i64], [7 x ptr], [10 x ptr] } { [3 x i64] [i64 5359822646784595218, i64 4611686018427388247, i64 3], [7 x ptr] [ptr @subtype_test, ptr @IO_hashtbl, ptr @IO_offset_tbl, ptr @_data_size_IO, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [10 x ptr] [ptr @IO_B__Self_print_xNil__Self_print_xString__Self_print_xf64__Self_print_xCharacter__Self_print_xi1__Self_print_xi64__Self_print_xi8__Self_print_xi32__Self_print_xRepresentable, ptr @IO__Self_print_xNil, ptr @IO__Self_print_xString, ptr @IO__Self_print_xf64, ptr @IO__Self_print_xCharacter, ptr @IO__Self_print_xi1, ptr @IO__Self_print_xi64, ptr @IO__Self_print_xi8, ptr @IO__Self_print_xi32, ptr @IO__Self_print_xRepresentable] }
+@IO = constant { [3 x i64], [7 x ptr], [10 x ptr] } { [3 x i64] [i64 5359822646784595218, i64 4611686018427388247, i64 3], [7 x ptr] [ptr @subtype_test, ptr @IO_hashtbl, ptr @IO_offset_tbl, ptr @_data_size_IO, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [10 x ptr] [ptr @IO_B__Self_print_xi32__Self_print_xRepresentable__Self_print_xNil__Self_print_xf64__Self_print_xi1__Self_print_xString__Self_print_xi8__Self_print_xi64__Self_print_xCharacter, ptr @IO__Self_print_xi32, ptr @IO__Self_print_xRepresentable, ptr @IO__Self_print_xNil, ptr @IO__Self_print_xf64, ptr @IO__Self_print_xi1, ptr @IO__Self_print_xString, ptr @IO__Self_print_xi8, ptr @IO__Self_print_xi64, ptr @IO__Self_print_xCharacter] }
 @Array = constant { [3 x i64], [7 x ptr], [83 x ptr] } { [3 x i64] [i64 -5261542750394134544, i64 4611686018427388331, i64 7], [7 x ptr] [ptr @subtype_test, ptr @Array_hashtbl, ptr @Array_offset_tbl, ptr @_data_size_Array, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [83 x ptr] [ptr @Array_field_Array_0, ptr @Array_field_buffer, ptr @Array_field_length, ptr @Array_field_capacity, ptr @Array_B__Self_from_iterable_iterableIterableT, ptr @Array_B_init_, ptr @Array_B_init_capacityi32, ptr @Array_B_init_lengthi32_capacityi32, ptr @Array_B_init_bufferBufferT_lengthi32_capacityi32, ptr @Array_B_length_, ptr @Array_B_capacity_, ptr @Array_B_append_xT, ptr @Array_B_extend_otherArrayT, ptr @Array_B_reserve_new_capacityi32, ptr @Array_B__index_xi32, ptr @Array_B__set_index_xi32_valueT, ptr @Array_B_throw_oob_xi32, ptr @Array_B_unchecked_index_xi32, ptr @Array_B_unchecked_insert_xi32_valueT, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_i1, ptr @Array_B_any_fFunctionT_to_i1, ptr @Array_B_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_i1, ptr @Array_B_chain_otherIterableT, ptr @Array_B_interleave_otherIterableT, ptr @Array_B_zip_otherIterableU, ptr @Array_B_product_otherIterableU, ptr @Array_B_repr_, ptr @Array__Self_from_iterable_iterableIterableT, ptr @Array_init_, ptr @Array_init_capacityi32, ptr @Array_init_lengthi32_capacityi32, ptr @Array_init_bufferBufferT_lengthi32_capacityi32, ptr @Array_length_, ptr @Array_capacity_, ptr @Array_append_xT, ptr @Array_extend_otherArrayT, ptr @Array_reserve_new_capacityi32, ptr @Array__index_xi32, ptr @Array__set_index_xi32_valueT, ptr @Array_throw_oob_xi32, ptr @Array_unchecked_index_xi32, ptr @Array_unchecked_insert_xi32_valueT, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_i1, ptr @Iterable_any_fFunctionT_to_i1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_i1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @Array_repr_, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_i1, ptr @Array_B_any_fFunctionT_to_i1, ptr @Array_B_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_i1, ptr @Array_B_chain_otherIterableT, ptr @Array_B_interleave_otherIterableT, ptr @Array_B_zip_otherIterableU, ptr @Array_B_product_otherIterableU, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_i1, ptr @Iterable_any_fFunctionT_to_i1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_i1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @Array_B_repr_, ptr @Array_repr_] }
 @PRNG_hashtbl = constant [4 x ptr] [ptr @Object, ptr @any_typ, ptr @PRNG, ptr null]
 @PRNG_offset_tbl = constant [4 x i32] [i32 15, i32 10, i32 10, i32 0]
@@ -390,7 +393,7 @@ define void @PRNG_setter_seed(ptr nocapture writeonly %0, i32 %1) #6 {
   ret void
 }
 
-define i1 @duiytoqbke(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @yfrgaxhbfn(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -399,14 +402,14 @@ define i1 @duiytoqbke(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i
   ret i1 %4
 }
 
-define i32 @qsjtsdvhps(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
+define i32 @ixcldmkshi(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @wsgorxvmky(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @jrehtithfs(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -415,14 +418,14 @@ define i1 @wsgorxvmky(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i
   ret i1 %4
 }
 
-define i32 @cljypajcar(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
+define i32 @tdwdzbsxtp(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @kclnmfqxdl(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @mdgkrrdjhs(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -431,14 +434,14 @@ define i1 @kclnmfqxdl(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i
   ret i1 %4
 }
 
-define i32 @bnyqqvohgh(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
+define i32 @ioysamcmke(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @jcxgtvkpfp(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @krjlttrvff(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -447,14 +450,14 @@ define i1 @jcxgtvkpfp(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i
   ret i1 %4
 }
 
-define i32 @zhdmjwigrs(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
+define i32 @twpqushskx(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @rwjoluobhj(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @jhqsppvsti(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -463,14 +466,14 @@ define i1 @rwjoluobhj(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i
   ret i1 %4
 }
 
-define i32 @gvzbsdoioe(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
+define i32 @hkwpztkrsg(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @yrqjndepbb(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @zggaxbtswz(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -479,14 +482,14 @@ define i1 @yrqjndepbb(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i
   ret i1 %4
 }
 
-define i32 @wwqqhqifmw(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
+define i32 @owufpqdiex(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @kflfivzjqm(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @msmfehrjrq(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -495,14 +498,14 @@ define i1 @kflfivzjqm(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i
   ret i1 %4
 }
 
-define i32 @dfmuulnvdy(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
+define i32 @czxppjcgkz(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @tjxbdbsbpc(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @dnkanujsmp(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -511,14 +514,14 @@ define i1 @tjxbdbsbpc(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i
   ret i1 %4
 }
 
-define i32 @bciymrxqpt(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
+define i32 @knexqonjed(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @qpklrdjsyo(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @jmashgkkuc(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -527,14 +530,14 @@ define i1 @qpklrdjsyo(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i
   ret i1 %4
 }
 
-define i32 @wxmrksjvjp(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
+define i32 @jpcxfjztbb(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @eldtdyolhc(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @qdtomfdguz(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -543,7 +546,7 @@ define i1 @eldtdyolhc(ptr nest nocapture readonly %0, { ptr, i160 } %1, { ptr, i
   ret i1 %4
 }
 
-define i32 @ifgcskyayi(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
+define i32 @iqalvjobge(ptr nest nocapture readonly %0, { ptr, i160 } %1) {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = tail call i32 %0(i32 %.sroa.1.8.extract.trunc)
@@ -903,13 +906,13 @@ define void @benchmark_insert_sequential(i32 %0) local_unnamed_addr {
   %35 = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %32)
   %36 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %36)
-  call void @llvm.init.trampoline(ptr %36, ptr nonnull @ifgcskyayi, ptr nonnull @i32_hasher)
+  call void @llvm.init.trampoline(ptr %36, ptr nonnull @iqalvjobge, ptr nonnull @i32_hasher)
   %37 = call ptr @adjust_trampoline(ptr %36)
   %38 = call ptr @llvm.invariant.start.p0(i64 24, ptr %36)
   %39 = insertvalue { ptr } undef, ptr %37, 0
   %40 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %40)
-  call void @llvm.init.trampoline(ptr %40, ptr nonnull @eldtdyolhc, ptr nonnull @i32_eq)
+  call void @llvm.init.trampoline(ptr %40, ptr nonnull @qdtomfdguz, ptr nonnull @i32_eq)
   %41 = call ptr @adjust_trampoline(ptr %40)
   %42 = call ptr @llvm.invariant.start.p0(i64 24, ptr %40)
   %43 = insertvalue { ptr } undef, ptr %41, 0
@@ -1243,13 +1246,13 @@ define void @benchmark_insert_random(i32 %0) local_unnamed_addr {
   %53 = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %50)
   %54 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %54)
-  call void @llvm.init.trampoline(ptr %54, ptr nonnull @wxmrksjvjp, ptr nonnull @i32_hasher)
+  call void @llvm.init.trampoline(ptr %54, ptr nonnull @jpcxfjztbb, ptr nonnull @i32_hasher)
   %55 = call ptr @adjust_trampoline(ptr %54)
   %56 = call ptr @llvm.invariant.start.p0(i64 24, ptr %54)
   %57 = insertvalue { ptr } undef, ptr %55, 0
   %58 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %58)
-  call void @llvm.init.trampoline(ptr %58, ptr nonnull @qpklrdjsyo, ptr nonnull @i32_eq)
+  call void @llvm.init.trampoline(ptr %58, ptr nonnull @jmashgkkuc, ptr nonnull @i32_eq)
   %59 = call ptr @adjust_trampoline(ptr %58)
   %60 = call ptr @llvm.invariant.start.p0(i64 24, ptr %58)
   %61 = insertvalue { ptr } undef, ptr %59, 0
@@ -1362,13 +1365,13 @@ define void @benchmark_insert_random(i32 %0) local_unnamed_addr {
   %134 = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %131)
   %135 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %135)
-  call void @llvm.init.trampoline(ptr %135, ptr nonnull @bciymrxqpt, ptr nonnull @i32_hasher)
+  call void @llvm.init.trampoline(ptr %135, ptr nonnull @knexqonjed, ptr nonnull @i32_hasher)
   %136 = call ptr @adjust_trampoline(ptr %135)
   %137 = call ptr @llvm.invariant.start.p0(i64 24, ptr %135)
   %138 = insertvalue { ptr } undef, ptr %136, 0
   %139 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %139)
-  call void @llvm.init.trampoline(ptr %139, ptr nonnull @tjxbdbsbpc, ptr nonnull @i32_eq)
+  call void @llvm.init.trampoline(ptr %139, ptr nonnull @dnkanujsmp, ptr nonnull @i32_eq)
   %140 = call ptr @adjust_trampoline(ptr %139)
   %141 = call ptr @llvm.invariant.start.p0(i64 24, ptr %139)
   %142 = insertvalue { ptr } undef, ptr %140, 0
@@ -1845,13 +1848,13 @@ define void @benchmark_get_sequential_hit(i32 %0) local_unnamed_addr {
   %41 = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %38)
   %42 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %42)
-  call void @llvm.init.trampoline(ptr %42, ptr nonnull @dfmuulnvdy, ptr nonnull @i32_hasher)
+  call void @llvm.init.trampoline(ptr %42, ptr nonnull @czxppjcgkz, ptr nonnull @i32_hasher)
   %43 = call ptr @adjust_trampoline(ptr %42)
   %44 = call ptr @llvm.invariant.start.p0(i64 24, ptr %42)
   %45 = insertvalue { ptr } undef, ptr %43, 0
   %46 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %46)
-  call void @llvm.init.trampoline(ptr %46, ptr nonnull @kflfivzjqm, ptr nonnull @i32_eq)
+  call void @llvm.init.trampoline(ptr %46, ptr nonnull @msmfehrjrq, ptr nonnull @i32_eq)
   %47 = call ptr @adjust_trampoline(ptr %46)
   %48 = call ptr @llvm.invariant.start.p0(i64 24, ptr %46)
   %49 = insertvalue { ptr } undef, ptr %47, 0
@@ -1974,7 +1977,7 @@ define void @benchmark_get_sequential_hit(i32 %0) local_unnamed_addr {
 
 114:                                              ; preds = %102
   %115 = call ptr @bump_malloc(i64 56)
-  %116 = load <55 x i8>, ptr @bkfoh_Error_Nil_returned_during_sequential_hit_test_for_key_, align 64
+  %116 = load <55 x i8>, ptr @latbw_Error_Nil_returned_during_sequential_hit_test_for_key_, align 64
   store <55 x i8> %116, ptr %115, align 64
   store ptr @String, ptr %6, align 8
   %117 = call { i64, i64 } @size_wrapper(ptr %94, ptr nonnull %6)
@@ -2210,13 +2213,13 @@ define void @benchmark_get_random_hit(i32 %0) local_unnamed_addr {
   %62 = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %59)
   %63 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %63)
-  call void @llvm.init.trampoline(ptr %63, ptr nonnull @wwqqhqifmw, ptr nonnull @i32_hasher)
+  call void @llvm.init.trampoline(ptr %63, ptr nonnull @owufpqdiex, ptr nonnull @i32_hasher)
   %64 = call ptr @adjust_trampoline(ptr %63)
   %65 = call ptr @llvm.invariant.start.p0(i64 24, ptr %63)
   %66 = insertvalue { ptr } undef, ptr %64, 0
   %67 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %67)
-  call void @llvm.init.trampoline(ptr %67, ptr nonnull @yrqjndepbb, ptr nonnull @i32_eq)
+  call void @llvm.init.trampoline(ptr %67, ptr nonnull @zggaxbtswz, ptr nonnull @i32_eq)
   %68 = call ptr @adjust_trampoline(ptr %67)
   %69 = call ptr @llvm.invariant.start.p0(i64 24, ptr %67)
   %70 = insertvalue { ptr } undef, ptr %68, 0
@@ -2329,13 +2332,13 @@ define void @benchmark_get_random_hit(i32 %0) local_unnamed_addr {
   %143 = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %140)
   %144 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %144)
-  call void @llvm.init.trampoline(ptr %144, ptr nonnull @gvzbsdoioe, ptr nonnull @i32_hasher)
+  call void @llvm.init.trampoline(ptr %144, ptr nonnull @hkwpztkrsg, ptr nonnull @i32_hasher)
   %145 = call ptr @adjust_trampoline(ptr %144)
   %146 = call ptr @llvm.invariant.start.p0(i64 24, ptr %144)
   %147 = insertvalue { ptr } undef, ptr %145, 0
   %148 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %148)
-  call void @llvm.init.trampoline(ptr %148, ptr nonnull @rwjoluobhj, ptr nonnull @i32_eq)
+  call void @llvm.init.trampoline(ptr %148, ptr nonnull @jhqsppvsti, ptr nonnull @i32_eq)
   %149 = call ptr @adjust_trampoline(ptr %148)
   %150 = call ptr @llvm.invariant.start.p0(i64 24, ptr %148)
   %151 = insertvalue { ptr } undef, ptr %149, 0
@@ -2537,7 +2540,7 @@ define void @benchmark_get_random_hit(i32 %0) local_unnamed_addr {
   %266 = call ptr @class_behavior_wrapper(ptr %261, ptr nonnull %17)
   call void %266(ptr nonnull %16, { ptr, i160 } %263) #23
   %267 = call ptr @bump_malloc(i64 34)
-  %268 = load <33 x i8>, ptr @sdwjd__unique_keys_for_random_hit_test, align 64
+  %268 = load <33 x i8>, ptr @etrai__unique_keys_for_random_hit_test, align 64
   store <33 x i8> %268, ptr %267, align 64
   store ptr @String, ptr %18, align 8
   %269 = call { i64, i64 } @size_wrapper(ptr %241, ptr nonnull %18)
@@ -2639,7 +2642,7 @@ define void @benchmark_get_random_hit(i32 %0) local_unnamed_addr {
 
 324:                                              ; preds = %307
   %325 = call ptr @bump_malloc(i64 52)
-  %326 = load <51 x i8>, ptr @frfld_Error_Nil_returned_during_random_hit_test_for_key_, align 64
+  %326 = load <51 x i8>, ptr @jzpqw_Error_Nil_returned_during_random_hit_test_for_key_, align 64
   store <51 x i8> %326, ptr %325, align 64
   store ptr @String, ptr %27, align 8
   %327 = call { i64, i64 } @size_wrapper(ptr %299, ptr nonnull %27)
@@ -2893,13 +2896,13 @@ define void @benchmark_get_random_miss(i32 %0) local_unnamed_addr {
   %80 = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %77)
   %81 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %81)
-  call void @llvm.init.trampoline(ptr %81, ptr nonnull @zhdmjwigrs, ptr nonnull @i32_hasher)
+  call void @llvm.init.trampoline(ptr %81, ptr nonnull @twpqushskx, ptr nonnull @i32_hasher)
   %82 = call ptr @adjust_trampoline(ptr %81)
   %83 = call ptr @llvm.invariant.start.p0(i64 24, ptr %81)
   %84 = insertvalue { ptr } undef, ptr %82, 0
   %85 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %85)
-  call void @llvm.init.trampoline(ptr %85, ptr nonnull @jcxgtvkpfp, ptr nonnull @i32_eq)
+  call void @llvm.init.trampoline(ptr %85, ptr nonnull @krjlttrvff, ptr nonnull @i32_eq)
   %86 = call ptr @adjust_trampoline(ptr %85)
   %87 = call ptr @llvm.invariant.start.p0(i64 24, ptr %85)
   %88 = insertvalue { ptr } undef, ptr %86, 0
@@ -3006,13 +3009,13 @@ define void @benchmark_get_random_miss(i32 %0) local_unnamed_addr {
   %157 = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %154)
   %158 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %158)
-  call void @llvm.init.trampoline(ptr %158, ptr nonnull @bnyqqvohgh, ptr nonnull @i32_hasher)
+  call void @llvm.init.trampoline(ptr %158, ptr nonnull @ioysamcmke, ptr nonnull @i32_hasher)
   %159 = call ptr @adjust_trampoline(ptr %158)
   %160 = call ptr @llvm.invariant.start.p0(i64 24, ptr %158)
   %161 = insertvalue { ptr } undef, ptr %159, 0
   %162 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %162)
-  call void @llvm.init.trampoline(ptr %162, ptr nonnull @kclnmfqxdl, ptr nonnull @i32_eq)
+  call void @llvm.init.trampoline(ptr %162, ptr nonnull @mdgkrrdjhs, ptr nonnull @i32_eq)
   %163 = call ptr @adjust_trampoline(ptr %162)
   %164 = call ptr @llvm.invariant.start.p0(i64 24, ptr %162)
   %165 = insertvalue { ptr } undef, ptr %163, 0
@@ -3736,13 +3739,13 @@ define void @benchmark_remove_random(i32 %0) local_unnamed_addr {
   %85 = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %82)
   %86 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %86)
-  call void @llvm.init.trampoline(ptr %86, ptr nonnull @cljypajcar, ptr nonnull @i32_hasher)
+  call void @llvm.init.trampoline(ptr %86, ptr nonnull @tdwdzbsxtp, ptr nonnull @i32_hasher)
   %87 = call ptr @adjust_trampoline(ptr %86)
   %88 = call ptr @llvm.invariant.start.p0(i64 24, ptr %86)
   %89 = insertvalue { ptr } undef, ptr %87, 0
   %90 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %90)
-  call void @llvm.init.trampoline(ptr %90, ptr nonnull @wsgorxvmky, ptr nonnull @i32_eq)
+  call void @llvm.init.trampoline(ptr %90, ptr nonnull @jrehtithfs, ptr nonnull @i32_eq)
   %91 = call ptr @adjust_trampoline(ptr %90)
   %92 = call ptr @llvm.invariant.start.p0(i64 24, ptr %90)
   %93 = insertvalue { ptr } undef, ptr %91, 0
@@ -3855,13 +3858,13 @@ define void @benchmark_remove_random(i32 %0) local_unnamed_addr {
   %166 = call ptr @llvm.invariant.start.p0(i64 24, ptr nonnull %163)
   %167 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %167)
-  call void @llvm.init.trampoline(ptr %167, ptr nonnull @qsjtsdvhps, ptr nonnull @i32_hasher)
+  call void @llvm.init.trampoline(ptr %167, ptr nonnull @ixcldmkshi, ptr nonnull @i32_hasher)
   %168 = call ptr @adjust_trampoline(ptr %167)
   %169 = call ptr @llvm.invariant.start.p0(i64 24, ptr %167)
   %170 = insertvalue { ptr } undef, ptr %168, 0
   %171 = call ptr @bump_malloc(i64 24)
   call void @anoint_trampoline(ptr %171)
-  call void @llvm.init.trampoline(ptr %171, ptr nonnull @duiytoqbke, ptr nonnull @i32_eq)
+  call void @llvm.init.trampoline(ptr %171, ptr nonnull @yfrgaxhbfn, ptr nonnull @i32_eq)
   %172 = call ptr @adjust_trampoline(ptr %171)
   %173 = call ptr @llvm.invariant.start.p0(i64 24, ptr %171)
   %174 = insertvalue { ptr } undef, ptr %172, 0
@@ -4167,7 +4170,7 @@ define void @benchmark_remove_random(i32 %0) local_unnamed_addr {
 
 350:                                              ; preds = %348
   %351 = call ptr @bump_malloc(i64 46)
-  %352 = load <45 x i8>, ptr @pmtdl_Warning_Remove_returned_wrong_value_for_key_, align 64
+  %352 = load <45 x i8>, ptr @rburm_Warning_Remove_returned_wrong_value_for_key_, align 64
   store <45 x i8> %352, ptr %351, align 64
   store ptr @String, ptr %27, align 8
   %353 = call { i64, i64 } @size_wrapper(ptr %326, ptr nonnull %27)
@@ -4212,7 +4215,7 @@ define void @benchmark_remove_random(i32 %0) local_unnamed_addr {
 
 372:                                              ; preds = %334
   %373 = call ptr @bump_malloc(i64 38)
-  %374 = load <37 x i8>, ptr @cpxxn_Warning_Remove_returned_Nil_for_key_, align 64
+  %374 = load <37 x i8>, ptr @nsurd_Warning_Remove_returned_Nil_for_key_, align 64
   store <37 x i8> %374, ptr %373, align 64
   store ptr @String, ptr %34, align 8
   %375 = call { i64, i64 } @size_wrapper(ptr %319, ptr nonnull %34)
@@ -18228,7 +18231,7 @@ define { ptr, i160 } @Map__index_keyK({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr
   %50 = call ptr @behavior_wrapper(ptr nonnull @KeyNotFound_B_init_, { ptr, ptr, ptr, i32 } %47, ptr nonnull %5)
   call void %50({ ptr, ptr, ptr, i32 } %47, { ptr, ptr, ptr, i32 } %47, ptr nonnull %5) #23
   %51 = call ptr @bump_malloc(i64 55)
-  %52 = load <54 x i8>, ptr @ekiga_CUsersPaulKOneDriveDocumentsPLPyPLlibmapmini, align 64
+  %52 = load <54 x i8>, ptr @qiggc_CUsersPaulKOneDriveDocumentsPLPyPLlibmapmini, align 64
   store <54 x i8> %52, ptr %51, align 64
   store ptr @String, ptr %7, align 8
   %53 = load ptr, ptr getelementptr inbounds (i8, ptr @String, i64 48), align 8
@@ -20529,17 +20532,15 @@ define { i64, i64 } @_data_size_IO(ptr nocapture readnone %0) #1 {
   ret { i64, i64 } { i64 0, i64 1 }
 }
 
-define ptr @IO_B__Self_print_xNil__Self_print_xString__Self_print_xf64__Self_print_xCharacter__Self_print_xi1__Self_print_xi64__Self_print_xi8__Self_print_xi32__Self_print_xRepresentable(ptr nocapture %0) {
+define ptr @IO_B__Self_print_xi32__Self_print_xRepresentable__Self_print_xNil__Self_print_xf64__Self_print_xi1__Self_print_xString__Self_print_xi8__Self_print_xi64__Self_print_xCharacter(ptr nocapture %0) {
   %2 = tail call ptr @llvm.invariant.start.p0(i64 8, ptr %0)
   %3 = load ptr, ptr %0, align 8
-  %4 = icmp eq ptr %3, @i8_typ
-  br i1 %4, label %65, label %5
-
-5:                                                ; preds = %1
-  %6 = icmp eq ptr %3, @bool_typ
+  %4 = icmp eq ptr %3, @nil_typ
+  %5 = icmp eq ptr %3, null
+  %6 = or i1 %4, %5
   br i1 %6, label %65, label %7
 
-7:                                                ; preds = %5
+7:                                                ; preds = %1
   %8 = getelementptr i8, ptr %3, i64 8
   %9 = getelementptr i8, ptr %3, i64 16
   %10 = getelementptr i8, ptr %3, i64 24
@@ -20548,8 +20549,8 @@ define ptr @IO_B__Self_print_xNil__Self_print_xString__Self_print_xf64__Self_pri
   %13 = load i64, ptr %9, align 4
   %14 = load ptr, ptr %10, align 8
   %15 = load ptr, ptr %11, align 8
-  %16 = load i64, ptr @Character, align 8
-  %17 = tail call i1 @subtype_test_wrapper(ptr %14, i64 %13, i64 %12, i64 %16, i64 ptrtoint (ptr @Character to i64), ptr %15)
+  %16 = load i64, ptr @Representable, align 8
+  %17 = tail call i1 @subtype_test_wrapper(ptr %14, i64 %13, i64 %12, i64 %16, i64 ptrtoint (ptr @Representable to i64), ptr %15)
   br i1 %17, label %18, label %.critedge
 
 18:                                               ; preds = %7
@@ -20557,75 +20558,146 @@ define ptr @IO_B__Self_print_xNil__Self_print_xString__Self_print_xf64__Self_pri
   %20 = load i64, ptr %9, align 4
   %21 = load ptr, ptr %10, align 8
   %22 = load ptr, ptr %11, align 8
-  %23 = load i64, ptr @String, align 8
-  %24 = tail call i1 @subtype_test_wrapper(ptr %21, i64 %20, i64 %19, i64 %23, i64 ptrtoint (ptr @String to i64), ptr %22)
-  br i1 %24, label %.critedge, label %65
+  %23 = load i64, ptr @Character, align 8
+  %24 = tail call i1 @subtype_test_wrapper(ptr %21, i64 %20, i64 %19, i64 %23, i64 ptrtoint (ptr @Character to i64), ptr %22)
+  br i1 %24, label %.critedge, label %25
 
-.critedge:                                        ; preds = %7, %18
-  %25 = icmp eq ptr %3, @nil_typ
-  %26 = icmp eq ptr %3, null
-  %27 = or i1 %25, %26
-  br i1 %27, label %65, label %28
+25:                                               ; preds = %18
+  %26 = load i64, ptr %8, align 4
+  %27 = load i64, ptr %9, align 4
+  %28 = load ptr, ptr %10, align 8
+  %29 = load ptr, ptr %11, align 8
+  %30 = load i64, ptr @String, align 8
+  %31 = tail call i1 @subtype_test_wrapper(ptr %28, i64 %27, i64 %26, i64 %30, i64 ptrtoint (ptr @String to i64), ptr %29)
+  br i1 %31, label %.critedge, label %65
 
-28:                                               ; preds = %.critedge
-  %29 = icmp eq ptr %3, @i64_typ
-  br i1 %29, label %65, label %30
+.critedge:                                        ; preds = %18, %7, %25
+  %32 = icmp eq ptr %3, @i8_typ
+  br i1 %32, label %65, label %33
 
-30:                                               ; preds = %28
-  %31 = load i64, ptr %8, align 4
-  %32 = load i64, ptr %9, align 4
-  %33 = load ptr, ptr %10, align 8
-  %34 = load ptr, ptr %11, align 8
-  %35 = load i64, ptr @Representable, align 8
-  %36 = tail call i1 @subtype_test_wrapper(ptr %33, i64 %32, i64 %31, i64 %35, i64 ptrtoint (ptr @Representable to i64), ptr %34)
-  br i1 %36, label %37, label %.critedge15
+33:                                               ; preds = %.critedge
+  %34 = icmp eq ptr %3, @f64_typ
+  br i1 %34, label %65, label %35
 
-37:                                               ; preds = %30
+35:                                               ; preds = %33
+  %36 = icmp eq ptr %3, @bool_typ
+  br i1 %36, label %65, label %37
+
+37:                                               ; preds = %35
   %38 = load i64, ptr %8, align 4
   %39 = load i64, ptr %9, align 4
   %40 = load ptr, ptr %10, align 8
   %41 = load ptr, ptr %11, align 8
-  %42 = tail call i1 @subtype_test_wrapper(ptr %40, i64 %39, i64 %38, i64 %16, i64 ptrtoint (ptr @Character to i64), ptr %41)
-  br i1 %42, label %.critedge15, label %43
+  %42 = load i64, ptr @Character, align 8
+  %43 = tail call i1 @subtype_test_wrapper(ptr %40, i64 %39, i64 %38, i64 %42, i64 ptrtoint (ptr @Character to i64), ptr %41)
+  br i1 %43, label %44, label %.critedge15
 
-43:                                               ; preds = %37
-  %44 = load i64, ptr %8, align 4
-  %45 = load i64, ptr %9, align 4
-  %46 = load ptr, ptr %10, align 8
-  %47 = load ptr, ptr %11, align 8
-  %48 = load i64, ptr @String, align 8
-  %49 = tail call i1 @subtype_test_wrapper(ptr %46, i64 %45, i64 %44, i64 %48, i64 ptrtoint (ptr @String to i64), ptr %47)
-  br i1 %49, label %.critedge15, label %65
+44:                                               ; preds = %37
+  %45 = load i64, ptr %8, align 4
+  %46 = load i64, ptr %9, align 4
+  %47 = load ptr, ptr %10, align 8
+  %48 = load ptr, ptr %11, align 8
+  %49 = load i64, ptr @String, align 8
+  %50 = tail call i1 @subtype_test_wrapper(ptr %47, i64 %46, i64 %45, i64 %49, i64 ptrtoint (ptr @String to i64), ptr %48)
+  br i1 %50, label %.critedge15, label %65
 
-.critedge15:                                      ; preds = %37, %30, %43
-  %50 = icmp eq ptr %3, @i32_typ
-  br i1 %50, label %65, label %51
+.critedge15:                                      ; preds = %37, %44
+  %51 = load i64, ptr %8, align 4
+  %52 = load i64, ptr %9, align 4
+  %53 = load ptr, ptr %10, align 8
+  %54 = load ptr, ptr %11, align 8
+  %55 = load i64, ptr @String, align 8
+  %56 = tail call i1 @subtype_test_wrapper(ptr %53, i64 %52, i64 %51, i64 %55, i64 ptrtoint (ptr @String to i64), ptr %54)
+  br i1 %56, label %57, label %.critedge17
 
-51:                                               ; preds = %.critedge15
-  %52 = load i64, ptr %8, align 4
-  %53 = load i64, ptr %9, align 4
-  %54 = load ptr, ptr %10, align 8
-  %55 = load ptr, ptr %11, align 8
-  %56 = load i64, ptr @String, align 8
-  %57 = tail call i1 @subtype_test_wrapper(ptr %54, i64 %53, i64 %52, i64 %56, i64 ptrtoint (ptr @String to i64), ptr %55)
-  br i1 %57, label %58, label %65
+57:                                               ; preds = %.critedge15
+  %58 = load i64, ptr %8, align 4
+  %59 = load i64, ptr %9, align 4
+  %60 = load ptr, ptr %10, align 8
+  %61 = load ptr, ptr %11, align 8
+  %62 = tail call i1 @subtype_test_wrapper(ptr %60, i64 %59, i64 %58, i64 %42, i64 ptrtoint (ptr @Character to i64), ptr %61)
+  br i1 %62, label %.critedge17, label %65
 
-58:                                               ; preds = %51
-  %59 = load i64, ptr %8, align 4
-  %60 = load i64, ptr %9, align 4
-  %61 = load ptr, ptr %10, align 8
-  %62 = load ptr, ptr %11, align 8
-  %63 = tail call i1 @subtype_test_wrapper(ptr %61, i64 %60, i64 %59, i64 %16, i64 ptrtoint (ptr @Character to i64), ptr %62)
-  %64 = select i1 %63, i32 3, i32 2
+.critedge17:                                      ; preds = %.critedge15, %57
+  %63 = icmp eq ptr %3, @i32_typ
+  %64 = select i1 %63, i32 1, i32 8
   br label %65
 
-65:                                               ; preds = %58, %51, %5, %18, %.critedge, %.critedge15, %43, %28, %1
-  %.reg2mem29.0 = phi i32 [ 7, %1 ], [ 5, %5 ], [ 1, %.critedge ], [ 6, %28 ], [ 8, %.critedge15 ], [ 9, %43 ], [ 4, %18 ], [ %64, %58 ], [ 3, %51 ]
+65:                                               ; preds = %33, %57, %.critedge17, %44, %35, %.critedge, %25, %1
+  %.reg2mem29.0 = phi i32 [ 3, %1 ], [ 7, %.critedge ], [ 4, %33 ], [ 5, %35 ], [ %64, %.critedge17 ], [ 6, %57 ], [ 9, %44 ], [ 2, %25 ]
   %66 = zext nneg i32 %.reg2mem29.0 to i64
   %67 = getelementptr [10 x ptr], ptr @IO, i64 0, i64 %66
   %68 = getelementptr i8, ptr %67, i64 80
   %69 = load ptr, ptr %68, align 8
   ret ptr %69
+}
+
+; Function Attrs: nofree nounwind
+define void @IO__Self_print_xi32(ptr nocapture readnone %0, { ptr, i160 } %1) #20 {
+  %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
+  %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
+  %3 = tail call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @i32_string, i32 %.sroa.1.8.extract.trunc)
+  ret void
+}
+
+define void @IO__Self_print_xRepresentable(ptr nocapture readnone %0, { ptr, i160 } %1) {
+  %3 = alloca [0 x ptr], align 8
+  %.fca.0.extract2 = extractvalue { ptr, i160 } %1, 0
+  %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
+  %4 = alloca { ptr, ptr, ptr, i32 }, align 8
+  store ptr %.fca.0.extract2, ptr %4, align 8
+  %5 = getelementptr inbounds i8, ptr %4, i64 8
+  store i160 %.fca.1.extract3, ptr %5, align 8
+  call void @set_offset(ptr nonnull %4, ptr nonnull @Representable)
+  %6 = load ptr, ptr %4, align 8
+  %7 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %6, 0
+  %8 = load ptr, ptr %5, align 8
+  %9 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %8, 1
+  %10 = getelementptr inbounds i8, ptr %4, i64 16
+  %11 = load ptr, ptr %10, align 8
+  %12 = insertvalue { ptr, ptr, ptr, i32 } %9, ptr %11, 2
+  %13 = getelementptr inbounds i8, ptr %4, i64 24
+  %14 = load i32, ptr %13, align 8
+  %15 = insertvalue { ptr, ptr, ptr, i32 } %12, i32 %14, 3
+  %16 = call ptr @llvm.invariant.start.p0(i64 0, ptr nonnull %3)
+  %17 = call ptr @llvm.invariant.start.p0(i64 16, ptr %6)
+  %18 = sext i32 %14 to i64
+  %19 = getelementptr ptr, ptr %6, i64 %18
+  %20 = load ptr, ptr %19, align 8
+  %21 = call ptr @behavior_wrapper(ptr %20, { ptr, ptr, ptr, i32 } %15, ptr nonnull %3)
+  %22 = call { ptr, ptr, ptr, i32 } %21({ ptr, ptr, ptr, i32 } %15, { ptr, ptr, ptr, i32 } %15, ptr nonnull %3) #23
+  %.fca.0.extract1 = extractvalue { ptr, ptr, ptr, i32 } %22, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %22, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %22, 2
+  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %22, 3
+  %23 = alloca { ptr, ptr, ptr, i32 }, align 8
+  store ptr %.fca.0.extract1, ptr %23, align 8
+  %24 = getelementptr inbounds i8, ptr %23, i64 8
+  store ptr %.fca.1.extract, ptr %24, align 8
+  %25 = getelementptr inbounds i8, ptr %23, i64 16
+  store ptr %.fca.2.extract, ptr %25, align 8
+  %26 = getelementptr inbounds i8, ptr %23, i64 24
+  store i32 %.fca.3.extract, ptr %26, align 8
+  call void @set_offset(ptr nonnull %23, ptr nonnull @String)
+  %27 = load ptr, ptr %23, align 8
+  %28 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %27, 0
+  %29 = load ptr, ptr %24, align 8
+  %30 = insertvalue { ptr, ptr, ptr, i32 } %28, ptr %29, 1
+  %31 = load ptr, ptr %25, align 8
+  %32 = insertvalue { ptr, ptr, ptr, i32 } %30, ptr %31, 2
+  %33 = load i32, ptr %26, align 8
+  %34 = insertvalue { ptr, ptr, ptr, i32 } %32, i32 %33, 3
+  %35 = call ptr @llvm.invariant.start.p0(i64 0, ptr nonnull %3)
+  %36 = call ptr @llvm.invariant.start.p0(i64 632, ptr %27)
+  %37 = sext i32 %33 to i64
+  %38 = getelementptr ptr, ptr %27, i64 %37
+  %39 = getelementptr i8, ptr %38, i64 80
+  %40 = load ptr, ptr %39, align 8
+  %41 = call ptr @behavior_wrapper(ptr %40, { ptr, ptr, ptr, i32 } %34, ptr nonnull %3)
+  %42 = call { ptr } %41({ ptr, ptr, ptr, i32 } %34, { ptr, ptr, ptr, i32 } %34, ptr nonnull %3) #23
+  %.fca.0.extract = extractvalue { ptr } %42, 0
+  %puts = call i32 @puts(ptr nonnull dereferenceable(1) %.fca.0.extract)
+  ret void
 }
 
 define void @IO__Self_print_xNil(ptr nocapture readnone %0, { ptr, i160 } %1) {
@@ -20669,79 +20741,12 @@ define void @IO__Self_print_xNil(ptr nocapture readnone %0, { ptr, i160 } %1) {
   ret void
 }
 
-define void @IO__Self_print_xString(ptr nocapture readnone %0, { ptr, i160 } %1) {
-  %3 = alloca [0 x ptr], align 8
-  %.fca.0.extract1 = extractvalue { ptr, i160 } %1, 0
-  %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
-  %4 = alloca { ptr, ptr, ptr, i32 }, align 8
-  store ptr %.fca.0.extract1, ptr %4, align 8
-  %5 = getelementptr inbounds i8, ptr %4, i64 8
-  store i160 %.fca.1.extract, ptr %5, align 8
-  call void @set_offset(ptr nonnull %4, ptr nonnull @String)
-  %6 = load ptr, ptr %4, align 8
-  %7 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %6, 0
-  %8 = load ptr, ptr %5, align 8
-  %9 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %8, 1
-  %10 = getelementptr inbounds i8, ptr %4, i64 16
-  %11 = load ptr, ptr %10, align 8
-  %12 = insertvalue { ptr, ptr, ptr, i32 } %9, ptr %11, 2
-  %13 = getelementptr inbounds i8, ptr %4, i64 24
-  %14 = load i32, ptr %13, align 8
-  %15 = insertvalue { ptr, ptr, ptr, i32 } %12, i32 %14, 3
-  %16 = call ptr @llvm.invariant.start.p0(i64 0, ptr nonnull %3)
-  %17 = call ptr @llvm.invariant.start.p0(i64 632, ptr %6)
-  %18 = sext i32 %14 to i64
-  %19 = getelementptr ptr, ptr %6, i64 %18
-  %20 = getelementptr i8, ptr %19, i64 80
-  %21 = load ptr, ptr %20, align 8
-  %22 = call ptr @behavior_wrapper(ptr %21, { ptr, ptr, ptr, i32 } %15, ptr nonnull %3)
-  %23 = call { ptr } %22({ ptr, ptr, ptr, i32 } %15, { ptr, ptr, ptr, i32 } %15, ptr nonnull %3) #23
-  %.fca.0.extract = extractvalue { ptr } %23, 0
-  %puts = call i32 @puts(ptr nonnull dereferenceable(1) %.fca.0.extract)
-  ret void
-}
-
 ; Function Attrs: nofree nounwind
 define void @IO__Self_print_xf64(ptr nocapture readnone %0, { ptr, i160 } %1) #20 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i64
   %3 = bitcast i64 %.sroa.1.8.extract.trunc to double
   %4 = tail call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @float_string, double %3)
-  ret void
-}
-
-define void @IO__Self_print_xCharacter(ptr nocapture readnone %0, { ptr, i160 } %1) {
-  %3 = alloca [0 x ptr], align 8
-  %.fca.0.extract = extractvalue { ptr, i160 } %1, 0
-  %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
-  %4 = alloca { ptr, ptr, ptr, i32 }, align 8
-  store ptr %.fca.0.extract, ptr %4, align 8
-  %5 = getelementptr inbounds i8, ptr %4, i64 8
-  store i160 %.fca.1.extract, ptr %5, align 8
-  call void @set_offset(ptr nonnull %4, ptr nonnull @Character)
-  %6 = call ptr @bump_malloc(i64 2)
-  %7 = load ptr, ptr %4, align 8
-  %8 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %7, 0
-  %9 = load ptr, ptr %5, align 8
-  %10 = insertvalue { ptr, ptr, ptr, i32 } %8, ptr %9, 1
-  %11 = getelementptr inbounds i8, ptr %4, i64 16
-  %12 = load ptr, ptr %11, align 8
-  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, ptr %12, 2
-  %14 = getelementptr inbounds i8, ptr %4, i64 24
-  %15 = load i32, ptr %14, align 8
-  %16 = insertvalue { ptr, ptr, ptr, i32 } %13, i32 %15, 3
-  %17 = call ptr @llvm.invariant.start.p0(i64 0, ptr nonnull %3)
-  %18 = call ptr @llvm.invariant.start.p0(i64 40, ptr %7)
-  %19 = sext i32 %15 to i64
-  %20 = getelementptr ptr, ptr %7, i64 %19
-  %21 = getelementptr i8, ptr %20, i64 8
-  %22 = load ptr, ptr %21, align 8
-  %23 = call ptr @behavior_wrapper(ptr %22, { ptr, ptr, ptr, i32 } %16, ptr nonnull %3)
-  %24 = call i8 %23({ ptr, ptr, ptr, i32 } %16, { ptr, ptr, ptr, i32 } %16, ptr nonnull %3) #23
-  store i8 %24, ptr %6, align 1
-  %25 = getelementptr i8, ptr %6, i64 1
-  store i8 0, ptr %25, align 1
-  %puts = call i32 @puts(ptr nonnull dereferenceable(1) %6)
   ret void
 }
 
@@ -20835,11 +20840,35 @@ define void @IO__Self_print_xi1(ptr nocapture readnone %0, { ptr, i160 } %1) {
   ret void
 }
 
-; Function Attrs: nofree nounwind
-define void @IO__Self_print_xi64(ptr nocapture readnone %0, { ptr, i160 } %1) #20 {
+define void @IO__Self_print_xString(ptr nocapture readnone %0, { ptr, i160 } %1) {
+  %3 = alloca [0 x ptr], align 8
+  %.fca.0.extract1 = extractvalue { ptr, i160 } %1, 0
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
-  %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i64
-  %3 = tail call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @i64_string, i64 %.sroa.1.8.extract.trunc)
+  %4 = alloca { ptr, ptr, ptr, i32 }, align 8
+  store ptr %.fca.0.extract1, ptr %4, align 8
+  %5 = getelementptr inbounds i8, ptr %4, i64 8
+  store i160 %.fca.1.extract, ptr %5, align 8
+  call void @set_offset(ptr nonnull %4, ptr nonnull @String)
+  %6 = load ptr, ptr %4, align 8
+  %7 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %6, 0
+  %8 = load ptr, ptr %5, align 8
+  %9 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %8, 1
+  %10 = getelementptr inbounds i8, ptr %4, i64 16
+  %11 = load ptr, ptr %10, align 8
+  %12 = insertvalue { ptr, ptr, ptr, i32 } %9, ptr %11, 2
+  %13 = getelementptr inbounds i8, ptr %4, i64 24
+  %14 = load i32, ptr %13, align 8
+  %15 = insertvalue { ptr, ptr, ptr, i32 } %12, i32 %14, 3
+  %16 = call ptr @llvm.invariant.start.p0(i64 0, ptr nonnull %3)
+  %17 = call ptr @llvm.invariant.start.p0(i64 632, ptr %6)
+  %18 = sext i32 %14 to i64
+  %19 = getelementptr ptr, ptr %6, i64 %18
+  %20 = getelementptr i8, ptr %19, i64 80
+  %21 = load ptr, ptr %20, align 8
+  %22 = call ptr @behavior_wrapper(ptr %21, { ptr, ptr, ptr, i32 } %15, ptr nonnull %3)
+  %23 = call { ptr } %22({ ptr, ptr, ptr, i32 } %15, { ptr, ptr, ptr, i32 } %15, ptr nonnull %3) #23
+  %.fca.0.extract = extractvalue { ptr } %23, 0
+  %puts = call i32 @puts(ptr nonnull dereferenceable(1) %.fca.0.extract)
   ret void
 }
 
@@ -20853,70 +20882,89 @@ define void @IO__Self_print_xi8(ptr nocapture readnone %0, { ptr, i160 } %1) #20
 }
 
 ; Function Attrs: nofree nounwind
-define void @IO__Self_print_xi32(ptr nocapture readnone %0, { ptr, i160 } %1) #20 {
+define void @IO__Self_print_xi64(ptr nocapture readnone %0, { ptr, i160 } %1) #20 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
-  %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
-  %3 = tail call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @i32_string, i32 %.sroa.1.8.extract.trunc)
+  %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i64
+  %3 = tail call i32 (ptr, ...) @printf(ptr nonnull dereferenceable(1) @i64_string, i64 %.sroa.1.8.extract.trunc)
   ret void
 }
 
-define void @IO__Self_print_xRepresentable(ptr nocapture readnone %0, { ptr, i160 } %1) {
+define void @IO__Self_print_xCharacter(ptr nocapture readnone %0, { ptr, i160 } %1) {
   %3 = alloca [0 x ptr], align 8
-  %.fca.0.extract2 = extractvalue { ptr, i160 } %1, 0
-  %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
+  %.fca.0.extract = extractvalue { ptr, i160 } %1, 0
+  %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %4 = alloca { ptr, ptr, ptr, i32 }, align 8
-  store ptr %.fca.0.extract2, ptr %4, align 8
+  store ptr %.fca.0.extract, ptr %4, align 8
   %5 = getelementptr inbounds i8, ptr %4, i64 8
-  store i160 %.fca.1.extract3, ptr %5, align 8
-  call void @set_offset(ptr nonnull %4, ptr nonnull @Representable)
-  %6 = load ptr, ptr %4, align 8
-  %7 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %6, 0
-  %8 = load ptr, ptr %5, align 8
-  %9 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %8, 1
-  %10 = getelementptr inbounds i8, ptr %4, i64 16
-  %11 = load ptr, ptr %10, align 8
-  %12 = insertvalue { ptr, ptr, ptr, i32 } %9, ptr %11, 2
-  %13 = getelementptr inbounds i8, ptr %4, i64 24
-  %14 = load i32, ptr %13, align 8
-  %15 = insertvalue { ptr, ptr, ptr, i32 } %12, i32 %14, 3
-  %16 = call ptr @llvm.invariant.start.p0(i64 0, ptr nonnull %3)
-  %17 = call ptr @llvm.invariant.start.p0(i64 16, ptr %6)
-  %18 = sext i32 %14 to i64
-  %19 = getelementptr ptr, ptr %6, i64 %18
-  %20 = load ptr, ptr %19, align 8
-  %21 = call ptr @behavior_wrapper(ptr %20, { ptr, ptr, ptr, i32 } %15, ptr nonnull %3)
-  %22 = call { ptr, ptr, ptr, i32 } %21({ ptr, ptr, ptr, i32 } %15, { ptr, ptr, ptr, i32 } %15, ptr nonnull %3) #23
-  %.fca.0.extract1 = extractvalue { ptr, ptr, ptr, i32 } %22, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %22, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %22, 2
-  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %22, 3
-  %23 = alloca { ptr, ptr, ptr, i32 }, align 8
-  store ptr %.fca.0.extract1, ptr %23, align 8
-  %24 = getelementptr inbounds i8, ptr %23, i64 8
-  store ptr %.fca.1.extract, ptr %24, align 8
-  %25 = getelementptr inbounds i8, ptr %23, i64 16
-  store ptr %.fca.2.extract, ptr %25, align 8
-  %26 = getelementptr inbounds i8, ptr %23, i64 24
-  store i32 %.fca.3.extract, ptr %26, align 8
-  call void @set_offset(ptr nonnull %23, ptr nonnull @String)
-  %27 = load ptr, ptr %23, align 8
-  %28 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %27, 0
-  %29 = load ptr, ptr %24, align 8
-  %30 = insertvalue { ptr, ptr, ptr, i32 } %28, ptr %29, 1
-  %31 = load ptr, ptr %25, align 8
-  %32 = insertvalue { ptr, ptr, ptr, i32 } %30, ptr %31, 2
-  %33 = load i32, ptr %26, align 8
-  %34 = insertvalue { ptr, ptr, ptr, i32 } %32, i32 %33, 3
-  %35 = call ptr @llvm.invariant.start.p0(i64 0, ptr nonnull %3)
-  %36 = call ptr @llvm.invariant.start.p0(i64 632, ptr %27)
-  %37 = sext i32 %33 to i64
-  %38 = getelementptr ptr, ptr %27, i64 %37
-  %39 = getelementptr i8, ptr %38, i64 80
-  %40 = load ptr, ptr %39, align 8
-  %41 = call ptr @behavior_wrapper(ptr %40, { ptr, ptr, ptr, i32 } %34, ptr nonnull %3)
-  %42 = call { ptr } %41({ ptr, ptr, ptr, i32 } %34, { ptr, ptr, ptr, i32 } %34, ptr nonnull %3) #23
-  %.fca.0.extract = extractvalue { ptr } %42, 0
-  %puts = call i32 @puts(ptr nonnull dereferenceable(1) %.fca.0.extract)
+  store i160 %.fca.1.extract, ptr %5, align 8
+  call void @set_offset(ptr nonnull %4, ptr nonnull @Character)
+  %6 = call ptr @bump_malloc(i64 2)
+  %7 = load ptr, ptr %4, align 8
+  %8 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %7, 0
+  %9 = load ptr, ptr %5, align 8
+  %10 = insertvalue { ptr, ptr, ptr, i32 } %8, ptr %9, 1
+  %11 = getelementptr inbounds i8, ptr %4, i64 16
+  %12 = load ptr, ptr %11, align 8
+  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, ptr %12, 2
+  %14 = getelementptr inbounds i8, ptr %4, i64 24
+  %15 = load i32, ptr %14, align 8
+  %16 = insertvalue { ptr, ptr, ptr, i32 } %13, i32 %15, 3
+  %17 = call ptr @llvm.invariant.start.p0(i64 0, ptr nonnull %3)
+  %18 = call ptr @llvm.invariant.start.p0(i64 40, ptr %7)
+  %19 = sext i32 %15 to i64
+  %20 = getelementptr ptr, ptr %7, i64 %19
+  %21 = getelementptr i8, ptr %20, i64 8
+  %22 = load ptr, ptr %21, align 8
+  %23 = call ptr @behavior_wrapper(ptr %22, { ptr, ptr, ptr, i32 } %16, ptr nonnull %3)
+  %24 = call i8 %23({ ptr, ptr, ptr, i32 } %16, { ptr, ptr, ptr, i32 } %16, ptr nonnull %3) #23
+  store i8 %24, ptr %6, align 1
+  %25 = getelementptr i8, ptr %6, i64 1
+  store i8 0, ptr %25, align 1
+  %puts = call i32 @puts(ptr nonnull dereferenceable(1) %6)
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
+define { i64, i64 } @_data_size_f64_typ(ptr nocapture readnone %0) #1 {
+  ret { i64, i64 } { i64 8, i64 8 }
+}
+
+define { ptr, i160 } @_box_f64_typ(ptr nocapture readonly %0, ptr %1) {
+  %.sroa.2 = alloca [24 x i8], align 8
+  %3 = tail call { i64, i64 } @size_wrapper(ptr nonnull @_data_size_f64_typ, ptr %1)
+  %4 = extractvalue { i64, i64 } %3, 0
+  %5 = icmp slt i64 %4, 17
+  br i1 %5, label %8, label %6
+
+6:                                                ; preds = %2
+  %7 = tail call ptr @bump_malloc(i64 %4)
+  tail call void @llvm.memcpy.inline.p0.p0.i64(ptr align 1 %7, ptr align 1 %0, i64 %4, i1 false)
+  store ptr %7, ptr %.sroa.2, align 8
+  br label %9
+
+8:                                                ; preds = %2
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr nonnull align 8 %.sroa.2, ptr align 1 %0, i64 %4, i1 false)
+  br label %9
+
+9:                                                ; preds = %8, %6
+  %.sroa.2.0..sroa.2.0..sroa.2.0..sroa.2.8. = load i160, ptr %.sroa.2, align 8
+  %10 = insertvalue { ptr, i160 } { ptr @f64_typ, i160 undef }, i160 %.sroa.2.0..sroa.2.0..sroa.2.0..sroa.2.8., 1
+  ret { ptr, i160 } %10
+}
+
+define void @_unbox_f64_typ({ ptr, i160 } %0, ptr %1, ptr nocapture writeonly %2) {
+  %4 = alloca { ptr, i160 }, align 8
+  %.fca.0.extract = extractvalue { ptr, i160 } %0, 0
+  store ptr %.fca.0.extract, ptr %4, align 8
+  %.fca.1.extract = extractvalue { ptr, i160 } %0, 1
+  %.fca.1.gep = getelementptr inbounds i8, ptr %4, i64 8
+  store i160 %.fca.1.extract, ptr %.fca.1.gep, align 8
+  %5 = load ptr, ptr %.fca.1.gep, align 8
+  %6 = tail call { i64, i64 } @size_wrapper(ptr nonnull @_data_size_f64_typ, ptr %1)
+  %7 = extractvalue { i64, i64 } %6, 0
+  %8 = icmp slt i64 %7, 17
+  %9 = select i1 %8, ptr %.fca.1.gep, ptr %5
+  call void @llvm.memcpy.inline.p0.p0.i64(ptr align 1 %2, ptr align 1 %9, i64 %7, i1 false)
   ret void
 }
 
@@ -22419,7 +22467,7 @@ define void @Array_throw_oob_xi32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i3
   %21 = call ptr @behavior_wrapper(ptr %20, { ptr, ptr, ptr, i32 } %17, ptr nonnull %5)
   call void %21({ ptr, ptr, ptr, i32 } %17, { ptr, ptr, ptr, i32 } %17, ptr nonnull %5) #23
   %22 = call ptr @bump_malloc(i64 57)
-  %23 = load <56 x i8>, ptr @garhv_CUsersPaulKOneDriveDocumentsPLPyPLlibarraymini, align 64
+  %23 = load <56 x i8>, ptr @tjdlc_CUsersPaulKOneDriveDocumentsPLPyPLlibarraymini, align 64
   store <56 x i8> %23, ptr %22, align 64
   %24 = alloca [1 x ptr], align 8
   store ptr @String, ptr %24, align 8

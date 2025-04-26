@@ -1,0 +1,201 @@
+start: statement*
+
+statement: function_def
+         | extern_def
+         | class_def
+         | import_statement ";"
+         | var_decl ";"
+         | assignment ";"
+         | alias ";"
+         | if_statement
+         | while_statement
+         | for_statement
+         | return_statement ";"
+         | break_statement ";"
+         | continue_statement ";"
+         | expression_statement
+         | block
+
+import_statement: "import" IDENT ("." IDENT)*
+alias: ALIAS basic_type "=" typ
+
+expression_statement: expression ";"
+
+class_def: CLASS (basic_type | parameterized_type) ["extends" type_list] ["where" type_bound_list] "{" [field_decls] [class_region_constraints] (class_method_def*)? ((method_def | operator_def)*)? "}"
+field_decls: (field_decl)+
+type_bound_list: type_bound ("," type_bound)*
+type_bound: IDENT "<:" typ
+
+ident_list: IDENT ("," IDENT)*
+
+extern_def: ["#["constraint_list"]"] "extern" DEF IDENT "(" param_list ")" ["->" typ] ["yields" typ]
+function_def: ["#["constraint_list"]"] DEF IDENT "(" param_list ")" ["->" typ] ["yields" typ] block
+abstract: "abstract"
+method_def: ["#["constraint_list"]"] [abstract] DEF method_name ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
+operator_def: ["#["constraint_list"]"] [abstract] DEF operator ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
+class_method_def: ["#["constraint_list"]"] [abstract] DEF "Self" "." IDENT ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
+
+method_name: (IDENT | SETTER)
+
+param_list: (param ("," param)*)?
+method_param_list: (method_param ("," method_param)*)? -> param_list
+
+class_region_constraints: "regions" "{" constraint_list "}" 
+constraint_list: (constraint ("," constraint)*)?
+constraint: region_variable LT region_variable
+          | region_variable GT region_variable
+          | region_variable EQ region_variable
+region_variable: ((IDENT | FIELD) ("." (IDENT | FIELD))*)? 
+
+method_param: param | field_param
+param: IDENT ":" typ
+field_param: FIELD ":" typ -> param
+
+var_decl: IDENT ":" typ ["=" expression]
+field_decl: FIELD ":" typ
+assignment: assignable "=" expression
+
+assignable: IDENT -> identifier
+          | FIELD -> identifier
+          | "(" assignable ")" -> paren_expr
+          | function_call
+          | method_call
+          | indexation
+
+if_statement: "if" expression block ("else" block)?
+while_statement: "while" expression block
+for_statement: "for" IDENT "in" [IDENT "::"] expression block
+return_statement: RETURN [expression]
+break_statement: BREAK
+continue_statement: CONTINUE
+
+typ: basic_type
+    | sum_type
+    | parameterized_type
+    | function_type
+
+type_list: (typ ("," typ)*)?
+basic_type: IDENT
+sum_type: typ "|" typ
+parameterized_type: IDENT "[" type_list "]"
+function_type: "(" type_list ")" ["->" typ] ["yields" typ]
+
+block: "{" statement* "}"
+
+expression: logical
+
+logical: and -> logical_single
+          | logical OR and
+
+and: comparison -> logical_single
+          | and AND comparison -> logical
+
+comparison: arithmetic -> comparison_single
+          | comparison NEQ arithmetic
+          | comparison EQ arithmetic
+          | comparison LT arithmetic
+          | comparison GT arithmetic
+          | comparison LE arithmetic
+          | comparison GE arithmetic
+          | comparison ":" arithmetic -> range_literal
+          | comparison "is" typ -> type_check
+
+arithmetic: term -> arithmetic_single
+          | arithmetic PLUS term
+          | arithmetic MINUS term
+
+term: factor -> term_single
+    | term TIMES factor -> arithmetic
+    | term DIVIDE factor -> arithmetic
+    | term MODULO factor -> arithmetic
+    | term LSHIFT factor -> arithmetic
+    | term RSHIFT factor -> arithmetic
+    | term BIT_AND factor -> arithmetic
+    | term BIT_OR factor -> arithmetic
+    | term BIT_XOR factor -> arithmetic
+
+factor: MINUS factor -> neg_op
+      | NOT factor -> not_op
+      | factor AS typ -> as_op
+      | primary -> factor_single
+
+primary: "(" expression ")" -> paren_expr
+       | INT -> int_literal
+       | HEX -> hex_literal
+       | FLOAT -> float_literal
+       | TRUE -> bool_literal
+       | FALSE -> bool_literal
+       | NIL -> nil_literal
+       | STRING -> string_literal
+       | function_literal
+       | array_literal
+       | tuple_literal
+       | print_call
+       | sizeof_call
+       | yield_call
+       | assignable
+
+function_literal: "(" param_list ")" ["yields" typ] ARROW block
+array_literal: LBRACKET (expression ("," expression)*)? "]"
+tuple_literal: "(" expression "," expression ("," expression)* ")"
+dictionary_literal: "{" (expression "::" ("," expression "::" expression)*)? "}"
+print_call: "print" "(" (expression ("," expression)*)? ")"
+sizeof_call: "sizeof" "(" typ ")"
+yield_call: YIELD "(" [expression] ")"
+function_call: IDENT "(" (expression ("," expression)*)? ")"
+method_call: (primary | parameterized_type) "." IDENT "(" (expression ("," expression)*)? ")"
+indexation: primary "." "[" expression "]"
+
+operator: PLUS | MINUS | TIMES | DIVIDE | NEQ | EQ | LE | GE | LT | GT | BRACKETS | BRACKETS_SETTER
+
+ARROW: "=>"
+PLUS: "+"
+MINUS: "-"
+TIMES: "*"
+DIVIDE: "/"
+MODULO: "%"
+LSHIFT: "<<"
+RSHIFT: ">>"
+BIT_OR: "bit_or"
+BIT_AND: "bit_and"
+BIT_XOR: "bit_xor"
+EQ: "=="
+NEQ: "!="
+LE: "<="
+GE: ">="
+LT: "<"
+GT: ">"
+AS: "as"
+NOT: "not"
+OR: "or"
+AND: "and"
+LBRACKET: "["
+RBRACKET: "]"
+BRACKETS: "[]"
+BRACKETS_SETTER: "[]="
+PIPE: "|"
+TRUE: "true"
+FALSE: "false"
+NIL: "nil"
+BREAK: "break"
+CONTINUE: "continue"
+RETURN: "return"
+YIELD: "yield"
+DEF: "def"
+CLASS: "class"
+ALIAS: "alias"
+SETTER: /[a-zA-Z][a-zA-Z0-9_]*=/
+FIELD: /@[a-zA-Z][a-zA-Z0-9_]*/
+IDENT: /[a-zA-Z][a-zA-Z0-9_]*/
+INT:   /[0-9]+(_[0-9]+)*/
+HEX:   /0x[0-9a-fA-F]+(_[0-9a-fA-F]+)*/
+FLOAT: /[0-9]+(_[0-9]+)*\.[0-9]+(_[0-9]+)*/
+STRING: /".*?"/
+
+COMMENT: "//" /[^\n]*/
+BLOCK_COMMENT: /\/\*[\s\S]*?\*\//
+
+%import common.WS
+%ignore WS
+%ignore COMMENT
+%ignore BLOCK_COMMENT

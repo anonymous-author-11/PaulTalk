@@ -406,14 +406,27 @@ DONE:
 
 TODO:
 
-- Improve proxy caching
+- What do I need for release 0.1.0?
+	- Works on any Windows x86_64 machine (other people's computers)
+	- You can download ptalk.exe and run it out-of-the-box
+	- Available commands should be 'ptalk compile [args]' and 'ptalk build'
+	- Avoid Windows marking it as malware
+		- Use --standalone instead of --onefile
+	- You can import PaulTalk libraries on Github using the manifest.yaml
+	- Make sure the ptalk-build proxy does caching in a sane way
+	- Should the user 0install the compiler?
+		- If so, we need an xml feed with implementations for versions
+	- The GPG key signing needs to be more portable [check!]
+		- Using pgpy [check!]
+	- The Github API token needs to be portable as well
 
-- What do I really need for 1.0?
+- What do I really need for 1.0.0?
 	- A way to distribute and adopt code (packages) [check!]
 		- Ideally use something existing and portable [check!]
 		- I like 0install and think I should adapt it [check!]
 		- I'd need to write some wrappers around it [check!]
 		- I'd like to be able to use GitHub repos as packages [check!]
+		- Security and verification mechanisms
 	- Namespacing is even more necessary with packages
 	- Determine what kind of file/directory structure is expected [check!]
 	- Region memory management
@@ -439,6 +452,7 @@ TODO:
 		- Function / coroutine base_typ
 		- Behavior ABI wrt overloads
 		- Already planned ahead for delegate passing
+		- Are strings Unicode or bytes?
 	- A less meager stdlib
 		- Set, LinkedList
 		- JSON?
