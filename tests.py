@@ -4,7 +4,7 @@ import tempfile
 import shutil
 import os
 from pathlib import Path
-from Compiler import compiler_driver_main
+from ptalk_compiler import compiler_driver_main
 from AST import silent
 from utils import random_letters
 import stat

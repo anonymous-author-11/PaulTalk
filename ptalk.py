@@ -1,6 +1,6 @@
 import sys
 from ptalk_build import build_main
-from Compiler import compiler_driver_main
+from ptalk_compile import compiler_driver_main
 
 def ptalk_main(argv):
 	if len(argv) < 2: raise Exception("Please specify a command, like 'ptalk compile' or 'ptalk build'")

@@ -26,12 +26,14 @@ import base64   # For handling signature format
 DIST_DIR = Path(__file__).parent
 GPG_KEY_PATH = DIST_DIR.joinpath("data_files/proxy_pub.gpg")
 PRIV_KEY_PATH = DIST_DIR.joinpath("data_files/private_proxy_key.asc")
+GPG_KEY, _ = pgpy.PGPKey.from_file(PRIV_KEY_PATH)
 
 PROXY_PORT = 8081
 PROXY_HOST = "localhost"
+
+# the one remaining hardcoded path that needs to be updated
 with open(Path("c:/users/paulk/onedrive/documents/pl/github_pat_for_proxy.txt"), "r") as f: git_api_tok = f.read()
 GITHUB_API_TOKEN = git_api_tok
-GPG_KEY, _ = pgpy.PGPKey.from_file(PRIV_KEY_PATH)
 
 CACHE_DIR = Path(tempfile.mkdtemp(prefix="0install_github_proxy_"))
 CACHE_EXPIRY_SECONDS = 3600
