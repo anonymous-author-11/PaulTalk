@@ -1,5 +1,7 @@
 <?xml version="1.0" ?>
-<interface xmlns="http://zero-install.sourceforge.net/2004/injector/interface" uri="https://github.com/anonymous-author-11/paultalk">
+<interface
+  xmlns="http://zero-install.sourceforge.net/2004/injector/interface"
+  uri="https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/ptalk.xml">
   <name>PaulTalk</name>
   <summary>The compiler and build tool for the PaulTalk programming language</summary>
 
