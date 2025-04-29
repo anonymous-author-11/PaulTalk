@@ -201,8 +201,9 @@ def generate_feed_for_repo(owner, repo) -> Path | None:
              # f.write(signed_bytes) # Write signed content if signing worked
              f.write(unsigned_bytes) # Write unsigned for now - SIGNING NEEDS FIXING
 
-        # calculates and adds the archive digest and other things (Windows-specific command)
-        subprocess.run(f"0publish {feed_path} --add-missing")
+        # Use 0publish to calculate and adds the archive digest and other things (Windows-specific command)
+        command = ["0install","run","https://apps.0install.net/0install/0publish.xml",feed_path,"--add-missing"]
+        subprocess.run(command)
 
         logging.info(f"Saved generated feed to {feed_path}")
         return feed_path
