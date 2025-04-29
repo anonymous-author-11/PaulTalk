@@ -4,12 +4,12 @@
   <name>PaulTalk</name>
   <summary xml:lang="en">The compiler and build tool for the PaulTalk programming language</summary>
   <implementation arch="Windows-x86_64" version="0.1.0" id="sha256new_4OYMIQUY7QOBJGX36TEJS35ZEQT24QPEMSNZGTFESWMRW6CSXBKQ">
-    <command name="run" path="ptalk.exe" />
+    <command name="run" path="ptalk.dist/ptalk.exe" />
     <manifest-digest sha256new="4OYMIQUY7QOBJGX36TEJS35ZEQT24QPEMSNZGTFESWMRW6CSXBKQ" />
-    <archive href="https://github.com/anonymous-author-11/paultalk/archive/refs/tags/v0.1.0.tar.gz" size="384184667" type="application/x-compressed-tar" extract="paultalk-0.1.0/ptalk.dist" />
+    <archive href="https://github.com/anonymous-author-11/paultalk/archive/refs/tags/v0.1.0.tar.gz" size="384184667" type="application/x-compressed-tar" extract="paultalk-0.1.0" />
   </implementation>
 </interface>
 <!-- Base64 Signature
-iQEcBAABAgAGBQJoEVOoAAoJEHRbTseggy0ZD3YH/j5jvmPKtpjjVkBWh17zuNXDRm5kO021yjULT6aVOGdCBOBLfdSEU0dT2+03VeBEGR2GxZC8+34WOz/9iEU1gdUm0/mK8vPOcoXz3ecW9urZ0j4eUZQ8netpxSE4qLA7n61v5fRYv9QCISmUs51m1JbgCE2VtHLsokt/EU6DxvHIRqsjs0aOfFuVWPi1Bp4ZXoOgb8VlYoKy8TrgvujZAubq2KUqBYAGW48mmGhMKSm7U/vvGxwpGehr6BDHvZcGSoLxW9uIG3UTbPOTWnXo/AcxExB+aiztGkta2Y8cUz268TXzQWdG/rffQ7nRMBFnLVhyGsU10F/M2nHGY3IcGOw=
+iQEcBAABAgAGBQJoEVB/AAoJEHRbTseggy0ZB/QH/AqxqPm9UOoRj/IuMc7ZXwgeTZEhCInZ56UK9ELPvQSzoWRl5JtCjJg2Bxn2aNaDHyJUqukbnr7lPWcTQ89hi+JFK2JAwBj+Ms+9AtsUi+VWSe4P/bKyPu83ItYSspzuOsChBI49s+RQ/GzvSMbEludPiT+0nelgEh9XRjqORB9LgzSl1P//e6/axHEK3BQcGbA+gjpVJ/KAgzHmzVsOTxMJIaNsezCIh6DUUZY7p4KYEMcYg4+OQDxTnYIYWCUik8Lqq8HBHhm2V/kVOloeXVpxGVixDuj5+09+fjL9ULCj994yhjQamCBZ4g7/+dNwOckanXzayyQ/EQmA2Q6f1Z4=
 
 -->
