@@ -41,11 +41,11 @@ def build_main(argv):
 	xml_deps = xml_dependencies(manifest_data)
 
 	github_pat = os.environ.get("GITHUB_PAT")
-	if not github_pat:
+	if github_pat:
+		print("Using Github access token found in GITHUB_PAT")
+	else:
 		print("No Github Personal Access Token (PAT) found.")
 		print("You can increase your Github API rate limit by setting the environment variable GITHUB_PAT to your own access token.")
-	else:
-		print("Using Github access token found in GITHUB_PAT")
 
 	# generate a 0install .xml feed from the manifest information
 	print("Generating xml feed")

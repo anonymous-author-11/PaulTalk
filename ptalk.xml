@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<interface xmlns="http://zero-install.sourceforge.net/2004/injector/interface" uri="https://github.com/anonymous-author-11/paultalk">
+  <name>PaulTalk</name>
+  <summary>The compiler and build tool for the PaulTalk programming language</summary>
+
+  <implementation arch="Windows-x86_64" version="0.1.0">
+    <command name='run' path='ptalk.dist/ptalk.exe' />
+    <archive extract="paultalk-0.1.0" href="https://github.com/anonymous-author-11/paultalk/archive/refs/tags/v0.1.0.tar.gz" />
+  </implementation>
+</interface>

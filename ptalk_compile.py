@@ -203,7 +203,7 @@ def recompile_set(input_path, dependency_list, dependency_graph, build_dir) -> s
 def add_source_directories(input_path):
 
     # Immediate parent directory of the file being compiled
-    source_directories.add(input_path.parent)
+    source_directories[input_path.parent] = input_path.parent
 
     # Dependencies put into PTALK_PATH by the build system
     ptalk_path = os.environ.get("PTALK_PATH")
@@ -213,15 +213,17 @@ def add_source_directories(input_path):
             if not env_var: raise Exception(f"Package listed in PTALK_PATH {package_name} is not bound to a directory")
             package_path = Path(env_var)
             if not package_path.exists(): raise Exception(f"Package {package_name} listed in PTALK_PATH does not point to a valid directory")
-            source_directories.add(package_path.resolve())
+            source_directories[package_path.resolve()] = package_path.resolve()
 
     # lib folder in the current working directory
     lib_folder_1 = Path(os.getcwd()).joinpath("lib")
-    if lib_folder_1.exists(): source_directories.add(lib_folder_1.resolve())
+    if lib_folder_1.exists():
+        source_directories[lib_folder_1.resolve()] = lib_folder_1.resolve()
 
     # lib folder adjacent to the file being compiled
     lib_folder_2 = input_path.parent.joinpath("lib")
-    if lib_folder_2.exists(): source_directories.add(lib_folder_2.resolve())
+    if lib_folder_2.exists():
+        source_directories[lib_folder_2.resolve()] = lib_folder_2.resolve()
 
 def print_dependency_graph(included_files, root_path):
     print("Dependency graph:")

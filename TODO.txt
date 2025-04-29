@@ -406,6 +406,10 @@ DONE:
 
 TODO:
 
+- Put hashes and bitcodes in their own folders within the build dir
+- Write a 0install xml feed for the compiler itself
+- Allow .yml or .yaml for the manifest
+
 - What do I need for release 0.1.0?
 	- Works on any Windows x86_64 machine (other people's computers)
 	- You can download ptalk.exe and run it out-of-the-box
@@ -418,6 +422,8 @@ TODO:
 	- The Github API token needs to be portable as well [check!]
 		- Just use an environment variable [check!]
 		- Add a message saying how to use [check!]
+	- Bundle the stdlib in data_files [check!]
+		- So that invocations of 'ptalk compile' can use it [check!]
 	- You can import PaulTalk libraries from Github using the manifest.yaml
 	- Should the user 0install the compiler?
 		- If so, we need an xml feed with implementations for versions
@@ -425,8 +431,7 @@ TODO:
 		- Add the dependency folder to an env variable named for the package
 		- Then add the name of that env variable to the path
 		- We can report import name conflicts. But can we instead resolve them?
-	- Bundle the stdlib in data_files
-		- So that invocations of 'ptalk compile' can use it
+		- The source_dirs should be ordered, not a set
 
 - What do I really need for 1.0.0?
 	- A way to distribute and adopt code (packages) [check!]
