@@ -6,10 +6,10 @@
   <implementation arch="Windows-x86_64" version="0.1.0" id="sha256new_4OYMIQUY7QOBJGX36TEJS35ZEQT24QPEMSNZGTFESWMRW6CSXBKQ">
     <command name="run" path="ptalk.dist/ptalk.exe" />
     <manifest-digest sha256new="4OYMIQUY7QOBJGX36TEJS35ZEQT24QPEMSNZGTFESWMRW6CSXBKQ" />
-    <archive href="https://github.com/anonymous-author-11/paultalk/archive/refs/tags/v0.1.0.tar.gz" size="384184667" type="application/x-compressed-tar" extract="paultalk-0.1.0" />
+    <archive href="https://github.com/anonymous-author-11/paultalk/archive/refs/tags/v0.1.0.tar.gz" size="384184667" type="application/x-compressed-tar" extract="PaulTalk-0.1.0" />
   </implementation>
 </interface>
 <!-- Base64 Signature
-iQEcBAABAgAGBQJoEVB/AAoJEHRbTseggy0ZB/QH/AqxqPm9UOoRj/IuMc7ZXwgeTZEhCInZ56UK9ELPvQSzoWRl5JtCjJg2Bxn2aNaDHyJUqukbnr7lPWcTQ89hi+JFK2JAwBj+Ms+9AtsUi+VWSe4P/bKyPu83ItYSspzuOsChBI49s+RQ/GzvSMbEludPiT+0nelgEh9XRjqORB9LgzSl1P//e6/axHEK3BQcGbA+gjpVJ/KAgzHmzVsOTxMJIaNsezCIh6DUUZY7p4KYEMcYg4+OQDxTnYIYWCUik8Lqq8HBHhm2V/kVOloeXVpxGVixDuj5+09+fjL9ULCj994yhjQamCBZ4g7/+dNwOckanXzayyQ/EQmA2Q6f1Z4=
+iQEcBAABAgAGBQJoEVjUAAoJEHRbTseggy0ZZgkIAKTqEdfNE5pQ0YMkdyQ8u9pcnqpN5FP/1FgYSFLYCyJCRVdBE/afNpl42/mAOlDG6gmCui+Gn82s8d7Hr2d1EfdYxAqNmviJliuFI8tWa6baPiB8NTKjQ+NcfIfDLvgIP1qmkNGRsKuS4cJzGyUc18dYKI/NVGfRsIVXCfOrTzzag84ucijzusJGdPkIwLwW1HXmz1EDLd5Ik35J/gwh0wDuIedMDYS2/jOrJ8mtcMKDxCC3KK8VQ1UOAtCk8nh0tdHPJG876aM4ZhQstSQ2i+fzoNoGoKBFAdTzzIhDZiggPkQAwD+3YdAhOXLZWQ8obNw2eifzJvwtnC5vA68H8jI=
 
 -->
