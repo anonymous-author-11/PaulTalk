@@ -17,9 +17,7 @@ import re
 import logging
 import time
 import shutil
-import mimetypes
-import subprocess # For GPG signing
-import base64   # For handling signature format
+import subprocess
 
 # --- Configuration ---
 
@@ -31,11 +29,9 @@ GPG_KEY, _ = pgpy.PGPKey.from_file(PRIV_KEY_PATH)
 PROXY_PORT = 8081
 PROXY_HOST = "localhost"
 
-# the one remaining hardcoded path that needs to be updated
-with open(Path("c:/users/paulk/onedrive/documents/pl/github_pat_for_proxy.txt"), "r") as f: git_api_tok = f.read()
-GITHUB_API_TOKEN = git_api_tok
+GITHUB_API_TOKEN = os.environ.get("GITHUB_PAT")
 
-CACHE_DIR = Path(tempfile.mkdtemp(prefix="0install_github_proxy_"))
+TEMP_DIR = Path(tempfile.mkdtemp(prefix="0install_github_proxy_"))
 CACHE_EXPIRY_SECONDS = 3600
 FEED_REQUEST_PREFIX = "/0install-github-feed/"
 LOCAL_FEED_PREFIX = "/0install-local-feed/"
@@ -46,16 +42,12 @@ ET.register_namespace("", NS["zero"])
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# --- In-Memory Cache ---
-feed_cache = {} # For generated GitHub feeds: maps repo_key -> (timestamp, file_path)
-
 # --- GitHub Interaction & Translation Logic ---
 def get_github_tags(owner, repo):
     """Fetches version tags (like vX.Y.Z) from a GitHub repo."""
     tags_url = f"https://api.github.com/repos/{owner}/{repo}/tags"
     headers = {"Accept": "application/vnd.github.v3+json"}
-    if GITHUB_API_TOKEN:
-        headers["Authorization"] = f"token {GITHUB_API_TOKEN}"
+    if GITHUB_API_TOKEN: headers["Authorization"] = f"token {GITHUB_API_TOKEN}"
     try:
         response = requests.get(tags_url, headers=headers, timeout=10)
         response.raise_for_status()
@@ -151,12 +143,6 @@ def generate_feed_for_repo(owner, repo) -> Path | None:
     repo_key = f"{owner}/{repo}"
     now = time.time()
 
-    if repo_key in feed_cache:
-        cache_time, cache_path = feed_cache[repo_key]
-        if now - cache_time < CACHE_EXPIRY_SECONDS and cache_path.exists():
-            logging.info(f"Cache hit for {repo_key}: {cache_path}")
-            return cache_path
-
     logging.info(f"Generating feed for {repo_key}...")
     tags = get_github_tags(owner, repo)
     if tags is None: return None
@@ -203,7 +189,7 @@ def generate_feed_for_repo(owner, repo) -> Path | None:
     for impl in implementations: group.append(impl)
 
     feed_filename = f"github_{owner.replace('/', '_')}_{repo.replace('/', '_')}.xml"
-    feed_path = CACHE_DIR / feed_filename
+    feed_path = TEMP_DIR / feed_filename
     try:
         tree = ET.ElementTree(root)
         ET.indent(tree, space="  ", level=0)
@@ -219,7 +205,6 @@ def generate_feed_for_repo(owner, repo) -> Path | None:
         subprocess.run(f"0publish {feed_path} --add-missing")
 
         logging.info(f"Saved generated feed to {feed_path}")
-        feed_cache[repo_key] = (now, feed_path)
         return feed_path
     except Exception as e:
         logging.error(f"Error writing feed file {feed_path}: {e}")
@@ -442,17 +427,11 @@ class GitHubFeedProxyHandler(http.server.SimpleHTTPRequestHandler):
          self.send_error(501, "CONNECT method not implemented.")
 
 def proxy_main():
-    try:
-        subprocess.run(['gpg', '--version'], check=True, capture_output=True)
-        logging.info("GPG command found.")
-    except (FileNotFoundError, subprocess.CalledProcessError) as e:
-        logging.error(f"GPG command not found or failed. Please install GnuPG and ensure it's in PATH. Error: {e}")
-        exit(1)
 
     socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer((PROXY_HOST, PROXY_PORT), GitHubFeedProxyHandler) as httpd:
         logging.info(f"GitHub Feed Proxy running on http://{PROXY_HOST}:{PROXY_PORT}")
-        logging.info(f"Cache directory: {CACHE_DIR}")
+        logging.info(f"Cache directory: {TEMP_DIR}")
         logging.info("Configure 0install to use this proxy:")
         logging.info(f"  export http_proxy=http://{PROXY_HOST}:{PROXY_PORT}")
         logging.info("Then run 0install commands for:")
@@ -469,6 +448,12 @@ def proxy_main():
             pass
         finally:
             logging.info("Shutting down proxy.")
+            try:
+                logging.info(f"Attempting to remove cache directory: {TEMP_DIR}")
+                shutil.rmtree(TEMP_DIR)
+                logging.info("Cache directory removed successfully.")
+            except Exception as e:
+                logging.error(f"Failed to remove cache directory {TEMP_DIR}: {e}")
 
 # --- Main Execution ---
 if __name__ == "__main__":

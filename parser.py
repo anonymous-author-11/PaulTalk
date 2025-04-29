@@ -12,19 +12,19 @@ import time
 from pathlib import Path
 import os
 
-GRAMMAR_PATH = Path(__file__).parent.joinpath("data_files/grammar.lark")
+DIR_PATH = Path(__file__).parent.resolve()
+GRAMMAR_PATH = DIR_PATH.joinpath("data_files/grammar.lark")
 with open(GRAMMAR_PATH, "r") as f: grammar = f.read()
 parser = parser = Lark(grammar, parser='lalr', propagate_positions=True, _plugins=lark_cython.plugins)
-source_directories = {Path(".")}
+source_directories = { DIR_PATH }
 parsed = {}
 
 def find_path(short_path, from_path) -> Path:
-    extended_sources = source_directories.union({from_path.parent})
+    extended_sources = source_directories.union({from_path.parent.resolve()})
     for dir in extended_sources:
         putative_path = dir.joinpath(short_path)
         if not putative_path.exists(): continue
-        putative_path.resolve()
-        return putative_path
+        return putative_path.resolve()
     return None
 
 def parse(file_path) -> AST:

@@ -1,0 +1,139 @@
+
+import core;
+import io;
+
+extern def fopen(name : Buffer[i8], mode : Buffer[i8]) -> Buffer[i32]
+extern def fprintf(file : Buffer[i32], text : Buffer[i8]) -> i32
+extern def fclose(file : Buffer[i32]) -> i32
+extern def fgetc(file : Buffer[i32]) -> i32
+extern def fgets(out : Buffer[i8], size : i32, file : Buffer[i32]) -> i64
+extern def ferror(file : Buffer[i32]) -> i32
+extern def fseek(file : Buffer[i32], offset : i64, whence : i32) -> i32
+extern def ftell(file : Buffer[i32]) -> i64
+extern def fread(out : Buffer[i8], size : i64, nmemb : i64, file : Buffer[i32]) -> i64
+extern def fwrite(ptr : Buffer[i8], size : i64, nmemb : i64, file : Buffer[i32]) -> i64
+extern def perror(null : i64)
+
+class FileSystemError extends Exception {}
+
+class File {
+	@name : String
+	@mode : String
+	@handle : Buffer[i32]
+	@open : Bool
+
+	def init(@name : String, @mode : String) {
+		@open = false;
+		@handle = fopen(@name.c_string(), @mode.c_string());
+		if @handle is Nil { yield(FileSystemError.new()); }
+		@open = true;
+	}
+	def mode=(@mode : String) {
+		if not @open { return; }
+		self.reopen();
+	}
+	def reopen() {
+		self.close();
+		@handle = fopen(@name.c_string(), @mode.c_string());
+		if @handle is Nil { yield(FileSystemError.new()); }
+		@open = true;
+	}
+	def close() {
+		if not @open { return; }
+		int = fclose(@handle);
+		@open = false;
+		if int == -1 { yield(FileSystemError.new()); }
+	}
+	def size() -> i64 {
+		if not @open { yield(FileSystemError.new()); }
+		seek_end = 2;
+		seek_set = 0;
+		current_pos = ftell(@handle);
+		fseek(@handle, 0 as i64, seek_end);
+		size = ftell(@handle);
+		fseek(@handle, current_pos, seek_set);
+		return size;
+	}
+	def read() -> String {
+		if not @open { yield(FileSystemError.new()); }
+		seek_set = 0;
+		int = fseek(@handle, 0 as i64, seek_set);
+		size = self.size();
+		capacity = size as i32 + 1;
+		buf = Buffer[i8].new(capacity);
+		elem_size = 1 as i64;
+		int = fread(buf, elem_size, size, @handle);
+		if int < size { yield(FileSystemError.new()); }
+		return String.new(buf, size as i32, capacity);
+	}
+	def read_byte() -> i8 | Nil {
+		if not @open { yield(FileSystemError.new()); }
+		int = fgetc(@handle);
+    	if int == -1 {
+    		if ferror(@handle) != 0 { yield(FileSystemError.new()); }
+    		return nil;
+    	}
+    	return int as i8;
+	}
+	def write(text : String) -> i64 {
+		if not @open { yield(FileSystemError.new()); }
+		text_len = text.length() as i64;
+		elem_size = 1 as i64;
+		int = fwrite(text.c_string(), elem_size, text_len, @handle);
+		if int < text_len { yield(FileSystemError.new()); }
+		return int;
+	}
+}
+
+class FileProcessor[T] {
+	abstract def process(file : File) -> T {
+	}
+}
+
+class FileReader extends FileProcessor[String] {
+	def init() {}
+	def process(file : File) -> String {
+		return file.read();
+	}
+}
+
+class FileWriter extends FileProcessor[i64] {
+	@text : String
+	def init(@text : String) {}
+	def process(file : File) -> i64 {
+		return file.write(@text);
+	}
+}
+
+class FileSystem {
+
+	def Self.process_file[T](file_name : String, mode: String, processor: FileProcessor[T]) -> T {
+		file = File.new(file_name, mode);
+		fn = (p : FileProcessor[T], f : File) => { p.process(f); };
+		coro = Coroutine.new(fn, processor, file);
+		possible_exception = coro.call();
+		file.close();
+		if possible_exception is Exception { yield(possible_exception); }
+		result = coro.result();
+		if result is T { return result; }
+	}
+
+	def Self.process_file[T](file_name : String, mode: String, processor: (File) -> T) -> T {
+		file = File.new(file_name, mode);
+		coro = Coroutine.new(processor, file);
+		possible_exception = coro.call();
+		file.close();
+		if possible_exception is Exception { yield(possible_exception); }
+		result = coro.result();
+		if result is T { return result; }
+	}
+
+	def Self.read_file(file_name : String) -> String {
+		return FileSystem.process_file(file_name, "rb", FileReader.new());
+	}
+
+	def Self.write_file(file_name : String, text : String) {
+		FileSystem.process_file(file_name, "wb", FileWriter.new(text));
+	}
+
+}

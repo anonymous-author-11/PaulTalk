@@ -10,7 +10,7 @@ import threading
 import xml.etree.ElementTree as ET
 from zeroinstall_proxy import proxy_main
 
-DIST_PATH = Path(__file__).parent
+DIST_PATH = Path(__file__).parent.resolve()
 XML_TEMPLATE_PATH = DIST_PATH.joinpath("data_files/template.xml")
 
 # 1. search upward and find manifest
@@ -39,6 +39,13 @@ def build_main(argv):
 	root_folder = manifest_path.parent
 	exe_stem, main_file_path = get_configuration(manifest_data, manifest_path)
 	xml_deps = xml_dependencies(manifest_data)
+
+	github_pat = os.environ.get("GITHUB_PAT")
+	if not github_pat:
+		print("No Github Personal Access Token (PAT) found.")
+		print("You can increase your Github API rate limit by setting the environment variable GITHUB_PAT to your own access token.")
+	else:
+		print("Using Github access token found in GITHUB_PAT")
 
 	# generate a 0install .xml feed from the manifest information
 	print("Generating xml feed")

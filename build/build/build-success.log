@@ -9,7 +9,7 @@ Build system: Windows, x86_64, 10, 10.0.26100, AMD64, Intel64 Family 6 Model 140
 [compile]
 download-base-url = 
 version-modifier = 
-interface = C:\Users\PaulK\OneDrive\Documents\PL\PyPL\build.xml
+interface = c:\Users\PaulK\OneDrive\Documents\PL\PyPL\build.xml
 selections = 
 metadir = 0install
 distdir = 
@@ -17,7 +17,7 @@ distdir =
 
 Executing: ['C:/Users/PaulK/OneDrive/Documents/PL/PyPL/ptalk.dist/ptalk.exe', 'compile', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\hash_benchmark.mini', '-o', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build-any-any/program.exe', '--build-dir', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build']
 Compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\hash_benchmark.mini
-Time to import: 0.8119919300079346 seconds
+Time to import: 0.7427940368652344 seconds
 Recompiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\builtins.mini
 Compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\builtins.mini
 Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\builtins.mini
@@ -66,17 +66,17 @@ Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\std.mini
 Recompiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\cuckoo.mini
 Compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\cuckoo.mini
 Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\cuckoo.mini
-Time to parse: 1.4158649444580078 seconds
-Time to type check + codegen: 3.09427809715271 seconds
-Time to verify / recompile dependencies: 23.37052893638611 seconds
-Time to do python lowering: 2.104564666748047 seconds
-Time to do PDL lowering: 0.23041033744812012 seconds
-Time to do mlir-opt: 0.18327689170837402 seconds
-Time to lower to llvm ir: 0.24826622009277344 seconds
-Time to llvm-link: 0.19449949264526367 seconds
-Time to opt: 7.882781028747559 seconds
-Time to llc: 0.896909236907959 seconds
-Time to lld-link: 0.04650688171386719 seconds
-Total time to compile: 40.479878664016724 seconds
+Time to parse: 1.5098330974578857 seconds
+Time to type check + codegen: 2.7999205589294434 seconds
+Time to verify / recompile dependencies: 22.15751338005066 seconds
+Time to do python lowering: 2.2483277320861816 seconds
+Time to do PDL lowering: 0.21784114837646484 seconds
+Time to do mlir-opt: 0.17241358757019043 seconds
+Time to lower to llvm ir: 0.23120403289794922 seconds
+Time to llvm-link: 0.18673992156982422 seconds
+Time to opt: 7.965679407119751 seconds
+Time to llc: 0.8972010612487793 seconds
+Time to lld-link: 0.09000086784362793 seconds
+Total time to compile: 39.21946883201599 seconds
 Finished compiling C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\hash_benchmark.mini
 Build successful

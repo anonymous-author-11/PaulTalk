@@ -1,0 +1,51 @@
+import std;
+
+extern def clock() -> i64
+
+class Function {
+    def evaluate(x : i32) -> i32 {
+        return x * x; 
+    }
+}
+
+def trapezoidal_rule(func : Function, a : i32, b : i32, n : i32) -> i32 {
+    h = ((b - a) * 1000) / n;  
+    sum = (func.evaluate(a) + func.evaluate(b)) * 500;  
+    
+    i = 1;
+    while i < n {
+        x = a + (i * (b - a)) / n;
+        sum = sum + func.evaluate(x) * 1000;
+        i = i + 1;
+    }
+    
+    return (sum * h) / (1000 * 1000); 
+}
+
+def benchmark_integration() {
+    func = Function.new();
+    a = 0;
+    b = 10;
+    n = 1000000;
+    
+    start_time = clock();
+    result = trapezoidal_rule(func, a, b, n);
+    end_time = clock();
+    
+    integration_time = end_time - start_time;
+    
+    print("Numeric Integration");
+    print("Function: x^2");
+    print("Interval:");
+    IO.print(a);
+    print("to");
+    IO.print(b);
+    print("Number of subdivisions:");
+    IO.print(n);
+    print("Result:");
+    IO.print(result);
+    print("Time taken:");
+    IO.print(integration_time);
+}
+
+benchmark_integration();

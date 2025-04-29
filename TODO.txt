@@ -409,16 +409,24 @@ TODO:
 - What do I need for release 0.1.0?
 	- Works on any Windows x86_64 machine (other people's computers)
 	- You can download ptalk.exe and run it out-of-the-box
-	- Available commands should be 'ptalk compile [args]' and 'ptalk build'
-	- Avoid Windows marking it as malware
-		- Use --standalone instead of --onefile
-	- You can import PaulTalk libraries on Github using the manifest.yaml
-	- Make sure the ptalk-build proxy does caching in a sane way
-	- Should the user 0install the compiler?
-		- If so, we need an xml feed with implementations for versions
+	- Available commands should be 'ptalk compile [args]' and 'ptalk build' [check!]
+	- Avoid Windows marking it as malware [check!]
+		- Use --standalone instead of --onefile [check!]
+	- Make sure the ptalk-build proxy deletes temporary directories [check!]
 	- The GPG key signing needs to be more portable [check!]
 		- Using pgpy [check!]
-	- The Github API token needs to be portable as well
+	- The Github API token needs to be portable as well [check!]
+		- Just use an environment variable [check!]
+		- Add a message saying how to use [check!]
+	- You can import PaulTalk libraries from Github using the manifest.yaml
+	- Should the user 0install the compiler?
+		- If so, we need an xml feed with implementations for versions
+	- Does just adding dependencies to the path work?
+		- Add the dependency folder to an env variable named for the package
+		- Then add the name of that env variable to the path
+		- We can report import name conflicts. But can we instead resolve them?
+	- Bundle the stdlib in data_files
+		- So that invocations of 'ptalk compile' can use it
 
 - What do I really need for 1.0.0?
 	- A way to distribute and adopt code (packages) [check!]
@@ -444,6 +452,7 @@ TODO:
 		- Have specialized utils.ll files for different platforms [check!]
 		- And the main utils.ll calls OS-agnostic wrappers [check!]
 		- Trampoline object file also needs to have multiple versions
+			- Or just generate it during compilation
 		- Make sure the compiler filesystem handling is portable
 		- Link the C stdlib
 		- What is the object file / executable extension?
@@ -451,6 +460,7 @@ TODO:
 	- You have to get ahead of breaking changes, esp. ABI
 		- Function / coroutine base_typ
 		- Behavior ABI wrt overloads
+			- Need to create an artificial override of methods in behavior with mismatched interface
 		- Already planned ahead for delegate passing
 		- Are strings Unicode or bytes?
 	- A less meager stdlib

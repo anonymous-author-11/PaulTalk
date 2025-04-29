@@ -1,0 +1,155 @@
+import std;
+
+extern def clock() -> i64
+
+class Math {
+
+    def Self.abs(x : i32) -> i32 {
+        return Intrinsic.abs_i32(x, false);
+    }
+    def Self.min(a : i32, b : i32) -> i32 {
+        return Intrinsic.smin_i32(a, b);
+    }
+}
+
+def swap(arr : IntArray, i : i32, j : i32) {
+    temp = arr.[i];
+    arr.[i] = arr.[j];
+    arr.[j] = temp;
+}
+
+def insertion_sort(arr : IntArray, left : i32, right : i32) {
+    i = left + 1;
+    while i <= right {
+        key = arr.[i];
+        j = i - 1;
+        while j >= left and arr.[j] > key {
+            arr.[j + 1] = arr.[j];
+            j = j - 1;
+        }
+        arr.[j + 1] = key;
+        i = i + 1;
+    }
+}
+
+def median_of_three(arr : IntArray, left : i32, mid : i32, right : i32) -> i32 {
+    if arr.[left] <= arr.[mid] {
+        if arr.[mid] <= arr.[right] { return mid; }
+        if arr.[left] <= arr.[right] { return right; }
+        return left;
+    } 
+    if arr.[left] <= arr.[right] { return left; }
+    if arr.[mid] <= arr.[right] { return right; }
+    return left;
+}
+
+def quicksort_optimized(arr : IntArray, left : i32, right : i32) {
+    while right - left > 10 {
+        pivot_index = median_of_three(arr, left, (left + right) / 2, right);
+        swap(arr, pivot_index, right);
+        pivot = arr.[right];
+        i = left - 1;
+        j = left;
+        while j < right {
+            if arr.[j] <= pivot {
+                i = i + 1;
+                swap(arr, i, j);
+            }
+            j = j + 1;
+        }
+        swap(arr, i + 1, right);
+        partition = i + 1;
+        
+        if partition - left < right - partition {
+            quicksort_optimized(arr, left, partition - 1);
+            left = partition + 1;
+        } else {
+            quicksort_optimized(arr, partition + 1, right);
+            right = partition - 1;
+        }
+    }
+    insertion_sort(arr, left, right);
+}
+
+def merge_optimized(arr : IntArray, left : i32, mid : i32, right : i32, temp : Buffer[i32]) {
+    i = left;
+    j = mid + 1;
+    k = left;
+    
+    while i <= mid and j <= right {
+        if arr.[i] <= arr.[j] {
+            temp.[k] = arr.[i];
+            i = i + 1;
+        } else {
+            temp.[k] = arr.[j];
+            j = j + 1;
+        }
+        k = k + 1;
+    }
+    
+    while i <= mid {
+        temp.[k] = arr.[i];
+        i = i + 1;
+        k = k + 1;
+    }
+    
+    i = left;
+    while i < k {
+        arr.[i] = temp.[i];
+        i = i + 1;
+    }
+}
+
+def mergesort_optimized(arr : IntArray) {
+    n = arr.length();
+    temp = Buffer[i32].new(n);
+    
+    width = 1;
+    while width < n {
+        i = 0;
+        while i < n {
+            left = i;
+            mid = Math.min(i + width - 1, n - 1);
+            right = Math.min(i + 2 * width - 1, n - 1);
+            if mid - left <= 10 {
+                insertion_sort(arr, left, right);
+            } else {
+                merge_optimized(arr, left, mid, right, temp);
+            }
+            i = i + 2 * width;
+        }
+        width = width * 2;
+    }
+}
+
+def benchmark_sorting() {
+    size = 1000000;
+    arr1 = IntArray.new();
+    arr2 = IntArray.new();
+    
+    for i in 0:size {
+        value = Math.abs(i * 1103515245 + 12345) % 1000000;
+        arr1.append(value);
+        arr2.append(value);
+    }
+    
+    start_time = clock();
+    quicksort_optimized(arr1, 0, size - 1);
+    end_time = clock();
+    quicksort_time = end_time - start_time;
+    
+    start_time = clock();
+    mergesort_optimized(arr2);
+    end_time = clock();
+    mergesort_time = end_time - start_time;
+    
+    print("Sorting");
+    IO.print(size);
+    print("integers");
+    print("Optimized Quicksort time:");
+    IO.print(quicksort_time);
+    print("Optimized Mergesort time:");
+    IO.print(mergesort_time);
+}
+
+benchmark_sorting();

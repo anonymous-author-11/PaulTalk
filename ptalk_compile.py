@@ -20,11 +20,8 @@ import platform
 import networkx as nx
 import hashlib
 
-# to compile to standalone (executable with necssary files bundled alongside):
-# py -m nuitka Compiler.py --standalone --msvc=latest --include-data-dir=data_files=data_files --include-raw-dir=executables=executables --nofollow-import-to=sympy --nofollow-import-to=pandas --nofollow-import-to=numpy --nofollow-import-to=sqlalchemy --nofollow-import-to=scipy --nofollow-import-to=multiprocessing --nofollow-import-to=PIL --nofollow-import-to=pygments
-
-# When compiled with Nuitka, DIST_FOLDER will point to the Compiler.dist folder
-DIST_FOLDER = Path(__file__).parent
+# When compiled with Nuitka, DIST_FOLDER will point to the ptalk.dist folder
+DIST_FOLDER = Path(__file__).parent.resolve()
 
 DEBUGIR_PATH = DIST_FOLDER.joinpath("executables/debugir.exe")
 STANDALONE_OPT_PATH = DIST_FOLDER.joinpath("executables/standalone-opt.exe")
@@ -50,7 +47,7 @@ def compiler_driver_main(argv):
     if not input_path.exists(): raise Exception(f"Input path {input_path} does not exist.")
     if not input_path.is_file(): raise Exception(f"Input path {input_path} should point to a .mini file.")
     if input_path.suffix != ".mini": raise Exception(f"Input path {input_path} should point to a .mini file.")
-    input_path.resolve()
+    input_path = input_path.resolve()
     debug_mode = "--debug" in argv
     show_dependencies = "--dependencies" in argv
     print_timings = "--no-timings" not in argv
@@ -74,7 +71,7 @@ def compiler_driver_main(argv):
         if len(argv) < i + 2: raise Exception("Please provide a build directory.")
         build_dir = Path(argv[i + 1])
         os.makedirs(build_dir, exist_ok=True)
-    build_dir.resolve()
+    build_dir = build_dir.resolve()
 
     add_source_directories(input_path)
 
@@ -205,24 +202,26 @@ def recompile_set(input_path, dependency_list, dependency_graph, build_dir) -> s
 
 def add_source_directories(input_path):
 
+    # Immediate parent directory of the file being compiled
     source_directories.add(input_path.parent)
+
+    # Dependencies put into PTALK_PATH by the build system
     ptalk_path = os.environ.get("PTALK_PATH")
     if ptalk_path:
-        for dir in ptalk_path.split(os.pathsep):
-            path = Path(dir)
-            if not path.exists(): raise Exception(f"Directory in PTALK_PATH {path} does not exist")
-            path.resolve()
-            source_directories.add(path)
+        for package_name in ptalk_path.split(os.pathsep):
+            env_var = os.environ.get(package_name)
+            if not env_var: raise Exception(f"Package listed in PTALK_PATH {package_name} is not bound to a directory")
+            package_path = Path(env_var)
+            if not package_path.exists(): raise Exception(f"Package {package_name} listed in PTALK_PATH does not point to a valid directory")
+            source_directories.add(package_path.resolve())
 
-    lib_folder_1 = Path("./lib")
-    if lib_folder_1.exists():
-        lib_folder_1.resolve()
-        source_directories.add(lib_folder_1)
+    # lib folder in the current working directory
+    lib_folder_1 = Path(os.getcwd()).joinpath("lib")
+    if lib_folder_1.exists(): source_directories.add(lib_folder_1.resolve())
 
+    # lib folder adjacent to the file being compiled
     lib_folder_2 = input_path.parent.joinpath("lib")
-    if lib_folder_2.exists():
-        lib_folder_2.resolve()
-        source_directories.add(lib_folder_2)
+    if lib_folder_2.exists(): source_directories.add(lib_folder_2.resolve())
 
 def print_dependency_graph(included_files, root_path):
     print("Dependency graph:")
