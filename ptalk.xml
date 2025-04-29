@@ -3,13 +3,13 @@
 <interface xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://zero-install.sourceforge.net/2004/injector/interface https://docs.0install.net/specifications/feed.xsd http://0install.de/schema/desktop-integration/capabilities https://docs.0install.net/specifications/capabilities.xsd" uri="https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/ptalk.xml" xmlns="http://zero-install.sourceforge.net/2004/injector/interface">
   <name>PaulTalk</name>
   <summary xml:lang="en">The compiler and build tool for the PaulTalk programming language</summary>
-  <implementation arch="Windows-x86_64" version="0.1.0" id="sha256new_4OYMIQUY7QOBJGX36TEJS35ZEQT24QPEMSNZGTFESWMRW6CSXBKQ">
+  <implementation arch="Windows-x86_64" version="0.1.0" id="sha256new_TA2EUGFDB5BRMF4GKPOI3EBG6GIRYDRJGHSINFJTY25WRXYPJDCA">
     <command name="run" path="ptalk.dist/ptalk.exe" />
-    <manifest-digest sha256new="4OYMIQUY7QOBJGX36TEJS35ZEQT24QPEMSNZGTFESWMRW6CSXBKQ" />
+    <manifest-digest sha256new="TA2EUGFDB5BRMF4GKPOI3EBG6GIRYDRJGHSINFJTY25WRXYPJDCA" />
     <archive href="https://github.com/anonymous-author-11/paultalk/archive/refs/tags/v0.1.0.tar.gz" size="384184667" type="application/x-compressed-tar" extract="PaulTalk-0.1.0" />
   </implementation>
 </interface>
 <!-- Base64 Signature
-iQEcBAABAgAGBQJoEVjUAAoJEHRbTseggy0ZZgkIAKTqEdfNE5pQ0YMkdyQ8u9pcnqpN5FP/1FgYSFLYCyJCRVdBE/afNpl42/mAOlDG6gmCui+Gn82s8d7Hr2d1EfdYxAqNmviJliuFI8tWa6baPiB8NTKjQ+NcfIfDLvgIP1qmkNGRsKuS4cJzGyUc18dYKI/NVGfRsIVXCfOrTzzag84ucijzusJGdPkIwLwW1HXmz1EDLd5Ik35J/gwh0wDuIedMDYS2/jOrJ8mtcMKDxCC3KK8VQ1UOAtCk8nh0tdHPJG876aM4ZhQstSQ2i+fzoNoGoKBFAdTzzIhDZiggPkQAwD+3YdAhOXLZWQ8obNw2eifzJvwtnC5vA68H8jI=
+iQEcBAABAgAGBQJoEWBgAAoJEHRbTseggy0ZwKsH/R0E30f7izE9CK6EctwT9cgy5Hnp95Q7DMmGa9ckGHb28Ex1CkJZedbyfkJ8ryrJdUMS7vS1jzQ1a5b+n7P34eoWlgjHkLKMwaxOGiKrPNCMW6DbeZUvQ+qPuZZzF+Azl1gN5B6jzdi9ybIS+HShTKi56IU75rz7jbHxCLF4O6ufBCOJ761fN2y3mMrwUcKVIdIF0/3wvrOzzq1ApWPwqEP+0ihg1HFlOlL6RuaVUdFFfXRs1UnscSrHoma/mtxBuR/QxZlVuAp16oVhUv+bDuz+e0aLwWBGnWiMvkvD9L6PpNyQ4dxuiMljHC2h98PwAf75grrqBSsxZPaVN3ZhzK0=
 
 -->
