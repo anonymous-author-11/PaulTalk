@@ -1,12 +1,15 @@
-<?xml version="1.0" ?>
-<interface
-  xmlns="http://zero-install.sourceforge.net/2004/injector/interface"
-  uri="https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/ptalk.xml">
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="feed.xsl"?>
+<interface xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://zero-install.sourceforge.net/2004/injector/interface https://docs.0install.net/specifications/feed.xsd http://0install.de/schema/desktop-integration/capabilities https://docs.0install.net/specifications/capabilities.xsd" uri="https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/ptalk.xml" xmlns="http://zero-install.sourceforge.net/2004/injector/interface">
   <name>PaulTalk</name>
-  <summary>The compiler and build tool for the PaulTalk programming language</summary>
-
-  <implementation arch="Windows-x86_64" version="0.1.0">
-    <command name='run' path='ptalk.dist/ptalk.exe' />
-    <archive extract="paultalk-0.1.0" href="https://github.com/anonymous-author-11/paultalk/archive/refs/tags/v0.1.0.tar.gz" />
+  <summary xml:lang="en">The compiler and build tool for the PaulTalk programming language</summary>
+  <implementation arch="Windows-x86_64" version="0.1.0" id="sha256new_4OYMIQUY7QOBJGX36TEJS35ZEQT24QPEMSNZGTFESWMRW6CSXBKQ">
+    <command name="run" path="ptalk.dist/ptalk.exe" />
+    <manifest-digest sha256new="4OYMIQUY7QOBJGX36TEJS35ZEQT24QPEMSNZGTFESWMRW6CSXBKQ" />
+    <archive href="https://github.com/anonymous-author-11/paultalk/archive/refs/tags/v0.1.0.tar.gz" size="384184667" type="application/x-compressed-tar" extract="paultalk-0.1.0" />
   </implementation>
 </interface>
+<!-- Base64 Signature
+iQEcBAABAgAGBQJoEVB/AAoJEHRbTseggy0ZB/QH/AqxqPm9UOoRj/IuMc7ZXwgeTZEhCInZ56UK9ELPvQSzoWRl5JtCjJg2Bxn2aNaDHyJUqukbnr7lPWcTQ89hi+JFK2JAwBj+Ms+9AtsUi+VWSe4P/bKyPu83ItYSspzuOsChBI49s+RQ/GzvSMbEludPiT+0nelgEh9XRjqORB9LgzSl1P//e6/axHEK3BQcGbA+gjpVJ/KAgzHmzVsOTxMJIaNsezCIh6DUUZY7p4KYEMcYg4+OQDxTnYIYWCUik8Lqq8HBHhm2V/kVOloeXVpxGVixDuj5+09+fjL9ULCj994yhjQamCBZ4g7/+dNwOckanXzayyQ/EQmA2Q6f1Z4=
+
+-->
