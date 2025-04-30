@@ -30,8 +30,8 @@ PaulTalk aims to combine high-level ergonomics with high performance and memory 
 
 ## Show Me The Code
 
-*   `intro.mini`: Provides a basic introduction to the language syntax and features. Note that it might be slightly outdated compared to the latest language features.
-*   `iteration.mini`: Demonstrates more advanced features, particularly generics, region syntax, and the iterator protocols, reflecting the current state of the language more accurately but is not tutorial-oriented.
+*   `[intro.mini](https://github.com/anonymous-author-11/PaulTalk/blob/main/intro.mini)`: Provides a basic introduction to the language syntax and features. Note that it might be slightly outdated compared to the latest language features.
+*   `[lib/iteration.mini](https://github.com/anonymous-author-11/PaulTalk/blob/main/lib/iteration.mini)`: Demonstrates more advanced features, particularly generics, region syntax, and the iterator protocols, reflecting the current state of the language more accurately but is not tutorial-oriented.
 
 ## Features Overview
 
