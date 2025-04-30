@@ -62,33 +62,35 @@ Note: as of the latest version (v0.1.0), PaulTalk is only built for Windows x86_
 *	If `--build-dir` is not specified, it will default to the current directory
 *	If you want hello.exe to be created in its own folder, use `-o folder_name/hello.exe` or any variation thereof
 *	Run the executable by entering `hello.exe` (or `"folder_name/hello.exe"`) in your command prompt
-*	Incremental recompilation: When recompiling a file, the compiler will used cahced results in the build-dir and only recompile what it needs to
+*	Incremental Recompilation: When recompiling a file, the compiler will used cached results in the build directory and only recompile what it needs to
 
 ## Build Tool
 
-*	With the command `ptalk build` you can build an entire project, making use of information specified in your manifest.yaml file
-*	`ptalk build` expects to find a manifest.yaml file at the root of your project which specifies build options
+*	With the command `ptalk build` you can build an entire project, making use of information specified in your `manifest.yaml` file
+*	`ptalk build` expects to find a `manifest.yaml` file at the root of your project which specifies build options
+*	Take a look at the `manifest.yaml` in this repo for an example of a manifest file
 *	Dependencies and versions can also be specified in the manifest, which will automatically be installed, cached, and used when building
 
 ## Compilation Pipeline
 
-The compiler driver can be found in `compiler.py`.
+The compiler driver can be found in `ptalk_compile.py`.
 
 1.  **Parsing:** `.mini` source files are parsed into an Abstract Syntax Tree (AST) using `lark`.
-2.  **Type Checking & Analysis:** The AST is type-checked, and points-to analysis is performed (`ast.py`, `scope.py`, `constraint_graph.py`).
+2.  **Type Checking & Analysis:** The AST is type-checked, and points-to analysis is performed (`AST.py`, `scope.py`, `constraint_graph.py`).
 3.  **MLIR Generation:** The AST is lowered to a custom MLIR dialect (`core_dialect.py`).
 4.  **Lowering (Python):** Initial lowering passes are applied (`lower.py`).
 5.  **Lowering (PDL & C++):** Further lowering occurs using PDL (Pattern Description Language) patterns (`patterns.mlir`) and custom C++ rewrite rules (`standalone/lib/Standalone/custom_rewrites.cpp`).
 6.  **MLIR Optimization:** Standard MLIR passes (`mlir-opt`) like canonicalization, CSE, LICM, etc., are applied.
 7.  **LLVM IR Generation:** The MLIR code is translated to LLVM IR (`mlir-translate`).
 8.  **LLVM Optimization:** LLVM optimization passes (`opt`) are run, including aggressive inlining and devirtualization.
+9.	**LLVM IR Linking:** The IR file and all its dependencies are linked, along with runtime utilities (`utils.ll`) into one module using `llvm-link`.
 9.  **Code Generation:** LLVM IR is compiled to object code (`llc`).
-10. **Linking:** The object code is linked with runtime helpers (`utils.ll`, `trampoline.obj`) into a final executable using `lld-link`.
+10. **Linking:** The object code is linked with the C runtime (`msvcrt.lib`) into a final executable using `lld-link`.
 
 ## Prerequisites
 
 *	**0install:** A cross-platform package manager that can be downloaded [here](https://get.0install.net/#windows)
-*   **OS:** Windows x64 (as of version v0.1.0)
+*   **OS:** Windows x86_64 (as of version v0.1.0)
 
 ## Standard Library (Minimal)
 
