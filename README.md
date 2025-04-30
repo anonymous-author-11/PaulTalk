@@ -49,7 +49,7 @@ PaulTalk aims to combine high-level ergonomics with high performance and memory 
 
 Note: as of the latest version (v0.1.0), PaulTalk is only built for Windows x86_64. This will change in future versions.
 
-*	First, install [0install][https://get.0install.net/#windows], a portable package manager.
+*	First, install [0install](https://get.0install.net/#windows), a portable package manager.
 *	Run the command `0install add ptalk https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/ptalk.xml` in your command prompt
 *	This will download the ptalk executable and add it to your PATH as `ptalk`
 *	Use it in the command line with `ptalk compile [args]` and `ptalk build`
@@ -58,8 +58,8 @@ Note: as of the latest version (v0.1.0), PaulTalk is only built for Windows x86_
 
 *	Write a PaulTalk program, and save it with the extension .mini, such as hello_world.mini
 *	From the directory where the program is located, run `ptalk compile hello_world.mini -o hello.exe --build-dir [build directory]` in your command prompt
-*	This will compile hello_world.mini and all its dependencies into a hello.exe executable, storing intermediate files in --build-dir (if specified)
-*	If --build-dir is not specified, it will default to the current directory
+*	This will compile `hello_world.mini` and all its dependencies into a `hello.exe` executable, storing intermediate files in `--build-dir` (if specified)
+*	If `--build-dir` is not specified, it will default to the current directory
 *	If you want hello.exe to be created in its own folder, use `-o folder_name/hello.exe` or any variation thereof
 *	Run the executable by entering `hello.exe` (or `"folder_name/hello.exe"`) in your command prompt
 *	Incremental recompilation: When recompiling a file, the compiler will used cahced results in the build-dir and only recompile what it needs to
@@ -87,7 +87,7 @@ The compiler driver can be found in `compiler.py`.
 
 ## Prerequisites
 
-*	**0install:** A cross-platform package manager that can be downloaded [here][https://get.0install.net/#windows]
+*	**0install:** A cross-platform package manager that can be downloaded [here](https://get.0install.net/#windows)
 *   **OS:** Windows x64 (as of version v0.1.0)
 
 ## Standard Library (Minimal)
