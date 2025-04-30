@@ -53,6 +53,7 @@ Note: as of the latest version (v0.1.0), PaulTalk is only built for Windows x86_
 *	Run the command `0install add ptalk https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/ptalk.xml` in your command prompt
 *	This will download the ptalk executable and add it to your PATH as `ptalk`
 *	Use it in the command line with `ptalk compile [args]` and `ptalk build`
+*	To update to the latest version, run `0install update https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/ptalk.xml`
 
 ## Syntax Highlighting
 
