@@ -58,6 +58,7 @@ Note: as of the latest version (v0.1.0), PaulTalk is only built for Windows x86_
 
 *	If you use Sublime Text, you can configure syntax highlighting for PaulTalk using the `ptalk.sublime-syntax` file found in this repo.
 *	Just copy that syntax file into the equivalent of `C:\Users\YourUserName\AppData\Roaming\Sublime Text 3\Packages\User`
+*	You should then be able to enjoy luxurious syntax highlighting like the following:
 
 	<img src="syntax_highlighting.png" width="600">
 
