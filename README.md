@@ -56,7 +56,7 @@ Note: as of the latest version (v0.1.0), PaulTalk is only built for Windows x86_
 
 ## Syntax Highlighting
 
-*	If you use Sublime Text, you can configure syntax highlighting for PaulTalk using the `ptalk.sublime-syntax` file found in this repo.
+*	If you use Sublime Text, you can configure syntax highlighting for PaulTalk using the [ptalk.sublime-syntax](https://github.com/anonymous-author-11/PaulTalk/blob/main/ptalk.sublime-syntax) file found in this repo.
 *	Just copy that syntax file into the equivalent of `C:\Users\YourUserName\AppData\Roaming\Sublime Text 3\Packages\User`
 *	You should then be able to enjoy luxurious syntax highlighting like the following:
 
@@ -81,17 +81,17 @@ Note: as of the latest version (v0.1.0), PaulTalk is only built for Windows x86_
 
 ## Compilation Pipeline
 
-The compiler driver can be found in `ptalk_compile.py`.
+The compiler driver can be found in [ptalk_compile.py](https://github.com/anonymous-author-11/PaulTalk/blob/main/ptalk_compile.py).
 
-1.  **Parsing:** `.mini` source files are parsed into an Abstract Syntax Tree (AST) using `lark` along with the grammar defined in `data_files/grammark.lark`.
-2.  **Type Checking & Analysis:** The AST is type-checked, and points-to analysis is performed (`AST.py`, `scope.py`, `constraint_graph.py`).
-3.  **MLIR Generation:** The AST is lowered to a custom MLIR dialect defined in `core_dialect.py`.
+1.  **Parsing:** `.mini` source files are parsed into an Abstract Syntax Tree (AST) using `lark` along with the grammar defined in [grammark.lark](https://github.com/anonymous-author-11/PaulTalk/blob/main/data_files/grammar.lark).
+2.  **Type Checking & Analysis:** The AST is type-checked, and points-to analysis is performed ([AST.py](https://github.com/anonymous-author-11/PaulTalk/blob/main/AST.py), [scope.py](https://github.com/anonymous-author-11/PaulTalk/blob/main/scope.py), [constraint_graph.py](https://github.com/anonymous-author-11/PaulTalk/blob/main/constraint_graph.py)).
+3.  **MLIR Generation:** The AST is lowered to a custom MLIR dialect defined in [core_dialect.py](https://github.com/anonymous-author-11/PaulTalk/blob/main/core_dialect.py).
 4.	**Dependency Analysis:** The import DAG is verified, and all dependencies are collected and (re)compiled to bitcode, using cached results if unchanged.
-5.  **Lowering (Python):** Initial lowering passes are applied in Python (`lower.py`).
-6.  **Lowering (PDL & C++):** Further lowering occurs using PDL (Pattern Description Language) patterns (`data_files/patterns.mlir`) and custom C++ rewrite rules (`standalone/lib/Standalone/custom_rewrites.cpp`).
+5.  **Lowering (Python):** Initial lowering passes are applied in Python ([lower.py](https://github.com/anonymous-author-11/PaulTalk/blob/main/lower.py)).
+6.  **Lowering (PDL & C++):** Further lowering occurs using PDL (Pattern Description Language) patterns ([patterns.mlir](https://github.com/anonymous-author-11/PaulTalk/blob/main/data_files/patterns.mlir)) and custom C++ rewrite rules ([custom_rewrites.cpp](https://github.com/anonymous-author-11/PaulTalk/blob/main/standalone/lib/Standalone/custom_rewrites.cpp)).
 7.  **MLIR Optimization:** Standard MLIR passes (`mlir-opt`) like canonicalization, CSE, LICM, etc., are applied.
 8.  **LLVM IR Generation:** The MLIR code is translated to LLVM IR (`mlir-translate`).
-9.	**LLVM IR Linking:** The IR file and all its dependencies are linked, along with runtime utilities (`utils.ll`) and OS-specific utilities (`win_utils.ll`, `posix_utils.ll`) into one module using `llvm-link`.
+9.	**LLVM IR Linking:** The IR file and all its dependencies are linked, along with runtime utilities ([utils.ll](https://github.com/anonymous-author-11/PaulTalk/blob/main/data_files/utils.ll)) and OS-specific utilities ([win_utils.ll](https://github.com/anonymous-author-11/PaulTalk/blob/main/data_files/win_utils.ll), [posix_utils.ll](https://github.com/anonymous-author-11/PaulTalk/blob/main/data_files/posix_utils.ll)) into one module using `llvm-link`.
 10.  **LLVM Optimization:** LLVM optimization passes (`opt`) are run on the whole module, including aggressive inlining and devirtualization.
 11.  **Code Generation:** LLVM IR is compiled to object code (`llc`).
 12. **Linking:** The object code is linked against the C runtime (`msvcrt.lib`) into a final executable using `lld-link`.
@@ -103,7 +103,7 @@ The compiler driver can be found in `ptalk_compile.py`.
 
 ## Standard Library (Minimal)
 
-The standard library (located in the `lib` folder) is currently very basic and includes modules like:
+The standard library (located in the [lib](https://github.com/anonymous-author-11/PaulTalk/blob/main/lib) folder) is currently very basic and includes modules like:
 
 *   `iteration.mini`
 *   `core.mini`
