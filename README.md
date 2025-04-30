@@ -54,6 +54,11 @@ Note: as of the latest version (v0.1.0), PaulTalk is only built for Windows x86_
 *	This will download the ptalk executable and add it to your PATH as `ptalk`
 *	Use it in the command line with `ptalk compile [args]` and `ptalk build`
 
+## Syntax Highlighting
+
+*	If you use Sublime Text, you can configure syntax highlighting for PaulTalk using the `ptalk.sublime-syntax` file found in this repo.
+*	Just copy that syntax file into the equivalent of `C:\Users\YourUserName\AppData\Roaming\Sublime Text 3\Packages\User`
+
 ## How to compile
 
 *	Write a PaulTalk program, and save it with the extension .mini, such as hello_world.mini
