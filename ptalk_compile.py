@@ -53,7 +53,7 @@ def compiler_driver_main(argv):
     print_timings = "--no-timings" not in argv
     time_printer = OptionalPrinter(print_timings)
     status_printer = OptionalPrinter(not silent[0])
-    status_printer.print(f"Compiling {input_path}")
+    status_printer.print(f"Compiling {input_path.name}")
 
     time_printer.print(f"Time to import: {after_imports - start_time} seconds")
 
@@ -105,7 +105,6 @@ def compiler_driver_main(argv):
         if not dependency.exists(): raise Exception(f"{input_path}, {dependency}, {dependency_list}")
         if dependency.samefile(input_path): continue
         if not dependency in to_recompile: continue
-        status_printer.print(f"Recompiling {dependency}")
         # compile the dependency into the current build directory
         compiler_driver_main(["", dependency, "--build-dir", build_dir, "--no-timings"])
 
@@ -139,7 +138,7 @@ def compiler_driver_main(argv):
     if not output_path:
         final_time = after_translate
         time_printer.print(f"Total time to compile: {final_time - start_time} seconds")
-        status_printer.print(f"Finished compiling {input_path}")
+        status_printer.print(f"Finished compiling {input_path.name}")
         return
 
     llvm_link(input_path, dependency_list, build_dir)
@@ -159,7 +158,7 @@ def compiler_driver_main(argv):
     if output_path.suffix == ".obj":
         final_time = after_llc
         time_printer.print(f"Total time to compile: {final_time - start_time} seconds")
-        status_printer.print(f"Finished compiling {input_path}")
+        status_printer.print(f"Finished compiling {input_path.name}")
         return
 
     run_lld_link(debug_mode, output_path, build_dir)
@@ -167,7 +166,7 @@ def compiler_driver_main(argv):
     final_time = after_lldlink
     time_printer.print(f"Time to lld-link: {after_lldlink - after_llc} seconds")
     time_printer.print(f"Total time to compile: {final_time - start_time} seconds")
-    status_printer.print(f"Finished compiling {input_path}")
+    status_printer.print(f"Finished compiling {input_path.name}")
 
 @dataclass
 class OptionalPrinter:
