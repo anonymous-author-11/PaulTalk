@@ -18,4 +18,4 @@ requires:
       - type: environment
         name: PYTHONPATH
         insert: lib # /lib is where the script is in the archive
-        mode: prepend # prepend to PYTHON_PATH
+        mode: prepend # prepend to PYTHONPATH

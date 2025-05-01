@@ -408,13 +408,16 @@ DONE:
 - Use the ptalk xml feed within 0compile [check!]
 - Allow .yml or .yaml for the manifest [check!]
 - Put hashes and bitcodes in their own folders within the build dir [check!]
+- We should auto-include core instead of builtins, so that setup_landing_pad works correctly [check!]
 
 TODO:
 
-- We should auto-include core instead of builtins, so that setup_landing_pad works correctly
-- 'ptalk build init [name]' could create a minimal manifest.yaml at the cwd
+- 'ptalk build init [name]' could create a minimal manifest.yaml in the cwd
+- 'ptalk upgrade' is cleaner than using the feed uri
 - ptalk --help / ptalk --version
 	- Should I just manually enter the version into the source code?
+	- I should treat the manifest as the source of truth for the version
+	- Should the manifest be included in the data files then?
 
 - What do I need for release 0.1.0?
 	- Works on any Windows x86_64 machine (other people's computers)
@@ -434,11 +437,12 @@ TODO:
 		- If so, we need an xml feed with implementations for versions [check!]
 	- You can import PaulTalk libraries from Github using the manifest.yaml
 	- Does just adding dependencies to the path work?
+		- The source_dirs collection should be ordered, not a set [check!]
 		- Add the dependency folder to an env variable named for the package
-		- Then add the name of that env variable to the path
+		- Then prepend the name of that env variable to the PTALK_PATH
 		- We can report import name conflicts. But can we instead resolve them?
-		- The source_dirs should be ordered, not a set [check!]
-		- 
+		- Local dependencies should override external ones
+		- Only conflicts between external dependencies should cause errors
 
 - What do I really need for 1.0.0?
 	- A way to distribute and adopt code (packages) [check!]
