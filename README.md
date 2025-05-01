@@ -77,7 +77,7 @@ Note: as of the latest version (v0.1.0), PaulTalk is only built for Windows x86_
 
 *	With the command `ptalk build` you can build an entire project, making use of information specified in your `manifest.yaml` file
 *	`ptalk build` expects to find a `manifest.yaml` file at the root of your project which specifies build options
-*	Take a look at the `manifest.yaml` in this repo for an example of a manifest file
+*	Take a look at the [manifest.yaml](https://github.com/anonymous-author-11/PaulTalk/blob/main/manifest.yaml) in this repo for an example of a manifest file
 *	Dependencies and versions can also be specified in the manifest, which will automatically be installed, cached, and used when building
 
 ## Compilation Pipeline
