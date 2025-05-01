@@ -1,0 +1,72 @@
+Build log for DoCompile-1.0.1
+
+Built using 0compile-1.7
+
+Build system: Windows, x86_64, 10, 10.0.26100, AMD64, Intel64 Family 6 Model 140 Stepping 1, GenuineIntel
+
+0compile.properties:
+
+[compile]
+download-base-url = 
+version-modifier = 
+interface = c:\Users\PaulK\OneDrive\Documents\PL\PyPL\build.xml
+selections = 
+metadir = 0install
+distdir = 
+
+
+Executing: ['C:\\Users\\PaulK\\AppData\\Local\\0install.net\\implementations\\sha256new_QE3OFQGB6X46TKKAMOBGCFXYRYAV4PM75TQL4ZVEXCMRLPBPZ4WQ\\ptalk.dist/ptalk.exe', 'compile', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\hash_benchmark.mini', '-o', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build-windows-x86_64/program.exe', '--build-dir', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build']
+C:\Users\PaulK\AppData\Local\0install.net\implementations\sha256new_QE3OFQGB6X46TKKAMOBGCFXYRYAV4PM75TQL4ZVEXCMRLPBPZ4WQ\ptalk.dist\executables\llvm-ar.exe: error: C:\Users\PaulK\OneDrive\Documents\PL\PyPL\build\build\builtins.bc: no such file or directory
+C:\Users\PaulK\AppData\Local\0install.net\implementations\sha256new_QE3OFQGB6X46TKKAMOBGCFXYRYAV4PM75TQL4ZVEXCMRLPBPZ4WQ\ptalk.dist\executables\llvm-link.exe: No such file or directory: 'C:\Users\PaulK\OneDrive\Documents\PL\PyPL\build\build\hash_benchmark.bc'
+Traceback (most recent call last):
+  File "C:\Users\PaulK\AppData\Local\0install.net\IMPLEM~1\SH0C19~1\PTALK~1.DIS\ptalk.py", line 19, in <module>
+  File "C:\Users\PaulK\AppData\Local\0install.net\IMPLEM~1\SH0C19~1\PTALK~1.DIS\ptalk.py", line 16, in ptalk_main
+  File "C:\Users\PaulK\AppData\Local\0install.net\IMPLEM~1\SH0C19~1\PTALK~1.DIS\ptalk_compile.py", line 144, in compiler_driver_main
+  File "C:\Users\PaulK\AppData\Local\0install.net\IMPLEM~1\SH0C19~1\PTALK~1.DIS\ptalk_compile.py", line 343, in llvm_link
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build\\out_linked.ll'
+Compiling hash_benchmark.mini
+Time to import: 0.7664248943328857 seconds
+Compiling builtins.mini
+Finished compiling builtins.mini
+Compiling iteration.mini
+Finished compiling iteration.mini
+Compiling core.mini
+Finished compiling core.mini
+Compiling io.mini
+Finished compiling io.mini
+Compiling files.mini
+narrowed Buffer[i32] & Nil to nothing
+narrowed Buffer[i32] & Nil to nothing
+narrowed Buffer[i32] & Nil to nothing
+narrowed Buffer[i32] & Nil to nothing
+narrowed Buffer[i32] & Nil to nothing
+would be impossible to enter then branch
+@handle
+!mini.nothing
+narrowed Buffer[i32] & Nil to nothing
+would be impossible to enter then branch
+@handle
+!mini.nothing
+Finished compiling files.mini
+Compiling array.mini
+Finished compiling array.mini
+Compiling channel.mini
+Finished compiling channel.mini
+Compiling range.mini
+Finished compiling range.mini
+Compiling math.mini
+Finished compiling math.mini
+Compiling map.mini
+Finished compiling map.mini
+Compiling std.mini
+Finished compiling std.mini
+Compiling cuckoo.mini
+Finished compiling cuckoo.mini
+Time to parse: 1.571706771850586 seconds
+Time to type check + codegen: 3.4442901611328125 seconds
+Time to verify / recompile dependencies: 22.409127473831177 seconds
+Time to do python lowering: 2.0119733810424805 seconds
+Time to do PDL lowering: 0.2181408405303955 seconds
+Time to do mlir-opt: 0.17207121849060059 seconds
+Time to lower to llvm ir: 0.25921106338500977 seconds
+Build failed with exit code 1

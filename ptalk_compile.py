@@ -328,12 +328,12 @@ def lower_to_llvm(module_str, in_file_path, build_dir):
 # kind of like LTO but no pretense of being at "link-time"
 def llvm_link(input_path, dependency_list, build_dir):
 
-    bc_file_paths = [str(build_dir.joinpath(f"{path.stem}.bc")) for path in dependency_list]
+    bc_file_paths = [str(build_dir.joinpath(f"bitcodes/{path.stem}.bc")) for path in dependency_list]
     lib_file_path = build_dir.joinpath(f"{input_path.stem}.lib")
     make_archive = f"{LLVM_AR_PATH} cr {lib_file_path} {' '.join(bc_file_paths)}"
     subprocess.run(make_archive, shell=True)
 
-    bc_file_path = build_dir.joinpath(f"{input_path.stem}.bc")
+    bc_file_path = build_dir.joinpath(f"bitcodes/{input_path.stem}.bc")
     out_linked_path = build_dir.joinpath("out_linked.ll")
     os_utils_path = WIN_UTILS_PATH if platform.system() == "Windows" else POSIX_UTILS_PATH
     link_utils = f"{LLVM_LINK_PATH} -S {bc_file_path} {UTILS_PATH} {os_utils_path} -o {out_linked_path}"
