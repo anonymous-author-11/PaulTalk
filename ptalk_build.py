@@ -2,9 +2,11 @@ import os
 import subprocess
 from pathlib import Path
 import sys
+import platform
 import yaml
 import shutil
 import stat
+import re
 import logging
 import threading
 import xml.etree.ElementTree as ET
@@ -39,6 +41,7 @@ def build_main(argv):
 	root_folder = manifest_path.parent
 	exe_stem, main_file_path = get_configuration(manifest_data, manifest_path)
 	xml_deps = xml_dependencies(manifest_data)
+	os_name, cpu_name = get_os_and_cpu()
 
 	github_pat = os.environ.get("GITHUB_PAT")
 	if github_pat:
@@ -50,9 +53,18 @@ def build_main(argv):
 	# generate a 0install .xml feed from the manifest information
 	print("Generating xml feed")
 	with open(XML_TEMPLATE_PATH, "r") as f: xml_template = f.read()
-	xml_feed = xml_template.replace("BIN_NAME", exe_stem)
-	xml_feed = xml_feed.replace("MAIN_FILE_PATH", f"{main_file_path.resolve()}")
-	xml_feed = xml_feed.replace("DEPENDENCIES", xml_deps)
+
+	replacements = {
+		"BIN_NAME":exe_stem,
+		"MAIN_FILE_PATH":f"{main_file_path.resolve()}",
+		"DEPENDENCIES":xml_deps,
+		"OS_NAME":os_name,
+		"CPU_NAME":cpu_name
+	}
+
+	pattern = re.compile('|'.join(f'(?:{re.escape(k)})' for k in replacements))
+	xml_feed = pattern.sub(lambda m: replacements[m.group()], xml_template)
+
 	build_dir = root_folder.joinpath("build")
 	with open(root_folder.joinpath("build.xml"), "w") as f: f.write(xml_feed)
 
@@ -71,7 +83,7 @@ def build_main(argv):
 	if process.returncode != 0: raise Exception(process.stderr)
 
 	# clean up unnecessary folder
-	extra_folder_path = build_dir.joinpath(f"build-any-any/0install")
+	extra_folder_path = build_dir.joinpath(f"build-{os_name}-{cpu_name}/0install")
 	os.chmod(extra_folder_path, stat.S_IWRITE)
 	shutil.rmtree(extra_folder_path)
 	print("Build completed successfully")
@@ -82,15 +94,21 @@ def find_manifest():
 	current_dir = Path.cwd()
 	manifest_path = None
 	while True:
-		file_path = current_dir.joinpath("manifest.yaml")
-		if file_path.is_file():
-			manifest_path = file_path
+		yaml_path = current_dir.joinpath("manifest.yaml")
+		yml_path = current_dir.joinpath("manifest.yml")
+		if yaml_path.is_file() and yml_path.is_file():
+			raise Exception(f"Found two different manifest files: {yaml_path.resolve()} and {yml_path.resolve()}")
+		if yaml_path.is_file():
+			manifest_path = yaml_path
+			break
+		if yml_path.is_file():
+			manifest_path = yml_path
 			break
 		parent_dir = current_dir.parent
 		if parent_dir == current_dir: break
 		current_dir = parent_dir
 
-	if not manifest_path: raise Exception("Could not find a manifest.yaml file in the directory tree")
+	if not manifest_path: raise Exception("Could not find a manifest.yaml (or manifest.yml) file in the directory tree")
 	with open(manifest_path, "r") as f: yaml_text = f.read()
 	manifest_data = yaml.safe_load(yaml_text)
 	return manifest_data, manifest_path.resolve()
@@ -145,6 +163,72 @@ def setup_build_dir(build_dir, root_folder):
 	if cmd_out.returncode != 0:
 		os.remove(root_folder.joinpath("build.xml"))
 		raise Exception(cmd_out.stderr)
+
+def get_os_and_cpu():
+
+	os_map = {
+		'Linux': 'Linux',
+		'Windows': 'Windows', # Default for Windows, might be overridden by Cygwin check
+		'Darwin': 'MacOSX',  # platform.system() returns 'Darwin' for macOS
+		'FreeBSD': 'FreeBSD',
+		# Add other direct OS mappings here if needed
+		# Special key for Cygwin case
+		'cygwin': 'Cygwin'
+	}
+
+	cpu_map = {
+		# Exact matches from platform.machine()
+		'x86_64': 'x86_64',
+		'AMD64': 'x86_64',   # Common on Windows
+		'i386': 'i386',
+		'i486': 'i486',
+		'i586': 'i586',
+		'i686': 'i686',
+		'aarch64': 'aarch64',
+		'arm64': 'aarch64',   # Common on macOS ARM
+		'ppc': 'ppc',
+		'ppc64': 'ppc64',
+		'Power Macintosh': 'ppc', # Older macOS might report this
+		'armv6l': 'armv6l',
+		'armv7l': 'armv7l',
+		# Add other direct CPU mappings here if needed
+	}
+
+	# --- Determine OS ---
+	system = platform.system()
+	os_key = system
+
+	# Handle Cygwin specifically
+	if system == 'Windows' and sys.platform == 'cygwin': os_key = 'cygwin'
+	# Handle versions like FreeBSD13
+	elif system.startswith('FreeBSD'): os_key = 'FreeBSD'
+
+	zeroinstall_os = os_map.get(os_key)
+
+	if zeroinstall_os is None: raise NotImplementedError(f"Unsupported OS for 0install mapping: {system}")
+
+	# --- Determine CPU ---
+	machine = platform.machine()
+	zeroinstall_cpu = cpu_map.get(machine)
+
+	# Handle cases not covered by direct mapping (e.g., prefixes, fallbacks)
+	if zeroinstall_cpu is None:
+		if machine.startswith('armv6'): # e.g., armv6l hasn't been caught exactly
+			zeroinstall_cpu = 'armv6l'
+		elif machine.startswith('armv7'): # e.g., armv7l hasn't been caught exactly
+			zeroinstall_cpu = 'armv7l'
+		elif 'x86' in machine or 'i86' in machine: # Generic x86/iX86 reported
+			# Determine if 32 or 64 bit OS/Python - prefer 64 if possible
+			is_64bit_os = platform.architecture()[0] == '64bit'
+			if is_64bit_os:
+				zeroinstall_cpu = 'x86_64'
+			else:
+				zeroinstall_cpu = 'i686' # Default to most common modern 32-bit
+
+	if zeroinstall_cpu is None: raise NotImplementedError(f"Unsupported CPU architecture for 0install mapping: '{machine}'")
+
+	# --- Combine OS and CPU ---
+	return zeroinstall_os, zeroinstall_cpu
 
 if __name__ == "__main__":
 	build_main(sys.argv)

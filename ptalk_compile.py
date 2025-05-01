@@ -181,8 +181,8 @@ def hash_file(filepath) -> bytes:
     return hash_object.hexdigest().encode("utf-8")
 
 def already_perfect(source_path, build_dir) -> bool:
-    bc_file_path = build_dir.joinpath(f"{source_path.stem}.bc")
-    hash_file_path = build_dir.joinpath(f"{source_path.stem}.hash")
+    bc_file_path = build_dir.joinpath(f"bitcodes/{source_path.stem}.bc")
+    hash_file_path = build_dir.joinpath(f"hashes/{source_path.stem}.hash")
     if not (hash_file_path.exists() and bc_file_path.exists()): return False
     src_hash = hash_file(source_path)
     with open(hash_file_path, "rb") as f: stored_hash = f.read()
@@ -306,7 +306,13 @@ def lower_to_llvm(module_str, in_file_path, build_dir):
     ])
     mlir_translate = f"{MLIR_TRANSLATE_PATH} --mlir-to-llvmir"
 
-    bc_file_path = build_dir.joinpath(f"{in_file_path.stem}.bc")
+    bitcodes_folder = build_dir.joinpath("bitcodes")
+    hashes_folder = build_dir.joinpath("hashes")
+    os.makedirs(bitcodes_folder, exist_ok=True)
+    os.makedirs(hashes_folder, exist_ok=True)
+
+    bc_file_path = bitcodes_folder.joinpath(f"{in_file_path.stem}.bc")
+    hash_file_path = hashes_folder.joinpath(f"{in_file_path.stem}.hash")
 
     # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
     # this has shown to improve the optimization potential for unclear reasons
@@ -316,7 +322,7 @@ def lower_to_llvm(module_str, in_file_path, build_dir):
     subprocess.run(cmd, text=True, shell=True, input=module_str)
 
     # store the hash of the source code file in the build directory
-    with open(build_dir.joinpath(f"{in_file_path.stem}.hash"), "wb") as f: f.write(hash_file(in_file_path))
+    with open(hash_file_path, "wb") as f: f.write(hash_file(in_file_path))
 
 # merge all the .bc files into one big .ll file for optimization
 # kind of like LTO but no pretense of being at "link-time"
