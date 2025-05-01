@@ -28,8 +28,13 @@
     <manifest-digest sha256new="6CSOOWKGZB64RLSDDZ2FIJLQZNG7RWFUNALKRMBVRVQPLJALUSKQ" />
     <archive href="https://github.com/anonymous-author-11/paultalk/archive/refs/tags/v0.1.4.tar.gz" size="194281765" type="application/x-compressed-tar" extract="PaulTalk-0.1.4" />
   </implementation>
+  <implementation arch="Windows-x86_64" version="0.1.5" id="sha256new_6KDESURBKTU2R7EZUCTWDEC6M25HWYYPQ43QVI3ONXT5UPUWLGTA">
+    <command name="run" path="ptalk.dist/ptalk.exe" />
+    <manifest-digest sha256new="6KDESURBKTU2R7EZUCTWDEC6M25HWYYPQ43QVI3ONXT5UPUWLGTA" />
+    <archive href="https://github.com/anonymous-author-11/paultalk/archive/refs/tags/v0.1.5.tar.gz" size="194276621" type="application/x-compressed-tar" extract="PaulTalk-0.1.5" />
+  </implementation>
 </interface>
 <!-- Base64 Signature
-iQEcBAABAgAGBQJoE9YrAAoJEHRbTseggy0ZFfIH/0yH4ZM2d3I5GUwvnN6CVEbCRN83ei9eO9wp54V4qAgqAZMUZH4fnZvzxgPK+vvBV0fJnlHsn58yvPll+A8meQgwY5ES0PSmiAnhfOtrz838d2yEbAh+eauPDbEfWWx3/FsoJj2o+d4+lGnK5xdTiYQBys1L3i9H391CF9r6j9bqRFDGe9REDc+rHdA8ns+AriIR1lSims8O4Q+UqADBBlksLvktO6sL7J/K+P5cOPrPJbZZ7ViyzdeVDiPYFzYCzz94ejhQUO9sF00PrfmLYTObvw/GPoUAgk6Gu3YUjD5r41NSdXTL0JvRNC1rdXe+cyLBslAtmEZu6SF2sPBCab8=
+iQEcBAABAgAGBQJoE+1mAAoJEHRbTseggy0Z72MIAJ5tMwxVgBv8Zn0In7jK8pvwD7g+vFHV79huRHvxC6RjeRbuUJVWbKk2FU3rHT1sjfqJrEUwClChazkmNtdugi/TOHpnVkqgdfPi3YrzgstE8dW2lCkBoi4e8iHYU9LccmEjwLMMPxu5rZSnsTSSBxhshT0hEpJGYicyADlzmHO5THY8ccJIrRHMf5xirM64gCrUj1sIFIkBOftU2jUSrIsEmrfyLTKqpNUvpVpgvKBfxoIL1OQcj2jhnA0wxbgeD4dZdItdgWPTvyNySfk8HsXwVkF6Y38qMVdu492NoqYybhffW2u0DeuEdh7jrLd6IRPCqceAZy1SMLTN4OMwCzw=
 
 -->
