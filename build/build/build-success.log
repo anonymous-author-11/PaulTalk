@@ -15,9 +15,9 @@ metadir = 0install
 distdir = 
 
 
-Executing: ['C:\\Users\\PaulK\\AppData\\Local\\0install.net\\implementations\\sha256new_6CSOOWKGZB64RLSDDZ2FIJLQZNG7RWFUNALKRMBVRVQPLJALUSKQ\\ptalk.dist/ptalk.exe', 'compile', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\hash_benchmark.mini', '-o', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build-windows-x86_64/program.exe', '--build-dir', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build']
+Executing: ['C:\\Users\\PaulK\\AppData\\Local\\0install.net\\implementations\\sha256new_6KDESURBKTU2R7EZUCTWDEC6M25HWYYPQ43QVI3ONXT5UPUWLGTA\\ptalk.dist/ptalk.exe', 'compile', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\hash_benchmark.mini', '-o', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build-windows-x86_64/program.exe', '--build-dir', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build']
 Compiling hash_benchmark.mini
-Time to import: 0.7101869583129883 seconds
+Time to import: 0.7605454921722412 seconds
 Compiling builtins.mini
 Finished compiling builtins.mini
 Compiling iteration.mini
@@ -54,17 +54,17 @@ Compiling std.mini
 Finished compiling std.mini
 Compiling cuckoo.mini
 Finished compiling cuckoo.mini
-Time to parse: 1.5150675773620605 seconds
-Time to type check + codegen: 2.8936080932617188 seconds
-Time to verify / recompile dependencies: 22.466020584106445 seconds
-Time to do python lowering: 2.1819705963134766 seconds
-Time to do PDL lowering: 0.24295258522033691 seconds
-Time to do mlir-opt: 0.16846466064453125 seconds
-Time to lower to llvm ir: 0.2275397777557373 seconds
-Time to llvm-link: 0.2469007968902588 seconds
-Time to opt: 7.501928806304932 seconds
-Time to llc: 0.8903875350952148 seconds
-Time to lld-link: 0.07965326309204102 seconds
-Total time to compile: 39.12468123435974 seconds
+Time to parse: 3.321775436401367 seconds
+Time to type check + codegen: 3.4237966537475586 seconds
+Time to verify / recompile dependencies: 23.773935317993164 seconds
+Time to do python lowering: 3.1346209049224854 seconds
+Time to do PDL lowering: 0.2263197898864746 seconds
+Time to do mlir-opt: 0.16137361526489258 seconds
+Time to lower to llvm ir: 0.23589086532592773 seconds
+Time to llvm-link: 0.24712586402893066 seconds
+Time to opt: 7.5982043743133545 seconds
+Time to llc: 0.9736504554748535 seconds
+Time to lld-link: 0.09011721611022949 seconds
+Total time to compile: 43.94735598564148 seconds
 Finished compiling hash_benchmark.mini
 Build successful
