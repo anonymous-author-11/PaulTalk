@@ -32,7 +32,11 @@ def parse(file_path) -> AST:
     try:
         if file_path in parsed: return copy.deepcopy(parsed[file_path])
         with open(file_path) as f: import_text = f.read()
-        if file_path.name != "builtins.mini": import_text = "import builtins;\n\n" + import_text
+
+        # auto-include core.mini
+        if file_path.name not in ["builtins.mini", "iteration.mini", "core.mini"]:
+            import_text = "import core;\n\n" + import_text
+
         tree = parser.parse(import_text)
         tree = CSTTransformer(file_path).transform(tree)
         parsed[file_path] = tree
