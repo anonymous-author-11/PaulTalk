@@ -22,8 +22,8 @@ def ptalk_main(args):
 if __name__ == "__main__":
 	ptalk_arg_parser = argparse.ArgumentParser(description="The general-purpose PaulTalk command line tool")
 	subparsers = ptalk_arg_parser.add_subparsers(dest='command', help='Available commands', required=True)
-	build_parser = subparsers.add_parser('build', help='Build the project based on the configuration in the manifest.yaml')
 	compile_parser = subparsers.add_parser('compile', help='Compile an input .mini file into an executable')
+	build_parser = subparsers.add_parser('build', help='Build the project based on the configuration in the manifest.yaml')
 	update_parser = subparsers.add_parser('update', help='Update ptalk to the latest version')
 	upgrade_parser = subparsers.add_parser('upgrade', help='Alias for update')
 	version_parser = subparsers.add_parser('version', help='Check which version of ptalk is installed')

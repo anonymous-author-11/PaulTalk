@@ -4,7 +4,7 @@ import tempfile
 import shutil
 import os
 from pathlib import Path
-from ptalk_compiler import compiler_driver_main
+from ptalk_compile import compiler_driver_main
 from AST import silent
 from utils import random_letters
 import stat
@@ -22,6 +22,10 @@ class CompilerTestCase(unittest.TestCase):
             os.chmod(test_bin, stat.S_IWRITE)
             shutil.rmtree(test_bin)
         if test_build.exists():
+            bitcodes_folder = test_build.joinpath("bitcodes")
+            hashes_folder = test_build.joinpath("hashes")
+            if bitcodes_folder.exists(): os.chmod(bitcodes_folder, stat.S_IWRITE)
+            if hashes_folder.exists(): os.chmod(hashes_folder, stat.S_IWRITE)
             os.chmod(test_build, stat.S_IWRITE)
             shutil.rmtree(test_build)
 

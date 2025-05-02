@@ -38,7 +38,6 @@ PDL_PATTERNS_PATH = DIST_FOLDER.joinpath("data_files/patterns.mlir")
 UTILS_PATH = DIST_FOLDER.joinpath("data_files/utils.ll")
 WIN_UTILS_PATH = DIST_FOLDER.joinpath("data_files/win_utils.ll")
 POSIX_UTILS_PATH = DIST_FOLDER.joinpath("data_files/posix_utils.ll")
-TRAMPOLINE_OBJ_PATH = DIST_FOLDER.joinpath("data_files/trampoline.obj")
 
 def compiler_driver_main(input_path, output_path=None, build_dir=Path("."), debug_mode=False, no_timings=False, show_dependencies=False):
     after_imports = time.time()
@@ -346,16 +345,10 @@ def llvm_link(input_path, dependency_list, build_dir):
 
 def record_all_passes(build_dir):
     #clang = "clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
-    open_world = "--attributor-assume-closed-world=false"
-    no_tail = "--disable-tail-calls"
-    use_internal_attributes = "--attributor-manifest-internal"
-    heap_to_stack = "--max-heap-to-stack-size=1024"
-    annotate_callsites = "--attributor-annotate-decl-cs"
-    attributor_settings = f"--attributor-enable=module {annotate_callsites} {heap_to_stack} {use_internal_attributes} {open_world} {no_tail}"
     opt_level = "--passes=\"default<O1>\""
     #opt = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
     out_reg2mem_path = build_dir.joinpath("out_reg2mem.ll")
-    opt = f"{OPT_PATH} {out_reg2mem_path} -S {opt_level} {attributor_settings} --max-devirt-iterations=100 --inline-threshold=10000 --print-after-all"
+    opt = f"{OPT_PATH} {out_reg2mem_path} -S {opt_level} {attributor_settings()} --max-devirt-iterations=100 --inline-threshold=10000 --print-after-all"
     with open(out_reg2mem_path, "r+") as f:
         txt = f.read()
         f.seek(0)
@@ -382,6 +375,13 @@ def run_opt(debug_mode, build_dir):
     # inline everything at o3, and nothing at debug. let the machine outliner undo some of it later, if requested
     inline_settings = "--inline-threshold=-10000" if debug_mode else "--inline-threshold=10000"
 
+    opt = f"{OPT_PATH} -S {out_reg2mem_path} {opt_level} {devirtualization_settings} {inline_settings} {attributor_settings()} -o {out_optimized_path}"
+    subprocess.run(opt, text=True, shell=True)
+
+    debug = f"{DEBUGIR_PATH} {out_optimized_path}"
+    if debug_mode: subprocess.run(debug, text=True, shell=True)
+
+def attributor_settings():
     # We --disable-tail-calls for the following reason:
     # It is considered UB for a tail call to read or write to an alloca
     # Heap-to-stack will convert malloc to alloca, retroactively creating UB if used in a tail call
@@ -393,13 +393,7 @@ def run_opt(debug_mode, build_dir):
     annotate_callsites = "--attributor-annotate-decl-cs"
     
     # Using attributor-enable=cgscc or attributor-enable=all takes way too long, though it does generate faster code
-    attributor_settings = f"--attributor-enable=module {annotate_callsites} {heap_to_stack} {use_internal_attributes} {open_world} {no_tail}"
-
-    opt = f"{OPT_PATH} -S {out_reg2mem_path} {opt_level} {devirtualization_settings} {inline_settings} {attributor_settings} -o {out_optimized_path}"
-    subprocess.run(opt, text=True, shell=True)
-
-    debug = f"{DEBUGIR_PATH} {out_optimized_path}"
-    if debug_mode: subprocess.run(debug, text=True, shell=True)
+    return f"--attributor-enable=module {annotate_callsites} {heap_to_stack} {use_internal_attributes} {open_world} {no_tail}"
 
 def run_llc(debug_mode, output_path, build_dir):
     target_triple = "-mtriple=x86_64-pc-windows-msvc"
@@ -425,7 +419,7 @@ def run_lld_link(debug_mode, output_path, build_dir):
     exe_path = output_path.parent.joinpath(f"{output_path.stem}.exe")
     
     # using dynamic linking:
-    lld_link = f"{LLD_LINK_PATH} /out:{exe_path} {obj_path} {TRAMPOLINE_OBJ_PATH} {debug_flag} {dynamic_libc}"
+    lld_link = f"{LLD_LINK_PATH} /out:{exe_path} {obj_path} {debug_flag} {dynamic_libc}"
     subprocess.run(lld_link)
 
 def add_compiler_args(parser):
