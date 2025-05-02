@@ -5,6 +5,7 @@ import sys
 import platform
 import yaml
 import shutil
+import argparse
 import stat
 import re
 import logging
@@ -26,7 +27,7 @@ XML_TEMPLATE_PATH = DIST_PATH.joinpath("data_files/template.xml")
 
 # Next step: put dependencies in the generated xml feed and let 0install track them all down
 
-def build_main(argv):
+def build_main():
 
 	# launch the http proxy server as a thread
 	# this will redirect 0install queries
@@ -226,5 +227,11 @@ def get_os_and_cpu():
 	# --- Combine OS and CPU ---
 	return zeroinstall_os, zeroinstall_cpu
 
+def add_build_args(parser):
+	pass
+
 if __name__ == "__main__":
-	build_main(sys.argv)
+	parser = argparse.ArgumentParser(description="Build tool for PaulTalk projects")
+	add_build_args(parser)
+	args = parser.parse_args()
+	build_main()

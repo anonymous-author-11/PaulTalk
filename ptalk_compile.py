@@ -11,6 +11,7 @@ from io import StringIO
 from lower import do_lowering
 from dataclasses import dataclass
 import sys
+import argparse
 import subprocess
 import os
 from pathlib import Path
@@ -39,38 +40,28 @@ WIN_UTILS_PATH = DIST_FOLDER.joinpath("data_files/win_utils.ll")
 POSIX_UTILS_PATH = DIST_FOLDER.joinpath("data_files/posix_utils.ll")
 TRAMPOLINE_OBJ_PATH = DIST_FOLDER.joinpath("data_files/trampoline.obj")
 
-def compiler_driver_main(argv):
+def compiler_driver_main(input_path, output_path=None, build_dir=Path("."), debug_mode=False, no_timings=False, show_dependencies=False):
     after_imports = time.time()
     
-    if len(argv) < 2: raise Exception("Please provide a file to compile")
-    input_path = Path(argv[1])
+    input_path = Path(input_path)
     if not input_path.exists(): raise Exception(f"Input path {input_path} does not exist.")
     if not input_path.is_file(): raise Exception(f"Input path {input_path} should point to a .mini file.")
     if input_path.suffix != ".mini": raise Exception(f"Input path {input_path} should point to a .mini file.")
     input_path = input_path.resolve()
-    debug_mode = "--debug" in argv
-    show_dependencies = "--dependencies" in argv
-    print_timings = "--no-timings" not in argv
+    print_timings = not no_timings
     time_printer = OptionalPrinter(print_timings)
     status_printer = OptionalPrinter(not silent[0])
     status_printer.print(f"Compiling {input_path.name}")
 
     time_printer.print(f"Time to import: {after_imports - start_time} seconds")
 
-    output_path = None
-    if "-o" in argv:
-        i = argv.index("-o")
-        if len(argv) < i + 2: raise Exception("Please provide an output file.")
-        output_path = Path(argv[i + 1])
+    if output_path:
+        output_path = Path(output_path)
         if not "." in output_path.name: raise Exception("Please provide an file extension in the output name.")
         if output_path.suffix == ".exe": generate_main_for.add(input_path)
 
-    build_dir = Path(".")
-    if "--build-dir" in argv:
-        i = argv.index("--build-dir")
-        if len(argv) < i + 2: raise Exception("Please provide a build directory.")
-        build_dir = Path(argv[i + 1])
-        os.makedirs(build_dir, exist_ok=True)
+    build_dir = Path(build_dir)
+    os.makedirs(build_dir, exist_ok=True)
     build_dir = build_dir.resolve()
 
     add_source_directories(input_path)
@@ -106,7 +97,7 @@ def compiler_driver_main(argv):
         if dependency.samefile(input_path): continue
         if not dependency in to_recompile: continue
         # compile the dependency into the current build directory
-        compiler_driver_main(["", dependency, "--build-dir", build_dir, "--no-timings"])
+        compiler_driver_main(dependency, build_dir=build_dir, no_timings=True)
 
     time_printer.print(f"Time to parse: {after_parse - after_imports} seconds")
 
@@ -437,5 +428,16 @@ def run_lld_link(debug_mode, output_path, build_dir):
     lld_link = f"{LLD_LINK_PATH} /out:{exe_path} {obj_path} {TRAMPOLINE_OBJ_PATH} {debug_flag} {dynamic_libc}"
     subprocess.run(lld_link)
 
+def add_compiler_args(parser):
+    parser.add_argument('input_file_path', help='The input file which will be compiled')
+    parser.add_argument('-o','--output','--out', dest='output_path', help='The output file produced by the compilation')
+    parser.add_argument('--build-dir', dest='build_dir', help='The build directory which will store intermediate results of the compilation')
+    parser.add_argument('--debug', dest='debug_mode', action='store_true', help='Compile in debug mode')
+    parser.add_argument('--no-timings', dest='no_timings', action='store_true', help='Do not print timings for the compilation stages')
+    parser.add_argument('--dependencies', dest='show_dependencies', action='store_true', help='Print the dependency graph of imported files')
+
 if __name__ == "__main__":
-    compiler_driver_main(sys.argv)
+    compiler_parser = argparse.ArgumentParser(description='The PaulTalk compiler')
+    add_compiler_args(compiler_parser)
+    args = compiler_parser.parse_args()
+    compiler_driver_main(args.input_file_path, args.output_path, args.build_dir, args.debug_mode, args.no_timings, args.show_dependencies)

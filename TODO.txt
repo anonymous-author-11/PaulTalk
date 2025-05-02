@@ -409,16 +409,13 @@ DONE:
 - Allow .yml or .yaml for the manifest [check!]
 - Put hashes and bitcodes in their own folders within the build dir [check!]
 - We should auto-include core instead of builtins, so that setup_landing_pad works correctly [check!]
+- 'ptalk upgrade' is cleaner than using the feed uri [check!]
+- ptalk --help / ptalk --version [check!]
+- Try compiling with /O2 /Ob3 via Nuitka [check!]
 
 TODO:
 
 - 'ptalk build init [name]' could create a minimal manifest.yaml in the cwd
-- 'ptalk upgrade' is cleaner than using the feed uri
-- ptalk --help / ptalk --version
-	- Should I just manually enter the version into the source code?
-	- I should treat the manifest as the source of truth for the version
-	- Should the manifest be included in the data files then?
-- Try compiling with /O2 /Ob3 via Nuitka
 
 - What do I need for release 0.1.0?
 	- Works on any Windows x86_64 machine (other people's computers)

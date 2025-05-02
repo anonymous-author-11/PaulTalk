@@ -31,7 +31,7 @@ class CompilerTestCase(unittest.TestCase):
 
         try:
             silent[0] = True
-            compiler_driver_main(["", self.temp_input_file_name, "-o", self.output_path, "--build-dir", "test_build", "--no-timings"])
+            compiler_driver_main(self.temp_input_file_name, self.output_path, build_dir="test_build", no_timings=True)
         except Exception as e:
             error_msg = "Compilation failed:\n" + str(e)
             self.fail(error_msg)
