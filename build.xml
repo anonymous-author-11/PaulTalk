@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<interface
+  xmlns="http://zero-install.sourceforge.net/2004/injector/interface"
+  xmlns:compile="http://zero-install.sourceforge.net/2006/namespaces/0compile"
+  uri="http://foo.bar/build">
+  <name>DoCompile</name>
+  <summary>Runs the PaulTalk compiler on C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\hash_benchmark.mini to produce program.exe, making use of any dependencies</summary>
+
+  <implementation id="." arch="Windows-src" version="1.0.1">
+    <command name='compile'>
+      <runner interface='https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/ptalk.xml'>
+        <arg>compile</arg>
+        <arg>C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\hash_benchmark.mini</arg>
+        <arg>-o</arg>
+        <arg>$DISTDIR/program.exe</arg>
+        <arg>--build-dir</arg>
+        <arg>$BUILDDIR</arg>
+      </runner>
+      <compile:implementation arch='Windows-x86_64'>
+        <command name='run' path='program.exe' />
+      </compile:implementation>
+    </command>
+    <requires interface="http://localhost:8081/0install-github-feed/anonymous-author-11/0install-testing" version="0.1.6"><environment name="PYTHONPATH" insert="lib" mode="prepend" /></requires>
+  </implementation>
+</interface>

@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<selections command="compile" interface="c:\Users\PaulK\OneDrive\Documents\PL\PyPL\build.xml" xmlns="http://zero-install.sourceforge.net/2004/injector/interface" xmlns:ns0="http://zero-install.sourceforge.net/2006/namespaces/0compile">
+  <selection arch="Windows-src" id="c:\Users\PaulK\OneDrive\Documents\PL\PyPL" interface="c:\Users\PaulK\OneDrive\Documents\PL\PyPL\build.xml" local-path="c:\Users\PaulK\OneDrive\Documents\PL\PyPL" version="1.0.1">
+    <requires interface="http://localhost:8081/0install-github-feed/anonymous-author-11/0install-testing" version="0.1.6">
+      <environment insert="lib" mode="prepend" name="PYTHONPATH" separator=";"/>
+    </requires>
+    <command name="compile">
+      <runner interface="https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/ptalk.xml">
+        <arg>compile</arg>
+        <arg>C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\hash_benchmark.mini</arg>
+        <arg>-o</arg>
+        <arg>$DISTDIR/program.exe</arg>
+        <arg>--build-dir</arg>
+        <arg>$BUILDDIR</arg>
+      </runner>
+      <ns0:implementation arch="Windows-x86_64">
+        <command name="run" path="program.exe"/>
+      </ns0:implementation>
+    </command>
+  </selection>
+  <selection id="github-anonymous-author-11-0install-testing-v0.1.6" interface="http://localhost:8081/0install-github-feed/anonymous-author-11/0install-testing" version="0.1.6">
+    <manifest-digest sha256new="337PFKZV36MHXTTBS6S34TCWEGA2UNGS4T4YSD5WDYYUT5KMBELA"/>
+  </selection>
+  <selection arch="Windows-x86_64" id="sha256new_5UNURN2KGTGEZYTOAYXK5EDEZGMV4UATO7VEFGWSAEKWAQISU3VA" interface="https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/ptalk.xml" version="0.1.9">
+    <manifest-digest sha256new="5UNURN2KGTGEZYTOAYXK5EDEZGMV4UATO7VEFGWSAEKWAQISU3VA"/>
+    <command name="run" path="ptalk.dist/ptalk.exe"/>
+  </selection>
+  <build-info arch="Windows-AMD64" host="Paul-Laptop.myfiosgateway.com" time="2025-05-01 23:46" user="PaulK"/>
+</selections>

@@ -1,0 +1,70 @@
+Build log for DoCompile-1.0.1
+
+Built using 0compile-1.7
+
+Build system: Windows, x86_64, 10, 10.0.26100, AMD64, Intel64 Family 6 Model 140 Stepping 1, GenuineIntel
+
+0compile.properties:
+
+[compile]
+download-base-url = 
+version-modifier = 
+interface = c:\Users\PaulK\OneDrive\Documents\PL\PyPL\build.xml
+selections = 
+metadir = 0install
+distdir = 
+
+
+Executing: ['C:\\Users\\PaulK\\AppData\\Local\\0install.net\\implementations\\sha256new_5UNURN2KGTGEZYTOAYXK5EDEZGMV4UATO7VEFGWSAEKWAQISU3VA\\ptalk.dist/ptalk.exe', 'compile', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\hash_benchmark.mini', '-o', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build-windows-x86_64/program.exe', '--build-dir', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build']
+Compiling hash_benchmark.mini
+Time to import: 0.7549746036529541 seconds
+Compiling builtins.mini
+Finished compiling builtins.mini
+Compiling iteration.mini
+Finished compiling iteration.mini
+Compiling core.mini
+Finished compiling core.mini
+Compiling io.mini
+Finished compiling io.mini
+Compiling files.mini
+narrowed Buffer[i32] & Nil to nothing
+narrowed Buffer[i32] & Nil to nothing
+narrowed Buffer[i32] & Nil to nothing
+narrowed Buffer[i32] & Nil to nothing
+narrowed Buffer[i32] & Nil to nothing
+would be impossible to enter then branch
+@handle
+!mini.nothing
+narrowed Buffer[i32] & Nil to nothing
+would be impossible to enter then branch
+@handle
+!mini.nothing
+Finished compiling files.mini
+Compiling array.mini
+Finished compiling array.mini
+Compiling channel.mini
+Finished compiling channel.mini
+Compiling range.mini
+Finished compiling range.mini
+Compiling math.mini
+Finished compiling math.mini
+Compiling map.mini
+Finished compiling map.mini
+Compiling std.mini
+Finished compiling std.mini
+Compiling cuckoo.mini
+Finished compiling cuckoo.mini
+Time to parse: 2.9173760414123535 seconds
+Time to type check + codegen: 2.8335111141204834 seconds
+Time to verify / recompile dependencies: 23.016037702560425 seconds
+Time to do python lowering: 2.77588152885437 seconds
+Time to do PDL lowering: 0.2066822052001953 seconds
+Time to do mlir-opt: 0.17530512809753418 seconds
+Time to lower to llvm ir: 0.2704589366912842 seconds
+Time to llvm-link: 0.17283248901367188 seconds
+Time to opt: 8.05277681350708 seconds
+Time to llc: 0.9677166938781738 seconds
+Time to lld-link: 0.055176734924316406 seconds
+Total time to compile: 42.19872999191284 seconds
+Finished compiling hash_benchmark.mini
+Build successful

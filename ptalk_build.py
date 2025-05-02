@@ -72,16 +72,11 @@ def build_main(argv):
 	print("Setting up build directory")
 	setup_build_dir(build_dir, root_folder)
 	
-	try:
-		# run 0compile build from inside the build directory
-		# We use subprocess.Popen in order to stream the process stdout line by line
-		print("Running 0compile build")
-		command = ["0install","run","https://apps.0install.net/0install/0compile.xml","build"]
-		stream_subprocess(command, build_dir)
-	except Exception as e:
-		# remove the temporary feed before exiting
-		os.remove(root_folder.joinpath("build.xml"))
-		raise e
+	# run 0compile build from inside the build directory
+	print("Running 0compile build")
+	command = ["0install","run","https://apps.0install.net/0install/0compile.xml","build"]
+	try: process = subprocess.run(command, cwd=build_dir.resolve(), check=True)
+	finally: os.remove(root_folder.joinpath("build.xml"))
 
 	# clean up unnecessary folder
 	extra_folder_path = build_dir.joinpath(f"build-{os_name}-{cpu_name}/0install")
@@ -113,15 +108,6 @@ def find_manifest():
 	with open(manifest_path, "r") as f: yaml_text = f.read()
 	manifest_data = yaml.safe_load(yaml_text)
 	return manifest_data, manifest_path.resolve()
-
-def stream_subprocess(command, dir_path):
-	with subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=dir_path.resolve()) as p:
-	    while True:
-	        output_bytes = p.stdout.read1()
-        	if output_bytes == b'' and p.poll() is not None: break
-        	text = output_bytes.decode("utf-8")
-        	print(text, end='', flush=True)
-	if p.returncode != 0: raise Exception(p.stderr)
 
 def xml_dependencies(manifest):
 	dependencies = []
