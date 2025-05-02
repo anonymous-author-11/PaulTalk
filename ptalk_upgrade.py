@@ -5,7 +5,7 @@ def stream_subprocess(command):
 	with subprocess.Popen(command, stdout=subprocess.PIPE) as p:
 	    while True:
 	        output_bytes = p.stdout.read1()
-        	if output_bytes == b'': break
+        	if output_bytes == b'' and p.poll() is not None: break
         	text = output_bytes.decode("utf-8")
         	print(text, end='', flush=True)
 	if p.returncode != 0: raise Exception(p.stderr)
