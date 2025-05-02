@@ -2,7 +2,7 @@ import sys
 import subprocess
 
 def stream_subprocess(command):
-	with Popen(command, stdout=subprocess.PIPE) as p:
+	with subprocess.Popen(command, stdout=subprocess.PIPE) as p:
 	    while True:
 	        output_bytes = p.stdout.read1()
         	if output_bytes == b'': break

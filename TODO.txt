@@ -418,7 +418,7 @@ TODO:
 	- Should I just manually enter the version into the source code?
 	- I should treat the manifest as the source of truth for the version
 	- Should the manifest be included in the data files then?
-- Try compiling with -O3 via Nuitka
+- Try compiling with /O2 /Ob3 via Nuitka
 
 - What do I need for release 0.1.0?
 	- Works on any Windows x86_64 machine (other people's computers)
