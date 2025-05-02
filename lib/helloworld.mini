@@ -1,3 +1,0 @@
-import io;
-
-IO.print("hello world!");
