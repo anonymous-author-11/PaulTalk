@@ -1,9 +1,0 @@
-<?xml version="1.0" ?><interface xmlns="http://zero-install.sourceforge.net/2004/injector/interface">
-  <name>DoCompile</name>
-  <summary>Runs the PaulTalk compiler on C:\Users\PaulK\OneDrive\Documents\PL\PyPL\lib\hash_benchmark.mini to produce program.exe, making use of any dependencies</summary>
-  <description/>
-  <feed-for interface="http://foo.bar/build"/>
-  <group>
-    <implementation arch="Windows-x86_64" id=".." released="2025-05-01" version="1.0.1"><command name="run" path="program.exe"/></implementation>
-  </group>
-</interface>

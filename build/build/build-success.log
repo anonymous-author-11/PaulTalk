@@ -17,7 +17,7 @@ distdir =
 
 Executing: ['C:\\Users\\PaulK\\AppData\\Local\\0install.net\\implementations\\sha256new_5UNURN2KGTGEZYTOAYXK5EDEZGMV4UATO7VEFGWSAEKWAQISU3VA\\ptalk.dist/ptalk.exe', 'compile', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\hash_benchmark.mini', '-o', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build-windows-x86_64/program.exe', '--build-dir', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build']
 Compiling hash_benchmark.mini
-Time to import: 0.7549746036529541 seconds
+Time to import: 1.0212483406066895 seconds
 Compiling builtins.mini
 Finished compiling builtins.mini
 Compiling iteration.mini
@@ -54,17 +54,17 @@ Compiling std.mini
 Finished compiling std.mini
 Compiling cuckoo.mini
 Finished compiling cuckoo.mini
-Time to parse: 2.9173760414123535 seconds
-Time to type check + codegen: 2.8335111141204834 seconds
-Time to verify / recompile dependencies: 23.016037702560425 seconds
-Time to do python lowering: 2.77588152885437 seconds
-Time to do PDL lowering: 0.2066822052001953 seconds
-Time to do mlir-opt: 0.17530512809753418 seconds
-Time to lower to llvm ir: 0.2704589366912842 seconds
-Time to llvm-link: 0.17283248901367188 seconds
-Time to opt: 8.05277681350708 seconds
-Time to llc: 0.9677166938781738 seconds
-Time to lld-link: 0.055176734924316406 seconds
-Total time to compile: 42.19872999191284 seconds
+Time to parse: 3.4225032329559326 seconds
+Time to type check + codegen: 3.1210243701934814 seconds
+Time to verify / recompile dependencies: 24.76683235168457 seconds
+Time to do python lowering: 2.760422706604004 seconds
+Time to do PDL lowering: 0.23827457427978516 seconds
+Time to do mlir-opt: 0.1890242099761963 seconds
+Time to lower to llvm ir: 0.2221221923828125 seconds
+Time to llvm-link: 0.30649757385253906 seconds
+Time to opt: 7.404560327529907 seconds
+Time to llc: 1.1229133605957031 seconds
+Time to lld-link: 0.2537708282470703 seconds
+Total time to compile: 44.82919406890869 seconds
 Finished compiling hash_benchmark.mini
 Build successful
