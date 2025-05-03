@@ -58,7 +58,7 @@ Note: as of the latest version (v0.1.0), PaulTalk is only built for Windows x86_
 
 ## Syntax Highlighting
 
-*	If you use Sublime Text, you can configure syntax highlighting for PaulTalk using the [ptalk.sublime-syntax](https://github.com/anonymous-author-11/PaulTalk/blob/main/ptalk.sublime-syntax) file found in this repo.
+*	If you use [Sublime Text](https://www.sublimetext.com/download), you can configure syntax highlighting for PaulTalk using the [ptalk.sublime-syntax](https://github.com/anonymous-author-11/PaulTalk/blob/main/ptalk.sublime-syntax) file found in this repo.
 *	Just copy that syntax file into the equivalent of `C:\Users\YourUserName\AppData\Roaming\Sublime Text 3\Packages\User`
 *	You should then be able to enjoy luxurious syntax highlighting like the following:
 
@@ -102,7 +102,7 @@ The compiler driver can be found in [ptalk_compile.py](https://github.com/anonym
 
 *	**0install:** A cross-platform package manager that can be downloaded [here](https://get.0install.net/#windows)
 *   **OS:** Windows x86_64 (as of version v0.2.2)
-*   **Sublime Text [Optional]:** If you want syntax highlighting for PaulTalk
+*   **Sublime Text [Optional]:** If you want syntax highlighting for PaulTalk. Can be downloaded [here](https://www.sublimetext.com/download)
 
 ## Standard Library (Minimal)
 
