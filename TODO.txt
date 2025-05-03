@@ -415,9 +415,7 @@ DONE:
 
 TODO:
 
-- 'ptalk build init [name]' could create a minimal manifest.yaml in the cwd
-
-- What do I need for release 0.1.0?
+- Release 0.1.0
 	- Works on any Windows x86_64 machine (other people's computers)
 	- You can download ptalk.exe and run it out-of-the-box [check!]
 	- Available commands should be 'ptalk compile [args]' and 'ptalk build' [check!]
@@ -433,7 +431,9 @@ TODO:
 		- So that invocations of 'ptalk compile' can use it [check!]
 	- Should the user 0install the compiler? [check!]
 		- If so, we need an xml feed with implementations for versions [check!]
-	- You can import PaulTalk libraries from Github using the manifest.yaml
+	- You can import PaulTalk libraries from Github using the manifest.yaml [check!]
+
+- Release 0.2.0
 	- Does just adding dependencies to the path work?
 		- The source_dirs collection should be ordered, not a set [check!]
 		- Add the dependency folder to an env variable named for the package
@@ -441,6 +441,10 @@ TODO:
 		- We can report import name conflicts. But can we instead resolve them?
 		- Local dependencies should override external ones
 		- Only conflicts between external dependencies should cause errors
+	- Fully commit to the rename from MiniLang to PaulTalk
+		- File name extensions: .mini -> .ptk
+		- MLIR dialect: mini. -> mid.
+	- 'ptalk build init [name]' could create a minimal manifest.yaml in the cwd
 
 - What do I really need for 1.0.0?
 	- A way to distribute and adopt code (packages) [check!]

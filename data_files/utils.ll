@@ -364,7 +364,6 @@ define void @coroutine_trampoline(ptr %into_callee_second_word) {
   ; Store the trampoline pointer in the instruction pointer slot of the jump buffer
   store ptr blockaddress(@coroutine_trampoline, %trampoline), ptr %into_callee_second_word
   %result = call i1 @returns_one()
-  %sp = call ptr @llvm.stacksave() mustprogress nocallback nofree nosync nounwind willreturn
   br i1 %result, label %exit, label %trampoline
 
 trampoline:

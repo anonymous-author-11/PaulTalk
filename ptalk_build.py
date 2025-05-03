@@ -198,7 +198,7 @@ def get_os_and_cpu():
 	# Handle Cygwin specifically
 	if system == 'Windows' and sys.platform == 'cygwin': os_key = 'cygwin'
 	# Handle versions like FreeBSD13
-	elif system.startswith('FreeBSD'): os_key = 'FreeBSD'
+	if system.startswith('FreeBSD'): os_key = 'FreeBSD'
 
 	zeroinstall_os = os_map.get(os_key)
 
