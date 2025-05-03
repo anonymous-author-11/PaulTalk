@@ -17,9 +17,9 @@ The compiler translates PaulTalk code through several stages, leveraging MLIR (M
 
 PaulTalk aims to combine high-level ergonomics with high performance and memory safety through its type system and planned region management.
 
-## Status: Highly Experimental (v0.1.5)
+## Status: Highly Experimental (v0.2.2)
 
-**⚠️ Warning:** PaulTalk is currently in a very early, experimental stage (v0.1.5). It is **not suitable for production use.**
+**⚠️ Warning:** PaulTalk is currently in a very early, experimental stage (v0.2.2). It is **not suitable for production use.**
 
 *   **Memory Management:** The region-based memory system is incomplete. Memory is allocated (using a fast bump allocator) but **never freed**, leading to memory leaks in any non-trivial program.
 *   **Platform:** Currently targets **x86_64 Windows only**. Aims to be multiplatform in the future.
@@ -52,8 +52,9 @@ Note: as of the latest version (v0.1.0), PaulTalk is only built for Windows x86_
 *	First, install [0install](https://get.0install.net/#windows), a portable package manager.
 *	Run the command `0install add ptalk https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/ptalk.xml` in your command prompt
 *	This will download the ptalk executable and add it to your PATH as `ptalk`
-*	Use it in the command line with `ptalk compile [args]` and `ptalk build`
-*	To update to the latest version, run `0install update https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/ptalk.xml`
+*	You can use it in the command line with `ptalk compile [args]` or `ptalk build`
+*	You can check the version with `ptalk version`
+*	To update to the latest version, run `ptlalk upgrade` or `ptalk update`
 
 ## Syntax Highlighting
 
@@ -100,7 +101,8 @@ The compiler driver can be found in [ptalk_compile.py](https://github.com/anonym
 ## Prerequisites
 
 *	**0install:** A cross-platform package manager that can be downloaded [here](https://get.0install.net/#windows)
-*   **OS:** Windows x86_64 (as of version v0.1.5)
+*   **OS:** Windows x86_64 (as of version v0.2.2)
+*   **Sublime Text [Optional]:** If you want syntax highlighting for PaulTalk
 
 ## Standard Library (Minimal)
 
