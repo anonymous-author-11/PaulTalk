@@ -41,127 +41,327 @@ LAYOUT_PATH = DIST_FOLDER / "data_files/datalayout.ll"
 POSIX_UTILS_PATH = DIST_FOLDER / "data_files/posix_utils.ll"
 
 def compiler_driver_main(input_path, output_path=None, build_dir=Path("."), debug_mode=False, no_timings=False, show_dependencies=False):
-    after_imports = time.time()
+    CompilationJob(input_path, output_path, build_dir, debug_mode, no_timings, show_dependencies).run()
+
+class CompilationJob:
+    input: "InputFile"
+    output_path: Path
+    build_dir: Path
+    dependency_graph: nx.DiGraph
+    _dependency_list: list
+    debug_mode: bool
+    show_dependencies: bool
+    timings: dict
+    time_printer: "OptionalPrinter"
+    status_printer: "OptionalPrinter"
     
-    input_path = Path(input_path)
-    if not input_path.exists(): raise Exception(f"Input path {input_path} does not exist.")
-    if not input_path.is_file(): raise Exception(f"Input path {input_path} should point to a .mini file.")
-    if input_path.suffix != ".mini": raise Exception(f"Input path {input_path} should point to a .mini file.")
-    input_path = input_path.resolve()
-    print_timings = not no_timings
-    time_printer = OptionalPrinter(print_timings)
-    status_printer = OptionalPrinter(not silent[0])
-    status_printer.print(f"Compiling {input_path.name}")
+    def __init__(self, input_path, output_path=None, build_dir=Path("."), debug_mode=False, no_timings=False, show_dependencies=False):
+        self.timings = {"start_time":start_time}
+        self.record_time("after_imports")
+    
+        input_path = Path(input_path)
+        if not input_path.exists(): raise Exception(f"Input path {input_path} does not exist.")
+        if not input_path.is_file(): raise Exception(f"Input path {input_path} should point to a .mini file.")
+        if input_path.suffix != ".mini": raise Exception(f"Input path {input_path} should point to a .mini file.")
 
-    time_printer.print(f"Time to import: {after_imports - start_time} seconds")
+        build_dir = Path(build_dir)
+        os.makedirs(build_dir, exist_ok=True)
+        self.build_dir = build_dir.resolve()
 
-    if output_path:
-        output_path = Path(output_path)
-        if not "." in output_path.name: raise Exception("Please provide an file extension in the output name.")
-        if output_path.suffix == ".exe": generate_main_for.add(input_path)
+        self.input = InputFile(input_path.resolve(), self.build_dir)
+        self.time_printer = OptionalPrinter(not no_timings)
+        self.status_printer = OptionalPrinter(not silent[0])
+        self.show_dependencies = show_dependencies
+        self.status_printer.print(f"Compiling {self.input.path.name}")
+        self.debug_mode = debug_mode
+        self._dependency_list = None
 
-    build_dir = Path(build_dir)
-    os.makedirs(build_dir, exist_ok=True)
-    build_dir = build_dir.resolve()
+        self.output_path = None
+        if not output_path: return
+        self.output_path = Path(output_path)
+        if not "." in self.output_path.name: raise Exception("Please provide an file extension in the output name.")
+        if self.output_path.suffix == ".exe": generate_main_for.add(self.input.path)
 
-    add_source_directories(input_path)
+    def run(self):
+        add_source_directories(self.input.path)
+        ast = parse(self.input.path)
+        self.record_time("after_parse")
 
-    ast = parse(input_path)
-    after_parse = time.time()
+        module = self.run_codegen(ast)
+        to_recompile = self.recompile_set()
 
-    #print(tree.pretty())
-    try:
-        module = ast.codegen()
-    except Exception as e:
+        # process in reverse-topological order, i.e. leaves first
+        for dependency in self.dependency_list:
+            if not dependency.exists(): raise Exception(f"{self.input.path}, {self.dependency}, {self.dependency_list}")
+            if not dependency in to_recompile: continue
+            # compile the dependency into the current build directory
+            CompilationJob(dependency, build_dir=self.build_dir, no_timings=True).run()
+
+        self.record_time("after_dependencies")
+        self.time_printer.print(f'Time to import: {self.time_between("start_time","after_imports")} seconds')
+        self.time_printer.print(f'Time to parse: {self.time_between("after_imports", "after_parse")} seconds')
+        self.time_printer.print(f'Time to type check + codegen: {self.time_between("after_parse", "after_codegen")} seconds')
+        self.time_printer.print(f'Time to verify / recompile dependencies: {self.time_between("after_codegen", "after_dependencies")} seconds')
+
+        # Do we need to produce a bitcode file or does a good one already exist?
+        needs_lowering = len(to_recompile) > 0 or not already_perfect(self.input.path, self.build_dir)
+        if needs_lowering: self.lower(module)
+
+        # not creating an output file
+        if not self.output_path: return self.finish()
+
+        self.llvm_link()
+        self.run_lto()
+        self.run_llc()
+
+        # Only creating an object file
+        if self.output_path.suffix != ".obj": self.run_lld()
+        self.finish()
+
+    def finish(self):
+        self.record_time("end_time")
+        self.time_printer.print(f'Total time to compile: {self.time_between("start_time", "end_time")} seconds')
+        self.status_printer.print(f"Finished compiling {self.input.path.name}")
+
+    def record_time(self, name):
+        self.timings[name] = time.time()
+
+    def time_between(self, a, b):
+        return self.timings[b] - self.timings[a]
+
+    @property
+    def dependency_list(self):
+        if self._dependency_list: return self._dependency_list
+        dependency_list = list(reversed(list(nx.topological_sort(self.dependency_graph))))
+        self._dependency_list = [path for path in dependency_list if not path.samefile(self.input.path)]
+        return self._dependency_list
+
+    @property
+    def optimization_level(self):
+        # a pass so nice we run it twice
+        o3 = "default<O3>,default<O3>"
+        o2 = "default<O2>"
+        o1 = "default<O1>"
+        opt_level = o1 if self.debug_mode else o3
+        return opt_level
+
+    @property
+    def devirt_settings(self):
+        # this is the real optimization sauce for our language
+        # does another round of cg-scc optimizations whenever an indirect callee is identified
+        # the default in LLVM is like 4 iterations
+        return "--max-devirt-iterations=100 --abort-on-max-devirt-iterations-reached"
+
+    def attributor_settings(self, mode="module"):
+        # We --disable-tail-calls for the following reason:
+        # It is considered UB for a tail call to read or write to an alloca
+        # Heap-to-stack will convert malloc to alloca, retroactively creating UB if used in a tail call
+        no_tail = "--disable-tail-calls"
+        heap_to_stack = "--max-heap-to-stack-size=1024"
+
+        open_world = "--attributor-assume-closed-world=false"
+        use_internal_attributes = "--attributor-manifest-internal"
+        annotate_callsites = "--attributor-annotate-decl-cs"
+        
+        # Using attributor-enable=cgscc or attributor-enable=all takes way too long, though it does generate faster code
+        return f"--attributor-enable={mode} {annotate_callsites} {heap_to_stack} {use_internal_attributes} {open_world} {no_tail}"
+
+    def recompile_set(self) -> set:
+        to_recompile = set()
+        for dependency in self.dependency_list:
+            if already_perfect(dependency, self.build_dir): continue
+            dependents = set(nx.ancestors(self.dependency_graph, dependency))
+            to_recompile.add(dependency)
+            to_recompile = to_recompile.union(dependents)
+        return to_recompile
+
+    def print_dependency_graph(self):
+        print("Dependency graph:")
+        stringio = StringIO()
+        nx.write_network_text(self.dependency_graph, sources=[self.input.path], path=stringio)
+        text_repr = stringio.getvalue().replace("╾","<─").replace("╼",">")
+        print(text_repr)
+
+    def run_codegen(self, ast):
+        try:
+            module = ast.codegen()
+        except Exception as e:
+            reset_ast_globals()
+            raise e
+
+        stringio = StringIO()
+        Printer(stringio).print(module)
+        module_str = stringio.getvalue().encode().decode('unicode_escape')
+        with open(self.build_dir.joinpath("in.mlir"), "w") as outfile: outfile.write(module_str)
+        self.dependency_graph = copy.deepcopy(included_files)
+        if self.show_dependencies: self.print_dependency_graph()
         reset_ast_globals()
-        raise e
+        self.record_time("after_codegen")
+        return module
 
-    stringio = StringIO()
-    Printer(stringio).print(module)
-    module_str = stringio.getvalue().encode().decode('unicode_escape')
-    with open(build_dir.joinpath("in.mlir"), "w") as outfile: outfile.write(module_str)
-    dependency_graph = copy.deepcopy(included_files)
-    if show_dependencies: print_dependency_graph(dependency_graph, input_path)
-    dependency_list = list(reversed(list(nx.topological_sort(dependency_graph))))
-    dependency_list = [path for path in dependency_list if not path.samefile(input_path)]
-    reset_ast_globals()
-    after_codegen = time.time()
-
-    to_recompile = recompile_set(input_path, dependency_list, dependency_graph, build_dir)
-
-    # Do we need to produce a bitcode file or does a good one already exist?
-    needs_lowering = len(to_recompile) > 0 or not already_perfect(input_path, build_dir)
-
-    # process in reverse-topological order, i.e. leaves first
-    for dependency in dependency_list:
-        if not dependency.exists(): raise Exception(f"{input_path}, {dependency}, {dependency_list}")
-        if not dependency in to_recompile: continue
-        # compile the dependency into the current build directory
-        compiler_driver_main(dependency, build_dir=build_dir, no_timings=True)
-
-    time_printer.print(f"Time to parse: {after_parse - after_imports} seconds")
-
-    time_printer.print(f"Time to type check + codegen: {after_codegen - after_parse} seconds")
-
-    after_dependencies = time.time()
-    time_printer.print(f"Time to verify / recompile dependencies: {after_dependencies - after_codegen} seconds")
-
-    pre_lowering = after_dependencies
-    if needs_lowering:
+    def lower(self, module):
         module_str = run_python_lowering(module)
-        after_firstpass = time.time()
-        time_printer.print(f"Time to do python lowering: {after_firstpass - after_dependencies} seconds")
+        self.record_time("after_firstpass")
+        self.time_printer.print(f'Time to do python lowering: {self.time_between("after_dependencies", "after_firstpass")} seconds')
 
-        module_str = run_pdl_lowering(module_str, build_dir)
-        after_pdl = time.time()
-        time_printer.print(f"Time to do PDL lowering: {after_pdl - after_firstpass} seconds")
+        module_str = run_pdl_lowering(module_str, self.build_dir)
+        self.record_time("after_pdl")
+        self.time_printer.print(f'Time to do PDL lowering: {self.time_between("after_firstpass", "after_pdl")} seconds')
 
         module_str = run_mlir_opt(module_str)
-        pre_lowering = time.time()
-        time_printer.print(f"Time to do mlir-opt: {pre_lowering - after_pdl} seconds")
+        self.record_time("after_translate")
+        self.time_printer.print(f'Time to do mlir-opt: {self.time_between("after_pdl", "after_translate")} seconds')
         
-        lower_to_llvm(module_str, input_path, build_dir)
+        self.lower_to_llvm(module_str)
 
-    after_translate = time.time()
-    time_printer.print(f"Time to lower to llvm ir: {after_translate - pre_lowering} seconds")
+    def lower_to_llvm(self, module_str):
+        scf = "--convert-scf-to-cf"
+        arith = "--convert-arith-to-llvm"
+        func = "--convert-func-to-llvm"
+        index = "--convert-index-to-llvm"
+        memref = "--finalize-memref-to-llvm"
+        cf = "--convert-cf-to-llvm"
+        ub = "--convert-ub-to-llvm"
+        to_llvm_dialect = f"{MLIR_OPT_PATH} {scf} {arith} {func} {index} {memref} {cf} {ub} --reconcile-unrealized-casts --emit-bytecode"
+        mlir_translate = f"{MLIR_TRANSLATE_PATH} --mlir-to-llvmir"
 
-    # not creating an output file
-    if not output_path:
-        final_time = after_translate
-        time_printer.print(f"Total time to compile: {final_time - start_time} seconds")
-        status_printer.print(f"Finished compiling {input_path.name}")
-        return
+        bitcodes_folder = self.build_dir / "bitcodes"
+        hashes_folder = self.build_dir / "hashes"
+        os.makedirs(bitcodes_folder, exist_ok=True)
+        os.makedirs(hashes_folder, exist_ok=True)
 
-    llvm_link(input_path, dependency_list, build_dir)
-    after_llvm_link = time.time()
-    time_printer.print(f"Time to llvm-link: {after_llvm_link - after_translate} seconds")
+        # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
+        # this has shown to improve the optimization potential for unclear reasons
+        opt1 = f"{OPT_PATH} --passes=\"reg2mem\""
 
-    run_lto(input_path, dependency_list, build_dir, debug_mode)
-    after_lto = time.time()
-    time_printer.print(f"Time to lto: {after_lto - after_llvm_link} seconds")
+        # We don't want to inline anything here because it might be compiled in debug mode later
+        # I don't mind running attributor-enable=all here because of the lack of inlining
+        o3 = "--passes=\"default<O3>\""
+        opt2 = f"{OPT_PATH} {o3} --inline-threshold=-10000 {self.attributor_settings('all')} {self.devirt_settings} -o {self.input.bc_file}"
+        cmd = " | ".join([to_llvm_dialect, mlir_translate, opt1, opt2])
+        subprocess.run(cmd, text=True, shell=True, input=module_str)
 
-    #run_opt(debug_mode, build_dir)
-    #record_all_passes(build_dir)
-    #after_opt = time.time()
-    #time_printer.print(f"Time to opt: {after_opt - after_llvm_link} seconds")
+        link_layout = (LLVM_LINK_PATH, self.input.bc_file, LAYOUT_PATH, "-o", self.input.bc_file)
+        subprocess.run(link_layout)
+        
+        # if we were doing real LTO
+        # thin_bc_path = bitcodes_folder / f"{in_file_path.stem}.thin.bc"
+        # subprocess.run([OPT_PATH, bc_file_path, "--thinlto-bc", "--unified-lto", "-o", thin_bc_path])
+        
+        # store the hash of the source code file in the build directory
+        self.input.write_hash()
 
-    run_llc(debug_mode, output_path, build_dir)
-    after_llc = time.time()
-    time_printer.print(f"Time to llc: {after_llc - after_lto} seconds")
+        self.record_time("after_lowering")
+        self.time_printer.print(f'Time to lower to LLVM IR: {self.time_between("after_translate", "after_lowering")} seconds')
 
-    # Only creating an object file
-    if output_path.suffix == ".obj":
-        final_time = after_llc
-        time_printer.print(f"Total time to compile: {final_time - start_time} seconds")
-        status_printer.print(f"Finished compiling {input_path.name}")
-        return
+    # merge all the .bc files into one big .ll file for optimization
+    # kind of like LTO but no pretense of being at "link-time"
+    def llvm_link(self):
 
-    run_lld_link(debug_mode, output_path, build_dir)
-    after_lldlink = time.time()
-    final_time = after_lldlink
-    time_printer.print(f"Time to lld link: {after_lldlink - after_llc} seconds")
-    time_printer.print(f"Total time to compile: {final_time - start_time} seconds")
-    status_printer.print(f"Finished compiling {input_path.name}")
+        self.record_time("before_llvm_link")
+
+        bc_file_paths = (self.build_dir.joinpath(f"bitcodes/{path.stem}.bc") for path in self.dependency_list)
+        lib_file_path = self.build_dir / f"{self.input.path.stem}.lib"
+        make_archive = (LLVM_AR_PATH, "cr", lib_file_path, *bc_file_paths)
+        subprocess.run(make_archive)
+
+        out_linked_path = self.build_dir / "out_linked.ll"
+        out_thin_path = self.build_dir / "out_thin.bc"
+        os_utils_path = WIN_UTILS_PATH if platform.system() == "Windows" else POSIX_UTILS_PATH
+        link_utils = (LLVM_LINK_PATH, UTILS_PATH, os_utils_path, self.input.bc_file, "-S", "-o", out_linked_path)
+        subprocess.run(link_utils)
+
+        # use the correct main function
+        replace_in_file(out_linked_path, f"_main_{clean_name(self.input.path.stem)}", "main")
+
+        subprocess.run((OPT_PATH, out_linked_path, "--thinlto-bc", "--unified-lto", "-o", out_thin_path))
+
+        # using --only-needed cuts out a lot of unnecessary imports
+        out_reg2mem_path = self.build_dir / "out_reg2mem.ll"
+        link_imports = (LLVM_LINK_PATH, "-S", out_linked_path, lib_file_path, "-o", out_reg2mem_path, "--only-needed")
+        subprocess.run(link_imports)
+
+        self.record_time("after_llvm_link")
+        self.time_printer.print(f'Time to llvm-link: {self.time_between("before_llvm_link", "after_llvm_link")} seconds')
+
+    # LTO doesn't work the normal way (drops needed imports) so we try to partition the linked file for LTO
+    def run_lto(self):
+
+        #thin_paths = [str(build_dir.joinpath(f"bitcodes/{path.stem}.thin.bc")) for path in dependency_list]
+
+        out_thin_path = self.build_dir / "out_thin.bc"
+        out_reg2mem_path = self.build_dir / "out_reg2mem.ll"
+        out_optimized_path = self.build_dir / "out_optimized.ll"
+
+        subprocess.run((OPT_PATH, out_reg2mem_path, "--thinlto-bc", "--unified-lto", "--thinlto-split-lto-unit", "-o", out_thin_path))
+
+        # inline everything at o3, and nothing at debug. let the machine outliner undo some of it later, if requested
+        inline_settings = "--inline-threshold=-10000" if self.debug_mode else "--inline-threshold=10000"
+        passes = f"--lto-newpm-passes={self.optimization_level}"
+
+        settings = f"{self.devirt_settings} {inline_settings} {self.attributor_settings()} --enable-lto-internalization=false"
+        mllvm_options = (f"--mllvm={s}" for s in settings.split(" "))
+
+        # lld with -flavor gnu is equivalent to ld.lld
+        command = (LLD_PATH, "-flavor", "gnu", out_thin_path, "--lto=thin", passes, "--lto-emit-llvm", "-o", "out_lto.bc", *mllvm_options)
+        subprocess.run(command, cwd=self.build_dir)
+
+        lto_file = self.build_dir / "out_lto.bc"
+        subprocess.run((OPT_PATH, lto_file, "-S", "-o", out_optimized_path))
+
+        self.record_time("after_lto")
+        self.time_printer.print(f'Time to lto: {self.time_between("after_llvm_link", "after_lto")} seconds')
+
+    def run_llc(self):
+        target_triple = "-mtriple=x86_64-pc-windows-msvc"
+        debug_extension = ".dbg" if self.debug_mode else ""
+
+        # necessary so that the machine outliner doesn't break; default would otherwise be 'exception-model=wineh'
+        exception_model = "-exception-model=sjlj"
+        outliner_settings = "-enable-machine-outliner -machine-outliner-reruns=2"
+
+        obj_dir = self.output_path.parent if self.output_path.suffix == ".obj" else self.build_dir
+        os.makedirs(obj_dir, exist_ok=True)
+
+        obj_path = obj_dir / f"{self.output_path.stem}.obj"
+        out_optimized_path = self.build_dir / f"out_optimized{debug_extension}.ll"
+
+        llc = (LLC_PATH, "-filetype=obj", out_optimized_path, "-O=3", target_triple, exception_model, "-o", obj_path)
+        subprocess.run(llc)
+
+        self.record_time("after_llc")
+        self.time_printer.print(f'Time to llc: {self.time_between("after_lto", "after_llc")} seconds')
+
+    def run_lld(self):
+        debug_flag = "/debug" if self.debug_mode else ""
+        dynamic_libc = ("msvcrt.lib", "legacy_stdio_definitions.lib")
+        static_libc = "libcmt.lib"
+        os.makedirs(self.output_path.parent, exist_ok=True)
+        obj_path = self.build_dir / f"{self.output_path.stem}.obj"
+        exe_path = self.output_path.parent / f"{self.output_path.stem}.exe"
+        
+        # lld with -flavor link is equivalent to lld-link
+        lld_link = (LLD_PATH, "-flavor", "link", obj_path, f"/out:{exe_path}", debug_flag, *dynamic_libc)
+        subprocess.run(lld_link)
+
+        self.record_time("after_lld")
+        self.time_printer.print(f'Time to lld link: {self.time_between("after_llc", "after_lld")} seconds')
+
+@dataclass
+class InputFile:
+    path: Path
+    build_dir: Path
+
+    @property
+    def bc_file(self):
+        return self.build_dir / "bitcodes" / f"{self.path.stem}.bc"
+
+    @property
+    def hash_file(self):
+        return self.build_dir / "hashes" / f"{self.path.stem}.hash"
+
+    def write_hash(self):
+        with open(self.hash_file, "wb") as f: f.write(hash_file(self.path))
 
 @dataclass
 class OptionalPrinter:
@@ -184,15 +384,12 @@ def already_perfect(source_path, build_dir) -> bool:
     if src_hash == stored_hash: return True
     return False
 
-def recompile_set(input_path, dependency_list, dependency_graph, build_dir) -> set:
-    to_recompile = set()
-    for dependency in dependency_list:
-        if dependency == input_path: continue
-        if already_perfect(dependency, build_dir): continue
-        dependents = set(nx.ancestors(dependency_graph, dependency))
-        to_recompile.add(dependency)
-        to_recompile = to_recompile.union(dependents)
-    return to_recompile
+def replace_in_file(path, string, replacement):
+    with open(path, "r+") as f:
+        txt = f.read()
+        f.seek(0)
+        f.write(txt.replace(string, replacement))
+        f.truncate()
 
 def add_source_directories(input_path):
 
@@ -218,13 +415,6 @@ def add_source_directories(input_path):
     lib_folder_2 = input_path.parent.joinpath("lib")
     if lib_folder_2.exists():
         source_directories[lib_folder_2.resolve()] = lib_folder_2.resolve()
-
-def print_dependency_graph(included_files, root_path):
-    print("Dependency graph:")
-    stringio = StringIO()
-    nx.write_network_text(included_files, sources=[root_path], path=stringio)
-    text_repr = stringio.getvalue().replace("╾","<─").replace("╼",">")
-    print(text_repr)
 
 def run_python_lowering(module) -> str:
     lowered_module = do_lowering(module)
@@ -274,14 +464,17 @@ def run_pdl_lowering(module_str, build_dir) -> str:
     return module_str
 
 def run_mlir_opt(module_str) -> str:
-    cmd = " ".join([
-        f"{MLIR_OPT_PATH}","-allow-unregistered-dialect","--mlir-print-op-generic","--canonicalize=\"region-simplify=aggressive\"",
-        "--sroa","--lift-cf-to-scf",
-        "--canonicalize=\"region-simplify=aggressive\"", "--sccp", "--loop-invariant-code-motion","--loop-invariant-subset-hoisting",
-        "--cse","--control-flow-sink","--convert-func-to-llvm"
-    ])
-    
-    cmd_out = subprocess.run(cmd, capture_output=True, shell=True, text=True, input=module_str, check=True)
+    unregistered = "--allow-unregistered-dialect"
+    generic = "--mlir-print-op-generic"
+    cf_to_scf = "--lift-cf-to-scf"
+    canonicalize = "--canonicalize=region-simplify=aggressive"
+    licm = "--loop-invariant-code-motion"
+    lish = "--loop-invariant-subset-hoisting"
+    cfs = "--control-flow-sink"
+    func_to_llvm = "--convert-func-to-llvm"
+
+    cmd = (f"{MLIR_OPT_PATH}", unregistered, generic, canonicalize, "--sroa", cf_to_scf, canonicalize, "--sccp", licm, lish, "--cse", cfs, func_to_llvm)
+    cmd_out = subprocess.run(cmd, capture_output=True, text=True, input=module_str, check=True)
     #with open("liveness_log.txt", "w") as outfile: outfile.write(cmd_out.stderr)
     module_str = cmd_out.stdout.replace("\\","\\\\")
     
@@ -291,181 +484,18 @@ def run_mlir_opt(module_str) -> str:
     module_str = stringio.getvalue().encode().decode('unicode_escape')
     return module_str
 
-def lower_to_llvm(module_str, in_file_path, build_dir):
-    to_llvm_dialect = " ".join([f"{MLIR_OPT_PATH}","--convert-scf-to-cf", "--convert-arith-to-llvm","--convert-func-to-llvm","--convert-index-to-llvm",
-        "--finalize-memref-to-llvm","--convert-cf-to-llvm","--convert-ub-to-llvm","--reconcile-unrealized-casts",
-        "--emit-bytecode"
-    ])
-    mlir_translate = f"{MLIR_TRANSLATE_PATH} --mlir-to-llvmir"
-
-    bitcodes_folder = build_dir / "bitcodes"
-    hashes_folder = build_dir / "hashes"
-    os.makedirs(bitcodes_folder, exist_ok=True)
-    os.makedirs(hashes_folder, exist_ok=True)
-
-    bc_file_path = bitcodes_folder / f"{in_file_path.stem}.bc"
-    hash_file_path = hashes_folder / f"{in_file_path.stem}.hash"
-
-    # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
-    # this has shown to improve the optimization potential for unclear reasons
-    opt1 = f"{OPT_PATH} --passes=\"reg2mem\""
-
-    # We don't want to inline anything here because it might be compiled in debug mode later
-    # I don't mind running attributor-enable=all here because of the lack of inlining
-    opt2 = f"{OPT_PATH} --passes=\"default<O3>\" --inline-threshold=-10000 {attributor_settings('all')} --max-devirt-iterations=100 -o {bc_file_path}"
-    cmd = " | ".join([to_llvm_dialect, mlir_translate, opt1, opt2])
-    subprocess.run(cmd, text=True, shell=True, input=module_str)
-
-    link_layout = [LLVM_LINK_PATH, bc_file_path, LAYOUT_PATH, "-o", bc_file_path]
-    subprocess.run(link_layout)
-    
-    # if we were doing LTO
-    # thin_bc_path = bitcodes_folder / f"{in_file_path.stem}.thin.bc"
-    # subprocess.run([OPT_PATH, bc_file_path, "--thinlto-bc", "--unified-lto", "-o", thin_bc_path])
-    
-    # store the hash of the source code file in the build directory
-    with open(hash_file_path, "wb") as f: f.write(hash_file(in_file_path))
-
-# merge all the .bc files into one big .ll file for optimization
-# kind of like LTO but no pretense of being at "link-time"
-def llvm_link(input_path, dependency_list, build_dir):
-
-    bc_file_paths = [(build_dir / "bitcodes" / f"{path.stem}.bc") for path in dependency_list]
-    lib_file_path = build_dir / f"{input_path.stem}.lib"
-    make_archive = (LLVM_AR_PATH, "cr", lib_file_path, *bc_file_paths)
-    subprocess.run(make_archive)
-
-    bc_file_path = build_dir / "bitcodes" / f"{input_path.stem}.bc"
-    out_linked_path = build_dir / "out_linked.ll"
-    out_thin_path = build_dir / "out_thin.bc"
-    os_utils_path = WIN_UTILS_PATH if platform.system() == "Windows" else POSIX_UTILS_PATH
-    link_utils = (LLVM_LINK_PATH, UTILS_PATH, os_utils_path, bc_file_path, "-S", "-o", out_linked_path)
-    subprocess.run(link_utils)
-
-    # use the correct main function
-    with open(out_linked_path, "r+") as f:
-        txt = f.read()
-        f.seek(0)
-        f.write(txt.replace(f"_main_{clean_name(input_path.stem)}", "main"))
-        f.truncate()
-
-    subprocess.run((OPT_PATH, out_linked_path, "--thinlto-bc", "--unified-lto", "-o", out_thin_path))
-
-    # using --only-needed cuts out a lot of unnecessary imports
-    out_reg2mem_path = build_dir / "out_reg2mem.ll"
-    link_imports = (LLVM_LINK_PATH, "-S", out_linked_path, lib_file_path, "-o", out_reg2mem_path, "--only-needed")
-    subprocess.run(link_imports)
-
-# LTO doesn't work the normal way (drops needed imports) so we try to partition the linked file for LTO
-def run_lto(input_path, dependency_list, build_dir, debug_mode):
-
-    #thin_paths = [str(build_dir.joinpath(f"bitcodes/{path.stem}.thin.bc")) for path in dependency_list]
-
-    out_thin_path = build_dir / "out_thin.bc"
-    out_reg2mem_path = build_dir / "out_reg2mem.ll"
-    out_optimized_path = build_dir / "out_optimized.ll"
-
-    subprocess.run((OPT_PATH, out_reg2mem_path, "--thinlto-bc", "--unified-lto", "--thinlto-split-lto-unit", "-o", out_thin_path))
-
-    # inline everything at o3, and nothing at debug. let the machine outliner undo some of it later, if requested
-    inline_settings = "--inline-threshold=-10000" if debug_mode else "--inline-threshold=10000"
-    passes = f"--lto-newpm-passes={optimization_level(debug_mode)}"
-
-    settings = f"{devirtualization_settings()} {inline_settings} {attributor_settings()} --enable-lto-internalization=false"
-    mllvm_options = (f"--mllvm={s}" for s in settings.split(" "))
-
-    # lld with -flavor gnu is equivalent to ld.lld
-    command = (LLD_PATH, "-flavor", "gnu", out_thin_path, "--lto=thin", passes, "--lto-emit-llvm", "-o", "out_lto.bc", *mllvm_options)
-    subprocess.run(command, cwd=build_dir)
-
-    lto_file = build_dir / "out_lto.bc"
-    subprocess.run((OPT_PATH, lto_file, "-S", "-o", out_optimized_path))
-
 def record_all_passes(build_dir):
     #clang = "clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
     passes = "--passes=default<O1>"
     #opt = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
-    out_lto_path = build_dir / "out_lto.bc"
+    out_reg2mem_path = build_dir / "out_reg2mem.ll"
     opt = (OPT_PATH, passes, attributor_settings(), devirtualization_settings(), "--inline-threshold=10000", "--print-changed")
-    #with open(out_reg2mem_path, "r+") as f:
-    #    txt = f.read()
-    #    f.seek(0)
-    #    # clang can't handle the 'preserve_nonecc' attribute for some reason
-    #    f.write(txt.replace("preserve_nonecc",""))
-    #    f.truncate()
+
+    # clang can't handle the 'preserve_nonecc' attribute for some reason
+    replace_in_file(out_reg2mem_path, "preserve_nonecc", "")
+
     opt_out = subprocess.run(opt, capture_output=True)
     with open(build_dir.joinpath("opt_passes.txt"), "w") as outfile: outfile.write(opt_out.stderr)
-
-def run_opt(debug_mode, build_dir):
-    out_optimized_path = build_dir / "out_optimized.ll"
-    out_reg2mem_path = build_dir / "out_reg2mem.ll"
-    
-    # interesting = "--use-noalias-intrinsic-during-inlining --mem-intrinsic-expand-size=1024"
-
-    # inline everything at o3, and nothing at debug. let the machine outliner undo some of it later, if requested
-    inline_settings = "--inline-threshold=-10000" if debug_mode else "--inline-threshold=10000"
-    passes = f"--passes={optimization_level(debug_mode)}"
-
-    opt = (OPT_PATH, "-S", out_reg2mem_path, passes, inline_settings, devirtualization_settings(), attributor_settings(), "-o", out_optimized_path)
-    subprocess.run(opt)
-
-    if debug_mode: subprocess.run([DEBUGIR_PATH, out_optimized_path])
-
-def attributor_settings(mode="module"):
-    # We --disable-tail-calls for the following reason:
-    # It is considered UB for a tail call to read or write to an alloca
-    # Heap-to-stack will convert malloc to alloca, retroactively creating UB if used in a tail call
-    no_tail = "--disable-tail-calls"
-    heap_to_stack = "--max-heap-to-stack-size=1024"
-
-    open_world = "--attributor-assume-closed-world=false"
-    use_internal_attributes = "--attributor-manifest-internal"
-    annotate_callsites = "--attributor-annotate-decl-cs"
-    
-    # Using attributor-enable=cgscc or attributor-enable=all takes way too long, though it does generate faster code
-    return f"--attributor-enable={mode} {annotate_callsites} {heap_to_stack} {use_internal_attributes} {open_world} {no_tail}"
-
-def devirtualization_settings():
-    # this is the real optimization sauce for our language
-    # does another round of cg-scc optimizations whenever an indirect callee is identified
-    # the default in LLVM is like 4 iterations
-    return "--max-devirt-iterations=100 --abort-on-max-devirt-iterations-reached"
-
-def optimization_level(debug_mode):
-    o3 = "default<O3>,default<O3>"
-    o2 = "default<O2>"
-    o1 = "default<O1>"
-    opt_level = o1 if debug_mode else o3
-    return opt_level
-
-def run_llc(debug_mode, output_path, build_dir):
-    target_triple = "-mtriple=x86_64-pc-windows-msvc"
-    debug_extension = ".dbg" if debug_mode else ""
-
-    # necessary so that the machine outliner doesn't break; default would otherwise be 'exception-model=wineh'
-    exception_model = "-exception-model=sjlj"
-    outliner_settings = "-enable-machine-outliner -machine-outliner-reruns=2"
-
-    obj_dir = output_path.parent if output_path.suffix == ".obj" else build_dir
-    os.makedirs(obj_dir, exist_ok=True)
-
-    obj_path = obj_dir / f"{output_path.stem}.obj"
-    out_optimized_path = build_dir / f"out_optimized{debug_extension}.ll"
-
-    llc = (LLC_PATH, "-filetype=obj", out_optimized_path, "-O=3", target_triple, exception_model, "-o", obj_path)
-    subprocess.run(llc)
-
-def run_lld_link(debug_mode, output_path, build_dir):
-    debug_flag = "/debug" if debug_mode else ""
-    dynamic_libc = ("msvcrt.lib", "legacy_stdio_definitions.lib")
-    static_libc = "libcmt.lib"
-    os.makedirs(output_path.parent, exist_ok=True)
-    obj_path = build_dir / f"{output_path.stem}.obj"
-    exe_path = output_path.parent / f"{output_path.stem}.exe"
-    
-    # lld with -flavor link is equivalent to lld-link
-    lld_link = (LLD_PATH, "-flavor", "link", obj_path, f"/out:{exe_path}", debug_flag, *dynamic_libc)
-    subprocess.run(lld_link)
 
 def add_compiler_args(parser):
     parser.add_argument('input_file_path', help='The input file which will be compiled')

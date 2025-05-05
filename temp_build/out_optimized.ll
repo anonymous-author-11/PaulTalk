@@ -9,11 +9,11 @@ target triple = "aarch64-unknown-linux-gnu"
 @current_coroutine = weak_odr dso_local thread_local local_unnamed_addr global ptr null
 @always_one = weak dso_local thread_local local_unnamed_addr global i1 true
 @current_ptr = internal thread_local global ptr null
-@xjiio_Warning_Remove_returned_Nil_for_key_ = internal unnamed_addr constant [37 x i8] c"Warning: Remove returned Nil for key "
-@zaets_Warning_Remove_returned_wrong_value_for_key_ = internal unnamed_addr constant [45 x i8] c"Warning: Remove returned wrong value for key "
-@pidap_Error_Nil_returned_during_random_hit_test_for_key_ = internal unnamed_addr constant [51 x i8] c"Error: Nil returned during random hit test for key "
-@mtuco__unique_keys_for_random_hit_test = internal unnamed_addr constant [33 x i8] c" unique keys for random hit test."
-@wipeb_Error_Nil_returned_during_sequential_hit_test_for_key_ = internal unnamed_addr constant [55 x i8] c"Error: Nil returned during sequential hit test for key "
+@yvhoz_Warning_Remove_returned_Nil_for_key_ = internal unnamed_addr constant [37 x i8] c"Warning: Remove returned Nil for key "
+@eifxa_Warning_Remove_returned_wrong_value_for_key_ = internal unnamed_addr constant [45 x i8] c"Warning: Remove returned wrong value for key "
+@hyxgh_Error_Nil_returned_during_random_hit_test_for_key_ = internal unnamed_addr constant [51 x i8] c"Error: Nil returned during random hit test for key "
+@rkmtz__unique_keys_for_random_hit_test = internal unnamed_addr constant [33 x i8] c" unique keys for random hit test."
+@isaob_Error_Nil_returned_during_sequential_hit_test_for_key_ = internal unnamed_addr constant [55 x i8] c"Error: Nil returned during sequential hit test for key "
 @_parameterization_Pairi32._i1 = weak_odr dso_local constant [4 x ptr] [ptr @Pair, ptr @_parameterization_i32, ptr @_parameterization_i1, ptr null]
 @_parameterization_Functioni32._i32_to_i1 = weak_odr dso_local local_unnamed_addr constant [5 x ptr] [ptr @function_typ, ptr @_parameterization_i1, ptr @_parameterization_i32, ptr @_parameterization_i32, ptr null]
 @_parameterization_Functioni32_to_i32 = weak_odr dso_local local_unnamed_addr constant [4 x ptr] [ptr @function_typ, ptr @_parameterization_i32, ptr @_parameterization_i32, ptr null]
@@ -30,8 +30,6 @@ target triple = "aarch64-unknown-linux-gnu"
 @i32_typ_offset_tbl = dso_local constant [4 x i32] [i32 10, i32 10, i32 10, i32 0]
 @i64_typ_hashtbl = dso_local constant [4 x ptr] [ptr @any_typ, ptr @Object, ptr @i64_typ, ptr null]
 @i64_typ_offset_tbl = dso_local constant [4 x i32] [i32 10, i32 10, i32 10, i32 0]
-@f64_typ_hashtbl = dso_local constant [4 x ptr] [ptr @Object, ptr @any_typ, ptr null, ptr @f64_typ]
-@f64_typ_offset_tbl = dso_local constant [4 x i32] [i32 10, i32 10, i32 0, i32 10]
 @nil_typ_hashtbl = dso_local constant [2 x ptr] [ptr @nil_typ, ptr @any_typ]
 @nil_typ_offset_tbl = dso_local constant [2 x i32] [i32 10, i32 10]
 @any_typ_hashtbl = dso_local constant [1 x ptr] [ptr @any_typ]
@@ -45,7 +43,6 @@ target triple = "aarch64-unknown-linux-gnu"
 @Object_hashtbl = dso_local constant [2 x ptr] [ptr @Object, ptr @any_typ]
 @Object_offset_tbl = dso_local constant [2 x i32] [i32 10, i32 10]
 @_parameterization_i1 = weak_odr dso_local constant [2 x ptr] [ptr @bool_typ, ptr null]
-@function_typ = dso_local constant { [3 x i64], [7 x ptr], [0 x ptr] } { [3 x i64] [i64 7927147055246173914, i64 4611686018427388081, i64 3], [7 x ptr] [ptr @subtype_test, ptr @function_typ_hashtbl, ptr @function_typ_offset_tbl, ptr @_data_size_function_typ, ptr @_box_function_typ, ptr @_unbox_function_typ, ptr @_data_size_function_typ], [0 x ptr] undef }
 @Pair_hashtbl = dso_local constant [4 x ptr] [ptr @Object, ptr @any_typ, ptr @Pair, ptr null]
 @Pair_offset_tbl = dso_local constant [4 x i32] [i32 20, i32 10, i32 10, i32 0]
 @Container_hashtbl = dso_local constant [4 x ptr] [ptr @Object, ptr @any_typ, ptr null, ptr @Container]
@@ -147,11 +144,12 @@ target triple = "aarch64-unknown-linux-gnu"
 @bool_typ = dso_local constant { [3 x i64], [7 x ptr], [0 x ptr] } { [3 x i64] [i64 5801531371504802705, i64 4611686018427388081, i64 3], [7 x ptr] [ptr @subtype_test, ptr @bool_typ_hashtbl, ptr @bool_typ_offset_tbl, ptr @_data_size_bool_typ, ptr @_box_bool_typ, ptr @_unbox_bool_typ, ptr @_data_size_bool_typ], [0 x ptr] undef }
 @IO_hashtbl = dso_local constant [4 x ptr] [ptr @any_typ, ptr @IO, ptr null, ptr @Object]
 @IO_offset_tbl = dso_local constant [4 x i32] [i32 10, i32 10, i32 0, i32 20]
-@IO = dso_local constant { [3 x i64], [7 x ptr], [10 x ptr] } { [3 x i64] [i64 5359822646784595218, i64 4611686018427388247, i64 3], [7 x ptr] [ptr @subtype_test, ptr @IO_hashtbl, ptr @IO_offset_tbl, ptr @_data_size_IO, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [10 x ptr] [ptr @IO_B__Self_print_xi1__Self_print_xRepresentable__Self_print_xf64__Self_print_xi8__Self_print_xNil__Self_print_xCharacter__Self_print_xString__Self_print_xi32__Self_print_xi64, ptr @IO__Self_print_xi1, ptr @IO__Self_print_xRepresentable, ptr @IO__Self_print_xf64, ptr @IO__Self_print_xi8, ptr @IO__Self_print_xNil, ptr @IO__Self_print_xCharacter, ptr @IO__Self_print_xString, ptr @IO__Self_print_xi32, ptr @IO__Self_print_xi64] }
+@IO = dso_local constant { [3 x i64], [7 x ptr], [10 x ptr] } { [3 x i64] [i64 5359822646784595218, i64 4611686018427388247, i64 3], [7 x ptr] [ptr @subtype_test, ptr @IO_hashtbl, ptr @IO_offset_tbl, ptr @_data_size_IO, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [10 x ptr] [ptr @IO_B__Self_print_xRepresentable__Self_print_xi8__Self_print_xString__Self_print_xi64__Self_print_xi32__Self_print_xi1__Self_print_xNil__Self_print_xCharacter__Self_print_xf64, ptr @IO__Self_print_xRepresentable, ptr @IO__Self_print_xi8, ptr @IO__Self_print_xString, ptr @IO__Self_print_xi64, ptr @IO__Self_print_xi32, ptr @IO__Self_print_xi1, ptr @IO__Self_print_xNil, ptr @IO__Self_print_xCharacter, ptr @IO__Self_print_xf64] }
 @_parameterization_i64 = weak_odr dso_local local_unnamed_addr constant [2 x ptr] [ptr @i64_typ, ptr null]
 @i8_typ = dso_local constant { [3 x i64], [7 x ptr], [0 x ptr] } { [3 x i64] [i64 2582149688529881115, i64 4611686018427388081, i64 3], [7 x ptr] [ptr @subtype_test, ptr @i8_typ_hashtbl, ptr @i8_typ_offset_tbl, ptr @_data_size_i8_typ, ptr @_box_i8_typ, ptr @_unbox_i8_typ, ptr @_data_size_i8_typ], [0 x ptr] undef }
 @i64_typ = dso_local constant { [3 x i64], [7 x ptr], [0 x ptr] } { [3 x i64] [i64 -7469797244461771922, i64 4611686018427388157, i64 3], [7 x ptr] [ptr @subtype_test, ptr @i64_typ_hashtbl, ptr @i64_typ_offset_tbl, ptr @_data_size_i64_typ, ptr @_box_i64_typ, ptr @_unbox_i64_typ, ptr @_data_size_i64_typ], [0 x ptr] undef }
-@aovie_CUsersPaulKOneDriveDocumentsPLPyPLlibarraymini = internal unnamed_addr constant [56 x i8] c"C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\array.mini"
+@function_typ = dso_local constant { [3 x i64], [7 x ptr], [0 x ptr] } { [3 x i64] [i64 7927147055246173914, i64 4611686018427388081, i64 3], [7 x ptr] [ptr @subtype_test, ptr @function_typ_hashtbl, ptr @function_typ_offset_tbl, ptr @_data_size_function_typ, ptr @_box_function_typ, ptr @_unbox_function_typ, ptr @_data_size_function_typ], [0 x ptr] undef }
+@khovy_CUsersPaulKOneDriveDocumentsPLPyPLlibarraymini = internal unnamed_addr constant [56 x i8] c"C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\array.mini"
 @Representable = dso_local constant { [3 x i64], [7 x ptr], [2 x ptr] } { [3 x i64] [i64 -7260840641129990118, i64 4611686018427388093, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Representable_hashtbl, ptr @Representable_offset_tbl, ptr @_data_size_Representable, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [2 x ptr] [ptr @Representable_B_repr_, ptr @Representable_repr_] }
 @Array_hashtbl = dso_local constant [8 x ptr] [ptr null, ptr null, ptr @Iterable, ptr @any_typ, ptr @Container, ptr @Array, ptr @Representable, ptr @Object]
 @Array_offset_tbl = dso_local constant [8 x i32] [i32 0, i32 0, i32 68, i32 10, i32 91, i32 10, i32 91, i32 91]
@@ -164,10 +162,9 @@ target triple = "aarch64-unknown-linux-gnu"
 @Array_field_capacity = internal constant { ptr, ptr } { ptr @Array_getter_capacity, ptr @Array_setter_capacity }
 @ArrayIterator_field_array = internal constant { ptr, ptr } { ptr @ArrayIterator_getter_array, ptr @ArrayIterator_setter_array }
 @ArrayIterator_field_index = internal constant { ptr, ptr } { ptr @ArrayIterator_getter_index, ptr @ArrayIterator_setter_index }
-@f64_typ = dso_local constant { [3 x i64], [7 x ptr], [0 x ptr] } { [3 x i64] [i64 -757315540097298781, i64 4611686018427388081, i64 3], [7 x ptr] [ptr @subtype_test, ptr @f64_typ_hashtbl, ptr @f64_typ_offset_tbl, ptr @_data_size_f64_typ, ptr @_box_f64_typ, ptr @_unbox_f64_typ, ptr @_data_size_f64_typ], [0 x ptr] undef }
 @_parameterization_String = weak_odr dso_local constant [2 x ptr] [ptr @String, ptr null]
 @_parameterization_Bufferi8 = weak_odr dso_local constant [2 x ptr] [ptr @buffer_typ, ptr null]
-@hnrmr_CUsersPaulKOneDriveDocumentsPLPyPLlibmapmini = internal unnamed_addr constant [54 x i8] c"C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\map.mini"
+@qufum_CUsersPaulKOneDriveDocumentsPLPyPLlibmapmini = internal unnamed_addr constant [54 x i8] c"C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\map.mini"
 @String = dso_local constant { [3 x i64], [7 x ptr], [79 x ptr] } { [3 x i64] [i64 6499063144389013426, i64 4611686018427388601, i64 7], [7 x ptr] [ptr @subtype_test, ptr @String_hashtbl, ptr @String_offset_tbl, ptr @_data_size_String, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [79 x ptr] [ptr @String_field_bytes, ptr @String_field_length, ptr @String_field_capacity, ptr @String_field_String_0, ptr @String_B__Self_from_c_string_c_stringBufferi8, ptr @String_B_init_, ptr @String_B_init_bytesBufferi8_lengthi32_capacityi32, ptr @String_B_length_, ptr @String_B_capacity_, ptr @String_B_bytes_, ptr @String_B_c_string_, ptr @String_B_append_xi8, ptr @String_B_extend_strString, ptr @String_B__index_xi32, ptr @String_B__EQ_otherString, ptr @String_B_pop_, ptr @String_B_copy_, ptr @String_B_iterator_, ptr @String_B_each_fFunctionT_to_Nothing, ptr @String_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @String_B_all_fFunctionT_to_i1, ptr @String_B_any_fFunctionT_to_i1, ptr @String_B_map_fFunctionT_to_U, ptr @String_B_filter_fFunctionT_to_i1, ptr @String_B_chain_otherIterableT, ptr @String_B_interleave_otherIterableT, ptr @String_B_zip_otherIterableU, ptr @String_B_product_otherIterableU, ptr @String_B_repr_, ptr @String__Self_from_c_string_c_stringBufferi8, ptr @String_init_, ptr @String_init_bytesBufferi8_lengthi32_capacityi32, ptr @String_length_, ptr @String_capacity_, ptr @String_bytes_, ptr @String_c_string_, ptr @String_append_xi8, ptr @String_extend_strString, ptr @String__index_xi32, ptr @String__EQ_otherString, ptr @String_pop_, ptr @String_copy_, ptr @String_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_i1, ptr @Iterable_any_fFunctionT_to_i1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_i1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @String_repr_, ptr @String_field_String_0, ptr @String_B_iterator_, ptr @String_B_each_fFunctionT_to_Nothing, ptr @String_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @String_B_all_fFunctionT_to_i1, ptr @String_B_any_fFunctionT_to_i1, ptr @String_B_map_fFunctionT_to_U, ptr @String_B_filter_fFunctionT_to_i1, ptr @String_B_chain_otherIterableT, ptr @String_B_interleave_otherIterableT, ptr @String_B_zip_otherIterableU, ptr @String_B_product_otherIterableU, ptr @String_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_i1, ptr @Iterable_any_fFunctionT_to_i1, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_i1, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @String_B_repr_, ptr @String_repr_] }
 @Character = dso_local constant { [3 x i64], [7 x ptr], [5 x ptr] } { [3 x i64] [i64 6681222582356018452, i64 4611686018427388091, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Character_hashtbl, ptr @Character_offset_tbl, ptr @_data_size_Character, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [5 x ptr] [ptr @Character_field_byte, ptr @Character_B_byte_, ptr @Character_B_init_bytei8, ptr @Character_byte_, ptr @Character_init_bytei8] }
 @StringIterator = dso_local constant { [3 x i64], [7 x ptr], [10 x ptr] } { [3 x i64] [i64 -7260570988945952630, i64 4611686018427388081, i64 7], [7 x ptr] [ptr @subtype_test, ptr @StringIterator_hashtbl, ptr @StringIterator_offset_tbl, ptr @_data_size_StringIterator, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [10 x ptr] [ptr @StringIterator_field_str, ptr @StringIterator_field_index, ptr @StringIterator_field_StringIterator_0, ptr @StringIterator_B_init_strString, ptr @StringIterator_B_next_, ptr @StringIterator_init_strString, ptr @StringIterator_next_, ptr @StringIterator_field_StringIterator_0, ptr @StringIterator_B_next_, ptr @StringIterator_next_] }
@@ -812,7 +809,7 @@ define dso_local void @anoint_trampoline(ptr nofree %0) local_unnamed_addr #29 {
 ; Function Attrs: mustprogress nofree nosync nounwind willreturn memory(argmem: readwrite)
 declare i32 @VirtualProtect(ptr, i64, i32, ptr) local_unnamed_addr #29
 
-define dso_local i1 @mcxmpemhen(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #30 {
+define dso_local i1 @lswpfbyore(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #30 {
   %4 = extractvalue { ptr, i160 } %1, 1
   %5 = trunc i160 %4 to i32
   %6 = extractvalue { ptr, i160 } %2, 1
@@ -821,14 +818,14 @@ define dso_local i1 @mcxmpemhen(ptr nest nocapture nofree noundef nonnull readon
   ret i1 %8
 }
 
-define dso_local i32 @pvwlqkytbf(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #30 {
+define dso_local i32 @ojnivhabfh(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #30 {
   %3 = extractvalue { ptr, i160 } %1, 1
   %4 = trunc i160 %3 to i32
   %5 = call i32 %0(i32 %4)
   ret i32 %5
 }
 
-define dso_local i1 @jhdbvbpdha(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #30 {
+define dso_local i1 @pkzwkzkbzm(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #30 {
   %4 = extractvalue { ptr, i160 } %1, 1
   %5 = trunc i160 %4 to i32
   %6 = extractvalue { ptr, i160 } %2, 1
@@ -837,14 +834,14 @@ define dso_local i1 @jhdbvbpdha(ptr nest nocapture nofree noundef nonnull readon
   ret i1 %8
 }
 
-define dso_local i32 @zzjhbkrgoq(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #30 {
+define dso_local i32 @jlshupgucm(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #30 {
   %3 = extractvalue { ptr, i160 } %1, 1
   %4 = trunc i160 %3 to i32
   %5 = call i32 %0(i32 %4)
   ret i32 %5
 }
 
-define dso_local i1 @dbfnyntjhi(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #30 {
+define dso_local i1 @hngttiynxy(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #30 {
   %4 = extractvalue { ptr, i160 } %1, 1
   %5 = trunc i160 %4 to i32
   %6 = extractvalue { ptr, i160 } %2, 1
@@ -853,14 +850,14 @@ define dso_local i1 @dbfnyntjhi(ptr nest nocapture nofree noundef nonnull readon
   ret i1 %8
 }
 
-define dso_local i32 @yhzeckjmtc(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #30 {
+define dso_local i32 @zwreoxukwo(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #30 {
   %3 = extractvalue { ptr, i160 } %1, 1
   %4 = trunc i160 %3 to i32
   %5 = call i32 %0(i32 %4)
   ret i32 %5
 }
 
-define dso_local i1 @gziprqswca(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #30 {
+define dso_local i1 @ajmtsoqhlz(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #30 {
   %4 = extractvalue { ptr, i160 } %1, 1
   %5 = trunc i160 %4 to i32
   %6 = extractvalue { ptr, i160 } %2, 1
@@ -869,14 +866,14 @@ define dso_local i1 @gziprqswca(ptr nest nocapture nofree noundef nonnull readon
   ret i1 %8
 }
 
-define dso_local i32 @iigxxwdobe(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #30 {
+define dso_local i32 @flmpumyyuf(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #30 {
   %3 = extractvalue { ptr, i160 } %1, 1
   %4 = trunc i160 %3 to i32
   %5 = call i32 %0(i32 %4)
   ret i32 %5
 }
 
-define dso_local i1 @xzqkffyenh(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #30 {
+define dso_local i1 @ipcdmginzz(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #30 {
   %4 = extractvalue { ptr, i160 } %1, 1
   %5 = trunc i160 %4 to i32
   %6 = extractvalue { ptr, i160 } %2, 1
@@ -885,14 +882,14 @@ define dso_local i1 @xzqkffyenh(ptr nest nocapture nofree noundef nonnull readon
   ret i1 %8
 }
 
-define dso_local i32 @xvbhttvchw(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #30 {
+define dso_local i32 @rrojubxfkm(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #30 {
   %3 = extractvalue { ptr, i160 } %1, 1
   %4 = trunc i160 %3 to i32
   %5 = call i32 %0(i32 %4)
   ret i32 %5
 }
 
-define dso_local i1 @majvlmmfcn(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #30 {
+define dso_local i1 @vgdjkugham(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #30 {
   %4 = extractvalue { ptr, i160 } %1, 1
   %5 = trunc i160 %4 to i32
   %6 = extractvalue { ptr, i160 } %2, 1
@@ -901,14 +898,14 @@ define dso_local i1 @majvlmmfcn(ptr nest nocapture nofree noundef nonnull readon
   ret i1 %8
 }
 
-define dso_local i32 @rlwecsgxrn(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #30 {
+define dso_local i32 @ajyzwoehpt(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #30 {
   %3 = extractvalue { ptr, i160 } %1, 1
   %4 = trunc i160 %3 to i32
   %5 = call i32 %0(i32 %4)
   ret i32 %5
 }
 
-define dso_local i1 @rtnngsagsz(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #30 {
+define dso_local i1 @mzxpyzfhpf(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #30 {
   %4 = extractvalue { ptr, i160 } %1, 1
   %5 = trunc i160 %4 to i32
   %6 = extractvalue { ptr, i160 } %2, 1
@@ -917,14 +914,14 @@ define dso_local i1 @rtnngsagsz(ptr nest nocapture nofree noundef nonnull readon
   ret i1 %8
 }
 
-define dso_local i32 @hduyxnzffi(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #30 {
+define dso_local i32 @ucmiafbern(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #30 {
   %3 = extractvalue { ptr, i160 } %1, 1
   %4 = trunc i160 %3 to i32
   %5 = call i32 %0(i32 %4)
   ret i32 %5
 }
 
-define dso_local i1 @ujzqhpwkdn(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #30 {
+define dso_local i1 @beseycracb(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #30 {
   %4 = extractvalue { ptr, i160 } %1, 1
   %5 = trunc i160 %4 to i32
   %6 = extractvalue { ptr, i160 } %2, 1
@@ -933,14 +930,14 @@ define dso_local i1 @ujzqhpwkdn(ptr nest nocapture nofree noundef nonnull readon
   ret i1 %8
 }
 
-define dso_local i32 @qjcvjoboml(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #30 {
+define dso_local i32 @eidfxtfccr(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #30 {
   %3 = extractvalue { ptr, i160 } %1, 1
   %4 = trunc i160 %3 to i32
   %5 = call i32 %0(i32 %4)
   ret i32 %5
 }
 
-define dso_local i1 @bbghiasbbs(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #30 {
+define dso_local i1 @hrqfjopbnq(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #30 {
   %4 = extractvalue { ptr, i160 } %1, 1
   %5 = trunc i160 %4 to i32
   %6 = extractvalue { ptr, i160 } %2, 1
@@ -949,14 +946,14 @@ define dso_local i1 @bbghiasbbs(ptr nest nocapture nofree noundef nonnull readon
   ret i1 %8
 }
 
-define dso_local i32 @msxhrhslwp(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #30 {
+define dso_local i32 @gxdirtcvlm(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #30 {
   %3 = extractvalue { ptr, i160 } %1, 1
   %4 = trunc i160 %3 to i32
   %5 = call i32 %0(i32 %4)
   ret i32 %5
 }
 
-define dso_local i1 @vzslpchwjy(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #30 {
+define dso_local i1 @ipgvuclcsi(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #30 {
   %4 = extractvalue { ptr, i160 } %1, 1
   %5 = trunc i160 %4 to i32
   %6 = extractvalue { ptr, i160 } %2, 1
@@ -965,7 +962,7 @@ define dso_local i1 @vzslpchwjy(ptr nest nocapture nofree noundef nonnull readon
   ret i1 %8
 }
 
-define dso_local i32 @lxwqeyebft(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #30 {
+define dso_local i32 @wwaikndpmx(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #30 {
   %3 = extractvalue { ptr, i160 } %1, 1
   %4 = trunc i160 %3 to i32
   %5 = call i32 %0(i32 %4)
@@ -1014,94 +1011,99 @@ define dso_local void @print_benchmark_result({ ptr, ptr, ptr, i32 } %0, i32 %1,
   store ptr @_parameterization_String, ptr %35, align 8
   %36 = call ptr @llvm.invariant.start.p0(i64 noundef 1, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %35) #43
   %37 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO) #43
-  %38 = getelementptr i8, ptr %9, i64 24
-  %39 = getelementptr i8, ptr %9, i64 32
-  %40 = load i64, ptr %12, align 4
-  %41 = load i64, ptr %13, align 4
-  %42 = load ptr, ptr %38, align 8
-  %43 = load ptr, ptr %39, align 8
-  %44 = call i1 %42(i64 %41, i64 %40, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr readonly %43) #2
-  br i1 %44, label %45, label %47
+  %38 = icmp eq ptr %9, @i32_typ
+  br i1 %38, label %68, label %39
 
-45:                                               ; preds = %3
-  %46 = call i1 %42(i64 %41, i64 %40, i64 6681222582356018452, i64 ptrtoint (ptr @Character to i64), ptr readonly %43) #2
-  br i1 %46, label %47, label %67
+39:                                               ; preds = %3
+  %40 = icmp eq ptr %9, @i64_typ
+  br i1 %40, label %68, label %41
 
-47:                                               ; preds = %45, %3
-  %48 = icmp eq ptr %9, @i32_typ
-  br i1 %48, label %67, label %49
+41:                                               ; preds = %39
+  %42 = icmp eq ptr %9, @i8_typ
+  br i1 %42, label %68, label %43
 
-49:                                               ; preds = %47
-  %50 = call i1 %42(i64 %41, i64 %40, i64 -7260840641129990118, i64 ptrtoint (ptr @Representable to i64), ptr readonly %43) #2
-  br i1 %50, label %51, label %54
+43:                                               ; preds = %41
+  %44 = getelementptr i8, ptr %9, i64 24
+  %45 = getelementptr i8, ptr %9, i64 32
+  %46 = load i64, ptr %12, align 4
+  %47 = load i64, ptr %13, align 4
+  %48 = load ptr, ptr %44, align 8
+  %49 = load ptr, ptr %45, align 8
+  %50 = call i1 %48(i64 %47, i64 %46, i64 -7260840641129990118, i64 ptrtoint (ptr @Representable to i64), ptr readonly %49) #2
+  br i1 %50, label %51, label %55
 
-51:                                               ; preds = %49
-  %52 = call i1 %42(i64 %41, i64 %40, i64 6681222582356018452, i64 ptrtoint (ptr @Character to i64), ptr readonly %43) #2
-  %53 = or i1 %44, %52
-  br i1 %53, label %54, label %67
+51:                                               ; preds = %43
+  %52 = call i1 %48(i64 %47, i64 %46, i64 6681222582356018452, i64 ptrtoint (ptr @Character to i64), ptr readonly %49) #2
+  br i1 %52, label %55, label %53
 
-54:                                               ; preds = %51, %49
-  %55 = icmp eq ptr %9, @bool_typ
-  br i1 %55, label %67, label %56
+53:                                               ; preds = %51
+  %54 = call i1 %48(i64 %47, i64 %46, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr readonly %49) #2
+  br i1 %54, label %55, label %68
 
-56:                                               ; preds = %54
-  %57 = icmp eq ptr %9, @i64_typ
-  br i1 %57, label %67, label %58
+55:                                               ; preds = %53, %51, %43
+  %56 = icmp eq ptr %9, @bool_typ
+  br i1 %56, label %68, label %57
 
-58:                                               ; preds = %56
-  %59 = call i1 %42(i64 %41, i64 %40, i64 6681222582356018452, i64 ptrtoint (ptr @Character to i64), ptr readonly %43) #2
-  %60 = xor i1 %59, true
-  %61 = or i1 %44, %60
-  br i1 %61, label %62, label %67
+57:                                               ; preds = %55
+  %58 = icmp eq ptr %9, @nil_typ
+  %59 = icmp eq ptr %9, null
+  %60 = or i1 %58, %59
+  br i1 %60, label %68, label %61
 
-62:                                               ; preds = %58
-  %63 = icmp eq ptr %9, @i8_typ
-  %64 = icmp eq ptr %9, @f64_typ
-  %65 = select i1 %64, i64 3, i64 5
-  %66 = select i1 %63, i64 4, i64 %65
-  br label %67
+61:                                               ; preds = %57
+  %62 = call i1 %48(i64 %47, i64 %46, i64 6681222582356018452, i64 ptrtoint (ptr @Character to i64), ptr readonly %49) #2
+  %63 = call i1 %48(i64 %47, i64 %46, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr readonly %49) #2
+  br i1 %62, label %64, label %66
 
-67:                                               ; preds = %62, %58, %56, %54, %51, %47, %45
-  %68 = phi i64 [ 8, %47 ], [ 1, %54 ], [ 9, %56 ], [ %66, %62 ], [ 7, %45 ], [ 2, %51 ], [ 6, %58 ]
-  %69 = getelementptr [10 x ptr], ptr @IO, i64 0, i64 %68
-  %70 = getelementptr i8, ptr %69, i64 80
-  %71 = load ptr, ptr %70, align 8
-  call void %71(ptr nonnull align 8 dereferenceable(8) %35, { ptr, i160 } %34) #28
+64:                                               ; preds = %61
+  %65 = select i1 %63, i64 9, i64 8
+  br label %68
+
+66:                                               ; preds = %61
+  %67 = select i1 %63, i64 3, i64 9
+  br label %68
+
+68:                                               ; preds = %66, %64, %57, %55, %53, %41, %39, %3
+  %69 = phi i64 [ 5, %3 ], [ 4, %39 ], [ 2, %41 ], [ 6, %55 ], [ 7, %57 ], [ 1, %53 ], [ %65, %64 ], [ %67, %66 ]
+  %70 = getelementptr [10 x ptr], ptr @IO, i64 0, i64 %69
+  %71 = getelementptr i8, ptr %70, i64 80
+  %72 = load ptr, ptr %71, align 8
+  call void %72(ptr nonnull align 8 dereferenceable(8) %35, { ptr, i160 } %34) #28
   store <14 x i8> <i8 32, i8 32, i8 79, i8 112, i8 101, i8 114, i8 97, i8 116, i8 105, i8 111, i8 110, i8 115, i8 58, i8 32>, ptr %8, align 16
-  %72 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(15) %8) #25
-  %73 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %1) #25
+  %73 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(15) %8) #25
+  %74 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %1) #25
   store <14 x i8> <i8 32, i8 32, i8 84, i8 111, i8 116, i8 97, i8 108, i8 32, i8 84, i8 105, i8 109, i8 101, i8 58, i8 32>, ptr %7, align 16
-  %74 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(15) %7) #25
-  %75 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(6) @i64_string, i64 %2) #25
-  %76 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO) #53
+  %75 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(15) %7) #25
+  %76 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(6) @i64_string, i64 %2) #25
+  %77 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO) #53
   store <3 x i8> <i8 32, i8 109, i8 115>, ptr %6, align 4
-  %77 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef nonnull align 16 dereferenceable(712) @String) #43
-  %78 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(4) %6) #25
-  %79 = icmp sgt i32 %1, 0
-  br i1 %79, label %80, label %93
+  %78 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef nonnull align 16 dereferenceable(712) @String) #43
+  %79 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(4) %6) #25
+  %80 = icmp sgt i32 %1, 0
+  br i1 %80, label %81, label %94
 
-80:                                               ; preds = %67
-  %81 = icmp sgt i64 %2, 0
-  br i1 %81, label %82, label %86
+81:                                               ; preds = %68
+  %82 = icmp sgt i64 %2, 0
+  br i1 %82, label %83, label %87
 
-82:                                               ; preds = %80
-  %83 = mul i64 %2, 1000000
-  %84 = zext nneg i32 %1 to i64
-  %85 = sdiv i64 %83, %84
-  br label %86
+83:                                               ; preds = %81
+  %84 = mul i64 %2, 1000000
+  %85 = zext nneg i32 %1 to i64
+  %86 = sdiv i64 %84, %85
+  br label %87
 
-86:                                               ; preds = %82, %80
-  %87 = phi i64 [ %85, %82 ], [ 0, %80 ]
+87:                                               ; preds = %83, %81
+  %88 = phi i64 [ %86, %83 ], [ 0, %81 ]
   store <15 x i8> <i8 32, i8 32, i8 84, i8 105, i8 109, i8 101, i8 47, i8 79, i8 112, i8 58, i8 32, i8 32, i8 32, i8 32, i8 126>, ptr %5, align 16
-  %88 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(16) %5) #25
-  %89 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(6) @i64_string, i64 %87) #25
-  %90 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO) #53
+  %89 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(16) %5) #25
+  %90 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(6) @i64_string, i64 %88) #25
+  %91 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO) #53
   store <3 x i8> <i8 32, i8 110, i8 115>, ptr %4, align 4
-  %91 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef nonnull align 16 dereferenceable(712) @String) #43
-  %92 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(4) %4) #25
-  br label %93
+  %92 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef nonnull align 16 dereferenceable(712) @String) #43
+  %93 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(4) %4) #25
+  br label %94
 
-93:                                               ; preds = %86, %67
+94:                                               ; preds = %87, %68
   ret void
 }
 
@@ -1144,14 +1146,14 @@ define dso_local void @benchmark_insert_sequential(i32 %0) local_unnamed_addr #3
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %12) #43
   %26 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %25, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %12) #54
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %12) #43
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %25, ptr noalias nofree noundef nonnull readnone align 4 @lxwqeyebft, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %25, ptr noalias nofree noundef nonnull readnone align 4 @wwaikndpmx, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
   %27 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %25) #47
   %28 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %25) #43
   %29 = call noalias align 4 dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %11) #43
   %30 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %29, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %11) #54
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %11) #43
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %29, ptr noalias nofree noundef nonnull readnone align 4 @vzslpchwjy, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %29, ptr noalias nofree noundef nonnull readnone align 4 @ipgvuclcsi, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
   %31 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %29) #47
   %32 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %29) #43
   %33 = getelementptr inbounds i8, ptr %21, i64 48
@@ -3069,14 +3071,14 @@ define dso_local void @benchmark_insert_random(i32 %0) local_unnamed_addr #30 {
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %16) #43
   %31 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %30, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %16) #54
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %16) #43
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %30, ptr noalias nofree noundef nonnull readnone align 4 @msxhrhslwp, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %30, ptr noalias nofree noundef nonnull readnone align 4 @gxdirtcvlm, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
   %32 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %30) #47
   %33 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %30) #43
   %34 = call noalias align 4 dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %15) #43
   %35 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %34, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %15) #54
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %15) #43
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %34, ptr noalias nofree noundef nonnull readnone align 4 @bbghiasbbs, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %34, ptr noalias nofree noundef nonnull readnone align 4 @hrqfjopbnq, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
   %36 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %34) #47
   %37 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %34) #43
   %38 = getelementptr inbounds i8, ptr %26, i64 48
@@ -3107,14 +3109,14 @@ define dso_local void @benchmark_insert_random(i32 %0) local_unnamed_addr #30 {
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %14) #43
   %55 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %54, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %14) #54
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %14) #43
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %54, ptr noalias nofree noundef nonnull readnone align 4 @qjcvjoboml, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %54, ptr noalias nofree noundef nonnull readnone align 4 @eidfxtfccr, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
   %56 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %54) #47
   %57 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %54) #43
   %58 = call noalias align 4 dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %13) #43
   %59 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %58, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %13) #54
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %13) #43
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %58, ptr noalias nofree noundef nonnull readnone align 4 @ujzqhpwkdn, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %58, ptr noalias nofree noundef nonnull readnone align 4 @beseycracb, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
   %60 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %58) #47
   %61 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %58) #43
   %62 = getelementptr inbounds i8, ptr %50, i64 48
@@ -6463,47 +6465,47 @@ define dso_local void @benchmark_insert_random(i32 %0) local_unnamed_addr #30 {
   %2853 = phi i32 [ %1379, %2844 ], [ 0, %70 ]
   %2854 = phi i64 [ %2670, %2844 ], [ %74, %70 ]
   %2855 = phi i1 [ %2850, %2844 ], [ true, %70 ]
+  %2856 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO) #43
   call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
-  %2856 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2) #43
-  %2857 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %2) #43
+  %2857 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2) #43
+  %2858 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %2) #43
   store <13 x i8> <i8 73, i8 110, i8 115, i8 101, i8 114, i8 116, i8 32, i8 82, i8 97, i8 110, i8 100, i8 111, i8 109>, ptr %12, align 16
-  %2858 = sub i64 %2854, %2852
-  %2859 = getelementptr inbounds i8, ptr %12, i64 13
-  store i8 0, ptr %2859, align 1
-  %2860 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(14) %12) #28
+  %2859 = sub i64 %2854, %2852
+  %2860 = getelementptr inbounds i8, ptr %12, i64 13
+  store i8 0, ptr %2860, align 1
+  %2861 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(14) %12) #28
   call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
   store <14 x i8> <i8 32, i8 32, i8 79, i8 112, i8 101, i8 114, i8 97, i8 116, i8 105, i8 111, i8 110, i8 115, i8 58, i8 32>, ptr %11, align 16
-  %2861 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(15) %11) #28
-  %2862 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %0) #25
+  %2862 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(15) %11) #28
+  %2863 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %0) #25
   store <14 x i8> <i8 32, i8 32, i8 84, i8 111, i8 116, i8 97, i8 108, i8 32, i8 84, i8 105, i8 109, i8 101, i8 58, i8 32>, ptr %10, align 16
-  %2863 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(15) %10) #28
-  %2864 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(6) @i64_string, i64 %2858) #25
+  %2864 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(15) %10) #28
+  %2865 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(6) @i64_string, i64 %2859) #25
   store <3 x i8> <i8 32, i8 109, i8 115>, ptr %9, align 4
-  %2865 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(4) %9) #28
-  br i1 %69, label %2866, label %2879
+  %2866 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(4) %9) #28
+  br i1 %69, label %2867, label %2879
 
-2866:                                             ; preds = %2851
-  %2867 = icmp sgt i64 %2858, 0
-  br i1 %2867, label %2868, label %2872
+2867:                                             ; preds = %2851
+  %2868 = icmp sgt i64 %2859, 0
+  br i1 %2868, label %2869, label %2873
 
-2868:                                             ; preds = %2866
-  %2869 = mul i64 %2858, 1000000
-  %2870 = zext nneg i32 %0 to i64
-  %2871 = sdiv i64 %2869, %2870
-  br label %2872
+2869:                                             ; preds = %2867
+  %2870 = mul i64 %2859, 1000000
+  %2871 = zext nneg i32 %0 to i64
+  %2872 = sdiv i64 %2870, %2871
+  br label %2873
 
-2872:                                             ; preds = %2868, %2866
-  %2873 = phi i64 [ %2871, %2868 ], [ 0, %2866 ]
+2873:                                             ; preds = %2869, %2867
+  %2874 = phi i64 [ %2872, %2869 ], [ 0, %2867 ]
   store <15 x i8> <i8 32, i8 32, i8 84, i8 105, i8 109, i8 101, i8 47, i8 79, i8 112, i8 58, i8 32, i8 32, i8 32, i8 32, i8 126>, ptr %8, align 16
-  %2874 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(16) %8) #28
-  %2875 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(6) @i64_string, i64 %2873) #25
-  %2876 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
+  %2875 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(16) %8) #28
+  %2876 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(6) @i64_string, i64 %2874) #25
   store <3 x i8> <i8 32, i8 110, i8 115>, ptr %7, align 4
   %2877 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef nonnull align 16 dereferenceable(712) @String) #55
   %2878 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(4) %7) #28
   br label %2879
 
-2879:                                             ; preds = %2872, %2851
+2879:                                             ; preds = %2873, %2851
   call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
   %2880 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2) #43
   %2881 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %2) #43
@@ -6606,14 +6608,14 @@ define dso_local void @benchmark_get_sequential_hit(i32 %0) local_unnamed_addr #
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %12) #43
   %26 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %25, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %12) #54
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %12) #43
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %25, ptr noalias nofree noundef nonnull readnone align 4 @hduyxnzffi, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %25, ptr noalias nofree noundef nonnull readnone align 4 @ucmiafbern, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
   %27 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %25) #47
   %28 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %25) #43
   %29 = call noalias align 4 dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %11) #43
   %30 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %29, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %11) #54
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %11) #43
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %29, ptr noalias nofree noundef nonnull readnone align 4 @rtnngsagsz, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %29, ptr noalias nofree noundef nonnull readnone align 4 @mzxpyzfhpf, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
   %31 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %29) #47
   %32 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %29) #43
   %33 = getelementptr inbounds i8, ptr %21, i64 48
@@ -8393,7 +8395,7 @@ define dso_local void @benchmark_get_sequential_hit(i32 %0) local_unnamed_addr #
 1512:                                             ; preds = %1500
   %1513 = alloca [56 x i8], align 64
   call void @llvm.memset.p0.i64(ptr noundef nonnull align 64 dereferenceable(56) %1513, i8 0, i64 56, i1 false)
-  %1514 = load <55 x i8>, ptr @wipeb_Error_Nil_returned_during_sequential_hit_test_for_key_, align 64
+  %1514 = load <55 x i8>, ptr @isaob_Error_Nil_returned_during_sequential_hit_test_for_key_, align 64
   store <55 x i8> %1514, ptr %1513, align 64
   call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
   %1515 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2) #43
@@ -8537,14 +8539,14 @@ define dso_local void @benchmark_get_random_hit(i32 %0) local_unnamed_addr #30 {
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %6) #43
   %21 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %20, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %6) #54
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %6) #43
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %20, ptr noalias nofree noundef nonnull readnone align 4 @rlwecsgxrn, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %20, ptr noalias nofree noundef nonnull readnone align 4 @ajyzwoehpt, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
   %22 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %20) #47
   %23 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %20) #43
   %24 = call noalias align 4 dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %5) #43
   %25 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %24, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %5) #54
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %5) #43
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %24, ptr noalias nofree noundef nonnull readnone align 4 @majvlmmfcn, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %24, ptr noalias nofree noundef nonnull readnone align 4 @vgdjkugham, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
   %26 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %24) #47
   %27 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %24) #43
   %28 = getelementptr inbounds i8, ptr %16, i64 48
@@ -8575,14 +8577,14 @@ define dso_local void @benchmark_get_random_hit(i32 %0) local_unnamed_addr #30 {
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %4) #43
   %45 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %44, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %4) #54
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %4) #43
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %44, ptr noalias nofree noundef nonnull readnone align 4 @xvbhttvchw, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %44, ptr noalias nofree noundef nonnull readnone align 4 @rrojubxfkm, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
   %46 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %44) #47
   %47 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %44) #43
   %48 = call noalias align 4 dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %3) #43
   %49 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %48, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %3) #54
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %3) #43
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %48, ptr noalias nofree noundef nonnull readnone align 4 @xzqkffyenh, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %48, ptr noalias nofree noundef nonnull readnone align 4 @ipcdmginzz, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
   %50 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %48) #47
   %51 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %48) #43
   %52 = getelementptr inbounds i8, ptr %40, i64 48
@@ -12402,7 +12404,7 @@ define dso_local void @benchmark_get_random_hit(i32 %0) local_unnamed_addr #30 {
   call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
   %3220 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %3211) #25
   %3221 = call noalias nonnull align 64 dereferenceable(34) ptr @bump_malloc_inner(i64 noundef 34, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
-  %3222 = load <33 x i8>, ptr @mtuco__unique_keys_for_random_hit_test, align 64
+  %3222 = load <33 x i8>, ptr @rkmtz__unique_keys_for_random_hit_test, align 64
   store <33 x i8> %3222, ptr %3221, align 64
   %3223 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
   call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
@@ -12642,7 +12644,7 @@ define dso_local void @benchmark_get_random_hit(i32 %0) local_unnamed_addr #30 {
 
 3420:                                             ; preds = %3408
   %3421 = call noalias nonnull align 64 dereferenceable(52) ptr @bump_malloc_inner(i64 noundef 52, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
-  %3422 = load <51 x i8>, ptr @pidap_Error_Nil_returned_during_random_hit_test_for_key_, align 64
+  %3422 = load <51 x i8>, ptr @hyxgh_Error_Nil_returned_during_random_hit_test_for_key_, align 64
   store <51 x i8> %3422, ptr %3421, align 64
   call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
   %3423 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2) #43
@@ -12808,14 +12810,14 @@ define dso_local void @benchmark_get_random_miss(i32 %0) local_unnamed_addr #30 
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %6) #43
   %21 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %20, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %6) #54
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %6) #43
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %20, ptr noalias nofree noundef nonnull readnone align 4 @iigxxwdobe, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %20, ptr noalias nofree noundef nonnull readnone align 4 @flmpumyyuf, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
   %22 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %20) #47
   %23 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %20) #43
   %24 = call noalias align 4 dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %5) #43
   %25 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %24, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %5) #54
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %5) #43
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %24, ptr noalias nofree noundef nonnull readnone align 4 @gziprqswca, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %24, ptr noalias nofree noundef nonnull readnone align 4 @ajmtsoqhlz, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
   %26 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %24) #47
   %27 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %24) #43
   %28 = getelementptr inbounds i8, ptr %16, i64 48
@@ -12842,14 +12844,14 @@ define dso_local void @benchmark_get_random_miss(i32 %0) local_unnamed_addr #30 
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %4) #43
   %41 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %40, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %4) #54
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %4) #43
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %40, ptr noalias nofree noundef nonnull readnone align 4 @yhzeckjmtc, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %40, ptr noalias nofree noundef nonnull readnone align 4 @zwreoxukwo, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
   %42 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %40) #47
   %43 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %40) #43
   %44 = call noalias align 4 dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %3) #43
   %45 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %44, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %3) #54
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %3) #43
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %44, ptr noalias nofree noundef nonnull readnone align 4 @dbfnyntjhi, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %44, ptr noalias nofree noundef nonnull readnone align 4 @hngttiynxy, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
   %46 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %44) #47
   %47 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %44) #43
   %48 = getelementptr inbounds i8, ptr %36, i64 48
@@ -17303,14 +17305,14 @@ define dso_local void @benchmark_remove_random(i32 %0) local_unnamed_addr #30 {
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %6) #43
   %21 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %20, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %6) #54
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %6) #43
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %20, ptr noalias nofree noundef nonnull readnone align 4 @zzjhbkrgoq, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %20, ptr noalias nofree noundef nonnull readnone align 4 @jlshupgucm, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
   %22 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %20) #47
   %23 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %20) #43
   %24 = call noalias align 4 dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %5) #43
   %25 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %24, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %5) #54
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %5) #43
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %24, ptr noalias nofree noundef nonnull readnone align 4 @jhdbvbpdha, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %24, ptr noalias nofree noundef nonnull readnone align 4 @pkzwkzkbzm, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
   %26 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %24) #47
   %27 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %24) #43
   %28 = getelementptr inbounds i8, ptr %16, i64 48
@@ -17341,14 +17343,14 @@ define dso_local void @benchmark_remove_random(i32 %0) local_unnamed_addr #30 {
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %4) #43
   %45 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %44, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %4) #54
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %4) #43
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %44, ptr noalias nofree noundef nonnull readnone align 4 @pvwlqkytbf, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %44, ptr noalias nofree noundef nonnull readnone align 4 @ojnivhabfh, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
   %46 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %44) #47
   %47 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %44) #43
   %48 = call noalias align 4 dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %3) #43
   %49 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %48, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %3) #54
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %3) #43
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %48, ptr noalias nofree noundef nonnull readnone align 4 @mcxmpemhen, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %48, ptr noalias nofree noundef nonnull readnone align 4 @lswpfbyore, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
   %50 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %48) #47
   %51 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %48) #43
   %52 = getelementptr inbounds i8, ptr %40, i64 48
@@ -21410,7 +21412,7 @@ define dso_local void @benchmark_remove_random(i32 %0) local_unnamed_addr #30 {
 
 3418:                                             ; preds = %3413
   %3419 = call noalias nonnull align 64 dereferenceable(46) ptr @bump_malloc_inner(i64 noundef 46, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
-  %3420 = load <45 x i8>, ptr @zaets_Warning_Remove_returned_wrong_value_for_key_, align 64
+  %3420 = load <45 x i8>, ptr @eifxa_Warning_Remove_returned_wrong_value_for_key_, align 64
   store <45 x i8> %3420, ptr %3419, align 64
   call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
   %3421 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2) #43
@@ -21433,7 +21435,7 @@ define dso_local void @benchmark_remove_random(i32 %0) local_unnamed_addr #30 {
 
 3432:                                             ; preds = %3407
   %3433 = call noalias nonnull align 64 dereferenceable(38) ptr @bump_malloc_inner(i64 noundef 38, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
-  %3434 = load <37 x i8>, ptr @xjiio_Warning_Remove_returned_Nil_for_key_, align 64
+  %3434 = load <37 x i8>, ptr @yvhoz_Warning_Remove_returned_Nil_for_key_, align 64
   store <37 x i8> %3434, ptr %3433, align 64
   call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
   %3435 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2) #43
@@ -21699,7 +21701,7 @@ define dso_local void @benchmark_remove_random(i32 %0) local_unnamed_addr #30 {
   %3649 = call noalias nonnull align 4 dereferenceable(4) ptr @bump_malloc_inner(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
   call void @llvm.memcpy.p0.p0.i64(ptr noalias nocapture nofree noundef nonnull writeonly align 4 dereferenceable(4) %3649, ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(4) %3648, i64 noundef 3, i1 noundef false)
   %3650 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(4) %3649) #28
-  br i1 %3227, label %3651, label %3668
+  br i1 %3227, label %3651, label %3667
 
 3651:                                             ; preds = %3629
   %3652 = icmp sgt i64 %3636, 0
@@ -21721,81 +21723,80 @@ define dso_local void @benchmark_remove_random(i32 %0) local_unnamed_addr #30 {
   %3662 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(6) @i64_string, i64 %3658) #25
   %3663 = call noalias nonnull align 4 dereferenceable(4) ptr @bump_malloc_inner(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
   store <3 x i8> <i8 32, i8 110, i8 115>, ptr %3663, align 4
-  %3664 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
-  %3665 = call noalias nonnull align 4 dereferenceable(4) ptr @bump_malloc_inner(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
-  call void @llvm.memcpy.p0.p0.i64(ptr noalias nocapture nofree noundef nonnull writeonly align 4 dereferenceable(4) %3665, ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(4) %3663, i64 noundef 3, i1 noundef false)
-  %3666 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef nonnull align 16 dereferenceable(712) @String) #55
-  %3667 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(4) %3665) #28
-  br label %3668
+  %3664 = call noalias nonnull align 4 dereferenceable(4) ptr @bump_malloc_inner(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
+  call void @llvm.memcpy.p0.p0.i64(ptr noalias nocapture nofree noundef nonnull writeonly align 4 dereferenceable(4) %3664, ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(4) %3663, i64 noundef 3, i1 noundef false)
+  %3665 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef nonnull align 16 dereferenceable(712) @String) #55
+  %3666 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(4) %3664) #28
+  br label %3667
 
-3668:                                             ; preds = %3657, %3629
-  %3669 = call noalias nonnull align 32 dereferenceable(19) ptr @bump_malloc_inner(i64 noundef 19, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
-  store <18 x i8> <i8 32, i8 32, i8 32, i8 32, i8 86, i8 101, i8 114, i8 105, i8 102, i8 105, i8 99, i8 97, i8 116, i8 105, i8 111, i8 110, i8 58, i8 32>, ptr %3669, align 32
+3667:                                             ; preds = %3657, %3629
+  %3668 = call noalias nonnull align 32 dereferenceable(19) ptr @bump_malloc_inner(i64 noundef 19, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
+  store <18 x i8> <i8 32, i8 32, i8 32, i8 32, i8 86, i8 101, i8 114, i8 105, i8 102, i8 105, i8 99, i8 97, i8 116, i8 105, i8 111, i8 110, i8 58, i8 32>, ptr %3668, align 32
   call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
-  %3670 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2) #43
-  %3671 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %2) #43
-  %3672 = call noalias nonnull align 4 dereferenceable(19) ptr @bump_malloc_inner(i64 noundef 19, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
-  call void @llvm.memcpy.p0.p0.i64(ptr noalias nocapture nofree noundef nonnull writeonly align 4 dereferenceable(19) %3672, ptr noalias nocapture nofree noundef nonnull readonly align 32 dereferenceable(19) %3669, i64 noundef 18, i1 noundef false)
-  %3673 = getelementptr inbounds i8, ptr %3672, i64 18
-  store i8 0, ptr %3673, align 2
-  %3674 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(19) %3672) #28
+  %3669 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2) #43
+  %3670 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %2) #43
+  %3671 = call noalias nonnull align 4 dereferenceable(19) ptr @bump_malloc_inner(i64 noundef 19, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
+  call void @llvm.memcpy.p0.p0.i64(ptr noalias nocapture nofree noundef nonnull writeonly align 4 dereferenceable(19) %3671, ptr noalias nocapture nofree noundef nonnull readonly align 32 dereferenceable(19) %3668, i64 noundef 18, i1 noundef false)
+  %3672 = getelementptr inbounds i8, ptr %3671, i64 18
+  store i8 0, ptr %3672, align 2
+  %3673 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(19) %3671) #28
   call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
-  %3675 = select i1 %3630, <4 x i8> <i8 80, i8 65, i8 83, i8 83>, <4 x i8> <i8 70, i8 65, i8 73, i8 76>
-  %3676 = select i1 %3630, ptr %8, ptr %12
-  %3677 = select i1 %3630, ptr %9, ptr %13
-  %3678 = select i1 %3630, ptr %10, ptr %14
-  %3679 = select i1 %3630, ptr %11, ptr %15
-  store ptr @_parameterization_Bufferi8, ptr %3676, align 8
-  %3680 = select i1 %3630, ptr %8, ptr %12
-  %3681 = getelementptr inbounds i8, ptr %3680, i64 8
-  store ptr @_parameterization_i32, ptr %3681, align 8
-  %3682 = select i1 %3630, ptr %8, ptr %12
-  %3683 = getelementptr inbounds i8, ptr %3682, i64 16
-  store ptr @_parameterization_i32, ptr %3683, align 8
-  %3684 = call ptr @llvm.invariant.start.p0(i64 noundef 9, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %3676)
-  store ptr @buffer_typ, ptr %3677, align 8
-  %3685 = select i1 %3630, ptr %9, ptr %13
-  %3686 = getelementptr inbounds i8, ptr %3685, i64 8
-  store ptr @i32_typ, ptr %3686, align 8
-  %3687 = select i1 %3630, ptr %9, ptr %13
-  %3688 = getelementptr inbounds i8, ptr %3687, i64 16
-  store ptr @i32_typ, ptr %3688, align 8
-  %3689 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(24) %3677) #43
-  store ptr @_parameterization_String, ptr %3678, align 8
-  %3690 = call ptr @llvm.invariant.start.p0(i64 noundef 1, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %3678)
-  store ptr @String, ptr %3679, align 8
-  %3691 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %3679) #43
+  %3674 = select i1 %3630, <4 x i8> <i8 80, i8 65, i8 83, i8 83>, <4 x i8> <i8 70, i8 65, i8 73, i8 76>
+  %3675 = select i1 %3630, ptr %8, ptr %12
+  %3676 = select i1 %3630, ptr %9, ptr %13
+  %3677 = select i1 %3630, ptr %10, ptr %14
+  %3678 = select i1 %3630, ptr %11, ptr %15
+  store ptr @_parameterization_Bufferi8, ptr %3675, align 8
+  %3679 = select i1 %3630, ptr %8, ptr %12
+  %3680 = getelementptr inbounds i8, ptr %3679, i64 8
+  store ptr @_parameterization_i32, ptr %3680, align 8
+  %3681 = select i1 %3630, ptr %8, ptr %12
+  %3682 = getelementptr inbounds i8, ptr %3681, i64 16
+  store ptr @_parameterization_i32, ptr %3682, align 8
+  %3683 = call ptr @llvm.invariant.start.p0(i64 noundef 9, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %3675)
+  store ptr @buffer_typ, ptr %3676, align 8
+  %3684 = select i1 %3630, ptr %9, ptr %13
+  %3685 = getelementptr inbounds i8, ptr %3684, i64 8
+  store ptr @i32_typ, ptr %3685, align 8
+  %3686 = select i1 %3630, ptr %9, ptr %13
+  %3687 = getelementptr inbounds i8, ptr %3686, i64 16
+  store ptr @i32_typ, ptr %3687, align 8
+  %3688 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(24) %3676) #43
+  store ptr @_parameterization_String, ptr %3677, align 8
+  %3689 = call ptr @llvm.invariant.start.p0(i64 noundef 1, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %3677)
+  store ptr @String, ptr %3678, align 8
+  %3690 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %3678) #43
   call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
-  %3692 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2) #43
-  %3693 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %2) #43
-  %3694 = call noalias nonnull align 4 dereferenceable(5) ptr @bump_malloc_inner(i64 noundef 5, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
-  store <4 x i8> %3675, ptr %3694, align 4
-  %3695 = getelementptr inbounds i8, ptr %3694, i64 4
-  store i8 0, ptr %3695, align 4
-  %3696 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(5) %3694) #28
+  %3691 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2) #43
+  %3692 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %2) #43
+  %3693 = call noalias nonnull align 4 dereferenceable(5) ptr @bump_malloc_inner(i64 noundef 5, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
+  store <4 x i8> %3674, ptr %3693, align 4
+  %3694 = getelementptr inbounds i8, ptr %3693, i64 4
+  store i8 0, ptr %3694, align 4
+  %3695 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(5) %3693) #28
   call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
-  %3697 = call noalias nonnull align 32 dereferenceable(21) ptr @bump_malloc_inner(i64 noundef 21, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
-  store <20 x i8> <i8 32, i8 32, i8 32, i8 32, i8 40, i8 73, i8 116, i8 101, i8 109, i8 115, i8 32, i8 114, i8 101, i8 109, i8 111, i8 118, i8 101, i8 100, i8 58, i8 32>, ptr %3697, align 32
+  %3696 = call noalias nonnull align 32 dereferenceable(21) ptr @bump_malloc_inner(i64 noundef 21, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
+  store <20 x i8> <i8 32, i8 32, i8 32, i8 32, i8 40, i8 73, i8 116, i8 101, i8 109, i8 115, i8 32, i8 114, i8 101, i8 109, i8 111, i8 118, i8 101, i8 100, i8 58, i8 32>, ptr %3696, align 32
   call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
-  %3698 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2) #43
-  %3699 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %2) #43
-  %3700 = call noalias nonnull align 4 dereferenceable(21) ptr @bump_malloc_inner(i64 noundef 21, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
-  call void @llvm.memcpy.p0.p0.i64(ptr noalias nocapture nofree noundef nonnull writeonly align 4 dereferenceable(21) %3700, ptr noalias nocapture nofree noundef nonnull readonly align 32 dereferenceable(21) %3697, i64 noundef 20, i1 noundef false)
-  %3701 = getelementptr inbounds i8, ptr %3700, i64 20
-  store i8 0, ptr %3701, align 4
-  %3702 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(21) %3700) #28
+  %3697 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2) #43
+  %3698 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %2) #43
+  %3699 = call noalias nonnull align 4 dereferenceable(21) ptr @bump_malloc_inner(i64 noundef 21, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
+  call void @llvm.memcpy.p0.p0.i64(ptr noalias nocapture nofree noundef nonnull writeonly align 4 dereferenceable(21) %3699, ptr noalias nocapture nofree noundef nonnull readonly align 32 dereferenceable(21) %3696, i64 noundef 20, i1 noundef false)
+  %3700 = getelementptr inbounds i8, ptr %3699, i64 20
+  store i8 0, ptr %3700, align 4
+  %3701 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(21) %3699) #28
   call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
-  %3703 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %3450) #25
-  %3704 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
+  %3702 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %3450) #25
+  %3703 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
   call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
-  %3705 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2) #43
-  %3706 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %2) #43
-  %3707 = call noalias nonnull align 4 dereferenceable(2) ptr @bump_malloc_inner(i64 noundef 2, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
-  store i8 41, ptr %3707, align 4
-  %3708 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef nonnull align 16 dereferenceable(712) @String) #55
-  %3709 = getelementptr inbounds i8, ptr %3707, i64 1
-  store i8 0, ptr %3709, align 1
-  %3710 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(2) %3707) #28
+  %3704 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2) #43
+  %3705 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %2) #43
+  %3706 = call noalias nonnull align 4 dereferenceable(2) ptr @bump_malloc_inner(i64 noundef 2, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
+  store i8 41, ptr %3706, align 4
+  %3707 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef nonnull align 16 dereferenceable(712) @String) #55
+  %3708 = getelementptr inbounds i8, ptr %3706, i64 1
+  store i8 0, ptr %3708, align 1
+  %3709 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly align 4 dereferenceable(2) %3706) #28
   call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %2)
   ret void
 }
@@ -21853,14 +21854,14 @@ define dso_local noundef i32 @main() local_unnamed_addr #30 {
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %13)
   %34 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %33, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %13) #28
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %13)
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %33, ptr noalias nofree noundef nonnull readnone align 4 @lxwqeyebft, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %33, ptr noalias nofree noundef nonnull readnone align 4 @wwaikndpmx, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
   %35 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %33) #47
   %36 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %33) #43
   %37 = call noalias align 4 dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %12)
   %38 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %37, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %12) #28
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %12)
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %37, ptr noalias nofree noundef nonnull readnone align 4 @vzslpchwjy, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %37, ptr noalias nofree noundef nonnull readnone align 4 @ipgvuclcsi, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
   %39 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %37) #47
   %40 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %37) #43
   %41 = getelementptr inbounds i8, ptr %29, i64 48
@@ -23749,14 +23750,14 @@ define dso_local noundef i32 @main() local_unnamed_addr #30 {
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %3)
   %1579 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %1578, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %3) #28
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %3)
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %1578, ptr noalias nofree noundef nonnull readnone align 4 @hduyxnzffi, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %1578, ptr noalias nofree noundef nonnull readnone align 4 @ucmiafbern, ptr noalias nofree noundef nonnull readnone align 4 @i32_hasher) #43
   %1580 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %1578) #47
   %1581 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %1578) #43
   %1582 = call noalias align 4 dereferenceable_or_null(24) ptr @bump_malloc_inner(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
   call void @llvm.lifetime.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %2)
   %1583 = call i32 @VirtualProtect(ptr nofree noundef align 4 dereferenceable_or_null(24) %1582, i64 noundef 16, i32 noundef 64, ptr nofree noundef nonnull align 4 dereferenceable(4) %2) #28
   call void @llvm.lifetime.end.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 4 dereferenceable(4) %2)
-  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %1582, ptr noalias nofree noundef nonnull readnone align 4 @rtnngsagsz, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
+  call void @llvm.init.trampoline(ptr nocapture nofree noundef writeonly align 4 dereferenceable_or_null(24) %1582, ptr noalias nofree noundef nonnull readnone align 4 @mzxpyzfhpf, ptr noalias nofree noundef nonnull readnone align 4 @i32_eq) #43
   %1584 = call align 4 ptr @llvm.adjust.trampoline(ptr nofree noundef readonly align 4 dereferenceable_or_null(24) %1582) #47
   %1585 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 4 dereferenceable_or_null(24) %1582) #43
   %1586 = getelementptr inbounds i8, ptr %1574, i64 48
@@ -25523,7 +25524,7 @@ define dso_local noundef i32 @main() local_unnamed_addr #30 {
 
 3057:                                             ; preds = %3045
   %3058 = call noalias align 64 dereferenceable_or_null(56) ptr @bump_malloc_inner(i64 noundef 56, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
-  %3059 = load <55 x i8>, ptr @wipeb_Error_Nil_returned_during_sequential_hit_test_for_key_, align 64
+  %3059 = load <55 x i8>, ptr @isaob_Error_Nil_returned_during_sequential_hit_test_for_key_, align 64
   store <55 x i8> %3059, ptr %3058, align 64
   call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %1)
   %3060 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %1) #43
@@ -25677,37 +25678,6 @@ define dso_local noundef i32 @main() local_unnamed_addr #30 {
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define dso_local { i64, i64 } @_data_size_function_typ(ptr nocapture nofree readnone %0) #1 {
-  ret { i64, i64 } { i64 8, i64 8 }
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define dso_local { ptr, i160 } @_box_function_typ(ptr nocapture nofree noundef nonnull readonly dereferenceable(8) %0, ptr nocapture nofree readnone %1) #12 {
-  %3 = load i64, ptr %0, align 1
-  %4 = zext i64 %3 to i160
-  %5 = insertvalue { ptr, i160 } { ptr @function_typ, i160 undef }, i160 %4, 1
-  ret { ptr, i160 } %5
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define dso_local void @_unbox_function_typ({ ptr, i160 } %0, ptr nocapture nofree readnone %1, ptr nocapture nofree noundef nonnull writeonly dereferenceable(8) %2) #13 {
-  %4 = extractvalue { ptr, i160 } %0, 1
-  %5 = trunc i160 %4 to i64
-  store i64 %5, ptr %2, align 1
-  ret void
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define dso_local { i64, i64 } @_data_size_any_typ(ptr nocapture nofree readnone %0) #1 {
-  ret { i64, i64 } { i64 32, i64 8 }
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define dso_local { i64, i64 } @_data_size_Object(ptr nocapture nofree readnone %0) #1 {
-  ret { i64, i64 } { i64 0, i64 1 }
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
 define dso_local { i64, i64 } @_data_size_bool_typ(ptr nocapture nofree readnone %0) #1 {
   ret { i64, i64 } { i64 ptrtoint (ptr getelementptr (i1, ptr null, i32 1) to i64), i64 1 }
 }
@@ -25729,97 +25699,84 @@ define dso_local void @_unbox_bool_typ({ ptr, i160 } %0, ptr nocapture nofree re
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
+define dso_local { i64, i64 } @_data_size_any_typ(ptr nocapture nofree readnone %0) #1 {
+  ret { i64, i64 } { i64 32, i64 8 }
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
+define dso_local { i64, i64 } @_data_size_Object(ptr nocapture nofree readnone %0) #1 {
+  ret { i64, i64 } { i64 0, i64 1 }
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
 define dso_local { i64, i64 } @_data_size_IO(ptr nocapture nofree readnone %0) #1 {
   ret { i64, i64 } { i64 0, i64 1 }
 }
 
 ; Function Attrs: mustprogress nofree nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define dso_local align 4 ptr @IO_B__Self_print_xi1__Self_print_xRepresentable__Self_print_xf64__Self_print_xi8__Self_print_xNil__Self_print_xCharacter__Self_print_xString__Self_print_xi32__Self_print_xi64(ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %0) #32 {
+define dso_local align 4 ptr @IO_B__Self_print_xRepresentable__Self_print_xi8__Self_print_xString__Self_print_xi64__Self_print_xi32__Self_print_xi1__Self_print_xNil__Self_print_xCharacter__Self_print_xf64(ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %0) #32 {
   %2 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %0) #43
   %3 = load ptr, ptr %0, align 8
-  %4 = getelementptr i8, ptr %3, i64 8
-  %5 = getelementptr i8, ptr %3, i64 16
-  %6 = getelementptr i8, ptr %3, i64 24
-  %7 = getelementptr i8, ptr %3, i64 32
-  %8 = load i64, ptr %4, align 4
-  %9 = load i64, ptr %5, align 4
-  %10 = load ptr, ptr %6, align 8
-  %11 = load ptr, ptr %7, align 8
-  %12 = call i1 %10(i64 %9, i64 %8, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr readonly %11) #2
-  br i1 %12, label %13, label %15
+  %4 = icmp eq ptr %3, @i32_typ
+  br i1 %4, label %36, label %5
 
-13:                                               ; preds = %1
-  %14 = call i1 %10(i64 %9, i64 %8, i64 6681222582356018452, i64 ptrtoint (ptr @Character to i64), ptr readonly %11) #2
-  br i1 %14, label %15, label %35
+5:                                                ; preds = %1
+  %6 = icmp eq ptr %3, @i64_typ
+  br i1 %6, label %36, label %7
 
-15:                                               ; preds = %13, %1
-  %16 = icmp eq ptr %3, @i32_typ
-  br i1 %16, label %35, label %17
+7:                                                ; preds = %5
+  %8 = icmp eq ptr %3, @i8_typ
+  br i1 %8, label %36, label %9
 
-17:                                               ; preds = %15
-  %18 = call i1 %10(i64 %9, i64 %8, i64 -7260840641129990118, i64 ptrtoint (ptr @Representable to i64), ptr readonly %11) #2
-  br i1 %18, label %19, label %22
+9:                                                ; preds = %7
+  %10 = getelementptr i8, ptr %3, i64 8
+  %11 = getelementptr i8, ptr %3, i64 16
+  %12 = getelementptr i8, ptr %3, i64 24
+  %13 = getelementptr i8, ptr %3, i64 32
+  %14 = load i64, ptr %10, align 4
+  %15 = load i64, ptr %11, align 4
+  %16 = load ptr, ptr %12, align 8
+  %17 = load ptr, ptr %13, align 8
+  %18 = call i1 %16(i64 %15, i64 %14, i64 -7260840641129990118, i64 ptrtoint (ptr @Representable to i64), ptr readonly %17) #2
+  br i1 %18, label %19, label %23
 
-19:                                               ; preds = %17
-  %20 = call i1 %10(i64 %9, i64 %8, i64 6681222582356018452, i64 ptrtoint (ptr @Character to i64), ptr readonly %11) #2
-  %21 = or i1 %12, %20
-  br i1 %21, label %22, label %35
+19:                                               ; preds = %9
+  %20 = call i1 %16(i64 %15, i64 %14, i64 6681222582356018452, i64 ptrtoint (ptr @Character to i64), ptr readonly %17) #2
+  br i1 %20, label %23, label %21
 
-22:                                               ; preds = %19, %17
-  %23 = icmp eq ptr %3, @bool_typ
-  br i1 %23, label %35, label %24
+21:                                               ; preds = %19
+  %22 = call i1 %16(i64 %15, i64 %14, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr readonly %17) #2
+  br i1 %22, label %23, label %36
 
-24:                                               ; preds = %22
-  %25 = icmp eq ptr %3, @i64_typ
-  br i1 %25, label %35, label %26
+23:                                               ; preds = %21, %19, %9
+  %24 = icmp eq ptr %3, @bool_typ
+  br i1 %24, label %36, label %25
 
-26:                                               ; preds = %24
-  %27 = call i1 %10(i64 %9, i64 %8, i64 6681222582356018452, i64 ptrtoint (ptr @Character to i64), ptr readonly %11) #2
-  %28 = xor i1 %27, true
-  %29 = or i1 %12, %28
-  br i1 %29, label %30, label %35
+25:                                               ; preds = %23
+  %26 = icmp eq ptr %3, @nil_typ
+  %27 = icmp eq ptr %3, null
+  %28 = or i1 %26, %27
+  br i1 %28, label %36, label %29
 
-30:                                               ; preds = %26
-  %31 = icmp eq ptr %3, @i8_typ
-  %32 = icmp eq ptr %3, @f64_typ
-  %33 = select i1 %32, i64 3, i64 5
-  %34 = select i1 %31, i64 4, i64 %33
-  br label %35
+29:                                               ; preds = %25
+  %30 = call i1 %16(i64 %15, i64 %14, i64 6681222582356018452, i64 ptrtoint (ptr @Character to i64), ptr readonly %17) #2
+  %31 = call i1 %16(i64 %15, i64 %14, i64 6499063144389013426, i64 ptrtoint (ptr @String to i64), ptr readonly %17) #2
+  br i1 %30, label %32, label %34
 
-35:                                               ; preds = %30, %26, %24, %22, %19, %15, %13
-  %36 = phi i64 [ 8, %15 ], [ 1, %22 ], [ 9, %24 ], [ %34, %30 ], [ 7, %13 ], [ 2, %19 ], [ 6, %26 ]
-  %37 = getelementptr [10 x ptr], ptr @IO, i64 0, i64 %36
-  %38 = getelementptr i8, ptr %37, i64 80
-  %39 = load ptr, ptr %38, align 8
-  ret ptr %39
-}
+32:                                               ; preds = %29
+  %33 = select i1 %31, i64 9, i64 8
+  br label %36
 
-; Function Attrs: nofree nounwind
-define dso_local void @IO__Self_print_xi1(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #33 {
-  %3 = alloca [6 x i8], align 8
-  call void @llvm.memset.p0.i64(ptr noundef nonnull align 8 dereferenceable(6) %3, i8 0, i64 6, i1 false)
-  %4 = alloca [5 x i8], align 4
-  call void @llvm.memset.p0.i64(ptr noundef nonnull align 4 dereferenceable(5) %4, i8 0, i64 5, i1 false)
-  %5 = extractvalue { ptr, i160 } %1, 1
-  %6 = trunc i160 %5 to i1
-  br i1 %6, label %7, label %8
+34:                                               ; preds = %29
+  %35 = select i1 %31, i64 3, i64 9
+  br label %36
 
-7:                                                ; preds = %2
-  store i32 1702195828, ptr %4, align 4
-  br label %9
-
-8:                                                ; preds = %2
-  store <5 x i8> <i8 102, i8 97, i8 108, i8 115, i8 101>, ptr %3, align 8
-  br label %9
-
-9:                                                ; preds = %8, %7
-  %10 = phi i64 [ 4, %7 ], [ 5, %8 ]
-  %11 = phi ptr [ %4, %7 ], [ %3, %8 ]
-  %12 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef nonnull align 16 dereferenceable(712) @String) #55
-  %13 = getelementptr i8, ptr %11, i64 %10
-  store i8 0, ptr %13, align 1
-  %14 = call i32 @puts(ptr nocapture nofree noundef nonnull readonly align 4 dereferenceable(5) %11) #28
-  ret void
+36:                                               ; preds = %34, %32, %25, %23, %21, %7, %5, %1
+  %37 = phi i64 [ 5, %1 ], [ 4, %5 ], [ 2, %7 ], [ 6, %23 ], [ 7, %25 ], [ 1, %21 ], [ %33, %32 ], [ %35, %34 ]
+  %38 = getelementptr [10 x ptr], ptr @IO, i64 0, i64 %37
+  %39 = getelementptr i8, ptr %38, i64 80
+  %40 = load ptr, ptr %39, align 8
+  ret ptr %40
 }
 
 ; Function Attrs: nounwind
@@ -25888,21 +25845,95 @@ define dso_local void @IO__Self_print_xRepresentable(ptr nocapture nofree readno
 }
 
 ; Function Attrs: nofree nounwind
-define dso_local void @IO__Self_print_xf64(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #33 {
-  %3 = extractvalue { ptr, i160 } %1, 1
-  %4 = trunc i160 %3 to i64
-  %5 = bitcast i64 %4 to double
-  %6 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @float_string, double %5) #25
-  ret void
-}
-
-; Function Attrs: nofree nounwind
 define dso_local void @IO__Self_print_xi8(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #33 {
   %3 = extractvalue { ptr, i160 } %1, 1
   %4 = trunc i160 %3 to i32
   %5 = shl i32 %4, 24
   %6 = ashr exact i32 %5, 24
   %7 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %6) #25
+  ret void
+}
+
+; Function Attrs: nounwind
+define dso_local void @IO__Self_print_xString(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #31 {
+  %3 = alloca [0 x ptr], align 8
+  %4 = extractvalue { ptr, i160 } %1, 0
+  %5 = extractvalue { ptr, i160 } %1, 1
+  %6 = trunc i160 %5 to i64
+  %7 = inttoptr i64 %6 to ptr
+  %8 = lshr i160 %5, 64
+  %9 = trunc i160 %8 to i64
+  %10 = inttoptr i64 %9 to ptr
+  %11 = getelementptr i8, ptr %4, i64 8
+  %12 = getelementptr i8, ptr %4, i64 16
+  %13 = getelementptr i8, ptr %4, i64 40
+  %14 = load i64, ptr %11, align 4, !noalias !494
+  %15 = load i64, ptr %12, align 4, !noalias !494
+  %16 = load ptr, ptr %13, align 8, !noalias !494
+  %17 = mul i64 %14, 6499063144389013426
+  %18 = lshr i64 %17, 32
+  %19 = xor i64 %18, %17
+  %20 = and i64 %19, %15
+  %21 = getelementptr i32, ptr %16, i64 %20
+  %22 = load i32, ptr %21, align 4, !noalias !494
+  %23 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %4, 0
+  %24 = insertvalue { ptr, ptr, ptr, i32 } %23, ptr %7, 1
+  %25 = insertvalue { ptr, ptr, ptr, i32 } %24, ptr %10, 2
+  %26 = insertvalue { ptr, ptr, ptr, i32 } %25, i32 %22, 3
+  %27 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %3) #43
+  %28 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef align 8 %4) #43
+  %29 = sext i32 %22 to i64
+  %30 = getelementptr ptr, ptr %4, i64 %29
+  %31 = getelementptr i8, ptr %30, i64 80
+  %32 = load ptr, ptr %31, align 8
+  %33 = call align 4 ptr %32({ ptr, ptr, ptr, i32 } %26, ptr nocapture nofree noundef nonnull readonly align 8 %3) #10
+  %34 = call { ptr } %33({ ptr, ptr, ptr, i32 } %26, { ptr, ptr, ptr, i32 } %26, ptr nonnull align 8 %3) #28
+  %35 = extractvalue { ptr } %34, 0
+  %36 = call i32 @puts(ptr nocapture nofree noundef nonnull readonly dereferenceable(1) %35) #28
+  ret void
+}
+
+; Function Attrs: nofree nounwind
+define dso_local void @IO__Self_print_xi64(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #33 {
+  %3 = extractvalue { ptr, i160 } %1, 1
+  %4 = trunc i160 %3 to i64
+  %5 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(6) @i64_string, i64 %4) #25
+  ret void
+}
+
+; Function Attrs: nofree nounwind
+define dso_local void @IO__Self_print_xi32(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #33 {
+  %3 = extractvalue { ptr, i160 } %1, 1
+  %4 = trunc i160 %3 to i32
+  %5 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %4) #25
+  ret void
+}
+
+; Function Attrs: nofree nounwind
+define dso_local void @IO__Self_print_xi1(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #33 {
+  %3 = alloca [6 x i8], align 8
+  call void @llvm.memset.p0.i64(ptr noundef nonnull align 8 dereferenceable(6) %3, i8 0, i64 6, i1 false)
+  %4 = alloca [5 x i8], align 4
+  call void @llvm.memset.p0.i64(ptr noundef nonnull align 4 dereferenceable(5) %4, i8 0, i64 5, i1 false)
+  %5 = extractvalue { ptr, i160 } %1, 1
+  %6 = trunc i160 %5 to i1
+  br i1 %6, label %7, label %8
+
+7:                                                ; preds = %2
+  store i32 1702195828, ptr %4, align 4
+  br label %9
+
+8:                                                ; preds = %2
+  store <5 x i8> <i8 102, i8 97, i8 108, i8 115, i8 101>, ptr %3, align 8
+  br label %9
+
+9:                                                ; preds = %8, %7
+  %10 = phi i64 [ 4, %7 ], [ 5, %8 ]
+  %11 = phi ptr [ %4, %7 ], [ %3, %8 ]
+  %12 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef nonnull align 16 dereferenceable(712) @String) #55
+  %13 = getelementptr i8, ptr %11, i64 %10
+  store i8 0, ptr %13, align 1
+  %14 = call i32 @puts(ptr nocapture nofree noundef nonnull readonly align 4 dereferenceable(5) %11) #28
   ret void
 }
 
@@ -25930,15 +25961,15 @@ define dso_local void @IO__Self_print_xCharacter(ptr nocapture nofree readnone %
   %12 = getelementptr i8, ptr %5, i64 8
   %13 = getelementptr i8, ptr %5, i64 16
   %14 = getelementptr i8, ptr %5, i64 40
-  %15 = load i64, ptr %12, align 4, !noalias !494
-  %16 = load i64, ptr %13, align 4, !noalias !494
-  %17 = load ptr, ptr %14, align 8, !noalias !494
+  %15 = load i64, ptr %12, align 4, !noalias !497
+  %16 = load i64, ptr %13, align 4, !noalias !497
+  %17 = load ptr, ptr %14, align 8, !noalias !497
   %18 = mul i64 %15, 6681222582356018452
   %19 = lshr i64 %18, 32
   %20 = xor i64 %19, %18
   %21 = and i64 %20, %16
   %22 = getelementptr i32, ptr %17, i64 %21
-  %23 = load i32, ptr %22, align 4, !noalias !494
+  %23 = load i32, ptr %22, align 4, !noalias !497
   %24 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %5, 0
   %25 = insertvalue { ptr, ptr, ptr, i32 } %24, ptr %8, 1
   %26 = insertvalue { ptr, ptr, ptr, i32 } %25, ptr %11, 2
@@ -25958,63 +25989,145 @@ define dso_local void @IO__Self_print_xCharacter(ptr nocapture nofree readnone %
   ret void
 }
 
-; Function Attrs: nounwind
-define dso_local void @IO__Self_print_xString(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #31 {
-  %3 = alloca [0 x ptr], align 8
-  %4 = extractvalue { ptr, i160 } %1, 0
-  %5 = extractvalue { ptr, i160 } %1, 1
-  %6 = trunc i160 %5 to i64
-  %7 = inttoptr i64 %6 to ptr
-  %8 = lshr i160 %5, 64
-  %9 = trunc i160 %8 to i64
-  %10 = inttoptr i64 %9 to ptr
-  %11 = getelementptr i8, ptr %4, i64 8
-  %12 = getelementptr i8, ptr %4, i64 16
-  %13 = getelementptr i8, ptr %4, i64 40
-  %14 = load i64, ptr %11, align 4, !noalias !497
-  %15 = load i64, ptr %12, align 4, !noalias !497
-  %16 = load ptr, ptr %13, align 8, !noalias !497
-  %17 = mul i64 %14, 6499063144389013426
-  %18 = lshr i64 %17, 32
-  %19 = xor i64 %18, %17
-  %20 = and i64 %19, %15
-  %21 = getelementptr i32, ptr %16, i64 %20
-  %22 = load i32, ptr %21, align 4, !noalias !497
-  %23 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %4, 0
-  %24 = insertvalue { ptr, ptr, ptr, i32 } %23, ptr %7, 1
-  %25 = insertvalue { ptr, ptr, ptr, i32 } %24, ptr %10, 2
-  %26 = insertvalue { ptr, ptr, ptr, i32 } %25, i32 %22, 3
-  %27 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %3) #43
-  %28 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef align 8 %4) #43
-  %29 = sext i32 %22 to i64
-  %30 = getelementptr ptr, ptr %4, i64 %29
-  %31 = getelementptr i8, ptr %30, i64 80
-  %32 = load ptr, ptr %31, align 8
-  %33 = call align 4 ptr %32({ ptr, ptr, ptr, i32 } %26, ptr nocapture nofree noundef nonnull readonly align 8 %3) #10
-  %34 = call { ptr } %33({ ptr, ptr, ptr, i32 } %26, { ptr, ptr, ptr, i32 } %26, ptr nonnull align 8 %3) #28
-  %35 = extractvalue { ptr } %34, 0
-  %36 = call i32 @puts(ptr nocapture nofree noundef nonnull readonly dereferenceable(1) %35) #28
-  ret void
-}
-
 ; Function Attrs: nofree nounwind
-define dso_local void @IO__Self_print_xi32(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #33 {
-  %3 = extractvalue { ptr, i160 } %1, 1
-  %4 = trunc i160 %3 to i32
-  %5 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %4) #25
-  ret void
-}
-
-; Function Attrs: nofree nounwind
-define dso_local void @IO__Self_print_xi64(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #33 {
+define dso_local void @IO__Self_print_xf64(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #33 {
   %3 = extractvalue { ptr, i160 } %1, 1
   %4 = trunc i160 %3 to i64
-  %5 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(6) @i64_string, i64 %4) #25
+  %5 = bitcast i64 %4 to double
+  %6 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @float_string, double %5) #25
   ret void
 }
 
 ; Function Attrs: nofree nounwind
 declare noundef i32 @puts(ptr nocapture noundef readonly) local_unnamed_addr #25
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
+define dso_local { i64, i64 } @_data_size_Character(ptr nocapture nofree readnone %0) #1 {
+  ret { i64, i64 } { i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), i64 1 }
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define dso_local align 4 ptr @Character_B_byte_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #5 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #43
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 104
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define dso_local align 4 ptr @Character_B_init_bytei8({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #5 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #43
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 112
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nounwind willreturn
+define dso_local i8 @Character_byte_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #7 {
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %6 = getelementptr i8, ptr %4, i64 8
+  %7 = getelementptr i8, ptr %4, i64 16
+  %8 = getelementptr i8, ptr %4, i64 40
+  %9 = load i64, ptr %6, align 4, !noalias !500
+  %10 = load i64, ptr %7, align 4, !noalias !500
+  %11 = load ptr, ptr %8, align 8, !noalias !500
+  %12 = mul i64 %9, 6681222582356018452
+  %13 = lshr i64 %12, 32
+  %14 = xor i64 %13, %12
+  %15 = and i64 %14, %10
+  %16 = getelementptr i32, ptr %11, i64 %15
+  %17 = load i32, ptr %16, align 4, !noalias !500
+  %18 = call ptr @llvm.invariant.start.p0(i64 noundef 40, ptr nocapture nofree noundef align 8 %4) #43
+  %19 = sext i32 %17 to i64
+  %20 = getelementptr ptr, ptr %4, i64 %19
+  %21 = load ptr, ptr %20, align 8
+  %22 = load ptr, ptr %21, align 8
+  %23 = call i8 %22(ptr %5) #46
+  ret i8 %23
+}
+
+; Function Attrs: mustprogress nounwind willreturn memory(readwrite, inaccessiblemem: none)
+define dso_local void @Character_init_bytei8({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, i8 %3) #6 {
+  %5 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %6 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %7 = getelementptr i8, ptr %5, i64 8
+  %8 = getelementptr i8, ptr %5, i64 16
+  %9 = getelementptr i8, ptr %5, i64 40
+  %10 = load i64, ptr %7, align 4, !noalias !503
+  %11 = load i64, ptr %8, align 4, !noalias !503
+  %12 = load ptr, ptr %9, align 8, !noalias !503
+  %13 = mul i64 %10, 6681222582356018452
+  %14 = lshr i64 %13, 32
+  %15 = xor i64 %14, %13
+  %16 = and i64 %15, %11
+  %17 = getelementptr i32, ptr %12, i64 %16
+  %18 = load i32, ptr %17, align 4, !noalias !503
+  %19 = call ptr @llvm.invariant.start.p0(i64 noundef 40, ptr nocapture nofree noundef align 8 %5) #43
+  %20 = sext i32 %18 to i64
+  %21 = getelementptr ptr, ptr %5, i64 %20
+  %22 = load ptr, ptr %21, align 8
+  %23 = getelementptr i8, ptr %22, i64 8
+  %24 = load ptr, ptr %23, align 8
+  call void %24(ptr %6, i8 %3) #45
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define dso_local i8 @Character_getter_byte(ptr nocapture nofree noundef nonnull readonly dereferenceable(1) %0) #12 {
+  %2 = load i8, ptr %0, align 1
+  ret i8 %2
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
+define dso_local void @Character_setter_byte(ptr nocapture nofree noundef nonnull writeonly dereferenceable(1) %0, i8 %1) #13 {
+  store i8 %1, ptr %0, align 1
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
+define dso_local { i64, i64 } @_data_size_i32_typ(ptr nocapture nofree readnone %0) #1 {
+  ret { i64, i64 } { i64 4, i64 4 }
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define dso_local { ptr, i160 } @_box_i32_typ(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) %0, ptr nocapture nofree readnone %1) #12 {
+  %3 = load i32, ptr %0, align 1
+  %4 = zext i32 %3 to i160
+  %5 = insertvalue { ptr, i160 } { ptr @i32_typ, i160 undef }, i160 %4, 1
+  ret { ptr, i160 } %5
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
+define dso_local void @_unbox_i32_typ({ ptr, i160 } %0, ptr nocapture nofree readnone %1, ptr nocapture nofree noundef nonnull writeonly dereferenceable(4) %2) #13 {
+  %4 = extractvalue { ptr, i160 } %0, 1
+  %5 = trunc i160 %4 to i32
+  store i32 %5, ptr %2, align 1
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
+define dso_local { i64, i64 } @_data_size_buffer_typ(ptr nocapture nofree readnone %0) #1 {
+  ret { i64, i64 } { i64 8, i64 8 }
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define dso_local { ptr, i160 } @_box_buffer_typ(ptr nocapture nofree noundef nonnull readonly dereferenceable(8) %0, ptr nocapture nofree readnone %1) #12 {
+  %3 = load i64, ptr %0, align 1
+  %4 = zext i64 %3 to i160
+  %5 = insertvalue { ptr, i160 } { ptr @buffer_typ, i160 undef }, i160 %4, 1
+  ret { ptr, i160 } %5
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
+define dso_local void @_unbox_buffer_typ({ ptr, i160 } %0, ptr nocapture nofree readnone %1, ptr nocapture nofree noundef nonnull writeonly dereferenceable(8) %2) #13 {
+  %4 = extractvalue { ptr, i160 } %0, 1
+  %5 = trunc i160 %4 to i64
+  store i64 %5, ptr %2, align 1
+  ret void
+}
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
 define dso_local { i64, i64 } @_data_size_String(ptr nocapture nofree readnone %0) #1 {
@@ -26283,15 +26396,15 @@ define dso_local void @String_init_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, 
   %6 = getelementptr i8, ptr %4, i64 8
   %7 = getelementptr i8, ptr %4, i64 16
   %8 = getelementptr i8, ptr %4, i64 40
-  %9 = load i64, ptr %6, align 4, !noalias !500
-  %10 = load i64, ptr %7, align 4, !noalias !500
-  %11 = load ptr, ptr %8, align 8, !noalias !500
+  %9 = load i64, ptr %6, align 4, !noalias !506
+  %10 = load i64, ptr %7, align 4, !noalias !506
+  %11 = load ptr, ptr %8, align 8, !noalias !506
   %12 = mul i64 %9, 6499063144389013426
   %13 = lshr i64 %12, 32
   %14 = xor i64 %13, %12
   %15 = and i64 %14, %10
   %16 = getelementptr i32, ptr %11, i64 %15
-  %17 = load i32, ptr %16, align 4, !noalias !500
+  %17 = load i32, ptr %16, align 4, !noalias !506
   %18 = call noalias align 4 dereferenceable_or_null(1) ptr @bump_malloc_inner(i64 noundef 1, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
   %19 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef align 8 %4) #43
   %20 = sext i32 %17 to i64
@@ -26323,15 +26436,15 @@ define dso_local void @String_init_bytesBufferi8_lengthi32_capacityi32({ ptr, pt
   %9 = getelementptr i8, ptr %7, i64 8
   %10 = getelementptr i8, ptr %7, i64 16
   %11 = getelementptr i8, ptr %7, i64 40
-  %12 = load i64, ptr %9, align 4, !noalias !503
-  %13 = load i64, ptr %10, align 4, !noalias !503
-  %14 = load ptr, ptr %11, align 8, !noalias !503
+  %12 = load i64, ptr %9, align 4, !noalias !509
+  %13 = load i64, ptr %10, align 4, !noalias !509
+  %14 = load ptr, ptr %11, align 8, !noalias !509
   %15 = mul i64 %12, 6499063144389013426
   %16 = lshr i64 %15, 32
   %17 = xor i64 %16, %15
   %18 = and i64 %17, %13
   %19 = getelementptr i32, ptr %14, i64 %18
-  %20 = load i32, ptr %19, align 4, !noalias !503
+  %20 = load i32, ptr %19, align 4, !noalias !509
   %21 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef align 8 %7) #43
   %22 = sext i32 %20 to i64
   %23 = getelementptr ptr, ptr %7, i64 %22
@@ -26361,15 +26474,15 @@ define dso_local i32 @String_length_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr,
   %6 = getelementptr i8, ptr %4, i64 8
   %7 = getelementptr i8, ptr %4, i64 16
   %8 = getelementptr i8, ptr %4, i64 40
-  %9 = load i64, ptr %6, align 4, !noalias !506
-  %10 = load i64, ptr %7, align 4, !noalias !506
-  %11 = load ptr, ptr %8, align 8, !noalias !506
+  %9 = load i64, ptr %6, align 4, !noalias !512
+  %10 = load i64, ptr %7, align 4, !noalias !512
+  %11 = load ptr, ptr %8, align 8, !noalias !512
   %12 = mul i64 %9, 6499063144389013426
   %13 = lshr i64 %12, 32
   %14 = xor i64 %13, %12
   %15 = and i64 %14, %10
   %16 = getelementptr i32, ptr %11, i64 %15
-  %17 = load i32, ptr %16, align 4, !noalias !506
+  %17 = load i32, ptr %16, align 4, !noalias !512
   %18 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef align 8 %4) #43
   %19 = sext i32 %17 to i64
   %20 = getelementptr ptr, ptr %4, i64 %19
@@ -26387,15 +26500,15 @@ define dso_local i32 @String_capacity_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, pt
   %6 = getelementptr i8, ptr %4, i64 8
   %7 = getelementptr i8, ptr %4, i64 16
   %8 = getelementptr i8, ptr %4, i64 40
-  %9 = load i64, ptr %6, align 4, !noalias !509
-  %10 = load i64, ptr %7, align 4, !noalias !509
-  %11 = load ptr, ptr %8, align 8, !noalias !509
+  %9 = load i64, ptr %6, align 4, !noalias !515
+  %10 = load i64, ptr %7, align 4, !noalias !515
+  %11 = load ptr, ptr %8, align 8, !noalias !515
   %12 = mul i64 %9, 6499063144389013426
   %13 = lshr i64 %12, 32
   %14 = xor i64 %13, %12
   %15 = and i64 %14, %10
   %16 = getelementptr i32, ptr %11, i64 %15
-  %17 = load i32, ptr %16, align 4, !noalias !509
+  %17 = load i32, ptr %16, align 4, !noalias !515
   %18 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef align 8 %4) #43
   %19 = sext i32 %17 to i64
   %20 = getelementptr ptr, ptr %4, i64 %19
@@ -26413,15 +26526,15 @@ define dso_local { ptr } @String_bytes_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %6 = getelementptr i8, ptr %4, i64 8
   %7 = getelementptr i8, ptr %4, i64 16
   %8 = getelementptr i8, ptr %4, i64 40
-  %9 = load i64, ptr %6, align 4, !noalias !512
-  %10 = load i64, ptr %7, align 4, !noalias !512
-  %11 = load ptr, ptr %8, align 8, !noalias !512
+  %9 = load i64, ptr %6, align 4, !noalias !518
+  %10 = load i64, ptr %7, align 4, !noalias !518
+  %11 = load ptr, ptr %8, align 8, !noalias !518
   %12 = mul i64 %9, 6499063144389013426
   %13 = lshr i64 %12, 32
   %14 = xor i64 %13, %12
   %15 = and i64 %14, %10
   %16 = getelementptr i32, ptr %11, i64 %15
-  %17 = load i32, ptr %16, align 4, !noalias !512
+  %17 = load i32, ptr %16, align 4, !noalias !518
   %18 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef align 8 %4) #43
   %19 = sext i32 %17 to i64
   %20 = getelementptr ptr, ptr %4, i64 %19
@@ -26438,15 +26551,15 @@ define dso_local { ptr } @String_c_string_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr
   %6 = getelementptr i8, ptr %4, i64 8
   %7 = getelementptr i8, ptr %4, i64 16
   %8 = getelementptr i8, ptr %4, i64 40
-  %9 = load i64, ptr %6, align 4, !noalias !515
-  %10 = load i64, ptr %7, align 4, !noalias !515
-  %11 = load ptr, ptr %8, align 8, !noalias !515
+  %9 = load i64, ptr %6, align 4, !noalias !521
+  %10 = load i64, ptr %7, align 4, !noalias !521
+  %11 = load ptr, ptr %8, align 8, !noalias !521
   %12 = mul i64 %9, 6499063144389013426
   %13 = lshr i64 %12, 32
   %14 = xor i64 %13, %12
   %15 = and i64 %14, %10
   %16 = getelementptr i32, ptr %11, i64 %15
-  %17 = load i32, ptr %16, align 4, !noalias !515
+  %17 = load i32, ptr %16, align 4, !noalias !521
   %18 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef nonnull align 8 %4) #43
   %19 = sext i32 %17 to i64
   %20 = getelementptr ptr, ptr %4, i64 %19
@@ -26645,15 +26758,15 @@ define dso_local { ptr, ptr, ptr, i32 } @String_extend_strString({ ptr, ptr, ptr
   %23 = getelementptr i8, ptr %20, i64 8
   %24 = getelementptr i8, ptr %20, i64 16
   %25 = getelementptr i8, ptr %20, i64 40
-  %26 = load i64, ptr %23, align 4, !noalias !518
-  %27 = load i64, ptr %24, align 4, !noalias !518
-  %28 = load ptr, ptr %25, align 8, !noalias !518
+  %26 = load i64, ptr %23, align 4, !noalias !524
+  %27 = load i64, ptr %24, align 4, !noalias !524
+  %28 = load ptr, ptr %25, align 8, !noalias !524
   %29 = mul i64 %26, 6499063144389013426
   %30 = lshr i64 %29, 32
   %31 = xor i64 %30, %29
   %32 = and i64 %31, %27
   %33 = getelementptr i32, ptr %28, i64 %32
-  %34 = load i32, ptr %33, align 4, !noalias !518
+  %34 = load i32, ptr %33, align 4, !noalias !524
   %35 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %20, 0
   %36 = insertvalue { ptr, ptr, ptr, i32 } %35, ptr %21, 1
   %37 = insertvalue { ptr, ptr, ptr, i32 } %36, ptr %22, 2
@@ -26842,15 +26955,15 @@ define dso_local i8 @String__index_xi32({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, p
   %7 = getelementptr i8, ptr %5, i64 8
   %8 = getelementptr i8, ptr %5, i64 16
   %9 = getelementptr i8, ptr %5, i64 40
-  %10 = load i64, ptr %7, align 4, !noalias !521
-  %11 = load i64, ptr %8, align 4, !noalias !521
-  %12 = load ptr, ptr %9, align 8, !noalias !521
+  %10 = load i64, ptr %7, align 4, !noalias !527
+  %11 = load i64, ptr %8, align 4, !noalias !527
+  %12 = load ptr, ptr %9, align 8, !noalias !527
   %13 = mul i64 %10, 6499063144389013426
   %14 = lshr i64 %13, 32
   %15 = xor i64 %14, %13
   %16 = and i64 %15, %11
   %17 = getelementptr i32, ptr %12, i64 %16
-  %18 = load i32, ptr %17, align 4, !noalias !521
+  %18 = load i32, ptr %17, align 4, !noalias !527
   %19 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef align 8 %5) #43
   %20 = sext i32 %18 to i64
   %21 = getelementptr ptr, ptr %5, i64 %20
@@ -26926,30 +27039,30 @@ define dso_local noundef i1 @String__EQ_otherString({ ptr, ptr, ptr, i32 } %0, {
   %8 = getelementptr i8, ptr %6, i64 8
   %9 = getelementptr i8, ptr %6, i64 16
   %10 = getelementptr i8, ptr %6, i64 40
-  %11 = load i64, ptr %8, align 4, !noalias !524
-  %12 = load i64, ptr %9, align 4, !noalias !524
-  %13 = load ptr, ptr %10, align 8, !noalias !524
+  %11 = load i64, ptr %8, align 4, !noalias !530
+  %12 = load i64, ptr %9, align 4, !noalias !530
+  %13 = load ptr, ptr %10, align 8, !noalias !530
   %14 = mul i64 %11, 6499063144389013426
   %15 = lshr i64 %14, 32
   %16 = xor i64 %15, %14
   %17 = and i64 %16, %12
   %18 = getelementptr i32, ptr %13, i64 %17
-  %19 = load i32, ptr %18, align 4, !noalias !524
+  %19 = load i32, ptr %18, align 4, !noalias !530
   %20 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
   %21 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
   %22 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
   %23 = getelementptr i8, ptr %20, i64 8
   %24 = getelementptr i8, ptr %20, i64 16
   %25 = getelementptr i8, ptr %20, i64 40
-  %26 = load i64, ptr %23, align 4, !noalias !527
-  %27 = load i64, ptr %24, align 4, !noalias !527
-  %28 = load ptr, ptr %25, align 8, !noalias !527
+  %26 = load i64, ptr %23, align 4, !noalias !533
+  %27 = load i64, ptr %24, align 4, !noalias !533
+  %28 = load ptr, ptr %25, align 8, !noalias !533
   %29 = mul i64 %26, 6499063144389013426
   %30 = lshr i64 %29, 32
   %31 = xor i64 %30, %29
   %32 = and i64 %31, %27
   %33 = getelementptr i32, ptr %28, i64 %32
-  %34 = load i32, ptr %33, align 4, !noalias !527
+  %34 = load i32, ptr %33, align 4, !noalias !533
   %35 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef align 8 %6) #43
   %36 = sext i32 %19 to i64
   %37 = getelementptr ptr, ptr %6, i64 %36
@@ -27018,15 +27131,15 @@ define dso_local { ptr, i8 } @String_pop_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr,
   %6 = getelementptr i8, ptr %4, i64 8
   %7 = getelementptr i8, ptr %4, i64 16
   %8 = getelementptr i8, ptr %4, i64 40
-  %9 = load i64, ptr %6, align 4, !noalias !530
-  %10 = load i64, ptr %7, align 4, !noalias !530
-  %11 = load ptr, ptr %8, align 8, !noalias !530
+  %9 = load i64, ptr %6, align 4, !noalias !536
+  %10 = load i64, ptr %7, align 4, !noalias !536
+  %11 = load ptr, ptr %8, align 8, !noalias !536
   %12 = mul i64 %9, 6499063144389013426
   %13 = lshr i64 %12, 32
   %14 = xor i64 %13, %12
   %15 = and i64 %14, %10
   %16 = getelementptr i32, ptr %11, i64 %15
-  %17 = load i32, ptr %16, align 4, !noalias !530
+  %17 = load i32, ptr %16, align 4, !noalias !536
   %18 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef align 8 %4) #43
   %19 = sext i32 %17 to i64
   %20 = getelementptr ptr, ptr %4, i64 %19
@@ -27074,15 +27187,15 @@ define dso_local { ptr, ptr, ptr, i32 } @String_copy_({ ptr, ptr, ptr, i32 } %0,
   %6 = getelementptr i8, ptr %4, i64 8
   %7 = getelementptr i8, ptr %4, i64 16
   %8 = getelementptr i8, ptr %4, i64 40
-  %9 = load i64, ptr %6, align 4, !noalias !533
-  %10 = load i64, ptr %7, align 4, !noalias !533
-  %11 = load ptr, ptr %8, align 8, !noalias !533
+  %9 = load i64, ptr %6, align 4, !noalias !539
+  %10 = load i64, ptr %7, align 4, !noalias !539
+  %11 = load ptr, ptr %8, align 8, !noalias !539
   %12 = mul i64 %9, 6499063144389013426
   %13 = lshr i64 %12, 32
   %14 = xor i64 %13, %12
   %15 = and i64 %14, %10
   %16 = getelementptr i32, ptr %11, i64 %15
-  %17 = load i32, ptr %16, align 4, !noalias !533
+  %17 = load i32, ptr %16, align 4, !noalias !539
   %18 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef nonnull align 8 %4) #43
   %19 = sext i32 %17 to i64
   %20 = getelementptr ptr, ptr %4, i64 %19
@@ -27187,15 +27300,15 @@ define dso_local void @Iterable_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 
   %9 = getelementptr i8, ptr %6, i64 8
   %10 = getelementptr i8, ptr %6, i64 16
   %11 = getelementptr i8, ptr %6, i64 40
-  %12 = load i64, ptr %9, align 4, !noalias !536
-  %13 = load i64, ptr %10, align 4, !noalias !536
-  %14 = load ptr, ptr %11, align 8, !noalias !536
+  %12 = load i64, ptr %9, align 4, !noalias !542
+  %13 = load i64, ptr %10, align 4, !noalias !542
+  %14 = load ptr, ptr %11, align 8, !noalias !542
   %15 = mul i64 %12, 3037712219555723519
   %16 = lshr i64 %15, 32
   %17 = xor i64 %16, %15
   %18 = and i64 %17, %13
   %19 = getelementptr i32, ptr %14, i64 %18
-  %20 = load i32, ptr %19, align 4, !noalias !536
+  %20 = load i32, ptr %19, align 4, !noalias !542
   %21 = extractvalue { ptr } %3, 0
   %22 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %6, 0
   %23 = insertvalue { ptr, ptr, ptr, i32 } %22, ptr %7, 1
@@ -27223,7 +27336,7 @@ define dso_local void @Iterable_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 
   %45 = xor i64 %44, %43
   %46 = and i64 %45, %41
   %47 = getelementptr i32, ptr %42, i64 %46
-  %48 = load i32, ptr %47, align 4, !noalias !539
+  %48 = load i32, ptr %47, align 4, !noalias !545
   %49 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %34, 0
   %50 = insertvalue { ptr, ptr, ptr, i32 } %49, ptr %35, 1
   %51 = insertvalue { ptr, ptr, ptr, i32 } %50, ptr %36, 2
@@ -27268,15 +27381,15 @@ define dso_local { ptr, i160 } @Iterable_reduce_accumulatorT_fFunctionT._T_to_T(
   %10 = getelementptr i8, ptr %7, i64 8
   %11 = getelementptr i8, ptr %7, i64 16
   %12 = getelementptr i8, ptr %7, i64 40
-  %13 = load i64, ptr %10, align 4, !noalias !542
-  %14 = load i64, ptr %11, align 4, !noalias !542
-  %15 = load ptr, ptr %12, align 8, !noalias !542
+  %13 = load i64, ptr %10, align 4, !noalias !548
+  %14 = load i64, ptr %11, align 4, !noalias !548
+  %15 = load ptr, ptr %12, align 8, !noalias !548
   %16 = mul i64 %13, 3037712219555723519
   %17 = lshr i64 %16, 32
   %18 = xor i64 %17, %16
   %19 = and i64 %18, %14
   %20 = getelementptr i32, ptr %15, i64 %19
-  %21 = load i32, ptr %20, align 4, !noalias !542
+  %21 = load i32, ptr %20, align 4, !noalias !548
   %22 = extractvalue { ptr } %4, 0
   %23 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %7, 0
   %24 = insertvalue { ptr, ptr, ptr, i32 } %23, ptr %8, 1
@@ -27304,7 +27417,7 @@ define dso_local { ptr, i160 } @Iterable_reduce_accumulatorT_fFunctionT._T_to_T(
   %46 = xor i64 %45, %44
   %47 = and i64 %46, %42
   %48 = getelementptr i32, ptr %43, i64 %47
-  %49 = load i32, ptr %48, align 4, !noalias !545
+  %49 = load i32, ptr %48, align 4, !noalias !551
   %50 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %35, 0
   %51 = insertvalue { ptr, ptr, ptr, i32 } %50, ptr %36, 1
   %52 = insertvalue { ptr, ptr, ptr, i32 } %51, ptr %37, 2
@@ -27344,81 +27457,6 @@ define dso_local { ptr, i160 } @Iterable_reduce_accumulatorT_fFunctionT._T_to_T(
 }
 
 define dso_local noundef i1 @Iterable_all_fFunctionT_to_i1({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr } %3) #30 {
-  %5 = alloca [0 x ptr], align 8
-  %6 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %7 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %8 = extractvalue { ptr, ptr, ptr, i32 } %0, 2
-  %9 = getelementptr i8, ptr %6, i64 8
-  %10 = getelementptr i8, ptr %6, i64 16
-  %11 = getelementptr i8, ptr %6, i64 40
-  %12 = load i64, ptr %9, align 4, !noalias !548
-  %13 = load i64, ptr %10, align 4, !noalias !548
-  %14 = load ptr, ptr %11, align 8, !noalias !548
-  %15 = mul i64 %12, 3037712219555723519
-  %16 = lshr i64 %15, 32
-  %17 = xor i64 %16, %15
-  %18 = and i64 %17, %13
-  %19 = getelementptr i32, ptr %14, i64 %18
-  %20 = load i32, ptr %19, align 4, !noalias !548
-  %21 = extractvalue { ptr } %3, 0
-  %22 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %6, 0
-  %23 = insertvalue { ptr, ptr, ptr, i32 } %22, ptr %7, 1
-  %24 = insertvalue { ptr, ptr, ptr, i32 } %23, ptr %8, 2
-  %25 = insertvalue { ptr, ptr, ptr, i32 } %24, i32 %20, 3
-  %26 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %5) #53
-  %27 = call ptr @llvm.invariant.start.p0(i64 noundef 184, ptr nocapture nofree noundef align 8 %6) #53
-  %28 = sext i32 %20 to i64
-  %29 = getelementptr ptr, ptr %6, i64 %28
-  %30 = getelementptr i8, ptr %29, i64 8
-  %31 = load ptr, ptr %30, align 8
-  %32 = call align 4 ptr %31({ ptr, ptr, ptr, i32 } %25, ptr nocapture nofree noundef nonnull readonly align 8 %5) #10
-  %33 = call { ptr, ptr, ptr, i32 } %32({ ptr, ptr, ptr, i32 } %25, { ptr, ptr, ptr, i32 } %25, ptr nonnull align 8 %5) #28
-  %34 = extractvalue { ptr, ptr, ptr, i32 } %33, 0
-  %35 = extractvalue { ptr, ptr, ptr, i32 } %33, 1
-  %36 = extractvalue { ptr, ptr, ptr, i32 } %33, 2
-  %37 = getelementptr i8, ptr %34, i64 8
-  %38 = getelementptr i8, ptr %34, i64 16
-  %39 = getelementptr i8, ptr %34, i64 40
-  %40 = load i64, ptr %37, align 4, !noalias !25
-  %41 = load i64, ptr %38, align 4, !noalias !25
-  %42 = load ptr, ptr %39, align 8, !noalias !25
-  %43 = mul i64 %40, 8673632051301757104
-  %44 = lshr i64 %43, 32
-  %45 = xor i64 %44, %43
-  %46 = and i64 %45, %41
-  %47 = getelementptr i32, ptr %42, i64 %46
-  %48 = load i32, ptr %47, align 4, !noalias !551
-  %49 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %34, 0
-  %50 = insertvalue { ptr, ptr, ptr, i32 } %49, ptr %35, 1
-  %51 = insertvalue { ptr, ptr, ptr, i32 } %50, ptr %36, 2
-  %52 = insertvalue { ptr, ptr, ptr, i32 } %51, i32 %48, 3
-  %53 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %5)
-  %54 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 8 %34)
-  %55 = sext i32 %48 to i64
-  %56 = getelementptr ptr, ptr %34, i64 %55
-  %57 = getelementptr i8, ptr %56, i64 8
-  br label %58
-
-58:                                               ; preds = %67, %4
-  %59 = load ptr, ptr %57, align 8
-  %60 = call align 4 ptr %59({ ptr, ptr, ptr, i32 } %52, ptr nocapture nofree noundef nonnull readonly align 8 %5) #10
-  %61 = call { ptr, i160 } %60({ ptr, ptr, ptr, i32 } %52, { ptr, ptr, ptr, i32 } %52, ptr nonnull align 8 %5) #28
-  %62 = extractvalue { ptr, i160 } %61, 0
-  %63 = call ptr @llvm.invariant.start.p0(i64 noundef 184, ptr nocapture nofree noundef align 8 %6)
-  %64 = icmp eq ptr %62, @nil_typ
-  %65 = icmp eq ptr %62, null
-  %66 = or i1 %64, %65
-  br i1 %66, label %69, label %67
-
-67:                                               ; preds = %58
-  %68 = call i1 %21({ ptr, i160 } %61)
-  br i1 %68, label %58, label %69
-
-69:                                               ; preds = %67, %58
-  ret i1 %66
-}
-
-define dso_local noundef i1 @Iterable_any_fFunctionT_to_i1({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr } %3) #30 {
   %5 = alloca [0 x ptr], align 8
   %6 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %7 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
@@ -27480,6 +27518,81 @@ define dso_local noundef i1 @Iterable_any_fFunctionT_to_i1({ ptr, ptr, ptr, i32 
   %61 = call { ptr, i160 } %60({ ptr, ptr, ptr, i32 } %52, { ptr, ptr, ptr, i32 } %52, ptr nonnull align 8 %5) #28
   %62 = extractvalue { ptr, i160 } %61, 0
   %63 = call ptr @llvm.invariant.start.p0(i64 noundef 184, ptr nocapture nofree noundef align 8 %6)
+  %64 = icmp eq ptr %62, @nil_typ
+  %65 = icmp eq ptr %62, null
+  %66 = or i1 %64, %65
+  br i1 %66, label %69, label %67
+
+67:                                               ; preds = %58
+  %68 = call i1 %21({ ptr, i160 } %61)
+  br i1 %68, label %58, label %69
+
+69:                                               ; preds = %67, %58
+  ret i1 %66
+}
+
+define dso_local noundef i1 @Iterable_any_fFunctionT_to_i1({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr } %3) #30 {
+  %5 = alloca [0 x ptr], align 8
+  %6 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %7 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %8 = extractvalue { ptr, ptr, ptr, i32 } %0, 2
+  %9 = getelementptr i8, ptr %6, i64 8
+  %10 = getelementptr i8, ptr %6, i64 16
+  %11 = getelementptr i8, ptr %6, i64 40
+  %12 = load i64, ptr %9, align 4, !noalias !560
+  %13 = load i64, ptr %10, align 4, !noalias !560
+  %14 = load ptr, ptr %11, align 8, !noalias !560
+  %15 = mul i64 %12, 3037712219555723519
+  %16 = lshr i64 %15, 32
+  %17 = xor i64 %16, %15
+  %18 = and i64 %17, %13
+  %19 = getelementptr i32, ptr %14, i64 %18
+  %20 = load i32, ptr %19, align 4, !noalias !560
+  %21 = extractvalue { ptr } %3, 0
+  %22 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %6, 0
+  %23 = insertvalue { ptr, ptr, ptr, i32 } %22, ptr %7, 1
+  %24 = insertvalue { ptr, ptr, ptr, i32 } %23, ptr %8, 2
+  %25 = insertvalue { ptr, ptr, ptr, i32 } %24, i32 %20, 3
+  %26 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %5) #53
+  %27 = call ptr @llvm.invariant.start.p0(i64 noundef 184, ptr nocapture nofree noundef align 8 %6) #53
+  %28 = sext i32 %20 to i64
+  %29 = getelementptr ptr, ptr %6, i64 %28
+  %30 = getelementptr i8, ptr %29, i64 8
+  %31 = load ptr, ptr %30, align 8
+  %32 = call align 4 ptr %31({ ptr, ptr, ptr, i32 } %25, ptr nocapture nofree noundef nonnull readonly align 8 %5) #10
+  %33 = call { ptr, ptr, ptr, i32 } %32({ ptr, ptr, ptr, i32 } %25, { ptr, ptr, ptr, i32 } %25, ptr nonnull align 8 %5) #28
+  %34 = extractvalue { ptr, ptr, ptr, i32 } %33, 0
+  %35 = extractvalue { ptr, ptr, ptr, i32 } %33, 1
+  %36 = extractvalue { ptr, ptr, ptr, i32 } %33, 2
+  %37 = getelementptr i8, ptr %34, i64 8
+  %38 = getelementptr i8, ptr %34, i64 16
+  %39 = getelementptr i8, ptr %34, i64 40
+  %40 = load i64, ptr %37, align 4, !noalias !25
+  %41 = load i64, ptr %38, align 4, !noalias !25
+  %42 = load ptr, ptr %39, align 8, !noalias !25
+  %43 = mul i64 %40, 8673632051301757104
+  %44 = lshr i64 %43, 32
+  %45 = xor i64 %44, %43
+  %46 = and i64 %45, %41
+  %47 = getelementptr i32, ptr %42, i64 %46
+  %48 = load i32, ptr %47, align 4, !noalias !563
+  %49 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %34, 0
+  %50 = insertvalue { ptr, ptr, ptr, i32 } %49, ptr %35, 1
+  %51 = insertvalue { ptr, ptr, ptr, i32 } %50, ptr %36, 2
+  %52 = insertvalue { ptr, ptr, ptr, i32 } %51, i32 %48, 3
+  %53 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %5)
+  %54 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef align 8 %34)
+  %55 = sext i32 %48 to i64
+  %56 = getelementptr ptr, ptr %34, i64 %55
+  %57 = getelementptr i8, ptr %56, i64 8
+  br label %58
+
+58:                                               ; preds = %67, %4
+  %59 = load ptr, ptr %57, align 8
+  %60 = call align 4 ptr %59({ ptr, ptr, ptr, i32 } %52, ptr nocapture nofree noundef nonnull readonly align 8 %5) #10
+  %61 = call { ptr, i160 } %60({ ptr, ptr, ptr, i32 } %52, { ptr, ptr, ptr, i32 } %52, ptr nonnull align 8 %5) #28
+  %62 = extractvalue { ptr, i160 } %61, 0
+  %63 = call ptr @llvm.invariant.start.p0(i64 noundef 184, ptr nocapture nofree noundef align 8 %6)
   %64 = icmp ne ptr %62, @nil_typ
   %65 = icmp ne ptr %62, null
   %66 = and i1 %64, %65
@@ -27501,15 +27614,15 @@ define dso_local { ptr, ptr, ptr, i32 } @Iterable_map_fFunctionT_to_U({ ptr, ptr
   %8 = getelementptr i8, ptr %5, i64 8
   %9 = getelementptr i8, ptr %5, i64 16
   %10 = getelementptr i8, ptr %5, i64 40
-  %11 = load i64, ptr %8, align 4, !noalias !560
-  %12 = load i64, ptr %9, align 4, !noalias !560
-  %13 = load ptr, ptr %10, align 8, !noalias !560
+  %11 = load i64, ptr %8, align 4, !noalias !566
+  %12 = load i64, ptr %9, align 4, !noalias !566
+  %13 = load ptr, ptr %10, align 8, !noalias !566
   %14 = mul i64 %11, 3037712219555723519
   %15 = lshr i64 %14, 32
   %16 = xor i64 %15, %14
   %17 = and i64 %16, %12
   %18 = getelementptr i32, ptr %13, i64 %17
-  %19 = load i32, ptr %18, align 4, !noalias !560
+  %19 = load i32, ptr %18, align 4, !noalias !566
   %20 = call ptr @llvm.invariant.start.p0(i64 noundef 184, ptr nocapture nofree noundef align 8 %5) #43
   %21 = sext i32 %19 to i64
   %22 = getelementptr ptr, ptr %5, i64 %21
@@ -27560,15 +27673,15 @@ define dso_local { ptr, ptr, ptr, i32 } @Iterable_filter_fFunctionT_to_i1({ ptr,
   %8 = getelementptr i8, ptr %5, i64 8
   %9 = getelementptr i8, ptr %5, i64 16
   %10 = getelementptr i8, ptr %5, i64 40
-  %11 = load i64, ptr %8, align 4, !noalias !563
-  %12 = load i64, ptr %9, align 4, !noalias !563
-  %13 = load ptr, ptr %10, align 8, !noalias !563
+  %11 = load i64, ptr %8, align 4, !noalias !569
+  %12 = load i64, ptr %9, align 4, !noalias !569
+  %13 = load ptr, ptr %10, align 8, !noalias !569
   %14 = mul i64 %11, 3037712219555723519
   %15 = lshr i64 %14, 32
   %16 = xor i64 %15, %14
   %17 = and i64 %16, %12
   %18 = getelementptr i32, ptr %13, i64 %17
-  %19 = load i32, ptr %18, align 4, !noalias !563
+  %19 = load i32, ptr %18, align 4, !noalias !569
   %20 = call ptr @llvm.invariant.start.p0(i64 noundef 184, ptr nocapture nofree noundef align 8 %5) #43
   %21 = sext i32 %19 to i64
   %22 = getelementptr ptr, ptr %5, i64 %21
@@ -27614,15 +27727,15 @@ define dso_local { ptr, ptr, ptr, i32 } @Iterable_chain_otherIterableT({ ptr, pt
   %8 = getelementptr i8, ptr %5, i64 8
   %9 = getelementptr i8, ptr %5, i64 16
   %10 = getelementptr i8, ptr %5, i64 40
-  %11 = load i64, ptr %8, align 4, !noalias !566
-  %12 = load i64, ptr %9, align 4, !noalias !566
-  %13 = load ptr, ptr %10, align 8, !noalias !566
+  %11 = load i64, ptr %8, align 4, !noalias !572
+  %12 = load i64, ptr %9, align 4, !noalias !572
+  %13 = load ptr, ptr %10, align 8, !noalias !572
   %14 = mul i64 %11, 3037712219555723519
   %15 = lshr i64 %14, 32
   %16 = xor i64 %15, %14
   %17 = and i64 %16, %12
   %18 = getelementptr i32, ptr %13, i64 %17
-  %19 = load i32, ptr %18, align 4, !noalias !566
+  %19 = load i32, ptr %18, align 4, !noalias !572
   %20 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
   %21 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
   %22 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
@@ -27668,7 +27781,7 @@ define dso_local { ptr, ptr, ptr, i32 } @Iterable_chain_otherIterableT({ ptr, pt
   %57 = xor i64 %56, %55
   %58 = and i64 %57, %53
   %59 = getelementptr i32, ptr %54, i64 %58
-  %60 = load i32, ptr %59, align 4, !noalias !569
+  %60 = load i32, ptr %59, align 4, !noalias !575
   %61 = call ptr @llvm.invariant.start.p0(i64 noundef 400, ptr nocapture nofree noundef nonnull align 16 dereferenceable(480) @ChainIterable) #43
   %62 = getelementptr inbounds i8, ptr %31, i64 40
   store ptr %20, ptr %62, align 8
@@ -27689,15 +27802,15 @@ define dso_local { ptr, ptr, ptr, i32 } @Iterable_interleave_otherIterableT({ pt
   %8 = getelementptr i8, ptr %5, i64 8
   %9 = getelementptr i8, ptr %5, i64 16
   %10 = getelementptr i8, ptr %5, i64 40
-  %11 = load i64, ptr %8, align 4, !noalias !572
-  %12 = load i64, ptr %9, align 4, !noalias !572
-  %13 = load ptr, ptr %10, align 8, !noalias !572
+  %11 = load i64, ptr %8, align 4, !noalias !578
+  %12 = load i64, ptr %9, align 4, !noalias !578
+  %13 = load ptr, ptr %10, align 8, !noalias !578
   %14 = mul i64 %11, 3037712219555723519
   %15 = lshr i64 %14, 32
   %16 = xor i64 %15, %14
   %17 = and i64 %16, %12
   %18 = getelementptr i32, ptr %13, i64 %17
-  %19 = load i32, ptr %18, align 4, !noalias !572
+  %19 = load i32, ptr %18, align 4, !noalias !578
   %20 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
   %21 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
   %22 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
@@ -27743,7 +27856,7 @@ define dso_local { ptr, ptr, ptr, i32 } @Iterable_interleave_otherIterableT({ pt
   %57 = xor i64 %56, %55
   %58 = and i64 %57, %53
   %59 = getelementptr i32, ptr %54, i64 %58
-  %60 = load i32, ptr %59, align 4, !noalias !575
+  %60 = load i32, ptr %59, align 4, !noalias !581
   %61 = call ptr @llvm.invariant.start.p0(i64 noundef 400, ptr nocapture nofree noundef nonnull align 16 dereferenceable(480) @InterleaveIterable) #43
   %62 = getelementptr inbounds i8, ptr %31, i64 40
   store ptr %20, ptr %62, align 8
@@ -27764,15 +27877,15 @@ define dso_local { ptr, ptr, ptr, i32 } @Iterable_zip_otherIterableU({ ptr, ptr,
   %8 = getelementptr i8, ptr %5, i64 8
   %9 = getelementptr i8, ptr %5, i64 16
   %10 = getelementptr i8, ptr %5, i64 40
-  %11 = load i64, ptr %8, align 4, !noalias !578
-  %12 = load i64, ptr %9, align 4, !noalias !578
-  %13 = load ptr, ptr %10, align 8, !noalias !578
+  %11 = load i64, ptr %8, align 4, !noalias !584
+  %12 = load i64, ptr %9, align 4, !noalias !584
+  %13 = load ptr, ptr %10, align 8, !noalias !584
   %14 = mul i64 %11, 3037712219555723519
   %15 = lshr i64 %14, 32
   %16 = xor i64 %15, %14
   %17 = and i64 %16, %12
   %18 = getelementptr i32, ptr %13, i64 %17
-  %19 = load i32, ptr %18, align 4, !noalias !578
+  %19 = load i32, ptr %18, align 4, !noalias !584
   %20 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
   %21 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
   %22 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
@@ -27837,7 +27950,7 @@ define dso_local { ptr, ptr, ptr, i32 } @Iterable_zip_otherIterableU({ ptr, ptr,
   %71 = xor i64 %70, %69
   %72 = and i64 %71, %67
   %73 = getelementptr i32, ptr %68, i64 %72
-  %74 = load i32, ptr %73, align 4, !noalias !581
+  %74 = load i32, ptr %73, align 4, !noalias !587
   %75 = call ptr @llvm.invariant.start.p0(i64 noundef 416, ptr nocapture nofree noundef nonnull align 16 dereferenceable(496) @ZipIterable) #43
   %76 = getelementptr inbounds i8, ptr %43, i64 56
   store ptr %20, ptr %76, align 8
@@ -27858,15 +27971,15 @@ define dso_local { ptr, ptr, ptr, i32 } @Iterable_product_otherIterableU({ ptr, 
   %8 = getelementptr i8, ptr %5, i64 8
   %9 = getelementptr i8, ptr %5, i64 16
   %10 = getelementptr i8, ptr %5, i64 40
-  %11 = load i64, ptr %8, align 4, !noalias !584
-  %12 = load i64, ptr %9, align 4, !noalias !584
-  %13 = load ptr, ptr %10, align 8, !noalias !584
+  %11 = load i64, ptr %8, align 4, !noalias !590
+  %12 = load i64, ptr %9, align 4, !noalias !590
+  %13 = load ptr, ptr %10, align 8, !noalias !590
   %14 = mul i64 %11, 3037712219555723519
   %15 = lshr i64 %14, 32
   %16 = xor i64 %15, %14
   %17 = and i64 %16, %12
   %18 = getelementptr i32, ptr %13, i64 %17
-  %19 = load i32, ptr %18, align 4, !noalias !584
+  %19 = load i32, ptr %18, align 4, !noalias !590
   %20 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
   %21 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
   %22 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
@@ -27931,7 +28044,7 @@ define dso_local { ptr, ptr, ptr, i32 } @Iterable_product_otherIterableU({ ptr, 
   %71 = xor i64 %70, %69
   %72 = and i64 %71, %67
   %73 = getelementptr i32, ptr %68, i64 %72
-  %74 = load i32, ptr %73, align 4, !noalias !587
+  %74 = load i32, ptr %73, align 4, !noalias !593
   %75 = call ptr @llvm.invariant.start.p0(i64 noundef 416, ptr nocapture nofree noundef nonnull align 16 dereferenceable(496) @ProductIterable) #43
   %76 = getelementptr inbounds i8, ptr %43, i64 56
   store ptr %20, ptr %76, align 8
@@ -27960,7 +28073,7 @@ define dso_local { ptr, ptr, ptr, i32 } @String_repr_({ ptr, ptr, ptr, i32 } %0,
   %15 = xor i64 %14, %13
   %16 = and i64 %15, %11
   %17 = getelementptr i32, ptr %12, i64 %16
-  %18 = load i32, ptr %17, align 4, !noalias !590
+  %18 = load i32, ptr %17, align 4, !noalias !596
   %19 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %4, 0
   %20 = insertvalue { ptr, ptr, ptr, i32 } %19, ptr %5, 1
   %21 = insertvalue { ptr, ptr, ptr, i32 } %20, ptr %6, 2
@@ -28108,15 +28221,15 @@ define dso_local void @ProductIterable_init_firstIterableT_secondIterableU({ ptr
   %8 = getelementptr i8, ptr %6, i64 8
   %9 = getelementptr i8, ptr %6, i64 16
   %10 = getelementptr i8, ptr %6, i64 40
-  %11 = load i64, ptr %8, align 4, !noalias !593
-  %12 = load i64, ptr %9, align 4, !noalias !593
-  %13 = load ptr, ptr %10, align 8, !noalias !593
+  %11 = load i64, ptr %8, align 4, !noalias !599
+  %12 = load i64, ptr %9, align 4, !noalias !599
+  %13 = load ptr, ptr %10, align 8, !noalias !599
   %14 = mul i64 %11, 4128338911757318636
   %15 = lshr i64 %14, 32
   %16 = xor i64 %15, %14
   %17 = and i64 %16, %12
   %18 = getelementptr i32, ptr %13, i64 %17
-  %19 = load i32, ptr %18, align 4, !noalias !593
+  %19 = load i32, ptr %18, align 4, !noalias !599
   %20 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
   %21 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
   %22 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
@@ -28131,7 +28244,7 @@ define dso_local void @ProductIterable_init_firstIterableT_secondIterableU({ ptr
   %31 = xor i64 %30, %29
   %32 = and i64 %31, %27
   %33 = getelementptr i32, ptr %28, i64 %32
-  %34 = load i32, ptr %33, align 4, !noalias !596
+  %34 = load i32, ptr %33, align 4, !noalias !602
   %35 = call ptr @llvm.invariant.start.p0(i64 noundef 416, ptr nocapture nofree noundef align 8 %6) #43
   %36 = sext i32 %19 to i64
   %37 = getelementptr ptr, ptr %6, i64 %36
@@ -28158,7 +28271,7 @@ define dso_local void @ProductIterable_init_firstIterableT_secondIterableU({ ptr
   %57 = xor i64 %56, %55
   %58 = and i64 %57, %53
   %59 = getelementptr i32, ptr %54, i64 %58
-  %60 = load i32, ptr %59, align 4, !noalias !599
+  %60 = load i32, ptr %59, align 4, !noalias !605
   %61 = call ptr @llvm.invariant.start.p0(i64 noundef 416, ptr nocapture nofree noundef align 8 %6) #43
   %62 = getelementptr i8, ptr %37, i64 32
   %63 = load ptr, ptr %62, align 8
@@ -28180,15 +28293,15 @@ define dso_local { ptr, ptr, ptr, i32 } @ProductIterable_iterator_({ ptr, ptr, p
   %7 = getelementptr i8, ptr %5, i64 8
   %8 = getelementptr i8, ptr %5, i64 16
   %9 = getelementptr i8, ptr %5, i64 40
-  %10 = load i64, ptr %7, align 4, !noalias !602
-  %11 = load i64, ptr %8, align 4, !noalias !602
-  %12 = load ptr, ptr %9, align 8, !noalias !602
+  %10 = load i64, ptr %7, align 4, !noalias !608
+  %11 = load i64, ptr %8, align 4, !noalias !608
+  %12 = load ptr, ptr %9, align 8, !noalias !608
   %13 = mul i64 %10, 4128338911757318636
   %14 = lshr i64 %13, 32
   %15 = xor i64 %14, %13
   %16 = and i64 %15, %11
   %17 = getelementptr i32, ptr %12, i64 %16
-  %18 = load i32, ptr %17, align 4, !noalias !602
+  %18 = load i32, ptr %17, align 4, !noalias !608
   %19 = call ptr @llvm.invariant.start.p0(i64 noundef 416, ptr nocapture nofree noundef align 8 %5) #43
   %20 = sext i32 %18 to i64
   %21 = getelementptr ptr, ptr %5, i64 %20
@@ -28310,7 +28423,7 @@ define dso_local { ptr, ptr, ptr, i32 } @ProductIterable_iterator_({ ptr, ptr, p
   %126 = xor i64 %125, %124
   %127 = and i64 %126, %122
   %128 = getelementptr i32, ptr %123, i64 %127
-  %129 = load i32, ptr %128, align 4, !noalias !605
+  %129 = load i32, ptr %128, align 4, !noalias !611
   %130 = getelementptr inbounds i8, ptr %60, i64 88
   store ptr %102, ptr %130, align 8
   %131 = getelementptr inbounds i8, ptr %60, i64 96
@@ -28343,7 +28456,7 @@ define dso_local { ptr, ptr, ptr, i32 } @ProductIterable_iterator_({ ptr, ptr, p
   %155 = xor i64 %154, %153
   %156 = and i64 %155, %151
   %157 = getelementptr i32, ptr %152, i64 %156
-  %158 = load i32, ptr %157, align 4, !noalias !608
+  %158 = load i32, ptr %157, align 4, !noalias !614
   %159 = getelementptr inbounds i8, ptr %60, i64 56
   store ptr %144, ptr %159, align 8
   %160 = getelementptr inbounds i8, ptr %60, i64 64
@@ -28432,15 +28545,15 @@ define dso_local void @ProductIterator_init_first_iteratorIteratorT_second_itera
   %9 = getelementptr i8, ptr %7, i64 8
   %10 = getelementptr i8, ptr %7, i64 16
   %11 = getelementptr i8, ptr %7, i64 40
-  %12 = load i64, ptr %9, align 4, !noalias !611
-  %13 = load i64, ptr %10, align 4, !noalias !611
-  %14 = load ptr, ptr %11, align 8, !noalias !611
+  %12 = load i64, ptr %9, align 4, !noalias !617
+  %13 = load i64, ptr %10, align 4, !noalias !617
+  %14 = load ptr, ptr %11, align 8, !noalias !617
   %15 = mul i64 %12, 1697250377212095568
   %16 = lshr i64 %15, 32
   %17 = xor i64 %16, %15
   %18 = and i64 %17, %13
   %19 = getelementptr i32, ptr %14, i64 %18
-  %20 = load i32, ptr %19, align 4, !noalias !611
+  %20 = load i32, ptr %19, align 4, !noalias !617
   %21 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
   %22 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
   %23 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
@@ -28455,7 +28568,7 @@ define dso_local void @ProductIterator_init_first_iteratorIteratorT_second_itera
   %32 = xor i64 %31, %30
   %33 = and i64 %32, %28
   %34 = getelementptr i32, ptr %29, i64 %33
-  %35 = load i32, ptr %34, align 4, !noalias !614
+  %35 = load i32, ptr %34, align 4, !noalias !620
   %36 = call ptr @llvm.invariant.start.p0(i64 noundef 112, ptr nocapture nofree noundef align 8 %7) #43
   %37 = sext i32 %20 to i64
   %38 = getelementptr ptr, ptr %7, i64 %37
@@ -28482,7 +28595,7 @@ define dso_local void @ProductIterator_init_first_iteratorIteratorT_second_itera
   %58 = xor i64 %57, %56
   %59 = and i64 %58, %54
   %60 = getelementptr i32, ptr %55, i64 %59
-  %61 = load i32, ptr %60, align 4, !noalias !617
+  %61 = load i32, ptr %60, align 4, !noalias !623
   %62 = call ptr @llvm.invariant.start.p0(i64 noundef 112, ptr nocapture nofree noundef align 8 %7) #43
   %63 = getelementptr i8, ptr %38, i64 40
   %64 = load ptr, ptr %63, align 8
@@ -28527,7 +28640,7 @@ define dso_local void @ProductIterator_init_first_iteratorIteratorT_second_itera
   %102 = xor i64 %101, %100
   %103 = and i64 %102, %98
   %104 = getelementptr i32, ptr %99, i64 %103
-  %105 = load i32, ptr %104, align 4, !noalias !620
+  %105 = load i32, ptr %104, align 4, !noalias !626
   %106 = call ptr @llvm.invariant.start.p0(i64 noundef 112, ptr nocapture nofree noundef align 8 %7)
   %107 = getelementptr i8, ptr %38, i64 32
   %108 = load ptr, ptr %107, align 8
@@ -29121,15 +29234,15 @@ define dso_local void @Pair_init_firstT_secondU({ ptr, ptr, ptr, i32 } %0, { ptr
   %8 = getelementptr i8, ptr %6, i64 8
   %9 = getelementptr i8, ptr %6, i64 16
   %10 = getelementptr i8, ptr %6, i64 40
-  %11 = load i64, ptr %8, align 4, !noalias !623
-  %12 = load i64, ptr %9, align 4, !noalias !623
-  %13 = load ptr, ptr %10, align 8, !noalias !623
+  %11 = load i64, ptr %8, align 4, !noalias !629
+  %12 = load i64, ptr %9, align 4, !noalias !629
+  %13 = load ptr, ptr %10, align 8, !noalias !629
   %14 = mul i64 %11, 9197944775169318296
   %15 = lshr i64 %14, 32
   %16 = xor i64 %15, %14
   %17 = and i64 %16, %12
   %18 = getelementptr i32, ptr %13, i64 %17
-  %19 = load i32, ptr %18, align 4, !noalias !623
+  %19 = load i32, ptr %18, align 4, !noalias !629
   %20 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef align 8 %6) #43
   %21 = sext i32 %19 to i64
   %22 = getelementptr ptr, ptr %6, i64 %21
@@ -29154,15 +29267,15 @@ define dso_local { ptr, i160 } @Pair_first_({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %6 = getelementptr i8, ptr %4, i64 8
   %7 = getelementptr i8, ptr %4, i64 16
   %8 = getelementptr i8, ptr %4, i64 40
-  %9 = load i64, ptr %6, align 4, !noalias !626
-  %10 = load i64, ptr %7, align 4, !noalias !626
-  %11 = load ptr, ptr %8, align 8, !noalias !626
+  %9 = load i64, ptr %6, align 4, !noalias !632
+  %10 = load i64, ptr %7, align 4, !noalias !632
+  %11 = load ptr, ptr %8, align 8, !noalias !632
   %12 = mul i64 %9, 9197944775169318296
   %13 = lshr i64 %12, 32
   %14 = xor i64 %13, %12
   %15 = and i64 %14, %10
   %16 = getelementptr i32, ptr %11, i64 %15
-  %17 = load i32, ptr %16, align 4, !noalias !626
+  %17 = load i32, ptr %16, align 4, !noalias !632
   %18 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef align 8 %4) #43
   %19 = sext i32 %17 to i64
   %20 = getelementptr ptr, ptr %4, i64 %19
@@ -29180,15 +29293,15 @@ define dso_local { ptr, i160 } @Pair_second_({ ptr, ptr, ptr, i32 } %0, { ptr, p
   %6 = getelementptr i8, ptr %4, i64 8
   %7 = getelementptr i8, ptr %4, i64 16
   %8 = getelementptr i8, ptr %4, i64 40
-  %9 = load i64, ptr %6, align 4, !noalias !629
-  %10 = load i64, ptr %7, align 4, !noalias !629
-  %11 = load ptr, ptr %8, align 8, !noalias !629
+  %9 = load i64, ptr %6, align 4, !noalias !635
+  %10 = load i64, ptr %7, align 4, !noalias !635
+  %11 = load ptr, ptr %8, align 8, !noalias !635
   %12 = mul i64 %9, 9197944775169318296
   %13 = lshr i64 %12, 32
   %14 = xor i64 %13, %12
   %15 = and i64 %14, %10
   %16 = getelementptr i32, ptr %11, i64 %15
-  %17 = load i32, ptr %16, align 4, !noalias !629
+  %17 = load i32, ptr %16, align 4, !noalias !635
   %18 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef align 8 %4) #43
   %19 = sext i32 %17 to i64
   %20 = getelementptr ptr, ptr %4, i64 %19
@@ -29452,15 +29565,15 @@ define dso_local void @ZipIterable_init_firstIterableT_secondIterableU({ ptr, pt
   %8 = getelementptr i8, ptr %6, i64 8
   %9 = getelementptr i8, ptr %6, i64 16
   %10 = getelementptr i8, ptr %6, i64 40
-  %11 = load i64, ptr %8, align 4, !noalias !632
-  %12 = load i64, ptr %9, align 4, !noalias !632
-  %13 = load ptr, ptr %10, align 8, !noalias !632
+  %11 = load i64, ptr %8, align 4, !noalias !638
+  %12 = load i64, ptr %9, align 4, !noalias !638
+  %13 = load ptr, ptr %10, align 8, !noalias !638
   %14 = mul i64 %11, 35232740166152944
   %15 = lshr i64 %14, 32
   %16 = xor i64 %15, %14
   %17 = and i64 %16, %12
   %18 = getelementptr i32, ptr %13, i64 %17
-  %19 = load i32, ptr %18, align 4, !noalias !632
+  %19 = load i32, ptr %18, align 4, !noalias !638
   %20 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
   %21 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
   %22 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
@@ -29475,7 +29588,7 @@ define dso_local void @ZipIterable_init_firstIterableT_secondIterableU({ ptr, pt
   %31 = xor i64 %30, %29
   %32 = and i64 %31, %27
   %33 = getelementptr i32, ptr %28, i64 %32
-  %34 = load i32, ptr %33, align 4, !noalias !635
+  %34 = load i32, ptr %33, align 4, !noalias !641
   %35 = call ptr @llvm.invariant.start.p0(i64 noundef 416, ptr nocapture nofree noundef align 8 %6) #43
   %36 = sext i32 %19 to i64
   %37 = getelementptr ptr, ptr %6, i64 %36
@@ -29502,7 +29615,7 @@ define dso_local void @ZipIterable_init_firstIterableT_secondIterableU({ ptr, pt
   %57 = xor i64 %56, %55
   %58 = and i64 %57, %53
   %59 = getelementptr i32, ptr %54, i64 %58
-  %60 = load i32, ptr %59, align 4, !noalias !638
+  %60 = load i32, ptr %59, align 4, !noalias !644
   %61 = call ptr @llvm.invariant.start.p0(i64 noundef 416, ptr nocapture nofree noundef align 8 %6) #43
   %62 = getelementptr i8, ptr %37, i64 32
   %63 = load ptr, ptr %62, align 8
@@ -29524,15 +29637,15 @@ define dso_local { ptr, ptr, ptr, i32 } @ZipIterable_iterator_({ ptr, ptr, ptr, 
   %7 = getelementptr i8, ptr %5, i64 8
   %8 = getelementptr i8, ptr %5, i64 16
   %9 = getelementptr i8, ptr %5, i64 40
-  %10 = load i64, ptr %7, align 4, !noalias !641
-  %11 = load i64, ptr %8, align 4, !noalias !641
-  %12 = load ptr, ptr %9, align 8, !noalias !641
+  %10 = load i64, ptr %7, align 4, !noalias !647
+  %11 = load i64, ptr %8, align 4, !noalias !647
+  %12 = load ptr, ptr %9, align 8, !noalias !647
   %13 = mul i64 %10, 35232740166152944
   %14 = lshr i64 %13, 32
   %15 = xor i64 %14, %13
   %16 = and i64 %15, %11
   %17 = getelementptr i32, ptr %12, i64 %16
-  %18 = load i32, ptr %17, align 4, !noalias !641
+  %18 = load i32, ptr %17, align 4, !noalias !647
   %19 = call ptr @llvm.invariant.start.p0(i64 noundef 416, ptr nocapture nofree noundef align 8 %5) #43
   %20 = sext i32 %18 to i64
   %21 = getelementptr ptr, ptr %5, i64 %20
@@ -29682,7 +29795,7 @@ define dso_local { ptr, ptr, ptr, i32 } @ZipIterable_iterator_({ ptr, ptr, ptr, 
   %155 = xor i64 %154, %153
   %156 = and i64 %155, %151
   %157 = getelementptr i32, ptr %152, i64 %156
-  %158 = load i32, ptr %157, align 4, !noalias !644
+  %158 = load i32, ptr %157, align 4, !noalias !650
   %159 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef nonnull align 16 dereferenceable(176) @ZipIterator) #43
   %160 = getelementptr inbounds i8, ptr %76, i64 56
   store ptr %126, ptr %160, align 8
@@ -29746,15 +29859,15 @@ define dso_local void @ZipIterator_init_firstIteratorT_secondIteratorU({ ptr, pt
   %8 = getelementptr i8, ptr %6, i64 8
   %9 = getelementptr i8, ptr %6, i64 16
   %10 = getelementptr i8, ptr %6, i64 40
-  %11 = load i64, ptr %8, align 4, !noalias !647
-  %12 = load i64, ptr %9, align 4, !noalias !647
-  %13 = load ptr, ptr %10, align 8, !noalias !647
+  %11 = load i64, ptr %8, align 4, !noalias !653
+  %12 = load i64, ptr %9, align 4, !noalias !653
+  %13 = load ptr, ptr %10, align 8, !noalias !653
   %14 = mul i64 %11, -2141114445739585318
   %15 = lshr i64 %14, 32
   %16 = xor i64 %15, %14
   %17 = and i64 %16, %12
   %18 = getelementptr i32, ptr %13, i64 %17
-  %19 = load i32, ptr %18, align 4, !noalias !647
+  %19 = load i32, ptr %18, align 4, !noalias !653
   %20 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
   %21 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
   %22 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
@@ -29769,7 +29882,7 @@ define dso_local void @ZipIterator_init_firstIteratorT_secondIteratorU({ ptr, pt
   %31 = xor i64 %30, %29
   %32 = and i64 %31, %27
   %33 = getelementptr i32, ptr %28, i64 %32
-  %34 = load i32, ptr %33, align 4, !noalias !650
+  %34 = load i32, ptr %33, align 4, !noalias !656
   %35 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef align 8 %6) #43
   %36 = sext i32 %19 to i64
   %37 = getelementptr ptr, ptr %6, i64 %36
@@ -29796,7 +29909,7 @@ define dso_local void @ZipIterator_init_firstIteratorT_secondIteratorU({ ptr, pt
   %57 = xor i64 %56, %55
   %58 = and i64 %57, %53
   %59 = getelementptr i32, ptr %54, i64 %58
-  %60 = load i32, ptr %59, align 4, !noalias !653
+  %60 = load i32, ptr %59, align 4, !noalias !659
   %61 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef align 8 %6) #43
   %62 = getelementptr i8, ptr %37, i64 32
   %63 = load ptr, ptr %62, align 8
@@ -29818,15 +29931,15 @@ define dso_local { ptr, i160 } @ZipIterator_next_({ ptr, ptr, ptr, i32 } %0, { p
   %7 = getelementptr i8, ptr %5, i64 8
   %8 = getelementptr i8, ptr %5, i64 16
   %9 = getelementptr i8, ptr %5, i64 40
-  %10 = load i64, ptr %7, align 4, !noalias !656
-  %11 = load i64, ptr %8, align 4, !noalias !656
-  %12 = load ptr, ptr %9, align 8, !noalias !656
+  %10 = load i64, ptr %7, align 4, !noalias !662
+  %11 = load i64, ptr %8, align 4, !noalias !662
+  %12 = load ptr, ptr %9, align 8, !noalias !662
   %13 = mul i64 %10, -2141114445739585318
   %14 = lshr i64 %13, 32
   %15 = xor i64 %14, %13
   %16 = and i64 %15, %11
   %17 = getelementptr i32, ptr %12, i64 %16
-  %18 = load i32, ptr %17, align 4, !noalias !656
+  %18 = load i32, ptr %17, align 4, !noalias !662
   %19 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef align 8 %5) #43
   %20 = sext i32 %18 to i64
   %21 = getelementptr ptr, ptr %5, i64 %20
@@ -29894,10 +30007,10 @@ define dso_local { ptr, i160 } @ZipIterator_next_({ ptr, ptr, ptr, i32 } %0, { p
   %79 = call align 8 ptr %65(ptr nocapture nofree noundef nonnull readonly %6) #2
   %80 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef nonnull align 8 %5)
   %81 = call align 8 ptr %77(ptr nocapture nofree noundef nonnull readonly %6) #2
-  %82 = load ptr, ptr %79, align 8, !alias.scope !659
+  %82 = load ptr, ptr %79, align 8, !alias.scope !665
   %83 = getelementptr i8, ptr %82, i64 72
-  %84 = load ptr, ptr %83, align 8, !alias.scope !659
-  %85 = call { i64, i64 } %84(ptr nocapture nofree nonnull readonly align 8 %79) #2, !alias.scope !659
+  %84 = load ptr, ptr %83, align 8, !alias.scope !665
+  %85 = call { i64, i64 } %84(ptr nocapture nofree nonnull readonly align 8 %79) #2, !alias.scope !665
   %86 = extractvalue { i64, i64 } %85, 0
   %87 = extractvalue { i64, i64 } %85, 1
   %88 = urem i64 16, %87
@@ -29906,10 +30019,10 @@ define dso_local { ptr, i160 } @ZipIterator_next_({ ptr, ptr, ptr, i32 } %0, { p
   %91 = select i1 %89, i64 0, i64 %90
   %92 = add i64 %86, 16
   %93 = add i64 %92, %91
-  %94 = load ptr, ptr %81, align 8, !alias.scope !659
+  %94 = load ptr, ptr %81, align 8, !alias.scope !665
   %95 = getelementptr i8, ptr %94, i64 72
-  %96 = load ptr, ptr %95, align 8, !alias.scope !659
-  %97 = call { i64, i64 } %96(ptr nocapture nofree nonnull readonly align 8 %81) #2, !alias.scope !659
+  %96 = load ptr, ptr %95, align 8, !alias.scope !665
+  %97 = call { i64, i64 } %96(ptr nocapture nofree nonnull readonly align 8 %81) #2, !alias.scope !665
   %98 = extractvalue { i64, i64 } %97, 0
   %99 = extractvalue { i64, i64 } %97, 1
   %100 = call i64 @llvm.umax.i64(i64 %87, i64 %99) #44
@@ -30250,15 +30363,15 @@ define dso_local void @InterleaveIterable_init_firstIterableT_secondIterableT({ 
   %8 = getelementptr i8, ptr %6, i64 8
   %9 = getelementptr i8, ptr %6, i64 16
   %10 = getelementptr i8, ptr %6, i64 40
-  %11 = load i64, ptr %8, align 4, !noalias !662
-  %12 = load i64, ptr %9, align 4, !noalias !662
-  %13 = load ptr, ptr %10, align 8, !noalias !662
+  %11 = load i64, ptr %8, align 4, !noalias !668
+  %12 = load i64, ptr %9, align 4, !noalias !668
+  %13 = load ptr, ptr %10, align 8, !noalias !668
   %14 = mul i64 %11, 4936782714255954462
   %15 = lshr i64 %14, 32
   %16 = xor i64 %15, %14
   %17 = and i64 %16, %12
   %18 = getelementptr i32, ptr %13, i64 %17
-  %19 = load i32, ptr %18, align 4, !noalias !662
+  %19 = load i32, ptr %18, align 4, !noalias !668
   %20 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
   %21 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
   %22 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
@@ -30273,7 +30386,7 @@ define dso_local void @InterleaveIterable_init_firstIterableT_secondIterableT({ 
   %31 = xor i64 %30, %29
   %32 = and i64 %31, %27
   %33 = getelementptr i32, ptr %28, i64 %32
-  %34 = load i32, ptr %33, align 4, !noalias !665
+  %34 = load i32, ptr %33, align 4, !noalias !671
   %35 = call ptr @llvm.invariant.start.p0(i64 noundef 400, ptr nocapture nofree noundef align 8 %6) #43
   %36 = sext i32 %19 to i64
   %37 = getelementptr ptr, ptr %6, i64 %36
@@ -30300,7 +30413,7 @@ define dso_local void @InterleaveIterable_init_firstIterableT_secondIterableT({ 
   %57 = xor i64 %56, %55
   %58 = and i64 %57, %53
   %59 = getelementptr i32, ptr %54, i64 %58
-  %60 = load i32, ptr %59, align 4, !noalias !668
+  %60 = load i32, ptr %59, align 4, !noalias !674
   %61 = call ptr @llvm.invariant.start.p0(i64 noundef 400, ptr nocapture nofree noundef align 8 %6) #43
   %62 = getelementptr i8, ptr %37, i64 16
   %63 = load ptr, ptr %62, align 8
@@ -30322,15 +30435,15 @@ define dso_local { ptr, ptr, ptr, i32 } @InterleaveIterable_iterator_({ ptr, ptr
   %7 = getelementptr i8, ptr %5, i64 8
   %8 = getelementptr i8, ptr %5, i64 16
   %9 = getelementptr i8, ptr %5, i64 40
-  %10 = load i64, ptr %7, align 4, !noalias !671
-  %11 = load i64, ptr %8, align 4, !noalias !671
-  %12 = load ptr, ptr %9, align 8, !noalias !671
+  %10 = load i64, ptr %7, align 4, !noalias !677
+  %11 = load i64, ptr %8, align 4, !noalias !677
+  %12 = load ptr, ptr %9, align 8, !noalias !677
   %13 = mul i64 %10, 4936782714255954462
   %14 = lshr i64 %13, 32
   %15 = xor i64 %14, %13
   %16 = and i64 %15, %11
   %17 = getelementptr i32, ptr %12, i64 %16
-  %18 = load i32, ptr %17, align 4, !noalias !671
+  %18 = load i32, ptr %17, align 4, !noalias !677
   %19 = call ptr @llvm.invariant.start.p0(i64 noundef 400, ptr nocapture nofree noundef align 8 %5) #43
   %20 = sext i32 %18 to i64
   %21 = getelementptr ptr, ptr %5, i64 %20
@@ -30463,7 +30576,7 @@ define dso_local { ptr, ptr, ptr, i32 } @InterleaveIterable_iterator_({ ptr, ptr
   %143 = xor i64 %142, %141
   %144 = and i64 %143, %139
   %145 = getelementptr i32, ptr %140, i64 %144
-  %146 = load i32, ptr %145, align 4, !noalias !674
+  %146 = load i32, ptr %145, align 4, !noalias !680
   %147 = getelementptr inbounds i8, ptr %66, i64 40
   store ptr %114, ptr %147, align 8
   %148 = getelementptr inbounds i8, ptr %66, i64 48
@@ -30515,15 +30628,15 @@ define dso_local void @InterleaveIterator_init_firstIteratorT_secondIteratorT({ 
   %8 = getelementptr i8, ptr %6, i64 8
   %9 = getelementptr i8, ptr %6, i64 16
   %10 = getelementptr i8, ptr %6, i64 40
-  %11 = load i64, ptr %8, align 4, !noalias !677
-  %12 = load i64, ptr %9, align 4, !noalias !677
-  %13 = load ptr, ptr %10, align 8, !noalias !677
+  %11 = load i64, ptr %8, align 4, !noalias !683
+  %12 = load i64, ptr %9, align 4, !noalias !683
+  %13 = load ptr, ptr %10, align 8, !noalias !683
   %14 = mul i64 %11, -3924664358248524505
   %15 = lshr i64 %14, 32
   %16 = xor i64 %15, %14
   %17 = and i64 %16, %12
   %18 = getelementptr i32, ptr %13, i64 %17
-  %19 = load i32, ptr %18, align 4, !noalias !677
+  %19 = load i32, ptr %18, align 4, !noalias !683
   %20 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
   %21 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
   %22 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
@@ -30538,7 +30651,7 @@ define dso_local void @InterleaveIterator_init_firstIteratorT_secondIteratorT({ 
   %31 = xor i64 %30, %29
   %32 = and i64 %31, %27
   %33 = getelementptr i32, ptr %28, i64 %32
-  %34 = load i32, ptr %33, align 4, !noalias !680
+  %34 = load i32, ptr %33, align 4, !noalias !686
   %35 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef align 8 %6) #43
   %36 = sext i32 %19 to i64
   %37 = getelementptr ptr, ptr %6, i64 %36
@@ -30565,7 +30678,7 @@ define dso_local void @InterleaveIterator_init_firstIteratorT_secondIteratorT({ 
   %57 = xor i64 %56, %55
   %58 = and i64 %57, %53
   %59 = getelementptr i32, ptr %54, i64 %58
-  %60 = load i32, ptr %59, align 4, !noalias !683
+  %60 = load i32, ptr %59, align 4, !noalias !689
   %61 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef align 8 %6) #43
   %62 = getelementptr i8, ptr %37, i64 16
   %63 = load ptr, ptr %62, align 8
@@ -30593,15 +30706,15 @@ define dso_local { ptr, i160 } @InterleaveIterator_next_({ ptr, ptr, ptr, i32 } 
   %7 = getelementptr i8, ptr %5, i64 8
   %8 = getelementptr i8, ptr %5, i64 16
   %9 = getelementptr i8, ptr %5, i64 40
-  %10 = load i64, ptr %7, align 4, !noalias !686
-  %11 = load i64, ptr %8, align 4, !noalias !686
-  %12 = load ptr, ptr %9, align 8, !noalias !686
+  %10 = load i64, ptr %7, align 4, !noalias !692
+  %11 = load i64, ptr %8, align 4, !noalias !692
+  %12 = load ptr, ptr %9, align 8, !noalias !692
   %13 = mul i64 %10, -3924664358248524505
   %14 = lshr i64 %13, 32
   %15 = xor i64 %14, %13
   %16 = and i64 %15, %11
   %17 = getelementptr i32, ptr %12, i64 %16
-  %18 = load i32, ptr %17, align 4, !noalias !686
+  %18 = load i32, ptr %17, align 4, !noalias !692
   %19 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 8 %5) #43
   %20 = sext i32 %18 to i64
   %21 = getelementptr ptr, ptr %5, i64 %20
@@ -30915,15 +31028,15 @@ define dso_local void @ChainIterable_init_firstIterableT_secondIterableT({ ptr, 
   %8 = getelementptr i8, ptr %6, i64 8
   %9 = getelementptr i8, ptr %6, i64 16
   %10 = getelementptr i8, ptr %6, i64 40
-  %11 = load i64, ptr %8, align 4, !noalias !689
-  %12 = load i64, ptr %9, align 4, !noalias !689
-  %13 = load ptr, ptr %10, align 8, !noalias !689
+  %11 = load i64, ptr %8, align 4, !noalias !695
+  %12 = load i64, ptr %9, align 4, !noalias !695
+  %13 = load ptr, ptr %10, align 8, !noalias !695
   %14 = mul i64 %11, -2370247058431047815
   %15 = lshr i64 %14, 32
   %16 = xor i64 %15, %14
   %17 = and i64 %16, %12
   %18 = getelementptr i32, ptr %13, i64 %17
-  %19 = load i32, ptr %18, align 4, !noalias !689
+  %19 = load i32, ptr %18, align 4, !noalias !695
   %20 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
   %21 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
   %22 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
@@ -30938,7 +31051,7 @@ define dso_local void @ChainIterable_init_firstIterableT_secondIterableT({ ptr, 
   %31 = xor i64 %30, %29
   %32 = and i64 %31, %27
   %33 = getelementptr i32, ptr %28, i64 %32
-  %34 = load i32, ptr %33, align 4, !noalias !692
+  %34 = load i32, ptr %33, align 4, !noalias !698
   %35 = call ptr @llvm.invariant.start.p0(i64 noundef 400, ptr nocapture nofree noundef align 8 %6) #43
   %36 = sext i32 %19 to i64
   %37 = getelementptr ptr, ptr %6, i64 %36
@@ -30965,7 +31078,7 @@ define dso_local void @ChainIterable_init_firstIterableT_secondIterableT({ ptr, 
   %57 = xor i64 %56, %55
   %58 = and i64 %57, %53
   %59 = getelementptr i32, ptr %54, i64 %58
-  %60 = load i32, ptr %59, align 4, !noalias !695
+  %60 = load i32, ptr %59, align 4, !noalias !701
   %61 = call ptr @llvm.invariant.start.p0(i64 noundef 400, ptr nocapture nofree noundef align 8 %6) #43
   %62 = getelementptr i8, ptr %37, i64 16
   %63 = load ptr, ptr %62, align 8
@@ -30987,15 +31100,15 @@ define dso_local { ptr, ptr, ptr, i32 } @ChainIterable_iterator_({ ptr, ptr, ptr
   %7 = getelementptr i8, ptr %5, i64 8
   %8 = getelementptr i8, ptr %5, i64 16
   %9 = getelementptr i8, ptr %5, i64 40
-  %10 = load i64, ptr %7, align 4, !noalias !698
-  %11 = load i64, ptr %8, align 4, !noalias !698
-  %12 = load ptr, ptr %9, align 8, !noalias !698
+  %10 = load i64, ptr %7, align 4, !noalias !704
+  %11 = load i64, ptr %8, align 4, !noalias !704
+  %12 = load ptr, ptr %9, align 8, !noalias !704
   %13 = mul i64 %10, -2370247058431047815
   %14 = lshr i64 %13, 32
   %15 = xor i64 %14, %13
   %16 = and i64 %15, %11
   %17 = getelementptr i32, ptr %12, i64 %16
-  %18 = load i32, ptr %17, align 4, !noalias !698
+  %18 = load i32, ptr %17, align 4, !noalias !704
   %19 = call ptr @llvm.invariant.start.p0(i64 noundef 400, ptr nocapture nofree noundef align 8 %5) #43
   %20 = sext i32 %18 to i64
   %21 = getelementptr ptr, ptr %5, i64 %20
@@ -31128,7 +31241,7 @@ define dso_local { ptr, ptr, ptr, i32 } @ChainIterable_iterator_({ ptr, ptr, ptr
   %143 = xor i64 %142, %141
   %144 = and i64 %143, %139
   %145 = getelementptr i32, ptr %140, i64 %144
-  %146 = load i32, ptr %145, align 4, !noalias !701
+  %146 = load i32, ptr %145, align 4, !noalias !707
   %147 = getelementptr inbounds i8, ptr %66, i64 40
   store ptr %114, ptr %147, align 8
   %148 = getelementptr inbounds i8, ptr %66, i64 48
@@ -31180,15 +31293,15 @@ define dso_local void @ChainIterator_init_firstIteratorT_secondIteratorT({ ptr, 
   %8 = getelementptr i8, ptr %6, i64 8
   %9 = getelementptr i8, ptr %6, i64 16
   %10 = getelementptr i8, ptr %6, i64 40
-  %11 = load i64, ptr %8, align 4, !noalias !704
-  %12 = load i64, ptr %9, align 4, !noalias !704
-  %13 = load ptr, ptr %10, align 8, !noalias !704
+  %11 = load i64, ptr %8, align 4, !noalias !710
+  %12 = load i64, ptr %9, align 4, !noalias !710
+  %13 = load ptr, ptr %10, align 8, !noalias !710
   %14 = mul i64 %11, 6043157723929225452
   %15 = lshr i64 %14, 32
   %16 = xor i64 %15, %14
   %17 = and i64 %16, %12
   %18 = getelementptr i32, ptr %13, i64 %17
-  %19 = load i32, ptr %18, align 4, !noalias !704
+  %19 = load i32, ptr %18, align 4, !noalias !710
   %20 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
   %21 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
   %22 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
@@ -31203,7 +31316,7 @@ define dso_local void @ChainIterator_init_firstIteratorT_secondIteratorT({ ptr, 
   %31 = xor i64 %30, %29
   %32 = and i64 %31, %27
   %33 = getelementptr i32, ptr %28, i64 %32
-  %34 = load i32, ptr %33, align 4, !noalias !707
+  %34 = load i32, ptr %33, align 4, !noalias !713
   %35 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef align 8 %6) #43
   %36 = sext i32 %19 to i64
   %37 = getelementptr ptr, ptr %6, i64 %36
@@ -31230,7 +31343,7 @@ define dso_local void @ChainIterator_init_firstIteratorT_secondIteratorT({ ptr, 
   %57 = xor i64 %56, %55
   %58 = and i64 %57, %53
   %59 = getelementptr i32, ptr %54, i64 %58
-  %60 = load i32, ptr %59, align 4, !noalias !710
+  %60 = load i32, ptr %59, align 4, !noalias !716
   %61 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef align 8 %6) #43
   %62 = getelementptr i8, ptr %37, i64 16
   %63 = load ptr, ptr %62, align 8
@@ -31258,15 +31371,15 @@ define dso_local { ptr, i160 } @ChainIterator_next_({ ptr, ptr, ptr, i32 } %0, {
   %7 = getelementptr i8, ptr %5, i64 8
   %8 = getelementptr i8, ptr %5, i64 16
   %9 = getelementptr i8, ptr %5, i64 40
-  %10 = load i64, ptr %7, align 4, !noalias !713
-  %11 = load i64, ptr %8, align 4, !noalias !713
-  %12 = load ptr, ptr %9, align 8, !noalias !713
+  %10 = load i64, ptr %7, align 4, !noalias !719
+  %11 = load i64, ptr %8, align 4, !noalias !719
+  %12 = load ptr, ptr %9, align 8, !noalias !719
   %13 = mul i64 %10, 6043157723929225452
   %14 = lshr i64 %13, 32
   %15 = xor i64 %14, %13
   %16 = and i64 %15, %11
   %17 = getelementptr i32, ptr %12, i64 %16
-  %18 = load i32, ptr %17, align 4, !noalias !713
+  %18 = load i32, ptr %17, align 4, !noalias !719
   %19 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 8 %5) #53
   %20 = sext i32 %18 to i64
   %21 = getelementptr ptr, ptr %5, i64 %20
@@ -31513,6 +31626,27 @@ define dso_local align 4 ptr @FilterIterable_B_init_iterableIterableT_fFunctionT
   ret ptr %6
 }
 
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
+define dso_local { i64, i64 } @_data_size_function_typ(ptr nocapture nofree readnone %0) #1 {
+  ret { i64, i64 } { i64 8, i64 8 }
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define dso_local { ptr, i160 } @_box_function_typ(ptr nocapture nofree noundef nonnull readonly dereferenceable(8) %0, ptr nocapture nofree readnone %1) #12 {
+  %3 = load i64, ptr %0, align 1
+  %4 = zext i64 %3 to i160
+  %5 = insertvalue { ptr, i160 } { ptr @function_typ, i160 undef }, i160 %4, 1
+  ret { ptr, i160 } %5
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
+define dso_local void @_unbox_function_typ({ ptr, i160 } %0, ptr nocapture nofree readnone %1, ptr nocapture nofree noundef nonnull writeonly dereferenceable(8) %2) #13 {
+  %4 = extractvalue { ptr, i160 } %0, 1
+  %5 = trunc i160 %4 to i64
+  store i64 %5, ptr %2, align 1
+  ret void
+}
+
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
 define dso_local align 4 ptr @FilterIterable_field_FilterIterable_0(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) #12 {
   %2 = load ptr, ptr %0, align 8
@@ -31625,15 +31759,15 @@ define dso_local void @FilterIterable_init_iterableIterableT_fFunctionT_to_i1({ 
   %8 = getelementptr i8, ptr %6, i64 8
   %9 = getelementptr i8, ptr %6, i64 16
   %10 = getelementptr i8, ptr %6, i64 40
-  %11 = load i64, ptr %8, align 4, !noalias !716
-  %12 = load i64, ptr %9, align 4, !noalias !716
-  %13 = load ptr, ptr %10, align 8, !noalias !716
+  %11 = load i64, ptr %8, align 4, !noalias !722
+  %12 = load i64, ptr %9, align 4, !noalias !722
+  %13 = load ptr, ptr %10, align 8, !noalias !722
   %14 = mul i64 %11, 8498466713076104350
   %15 = lshr i64 %14, 32
   %16 = xor i64 %15, %14
   %17 = and i64 %16, %12
   %18 = getelementptr i32, ptr %13, i64 %17
-  %19 = load i32, ptr %18, align 4, !noalias !716
+  %19 = load i32, ptr %18, align 4, !noalias !722
   %20 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
   %21 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
   %22 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
@@ -31648,7 +31782,7 @@ define dso_local void @FilterIterable_init_iterableIterableT_fFunctionT_to_i1({ 
   %31 = xor i64 %30, %29
   %32 = and i64 %31, %27
   %33 = getelementptr i32, ptr %28, i64 %32
-  %34 = load i32, ptr %33, align 4, !noalias !719
+  %34 = load i32, ptr %33, align 4, !noalias !725
   %35 = call ptr @llvm.invariant.start.p0(i64 noundef 400, ptr nocapture nofree noundef align 8 %6) #43
   %36 = sext i32 %19 to i64
   %37 = getelementptr ptr, ptr %6, i64 %36
@@ -31678,15 +31812,15 @@ define dso_local { ptr, ptr, ptr, i32 } @FilterIterable_iterator_({ ptr, ptr, pt
   %7 = getelementptr i8, ptr %5, i64 8
   %8 = getelementptr i8, ptr %5, i64 16
   %9 = getelementptr i8, ptr %5, i64 40
-  %10 = load i64, ptr %7, align 4, !noalias !722
-  %11 = load i64, ptr %8, align 4, !noalias !722
-  %12 = load ptr, ptr %9, align 8, !noalias !722
+  %10 = load i64, ptr %7, align 4, !noalias !728
+  %11 = load i64, ptr %8, align 4, !noalias !728
+  %12 = load ptr, ptr %9, align 8, !noalias !728
   %13 = mul i64 %10, 8498466713076104350
   %14 = lshr i64 %13, 32
   %15 = xor i64 %14, %13
   %16 = and i64 %15, %11
   %17 = getelementptr i32, ptr %12, i64 %16
-  %18 = load i32, ptr %17, align 4, !noalias !722
+  %18 = load i32, ptr %17, align 4, !noalias !728
   %19 = call ptr @llvm.invariant.start.p0(i64 noundef 400, ptr nocapture nofree noundef align 8 %5) #43
   %20 = sext i32 %18 to i64
   %21 = getelementptr ptr, ptr %5, i64 %20
@@ -31816,15 +31950,15 @@ define dso_local void @FilterIterator_init_iteratorIteratorT_fFunctionT_to_i1({ 
   %8 = getelementptr i8, ptr %6, i64 8
   %9 = getelementptr i8, ptr %6, i64 16
   %10 = getelementptr i8, ptr %6, i64 40
-  %11 = load i64, ptr %8, align 4, !noalias !725
-  %12 = load i64, ptr %9, align 4, !noalias !725
-  %13 = load ptr, ptr %10, align 8, !noalias !725
+  %11 = load i64, ptr %8, align 4, !noalias !731
+  %12 = load i64, ptr %9, align 4, !noalias !731
+  %13 = load ptr, ptr %10, align 8, !noalias !731
   %14 = mul i64 %11, -1221365496900303883
   %15 = lshr i64 %14, 32
   %16 = xor i64 %15, %14
   %17 = and i64 %16, %12
   %18 = getelementptr i32, ptr %13, i64 %17
-  %19 = load i32, ptr %18, align 4, !noalias !725
+  %19 = load i32, ptr %18, align 4, !noalias !731
   %20 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
   %21 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
   %22 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
@@ -31839,7 +31973,7 @@ define dso_local void @FilterIterator_init_iteratorIteratorT_fFunctionT_to_i1({ 
   %31 = xor i64 %30, %29
   %32 = and i64 %31, %27
   %33 = getelementptr i32, ptr %28, i64 %32
-  %34 = load i32, ptr %33, align 4, !noalias !728
+  %34 = load i32, ptr %33, align 4, !noalias !734
   %35 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef align 8 %6) #43
   %36 = sext i32 %19 to i64
   %37 = getelementptr ptr, ptr %6, i64 %36
@@ -31868,15 +32002,15 @@ define dso_local { ptr, i160 } @FilterIterator_next_({ ptr, ptr, ptr, i32 } %0, 
   %7 = getelementptr i8, ptr %5, i64 8
   %8 = getelementptr i8, ptr %5, i64 16
   %9 = getelementptr i8, ptr %5, i64 40
-  %10 = load i64, ptr %7, align 4, !noalias !731
-  %11 = load i64, ptr %8, align 4, !noalias !731
-  %12 = load ptr, ptr %9, align 8, !noalias !731
+  %10 = load i64, ptr %7, align 4, !noalias !737
+  %11 = load i64, ptr %8, align 4, !noalias !737
+  %12 = load ptr, ptr %9, align 8, !noalias !737
   %13 = mul i64 %10, -1221365496900303883
   %14 = lshr i64 %13, 32
   %15 = xor i64 %14, %13
   %16 = and i64 %15, %11
   %17 = getelementptr i32, ptr %12, i64 %16
-  %18 = load i32, ptr %17, align 4, !noalias !731
+  %18 = load i32, ptr %17, align 4, !noalias !737
   %19 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef align 8 %5) #53
   %20 = sext i32 %18 to i64
   %21 = getelementptr ptr, ptr %5, i64 %20
@@ -32205,15 +32339,15 @@ define dso_local void @MapIterable_init_iterableIterableT_fFunctionT_to_U({ ptr,
   %8 = getelementptr i8, ptr %6, i64 8
   %9 = getelementptr i8, ptr %6, i64 16
   %10 = getelementptr i8, ptr %6, i64 40
-  %11 = load i64, ptr %8, align 4, !noalias !734
-  %12 = load i64, ptr %9, align 4, !noalias !734
-  %13 = load ptr, ptr %10, align 8, !noalias !734
+  %11 = load i64, ptr %8, align 4, !noalias !740
+  %12 = load i64, ptr %9, align 4, !noalias !740
+  %13 = load ptr, ptr %10, align 8, !noalias !740
   %14 = mul i64 %11, -7488770571603291722
   %15 = lshr i64 %14, 32
   %16 = xor i64 %15, %14
   %17 = and i64 %16, %12
   %18 = getelementptr i32, ptr %13, i64 %17
-  %19 = load i32, ptr %18, align 4, !noalias !734
+  %19 = load i32, ptr %18, align 4, !noalias !740
   %20 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
   %21 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
   %22 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
@@ -32228,7 +32362,7 @@ define dso_local void @MapIterable_init_iterableIterableT_fFunctionT_to_U({ ptr,
   %31 = xor i64 %30, %29
   %32 = and i64 %31, %27
   %33 = getelementptr i32, ptr %28, i64 %32
-  %34 = load i32, ptr %33, align 4, !noalias !737
+  %34 = load i32, ptr %33, align 4, !noalias !743
   %35 = call ptr @llvm.invariant.start.p0(i64 noundef 408, ptr nocapture nofree noundef align 8 %6) #43
   %36 = sext i32 %19 to i64
   %37 = getelementptr ptr, ptr %6, i64 %36
@@ -32258,15 +32392,15 @@ define dso_local { ptr, ptr, ptr, i32 } @MapIterable_iterator_({ ptr, ptr, ptr, 
   %7 = getelementptr i8, ptr %5, i64 8
   %8 = getelementptr i8, ptr %5, i64 16
   %9 = getelementptr i8, ptr %5, i64 40
-  %10 = load i64, ptr %7, align 4, !noalias !740
-  %11 = load i64, ptr %8, align 4, !noalias !740
-  %12 = load ptr, ptr %9, align 8, !noalias !740
+  %10 = load i64, ptr %7, align 4, !noalias !746
+  %11 = load i64, ptr %8, align 4, !noalias !746
+  %12 = load ptr, ptr %9, align 8, !noalias !746
   %13 = mul i64 %10, -7488770571603291722
   %14 = lshr i64 %13, 32
   %15 = xor i64 %14, %13
   %16 = and i64 %15, %11
   %17 = getelementptr i32, ptr %12, i64 %16
-  %18 = load i32, ptr %17, align 4, !noalias !740
+  %18 = load i32, ptr %17, align 4, !noalias !746
   %19 = call ptr @llvm.invariant.start.p0(i64 noundef 408, ptr nocapture nofree noundef align 8 %5) #43
   %20 = sext i32 %18 to i64
   %21 = getelementptr ptr, ptr %5, i64 %20
@@ -32410,15 +32544,15 @@ define dso_local void @MapIterator_init_iteratorIteratorT_fFunctionT_to_U({ ptr,
   %8 = getelementptr i8, ptr %6, i64 8
   %9 = getelementptr i8, ptr %6, i64 16
   %10 = getelementptr i8, ptr %6, i64 40
-  %11 = load i64, ptr %8, align 4, !noalias !743
-  %12 = load i64, ptr %9, align 4, !noalias !743
-  %13 = load ptr, ptr %10, align 8, !noalias !743
+  %11 = load i64, ptr %8, align 4, !noalias !749
+  %12 = load i64, ptr %9, align 4, !noalias !749
+  %13 = load ptr, ptr %10, align 8, !noalias !749
   %14 = mul i64 %11, -146553482626734782
   %15 = lshr i64 %14, 32
   %16 = xor i64 %15, %14
   %17 = and i64 %16, %12
   %18 = getelementptr i32, ptr %13, i64 %17
-  %19 = load i32, ptr %18, align 4, !noalias !743
+  %19 = load i32, ptr %18, align 4, !noalias !749
   %20 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
   %21 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
   %22 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
@@ -32433,7 +32567,7 @@ define dso_local void @MapIterator_init_iteratorIteratorT_fFunctionT_to_U({ ptr,
   %31 = xor i64 %30, %29
   %32 = and i64 %31, %27
   %33 = getelementptr i32, ptr %28, i64 %32
-  %34 = load i32, ptr %33, align 4, !noalias !746
+  %34 = load i32, ptr %33, align 4, !noalias !752
   %35 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef align 8 %6) #43
   %36 = sext i32 %19 to i64
   %37 = getelementptr ptr, ptr %6, i64 %36
@@ -32462,15 +32596,15 @@ define dso_local { ptr, i160 } @MapIterator_next_({ ptr, ptr, ptr, i32 } %0, { p
   %7 = getelementptr i8, ptr %5, i64 8
   %8 = getelementptr i8, ptr %5, i64 16
   %9 = getelementptr i8, ptr %5, i64 40
-  %10 = load i64, ptr %7, align 4, !noalias !749
-  %11 = load i64, ptr %8, align 4, !noalias !749
-  %12 = load ptr, ptr %9, align 8, !noalias !749
+  %10 = load i64, ptr %7, align 4, !noalias !755
+  %11 = load i64, ptr %8, align 4, !noalias !755
+  %12 = load ptr, ptr %9, align 8, !noalias !755
   %13 = mul i64 %10, -146553482626734782
   %14 = lshr i64 %13, 32
   %15 = xor i64 %14, %13
   %16 = and i64 %15, %11
   %17 = getelementptr i32, ptr %12, i64 %16
-  %18 = load i32, ptr %17, align 4, !noalias !749
+  %18 = load i32, ptr %17, align 4, !noalias !755
   %19 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef align 8 %5) #43
   %20 = sext i32 %18 to i64
   %21 = getelementptr ptr, ptr %5, i64 %20
@@ -32656,15 +32790,15 @@ define dso_local void @StringIterator_init_strString({ ptr, ptr, ptr, i32 } %0, 
   %7 = getelementptr i8, ptr %5, i64 8
   %8 = getelementptr i8, ptr %5, i64 16
   %9 = getelementptr i8, ptr %5, i64 40
-  %10 = load i64, ptr %7, align 4, !noalias !752
-  %11 = load i64, ptr %8, align 4, !noalias !752
-  %12 = load ptr, ptr %9, align 8, !noalias !752
+  %10 = load i64, ptr %7, align 4, !noalias !758
+  %11 = load i64, ptr %8, align 4, !noalias !758
+  %12 = load ptr, ptr %9, align 8, !noalias !758
   %13 = mul i64 %10, -7260570988945952630
   %14 = lshr i64 %13, 32
   %15 = xor i64 %14, %13
   %16 = and i64 %15, %11
   %17 = getelementptr i32, ptr %12, i64 %16
-  %18 = load i32, ptr %17, align 4, !noalias !752
+  %18 = load i32, ptr %17, align 4, !noalias !758
   %19 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
   %20 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
   %21 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
@@ -32679,7 +32813,7 @@ define dso_local void @StringIterator_init_strString({ ptr, ptr, ptr, i32 } %0, 
   %30 = xor i64 %29, %28
   %31 = and i64 %30, %26
   %32 = getelementptr i32, ptr %27, i64 %31
-  %33 = load i32, ptr %32, align 4, !noalias !755
+  %33 = load i32, ptr %32, align 4, !noalias !761
   %34 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef align 8 %5) #43
   %35 = sext i32 %18 to i64
   %36 = getelementptr ptr, ptr %5, i64 %35
@@ -32708,15 +32842,15 @@ define dso_local { ptr, i160 } @StringIterator_next_({ ptr, ptr, ptr, i32 } %0, 
   %7 = getelementptr i8, ptr %5, i64 8
   %8 = getelementptr i8, ptr %5, i64 16
   %9 = getelementptr i8, ptr %5, i64 40
-  %10 = load i64, ptr %7, align 4, !noalias !758
-  %11 = load i64, ptr %8, align 4, !noalias !758
-  %12 = load ptr, ptr %9, align 8, !noalias !758
+  %10 = load i64, ptr %7, align 4, !noalias !764
+  %11 = load i64, ptr %8, align 4, !noalias !764
+  %12 = load ptr, ptr %9, align 8, !noalias !764
   %13 = mul i64 %10, -7260570988945952630
   %14 = lshr i64 %13, 32
   %15 = xor i64 %14, %13
   %16 = and i64 %15, %11
   %17 = getelementptr i32, ptr %12, i64 %16
-  %18 = load i32, ptr %17, align 4, !noalias !758
+  %18 = load i32, ptr %17, align 4, !noalias !764
   %19 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef align 8 %5) #43
   %20 = sext i32 %18 to i64
   %21 = getelementptr ptr, ptr %5, i64 %20
@@ -32827,20 +32961,6 @@ define dso_local { ptr, i160 } @StringIterator_next_({ ptr, ptr, ptr, i32 } %0, 
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define dso_local { i64, i64 } @_data_size_Character(ptr nocapture nofree readnone %0) #1 {
-  ret { i64, i64 } { i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), i64 1 }
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define dso_local align 4 ptr @Character_B_init_bytei8({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #5 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #43
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 112
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
 define dso_local { i64, i64 } @_data_size_i8_typ(ptr nocapture nofree readnone %0) #1 {
   ret { i64, i64 } { i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), i64 1 }
 }
@@ -32858,78 +32978,6 @@ define dso_local void @_unbox_i8_typ({ ptr, i160 } %0, ptr nocapture nofree read
   %4 = extractvalue { ptr, i160 } %0, 1
   %5 = trunc i160 %4 to i8
   store i8 %5, ptr %2, align 1
-  ret void
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define dso_local align 4 ptr @Character_B_byte_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #5 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #43
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 104
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nounwind willreturn
-define dso_local i8 @Character_byte_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #7 {
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %6 = getelementptr i8, ptr %4, i64 8
-  %7 = getelementptr i8, ptr %4, i64 16
-  %8 = getelementptr i8, ptr %4, i64 40
-  %9 = load i64, ptr %6, align 4, !noalias !761
-  %10 = load i64, ptr %7, align 4, !noalias !761
-  %11 = load ptr, ptr %8, align 8, !noalias !761
-  %12 = mul i64 %9, 6681222582356018452
-  %13 = lshr i64 %12, 32
-  %14 = xor i64 %13, %12
-  %15 = and i64 %14, %10
-  %16 = getelementptr i32, ptr %11, i64 %15
-  %17 = load i32, ptr %16, align 4, !noalias !761
-  %18 = call ptr @llvm.invariant.start.p0(i64 noundef 40, ptr nocapture nofree noundef align 8 %4) #43
-  %19 = sext i32 %17 to i64
-  %20 = getelementptr ptr, ptr %4, i64 %19
-  %21 = load ptr, ptr %20, align 8
-  %22 = load ptr, ptr %21, align 8
-  %23 = call i8 %22(ptr %5) #46
-  ret i8 %23
-}
-
-; Function Attrs: mustprogress nounwind willreturn memory(readwrite, inaccessiblemem: none)
-define dso_local void @Character_init_bytei8({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, i8 %3) #6 {
-  %5 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %6 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %7 = getelementptr i8, ptr %5, i64 8
-  %8 = getelementptr i8, ptr %5, i64 16
-  %9 = getelementptr i8, ptr %5, i64 40
-  %10 = load i64, ptr %7, align 4, !noalias !764
-  %11 = load i64, ptr %8, align 4, !noalias !764
-  %12 = load ptr, ptr %9, align 8, !noalias !764
-  %13 = mul i64 %10, 6681222582356018452
-  %14 = lshr i64 %13, 32
-  %15 = xor i64 %14, %13
-  %16 = and i64 %15, %11
-  %17 = getelementptr i32, ptr %12, i64 %16
-  %18 = load i32, ptr %17, align 4, !noalias !764
-  %19 = call ptr @llvm.invariant.start.p0(i64 noundef 40, ptr nocapture nofree noundef align 8 %5) #43
-  %20 = sext i32 %18 to i64
-  %21 = getelementptr ptr, ptr %5, i64 %20
-  %22 = load ptr, ptr %21, align 8
-  %23 = getelementptr i8, ptr %22, i64 8
-  %24 = load ptr, ptr %23, align 8
-  call void %24(ptr %6, i8 %3) #45
-  ret void
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define dso_local i8 @Character_getter_byte(ptr nocapture nofree noundef nonnull readonly dereferenceable(1) %0) #12 {
-  %2 = load i8, ptr %0, align 1
-  ret i8 %2
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define dso_local void @Character_setter_byte(ptr nocapture nofree noundef nonnull writeonly dereferenceable(1) %0, i8 %1) #13 {
-  store i8 %1, ptr %0, align 1
   ret void
 }
 
@@ -32976,48 +33024,6 @@ define dso_local void @StringIterator_setter_str(ptr nocapture nofree noundef no
   store ptr %5, ptr %8, align 8
   %9 = getelementptr inbounds i8, ptr %0, i64 24
   store i32 %6, ptr %9, align 8
-  ret void
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define dso_local { i64, i64 } @_data_size_i32_typ(ptr nocapture nofree readnone %0) #1 {
-  ret { i64, i64 } { i64 4, i64 4 }
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define dso_local { ptr, i160 } @_box_i32_typ(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) %0, ptr nocapture nofree readnone %1) #12 {
-  %3 = load i32, ptr %0, align 1
-  %4 = zext i32 %3 to i160
-  %5 = insertvalue { ptr, i160 } { ptr @i32_typ, i160 undef }, i160 %4, 1
-  ret { ptr, i160 } %5
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define dso_local void @_unbox_i32_typ({ ptr, i160 } %0, ptr nocapture nofree readnone %1, ptr nocapture nofree noundef nonnull writeonly dereferenceable(4) %2) #13 {
-  %4 = extractvalue { ptr, i160 } %0, 1
-  %5 = trunc i160 %4 to i32
-  store i32 %5, ptr %2, align 1
-  ret void
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define dso_local { i64, i64 } @_data_size_buffer_typ(ptr nocapture nofree readnone %0) #1 {
-  ret { i64, i64 } { i64 8, i64 8 }
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define dso_local { ptr, i160 } @_box_buffer_typ(ptr nocapture nofree noundef nonnull readonly dereferenceable(8) %0, ptr nocapture nofree readnone %1) #12 {
-  %3 = load i64, ptr %0, align 1
-  %4 = zext i64 %3 to i160
-  %5 = insertvalue { ptr, i160 } { ptr @buffer_typ, i160 undef }, i160 %4, 1
-  ret { ptr, i160 } %5
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define dso_local void @_unbox_buffer_typ({ ptr, i160 } %0, ptr nocapture nofree readnone %1, ptr nocapture nofree noundef nonnull writeonly dereferenceable(8) %2) #13 {
-  %4 = extractvalue { ptr, i160 } %0, 1
-  %5 = trunc i160 %4 to i64
-  store i64 %5, ptr %2, align 1
   ret void
 }
 
@@ -33090,27 +33096,6 @@ define dso_local { ptr, ptr, ptr, i32 } @Representable_repr_({ ptr, ptr, ptr, i3
   %10 = call ptr @llvm.invariant.start.p0(i64 noundef 632, ptr nocapture nofree noundef nonnull align 16 dereferenceable(712) @String) #43
   store <2 x i32> <i32 6, i32 7>, ptr %9, align 8
   ret { ptr, ptr, ptr, i32 } %8
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define dso_local { i64, i64 } @_data_size_f64_typ(ptr nocapture nofree readnone %0) #1 {
-  ret { i64, i64 } { i64 8, i64 8 }
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define dso_local { ptr, i160 } @_box_f64_typ(ptr nocapture nofree noundef nonnull readonly dereferenceable(8) %0, ptr nocapture nofree readnone %1) #12 {
-  %3 = load i64, ptr %0, align 1
-  %4 = zext i64 %3 to i160
-  %5 = insertvalue { ptr, i160 } { ptr @f64_typ, i160 undef }, i160 %4, 1
-  ret { ptr, i160 } %5
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define dso_local void @_unbox_f64_typ({ ptr, i160 } %0, ptr nocapture nofree readnone %1, ptr nocapture nofree noundef nonnull writeonly dereferenceable(8) %2) #13 {
-  %4 = extractvalue { ptr, i160 } %0, 1
-  %5 = trunc i160 %4 to i64
-  store i64 %5, ptr %2, align 1
-  ret void
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
@@ -34350,7 +34335,7 @@ define dso_local void @Array_throw_oob_xi32({ ptr, ptr, ptr, i32 } %0, { ptr, pt
   %13 = getelementptr i8, ptr %5, i64 16
   %14 = getelementptr i8, ptr %5, i64 32
   %15 = call noalias align 64 dereferenceable_or_null(57) ptr @bump_malloc_inner(i64 noundef 57, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
-  %16 = load <56 x i8>, ptr @aovie_CUsersPaulKOneDriveDocumentsPLPyPLlibarraymini, align 64
+  %16 = load <56 x i8>, ptr @khovy_CUsersPaulKOneDriveDocumentsPLPyPLlibarraymini, align 64
   store <56 x i8> %16, ptr %15, align 64
   %17 = call noalias align 8 dereferenceable_or_null(16) ptr @bump_malloc_inner(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
   store ptr %15, ptr %17, align 8
@@ -37369,7 +37354,7 @@ define dso_local { ptr, i160 } @Map__index_keyK({ ptr, ptr, ptr, i32 } %0, { ptr
   %51 = getelementptr i8, ptr %43, i64 16
   %52 = getelementptr i8, ptr %43, i64 32
   %53 = call noalias align 64 dereferenceable_or_null(55) ptr @bump_malloc_inner(i64 noundef 55, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
-  %54 = load <54 x i8>, ptr @hnrmr_CUsersPaulKOneDriveDocumentsPLPyPLlibmapmini, align 64
+  %54 = load <54 x i8>, ptr @qufum_CUsersPaulKOneDriveDocumentsPLPyPLlibmapmini, align 64
   store <54 x i8> %54, ptr %53, align 64
   %55 = call noalias align 8 dereferenceable_or_null(16) ptr @bump_malloc_inner(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) @current_ptr) #48
   store ptr %53, ptr %55, align 8
@@ -39501,14 +39486,14 @@ attributes #55 = { willreturn }
 !657 = distinct !{!657, !658, !"set_offset: argument 0"}
 !658 = distinct !{!658, !"set_offset"}
 !659 = !{!660}
-!660 = distinct !{!660, !661, !"size_wrapper: argument 0"}
-!661 = distinct !{!661, !"size_wrapper"}
+!660 = distinct !{!660, !661, !"set_offset: argument 0"}
+!661 = distinct !{!661, !"set_offset"}
 !662 = !{!663}
 !663 = distinct !{!663, !664, !"set_offset: argument 0"}
 !664 = distinct !{!664, !"set_offset"}
 !665 = !{!666}
-!666 = distinct !{!666, !667, !"set_offset: argument 0"}
-!667 = distinct !{!667, !"set_offset"}
+!666 = distinct !{!666, !667, !"size_wrapper: argument 0"}
+!667 = distinct !{!667, !"size_wrapper"}
 !668 = !{!669}
 !669 = distinct !{!669, !670, !"set_offset: argument 0"}
 !670 = distinct !{!670, !"set_offset"}
