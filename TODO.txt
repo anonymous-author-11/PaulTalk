@@ -446,6 +446,25 @@ TODO:
 		- MLIR dialect: mini. -> mid.
 	- 'ptalk build init [name]' could create a minimal manifest.yaml in the cwd
 
+- LTO Learnings
+	- lld-link much more usable than ld.lld
+	- My IR works with aarch64 target triple
+	- My IR fails with x86_64 target triple
+	- Unnamed_addr means the address is not sementically meaningful
+		- Can use for behaviors, offset tables
+	- LTO is not worth it!
+		- The optimization pipeline is strictly worse
+		- It gets imports wrong for indirect calls
+		- It only parallelizes at module granularity
+	- MLIR is natively multithreaded!
+		- Which would be great to leverage
+		- Could we store files as .mlir instead of .bc?
+			- No, that would take too much time to optimize every time
+		- Otherwise, what's even the advantage?
+			- For your recompile list, you can put all of them in one big .mlir file
+			- Then all the mlir commands can process them all in parallel
+	- LTO partitioning is based on !type metadata
+
 - What do I really need for 1.0.0?
 	- A way to distribute and adopt code (packages) [check!]
 		- Ideally use something existing and portable [check!]

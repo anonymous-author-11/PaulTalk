@@ -13,7 +13,8 @@ from pathlib import Path
 import os
 
 DIR_PATH = Path(__file__).parent.resolve()
-GRAMMAR_PATH = DIR_PATH.joinpath("data_files/grammar.lark")
+GRAMMAR_PATH = DIR_PATH / "data_files/grammar.lark"
+
 with open(GRAMMAR_PATH, "r") as f: grammar = f.read()
 parser = parser = Lark(grammar, parser='lalr', propagate_positions=True, _plugins=lark_cython.plugins)
 source_directories = {}

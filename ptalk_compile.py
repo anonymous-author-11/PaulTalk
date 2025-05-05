@@ -24,20 +24,21 @@ import hashlib
 # When compiled with Nuitka, DIST_FOLDER will point to the ptalk.dist folder
 DIST_FOLDER = Path(__file__).parent.resolve()
 
-DEBUGIR_PATH = DIST_FOLDER.joinpath("executables/debugir.exe")
-STANDALONE_OPT_PATH = DIST_FOLDER.joinpath("executables/standalone-opt.exe")
-MLIR_OPT_PATH = DIST_FOLDER.joinpath("executables/mlir-opt.exe")
-MLIR_TRANSLATE_PATH = DIST_FOLDER.joinpath("executables/mlir-translate.exe")
-LLVM_AR_PATH = DIST_FOLDER.joinpath("executables/llvm-ar.exe")
-LLVM_LINK_PATH = DIST_FOLDER.joinpath("executables/llvm-link.exe")
-OPT_PATH = DIST_FOLDER.joinpath("executables/opt.exe")
-LLC_PATH = DIST_FOLDER.joinpath("executables/llc.exe")
-LLD_LINK_PATH = DIST_FOLDER.joinpath("executables/lld-link.exe")
+DEBUGIR_PATH = DIST_FOLDER / "executables/debugir.exe"
+STANDALONE_OPT_PATH = DIST_FOLDER / "executables/standalone-opt.exe"
+MLIR_OPT_PATH = DIST_FOLDER / "executables/mlir-opt.exe"
+MLIR_TRANSLATE_PATH = DIST_FOLDER / "executables/mlir-translate.exe"
+LLVM_AR_PATH = DIST_FOLDER / "executables/llvm-ar.exe"
+LLVM_LINK_PATH = DIST_FOLDER / "executables/llvm-link.exe"
+OPT_PATH = DIST_FOLDER / "executables/opt.exe"
+LLC_PATH = DIST_FOLDER / "executables/llc.exe"
+LLD_PATH = DIST_FOLDER / "executables/lld.exe"
 
-PDL_PATTERNS_PATH = DIST_FOLDER.joinpath("data_files/patterns.mlir")
-UTILS_PATH = DIST_FOLDER.joinpath("data_files/utils.ll")
-WIN_UTILS_PATH = DIST_FOLDER.joinpath("data_files/win_utils.ll")
-POSIX_UTILS_PATH = DIST_FOLDER.joinpath("data_files/posix_utils.ll")
+PDL_PATTERNS_PATH = DIST_FOLDER / "data_files/patterns.mlir"
+UTILS_PATH = DIST_FOLDER / "data_files/utils.ll"
+WIN_UTILS_PATH = DIST_FOLDER / "data_files/win_utils.ll"
+LAYOUT_PATH = DIST_FOLDER / "data_files/datalayout.ll"
+POSIX_UTILS_PATH = DIST_FOLDER / "data_files/posix_utils.ll"
 
 def compiler_driver_main(input_path, output_path=None, build_dir=Path("."), debug_mode=False, no_timings=False, show_dependencies=False):
     after_imports = time.time()
@@ -82,6 +83,7 @@ def compiler_driver_main(input_path, output_path=None, build_dir=Path("."), debu
     dependency_graph = copy.deepcopy(included_files)
     if show_dependencies: print_dependency_graph(dependency_graph, input_path)
     dependency_list = list(reversed(list(nx.topological_sort(dependency_graph))))
+    dependency_list = [path for path in dependency_list if not path.samefile(input_path)]
     reset_ast_globals()
     after_codegen = time.time()
 
@@ -93,7 +95,6 @@ def compiler_driver_main(input_path, output_path=None, build_dir=Path("."), debu
     # process in reverse-topological order, i.e. leaves first
     for dependency in dependency_list:
         if not dependency.exists(): raise Exception(f"{input_path}, {dependency}, {dependency_list}")
-        if dependency.samefile(input_path): continue
         if not dependency in to_recompile: continue
         # compile the dependency into the current build directory
         compiler_driver_main(dependency, build_dir=build_dir, no_timings=True)
@@ -135,14 +136,18 @@ def compiler_driver_main(input_path, output_path=None, build_dir=Path("."), debu
     after_llvm_link = time.time()
     time_printer.print(f"Time to llvm-link: {after_llvm_link - after_translate} seconds")
 
-    run_opt(debug_mode, build_dir)
+    run_lto(input_path, dependency_list, build_dir, debug_mode)
+    after_lto = time.time()
+    time_printer.print(f"Time to lto: {after_lto - after_llvm_link} seconds")
+
+    #run_opt(debug_mode, build_dir)
     #record_all_passes(build_dir)
-    after_opt = time.time()
-    time_printer.print(f"Time to opt: {after_opt - after_llvm_link} seconds")
+    #after_opt = time.time()
+    #time_printer.print(f"Time to opt: {after_opt - after_llvm_link} seconds")
 
     run_llc(debug_mode, output_path, build_dir)
     after_llc = time.time()
-    time_printer.print(f"Time to llc: {after_llc - after_opt} seconds")
+    time_printer.print(f"Time to llc: {after_llc - after_lto} seconds")
 
     # Only creating an object file
     if output_path.suffix == ".obj":
@@ -154,7 +159,7 @@ def compiler_driver_main(input_path, output_path=None, build_dir=Path("."), debu
     run_lld_link(debug_mode, output_path, build_dir)
     after_lldlink = time.time()
     final_time = after_lldlink
-    time_printer.print(f"Time to lld-link: {after_lldlink - after_llc} seconds")
+    time_printer.print(f"Time to lld link: {after_lldlink - after_llc} seconds")
     time_printer.print(f"Total time to compile: {final_time - start_time} seconds")
     status_printer.print(f"Finished compiling {input_path.name}")
 
@@ -171,8 +176,8 @@ def hash_file(filepath) -> bytes:
     return hash_object.hexdigest().encode("utf-8")
 
 def already_perfect(source_path, build_dir) -> bool:
-    bc_file_path = build_dir.joinpath(f"bitcodes/{source_path.stem}.bc")
-    hash_file_path = build_dir.joinpath(f"hashes/{source_path.stem}.hash")
+    bc_file_path = build_dir / "bitcodes" / f"{source_path.stem}.bc"
+    hash_file_path = build_dir / "hashes" / f"{source_path.stem}.hash"
     if not (hash_file_path.exists() and bc_file_path.exists()): return False
     src_hash = hash_file(source_path)
     with open(hash_file_path, "rb") as f: stored_hash = f.read()
@@ -234,11 +239,10 @@ def run_pdl_lowering(module_str, build_dir) -> str:
     to_pdl_bytecode = f"{MLIR_OPT_PATH} -allow-unregistered-dialect --mlir-print-op-generic --convert-pdl-to-pdl-interp"
     run_bytecode = f"{STANDALONE_OPT_PATH} -allow-unregistered-dialect --mlir-print-op-generic --my-custom-pass"
     
-    out_mlir_path = build_dir.joinpath("out.mlir")
+    out_mlir_path = build_dir / "out.mlir"
     with open(out_mlir_path, "w") as outfile: outfile.write(module_str)
 
-    cmd_out = subprocess.run(to_pdl_bytecode, capture_output=True, shell=True, text=True, input=patterns)
-    if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
+    cmd_out = subprocess.run(to_pdl_bytecode, capture_output=True, shell=True, text=True, input=patterns, check=True)
     patterns = cmd_out.stdout
 
     # the IR verifier will complain about temporary symbol-table inconsistencies unless we use these placeholders
@@ -256,8 +260,7 @@ def run_pdl_lowering(module_str, build_dir) -> str:
 
     # this should run only one iteration, but we use 'while' anyway
     while "\"mini." in module_str:
-        cmd_out = subprocess.run(run_bytecode, capture_output=True, shell=True, text=True, input=module_str)
-        if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
+        cmd_out = subprocess.run(run_bytecode, capture_output=True, shell=True, text=True, input=module_str, check=True)
         stringio = StringIO()
         Printer(stringio).print(cmd_out.stdout.replace("\\","\\\\"))
         module_str = stringio.getvalue().encode().decode('unicode_escape')
@@ -278,8 +281,7 @@ def run_mlir_opt(module_str) -> str:
         "--cse","--control-flow-sink","--convert-func-to-llvm"
     ])
     
-    cmd_out = subprocess.run(cmd, capture_output=True, shell=True, text=True, input=module_str)
-    if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
+    cmd_out = subprocess.run(cmd, capture_output=True, shell=True, text=True, input=module_str, check=True)
     #with open("liveness_log.txt", "w") as outfile: outfile.write(cmd_out.stderr)
     module_str = cmd_out.stdout.replace("\\","\\\\")
     
@@ -296,21 +298,31 @@ def lower_to_llvm(module_str, in_file_path, build_dir):
     ])
     mlir_translate = f"{MLIR_TRANSLATE_PATH} --mlir-to-llvmir"
 
-    bitcodes_folder = build_dir.joinpath("bitcodes")
-    hashes_folder = build_dir.joinpath("hashes")
+    bitcodes_folder = build_dir / "bitcodes"
+    hashes_folder = build_dir / "hashes"
     os.makedirs(bitcodes_folder, exist_ok=True)
     os.makedirs(hashes_folder, exist_ok=True)
 
-    bc_file_path = bitcodes_folder.joinpath(f"{in_file_path.stem}.bc")
-    hash_file_path = hashes_folder.joinpath(f"{in_file_path.stem}.hash")
+    bc_file_path = bitcodes_folder / f"{in_file_path.stem}.bc"
+    hash_file_path = hashes_folder / f"{in_file_path.stem}.hash"
 
     # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
     # this has shown to improve the optimization potential for unclear reasons
     opt1 = f"{OPT_PATH} --passes=\"reg2mem\""
-    opt2 = f"{OPT_PATH} --passes=\"default<O1>\" -o {bc_file_path}"
+
+    # We don't want to inline anything here because it might be compiled in debug mode later
+    # I don't mind running attributor-enable=all here because of the lack of inlining
+    opt2 = f"{OPT_PATH} --passes=\"default<O3>\" --inline-threshold=-10000 {attributor_settings('all')} --max-devirt-iterations=100 -o {bc_file_path}"
     cmd = " | ".join([to_llvm_dialect, mlir_translate, opt1, opt2])
     subprocess.run(cmd, text=True, shell=True, input=module_str)
 
+    link_layout = [LLVM_LINK_PATH, bc_file_path, LAYOUT_PATH, "-o", bc_file_path]
+    subprocess.run(link_layout)
+    
+    # if we were doing LTO
+    # thin_bc_path = bitcodes_folder / f"{in_file_path.stem}.thin.bc"
+    # subprocess.run([OPT_PATH, bc_file_path, "--thinlto-bc", "--unified-lto", "-o", thin_bc_path])
+    
     # store the hash of the source code file in the build directory
     with open(hash_file_path, "wb") as f: f.write(hash_file(in_file_path))
 
@@ -318,16 +330,17 @@ def lower_to_llvm(module_str, in_file_path, build_dir):
 # kind of like LTO but no pretense of being at "link-time"
 def llvm_link(input_path, dependency_list, build_dir):
 
-    bc_file_paths = [str(build_dir.joinpath(f"bitcodes/{path.stem}.bc")) for path in dependency_list]
-    lib_file_path = build_dir.joinpath(f"{input_path.stem}.lib")
-    make_archive = f"{LLVM_AR_PATH} cr {lib_file_path} {' '.join(bc_file_paths)}"
-    subprocess.run(make_archive, shell=True)
+    bc_file_paths = [(build_dir / "bitcodes" / f"{path.stem}.bc") for path in dependency_list]
+    lib_file_path = build_dir / f"{input_path.stem}.lib"
+    make_archive = (LLVM_AR_PATH, "cr", lib_file_path, *bc_file_paths)
+    subprocess.run(make_archive)
 
-    bc_file_path = build_dir.joinpath(f"bitcodes/{input_path.stem}.bc")
-    out_linked_path = build_dir.joinpath("out_linked.ll")
+    bc_file_path = build_dir / "bitcodes" / f"{input_path.stem}.bc"
+    out_linked_path = build_dir / "out_linked.ll"
+    out_thin_path = build_dir / "out_thin.bc"
     os_utils_path = WIN_UTILS_PATH if platform.system() == "Windows" else POSIX_UTILS_PATH
-    link_utils = f"{LLVM_LINK_PATH} -S {bc_file_path} {UTILS_PATH} {os_utils_path} -o {out_linked_path}"
-    subprocess.run(link_utils, shell=True)
+    link_utils = (LLVM_LINK_PATH, UTILS_PATH, os_utils_path, bc_file_path, "-S", "-o", out_linked_path)
+    subprocess.run(link_utils)
 
     # use the correct main function
     with open(out_linked_path, "r+") as f:
@@ -336,52 +349,69 @@ def llvm_link(input_path, dependency_list, build_dir):
         f.write(txt.replace(f"_main_{clean_name(input_path.stem)}", "main"))
         f.truncate()
 
+    subprocess.run((OPT_PATH, out_linked_path, "--thinlto-bc", "--unified-lto", "-o", out_thin_path))
+
     # using --only-needed cuts out a lot of unnecessary imports
-    out_reg2mem_path = build_dir.joinpath("out_reg2mem.ll")
-    link_imports = f"{LLVM_LINK_PATH} -S {out_linked_path} {lib_file_path} -o {out_reg2mem_path} --only-needed"
-    subprocess.run(link_imports, shell=True)
-    os.remove(lib_file_path)
-    os.remove(out_linked_path)
+    out_reg2mem_path = build_dir / "out_reg2mem.ll"
+    link_imports = (LLVM_LINK_PATH, "-S", out_linked_path, lib_file_path, "-o", out_reg2mem_path, "--only-needed")
+    subprocess.run(link_imports)
+
+# LTO doesn't work the normal way (drops needed imports) so we try to partition the linked file for LTO
+def run_lto(input_path, dependency_list, build_dir, debug_mode):
+
+    #thin_paths = [str(build_dir.joinpath(f"bitcodes/{path.stem}.thin.bc")) for path in dependency_list]
+
+    out_thin_path = build_dir / "out_thin.bc"
+    out_reg2mem_path = build_dir / "out_reg2mem.ll"
+    out_optimized_path = build_dir / "out_optimized.ll"
+
+    subprocess.run((OPT_PATH, out_reg2mem_path, "--thinlto-bc", "--unified-lto", "--thinlto-split-lto-unit", "-o", out_thin_path))
+
+    # inline everything at o3, and nothing at debug. let the machine outliner undo some of it later, if requested
+    inline_settings = "--inline-threshold=-10000" if debug_mode else "--inline-threshold=10000"
+    passes = f"--lto-newpm-passes={optimization_level(debug_mode)}"
+
+    settings = f"{devirtualization_settings()} {inline_settings} {attributor_settings()} --enable-lto-internalization=false"
+    mllvm_options = (f"--mllvm={s}" for s in settings.split(" "))
+
+    # lld with -flavor gnu is equivalent to ld.lld
+    command = (LLD_PATH, "-flavor", "gnu", out_thin_path, "--lto=thin", passes, "--lto-emit-llvm", "-o", "out_lto.bc", *mllvm_options)
+    subprocess.run(command, cwd=build_dir)
+
+    lto_file = build_dir / "out_lto.bc"
+    subprocess.run((OPT_PATH, lto_file, "-S", "-o", out_optimized_path))
 
 def record_all_passes(build_dir):
     #clang = "clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
-    opt_level = "--passes=\"default<O1>\""
+    passes = "--passes=default<O1>"
     #opt = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
-    out_reg2mem_path = build_dir.joinpath("out_reg2mem.ll")
-    opt = f"{OPT_PATH} {out_reg2mem_path} -S {opt_level} {attributor_settings()} --max-devirt-iterations=100 --inline-threshold=10000 --print-after-all"
-    with open(out_reg2mem_path, "r+") as f:
-        txt = f.read()
-        f.seek(0)
-        # clang can't handle the 'preserve_nonecc' attribute for some reason
-        f.write(txt.replace("preserve_nonecc",""))
-        f.truncate()
-    opt_out = subprocess.run(opt, text=True, shell=True, capture_output=True)
+    out_lto_path = build_dir / "out_lto.bc"
+    opt = (OPT_PATH, passes, attributor_settings(), devirtualization_settings(), "--inline-threshold=10000", "--print-changed")
+    #with open(out_reg2mem_path, "r+") as f:
+    #    txt = f.read()
+    #    f.seek(0)
+    #    # clang can't handle the 'preserve_nonecc' attribute for some reason
+    #    f.write(txt.replace("preserve_nonecc",""))
+    #    f.truncate()
+    opt_out = subprocess.run(opt, capture_output=True)
     with open(build_dir.joinpath("opt_passes.txt"), "w") as outfile: outfile.write(opt_out.stderr)
 
 def run_opt(debug_mode, build_dir):
-    out_optimized_path = build_dir.joinpath("out_optimized.ll")
-    out_reg2mem_path = build_dir.joinpath("out_reg2mem.ll")
-    target_triple = "-mtriple=x86_64-pc-windows-msvc"
-    o3 = "--passes=\"default<O3>,default<O3>\""
-    o2 = "--passes=\"default<O2>\""
-    o1 = "--passes=\"default<O1>\""
-    opt_level = o1 if debug_mode else o3
-
+    out_optimized_path = build_dir / "out_optimized.ll"
+    out_reg2mem_path = build_dir / "out_reg2mem.ll"
+    
     # interesting = "--use-noalias-intrinsic-during-inlining --mem-intrinsic-expand-size=1024"
 
-    # this is the real optimization sauce for our language
-    # does another round of cg-scc optimizations whenever an indirect callee is identified
-    devirtualization_settings = "--max-devirt-iterations=100 --abort-on-max-devirt-iterations-reached"
     # inline everything at o3, and nothing at debug. let the machine outliner undo some of it later, if requested
     inline_settings = "--inline-threshold=-10000" if debug_mode else "--inline-threshold=10000"
+    passes = f"--passes={optimization_level(debug_mode)}"
 
-    opt = f"{OPT_PATH} -S {out_reg2mem_path} {opt_level} {devirtualization_settings} {inline_settings} {attributor_settings()} -o {out_optimized_path}"
-    subprocess.run(opt, text=True, shell=True)
+    opt = (OPT_PATH, "-S", out_reg2mem_path, passes, inline_settings, devirtualization_settings(), attributor_settings(), "-o", out_optimized_path)
+    subprocess.run(opt)
 
-    debug = f"{DEBUGIR_PATH} {out_optimized_path}"
-    if debug_mode: subprocess.run(debug, text=True, shell=True)
+    if debug_mode: subprocess.run([DEBUGIR_PATH, out_optimized_path])
 
-def attributor_settings():
+def attributor_settings(mode="module"):
     # We --disable-tail-calls for the following reason:
     # It is considered UB for a tail call to read or write to an alloca
     # Heap-to-stack will convert malloc to alloca, retroactively creating UB if used in a tail call
@@ -393,7 +423,20 @@ def attributor_settings():
     annotate_callsites = "--attributor-annotate-decl-cs"
     
     # Using attributor-enable=cgscc or attributor-enable=all takes way too long, though it does generate faster code
-    return f"--attributor-enable=module {annotate_callsites} {heap_to_stack} {use_internal_attributes} {open_world} {no_tail}"
+    return f"--attributor-enable={mode} {annotate_callsites} {heap_to_stack} {use_internal_attributes} {open_world} {no_tail}"
+
+def devirtualization_settings():
+    # this is the real optimization sauce for our language
+    # does another round of cg-scc optimizations whenever an indirect callee is identified
+    # the default in LLVM is like 4 iterations
+    return "--max-devirt-iterations=100 --abort-on-max-devirt-iterations-reached"
+
+def optimization_level(debug_mode):
+    o3 = "default<O3>,default<O3>"
+    o2 = "default<O2>"
+    o1 = "default<O1>"
+    opt_level = o1 if debug_mode else o3
+    return opt_level
 
 def run_llc(debug_mode, output_path, build_dir):
     target_triple = "-mtriple=x86_64-pc-windows-msvc"
@@ -405,21 +448,23 @@ def run_llc(debug_mode, output_path, build_dir):
 
     obj_dir = output_path.parent if output_path.suffix == ".obj" else build_dir
     os.makedirs(obj_dir, exist_ok=True)
-    obj_path = obj_dir.joinpath(f"{output_path.stem}.obj")
-    out_optimized_path = build_dir.joinpath(f"out_optimized{debug_extension}.ll")
-    llc = f"{LLC_PATH} -filetype=obj {out_optimized_path} -O=3 {target_triple} {exception_model} -o {obj_path}"
+
+    obj_path = obj_dir / f"{output_path.stem}.obj"
+    out_optimized_path = build_dir / f"out_optimized{debug_extension}.ll"
+
+    llc = (LLC_PATH, "-filetype=obj", out_optimized_path, "-O=3", target_triple, exception_model, "-o", obj_path)
     subprocess.run(llc)
 
 def run_lld_link(debug_mode, output_path, build_dir):
     debug_flag = "/debug" if debug_mode else ""
-    dynamic_libc = "msvcrt.lib legacy_stdio_definitions.lib"
+    dynamic_libc = ("msvcrt.lib", "legacy_stdio_definitions.lib")
     static_libc = "libcmt.lib"
     os.makedirs(output_path.parent, exist_ok=True)
-    obj_path = build_dir.joinpath(f"{output_path.stem}.obj")
-    exe_path = output_path.parent.joinpath(f"{output_path.stem}.exe")
+    obj_path = build_dir / f"{output_path.stem}.obj"
+    exe_path = output_path.parent / f"{output_path.stem}.exe"
     
-    # using dynamic linking:
-    lld_link = f"{LLD_LINK_PATH} /out:{exe_path} {obj_path} {debug_flag} {dynamic_libc}"
+    # lld with -flavor link is equivalent to lld-link
+    lld_link = (LLD_PATH, "-flavor", "link", obj_path, f"/out:{exe_path}", debug_flag, *dynamic_libc)
     subprocess.run(lld_link)
 
 def add_compiler_args(parser):
