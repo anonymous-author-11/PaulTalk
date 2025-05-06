@@ -40,7 +40,7 @@ PaulTalk aims to combine high-level ergonomics with high performance and memory 
 *   **Generics:** Parameterized types (`Class[T, U]`), type bounds (`where K <: Hashable`).
 *   **First-Class Functions:** Convenient anonymous functions with `(a : i32, a : i32) => ( a*b; )` syntax. No closures.
 *   **Coroutines:** `Coroutine.new(func, args...)`, `yield(value)`, `coro.call(arg?)`, `coro.result()`. Can yield exceptions for non-local control flow.
-*   **Type System:** Static typing, flow-sensitive inference, Unions (`|`), `Nil`, `Any`, `x is T` type checks.
+*   **Type System:** Static typing, flow-sensitive inference, Unions (`T | U`), `Nil`, `Any`, `x is T` type checks.
 *   **Iteration:** `for..in` loops, range literals (`start:end`), `Iterable`/`Iterator` protocols.
 *   **FFI:** `extern def` to link C functions, `Buffer[T]` for raw memory access.
 *   **Operator Overloading:** Define custom behavior for operators like `+`, `-`, `*`, `/`, `[]`.
@@ -54,7 +54,7 @@ Note: as of the latest version (v0.3.0), PaulTalk is only built for Windows x86_
 *	This will download the ptalk executable and add it to your PATH as `ptalk`
 *	You can use it in the command line with `ptalk compile [args]` or `ptalk build`
 *	You can check the version with `ptalk version`
-*	To update to the latest version, run `ptlalk upgrade` or `ptalk update`
+*	To update to the latest version, run `ptalk upgrade` or `ptalk update`
 *	For more information on the command line usage, run `ptalk --help` or `ptalk -h`
 
 ## Syntax Highlighting
