@@ -10,6 +10,7 @@
             "labels": ["syntax highlighting", "language"],
             "releases": [
                 {
+                    "sublime_text": "*"
                     "asset": "PaulTalkSyntax.sublime-package"
                 }
             ]
