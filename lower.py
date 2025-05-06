@@ -32,6 +32,13 @@ from utils import builtin_types, vtable_buffer_size
 from itertools import chain
 import random
 
+def get_parent_module(op):
+    parent = op.parent_op()
+    while parent:
+        if isinstance(parent, ModuleOp): break
+        parent = parent.parent_op()
+    return parent
+
 def random_letters(n):
     return "".join(random.choices('abcdefghijklmnopqrstuvwxyz', k=n))
 
@@ -388,7 +395,7 @@ class LowerReabstract(RewritePattern):
         f_body = Region([f_block])
         dict_ary = ArrayAttr([DictionaryAttr({"llvm.nest":UnitAttr()}), *[DictionaryAttr({}) for arg in to_typ.param_types.data]])
         func_def = func.FuncOp(wrapper_name, FunctionType.from_lists([t.base_typ() for t in to_typ.param_types.data], ret_type), f_body, arg_attrs=dict_ary)
-        top_level = op.get_toplevel_object()
+        top_level = get_parent_module(op)
         rewriter.insert_op_before(func_def, top_level.body.block.first_op)
 
         tramp = MallocOp.create(attributes={"typ":llvm.LLVMArrayType.from_size_and_type(24, IntegerType(8))}, result_types=[llvm.LLVMPointerType.opaque()])
@@ -724,7 +731,7 @@ class LowerFromBuffer(RewritePattern):
 class LowerParameterization(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: ParameterizationOp, rewriter: PatternRewriter):
-        module = op.get_toplevel_object()
+        module = get_parent_module(op)
         if not isinstance(module, ModuleOp):
             raise Exception([*module.block.ops])
         name = op.name_hierarchy.data[0]
@@ -906,7 +913,7 @@ class LowerLiteral(RewritePattern):
                 value=op.value,
                 constant=True
             )
-            top_level = op.get_toplevel_object()
+            top_level = get_parent_module(op)
             rewriter.insert_op_before(str_glob, top_level.body.block.first_op)
             addr_of = AddrOfOp.from_string(global_name)
             rewriter.replace_matched_op(addr_of)

@@ -5,6 +5,7 @@ start_time = time.time()
 from parser import CSTTransformer, parse, source_directories
 from AST import included_files, generate_main_for, reset_ast_globals, silent
 from utils import clean_name
+from xdsl.dialects.builtin import ModuleOp, StringAttr
 from xdsl.context import MLContext
 from xdsl.printer import Printer
 from io import StringIO
@@ -72,7 +73,6 @@ class CompilationJob:
         self.time_printer = OptionalPrinter(not no_timings)
         self.status_printer = OptionalPrinter(not silent[0])
         self.show_dependencies = show_dependencies
-        self.status_printer.print(f"Compiling {self.input.path.name}")
         self.debug_mode = debug_mode
         self._dependency_list = None
 
@@ -83,29 +83,13 @@ class CompilationJob:
         if self.output_path.suffix == ".exe": generate_main_for.add(self.input.path)
 
     def run(self):
-        add_source_directories(self.input.path)
-        ast = parse(self.input.path)
-        self.record_time("after_parse")
+        self.status_printer.print(f"Compiling {self.input.path.name}")
 
+        add_source_directories(self.input.path)
+        ast = self.run_parse()
         module = self.run_codegen(ast)
         to_recompile = self.recompile_set()
-
-        # process in reverse-topological order, i.e. leaves first
-        for dependency in self.dependency_list:
-            if not dependency.exists(): raise Exception(f"{self.input.path}, {self.dependency}, {self.dependency_list}")
-            if not dependency in to_recompile: continue
-            # compile the dependency into the current build directory
-            CompilationJob(dependency, build_dir=self.build_dir, no_timings=True).run()
-
-        self.record_time("after_dependencies")
-        self.time_printer.print(f'Time to import: {self.time_between("start_time","after_imports")} seconds')
-        self.time_printer.print(f'Time to parse: {self.time_between("after_imports", "after_parse")} seconds')
-        self.time_printer.print(f'Time to type check + codegen: {self.time_between("after_parse", "after_codegen")} seconds')
-        self.time_printer.print(f'Time to verify / recompile dependencies: {self.time_between("after_codegen", "after_dependencies")} seconds')
-
-        # Do we need to produce a bitcode file or does a good one already exist?
-        needs_lowering = len(to_recompile) > 0 or not already_perfect(self.input.path, self.build_dir)
-        if needs_lowering: self.lower(module)
+        self.lower_all(to_recompile, module)
 
         # not creating an output file
         if not self.output_path: return self.finish()
@@ -182,6 +166,11 @@ class CompilationJob:
         text_repr = stringio.getvalue().replace("╾","<─").replace("╼",">")
         print(text_repr)
 
+    def run_parse(self):
+        ast = parse(self.input.path)
+        self.record_time("after_parse")
+        return ast
+
     def run_codegen(self, ast):
         try:
             module = ast.codegen()
@@ -199,11 +188,61 @@ class CompilationJob:
         self.record_time("after_codegen")
         return module
 
-    def lower(self, module):
-        module_str = run_python_lowering(module)
-        self.record_time("after_firstpass")
-        self.time_printer.print(f'Time to do python lowering: {self.time_between("after_dependencies", "after_firstpass")} seconds')
+    def lower_all(self, to_recompile, own_module):
 
+        sorted_dependencies = [dependency for dependency in self.dependency_list if dependency in to_recompile]
+
+        if len(sorted_dependencies) > 0:
+            dependencies_string = ', '.join([x.stem for  x in sorted_dependencies])
+            self.status_printer.print(f"Recompiling dependencies: {dependencies_string}")
+
+        jobs = [CompilationJob(dependency, build_dir=self.build_dir, no_timings=True) for dependency in sorted_dependencies]
+        asts = self.parse_dependencies(jobs)
+        modules = self.codegen_dependencies(jobs, asts)
+        
+        needs_lowering = not already_perfect(self.input.path, self.build_dir)
+        if needs_lowering:
+            jobs.append(self)
+            modules.append(own_module)
+        
+        # We deferred printing these timings so they weren't broken up by any miscellaneous printing during codegen
+        self.time_printer.print(f'Time to import: {self.time_between("start_time","after_imports")} seconds')
+        self.time_printer.print(f'Time to parse: {self.time_between("after_imports", "after_parse")} seconds')
+        self.time_printer.print(f'Time to type check + codegen: {self.time_between("after_parse", "after_codegen")} seconds')
+
+        if len(sorted_dependencies) > 0:
+            self.time_printer.print(f'Time to parse dependencies: {self.time_between("after_codegen", "parse_dependencies")} seconds')
+            self.time_printer.print(f'Time to codegen dependencies: {self.time_between("parse_dependencies", "codegen_dependencies")} seconds')
+        
+        # All bitcodes are already perfect; return early
+        if len(modules) == 0: return
+        
+        module_str = self.lower_mlir(modules)
+        llvm_string = self.lower_to_llvm(module_str)
+        self.make_bitcodes(jobs, llvm_string)
+
+    def parse_dependencies(self, jobs):
+        asts = [job.run_parse() for job in jobs]
+        self.record_time("parse_dependencies")
+        return asts
+
+    def codegen_dependencies(self, jobs, asts):
+        modules = [job.run_codegen(ast) for (job, ast) in zip(jobs, asts)]
+        self.record_time("codegen_dependencies")
+        return modules
+
+    def lower_mlir(self, modules):
+
+        self.record_time("before_firstpass")
+        combined_module = ModuleOp([*modules], {"sym_name":StringAttr("ir")})
+        
+        # Using multiprocessing invariably leeds to a recursion limit exceeded while pickling the IR
+        # Using non-parallel concurrency is not measurably any faster than serial processing
+        module_str = run_python_lowering(combined_module)
+        self.record_time("after_firstpass")
+        self.time_printer.print(f'Time to do python lowering: {self.time_between("before_firstpass", "after_firstpass")} seconds')
+
+        # MLIR is already natively multithreaded which is great
         module_str = run_pdl_lowering(module_str, self.build_dir)
         self.record_time("after_pdl")
         self.time_printer.print(f'Time to do PDL lowering: {self.time_between("after_firstpass", "after_pdl")} seconds')
@@ -211,8 +250,8 @@ class CompilationJob:
         module_str = run_mlir_opt(module_str)
         self.record_time("after_translate")
         self.time_printer.print(f'Time to do mlir-opt: {self.time_between("after_pdl", "after_translate")} seconds')
-        
-        self.lower_to_llvm(module_str)
+
+        return module_str
 
     def lower_to_llvm(self, module_str):
         scf = "--convert-scf-to-cf"
@@ -222,37 +261,53 @@ class CompilationJob:
         memref = "--finalize-memref-to-llvm"
         cf = "--convert-cf-to-llvm"
         ub = "--convert-ub-to-llvm"
-        to_llvm_dialect = f"{MLIR_OPT_PATH} {scf} {arith} {func} {index} {memref} {cf} {ub} --reconcile-unrealized-casts --emit-bytecode"
-        mlir_translate = f"{MLIR_TRANSLATE_PATH} --mlir-to-llvmir"
+
+        self.record_time("before_mlir_opt_lower")
+        to_llvm_dialect = f"{MLIR_OPT_PATH} {scf} {arith} {func} {index} {memref} {cf} {ub} --reconcile-unrealized-casts"
+        module_str = subprocess.run(to_llvm_dialect, text=True, shell=True, input=module_str, capture_output=True).stdout
+        module_str = module_str[14:-3].replace("module","// ----- module")[9:]
+        self.record_time("after_mlir_opt_lower")
+        self.time_printer.print(f'Time to mlir-opt lower: {self.time_between("before_mlir_opt_lower", "after_mlir_opt_lower")} seconds')
+
+        mlir_translate = f"{MLIR_TRANSLATE_PATH} --split-input-file --output-split-marker=\"// -----\" --mlir-to-llvmir"
+        llvm_string = subprocess.run(mlir_translate, text=True, shell=True, input=module_str, capture_output=True).stdout
+        self.record_time("after_mlir_translate")
+        self.time_printer.print(f'Time to mlir-translate: {self.time_between("after_mlir_opt_lower", "after_mlir_translate")} seconds')
+        return llvm_string
+
+    def make_bitcodes(self, jobs, llvm_string):
 
         bitcodes_folder = self.build_dir / "bitcodes"
         hashes_folder = self.build_dir / "hashes"
         os.makedirs(bitcodes_folder, exist_ok=True)
         os.makedirs(hashes_folder, exist_ok=True)
 
-        # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
-        # this has shown to improve the optimization potential for unclear reasons
-        opt1 = f"{OPT_PATH} --passes=\"reg2mem\""
+        # Split the big llvm IR string into individual bitcode files and save them
+        for job, section in zip(jobs, llvm_string.split("// -----")):
+            
+            # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
+            # this has shown to improve the optimization potential for unclear reasons
+            opt1 = f"{OPT_PATH} --passes=reg2mem"
 
-        # We don't want to inline anything here because it might be compiled in debug mode later
-        # I don't mind running attributor-enable=all here because of the lack of inlining
-        o3 = "--passes=\"default<O3>\""
-        opt2 = f"{OPT_PATH} {o3} --inline-threshold=-10000 {self.attributor_settings('all')} {self.devirt_settings} -o {self.input.bc_file}"
-        cmd = " | ".join([to_llvm_dialect, mlir_translate, opt1, opt2])
-        subprocess.run(cmd, text=True, shell=True, input=module_str)
+            # We don't want to inline anything here because it might be compiled in debug mode later
+            # I don't mind running attributor-enable=all here because of the lack of inlining
+            o3 = "--passes=\"default<O3>\""
+            opt2 = f"{OPT_PATH} {o3} --inline-threshold=-10000 {self.attributor_settings('all')} {self.devirt_settings} -o {job.input.bc_file}"
+            
+            subprocess.run(f"{opt1} | {opt2}", text=True, shell=True, input=section)
 
-        link_layout = (LLVM_LINK_PATH, self.input.bc_file, LAYOUT_PATH, "-o", self.input.bc_file)
-        subprocess.run(link_layout)
-        
-        # if we were doing real LTO
-        # thin_bc_path = bitcodes_folder / f"{in_file_path.stem}.thin.bc"
-        # subprocess.run([OPT_PATH, bc_file_path, "--thinlto-bc", "--unified-lto", "-o", thin_bc_path])
-        
-        # store the hash of the source code file in the build directory
-        self.input.write_hash()
+            link_layout = (LLVM_LINK_PATH, job.input.bc_file, LAYOUT_PATH, "-o", job.input.bc_file)
+            subprocess.run(link_layout)
 
-        self.record_time("after_lowering")
-        self.time_printer.print(f'Time to lower to LLVM IR: {self.time_between("after_translate", "after_lowering")} seconds')
+            # if we were doing real LTO
+            # thin_bc_path = bitcodes_folder / f"{job.input.path.stem}.thin.bc"
+            # subprocess.run((OPT_PATH, bc_file_path, "--thinlto-bc", "--unified-lto", "-o", thin_bc_path))
+
+            # store the hash of the source code that generated this bitcode
+            job.input.write_hash()
+
+        self.record_time("lower_to_llvm")
+        self.time_printer.print(f'Time to generate bitcodes: {self.time_between("after_mlir_translate", "lower_to_llvm")} seconds')
 
     # merge all the .bc files into one big .ll file for optimization
     # kind of like LTO but no pretense of being at "link-time"
@@ -432,7 +487,8 @@ def run_pdl_lowering(module_str, build_dir) -> str:
     out_mlir_path = build_dir / "out.mlir"
     with open(out_mlir_path, "w") as outfile: outfile.write(module_str)
 
-    cmd_out = subprocess.run(to_pdl_bytecode, capture_output=True, shell=True, text=True, input=patterns, check=True)
+    cmd_out = subprocess.run(to_pdl_bytecode, capture_output=True, shell=True, text=True, input=patterns)
+    if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
     patterns = cmd_out.stdout
 
     # the IR verifier will complain about temporary symbol-table inconsistencies unless we use these placeholders
@@ -450,14 +506,14 @@ def run_pdl_lowering(module_str, build_dir) -> str:
 
     # this should run only one iteration, but we use 'while' anyway
     while "\"mini." in module_str:
-        cmd_out = subprocess.run(run_bytecode, capture_output=True, shell=True, text=True, input=module_str, check=True)
+        cmd_out = subprocess.run(run_bytecode, capture_output=True, shell=True, text=True, input=module_str)
+        if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
         stringio = StringIO()
         Printer(stringio).print(cmd_out.stdout.replace("\\","\\\\"))
         module_str = stringio.getvalue().encode().decode('unicode_escape')
 
     # trim off the residual PDL bytecode
     module_str = module_str[23:-16]
-
     module_str = module_str.replace("placeholder.call", "llvm.call")
     module_str = module_str.replace("placeholder.extractvalue", "llvm.extractvalue")
     with open(out_mlir_path, "w") as outfile: outfile.write(module_str)
@@ -474,7 +530,8 @@ def run_mlir_opt(module_str) -> str:
     func_to_llvm = "--convert-func-to-llvm"
 
     cmd = (f"{MLIR_OPT_PATH}", unregistered, generic, canonicalize, "--sroa", cf_to_scf, canonicalize, "--sccp", licm, lish, "--cse", cfs, func_to_llvm)
-    cmd_out = subprocess.run(cmd, capture_output=True, text=True, input=module_str, check=True)
+    cmd_out = subprocess.run(cmd, capture_output=True, text=True, input=module_str)
+    if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
     #with open("liveness_log.txt", "w") as outfile: outfile.write(cmd_out.stderr)
     module_str = cmd_out.stdout.replace("\\","\\\\")
     

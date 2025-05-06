@@ -101,9 +101,9 @@ class AST:
         if self.root.info.filepath in generate_main_for:
             main_name = StringAttr("_main_" + clean_name(self.root.info.filepath.stem))
             main = MainOp.create(regions=[global_scope.region], attributes={"main_name":main_name})
-            module = ModuleOp([PreludeOp.create(), *typ_ops, *class_ops, *func_ops, main], {"sym_name":StringAttr("ir")})
+            module = ModuleOp([PreludeOp.create(), *typ_ops, *class_ops, *func_ops, main], {"sym_name":StringAttr(self.root.info.filepath.stem)})
         else:
-            module = ModuleOp([PreludeOp.create(), *typ_ops, *class_ops, *func_ops], {"sym_name":StringAttr("ir")})
+            module = ModuleOp([PreludeOp.create(), *typ_ops, *class_ops, *func_ops], {"sym_name":StringAttr(self.root.info.filepath.stem)})
         return module
 
 @dataclass
