@@ -17,9 +17,9 @@ The compiler translates PaulTalk code through several stages, leveraging MLIR (M
 
 PaulTalk aims to combine high-level ergonomics with high performance and memory safety through its type system and planned region management.
 
-## Status: Highly Experimental (v0.2.2)
+## Status: Highly Experimental (v0.3.0)
 
-**⚠️ Warning:** PaulTalk is currently in a very early, experimental stage (v0.2.2). It is **not suitable for production use.**
+**⚠️ Warning:** PaulTalk is currently in a very early, experimental stage (v0.3.0). It is **not suitable for production use.**
 
 *   **Memory Management:** The region-based memory system is incomplete. Memory is allocated (using a fast bump allocator) but **never freed**, leading to memory leaks in any non-trivial program.
 *   **Platform:** Currently targets **x86_64 Windows only**. Aims to be multiplatform in the future.
@@ -58,8 +58,12 @@ Note: as of the latest version (v0.1.0), PaulTalk is only built for Windows x86_
 
 ## Syntax Highlighting
 
-*	If you use [Sublime Text](https://www.sublimetext.com/download), you can configure syntax highlighting for PaulTalk using the [ptalk.sublime-syntax](https://github.com/anonymous-author-11/PaulTalk/blob/main/ptalk.sublime-syntax) file found in this repo.
-*	Just copy that syntax file into the equivalent of `C:\Users\YourUserName\AppData\Roaming\Sublime Text 3\Packages\User`
+*	If you use [Sublime Text](https://www.sublimetext.com/download), you can configure syntax highlighting for PaulTalk
+*	In Sublime Text, go to Preferences > Package Control > Add Repository
+*	Enter in this URL: `https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/paultalk-package.json`
+*	Go to Preferences > Package Control > Install Package > select PaulTalkSyntax
+*	Open a PaulTalk source code file
+*	Go to View > Syntax > Open All With Current Extension As > PaulTalk
 *	You should then be able to enjoy luxurious syntax highlighting like the following:
 
 	<img src="syntax_highlighting.png" width="600">
@@ -101,7 +105,7 @@ The compiler driver can be found in [ptalk_compile.py](https://github.com/anonym
 ## Prerequisites
 
 *	**0install:** A cross-platform package manager that can be downloaded [here](https://get.0install.net/#windows)
-*   **OS:** Windows x86_64 (as of version v0.2.2)
+*   **OS:** Windows x86_64 (as of version v0.3.0)
 *   **Sublime Text [Optional]:** If you want syntax highlighting for PaulTalk. Can be downloaded [here](https://www.sublimetext.com/download)
 
 ## Standard Library (Minimal)
