@@ -59,11 +59,11 @@ Note: as of the latest version (v0.1.0), PaulTalk is only built for Windows x86_
 ## Syntax Highlighting
 
 *	If you use [Sublime Text](https://www.sublimetext.com/download), you can configure syntax highlighting for PaulTalk
-*	In Sublime Text, go to Preferences > Package Control > Add Repository
+*	In Sublime Text, go to `Preferences` > `Package Control` > `Add Repository`
 *	Enter in this URL: `https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/paultalk-package.json`
-*	Go to Preferences > Package Control > Install Package > select PaulTalkSyntax
-*	Open a PaulTalk source code file
-*	Go to View > Syntax > Open All With Current Extension As > PaulTalk
+*	Go to `Preferences` > `Package Control` > `Install Package` > select `PaulTalkSyntax`
+*	Open any PaulTalk source code file
+*	Go to `View` > `Syntax` > `Open All With Current Extension As` > `PaulTalk`
 *	You should then be able to enjoy luxurious syntax highlighting like the following:
 
 	<img src="syntax_highlighting.png" width="600">
