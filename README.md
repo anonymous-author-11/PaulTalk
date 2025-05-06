@@ -5,15 +5,16 @@
 
 ## Introduction
 
-PaulTalk is an experimental, statically-typed, **unabashedly object-oriented** programming language featuring:
+PaulTalk is an experimental, statically-typed, **unabashedly object-oriented** programming language with such enticing features as:
 
-*   **Multiple Dispatch:** Methods are chosen at runtime based on the dynamic types of *multiple* arguments, enabling flexible and expressive code, especially for operator overloading and functions like `print`.
-*   **Non-monomorphized Generics:** Define reusable classes and methods with type parameters (`Class[T]`) and constraints (`where T <: Constraint`), enabling separate compilation and dynamic linking.
-*   **Stackful Asymmetric Coroutines:** Lightweight concurrency using `yield` for cooperative multitasking, exception handling, and creating generators or asynchronous patterns.
-*   **Advanced Type System:** Includes union types (`A | B`), local flow-sensitive type inference, and nilable types.
-*   **Region-Based Memory Management (In Progress):** Aims for safe and efficient memory management *without garbage collection or reference counting* using static analysis (points-to analysis), although the liveness analysis necessary for region deallocation is not yet implemented.
+*   **Multiple Dispatch:** Methods are dispatched at runtime (via efficient lookup automata) based on the *dynamic* types of *multiple* arguments, enabling flexible and expressive code, especially for operator overloading.
+*   **Non-monomorphized Generics:** Define reusable classes and methods with type parameters (`Class[T]`) and constraints (`where T <: Constraint`), fully compatible with separate compilation and dynamic linking.
+*   **Stackful Asymmetric Coroutines:** Lightweight concurrency using `.call(...)` and `yield(...)` for cooperative multitasking, exception handling, and creating generators or asynchronous patterns. Implemented entirely in portable LLVM IR.
+*   **Advanced Type System:** Union types (`A | B`), generics (`Array[i32 | Nil]`), local flow-sensitive type inference, and nilable types.
+*	**Memory Safety:** Variable / field initialization tracking, array bounds checking, and null safety.
+*   **Region-Based Memory Management (In Progress):** Aims for safe and efficient memory management *without garbage collection or reference counting* using static analysis (points-to analysis). The liveness analysis necessary for region deallocation is not yet implemented.
 
-The compiler translates PaulTalk code through several stages, leveraging MLIR (Multi-Level Intermediate Representation) and LLVM for optimization and code generation.
+The compiler leverages MLIR and LLVM for optimization and code generation.
 
 PaulTalk aims to combine high-level ergonomics with high performance and memory safety through its type system and planned region management.
 
@@ -23,10 +24,9 @@ PaulTalk aims to combine high-level ergonomics with high performance and memory 
 
 *   **Memory Management:** The region-based memory system is incomplete. Memory is allocated (using a fast bump allocator) but **never freed**, leading to memory leaks in any non-trivial program.
 *   **Platform:** Currently targets **x86_64 Windows only**. Aims to be multiplatform in the future.
-*   **Setup:** The build process, especially for the C++ components, is complex and not documented for general users. Makes use of in-tree versions of the `xDSL` and `debugir` projects.
 *   **Standard Library:** Currently minimal, involving core facilities for string manipulation, arrays, I/O, and iteration.
 *   **Language Features:** While many core features are implemented, expect bugs, rough edges, and potential breaking changes.
-*	**Name Inconsistencies** Many parts of the project still refer to the language as "Mini Lang" and the source code file extension is still .mini.
+*	**Name Inconsistencies** Many parts of the project still refer to the language as "Mini Lang" and the source-code file extension is still .mini.
 
 ## Show Me The Code
 
@@ -38,7 +38,7 @@ PaulTalk aims to combine high-level ergonomics with high performance and memory 
 *   **Object-Oriented:** Classes, multiple inheritance, `@field` syntax, `init` constructors.
 *   **Multiple Dispatch:** Implemented via efficient dispatch automata. Used for standard functions (`IO.print`) and operator overloading.
 *   **Generics:** Parameterized types (`Class[T, U]`), type bounds (`where K <: Hashable`).
-*   **First-Class Functions:** Convenient anonymous functions with `(a : i32, a : i32) => ( a*b; )` syntax.
+*   **First-Class Functions:** Convenient anonymous functions with `(a : i32, a : i32) => ( a*b; )` syntax. No closures.
 *   **Coroutines:** `Coroutine.new(func, args...)`, `yield(value)`, `coro.call(arg?)`, `coro.result()`. Can yield exceptions for non-local control flow.
 *   **Type System:** Static typing, flow-sensitive inference, Unions (`|`), `Nil`, `Any`, `x is T` type checks.
 *   **Iteration:** `for..in` loops, range literals (`start:end`), `Iterable`/`Iterator` protocols.
@@ -47,7 +47,7 @@ PaulTalk aims to combine high-level ergonomics with high performance and memory 
 
 ## How to Install
 
-Note: as of the latest version (v0.1.0), PaulTalk is only built for Windows x86_64. This will change in future versions.
+Note: as of the latest version (v0.3.0), PaulTalk is only built for Windows x86_64. This will change in future versions.
 
 *	First, install [0install](https://get.0install.net/#windows), a portable package manager.
 *	Run the command `0install add ptalk https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/ptalk.xml` in your command prompt
@@ -55,6 +55,7 @@ Note: as of the latest version (v0.1.0), PaulTalk is only built for Windows x86_
 *	You can use it in the command line with `ptalk compile [args]` or `ptalk build`
 *	You can check the version with `ptalk version`
 *	To update to the latest version, run `ptlalk upgrade` or `ptalk update`
+*	For more information on the command line usage, run `ptalk --help` or `ptalk -h`
 
 ## Syntax Highlighting
 
@@ -127,7 +128,7 @@ The standard library (located in the [lib](https://github.com/anonymous-author-1
 *	`quadratic_probe.mini`
 *	`cuckoo.mini`
 
-## Future Work
+## Near-Future Work
 
 *   Complete the region-based memory management system (liveness analysis and deallocation).
 *   Expand the standard library.
@@ -135,7 +136,23 @@ The standard library (located in the [lib](https://github.com/anonymous-author-1
 *   Add support for more platforms (Linux, macOS).
 *   Refine the build and setup process for easier adoption.
 
-You can find a disorganized but informative roadmap in `TODO.txt`.
+You can find a disorganized but informative roadmap in [TODO.txt](https://github.com/anonymous-author-11/PaulTalk/blob/main/TODO.txt).
+
+## Further-Future Work
+
+*	Multithreading (shared-memory, not data-race safe)
+*	Precompiled AST-based macros
+*	Use-site struct types (stack allocated, value semantics)
+*	Delegates (an alternative to inheritance; uses open recursion)
+
+## Language Inspirations
+
+*	**Crystal:** Flow-sensitive type inference, union types, multiple dispatch, Fibers
+*	**Lua:** Stackful asymmetric coroutines, also used for error handling, fantastic interoperability with C
+*	**Swift:** Non-monomorphized generics, philosophy of progressive disclosure
+*	**Simula:** The original statically-typed object-oriented language
+*	**Cyclone:** Region-based memory management (in a procedural language)
+*	**SmallTalk:** For the name, mostly
 
 ## License
 
