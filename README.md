@@ -67,7 +67,7 @@ If you use [Sublime Text](https://www.sublimetext.com/download), you can configu
 *	Open any PaulTalk source code file
 *	Go to `View` > `Syntax` > `Open All With Current Extension As` > `PaulTalk`
 *	You should then be able to enjoy luxurious syntax highlighting like the following:
-	
+	<br>
 	<img src="syntax_highlighting.png" width="600">
 
 ## How to compile
