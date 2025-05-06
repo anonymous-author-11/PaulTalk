@@ -15,56 +15,15 @@ metadir = 0install
 distdir = 
 
 
-Executing: ['C:\\Users\\PaulK\\AppData\\Local\\0install.net\\implementations\\sha256new_S4U3KV7UJDBHKPR5DSYLWPRH7VN5HTDNRCYLBDDLI6NEMZCRVNVA\\ptalk.dist/ptalk.exe', 'compile', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\hash_benchmark.mini', '-o', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build-windows-x86_64/program.exe', '--build-dir', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build']
+Executing: ['C:\\Users\\PaulK\\AppData\\Local\\0install.net\\implementations\\sha256new_4DM2CFU7XSLCVN5AZEIF62C3JAV4B7WKJBREMNIJOCEHGYKOHH3Q\\ptalk.dist/ptalk.exe', 'compile', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\hash_benchmark.mini', '-o', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build-windows-x86_64/program.exe', '--build-dir', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build']
 Compiling hash_benchmark.mini
-Time to import: 0.8526501655578613 seconds
-Compiling builtins.mini
-Finished compiling builtins.mini
-Compiling iteration.mini
-Finished compiling iteration.mini
-Compiling core.mini
-Finished compiling core.mini
-Compiling io.mini
-Finished compiling io.mini
-Compiling files.mini
-narrowed Buffer[i32] & Nil to nothing
-narrowed Buffer[i32] & Nil to nothing
-narrowed Buffer[i32] & Nil to nothing
-narrowed Buffer[i32] & Nil to nothing
-narrowed Buffer[i32] & Nil to nothing
-would be impossible to enter then branch
-@handle
-!mini.nothing
-narrowed Buffer[i32] & Nil to nothing
-would be impossible to enter then branch
-@handle
-!mini.nothing
-Finished compiling files.mini
-Compiling array.mini
-Finished compiling array.mini
-Compiling channel.mini
-Finished compiling channel.mini
-Compiling range.mini
-Finished compiling range.mini
-Compiling math.mini
-Finished compiling math.mini
-Compiling map.mini
-Finished compiling map.mini
-Compiling std.mini
-Finished compiling std.mini
-Compiling cuckoo.mini
-Finished compiling cuckoo.mini
-Time to parse: 2.9978690147399902 seconds
-Time to type check + codegen: 2.919532537460327 seconds
-Time to verify / recompile dependencies: 23.185489177703857 seconds
-Time to do python lowering: 3.005326747894287 seconds
-Time to do PDL lowering: 0.20678448677062988 seconds
-Time to do mlir-opt: 0.16130566596984863 seconds
-Time to lower to llvm ir: 0.2207660675048828 seconds
-Time to llvm-link: 0.17377686500549316 seconds
-Time to opt: 7.1812584400177 seconds
-Time to llc: 0.8484764099121094 seconds
-Time to lld-link: 0.04901909828186035 seconds
-Total time to compile: 41.80225467681885 seconds
+Time to import: 0.7451052665710449 seconds
+Time to parse: 3.108926773071289 seconds
+Time to type check + codegen: 3.3061625957489014 seconds
+Time to llvm-link: 0.1739821434020996 seconds
+Time to lto: 7.758469581604004 seconds
+Time to llc: 0.9493560791015625 seconds
+Time to lld link: 0.04084491729736328 seconds
+Total time to compile: 16.09889793395996 seconds
 Finished compiling hash_benchmark.mini
 Build successful
