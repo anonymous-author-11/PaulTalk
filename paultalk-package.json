@@ -10,8 +10,10 @@
             "labels": ["syntax highlighting", "language"],
             "releases": [
                 {
+                    "version": "0.1.0",
+                    "url": "https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/PaulTalkSyntax.zip",
+                    "date": "2025-05-05 23:21:41",
                     "sublime_text": "*"
-                    "asset": "PaulTalkSyntax.sublime-package"
                 }
             ]
         }
