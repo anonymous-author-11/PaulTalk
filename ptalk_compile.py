@@ -14,6 +14,9 @@ from dataclasses import dataclass
 import sys
 import argparse
 import subprocess
+import multiprocessing
+import random
+import functools
 import os
 from pathlib import Path
 import copy
@@ -94,8 +97,7 @@ class CompilationJob:
         # not creating an output file
         if not self.output_path: return self.finish()
 
-        self.llvm_link()
-        self.run_lto()
+        self.parallel_optimization()
         self.run_llc()
 
         # Only creating an object file
@@ -146,9 +148,15 @@ class CompilationJob:
         open_world = "--attributor-assume-closed-world=false"
         use_internal_attributes = "--attributor-manifest-internal"
         annotate_callsites = "--attributor-annotate-decl-cs"
+        simplify_loads = "--attributor-simplify-all-loads"
+
+        # Might add these ones in the future, not sure if they're good
+        callsite_deduction = "--attributor-enable-call-site-specific-deduction"
+        max_iter = "--attributor-max-iterations=100000"
+        max_specializations = "--attributor-max-specializations-per-call-base=100000"
         
         # Using attributor-enable=cgscc or attributor-enable=all takes way too long, though it does generate faster code
-        return f"--attributor-enable={mode} {annotate_callsites} {heap_to_stack} {use_internal_attributes} {open_world} {no_tail}"
+        return f"--attributor-enable={mode} {simplify_loads} {annotate_callsites} {heap_to_stack} {use_internal_attributes} {open_world} {no_tail}"
 
     def recompile_set(self) -> set:
         to_recompile = set()
@@ -222,6 +230,7 @@ class CompilationJob:
         self.make_bitcodes(jobs, llvm_string)
 
     def parse_dependencies(self, jobs):
+        # by construction, all of these asts should already be in the parsed cache
         asts = [job.run_parse() for job in jobs]
         self.record_time("parse_dependencies")
         return asts
@@ -237,12 +246,13 @@ class CompilationJob:
         combined_module = ModuleOp([*modules], {"sym_name":StringAttr("ir")})
         
         # Using multiprocessing invariably leeds to a recursion limit exceeded while pickling the IR
-        # Using non-parallel concurrency is not measurably any faster than serial processing
+        # Using non-parallel concurrency (threading) is not measurably any faster than serial processing
+        # If we want more lowering in parallel, we have to migrate more lowering patterns from python to PDL
         module_str = run_python_lowering(combined_module)
         self.record_time("after_firstpass")
         self.time_printer.print(f'Time to do python lowering: {self.time_between("before_firstpass", "after_firstpass")} seconds')
 
-        # MLIR is already natively multithreaded which is great
+        # MLIR is already natively multithreaded, which is great. This is why we combined all the modules into one.
         module_str = run_pdl_lowering(module_str, self.build_dir)
         self.record_time("after_pdl")
         self.time_printer.print(f'Time to do PDL lowering: {self.time_between("after_firstpass", "after_pdl")} seconds')
@@ -287,21 +297,17 @@ class CompilationJob:
             
             # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
             # this has shown to improve the optimization potential for unclear reasons
-            opt1 = f"{OPT_PATH} --passes=reg2mem"
+            reg2mem = f"{OPT_PATH} --passes=reg2mem"
 
             # We don't want to inline anything here because it might be compiled in debug mode later
             # I don't mind running attributor-enable=all here because of the lack of inlining
-            o3 = "--passes=\"default<O3>\""
-            opt2 = f"{OPT_PATH} {o3} --inline-threshold=-10000 {self.attributor_settings('all')} {self.devirt_settings} -o {job.input.bc_file}"
+            passes = "--passes=\"default<O3>\""
+            opt = f"{OPT_PATH} {passes} --inline-threshold=-10000 {self.attributor_settings('all')} {self.devirt_settings} -o {job.input.bc_file}"
             
-            subprocess.run(f"{opt1} | {opt2}", text=True, shell=True, input=section)
+            subprocess.run(f"{reg2mem} | {opt}", text=True, shell=True, input=section)
 
-            link_layout = (LLVM_LINK_PATH, job.input.bc_file, LAYOUT_PATH, "-o", job.input.bc_file)
-            subprocess.run(link_layout)
-
-            # if we were doing real LTO
-            # thin_bc_path = bitcodes_folder / f"{job.input.path.stem}.thin.bc"
-            # subprocess.run((OPT_PATH, bc_file_path, "--thinlto-bc", "--unified-lto", "-o", thin_bc_path))
+            link_layout = f"{LLVM_LINK_PATH} {job.input.bc_file} {LAYOUT_PATH} -o {job.input.bc_file}"
+            subprocess.run(link_layout, shell=True)
 
             # store the hash of the source code that generated this bitcode
             job.input.write_hash()
@@ -329,7 +335,7 @@ class CompilationJob:
         # use the correct main function
         replace_in_file(out_linked_path, f"_main_{clean_name(self.input.path.stem)}", "main")
 
-        subprocess.run((OPT_PATH, out_linked_path, "--thinlto-bc", "--unified-lto", "-o", out_thin_path))
+        subprocess.run((OPT_PATH, out_linked_path, "-o", out_thin_path))
 
         # using --only-needed cuts out a lot of unnecessary imports
         out_reg2mem_path = self.build_dir / "out_reg2mem.ll"
@@ -339,7 +345,69 @@ class CompilationJob:
         self.record_time("after_llvm_link")
         self.time_printer.print(f'Time to llvm-link: {self.time_between("before_llvm_link", "after_llvm_link")} seconds')
 
-    # LTO doesn't work the normal way (drops needed imports) so we try to partition the linked file for LTO
+    # LLVM is not natively multithreaded and ThinLTO does not work properly
+    # So here's how we can parallelize optimization by ourselves:
+    # Split the file dependency graph into layers with nx.topological_generations
+    # Be sure to add utils.ll and os_utils.ll to the graph
+    # Optimize each *layer* in parallel with multiprocessing
+    # For each file, before optimizing, use llvm-link --only-needed to link in its (already optimized) dependencies
+    def parallel_optimization(self):
+
+        os_utils_path = WIN_UTILS_PATH if platform.system() == "Windows" else POSIX_UTILS_PATH
+        dependency_graph = copy.deepcopy(self.dependency_graph)
+        for node in list(dependency_graph.nodes()): dependency_graph.add_edge(node, UTILS_PATH)
+        dependency_graph.add_edge(UTILS_PATH, os_utils_path)
+
+        layers = list(reversed(list(nx.topological_generations(dependency_graph))))
+
+        optimized_folder = self.build_dir / "optimized"
+        bitcodes_folder = self.build_dir / "bitcodes"
+        os.makedirs(optimized_folder, exist_ok=True)
+
+        # inline everything at o3, and nothing at debug. let the machine outliner undo some of it later, if requested
+        inline_settings = "--inline-threshold=-10000" if self.debug_mode else "--inline-threshold=10000"
+        passes = f"--passes=\"{self.optimization_level}\""
+        settings = f"{self.devirt_settings} {inline_settings} {self.attributor_settings()}"
+
+        self.record_time("before_parallel_opt")
+
+        os_utils_optimized = optimized_folder / f'{os_utils_path.stem}.optimized.bc'
+        utils_optimized = optimized_folder / f'{UTILS_PATH.stem}.optimized.bc'
+
+        opt_os_utils = f"{LLVM_LINK_PATH} {os_utils_path} {LAYOUT_PATH} | {OPT_PATH} -o {os_utils_optimized} {settings} {passes}"
+        opt_utils = f"{LLVM_LINK_PATH} {UTILS_PATH} {LAYOUT_PATH} | {OPT_PATH} -o {utils_optimized} {settings} {passes}"
+        subprocess.run(opt_os_utils, shell=True)
+        subprocess.run(opt_utils, shell=True)
+
+        optimize_fn = functools.partial(optimize_file, dependency_graph, self.build_dir, passes, settings)
+
+        # don't create a new pool for every layer
+        with multiprocessing.Pool() as pool:
+            # processing in reverse-topological order (leaves first)
+            # Skip first two layers (os_utils and utils.ll)
+            for i, layer in enumerate(layers[2:]):
+                self.record_time(f"before_{i}")
+
+                # process in parallel only if there are actually multiple files in the layer
+                optimize_fn(layer[0]) if len(layer) == 1 else pool.map(optimize_fn, layer)
+
+                self.record_time(f"after_{i}")
+                layer_string = f"{(', ').join([x.stem for x in layer])}"
+                self.time_printer.print(f'Time to opt layer {i} ({layer_string}): {self.time_between(f"before_{i}", f"after_{i}")} seconds')
+
+        # Store the optimized IR in out_optimized.ll
+        optimized_bc = optimized_folder / f"{self.input.path.stem}.optimized.bc"
+        out_optimized_path = self.build_dir / "out_optimized.ll"
+        subprocess.run(f"{OPT_PATH} -S {optimized_bc} -o {out_optimized_path}")
+
+        # Add debug metadata if compiling in debug mode
+        if self.debug_mode: subprocess.run((DEBUGIR_PATH, out_optimized_path))
+
+        self.record_time("after_parallel_opt")
+        self.time_printer.print(f'Time to parallel opt: {self.time_between("before_parallel_opt", "after_parallel_opt")} seconds')
+
+    # ThinLTO doesn't work because it doesn't correctly determine up front what it needs to import into each module
+    # So what we're doing here is actually just non-parallelized whole module optimization
     def run_lto(self):
 
         #thin_paths = [str(build_dir.joinpath(f"bitcodes/{path.stem}.thin.bc")) for path in dependency_list]
@@ -364,6 +432,8 @@ class CompilationJob:
         lto_file = self.build_dir / "out_lto.bc"
         subprocess.run((OPT_PATH, lto_file, "-S", "-o", out_optimized_path))
 
+        if self.debug_mode: subprocess.run((DEBUGIR_PATH, out_optimized_path))
+
         self.record_time("after_lto")
         self.time_printer.print(f'Time to lto: {self.time_between("after_llvm_link", "after_lto")} seconds')
 
@@ -381,11 +451,13 @@ class CompilationJob:
         obj_path = obj_dir / f"{self.output_path.stem}.obj"
         out_optimized_path = self.build_dir / f"out_optimized{debug_extension}.ll"
 
+        self.record_time("before_llc")
+
         llc = (LLC_PATH, "-filetype=obj", out_optimized_path, "-O=3", target_triple, exception_model, "-o", obj_path)
         subprocess.run(llc)
 
         self.record_time("after_llc")
-        self.time_printer.print(f'Time to llc: {self.time_between("after_lto", "after_llc")} seconds')
+        self.time_printer.print(f'Time to llc: {self.time_between("before_llc", "after_llc")} seconds')
 
     def run_lld(self):
         debug_flag = "/debug" if self.debug_mode else ""
@@ -402,6 +474,48 @@ class CompilationJob:
         self.record_time("after_lld")
         self.time_printer.print(f'Time to lld link: {self.time_between("after_llc", "after_lld")} seconds')
 
+def optimize_file(dependency_graph, build_dir, passes, settings, path):
+    bc_path = build_dir /  f"bitcodes/{path.stem}.bc"
+    optimized_path = build_dir / f"optimized/{path.stem}.optimized.bc"
+    dependencies = list(nx.descendants(dependency_graph, path))
+    dependents = list(nx.ancestors(dependency_graph, path))
+    out_reg2mem_path = build_dir / "out_reg2mem.ll"
+    out_reg2mem_bc_path = build_dir / "out_reg2mem.bc"
+
+    sorted_nodes = list(nx.topological_sort(dependency_graph))
+    dependencies.sort(key = lambda dep: sorted_nodes.index(dep))
+
+    # This is the root module
+    is_root = len(dependents) == 0
+    if is_root:
+        # get textual IR
+        opt = f"{OPT_PATH} {bc_path} -S"
+        cmd_out = subprocess.run(opt, shell=True, capture_output=True, text=True)
+        if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
+
+        # Specify the correct main function
+        llvm_string = cmd_out.stdout.replace(f"_main_{clean_name(path.stem)}", "main")
+
+        # Convert back into bitcode
+        opt = f"{OPT_PATH} -o {out_reg2mem_bc_path}"
+        subprocess.run(opt, shell=True, input=llvm_string, text=True)
+
+    optimized_dependencies = [f"--override {build_dir.joinpath(f'optimized/{dep.stem}.optimized.bc')}" for dep in dependencies]
+
+    in_file = out_reg2mem_bc_path if is_root else bc_path
+    link = f"{LLVM_LINK_PATH} {in_file} {' '.join(optimized_dependencies)} --only-needed"
+    out_linked_path = build_dir / "out_linked.ll"
+    if is_root: subprocess.run(f"{link} -S -o {out_linked_path}", shell=True)
+    opt = f"{OPT_PATH} {settings} {passes} -o {optimized_path}"
+    cmd_out = subprocess.run(f"{link} | {opt}", shell=True)
+    if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
+
+def clean_lto_metadata(llvm_string):
+    llvm_string = llvm_string.replace("!llvm.module.flags = !{!0, !1, !2}","")
+    llvm_string = llvm_string.replace("!1 = !{i32 1, !\"EnableSplitLTOUnit\", i32 0}", "")
+    llvm_string = llvm_string.replace("!2 = !{i32 1, !\"UnifiedLTO\", i32 1}", "")
+    return llvm_string
+
 @dataclass
 class InputFile:
     path: Path
@@ -417,14 +531,6 @@ class InputFile:
 
     def write_hash(self):
         with open(self.hash_file, "wb") as f: f.write(hash_file(self.path))
-
-@dataclass
-class OptionalPrinter:
-    on: bool
-
-    def print(self, message):
-        if not self.on: return
-        print(message)
 
 def hash_file(filepath) -> bytes:
     with open(filepath, 'rb') as f: hash_object = hashlib.file_digest(f, 'sha256')
@@ -446,6 +552,14 @@ def replace_in_file(path, string, replacement):
         f.write(txt.replace(string, replacement))
         f.truncate()
 
+@dataclass
+class OptionalPrinter:
+    on: bool
+
+    def print(self, message):
+        if not self.on: return
+        print(message)
+
 def add_source_directories(input_path):
 
     # Immediate parent directory of the file being compiled
@@ -459,17 +573,17 @@ def add_source_directories(input_path):
             if not env_var: raise Exception(f"Package listed in PTALK_PATH {package_name} is not bound to a directory")
             package_path = Path(env_var)
             if not package_path.exists(): raise Exception(f"Package {package_name} listed in PTALK_PATH does not point to a valid directory")
-            source_directories[package_path.resolve()] = package_path.resolve()
+            package_path = package_path.resolve()
+            source_directories[package_path] = package_path
 
-    # lib folder in the current working directory
-    lib_folder_1 = Path(os.getcwd()).joinpath("lib")
-    if lib_folder_1.exists():
-        source_directories[lib_folder_1.resolve()] = lib_folder_1.resolve()
+    # lib folder in the current working directory, and lib folder adjacent to the file being compiled
+    lib1 = Path(os.getcwd()).joinpath("lib")
+    lib2 = input_path.parent.joinpath("lib")
 
-    # lib folder adjacent to the file being compiled
-    lib_folder_2 = input_path.parent.joinpath("lib")
-    if lib_folder_2.exists():
-        source_directories[lib_folder_2.resolve()] = lib_folder_2.resolve()
+    for folder in (lib1, lib2):
+        if not folder.exists(): continue
+        folder = folder.resolve()
+        source_directories[folder] = folder
 
 def run_python_lowering(module) -> str:
     lowered_module = do_lowering(module)
@@ -523,13 +637,13 @@ def run_mlir_opt(module_str) -> str:
     unregistered = "--allow-unregistered-dialect"
     generic = "--mlir-print-op-generic"
     cf_to_scf = "--lift-cf-to-scf"
-    canonicalize = "--canonicalize=region-simplify=aggressive"
+    canon = "--canonicalize=region-simplify=aggressive"
     licm = "--loop-invariant-code-motion"
     lish = "--loop-invariant-subset-hoisting"
     cfs = "--control-flow-sink"
     func_to_llvm = "--convert-func-to-llvm"
 
-    cmd = (f"{MLIR_OPT_PATH}", unregistered, generic, canonicalize, "--sroa", cf_to_scf, canonicalize, "--sccp", licm, lish, "--cse", cfs, func_to_llvm)
+    cmd = (f"{MLIR_OPT_PATH}", unregistered, generic, canon, "--sroa", cf_to_scf, canon, "--sccp", licm, lish, "--cse", cfs, func_to_llvm)
     cmd_out = subprocess.run(cmd, capture_output=True, text=True, input=module_str)
     if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
     #with open("liveness_log.txt", "w") as outfile: outfile.write(cmd_out.stderr)

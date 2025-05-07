@@ -32,43 +32,48 @@ declare void @anoint_trampoline(ptr %tramp) mustprogress nofree nosync nounwind 
 ; Thread-local storage for our bump allocator state
 @current_ptr = internal thread_local global ptr null
 
-define ptr @typegetter_wrapper(ptr %f, ptr nocapture nofree noundef nonnull readonly %0) speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none) {
+define ptr @typegetter_wrapper(ptr %f, ptr nocapture nofree noundef nonnull readonly %0) alwaysinline speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none) {
   %result = call ptr %f(ptr nocapture nofree noundef nonnull readonly %0) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none)
   ret ptr %result
 }
 
-define { i64, i64 } @size_wrapper(ptr %f, ptr nocapture nofree readonly %0) speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none) {
+define { i64, i64 } @size_wrapper(ptr %f, ptr nocapture nofree readonly %0) alwaysinline speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none) {
   %result = call { i64, i64 } %f(ptr nocapture nofree readonly %0) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none)
   ret { i64, i64 } %result
 }
 
-define { ptr, i160 } @box_wrapper(ptr %f, ptr nocapture nofree readonly %0, ptr nocapture nofree readonly %1) speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none) {
+define { ptr, i160 } @box_wrapper(ptr %f, ptr nocapture nofree readonly %0, ptr nocapture nofree readonly %1) alwaysinline speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none) {
   %result = call { ptr, i160 } %f(ptr nocapture nofree readonly %0, ptr nocapture nofree readonly %1) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none)
   ret { ptr, i160 } %result
 }
 
-define void @unbox_wrapper(ptr %f, { ptr, i160 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none) {
+define void @unbox_wrapper(ptr %f, { ptr, i160 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) alwaysinline speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none) {
   call void %f({ ptr, i160 } %0, ptr nocapture nofree readonly %1, ptr nocapture nofree writeonly %2) mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
   ret void
 }
 
-define ptr @behavior_wrapper(ptr %f, { ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull %1) speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: read, inaccessiblemem: none) {
+define ptr @behavior_wrapper(ptr %f, { ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull %1) alwaysinline speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: read, inaccessiblemem: none) {
   %result = call ptr %f({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull %1) mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: read, inaccessiblemem: none)
   ret ptr %result
 }
   
-define ptr @class_behavior_wrapper(ptr %f, ptr nocapture nofree noundef nonnull %1) speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: read, inaccessiblemem: none) {
+define ptr @class_behavior_wrapper(ptr %f, ptr nocapture nofree noundef nonnull %1) alwaysinline speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: read, inaccessiblemem: none) {
   %result = call ptr %f(ptr nocapture nofree noundef nonnull %1) mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: read, inaccessiblemem: none)
   ret ptr %result
 }
 
-define ptr @adjust_trampoline(ptr %tramp) {
+define ptr @adjust_trampoline(ptr %tramp) alwaysinline {
   %ret = call ptr @llvm.adjust.trampoline(ptr %tramp) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: read)
   ret ptr %ret
 }
 
-define noalias ptr @bump_malloc(i64 noundef %size) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
-  %result = tail call noalias ptr @bump_malloc_inner(i64 noundef %size, ptr @current_ptr) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
+define noalias ptr @bump_malloc(i64 noundef %size) alwaysinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
+  %result = call noalias ptr @bump_malloc_wrapper(i64 noundef %size) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
+  ret ptr %result
+}
+
+define noalias ptr @bump_malloc_wrapper(i64 noundef %size) noinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
+  %result = call noalias ptr @bump_malloc_inner(i64 noundef %size, ptr @current_ptr) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
   ret ptr %result
 }
 
@@ -109,10 +114,10 @@ define { i64, i64 } @_data_size_tuple_typ(ptr %0) {
   %7 = load ptr, ptr %6, align 8
   %8 = getelementptr i8, ptr %7, i64 72
   %9 = load ptr, ptr %8, align 8
-  %10 = tail call { i64, i64 } %9(ptr nonnull %6)
+  %10 = call { i64, i64 } %9(ptr nonnull %6)
   %11 = extractvalue { i64, i64 } %10, 0
   %12 = extractvalue { i64, i64 } %10, 1
-  %13 = tail call i64 @llvm.umax.i64(i64 %12, i64 %.reg2mem20.010)
+  %13 = call i64 @llvm.umax.i64(i64 %12, i64 %.reg2mem20.010)
   %14 = urem i64 %.reg2mem22.011, %12
   %15 = icmp eq i64 %14, 0
   %16 = sub i64 %12, %14
@@ -153,16 +158,16 @@ define { i64, i64 } @_data_size_union_typ(ptr %0) {
   %7 = load ptr, ptr %6, align 8
   %8 = getelementptr i8, ptr %7, i64 72
   %9 = load ptr, ptr %8, align 8
-  %10 = tail call { i64, i64 } %9(ptr nonnull %6)
+  %10 = call { i64, i64 } %9(ptr nonnull %6)
   %11 = extractvalue { i64, i64 } %10, 0
   %12 = extractvalue { i64, i64 } %10, 1
-  %13 = tail call i64 @llvm.umax.i64(i64 noundef %12, i64 noundef %.reg2mem20.010)
+  %13 = call i64 @llvm.umax.i64(i64 noundef %12, i64 noundef %.reg2mem20.010)
   %14 = urem i64 %.reg2mem22.011, %12
   %15 = icmp eq i64 %14, 0
   %16 = sub i64 %12, %14
   %17 = select i1 %15, i64 0, i64 %16
-  %18 = tail call i64 @llvm.umax.i64(i64 noundef %11, i64 noundef %.reg2mem22.011)
-  %19 = tail call i64 @llvm.umax.i64(i64 noundef %18, i64 noundef %17)
+  %18 = call i64 @llvm.umax.i64(i64 noundef %11, i64 noundef %.reg2mem22.011)
+  %19 = call i64 @llvm.umax.i64(i64 noundef %18, i64 noundef %17)
   %20 = add i64 %5, 1
   %21 = getelementptr ptr, ptr %0, i64 %20
   %22 = load i64, ptr %21, align 4
@@ -335,7 +340,7 @@ define i1 @subtype_test(i64 %tbl_size, i64 %hash_coef, i64 %cand_id, i64 %candid
   ret i1 %eq
 }
 
-define i1 @subtype_test_wrapper(ptr %f, i64 %tbl_size, i64 %hash_coef, i64 %cand_id, i64 %candidate, ptr %supertype_tbl) mustprogress nofree norecurse nosync nounwind speculatable willreturn memory(argmem: read) {
+define i1 @subtype_test_wrapper(ptr %f, i64 %tbl_size, i64 %hash_coef, i64 %cand_id, i64 %candidate, ptr %supertype_tbl) alwaysinline mustprogress nofree norecurse nosync nounwind speculatable willreturn memory(argmem: read) {
   %result = call i1 %f(i64 %tbl_size, i64 %hash_coef, i64 %cand_id, i64 %candidate, ptr %supertype_tbl) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
   ret i1 %result
 }
