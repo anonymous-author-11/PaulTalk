@@ -1,0 +1,11 @@
+xdsl/
+papers/
+backup/
+standalone/
+debugir-master/
+build/
+Design Docs/
+temp_build/
+ptalk.dist/
+executables/
+region.rs

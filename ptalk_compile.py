@@ -188,7 +188,7 @@ class CompilationJob:
         # Using multiprocessing invariably leeds to a recursion limit exceeded while pickling the IR
         # Using non-parallel concurrency (threading) is not measurably any faster than serial processing
         # If we want more lowering in parallel, we have to migrate more lowering patterns from python to PDL
-        module_str = run_python_lowering(combined_module)
+        module_str = self.run_python_lowering(combined_module)
         self.record_time("after_firstpass")
         self.time_printer.print(f'Time to do python lowering: {self.time_between("before_firstpass", "after_firstpass")} seconds')
 
@@ -201,6 +201,13 @@ class CompilationJob:
         self.record_time("after_translate")
         self.time_printer.print(f'Time to do mlir-opt: {self.time_between("after_pdl", "after_translate")} seconds')
 
+        return module_str
+
+    def run_python_lowering(self, module) -> str:
+        lowered_module = do_lowering(module)
+        stringio = StringIO()
+        Printer(stringio).print(lowered_module)
+        module_str = stringio.getvalue().encode().decode('unicode_escape')
         return module_str
 
     def lower_to_llvm(self, module_str):
@@ -494,7 +501,7 @@ class OptimizationSettings:
         simplify_loads = "--attributor-simplify-all-loads"
 
         # Might add these ones in the future, not sure if they're good
-        callsite_deduction = "--attributor-enable-call-site-specific-deduction"
+        callsite_deduction = "--attributor-enable-call-site-specific-deduction=true"
         max_iter = "--attributor-max-iterations=100000"
         max_specializations = "--attributor-max-specializations-per-call-base=100000"
         
@@ -617,13 +624,6 @@ def add_source_directories(input_path):
         if not folder.exists(): continue
         folder = folder.resolve()
         source_directories[folder] = folder
-
-def run_python_lowering(module) -> str:
-    lowered_module = do_lowering(module)
-    stringio = StringIO()
-    Printer(stringio).print(lowered_module)
-    module_str = stringio.getvalue().encode().decode('unicode_escape')
-    return module_str
 
 def run_pdl_lowering(module_str, build_dir) -> str:
     with open(PDL_PATTERNS_PATH, "r") as patterns_file: patterns = patterns_file.read()

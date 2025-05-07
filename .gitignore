@@ -1,2 +1,4 @@
 .aider*
 .env
+!.aiderignore
+!.aider.conf.yml
