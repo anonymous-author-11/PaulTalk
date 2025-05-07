@@ -1329,10 +1329,7 @@ class ObjectCreation(Expression):
         scope.validate_type(self.info, simplified_type)
 
         is_exception = scope.subtype(simplified_type, FatPtr.basic("Exception"))
-        if is_exception and len(self.arguments) > 0 and not isinstance(self.arguments[0].params[0], StringLiteral):
-            raise Exception(f"{self.info}: An exception message should only be a string *literal*, not a {simplified_type}.")
-
-        if is_exception and len(self.arguments) > 0:
+        if is_exception and len(self.arguments) > 0 and isinstance(self.arguments[0], StringLiteral):
             self.arguments[0] = autoclosure_string_literal(self.info, self.arguments[0], "exception_message")
         
         input_types = [arg.exprtype(scope) for arg in self.arguments]
