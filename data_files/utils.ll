@@ -30,7 +30,7 @@ declare noalias ptr @virtual_reserve(i64) mustprogress nofree nounwind willretur
 declare void @anoint_trampoline(ptr %tramp) mustprogress nofree nosync nounwind willreturn memory(argmem: readwrite)
 
 ; Thread-local storage for our bump allocator state
-@current_ptr = internal thread_local global ptr null
+@current_ptr = thread_local global ptr null
 
 define ptr @typegetter_wrapper(ptr %f, ptr nocapture nofree noundef nonnull readonly %0) alwaysinline speculatable mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none) {
   %result = call ptr %f(ptr nocapture nofree noundef nonnull readonly %0) mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read, inaccessiblemem: none)

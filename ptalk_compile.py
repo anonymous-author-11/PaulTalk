@@ -39,10 +39,12 @@ LLC_PATH = DIST_FOLDER / "executables/llc.exe"
 LLD_PATH = DIST_FOLDER / "executables/lld.exe"
 
 PDL_PATTERNS_PATH = DIST_FOLDER / "data_files/patterns.mlir"
+LAYOUT_PATH = DIST_FOLDER / "data_files/datalayout.ll"
 UTILS_PATH = DIST_FOLDER / "data_files/utils.ll"
 WIN_UTILS_PATH = DIST_FOLDER / "data_files/win_utils.ll"
-LAYOUT_PATH = DIST_FOLDER / "data_files/datalayout.ll"
 POSIX_UTILS_PATH = DIST_FOLDER / "data_files/posix_utils.ll"
+
+OS_UTILS_PATH = WIN_UTILS_PATH if platform.system() == "Windows" else POSIX_UTILS_PATH
 
 def compiler_driver_main(input_path, output_path=None, build_dir=Path("."), debug_mode=False, no_timings=False, show_dependencies=False):
     CompilationJob(input_path, output_path, build_dir, debug_mode, no_timings, show_dependencies).run()
@@ -51,13 +53,11 @@ class CompilationJob:
     input: "InputFile"
     output_path: Path
     build_dir: Path
-    dependency_graph: nx.DiGraph
-    _dependency_list: list
-    debug_mode: bool
-    show_dependencies: bool
-    timings: dict
+    dependencies: "Dependencies"
+    settings: "OptimizationSettings"
     time_printer: "OptionalPrinter"
     status_printer: "OptionalPrinter"
+    timings: dict
     
     def __init__(self, input_path, output_path=None, build_dir=Path("."), debug_mode=False, no_timings=False, show_dependencies=False):
         self.timings = {"start_time":start_time}
@@ -75,9 +75,8 @@ class CompilationJob:
         self.input = InputFile(input_path.resolve(), self.build_dir)
         self.time_printer = OptionalPrinter(not no_timings)
         self.status_printer = OptionalPrinter(not silent[0])
-        self.show_dependencies = show_dependencies
-        self.debug_mode = debug_mode
-        self._dependency_list = None
+        self.settings = OptimizationSettings(debug_mode)
+        self.dependencies = Dependencies(self.input, show_dependencies)
 
         self.output_path = None
         if not output_path: return
@@ -91,7 +90,7 @@ class CompilationJob:
         add_source_directories(self.input.path)
         ast = self.run_parse()
         module = self.run_codegen(ast)
-        to_recompile = self.recompile_set()
+        to_recompile = self.dependencies.recompile_set()
         self.lower_all(to_recompile, module)
 
         # not creating an output file
@@ -115,65 +114,6 @@ class CompilationJob:
     def time_between(self, a, b):
         return self.timings[b] - self.timings[a]
 
-    @property
-    def dependency_list(self):
-        if self._dependency_list: return self._dependency_list
-        dependency_list = list(reversed(list(nx.topological_sort(self.dependency_graph))))
-        self._dependency_list = [path for path in dependency_list if not path.samefile(self.input.path)]
-        return self._dependency_list
-
-    @property
-    def optimization_level(self):
-        # a pass so nice we run it twice
-        o3 = "default<O3>,default<O3>"
-        o2 = "default<O2>"
-        o1 = "default<O1>"
-        opt_level = o1 if self.debug_mode else o3
-        return opt_level
-
-    @property
-    def devirt_settings(self):
-        # this is the real optimization sauce for our language
-        # does another round of cg-scc optimizations whenever an indirect callee is identified
-        # the default in LLVM is like 4 iterations
-        return "--max-devirt-iterations=100 --abort-on-max-devirt-iterations-reached"
-
-    def attributor_settings(self, mode="module"):
-        # We --disable-tail-calls for the following reason:
-        # It is considered UB for a tail call to read or write to an alloca
-        # Heap-to-stack will convert malloc to alloca, retroactively creating UB if used in a tail call
-        no_tail = "--disable-tail-calls"
-        heap_to_stack = "--max-heap-to-stack-size=1024"
-
-        open_world = "--attributor-assume-closed-world=false"
-        use_internal_attributes = "--attributor-manifest-internal"
-        annotate_callsites = "--attributor-annotate-decl-cs"
-        simplify_loads = "--attributor-simplify-all-loads"
-
-        # Might add these ones in the future, not sure if they're good
-        callsite_deduction = "--attributor-enable-call-site-specific-deduction"
-        max_iter = "--attributor-max-iterations=100000"
-        max_specializations = "--attributor-max-specializations-per-call-base=100000"
-        
-        # Using attributor-enable=cgscc or attributor-enable=all takes way too long, though it does generate faster code
-        return f"--attributor-enable={mode} {simplify_loads} {annotate_callsites} {heap_to_stack} {use_internal_attributes} {open_world} {no_tail}"
-
-    def recompile_set(self) -> set:
-        to_recompile = set()
-        for dependency in self.dependency_list:
-            if already_perfect(dependency, self.build_dir): continue
-            dependents = set(nx.ancestors(self.dependency_graph, dependency))
-            to_recompile.add(dependency)
-            to_recompile = to_recompile.union(dependents)
-        return to_recompile
-
-    def print_dependency_graph(self):
-        print("Dependency graph:")
-        stringio = StringIO()
-        nx.write_network_text(self.dependency_graph, sources=[self.input.path], path=stringio)
-        text_repr = stringio.getvalue().replace("╾","<─").replace("╼",">")
-        print(text_repr)
-
     def run_parse(self):
         ast = parse(self.input.path)
         self.record_time("after_parse")
@@ -190,15 +130,15 @@ class CompilationJob:
         Printer(stringio).print(module)
         module_str = stringio.getvalue().encode().decode('unicode_escape')
         with open(self.build_dir.joinpath("in.mlir"), "w") as outfile: outfile.write(module_str)
-        self.dependency_graph = copy.deepcopy(included_files)
-        if self.show_dependencies: self.print_dependency_graph()
+        self.dependencies.graph  = copy.deepcopy(included_files)
+        self.dependencies.print()
         reset_ast_globals()
         self.record_time("after_codegen")
         return module
 
     def lower_all(self, to_recompile, own_module):
 
-        sorted_dependencies = [dependency for dependency in self.dependency_list if dependency in to_recompile]
+        sorted_dependencies = [dependency for dependency in self.dependencies.list if dependency in to_recompile]
 
         if len(sorted_dependencies) > 0:
             dependencies_string = ', '.join([x.stem for  x in sorted_dependencies])
@@ -300,9 +240,9 @@ class CompilationJob:
             reg2mem = f"{OPT_PATH} --passes=reg2mem"
 
             # We don't want to inline anything here because it might be compiled in debug mode later
-            # I don't mind running attributor-enable=all here because of the lack of inlining
+            # I don't mind running --attributor-enable=all here because of the lack of inlining
             passes = "--passes=\"default<O3>\""
-            opt = f"{OPT_PATH} {passes} --inline-threshold=-10000 {self.attributor_settings('all')} {self.devirt_settings} -o {job.input.bc_file}"
+            opt = f"{OPT_PATH} {passes} --inline-threshold=-10000 {self.settings.attributor('all')} {self.settings.devirt} -o {job.input.bc_file}"
             
             subprocess.run(f"{reg2mem} | {opt}", text=True, shell=True, input=section)
 
@@ -321,15 +261,14 @@ class CompilationJob:
 
         self.record_time("before_llvm_link")
 
-        bc_file_paths = (self.build_dir.joinpath(f"bitcodes/{path.stem}.bc") for path in self.dependency_list)
+        bc_file_paths = (self.build_dir.joinpath(f"bitcodes/{path.stem}.bc") for path in self.dependencies.list)
         lib_file_path = self.build_dir / f"{self.input.path.stem}.lib"
         make_archive = (LLVM_AR_PATH, "cr", lib_file_path, *bc_file_paths)
         subprocess.run(make_archive)
 
         out_linked_path = self.build_dir / "out_linked.ll"
         out_thin_path = self.build_dir / "out_thin.bc"
-        os_utils_path = WIN_UTILS_PATH if platform.system() == "Windows" else POSIX_UTILS_PATH
-        link_utils = (LLVM_LINK_PATH, UTILS_PATH, os_utils_path, self.input.bc_file, "-S", "-o", out_linked_path)
+        link_utils = (LLVM_LINK_PATH, UTILS_PATH, OS_UTILS_PATH, self.input.bc_file, "-S", "-o", out_linked_path)
         subprocess.run(link_utils)
 
         # use the correct main function
@@ -348,44 +287,33 @@ class CompilationJob:
     # LLVM is not natively multithreaded and ThinLTO does not work properly
     # So here's how we can parallelize optimization by ourselves:
     # Split the file dependency graph into layers with nx.topological_generations
-    # Be sure to add utils.ll and os_utils.ll to the graph
     # Optimize each *layer* in parallel with multiprocessing
     # For each file, before optimizing, use llvm-link --only-needed to link in its (already optimized) dependencies
     def parallel_optimization(self):
-
-        os_utils_path = WIN_UTILS_PATH if platform.system() == "Windows" else POSIX_UTILS_PATH
-        dependency_graph = copy.deepcopy(self.dependency_graph)
-        for node in list(dependency_graph.nodes()): dependency_graph.add_edge(node, UTILS_PATH)
-        dependency_graph.add_edge(UTILS_PATH, os_utils_path)
-
-        layers = list(reversed(list(nx.topological_generations(dependency_graph))))
 
         optimized_folder = self.build_dir / "optimized"
         bitcodes_folder = self.build_dir / "bitcodes"
         os.makedirs(optimized_folder, exist_ok=True)
 
-        # inline everything at o3, and nothing at debug. let the machine outliner undo some of it later, if requested
-        inline_settings = "--inline-threshold=-10000" if self.debug_mode else "--inline-threshold=10000"
-        passes = f"--passes=\"{self.optimization_level}\""
-        settings = f"{self.devirt_settings} {inline_settings} {self.attributor_settings()}"
+        passes = f"--passes=\"{self.settings.opt_level}\""
+        settings = f"{self.settings.devirt} {self.settings.inlining} {self.settings.attributor()}"
 
         self.record_time("before_parallel_opt")
 
-        os_utils_optimized = optimized_folder / f'{os_utils_path.stem}.optimized.bc'
+        os_utils_optimized = optimized_folder / f'{OS_UTILS_PATH.stem}.optimized.bc'
         utils_optimized = optimized_folder / f'{UTILS_PATH.stem}.optimized.bc'
 
-        opt_os_utils = f"{LLVM_LINK_PATH} {os_utils_path} {LAYOUT_PATH} | {OPT_PATH} -o {os_utils_optimized} {settings} {passes}"
+        opt_os_utils = f"{LLVM_LINK_PATH} {OS_UTILS_PATH} {LAYOUT_PATH} | {OPT_PATH} -o {os_utils_optimized} {settings} {passes}"
         opt_utils = f"{LLVM_LINK_PATH} {UTILS_PATH} {LAYOUT_PATH} | {OPT_PATH} -o {utils_optimized} {settings} {passes}"
         subprocess.run(opt_os_utils, shell=True)
         subprocess.run(opt_utils, shell=True)
 
-        optimize_fn = functools.partial(optimize_file, dependency_graph, self.build_dir, passes, settings)
+        optimize_fn = functools.partial(optimize_file, self.dependencies, self.build_dir, passes, settings)
 
         # don't create a new pool for every layer
         with multiprocessing.Pool() as pool:
             # processing in reverse-topological order (leaves first)
-            # Skip first two layers (os_utils and utils.ll)
-            for i, layer in enumerate(layers[2:]):
+            for i, layer in enumerate(self.dependencies.layers):
                 self.record_time(f"before_{i}")
 
                 # process in parallel only if there are actually multiple files in the layer
@@ -395,13 +323,13 @@ class CompilationJob:
                 layer_string = f"{(', ').join([x.stem for x in layer])}"
                 self.time_printer.print(f'Time to opt layer {i} ({layer_string}): {self.time_between(f"before_{i}", f"after_{i}")} seconds')
 
-        # Store the optimized IR in out_optimized.ll
+        # Store the optimized IR in out_optimized.ll so we can review it
         optimized_bc = optimized_folder / f"{self.input.path.stem}.optimized.bc"
         out_optimized_path = self.build_dir / "out_optimized.ll"
         subprocess.run(f"{OPT_PATH} -S {optimized_bc} -o {out_optimized_path}")
 
         # Add debug metadata if compiling in debug mode
-        if self.debug_mode: subprocess.run((DEBUGIR_PATH, out_optimized_path))
+        if self.settings.debug_mode: subprocess.run((DEBUGIR_PATH, out_optimized_path))
 
         self.record_time("after_parallel_opt")
         self.time_printer.print(f'Time to parallel opt: {self.time_between("before_parallel_opt", "after_parallel_opt")} seconds')
@@ -418,11 +346,9 @@ class CompilationJob:
 
         subprocess.run((OPT_PATH, out_reg2mem_path, "--thinlto-bc", "--unified-lto", "--thinlto-split-lto-unit", "-o", out_thin_path))
 
-        # inline everything at o3, and nothing at debug. let the machine outliner undo some of it later, if requested
-        inline_settings = "--inline-threshold=-10000" if self.debug_mode else "--inline-threshold=10000"
-        passes = f"--lto-newpm-passes={self.optimization_level}"
+        passes = f"--lto-newpm-passes={self.settings.opt_level}"
 
-        settings = f"{self.devirt_settings} {inline_settings} {self.attributor_settings()} --enable-lto-internalization=false"
+        settings = f"{self.settings.devirt} {self.settings.inlining} {self.settings.attributor()} --enable-lto-internalization=false"
         mllvm_options = (f"--mllvm={s}" for s in settings.split(" "))
 
         # lld with -flavor gnu is equivalent to ld.lld
@@ -432,14 +358,15 @@ class CompilationJob:
         lto_file = self.build_dir / "out_lto.bc"
         subprocess.run((OPT_PATH, lto_file, "-S", "-o", out_optimized_path))
 
-        if self.debug_mode: subprocess.run((DEBUGIR_PATH, out_optimized_path))
+        if self.settings.debug_mode: subprocess.run((DEBUGIR_PATH, out_optimized_path))
 
         self.record_time("after_lto")
         self.time_printer.print(f'Time to lto: {self.time_between("after_llvm_link", "after_lto")} seconds')
 
     def run_llc(self):
+
+        # overrides the target triple specified in the IR
         target_triple = "-mtriple=x86_64-pc-windows-msvc"
-        debug_extension = ".dbg" if self.debug_mode else ""
 
         # necessary so that the machine outliner doesn't break; default would otherwise be 'exception-model=wineh'
         exception_model = "-exception-model=sjlj"
@@ -449,7 +376,7 @@ class CompilationJob:
         os.makedirs(obj_dir, exist_ok=True)
 
         obj_path = obj_dir / f"{self.output_path.stem}.obj"
-        out_optimized_path = self.build_dir / f"out_optimized{debug_extension}.ll"
+        out_optimized_path = self.build_dir / f"out_optimized{self.settings.debug_extension}.ll"
 
         self.record_time("before_llc")
 
@@ -460,7 +387,7 @@ class CompilationJob:
         self.time_printer.print(f'Time to llc: {self.time_between("before_llc", "after_llc")} seconds')
 
     def run_lld(self):
-        debug_flag = "/debug" if self.debug_mode else ""
+        
         dynamic_libc = ("msvcrt.lib", "legacy_stdio_definitions.lib")
         static_libc = "libcmt.lib"
         os.makedirs(self.output_path.parent, exist_ok=True)
@@ -468,21 +395,24 @@ class CompilationJob:
         exe_path = self.output_path.parent / f"{self.output_path.stem}.exe"
         
         # lld with -flavor link is equivalent to lld-link
-        lld_link = (LLD_PATH, "-flavor", "link", obj_path, f"/out:{exe_path}", debug_flag, *dynamic_libc)
+        lld_link = (LLD_PATH, "-flavor", "link", obj_path, f"/out:{exe_path}", self.settings.debug_flag, *dynamic_libc)
         subprocess.run(lld_link)
 
         self.record_time("after_lld")
         self.time_printer.print(f'Time to lld link: {self.time_between("after_llc", "after_lld")} seconds')
 
-def optimize_file(dependency_graph, build_dir, passes, settings, path):
+def optimize_file(all_dependencies, build_dir, passes, settings, path):
     bc_path = build_dir /  f"bitcodes/{path.stem}.bc"
     optimized_path = build_dir / f"optimized/{path.stem}.optimized.bc"
-    dependencies = list(nx.descendants(dependency_graph, path))
-    dependents = list(nx.ancestors(dependency_graph, path))
+    dependencies = list(nx.descendants(all_dependencies.graph, path))
+    dependents = list(nx.ancestors(all_dependencies.graph, path))
     out_reg2mem_path = build_dir / "out_reg2mem.ll"
     out_reg2mem_bc_path = build_dir / "out_reg2mem.bc"
+    utils_optimized = build_dir / "optimized/utils.optimized.bc"
+    os_utils_optimized = build_dir / f"optimized/{OS_UTILS_PATH.stem}.optimized.bc"
 
-    sorted_nodes = list(nx.topological_sort(dependency_graph))
+    # Topological order (leaf nodes last)
+    sorted_nodes = list(reversed(all_dependencies.list))
     dependencies.sort(key = lambda dep: sorted_nodes.index(dep))
 
     # This is the root module
@@ -500,10 +430,12 @@ def optimize_file(dependency_graph, build_dir, passes, settings, path):
         opt = f"{OPT_PATH} -o {out_reg2mem_bc_path}"
         subprocess.run(opt, shell=True, input=llvm_string, text=True)
 
+    # --override means that symbols in later-listed files override symbols in earlier files
+    # Since our files are in topological order, this means the definition overrides the declaration
     optimized_dependencies = [f"--override {build_dir.joinpath(f'optimized/{dep.stem}.optimized.bc')}" for dep in dependencies]
 
     in_file = out_reg2mem_bc_path if is_root else bc_path
-    link = f"{LLVM_LINK_PATH} {in_file} {' '.join(optimized_dependencies)} --only-needed"
+    link = f"{LLVM_LINK_PATH} {in_file} {' '.join(optimized_dependencies)} {utils_optimized} {os_utils_optimized} --only-needed"
     out_linked_path = build_dir / "out_linked.ll"
     if is_root: subprocess.run(f"{link} -S -o {out_linked_path}", shell=True)
     opt = f"{OPT_PATH} {settings} {passes} -o {optimized_path}"
@@ -515,6 +447,115 @@ def clean_lto_metadata(llvm_string):
     llvm_string = llvm_string.replace("!1 = !{i32 1, !\"EnableSplitLTOUnit\", i32 0}", "")
     llvm_string = llvm_string.replace("!2 = !{i32 1, !\"UnifiedLTO\", i32 1}", "")
     return llvm_string
+
+@dataclass
+class OptimizationSettings:
+    debug_mode: bool
+
+    @property
+    def opt_level(self):
+        # a pass so nice we run it twice
+        o3 = "default<O3>,default<O3>"
+        o2 = "default<O2>"
+        o1 = "default<O1>"
+        opt_level = o1 if self.debug_mode else o3
+        return opt_level
+
+    @property
+    def inlining(self):
+        # inline everything in release, and nothing in debug. let the machine outliner undo some of it later, if requested
+        return "--inline-threshold=-10000" if self.debug_mode else "--inline-threshold=10000"
+
+    @property
+    def devirt(self):
+        # this is the real optimization sauce for our language
+        # does another round of cg-scc optimizations whenever an indirect callee is identified
+        # the default in LLVM is like 4 iterations
+        return "--max-devirt-iterations=100 --abort-on-max-devirt-iterations-reached"
+
+    @property
+    def debug_extension(self):
+        return ".dbg" if self.debug_mode else ""
+
+    @property
+    def debug_flag(self):
+        return "/debug" if self.debug_mode else ""
+
+    def attributor(self, mode="module"):
+        # We --disable-tail-calls for the following reason:
+        # It is considered UB for a tail call to read or write to an alloca
+        # Heap-to-stack will convert malloc to alloca, retroactively creating UB if used in a tail call
+        no_tail = "--disable-tail-calls"
+        heap2stack = "--max-heap-to-stack-size=1024"
+
+        open_world = "--attributor-assume-closed-world=false"
+        use_internal_attributes = "--attributor-manifest-internal"
+        annotate_callsites = "--attributor-annotate-decl-cs"
+        simplify_loads = "--attributor-simplify-all-loads"
+
+        # Might add these ones in the future, not sure if they're good
+        callsite_deduction = "--attributor-enable-call-site-specific-deduction"
+        max_iter = "--attributor-max-iterations=100000"
+        max_specializations = "--attributor-max-specializations-per-call-base=100000"
+        
+        # Using attributor-enable=cgscc or attributor-enable=all takes way too long, though it does generate faster code
+        return f"--attributor-enable={mode} {simplify_loads} {annotate_callsites} {heap2stack} {use_internal_attributes} {open_world} {no_tail}"
+
+class Dependencies:
+    input: "InputFile"
+    graph: nx.DiGraph
+    print_graph: bool
+    _list: list
+    _layers: list
+
+    def __init__(self, input: "InputFile", print_graph: bool):
+        self.input = input
+        self.print_graph = print_graph
+        self._list = None
+        self._layers = None
+
+        # Will be added by CompilationJob.run_codegen()
+        self.graph = None
+
+    @property
+    def list(self):
+        if self._list: return self._list
+        dependency_list = list(reversed(list(nx.topological_sort(self.graph))))
+        # input file is excluded from the list
+        self._list = [path for path in dependency_list if not path.samefile(self.input.path)]
+        return self._list
+
+    @property
+    def layers(self):
+        if self._layers: return self._layers
+        # input file is included in the layers
+        self._layers = list(reversed(list(nx.topological_generations(self.graph))))
+        return self._layers
+
+    def print(self):
+        if not self.print_graph: return
+        print("Dependency graph:")
+        stringio = StringIO()
+        nx.write_network_text(self.graph, sources=[self.input.path], path=stringio)
+        text_repr = stringio.getvalue().replace("╾","<─").replace("╼",">")
+        print(text_repr)
+
+    def recompile_set(self) -> set:
+        to_recompile = set()
+        for dependency in self.list:
+            if already_perfect(dependency, self.input.build_dir): continue
+            dependents = set(nx.ancestors(self.graph, dependency))
+            to_recompile.add(dependency)
+            to_recompile = to_recompile.union(dependents)
+        return to_recompile
+
+@dataclass
+class OptionalPrinter:
+    on: bool
+
+    def print(self, message):
+        if not self.on: return
+        print(message)
 
 @dataclass
 class InputFile:
@@ -551,14 +592,6 @@ def replace_in_file(path, string, replacement):
         f.seek(0)
         f.write(txt.replace(string, replacement))
         f.truncate()
-
-@dataclass
-class OptionalPrinter:
-    on: bool
-
-    def print(self, message):
-        if not self.on: return
-        print(message)
 
 def add_source_directories(input_path):
 
@@ -657,12 +690,13 @@ def run_mlir_opt(module_str) -> str:
 
 def record_all_passes(build_dir):
     #clang = "clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
-    passes = "--passes=default<O1>"
     #opt = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
+    
     out_reg2mem_path = build_dir / "out_reg2mem.ll"
+    passes = "--passes=default<O1>"
     opt = (OPT_PATH, passes, attributor_settings(), devirtualization_settings(), "--inline-threshold=10000", "--print-changed")
 
-    # clang can't handle the 'preserve_nonecc' attribute for some reason
+    # clang can't handle the 'preserve_nonecc' calling convention for some reason
     replace_in_file(out_reg2mem_path, "preserve_nonecc", "")
 
     opt_out = subprocess.run(opt, capture_output=True)

@@ -1270,9 +1270,10 @@ class ObjectCreation(Expression):
     region: str
 
     def codegen(self, scope):
+
+        self_type = self.exprtype(scope)
         input_types = [arg.exprtype(scope) for arg in self.arguments]
         inputs = [arg.codegen(scope) for arg in self.arguments]
-        self_type = self.exprtype(scope)
         
         for (i, arg) in enumerate(inputs):
             unwrap = UnwrapOp(operands=[arg], result_types=[input_types[i].base_typ()])
@@ -1289,10 +1290,15 @@ class ObjectCreation(Expression):
 
         anon_id = Identifier(self.info, self.anon_name)
         MethodCall(NodeInfo(None, self.info.filepath, self.info.line_number), anon_id, "init", self.arguments).codegen(scope)
-        if scope.subtype(self_type, FatPtr.basic("Exception")):
-            file_name = StringLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), str(self.info.filepath).replace("\\", "\\\\"))
-            line_number = IntegerLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), self.info.line_number, 32)
-            MethodCall(NodeInfo(None, self.info.filepath, self.info.line_number), anon_id, "set_info", [line_number, file_name]).codegen(scope)
+
+        is_exception = scope.subtype(self_type, FatPtr.basic("Exception"))
+        if is_exception:
+            node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for i in range(3)]
+            file_name = StringLiteral(node_infos[0], str(self.info.filepath).replace("\\", "\\\\"))
+            file_name_fn = autoclosure_string_literal(self.info, file_name, "exception_file")
+            line_number = IntegerLiteral(node_infos[1], self.info.line_number, 32)
+            MethodCall(node_infos[2], anon_id, "set_info", [line_number, file_name_fn]).codegen(scope)
+
         return new_op.results[0]
 
     def parameterizations(self, created_cls, self_type, scope):
@@ -1321,6 +1327,13 @@ class ObjectCreation(Expression):
             raise Exception(f"{self.info}: class {simplified_type.cls.data} not declared!")
         cls = scope.classes[simplified_type.cls.data]
         scope.validate_type(self.info, simplified_type)
+
+        is_exception = scope.subtype(simplified_type, FatPtr.basic("Exception"))
+        if is_exception and len(self.arguments) > 0 and not isinstance(self.arguments[0].params[0], StringLiteral):
+            raise Exception(f"{self.info}: An exception message should only be a string *literal*, not a {simplified_type}.")
+
+        if is_exception and len(self.arguments) > 0:
+            self.arguments[0] = autoclosure_string_literal(self.info, self.arguments[0], "exception_message")
         
         input_types = [arg.exprtype(scope) for arg in self.arguments]
         behaviors = [behavior for behavior in cls.behaviors if behavior.applicable(simplified_type, scope, "init", input_types)]
@@ -1339,6 +1352,11 @@ class ObjectCreation(Expression):
         scope.allocations[self.info.id] = self
         scope.points_to_facts.add((self.info.id, "==", self.anon_name))
         return simplified_type
+
+def autoclosure_string_literal(node_info: NodeInfo, string_literal: StringLiteral, fn_name: str) -> FunctionLiteral:
+    node_infos = [NodeInfo(None, node_info.filepath, node_info.line_number) for i in range(3)]
+    block = BlockNode(node_infos[0], [ExpressionStatement(node_infos[1], string_literal)])
+    return FunctionLiteral(node_infos[2], f"{fn_name}_{random_letters(10)}", tuple(), 0, block, FatPtr.basic("String"), Nothing())
 
 @dataclass
 class Constraint(Node):

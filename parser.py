@@ -425,13 +425,13 @@ class CSTTransformer(Transformer):
     def method_call(self, receiver, meth_name, *args):
         node_info = NodeInfo(None, self.file_path, meth_name.line)
         if isinstance(receiver, Identifier) and receiver.name[0].isupper():
-            if receiver.name == "Coroutine":
+            if receiver.name == "Coroutine" and meth_name == "new":
                 return CoCreate(node_info, "coroutine_" + random_letters(10), args)
             if meth_name == "new":
                 return ObjectCreation(node_info, random_letters(10), FatPtr.basic(receiver.name), args, None)
             return ClassMethodCall(node_info, FatPtr.basic(receiver.name), meth_name.value, args)
         if isinstance(receiver, ParametrizedAttribute):
-            if isinstance(receiver, Buffer):
+            if isinstance(receiver, Buffer) and meth_name == "new":
                 node_info = NodeInfo(None, self.file_path, args[0].info.line_number)
                 return CreateBuffer(node_info, receiver, args[0], None)
             if meth_name == "new":

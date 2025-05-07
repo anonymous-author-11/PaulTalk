@@ -158,25 +158,26 @@ class StringIterator extends Iterator[Character] {
 
 class Exception {
 	@line_number : i32
-	@file_name : String
-	@message : String
+	@file_name_fn : () -> String
+	@message_fn : () -> String
 
-	def init(@message : String) {
+    // by passing a closure we can avoid constructing the string until actually needed
+	def init(@message_fn : () -> String) {
         @line_number = 0;
-        @file_name = "";
+        @file_name_fn = () => {"";};
     }
 	def init() {
         @line_number = 0;
-		@message = "<None>";
-        @file_name = "";
+		@message_fn = () => {"<None>";};
+        @file_name_fn = () => {"";};
 	}
 
-    def set_info(@line_number : i32, @file_name : String) {}
+    def set_info(@line_number : i32, @file_name_fn : () -> String) {}
 
 	def report() {
 		print("---------".c_string());
 		print("Exception thrown from file".c_string());
-		print(@file_name.c_string());
+		print(@file_name_fn.call().c_string());
 		print("At line".c_string());
 		print(@line_number);
 		print("With message".c_string());
@@ -184,7 +185,7 @@ class Exception {
 		print("---------".c_string());
 	}
     def print_message() {
-        print(@message.c_string());
+        print(@message_fn.call().c_string());
     }
 }
 

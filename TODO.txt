@@ -415,7 +415,7 @@ DONE:
 
 TODO:
 
-- Release 0.1.0
+- Releases 0.1.*
 	- Works on any Windows x86_64 machine (other people's computers)
 	- You can download ptalk.exe and run it out-of-the-box [check!]
 	- Available commands should be 'ptalk compile [args]' and 'ptalk build' [check!]
@@ -433,7 +433,21 @@ TODO:
 		- If so, we need an xml feed with implementations for versions [check!]
 	- You can import PaulTalk libraries from Github using the manifest.yaml [check!]
 
-- Release 0.2.0
+- Releases 0.2.*
+	- Add more functionality to the ptalk command [check!]
+		- Like 'help', 'version', 'update' [check!]
+		- Better error messages. [check!]
+	- Use argparse [check!]
+	- Fix coroutine trampoline [check!]
+
+- Releases 0.3.*
+	- Package sublime syntax file [check!]
+	- Refactor compiler driver [check!]
+	- Do all MLIR lowering in parallel [check!]
+	- Fix bump_malloc [check!]
+	- Lazily constructed exception messages [check!]
+
+- Releases 0.4.*
 	- Does just adding dependencies to the path work?
 		- The source_dirs collection should be ordered, not a set [check!]
 		- Add the dependency folder to an env variable named for the package
@@ -499,7 +513,8 @@ TODO:
 		- Behavior ABI wrt overloads
 			- Need to create an artificial override of methods in behavior with mismatched interface
 		- Already planned ahead for delegate passing
-		- Are strings Unicode or bytes?
+		- Are strings Unicode or bytes? (very important for 1.0.0!)
+			- Should be Unicode (UTF-8)
 	- A less meager stdlib
 		- Set, LinkedList
 		- JSON?
