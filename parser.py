@@ -5,7 +5,7 @@ from core_dialect import *
 from lark import Transformer
 from lark.exceptions import UnexpectedToken
 from xdsl.ir import Block, Region
-from xdsl.dialects.builtin import IntegerType, IntegerAttr, StringAttr, NoneAttr Signedness
+from xdsl.dialects.builtin import IntegerType, IntegerAttr, StringAttr, NoneAttr, Signedness
 from utils import *
 import copy
 import time
@@ -246,13 +246,13 @@ class CSTTransformer(Transformer):
     def basic_type(self, type_name):
         type_map = {
             "Bool":Integer(1),
-            "u8":Integer(8, Signedness.UNSIGNED)
+            "u8":Integer(8, Signedness.UNSIGNED),
             "i8":Integer(8),
-            "u32":Integer(32, Signedness.UNSIGNED)
+            "u32":Integer(32, Signedness.UNSIGNED),
             "i32":Integer(32),
-            "u64":Integer(64, Signedness.UNSIGNED)
+            "u64":Integer(64, Signedness.UNSIGNED),
             "i64":Integer(64),
-            "u128":Integer(128, Signedness.UNSIGNED)
+            "u128":Integer(128, Signedness.UNSIGNED),
             "i128":Integer(128),
             "f64":Float(),
             "Any":Any(),
@@ -323,10 +323,6 @@ class CSTTransformer(Transformer):
     def logical(self, left, op, right):
         node_info = NodeInfo(None, self.file_path, op.line)
         return Logical(node_info, left, op.value, right)
-
-    def bitwise(self, left, op, right):
-        node_info = NodeInfo(None, self.file_path, op.line)
-        return Bitwise(node_info, left, op.value, right)
 
     def type_check(self, lhs, typ):
         node_info = NodeInfo(None, self.file_path, lhs.info.line_number)

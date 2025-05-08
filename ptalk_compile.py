@@ -71,6 +71,7 @@ class CompilationJob:
         build_dir = Path(build_dir)
         os.makedirs(build_dir, exist_ok=True)
         self.build_dir = build_dir.resolve()
+        with open(build_dir / ".gitignore", "w") as f: f.write("*")
 
         self.input = InputFile(input_path.resolve(), self.build_dir)
         self.time_printer = OptionalPrinter(not no_timings)

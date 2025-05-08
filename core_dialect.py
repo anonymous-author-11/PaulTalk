@@ -110,10 +110,12 @@ class Integer(ParametrizedAttribute, FixedBitwidthType):
         return StringAttr(f"{letter}{self.bitwidth}_typ")
 
     def __repr__(self):
-        return f"{self.base_typ()}"
+        letter = "u" if self.signedness == Signedness.UNSIGNED else "i"
+        return f"{letter}{self.bitwidth}"
 
     def __format__(self, format_spec):
-        return f"{self.base_typ()}"
+        letter = "u" if self.signedness == Signedness.UNSIGNED else "i"
+        return f"{letter}{self.bitwidth}"
 
 @irdl_attr_definition
 class Float(ParametrizedAttribute, FixedBitwidthType, _FloatType):
@@ -130,10 +132,10 @@ class Float(ParametrizedAttribute, FixedBitwidthType, _FloatType):
         return StringAttr("f64_typ")
 
     def __repr__(self):
-        return f"{self.base_typ()}"
+        return f"f64"
 
     def __format__(self, format_spec):
-        return f"{self.base_typ()}"
+        return f"f64"
 
 @irdl_attr_definition
 class FatPtr(ParametrizedAttribute, TypeAttribute):

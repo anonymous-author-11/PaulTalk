@@ -14,7 +14,7 @@ from constraint_graph import *
 from xdsl.dialects import llvm, arith, builtin, memref, cf, func
 from xdsl.ir import Block, Region, TypeAttribute
 from xdsl.dialects.builtin import (
-    ModuleOp, IntegerType, IntegerAttr, StringAttr, VectorType,
+    ModuleOp, IntegerType, IntegerAttr, StringAttr, VectorType, Signedness,
     SymbolRefAttr, SymbolNameAttr, DenseArrayBase, FunctionType, DenseIntOrFPElementsAttr, FloatAttr
 )
 from itertools import product, chain, combinations
@@ -118,10 +118,10 @@ class NodeInfo:
         return self._id
 
     def __repr__(self):
-        return f"File {self.filepath}, line {self.line_number}"
+        return f"File {self.filepath.name}, line {self.line_number}"
 
     def __format__(self, format_spec):
-        return f"File {self.filepath}, line {self.line_number}"
+        return f"File {self.filepath.name}, line {self.line_number}"
 
 @dataclass
 class Node:
@@ -232,20 +232,27 @@ class BinaryOp(Expression):
     def concrete_exprtype(self, left_type, right_type):
         raise Exception("abstract")
 
-    def ensure_compatible_types(self, left_type, right_type):
-        if left_type != right_type:
-            raise Exception(f"{self.info}: tried to use {self.operator} on different types: {left_type} and {right_type}")
-        needs_integers = self.operator in ["MOD", "LSHIFT", "RSHIFT", "bit_and", "bit_or", "bit_xor"]
-        uses_integers = isinstance(left_type, Integer)
-        if needs_integers and not uses_integers:
-            raise Exception(f"{self.info}: {self.operator} only works on integers, not {left_type} and {right_type}")
+    def ensure_numbers(self, left_type, right_type):
+        left_number = isinstance(left_type, Integer) or isinstance(left_type, Float)
+        right_number = isinstance(right_type, Integer) or isinstance(right_type, Float)
+        if not left_number and right_number:
+            raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
 
     def exprtype(self, scope):
         left_type = self.left.exprtype(scope)
         if isinstance(left_type, FatPtr) or isinstance(left_type, TypeParameter):
             return OverloadedBinaryOp(self.info, self.left, self.operator, self.right).exprtype(scope)
         right_type = self.right.exprtype(scope)
-        self.ensure_compatible_types(left_type, right_type)
+        self.ensure_numbers(left_type, right_type)
+
+        if isinstance(self.right, IntegerLiteral) and isinstance(left_type, Integer):
+            self.right.width = left_type.bitwidth
+            right_type = self.right.exprtype(scope)
+
+        if isinstance(self.left, IntegerLiteral) and isinstance(right_type, Integer):
+            self.left.width = right_type.bitwidth
+            left_type = self.left.exprtype(scope)
+
         return self.concrete_exprtype(left_type, right_type)
 
     def typeflow(self, scope):
@@ -255,11 +262,31 @@ class BinaryOp(Expression):
 
 @dataclass
 class Arithmetic(BinaryOp):
+
     def concrete_op(self, operands, attributes, result_types):
         return ArithmeticOp.create(operands=operands, attributes=attributes, result_types=result_types)
+
     def concrete_exprtype(self, left_type, right_type):
         if not (isinstance(left_type, Integer) or isinstance(left_type, Float)):
             raise Exception(f"{self.info} Operator {self.operator} not available for type {left_type}")
+
+        needs_same_types = self.operator in ("ADD", "SUB", "MUL", "DIV", "MOD")
+        if needs_same_types and left_type != right_type:
+            raise Exception(f"{self.info}: tried to use {self.operator} on different types: {left_type} and {right_type}")
+
+        needs_same_width = self.operator in ("bit_and", "bit_or", "bit_xor", "ADD", "SUB", "MUL", "DIV", "MOD")
+        if needs_same_width and left_type.bitwidth != right_type.bitwidth:
+            raise Exception(f"{self.info}: tried to use {self.operator} on types with different widths: {left_type} and {right_type}")
+
+        #if self.operator in ("LSHIFT","RSHIFT") and ((not isinstance(right_type, Integer)) or right_type.signedness != Signedness.UNSIGNED):
+        #    raise Exception(f"{self.info}: Operator {self.operator} expects rhs to be an unsigned integer, not {right_type}")
+
+        # This is overly restrictive-- bitwise ops can work on floats
+        needs_integers = self.operator in ("MOD", "LSHIFT", "RSHIFT", "bit_and", "bit_or", "bit_xor")
+        uses_integers = isinstance(left_type, Integer)
+        if needs_integers and not uses_integers:
+            raise Exception(f"{self.info}: {self.operator} only works on integers, not {left_type} and {right_type}")
+
         return left_type
 
 @dataclass
@@ -269,6 +296,8 @@ class Comparison(BinaryOp):
     def concrete_exprtype(self, left_type, right_type):
         if not (isinstance(left_type, Integer) or isinstance(left_type, Float)):
             raise Exception(f"{self.info} Operator {self.operator} not available for type {left_type}")
+        if left_type != right_type:
+            raise Exception(f"{self.info}: tried to use {self.operator} on different types: {left_type} and {right_type}")
         return Integer(1)
 
 @dataclass
@@ -289,24 +318,10 @@ class Logical(BinaryOp):
         scope.region.last_block.add_ops([left_unwrap, binop, wrap])
         return wrap.results[0]
 
-    def ensure_compatible_types(self, left_type, right_type):
-        if left_type != right_type:
-            raise Exception(f"{self.info}: tried to use {self.operator} on different types: {left_type} and {right_type}")
-
-    def exprtype(self, scope):
-        left_type = self.left.exprtype(scope)
-        right_type = self.right.exprtype(scope)
-        self.ensure_compatible_types(left_type, right_type)
-        if left_type != Integer(1):
-            raise Exception(f"{self.info} Operator {self.operator} not available for type {left_type}")
-        return Integer(1)
-
-@dataclass
-class Bitwise(BinaryOp):
-    def concrete_op(self, operands, attributes, result_types):
-        return ArithmeticOp.create(operands=operands, attributes=attributes, result_types=result_types)
     def concrete_exprtype(self, left_type, right_type):
-        return left_type
+        if left_type != Integer(1) or right_type != Integer(1):
+            raise Exception(f"{self.info} Logical operator {self.operator} must take two booleans, not {left_type} and {right_type}")
+        return Integer(1)
 
 @dataclass
 class OverloadedBinaryOp(BinaryOp):
@@ -354,6 +369,8 @@ class NegativeOp(Expression):
     def exprtype(self, scope):
         t = self.operand.exprtype(scope)
         self.ensure_is_number(t)
+        if isinstance(t, Integer) and t.signedness == Signedness.UNSIGNED:
+            raise Exception(f"{self.info}: Negation of unsigned integer {t} not yet implemented.")
         return t
 
     def typeflow(self, scope):
@@ -372,7 +389,11 @@ class IntegerLiteral(Expression):
         return const_op.results[0]
 
     def exprtype(self, scope):
-        return Integer(self.width)
+        typ = Integer(self.width)
+        min_val, max_val = IntegerType(self.width).value_range()
+        if self.value < min_val or self.value > max_val:
+            raise Exception(f"{self.info}: Integer literal value {self.value} cannot be represented by type {typ}")
+        return typ
 
 @dataclass
 class DoubleLiteral(Expression):
@@ -713,7 +734,7 @@ class As(Expression):
         to_typ = self.exprtype(scope)
         to_integer = isinstance(to_typ, Integer)
         if isinstance(self.operand, IntegerLiteral) and to_integer:
-            self.operand.width = to_typ.width.data
+            self.operand.width = to_typ.bitwidth
             operand = self.operand.codegen(scope)
             return operand
 
@@ -732,7 +753,7 @@ class As(Expression):
         scope.validate_type(self.info, to_typ)
         to_integer = isinstance(to_typ, Integer)
         if isinstance(self.operand, IntegerLiteral) and to_integer:
-            self.operand.width = to_typ.width.data
+            self.operand.width = to_typ.bitwidth
             return to_typ
         from_integer = isinstance(operand_type, Integer)
         if from_integer and to_integer: return to_typ
@@ -2632,7 +2653,7 @@ class VarInit(VarDecl):
         self.ensure_capitalization()
         scope.validate_type(self.info, self_type)
         if isinstance(self.initial_value, IntegerLiteral) and isinstance(self_type, Integer):
-            self.initial_value.width = self_type.width.data
+            self.initial_value.width = self_type.bitwidth
         value_type = self.initial_value.exprtype(scope)
         if not value_type or value_type == llvm.LLVMVoidType():
             raise Exception(f"{self.info}: Assignment impossible: right hand side expression does not return anything.")
