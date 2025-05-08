@@ -412,6 +412,7 @@ DONE:
 - 'ptalk upgrade' is cleaner than using the feed uri [check!]
 - ptalk --help / ptalk --version [check!]
 - Try compiling with /O2 /Ob3 via Nuitka [check!]
+- Implement heterogenous-width and integer-float binary operations [check!]
 
 TODO:
 
@@ -451,26 +452,29 @@ TODO:
 - You don't need to re-lower a file when one of its dependencies changes
 	- You only need to reoptimize it
 
+- Right now, overflow *is defined* as 2's complement
+	- This is why we have extensions / truncations in loops
+	- If we used nsw / nuw instead, that would make it undefined
+	- This would allow further loop optimizations
+	- Or, we could try to use some kind of usize type
+	- Or we could just recognize that the current approach is fine
+
 - Releases 0.4.*
-	- Put .gitignore * in build dir
+	- Put .gitignore * in build dir [check!]
 	- Unsigned integers
 		- Should probably split out Integer and Float first [check!]
 		- Any u[width] can be converted to an i[2*width] or larger [check!]
 		- Cannot convert from signed to unsigned except for literals [check!]
 		- Literals can be converted to unsigned, conditional on their value [check!]
+		- Int-Int binary ops extend the shorter one [check!]
+		- Int-Float binary ops convert the int to float [check!]
 		- In LLVM, signedness is a property of operations, not types
-		- Right now, overflow *is defined* as 2's complement
-			- This is why we have extensions / truncations in loops
-			- If we used nsw / nuw instead, that would make it undefined
-			- This would allow further loop optimizations
-			- Or, we could try to use some kind of usize type
-			- Or we could just recognize that the current approach is fine
 		- What ops care about signedness?
 			- Division (udiv vs sdiv)
 			- Modulo (urem vs srem)
 			- Shifts treat rhs as unsigned
 			- lshr for unsigned lhs, ashr for signed lhs
-
+			- sitofp, uitofp
 	- UTF-8 strings
 		- Character as codepoint (not grapheme cluster)
 		- All strings must be valid UTF-8
@@ -569,7 +573,6 @@ TODO:
 	- May actually technically be more efficient
 	- Not needing to cast self twice
 - Add multi-line strings
-- Implement heterogenous-width and integer-float binary operations
 - Split MLIR dialect into hi, mid, and lo dialects
 	- hi will use PaulTalk types
 	- types will be lowered in hi -> mid

@@ -232,26 +232,33 @@ class BinaryOp(Expression):
     def concrete_exprtype(self, left_type, right_type):
         raise Exception("abstract")
 
-    def ensure_numbers(self, left_type, right_type):
-        left_number = isinstance(left_type, Integer) or isinstance(left_type, Float)
-        right_number = isinstance(right_type, Integer) or isinstance(right_type, Float)
-        if not left_number and right_number:
-            raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
-
     def exprtype(self, scope):
         left_type = self.left.exprtype(scope)
         if isinstance(left_type, FatPtr) or isinstance(left_type, TypeParameter):
             return OverloadedBinaryOp(self.info, self.left, self.operator, self.right).exprtype(scope)
         right_type = self.right.exprtype(scope)
-        self.ensure_numbers(left_type, right_type)
 
-        if isinstance(self.right, IntegerLiteral) and isinstance(left_type, Integer):
-            self.right.width = left_type.bitwidth
-            right_type = self.right.exprtype(scope)
+        left_number = isinstance(left_type, Integer) or isinstance(left_type, Float)
+        right_number = isinstance(right_type, Integer) or isinstance(right_type, Float)
+        if not (left_number and right_number):
+            raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
 
-        if isinstance(self.left, IntegerLiteral) and isinstance(right_type, Integer):
-            self.left.width = right_type.bitwidth
+        # For int-int ops with different width, extend the smaller int to the size of the larger one
+        if isinstance(left_type, Integer) and isinstance(right_type, Integer):
+            if left_type.bitwidth < right_type.bitwidth:
+                self.left = As(NodeInfo(None, self.info.filepath, self.info.line_number), self.left, right_type)
+                left_type = self.left.exprtype(scope)
+            if left_type.bitwidth > right_type.bitwidth:
+                self.right = As(NodeInfo(None, self.info.filepath, self.info.line_number), self.right, left_type)
+                right_type = self.right.exprtype(scope)
+
+        # For int-float ops of the same width, convert the int to a float
+        if isinstance(left_type, Integer) and isinstance(right_type, Float) and left_type.bitwidth == right_type.bitwidth:
+            self.left = As(NodeInfo(None, self.info.filepath, self.info.line_number), self.left, right_type)
             left_type = self.left.exprtype(scope)
+        if isinstance(right_type, Integer) and isinstance(left_type, Float) and left_type.bitwidth == right_type.bitwidth:
+            self.right = As(NodeInfo(None, self.info.filepath, self.info.line_number), self.right, left_type)
+            right_type = self.right.exprtype(scope)
 
         return self.concrete_exprtype(left_type, right_type)
 
@@ -267,8 +274,6 @@ class Arithmetic(BinaryOp):
         return ArithmeticOp.create(operands=operands, attributes=attributes, result_types=result_types)
 
     def concrete_exprtype(self, left_type, right_type):
-        if not (isinstance(left_type, Integer) or isinstance(left_type, Float)):
-            raise Exception(f"{self.info} Operator {self.operator} not available for type {left_type}")
 
         needs_same_types = self.operator in ("ADD", "SUB", "MUL", "DIV", "MOD")
         if needs_same_types and left_type != right_type:
@@ -294,8 +299,6 @@ class Comparison(BinaryOp):
     def concrete_op(self, operands, attributes, result_types):
         return ComparisonOp.create(operands=operands, attributes=attributes, result_types=[IntegerType(1)])
     def concrete_exprtype(self, left_type, right_type):
-        if not (isinstance(left_type, Integer) or isinstance(left_type, Float)):
-            raise Exception(f"{self.info} Operator {self.operator} not available for type {left_type}")
         if left_type != right_type:
             raise Exception(f"{self.info}: tried to use {self.operator} on different types: {left_type} and {right_type}")
         return Integer(1)
@@ -769,6 +772,7 @@ class As(Expression):
             self.operand.width = to_typ.bitwidth
             self.operand.signed = to_typ.signedness.data == Signedness.SIGNED
             return self.operand.exprtype(scope)
+        if operand_type == to_typ: return operand_type
         from_integer = isinstance(operand_type, Integer)
         if from_integer and to_integer:
             from_min, from_max = operand_type.value_range()
@@ -776,6 +780,8 @@ class As(Expression):
             if from_min < to_min or from_max > to_max:
                 raise Exception(f"{self.info}: Cannot cast {operand_type} to {to_typ} as the value range of the former ({from_min}:{from_max}) is not within the value range of the latter ({to_min}:{to_max})")
             return to_typ
+        to_float = isinstance(to_typ, Float)
+        if from_integer and to_float: return to_typ
         if not scope.subtype(operand_type, to_typ):
             raise Exception(f"{self.info} Can't cast {operand_type} to {to_typ}")
         return to_typ
