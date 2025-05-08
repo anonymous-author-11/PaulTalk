@@ -347,6 +347,12 @@ class LowerCast(RewritePattern):
 
         from_integer = isinstance(from_typ, Integer)
         to_integer = isinstance(to_typ, Integer)
+
+        if from_integer and to_integer and to_typ.bitwidth == from_typ.bitwidth:
+            cast = builtin.UnrealizedConversionCastOp.create(operands=[operand], result_types=[to_typ])
+            rewriter.replace_matched_op(cast)
+            return
+
         if from_integer and to_integer and to_typ.bitwidth > from_typ.bitwidth:
             widen_op = WidenIntOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
             rewriter.replace_matched_op(widen_op)

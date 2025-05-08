@@ -89,7 +89,7 @@ class Integer(ParametrizedAttribute, FixedBitwidthType):
     width: ParameterDef[IntAttr]
     signedness: ParameterDef[SignednessAttr]
 
-    def __init__(self, data: int | IntAttr, signedness: Signedness | SignednessAttr = Signedness.SIGNLESS) -> None:
+    def __init__(self, data: int | IntAttr, signedness: Signedness | SignednessAttr = Signedness.SIGNED) -> None:
         if isinstance(data, int): data = IntAttr(data)
         if isinstance(signedness, Signedness): signedness = SignednessAttr(signedness)
         super().__init__([data, signedness])
@@ -106,15 +106,15 @@ class Integer(ParametrizedAttribute, FixedBitwidthType):
 
     def symbol(self):
         if self.bitwidth == 1: return StringAttr("bool_typ")
-        letter = "u" if self.signedness == Signedness.UNSIGNED else "i"
+        letter = "u" if self.signedness.data == Signedness.UNSIGNED else "i"
         return StringAttr(f"{letter}{self.bitwidth}_typ")
 
     def __repr__(self):
-        letter = "u" if self.signedness == Signedness.UNSIGNED else "i"
+        letter = "u" if self.signedness.data == Signedness.UNSIGNED else "i"
         return f"{letter}{self.bitwidth}"
 
     def __format__(self, format_spec):
-        letter = "u" if self.signedness == Signedness.UNSIGNED else "i"
+        letter = "u" if self.signedness.data == Signedness.UNSIGNED else "i"
         return f"{letter}{self.bitwidth}"
 
 @irdl_attr_definition

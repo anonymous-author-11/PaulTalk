@@ -278,7 +278,7 @@ class Arithmetic(BinaryOp):
         if needs_same_width and left_type.bitwidth != right_type.bitwidth:
             raise Exception(f"{self.info}: tried to use {self.operator} on types with different widths: {left_type} and {right_type}")
 
-        #if self.operator in ("LSHIFT","RSHIFT") and ((not isinstance(right_type, Integer)) or right_type.signedness != Signedness.UNSIGNED):
+        #if self.operator in ("LSHIFT","RSHIFT") and ((not isinstance(right_type, Integer)) or right_type.signedness.data != Signedness.UNSIGNED):
         #    raise Exception(f"{self.info}: Operator {self.operator} expects rhs to be an unsigned integer, not {right_type}")
 
         # This is overly restrictive-- bitwise ops can work on floats
@@ -359,7 +359,9 @@ class NegativeOp(Expression):
 
     def codegen(self, scope):
         typ = self.exprtype(scope)
-        zero = IntegerLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), 0, 32) if typ == Integer(32) else DoubleLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), 0.0)
+        zero_int = IntegerLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), 0, 32)
+        zero_double = DoubleLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), 0.0)
+        zero = zero_int if typ == Integer(32) else zero_double
         return Arithmetic(self.info, zero, "SUB", self.operand).codegen(scope)
 
     def ensure_is_number(self, t):
@@ -369,7 +371,7 @@ class NegativeOp(Expression):
     def exprtype(self, scope):
         t = self.operand.exprtype(scope)
         self.ensure_is_number(t)
-        if isinstance(t, Integer) and t.signedness == Signedness.UNSIGNED:
+        if isinstance(t, Integer) and t.signedness.data == Signedness.UNSIGNED:
             raise Exception(f"{self.info}: Negation of unsigned integer {t} not yet implemented.")
         return t
 
@@ -381,18 +383,28 @@ class NegativeOp(Expression):
 class IntegerLiteral(Expression):
     value: int
     width: int
+    signed: bool
+
+    def __init__(self, info: NodeInfo, value: int, width: int, signed=True):
+        self.info = info
+        self.value = value
+        self.width = width
+        self.signed = signed
 
     def codegen(self, scope):
-        attr_dict = {"value": IntegerAttr.from_int_and_width(self.value, self.width), "typ":IntegerType(self.width)}
-        const_op = LiteralOp.create(result_types=[Integer(self.width)], attributes=attr_dict)
+        typ = self.exprtype(scope)
+        attr_dict = {"value": IntegerAttr.from_int_and_width(self.value, self.width), "typ":typ.base_typ()}
+        const_op = LiteralOp.create(result_types=[typ], attributes=attr_dict)
         scope.region.last_block.add_op(const_op)
         return const_op.results[0]
 
     def exprtype(self, scope):
-        typ = Integer(self.width)
-        min_val, max_val = IntegerType(self.width).value_range()
+        typ = Integer(self.width, Signedness.SIGNED if self.signed else Signedness.UNSIGNED)
+        min_val, max_val = typ.value_range()
         if self.value < min_val or self.value > max_val:
-            raise Exception(f"{self.info}: Integer literal value {self.value} cannot be represented by type {typ}")
+            print(self.signed)
+            print(typ.signedness.data)
+            raise Exception(f"{self.info}: Integer literal value {self.value} cannot be represented by type {typ}, which value range {min_val}:{max_val}")
         return typ
 
 @dataclass
@@ -735,6 +747,7 @@ class As(Expression):
         to_integer = isinstance(to_typ, Integer)
         if isinstance(self.operand, IntegerLiteral) and to_integer:
             self.operand.width = to_typ.bitwidth
+            self.operand.signed = to_typ.signedness.data == Signedness.SIGNED
             operand = self.operand.codegen(scope)
             return operand
 
@@ -754,9 +767,15 @@ class As(Expression):
         to_integer = isinstance(to_typ, Integer)
         if isinstance(self.operand, IntegerLiteral) and to_integer:
             self.operand.width = to_typ.bitwidth
-            return to_typ
+            self.operand.signed = to_typ.signedness.data == Signedness.SIGNED
+            return self.operand.exprtype(scope)
         from_integer = isinstance(operand_type, Integer)
-        if from_integer and to_integer: return to_typ
+        if from_integer and to_integer:
+            from_min, from_max = operand_type.value_range()
+            to_min, to_max = to_typ.value_range()
+            if from_min < to_min or from_max > to_max:
+                raise Exception(f"{self.info}: Cannot cast {operand_type} to {to_typ} as the value range of the former ({from_min}:{from_max}) is not within the value range of the latter ({to_min}:{to_max})")
+            return to_typ
         if not scope.subtype(operand_type, to_typ):
             raise Exception(f"{self.info} Can't cast {operand_type} to {to_typ}")
         return to_typ
@@ -2654,6 +2673,7 @@ class VarInit(VarDecl):
         scope.validate_type(self.info, self_type)
         if isinstance(self.initial_value, IntegerLiteral) and isinstance(self_type, Integer):
             self.initial_value.width = self_type.bitwidth
+            self.initial_value.signed = self_type.signedness.data == Signedness.SIGNED
         value_type = self.initial_value.exprtype(scope)
         if not value_type or value_type == llvm.LLVMVoidType():
             raise Exception(f"{self.info}: Assignment impossible: right hand side expression does not return anything.")

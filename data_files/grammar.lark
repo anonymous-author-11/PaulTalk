@@ -104,20 +104,22 @@ arithmetic: term -> arithmetic_single
           | arithmetic PLUS term
           | arithmetic MINUS term
 
-term: factor -> term_single
-    | term TIMES factor -> arithmetic
-    | term DIVIDE factor -> arithmetic
-    | term MODULO factor -> arithmetic
-    | term LSHIFT factor -> arithmetic
-    | term RSHIFT factor -> arithmetic
-    | term BIT_AND factor -> arithmetic
-    | term BIT_OR factor -> arithmetic
-    | term BIT_XOR factor -> arithmetic
+term: cast -> term_single
+    | term TIMES cast -> arithmetic
+    | term DIVIDE cast -> arithmetic
+    | term MODULO cast -> arithmetic
+    | term LSHIFT cast -> arithmetic
+    | term RSHIFT cast -> arithmetic
+    | term BIT_AND cast -> arithmetic
+    | term BIT_OR cast -> arithmetic
+    | term BIT_XOR cast -> arithmetic
 
-factor: MINUS factor -> neg_op
+cast: factor -> cast_single
+    | cast AS typ -> as_op
+
+factor: primary -> factor_single
+      | MINUS factor -> neg_op
       | NOT factor -> not_op
-      | factor AS typ -> as_op
-      | primary -> factor_single
 
 primary: "(" expression ")" -> paren_expr
        | INT -> int_literal
@@ -134,6 +136,8 @@ primary: "(" expression ")" -> paren_expr
        | sizeof_call
        | yield_call
        | assignable
+
+
 
 function_literal: "(" param_list ")" ["yields" typ] ARROW block
 array_literal: LBRACKET (expression ("," expression)*)? "]"

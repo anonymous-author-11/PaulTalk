@@ -328,14 +328,17 @@ class CSTTransformer(Transformer):
         node_info = NodeInfo(None, self.file_path, lhs.info.line_number)
         return TypeCheck(node_info, lhs, typ)
 
-    def term_single(self, factor):
-        return factor
+    def term_single(self, cast):
+        return cast
 
     def factor_single(self, primary):
         return primary
 
     def logical_single(self, comparison):
         return comparison
+
+    def cast_single(self, factor):
+        return factor
 
     def neg_op(self, minus, expr):
         if isinstance(expr, IntegerLiteral):
