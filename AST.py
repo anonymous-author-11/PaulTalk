@@ -766,6 +766,8 @@ class As(Expression):
     def exprtype(self, scope):
         operand_type = self.operand.exprtype(scope)
         to_typ = scope.simplify(self.typ)
+        if not operand_type or operand_type == llvm.LLVMVoidType():
+            raise Exception(f"{self.info}: Cannot cast Nothing to {to_typ}.")
         scope.validate_type(self.info, to_typ)
         to_integer = isinstance(to_typ, Integer)
         if isinstance(self.operand, IntegerLiteral) and to_integer:
@@ -2660,36 +2662,21 @@ class VarInit(VarDecl):
     def codegen(self, scope):
         self_type = self.type(scope)
         should_reassign = self.name in scope.symbol_table and self_type == scope.type_table[self.name]
-        from_typ = self.initial_value.exprtype(scope)
-        new_val = self.initial_value.codegen(scope)
+        cast = As(self.initial_value.info, self.initial_value, self_type).codegen(scope)
         if not should_reassign:
-            cast = CastOp.make(new_val, from_typ, self_type)
-            scope.region.last_block.add_op(cast)
-            scope.symbol_table[self.name] = cast.results[0]
+            scope.symbol_table[self.name] = cast
             scope.type_table[self.name] = self_type
             return
-        cast = CastOp.make(new_val, from_typ, self_type)
-        assign = AssignOp.make(scope.symbol_table[self.name], cast.results[0], self_type)
-        scope.region.last_block.add_ops([cast, assign])
+        assign = AssignOp.make(scope.symbol_table[self.name], cast, self_type)
+        scope.region.last_block.add_op(assign)
         scope.type_table[self.name] = self_type
 
     def typeflow(self, scope):
         self_type = self.type(scope)
         self.ensure_capitalization()
         scope.validate_type(self.info, self_type)
-        if isinstance(self.initial_value, IntegerLiteral) and isinstance(self_type, Integer):
-            self.initial_value.width = self_type.bitwidth
-            self.initial_value.signed = self_type.signedness.data == Signedness.SIGNED
-        value_type = self.initial_value.exprtype(scope)
-        if not value_type or value_type == llvm.LLVMVoidType():
-            raise Exception(f"{self.info}: Assignment impossible: right hand side expression does not return anything.")
+        cast = As(self.initial_value.info, self.initial_value, self_type).exprtype(scope)
         scope.points_to_facts.add((self.name, "==", self.initial_value.info.id))
-        # obviously needs work
-        if self.initial_value and not scope.subtype(value_type, self_type):
-            if not isinstance(value_type, Integer):
-                raise Exception(f"{self.info}: rhs type {value_type} not subtype of declared type {self_type}!")
-            if isinstance(self_type, Integer) and value_type.bitwidth > self_type.bitwidth:
-                raise Exception(f"{self.info}: rhs type {value_type} not subtype of declared type {self_type}!")
         self.initial_value.typeflow(scope)
         scope.type_table[self.name] = self_type
 
