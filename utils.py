@@ -70,15 +70,15 @@ def vtable_buffer_size():
     return 10
 
 def is_builtin(typ):
-    types = { Ptr, Nil, Any, Buffer, Coroutine, Function, Tuple }
+    types = { Integer, Float, Nil, Any, Buffer, Coroutine, Function, Tuple }
     if typ in builtin_types.values(): return True
     for t in types:
         if isinstance(typ, t): return True
     return False
 
 builtin_types = {
-    "bool_typ":Ptr([IntegerType(1)]), "i8_typ":Ptr([IntegerType(8)]), "i32_typ":Ptr([IntegerType(32)]), "i64_typ":Ptr([IntegerType(64)]),
-    "i128_typ":Ptr([IntegerType(128)]), "f64_typ":Ptr([Float64Type()]), "nil_typ":Nil(), "any_typ":Any(), "nothing_typ":Nothing(),
+    "bool_typ":Integer(1), "i8_typ":Integer(8), "i32_typ":Integer(32), "i64_typ":Integer(64),
+    "i128_typ":Integer(128), "f64_typ":Float(), "nil_typ":Nil(), "any_typ":Any(), "nothing_typ":Nothing(),
     "coroutine_typ":Coroutine([ArrayAttr([]), Nothing(), Nothing()]), "function_typ":Function([ArrayAttr([]), Nothing(), Nothing()]),
     "buffer_typ":Buffer([Nothing()]), "tuple_typ":Tuple([ArrayAttr([])]), "union_typ":Union.from_list([IntegerType(8)])
 }

@@ -5,7 +5,7 @@ from core_dialect import *
 from lark import Transformer
 from lark.exceptions import UnexpectedToken
 from xdsl.ir import Block, Region
-from xdsl.dialects.builtin import IntegerType, IntegerAttr, StringAttr, NoneAttr
+from xdsl.dialects.builtin import IntegerType, IntegerAttr, StringAttr, NoneAttr Signedness
 from utils import *
 import copy
 import time
@@ -245,12 +245,16 @@ class CSTTransformer(Transformer):
 
     def basic_type(self, type_name):
         type_map = {
-            "Bool":Ptr([IntegerType(1)]),
-            "i8":Ptr([IntegerType(8)]),
-            "i32":Ptr([IntegerType(32)]),
-            "i64":Ptr([IntegerType(64)]),
-            "i128":Ptr([IntegerType(128)]),
-            "f64":Ptr([Float64Type()]),
+            "Bool":Integer(1),
+            "u8":Integer(8, Signedness.UNSIGNED)
+            "i8":Integer(8),
+            "u32":Integer(32, Signedness.UNSIGNED)
+            "i32":Integer(32),
+            "u64":Integer(64, Signedness.UNSIGNED)
+            "i64":Integer(64),
+            "u128":Integer(128, Signedness.UNSIGNED)
+            "i128":Integer(128),
+            "f64":Float(),
             "Any":Any(),
             "Nil":Nil()
         }

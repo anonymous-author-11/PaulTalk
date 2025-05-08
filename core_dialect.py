@@ -1,37 +1,16 @@
 from xdsl.context import MLContext
 from xdsl.ir import OpResult, Attribute, Dialect, TypeAttribute, Block, Region
 from xdsl.irdl import (
-    IRDLOperation,
-    irdl_op_definition,
-    irdl_attr_definition,
-    operand_def,
-    result_def,
-    attr_def,
-    Operand,
-    region_def,
-    Region,
-    VarRegion,
-    var_region_def,
-    VarOperand,
-    var_operand_def,
-    VarResultDef,
-    var_result_def,
-    opt_region_def,
-    OptRegionDef,
-    ParametrizedAttribute,
-    ParameterDef,
-    prop_def,
-    opt_prop_def,
-    OptOperandDef,
-    opt_operand_def,
-    OptAttributeDef,
-    opt_attr_def,
-    successor_def,
-    Successor,
-    OptResultDef,
-    opt_result_def
+    IRDLOperation, irdl_op_definition, irdl_attr_definition, operand_def, result_def, attr_def, Operand,
+    region_def, Region, VarRegion, var_region_def, VarOperand, var_operand_def, VarResultDef, var_result_def,
+    opt_region_def, OptRegionDef, ParametrizedAttribute, ParameterDef, prop_def, opt_prop_def, OptOperandDef,
+    opt_operand_def, OptAttributeDef, opt_attr_def, successor_def, Successor, OptResultDef, opt_result_def
 )
-from xdsl.dialects.builtin import IntegerType, IntegerAttr, NoneAttr, StringAttr, ArrayAttr, Float64Type, SymbolRefAttr, UnitAttr, AnyIntegerAttr, DenseArrayBase, FunctionType, DictionaryAttr
+from xdsl.dialects.builtin import (
+    IntegerType, IntegerAttr, IntAttr, NoneAttr, StringAttr, ArrayAttr, Float64Type, FixedBitwidthType,
+    SymbolRefAttr, UnitAttr, AnyIntegerAttr, DenseArrayBase, FunctionType, DictionaryAttr, _FloatType,
+    SignednessAttr, Signedness
+)
 from xdsl.dialects import llvm, func, builtin
 from xdsl import traits
 from xdsl.traits import SymbolOpInterface
@@ -67,8 +46,8 @@ def type_size(typ: TypeAttribute) -> int:
     if isinstance(typ, IntegerType) or isinstance(typ, Float64Type):
         result = typ.bitwidth
         return result
-    if isinstance(typ.type, IntegerType) or isinstance(typ.type, Float64Type):
-        result = typ.type.bitwidth
+    if isinstance(typ, Integer) or isinstance(typ, Float):
+        result = typ.bitwidth
         return result
     raise Exception("not a recognized type!")
 
@@ -105,27 +84,56 @@ class TypeParameter(ParametrizedAttribute, TypeAttribute):
         return result
 
 @irdl_attr_definition
-class Ptr(ParametrizedAttribute, TypeAttribute):
-    name = "mini.ptr"
-    type: ParameterDef[TypeAttribute]
+class Integer(ParametrizedAttribute, FixedBitwidthType):
+    name = "mini.int"
+    width: ParameterDef[IntAttr]
+    signedness: ParameterDef[SignednessAttr]
+
+    def __init__(self, data: int | IntAttr, signedness: Signedness | SignednessAttr = Signedness.SIGNLESS) -> None:
+        if isinstance(data, int): data = IntAttr(data)
+        if isinstance(signedness, Signedness): signedness = SignednessAttr(signedness)
+        super().__init__([data, signedness])
+
+    def value_range(self) -> tuple[int, int]:
+        return self.signedness.data.value_range(self.width.data)
+
+    @property
+    def bitwidth(self) -> int:
+        return self.width.data
 
     def base_typ(self):
-        return self.type
+        return IntegerType(self.bitwidth)
 
     def symbol(self):
-        if self.type == IntegerType(1): return StringAttr("bool_typ")
-        if self.type == IntegerType(8): return StringAttr("i8_typ")
-        if self.type == IntegerType(32): return StringAttr("i32_typ")
-        if self.type == IntegerType(64): return StringAttr("i64_typ")
-        if self.type == IntegerType(128): return StringAttr("i128_typ")
-        if self.type == Float64Type(): return StringAttr("f64_typ")
-        raise Exception(f"no symbol for {self}")
+        if self.bitwidth == 1: return StringAttr("bool_typ")
+        letter = "u" if self.signedness == Signedness.UNSIGNED else "i"
+        return StringAttr(f"{letter}{self.bitwidth}_typ")
 
     def __repr__(self):
-        return f"{self.type}"
+        return f"{self.base_typ()}"
 
     def __format__(self, format_spec):
-        return f"{self.type}"
+        return f"{self.base_typ()}"
+
+@irdl_attr_definition
+class Float(ParametrizedAttribute, FixedBitwidthType, _FloatType):
+    name = "mini.float"
+
+    @property
+    def bitwidth(self) -> int:
+        return 64
+
+    def base_typ(self):
+        return Float64Type()
+
+    def symbol(self):
+        return StringAttr("f64_typ")
+
+    def __repr__(self):
+        return f"{self.base_typ()}"
+
+    def __format__(self, format_spec):
+        return f"{self.base_typ()}"
 
 @irdl_attr_definition
 class FatPtr(ParametrizedAttribute, TypeAttribute):
@@ -405,7 +413,7 @@ class MainOp(IRDLOperation):
 @irdl_op_definition
 class IdentifierOp(IRDLOperation):
     name = "mini.identifier"
-    result: OpResult = result_def(Ptr([IntegerType(32)]))
+    result: OpResult = result_def(Integer(32))
 
 @irdl_op_definition
 class DataSizeDefOp(IRDLOperation):
@@ -505,13 +513,13 @@ class LiteralOp(IRDLOperation):
     name = "mini.literal"
     typ: Attribute = attr_def(Attribute)
     value: Attribute = attr_def(Attribute)
-    result: OpResult = result_def(Ptr)
+    result: OpResult = result_def()
 
 @irdl_op_definition
 class AllocateOp(IRDLOperation):
     name = "mini.alloc"
     typ: TypeAttribute = attr_def(TypeAttribute)
-    result: OpResult = result_def(Ptr)
+    result: OpResult = result_def()
 
     @classmethod
     def make(cls, typ):
@@ -592,7 +600,7 @@ class AddrOfOp(IRDLOperation):
 class MallocOp(IRDLOperation):
     name = "mini.malloc"
     typ: TypeAttribute = attr_def(TypeAttribute)
-    result: OpResult = result_def(Ptr)
+    result: OpResult = result_def()
 
 @irdl_op_definition
 class UtilsAPIOp(IRDLOperation):
@@ -603,14 +611,14 @@ class CoroCreateOp(IRDLOperation):
     name = "mini.coro_create"
     func: Operand = operand_def()
     args: VarOperand = var_operand_def()
-    result: OpResult = result_def(Ptr)
+    result: OpResult = result_def()
     arg_passer: SymbolRefAttr = attr_def(SymbolRefAttr)
     buffer_filler: SymbolRefAttr = attr_def(SymbolRefAttr)
 
 @irdl_op_definition
 class CoroCallOp(IRDLOperation):
     name = "mini.coro_call"
-    coro: Operand = operand_def(Ptr)
+    coro: Operand = operand_def()
     value: OptOperandDef = opt_operand_def()
     result: OptResultDef = opt_result_def()
 
@@ -740,7 +748,7 @@ class FieldAccessOp(IRDLOperation):
     fat_ptr: Operand = operand_def(FatPtr)
     offset: IntegerAttr = attr_def(IntegerAttr)
     vtable_bytes: IntegerAttr = attr_def(IntegerAttr)
-    result: OpResult = result_def(Ptr)
+    result: OpResult = result_def()
 
 @irdl_op_definition
 class GetFieldOp(IRDLOperation):
@@ -750,7 +758,7 @@ class GetFieldOp(IRDLOperation):
     vtable_bytes: IntegerAttr = attr_def(IntegerAttr)
     original_type: TypeAttribute = attr_def(TypeAttribute)
     assumed_type: OptAttributeDef = opt_attr_def(StringAttr)
-    result: OpResult = result_def(Ptr)
+    result: OpResult = result_def()
 
 @irdl_op_definition
 class GetTypeFieldOp(IRDLOperation):
@@ -758,7 +766,7 @@ class GetTypeFieldOp(IRDLOperation):
     fat_ptr: Operand = operand_def(FatPtr)
     offset: IntegerAttr = attr_def(IntegerAttr)
     vtable_bytes: IntegerAttr = attr_def(IntegerAttr)
-    result: OpResult = result_def(Ptr)
+    result: OpResult = result_def()
 
 @irdl_op_definition
 class SetFieldOp(IRDLOperation):
@@ -909,7 +917,7 @@ class NewOp(IRDLOperation):
     num_data_fields: IntegerAttr = attr_def(IntegerAttr)
     region_id: StringAttr = attr_def(StringAttr)
     has_type_fields: OptAttributeDef = opt_attr_def(UnitAttr)
-    result: OpResult = result_def(Ptr)
+    result: OpResult = result_def()
 
     @classmethod
     def make(cls, parameterizations, typ, class_name, num_data_fields, region_id, result_type):
@@ -966,31 +974,31 @@ class AnointTrampolineOp(IRDLOperation):
 @irdl_op_definition
 class TypIDOp(IRDLOperation):
     name = "mini.typid"
-    result: OpResult = result_def(Ptr)
+    result: OpResult = result_def()
     typ_name: Attribute = attr_def(StringAttr)
 
 @irdl_op_definition
 class GetFlagOp(IRDLOperation):
     name = "mini.getflag"
-    ptr: Operand = operand_def(Ptr)
+    ptr: Operand = operand_def()
     struct_typ: TypeAttribute = attr_def(TypeAttribute)
-    result: OpResult = result_def(Ptr)
+    result: OpResult = result_def()
 
 @irdl_op_definition
 class SetFlagOp(IRDLOperation):
     name = "mini.setflag"
-    ptr: Operand = operand_def(Ptr)
-    new_flag: OptOperandDef = opt_operand_def(Ptr)
+    ptr: Operand = operand_def()
+    new_flag: OptOperandDef = opt_operand_def()
     struct_typ: TypeAttribute = attr_def(TypeAttribute)
     typ_name: OptAttributeDef = opt_attr_def(StringAttr)
 
 @irdl_op_definition
 class CheckFlagOp(IRDLOperation):
     name = "mini.checkflag"
-    ptr: Operand = operand_def(Ptr)
-    parameterization: OptOperandDef = opt_operand_def(Ptr)
+    ptr: Operand = operand_def()
+    parameterization: OptOperandDef = opt_operand_def()
     typ_name: Attribute = attr_def(StringAttr)
-    result: OpResult = result_def(Ptr)
+    result: OpResult = result_def()
     neg: OptAttributeDef = opt_attr_def(UnitAttr)
 
     @classmethod
@@ -1001,7 +1009,7 @@ class CheckFlagOp(IRDLOperation):
             attr_dict["neg"] = UnitAttr()
             parameterization = None
         operands = [ptr, parameterization] if parameterization else [ptr]
-        return CheckFlagOp.create(operands=operands, attributes=attr_dict, result_types=[Ptr([IntegerType(1)])])
+        return CheckFlagOp.create(operands=operands, attributes=attr_dict, result_types=[Integer(1)])
 
 @irdl_op_definition
 class AssignOp(IRDLOperation):
@@ -1028,7 +1036,7 @@ class GlobalStrOp(IRDLOperation):
 @irdl_op_definition
 class PrintOp(IRDLOperation):
     name = "mini.print"
-    value: Operand = operand_def(Ptr([IntegerType(32)]))
+    value: Operand = operand_def()
     typ: Attribute = attr_def(Attribute)
     result: OpResult = result_def(IntegerType)
 
@@ -1046,6 +1054,10 @@ class ArithmeticOp(IRDLOperation):
     rhs : Operand = operand_def(IntegerType)
     result : OpResult = result_def(IntegerType)
     op : StringAttr = attr_def(StringAttr)
+
+    @classmethod
+    def make(cls, op, lhs, rhs):
+        return ArithmeticOp.create(operands=[lhs, rhs], attributes={"op":StringAttr(op)}, result_types=[lhs.type])
 
 @irdl_op_definition
 class ComparisonOp(IRDLOperation):
@@ -1358,7 +1370,8 @@ Hi = Dialect(
         TupleCastOp
     ],
     [
-        Ptr,
+        Integer,
+        Float,
         FatPtr,
         ReifiedType,
         Tuple,

@@ -448,6 +448,28 @@ TODO:
 	- Lazily constructed exception messages [check!]
 
 - Releases 0.4.*
+	- Put .gitignore * in build dir
+	- Unsigned integers
+		- Should probably split out Integer and Float first [check!]
+		- In LLVM, signedness is a property of operations, not types
+		- Right now, overflow *is defined* as 2's complement
+			- This is why we have extensions / truncations in loops
+			- If we used nsw / nuw instead, that would make it undefined
+			- This would allow further loop optimizations
+			- Or, we could try to use some kind of usize type
+			- Or we could just recognize that the current approach is fine
+		- What ops care about signedness?
+			- Division (udiv vs sdiv)
+			- Modulo (urem vs srem)
+			- Shifts treat rhs as unsigned
+			- lshr for unsigned lhs, ashr for signed lhs
+		- Any u[width] can be converted to an i[2*width] or larger
+		- Cannot convert from signed to unsigned except for literals
+		- Literals can be converted to unsigned, conditional on their value
+	- UTF-8 strings
+		- Character as codepoint (not grapheme cluster)
+		- All strings must be valid UTF-8
+		- No indexing operation (not constant time)
 	- Does just adding dependencies to the path work?
 		- The source_dirs collection should be ordered, not a set [check!]
 		- Add the dependency folder to an env variable named for the package

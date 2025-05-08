@@ -236,7 +236,7 @@ class BinaryOp(Expression):
         if left_type != right_type:
             raise Exception(f"{self.info}: tried to use {self.operator} on different types: {left_type} and {right_type}")
         needs_integers = self.operator in ["MOD", "LSHIFT", "RSHIFT", "bit_and", "bit_or", "bit_xor"]
-        uses_integers = isinstance(left_type, Ptr) and isinstance(left_type.type, IntegerType)
+        uses_integers = isinstance(left_type, Integer)
         if needs_integers and not uses_integers:
             raise Exception(f"{self.info}: {self.operator} only works on integers, not {left_type} and {right_type}")
 
@@ -258,7 +258,7 @@ class Arithmetic(BinaryOp):
     def concrete_op(self, operands, attributes, result_types):
         return ArithmeticOp.create(operands=operands, attributes=attributes, result_types=result_types)
     def concrete_exprtype(self, left_type, right_type):
-        if not (isinstance(left_type, Ptr) and (isinstance(left_type.type, IntegerType) or left_type.type == Float64Type())):
+        if not (isinstance(left_type, Integer) or isinstance(left_type, Float)):
             raise Exception(f"{self.info} Operator {self.operator} not available for type {left_type}")
         return left_type
 
@@ -267,9 +267,9 @@ class Comparison(BinaryOp):
     def concrete_op(self, operands, attributes, result_types):
         return ComparisonOp.create(operands=operands, attributes=attributes, result_types=[IntegerType(1)])
     def concrete_exprtype(self, left_type, right_type):
-        if not (isinstance(left_type, Ptr) and (isinstance(left_type.type, IntegerType) or left_type.type == Float64Type())):
+        if not (isinstance(left_type, Integer) or isinstance(left_type, Float)):
             raise Exception(f"{self.info} Operator {self.operator} not available for type {left_type}")
-        return Ptr([IntegerType(1)])
+        return Integer(1)
 
 @dataclass
 class Logical(BinaryOp):
@@ -297,9 +297,9 @@ class Logical(BinaryOp):
         left_type = self.left.exprtype(scope)
         right_type = self.right.exprtype(scope)
         self.ensure_compatible_types(left_type, right_type)
-        if left_type != Ptr([IntegerType(1)]):
+        if left_type != Integer(1):
             raise Exception(f"{self.info} Operator {self.operator} not available for type {left_type}")
-        return Ptr([IntegerType(1)])
+        return Integer(1)
 
 @dataclass
 class Bitwise(BinaryOp):
@@ -344,11 +344,11 @@ class NegativeOp(Expression):
 
     def codegen(self, scope):
         typ = self.exprtype(scope)
-        zero = IntegerLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), 0, 32) if typ == Ptr([IntegerType(32)]) else DoubleLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), 0.0)
+        zero = IntegerLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), 0, 32) if typ == Integer(32) else DoubleLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), 0.0)
         return Arithmetic(self.info, zero, "SUB", self.operand).codegen(scope)
 
     def ensure_is_number(self, t):
-        if not isinstance(t, Ptr):
+        if not (isinstance(t, Integer) or isinstance(t, Float)):
             raise Exception(f"{self.info}: cannot negate type {t}; can only negate integers and floats.")
 
     def exprtype(self, scope):
@@ -367,12 +367,12 @@ class IntegerLiteral(Expression):
 
     def codegen(self, scope):
         attr_dict = {"value": IntegerAttr.from_int_and_width(self.value, self.width), "typ":IntegerType(self.width)}
-        const_op = LiteralOp.create(result_types=[Ptr([IntegerType(self.width)])], attributes=attr_dict)
+        const_op = LiteralOp.create(result_types=[Integer(self.width)], attributes=attr_dict)
         scope.region.last_block.add_op(const_op)
         return const_op.results[0]
 
     def exprtype(self, scope):
-        return Ptr([IntegerType(self.width)])
+        return Integer(self.width)
 
 @dataclass
 class DoubleLiteral(Expression):
@@ -380,12 +380,12 @@ class DoubleLiteral(Expression):
 
     def codegen(self, scope):
         attr_dict = {"value": FloatAttr(self.value, Float64Type()), "typ":Float64Type()}
-        const_op = LiteralOp.create(result_types=[Ptr([Float64Type()])], attributes=attr_dict)
+        const_op = LiteralOp.create(result_types=[Float()], attributes=attr_dict)
         scope.region.last_block.add_op(const_op)
         return const_op.results[0]
 
     def exprtype(self, scope):
-        return Ptr([Float64Type()])
+        return Float()
 
 @dataclass
 class BoolLiteral(Expression):
@@ -393,12 +393,12 @@ class BoolLiteral(Expression):
 
     def codegen(self, scope):
         attr_dict = {"value": IntegerAttr.from_int_and_width(self.value, 1), "typ":IntegerType(1)}
-        const_op = LiteralOp.create(result_types=[Ptr([IntegerType(1)])], attributes=attr_dict)
+        const_op = LiteralOp.create(result_types=[Integer(1)], attributes=attr_dict)
         scope.region.last_block.add_op(const_op)
         return const_op.results[0]
 
     def exprtype(self, scope):
-        return Ptr([IntegerType(1)])
+        return Integer(1)
 
 @dataclass
 class NilLiteral(Expression):
@@ -433,7 +433,7 @@ class ArrayLiteral(Expression):
 
     def exprtype(self, scope):
         elem_types = [elem.exprtype(scope) for elem in self.elements]
-        elem_type = scope.simplify(Union.from_list(elem_types)) if len(elem_types) > 0 else Ptr([IntegerType(32)])
+        elem_type = scope.simplify(Union.from_list(elem_types)) if len(elem_types) > 0 else Integer(32)
         return FatPtr.generic("Array", [elem_type])
 
     def typeflow(self, scope):
@@ -447,7 +447,7 @@ class StringLiteral(Expression):
         escaped_str = self.value.encode().decode('unicode_escape')
         sizelit = IntegerLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), len(escaped_str), 32)
         capacitylit = IntegerLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), len(escaped_str) + 1, 32)
-        buf = CreateBuffer(NodeInfo(None, self.info.filepath, self.info.line_number), Buffer([Ptr([IntegerType(8)])]), capacitylit, None)
+        buf = CreateBuffer(NodeInfo(None, self.info.filepath, self.info.line_number), Buffer([Integer(8)]), capacitylit, None)
         temp_var = Identifier(NodeInfo(None, self.info.filepath, self.info.line_number), "_temp_buf" + random_letters(10))
         assign = Assignment(NodeInfo(None, self.info.filepath, self.info.line_number), temp_var, buf)
         assign.codegen(scope);
@@ -476,7 +476,7 @@ class RangeLiteral(Expression):
         return ObjectCreation(self.info, random_letters(10), FatPtr.basic("Range"), [self.start, self.end], None).codegen(scope)
     
     def ensure_i32_args(self, start_type, end_type):
-        if start_type != Ptr([IntegerType(32)]) or end_type != Ptr([IntegerType(32)]):
+        if start_type != Integer(32) or end_type != Integer(32):
             raise Exception(f"{self.info}: Range literals take i32 arguments, not {start_type} and {end_type}")
 
     def exprtype(self, scope):
@@ -678,7 +678,7 @@ class TypeCheck(Expression):
         if not nil_buffer_check and static_type in builtin_types.values():
             result = 1 if scope.subtype(static_type, right_type) else 0
             attr_dict = {"value": IntegerAttr.from_int_and_width(result, 1), "typ":IntegerType(1)}
-            const_op = LiteralOp.create(result_types=[Ptr([IntegerType(1)])], attributes=attr_dict)
+            const_op = LiteralOp.create(result_types=[Integer(1)], attributes=attr_dict)
             scope.region.last_block.add_op(const_op)
             return const_op.results[0]
 
@@ -698,7 +698,7 @@ class TypeCheck(Expression):
         self.left.exprtype(scope)
         right_type = scope.simplify(self.right)
         scope.validate_type(self.info, right_type)
-        return Ptr([IntegerType(1)])
+        return Integer(1)
 
     def typeflow(self, scope):
         self.exprtype(scope)
@@ -711,9 +711,9 @@ class As(Expression):
     def codegen(self, scope):
 
         to_typ = self.exprtype(scope)
-        to_integer = isinstance(to_typ, Ptr) and isinstance(to_typ.type, IntegerType)
+        to_integer = isinstance(to_typ, Integer)
         if isinstance(self.operand, IntegerLiteral) and to_integer:
-            self.operand.width = to_typ.type.width.data
+            self.operand.width = to_typ.width.data
             operand = self.operand.codegen(scope)
             return operand
 
@@ -730,11 +730,11 @@ class As(Expression):
         operand_type = self.operand.exprtype(scope)
         to_typ = scope.simplify(self.typ)
         scope.validate_type(self.info, to_typ)
-        to_integer = isinstance(to_typ, Ptr) and isinstance(to_typ.type, IntegerType)
+        to_integer = isinstance(to_typ, Integer)
         if isinstance(self.operand, IntegerLiteral) and to_integer:
-            self.operand.width = to_typ.type.width.data
+            self.operand.width = to_typ.width.data
             return to_typ
-        from_integer = isinstance(operand_type, Ptr) and isinstance(operand_type.type, IntegerType)
+        from_integer = isinstance(operand_type, Integer)
         if from_integer and to_integer: return to_typ
         if not scope.subtype(operand_type, to_typ):
             raise Exception(f"{self.info} Can't cast {operand_type} to {to_typ}")
@@ -1033,7 +1033,7 @@ class BufferIndexation(Indexation):
         rec_typ = self.receiver.exprtype(scope)
         self.ensure_prereqs(scope, rec_typ)
         id_typ = self.arguments[0].exprtype(scope)
-        if id_typ != Ptr([IntegerType(32)]):
+        if id_typ != Integer(32):
             raise Exception(f"{self.info}: Indexation currently only supported with integers.")
         self.apply_constraints(scope)
         return scope.simplify(rec_typ.elem_type)
@@ -1060,7 +1060,7 @@ class BufferSetIndex(MethodCall):
     def exprtype(self, scope):
         rec_typ = self.receiver.exprtype(scope)
         id_typ = self.arguments[0].exprtype(scope)
-        if id_typ != Ptr([IntegerType(32)]):
+        if id_typ != Integer(32):
             raise Exception(f"{self.info}: Indexation currently only supported with integers.")
         value_type = self.arguments[1].exprtype(scope)
         if not scope.subtype(value_type, rec_typ.elem_type):
@@ -1224,10 +1224,10 @@ class IntrinsicCall(ClassMethodCall):
         return wrap.results[0]
 
     def exprtype(self, scope):
-        if "f64" in self.method: return Ptr([Float64Type()])
-        if "i32" in self.method: return Ptr([IntegerType(32)])
-        if "i64" in self.method: return Ptr([IntegerType(64)])
-        if "i1" in self.method: return Ptr([IntegerType(1)])
+        if "f64" in self.method: return Float()
+        if "i32" in self.method: return Integer(32)
+        if "i64" in self.method: return Integer(64)
+        if "i1" in self.method: return Integer(1)
         raise Exception(f"{self.info}: not implemented intrinsic {self.method} for type yet")
 
 @dataclass
@@ -1260,7 +1260,7 @@ class SizeOfCall(Expression):
         return wrap.results[0]
 
     def exprtype(self, scope):
-        return Ptr([IntegerType(64)])
+        return Integer(64)
 
 @dataclass
 class ObjectCreation(Expression):
@@ -1295,7 +1295,7 @@ class ObjectCreation(Expression):
         if is_exception:
             node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for i in range(3)]
             file_name = StringLiteral(node_infos[0], str(self.info.filepath).replace("\\", "\\\\"))
-            file_name_fn = autoclosure_string_literal(self.info, file_name, "exception_file")
+            file_name_fn = lazy_string_literal(self.info, file_name, "exception_file")
             line_number = IntegerLiteral(node_infos[1], self.info.line_number, 32)
             MethodCall(node_infos[2], anon_id, "set_info", [line_number, file_name_fn]).codegen(scope)
 
@@ -1328,9 +1328,10 @@ class ObjectCreation(Expression):
         cls = scope.classes[simplified_type.cls.data]
         scope.validate_type(self.info, simplified_type)
 
+        # minor optimization: lazily construct string-literal exception messages
         is_exception = scope.subtype(simplified_type, FatPtr.basic("Exception"))
         if is_exception and len(self.arguments) > 0 and isinstance(self.arguments[0], StringLiteral):
-            self.arguments[0] = autoclosure_string_literal(self.info, self.arguments[0], "exception_message")
+            self.arguments[0] = lazy_string_literal(self.info, self.arguments[0], "exception_message")
         
         input_types = [arg.exprtype(scope) for arg in self.arguments]
         behaviors = [behavior for behavior in cls.behaviors if behavior.applicable(simplified_type, scope, "init", input_types)]
@@ -1350,7 +1351,7 @@ class ObjectCreation(Expression):
         scope.points_to_facts.add((self.info.id, "==", self.anon_name))
         return simplified_type
 
-def autoclosure_string_literal(node_info: NodeInfo, string_literal: StringLiteral, fn_name: str) -> FunctionLiteral:
+def lazy_string_literal(node_info: NodeInfo, string_literal: StringLiteral, fn_name: str) -> FunctionLiteral:
     node_infos = [NodeInfo(None, node_info.filepath, node_info.line_number) for i in range(3)]
     block = BlockNode(node_infos[0], [ExpressionStatement(node_infos[1], string_literal)])
     return FunctionLiteral(node_infos[2], f"{fn_name}_{random_letters(10)}", tuple(), 0, block, FatPtr.basic("String"), Nothing())
@@ -2093,7 +2094,7 @@ class Behavior(Statement):
 
         gep = llvm.GEPOp.from_mixed_indices(arg, [block.arg_position], pointee_type=llvm.LLVMPointerType.opaque())
         operands = [gep.results[0]]
-        check_flag = CheckFlagOp.create(operands=operands, attributes={"typ_name":block.typ.symbol()}, result_types=[Ptr([IntegerType(1)])])
+        check_flag = CheckFlagOp.create(operands=operands, attributes={"typ_name":block.typ.symbol()}, result_types=[Integer(1)])
         is_subtype = llvm.LoadOp(check_flag.results[0], IntegerType(1))
 
         br = cf.ConditionalBranch(is_subtype.results[0], blocks[block.first_succ_name][1], [], blocks[block.second_succ_name][1], [])
@@ -2630,19 +2631,17 @@ class VarInit(VarDecl):
         self_type = self.type(scope)
         self.ensure_capitalization()
         scope.validate_type(self.info, self_type)
-        if isinstance(self.initial_value, IntegerLiteral) and isinstance(self_type, Ptr) and isinstance(self_type.type, IntegerType):
-            self.initial_value.width = self_type.type.width.data
+        if isinstance(self.initial_value, IntegerLiteral) and isinstance(self_type, Integer):
+            self.initial_value.width = self_type.width.data
         value_type = self.initial_value.exprtype(scope)
         if not value_type or value_type == llvm.LLVMVoidType():
             raise Exception(f"{self.info}: Assignment impossible: right hand side expression does not return anything.")
         scope.points_to_facts.add((self.name, "==", self.initial_value.info.id))
         # obviously needs work
         if self.initial_value and not scope.subtype(value_type, self_type):
-            if not isinstance(value_type, Ptr) or not isinstance(self_type, Ptr):
+            if not isinstance(value_type, Integer):
                 raise Exception(f"{self.info}: rhs type {value_type} not subtype of declared type {self_type}!")
-            if not isinstance(value_type.type, IntegerType):
-                raise Exception(f"{self.info}: rhs type {value_type} not subtype of declared type {self_type}!")
-            if isinstance(self_type.type, IntegerType) and value_type.type.bitwidth > self_type.type.bitwidth:
+            if isinstance(self_type, Integer) and value_type.bitwidth > self_type.bitwidth:
                 raise Exception(f"{self.info}: rhs type {value_type} not subtype of declared type {self_type}!")
         self.initial_value.typeflow(scope)
         scope.type_table[self.name] = self_type
@@ -2731,7 +2730,7 @@ class FieldAssignment(Assignment):
             raise Exception(f"{self.info}: field {self.target.name} not in class {scope.cls.name}!")
         declared_type = field.type()
         if not scope.subtype(typ, declared_type):
-            if typ != Ptr([IntegerType(32)]) or declared_type not in [Ptr([Float64Type()]), Ptr([IntegerType(64)])]:
+            if typ != Integer(32) or declared_type not in [Float(), Integer(64)]:
                 raise Exception(f"{self.info}: cannot assign to field {self.target.name}: {typ} is not a subtype of {declared_type}")
         self.target.typeflow(scope)
         scope.type_table[self.target.name] = typ
@@ -3113,7 +3112,7 @@ class CreateBuffer(Expression):
 
     def exprtype(self, scope):
         size_typ = self.size.exprtype(scope)
-        if size_typ != Ptr([IntegerType(32)]):
+        if size_typ != Integer(32):
             raise Exception(f"{self.info}: Buffer creation takes i32 as argument, not {size_typ}.")
         scope.allocations[self.info.id] = self
         buf_type = scope.simplify(self.buf)

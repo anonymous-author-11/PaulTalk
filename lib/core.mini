@@ -76,20 +76,6 @@ class String extends Iterable[Character], Representable {
             i = i + 1;
         }
     }
-    def [](x : i32) -> i8 yields OutOfBounds {
-        past_end = x > (@length - 1);
-        before_start = (@length + x) < 0;
-        if past_end or before_start { yield(OutOfBounds.new(@length, x)); }
-        if x < 0 { x = @length + x; }
-        return self.unchecked_index(x);
-    }
-    def []=(x : i32, value : i8) yields OutOfBounds {
-        past_end = x > (@length - 1);
-        before_start = (@length + x) < 0;
-        if past_end or before_start { yield(OutOfBounds.new(@length, x)); }
-        if x < 0 { x = @length + x; }
-        self.unchecked_insert(x, value);
-    }
     def ==(other : String) -> Bool {
         if @length != other.length() { return false; }
         i = 0;

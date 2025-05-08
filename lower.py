@@ -70,7 +70,8 @@ class LowerTypes(ModulePass):
     def apply(self, ctx: MLContext, op: ModuleOp) -> None:
         walker = PatternRewriteWalker(
             GreedyRewritePatternApplier([
-                LowerPtr(),
+                LowerInteger(),
+                LowerFloat(),
                 LowerNil(),
                 LowerFatPtr(),
                 LowerAny(),
@@ -208,9 +209,14 @@ class LowerMid(ModulePass):
 def debug_code(op):
     pass
 
-class LowerPtr(TypeConversionPattern):
+class LowerInteger(TypeConversionPattern):
     @attr_type_rewrite_pattern
-    def convert_type(self, typ: Ptr):
+    def convert_type(self, typ: Integer):
+        return llvm.LLVMPointerType.opaque()
+
+class LowerFloat(TypeConversionPattern):
+    @attr_type_rewrite_pattern
+    def convert_type(self, typ: Float):
         return llvm.LLVMPointerType.opaque()
 
 class LowerNil(TypeConversionPattern):
@@ -339,19 +345,19 @@ class LowerCast(RewritePattern):
             rewriter.replace_matched_op(unionize_op)
             return 
 
-        from_integer = isinstance(from_typ, Ptr) and isinstance(from_typ.type, IntegerType)
-        to_integer = isinstance(to_typ, Ptr) and isinstance(to_typ.type, IntegerType)
-        if from_integer and to_integer and to_typ.type.bitwidth > from_typ.type.bitwidth:
+        from_integer = isinstance(from_typ, Integer)
+        to_integer = isinstance(to_typ, Integer)
+        if from_integer and to_integer and to_typ.bitwidth > from_typ.bitwidth:
             widen_op = WidenIntOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
             rewriter.replace_matched_op(widen_op)
             return 
 
-        if from_integer and to_integer and to_typ.type.bitwidth < from_typ.type.bitwidth:
+        if from_integer and to_integer and to_typ.bitwidth < from_typ.bitwidth:
             truncate_op = TruncateIntOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
             rewriter.replace_matched_op(truncate_op)
             return
 
-        if from_typ == Ptr([IntegerType(32)]) and to_typ == Ptr([Float64Type()]):
+        if from_typ == Integer(32) and to_typ == Float():
             to_float_op = IntToFloatOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
             rewriter.replace_matched_op(to_float_op)
             return 
@@ -1011,7 +1017,7 @@ class LowerNext(RewritePattern):
     def match_and_rewrite(self, op: NextOp, rewriter: PatternRewriter):
         one = llvm.ConstantOp(IntegerAttr.from_int_and_width(1, 32), IntegerType(32))
         load = llvm.LoadOp(op.operand, IntegerType(32))
-        inc = arith.Addi(load.results[0], one.results[0])
+        inc = ArithmeticOp.make("ADD", load.results[0], one.results[0])
         store = llvm.StoreOp(inc.results[0], op.operand)
         rewriter.inline_block_after_matched_op(Block([one, inc, store]))
         rewriter.replace_matched_op(load)
@@ -2039,10 +2045,10 @@ class LowerDataSizeDef(RewritePattern):
             max_align = arith.Select(cmp_align.results[0], alignment.results[0], max_align.results[0])
             rem = arith.RemUI(current_offset.results[0], alignment.results[0])
             cmp_rem = ComparisonOp.make(zero.results[0], rem.results[0], "EQ")
-            high_end_pad = arith.Subi(alignment.results[0], rem.results[0])
+            high_end_pad = ArithmeticOp.make("SUB", alignment.results[0], rem.results[0])
             padding = arith.Select(cmp_rem.results[0], zero.results[0], high_end_pad.results[0])
-            padded_size = arith.Addi(size.results[0], padding.results[0])
-            current_offset = arith.Addi(current_offset.results[0], padded_size.results[0])
+            padded_size = ArithmeticOp.make("ADD", size.results[0], padding.results[0])
+            current_offset = ArithmeticOp.make("ADD", current_offset.results[0], padded_size.results[0])
             body_block.add_ops([
                 cmp_align, max_align,
                 rem, cmp_rem, high_end_pad, padding, padded_size, current_offset
@@ -2050,9 +2056,9 @@ class LowerDataSizeDef(RewritePattern):
 
         rem_final = arith.RemUI(current_offset.results[0], max_align.results[0])
         cmp_rem_final = ComparisonOp.make(rem_final.results[0], zero.results[0], "EQ")
-        high_pad_final = arith.Subi(max_align.results[0], rem_final.results[0])
+        high_pad_final = ArithmeticOp.make("SUB", max_align.results[0], rem_final.results[0])
         padding_final = arith.Select(cmp_rem_final.results[0], zero.results[0], high_pad_final.results[0])
-        final_size = arith.Addi(current_offset.results[0], padding_final.results[0])
+        final_size = ArithmeticOp.make("ADD", current_offset.results[0], padding_final.results[0])
 
         undef = llvm.UndefOp(return_type)
         dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
@@ -2100,17 +2106,17 @@ class LowerGetterDef(RewritePattern):
             if i == op.offset.value.data: break
             rem = arith.RemUI(current_offset.results[0], alignment.results[0])
             cmp_rem = ComparisonOp.make(zero.results[0], rem.results[0], "EQ")
-            high_end_pad = arith.Subi(alignment.results[0], rem.results[0])
+            high_end_pad = ArithmeticOp.make("SUB", alignment.results[0], rem.results[0])
             padding = arith.Select(cmp_rem.results[0], zero.results[0], high_end_pad.results[0])
-            padded_size = arith.Addi(size.results[0], padding.results[0])
-            current_offset = arith.Addi(current_offset.results[0], padded_size.results[0])
+            padded_size = ArithmeticOp.make("ADD", size.results[0], padding.results[0])
+            current_offset = ArithmeticOp.make("ADD", current_offset.results[0], padded_size.results[0])
             body_block.add_ops([rem, cmp_rem, high_end_pad, padding, padded_size, current_offset])
 
         rem_final = arith.RemUI(current_offset.results[0], alignment.results[0])
         cmp_rem_final = ComparisonOp.make(rem_final.results[0], zero.results[0], "EQ")
-        high_pad_final = arith.Subi(alignment.results[0], rem_final.results[0])
+        high_pad_final = ArithmeticOp.make("SUB", alignment.results[0], rem_final.results[0])
         padding_final = arith.Select(cmp_rem_final.results[0], zero.results[0], high_pad_final.results[0])
-        final_size = arith.Addi(current_offset.results[0], padding_final.results[0])
+        final_size = ArithmeticOp.make("ADD", current_offset.results[0], padding_final.results[0])
 
         field_gep = llvm.GEPOp.from_mixed_indices(data_ptr, [final_size.results[0]], pointee_type=IntegerType(8))
         body_block.add_ops([rem_final, cmp_rem_final, high_pad_final, padding_final, final_size, field_gep])
@@ -2195,17 +2201,17 @@ class LowerSetterDef(RewritePattern):
             if i == op.offset.value.data: break
             rem = arith.RemUI(current_offset.results[0], alignment.results[0])
             cmp_rem = ComparisonOp.make(zero.results[0], rem.results[0], "EQ")
-            high_end_pad = arith.Subi(alignment.results[0], rem.results[0])
+            high_end_pad = ArithmeticOp.make("SUB", alignment.results[0], rem.results[0])
             padding = arith.Select(cmp_rem.results[0], zero.results[0], high_end_pad.results[0])
-            padded_size = arith.Addi(size.results[0], padding.results[0])
-            current_offset = arith.Addi(current_offset.results[0], padded_size.results[0])
+            padded_size = ArithmeticOp.make("ADD", size.results[0], padding.results[0])
+            current_offset = ArithmeticOp.make("ADD", current_offset.results[0], padded_size.results[0])
             body_block.add_ops([rem, cmp_rem, high_end_pad, padding, padded_size, current_offset])
 
         rem_final = arith.RemUI(current_offset.results[0], alignment.results[0])
         cmp_rem_final = ComparisonOp.make(rem_final.results[0], zero.results[0], "EQ")
-        high_pad_final = arith.Subi(alignment.results[0], rem_final.results[0])
+        high_pad_final = ArithmeticOp.make("SUB", alignment.results[0], rem_final.results[0])
         padding_final = arith.Select(cmp_rem_final.results[0], zero.results[0], high_pad_final.results[0])
-        final_size = arith.Addi(current_offset.results[0], padding_final.results[0])
+        final_size = ArithmeticOp.make("ADD", current_offset.results[0], padding_final.results[0])
 
         field_gep = llvm.GEPOp.from_mixed_indices(data_ptr, [final_size.results[0]], pointee_type=IntegerType(8))
         body_block.add_ops([rem_final, cmp_rem_final, high_pad_final, padding_final, final_size, field_gep])

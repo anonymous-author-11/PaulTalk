@@ -284,7 +284,8 @@ module @patterns {
       %one_result = pdl.result 0 of %one
       %load = pdl.operation "llvm.load"(%operand : !pdl.value) {"type" = %i32_attr} -> (%i32_type : !pdl.type)
       %load_result = pdl.result 0 of %load
-      %inc = pdl.operation "arith.addi"(%load_result, %one_result : !pdl.value, !pdl.value) -> (%i32_type : !pdl.type)
+      %overflow = pdl.attribute = #arith.overflow<none>
+      %inc = pdl.operation "arith.addi"(%load_result, %one_result : !pdl.value, !pdl.value) {"overflowFlags" = %overflow} -> (%i32_type : !pdl.type)
       %inc_result = pdl.result 0 of %inc
       %store = pdl.operation "llvm.store"(%inc_result, %operand : !pdl.value, !pdl.value)
       pdl.replace %root with (%load_result : !pdl.value)
@@ -812,7 +813,8 @@ module @patterns {
     %op_name_attr = pdl.attribute = "ADD"
     %root = pdl.operation "mini.int_arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
     pdl.rewrite %root {
-      %replacement = pdl.operation "arith.addi"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%op_type : !pdl.type)
+      %overflow = pdl.attribute = #arith.overflow<none>
+      %replacement = pdl.operation "arith.addi"(%lhs, %rhs : !pdl.value, !pdl.value) {"overflowFlags" = %overflow} -> (%op_type : !pdl.type)
       %result = pdl.result 0 of %replacement
       pdl.replace %root with (%result : !pdl.value)
     }

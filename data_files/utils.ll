@@ -120,11 +120,11 @@ define { i64, i64 } @_data_size_tuple_typ(ptr %0) {
   %13 = call i64 @llvm.umax.i64(i64 %12, i64 %.reg2mem20.010)
   %14 = urem i64 %.reg2mem22.011, %12
   %15 = icmp eq i64 %14, 0
-  %16 = sub i64 %12, %14
+  %16 = sub nuw i64 %12, %14
   %17 = select i1 %15, i64 0, i64 %16
-  %18 = add i64 %11, %.reg2mem22.011
-  %19 = add i64 %18, %17
-  %20 = add i64 %5, 1
+  %18 = add nuw i64 %11, %.reg2mem22.011
+  %19 = add nuw i64 %18, %17
+  %20 = add nuw i64 %5, 1
   %21 = getelementptr ptr, ptr %0, i64 %20
   %22 = load i64, ptr %21, align 4
   %23 = icmp eq i64 %22, 0
@@ -135,9 +135,9 @@ define { i64, i64 } @_data_size_tuple_typ(ptr %0) {
   %.reg2mem22.0.lcssa = phi i64 [ 0, %1 ], [ %19, %.lr.ph ]
   %24 = urem i64 %.reg2mem22.0.lcssa, %.reg2mem20.0.lcssa
   %25 = icmp eq i64 %24, 0
-  %26 = sub i64 %.reg2mem20.0.lcssa, %24
+  %26 = sub nuw i64 %.reg2mem20.0.lcssa, %24
   %27 = select i1 %25, i64 0, i64 %26
-  %28 = add i64 %27, %.reg2mem22.0.lcssa
+  %28 = add nuw i64 %27, %.reg2mem22.0.lcssa
   %29 = insertvalue { i64, i64 } undef, i64 %28, 0
   %30 = insertvalue { i64, i64 } %29, i64 %.reg2mem20.0.lcssa, 1
   ret { i64, i64 } %30
@@ -164,11 +164,11 @@ define { i64, i64 } @_data_size_union_typ(ptr %0) {
   %13 = call i64 @llvm.umax.i64(i64 noundef %12, i64 noundef %.reg2mem20.010)
   %14 = urem i64 %.reg2mem22.011, %12
   %15 = icmp eq i64 %14, 0
-  %16 = sub i64 %12, %14
+  %16 = sub nuw i64 %12, %14
   %17 = select i1 %15, i64 0, i64 %16
   %18 = call i64 @llvm.umax.i64(i64 noundef %11, i64 noundef %.reg2mem22.011)
   %19 = call i64 @llvm.umax.i64(i64 noundef %18, i64 noundef %17)
-  %20 = add i64 %5, 1
+  %20 = add nuw i64 %5, 1
   %21 = getelementptr ptr, ptr %0, i64 %20
   %22 = load i64, ptr %21, align 4
   %23 = icmp eq i64 %22, 0
@@ -182,9 +182,9 @@ define { i64, i64 } @_data_size_union_typ(ptr %0) {
   %final_size = add i64 %.reg2mem22.0.lcssa, %flag_size
   %24 = urem i64 %final_size, %.reg2mem20.0.lcssa
   %25 = icmp eq i64 %24, 0
-  %26 = sub i64 %.reg2mem20.0.lcssa, %24
+  %26 = sub nuw i64 %.reg2mem20.0.lcssa, %24
   %27 = select i1 %25, i64 0, i64 %26
-  %28 = add i64 %27, %final_size
+  %28 = add nuw i64 %27, %final_size
   %29 = insertvalue { i64, i64 } undef, i64 %28, 0
   %30 = insertvalue { i64, i64 } %29, i64 %.reg2mem20.0.lcssa, 1
   ret { i64, i64 } %30
