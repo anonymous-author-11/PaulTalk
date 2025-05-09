@@ -285,16 +285,16 @@ class CompilationJob:
         make_archive = (LLVM_AR_PATH, "cr", lib_file_path, *bc_file_paths)
         subprocess.run(make_archive)
 
-        out_linked_path = self.build_dir / "out_linked.ll"
-        link_utils = (LLVM_LINK_PATH, UTILS_PATH, OS_UTILS_PATH, self.input.bc_file, "-S", "-o", out_linked_path)
+        out_utils_path = self.build_dir / "out_utils.ll"
+        link_utils = (LLVM_LINK_PATH, UTILS_PATH, OS_UTILS_PATH, self.input.bc_file, "-S", "-o", out_utils_path)
         subprocess.run(link_utils)
 
         # use the correct main function
-        replace_in_file(out_linked_path, f"_main_{clean_name(self.input.path.stem)}", "main")
+        replace_in_file(out_utils_path, f"_main_{clean_name(self.input.path.stem)}", "main")
 
         # using --only-needed cuts out a lot of unnecessary imports
-        out_reg2mem_path = self.build_dir / "out_reg2mem.ll"
-        link_imports = (LLVM_LINK_PATH, "-S", out_linked_path, lib_file_path, "-o", out_reg2mem_path, "--only-needed")
+        out_reg2mem_path = self.build_dir / "out_linked.ll"
+        link_imports = (LLVM_LINK_PATH, "-S", out_utils_path, lib_file_path, "-o", out_reg2mem_path, "--only-needed")
         subprocess.run(link_imports)
 
         self.record_time("after_llvm_link")
@@ -302,7 +302,7 @@ class CompilationJob:
 
     def run_opt(self):
 
-        out_reg2mem_path = self.build_dir / "out_reg2mem.ll"
+        out_reg2mem_path = self.build_dir / "out_linked.ll"
         out_optimized_path = self.build_dir / "out_optimized.ll"
 
         passes = f"--passes=\"{self.settings.opt_level}\""
@@ -355,53 +355,6 @@ class CompilationJob:
 
         self.record_time("after_lld")
         self.time_printer.print(f'Time to lld link: {self.time_between("after_llc", "after_lld")} seconds')
-
-def optimize_file(all_dependencies, build_dir, passes, settings, path):
-    bc_path = build_dir /  f"bitcodes/{path.stem}.bc"
-    optimized_path = build_dir / f"optimized/{path.stem}.optimized.bc"
-    dependencies = list(nx.descendants(all_dependencies.graph, path))
-    dependents = list(nx.ancestors(all_dependencies.graph, path))
-    out_reg2mem_path = build_dir / "out_reg2mem.ll"
-    out_reg2mem_bc_path = build_dir / "out_reg2mem.bc"
-    utils_optimized = build_dir / "optimized/utils.optimized.bc"
-    os_utils_optimized = build_dir / f"optimized/{OS_UTILS_PATH.stem}.optimized.bc"
-
-    # Topological order (leaf nodes last)
-    sorted_nodes = list(reversed(all_dependencies.list))
-    dependencies.sort(key = lambda dep: sorted_nodes.index(dep))
-
-    # This is the root module
-    is_root = len(dependents) == 0
-    if is_root:
-        # get textual IR
-        opt = f"{OPT_PATH} {bc_path} -S"
-        cmd_out = subprocess.run(opt, shell=True, capture_output=True, text=True)
-        if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
-
-        # Specify the correct main function
-        llvm_string = cmd_out.stdout.replace(f"_main_{clean_name(path.stem)}", "main")
-
-        # Convert back into bitcode
-        opt = f"{OPT_PATH} -o {out_reg2mem_bc_path}"
-        subprocess.run(opt, shell=True, input=llvm_string, text=True)
-
-    # --override means that symbols in later-listed files override symbols in earlier files
-    # Since our files are in topological order, this means the definition overrides the declaration
-    optimized_dependencies = [f"--override {build_dir.joinpath(f'optimized/{dep.stem}.optimized.bc')}" for dep in dependencies]
-
-    in_file = out_reg2mem_bc_path if is_root else bc_path
-    link = f"{LLVM_LINK_PATH} {in_file} {' '.join(optimized_dependencies)} {utils_optimized} {os_utils_optimized} --only-needed"
-    out_linked_path = build_dir / "out_linked.ll"
-    if is_root: subprocess.run(f"{link} -S -o {out_linked_path}", shell=True)
-    opt = f"{OPT_PATH} {settings} {passes} -o {optimized_path}"
-    cmd_out = subprocess.run(f"{link} | {opt}", shell=True)
-    if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
-
-def clean_lto_metadata(llvm_string):
-    llvm_string = llvm_string.replace("!llvm.module.flags = !{!0, !1, !2}","")
-    llvm_string = llvm_string.replace("!1 = !{i32 1, !\"EnableSplitLTOUnit\", i32 0}", "")
-    llvm_string = llvm_string.replace("!2 = !{i32 1, !\"UnifiedLTO\", i32 1}", "")
-    return llvm_string
 
 @dataclass
 class OptimizationSettings:
@@ -461,14 +414,12 @@ class Dependencies:
     graph: nx.DiGraph
     print_graph: bool
     _list: list
-    _layers: list
     _recompile_list: list
 
     def __init__(self, input: "InputFile", print_graph: bool):
         self.input = input
         self.print_graph = print_graph
         self._list = None
-        self._layers = None
         self._recompile_list = None
 
         # Will be added by CompilationJob.run_codegen()
@@ -481,17 +432,6 @@ class Dependencies:
         # input file is excluded from the list
         self._list = [path for path in dependency_list if not path.samefile(self.input.path)]
         return self._list
-
-    @property
-    def layers(self):
-        if self._layers: return self._layers
-        # input file is included in the layers
-        layers = list(reversed(list(nx.topological_generations(self.graph))))
-        # we only care about what needs to be recompiled
-        layers = [[path for path in layer if path in self.recompile_list] for layer in layers]
-        # remove empty layers
-        self._layers = [layer for layer in layers if layer]
-        return self._layers
 
     @property
     def recompile_list(self) -> set:
@@ -648,10 +588,10 @@ def run_mlir_opt(module_str) -> str:
     return module_str
 
 def record_all_passes(build_dir):
-    #clang = "clang -x ir out_reg2mem.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
+    #clang = "clang -x ir out_linked.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
     #opt = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
     
-    out_reg2mem_path = build_dir / "out_reg2mem.ll"
+    out_reg2mem_path = build_dir / "out_linked.ll"
     passes = "--passes=default<O1>"
     opt = (OPT_PATH, passes, attributor_settings(), devirtualization_settings(), "--inline-threshold=10000", "--print-changed")
 
