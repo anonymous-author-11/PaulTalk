@@ -27,10 +27,7 @@ def print_benchmark_result(test_name: String, n: i32, duration: i64) {
     IO.print("  Operations: "); IO.print(n);
     IO.print("  Total Time: "); IO.print(duration); IO.print(" ms");
     if n > 0 {
-        ns_per_op : i64 = 0;
-        if duration > 0 {
-            ns_per_op = (duration * 1_000_000) / n;
-        }
+        ns_per_op = (duration * 1_000_000) / n;
         IO.print("  Time/Op:    ~"); IO.print(ns_per_op); IO.print(" ns");
     }
 }

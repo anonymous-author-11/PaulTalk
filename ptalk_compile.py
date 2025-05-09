@@ -83,21 +83,18 @@ class CompilationJob:
         if not output_path: return
         self.output_path = Path(output_path)
         if not "." in self.output_path.name: raise Exception("Please provide an file extension in the output name.")
-        if self.output_path.suffix == ".exe": generate_main_for.add(self.input.path)
 
     def run(self):
         self.status_printer.print(f"Compiling {self.input.path.name}")
 
         add_source_directories(self.input.path)
         ast = self.run_parse()
-        module = self.run_codegen(ast)
-        to_recompile = self.dependencies.recompile_set()
-        self.lower_all(to_recompile, module)
+        self.lower_all(ast)
+        self.parallel_optimization()
 
         # not creating an output file
         if not self.output_path: return self.finish()
 
-        self.parallel_optimization()
         self.run_llc()
 
         # Only creating an object file
@@ -117,6 +114,9 @@ class CompilationJob:
 
     def run_parse(self):
         ast = parse(self.input.path)
+        self.dependencies.graph = copy.deepcopy(included_files)
+        self.dependencies.print()
+        reset_ast_globals()
         self.record_time("after_parse")
         return ast
 
@@ -131,15 +131,13 @@ class CompilationJob:
         Printer(stringio).print(module)
         module_str = stringio.getvalue().encode().decode('unicode_escape')
         with open(self.build_dir.joinpath("in.mlir"), "w") as outfile: outfile.write(module_str)
-        self.dependencies.graph  = copy.deepcopy(included_files)
-        self.dependencies.print()
         reset_ast_globals()
         self.record_time("after_codegen")
         return module
 
-    def lower_all(self, to_recompile, own_module):
+    def lower_all(self, own_ast):
 
-        sorted_dependencies = [dependency for dependency in self.dependencies.list if dependency in to_recompile]
+        sorted_dependencies = [path for path in self.dependencies.recompile_list if not path.samefile(self.input.path)]
 
         if len(sorted_dependencies) > 0:
             dependencies_string = ', '.join([x.stem for  x in sorted_dependencies])
@@ -151,20 +149,20 @@ class CompilationJob:
         
         needs_lowering = not already_perfect(self.input.path, self.build_dir)
         if needs_lowering:
-            jobs.append(self)
+            if self.output_path.suffix == ".exe": generate_main_for.add(self.input.path)
+            own_module = self.run_codegen(own_ast)
             modules.append(own_module)
+            jobs.append(self)
         
         # We deferred printing these timings so they weren't broken up by any miscellaneous printing during codegen
         self.time_printer.print(f'Time to import: {self.time_between("start_time","after_imports")} seconds')
-        self.time_printer.print(f'Time to parse: {self.time_between("after_imports", "after_parse")} seconds')
-        self.time_printer.print(f'Time to type check + codegen: {self.time_between("after_parse", "after_codegen")} seconds')
-
-        if len(sorted_dependencies) > 0:
-            self.time_printer.print(f'Time to parse dependencies: {self.time_between("after_codegen", "parse_dependencies")} seconds')
-            self.time_printer.print(f'Time to codegen dependencies: {self.time_between("parse_dependencies", "codegen_dependencies")} seconds')
+        self.time_printer.print(f'Time to parse: {self.time_between("after_imports", "parse_dependencies")} seconds')
         
         # All bitcodes are already perfect; return early
         if len(modules) == 0: return
+
+        # Only relevant if there were more than 0 modules
+        self.time_printer.print(f'Time to codegen: {self.time_between("parse_dependencies", "codegen_dependencies")} seconds')
         
         module_str = self.lower_mlir(modules)
         llvm_string = self.lower_to_llvm(module_str)
@@ -263,35 +261,6 @@ class CompilationJob:
         self.record_time("lower_to_llvm")
         self.time_printer.print(f'Time to generate bitcodes: {self.time_between("after_mlir_translate", "lower_to_llvm")} seconds')
 
-    # merge all the .bc files into one big .ll file for optimization
-    # kind of like LTO but no pretense of being at "link-time"
-    def llvm_link(self):
-
-        self.record_time("before_llvm_link")
-
-        bc_file_paths = (self.build_dir.joinpath(f"bitcodes/{path.stem}.bc") for path in self.dependencies.list)
-        lib_file_path = self.build_dir / f"{self.input.path.stem}.lib"
-        make_archive = (LLVM_AR_PATH, "cr", lib_file_path, *bc_file_paths)
-        subprocess.run(make_archive)
-
-        out_linked_path = self.build_dir / "out_linked.ll"
-        out_thin_path = self.build_dir / "out_thin.bc"
-        link_utils = (LLVM_LINK_PATH, UTILS_PATH, OS_UTILS_PATH, self.input.bc_file, "-S", "-o", out_linked_path)
-        subprocess.run(link_utils)
-
-        # use the correct main function
-        replace_in_file(out_linked_path, f"_main_{clean_name(self.input.path.stem)}", "main")
-
-        subprocess.run((OPT_PATH, out_linked_path, "-o", out_thin_path))
-
-        # using --only-needed cuts out a lot of unnecessary imports
-        out_reg2mem_path = self.build_dir / "out_reg2mem.ll"
-        link_imports = (LLVM_LINK_PATH, "-S", out_linked_path, lib_file_path, "-o", out_reg2mem_path, "--only-needed")
-        subprocess.run(link_imports)
-
-        self.record_time("after_llvm_link")
-        self.time_printer.print(f'Time to llvm-link: {self.time_between("before_llvm_link", "after_llvm_link")} seconds')
-
     # LLVM is not natively multithreaded and ThinLTO does not work properly
     # So here's how we can parallelize optimization by ourselves:
     # Split the file dependency graph into layers with nx.topological_generations
@@ -341,35 +310,6 @@ class CompilationJob:
 
         self.record_time("after_parallel_opt")
         self.time_printer.print(f'Time to parallel opt: {self.time_between("before_parallel_opt", "after_parallel_opt")} seconds')
-
-    # ThinLTO doesn't work because it doesn't correctly determine up front what it needs to import into each module
-    # So what we're doing here is actually just non-parallelized whole module optimization
-    def run_lto(self):
-
-        #thin_paths = [str(build_dir.joinpath(f"bitcodes/{path.stem}.thin.bc")) for path in dependency_list]
-
-        out_thin_path = self.build_dir / "out_thin.bc"
-        out_reg2mem_path = self.build_dir / "out_reg2mem.ll"
-        out_optimized_path = self.build_dir / "out_optimized.ll"
-
-        subprocess.run((OPT_PATH, out_reg2mem_path, "--thinlto-bc", "--unified-lto", "--thinlto-split-lto-unit", "-o", out_thin_path))
-
-        passes = f"--lto-newpm-passes={self.settings.opt_level}"
-
-        settings = f"{self.settings.devirt} {self.settings.inlining} {self.settings.attributor()} --enable-lto-internalization=false"
-        mllvm_options = (f"--mllvm={s}" for s in settings.split(" "))
-
-        # lld with -flavor gnu is equivalent to ld.lld
-        command = (LLD_PATH, "-flavor", "gnu", out_thin_path, "--lto=thin", passes, "--lto-emit-llvm", "-o", "out_lto.bc", *mllvm_options)
-        subprocess.run(command, cwd=self.build_dir)
-
-        lto_file = self.build_dir / "out_lto.bc"
-        subprocess.run((OPT_PATH, lto_file, "-S", "-o", out_optimized_path))
-
-        if self.settings.debug_mode: subprocess.run((DEBUGIR_PATH, out_optimized_path))
-
-        self.record_time("after_lto")
-        self.time_printer.print(f'Time to lto: {self.time_between("after_llvm_link", "after_lto")} seconds')
 
     def run_llc(self):
 
@@ -515,12 +455,14 @@ class Dependencies:
     print_graph: bool
     _list: list
     _layers: list
+    _recompile_list: list
 
     def __init__(self, input: "InputFile", print_graph: bool):
         self.input = input
         self.print_graph = print_graph
         self._list = None
         self._layers = None
+        self._recompile_list = None
 
         # Will be added by CompilationJob.run_codegen()
         self.graph = None
@@ -537,8 +479,26 @@ class Dependencies:
     def layers(self):
         if self._layers: return self._layers
         # input file is included in the layers
-        self._layers = list(reversed(list(nx.topological_generations(self.graph))))
+        layers = list(reversed(list(nx.topological_generations(self.graph))))
+        # we only care about what needs to be recompiled
+        layers = [[path for path in layer if path in self.recompile_list] for layer in layers]
+        # remove empty layers
+        self._layers = [layer for layer in layers if layer]
         return self._layers
+
+    @property
+    def recompile_list(self) -> set:
+        if self._recompile_list: return self._recompile_list
+        to_recompile = set()
+        for dependency in self.list:
+            if already_perfect(dependency, self.input.build_dir): continue
+            dependents = set(nx.ancestors(self.graph, dependency))
+            to_recompile.add(dependency)
+            to_recompile = to_recompile.union(dependents)
+        # ordered in reverse-topological order; input file is included
+        sorted_paths = reversed(list(nx.topological_sort(self.graph)))
+        self._recompile_list = [path for path in sorted_paths if path in to_recompile]
+        return self._recompile_list
 
     def print(self):
         if not self.print_graph: return
@@ -547,15 +507,6 @@ class Dependencies:
         nx.write_network_text(self.graph, sources=[self.input.path], path=stringio)
         text_repr = stringio.getvalue().replace("╾","<─").replace("╼",">")
         print(text_repr)
-
-    def recompile_set(self) -> set:
-        to_recompile = set()
-        for dependency in self.list:
-            if already_perfect(dependency, self.input.build_dir): continue
-            dependents = set(nx.ancestors(self.graph, dependency))
-            to_recompile.add(dependency)
-            to_recompile = to_recompile.union(dependents)
-        return to_recompile
 
 @dataclass
 class OptionalPrinter:
@@ -587,8 +538,9 @@ def hash_file(filepath) -> bytes:
 
 def already_perfect(source_path, build_dir) -> bool:
     bc_file_path = build_dir / "bitcodes" / f"{source_path.stem}.bc"
+    optimized_file_path = build_dir / "optimized" / f"{source_path.stem}.optimized.bc"
     hash_file_path = build_dir / "hashes" / f"{source_path.stem}.hash"
-    if not (hash_file_path.exists() and bc_file_path.exists()): return False
+    if not (hash_file_path.exists() and bc_file_path.exists() and optimized_file_path.exists()): return False
     src_hash = hash_file(source_path)
     with open(hash_file_path, "rb") as f: stored_hash = f.read()
     if src_hash == stored_hash: return True

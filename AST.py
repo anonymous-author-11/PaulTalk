@@ -407,7 +407,7 @@ class IntegerLiteral(Expression):
         if self.value < min_val or self.value > max_val:
             print(self.signed)
             print(typ.signedness.data)
-            raise Exception(f"{self.info}: Integer literal value {self.value} cannot be represented by type {typ}, which value range {min_val}:{max_val}")
+            raise Exception(f"{self.info}: Integer literal value {self.value} cannot be represented by type {typ}, which has value range [{min_val}, {max_val})")
         return typ
 
 @dataclass
@@ -743,6 +743,13 @@ class TypeCheck(Expression):
 class As(Expression):
     operand: Expression
     typ: TypeAttribute
+    force: bool
+
+    def __init__(self, info: NodeInfo, operand: Expression, typ: TypeAttribute, force=False):
+        self.info = info
+        self.operand = operand
+        self.typ = typ
+        self.force = force
 
     def codegen(self, scope):
 
@@ -779,8 +786,8 @@ class As(Expression):
         if from_integer and to_integer:
             from_min, from_max = operand_type.value_range()
             to_min, to_max = to_typ.value_range()
-            if from_min < to_min or from_max > to_max:
-                raise Exception(f"{self.info}: Cannot cast {operand_type} to {to_typ} as the value range of the former ({from_min}:{from_max}) is not within the value range of the latter ({to_min}:{to_max})")
+            if not self.force and (from_min < to_min or from_max > to_max):
+                raise Exception(f"{self.info}: Cannot cast {operand_type} to {to_typ} as the value range of the former [{from_min}, {from_max}) is not within the value range of the latter [{to_min}, {to_max})")
             return to_typ
         to_float = isinstance(to_typ, Float)
         if from_integer and to_float: return to_typ
@@ -2656,31 +2663,6 @@ class Field:
         return SymbolRefAttr(self.cls.name + "_field_" + self.declaration.name.replace("@",""))
 
 @dataclass
-class VarInit(VarDecl):
-    initial_value: Expression
-
-    def codegen(self, scope):
-        self_type = self.type(scope)
-        should_reassign = self.name in scope.symbol_table and self_type == scope.type_table[self.name]
-        cast = As(self.initial_value.info, self.initial_value, self_type).codegen(scope)
-        if not should_reassign:
-            scope.symbol_table[self.name] = cast
-            scope.type_table[self.name] = self_type
-            return
-        assign = AssignOp.make(scope.symbol_table[self.name], cast, self_type)
-        scope.region.last_block.add_op(assign)
-        scope.type_table[self.name] = self_type
-
-    def typeflow(self, scope):
-        self_type = self.type(scope)
-        self.ensure_capitalization()
-        scope.validate_type(self.info, self_type)
-        cast = As(self.initial_value.info, self.initial_value, self_type).exprtype(scope)
-        scope.points_to_facts.add((self.name, "==", self.initial_value.info.id))
-        self.initial_value.typeflow(scope)
-        scope.type_table[self.name] = self_type
-
-@dataclass
 class Assignment(Statement):
     target: Identifier
     value: Expression
@@ -3160,13 +3142,6 @@ class Import(Statement):
     sandbox: Scope
 
     def typeflow(self, scope):
-        if self.info.filepath == self.import_filepath: raise Exception("a file should never import itself")
-        included_files.add_edge(self.info.filepath, self.import_filepath)
-        dependency_cycle = next(nx.simple_cycles(included_files), None)
-        if dependency_cycle:
-            debug_print("Dependency graph:")
-            nx.write_network_text(included_files)
-            raise Exception(f"{self.info}: Import of {self.import_filepath} from {self.info.filepath} creates a cycle in the dependency graph.")
         self.program.interface_typeflow(self.sandbox)
         for k, v in self.sandbox.classes.items():
             if k not in scope.classes.keys(): scope.classes[k] = v

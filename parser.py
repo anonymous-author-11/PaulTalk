@@ -6,6 +6,7 @@ from lark import Transformer
 from lark.exceptions import UnexpectedToken
 from xdsl.ir import Block, Region
 from xdsl.dialects.builtin import IntegerType, IntegerAttr, StringAttr, NoneAttr, Signedness
+import networkx as nx
 from utils import *
 import copy
 import time
@@ -183,6 +184,13 @@ class CSTTransformer(Transformer):
         path = Path(*path_components)
         full_path = find_path(path, self.file_path)
         if not full_path: raise Exception(f"{node_info}: Could not find import {path} in available source directories")
+        if self.file_path == full_path: raise Exception(f"{node_info}: A file should never import itself")
+        included_files.add_edge(self.file_path, full_path)
+        dependency_cycle = next(nx.simple_cycles(included_files), None)
+        if dependency_cycle:
+            print("Dependency graph:")
+            nx.write_network_text(included_files)
+            raise Exception(f"{node_info}: Import of {full_path} from {self.file_path} creates a cycle in the dependency graph.")
         ast = parse(full_path)
         return Import(node_info, full_path, ast.root, Scope())
 
@@ -197,9 +205,12 @@ class CSTTransformer(Transformer):
         return param
 
     def var_decl(self, name, typ, initial_value):
-        node_info = NodeInfo(None, self.file_path, name.line)
-        if initial_value: return VarInit(node_info, name.value, typ, initial_value)
-        return VarInit(node_info, name.value, typ, NilLiteral(name.line))
+        assignment_info = NodeInfo(None, self.file_path, name.line)
+        cast_info = NodeInfo(None, self.file_path, name.line)
+        ident_info = NodeInfo(None, self.file_path, name.line)
+        nil_info = NodeInfo(None, self.file_path, name.line)
+        if initial_value: return Assignment(assignment_info, Identifier(ident_info, name.value), As(cast_info, initial_value, typ))
+        return Assignment(assignment_info, Identifier(ident_info, name.value), As(cast_info, NilLiteral(nil_info), typ))
 
     def field_decl(self, name, typ):
         node_info = NodeInfo(None, self.file_path, name.line)
@@ -354,18 +365,20 @@ class CSTTransformer(Transformer):
 
     def as_op(self, operand, astoken, typ):
         node_info = NodeInfo(None, self.file_path, astoken.line)
-        return As(node_info, operand, typ);
+        return As(node_info, operand, typ, force=True);
 
     def paren_expr(self, expr):
         return expr
 
     def int_literal(self, token):
         node_info = NodeInfo(None, self.file_path, token.line)
-        return IntegerLiteral(node_info, int(token.value.replace("_","")), 32)
+        value = int(token.value.replace("_",""))
+        return IntegerLiteral(node_info, value, 32)
 
     def hex_literal(self, token):
         node_info = NodeInfo(None, self.file_path, token.line)
-        return IntegerLiteral(node_info, int(token.value.replace("_",""), 16), 32)
+        value = int.from_bytes(bytes.fromhex(token.value.replace("_","")[2:]), byteorder='big', signed=True)
+        return IntegerLiteral(node_info, value, 32)
 
     def float_literal(self, token):
         node_info = NodeInfo(None, self.file_path, token.line)

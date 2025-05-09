@@ -414,8 +414,6 @@ DONE:
 - Try compiling with /O2 /Ob3 via Nuitka [check!]
 - Implement heterogenous-width and integer-float binary operations [check!]
 
-TODO:
-
 - Releases 0.1.*
 	- Works on any Windows x86_64 machine (other people's computers)
 	- You can download ptalk.exe and run it out-of-the-box [check!]
@@ -448,9 +446,15 @@ TODO:
 	- Fix bump_malloc [check!]
 	- Lazily constructed exception messages [check!]
 
+TODO:
+
 - We don't have to do codegen to discover the dependency graph
-- You don't need to re-lower a file when one of its dependencies changes
-	- You only need to reoptimize it
+- Make optimization incremental
+- You shouldn't be able to add booleans to numbers
+	- Arguably Bool should be its own type, not Integer(1)
+- Could infer a default width for int / hex literals
+
+- Should hex literals be i32 by default or should their width be inferred?
 
 - Right now, overflow *is defined* as 2's complement
 	- This is why we have extensions / truncations in loops
