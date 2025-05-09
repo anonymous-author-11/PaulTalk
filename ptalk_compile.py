@@ -91,11 +91,12 @@ class CompilationJob:
         ast = self.run_parse()
         self.run_typeflow(ast)
         self.lower_all(ast)
-        self.parallel_optimization()
 
         # not creating an output file
         if not self.output_path: return self.finish()
 
+        self.llvm_link()
+        self.run_opt()
         self.run_llc()
 
         # Only creating an object file
@@ -259,7 +260,7 @@ class CompilationJob:
 
             # We don't want to inline anything here because it might be compiled in debug mode later
             # I don't mind running --attributor-enable=all here because of the lack of inlining
-            passes = "--passes=\"default<O3>\""
+            passes = "--passes=sroa"
             opt = f"{OPT_PATH} {passes} --inline-threshold=-10000 {self.settings.attributor('all')} {self.settings.devirt} -o {job.input.bc_file}"
             
             subprocess.run(f"{reg2mem} | {opt}", text=True, shell=True, input=section)
@@ -273,55 +274,49 @@ class CompilationJob:
         self.record_time("lower_to_llvm")
         self.time_printer.print(f'Time to generate bitcodes: {self.time_between("after_mlir_translate", "lower_to_llvm")} seconds')
 
-    # LLVM is not natively multithreaded and ThinLTO does not work properly
-    # So here's how we can parallelize optimization by ourselves:
-    # Split the file dependency graph into layers with nx.topological_generations
-    # Optimize each *layer* in parallel with multiprocessing
-    # For each file, before optimizing, use llvm-link --only-needed to link in its (already optimized) dependencies
-    def parallel_optimization(self):
+    # merge all the .bc files into one big .ll file for optimization
+    # kind of like LTO but no pretense of being at "link-time"
+    def llvm_link(self):
 
-        optimized_folder = self.build_dir / "optimized"
-        bitcodes_folder = self.build_dir / "bitcodes"
-        os.makedirs(optimized_folder, exist_ok=True)
+        self.record_time("before_llvm_link")
+
+        bc_file_paths = (self.build_dir.joinpath(f"bitcodes/{path.stem}.bc") for path in self.dependencies.list)
+        lib_file_path = self.build_dir / f"{self.input.path.stem}.lib"
+        make_archive = (LLVM_AR_PATH, "cr", lib_file_path, *bc_file_paths)
+        subprocess.run(make_archive)
+
+        out_linked_path = self.build_dir / "out_linked.ll"
+        link_utils = (LLVM_LINK_PATH, UTILS_PATH, OS_UTILS_PATH, self.input.bc_file, "-S", "-o", out_linked_path)
+        subprocess.run(link_utils)
+
+        # use the correct main function
+        replace_in_file(out_linked_path, f"_main_{clean_name(self.input.path.stem)}", "main")
+
+        # using --only-needed cuts out a lot of unnecessary imports
+        out_reg2mem_path = self.build_dir / "out_reg2mem.ll"
+        link_imports = (LLVM_LINK_PATH, "-S", out_linked_path, lib_file_path, "-o", out_reg2mem_path, "--only-needed")
+        subprocess.run(link_imports)
+
+        self.record_time("after_llvm_link")
+        self.time_printer.print(f'Time to llvm-link: {self.time_between("before_llvm_link", "after_llvm_link")} seconds')
+
+    def run_opt(self):
+
+        out_reg2mem_path = self.build_dir / "out_reg2mem.ll"
+        out_optimized_path = self.build_dir / "out_optimized.ll"
 
         passes = f"--passes=\"{self.settings.opt_level}\""
+
         settings = f"{self.settings.devirt} {self.settings.inlining} {self.settings.attributor()}"
+        mllvm_options = [*(f"--mllvm={s}" for s in settings.split(" ")), "--mllvm=--enable-lto-internalization=false"]
 
-        self.record_time("before_parallel_opt")
+        opt = f"{OPT_PATH} -S {out_reg2mem_path} {passes} {settings} -o {out_optimized_path}"
+        subprocess.run(opt)
 
-        os_utils_optimized = optimized_folder / f'{OS_UTILS_PATH.stem}.optimized.bc'
-        utils_optimized = optimized_folder / f'{UTILS_PATH.stem}.optimized.bc'
-
-        opt_os_utils = f"{LLVM_LINK_PATH} {OS_UTILS_PATH} {LAYOUT_PATH} | {OPT_PATH} -o {os_utils_optimized} {settings} {passes}"
-        opt_utils = f"{LLVM_LINK_PATH} {UTILS_PATH} {LAYOUT_PATH} | {OPT_PATH} -o {utils_optimized} {settings} {passes}"
-        subprocess.run(opt_os_utils, shell=True)
-        subprocess.run(opt_utils, shell=True)
-
-        optimize_fn = functools.partial(optimize_file, self.dependencies, self.build_dir, passes, settings)
-
-        # don't create a new pool for every layer
-        with multiprocessing.Pool() as pool:
-            # processing in reverse-topological order (leaves first)
-            for i, layer in enumerate(self.dependencies.layers):
-                self.record_time(f"before_{i}")
-
-                # process in parallel only if there are actually multiple files in the layer
-                optimize_fn(layer[0]) if len(layer) == 1 else pool.map(optimize_fn, layer)
-
-                self.record_time(f"after_{i}")
-                layer_string = f"{(', ').join([x.stem for x in layer])}"
-                self.time_printer.print(f'Time to opt layer {i} ({layer_string}): {self.time_between(f"before_{i}", f"after_{i}")} seconds')
-
-        # Store the optimized IR in out_optimized.ll so we can review it
-        optimized_bc = optimized_folder / f"{self.input.path.stem}.optimized.bc"
-        out_optimized_path = self.build_dir / "out_optimized.ll"
-        subprocess.run(f"{OPT_PATH} -S {optimized_bc} -o {out_optimized_path}")
-
-        # Add debug metadata if compiling in debug mode
         if self.settings.debug_mode: subprocess.run((DEBUGIR_PATH, out_optimized_path))
 
-        self.record_time("after_parallel_opt")
-        self.time_printer.print(f'Time to parallel opt: {self.time_between("before_parallel_opt", "after_parallel_opt")} seconds')
+        self.record_time("after_opt")
+        self.time_printer.print(f'Time to optimize: {self.time_between("after_llvm_link", "after_opt")} seconds')
 
     def run_llc(self):
 
@@ -356,12 +351,7 @@ class CompilationJob:
         
         # lld with -flavor link is equivalent to lld-link
         lld_link = (LLD_PATH, "-flavor", "link", obj_path, f"/out:{exe_path}", self.settings.debug_flag, *dynamic_libc)
-        try:
-            subprocess.run(lld_link, check=True)
-        except:
-            self.dependencies.print_graph = True
-            self.dependencies.print()
-            raise Exception()
+        subprocess.run(lld_link, check=True)
 
         self.record_time("after_lld")
         self.time_printer.print(f'Time to lld link: {self.time_between("after_llc", "after_lld")} seconds')
@@ -555,9 +545,8 @@ def hash_file(filepath) -> bytes:
 
 def already_perfect(source_path, build_dir) -> bool:
     bc_file_path = build_dir / "bitcodes" / f"{source_path.stem}.bc"
-    optimized_file_path = build_dir / "optimized" / f"{source_path.stem}.optimized.bc"
     hash_file_path = build_dir / "hashes" / f"{source_path.stem}.hash"
-    if not (hash_file_path.exists() and bc_file_path.exists() and optimized_file_path.exists()): return False
+    if not (hash_file_path.exists() and bc_file_path.exists()): return False
     src_hash = hash_file(source_path)
     with open(hash_file_path, "rb") as f: stored_hash = f.read()
     if src_hash == stored_hash: return True

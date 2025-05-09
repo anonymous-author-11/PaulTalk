@@ -448,6 +448,8 @@ DONE:
 
 TODO:
 
+- Our hand-rolled parallel optimization is like 2x slower than just normal serial LLVM
+	- New idea: do ThinLTO, then one more round of FullLTO
 - We don't have to do codegen to discover the dependency graph
 - Make optimization incremental
 - You shouldn't be able to add booleans to numbers
