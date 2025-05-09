@@ -22,28 +22,20 @@ from functools import cmp_to_key
 import networkx as nx
 from pathlib import Path
 
-codegenned = set()
-generate_main_for = set()
-toplevel_ops = []
-included_files = nx.DiGraph()
 silent = [False]
 
 def debug_print(message):
     if silent[0]: return
     print(message)
 
-def reset_ast_globals():
-    codegenned.clear()
-    generate_main_for.clear()
-    toplevel_ops.clear()
-    included_files.clear()
-
 class AST:
 
     global_scope: Scope
     typed: bool
+    root: "Program"
 
-    def __init__(self):
+    def __init__(self, root):
+        self.root = root
         self.global_scope = Scope()
         self.typed = False
 
@@ -56,7 +48,7 @@ class AST:
         #debug_print("typechecking complete")
         self.root.codegen(self.global_scope)
         #debug_print("codegen complete")
-        func_ops = [op.parent_block().detach_op(op) for op in toplevel_ops]
+        func_ops = [op.parent_block().detach_op(op) for op in self.global_scope.comp_unit.toplevel_ops]
         ops = chain.from_iterable([block.ops for block in self.global_scope.region.blocks])
         class_ops = [op.parent_block().detach_op(op) for op in ops if isinstance(op, TypeDefOp) or isinstance(op, ExternalTypeDefOp)]
         typ_ops = []
@@ -108,7 +100,7 @@ class AST:
                 "size_fn":data_size_fn_name
             }
             typ_ops.append(TypeDefOp.create(attributes=attr_dict))
-        if self.root.info.filepath in generate_main_for:
+        if self.global_scope.comp_unit.main and self.root.info.filepath.samefile(self.global_scope.comp_unit.main):
             main_name = StringAttr("_main_" + clean_name(self.root.info.filepath.stem))
             main = MainOp.create(regions=[self.global_scope.region], attributes={"main_name":main_name})
             module = ModuleOp([PreludeOp.create(), *typ_ops, *class_ops, *func_ops, main], {"sym_name":StringAttr(self.root.info.filepath.stem)})
@@ -564,7 +556,7 @@ class FunctionLiteral(Expression):
     yield_type: TypeAttribute
 
     def codegen(self, scope):
-        if self.name in codegenned: return
+        if self.name in scope.comp_unit.codegenned: return
         body_scope = Scope(scope, method=self)
         body_scope.behavior = None
         body_scope.type_table = {}
@@ -577,12 +569,12 @@ class FunctionLiteral(Expression):
             "yield_type":self.yield_type
         }
         func_op = FunctionDefOp.create(attributes=attr_dict, regions=[body_scope.region])
-        toplevel_ops.append(func_op)
+        scope.comp_unit.toplevel_ops.append(func_op)
         addr_of = AddrOfOp.from_string(self.name)
         alloca = AllocateOp.make(llvm.LLVMPointerType.opaque())
         store = llvm.StoreOp(addr_of.results[0], alloca.results[0])
         scope.region.last_block.add_ops([func_op, addr_of, alloca, store])
-        codegenned.add(self.name)
+        scope.comp_unit.codegenned.add(self.name)
         return alloca.results[0]
 
     def wrap_params(self, body_scope):
@@ -1441,13 +1433,13 @@ class ExternDef(Statement):
     yield_type: TypeAttribute
 
     def codegen(self, scope):
-        if self.name in codegenned: return
+        if self.name in scope.comp_unit.codegenned: return
         arg_types = [param.type(scope).base_typ() for param in self.params]
         result_type = self.return_type().base_typ() if self.return_type() else llvm.LLVMVoidType()
         func = llvm.FuncOp(self.name, llvm.LLVMFunctionType(arg_types, result_type), llvm.LinkageAttr("external"))
-        toplevel_ops.append(func)
+        scope.comp_unit.toplevel_ops.append(func)
         scope.region.last_block.add_op(func)
-        codegenned.add(self.name)
+        scope.comp_unit.codegenned.add(self.name)
 
     def interface_codegen(self, scope):
         self.codegen(scope)
@@ -1473,7 +1465,7 @@ class FunctionDef(Statement):
     hasreturn: bool
 
     def codegen(self, scope):
-        if self.name in codegenned: return
+        if self.name in scope.comp_unit.codegenned: return
         scope.functions[self.name] = self
         body_scope = Scope(scope, method=self)
         body_scope.type_table = {}
@@ -1487,18 +1479,18 @@ class FunctionDef(Statement):
             "yield_type":self.yield_type
         }
         func_op = FunctionDefOp.create(attributes=attr_dict, regions=[body_scope.region])
-        toplevel_ops.append(func_op)
+        scope.comp_unit.toplevel_ops.append(func_op)
         scope.region.last_block.add_op(func_op)
-        codegenned.add(self.name)
+        scope.comp_unit.codegenned.add(self.name)
 
     def interface_codegen(self, scope):
-        if self.name in codegenned: return
+        if self.name in scope.comp_unit.codegenned: return
         arg_types = [param.type(scope).base_typ() for param in self.params]
         result_type = self.return_type().base_typ() if self.return_type() else llvm.LLVMVoidType()
         func = llvm.FuncOp(self.name, llvm.LLVMFunctionType(arg_types, result_type), llvm.LinkageAttr("external"))
-        toplevel_ops.append(func)
+        scope.comp_unit.toplevel_ops.append(func)
         scope.region.last_block.add_op(func)
-        codegenned.add(self.name)
+        scope.comp_unit.codegenned.add(self.name)
 
     def return_type(self):
         return self._return_type
@@ -1545,7 +1537,7 @@ class MethodDef(Statement):
 
     def codegen(self, scope):
         #debug_print(f"codegenning {self.defining_class.name}.{self.name}")
-        if self.qualified_name() in codegenned: return
+        if self.qualified_name() in scope.comp_unit.codegenned: return
 
         body_scope = Scope(scope, method=self)
         for t in self.type_params: body_scope.add_alias(FatPtr.basic(t.label.data), t)
@@ -1560,19 +1552,19 @@ class MethodDef(Statement):
             "yield_type":self.yield_type
         }
         func_op = FunctionDefOp.create(attributes=attr_dict, regions=[body_scope.region])
-        toplevel_ops.append(func_op)
+        scope.comp_unit.toplevel_ops.append(func_op)
         scope.region.last_block.add_op(func_op)
-        codegenned.add(self.qualified_name())
+        scope.comp_unit.codegenned.add(self.qualified_name())
 
     def interface_codegen(self, scope):
         #debug_print(f"interface codegenning {self.defining_class.name}.{self.name}")
-        if self.qualified_name() in codegenned: return
+        if self.qualified_name() in scope.comp_unit.codegenned: return
         arg_types = [t.base_typ() for t in scope.behavior.broad_param_types()]
         result_type = scope.behavior.broad_return_type().base_typ() if scope.behavior.broad_return_type() else llvm.LLVMVoidType()
         func = llvm.FuncOp(self.qualified_name(), llvm.LLVMFunctionType(arg_types, result_type), llvm.LinkageAttr("external"))
-        toplevel_ops.append(func)
+        scope.comp_unit.toplevel_ops.append(func)
         scope.region.last_block.add_op(func)
-        codegenned.add(self.qualified_name())
+        scope.comp_unit.codegenned.add(self.qualified_name())
 
     def qualified_name(self):
         return self.defining_class.name+"_"+self.mangled_name
@@ -1922,7 +1914,7 @@ class Method:
 class ClassMethodDef(MethodDef):
 
     def codegen(self, scope):
-        if self.qualified_name() in codegenned: return
+        if self.qualified_name() in scope.comp_unit.codegenned: return
         body_scope = Scope(scope, method=self)
         arg_types = scope.behavior.broad_param_types()
         self.wrap_params(body_scope, arg_types)
@@ -1934,9 +1926,9 @@ class ClassMethodDef(MethodDef):
             "yield_type":self.yield_type
         }
         func_op = FunctionDefOp.create(attributes=attr_dict, regions=[body_scope.region])
-        toplevel_ops.append(func_op)
+        scope.comp_unit.toplevel_ops.append(func_op)
         scope.region.last_block.add_op(func_op)
-        codegenned.add(self.qualified_name())
+        scope.comp_unit.codegenned.add(self.qualified_name())
 
     def wrap_params(self, body_scope, arg_types):
         body_block = body_scope.region.block
@@ -2091,7 +2083,7 @@ class Behavior(Statement):
         return self.cls.name + "_B_" + "_".join(meth.definition.mangled_name for meth in self.methods)
         
     def codegen(self, scope):
-        if self.qualified_name() in codegenned: return
+        if self.qualified_name() in scope.comp_unit.codegenned: return
 
         behavior_scope = Scope(scope, behavior=self)
         for method in self.methods:
@@ -2130,9 +2122,9 @@ class Behavior(Statement):
 
         body = Region([entry, *[bblock for (block, bblock) in blocks.values()], exit])
         function = FunctionDefOp.create(attributes=attr_dict, regions=[body])
-        toplevel_ops.append(function)
+        scope.comp_unit.toplevel_ops.append(function)
         scope.region.last_block.add_op(function)
-        codegenned.add(self.qualified_name())
+        scope.comp_unit.codegenned.add(self.qualified_name())
 
     def setup_exit(self, offset_ptr, fat_ptr):
         exit = Block([])
@@ -2269,13 +2261,13 @@ class ClassDef(Statement):
     _my_ordering: List["ClassDef"]
 
     def codegen(self, scope):
-        if self.name in codegenned: return
+        if self.name in scope.comp_unit.codegenned: return
 
         fields_types = ArrayAttr([t.base_typ() if not isinstance(t, TypeParameter) else IntegerAttr.from_int_and_width(self.type_parameters.index(t), 64) for t in self.fields_types()])
         data_size_fn_name = StringAttr("_data_size_" + self.name)
         data_size_fn = DataSizeDefOp.create(attributes={"meth_name":data_size_fn_name,"types":fields_types})
         scope.region.last_block.add_op(data_size_fn)
-        toplevel_ops.append(data_size_fn)
+        scope.comp_unit.toplevel_ops.append(data_size_fn)
 
         not_instantiable = any(isinstance(elem.definition, AbstractMethodDef) for elem in self.vtable() if isinstance(elem, Method))
         if not_instantiable:
@@ -2302,16 +2294,16 @@ class ClassDef(Statement):
         for elem in self.vtable():
             if isinstance(elem, Behavior): elem.codegen(self._scope)
         scope.merge_blocks(self._scope)
-        codegenned.add(self.name)
+        scope.comp_unit.codegenned.add(self.name)
 
     def interface_codegen(self, scope):
-        if self.name in codegenned: return
+        if self.name in scope.comp_unit.codegenned: return
         not_instantiable = any(isinstance(elem.definition, AbstractMethodDef) for elem in self.vtable() if isinstance(elem, Method))
         vtable_size = 0 if not_instantiable else self.vtable_size()
         attr_dict = {"class_name":StringAttr(self.name), "vtbl_size":IntegerAttr.from_int_and_width(vtable_size, 32)}
         class_def = ExternalTypeDefOp.create(attributes=attr_dict)
         scope.region.last_block.add_op(class_def)
-        codegenned.add(self.name)
+        scope.comp_unit.codegenned.add(self.name)
 
     def typeflow(self, scope):
         if not self.name[0].isupper():
@@ -2645,7 +2637,7 @@ class Field:
                 attr_dict["id_hierarchy"] = id_hierarchy(self.declaration.type_param, [])
                 attr_dict["name_hierarchy"] = name_hierarchy(self.declaration.type_param)
             accessor = TypeAccessorDefOp.create(attributes=attr_dict)
-            toplevel_ops.append(accessor)
+            scope.comp_unit.toplevel_ops.append(accessor)
             scope.region.last_block.add_op(accessor)
             return
 
@@ -2659,7 +2651,7 @@ class Field:
         attr_dict = {"meth_name":accessor_name, "getter_name":getter_name, "setter_name":setter_name}
         accessor = AccessorDefOp.create(attributes=attr_dict)
         
-        toplevel_ops.extend([getter, setter, accessor])
+        scope.comp_unit.toplevel_ops.extend([getter, setter, accessor])
         scope.region.last_block.add_ops([getter, setter, accessor])
 
     def needs_storage(self):
@@ -3048,7 +3040,7 @@ class CoCreate(Expression):
             if not union_like: attr_dict["ret_flag"] = func_type.return_type.symbol()
         attr_dict["yield_type"] = scope.simplify(Union.from_list([Nil(), arg_types[0].yield_type])).base_typ()
         op = ArgPasserOp.create(attributes=attr_dict)
-        toplevel_ops.append(op)
+        scope.comp_unit.toplevel_ops.append(op)
         scope.region.last_block.add_op(op)
 
     def generate_buffer_filler(self, scope, self_type):
@@ -3056,7 +3048,7 @@ class CoCreate(Expression):
         attr_dict = {"func_name":StringAttr(self.name + "_buffer_filler"), "arg_types":ArrayAttr([t.base_typ() for t in arg_types[1:]])}
         attr_dict["yield_type"] = scope.simplify(Union.from_list([Nil(), arg_types[0].yield_type])).base_typ()
         op = BufferFillerOp.create(attributes=attr_dict)
-        toplevel_ops.append(op)
+        scope.comp_unit.toplevel_ops.append(op)
         scope.region.last_block.add_op(op)
 
     def exprtype(self, scope):
@@ -3152,12 +3144,15 @@ class Import(Statement):
     sandbox: Scope
 
     def typeflow(self, scope):
-        included_files.add_edge(self.info.filepath, self.import_filepath)
-        dependency_cycle = next(nx.simple_cycles(included_files), None)
+        scope.comp_unit.dependency_graph.add_edge(self.info.filepath, self.import_filepath)
+        dependency_cycle = next(nx.simple_cycles(scope.comp_unit.dependency_graph), None)
         if dependency_cycle:
             print("Dependency graph:")
-            nx.write_network_text(included_files)
+            nx.write_network_text(scope.comp_unit.dependency_graph)
             raise Exception(f"{self.info}: Import of {self.import_filepath} from {self.info.filepath} creates a cycle in the dependency graph.")
+        if not self.sandbox:
+            self.sandbox = Scope()
+            self.sandbox.comp_unit = scope.comp_unit
         self.program.interface_typeflow(self.sandbox)
         for k, v in self.sandbox.classes.items():
             if k not in scope.classes.keys(): scope.classes[k] = v

@@ -3,7 +3,7 @@ import time
 start_time = time.time()
 
 from parser import CSTTransformer, parse, source_directories
-from AST import included_files, generate_main_for, reset_ast_globals, silent
+from AST import silent, AST
 from utils import clean_name
 from xdsl.dialects.builtin import ModuleOp, StringAttr
 from xdsl.context import MLContext
@@ -115,27 +115,21 @@ class CompilationJob:
         return self.timings[b] - self.timings[a]
 
     def run_parse(self):
-        ast = parse(self.input.path)
+        program = parse(self.input.path)
+        ast = AST(program)
+        if self.output_path and self.output_path.suffix == ".exe":
+            ast.global_scope.comp_unit.main = self.input.path
         self.record_time("after_parse")
         return ast
 
     def run_typeflow(self, ast):
-        try:
-            ast.typeflow()
-        except Exception as e:
-            reset_ast_globals()
-            raise e
-        self.dependencies.graph = copy.deepcopy(included_files)
+        ast.typeflow()
+        self.dependencies.graph = ast.global_scope.comp_unit.dependency_graph
         self.dependencies.print()
-        reset_ast_globals()
         self.record_time("after_typeflow")
 
     def run_codegen(self, ast):
-        try:
-            module = ast.codegen()
-        finally:
-            reset_ast_globals()
-
+        module = ast.codegen()
         stringio = StringIO()
         Printer(stringio).print(module)
         module_str = stringio.getvalue().encode().decode('unicode_escape')
@@ -157,7 +151,6 @@ class CompilationJob:
         
         needs_lowering = not already_perfect(self.input.path, self.build_dir)
         if needs_lowering:
-            if self.output_path.suffix == ".exe": generate_main_for.add(self.input.path)
             own_module = self.run_codegen(own_ast)
             modules.append(own_module)
             jobs.append(self)
@@ -256,14 +249,8 @@ class CompilationJob:
             
             # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
             # this has shown to improve the optimization potential for unclear reasons
-            reg2mem = f"{OPT_PATH} --passes=reg2mem"
-
-            # We don't want to inline anything here because it might be compiled in debug mode later
-            # I don't mind running --attributor-enable=all here because of the lack of inlining
-            passes = "--passes=sroa"
-            opt = f"{OPT_PATH} {passes} --inline-threshold=-10000 {self.settings.attributor('all')} {self.settings.devirt} -o {job.input.bc_file}"
-            
-            subprocess.run(f"{reg2mem} | {opt}", text=True, shell=True, input=section)
+            reg2mem = (OPT_PATH, "--passes=reg2mem", "-o", job.input.bc_file)
+            subprocess.run(reg2mem, input=section, text=True)
 
             link_layout = f"{LLVM_LINK_PATH} {job.input.bc_file} {LAYOUT_PATH} -o {job.input.bc_file}"
             subprocess.run(link_layout, shell=True)

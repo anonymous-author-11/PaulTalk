@@ -39,10 +39,10 @@ def parse(file_path) -> AST:
         if file_path.name not in ["builtins.mini", "iteration.mini", "core.mini"]:
             import_text = "import core;\n\n" + import_text
 
-        tree = parser.parse(import_text)
-        tree = CSTTransformer(file_path).transform(tree)
-        parsed[file_path] = tree
-        return copy.deepcopy(tree)
+        program = parser.parse(import_text)
+        program = CSTTransformer(file_path).transform(program)
+        parsed[file_path] = program
+        return copy.deepcopy(program)
     except UnexpectedToken as e:
         error_message = format_parser_error(e, file_path)
         raise Exception(f"Parsing Error:\n\n{error_message}") from None
@@ -65,13 +65,11 @@ class CSTTransformer(Transformer):
 
     def __init__(self, file_path):
         super().__init__()
-        self.tree = AST()
         self.file_path = file_path
     
     def start(self, *statements):
         node_info = NodeInfo(None, self.file_path, 0)
-        self.tree.root = Program(node_info, statements)
-        return self.tree
+        return Program(node_info, statements)
 
     def statement(self, stmt):
         return stmt
@@ -185,8 +183,8 @@ class CSTTransformer(Transformer):
         full_path = find_path(path, self.file_path)
         if not full_path: raise Exception(f"{node_info}: Could not find import {path} in available source directories")
         if self.file_path == full_path: raise Exception(f"{node_info}: A file should never import itself")
-        ast = parse(full_path)
-        return Import(node_info, full_path, ast.root, Scope())
+        program = parse(full_path)
+        return Import(node_info, full_path, program, None)
 
     def ident_list(self, *ids):
         return list(ids)
@@ -237,12 +235,12 @@ class CSTTransformer(Transformer):
         node_info = NodeInfo(None, self.file_path, ret.line)
         return ReturnValue(node_info, value) if value else Return(node_info)
 
-    def break_statement(self, tree):
-        node_info = NodeInfo(None, self.file_path, tree.line)
+    def break_statement(self, break_token):
+        node_info = NodeInfo(None, self.file_path, break_token.line)
         return Break(node_info)
 
-    def continue_statement(self, tree):
-        node_info = NodeInfo(None, self.file_path, tree.line)
+    def continue_statement(self, continue_token):
+        node_info = NodeInfo(None, self.file_path, continue_token.line)
         return Continue(node_info)
 
     def typ(self, t):

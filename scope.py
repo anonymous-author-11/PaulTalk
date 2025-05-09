@@ -6,7 +6,9 @@ from gmpy2 import next_prime
 from xdsl.ir import Block, Region
 from xdsl.dialects import cf
 import random
+import networkx as nx
 from dataclasses import dataclass
+from pathlib import Path
 
 @dataclass
 class ConstraintSet:
@@ -46,9 +48,24 @@ class ConstraintSet:
     def union(self, other):
         return ConstraintSet(self._set.union(other._set))
 
+class CompilationUnit:
+    dependency_graph: nx.DiGraph
+    codegenned: set
+    toplevel_ops: list
+    main: Path
+
+    def __init__(self):
+        self.dependency_graph = nx.DiGraph()
+        self.codegenned = set()
+        self.toplevel_ops = []
+        self.main = None
+
 class Scope:
     def __init__(self, parent=None, cls=None, behavior=None, method=None, wile=None):
         self.region = Region([Block([])])
+
+        self.comp_unit = parent.comp_unit if parent else CompilationUnit()
+
         self.symbol_table = parent.symbol_table.copy() if parent else {}
         self.type_table = parent.type_table.copy() if parent else {}
         self.aliases = parent.aliases.copy() if parent else {}
