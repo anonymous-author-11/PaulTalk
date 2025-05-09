@@ -185,12 +185,6 @@ class CSTTransformer(Transformer):
         full_path = find_path(path, self.file_path)
         if not full_path: raise Exception(f"{node_info}: Could not find import {path} in available source directories")
         if self.file_path == full_path: raise Exception(f"{node_info}: A file should never import itself")
-        included_files.add_edge(self.file_path, full_path)
-        dependency_cycle = next(nx.simple_cycles(included_files), None)
-        if dependency_cycle:
-            print("Dependency graph:")
-            nx.write_network_text(included_files)
-            raise Exception(f"{node_info}: Import of {full_path} from {self.file_path} creates a cycle in the dependency graph.")
         ast = parse(full_path)
         return Import(node_info, full_path, ast.root, Scope())
 

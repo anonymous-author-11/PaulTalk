@@ -40,14 +40,24 @@ def reset_ast_globals():
 
 class AST:
 
+    global_scope: Scope
+    typed: bool
+
+    def __init__(self):
+        self.global_scope = Scope()
+        self.typed = False
+
+    def typeflow(self):
+        self.root.typeflow(self.global_scope)
+        self.typed = True
+
     def codegen(self) -> ModuleOp:
-        global_scope = Scope()
-        self.root.typeflow(global_scope)
+        if not self.typed: self.root.typeflow(self.global_scope)
         #debug_print("typechecking complete")
-        self.root.codegen(global_scope)
+        self.root.codegen(self.global_scope)
         #debug_print("codegen complete")
         func_ops = [op.parent_block().detach_op(op) for op in toplevel_ops]
-        ops = chain.from_iterable([block.ops for block in global_scope.region.blocks])
+        ops = chain.from_iterable([block.ops for block in self.global_scope.region.blocks])
         class_ops = [op.parent_block().detach_op(op) for op in ops if isinstance(op, TypeDefOp) or isinstance(op, ExternalTypeDefOp)]
         typ_ops = []
         for typ_name, typ in builtin_types.items():
@@ -81,8 +91,8 @@ class AST:
                 unbox_fn = UnboxDefOp.make("_unbox_" + typ_name)
                 func_ops.extend([box_fn, unbox_fn])
 
-            hash_tbl, prime = global_scope.build_hashtable(typ)
-            offset_tbl = global_scope.build_offset_table(typ)
+            hash_tbl, prime = self.global_scope.build_hashtable(typ)
+            offset_tbl = self.global_scope.build_offset_table(typ)
             hashid = IntegerAttr.from_int_and_width(hash_id(typ_name), 64)
             attr_dict = {
                 "class_name":StringAttr(typ_name),
@@ -100,7 +110,7 @@ class AST:
             typ_ops.append(TypeDefOp.create(attributes=attr_dict))
         if self.root.info.filepath in generate_main_for:
             main_name = StringAttr("_main_" + clean_name(self.root.info.filepath.stem))
-            main = MainOp.create(regions=[global_scope.region], attributes={"main_name":main_name})
+            main = MainOp.create(regions=[self.global_scope.region], attributes={"main_name":main_name})
             module = ModuleOp([PreludeOp.create(), *typ_ops, *class_ops, *func_ops, main], {"sym_name":StringAttr(self.root.info.filepath.stem)})
         else:
             module = ModuleOp([PreludeOp.create(), *typ_ops, *class_ops, *func_ops], {"sym_name":StringAttr(self.root.info.filepath.stem)})
@@ -3142,6 +3152,12 @@ class Import(Statement):
     sandbox: Scope
 
     def typeflow(self, scope):
+        included_files.add_edge(self.info.filepath, self.import_filepath)
+        dependency_cycle = next(nx.simple_cycles(included_files), None)
+        if dependency_cycle:
+            print("Dependency graph:")
+            nx.write_network_text(included_files)
+            raise Exception(f"{self.info}: Import of {self.import_filepath} from {self.info.filepath} creates a cycle in the dependency graph.")
         self.program.interface_typeflow(self.sandbox)
         for k, v in self.sandbox.classes.items():
             if k not in scope.classes.keys(): scope.classes[k] = v

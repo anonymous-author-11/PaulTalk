@@ -89,6 +89,7 @@ class CompilationJob:
 
         add_source_directories(self.input.path)
         ast = self.run_parse()
+        self.run_typeflow(ast)
         self.lower_all(ast)
         self.parallel_optimization()
 
@@ -114,24 +115,30 @@ class CompilationJob:
 
     def run_parse(self):
         ast = parse(self.input.path)
+        self.record_time("after_parse")
+        return ast
+
+    def run_typeflow(self, ast):
+        try:
+            ast.typeflow()
+        except Exception as e:
+            reset_ast_globals()
+            raise e
         self.dependencies.graph = copy.deepcopy(included_files)
         self.dependencies.print()
         reset_ast_globals()
-        self.record_time("after_parse")
-        return ast
+        self.record_time("after_typeflow")
 
     def run_codegen(self, ast):
         try:
             module = ast.codegen()
-        except Exception as e:
+        finally:
             reset_ast_globals()
-            raise e
 
         stringio = StringIO()
         Printer(stringio).print(module)
         module_str = stringio.getvalue().encode().decode('unicode_escape')
         with open(self.build_dir.joinpath("in.mlir"), "w") as outfile: outfile.write(module_str)
-        reset_ast_globals()
         self.record_time("after_codegen")
         return module
 
@@ -153,16 +160,20 @@ class CompilationJob:
             own_module = self.run_codegen(own_ast)
             modules.append(own_module)
             jobs.append(self)
+
+        self.record_time("codegen_done")
         
         # We deferred printing these timings so they weren't broken up by any miscellaneous printing during codegen
         self.time_printer.print(f'Time to import: {self.time_between("start_time","after_imports")} seconds')
-        self.time_printer.print(f'Time to parse: {self.time_between("after_imports", "parse_dependencies")} seconds')
+        self.time_printer.print(f'Time to parse: {self.time_between("after_imports", "after_parse")} seconds')
+        self.time_printer.print(f'Time to type check: {self.time_between("after_parse", "after_typeflow")} seconds')
         
         # All bitcodes are already perfect; return early
         if len(modules) == 0: return
 
         # Only relevant if there were more than 0 modules
-        self.time_printer.print(f'Time to codegen: {self.time_between("parse_dependencies", "codegen_dependencies")} seconds')
+        self.time_printer.print(f'Time to parse dependencies: {self.time_between("after_typeflow", "parse_dependencies")} seconds')
+        self.time_printer.print(f'Time to codegen: {self.time_between("parse_dependencies", "codegen_done")} seconds')
         
         module_str = self.lower_mlir(modules)
         llvm_string = self.lower_to_llvm(module_str)
@@ -344,7 +355,12 @@ class CompilationJob:
         
         # lld with -flavor link is equivalent to lld-link
         lld_link = (LLD_PATH, "-flavor", "link", obj_path, f"/out:{exe_path}", self.settings.debug_flag, *dynamic_libc)
-        subprocess.run(lld_link)
+        try:
+            subprocess.run(lld_link, check=True)
+        except:
+            self.dependencies.print_graph = True
+            self.dependencies.print()
+            raise Exception()
 
         self.record_time("after_lld")
         self.time_printer.print(f'Time to lld link: {self.time_between("after_llc", "after_lld")} seconds')
@@ -490,13 +506,13 @@ class Dependencies:
     def recompile_list(self) -> set:
         if self._recompile_list: return self._recompile_list
         to_recompile = set()
-        for dependency in self.list:
+        # ordered in reverse-topological order; input file is included
+        sorted_paths = list(reversed(list(nx.topological_sort(self.graph))))
+        for dependency in sorted_paths:
             if already_perfect(dependency, self.input.build_dir): continue
             dependents = set(nx.ancestors(self.graph, dependency))
             to_recompile.add(dependency)
             to_recompile = to_recompile.union(dependents)
-        # ordered in reverse-topological order; input file is included
-        sorted_paths = reversed(list(nx.topological_sort(self.graph)))
         self._recompile_list = [path for path in sorted_paths if path in to_recompile]
         return self._recompile_list
 
