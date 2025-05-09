@@ -167,12 +167,13 @@ class CompilationJob:
         self.time_printer.print(f'Time to import: {self.time_between("start_time","after_imports")} seconds')
         self.time_printer.print(f'Time to parse: {self.time_between("after_imports", "after_parse")} seconds')
         self.time_printer.print(f'Time to type check: {self.time_between("after_parse", "after_typeflow")} seconds')
+        if len(sorted_dependencies) > 0: 
+            self.time_printer.print(f'Time to parse dependencies: {self.time_between("after_typeflow", "parse_dependencies")} seconds')
         
         # All bitcodes are already perfect; return early
         if len(modules) == 0: return
 
         # Only relevant if there were more than 0 modules
-        self.time_printer.print(f'Time to parse dependencies: {self.time_between("after_typeflow", "parse_dependencies")} seconds')
         self.time_printer.print(f'Time to codegen: {self.time_between("parse_dependencies", "codegen_done")} seconds')
         
         module_str = self.lower_mlir(modules)
