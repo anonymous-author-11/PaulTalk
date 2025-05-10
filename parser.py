@@ -1,7 +1,8 @@
 from lark import Transformer, v_args, Lark
 import lark_cython
 from AST import *
-from core_dialect import *
+from hi_dialect import *
+from mid_dialect import *
 from lark import Transformer
 from lark.exceptions import UnexpectedToken
 from xdsl.ir import Block, Region

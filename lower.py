@@ -25,7 +25,8 @@ from xdsl.dialects.builtin import (
 from xdsl.ir.core import SSAValue, OpResult, Block, Region
 from xdsl.irdl import IRDLOperation
 from xdsl.passes import ModulePass
-from core_dialect import *
+from hi_dialect import *
+from mid_dialect import *
 from xdsl.dialects import scf, func, builtin, cf, memref
 from xdsl.printer import Printer
 from utils import builtin_types, vtable_buffer_size

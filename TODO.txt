@@ -448,7 +448,7 @@ DONE:
 
 TODO:
 
-- Could infer a default width for int / hex literals
+- Split dialect into multiple files
 
 - Should hex literals be i32 by default or should their width be inferred?
 
@@ -465,6 +465,7 @@ TODO:
 		- We separate typeflow and codegen [check!]
 		- Then get the dependency graph from typeflow [check!]
 	- Arguably Bool should be its own type, not Integer(1) [check!]
+	- In debug mode we should skip optimizing entirely [check!]
 	- Hi, mid, lo dialects
 	- Unsigned integers
 		- Should probably split out Integer and Float first [check!]

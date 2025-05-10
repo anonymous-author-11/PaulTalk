@@ -6,7 +6,8 @@ methods for type checking and code generation.
 
 from dataclasses import dataclass
 from typing import List, Optional, Dict, Tuple, Set
-from core_dialect import *
+from hi_dialect import *
+from mid_dialect import *
 from utils import *
 from scope import Scope, ConstraintSet
 from method_dispatch import *

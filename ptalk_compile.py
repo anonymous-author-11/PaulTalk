@@ -93,14 +93,17 @@ class CompilationJob:
         self.lower_all(ast)
 
         # not creating an output file
-        if not self.output_path: return self.finish()
+        if not self.output_path:
+            return self.finish()
 
         self.llvm_link()
-        self.run_opt()
+        if not self.settings.debug_mode:
+            self.run_opt()
         self.run_llc()
 
         # Only creating an object file
-        if self.output_path.suffix != ".obj": self.run_lld()
+        if self.output_path.suffix != ".obj":
+            self.run_lld()
         self.finish()
 
     def finish(self):
@@ -249,8 +252,12 @@ class CompilationJob:
             
             # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
             # this has shown to improve the optimization potential for unclear reasons
-            reg2mem = (OPT_PATH, "--passes=reg2mem", "-o", job.input.bc_file)
-            subprocess.run(reg2mem, input=section, text=True)
+            reg2mem = f"{OPT_PATH} --passes=\"reg2mem\""
+            # Don't inline anything here as it may be compiled in debug mode later
+            # Since we are not inlining, I don't mind using --attributor-enable=all here
+            # The LTO pre-link pipeline is a good fit for this stage
+            o1 = f"{OPT_PATH} --passes=\"lto-pre-link<O1>\" {self.settings.attributor('all')} --inline-threshold=-10000 -o {job.input.bc_file}"
+            subprocess.run(f"{reg2mem} | {o1}", input=section, text=True, shell=True)
 
             link_layout = f"{LLVM_LINK_PATH} {job.input.bc_file} {LAYOUT_PATH} -o {job.input.bc_file}"
             subprocess.run(link_layout, shell=True)
@@ -280,27 +287,27 @@ class CompilationJob:
         replace_in_file(out_utils_path, f"_main_{clean_name(self.input.path.stem)}", "main")
 
         # using --only-needed cuts out a lot of unnecessary imports
-        out_reg2mem_path = self.build_dir / "out_linked.ll"
-        link_imports = (LLVM_LINK_PATH, "-S", out_utils_path, lib_file_path, "-o", out_reg2mem_path, "--only-needed")
+        out_linked_path = self.build_dir / "out_linked.ll"
+        link_imports = (LLVM_LINK_PATH, "-S", out_utils_path, lib_file_path, "-o", out_linked_path, "--only-needed")
         subprocess.run(link_imports)
+
+        if self.settings.debug_mode: subprocess.run((DEBUGIR_PATH, out_linked_path))
 
         self.record_time("after_llvm_link")
         self.time_printer.print(f'Time to llvm-link: {self.time_between("before_llvm_link", "after_llvm_link")} seconds')
 
     def run_opt(self):
 
-        out_reg2mem_path = self.build_dir / "out_linked.ll"
+        out_linked_path = self.build_dir / "out_linked.ll"
         out_optimized_path = self.build_dir / "out_optimized.ll"
 
-        passes = f"--passes=\"{self.settings.opt_level}\""
+        passes = f"--passes=\"{self.settings.opt_level(3)}\""
 
         settings = f"{self.settings.devirt} {self.settings.inlining} {self.settings.attributor()}"
         mllvm_options = [*(f"--mllvm={s}" for s in settings.split(" ")), "--mllvm=--enable-lto-internalization=false"]
 
-        opt = f"{OPT_PATH} -S {out_reg2mem_path} {passes} {settings} -o {out_optimized_path}"
+        opt = f"{OPT_PATH} -S {out_linked_path} {passes} {settings} -o {out_optimized_path}"
         subprocess.run(opt)
-
-        if self.settings.debug_mode: subprocess.run((DEBUGIR_PATH, out_optimized_path))
 
         self.record_time("after_opt")
         self.time_printer.print(f'Time to optimize: {self.time_between("after_llvm_link", "after_opt")} seconds')
@@ -318,11 +325,13 @@ class CompilationJob:
         os.makedirs(obj_dir, exist_ok=True)
 
         obj_path = obj_dir / f"{self.output_path.stem}.obj"
-        out_optimized_path = self.build_dir / f"out_optimized{self.settings.debug_extension}.ll"
+        out_linked_dbg_path = self.build_dir / f"out_linked.dbg.ll"
+        out_optimized_path = self.build_dir / f"out_optimized.ll"
+        in_path = out_linked_dbg_path if self.settings.debug_mode else out_optimized_path
 
         self.record_time("before_llc")
 
-        llc = (LLC_PATH, "-filetype=obj", out_optimized_path, "-O=3", target_triple, exception_model, "-o", obj_path)
+        llc = (LLC_PATH, "-filetype=obj", in_path, "-O=3", target_triple, exception_model, "-o", obj_path)
         subprocess.run(llc)
 
         self.record_time("after_llc")
@@ -337,8 +346,8 @@ class CompilationJob:
         exe_path = self.output_path.parent / f"{self.output_path.stem}.exe"
         
         # lld with -flavor link is equivalent to lld-link
-        lld_link = (LLD_PATH, "-flavor", "link", obj_path, f"/out:{exe_path}", self.settings.debug_flag, *dynamic_libc)
-        subprocess.run(lld_link, check=True)
+        lld_link = (LLD_PATH, "-flavor", "link", obj_path, f"/out:{exe_path}", "/ignore:longsections", self.settings.debug_flag, *dynamic_libc)
+        subprocess.run(lld_link)
 
         self.record_time("after_lld")
         self.time_printer.print(f'Time to lld link: {self.time_between("after_llc", "after_lld")} seconds')
@@ -346,15 +355,6 @@ class CompilationJob:
 @dataclass
 class OptimizationSettings:
     debug_mode: bool
-
-    @property
-    def opt_level(self):
-        # a pass so nice we run it twice
-        o3 = "default<O3>,default<O3>"
-        o2 = "default<O2>"
-        o1 = "default<O1>"
-        opt_level = o1 if self.debug_mode else o3
-        return opt_level
 
     @property
     def inlining(self):
@@ -369,12 +369,16 @@ class OptimizationSettings:
         return "--max-devirt-iterations=100 --abort-on-max-devirt-iterations-reached"
 
     @property
-    def debug_extension(self):
-        return ".dbg" if self.debug_mode else ""
-
-    @property
     def debug_flag(self):
         return "/debug" if self.debug_mode else ""
+
+    def opt_level(self, level):
+        levels = {
+            1:"default<O1>",
+            2:"default<O2>",
+            3:"default<O3>,default<O3>" # a pass so nice we run it twice
+        }
+        return levels[level]
 
     def attributor(self, mode="module"):
         # We --disable-tail-calls for the following reason:
@@ -409,7 +413,7 @@ class Dependencies:
         self._list = None
         self._recompile_list = None
 
-        # Will be added by CompilationJob.run_codegen()
+        # Will be added by CompilationJob.run_typeflow()
         self.graph = None
 
     @property
@@ -578,12 +582,12 @@ def record_all_passes(build_dir):
     #clang = "clang -x ir out_linked.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
     #opt = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
     
-    out_reg2mem_path = build_dir / "out_linked.ll"
+    out_linked_path = build_dir / "out_linked.ll"
     passes = "--passes=default<O1>"
     opt = (OPT_PATH, passes, attributor_settings(), devirtualization_settings(), "--inline-threshold=10000", "--print-changed")
 
     # clang can't handle the 'preserve_nonecc' calling convention for some reason
-    replace_in_file(out_reg2mem_path, "preserve_nonecc", "")
+    replace_in_file(out_linked_path, "preserve_nonecc", "")
 
     opt_out = subprocess.run(opt, capture_output=True)
     with open(build_dir.joinpath("opt_passes.txt"), "w") as outfile: outfile.write(opt_out.stderr)
