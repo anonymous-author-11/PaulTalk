@@ -448,12 +448,6 @@ DONE:
 
 TODO:
 
-- Our hand-rolled parallel optimization is like 2x slower than just normal serial LLVM
-	- New idea: do ThinLTO, then one more round of FullLTO
-- We don't have to do codegen to discover the dependency graph
-- Make optimization incremental
-- You shouldn't be able to add booleans to numbers
-	- Arguably Bool should be its own type, not Integer(1)
 - Could infer a default width for int / hex literals
 
 - Should hex literals be i32 by default or should their width be inferred?
@@ -467,6 +461,11 @@ TODO:
 
 - Releases 0.4.*
 	- Put .gitignore * in build dir [check!]
+	- We don't have to do codegen to discover the dependency graph [check!]
+		- We separate typeflow and codegen [check!]
+		- Then get the dependency graph from typeflow [check!]
+	- Arguably Bool should be its own type, not Integer(1) [check!]
+	- Hi, mid, lo dialects
 	- Unsigned integers
 		- Should probably split out Integer and Float first [check!]
 		- Any u[width] can be converted to an i[2*width] or larger [check!]
@@ -481,6 +480,7 @@ TODO:
 			- Shifts treat rhs as unsigned
 			- lshr for unsigned lhs, ashr for signed lhs
 			- sitofp, uitofp
+		- I should want a hi.arith which dispatches based on hi types
 	- UTF-8 strings
 		- Character as codepoint (not grapheme cluster)
 		- All strings must be valid UTF-8

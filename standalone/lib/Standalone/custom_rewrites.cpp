@@ -324,7 +324,7 @@ static Value unwrapStruct(PatternRewriter &rewriter, Operation *op) {
     auto gepOp = rewriter.create<LLVM::GEPOp>(op->getLoc(), ptrType, structType, structPtr, indices);
     
     // Create recursive unwrap operation
-    OperationState state(op->getLoc(), "mini.unwrap");
+    OperationState state(op->getLoc(), "mid.unwrap");
     state.addOperands(gepOp.getResult());
     state.addTypes(elementType);
     Operation *unwrapOp = rewriter.create(state);
@@ -394,7 +394,7 @@ static void lowerMemcpyStruct(PatternRewriter &rewriter, Operation *op) {
     auto destGep = rewriter.create<LLVM::GEPOp>(op->getLoc(), ptrType, structType, dest, destIndices);
 
     // Create memcpy for this element
-    OperationState memcpyState(op->getLoc(), "mini.memcpy");
+    OperationState memcpyState(op->getLoc(), "mid.memcpy");
     memcpyState.addOperands({sourceGep, destGep});
     memcpyState.addAttribute("type", TypeAttr::get(elementType));
     rewriter.create(memcpyState);

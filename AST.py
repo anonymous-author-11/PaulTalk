@@ -240,8 +240,8 @@ class BinaryOp(Expression):
             return OverloadedBinaryOp(self.info, self.left, self.operator, self.right).exprtype(scope)
         right_type = self.right.exprtype(scope)
 
-        left_number = isinstance(left_type, Integer) or isinstance(left_type, Float)
-        right_number = isinstance(right_type, Integer) or isinstance(right_type, Float)
+        left_number = isinstance(left_type, Integer) or isinstance(left_type, Float) or isinstance(left_type, Bool)
+        right_number = isinstance(right_type, Integer) or isinstance(right_type, Float) or isinstance(right_type, Bool)
         if not (left_number and right_number):
             raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
 
@@ -303,7 +303,7 @@ class Comparison(BinaryOp):
     def concrete_exprtype(self, left_type, right_type):
         if left_type != right_type:
             raise Exception(f"{self.info}: tried to use {self.operator} on different types: {left_type} and {right_type}")
-        return Integer(1)
+        return Bool()
 
 @dataclass
 class Logical(BinaryOp):
@@ -324,9 +324,9 @@ class Logical(BinaryOp):
         return wrap.results[0]
 
     def concrete_exprtype(self, left_type, right_type):
-        if left_type != Integer(1) or right_type != Integer(1):
+        if left_type != Bool() or right_type != Bool():
             raise Exception(f"{self.info} Logical operator {self.operator} must take two booleans, not {left_type} and {right_type}")
-        return Integer(1)
+        return Bool()
 
 @dataclass
 class OverloadedBinaryOp(BinaryOp):
@@ -431,12 +431,12 @@ class BoolLiteral(Expression):
 
     def codegen(self, scope):
         attr_dict = {"value": IntegerAttr.from_int_and_width(self.value, 1), "typ":IntegerType(1)}
-        const_op = LiteralOp.create(result_types=[Integer(1)], attributes=attr_dict)
+        const_op = LiteralOp.create(result_types=[Bool()], attributes=attr_dict)
         scope.region.last_block.add_op(const_op)
         return const_op.results[0]
 
     def exprtype(self, scope):
-        return Integer(1)
+        return Bool()
 
 @dataclass
 class NilLiteral(Expression):
@@ -716,7 +716,7 @@ class TypeCheck(Expression):
         if not nil_buffer_check and static_type in builtin_types.values():
             result = 1 if scope.subtype(static_type, right_type) else 0
             attr_dict = {"value": IntegerAttr.from_int_and_width(result, 1), "typ":IntegerType(1)}
-            const_op = LiteralOp.create(result_types=[Integer(1)], attributes=attr_dict)
+            const_op = LiteralOp.create(result_types=[Bool()], attributes=attr_dict)
             scope.region.last_block.add_op(const_op)
             return const_op.results[0]
 
@@ -736,7 +736,7 @@ class TypeCheck(Expression):
         self.left.exprtype(scope)
         right_type = scope.simplify(self.right)
         scope.validate_type(self.info, right_type)
-        return Integer(1)
+        return Bool()
 
     def typeflow(self, scope):
         self.exprtype(scope)
@@ -1284,7 +1284,7 @@ class IntrinsicCall(ClassMethodCall):
         if "f64" in self.method: return Float()
         if "i32" in self.method: return Integer(32)
         if "i64" in self.method: return Integer(64)
-        if "i1" in self.method: return Integer(1)
+        if "i1" in self.method: return Bool()
         raise Exception(f"{self.info}: not implemented intrinsic {self.method} for type yet")
 
 @dataclass
@@ -2151,7 +2151,7 @@ class Behavior(Statement):
 
         gep = llvm.GEPOp.from_mixed_indices(arg, [block.arg_position], pointee_type=llvm.LLVMPointerType.opaque())
         operands = [gep.results[0]]
-        check_flag = CheckFlagOp.create(operands=operands, attributes={"typ_name":block.typ.symbol()}, result_types=[Integer(1)])
+        check_flag = CheckFlagOp.create(operands=operands, attributes={"typ_name":block.typ.symbol()}, result_types=[Bool()])
         is_subtype = llvm.LoadOp(check_flag.results[0], IntegerType(1))
 
         br = cf.ConditionalBranch(is_subtype.results[0], blocks[block.first_succ_name][1], [], blocks[block.second_succ_name][1], [])

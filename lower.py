@@ -71,6 +71,7 @@ class LowerTypes(ModulePass):
         walker = PatternRewriteWalker(
             GreedyRewritePatternApplier([
                 LowerInteger(),
+                LowerBool(),
                 LowerFloat(),
                 LowerNil(),
                 LowerFatPtr(),
@@ -212,6 +213,11 @@ def debug_code(op):
 class LowerInteger(TypeConversionPattern):
     @attr_type_rewrite_pattern
     def convert_type(self, typ: Integer):
+        return llvm.LLVMPointerType.opaque()
+
+class LowerBool(TypeConversionPattern):
+    @attr_type_rewrite_pattern
+    def convert_type(self, typ: Bool):
         return llvm.LLVMPointerType.opaque()
 
 class LowerFloat(TypeConversionPattern):

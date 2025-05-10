@@ -526,8 +526,8 @@ def run_pdl_lowering(module_str, build_dir) -> str:
 
     # the IR verifier will complain about temporary symbol-table inconsistencies unless we use these placeholders
     replacements = {
-        "mini.addressof": "placeholder.addressof",
-        "\"mini.global\"": "\"placeholder.global\"",
+        "mid.addressof": "placeholder.addressof",
+        "\"mid.global\"": "\"placeholder.global\"",
         #"\"llvm.load\"": "\"placeholder.load\"",
         #"\"llvm.extractvalue\"": "\"placeholder.extractvalue\"",
         "\"llvm.call\"": "\"placeholder.call\""
@@ -538,7 +538,7 @@ def run_pdl_lowering(module_str, build_dir) -> str:
     module_str = patterns + module_str
 
     # this should run only one iteration, but we use 'while' anyway
-    while "\"mini." in module_str:
+    while "\"mid." in module_str:
         cmd_out = subprocess.run(run_bytecode, capture_output=True, shell=True, text=True, input=module_str)
         if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
         stringio = StringIO()

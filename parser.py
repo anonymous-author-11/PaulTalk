@@ -248,7 +248,7 @@ class CSTTransformer(Transformer):
 
     def basic_type(self, type_name):
         type_map = {
-            "Bool":Integer(1),
+            "Bool":Bool(),
             "u8":Integer(8, Signedness.UNSIGNED),
             "i8":Integer(8),
             "u32":Integer(32, Signedness.UNSIGNED),

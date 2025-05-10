@@ -15,10 +15,6 @@ from xdsl.dialects import llvm, func, builtin
 from xdsl import traits
 from xdsl.traits import SymbolOpInterface
 from xdsl.printer import Printer
-import random
-
-def random_letters(n):
-    return "".join(random.choices('abcdefghijklmnopqrstuvwxyz', k=n))
 
 # Return type size in bits
 def type_size(typ: TypeAttribute) -> int:
@@ -43,6 +39,8 @@ def type_size(typ: TypeAttribute) -> int:
         return 160
     if isinstance(typ, TypeParameter):
         return 160
+    if isinstance(typ, Bool):
+        return 1
     if isinstance(typ, IntegerType) or isinstance(typ, Float64Type):
         result = typ.bitwidth
         return result
@@ -53,7 +51,7 @@ def type_size(typ: TypeAttribute) -> int:
 
 @irdl_attr_definition
 class TypeParameter(ParametrizedAttribute, TypeAttribute):
-    name = "mini.type_param"
+    name = "hi.type_param"
     label: ParameterDef[StringAttr]
     bound: ParameterDef[TypeAttribute]
     defining_class: ParameterDef[StringAttr]
@@ -85,7 +83,7 @@ class TypeParameter(ParametrizedAttribute, TypeAttribute):
 
 @irdl_attr_definition
 class Integer(ParametrizedAttribute, FixedBitwidthType):
-    name = "mini.int"
+    name = "hi.int"
     width: ParameterDef[IntAttr]
     signedness: ParameterDef[SignednessAttr]
 
@@ -105,7 +103,6 @@ class Integer(ParametrizedAttribute, FixedBitwidthType):
         return IntegerType(self.bitwidth)
 
     def symbol(self):
-        if self.bitwidth == 1: return StringAttr("bool_typ")
         letter = "u" if self.signedness.data == Signedness.UNSIGNED else "i"
         return StringAttr(f"{letter}{self.bitwidth}_typ")
 
@@ -118,8 +115,28 @@ class Integer(ParametrizedAttribute, FixedBitwidthType):
         return f"{letter}{self.bitwidth}"
 
 @irdl_attr_definition
+class Bool(ParametrizedAttribute, TypeAttribute):
+    name = "hi.bool"
+
+    @property
+    def bitwidth(self) -> int:
+        return 1
+
+    def base_typ(self):
+        return IntegerType(1)
+
+    def symbol(self):
+        return StringAttr("bool_typ")
+
+    def __repr__(self):
+        return "Bool"
+
+    def __format__(self, format_spec):
+        return "Bool"
+
+@irdl_attr_definition
 class Float(ParametrizedAttribute, FixedBitwidthType, _FloatType):
-    name = "mini.float"
+    name = "hi.float"
 
     @property
     def bitwidth(self) -> int:
@@ -139,7 +156,7 @@ class Float(ParametrizedAttribute, FixedBitwidthType, _FloatType):
 
 @irdl_attr_definition
 class FatPtr(ParametrizedAttribute, TypeAttribute):
-    name = "mini.fatptr"
+    name = "hi.fatptr"
     cls: ParameterDef[StringAttr]
     type_params: ParameterDef[ArrayAttr[TypeAttribute] | NoneAttr]
 
@@ -188,14 +205,14 @@ class FatPtr(ParametrizedAttribute, TypeAttribute):
 
 @irdl_attr_definition
 class ReifiedType(ParametrizedAttribute, TypeAttribute):
-    name = "mini.reified_type"
+    name = "hi.reified_type"
 
     def base_typ(self):
         return llvm.LLVMPointerType.opaque()
 
 @irdl_attr_definition
 class Tuple(ParametrizedAttribute, TypeAttribute):
-    name = "mini.tuple"
+    name = "hi.tuple"
     types: ParameterDef[ArrayAttr]
 
     def base_typ(self):
@@ -212,7 +229,7 @@ class Tuple(ParametrizedAttribute, TypeAttribute):
 
 @irdl_attr_definition
 class Callable(ParametrizedAttribute, TypeAttribute):
-    name = "mini.callable"
+    name = "hi.callable"
     param_types: ParameterDef[ArrayAttr]
     yield_type: ParameterDef[TypeAttribute]
     return_type: ParameterDef[TypeAttribute]
@@ -233,7 +250,7 @@ class Callable(ParametrizedAttribute, TypeAttribute):
 
 @irdl_attr_definition
 class Coroutine(ParametrizedAttribute, TypeAttribute):
-    name = "mini.coroutine"
+    name = "hi.coroutine"
     param_types: ParameterDef[ArrayAttr]
     yield_type: ParameterDef[TypeAttribute]
     return_type: ParameterDef[TypeAttribute]
@@ -257,7 +274,7 @@ class Coroutine(ParametrizedAttribute, TypeAttribute):
 
 @irdl_attr_definition
 class Function(ParametrizedAttribute, TypeAttribute):
-    name = "mini.function"
+    name = "hi.function"
     param_types: ParameterDef[ArrayAttr]
     yield_type: ParameterDef[TypeAttribute]
     return_type: ParameterDef[TypeAttribute]
@@ -281,7 +298,7 @@ class Function(ParametrizedAttribute, TypeAttribute):
 
 @irdl_attr_definition
 class Buffer(ParametrizedAttribute, TypeAttribute):
-    name = "mini.buffer"
+    name = "hi.buffer"
     elem_type: ParameterDef[TypeAttribute]
 
     def base_typ(self):
@@ -298,7 +315,7 @@ class Buffer(ParametrizedAttribute, TypeAttribute):
 
 @irdl_attr_definition
 class Union(ParametrizedAttribute, TypeAttribute):
-    name = "mini.union"
+    name = "hi.union"
     types: ParameterDef[ArrayAttr]
 
     def base_typ(self) -> TypeAttribute:
@@ -327,7 +344,7 @@ class Union(ParametrizedAttribute, TypeAttribute):
 
 @irdl_attr_definition
 class Intersection(ParametrizedAttribute, TypeAttribute):
-    name = "mini.intersection"
+    name = "hi.intersection"
     types: ParameterDef[ArrayAttr]
 
     @classmethod
@@ -346,12 +363,12 @@ class Intersection(ParametrizedAttribute, TypeAttribute):
 
 @irdl_attr_definition
 class StackAlloc(ParametrizedAttribute, TypeAttribute):
-    name = "mini.stackalloc"
+    name = "hi.stackalloc"
     type: ParameterDef[Attribute]
 
 @irdl_attr_definition
 class Nothing(ParametrizedAttribute, TypeAttribute):
-    name = "mini.nothing"
+    name = "hi.nothing"
 
     def base_typ(self):
         return llvm.LLVMArrayType.from_size_and_type(0, IntegerType(8))
@@ -367,7 +384,7 @@ class Nothing(ParametrizedAttribute, TypeAttribute):
 
 @irdl_attr_definition
 class Any(ParametrizedAttribute, TypeAttribute):
-    name = "mini.any"
+    name = "hi.any"
 
     def __repr__(self):
         return "Any"
@@ -388,7 +405,7 @@ class Any(ParametrizedAttribute, TypeAttribute):
 
 @irdl_attr_definition
 class Nil(ParametrizedAttribute, TypeAttribute):
-    name = "mini.nil"
+    name = "hi.nil"
 
     def base_typ(self):
         return llvm.LLVMArrayType.from_size_and_type(0, IntegerType(8))
@@ -404,28 +421,28 @@ class Nil(ParametrizedAttribute, TypeAttribute):
 
 @irdl_op_definition
 class PreludeOp(IRDLOperation):
-    name = "mini.prelude"
+    name = "mid.prelude"
 
 @irdl_op_definition
 class MainOp(IRDLOperation):
-    name = "mini.main"
+    name = "mid.main"
     main_name: StringAttr = attr_def(StringAttr)
     body : Region = region_def()
 
 @irdl_op_definition
 class IdentifierOp(IRDLOperation):
-    name = "mini.identifier"
+    name = "mid.identifier"
     result: OpResult = result_def(Integer(32))
 
 @irdl_op_definition
 class DataSizeDefOp(IRDLOperation):
-    name = "mini.data_size_def"
+    name = "mid.data_size_def"
     meth_name: StringAttr = attr_def(StringAttr)
     types: ArrayAttr = attr_def(ArrayAttr)
 
 @irdl_op_definition
 class TypeDefOp(IRDLOperation):
-    name = "mini.typedef"
+    name = "mid.typedef"
     class_name: StringAttr = attr_def(StringAttr)
     methods: ArrayAttr = attr_def(ArrayAttr)
     hash_tbl: ArrayAttr = attr_def(ArrayAttr)
@@ -440,13 +457,13 @@ class TypeDefOp(IRDLOperation):
 
 @irdl_op_definition
 class ExternalTypeDefOp(IRDLOperation):
-    name = "mini.external_typedef"
+    name = "mid.external_typedef"
     class_name: StringAttr = attr_def(StringAttr)
     vtbl_size: IntegerAttr = attr_def(IntegerAttr)
 
 @irdl_op_definition
 class TypeIntegersTableOp(IRDLOperation):
-    name = "mini.type_integers"
+    name = "mid.type_integers"
     hash_id: IntegerAttr = attr_def(IntegerAttr)
     prime: IntegerAttr = attr_def(IntegerAttr)
     tbl_size: IntegerAttr = attr_def(IntegerAttr)
@@ -454,7 +471,7 @@ class TypeIntegersTableOp(IRDLOperation):
 
 @irdl_op_definition
 class MemCpyOp(IRDLOperation):
-    name = "mini.memcpy"
+    name = "mid.memcpy"
     source: Operand = operand_def()
     dest: Operand = operand_def()
     type: TypeAttribute = attr_def(TypeAttribute)
@@ -468,7 +485,7 @@ class MemCpyOp(IRDLOperation):
 
 @irdl_op_definition
 class TypePtrsTableOp(IRDLOperation):
-    name = "mini.type_ptrs"
+    name = "mid.type_ptrs"
     subtype_test: StringAttr = attr_def(StringAttr)
     hash_tbl: StringAttr = attr_def(StringAttr)
     offset_tbl: StringAttr = attr_def(StringAttr)
@@ -481,45 +498,45 @@ class TypePtrsTableOp(IRDLOperation):
 
 @irdl_op_definition
 class VtableOp(IRDLOperation):
-    name = "mini.vtable"
+    name = "mid.vtable"
     methods: ArrayAttr = attr_def(ArrayAttr)
     result: OpResult = result_def()
 
 @irdl_op_definition
 class HashTableOp(IRDLOperation):
-    name = "mini.hash_tbl"
+    name = "mid.hash_tbl"
     class_name: StringAttr = attr_def(StringAttr)
     tbl: ArrayAttr = attr_def(ArrayAttr)
 
 @irdl_op_definition
 class OffsetTableOp(IRDLOperation):
-    name = "mini.offset_tbl"
+    name = "mid.offset_tbl"
     class_name: StringAttr = attr_def(StringAttr)
     tbl: ArrayAttr = attr_def(ArrayAttr)
 
 @irdl_op_definition
 class PlaceIntoBufferOp(IRDLOperation):
-    name = "mini.place_into_buffer"
+    name = "mid.place_into_buffer"
     fat_ptr: Operand = operand_def()
     buf: Operand = operand_def()
 
 @irdl_op_definition
 class FromBufferOp(IRDLOperation):
-    name = "mini.from_buffer"
+    name = "mid.from_buffer"
     vptr: Operand = operand_def()
     buf: Operand = operand_def()
     result: OpResult = result_def()
 
 @irdl_op_definition
 class LiteralOp(IRDLOperation):
-    name = "mini.literal"
+    name = "mid.literal"
     typ: Attribute = attr_def(Attribute)
     value: Attribute = attr_def(Attribute)
     result: OpResult = result_def()
 
 @irdl_op_definition
 class AllocateOp(IRDLOperation):
-    name = "mini.alloc"
+    name = "mid.alloc"
     typ: TypeAttribute = attr_def(TypeAttribute)
     result: OpResult = result_def()
 
@@ -529,7 +546,7 @@ class AllocateOp(IRDLOperation):
 
 @irdl_op_definition
 class InvariantOp(IRDLOperation):
-    name = "mini.invariant"
+    name = "mid.invariant"
     ptr: Operand = operand_def()
     result: OpResult = result_def()
     num_bytes: IntegerAttr = attr_def(IntegerAttr)
@@ -544,7 +561,7 @@ class InvariantOp(IRDLOperation):
 
 @irdl_op_definition
 class BufferIndexationOp(IRDLOperation):
-    name = "mini.buffer_indexation"
+    name = "mid.buffer_indexation"
     receiver: Operand = operand_def()
     index: Operand = operand_def()
     type_size_arg: Operand = operand_def()
@@ -552,7 +569,7 @@ class BufferIndexationOp(IRDLOperation):
 
 @irdl_op_definition
 class BufferGetOp(IRDLOperation):
-    name = "mini.buffer_get"
+    name = "mid.buffer_get"
     receiver: Operand = operand_def()
     index: Operand = operand_def()
     parameterization: OptOperandDef = opt_operand_def()
@@ -561,7 +578,7 @@ class BufferGetOp(IRDLOperation):
 
 @irdl_op_definition
 class BufferSetOp(IRDLOperation):
-    name = "mini.buffer_set"
+    name = "mid.buffer_set"
     receiver: Operand = operand_def()
     index: Operand = operand_def()
     value: Operand = operand_def()
@@ -570,7 +587,7 @@ class BufferSetOp(IRDLOperation):
 
 @irdl_op_definition
 class TupleIndexationOp(IRDLOperation):
-    name = "mini.tuple_indexation"
+    name = "mid.tuple_indexation"
     receiver: Operand = operand_def()
     index: IntegerAttr = attr_def(IntegerAttr)
     result: OpResult = result_def()
@@ -578,11 +595,11 @@ class TupleIndexationOp(IRDLOperation):
 
 @irdl_op_definition
 class PDLOps(IRDLOperation):
-    name = "mini.pdl_ops"
+    name = "mid.pdl_ops"
 
 @irdl_op_definition
 class AddrOfOp(IRDLOperation):
-    name = "mini.addr_of"
+    name = "mid.addr_of"
     global_name: SymbolRefAttr = attr_def(SymbolRefAttr)
     result: OpResult = result_def(llvm.LLVMPointerType.opaque())
 
@@ -600,17 +617,17 @@ class AddrOfOp(IRDLOperation):
 
 @irdl_op_definition
 class MallocOp(IRDLOperation):
-    name = "mini.malloc"
+    name = "mid.malloc"
     typ: TypeAttribute = attr_def(TypeAttribute)
     result: OpResult = result_def()
 
 @irdl_op_definition
 class UtilsAPIOp(IRDLOperation):
-    name = "mini.utils_api"
+    name = "mid.utils_api"
 
 @irdl_op_definition
 class CoroCreateOp(IRDLOperation):
-    name = "mini.coro_create"
+    name = "mid.coro_create"
     func: Operand = operand_def()
     args: VarOperand = var_operand_def()
     result: OpResult = result_def()
@@ -619,32 +636,32 @@ class CoroCreateOp(IRDLOperation):
 
 @irdl_op_definition
 class CoroCallOp(IRDLOperation):
-    name = "mini.coro_call"
+    name = "mid.coro_call"
     coro: Operand = operand_def()
     value: OptOperandDef = opt_operand_def()
     result: OptResultDef = opt_result_def()
 
 @irdl_op_definition
 class CoroYieldOp(IRDLOperation):
-    name = "mini.coro_yield"
+    name = "mid.coro_yield"
     value: OptOperandDef = opt_operand_def()
     result: OptResultDef = opt_result_def()
 
 @irdl_op_definition
 class CoroGetResultOp(IRDLOperation):
-    name = "mini.coro_get_result"
+    name = "mid.coro_get_result"
     coro: Operand = operand_def()
     result: OpResult = result_def()
 
 @irdl_op_definition
 class CoroSetResultOp(IRDLOperation):
-    name = "mini.coro_set_result"
+    name = "mid.coro_set_result"
     coro: Operand = operand_def()
     value: Operand = operand_def()
 
 @irdl_op_definition
 class SubtypeOp(IRDLOperation):
-    name = "mini.subtype"
+    name = "mid.subtype"
     subtype_inner: Operand = operand_def()
     tbl_size: Operand = operand_def()
     hash_coef: Operand = operand_def()
@@ -655,19 +672,19 @@ class SubtypeOp(IRDLOperation):
 
 @irdl_op_definition
 class TypeSizeOp(IRDLOperation):
-    name = "mini.type_size"
+    name = "mid.type_size"
     typ: TypeAttribute = attr_def(TypeAttribute)
     result: OpResult = result_def()
 
 @irdl_op_definition
 class TypeAlignmentOp(IRDLOperation):
-    name = "mini.type_alignment"
+    name = "mid.type_alignment"
     typ: TypeAttribute = attr_def(TypeAttribute)
     result: OpResult = result_def()
 
 @irdl_op_definition
 class CreateBufferOp(IRDLOperation):
-    name = "mini.create_buffer"
+    name = "mid.create_buffer"
     size: Operand = operand_def()
     parameterization: OptOperandDef = opt_operand_def()
     region_id: StringAttr = attr_def(StringAttr)
@@ -676,14 +693,14 @@ class CreateBufferOp(IRDLOperation):
 
 @irdl_op_definition
 class CreateTupleOp(IRDLOperation):
-    name = "mini.create_tuple"
+    name = "mid.create_tuple"
     values: VarOperand = var_operand_def()
     typ: TypeAttribute = attr_def(TypeAttribute)
     result: OpResult = result_def()
 
 @irdl_op_definition
 class MethodCallLike(IRDLOperation):
-    name = "mini.method_call_like"
+    name = "mid.method_call_like"
     args: VarOperand = var_operand_def()
     result: OpResult = result_def()
     offset: IntegerAttr = attr_def(IntegerAttr)
@@ -694,7 +711,7 @@ class MethodCallLike(IRDLOperation):
 
 @irdl_op_definition
 class MethodCallOp(MethodCallLike, IRDLOperation):
-    name = "mini.method_call"
+    name = "mid.method_call"
     parameterizations: Operand = operand_def()
     fat_ptr: Operand = operand_def(FatPtr)
     traits = frozenset()
@@ -721,7 +738,7 @@ class MethodCallOp(MethodCallLike, IRDLOperation):
 
 @irdl_op_definition
 class ClassMethodCallOp(MethodCallLike, IRDLOperation):
-    name = "mini.class_method_call"
+    name = "mid.class_method_call"
     parameterizations: Operand = operand_def()
     class_name: StringAttr = attr_def(StringAttr)
     traits = frozenset()
@@ -746,7 +763,7 @@ class ClassMethodCallOp(MethodCallLike, IRDLOperation):
 
 @irdl_op_definition
 class FieldAccessOp(IRDLOperation):
-    name = "mini.field_access"
+    name = "mid.field_access"
     fat_ptr: Operand = operand_def(FatPtr)
     offset: IntegerAttr = attr_def(IntegerAttr)
     vtable_bytes: IntegerAttr = attr_def(IntegerAttr)
@@ -754,7 +771,7 @@ class FieldAccessOp(IRDLOperation):
 
 @irdl_op_definition
 class GetFieldOp(IRDLOperation):
-    name = "mini.get_field"
+    name = "mid.get_field"
     fat_ptr: Operand = operand_def(FatPtr)
     offset: IntegerAttr = attr_def(IntegerAttr)
     vtable_bytes: IntegerAttr = attr_def(IntegerAttr)
@@ -764,7 +781,7 @@ class GetFieldOp(IRDLOperation):
 
 @irdl_op_definition
 class GetTypeFieldOp(IRDLOperation):
-    name = "mini.get_type_field"
+    name = "mid.get_type_field"
     fat_ptr: Operand = operand_def(FatPtr)
     offset: IntegerAttr = attr_def(IntegerAttr)
     vtable_bytes: IntegerAttr = attr_def(IntegerAttr)
@@ -772,7 +789,7 @@ class GetTypeFieldOp(IRDLOperation):
 
 @irdl_op_definition
 class SetFieldOp(IRDLOperation):
-    name = "mini.set_field"
+    name = "mid.set_field"
     fat_ptr: Operand = operand_def(FatPtr)
     value: Operand = operand_def()
     offset: IntegerAttr = attr_def(IntegerAttr)
@@ -781,27 +798,27 @@ class SetFieldOp(IRDLOperation):
 
 @irdl_op_definition
 class ParameterizationsArrayOp(IRDLOperation):
-    name = "mini.parameterizations_array"
+    name = "mid.parameterizations_array"
     parameterizations: VarOperand = var_operand_def()
     result: OpResult = result_def()
 
 @irdl_op_definition
 class ParameterizationIndexationOp(IRDLOperation):
-    name = "mini.parameterization_indexation"
+    name = "mid.parameterization_indexation"
     parameterization: Operand = operand_def()
     indices: ArrayAttr = attr_def(ArrayAttr)
     result: OpResult = result_def()
 
 @irdl_op_definition
 class AccessorDefOp(IRDLOperation):
-    name = "mini.accessor_def"
+    name = "mid.accessor_def"
     meth_name: StringAttr = attr_def(StringAttr)
     getter_name: StringAttr = attr_def(StringAttr)
     setter_name: StringAttr = attr_def(StringAttr)
 
 @irdl_op_definition
 class TypeAccessorDefOp(IRDLOperation):
-    name = "mini.type_accessor_def"
+    name = "mid.type_accessor_def"
     meth_name: StringAttr = attr_def(StringAttr)
     offset: IntegerAttr = attr_def(IntegerAttr)
     id_hierarchy: OptAttributeDef = opt_attr_def(ArrayAttr)
@@ -809,7 +826,7 @@ class TypeAccessorDefOp(IRDLOperation):
 
 @irdl_op_definition
 class GetterDefOp(IRDLOperation):
-    name = "mini.getter_def"
+    name = "mid.getter_def"
     meth_name: StringAttr = attr_def(StringAttr)
     types: ArrayAttr = attr_def(ArrayAttr)
     offset: IntegerAttr = attr_def(IntegerAttr)
@@ -835,7 +852,7 @@ class GetterDefOp(IRDLOperation):
 
 @irdl_op_definition
 class SetterDefOp(IRDLOperation):
-    name = "mini.setter_def"
+    name = "mid.setter_def"
     meth_name: StringAttr = attr_def(StringAttr)
     types: ArrayAttr = attr_def(ArrayAttr)
     offset: IntegerAttr = attr_def(IntegerAttr)
@@ -861,7 +878,7 @@ class SetterDefOp(IRDLOperation):
 
 @irdl_op_definition
 class ArgPasserOp(IRDLOperation):
-    name = "mini.arg_passer"
+    name = "mid.arg_passer"
     func_name: StringAttr = attr_def(StringAttr)
     arg_types: ArrayAttr = attr_def(ArrayAttr)
     yield_type: TypeAttribute = attr_def(TypeAttribute)
@@ -870,14 +887,14 @@ class ArgPasserOp(IRDLOperation):
 
 @irdl_op_definition
 class BufferFillerOp(IRDLOperation):
-    name = "mini.buffer_filler"
+    name = "mid.buffer_filler"
     func_name: StringAttr = attr_def(StringAttr)
     arg_types: ArrayAttr = attr_def(ArrayAttr)
     yield_type: TypeAttribute = attr_def(TypeAttribute)
 
 @irdl_op_definition
 class DataSizeOp(IRDLOperation):
-    name = "mini.data_size"
+    name = "mid.data_size"
     parameterization: Operand = operand_def()
     result: OpResult = result_def()
 
@@ -887,7 +904,7 @@ class DataSizeOp(IRDLOperation):
 
 @irdl_op_definition
 class SizeOp(IRDLOperation):
-    name = "mini.size"
+    name = "mid.size"
     parameterization: Operand = operand_def()
     result: OpResult = result_def()
 
@@ -897,7 +914,7 @@ class SizeOp(IRDLOperation):
 
 @irdl_op_definition
 class ParameterizationOp(IRDLOperation):
-    name = "mini.parameterization"
+    name = "mid.parameterization"
     args: VarOperand = var_operand_def()
     name_hierarchy: ArrayAttr = attr_def(ArrayAttr)
     id_hierarchy: ArrayAttr = attr_def(ArrayAttr)
@@ -912,7 +929,7 @@ class ParameterizationOp(IRDLOperation):
 
 @irdl_op_definition
 class NewOp(IRDLOperation):
-    name = "mini.new"
+    name = "mid.new"
     parameterizations: VarOperand = var_operand_def()
     typ: TypeAttribute = attr_def(TypeAttribute)
     class_name: Attribute = attr_def(StringAttr)
@@ -930,7 +947,7 @@ class NewOp(IRDLOperation):
 
 @irdl_op_definition
 class BoxDefOp(IRDLOperation):
-    name = "mini.box_def"
+    name = "mid.box_def"
     meth_name: StringAttr = attr_def(StringAttr)
 
     @classmethod
@@ -939,7 +956,7 @@ class BoxDefOp(IRDLOperation):
 
 @irdl_op_definition
 class BoxUnionDefOp(IRDLOperation):
-    name = "mini.box_union_def"
+    name = "mid.box_union_def"
     meth_name: StringAttr = attr_def(StringAttr)
 
     @classmethod
@@ -948,7 +965,7 @@ class BoxUnionDefOp(IRDLOperation):
 
 @irdl_op_definition
 class UnboxDefOp(IRDLOperation):
-    name = "mini.unbox_def"
+    name = "mid.unbox_def"
     meth_name: StringAttr = attr_def(StringAttr)
 
     @classmethod
@@ -957,38 +974,38 @@ class UnboxDefOp(IRDLOperation):
 
 @irdl_op_definition
 class ReferOp(IRDLOperation):
-    name = "mini.refer"
+    name = "mid.refer"
     value: Operand = operand_def()
     typ: TypeAttribute = attr_def(TypeAttribute)
     result: OpResult = result_def()
 
 @irdl_op_definition
 class SetOffsetOp(IRDLOperation):
-    name = "mini.set_offset"
+    name = "mid.set_offset"
     union: Operand = operand_def()
     to_typ: SymbolRefAttr = attr_def(SymbolRefAttr)
 
 @irdl_op_definition
 class AnointTrampolineOp(IRDLOperation):
-    name = "mini.anoint_trampoline"
+    name = "mid.anoint_trampoline"
     tramp: Operand = operand_def()
 
 @irdl_op_definition
 class TypIDOp(IRDLOperation):
-    name = "mini.typid"
+    name = "mid.typid"
     result: OpResult = result_def()
     typ_name: Attribute = attr_def(StringAttr)
 
 @irdl_op_definition
 class GetFlagOp(IRDLOperation):
-    name = "mini.getflag"
+    name = "mid.getflag"
     ptr: Operand = operand_def()
     struct_typ: TypeAttribute = attr_def(TypeAttribute)
     result: OpResult = result_def()
 
 @irdl_op_definition
 class SetFlagOp(IRDLOperation):
-    name = "mini.setflag"
+    name = "mid.setflag"
     ptr: Operand = operand_def()
     new_flag: OptOperandDef = opt_operand_def()
     struct_typ: TypeAttribute = attr_def(TypeAttribute)
@@ -996,7 +1013,7 @@ class SetFlagOp(IRDLOperation):
 
 @irdl_op_definition
 class CheckFlagOp(IRDLOperation):
-    name = "mini.checkflag"
+    name = "mid.checkflag"
     ptr: Operand = operand_def()
     parameterization: OptOperandDef = opt_operand_def()
     typ_name: Attribute = attr_def(StringAttr)
@@ -1015,7 +1032,7 @@ class CheckFlagOp(IRDLOperation):
 
 @irdl_op_definition
 class AssignOp(IRDLOperation):
-    name = "mini.assign"
+    name = "mid.assign"
     target: Operand = operand_def()
     value: Operand = operand_def()
     typ: Attribute = attr_def(Attribute)
@@ -1026,32 +1043,32 @@ class AssignOp(IRDLOperation):
 
 @irdl_op_definition
 class PrintfDeclOp(IRDLOperation):
-    name = "mini.printf_decl"
+    name = "mid.printf_decl"
 
 @irdl_op_definition
 class GlobalStrOp(IRDLOperation):
-    name = "mini.globalstr"
+    name = "mid.globalstr"
     sym_name: StringAttr = attr_def(StringAttr)
     str_type: TypeAttribute = attr_def(TypeAttribute)
     value : StringAttr = attr_def(StringAttr)
 
 @irdl_op_definition
 class PrintOp(IRDLOperation):
-    name = "mini.print"
+    name = "mid.print"
     value: Operand = operand_def()
     typ: Attribute = attr_def(Attribute)
     result: OpResult = result_def(IntegerType)
 
 @irdl_op_definition
 class PrintFOp(IRDLOperation):
-    name = "mini.printf"
+    name = "mid.printf"
     fmt_ptr: Operand = operand_def()
     msg: Operand = operand_def()
     result: OpResult = result_def(IntegerType)
 
 @irdl_op_definition
 class ArithmeticOp(IRDLOperation):
-    name = "mini.arithmetic"
+    name = "mid.arithmetic"
     lhs : Operand = operand_def(IntegerType)
     rhs : Operand = operand_def(IntegerType)
     result : OpResult = result_def(IntegerType)
@@ -1063,7 +1080,7 @@ class ArithmeticOp(IRDLOperation):
 
 @irdl_op_definition
 class ComparisonOp(IRDLOperation):
-    name = "mini.comparison"
+    name = "mid.comparison"
     lhs : Operand = operand_def(IntegerType)
     rhs : Operand = operand_def(IntegerType)
     result : OpResult = result_def(IntegerType(1))
@@ -1076,7 +1093,7 @@ class ComparisonOp(IRDLOperation):
 
 @irdl_op_definition
 class LogicalOp(IRDLOperation):
-    name = "mini.logical"
+    name = "mid.logical"
     lhs : Operand = operand_def(IntegerType)
     rhs_region : Region = region_def()
     result : OpResult = result_def(IntegerType(1))
@@ -1084,36 +1101,36 @@ class LogicalOp(IRDLOperation):
 
 @irdl_op_definition
 class WhileOp(IRDLOperation):
-    name = "mini.while"
+    name = "mid.while"
     before_region: Region = region_def()
     loop_region: Region = region_def()
     traits = frozenset([traits.NoTerminator()])
 
 @irdl_op_definition
 class IfOp(IRDLOperation):
-    name = "mini.if"
+    name = "mid.if"
     condition: Operand = operand_def()
     then_region: Region = region_def()
     else_region: OptRegionDef = opt_region_def()
 
 @irdl_op_definition
 class ReturnOp(IRDLOperation):
-    name = "mini.return"
+    name = "mid.return"
     value: OptOperandDef = opt_operand_def()
 
 @irdl_op_definition
 class BreakOp(IRDLOperation):
-    name = "mini.break"
+    name = "mid.break"
     to: Successor = successor_def()
 
 @irdl_op_definition
 class ContinueOp(IRDLOperation):
-    name = "mini.continue"
+    name = "mid.continue"
     to: Successor = successor_def()
 
 @irdl_op_definition
 class FunctionDefOp(IRDLOperation):
-    name = "mini.func"
+    name = "mid.func"
     args_types: ArrayAttr[TypeAttribute] = attr_def(ArrayAttr[TypeAttribute])
     result_type: TypeAttribute = attr_def(TypeAttribute)
     yield_type: TypeAttribute = attr_def(TypeAttribute)
@@ -1122,7 +1139,7 @@ class FunctionDefOp(IRDLOperation):
 
 @irdl_op_definition
 class FunctionCallOp(IRDLOperation):
-    name = "mini.call"
+    name = "mid.call"
     func_name: StringAttr = attr_def(StringAttr)
     args: VarOperand = var_operand_def()
     results: VarResultDef = var_result_def()
@@ -1130,7 +1147,7 @@ class FunctionCallOp(IRDLOperation):
 
 @irdl_op_definition
 class FPtrCallOp(IRDLOperation):
-    name = "mini.fptr_call"
+    name = "mid.fptr_call"
     fptr: Operand = operand_def()
     args: VarOperand = var_operand_def()
     results: VarResultDef = var_result_def()
@@ -1138,17 +1155,17 @@ class FPtrCallOp(IRDLOperation):
 
 @irdl_op_definition
 class NextOp(IRDLOperation):
-    name = "mini.next"
+    name = "mid.next"
     operand: Operand = operand_def()
     result: OpResult = result_def()
 
 @irdl_op_definition
 class SetupExceptionOp(IRDLOperation):
-    name = "mini.setup_exception"
+    name = "mid.setup_exception"
 
 @irdl_op_definition
 class GlobalFptrOp(IRDLOperation):
-    name = "mini.global_fptr"
+    name = "mid.global_fptr"
     global_name: StringAttr = attr_def(StringAttr)
 
 @irdl_op_definition
@@ -1168,7 +1185,7 @@ class CastOp(IRDLOperation):
 
 @irdl_op_definition
 class BoxOp(IRDLOperation):
-    name = "mini.box"
+    name = "mid.box"
     operand: Operand = operand_def()
     result: OpResult = result_def()
     from_typ: TypeAttribute = attr_def(TypeAttribute)
@@ -1180,7 +1197,7 @@ class BoxOp(IRDLOperation):
 
 @irdl_op_definition
 class UnboxOp(IRDLOperation):
-    name = "mini.unbox"
+    name = "mid.unbox"
     operand: Operand = operand_def()
     result: OpResult = result_def()
     from_typ: TypeAttribute = attr_def(TypeAttribute)
@@ -1192,7 +1209,7 @@ class UnboxOp(IRDLOperation):
 
 @irdl_op_definition
 class ToFatPtrOp(IRDLOperation):
-    name = "mini.to_fat_ptr"
+    name = "mid.to_fat_ptr"
     operand: Operand = operand_def()
     result: OpResult = result_def()
     from_typ: TypeAttribute = attr_def(TypeAttribute)
@@ -1203,7 +1220,7 @@ class ToFatPtrOp(IRDLOperation):
 
 @irdl_op_definition
 class UnionizeOp(IRDLOperation):
-    name = "mini.unionize"
+    name = "mid.unionize"
     operand: Operand = operand_def()
     result: OpResult = result_def()
     from_typ: TypeAttribute = attr_def(TypeAttribute)
@@ -1222,7 +1239,7 @@ class UnionizeOp(IRDLOperation):
 
 @irdl_op_definition
 class ReUnionizeOp(IRDLOperation):
-    name = "mini.reunionize"
+    name = "mid.reunionize"
     operand: Operand = operand_def()
     result: OpResult = result_def()
     from_typ: TypeAttribute = attr_def(TypeAttribute)
@@ -1233,7 +1250,7 @@ class ReUnionizeOp(IRDLOperation):
 
 @irdl_op_definition
 class NarrowOp(IRDLOperation):
-    name = "mini.narrow"
+    name = "mid.narrow"
     operand: Operand = operand_def()
     result: OpResult = result_def()
     from_typ: TypeAttribute = attr_def(TypeAttribute)
@@ -1266,7 +1283,7 @@ class ReabstractOp(IRDLOperation):
 
 @irdl_op_definition
 class TupleCastOp(IRDLOperation):
-    name = "mini.tuple_cast"
+    name = "mid.tuple_cast"
     from_typ: TypeAttribute = attr_def(TypeAttribute)
     to_typ: TypeAttribute = attr_def(TypeAttribute)
     traits = frozenset()
@@ -1278,7 +1295,7 @@ class TupleCastOp(IRDLOperation):
 
 @irdl_op_definition
 class WidenIntOp(IRDLOperation):
-    name = "mini.widen_int"
+    name = "mid.widen_int"
     operand: Operand = operand_def()
     result: OpResult = result_def()
     from_typ: TypeAttribute = attr_def(TypeAttribute)
@@ -1289,7 +1306,7 @@ class WidenIntOp(IRDLOperation):
 
 @irdl_op_definition
 class TruncateIntOp(IRDLOperation):
-    name = "mini.truncate_int"
+    name = "mid.truncate_int"
     operand: Operand = operand_def()
     result: OpResult = result_def()
     from_typ: TypeAttribute = attr_def(TypeAttribute)
@@ -1300,7 +1317,7 @@ class TruncateIntOp(IRDLOperation):
 
 @irdl_op_definition
 class IntToFloatOp(IRDLOperation):
-    name = "mini.int_to_float"
+    name = "mid.int_to_float"
     operand: Operand = operand_def()
     result: OpResult = result_def()
     from_typ: TypeAttribute = attr_def(TypeAttribute)
@@ -1311,7 +1328,7 @@ class IntToFloatOp(IRDLOperation):
 
 @irdl_op_definition
 class WrapOp(IRDLOperation):
-    name = "mini.wrap"
+    name = "mid.wrap"
     operand: Operand = operand_def()
     result: OpResult = result_def()
 
@@ -1321,13 +1338,13 @@ class WrapOp(IRDLOperation):
 
 @irdl_op_definition
 class UnwrapOp(IRDLOperation):
-    name = "mini.unwrap"
+    name = "mid.unwrap"
     operand: Operand = operand_def()
     result: OpResult = result_def()
 
 @irdl_op_definition
 class IntrinsicOp(IRDLOperation):
-    name = "mini.intrinsic"
+    name = "mid.intrinsic"
     call_name: StringAttr = attr_def(StringAttr)
     num_args: IntegerAttr = attr_def(IntegerAttr)
     args: VarOperand = var_operand_def()
@@ -1342,12 +1359,12 @@ class IntrinsicOp(IRDLOperation):
 
 @irdl_op_definition
 class GlobalOp(llvm.GlobalOp, IRDLOperation):
-    name = "mini.global"
+    name = "mid.global"
     traits = frozenset([SymbolOpInterface()])
 
 @irdl_op_definition
 class AddressOfOp(llvm.AddressOfOp, IRDLOperation):
-    name = "mini.addressof"
+    name = "mid.addressof"
     traits = frozenset([])
 
 @irdl_op_definition
@@ -1374,6 +1391,7 @@ Hi = Dialect(
     [
         Integer,
         Float,
+        Bool,
         FatPtr,
         ReifiedType,
         Tuple,
