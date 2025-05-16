@@ -243,7 +243,15 @@ class CoroCallOp(IRDLOperation):
 class CoroYieldOp(IRDLOperation):
     name = "mid.coro_yield"
     value: OptOperandDef = opt_operand_def()
+    cold: Attribute = attr_def(IntegerAttr)
     result: OptResultDef = opt_result_def()
+
+    @classmethod
+    def make(cls, value=None, result_type=None, cold=False):
+        operands = [value] if value else []
+        result_types = [result_type] if result_type else []
+        cold = IntegerAttr.from_int_and_width(int(cold), 1)
+        return CoroYieldOp.create(operands=operands, result_types=result_types, attributes={"cold":cold})
 
 @irdl_op_definition
 class CoroGetResultOp(IRDLOperation):

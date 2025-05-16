@@ -1128,9 +1128,9 @@ class LowerCoroGetResult(RewritePattern):
         type_list = [llvm.LLVMPointerType.opaque(), buf_type, llvm.LLVMPointerType.opaque(), IntegerType(1), op.result.type]
         coro_struct = llvm.LLVMStructType.from_type_list(type_list)
         gep = llvm.GEPOp(op.coro, [0, 4], pointee_type=coro_struct)
-        load = llvm.LoadOp(gep.results[0], op.result.type)
+        unwrap = UnwrapOp.create(operands=[gep.results[0]], result_types=[op.result.type])
         rewriter.insert_op_before_matched_op(gep)
-        rewriter.replace_matched_op(load)
+        rewriter.replace_matched_op(unwrap)
 
 class LowerCoroSetResult(RewritePattern):
     @op_type_rewrite_pattern
@@ -1139,9 +1139,10 @@ class LowerCoroSetResult(RewritePattern):
         type_list = [llvm.LLVMPointerType.opaque(), buf_type, llvm.LLVMPointerType.opaque(), IntegerType(1), op.value.type]
         coro_struct = llvm.LLVMStructType.from_type_list(type_list)
         gep = llvm.GEPOp(op.coro, [0, 4], pointee_type=coro_struct)
-        store = llvm.StoreOp(op.value, gep.results[0])
-        rewriter.insert_op_before_matched_op(gep)
-        rewriter.replace_matched_op(store)
+        wrap = WrapOp.make(op.value)
+        memcpy = MemCpyOp.make(wrap.results[0], gep.results[0])
+        rewriter.inline_block_before_matched_op(Block([gep, wrap]))
+        rewriter.replace_matched_op(memcpy)
 
 class LowerCoroCall(RewritePattern):
     @op_type_rewrite_pattern
@@ -1724,11 +1725,6 @@ class LowerMain(RewritePattern):
         debug_code(op)
         ret_val = llvm.ConstantOp(llvm.IntegerAttr.from_int_and_width(0,32), llvm.IntegerType(32))
         ret_op = func.Return(ret_val.results[0])
-        if all(len([*block.ops]) < 2 for block in op.body.blocks):
-            body = Region([Block([ret_val, ret_op])])
-            main_decl = func.FuncOp(op.main_name.data, FunctionType.from_lists([IntegerType(32), llvm.LLVMPointerType.opaque()], [IntegerType(32)]), region=body)
-            rewriter.replace_matched_op(main_decl)
-            return
         last_block = op.body.last_block
         first_block = op.body.first_block
         if not last_block or not first_block: raise Exception("no blocks!")

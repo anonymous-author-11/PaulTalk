@@ -302,24 +302,26 @@ module @patterns {
       %indices = pdl.attribute = array<i32: 0, 4>
       %gep = pdl.operation "llvm.getelementptr"(%coro : !pdl.value) {"elem_type" = %coro_struct_type, "rawConstantIndices" = %indices} -> (%coro_type : !pdl.type)
       %gep_result = pdl.result 0 of %gep
-      %load = pdl.operation "llvm.load"(%gep_result : !pdl.value) {"type" = %result_type_attr} -> (%result_type : !pdl.type)
-      %load_result = pdl.result 0 of %load
-      pdl.replace %root with (%load_result : !pdl.value)
+      %unwrap = pdl.operation "mid.unwrap"(%gep_result : !pdl.value) -> (%result_type : !pdl.type)
+      pdl.replace %root with %unwrap
     }
   }
   pdl.pattern @LowerCoroSetResult : benefit(1) {
-    %coro_type = pdl.type : !llvm.ptr
-    %coro = pdl.operand : %coro_type
+    %ptr_type = pdl.type : !llvm.ptr
+    %coro = pdl.operand : %ptr_type
     %value_type = pdl.type
     %value = pdl.operand : %value_type
     %root = pdl.operation "mid.coro_set_result"(%coro, %value : !pdl.value, !pdl.value)
     pdl.rewrite %root {
       %coro_struct_type = pdl.apply_native_rewrite "coro_frame"(%value_type : !pdl.type) : !pdl.attribute
       %indices = pdl.attribute = array<i32: 0, 4>
-      %gep = pdl.operation "llvm.getelementptr"(%coro : !pdl.value) {"elem_type" = %coro_struct_type, "rawConstantIndices" = %indices} -> (%coro_type : !pdl.type)
+      %gep = pdl.operation "llvm.getelementptr"(%coro : !pdl.value) {"elem_type" = %coro_struct_type, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
       %gep_result = pdl.result 0 of %gep
-      %store = pdl.operation "llvm.store"(%value, %gep_result : !pdl.value, !pdl.value)
-      pdl.replace %root with %store
+      %wrap = pdl.operation "mid.wrap"(%value: !pdl.value) -> (%ptr_type : !pdl.type)
+      %wrap_result = pdl.result 0 of %wrap
+      %value_type_attr = pdl.apply_native_rewrite "type_to_type_attr"(%value_type : !pdl.type) : !pdl.attribute
+      %memcpy = pdl.operation "mid.memcpy"(%wrap_result, %gep_result : !pdl.value, !pdl.value) {"type" = %value_type_attr}
+      pdl.replace %root with %memcpy
     }
   }
   pdl.pattern @LowerGlobalStr : benefit(1) {
@@ -443,6 +445,11 @@ module @patterns {
       %coroutine_yield_decl = pdl.operation "llvm.func" {"sym_name" = %yield, "function_type" = %func_type_attr6, "linkage" = %linkage}
       %coroutine_yield_with_region = pdl.apply_native_rewrite "add_region"(%coroutine_yield_decl : !pdl.operation) : !pdl.operation
       pdl.erase %coroutine_yield_decl
+
+      %yield_cold = pdl.attribute = "coroutine_yield_cold"
+      %yield_cold_decl = pdl.operation "llvm.func" {"sym_name" = %yield_cold, "function_type" = %func_type_attr6, "linkage" = %linkage}
+      %yield_cold_with_region = pdl.apply_native_rewrite "add_region"(%yield_cold_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %yield_cold_decl
       
       %gcc = pdl.attribute = "get_current_coroutine"
       %func_type_attr7 = pdl.attribute = !llvm.func<ptr  ()>
@@ -1386,14 +1393,15 @@ module @patterns {
     %ptr_type = pdl.type : !llvm.ptr
     %values = pdl.operands
     %results_types = pdl.types
-    %root = pdl.operation "mid.coro_yield"(%values : !pdl.range<value>) -> (%results_types : !pdl.range<type>)
+    %cold = pdl.attribute
+    %root = pdl.operation "mid.coro_yield"(%values : !pdl.range<value>) {"cold" = %cold} -> (%results_types : !pdl.range<type>)
     pdl.rewrite %root {
       %callee = pdl.attribute = @get_current_coroutine
       %opbundlesize = pdl.attribute = array<i32>
       %opsegsize = pdl.attribute = array<i32: 0, 0>
       %current_coro = pdl.operation "placeholder.call" {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%ptr_type : !pdl.type)
       %current_coro_result = pdl.result 0 of %current_coro
-      %replacement = pdl.operation "mid.coro_yield_modified"(%current_coro_result, %values : !pdl.value, !pdl.range<value>) -> (%results_types : !pdl.range<type>)
+      %replacement = pdl.operation "mid.coro_yield_modified"(%current_coro_result, %values : !pdl.value, !pdl.range<value>) {"cold" = %cold} -> (%results_types : !pdl.range<type>)
       pdl.replace %root with %replacement
     }
   }
@@ -1402,10 +1410,11 @@ module @patterns {
     %value = pdl.operand
     %coro = pdl.operand
     %results_types = pdl.types
-    %root = pdl.operation "mid.coro_yield_modified"(%coro, %value : !pdl.value, !pdl.value) -> (%results_types : !pdl.range<type>)
+    %cold = pdl.attribute
+    %root = pdl.operation "mid.coro_yield_modified"(%coro, %value : !pdl.value, !pdl.value) {"cold" = %cold} -> (%results_types : !pdl.range<type>)
     pdl.rewrite %root {
       %set_result = pdl.operation "mid.coro_set_result"(%coro, %value : !pdl.value, !pdl.value)
-      %replacement = pdl.operation "mid.coro_yield_modified"(%coro : !pdl.value) -> (%results_types : !pdl.range<type>)
+      %replacement = pdl.operation "mid.coro_yield_modified"(%coro : !pdl.value) {"cold" = %cold} -> (%results_types : !pdl.range<type>)
       pdl.replace %root with %replacement
     }
   }
@@ -1413,20 +1422,34 @@ module @patterns {
     %ptr_type = pdl.type : !llvm.ptr
     %coro = pdl.operand
     %result_type = pdl.type
-    %root = pdl.operation "mid.coro_yield_modified"(%coro : !pdl.value) -> (%result_type : !pdl.type)
+    %cold = pdl.attribute
+    %root = pdl.operation "mid.coro_yield_modified"(%coro : !pdl.value) {"cold" = %cold} -> (%result_type : !pdl.type)
     pdl.rewrite %root {
-      %replacement = pdl.operation "mid.coro_yield_modified"(%coro : !pdl.value)
+      %replacement = pdl.operation "mid.coro_yield_modified"(%coro : !pdl.value) {"cold" = %cold}
       %get_result = pdl.operation "mid.coro_get_result"(%coro : !pdl.value) -> (%result_type : !pdl.type)
-      %get_result_result = pdl.result 0 of %get_result
-      pdl.replace %root with (%get_result_result : !pdl.value)
+      pdl.replace %root with %get_result
     }
   }
   pdl.pattern @LowerCoroYieldSimple : benefit(1) {
     %ptr_type = pdl.type : !llvm.ptr
-    %coro = pdl.operand
-    %root = pdl.operation "mid.coro_yield_modified"(%coro : !pdl.value)
+    %coro = pdl.operand : %ptr_type
+    %false = pdl.attribute = false
+    %root = pdl.operation "mid.coro_yield_modified"(%coro : !pdl.value) {"cold" = %false}
     pdl.rewrite %root {
       %callee = pdl.attribute = @coroutine_yield
+      %opbundlesize = pdl.attribute = array<i32>
+      %opsegsize = pdl.attribute = array<i32: 1, 0>
+      %call = pdl.operation "placeholder.call"(%coro : !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize}
+      pdl.replace %root with %call
+    }
+  }
+  pdl.pattern @LowerCoroYieldCold : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %coro = pdl.operand : %ptr_type
+    %true = pdl.attribute = true
+    %root = pdl.operation "mid.coro_yield_modified"(%coro : !pdl.value) {"cold" = %true}
+    pdl.rewrite %root {
+      %callee = pdl.attribute = @coroutine_yield_cold
       %opbundlesize = pdl.attribute = array<i32>
       %opsegsize = pdl.attribute = array<i32: 1, 0>
       %call = pdl.operation "placeholder.call"(%coro : !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize}

@@ -64,7 +64,7 @@ assignable: IDENT -> identifier
 
 if_statement: "if" expression block ("else" block)?
 while_statement: "while" expression block
-for_statement: "for" IDENT "in" [IDENT "::"] expression block
+for_statement: "for" IDENT "in" expression block
 return_statement: RETURN [expression]
 break_statement: BREAK
 continue_statement: CONTINUE
@@ -137,8 +137,6 @@ primary: "(" expression ")" -> paren_expr
        | yield_call
        | assignable
 
-
-
 function_literal: "(" param_list ")" ["yields" typ] ARROW block
 array_literal: LBRACKET (expression ("," expression)*)? "]"
 tuple_literal: "(" expression "," expression ("," expression)* ")"
@@ -178,6 +176,7 @@ RBRACKET: "]"
 BRACKETS: "[]"
 BRACKETS_SETTER: "[]="
 PIPE: "|"
+ELIPSIS: "..."
 TRUE: "true"
 FALSE: "false"
 NIL: "nil"

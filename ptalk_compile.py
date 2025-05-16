@@ -259,8 +259,8 @@ class CompilationJob:
             o1 = f"{OPT_PATH} --passes=\"lto-pre-link<O1>\" {self.settings.attributor('all')} --inline-threshold=-10000 -o {job.input.bc_file}"
             subprocess.run(f"{reg2mem} | {o1}", input=section, text=True, shell=True)
 
-            link_layout = f"{LLVM_LINK_PATH} {job.input.bc_file} {LAYOUT_PATH} -o {job.input.bc_file}"
-            subprocess.run(link_layout, shell=True)
+            #link_layout = f"{LLVM_LINK_PATH} {job.input.bc_file} {LAYOUT_PATH} -o {job.input.bc_file}"
+            #subprocess.run(link_layout, shell=True)
 
             # store the hash of the source code that generated this bitcode
             job.input.write_hash()
@@ -280,7 +280,7 @@ class CompilationJob:
         subprocess.run(make_archive)
 
         out_utils_path = self.build_dir / "out_utils.ll"
-        link_utils = (LLVM_LINK_PATH, UTILS_PATH, OS_UTILS_PATH, self.input.bc_file, "-S", "-o", out_utils_path)
+        link_utils = (LLVM_LINK_PATH, UTILS_PATH, OS_UTILS_PATH, self.input.bc_file, LAYOUT_PATH, "-S", "-o", out_utils_path)
         subprocess.run(link_utils)
 
         # use the correct main function
@@ -288,26 +288,28 @@ class CompilationJob:
 
         # using --only-needed cuts out a lot of unnecessary imports
         out_linked_path = self.build_dir / "out_linked.ll"
-        link_imports = (LLVM_LINK_PATH, "-S", out_utils_path, lib_file_path, "-o", out_linked_path, "--only-needed")
+        link_imports = (LLVM_LINK_PATH, "-S", out_utils_path, lib_file_path, "-o", out_linked_path, "--only-needed", "--suppress-warnings")
         subprocess.run(link_imports)
 
-        if self.settings.debug_mode: subprocess.run((DEBUGIR_PATH, out_linked_path))
+        # Add debug metadata to the IR, before any inlining
+        subprocess.run((DEBUGIR_PATH, out_linked_path))
 
         self.record_time("after_llvm_link")
         self.time_printer.print(f'Time to llvm-link: {self.time_between("before_llvm_link", "after_llvm_link")} seconds')
 
     def run_opt(self):
 
-        out_linked_path = self.build_dir / "out_linked.ll"
+        out_linked_path = self.build_dir / "out_linked.dbg.ll"
+        out_optimized_dbg = self.build_dir / "out_optimized.dbg.ll"
         out_optimized_path = self.build_dir / "out_optimized.ll"
 
         passes = f"--passes=\"{self.settings.opt_level(3)}\""
 
-        settings = f"{self.settings.devirt} {self.settings.inlining} {self.settings.attributor()}"
-        mllvm_options = [*(f"--mllvm={s}" for s in settings.split(" ")), "--mllvm=--enable-lto-internalization=false"]
-
-        opt = f"{OPT_PATH} -S {out_linked_path} {passes} {settings} -o {out_optimized_path}"
+        settings = f"{self.settings.devirt} {self.settings.inlining} {self.settings.attributor()} {self.settings.hotcold}"
+        opt = f"{OPT_PATH} -S {out_linked_path} {passes} {settings} -o {out_optimized_dbg}"
         subprocess.run(opt)
+
+        subprocess.run((OPT_PATH, "-S", out_optimized_dbg, "-o", out_optimized_path, "--strip-debug"))
 
         self.record_time("after_opt")
         self.time_printer.print(f'Time to optimize: {self.time_between("after_llvm_link", "after_opt")} seconds')
@@ -318,7 +320,7 @@ class CompilationJob:
         target_triple = "-mtriple=x86_64-pc-windows-msvc"
 
         # necessary so that the machine outliner doesn't break; default would otherwise be 'exception-model=wineh'
-        exception_model = "-exception-model=sjlj"
+        exception_model = "-exception-model=wineh"
         outliner_settings = "-enable-machine-outliner -machine-outliner-reruns=2"
 
         obj_dir = self.output_path.parent if self.output_path.suffix == ".obj" else self.build_dir
@@ -326,7 +328,7 @@ class CompilationJob:
 
         obj_path = obj_dir / f"{self.output_path.stem}.obj"
         out_linked_dbg_path = self.build_dir / f"out_linked.dbg.ll"
-        out_optimized_path = self.build_dir / f"out_optimized.ll"
+        out_optimized_path = self.build_dir / f"out_optimized.dbg.ll"
         in_path = out_linked_dbg_path if self.settings.debug_mode else out_optimized_path
 
         self.record_time("before_llc")
@@ -341,12 +343,13 @@ class CompilationJob:
         
         dynamic_libc = ("msvcrt.lib", "legacy_stdio_definitions.lib")
         static_libc = "libcmt.lib"
+        includes = (*dynamic_libc, "Dbghelp.lib")
         os.makedirs(self.output_path.parent, exist_ok=True)
         obj_path = self.build_dir / f"{self.output_path.stem}.obj"
         exe_path = self.output_path.parent / f"{self.output_path.stem}.exe"
         
         # lld with -flavor link is equivalent to lld-link
-        lld_link = (LLD_PATH, "-flavor", "link", obj_path, f"/out:{exe_path}", "/ignore:longsections", self.settings.debug_flag, *dynamic_libc)
+        lld_link = (LLD_PATH, "-flavor", "link", obj_path, f"/out:{exe_path}", "/ignore:longsections", "/debug", *includes)
         subprocess.run(lld_link)
 
         self.record_time("after_lld")
@@ -369,14 +372,15 @@ class OptimizationSettings:
         return "--max-devirt-iterations=100 --abort-on-max-devirt-iterations-reached"
 
     @property
-    def debug_flag(self):
-        return "/debug" if self.debug_mode else ""
+    def hotcold(self):
+        # We mark any yielded Exceptions as cold and outline them into a cold section with a hot-cold split
+        return "--hotcoldsplit-max-params=100 --hotcoldsplit-threshold=-1 --inline-cold-callsite-threshold=-10000 --enable-cold-section"
 
     def opt_level(self, level):
         levels = {
-            1:"default<O1>",
-            2:"default<O2>",
-            3:"default<O3>,default<O3>" # a pass so nice we run it twice
+            1:"hotcoldsplit,default<O1>",
+            2:"hotcoldsplit,default<O2>",
+            3:"hotcoldsplit,default<O3>,default<O3>" # a pass so nice we run it twice
         }
         return levels[level]
 

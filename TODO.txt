@@ -448,7 +448,16 @@ DONE:
 
 TODO:
 
-- Split dialect into multiple files
+- Snprintf can convert things to string representations
+- Constructor type parameter deduction
+- I'd like to be able to type Pair{5, 6} instead of Pair[i32, i32].new(5, 6)
+- I should be able to declare variadic extern defs
+	- e.g. "extern def printf(Buffer[i8], ...) -> i32"
+- I need to add alwaysinline to wrapper declarations
+- Source.mini crashes in debug mode
+- GEP inbounds could help optimization on dynamic geps
+- I should add real type checking for call/yield
+- Buffer doesn't need to take an i32; it could take any kind of up to i64 integer really
 
 - Should hex literals be i32 by default or should their width be inferred?
 
@@ -466,7 +475,11 @@ TODO:
 		- Then get the dependency graph from typeflow [check!]
 	- Arguably Bool should be its own type, not Integer(1) [check!]
 	- In debug mode we should skip optimizing entirely [check!]
+	- capture_backtrace and print_backtrace for Windows and POSIX [check!]
+	- Mark yielded exceptions as cold and outline in hot-cold split [check!]
+	- Correct line numbers for implicit 'include core;' [check!]
 	- Hi, mid, lo dialects
+		- Split dialect into multiple files [check!]
 	- Unsigned integers
 		- Should probably split out Integer and Float first [check!]
 		- Any u[width] can be converted to an i[2*width] or larger [check!]

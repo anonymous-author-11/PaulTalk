@@ -18,6 +18,7 @@ DIR_PATH = Path(__file__).parent.resolve()
 GRAMMAR_PATH = DIR_PATH / "data_files/grammar.lark"
 
 with open(GRAMMAR_PATH, "r") as f: grammar = f.read()
+
 parser = parser = Lark(grammar, parser='lalr', propagate_positions=True, _plugins=lark_cython.plugins)
 source_directories = {}
 parsed = {}
@@ -50,7 +51,7 @@ def parse(file_path) -> AST:
 
 def format_parser_error(exc: UnexpectedToken, file_path: Path) -> str:
     """Formats a Lark UnexpectedToken exception into a user-friendly error message."""
-    line = exc.line
+    line = line_number(exc)
     column = exc.column
     unexpected_token = exc.token.value
     expected_tokens = ", ".join(exc.expected) # Join expected tokens for readability
@@ -60,6 +61,10 @@ def format_parser_error(exc: UnexpectedToken, file_path: Path) -> str:
     error_message += f"  Expected one of: {expected_tokens}\n"
 
     return error_message
+
+def line_number(token):
+    # Account for the implicit 'import core;\n\n' appended to the file
+    return token.line - 3
 
 @v_args(inline=True)
 class CSTTransformer(Transformer):
@@ -77,12 +82,12 @@ class CSTTransformer(Transformer):
 
     def extern_def(self, constraints, deff, name, params, return_type, yield_type):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
-        node_info = NodeInfo(None, self.file_path, name.line)
+        node_info = NodeInfo(None, self.file_path, line_number(name))
         return ExternDef(node_info, name.value, constraints or [], params or [], len(params or []), return_type, yield_type or exception_or_nil)
 
     def function_def(self, constraints, deff, name, params, return_type, yield_type, body):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
-        node_info = NodeInfo(None, self.file_path, name.line)
+        node_info = NodeInfo(None, self.file_path, line_number(name))
         return FunctionDef(node_info, name.value, constraints or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, False)
 
     def abstract(self):
@@ -96,7 +101,7 @@ class CSTTransformer(Transformer):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractMethodDef if abstract else MethodDef
         mangled_name = name + "_" + clean_param_names(params)
-        node_info = NodeInfo(None, self.file_path, deff.line)
+        node_info = NodeInfo(None, self.file_path, line_number(deff))
         return ty(node_info, name, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
 
     def operator(self, op):
@@ -110,23 +115,23 @@ class CSTTransformer(Transformer):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractMethodDef if abstract else MethodDef
         mangled_name = translated_op + "_" + clean_param_names(params)
-        node_info = NodeInfo(None, self.file_path, deff.line)
+        node_info = NodeInfo(None, self.file_path, line_number(deff))
         return ty(node_info, translated_op, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
 
     def class_method_def(self, constraints, abstract, deff, name, type_params, params, return_type, yield_type, body):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractClassMethodDef if abstract else ClassMethodDef
         mangled_name = "_Self_" + name.value + "_" + clean_param_names(params)
-        node_info = NodeInfo(None, self.file_path, name.line)
+        node_info = NodeInfo(None, self.file_path, line_number(name))
         return ty(node_info, "_Self_" + name.value, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
 
     def class_def(self, cls, name, supertype_list, bound_list, fields, region_constraints, *methods):
         if not isinstance(name, FatPtr):
-            raise Exception(f"Line {cls.line}: Invalid class name.")
+            raise Exception(f"Line {line_number(cls)}: Invalid class name.")
         class_name = name.cls.data
         if not isinstance(name.type_params, NoneAttr) and any(not isinstance(t, FatPtr) for t in name.type_params.data):
             offender = next(t for t in name.type_params.data if not isinstance(t, FatPtr))
-            raise Exception(f"Line {cls.line}: Cannot use {offender} as a type parameter")
+            raise Exception(f"Line {line_number(cls)}: Cannot use {offender} as a type parameter")
         type_parameters = []
         if not isinstance(name.type_params, NoneAttr):
             for t in name.type_params:
@@ -136,7 +141,7 @@ class CSTTransformer(Transformer):
                 type_parameters.append(TypeParameter([t.cls, bound_list[t.cls.data], name.cls]))
         if supertype_list and any(not isinstance(t, FatPtr) for t in supertype_list):
             offender = next(t for t in supertype_list if not isinstance(t, FatPtr))
-            raise Exception(f"Line {cls.line}: Cannot extend {t}")
+            raise Exception(f"Line {line_number(cls)}: Cannot extend {t}")
         fields = fields or []
         region_constraints = region_constraints or []
         regions = [f.name for f in fields if f._type == FatPtr.basic("Region")]
@@ -144,7 +149,7 @@ class CSTTransformer(Transformer):
         
         direct_supertypes = [typ for typ in supertype_list] if supertype_list else [FatPtr.basic("Object")]
         if class_name == "Object": direct_supertypes = [Any()]
-        node_info = NodeInfo(None, self.file_path, cls.line)
+        node_info = NodeInfo(None, self.file_path, line_number(cls))
         class_def = ClassDef(node_info, class_name, type_parameters, direct_supertypes, None, fields, regions, region_constraints, methods, None, None, None, None)
         for field in fields: field.defining_class = class_def
         for method in methods:
@@ -168,17 +173,17 @@ class CSTTransformer(Transformer):
         return list(constraints)
 
     def constraint(self, lhs, op, rhs):
-        node_info = NodeInfo(None, self.file_path, op.line)
+        node_info = NodeInfo(None, self.file_path, line_number(op))
         # canonicalize to use "<"
         if op.value == ">": return Constraint(node_info, rhs, "<", lhs)
         return Constraint(node_info, lhs, op.value, rhs)
 
     def alias(self, alias, name, meaning):
-        node_info = NodeInfo(None, self.file_path, alias.line)
+        node_info = NodeInfo(None, self.file_path, line_number(alias))
         return Alias(node_info, name, meaning)
 
     def import_statement(self, *names):
-        node_info = NodeInfo(None, self.file_path, names[0].line)
+        node_info = NodeInfo(None, self.file_path, line_number(names[0]))
         path_components = [*(name.value for name in names[:-1]), f"{names[-1].value}.mini"]
         path = Path(*path_components)
         full_path = find_path(path, self.file_path)
@@ -191,22 +196,22 @@ class CSTTransformer(Transformer):
         return list(ids)
 
     def param(self, name, typ):
-        node_info = NodeInfo(None, self.file_path, name.line)
+        node_info = NodeInfo(None, self.file_path, line_number(name))
         return VarDecl(node_info, name.value, typ)
 
     def method_param(self, param):
         return param
 
     def var_decl(self, name, typ, initial_value):
-        assignment_info = NodeInfo(None, self.file_path, name.line)
-        cast_info = NodeInfo(None, self.file_path, name.line)
-        ident_info = NodeInfo(None, self.file_path, name.line)
-        nil_info = NodeInfo(None, self.file_path, name.line)
+        assignment_info = NodeInfo(None, self.file_path, line_number(name))
+        cast_info = NodeInfo(None, self.file_path, line_number(name))
+        ident_info = NodeInfo(None, self.file_path, line_number(name))
+        nil_info = NodeInfo(None, self.file_path, line_number(name))
         if initial_value: return Assignment(assignment_info, Identifier(ident_info, name.value), As(cast_info, initial_value, typ))
         return Assignment(assignment_info, Identifier(ident_info, name.value), As(cast_info, NilLiteral(nil_info), typ))
 
     def field_decl(self, name, typ):
-        node_info = NodeInfo(None, self.file_path, name.line)
+        node_info = NodeInfo(None, self.file_path, line_number(name))
         return FieldDecl(node_info, name.value, typ, None)
 
     def assignment(self, target, value):
@@ -228,20 +233,20 @@ class CSTTransformer(Transformer):
         node_info = NodeInfo(None, self.file_path, condition.info.line_number)
         return WhileStatement(node_info, condition, None, body)
 
-    def for_statement(self, inductee, region, iterator, body):
-        node_info = NodeInfo(None, self.file_path, inductee.line)
+    def for_statement(self, inductee, iterator, body):
+        node_info = NodeInfo(None, self.file_path, line_number(inductee))
         return For(node_info, inductee.value, iterator, body, "_temp_" + random_letters(10))
 
     def return_statement(self, ret, value):
-        node_info = NodeInfo(None, self.file_path, ret.line)
+        node_info = NodeInfo(None, self.file_path, line_number(ret))
         return ReturnValue(node_info, value) if value else Return(node_info)
 
     def break_statement(self, break_token):
-        node_info = NodeInfo(None, self.file_path, break_token.line)
+        node_info = NodeInfo(None, self.file_path, line_number(break_token))
         return Break(node_info)
 
     def continue_statement(self, continue_token):
-        node_info = NodeInfo(None, self.file_path, continue_token.line)
+        node_info = NodeInfo(None, self.file_path, line_number(continue_token))
         return Continue(node_info)
 
     def typ(self, t):
@@ -270,7 +275,7 @@ class CSTTransformer(Transformer):
     def parameterized_type(self, type_name, types):
         if any(not isinstance(t, TypeAttribute) for t in types):
             offender = next(t for t in types if not isinstance(t, TypeAttribute))
-            raise Exception(f"Line {type_name.line}: Type parameter {offender} is not a type")
+            raise Exception(f"Line {line_number(type_name)}: Type parameter {offender} is not a type")
         if type_name == "Coroutine":
             return Coroutine([types[0].param_types, types[0].yield_type, types[0].return_type])
         if type_name == "Tuple":
@@ -316,16 +321,16 @@ class CSTTransformer(Transformer):
             "%":"MOD","<<":"LSHIFT",">>":"RSHIFT",
             "bit_and":"bit_and","bit_or":"bit_or","bit_xor":"bit_xor"
         }[op.value]
-        node_info = NodeInfo(None, self.file_path, op.line)
+        node_info = NodeInfo(None, self.file_path, line_number(op))
         return Arithmetic(node_info, left, translated_op, right)
 
     def comparison(self, left, op, right):
         translated_op = {"==":"EQ","!=":"NEQ","<":"LT",">":"GT","<=":"LE",">=":"GE"}[op.value]
-        node_info = NodeInfo(None, self.file_path, op.line)
+        node_info = NodeInfo(None, self.file_path, line_number(op))
         return Comparison(node_info, left, translated_op, right)
 
     def logical(self, left, op, right):
-        node_info = NodeInfo(None, self.file_path, op.line)
+        node_info = NodeInfo(None, self.file_path, line_number(op))
         return Logical(node_info, left, op.value, right)
 
     def type_check(self, lhs, typ):
@@ -348,41 +353,41 @@ class CSTTransformer(Transformer):
         if isinstance(expr, IntegerLiteral):
             node_info = NodeInfo(None, self.file_path, expr.info.line_number)
             return IntegerLiteral(node_info, -1 * expr.value, 32)
-        node_info = NodeInfo(None, self.file_path, minus.line)
+        node_info = NodeInfo(None, self.file_path, line_number(minus))
         return NegativeOp(node_info, expr)
 
     def not_op(self, exclam, expr):
-        node_info = NodeInfo(None, self.file_path, exclam.line)
+        node_info = NodeInfo(None, self.file_path, line_number(exclam))
         f = BoolLiteral(node_info, 0)
         return Comparison(node_info, f, "EQ", expr)
 
     def as_op(self, operand, astoken, typ):
-        node_info = NodeInfo(None, self.file_path, astoken.line)
+        node_info = NodeInfo(None, self.file_path, line_number(astoken))
         return As(node_info, operand, typ, force=True);
 
     def paren_expr(self, expr):
         return expr
 
     def int_literal(self, token):
-        node_info = NodeInfo(None, self.file_path, token.line)
+        node_info = NodeInfo(None, self.file_path, line_number(token))
         value = int(token.value.replace("_",""))
         return IntegerLiteral(node_info, value, 32)
 
     def hex_literal(self, token):
-        node_info = NodeInfo(None, self.file_path, token.line)
+        node_info = NodeInfo(None, self.file_path, line_number(token))
         value = int.from_bytes(bytes.fromhex(token.value.replace("_","")[2:]), byteorder='big', signed=True)
         return IntegerLiteral(node_info, value, 32)
 
     def float_literal(self, token):
-        node_info = NodeInfo(None, self.file_path, token.line)
+        node_info = NodeInfo(None, self.file_path, line_number(token))
         return DoubleLiteral(node_info, float(token.value.replace("_","")))
 
     def string_literal(self, token):
-        node_info = NodeInfo(None, self.file_path, token.line)
+        node_info = NodeInfo(None, self.file_path, line_number(token))
         return StringLiteral(node_info, token.value[1:-1])  # Remove quotes
 
     def array_literal(self, lbracket, *elems):
-        node_info = NodeInfo(None, self.file_path, lbracket.line)
+        node_info = NodeInfo(None, self.file_path, line_number(lbracket))
         return ArrayLiteral(node_info, tuple(elems))
 
     def tuple_literal(self, first, second, *rest):
@@ -392,7 +397,7 @@ class CSTTransformer(Transformer):
     def function_literal(self, param_list, yield_type, arrow, block):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         anon_name = "_functionliteral_" + random_letters(10)
-        node_info = NodeInfo(None, self.file_path, arrow.line)
+        node_info = NodeInfo(None, self.file_path, line_number(arrow))
         return FunctionLiteral(node_info, anon_name, tuple(param_list), len(param_list), block, Any(), yield_type or exception_or_nil)
 
     def range_literal(self, start, end):
@@ -401,22 +406,22 @@ class CSTTransformer(Transformer):
 
     def bool_literal(self, token):
         intval = {"true":1,"false":0}[token.value]
-        node_info = NodeInfo(None, self.file_path, token.line)
+        node_info = NodeInfo(None, self.file_path, line_number(token))
         return BoolLiteral(node_info, intval)
 
     def nil_literal(self, token):
-        node_info = NodeInfo(None, self.file_path, token.line)
+        node_info = NodeInfo(None, self.file_path, line_number(token))
         return NilLiteral(node_info)
 
     def primary(self, literal):
         return literal
 
     def identifier(self, token):
-        node_info = NodeInfo(None, self.file_path, token.line)
+        node_info = NodeInfo(None, self.file_path, line_number(token))
         return Identifier(node_info, token.value)
 
     def field(self, token):
-        node_info = NodeInfo(None, self.file_path, token.line)
+        node_info = NodeInfo(None, self.file_path, line_number(token))
         return Identifier(node_info, token.value)
 
     def print_call(self, *args):
@@ -428,11 +433,11 @@ class CSTTransformer(Transformer):
         return SizeOfCall(node_info, typ)
 
     def function_call(self, func_name, *args):
-        node_info = NodeInfo(None, self.file_path, func_name.line)
+        node_info = NodeInfo(None, self.file_path, line_number(func_name))
         return FunctionCall(node_info, func_name.value, args)
 
     def method_call(self, receiver, meth_name, *args):
-        node_info = NodeInfo(None, self.file_path, meth_name.line)
+        node_info = NodeInfo(None, self.file_path, line_number(meth_name))
         if isinstance(receiver, Identifier) and receiver.name[0].isupper():
             if receiver.name == "Coroutine" and meth_name == "new":
                 return CoCreate(node_info, "coroutine_" + random_letters(10), args)
@@ -453,7 +458,7 @@ class CSTTransformer(Transformer):
         return MethodCall(node_info, receiver, "_index", [index])
 
     def yield_call(self, word, expression):
-        node_info = NodeInfo(None, self.file_path, word.line)
+        node_info = NodeInfo(None, self.file_path, line_number(word))
         return CoYield(node_info, expression)
 
     def expression_statement(self, expression):

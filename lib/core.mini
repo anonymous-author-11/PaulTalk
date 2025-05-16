@@ -1,4 +1,7 @@
 
+extern def capture_backtrace(max_frames : i64, backtrace : Buffer[i64]) -> i64
+extern def print_backtrace(backtrace : Buffer[i64], n_frames : i64)
+
 import iteration;
 
 class Representable {
@@ -129,34 +132,45 @@ class StringIterator extends Iterator[Character] {
 
 class Exception {
 	@line_number : i32
-	@file_name_fn : () -> String
-	@message_fn : () -> String
+	@file_name : String
+	@message : String
+    @stacktrace : Buffer[i64]
+    @n_frames : i64
 
-    // by passing a function we avoid constructing the string until actually needed
-	def init(@message_fn : () -> String) {
+	def init(@message : String) {
         @line_number = 0;
-        @file_name_fn = () => {"";};
+        @file_name = "";
+        @stacktrace = Buffer[i64].new(100);
+        @n_frames = capture_backtrace(100 as i64, @stacktrace);
     }
 	def init() {
         @line_number = 0;
-		@message_fn = () => {"<None>";};
-        @file_name_fn = () => {"";};
+		@message = "<None>";
+        @file_name = "";
+        @stacktrace = Buffer[i64].new(100);
+        @n_frames = capture_backtrace(100 as i64, @stacktrace);
 	}
 
-    def set_info(@line_number : i32, @file_name_fn : () -> String) {}
+    def set_info(@line_number : i32, @file_name : String) {}
+
+    def print_stacktrace() {
+        print_backtrace(@stacktrace, @n_frames);
+    }
 
 	def report() {
 		print("---------".c_string());
 		print("Exception thrown from file".c_string());
-		print(@file_name_fn.call().c_string());
+		print(@file_name.c_string());
 		print("At line".c_string());
 		print(@line_number);
 		print("With message".c_string());
 		self.print_message();
+        print("Stack trace:".c_string());
+        self.print_stacktrace();
 		print("---------".c_string());
 	}
     def print_message() {
-        print(@message_fn.call().c_string());
+        print(@message.c_string());
     }
 }
 
@@ -166,11 +180,13 @@ class OutOfBounds extends Exception {
     def init(bounds : i32, index : i32) {
         @details = OutOfBoundsDetails.new(bounds, index);
         @line_number = 0;
-        @file_name_fn = () => {"";};
-        @message_fn = () => {"An out-of-bounds error occurred while indexing into a collection.";};
+        @file_name = "";
+        @message = "An out-of-bounds error occurred while indexing into a collection.";
+        @stacktrace = Buffer[i64].new(100);
+        @n_frames = capture_backtrace(100 as i64, @stacktrace);
     }
     def print_message() {
-        print(@message_fn.call().c_string());
+        print(@message.c_string());
         details = @details;
         if details is OutOfBoundsDetails { details.report(); }
     }

@@ -1,0 +1,30 @@
+extern def capture_backtrace(max_frames : i64, backtrace : Buffer[i64]) -> i64
+extern def print_backtrace(backtrace : Buffer[i64], n_frames : i64)
+
+def foo() yields StackTrace {
+	bar();
+}
+def bar() yields StackTrace {
+	qux();
+}
+def qux() yields StackTrace {
+	baz();
+}
+def baz() yields StackTrace {
+	yield(StackTrace.new());
+}
+
+class StackTrace {
+	@trace : Buffer[i64]
+	@n_frames : i64
+	def init() {
+		@trace = Buffer[i64].new(100);
+		@n_frames = capture_backtrace(100 as i64, @trace);
+	}
+	def print() {
+		print_backtrace(@trace, @n_frames);
+	}
+}
+
+stacktrace = Coroutine.new(foo).call();
+if stacktrace is StackTrace { stacktrace.print(); }

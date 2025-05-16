@@ -11,6 +11,7 @@ declare ptr @malloc(i64)
 declare void @free(ptr allocptr nocapture noundef)
 declare void @llvm.eh.sjlj.longjmp(ptr) noreturn nounwind
 declare ptr @llvm.stacksave() mustprogress nocallback nofree nosync nounwind willreturn
+declare ptr @llvm.frameaddress(i32)
 
 declare void @report_exception( {ptr} )
 
@@ -28,6 +29,10 @@ declare noalias ptr @virtual_reserve(i64) mustprogress nofree nounwind willretur
 
 ; An OS-agnostic API to make trampoline code executable
 declare void @anoint_trampoline(ptr %tramp) mustprogress nofree nosync nounwind willreturn memory(argmem: readwrite)
+
+declare i64 @capture_backtrace(i64, ptr)
+
+declare void @print_backtrace(ptr, i64)
 
 ; Thread-local storage for our bump allocator state
 @current_ptr = thread_local global ptr null
@@ -238,7 +243,7 @@ define ptr @coroutine_create(ptr %func, ptr %arg_passer) {
   store ptr %func, ptr %func_ptr
 
   ; store the stack top in the frame and stack pointer slots of the jump buffer
-  %stack_top = getelementptr i8, ptr %stack, i64 8388608
+  %stack_top = getelementptr i8, ptr %stack, i64 8388512
   %stack_top_i64 = ptrtoint ptr %stack_top to i64
   %stack_top_aligned = and i64 %stack_top_i64, -16
   %into_callee_buf = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %stack, i32 0, i32 1
@@ -373,6 +378,11 @@ define void @coroutine_trampoline(ptr %into_callee_second_word) {
 
 trampoline:
 
+  ;%fp = call ptr @llvm.frameaddress(i32 0)
+  ;%old_fp = load ptr, ptr %fp
+  ;%ret_ptr = getelementptr ptr, ptr %old_fp, i32 1
+  ;store ptr %caller, ptr %ret_ptr
+
   %current_coroutine = load ptr, ptr @current_coroutine
   %arg_passer_ptr = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %current_coroutine, i32 0, i32 2
   %arg_passer = load ptr, ptr %arg_passer_ptr
@@ -420,6 +430,12 @@ return_from_switch:
 define void @coroutine_yield(ptr %current_coroutine) {
   %into_callee_buf = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %current_coroutine, i32 0, i32 1
   call preserve_nonecc void @context_switch(ptr nocapture writeonly %into_callee_buf, ptr @into_caller_buf) nounwind memory(readwrite, inaccessiblemem: readwrite)
+  ret void
+}
+
+; When yielding an exception, we'd like to outline the whole block during hot-cold splitting
+define void @coroutine_yield_cold(ptr %current_coroutine) cold noinline {
+  call void @coroutine_yield(ptr %current_coroutine)
   ret void
 }
 
