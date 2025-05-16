@@ -1,5 +1,8 @@
 import core;
 
+// extern def snprintf(buf : Buffer[i8], n_bytes : i32, fmt_str : Buffer[i8], str : Buffer[i8])
+// extern def puts(str : Buffer[i8])
+
 class IO {
     def Self.print(x : i8) {
         print(x);

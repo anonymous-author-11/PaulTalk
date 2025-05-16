@@ -16,7 +16,7 @@ statement: function_def
          | expression_statement
          | block
 
-import_statement: "import" IDENT ("." IDENT)*
+import_statement: "import" ident ("." ident)*
 alias: ALIAS basic_type "=" typ
 
 expression_statement: expression ";"
@@ -24,18 +24,18 @@ expression_statement: expression ";"
 class_def: CLASS (basic_type | parameterized_type) ["extends" type_list] ["where" type_bound_list] "{" [field_decls] [class_region_constraints] (class_method_def*)? ((method_def | operator_def)*)? "}"
 field_decls: (field_decl)+
 type_bound_list: type_bound ("," type_bound)*
-type_bound: IDENT "<:" typ
+type_bound: ident "<:" typ
 
-ident_list: IDENT ("," IDENT)*
+ident_list: ident ("," ident)*
 
-extern_def: ["#["constraint_list"]"] "extern" DEF IDENT "(" param_list ")" ["->" typ] ["yields" typ]
-function_def: ["#["constraint_list"]"] DEF IDENT "(" param_list ")" ["->" typ] ["yields" typ] block
+extern_def: ["#["constraint_list"]"] "extern" DEF ident "(" param_list ")" ["->" typ] ["yields" typ]
+function_def: ["#["constraint_list"]"] DEF ident "(" param_list ")" ["->" typ] ["yields" typ] block
 abstract: "abstract"
 method_def: ["#["constraint_list"]"] [abstract] DEF method_name ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
 operator_def: ["#["constraint_list"]"] [abstract] DEF operator ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
-class_method_def: ["#["constraint_list"]"] [abstract] DEF "Self" "." IDENT ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
+class_method_def: ["#["constraint_list"]"] [abstract] DEF SELF_TYPE "." ident ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
 
-method_name: (IDENT | SETTER)
+method_name: (ident | SETTER)
 
 param_list: (param ("," param)*)?
 method_param_list: (method_param ("," method_param)*)? -> param_list
@@ -45,26 +45,27 @@ constraint_list: (constraint ("," constraint)*)?
 constraint: region_variable LT region_variable
           | region_variable GT region_variable
           | region_variable EQ region_variable
-region_variable: ((IDENT | FIELD) ("." (IDENT | FIELD))*)? 
+region_variable: ((ident | FIELD) ("." (ident | FIELD))*)? 
 
 method_param: param | field_param
-param: IDENT ":" typ
+param: ident ":" typ
 field_param: FIELD ":" typ -> param
 
-var_decl: IDENT ":" typ ["=" expression]
+var_decl: ident ":" typ ["=" expression]
 field_decl: FIELD ":" typ
 assignment: assignable "=" expression
 
-assignable: IDENT -> identifier
+assignable: ident -> identifier
           | FIELD -> identifier
           | "(" assignable ")" -> paren_expr
           | function_call
           | method_call
+          | object_creation
           | indexation
 
 if_statement: "if" expression block ("else" block)?
 while_statement: "while" expression block
-for_statement: "for" IDENT "in" expression block
+for_statement: "for" ident "in" expression block
 return_statement: RETURN [expression]
 break_statement: BREAK
 continue_statement: CONTINUE
@@ -75,9 +76,9 @@ typ: basic_type
     | function_type
 
 type_list: (typ ("," typ)*)?
-basic_type: IDENT
+basic_type: ident
 sum_type: typ "|" typ
-parameterized_type: IDENT "[" type_list "]"
+parameterized_type: ident "[" type_list "]"
 function_type: "(" type_list ")" ["->" typ] ["yields" typ]
 
 block: "{" statement* "}"
@@ -144,9 +145,11 @@ dictionary_literal: "{" (expression "::" ("," expression "::" expression)*)? "}"
 print_call: "print" "(" (expression ("," expression)*)? ")"
 sizeof_call: "sizeof" "(" typ ")"
 yield_call: YIELD "(" [expression] ")"
-function_call: IDENT "(" (expression ("," expression)*)? ")"
-method_call: (primary | parameterized_type) "." IDENT "(" (expression ("," expression)*)? ")"
+function_call: ident "(" (expression ("," expression)*)? ")"
+method_call: (primary | parameterized_type) "." ident "(" (expression ("," expression)*)? ")"
+object_creation: (CAPITAL_IDENT | parameterized_type) LBRACE (expression ("," expression)*)? "}"
 indexation: primary "." "[" expression "]"
+ident: CAPITAL_IDENT | LOWERCASE_IDENT
 
 operator: PLUS | MINUS | TIMES | DIVIDE | NEQ | EQ | LE | GE | LT | GT | BRACKETS | BRACKETS_SETTER
 
@@ -172,6 +175,7 @@ NOT: "not"
 OR: "or"
 AND: "and"
 LBRACKET: "["
+LBRACE: "{"
 RBRACKET: "]"
 BRACKETS: "[]"
 BRACKETS_SETTER: "[]="
@@ -187,9 +191,11 @@ YIELD: "yield"
 DEF: "def"
 CLASS: "class"
 ALIAS: "alias"
+SELF_TYPE.3: "Self"
 SETTER: /[a-zA-Z][a-zA-Z0-9_]*=/
 FIELD: /@[a-zA-Z][a-zA-Z0-9_]*/
-IDENT: /[a-zA-Z][a-zA-Z0-9_]*/
+CAPITAL_IDENT.2: /[A-Z][a-zA-Z0-9_]*/
+LOWERCASE_IDENT: /[a-z][a-zA-Z0-9_]*/
 INT:   /[0-9]+(_[0-9]+)*/
 HEX:   /0x[0-9a-fA-F]+(_[0-9a-fA-F]+)*/
 FLOAT: /[0-9]+(_[0-9]+)*\.[0-9]+(_[0-9]+)*/

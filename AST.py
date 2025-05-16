@@ -1374,6 +1374,27 @@ class ObjectCreation(Expression):
     def typeflow(self, scope):
         self.exprtype(scope)
 
+    # try to deduce the reciever type from the argument types, e.g. Pair{5, 6} => Pair[i32, i32].new(5, 6)
+    def deduce_type_parameters(self, simplified_type, arg_types, scope):
+        arg_types = [arg.exprtype(scope) for arg in self.arguments]
+        cls = scope.classes[simplified_type.cls.data]
+        behavior_candidates = [behavior for behavior in cls.behaviors if behavior.name == "init" and behavior.arity == len(self.arguments)]
+        if len(behavior_candidates) == 0:
+            raise Exception(f"{self.info}: No init method in class {simplified_type} matches the argument types {input_types}")
+        deduced_candidates = []
+        for b in behavior_candidates:
+            for m in b.methods:
+                class_scope_copy = Scope(scope)
+                for t, param_type in zip(arg_types, m.param_types()):
+                    matches = [anc for anc in scope.ancestors(t) if scope.matches(anc, param_type)]
+                    if len(matches) == 0: continue
+                    class_scope_copy.substitute(matches[0], param_type)
+                deduced_candidates.append(class_scope_copy.simplify(cls.type()))
+        valid_candidates = [c for c in deduced_candidates if "subtype" not in f"{c}"]
+        if len(valid_candidates) == 0 or len(valid_candidates) > 1:
+            raise Exception(f"{self.info}: Could not deduce type parameters from {simplified_type}.new with argument types {arg_types}")
+        return valid_candidates[0]
+
     def exprtype(self, scope):
         if self.type.cls.data == "Self":
             if not scope.cls:
@@ -1382,12 +1403,15 @@ class ObjectCreation(Expression):
         if self.type.cls.data == "Buffer":
             raise Exception(f"{self.info}: Buffer type must be parameterized, like Buffer[i8] or Buffer[f64]")
         simplified_type = scope.simplify(self.type)
-        if simplified_type.cls.data not in scope.classes.keys():
-            raise Exception(f"{self.info}: class {simplified_type.cls.data} not declared!")
+        if simplified_type.cls.data not in scope.classes:
+            raise Exception(f"{self.info}: Class {simplified_type.cls.data} has not been declared.")
+
         cls = scope.classes[simplified_type.cls.data]
-        scope.validate_type(self.info, simplified_type)
-        
         input_types = [arg.exprtype(scope) for arg in self.arguments]
+        if simplified_type.type_params == NoneAttr() and len(cls.type_parameters) > 0:
+            simplified_type = self.deduce_type_parameters(simplified_type, input_types, scope)
+        scope.validate_type(self.info, simplified_type)
+
         behaviors = [behavior for behavior in cls.behaviors if behavior.applicable(simplified_type, scope, "init", input_types)]
         if len(behaviors) == 0:
             debug_print(cls.behaviors)

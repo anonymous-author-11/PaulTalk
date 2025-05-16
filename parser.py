@@ -118,7 +118,7 @@ class CSTTransformer(Transformer):
         node_info = NodeInfo(None, self.file_path, line_number(deff))
         return ty(node_info, translated_op, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
 
-    def class_method_def(self, constraints, abstract, deff, name, type_params, params, return_type, yield_type, body):
+    def class_method_def(self, constraints, abstract, deff, self_tok, name, type_params, params, return_type, yield_type, body):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractClassMethodDef if abstract else ClassMethodDef
         mangled_name = "_Self_" + name.value + "_" + clean_param_names(params)
@@ -194,6 +194,9 @@ class CSTTransformer(Transformer):
 
     def ident_list(self, *ids):
         return list(ids)
+
+    def ident(self, token):
+        return token
 
     def param(self, name, typ):
         node_info = NodeInfo(None, self.file_path, line_number(name))
@@ -452,6 +455,21 @@ class CSTTransformer(Transformer):
                 return ObjectCreation(node_info, random_letters(10), receiver, args, None)
             return ClassMethodCall(node_info, receiver, meth_name.value, args)
         return MethodCall(node_info, receiver, meth_name.value, args)
+
+    def object_creation(self, receiver, lbrace, *args):
+        node_info = NodeInfo(None, self.file_path, line_number(lbrace))
+        if isinstance(receiver, Identifier) and receiver.name[0].isupper():
+            if receiver.name == "Coroutine":
+                return CoCreate(node_info, "coroutine_" + random_letters(10), args)
+            return ObjectCreation(node_info, random_letters(10), FatPtr.basic(receiver.name), args, None)
+        if isinstance(receiver, ParametrizedAttribute):
+            if isinstance(receiver, Buffer):
+                node_info = NodeInfo(None, self.file_path, args[0].info.line_number)
+                return CreateBuffer(node_info, receiver, args[0], None)
+            return ObjectCreation(node_info, random_letters(10), receiver, args, None)
+        if receiver.value == "Coroutine":
+            return CoCreate(node_info, "coroutine_" + random_letters(10), args)
+        return ObjectCreation(node_info, random_letters(10), FatPtr.basic(receiver.value), args, None)
 
     def indexation(self, receiver, index):
         node_info = NodeInfo(None, self.file_path, receiver.info.line_number)

@@ -54,27 +54,27 @@ class Iterable[T] extends Container {
     }
     #[ret.iterable == self, ret.f == f]
     def map[U](f : (T) -> U) -> MapIterable[T, U] {
-        return MapIterable[T, U].new(self, f);
+        return MapIterable{self, f};
     }
     #[ret.iterable == self, ret.f == f]
     def filter(f : (T) -> Bool) -> FilterIterable[T] {
-        return FilterIterable[T].new(self, f);
+        return FilterIterable{self, f};
     }
     #[ret.first == self, ret.second == other]
     def chain(other : Iterable[T]) -> ChainIterable[T] {
-        return ChainIterable[T].new(self, other);
+        return ChainIterable{self, other};
     }
     #[ret.first == self, ret.second == other]
     def interleave(other : Iterable[T]) -> InterleaveIterable[T] {
-        return InterleaveIterable[T].new(self, other);
+        return InterleaveIterable{self, other};
     }
     #[ret.first == self, ret.second == other]
     def zip[U](other : Iterable[U]) -> ZipIterable[T, U] {
-        return ZipIterable[T, U].new(self, other);
+        return ZipIterable{self, other};
     }
     #[ret.first == self, ret.second == other]
     def product[U](other : Iterable[U]) -> ProductIterable[T, U] {
-        return ProductIterable[T, U].new(self, other);
+        return ProductIterable{self, other};
     }
 }
 
@@ -87,7 +87,7 @@ class MapIterable[T, U] extends Iterable[U] {
     def init(@iterable : Iterable[T], @f : (T) -> U) {}
 
     def iterator() -> MapIterator[T, U] {
-        return MapIterator[T, U].new(@iterable.iterator(), @f);
+        return MapIterator{@iterable.iterator(), @f};
     }
 }
 
@@ -115,7 +115,7 @@ class FilterIterable[T] extends Iterable[T] {
     def init(@iterable : Iterable[T], @f : (T) -> Bool) {}
 
     def iterator() -> FilterIterator[T] {
-        return FilterIterator[T].new(@iterable.iterator(), @f);
+        return FilterIterator{@iterable.iterator(), @f};
     }
 }
 
@@ -149,7 +149,7 @@ class ChainIterable[T] extends Iterable[T] {
     def init(@first : Iterable[T], @second : Iterable[T]) {}
 
     def iterator() -> ChainIterator[T] {
-        return ChainIterator[T].new(@first.iterator(), @second.iterator());
+        return ChainIterator{@first.iterator(), @second.iterator()};
     }
 }
 
@@ -186,7 +186,7 @@ class InterleaveIterable[T] extends Iterable[T] {
     def init(@first : Iterable[T], @second : Iterable[T]) {}
 
     def iterator() -> InterleaveIterator[T] {
-        return InterleaveIterator[T].new(@first.iterator(), @second.iterator());
+        return InterleaveIterator{@first.iterator(), @second.iterator()};
     }
 }
 
@@ -225,7 +225,7 @@ class ZipIterable[T, U] extends Iterable[Pair[T, U]] {
     def init(@first : Iterable[T], @second : Iterable[U]) {}
 
     def iterator() -> ZipIterator[T, U] {
-        return ZipIterator[T, U].new(@first.iterator(), @second.iterator());
+        return ZipIterator{@first.iterator(), @second.iterator()};
     }
 }
 
@@ -245,7 +245,7 @@ class ZipIterator[T, U] extends Iterator[Pair[T, U]] {
         first_elem = @first.next();
         second_elem = @second.next();
         if first_elem is T {
-            if second_elem is U { return Pair[T, U].new(first_elem, second_elem); }
+            if second_elem is U { return Pair{first_elem, second_elem}; }
         }
         return nil;
     }
@@ -263,7 +263,7 @@ class ProductIterable[T, U] extends Iterable[Pair[T, U]] {
     def init(@first : Iterable[T], @second : Iterable[U]) {
     }
     def iterator() -> ProductIterator[T, U] {
-        return ProductIterator[T, U].new(@first.iterator(), @second);
+        return ProductIterator{@first.iterator(), @second};
     }
 }
 
@@ -289,7 +289,7 @@ class ProductIterator[T, U] extends Iterator[Pair[T, U]] {
         current_first = @current_first;
         while current_first is T {
             second_elem = @second_iterator.next();
-            if second_elem is U { return Pair[T, U].new(current_first, second_elem); }
+            if second_elem is U { return Pair{current_first, second_elem}; }
             @current_first = @first_iterator.next();
             @second_iterator = @second_iterable.iterator();
             current_first = @current_first;

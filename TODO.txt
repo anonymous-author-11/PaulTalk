@@ -448,13 +448,13 @@ DONE:
 
 TODO:
 
+- Make sure function names / identifiers don't conflict with type aliases
 - Snprintf can convert things to string representations
-- Constructor type parameter deduction
-- I'd like to be able to type Pair{5, 6} instead of Pair[i32, i32].new(5, 6)
 - I should be able to declare variadic extern defs
 	- e.g. "extern def printf(Buffer[i8], ...) -> i32"
 - I need to add alwaysinline to wrapper declarations
 - Source.mini crashes in debug mode
+	- It's those damn i160's I'm sure of it
 - GEP inbounds could help optimization on dynamic geps
 - I should add real type checking for call/yield
 - Buffer doesn't need to take an i32; it could take any kind of up to i64 integer really
@@ -478,8 +478,14 @@ TODO:
 	- capture_backtrace and print_backtrace for Windows and POSIX [check!]
 	- Mark yielded exceptions as cold and outline in hot-cold split [check!]
 	- Correct line numbers for implicit 'include core;' [check!]
+	- Constructor ergonomics upgrades [check!]
+		- I'd like to be able to type Pair{5, 6} instead of Pair[i32, i32].new(5, 6) [check!]
+		- Shorter braces constructor syntax [check!]
+		- Basic constructor type parameter deduction [check!]
+
 	- Hi, mid, lo dialects
 		- Split dialect into multiple files [check!]
+		- Use lo dialect in patterns.mlir
 	- Unsigned integers
 		- Should probably split out Integer and Float first [check!]
 		- Any u[width] can be converted to an i[2*width] or larger [check!]
