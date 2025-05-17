@@ -2,9 +2,52 @@ import std;
 
 extern def clock() -> i64
 
+// compiles to:
+// define i32 @min(i32 %0, i32 %1) {
+//   %3 = call i32 @llvm.smin.i32(i32 %0, i32 %1)
+//   ret i32 %3
+// }
 def min(a : i32, b : i32) -> i32 {
     if a < b { return a; }
     return b;
+}
+
+// compiles to:
+// define <4 x i64> @simd_add(<4 x i64> %0, <4 x i64> %1) {
+//   %3 = add <4 x i64> %1, %0
+//   ret <4 x i64> %3
+// }
+def simd_add(a : Tuple[i64, i64, i64, i64], b : Tuple[i64, i64, i64, i64]) -> Tuple[i64, i64, i64, i64] {
+    return (a.[0] + b.[0], a.[1] + b.[1], a.[2] + b.[2], a.[3] + b.[3]);
+}
+
+// compiles to:
+// define <4 x i64> @simd_mul(<4 x i64> %0, <4 x i64> %1) {
+//   %3 = mul <4 x i64> %1, %0
+//   ret <4 x i64> %3
+// }
+def simd_mul(a : Tuple[i64, i64, i64, i64], b : Tuple[i64, i64, i64, i64]) -> Tuple[i64, i64, i64, i64] {
+    return (a.[0] * b.[0], a.[1] * b.[1], a.[2] * b.[2], a.[3] * b.[3]);
+}
+
+// compiles to:
+// define i64 @simd_reduce(<4 x i64> %0) {
+//   %2 = call i64 @llvm.vector.reduce.add.v4i64(<4 x i64> %0)
+//   ret i64 %2
+// }
+def simd_reduce(a : Tuple[i64, i64, i64, i64]) -> i64 {
+    return simd_reduce_inner(a.[0], a.[1], a.[2], a.[3]);
+}
+
+// compiles to:
+// define i64 @simd_reduce_inner(i64 %0, i64 %1, i64 %2, i64 %3) {
+//   %5 = add i64 %1, %0
+//   %6 = add i64 %5, %2
+//   %7 = add i64 %6, %3
+//   ret i64 %7
+// }
+def simd_reduce_inner(a : i64, b : i64, c : i64, d : i64) -> i64 {
+    return a + b + c + d;
 }
 
 class Matrix {
@@ -16,75 +59,49 @@ class Matrix {
         @data = Buffer[i64].new(@rows * @cols);
     }
 
+    def rows() -> i32 { return @rows; }
+    def row_idx() -> Range { return 0:(@rows - 1); }
+    def cols() -> i32 { return @cols; }
+    def col_idx() -> Range { return 0:(@cols - 1); }
+    def data() -> Buffer[i64] { return @data; }
+
     def set(row : i32, col : i32, value : i64) {
-        @data.[row * @cols + col] = value;
+        @data.[col * @rows + row] = value;
     }
 
     def get(row : i32, col : i32) -> i64 {
-        return @data.[row * @cols + col];
-    }
-
-    def rows() -> i32 {
-        return @rows;
-    }
-
-    def row_idx() -> Range {
-        return 0:(@rows - 1);
-    }
-
-    def cols() -> i32 {
-        return @rows;
-    }
-
-    def col_idx() -> Range {
-        return 0:(@cols - 1);
-    }
-
-    def data() -> Buffer[i64] {
-        return @data;
+        return @data.[col * @rows + row];
     }
 
     def *(other : Matrix) -> Matrix {
-        if @cols != other.rows() { yield(); }
+        if @cols != other.rows() { yield(Exception.new()); }
         result = Matrix.new(@rows, other.cols());
-        self.mul_inner(@rows, @cols, other.cols(), @data, other.data(), result.data());
-        return result;
-    }
+        common_dim = @cols; 
 
-    def mul_inner(rows : i32, cols : i32, other_cols : i32, data : Buffer[i64], other_data : Buffer[i64], result_data : Buffer[i64]) {
-        i = 0;
-        while i < rows {
-            i_offset = i * cols;
-            result_i_offset = i * other_cols;
-            j = 0;
-            while j < other_cols {
-                sum1 : i64 = 0;
-                sum2 : i64 = 0;
-                sum3 : i64 = 0;
-                sum4 : i64 = 0;
+        for i in self.row_idx() {
+            for j in other.col_idx() {
+                sums : Tuple[i64, i64, i64, i64] = (0, 0, 0, 0);
                 k = 0;
-                while k < cols - 3 {
-                    sum1 = sum1 + data.[i_offset + k] * other_data.[k * other_cols + j];
-                    sum2 = sum2 + data.[i_offset + k + 1] * other_data.[(k + 1) * other_cols + j];
-                    sum3 = sum3 + data.[i_offset + k + 2] * other_data.[(k + 2) * other_cols + j];
-                    sum4 = sum4 + data.[i_offset + k + 3] * other_data.[(k + 3) * other_cols + j];
+                while k < common_dim - 3 {
+                    data_vec = (self.get(i, k), self.get(i, k + 1), self.get(i, k + 2), self.get(i, k + 3));
+                    other_vec = (other.get(k, j), other.get(k + 1, j), other.get(k + 2, j), other.get(k + 3, j));
+                    sums = simd_add(sums, simd_mul(data_vec, other_vec));
                     k = k + 4;
                 }
-                // Handle remaining elements
-                while k < cols {
-                    sum1 = sum1 + data.[i_offset + k] * other_data.[k * other_cols + j];
+                
+                while k < common_dim {
+                    sums.[0] = sums.[0] + self.get(i, k) * other.get(k, j);
                     k = k + 1;
                 }
-                result_data.[result_i_offset + j] = sum1 + sum2 + sum3 + sum4;
-                j = j + 1;
+                result.set(i, j, simd_reduce(sums));
             }
-            i = i + 1;
         }
+        return result;
     }
 }
 
 def benchmark_matrix_multiplication() {
-    size = 1000;
+    size = 1_000;
     
     matrix1 = Matrix.new(size, size);
     matrix2 = Matrix.new(size, size);
@@ -111,7 +128,7 @@ def benchmark_matrix_multiplication() {
     IO.print("Time taken:");
     IO.print(time_taken);
     
-    sum : i64 = 0;
+    sum = 0;
     for i in 0:(size - 1) { sum = sum + result.get(0, i); }
     IO.print("Sum of first row (for verification):");
     IO.print(sum);

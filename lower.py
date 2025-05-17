@@ -452,9 +452,9 @@ class LowerTupleCast(RewritePattern):
         from_geps = [llvm.GEPOp(conversion.results[0], [0, i], pointee_type=from_typ.base_typ()) for (i, t) in enumerate(from_typ.types)]
         to_geps = [llvm.GEPOp(alloca.results[0], [0, i], pointee_type=to_typ.base_typ()) for (i, t) in enumerate(to_typ.types.data)]
         casts = [CastOp.make(from_geps[i].results[0], a, b) for (i, (a, b)) in enumerate(zip(from_typ.types.data, to_typ.types.data))]
-        stores = [llvm.StoreOp(casts[i].results[0], to_geps[i].results[0]) for (i, t) in enumerate(to_typ.types.data)]
-        rewriter.inline_block_before_matched_op([Block([conversion, *from_geps, *to_geps, *casts])])
-        rewriter.inline_block_after_matched_op(Block([*stores]))
+        memcpys = [MemCpyOp.make(casts[i].results[0], to_geps[i].results[0], to_typ.types.data[i]) for (i, t) in enumerate(to_typ.types.data)]
+        rewriter.inline_block_before_matched_op(Block([conversion, *from_geps, *casts]))
+        rewriter.inline_block_after_matched_op(Block([*to_geps, *memcpys]))
         rewriter.replace_matched_op(alloca)
 
 class LowerPrelude(RewritePattern):

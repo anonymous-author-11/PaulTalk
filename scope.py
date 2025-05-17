@@ -111,6 +111,8 @@ class Scope:
             return self.subtype(left, self.simplify(right))
         if isinstance(right, Any): return True
         if isinstance(left, Nothing): return True
+        if isinstance(left, Integer) and isinstance(right, Integer):
+            return left.bitwidth <= right.bitwidth and left.signedness.data == right.signedness.data
         if isinstance(left, Union): return all(self.subtype(t, right) for t in left.types.data)
         if isinstance(right, Intersection): return all(self.subtype(t, right) for t in left.types.data)
         if isinstance(right, Union): return any(self.subtype(left, t) for t in right.types.data)

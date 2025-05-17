@@ -249,6 +249,14 @@ class BinaryOp(Expression):
         if not (left_number and right_number):
             raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
 
+        # For int-int ops where one is a literal, set the literal's width equal to the other
+        if isinstance(left_type, Integer) and isinstance(self.right, IntegerLiteral):
+            self.right.width = left_type.bitwidth
+            right_type = self.right.exprtype(scope)
+        if isinstance(right_type, Integer) and isinstance(self.left, IntegerLiteral):
+            self.left.width = right_type.bitwidth
+            left_type = self.left.exprtype(scope)
+
         # For int-int ops with different width, extend the smaller int to the size of the larger one
         if isinstance(left_type, Integer) and isinstance(right_type, Integer):
             if left_type.bitwidth < right_type.bitwidth:

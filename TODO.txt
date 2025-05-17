@@ -452,7 +452,9 @@ DONE:
 
 TODO:
 
-- Do we properly account for break/continue in typeflow?
+- Index setter shouldn't be hardcoded to one index
+	- I'd like to be able to do mat[i,j] = val;
+- We do not properly account for break/continue in typeflow
 	- We should probably move to a cfg
 	- What if I did something ad hoc
 	- Store all "exits" from the loop
@@ -500,6 +502,9 @@ TODO:
 	- Make sure function names / identifiers don't conflict with type aliases [check!]
 	- I could special-case Buffer & Nil to not narrow to Nothing [check!]
 	- Probably better to special-case in Branch.narrow [check!]
+	- Lower homogenous integer/float tuple to vector [check!]
+	- I'd like to be able to say '(0, 0, 0, 0) as Tuple[i64, i64, i64, i64]' [check!]
+	- Allow subtyping between integers of different widths [check!]
 	- Hi, mid, lo dialects
 		- Split dialect into multiple files [check!]
 		- Use lo dialect in patterns.mlir
@@ -510,6 +515,8 @@ TODO:
 		- Literals can be converted to unsigned, conditional on their value [check!]
 		- Int-Int binary ops extend the shorter one [check!]
 		- Int-Float binary ops convert the int to float [check!]
+		- Arithetic with literals should not promote to the larger width [check!]
+			- Instead, we should set the literal width to the non-literal width [check!]
 		- In LLVM, signedness is a property of operations, not types
 		- What ops care about signedness?
 			- Division (udiv vs sdiv)
@@ -562,6 +569,11 @@ TODO:
 		- Security and verification mechanisms
 	- Namespacing is even more necessary with packages
 	- Determine what kind of file/directory structure is expected [check!]
+	- Able to cast builtins to generic bounds
+		- Addable / Subtractable / etc.
+		- Hashable
+		- Representable
+		- Equatable, Comparable
 	- Region memory management
 		- Liveness analysis
 			- Two backward passes over AST

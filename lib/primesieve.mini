@@ -129,7 +129,7 @@ class CacheOptimizedBitpackedSieve {
         if n < 2 { return true; } // 0 and 1 are not prime
         byte_index = n / 8;
         bit_offset = (n % 8) as i8;
-        return (@sieve_bits.[byte_index] bit_and ((1 as i8) << bit_offset)) != 0;
+        return (@sieve_bits.[byte_index] bit_and (1 << bit_offset)) != 0;
     }
 
     // Helper to set the bit for a number n (mark as composite)
@@ -137,7 +137,7 @@ class CacheOptimizedBitpackedSieve {
         if n < 2 { return; }
         byte_index = n / 8;
         bit_offset = (n % 8) as i8;
-        @sieve_bits.[byte_index] = @sieve_bits.[byte_index] bit_or ((1 as i8) << bit_offset);
+        @sieve_bits.[byte_index] = @sieve_bits.[byte_index] bit_or (1 << bit_offset);
     }
 
     def init(@size : i32) {

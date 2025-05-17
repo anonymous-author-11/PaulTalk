@@ -216,6 +216,10 @@ class Tuple(ParametrizedAttribute, TypeAttribute):
     types: ParameterDef[ArrayAttr]
 
     def base_typ(self):
+        homogenous_types = len(set(self.types.data)) == 1
+        # A tuple of homogenous integers or floats can be lowered to a vector
+        if homogenous_types and (isinstance(self.types.data[0], Integer) or isinstance(self.types.data[0], Float)):
+            return builtin.VectorType(self.types.data[0].base_typ(), [len(self.types.data)])
         return llvm.LLVMStructType.from_type_list([t.base_typ() for t in self.types.data])
 
     def symbol(self):
@@ -451,6 +455,8 @@ class ReabstractOp(IRDLOperation):
 @irdl_op_definition
 class TupleCastOp(IRDLOperation):
     name = "mid.tuple_cast"
+    operand: Operand = operand_def()
+    result: OpResult = result_def()
     from_typ: TypeAttribute = attr_def(TypeAttribute)
     to_typ: TypeAttribute = attr_def(TypeAttribute)
     traits = frozenset()
