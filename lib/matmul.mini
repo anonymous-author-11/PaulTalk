@@ -1,5 +1,6 @@
 import std;
 
+// records time in milliseconds
 extern def clock() -> i64
 
 // compiles to:
@@ -75,25 +76,38 @@ class Matrix {
 
     def *(other : Matrix) -> Matrix {
         if @cols != other.rows() { yield(Exception.new()); }
+        
         result = Matrix.new(@rows, other.cols());
-        common_dim = @cols; 
+        common_dim = @cols;
+        res_rows = @rows;
+        col_idx = self.col_idx();
 
-        for i in self.row_idx() {
-            for j in other.col_idx() {
-                sums : Tuple[i64, i64, i64, i64] = (0, 0, 0, 0);
-                k = 0;
-                while k < common_dim - 3 {
-                    data_vec = (self.get(i, k), self.get(i, k + 1), self.get(i, k + 2), self.get(i, k + 3));
-                    other_vec = (other.get(k, j), other.get(k + 1, j), other.get(k + 2, j), other.get(k + 3, j));
-                    sums = simd_add(sums, simd_mul(data_vec, other_vec));
-                    k = k + 4;
+        for j in other.col_idx() {
+            for k in col_idx {
+                b_kj = other.get(k, j);
+                if b_kj == 0 { continue; }
+
+                i = 0;
+                while i <= res_rows - 4 {
+                    a_vec = (self.get(i + 0, k), self.get(i + 1, k), self.get(i + 2, k), self.get(i + 3, k));
+                    b_broadcast_vec = (b_kj, b_kj, b_kj, b_kj);
+                    c_vec = (result.get(i + 0, j), result.get(i + 1, j), result.get(i + 2, j), result.get(i + 3, j));
+                    new_c_vec = simd_add(c_vec, simd_mul(a_vec, b_broadcast_vec));
+
+                    result.set(i + 0, j, new_c_vec.[0]);
+                    result.set(i + 1, j, new_c_vec.[1]);
+                    result.set(i + 2, j, new_c_vec.[2]);
+                    result.set(i + 3, j, new_c_vec.[3]);
+                    
+                    i = i + 4;
                 }
                 
-                while k < common_dim {
-                    sums.[0] = sums.[0] + self.get(i, k) * other.get(k, j);
-                    k = k + 1;
+                while i < res_rows {
+                    current_val = result.get(i, j);
+                    term_to_add = self.get(i, k) * b_kj;
+                    result.set(i, j, current_val + term_to_add);
+                    i = i + 1;
                 }
-                result.set(i, j, simd_reduce(sums));
             }
         }
         return result;
