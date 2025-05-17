@@ -413,6 +413,10 @@ DONE:
 - ptalk --help / ptalk --version [check!]
 - Try compiling with /O2 /Ob3 via Nuitka [check!]
 - Implement heterogenous-width and integer-float binary operations [check!]
+- Get rid of Ptr type and split into Int and Float types [check!]
+- Special case "if buffer is Nil" to check for C nullptr [check!]
+	- Special case in TypeCheck [check!]
+	- Need to ensure intersection of Buffer & Nil doesn't reduce to Nothing [check!]
 
 - Releases 0.1.*
 	- Works on any Windows x86_64 machine (other people's computers)
@@ -444,11 +448,22 @@ DONE:
 	- Refactor compiler driver [check!]
 	- Do all MLIR lowering in parallel [check!]
 	- Fix bump_malloc [check!]
-	- Lazily constructed exception messages [check!]
+	- Lazily constructed exception messages [check!] [reverted in 0.4.*]
 
 TODO:
 
-- Make sure function names / identifiers don't conflict with type aliases
+- Do we properly account for break/continue in typeflow?
+	- We should probably move to a cfg
+	- What if I did something ad hoc
+	- Store all "exits" from the loop
+	- For each exit, store the type and symbol tables
+	- After the branch, union all the exits
+	- This is a little over-conservative (breaks can't go back to the start of the loop)
+	- What about cast-assigning before breaks/continue's?
+- I really want type narrowing in alternative branches
+	- And 'is not' syntax
+	- And narrowing within logical ops
+	- And 'while' with a type check condition not polluting the main path
 - Snprintf can convert things to string representations
 - I should be able to declare variadic extern defs
 	- e.g. "extern def printf(Buffer[i8], ...) -> i32"
@@ -482,7 +497,9 @@ TODO:
 		- I'd like to be able to type Pair{5, 6} instead of Pair[i32, i32].new(5, 6) [check!]
 		- Shorter braces constructor syntax [check!]
 		- Basic constructor type parameter deduction [check!]
-
+	- Make sure function names / identifiers don't conflict with type aliases [check!]
+	- I could special-case Buffer & Nil to not narrow to Nothing [check!]
+	- Probably better to special-case in Branch.narrow [check!]
 	- Hi, mid, lo dialects
 		- Split dialect into multiple files [check!]
 		- Use lo dialect in patterns.mlir
@@ -587,7 +604,6 @@ TODO:
 - Overloading *functions*
 	- Reuse the Behavior code as much as possible
 	- Only functions in the same file should count as overloads?
-- Get rid of Ptr type and split into Int and Float types
 - Where clauses for method type parameters
 - Should i32 be a subtype of i64?
 	- It can be trivially cast to it, so I don't see why not
@@ -618,9 +634,7 @@ TODO:
 	- "alias Foo[A] = Bar[A, i32];"
 	- This is more complex
 - Should ensure that all branches must return if return value declared
-- Special case "if buffer is Nil" to check for C nullptr
-	- Special case in TypeCheck [check!]
-	- Need to ensure intersection of Buffer & Nil doesn't reduce to Nothing
+
 - Do less work for imports
 	- Type-check specific imports on-demand rather than upfront
 	- Decrease work done in interface_codegen

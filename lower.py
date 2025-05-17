@@ -949,24 +949,36 @@ class LowerArithmetic(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: ArithmeticOp, rewriter: PatternRewriter):
         debug_code(op)
-        if isinstance(op.result.type, IntegerType):
+        if isinstance(op.lhs.type, Integer) and isinstance(op.rhs.type, Integer):
+            lhs_sign = op.lhs.type.signedness.data
+            rhs_sign = op.rhs.type.signedness.data
             op_map1 = {
-                "ADD":arith.Addi,
-                "SUB": arith.Subi,
-                "MUL": arith.Muli,
-                "DIV": arith.DivSI,
-                "MOD":arith.RemSI,
-                "LSHIFT":arith.ShLI,
-                "RSHIFT":arith.ShRSI,
-                "bit_and":arith.AndI,
-                "bit_or":arith.OrI,
-                "bit_xor":arith.XOrI
+                tuple(Signedness.SIGNED, "ADD", Signedness.SIGNED):arith.Addi,
+                tuple(Signedness.SIGNED, "SUB", Signedness.SIGNED): arith.Subi,
+                tuple(Signedness.SIGNED, "MUL", Signedness.SIGNED): arith.Muli,
+                tuple(Signedness.UNSIGNED, "ADD", Signedness.UNSIGNED):arith.Addi,
+                tuple(Signedness.UNSIGNED, "SUB", Signedness.UNSIGNED): arith.Subi,
+                tuple(Signedness.UNSIGNED, "MUL", Signedness.UNSIGNED): arith.Muli,
+                tuple(Signedness.SIGNED, "DIV", Signedness.SIGNED): arith.DivSI,
+                tuple(Signedness.SIGNED, "MOD", Signedness.SIGNED):arith.RemSI,
+                tuple(Signedness.UNSIGNED, "DIV", Signedness.UNSIGNED): arith.DivUI,
+                tuple(Signedness.UNSIGNED, "MOD", Signedness.UNSIGNED):arith.RemUI,
+                tuple(Signedness.SIGNED, "LSHIFT", Signedness.SIGNED):arith.ShLI,
+                tuple(Signedness.UNSIGNED, "LSHIFT", Signedness.UNSIGNED):arith.ShLI,
+                tuple(Signedness.SIGNED, "RSHIFT", Signedness.SIGNED):arith.ShRSI,
+                tuple(Signedness.UNSIGNED, "RSHIFT", Signedness.UNSIGNED):arith.ShRUI,
+                tuple(Signedness.SIGNED, "bit_and", Signedness.SIGNED):arith.AndI,
+                tuple(Signedness.SIGNED, "bit_or", Signedness.SIGNED):arith.OrI,
+                tuple(Signedness.SIGNED, "bit_xor", Signedness.SIGNED):arith.XOrI,
+                tuple(Signedness.UNSIGNED, "bit_and", Signedness.UNSIGNED):arith.AndI,
+                tuple(Signedness.UNSIGNED, "bit_or", Signedness.UNSIGNED):arith.OrI,
+                tuple(Signedness.UNSIGNED, "bit_xor", Signedness.UNSIGNED):arith.XOrI
             }
-            concrete_op1 = op_map1[op.op.data]
+            concrete_op1 = op_map1[tuple(lhs_sign, op.op.data, rhs_sign)]
             add1 = concrete_op1(op.lhs, op.rhs)
             rewriter.replace_matched_op(add1)
             return
-        if(isinstance(op.result.type, Float64Type)):
+        if isinstance(op.lhs.type, Float) and isinstance(op.rhs.type, Float):
             op_map2 = {
                 "ADD":arith.Addf,
                 "SUB": arith.Subf,

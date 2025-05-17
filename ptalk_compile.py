@@ -150,13 +150,13 @@ class CompilationJob:
 
         jobs = [CompilationJob(dependency, build_dir=self.build_dir, no_timings=True) for dependency in sorted_dependencies]
         asts = self.parse_dependencies(jobs)
-        modules = self.codegen_dependencies(jobs, asts)
         
         needs_lowering = not already_perfect(self.input.path, self.build_dir)
         if needs_lowering:
-            own_module = self.run_codegen(own_ast)
-            modules.append(own_module)
+            asts.append(own_ast)
             jobs.append(self)
+
+        modules = self.codegen_dependencies(jobs, asts)
 
         self.record_time("codegen_done")
         

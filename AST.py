@@ -176,7 +176,10 @@ class Program(Node):
             if fn.name in scope.functions:
                 raise Exception(f"{fn.info}: Function {fn.name} already declared in this scope")
             scope.functions[fn.name] = fn
-        for alias in aliases: scope.add_alias(alias.alias, alias.meaning)
+        for alias in aliases:
+            if alias.alias in scope.functions:
+                raise Exception(f"{alias.info}: Alias conflicts with function named {alias.alias}")
+            scope.add_alias(alias.alias, alias.meaning)
         for imp in imports: imp.typeflow(scope)
 
     def typeflow(self, scope):
@@ -641,6 +644,10 @@ class Identifier(Expression):
     def ensure_previously_declared(self, scope):
         if (self.name not in scope.type_table) and (self.name not in scope.functions):
             raise Exception(f"{self.info}: identifier {self.name} not previously declared!")
+
+    def ensure_no_alias_conflicts(self, scope):
+        if self.name in scope.aliases:
+            raise Exception(f"{self.info}: Identifier {self.name} conflicts with existing alias of the same name")
 
     def exprtype(self, scope):
         self.disallow_self_in_init(scope)
@@ -2815,10 +2822,12 @@ class Branch(Statement):
     def narrow_dry(self, then_scope):
         if not isinstance(self.condition, TypeCheck): return
         if not isinstance(self.condition.left, Identifier): return
+        if "@" in self.condition.left.name: return
         old_typ = then_scope.type_table[self.condition.left.name]
         right_type = then_scope.simplify(self.condition.right)
         intersection = Intersection.from_list([right_type, old_typ])
         new_typ = then_scope.simplify(intersection)
+        if isinstance(old_typ, Buffer) and right_type == Nil(): new_typ = Nil()
         if new_typ == Nothing():
             debug_print(f'narrowed {old_typ} & {right_type} to nothing')
             #if then_scope.subtype(right_type, old_typ):
@@ -2832,11 +2841,13 @@ class Branch(Statement):
     def narrow(self, then_scope):
         if not isinstance(self.condition, TypeCheck): return
         if not isinstance(self.condition.left, Identifier): return
+        if "@" in self.condition.left.name: return
         scope = then_scope.parent
         old_typ = then_scope.type_table[self.condition.left.name]
         right_type = then_scope.simplify(self.condition.right)
         intersection = Intersection.from_list([right_type, old_typ])
         new_typ = scope.simplify(intersection)
+        if isinstance(old_typ, Buffer) and right_type == Nil(): new_typ = Nil()
         cast = CastOp.make(scope.symbol_table[self.condition.left.name], old_typ, new_typ)
         then_scope.region.first_block.add_op(cast)
         then_scope.symbol_table[self.condition.left.name] = cast.results[0]
@@ -2856,7 +2867,7 @@ class IfStatement(Branch):
         branch_scopes = [Scope(scope) for block in branch_blocks]
         self.narrow_dry(branch_scopes[0])
         if Nothing() in branch_scopes[0].type_table.values():
-            debug_print("would be impossible to enter then branch")
+            debug_print("would be impossible to enter 'then' branch of if-statement")
             offender = next((k,v) for k,v in branch_scopes[0].type_table.items() if v == Nothing())
             debug_print(offender[0])
             debug_print(offender[1])
@@ -2939,10 +2950,11 @@ class WhileStatement(Branch):
 
 @dataclass
 class For(Statement):
-    inductee: str
+    inductee: Identifier
     iterable: Expression
+    iterator: MethodCall
+    temp_ident: Identifier
     body: BlockNode
-    temp_name: str
 
     def codegen(self, scope):
         """
@@ -2953,32 +2965,29 @@ class For(Statement):
         _iterator_xyz = iterable.iterator();
         while (x := _iterator_xyz.next()) is not Nil { ... }
         """
-        temp = Identifier(NodeInfo(None, self.info.filepath, self.info.line_number), self.temp_name)
-        iterator = MethodCall(NodeInfo("_iterator_" + random_letters(10), self.info.filepath, self.info.line_number), self.iterable, "iterator", [])
-        assign0 = Assignment(NodeInfo(None, self.info.filepath, self.info.line_number), temp, iterator)
+        node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for i in range(5)]
+        assign0 = Assignment(node_infos[0], self.temp_ident, self.iterator)
         assign0.codegen(scope)
-        nxt_call = MethodCall(NodeInfo(None, self.info.filepath, self.info.line_number), temp, "next", [])
+        nxt_call = MethodCall(node_infos[1], self.temp_ident, "next", [])
         nxt_type = nxt_call.exprtype(scope)
         continue_type = scope.simplify(Union.from_list([t for t in nxt_type.types.data if t != Nil()]))
-        inductee = Identifier(NodeInfo(None, self.info.filepath, self.info.line_number), self.inductee)
-        assign1 = Assignment(NodeInfo(None, self.info.filepath, self.info.line_number), inductee, nxt_call)
-        condition = TypeCheck(NodeInfo(None, self.info.filepath, self.info.line_number), inductee, continue_type)
-        wile = WhileStatement(NodeInfo(None, self.info.filepath, self.info.line_number), condition, assign1, self.body)
+        assign1 = Assignment(node_infos[2], self.inductee, nxt_call)
+        condition = TypeCheck(node_infos[3], self.inductee, continue_type)
+        wile = WhileStatement(node_infos[4], condition, assign1, self.body)
         wile.codegen(scope)
 
     def typeflow(self, scope):
+        node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for i in range(7)]
         iterable_type = self.iterable.exprtype(scope)
         if not isinstance(iterable_type, FatPtr):
             raise Exception(f"{self.info}: For-loop iterable must be an object with a .iterator() method, not {iterable_type}")
-        temp = Identifier(NodeInfo(None, self.info.filepath, self.info.line_number), self.temp_name)
-        iterator = MethodCall(NodeInfo("_iterator_" + random_letters(10), self.info.filepath, self.info.line_number), self.iterable, "iterator", [])
-        iterator_type = iterator.exprtype(scope)
+        iterator_type = self.iterator.exprtype(scope)
         if not isinstance(iterator_type, FatPtr):
             raise Exception(f"{self.info}: For-loop iterator must be an object with a .next() method, not {iterator_type}")
-        assign0 = Assignment(NodeInfo(None, self.info.filepath, self.info.line_number), temp, iterator)
+        assign0 = Assignment(node_infos[0], self.temp_ident, self.iterator)
         assign0.typeflow(scope)
 
-        nxt_call = MethodCall(NodeInfo(None, self.info.filepath, self.info.line_number), temp, "next", [])
+        nxt_call = MethodCall(node_infos[1], self.temp_ident, "next", [])
         nxt_type = nxt_call.exprtype(scope)
         if not isinstance(nxt_type, Union):
             debug_print(nxt_type)
@@ -2987,10 +2996,9 @@ class For(Statement):
         if continue_type == Nothing():
             raise Exception(f"{self.info}: For-loop would never enter.")
 
-        inductee = Identifier(NodeInfo(None, self.info.filepath, self.info.line_number), self.inductee)
-        assign1 = Assignment(NodeInfo(None, self.info.filepath, self.info.line_number), inductee, nxt_call)
-        condition = TypeCheck(NodeInfo(None, self.info.filepath, self.info.line_number), inductee, continue_type)
-        wile = WhileStatement(NodeInfo(None, self.info.filepath, self.info.line_number), condition, assign1, self.body)
+        assign1 = Assignment(node_infos[2], self.inductee, nxt_call)
+        condition = TypeCheck(node_infos[3], self.inductee, continue_type)
+        wile = WhileStatement(node_infos[4], condition, assign1, self.body)
         wile.typeflow(scope)
 
 @dataclass
