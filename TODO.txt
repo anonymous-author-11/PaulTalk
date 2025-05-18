@@ -457,7 +457,6 @@ TODO:
 	- Because the array is merely an implementation detail, it can't escape
 	- Have a utlity to convert tuple to stack-allocated buffer
 - Buffer doesn't need to take an i32; it could take any kind of integer up to i64 really
-	- Probably the lowered logic should all be in i64
 	- For creation, indexing
 	- Tuple too
 - Index setter shouldn't be hardcoded to one index

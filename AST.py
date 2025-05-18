@@ -1254,7 +1254,8 @@ class ClassMethodCall(MethodCall):
             self.receiver = scope.cls.type()
         
         rec_typ = scope.simplify(self.receiver)
-        if rec_typ.cls.data not in scope.classes.keys(): raise Exception(f"class {rec_typ.cls.data} not declared.")
+        if rec_typ.cls.data not in scope.classes.keys():
+            raise Exception(f"{self.info}: Class {rec_typ.cls.data} has not been declared.")
         rec_class = scope.classes[rec_typ.cls.data]
 
         scope.validate_type(self.info, rec_typ)

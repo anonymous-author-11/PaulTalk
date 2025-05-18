@@ -322,7 +322,7 @@ class CompilerTests(CompilerTestCase):
             t = NonExistentClass.new(); // Class not declared
         }
         """
-        with self.assertRaisesRegex(Exception, "class NonExistentClass not declared!"):
+        with self.assertRaisesRegex(Exception, "Class NonExistentClass has not been declared."):
             self.run_mini_code(mini_code, "", "new_expression_class_not_declared")
 
     def test_class_method_call_class_not_declared(self):
@@ -331,7 +331,7 @@ class CompilerTests(CompilerTestCase):
             NonExistentClass.staticMethod(); // Class not declared
         }
         """
-        with self.assertRaisesRegex(Exception, "class NonExistentClass not declared."):
+        with self.assertRaisesRegex(Exception, "Class NonExistentClass has not been declared."):
             self.run_mini_code(mini_code, "", "class_method_call_class_not_declared")
 
     def test_for_loop_never_terminate(self):
