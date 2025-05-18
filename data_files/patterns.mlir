@@ -664,11 +664,9 @@ module @patterns {
     pdl.rewrite %root {
       %buf_ptr = pdl.operation "llvm.load"(%receiver : !pdl.value) -> (%ptr_type : !pdl.type)
       %buf_ptr_result = pdl.result 0 of %buf_ptr
-      %idx = pdl.operation "llvm.load"(%index : !pdl.value) -> (%i32_type : !pdl.type)
+      %idx = pdl.operation "llvm.load"(%index : !pdl.value) -> (%i64_type : !pdl.type)
       %idx_result = pdl.result 0 of %idx
-      %idx_64 = pdl.operation "arith.extsi"(%idx_result : !pdl.value) -> (%i64_type : !pdl.type)
-      %idx_64_result = pdl.result 0 of %idx_64
-      %idx_bytes = pdl.operation "arith.muli"(%type_size, %idx_64_result : !pdl.value, !pdl.value) -> (%i64_type : !pdl.type)
+      %idx_bytes = pdl.operation "arith.muli"(%type_size, %idx_result : !pdl.value, !pdl.value) -> (%i64_type : !pdl.type)
       %idx_bytes_result = pdl.result 0 of %idx_bytes
       %indices = pdl.attribute = array<i32: -2147483648>
       %gep1 = pdl.operation "llvm.getelementptr"(%buf_ptr_result, %idx_bytes_result : !pdl.value, !pdl.value) {"elem_type" = %i8_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
@@ -721,14 +719,12 @@ module @patterns {
     %region = pdl.attribute
     %root = pdl.operation "mid.create_buffer_dynamic"(%size, %type_size : !pdl.value, !pdl.value) {"region_id" = %region} -> (%ptr_type : !pdl.type)
     pdl.rewrite %root {
-      %load = pdl.operation "llvm.load"(%size : !pdl.value) -> (%i32_type : !pdl.type)
+      %load = pdl.operation "llvm.load"(%size : !pdl.value) -> (%i64_type : !pdl.type)
       %load_result = pdl.result 0 of %load
-      %load_64 = pdl.operation "arith.extsi"(%load_result : !pdl.value) -> (%i64_type : !pdl.type)
-      %load_64_result = pdl.result 0 of %load_64
       %ptr_type_attr = pdl.attribute = !llvm.ptr
       %alloca = pdl.operation "mid.alloc" {"typ" = %ptr_type_attr} -> (%ptr_type : !pdl.type)
       %alloca_result = pdl.result 0 of %alloca
-      %malloc_size = pdl.operation "arith.muli"(%load_64_result, %type_size : !pdl.value, !pdl.value) -> (%i64_type : !pdl.type)
+      %malloc_size = pdl.operation "arith.muli"(%load_result, %type_size : !pdl.value, !pdl.value) -> (%i64_type : !pdl.type)
       %malloc_size_result = pdl.result 0 of %malloc_size
       %callee = pdl.attribute = @bump_malloc
       %opsegsize = pdl.attribute = array<i32: 1, 0>

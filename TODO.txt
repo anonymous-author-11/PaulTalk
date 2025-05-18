@@ -452,13 +452,11 @@ DONE:
 
 TODO:
 
+- Bug: file being compiled is not added to recompile set
 - Could do something very clever for treating tuples as iterables
 	- Create an array with the buffer literally being the tuple
 	- Because the array is merely an implementation detail, it can't escape
 	- Have a utlity to convert tuple to stack-allocated buffer
-- Buffer doesn't need to take an i32; it could take any kind of integer up to i64 really
-	- For creation, indexing
-	- Tuple too
 - Index setter shouldn't be hardcoded to one index
 	- I'd like to be able to do mat[i,j] = val;
 - We do not properly account for break/continue in typeflow
@@ -513,6 +511,8 @@ TODO:
 	- I'd like to be able to say '(0, 0, 0, 0) as Tuple[i64, i64, i64, i64]' [check!]
 	- Allow subtyping between integers of different widths [check!]
 	- Enable Tuple[4 x i64] syntax [check!]
+	- Buffer doesn't need to take an i32; it could take any kind of integer up to i64 really [check!]
+		- For creation, indexing [check!]
 	- Hi, mid, lo dialects
 		- Split dialect into multiple files [check!]
 		- Use lo dialect in patterns.mlir

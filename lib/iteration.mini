@@ -299,4 +299,3 @@ class ProductIterator[T, U] extends Iterator[Pair[T, U]] {
         return nil;
     }
 }
-

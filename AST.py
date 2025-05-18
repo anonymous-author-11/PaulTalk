@@ -1089,14 +1089,17 @@ class BufferIndexation(Indexation):
 
     def codegen(self, scope):
         self_typ = self.exprtype(scope)
-        operands = [self.receiver.codegen(scope), self.arguments[0].codegen(scope)]
+        idx_type = self.arguments[0].exprtype(scope)
+        idx = self.arguments[0].codegen(scope)
+        cast = CastOp.make(idx, idx_type, Integer(64))
+        operands = [self.receiver.codegen(scope), cast.results[0]]
         if isinstance(self_typ, TypeParameter):
             parameterization = scope.get_parameterization(self_typ)
             operands.append(parameterization)
         attr_dict = {"typ":self_typ.base_typ()}
-        idx = BufferGetOp.create(operands=operands, result_types=[self_typ], attributes=attr_dict)
-        scope.region.last_block.add_op(idx)
-        return idx.results[0]
+        buf_get = BufferGetOp.create(operands=operands, result_types=[self_typ], attributes=attr_dict)
+        scope.region.last_block.add_ops([cast, buf_get])
+        return buf_get.results[0]
 
     def apply_constraints(self, scope):
         scope.points_to_facts.add((self.receiver.info.id + ".elems_reg", "==", self.info.id))
@@ -1106,8 +1109,10 @@ class BufferIndexation(Indexation):
         rec_typ = self.receiver.exprtype(scope)
         self.ensure_prereqs(scope, rec_typ)
         id_typ = self.arguments[0].exprtype(scope)
-        if id_typ != Integer(32):
+        if not isinstance(id_typ, Integer):
             raise Exception(f"{self.info}: Indexation currently only supported with integers.")
+        if id_typ.bitwidth > 64:
+            raise Exception(f"{self.info}: Indexation only supported with integers up to 64 bits in width.")
         self.apply_constraints(scope)
         return scope.simplify(rec_typ.elem_type)
 
@@ -1117,14 +1122,17 @@ class BufferSetIndex(MethodCall):
     def codegen(self, scope):
         rec_typ = self.receiver.exprtype(scope)
         elem_type = scope.simplify(rec_typ.elem_type)
-        cast = CastOp.make(self.arguments[1].codegen(scope), self.arguments[1].exprtype(scope), elem_type)
-        operands = [self.receiver.codegen(scope), self.arguments[0].codegen(scope), cast.results[0]]
+        idx_type = self.arguments[0].exprtype(scope)
+        idx = self.arguments[0].codegen(scope)
+        cast_idx = CastOp.make(idx, idx_type, Integer(64))
+        cast_val = CastOp.make(self.arguments[1].codegen(scope), self.arguments[1].exprtype(scope), elem_type)
+        operands = [self.receiver.codegen(scope), cast_idx.results[0], cast_val.results[0]]
         if isinstance(elem_type, TypeParameter):
             parameterization = scope.get_parameterization(elem_type)
             operands.append(parameterization)
         attr_dict = {"typ":elem_type.base_typ()}
-        idx = BufferSetOp.create(operands=operands, attributes=attr_dict)
-        scope.region.last_block.add_ops([cast, idx])
+        buf_set = BufferSetOp.create(operands=operands, attributes=attr_dict)
+        scope.region.last_block.add_ops([cast_val, cast_idx, buf_set])
 
     def apply_constraints(self, scope):
         scope.points_to_facts.add((self.receiver.info.id + ".elems_reg", "==", self.info.id))
@@ -1133,8 +1141,10 @@ class BufferSetIndex(MethodCall):
     def exprtype(self, scope):
         rec_typ = self.receiver.exprtype(scope)
         id_typ = self.arguments[0].exprtype(scope)
-        if id_typ != Integer(32):
+        if not isinstance(id_typ, Integer):
             raise Exception(f"{self.info}: Indexation currently only supported with integers.")
+        if id_typ.bitwidth > 64:
+            raise Exception(f"{self.info}: Indexation only supported with integers up to 64 bits in width.")
         value_type = self.arguments[1].exprtype(scope)
         if not scope.subtype(value_type, rec_typ.elem_type):
             raise Exception(f"{self.info}: Value being placed in buffer is of type {value_type}, but buffer is of type {rec_typ}.")
@@ -3152,22 +3162,26 @@ class CreateBuffer(Expression):
     region: str
 
     def codegen(self, scope):
+        size_type = self.size.exprtype(scope)
         size = self.size.codegen(scope)
+        cast = CastOp.make(size, size_type, Integer(64))
         region_id = StringAttr(self.region) if self.region else StringAttr("")
         elem_type = scope.simplify(self.buf.elem_type)
         attr_dict = {"typ":elem_type.base_typ(), "region_id":region_id}
-        operands = [size]
+        operands = [cast.results[0]]
         if isinstance(elem_type, TypeParameter):
             parameterization = scope.get_parameterization(elem_type)
             operands.append(parameterization)
         create_buffer = CreateBufferOp.create(operands=operands, attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
-        scope.region.last_block.add_op(create_buffer)
+        scope.region.last_block.add_ops([cast, create_buffer])
         return create_buffer.results[0]
 
     def exprtype(self, scope):
         size_typ = self.size.exprtype(scope)
-        if size_typ != Integer(32):
-            raise Exception(f"{self.info}: Buffer creation takes i32 as argument, not {size_typ}.")
+        if not isinstance(size_typ, Integer):
+            raise Exception(f"{self.info}: Buffer creation takes an integer as argument, not {size_typ}.")
+        if size_typ.bitwidth > 64:
+            raise Exception(f"{self.info}: Buffer creation can only take integers up to 64 bits wide, not {size_typ}.")
         scope.allocations[self.info.id] = self
         buf_type = scope.simplify(self.buf)
         scope.validate_type(self.info, buf_type.elem_type)
