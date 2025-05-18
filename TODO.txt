@@ -511,6 +511,7 @@ TODO:
 	- Lower homogenous integer/float tuple to vector [check!]
 	- I'd like to be able to say '(0, 0, 0, 0) as Tuple[i64, i64, i64, i64]' [check!]
 	- Allow subtyping between integers of different widths [check!]
+	- Enable Tuple[4 x i64] syntax [check!]
 	- Hi, mid, lo dialects
 		- Split dialect into multiple files [check!]
 		- Use lo dialect in patterns.mlir

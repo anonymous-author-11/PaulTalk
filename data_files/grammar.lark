@@ -76,9 +76,10 @@ typ: basic_type
     | function_type
 
 type_list: (typ ("," typ)*)?
+type_count: INT "x" typ
 basic_type: ident
 sum_type: typ "|" typ
-parameterized_type: ident "[" type_list "]"
+parameterized_type: ident "[" (type_list | type_count) "]"
 function_type: "(" type_list ")" ["->" typ] ["yields" typ]
 
 block: "{" statement* "}"

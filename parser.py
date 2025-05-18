@@ -301,6 +301,9 @@ class CSTTransformer(Transformer):
     def type_list(self, *types):
         return types
 
+    def type_count(self, int_tok, typ):
+        return [typ for i in range(int(int_tok.value))]
+
     def type_bound(self, ident, bound):
         return (ident, bound)
 
