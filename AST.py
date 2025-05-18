@@ -2706,6 +2706,8 @@ class Assignment(Statement):
             return FieldAssignment(self.info, self.target, self.value).codegen(scope)
         if isinstance(self.target, MethodCall):
             return CallAssignment(self.info, self.target, self.value).codegen(scope)
+        if isinstance(self.value, Identifier):
+            return Reference(self.info, self.target, self.value).codegen(scope)
         in_symbol_table = self.target.name in scope.symbol_table
         should_reassign = in_symbol_table and scope.subtype(typ,scope.type_table[self.target.name])
         if should_reassign: return Reassignment(self.info, self.target, self.value).codegen(scope)
@@ -2736,9 +2738,8 @@ class Reference(Assignment):
     def codegen(self, scope):
         typ = self.value.exprtype(scope)
         new_val = self.value.codegen(scope)
-        cast = CastOp.make(new_val, typ, typ)
-        refer_op = ReferOp.create(operands=[cast.results[0]], attributes={"typ":typ.base_typ()}, result_types=[typ])
-        scope.region.last_block.add_ops([cast, refer_op])
+        refer_op = ReferOp.create(operands=[new_val], attributes={"typ":typ.base_typ()}, result_types=[typ])
+        scope.region.last_block.add_op(refer_op)
         new_val = refer_op.results[0]
         scope.symbol_table[self.target.name] = new_val
         scope.type_table[self.target.name] = typ

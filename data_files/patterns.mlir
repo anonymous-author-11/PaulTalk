@@ -820,7 +820,7 @@ module @patterns {
     %op_name_attr = pdl.attribute = "ADD"
     %root = pdl.operation "mid.int_arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
     pdl.rewrite %root {
-      %overflow = pdl.attribute = #arith.overflow<nsw>
+      %overflow = pdl.attribute = #arith.overflow<none>
       %replacement = pdl.operation "arith.addi"(%lhs, %rhs : !pdl.value, !pdl.value) {"overflowFlags" = %overflow} -> (%op_type : !pdl.type)
       %result = pdl.result 0 of %replacement
       pdl.replace %root with (%result : !pdl.value)
