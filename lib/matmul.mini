@@ -155,7 +155,7 @@ class Matrix {
 }
 
 def benchmark_matrix_multiplication() {
-    size = 4096;
+    size = 1500;
     
     matrix1 = Matrix.new(size, size);
     matrix2 = Matrix.new(size, size);
