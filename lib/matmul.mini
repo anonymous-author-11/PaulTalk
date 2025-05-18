@@ -31,6 +31,9 @@ def simd_mul(a : Tuple[f64, f64, f64, f64], b : Tuple[f64, f64, f64, f64]) -> Tu
     return (a.[0] * b.[0], a.[1] * b.[1], a.[2] * b.[2], a.[3] * b.[3]);
 }
 
+// simd_reduce compiles to an @llvm.vector.reduce intrinsic but simd_reduce_inner does not, though the former simply calls the latter
+// This is an interesting LLVM quirk
+
 // compiles to:
 // define f64 @simd_reduce(<4 x f64> %0) {
 //   %2 = call f64 @llvm.vector.reduce.add.v4f64(<4 x f64> %0)
@@ -51,23 +54,24 @@ def simd_reduce_inner(a : f64, b : f64, c : f64, d : f64) -> f64 {
     return a + b + c + d;
 }
 
-// simd_reduce compiles to an @llvm.vector.reduce intrinsic but simd_reduce_inner does not, though the former just calls the latter
-// This is an interesting LLVM quirk
-
 class Matrix {
     @data : Buffer[f64]
     @rows : i32
     @cols : i32
 
+    // A subtype could override this to do something adaptive
+    def Self.block_size() -> i32 { return 32; }
+
     def init(@rows : i32, @cols : i32) {
         @data = Buffer[f64].new(@rows * @cols);
     }
 
-    def rows() -> i32 { return @rows; }
-    def row_idx() -> Range { return 0:(@rows - 1); }
-    def cols() -> i32 { return @cols; }
-    def col_idx() -> Range { return 0:(@cols - 1); }
     def data() -> Buffer[f64] { return @data; }
+    def rows() -> i32 { return @rows; }
+    def cols() -> i32 { return @cols; }
+    
+    def row_idx() -> Range { return 0:(@rows - 1); }
+    def col_idx() -> Range { return 0:(@cols - 1); }
 
     def set(row : i32, col : i32, value : f64) {
         @data.[col * @rows + row] = value;
@@ -105,11 +109,14 @@ class Matrix {
         p = @cols;
         n = other.cols();
 
-        block_size = 32;
+        block_size = Self.block_size();
+        row_blocks_idx = self.row_idx().step(block_size);
+        col_blocks_idx = self.col_idx().step(block_size);
+        other_col_blocks_idx = other.col_idx().step(block_size);
 
-        for ii in (0:(m-1)).step(block_size) {
-            for jj in (0:(n-1)).step(block_size) {
-                for kk in (0:(p-1)).step(block_size) {
+        for ii in row_blocks_idx {
+            for jj in other_col_blocks_idx {
+                for kk in col_blocks_idx {
                     
                     i_limit_block = min(ii + block_size, m);
                     j_limit_block = min(jj + block_size, n);
@@ -123,17 +130,17 @@ class Matrix {
                             i_block = ii;
                             while i_block <= i_limit_block - 4 {
                                 a_vec = self.get_simd(i_block, k_block);
-                                b_val_broadcast = (b_kj, b_kj, b_kj, b_kj);
-                                c_vec_current = result.get_simd(i_block, j_block);
-                                new_c_vec = simd_add(simd_mul(a_vec, b_val_broadcast), c_vec_current);
+                                b_vec = (b_kj, b_kj, b_kj, b_kj);
+                                c_vec = result.get_simd(i_block, j_block);
+                                new_c_vec = simd_add(simd_mul(a_vec, b_vec), c_vec);
                                 result.set_simd(i_block, j_block, new_c_vec);
                                 i_block = i_block + 4;
                             }
                             
                             while i_block < i_limit_block {
-                                current_c_val = result.get(i_block, j_block);
+                                c_val = result.get(i_block, j_block);
                                 a_val = self.get(i_block, k_block);
-                                result.set(i_block, j_block, current_c_val + a_val * b_kj);
+                                result.set(i_block, j_block, c_val + a_val * b_kj);
                                 i_block = i_block + 1;
                             }
                         }
@@ -146,7 +153,7 @@ class Matrix {
 }
 
 def benchmark_matrix_multiplication() {
-    size = 1_024;
+    size = 1500;
     
     matrix1 = Matrix.new(size, size);
     matrix2 = Matrix.new(size, size);

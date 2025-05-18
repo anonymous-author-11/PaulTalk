@@ -453,6 +453,8 @@ DONE:
 TODO:
 
 - Buffer doesn't need to take an i32; it could take any kind of integer up to i64 really
+	- Probably the lowered logic should all be in i64
+	- Then everything converts to i64 in lowering
 	- For creation
 	- For indexing
 	- Tuple too
