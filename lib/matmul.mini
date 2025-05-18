@@ -51,10 +51,13 @@ def simd_reduce_inner(a : i64, b : i64, c : i64, d : i64) -> i64 {
     return a + b + c + d;
 }
 
+// simd_reduce compiles to an @llvm.vector.reduce intrinsic but simd_reduce_inner does not, though the former just calls the latter
+// This is an interesting LLVM quirk
+
 class Matrix {
+    @data : Buffer[i64]
     @rows : i32
     @cols : i32
-    @data : Buffer[i64]
 
     def init(@rows : i32, @cols : i32) {
         @data = Buffer[i64].new(@rows * @cols);
@@ -70,16 +73,33 @@ class Matrix {
         @data.[col * @rows + row] = value;
     }
 
+    def set_simd(start_row : i32, col : i32, values : Tuple[i64, i64, i64, i64]) {
+        data = @data;
+        rows = @rows;
+        data.[col * rows + start_row + 0] = values.[0];
+        data.[col * rows + start_row + 1] = values.[1];
+        data.[col * rows + start_row + 2] = values.[2];
+        data.[col * rows + start_row + 3] = values.[3];
+    }
+
     def get(row : i32, col : i32) -> i64 {
         return @data.[col * @rows + row];
+    }
+
+    def get_simd(start_row : i32, col : i32) -> Tuple[i64, i64, i64, i64] {
+        data = @data;
+        rows = @rows;
+        a = data.[col * rows + start_row + 0];
+        b = data.[col * rows + start_row + 1];
+        c = data.[col * rows + start_row + 2];
+        d = data.[col * rows + start_row + 3];
+        return (a, b, c, d);
     }
 
     def *(other : Matrix) -> Matrix {
         if @cols != other.rows() { yield(Exception.new()); }
         
         result = Matrix.new(@rows, other.cols());
-        common_dim = @cols;
-        res_rows = @rows;
         col_idx = self.col_idx();
 
         for j in other.col_idx() {
@@ -88,24 +108,17 @@ class Matrix {
                 if b_kj == 0 { continue; }
 
                 i = 0;
-                while i <= res_rows - 4 {
-                    a_vec = (self.get(i + 0, k), self.get(i + 1, k), self.get(i + 2, k), self.get(i + 3, k));
-                    b_broadcast_vec = (b_kj, b_kj, b_kj, b_kj);
-                    c_vec = (result.get(i + 0, j), result.get(i + 1, j), result.get(i + 2, j), result.get(i + 3, j));
-                    new_c_vec = simd_add(c_vec, simd_mul(a_vec, b_broadcast_vec));
-
-                    result.set(i + 0, j, new_c_vec.[0]);
-                    result.set(i + 1, j, new_c_vec.[1]);
-                    result.set(i + 2, j, new_c_vec.[2]);
-                    result.set(i + 3, j, new_c_vec.[3]);
-                    
+                while i <= @rows - 4 {
+                    a_vec = self.get_simd(i, k);
+                    b_vec = (b_kj, b_kj, b_kj, b_kj);
+                    c_vec = result.get_simd(i, j);
+                    new_c_vec = simd_add(c_vec, simd_mul(a_vec, b_vec));
+                    result.set_simd(i, j, new_c_vec);
                     i = i + 4;
                 }
                 
-                while i < res_rows {
-                    current_val = result.get(i, j);
-                    term_to_add = self.get(i, k) * b_kj;
-                    result.set(i, j, current_val + term_to_add);
+                while i < @rows {
+                    result.set(i, j, result.get(i, j) + self.get(i, k) * b_kj);
                     i = i + 1;
                 }
             }
@@ -115,7 +128,7 @@ class Matrix {
 }
 
 def benchmark_matrix_multiplication() {
-    size = 1_000;
+    size = 2_000;
     
     matrix1 = Matrix.new(size, size);
     matrix2 = Matrix.new(size, size);

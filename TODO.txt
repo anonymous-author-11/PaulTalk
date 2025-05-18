@@ -452,6 +452,10 @@ DONE:
 
 TODO:
 
+- Buffer doesn't need to take an i32; it could take any kind of integer up to i64 really
+	- For creation
+	- For indexing
+	- Tuple too
 - Index setter shouldn't be hardcoded to one index
 	- I'd like to be able to do mat[i,j] = val;
 - We do not properly account for break/continue in typeflow
@@ -474,7 +478,7 @@ TODO:
 	- It's those damn i160's I'm sure of it
 - GEP inbounds could help optimization on dynamic geps
 - I should add real type checking for call/yield
-- Buffer doesn't need to take an i32; it could take any kind of up to i64 integer really
+
 
 - Should hex literals be i32 by default or should their width be inferred?
 

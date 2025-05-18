@@ -167,10 +167,12 @@ class ChainIterator[T] extends Iterator[T] {
         @on_first = true;
     }
     def next() -> T | Nil {
-        if not @on_first { return @second.next(); }
-        next = @first.next();
-        if next is T { return next; }
-        @on_first = false;
+        if @on_first { 
+            next = @first.next();
+            if next is T { return next; }
+            @on_first = false;
+        }
+        return @second.next();
     }
 }
 

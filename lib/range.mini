@@ -20,7 +20,7 @@ class Range extends Iterable[i32] {
     }
 
     def iterator() -> RangeIterator {
-        return RangeIterator.new(@start, @end, @step);
+        return RangeIterator{@start, @end, @step};
     }
 }
 

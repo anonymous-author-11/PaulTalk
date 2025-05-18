@@ -36,6 +36,7 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
         // @hasher and @eq are initialized by the parameter syntax
     }
 
+    // Concrete implementations should override this method
     abstract def find_slot(key: K, hash: i32) -> i32 {}
 
     // Ensures capacity is a power of two, doubles if needed
