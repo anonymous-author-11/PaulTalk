@@ -452,11 +452,13 @@ DONE:
 
 TODO:
 
+- Could do something very clever for treating tuples as iterables
+	- Create an array with the buffer literally being the tuple
+	- Because the array is merely an implementation detail, it can't escape
+	- Have a utlity to convert tuple to stack-allocated buffer
 - Buffer doesn't need to take an i32; it could take any kind of integer up to i64 really
 	- Probably the lowered logic should all be in i64
-	- Then everything converts to i64 in lowering
-	- For creation
-	- For indexing
+	- For creation, indexing
 	- Tuple too
 - Index setter shouldn't be hardcoded to one index
 	- I'd like to be able to do mat[i,j] = val;

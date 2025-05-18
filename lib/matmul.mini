@@ -114,35 +114,37 @@ class Matrix {
         col_blocks_idx = self.col_idx().step(block_size);
         other_col_blocks_idx = other.col_idx().step(block_size);
 
-        for ii in row_blocks_idx {
-            for jj in other_col_blocks_idx {
-                for kk in col_blocks_idx {
-                    
+        for jj in other_col_blocks_idx {
+            j_limit_block = min(jj + block_size, n);
+            for kk in col_blocks_idx {
+                k_limit_block = min(kk + block_size, p);
+                for ii in row_blocks_idx {
                     i_limit_block = min(ii + block_size, m);
-                    j_limit_block = min(jj + block_size, n);
-                    k_limit_block = min(kk + block_size, p);
-
                     for j_block in jj:(j_limit_block - 1) {
-                        for k_block in kk:(k_limit_block - 1) {
-                            b_kj = other.get(k_block, j_block);
-                            if b_kj == 0.0 { continue; }
 
-                            i_block = ii;
-                            while i_block <= i_limit_block - 4 {
+                        i_block = ii;
+                        while i_block <= i_limit_block - 4 {
+                            c_vec = result.get_simd(i_block, j_block);
+                            for k_block in kk:(k_limit_block - 1) {
+                                b_kj = other.get(k_block, j_block);
+                                if b_kj == 0.0 { continue; }
                                 a_vec = self.get_simd(i_block, k_block);
                                 b_vec = (b_kj, b_kj, b_kj, b_kj);
-                                c_vec = result.get_simd(i_block, j_block);
-                                new_c_vec = simd_add(simd_mul(a_vec, b_vec), c_vec);
-                                result.set_simd(i_block, j_block, new_c_vec);
-                                i_block = i_block + 4;
+                                c_vec = simd_add(simd_mul(a_vec, b_vec), c_vec);
                             }
-                            
-                            while i_block < i_limit_block {
-                                c_val = result.get(i_block, j_block);
+                            result.set_simd(i_block, j_block, c_vec);
+                            i_block = i_block + 4;
+                        }
+                        
+                        while i_block < i_limit_block {
+                            c_val = result.get(i_block, j_block);
+                            for k_block in kk:(k_limit_block - 1) {
+                                b_kj = other.get(k_block, j_block);
                                 a_val = self.get(i_block, k_block);
-                                result.set(i_block, j_block, c_val + a_val * b_kj);
-                                i_block = i_block + 1;
+                                c_val = c_val + a_val * b_kj;
                             }
+                            result.set(i_block, j_block, c_val);
+                            i_block = i_block + 1;
                         }
                     }
                 }
@@ -153,7 +155,7 @@ class Matrix {
 }
 
 def benchmark_matrix_multiplication() {
-    size = 2048;
+    size = 4096;
     
     matrix1 = Matrix.new(size, size);
     matrix2 = Matrix.new(size, size);
