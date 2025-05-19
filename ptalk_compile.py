@@ -266,8 +266,8 @@ class CompilationJob:
         # Don't inline anything here as it may be compiled in debug mode later
         # Since we are not inlining, I don't mind using --attributor-enable=all here
         # The LTO pre-link pipeline is generally a good fit for this stage
-        passes = "--passes=\"lto-pre-link<O1>\""
-        opt = f"{OPT_PATH} {passes} {self.settings.attributor('all')} --inline-threshold=-10000 -o {job.input.bc_file}"
+        passes = "--passes=\"lto-pre-link<O3>\""
+        opt = f"{OPT_PATH} {passes} {self.settings.vec} {self.settings.attributor('all')} --inline-threshold=-10000 -o {job.input.bc_file}"
         subprocess.run(f"{reg2mem} | {opt}", input=section, text=True, shell=True)
 
         #link_layout = f"{LLVM_LINK_PATH} {job.input.bc_file} {LAYOUT_PATH} -o {job.input.bc_file}"
@@ -325,9 +325,9 @@ class CompilationJob:
         
         out_linked_path = self.build_dir / "out_linked.ll"
 
-        passes = "--passes=\"default<O2>\""
+        passes = "--passes=\"lto-pre-link<O3>\""
         settings = f"{self.settings.devirt} {self.settings.inlining} {self.settings.attributor()} {self.settings.hotcold}"
-        opt = f"{OPT_PATH} {out_linked_path} {passes} {settings} --disable-output --print-after-all"
+        opt = f"{OPT_PATH} {self.input.bc_file} {passes} {settings} --disable-output --print-after-all"
 
         # clang can't handle the 'preserve_nonecc' calling convention for some reason
         replace_in_file(out_linked_path, "preserve_nonecc", "")
