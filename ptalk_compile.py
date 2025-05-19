@@ -99,6 +99,7 @@ class CompilationJob:
         self.llvm_link()
         if not self.settings.debug_mode:
             self.run_opt()
+            #self.record_all_passes()
         self.run_llc()
 
         # Only creating an object file
@@ -249,24 +250,29 @@ class CompilationJob:
 
         # Split the big llvm IR string into individual bitcode files and save them
         for job, section in zip(jobs, llvm_string.split("// -----")):
-            
-            # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
-            # this has shown to improve the optimization potential for unclear reasons
-            reg2mem = f"{OPT_PATH} --passes=\"reg2mem\""
-            # Don't inline anything here as it may be compiled in debug mode later
-            # Since we are not inlining, I don't mind using --attributor-enable=all here
-            # The LTO pre-link pipeline is a good fit for this stage
-            o1 = f"{OPT_PATH} --passes=\"lto-pre-link<O1>\" {self.settings.attributor('all')} --inline-threshold=-10000 -o {job.input.bc_file}"
-            subprocess.run(f"{reg2mem} | {o1}", input=section, text=True, shell=True)
-
-            #link_layout = f"{LLVM_LINK_PATH} {job.input.bc_file} {LAYOUT_PATH} -o {job.input.bc_file}"
-            #subprocess.run(link_layout, shell=True)
+            self.pre_link_opt(job, section)
 
             # store the hash of the source code that generated this bitcode
             job.input.write_hash()
 
         self.record_time("lower_to_llvm")
         self.time_printer.print(f'Time to generate bitcodes: {self.time_between("after_mlir_translate", "lower_to_llvm")} seconds')
+
+    def pre_link_opt(self, job, section):
+        # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
+        # this has shown to improve the optimization potential for unclear reasons
+        reg2mem = f"{OPT_PATH} --passes=\"reg2mem\""
+
+        # Don't inline anything here as it may be compiled in debug mode later
+        # Since we are not inlining, I don't mind using --attributor-enable=all here
+        # The LTO pre-link pipeline is generally a good fit for this stage
+        # I add the slp-vectorizer because I want vector loads / stores *before* inlining
+        passes = "--passes=\"lto-pre-link<O1>,slp-vectorizer,vector-combine\""
+        opt = f"{OPT_PATH} {passes} {self.settings.vec} {self.settings.attributor('all')} --inline-threshold=-10000 -o {job.input.bc_file}"
+        subprocess.run(f"{reg2mem} | {opt}", input=section, text=True, shell=True)
+
+        #link_layout = f"{LLVM_LINK_PATH} {job.input.bc_file} {LAYOUT_PATH} -o {job.input.bc_file}"
+        #subprocess.run(link_layout, shell=True)
 
     # merge all the .bc files into one big .ll file for optimization
     # kind of like LTO but no pretense of being at "link-time"
@@ -305,7 +311,7 @@ class CompilationJob:
 
         passes = f"--passes=\"{self.settings.opt_level(3)}\""
 
-        settings = f"{self.settings.devirt} {self.settings.inlining} {self.settings.attributor()} {self.settings.hotcold}"
+        settings = f"{self.settings.devirt} {self.settings.vec} {self.settings.inlining} {self.settings.attributor()} {self.settings.hotcold}"
         opt = f"{OPT_PATH} -S {out_linked_path} {passes} {settings} -o {out_optimized_dbg}"
         subprocess.run(opt)
 
@@ -313,6 +319,22 @@ class CompilationJob:
 
         self.record_time("after_opt")
         self.time_printer.print(f'Time to optimize: {self.time_between("after_llvm_link", "after_opt")} seconds')
+
+    def record_all_passes(self):
+        #clang = "clang -x ir out_linked.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
+        #opt = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
+        
+        out_linked_path = self.build_dir / "out_linked.ll"
+
+        passes = "--passes=\"default<O2>\""
+        settings = f"{self.settings.devirt} {self.settings.inlining} {self.settings.attributor()} {self.settings.hotcold}"
+        opt = f"{OPT_PATH} {out_linked_path} {passes} {settings} --disable-output --print-after-all"
+
+        # clang can't handle the 'preserve_nonecc' calling convention for some reason
+        replace_in_file(out_linked_path, "preserve_nonecc", "")
+
+        opt_out = subprocess.run(opt, capture_output=True, text=True)
+        with open(self.build_dir.joinpath("opt_passes.txt"), "w") as outfile: outfile.write(opt_out.stderr)
 
     def run_llc(self):
 
@@ -370,6 +392,12 @@ class OptimizationSettings:
         # does another round of cg-scc optimizations whenever an indirect callee is identified
         # the default in LLVM is like 4 iterations
         return "--max-devirt-iterations=100 --abort-on-max-devirt-iterations-reached"
+
+    @property
+    def vec(self):
+        # slp-revec allows the SLP vectorizer to widen previously generated vector loads/stores
+        # slp-max-reg-size default is only 128, which means it won't generate a 'store <4 x double>'
+        return "--slp-max-reg-size=256 --slp-revec"
 
     @property
     def hotcold(self):
@@ -581,20 +609,6 @@ def run_mlir_opt(module_str) -> str:
     Printer(stringio).print(module_str)
     module_str = stringio.getvalue().encode().decode('unicode_escape')
     return module_str
-
-def record_all_passes(build_dir):
-    #clang = "clang -x ir out_linked.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
-    #opt = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
-    
-    out_linked_path = build_dir / "out_linked.ll"
-    passes = "--passes=default<O1>"
-    opt = (OPT_PATH, passes, attributor_settings(), devirtualization_settings(), "--inline-threshold=10000", "--print-changed")
-
-    # clang can't handle the 'preserve_nonecc' calling convention for some reason
-    replace_in_file(out_linked_path, "preserve_nonecc", "")
-
-    opt_out = subprocess.run(opt, capture_output=True)
-    with open(build_dir.joinpath("opt_passes.txt"), "w") as outfile: outfile.write(opt_out.stderr)
 
 def add_compiler_args(parser):
     parser.add_argument('input_file_path', help='The input file which will be compiled')
