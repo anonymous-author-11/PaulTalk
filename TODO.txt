@@ -452,6 +452,8 @@ DONE:
 
 TODO:
 
+- Recompiling dependencies is not exactly correct
+	- Only the dependents in the current CU are recompiled
 - Should have a BuildDirectory class
 - Could do something very clever for treating tuples as iterables
 	- Create an array with the buffer literally being the tuple

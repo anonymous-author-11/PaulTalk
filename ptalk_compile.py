@@ -52,12 +52,17 @@ def compiler_driver_main(input_path, output_path=None, build_dir=Path("."), debu
 class CompilationJob:
     input: "InputFile"
     output_path: Path
-    build_dir: Path
+    build: "BuildDirectory"
     dependencies: "Dependencies"
     settings: "OptimizationSettings"
     time_printer: "OptionalPrinter"
     status_printer: "OptionalPrinter"
     timings: dict
+
+    @property
+    def obj_path(self):
+        if ".exe" in self.output_path.name: return self.build.dir / f"{self.output_path.stem}.obj"
+        return self.output_path.parent / f"{self.output_path.stem}.obj"
     
     def __init__(self, input_path, output_path=None, build_dir=Path("."), debug_mode=False, no_timings=False, show_dependencies=False):
         self.timings = {"start_time":start_time}
@@ -68,12 +73,8 @@ class CompilationJob:
         if not input_path.is_file(): raise Exception(f"Input path {input_path} should point to a .mini file.")
         if input_path.suffix != ".mini": raise Exception(f"Input path {input_path} should point to a .mini file.")
 
-        build_dir = Path(build_dir)
-        os.makedirs(build_dir, exist_ok=True)
-        self.build_dir = build_dir.resolve()
-        with open(build_dir / ".gitignore", "w") as f: f.write("*")
-
-        self.input = InputFile(input_path.resolve(), self.build_dir)
+        self.build = BuildDirectory(build_dir, debug_mode)
+        self.input = InputFile(input_path.resolve(), self.build.dir)
         self.time_printer = OptionalPrinter(not no_timings)
         self.status_printer = OptionalPrinter(not silent[0])
         self.settings = OptimizationSettings(debug_mode)
@@ -137,7 +138,7 @@ class CompilationJob:
         stringio = StringIO()
         Printer(stringio).print(module)
         module_str = stringio.getvalue().encode().decode('unicode_escape')
-        with open(self.build_dir.joinpath("in.mlir"), "w") as outfile: outfile.write(module_str)
+        with open(self.build.in_mlir, "w") as outfile: outfile.write(module_str)
         self.record_time("after_codegen")
         return module
 
@@ -149,7 +150,7 @@ class CompilationJob:
             dependencies_string = ', '.join([x.stem for  x in sorted_dependencies])
             self.status_printer.print(f"Recompiling dependencies: {dependencies_string}")
 
-        jobs = [CompilationJob(dependency, build_dir=self.build_dir, no_timings=True) for dependency in sorted_dependencies]
+        jobs = [CompilationJob(dependency, build_dir=self.build.dir, no_timings=True) for dependency in sorted_dependencies]
         asts = self.parse_dependencies(jobs)
         
         needs_lowering = any(path.samefile(self.input.path) for path in self.dependencies.recompile_list)
@@ -202,7 +203,7 @@ class CompilationJob:
         self.time_printer.print(f'Time to do python lowering: {self.time_between("before_firstpass", "after_firstpass")} seconds')
 
         # MLIR is already natively multithreaded, which is great. This is why we combined all the modules into one.
-        module_str = run_pdl_lowering(module_str, self.build_dir)
+        module_str = run_pdl_lowering(module_str, self.build.dir)
         self.record_time("after_pdl")
         self.time_printer.print(f'Time to do PDL lowering: {self.time_between("after_firstpass", "after_pdl")} seconds')
 
@@ -243,16 +244,12 @@ class CompilationJob:
 
     def make_bitcodes(self, jobs, llvm_string):
 
-        bitcodes_folder = self.build_dir / "bitcodes"
-        hashes_folder = self.build_dir / "hashes"
-        os.makedirs(bitcodes_folder, exist_ok=True)
-        os.makedirs(hashes_folder, exist_ok=True)
+        os.makedirs(self.build.bitcodes_folder, exist_ok=True)
+        os.makedirs(self.build.hashes_folder, exist_ok=True)
 
         # Split the big llvm IR string into individual bitcode files and save them
         for job, section in zip(jobs, llvm_string.split("// -----")):
             self.pre_link_opt(job, section)
-
-            # store the hash of the source code that generated this bitcode
             job.input.write_hash()
 
         self.record_time("lower_to_llvm")
@@ -279,42 +276,36 @@ class CompilationJob:
 
         self.record_time("before_llvm_link")
 
-        bc_file_paths = (self.build_dir.joinpath(f"bitcodes/{path.stem}.bc") for path in self.dependencies.list)
-        lib_file_path = self.build_dir / f"{self.input.path.stem}.lib"
-        make_archive = (LLVM_AR_PATH, "cr", lib_file_path, *bc_file_paths)
+        bitcode_files = self.build.bitcode_files([path.stem for path in self.dependencies.list])
+        make_archive = (LLVM_AR_PATH, "cr", self.build.out_lib, *bitcode_files)
         subprocess.run(make_archive)
 
-        out_utils_path = self.build_dir / "out_utils.ll"
-        link_utils = (LLVM_LINK_PATH, UTILS_PATH, OS_UTILS_PATH, self.input.bc_file, LAYOUT_PATH, "-S", "-o", out_utils_path)
+        link_utils = (LLVM_LINK_PATH, UTILS_PATH, OS_UTILS_PATH, self.input.bc_file, LAYOUT_PATH, "-S", "-o", self.build.out_utils)
         subprocess.run(link_utils)
 
         # use the correct main function
-        replace_in_file(out_utils_path, f"_main_{clean_name(self.input.path.stem)}", "main")
+        replace_in_file(self.build.out_utils, f"_main_{clean_name(self.input.path.stem)}", "main")
 
         # using --only-needed cuts out a lot of unnecessary imports
-        out_linked_path = self.build_dir / "out_linked.ll"
-        link_imports = (LLVM_LINK_PATH, "-S", out_utils_path, lib_file_path, "-o", out_linked_path, "--only-needed", "--suppress-warnings")
+        flags = ("--only-needed", "--suppress-warnings")
+        link_imports = (LLVM_LINK_PATH, "-S", self.build.out_utils, self.build.out_lib, "-o", self.build.out_linked, *flags)
         subprocess.run(link_imports)
 
         # Add debug metadata to the IR, before any inlining
-        subprocess.run((DEBUGIR_PATH, out_linked_path))
+        subprocess.run((DEBUGIR_PATH, self.build.out_linked))
 
         self.record_time("after_llvm_link")
         self.time_printer.print(f'Time to llvm-link: {self.time_between("before_llvm_link", "after_llvm_link")} seconds')
 
     def run_opt(self):
 
-        out_linked_path = self.build_dir / "out_linked.dbg.ll"
-        out_optimized_dbg = self.build_dir / "out_optimized.dbg.ll"
-        out_optimized_path = self.build_dir / "out_optimized.ll"
-
         passes = f"--passes=\"{self.settings.opt_level(3)}\""
 
         settings = f"{self.settings.devirt} {self.settings.vec} {self.settings.inlining} {self.settings.attributor()} {self.settings.hotcold}"
-        opt = f"{OPT_PATH} -S {out_linked_path} {passes} {settings} -o {out_optimized_dbg}"
+        opt = f"{OPT_PATH} -S {self.build.out_linked_dbg} {passes} {settings} -o {self.build.out_optimized_dbg}"
         subprocess.run(opt)
 
-        subprocess.run((OPT_PATH, "-S", out_optimized_dbg, "-o", out_optimized_path, "--strip-debug"))
+        subprocess.run((OPT_PATH, "-S", self.build.out_optimized_dbg, "-o", self.build.out_optimized, "--strip-debug"))
 
         self.record_time("after_opt")
         self.time_printer.print(f'Time to optimize: {self.time_between("after_llvm_link", "after_opt")} seconds')
@@ -323,17 +314,15 @@ class CompilationJob:
         #clang = "clang -x ir out_linked.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
         #opt = f"opt -S --passes=\"iroutliner,default<Oz>\" --ir-outlining-no-cost --inline-threshold=0 -o out_optimized.ll"
         
-        out_linked_path = self.build_dir / "out_linked.ll"
-
-        passes = "--passes=\"lto-pre-link<O3>\""
+        passes = "--passes=\"default<O3>\""
         settings = f"{self.settings.devirt} {self.settings.inlining} {self.settings.attributor()} {self.settings.hotcold}"
-        opt = f"{OPT_PATH} {self.input.bc_file} {passes} {settings} --disable-output --print-after-all"
+        opt = f"{OPT_PATH} {self.build.out_linked} {passes} {settings} --disable-output --print-after-all"
 
         # clang can't handle the 'preserve_nonecc' calling convention for some reason
-        replace_in_file(out_linked_path, "preserve_nonecc", "")
+        replace_in_file(self.build.out_linked, "preserve_nonecc", "")
 
         opt_out = subprocess.run(opt, capture_output=True, text=True)
-        with open(self.build_dir.joinpath("opt_passes.txt"), "w") as outfile: outfile.write(opt_out.stderr)
+        with open(self.build.opt_passes, "w") as outfile: outfile.write(opt_out.stderr)
 
     def run_llc(self):
 
@@ -344,18 +333,12 @@ class CompilationJob:
         exception_model = "-exception-model=wineh"
         outliner_settings = "-enable-machine-outliner -machine-outliner-reruns=2"
 
-        obj_dir = self.output_path.parent if self.output_path.suffix == ".obj" else self.build_dir
+        obj_dir = self.output_path.parent if self.output_path.suffix == ".obj" else self.build.dir
         os.makedirs(obj_dir, exist_ok=True)
 
-        obj_path = obj_dir / f"{self.output_path.stem}.obj"
-        out_linked_dbg_path = self.build_dir / f"out_linked.dbg.ll"
-        out_optimized_path = self.build_dir / f"out_optimized.dbg.ll"
-        in_path = out_linked_dbg_path if self.settings.debug_mode else out_optimized_path
-
         self.record_time("before_llc")
-
         optimizations = ("-O=3", "-mcpu=native", "-fp-contract=fast")
-        llc = (LLC_PATH, "-filetype=obj", in_path, *optimizations, target_triple, exception_model, "-o", obj_path)
+        llc = (LLC_PATH, "-filetype=obj", self.build.final_ir, *optimizations, target_triple, exception_model, "-o", self.obj_path)
         subprocess.run(llc)
 
         self.record_time("after_llc")
@@ -367,11 +350,10 @@ class CompilationJob:
         static_libc = "libcmt.lib"
         includes = (*dynamic_libc, "Dbghelp.lib")
         os.makedirs(self.output_path.parent, exist_ok=True)
-        obj_path = self.build_dir / f"{self.output_path.stem}.obj"
         exe_path = self.output_path.parent / f"{self.output_path.stem}.exe"
         
         # lld with -flavor link is equivalent to lld-link
-        lld_link = (LLD_PATH, "-flavor", "link", obj_path, f"/out:{exe_path}", "/ignore:longsections", "/debug", *includes)
+        lld_link = (LLD_PATH, "-flavor", "link", self.obj_path, f"/out:{exe_path}", "/ignore:longsections", "/debug", *includes)
         subprocess.run(lld_link)
 
         self.record_time("after_lld")
@@ -432,6 +414,67 @@ class OptimizationSettings:
         
         # Using attributor-enable=cgscc or attributor-enable=all takes way too long, though it does generate faster code
         return f"--attributor-enable={mode} {simplify_loads} {annotate_callsites} {heap2stack} {use_internal_attributes} {open_world} {no_tail}"
+
+class BuildDirectory:
+    dir: Path
+    debug_mode: bool
+
+    def __init__(self, dir, debug_mode):
+        os.makedirs(dir, exist_ok=True)
+        self.dir = Path(dir).resolve()
+        self.debug_mode = debug_mode
+        with open(self.dir / ".gitignore", "w") as f: f.write("*")
+
+    def bitcode_files(self, stems):
+        return [str(self.bitcodes_folder / f"{stem}.bc") for stem in stems]
+
+    @property
+    def final_ir(self):
+        return self.out_linked_dbg if self.debug_mode else self.out_optimized_dbg
+
+    @property
+    def bitcodes_folder(self):
+        return self.dir / "bitcodes"
+
+    @property
+    def hashes_folder(self):
+        return self.dir / "hashes"
+
+    @property
+    def in_mlir(self):
+        return self.dir / "in.mlir"
+
+    @property
+    def out_mlir(self):
+        return self.dir / "out.mlir"
+
+    @property
+    def out_lib(self):
+        return self.dir / "out.lib"
+
+    @property
+    def out_utils(self):
+        return self.dir / "out_utils.ll"
+
+    @property
+    def out_linked(self):
+        return self.dir / "out_linked.ll"
+
+    @property
+    def out_linked_dbg(self):
+        return self.dir / "out_linked.dbg.ll"
+
+    @property
+    def out_optimized(self):
+        return self.dir / "out_optimized.ll"
+
+    @property
+    def out_optimized_dbg(self):
+        return self.dir / "out_optimized.dbg.ll"
+
+    @property
+    def opt_passes(self):
+        return self.dir / "opt_passes.txt"
 
 class Dependencies:
     input: "InputFile"
