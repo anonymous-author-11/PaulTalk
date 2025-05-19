@@ -267,7 +267,7 @@ class CompilationJob:
         # Since we are not inlining, I don't mind using --attributor-enable=all here
         # The LTO pre-link pipeline is generally a good fit for this stage
         # I add in (slp-vectorizer + vector-combine) because I want vector loads / stores *before* inlining
-        passes = "--passes=\"lto-pre-link<O1>,slp-vectorizer,vector-combine\""
+        passes = "--passes=\"lto-pre-link<O1>\""
         opt = f"{OPT_PATH} {passes} {self.settings.vec} {self.settings.attributor('all')} --inline-threshold=-10000 -o {job.input.bc_file}"
         subprocess.run(f"{reg2mem} | {opt}", input=section, text=True, shell=True)
 

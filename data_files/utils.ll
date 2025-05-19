@@ -72,18 +72,18 @@ define ptr @adjust_trampoline(ptr %tramp) alwaysinline {
   ret ptr %ret
 }
 
-define noalias align 16 ptr @bump_malloc(i64 noundef %size) alwaysinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
-  %result = call noalias align 16 ptr @bump_malloc_wrapper(i64 noundef %size) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
+define noalias ptr @bump_malloc(i64 noundef %size) alwaysinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
+  %result = call noalias ptr @bump_malloc_wrapper(i64 noundef %size) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
   ret ptr %result
 }
 
-define noalias align 16 ptr @bump_malloc_wrapper(i64 noundef %size) noinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
-  %result = call noalias align 16 ptr @bump_malloc_inner(i64 noundef %size, ptr @current_ptr) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
+define noalias ptr @bump_malloc_wrapper(i64 noundef %size) noinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
+  %result = call noalias ptr @bump_malloc_inner(i64 noundef %size, ptr @current_ptr) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
   ret ptr %result
 }
 
 ; Our malloc replacement 
-define noalias align 16 ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) noinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
+define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) noinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
   
   ; Calculate aligned size (align to 16 bytes)
   %size_plus_15 = add i64 %size, 15
