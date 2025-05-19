@@ -14,18 +14,18 @@ def min(a : i32, b : i32) -> i32 {
 }
 
 // compiles to:
-// define <4 x double> @simd_add(<4 x double> %0, <4 x double> %1) {
-//   %3 = add <4 x double> %1, %0
-//   ret <4 x double> %3
+// define <8 x double> @simd_add(<8 x double> %0, <8 x double> %1) {
+//   %3 = add <8 x double> %1, %0
+//   ret <8 x double> %3
 // }
 def simd_add(a : Tuple[8 x f64], b : Tuple[8 x f64]) -> Tuple[8 x f64] {
     return (a.[0] + b.[0], a.[1] + b.[1], a.[2] + b.[2], a.[3] + b.[3], a.[4] + b.[4], a.[5] + b.[5], a.[6] + b.[6], a.[7] + b.[7]);
 }
 
 // compiles to:
-// define <4 x double> @simd_mul(<4 x double> %0, <4 x double> %1) {
-//   %3 = mul <4 x double> %1, %0
-//   ret <4 x double> %3
+// define <8 x double> @simd_mul(<8 x double> %0, <8 x double> %1) {
+//   %3 = mul <8 x double> %1, %0
+//   ret <8 x double> %3
 // }
 def simd_mul(a : Tuple[8 x f64], b : Tuple[8 x f64]) -> Tuple[8 x f64] {
     return (a.[0] * b.[0], a.[1] * b.[1], a.[2] * b.[2], a.[3] * b.[3], a.[4] * b.[4], a.[5] * b.[5], a.[6] * b.[6], a.[7] * b.[7]);
@@ -62,8 +62,8 @@ class Matrix {
     }
 
     // relevant IR:
-    // %24 = load <4 x double>, ptr %23, align 8
-    // ret <4 x double> %24
+    // %31 = load <8 x double>, ptr %30, align 8
+    // ret <8 x double> %31
     def get_simd(start_row : i32, col : i32) -> Tuple[8 x f64] {
         start_index = (col as i64) * @rows + start_row;
         data = @data;
@@ -79,7 +79,7 @@ class Matrix {
     }
 
     // relevant IR:
-    // store <4 x double> %5, ptr %24, align 8
+    // store <8 x double> %5, ptr %31, align 8
     // ret void
     def set_simd(start_row : i32, col : i32, values : Tuple[8 x f64]) {
         start_index = (col as i64) * @rows + start_row;
@@ -149,7 +149,7 @@ class Matrix {
 }
 
 def benchmark_matrix_multiplication() {
-    size = 4096;
+    size = 1024;
 
     matrix1 = Matrix.new(size, size);
     matrix2 = Matrix.new(size, size);

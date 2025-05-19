@@ -354,7 +354,8 @@ class CompilationJob:
 
         self.record_time("before_llc")
 
-        llc = (LLC_PATH, "-filetype=obj", in_path, "-O=3", "-mcpu=native", target_triple, exception_model, "-o", obj_path)
+        optimizations = ("-O=3", "-mcpu=native", "-fp-contract=fast")
+        llc = (LLC_PATH, "-filetype=obj", in_path, *optimizations, target_triple, exception_model, "-o", obj_path)
         subprocess.run(llc)
 
         self.record_time("after_llc")
