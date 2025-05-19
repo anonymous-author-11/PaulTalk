@@ -1067,10 +1067,11 @@ module @patterns {
     pdl.apply_native_constraint "is_llvm_array_attr"(%type_attr : !pdl.attribute)
     %root = pdl.operation "mid.assign"(%target, %value : !pdl.value, !pdl.value) {"typ" = %type_attr}
     pdl.rewrite %root {
-      %equivalent_int_type = pdl.apply_native_rewrite "array_to_vector"(%type_attr : !pdl.attribute) : !pdl.type
-      %load = pdl.operation "llvm.load"(%value : !pdl.value) -> (%equivalent_int_type : !pdl.type)
+      %one = pdl.attribute = 1
+      %vector = pdl.apply_native_rewrite "array_to_vector"(%type_attr : !pdl.attribute) : !pdl.type
+      %load = pdl.operation "llvm.load"(%value : !pdl.value) {"alignment" = %one} -> (%vector : !pdl.type)
       %load_result = pdl.result 0 of %load
-      %store = pdl.operation "llvm.store"(%load_result, %target : !pdl.value, !pdl.value)
+      %store = pdl.operation "llvm.store"(%load_result, %target : !pdl.value, !pdl.value) {"alignment" = %one}
       pdl.replace %root with %store
     }
   }

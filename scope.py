@@ -117,7 +117,9 @@ class Scope:
         if isinstance(right, Intersection): return all(self.subtype(t, right) for t in left.types.data)
         if isinstance(right, Union): return any(self.subtype(left, t) for t in right.types.data)
         if isinstance(left, Intersection): return any(self.subtype(t, right) for t in left.types.data)
-        if isinstance(left, Tuple) and isinstance(right, Tuple): return all(self.subtype(a,b) for a,b in zip(left.types.data, right.types.data))
+        if isinstance(left, Tuple) and isinstance(right, Tuple):
+            same_len = len(left.types.data) == len(right.types.data)
+            return same_len and all(self.subtype(a,b) for a,b in zip(left.types.data, right.types.data))
         if isinstance(left, Function) or isinstance(left, Coroutine):
             if not (isinstance(right, Function) or isinstance(right, Coroutine)): return False
             covariant_return = self.subtype(left.return_type, right.return_type)

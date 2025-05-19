@@ -152,7 +152,7 @@ class CompilationJob:
         jobs = [CompilationJob(dependency, build_dir=self.build_dir, no_timings=True) for dependency in sorted_dependencies]
         asts = self.parse_dependencies(jobs)
         
-        needs_lowering = not already_perfect(self.input.path, self.build_dir)
+        needs_lowering = any(path.samefile(self.input.path) for path in self.dependencies.recompile_list)
         if needs_lowering:
             asts.append(own_ast)
             jobs.append(self)
@@ -266,7 +266,7 @@ class CompilationJob:
         # Don't inline anything here as it may be compiled in debug mode later
         # Since we are not inlining, I don't mind using --attributor-enable=all here
         # The LTO pre-link pipeline is generally a good fit for this stage
-        # I add the slp-vectorizer because I want vector loads / stores *before* inlining
+        # I add in (slp-vectorizer + vector-combine) because I want vector loads / stores *before* inlining
         passes = "--passes=\"lto-pre-link<O1>,slp-vectorizer,vector-combine\""
         opt = f"{OPT_PATH} {passes} {self.settings.vec} {self.settings.attributor('all')} --inline-threshold=-10000 -o {job.input.bc_file}"
         subprocess.run(f"{reg2mem} | {opt}", input=section, text=True, shell=True)
@@ -355,7 +355,7 @@ class CompilationJob:
 
         self.record_time("before_llc")
 
-        llc = (LLC_PATH, "-filetype=obj", in_path, "-O=3", target_triple, exception_model, "-o", obj_path)
+        llc = (LLC_PATH, "-filetype=obj", in_path, "-O=3", "-mcpu=native", target_triple, exception_model, "-o", obj_path)
         subprocess.run(llc)
 
         self.record_time("after_llc")
@@ -396,8 +396,9 @@ class OptimizationSettings:
     @property
     def vec(self):
         # slp-revec allows the SLP vectorizer to widen previously generated vector loads/stores
-        # slp-max-reg-size default is only 128, which means it won't generate a 'store <4 x double>'
-        return "--slp-max-reg-size=256 --slp-revec"
+        # This is especially useful because we run the slp-vectorizer in the pre-link optimization
+        # slp-max-reg-size default is only 128, which means it wouldn't generate a 'store <4 x double>'
+        return "--slp-max-reg-size=512 --slp-revec"
 
     @property
     def hotcold(self):
@@ -424,7 +425,7 @@ class OptimizationSettings:
         annotate_callsites = "--attributor-annotate-decl-cs"
         simplify_loads = "--attributor-simplify-all-loads"
 
-        # Might add these ones in the future, not sure if they're good
+        # Might add these ones in the future, not sure if they're useful
         callsite_deduction = "--attributor-enable-call-site-specific-deduction=true"
         max_iter = "--attributor-max-iterations=100000"
         max_specializations = "--attributor-max-specializations-per-call-base=100000"
