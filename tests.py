@@ -545,7 +545,7 @@ class CompilerTests(CompilerTestCase):
         def test() {
             buf : Buffer[i32] = Buffer[i32].new(5.0); // Invalid size type
         }"""
-        with self.assertRaisesRegex(Exception, "Buffer creation takes i32 as argument, not f64."):
+        with self.assertRaisesRegex(Exception, "Buffer creation takes an integer as argument, not f64."):
             self.run_mini_code(mini_code, "", "create_buffer_invalid_size_type")
 
     def test_method_def_missing_return(self):
@@ -564,7 +564,7 @@ class CompilerTests(CompilerTestCase):
         import range;
         def test() {
             x : f64 = 5.0;
-            r = x:10; // Invalid range arg type
+            r = x...10; // Invalid range arg type
         }
         """
         with self.assertRaisesRegex(Exception, "Range literals take i32 arguments, not f64 and i32"):

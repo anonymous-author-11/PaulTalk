@@ -99,7 +99,8 @@ comparison: arithmetic -> comparison_single
           | comparison GT arithmetic
           | comparison LE arithmetic
           | comparison GE arithmetic
-          | comparison ":" arithmetic -> range_literal
+          | comparison "..." arithmetic -> inclusive_range_literal
+          | comparison ".." arithmetic -> exclusive_range_literal
           | comparison "is" typ -> type_check
 
 arithmetic: term -> arithmetic_single

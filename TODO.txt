@@ -452,9 +452,11 @@ DONE:
 
 TODO:
 
+- Nested loops take WAY too long to type check
+	- It's expontential or factorial or something
 - Recompiling dependencies is not exactly correct
 	- Only the dependents in the current CU are recompiled
-- Should have a BuildDirectory class
+	- Could we hash together the source of a file and all its dependencies?
 - Could do something very clever for treating tuples as iterables
 	- Create an array with the buffer literally being the tuple
 	- Because the array is merely an implementation detail, it can't escape
@@ -516,6 +518,12 @@ TODO:
 		- For creation, indexing [check!]
 	- Needs_lowering should account for changed dependencies [check!]
 	- Check that tuples are same length in subtype test [check!]
+	- Should have a BuildDirectory class [check!]
+	- Change range literal from colon to ellipses [check!]
+		- There was a parsing conflict with function literals
+		- LALR(1) can only look forward one token
+		- is (x:y) a range or the start of a function literal?
+	- Add exclusive range literal [check!]
 	- Hi, mid, lo dialects
 		- Split dialect into multiple files [check!]
 		- Use lo dialect in patterns.mlir

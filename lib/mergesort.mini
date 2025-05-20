@@ -127,7 +127,7 @@ def benchmark_sorting() {
     arr1 = IntArray.new();
     arr2 = IntArray.new();
     
-    for i in 0:size {
+    for i in 0..size {
         value = Math.abs(i * 1103515245 + 12345) % 1000000;
         arr1.append(value);
         arr2.append(value);

@@ -37,7 +37,16 @@ class Matrix {
     @cols : i32
 
     // A subtype could override this to do something adaptive
-    def Self.block_size() -> i32 { return 32; }
+
+    // L1_TILE_SIZE (Micro-kernel tile size, aims for L1 cache and register reuse)
+    // This was your original block_size
+    def Self.l1_tile_size() -> i32 { return 32; } 
+
+    // L2_TILE_SIZE (Macro-kernel tile size, aims for L2 cache reuse)
+    // This should be larger, e.g., 128 or 256. 
+    // Must be a multiple of l1_tile_size() for cleaner loop bounds, or handle remainders.
+    // Let's choose 128 for this example.
+    def Self.l2_tile_size() -> i32 { return 128; } 
 
     def init(@rows : i32, @cols : i32) {
         @data = Buffer[f64].new(@rows * @cols);
@@ -47,8 +56,8 @@ class Matrix {
     def rows() -> i32 { return @rows; }
     def cols() -> i32 { return @cols; }
     
-    def row_idx() -> Range { return 0:(@rows - 1); }
-    def col_idx() -> Range { return 0:(@cols - 1); }
+    def row_idx() -> Range { return 0..@rows; }
+    def col_idx() -> Range { return 0..@cols; }
 
     // Because overflow *is defined*, it's imperative to cast to i64 *before* computing indices
     def get(row : i32, col : i32) -> f64 {
@@ -95,50 +104,89 @@ class Matrix {
     }
 
     def *(other : Matrix) -> Matrix {
-        if @cols != other.rows() { yield(Exception.new()); }
+        if @cols != other.rows() { yield(Exception.new("Incompatible matrix dimensions for multiplication")); }
         
         result = Matrix.new(@rows, other.cols());
         
-        m = @rows;
-        p = @cols;
-        n = other.cols();
+        m = @rows;    // Rows of self (A) and result (C)
+        p = @cols;    // Cols of self (A) and rows of other (B)
+        n = other.cols(); // Cols of other (B) and result (C)
 
-        block_size = Self.block_size();
-        row_blocks_idx = self.row_idx().step(block_size);
-        col_blocks_idx = self.col_idx().step(block_size);
-        other_col_blocks_idx = other.col_idx().step(block_size);
+        l1_ts = Self.l1_tile_size(); // e.g., 32
+        l2_ts = Self.l2_tile_size(); // e.g., 128
 
-        for jj in other_col_blocks_idx {
-            j_limit_block = min(jj + block_size, n);
-            for kk in col_blocks_idx {
-                k_limit_block = min(kk + block_size, p);
-                for ii in row_blocks_idx {
-                    i_limit_block = min(ii + block_size, m);
-                    for j_block in jj:(j_limit_block - 1) {
+        // Outer loops: Iterate by L2_TILE_SIZE (e.g., 128)
+        // Loop order jc, kc, ic (common in BLAS-like libraries)
+        // jc: iterates over columns of C and B
+        // kc: iterates over the common dimension P
+        // ic: iterates over rows of C and A
+        for jc in (0..n).step(l2_ts) { // Iterate N by l2_ts
+            jc_end = min(jc + l2_ts, n);
+            for kc in (0..p).step(l2_ts) { // Iterate P by l2_ts
+                kc_end = min(kc + l2_ts, p);
+                for ic in (0..m).step(l2_ts) { // Iterate M by l2_ts
+                    ic_end = min(ic + l2_ts, m);
 
-                        i_block = ii;
-                        while i_block <= i_limit_block - 8 {
-                            c_vec = result.get_simd(i_block, j_block);
-                            for k_block in kk:(k_limit_block - 1) {
-                                b_kj = other.get(k_block, j_block);
-                                if b_kj == 0.0 { continue; }
-                                a_vec = self.get_simd(i_block, k_block);
-                                b_vec = (b_kj, b_kj, b_kj, b_kj, b_kj, b_kj, b_kj, b_kj);
-                                c_vec = simd_add(simd_mul(a_vec, b_vec), c_vec);
+                    // Inner loops: Iterate by L1_TILE_SIZE (e.g., 32)
+                    // These are your original loops, but now bounded by the L2 tile (ic, jc, kc extents)
+                    // Original loop order: jj, kk, ii
+                    for jj_l1 in (jc..jc_end).step(l1_ts) { // Iterate current L2 N-slice by l1_ts
+                        jj_l1_end = min(jj_l1 + l1_ts, jc_end);
+                        for kk_l1 in (kc..kc_end).step(l1_ts) { // Iterate current L2 P-slice by l1_ts
+                            kk_l1_end = min(kk_l1 + l1_ts, kc_end);
+                            for ii_l1 in (ic..ic_end).step(l1_ts) { // Iterate current L2 M-slice by l1_ts
+                                ii_l1_end = min(ii_l1 + l1_ts, ic_end);
+
+                                // Micro-kernel: Operates on an l1_ts x l1_ts (conceptual) block
+                                // This is your original innermost logic for a block
+                                // Bounds are:
+                                // C_rows: ii_l1 to ii_l1_end
+                                // C_cols: jj_l1 to jj_l1_end
+                                // K_dim:  kk_l1 to kk_l1_end
+
+                                for j_block in jj_l1..jj_l1_end { // Iterate columns within L1 C-tile
+                                    
+                                    i_block = ii_l1;
+                                    // Vectorized part for rows of C
+                                    while i_block <= ii_l1_end - 8 { // SIMD_WIDTH = 8
+                                        // Load C_vec for C[i_block..i_block+7, j_block]
+                                        // It's an accumulator, so it's loaded once per (i_block, j_block) pair
+                                        // and updated over the k_block loop.
+                                        c_vec = result.get_simd(i_block, j_block);
+
+                                        for k_block in kk_l1..kk_l1_end { // Iterate K within L1 tile
+                                            b_kj = other.get(k_block, j_block); // B[k, j]
+                                            if b_kj == 0.0 { continue; } // Sparsity check
+
+                                            // Load A_vec for A[i_block..i_block+7, k_block]
+                                            a_vec = self.get_simd(i_block, k_block); // A[i, k]
+                                            
+                                            // Broadcast b_kj to a SIMD vector
+                                            // (Assuming compiler can optimize this or you have an intrinsic)
+                                            b_broadcast_vec = (b_kj, b_kj, b_kj, b_kj, b_kj, b_kj, b_kj, b_kj);
+                                            
+                                            // FMA: c_vec = (a_vec * b_broadcast_vec) + c_vec
+                                            c_vec = simd_add(simd_mul(a_vec, b_broadcast_vec), c_vec);
+                                        }
+                                        result.set_simd(i_block, j_block, c_vec); // Store accumulated C_vec
+                                        i_block = i_block + 8;
+                                    }
+                                    
+                                    // Scalar cleanup for remaining rows in the L1 C-tile
+                                    while i_block < ii_l1_end {
+                                        c_val = result.get(i_block, j_block);
+                                        for k_block in kk_l1..kk_l1_end {
+                                            b_kj = other.get(k_block, j_block);
+                                            // Note: Original code had a_val = self.get(i_block, k_block);
+                                            // This is correct for C(i,j) += A(i,k) * B(k,j)
+                                            a_val = self.get(i_block, k_block); 
+                                            c_val = c_val + a_val * b_kj;
+                                        }
+                                        result.set(i_block, j_block, c_val);
+                                        i_block = i_block + 1;
+                                    }
+                                }
                             }
-                            result.set_simd(i_block, j_block, c_vec);
-                            i_block = i_block + 8;
-                        }
-                        
-                        while i_block < i_limit_block {
-                            c_val = result.get(i_block, j_block);
-                            for k_block in kk:(k_limit_block - 1) {
-                                b_kj = other.get(k_block, j_block);
-                                a_val = self.get(i_block, k_block);
-                                c_val = c_val + a_val * b_kj;
-                            }
-                            result.set(i_block, j_block, c_val);
-                            i_block = i_block + 1;
                         }
                     }
                 }
@@ -149,13 +197,13 @@ class Matrix {
 }
 
 def benchmark_matrix_multiplication() {
-    size = 1024;
+    size = 4096;
 
     matrix1 = Matrix.new(size, size);
     matrix2 = Matrix.new(size, size);
     
-    for i in 0:(size - 1) {
-        for j in 0:(size - 1) {
+    for i in 0..size {
+        for j in 0..size {
             val1 = (i + j) % 10;
             val2 = (i - j + 10) % 10;
             matrix1.set(i, j, val1 as f64); 
@@ -177,7 +225,7 @@ def benchmark_matrix_multiplication() {
     IO.print(time_taken);
     
     sum = 0.0;
-    for i in 0:(size - 1) { sum = sum + result.get(0, i); }
+    for i in 0..size { sum = sum + result.get(0, i); }
     IO.print("Sum of first row (for verification):");
     IO.print(sum);
 }

@@ -19,7 +19,7 @@ GRAMMAR_PATH = DIR_PATH / "data_files/grammar.lark"
 
 with open(GRAMMAR_PATH, "r") as f: grammar = f.read()
 
-parser = parser = Lark(grammar, parser='lalr', propagate_positions=True, _plugins=lark_cython.plugins)
+parser = Lark(grammar, parser='lalr', propagate_positions=True, _plugins=lark_cython.plugins)
 source_directories = {}
 parsed = {}
 
@@ -414,9 +414,17 @@ class CSTTransformer(Transformer):
         node_info = NodeInfo(None, self.file_path, line_number(arrow))
         return FunctionLiteral(node_info, anon_name, tuple(param_list), len(param_list), block, Any(), yield_type or exception_or_nil)
 
-    def range_literal(self, start, end):
+    def inclusive_range_literal(self, start, end):
         node_info = NodeInfo(None, self.file_path, start.info.line_number)
         return RangeLiteral(node_info, start, end)
+
+    def exclusive_range_literal(self, start, end):
+        range_info = NodeInfo(None, self.file_path, start.info.line_number)
+        one_info = NodeInfo(None, self.file_path, start.info.line_number)
+        sub_info = NodeInfo(None, self.file_path, start.info.line_number)
+        one = IntegerLiteral(one_info, 1, 32)
+        end_minus_one = Arithmetic(sub_info, end, "SUB", one)
+        return RangeLiteral(range_info, start, end_minus_one)
 
     def bool_literal(self, token):
         intval = {"true":1,"false":0}[token.value]
