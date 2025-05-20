@@ -50,7 +50,7 @@ def compiler_driver_main(input_path, output_path=None, build_dir=Path("."), debu
     CompilationJob(input_path, output_path, build_dir, debug_mode, no_timings, show_dependencies).run()
 
 class CompilationJob:
-    input: "InputFile"
+    input: "SourceFile"
     output_path: Path
     build: "BuildDirectory"
     dependencies: "Dependencies"
@@ -74,11 +74,11 @@ class CompilationJob:
         if input_path.suffix != ".mini": raise Exception(f"Input path {input_path} should point to a .mini file.")
 
         self.build = BuildDirectory(build_dir, debug_mode)
-        self.input = InputFile(input_path.resolve(), self.build.dir)
+        self.dependencies = Dependencies(self.build, show_dependencies)
+        self.input = SourceFile(input_path.resolve(), self.build)
         self.time_printer = OptionalPrinter(not no_timings)
         self.status_printer = OptionalPrinter(not silent[0])
         self.settings = OptimizationSettings(debug_mode)
-        self.dependencies = Dependencies(self.input, show_dependencies)
 
         self.output_path = None
         if not output_path: return
@@ -250,6 +250,7 @@ class CompilationJob:
         # Split the big llvm IR string into individual bitcode files and save them
         for job, section in zip(jobs, llvm_string.split("// -----")):
             self.pre_link_opt(job, section)
+            job.input.add_dependencies(self.dependencies)
             job.input.write_hash()
 
         self.record_time("lower_to_llvm")
@@ -263,7 +264,7 @@ class CompilationJob:
         # Don't inline anything here as it may be compiled in debug mode later
         # Since we are not inlining, I don't mind using --attributor-enable=all here
         # The LTO pre-link pipeline is generally a good fit for this stage
-        passes = "--passes=\"lto-pre-link<O3>\""
+        passes = "--passes=\"lto-pre-link<O1>,vector-combine\""
         opt = f"{OPT_PATH} {passes} {self.settings.vec} {self.settings.attributor('all')} --inline-threshold=-10000 -o {job.input.bc_file}"
         subprocess.run(f"{reg2mem} | {opt}", input=section, text=True, shell=True)
 
@@ -329,15 +330,15 @@ class CompilationJob:
         # overrides the target triple specified in the IR
         target_triple = "-mtriple=x86_64-pc-windows-msvc"
 
-        # necessary so that the machine outliner doesn't break; default would otherwise be 'exception-model=wineh'
+        # the machine outliner is not compatible with 'exception-model=wineh'
+        # however, obtaining stack traces currently requires 'exception-model=wineh'
         exception_model = "-exception-model=wineh"
         outliner_settings = "-enable-machine-outliner -machine-outliner-reruns=2"
 
-        obj_dir = self.output_path.parent if self.output_path.suffix == ".obj" else self.build.dir
-        os.makedirs(obj_dir, exist_ok=True)
+        os.makedirs(self.obj_path.parent, exist_ok=True)
 
         self.record_time("before_llc")
-        optimizations = ("-O=3", "-mcpu=native", "-fp-contract=fast")
+        optimizations = ("-O=3", "-fp-contract=fast")
         llc = (LLC_PATH, "-filetype=obj", self.build.final_ir, *optimizations, target_triple, exception_model, "-o", self.obj_path)
         subprocess.run(llc)
 
@@ -477,15 +478,15 @@ class BuildDirectory:
         return self.dir / "opt_passes.txt"
 
 class Dependencies:
-    input: "InputFile"
     graph: nx.DiGraph
+    build: BuildDirectory
     print_graph: bool
     _list: list
     _recompile_list: list
 
-    def __init__(self, input: "InputFile", print_graph: bool):
-        self.input = input
+    def __init__(self, build, print_graph: bool):
         self.print_graph = print_graph
+        self.build = build
         self._list = None
         self._recompile_list = None
 
@@ -497,7 +498,7 @@ class Dependencies:
         if self._list: return self._list
         dependency_list = list(reversed(list(nx.topological_sort(self.graph))))
         # input file is excluded from the list
-        self._list = [path for path in dependency_list if not path.samefile(self.input.path)]
+        self._list = dependency_list[:-1]
         return self._list
 
     @property
@@ -506,10 +507,13 @@ class Dependencies:
         to_recompile = set()
         # ordered in reverse-topological order; input file is included
         sorted_paths = list(reversed(list(nx.topological_sort(self.graph))))
-        for dependency in sorted_paths:
-            if already_perfect(dependency, self.input.build_dir): continue
-            dependents = set(nx.ancestors(self.graph, dependency))
-            to_recompile.add(dependency)
+        for path in sorted_paths:
+            if path in to_recompile: continue
+            src = SourceFile(path, self.build)
+            src.add_dependencies(self)
+            if src.already_perfect(): continue
+            dependents = set(nx.ancestors(self.graph, path))
+            to_recompile.add(path)
             to_recompile = to_recompile.union(dependents)
         self._recompile_list = [path for path in sorted_paths if path in to_recompile]
         return self._recompile_list
@@ -518,9 +522,50 @@ class Dependencies:
         if not self.print_graph: return
         print("Dependency graph:")
         stringio = StringIO()
-        nx.write_network_text(self.graph, sources=[self.input.path], path=stringio)
+        nx.write_network_text(self.graph, path=stringio)
         text_repr = stringio.getvalue().replace("╾","<─").replace("╼",">")
         print(text_repr)
+
+@dataclass
+class SourceFile:
+    path: Path
+    build: BuildDirectory
+    dependencies: list
+
+    def __init__(self, path, build):
+        self.path = path
+        self.build = build
+        self.dependencies = None
+
+    def add_dependencies(self, dependencies):
+        deps = nx.descendants(dependencies.graph, self.path)
+        sorted_deps = [p for p in dependencies.list if p in deps]
+        self.dependencies = sorted_deps
+
+    @property
+    def bc_file(self):
+        return self.build.bitcodes_folder / f"{self.path.stem}.bc"
+
+    @property
+    def hash_file(self):
+        return self.build.hashes_folder / f"{self.path.stem}.hash"
+
+    def source_hash(self) -> bytes:
+        hashes = []
+        for path in (*self.dependencies, self.path):
+            with open(path, 'rb') as f:
+                hash_object = hashlib.file_digest(f, 'sha256')
+                hashes.append(hash_object.hexdigest().encode("utf-8"))
+        return b''.join(hashes)
+
+    def already_perfect(self) -> bool:
+        if not (self.hash_file.exists() and self.bc_file.exists()): return False
+        with open(self.hash_file, "rb") as f: stored_hash = f.read()
+        if self.source_hash() == stored_hash: return True
+        return False
+
+    def write_hash(self):
+        with open(self.hash_file, "wb") as f: f.write(self.source_hash())
 
 @dataclass
 class OptionalPrinter:
@@ -529,35 +574,6 @@ class OptionalPrinter:
     def print(self, message):
         if not self.on: return
         print(message)
-
-@dataclass
-class InputFile:
-    path: Path
-    build_dir: Path
-
-    @property
-    def bc_file(self):
-        return self.build_dir / "bitcodes" / f"{self.path.stem}.bc"
-
-    @property
-    def hash_file(self):
-        return self.build_dir / "hashes" / f"{self.path.stem}.hash"
-
-    def write_hash(self):
-        with open(self.hash_file, "wb") as f: f.write(hash_file(self.path))
-
-def hash_file(filepath) -> bytes:
-    with open(filepath, 'rb') as f: hash_object = hashlib.file_digest(f, 'sha256')
-    return hash_object.hexdigest().encode("utf-8")
-
-def already_perfect(source_path, build_dir) -> bool:
-    bc_file_path = build_dir / "bitcodes" / f"{source_path.stem}.bc"
-    hash_file_path = build_dir / "hashes" / f"{source_path.stem}.hash"
-    if not (hash_file_path.exists() and bc_file_path.exists()): return False
-    src_hash = hash_file(source_path)
-    with open(hash_file_path, "rb") as f: stored_hash = f.read()
-    if src_hash == stored_hash: return True
-    return False
 
 def replace_in_file(path, string, replacement):
     with open(path, "r+") as f:
@@ -582,7 +598,7 @@ def add_source_directories(input_path):
             package_path = package_path.resolve()
             source_directories[package_path] = package_path
 
-    # lib folder in the current working directory, and lib folder adjacent to the file being compiled
+    # lib folder in the current working directory + lib folder adjacent to the file being compiled
     lib1 = Path(os.getcwd()).joinpath("lib")
     lib2 = input_path.parent.joinpath("lib")
 

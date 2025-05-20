@@ -452,11 +452,10 @@ DONE:
 
 TODO:
 
+- Allow arithmetic on homogenous tuples of number type
 - Nested loops take WAY too long to type check
-	- It's expontential or factorial or something
-- Recompiling dependencies is not exactly correct
-	- Only the dependents in the current CU are recompiled
-	- Could we hash together the source of a file and all its dependencies?
+	- It's exponential time complexity
+	- Need to cache results of typeflow for each loop
 - Could do something very clever for treating tuples as iterables
 	- Create an array with the buffer literally being the tuple
 	- Because the array is merely an implementation detail, it can't escape
@@ -524,6 +523,7 @@ TODO:
 		- LALR(1) can only look forward one token
 		- is (x:y) a range or the start of a function literal?
 	- Add exclusive range literal [check!]
+	- Concatenate the hashes of dependencies [check!]
 	- Hi, mid, lo dialects
 		- Split dialect into multiple files [check!]
 		- Use lo dialect in patterns.mlir
