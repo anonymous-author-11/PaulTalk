@@ -1,7 +1,7 @@
-import cuckoo;
+import linear_probe;
 import std;
 
-alias Map = CuckooMap;
+alias Map = LinearProbeMap;
 
 // --- Additions for Benchmarking (Unchanged) ---
 extern def clock() -> i64

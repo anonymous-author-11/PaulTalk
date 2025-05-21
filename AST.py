@@ -223,6 +223,8 @@ class BinaryOp(Expression):
         if isinstance(left_type, FatPtr) or isinstance(left_type, TypeParameter):
             return OverloadedBinaryOp(self.info, self.left, self.operator, self.right).codegen(scope)
         right_type = self.right.exprtype(scope)
+        if isinstance(left_type, Tuple) and isinstance(right_type, Tuple):
+            return TupleArithmetic(self.info, self.left, self.operator, self.right).codegen(scope)
         left_unwrap = UnwrapOp.create(operands=[self.left.codegen(scope)], result_types=[left_type.base_typ()])
         right_unwrap = UnwrapOp.create(operands=[self.right.codegen(scope)], result_types=[right_type.base_typ()])
         operands = [left_unwrap.results[0], right_unwrap.results[0]]
@@ -243,6 +245,8 @@ class BinaryOp(Expression):
         if isinstance(left_type, FatPtr) or isinstance(left_type, TypeParameter):
             return OverloadedBinaryOp(self.info, self.left, self.operator, self.right).exprtype(scope)
         right_type = self.right.exprtype(scope)
+        if isinstance(left_type, Tuple) and isinstance(right_type, Tuple):
+            return TupleArithmetic(self.info, self.left, self.operator, self.right).exprtype(scope)
 
         left_number = isinstance(left_type, Integer) or isinstance(left_type, Float) or isinstance(left_type, Bool)
         right_number = isinstance(right_type, Integer) or isinstance(right_type, Float) or isinstance(right_type, Bool)
@@ -307,6 +311,35 @@ class Arithmetic(BinaryOp):
             raise Exception(f"{self.info}: {self.operator} only works on integers, not {left_type} and {right_type}")
 
         return left_type
+
+@dataclass
+class TupleArithmetic(Arithmetic):
+
+    def codegen(self, scope):
+        left_type = self.left.exprtype(scope)
+        right_type = self.right.exprtype(scope)
+        num_elems = len(left_type.types.data)
+        node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for x in range(4 * num_elems)]
+        indices = [IntegerLiteral(node_infos[i], i, 32) for i in range(num_elems)]
+        left_elems = [TupleIndexation(node_infos[num_elems + i], self.left, "_index", [indices[i]]) for i in range(num_elems)]
+        right_elems = [TupleIndexation(node_infos[2 * num_elems + i], self.right, "_index", [indices[i]]) for i in range(num_elems)]
+        result_elems = tuple(Arithmetic(node_infos[3 * num_elems + i], left_elems[i], self.operator, right_elems[i]) for i in range(num_elems))
+        return TupleLiteral(self.info, result_elems).codegen(scope)
+
+    def exprtype(self, scope):
+        left_type = self.left.exprtype(scope)
+        right_type = self.right.exprtype(scope)
+        if left_type != right_type:
+            raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
+        if self.operator not in ("ADD","SUB","MUL","DIV","MOD","LSHIFT","RSHIFT","bit_and","bit_or","bit_xor"):
+            raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
+        num_elems = len(left_type.types.data)
+        node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for x in range(4 * num_elems)]
+        indices = [IntegerLiteral(node_infos[i], i, 32) for i in range(num_elems)]
+        left_elems = [TupleIndexation(node_infos[num_elems + i], self.left, "_index", [indices[i]]) for i in range(num_elems)]
+        right_elems = [TupleIndexation(node_infos[2 * num_elems + i], self.right, "_index", [indices[i]]) for i in range(num_elems)]
+        result_elems = tuple(Arithmetic(node_infos[3 * num_elems + i], left_elems[i], self.operator, right_elems[i]) for i in range(num_elems))
+        return TupleLiteral(self.info, result_elems).exprtype(scope)
 
 @dataclass
 class Comparison(BinaryOp):
@@ -1514,7 +1547,8 @@ class FunctionDef(Statement):
         body_scope.symbol_table = {}
         self.wrap_params(body_scope)
         self.body.codegen(body_scope)
-        result_type = self.return_type().base_typ() if self.return_type() else llvm.LLVMVoidType()
+        result_type = self.return_type()
+        result_type = scope.simplify(result_type).base_typ() if result_type else llvm.LLVMVoidType()
         attr_dict = {
             "func_name":StringAttr(self.name),
             "result_type":result_type,
@@ -1528,7 +1562,8 @@ class FunctionDef(Statement):
     def interface_codegen(self, scope):
         if self.name in scope.comp_unit.codegenned: return
         arg_types = [param.type(scope).base_typ() for param in self.params]
-        result_type = self.return_type().base_typ() if self.return_type() else llvm.LLVMVoidType()
+        result_type = self.return_type()
+        result_type = scope.simplify(result_type).base_typ() if result_type else llvm.LLVMVoidType()
         func = llvm.FuncOp(self.name, llvm.LLVMFunctionType(arg_types, result_type), llvm.LinkageAttr("external"))
         scope.comp_unit.toplevel_ops.append(func)
         scope.region.last_block.add_op(func)
@@ -3038,9 +3073,9 @@ class ReturnValue(Return):
     value: Expression
 
     def codegen(self, scope):
-        retval_typ = self.value.exprtype(scope)
+        retval_typ = scope.simplify(self.value.exprtype(scope))
         broad_return_type = scope.behavior.broad_return_type() if scope.behavior else scope.method.return_type()
-        cast = CastOp.make(self.value.codegen(scope), retval_typ, broad_return_type)
+        cast = CastOp.make(self.value.codegen(scope), retval_typ, scope.simplify(broad_return_type))
         ret_op = ReturnOp.create(operands=[cast.results[0]])
         scope.region.last_block.add_ops([cast, ret_op])
 
@@ -3049,8 +3084,8 @@ class ReturnValue(Return):
             raise Exception(f"{self.info}: can only have return statements in functions")
         if not scope.method.return_type():
             raise Exception(f"{self.info}: function returns a value but does not declare a return type")
-        ret_typ = self.value.exprtype(scope)
-        if not scope.subtype(ret_typ, scope.method.return_type()):
+        ret_typ = scope.simplify(self.value.exprtype(scope))
+        if not scope.subtype(ret_typ, scope.simplify(scope.method.return_type())):
             raise Exception(f"{self.info}: returned value of invalid type: {ret_typ}. Should be subtype of {scope.method.return_type()}.")
         scope.points_to_facts.add(("ret", "==", self.value.info.id))
         scope.method.hasreturn = True

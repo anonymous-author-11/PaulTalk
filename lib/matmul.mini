@@ -19,7 +19,7 @@ def min(a : i32, b : i32) -> i32 {
 //   ret <8 x double> %3
 // }
 def simd_add(a : Tuple[8 x f64], b : Tuple[8 x f64]) -> Tuple[8 x f64] {
-    return (a.[0] + b.[0], a.[1] + b.[1], a.[2] + b.[2], a.[3] + b.[3], a.[4] + b.[4], a.[5] + b.[5], a.[6] + b.[6], a.[7] + b.[7]);
+    return a + b;
 }
 
 // compiles to:
@@ -28,7 +28,7 @@ def simd_add(a : Tuple[8 x f64], b : Tuple[8 x f64]) -> Tuple[8 x f64] {
 //   ret <8 x double> %3
 // }
 def simd_mul(a : Tuple[8 x f64], b : Tuple[8 x f64]) -> Tuple[8 x f64] {
-    return (a.[0] * b.[0], a.[1] * b.[1], a.[2] * b.[2], a.[3] * b.[3], a.[4] * b.[4], a.[5] * b.[5], a.[6] * b.[6], a.[7] * b.[7]);
+    return a * b;
 }
 
 class Matrix {
@@ -124,7 +124,7 @@ class Matrix {
                                 if b_kj == 0.0 { continue; }
                                 a_vec = self.get_simd(i_block, k_block);
                                 b_vec = (b_kj, b_kj, b_kj, b_kj, b_kj, b_kj, b_kj, b_kj);
-                                c_vec = simd_add(simd_mul(a_vec, b_vec), c_vec);
+                                c_vec = c_vec + a_vec * b_vec;
                             }
                             result.set_simd(i_block, j_block, c_vec);
                             i_block = i_block + 8;

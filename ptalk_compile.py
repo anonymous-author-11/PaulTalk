@@ -277,6 +277,7 @@ class CompilationJob:
 
         self.record_time("before_llvm_link")
 
+        if self.build.out_lib.exists(): os.remove(self.build.out_lib)
         bitcode_files = self.build.bitcode_files([path.stem for path in self.dependencies.list])
         make_archive = (LLVM_AR_PATH, "cr", self.build.out_lib, *bitcode_files)
         subprocess.run(make_archive)
