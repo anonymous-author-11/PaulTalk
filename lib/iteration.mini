@@ -52,6 +52,10 @@ class Iterable[T] extends Container {
         for x in self { if f.call(x) { return true; } }
         return false;
     }
+    #[ret.iterable == self]
+    def enumerate() -> Enumerable[T] {
+        return Enumerable{self};
+    }
     #[ret.iterable == self, ret.f == f]
     def map[U](f : (T) -> U) -> MapIterable[T, U] {
         return MapIterable{self, f};
@@ -75,6 +79,32 @@ class Iterable[T] extends Container {
     #[ret.first == self, ret.second == other]
     def product[U](other : Iterable[U]) -> ProductIterable[T, U] {
         return ProductIterable{self, other};
+    }
+}
+
+class Enumerable[T] extends Iterable[Pair[i32, T]] {
+    @iterable : Iterable[T]
+
+    def init(@iterable : Iterable[T]) {}
+
+    def iterator() -> Enumerator[T] {
+        return Enumerator{@iterable.iterator()};
+    }
+}
+
+class Enumerator[T] extends Iterator[Pair[i32, T]] {
+    @iterator : Iterator[T]
+    @index : i32
+
+    def init(@iterator : Iterator[T]) {
+        @index = 0;
+    }
+
+    def next() -> Pair[i32, T] | Nil {
+        @index = @index + 1;
+        next = @iterator.next();
+        if next is T { return Pair{@index - 1, next}; }
+        return nil;
     }
 }
 

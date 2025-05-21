@@ -791,6 +791,48 @@ class TypeCheck(Expression):
         self.exprtype(scope)
 
 @dataclass
+class TupleToBuffer(Expression):
+    tupl: Expression
+
+    def codegen(self, scope):
+        tuple_type = self.tupl.exprtype(scope)
+        tupl = self.tupl.codegen(scope)
+        alloca = AllocateOp.make(llvm.LLVMPointerType.opaque())
+        store = llvm.StoreOp(tupl, alloca.results[0])
+        scope.region.last_block.add_ops([alloca, store])
+        return alloca.results[0]
+
+    def exprtype(self, scope):
+        tuple_type = self.tupl.exprtype(scope)        
+        elem_type = tuple_type.types.data[0]
+        return Buffer([elem_type])
+
+@dataclass
+class TupleToArray(Expression):
+    tupl: Expression
+
+    def codegen(self, scope):
+        tuple_type = self.tupl.exprtype(scope)        
+        elem_type = tuple_type.types.data[0]
+        cast_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+        size_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+        capacity_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+        ary_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+        buf = TupleToBuffer(cast_info, self.tupl)
+        sizelit = IntegerLiteral(size_info, len(tuple_type.types.data), 32)
+        capacitylit = IntegerLiteral(capacity_info, len(tuple_type.types.data), 32)
+        ary = ObjectCreation(ary_info, random_letters(10), FatPtr.generic("Array", [elem_type]), [buf, sizelit, capacitylit], None)
+        return ary.codegen(scope)
+
+    def exprtype(self, scope):
+        tuple_type = self.tupl.exprtype(scope)
+        homogenous_type = len(set(tuple_type.types.data)) == 1
+        if not homogenous_type:
+            raise Exception(f"{self.info}: Cannot iterate over a tuple of heterogenous type: {tuple_type}")
+        elem_type = tuple_type.types.data[0]
+        return FatPtr.generic("Array", [elem_type])
+
+@dataclass
 class As(Expression):
     operand: Expression
     typ: TypeAttribute
@@ -914,7 +956,11 @@ class MethodCall(Expression):
         if isinstance(rec_typ, Buffer): return BufferIndexation(self.info, self.receiver, self.method, self.arguments).codegen(scope)
         if isinstance(rec_typ, Tuple) and self.method == "_set_index":
             return TupleSetIndex(self.info, self.receiver, self.method, self.arguments).codegen(scope)
-        if isinstance(rec_typ, Tuple): return TupleIndexation(self.info, self.receiver, self.method, self.arguments).codegen(scope)
+        if isinstance(rec_typ, Tuple) and self.method == "_index":
+            return TupleIndexation(self.info, self.receiver, self.method, self.arguments).codegen(scope)
+        if isinstance(rec_typ, Tuple):
+            cast_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+            return MethodCall(self.info, TupleToArray(cast_info, self.receiver), self.method, self.arguments).codegen(scope)
         rec_class = scope.classes[rec_typ.cls.data]
 
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
@@ -1003,10 +1049,15 @@ class MethodCall(Expression):
         if isinstance(rec_typ, TypeParameter): rec_typ = rec_typ.bound
         if isinstance(rec_typ, Buffer) and self.method == "_set_index":
             return BufferSetIndex(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
-        if isinstance(rec_typ, Buffer): return BufferIndexation(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
+        if isinstance(rec_typ, Buffer) and self.method == "_index":
+            return BufferIndexation(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
         if isinstance(rec_typ, Tuple) and self.method == "_set_index":
             return TupleSetIndex(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
-        if isinstance(rec_typ, Tuple): return TupleIndexation(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
+        if isinstance(rec_typ, Tuple) and self.method == "_index":
+            return TupleIndexation(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
+        if isinstance(rec_typ, Tuple):
+            cast_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+            return MethodCall(self.info, TupleToArray(cast_info, self.receiver), self.method, self.arguments).exprtype(scope)
         if isinstance(rec_typ, Coroutine): return CoroutineCall(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
         if isinstance(rec_typ, Function): return FunctionLiteralCall(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
         broad, specialized = self.simple_exprtype(scope, rec_typ)
@@ -1439,7 +1490,7 @@ class ObjectCreation(Expression):
         cls = scope.classes[simplified_type.cls.data]
         behavior_candidates = [behavior for behavior in cls.behaviors if behavior.name == "init" and behavior.arity == len(self.arguments)]
         if len(behavior_candidates) == 0:
-            raise Exception(f"{self.info}: No init method in class {simplified_type} matches the argument types {input_types}")
+            raise Exception(f"{self.info}: No init method in class {simplified_type} matches the argument types {arg_types}")
         deduced_candidates = []
         for b in behavior_candidates:
             for m in b.methods:
@@ -3032,6 +3083,12 @@ class For(Statement):
     def typeflow(self, scope):
         node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for i in range(7)]
         iterable_type = self.iterable.exprtype(scope)
+        if isinstance(iterable_type, Tuple):
+            cast_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+            self.iterable = TupleToArray(cast_info, self.iterable)
+            self.iterator.receiver = self.iterable
+            iterable_type = self.iterable.exprtype(scope)
+
         if not isinstance(iterable_type, FatPtr):
             raise Exception(f"{self.info}: For-loop iterable must be an object with a .iterator() method, not {iterable_type}")
         iterator_type = self.iterator.exprtype(scope)

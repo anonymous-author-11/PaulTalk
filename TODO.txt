@@ -455,10 +455,6 @@ TODO:
 - Nested loops take WAY too long to type check
 	- It's exponential time complexity
 	- Need to cache results of typeflow for each loop
-- Could do something very clever for treating tuples as iterables
-	- Create an array with the buffer literally being the tuple
-	- Because the array is merely an implementation detail, it can't escape
-	- Have a utlity to convert tuple to stack-allocated buffer
 - Index setter shouldn't be hardcoded to one index
 	- I'd like to be able to do mat[i,j] = val;
 - We do not properly account for break/continue in typeflow
@@ -524,6 +520,10 @@ TODO:
 	- Add exclusive range literal [check!]
 	- Concatenate the hashes of dependencies [check!]
 	- Enable arithmetic on arbitrary matching tuples [check!]
+	- Could do something very clever for treating tuples as iterables [check!]
+	- Create an array with the buffer literally being the tuple [check!]
+	- Because the array is merely an implementation detail, it can't escape [check!]
+	- Have a utility to convert tuple to stack-allocated buffer [check!]
 	- Hi, mid, lo dialects
 		- Split dialect into multiple files [check!]
 		- Use lo dialect in patterns.mlir
