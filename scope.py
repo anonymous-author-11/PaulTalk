@@ -476,7 +476,7 @@ class Scope:
             concrete_types = [typ]
             ancestors = [temp_scope.specialize(formal_types, concrete_types, anc) for anc in cls.ancestors()]
             ancestors = [self.simplify(anc) for anc in ancestors]
-            print(f"ancestors of {original_type} are {ancestors}")
+            #print(f"ancestors of {original_type} are {ancestors}")
             return ancestors
 
         if isinstance(typ, TypeParameter): return [typ, *self.ancestors(typ.bound)]
@@ -538,7 +538,7 @@ class Scope:
             flattened = {s for s in flattened if (not any(((self.subtype(s, s2)) and (not self.subtype(s2, s))) for s2 in flattened))} # merge subtypes
             if len(list(flattened)) == 1: return list(flattened)[0] # A union of one type is just that type
             if len(list(flattened)) == 0: return Nothing()
-            print(f"simplified {typ} to {Union.from_list(list(flattened))}")
+            #print(f"simplified {typ} to {Union.from_list(list(flattened))}")
             #print(f"with aliases {self.aliases}")
             return Union.from_list(list(flattened)) # Union is associative
         

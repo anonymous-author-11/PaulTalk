@@ -2128,7 +2128,7 @@ class Method:
             m2 = method_set[i + 1]
             for t1, t2 in zip(m1.type_params, m2.type_params):
                 scope.add_alias(t2, t1)
-                print(f"added alias from {t2} to {t1}")
+                #print(f"added alias from {t2} to {t1}")
 
     def symbol(self):
         return SymbolRefAttr(self.definition.qualified_name())
@@ -2139,14 +2139,11 @@ class Method:
         return result
 
     def broad_param_types(self):
-        narrow = self.param_types()
-        broad = [*narrow]
         temp_scope = Scope(self.scope)
         temp_scope.deconcretize()
+        broad = [temp_scope.simplify(t) for t in self.param_types()]
         for definition in self.overridden_methods():
-            def_param_types = definition.param_types()
-            for k, t in enumerate(narrow):
-                broad[k] = temp_scope.simplify(def_param_types[k])
+            broad = [temp_scope.simplify(t) for t in definition.param_types()]
         return broad
 
     def constraints(self):
@@ -2164,9 +2161,9 @@ class Method:
         return result
 
     def broad_return_type(self):
-        broad = self.return_type()
         temp_scope = Scope(self.scope)
         temp_scope.deconcretize()
+        broad = temp_scope.simplify(self.return_type())
         for definition in self.overridden_methods():
             broad = temp_scope.simplify(definition.return_type())
         return broad
@@ -2248,10 +2245,12 @@ class Behavior(Statement):
     cls: 'ClassDef'
     superfluous_methods: List[Method]
 
-    # I wonder if we should make a temp scope where we remove all TP -> Concrete type aliases
     def broad_param_types(self):
         param_type_sets = [method.broad_param_types() for method in self.methods]
         temp_scope = Scope(self.cls._scope)
+        for m in self.methods:
+            for k,v in m.scope.aliases.items():
+                temp_scope.aliases[k] = v
         temp_scope.deconcretize()
         result = [temp_scope.simplify(Union.from_list([params[k] for params in param_type_sets])) for k in range(self.arity)]
         return result
@@ -2259,6 +2258,9 @@ class Behavior(Statement):
     def broad_return_type(self):
         if not self.methods[0].definition.return_type(): return None
         temp_scope = Scope(self.cls._scope)
+        for m in self.methods:
+            for k,v in m.scope.aliases.items():
+                temp_scope.aliases[k] = v
         temp_scope.deconcretize()
         result = temp_scope.simplify(Union.from_list([method.broad_return_type() for method in self.methods]))
         return result

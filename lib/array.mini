@@ -1,6 +1,6 @@
 import core;
 
-class Array[T] extends Iterable[T], Representable {
+class Array[T] extends Collection[T], Representable {
 	@buffer : Buffer[T]
 	@length : i32
 	@capacity : i32
