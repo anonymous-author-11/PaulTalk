@@ -72,12 +72,12 @@ class TypeParameter(ParametrizedAttribute, TypeAttribute):
 
     def __repr__(self):
         result = f"{self.defining_class.data}.{self.label.data}"
-        if self.bound != Any(): result = f"{result} <: {self.bound}"
+        result = f"{result} <: {self.bound}"
         return result
 
     def __format__(self, format_spec):
         result = f"{self.defining_class.data}.{self.label.data}"
-        if self.bound != Any(): result = f"{result} <: {self.bound}"
+        result = f"{result} <: {self.bound}"
         return result
 
     def __eq__(self, other):
