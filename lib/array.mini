@@ -13,6 +13,14 @@ class Array[T] extends Iterable[T], Representable {
     	for elem in iterable { result.append(elem); }
     	return result;
     }
+    /*
+    #[ret.elems_reg == collection.elems_reg]
+    def Self.from_collection(collection : Collection[T]) -> Array[T] {
+        result = Array[T].new(collection.size());
+        for elem in collection { result.append(elem); }
+        return result;
+    }
+    */
 	def init() {
 		@buffer = Buffer[T].new(1);
 		@length = 0;
@@ -31,6 +39,10 @@ class Array[T] extends Iterable[T], Representable {
 	def length() -> i32 {
 		return @length;
 	}
+    #[ret == @length]
+    def size() -> i32 {
+        return @length;
+    }
     #[ret == @capacity]
     def capacity() -> i32 {
     	return @capacity;

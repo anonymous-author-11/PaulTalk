@@ -135,10 +135,6 @@ class CompilationJob:
 
     def run_codegen(self, ast):
         module = ast.codegen()
-        stringio = StringIO()
-        Printer(stringio).print(module)
-        module_str = stringio.getvalue().encode().decode('unicode_escape')
-        with open(self.build.in_mlir, "w") as outfile: outfile.write(module_str)
         self.record_time("after_codegen")
         return module
 
@@ -194,6 +190,11 @@ class CompilationJob:
 
         self.record_time("before_firstpass")
         combined_module = ModuleOp([*modules], {"sym_name":StringAttr("ir")})
+
+        stringio = StringIO()
+        Printer(stringio).print(combined_module)
+        module_str = stringio.getvalue().encode().decode('unicode_escape')
+        with open(self.build.in_mlir, "w") as outfile: outfile.write(module_str)
         
         # Using multiprocessing invariably leeds to a recursion limit exceeded while pickling the IR
         # Using non-parallel concurrency (threading) is not measurably any faster than serial processing
@@ -231,16 +232,18 @@ class CompilationJob:
 
         self.record_time("before_mlir_opt_lower")
         to_llvm_dialect = f"{MLIR_OPT_PATH} {scf} {arith} {func} {index} {memref} {cf} {ub} --reconcile-unrealized-casts"
-        module_str = subprocess.run(to_llvm_dialect, text=True, shell=True, input=module_str, capture_output=True).stdout
-        module_str = module_str[14:-3].replace("module","// ----- module")[9:]
+        cmd_out = subprocess.run(to_llvm_dialect, text=True, shell=True, input=module_str, capture_output=True)
+        if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
+        module_str = cmd_out.stdout[14:-3].replace("module","// ----- module")[9:]
         self.record_time("after_mlir_opt_lower")
         self.time_printer.print(f'Time to mlir-opt lower: {self.time_between("before_mlir_opt_lower", "after_mlir_opt_lower")} seconds')
 
         mlir_translate = f"{MLIR_TRANSLATE_PATH} --split-input-file --output-split-marker=\"// -----\" --mlir-to-llvmir"
-        llvm_string = subprocess.run(mlir_translate, text=True, shell=True, input=module_str, capture_output=True).stdout
+        cmd_out = subprocess.run(mlir_translate, text=True, shell=True, input=module_str, capture_output=True)
+        if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
         self.record_time("after_mlir_translate")
         self.time_printer.print(f'Time to mlir-translate: {self.time_between("after_mlir_opt_lower", "after_mlir_translate")} seconds')
-        return llvm_string
+        return cmd_out.stdout
 
     def make_bitcodes(self, jobs, llvm_string):
 
@@ -301,7 +304,7 @@ class CompilationJob:
 
     def run_opt(self):
 
-        passes = f"--passes=\"{self.settings.opt_level(3)}\""
+        passes = f"--passes=\"{self.settings.opt_level}\""
 
         settings = f"{self.settings.devirt} {self.settings.vec} {self.settings.inlining} {self.settings.attributor()} {self.settings.hotcold}"
         opt = f"{OPT_PATH} -S {self.build.out_linked_dbg} {passes} {settings} -o {self.build.out_optimized_dbg}"
@@ -389,13 +392,14 @@ class OptimizationSettings:
         # We mark any yielded Exceptions as cold and outline them into a cold section with a hot-cold split
         return "--hotcoldsplit-max-params=100 --hotcoldsplit-threshold=-1 --inline-cold-callsite-threshold=-10000 --enable-cold-section"
 
-    def opt_level(self, level):
+    @property
+    def opt_level(self):
         levels = {
             1:"hotcoldsplit,default<O1>",
             2:"hotcoldsplit,default<O2>",
             3:"hotcoldsplit,default<O3>,default<O3>" # a pass so nice we run it twice
         }
-        return levels[level]
+        return levels[1] if self.debug_mode else levels[3]
 
     def attributor(self, mode="module"):
         # We --disable-tail-calls for the following reason:

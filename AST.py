@@ -116,15 +116,25 @@ class NodeInfo:
     line_number: int
 
     @property
+    def line(self):
+        if self.filepath.name in ["builtins.mini", "iteration.mini", "collection.mini", "core.mini"]:
+            return self.line_number + 3
+        return self.line_number
+
+    @property
     def id(self):
         if not self._id: self._id = random_letters(10)
         return self._id
 
     def __repr__(self):
-        return f"File {self.filepath.name}, line {self.line_number}"
+        with open(self.filepath, "r") as f: lines = f.readlines()
+        line = lines[self.line - 1]
+        return f"{line}\n\nFile {self.filepath.name}, line {self.line}"
 
     def __format__(self, format_spec):
-        return f"File {self.filepath.name}, line {self.line_number}"
+        with open(self.filepath, "r") as f: lines = f.readlines()
+        line = lines[self.line - 1]
+        return f"{line}\n\nFile {self.filepath.name}, line {self.line}"
 
 @dataclass
 class Node:
@@ -600,6 +610,10 @@ class FunctionLiteral(Expression):
     _return_type: TypeAttribute
     yield_type: TypeAttribute
 
+    @property
+    def definition(self):
+        return self
+
     def codegen(self, scope):
         if self.name in scope.comp_unit.codegenned: return
         body_scope = Scope(scope, method=self)
@@ -679,7 +693,7 @@ class Identifier(Expression):
         return FunctionIdentifier(self.info, self.name).codegen(scope)
 
     def disallow_self_in_init(self, scope):
-        if self.name == "self" and scope.method and scope.method.name == "init":
+        if self.name == "self" and scope.method and scope.method.definition.name == "init":
             raise Exception(f"{self.info}: Cannot refer to 'self' within .init() method, as self is not yet initialized")
 
     def ensure_previously_declared(self, scope):
@@ -1488,22 +1502,32 @@ class ObjectCreation(Expression):
     def deduce_type_parameters(self, simplified_type, arg_types, scope):
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
         cls = scope.classes[simplified_type.cls.data]
+        cls_type =  cls.type()
         behavior_candidates = [behavior for behavior in cls.behaviors if behavior.name == "init" and behavior.arity == len(self.arguments)]
         if len(behavior_candidates) == 0:
             raise Exception(f"{self.info}: No init method in class {simplified_type} matches the argument types {arg_types}")
         deduced_candidates = []
         for b in behavior_candidates:
             for m in b.methods:
-                class_scope_copy = Scope(scope)
-                for t, param_type in zip(arg_types, m.param_types()):
-                    matches = [anc for anc in scope.ancestors(t) if scope.matches(anc, param_type)]
-                    if len(matches) == 0: continue
-                    class_scope_copy.substitute(matches[0], param_type)
-                deduced_candidates.append(class_scope_copy.simplify(cls.type()))
-        valid_candidates = [c for c in deduced_candidates if "subtype" not in f"{c}"]
-        if len(valid_candidates) == 0 or len(valid_candidates) > 1:
+                param_types = m.param_types()
+                arg_ancestors = []
+                ok = True
+                for a,b in zip(arg_types, param_types):
+                    ancestors = scope.ancestors(a)
+                    matching_ancestor = next((anc for anc in ancestors if scope.matches(anc, b)), None)
+                    if not matching_ancestor:
+                        ok = False
+                        break
+                    arg_ancestors.append(matching_ancestor)
+                if not ok: continue
+                deduced_candidates.append(scope.specialize(param_types, arg_ancestors, cls_type))
+        if len(deduced_candidates) == 0 or len(deduced_candidates) > 1:
+            print(len(behavior_candidates))
+            print(deduced_candidates)
+            print(behavior_candidates)
             raise Exception(f"{self.info}: Could not deduce type parameters from {simplified_type}.new with argument types {arg_types}")
-        return valid_candidates[0]
+        #print(f"deduced type {deduced_candidates[0]} for {simplified_type}.new with argument types {arg_types}")
+        return deduced_candidates[0]
 
     def exprtype(self, scope):
         if self.type.cls.data == "Self":
@@ -1590,6 +1614,10 @@ class FunctionDef(Statement):
     body: BlockNode
     hasreturn: bool
 
+    @property
+    def definition(self):
+        return self
+
     def codegen(self, scope):
         if self.name in scope.comp_unit.codegenned: return
         scope.functions[self.name] = self
@@ -1666,9 +1694,7 @@ class MethodDef(Statement):
     def codegen(self, scope):
         #debug_print(f"codegenning {self.defining_class.name}.{self.name}")
         if self.qualified_name() in scope.comp_unit.codegenned: return
-
-        body_scope = Scope(scope, method=self)
-        for t in self.type_params: body_scope.add_alias(FatPtr.basic(t.label.data), t)
+        body_scope = Scope(scope)
         arg_types = scope.behavior.broad_param_types()
         self.wrap_self(body_scope)
         self.wrap_params(body_scope, arg_types)
@@ -1698,11 +1724,7 @@ class MethodDef(Statement):
         return self.defining_class.name+"_"+self.mangled_name
 
     def return_type(self):
-        temp_scope = self.defining_class._scope
-        for t in self.type_params: temp_scope.add_alias(FatPtr.basic(t.label.data), t)
-        ret_type = temp_scope.simplify(self._return_type)
-        temp_scope.validate_type(self.info, ret_type)
-        return ret_type
+        return self.defining_class._scope.simplify(self._return_type)
 
     def wrap_self(self, body_scope):
         body_block = body_scope.region.block
@@ -1747,40 +1769,9 @@ class MethodDef(Statement):
         if isinstance(self, AbstractMethodDef): overridden_methods = [x for x in overridden_methods if isinstance(x, AbstractMethodDef)]
         return overridden_methods
 
-    def enforce_override_rules(self, scope):
-        overridden_methods = self.overridden_methods()
-        overridden_arg_types = [scope.simplify(Union.from_list([self.defining_class._scope.simplify(meth.param_types()[k]) for meth in overridden_methods])) for k in range(self.arity)]
-        if len(overridden_methods) > 0 and any(not scope.subtype(param.type(scope), overridden_arg_types[k]) for (k, param) in enumerate(self.params)):
-            k, offender = next((k, param) for (k, param) in enumerate(self.params) if not scope.subtype(param.type(scope), overridden_arg_types[k]))
-            raise Exception(f"{self.info}: Overriding method {self.name} in class {self.defining_class}: parameter {offender.name} with type {offender.type(scope)} is not a subtype of overridden methods' parameters {overridden_arg_types[k]}.")
-        if self.return_type() and any(not meth.return_type() for meth in overridden_methods):
-            raise Exception(f"{self.info}: Overriding method {self.name} in class {self.defining_class} should not have a return type.")
-        if not self.return_type() and any(meth.return_type() for meth in overridden_methods):
-            raise Exception(f"{self.info}: Overriding method {self.name} in class {self.defining_class} should have a return type.")
-        if not self.return_type(): return
-        overridden_ret_type = scope.simplify(Union.from_list([self.defining_class._scope.simplify(meth.return_type()) for meth in overridden_methods]))
-        if len(overridden_methods) > 0 and not (scope.subtype(self.return_type(), overridden_ret_type) or any(scope.matches(anc, overridden_ret_type) for anc in scope.ancestors(self.return_type()))):
-            #debug_print(scope.ancestors(self.return_type())[1].type_params.data[0])
-            debug_print(self.defining_class._scope.aliases)
-            #debug_print(overridden_ret_type.type_params.data[0])
-            raise Exception(f"{self.info}: Overriding method {self.name} in class {self.defining_class}: return type {self.return_type()} not a subtype of overridden methods' return types {overridden_ret_type}.")
-
     def ensure_return_type(self, scope):
         if not self.hasreturn and self.return_type():
             raise Exception(f"{self.info}: Method declares return type {self.return_type()} yet has no return statement.")
-
-    def ensure_proper_init(self, body_scope):
-        for field in self.defining_class.fields():
-            if "@" not in field.declaration.name: continue
-            declared_type = field.type()
-            if field.declaration.name in body_scope.type_table and body_scope.subtype(body_scope.type_table[field.declaration.name], declared_type): continue
-            if declared_type == Nil () or isinstance(declared_type, Union) and Nil() in declared_type.types.data:
-                field_id = Identifier(NodeInfo(None, self.info.filepath, self.info.line_number), field.declaration.name)
-                initialization = Assignment(NodeInfo(None, self.info.filepath, self.info.line_number), field_id, NilLiteral(NodeInfo(None, self.info.filepath, self.info.line_number)))
-                self.body.statements.append(initialization)
-                continue
-            debug_print(f"field name in body type table? {field.declaration.name in body_scope.type_table}")
-            raise Exception(f"{self.info}: field {field.declaration.name} not properly initialized for class {body_scope.cls.name}. You may need to override this constructor.")
 
     def annotated_points_to_facts(self, body_scope, param_names):
         annotated_facts = self.defining_class.all_constraints()
@@ -1842,34 +1833,12 @@ class MethodDef(Statement):
     def check_setter_num_params(self):
         if self.name[0:5] != "_set_": return
         if self.name == "_set_index":
-            if len(self.params) == 2: return
-            raise Exception(f"{self.info}: Index setter method []= must take two parameters (index and value), not {len(self.params)}")
+            if len(self.params) > 1: return
+            raise Exception(f"{self.info}: Index setter method []= must take at least two parameters (index and value), not {len(self.params)}")
         if len(self.params) == 1: return
         raise Exception(f"{self.info}: Setter method {self.name.replace('_set_','') + '='} must take one parameter, not {len(self.params)}")
 
-    def check_duplicate_type_params(self, scope):
-        for t in self.type_params:
-            if t in scope.cls.type_parameters:
-                raise Exception(f"{self.info}: Method-scoped type parameter {t.label.data} cannot have the same name as class-scoped type parameter {scope.cls.name}.{t.label.data}")
-
-    def typeflow(self, scope):
-        if self.name[0].isupper():
-            raise Exception(f"{self.info}: Method names should not be capitalized.")
-        if self.name == "init" and self.return_type():
-            raise Exception(f'{self.info}: init should not return anything')
-
-        self.check_setter_num_params()
-        self.check_duplicate_type_params(scope)
-        body_scope = Scope(scope, method=self)
-        for t in self.type_params: body_scope.add_alias(FatPtr.basic(t.label.data), t)
-        self.enforce_override_rules(body_scope)
-        self_typ = body_scope.simplify(FatPtr.generic(self.defining_class.name, self.defining_class.type_parameters))
-        body_scope.type_table["self"] = self_typ
-        if self.name == "init":
-            body_scope.type_table.pop("self")
-            for key in [*body_scope.type_table.keys()]:
-                if "@" not in key: continue
-                body_scope.type_table.pop(key)
+    def typeflow_params(self, scope, body_scope):
         for param in self.params:
             if "@" not in param.name:
                 param.typeflow(body_scope)
@@ -1879,30 +1848,27 @@ class MethodDef(Statement):
                 raise Exception(f"{self.info}: field {param.name} does not exist in class {self.defining_class.name}")
             if not scope.subtype(param.type(self.defining_class._scope), field.type(body_scope)):
                 raise Exception(f"{self.info}: field {param.name} has type {field.type(body_scope)}, not {param.type(body_scope)}")
-            body_scope.type_table[param.name] = param.type(self.defining_class._scope)
+            body_scope.type_table[param.name] = param.type(body_scope)
+
+    def setup_init(self, body_scope):
+        if self.name != "init": return
+        if self.return_type():
+            raise Exception(f'{self.info}: init should not return anything')
+        body_scope.type_table.pop("self")
+        for key in [*body_scope.type_table.keys()]:
+            if "@" not in key: continue
+            body_scope.type_table.pop(key)
+
+    def enforce_capitalization(self):
+        if self.name[0].isupper():
+            raise Exception(f"{self.info}: Method names should not be capitalized.")
+
+    def typeflow(self, body_scope):
+        self.check_setter_num_params()
         self.body.typeflow(body_scope)
-        if self.name == "init": self.ensure_proper_init(body_scope)
-        #self.check_lifetime_constraints(body_scope)
-        self.ensure_return_type(scope)
 
     def param_types(self):
-        temp_scope = self.defining_class._scope
-        for t in self.type_params: temp_scope.add_alias(FatPtr.basic(t.label.data), t)
-        return [param.type(temp_scope) for param in self.params]
-
-    def mutually_confusable(self, other, scope):
-        if self.name != other.name or len(self.params) != len(other.params): return False
-        zipped_args = zip(self.param_types(), other.param_types())
-        for (a,b) in zipped_args:
-            if not isinstance(a, FatPtr) or not isinstance(b, FatPtr): continue
-            mock = ClassMock([a, b])
-            if not mock.c3_linearization_possible(scope): return False
-        return True
-
-    def confusable_set(self, others, scope):
-        confusable_set = {other for other in others if self.mutually_confusable(other, scope)}
-        confusable_set.add(self)
-        return confusable_set
+        return [param.type(self.defining_class._scope) for param in self.params]
 
     def __hash__(self):
         return hash(self.qualified_name())
@@ -1924,126 +1890,11 @@ class AbstractMethodDef(MethodDef):
         return hash(self.qualified_name())
 
 @dataclass
-class Method:
-    definition: MethodDef
-    cls: "ClassDef"
-    offset: int
-    _overridden_methods: List[MethodDef]
-
-    def symbol(self):
-        return SymbolRefAttr(self.definition.qualified_name())
-
-    def param_types(self):
-        return [self.cls._scope.simplify(t) for t in self.definition.param_types()]
-
-    def broad_param_types(self):
-        narrow = self.param_types()
-        broad = [*narrow]
-        temp_scope = Scope(self.cls._scope)
-        for definition in self.overridden_methods():
-            def_param_types = definition.param_types()
-            for k, t in enumerate(narrow): broad[k] = def_param_types[k]
-        return broad
-
-    def constraints(self):
-        constraints = [*chain.from_iterable((self.definition.constraints, *(defn.constraints for defn in self.overridden_methods())))]
-        if isinstance(self.definition, ClassMethodDef): return constraints
-        for param in self.definition.params:
-            if "@" not in param.name: continue
-            node_info = NodeInfo(None, self.definition.info.filepath, self.definition.info.line_number)
-            constraints.append(Constraint(node_info, "self", "<", param.name))
-        return constraints
-
-    def return_type(self):
-        return self.cls._scope.simplify(self.definition.return_type())
-
-    def broad_return_type(self):
-        broad = self.return_type()
-        temp_scope = Scope(self.cls._scope)
-        for definition in self.overridden_methods(): broad = definition.return_type()
-        return broad
-
-    def specialized_param_type_for(self, rec_typ, i, t, scope):
-        class_scope_copy = Scope(scope)
-        param_type = self.param_types()[i]
-
-        matches = [anc for anc in scope.ancestors(t) if scope.matches(anc, param_type)]
-        if len(matches) == 0: return False
-        class_scope_copy.substitute(matches[0], param_type)
-
-        unspecialized_rec_type = self.cls.type()
-        rec_typ_match = [anc for anc in scope.ancestors(rec_typ) if scope.matches(anc, unspecialized_rec_type)]
-        if len(rec_typ_match) > 0: class_scope_copy.substitute(rec_typ_match[0], unspecialized_rec_type)
-
-        return class_scope_copy.simplify(param_type)
-
-    def specialized_return_type(self, rec_typ, arg_types, scope):
-        class_scope_copy = Scope(scope)
-        ret_type = self.return_type()
-        param_types = self.param_types()
-
-        for arg_type, param_type in zip(arg_types, param_types):
-            matches = [anc for anc in scope.ancestors(arg_type) if scope.matches(anc, param_type)]
-            if len(matches) == 0: return False
-            class_scope_copy.substitute(matches[0], param_type)
-
-        unspecialized_rec_type = self.cls.type()
-        rec_typ_match = [anc for anc in scope.ancestors(rec_typ) if scope.matches(anc, unspecialized_rec_type)]
-        if len(rec_typ_match) > 0: class_scope_copy.substitute(rec_typ_match[0], unspecialized_rec_type)
-
-        return class_scope_copy.simplify(ret_type)
-
-    def applicable_for(self, rec_typ, i, t, scope):
-        specialized_param = self.specialized_param_type_for(rec_typ, i, t, scope)
-        if not specialized_param: return False
-        return scope.subtype(t, specialized_param)
-
-    def overridden_methods(self):
-        if self._overridden_methods: return self._overridden_methods
-        candidates = (definition for definition in self.cls.parents_methods() if definition.name == self.definition.name)
-        candidates = (definition for definition in candidates if definition.arity == self.definition.arity)
-        candidates = (candidate for candidate in candidates if self.definition.arity == 0 or all(a == self.cls._scope.simplify(candidate.defining_class._scope.simplify(b)) for (a,b) in zip(self.param_types(), candidate.param_types())))
-        if isinstance(self.definition, AbstractMethodDef):
-            candidates = (candidate for candidate in candidates if isinstance(candidate, AbstractMethodDef))
-        self._overridden_methods = [*candidates]
-        return self._overridden_methods
-
-    def is_override_of(self, other):
-        if self is other: return False
-        if self.definition.name != other.definition.name: return False
-        if self.definition.arity != other.definition.arity: return False
-        result = other.definition in self.overridden_methods()
-        return result
-
-    def is_superfluous(self, others):
-        param_types = self.param_types()
-        for i, t in enumerate(param_types):
-            types = t.types.data if isinstance(t, Union) else [t]
-            others_x = (other.param_types()[i] for other in others)
-            others_types = (x.types.data if isinstance(x, Union) else [x] for x in others_x)
-            others = [x for x, y in zip(others, others_types) if all(z in types for z in y)]
-        if len(others) == 0: return False
-        for i, t in enumerate(param_types):
-            types = t.types.data if isinstance(t, Union) else [t]
-            others_x = (other.param_types()[i] for other in others)
-            others_types = [*chain.from_iterable(x.types.data if isinstance(x, Union) else [x] for x in others_x)]
-            if all(tt in others_types for tt in types): continue
-            return False
-        #debug_print(f"{self} is superfluous")
-        return True
-
-    def __hash__(self):
-        return hash(self.definition.mangled_name + str(self.offset))
-
-    def __repr__(self):
-        return self.definition.parent_repr() + f"{self.offset})"
-
-@dataclass
 class ClassMethodDef(MethodDef):
 
     def codegen(self, scope):
         if self.qualified_name() in scope.comp_unit.codegenned: return
-        body_scope = Scope(scope, method=self)
+        body_scope = Scope(scope)
         arg_types = scope.behavior.broad_param_types()
         self.wrap_params(body_scope, arg_types)
         self.body.codegen(body_scope)
@@ -2123,20 +1974,26 @@ class ClassMethodDef(MethodDef):
         body_scope.assign_regions(var_mapping1, param_names)
         if not ok: raise Exception(f"{self.info}: {comment}")
 
-    def typeflow(self, scope):
+    def setup_init(self, body_scope):
+        if self.name == "init":
+            raise Exception(f"{self.info}: Class methods should not be named init")
+
+    def typeflow_params(self, scope, body_scope):
+        self.initialize_points_to(body_scope)
+        for i, param in enumerate(self.params):
+            if "@" in param.name:
+                raise Exception(f"{self.info}: cannot access instance field ({param.name}) in class method")
+            param.typeflow(body_scope)
+
+    def initialize_points_to(self, body_scope):
+        body_scope.points_to_facts = ConstraintSet(set())
+
+    def ensure_capitalization(self):
         if self.name[5].isupper():
             raise Exception(f"{self.info}: Method names should not be capitalized.")
-        self.enforce_override_rules(scope)
-        self.check_duplicate_type_params(scope)
-        body_scope = Scope(scope, method=self)
-        body_scope.points_to_facts = ConstraintSet(set())
-        if any("@" in param.name for param in self.params):
-            raise Exception(f"{self.info}: cannot access instance fields ({param.name}) in class methods")
-        for i, param in enumerate(self.params):
-            param.typeflow(body_scope)
+
+    def typeflow(self, body_scope):
         self.body.typeflow(body_scope)
-        #self.check_lifetime_constraints(body_scope)
-        self.ensure_return_type(scope)
 
     def parent_repr(self):
         return f"ClassMethod({self.name}, {self.param_types()}, "
@@ -2154,6 +2011,234 @@ class AbstractClassMethodDef(AbstractMethodDef, ClassMethodDef):
         return hash(self.qualified_name())
 
 @dataclass
+class Method:
+    definition: MethodDef
+    cls: "ClassDef"
+    offset: int
+    _overridden_methods: List[MethodDef]
+    _scope: Scope
+
+    @property
+    def scope(self):
+        if self._scope: return self._scope
+        self._scope = Scope(self.cls._scope, method=self)
+        self.add_type_parameters(self._scope)
+        return self._scope
+
+    @property
+    def type_params(self):
+        return self.definition.type_params
+
+    def codegen(self, scope):
+        self._scope = Scope(scope, method=self)
+        self.add_type_parameters(self._scope)
+        self.definition.codegen(self.scope)
+
+    def typeflow(self, scope):
+        self.definition.enforce_capitalization()
+        self.check_duplicate_type_params(scope)
+        self._scope = Scope(scope, method=self)
+        self.add_type_parameters(self._scope)
+        body_scope = Scope(self.scope, method=self)
+        self.add_self(body_scope)
+        self.definition.setup_init(body_scope)
+        self.definition.typeflow_params(scope, body_scope)
+        self.enforce_override_rules(body_scope)
+        self.definition.typeflow(body_scope)
+        self.ensure_proper_init(body_scope)
+        #self.definition.check_lifetime_constraints(body_scope)
+        self.definition.ensure_return_type(scope)
+
+    def ensure_proper_init(self, body_scope):
+        if self.definition.name != "init": return
+        if isinstance(self.definition, ClassMethodDef): return
+        for field in self.cls.fields():
+            if "@" not in field.declaration.name: continue
+            declared_type = field.type()
+            if field.declaration.name in body_scope.type_table and body_scope.subtype(body_scope.type_table[field.declaration.name], declared_type): continue
+            if declared_type == Nil () or isinstance(declared_type, Union) and Nil() in declared_type.types.data:
+                field_id = Identifier(NodeInfo(None, self.info.filepath, self.info.line_number), field.declaration.name)
+                initialization = Assignment(NodeInfo(None, self.info.filepath, self.info.line_number), field_id, NilLiteral(NodeInfo(None, self.info.filepath, self.info.line_number)))
+                self.body.statements.append(initialization)
+                continue
+            debug_print(f"field name in body type table? {field.declaration.name in body_scope.type_table}")
+            raise Exception(f"{self.definition.info}: field {field.declaration.name} not properly initialized for class {body_scope.cls.name}. You may need to override this constructor.")
+
+    def enforce_override_rules(self, scope):
+        overridden_methods = self.definition.overridden_methods()
+        if len(overridden_methods) == 0: return
+        overridden_arg_types = [scope.simplify(Union.from_list([self.cls._scope.simplify(meth.param_types()[k]) for meth in overridden_methods])) for k in range(self.definition.arity)]
+        if any(not scope.subtype(a,b) for a,b in zip(self.param_types(), overridden_arg_types)):
+            offender_index = next(i for i in range(self.definition.arity) if not scope.subtype(self.param_types()[i], overridden_arg_types[i]))
+            offender = self.definition.params[i]
+            offender_type = self.param_types()[i]
+            raise Exception(f"{self.info}: Overriding method {self.cls.name}.{self.definition.name}: parameter {offender.name} with type {offender_type} is not a subtype of overridden methods' parameters {overridden_arg_types[k]}.")
+        if self.return_type() and any(not meth.return_type() for meth in overridden_methods):
+            raise Exception(f"{self.info}: Overriding method {self.cls.name}.{self.definition.name} should not have a return type.")
+        if not self.return_type() and any(meth.return_type() for meth in overridden_methods):
+            raise Exception(f"{self.info}: Overriding method {self.cls.name}.{self.definition.name} should have a return type.")
+        if not self.return_type(): return
+        ret_types = [self.cls._scope.simplify(meth.return_type()) for meth in overridden_methods]
+        overridden_ret_type = scope.simplify(Union.from_list(ret_types))
+        is_direct_subtype = scope.subtype(self.return_type(), overridden_ret_type)
+        if is_direct_subtype: return
+        is_match = any(scope.matches(anc, overridden_ret_type) for anc in scope.ancestors(self.return_type()))
+        if is_match: return
+        #debug_print(scope.ancestors(self.return_type())[1].type_params.data[0])
+        debug_print(self.cls._scope.aliases)
+        #debug_print(overridden_ret_type.type_params.data[0])
+        raise Exception(f"{self.definition.info}: Overriding method {self.cls.name}.{self.definition.name}: return type {self.return_type()} not a subtype of overridden methods' return types {overridden_ret_type}.")
+
+    def mutually_confusable(self, other):
+        if self.definition.name != other.definition.name or len(self.definition.params) != len(other.definition.params): return False
+        zipped_args = zip(self.param_types(), other.param_types())
+        for (a,b) in zipped_args:
+            if not isinstance(a, FatPtr) or not isinstance(b, FatPtr): continue
+            mock = ClassMock([a, b])
+            if not mock.c3_linearization_possible(self.scope): return False
+        return True
+
+    def confusable_set(self, others, scope):
+        confusable_set = {other for other in others if self.mutually_confusable(other)}
+        confusable_set.add(self)
+        return confusable_set
+
+    def add_self(self, body_scope):
+        if isinstance(self.definition, ClassMethodDef): return
+        self_typ = body_scope.simplify(self.cls.type())
+        body_scope.type_table["self"] = self_typ
+
+    def check_duplicate_type_params(self, scope):
+        for t in self.type_params:
+            if t not in self.cls.type_parameters: continue
+            raise Exception(f"{self.definition.info}, {self.cls.info}: Method-scoped type parameter {t.label.data} cannot have the same name as class-scoped type parameter {scope.cls.name}.{t.label.data}")
+
+    def add_type_parameters(self, scope):
+        for t in self.type_params:
+            scope.add_alias(FatPtr.basic(t.label.data), t)
+        labels = [t.label for t in self.type_params]
+
+        # We want to alias overridden type parameters as well
+        overridden_methods = [m for m in self.definition.overridden_methods() if len(m.type_params) == len(self.type_params)]
+        overridden_methods = [m for m in overridden_methods if all(l1 == l2 for (l1, l2) in zip(labels, [t.label for t in m.type_params]))]
+        method_set = [self.definition, *overridden_methods]
+        
+        for i in range(len(method_set) - 1):
+            m1 = method_set[i]
+            m2 = method_set[i + 1]
+            for t1, t2 in zip(m1.type_params, m2.type_params):
+                scope.add_alias(t2, t1)
+                print(f"added alias from {t2} to {t1}")
+
+    def symbol(self):
+        return SymbolRefAttr(self.definition.qualified_name())
+
+    def param_types(self):
+        result = [self.scope.simplify(t) for t in self.definition.param_types()]
+        for t in result: self.scope.validate_type(self.definition.info, t)
+        return result
+
+    def broad_param_types(self):
+        narrow = self.param_types()
+        broad = [*narrow]
+        temp_scope = Scope(self.scope)
+        temp_scope.deconcretize()
+        for definition in self.overridden_methods():
+            def_param_types = definition.param_types()
+            for k, t in enumerate(narrow):
+                broad[k] = temp_scope.simplify(def_param_types[k])
+        return broad
+
+    def constraints(self):
+        constraints = [*chain.from_iterable((self.definition.constraints, *(defn.constraints for defn in self.overridden_methods())))]
+        if isinstance(self.definition, ClassMethodDef): return constraints
+        for param in self.definition.params:
+            if "@" not in param.name: continue
+            node_info = NodeInfo(None, self.definition.info.filepath, self.definition.info.line_number)
+            constraints.append(Constraint(node_info, "self", "<", param.name))
+        return constraints
+
+    def return_type(self):
+        result = self.scope.simplify(self.definition.return_type())
+        self.scope.validate_type(self.definition.info, result)
+        return result
+
+    def broad_return_type(self):
+        broad = self.return_type()
+        temp_scope = Scope(self.scope)
+        temp_scope.deconcretize()
+        for definition in self.overridden_methods():
+            broad = temp_scope.simplify(definition.return_type())
+        return broad
+
+    def specialized_param_type_for(self, rec_typ, i, t, scope):
+        param_type = self.param_types()[i]
+        formal_types = [self.cls.type(), param_type]
+        arg_ancestor = next((anc for anc in scope.ancestors(t) if scope.matches(anc, param_type)), None)
+        if not arg_ancestor: return None
+        concrete_types = [rec_typ, arg_ancestor]
+        return scope.specialize(formal_types, concrete_types, param_type)
+
+    def specialized_return_type(self, rec_typ, arg_types, scope):
+        ret_type = self.return_type()
+        param_types = self.param_types()
+        formal_types = [self.cls.type(), *param_types]
+        arg_ancestors = []
+        for arg_t, param_t in zip(arg_types, param_types):
+            nxt_ancestor = next((anc for anc in scope.ancestors(arg_t) if scope.matches(anc, param_t)), None)
+            if not nxt_ancestor: return None
+            arg_ancestors.append(nxt_ancestor)
+        concrete_types = [rec_typ, *arg_ancestors]
+        result = scope.specialize(formal_types, concrete_types, ret_type)
+        scope.validate_type(self.definition.info, result)
+        return result
+
+    def applicable_for(self, rec_typ, i, t, scope):
+        specialized_param = self.specialized_param_type_for(rec_typ, i, t, scope)
+        if not specialized_param: return False
+        return scope.subtype(t, specialized_param)
+
+    def overridden_methods(self):
+        if self._overridden_methods: return self._overridden_methods
+        candidates = (definition for definition in self.cls.parents_methods() if definition.name == self.definition.name)
+        candidates = (definition for definition in candidates if definition.arity == self.definition.arity)
+        candidates = (candidate for candidate in candidates if self.definition.arity == 0 or all(a == self.cls._scope.simplify(candidate.defining_class._scope.simplify(b)) for (a,b) in zip(self.param_types(), candidate.param_types())))
+        if isinstance(self.definition, AbstractMethodDef):
+            candidates = (candidate for candidate in candidates if isinstance(candidate, AbstractMethodDef))
+        self._overridden_methods = [*candidates]
+        return self._overridden_methods
+
+    def is_override_of(self, other):
+        if self is other: return False
+        if self.definition.name != other.definition.name: return False
+        if self.definition.arity != other.definition.arity: return False
+        result = other.definition in self.overridden_methods()
+        return result
+
+    def is_superfluous(self, others):
+        param_types = self.param_types()
+        for i, t in enumerate(param_types):
+            types = t.types.data if isinstance(t, Union) else [t]
+            others_x = (other.param_types()[i] for other in others)
+            others_types = (x.types.data if isinstance(x, Union) else [x] for x in others_x)
+            others = [x for x, y in zip(others, others_types) if all(z in types for z in y)]
+        if len(others) == 0: return False
+        for i, t in enumerate(param_types):
+            types = t.types.data if isinstance(t, Union) else [t]
+            others_x = (other.param_types()[i] for other in others)
+            others_types = [*chain.from_iterable(x.types.data if isinstance(x, Union) else [x] for x in others_x)]
+            if all(tt in others_types for tt in types): continue
+            return False
+        #debug_print(f"{self} is superfluous")
+        return True
+
+    def __hash__(self):
+        return hash(self.definition.mangled_name + str(self.offset))
+
+    def __repr__(self):
+        return self.definition.parent_repr() + f"{self.offset})"
+
+@dataclass
 class Behavior(Statement):
     name: str
     offset: int
@@ -2163,24 +2248,31 @@ class Behavior(Statement):
     cls: 'ClassDef'
     superfluous_methods: List[Method]
 
+    # I wonder if we should make a temp scope where we remove all TP -> Concrete type aliases
     def broad_param_types(self):
         param_type_sets = [method.broad_param_types() for method in self.methods]
-        top_scope = self.cls._scope.parent
-        result = [top_scope.simplify(Union.from_list([params[k] for params in param_type_sets])) for k in range(self.arity)]
+        temp_scope = Scope(self.cls._scope)
+        temp_scope.deconcretize()
+        result = [temp_scope.simplify(Union.from_list([params[k] for params in param_type_sets])) for k in range(self.arity)]
         return result
 
     def broad_return_type(self):
         if not self.methods[0].definition.return_type(): return None
-        top_scope = self.cls._scope.parent
-        result = top_scope.simplify(Union.from_list([method.broad_return_type() for method in self.methods]))
+        temp_scope = Scope(self.cls._scope)
+        temp_scope.deconcretize()
+        result = temp_scope.simplify(Union.from_list([method.broad_return_type() for method in self.methods]))
         return result
 
     def specialized_return_type(self, rec_typ, arg_types, scope):
+        temp_scope = Scope(self.cls._scope)
+        for m in self.methods:
+            for k,v in m.scope.aliases.items():
+                temp_scope.aliases[k] = v
         all_return_types = [method.specialized_return_type(rec_typ, arg_types, scope) for method in self.methods if method.definition.return_type()]
         #debug_print(all_return_types)
         all_return_types = [t for t in all_return_types if t]
         if len(all_return_types) == 0: return None
-        return self.cls._scope.simplify(Union.from_list(all_return_types))
+        return temp_scope.simplify(Union.from_list(all_return_types))
 
     def constraints(self):
         constraints = ConstraintSet(set())
@@ -2215,7 +2307,7 @@ class Behavior(Statement):
 
         behavior_scope = Scope(scope, behavior=self)
         for method in self.methods:
-            if method.definition.defining_class == self.cls: method.definition.codegen(behavior_scope)
+            if method.definition.defining_class == self.cls: method.codegen(behavior_scope)
             if method.definition.defining_class != self.cls and method.definition.defining_class.info.filepath != self.cls.info.filepath:
                 method.definition.interface_codegen(behavior_scope)
 
@@ -2298,7 +2390,7 @@ class Behavior(Statement):
         behavior_scope = Scope(scope, behavior=self)
         for method in self.methods:
             if method.definition.defining_class != self.cls: continue
-            method.definition.typeflow(behavior_scope)
+            method.typeflow(behavior_scope)
 
         #debug_print(f"Constructing Automaton for behavior {self.name}")
         self.automaton = Automaton.build(set(self.methods), self.cls._scope)
@@ -2317,6 +2409,7 @@ class Behavior(Statement):
                     if j == i: continue
                     types_j = {type_j} if not isinstance(type_j, Union) else {*type_j.types.data}
                     accepted_types = {*chain.from_iterable([m.specialized_param_type_for(rec_typ, j, jt, scope) for jt in types_j] for m in applicable_methods)}
+                    #print(f"acceptable types for {rec_typ}.{self.name} at index {j}: {accepted_types}")
                     workable = {x for x in types_j if any(scope.subtype(x, at) for at in accepted_types)}
                     if len(workable) == 0: return False
         return True
@@ -2551,6 +2644,9 @@ class ClassDef(Statement):
                 else:
                     raise Exception(f"Inconsistent hierarchy for class {self.name}.")
         
+        undeclared = next((sup for sup in self.direct_supertypes() if isinstance(sup, FatPtr) and sup.cls.data not in self._scope.classes), None)
+        if undeclared:
+            raise Exception(f"{self.info}: Supertype {undeclared.cls.data} has not been declared.")
         linearizations = [self._scope.classes[sup.cls.data].c3_linearization(sup.type_params.data if sup.type_params != NoneAttr() else []) for sup in self.direct_supertypes() if isinstance(sup, FatPtr)]
         linearizations.append(self.direct_supertypes())
         
@@ -2595,10 +2691,11 @@ class ClassDef(Statement):
 
     def initialize_behaviors(self):
         all_method_definitions = self.all_method_definitions()
-        confusable_sets = list(reversed({tuple(definition.confusable_set(all_method_definitions, self._scope)):definition for definition in reversed(all_method_definitions)}.keys()))
+        as_methods = [Method(definition, self, 0, None, None) for definition in all_method_definitions]
+        confusable_sets = list(reversed({tuple(m.confusable_set(as_methods, self._scope)):m for m in reversed(as_methods)}.keys()))
         self._behaviors = []
         for confusable_set in confusable_sets:
-            belonging_methods = [Method(definition, self, 0, None) for definition in confusable_set]
+            belonging_methods = [m for m in confusable_set]
             meth_name = belonging_methods[0].definition.name
             meth_arity = belonging_methods[0].definition.arity
             ty = ClassBehavior if len(meth_name) > 6 and meth_name[0:6] == "_Self_" else Behavior
@@ -2727,7 +2824,7 @@ class FieldDecl(VarDecl):
     defining_class: ClassDef
 
     def type(self, scope):
-        return self.defining_class._scope.simplify(self._type)
+        return scope.simplify(self.defining_class._scope.simplify(self._type))
 
     def ensure_capitalization(self):
         if self.name[1].isupper():
@@ -2787,7 +2884,9 @@ class Field:
         return "subtype" in self.declaration.scoped_name(self.cls._scope)
 
     def type(self):
-        return self.cls._scope.simplify(self.declaration.type(self.declaration.defining_class._scope))
+        result = self.declaration.type(self.cls._scope)
+        self.cls._scope.validate_type(self.declaration.info, result)
+        return result
 
     def symbol(self):
         return SymbolRefAttr(self.cls.name + "_field_" + self.declaration.name.replace("@",""))
@@ -3082,7 +3181,7 @@ class For(Statement):
 
     def typeflow(self, scope):
         node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for i in range(7)]
-        iterable_type = self.iterable.exprtype(scope)
+        iterable_type = scope.simplify(self.iterable.exprtype(scope))
         if isinstance(iterable_type, Tuple):
             cast_info = NodeInfo(None, self.info.filepath, self.info.line_number)
             self.iterable = TupleToArray(cast_info, self.iterable)
@@ -3121,9 +3220,9 @@ class Return(Statement):
     def typeflow(self, scope):
         if(not scope.method):
             raise Exception(f"{self.info}: can only have return statements in functions")
-        if(scope.method.return_type()):
+        if(scope.method.definition.return_type()):
             raise Exception(f"{self.info}: function declares a return type but returns no values")
-        scope.method.hasreturn = True
+        scope.method.definition.hasreturn = True
 
 @dataclass
 class ReturnValue(Return):
@@ -3131,7 +3230,7 @@ class ReturnValue(Return):
 
     def codegen(self, scope):
         retval_typ = scope.simplify(self.value.exprtype(scope))
-        broad_return_type = scope.behavior.broad_return_type() if scope.behavior else scope.method.return_type()
+        broad_return_type = scope.behavior.broad_return_type() if scope.behavior else scope.method.definition.return_type()
         cast = CastOp.make(self.value.codegen(scope), retval_typ, scope.simplify(broad_return_type))
         ret_op = ReturnOp.create(operands=[cast.results[0]])
         scope.region.last_block.add_ops([cast, ret_op])
@@ -3139,13 +3238,16 @@ class ReturnValue(Return):
     def typeflow(self, scope):
         if not scope.method:
             raise Exception(f"{self.info}: can only have return statements in functions")
-        if not scope.method.return_type():
+        if not scope.method.definition.return_type():
             raise Exception(f"{self.info}: function returns a value but does not declare a return type")
         ret_typ = scope.simplify(self.value.exprtype(scope))
-        if not scope.subtype(ret_typ, scope.simplify(scope.method.return_type())):
+        meth_ret_type = scope.simplify(scope.method.return_type())
+        direct_subtype = scope.subtype(ret_typ, meth_ret_type)
+        matches = scope.matches(ret_typ, meth_ret_type)
+        if not (direct_subtype or matches):
             raise Exception(f"{self.info}: returned value of invalid type: {ret_typ}. Should be subtype of {scope.method.return_type()}.")
         scope.points_to_facts.add(("ret", "==", self.value.info.id))
-        scope.method.hasreturn = True
+        scope.method.definition.hasreturn = True
 
 @dataclass
 class CoCreate(Expression):
@@ -3212,7 +3314,7 @@ class CoYield(Expression):
             return
         self_type = self.exprtype(scope)
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
-        to_type = exception_or_nil if not scope.method else scope.simplify(Union.from_list([scope.method.yield_type, Nil()]))
+        to_type = exception_or_nil if not scope.method else scope.simplify(Union.from_list([scope.method.definition.yield_type, Nil()]))
         arg_type = self.arg.exprtype(scope)
         cold = scope.subtype(arg_type, FatPtr.basic("Exception"))
         cast = CastOp.make(self.arg.codegen(scope), arg_type, to_type)

@@ -38,7 +38,7 @@ def parse(file_path) -> AST:
         with open(file_path) as f: import_text = f.read()
 
         # auto-include core.mini
-        if file_path.name not in ["builtins.mini", "iteration.mini", "core.mini"]:
+        if file_path.name not in ["builtins.mini", "iteration.mini", "collection.mini", "core.mini"]:
             import_text = "import core;\n\n" + import_text
 
         program = parser.parse(import_text)

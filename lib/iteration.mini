@@ -53,36 +53,36 @@ class Iterable[T] extends Container {
         return false;
     }
     #[ret.iterable == self]
-    def enumerate() -> Enumerable[T] {
-        return Enumerable{self};
+    def enumerate() -> Iterable[Pair[i32, T]] {
+        return Enumeration{self};
     }
     #[ret.iterable == self, ret.f == f]
-    def map[U](f : (T) -> U) -> MapIterable[T, U] {
+    def map[U](f : (T) -> U) -> Iterable[U] {
         return MapIterable{self, f};
     }
     #[ret.iterable == self, ret.f == f]
-    def filter(f : (T) -> Bool) -> FilterIterable[T] {
+    def filter(f : (T) -> Bool) -> Iterable[T] {
         return FilterIterable{self, f};
     }
     #[ret.first == self, ret.second == other]
-    def chain(other : Iterable[T]) -> ChainIterable[T] {
+    def chain(other : Iterable[T]) -> Iterable[T] {
         return ChainIterable{self, other};
     }
     #[ret.first == self, ret.second == other]
-    def interleave(other : Iterable[T]) -> InterleaveIterable[T] {
+    def interleave(other : Iterable[T]) -> Iterable[T] {
         return InterleaveIterable{self, other};
     }
     #[ret.first == self, ret.second == other]
-    def zip[U](other : Iterable[U]) -> ZipIterable[T, U] {
+    def zip[U](other : Iterable[U]) -> Iterable[Pair[T, U]] {
         return ZipIterable{self, other};
     }
     #[ret.first == self, ret.second == other]
-    def product[U](other : Iterable[U]) -> ProductIterable[T, U] {
+    def product[U](other : Iterable[U]) -> Iterable[Pair[T, U]] {
         return ProductIterable{self, other};
     }
 }
 
-class Enumerable[T] extends Iterable[Pair[i32, T]] {
+class Enumeration[T] extends Iterable[Pair[i32, T]] {
     @iterable : Iterable[T]
 
     def init(@iterable : Iterable[T]) {}

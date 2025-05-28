@@ -7,6 +7,7 @@ from gmpy2 import next_prime
 from xdsl.ir import Block, Region
 from xdsl.dialects import cf
 import random
+import copy
 import networkx as nx
 from dataclasses import dataclass
 from pathlib import Path
@@ -70,6 +71,7 @@ class Scope:
         self.symbol_table = parent.symbol_table.copy() if parent else {}
         self.type_table = parent.type_table.copy() if parent else {}
         self.aliases = parent.aliases.copy() if parent else {}
+        self.alias_graph = parent.alias_graph.copy() if parent else nx.DiGraph()
         self.allocations = parent.allocations.copy() if parent else {}
         self.points_to_facts = parent.points_to_facts.copy() if parent else ConstraintSet(set())
         self.parameterization_cache = parent.parameterization_cache.copy() if parent and parent.method else {}
@@ -100,7 +102,15 @@ class Scope:
 
     def add_alias(self, key, value):
         if key == value: return
+        self.alias_graph.add_edge(key, value)
+        alias_cycle = next(nx.simple_cycles(self.alias_graph), None)
+        if alias_cycle:
+            raise Exception(f"Cycle in aliases graph created with alias from {key} to {value}")
         self.aliases[key] = value
+
+    def remove_alias(self, key):
+        self.alias_graph.remove_edge(key, self.aliases[key])
+        del self.aliases[key]
 
     def subtype_inner(self, left, right):
         if self.simplify(left) != left:
@@ -142,7 +152,11 @@ class Scope:
 
     def subtype(self, left, right):
         if (left, right) in self.subtype_cache: return self.subtype_cache[(left, right)]
-        self.subtype_cache[(left, right)] = self.subtype_inner(left, right)
+        try:
+            self.subtype_cache[(left, right)] = self.subtype_inner(left, right)
+        except Exception as e:
+            print(f"Exception while trying to determine if {left} is a subtype of {right}")
+            raise e
         return self.subtype_cache[(left, right)]
 
     def constraints_of(self, typ):
@@ -180,19 +194,34 @@ class Scope:
             if not all(self.matches(a,b) for a,b in zipped):
                 raise Exception(f"{node_info}: Class {cls.name} cannot be instantiated with types {[*typ.type_params.data]}")
 
+    # is lhs a valid instantiation of rhs?
     def matches(self, left, right):
         if isinstance(left, FatPtr) and isinstance(right, FatPtr): return left.cls == right.cls
         if isinstance(left, Buffer): return isinstance(right, Buffer)
+        if isinstance(left, TypeParameter) and isinstance(right, TypeParameter):
+            return self.subtype(left.bound, right.bound)
         if isinstance(right, TypeParameter): return self.subtype(left, right.bound)
         if isinstance(left, Tuple) and isinstance(right, Tuple):
             same_len = len(left.types.data) == len(right.types.data)
             return same_len and all(self.matches(l,r) for (l,r) in zip(left.types.data, right.types.data))
+        if isinstance(right, Union):
+            if not isinstance(left, Union): return False
+            # If there's more than one unbound type parameter in the rhs we give up immediately
+            if len([t for t in right.types.data if isinstance(t, TypeParameter)]) > 1:
+                return False
+            if any(not self.subtype(t, left) for t in right.types.data if not isinstance(t, TypeParameter)): return False
+            # Obviously not correct; just a cop-out
+            return True
         if isinstance(left, Function) and isinstance(right, Function):
             same_len = len(left.param_types.data) == len(right.param_types.data)
-            return same_len and self.matches(left.return_type, right.return_type) and all(self.matches(l,r) for (l,r) in zip(left.param_types.data, right.param_types.data))
+            matched_return = self.matches(left.return_type, right.return_type)
+            matched_params = same_len and all(self.matches(l,r) for (l,r) in zip(left.param_types.data, right.param_types.data))
+            return matched_return and matched_params
         return left == right
 
+    # Given that lhs is a valid instantiation of rhs, add the aliases needed to transform rhs into lhs
     def substitute(self, left, right):
+        left = next(anc for anc in self.ancestors(left) if self.matches(anc, right))
         if isinstance(right, TypeParameter) and left != right: return self.add_alias(right, left)
         if isinstance(right, Buffer): return self.substitute(left.elem_type, right.elem_type)
         if isinstance(right, FatPtr) and right.type_params == NoneAttr(): return None
@@ -202,6 +231,29 @@ class Scope:
             [self.substitute(l,r) for (l,r) in zip(left.param_types.data, right.param_types.data)]
             return self.substitute(left.return_type, right.return_type)
         return None
+
+    # Assmues that matches(new, old) == True
+    def substitute_random(self, new, old) -> dict:
+        if not self.matches(new, old):
+            raise Exception(F'{new} foes not match {old}')
+        if isinstance(old, TypeParameter):
+            rand_name = FatPtr.basic(random_letters(10))
+            self.add_alias(old, rand_name)
+            return {rand_name:new}
+        if isinstance(old, Buffer):
+            return self.substitute_random(new.elem_type, old.elem_type)
+        if isinstance(old, FatPtr) and old.type_params == NoneAttr():
+            return {}
+        if isinstance(old, FatPtr):
+            zipped = zip(new.type_params.data, old.type_params.data)
+            return {k:v for k,v in chain.from_iterable(self.substitute_random(l,r).items() for (l,r) in zipped)}
+        if isinstance(old, Tuple):
+            zipped = zip(new.types.data, old.types.data)
+            return {k:v for k,v in chain.from_iterable(self.substitute_random(l,r).items() for (l,r) in zipped)}
+        if isinstance(old, Function):
+            zipped = zip([new.return_type, *new.param_types.data], [old.return_type, *old.param_types.data])
+            return {k:v for k,v in chain.from_iterable(self.substitute_random(l,r).items() for (l,r) in zipped)}
+        return {}
 
     def offset_to(self, from_typ, to_typ):
         if from_typ in builtin_types.values() or to_typ in builtin_types.values(): return 0
@@ -254,9 +306,7 @@ class Scope:
             corresponding_formal_tp = t_cls.type_parameters[type_index(first_arg_with_type, typ)[0]]
             t_field = t_cls.type_field_of(corresponding_formal_tp)
             offset = IntegerAttr.from_int_and_width(t_field.offset, IntegerType(64))
-            method_scope = self
-            while method_scope.parent and method_scope.parent.method and method_scope.parent.method == self.method:
-                method_scope = method_scope.parent
+            method_scope = self.method_def_scope()
             wrapped = WrapOp.make(method_scope.region.block.args[len(method_scope.region.block.args) - len(self.method.param_types()) + i])
             attr_dict = {"offset":offset, "vtable_bytes":IntegerAttr.from_int_and_width(self.cls.vtable_size() * 8, 32)}
             field_acc = GetTypeFieldOp.create(operands=[wrapped.results[0]], attributes=attr_dict, result_types=[ReifiedType()])
@@ -286,6 +336,21 @@ class Scope:
         self.region.last_block.add_op(parameterization)
         self.parameterization_cache[typ] = parameterization.results[0]
         return parameterization.results[0]
+
+    def parent_has_method(self):
+        return self.parent and self.parent.method and self.parent.method == self.method
+
+    def method_scope(self):
+        method_scope = self
+        while method_scope.parent_has_method():
+            method_scope = method_scope.parent
+        return method_scope
+
+    def method_def_scope(self):
+        method_scope = self
+        while method_scope.parent_has_method() and method_scope.parent.parent_has_method():
+            method_scope = method_scope.parent
+        return method_scope
 
     def build_hashtable(self, typ):
         EMPTY = 2**64 - 1
@@ -346,9 +411,39 @@ class Scope:
         print(f"ancestors are: {self.ancestors(typ)}")
         raise Exception(f"could not build hash table for type {typ}.")
 
+    # Simplify the target type given the implicit mapping between formal types and concrete types
+    def specialize(self, formal_types, concrete_types, target_type):
+        temp_scope = Scope(self)
+
+        # formal types are obtained from the formal param / return types of a method
+        # Or from the formal type parameters of a class
+        # concrete types are obtained from the argument types and receiver type
+
+        # for each formal/concrete pair,
+        # map each replaced type parameter to a random name
+
+        # then, simplify the target type to be in terms of the those random names
+
+        # remove the previously added mappings
+        # Add mapping from the random names to the concrete type parameters
+        # Simplify the target in terms of the new mapping
+
+        mapping = {}
+        for ct, ft in zip(concrete_types, formal_types):
+            #if not temp_scope.matches(ct, ft):
+            #    raise Exception(f"{ct} does not match {ft}")
+            # substitute ct for ft
+            mapping = mapping | temp_scope.substitute_random(ct, ft)
+
+        target_type = temp_scope.simplify(target_type)
+        temp_scope = Scope(self)
+        for rand_name, concrete_type in mapping.items():
+            temp_scope.add_alias(rand_name, concrete_type)
+        return temp_scope.simplify(target_type)
+
     def ancestors(self, typ: TypeAttribute):
-        if typ == Nil(): return [typ, Any()]
         if typ == Any(): return [typ]
+        if typ == Nil(): return [typ, Any()]
         if typ in builtin_types.values(): return [typ, FatPtr.basic("Object"), Any()]
         if isinstance(typ, Tuple): return [typ, FatPtr.basic("Object"), Any()]
         if isinstance(typ, Buffer): return [typ, FatPtr.basic("Object"), Any()]
@@ -356,9 +451,14 @@ class Scope:
         if isinstance(typ, Union):
             #ancestor_groups = [set(self.ancestors(element)) for element in typ.types.data]
             #common_ancestors = functools.reduce(lambda a,b: a.intersection(b), ancestor_groups)
-            return [*chain.from_iterable(self.ancestors(element) for element in typ.types.data)]
+            ancestors = [self.ancestors(element) for element in typ.types.data]
+            prod = product(*ancestors)
+            return [self.simplify(Union.from_list([*tup])) for tup in prod]
         if isinstance(typ, Intersection): raise Exception("not yet implemented ancestors() for Intersection")
         if isinstance(typ, FatPtr):
+            original_type = typ
+            typ = self.simplify(typ)
+            
             if typ.cls.data not in self.classes:
                 print(f" problem is {typ}")
                 raise Exception(self.classes)
@@ -368,12 +468,16 @@ class Scope:
             # we want to find ancestors of a parameterized type
             # to do so, we need to replace formal type parameters with concrete ones
             # 
-            temp_scope = Scope(self)
             cls = self.classes[typ.cls.data]
-            if len(typ.type_params.data) != len(cls.type_parameters):
-                raise Exception(f"number of type parameters of {typ} is different from class {cls.name}")
-            for i, t in enumerate(typ.type_params.data): temp_scope.add_alias(cls.type_parameters[i], t)
-            return [temp_scope.simplify(anc) for anc in cls.ancestors()]
+            temp_scope = Scope(cls._scope.parent)
+            typ = temp_scope.simplify(typ)
+
+            formal_types = [cls.type()]
+            concrete_types = [typ]
+            ancestors = [temp_scope.specialize(formal_types, concrete_types, anc) for anc in cls.ancestors()]
+            ancestors = [self.simplify(anc) for anc in ancestors]
+            print(f"ancestors of {original_type} are {ancestors}")
+            return ancestors
 
         if isinstance(typ, TypeParameter): return [typ, *self.ancestors(typ.bound)]
         raise Exception(f"can't find ancestors for {typ}")
@@ -381,27 +485,29 @@ class Scope:
     def all_types(self):
         return [*builtin_types.values(), *[FatPtr.basic(name) for name in self.classes.keys()]]
 
-    def flat_type_list(self, typ):
-        if isinstance(typ, Union) or isinstance(typ, Tuple):
-            type_lists = (self.flat_type_list(t) for t in typ.types.data)
-            return [typ, *chain.from_iterable(type_lists)]
-        if not isinstance(typ, FatPtr) or typ.type_params == NoneAttr(): return [typ]
-        type_lists = (self.flat_type_list(t) for t in typ.type_params.data)
-        return [typ, *chain.from_iterable(type_lists)]
+    # remove all aliases from type parameters to concrete types
+    def deconcretize(self):
+        aliases = self.aliases.copy()
+        for k,v in aliases.items():
+            if not isinstance(k, TypeParameter): continue
+            if isinstance(v, TypeParameter): continue
+            self.remove_alias(k)
 
     # Simplify a type to Disjunctive Normal Form (DNF)
     def simplify(self, typ: TypeAttribute) -> TypeAttribute:
+        #print(f"simplifying {typ}")
         cache_key = (typ, frozenset(self.aliases.items()))
         if cache_key in self.simplify_cache:
+            #print(f"simplified {typ} to {self.simplify_cache[cache_key]}")
             return self.simplify_cache[cache_key]
-            
         result = self.simplify_inner(typ)
         self.simplify_cache[cache_key] = result
+        #print(f"simplified {typ} to {self.simplify_cache[cache_key]}")
         return result
 
     def simplify_inner(self, typ: TypeAttribute) -> TypeAttribute:
 
-        if typ in self.aliases.keys(): return self.simplify(self.aliases[typ])
+        if typ in self.aliases: return self.simplify(self.aliases[typ])
 
         if isinstance(typ, FatPtr) and FatPtr.basic(typ.cls.data) in self.aliases.keys():
             return FatPtr([self.aliases[FatPtr.basic(typ.cls.data)].cls, typ.type_params])
@@ -432,6 +538,8 @@ class Scope:
             flattened = {s for s in flattened if (not any(((self.subtype(s, s2)) and (not self.subtype(s2, s))) for s2 in flattened))} # merge subtypes
             if len(list(flattened)) == 1: return list(flattened)[0] # A union of one type is just that type
             if len(list(flattened)) == 0: return Nothing()
+            print(f"simplified {typ} to {Union.from_list(list(flattened))}")
+            #print(f"with aliases {self.aliases}")
             return Union.from_list(list(flattened)) # Union is associative
         
         if isinstance(typ, Intersection):

@@ -71,10 +71,14 @@ class TypeParameter(ParametrizedAttribute, TypeAttribute):
         return self.bound.symbol()
 
     def __repr__(self):
-        return f"{self.defining_class.data}.{self.label.data} <: {self.bound}"
+        result = f"{self.defining_class.data}.{self.label.data}"
+        if self.bound != Any(): result = f"{result} <: {self.bound}"
+        return result
 
     def __format__(self, format_spec):
-        return f"{self.defining_class.data}.{self.label.data} <: {self.bound}"
+        result = f"{self.defining_class.data}.{self.label.data}"
+        if self.bound != Any(): result = f"{result} <: {self.bound}"
+        return result
 
     def __eq__(self, other):
         if not isinstance(other, TypeParameter): return False
@@ -215,20 +219,32 @@ class Tuple(ParametrizedAttribute, TypeAttribute):
     name = "hi.tuple"
     types: ParameterDef[ArrayAttr]
 
+    @property
+    def is_homogenous(self):
+        return len(set(self.types.data)) == 1
+
+    @property
+    def vector_like(self):
+        if not self.is_homogenous: return False
+        is_numeric = isinstance(self.types.data[0], Integer) or isinstance(self.types.data[0], Float)
+        return is_numeric
+
     def base_typ(self):
-        homogenous_types = len(set(self.types.data)) == 1
         # A tuple of homogenous integers or floats can be lowered to a vector
-        if homogenous_types and (isinstance(self.types.data[0], Integer) or isinstance(self.types.data[0], Float)):
-            return builtin.VectorType(self.types.data[0].base_typ(), [len(self.types.data)])
+        if self.vector_like: return builtin.VectorType(self.types.data[0].base_typ(), [len(self.types.data)])
         return llvm.LLVMStructType.from_type_list([t.base_typ() for t in self.types.data])
 
     def symbol(self):
         return StringAttr("tuple_typ")
 
     def __repr__(self):
+        if self.is_homogenous and len(self.types.data) > 2:
+            return f"Tuple[{len(self.types.data)} x {self.types.data[0]}]"
         return f"Tuple[{self.types.data}]"
 
     def __format__(self, format_spec):
+        if self.is_homogenous and len(self.types.data) > 2:
+            return f"Tuple[{len(self.types.data)} x {self.types.data[0]}]"
         return f"Tuple[{self.types.data}]"
 
 @irdl_attr_definition
