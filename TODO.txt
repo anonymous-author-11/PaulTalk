@@ -452,6 +452,7 @@ DONE:
 
 TODO:
 
+- Ancestors of String are not correct (should be Iterable[Character] not Iterable[Collection.T])
 - Define scope.matches for union types [check!]
 - Since @first is Collection[ProductIterator.T], its .iterator() should be Iterator[ProductIterator.T], not Iterator[Iterator.T]
 	- This is caused by return types being simplified immediately
@@ -461,15 +462,15 @@ TODO:
 	- When type parameters are specialized, they can get smaller
 	- We need the ABI of overriding functions to be comptabible with the overridden
 	- So we need to track the "broad" signature of specialized overrides
-- Need to alias method-scoped type parameters in overrides
+- Need to alias method-scoped type parameters in overrides [check!]
 - Records: why not?
 	- Idea: casting between these works seamlessly, unlike tuples
 	- Their allocated size is dynamic
-	- Indexing would need to run specialized code to calculate the offset
+	- Blocker: Indexing would need to run specialized code to calculate the offset
 - Nested loops take WAY too long to type check
 	- It's exponential time complexity
 	- Need to cache results of typeflow for each loop
-- Index setter shouldn't be hardcoded to one index
+- Index setter shouldn't be hardcoded to one index [check!]
 	- I'd like to be able to do mat[i,j] = val;
 - We do not properly account for break/continue in typeflow
 	- We should probably move to a cfg
@@ -481,7 +482,7 @@ TODO:
 	- What about cast-assigning before breaks/continue's?
 - I really want type narrowing in alternative branches
 	- And 'is not' syntax
-	- And narrowing within logical ops
+	- And narrowing within logical and/or ops
 	- And 'while' with a type check condition not polluting the main path
 - Snprintf can convert things to string representations
 - I should be able to declare variadic extern defs

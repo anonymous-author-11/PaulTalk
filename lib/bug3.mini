@@ -1,0 +1,6 @@
+import std;
+
+file = File{"bigtings.txt", "rb"};
+fr = FileReader{} as FileProcessor[String];
+txt = fr.process(file);
+IO.print(txt);

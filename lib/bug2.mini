@@ -1,0 +1,9 @@
+import std;
+
+add = (a : i32, b : i32) => { a + b; };
+
+v = (1...15).map((x : i32) => { x * x; })
+    .filter((x : i32) => { x % 2 == 0; })
+    .reduce(0, add);
+
+IO.print(v);

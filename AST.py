@@ -118,7 +118,7 @@ class NodeInfo:
     @property
     def line(self):
         if self.filepath.name in ["builtins.mini", "iteration.mini", "collection.mini", "core.mini"]:
-            return self.line_number + 3
+            return self.line_number + 2
         return self.line_number
 
     @property
@@ -2057,9 +2057,11 @@ class Method:
             declared_type = field.type()
             if field.declaration.name in body_scope.type_table and body_scope.subtype(body_scope.type_table[field.declaration.name], declared_type): continue
             if declared_type == Nil () or isinstance(declared_type, Union) and Nil() in declared_type.types.data:
-                field_id = Identifier(NodeInfo(None, self.info.filepath, self.info.line_number), field.declaration.name)
-                initialization = Assignment(NodeInfo(None, self.info.filepath, self.info.line_number), field_id, NilLiteral(NodeInfo(None, self.info.filepath, self.info.line_number)))
-                self.body.statements.append(initialization)
+                node_infos = [NodeInfo(None, self.definition.info.filepath, self.definition.info.line_number) for i in range(3)]
+                field_id = Identifier(node_infos[0], field.declaration.name)
+                nil = NilLiteral(node_infos[1])
+                initialization = Assignment(node_infos[2], field_id, nil)
+                self.definition.body.statements.append(initialization)
                 continue
             debug_print(f"field name in body type table? {field.declaration.name in body_scope.type_table}")
             raise Exception(f"{self.definition.info}: field {field.declaration.name} not properly initialized for class {body_scope.cls.name}. You may need to override this constructor.")
@@ -2070,13 +2072,14 @@ class Method:
         overridden_arg_types = [scope.simplify(Union.from_list([self.cls._scope.simplify(meth.param_types()[k]) for meth in overridden_methods])) for k in range(self.definition.arity)]
         if any(not scope.subtype(a,b) for a,b in zip(self.param_types(), overridden_arg_types)):
             offender_index = next(i for i in range(self.definition.arity) if not scope.subtype(self.param_types()[i], overridden_arg_types[i]))
-            offender = self.definition.params[i]
-            offender_type = self.param_types()[i]
-            raise Exception(f"{self.info}: Overriding method {self.cls.name}.{self.definition.name}: parameter {offender.name} with type {offender_type} is not a subtype of overridden methods' parameters {overridden_arg_types[k]}.")
+            offender = self.definition.params[offender_index]
+            offender_type = self.param_types()[offender_index]
+            overridden_arg = overridden_arg_types[offender_index]
+            raise Exception(f"{self.definition.info}: Overriding method {self.cls.name}.{self.definition.name}: parameter {offender.name} with type {offender_type} is not a subtype of overridden methods' parameters {overridden_arg}.")
         if self.return_type() and any(not meth.return_type() for meth in overridden_methods):
-            raise Exception(f"{self.info}: Overriding method {self.cls.name}.{self.definition.name} should not have a return type.")
+            raise Exception(f"{self.definition.info}: Overriding method {self.cls.name}.{self.definition.name} should not have a return type.")
         if not self.return_type() and any(meth.return_type() for meth in overridden_methods):
-            raise Exception(f"{self.info}: Overriding method {self.cls.name}.{self.definition.name} should have a return type.")
+            raise Exception(f"{self.definition.info}: Overriding method {self.cls.name}.{self.definition.name} should have a return type.")
         if not self.return_type(): return
         ret_types = [self.cls._scope.simplify(meth.return_type()) for meth in overridden_methods]
         overridden_ret_type = scope.simplify(Union.from_list(ret_types))
@@ -2139,11 +2142,14 @@ class Method:
         return result
 
     def broad_param_types(self):
-        temp_scope = Scope(self.scope)
-        temp_scope.deconcretize()
-        broad = [temp_scope.simplify(t) for t in self.param_types()]
-        for definition in self.overridden_methods():
-            broad = [temp_scope.simplify(t) for t in definition.param_types()]
+        broad = [param._type for param in self.definition.params]
+        self_temp_scope = Scope(self.scope)
+        self_temp_scope.deconcretize()
+        for definition in [self.definition, *self.overridden_methods()]:
+            temp_scope = Scope(definition.defining_class._scope)
+            temp_scope.deconcretize()
+            broad = [temp_scope.simplify(param._type) for param in definition.params]
+            broad = [self_temp_scope.simplify(t) for t in broad]
         return broad
 
     def constraints(self):
@@ -2161,11 +2167,14 @@ class Method:
         return result
 
     def broad_return_type(self):
-        temp_scope = Scope(self.scope)
-        temp_scope.deconcretize()
-        broad = temp_scope.simplify(self.return_type())
-        for definition in self.overridden_methods():
-            broad = temp_scope.simplify(definition.return_type())
+        broad = self.definition._return_type
+        self_temp_scope = Scope(self.scope)
+        self_temp_scope.deconcretize()
+        for definition in [self.definition, *self.overridden_methods()]:
+            temp_scope = Scope(definition.defining_class._scope)
+            temp_scope.deconcretize()
+            broad = temp_scope.simplify(definition._return_type)
+            broad = self_temp_scope.simplify(broad)
         return broad
 
     def specialized_param_type_for(self, rec_typ, i, t, scope):
@@ -2174,7 +2183,8 @@ class Method:
         arg_ancestor = next((anc for anc in scope.ancestors(t) if scope.matches(anc, param_type)), None)
         if not arg_ancestor: return None
         concrete_types = [rec_typ, arg_ancestor]
-        return scope.specialize(formal_types, concrete_types, param_type)
+        result = scope.specialize(formal_types, concrete_types, param_type)
+        return result
 
     def specialized_return_type(self, rec_typ, arg_types, scope):
         ret_type = self.return_type()
@@ -2183,7 +2193,7 @@ class Method:
         arg_ancestors = []
         for arg_t, param_t in zip(arg_types, param_types):
             nxt_ancestor = next((anc for anc in scope.ancestors(arg_t) if scope.matches(anc, param_t)), None)
-            if not nxt_ancestor: return None
+            if not nxt_ancestor: return False
             arg_ancestors.append(nxt_ancestor)
         concrete_types = [rec_typ, *arg_ancestors]
         result = scope.specialize(formal_types, concrete_types, ret_type)
@@ -2408,10 +2418,9 @@ class Behavior(Statement):
             for t in types:
                 applicable_methods = [m for m in self.methods if m.applicable_for(rec_typ, i, t, scope)]
                 for j, type_j in enumerate(arg_types):
-                    if j == i: continue
+                    #if j == i: continue
                     types_j = {type_j} if not isinstance(type_j, Union) else {*type_j.types.data}
                     accepted_types = {*chain.from_iterable([m.specialized_param_type_for(rec_typ, j, jt, scope) for jt in types_j] for m in applicable_methods)}
-                    #print(f"acceptable types for {rec_typ}.{self.name} at index {j}: {accepted_types}")
                     workable = {x for x in types_j if any(scope.subtype(x, at) for at in accepted_types)}
                     if len(workable) == 0: return False
         return True
@@ -3233,7 +3242,7 @@ class ReturnValue(Return):
     def codegen(self, scope):
         retval_typ = scope.simplify(self.value.exprtype(scope))
         broad_return_type = scope.behavior.broad_return_type() if scope.behavior else scope.method.definition.return_type()
-        cast = CastOp.make(self.value.codegen(scope), retval_typ, scope.simplify(broad_return_type))
+        cast = CastOp.make(self.value.codegen(scope), retval_typ, broad_return_type)
         ret_op = ReturnOp.create(operands=[cast.results[0]])
         scope.region.last_block.add_ops([cast, ret_op])
 

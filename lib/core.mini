@@ -8,7 +8,7 @@ class Representable {
     def repr() -> String { return "Object"; }
 }
 
-class String extends Iterable[Character], Representable {
+class String extends Collection[Character], Representable {
     @bytes : Buffer[i8]
     @length : i32
     @capacity: i32
@@ -37,6 +37,8 @@ class String extends Iterable[Character], Representable {
 
     def length() -> i32 { return @length; }
     def capacity() -> i32 { return @capacity; }
+
+    def size() -> i32 { return @length; }
 
     def c_string() -> Buffer[i8] {
         buf = Buffer[i8].new(@length + 1);

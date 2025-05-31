@@ -78,7 +78,9 @@ class Scope:
         self.classes = parent.classes if parent else {}
         self.functions = parent.functions if parent else {}
         self.subtype_cache = parent.subtype_cache if parent else {}
+        self.matches_cache = parent.matches_cache if parent else {}
         self.simplify_cache = parent.simplify_cache if parent else {}
+        self.ancestors_cache = parent.ancestors_cache if parent else {}
         self.parent = parent
         self.cls = cls
         self.method = method
@@ -142,6 +144,7 @@ class Scope:
         if isinstance(left, TypeParameter): return self.subtype(left.bound, right)
         if isinstance(right, TypeParameter): return left == right
         if isinstance(right, FatPtr):
+            if isinstance(left, FatPtr) and not left.cls.data in self.classes: return False
             return left == right or right in self.ancestors(left)
         if isinstance(left, Tuple):
             if not isinstance(right, Tuple): return False
@@ -194,10 +197,19 @@ class Scope:
             if not all(self.matches(a,b) for a,b in zipped):
                 raise Exception(f"{node_info}: Class {cls.name} cannot be instantiated with types {[*typ.type_params.data]}")
 
-    # is lhs a valid instantiation of rhs?
     def matches(self, left, right):
+        if (left, right) in self.matches_cache: return self.matches_cache[(left, right)]
+        result = self.matches_inner(left, right)
+        self.matches_cache[(left, right)] = result
+        #modifier = "not " if not result else ""
+        #print(f"{left} does {modifier}match {right}")
+        return self.matches_cache[(left, right)]
+
+    # is lhs a valid instantiation of rhs?
+    def matches_inner(self, left, right):
         if isinstance(left, FatPtr) and isinstance(right, FatPtr): return left.cls == right.cls
-        if isinstance(left, Buffer): return isinstance(right, Buffer)
+        if isinstance(left, Buffer):
+            return isinstance(right, Buffer) and self.matches(left.elem_type, right.elem_type)
         if isinstance(left, TypeParameter) and isinstance(right, TypeParameter):
             return self.subtype(left.bound, right.bound)
         if isinstance(right, TypeParameter): return self.subtype(left, right.bound)
@@ -206,11 +218,11 @@ class Scope:
             return same_len and all(self.matches(l,r) for (l,r) in zip(left.types.data, right.types.data))
         if isinstance(right, Union):
             if not isinstance(left, Union): return False
-            # If there's more than one unbound type parameter in the rhs we give up immediately
-            if len([t for t in right.types.data if isinstance(t, TypeParameter)]) > 1:
-                return False
-            if any(not self.subtype(t, left) for t in right.types.data if not isinstance(t, TypeParameter)): return False
-            # Obviously not correct; just a cop-out
+            # See if every type in the lhs can be greedily matched with a type in the rhs
+            for t1 in left.types.data:
+                next_match = next((t2 for t2 in right.types.data if self.matches(t1, t2) or self.subtype(t1, t2)), None)
+                if not next_match: return False
+                right = Union.from_list([t for t in right.types.data if t != next_match])
             return True
         if isinstance(left, Function) and isinstance(right, Function):
             same_len = len(left.param_types.data) == len(right.param_types.data)
@@ -226,6 +238,13 @@ class Scope:
         if isinstance(right, Buffer): return self.substitute(left.elem_type, right.elem_type)
         if isinstance(right, FatPtr) and right.type_params == NoneAttr(): return None
         if isinstance(right, FatPtr): return [self.substitute(l,r) for (l,r) in zip(left.type_params.data, right.type_params.data)]
+        # Greedily match and substitute elements of the unions
+        if isinstance(right, Union):
+            for t1 in left.types.data:
+                next_match = next((t2 for t2 in right.types.data if self.matches(t1, t2)), None)
+                if not next_match: continue
+                right = Union.from_list([t for t in right.types.data if t != next_match])
+                self.substitute(t1, next_match)
         if isinstance(right, Tuple): return [self.substitute(l,r) for (l,r) in zip(left.types.data, right.types.data)]
         if isinstance(right, Function):
             [self.substitute(l,r) for (l,r) in zip(left.param_types.data, right.param_types.data)]
@@ -235,7 +254,7 @@ class Scope:
     # Assmues that matches(new, old) == True
     def substitute_random(self, new, old) -> dict:
         if not self.matches(new, old):
-            raise Exception(F'{new} foes not match {old}')
+            raise Exception(F'{new} does not match {old}')
         if isinstance(old, TypeParameter):
             rand_name = FatPtr.basic(random_letters(10))
             self.add_alias(old, rand_name)
@@ -439,9 +458,20 @@ class Scope:
         temp_scope = Scope(self)
         for rand_name, concrete_type in mapping.items():
             temp_scope.add_alias(rand_name, concrete_type)
-        return temp_scope.simplify(target_type)
+        result = temp_scope.simplify(target_type)
+        #print(f"specialized {target_type} to {result}")
+        return result
 
-    def ancestors(self, typ: TypeAttribute):
+    def ancestors(self, typ: TypeAttribute) -> list:
+        cache_key = (typ, frozenset(self.aliases.items()))
+        if cache_key in self.ancestors_cache:
+            return self.ancestors_cache[cache_key]
+        result = self.ancestors_inner(typ)
+        #print(f"ancestors of {typ} are {result}")
+        self.ancestors_cache[cache_key] = result
+        return result
+
+    def ancestors_inner(self, typ: TypeAttribute) -> list:
         if typ == Any(): return [typ]
         if typ == Nil(): return [typ, Any()]
         if typ in builtin_types.values(): return [typ, FatPtr.basic("Object"), Any()]
@@ -449,8 +479,6 @@ class Scope:
         if isinstance(typ, Buffer): return [typ, FatPtr.basic("Object"), Any()]
         if isinstance(typ, Function): return [typ, FatPtr.basic("Object"), Any()]
         if isinstance(typ, Union):
-            #ancestor_groups = [set(self.ancestors(element)) for element in typ.types.data]
-            #common_ancestors = functools.reduce(lambda a,b: a.intersection(b), ancestor_groups)
             ancestors = [self.ancestors(element) for element in typ.types.data]
             prod = product(*ancestors)
             return [self.simplify(Union.from_list([*tup])) for tup in prod]
@@ -464,10 +492,6 @@ class Scope:
                 raise Exception(self.classes)
             if typ.type_params == NoneAttr(): return self.classes[typ.cls.data].ancestors()
 
-            # what is going on here?
-            # we want to find ancestors of a parameterized type
-            # to do so, we need to replace formal type parameters with concrete ones
-            # 
             cls = self.classes[typ.cls.data]
             temp_scope = Scope(cls._scope.parent)
             typ = temp_scope.simplify(typ)

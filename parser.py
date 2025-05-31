@@ -64,7 +64,7 @@ def format_parser_error(exc: UnexpectedToken, file_path: Path) -> str:
 
 def line_number(token):
     # Account for the implicit 'import core;\n\n' appended to the file
-    return token.line - 3
+    return token.line - 2
 
 @v_args(inline=True)
 class CSTTransformer(Transformer):

@@ -452,7 +452,7 @@ class CompilerTests(CompilerTestCase):
             def speak(volume : i32) {} // Invalid param type
         }
         """
-        with self.assertRaisesRegex(Exception, "Overriding method speak in class Dog: parameter volume with type i32 is not a subtype of overridden methods' parameters .*"):
+        with self.assertRaisesRegex(Exception, "Overriding method Dog.speak: parameter volume with type i32 is not a subtype of overridden methods' parameters .*"):
             self.run_mini_code(mini_code, "", "override_invalid_param_type")
 
     def test_coroutine_call_too_many_args(self):
@@ -474,7 +474,7 @@ class CompilerTests(CompilerTestCase):
             def speak() -> i32 { return 0; } // Invalid return type present
         }
         """
-        with self.assertRaisesRegex(Exception, "Overriding method speak in class Dog should not have a return type."):
+        with self.assertRaisesRegex(Exception, "Overriding method Dog.speak should not have a return type."):
             self.run_mini_code(mini_code, "", "override_invalid_return_type_present")
 
     def test_function_literal_call_too_few_args(self):
@@ -495,7 +495,7 @@ class CompilerTests(CompilerTestCase):
             def speak() {} // Invalid return type missing
         }
         """
-        with self.assertRaisesRegex(Exception, "Overriding method speak in class Dog should have a return type."):
+        with self.assertRaisesRegex(Exception, "Overriding method Dog.speak should have a return type."):
             self.run_mini_code(mini_code, "", "override_invalid_return_type_missing")
 
     def test_method_def_override_invalid_return_type_subtype(self):
@@ -507,7 +507,7 @@ class CompilerTests(CompilerTestCase):
             def speak() -> i32 { return 0; } // Invalid return type not subtype
         }
         """
-        with self.assertRaisesRegex(Exception, "Overriding method speak in class Dog: return type i32 not a subtype of overridden methods' return types .*"):
+        with self.assertRaisesRegex(Exception, "Overriding method Dog.speak: return type i32 not a subtype of overridden methods' return types .*"):
             self.run_mini_code(mini_code, "", "override_invalid_return_type_subtype")
 
     def test_coroutine_call_invalid_method(self):
