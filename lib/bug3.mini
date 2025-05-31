@@ -4,3 +4,11 @@ file = File{"bigtings.txt", "rb"};
 fr = FileReader{} as FileProcessor[String];
 txt = fr.process(file);
 IO.print(txt);
+
+class Foo {
+	def Self.collection_taker(c : Iterable[Character]) {
+		IO.print("jolly good");
+	}
+}
+
+Foo.collection_taker("a string");

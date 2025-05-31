@@ -452,17 +452,6 @@ DONE:
 
 TODO:
 
-- Ancestors of String are not correct (should be Iterable[Character] not Iterable[Collection.T])
-- Define scope.matches for union types [check!]
-- Since @first is Collection[ProductIterator.T], its .iterator() should be Iterator[ProductIterator.T], not Iterator[Iterator.T]
-	- This is caused by return types being simplified immediately
-- Move switch-like utils.py functions into type definitions
-- I need to reform "broad param types"
-	- The point is to handle type parameters
-	- When type parameters are specialized, they can get smaller
-	- We need the ABI of overriding functions to be comptabible with the overridden
-	- So we need to track the "broad" signature of specialized overrides
-- Need to alias method-scoped type parameters in overrides [check!]
 - Records: why not?
 	- Idea: casting between these works seamlessly, unlike tuples
 	- Their allocated size is dynamic
@@ -539,6 +528,15 @@ TODO:
 	- Create an array with the buffer literally being the tuple [check!]
 	- Because the array is merely an implementation detail, it can't escape [check!]
 	- Have a utility to convert tuple to stack-allocated buffer [check!]
+	- Fix ancestors of non-parameterized class with baked-in type parameters [check]
+	- Define scope.matches for union types [check!]
+	- Move switch-like utils.py functions into type definitions
+	- I need to reform "broad param types" [check!]
+		- The point is to handle type parameters
+		- When type parameters are specialized, they can get smaller
+		- We need the ABI of overriding functions to be comptabible with the overridden
+		- So we need to track the "broad" signature of specialized overrides
+	- Need to alias method-scoped type parameters in overrides [check!]
 
 - Release 0.5.*
 	- Hi, mid, lo dialects

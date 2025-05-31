@@ -490,14 +490,13 @@ class Scope:
             if typ.cls.data not in self.classes:
                 print(f" problem is {typ}")
                 raise Exception(self.classes)
-            if typ.type_params == NoneAttr(): return self.classes[typ.cls.data].ancestors()
 
             cls = self.classes[typ.cls.data]
             temp_scope = Scope(cls._scope.parent)
             typ = temp_scope.simplify(typ)
 
-            formal_types = [cls.type()]
-            concrete_types = [typ]
+            formal_types = [cls.type(), *(self.classes[sup.cls.data].type() for sup in cls.direct_supertypes())]
+            concrete_types = [typ, *cls.direct_supertypes()]
             ancestors = [temp_scope.specialize(formal_types, concrete_types, anc) for anc in cls.ancestors()]
             ancestors = [self.simplify(anc) for anc in ancestors]
             #print(f"ancestors of {original_type} are {ancestors}")
