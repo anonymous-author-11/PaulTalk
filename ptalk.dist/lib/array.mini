@@ -1,6 +1,6 @@
 import core;
 
-class Array[T] extends Iterable[T], Representable {
+class Array[T] extends Collection[T], Representable {
 	@buffer : Buffer[T]
 	@length : i32
 	@capacity : i32
@@ -13,6 +13,14 @@ class Array[T] extends Iterable[T], Representable {
     	for elem in iterable { result.append(elem); }
     	return result;
     }
+    /*
+    #[ret.elems_reg == collection.elems_reg]
+    def Self.from_collection(collection : Collection[T]) -> Array[T] {
+        result = Array[T].new(collection.size());
+        for elem in collection { result.append(elem); }
+        return result;
+    }
+    */
 	def init() {
 		@buffer = Buffer[T].new(1);
 		@length = 0;
@@ -31,6 +39,10 @@ class Array[T] extends Iterable[T], Representable {
 	def length() -> i32 {
 		return @length;
 	}
+    #[ret == @length]
+    def size() -> i32 {
+        return @length;
+    }
     #[ret == @capacity]
     def capacity() -> i32 {
     	return @capacity;
@@ -68,23 +80,20 @@ class Array[T] extends Iterable[T], Representable {
         }
     }
     #[ret == @elems_reg]
-    def [](x : i32) -> T yields OutOfBounds | Nil {
+    def [](x : i32) -> T yields OutOfBounds {
     	past_end = x > (@length - 1);
     	before_start = (@length + x) < 0;
-        if past_end or before_start { self.throw_oob(x); }
+        if past_end or before_start { yield(OutOfBounds.new(@length, x)); }
         if x < 0 { x = @length + x; }
         return self.unchecked_index(x);
     }
     #[value == @elems_reg]
-    def []=(x : i32, value : T) yields OutOfBounds | Nil {
+    def []=(x : i32, value : T) yields OutOfBounds {
         past_end = x > (@length - 1);
         before_start = (@length + x) < 0;
-        if past_end or before_start { self.throw_oob(x); }
+        if past_end or before_start { yield(OutOfBounds.new(@length, x)); }
         if x < 0 { x = @length + x; }
         self.unchecked_insert(x, value);
-    }
-    def throw_oob(x : i32) yields OutOfBounds {
-    	yield(Exception.new());
     }
     #[ret == @elems_reg]
     def unchecked_index(x : i32) -> T {

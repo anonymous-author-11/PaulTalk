@@ -230,7 +230,7 @@ class CuckooMap[K,V] extends HashMap[K, V] {
             self.resize();
 
             // The entry that failed placement becomes the one to try inserting next cycle
-            entry_to_insert = failed_entry;
+            if failed_entry is Entry[K, V] { entry_to_insert = failed_entry; }
 
             placement_attempt = placement_attempt + 1;
         } // end while placement_attempt

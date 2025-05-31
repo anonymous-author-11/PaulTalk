@@ -211,7 +211,7 @@ larry.say_skill();
 mylist = ListNode.new(0);
 next = mylist;
 
-for i in 1:10 { next = next.push(ListNode.new(i)); }
+for i in 1...10 { next = next.push(ListNode.new(i)); }
 
 IO.print(mylist.data());
 
@@ -227,7 +227,7 @@ my_coro = Coroutine.new(print88);
 my_coro.call();
 IO.print(89);
 my_coro.call();
-for z in 1:10 {
+for z in 1...10 {
     if z == 5 { break; }
     IO.print(z);
 }
@@ -257,7 +257,7 @@ IO.print(sixtyfour);
 sixtyfour : f64 = 5;
 IO.print(sixtyfour);
 
-for i in 11:14 { IO.print(i); }
+for i in 11...14 { IO.print(i); }
 for i in [44,55,66] { IO.print(i); }
 
 byte : i8 = 3;
@@ -270,7 +270,7 @@ derived.print();
 IO.print(derived);
 derived.introduce();
 
-for k in (0:25).step(5) { IO.print(k); }
+for k in (0...25).step(5) { IO.print(k); }
 
 add = (a: i32, b: i32) => { a + b; };
 times_two = (x: i32) => { x * 2; };
@@ -283,7 +283,7 @@ IO.print(FileSystem.read_file("bigtings.txt"));
 
 //system("dir".c_string());
 
-(2:5).each((x : i32) => { IO.print(x*x); });
+(2...5).each((x : i32) => { IO.print(x*x); });
 
 def i32toi8(x : i32) -> i8 {
     return x as i8;
@@ -314,7 +314,7 @@ producer = Coroutine.new((chan : Channel[i32]) => { chan.put(88); }, chan);
 producer.call();
 IO.print(chan.get());
 
-v = (1:15).map((x : i32) => { x * x; })
+v = (1...15).map((x : i32) => { x * x; })
     .filter((x : i32) => { x % 2 == 0; })
     .reduce(0, add);
 

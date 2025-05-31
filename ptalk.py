@@ -5,7 +5,7 @@ from ptalk_build import build_main, add_build_args
 from ptalk_compile import compiler_driver_main, add_compiler_args
 
 # to compile to standalone (executable with necssary files bundled alongside):
-# py -m nuitka ptalk.py --standalone --msvc=latest --include-data-dir=data_files=data_files --include-data-dir=lib=lib --include-raw-dir=executables=executables --nofollow-import-to=sympy --nofollow-import-to=pandas --nofollow-import-to=numpy --nofollow-import-to=sqlalchemy --nofollow-import-to=scipy --nofollow-import-to=multiprocessing --nofollow-import-to=PIL --nofollow-import-to=pygments
+# py -m nuitka ptalk.py --standalone --msvc=latest --include-data-dir=data_files=data_files --include-data-dir=lib=lib --include-raw-dir=executables=executables --nofollow-import-to=sympy --nofollow-import-to=pandas --nofollow-import-to=numpy --nofollow-import-to=sqlalchemy --nofollow-import-to=scipy --nofollow-import-to=PIL --nofollow-import-to=pygments
 
 def ptalk_main(args):
 	if args.command == "build":

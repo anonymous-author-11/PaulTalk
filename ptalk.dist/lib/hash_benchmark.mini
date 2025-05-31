@@ -27,12 +27,7 @@ def print_benchmark_result(test_name: String, n: i32, duration: i64) {
     IO.print("  Operations: "); IO.print(n);
     IO.print("  Total Time: "); IO.print(duration); IO.print(" ms");
     if n > 0 {
-        ns_per_op : i64 = 0;
-        zero : i64 = 0;
-        million : i64 = 1_000_000;
-        if duration > zero and (n as i64) > zero {
-             ns_per_op = (duration * million) / (n as i64);
-        }
+        ns_per_op = (duration * 1_000_000) / n;
         IO.print("  Time/Op:    ~"); IO.print(ns_per_op); IO.print(" ns");
     }
 }
@@ -45,6 +40,7 @@ def benchmark_insert_sequential(n: i32) {
     i = 0;
     while i < n {
         map.insert(i, i + 1);
+        // IO.print(i);
         i = i + 1;
     }
     end_time: i64 = clock();
@@ -125,7 +121,7 @@ def benchmark_get_sequential_hit(n: i32) {
     while i < n {
         value_to_insert = i + 1;
         map.insert(i, value_to_insert);
-        expected_sum = expected_sum + value_to_insert as i64;
+        expected_sum = expected_sum + value_to_insert;
         i = i + 1;
     }
 
@@ -136,7 +132,7 @@ def benchmark_get_sequential_hit(n: i32) {
     while i < n {
         val = map.get(i);
         if val is i32 {
-            actual_sum = actual_sum + val as i64;
+            actual_sum = actual_sum + val;
         } else {
              // If Nil is returned, it's an error for a hit test
              verification_passed = false;
@@ -173,7 +169,7 @@ def benchmark_get_random_hit(n: i32) {
             map.insert(key, value_to_insert);
             keys_present.unchecked_insert(keys_added_count, key);
             temp_map_for_setup.insert(key, true); // Mark as added
-            expected_sum = expected_sum + value_to_insert as i64;
+            expected_sum = expected_sum + value_to_insert;
             keys_added_count = keys_added_count + 1;
         }
         attempts = attempts + 1;
@@ -194,7 +190,7 @@ def benchmark_get_random_hit(n: i32) {
         key = keys_present.unchecked_index(i);
         val = map.get(key);
         if val is i32 {
-            actual_sum = actual_sum + val as i64;
+            actual_sum = actual_sum + val;
         } else {
              // Nil returned is an error for hit test
              verification_passed = false;
