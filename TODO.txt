@@ -537,6 +537,7 @@ TODO:
 		- We need the ABI of overriding functions to be comptabible with the overridden
 		- So we need to track the "broad" signature of specialized overrides
 	- Need to alias method-scoped type parameters in overrides [check!]
+	- Make bitcodes concurrently [check!]
 
 - Release 0.5.*
 	- Hi, mid, lo dialects
