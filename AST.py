@@ -565,21 +565,46 @@ class RangeLiteral(Expression):
     start: Expression
     end: Expression
 
+    def ensure_i32_args(self, scope):
+        start_type = self.start.exprtype(scope)
+        end_type = self.end.exprtype(scope)
+        if start_type == Integer(32) and end_type == Integer(32): return
+        raise Exception(f"{self.info}: Range literals take i32 arguments, not {start_type} and {end_type}")
+
+    def typeflow(self, scope):
+        self.exprtype(scope)
+
+@dataclass
+class InclusiveRangeLiteral(Expression):
+
     def codegen(self, scope):
         return ObjectCreation(self.info, random_letters(10), FatPtr.basic("Range"), [self.start, self.end], None).codegen(scope)
     
-    def ensure_i32_args(self, start_type, end_type):
-        if start_type != Integer(32) or end_type != Integer(32):
-            raise Exception(f"{self.info}: Range literals take i32 arguments, not {start_type} and {end_type}")
-
     def exprtype(self, scope):
-        start_type = self.start.exprtype(scope)
-        end_type = self.end.exprtype(scope)
-        self.ensure_i32_args(start_type, end_type)
+        self.ensure_i32_args(scope)
         return ObjectCreation(self.info, random_letters(10), FatPtr.basic("Range"), [self.start, self.end], None).exprtype(scope)
+
+@dataclass
+class ExclusiveRangeLiteral(Expression):
+    start: Expression
+    end: Expression
+
+    def codegen(self, scope):
+        range_info = NodeInfo(None, self.file_path, start.info.line_number)
+        one_info = NodeInfo(None, self.file_path, start.info.line_number)
+        sub_info = NodeInfo(None, self.file_path, start.info.line_number)
+        one = IntegerLiteral(one_info, 1, 32)
+        end_minus_one = Arithmetic(sub_info, end, "SUB", one)
+        return ObjectCreation(self.info, random_letters(10), FatPtr.basic("Range"), [self.start, end_minus_one], None).codegen(scope)
     
-    def typeflow(self, scope):
-        self.exprtype(scope)
+    def exprtype(self, scope):
+        self.ensure_i32_args(scope)
+        range_info = NodeInfo(None, self.file_path, start.info.line_number)
+        one_info = NodeInfo(None, self.file_path, start.info.line_number)
+        sub_info = NodeInfo(None, self.file_path, start.info.line_number)
+        one = IntegerLiteral(one_info, 1, 32)
+        end_minus_one = Arithmetic(sub_info, end, "SUB", one)
+        return ObjectCreation(self.info, random_letters(10), FatPtr.basic("Range"), [self.start, end_minus_one], None).exprtype(scope)
 
 @dataclass
 class TupleLiteral(Expression):

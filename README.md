@@ -62,8 +62,8 @@ If you use [Sublime Text](https://www.sublimetext.com/download), you can configu
 
 Once Sublime Text is installed, do the following:
 
-*	Go to `Tools` and select `Install Package Control` (if not already installed)
-*	In Sublime Text, go to `Preferences` > `Package Control` > `Add Repository`
+*	In Sublime Text, go to `Tools` and select `Install Package Control` (if not already installed)
+*	Go to `Preferences` > `Package Control` > `Add Repository`
 *	Enter in this URL: `https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/paultalk-package.json`
 *	You may need to close and reopen Sublime Text for the available packages list to update
 *	Go to `Preferences` > `Package Control` > `Install Package` > select `PaulTalkSyntax`
@@ -98,8 +98,8 @@ Note: this is using the [Visual Studio Code Plus](https://packagecontrol.io/pack
 *   **Multiple Dispatch:** Methods are dispatched at runtime (via efficient lookup automata) based on the *dynamic* types of *multiple* arguments, enabling flexible and expressive code, especially for operator overloading.
 *   **Non-monomorphized Generics:** Define reusable classes and methods with type parameters (`Class[T]`) and constraints (`where T <: Constraint`), fully compatible with separate compilation and dynamic linking.
 *   **Stackful Asymmetric Coroutines:** Lightweight concurrency using `.call(...)` and `yield(...)` for cooperative multitasking, exception handling, and generators. Implemented entirely in portable LLVM IR.
-*   **Advanced Type System:** Union types (`A | B`), generics (`Array[i32 | Nil]`), local flow-sensitive type inference, and nilable types.
-*	**Memory Safety:** Variable / field initialization tracking, array bounds checking, and null safety.
+*   **Advanced Type System:** Union types (`A | B`), generics (`Array[i32 | Nil]`), local flow-sensitive type inference, and null-safe types.
+*	**Memory Safety:** Variable / field initialization tracking, array bounds-checking, strong typing, and null safety.
 *   **Region-Based Memory Management (In Progress):** Aims for safe and efficient memory management *without garbage collection or reference counting* using static analysis (points-to analysis). The liveness analysis necessary for region deallocation is not yet implemented.
 
 ## Compilation Pipeline

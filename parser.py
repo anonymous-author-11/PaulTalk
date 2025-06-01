@@ -416,15 +416,11 @@ class CSTTransformer(Transformer):
 
     def inclusive_range_literal(self, start, end):
         node_info = NodeInfo(None, self.file_path, start.info.line_number)
-        return RangeLiteral(node_info, start, end)
+        return InclusiveRangeLiteral(node_info, start, end)
 
     def exclusive_range_literal(self, start, end):
-        range_info = NodeInfo(None, self.file_path, start.info.line_number)
-        one_info = NodeInfo(None, self.file_path, start.info.line_number)
-        sub_info = NodeInfo(None, self.file_path, start.info.line_number)
-        one = IntegerLiteral(one_info, 1, 32)
-        end_minus_one = Arithmetic(sub_info, end, "SUB", one)
-        return RangeLiteral(range_info, start, end_minus_one)
+        node_info = NodeInfo(None, self.file_path, start.info.line_number)
+        return ExclusiveRangeLiteral(node_info, start, end)
 
     def bool_literal(self, token):
         intval = {"true":1,"false":0}[token.value]

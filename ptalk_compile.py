@@ -101,9 +101,8 @@ class CompilationJob:
             return self.finish()
 
         self.llvm_link()
-        if not self.settings.debug_mode:
-            self.run_opt()
-            #self.record_all_passes()
+        self.run_opt()
+        #self.record_all_passes()
         self.run_llc()
 
         # Only creating an object file
@@ -403,12 +402,12 @@ class OptimizationSettings:
 
     @property
     def opt_level(self):
-        levels = {
-            1:"hotcoldsplit,default<O1>",
-            2:"hotcoldsplit,default<O2>",
+        opt_levels = {
+            1:"default<O1>",
+            2:"default<O2>",
             3:"hotcoldsplit,default<O3>,default<O3>" # a pass so nice we run it twice
         }
-        return levels[1] if self.debug_mode else levels[3]
+        return opt_levels[1] if self.debug_mode else opt_levels[3]
 
     def attributor(self, mode="module"):
         # We --disable-tail-calls for the following reason:
@@ -445,7 +444,7 @@ class BuildDirectory:
 
     @property
     def final_ir(self):
-        return self.out_linked_dbg if self.debug_mode else self.out_optimized_dbg
+        return self.out_optimized_dbg
 
     @property
     def bitcodes_folder(self):

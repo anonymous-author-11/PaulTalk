@@ -419,7 +419,7 @@ DONE:
 	- Need to ensure intersection of Buffer & Nil doesn't reduce to Nothing [check!]
 
 - Releases 0.1.*
-	- Works on any Windows x86_64 machine (other people's computers)
+	- Works on any Windows x86_64 machine (other people's computers) [check!]
 	- You can download ptalk.exe and run it out-of-the-box [check!]
 	- Available commands should be 'ptalk compile [args]' and 'ptalk build' [check!]
 	- Avoid Windows marking it as malware [check!]
@@ -538,9 +538,11 @@ TODO:
 		- So we need to track the "broad" signature of specialized overrides
 	- Need to alias method-scoped type parameters in overrides [check!]
 	- Make bitcodes concurrently [check!]
+	- Add stdlib to include path [check!]
+	- Fix debug mode (use O1 again) [check!]
+	- Better error message for type mismatch in range literal [check!]
 
 - Release 0.5.*
-	- Better error message for type mismatch in range literal
 	- Hi, mid, lo dialects
 		- Split dialect into multiple files [check!]
 		- Use lo dialect in patterns.mlir
