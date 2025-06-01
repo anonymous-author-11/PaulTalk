@@ -588,20 +588,14 @@ class InclusiveRangeLiteral(RangeLiteral):
 class ExclusiveRangeLiteral(RangeLiteral):
 
     def codegen(self, scope):
-        range_info = NodeInfo(None, self.file_path, start.info.line_number)
-        one_info = NodeInfo(None, self.file_path, start.info.line_number)
-        sub_info = NodeInfo(None, self.file_path, start.info.line_number)
-        one = IntegerLiteral(one_info, 1, 32)
-        end_minus_one = Arithmetic(sub_info, end, "SUB", one)
+        one = IntegerLiteral(self.info, 1, 32)
+        end_minus_one = Arithmetic(self.info, self.end, "SUB", one)
         return ObjectCreation(self.info, random_letters(10), FatPtr.basic("Range"), [self.start, end_minus_one], None).codegen(scope)
     
     def exprtype(self, scope):
         self.ensure_i32_args(scope)
-        range_info = NodeInfo(None, self.file_path, start.info.line_number)
-        one_info = NodeInfo(None, self.file_path, start.info.line_number)
-        sub_info = NodeInfo(None, self.file_path, start.info.line_number)
-        one = IntegerLiteral(one_info, 1, 32)
-        end_minus_one = Arithmetic(sub_info, end, "SUB", one)
+        one = IntegerLiteral(self.info, 1, 32)
+        end_minus_one = Arithmetic(self.info, self.end, "SUB", one)
         return ObjectCreation(self.info, random_letters(10), FatPtr.basic("Range"), [self.start, end_minus_one], None).exprtype(scope)
 
 @dataclass
