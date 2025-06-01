@@ -15,15 +15,15 @@ metadir = 0install
 distdir = 
 
 
-Executing: ['C:\\Users\\PaulK\\AppData\\Local\\0install.net\\implementations\\sha256new_4DM2CFU7XSLCVN5AZEIF62C3JAV4B7WKJBREMNIJOCEHGYKOHH3Q\\ptalk.dist/ptalk.exe', 'compile', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\hash_benchmark.mini', '-o', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build-windows-x86_64/program.exe', '--build-dir', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build']
+Executing: ['C:\\Users\\PaulK\\AppData\\Local\\0install.net\\implementations\\sha256new_AVRHJY5S67ANEDIZNDUQAYWGPEPBDS6R4EGDEZS3FUERUOB7YDMQ\\ptalk.dist/ptalk.exe', 'compile', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\hash_benchmark.mini', '-o', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build-windows-x86_64/program.exe', '--build-dir', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build']
 Compiling hash_benchmark.mini
-Time to import: 0.742476224899292 seconds
-Time to parse: 3.0227670669555664 seconds
-Time to type check + codegen: 3.0411150455474854 seconds
-Time to llvm-link: 0.15610814094543457 seconds
-Time to lto: 7.083378314971924 seconds
-Time to llc: 0.8824224472045898 seconds
-Time to lld link: 0.0558929443359375 seconds
-Total time to compile: 15.001814842224121 seconds
+Time to import: 0.7197484970092773 seconds
+Time to parse: 4.0613112449646 seconds
+Time to type check: 4.00203537940979 seconds
+Time to llvm-link: 0.3326742649078369 seconds
+Time to optimize: 8.894450902938843 seconds
+Time to llc: 1.970914602279663 seconds
+Time to lld link: 0.05877375602722168 seconds
+Total time to compile: 20.071723222732544 seconds
 Finished compiling hash_benchmark.mini
 Build successful

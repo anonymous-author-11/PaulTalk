@@ -9,7 +9,7 @@ PaulTalk is an experimental, statically-typed, **unabashedly object-oriented** p
 
 *   **Multiple Dispatch:** Methods are dispatched at runtime (via efficient lookup automata) based on the *dynamic* types of *multiple* arguments, enabling flexible and expressive code, especially for operator overloading.
 *   **Non-monomorphized Generics:** Define reusable classes and methods with type parameters (`Class[T]`) and constraints (`where T <: Constraint`), fully compatible with separate compilation and dynamic linking.
-*   **Stackful Asymmetric Coroutines:** Lightweight concurrency using `.call(...)` and `yield(...)` for cooperative multitasking, exception handling, and creating generators or asynchronous patterns. Implemented entirely in portable LLVM IR.
+*   **Stackful Asymmetric Coroutines:** Lightweight concurrency using `.call(...)` and `yield(...)` for cooperative multitasking, exception handling, and generators. Implemented entirely in portable LLVM IR.
 *   **Advanced Type System:** Union types (`A | B`), generics (`Array[i32 | Nil]`), local flow-sensitive type inference, and nilable types.
 *	**Memory Safety:** Variable / field initialization tracking, array bounds checking, and null safety.
 *   **Region-Based Memory Management (In Progress):** Aims for safe and efficient memory management *without garbage collection or reference counting* using static analysis (points-to analysis). The liveness analysis necessary for region deallocation is not yet implemented.
@@ -18,9 +18,9 @@ The compiler leverages MLIR and LLVM for optimization and code generation.
 
 PaulTalk aims to combine high-level ergonomics with high performance and memory safety through its type system and planned region management.
 
-## Status: Highly Experimental (v0.3.0)
+## Status: Highly Experimental (v0.4.0)
 
-**⚠️ Warning:** PaulTalk is currently in a very early, experimental stage (v0.3.0). It is **not suitable for production use.**
+**⚠️ Warning:** PaulTalk is currently in a very early, experimental stage (v0.4.0). It is **not suitable for production use.**
 
 *   **Memory Management:** The region-based memory system is incomplete. Memory is allocated (using a fast bump allocator) but **never freed**, leading to memory leaks in any non-trivial program.
 *   **Platform:** Currently targets **x86_64 Windows only**. Aims to be multiplatform in the future.
@@ -47,7 +47,7 @@ PaulTalk aims to combine high-level ergonomics with high performance and memory 
 
 ## How to Install
 
-Note: as of the latest version (v0.3.0), PaulTalk is only built for Windows x86_64. This will change in future versions.
+Note: as of the latest version (v0.4.0), PaulTalk is only built for Windows x86_64. This will change in future versions.
 
 *	First, install [0install](https://get.0install.net/#windows), a portable package manager.
 *	Run the command `0install add ptalk https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/ptalk.xml` in your command prompt
@@ -70,6 +70,8 @@ If you use [Sublime Text](https://www.sublimetext.com/download), you can configu
 	<br>
 	<br>
 	<img src="syntax_highlighting.png" width="600">
+
+Note: this is using the [Visual Studio Code Plus](https://packagecontrol.io/packages/Visual%20Studio%20Code%20Plus%20Scheme) Dark+ color scheme.
 
 ## How to compile
 
@@ -108,7 +110,7 @@ The compiler driver can be found in [ptalk_compile.py](https://github.com/anonym
 ## Prerequisites
 
 *	**0install:** A cross-platform package manager that can be downloaded [here](https://get.0install.net/#windows)
-*   **OS:** Windows x86_64 (as of version v0.3.0)
+*   **OS:** Windows x86_64 (as of version v0.4.0)
 *   **Sublime Text [Optional]:** If you want syntax highlighting for PaulTalk. Can be downloaded [here](https://www.sublimetext.com/download)
 
 ## Standard Library (Minimal)
