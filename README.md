@@ -5,14 +5,19 @@
 
 ## Introduction
 
-PaulTalk is an experimental, statically-typed, **unabashedly object-oriented** programming language with such enticing features as:
+PaulTalk is an experimental, statically-typed, **unabashedly object-oriented** general-purpose programming language.
 
-*   **Multiple Dispatch:** Methods are dispatched at runtime (via efficient lookup automata) based on the *dynamic* types of *multiple* arguments, enabling flexible and expressive code, especially for operator overloading.
-*   **Non-monomorphized Generics:** Define reusable classes and methods with type parameters (`Class[T]`) and constraints (`where T <: Constraint`), fully compatible with separate compilation and dynamic linking.
-*   **Stackful Asymmetric Coroutines:** Lightweight concurrency using `.call(...)` and `yield(...)` for cooperative multitasking, exception handling, and generators. Implemented entirely in portable LLVM IR.
-*   **Advanced Type System:** Union types (`A | B`), generics (`Array[i32 | Nil]`), local flow-sensitive type inference, and nilable types.
-*	**Memory Safety:** Variable / field initialization tracking, array bounds checking, and null safety.
-*   **Region-Based Memory Management (In Progress):** Aims for safe and efficient memory management *without garbage collection or reference counting* using static analysis (points-to analysis). The liveness analysis necessary for region deallocation is not yet implemented.
+## Features Overview
+
+*   **Object-Oriented:** Classes, multiple inheritance, `@field` syntax, `init` constructors.
+*   **Multiple Dispatch:** Implemented via efficient dispatch automata. Used for standard functions (`IO.print`) and operator overloading.
+*   **Generics:** Parameterized types (`Class[T, U]`), type bounds (`where K <: Hashable`).
+*   **First-Class Functions:** Convenient anonymous functions with `(a : i32, a : i32) => ( a*b; )` syntax. No closures.
+*   **Coroutines:** `Coroutine.new(func, args...)`, `yield(value)`, `coro.call(arg?)`, `coro.result()`. Can yield exceptions for non-local control flow.
+*   **Type System:** Static typing, flow-sensitive inference, Unions (`T | U`), `Nil`, `Any`, `x is T` type checks.
+*   **Iteration:** `for..in` loops, range literals (`start:end`), `Iterable`/`Iterator` protocols.
+*   **FFI:** `extern def` to link C functions, `Buffer[T]` for raw memory access.
+*   **Operator Overloading:** Define custom behavior for operators like `+`, `-`, `*`, `/`, `[]`.
 
 The compiler leverages MLIR and LLVM for optimization and code generation.
 
@@ -26,24 +31,18 @@ PaulTalk aims to combine high-level ergonomics with high performance and memory 
 *   **Platform:** Currently targets **x86_64 Windows only**. Aims to be multiplatform in the future.
 *   **Standard Library:** Currently minimal, involving core facilities for string manipulation, arrays, I/O, and iteration.
 *   **Language Features:** While many core features are implemented, expect bugs, rough edges, and potential breaking changes.
-*	**Name Inconsistencies** Many parts of the project still refer to the language as "Mini Lang" and the source-code file extension is still .mini.
+*	**Name Inconsistencies** Parts of the project may still refer to the language as "Mini Lang" and the source-code file extension is still .mini.
 
 ## Show Me The Code
 
 *   [intro.mini](https://github.com/anonymous-author-11/PaulTalk/blob/main/intro.mini): Provides a basic introduction to the language syntax and features. Note that it might be slightly outdated compared to the latest language features.
 *   [lib/iteration.mini](https://github.com/anonymous-author-11/PaulTalk/blob/main/lib/iteration.mini): Demonstrates more advanced features, particularly generics, region syntax, and the iterator protocols, reflecting the current state of the language more accurately but is not tutorial-oriented.
 
-## Features Overview
+## Prerequisites
 
-*   **Object-Oriented:** Classes, multiple inheritance, `@field` syntax, `init` constructors.
-*   **Multiple Dispatch:** Implemented via efficient dispatch automata. Used for standard functions (`IO.print`) and operator overloading.
-*   **Generics:** Parameterized types (`Class[T, U]`), type bounds (`where K <: Hashable`).
-*   **First-Class Functions:** Convenient anonymous functions with `(a : i32, a : i32) => ( a*b; )` syntax. No closures.
-*   **Coroutines:** `Coroutine.new(func, args...)`, `yield(value)`, `coro.call(arg?)`, `coro.result()`. Can yield exceptions for non-local control flow.
-*   **Type System:** Static typing, flow-sensitive inference, Unions (`T | U`), `Nil`, `Any`, `x is T` type checks.
-*   **Iteration:** `for..in` loops, range literals (`start:end`), `Iterable`/`Iterator` protocols.
-*   **FFI:** `extern def` to link C functions, `Buffer[T]` for raw memory access.
-*   **Operator Overloading:** Define custom behavior for operators like `+`, `-`, `*`, `/`, `[]`.
+*	**0install:** A cross-platform package manager that can be downloaded [here](https://get.0install.net/#windows)
+*   **OS:** Windows x86_64 (as of version v0.4.0)
+*   **Sublime Text [Optional]:** If you want syntax highlighting for PaulTalk. Can be downloaded [here](https://www.sublimetext.com/download)
 
 ## How to Install
 
@@ -59,13 +58,17 @@ Note: as of the latest version (v0.4.0), PaulTalk is only built for Windows x86_
 
 ## Syntax Highlighting
 
-If you use [Sublime Text](https://www.sublimetext.com/download), you can configure syntax highlighting for PaulTalk
+If you use [Sublime Text](https://www.sublimetext.com/download), you can configure syntax highlighting for PaulTalk.
 
+Once Sublime Text is installed, do the following:
+
+*	Go to `Tools` and select `Install Package Control` (if not already installed)
 *	In Sublime Text, go to `Preferences` > `Package Control` > `Add Repository`
 *	Enter in this URL: `https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/paultalk-package.json`
+*	You may need to close and reopen Sublime Text for the available packages list to update
 *	Go to `Preferences` > `Package Control` > `Install Package` > select `PaulTalkSyntax`
 *	Open any PaulTalk source code file
-*	Go to `View` > `Syntax` > `Open All With Current Extension As` > `PaulTalk`
+*	Go to `View` > `Syntax` > `PaulTalk`
 *	You should then be able to enjoy luxurious syntax highlighting like the following:
 	<br>
 	<br>
@@ -90,6 +93,15 @@ Note: this is using the [Visual Studio Code Plus](https://packagecontrol.io/pack
 *	Take a look at the [manifest.yaml](https://github.com/anonymous-author-11/PaulTalk/blob/main/manifest.yaml) in this repo for an example of a manifest file
 *	Dependencies and versions can also be specified in the manifest, which will automatically be installed, cached, and used when building
 
+## Interesting Implementation Details
+
+*   **Multiple Dispatch:** Methods are dispatched at runtime (via efficient lookup automata) based on the *dynamic* types of *multiple* arguments, enabling flexible and expressive code, especially for operator overloading.
+*   **Non-monomorphized Generics:** Define reusable classes and methods with type parameters (`Class[T]`) and constraints (`where T <: Constraint`), fully compatible with separate compilation and dynamic linking.
+*   **Stackful Asymmetric Coroutines:** Lightweight concurrency using `.call(...)` and `yield(...)` for cooperative multitasking, exception handling, and generators. Implemented entirely in portable LLVM IR.
+*   **Advanced Type System:** Union types (`A | B`), generics (`Array[i32 | Nil]`), local flow-sensitive type inference, and nilable types.
+*	**Memory Safety:** Variable / field initialization tracking, array bounds checking, and null safety.
+*   **Region-Based Memory Management (In Progress):** Aims for safe and efficient memory management *without garbage collection or reference counting* using static analysis (points-to analysis). The liveness analysis necessary for region deallocation is not yet implemented.
+
 ## Compilation Pipeline
 
 The compiler driver can be found in [ptalk_compile.py](https://github.com/anonymous-author-11/PaulTalk/blob/main/ptalk_compile.py).
@@ -107,17 +119,12 @@ The compiler driver can be found in [ptalk_compile.py](https://github.com/anonym
 11.  **Code Generation:** LLVM IR is compiled to object code (`llc`).
 12. **Linking:** The object code is linked against the C runtime (`msvcrt.lib`) into a final executable using `lld-link`.
 
-## Prerequisites
-
-*	**0install:** A cross-platform package manager that can be downloaded [here](https://get.0install.net/#windows)
-*   **OS:** Windows x86_64 (as of version v0.4.0)
-*   **Sublime Text [Optional]:** If you want syntax highlighting for PaulTalk. Can be downloaded [here](https://www.sublimetext.com/download)
-
 ## Standard Library (Minimal)
 
 The standard library (located in the [lib](https://github.com/anonymous-author-11/PaulTalk/blob/main/lib) folder) is currently very basic and includes modules like:
 
 *   `iteration.mini`
+*	`collection.mini`
 *   `core.mini`
 *   `array.mini`
 *   `range.mini`
@@ -151,7 +158,7 @@ You can find a disorganized but informative roadmap in [TODO.txt](https://github
 ## Language Inspirations
 
 *	**Crystal:** Flow-sensitive type inference, union types, multiple dispatch, Fibers
-*	**Lua:** Stackful asymmetric coroutines, also used for error handling, fantastic interoperability with C
+*	**Lua:** Stackful asymmetric coroutines, elegant simple language, fantastic interoperability with C
 *	**Swift:** Non-monomorphized generics, philosophy of 'progressive disclosure of complexity'
 *	**Simula:** The original statically-typed object-oriented language
 *	**Cyclone:** Region-based memory management (in a procedural language)

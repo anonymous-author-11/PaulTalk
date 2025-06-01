@@ -39,6 +39,8 @@ OPT_PATH = DIST_FOLDER / "executables/opt.exe"
 LLC_PATH = DIST_FOLDER / "executables/llc.exe"
 LLD_PATH = DIST_FOLDER / "executables/lld.exe"
 
+STDLIB_PATH = DIST_FOLDER / "lib"
+
 PDL_PATTERNS_PATH = DIST_FOLDER / "data_files/patterns.mlir"
 LAYOUT_PATH = DIST_FOLDER / "data_files/datalayout.ll"
 UTILS_PATH = DIST_FOLDER / "data_files/utils.ll"
@@ -614,7 +616,7 @@ def add_source_directories(input_path):
     lib1 = Path(os.getcwd()).joinpath("lib")
     lib2 = input_path.parent.joinpath("lib")
 
-    for folder in (lib1, lib2):
+    for folder in (lib1, lib2, STDLIB_PATH):
         if not folder.exists(): continue
         folder = folder.resolve()
         source_directories[folder] = folder

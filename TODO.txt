@@ -540,6 +540,7 @@ TODO:
 	- Make bitcodes concurrently [check!]
 
 - Release 0.5.*
+	- Better error message for type mismatch in range literal
 	- Hi, mid, lo dialects
 		- Split dialect into multiple files [check!]
 		- Use lo dialect in patterns.mlir
