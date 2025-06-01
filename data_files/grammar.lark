@@ -150,7 +150,7 @@ yield_call: YIELD "(" [expression] ")"
 function_call: ident "(" (expression ("," expression)*)? ")"
 method_call: (primary | parameterized_type) "." ident "(" (expression ("," expression)*)? ")"
 object_creation: (CAPITAL_IDENT | parameterized_type) LBRACE (expression ("," expression)*)? "}"
-indexation: primary "." "[" expression "]"
+indexation: primary "." "[" (expression ("," expression)*)? "]"
 ident: CAPITAL_IDENT | LOWERCASE_IDENT
 
 operator: PLUS | MINUS | TIMES | DIVIDE | NEQ | EQ | LE | GE | LT | GT | BRACKETS | BRACKETS_SETTER

@@ -453,6 +453,7 @@ DONE:
 TODO:
 
 - Why are extern defs apparently not imported?
+	- Because they aren't added to scope.functions
 
 - Records: why not?
 	- Idea: casting between these works seamlessly, unlike tuples
@@ -461,8 +462,6 @@ TODO:
 - Nested loops take WAY too long to type check
 	- It's exponential time complexity
 	- Need to cache results of typeflow for each loop
-- Index setter shouldn't be hardcoded to one index [check!]
-	- I'd like to be able to do mat[i,j] = val;
 - We do not properly account for break/continue in typeflow
 	- We should probably move to a cfg
 	- What if I did something ad hoc
@@ -540,12 +539,16 @@ TODO:
 		- So we need to track the "broad" signature of specialized overrides
 	- Need to alias method-scoped type parameters in overrides [check!]
 	- Make bitcodes concurrently [check!]
+	- Index setter shouldn't be hardcoded to one index [check!]
 
 - Release 0.4.1
 	- Add stdlib to include path [check!]
 	- Fix debug mode (use O1 again) [check!]
 	- Better error message for type mismatch in range literal [check!]
 	- Fixed stacktraces by removing 'nounwind' attribute [check!]
+
+- Release 0.4.2
+	- I'd like to be able to do mat[i,j] = val; [check!]
 
 - Release 0.5.*
 	- Hi, mid, lo dialects

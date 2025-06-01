@@ -486,9 +486,9 @@ class CSTTransformer(Transformer):
             return CoCreate(node_info, "coroutine_" + random_letters(10), args)
         return ObjectCreation(node_info, random_letters(10), FatPtr.basic(receiver.value), args, None)
 
-    def indexation(self, receiver, index):
+    def indexation(self, receiver, *indices):
         node_info = NodeInfo(None, self.file_path, receiver.info.line_number)
-        return MethodCall(node_info, receiver, "_index", [index])
+        return MethodCall(node_info, receiver, "_index", [*indices])
 
     def yield_call(self, word, expression):
         node_info = NodeInfo(None, self.file_path, line_number(word))
