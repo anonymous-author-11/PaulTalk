@@ -1,5 +1,0 @@
-import std;
-
-sum = 1;
-for x in [4, 9, 6, 3] { sum = sum + x; }
-IO.print(sum);

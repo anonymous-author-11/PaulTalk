@@ -1,5 +1,0 @@
-.aider*
-.env
-__pycache__/
-!.aiderignore
-!.aider.conf.yml
