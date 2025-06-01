@@ -452,6 +452,8 @@ DONE:
 
 TODO:
 
+- Why are extern defs apparently not imported?
+
 - Records: why not?
 	- Idea: casting between these works seamlessly, unlike tuples
 	- Their allocated size is dynamic
@@ -491,7 +493,7 @@ TODO:
 	- Or, we could try to use some kind of usize type
 	- Or we could just recognize that the current approach is fine
 
-- Releases 0.4.*
+- Release 0.4.0
 	- Put .gitignore * in build dir [check!]
 	- We don't have to do codegen to discover the dependency graph [check!]
 		- We separate typeflow and codegen [check!]
@@ -538,9 +540,12 @@ TODO:
 		- So we need to track the "broad" signature of specialized overrides
 	- Need to alias method-scoped type parameters in overrides [check!]
 	- Make bitcodes concurrently [check!]
+
+- Release 0.4.1
 	- Add stdlib to include path [check!]
 	- Fix debug mode (use O1 again) [check!]
 	- Better error message for type mismatch in range literal [check!]
+	- Fixed stacktraces by removing 'nounwind' attribute [check!]
 
 - Release 0.5.*
 	- Hi, mid, lo dialects

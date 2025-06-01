@@ -1991,7 +1991,7 @@ class LowerMethodCall(RewritePattern):
         behavior_call = llvm.CallOp(op.wrapper_name(), fptr.results[0], *op.behavior_args(concrete_types.results[0]), return_type=llvm.LLVMPointerType.opaque())
 
         call_indirect = llvm.CallIndirectOp(behavior_call.results[0], *op.method_args(), return_type=result_type)
-        call_indirect.properties["no_unwind"] = UnitAttr()
+        #call_indirect.properties["no_unwind"] = UnitAttr()
 
         if(op.ret_type == llvm.LLVMVoidType()):
             rewriter.inline_block_before_matched_op(Block([*ops, behavior_call]))

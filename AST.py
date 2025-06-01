@@ -575,7 +575,7 @@ class RangeLiteral(Expression):
         self.exprtype(scope)
 
 @dataclass
-class InclusiveRangeLiteral(Expression):
+class InclusiveRangeLiteral(RangeLiteral):
 
     def codegen(self, scope):
         return ObjectCreation(self.info, random_letters(10), FatPtr.basic("Range"), [self.start, self.end], None).codegen(scope)
@@ -585,9 +585,7 @@ class InclusiveRangeLiteral(Expression):
         return ObjectCreation(self.info, random_letters(10), FatPtr.basic("Range"), [self.start, self.end], None).exprtype(scope)
 
 @dataclass
-class ExclusiveRangeLiteral(Expression):
-    start: Expression
-    end: Expression
+class ExclusiveRangeLiteral(RangeLiteral):
 
     def codegen(self, scope):
         range_info = NodeInfo(None, self.file_path, start.info.line_number)
