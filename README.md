@@ -152,10 +152,10 @@ You can find a disorganized but informative roadmap in [TODO.txt](https://github
 
 *	**Crystal:** Flow-sensitive type inference, union types, multiple dispatch, Fibers
 *	**Lua:** Stackful asymmetric coroutines, also used for error handling, fantastic interoperability with C
-*	**Swift:** Non-monomorphized generics, philosophy of progressive disclosure
+*	**Swift:** Non-monomorphized generics, philosophy of 'progressive disclosure of complexity'
 *	**Simula:** The original statically-typed object-oriented language
 *	**Cyclone:** Region-based memory management (in a procedural language)
-*	**SmallTalk:** For the name, mostly
+*	**SmallTalk:** For the name, mostly. Also the original *ergonomic* OO language.
 
 ## License
 
