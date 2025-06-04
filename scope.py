@@ -1,5 +1,5 @@
-from hi_dialect import *
-from mid_dialect import *
+from hi import *
+from mid import *
 from utils import *
 from itertools import product, chain, combinations
 from hashlib import sha256

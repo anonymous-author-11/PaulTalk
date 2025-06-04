@@ -452,7 +452,8 @@ class Printer:
             self.print("loc(unknown)")
             return
 
-        if isinstance(attribute, IntegerType):
+        try:
+            signedness = attribute.signedness
             if attribute.signedness.data == Signedness.SIGNLESS:
                 self.print("i")
             elif attribute.signedness.data == Signedness.SIGNED:
@@ -461,6 +462,8 @@ class Printer:
                 self.print("ui")
             self.print(attribute.width.data)
             return
+        except:
+            pass
 
         if isinstance(attribute, BFloat16Type):
             self.print("bf16")

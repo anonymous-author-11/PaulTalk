@@ -15,7 +15,7 @@ from xdsl.dialects import llvm, func, builtin
 from xdsl import traits
 from xdsl.traits import SymbolOpInterface
 from xdsl.printer import Printer
-from hi_dialect import *
+import hi
 
 @irdl_op_definition
 class PreludeOp(IRDLOperation):
@@ -30,7 +30,7 @@ class MainOp(IRDLOperation):
 @irdl_op_definition
 class IdentifierOp(IRDLOperation):
     name = "mid.identifier"
-    result: OpResult = result_def(Integer(32))
+    result: OpResult = result_def(hi.Integer(32))
 
 @irdl_op_definition
 class DataSizeDefOp(IRDLOperation):
@@ -319,7 +319,7 @@ class MethodCallLike(IRDLOperation):
 class MethodCallOp(MethodCallLike, IRDLOperation):
     name = "mid.method_call"
     parameterizations: Operand = operand_def()
-    fat_ptr: Operand = operand_def(FatPtr)
+    fat_ptr: Operand = operand_def(hi.FatPtr)
     traits = frozenset()
 
     def get_fat_ptr(self):
@@ -370,7 +370,7 @@ class ClassMethodCallOp(MethodCallLike, IRDLOperation):
 @irdl_op_definition
 class FieldAccessOp(IRDLOperation):
     name = "mid.field_access"
-    fat_ptr: Operand = operand_def(FatPtr)
+    fat_ptr: Operand = operand_def(hi.FatPtr)
     offset: IntegerAttr = attr_def(IntegerAttr)
     vtable_bytes: IntegerAttr = attr_def(IntegerAttr)
     result: OpResult = result_def()
@@ -378,7 +378,7 @@ class FieldAccessOp(IRDLOperation):
 @irdl_op_definition
 class GetFieldOp(IRDLOperation):
     name = "mid.get_field"
-    fat_ptr: Operand = operand_def(FatPtr)
+    fat_ptr: Operand = operand_def(hi.FatPtr)
     offset: IntegerAttr = attr_def(IntegerAttr)
     vtable_bytes: IntegerAttr = attr_def(IntegerAttr)
     original_type: TypeAttribute = attr_def(TypeAttribute)
@@ -388,7 +388,7 @@ class GetFieldOp(IRDLOperation):
 @irdl_op_definition
 class GetTypeFieldOp(IRDLOperation):
     name = "mid.get_type_field"
-    fat_ptr: Operand = operand_def(FatPtr)
+    fat_ptr: Operand = operand_def(hi.FatPtr)
     offset: IntegerAttr = attr_def(IntegerAttr)
     vtable_bytes: IntegerAttr = attr_def(IntegerAttr)
     result: OpResult = result_def()
@@ -396,7 +396,7 @@ class GetTypeFieldOp(IRDLOperation):
 @irdl_op_definition
 class SetFieldOp(IRDLOperation):
     name = "mid.set_field"
-    fat_ptr: Operand = operand_def(FatPtr)
+    fat_ptr: Operand = operand_def(hi.FatPtr)
     value: Operand = operand_def()
     offset: IntegerAttr = attr_def(IntegerAttr)
     vtable_bytes: IntegerAttr = attr_def(IntegerAttr)
@@ -452,7 +452,7 @@ class GetterDefOp(IRDLOperation):
             "specialized_name":specialized_type.symbol()
         }
         if parameterization: attr_dict["parameterization"] = parameterization
-        if isinstance(original_type, TypeParameter):
+        if isinstance(original_type, hi.TypeParameter):
             attr_dict["box"] = UnitAttr()
         return GetterDefOp.create(attributes=attr_dict)
 
@@ -478,7 +478,7 @@ class SetterDefOp(IRDLOperation):
             "specialized_name":specialized_type.symbol()
         }
         if parameterization: attr_dict["parameterization"] = parameterization
-        if isinstance(original_type, TypeParameter):
+        if isinstance(original_type, hi.TypeParameter):
             attr_dict["unbox"] = UnitAttr()
         return SetterDefOp.create(attributes=attr_dict)
 
@@ -629,12 +629,12 @@ class CheckFlagOp(IRDLOperation):
     @classmethod
     def make(cls, ptr, lhs_type, rhs_type, parameterization=None, simplify=True):
         attr_dict = {"typ_name":rhs_type.symbol()}
-        if simplify and isinstance(lhs_type, Union) and len(lhs_type.types.data) == 2 and Nil() in lhs_type.types.data and rhs_type != Nil():
+        if simplify and isinstance(lhs_type, hi.Union) and len(lhs_type.types.data) == 2 and hi.Nil() in lhs_type.types.data and rhs_type != hi.Nil():
             attr_dict["typ_name"] = StringAttr("nil_typ")
             attr_dict["neg"] = UnitAttr()
             parameterization = None
         operands = [ptr, parameterization] if parameterization else [ptr]
-        return CheckFlagOp.create(operands=operands, attributes=attr_dict, result_types=[Integer(1)])
+        return CheckFlagOp.create(operands=operands, attributes=attr_dict, result_types=[hi.Integer(1)])
 
 @irdl_op_definition
 class AssignOp(IRDLOperation):
@@ -696,14 +696,6 @@ class ComparisonOp(IRDLOperation):
     def make(cls, lhs, rhs, op):
         if isinstance(op, str): op = StringAttr(op)
         return ComparisonOp.create(operands=[lhs, rhs], attributes={"op":op}, result_types=[IntegerType(1)])
-
-@irdl_op_definition
-class LogicalOp(IRDLOperation):
-    name = "mid.logical"
-    lhs : Operand = operand_def(IntegerType)
-    rhs_region : Region = region_def()
-    result : OpResult = result_def(IntegerType(1))
-    op : StringAttr = attr_def(StringAttr)
 
 @irdl_op_definition
 class WhileOp(IRDLOperation):
@@ -859,30 +851,8 @@ class NarrowOp(IRDLOperation):
         return NarrowOp.create(operands=[operand], attributes=attr_dict, result_types=[to_typ]) 
 
 @irdl_op_definition
-class WidenIntOp(IRDLOperation):
-    name = "mid.widen_int"
-    operand: Operand = operand_def()
-    result: OpResult = result_def()
-    from_typ: TypeAttribute = attr_def(TypeAttribute)
-    to_typ: TypeAttribute = attr_def(TypeAttribute)
-    from_typ_name: StringAttr = attr_def(StringAttr)
-    to_typ_name: StringAttr = attr_def(StringAttr)
-    traits = frozenset()
-
-@irdl_op_definition
 class TruncateIntOp(IRDLOperation):
     name = "mid.truncate_int"
-    operand: Operand = operand_def()
-    result: OpResult = result_def()
-    from_typ: TypeAttribute = attr_def(TypeAttribute)
-    to_typ: TypeAttribute = attr_def(TypeAttribute)
-    from_typ_name: StringAttr = attr_def(StringAttr)
-    to_typ_name: StringAttr = attr_def(StringAttr)
-    traits = frozenset()
-
-@irdl_op_definition
-class IntToFloatOp(IRDLOperation):
-    name = "mid.int_to_float"
     operand: Operand = operand_def()
     result: OpResult = result_def()
     from_typ: TypeAttribute = attr_def(TypeAttribute)
@@ -945,7 +915,6 @@ Mid = Dialect(
         GlobalStrOp,
         ComparisonOp,
         ArithmeticOp,
-        LogicalOp,
         WhileOp,
         IfOp,
         ReturnOp,
@@ -966,8 +935,6 @@ Mid = Dialect(
         UnwrapOp,
         BoxOp,
         UnboxOp,
-        IntToFloatOp,
-        WidenIntOp,
         UnionizeOp,
         NarrowOp,
         ToFatPtrOp,

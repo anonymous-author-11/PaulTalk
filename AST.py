@@ -6,8 +6,10 @@ methods for type checking and code generation.
 
 from dataclasses import dataclass
 from typing import List, Optional, Dict, Tuple, Set
-from hi_dialect import *
-from mid_dialect import *
+from hi import *
+from mid import *
+import hi
+import mid
 from utils import *
 from scope import Scope, ConstraintSet
 from method_dispatch import *
@@ -235,14 +237,15 @@ class BinaryOp(Expression):
         right_type = self.right.exprtype(scope)
         if isinstance(left_type, Tuple) and isinstance(right_type, Tuple):
             return TupleArithmetic(self.info, self.left, self.operator, self.right).codegen(scope)
-        left_unwrap = UnwrapOp.create(operands=[self.left.codegen(scope)], result_types=[left_type.base_typ()])
-        right_unwrap = UnwrapOp.create(operands=[self.right.codegen(scope)], result_types=[right_type.base_typ()])
-        operands = [left_unwrap.results[0], right_unwrap.results[0]]
-        attr_dict = {"op":StringAttr(self.operator)}
-        binop = self.concrete_op(operands=operands, attributes=attr_dict, result_types=[left_type.base_typ()])
-        wrap = WrapOp.make(binop.results[0], left_type)
-        scope.region.last_block.add_ops([left_unwrap, right_unwrap, binop, wrap])
-        return wrap.results[0]
+        operands = [self.left.codegen(scope), self.right.codegen(scope)]
+        attr_dict = {
+            "op":StringAttr(self.operator),
+            "lhs_type":left_type,
+            "rhs_type":right_type
+        }
+        binop = self.concrete_op(operands=operands, attributes=attr_dict, result_types=[left_type])
+        scope.region.last_block.add_op(binop)
+        return binop.results[0]
 
     def concrete_op(self, operands, attributes, result_types):
         raise Exception("abstract")
@@ -258,34 +261,43 @@ class BinaryOp(Expression):
         if isinstance(left_type, Tuple) and isinstance(right_type, Tuple):
             return TupleArithmetic(self.info, self.left, self.operator, self.right).exprtype(scope)
 
-        left_number = isinstance(left_type, Integer) or isinstance(left_type, Float) or isinstance(left_type, Bool)
-        right_number = isinstance(right_type, Integer) or isinstance(right_type, Float) or isinstance(right_type, Bool)
+        left_integer = isinstance(left_type, Integer)
+        right_integer = isinstance(right_type, Integer)
+
+        left_number = left_integer or isinstance(left_type, Float) or isinstance(left_type, Bool)
+        right_number = right_integer or isinstance(right_type, Float) or isinstance(right_type, Bool)
+
         if not (left_number and right_number):
             raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
 
         # For int-int ops where one is a literal, set the literal's width equal to the other
-        if isinstance(left_type, Integer) and isinstance(self.right, IntegerLiteral):
+        if left_integer and isinstance(self.right, IntegerLiteral):
             self.right.width = left_type.bitwidth
             right_type = self.right.exprtype(scope)
-        if isinstance(right_type, Integer) and isinstance(self.left, IntegerLiteral):
+        if right_integer and isinstance(self.left, IntegerLiteral):
             self.left.width = right_type.bitwidth
             left_type = self.left.exprtype(scope)
 
         # For int-int ops with different width, extend the smaller int to the size of the larger one
-        if isinstance(left_type, Integer) and isinstance(right_type, Integer):
+        # Or if one is unsigned and the other is signed, cast the unsigned one
+        if left_integer and right_integer:
             if left_type.bitwidth < right_type.bitwidth:
-                self.left = As(NodeInfo(None, self.info.filepath, self.info.line_number), self.left, right_type)
+                as_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+                self.left = As(as_info, self.left, right_type)
                 left_type = self.left.exprtype(scope)
             if left_type.bitwidth > right_type.bitwidth:
-                self.right = As(NodeInfo(None, self.info.filepath, self.info.line_number), self.right, left_type)
+                as_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+                self.right = As(as_info, self.right, left_type)
                 right_type = self.right.exprtype(scope)
 
         # For int-float ops of the same width, convert the int to a float
-        if isinstance(left_type, Integer) and isinstance(right_type, Float) and left_type.bitwidth == right_type.bitwidth:
-            self.left = As(NodeInfo(None, self.info.filepath, self.info.line_number), self.left, right_type)
+        if left_integer and isinstance(right_type, Float) and left_type.bitwidth == right_type.bitwidth:
+            as_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+            self.left = As(as_info, self.left, right_type)
             left_type = self.left.exprtype(scope)
-        if isinstance(right_type, Integer) and isinstance(left_type, Float) and left_type.bitwidth == right_type.bitwidth:
-            self.right = As(NodeInfo(None, self.info.filepath, self.info.line_number), self.right, left_type)
+        if right_integer and isinstance(left_type, Float) and left_type.bitwidth == right_type.bitwidth:
+            as_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+            self.right = As(as_info, self.right, left_type)
             right_type = self.right.exprtype(scope)
 
         return self.concrete_exprtype(left_type, right_type)
@@ -299,7 +311,7 @@ class BinaryOp(Expression):
 class Arithmetic(BinaryOp):
 
     def concrete_op(self, operands, attributes, result_types):
-        return ArithmeticOp.create(operands=operands, attributes=attributes, result_types=result_types)
+        return hi.ArithmeticOp.create(operands=operands, attributes=attributes, result_types=result_types)
 
     def concrete_exprtype(self, left_type, right_type):
 
@@ -354,7 +366,7 @@ class TupleArithmetic(Arithmetic):
 @dataclass
 class Comparison(BinaryOp):
     def concrete_op(self, operands, attributes, result_types):
-        return ComparisonOp.create(operands=operands, attributes=attributes, result_types=[IntegerType(1)])
+        return hi.ComparisonOp.create(operands=operands, attributes=attributes, result_types=[Integer(1)])
     def concrete_exprtype(self, left_type, right_type):
         if left_type != right_type:
             raise Exception(f"{self.info}: tried to use {self.operator} on different types: {left_type} and {right_type}")
@@ -366,17 +378,15 @@ class Logical(BinaryOp):
     def codegen(self, scope):
         left_type = self.left.exprtype(scope)
         right_type = self.right.exprtype(scope)
-        left_unwrap = UnwrapOp.create(operands=[self.left.codegen(scope)], result_types=[left_type.base_typ()])
         right_scope = Scope(scope)
         right_value = self.right.codegen(right_scope)
         right_scope.region.block.add_op(func.Return(right_value))
-        operands = [left_unwrap.results[0]]
+        operands = [self.left.codegen(scope)]
         attr_dict = {"op":StringAttr(self.operator)}
         regions = [right_scope.region]
-        binop = LogicalOp.create(operands=operands, attributes=attr_dict, result_types=[IntegerType(1)], regions=regions)
-        wrap = WrapOp.make(binop.results[0], left_type)
-        scope.region.last_block.add_ops([left_unwrap, binop, wrap])
-        return wrap.results[0]
+        logical = hi.LogicalOp.create(operands=operands, attributes=attr_dict, result_types=[Integer(1)], regions=regions)
+        scope.region.last_block.add_op(logical)
+        return logical.results[0]
 
     def concrete_exprtype(self, left_type, right_type):
         if left_type != Bool() or right_type != Bool():
@@ -844,7 +854,7 @@ class TupleToArray(Expression):
 
     def codegen(self, scope):
         tuple_type = self.tupl.exprtype(scope)        
-        elem_type = tuple_type.types.data[0]
+        elem_type = self.elem_type(tuple_type, scope)
         cast_info = NodeInfo(None, self.info.filepath, self.info.line_number)
         size_info = NodeInfo(None, self.info.filepath, self.info.line_number)
         capacity_info = NodeInfo(None, self.info.filepath, self.info.line_number)
@@ -855,12 +865,12 @@ class TupleToArray(Expression):
         ary = ObjectCreation(ary_info, random_letters(10), FatPtr.generic("Array", [elem_type]), [buf, sizelit, capacitylit], None)
         return ary.codegen(scope)
 
+    def elem_type(self, tuple_type, scope):
+        return scope.simplify(Union.from_list(tuple_type.types.data))
+
     def exprtype(self, scope):
         tuple_type = self.tupl.exprtype(scope)
-        homogenous_type = len(set(tuple_type.types.data)) == 1
-        if not homogenous_type:
-            raise Exception(f"{self.info}: Cannot iterate over a tuple of heterogenous type: {tuple_type}")
-        elem_type = tuple_type.types.data[0]
+        elem_type = self.elem_type(tuple_type, scope)
         return FatPtr.generic("Array", [elem_type])
 
 @dataclass

@@ -993,6 +993,19 @@ class SIToFPOp(IRDLOperation):
     def __init__(self, op: SSAValue | Operation, target_type: AnyFloat):
         super().__init__(operands=[op], result_types=[target_type])
 
+@irdl_op_definition
+class UIToFPOp(IRDLOperation):
+    name = "arith.uitofp"
+
+    input: Operand = operand_def(IntegerType)
+    result: OpResult = result_def(AnyFloatConstr)
+
+    assembly_format = "$input attr-dict `:` type($input) `to` type($result)"
+
+    traits = frozenset([Pure()])
+
+    def __init__(self, op: SSAValue | Operation, target_type: AnyFloat):
+        super().__init__(operands=[op], result_types=[target_type])
 
 @irdl_op_definition
 class ExtFOp(IRDLOperation):
@@ -1140,6 +1153,7 @@ Arith = Dialect(
         IndexCastOp,
         FPToSIOp,
         SIToFPOp,
+        UIToFPOp,
         ExtFOp,
         TruncFOp,
         TruncIOp,

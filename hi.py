@@ -482,12 +482,70 @@ class TupleCastOp(IRDLOperation):
         attr_dict = {"from_typ":from_typ,"to_typ":to_typ}
         return TupleCastOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
 
+@irdl_op_definition
+class IntToFloatOp(IRDLOperation):
+    name = "hi.int_to_float"
+    operand: Operand = operand_def()
+    result: OpResult = result_def()
+    from_typ: TypeAttribute = attr_def(TypeAttribute)
+    to_typ: TypeAttribute = attr_def(TypeAttribute)
+
+@irdl_op_definition
+class WidenIntOp(IRDLOperation):
+    name = "hi.widen_int"
+    operand: Operand = operand_def()
+    result: OpResult = result_def()
+    from_typ: TypeAttribute = attr_def(TypeAttribute)
+    to_typ: TypeAttribute = attr_def(TypeAttribute)
+
+@irdl_op_definition
+class ArithmeticOp(IRDLOperation):
+    name = "hi.arithmetic"
+    lhs : Operand = operand_def(IntegerType)
+    rhs : Operand = operand_def(IntegerType)
+    lhs_type : TypeAttribute = attr_def(TypeAttribute)
+    rhs_type : TypeAttribute = attr_def(TypeAttribute)
+    result : OpResult = result_def(IntegerType)
+    op : StringAttr = attr_def(StringAttr)
+
+    @classmethod
+    def make(cls, op, lhs, rhs):
+        return ArithmeticOp.create(operands=[lhs, rhs], attributes={"op":StringAttr(op)}, result_types=[lhs.type])
+
+@irdl_op_definition
+class LogicalOp(IRDLOperation):
+    name = "hi.logical"
+    lhs : Operand = operand_def(IntegerType)
+    rhs_region : Region = region_def()
+    result : OpResult = result_def(Integer(1))
+    op : StringAttr = attr_def(StringAttr)
+
+@irdl_op_definition
+class ComparisonOp(IRDLOperation):
+    name = "hi.comparison"
+    lhs : Operand = operand_def(IntegerType)
+    rhs : Operand = operand_def(IntegerType)
+    lhs_type : TypeAttribute = attr_def(TypeAttribute)
+    rhs_type : TypeAttribute = attr_def(TypeAttribute)
+    result : OpResult = result_def(Integer(1))
+    op : StringAttr = attr_def(StringAttr)
+
+    @classmethod
+    def make(cls, lhs, rhs, op):
+        if isinstance(op, str): op = StringAttr(op)
+        return ComparisonOp.create(operands=[lhs, rhs], attributes={"op":op}, result_types=[Integer(1)])
+
 Hi = Dialect(
     "hi",
     [
         CastOp,
         ReabstractOp,
-        TupleCastOp
+        TupleCastOp,
+        IntToFloatOp,
+        WidenIntOp,
+        ArithmeticOp,
+        LogicalOp,
+        ComparisonOp
     ],
     [
         Integer,

@@ -25,8 +25,10 @@ from xdsl.dialects.builtin import (
 from xdsl.ir.core import SSAValue, OpResult, Block, Region
 from xdsl.irdl import IRDLOperation
 from xdsl.passes import ModulePass
-from hi_dialect import *
-from mid_dialect import *
+import hi
+import mid
+from hi import *
+from mid import *
 from xdsl.dialects import scf, func, builtin, cf, memref
 from xdsl.printer import Printer
 from utils import builtin_types, vtable_buffer_size
@@ -55,7 +57,12 @@ class LowerHi(ModulePass):
             GreedyRewritePatternApplier([
                 LowerReabstract(),
                 LowerTupleCast(),
-                LowerCast()
+                LowerCast(),
+                LowerIntToFloat(),
+                LowerWidenInt(),
+                LowerArithmetic(),
+                LowerLogical(),
+                LowerComparison()
             ]),
             apply_recursively=True
         )
@@ -106,7 +113,6 @@ class LowerControlFlow(ModulePass):
                 LowerBreak(),
                 LowerContinue(),
                 LowerMethodCall()
-                #LowerCreateBuffer(),
             ]),
             apply_recursively=True
         )
@@ -122,7 +128,6 @@ class LowerMid(ModulePass):
     def apply(self, ctx: MLContext, op: ModuleOp) -> None:
         walker = PatternRewriteWalker(
             GreedyRewritePatternApplier([
-                LowerLogical(),
                 LowerUnionize(),
                 LowerFuncDef(),
                 LowerGetterDef(),
@@ -152,6 +157,7 @@ class LowerMid(ModulePass):
                 LowerUnboxDef()
                 #LowerDataSize(),
                 #LowerSize(),
+                #LowerCreateBuffer(),
                 #LowerParameterizationIndexation(),
                 #LowerParameterizationsArray(),
                 #LowerGlobalFptr(),
@@ -173,8 +179,6 @@ class LowerMid(ModulePass):
                 #LowerToFatPtr(),
                 #LowerCoroCreate(),
                 #LowerReUnionize(),
-                #LowerWidenInt(),
-                #LowerIntToFloat(),
                 #LowerTypID(),
                 #LowerRefer(),
                 #LowerFieldAccess(),
@@ -360,22 +364,48 @@ class LowerCast(RewritePattern):
             rewriter.replace_matched_op(cast)
             return
 
-        if from_integer and to_integer and to_typ.bitwidth > from_typ.bitwidth:
-            widen_op = WidenIntOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
-            rewriter.replace_matched_op(widen_op)
-            return 
-
         if from_integer and to_integer and to_typ.bitwidth < from_typ.bitwidth:
             truncate_op = TruncateIntOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
             rewriter.replace_matched_op(truncate_op)
             return
 
-        if from_typ == Integer(32) and to_typ == Float():
+        if from_integer and to_integer and to_typ.bitwidth > from_typ.bitwidth:
+            attr_dict = {"from_typ":op.from_typ, "to_typ":op.to_typ}
+            widen_op = WidenIntOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
+            rewriter.replace_matched_op(widen_op)
+            return 
+
+        if from_integer and to_typ == Float():
+            attr_dict = {"from_typ":op.from_typ, "to_typ":op.to_typ}
             to_float_op = IntToFloatOp.create(operands=[operand], result_types=[to_typ], attributes=attr_dict)
             rewriter.replace_matched_op(to_float_op)
             return 
 
         raise Exception(f"cast from {from_typ} to {to_typ} not accounted for")
+
+class LowerWidenInt(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: hi.WidenIntOp, rewriter: PatternRewriter):
+        alloca = AllocateOp.make(op.to_typ.base_typ())
+        unwrapped = UnwrapOp.create(operands=[op.operand], result_types=[op.from_typ.base_typ()])
+        op_map = {Signedness.SIGNED:arith.ExtSIOp, Signedness.UNSIGNED:arith.ExtUIOp}
+        extend_op = op_map[op.from_typ.signedness.data]
+        extended = extend_op(unwrapped.results[0], op.to_typ.base_typ())
+        store = llvm.StoreOp(extended.results[0], alloca.results[0])
+        rewriter.inline_block_after_matched_op(Block([unwrapped, extended, store]))
+        rewriter.replace_matched_op(alloca)
+
+class LowerIntToFloat(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: hi.IntToFloatOp, rewriter: PatternRewriter):
+        alloca = AllocateOp.make(op.to_typ.base_typ())
+        unwrapped = UnwrapOp.create(operands=[op.operand], result_types=[op.from_typ.base_typ()])
+        op_map = {Signedness.SIGNED:arith.SIToFPOp, Signedness.UNSIGNED:arith.UIToFPOp}
+        cast_op = op_map[op.from_typ.signedness.data]
+        cast = cast_op(unwrapped.results[0], op.to_typ.base_typ())
+        store = llvm.StoreOp(cast.results[0], alloca.results[0])
+        rewriter.inline_block_after_matched_op(Block([unwrapped, cast, store]))
+        rewriter.replace_matched_op(alloca)
 
 class LowerReabstract(RewritePattern):
     @op_type_rewrite_pattern
@@ -456,6 +486,93 @@ class LowerTupleCast(RewritePattern):
         rewriter.inline_block_before_matched_op(Block([conversion, *from_geps, *casts]))
         rewriter.inline_block_after_matched_op(Block([*to_geps, *memcpys]))
         rewriter.replace_matched_op(alloca)
+
+int_arithmetic_map = {
+    (Signedness.SIGNED, "ADD", Signedness.SIGNED):arith.Addi,
+    (Signedness.SIGNED, "SUB", Signedness.SIGNED): arith.Subi,
+    (Signedness.SIGNED, "MUL", Signedness.SIGNED): arith.Muli,
+    (Signedness.UNSIGNED, "ADD", Signedness.UNSIGNED):arith.Addi,
+    (Signedness.UNSIGNED, "SUB", Signedness.UNSIGNED): arith.Subi,
+    (Signedness.UNSIGNED, "MUL", Signedness.UNSIGNED): arith.Muli,
+    (Signedness.SIGNED, "DIV", Signedness.SIGNED): arith.DivSI,
+    (Signedness.SIGNED, "MOD", Signedness.SIGNED):arith.RemSI,
+    (Signedness.UNSIGNED, "DIV", Signedness.UNSIGNED): arith.DivUI,
+    (Signedness.UNSIGNED, "MOD", Signedness.UNSIGNED):arith.RemUI,
+    (Signedness.SIGNED, "LSHIFT", Signedness.SIGNED):arith.ShLI,
+    (Signedness.UNSIGNED, "LSHIFT", Signedness.UNSIGNED):arith.ShLI,
+    (Signedness.SIGNED, "RSHIFT", Signedness.SIGNED):arith.ShRSI,
+    (Signedness.UNSIGNED, "RSHIFT", Signedness.UNSIGNED):arith.ShRUI,
+    (Signedness.SIGNED, "bit_and", Signedness.SIGNED):arith.AndI,
+    (Signedness.SIGNED, "bit_or", Signedness.SIGNED):arith.OrI,
+    (Signedness.SIGNED, "bit_xor", Signedness.SIGNED):arith.XOrI,
+    (Signedness.UNSIGNED, "bit_and", Signedness.UNSIGNED):arith.AndI,
+    (Signedness.UNSIGNED, "bit_or", Signedness.UNSIGNED):arith.OrI,
+    (Signedness.UNSIGNED, "bit_xor", Signedness.UNSIGNED):arith.XOrI
+}
+
+float_arithmetic_map = {
+    "ADD":arith.Addf,
+    "SUB": arith.Subf,
+    "MUL": arith.Mulf,
+    "DIV": arith.Divf
+}
+
+class LowerArithmetic(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: hi.ArithmeticOp, rewriter: PatternRewriter):
+        lhs = UnwrapOp.create(operands=[op.lhs], result_types=[op.lhs_type.base_typ()])
+        rhs = UnwrapOp.create(operands=[op.rhs], result_types=[op.rhs_type.base_typ()])
+        rewriter.inline_block_before_matched_op(Block([lhs, rhs]))
+        if isinstance(op.lhs_type, Integer) and isinstance(op.rhs_type, Integer):
+            lhs_sign = op.lhs_type.signedness.data
+            rhs_sign = op.rhs_type.signedness.data
+            int_op = int_arithmetic_map[(lhs_sign, op.op.data, rhs_sign)]
+            operation = int_op(lhs.results[0], rhs.results[0])
+        if isinstance(op.lhs_type, Float) and isinstance(op.rhs_type, Float):
+            float_op = float_arithmetic_map[op.op.data]
+            operation = float_op(lhs.results[0], rhs.results[0])
+        wrap = WrapOp.make(operation.results[0])
+        rewriter.insert_op_before_matched_op(operation)
+        rewriter.replace_matched_op(wrap)
+
+class LowerLogical(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: hi.LogicalOp, rewriter: PatternRewriter):
+
+        rhs_region = op.detach_region(op.rhs_region)
+
+        lhs = llvm.LoadOp(op.lhs, IntegerType(1))        
+        result = AllocateOp.make(IntegerType(1))
+        store1 = llvm.StoreOp(lhs.results[0], result.results[0])
+        rewriter.inline_block_after_matched_op(Block([lhs, store1]))
+        surrounding_block = op.parent_block()
+        after_block = surrounding_block.split_before(store1.next_op)
+
+        if op.op.data == "and":
+            cbr = cf.ConditionalBranch(lhs.results[0], rhs_region.block, [], after_block, [])
+        if op.op.data == "or":
+            cbr = cf.ConditionalBranch(lhs.results[0], after_block, [], rhs_region.block, [])
+        surrounding_block.add_op(cbr)
+        
+        rhs_value = rhs_region.block.last_op.operands[0]
+        load1 = llvm.LoadOp(rhs_value, IntegerType(1))
+        store2 = llvm.StoreOp(load1.results[0], result.results[0])
+        br = cf.Branch(after_block)
+        rewriter.erase_op(rhs_region.block.last_op)
+        rhs_region.block.add_ops([load1, store2, br])
+        rhs_region.move_blocks_before(after_block)
+
+        rewriter.replace_matched_op(result)
+
+class LowerComparison(RewritePattern):
+    @op_type_rewrite_pattern
+    def match_and_rewrite(self, op: hi.ComparisonOp, rewriter: PatternRewriter):
+        lhs = UnwrapOp.create(operands=[op.lhs], result_types=[op.lhs_type.base_typ()])
+        rhs = UnwrapOp.create(operands=[op.rhs], result_types=[op.rhs_type.base_typ()])
+        cmp_op = mid.ComparisonOp.make(lhs.results[0], rhs.results[0], op.op.data)
+        wrap = WrapOp.make(cmp_op.results[0])
+        rewriter.inline_block_before_matched_op(Block([lhs, rhs, cmp_op]))
+        rewriter.replace_matched_op(wrap)
 
 class LowerPrelude(RewritePattern):
     @op_type_rewrite_pattern
@@ -543,21 +660,21 @@ class LowerCheckFlag(RewritePattern):
         candidate = llvm.PtrToIntOp(candidate_ptr.results[0], IntegerType(64))
 
         if op.typ_name.data in builtin_types.keys() and op.typ_name.data not in ["nil_typ", "any_typ"]:
-            eq = ComparisonOp.make(vptr_int.results[0], candidate.results[0], "EQ")
+            eq = mid.ComparisonOp.make(vptr_int.results[0], candidate.results[0], "EQ")
             rewriter.inline_block_before_matched_op(Block([vptr, vptr_int, candidate_ptr, candidate, eq]))
             wrap = WrapOp.make(eq.results[0])
             rewriter.replace_matched_op(wrap)
             return
 
         if op.typ_name.data == "nil_typ":
-            eq = ComparisonOp.make(vptr_int.results[0], candidate.results[0], "EQ")
+            eq = mid.ComparisonOp.make(vptr_int.results[0], candidate.results[0], "EQ")
             zero = llvm.ZeroOp.create(result_types=[IntegerType(64)])
-            extra_cmp = ComparisonOp.make(vptr_int.results[0], zero.results[0], "EQ")
+            extra_cmp = mid.ComparisonOp.make(vptr_int.results[0], zero.results[0], "EQ")
             either = arith.OrI(eq.results[0], extra_cmp.results[0])
             rewriter.inline_block_before_matched_op(Block([vptr, vptr_int, candidate_ptr, candidate, eq, zero, extra_cmp, either]))
             if op.neg: 
                 false = llvm.ZeroOp.create(result_types=[IntegerType(1)])
-                either = ComparisonOp.make(either.results[0], false.results[0], "EQ")
+                either = mid.ComparisonOp.make(either.results[0], false.results[0], "EQ")
                 rewriter.inline_block_before_matched_op(Block([false, either]))
             wrap = WrapOp.make(either.results[0])
             rewriter.replace_matched_op(wrap)
@@ -709,7 +826,7 @@ class LowerPlaceIntoBuffer(RewritePattern):
         offset_ptr = llvm.GEPOp(op.fat_ptr, [0,3], pointee_type=fat_base)
         offset = llvm.LoadOp(offset_ptr.results[0], IntegerType(32))
         ones = llvm.ConstantOp(IntegerAttr.from_int_and_width(-1, 32), IntegerType(32))
-        eq = ComparisonOp.make(ones.results[0], offset.results[0], "EQ")
+        eq = mid.ComparisonOp.make(ones.results[0], offset.results[0], "EQ")
         data_ptr_ptr = llvm.GEPOp(op.fat_ptr, [0,1], pointee_type=fat_base)
         data_ptr_if_boxed = llvm.LoadOp(data_ptr_ptr.results[0], llvm.LLVMPointerType.opaque())
         data_ptr = arith.Select(eq.results[0], data_ptr_ptr.results[0], data_ptr_if_boxed.results[0])
@@ -732,7 +849,7 @@ class LowerFromBuffer(RewritePattern):
         data_size_ptr = llvm.GEPOp(op.vptr, [6], pointee_type=llvm.LLVMPointerType.opaque())
         data_size = llvm.LoadOp(data_size_ptr.results[0], IntegerType(64))
         threshold = llvm.ConstantOp(IntegerAttr.from_int_and_width(128, 64), IntegerType(64))
-        small_struct = ComparisonOp.make(data_size.results[0], threshold.results[0], "LE")
+        small_struct = mid.ComparisonOp.make(data_size.results[0], threshold.results[0], "LE")
         malloc = llvm.CallOp("bump_malloc", data_size.results[0], return_type=llvm.LLVMPointerType.opaque())
         operandSegmentSizes = DenseArrayBase.from_list(IntegerType(32), [1, 0])
         malloc.properties["operandSegmentSizes"] = operandSegmentSizes
@@ -945,104 +1062,12 @@ class LowerLiteral(RewritePattern):
         rewriter.replace_matched_op(alloca)
         debug_code(alloca)
 
-class LowerArithmetic(RewritePattern):
-    @op_type_rewrite_pattern
-    def match_and_rewrite(self, op: ArithmeticOp, rewriter: PatternRewriter):
-        debug_code(op)
-        if isinstance(op.lhs.type, Integer) and isinstance(op.rhs.type, Integer):
-            lhs_sign = op.lhs.type.signedness.data
-            rhs_sign = op.rhs.type.signedness.data
-            op_map1 = {
-                tuple(Signedness.SIGNED, "ADD", Signedness.SIGNED):arith.Addi,
-                tuple(Signedness.SIGNED, "SUB", Signedness.SIGNED): arith.Subi,
-                tuple(Signedness.SIGNED, "MUL", Signedness.SIGNED): arith.Muli,
-                tuple(Signedness.UNSIGNED, "ADD", Signedness.UNSIGNED):arith.Addi,
-                tuple(Signedness.UNSIGNED, "SUB", Signedness.UNSIGNED): arith.Subi,
-                tuple(Signedness.UNSIGNED, "MUL", Signedness.UNSIGNED): arith.Muli,
-                tuple(Signedness.SIGNED, "DIV", Signedness.SIGNED): arith.DivSI,
-                tuple(Signedness.SIGNED, "MOD", Signedness.SIGNED):arith.RemSI,
-                tuple(Signedness.UNSIGNED, "DIV", Signedness.UNSIGNED): arith.DivUI,
-                tuple(Signedness.UNSIGNED, "MOD", Signedness.UNSIGNED):arith.RemUI,
-                tuple(Signedness.SIGNED, "LSHIFT", Signedness.SIGNED):arith.ShLI,
-                tuple(Signedness.UNSIGNED, "LSHIFT", Signedness.UNSIGNED):arith.ShLI,
-                tuple(Signedness.SIGNED, "RSHIFT", Signedness.SIGNED):arith.ShRSI,
-                tuple(Signedness.UNSIGNED, "RSHIFT", Signedness.UNSIGNED):arith.ShRUI,
-                tuple(Signedness.SIGNED, "bit_and", Signedness.SIGNED):arith.AndI,
-                tuple(Signedness.SIGNED, "bit_or", Signedness.SIGNED):arith.OrI,
-                tuple(Signedness.SIGNED, "bit_xor", Signedness.SIGNED):arith.XOrI,
-                tuple(Signedness.UNSIGNED, "bit_and", Signedness.UNSIGNED):arith.AndI,
-                tuple(Signedness.UNSIGNED, "bit_or", Signedness.UNSIGNED):arith.OrI,
-                tuple(Signedness.UNSIGNED, "bit_xor", Signedness.UNSIGNED):arith.XOrI
-            }
-            concrete_op1 = op_map1[tuple(lhs_sign, op.op.data, rhs_sign)]
-            add1 = concrete_op1(op.lhs, op.rhs)
-            rewriter.replace_matched_op(add1)
-            return
-        if isinstance(op.lhs.type, Float) and isinstance(op.rhs.type, Float):
-            op_map2 = {
-                "ADD":arith.Addf,
-                "SUB": arith.Subf,
-                "MUL": arith.Mulf,
-                "DIV": arith.Divf
-            }
-            concrete_op2 = op_map2[op.op.data]
-            add2 = concrete_op2(op.lhs, op.rhs)
-            rewriter.replace_matched_op(add2)
-            return
-        debug_code(op)
-
-class LowerComparison(RewritePattern):
-    @op_type_rewrite_pattern
-    def match_and_rewrite(self, op: ComparisonOp, rewriter: PatternRewriter):
-        debug_code(op)
-        if(isinstance(op.result.type, IntegerType)):
-            op_map = {"EQ":"eq","NEQ":"ne","LT":"slt","GT":"sgt","GE":"sge","LE":"sle"}
-            cmp_op = arith.Cmpi(op.lhs, op.rhs, op_map[op.op.data])
-        if(isinstance(op.result.type, Float64Type)):
-            op_map = {"EQ":"eq","NEQ":"ne","LT":"olt","GT":"ogt","GE":"ugt","LE":"ult"}
-            cmp_op = arith.Cmpf(op.lhs, op.rhs, op_map[op.op.data])
-        rewriter.replace_matched_op(cmp_op)
-        debug_code(op)
-
-class LowerLogical(RewritePattern):
-    @op_type_rewrite_pattern
-    def match_and_rewrite(self, op: LogicalOp, rewriter: PatternRewriter):
-        debug_code(op)
-        
-        rhs_region = op.detach_region(op.rhs_region)
-        
-        result = AllocateOp.make(IntegerType(1))
-        store1 = llvm.StoreOp(op.lhs, result.results[0])
-        rewriter.insert_op_before_matched_op(result)
-        rewriter.insert_op_before_matched_op(store1)
-        surrounding_block = op.parent_block()
-        after_block = surrounding_block.split_before(op)
-
-        if op.op.data == "and":
-            cbr = cf.ConditionalBranch(op.lhs, rhs_region.block, [], after_block, [])
-        if op.op.data == "or":
-            cbr = cf.ConditionalBranch(op.lhs, after_block, [], rhs_region.block, [])
-        surrounding_block.add_op(cbr)
-        
-        rhs_value = rhs_region.block.last_op.operands[0]
-        load1 = llvm.LoadOp(rhs_value, IntegerType(1))
-        store2 = llvm.StoreOp(load1.results[0], result.results[0])
-        br = cf.Branch(after_block)
-        rewriter.erase_op(rhs_region.block.last_op)
-        rhs_region.block.add_ops([load1, store2, br])
-        rhs_region.move_blocks_before(after_block)
-
-        load2 = llvm.LoadOp(result.results[0], IntegerType(1))
-        rewriter.replace_matched_op(load2)
-        
-        debug_code(op)
-
 class LowerNext(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: NextOp, rewriter: PatternRewriter):
         one = llvm.ConstantOp(IntegerAttr.from_int_and_width(1, 32), IntegerType(32))
         load = llvm.LoadOp(op.operand, IntegerType(32))
-        inc = ArithmeticOp.make("ADD", load.results[0], one.results[0])
+        inc = mid.ArithmeticOp.make("ADD", load.results[0], one.results[0])
         store = llvm.StoreOp(inc.results[0], op.operand)
         rewriter.inline_block_after_matched_op(Block([one, inc, store]))
         rewriter.replace_matched_op(load)
@@ -1371,26 +1396,6 @@ class LowerToFatPtr(RewritePattern):
         set_offset = SetOffsetOp.create(operands=[alloca.results[0]], attributes={"to_typ":op.to_typ_name})
         ops = [memcpy, set_offset]
         rewriter.inline_block_after_matched_op(Block(ops))
-        rewriter.replace_matched_op(alloca)
-
-class LowerWidenInt(RewritePattern):
-    @op_type_rewrite_pattern
-    def match_and_rewrite(self, op: WidenIntOp, rewriter: PatternRewriter):
-        alloca = AllocateOp.make(op.to_typ)
-        unwrapped = UnwrapOp.create(operands=[op.operand], result_types=[op.from_typ])
-        extended = arith.ExtSIOp(unwrapped.results[0], op.to_typ)
-        store = llvm.StoreOp(extended.results[0], alloca.results[0])
-        rewriter.inline_block_after_matched_op(Block([unwrapped, extended, store]))
-        rewriter.replace_matched_op(alloca)
-
-class LowerIntToFloat(RewritePattern):
-    @op_type_rewrite_pattern
-    def match_and_rewrite(self, op: IntToFloatOp, rewriter: PatternRewriter):
-        alloca = AllocateOp.make(op.to_typ)
-        unwrapped = UnwrapOp.create(operands=[op.operand], result_types=[op.from_typ])
-        cast = arith.SIToFPOp(unwrapped.results[0], Float64Type())
-        store = llvm.StoreOp(cast.results[0], alloca.results[0])
-        rewriter.inline_block_after_matched_op(Block([unwrapped, cast, store]))
         rewriter.replace_matched_op(alloca)
 
 class LowerNarrow(RewritePattern):
@@ -1871,6 +1876,8 @@ class LowerFuncDef(RewritePattern):
         terminator = cf.Branch(exit_block)
         last_block.add_op(terminator)
         if not void_return: exit_arg = exit_block.insert_arg(op.result_type, 0)
+
+        # Convert return ops into branches to exit block
         ret_ops = chain.from_iterable([[op for op in block.ops if isinstance(op, ReturnOp)] for block in body.blocks])
         for ret_op in ret_ops:
             parent_block = ret_op.parent_block()
@@ -1885,15 +1892,20 @@ class LowerFuncDef(RewritePattern):
             rewriter.insert_op_before(br, ret_op)
             dead_block = parent_block.split_before(ret_op)
             rewriter.replace_op(dead_block.last_op, cf.Branch(dead_block))
+
+        # Add a return op to the exit block
         new_ret = func.Return(exit_arg) if not void_return else func.Return()
         exit_block.add_op(new_ret)
         body.add_block(exit_block)
         result_types = [] if void_return else [op.result_type]
         body = op.detach_region(body)
+
+        # Any branch to exit block with the wrong number of arguments is converted into infinite loop
         for block in body.blocks:
             if not isinstance(block.last_op, cf.Branch): continue
             if not void_return and exit_block in block.last_op.successors and len([*block.last_op.arguments]) == 0:
                 rewriter.replace_op(block.last_op, cf.Branch(block))
+
         func_op = func.FuncOp(name=op.func_name.data, function_type=([arg.type for arg in body.first_block.args], result_types), region=body)
         rewriter.replace_matched_op(func_op)
         debug_code(op)
@@ -2065,21 +2077,21 @@ class LowerDataSizeDef(RewritePattern):
             cmp_align = arith.Cmpi(alignment.results[0], max_align.results[0], "ugt")
             max_align = arith.Select(cmp_align.results[0], alignment.results[0], max_align.results[0])
             rem = arith.RemUI(current_offset.results[0], alignment.results[0])
-            cmp_rem = ComparisonOp.make(zero.results[0], rem.results[0], "EQ")
-            high_end_pad = ArithmeticOp.make("SUB", alignment.results[0], rem.results[0])
+            cmp_rem = mid.ComparisonOp.make(zero.results[0], rem.results[0], "EQ")
+            high_end_pad = mid.ArithmeticOp.make("SUB", alignment.results[0], rem.results[0])
             padding = arith.Select(cmp_rem.results[0], zero.results[0], high_end_pad.results[0])
-            padded_size = ArithmeticOp.make("ADD", size.results[0], padding.results[0])
-            current_offset = ArithmeticOp.make("ADD", current_offset.results[0], padded_size.results[0])
+            padded_size = mid.ArithmeticOp.make("ADD", size.results[0], padding.results[0])
+            current_offset = mid.ArithmeticOp.make("ADD", current_offset.results[0], padded_size.results[0])
             body_block.add_ops([
                 cmp_align, max_align,
                 rem, cmp_rem, high_end_pad, padding, padded_size, current_offset
             ])
 
         rem_final = arith.RemUI(current_offset.results[0], max_align.results[0])
-        cmp_rem_final = ComparisonOp.make(rem_final.results[0], zero.results[0], "EQ")
-        high_pad_final = ArithmeticOp.make("SUB", max_align.results[0], rem_final.results[0])
+        cmp_rem_final = mid.ComparisonOp.make(rem_final.results[0], zero.results[0], "EQ")
+        high_pad_final = mid.ArithmeticOp.make("SUB", max_align.results[0], rem_final.results[0])
         padding_final = arith.Select(cmp_rem_final.results[0], zero.results[0], high_pad_final.results[0])
-        final_size = ArithmeticOp.make("ADD", current_offset.results[0], padding_final.results[0])
+        final_size = mid.ArithmeticOp.make("ADD", current_offset.results[0], padding_final.results[0])
 
         undef = llvm.UndefOp(return_type)
         dense_ary = DenseArrayBase.create_dense_int_or_index(IntegerType(64), [0])
@@ -2126,18 +2138,18 @@ class LowerGetterDef(RewritePattern):
                 body_block.add_ops([size, alignment])
             if i == op.offset.value.data: break
             rem = arith.RemUI(current_offset.results[0], alignment.results[0])
-            cmp_rem = ComparisonOp.make(zero.results[0], rem.results[0], "EQ")
-            high_end_pad = ArithmeticOp.make("SUB", alignment.results[0], rem.results[0])
+            cmp_rem = mid.ComparisonOp.make(zero.results[0], rem.results[0], "EQ")
+            high_end_pad = mid.ArithmeticOp.make("SUB", alignment.results[0], rem.results[0])
             padding = arith.Select(cmp_rem.results[0], zero.results[0], high_end_pad.results[0])
-            padded_size = ArithmeticOp.make("ADD", size.results[0], padding.results[0])
-            current_offset = ArithmeticOp.make("ADD", current_offset.results[0], padded_size.results[0])
+            padded_size = mid.ArithmeticOp.make("ADD", size.results[0], padding.results[0])
+            current_offset = mid.ArithmeticOp.make("ADD", current_offset.results[0], padded_size.results[0])
             body_block.add_ops([rem, cmp_rem, high_end_pad, padding, padded_size, current_offset])
 
         rem_final = arith.RemUI(current_offset.results[0], alignment.results[0])
-        cmp_rem_final = ComparisonOp.make(rem_final.results[0], zero.results[0], "EQ")
-        high_pad_final = ArithmeticOp.make("SUB", alignment.results[0], rem_final.results[0])
+        cmp_rem_final = mid.ComparisonOp.make(rem_final.results[0], zero.results[0], "EQ")
+        high_pad_final = mid.ArithmeticOp.make("SUB", alignment.results[0], rem_final.results[0])
         padding_final = arith.Select(cmp_rem_final.results[0], zero.results[0], high_pad_final.results[0])
-        final_size = ArithmeticOp.make("ADD", current_offset.results[0], padding_final.results[0])
+        final_size = mid.ArithmeticOp.make("ADD", current_offset.results[0], padding_final.results[0])
 
         field_gep = llvm.GEPOp.from_mixed_indices(data_ptr, [final_size.results[0]], pointee_type=IntegerType(8))
         body_block.add_ops([rem_final, cmp_rem_final, high_pad_final, padding_final, final_size, field_gep])
@@ -2221,18 +2233,18 @@ class LowerSetterDef(RewritePattern):
                 body_block.add_ops([size, alignment])
             if i == op.offset.value.data: break
             rem = arith.RemUI(current_offset.results[0], alignment.results[0])
-            cmp_rem = ComparisonOp.make(zero.results[0], rem.results[0], "EQ")
-            high_end_pad = ArithmeticOp.make("SUB", alignment.results[0], rem.results[0])
+            cmp_rem = mid.ComparisonOp.make(zero.results[0], rem.results[0], "EQ")
+            high_end_pad = mid.ArithmeticOp.make("SUB", alignment.results[0], rem.results[0])
             padding = arith.Select(cmp_rem.results[0], zero.results[0], high_end_pad.results[0])
-            padded_size = ArithmeticOp.make("ADD", size.results[0], padding.results[0])
-            current_offset = ArithmeticOp.make("ADD", current_offset.results[0], padded_size.results[0])
+            padded_size = mid.ArithmeticOp.make("ADD", size.results[0], padding.results[0])
+            current_offset = mid.ArithmeticOp.make("ADD", current_offset.results[0], padded_size.results[0])
             body_block.add_ops([rem, cmp_rem, high_end_pad, padding, padded_size, current_offset])
 
         rem_final = arith.RemUI(current_offset.results[0], alignment.results[0])
-        cmp_rem_final = ComparisonOp.make(rem_final.results[0], zero.results[0], "EQ")
-        high_pad_final = ArithmeticOp.make("SUB", alignment.results[0], rem_final.results[0])
+        cmp_rem_final = mid.ComparisonOp.make(rem_final.results[0], zero.results[0], "EQ")
+        high_pad_final = mid.ArithmeticOp.make("SUB", alignment.results[0], rem_final.results[0])
         padding_final = arith.Select(cmp_rem_final.results[0], zero.results[0], high_pad_final.results[0])
-        final_size = ArithmeticOp.make("ADD", current_offset.results[0], padding_final.results[0])
+        final_size = mid.ArithmeticOp.make("ADD", current_offset.results[0], padding_final.results[0])
 
         field_gep = llvm.GEPOp.from_mixed_indices(data_ptr, [final_size.results[0]], pointee_type=IntegerType(8))
         body_block.add_ops([rem_final, cmp_rem_final, high_pad_final, padding_final, final_size, field_gep])
@@ -2312,7 +2324,7 @@ class LowerBoxDef(RewritePattern):
         exit = Block([])
 
         threshold = llvm.ConstantOp(IntegerAttr.from_int_and_width(16, 64), IntegerType(64))
-        small_struct = ComparisonOp.make(data_size.results[0], threshold.results[0], "LE")
+        small_struct = mid.ComparisonOp.make(data_size.results[0], threshold.results[0], "LE")
         br = cf.ConditionalBranch(small_struct.results[0], no_box_block, [], box_block, [])
 
         entry.add_ops([alloca, gep, vptr, store, data_size_fn, call, data_size, false, threshold, small_struct, br])
@@ -2382,12 +2394,12 @@ class LowerBoxUnionDef(RewritePattern):
         
         thirtytwo = llvm.ConstantOp(IntegerAttr.from_int_and_width(32, 64), IntegerType(64))
         
-        right_size = ComparisonOp.make(data_size.results[0], thirtytwo.results[0], "EQ")
+        right_size = mid.ComparisonOp.make(data_size.results[0], thirtytwo.results[0], "EQ")
         br = cf.ConditionalBranch(right_size.results[0], right_size_block, [], box_decision_block, [])
         entry.add_ops([alloca, gep, vptr, store, data_size_fn, call, data_size, false, thirtytwo, right_size, br])
 
         threshold = llvm.ConstantOp(IntegerAttr.from_int_and_width(16, 64), IntegerType(64))
-        small_struct = ComparisonOp.make(data_size.results[0], threshold.results[0], "LE")
+        small_struct = mid.ComparisonOp.make(data_size.results[0], threshold.results[0], "LE")
         br = cf.ConditionalBranch(small_struct.results[0], no_box_block, [], box_block, [])
         box_decision_block.add_ops([threshold, small_struct, br])
 
@@ -2453,7 +2465,7 @@ class LowerUnboxDef(RewritePattern):
         data_size = llvm.ExtractValueOp(dense_ary, call.results[0], IntegerType(64))
 
         threshold = llvm.ConstantOp(IntegerAttr.from_int_and_width(16, 64), IntegerType(64))
-        small_struct = ComparisonOp.make(data_size.results[0], threshold.results[0], "LE")
+        small_struct = mid.ComparisonOp.make(data_size.results[0], threshold.results[0], "LE")
 
         source = arith.Select(small_struct.results[0], data_ptr_ptr.results[0], data_ptr.results[0])
         false = llvm.ConstantOp(IntegerAttr.from_int_and_width(0, 1), IntegerType(1))
