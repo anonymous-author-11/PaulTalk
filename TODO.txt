@@ -561,8 +561,8 @@ TODO:
 			- Modulo (urem vs srem) [check!]
 			- Shifts treat rhs as unsigned [check!]
 			- lshr for unsigned lhs, ashr for signed lhs [check!]
-			- sitofp, uitofp [check!]
-			- extsi, extui [check!]
+			- sitofp, uitofp, extsi, extui [check!]
+			- Comparisons (icmp) [check!]
 		- I should want a hi.arithmetic which dispatches based on hi types [check!]
 			- Do I want mid.arithmetic as well?
 			- If I ever want to change overflow semantics

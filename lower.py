@@ -564,12 +564,18 @@ class LowerLogical(RewritePattern):
 
         rewriter.replace_matched_op(result)
 
+int_compare_map = {
+    Signedness.SIGNED:{"EQ":"eq", "NEQ":"ne", "LT":"slt", "GT":"sgt", "LE":"sle", "GE":"sge"},
+    Signedness.UNSIGNED:{"EQ":"eq", "NEQ":"ne", "LT":"ult", "GT":"ugt", "LE":"ule", "GE":"uge"},
+}
+
 class LowerComparison(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: hi.ComparisonOp, rewriter: PatternRewriter):
         lhs = UnwrapOp.create(operands=[op.lhs], result_types=[op.lhs_type.base_typ()])
         rhs = UnwrapOp.create(operands=[op.rhs], result_types=[op.rhs_type.base_typ()])
-        cmp_op = mid.ComparisonOp.make(lhs.results[0], rhs.results[0], op.op.data)
+        op_code = int_compare_map[op.lhs_type.signedness.data][op.op.data]
+        cmp_op = arith.Cmpi(lhs.results[0], rhs.results[0], op_code)
         wrap = WrapOp.make(cmp_op.results[0])
         rewriter.inline_block_before_matched_op(Block([lhs, rhs, cmp_op]))
         rewriter.replace_matched_op(wrap)
