@@ -236,7 +236,7 @@ class BinaryOp(Expression):
             return OverloadedBinaryOp(self.info, self.left, self.operator, self.right).codegen(scope)
         right_type = self.right.exprtype(scope)
         if isinstance(left_type, Tuple) and isinstance(right_type, Tuple):
-            return TupleArithmetic(self.info, self.left, self.operator, self.right).codegen(scope)
+            return TuplesOp(self.info, self.left, self.operator, self.right, type(self)).codegen(scope)
         operands = [self.left.codegen(scope), self.right.codegen(scope)]
         attr_dict = {
             "op":StringAttr(self.operator),
@@ -253,34 +253,20 @@ class BinaryOp(Expression):
     def concrete_exprtype(self, left_type, right_type):
         raise Exception("abstract")
 
-    def exprtype(self, scope):
-        left_type = self.left.exprtype(scope)
-        if isinstance(left_type, FatPtr) or isinstance(left_type, TypeParameter):
-            return OverloadedBinaryOp(self.info, self.left, self.operator, self.right).exprtype(scope)
-        right_type = self.right.exprtype(scope)
-        if isinstance(left_type, Tuple) and isinstance(right_type, Tuple):
-            return TupleArithmetic(self.info, self.left, self.operator, self.right).exprtype(scope)
-
-        left_integer = isinstance(left_type, Integer)
-        right_integer = isinstance(right_type, Integer)
-
-        left_number = left_integer or isinstance(left_type, Float) or isinstance(left_type, Bool)
-        right_number = right_integer or isinstance(right_type, Float) or isinstance(right_type, Bool)
-
-        if not (left_number and right_number):
-            raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
-
+    def conform_literals(self, left_type, right_type):
         # For int-int ops where one is a literal, set the literal's width equal to the other
-        if left_integer and isinstance(self.right, IntegerLiteral):
+        if isinstance(left_type, Integer) and isinstance(self.right, IntegerLiteral):
             self.right.width = left_type.bitwidth
             right_type = self.right.exprtype(scope)
-        if right_integer and isinstance(self.left, IntegerLiteral):
+        if isinstance(right_type, Integer) and isinstance(self.left, IntegerLiteral):
             self.left.width = right_type.bitwidth
             left_type = self.left.exprtype(scope)
+        return left_type, right_type
 
+    def widen_operands(self, left_type, right_type):
         # For int-int ops with different width, extend the smaller int to the size of the larger one
         # Or if one is unsigned and the other is signed, cast the unsigned one
-        if left_integer and right_integer:
+        if isinstance(left_type, Integer) and isinstance(right_type, Integer):
             if left_type.bitwidth < right_type.bitwidth:
                 as_info = NodeInfo(None, self.info.filepath, self.info.line_number)
                 self.left = As(as_info, self.left, right_type)
@@ -289,16 +275,40 @@ class BinaryOp(Expression):
                 as_info = NodeInfo(None, self.info.filepath, self.info.line_number)
                 self.right = As(as_info, self.right, left_type)
                 right_type = self.right.exprtype(scope)
+        return left_type, right_type
 
+    def floatify_ints(self, left_type, right_type):
         # For int-float ops of the same width, convert the int to a float
-        if left_integer and isinstance(right_type, Float) and left_type.bitwidth == right_type.bitwidth:
+        if isinstance(left_type, Integer) and isinstance(right_type, Float) and left_type.bitwidth == right_type.bitwidth:
             as_info = NodeInfo(None, self.info.filepath, self.info.line_number)
             self.left = As(as_info, self.left, right_type)
             left_type = self.left.exprtype(scope)
-        if right_integer and isinstance(left_type, Float) and left_type.bitwidth == right_type.bitwidth:
+        if isinstance(right_type, Integer) and isinstance(left_type, Float) and left_type.bitwidth == right_type.bitwidth:
             as_info = NodeInfo(None, self.info.filepath, self.info.line_number)
             self.right = As(as_info, self.right, left_type)
             right_type = self.right.exprtype(scope)
+        return left_type, right_type
+
+    def ensure_numbers(self, left_type, right_type):
+        left_number = isinstance(left_type, Integer) or isinstance(left_type, Float) or isinstance(left_type, Bool)
+        right_number = isinstance(right_type, Integer) or isinstance(right_type, Float) or isinstance(right_type, Bool)
+
+        if not (left_number and right_number):
+            raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
+
+    def exprtype(self, scope):
+        left_type = self.left.exprtype(scope)
+        if isinstance(left_type, FatPtr) or isinstance(left_type, TypeParameter):
+            return OverloadedBinaryOp(self.info, self.left, self.operator, self.right).exprtype(scope)
+        right_type = self.right.exprtype(scope)
+        if isinstance(left_type, Tuple) and isinstance(right_type, Tuple):
+            return TuplesOp(self.info, self.left, self.operator, self.right, type(self)).exprtype(scope)
+
+        self.ensure_numbers(left_type, right_type)
+
+        left_type, right_type = self.conform_literals(left_type, right_type)
+        left_type, right_type = self.widen_operands(left_type, right_type)
+        left_type, right_type = self.floatify_ints(left_type, right_type)
 
         return self.concrete_exprtype(left_type, right_type)
 
@@ -306,6 +316,36 @@ class BinaryOp(Expression):
         self.left.typeflow(scope)
         self.right.typeflow(scope)
         self.exprtype(scope)
+
+@dataclass
+class TuplesOp(BinaryOp):
+    op_type: type
+
+    def codegen(self, scope):
+        left_type = self.left.exprtype(scope)
+        right_type = self.right.exprtype(scope)
+        num_elems = len(left_type.types.data)
+        node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for x in range(4 * num_elems)]
+        indices = [IntegerLiteral(node_infos[i], i, 32) for i in range(num_elems)]
+        left_elems = [TupleIndexation(node_infos[num_elems + i], self.left, "_index", [indices[i]]) for i in range(num_elems)]
+        right_elems = [TupleIndexation(node_infos[2 * num_elems + i], self.right, "_index", [indices[i]]) for i in range(num_elems)]
+        result_elems = tuple(self.op_type(node_infos[3 * num_elems + i], left_elems[i], self.operator, right_elems[i]) for i in range(num_elems))
+        return TupleLiteral(self.info, result_elems).codegen(scope)
+
+    def exprtype(self, scope):
+        left_type = self.left.exprtype(scope)
+        right_type = self.right.exprtype(scope)
+        if left_type != right_type:
+            raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
+        if self.operator not in ("ADD","SUB","MUL","DIV","MOD","LSHIFT","RSHIFT","bit_and","bit_or","bit_xor"):
+            raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
+        num_elems = len(left_type.types.data)
+        node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for x in range(4 * num_elems)]
+        indices = [IntegerLiteral(node_infos[i], i, 32) for i in range(num_elems)]
+        left_elems = [TupleIndexation(node_infos[num_elems + i], self.left, "_index", [indices[i]]) for i in range(num_elems)]
+        right_elems = [TupleIndexation(node_infos[2 * num_elems + i], self.right, "_index", [indices[i]]) for i in range(num_elems)]
+        result_elems = tuple(self.op_type(node_infos[3 * num_elems + i], left_elems[i], self.operator, right_elems[i]) for i in range(num_elems))
+        return TupleLiteral(self.info, result_elems).exprtype(scope)
 
 @dataclass
 class Arithmetic(BinaryOp):
@@ -335,37 +375,13 @@ class Arithmetic(BinaryOp):
         return left_type
 
 @dataclass
-class TupleArithmetic(Arithmetic):
-
-    def codegen(self, scope):
-        left_type = self.left.exprtype(scope)
-        right_type = self.right.exprtype(scope)
-        num_elems = len(left_type.types.data)
-        node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for x in range(4 * num_elems)]
-        indices = [IntegerLiteral(node_infos[i], i, 32) for i in range(num_elems)]
-        left_elems = [TupleIndexation(node_infos[num_elems + i], self.left, "_index", [indices[i]]) for i in range(num_elems)]
-        right_elems = [TupleIndexation(node_infos[2 * num_elems + i], self.right, "_index", [indices[i]]) for i in range(num_elems)]
-        result_elems = tuple(Arithmetic(node_infos[3 * num_elems + i], left_elems[i], self.operator, right_elems[i]) for i in range(num_elems))
-        return TupleLiteral(self.info, result_elems).codegen(scope)
-
-    def exprtype(self, scope):
-        left_type = self.left.exprtype(scope)
-        right_type = self.right.exprtype(scope)
-        if left_type != right_type:
-            raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
-        if self.operator not in ("ADD","SUB","MUL","DIV","MOD","LSHIFT","RSHIFT","bit_and","bit_or","bit_xor"):
-            raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
-        num_elems = len(left_type.types.data)
-        node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for x in range(4 * num_elems)]
-        indices = [IntegerLiteral(node_infos[i], i, 32) for i in range(num_elems)]
-        left_elems = [TupleIndexation(node_infos[num_elems + i], self.left, "_index", [indices[i]]) for i in range(num_elems)]
-        right_elems = [TupleIndexation(node_infos[2 * num_elems + i], self.right, "_index", [indices[i]]) for i in range(num_elems)]
-        result_elems = tuple(Arithmetic(node_infos[3 * num_elems + i], left_elems[i], self.operator, right_elems[i]) for i in range(num_elems))
-        return TupleLiteral(self.info, result_elems).exprtype(scope)
-
-@dataclass
 class Comparison(BinaryOp):
     def concrete_op(self, operands, attributes, result_types):
+        op_map = {
+            Signedness.SIGNED:{"EQ":"eq", "NEQ":"ne", "LT":"slt", "GT":"sgt", "LE":"sle", "GE":"sge"},
+            Signedness.UNSIGNED:{"EQ":"eq", "NEQ":"ne", "LT":"ult", "GT":"ugt", "LE":"ule", "GE":"uge"},
+        }
+        attributes["op"] = StringAttr(op_map[self.operator])
         return hi.ComparisonOp.create(operands=operands, attributes=attributes, result_types=[Integer(1)])
     def concrete_exprtype(self, left_type, right_type):
         if left_type != right_type:

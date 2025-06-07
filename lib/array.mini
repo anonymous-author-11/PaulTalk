@@ -1,26 +1,12 @@
 import core;
 
-class Array[T] extends Collection[T], Representable {
+class Array[T] extends List[T], Indexable[i32, T, T], Representable {
 	@buffer : Buffer[T]
 	@length : i32
 	@capacity : i32
 
     regions { @elems_reg == @buffer.elems_reg }
 
-    #[ret.elems_reg == iterable.elems_reg]
-	def Self.from_iterable(iterable : Iterable[T]) -> Array[T] {
-    	result = Array[T].new();
-    	for elem in iterable { result.append(elem); }
-    	return result;
-    }
-    /*
-    #[ret.elems_reg == collection.elems_reg]
-    def Self.from_collection(collection : Collection[T]) -> Array[T] {
-        result = Array[T].new(collection.size());
-        for elem in collection { result.append(elem); }
-        return result;
-    }
-    */
 	def init() {
 		@buffer = Buffer[T].new(1);
 		@length = 0;
@@ -36,10 +22,6 @@ class Array[T] extends Collection[T], Representable {
     def init(@buffer : Buffer[T], @length : i32, @capacity : i32) {
     }
     #[ret == @length]
-	def length() -> i32 {
-		return @length;
-	}
-    #[ret == @length]
     def size() -> i32 {
         return @length;
     }
@@ -48,21 +30,23 @@ class Array[T] extends Collection[T], Representable {
     	return @capacity;
     }
     #[ret == self, x == @elems_reg]
-    def append(x : T) -> Array[T] {
+    def append(x : T) -> Self {
         if @length >= @capacity { self.reserve(@capacity * 2); }
         @buffer.[@length] = x;
         @length = @length + 1;
         return self;
     }
+    // Since List.collect(iterable : Iterable[T]) calls .extend(iterable) internally, this makes that more efficient too
+    // Another great example of why multimethods are so useful: always dispatches on argument's runtime type
     #[ret == self, other.elems_reg == @elems_reg]
-    def extend(other : Array[T]) -> Array[T] {
-        other_len = other.length();
+    def extend(other : Collection[T]) -> Self {
+        other_size = other.size();
         old_len = @length;
-        new_len = old_len + other_len;
+        new_len = old_len + other_size;
         self.reserve(new_len);
         i = 0;
-        while i < other_len {
-            self.unchecked_insert(i + old_len, other.unchecked_index(i));
+        for elem in other {
+            self.unchecked_insert(i + old_len, elem);
             i = i + 1;
         }
         @length = new_len;
@@ -103,15 +87,18 @@ class Array[T] extends Collection[T], Representable {
     def unchecked_insert(x : i32, value : T) {
         @buffer.[x] = value;
     }
-    def iterator() -> ArrayIterator[T] {
-    	return ArrayIterator[T].new(self);
+    def iterator() -> ConstantTimeIterator[T] {
+    	return ArrayIterator{self};
     }
     def repr() -> String {
         return "Array";
     }
 }
 
-class ArrayIterator[T] extends Iterator[T] {
+// Must be O(1) to get next element
+class ConstantTimeIterator[T] extends Iterator[T] {}
+
+class ArrayIterator[T] extends ConstantTimeIterator[T] {
 	@array : Array[T]
 	@index : i32
 
@@ -119,6 +106,8 @@ class ArrayIterator[T] extends Iterator[T] {
 
 	def init(@array : Array[T]) { @index = 0; }
 	def next() -> T | Nil {
+        // We check the array's current .length() on every .next() call
+        // This guarantees no out-of-bounds access if the array was modified
 		if @index >= @array.length() { return nil; }
 		@index = @index + 1;
 		return @array.unchecked_index(@index - 1);

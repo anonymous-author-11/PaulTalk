@@ -1,0 +1,24 @@
+import collection;
+
+class List[T] extends Collection[T] {
+
+	// Create a List from any iterable
+    def Self.collect(iterable : Iterable[T]) -> Self {
+        return Self{}.extend(iterable);
+    }
+
+    // must be able to create an empty List with no arguments
+    abstract def init() {}
+
+    // append always increases .size() by 1
+    abstract def append(x : T) -> Self {}
+
+    def length() -> i32 {
+        return self.size();
+    }
+
+    def extend(other : Iterable[T]) -> Self {
+        for x in other { self.append(x); }
+        return self;
+    }
+}

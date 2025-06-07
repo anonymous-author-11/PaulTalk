@@ -1,0 +1,8 @@
+import iteration;
+
+class Indexable[I, V, T] extends Iterable[T] {
+
+	// Should be O(1) access
+	abstract def [](index : I) -> V {}
+
+}

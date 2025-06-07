@@ -2,7 +2,9 @@
 extern def capture_backtrace(max_frames : i64, backtrace : Buffer[i64]) -> i64
 extern def print_backtrace(backtrace : Buffer[i64], n_frames : i64)
 
-import collection;
+import list;
+import indexable;
+import range;
 
 class Representable {
     def repr() -> String { return "Object"; }
