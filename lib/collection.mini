@@ -4,6 +4,12 @@ class Collection[T] extends Iterable[T] {
 
     abstract def size() -> i32 {}
 
+    def is_empty() -> Bool {
+        return self.size() == 0;
+    }
+
+    // Iterable.filter is *not* overridden because the size of a filtered collection cannot be known prior to iterating
+
     #[ret.iterable == self]
     def enumerate() -> Collection[Pair[i32, T]] {
         return EnumeratedCollection[T]{self};

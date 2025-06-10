@@ -15,7 +15,7 @@ class LinearProbeMap[K, V] extends OpenAddressMap[K, V] {
 
         while true {
             entry = @entries.[current_index];
-
+            
             if entry is Nil {
                 // Empty slot found. Key is not present beyond this point.
                 if first_tombstone_idx == -1 { return current_index; }
@@ -37,7 +37,6 @@ class LinearProbeMap[K, V] extends OpenAddressMap[K, V] {
                 }
                 // Else (it's an active entry for a different key), continue probing.
             }
-
             // --- Linear Probing Step ---
             current_index = (current_index + 1) bit_and mask; // Move to the next slot, wrapping around
 

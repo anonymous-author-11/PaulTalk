@@ -1,0 +1,99 @@
+import core;
+
+// A First-In, First-Out (FIFO) collection.
+// Implemented as a circular buffer for efficient enqueue and dequeue operations.
+class Queue[T] extends Collection[T] {
+    @storage : Buffer[T]
+    @head : i32         // Physical index of the first element in the buffer
+    @tail : i32         // Physical index of the next empty slot
+    @count : i32        // Number of elements in the queue
+    @capacity : i32     // The total size of the internal storage buffer
+
+    def init() {
+        @capacity = 16; // A reasonable default starting capacity
+        @storage = Buffer[T].new(@capacity);
+        @head = 0;
+        @tail = 0;
+        @count = 0;
+    }
+
+    // Returns the number of elements in the queue. O(1).
+    def size() -> i32 {
+        return @count;
+    }
+
+    // Adds an element to the back of the queue. Amortized O(1).
+    def enqueue(item : T) -> Self {
+        if @count >= @capacity { self.resize(); }
+        @storage.[@tail] = item;
+        @tail = (@tail + 1) % @capacity;
+        @count = @count + 1;
+        return self;
+    }
+
+    // Removes and returns the element at the front of the queue.
+    // Returns Nil if the queue is empty. O(1).
+    def dequeue() -> T | Nil {
+        if @count == 0 { return nil; }
+
+        item = @storage.[@head];
+        // Note: We don't need to null out the old slot. It will be overwritten later.
+        @head = (@head + 1) % @capacity;
+        @count = @count - 1;
+        return item;
+    }
+
+    // Returns the element at the front of the queue without removing it.
+    // Returns Nil if the queue is empty. O(1).
+    def peek() -> T | Nil {
+        if @count == 0 { return nil; }
+        return @storage.[@head];
+    }
+
+    // Provides unchecked access to an element by its logical index (0 = front).
+    // This is the correct, encapsulated way for the iterator to access elements.
+    def unchecked_get(logical_index : i32) -> T {
+        physical_index = (@head + logical_index) % @capacity;
+        return @storage.[physical_index];
+    }
+
+    // Internal helper to double the storage capacity and re-order elements.
+    def resize() {
+        new_capacity = @capacity * 2;
+        if new_capacity == 0 { new_capacity = 1; }
+        new_storage = Buffer[T].new(new_capacity);
+
+        // Copy elements, "un-wrapping" them from the circular buffer
+        // into a linear sequence in the new buffer.
+        for i in 0..@count { new_storage.[i] = self.unchecked_get(i); }
+
+        @storage = new_storage;
+        @capacity = new_capacity;
+        @head = 0;
+        @tail = @count;
+    }
+
+    def iterator() -> Iterator[T] {
+        return QueueIterator{self};
+    }
+}
+
+class QueueIterator[T] extends Iterator[T] {
+    @queue : Queue[T]
+    @logical_index : i32 // The logical index of the next item to yield.
+
+    def init(@queue : Queue[T]) {
+        @logical_index = 0;
+    }
+
+    def next() -> T | Nil {
+        // This check is identical to ArrayIterator's. It makes the iterator safe
+        // (though not perfectly predictable) if the queue is modified during iteration.
+        // It reads the queue's current size on every call.
+        if @logical_index >= @queue.size() { return nil; }
+
+        item = @queue.unchecked_get(@logical_index);
+        @logical_index = @logical_index + 1;
+        return item;
+    }
+}

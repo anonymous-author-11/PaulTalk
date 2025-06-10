@@ -23,17 +23,13 @@ class Container {
 
 class Iterator[T] extends Container {
 
-    @referent_reg : Region
-
-    regions { @elems_reg == @referent_reg.elems_reg }
-
     #[ret == @elems_reg]
 	abstract def next() -> T | Nil {}
 }
 
 class Iterable[T] extends Container {
 
-    #[ret.referent_reg == self]
+    #[ret.elems_reg == self.elems_reg]
 	abstract def iterator() -> Iterator[T] {
     }
 	def each(f : (T)) {
@@ -82,6 +78,20 @@ class Iterable[T] extends Container {
     }
 }
 
+// Must be O(1) to get next element
+class ConstantTimeIterator[T] extends Iterator[T] {}
+
+// Adapts a Coroutine into an Iterator
+// An alternative to writing boilerplate Iterator classes for your types
+// Generally less efficient than writing the classes
+class CoroIterator[T] extends Iterator[T] {
+    @coro : Coroutine[() yields T | Nil]
+
+    def init(@coro : Coroutine[() yields T | Nil]) {}
+
+    def next() -> T | Nil { return @coro.call(); }
+}
+
 class Enumeration[T] extends Iterable[Pair[i32, T]] {
     @iterable : Iterable[T]
 
@@ -125,7 +135,7 @@ class MapIterator[T, U] extends Iterator[U] {
     @iterator : Iterator[T]
     @f : (T) -> U
 
-    regions { @referent_reg == @iterator }
+    regions { @elems_reg == @iterator.elems_reg }
 
     def init(@iterator : Iterator[T], @f : (T) -> U) {}
 
@@ -153,7 +163,7 @@ class FilterIterator[T] extends Iterator[T] {
     @iterator : Iterator[T]
     @f : (T) -> Bool
 
-    regions { @referent_reg == @iterator }
+    regions { @elems_reg == @iterator.elems_reg }
     
     def init(@iterator : Iterator[T], @f : (T) -> Bool) {}
 
@@ -189,8 +199,8 @@ class ChainIterator[T] extends Iterator[T] {
     @on_first : Bool
 
     regions {
-        @referent_reg == @first,
-        @referent_reg == @second
+        @first == @second,
+        @elems_reg == @first.elems_reg
     }
 
     def init(@first : Iterator[T], @second : Iterator[T]) {
@@ -228,8 +238,8 @@ class InterleaveIterator[T] extends Iterator[T] {
     @on_first : Bool
 
     regions {
-        @referent_reg == @first,
-        @referent_reg == @second
+        @first == @second,
+        @elems_reg == @first.elems_reg
     }
 
     def init(@first : Iterator[T], @second : Iterator[T]) {
@@ -307,7 +317,7 @@ class ProductIterator[T, U] extends Iterator[Pair[T, U]] {
 
     regions {
         @current_first == @first_iterator.elems_reg,
-        @second_iterator.referent_reg == @second_iterable,
+        @second_iterator.elems_reg == @second_iterable.elems_reg,
         @elems_reg < @first_iterator.elems_reg,
         @elems_reg < @second_iterator.elems_reg
     }

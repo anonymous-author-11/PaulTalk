@@ -5,4 +5,7 @@ class Indexable[I, V, T] extends Iterable[T] {
 	// Should be O(1) access
 	abstract def [](index : I) -> V {}
 
+	// Should be O(1) access
+	abstract def []=(index : I, value : V) {}
+
 }

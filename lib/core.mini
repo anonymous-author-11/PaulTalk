@@ -6,16 +6,187 @@ import list;
 import indexable;
 import range;
 
+class BufferIterator[T] extends ConstantTimeIterator[T] {
+    @buffer : Buffer[T]
+    @range : Range
+
+    def init(@buffer : Buffer[T], buf_len : i32) {
+        @range = 0..buf_len;
+    }
+
+    def init(@buffer : Buffer[T], start_index : i32, buf_len : i32) {
+        @range = start_index..buf_len;
+    }
+
+    def next() -> T | Nil {
+        next = @range.next();
+        if next is i32 { return @buffer.[next]; }
+        return nil
+    }
+}
+
+class Unicode {
+
+    // � as i32 codepoint
+    def Self.replacement_codepoint() -> i32 {
+        return 0xFFFD;
+    }
+
+    // � as String
+    def Self.replacement_str() -> String {
+        return String{Self.replacement_buf(), 3, 1, 4};
+    }
+
+    // � as Buffer[i8]
+    def Self.replacement_buf() -> Buffer[i8] {
+        replacement_bytes = Buffer[i8].new(3);
+        replacement_bytes.[0] = 0xEF as i8;
+        replacement_bytes.[1] = 0xBF as i8;
+        replacement_bytes.[2] = 0xBD as i8;
+        return replacement_bytes;
+    }
+
+    // Decodes one codepoint from a buffer of bytes.
+    // Returns Nil on failure (invalid sequence or insufficient data).
+    // Otherwise, returns a tuple (codepoint, bytes_consumed).
+    def Self.decode_one(bytes: Buffer[i8], index: i32, len: i32) -> Tuple[i32, i32] | Nil {
+        if index >= len { return nil; }
+
+        b1 = bytes.[index] as i32;
+        codepoint = 0;
+        bytes_needed = 0;
+
+        // these bit patterns are mutually exclusive
+        // LLVM will see that the conditions are disjoint
+
+        if (b1 bit_and 0x80) == 0 { // 0xxxxxxx
+            codepoint = b1;
+            bytes_needed = 1;
+        }
+        if (b1 bit_and 0xE0) == 0xC0 { // 110xxxxx
+            codepoint = b1 bit_and 0x1F;
+            bytes_needed = 2;
+        }
+        if (b1 bit_and 0xF0) == 0xE0 { // 1110xxxx
+            codepoint = b1 bit_and 0x0F;
+            bytes_needed = 3;
+        }
+        if (b1 bit_and 0xF8) == 0xF0 { // 11110xxx
+            codepoint = b1 bit_and 0x07;
+            bytes_needed = 4;
+        }
+
+        // Check for invalid start byte
+        if bytes_needed == 0 or index + bytes_needed > len { return nil; }
+
+        for i in 1..bytes_needed {
+            b_next = bytes.[index + i] as i32;
+            if (b_next bit_and 0xC0) != 0x80 { return nil; } // Invalid continuation byte
+            codepoint = (codepoint << 6) bit_or (b_next bit_and 0x3F);
+        }
+
+        // Check for overlong encodings and other invalid sequences
+        if (bytes_needed == 2 and codepoint < 0x80) or
+           (bytes_needed == 3 and codepoint < 0x800) or
+           (bytes_needed == 4 and codepoint < 0x10000) or
+           (codepoint >= 0xD800 and codepoint <= 0xDFFF) or
+           (codepoint > 0x10FFFF) {
+            return nil;
+        }
+
+        return (codepoint, bytes_needed);
+    }
+
+    // Encodes a single codepoint into a new String instance.
+    def Self.encode_one(cp : i32) -> String {
+        // Pre-allocate for the max case
+        capacity = 4;
+        buf = Buffer[i8].new(capacity);
+
+        if cp <= 0x7F { // 1-byte
+            buf.[0] = cp as i8;
+            return String{buf, 1, 1, capacity}
+        }
+        if cp <= 0x7FF { // 2-byte
+            buf.[0] = (0xC0 bit_or (cp >> 6)) as i8;
+            buf.[1] = (0x80 bit_or (cp bit_and 0x3F)) as i8;
+            return String{buf, 2, 1, capacity}
+        }
+        if cp <= 0xFFFF { // 3-byte
+            buf.[0] = (0xE0 bit_or (cp >> 12)) as i8;
+            buf.[1] = (0x80 bit_or ((cp >> 6) bit_and 0x3F)) as i8;
+            buf.[2] = (0x80 bit_or (cp bit_and 0x3F)) as i8;
+            return String{buf, 3, 1, capacity}
+        }
+        if cp <= 0x10FFFF { // 4-byte
+            buf.[0] = (0xF0 bit_or (cp >> 18)) as i8;
+            buf.[1] = (0x80 bit_or ((cp >> 12) bit_and 0x3F)) as i8;
+            buf.[2] = (0x80 bit_or ((cp >> 6) bit_and 0x3F)) as i8;
+            buf.[3] = (0x80 bit_or (cp bit_and 0x3F)) as i8;
+            return String{buf, 4, 1, capacity}
+        }
+        return Unicode.replacement_str();
+    }
+}
+
 class Representable {
     def repr() -> String { return "Object"; }
 }
 
-class String extends Collection[Character], Representable {
+class String extends List[Character], Representable {
     @bytes : Buffer[i8]
-    @length : i32
+    @byte_length : i32
+    @char_length : i32 // Number of unicode codepoints
     @capacity: i32
 
-    def Self.from_c_string(c_string : Buffer[i8]) -> String {
+    def Self.empty() -> Self { return Self{}; }
+
+    // STRICT, Failable constructor. Validates input and can yield an error.
+    def Self.from_bytes(source_bytes: Buffer[i8], source_len: i32) -> Self yields InvalidUTF8Error {
+
+        // Pre-allocate with exactly enough capacity
+        // result.append within the loop will never reallocate
+        result = String{source_len};
+
+        // Single pass: Validate and append
+        byte_idx = 0;
+        while byte_idx < source_len {
+            decode_result = Unicode.decode_one(source_bytes, byte_idx, source_len);
+            if decode_result is Nil { yield(InvalidUTF8Error{}); }
+            if decode_result is Tuple[i32, i32] {
+                bytes_consumed = decode_result.[1];
+                result.append_char_from_bytes(source_bytes, byte_idx, bytes_consumed);
+                byte_idx = byte_idx + bytes_consumed;
+            }
+        }
+        return result;
+    }
+
+    // LOSSY constructor. Never fails, replaces invalid sequences with '�'.
+    // Consequently, byte length of resultant string may be different than source length
+    def Self.from_bytes_lossy(source_bytes: Buffer[i8], source_len: i32) -> Self {
+        // Approximate capacity needed
+        result = String{source_len}; 
+        replacement_buf = Unicode.replacement_buf();
+
+        byte_idx = 0;
+        while byte_idx < source_len {
+            decode_result = Unicode.decode_one(source_bytes, byte_idx, source_len);
+            if decode_result is Tuple[i32, i32] {
+                // Append the valid bytes
+                bytes_to_copy = decode_result.[1];
+                result.append_char_from_bytes(source_bytes, byte_idx, bytes_to_copy)
+                byte_idx = byte_idx + bytes_to_copy;
+            } else {
+                // Invalid sequence, append replacement character and advance one byte
+                result.append_char_from_bytes(replacement_buf, 0, 3);
+                byte_idx = byte_idx + 1;
+            }
+        }
+        return result;
+    }
+
+    def Self.from_c_string(c_string : Buffer[i8]) -> Self {
         null = 0 as i8;
         size = 0;
         while true {
@@ -23,53 +194,68 @@ class String extends Collection[Character], Representable {
             if byte == null { break; }
             size = size + 1;
         }
-        return String.new(c_string, size, size + 1);
+        // Defaults to a lossy conversion
+        return String.from_bytes_lossy(c_string, size);
     }
 
     def init() {
         @bytes = Buffer[i8].new(1);
         @capacity = 1;
-        @length = 0;
+        @byte_length = 0;
+        @char_length = 0;
     }
-    def init(@length : i32, @capacity : i32) {
+    def init(@capacity : i32) {
         @bytes = Buffer[i8].new(@capacity);
+        @byte_length = 0;
+        @char_length = 0;
     }
-    def init(@bytes : Buffer[i8], @length : i32, @capacity : i32) {
-    }
+    // Constructor for internal use.
+    def init(@bytes : Buffer[i8], @byte_length : i32, @char_length : i32, @capacity : i32) {}
 
-    def length() -> i32 { return @length; }
+    def byte_length() -> i32 { return @byte_length; }
+    def size() -> i32 { return @char_length; }
     def capacity() -> i32 { return @capacity; }
 
-    def size() -> i32 { return @length; }
-
     def c_string() -> Buffer[i8] {
-        buf = Buffer[i8].new(@length + 1);
-        i = 0;
-        while i < @length {
-            buf.[i] = @bytes.[i];
-            i = i + 1;
-        }
+        buf = Buffer[i8].new(@byte_length + 1);
+        for i in 0..@byte_length { buf.[i] = @bytes.[i]; }
         null = 0 as i8;
-        buf.[@length] = null;
+        buf.[@byte_length] = null;
         return buf;
     }
-    def append(x : i8) -> String {
-        if @length >= @capacity { self.reserve(@capacity * 2); }
-        @bytes.[@length] = x;
-        @length = @length + 1;
+    def append(char : Character) -> Self {
+        return self.extend(char.to_string());
+    }
+    // Assumes that inputs are valid
+    def append_char_from_bytes(source_bytes : Buffer[i8], start_index : i32, n_bytes : i32) -> Self {
+        if @byte_length + n_bytes >= @capacity { self.reserve(@capacity * 2); }
+        for i in 0..n_bytes {
+            @bytes.[@byte_length + i] = source_bytes.[start_index + i];
+        }
+        @char_length = @char_length + 1;
+        @byte_length = @byte_length + n_bytes;
         return self;
     }
-    def extend(other : String) -> String {
-        other_len = other.length();
-        old_len = @length;
-        new_len = old_len + other_len;
-        self.reserve(new_len);
-        i = 0;
-        while i < other_len {
-            self.unchecked_insert(i + old_len, other.unchecked_index(i));
-            i = i + 1;
+    def extend(other : Collection[Character]) -> Self {
+        // 2 passes: one to calculate needed capacity; one to append characters
+        other_n_bytes = 0;
+        for char in other { other_n_bytes = other_n_bytes + char.n_bytes(); }
+        self.reserve(@byte_length + other_n_bytes);
+        for char in other { self.append(char); }
+        return self;
+    }
+    // We know the other string is already valid and don't need to validate
+    def extend(other : String) -> Self {
+        // We know exactly how many bytes to reserve
+        other_b_len = other.byte_length();
+        old_b_len = @byte_length;
+        new_b_len = old_b_len + other_b_len;
+        self.reserve(new_b_len);
+        for i in 0..other_b_len {
+            self.unchecked_insert(i + old_b_len, other.unchecked_index(i));
         }
-        @length = new_len;
+        @byte_length = new_b_len;
+        @char_length = @char_length + other.char_length();
         return self;
     }
     def reserve(new_capacity : i32) {
@@ -77,21 +263,17 @@ class String extends Collection[Character], Representable {
         @capacity = new_capacity;
         old_bytes = @bytes;
         @bytes = Buffer[i8].new(@capacity);
-        i = 0;
-        while i < @length {
-            @bytes.[i] = old_bytes.[i];
-            i = i + 1;
-        }
+        for i in 0..@byte_length { @bytes.[i] = old_bytes.[i]; }
     }
     def ==(other : String) -> Bool {
-        if @length != other.length() { return false; }
-        i = 0;
-        while i < @length {
-            byte_unequal = @bytes.[i] != other.unchecked_index(i);
-            if byte_unequal { return false; }
-            i = i + 1;
+        if @byte_length != other.byte_length() { return false; }
+        for i in 0..@byte_length {
+            if @bytes.[i] != other.unchecked_index(i) { return false; }
         }
         return true;
+    }
+    def decode_at(byte_index : i32) -> Tuple[i32, i32] | Nil {
+        return Unicode.decode_one(@bytes, byte_index, @byte_length);
     }
     def unchecked_index(x : i32) -> i8 {
         return @bytes.[x];
@@ -99,18 +281,13 @@ class String extends Collection[Character], Representable {
     def unchecked_insert(x : i32, value : i8) {
         @bytes.[x] = value;
     }
-    def copy() -> String {
-        new_buf = Buffer[i8].new(@length);
-        i = 0;
-        while i < @length {
-            new_buf.[i] = @bytes.[i];
-            i = i + 1;
-        }
-        new_str = String.new(new_buf, @length, @length);
-        return new_str;
+    def copy() -> Self {
+        new_buf = Buffer[i8].new(@byte_length);
+        for i in 0..@byte_length { new_buf.[i] = @bytes.[i]; }
+        return String.new(new_buf, @byte_length, @char_length, @byte_length);
     }
-    def iterator() -> StringIterator {
-        return StringIterator.new(self);
+    def iterator() -> ConstantTimeIterator[Character] {
+        return StringIterator{self};
     }
     def repr() -> String {
         return self;
@@ -118,48 +295,86 @@ class String extends Collection[Character], Representable {
 }
 
 class Character {
-    @byte : i8
-    def init(@byte : i8) {}
-    def byte() -> i8 { return @byte; }
+    @codepoint : i32
+
+    def init(@codepoint : i32) {}
+
+    def codepoint() -> i32 {
+        return @codepoint;
+    }
+    def to_string() -> String {
+        return Unicode.encode_one(@codepoint);
+    }
+    def ==(other : Character) -> Bool {
+        return @codepoint == other.codepoint();
+    }
+    def n_bytes() -> i32 {
+        cp = @codepoint;
+        if cp <= 0x7F { return 1; }
+        if cp <= 0x7FF { return 2; }
+        if cp <= 0xFFFF { return 3; }
+        if cp <= 0x10FFFF { return 4; }
+        return 3; // For replacement character if codepoint is invalid
+    }
 }
 
-class StringIterator extends Iterator[Character] {
+// Iterator can trust that the source string is valid.
+class StringIterator extends ConstantTimeIterator[Character] {
     @str : String
-    @index : i32
-    def init(@str : String) { @index = 0; }
+    @byte_index : i32
+
+    def init(@str : String) { @byte_index = 0; }
+
     def next() -> Character | Nil {
-        if @index >= @str.length() { return nil; }
-        @index = @index + 1;
-        return Character.new(@str.unchecked_index(@index - 1));
+        if @byte_index >= @str.byte_length() { return nil; }
+        
+        decode_result = @str.decode_at(@byte_index);
+        
+        // This path should be safe if the String invariant holds.
+        if decode_result is Tuple[i32, i32] {
+            codepoint = decode_result.[0];
+            bytes_consumed = decode_result.[1];
+            @byte_index = @byte_index + bytes_consumed;
+            return Character{codepoint};
+        }
+        return nil; // Should be unreachable.
     }
+}
+
+class StackTrace {
+    @stacktrace : Buffer[i64]
+    @n_frames : i64
+
+    def init() {
+        @stacktrace = Buffer[i64].new(100);
+        @n_frames = capture_backtrace(100 as i64, @stacktrace);
+    }
+
+    def print() {
+        print_backtrace(@stacktrace, @n_frames);
+    }
+
 }
 
 class Exception {
 	@line_number : i32
 	@file_name : String
 	@message : String
-    @stacktrace : Buffer[i64]
-    @n_frames : i64
+    @stacktrace : Stacktrace
 
 	def init(@message : String) {
         @line_number = 0;
         @file_name = "";
-        @stacktrace = Buffer[i64].new(100);
-        @n_frames = capture_backtrace(100 as i64, @stacktrace);
+        @stacktrace = Stacktrace{};
     }
 	def init() {
         @line_number = 0;
 		@message = "<None>";
         @file_name = "";
-        @stacktrace = Buffer[i64].new(100);
-        @n_frames = capture_backtrace(100 as i64, @stacktrace);
+        @stacktrace = Stacktrace{};
 	}
 
     def set_info(@line_number : i32, @file_name : String) {}
-
-    def print_stacktrace() {
-        print_backtrace(@stacktrace, @n_frames);
-    }
 
 	def report() {
 		print("---------".c_string());
@@ -170,11 +385,20 @@ class Exception {
 		print("With message".c_string());
 		self.print_message();
         print("Stack trace:".c_string());
-        self.print_stacktrace();
+        @stacktrace.print();
 		print("---------".c_string());
 	}
     def print_message() {
         print(@message.c_string());
+    }
+}
+
+class InvalidUTF8Error extends Exception {
+    def init() {
+        @message = "Invalid UTF-8 sequence encountered during string conversion.";
+        @line_number = 0;
+        @file_name = "";
+        @stacktrace = Stacktrace{};
     }
 }
 
@@ -186,8 +410,7 @@ class OutOfBounds extends Exception {
         @line_number = 0;
         @file_name = "";
         @message = "An out-of-bounds error occurred while indexing into a collection.";
-        @stacktrace = Buffer[i64].new(100);
-        @n_frames = capture_backtrace(100 as i64, @stacktrace);
+        @stacktrace = Stacktrace{};
     }
     def print_message() {
         print(@message.c_string());
