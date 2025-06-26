@@ -2,7 +2,7 @@ import core;
 
 class Array[T] extends
     List[T],
-    Indexable[i32, T, T],
+    IndexableCollection[i32, T, T],
     Representable
 {
 	@buffer : Buffer[T]
@@ -35,6 +35,20 @@ class Array[T] extends
     def capacity() -> i32 {
     	return @capacity;
     }
+    def reserve(new_capacity : i32) {
+        if new_capacity <= @capacity { return; }
+        @capacity = new_capacity;
+        old_buffer = @buffer;
+        @buffer = Buffer[T].new(@capacity);
+        i = 0;
+        while i < @length {
+            @buffer.[i] = old_buffer.[i];
+            i = i + 1;
+        }
+    }
+
+    // List[T] overrides
+
     #[ret == self, x == @elems_reg]
     def append(x : T) -> Self {
         if @length >= @capacity { self.reserve(@capacity * 2); }
@@ -55,40 +69,42 @@ class Array[T] extends
         @length = new_len;
         return self;
     }
-    def reserve(new_capacity : i32) {
-        if new_capacity <= @capacity { return; }
-        @capacity = new_capacity;
-        old_buffer = @buffer;
-        @buffer = Buffer[T].new(@capacity);
-        i = 0;
-        while i < @length {
-            @buffer.[i] = old_buffer.[i];
-            i = i + 1;
+
+    // IndexableCollection[i32, T, T] overrides
+
+    def indices() -> Range {
+        return 0..@length;
+    }
+    def values() -> Self {
+        return self;
+    }
+    #[ret == @elems_reg]
+    def [](index : i32) -> T yields OutOfBounds {
+        self.bounds_check(index);
+        if index < 0 { index = @length + index; }
+        return self.unchecked_index(index);
+    }
+    #[value == @elems_reg]
+    def []=(index : i32, value : T) yields OutOfBounds {
+        self.bounds_check(index);
+        if index < 0 { index = @length + index; }
+        self.unchecked_insert(index, value);
+    }
+
+    def bounds_check(index : i32) yields OutOfBounds {
+        past_end = index > (@length - 1);
+        before_start = (@length + index) < 0;
+        if past_end or before_start {
+            yield(OutOfBounds.new(@length, index));
         }
     }
     #[ret == @elems_reg]
-    def [](x : i32) -> T yields OutOfBounds {
-    	past_end = x > (@length - 1);
-    	before_start = (@length + x) < 0;
-        if past_end or before_start { yield(OutOfBounds.new(@length, x)); }
-        if x < 0 { x = @length + x; }
-        return self.unchecked_index(x);
+    def unchecked_index(index : i32) -> T {
+    	return @buffer.[index];
     }
     #[value == @elems_reg]
-    def []=(x : i32, value : T) yields OutOfBounds {
-        past_end = x > (@length - 1);
-        before_start = (@length + x) < 0;
-        if past_end or before_start { yield(OutOfBounds.new(@length, x)); }
-        if x < 0 { x = @length + x; }
-        self.unchecked_insert(x, value);
-    }
-    #[ret == @elems_reg]
-    def unchecked_index(x : i32) -> T {
-    	return @buffer.[x];
-    }
-    #[value == @elems_reg]
-    def unchecked_insert(x : i32, value : T) {
-        @buffer.[x] = value;
+    def unchecked_insert(index : i32, value : T) {
+        @buffer.[index] = value;
     }
     def iterator() -> ConstantTimeIterator[T] {
     	return ArrayIterator{self};
@@ -109,7 +125,8 @@ class ArrayIterator[T] extends ConstantTimeIterator[T] {
         // We check the array's current .length() on every .next() call
         // This guarantees no out-of-bounds access if the array was modified
 		if @index >= @array.length() { return nil; }
+        old_index = @index;
 		@index = @index + 1;
-		return @array.unchecked_index(@index - 1);
+		return @array.unchecked_index(old_index);
 	}
 }

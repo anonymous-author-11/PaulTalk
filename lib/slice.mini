@@ -1,0 +1,80 @@
+import core;
+
+// A slice is a constant-length indexable collection
+// It is the lowest-level abstraction over a raw Buffer
+class Slice[T] extends IndexableCollection[i32, T, T] {
+	
+	// Having a @start_index makes Slice useful for views into pre-existing buffers
+	@buffer : Buffer[T]
+	@start_index : i32
+	@length : i32
+
+	// Can't collect from an Iterable, as size needs to be known up-front
+	Self.collect(collection : Collection[T]) -> Self {
+		collection_size = collection.size();
+		buf = Buffer[T].new(collection_size);
+		i = 0;
+		for elem in collection {
+			buf.[i] = elem;
+			i = i + 1;
+		}
+		return Slice{buf, collection_size, 0};
+	}
+	def init(@buffer : Buffer[T], @start_index : i32, @length : i32) {
+	}
+	def length() -> i32 {
+		return @length;
+	}
+	def size() -> i32 {
+		return @length;
+	}
+	def indices() -> Range {
+        return 0..@length;
+    }
+    def values() -> Self {
+        return self;
+    }
+	def unchecked_index(index : i32) -> T {
+		return @buffer.[@start_index + index];
+	}
+	def unchecked_insert(index : i32, value : T) {
+		@buffer.[@start_index + index] = value;
+	}
+    def [](index : i32) -> T yields OutOfBounds {
+        self.bounds_check(index);
+        if index < 0 { index = @length + index; }
+        return self.unchecked_index(index);
+    }
+    def []=(index : i32, value : T) yields OutOfBounds {
+        self.bounds_check(index);
+        if index < 0 { index = @length + index; }
+        self.unchecked_insert(index, value);
+    }
+    def bounds_check(index : i32) yields OutOfBounds {
+        past_end = index > (@length - 1);
+        before_start = (@length + index) < 0;
+        if past_end or before_start {
+            yield(OutOfBounds.new(@length, index));
+        }
+    }
+    def iterator() -> ConstantTimeIterator[T] {
+    	return SliceIterator{self};
+    }
+}
+
+class SliceIterator[T] extends ConstantTimeIterator[T] {
+	@slice : Slice[T]
+	@length : i32	
+	@index : i32
+
+	def init(@slice : Slice[T]) {
+		@length = @slice.length(); // Because a Slice is constant-length, we can cache it
+		@index = 0;
+	}
+	def next() -> T | Nil {
+		if @index >= @length { return nil; }
+		old_index = @index;
+		@index = @index + 1;
+		return @slice.unchecked_index(old_index);
+	}
+}

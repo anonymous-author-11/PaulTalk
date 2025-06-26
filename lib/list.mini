@@ -17,8 +17,7 @@ class List[T] extends Collection[T] {
     // iterator.next() should be O(1)
     abstract def iterator() -> ConstantTimeIterator[T] {}
 
-    // Set the element at 'index' to 'value'
-    // abstract def set(index : i32, value : T) {}
+    // we do not provide List.set(index, value), as String for example cannot fulfill it
 
     def length() -> i32 {
         return self.size();

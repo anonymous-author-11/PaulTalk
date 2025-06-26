@@ -2,7 +2,7 @@ import open_addressing;
 
 class QuadraticProbeMap[K, V] extends OpenAddressMap[K, V] {
 
-    // Finds the slot index for a key using QUADRATIC PROBING (Optimized Step Calculation).
+    // Finds the slot index for a key using QUADRATIC PROBING
     // Returns the index where the key is located, OR
     // Returns the index where the key should be inserted (first tombstone or nil).
     // Precondition: @entries_len is a power of 2.
@@ -41,7 +41,7 @@ class QuadraticProbeMap[K, V] extends OpenAddressMap[K, V] {
                 // Else (it's an active entry for a different key), continue probing.
             }
 
-            // --- Optimized Incremental Quadratic Probing Step ---
+            // --- Incremental Quadratic Probing Step ---
             probe_step = probe_step + 1;
             // Increment offset: 0+1=1, 1+2=3, 3+3=6, ... (equivalent to (step*step + step)/2)
             probe_offset = probe_offset + probe_step;

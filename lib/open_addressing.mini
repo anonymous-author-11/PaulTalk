@@ -17,8 +17,6 @@ class Entry[K,V] {
     def hash() -> i32 { return @hash; }
 }
 
-// --- HashMap Implementation (Optimized) ---
-
 class OpenAddressMap[K,V] extends HashMap[K,V] {
     @entries: Buffer[Entry[K,V] | Nil]
     @entries_len : i32
@@ -33,7 +31,6 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
         @entries_len = 16;
         @size = 0;
         @load = 0;
-        // @hasher and @eq are initialized by the parameter syntax
     }
 
     // Concrete implementations should override this method
@@ -184,8 +181,6 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
     }
 }
 
-// --- Custom Iterator Class ---
-// Conforms to Iterator interface
 class OpenAddressMapIterator[K,V] extends Iterator[Pair[K,V]] {
     @map_entries: Buffer[Entry[K,V] | Nil]
     @index: i32

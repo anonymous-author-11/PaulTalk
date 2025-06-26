@@ -22,9 +22,9 @@ These are cargo-cult operators, hard to read and not necessary. Plus, we only ha
 
 These may yet be added, but I am skeptical. For now we do x = x + y rather than x += y
 
-5. Var / let / const / public / static / mut / etc.
+5. Var / let / const / public / static / final / async / mut / etc.
 
-There will be no "public static void main" in this language. Immutability is when a class does not expose any mutating methods. Fields are all private and methods are all public. Variables are all variable.
+There will be no "public static void main" in this language. Immutability is when a class does not expose any mutating methods. Fields are all private and methods are all public and overridable. Classes are all open. Variables are all variable.
 
 6. Global variables
 
@@ -66,7 +66,7 @@ In addition, region-based automatic memory managment means that the primary use-
 
 14. Unchecked exceptions
 
-Some people are apparently incapable of distinguishing between "the Java implementation of checked exceptions" and the concept of checked exceptions. The Java implementation is horrible, but almost entirely because it is implemented horribly. Having sane defaults-- like omitted annotation defaulting to "yields Exception | Nil"-- along with union types in general, makes tracking exceptions via the type system easy and ergonomic.
+One must distinguish between "the Java implementation of checked exceptions" and the concept of checked exceptions. The Java implementation is horrible, but almost entirely because it is implemented horribly. Having sane defaults-- like omitted annotation defaulting to "yields Exception | Nil"-- along with union types in general, makes tracking exceptions via the type system easy and ergonomic.
 
 14. Global type inference
 

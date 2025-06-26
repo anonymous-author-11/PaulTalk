@@ -334,7 +334,7 @@ DONE:
 - Allow underscores in numbers [check!]
 - I should be allowed to do "if [expression] is T" [check!]
 - I should be allowed to do ClassMethodCall with parameterized receiver [check!]
-- Lazy logical ops [check!]
+- Lazy (short-circuiting) logical ops [check!]
 - Separate out _size_ and _data_size_ methods [check!]
 	- Rename current _size_ methods to _data_size_ [check!]
 	- Use the same wrapper for both [check!]
@@ -452,25 +452,39 @@ DONE:
 
 TODO:
 
-- What kind of abstract container could have .from_iterable constructor?
-	- Good candidate: List[T]
-	- def Self.from_iterable(iterable : Iterable[T]) -> Self {
-    	result = Self.new();
-    	for elem in iterable { result.append(elem); }
-    	return result;
-    }
-    - Needs a zero-arg (empty) constructor
-	- Needs an .append method
-		- What are its semantics / guarantees?
-		- Should append always increase .size() by 1?
-		- Should append be paired with .pop() ?
-		- Should .append(x).pop() == x be guaranteed?
-	- Needs to have an order
-	- Needs to be finite sized
-
+- The lack of closures is a problem
+	- Iterable.map function can't take any extra parameters
+	- I could require explicit capture like C++
+		- Hard to track which variables are used in the fn
+		- Probably better to do the work of tracking
+	- Capture value types by copy, not reference
+	- I could use the llvm.trampoline tools
+		- vs making fn into a fat ptr
+		- Improves C interop
+- Selective imports
+	- from x import y;
+	- Should improve compilation time
+- Export / no_export lists
+	- An alternative to public / private annotations
+	- no_export { ConcreteStringIndex, Entry }
+	- Justification
+		- The "privateness" of a class / function is not intrinsic
+		- You might want to export a class from one file and not from another
+	- Export local definitions by default
+	- Don't export imports by default
+- 'into' operator as sugar for conversion methods
+	- into will look for a .from_ or a .to_ method
+		- .to_ method has precedence
+		- .from_ method as backup
+	- If there are multiple equally valid method candidates, report ambiguity
+	- Abstracts over which type defined the conversion
+	- Could later change which type defined the conversion
+- Deduplicate behaviors
+	- If all methods in the behavior are inherited from the same class, reuse that behavior
+- You could parallelize the frontend phase from (parse tree) -> (lowered IR string)
 - I really want type narrowing in alternative branches
-	- And 'is not' syntax
-	- And narrowing within logical and/or ops
+	- And 'is not' syntax (if x is not Nil)
+	- And narrowing within logical and/or ops (if x is T and y is U { ... } )
 	- And 'while' with a type check condition not polluting the main path
 	- Honestly this should not be too hard
 		- I don't have to reform the whole flow analysis to add this
@@ -481,17 +495,19 @@ TODO:
 	- Idea: casting between these works seamlessly, unlike tuples
 	- Their allocated size is dynamic
 	- Blocker: Indexing would need to run specialized code to calculate the offset
-- Nested loops take WAY too long to type check
-	- It's exponential time complexity
-	- Need to cache results of typeflow for each loop
-- We do not properly account for break/continue in typeflow
-	- We should probably move to a cfg
-	- What if I did something ad hoc
-	- Store all "exits" from the loop
-	- For each exit, store the type and symbol tables
-	- After the branch, union all the exits
-	- This is a little over-conservative (breaks can't go back to the start of the loop)
-	- What about cast-assigning before breaks/continue's?
+
+- Flow analysis problems:
+	- Nested loops take WAY too long to type check
+		- It's exponential time complexity
+		- Need to cache results of typeflow for each loop
+	- We do not properly account for break/continue in typeflow
+		- We should probably move to a cfg
+		- What if I did something ad hoc
+		- Store all "exits" from the loop
+		- For each exit, store the type and symbol tables
+		- After the branch, union all the exits
+		- This is a little over-conservative (breaks can't go back to the start of the loop)
+		- What about cast-assigning before breaks/continue's?
 
 - Snprintf can convert things to string representations
 - I should be able to declare variadic extern defs
@@ -506,7 +522,7 @@ TODO:
 		- We separate typeflow and codegen [check!]
 		- Then get the dependency graph from typeflow [check!]
 	- Arguably Bool should be its own type, not Integer(1) [check!]
-	- In debug mode we should skip optimizing entirely [check!]
+	- In debug mode we should skip optimizing entirely [check!] [reverted]
 	- capture_backtrace and print_backtrace for Windows and POSIX [check!]
 	- Mark yielded exceptions as cold and outline in hot-cold split [check!]
 	- Correct line numbers for implicit 'include core;' [check!]
@@ -561,7 +577,8 @@ TODO:
 - Release 0.5.*
 	- Allow iterating over heterogenous tuples [check!]
 		- Convert to Array of union of element types [check!]
-		- This is corrently actually unsafe
+		- This is currently actually unsafe
+		- I should only do this when used as for-loop iterable
 	- Hi, mid, lo dialects
 		- Split dialect into multiple files [check!]
 		- Use lo dialect in patterns.mlir
@@ -685,7 +702,7 @@ TODO:
 	- A way to read program arguments (argc, argv)
 		- Make it a nice interface
 		- argv() -> Indexable[i32, String]
-	- Stack traces for exceptions
+	- Stack traces for exceptions [check!]
 
 - Tighten up return type inference for function literals
 	- You can't have a bare return and a return value in the same literal
@@ -768,7 +785,6 @@ TODO:
 	- Why not just new behaviors for the ones that have actually changed?
 - Reduce number of redundant type fields
 - Think about how actually to handle union type parameters
-- Implement type parameter deduction from init()
 - Make sure that type bounds are applied generally
 	- What does this mean?
 - Figure out signature compatibility of overrides of generic parameters
@@ -777,12 +793,12 @@ TODO:
 	- PrimitiveDef subtype of ClassDef?
 - Allow multiple type checks in one condition
 - Add tuple destructuring
-- Check for mismatched yield types
 - Allow capturing class methods
 	- Will introduce A.b syntax
 	- A.b will also denote module-qualified names
 - Shift Functions and Coroutines to FatPtr interface [ABI breaking]
 	- Store the fptr in the second word
+	- Would need a .fptr() pseudo-method for C interop
 - Narrow alternate path in branches
 	- The main motivation is to be able to pare off nil with "while x is Nil { yield(Exception); }"
 	- If the condition of a while is a type check then that type can be pared off after the loop
@@ -818,7 +834,7 @@ TODO:
 - If I compile with -O0 it hangs
 	- Seems to be related to loading fatptr as { ptr, i160 }
 	- Plausibly related to type legalization in llc
-	- I believe it is that i128 and above is supposed to be 16-bit aligned
+	- I believe it is that i128 and above is supposed to be 16-byte aligned
 	- So I should move TypeParameter and union to something like { ptr, [20 x i8] }
 	- Or maybe use something janky like {ptr, i64, i64, ... (however many) ..., i[rest] }
 
@@ -830,21 +846,9 @@ TODO:
 	- We could go based on textual order, making Pair[Shark, Reptile] more specific
 	- This would in principle allow (and incentivize) people to be intentional about the ordering of generic parameters
 	- A function needs to store its type parameters
-- The central idea is that within a confusable set, there exists a natural ordering of types
-- If any two types in a confusable set have incompatible inheritence orders, then there is no order
-- Rather than saying two methods are confusable if, for each pair of parameters, there exists a common subtype, we ought to say
-	- That two methods are confusable if it not *illegal* for there to be a common subtype for each pair of parameters
-- Currently, if an argument is passed which is a subtype of multiple parameter types, the dispatch will be arbitrary
 - We will need to be able to perform runtime subtype checks of parameterized types
 - This subtype test will be stored in the parameterized type's vtable
 - The subtype test will probably take a parameter for the number of type parameters
-- GLB with intersection types
-	- GLB includes two intersections of each pair (of classes) in the set of types for the parameter
-	- These intersections can be split into overlapping subsets representing different consistent hierarchies
-	- Intersections not in the same subset are guaranteed to be mutually exclusive possibilities
-	- Mutually exclusive possibilities can be checked consecutively with early exit
-	- Intersections within a subset agree on the precedence of the types, and can be checked consecutively with early exit
-	- Type narrowing implies that there will be variables whose static type is an intersection
 - Runtime subtyping tests for unions in overload
 	- We may actually want to disallow unions in parameter types
 	- This is because a union multiply inherits without specifying its inheritance order
@@ -929,6 +933,7 @@ TODO:
 	- Would have to copy the whole stack
 	- Would also have to know the actual stack size
 	- Which, if we stored the top of the stack in the coroutine, would be easy
+	- You could even use a virtual-memory COW trick
 
 # --- later on ---
 
@@ -940,7 +945,7 @@ TODO:
 	- value semantics
 	- subtype test is vptr equality
 	- this seems fairly straightforward?
-	- Except that value semantics for self is immensely complicated
+	- Except that value semantics for 'self' is immensely complicated
 	- How to pass self to virtual calls requires change
 	- Basically requires generating a struct version of the class
 	- Unclear how methods will even work
@@ -966,43 +971,8 @@ TODO:
 	- Can't use RAII for scoped mutexes
 	- But manually locked and unlocked mutexes are fine
 
-class Uninitialized[T] {
-	@allocated : T
-	def init() -> T {
-		@allocated.init();
-	}
-}
-
-class Object {
-	def Self.from_data_buffer(buf : Buffer[i8], start_index : i32) -> Self {
-		return magic_from_data_buffer(buf, start_index, Self.size_in_bytes());
-	}
-	def Self.size_in_bytes() -> i32 {
-		return magic_size_in_bytes(self);
-	}
-	def place_in_buffer(buffer : Buffer[i8], start_index : i32) {
-		magic_place_into_buffer(self, buffer, start_index);
-	}
-}
-
-class Array[T] {
-
-	@buffer : Buffer[T]
-	@size : i32
-	@capacity : i32
-
-	@T : Type	// implicit type member
-
-	def init[T] (@buffer : Buffer[T], @size : i32, @capacity : i32) {
-		// @T implicitly initialized with [T]
-	}
-	def [](i : i32) -> T {
-		return T.from_data_buffer(@buffer, T.size_in_bytes() * i);
-	}
-}
-
-consider a signature that takes a function of type f : Function[i32, Animal]
-since functions are covariant in return type and contravariant in argument type, a function of type Function[i32, Shark] should be able to be passed in
+consider a signature that takes a function of type f : (i32) -> Animal
+since functions are covariant in return type and contravariant in argument type, a function of type (i32) -> Shark should be able to be passed in
 can the offset be appropriately set?
 it may actually be more correct when the type parameter is passed in by the call and not at instantiation
 or at least the type parameter has to be updated upon upcast

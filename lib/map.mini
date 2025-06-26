@@ -2,16 +2,15 @@ import core;
 
 class KeyNotFound extends Exception {}
 
-class Map[K, V] extends
-    Indexable[K, V, Pair[K, V]],
-    Collection[Pair[K, V]]
-{
-    // You can construct a Map with a hash function and an equality function
-    abstract def init(hasher: (K) -> i32, eq : (K, K) -> Bool) {}
+class Map[K, V] extends IndexableCollection[K, V, Pair[K, V]] {
+    
     abstract def get(key : K) -> V | Nil {}
     abstract def insert(key : K, value : V) {}
     abstract def remove(key : K) -> V | Nil {}
 
+    def indices() -> Collection[K] {
+        return self.keys();
+    }
     def keys() -> Collection[K] {
         return MapKeys{self};
     }
@@ -81,7 +80,10 @@ class MapValueIterator[K, V] extends Iterator[V] {
     }
 }
 
-class HashMap[K, V] extends Map[K, V] {}
+class HashMap[K, V] extends Map[K, V] {
+    // You can construct a HashMap with a hash function and an equality function
+    abstract def init(hasher: (K) -> i32, eq : (K, K) -> Bool) {}
+}
 
 def i32_hasher(i : i32) -> i32 {
     i = (i + 0x7ed55d16) + (i << 12);

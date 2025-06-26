@@ -29,7 +29,7 @@ class Iterator[T] extends Container {
 
 class Iterable[T] extends Container {
 
-    #[ret.elems_reg == self.elems_reg]
+    #[ret.elems_reg == @elems_reg]
 	abstract def iterator() -> Iterator[T] {
     }
 	def each(f : (T)) {
@@ -111,9 +111,12 @@ class Enumerator[T] extends Iterator[Pair[i32, T]] {
     }
 
     def next() -> Pair[i32, T] | Nil {
-        @index = @index + 1;
         next = @iterator.next();
-        if next is T { return Pair{@index - 1, next}; }
+        if next is T {
+            old_index = @index;
+            @index = @index + 1;
+            return Pair{old_index, next};
+        }
         return nil;
     }
 }
@@ -248,10 +251,14 @@ class InterleaveIterator[T] extends Iterator[T] {
     def next() -> T | Nil {
         if @on_first {
             @on_first = false;
-            return @first.next();
+            nxt = @first.next();
+            if nxt is T { return nxt; }
+            return @second.next();
         }
         @on_first = true;
-        return @second.next();
+        nxt = @second.next();
+        if nxt is T { return nxt; }
+        return @first.next();
     }
 }
 

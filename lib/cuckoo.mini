@@ -1,6 +1,5 @@
 import map;
 
-// --- Entry Class (Cuckoo) ---
 class Entry[K,V] {
     @primary_hash: i32 // Store primary hash (h1)
     @key: K
@@ -16,8 +15,6 @@ class Entry[K,V] {
         return Pair[K, V].new(@key, @value);
     }
 }
-
-// --- Cuckoo HashMap Implementation ---
 
 class CuckooMap[K,V] extends HashMap[K, V] {
     @table1 : Buffer[Entry[K,V] | Nil]
@@ -294,8 +291,6 @@ class CuckooMap[K,V] extends HashMap[K, V] {
         return CuckooMapIterator[K,V].new(@table1, @table2, @table_len);
     }
 }
-
-// --- Custom Iterator Class for Cuckoo HashMap ---
 
 class CuckooMapIterator[K,V] extends Iterator[Pair[K,V]] {
     @map_table1: Buffer[Entry[K,V] | Nil]

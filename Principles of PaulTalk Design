@@ -1,0 +1,84 @@
+Principles of PaulTalk Design
+
+1. Divorce from the *declaration* aspects which are not *intrinsic* to the entity
+	- Prefer use-site specification over declaration-site specification wherever possible
+		- Whether an instance is allocated on the heap or the stack is decided at construction time
+			- Unlike C# class / struct declaration-site choice
+			- Heap by default: reference semantics
+			- Stack by specification: value semantics
+			- Reverse of C / C++ / Rust default
+		- Whether a function is synchronous or asynchronous
+			- Any function can be called as a coroutine or as a function
+			- Stackful coroutines can yield from within arbitrary nesting
+		- Variance of generic types
+	- Whether or not a function or class is 'exported' is a matter of use, not essence
+		- export / no_export lists at file scope
+		- Instead of public / private modifiers on declarations
+
+2. Converse: require all *intrinsic* aspects of a type to be in one single declaration
+	- No retroactive conformance to interfaces / 'impl for'
+		- No orphan rules / coherence issues
+	- No adding methods to a class from outside the class / monkey patching
+		- No "uniform function call syntax"
+	- Every type's "inheritance order" must have single source of truth
+		- Strict nominal subtyping for classes
+		- Necessary for multimethod dispatch
+	- All classes are open to extension via subclassing (no final)
+
+3. Prefer short English words to sigils
+	- Bitwise and logical operators are spelled out ('bit_and' vs 'and')
+	- No &T or T* pointer-related sigils
+	- ++ and -- operators don't exist
+	- No obscure ternary operator
+
+4. Minimize viral language constructs
+	- One minor change generates a ripple of required changes across the program
+	- Examples: const, async, pure
+	- Limits composability
+	- Alias annotations are a remaining source of virality
+
+5. Avoid a built-in "runtime" to protect interoperability with other languages
+	- No garbage collector
+		- Region inference for semi-automatic memory management without a runtime
+	- No builtin thread scheduling
+		- Thread scheduler can and should be a library, like in Ruby, Lua
+	- No segmented / copying stacks
+		- Requires special function prologues
+		- What if you hit the end of the stack within a native call?
+		- Coroutine stacks are instead virtual-memory based
+
+6. Protect separate compilation through modularity and indirection
+	- No monomorphization
+		- Carry type parameters as implicit immutable fields
+		- Allows virtual methods to be generic
+		- Makes compilation much more *incremental*
+	- But *will* still optimize the linked-together bitcodes in release mode
+	- You can compile dynamic libraries with generics
+	- Multimethods must be separately compilable
+		- Rules out many multimethod implementation schemes
+	- All compiler analyses must be intraprocedural
+		- Type inference is intraprocedural but flow-sensitive
+			- All parameter, field, and return types must be specified
+			- Within a procedure, type inference is extremely generous
+		- Alias analysis is intraprocedural
+			- Aliasing information must be annotated to be available for callers
+			- The compiler can tell you how you could annotate a procedure
+	- Prefer link-time selection to macros
+		- Which OS, which target triple
+		- Avoids recompiling bitcodes
+
+7. Macros are bug reports against the language
+	- Anything best implemented with a macro should probably become a language construct
+	- Allowing macros is crucial for guiding the evolution of a language
+	- No "shadow language"
+		- E.g. C++ template metaprogramming
+		- Macros should be written in the same language as the rest of the program
+		- Precompile macros rather than running an interpreter at compile-time
+
+8. Defaulting to the most common case minimizes annotation burden
+	- The default yield type when not specified is Exception | Nil
+	- No aliasing annotations -> conservative aliasing assumptions
+	- Aliasing annotations are inherited by overrides
+	- Default export / no_export settings
+		- Default to exporting all local declarations
+		- Default to not exporting imported declarations

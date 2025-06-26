@@ -6,25 +6,6 @@ import list;
 import indexable;
 import range;
 
-class BufferIterator[T] extends ConstantTimeIterator[T] {
-    @buffer : Buffer[T]
-    @range : Range
-
-    def init(@buffer : Buffer[T], buf_len : i32) {
-        @range = 0..buf_len;
-    }
-
-    def init(@buffer : Buffer[T], start_index : i32, buf_len : i32) {
-        @range = start_index..buf_len;
-    }
-
-    def next() -> T | Nil {
-        next = @range.next();
-        if next is i32 { return @buffer.[next]; }
-        return nil
-    }
-}
-
 class Unicode {
 
     // � as i32 codepoint
@@ -319,6 +300,7 @@ class Character {
 }
 
 // Iterator can trust that the source string is valid.
+// Constant-time *with respect to the length of the String*
 class StringIterator extends ConstantTimeIterator[Character] {
     @str : String
     @byte_index : i32
