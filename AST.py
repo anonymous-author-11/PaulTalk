@@ -119,7 +119,12 @@ class NodeInfo:
 
     @property
     def line(self):
-        if self.filepath.name in ["builtins.mini", "iteration.mini", "collection.mini", "core.mini"]:
+        special_files = (
+            "builtins.mini", "iteration.mini", "collection.mini",
+            "list.mini", "range.mini", "indexable.mini",
+            "core.mini"
+        )
+        if self.filepath.name in special_files:
             return self.line_number + 2
         return self.line_number
 
@@ -250,10 +255,10 @@ class BinaryOp(Expression):
     def concrete_op(self, operands, attributes, result_types):
         raise Exception("abstract")
 
-    def concrete_exprtype(self, left_type, right_type):
+    def concrete_exprtype(self, left_type, right_type, scope):
         raise Exception("abstract")
 
-    def conform_literals(self, left_type, right_type):
+    def conform_literals(self, left_type, right_type, scope):
         # For int-int ops where one is a literal, set the literal's width equal to the other
         if isinstance(left_type, Integer) and isinstance(self.right, IntegerLiteral):
             self.right.width = left_type.bitwidth
@@ -263,7 +268,7 @@ class BinaryOp(Expression):
             left_type = self.left.exprtype(scope)
         return left_type, right_type
 
-    def widen_operands(self, left_type, right_type):
+    def widen_operands(self, left_type, right_type, scope):
         # For int-int ops with different width, extend the smaller int to the size of the larger one
         # Or if one is unsigned and the other is signed, cast the unsigned one
         if isinstance(left_type, Integer) and isinstance(right_type, Integer):
@@ -277,7 +282,7 @@ class BinaryOp(Expression):
                 right_type = self.right.exprtype(scope)
         return left_type, right_type
 
-    def floatify_ints(self, left_type, right_type):
+    def floatify_ints(self, left_type, right_type, scope):
         # For int-float ops of the same width, convert the int to a float
         if isinstance(left_type, Integer) and isinstance(right_type, Float) and left_type.bitwidth == right_type.bitwidth:
             as_info = NodeInfo(None, self.info.filepath, self.info.line_number)
@@ -306,9 +311,9 @@ class BinaryOp(Expression):
 
         self.ensure_numbers(left_type, right_type)
 
-        left_type, right_type = self.conform_literals(left_type, right_type)
-        left_type, right_type = self.widen_operands(left_type, right_type)
-        left_type, right_type = self.floatify_ints(left_type, right_type)
+        left_type, right_type = self.conform_literals(left_type, right_type, scope)
+        left_type, right_type = self.widen_operands(left_type, right_type, scope)
+        left_type, right_type = self.floatify_ints(left_type, right_type, scope)
 
         return self.concrete_exprtype(left_type, right_type)
 
@@ -377,11 +382,6 @@ class Arithmetic(BinaryOp):
 @dataclass
 class Comparison(BinaryOp):
     def concrete_op(self, operands, attributes, result_types):
-        op_map = {
-            Signedness.SIGNED:{"EQ":"eq", "NEQ":"ne", "LT":"slt", "GT":"sgt", "LE":"sle", "GE":"sge"},
-            Signedness.UNSIGNED:{"EQ":"eq", "NEQ":"ne", "LT":"ult", "GT":"ugt", "LE":"ule", "GE":"uge"},
-        }
-        attributes["op"] = StringAttr(op_map[self.operator])
         return hi.ComparisonOp.create(operands=operands, attributes=attributes, result_types=[Integer(1)])
     def concrete_exprtype(self, left_type, right_type):
         if left_type != right_type:
@@ -564,20 +564,24 @@ class StringLiteral(Expression):
 
     def codegen(self, scope):
         escaped_str = self.value.encode().decode('unicode_escape')
-        sizelit = IntegerLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), len(escaped_str), 32)
-        capacitylit = IntegerLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), len(escaped_str) + 1, 32)
-        buf = CreateBuffer(NodeInfo(None, self.info.filepath, self.info.line_number), Buffer([Integer(8)]), capacitylit, None)
-        temp_var = Identifier(NodeInfo(None, self.info.filepath, self.info.line_number), "_temp_buf" + random_letters(10))
-        assign = Assignment(NodeInfo(None, self.info.filepath, self.info.line_number), temp_var, buf)
+        n_bytes = len(escaped_str.encode('utf-8'))
+        n_codepoints = len(escaped_str)
+        node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for i in range(7)]
+        size_lit = IntegerLiteral(node_infos[0], n_codepoints, 32)
+        n_bytes_lit = IntegerLiteral(node_infos[1], n_bytes, 32)
+        capacity_lit = IntegerLiteral(node_infos[2], n_bytes + 1, 32)
+        buf = CreateBuffer(node_infos[3], Buffer([Integer(8)]), capacity_lit, None)
+        temp_var = Identifier(node_infos[4], "_temp_buf" + random_letters(10))
+        assign = Assignment(node_infos[5], temp_var, buf)
         assign.codegen(scope);
-        llvmtype = llvm.LLVMArrayType.from_size_and_type(len(escaped_str), IntegerType(8))
+        llvmtype = llvm.LLVMArrayType.from_size_and_type(n_bytes, IntegerType(8))
         lit = LiteralOp.create(attributes={"typ":llvmtype, "value":StringAttr(self.value)}, result_types=[llvm.LLVMPointerType.opaque()])
         attr_dict = {"typ":IntegerType(32), "value":IntegerAttr.from_int_and_width(0, 32)}
         zero = LiteralOp.create(attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
         operands = [temp_var.codegen(scope), zero.results[0], lit.results[0]]
         buffer_set = BufferSetOp.create(operands=operands, attributes={"typ": llvmtype})
         scope.region.last_block.add_ops([lit, zero, buffer_set])
-        string = ObjectCreation(self.info, random_letters(10), FatPtr.basic("String"), [temp_var, sizelit, capacitylit], None)
+        string = ObjectCreation(self.info, random_letters(10), FatPtr.basic("String"), [temp_var, n_bytes_lit, size_lit, capacity_lit], None)
         return string.codegen(scope)
 
     def exprtype(self, scope):
@@ -1399,10 +1403,6 @@ class ClassMethodCall(MethodCall):
         scope.points_to_facts = scope.points_to_facts.union(formal_constraints)
 
     def simple_exprtype(self, scope):
-        if self.receiver.cls.data == "Self":
-            if not scope.cls:
-                raise Exception(f"{self.info}: Self type can only be used within a class.")
-            self.receiver = scope.cls.type()
         
         rec_typ = scope.simplify(self.receiver)
         if rec_typ.cls.data not in scope.classes.keys():
@@ -1573,10 +1573,6 @@ class ObjectCreation(Expression):
         return deduced_candidates[0]
 
     def exprtype(self, scope):
-        if self.type.cls.data == "Self":
-            if not scope.cls:
-                raise Exception(f"{self.info}: Self type can only be used within a class.")
-            self.type = scope.cls.type()
         if self.type.cls.data == "Buffer":
             raise Exception(f"{self.info}: Buffer type must be parameterized, like Buffer[i8] or Buffer[f64]")
         simplified_type = scope.simplify(self.type)
@@ -2064,7 +2060,7 @@ class Method:
     @property
     def scope(self):
         if self._scope: return self._scope
-        self._scope = Scope(self.cls._scope, method=self)
+        self._scope = Scope(self.cls.scope, method=self)
         self.add_type_parameters(self._scope)
         return self._scope
 
@@ -2073,16 +2069,16 @@ class Method:
         return self.definition.type_params
 
     def codegen(self, scope):
-        self._scope = Scope(scope, method=self)
-        self.add_type_parameters(self._scope)
-        self.definition.codegen(self.scope)
+        self_scope = self.scope
+        self_scope.behavior = scope.behavior
+        self.definition.codegen(self_scope)
 
     def typeflow(self, scope):
         self.definition.enforce_capitalization()
         self.check_duplicate_type_params(scope)
-        self._scope = Scope(scope, method=self)
-        self.add_type_parameters(self._scope)
-        body_scope = Scope(self.scope, method=self)
+        self_scope = self.scope
+        self_scope.behavior = scope.behavior
+        body_scope = Scope(self_scope, method=self)
         self.add_self(body_scope)
         self.definition.setup_init(body_scope)
         self.definition.typeflow_params(scope, body_scope)
@@ -2112,7 +2108,7 @@ class Method:
     def enforce_override_rules(self, scope):
         overridden_methods = self.definition.overridden_methods()
         if len(overridden_methods) == 0: return
-        overridden_arg_types = [scope.simplify(Union.from_list([self.cls._scope.simplify(meth.param_types()[k]) for meth in overridden_methods])) for k in range(self.definition.arity)]
+        overridden_arg_types = [scope.simplify(Union.from_list([self.cls.scope.simplify(meth.param_types()[k]) for meth in overridden_methods])) for k in range(self.definition.arity)]
         if any(not scope.subtype(a,b) for a,b in zip(self.param_types(), overridden_arg_types)):
             offender_index = next(i for i in range(self.definition.arity) if not scope.subtype(self.param_types()[i], overridden_arg_types[i]))
             offender = self.definition.params[offender_index]
@@ -2124,14 +2120,14 @@ class Method:
         if not self.return_type() and any(meth.return_type() for meth in overridden_methods):
             raise Exception(f"{self.definition.info}: Overriding method {self.cls.name}.{self.definition.name} should have a return type.")
         if not self.return_type(): return
-        ret_types = [self.cls._scope.simplify(meth.return_type()) for meth in overridden_methods]
+        ret_types = [self.cls.scope.simplify(meth.return_type()) for meth in overridden_methods]
         overridden_ret_type = scope.simplify(Union.from_list(ret_types))
         is_direct_subtype = scope.subtype(self.return_type(), overridden_ret_type)
         if is_direct_subtype: return
         is_match = any(scope.matches(anc, overridden_ret_type) for anc in scope.ancestors(self.return_type()))
         if is_match: return
         #debug_print(scope.ancestors(self.return_type())[1].type_params.data[0])
-        debug_print(self.cls._scope.aliases)
+        debug_print(self.cls.scope.aliases)
         #debug_print(overridden_ret_type.type_params.data[0])
         raise Exception(f"{self.definition.info}: Overriding method {self.cls.name}.{self.definition.name}: return type {self.return_type()} not a subtype of overridden methods' return types {overridden_ret_type}.")
 
@@ -2185,14 +2181,19 @@ class Method:
         return result
 
     def broad_param_types(self):
-        broad = [param._type for param in self.definition.params]
-        self_temp_scope = Scope(self.scope)
-        self_temp_scope.deconcretize()
-        for definition in [self.definition, *self.overridden_methods()]:
-            temp_scope = Scope(definition.defining_class._scope)
-            temp_scope.deconcretize()
-            broad = [temp_scope.simplify(param._type) for param in definition.params]
-            broad = [self_temp_scope.simplify(t) for t in broad]
+        # simplify the param types in the context of
+        # 1. first the class of the original overridden method
+        # 2. second, the current method scope
+
+        original_definition = next(reversed((self.definition, *self.overridden_methods())))
+
+        method_temp_scope = Scope(self.scope)
+        method_temp_scope.deconcretize()
+        defining_class_scope = Scope(original_definition.defining_class._scope)
+        defining_class_scope.deconcretize()
+        
+        broad = [defining_class_scope.simplify(param._type) for param in original_definition.params]
+        broad = [method_temp_scope.simplify(t) for t in broad]
         return broad
 
     def constraints(self):
@@ -2210,14 +2211,15 @@ class Method:
         return result
 
     def broad_return_type(self):
-        broad = self.definition._return_type
-        self_temp_scope = Scope(self.scope)
-        self_temp_scope.deconcretize()
-        for definition in [self.definition, *self.overridden_methods()]:
-            temp_scope = Scope(definition.defining_class._scope)
-            temp_scope.deconcretize()
-            broad = temp_scope.simplify(definition._return_type)
-            broad = self_temp_scope.simplify(broad)
+        original_definition = next(reversed((self.definition, *self.overridden_methods())))
+
+        method_temp_scope = Scope(self.scope)
+        method_temp_scope.deconcretize()
+        defining_class_scope = Scope(original_definition.defining_class._scope)
+        defining_class_scope.deconcretize()
+
+        broad = defining_class_scope.simplify(original_definition._return_type)
+        broad = method_temp_scope.simplify(broad)
         return broad
 
     def specialized_param_type_for(self, rec_typ, i, t, scope):
@@ -2232,6 +2234,8 @@ class Method:
     def specialized_return_type(self, rec_typ, arg_types, scope):
         ret_type = self.return_type()
         param_types = self.param_types()
+        if self.definition._return_type == FatPtr.basic("Self"):
+            return self.cls.type()
         formal_types = [self.cls.type(), *param_types]
         arg_ancestors = []
         for arg_t, param_t in zip(arg_types, param_types):
@@ -2252,7 +2256,7 @@ class Method:
         if self._overridden_methods: return self._overridden_methods
         candidates = (definition for definition in self.cls.parents_methods() if definition.name == self.definition.name)
         candidates = (definition for definition in candidates if definition.arity == self.definition.arity)
-        candidates = (candidate for candidate in candidates if self.definition.arity == 0 or all(a == self.cls._scope.simplify(candidate.defining_class._scope.simplify(b)) for (a,b) in zip(self.param_types(), candidate.param_types())))
+        candidates = (candidate for candidate in candidates if self.definition.arity == 0 or all(a == self.cls.scope.simplify(candidate.defining_class._scope.simplify(b)) for (a,b) in zip(self.param_types(), candidate.param_types())))
         if isinstance(self.definition, AbstractMethodDef):
             candidates = (candidate for candidate in candidates if isinstance(candidate, AbstractMethodDef))
         self._overridden_methods = [*candidates]
@@ -2298,31 +2302,32 @@ class Behavior(Statement):
     cls: 'ClassDef'
     superfluous_methods: List[Method]
 
+    def abstract_temp_scope(self):
+        temp_scope = Scope(self.cls.scope)
+        temp_scope.deconcretize()
+        for m in self.methods:
+            for k,v in m.definition.defining_class.scope.aliases.items():
+                if not isinstance(v, TypeParameter): continue
+                temp_scope.add_alias(k, v)
+            for k,v in m.scope.aliases.items():
+                if not isinstance(v, TypeParameter): continue
+                temp_scope.add_alias(k, v)
+        return temp_scope
+
     def broad_param_types(self):
         param_type_sets = [method.broad_param_types() for method in self.methods]
-        temp_scope = Scope(self.cls._scope)
-        for m in self.methods:
-            for k,v in m.scope.aliases.items():
-                temp_scope.aliases[k] = v
-        temp_scope.deconcretize()
+        temp_scope = self.abstract_temp_scope()
         result = [temp_scope.simplify(Union.from_list([params[k] for params in param_type_sets])) for k in range(self.arity)]
         return result
 
     def broad_return_type(self):
         if not self.methods[0].definition.return_type(): return None
-        temp_scope = Scope(self.cls._scope)
-        for m in self.methods:
-            for k,v in m.scope.aliases.items():
-                temp_scope.aliases[k] = v
-        temp_scope.deconcretize()
+        temp_scope = self.abstract_temp_scope()
         result = temp_scope.simplify(Union.from_list([method.broad_return_type() for method in self.methods]))
         return result
 
     def specialized_return_type(self, rec_typ, arg_types, scope):
-        temp_scope = Scope(self.cls._scope)
-        for m in self.methods:
-            for k,v in m.scope.aliases.items():
-                temp_scope.aliases[k] = v
+        temp_scope = self.abstract_temp_scope()
         all_return_types = [method.specialized_return_type(rec_typ, arg_types, scope) for method in self.methods if method.definition.return_type()]
         #debug_print(all_return_types)
         all_return_types = [t for t in all_return_types if t]
@@ -2448,7 +2453,7 @@ class Behavior(Statement):
             method.typeflow(behavior_scope)
 
         #debug_print(f"Constructing Automaton for behavior {self.name}")
-        self.automaton = Automaton.build(set(self.methods), self.cls._scope)
+        self.automaton = Automaton.build(set(self.methods), self.cls.scope)
 
         #for block in chain.from_iterable(state.blocks() for state in self.automaton._states.values()):
         #    debug_print(block)
@@ -2535,6 +2540,12 @@ class ClassDef(Statement):
     _vtable: List[Method | Behavior]
     _my_ordering: List["ClassDef"]
 
+    @property
+    def scope(self):
+        if FatPtr.basic("Self") in self._scope.aliases: return self._scope
+        vtbl = self.vtable() # will compute all aliases implicitly
+        return self._scope
+
     def codegen(self, scope):
         if self.name in scope.comp_unit.codegenned: return
 
@@ -2618,6 +2629,7 @@ class ClassDef(Statement):
                 t = self._scope.simplify(Union.from_list(types))
                 self._scope.add_alias(old_tp, t)
         for t in self.type_parameters: self._scope.add_alias(FatPtr.basic(t.label.data), t)
+        self._scope.add_alias(FatPtr.basic("Self"), self.type())
 
     def all_regions(self):
         full_ordering = [self, *self.my_ordering()]
@@ -2935,11 +2947,11 @@ class Field:
 
     def needs_storage(self):
         if not isinstance(self.declaration, TypeFieldDecl): return True
-        return "subtype" in self.declaration.scoped_name(self.cls._scope)
+        return "subtype" in self.declaration.scoped_name(self.cls.scope)
 
     def type(self):
-        result = self.declaration.type(self.cls._scope)
-        self.cls._scope.validate_type(self.declaration.info, result)
+        result = self.declaration.type(self.cls.scope)
+        self.cls.scope.validate_type(self.declaration.info, result)
         return result
 
     def symbol(self):
@@ -3054,7 +3066,7 @@ class Branch(Statement):
     condition: Expression
 
     def preallocate(self, scope, route_scopes):
-        lhs_is_identifier = isinstance(self.condition, TypeCheck) and isinstance(self.condition.left, Identifier)
+        lhs_is_identifier = isinstance(self.condition, TypeCheck) and isinstance(self.condition.left, Identifier) and "@" not in self.condition.left.name
         mutated_vars = {self.condition.left.name: route_scopes[0].type_table[self.condition.left.name]} if lhs_is_identifier else {}
         for key in scope.symbol_table.keys():
             union = scope.simplify(Union.from_list([route.type_table[key] for route in route_scopes]))

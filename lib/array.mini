@@ -11,10 +11,13 @@ class Array[T] extends
 
     regions { @elems_reg == @buffer.elems_reg }
 
-    // List.collect(iterable) uses Self.empty().extend(iterable) internally
+    def Self.empty() -> Self { return Self{}; }
+
     // When iterable is actually a Collection, the optimized dispatch for Array.extend(collection) will be used
     // A great example of why multimethods are so powerful: always dispatches on argument's runtime type
-    def Self.empty() -> Self { return Self{}; }
+    def Self.collect(iterable : Iterable[T]) -> Self {
+        return Self.empty().extend(iterable);
+    }
 
 	def init() {
 		@buffer = Buffer[T].new(1);

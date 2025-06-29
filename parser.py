@@ -38,7 +38,12 @@ def parse(file_path) -> AST:
         with open(file_path) as f: import_text = f.read()
 
         # auto-include core.mini
-        if file_path.name not in ["builtins.mini", "iteration.mini", "collection.mini", "core.mini"]:
+        special_files = (
+            "builtins.mini", "iteration.mini", "collection.mini",
+            "list.mini", "range.mini", "indexable.mini",
+            "core.mini"
+        )
+        if file_path.name not in special_files:
             import_text = "import core;\n\n" + import_text
 
         program = parser.parse(import_text)
@@ -389,7 +394,9 @@ class CSTTransformer(Transformer):
 
     def hex_literal(self, token):
         node_info = NodeInfo(None, self.file_path, line_number(token))
-        value = int.from_bytes(bytes.fromhex(token.value.replace("_","")[2:]), byteorder='big', signed=True)
+        hex_string = token.value.replace("_","").lstrip('0x')
+        if len(hex_string) % 2 != 0: hex_string = f"0{hex_string}"
+        value = int.from_bytes(bytes.fromhex(hex_string), byteorder='big', signed=True)
         return IntegerLiteral(node_info, value, 32)
 
     def float_literal(self, token):

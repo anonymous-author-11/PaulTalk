@@ -64,7 +64,7 @@ class File {
 		elem_size = 1 as i64;
 		int = fread(buf, elem_size, size, @handle);
 		if int < size { yield(FileSystemError.new()); }
-		return String.new(buf, size as i32, capacity);
+		return String.from_bytes_lossy(buf, size as i32);
 	}
 	def read_byte() -> i8 | Nil {
 		if not @open { yield(FileSystemError.new()); }

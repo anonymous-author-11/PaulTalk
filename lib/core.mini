@@ -86,25 +86,25 @@ class Unicode {
 
         if cp <= 0x7F { // 1-byte
             buf.[0] = cp as i8;
-            return String{buf, 1, 1, capacity}
+            return String{buf, 1, 1, capacity};
         }
         if cp <= 0x7FF { // 2-byte
             buf.[0] = (0xC0 bit_or (cp >> 6)) as i8;
             buf.[1] = (0x80 bit_or (cp bit_and 0x3F)) as i8;
-            return String{buf, 2, 1, capacity}
+            return String{buf, 2, 1, capacity};
         }
         if cp <= 0xFFFF { // 3-byte
             buf.[0] = (0xE0 bit_or (cp >> 12)) as i8;
             buf.[1] = (0x80 bit_or ((cp >> 6) bit_and 0x3F)) as i8;
             buf.[2] = (0x80 bit_or (cp bit_and 0x3F)) as i8;
-            return String{buf, 3, 1, capacity}
+            return String{buf, 3, 1, capacity};
         }
         if cp <= 0x10FFFF { // 4-byte
             buf.[0] = (0xF0 bit_or (cp >> 18)) as i8;
             buf.[1] = (0x80 bit_or ((cp >> 12) bit_and 0x3F)) as i8;
             buf.[2] = (0x80 bit_or ((cp >> 6) bit_and 0x3F)) as i8;
             buf.[3] = (0x80 bit_or (cp bit_and 0x3F)) as i8;
-            return String{buf, 4, 1, capacity}
+            return String{buf, 4, 1, capacity};
         }
         return Unicode.replacement_str();
     }
@@ -121,6 +121,11 @@ class String extends List[Character], Representable {
     @capacity: i32
 
     def Self.empty() -> Self { return Self{}; }
+
+    // This benefits from any optimized .extend overrides
+    def Self.collect(iterable : Iterable[Character]) -> Self {
+        return Self.empty().extend(iterable);
+    }
 
     // STRICT, Failable constructor. Validates input and can yield an error.
     def Self.from_bytes(source_bytes: Buffer[i8], source_len: i32) -> Self yields InvalidUTF8Error {
@@ -156,7 +161,7 @@ class String extends List[Character], Representable {
             if decode_result is Tuple[i32, i32] {
                 // Append the valid bytes
                 bytes_to_copy = decode_result.[1];
-                result.append_char_from_bytes(source_bytes, byte_idx, bytes_to_copy)
+                result.append_char_from_bytes(source_bytes, byte_idx, bytes_to_copy);
                 byte_idx = byte_idx + bytes_to_copy;
             } else {
                 // Invalid sequence, append replacement character and advance one byte
@@ -236,7 +241,7 @@ class String extends List[Character], Representable {
             self.unchecked_insert(i + old_b_len, other.unchecked_index(i));
         }
         @byte_length = new_b_len;
-        @char_length = @char_length + other.char_length();
+        @char_length = @char_length + other.size();
         return self;
     }
     def reserve(new_capacity : i32) {
@@ -323,7 +328,7 @@ class StringIterator extends ConstantTimeIterator[Character] {
     }
 }
 
-class StackTrace {
+class Stacktrace {
     @stacktrace : Buffer[i64]
     @n_frames : i64
 

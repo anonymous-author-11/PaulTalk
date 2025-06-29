@@ -452,6 +452,8 @@ DONE:
 
 TODO:
 
+- Apparently the Method scope doesn't have the class type parameter aliases in it
+	- Why doesn't the Method get the complete class scope?
 - The lack of closures is a problem
 	- Iterable.map function can't take any extra parameters
 	- I could require explicit capture like C++
@@ -472,6 +474,9 @@ TODO:
 		- You might want to export a class from one file and not from another
 	- Export local definitions by default
 	- Don't export imports by default
+	- There's a difference between symbol visibility and data accessibility
+		- Files / export lists used for symbol visibility control; classes for data accessibility
+		- What is encapsulated is static (symbol visibility) vs dynamic (data accessibility)
 - 'into' operator as sugar for conversion methods
 	- into will look for a .from_ or a .to_ method
 		- .to_ method has precedence
@@ -817,6 +822,13 @@ TODO:
 	- Then textual substitution can happen after
 
 # --- Known Bugs ---
+
+- Complications when Self is used as return type
+	- Overrides could be re-checked
+		- To ensure that the value returned is still a subtype of the overriding class
+	- Alternatively, could require that the returned instance was created polymorphically
+		- Possible if you disallow casting to Self
+		- Would need to use a different mechanism from aliases
 
 - Method.overridden_methods() probably has a subtle bug
 	- Which I've hidden for now by mandating that abstract methods not override concrete ones

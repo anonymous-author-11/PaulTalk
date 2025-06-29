@@ -19,6 +19,7 @@ class Range extends Collection[i32] {
     }
 
     def size() -> i32 {
+        if @step == 1 { return (@end - @start) + 1; }
         return ((@end - @start) / @step) + 1;
     }
 
