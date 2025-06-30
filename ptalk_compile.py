@@ -391,13 +391,13 @@ class OptimizationSettings:
     @property
     def vec(self):
         # slp-revec allows the SLP vectorizer to widen previously generated vector loads/stores
-        # This is especially useful because we run the slp-vectorizer in the pre-link optimization
         # slp-max-reg-size default is only 128, which means it wouldn't generate a 'store <4 x double>'
         return "--slp-max-reg-size=512 --slp-revec"
 
     @property
     def hotcold(self):
         # We mark any yielded Exceptions as cold and outline them into a cold section with a hot-cold split
+        # In theory this should keep the instruction cache clean for the non-error path
         return "--hotcoldsplit-max-params=100 --hotcoldsplit-threshold=-1 --inline-cold-callsite-threshold=-10000 --enable-cold-section"
 
     @property

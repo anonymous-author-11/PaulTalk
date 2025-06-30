@@ -13,94 +13,27 @@ from dataclasses import dataclass
 from pathlib import Path
 
 @dataclass
-class ConstraintSet:
-    _set: set["Constraint"]
+class TypeCache:
+    subtype: dict
+    matches: dict
+    simplify: dict
+    ancestors: dict
 
-    def add(self, triple: tuple[str, str, str]):
-        self._set.add(triple)
-        
-        # add implicit constraints ensuring that foo < foo.bar for lhs and rhs
-        lhs, op, rhs = triple
-        for i, section in enumerate(lhs.split(".")):
-            if i == len(lhs.split(".")) - 1: break
-            self._set.add((".".join(lhs.split(".")[:(i + 1)]), "<", ".".join(lhs.split(".")[:(i + 2)])))
-        for i, section in enumerate(rhs.split(".")):
-            if i == len(rhs.split(".")) - 1: break
-            self._set.add((".".join(rhs.split(".")[:(i + 1)]), "<", ".".join(rhs.split(".")[:(i + 2)])))
+    @classmethod
+    def empty(cls):
+        return TypeCache({}, {}, {}, {})
 
-    def transform_with_mapping(self, mapping):
-        old_set = self._set
-        self._set = set()
-        for lhs, op, rhs in old_set:
-            lhs_split = lhs.split(".")
-            lhs_split[0] = mapping[lhs_split[0]]
-            rhs_split = rhs.split(".")
-            rhs_split[0] = mapping[rhs_split[0]]
-            self.add((".".join(lhs_split), op, ".".join(rhs_split)))
+class TypeEnvironment:
+    aliases: dict
+    alias_graph: nx.DiGraph
+    classes: dict
+    caches: dict
 
-    def __contains__(self, item):
-        return item in self._set
-
-    def remove(self, item):
-        self._set.remove(item)
-
-    def copy(self):
-        return ConstraintSet(self._set.copy())
-
-    def union(self, other):
-        return ConstraintSet(self._set.union(other._set))
-
-class CompilationUnit:
-    dependency_graph: nx.DiGraph
-    codegenned: set
-    toplevel_ops: list
-    main: Path
-
-    def __init__(self):
-        self.dependency_graph = nx.DiGraph()
-        self.codegenned = set()
-        self.toplevel_ops = []
-        self.main = None
-
-class Scope:
-    def __init__(self, parent=None, cls=None, behavior=None, method=None, wile=None):
-        self.region = Region([Block([])])
-
-        self.comp_unit = parent.comp_unit if parent else CompilationUnit()
-
-        self.symbol_table = parent.symbol_table.copy() if parent else {}
-        self.type_table = parent.type_table.copy() if parent else {}
+    def __init__(self, parent=None):
         self.aliases = parent.aliases.copy() if parent else {}
         self.alias_graph = parent.alias_graph.copy() if parent else nx.DiGraph()
-        self.allocations = parent.allocations.copy() if parent else {}
-        self.points_to_facts = parent.points_to_facts.copy() if parent else ConstraintSet(set())
-        self.parameterization_cache = parent.parameterization_cache.copy() if parent and parent.method else {}
         self.classes = parent.classes if parent else {}
-        self.functions = parent.functions if parent else {}
-        self.subtype_cache = parent.subtype_cache if parent else {}
-        self.matches_cache = parent.matches_cache if parent else {}
-        self.simplify_cache = parent.simplify_cache if parent else {}
-        self.ancestors_cache = parent.ancestors_cache if parent else {}
-        self.parent = parent
-        self.cls = cls
-        self.method = method
-        self.behavior = behavior
-        self.wile = wile
-        if(not cls and parent and parent.cls): self.cls = parent.cls
-        if(not behavior and parent and parent.behavior): self.behavior = parent.behavior
-        if(not method and parent and parent.method): self.method = parent.method
-        if(not wile and parent and parent.wile): self.wile = parent.wile
-
-    def merge_blocks(self, other: "Scope"):
-        self.region.last_block.add_op(cf.Branch(other.region.first_block))
-        other.region.move_blocks(self.region)
-        other.region.erase()
-
-    def merge(self, other: "Scope"):
-        for key, value in self.type_table.items():
-            self.type_table[key] = self.simplify(Union.from_list([self.type_table[key], other.type_table[key]]))
-        self.points_to_facts = self.points_to_facts.union(other.points_to_facts)
-        for k, v in other.allocations.items(): self.allocations[k] = v
+        self.caches = parent.caches if parent else {}
 
     def add_alias(self, key, value):
         if key == value: return
@@ -113,6 +46,20 @@ class Scope:
     def remove_alias(self, key):
         self.alias_graph.remove_edge(key, self.aliases[key])
         del self.aliases[key]
+
+    def validate_type(self, node_info, typ):
+        if not isinstance(typ, FatPtr): return
+        if typ.cls.data not in self.classes:
+            raise Exception(f"{node_info}: Class {typ.cls.data} has not been declared.")
+        cls = self.classes[typ.cls.data]
+        if typ.type_params == NoneAttr() and len(cls.type_parameters) != 0:
+            raise Exception(f"{node_info}: Wrong number of type parameters for {typ.cls.data}: expected {len(cls.type_parameters)}.")
+        if typ.type_params != NoneAttr():
+            if len(typ.type_params.data) != len(cls.type_parameters):
+                raise Exception(f"{node_info}: Wrong number of type parameters for {typ.cls.data}: expected {len(cls.type_parameters)}.")
+            zipped = zip(typ.type_params.data, cls.type_parameters)
+            if not all(self.matches(a,b) for a,b in zipped):
+                raise Exception(f"{node_info}: Class {cls.name} cannot be instantiated with types {[*typ.type_params.data]}")
 
     def subtype_inner(self, left, right):
         if self.simplify(left) != left:
@@ -154,56 +101,36 @@ class Scope:
         return left == right
 
     def subtype(self, left, right):
-        if (left, right) in self.subtype_cache: return self.subtype_cache[(left, right)]
         try:
-            self.subtype_cache[(left, right)] = self.subtype_inner(left, right)
+            cache_key = frozenset(self.aliases.items())
+            if cache_key in self.caches:
+                if (left, right) in self.caches[cache_key].subtype:
+                    return self.caches[cache_key].subtype[(left, right)]
+                result = self.subtype_inner(left, right)
+                self.caches[cache_key].subtype[(left, right)] = result
+                return result
+            result = self.subtype_inner(left, right)
+            self.caches[cache_key] = TypeCache.empty()
+            self.caches[cache_key].subtype[(left, right)] = result
+            return result
         except Exception as e:
             print(f"Exception while trying to determine if {left} is a subtype of {right}")
             raise e
-        return self.subtype_cache[(left, right)]
-
-    def constraints_of(self, typ):
-        constraints = ConstraintSet(set())
-        if isinstance(typ, FatPtr):
-            return self.classes[typ.cls.data].all_constraints().copy()
-        if isinstance(typ, TypeParameter) and isinstance(typ.bound, FatPtr) and typ.bound.cls.data in self.classes:
-            return self.classes[typ.bound.cls.data].all_constraints().copy()
-        if isinstance(typ, Union):
-            for t in typ.types.data:
-                constraints = constraints.union(self.constraints_of(t))
-        return constraints
-
-    def assign_regions(self, var_mapping, param_names):
-        rep_to_vars = {}
-        for var, rep in var_mapping.items():
-            rep_to_vars.setdefault(rep, []).append(var)
-        for id, allocation in self.allocations.items():
-            labels = rep_to_vars[var_mapping[id]]
-            param_labels = sorted(label for label in labels if label in param_names)
-            best_label = (*param_labels, "stack")[0]
-            allocation.region = best_label
-
-    def validate_type(self, node_info, typ):
-        if not isinstance(typ, FatPtr): return
-        if typ.cls.data not in self.classes:
-            raise Exception(f"{node_info}: Class {typ.cls.data} has not been declared.")
-        cls = self.classes[typ.cls.data]
-        if typ.type_params == NoneAttr() and len(cls.type_parameters) != 0:
-            raise Exception(f"{node_info}: Wrong number of type parameters for {typ.cls.data}: expected {len(cls.type_parameters)}.")
-        if typ.type_params != NoneAttr():
-            if len(typ.type_params.data) != len(cls.type_parameters):
-                raise Exception(f"{node_info}: Wrong number of type parameters for {typ.cls.data}: expected {len(cls.type_parameters)}.")
-            zipped = zip(typ.type_params.data, cls.type_parameters)
-            if not all(self.matches(a,b) for a,b in zipped):
-                raise Exception(f"{node_info}: Class {cls.name} cannot be instantiated with types {[*typ.type_params.data]}")
 
     def matches(self, left, right):
-        if (left, right) in self.matches_cache: return self.matches_cache[(left, right)]
+        cache_key = frozenset(self.aliases.items())
+        if cache_key in self.caches:
+            if (left, right) in self.caches[cache_key].matches:
+                return self.caches[cache_key].matches[(left, right)]
+            result = self.matches_inner(left, right)
+            self.caches[cache_key].matches[(left, right)] = result
+            return result
         result = self.matches_inner(left, right)
-        self.matches_cache[(left, right)] = result
+        self.caches[cache_key] = TypeCache.empty()
+        self.caches[cache_key].matches[(left, right)] = result
         #modifier = "not " if not result else ""
         #print(f"{left} does {modifier}match {right}")
-        return self.matches_cache[(left, right)]
+        return result
 
     # is lhs a valid instantiation of rhs?
     def matches_inner(self, left, right):
@@ -274,13 +201,316 @@ class Scope:
             return {k:v for k,v in chain.from_iterable(self.substitute_random(l,r).items() for (l,r) in zipped)}
         return {}
 
+    # Simplify the target type given the implicit mapping between formal types and concrete types
+    def specialize(self, formal_types, concrete_types, target_type):
+        temp_env = TypeEnvironment(self)
+
+        # formal types are obtained from the formal param / return types of a method
+        # Or from the formal type parameters of a class
+        # concrete types are obtained from the argument types and receiver type
+
+        # for each formal/concrete pair,
+        # map each replaced type parameter to a random name
+
+        # then, simplify the target type to be in terms of the those random names
+
+        # remove the previously added mappings
+        # Add mapping from the random names to the concrete type parameters
+        # Simplify the target in terms of the new mapping
+
+        mapping = {}
+        for ct, ft in zip(concrete_types, formal_types):
+            #if not temp_env.matches(ct, ft):
+            #    raise Exception(f"{ct} does not match {ft}")
+            # substitute ct for ft
+            mapping = mapping | temp_env.substitute_random(ct, ft)
+
+        target_type = temp_env.simplify(target_type)
+        temp_env = TypeEnvironment(self)
+        for rand_name, concrete_type in mapping.items():
+            temp_env.add_alias(rand_name, concrete_type)
+        result = temp_env.simplify(target_type)
+        #print(f"specialized {target_type} to {result}")
+        return result
+
+    def ancestors(self, typ: TypeAttribute) -> list:
+        cache_key = frozenset(self.aliases.items())
+        if cache_key in self.caches:
+            if typ in self.caches[cache_key].ancestors:
+                return self.caches[cache_key].ancestors[typ]
+            result = self.ancestors_inner(typ)
+            self.caches[cache_key].ancestors[typ] = result
+            return result
+        result = self.ancestors_inner(typ)
+        #print(f"ancestors of {typ} are {result}")
+        self.caches[cache_key] = TypeCache.empty()
+        self.caches[cache_key].ancestors[typ] = result
+        return result
+
+    def ancestors_inner(self, typ: TypeAttribute) -> list:
+        if typ == Any(): return [typ]
+        if typ == Nil(): return [typ, Any()]
+        if typ in builtin_types.values(): return [typ, FatPtr.basic("Object"), Any()]
+        if isinstance(typ, Tuple): return [typ, FatPtr.basic("Object"), Any()]
+        if isinstance(typ, Buffer): return [typ, FatPtr.basic("Object"), Any()]
+        if isinstance(typ, Function): return [typ, FatPtr.basic("Object"), Any()]
+        if isinstance(typ, Union):
+            ancestors = [self.ancestors(element) for element in typ.types.data]
+            prod = product(*ancestors)
+            return [self.simplify(Union.from_list([*tup])) for tup in prod]
+        if isinstance(typ, Intersection): raise Exception("not yet implemented ancestors() for Intersection")
+        if isinstance(typ, FatPtr):
+            original_type = typ
+            typ = self.simplify(typ)
+            
+            if typ.cls.data not in self.classes:
+                print(f" problem is {typ}")
+                raise Exception(self.classes)
+
+            cls = self.classes[typ.cls.data]
+            temp_env = TypeEnvironment(cls.scope.parent.type_env)
+            typ = temp_env.simplify(typ)
+
+            supertypes = [sup for sup in cls.direct_supertypes() if isinstance(sup, FatPtr)]
+            formal_types = [cls.type(), *(self.classes[sup.cls.data].type() for sup in supertypes)]
+            concrete_types = [typ, *supertypes]
+            ancestors = [temp_env.specialize(formal_types, concrete_types, anc) for anc in cls.ancestors()]
+            ancestors = [self.simplify(anc) for anc in ancestors]
+            #print(f"ancestors of {original_type} are {ancestors}")
+            return ancestors
+
+        if isinstance(typ, TypeParameter): return [typ, *self.ancestors(typ.bound)]
+        raise Exception(f"can't find ancestors for {typ}")
+
+    def all_types(self):
+        return [*builtin_types.values(), *[FatPtr.basic(name) for name in self.classes.keys()]]
+
+    # remove all aliases from type parameters to concrete types
+    def deconcretize(self):
+        aliases = self.aliases.copy()
+        for k,v in aliases.items():
+            if not isinstance(k, TypeParameter): continue
+            if isinstance(v, TypeParameter): continue
+            self.remove_alias(k)
+
+    # Simplify a type to Disjunctive Normal Form (DNF)
+    def simplify(self, typ: TypeAttribute) -> TypeAttribute:
+        #print(f"simplifying {typ}")
+        cache_key = frozenset(self.aliases.items())
+        if cache_key in self.caches:
+            if typ in self.caches[cache_key].simplify:
+            #print(f"simplified {typ} to {self.simplify_cache[cache_key]}")
+                return self.caches[cache_key].simplify[typ]
+            result = self.simplify_inner(typ)
+            self.caches[cache_key].simplify[typ] = result
+            return result
+        result = self.simplify_inner(typ)
+        self.caches[cache_key] = TypeCache.empty()
+        self.caches[cache_key].simplify[typ] = result
+        #print(f"simplified {typ} to {self.simplify_cache[cache_key]}")
+        return result
+
+    def simplify_inner(self, typ: TypeAttribute) -> TypeAttribute:
+
+        if typ in self.aliases: return self.simplify(self.aliases[typ])
+
+        if isinstance(typ, FatPtr) and FatPtr.basic(typ.cls.data) in self.aliases.keys():
+            return FatPtr([self.aliases[FatPtr.basic(typ.cls.data)].cls, typ.type_params])
+
+        if isinstance(typ, FatPtr) and typ.type_params != NoneAttr():
+            return FatPtr.generic(typ.cls.data, [self.simplify(t) for t in typ.type_params.data])
+
+        if isinstance(typ, Buffer): return Buffer([self.simplify(typ.elem_type)])
+
+        if isinstance(typ, TypeParameter) and isinstance(typ.bound, TypeParameter):
+            return self.simplify(typ.bound)
+
+        if isinstance(typ, Tuple):
+            return Tuple([ArrayAttr([self.simplify(t) for t in typ.types.data])])
+
+        if isinstance(typ, Function):
+            new_param_types = ArrayAttr([self.simplify(t) for t in typ.param_types.data])
+            new_return_type = self.simplify(typ.return_type)
+            new_yield_type = self.simplify(typ.yield_type)
+            #print(f"simplified {typ} to {Function([new_param_types, new_yield_type, new_return_type])}")
+            return Function([new_param_types, new_yield_type, new_return_type])
+
+        if isinstance(typ, Union):
+            simplified = {self.simplify(t) for t in typ.types.data} # recursive call
+            flattened = {s for typ in simplified for s in (typ.types.data if isinstance(typ, Union) else [typ])}
+            flattened = {s for s in flattened if not isinstance(s, Nothing)} # remove Nothing types
+            flattened = {s for s in flattened if isinstance(s, TypeParameter) or isinstance(s, Nil) or (not any(s == s2.bound) for s2 in flattened if isinstance(s2, TypeParameter))}
+            flattened = {s for s in flattened if (not any(((self.subtype(s, s2)) and (not self.subtype(s2, s))) for s2 in flattened))} # merge subtypes
+            if len(list(flattened)) == 1: return list(flattened)[0] # A union of one type is just that type
+            if len(list(flattened)) == 0: return Nothing()
+            #print(f"simplified {typ} to {Union.from_list(list(flattened))}")
+            #print(f"with aliases {self.aliases}")
+            return Union.from_list(list(flattened)) # Union is associative
+        
+        if isinstance(typ, Intersection):
+            simplified = {self.simplify(t) for t in typ.types.data} # recursive call
+            simplified = {t for t in simplified if not isinstance(t, Nothing)} # remove Nothing types
+            simplified = {t1 for t1 in simplified if not any(self.subtype(t2, t1) and (not self.subtype(t1, t2)) for t2 in simplified)}
+            builtins = [t for t in simplified if is_builtin(t) and t != Any()]
+            if len(builtins) == 1: return builtins[0]
+            if all(is_primitive(t) for t in simplified): # if all types in the intersection are primitive (not union or intersection)
+                if len(list(simplified)) == 1: return list(simplified)[0] # an intersection of one type is just that type
+                return Nothing() # an intersection of disjoint types is Nothing
+            unions = [t.types.data if isinstance(t, Union) else [t] for t in simplified]
+            distributed = {Intersection.from_list(list(prod)) for prod in product(*unions)} # distribute intersections across unions
+            flattened = {item for d in distributed for item in (d.types.data if len(d.types.data) == 1 else [d])}
+            return self.simplify(Union.from_list(list(flattened)))
+
+        return typ
+
+@dataclass
+class ConstraintSet:
+    _set: set["Constraint"]
+
+    def add(self, triple: tuple[str, str, str]):
+        self._set.add(triple)
+        
+        # add implicit constraints ensuring that foo < foo.bar for lhs and rhs
+        lhs, op, rhs = triple
+        for i, section in enumerate(lhs.split(".")):
+            if i == len(lhs.split(".")) - 1: break
+            self._set.add((".".join(lhs.split(".")[:(i + 1)]), "<", ".".join(lhs.split(".")[:(i + 2)])))
+        for i, section in enumerate(rhs.split(".")):
+            if i == len(rhs.split(".")) - 1: break
+            self._set.add((".".join(rhs.split(".")[:(i + 1)]), "<", ".".join(rhs.split(".")[:(i + 2)])))
+
+    def transform_with_mapping(self, mapping):
+        old_set = self._set
+        self._set = set()
+        for lhs, op, rhs in old_set:
+            lhs_split = lhs.split(".")
+            lhs_split[0] = mapping[lhs_split[0]]
+            rhs_split = rhs.split(".")
+            rhs_split[0] = mapping[rhs_split[0]]
+            self.add((".".join(lhs_split), op, ".".join(rhs_split)))
+
+    def __contains__(self, item):
+        return item in self._set
+
+    def remove(self, item):
+        self._set.remove(item)
+
+    def copy(self):
+        return ConstraintSet(self._set.copy())
+
+    def union(self, other):
+        return ConstraintSet(self._set.union(other._set))
+
+class CompilationUnit:
+    dependency_graph: nx.DiGraph
+    codegenned: set
+    toplevel_ops: list
+    main: Path
+
+    def __init__(self):
+        self.dependency_graph = nx.DiGraph()
+        self.codegenned = set()
+        self.toplevel_ops = []
+        self.main = None
+
+class Scope:
+    parent: "Scope"
+    cls: "ClassDef"
+    method: "Method"
+    behavior: "Behavior"
+    wile: "WhileStatement"
+    region: Region
+    comp_unit: CompilationUnit
+    type_env: TypeEnvironment
+    points_to_facts: ConstraintSet
+    functions: dict
+    symbol_table: dict
+    type_table: dict
+    allocations: dict
+    parameterization_cache: dict
+
+    def __init__(self, parent=None, cls=None, behavior=None, method=None, wile=None):
+        self.region = Region([Block([])])
+
+        self.comp_unit = parent.comp_unit if parent else CompilationUnit()
+        self.type_env = TypeEnvironment(parent.type_env) if parent else TypeEnvironment()
+        self.functions = parent.functions if parent else {}
+
+        self.symbol_table = parent.symbol_table.copy() if parent else {}
+        self.type_table = parent.type_table.copy() if parent else {}
+        self.allocations = parent.allocations.copy() if parent else {}
+        self.points_to_facts = parent.points_to_facts.copy() if parent else ConstraintSet(set())
+        self.parameterization_cache = parent.parameterization_cache.copy() if parent and parent.method else {}
+        self.cls = parent.cls if (parent and parent.cls and not cls) else cls
+        self.method = parent.method if (parent and parent.method and not method) else method
+        self.behavior = parent.behavior if (parent and parent.behavior and not behavior) else behavior
+        self.wile = parent.wile if (parent and parent.wile and not wile) else wile
+        self.parent = parent
+
+    @property
+    def classes(self):
+        return self.type_env.classes
+
+    def subtype(self, left, right):
+        return self.type_env.subtype(left, right)
+
+    def matches(self, left, right):
+        return self.type_env.matches(left, right)
+
+    def simplify(self, typ):
+        return self.type_env.simplify(typ)
+
+    def ancestors(self, typ):
+        return self.type_env.ancestors(typ)
+
+    def specialize(self, formal_types, concrete_types, target_type):
+        return self.type_env.specialize(formal_types, concrete_types, target_type)
+
+    def merge_ops(self, other: "Scope"):
+        other_first_block = other.region.first_block
+        self_last_block = self.region.last_block
+        other.region.move_blocks(self.region)
+        ops_to_move = [*other_first_block.ops]
+        for op in ops_to_move:
+            self_last_block.add_op(other_first_block.detach_op(op))
+        self.region.detach_block(other_first_block)
+        other_first_block.erase()
+        other.region.erase()
+
+    def merge(self, other: "Scope"):
+        for key, value in self.type_table.items():
+            self.type_table[key] = self.simplify(Union.from_list([self.type_table[key], other.type_table[key]]))
+        self.points_to_facts = self.points_to_facts.union(other.points_to_facts)
+        for k, v in other.allocations.items(): self.allocations[k] = v
+
+    def constraints_of(self, typ):
+        constraints = ConstraintSet(set())
+        classes = self.classes
+        if isinstance(typ, FatPtr):
+            return classes[typ.cls.data].all_constraints().copy()
+        if isinstance(typ, TypeParameter) and isinstance(typ.bound, FatPtr) and typ.bound.cls.data in classes:
+            return classes[typ.bound.cls.data].all_constraints().copy()
+        if isinstance(typ, Union):
+            for t in typ.types.data:
+                constraints = constraints.union(self.constraints_of(t))
+        return constraints
+
+    def assign_regions(self, var_mapping, param_names):
+        rep_to_vars = {}
+        for var, rep in var_mapping.items():
+            rep_to_vars.setdefault(rep, []).append(var)
+        for id, allocation in self.allocations.items():
+            labels = rep_to_vars[var_mapping[id]]
+            param_labels = sorted(label for label in labels if label in param_names)
+            best_label = (*param_labels, "stack")[0]
+            allocation.region = best_label
+
     def offset_to(self, from_typ, to_typ):
         if from_typ in builtin_types.values() or to_typ in builtin_types.values(): return 0
         if isinstance(from_typ, FatPtr) and isinstance(to_typ, FatPtr): return self.classes[from_typ.cls.data].offset_to(to_typ.cls.data)
         raise Exception(f"not implemented yet for types {from_typ} and {to_typ}")
 
     def get_parameterization(self, typ):
-        # if typ in self.parameterization_cache: return self.parameterization_cache[typ]
         self_types = self.cls.type_parameters if "self" in self.symbol_table else []
         scoped_types = self.method.param_types() if "local_parameterizations" in self.symbol_table.keys() else []
         if self.cls: scoped_types = [*scoped_types, *self.cls.type_parameters]
@@ -429,155 +659,3 @@ class Scope:
             return array_attr
         print(f"ancestors are: {self.ancestors(typ)}")
         raise Exception(f"could not build hash table for type {typ}.")
-
-    # Simplify the target type given the implicit mapping between formal types and concrete types
-    def specialize(self, formal_types, concrete_types, target_type):
-        temp_scope = Scope(self)
-
-        # formal types are obtained from the formal param / return types of a method
-        # Or from the formal type parameters of a class
-        # concrete types are obtained from the argument types and receiver type
-
-        # for each formal/concrete pair,
-        # map each replaced type parameter to a random name
-
-        # then, simplify the target type to be in terms of the those random names
-
-        # remove the previously added mappings
-        # Add mapping from the random names to the concrete type parameters
-        # Simplify the target in terms of the new mapping
-
-        mapping = {}
-        for ct, ft in zip(concrete_types, formal_types):
-            #if not temp_scope.matches(ct, ft):
-            #    raise Exception(f"{ct} does not match {ft}")
-            # substitute ct for ft
-            mapping = mapping | temp_scope.substitute_random(ct, ft)
-
-        target_type = temp_scope.simplify(target_type)
-        temp_scope = Scope(self)
-        for rand_name, concrete_type in mapping.items():
-            temp_scope.add_alias(rand_name, concrete_type)
-        result = temp_scope.simplify(target_type)
-        #print(f"specialized {target_type} to {result}")
-        return result
-
-    def ancestors(self, typ: TypeAttribute) -> list:
-        cache_key = (typ, frozenset(self.aliases.items()))
-        if cache_key in self.ancestors_cache:
-            return self.ancestors_cache[cache_key]
-        result = self.ancestors_inner(typ)
-        #print(f"ancestors of {typ} are {result}")
-        self.ancestors_cache[cache_key] = result
-        return result
-
-    def ancestors_inner(self, typ: TypeAttribute) -> list:
-        if typ == Any(): return [typ]
-        if typ == Nil(): return [typ, Any()]
-        if typ in builtin_types.values(): return [typ, FatPtr.basic("Object"), Any()]
-        if isinstance(typ, Tuple): return [typ, FatPtr.basic("Object"), Any()]
-        if isinstance(typ, Buffer): return [typ, FatPtr.basic("Object"), Any()]
-        if isinstance(typ, Function): return [typ, FatPtr.basic("Object"), Any()]
-        if isinstance(typ, Union):
-            ancestors = [self.ancestors(element) for element in typ.types.data]
-            prod = product(*ancestors)
-            return [self.simplify(Union.from_list([*tup])) for tup in prod]
-        if isinstance(typ, Intersection): raise Exception("not yet implemented ancestors() for Intersection")
-        if isinstance(typ, FatPtr):
-            original_type = typ
-            typ = self.simplify(typ)
-            
-            if typ.cls.data not in self.classes:
-                print(f" problem is {typ}")
-                raise Exception(self.classes)
-
-            cls = self.classes[typ.cls.data]
-            temp_scope = Scope(cls._scope.parent)
-            typ = temp_scope.simplify(typ)
-
-            supertypes = [sup for sup in cls.direct_supertypes() if isinstance(sup, FatPtr)]
-            formal_types = [cls.type(), *(self.classes[sup.cls.data].type() for sup in supertypes)]
-            concrete_types = [typ, *supertypes]
-            ancestors = [temp_scope.specialize(formal_types, concrete_types, anc) for anc in cls.ancestors()]
-            ancestors = [self.simplify(anc) for anc in ancestors]
-            #print(f"ancestors of {original_type} are {ancestors}")
-            return ancestors
-
-        if isinstance(typ, TypeParameter): return [typ, *self.ancestors(typ.bound)]
-        raise Exception(f"can't find ancestors for {typ}")
-
-    def all_types(self):
-        return [*builtin_types.values(), *[FatPtr.basic(name) for name in self.classes.keys()]]
-
-    # remove all aliases from type parameters to concrete types
-    def deconcretize(self):
-        aliases = self.aliases.copy()
-        for k,v in aliases.items():
-            if not isinstance(k, TypeParameter): continue
-            if isinstance(v, TypeParameter): continue
-            self.remove_alias(k)
-
-    # Simplify a type to Disjunctive Normal Form (DNF)
-    def simplify(self, typ: TypeAttribute) -> TypeAttribute:
-        #print(f"simplifying {typ}")
-        cache_key = (typ, frozenset(self.aliases.items()))
-        if cache_key in self.simplify_cache:
-            #print(f"simplified {typ} to {self.simplify_cache[cache_key]}")
-            return self.simplify_cache[cache_key]
-        result = self.simplify_inner(typ)
-        self.simplify_cache[cache_key] = result
-        #print(f"simplified {typ} to {self.simplify_cache[cache_key]}")
-        return result
-
-    def simplify_inner(self, typ: TypeAttribute) -> TypeAttribute:
-
-        if typ in self.aliases: return self.simplify(self.aliases[typ])
-
-        if isinstance(typ, FatPtr) and FatPtr.basic(typ.cls.data) in self.aliases.keys():
-            return FatPtr([self.aliases[FatPtr.basic(typ.cls.data)].cls, typ.type_params])
-
-        if isinstance(typ, FatPtr) and typ.type_params != NoneAttr():
-            return FatPtr.generic(typ.cls.data, [self.simplify(t) for t in typ.type_params.data])
-
-        if isinstance(typ, Buffer): return Buffer([self.simplify(typ.elem_type)])
-
-        if isinstance(typ, TypeParameter) and isinstance(typ.bound, TypeParameter):
-            return self.simplify(typ.bound)
-
-        if isinstance(typ, Tuple):
-            return Tuple([ArrayAttr([self.simplify(t) for t in typ.types.data])])
-
-        if isinstance(typ, Function):
-            new_param_types = ArrayAttr([self.simplify(t) for t in typ.param_types.data])
-            new_return_type = self.simplify(typ.return_type)
-            new_yield_type = self.simplify(typ.yield_type)
-            #print(f"simplified {typ} to {Function([new_param_types, new_yield_type, new_return_type])}")
-            return Function([new_param_types, new_yield_type, new_return_type])
-
-        if isinstance(typ, Union):
-            simplified = {self.simplify(t) for t in typ.types.data} # recursive call
-            flattened = {s for typ in simplified for s in (typ.types.data if isinstance(typ, Union) else [typ])}
-            flattened = {s for s in flattened if not isinstance(s, Nothing)} # remove Nothing types
-            flattened = {s for s in flattened if isinstance(s, TypeParameter) or isinstance(s, Nil) or (not any(s == s2.bound) for s2 in flattened if isinstance(s2, TypeParameter))}
-            flattened = {s for s in flattened if (not any(((self.subtype(s, s2)) and (not self.subtype(s2, s))) for s2 in flattened))} # merge subtypes
-            if len(list(flattened)) == 1: return list(flattened)[0] # A union of one type is just that type
-            if len(list(flattened)) == 0: return Nothing()
-            #print(f"simplified {typ} to {Union.from_list(list(flattened))}")
-            #print(f"with aliases {self.aliases}")
-            return Union.from_list(list(flattened)) # Union is associative
-        
-        if isinstance(typ, Intersection):
-            simplified = {self.simplify(t) for t in typ.types.data} # recursive call
-            simplified = {t for t in simplified if not isinstance(t, Nothing)} # remove Nothing types
-            simplified = {t1 for t1 in simplified if not any(self.subtype(t2, t1) and (not self.subtype(t1, t2)) for t2 in simplified)}
-            builtins = [t for t in simplified if is_builtin(t) and t != Any()]
-            if len(builtins) == 1: return builtins[0]
-            if all(is_primitive(t) for t in simplified): # if all types in the intersection are primitive (not union or intersection)
-                if len(list(simplified)) == 1: return list(simplified)[0] # an intersection of one type is just that type
-                return Nothing() # an intersection of disjoint types is Nothing
-            unions = [t.types.data if isinstance(t, Union) else [t] for t in simplified]
-            distributed = {Intersection.from_list(list(prod)) for prod in product(*unions)} # distribute intersections across unions
-            flattened = {item for d in distributed for item in (d.types.data if len(d.types.data) == 1 else [d])}
-            return self.simplify(Union.from_list(list(flattened)))
-
-        return typ

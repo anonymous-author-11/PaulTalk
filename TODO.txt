@@ -452,17 +452,85 @@ DONE:
 
 TODO:
 
-- Apparently the Method scope doesn't have the class type parameter aliases in it
-	- Why doesn't the Method get the complete class scope?
-- The lack of closures is a problem
+- Parsing is too slow
+	- If we make more of the process non-mutating, we can cache more intermediate results
+	- Think about doing typeflow and codegen using visitors
+		- How will exprtype work?
+	- There are probably a billion copies of each AST floating around
+		- And I don't believe imported AST's even get mutated
+
+- Why can't we just store in the parse cache a mapping from Program node id's (or file names) to sandbox scopes?
+	- Because the parse cache knows nothing about typeflow and typeflow knows nothing about the parse cache
+	- Because it matters whether we typeflowed the scope or interface_typeflowed the scope
+
+- Maybe what I should focus on is making AST mutations idempotent
+	- Doing it twice is the same as doing it once
+
+- I'd like imported AST's to be shared between AST's
+
+- Why was it a problem to have a scope in the parse cache?
+	- Because it made it impossible to imbue a CompilationUnit into the scope
+	- The scopes are inserted by the driver by constructing AST(program)
+	- Importantly, the CU is spread into imports by typeflow
+	- Then the CU keeps track of codegenned
+
+- Each AST import tree is very coupled to its hierarchy of scopes, which are supposed to all have a single unique CU
+
+- What if we indexed codegenned by CU id
+	- Codegenned in CU a vs codegenned in CU b
+	- Introduces a global cache, which we previously fought to eliminate
+	- Means that ASTs themselves can become reusable
+
+- Ideally the AST's would be in a cache indexed by file name
+	- Then the CU into which an AST is codegenned should be injected
+	- As long as the CU itself is not stored in the AST this should work
+	- We pass a context into codegen which carries scope and CU
+	- Many things in the AST store scopes, but need not store the CU
+
+- I should decouple the aspects of scope which need to be cached in the AST vs vary by CU
+	- Especially the generated IR in scope.region
+		- How will the hierarchical nature be represented?
+		- scope.get_parameterization is highly coupled
+			- We could pass in the context object
+	- Then pass a context object which contains both the scope and the other aspects
+
+- Both passed scopes and stored scopes are codegenned into
+	- Class.scope is codegenned into, so is global scope
+
+- Things to break scope into
+	- Symbol resolution
+		- Pointers to declared classes and functions
+		- Can be gathered without any typeflow
+	- Properly part of scope
+		- Symbol table, type table
+		- Cached type system results
+			- Needs classes from symbol resolution
+			- Builds as typeflow proceeds
+	- Current class, behavior, method, loop
+	- Generated IR
+	- ConstraintSet for points-to analysis
+	- CompilationUnit
+
+- Ways that I mutate the AST during typeflow
+	- Function literal return type
+	- Syntax sugar rewriting
+		- For-loop
+		- Array, range, string literals
+
+- You can probably cache the global scope of every file
+	- Would get in the way of parallel compilation
+
+- The lack of closures may be a problem
 	- Iterable.map function can't take any extra parameters
 	- I could require explicit capture like C++
 		- Hard to track which variables are used in the fn
 		- Probably better to do the work of tracking
 	- Capture value types by copy, not reference
+		- No need to "lift" captured variables
+		- No escaping stack pointers
 	- I could use the llvm.trampoline tools
 		- vs making fn into a fat ptr
-		- Improves C interop
+		- Preserves C interop
 - Selective imports
 	- from x import y;
 	- Should improve compilation time
@@ -484,6 +552,11 @@ TODO:
 	- If there are multiple equally valid method candidates, report ambiguity
 	- Abstracts over which type defined the conversion
 	- Could later change which type defined the conversion
+	- Could also provide an alternative to the Rust turbofish operator
+		- I.e. '(0...5).map(times_two) into Array[i32]'
+		- Instead of Array[i32].from_iterable((0...5).map(times_two))
+		- def Array.from_iterable[U](iterable : Iterable[U]) -> Self
+	- Nice because .from_ methods suck for sequential chaining
 - Deduplicate behaviors
 	- If all methods in the behavior are inherited from the same class, reuse that behavior
 - You could parallelize the frontend phase from (parse tree) -> (lowered IR string)

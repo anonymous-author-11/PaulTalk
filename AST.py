@@ -177,7 +177,8 @@ class Program(Node):
     def interface_codegen(self, scope):
         for stmt in self.statements: stmt.interface_codegen(scope)
 
-    def interface_typeflow(self, scope):
+    # Find top-level entities (including imported ones) and record them without any further analysis
+    def name_resolution(self, scope):
 
         classes = (stmt for stmt in self.statements if isinstance(stmt, ClassDef))
         functions = (stmt for stmt in self.statements if isinstance(stmt, FunctionDef))
@@ -196,11 +197,11 @@ class Program(Node):
         for alias in aliases:
             if alias.alias in scope.functions:
                 raise Exception(f"{alias.info}: Alias conflicts with function named {alias.alias}")
-            scope.add_alias(alias.alias, alias.meaning)
-        for imp in imports: imp.typeflow(scope)
+            scope.type_env.add_alias(alias.alias, alias.meaning)
+        for imp in imports: imp.name_resolution(scope)
 
     def typeflow(self, scope):
-        self.interface_typeflow(scope)
+        self.name_resolution(scope)
         for stmt in self.statements:
             if isinstance(stmt, Import): continue
             stmt.typeflow(scope)
@@ -396,7 +397,10 @@ class Logical(BinaryOp):
         right_type = self.right.exprtype(scope)
         right_scope = Scope(scope)
         right_value = self.right.codegen(right_scope)
+
+        # this is intentional-- the func.return is a placeholder removed in lowering
         right_scope.region.block.add_op(func.Return(right_value))
+
         operands = [self.left.codegen(scope)]
         attr_dict = {"op":StringAttr(self.operator)}
         regions = [right_scope.region]
@@ -748,7 +752,7 @@ class Identifier(Expression):
             raise Exception(f"{self.info}: identifier {self.name} not previously declared!")
 
     def ensure_no_alias_conflicts(self, scope):
-        if self.name in scope.aliases:
+        if self.name in scope.type_env.aliases:
             raise Exception(f"{self.info}: Identifier {self.name} conflicts with existing alias of the same name")
 
     def exprtype(self, scope):
@@ -845,7 +849,7 @@ class TypeCheck(Expression):
         self.ensure_rhs_simple()
         self.left.exprtype(scope)
         right_type = scope.simplify(self.right)
-        scope.validate_type(self.info, right_type)
+        scope.type_env.validate_type(self.info, right_type)
         return Bool()
 
     def typeflow(self, scope):
@@ -929,7 +933,7 @@ class As(Expression):
         to_typ = scope.simplify(self.typ)
         if not operand_type or operand_type == llvm.LLVMVoidType():
             raise Exception(f"{self.info}: Cannot cast Nothing to {to_typ}.")
-        scope.validate_type(self.info, to_typ)
+        scope.type_env.validate_type(self.info, to_typ)
         to_integer = isinstance(to_typ, Integer)
         if isinstance(self.operand, IntegerLiteral) and to_integer:
             self.operand.width = to_typ.bitwidth
@@ -1409,7 +1413,7 @@ class ClassMethodCall(MethodCall):
             raise Exception(f"{self.info}: Class {rec_typ.cls.data} has not been declared.")
         rec_class = scope.classes[rec_typ.cls.data]
 
-        scope.validate_type(self.info, rec_typ)
+        scope.type_env.validate_type(self.info, rec_typ)
 
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
         behaviors = [behavior for behavior in rec_class.behaviors if behavior.applicable(rec_typ, scope, "_Self_" + self.method, arg_types)]
@@ -1529,7 +1533,7 @@ class ObjectCreation(Expression):
         if self_type.type_params == NoneAttr(): return []
 
         temp_scope = Scope(scope)
-        for t1, t2 in zip(created_cls.type_parameters, self_type.type_params.data): temp_scope.add_alias(t1, t2)
+        for t1, t2 in zip(created_cls.type_parameters, self_type.type_params.data): temp_scope.type_env.add_alias(t1, t2)
 
         parameterizations = []
         for new_instance_type_field in created_cls.stored_type_fields():
@@ -1583,7 +1587,7 @@ class ObjectCreation(Expression):
         input_types = [arg.exprtype(scope) for arg in self.arguments]
         if simplified_type.type_params == NoneAttr() and len(cls.type_parameters) > 0:
             simplified_type = self.deduce_type_parameters(simplified_type, input_types, scope)
-        scope.validate_type(self.info, simplified_type)
+        scope.type_env.validate_type(self.info, simplified_type)
 
         behaviors = [behavior for behavior in cls.behaviors if behavior.applicable(simplified_type, scope, "init", input_types)]
         if len(behaviors) == 0:
@@ -2127,7 +2131,7 @@ class Method:
         is_match = any(scope.matches(anc, overridden_ret_type) for anc in scope.ancestors(self.return_type()))
         if is_match: return
         #debug_print(scope.ancestors(self.return_type())[1].type_params.data[0])
-        debug_print(self.cls.scope.aliases)
+        debug_print(self.cls.scope.type_env.aliases)
         #debug_print(overridden_ret_type.type_params.data[0])
         raise Exception(f"{self.definition.info}: Overriding method {self.cls.name}.{self.definition.name}: return type {self.return_type()} not a subtype of overridden methods' return types {overridden_ret_type}.")
 
@@ -2157,7 +2161,7 @@ class Method:
 
     def add_type_parameters(self, scope):
         for t in self.type_params:
-            scope.add_alias(FatPtr.basic(t.label.data), t)
+            scope.type_env.add_alias(FatPtr.basic(t.label.data), t)
         labels = [t.label for t in self.type_params]
 
         # We want to alias overridden type parameters as well
@@ -2169,7 +2173,7 @@ class Method:
             m1 = method_set[i]
             m2 = method_set[i + 1]
             for t1, t2 in zip(m1.type_params, m2.type_params):
-                scope.add_alias(t2, t1)
+                scope.type_env.add_alias(t2, t1)
                 #print(f"added alias from {t2} to {t1}")
 
     def symbol(self):
@@ -2177,7 +2181,7 @@ class Method:
 
     def param_types(self):
         result = [self.scope.simplify(t) for t in self.definition.param_types()]
-        for t in result: self.scope.validate_type(self.definition.info, t)
+        for t in result: self.scope.type_env.validate_type(self.definition.info, t)
         return result
 
     def broad_param_types(self):
@@ -2188,9 +2192,9 @@ class Method:
         original_definition = next(reversed((self.definition, *self.overridden_methods())))
 
         method_temp_scope = Scope(self.scope)
-        method_temp_scope.deconcretize()
+        method_temp_scope.type_env.deconcretize()
         defining_class_scope = Scope(original_definition.defining_class._scope)
-        defining_class_scope.deconcretize()
+        defining_class_scope.type_env.deconcretize()
         
         broad = [defining_class_scope.simplify(param._type) for param in original_definition.params]
         broad = [method_temp_scope.simplify(t) for t in broad]
@@ -2207,16 +2211,16 @@ class Method:
 
     def return_type(self):
         result = self.scope.simplify(self.definition.return_type())
-        self.scope.validate_type(self.definition.info, result)
+        self.scope.type_env.validate_type(self.definition.info, result)
         return result
 
     def broad_return_type(self):
         original_definition = next(reversed((self.definition, *self.overridden_methods())))
 
         method_temp_scope = Scope(self.scope)
-        method_temp_scope.deconcretize()
+        method_temp_scope.type_env.deconcretize()
         defining_class_scope = Scope(original_definition.defining_class._scope)
-        defining_class_scope.deconcretize()
+        defining_class_scope.type_env.deconcretize()
 
         broad = defining_class_scope.simplify(original_definition._return_type)
         broad = method_temp_scope.simplify(broad)
@@ -2244,7 +2248,7 @@ class Method:
             arg_ancestors.append(nxt_ancestor)
         concrete_types = [rec_typ, *arg_ancestors]
         result = scope.specialize(formal_types, concrete_types, ret_type)
-        scope.validate_type(self.definition.info, result)
+        scope.type_env.validate_type(self.definition.info, result)
         return result
 
     def applicable_for(self, rec_typ, i, t, scope):
@@ -2304,14 +2308,14 @@ class Behavior(Statement):
 
     def abstract_temp_scope(self):
         temp_scope = Scope(self.cls.scope)
-        temp_scope.deconcretize()
+        temp_scope.type_env.deconcretize()
         for m in self.methods:
-            for k,v in m.definition.defining_class.scope.aliases.items():
+            for k,v in m.definition.defining_class.scope.type_env.aliases.items():
                 if not isinstance(v, TypeParameter): continue
-                temp_scope.add_alias(k, v)
-            for k,v in m.scope.aliases.items():
+                temp_scope.type_env.add_alias(k, v)
+            for k,v in m.scope.type_env.aliases.items():
                 if not isinstance(v, TypeParameter): continue
-                temp_scope.add_alias(k, v)
+                temp_scope.type_env.add_alias(k, v)
         return temp_scope
 
     def broad_param_types(self):
@@ -2371,7 +2375,7 @@ class Behavior(Statement):
             if method.definition.defining_class != self.cls and method.definition.defining_class.info.filepath != self.cls.info.filepath:
                 method.definition.interface_codegen(behavior_scope)
 
-        scope.merge_blocks(behavior_scope)
+        scope.merge_ops(behavior_scope)
 
         args_types = [arg.base_typ() for arg in self.broad_param_types()]
         yield_typ = Nil()
@@ -2542,7 +2546,7 @@ class ClassDef(Statement):
 
     @property
     def scope(self):
-        if FatPtr.basic("Self") in self._scope.aliases: return self._scope
+        if FatPtr.basic("Self") in self._scope.type_env.aliases: return self._scope
         vtbl = self.vtable() # will compute all aliases implicitly
         return self._scope
 
@@ -2579,7 +2583,7 @@ class ClassDef(Statement):
         #debug_print(f"{self.name} fields are {[field.declaration.scoped_name(self._scope) for field in self.fields()]}")
         for elem in self.vtable():
             if isinstance(elem, Behavior): elem.codegen(self._scope)
-        scope.merge_blocks(self._scope)
+        scope.merge_ops(self._scope)
         scope.comp_unit.codegenned.add(self.name)
 
     def interface_codegen(self, scope):
@@ -2615,7 +2619,7 @@ class ClassDef(Statement):
         class_scope = Scope(scope, cls=self)
         class_scope.symbol_table = {}
         class_scope.type_table = {}
-        for t in self.type_parameters: class_scope.add_alias(FatPtr.basic(t.label.data), t)
+        for t in self.type_parameters: class_scope.type_env.add_alias(FatPtr.basic(t.label.data), t)
         self._scope = class_scope
     
     def compute_aliases(self):
@@ -2627,9 +2631,9 @@ class ClassDef(Statement):
                 types = [t.type_params.data[i] for t in ancestors if t.cls.data == anc.cls.data]
                 old_tp = self._scope.classes[anc.cls.data].type_parameters[i]
                 t = self._scope.simplify(Union.from_list(types))
-                self._scope.add_alias(old_tp, t)
-        for t in self.type_parameters: self._scope.add_alias(FatPtr.basic(t.label.data), t)
-        self._scope.add_alias(FatPtr.basic("Self"), self.type())
+                self._scope.type_env.add_alias(old_tp, t)
+        for t in self.type_parameters: self._scope.type_env.add_alias(FatPtr.basic(t.label.data), t)
+        self._scope.type_env.add_alias(FatPtr.basic("Self"), self.type())
 
     def all_regions(self):
         full_ordering = [self, *self.my_ordering()]
@@ -2882,7 +2886,7 @@ class VarDecl(Statement):
     def typeflow(self, scope):
         self.ensure_capitalization()
         self_type = self.type(scope)
-        scope.validate_type(self.info, self_type)
+        scope.type_env.validate_type(self.info, self_type)
         scope.type_table[self.name] = self.type(scope)
 
 @dataclass
@@ -2951,7 +2955,7 @@ class Field:
 
     def type(self):
         result = self.declaration.type(self.cls.scope)
-        self.cls.scope.validate_type(self.declaration.info, result)
+        self.cls.scope.type_env.validate_type(self.declaration.info, result)
         return result
 
     def symbol(self):
@@ -3442,7 +3446,7 @@ class CreateBuffer(Expression):
             raise Exception(f"{self.info}: Buffer creation can only take integers up to 64 bits wide, not {size_typ}.")
         scope.allocations[self.info.id] = self
         buf_type = scope.simplify(self.buf)
-        scope.validate_type(self.info, buf_type.elem_type)
+        scope.type_env.validate_type(self.info, buf_type.elem_type)
         return buf_type
 
 @dataclass
@@ -3451,7 +3455,7 @@ class Import(Statement):
     program: Program
     sandbox: Scope
 
-    def typeflow(self, scope):
+    def name_resolution(self, scope):
         scope.comp_unit.dependency_graph.add_edge(self.info.filepath, self.import_filepath)
         dependency_cycle = next(nx.simple_cycles(scope.comp_unit.dependency_graph), None)
         if dependency_cycle:
@@ -3461,7 +3465,7 @@ class Import(Statement):
         if not self.sandbox:
             self.sandbox = Scope()
             self.sandbox.comp_unit = scope.comp_unit
-        self.program.interface_typeflow(self.sandbox)
+        self.program.name_resolution(self.sandbox)
         for k, v in self.sandbox.classes.items():
             if k not in scope.classes.keys(): scope.classes[k] = v
         for k, v in self.sandbox.functions.items():
@@ -3469,7 +3473,7 @@ class Import(Statement):
 
     def codegen(self, scope):
         self.program.interface_codegen(self.sandbox)
-        scope.merge_blocks(self.sandbox)
+        scope.merge_ops(self.sandbox)
 
     def interface_codegen(self, scope):
         self.codegen(scope)
