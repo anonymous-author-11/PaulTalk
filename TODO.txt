@@ -517,8 +517,12 @@ TODO:
 		- For-loop
 		- Array, range, string literals
 
-- You can probably cache the global scope of every file
-	- Would get in the way of parallel compilation
+- Issue: part of the reason we store a ClassDef._scope is for the type and symbol table
+	- In particular, emptying out those tables
+	- Where are fields added to the tables?
+		- For field in fields: field.declaration.typeflow(self._scope)
+		- This seems to be relied upon to persist for codegen
+	- We can just put that into the passed-in scope
 
 - The lack of closures may be a problem
 	- Iterable.map function can't take any extra parameters

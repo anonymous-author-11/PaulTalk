@@ -230,7 +230,7 @@ class TypeEnvironment:
         for rand_name, concrete_type in mapping.items():
             temp_env.add_alias(rand_name, concrete_type)
         result = temp_env.simplify(target_type)
-        #print(f"specialized {target_type} to {result}")
+        print(f"specialized {target_type} to {result} given formal types {formal_types} and concrete types {concrete_types}")
         return result
 
     def ancestors(self, typ: TypeAttribute) -> list:
@@ -268,7 +268,8 @@ class TypeEnvironment:
                 raise Exception(self.classes)
 
             cls = self.classes[typ.cls.data]
-            temp_env = TypeEnvironment(cls.scope.parent.type_env)
+            temp_env = TypeEnvironment(self)
+            temp_env.aliases = {}
             typ = temp_env.simplify(typ)
 
             supertypes = [sup for sup in cls.direct_supertypes() if isinstance(sup, FatPtr)]
@@ -276,7 +277,7 @@ class TypeEnvironment:
             concrete_types = [typ, *supertypes]
             ancestors = [temp_env.specialize(formal_types, concrete_types, anc) for anc in cls.ancestors()]
             ancestors = [self.simplify(anc) for anc in ancestors]
-            #print(f"ancestors of {original_type} are {ancestors}")
+            print(f"ancestors of {original_type} are {ancestors}")
             return ancestors
 
         if isinstance(typ, TypeParameter): return [typ, *self.ancestors(typ.bound)]
@@ -363,6 +364,18 @@ class TypeEnvironment:
 
         return typ
 
+    def constraints_of(self, typ):
+        constraints = ConstraintSet(set())
+        classes = self.classes
+        if isinstance(typ, FatPtr):
+            return classes[typ.cls.data].all_constraints().copy()
+        if isinstance(typ, TypeParameter) and isinstance(typ.bound, FatPtr) and typ.bound.cls.data in classes:
+            return classes[typ.bound.cls.data].all_constraints().copy()
+        if isinstance(typ, Union):
+            for t in typ.types.data:
+                constraints = constraints.union(self.constraints_of(t))
+        return constraints
+
 @dataclass
 class ConstraintSet:
     _set: set["Constraint"]
@@ -401,6 +414,24 @@ class ConstraintSet:
     def union(self, other):
         return ConstraintSet(self._set.union(other._set))
 
+class MemRegions:
+    allocations: dict
+    points_to_facts: ConstraintSet
+
+    def __init__(self, parent=None):
+        self.allocations = parent.allocations.copy() if parent else {}
+        self.points_to_facts = parent.points_to_facts.copy() if parent else ConstraintSet(set())
+
+    def assign_regions(self, var_mapping, param_names):
+        rep_to_vars = {}
+        for var, rep in var_mapping.items():
+            rep_to_vars.setdefault(rep, []).append(var)
+        for id, allocation in self.allocations.items():
+            labels = rep_to_vars[var_mapping[id]]
+            param_labels = sorted(label for label in labels if label in param_names)
+            best_label = (*param_labels, "stack")[0]
+            allocation.region = best_label
+
 class CompilationUnit:
     dependency_graph: nx.DiGraph
     codegenned: set
@@ -422,11 +453,10 @@ class Scope:
     region: Region
     comp_unit: CompilationUnit
     type_env: TypeEnvironment
-    points_to_facts: ConstraintSet
+    mem_regions: MemRegions
     functions: dict
     symbol_table: dict
     type_table: dict
-    allocations: dict
     parameterization_cache: dict
 
     def __init__(self, parent=None, cls=None, behavior=None, method=None, wile=None):
@@ -434,12 +464,11 @@ class Scope:
 
         self.comp_unit = parent.comp_unit if parent else CompilationUnit()
         self.type_env = TypeEnvironment(parent.type_env) if parent else TypeEnvironment()
+        self.mem_regions = MemRegions(parent.mem_regions) if parent else MemRegions()
         self.functions = parent.functions if parent else {}
 
         self.symbol_table = parent.symbol_table.copy() if parent else {}
         self.type_table = parent.type_table.copy() if parent else {}
-        self.allocations = parent.allocations.copy() if parent else {}
-        self.points_to_facts = parent.points_to_facts.copy() if parent else ConstraintSet(set())
         self.parameterization_cache = parent.parameterization_cache.copy() if parent and parent.method else {}
         self.cls = parent.cls if (parent and parent.cls and not cls) else cls
         self.method = parent.method if (parent and parent.method and not method) else method
@@ -480,30 +509,8 @@ class Scope:
     def merge(self, other: "Scope"):
         for key, value in self.type_table.items():
             self.type_table[key] = self.simplify(Union.from_list([self.type_table[key], other.type_table[key]]))
-        self.points_to_facts = self.points_to_facts.union(other.points_to_facts)
-        for k, v in other.allocations.items(): self.allocations[k] = v
-
-    def constraints_of(self, typ):
-        constraints = ConstraintSet(set())
-        classes = self.classes
-        if isinstance(typ, FatPtr):
-            return classes[typ.cls.data].all_constraints().copy()
-        if isinstance(typ, TypeParameter) and isinstance(typ.bound, FatPtr) and typ.bound.cls.data in classes:
-            return classes[typ.bound.cls.data].all_constraints().copy()
-        if isinstance(typ, Union):
-            for t in typ.types.data:
-                constraints = constraints.union(self.constraints_of(t))
-        return constraints
-
-    def assign_regions(self, var_mapping, param_names):
-        rep_to_vars = {}
-        for var, rep in var_mapping.items():
-            rep_to_vars.setdefault(rep, []).append(var)
-        for id, allocation in self.allocations.items():
-            labels = rep_to_vars[var_mapping[id]]
-            param_labels = sorted(label for label in labels if label in param_names)
-            best_label = (*param_labels, "stack")[0]
-            allocation.region = best_label
+        self.mem_regions.points_to_facts = self.mem_regions.points_to_facts.union(other.mem_regions.points_to_facts)
+        for k, v in other.mem_regions.allocations.items(): self.mem_regions.allocations[k] = v
 
     def offset_to(self, from_typ, to_typ):
         if from_typ in builtin_types.values() or to_typ in builtin_types.values(): return 0
