@@ -2059,7 +2059,7 @@ class Method:
     cls: "ClassDef"
     offset: int
     _overridden_methods: List[MethodDef]
-    _type_env: Scope
+    _type_env: TypeEnvironment
 
     @property
     def type_env(self):
@@ -2076,13 +2076,13 @@ class Method:
         self_scope = Scope(scope, method=self)
         self_scope.type_env = self.type_env
         self.definition.codegen(self_scope)
-        scope.merge_ops(self_scope)
 
     def typeflow(self, scope):
         self.definition.enforce_capitalization()
         self.check_duplicate_type_params(scope)
-        body_scope = Scope(scope, method=self)
-        body_scope.type_env = self.type_env
+        self_scope = Scope(scope, method=self)
+        self_scope.type_env = self.type_env
+        body_scope = Scope(self_scope, method=self)
         self.add_self(body_scope)
         self.definition.setup_init(body_scope)
         self.definition.typeflow_params(scope, body_scope)
@@ -2457,9 +2457,8 @@ class Behavior(Statement):
             method.typeflow(behavior_scope)
 
         #debug_print(f"Constructing Automaton for behavior {self.name}")
-        class_scope = Scope(scope, cls= self.cls)
-        class_scope.type_env = self.cls.type_env
-        self.automaton = Automaton.build(set(self.methods), class_scope)
+        automaton_scope = Scope(scope)
+        self.automaton = Automaton.build(set(self.methods), automaton_scope)
 
         #for block in chain.from_iterable(state.blocks() for state in self.automaton._states.values()):
         #    debug_print(block)
@@ -2547,15 +2546,15 @@ class ClassDef(Statement):
     _vtable: List[Method | Behavior]
     _my_ordering: List["ClassDef"]
 
-    def __init__(self, info, name, type_parameters, direct_supertypes, field_declarations, virtual_regions, region_constraints, method_definitions):
+    def __init__(self, info, name, type_params, supertypes, fields, regions, constraints, methods):
         self.info = info
         self.name = name
-        self.type_parameters = type_parameters
-        self._direct_supertypes = direct_supertypes
-        self.field_declarations = field_declarations
-        self.virtual_regions = virtual_regions
-        self.region_constraints = region_constraints
-        self.method_definitions = method_definitions
+        self.type_parameters = type_params
+        self._direct_supertypes = supertypes
+        self.field_declarations = fields
+        self.virtual_regions = regions
+        self.region_constraints = constraints
+        self.method_definitions = methods
         self.mem_regions = MemRegions()
         self._ancestors = None
         self._behaviors = None
@@ -2566,7 +2565,7 @@ class ClassDef(Statement):
     @property
     def type_env(self):
         if self._type_env and FatPtr.basic("Self") in self._type_env.aliases: return self._type_env
-        self.compute_vtable() # will compute all aliases implicitly
+        vtbl = self.vtable() # will compute all aliases implicitly
         return self._type_env
 
     def codegen(self, scope):
@@ -2600,10 +2599,8 @@ class ClassDef(Statement):
 
         self_scope = self.self_scope(scope)
 
-        for field in self.fields():
-            field.declaration.typeflow(self_scope)
-            field.codegen(self_scope)
-        #debug_print(f"{self.name} fields are {[field.declaration.scoped_name(self_scope) for field in self.fields()]}")
+        for field in self.fields(): field.codegen(self_scope)
+        #debug_print(f"{self.name} fields are {[field.declaration.scoped_name(self.type_env) for field in self.fields()]}")
         for elem in self.vtable():
             if isinstance(elem, Behavior): elem.codegen(self_scope)
         scope.merge_ops(self_scope)
@@ -2630,10 +2627,10 @@ class ClassDef(Statement):
         if not self.name[0].isupper():
             raise Exception(f"{self.info}: Class names should be capitalized.")
         scope.classes[self.name] = self
-        self_scope = self.self_scope(scope)
         self.mem_regions.points_to_facts.add(("self","==","self"))
         for reg in self.all_regions():
             self.mem_regions.points_to_facts.add(("self", "<", reg))
+        self_scope = self.self_scope(scope)
         for field in self.fields():
             field.declaration.typeflow(self_scope)
             if not isinstance(field.declaration, TypeFieldDecl):
@@ -2648,7 +2645,7 @@ class ClassDef(Statement):
             behavior.typeflow(self_scope)
 
     def register_type_env(self, scope):
-        self._type_env = scope.type_env
+        self._type_env = TypeEnvironment(scope.type_env)
         for t in self.type_parameters:
             self._type_env.add_alias(FatPtr.basic(t.label.data), t)
     
@@ -2662,8 +2659,7 @@ class ClassDef(Statement):
                 old_tp = self._type_env.classes[anc.cls.data].type_parameters[i]
                 t = self._type_env.simplify(Union.from_list(types))
                 self._type_env.add_alias(old_tp, t)
-        for t in self.type_parameters:
-            self._type_env.add_alias(FatPtr.basic(t.label.data), t)
+        for t in self.type_parameters: self._type_env.add_alias(FatPtr.basic(t.label.data), t)
         self._type_env.add_alias(FatPtr.basic("Self"), self.type())
 
     def all_regions(self):
@@ -2806,7 +2802,6 @@ class ClassDef(Statement):
             self._behaviors.append(behavior)
 
     def compute_vtable(self):
-        if self._vtable: return
         self.compute_aliases()
         vtables = [*chain.from_iterable(cls.vtable() for cls in self.my_ordering())]
         # divide type fields into fixed and unfixed depending on whether a type parameter appears anywhere in them
@@ -2932,7 +2927,7 @@ class FieldDecl(VarDecl):
         if self.name[1].isupper():
             raise Exception(f"{self.info}: Fields should not be capitalized.")
 
-    def scoped_name(self, scope):
+    def scoped_name(self, type_env):
         return self.name
 
 @dataclass
