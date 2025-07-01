@@ -155,7 +155,7 @@ class CSTTransformer(Transformer):
         direct_supertypes = [typ for typ in supertype_list] if supertype_list else [FatPtr.basic("Object")]
         if class_name == "Object": direct_supertypes = [Any()]
         node_info = NodeInfo(None, self.file_path, line_number(cls))
-        class_def = ClassDef(node_info, class_name, type_parameters, direct_supertypes, None, fields, regions, region_constraints, methods, None, None, None, None)
+        class_def = ClassDef(node_info, class_name, type_parameters, direct_supertypes, fields, regions, region_constraints, methods)
         for field in fields: field.defining_class = class_def
         for method in methods:
             method.defining_class = class_def
