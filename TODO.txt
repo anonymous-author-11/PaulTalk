@@ -524,6 +524,8 @@ TODO:
 		- This seems to be relied upon to persist for codegen
 	- We can just put that into the passed-in scope
 
+- String.ancestors() is wrong
+	- Iterable[Collection.T <: Any] instead of Iterable[Character]
 - The lack of closures may be a problem
 	- Iterable.map function can't take any extra parameters
 	- I could require explicit capture like C++
