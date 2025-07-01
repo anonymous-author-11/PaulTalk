@@ -230,7 +230,7 @@ class TypeEnvironment:
         for rand_name, concrete_type in mapping.items():
             temp_env.add_alias(rand_name, concrete_type)
         result = temp_env.simplify(target_type)
-        print(f"specialized {target_type} to {result} given formal types {formal_types} and concrete types {concrete_types}")
+        #print(f"specialized {target_type} to {result} given formal types {formal_types} and concrete types {concrete_types}")
         return result
 
     def ancestors(self, typ: TypeAttribute) -> list:
@@ -277,7 +277,7 @@ class TypeEnvironment:
             concrete_types = [typ, *supertypes]
             ancestors = [temp_env.specialize(formal_types, concrete_types, anc) for anc in cls.ancestors()]
             ancestors = [self.simplify(anc) for anc in ancestors]
-            print(f"ancestors of {original_type} are {ancestors}")
+            #print(f"ancestors of {original_type} are {ancestors}")
             return ancestors
 
         if isinstance(typ, TypeParameter): return [typ, *self.ancestors(typ.bound)]
