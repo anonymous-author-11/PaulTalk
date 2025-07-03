@@ -27,12 +27,14 @@ class TypeEnvironment:
     aliases: dict
     alias_graph: nx.DiGraph
     classes: dict
+    functions: dict
     caches: dict
 
     def __init__(self, parent=None):
         self.aliases = parent.aliases.copy() if parent else {}
         self.alias_graph = parent.alias_graph.copy() if parent else nx.DiGraph()
         self.classes = parent.classes if parent else {}
+        self.functions = parent.functions if parent else {}
         self.caches = parent.caches if parent else {}
 
     def add_alias(self, key, value):
@@ -454,7 +456,6 @@ class Scope:
     comp_unit: CompilationUnit
     type_env: TypeEnvironment
     mem_regions: MemRegions
-    functions: dict
     symbol_table: dict
     type_table: dict
     parameterization_cache: dict
@@ -465,7 +466,6 @@ class Scope:
         self.comp_unit = parent.comp_unit if parent else CompilationUnit()
         self.type_env = TypeEnvironment(parent.type_env) if parent else TypeEnvironment()
         self.mem_regions = MemRegions(parent.mem_regions) if parent else MemRegions()
-        self.functions = parent.functions if parent else {}
 
         self.symbol_table = parent.symbol_table.copy() if parent else {}
         self.type_table = parent.type_table.copy() if parent else {}
@@ -479,6 +479,10 @@ class Scope:
     @property
     def classes(self):
         return self.type_env.classes
+
+    @property
+    def functions(self):
+        return self.type_env.functions
 
     def subtype(self, left, right):
         return self.type_env.subtype(left, right)

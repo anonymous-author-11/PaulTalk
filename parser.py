@@ -34,7 +34,7 @@ def find_path(short_path, from_path) -> Path:
 
 def parse(file_path) -> AST:
     try:
-        if file_path in parsed: return copy.deepcopy(parsed[file_path])
+        if file_path in parsed: return (parsed[file_path])
         with open(file_path) as f: import_text = f.read()
 
         # auto-include core.mini
@@ -49,7 +49,7 @@ def parse(file_path) -> AST:
         program = parser.parse(import_text)
         program = CSTTransformer(file_path).transform(program)
         parsed[file_path] = program
-        return copy.deepcopy(program)
+        return (program)
     except UnexpectedToken as e:
         error_message = format_parser_error(e, file_path)
         raise Exception(f"Parsing Error:\n\n{error_message}") from None

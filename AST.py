@@ -180,8 +180,8 @@ class Program(Node):
     # Find top-level entities (including imported ones) and record them without any further analysis
     def name_resolution(self, scope):
 
-        classes = (stmt for stmt in self.statements if isinstance(stmt, ClassDef))
-        functions = (stmt for stmt in self.statements if isinstance(stmt, FunctionDef))
+        classes = [stmt for stmt in self.statements if isinstance(stmt, ClassDef)]
+        functions = (stmt for stmt in self.statements if isinstance(stmt, FunctionDef) or isinstance(stmt, ExternDef))
         aliases = (stmt for stmt in self.statements if isinstance(stmt, Alias))
         imports = (stmt for stmt in self.statements if isinstance(stmt, Import))
 
@@ -189,7 +189,6 @@ class Program(Node):
             if cls.name in scope.classes:
                 raise Exception(f"{cls.info}: Class {cls.name} already declared in this scope")
             scope.classes[cls.name] = cls
-            cls.register_type_env(scope)
         for fn in functions:
             if fn.name in scope.functions:
                 raise Exception(f"{fn.info}: Function {fn.name} already declared in this scope")
@@ -198,7 +197,10 @@ class Program(Node):
             if alias.alias in scope.functions:
                 raise Exception(f"{alias.info}: Alias conflicts with function named {alias.alias}")
             scope.type_env.add_alias(alias.alias, alias.meaning)
-        for imp in imports: imp.name_resolution(scope)
+        for imp in imports:
+            imp.name_resolution(scope)
+        for cls in classes:
+            if not cls._type_env: cls.register_type_env(scope.type_env)
 
     def typeflow(self, scope):
         self.name_resolution(scope)
@@ -2644,8 +2646,8 @@ class ClassDef(Statement):
         for behavior in self.behaviors:
             behavior.typeflow(self_scope)
 
-    def register_type_env(self, scope):
-        self._type_env = TypeEnvironment(scope.type_env)
+    def register_type_env(self, type_env):
+        self._type_env = TypeEnvironment(type_env)
         for t in self.type_parameters:
             self._type_env.add_alias(FatPtr.basic(t.label.data), t)
     
@@ -2743,6 +2745,7 @@ class ClassDef(Statement):
         
         undeclared = next((sup for sup in self.direct_supertypes() if isinstance(sup, FatPtr) and sup.cls.data not in self._type_env.classes), None)
         if undeclared:
+            print(self._type_env.classes)
             raise Exception(f"{self.info}: Supertype {undeclared.cls.data} has not been declared.")
         linearizations = [self._type_env.classes[sup.cls.data].c3_linearization(sup.type_params.data if sup.type_params != NoneAttr() else []) for sup in self.direct_supertypes() if isinstance(sup, FatPtr)]
         linearizations.append(self.direct_supertypes())
@@ -3480,7 +3483,7 @@ class CreateBuffer(Expression):
 class Import(Statement):
     import_filepath: Path
     program: Program
-    sandbox: Scope
+    type_env: TypeEnvironment
 
     def name_resolution(self, scope):
         scope.comp_unit.dependency_graph.add_edge(self.info.filepath, self.import_filepath)
@@ -3489,18 +3492,27 @@ class Import(Statement):
             print("Dependency graph:")
             nx.write_network_text(scope.comp_unit.dependency_graph)
             raise Exception(f"{self.info}: Import of {self.import_filepath} from {self.info.filepath} creates a cycle in the dependency graph.")
-        if not self.sandbox:
-            self.sandbox = Scope()
-            self.sandbox.comp_unit = scope.comp_unit
-        self.program.name_resolution(self.sandbox)
-        for k, v in self.sandbox.classes.items():
+        if self.type_env:
+            for k, v in self.type_env.classes.items():
+                if k not in scope.classes.keys(): scope.classes[k] = v
+            for k, v in self.type_env.functions.items():
+                if k not in scope.functions.keys(): scope.functions[k] = v
+            return
+        sandbox = Scope()
+        sandbox.comp_unit = scope.comp_unit
+        self.type_env = sandbox.type_env
+        self.program.name_resolution(sandbox)
+        for k, v in sandbox.classes.items():
             if k not in scope.classes.keys(): scope.classes[k] = v
-        for k, v in self.sandbox.functions.items():
+        for k, v in sandbox.functions.items():
             if k not in scope.functions.keys(): scope.functions[k] = v
 
     def codegen(self, scope):
-        self.program.interface_codegen(self.sandbox)
-        scope.merge_ops(self.sandbox)
+        sandbox = Scope()
+        sandbox.comp_unit = scope.comp_unit
+        sandbox.type_env = self.type_env
+        self.program.interface_codegen(sandbox)
+        scope.merge_ops(sandbox)
 
     def interface_codegen(self, scope):
         self.codegen(scope)
