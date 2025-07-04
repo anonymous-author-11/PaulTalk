@@ -3487,25 +3487,22 @@ class Import(Statement):
 
     def name_resolution(self, scope):
         scope.comp_unit.dependency_graph.add_edge(self.info.filepath, self.import_filepath)
-        dependency_cycle = next(nx.simple_cycles(scope.comp_unit.dependency_graph), None)
-        if dependency_cycle:
-            print("Dependency graph:")
-            nx.write_network_text(scope.comp_unit.dependency_graph)
-            raise Exception(f"{self.info}: Import of {self.import_filepath} from {self.info.filepath} creates a cycle in the dependency graph.")
-        if self.type_env:
-            for k, v in self.type_env.classes.items():
-                if k not in scope.classes.keys(): scope.classes[k] = v
-            for k, v in self.type_env.functions.items():
-                if k not in scope.functions.keys(): scope.functions[k] = v
-            return
+        self.ensure_acyclic_imports(scope.comp_unit.dependency_graph)
         sandbox = Scope()
         sandbox.comp_unit = scope.comp_unit
         self.type_env = sandbox.type_env
         self.program.name_resolution(sandbox)
-        for k, v in sandbox.classes.items():
+        for k, v in self.type_env.classes.items():
             if k not in scope.classes.keys(): scope.classes[k] = v
-        for k, v in sandbox.functions.items():
+        for k, v in self.type_env.functions.items():
             if k not in scope.functions.keys(): scope.functions[k] = v
+
+    def ensure_acyclic_imports(self, import_graph):
+        dependency_cycle = next(nx.simple_cycles(import_graph), None)
+        if dependency_cycle:
+            print("Dependency graph:")
+            nx.write_network_text(import_graph)
+            raise Exception(f"{self.info}: Import of {self.import_filepath} from {self.info.filepath} creates a cycle in the dependency graph.")
 
     def codegen(self, scope):
         sandbox = Scope()

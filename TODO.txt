@@ -452,78 +452,12 @@ DONE:
 
 TODO:
 
-- Parsing is too slow
-	- If we make more of the process non-mutating, we can cache more intermediate results
-	- Think about doing typeflow and codegen using visitors
-		- How will exprtype work?
-	- There are probably a billion copies of each AST floating around
-		- And I don't believe imported AST's even get mutated
-
-- Why can't we just store in the parse cache a mapping from Program node id's (or file names) to sandbox scopes?
-	- Because the parse cache knows nothing about typeflow and typeflow knows nothing about the parse cache
-	- Because it matters whether we typeflowed the scope or interface_typeflowed the scope
-
-- Maybe what I should focus on is making AST mutations idempotent
-	- Doing it twice is the same as doing it once
-
-- I'd like imported AST's to be shared between AST's
-
-- Why was it a problem to have a scope in the parse cache?
-	- Because it made it impossible to imbue a CompilationUnit into the scope
-	- The scopes are inserted by the driver by constructing AST(program)
-	- Importantly, the CU is spread into imports by typeflow
-	- Then the CU keeps track of codegenned
-
-- Each AST import tree is very coupled to its hierarchy of scopes, which are supposed to all have a single unique CU
-
-- What if we indexed codegenned by CU id
-	- Codegenned in CU a vs codegenned in CU b
-	- Introduces a global cache, which we previously fought to eliminate
-	- Means that ASTs themselves can become reusable
-
-- Ideally the AST's would be in a cache indexed by file name
-	- Then the CU into which an AST is codegenned should be injected
-	- As long as the CU itself is not stored in the AST this should work
-	- We pass a context into codegen which carries scope and CU
-	- Many things in the AST store scopes, but need not store the CU
-
-- I should decouple the aspects of scope which need to be cached in the AST vs vary by CU
-	- Especially the generated IR in scope.region
-		- How will the hierarchical nature be represented?
-		- scope.get_parameterization is highly coupled
-			- We could pass in the context object
-	- Then pass a context object which contains both the scope and the other aspects
-
-- Both passed scopes and stored scopes are codegenned into
-	- Class.scope is codegenned into, so is global scope
-
-- Things to break scope into
-	- Symbol resolution
-		- Pointers to declared classes and functions
-		- Can be gathered without any typeflow
-	- Properly part of scope
-		- Symbol table, type table
-		- Cached type system results
-			- Needs classes from symbol resolution
-			- Builds as typeflow proceeds
-	- Current class, behavior, method, loop
-	- Generated IR
-	- ConstraintSet for points-to analysis
-	- CompilationUnit
-
-- Ways that I mutate the AST during typeflow
-	- Function literal return type
-	- Syntax sugar rewriting
-		- For-loop
-		- Array, range, string literals
-
-- Issue: part of the reason we store a ClassDef._scope is for the type and symbol table
-	- In particular, emptying out those tables
-	- Where are fields added to the tables?
-		- For field in fields: field.declaration.typeflow(self._scope)
-		- This seems to be relied upon to persist for codegen
-	- We can just put that into the passed-in scope
-
+- Why are symbols not available to the linker when running tests.py?
+	- Either the definitions aren't codegenned or the interfaces aren't
+	- Apparently certain files never even got MLIR modules generated
+	- They're never added to the dependency graph either
+	- The issue is with the early return in import.name_resolution
+		- It's not updating the dependency graph from transitive imports
 - String.ancestors() is wrong
 	- Iterable[Collection.T <: Any] instead of Iterable[Character]
 - The lack of closures may be a problem
@@ -689,11 +623,18 @@ TODO:
 			- If I ever want to change overflow semantics
 		- I need to reform BinaryOp in the AST
 			- Maybe have some kind of op holder
-	- UTF-8 strings
-		- Character as codepoint (not grapheme cluster)
-		- All strings must be valid UTF-8
-		- No indexing operation (not constant time)
-		- Pass unicode text through the compiler correctly
+	- UTF-8 strings [check!]
+		- Character as codepoint (not grapheme cluster) [check!]
+		- All strings must be valid UTF-8 [check!]
+		- No indexing operation (not constant time) [check!]
+		- Pass unicode text through the compiler correctly [check!]
+	- Make parsing faster [check!]
+		- I'd like imported AST's to be shared between AST's [check!]
+		- Break scope into reusable components [check!]
+			- TypeEnvironment
+			- MemRegions
+			- Rest
+		- Decouple AST from CompilationUnit [check!]
 	- Character literals
 		- Single quotes: 'a' 'b' 'c'
 		- Validate that the literal is in fact a single codepoint
@@ -1004,15 +945,13 @@ TODO:
 		- Or store a method in the vtable that can retrieve the virtual region
 	- Unclear if boxed types will need to carry regions
 
-- Manual memory management combines four questions
-	- When memory gets allocated and deallocated
-	- Where objects are stored in memory
-		- Which objects are near each other
-	- How objects are stored in memory
-		- How they are laid out
+- Manual memory management combines three questions
+	- When memory gets allocated / deallocated
+	- Where objects are stored in memory relative to each other
+	- How individual instances are laid out in memory
 	- Semiautomatic memory management removes some of these choices from the programmer
 		- You decide how objects are laid out, and can impose some constraints on where
-		- The compiler decides when memory is allocated and deallocated
+		- The compiler decides when memory is allocated / deallocated
 
 - Inheriting from Sentinel (or do Struct types solve this)
 - Bare 'yield();' should yield the coroutine itself? or nil?

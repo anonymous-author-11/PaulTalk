@@ -29,7 +29,7 @@ class CompilerTestCase(unittest.TestCase):
             os.chmod(test_build, stat.S_IWRITE)
             shutil.rmtree(test_build)
 
-    def run_mini_code(self, mini_code, expected_output, output_file_name_base, expect_error=None):
+    def run_mini_code(self, mini_code, expected_output, output_file_name_base):
         with open(self.temp_input_file_name, "w") as f: f.write(mini_code)
         self.output_path = Path(f"./test_bin/{output_file_name_base}.exe")
 
