@@ -195,7 +195,7 @@ class CompilationJob:
 
         stringio = StringIO()
         Printer(stringio).print(combined_module)
-        module_str = stringio.getvalue().encode().decode('unicode_escape')
+        module_str = stringio.getvalue()
         with open(self.build.in_mlir, "w") as outfile: outfile.write(module_str)
         
         # Using multiprocessing invariably leeds to a recursion limit exceeded while pickling the IR
@@ -220,7 +220,7 @@ class CompilationJob:
         lowered_module = do_lowering(module)
         stringio = StringIO()
         Printer(stringio).print(lowered_module)
-        module_str = stringio.getvalue().encode().decode('unicode_escape')
+        module_str = stringio.getvalue()
         return module_str
 
     def lower_to_llvm(self, module_str):
@@ -651,8 +651,8 @@ def run_pdl_lowering(module_str, build_dir) -> str:
         cmd_out = subprocess.run(run_bytecode, capture_output=True, shell=True, text=True, input=module_str)
         if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
         stringio = StringIO()
-        Printer(stringio).print(cmd_out.stdout.replace("\\","\\\\"))
-        module_str = stringio.getvalue().encode().decode('unicode_escape')
+        Printer(stringio).print(cmd_out.stdout)
+        module_str = stringio.getvalue()
 
     # trim off the residual PDL bytecode
     module_str = module_str[23:-16]
@@ -675,12 +675,12 @@ def run_mlir_opt(module_str) -> str:
     cmd_out = subprocess.run(cmd, capture_output=True, text=True, input=module_str)
     if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
     #with open("liveness_log.txt", "w") as outfile: outfile.write(cmd_out.stderr)
-    module_str = cmd_out.stdout.replace("\\","\\\\")
+    module_str = cmd_out.stdout
     
     module_str = module_str.replace("placeholder", "llvm.mlir")
     stringio = StringIO()
     Printer(stringio).print(module_str)
-    module_str = stringio.getvalue().encode().decode('unicode_escape')
+    module_str = stringio.getvalue()
     return module_str
 
 def add_compiler_args(parser):

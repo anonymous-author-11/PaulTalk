@@ -226,11 +226,11 @@ class Tuple(ParametrizedAttribute, TypeAttribute):
     @property
     def vector_like(self):
         if not self.is_homogenous: return False
-        is_numeric = isinstance(self.types.data[0], Integer) or isinstance(self.types.data[0], Float)
+        is_numeric = isinstance(self.types.data[0], Integer) or isinstance(self.types.data[0], Float) or isinstance(self.types.data[0], Bool)
         return is_numeric
 
     def base_typ(self):
-        # A tuple of homogenous integers or floats can be lowered to a vector
+        # A tuple of homogenous integers, floats, or bools can be lowered to a SIMD vector
         if self.vector_like: return builtin.VectorType(self.types.data[0].base_typ(), [len(self.types.data)])
         return llvm.LLVMStructType.from_type_list([t.base_typ() for t in self.types.data])
 

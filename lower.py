@@ -16,6 +16,7 @@ from xdsl.dialects.builtin import (
     ModuleOp,
     IntegerAttr,
     StringAttr,
+    BytesAttr,
     SymbolRefAttr,
     IntegerType,
     FunctionType,
@@ -588,15 +589,16 @@ class LowerPrelude(RewritePattern):
     def match_and_rewrite(self, op: PreludeOp, rewriter: PatternRewriter):
         print_decl = PrintfDeclOp.create()
         global_strs = {
-            "i32_string":"%d\\0A\\00",
-            "i64_string":"%lld\\0A\\00",
-            "float_string":"%f\\0A\\00",
-            "string_string":"%s\\0A\\00"
+            "i32_string":"%d\0A\00",
+            "i64_string":"%lld\0A\00",
+            "float_string":"%f\0A\00",
+            "string_string":"%s\0A\00"
         }
         for key, value in global_strs.items():
             str_len = 6 if key == "i64_string" else 4
             str_type = llvm.LLVMArrayType.from_size_and_type(str_len, llvm.IntegerType(8))
-            str_op = GlobalStrOp.create(attributes={"value":llvm.StringAttr(value), "sym_name":llvm.StringAttr(key), "str_type":str_type})
+            value = llvm.BytesAttr(value.encode())
+            str_op = GlobalStrOp.create(attributes={"value":value, "sym_name":llvm.StringAttr(key), "str_type":str_type})
             rewriter.insert_op_before_matched_op(str_op)
 
         utils_api = UtilsAPIOp.create()

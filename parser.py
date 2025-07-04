@@ -13,6 +13,7 @@ import copy
 import time
 from pathlib import Path
 import os
+import ast
 
 DIR_PATH = Path(__file__).parent.resolve()
 GRAMMAR_PATH = DIR_PATH / "data_files/grammar.lark"
@@ -35,7 +36,7 @@ def find_path(short_path, from_path) -> Path:
 def parse(file_path) -> AST:
     try:
         if file_path in parsed: return (parsed[file_path])
-        with open(file_path) as f: import_text = f.read()
+        with open(file_path, encoding='utf-8') as f: import_text = f.read()
 
         # auto-include core.mini
         special_files = (
@@ -405,7 +406,7 @@ class CSTTransformer(Transformer):
 
     def string_literal(self, token):
         node_info = NodeInfo(None, self.file_path, line_number(token))
-        return StringLiteral(node_info, token.value[1:-1])  # Remove quotes
+        return StringLiteral(node_info, ast.literal_eval(token.value))  # Remove quotes
 
     def array_literal(self, lbracket, *elems):
         node_info = NodeInfo(None, self.file_path, line_number(lbracket))

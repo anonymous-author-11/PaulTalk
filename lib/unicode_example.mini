@@ -1,0 +1,3 @@
+import std;
+
+IO.print("Computer in Chinese is 电脑");

@@ -17,7 +17,7 @@ from constraint_graph import *
 from xdsl.dialects import llvm, arith, builtin, memref, cf, func
 from xdsl.ir import Block, Region, TypeAttribute
 from xdsl.dialects.builtin import (
-    ModuleOp, IntegerType, IntegerAttr, StringAttr, VectorType, Signedness,
+    ModuleOp, IntegerType, IntegerAttr, StringAttr, BytesAttr, VectorType, Signedness,
     SymbolRefAttr, SymbolNameAttr, DenseArrayBase, FunctionType, DenseIntOrFPElementsAttr, FloatAttr
 )
 from itertools import product, chain, combinations
@@ -569,9 +569,8 @@ class StringLiteral(Expression):
     value: str
 
     def codegen(self, scope):
-        escaped_str = self.value.encode().decode('unicode_escape')
-        n_bytes = len(escaped_str.encode('utf-8'))
-        n_codepoints = len(escaped_str)
+        n_bytes = len(self.value.encode('utf-8'))
+        n_codepoints = len(self.value)
         node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for i in range(7)]
         size_lit = IntegerLiteral(node_infos[0], n_codepoints, 32)
         n_bytes_lit = IntegerLiteral(node_infos[1], n_bytes, 32)
@@ -581,7 +580,7 @@ class StringLiteral(Expression):
         assign = Assignment(node_infos[5], temp_var, buf)
         assign.codegen(scope);
         llvmtype = llvm.LLVMArrayType.from_size_and_type(n_bytes, IntegerType(8))
-        lit = LiteralOp.create(attributes={"typ":llvmtype, "value":StringAttr(self.value)}, result_types=[llvm.LLVMPointerType.opaque()])
+        lit = LiteralOp.create(attributes={"typ":llvmtype, "value":BytesAttr(self.value.encode('utf-8'))}, result_types=[llvm.LLVMPointerType.opaque()])
         attr_dict = {"typ":IntegerType(32), "value":IntegerAttr.from_int_and_width(0, 32)}
         zero = LiteralOp.create(attributes=attr_dict, result_types=[llvm.LLVMPointerType.opaque()])
         operands = [temp_var.codegen(scope), zero.results[0], lit.results[0]]
@@ -1525,7 +1524,7 @@ class ObjectCreation(Expression):
         is_exception = scope.subtype(self_type, FatPtr.basic("Exception"))
         if is_exception:
             node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for i in range(3)]
-            file_name = StringLiteral(node_infos[0], str(self.info.filepath).replace("\\", "\\\\"))
+            file_name = StringLiteral(node_infos[0], str(self.info.filepath).replace("\\", "/"))
             line_number = IntegerLiteral(node_infos[1], self.info.line_number, 32)
             MethodCall(node_infos[2], anon_id, "set_info", [line_number, file_name]).codegen(scope)
 

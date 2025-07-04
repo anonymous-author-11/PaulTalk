@@ -452,12 +452,14 @@ DONE:
 
 TODO:
 
-- Why are symbols not available to the linker when running tests.py?
-	- Either the definitions aren't codegenned or the interfaces aren't
-	- Apparently certain files never even got MLIR modules generated
-	- They're never added to the dependency graph either
-	- The issue is with the early return in import.name_resolution
-		- It's not updating the dependency graph from transitive imports
+- Change the console's active code page in the main() prelude
+	- to make puts /printf display unicode correctly
+	- Obviously OS-specific
+- We could have special-cased all() and any() functions which take tuples of Booleans
+	- Necessary for ergonomics if tuple comparison produces tuples of Booleans
+	- And could compile to SIMD intrinsics (_mm_movemask_ps)
+	- For other Iterable[Bool] it can just lower to .all() and .any() methods
+	- Should also enable bitwise operations for tuples
 - String.ancestors() is wrong
 	- Iterable[Collection.T <: Any] instead of Iterable[Character]
 - The lack of closures may be a problem
