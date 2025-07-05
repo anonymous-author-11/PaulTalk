@@ -6,7 +6,8 @@ class List[T] extends Collection[T] {
     abstract def Self.empty() -> Self {}
 
     // Create a List from any iterable, even of unknown size
-    abstract def Self.collect(iterable : Iterable[T]) -> Self {}
+    // 'my_iterable into List' can desugar to this method
+    abstract def Self.from_iterable(iterable : Iterable[T]) -> Self {}
 
     // append always increases .size() by 1
     abstract def append(x : T) -> Self {}

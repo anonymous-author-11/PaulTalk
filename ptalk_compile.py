@@ -276,7 +276,7 @@ class CompilationJob:
         #link_layout = f"{LLVM_LINK_PATH} {job.input.bc_file} {LAYOUT_PATH} -o {job.input.bc_file}"
         #subprocess.run(link_layout, shell=True)
 
-        # Open a process, write input, and return it *without* waiting for it to complete
+        # Open a process, write input, and return the process *without* waiting for it to complete
         process = subprocess.Popen(f"{reg2mem} | {opt}", text=True, shell=True, stdin=subprocess.PIPE)
         process.stdin.write(section)
         process.stdin.close()

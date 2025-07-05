@@ -1799,21 +1799,23 @@ class LowerWhile(RewritePattern):
     def match_and_rewrite(self, op: WhileOp, rewriter: PatternRewriter):
         debug_code(op)
         surrounding_block = op.parent_block()
-        condition_block = op.before_region.block
+        condition_first_block = op.before_region.first_block
+        condition_last_block = op.before_region.last_block
         body_last_block = op.loop_region.last_block
         body_first_block = op.loop_region.first_block
-        if not surrounding_block or not condition_block or not body_last_block or not body_first_block: raise Exception("no blocks!")
+        if not surrounding_block or not condition_first_block or not condition_last_block or not body_last_block or not body_first_block:
+            raise Exception("no blocks!")
         end_block = surrounding_block.split_before(op)
         op.before_region.move_blocks_before(end_block)
-        br = cf.Branch(condition_block)
+        br = cf.Branch(condition_first_block)
         surrounding_block.add_op(br)
         op.loop_region.move_blocks_before(end_block)
-        br = cf.Branch(condition_block)
+        br = cf.Branch(condition_first_block)
         body_last_block.add_op(br)
-        last_op = condition_block.last_op
+        last_op = condition_last_block.last_op
         if not last_op: raise Exception("no last op!")
         cbr = cf.ConditionalBranch(last_op.results[0], body_first_block, [], end_block, [])
-        condition_block.add_op(cbr)
+        condition_last_block.add_op(cbr)
         rewriter.erase_matched_op()
         debug_code(op)
 

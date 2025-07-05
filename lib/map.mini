@@ -18,7 +18,7 @@ class Map[K, V] extends IndexableCollection[K, V, Pair[K, V]] {
         return MapValues{self};
     }
     def clear() {
-        for key in self.keys() { self.remove(key)); }
+        for key in self.keys() { self.remove(key); }
     }
     def [](key : K) -> V {
         val = self.get(key);

@@ -15,7 +15,7 @@ class Array[T] extends
 
     // When iterable is actually a Collection, the optimized dispatch for Array.extend(collection) will be used
     // A great example of why multimethods are so powerful: always dispatches on argument's runtime type
-    def Self.collect(iterable : Iterable[T]) -> Self {
+    def Self.from_iterable(iterable : Iterable[T]) -> Self {
         return Self.empty().extend(iterable);
     }
 
