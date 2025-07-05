@@ -452,6 +452,16 @@ DONE:
 
 TODO:
 
+- Things we could work on right now
+	- Into operator
+	- Comparison for tuples
+	- Reforming flow analysis
+	- Closures
+	- Character literals
+
+- Why are extern defs apparently not imported?
+	- Because they aren't added to scope.functions
+
 - Apply partial order to subtype tests in method dispatch
 	- Builtins come first, as it's a simple pointer equality check
 	- Then make sure subtypes precede their supertypes
@@ -506,15 +516,12 @@ TODO:
 	- Nice because .from_ methods suck for sequential chaining
 - Deduplicate behaviors
 	- If all methods in the behavior are inherited from the same class, reuse that behavior
-- You could parallelize the frontend phase from (parse tree) -> (lowered IR string)
 - I really want type narrowing in alternative branches
 	- And 'is not' syntax (if x is not Nil)
 	- And narrowing within logical and/or ops (if x is T and y is U { ... } )
 	- And 'while' with a type check condition not polluting the main path
 	- Honestly this should not be too hard
 		- I don't have to reform the whole flow analysis to add this
-- Why are extern defs apparently not imported?
-	- Because they aren't added to scope.functions
 
 - Records: why not?
 	- Idea: casting between these works seamlessly, unlike tuples
@@ -638,13 +645,15 @@ TODO:
 	- Make parsing faster [check!]
 		- I'd like imported AST's to be shared between AST's [check!]
 		- Break scope into reusable components [check!]
-			- TypeEnvironment
-			- MemRegions
-			- Rest
+			- TypeEnvironment [check!]
+			- MemRegions [check!]
+			- CompilationUnit [check!]
+			- Rest [check!]
 		- Decouple AST from CompilationUnit [check!]
 	- Character literals
 		- Single quotes: 'a' 'b' 'c'
 		- Validate that the literal is in fact a single codepoint
+		- Add to syntax highlighting
 	- Does just adding dependencies to the path work?
 		- The source_dirs collection should be ordered, not a set [check!]
 		- Add the dependency folder to an env variable named for the package

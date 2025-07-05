@@ -132,6 +132,7 @@ primary: "(" expression ")" -> paren_expr
        | FALSE -> bool_literal
        | NIL -> nil_literal
        | STRING -> string_literal
+       | CHAR -> char_literal
        | function_literal
        | array_literal
        | tuple_literal
@@ -202,6 +203,7 @@ INT:   /[0-9]+(_[0-9]+)*/
 HEX:   /0x[0-9a-fA-F]+(_[0-9a-fA-F]+)*/
 FLOAT: /[0-9]+(_[0-9]+)*\.[0-9]+(_[0-9]+)*/
 STRING: /".*?"/
+CHAR: /".*?"/
 
 COMMENT: "//" /[^\n]*/
 BLOCK_COMMENT: /\/\*[\s\S]*?\*\//

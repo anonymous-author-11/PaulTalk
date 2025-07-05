@@ -21,6 +21,7 @@ contexts:
     - include: modifiers
     - include: types
     - include: strings
+    - include: chars
     - include: numbers
     - include: booleans
     - include: function-calls
@@ -80,6 +81,10 @@ contexts:
   strings:
     - match: '"'
       push: string
+
+  chars:
+    - match: "'"
+      push: char
       
   numbers:
     - match: '\b(0x[0-9a-fA-F]+(?:_[0-9a-fA-F]+)*|\d+(?:_\d+)*\.\d+(?:_\d+)*|\d+(?:_\d+)*)\b'
@@ -111,4 +116,11 @@ contexts:
     - match: '\\'
       scope: constant.character.escape.mini
     - match: '"'
+      pop: true
+
+  char:
+    - meta_scope: string.quoted.single.mini
+    - match: '\\'
+      scope: constant.character.escape.mini
+    - match: "'"
       pop: true

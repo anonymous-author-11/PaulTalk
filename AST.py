@@ -596,6 +596,26 @@ class StringLiteral(Expression):
         pass
 
 @dataclass
+class CharLiteral(Expression):
+    value: str
+
+    def codegen(self, scope):
+        codepoint = ord(self.value)
+        cp_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+        codepoint_literal = IntegerLiteral(cp_info, codepoint, 32)
+        char = ObjectCreation(self.info, random_letters(10), FatPtr.basic("Character"), [codepoint_literal], None)
+        return char.codegen(scope)
+
+    def exprtype(self, scope):
+        n_codepoints = len(self.value)
+        if n_codepoints != 1:
+            raise Exception(f"{self.info}: Character literal '{self.value}' is not a single Unicode codepoint; it is {n_codepoints}")
+        return FatPtr.basic("Character")
+
+    def typeflow(self, scope):
+        pass
+
+@dataclass
 class RangeLiteral(Expression):
     start: Expression
     end: Expression

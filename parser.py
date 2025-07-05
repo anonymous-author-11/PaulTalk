@@ -406,7 +406,11 @@ class CSTTransformer(Transformer):
 
     def string_literal(self, token):
         node_info = NodeInfo(None, self.file_path, line_number(token))
-        return StringLiteral(node_info, ast.literal_eval(token.value))  # Remove quotes
+        return StringLiteral(node_info, ast.literal_eval(token.value))
+
+    def char_literal(self, token):
+        node_info = NodeInfo(None, self.file_path, line_number(token))
+        return CharLiteral(node_info, ast.literal_eval(token.value))
 
     def array_literal(self, lbracket, *elems):
         node_info = NodeInfo(None, self.file_path, line_number(lbracket))
