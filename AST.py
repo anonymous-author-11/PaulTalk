@@ -975,6 +975,65 @@ class As(Expression):
         return to_typ
 
 @dataclass
+class Into(Expression):
+    operand: Expression
+    typ: TypeAttribute
+
+    def codegen(self, scope):
+        operand_type = self.operand.exprtype(scope)
+        to_type = scope.simplify(self.typ)
+
+        # see if there is a .to_ method on the operand that returns the rhs type
+        to_method = self.find_to_method(scope, operand_type, to_type)
+        if to_method:
+            call = to_method.codegen(scope)
+            cast = CastOp.make(call, to_method.exprtype(scope), to_type)
+            scope.region.last_block.add_op(cast)
+            return cast.results[0]
+
+        from_method = self.find_from_method(scope, operand_type, to_type)
+        if from_method: return from_method.codegen(scope)
+
+    def exprtype(self, scope):
+        operand_type = self.operand.exprtype(scope)
+        to_type = scope.simplify(self.typ)
+
+        # see if there is a .to_ method on the operand that returns the rhs type
+        to_method = self.find_to_method(scope, operand_type, to_type)
+        if to_method: return to_type
+
+        from_method = self.find_from_method(scope, operand_type, to_type)
+        if from_method: return to_type
+
+        raise Exception(f"{self.info}: There are no {operand_type}.to_ methods or {to_type}.from_ methods that are applicable")
+
+    def find_to_method(self, scope, operand_type, to_type):
+        if isinstance(operand_type, FatPtr):
+            operand_class = scope.classes[operand_type.cls.data]
+            candidate_behaviors = [behavior for behavior in operand_class.behaviors if behavior.name.startswith("to_") and behavior.arity == 0]
+            candidate_behaviors = [behavior for behavior in candidate_behaviors if scope.subtype(behavior.specialized_return_type(operand_type, [], scope), to_type)]
+            if len(candidate_behaviors) > 1:
+                candidate_behaviors = [behavior for behavior in candidate_behaviors if behavior.specialized_return_type(operand_type, [], scope) == to_type]
+                if len(candidate_behaviors) != 1:
+                    raise Exception(f"{self.info}: There are multiple equally applicable {operand_type}.to_ methods that return a subtype of {to_type}")
+            if len(candidate_behaviors) == 1:
+                to_behavior = candidate_behaviors[0]
+                return MethodCall(self.info, self.operand, to_behavior.name, [])
+        return None
+
+    def find_from_method(self, scope, operand_type, to_type):
+        if isinstance(to_type, FatPtr):
+            to_class = scope.classes[to_type.cls.data]
+            candidate_behaviors = [behavior for behavior in to_class.behaviors if behavior.name.startswith("_Self_from_") and behavior.arity == 1]
+            candidate_behaviors = [behavior for behavior in candidate_behaviors if behavior.applicable(to_type, scope, behavior.name, [operand_type])]
+            if len(candidate_behaviors) > 1:
+                    raise Exception(f"{self.info}: There are multiple equally applicable {to_type}.from_ methods that accept {operand_type}")
+            if len(candidate_behaviors) == 1:
+                from_behavior = candidate_behaviors[0]
+                return ClassMethodCall(self.info, operand_type, from_behavior.name, [])
+        return None
+
+@dataclass
 class FunctionCall(Expression):
     function: str
     arguments: List[Expression]
@@ -2818,7 +2877,7 @@ class ClassDef(Statement):
             belonging_methods = [m for m in confusable_set]
             meth_name = belonging_methods[0].definition.name
             meth_arity = belonging_methods[0].definition.arity
-            ty = ClassBehavior if len(meth_name) > 6 and meth_name[0:6] == "_Self_" else Behavior
+            ty = ClassBehavior if len(meth_name) > 6 and meth_name.startswith("_Self_") else Behavior
             node_info = NodeInfo(None, self.info.filepath, self.info.line_number)
             behavior = ty(node_info, meth_name, 0, belonging_methods, meth_arity, None, self, [])
             behavior.remove_superfluous_methods()

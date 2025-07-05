@@ -9,4 +9,4 @@ IO.print(add_translation("电脑"));
 
 my_char = 'a';
 
-IO.print(my_char);
+IO.print(my_char into String);

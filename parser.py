@@ -385,6 +385,10 @@ class CSTTransformer(Transformer):
         node_info = NodeInfo(None, self.file_path, line_number(astoken))
         return As(node_info, operand, typ, force=True);
 
+    def into_op(self, operand, astoken, typ):
+        node_info = NodeInfo(None, self.file_path, line_number(astoken))
+        return Into(node_info, operand, typ);
+
     def paren_expr(self, expr):
         return expr
 

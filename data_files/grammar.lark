@@ -119,6 +119,7 @@ term: cast -> term_single
 
 cast: factor -> cast_single
     | cast AS typ -> as_op
+    | cast INTO typ -> into_op
 
 factor: primary -> factor_single
       | MINUS factor -> neg_op
@@ -174,6 +175,7 @@ GE: ">="
 LT: "<"
 GT: ">"
 AS: "as"
+INTO: "into"
 NOT: "not"
 OR: "or"
 AND: "and"

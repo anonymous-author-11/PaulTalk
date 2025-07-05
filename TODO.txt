@@ -453,11 +453,10 @@ DONE:
 TODO:
 
 - Things we could work on right now
-	- Into operator
+	- 'into' operator
 	- Comparison for tuples
 	- Reforming flow analysis
 	- Closures
-	- Character literals
 
 - Why are extern defs apparently not imported?
 	- Because they aren't added to scope.functions
@@ -650,10 +649,10 @@ TODO:
 			- CompilationUnit [check!]
 			- Rest [check!]
 		- Decouple AST from CompilationUnit [check!]
-	- Character literals
-		- Single quotes: 'a' 'b' 'c'
-		- Validate that the literal is in fact a single codepoint
-		- Add to syntax highlighting
+	- Character literals [check!]
+		- Single quotes: 'a' 'b' 'c' [check!]
+		- Validate that the literal is in fact a single codepoint [check!]
+		- Add to syntax highlighting [check!]
 	- Does just adding dependencies to the path work?
 		- The source_dirs collection should be ordered, not a set [check!]
 		- Add the dependency folder to an env variable named for the package
