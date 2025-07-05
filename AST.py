@@ -978,35 +978,43 @@ class As(Expression):
 class Into(Expression):
     operand: Expression
     typ: TypeAttribute
+    method: "MethodCall"
+
+    def __init__(self, info, operand, typ):
+        self.info = info
+        self.operand = operand
+        self.typ = typ
+        self.method = None
 
     def codegen(self, scope):
         operand_type = self.operand.exprtype(scope)
         to_type = scope.simplify(self.typ)
+        method_return_type = self.method.exprtype(scope)
+        if method_return_type == to_type: return self.method.codegen(scope)
 
-        # see if there is a .to_ method on the operand that returns the rhs type
-        to_method = self.find_to_method(scope, operand_type, to_type)
-        if to_method:
-            call = to_method.codegen(scope)
-            cast = CastOp.make(call, to_method.exprtype(scope), to_type)
-            scope.region.last_block.add_op(cast)
-            return cast.results[0]
-
-        from_method = self.find_from_method(scope, operand_type, to_type)
-        if from_method: return from_method.codegen(scope)
+        # If the conversion method returned a subtype, we must upcast to the desired type
+        cast = CastOp.make(self.method.codegen(scope), method_return_type, to_type)
+        scope.region.last_block.add_op(cast)
+        return cast.results[0]
 
     def exprtype(self, scope):
+        if self.method: return scope.simplify(self.typ)
         operand_type = self.operand.exprtype(scope)
         to_type = scope.simplify(self.typ)
 
-        # see if there is a .to_ method on the operand that returns the rhs type
         to_method = self.find_to_method(scope, operand_type, to_type)
-        if to_method: return to_type
+        if to_method:
+            self.method = to_method
+            return to_type
 
         from_method = self.find_from_method(scope, operand_type, to_type)
-        if from_method: return to_type
+        if from_method:
+            self.method = from_method
+            return to_type
 
         raise Exception(f"{self.info}: There are no {operand_type}.to_ methods or {to_type}.from_ methods that are applicable")
 
+    # see if there is a .to_ method on the operand that returns the rhs type
     def find_to_method(self, scope, operand_type, to_type):
         if isinstance(operand_type, FatPtr):
             operand_class = scope.classes[operand_type.cls.data]
@@ -1021,6 +1029,7 @@ class Into(Expression):
                 return MethodCall(self.info, self.operand, to_behavior.name, [])
         return None
 
+    # see if there is a .from_ ClassMethod on the target type that accepts the operand type
     def find_from_method(self, scope, operand_type, to_type):
         if isinstance(to_type, FatPtr):
             to_class = scope.classes[to_type.cls.data]
@@ -1030,7 +1039,7 @@ class Into(Expression):
                     raise Exception(f"{self.info}: There are multiple equally applicable {to_type}.from_ methods that accept {operand_type}")
             if len(candidate_behaviors) == 1:
                 from_behavior = candidate_behaviors[0]
-                return ClassMethodCall(self.info, operand_type, from_behavior.name, [])
+                return ClassMethodCall(self.info, to_type, from_behavior.name, [self.operand])
         return None
 
 @dataclass
