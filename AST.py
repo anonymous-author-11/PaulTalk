@@ -2750,8 +2750,9 @@ class ClassDef(Statement):
         linearizations.append(self.direct_supertypes())
         
         order = merge(linearizations)
-        specialized = FatPtr.generic(self.name, type_params)
-        return [specialized, *order]
+        specialized_self = FatPtr.generic(self.name, type_params)
+        specialized_list = [self._type_env.specialize([self.type()], [specialized_self], t) for t in (specialized_self, *order)]
+        return specialized_list
 
     def my_ordering(self):
         if self._my_ordering: return self._my_ordering

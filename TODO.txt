@@ -452,7 +452,13 @@ DONE:
 
 TODO:
 
-- Change the console's active code page in the main() prelude
+- Subtype test for builtins should come first in method dispatch
+	- Because it's a simple pointer equality check
+- I think I could have stuff like "x : Addable & Comparable" in signatures
+	- Before using a method we must cast to the particular required supertype
+	- File.iterator() -> ConstantTimeIterator & Writer
+	- LLVM can optimize some of these casts out
+- Change the console's "active code page" in the main() prelude
 	- to make puts /printf display unicode correctly
 	- Obviously OS-specific
 - We could have special-cased all() and any() functions which take tuples of Booleans
@@ -460,8 +466,6 @@ TODO:
 	- And could compile to SIMD intrinsics (_mm_movemask_ps)
 	- For other Iterable[Bool] it can just lower to .all() and .any() methods
 	- Should also enable bitwise operations for tuples
-- String.ancestors() is wrong
-	- Iterable[Collection.T <: Any] instead of Iterable[Character]
 - The lack of closures may be a problem
 	- Iterable.map function can't take any extra parameters
 	- I could require explicit capture like C++
@@ -849,7 +853,8 @@ TODO:
 	- Overrides could be re-checked
 		- To ensure that the value returned is still a subtype of the overriding class
 	- Alternatively, could require that the returned instance was created polymorphically
-		- Possible if you disallow casting to Self
+		- I.e. with Self{} constructor
+		- Possible trivially if you disallow upcasting to Self
 		- Would need to use a different mechanism from aliases
 
 - Method.overridden_methods() probably has a subtle bug
@@ -874,6 +879,14 @@ TODO:
 
 # --- Problems ---
 
+- I think union / intersection types cannot work with multiple dispatch
+	- Arguably method dispatch doesn't even work correctly for normal types
+		- Does it even dispatch on most specific supertype?
+	- You could come up with some arbitrary rule
+		- A union is always less specific than a listed supertype unless it includes the concrete type
+		- Or, a union has the specificity of its least specific member
+	- We can  slightly modify the current approach to use inheritance-order information at runtime
+		- The offset table literally encodes supertype specificity
 - Think about how multiple dispatch works with function types
 	- Or more generally, how inheritance order precedence applies to type parameters
 	- For Pair[+T, +U], which of Pair[Fish, Crocodile], and Pair[Shark, Reptile] is more specific for Pair[Shark, Crocodile] ?

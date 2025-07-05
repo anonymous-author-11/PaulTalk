@@ -1,3 +1,6 @@
 import std;
 
-IO.print("Computer in Chinese is 电脑");
+str = "Computer in Chinese is ";
+str.extend("电脑");
+
+IO.print(str);
