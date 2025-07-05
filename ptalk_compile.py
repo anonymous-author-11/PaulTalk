@@ -14,8 +14,6 @@ from dataclasses import dataclass
 import sys
 import argparse
 import subprocess
-#import multiprocessing
-from concurrent import futures
 import random
 import functools
 import os
@@ -164,8 +162,6 @@ class CompilationJob:
         self.time_printer.print(f'Time to import: {self.time_between("start_time","after_imports")} seconds')
         self.time_printer.print(f'Time to parse: {self.time_between("after_imports", "after_parse")} seconds')
         self.time_printer.print(f'Time to type check: {self.time_between("after_parse", "after_typeflow")} seconds')
-        if len(sorted_dependencies) > 0: 
-            self.time_printer.print(f'Time to parse dependencies: {self.time_between("after_typeflow", "parse_dependencies")} seconds')
         
         # All bitcodes are already perfect; return early
         if len(modules) == 0: return
@@ -255,15 +251,16 @@ class CompilationJob:
         # Split the big llvm IR string into individual bitcode files and save them
         # This can be done fully concurrently
         sections = llvm_string.split("// -----")
-        with futures.ThreadPoolExecutor() as executor:
-            executor.map(self.pre_link_opt, zip(jobs, sections))
+        processes = [self.pre_link_opt(job, section) for (job, section) in zip(jobs, sections)]
+        for job in jobs:
+            job.input.add_dependencies(self.dependencies)
+            job.input.write_hash()
+        for process in processes: process.wait()
 
         self.record_time("lower_to_llvm")
         self.time_printer.print(f'Time to generate bitcodes: {self.time_between("after_mlir_translate", "lower_to_llvm")} seconds')
 
-    def pre_link_opt(self, job_and_section):
-
-        job, section = job_and_section
+    def pre_link_opt(self, job, section):
 
         # since mlir-opt ran mem2reg and sroa, we run reg2mem before doing opt
         # this has shown to improve the optimization potential for unclear reasons
@@ -274,13 +271,16 @@ class CompilationJob:
         # The LTO pre-link pipeline is generally a good fit for this stage
         passes = "--passes=\"lto-pre-link<O1>,vector-combine\""
         opt = f"{OPT_PATH} {passes} {self.settings.vec} {self.settings.attributor('all')} --inline-threshold=-10000 -o {job.input.bc_file}"
-        subprocess.run(f"{reg2mem} | {opt}", text=True, shell=True, input=section)
-
+        
+        #subprocess.run(f"{reg2mem} | {opt}", text=True, shell=True, input=section)
         #link_layout = f"{LLVM_LINK_PATH} {job.input.bc_file} {LAYOUT_PATH} -o {job.input.bc_file}"
         #subprocess.run(link_layout, shell=True)
 
-        job.input.add_dependencies(self.dependencies)
-        job.input.write_hash()
+        # Open a process, write input, and return it *without* waiting for it to complete
+        process = subprocess.Popen(f"{reg2mem} | {opt}", text=True, shell=True, stdin=subprocess.PIPE)
+        process.stdin.write(section)
+        process.stdin.close()
+        return process
 
     # merge all the .bc files into one big .ll file for optimization
     # kind of like LTO but no pretense of being at "link-time"

@@ -452,8 +452,9 @@ DONE:
 
 TODO:
 
-- Subtype test for builtins should come first in method dispatch
-	- Because it's a simple pointer equality check
+- Apply partial order to subtype tests in method dispatch
+	- Builtins come first, as it's a simple pointer equality check
+	- Then make sure subtypes precede their supertypes
 - I think I could have stuff like "x : Addable & Comparable" in signatures
 	- Before using a method we must cast to the particular required supertype
 	- File.iterator() -> ConstantTimeIterator & Writer
@@ -928,6 +929,12 @@ TODO:
 
 - Assume call return value offsets
 - Expect reciever static types
+
+- Can we encode the knowledge that T <: Collection implies T <: Iterable?
+	- Can this be encoded with an llvm.assume?
+		- @llvm.assume(xor(subtype(t, a), subtype(t, b)) == false)
+	- For each class generate a standalone function that just holds all its assumptions
+		- Have to have some kind of free variable t
 
 - Generic tuple creation and indexing
 	- Would have to use dynamic allocas
