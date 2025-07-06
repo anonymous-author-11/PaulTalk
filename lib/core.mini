@@ -124,7 +124,7 @@ class String extends List[Character], Representable {
 
     // This benefits from any optimized .extend overrides
     def Self.from_iterable(iterable : Iterable[Character]) -> Self {
-        return Self.empty().extend(iterable);
+        return Self.empty().extend(iterable); 
     }
 
     // STRICT, Failable constructor. Validates input and can yield an error.

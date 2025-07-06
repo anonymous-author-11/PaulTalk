@@ -7,6 +7,4 @@ def add_translation(translation : String) -> String {
 
 IO.print(add_translation("电脑"));
 
-my_char = 'a';
-
-IO.print(my_char into String);
+IO.print(['a', 'b', 'c', 'd'] into String);

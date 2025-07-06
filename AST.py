@@ -1026,7 +1026,9 @@ class Into(Expression):
                     raise Exception(f"{self.info}: There are multiple equally applicable {operand_type}.to_ methods that return a subtype of {to_type}")
             if len(candidate_behaviors) == 1:
                 to_behavior = candidate_behaviors[0]
-                return MethodCall(self.info, self.operand, to_behavior.name, [])
+                call = MethodCall(self.info, self.operand, to_behavior.name, [])
+                call.exprtype(scope)
+                return call
         return None
 
     # see if there is a .from_ ClassMethod on the target type that accepts the operand type
@@ -1039,7 +1041,9 @@ class Into(Expression):
                     raise Exception(f"{self.info}: There are multiple equally applicable {to_type}.from_ methods that accept {operand_type}")
             if len(candidate_behaviors) == 1:
                 from_behavior = candidate_behaviors[0]
-                return ClassMethodCall(self.info, to_type, from_behavior.name, [self.operand])
+                call = ClassMethodCall(self.info, to_type, from_behavior.name.replace("_Self_",""), [self.operand])
+                call.exprtype(scope)
+                return call
         return None
 
 @dataclass
@@ -2425,7 +2429,9 @@ class Behavior(Statement):
         #debug_print(all_return_types)
         all_return_types = [t for t in all_return_types if t]
         if len(all_return_types) == 0: return None
-        return temp_env.simplify(Union.from_list(all_return_types))
+        result = temp_env.simplify(Union.from_list(all_return_types))
+        #print(f"specialized return type of {self.cls.name}.{self.name} with rec_typ {rec_typ} and arg types {arg_types} is {result}")
+        return result
 
     def constraints(self):
         constraints = ConstraintSet(set())

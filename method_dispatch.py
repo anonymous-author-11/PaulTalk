@@ -6,6 +6,7 @@ from utils import *
 from scope import Scope
 import functools
 from itertools import chain
+from hi import FatPtr
 
 @dataclass(frozen=True)
 class DispatchBlock:
@@ -188,12 +189,17 @@ class _AutomatonBuilder:
             if arg_position < len(method.param_types()):
                 param_type = method.param_types()[arg_position]
                 methods_by_type.setdefault(param_type, set()).add(method)
+
+        def cmp_key1(a, b): return -1 if isinstance(b[0], FatPtr) and not isinstance(a[0], FatPtr) else 0
+        def cmp_key2(a, b): return -1 if self.scope.subtype(a[0], b[0]) else 0
+        sorted_methods_by_type = sorted(methods_by_type.items(), key=functools.cmp_to_key(cmp_key1))
+        sorted_methods_by_type = sorted(sorted_methods_by_type, key=functools.cmp_to_key(cmp_key2))
         
         transitions = []
-        # Process each method group independently - order doesn't matter
+        # Partially order by subtyping relation, then process each method group independently
         names = [random_letters(10) for k in methods_by_type]
         names[0] = state_id
-        for (i, (primary_type, methods)) in enumerate(methods_by_type.items()):
+        for (i, (primary_type, methods)) in enumerate(sorted_methods_by_type):
             # Compute types that must be forbidden to ensure disjointness
             forbidden = self._compute_forbidden_types(primary_type, methods_by_type)
             

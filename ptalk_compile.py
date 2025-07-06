@@ -379,7 +379,7 @@ class OptimizationSettings:
     @property
     def inlining(self):
         # inline everything in release, and nothing in debug. let the machine outliner undo some of it later, if requested
-        return "--inline-threshold=-10000" if self.debug_mode else "--inline-threshold=10000"
+        return "--inline-threshold=-10000" if self.debug_mode else "--inline-threshold=2000"
 
     @property
     def devirt(self):

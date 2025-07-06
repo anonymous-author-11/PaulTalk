@@ -453,17 +453,23 @@ DONE:
 TODO:
 
 - Things we could work on right now
-	- 'into' operator
 	- Comparison for tuples
 	- Reforming flow analysis
 	- Closures
 
+- Check if a method's definition has different param base types than its behavior
+
+- You could probably see what's going wrong with O0 by seeing the asm for passing a fatptr vs type-param
+
 - Why are extern defs apparently not imported?
 	- Because they aren't added to scope.functions
 
-- Apply partial order to subtype tests in method dispatch
-	- Builtins come first, as it's a simple pointer equality check
-	- Then make sure subtypes precede their supertypes
+- Add T? syntax for T | Nil
+
+- Add 'of' syntax for array literals
+	- [] of String
+	- [1, 2, 3] of i32 | f64
+
 - I think I could have stuff like "x : Addable & Comparable" in signatures
 	- Before using a method we must cast to the particular required supertype
 	- File.iterator() -> ConstantTimeIterator & Writer
@@ -501,18 +507,6 @@ TODO:
 	- There's a difference between symbol visibility and data accessibility
 		- Files / export lists used for symbol visibility control; classes for data accessibility
 		- What is encapsulated is static (symbol visibility) vs dynamic (data accessibility)
-- 'into' operator as sugar for conversion methods
-	- into will look for a .from_ or a .to_ method
-		- .to_ method has precedence
-		- .from_ method as backup
-	- If there are multiple equally valid method candidates, report ambiguity
-	- Abstracts over which type defined the conversion
-	- Could later change which type defined the conversion
-	- Could also provide an alternative to the Rust turbofish operator
-		- I.e. '(0...5).map(times_two) into Array[i32]'
-		- Instead of Array[i32].from_iterable((0...5).map(times_two))
-		- def Array.from_iterable[U](iterable : Iterable[U]) -> Self
-	- Nice because .from_ methods suck for sequential chaining
 - Deduplicate behaviors
 	- If all methods in the behavior are inherited from the same class, reuse that behavior
 - I really want type narrowing in alternative branches
@@ -653,6 +647,21 @@ TODO:
 		- Single quotes: 'a' 'b' 'c' [check!]
 		- Validate that the literal is in fact a single codepoint [check!]
 		- Add to syntax highlighting [check!]
+	- 'into' operator as sugar for conversion methods [check!]
+		- into will look for a .from_ or a .to_ method [check!]
+			- .to_ method has precedence [check!]
+			- .from_ method as backup [check!]
+		- If there are multiple equally valid method candidates, report ambiguity [check!]
+		- Abstracts over which type defined the conversion
+		- Could later change which type defined the conversion
+		- A nicer alternative to the Rust turbofish operator
+			- I.e. '(0...5).map(times_two) into Array[i32]'
+			- Instead of Array[i32].from_iterable((0...5).map(times_two))
+			- def Array.from_iterable[U](iterable : Iterable[U]) -> Self
+		- Nice because .from_ methods suck for sequential chaining
+	- Apply partial order to subtype tests in method dispatch [check!]
+		- Builtins come first, as it's a simple pointer equality check [check!]
+		- Then make sure subtypes precede their supertypes [check!]
 	- Does just adding dependencies to the path work?
 		- The source_dirs collection should be ordered, not a set [check!]
 		- Add the dependency folder to an env variable named for the package
@@ -665,7 +674,7 @@ TODO:
 		- MLIR dialect: mini. -> mid.
 	- 'ptalk build init [name]' could create a minimal manifest.yaml in the cwd
 
-- Stdlib plan
+- Stdlib ideas
 	- ReverseIterator[T] has a .prev() method
 	- SkipIterator[T] could have .next(n) and .prev(n) methods
 	- Collection[T] extends Iterable[T]
@@ -687,12 +696,12 @@ TODO:
 		- It gets imports wrong for indirect calls
 		- It only parallelizes at module granularity
 	- MLIR is natively multithreaded!
-		- Which would be great to leverage
+		- Which would be great to leverage [check!]
 		- Could we store files as .mlir instead of .bc?
 			- No, that would take too much time to optimize every time
 		- Otherwise, what's even the advantage?
-			- For your recompile list, you can put all of them in one big .mlir file
-			- Then all the mlir commands can process them all in parallel
+			- For your recompile list, you can put all of them in one big .mlir file [check!]
+			- Then all the mlir commands can process them all in parallel [check!]
 	- LTO partitioning is based on !type metadata
 
 - What do I really need for 1.0.0?
@@ -736,6 +745,7 @@ TODO:
 		- Already planned ahead for delegate passing
 		- Are strings Unicode or bytes? (very important for 1.0.0!)
 			- Should be Unicode (UTF-8)
+		- Make sure method dispatch is sound and complete for normal types
 	- A less meager stdlib
 		- Set, LinkedList
 		- JSON?
@@ -751,10 +761,10 @@ TODO:
 - Overloading *functions*
 	- Reuse the Behavior code as much as possible
 	- Only functions in the same file should count as overloads?
+	- More complicated due to namespacing
 - Where clauses for method type parameters
-- Should i32 be a subtype of i64?
-	- It can be trivially cast to it, so I don't see why not
 - Cast literals when passing as arguments
+	- A little bit involved
 - Implement user-exposed getters
 	- Shouldn't be technically difficult
 	- Will significantly improve ergonomics
@@ -763,20 +773,16 @@ TODO:
 	- Not needing to cast self twice
 - Add multi-line strings
 - Split MLIR dialect into hi, mid, and lo dialects
-	- hi will use PaulTalk types
-	- types will be lowered in hi -> mid
+	- hi will use PaulTalk types [check!]
+	- types will be lowered in hi -> mid [check!]
 	- lo will only lower to other dialects
 - Refactor to use lo.call in PDL
-- Add T? syntax for T | Nil
 - Improve namespacing
 	- Right now import order implicitly resolves conflicts
 	- Instead one should have to explicitly disambiguate conflicts
 	- Should only have to disambiguate if an ambiguous entity is actually used
 	- Dot syntax for namespacing
 - Putting coroutine yields and returns in the same slot is asking for bugs
-- Add 'of' syntax for array literals
-	- [] of String
-	- [1, 2, 3] of i32 | f64
 - Make aliases even smarter
 	- "alias Foo[A] = Bar[A, i32];"
 	- This is more complex
