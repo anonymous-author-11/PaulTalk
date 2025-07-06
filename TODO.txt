@@ -464,11 +464,10 @@ TODO:
 - Why are extern defs apparently not imported?
 	- Because they aren't added to scope.functions
 
-- Add T? syntax for T | Nil
-
-- Add 'of' syntax for array literals
-	- [] of String
-	- [1, 2, 3] of i32 | f64
+- Should I also consider constructors for 'into' ?
+	- Third option after to_ and from_ methods
+	- '55 into Character' <-> Character{55}
+	- Still useful for left-to-right chaining
 
 - I think I could have stuff like "x : Addable & Comparable" in signatures
 	- Before using a method we must cast to the particular required supertype
@@ -662,6 +661,8 @@ TODO:
 	- Apply partial order to subtype tests in method dispatch [check!]
 		- Builtins come first, as it's a simple pointer equality check [check!]
 		- Then make sure subtypes precede their supertypes [check!]
+	- Add 'of' syntax for array literals [check!]
+	- Add T? syntax for T | Nil [check!]
 	- Does just adding dependencies to the path work?
 		- The source_dirs collection should be ordered, not a set [check!]
 		- Add the dependency folder to an env variable named for the package

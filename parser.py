@@ -286,8 +286,11 @@ class CSTTransformer(Transformer):
         }
         return type_map[type_name.value] if type_name.value in type_map else FatPtr.basic(type_name.value)
 
-    def sum_type(self, left, right):
-        return Union([ArrayAttr([left, right])])
+    def union_type(self, left, right):
+        return Union.from_list([left, right])
+
+    def nilable_type(self, typ):
+        return Union.from_list([typ, Nil()])
 
     def parameterized_type(self, type_name, types):
         if any(not isinstance(t, TypeAttribute) for t in types):

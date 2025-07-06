@@ -8,3 +8,5 @@ def add_translation(translation : String) -> String {
 IO.print(add_translation("电脑"));
 
 IO.print(['a', 'b', 'c', 'd'] of Character into String);
+
+nilable : String? = nil;

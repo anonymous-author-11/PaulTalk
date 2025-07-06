@@ -71,16 +71,18 @@ break_statement: BREAK
 continue_statement: CONTINUE
 
 typ: basic_type
-    | sum_type
+    | union_type
     | parameterized_type
     | function_type
+    | nilable_type
 
 type_list: (typ ("," typ)*)?
 type_count: INT "x" typ
 basic_type: ident
-sum_type: typ "|" typ
+union_type: typ "|" typ
 parameterized_type: ident "[" (type_list | type_count) "]"
 function_type: "(" type_list ")" ["->" typ] ["yields" typ]
+nilable_type: typ "?"
 
 block: "{" statement* "}"
 
