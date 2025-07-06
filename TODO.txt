@@ -457,14 +457,16 @@ TODO:
 	- Reforming flow analysis
 	- Closures
 
+- Array of i32 | f64 is not working correctly
+
 - Check if a method's definition has different param base types than its behavior
 
 - You could probably see what's going wrong with O0 by seeing the asm for passing a fatptr vs type-param
 
 - I think I could have stuff like "x : Addable & Comparable" in signatures
 	- Before using a method we must cast to the particular required supertype
-	- File.iterator() -> ConstantTimeIterator & Writer
-	- LLVM can optimize some of these casts out
+	- File.iterator() -> ConstantTimeIterator[i8] & Writer[i8] & Seeker[i32]
+	- LLVM can optimize many of these casts out
 - Change the console's "active code page" in the main() prelude
 	- to make puts /printf display unicode correctly
 	- Obviously OS-specific

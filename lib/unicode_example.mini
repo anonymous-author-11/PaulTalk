@@ -7,6 +7,12 @@ def add_translation(translation : String) -> String {
 
 IO.print(add_translation("电脑"));
 
-IO.print(['a', 'b', 'c', 'd'] of Character into String);
+IO.print(['a', 'b', 'c', 'd'] into String);
 
 nilable : String? = nil;
+
+ary = [] of i32 | f64;
+ary.append(1);
+ary.append(2.0);
+
+IO.print(100 into Character into String);

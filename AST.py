@@ -563,11 +563,11 @@ class ArrayLiteral(Expression):
         if len(self.elements) == 0:
             return FatPtr.generic("Array", [scope.simplify(self.specified_elem_type)])
         elem_types = [elem.exprtype(scope) for elem in self.elements]
-        elem_type = scope.simplify(Union.from_list(elem_types)) if len(elem_types) > 0 else Integer(32)
-        if not self.specified_elem_type: return FatPtr.generic("Array", [elem_type])
+        inferred_elem_type = scope.simplify(Union.from_list(elem_types)) if len(elem_types) > 0 else Integer(32)
+        if not self.specified_elem_type: return FatPtr.generic("Array", [inferred_elem_type])
         specified_elem_type = scope.simplify(self.specified_elem_type)
-        if not scope.subtype(elem_type, specified_elem_type):
-            raise Exception(f"{self.info}: Inferred type of array literal ({elem_type}) is not a subtype of specified type ({specified_elem_type})")
+        if not scope.subtype(inferred_elem_type, specified_elem_type):
+            raise Exception(f"{self.info}: Inferred element type of array literal ({inferred_elem_type}) is not a subtype of specified type ({specified_elem_type})")
         return FatPtr.generic("Array", [specified_elem_type])
 
     def typeflow(self, scope):
@@ -1010,7 +1010,7 @@ class Into(Expression):
         if self.method: return scope.simplify(self.typ)
         operand_type = self.operand.exprtype(scope)
         to_type = scope.simplify(self.typ)
-        scope.validate_type(to_type)
+        scope.type_env.validate_type(self.info, to_type)
 
         # Precedence order: 1) .to_ method 2) .from_ method 3) constructor
 
