@@ -11,7 +11,7 @@ Principles of PaulTalk Design
 			- Any function can be called as a coroutine or as a function
 			- Stackful coroutines can yield from within arbitrary nesting
 		- Variance of generic types
-	- Whether or not a function or class is 'exported' is a matter of use, not essence
+	- Whether or not a function or class is 'private' is a matter of use, not essence
 		- export / no_export lists at file scope
 		- Instead of public / private modifiers on declarations
 
@@ -24,43 +24,53 @@ Principles of PaulTalk Design
 		- Strict nominal subtyping for classes
 		- Necessary for multimethod dispatch
 	- All classes are open to extension via subclassing (no final)
+		- Diminishes the impetus for retroactive conformance
 
-3. Prefer short English words to sigils
-	- Bitwise and logical operators are spelled out ('bit_and' vs 'and')
-	- No &T or T* pointer-related sigils
-	- ++ and -- operators don't exist
-	- No obscure ternary operator
+3. Keyword brevity should be inversely proportional to rarity
+	- T? is sugar for T | Nil because this is very common
+	- Bitwise operations are actually not very common
+	- Prefer short English words to sigils
+		- Bitwise and logical operators are spelled out ('bit_and' vs 'and')
+		- No &T or T* pointer-related sigils
+		- ++ and -- operators don't exist
+		- No obscure x ? y : z ternary operator
 
 4. Minimize viral language constructs
 	- One minor change generates a ripple of required changes across the program
-	- Examples: const, async, pure
-	- Limits composability
+	- Examples: const, async, pure, IType vs Type
+	- Limits composability, especially the more of these constructs there are (combinatorial)
 	- Alias annotations are a remaining source of virality
 
-5. Avoid a built-in "runtime" to protect interoperability with other languages
+5. Minimize the builtin "runtime" to protect interoperability with other languages
 	- No garbage collector
-		- Region inference for semi-automatic memory management without a runtime
-	- No builtin thread scheduling
+		- Two languages with their own garbage collectors have a hard time working together
+		- Region inference: semi-automatic memory management without a runtime
+	- No preemptive thread scheduling
 		- Thread scheduler can and should be a library, like in Ruby, Lua
+		- Yield at specified yield points, which may be nested inside functions
 	- No segmented / copying stacks
-		- Requires special function prologues
+		- Requires special function prologues to check for morestack
 		- What if you hit the end of the stack within a native call?
+		- Can't just relocate pointers that might be dereferenced from C
 		- Coroutine stacks are instead virtual-memory based
 
-6. Protect separate compilation through modularity and indirection
+6. Separate compilation is non-negotiable
 	- No monomorphization
 		- Carry type parameters as implicit immutable fields
-		- Allows virtual methods to be generic
-		- Makes compilation much more *incremental*
+		- Allows virtual methods to be generic-- unlike Rust and C++
+		- Enables compilation to be much more *incremental*
 	- But *will* still optimize the linked-together bitcodes in release mode
 	- You can compile dynamic libraries with generics
 	- Multimethods must be separately compilable
 		- Rules out many multimethod implementation schemes
+		- Cannot assume knowledge of the full type hierarchy
+		- Cannot assume knowledge of all methods and their overrides
 	- All compiler analyses must be intraprocedural
 		- Type inference is intraprocedural but flow-sensitive
 			- All parameter, field, and return types must be specified
 			- Within a procedure, type inference is extremely generous
-		- Alias analysis is intraprocedural
+		- Region inference is intraprocedural
+			- Many region proposed inference schemes are inherently interprocedural
 			- Aliasing information must be annotated to be available for callers
 			- The compiler can tell you how you could annotate a procedure
 	- Prefer link-time selection to macros
@@ -70,14 +80,14 @@ Principles of PaulTalk Design
 7. Macros are bug reports against the language
 	- Anything best implemented with a macro should probably become a language construct
 	- Allowing macros is crucial for guiding the evolution of a language
-	- No "shadow language"
-		- E.g. C++ template metaprogramming
+	- Macros should not become a "shadow language"
+		- E.g. C++ templates (a pure functional turing-complete language embedded in C++)
 		- Macros should be written in the same language as the rest of the program
 		- Precompile macros rather than running an interpreter at compile-time
 
 8. Defaulting to the most common case minimizes annotation burden
 	- The default yield type when not specified is Exception | Nil
-	- No aliasing annotations -> conservative aliasing assumptions
+	- No aliasing annotations -> make conservative aliasing assumptions
 	- Aliasing annotations are inherited by overrides
 	- Default export / no_export settings
 		- Default to exporting all local declarations

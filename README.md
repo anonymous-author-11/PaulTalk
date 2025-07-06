@@ -5,7 +5,7 @@
 
 ## Introduction
 
-PaulTalk is an experimental, statically-typed, **unabashedly object-oriented** general-purpose programming language.
+PaulTalk is an experimental, statically-typed, and **unabashedly object-oriented**  programming language.
 
 ## Features Overview
 
