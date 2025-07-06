@@ -461,14 +461,6 @@ TODO:
 
 - You could probably see what's going wrong with O0 by seeing the asm for passing a fatptr vs type-param
 
-- Why are extern defs apparently not imported?
-	- Because they aren't added to scope.functions
-
-- Should I also consider constructors for 'into' ?
-	- Third option after to_ and from_ methods
-	- '55 into Character' <-> Character{55}
-	- Still useful for left-to-right chaining
-
 - I think I could have stuff like "x : Addable & Comparable" in signatures
 	- Before using a method we must cast to the particular required supertype
 	- File.iterator() -> ConstantTimeIterator & Writer
@@ -650,6 +642,7 @@ TODO:
 		- into will look for a .from_ or a .to_ method [check!]
 			- .to_ method has precedence [check!]
 			- .from_ method as backup [check!]
+			- Target type constructor as final fallback [check!]
 		- If there are multiple equally valid method candidates, report ambiguity [check!]
 		- Abstracts over which type defined the conversion
 		- Could later change which type defined the conversion

@@ -1010,6 +1010,9 @@ class Into(Expression):
         if self.method: return scope.simplify(self.typ)
         operand_type = self.operand.exprtype(scope)
         to_type = scope.simplify(self.typ)
+        scope.validate_type(to_type)
+
+        # Precedence order: 1) .to_ method 2) .from_ method 3) constructor
 
         to_method = self.find_to_method(scope, operand_type, to_type)
         if to_method:
@@ -1019,6 +1022,11 @@ class Into(Expression):
         from_method = self.find_from_method(scope, operand_type, to_type)
         if from_method:
             self.method = from_method
+            return to_type
+
+        constructor = self.find_constructor(scope, operand_type, to_type)
+        if constructor:
+            self.method = constructor
             return to_type
 
         raise Exception(f"{self.info}: There are no {operand_type}.to_ methods or {to_type}.from_ methods that are applicable")
@@ -1051,6 +1059,21 @@ class Into(Expression):
             if len(candidate_behaviors) == 1:
                 from_behavior = candidate_behaviors[0]
                 call = ClassMethodCall(self.info, to_type, from_behavior.name.replace("_Self_",""), [self.operand])
+                call.exprtype(scope)
+                return call
+        return None
+
+    # see if the target type has a constructor that accepts the operand type
+    def find_constructor(self, scope, operand_type, to_type):
+        if isinstance(to_type, FatPtr):
+            to_class = scope.classes[to_type.cls.data]
+            candidate_behaviors = [behavior for behavior in to_class.behaviors if behavior.name == "init" and behavior.arity == 1]
+            candidate_behaviors = [behavior for behavior in candidate_behaviors if behavior.applicable(to_type, scope, "init", [operand_type])]
+            if len(candidate_behaviors) > 1:
+                    raise Exception(f"{self.info}: There are multiple equally applicable {to_type}.init methods that accept {operand_type}")
+            if len(candidate_behaviors) == 1:
+                from_behavior = candidate_behaviors[0]
+                call = ObjectCreation(self.info, random_letters(10), to_type, [self.operand], None)
                 call.exprtype(scope)
                 return call
         return None
