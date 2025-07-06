@@ -33,7 +33,7 @@ class Queue[T] extends Collection[T] {
 
     // Removes and returns the element at the front of the queue.
     // Returns Nil if the queue is empty. O(1).
-    def dequeue() -> T | Nil {
+    def dequeue() -> T? {
         if @count == 0 { return nil; }
 
         item = @buffer.[@head];
@@ -45,7 +45,7 @@ class Queue[T] extends Collection[T] {
 
     // Returns the element at the front of the queue without removing it.
     // Returns Nil if the queue is empty. O(1).
-    def peek() -> T | Nil {
+    def peek() -> T? {
         if @count == 0 { return nil; }
         return @buffer.[@head];
     }
@@ -85,7 +85,7 @@ class QueueIterator[T] extends Iterator[T] {
         @logical_index = 0;
     }
 
-    def next() -> T | Nil {
+    def next() -> T? {
         // This check makes the iterator safe
         // (though not perfectly predictable) if the queue is modified during iteration.
         // It reads the queue's current size on every call.

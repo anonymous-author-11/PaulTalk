@@ -129,5 +129,5 @@ class Temp[T] {
     }
 }
 
-temp = Temp[String | Nil].new();
+temp = Temp[String?].new();
 temp.print();

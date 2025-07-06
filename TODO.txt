@@ -486,20 +486,23 @@ TODO:
 	- I could use the llvm.trampoline tools
 		- vs making fn into a fat ptr
 		- Preserves C interop
-- Selective imports
-	- from x import y;
-	- Should improve compilation time
-- Export / no_export lists
-	- An alternative to public / private annotations
-	- no_export { ConcreteStringIndex, Entry }
-	- Justification
-		- The "privateness" of a class / function is not intrinsic
-		- You might want to export a class from one file and not from another
-	- Export local definitions by default
-	- Don't export imports by default
-	- There's a difference between symbol visibility and data accessibility
-		- Files / export lists used for symbol visibility control; classes for data accessibility
-		- What is encapsulated is static (symbol visibility) vs dynamic (data accessibility)
+
+- Blocked on namespacing:
+	- Selective imports
+		- from x import y;
+		- Should improve compilation time
+	- Export / no_export lists
+		- An alternative to public / private annotations
+		- no_export { ConcreteStringIndex, Entry }
+		- Justification
+			- The "privateness" of a class / function is not intrinsic
+			- You might want to export a class from one file and not from another
+		- Export local definitions by default
+		- Don't export imports by default
+		- There's a difference between symbol visibility and data accessibility
+			- Files / export lists used for symbol visibility control; classes for data accessibility
+			- What is encapsulated is static (symbol visibility) vs dynamic (data accessibility)
+
 - Deduplicate behaviors
 	- If all methods in the behavior are inherited from the same class, reuse that behavior
 - I really want type narrowing in alternative branches

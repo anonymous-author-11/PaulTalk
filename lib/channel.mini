@@ -4,7 +4,7 @@ class Blocking {
 }
 
 class Channel[T] {
-    @value : T | Nil
+    @value : T?
 
     def init() {
         @value = nil;

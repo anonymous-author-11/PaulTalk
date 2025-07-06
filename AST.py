@@ -1033,50 +1033,43 @@ class Into(Expression):
 
     # see if there is a .to_ method on the operand that returns the rhs type
     def find_to_method(self, scope, operand_type, to_type):
-        if isinstance(operand_type, FatPtr):
-            operand_class = scope.classes[operand_type.cls.data]
-            candidate_behaviors = [behavior for behavior in operand_class.behaviors if behavior.name.startswith("to_") and behavior.arity == 0]
-            candidate_behaviors = [behavior for behavior in candidate_behaviors if scope.subtype(behavior.specialized_return_type(operand_type, [], scope), to_type)]
-            if len(candidate_behaviors) > 1:
-                candidate_behaviors = [behavior for behavior in candidate_behaviors if behavior.specialized_return_type(operand_type, [], scope) == to_type]
-                if len(candidate_behaviors) != 1:
-                    raise Exception(f"{self.info}: There are multiple equally applicable {operand_type}.to_ methods that return a subtype of {to_type}")
-            if len(candidate_behaviors) == 1:
-                to_behavior = candidate_behaviors[0]
-                call = MethodCall(self.info, self.operand, to_behavior.name, [])
-                call.exprtype(scope)
-                return call
+        if not isinstance(operand_type, FatPtr): return None
+        operand_class = scope.classes[operand_type.cls.data]
+        candidate_behaviors = [behavior for behavior in operand_class.behaviors if behavior.name.startswith("to_") and behavior.arity == 0]
+        candidate_behaviors = [behavior for behavior in candidate_behaviors if scope.subtype(behavior.specialized_return_type(operand_type, [], scope), to_type)]
+        if len(candidate_behaviors) > 1:
+            candidate_behaviors = [behavior for behavior in candidate_behaviors if behavior.specialized_return_type(operand_type, [], scope) == to_type]
+            if len(candidate_behaviors) != 1:
+                raise Exception(f"{self.info}: There are multiple equally applicable {operand_type}.to_ methods that return a subtype of {to_type}")
+        if len(candidate_behaviors) == 1:
+            to_behavior = candidate_behaviors[0]
+            call = MethodCall(self.info, self.operand, to_behavior.name, [])
+            call.exprtype(scope)
+            return call
         return None
 
     # see if there is a .from_ ClassMethod on the target type that accepts the operand type
     def find_from_method(self, scope, operand_type, to_type):
-        if isinstance(to_type, FatPtr):
-            to_class = scope.classes[to_type.cls.data]
-            candidate_behaviors = [behavior for behavior in to_class.behaviors if behavior.name.startswith("_Self_from_") and behavior.arity == 1]
-            candidate_behaviors = [behavior for behavior in candidate_behaviors if behavior.applicable(to_type, scope, behavior.name, [operand_type])]
-            if len(candidate_behaviors) > 1:
-                    raise Exception(f"{self.info}: There are multiple equally applicable {to_type}.from_ methods that accept {operand_type}")
-            if len(candidate_behaviors) == 1:
-                from_behavior = candidate_behaviors[0]
-                call = ClassMethodCall(self.info, to_type, from_behavior.name.replace("_Self_",""), [self.operand])
-                call.exprtype(scope)
-                return call
-        return None
+        if not isinstance(to_type, FatPtr): return None
+        to_class = scope.classes[to_type.cls.data]
+        candidate_behaviors = [behavior for behavior in to_class.behaviors if behavior.name.startswith("_Self_from_") and behavior.arity == 1]
+        candidate_behaviors = [behavior for behavior in candidate_behaviors if behavior.applicable(to_type, scope, behavior.name, [operand_type])]
+        if len(candidate_behaviors) == 0: return None
+        from_behavior = candidate_behaviors[0]
+        call = ClassMethodCall(self.info, to_type, from_behavior.name.replace("_Self_",""), [self.operand])
+        call.exprtype(scope)
+        return call
 
     # see if the target type has a constructor that accepts the operand type
     def find_constructor(self, scope, operand_type, to_type):
-        if isinstance(to_type, FatPtr):
-            to_class = scope.classes[to_type.cls.data]
-            candidate_behaviors = [behavior for behavior in to_class.behaviors if behavior.name == "init" and behavior.arity == 1]
-            candidate_behaviors = [behavior for behavior in candidate_behaviors if behavior.applicable(to_type, scope, "init", [operand_type])]
-            if len(candidate_behaviors) > 1:
-                    raise Exception(f"{self.info}: There are multiple equally applicable {to_type}.init methods that accept {operand_type}")
-            if len(candidate_behaviors) == 1:
-                from_behavior = candidate_behaviors[0]
-                call = ObjectCreation(self.info, random_letters(10), to_type, [self.operand], None)
-                call.exprtype(scope)
-                return call
-        return None
+        if not isinstance(to_type, FatPtr): return None
+        to_class = scope.classes[to_type.cls.data]
+        candidate_behaviors = [behavior for behavior in to_class.behaviors if behavior.name == "init" and behavior.arity == 1]
+        candidate_behaviors = [behavior for behavior in candidate_behaviors if behavior.applicable(to_type, scope, "init", [operand_type])]
+        if len(candidate_behaviors) == 0: return None
+        call = ObjectCreation(self.info, random_letters(10), to_type, [self.operand], None)
+        call.exprtype(scope)
+        return call
 
 @dataclass
 class FunctionCall(Expression):

@@ -22,13 +22,13 @@ class List[T] extends Collection[T] {
     }
 
     // O(1) time complexity
-    def first() -> T | Nil {
+    def first() -> T? {
     	if self.is_empty() { return nil; }
     	for elem in self { return elem; }
     }
 
     // O(size) time complexity
-    def last() -> T | Nil {
+    def last() -> T? {
     	return self.get(self.size() - 1);
     }
 
@@ -39,7 +39,7 @@ class List[T] extends Collection[T] {
     }
 
     // O(index) time complexity
-    def get(index : i32) -> T | Nil {
+    def get(index : i32) -> T? {
     	if index >= self.size() { return nil; }
     	for pair in self.enumerate() {
     		if pair.first() == index { return pair.second(); }
@@ -47,7 +47,7 @@ class List[T] extends Collection[T] {
     }
 
     // O(index) time complexity
-    def index_of(target : T, eq : (T, T) -> Bool) -> i32 | Nil {
+    def index_of(target : T, eq : (T, T) -> Bool) -> i32? {
     	if self.is_empty() { return nil; }
     	for pair in self.enumerate() {
     		if eq.call(pair.second(), target) { return pair.first(); }

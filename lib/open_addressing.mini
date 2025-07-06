@@ -18,7 +18,7 @@ class Entry[K,V] {
 }
 
 class OpenAddressMap[K,V] extends HashMap[K,V] {
-    @entries: Buffer[Entry[K,V] | Nil]
+    @entries: Buffer[Entry[K,V]?]
     @entries_len : i32
     @size: i32      // number of actual entries (key -> V)
     @load: i32      // number of occupied slots (key -> V or key -> Tombstone)
@@ -27,7 +27,7 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
 
     def init(@hasher: (K) -> i32, @eq : (K, K) -> Bool) {
         // Ensure initial capacity is a power of 2
-        @entries = Buffer[Entry[K,V] | Nil].new(16);
+        @entries = Buffer[Entry[K,V]?].new(16);
         @entries_len = 16;
         @size = 0;
         @load = 0;
@@ -59,7 +59,7 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
         // Assume new_capacity is a power of 2
         old_entries = @entries;
         old_len = @entries_len;
-        @entries = Buffer[Entry[K,V] | Nil].new(new_capacity); // Buffer of Nil
+        @entries = Buffer[Entry[K,V]?].new(new_capacity); // Buffer of Nil
         @entries_len = new_capacity;
         @size = 0; // Reset size and load for the new table
         @load = 0;
@@ -120,7 +120,7 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
     }
 
     // Get value associated with key
-    def get(key: K) -> V | Nil {
+    def get(key: K) -> V? {
         // No need to check capacity here
         hash = @hasher.call(key);
         i = self.find_slot(key, hash);
@@ -138,7 +138,7 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
     }
 
     // Remove key and return its value, or Nil if not found.
-    def remove(key: K) -> V | Nil {
+    def remove(key: K) -> V? {
         // No need to check capacity here
         hash = @hasher.call(key);
         i = self.find_slot(key, hash);
@@ -166,7 +166,7 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
     // Clear the map
     def clear() {
         // Re-initialize with default capacity
-        @entries = Buffer[Entry[K,V] | Nil].new(16);
+        @entries = Buffer[Entry[K,V]?].new(16);
         @size = 0;
         @load = 0;
     }
@@ -182,15 +182,15 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
 }
 
 class OpenAddressMapIterator[K,V] extends Iterator[Pair[K,V]] {
-    @map_entries: Buffer[Entry[K,V] | Nil]
+    @map_entries: Buffer[Entry[K,V]?]
     @index: i32
     @length: i32 // Cache length for minor optimization
 
-    def init(@map_entries: Buffer[Entry[K,V] | Nil], @length : i32) {
+    def init(@map_entries: Buffer[Entry[K,V]?], @length : i32) {
         @index = 0;
     }
 
-    def next() -> Pair[K, V] | Nil {
+    def next() -> Pair[K, V]? {
         while @index < @length { // Use cached length
             entry_or_nil = @map_entries.[@index];
             @index = @index + 1; // Increment index for next call

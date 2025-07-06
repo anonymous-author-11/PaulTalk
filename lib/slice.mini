@@ -71,7 +71,7 @@ class SliceIterator[T] extends ConstantTimeIterator[T] {
 		@length = @slice.length(); // Because a Slice is constant-length, we can cache it
 		@index = 0;
 	}
-	def next() -> T | Nil {
+	def next() -> T? {
 		if @index >= @length { return nil; }
 		old_index = @index;
 		@index = @index + 1;

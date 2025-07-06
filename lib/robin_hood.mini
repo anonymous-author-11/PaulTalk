@@ -37,14 +37,14 @@ class Entry[K,V] {
 // --- HashMap Implementation (Robin Hood Probing) ---
 
 class HashMap[K,V] extends Iterable[Pair[K,V]] {
-    @entries: Array[Entry[K,V] | Nil]
+    @entries: Array[Entry[K,V]?]
     @size: i32      // number of actual entries (key -> V)
     @load: i32      // number of occupied slots (key -> V or key -> Tombstone)
     @hasher: (K) -> i32
     @eq: (K, K) -> Bool
 
     def init(@hasher: (K) -> i32, @eq : (K, K) -> Bool) {
-        @entries = Array[Entry[K,V] | Nil].new(16, 16);
+        @entries = Array[Entry[K,V]?].new(16, 16);
         @size = 0;
         @load = 0;
     }
@@ -137,7 +137,7 @@ class HashMap[K,V] extends Iterable[Pair[K,V]] {
     // Resizes the internal array and rehashes all existing ACTIVE entries.
     def resize(new_capacity: i32) {
         old_entries = @entries;
-        @entries = Array[Entry[K,V] | Nil].new(new_capacity, new_capacity);
+        @entries = Array[Entry[K,V]?].new(new_capacity, new_capacity);
         @size = 0;
         @load = 0;
         old_len = old_entries.length();
@@ -245,7 +245,7 @@ class HashMap[K,V] extends Iterable[Pair[K,V]] {
     }
 
     // Get value associated with key
-    def get(key: K) -> V | Nil {
+    def get(key: K) -> V? {
         hash = @hasher.call(key);
         i = self.find_slot(key, hash);
         if i == -1 { return nil; }
@@ -259,7 +259,7 @@ class HashMap[K,V] extends Iterable[Pair[K,V]] {
     }
 
     // Remove key and return its value, or Nil if not found.
-    def remove(key: K) -> V | Nil {
+    def remove(key: K) -> V? {
         hash = @hasher.call(key);
         i = self.find_slot(key, hash);
         if i == -1 { return nil; } // Not found or already tombstoned
@@ -281,7 +281,7 @@ class HashMap[K,V] extends Iterable[Pair[K,V]] {
 
     // Clear the map
     def clear() {
-        @entries = Array[Entry[K,V] | Nil].new(16, 16);
+        @entries = Array[Entry[K,V]?].new(16, 16);
         @size = 0;
         @load = 0;
     }
@@ -297,16 +297,16 @@ class HashMap[K,V] extends Iterable[Pair[K,V]] {
 
 // --- Custom Iterator Class (Unchanged from original) ---
 class HashMapIterator[K,V] extends Iterator[Pair[K,V]] {
-    @map_entries: Array[Entry[K,V] | Nil]
+    @map_entries: Array[Entry[K,V]?]
     @index: i32
     @length: i32 // Cache length for minor optimization
 
-    def init(@map_entries: Array[Entry[K,V] | Nil]) {
+    def init(@map_entries: Array[Entry[K,V]?]) {
         @index = 0;
         @length = @map_entries.length(); // Cache length
     }
 
-    def next() -> Pair[K, V] | Nil {
+    def next() -> Pair[K, V]? {
         while @index < @length { // Use cached length
             entry_or_nil = @map_entries.unchecked_index(@index);
             @index = @index + 1; // Increment index for next call

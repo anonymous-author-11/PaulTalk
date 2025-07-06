@@ -30,7 +30,7 @@ class Unicode {
     // Decodes one codepoint from a buffer of bytes.
     // Returns Nil on failure (invalid sequence or insufficient data).
     // Otherwise, returns a tuple (codepoint, bytes_consumed).
-    def Self.decode_one(bytes: Buffer[i8], index: i32, len: i32) -> Tuple[i32, i32] | Nil {
+    def Self.decode_one(bytes: Buffer[i8], index: i32, len: i32) -> Tuple[i32, i32]? {
         if index >= len { return nil; }
 
         b1 = bytes.[index] as i32;
@@ -258,7 +258,7 @@ class String extends List[Character], Representable {
         }
         return true;
     }
-    def decode_at(byte_index : i32) -> Tuple[i32, i32] | Nil {
+    def decode_at(byte_index : i32) -> Tuple[i32, i32]? {
         return Unicode.decode_one(@bytes, byte_index, @byte_length);
     }
     def unchecked_index(x : i32) -> i8 {
@@ -312,7 +312,7 @@ class StringIterator extends ConstantTimeIterator[Character] {
 
     def init(@str : String) { @byte_index = 0; }
 
-    def next() -> Character | Nil {
+    def next() -> Character? {
         if @byte_index >= @str.byte_length() { return nil; }
         
         decode_result = @str.decode_at(@byte_index);
@@ -390,7 +390,7 @@ class InvalidUTF8Error extends Exception {
 }
 
 class OutOfBounds extends Exception {
-    @details : OutOfBoundsDetails | Nil
+    @details : OutOfBoundsDetails?
 
     def init(bounds : i32, index : i32) {
         @details = OutOfBoundsDetails.new(bounds, index);

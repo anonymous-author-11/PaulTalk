@@ -4,9 +4,9 @@ class KeyNotFound extends Exception {}
 
 class Map[K, V] extends IndexableCollection[K, V, Pair[K, V]] {
     
-    abstract def get(key : K) -> V | Nil {}
+    abstract def get(key : K) -> V? {}
     abstract def insert(key : K, value : V) {}
-    abstract def remove(key : K) -> V | Nil {}
+    abstract def remove(key : K) -> V? {}
 
     def indices() -> Collection[K] {
         return self.keys();
@@ -61,7 +61,7 @@ class MapKeyIterator[K, V] extends Iterator[K] {
 
     def init(@map_iterator : Iterator[Pair[K, V]]) {}
 
-    def next() -> K | Nil {
+    def next() -> K? {
         pair = @map_iterator.next();
         if pair is Pair[K, V] { return pair.first(); }
         return nil;
@@ -73,7 +73,7 @@ class MapValueIterator[K, V] extends Iterator[V] {
 
     def init(@map_iterator : Iterator[Pair[K, V]]) {}
 
-    def next() -> V | Nil {
+    def next() -> V? {
         pair = @map_iterator.next();
         if pair is Pair[K, V] { return pair.second(); }
         return nil;

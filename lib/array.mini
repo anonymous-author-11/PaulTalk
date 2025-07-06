@@ -124,7 +124,7 @@ class ArrayIterator[T] extends ConstantTimeIterator[T] {
     regions { @elems_reg == @array.elems_reg }
 
 	def init(@array : Array[T]) { @index = 0; }
-	def next() -> T | Nil {
+	def next() -> T? {
         // We check the array's current .length() on every .next() call
         // This guarantees no out-of-bounds access if the array was modified
 		if @index >= @array.length() { return nil; }
