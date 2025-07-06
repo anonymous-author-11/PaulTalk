@@ -539,6 +539,7 @@ class NilLiteral(Expression):
 @dataclass
 class ArrayLiteral(Expression):
     elements: tuple[Expression]
+    specified_elem_type: TypeAttribute
 
     def codegen(self, scope):
         self_type = self.exprtype(scope)
@@ -557,9 +558,17 @@ class ArrayLiteral(Expression):
         return ary.codegen(scope)
 
     def exprtype(self, scope):
+        if len(self.elements) == 0 and not self.specified_elem_type:
+            raise Exception(f"{self.info}: An empty array literal must specify its element type, like '[] of i32'")
+        if len(self.elements) == 0:
+            return FatPtr.generic("Array", [scope.simplify(self.specified_elem_type)])
         elem_types = [elem.exprtype(scope) for elem in self.elements]
         elem_type = scope.simplify(Union.from_list(elem_types)) if len(elem_types) > 0 else Integer(32)
-        return FatPtr.generic("Array", [elem_type])
+        if not self.specified_elem_type: return FatPtr.generic("Array", [elem_type])
+        specified_elem_type = scope.simplify(self.specified_elem_type)
+        if not scope.subtype(elem_type, specified_elem_type):
+            raise Exception(f"{self.info}: Inferred type of array literal ({elem_type}) is not a subtype of specified type ({specified_elem_type})")
+        return FatPtr.generic("Array", [specified_elem_type])
 
     def typeflow(self, scope):
         for elem in self.elements: elem.typeflow(scope)

@@ -142,8 +142,10 @@ primary: "(" expression ")" -> paren_expr
        | yield_call
        | assignable
 
+expression_list: (expression ("," expression)*)?
+
 function_literal: "(" param_list ")" ["yields" typ] ARROW block
-array_literal: LBRACKET (expression ("," expression)*)? "]"
+array_literal: LBRACKET expression_list "]" ["of" typ]
 tuple_literal: "(" expression "," expression ("," expression)* ")"
 dictionary_literal: "{" (expression "::" ("," expression "::" expression)*)? "}"
 print_call: "print" "(" (expression ("," expression)*)? ")"

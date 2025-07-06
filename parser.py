@@ -392,6 +392,9 @@ class CSTTransformer(Transformer):
     def paren_expr(self, expr):
         return expr
 
+    def expression_list(self, *expressions):
+        return expressions
+
     def int_literal(self, token):
         node_info = NodeInfo(None, self.file_path, line_number(token))
         value = int(token.value.replace("_",""))
@@ -416,9 +419,9 @@ class CSTTransformer(Transformer):
         node_info = NodeInfo(None, self.file_path, line_number(token))
         return CharLiteral(node_info, ast.literal_eval(token.value))
 
-    def array_literal(self, lbracket, *elems):
+    def array_literal(self, lbracket, elems, elem_type):
         node_info = NodeInfo(None, self.file_path, line_number(lbracket))
-        return ArrayLiteral(node_info, tuple(elems))
+        return ArrayLiteral(node_info, tuple(elems), elem_type)
 
     def tuple_literal(self, first, second, *rest):
         node_info = NodeInfo(None, self.file_path, first.info.line_number)
