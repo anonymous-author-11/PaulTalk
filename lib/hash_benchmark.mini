@@ -1,7 +1,7 @@
-import cuckoo;
+import robin_hood;
 import std;
 
-alias Map = CuckooMap;
+alias Map = RobinHoodMap;
 
 // --- Additions for Benchmarking ---
 extern def clock() -> i64

@@ -10,12 +10,12 @@ PaulTalk is an experimental, statically-typed, and **unabashedly object-oriented
 ## Features Overview
 
 *   **Object-Oriented:** Classes, multiple inheritance, `@field` syntax, `init` constructors.
-*   **Multiple Dispatch:** Implemented via efficient dispatch automata. Used for standard functions (`IO.print`) and operator overloading.
-*   **Generics:** Parameterized types (`Class[T, U]`), type bounds (`where K <: Hashable`).
+*   **Multiple Dispatch:** Implemented via efficient dispatch automata. Used for standard functions (`IO.print`) and especially useful for operator overloading.
+*   **Generics:** Parameterized types (`Map[K, V]`), type bounds (`where K <: Hashable`).
 *   **First-Class Functions:** Convenient anonymous functions with `(a : i32, a : i32) => ( a*b; )` syntax. No closures.
-*   **Coroutines:** `Coroutine.new(func, args...)`, `yield(value)`, `coro.call(arg?)`, `coro.result()`. Can yield exceptions for non-local control flow.
-*   **Type System:** Static typing, flow-sensitive inference, Unions (`T | U`), `Nil`, `Any`, `x is T` type checks.
-*   **Iteration:** `for..in` loops, range literals (`start:end`), `Iterable`/`Iterator` protocols.
+*   **Coroutines:** `Coroutine{func, args...}`, `yield(value)`, `coro.call(arg?)`, `coro.result()`. Can yield exceptions for non-local control flow.
+*   **Type System:** Static typing, flow-sensitive inference, Unions (`T | U`), `Nil`, `Any`, `if x is T` type checks.
+*   **Iteration:** `for..in` loops, range literals (`start...end`), `Iterable`/`Iterator` protocols.
 *   **FFI:** `extern def` to link C functions, `Buffer[T]` for raw memory access.
 *   **Operator Overloading:** Define custom behavior for operators like `+`, `-`, `*`, `/`, `[]`.
 

@@ -3220,6 +3220,8 @@ class Branch(Statement):
 
     def preallocate(self, scope, route_scopes):
         lhs_is_identifier = isinstance(self.condition, TypeCheck) and isinstance(self.condition.left, Identifier) and "@" not in self.condition.left.name
+        # here, route_scopes[0] means the "if branch" or the "while body"
+        # route_scopes[1] is the "alternate" route (no-entry / else branch)
         mutated_vars = {self.condition.left.name: route_scopes[0].type_table[self.condition.left.name]} if lhs_is_identifier else {}
         for key in scope.symbol_table.keys():
             union = scope.simplify(Union.from_list([route.type_table[key] for route in route_scopes]))

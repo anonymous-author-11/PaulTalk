@@ -210,7 +210,7 @@ class String extends List[Character], Representable {
         return buf;
     }
     def append(char : Character) -> Self {
-        return self.extend(char.to_string());
+        return self.extend(char into String);
     }
     // Assumes that inputs are valid
     def append_char_from_bytes(source_bytes : Buffer[i8], start_index : i32, n_bytes : i32) -> Self {

@@ -452,14 +452,34 @@ DONE:
 
 TODO:
 
+- Modifying while lowering was not correct
+	- Break and continue will not jump to the right block
+
 - Things we could work on right now
 	- Comparison for tuples
 	- Reforming flow analysis
 	- Closures
 
-- Array of i32 | f64 is not working correctly
+- Add "is not" operator
+
+- Flow analysis
+	- Each control flow stmt (if, while) can maintain a cache mapping in/out type tables
+	- In will be union of all incomings (previous block, continue)
+	- Out will be union of all outgoings (end of block, break)
+	- Early return should set all types to Nothing
+	- What about cast-assign?
+		- On break and continue
+		- Store pre_exit ops in node
+			- block.insert_after
+
+- @current_coroutine will break if two coroutines call each other
+	- We should instead maintain a stack of coroutines
+
+- Array[i32 | f64] is not working correctly
 
 - Check if a method's definition has different param base types than its behavior
+	- ['a','b','c'].filter((x : Character) => { true; }) into String
+	- Will invoke List.extend(iterable) whose signature will mismatch the behavior
 
 - You could probably see what's going wrong with O0 by seeing the asm for passing a fatptr vs type-param
 
@@ -502,6 +522,14 @@ TODO:
 		- There's a difference between symbol visibility and data accessibility
 			- Files / export lists used for symbol visibility control; classes for data accessibility
 			- What is encapsulated is static (symbol visibility) vs dynamic (data accessibility)
+
+- Formatted string literals
+	- Blocked on conforming builtin types to interfaces like Representable
+	- Is it actually? Can't you just special-case builtins?
+	- Yeah just use snprintf or something
+
+- Dictionary literals
+	- Need to choose a default implementation
 
 - Deduplicate behaviors
 	- If all methods in the behavior are inherited from the same class, reuse that behavior
@@ -943,11 +971,59 @@ TODO:
 - Assume call return value offsets
 - Expect reciever static types
 
+- Plan for try / catch
+	- Try is an IR op
+		- At beginning it pushes a new into_caller
+		- At end it restores the old into_caller
+		- Need to store a fake coroutine buffer for the called code to yield things into
+		- It does NOT context switch or create a new stack
+		- It proceeds with the current stack (try block is inlined)
+		- Does it need to save registers?
+	- Catch implicitly filters only yielded Exceptions
+		- Anything not an Exception is yielded further up ("tunnels")
+			- What about nil?
+			- It should make sure to preserve into_callee
+		- There's an opportunity to run 'defer' or 'finally' code during filtering
+			- or even RAII code?
+			- Wait, but what if a frame has a defer statement but no catch statements?
+				- Defer could implicitly add a catch statement
+				- But do you really want to run deferred code every time an exception is yielded through, even if it might resume?
+		- Can have explicit filter as well
+			- catch e : MyException { ... }
+		- Could have multiple catch blocks
+	- With statement
+		- with file = File{"foo.txt"} { txt = f.read(); }
+		- inductee must have a .close() method or similar
+		- Is that syntactically ambiguous?
+		- Desugars to try { ... } finally { inductee.close(); }
+	- Coroutine code will still have to deal with yielded Exceptions
+		- Unless we add some sugar to allow them to tunnel through
+		- x = catch i32 from coro.call(arg)
+		- e = catch Exception from { ... }
+	- Would it always be "yield()" or would there be "raise" ?
+		- Should it always be resumable?
+			- There are good reasons to not want it to be resumable
+			- This should be a decision at the yield / raise site
+		- One cannot know whether the exception will be handled via catch or coroutine
+		- Or raise could be sugar for "while true { yield(Exception{}) }"
+		- And then just use that semantic knowledge in typeflow inference
+	- When should deferred code execute?
+		- When the function returns
+		- When the stack it's on is destroyed
+			- So each coroutine should keep a list of deferred actions
+			- Or basically a list of jump buffers
+				- Process bottom up
+				- Jump to location, run code, jump to next
+			- But there isn't an automatic mechanism for stacks to be destroyed
+
 - Can we encode the knowledge that T <: Collection implies T <: Iterable?
 	- Can this be encoded with an llvm.assume?
 		- @llvm.assume(xor(subtype(t, a), subtype(t, b)) == false)
 	- For each class generate a standalone function that just holds all its assumptions
 		- Have to have some kind of free variable t
+	- No, probably not possible to encode
+	- Why would this help much?
+		- Now that we partially order method dispatch by subtyping
 
 - Generic tuple creation and indexing
 	- Would have to use dynamic allocas
