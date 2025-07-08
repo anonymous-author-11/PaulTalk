@@ -851,29 +851,76 @@ class TypeCheck(Expression):
     right: TypeAttribute
 
     def codegen(self, scope):
-        static_type = self.left.exprtype(scope)
+
+        left_type = self.left.exprtype(scope)
         leftval = self.left.codegen(scope)
 
         right_type = scope.simplify(self.right)
 
-        nil_buffer_check = isinstance(static_type, Buffer) and right_type == Nil()
-        if not nil_buffer_check and static_type in builtin_types.values():
-            result = 1 if scope.subtype(static_type, right_type) else 0
-            attr_dict = {"value": IntegerAttr.from_int_and_width(result, 1), "typ":IntegerType(1)}
-            const_op = LiteralOp.create(result_types=[Bool()], attributes=attr_dict)
-            scope.region.last_block.add_op(const_op)
-            return const_op.results[0]
+        # if the operand is a builtin type, we know statically the result of the check
+        nil_buffer_check = isinstance(left_type, Buffer) and right_type == Nil()
+        if not nil_buffer_check and left_type in builtin_types.values():
+            return self.resolve_statically(left_type, right_type, scope)
 
-        parameterization = None
-        if isinstance(right_type, TypeParameter): parameterization = scope.get_parameterization(right_type)
-        simplify = not scope.subtype(right_type, FatPtr.basic("Exception"))
-        check_flag = CheckFlagOp.make(leftval, static_type, right_type, parameterization, simplify)
+        parameterization = scope.get_parameterization(right_type) if isinstance(right_type, TypeParameter) else None
+
+        # This is so that Exception? doesn't get simplified to a nil-check I think
+        allow_simplify = not scope.subtype(right_type, FatPtr.basic("Exception"))
+
+        check_flag = CheckFlagOp.make(leftval, left_type, right_type, parameterization, allow_simplify)
         scope.region.last_block.add_op(check_flag)
         return check_flag.results[0]
+
+    def resolve_statically(self, left_type, right_type, scope):
+        result = 1 if scope.subtype(left_type, right_type) else 0
+        attr_dict = {"value": IntegerAttr.from_int_and_width(result, 1), "typ":IntegerType(1)}
+        const_op = LiteralOp.create(result_types=[Bool()], attributes=attr_dict)
+        scope.region.last_block.add_op(const_op)
+        return const_op.results[0]
 
     def ensure_rhs_simple(self):
         if isinstance(self.right, Union) or isinstance(self.right, Intersection):
             raise Exception(f"{self.info}: Cannot type-check {self.right} yet.")
+
+    def narrow_true(self, scope):
+        if not isinstance(self.left, Identifier): return None
+        if "@" in self.left.name: return None
+        old_typ = scope.type_table[self.left.name]
+        right_type = scope.simplify(self.right)
+        intersection = Intersection.from_list([right_type, old_typ])
+        new_typ = scope.simplify(intersection)
+
+        # special-cased for checking C functions which return null pointers
+        if isinstance(old_typ, Buffer) and right_type == Nil(): new_typ = Nil()
+
+        # Usually means a programmer error; might want to error out
+        if new_typ == Nothing():
+            debug_print(f'narrowed {old_typ} & {right_type} to nothing')
+            #if scope.subtype(right_type, old_typ):
+                #debug_print(f'{right_type} is a subtype of {old_typ}')
+            #else:
+                #debug_print(f'{right_type} is not a subtype of {old_typ}')
+                #debug_print(f'{right_type} ancestors: {scope.ancestors(right_type)}')
+                #debug_print(old_typ in scope.ancestors(right_type))
+        scope.type_table[self.left.name] = new_typ
+        return new_typ
+
+    def narrow_false(self, scope):
+        if not isinstance(self.left, Identifier): return None
+        if "@" in self.left.name: return None
+        old_typ = scope.type_table[self.left.name]
+        right_type = scope.simplify(self.right)
+        new_typ = right_type
+
+        # Pare off a branch of a union type with an "is not" check
+        if isinstance(old_typ, Union) and right_type in old_typ.types.data:
+            new_typ = scope.simplify(Union.from_list([t for t in old_typ.types.data if t != right_type]))
+
+        # special-cased for checking C functions which return null pointers
+        if isinstance(old_typ, Buffer) and right_type == Nil(): new_typ = Buffer()
+
+        scope.type_table[self.left.name] = new_typ
+        return new_typ
 
     def exprtype(self, scope):
         self.ensure_rhs_simple()
@@ -884,6 +931,21 @@ class TypeCheck(Expression):
 
     def typeflow(self, scope):
         self.exprtype(scope)
+
+@dataclass
+class NegatedTypeCheck(TypeCheck):
+
+    def codegen(self, scope):
+        # "x is not T" == "not x is T"
+        false = BoolLiteral(self.info, 0)
+        typecheck = TypeCheck(self.info, self.left, self.right)
+        return Comparison(self.info, false, "EQ", typecheck).codegen(scope)
+
+    def narrow_true(self, scope):
+        return super().narrow_false(scope)
+
+    def narrow_false(self, scope):
+        return super().narrow_true(scope)
 
 @dataclass
 class TupleToBuffer(Expression):
@@ -3218,64 +3280,71 @@ class CallAssignment(Assignment):
 class Branch(Statement):
     condition: Expression
 
-    def preallocate(self, scope, route_scopes):
-        lhs_is_identifier = isinstance(self.condition, TypeCheck) and isinstance(self.condition.left, Identifier) and "@" not in self.condition.left.name
-        # here, route_scopes[0] means the "if branch" or the "while body"
-        # route_scopes[1] is the "alternate" route (no-entry / else branch)
-        mutated_vars = {self.condition.left.name: route_scopes[0].type_table[self.condition.left.name]} if lhs_is_identifier else {}
-        for key in scope.symbol_table.keys():
-            union = scope.simplify(Union.from_list([route.type_table[key] for route in route_scopes]))
-            if union == scope.type_table[key]:
-                if not lhs_is_identifier: continue
-                if self.condition.left.name != key: continue
-            mutated_vars[key] = union
-            cast = CastOp.make(scope.symbol_table[key], scope.type_table[key], union)
-            scope.symbol_table[key] = cast.results[0]
-            scope.region.last_block.add_op(cast)
-        return mutated_vars
-
     def cast_mutated_vars(self, mutated_vars, branch_scope, scope):
         for key, value in mutated_vars.items():
             if "@" in key: continue
             local_type = branch_scope.type_table[key]
+            if local_type is Nothing(): continue
             local_var = branch_scope.symbol_table[key]
             cast = CastOp.make(local_var, local_type, value)
             assign = AssignOp.make(scope.symbol_table[key], cast.results[0], value)
             branch_scope.region.last_block.add_ops([cast, assign])
 
-    def narrow_dry(self, then_scope):
+    def narrow_types_true(self, scope):
         if not isinstance(self.condition, TypeCheck): return
-        if not isinstance(self.condition.left, Identifier): return
-        if "@" in self.condition.left.name: return
-        old_typ = then_scope.type_table[self.condition.left.name]
-        right_type = then_scope.simplify(self.condition.right)
-        intersection = Intersection.from_list([right_type, old_typ])
-        new_typ = then_scope.simplify(intersection)
-        if isinstance(old_typ, Buffer) and right_type == Nil(): new_typ = Nil()
-        if new_typ == Nothing():
-            debug_print(f'narrowed {old_typ} & {right_type} to nothing')
-            #if then_scope.subtype(right_type, old_typ):
-                #debug_print(f'{right_type} is a subtype of {old_typ}')
-            #else:
-                #debug_print(f'{right_type} is not a subtype of {old_typ}')
-                #debug_print(f'{right_type} ancestors: {then_scope.ancestors(right_type)}')
-                #debug_print(old_typ in then_scope.ancestors(right_type))
-        then_scope.type_table[self.condition.left.name] = new_typ
+        self.condition.narrow_true(scope)
 
-    def narrow(self, then_scope):
+    def narrow_types_false(self, scope):
+        if not isinstance(self.condition, TypeCheck): return
+        self.condition.narrow_false(scope)
+
+    def narrow_true(self, scope):
+        self.narrow(scope, True)
+
+    def narrow_false(self, scope):
+        self.narrow(scope, False)
+
+    def narrow(self, scope, true):
         if not isinstance(self.condition, TypeCheck): return
         if not isinstance(self.condition.left, Identifier): return
         if "@" in self.condition.left.name: return
-        scope = then_scope.parent
-        old_typ = then_scope.type_table[self.condition.left.name]
-        right_type = then_scope.simplify(self.condition.right)
-        intersection = Intersection.from_list([right_type, old_typ])
-        new_typ = scope.simplify(intersection)
-        if isinstance(old_typ, Buffer) and right_type == Nil(): new_typ = Nil()
-        cast = CastOp.make(scope.symbol_table[self.condition.left.name], old_typ, new_typ)
-        then_scope.region.first_block.add_op(cast)
-        then_scope.symbol_table[self.condition.left.name] = cast.results[0]
-        then_scope.type_table[self.condition.left.name] = new_typ
+        narrow_method = self.condition.narrow_true if true else self.condition.narrow_true
+        old_typ = scope.type_table[self.condition.left.name]
+        new_typ = narrow_method(scope)
+        cast = CastOp.make(scope.parent.symbol_table[self.condition.left.name], old_typ, new_typ)
+        scope.region.first_block.add_op(cast)
+        scope.symbol_table[self.condition.left.name] = cast.results[0]
+
+    def merge_scope_types(self, main_scope, branch_scopes):
+        mutated_vars = {}
+        for key, value in main_scope.type_table.items():
+            if "@" in key: continue
+            all_types = [scope.type_table[key] for scope in branch_scopes]
+            new_typ = main_scope.simplify(Union.from_list(all_types))
+            main_scope.type_table[key] = new_typ
+            mutated_vars[key] = new_typ
+        self.merge_scope_memregions(main_scope, branch_scopes)
+        return mutated_vars
+
+    def merge_scopes(self, main_scope, branch_scopes):
+        mutated_vars = {}
+        for key, value in main_scope.type_table.items():
+            if "@" in key: continue
+            all_types = [scope.type_table[key] for scope in branch_scopes]
+            new_typ = main_scope.simplify(Union.from_list(all_types))
+            if new_typ == value: continue
+            cast = CastOp.make(main_scope.symbol_table[key], value, new_typ)
+            main_scope.symbol_table[key] = cast.results[0]
+            main_scope.type_table[key] = new_typ
+            main_scope.region.last_block.add_op(cast)
+            mutated_vars[key] = new_typ
+        self.merge_scope_memregions(main_scope, branch_scopes)
+        return mutated_vars
+
+    def merge_scope_memregions(self, main_scope, branch_scopes):
+        for scope in branch_scopes:
+            main_scope.mem_regions.points_to_facts = main_scope.mem_regions.points_to_facts.union(scope.mem_regions.points_to_facts)
+            for k, v in scope.mem_regions.allocations.items(): main_scope.mem_regions.allocations[k] = v
 
 @dataclass
 class IfStatement(Branch):
@@ -3289,7 +3358,7 @@ class IfStatement(Branch):
         branch_blocks = [self.then_block] if (not self.else_block) else [self.then_block, self.else_block]
         
         branch_scopes = [Scope(scope) for block in branch_blocks]
-        self.narrow_dry(branch_scopes[0])
+        self.narrow_types_true(branch_scopes[0])
         if Nothing() in branch_scopes[0].type_table.values():
             debug_print("would be impossible to enter 'then' branch of if-statement")
             offender = next((k,v) for k,v in branch_scopes[0].type_table.items() if v == Nothing())
@@ -3300,9 +3369,9 @@ class IfStatement(Branch):
 
         # allocate and initialize variables whose types morph during the branching
         route_scopes = branch_scopes if self.else_block else [branch_scopes[0], scope]
-        mutated_vars = self.preallocate(scope, route_scopes)
+        mutated_vars = self.merge_scopes(scope, route_scopes)
         branch_scopes = [Scope(scope) for block in branch_blocks]
-        self.narrow(branch_scopes[0])
+        self.narrow_true(branch_scopes[0])
         for (b_scope, b_block) in zip(branch_scopes, branch_blocks): b_block.codegen(b_scope)
 
         # at end of branch, store variables to space allocated for them prior to branch
@@ -3310,19 +3379,22 @@ class IfStatement(Branch):
         
         branch_regions = [b_scope.region for b_scope in branch_scopes]
         if_op = IfOp.create(operands=[unwrap.results[0]], regions=branch_regions)
-        for b_scope in branch_scopes: scope.merge(b_scope)
         scope.region.last_block.add_op(if_op)
+        route_scopes = branch_scopes if self.else_block else [branch_scopes[0], scope]
+        self.merge_scopes(scope, route_scopes)
 
     def typeflow(self, scope):
         bool_condition = self.condition.typeflow(scope)
         branch_blocks = [self.then_block] if (not self.else_block) else [self.then_block, self.else_block]
+        
         branch_scopes = [Scope(scope) for block in branch_blocks]
-        self.narrow_dry(branch_scopes[0])
+        self.narrow_types_true(branch_scopes[0])
         for (b_block, b_scope) in zip(branch_blocks, branch_scopes): b_block.typeflow(b_scope)
-        branch_scopes = [Scope(scope) for block in branch_blocks]
-        self.narrow_dry(branch_scopes[0])
-        for (b_scope, b_block) in zip(branch_scopes, branch_blocks): b_block.typeflow(b_scope)
-        for b_scope in branch_scopes: scope.merge(b_scope)
+
+        #if isinstance(self.condition, TypeCheck): self.condition.narrow_false(branch_scopes[1])
+
+        route_scopes = branch_scopes if self.else_block else [branch_scopes[0], scope]
+        self.merge_scope_types(scope, route_scopes)
 
 @dataclass
 class WhileStatement(Branch):
@@ -3334,16 +3406,16 @@ class WhileStatement(Branch):
         if self.preheader: self.preheader.typeflow(condition_scope)
         self.condition.typeflow(condition_scope)
         body_scope = Scope(condition_scope, wile=condition_scope.region.last_block)
-        self.narrow_dry(body_scope)
+        self.narrow_types_true(body_scope)
         if Nothing() in body_scope.type_table.values(): return
         self.body.typeflow(body_scope)
         route_scopes = [body_scope, scope]
-        mutated_vars = self.preallocate(scope, route_scopes)
-        scope.merge(body_scope)
+        mutated_vars = self.merge_scopes(scope, route_scopes)
+        self.merge_scope_types(scope, [body_scope, scope])
         condition_scope = Scope(scope)
         if self.preheader: self.preheader.codegen(condition_scope)
         body_scope = Scope(condition_scope, wile=condition_scope.region.last_block)
-        self.narrow(body_scope)
+        self.narrow_true(body_scope)
         boolean = self.condition.codegen(condition_scope)
         unwrap = UnwrapOp.create(operands=[boolean], result_types=[IntegerType(1)])
         condition_scope.region.last_block.add_op(unwrap)
@@ -3353,24 +3425,24 @@ class WhileStatement(Branch):
 
         regions = [condition_scope.region, body_scope.region]
         while_op = WhileOp.create(regions=regions)
-        scope.merge(body_scope)
         scope.region.last_block.add_op(while_op)
+        self.merge_scopes(scope, [body_scope, scope])
 
     def typeflow(self, scope):
         condition_scope = Scope(scope)
         if self.preheader: self.preheader.typeflow(condition_scope)
         self.condition.typeflow(condition_scope)
         body_scope = Scope(condition_scope, wile=condition_scope.region.last_block)
-        self.narrow_dry(body_scope)
+        self.narrow_types_true(body_scope)
         self.body.typeflow(body_scope)
-        scope.merge(body_scope)
+        self.merge_scope_types(scope, [body_scope, scope])
         if self.preheader: self.preheader.typeflow(scope)
         condition_scope = Scope(scope)
         self.condition.typeflow(condition_scope)
         body_scope = Scope(condition_scope, wile=condition_scope.region.last_block)
-        self.narrow_dry(body_scope)
+        self.narrow_types_true(body_scope)
         self.body.typeflow(body_scope)
-        scope.merge(body_scope)
+        self.merge_scope_types(scope, [body_scope, scope])
 
 @dataclass
 class For(Statement):
@@ -3438,12 +3510,22 @@ class Return(Statement):
         ret_op = ReturnOp.create()
         scope.region.last_block.add_op(ret_op)
 
+    def untype_variables(self, scope):
+        # early returns in control-flow branches should affect type inference
+        for key in scope.type_table.keys():
+            if "@" not in key: scope.type_table[key] = Nothing()
+
+        # x : i32 | Nil;
+        # if x is Nil { return nil; }
+        # now typeof(x) should be (i32 | Nothing) == i32
+
     def typeflow(self, scope):
         if(not scope.method):
             raise Exception(f"{self.info}: can only have return statements in functions")
         if(scope.method.definition.return_type()):
             raise Exception(f"{self.info}: function declares a return type but returns no values")
         scope.method.definition.hasreturn = True
+        self.untype_variables(scope)
 
 @dataclass
 class ReturnValue(Return):
@@ -3469,6 +3551,7 @@ class ReturnValue(Return):
             raise Exception(f"{self.info}: returned value of invalid type: {ret_typ}. Should be subtype of {scope.method.return_type()}.")
         scope.mem_regions.points_to_facts.add(("ret", "==", self.value.info.id))
         scope.method.definition.hasreturn = True
+        self.untype_variables(scope)
 
 @dataclass
 class CoCreate(Expression):

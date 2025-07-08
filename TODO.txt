@@ -452,7 +452,7 @@ DONE:
 
 TODO:
 
-- Modifying while lowering was not correct
+- Modifying 'while' lowering was not correct
 	- Break and continue will not jump to the right block
 
 - Things we could work on right now
@@ -460,25 +460,47 @@ TODO:
 	- Reforming flow analysis
 	- Closures
 
-- Add "is not" operator
+- super() may be useful for polymorphism in the AST
 
 - Flow analysis
 	- Each control flow stmt (if, while) can maintain a cache mapping in/out type tables
 	- In will be union of all incomings (previous block, continue)
 	- Out will be union of all outgoings (end of block, break)
-	- Early return should set all types to Nothing
+	- Early return should set all variables (except for fields) to Nothing
+		- Make sure doesn't screw up mutated_vars
 	- What about cast-assign?
 		- On break and continue
 		- Store pre_exit ops in node
 			- block.insert_after
+	- "narrow alternate branches"
+		- Setting types to nothning after return
+		- Somehow doing the narrow_false in the "alternate" branch
+			- Complicated when the alternate is the original scope
+			- What if there were an implicit empty else branch
+	- Move merge_scopes from Scope to Branch [check!]
+	- Split out merge_scope_types [check!]
+
+- Flow analysis problems:
+	- Nested loops take WAY too long to type check
+		- It's exponential time complexity
+		- Need to cache results of typeflow for each loop
+	- We do not properly account for break/continue in typeflow
+		- We should probably move to a cfg
+		- What if I did something ad hoc
+		- Store all "exits" from the loop
+		- For each exit, store the type and symbol tables
+		- After the branch, union all the exits
+		- This is a little over-conservative (breaks can't go back to the start of the loop)
+		- What about cast-assigning before breaks/continue's?
 
 - @current_coroutine will break if two coroutines call each other
 	- We should instead maintain a stack of coroutines
 
 - Array[i32 | f64] is not working correctly
+	- A small union (128 bits) which is stored inside of its fatptr
 
 - Check if a method's definition has different param base types than its behavior
-	- ['a','b','c'].filter((x : Character) => { true; }) into String
+	- ['a','b','c'].filter( ... ) into String
 	- Will invoke List.extend(iterable) whose signature will mismatch the behavior
 
 - You could probably see what's going wrong with O0 by seeing the asm for passing a fatptr vs type-param
@@ -524,15 +546,30 @@ TODO:
 			- What is encapsulated is static (symbol visibility) vs dynamic (data accessibility)
 
 - Formatted string literals
-	- Blocked on conforming builtin types to interfaces like Representable
-	- Is it actually? Can't you just special-case builtins?
-	- Yeah just use snprintf or something
+	- Just special-case .repr for builtins
+	- You can use s(n)printf or something
+		- Blocked on variadic extern defs
+	- Or you can implement a builtin format() like the builtin print()
+		- Is it a good idea to go further down that road?
+		- No, probably not
+
+- Should probably unify ExterndDef and FunctionDef (and FunctionLiteral) logic
+	- Should probably make them responsible for determining applicability
+		- So that extern defs can handle variadicity
+	- Currently calls can have more arguments than the function has parameters
+		- Which should not be the case
 
 - Dictionary literals
 	- Need to choose a default implementation
+		- LinearProbe works
+	- Adding to stdlib will balloon compilation times :(
+		- So for now, blocked on improving typeflow / codegen speed
 
 - Deduplicate behaviors
 	- If all methods in the behavior are inherited from the same class, reuse that behavior
+	- I believe behaviors encode absolute vtable offsets so this would not work out of the box
+	- Would have to add the fatptr offset within the behavior before loading the method fptr
+
 - I really want type narrowing in alternative branches
 	- And 'is not' syntax (if x is not Nil)
 	- And narrowing within logical and/or ops (if x is T and y is U { ... } )
@@ -544,19 +581,6 @@ TODO:
 	- Idea: casting between these works seamlessly, unlike tuples
 	- Their allocated size is dynamic
 	- Blocker: Indexing would need to run specialized code to calculate the offset
-
-- Flow analysis problems:
-	- Nested loops take WAY too long to type check
-		- It's exponential time complexity
-		- Need to cache results of typeflow for each loop
-	- We do not properly account for break/continue in typeflow
-		- We should probably move to a cfg
-		- What if I did something ad hoc
-		- Store all "exits" from the loop
-		- For each exit, store the type and symbol tables
-		- After the branch, union all the exits
-		- This is a little over-conservative (breaks can't go back to the start of the loop)
-		- What about cast-assigning before breaks/continue's?
 
 - Snprintf can convert things to string representations
 - I should be able to declare variadic extern defs
@@ -689,6 +713,10 @@ TODO:
 		- Then make sure subtypes precede their supertypes [check!]
 	- Add 'of' syntax for array literals [check!]
 	- Add T? syntax for T | Nil [check!]
+	- Add "is not" operator [check!]
+		- Modify TypeCheck and Branch [check!]
+		- Should TypeCheck have a .narrow_type(scope) method? [check!]
+		- NegatedTypeCheck class [check!]
 	- Does just adding dependencies to the path work?
 		- The source_dirs collection should be ordered, not a set [check!]
 		- Add the dependency folder to an env variable named for the package

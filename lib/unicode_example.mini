@@ -11,6 +11,10 @@ IO.print(['a', 'b', 'c', 'd'] into String);
 
 nilable : String? = nil;
 
+if nilable is not String {
+	IO.print(nilable);
+}
+
 ary = [] of i32 | f64;
 ary.append(1);
 ary.append(2.0);

@@ -28,7 +28,7 @@ type_bound: ident "<:" typ
 
 ident_list: ident ("," ident)*
 
-extern_def: ["#["constraint_list"]"] "extern" DEF ident "(" param_list ")" ["->" typ] ["yields" typ]
+extern_def: ["#["constraint_list"]"] "extern" DEF ident "(" param_list ["," ELIPSIS] ")" ["->" typ] ["yields" typ]
 function_def: ["#["constraint_list"]"] DEF ident "(" param_list ")" ["->" typ] ["yields" typ] block
 abstract: "abstract"
 method_def: ["#["constraint_list"]"] [abstract] DEF method_name ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
@@ -103,7 +103,8 @@ comparison: arithmetic -> comparison_single
           | comparison GE arithmetic
           | comparison "..." arithmetic -> inclusive_range_literal
           | comparison ".." arithmetic -> exclusive_range_literal
-          | comparison "is" typ -> type_check
+          | comparison IS typ -> is_check
+          | comparison IS NOT typ -> isnot_check
 
 arithmetic: term -> arithmetic_single
           | arithmetic PLUS term
@@ -179,6 +180,7 @@ GE: ">="
 LT: "<"
 GT: ">"
 AS: "as"
+IS: "is"
 INTO: "into"
 NOT: "not"
 OR: "or"

@@ -510,12 +510,6 @@ class Scope:
         other_first_block.erase()
         other.region.erase()
 
-    def merge(self, other: "Scope"):
-        for key, value in self.type_table.items():
-            self.type_table[key] = self.simplify(Union.from_list([self.type_table[key], other.type_table[key]]))
-        self.mem_regions.points_to_facts = self.mem_regions.points_to_facts.union(other.mem_regions.points_to_facts)
-        for k, v in other.mem_regions.allocations.items(): self.mem_regions.allocations[k] = v
-
     def offset_to(self, from_typ, to_typ):
         if from_typ in builtin_types.values() or to_typ in builtin_types.values(): return 0
         if isinstance(from_typ, FatPtr) and isinstance(to_typ, FatPtr): return self.classes[from_typ.cls.data].offset_to(to_typ.cls.data)

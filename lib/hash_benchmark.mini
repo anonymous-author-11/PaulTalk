@@ -10,7 +10,10 @@ extern def clock() -> i64
 class PRNG {
     @seed: i32
     def init(initial_seed: i32) {
-        if initial_seed <= 0 { @seed = 1; return; }
+        if initial_seed <= 0 {
+            @seed = 1;
+            return;
+        }
         @seed = initial_seed bit_and 0x7FFFFFFF;
     }
     def next() -> i32 {

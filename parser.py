@@ -86,7 +86,7 @@ class CSTTransformer(Transformer):
     def statement(self, stmt):
         return stmt
 
-    def extern_def(self, constraints, deff, name, params, return_type, yield_type):
+    def extern_def(self, constraints, deff, name, params, elipsis, return_type, yield_type):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         node_info = NodeInfo(None, self.file_path, line_number(name))
         return ExternDef(node_info, name.value, constraints or [], params or [], len(params or []), return_type, yield_type or exception_or_nil)
@@ -356,9 +356,13 @@ class CSTTransformer(Transformer):
         node_info = NodeInfo(None, self.file_path, line_number(op))
         return Logical(node_info, left, op.value, right)
 
-    def type_check(self, lhs, typ):
+    def is_check(self, lhs, op, typ):
         node_info = NodeInfo(None, self.file_path, lhs.info.line_number)
         return TypeCheck(node_info, lhs, typ)
+
+    def isnot_check(self, lhs, op, neg, typ):
+        node_info = NodeInfo(None, self.file_path, lhs.info.line_number)
+        return NegatedTypeCheck(node_info, lhs, typ)
 
     def term_single(self, cast):
         return cast

@@ -245,7 +245,7 @@ def grabo() {
 ary = [1,2,3,4];
 ary.extend([5,6,7,8,9,10]);
 IO.print(ary.[7]);
-empty = [];
+empty = [] of i32;
 empty.extend([8,7,6,5]);
 IO.print(empty.[3]);
 grabo();
