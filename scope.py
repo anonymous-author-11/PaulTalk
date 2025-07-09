@@ -354,11 +354,11 @@ class TypeEnvironment:
             simplified = {self.simplify(t) for t in typ.types.data} # recursive call
             simplified = {t for t in simplified if not isinstance(t, Nothing)} # remove Nothing types
             simplified = {t1 for t1 in simplified if not any(self.subtype(t2, t1) and (not self.subtype(t1, t2)) for t2 in simplified)}
-            builtins = [t for t in simplified if is_builtin(t) and t != Any()]
-            if len(builtins) == 1: return builtins[0]
-            if all(is_primitive(t) for t in simplified): # if all types in the intersection are primitive (not union or intersection)
+            
+            if all(is_non_algebraic(t) for t in simplified): # if all types in the intersection are non-algebraic (not union or intersection)
                 if len(list(simplified)) == 1: return list(simplified)[0] # an intersection of one type is just that type
                 return Nothing() # an intersection of disjoint types is Nothing
+
             unions = [t.types.data if isinstance(t, Union) else [t] for t in simplified]
             distributed = {Intersection.from_list(list(prod)) for prod in product(*unions)} # distribute intersections across unions
             flattened = {item for d in distributed for item in (d.types.data if len(d.types.data) == 1 else [d])}

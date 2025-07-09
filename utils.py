@@ -84,6 +84,6 @@ builtin_types = {
     "buffer_typ":Buffer([Nothing()]), "tuple_typ":Tuple([ArrayAttr([])]), "union_typ":Union.from_list([IntegerType(8)])
 }
 
-# Determine if a type is primitive
-def is_primitive(typ: TypeAttribute) -> bool:
+# Determine if a type is not an algebraic data type
+def is_non_algebraic(typ: TypeAttribute) -> bool:
     return ((not isinstance(typ, Union)) and (not isinstance(typ, Intersection)))

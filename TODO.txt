@@ -462,23 +462,31 @@ TODO:
 
 - super() may be useful for polymorphism in the AST
 
+- Here's the issue
+	- If you have nested control flow
+	- It will do the initial scope_merge for the inner before the outer
+	- Which will be the wrong order
+
 - Flow analysis
 	- Each control flow stmt (if, while) can maintain a cache mapping in/out type tables
 	- In will be union of all incomings (previous block, continue)
 	- Out will be union of all outgoings (end of block, break)
-	- Early return should set all variables (except for fields) to Nothing
-		- Make sure doesn't screw up mutated_vars
+	- Early return should set all variables (except for fields) to Nothing [check!]
+		- Make sure doesn't screw up mutated_vars [check!]
 	- What about cast-assign?
 		- On break and continue
 		- Store pre_exit ops in node
 			- block.insert_after
 	- "narrow alternate branches"
-		- Setting types to nothning after return
+		- Setting types to Nothing after return [check!]
 		- Somehow doing the narrow_false in the "alternate" branch
 			- Complicated when the alternate is the original scope
 			- What if there were an implicit empty else branch
-	- Move merge_scopes from Scope to Branch [check!]
-	- Split out merge_scope_types [check!]
+	- Reform Scope.merge [check!]
+		- Move from Scope.merge to Branch.merge_scopes [check!]
+		- Split out merge_scope_types [check!]
+		- Remove Branch.preallocate [check!]
+	- Break and continue should also set all variables to Nothing
 
 - Flow analysis problems:
 	- Nested loops take WAY too long to type check

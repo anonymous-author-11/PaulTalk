@@ -895,7 +895,7 @@ class TypeCheck(Expression):
 
         # Usually means a programmer error; might want to error out
         if new_typ == Nothing():
-            debug_print(f'narrowed {old_typ} & {right_type} to nothing')
+            debug_print(f'{self.info}: narrowed {old_typ} & {right_type} to Nothing')
             #if scope.subtype(right_type, old_typ):
                 #debug_print(f'{right_type} is a subtype of {old_typ}')
             #else:
@@ -903,6 +903,7 @@ class TypeCheck(Expression):
                 #debug_print(f'{right_type} ancestors: {scope.ancestors(right_type)}')
                 #debug_print(old_typ in scope.ancestors(right_type))
         scope.type_table[self.left.name] = new_typ
+        print(f"narrowed {self.left.name} from {old_typ} to {new_typ} in true branch")
         return new_typ
 
     def narrow_false(self, scope):
@@ -910,7 +911,7 @@ class TypeCheck(Expression):
         if "@" in self.left.name: return None
         old_typ = scope.type_table[self.left.name]
         right_type = scope.simplify(self.right)
-        new_typ = right_type
+        new_typ = old_typ
 
         # Pare off a branch of a union type with an "is not" check
         if isinstance(old_typ, Union) and right_type in old_typ.types.data:
@@ -920,6 +921,7 @@ class TypeCheck(Expression):
         if isinstance(old_typ, Buffer) and right_type == Nil(): new_typ = Buffer()
 
         scope.type_table[self.left.name] = new_typ
+        print(f"narrowed {self.left.name} from {old_typ} to {new_typ} in false branch")
         return new_typ
 
     def exprtype(self, scope):
@@ -3308,7 +3310,7 @@ class Branch(Statement):
         if not isinstance(self.condition, TypeCheck): return
         if not isinstance(self.condition.left, Identifier): return
         if "@" in self.condition.left.name: return
-        narrow_method = self.condition.narrow_true if true else self.condition.narrow_true
+        narrow_method = self.condition.narrow_true if true else self.condition.narrow_false
         old_typ = scope.type_table[self.condition.left.name]
         new_typ = narrow_method(scope)
         cast = CastOp.make(scope.parent.symbol_table[self.condition.left.name], old_typ, new_typ)
@@ -3321,6 +3323,7 @@ class Branch(Statement):
             if "@" in key: continue
             all_types = [scope.type_table[key] for scope in branch_scopes]
             new_typ = main_scope.simplify(Union.from_list(all_types))
+            print(f"{self.info}: merged {key} from {all_types} to {new_typ}")
             main_scope.type_table[key] = new_typ
             mutated_vars[key] = new_typ
         self.merge_scope_memregions(main_scope, branch_scopes)
@@ -3332,6 +3335,7 @@ class Branch(Statement):
             if "@" in key: continue
             all_types = [scope.type_table[key] for scope in branch_scopes]
             new_typ = main_scope.simplify(Union.from_list(all_types))
+            print(f"{self.info}: merged {key} from {all_types} to {new_typ}")
             if new_typ == value: continue
             cast = CastOp.make(main_scope.symbol_table[key], value, new_typ)
             main_scope.symbol_table[key] = cast.results[0]
@@ -3358,20 +3362,32 @@ class IfStatement(Branch):
         branch_blocks = [self.then_block] if (not self.else_block) else [self.then_block, self.else_block]
         
         branch_scopes = [Scope(scope) for block in branch_blocks]
+        alternate_scope = branch_scopes[1] if self.else_block else Scope(scope)
+        route_scopes = [branch_scopes[0], alternate_scope, scope]
+
         self.narrow_types_true(branch_scopes[0])
+        self.narrow_types_false(alternate_scope)
+
         if Nothing() in branch_scopes[0].type_table.values():
-            debug_print("would be impossible to enter 'then' branch of if-statement")
             offender = next((k,v) for k,v in branch_scopes[0].type_table.items() if v == Nothing())
             debug_print(offender[0])
             debug_print(offender[1])
+            raise Exception(f"{self.info}: would be impossible to enter 'then' branch of if-statement")
             return
+
         for (b_block, b_scope) in zip(branch_blocks, branch_scopes): b_block.typeflow(b_scope)
 
         # allocate and initialize variables whose types morph during the branching
-        route_scopes = branch_scopes if self.else_block else [branch_scopes[0], scope]
+        
         mutated_vars = self.merge_scopes(scope, route_scopes)
+
         branch_scopes = [Scope(scope) for block in branch_blocks]
+        alternate_scope = branch_scopes[1] if self.else_block else Scope(scope)
+        route_scopes = [branch_scopes[0], alternate_scope]
+
         self.narrow_true(branch_scopes[0])
+        self.narrow_false(alternate_scope)
+
         for (b_scope, b_block) in zip(branch_scopes, branch_blocks): b_block.codegen(b_scope)
 
         # at end of branch, store variables to space allocated for them prior to branch
@@ -3380,7 +3396,6 @@ class IfStatement(Branch):
         branch_regions = [b_scope.region for b_scope in branch_scopes]
         if_op = IfOp.create(operands=[unwrap.results[0]], regions=branch_regions)
         scope.region.last_block.add_op(if_op)
-        route_scopes = branch_scopes if self.else_block else [branch_scopes[0], scope]
         self.merge_scopes(scope, route_scopes)
 
     def typeflow(self, scope):
@@ -3388,12 +3403,23 @@ class IfStatement(Branch):
         branch_blocks = [self.then_block] if (not self.else_block) else [self.then_block, self.else_block]
         
         branch_scopes = [Scope(scope) for block in branch_blocks]
+        alternate_scope = branch_scopes[1] if self.else_block else Scope(scope)
+        route_scopes = [branch_scopes[0], alternate_scope]
+
         self.narrow_types_true(branch_scopes[0])
+        self.narrow_types_false(alternate_scope)
+
+        if Nothing() in branch_scopes[0].type_table.values():
+            offender = next((k,v) for k,v in branch_scopes[0].type_table.items() if v == Nothing())
+            debug_print(offender[0])
+            debug_print(offender[1])
+            raise Exception(f"{self.info}: would be impossible to enter 'then' branch of if-statement")
+            return
+
         for (b_block, b_scope) in zip(branch_blocks, branch_scopes): b_block.typeflow(b_scope)
 
         #if isinstance(self.condition, TypeCheck): self.condition.narrow_false(branch_scopes[1])
 
-        route_scopes = branch_scopes if self.else_block else [branch_scopes[0], scope]
         self.merge_scope_types(scope, route_scopes)
 
 @dataclass
@@ -3407,7 +3433,8 @@ class WhileStatement(Branch):
         self.condition.typeflow(condition_scope)
         body_scope = Scope(condition_scope, wile=condition_scope.region.last_block)
         self.narrow_types_true(body_scope)
-        if Nothing() in body_scope.type_table.values(): return
+        if Nothing() in body_scope.type_table.values(): 
+            raise Exception(f"{self.info}: this should not happen!")
         self.body.typeflow(body_scope)
         route_scopes = [body_scope, scope]
         mutated_vars = self.merge_scopes(scope, route_scopes)
@@ -3509,6 +3536,7 @@ class Return(Statement):
     def codegen(self, scope):
         ret_op = ReturnOp.create()
         scope.region.last_block.add_op(ret_op)
+        self.untype_variables(scope)
 
     def untype_variables(self, scope):
         # early returns in control-flow branches should affect type inference
@@ -3537,6 +3565,7 @@ class ReturnValue(Return):
         cast = CastOp.make(self.value.codegen(scope), retval_typ, broad_return_type)
         ret_op = ReturnOp.create(operands=[cast.results[0]])
         scope.region.last_block.add_ops([cast, ret_op])
+        self.untype_variables(scope)
 
     def typeflow(self, scope):
         if not scope.method:

@@ -63,20 +63,18 @@ class RobinHoodMap[K, V] extends OpenAddressMap[K, V] {
                 return;
             }
 
-            if existing_entry is Entry[K, V] {
-                if existing_entry.hash() == hash and @eq.call(existing_entry.key(), key) {
-                    @entries.[current_index] = entry_to_insert;
-                    return;
-                }
+            if existing_entry.hash() == hash and @eq.call(existing_entry.key(), key) {
+                @entries.[current_index] = entry_to_insert;
+                return;
+            }
 
-                existing_distance = self.probe_distance(existing_entry.hash(), current_index);
+            existing_distance = self.probe_distance(existing_entry.hash(), current_index);
 
-                if distance_to_insert > existing_distance {
-                    temp = entry_to_insert;
-                    entry_to_insert = existing_entry;
-                    @entries.[current_index] = temp;
-                    distance_to_insert = existing_distance;
-                }
+            if distance_to_insert > existing_distance {
+                temp = entry_to_insert;
+                entry_to_insert = existing_entry;
+                @entries.[current_index] = temp;
+                distance_to_insert = existing_distance;
             }
 
             distance_to_insert = distance_to_insert + 1;
@@ -128,7 +126,7 @@ class RobinHoodMap[K, V] extends OpenAddressMap[K, V] {
             if entry_at_slot.hash() != hash or not @eq.call(entry_at_slot.key(), key) {
                 return nil; // Key not found.
             }
-        } else { return nil; }
+        }
 
         current_empty_index = index_to_remove;
         while true {
