@@ -475,8 +475,10 @@ TODO:
 		- Make sure doesn't screw up mutated_vars [check!]
 	- What about cast-assign?
 		- On break and continue
-		- Store pre_exit ops in node
+		- Store pre_exit ops
 			- block.insert_after
+			- Do NOT store in the AST node
+			- Store in the body_scope
 	- "narrow alternate branches"
 		- Setting types to Nothing after return [check!]
 		- Somehow doing the narrow_false in the "alternate" branch
@@ -487,6 +489,10 @@ TODO:
 		- Split out merge_scope_types [check!]
 		- Remove Branch.preallocate [check!]
 	- Break and continue should also set all variables to Nothing
+		- And store a snapshot of the type table before doing so [check!]
+
+- I don't think cast_mutated_vars is correct at all
+	- Perhaps instead we should check whether the symbol_table value is the same
 
 - Flow analysis problems:
 	- Nested loops take WAY too long to type check

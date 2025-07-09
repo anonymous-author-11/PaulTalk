@@ -459,6 +459,7 @@ class Scope:
     symbol_table: dict
     type_table: dict
     parameterization_cache: dict
+    exit_ops: list
 
     def __init__(self, parent=None, cls=None, behavior=None, method=None, wile=None):
         self.region = Region([Block([])])
@@ -474,6 +475,7 @@ class Scope:
         self.method = parent.method if (parent and parent.method and not method) else method
         self.behavior = parent.behavior if (parent and parent.behavior and not behavior) else behavior
         self.wile = parent.wile if (parent and parent.wile and not wile) else wile
+        self.exit_ops = parent.exit_ops if (parent and parent.wile and not wile) else []
         self.parent = parent
 
     @property

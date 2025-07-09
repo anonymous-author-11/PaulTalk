@@ -23,20 +23,19 @@ class RobinHoodMap[K, V] extends OpenAddressMap[K, V] {
             existing_entry = @entries.[current_index];
 
             if existing_entry is Nil { return current_index; }
+            
 
-            if existing_entry is Entry[K, V] {
-                // If the current search is "poorer" than the entry in the slot,
-                // the key we're looking for cannot be in the table.
-                existing_distance = self.probe_distance(existing_entry.hash(), current_index);
-                if distance_of_seeker > existing_distance {
-                    return current_index; // Key not found.
-                }
+            // If the current search is "poorer" than the entry in the slot,
+            // the key we're looking for cannot be in the table.
+            existing_distance = self.probe_distance(existing_entry.hash(), current_index);
+            if distance_of_seeker > existing_distance {
+                return current_index; // Key not found.
+            }
 
-                // Found a potential match, check for equality.
-                if existing_entry.hash() == hash and @eq.call(existing_entry.key(), key) {
-                    // Ensure it's not a tombstone from a misbehaving parent method.
-                    return current_index;
-                }
+            // Found a potential match, check for equality.
+            if existing_entry.hash() == hash and @eq.call(existing_entry.key(), key) {
+                // Ensure it's not a tombstone from a misbehaving parent method.
+                return current_index;
             }
 
             distance_of_seeker = distance_of_seeker + 1;
@@ -99,8 +98,7 @@ class RobinHoodMap[K, V] extends OpenAddressMap[K, V] {
         @size = 0;
         @load = 0;
 
-        i = 0;
-        while i < old_len {
+        for i in 0..old_len {
             entry = old_entries.[i];
             if entry is Entry[K,V] {
                 val = entry.value();
@@ -109,7 +107,6 @@ class RobinHoodMap[K, V] extends OpenAddressMap[K, V] {
                     self.insert_core(entry.key(), val, entry.hash());
                 }
             }
-            i = i + 1;
         }
     }
 
@@ -122,12 +119,10 @@ class RobinHoodMap[K, V] extends OpenAddressMap[K, V] {
         entry_at_slot = @entries.[index_to_remove];
 
         if entry_at_slot is Nil { return nil; }
-        if entry_at_slot is Entry[K, V] {
-            if entry_at_slot.hash() != hash or not @eq.call(entry_at_slot.key(), key) {
-                return nil; // Key not found.
-            }
+        if entry_at_slot.hash() != hash or not @eq.call(entry_at_slot.key(), key) {
+            return nil; // Key not found.
         }
-
+        
         current_empty_index = index_to_remove;
         while true {
             next_index = (current_empty_index + 1) bit_and mask;
@@ -147,9 +142,7 @@ class RobinHoodMap[K, V] extends OpenAddressMap[K, V] {
         @size = @size - 1;
         @load = @load - 1;
 
-        if entry_at_slot is Entry[K, V] {
-            value_to_return = entry_at_slot.value();
-            if value_to_return is V { return value_to_return; }
-        }
+        value_to_return = entry_at_slot.value();
+        if value_to_return is V { return value_to_return; }
     }
 }

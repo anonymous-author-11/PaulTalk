@@ -3282,6 +3282,18 @@ class CallAssignment(Assignment):
 class Branch(Statement):
     condition: Expression
 
+    def cast_mutated_new(self, scope, insert_after, type_table, symbol_table):
+        for key, old_var in scope.symbol_table.items():
+            if "@" in key: continue
+            local_var = symbol_table[key]
+            if local_var == old_var: continue
+            local_type = type_table[key]
+            if local_type is Nothing(): continue
+            old_type = scope.type_table[key]
+            cast = CastOp.make(local_var, local_type, old_type)
+            assign = AssignOp.make(old_var, cast.results[0], old_type)
+            insert_after.parent.insert_ops_after([cast, assign], insert_after)
+
     def cast_mutated_vars(self, mutated_vars, branch_scope, scope):
         for key, value in mutated_vars.items():
             if "@" in key: continue
@@ -3323,7 +3335,7 @@ class Branch(Statement):
             if "@" in key: continue
             all_types = [scope.type_table[key] for scope in branch_scopes]
             new_typ = main_scope.simplify(Union.from_list(all_types))
-            print(f"{self.info}: merged {key} from {all_types} to {new_typ}")
+            #print(f"{self.info}: merged {key} from {all_types} to {new_typ}")
             main_scope.type_table[key] = new_typ
             mutated_vars[key] = new_typ
         self.merge_scope_memregions(main_scope, branch_scopes)
@@ -3335,7 +3347,7 @@ class Branch(Statement):
             if "@" in key: continue
             all_types = [scope.type_table[key] for scope in branch_scopes]
             new_typ = main_scope.simplify(Union.from_list(all_types))
-            print(f"{self.info}: merged {key} from {all_types} to {new_typ}")
+            #print(f"{self.info}: merged {key} from {all_types} to {new_typ}")
             if new_typ == value: continue
             cast = CastOp.make(main_scope.symbol_table[key], value, new_typ)
             main_scope.symbol_table[key] = cast.results[0]
@@ -3391,7 +3403,8 @@ class IfStatement(Branch):
         for (b_scope, b_block) in zip(branch_scopes, branch_blocks): b_block.codegen(b_scope)
 
         # at end of branch, store variables to space allocated for them prior to branch
-        for b_scope in branch_scopes: self.cast_mutated_vars(mutated_vars, b_scope, scope)
+        for b_scope in branch_scopes:
+            self.cast_mutated_new(scope, b_scope.region.last_block.last_op, b_scope.type_table, b_scope.symbol_table)
         
         branch_regions = [b_scope.region for b_scope in branch_scopes]
         if_op = IfOp.create(operands=[unwrap.results[0]], regions=branch_regions)
@@ -3426,6 +3439,16 @@ class IfStatement(Branch):
 class WhileStatement(Branch):
     preheader: Statement
     body: BlockNode
+    breaks: set
+    continues: set
+
+    def __init__(self, info, condition, preheader, body):
+        self.info = info
+        self.condition = condition
+        self.preheader = preheader
+        self.body= body
+        self.breaks = set()
+        self.continues = set()
 
     def codegen(self, scope):
         condition_scope = Scope(scope)
@@ -3448,7 +3471,7 @@ class WhileStatement(Branch):
         condition_scope.region.last_block.add_op(unwrap)
         self.body.codegen(body_scope)
 
-        self.cast_mutated_vars(mutated_vars, body_scope, condition_scope)
+        self.cast_mutated_new(condition_scope, body_scope.region.last_block.last_op, body_scope.type_table, body_scope.symbol_table)
 
         regions = [condition_scope.region, body_scope.region]
         while_op = WhileOp.create(regions=regions)
@@ -3662,23 +3685,39 @@ class CoYield(Expression):
 
 @dataclass
 class Break(Statement):
+    type_snapshot: dict
+
+    def __init__(self, info):
+        self.info = info
+        self.type_snapshot = None
 
     def codegen(self, scope):
         br = BreakOp.create(successors=[scope.wile])
         scope.region.last_block.add_op(br)
+        scope.exit_ops.append(br)
 
     def typeflow(self, scope):
         if not scope.wile: raise Exception(f"{self.info}: Can't break when not in loop")
+        self.type_snapshot = scope.type_table.copy()
+        #scope.wile.breaks.add(self)
 
 @dataclass
 class Continue(Statement):
+    type_snapshot: dict
+
+    def __init__(self, info):
+        self.info = info
+        self.type_snapshot = None
 
     def codegen(self, scope):
         cont = ContinueOp.create(successors=[scope.wile])
         scope.region.last_block.add_op(cont)
+        scope.exit_ops.append(br)
 
     def typeflow(self, scope):
         if not scope.wile: raise Exception(f"{self.info}: Can't continue when not in loop")
+        self.type_snapshot = scope.type_table.copy()
+        #scope.wile.continues.add(self)
 
 @dataclass
 class CreateBuffer(Expression):

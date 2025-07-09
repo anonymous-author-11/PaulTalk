@@ -1,0 +1,125 @@
+
+class DataFrame {
+	@columns : Array[Column]
+	@n_rows : i32
+
+	def Self.from_bytes_lossy(bytes : Iterable[i8]) -> Self {
+		// decode from raw bytes or whatever
+	}
+	def Self.from_bytes(bytes : Iterable[i8]) -> Self yields DecodingError {
+		// decode from raw bytes or whatever
+	}
+	def Self.from_file(file : File) -> Self {
+		// read from file
+	}
+	def Self.from_file(file_name : String) -> Self {
+		// read from file
+	}
+
+	def cols() -> Collection[Column] {
+		return @columns;
+	}
+
+	def rows(start_row : i32, end_row : i32) -> Rows {
+		return Rows{self, start_row, end_row};
+	}
+
+	def get_col(name : String) -> Column | Nil {
+		for col in @columns {
+			if col.name() == name { return col; }
+		}
+		return nil;
+	}
+
+	def get_row(index : i32) -> Row | Nil {
+		if index < 0 or index >= @n_rows { return nil; }
+		return 
+	}
+}
+
+class Column {
+	@name : String
+	def name() -> String { return @name; }
+	abstract def size() -> i32 {}
+}
+
+class Col[T] extends Column, IndexableCollection[i32, T, T] {
+	@array : Array[T]
+
+	def Self.from_column(col : Column) -> Self yields TypeError {
+		if col is Col[T] { return col; }
+		yield(TypeError{});
+	}
+
+	def init(@name : String, @array : Array[T]) {}
+
+	def size() -> i32 {
+		return @array.size();
+	}
+
+	def iterator() -> ConstantTimeIterator[T] {
+		return @array.iterator();
+	}
+
+	def [](index : i32) -> T {
+		return @array.[index];
+	}
+
+	def []=(index : i32, value : T) {
+		return @array.[index] = value;
+	}
+
+}
+
+class ColumnView extends Column {
+	@start_row : i32
+	@end_row : i32
+
+	abstract def col() -> Column {}
+
+	def start_row() -> i32 {
+		return @start_row;
+	}
+	def end_row() -> i32 {
+		return @end_row;
+	}
+}
+
+class ColView[T] extends ColumnView, IndexableCollection[i32, T, T] {
+	@col : Col[T]
+
+	def Self.from_col_view(col_view : ColumnView) -> Self yields TypeError {
+		col = col_view.col();
+		if col is not Col[T] { yield(TypeError{}); }
+		return Self{col, col_view.start_row(), col_view.end_row()};
+	}
+
+	def init(@col : Col[T], @start_row : i32, @end_row : i32) {}
+
+	def col() -> Col[T] {
+		return @col;
+	}
+}
+
+class Rows {
+	@dataframe : DataFrame
+	@start_row : i32
+	@end_row : i32
+
+	def col(col_name : String) -> ColumnView | Nil {
+		col = @dataframe.get_col(col_name);
+		if col is Nil { return nil; }
+		return ColumnView{col, @start_row, @end_row};
+	}
+	def cols() -> Collection[ColumnView] {
+		to_view = (col : Column) => { ColumnView{col, @start_row, @end_row}; };
+		return @dataframe.cols().map(to_view);
+	}
+	def n_rows() -> i32 {
+		return @end_row - @start_row;
+	}
+}
+
+my_df = DataFrame.from_file("df.csv");
+ages = my_df.get_col("Age") into Col[i32];
+ten_rows = my_df.rows(10, 20);

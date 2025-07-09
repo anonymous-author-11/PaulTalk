@@ -1,0 +1,9 @@
+import io;
+
+a = 5;
+b = true;
+if b {
+	a = 6.0;
+	a = 7;
+}
+IO.print(a); // Should print 7, prints 5 instead
