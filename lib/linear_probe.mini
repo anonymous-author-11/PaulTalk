@@ -23,20 +23,19 @@ class LinearProbeMap[K, V] extends OpenAddressMap[K, V] {
             }
 
             // entry must be Entry[K,V] here
-            if entry is Entry[K, V] {
-                // Key found? Check hash first (cheap), then equality (potentially expensive).
-                if entry.hash() == hash and @eq.call(entry.key(), key) {
-                    return current_index;
-                } 
+        
+            // Key found? Check hash first (cheap), then equality (potentially expensive).
+            if entry.hash() == hash and @eq.call(entry.key(), key) {
+                return current_index;
+            } 
 
-                // If it's an entry for a *different* key, check if it's a tombstone
-                if entry.value() is Tombstone {
-                    if first_tombstone_idx == -1 {
-                        first_tombstone_idx = current_index; // Record the first tombstone spot
-                    }
+            // If it's an entry for a *different* key, check if it's a tombstone
+            if entry.value() is Tombstone {
+                if first_tombstone_idx == -1 {
+                    first_tombstone_idx = current_index; // Record the first tombstone spot
                 }
-                // Else (it's an active entry for a different key), continue probing.
             }
+            // Else (it's an active entry for a different key), continue probing.
             // --- Linear Probing Step ---
             current_index = (current_index + 1) bit_and mask; // Move to the next slot, wrapping around
 

@@ -3476,27 +3476,30 @@ class WhileStatement(Branch):
         if self.preheader: self.preheader.typeflow(condition_scope)
         self.condition.typeflow(condition_scope)
         body_scope = Scope(condition_scope, wile=condition_scope.region.last_block)
+        skip_scope = Scope(condition_scope)
         self.narrow_types_true(body_scope, self.condition)
+        self.narrow_types_false(skip_scope, self.condition)
         if Nothing() in body_scope.type_table.values(): 
             raise Exception(f"{self.info}: this should not happen!")
         self.body.typeflow(body_scope)
 
         exit_scopes = [self.exit_scope(scope, exit) for exit in body_scope.exits]
-        route_scopes = [*exit_scopes, body_scope, scope]
+        route_scopes = [*exit_scopes, body_scope, skip_scope]
 
         self.merge_scopes(scope, route_scopes)
-        self.merge_scope_types(scope, [body_scope, scope])
         condition_scope = Scope(scope)
         if self.preheader: self.preheader.codegen(condition_scope)
         body_scope = Scope(condition_scope, wile=condition_scope.region.last_block)
+        skip_scope = Scope(condition_scope)
         self.narrow_true(body_scope)
+        self.narrow_types_false(skip_scope, self.condition)
         boolean = self.condition.codegen(condition_scope)
         unwrap = UnwrapOp.create(operands=[boolean], result_types=[IntegerType(1)])
         condition_scope.region.last_block.add_op(unwrap)
         self.body.codegen(body_scope)
 
         exit_scopes = [self.exit_scope(scope, exit) for exit in body_scope.exits]
-        route_scopes = [*exit_scopes, body_scope, scope]
+        route_scopes = [*exit_scopes, body_scope, skip_scope]
         main_exit = ScopeExit(body_scope, True)
 
         for exit in [*body_scope.exits, main_exit]: self.cast_mutated_vars(condition_scope, exit)
@@ -3512,22 +3515,26 @@ class WhileStatement(Branch):
         if self.preheader: self.preheader.typeflow(condition_scope)
         self.condition.typeflow(condition_scope)
         body_scope = Scope(condition_scope, wile=condition_scope.region.last_block)
+        skip_scope = Scope(condition_scope)
         self.narrow_types_true(body_scope, self.condition)
+        self.narrow_types_false(skip_scope, self.condition)
         self.body.typeflow(body_scope)
 
         exit_scopes = [self.exit_scope(scope, exit) for exit in body_scope.exits]
-        route_scopes = [*exit_scopes, body_scope, scope]
+        route_scopes = [*exit_scopes, body_scope, skip_scope]
 
         self.merge_scope_types(scope, route_scopes)
         if self.preheader: self.preheader.typeflow(scope)
         condition_scope = Scope(scope)
         self.condition.typeflow(condition_scope)
         body_scope = Scope(condition_scope, wile=condition_scope.region.last_block)
+        skip_scope = Scope(condition_scope)
         self.narrow_types_true(body_scope, self.condition)
+        self.narrow_types_false(skip_scope, self.condition)
         self.body.typeflow(body_scope)
 
         exit_scopes = [self.exit_scope(scope, exit) for exit in body_scope.exits]
-        route_scopes = [*exit_scopes, body_scope, scope]
+        route_scopes = [*exit_scopes, body_scope, skip_scope]
 
         self.merge_scope_types(scope, route_scopes)
 

@@ -64,16 +64,14 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
         @size = 0; // Reset size and load for the new table
         @load = 0;
 
-        i = 0;
-        while i < old_len { // Iterate only up to old length
+        for i in 0..old_len { // Iterate only up to old length
             entry = old_entries.[i];
             // Re-insert only if it's a valid entry with a non-tombstone value
-            if entry is Entry[K,V] {
-                val = entry.value();
-                // We know the entry's hash, reuse it.
-                if val is V { self.insert_internal(entry.key(), val, entry.hash()); }
-            }
-            i = i + 1;
+            if entry is Nil { continue; }
+            val = entry.value();
+            if val is not V { continue; }
+            // We know the entry's hash, reuse it.
+            self.insert_internal(entry.key(), val, entry.hash());
         }
     }
 
@@ -93,19 +91,18 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
             // Inserted into an empty slot
             @size = @size + 1;
             @load = @load + 1;
+            return;
          }
-         if current_entry_or_nil is Entry[K, V] {
-             // Slot was occupied, check if it was a tombstone
-             old_value = current_entry_or_nil.value();
-             if old_value is Tombstone {
-                 // Replaced a tombstone
-                 @size = @size + 1; // Now holds a real value
-                 // @load doesn't change (slot was already occupied)
-             } else {
-                 // Replaced an existing, active value.
-                 // @size doesn't change (still one active value)
-                 // @load doesn't change (slot was already occupied)
-             }
+         // Slot was occupied, check if it was a tombstone
+         old_value = current_entry_or_nil.value();
+         if old_value is Tombstone {
+             // Replaced a tombstone
+             @size = @size + 1; // Now holds a real value
+             // @load doesn't change (slot was already occupied)
+         } else {
+             // Replaced an existing, active value.
+             // @size doesn't change (still one active value)
+             // @load doesn't change (slot was already occupied)
          }
          // else case should not happen if find_slot works correctly
     }
@@ -128,13 +125,11 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
 
         // find_slot guarantees that if an entry is returned, hash/key match.
         // We only need to check if it's Nil or a Tombstone.
-        if entry_or_nil is Entry[K, V] {
-            val = entry_or_nil.value();
-            if val is V { return val; }
-            // If val is Tombstone, the key was deleted
-        }
-        // If entry_or_nil is Nil, or it was a Tombstone entry for this key
-        return nil;
+        if entry_or_nil is Nil { return nil; }
+        val = entry_or_nil.value();
+        // If val is Tombstone, the key was deleted
+        if val is Tombstone { return nil; }
+        return val;
     }
 
     // Remove key and return its value, or Nil if not found.
@@ -144,23 +139,19 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
         i = self.find_slot(key, hash);
         entry_or_nil = @entries.[i];
 
-        if entry_or_nil is Entry[K, V] {
-            val = entry_or_nil.value();
-            // Only remove if it's an active entry (not already a tombstone)
-            if val is V {
-                // Create Tombstone entry, preserving key and hash for probing continuity
-                tombstone_entry = Entry[K,V].new(entry_or_nil.key(), Tombstone.new(), entry_or_nil.hash());
-                @entries.[i] = tombstone_entry;
-                @size = @size - 1; // Active element count decreases
-                // @load remains the same (slot still occupied by tombstone)
+        // return nil if entry_or_nil is Nil or holds a Tombstone for the key
+        if entry_or_nil is Nil { return nil; }
+        val = entry_or_nil.value();
+        // Only remove if it's an active entry (not already a tombstone)
+        if val is Tombstone{ return nil; }
+        // Create Tombstone entry, preserving key and hash for probing continuity
+        tombstone_entry = Entry[K,V].new(entry_or_nil.key(), Tombstone.new(), entry_or_nil.hash());
+        @entries.[i] = tombstone_entry;
+        @size = @size - 1; // Active element count decreases
+        // @load remains the same (slot still occupied by tombstone)
 
-                // Return the removed value (which we know is not Tombstone)
-                return val;
-            }
-            // If val is Tombstone, key was already removed effectively
-        }
-        // If entry_or_nil is Nil or holds a Tombstone for the key
-        return nil;
+        // Return the removed value (which we know is not Tombstone)
+        return val;
     }
 
     // Clear the map
@@ -194,12 +185,11 @@ class OpenAddressMapIterator[K,V] extends Iterator[Pair[K,V]] {
         while @index < @length { // Use cached length
             entry_or_nil = @map_entries.[@index];
             @index = @index + 1; // Increment index for next call
-
-            if entry_or_nil is Entry[K, V] {
-                val = entry_or_nil.value();
-                if val is V { return Pair{entry_or_nil.key(), val}; }
-            }
             // Continue loop if Nil or Tombstone
+            if entry_or_nil is Nil { continue; }
+            val = entry_or_nil.value();
+            if val is Tombstone { continue; }
+            return Pair{entry_or_nil.key(), val};
         }
         return nil; // End of iteration
     }

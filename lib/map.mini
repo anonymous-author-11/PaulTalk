@@ -22,8 +22,8 @@ class Map[K, V] extends IndexableCollection[K, V, Pair[K, V]] {
     }
     def [](key : K) -> V {
         val = self.get(key);
-        if val is Nil { yield(KeyNotFound.new()); }
         if val is V { return val; }
+        yield(KeyNotFound{});
     }
     def []=(key : K, value : V) {
         self.insert(key, value);

@@ -457,6 +457,8 @@ TODO:
 	- Comparison for tuples
 	- Closures
 
+- it would be nice to narrow types *within* a logical expression, not merely in the following block
+
 - Ensure 'while' with a type check condition does not pollute the main path
 - Should ensure that all branches must return if return value declared
 
