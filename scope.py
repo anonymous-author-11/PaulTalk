@@ -4,7 +4,7 @@ from utils import *
 from itertools import product, chain, combinations
 from hashlib import sha256
 from gmpy2 import next_prime
-from xdsl.ir import Block, Region
+from xdsl.ir import Block, Region, Operation
 from xdsl.dialects import cf
 import random
 import copy
@@ -446,6 +446,34 @@ class CompilationUnit:
         self.toplevel_ops = []
         self.main = None
 
+@dataclass
+class ScopeExit:
+    block: Block
+    last_op: Operation
+    insert_before: bool
+    types_snapshot: dict
+    symbols_snapshot: dict
+    may_rewind: bool
+
+    def __init__(self, scope, may_rewind):
+        self.block = scope.region.last_block
+        self.last_op = scope.region.last_block.last_op
+        self.types_snapshot = scope.type_table.copy()
+        self.symbols_snapshot = scope.symbol_table.copy()
+        self.may_rewind = may_rewind
+        self.insert_before = False
+
+    def insert_ops(self, ops):
+        if not self.last_op:
+            if len(self.block.ops) != 0:
+                raise Exception("Should never happen")
+            self.block.add_ops(ops)
+            return
+        if self.insert_before:
+            self.block.insert_ops_before(ops, self.last_op)
+            return
+        self.block.insert_ops_after(ops, self.last_op)
+
 class Scope:
     parent: "Scope"
     cls: "ClassDef"
@@ -459,7 +487,7 @@ class Scope:
     symbol_table: dict
     type_table: dict
     parameterization_cache: dict
-    exit_ops: list
+    exits: list
 
     def __init__(self, parent=None, cls=None, behavior=None, method=None, wile=None):
         self.region = Region([Block([])])
@@ -475,7 +503,7 @@ class Scope:
         self.method = parent.method if (parent and parent.method and not method) else method
         self.behavior = parent.behavior if (parent and parent.behavior and not behavior) else behavior
         self.wile = parent.wile if (parent and parent.wile and not wile) else wile
-        self.exit_ops = parent.exit_ops if (parent and parent.wile and not wile) else []
+        self.exits = parent.exits if (parent and parent.wile and not wile) else []
         self.parent = parent
 
     @property

@@ -491,9 +491,6 @@ TODO:
 	- Break and continue should also set all variables to Nothing
 		- And store a snapshot of the type table before doing so [check!]
 
-- I don't think cast_mutated_vars is correct at all
-	- Perhaps instead we should check whether the symbol_table value is the same
-
 - Flow analysis problems:
 	- Nested loops take WAY too long to type check
 		- It's exponential time complexity

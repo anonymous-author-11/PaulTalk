@@ -1,3 +1,5 @@
+// This bug has been fixed! the program now prints '7' as it should
+
 import io;
 
 a = 5;

@@ -23,7 +23,6 @@ class RobinHoodMap[K, V] extends OpenAddressMap[K, V] {
             existing_entry = @entries.[current_index];
 
             if existing_entry is Nil { return current_index; }
-            
 
             // If the current search is "poorer" than the entry in the slot,
             // the key we're looking for cannot be in the table.
@@ -100,13 +99,11 @@ class RobinHoodMap[K, V] extends OpenAddressMap[K, V] {
 
         for i in 0..old_len {
             entry = old_entries.[i];
-            if entry is Entry[K,V] {
-                val = entry.value();
-                if val is V {
-                    // Re-insert using the core logic to maintain the invariant.
-                    self.insert_core(entry.key(), val, entry.hash());
-                }
-            }
+            if entry is Nil { continue; }
+            val = entry.value();
+            if val is not V { continue; }
+            // Re-insert using the core logic to maintain the invariant.
+            self.insert_core(entry.key(), val, entry.hash());
         }
     }
 
@@ -129,13 +126,9 @@ class RobinHoodMap[K, V] extends OpenAddressMap[K, V] {
             entry_to_shift = @entries.[next_index];
 
             if entry_to_shift is Nil { break; }
-            if entry_to_shift is Entry[K, V] {
-                if self.probe_distance(entry_to_shift.hash(), next_index) == 0 {
-                    break;
-                }
-                @entries.[current_empty_index] = entry_to_shift;
-                current_empty_index = next_index;
-            }
+            if self.probe_distance(entry_to_shift.hash(), next_index) == 0 { break; }
+            @entries.[current_empty_index] = entry_to_shift;
+            current_empty_index = next_index;
         }
 
         @entries.[current_empty_index] = nil;
