@@ -691,6 +691,16 @@ class FunctionLiteral(Expression):
     _return_type: TypeAttribute
     yield_type: TypeAttribute
 
+    def __init__(self, info, name, params, body, yield_type):
+        self.info = info
+        self.name = name
+        self.params = params
+        self.arity = len(params)
+        self.body = body
+        self.yield_type = yield_type
+        self._return_type = Any()
+        self.has_return = False
+
     @property
     def definition(self):
         return self
@@ -728,12 +738,24 @@ class FunctionLiteral(Expression):
             body_scope.type_table[param.name] = param_type
 
     def insert_implicit_return(self, scope):
+        if self.has_return: return
         last_stmt = self.body.statements[-1]
-        if isinstance(last_stmt, Return): return
+        if isinstance(last_stmt, ReturnValue):
+            self.has_return = True
+            self._return_type = last_stmt.value.exprtype(scope)
+            return
+        if isinstance(last_stmt, Return):
+            self.has_return = True
+            self._return_type = None
+            return
         if isinstance(last_stmt, ExpressionStatement) and last_stmt.expr.exprtype(scope) and last_stmt.expr.exprtype(scope) != llvm.LLVMVoidType():
             self.body.statements[-1] = ReturnValue(NodeInfo(None, self.info.filepath, self.info.line_number), last_stmt.expr)
+            self.has_return = True
+            self._return_type = last_stmt.expr.exprtype(scope)
             return
         self.body.statements.append(Return(NodeInfo(None, self.info.filepath, self.info.line_number)))
+        self.has_return = True
+        self._return_type = None
 
     def typeflow(self, scope):
         self.exprtype(scope)
@@ -752,11 +774,6 @@ class FunctionLiteral(Expression):
             body_scope.type_table[param.name] = param_types[i]
         self.body.typeflow(body_scope)
         self.insert_implicit_return(body_scope)
-        last_stmt = self.body.statements[-1]
-        return_type = None
-        if isinstance(last_stmt, ReturnValue):
-            return_type = last_stmt.value.exprtype(body_scope)
-        self._return_type = return_type
         return_type = self.return_type() if self.return_type() else Nothing()
         scope.functions[self.name] = self
         return Function([ArrayAttr(param_types), self.yield_type, return_type])
@@ -1273,10 +1290,8 @@ class MethodCall(Expression):
     def simple_exprtype(self, scope, rec_typ):
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
         if not isinstance(rec_typ, FatPtr):
-            raise Exception(f"{self.info}: receiver type {rec_typ} is not an object!")
-        if not rec_typ.cls.data in scope.classes.keys():
-            debug_print(scope.classes.keys())
-            raise Exception(f"{self.info}: class {rec_typ.cls.data} not declared (temporary).")
+            print(scope.type_table)
+            raise Exception(f"{self.info}: receiver type {rec_typ} for method call .{self.method} is not an object!")
         rec_class = scope.classes[rec_typ.cls.data]
         behaviors = [behavior for behavior in rec_class.behaviors if behavior.applicable(rec_typ, scope, self.method, arg_types)]
         if len(behaviors) == 0:

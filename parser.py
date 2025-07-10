@@ -438,7 +438,7 @@ class CSTTransformer(Transformer):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         anon_name = "_functionliteral_" + random_letters(10)
         node_info = NodeInfo(None, self.file_path, line_number(arrow))
-        return FunctionLiteral(node_info, anon_name, tuple(param_list), len(param_list), block, Any(), yield_type or exception_or_nil)
+        return FunctionLiteral(node_info, anon_name, tuple(param_list), block, yield_type or exception_or_nil)
 
     def inclusive_range_literal(self, start, end):
         node_info = NodeInfo(None, self.file_path, start.info.line_number)
