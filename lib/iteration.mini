@@ -293,10 +293,8 @@ class ZipIterator[T, U] extends Iterator[Pair[T, U]] {
     def next() -> Pair[T, U]? {
         first_elem = @first.next();
         second_elem = @second.next();
-        if first_elem is T {
-            if second_elem is U { return Pair{first_elem, second_elem}; }
-        }
-        return nil;
+        if first_elem is Nil or second_elem is Nil { return nil; }
+        return Pair{first_elem, second_elem};
     }
 }
 

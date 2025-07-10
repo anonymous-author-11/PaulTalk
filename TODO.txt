@@ -417,6 +417,7 @@ DONE:
 - Special case "if buffer is Nil" to check for C nullptr [check!]
 	- Special case in TypeCheck [check!]
 	- Need to ensure intersection of Buffer & Nil doesn't reduce to Nothing [check!]
+- Promote negation to being a real node [check!]
 
 - Releases 0.1.*
 	- Works on any Windows x86_64 machine (other people's computers) [check!]
@@ -452,57 +453,16 @@ DONE:
 
 TODO:
 
-- Modifying 'while' lowering was not correct
-	- Break and continue will not jump to the right block
-
 - Things we could work on right now
 	- Comparison for tuples
-	- Reforming flow analysis
 	- Closures
+
+- Ensure 'while' with a type check condition does not pollute the main path
+- Should ensure that all branches must return if return value declared
 
 - super() may be useful for polymorphism in the AST
 
-- Here's the issue
-	- If you have nested control flow
-	- It will do the initial scope_merge for the inner before the outer
-	- Which will be the wrong order
-
-- Flow analysis
-	- Each control flow stmt (if, while) can maintain a cache mapping in/out type tables
-	- In will be union of all incomings (previous block, continue)
-	- Out will be union of all outgoings (end of block, break)
-	- Early return should set all variables (except for fields) to Nothing [check!]
-		- Make sure doesn't screw up mutated_vars [check!]
-	- What about cast-assign?
-		- On break and continue
-		- Store pre_exit ops
-			- block.insert_after
-			- Do NOT store in the AST node
-			- Store in the body_scope
-	- "narrow alternate branches"
-		- Setting types to Nothing after return [check!]
-		- Somehow doing the narrow_false in the "alternate" branch
-			- Complicated when the alternate is the original scope
-			- What if there were an implicit empty else branch
-	- Reform Scope.merge [check!]
-		- Move from Scope.merge to Branch.merge_scopes [check!]
-		- Split out merge_scope_types [check!]
-		- Remove Branch.preallocate [check!]
-	- Break and continue should also set all variables to Nothing
-		- And store a snapshot of the type table before doing so [check!]
-
-- Flow analysis problems:
-	- Nested loops take WAY too long to type check
-		- It's exponential time complexity
-		- Need to cache results of typeflow for each loop
-	- We do not properly account for break/continue in typeflow
-		- We should probably move to a cfg
-		- What if I did something ad hoc
-		- Store all "exits" from the loop
-		- For each exit, store the type and symbol tables
-		- After the branch, union all the exits
-		- This is a little over-conservative (breaks can't go back to the start of the loop)
-		- What about cast-assigning before breaks/continue's?
+- Cache flow analysis results to avoid time redoing work for nested control flow
 
 - @current_coroutine will break if two coroutines call each other
 	- We should instead maintain a stack of coroutines
@@ -580,13 +540,6 @@ TODO:
 	- If all methods in the behavior are inherited from the same class, reuse that behavior
 	- I believe behaviors encode absolute vtable offsets so this would not work out of the box
 	- Would have to add the fatptr offset within the behavior before loading the method fptr
-
-- I really want type narrowing in alternative branches
-	- And 'is not' syntax (if x is not Nil)
-	- And narrowing within logical and/or ops (if x is T and y is U { ... } )
-	- And 'while' with a type check condition not polluting the main path
-	- Honestly this should not be too hard
-		- I don't have to reform the whole flow analysis to add this
 
 - Records: why not?
 	- Idea: casting between these works seamlessly, unlike tuples
@@ -728,6 +681,25 @@ TODO:
 		- Modify TypeCheck and Branch [check!]
 		- Should TypeCheck have a .narrow_type(scope) method? [check!]
 		- NegatedTypeCheck class [check!]
+	- Reform flow analysis [check!]
+		- Add "is not" operator [check!]
+		- Properly account for break/continue in typeflow [check!]
+			- What if I did something ad hoc [check!]
+			- Store all "exits" from the loop [check!]
+			- For each exit, store the type and symbol tables [check!]
+			- After the branch, union all the exits [check!]
+			- Cast-assign before breaks/continue's [check!]
+			- This is a little over-conservative (breaks can't go back to the start of the loop)
+				- But seems necessary for the cast-assigning
+		- Early return should set all variables (except for fields) to Nothing
+		- So should break and continue [check!]
+			- And store a snapshot of the type table before doing so [check!]
+		- Narrow alternate branches [check!]
+		- Reform Scope.merge [check!]
+			- Move from Scope.merge to Branch.merge_scopes [check!]
+			- Split out merge_scope_types [check!]
+			- Remove Branch.preallocate [check!]
+		- Add narrowing within logical and/or ops (if x is T and y is U { ... } ) [check!]
 	- Does just adding dependencies to the path work?
 		- The source_dirs collection should be ordered, not a set [check!]
 		- Add the dependency folder to an env variable named for the package
@@ -777,6 +749,7 @@ TODO:
 		- I'd need to write some wrappers around it [check!]
 		- I'd like to be able to use GitHub repos as packages [check!]
 		- Security and verification mechanisms
+	- Stack traces for exceptions [check!]
 	- Namespacing is even more necessary with packages
 	- Determine what kind of file/directory structure is expected [check!]
 	- Able to cast builtins to generic bounds
@@ -809,8 +782,8 @@ TODO:
 		- Behavior ABI wrt overloads
 			- Need to create an artificial override of methods in behavior with mismatched interface
 		- Already planned ahead for delegate passing
-		- Are strings Unicode or bytes? (very important for 1.0.0!)
-			- Should be Unicode (UTF-8)
+		- Are strings Unicode or bytes? (very important for 1.0.0!) [check!]
+			- Should be Unicode (UTF-8) [check!]
 		- Make sure method dispatch is sound and complete for normal types
 	- A less meager stdlib
 		- Set, LinkedList
@@ -818,7 +791,6 @@ TODO:
 	- A way to read program arguments (argc, argv)
 		- Make it a nice interface
 		- argv() -> Indexable[i32, String]
-	- Stack traces for exceptions [check!]
 
 - Tighten up return type inference for function literals
 	- You can't have a bare return and a return value in the same literal
@@ -852,7 +824,6 @@ TODO:
 - Make aliases even smarter
 	- "alias Foo[A] = Bar[A, i32];"
 	- This is more complex
-- Should ensure that all branches must return if return value declared
 
 - Do less work for imports
 	- Type-check specific imports on-demand rather than upfront
@@ -866,6 +837,7 @@ TODO:
 	- Let me have periods in extern def names
 	- Externally declare intrinsics
 	- Extern def llvm.sqrt.i64(x : i64) -> i64
+		- Can intrinsics be passed around as fptrs?
 - Add asserts
 	- There's mlir functionality (cf.assert) for this
 	- Compile to llvm.assume in release; branch to abort in debug
@@ -911,12 +883,12 @@ TODO:
 - Shift Functions and Coroutines to FatPtr interface [ABI breaking]
 	- Store the fptr in the second word
 	- Would need a .fptr() pseudo-method for C interop
-- Narrow alternate path in branches
+- Narrow alternate path in branches [check!]
 	- The main motivation is to be able to pare off nil with "while x is Nil { yield(Exception); }"
 	- If the condition of a while is a type check then that type can be pared off after the loop
 	- We know that some intersections are uninhabitable (especially with nil)
-	- Therefore we know that 'if x is Nil' implies that it is non-nil in the other branch
-	- We know the intersection of a union with a negation of one of its members
+	- Therefore we know that 'if x is Nil' implies that it is non-nil in the other branch [check!]
+	- We know the intersection of a union with a negation of one of its members [check!]
 - Make sure that c3 linearization interacts properly with imports
 - When call is statically known, narrow result types
 	- Casting is needed (from behavior return type to narrowed return type)
@@ -924,6 +896,7 @@ TODO:
 - Skip behavior call when all arguments are builtin types
 - Both coroutines and funcs should inherit Callable[-T, +U]
 - Actually free coroutine stacks
+	- Only on completion?
 - Rewrite in PDL!
 	- Block / region transformation needs to happen prior
 	- Then textual substitution can happen after
@@ -966,6 +939,8 @@ TODO:
 	- You could come up with some arbitrary rule
 		- A union is always less specific than a listed supertype unless it includes the concrete type
 		- Or, a union has the specificity of its least specific member
+		- Or, unions and intersections always get checked after non-compound types
+			- This is desirable from a performance POV
 	- We can  slightly modify the current approach to use inheritance-order information at runtime
 		- The offset table literally encodes supertype specificity
 - Think about how multiple dispatch works with function types
@@ -1105,6 +1080,7 @@ TODO:
 
 - Inheriting from Sentinel (or do Struct types solve this)
 - Bare 'yield();' should yield the coroutine itself? or nil?
+	- Probably just nil
 - Specifying that a class cannot be inherited alongside another class
 - Recursive aliases?
 - Propagate type information backwards?
@@ -1121,18 +1097,18 @@ TODO:
 - Struct Types
 	- How much would struct types actually entail?
 	- virtual calls resolve to static calls
-	- allocated on stack
-	- value semantics
+	- allocated on stack, value semantics
 	- subtype test is vptr equality
 	- this seems fairly straightforward?
 	- Except that value semantics for 'self' is immensely complicated
 	- How to pass self to virtual calls requires change
-	- Basically requires generating a struct version of the class
+	- Bad idea: generating a struct version of the class
 	- Unclear how methods will even work
 		- When self is passed as variable, it is copied
 		- When self is passed as receiver, it is by ref
 		- Would have to box self whenever passed as variable
 	- Must be boxed to be used in place of ref version?
+		- Into what region?
 - Regions
 - Generics
 	- Store type T as implicit member, use to construct instances of T

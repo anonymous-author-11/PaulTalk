@@ -385,8 +385,7 @@ class CSTTransformer(Transformer):
 
     def not_op(self, exclam, expr):
         node_info = NodeInfo(None, self.file_path, line_number(exclam))
-        f = BoolLiteral(node_info, 0)
-        return Comparison(node_info, f, "EQ", expr)
+        return Not(node_info, expr)
 
     def as_op(self, operand, astoken, typ):
         node_info = NodeInfo(None, self.file_path, line_number(astoken))
