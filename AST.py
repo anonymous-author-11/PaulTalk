@@ -920,7 +920,7 @@ class TypeCheck(Expression):
                 #debug_print(f'{right_type} ancestors: {scope.ancestors(right_type)}')
                 #debug_print(old_typ in scope.ancestors(right_type))
         scope.type_table[self.left.name] = new_typ
-        print(f"narrowed {self.left.name} from {old_typ} to {new_typ} in true branch")
+        #print(f"narrowed {self.left.name} from {old_typ} to {new_typ} in true branch")
         return new_typ
 
     def narrow_false(self, scope):
@@ -938,7 +938,7 @@ class TypeCheck(Expression):
         if isinstance(old_typ, Buffer) and right_type == Nil(): new_typ = Buffer()
 
         scope.type_table[self.left.name] = new_typ
-        print(f"narrowed {self.left.name} from {old_typ} to {new_typ} in false branch")
+        #print(f"narrowed {self.left.name} from {old_typ} to {new_typ} in false branch")
         return new_typ
 
     def exprtype(self, scope):
@@ -1290,7 +1290,7 @@ class MethodCall(Expression):
     def simple_exprtype(self, scope, rec_typ):
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
         if not isinstance(rec_typ, FatPtr):
-            print(scope.type_table)
+            debug_print(scope.type_table)
             raise Exception(f"{self.info}: receiver type {rec_typ} for method call .{self.method} is not an object!")
         rec_class = scope.classes[rec_typ.cls.data]
         behaviors = [behavior for behavior in rec_class.behaviors if behavior.applicable(rec_typ, scope, self.method, arg_types)]
@@ -3379,13 +3379,6 @@ class IfStatement(Branch):
 
         self.narrow_types_true(branch_scopes[0])
         self.narrow_types_false(alternate_scope)
-
-        if Nothing() in branch_scopes[0].type_table.values():
-            offender = next((k,v) for k,v in branch_scopes[0].type_table.items() if v == Nothing())
-            debug_print(offender[0])
-            debug_print(offender[1])
-            raise Exception(f"{self.info}: would be impossible to enter 'then' branch of if-statement")
-            return
 
         for (b_block, b_scope) in zip(branch_blocks, branch_scopes): b_block.typeflow(b_scope)
 

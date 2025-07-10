@@ -292,7 +292,7 @@ class CompilerTests(CompilerTestCase):
             x.method(); // Invalid receiver type
         }
         """
-        with self.assertRaisesRegex(Exception, "receiver type i32 is not an object!"):
+        with self.assertRaisesRegex(Exception, "receiver type i32 for method call .method is not an object!"):
             self.run_mini_code(mini_code, "", "method_call_invalid_receiver_type")
 
     def test_class_method_call_abstract_method(self):
