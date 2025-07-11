@@ -25,29 +25,26 @@ class TypeCache:
 
 class TypeEnvironment:
     aliases: dict
-    alias_graph: nx.DiGraph
+    frozen_aliases: frozenset
     classes: dict
     functions: dict
     caches: dict
 
     def __init__(self, parent=None):
         self.aliases = parent.aliases.copy() if parent else {}
-        self.alias_graph = parent.alias_graph.copy() if parent else nx.DiGraph()
+        self.frozen_aliases = frozenset(self.aliases.items())
         self.classes = parent.classes if parent else {}
         self.functions = parent.functions if parent else {}
         self.caches = parent.caches if parent else {}
 
     def add_alias(self, key, value):
         if key == value: return
-        #self.alias_graph.add_edge(key, value)
-        #alias_cycle = next(nx.simple_cycles(self.alias_graph), None)
-        #if alias_cycle:
-        #    raise Exception(f"Cycle in aliases graph created with alias from {key} to {value}")
         self.aliases[key] = value
+        self.frozen_aliases = frozenset(self.aliases.items())
 
     def remove_alias(self, key):
-        #self.alias_graph.remove_edge(key, self.aliases[key])
         del self.aliases[key]
+        self.frozen_aliases = frozenset(self.aliases.items())
 
     def validate_type(self, node_info, typ):
         if not isinstance(typ, FatPtr): return
@@ -104,7 +101,7 @@ class TypeEnvironment:
 
     def subtype(self, left, right):
         try:
-            cache_key = frozenset(self.aliases.items())
+            cache_key = self.frozen_aliases
             if cache_key in self.caches:
                 if (left, right) in self.caches[cache_key].subtype:
                     return self.caches[cache_key].subtype[(left, right)]
@@ -120,7 +117,7 @@ class TypeEnvironment:
             raise e
 
     def matches(self, left, right):
-        cache_key = frozenset(self.aliases.items())
+        cache_key = self.frozen_aliases
         if cache_key in self.caches:
             if (left, right) in self.caches[cache_key].matches:
                 return self.caches[cache_key].matches[(left, right)]
@@ -236,7 +233,7 @@ class TypeEnvironment:
         return result
 
     def ancestors(self, typ: TypeAttribute) -> list:
-        cache_key = frozenset(self.aliases.items())
+        cache_key = self.frozen_aliases
         if cache_key in self.caches:
             if typ in self.caches[cache_key].ancestors:
                 return self.caches[cache_key].ancestors[typ]
@@ -299,7 +296,7 @@ class TypeEnvironment:
     # Simplify a type to Disjunctive Normal Form (DNF)
     def simplify(self, typ: TypeAttribute) -> TypeAttribute:
         #print(f"simplifying {typ}")
-        cache_key = frozenset(self.aliases.items())
+        cache_key = self.frozen_aliases
         if cache_key in self.caches:
             if typ in self.caches[cache_key].simplify:
             #print(f"simplified {typ} to {self.simplify_cache[cache_key]}")
