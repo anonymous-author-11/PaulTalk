@@ -59,6 +59,7 @@ class CompilationJob:
     time_printer: "OptionalPrinter"
     status_printer: "OptionalPrinter"
     timings: dict
+    lines_of_code: int
 
     @property
     def obj_path(self):
@@ -67,6 +68,7 @@ class CompilationJob:
     
     def __init__(self, input_path, output_path=None, build_dir=Path("."), debug_mode=False, no_timings=False, show_dependencies=False):
         self.timings = {"start_time":start_time}
+        self.lines_of_code = 0
         self.record_time("after_imports")
     
         input_path = Path(input_path)
@@ -110,7 +112,9 @@ class CompilationJob:
 
     def finish(self):
         self.record_time("end_time")
-        self.time_printer.print(f'Total time to compile: {self.time_between("start_time", "end_time")} seconds')
+        total_time = self.time_between("start_time", "end_time")
+        self.time_printer.print(f'Total time to compile: {total_time} seconds')
+        self.time_printer.print(f"Compiled {self.lines_of_code} lines of code at {self.lines_of_code / total_time} LoC/second")
         self.status_printer.print(f"Finished compiling {self.input.path.name}")
 
     def record_time(self, name):
@@ -141,6 +145,9 @@ class CompilationJob:
     def lower_all(self, own_ast):
 
         sorted_dependencies = [path for path in self.dependencies.recompile_list if not path.samefile(self.input.path)]
+
+        self.lines_of_code += line_count(self.input.path)
+        for path in sorted_dependencies: self.lines_of_code += line_count(path)
 
         if len(sorted_dependencies) > 0:
             dependencies_string = ', '.join([x.stem for  x in sorted_dependencies])
@@ -662,6 +669,17 @@ def run_pdl_lowering(module_str, build_dir) -> str:
     module_str = module_str.replace("placeholder.extractvalue", "llvm.extractvalue")
     with open(out_mlir_path, "w") as outfile: outfile.write(module_str)
     return module_str
+
+def _make_gen(reader):
+    b = reader(1024 * 1024)
+    while b:
+        yield b
+        b = reader(1024*1024)
+
+def line_count(filename):
+    with open(filename, 'rb') as f:
+        f_gen = _make_gen(f.raw.read)
+        return sum(buf.count(b'\n') for buf in f_gen)
 
 def run_mlir_opt(module_str) -> str:
     unregistered = "--allow-unregistered-dialect"
