@@ -458,8 +458,8 @@ TODO:
 	- Closures
 
 - it would be nice to narrow types *within* a logical expression, not merely in the following block
+	- Would be implemented inside of Logical
 
-- Ensure 'while' with a type check condition does not pollute the main path
 - Should ensure that all branches must return if return value declared
 
 - super() may be useful for polymorphism in the AST
@@ -702,6 +702,7 @@ TODO:
 			- Split out merge_scope_types [check!]
 			- Remove Branch.preallocate [check!]
 		- Add narrowing within logical and/or ops (if x is T and y is U { ... } ) [check!]
+		- Ensure 'while' with a type check condition does not pollute the main path [check!]
 	- Does just adding dependencies to the path work?
 		- The source_dirs collection should be ordered, not a set [check!]
 		- Add the dependency folder to an env variable named for the package
@@ -986,6 +987,17 @@ TODO:
 
 - Assume call return value offsets
 - Expect reciever static types
+
+- could have a way to load and store tuples from a buffer of non-tuples
+	- tuple_load(buf : Buffer[T], start : i32, len : int_literal) -> Tuple[T x len]
+	- tuple_store(buf : Buffer[T], start : i32, tuple : Tuple[T x len])
+	- Or even sugar for this?
+		- buf.[start, len] (= tuple)
+		- I kinda like this
+	- Could even support predicated loads / stores
+		- vector.maskedload / vector.maskedstore
+		- buf.[start, len, mask, passthru] ?
+		- buf.[start, len].mask(mask, passthru) ?
 
 - Plan for try / catch
 	- Try is an IR op

@@ -39,14 +39,14 @@ class TypeEnvironment:
 
     def add_alias(self, key, value):
         if key == value: return
-        self.alias_graph.add_edge(key, value)
-        alias_cycle = next(nx.simple_cycles(self.alias_graph), None)
-        if alias_cycle:
-            raise Exception(f"Cycle in aliases graph created with alias from {key} to {value}")
+        #self.alias_graph.add_edge(key, value)
+        #alias_cycle = next(nx.simple_cycles(self.alias_graph), None)
+        #if alias_cycle:
+        #    raise Exception(f"Cycle in aliases graph created with alias from {key} to {value}")
         self.aliases[key] = value
 
     def remove_alias(self, key):
-        self.alias_graph.remove_edge(key, self.aliases[key])
+        #self.alias_graph.remove_edge(key, self.aliases[key])
         del self.aliases[key]
 
     def validate_type(self, node_info, typ):
