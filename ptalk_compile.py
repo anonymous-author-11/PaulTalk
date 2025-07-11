@@ -607,7 +607,7 @@ class Metrics:
         self.llvm_ir_lines = 0
 
     def lines_per_second(self, total_time):
-        a = f"Compiled {self.source_lines} source lines of code at {self.source_lines / total_time} LoC/second"
+        a = f"Compiled {self.source_lines} lines of code at {self.source_lines / total_time} LoC/second"
         b = f"Compiled {self.hi_ir_lines} high-level IR lines of code at {self.hi_ir_lines / total_time} LoC/second"
         c = f"Compiled {self.llvm_ir_lines} LLVM IR lines of code at {self.llvm_ir_lines / total_time} LoC/second"
         return a # don't display b or c for now

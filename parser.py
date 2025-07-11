@@ -17,10 +17,19 @@ import ast
 
 DIR_PATH = Path(__file__).parent.resolve()
 GRAMMAR_PATH = DIR_PATH / "data_files/grammar.lark"
+CACHED_GRAMMAR_PATH = DIR_PATH / "data_files/grammar.pkl"
 
-with open(GRAMMAR_PATH, "r") as f: grammar = f.read()
+def get_cached_parser():
+    with open(CACHED_GRAMMAR_PATH, "rb") as grammar: cached_parser = Lark.load(grammar)
+    return cached_parser
 
-parser = Lark(grammar, parser='lalr', propagate_positions=True, _plugins=lark_cython.plugins)
+def get_fresh_parser():
+    with open(GRAMMAR_PATH, "r") as f: grammar = f.read()
+    fresh_parser = Lark(grammar, parser='lalr', propagate_positions=True, _plugins=lark_cython.plugins)
+    with open(CACHED_GRAMMAR_PATH, "wb") as f: fresh_parser.save(f)
+    return fresh_parser
+
+parser = get_cached_parser()
 source_directories = {}
 parsed = {}
 

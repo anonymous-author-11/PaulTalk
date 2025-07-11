@@ -457,8 +457,6 @@ TODO:
 	- Comparison for tuples
 	- Closures
 
-- Use opaque 
-
 - it would be nice to narrow types *within* a logical expression, not merely in the following block
 	- Would be implemented inside of Logical
 
@@ -705,6 +703,7 @@ TODO:
 			- Remove Branch.preallocate [check!]
 		- Add narrowing within logical and/or ops (if x is T and y is U { ... } ) [check!]
 		- Ensure 'while' with a type check condition does not pollute the main path [check!]
+	- Use opaque types for external vtables [check!]
 	- Does just adding dependencies to the path work?
 		- The source_dirs collection should be ordered, not a set [check!]
 		- Add the dependency folder to an env variable named for the package
