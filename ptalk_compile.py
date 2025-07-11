@@ -58,8 +58,7 @@ class CompilationJob:
     settings: "OptimizationSettings"
     time_printer: "OptionalPrinter"
     status_printer: "OptionalPrinter"
-    timings: dict
-    lines_of_code: int
+    metrics: "Metrics"
 
     @property
     def obj_path(self):
@@ -67,8 +66,7 @@ class CompilationJob:
         return self.output_path.parent / f"{self.output_path.stem}.obj"
     
     def __init__(self, input_path, output_path=None, build_dir=Path("."), debug_mode=False, no_timings=False, show_dependencies=False):
-        self.timings = {"start_time":start_time}
-        self.lines_of_code = 0
+        self.metrics = Metrics()
         self.record_time("after_imports")
     
         input_path = Path(input_path)
@@ -114,14 +112,14 @@ class CompilationJob:
         self.record_time("end_time")
         total_time = self.time_between("start_time", "end_time")
         self.time_printer.print(f'Total time to compile: {total_time} seconds')
-        self.time_printer.print(f"Compiled {self.lines_of_code} lines of code at {self.lines_of_code / total_time} LoC/second")
+        self.time_printer.print(self.metrics.lines_per_second(total_time))
         self.status_printer.print(f"Finished compiling {self.input.path.name}")
 
     def record_time(self, name):
-        self.timings[name] = time.time()
+        self.metrics.timings[name] = time.time()
 
     def time_between(self, a, b):
-        return self.timings[b] - self.timings[a]
+        return self.metrics.timings[b] - self.metrics.timings[a]
 
     def run_parse(self):
         program = parse(self.input.path)
@@ -146,8 +144,8 @@ class CompilationJob:
 
         sorted_dependencies = [path for path in self.dependencies.recompile_list if not path.samefile(self.input.path)]
 
-        self.lines_of_code += line_count(self.input.path)
-        for path in sorted_dependencies: self.lines_of_code += line_count(path)
+        self.metrics.source_lines += line_count(self.input.path)
+        for path in sorted_dependencies: self.metrics.source_lines += line_count(path)
 
         if len(sorted_dependencies) > 0:
             dependencies_string = ', '.join([x.stem for  x in sorted_dependencies])
@@ -199,6 +197,7 @@ class CompilationJob:
         stringio = StringIO()
         Printer(stringio).print(combined_module)
         module_str = stringio.getvalue()
+        self.metrics.hi_ir_lines = module_str.count('\n')
         with open(self.build.in_mlir, "w") as outfile: outfile.write(module_str)
         
         # Using multiprocessing invariably leeds to a recursion limit exceeded while pickling the IR
@@ -240,6 +239,7 @@ class CompilationJob:
         cmd_out = subprocess.run(to_llvm_dialect, text=True, shell=True, input=module_str, capture_output=True)
         if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
         module_str = cmd_out.stdout[14:-3].replace("module","// ----- module")[9:]
+        self.metrics.llvm_ir_lines = module_str.count("\n")
         self.record_time("after_mlir_opt_lower")
         self.time_printer.print(f'Time to mlir-opt lower: {self.time_between("before_mlir_opt_lower", "after_mlir_opt_lower")} seconds')
 
@@ -357,8 +357,7 @@ class CompilationJob:
         os.makedirs(self.obj_path.parent, exist_ok=True)
 
         self.record_time("before_llc")
-        optimizations = ("-O=3", "-fp-contract=fast")
-        llc = (LLC_PATH, "-filetype=obj", self.build.final_ir, *optimizations, target_triple, exception_model, "-o", self.obj_path)
+        llc = (LLC_PATH, "-filetype=obj", self.build.final_ir, *self.settings.llc_options, target_triple, exception_model, "-o", self.obj_path)
         subprocess.run(llc)
 
         self.record_time("after_llc")
@@ -417,6 +416,11 @@ class OptimizationSettings:
             3:"hotcoldsplit,default<O3>,default<O3>" # a pass so nice we run it twice
         }
         return opt_levels[1] if self.debug_mode else opt_levels[3]
+
+    @property
+    def llc_options(self):
+        if self.debug_mode: return ("-O=0",)
+        return ("-O=3", "-fp-contract=fast")
 
     def attributor(self, mode="module"):
         # We --disable-tail-calls for the following reason:
@@ -588,6 +592,25 @@ class SourceFile:
 
     def write_hash(self):
         with open(self.hash_file, "wb") as f: f.write(self.source_hash())
+
+@dataclass
+class Metrics:
+    timings: dict
+    source_lines: int
+    hi_ir_lines: int
+    llvm_ir_lines: int
+
+    def __init__(self):
+        self.timings = {"start_time":start_time}
+        self.source_lines = 0
+        self.hi_ir_lines = 0
+        self.llvm_ir_lines = 0
+
+    def lines_per_second(self, total_time):
+        a = f"Compiled {self.source_lines} source lines of code at {self.source_lines / total_time} LoC/second"
+        b = f"Compiled {self.hi_ir_lines} high-level IR lines of code at {self.hi_ir_lines / total_time} LoC/second"
+        c = f"Compiled {self.llvm_ir_lines} LLVM IR lines of code at {self.llvm_ir_lines / total_time} LoC/second"
+        return a # don't display b or c for now
 
 @dataclass
 class OptionalPrinter:

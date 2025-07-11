@@ -57,7 +57,6 @@ class TypeDefOp(IRDLOperation):
 class ExternalTypeDefOp(IRDLOperation):
     name = "mid.external_typedef"
     class_name: StringAttr = attr_def(StringAttr)
-    vtbl_size: IntegerAttr = attr_def(IntegerAttr)
 
 @irdl_op_definition
 class TypeIntegersTableOp(IRDLOperation):

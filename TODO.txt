@@ -457,6 +457,8 @@ TODO:
 	- Comparison for tuples
 	- Closures
 
+- Use opaque 
+
 - it would be nice to narrow types *within* a logical expression, not merely in the following block
 	- Would be implemented inside of Logical
 

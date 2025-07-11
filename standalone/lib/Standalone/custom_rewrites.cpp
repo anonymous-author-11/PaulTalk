@@ -121,25 +121,12 @@ static Attribute coroFrame(PatternRewriter &rewriter, Type inputType) {
 static Attribute vtableType(PatternRewriter &rewriter, Attribute attr) {
 
   // Extract size from integer attribute - need to cast to Attribute first
-  auto sizeAttr = mlir::cast<IntegerAttr>(attr);
-  uint64_t thirdTableSize = sizeAttr.getInt();
+  auto name = mlir::cast<StringAttr>(attr);
   
   // Get the context
   MLIRContext *context = rewriter.getContext();
-  
-  // Create component types
-  auto i64Type = IntegerType::get(context, 64);
-  auto ptrType = LLVM::LLVMPointerType::get(context);  // Opaque pointer
-  
-  // Create the three array types
-  auto firstTableType = LLVM::LLVMArrayType::get(i64Type, 3);
-  auto secondTableType = LLVM::LLVMArrayType::get(ptrType, 4);
-  auto thirdTableType = LLVM::LLVMArrayType::get(ptrType, thirdTableSize);
-  
-  // Create the struct type containing the three arrays
-  SmallVector<Type, 3> structElements {firstTableType, secondTableType, thirdTableType};
-  
-  auto structType = LLVM::LLVMStructType::getLiteral(context, structElements);
+
+  auto structType = LLVM::LLVMStructType::getOpaque(name, context);
   auto structAttr = TypeAttr::get(structType);
   
   return mlir::cast<Attribute>(structAttr);

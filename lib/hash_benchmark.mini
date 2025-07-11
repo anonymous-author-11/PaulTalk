@@ -1,7 +1,7 @@
-import robin_hood;
+import linear_probe;
 import std;
 
-alias Map = RobinHoodMap;
+alias Map = LinearProbeMap;
 
 // --- Additions for Benchmarking ---
 extern def clock() -> i64
@@ -54,7 +54,6 @@ def benchmark_insert_sequential(n: i32) {
         last_val = map.get(n - 1);
         if last_val is Nil { verification_passed = false; }
         if last_val is i32 { if last_val != n { verification_passed = false; } }
-        else { if not (last_val is Nil) { verification_passed = false; } } // Must be Nil or i32
 
         // Verify size
         if map.size() != n { verification_passed = false; }
@@ -99,7 +98,6 @@ def benchmark_insert_random(n: i32) {
          last_val = map.get(last_key);
          if last_val is Nil { verification_passed = false; }
          if last_val is i32 { if last_val != (last_key + 1) { verification_passed = false; } }
-         else { if not (last_val is Nil) { verification_passed = false; } }
 
         // Verify size matches expected unique count
          actual_size = map.size();

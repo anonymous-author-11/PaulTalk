@@ -58,10 +58,7 @@ class AST:
         for typ_name, typ in builtin_types.items():
 
             if self.root.info.filepath.name != "builtins.mini":
-                attr_dict = {
-                    "class_name":StringAttr(typ_name),
-                    "vtbl_size":IntegerAttr.from_int_and_width(0, 32)
-                }
+                attr_dict = {"class_name":StringAttr(typ_name)}
                 typ_ops.append(ExternalTypeDefOp.create(attributes=attr_dict))
                 continue
 
@@ -2829,9 +2826,9 @@ class ClassDef(Statement):
 
     def interface_codegen(self, scope):
         if self.name in scope.comp_unit.codegenned: return
-        not_instantiable = any(isinstance(elem.definition, AbstractMethodDef) for elem in self.vtable() if isinstance(elem, Method))
-        vtable_size = 0 if not_instantiable else self.vtable_size()
-        attr_dict = {"class_name":StringAttr(self.name), "vtbl_size":IntegerAttr.from_int_and_width(vtable_size, 32)}
+        #not_instantiable = any(isinstance(elem.definition, AbstractMethodDef) for elem in self.vtable() if isinstance(elem, Method))
+        #vtable_size = 0 if not_instantiable else self.vtable_size()
+        attr_dict = {"class_name":StringAttr(self.name)}
         class_def = ExternalTypeDefOp.create(attributes=attr_dict)
         scope.region.last_block.add_op(class_def)
         scope.comp_unit.codegenned.add(self.name)

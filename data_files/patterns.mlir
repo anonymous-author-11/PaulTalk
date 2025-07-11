@@ -341,10 +341,9 @@ module @patterns {
   }
   pdl.pattern @LowerExternalTypeDef : benefit(1) {
     %class_name_attr = pdl.attribute
-    %vtbl_size_attr = pdl.attribute
-    %root = pdl.operation "mid.external_typedef" {"class_name" = %class_name_attr, "vtbl_size" = %vtbl_size_attr}
+    %root = pdl.operation "mid.external_typedef" {"class_name" = %class_name_attr}
     pdl.rewrite %root {
-      %vtbl_type = pdl.apply_native_rewrite "vtable_type"(%vtbl_size_attr : !pdl.attribute) : !pdl.attribute
+      %vtbl_type = pdl.apply_native_rewrite "vtable_type"(%class_name_attr : !pdl.attribute) : !pdl.attribute
       %linkage = pdl.attribute = #llvm.linkage<external>
       %constant = pdl.attribute = unit
       %class_glob = pdl.operation "placeholder.global" {"sym_name" = %class_name_attr, "global_type" = %vtbl_type, "linkage" = %linkage, "constant" = %constant}
