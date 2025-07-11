@@ -158,6 +158,8 @@ class Float(ParametrizedAttribute, FixedBitwidthType, _FloatType):
     def __format__(self, format_spec):
         return f"f64"
 
+fatptr_cache = {}
+
 @irdl_attr_definition
 class FatPtr(ParametrizedAttribute, TypeAttribute):
     name = "hi.fatptr"
@@ -166,7 +168,10 @@ class FatPtr(ParametrizedAttribute, TypeAttribute):
 
     @classmethod
     def basic(cls, name):
-        return FatPtr([StringAttr(name), NoneAttr()])
+        if name in fatptr_cache: return fatptr_cache[name]
+        result = FatPtr([StringAttr(name), NoneAttr()])
+        fatptr_cache[name] = result
+        return result
 
     @classmethod
     def generic(cls, name, types):
