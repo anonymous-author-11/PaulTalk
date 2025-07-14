@@ -23,17 +23,13 @@ class Container {
 
 class Iterator[T] extends Container {
 
-    @referent_reg : Region
-
-    regions { @elems_reg == @referent_reg.elems_reg }
-
     #[ret == @elems_reg]
-	abstract def next() -> T | Nil {}
+	abstract def next() -> T? {}
 }
 
 class Iterable[T] extends Container {
 
-    #[ret.referent_reg == self]
+    #[ret.elems_reg == @elems_reg]
 	abstract def iterator() -> Iterator[T] {
     }
 	def each(f : (T)) {
@@ -82,6 +78,20 @@ class Iterable[T] extends Container {
     }
 }
 
+// Must be O(1) to get next element
+class ConstantTimeIterator[T] extends Iterator[T] {}
+
+// Adapts a Coroutine into an Iterator
+// An alternative to writing boilerplate Iterator classes for your types
+// Generally less efficient than writing the classes
+class CoroIterator[T] extends Iterator[T] {
+    @coro : Coroutine[() yields T?]
+
+    def init(@coro : Coroutine[() yields T?]) {}
+
+    def next() -> T? { return @coro.call(); }
+}
+
 class Enumeration[T] extends Iterable[Pair[i32, T]] {
     @iterable : Iterable[T]
 
@@ -100,10 +110,13 @@ class Enumerator[T] extends Iterator[Pair[i32, T]] {
         @index = 0;
     }
 
-    def next() -> Pair[i32, T] | Nil {
-        @index = @index + 1;
+    def next() -> Pair[i32, T]? {
         next = @iterator.next();
-        if next is T { return Pair{@index - 1, next}; }
+        if next is T {
+            old_index = @index;
+            @index = @index + 1;
+            return Pair{old_index, next};
+        }
         return nil;
     }
 }
@@ -125,11 +138,11 @@ class MapIterator[T, U] extends Iterator[U] {
     @iterator : Iterator[T]
     @f : (T) -> U
 
-    regions { @referent_reg == @iterator }
+    regions { @elems_reg == @iterator.elems_reg }
 
     def init(@iterator : Iterator[T], @f : (T) -> U) {}
 
-    def next() -> U | Nil {
+    def next() -> U? {
         next = @iterator.next();
         if next is T { return @f.call(next); }
         return nil;
@@ -153,11 +166,11 @@ class FilterIterator[T] extends Iterator[T] {
     @iterator : Iterator[T]
     @f : (T) -> Bool
 
-    regions { @referent_reg == @iterator }
+    regions { @elems_reg == @iterator.elems_reg }
     
     def init(@iterator : Iterator[T], @f : (T) -> Bool) {}
 
-    def next() -> T | Nil {
+    def next() -> T? {
         next = @iterator.next();
         while next is T {
             if @f.call(next) { return next; }
@@ -189,14 +202,14 @@ class ChainIterator[T] extends Iterator[T] {
     @on_first : Bool
 
     regions {
-        @referent_reg == @first,
-        @referent_reg == @second
+        @first == @second,
+        @elems_reg == @first.elems_reg
     }
 
     def init(@first : Iterator[T], @second : Iterator[T]) {
         @on_first = true;
     }
-    def next() -> T | Nil {
+    def next() -> T? {
         if @on_first { 
             next = @first.next();
             if next is T { return next; }
@@ -228,20 +241,24 @@ class InterleaveIterator[T] extends Iterator[T] {
     @on_first : Bool
 
     regions {
-        @referent_reg == @first,
-        @referent_reg == @second
+        @first == @second,
+        @elems_reg == @first.elems_reg
     }
 
     def init(@first : Iterator[T], @second : Iterator[T]) {
         @on_first = true;
     }
-    def next() -> T | Nil {
+    def next() -> T? {
         if @on_first {
             @on_first = false;
-            return @first.next();
+            nxt = @first.next();
+            if nxt is T { return nxt; }
+            return @second.next();
         }
         @on_first = true;
-        return @second.next();
+        nxt = @second.next();
+        if nxt is T { return nxt; }
+        return @first.next();
     }
 }
 
@@ -273,13 +290,12 @@ class ZipIterator[T, U] extends Iterator[Pair[T, U]] {
     def init(@first : Iterator[T], @second : Iterator[U]) {
     }
 
-    def next() -> Pair[T, U] | Nil {
+    def next() -> Pair[T, U]? {
         first_elem = @first.next();
         second_elem = @second.next();
-        if first_elem is T {
-            if second_elem is U { return Pair{first_elem, second_elem}; }
-        }
-        return nil;
+        // notice the sophistication of the flow-typing
+        if first_elem is Nil or second_elem is Nil { return nil; }
+        return Pair{first_elem, second_elem};
     }
 }
 
@@ -303,11 +319,11 @@ class ProductIterator[T, U] extends Iterator[Pair[T, U]] {
     @first_iterator : Iterator[T]
     @second_iterator : Iterator[U]
     @second_iterable : Iterable[U]
-    @current_first : T | Nil
+    @current_first : T?
 
     regions {
         @current_first == @first_iterator.elems_reg,
-        @second_iterator.referent_reg == @second_iterable,
+        @second_iterator.elems_reg == @second_iterable.elems_reg,
         @elems_reg < @first_iterator.elems_reg,
         @elems_reg < @second_iterator.elems_reg
     }
@@ -317,7 +333,7 @@ class ProductIterator[T, U] extends Iterator[Pair[T, U]] {
         @current_first = @first_iterator.next();
     }
 
-    def next() -> Pair[T, U] | Nil {
+    def next() -> Pair[T, U]? {
         current_first = @current_first;
         while current_first is T {
             second_elem = @second_iterator.next();
@@ -329,3 +345,4 @@ class ProductIterator[T, U] extends Iterator[Pair[T, U]] {
         return nil;
     }
 }
+

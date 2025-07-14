@@ -1,26 +1,24 @@
 import core;
 
-class Array[T] extends Collection[T], Representable {
+class Array[T] extends
+    List[T],
+    IndexableCollection[i32, T, T],
+    Representable
+{
 	@buffer : Buffer[T]
 	@length : i32
 	@capacity : i32
 
     regions { @elems_reg == @buffer.elems_reg }
 
-    #[ret.elems_reg == iterable.elems_reg]
-	def Self.from_iterable(iterable : Iterable[T]) -> Array[T] {
-    	result = Array[T].new();
-    	for elem in iterable { result.append(elem); }
-    	return result;
+    def Self.empty() -> Self { return Self{}; }
+
+    // When iterable is actually a Collection, the optimized dispatch for Array.extend(collection) will be used
+    // A great example of why multimethods are so powerful: always dispatches on argument's runtime type
+    def Self.from_iterable(iterable : Iterable[T]) -> Self {
+        return Self.empty().extend(iterable);
     }
-    /*
-    #[ret.elems_reg == collection.elems_reg]
-    def Self.from_collection(collection : Collection[T]) -> Array[T] {
-        result = Array[T].new(collection.size());
-        for elem in collection { result.append(elem); }
-        return result;
-    }
-    */
+
 	def init() {
 		@buffer = Buffer[T].new(1);
 		@length = 0;
@@ -30,15 +28,8 @@ class Array[T] extends Collection[T], Representable {
         @buffer = Buffer[T].new(@capacity);
         @length = 0;
     }
-    def init(@length : i32, @capacity : i32) {
-        @buffer = Buffer[T].new(@capacity);
-    }
     def init(@buffer : Buffer[T], @length : i32, @capacity : i32) {
     }
-    #[ret == @length]
-	def length() -> i32 {
-		return @length;
-	}
     #[ret == @length]
     def size() -> i32 {
         return @length;
@@ -46,27 +37,6 @@ class Array[T] extends Collection[T], Representable {
     #[ret == @capacity]
     def capacity() -> i32 {
     	return @capacity;
-    }
-    #[ret == self, x == @elems_reg]
-    def append(x : T) -> Array[T] {
-        if @length >= @capacity { self.reserve(@capacity * 2); }
-        @buffer.[@length] = x;
-        @length = @length + 1;
-        return self;
-    }
-    #[ret == self, other.elems_reg == @elems_reg]
-    def extend(other : Array[T]) -> Array[T] {
-        other_len = other.length();
-        old_len = @length;
-        new_len = old_len + other_len;
-        self.reserve(new_len);
-        i = 0;
-        while i < other_len {
-            self.unchecked_insert(i + old_len, other.unchecked_index(i));
-            i = i + 1;
-        }
-        @length = new_len;
-        return self;
     }
     def reserve(new_capacity : i32) {
         if new_capacity <= @capacity { return; }
@@ -79,48 +49,87 @@ class Array[T] extends Collection[T], Representable {
             i = i + 1;
         }
     }
+
+    // List[T] overrides
+
+    #[ret == self, x == @elems_reg]
+    def append(x : T) -> Self {
+        if @length >= @capacity { self.reserve(@capacity * 2); }
+        @buffer.[@length] = x;
+        @length = @length + 1;
+        return self;
+    }
+    #[ret == self, other.elems_reg == @elems_reg]
+    def extend(other : Collection[T]) -> Self {
+        old_len = @length;
+        new_len = old_len + other.size();
+        self.reserve(new_len);
+        i = 0;
+        for elem in other {
+            self.unchecked_insert(i + old_len, elem);
+            i = i + 1;
+        }
+        @length = new_len;
+        return self;
+    }
+
+    // IndexableCollection[i32, T, T] overrides
+
+    def indices() -> Range {
+        return 0..@length;
+    }
+    def values() -> Self {
+        return self;
+    }
     #[ret == @elems_reg]
-    def [](x : i32) -> T yields OutOfBounds {
-    	past_end = x > (@length - 1);
-    	before_start = (@length + x) < 0;
-        if past_end or before_start { yield(OutOfBounds.new(@length, x)); }
-        if x < 0 { x = @length + x; }
-        return self.unchecked_index(x);
+    def [](index : i32) -> T yields OutOfBounds {
+        self.bounds_check(index);
+        if index < 0 { index = @length + index; }
+        return self.unchecked_index(index);
     }
     #[value == @elems_reg]
-    def []=(x : i32, value : T) yields OutOfBounds {
-        past_end = x > (@length - 1);
-        before_start = (@length + x) < 0;
-        if past_end or before_start { yield(OutOfBounds.new(@length, x)); }
-        if x < 0 { x = @length + x; }
-        self.unchecked_insert(x, value);
+    def []=(index : i32, value : T) yields OutOfBounds {
+        self.bounds_check(index);
+        if index < 0 { index = @length + index; }
+        self.unchecked_insert(index, value);
+    }
+
+    def bounds_check(index : i32) yields OutOfBounds {
+        past_end = index > (@length - 1);
+        before_start = (@length + index) < 0;
+        if past_end or before_start {
+            yield(OutOfBounds.new(@length, index));
+        }
     }
     #[ret == @elems_reg]
-    def unchecked_index(x : i32) -> T {
-    	return @buffer.[x];
+    def unchecked_index(index : i32) -> T {
+    	return @buffer.[index];
     }
     #[value == @elems_reg]
-    def unchecked_insert(x : i32, value : T) {
-        @buffer.[x] = value;
+    def unchecked_insert(index : i32, value : T) {
+        @buffer.[index] = value;
     }
-    def iterator() -> ArrayIterator[T] {
-    	return ArrayIterator[T].new(self);
+    def iterator() -> ConstantTimeIterator[T] {
+    	return ArrayIterator{self};
     }
     def repr() -> String {
         return "Array";
     }
 }
 
-class ArrayIterator[T] extends Iterator[T] {
+class ArrayIterator[T] extends ConstantTimeIterator[T] {
 	@array : Array[T]
 	@index : i32
 
-    regions { @referent_reg == @array }
+    regions { @elems_reg == @array.elems_reg }
 
 	def init(@array : Array[T]) { @index = 0; }
-	def next() -> T | Nil {
+	def next() -> T? {
+        // We check the array's current .length() on every .next() call
+        // This guarantees no out-of-bounds access if the array was modified
 		if @index >= @array.length() { return nil; }
+        old_index = @index;
 		@index = @index + 1;
-		return @array.unchecked_index(@index - 1);
+		return @array.unchecked_index(old_index);
 	}
 }

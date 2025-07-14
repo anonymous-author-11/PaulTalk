@@ -2,24 +2,90 @@ import core;
 
 class KeyNotFound extends Exception {}
 
-class Map[K, V] extends Iterable[Pair[K, V]] {
-    abstract def size() -> i32 {}
-    abstract def get(key : K) -> V | Nil {}
-    abstract def []=(key : K, value : V) {}
-    abstract def remove(key : K) -> V | Nil {}
-    abstract def clear() {}
+class Map[K, V] extends IndexableCollection[K, V, Pair[K, V]] {
+    
+    abstract def get(key : K) -> V? {}
+    abstract def insert(key : K, value : V) {}
+    abstract def remove(key : K) -> V? {}
 
+    def indices() -> Collection[K] {
+        return self.keys();
+    }
+    def keys() -> Collection[K] {
+        return MapKeys{self};
+    }
+    def values() -> Collection[V] {
+        return MapValues{self};
+    }
+    def clear() {
+        for key in self.keys() { self.remove(key); }
+    }
     def [](key : K) -> V {
         val = self.get(key);
-        if val is Nil { yield(KeyNotFound.new()); }
         if val is V { return val; }
+        yield(KeyNotFound{});
+    }
+    def []=(key : K, value : V) {
+        self.insert(key, value);
     }
 }
 
-class HashMap[K, V] extends Map[K, V] {}
+class MapKeys[K, V] extends Collection[K] {
+    @map : Map[K, V]
+
+    def init(@map : Map[K, V]) {
+    }
+    def size() -> i32 {
+        return @map.size();
+    }
+    def iterator() -> Iterator[K] {
+        return MapKeyIterator{@map.iterator()};
+    }
+}
+
+class MapValues[K, V] extends Collection[V] {
+    @map : Map[K, V]
+
+    def init(@map : Map[K, V]) {
+    }
+    def size() -> i32 {
+        return @map.size();
+    }
+    def iterator() -> Iterator[V] {
+        return MapValueIterator{@map.iterator()};
+    }
+}
+
+class MapKeyIterator[K, V] extends Iterator[K] {
+    @map_iterator : Iterator[Pair[K, V]]
+
+    def init(@map_iterator : Iterator[Pair[K, V]]) {}
+
+    def next() -> K? {
+        pair = @map_iterator.next();
+        if pair is Pair[K, V] { return pair.first(); }
+        return nil;
+    }
+}
+
+class MapValueIterator[K, V] extends Iterator[V] {
+    @map_iterator : Iterator[Pair[K, V]]
+
+    def init(@map_iterator : Iterator[Pair[K, V]]) {}
+
+    def next() -> V? {
+        pair = @map_iterator.next();
+        if pair is Pair[K, V] { return pair.second(); }
+        return nil;
+    }
+}
+
+class HashMap[K, V] extends Map[K, V] {
+    // You can construct a HashMap with a hash function and an equality function
+    abstract def init(hasher: (K) -> i32, eq : (K, K) -> Bool) {}
+}
 
 def i32_hasher(i : i32) -> i32 {
-    // Same fast bit-mixing hash function
     i = (i + 0x7ed55d16) + (i << 12);
     i = (i bit_xor 0xc761c23c) bit_xor (i >> 19);
     i = (i + 0x165667b1) + (i << 5);
@@ -37,8 +103,7 @@ def string_hasher(s : String) -> i32 {
     hash : i32 = 0;
     seed : i32 = 31;
     for c in s {
-        cast_val : i32 = c.byte();
-        hash = (hash * seed + cast_val) bit_and 0x7FFFFFFF;
+        hash = (hash * seed + c.codepoint()) bit_and 0x7FFFFFFF;
     }
     return hash;
 }

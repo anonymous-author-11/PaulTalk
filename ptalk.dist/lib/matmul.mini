@@ -51,12 +51,12 @@ class Matrix {
     def col_idx() -> Range { return 0..@cols; }
 
     // Because overflow *is defined*, it's imperative to cast to i64 *before* computing indices
-    def get(row : i32, col : i32) -> f64 {
+    def [](row : i32, col : i32) -> f64 {
         index = (col as i64) * @rows + row;
         return @data.[index];
     }
 
-    def set(row : i32, col : i32, value : f64) {
+    def []=(row : i32, col : i32, value : f64) {
         index = (col as i64) * @rows + row;
         @data.[index] = value;
     }
@@ -120,7 +120,7 @@ class Matrix {
                         while i_block <= i_limit_block - 8 {
                             c_vec = result.get_simd(i_block, j_block);
                             for k_block in kk..k_limit_block {
-                                b_kj = other.get(k_block, j_block);
+                                b_kj = other.[k_block, j_block];
                                 if b_kj == 0.0 { continue; }
                                 a_vec = self.get_simd(i_block, k_block);
                                 b_vec = (b_kj, b_kj, b_kj, b_kj, b_kj, b_kj, b_kj, b_kj);
@@ -131,13 +131,13 @@ class Matrix {
                         }
                         
                         while i_block < i_limit_block {
-                            c_val = result.get(i_block, j_block);
+                            c_val = result.[i_block, j_block];
                             for k_block in kk..k_limit_block {
-                                b_kj = other.get(k_block, j_block);
-                                a_val = self.get(i_block, k_block);
+                                b_kj = other.[k_block, j_block];
+                                a_val = self.[i_block, k_block];
                                 c_val = c_val + a_val * b_kj;
                             }
-                            result.set(i_block, j_block, c_val);
+                            result.[i_block, j_block] = c_val;
                             i_block = i_block + 1;
                         }
                     }
@@ -158,8 +158,8 @@ def benchmark_matrix_multiplication() {
         for j in 0..size {
             val1 = (i + j) % 10;
             val2 = (i - j + 10) % 10;
-            matrix1.set(i, j, val1 as f64); 
-            matrix2.set(i, j, val2 as f64);
+            matrix1.[i, j] = val1 as f64; 
+            matrix2.[i, j] = val2 as f64;
         }
     }
     
@@ -177,7 +177,7 @@ def benchmark_matrix_multiplication() {
     IO.print(time_taken);
     
     sum = 0.0;
-    for i in 0..size { sum = sum + result.get(0, i); }
+    for i in 0..size { sum = sum + result.[0, i]; }
     IO.print("Sum of first row (for verification):");
     IO.print(sum);
 }

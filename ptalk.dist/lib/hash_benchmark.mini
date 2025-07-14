@@ -3,14 +3,17 @@ import std;
 
 alias Map = CuckooMap;
 
-// --- Additions for Benchmarking (Unchanged) ---
+// --- Additions for Benchmarking ---
 extern def clock() -> i64
 
-// --- PRNG Class (Unchanged) ---
+// --- PRNG Class ---
 class PRNG {
     @seed: i32
     def init(initial_seed: i32) {
-        if initial_seed <= 0 { @seed = 1; return; }
+        if initial_seed <= 0 {
+            @seed = 1;
+            return;
+        }
         @seed = initial_seed bit_and 0x7FFFFFFF;
     }
     def next() -> i32 {
@@ -21,7 +24,7 @@ class PRNG {
     }
 }
 
-// --- Helper to print benchmark results (Unchanged) ---
+// --- Helper to print benchmark results ---
 def print_benchmark_result(test_name: String, n: i32, duration: i64) {
     IO.print(test_name);
     IO.print("  Operations: "); IO.print(n);
@@ -32,7 +35,7 @@ def print_benchmark_result(test_name: String, n: i32, duration: i64) {
     }
 }
 
-// --- Benchmarking Functions (Mostly Unchanged, ensure verification logic is correct) ---
+// --- Benchmarking Functions ---
 
 def benchmark_insert_sequential(n: i32) {
     map = Map[i32, i32].new(i32_hasher, i32_eq);
@@ -51,7 +54,6 @@ def benchmark_insert_sequential(n: i32) {
         last_val = map.get(n - 1);
         if last_val is Nil { verification_passed = false; }
         if last_val is i32 { if last_val != n { verification_passed = false; } }
-        else { if not (last_val is Nil) { verification_passed = false; } } // Must be Nil or i32
 
         // Verify size
         if map.size() != n { verification_passed = false; }
@@ -80,7 +82,6 @@ def benchmark_insert_random(n: i32) {
         i = i + 1;
     }
     expected_size = temp_map_for_size_check.size();
-    temp_map_for_size_check = nil; // Release memory
 
     start_time: i64 = clock();
     i = 0;
@@ -97,7 +98,6 @@ def benchmark_insert_random(n: i32) {
          last_val = map.get(last_key);
          if last_val is Nil { verification_passed = false; }
          if last_val is i32 { if last_val != (last_key + 1) { verification_passed = false; } }
-         else { if not (last_val is Nil) { verification_passed = false; } }
 
         // Verify size matches expected unique count
          actual_size = map.size();
@@ -174,7 +174,6 @@ def benchmark_get_random_hit(n: i32) {
         }
         attempts = attempts + 1;
     }
-    temp_map_for_setup = nil; // Release memory
 
     // Adjust n if we couldn't generate enough unique keys
     if keys_added_count < n {
@@ -244,7 +243,6 @@ def benchmark_get_random_miss(n: i32) {
         }
         attempts = attempts + 1;
     }
-    temp_map_for_setup = nil; // Release memory
 
     // Adjust n if we couldn't generate enough guaranteed miss keys
     if miss_keys_generated < n {
@@ -298,7 +296,6 @@ def benchmark_remove_random(n: i32) {
         }
         attempts = attempts + 1;
     }
-    temp_map_keys = nil; // Release memory
 
     // Adjust n if we couldn't add enough unique keys
     if keys_added_count < n {

@@ -28,7 +28,7 @@ type_bound: ident "<:" typ
 
 ident_list: ident ("," ident)*
 
-extern_def: ["#["constraint_list"]"] "extern" DEF ident "(" param_list ")" ["->" typ] ["yields" typ]
+extern_def: ["#["constraint_list"]"] "extern" DEF ident "(" param_list ["," ELIPSIS] ")" ["->" typ] ["yields" typ]
 function_def: ["#["constraint_list"]"] DEF ident "(" param_list ")" ["->" typ] ["yields" typ] block
 abstract: "abstract"
 method_def: ["#["constraint_list"]"] [abstract] DEF method_name ["[" ident_list "]"] "(" method_param_list ")" ["->" typ] ["yields" typ] block
@@ -71,16 +71,18 @@ break_statement: BREAK
 continue_statement: CONTINUE
 
 typ: basic_type
-    | sum_type
+    | union_type
     | parameterized_type
     | function_type
+    | nilable_type
 
 type_list: (typ ("," typ)*)?
 type_count: INT "x" typ
 basic_type: ident
-sum_type: typ "|" typ
+union_type: typ "|" typ
 parameterized_type: ident "[" (type_list | type_count) "]"
 function_type: "(" type_list ")" ["->" typ] ["yields" typ]
+nilable_type: typ "?"
 
 block: "{" statement* "}"
 
@@ -101,7 +103,8 @@ comparison: arithmetic -> comparison_single
           | comparison GE arithmetic
           | comparison "..." arithmetic -> inclusive_range_literal
           | comparison ".." arithmetic -> exclusive_range_literal
-          | comparison "is" typ -> type_check
+          | comparison IS typ -> is_check
+          | comparison IS NOT typ -> isnot_check
 
 arithmetic: term -> arithmetic_single
           | arithmetic PLUS term
@@ -119,6 +122,7 @@ term: cast -> term_single
 
 cast: factor -> cast_single
     | cast AS typ -> as_op
+    | cast INTO typ -> into_op
 
 factor: primary -> factor_single
       | MINUS factor -> neg_op
@@ -132,6 +136,7 @@ primary: "(" expression ")" -> paren_expr
        | FALSE -> bool_literal
        | NIL -> nil_literal
        | STRING -> string_literal
+       | CHAR -> char_literal
        | function_literal
        | array_literal
        | tuple_literal
@@ -140,17 +145,19 @@ primary: "(" expression ")" -> paren_expr
        | yield_call
        | assignable
 
+expression_list: (expression ("," expression)*)?
+
 function_literal: "(" param_list ")" ["yields" typ] ARROW block
-array_literal: LBRACKET (expression ("," expression)*)? "]"
+array_literal: LBRACKET expression_list "]" ["of" typ]
 tuple_literal: "(" expression "," expression ("," expression)* ")"
-dictionary_literal: "{" (expression "::" ("," expression "::" expression)*)? "}"
+dictionary_literal: "{" (expression ":" expression ("," expression ":" expression)*)? "}"
 print_call: "print" "(" (expression ("," expression)*)? ")"
 sizeof_call: "sizeof" "(" typ ")"
 yield_call: YIELD "(" [expression] ")"
 function_call: ident "(" (expression ("," expression)*)? ")"
 method_call: (primary | parameterized_type) "." ident "(" (expression ("," expression)*)? ")"
 object_creation: (CAPITAL_IDENT | parameterized_type) LBRACE (expression ("," expression)*)? "}"
-indexation: primary "." "[" expression "]"
+indexation: primary "." "[" (expression ("," expression)*)? "]"
 ident: CAPITAL_IDENT | LOWERCASE_IDENT
 
 operator: PLUS | MINUS | TIMES | DIVIDE | NEQ | EQ | LE | GE | LT | GT | BRACKETS | BRACKETS_SETTER
@@ -173,6 +180,8 @@ GE: ">="
 LT: "<"
 GT: ">"
 AS: "as"
+IS: "is"
+INTO: "into"
 NOT: "not"
 OR: "or"
 AND: "and"
@@ -202,6 +211,7 @@ INT:   /[0-9]+(_[0-9]+)*/
 HEX:   /0x[0-9a-fA-F]+(_[0-9a-fA-F]+)*/
 FLOAT: /[0-9]+(_[0-9]+)*\.[0-9]+(_[0-9]+)*/
 STRING: /".*?"/
+CHAR: /'.*?'/
 
 COMMENT: "//" /[^\n]*/
 BLOCK_COMMENT: /\/\*[\s\S]*?\*\//

@@ -1,8 +1,10 @@
+// This bug has been fixed! the program now prints 'nil' as it should
+
 import range;
 import io;
 
 a = 5;
-for i in 0:10 {
+for i in 0...10 {
 	a = nil;
 	break;
 	a = 6;

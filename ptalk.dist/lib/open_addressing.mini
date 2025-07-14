@@ -17,10 +17,8 @@ class Entry[K,V] {
     def hash() -> i32 { return @hash; }
 }
 
-// --- HashMap Implementation (Optimized) ---
-
 class OpenAddressMap[K,V] extends HashMap[K,V] {
-    @entries: Buffer[Entry[K,V] | Nil]
+    @entries: Buffer[Entry[K,V]?]
     @entries_len : i32
     @size: i32      // number of actual entries (key -> V)
     @load: i32      // number of occupied slots (key -> V or key -> Tombstone)
@@ -29,11 +27,10 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
 
     def init(@hasher: (K) -> i32, @eq : (K, K) -> Bool) {
         // Ensure initial capacity is a power of 2
-        @entries = Buffer[Entry[K,V] | Nil].new(16);
+        @entries = Buffer[Entry[K,V]?].new(16);
         @entries_len = 16;
         @size = 0;
         @load = 0;
-        // @hasher and @eq are initialized by the parameter syntax
     }
 
     // Concrete implementations should override this method
@@ -62,21 +59,19 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
         // Assume new_capacity is a power of 2
         old_entries = @entries;
         old_len = @entries_len;
-        @entries = Buffer[Entry[K,V] | Nil].new(new_capacity); // Buffer of Nil
+        @entries = Buffer[Entry[K,V]?].new(new_capacity); // Buffer of Nil
         @entries_len = new_capacity;
         @size = 0; // Reset size and load for the new table
         @load = 0;
 
-        i = 0;
-        while i < old_len { // Iterate only up to old length
+        for i in 0..old_len { // Iterate only up to old length
             entry = old_entries.[i];
             // Re-insert only if it's a valid entry with a non-tombstone value
-            if entry is Entry[K,V] {
-                val = entry.value();
-                // We know the entry's hash, reuse it.
-                if val is V { self.insert_internal(entry.key(), val, entry.hash()); }
-            }
-            i = i + 1;
+            if entry is Nil { continue; }
+            val = entry.value();
+            if val is not V { continue; }
+            // We know the entry's hash, reuse it.
+            self.insert_internal(entry.key(), val, entry.hash());
         }
     }
 
@@ -96,25 +91,20 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
             // Inserted into an empty slot
             @size = @size + 1;
             @load = @load + 1;
+            return;
          }
-         if current_entry_or_nil is Entry[K, V] {
-             // Slot was occupied, check if it was a tombstone
-             old_value = current_entry_or_nil.value();
-             if old_value is Tombstone {
-                 // Replaced a tombstone
-                 @size = @size + 1; // Now holds a real value
-                 // @load doesn't change (slot was already occupied)
-             } else {
-                 // Replaced an existing, active value.
-                 // @size doesn't change (still one active value)
-                 // @load doesn't change (slot was already occupied)
-             }
+         // Slot was occupied, check if it was a tombstone
+         old_value = current_entry_or_nil.value();
+         if old_value is Tombstone {
+             // Replaced a tombstone
+             @size = @size + 1; // Now holds a real value
+             // @load doesn't change (slot was already occupied)
+         } else {
+             // Replaced an existing, active value.
+             // @size doesn't change (still one active value)
+             // @load doesn't change (slot was already occupied)
          }
          // else case should not happen if find_slot works correctly
-    }
-
-    def []=(key : K, value : V) {
-        self.insert(key, value);
     }
 
     // Public insert method
@@ -127,7 +117,7 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
     }
 
     // Get value associated with key
-    def get(key: K) -> V | Nil {
+    def get(key: K) -> V? {
         // No need to check capacity here
         hash = @hasher.call(key);
         i = self.find_slot(key, hash);
@@ -135,45 +125,39 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
 
         // find_slot guarantees that if an entry is returned, hash/key match.
         // We only need to check if it's Nil or a Tombstone.
-        if entry_or_nil is Entry[K, V] {
-            val = entry_or_nil.value();
-            if val is V { return val; }
-            // If val is Tombstone, the key was deleted
-        }
-        // If entry_or_nil is Nil, or it was a Tombstone entry for this key
-        return nil;
+        if entry_or_nil is Nil { return nil; }
+        val = entry_or_nil.value();
+        // If val is Tombstone, the key was deleted
+        if val is Tombstone { return nil; }
+        return val;
     }
 
     // Remove key and return its value, or Nil if not found.
-    def remove(key: K) -> V | Nil {
+    def remove(key: K) -> V? {
         // No need to check capacity here
         hash = @hasher.call(key);
         i = self.find_slot(key, hash);
         entry_or_nil = @entries.[i];
 
-        if entry_or_nil is Entry[K, V] {
-            val = entry_or_nil.value();
-            // Only remove if it's an active entry (not already a tombstone)
-            if val is V {
-                // Create Tombstone entry, preserving key and hash for probing continuity
-                tombstone_entry = Entry[K,V].new(entry_or_nil.key(), Tombstone.new(), entry_or_nil.hash());
-                @entries.[i] = tombstone_entry;
-                @size = @size - 1; // Active element count decreases
-                // @load remains the same (slot still occupied by tombstone)
+        // return nil if entry_or_nil is Nil or holds a Tombstone for the key
+        if entry_or_nil is Nil { return nil; }
+        val = entry_or_nil.value();
+        // Only remove if it's an active entry (not already a tombstone)
+        if val is Tombstone{ return nil; }
+        // Create Tombstone entry, preserving key and hash for probing continuity
+        tombstone_entry = Entry[K,V].new(entry_or_nil.key(), Tombstone.new(), entry_or_nil.hash());
+        @entries.[i] = tombstone_entry;
+        @size = @size - 1; // Active element count decreases
+        // @load remains the same (slot still occupied by tombstone)
 
-                // Return the removed value (which we know is not Tombstone)
-                return val;
-            }
-            // If val is Tombstone, key was already removed effectively
-        }
-        // If entry_or_nil is Nil or holds a Tombstone for the key
-        return nil;
+        // Return the removed value (which we know is not Tombstone)
+        return val;
     }
 
     // Clear the map
     def clear() {
         // Re-initialize with default capacity
-        @entries = Buffer[Entry[K,V] | Nil].new(16);
+        @entries = Buffer[Entry[K,V]?].new(16);
         @size = 0;
         @load = 0;
     }
@@ -188,27 +172,24 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
     }
 }
 
-// --- Custom Iterator Class (Unchanged from original logic) ---
-// Conforms to Iterator interface
 class OpenAddressMapIterator[K,V] extends Iterator[Pair[K,V]] {
-    @map_entries: Buffer[Entry[K,V] | Nil]
+    @map_entries: Buffer[Entry[K,V]?]
     @index: i32
     @length: i32 // Cache length for minor optimization
 
-    def init(@map_entries: Buffer[Entry[K,V] | Nil], @length : i32) {
+    def init(@map_entries: Buffer[Entry[K,V]?], @length : i32) {
         @index = 0;
     }
 
-    def next() -> Pair[K, V] | Nil {
+    def next() -> Pair[K, V]? {
         while @index < @length { // Use cached length
             entry_or_nil = @map_entries.[@index];
             @index = @index + 1; // Increment index for next call
-
-            if entry_or_nil is Entry[K, V] {
-                val = entry_or_nil.value();
-                if val is V { return Pair[K, V].new(entry_or_nil.key(), val); }
-            }
             // Continue loop if Nil or Tombstone
+            if entry_or_nil is Nil { continue; }
+            val = entry_or_nil.value();
+            if val is Tombstone { continue; }
+            return Pair{entry_or_nil.key(), val};
         }
         return nil; // End of iteration
     }

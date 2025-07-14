@@ -341,10 +341,9 @@ module @patterns {
   }
   pdl.pattern @LowerExternalTypeDef : benefit(1) {
     %class_name_attr = pdl.attribute
-    %vtbl_size_attr = pdl.attribute
-    %root = pdl.operation "mid.external_typedef" {"class_name" = %class_name_attr, "vtbl_size" = %vtbl_size_attr}
+    %root = pdl.operation "mid.external_typedef" {"class_name" = %class_name_attr}
     pdl.rewrite %root {
-      %vtbl_type = pdl.apply_native_rewrite "vtable_type"(%vtbl_size_attr : !pdl.attribute) : !pdl.attribute
+      %vtbl_type = pdl.apply_native_rewrite "vtable_type"(%class_name_attr : !pdl.attribute) : !pdl.attribute
       %linkage = pdl.attribute = #llvm.linkage<external>
       %constant = pdl.attribute = unit
       %class_glob = pdl.operation "placeholder.global" {"sym_name" = %class_name_attr, "global_type" = %vtbl_type, "linkage" = %linkage, "constant" = %constant}
@@ -457,11 +456,11 @@ module @patterns {
       %get_current_coroutine_with_region = pdl.apply_native_rewrite "add_region"(%get_current_coroutine_decl : !pdl.operation) : !pdl.operation
       pdl.erase %get_current_coroutine_decl
       
-      %set_offset = pdl.attribute = "set_offset"
-      %func_type_attr8 = pdl.attribute = !llvm.func<void (ptr, ptr)>
-      %set_offset_decl = pdl.operation "llvm.func" {"sym_name" = %set_offset, "function_type" = %func_type_attr8, "linkage" = %linkage}
-      %set_offset_with_region = pdl.apply_native_rewrite "add_region"(%set_offset_decl : !pdl.operation) : !pdl.operation
-      pdl.erase %set_offset_decl
+      %get_offset = pdl.attribute = "get_offset"
+      %func_type_attr8 = pdl.attribute = !llvm.func<i32 (ptr, ptr)>
+      %get_offset_decl = pdl.operation "llvm.func" {"sym_name" = %get_offset, "function_type" = %func_type_attr8, "linkage" = %linkage}
+      %get_offset_with_region = pdl.apply_native_rewrite "add_region"(%get_offset_decl : !pdl.operation) : !pdl.operation
+      pdl.erase %get_offset_decl
 
       %assume_offset = pdl.attribute = "assume_offset"
       %func_type_attr81 = pdl.attribute = !llvm.func<void (ptr, ptr)>
@@ -1115,17 +1114,28 @@ module @patterns {
   pdl.pattern @LowerSetOffset : benefit (1) {
     %to_typ = pdl.attribute
     %ptr_type = pdl.type : !llvm.ptr
+    %i64_type = pdl.type : i64
+    %i32_type = pdl.type : i32
+
     %fat_ptr = pdl.operand
     %root = pdl.operation "mid.set_offset"(%fat_ptr : !pdl.value) {"to_typ" = %to_typ}
     pdl.rewrite %root {
       %symbol = pdl.apply_native_rewrite "string_to_symbol"(%to_typ: !pdl.attribute) : !pdl.attribute
       %addr_of = pdl.operation "mid.addr_of" {"global_name" = %symbol} -> (%ptr_type : !pdl.type)
       %addr_of_result = pdl.result 0 of %addr_of
-      %callee = pdl.attribute = @set_offset
+      %vptr = pdl.operation "llvm.load"(%fat_ptr : !pdl.value) -> (%ptr_type : !pdl.type)
+      %vptr_result = pdl.result 0 of %vptr
+      %callee = pdl.attribute = @get_offset
       %opsegsize = pdl.attribute = array<i32: 2, 0>
       %opbundlesize = pdl.attribute = array<i32>
-      %call = pdl.operation "placeholder.call"(%fat_ptr, %addr_of_result : !pdl.value, !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize}
-      pdl.replace %root with %call
+      %call = pdl.operation "placeholder.call"(%vptr_result, %addr_of_result : !pdl.value, !pdl.value) {"callee" = %callee, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%i32_type : !pdl.type)
+      %offset = pdl.result 0 of %call
+      %indices = pdl.attribute = array<i32: 0, 3>
+      %fat_base_attr = pdl.attribute = !llvm.struct<(ptr, ptr, ptr, i32)>
+      %destination = pdl.operation "llvm.getelementptr"(%fat_ptr : !pdl.value) {"elem_type" = %fat_base_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
+      %destination_result = pdl.result 0 of %destination
+      %store = pdl.operation "llvm.store"(%offset, %destination_result : !pdl.value, !pdl.value)
+      pdl.replace %root with %store
     }
   }
   pdl.pattern @LowerSetOffsetAny : benefit (2) {

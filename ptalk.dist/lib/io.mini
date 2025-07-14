@@ -26,11 +26,7 @@ class IO {
         print(x.c_string());
     }
     def Self.print(x : Character){
-        buf = Buffer[i8].new(2);
-        null : i8 = 0;
-        buf.[0] = x.byte();
-        buf.[1] = null;
-        print(buf);
+        print(x.to_string().c_string());
     }
     def Self.print(x : Representable){
         print(x.repr().c_string());

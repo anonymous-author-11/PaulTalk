@@ -319,15 +319,6 @@ define void @assume_offset(ptr %fat_ptr, ptr %id_ptr) {
   ret void
 }
 
-define void @set_offset(ptr %fat_ptr, ptr %id_ptr) {
-  %vptr = load ptr, ptr %fat_ptr
-  %id_of_casted = load i64, ptr %vptr
-  %offset = call i32 @get_offset(ptr %vptr, ptr %id_ptr)
-  %destination = getelementptr { ptr, ptr, ptr, i32 }, ptr %fat_ptr, i32 0, i32 3
-  store i32 %offset, ptr %destination
-  ret void
-}
-
 define i64 @hash_to_index(i64 %tbl_size, i64 %hash_coef, i64 %cand_id) {
   %product = mul i64 %cand_id, %hash_coef
   %shifted = lshr i64 %product, 32

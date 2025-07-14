@@ -1,6 +1,5 @@
 import map;
 
-// --- Entry Class (Cuckoo) ---
 class Entry[K,V] {
     @primary_hash: i32 // Store primary hash (h1)
     @key: K
@@ -17,11 +16,9 @@ class Entry[K,V] {
     }
 }
 
-// --- Cuckoo HashMap Implementation ---
-
 class CuckooMap[K,V] extends HashMap[K, V] {
-    @table1 : Buffer[Entry[K,V] | Nil]
-    @table2 : Buffer[Entry[K,V] | Nil]
+    @table1 : Buffer[Entry[K,V]?]
+    @table2 : Buffer[Entry[K,V]?]
     @table_len : i32
     @size : i32
     @hasher : (K) -> i32 // Primary user-provided hash function
@@ -34,8 +31,8 @@ class CuckooMap[K,V] extends HashMap[K, V] {
     def init(@hasher : (K) -> i32, @eq : (K, K) -> Bool) {
         tbl_capacity = 8;
         @table_len = tbl_capacity; // Start small, total capacity 16
-        @table1 = Buffer[Entry[K,V] | Nil].new(tbl_capacity);
-        @table2 = Buffer[Entry[K,V] | Nil].new(tbl_capacity);
+        @table1 = Buffer[Entry[K,V]?].new(tbl_capacity);
+        @table2 = Buffer[Entry[K,V]?].new(tbl_capacity);
         @size = 0;
     }
 
@@ -66,7 +63,7 @@ class CuckooMap[K,V] extends HashMap[K, V] {
     // Attempts to place an entry, performing displacements.
     // Returns Nil on success.
     // Returns the Entry that failed placement if max displacements reached.
-    def place_entry_or_get_failed(entry_to_insert: Entry[K,V]) -> Entry[K,V] | Nil {
+    def place_entry_or_get_failed(entry_to_insert: Entry[K,V]) -> Entry[K,V]? {
         current_entry = entry_to_insert;
         on_first = true; // Start with table 1
 
@@ -112,7 +109,7 @@ class CuckooMap[K,V] extends HashMap[K, V] {
         return current_entry;
     }
 
-    def move_entries(old_table : Buffer[Entry[K,V] | Nil], old_capacity_per_table : i32) {
+    def move_entries(old_table : Buffer[Entry[K,V]?], old_capacity_per_table : i32) {
         i = 0;
         while i < old_capacity_per_table {
             entry = old_table.[i];
@@ -133,15 +130,15 @@ class CuckooMap[K,V] extends HashMap[K, V] {
 
         // Create new tables and reset state
         @table_len = new_capacity_per_table;
-        @table1 = Buffer[Entry[K,V] | Nil].new(new_capacity_per_table);
-        @table2 = Buffer[Entry[K,V] | Nil].new(new_capacity_per_table);
+        @table1 = Buffer[Entry[K,V]?].new(new_capacity_per_table);
+        @table2 = Buffer[Entry[K,V]?].new(new_capacity_per_table);
         @size = 0; // Reset size, place_entry_or_get_failed will increment it
 
         self.move_entries(old_table1, old_capacity_per_table);
         self.move_entries(old_table2, old_capacity_per_table);
     }
 
-    def replace_in_table(key : K, value : V, h1 : i32, idx : i32, table : Buffer[Entry[K,V] | Nil]) -> Bool {
+    def replace_in_table(key : K, value : V, h1 : i32, idx : i32, table : Buffer[Entry[K,V]?]) -> Bool {
         entry = table.[idx];
         if entry is Entry[K,V] {
             // Check primary hash first (quick), then key equality (potentially slow)
@@ -155,7 +152,7 @@ class CuckooMap[K,V] extends HashMap[K, V] {
         return false;
     }
 
-    def get_from_table(key : K, h1 : i32, idx : i32, table : Buffer[Entry[K,V] | Nil]) -> V | Nil {
+    def get_from_table(key : K, h1 : i32, idx : i32, table : Buffer[Entry[K,V]?]) -> V? {
         entry = table.[idx];
         if entry is Entry[K,V] {
             // Check hash first, then equality
@@ -166,7 +163,7 @@ class CuckooMap[K,V] extends HashMap[K, V] {
         return nil;
     }
 
-    def remove_from_table(key : K, h1 : i32, idx : i32, table : Buffer[Entry[K,V] | Nil]) -> V | Nil {
+    def remove_from_table(key : K, h1 : i32, idx : i32, table : Buffer[Entry[K,V]?]) -> V? {
         entry = table.[idx];
         if entry is Entry[K,V] {
             if entry.primary_hash() == h1 and @eq.call(entry.key(), key) {
@@ -210,7 +207,7 @@ class CuckooMap[K,V] extends HashMap[K, V] {
 
         // Create the new entry to insert
         entry_to_insert = Entry[K,V].new(key, value, h1);
-        failed_entry: Entry[K,V] | Nil = nil; // Tracks failure across resize attempts
+        failed_entry: Entry[K,V]? = nil; // Tracks failure across resize attempts
 
         // --- Loop to handle insertion attempts and potential resize ---
         // Allow one resize cycle if the initial placement fails.
@@ -239,7 +236,7 @@ class CuckooMap[K,V] extends HashMap[K, V] {
     }
 
     // Get value associated with key
-    def get(key: K) -> V | Nil {
+    def get(key: K) -> V? {
         h1 = self.hash1(key);
         idx1 = self.index1(h1);
 
@@ -257,7 +254,7 @@ class CuckooMap[K,V] extends HashMap[K, V] {
     }
 
     // Remove key and return its value, or Nil if not found.
-    def remove(key: K) -> V | Nil {
+    def remove(key: K) -> V? {
         h1 = self.hash1(key);
         idx1 = self.index1(h1);
 
@@ -278,8 +275,8 @@ class CuckooMap[K,V] extends HashMap[K, V] {
     def clear() {
         tbl_capacity = 8;
         @table_len = tbl_capacity;
-        @table1 = Buffer[Entry[K,V] | Nil].new(tbl_capacity);
-        @table2 = Buffer[Entry[K,V] | Nil].new(tbl_capacity);
+        @table1 = Buffer[Entry[K,V]?].new(tbl_capacity);
+        @table2 = Buffer[Entry[K,V]?].new(tbl_capacity);
         @size = 0;
     }
 
@@ -295,21 +292,19 @@ class CuckooMap[K,V] extends HashMap[K, V] {
     }
 }
 
-// --- Custom Iterator Class for Cuckoo HashMap ---
-
 class CuckooMapIterator[K,V] extends Iterator[Pair[K,V]] {
-    @map_table1: Buffer[Entry[K,V] | Nil]
-    @map_table2: Buffer[Entry[K,V] | Nil]
+    @map_table1: Buffer[Entry[K,V]?]
+    @map_table2: Buffer[Entry[K,V]?]
     @table_len : i32
     @index: i32       // Index within the current table
     @on_second : Bool // whether on second table
 
-    def init(@map_table1: Buffer[Entry[K,V] | Nil], @map_table2: Buffer[Entry[K,V] | Nil], @table_len : i32) {
+    def init(@map_table1: Buffer[Entry[K,V]?], @map_table2: Buffer[Entry[K,V]?], @table_len : i32) {
         @index = 0;
         @on_second = false; // Start with table 1
     }
 
-    def next_from_table(table : Buffer[Entry[K,V] | Nil]) -> Pair[K, V] | Nil {
+    def next_from_table(table : Buffer[Entry[K,V]?]) -> Pair[K, V]? {
         while @index < @table_len {
             entry = table.[@index];
             @index = @index + 1;
@@ -318,7 +313,7 @@ class CuckooMapIterator[K,V] extends Iterator[Pair[K,V]] {
         return nil;
     }
 
-    def next() -> Pair[K, V] | Nil {
+    def next() -> Pair[K, V]? {
         if not @on_second {
             nxt = self.next_from_table(@map_table1);
             if nxt is Pair[K, V] { return nxt; }

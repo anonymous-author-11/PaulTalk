@@ -1,7 +1,10 @@
 
-import iteration;
+import collection;
 
-class Range extends Iterable[i32] {
+// An *inclusive* range
+// a...b is sugar for Range{a, b}
+// a..b is sugar for Range{a, b - 1}
+class Range extends Collection[i32] {
     @start : i32
     @end : i32
     @step : i32
@@ -13,6 +16,11 @@ class Range extends Iterable[i32] {
 
     def init(@start : i32, @end : i32) {
         @step = 1;
+    }
+
+    def size() -> i32 {
+        if @step == 1 { return (@end - @start) + 1; }
+        return ((@end - @start) / @step) + 1;
     }
 
     def step(@step : i32) -> Range {
@@ -31,7 +39,7 @@ class RangeIterator extends Iterator[i32] {
 
     def init(@counter : i32, @end : i32, @step : i32) {}
 
-    def next() -> i32 | Nil {
+    def next() -> i32? {
         if @counter > @end { return nil; }
         old_counter = @counter;
         @counter = @counter + @step;

@@ -418,6 +418,12 @@ DONE:
 	- Special case in TypeCheck [check!]
 	- Need to ensure intersection of Buffer & Nil doesn't reduce to Nothing [check!]
 - Promote negation to being a real node [check!]
+- Narrow alternate path in branches [check!]
+	- The main motivation is to be able to pare off nil with "while x is Nil { yield(Exception); }"
+	- If the condition of a while is a type check then that type can be pared off after the loop [check!]
+	- We know that some intersections are uninhabitable (especially with nil) [check!]
+	- Therefore we know that 'if x is Nil' implies that it is non-nil in the other branch [check!]
+	- We know the intersection of a union with a negation of one of its members [check!]
 
 - Releases 0.1.*
 	- Works on any Windows x86_64 machine (other people's computers) [check!]
@@ -707,6 +713,10 @@ TODO:
 		- Add narrowing within logical and/or ops (if x is T and y is U { ... } ) [check!]
 		- Ensure 'while' with a type check condition does not pollute the main path [check!]
 	- Use opaque types for external vtables [check!]
+	- Do less work for imports [check!]
+		- Type-check specific imports on-demand rather than upfront [check!]
+		- Decrease work done in interface_codegen [check!]
+		- std.mini should compile near instantly [check!]
 	- Cache the parser instead of reconstructing every time [check!]
 	- Does just adding dependencies to the path work?
 		- The source_dirs collection should be ordered, not a set [check!]
@@ -833,10 +843,6 @@ TODO:
 	- "alias Foo[A] = Bar[A, i32];"
 	- This is more complex
 
-- Do less work for imports
-	- Type-check specific imports on-demand rather than upfront
-	- Decrease work done in interface_codegen
-	- std.mini should compile near instantly
 - Implement Records
 	- Will require a utility method for finding field offsets for generic records
 - Dispatch on parameterizations
@@ -888,15 +894,11 @@ TODO:
 - Allow capturing class methods
 	- Will introduce A.b syntax
 	- A.b will also denote module-qualified names
+	- Easier than instance methods b/c no need to capture 'self'
 - Shift Functions and Coroutines to FatPtr interface [ABI breaking]
 	- Store the fptr in the second word
 	- Would need a .fptr() pseudo-method for C interop
-- Narrow alternate path in branches [check!]
-	- The main motivation is to be able to pare off nil with "while x is Nil { yield(Exception); }"
-	- If the condition of a while is a type check then that type can be pared off after the loop
-	- We know that some intersections are uninhabitable (especially with nil)
-	- Therefore we know that 'if x is Nil' implies that it is non-nil in the other branch [check!]
-	- We know the intersection of a union with a negation of one of its members [check!]
+	- Instead we should only do this when upcasting to Callable
 - Make sure that c3 linearization interacts properly with imports
 - When call is statically known, narrow result types
 	- Casting is needed (from behavior return type to narrowed return type)
