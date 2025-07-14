@@ -622,7 +622,7 @@ TODO:
 - Release 0.4.2
 	- I'd like to be able to do mat[i,j] = val; [check!]
 
-- Release 0.5.*
+- Release 0.5.0
 	- Allow iterating over heterogenous tuples [check!]
 		- Convert to Array of union of element types [check!]
 		- This is currently actually unsafe
