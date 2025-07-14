@@ -23,9 +23,9 @@ The compiler leverages MLIR and LLVM for optimization and code generation.
 
 PaulTalk aims to combine high-level ergonomics with high performance and memory safety through its type system and planned region management.
 
-## Status: Highly Experimental (v0.4.0)
+## Status: Highly Experimental (v0.5.0)
 
-**⚠️ Warning:** PaulTalk is currently in a very early, experimental stage (v0.4.0). It is **not suitable for production use.**
+**⚠️ Warning:** PaulTalk is currently in a very early, experimental stage (v0.5.0). It is **not suitable for production use.**
 
 *   **Memory Management:** The region-based memory system is incomplete. Memory is allocated (using a fast bump allocator) but **never freed**, leading to memory leaks in any non-trivial program.
 *   **Platform:** Currently targets **x86_64 Windows only**. Aims to be multiplatform in the future.
@@ -41,12 +41,12 @@ PaulTalk aims to combine high-level ergonomics with high performance and memory 
 ## Prerequisites
 
 *	**0install:** A cross-platform package manager that can be downloaded [here](https://get.0install.net/#windows)
-*   **OS:** Windows x86_64 (as of version v0.4.0)
+*   **OS:** Windows x86_64 (as of version v0.5.0)
 *   **Sublime Text [Optional]:** If you want syntax highlighting for PaulTalk. Can be downloaded [here](https://www.sublimetext.com/download)
 
 ## How to Install
 
-Note: as of the latest version (v0.4.0), PaulTalk is only built for Windows x86_64. This will change in future versions.
+Note: as of the latest version (v0.5.0), PaulTalk is only built for Windows x86_64. This will change in future versions.
 
 *	First, install [0install](https://get.0install.net/#windows), a portable package manager.
 *	Run the command `0install add ptalk https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/ptalk.xml` in your command prompt
