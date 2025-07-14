@@ -1,0 +1,326 @@
+Effect System
+
+- Instead of 'yields' on signature, have a 'uses' clause
+- The default signature is implicitly "uses Exception, Scheduler, Logger"
+- Is there any benefit of having an "IO" handler?
+- Handlers are lexically scoped
+	- Maintain a stack of them at runtime
+- You can attach multiple kinds of handlers to a scope
+	- "In this scope, handle calls to Scheduler with my_scheduler and calls to Sink with my_sink"
+	- They maintain separate runtime stacks for each handler
+	- Do blocks push to the stacks and leaving the block pops them
+	- No cross-pollution between Exceptions and other yielded things
+- Within the method there's no type ambiguity
+	- We know that Sink[i32].put() can only take an i32
+- The problem with .call for a coroutine is that it cannot syntactically distinguish yield and a return
+	- If we instead have one syntactic block for the yield branch and one for the return branch, the types cna be disambiguated
+	- do { return_val = my_coro.call(); } handle Sink.put(yielded : i32) { ... }
+	- You could instead have .call return two values: yielded and returned
+		- This breaks the polymorphism aspect
+		- Not entirely; you can be generic over one of the returned values
+		- But now functions and coroutines are not interchangeable
+	- a = handle coro.call(args) with (x : i32){ b = x; }
+		- We kind of want access to the surrounding environment
+		- If the thing there is non-escaping we can pass stack ptrs?
+- NonResumableHandler could be special-cased to never resume, for flow analysis
+	- And the compiler would know that execution cannot continue after it is called
+	- CatchPad would be nonresumable
+	- People could also define their own NonResumableHandlers and get the same benefit
+
+- If you specify a handler in signatures, then there needs to be some way of identifying handle blocks with handler classes
+- The handler executes on the stack of the do {} block and falls through on return
+
+- Being generic over handlers is difficult with multiple handlers
+	- The question is whether codegen needs to be any different
+	- It kind of doesn't seem like it?
+
+- What if a coroutine raises and then is resumed?
+	- Immediately raise another exception
+	- This can be part of the contract of NonResumableHandler
+	- And this behavior will extend to any NonResumableHandler
+
+- Wait, how is the scheduler not overwriting the stack here?
+	- It would have to check that Coro.current() is not Nil
+	- If it is nil
+
+- Should current_coroutine be a handler?
+	- I.e. if you never launched one you can't use the Scheduler
+	- Scheduler.yield(Coro.current())
+
+- Is it wise to have handler invocation be static method syntax?
+	- It's okay as long as the declarations are marked as 'effects'
+	- That way the compiler knows at point of call whether it is an effect
+	- But you can also invoke static methods on the handler
+
+- How to recieve data back from handler?
+	- The return type of the effect?
+	- 'resume' statement?
+
+- If the do-block switches to a new stack, it would have to capture variables from the scope
+
+- how can we guarantee that resumption is safe?
+	- By switching all code in do-block or in handler onto another stack
+	- Execute the handler in the invoker's frame
+		- Would need to make variables in the do-block scope available somehow
+	- Literally don't give handlers the ability to resume
+		- but then how to pass data back and forth?
+		- By means of a normal method
+		- The normal method uses an effect internally
+		- The data is stored in the handler itself
+
+- Annoying pattern of wanting an abstract effect to be implemented in-line but also have normal methods on a preconstructed instance
+
+- What if we assume that the handler runs on the frame of the invoker
+	- And magically it can manipulate values from to do-block scope
+	- Then resume() should always be safe-- no stack overwriting
+	- it only jumps back to the do-block frame upon 'return' in the handler
+
+- This turns out to be a sweet stack-cohabiting non-escaping coroutine
+	- It's neat because resume() is a terminator just like return
+	- Any variables declared in the handle-scope can be overwritten upon resume
+	- Any variables needed to persist will be stored in the frame of the do-scope
+	- Compile 'resume' to ret; 'return' to longjmp
+
+- We should keep first-class coroutines but try to integrate them into the handler system
+	- This actually looks pretty nice
+
+- I'm more bullish on this idea
+	- We just need to work on the "magic" of manipulating variables from the do-block scope
+
+class Scheduler {
+
+	def Self.yield(yielding_coro : Coro?) uses Scheduler {
+		// this is NOT sufficient to guarantee that the handler is on a different stack
+		if yielding_coro is Nil { return; }
+		Scheduler.yield_inner(yielding_coro);
+	}
+
+	effect yield_inner(yielding_coro : Coro) {
+		self.run_other_tasks();
+		yielding_coro.resume();
+	}
+
+	abstract def run_other_tasks() {}
+}
+
+def async_fn() uses Scheduler {
+	...
+	Scheduler.yield(Coro.current());
+	...
+}
+
+my_scheduler = WorkStealingScheduler{};
+do with my_scheduler {
+	...
+	async_fn();
+	...
+}
+
+class Exit extends NonResumable {
+	abstract effect raise(e : Exception) {}
+}
+
+def raising_fn() uses Exit {
+	i32_or_nil : i32 | Nil = 5;
+	if i32_or_nil is Nil { Exit.raise(SpecificException{"oh no!"}); }
+	// Since .raise cannot resume, type is i32 here
+	sum = i32_or_nil + 6;
+}
+
+do {
+	...
+	raising_fn();
+	...
+} handle Exit.raise(e : SpecificException) {
+	...
+} handle Exit.raise(e : Exception) {
+	...
+}
+
+class Sink[T] {
+	abstract effect put(value : T) {}
+} 
+
+def my_generator(start : i32, step : i32) uses Sink[i32] {
+	i = start;
+	while true {
+		Sink.put(i);
+		i = i + step;
+	}
+}
+
+coro = Coro{my_generator, 3, 5};
+my_list = [];
+for i in 0..5 {
+	do {
+		coro.call();
+	} handle Sink.put(x : i32) {
+		my_list.append(x);
+	} handle Exit.raise(e : Exception) {
+		...
+	}
+}
+
+class PrintConsumer extends Sink[i32] {
+	def put(x : i32) {
+		print(x);
+	}
+}
+
+my_consumer = PrintConsumer{};
+for i in 0..5 { do with my_consumer { coro.call(); } }
+
+def forEach[T, Handlers](iterable : Iterable[T], fn : (T) uses Handlers) uses Handlers {
+	for x in iterable { fn.call(x); }
+}
+
+-----
+
+class Yield[T, U] {
+	def Self.yield(value : T) -> U uses Channel[U], Self {
+		Self.get(value);
+		return Channel.get();
+	}
+	abstract effect get(value : T) {}
+}
+
+class Channel[T] {
+	@data : T
+
+	def init(@data : T) {}
+	def get() -> T { return @data; }
+	def put(@data : T) {}
+}
+
+my_chan = Channel[f64]{7.0};
+do with my_chan { foobar(); } handle Yield.get(i32_value : i32) {
+	f64_value = process(i32_value);
+	my_chan.put(f64_value);
+}
+
+def foobar() uses Channel[f64], Yield[i32, f64] {
+	f64_value = Yield.yield(5);
+	print(f64_value);
+}
+
+------
+
+class Scheduler {
+	abstract handler yield()
+}
+
+class NoOpScheduler extends Scheduler {
+	handler yield() {
+		resume;
+	}
+}
+
+class TaskScheduler extends Scheduler {
+
+	handler yield() {
+		self.run_other_tasks();
+		resume;
+	}
+
+	abstract def run_other_tasks()
+}
+
+def async_fn() uses Scheduler {
+	...
+	Scheduler.yield();
+	...
+}
+
+my_scheduler = WorkStealingScheduler{};
+do with my_scheduler {
+	...
+	async_fn();
+	...
+}
+
+class Exit extends NonResumable {
+	abstract handler raise(e : Exception)
+}
+
+def raising_fn() uses Exit {
+	i32_or_nil : i32 | Nil = 5;
+	if i32_or_nil is Nil { Exit.raise(SpecificException{"oh no!"}); }
+	// Since .raise cannot resume, type is i32 here
+	sum = i32_or_nil + 6;
+}
+
+do {
+	...
+	raising_fn();
+	...
+} handle Exit.raise(e : SpecificException) {
+	...
+} handle Exit.raise(e : Exception) {
+	...
+}
+
+class Pipe[T, U] {
+	abstract handler put(value : T) -> U
+}
+
+class Doubler extends Pipe[i32, i32] {
+	handler put(value : i32) -> i32 {
+		resume value * 2;
+	}
+}
+
+def foobar() uses Pipe[i32, f64] {
+	f64_value = Pipe.put(5);
+	print(f64_value);
+}
+
+do { foobar(); } handle Pipe.put(value : i32) {
+	f64_value = process(value);
+	resume f64_value;
+}
+
+class Sink[T] {
+	abstract handler put(value : T)
+}
+
+def my_generator(start : i32, step : i32) uses Sink[i32] {
+	i = start;
+	while true {
+		Sink.put(i);
+		i = i + step;
+	}
+}
+
+my_list = []
+i = 0;
+do { my_generator(5, 10); } handle Sink.put(value : i32) {
+	if i > 25 { return; }
+	i = i + 1;
+	my_list.append(value);
+	resume;
+}
+
+class Printer extends Sink[i32] {
+	handler put(value : i32) {
+		print(value);
+	}
+}
+
+def float_yielder() uses Coro[i32 -> f64] {
+	...
+	int = Coro.yield(5.0);
+	...
+}
+
+def passthrough() uses Coro[i32 -> f64] {
+	...
+	float_yielder();
+	...
+}
+
+my_coro = Coro{passthrough};
+float = my_coro.call(3);
+
+def forEach[T, Handlers](iterable : Iterable[T], fn : (T) uses Handlers) uses Handlers {
+	for x in iterable { fn.call(x); }
+}

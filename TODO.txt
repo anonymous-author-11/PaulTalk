@@ -462,6 +462,9 @@ TODO:
 
 - Should ensure that all branches must return if return value declared
 
+- Could try to fuse llc and lld into one subprocess call
+	- Will this employ the linker's wisdom to avoid codgenning unused code?
+
 - super() may be useful for polymorphism in the AST
 
 - Cache flow analysis results to avoid time redoing work for nested control flow
@@ -704,6 +707,7 @@ TODO:
 		- Add narrowing within logical and/or ops (if x is T and y is U { ... } ) [check!]
 		- Ensure 'while' with a type check condition does not pollute the main path [check!]
 	- Use opaque types for external vtables [check!]
+	- Cache the parser instead of reconstructing every time [check!]
 	- Does just adding dependencies to the path work?
 		- The source_dirs collection should be ordered, not a set [check!]
 		- Add the dependency folder to an env variable named for the package
@@ -1000,7 +1004,7 @@ TODO:
 		- buf.[start, len, mask, passthru] ?
 		- buf.[start, len].mask(mask, passthru) ?
 
-- Plan for try / catch
+- Possible try / catch
 	- Try is an IR op
 		- At beginning it pushes a new into_caller
 		- At end it restores the old into_caller
