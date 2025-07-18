@@ -213,6 +213,9 @@ class CSTTransformer(Transformer):
     def ident(self, token):
         return token
 
+    def qualified_ident(self, *idents):
+        return idents[-1]
+
     def param(self, name, typ):
         node_info = NodeInfo(None, self.file_path, line_number(name))
         return VarDecl(node_info, name.value, typ)

@@ -15,6 +15,7 @@ from xdsl.dialects import llvm, func, builtin
 from xdsl import traits
 from xdsl.traits import SymbolOpInterface
 from xdsl.printer import Printer
+from pathlib import Path
 
 # Return type size in bits
 def type_size(typ: TypeAttribute) -> int:
@@ -159,24 +160,36 @@ class Float(ParametrizedAttribute, FixedBitwidthType, _FloatType):
         return f"f64"
 
 fatptr_cache = {}
+path_indexed_cache = {}
 
 @irdl_attr_definition
 class FatPtr(ParametrizedAttribute, TypeAttribute):
     name = "hi.fatptr"
     cls: ParameterDef[StringAttr]
     type_params: ParameterDef[ArrayAttr[TypeAttribute] | NoneAttr]
+    path: ParameterDef[StringAttr | NoneAttr]
 
     @classmethod
     def basic(cls, name):
         if name in fatptr_cache: return fatptr_cache[name]
-        result = FatPtr([StringAttr(name), NoneAttr()])
+        result = FatPtr([StringAttr(name), NoneAttr(), NoneAttr()])
         fatptr_cache[name] = result
+        return result
+
+    @classmethod
+    def with_path(cls, fatptr, path):
+        if fatptr.type_params != NoneAttr():
+            return FatPtr([fatptr.cls, fatptr.type_params, StringAttr(f"{path}")])
+        if (fatptr.cls.data, path) in path_indexed_cache:
+            return path_indexed_cache[(fatptr.cls.data, path)]
+        result = FatPtr([fatptr.cls, fatptr.type_params, StringAttr(f"{path}")])
+        path_indexed_cache[(fatptr.cls.data, path)] = result
         return result
 
     @classmethod
     def generic(cls, name, types):
         if len(types) == 0: return FatPtr.basic(name)
-        return FatPtr([StringAttr(name), ArrayAttr(types)])
+        return FatPtr([StringAttr(name), ArrayAttr(types), NoneAttr()])
 
     def base_typ(self):
         return llvm.LLVMStructType.from_type_list([
@@ -190,10 +203,14 @@ class FatPtr(ParametrizedAttribute, TypeAttribute):
         return self.cls
 
     def __repr__(self):
-        return f"{self.cls.data}" + ((f"{[*self.type_params.data]}") if not isinstance(self.type_params, NoneAttr) else "")
+        namespace = f"{Path(self.path.data).stem}." if self.path != NoneAttr() else ""
+        type_param_string = (f"{[*self.type_params.data]}") if not isinstance(self.type_params, NoneAttr) else ""
+        return namespace + f"{self.cls.data}" + type_param_string
 
     def __format__(self, format_spec):
-        return f"{self.cls.data}" + ((f"{[*self.type_params.data]}") if not isinstance(self.type_params, NoneAttr) else "")
+        namespace = f"{Path(self.path.data).stem}." if self.path != NoneAttr() else ""
+        type_param_string = (f"{[*self.type_params.data]}") if not isinstance(self.type_params, NoneAttr) else ""
+        return namespace + f"{self.cls.data}" + type_param_string
 
     def __eq__(self, other):
         if not isinstance(other, FatPtr): return False

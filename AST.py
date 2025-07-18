@@ -572,14 +572,16 @@ class ArrayLiteral(Expression):
         if len(self.elements) == 0 and not self.specified_elem_type:
             raise Exception(f"{self.info}: An empty array literal must specify its element type, like '[] of i32'")
         if len(self.elements) == 0:
-            return FatPtr.generic("Array", [scope.simplify(self.specified_elem_type)])
+            array_type = FatPtr.generic("Array", [scope.simplify(self.specified_elem_type)])
+            return scope.type_env.validated_type(self.info, array_type)
         elem_types = [elem.exprtype(scope) for elem in self.elements]
         inferred_elem_type = scope.simplify(Union.from_list(elem_types)) if len(elem_types) > 0 else Integer(32)
         if not self.specified_elem_type: return FatPtr.generic("Array", [inferred_elem_type])
         specified_elem_type = scope.simplify(self.specified_elem_type)
         if not scope.subtype(inferred_elem_type, specified_elem_type):
             raise Exception(f"{self.info}: Inferred element type of array literal ({inferred_elem_type}) is not a subtype of specified type ({specified_elem_type})")
-        return FatPtr.generic("Array", [specified_elem_type])
+        array_type = FatPtr.generic("Array", [specified_elem_type])
+        return scope.type_env.validated_type(self.info, array_type)
 
     def typeflow(self, scope):
         for elem in self.elements: elem.typeflow(scope)
@@ -606,11 +608,12 @@ class StringLiteral(Expression):
         operands = [temp_var.codegen(scope), zero.results[0], lit.results[0]]
         buffer_set = BufferSetOp.create(operands=operands, attributes={"typ": llvmtype})
         scope.region.last_block.add_ops([lit, zero, buffer_set])
-        string = ObjectCreation(self.info, random_letters(10), FatPtr.basic("String"), [temp_var, n_bytes_lit, size_lit, capacity_lit], None)
+        string = ObjectCreation(self.info, random_letters(10), self.exprtype(scope), [temp_var, n_bytes_lit, size_lit, capacity_lit], None)
         return string.codegen(scope)
 
     def exprtype(self, scope):
-        return FatPtr.basic("String")
+        string_type = FatPtr.basic("String")
+        return scope.type_env.validated_type(self.info, string_type)
 
     def typeflow(self, scope):
         pass
@@ -623,14 +626,15 @@ class CharLiteral(Expression):
         codepoint = ord(self.value)
         cp_info = NodeInfo(None, self.info.filepath, self.info.line_number)
         codepoint_literal = IntegerLiteral(cp_info, codepoint, 32)
-        char = ObjectCreation(self.info, random_letters(10), FatPtr.basic("Character"), [codepoint_literal], None)
+        char = ObjectCreation(self.info, random_letters(10), self.exprtype(scope), [codepoint_literal], None)
         return char.codegen(scope)
 
     def exprtype(self, scope):
         n_codepoints = len(self.value)
         if n_codepoints != 1:
             raise Exception(f"{self.info}: Character literal '{self.value}' is not a single Unicode codepoint; it is {n_codepoints}")
-        return FatPtr.basic("Character")
+        char_type = FatPtr.basic("Character")
+        return scope.type_env.validated_type(self.info, char_type)
 
     def typeflow(self, scope):
         pass
@@ -893,7 +897,8 @@ class TypeCheck(Expression):
         parameterization = scope.get_parameterization(right_type) if isinstance(right_type, TypeParameter) else None
 
         # This is so that Exception? doesn't get simplified to a nil-check I think
-        allow_simplify = not scope.subtype(right_type, FatPtr.basic("Exception"))
+        exception_type = FatPtr.basic("Exception")
+        allow_simplify = not scope.subtype(right_type, exception_type)
 
         check_flag = CheckFlagOp.make(leftval, left_type, right_type, parameterization, allow_simplify)
         scope.region.last_block.add_op(check_flag)
@@ -956,7 +961,7 @@ class TypeCheck(Expression):
         self.ensure_rhs_simple()
         self.left.exprtype(scope)
         right_type = scope.simplify(self.right)
-        scope.type_env.validate_type(self.info, right_type)
+        right_type = scope.type_env.validated_type(self.info, right_type)
         return Bool()
 
     def typeflow(self, scope):
@@ -1017,7 +1022,8 @@ class TupleToArray(Expression):
     def exprtype(self, scope):
         tuple_type = self.tupl.exprtype(scope)
         elem_type = self.elem_type(tuple_type, scope)
-        return FatPtr.generic("Array", [elem_type])
+        array_type = scope.type_env.validated_type(self.info, FatPtr.generic("Array", [elem_type]))
+        return array_type
 
 @dataclass
 class As(Expression):
@@ -1055,7 +1061,7 @@ class As(Expression):
         to_typ = scope.simplify(self.typ)
         if not operand_type or operand_type == llvm.LLVMVoidType():
             raise Exception(f"{self.info}: Cannot cast Nothing to {to_typ}.")
-        scope.type_env.validate_type(self.info, to_typ)
+        to_typ = scope.type_env.validated_type(self.info, to_typ)
         to_integer = isinstance(to_typ, Integer)
         if isinstance(self.operand, IntegerLiteral) and to_integer:
             self.operand.width = to_typ.bitwidth
@@ -1102,7 +1108,7 @@ class Into(Expression):
         if self.method: return scope.simplify(self.typ)
         operand_type = self.operand.exprtype(scope)
         to_type = scope.simplify(self.typ)
-        scope.type_env.validate_type(self.info, to_type)
+        to_type = scope.type_env.validated_type(self.info, to_type)
 
         # Precedence order: 1) .to_ method 2) .from_ method 3) constructor
 
@@ -1621,7 +1627,7 @@ class ClassMethodCall(MethodCall):
             raise Exception(f"{self.info}: Class {rec_typ.cls.data} has not been declared.")
         rec_class = scope.classes[rec_typ.cls.data]
 
-        scope.type_env.validate_type(self.info, rec_typ)
+        rec_typ = scope.type_env.validated_type(self.info, rec_typ)
 
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
         behaviors = [behavior for behavior in rec_class.behaviors if behavior.applicable(rec_typ, scope, "_Self_" + self.method, arg_types)]
@@ -1728,7 +1734,8 @@ class ObjectCreation(Expression):
         anon_id = Identifier(self.info, self.anon_name)
         MethodCall(NodeInfo(None, self.info.filepath, self.info.line_number), anon_id, "init", self.arguments).codegen(scope)
 
-        is_exception = scope.subtype(self_type, FatPtr.basic("Exception"))
+        exception_type = FatPtr.basic("Exception")
+        is_exception = scope.subtype(self_type, exception_type)
         if is_exception:
             node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for i in range(3)]
             file_name = StringLiteral(node_infos[0], str(self.info.filepath).replace("\\", "/"))
@@ -1795,7 +1802,7 @@ class ObjectCreation(Expression):
         input_types = [arg.exprtype(scope) for arg in self.arguments]
         if simplified_type.type_params == NoneAttr() and len(cls.type_parameters) > 0:
             simplified_type = self.deduce_type_parameters(simplified_type, input_types, scope)
-        scope.type_env.validate_type(self.info, simplified_type)
+        simplified_type = scope.type_env.validated_type(self.info, simplified_type)
 
         behaviors = [behavior for behavior in cls.behaviors if behavior.applicable(simplified_type, scope, "init", input_types)]
         if len(behaviors) == 0:
@@ -1979,7 +1986,7 @@ class MethodDef(Statement):
 
     def wrap_self(self, body_scope):
         body_block = body_scope.region.block
-        self_typ = body_scope.simplify(FatPtr.generic(self.defining_class.name, self.defining_class.type_parameters))
+        self_typ = body_scope.simplify(self.defining_class.type())
         self_arg = body_block.insert_arg(self_typ.base_typ(), 0)
         unused = body_block.insert_arg(self_typ.base_typ(), 1)
         refer = WrapOp.make(self_arg, self_typ)
@@ -2389,7 +2396,7 @@ class Method:
 
     def param_types(self):
         result = [self.type_env.simplify(t) for t in self.definition.param_types()]
-        for t in result: self.type_env.validate_type(self.definition.info, t)
+        result = [self.type_env.validated_type(self.definition.info, t) for t in result]
         return result
 
     def broad_param_types(self):
@@ -2419,7 +2426,7 @@ class Method:
 
     def return_type(self):
         result = self.type_env.simplify(self.definition.return_type())
-        self.type_env.validate_type(self.definition.info, result)
+        result = self.type_env.validated_type(self.definition.info, result)
         return result
 
     def broad_return_type(self):
@@ -2456,7 +2463,7 @@ class Method:
             arg_ancestors.append(nxt_ancestor)
         concrete_types = [rec_typ, *arg_ancestors]
         result = scope.specialize(formal_types, concrete_types, ret_type)
-        scope.type_env.validate_type(self.definition.info, result)
+        result = scope.type_env.validated_type(self.definition.info, result)
         return result
 
     def applicable_for(self, rec_typ, i, t, scope):
@@ -2930,7 +2937,8 @@ class ClassDef(Statement):
         return self._ancestors
 
     def type(self) -> TypeAttribute:
-        return FatPtr.generic(self.name, self.type_parameters)
+        typ = FatPtr.generic(self.name, self.type_parameters)
+        return FatPtr.with_path(typ, self.info.filepath)
 
     def c3_linearization(self, type_params) -> List[TypeAttribute]:
 
@@ -2959,7 +2967,7 @@ class ClassDef(Statement):
         linearizations.append(self.direct_supertypes())
         
         order = merge(linearizations)
-        specialized_self = FatPtr.generic(self.name, type_params)
+        specialized_self = FatPtr.with_path(FatPtr.generic(self.name, type_params), self.info.filepath)
         specialized_list = [self._type_env.specialize([self.type()], [specialized_self], t) for t in (specialized_self, *order)]
         return specialized_list
 
@@ -3125,8 +3133,8 @@ class VarDecl(Statement):
     def typeflow(self, scope):
         self.ensure_capitalization()
         self_type = self.type(scope.type_env)
-        scope.type_env.validate_type(self.info, self_type)
-        scope.type_table[self.name] = self.type(scope.type_env)
+        self_type = scope.type_env.validated_type(self.info, self_type)
+        scope.type_table[self.name] = self_type
 
 @dataclass
 class FieldDecl(VarDecl):
@@ -3194,7 +3202,7 @@ class Field:
 
     def type(self):
         result = self.declaration.type(self.cls.type_env)
-        self.cls.type_env.validate_type(self.declaration.info, result)
+        result = self.cls.type_env.validated_type(self.declaration.info, result)
         return result
 
     def symbol(self):
@@ -3716,10 +3724,11 @@ class CoYield(Expression):
             scope.region.last_block.add_op(yield_op)
             return
         self_type = self.exprtype(scope)
-        exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
+        exception_type = FatPtr.basic("Exception")
+        exception_or_nil = Union.from_list([exception_type, Nil()])
         to_type = exception_or_nil if not scope.method else scope.simplify(Union.from_list([scope.method.definition.yield_type, Nil()]))
         arg_type = self.arg.exprtype(scope)
-        cold = scope.subtype(arg_type, FatPtr.basic("Exception"))
+        cold = scope.subtype(arg_type, exception_type)
         cast = CastOp.make(self.arg.codegen(scope), arg_type, to_type)
         unwrap = UnwrapOp.create(operands=[cast.results[0]], result_types=[to_type.base_typ()])
         yield_op = CoroYieldOp.make(unwrap.results[0], self_type.base_typ(), cold)
@@ -3805,8 +3814,8 @@ class CreateBuffer(Expression):
             raise Exception(f"{self.info}: Buffer creation can only take integers up to 64 bits wide, not {size_typ}.")
         scope.mem_regions.allocations[self.info.id] = self
         buf_type = scope.simplify(self.buf)
-        scope.type_env.validate_type(self.info, buf_type.elem_type)
-        return buf_type
+        elem_type = scope.type_env.validated_type(self.info, buf_type.elem_type)
+        return Buffer([elem_type])
 
 @dataclass
 class Import(Statement):

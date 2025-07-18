@@ -160,7 +160,9 @@ object_creation: (CAPITAL_IDENT | parameterized_type) LBRACE (expression ("," ex
 indexation: primary "." "[" (expression ("," expression)*)? "]"
 ident: CAPITAL_IDENT | LOWERCASE_IDENT
 
-operator: PLUS | MINUS | TIMES | DIVIDE | NEQ | EQ | LE | GE | LT | GT | BRACKETS | BRACKETS_SETTER
+operator: PLUS | MINUS | TIMES | DIVIDE
+        | NEQ | EQ | LE | GE | LT | GT
+        | BRACKETS | BRACKETS_SETTER
 
 ARROW: "=>"
 PLUS: "+"

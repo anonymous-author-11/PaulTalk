@@ -459,9 +459,51 @@ DONE:
 
 TODO:
 
+- String could expose a writer that can only write to its end
+	- Is that a Writer[i32] or a Writer[i8]?
+	- It's an abstract Writer[i32]
+
+- Constructor should check for T.new first before T.init
+	- So that new can return some subtype
+
 - Things we could work on right now
+	- Basic namespacing
+	- Extern type
 	- Comparison for tuples
 	- Closures
+	- Moving patterns to PDL
+	- Lifetime analysis
+
+- Namespacing
+	- Step one: adding path to FatPtr [check!]
+		- Would make it more involved to construct FatPtrs
+		- Especially in the parser
+		- We'd need to add in the path later [check!]
+			- Probably during scope.validate_type [check!]
+			- Should expose a FatPtr classmethod to create new with path [check!]
+		- make sure all creations of FatPtr in typeflow add paths [check!]
+	- Technically can't we do export / no_export lists before namespacing?
+	- Step two is to use path-qualified names in scope.classes and scope.functions
+		- We could do {name : {path : definition}}
+		- Use absolute path
+	- Step 3: Add namespacing to grammar
+		- Dot-qualification
+		- Import syntax
+			- import std.fmt.{foo as localfoo, bar as localbar};
+		- Export syntax
+			- Export
+		- Method and function calls become syntactically indistinguishable
+			- We need a way to semantically distinguish them
+			- Namespaced take precedence over variable names
+			- Check if receiver is an Identifier; check if it's in scope.functions
+	- Report name collisions of imports (only when used!) (?)
+
+- Add an "extern type" statement
+	- Very useful for C interop
+	- Compiles down to LLVM opaque named type
+	- Will this run into ABI issues?
+
+- Could the compiler be aware of DefaultString for literals without it being exposed?
 
 - it would be nice to narrow types *within* a logical expression, not merely in the following block
 	- Would be implemented inside of Logical
@@ -1005,6 +1047,41 @@ TODO:
 		- vector.maskedload / vector.maskedstore
 		- buf.[start, len, mask, passthru] ?
 		- buf.[start, len].mask(mask, passthru) ?
+
+- Could parameterize String over its encoding
+	- alias str = String[UTF8]
+	- Probably not a good idea
+		- UTF-16 doesn't have a buffer[i8], it has a buffer[i16]
+		- You don't want to be doing endianness shuffling in the class
+		- That's really just an argument for making String abstract
+
+- Unicode evolution steps
+	- Step 1: encode(cp, buffer, index, len) and decode(buffer, index, len) -> i32
+	- Then we say maybe we should operator on iterators at least
+	- Unicode decoding needs lookahead without consuming
+	- PeekingIterator[T] wraps any Iterator[T]
+	- Need a way to signal decoding failure
+	- Should append(cp) be implemented in terms of self.codepoint_writer().write(cp)?
+		- Currently implemented in terms of .extend(encode_one(cp))
+			- Which is allocating a new string on every call
+			- And will currently append a replacement char
+		- Would mean that append could be implemented in String and not in DefaultString
+		- E.g. relying on the abstract writer
+		- And anyone overriding just the writer would get a new append for free
+		- E.g. if you write a better encoder / decoder
+	- Char should be prevalidated
+
+- There are several ways to achieve encapsulation
+	- Upcasting
+		- Any methods not on the supertype are now hidden
+		- Flaw: can be reversed by downcasting
+	- Visibility controls
+		- Certain behaviors are not exported
+		- Syntax may vary
+	- Fields
+		- Actually this is just a design choice
+	- Upcasting + visibility control
+		- Now you can't downcast b/c the subtype is not exported
 
 - Possible try / catch
 	- Try is an IR op

@@ -46,8 +46,8 @@ class TypeEnvironment:
         del self.aliases[key]
         self.frozen_aliases = frozenset(self.aliases.items())
 
-    def validate_type(self, node_info, typ):
-        if not isinstance(typ, FatPtr): return
+    def validated_type(self, node_info, typ):
+        if not isinstance(typ, FatPtr): return typ
         if typ.cls.data not in self.classes:
             raise Exception(f"{node_info}: Class {typ.cls.data} has not been declared.")
         cls = self.classes[typ.cls.data]
@@ -59,6 +59,7 @@ class TypeEnvironment:
             zipped = zip(typ.type_params.data, cls.type_parameters)
             if not all(self.matches(a,b) for a,b in zipped):
                 raise Exception(f"{node_info}: Class {cls.name} cannot be instantiated with types {[*typ.type_params.data]}")
+        return FatPtr.with_path(typ, cls.info.filepath)
 
     def subtype_inner(self, left, right):
         if self.simplify(left) != left:
@@ -241,7 +242,7 @@ class TypeEnvironment:
             self.caches[cache_key].ancestors[typ] = result
             return result
         result = self.ancestors_inner(typ)
-        #print(f"ancestors of {typ} are {result}")
+        print(f"ancestors of {typ} are {result}")
         self.caches[cache_key] = TypeCache.empty()
         self.caches[cache_key].ancestors[typ] = result
         return result
@@ -315,10 +316,17 @@ class TypeEnvironment:
         if typ in self.aliases: return self.simplify(self.aliases[typ])
 
         if isinstance(typ, FatPtr) and FatPtr.basic(typ.cls.data) in self.aliases.keys():
-            return FatPtr([self.aliases[FatPtr.basic(typ.cls.data)].cls, typ.type_params])
+            path = self.classes[typ.cls.data].info.filepath if typ.cls.data in self.classes else typ.path.data
+            fatptr = FatPtr.generic(self.aliases[FatPtr.basic(typ.cls.data)].cls.data, typ.type_params.data)
+            return FatPtr.with_path(fatptr, path)
 
         if isinstance(typ, FatPtr) and typ.type_params != NoneAttr():
-            return FatPtr.generic(typ.cls.data, [self.simplify(t) for t in typ.type_params.data])
+            path = self.classes[typ.cls.data].info.filepath if typ.cls.data in self.classes else typ.path.data
+            return FatPtr([typ.cls, ArrayAttr([self.simplify(t) for t in typ.type_params.data]), StringAttr(path)])
+
+        if isinstance(typ, FatPtr) and typ.cls.data in self.classes:
+            path = self.classes[typ.cls.data].info.filepath
+            return FatPtr.with_path(typ, path)
 
         if isinstance(typ, Buffer): return Buffer([self.simplify(typ.elem_type)])
 
