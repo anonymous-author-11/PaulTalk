@@ -1,6 +1,79 @@
-import rustworkx
+import rustworkx as rx
 from collections import defaultdict
+from pathlib import Path
 from typing import Any, NamedTuple, List, Dict, Set, Optional, Union
+
+class DiGraph:
+    """
+    A wrapper for a rustworkx.PyDiGraph that provides a limited,
+    networkx-like API for node-as-data operations.
+    """
+    def __init__(self):
+        self._graph = rx.PyDiGraph()
+        self._node_to_idx = {}
+
+    def _get_or_add_node(self, node):
+        """
+        Internal helper to get the index for a node, adding it to the
+        graph if it does not exist. This is the core of the translation.
+        """
+        if node not in self._node_to_idx:
+            idx = self._graph.add_node(node)
+            self._node_to_idx[node] = idx
+        return self._node_to_idx[node]
+
+    def add_edge(self, u, v):
+        """
+        Mirrors networkx.DiGraph.add_edge(u, v).
+        Nodes u and v can be any hashable objects.
+        """
+        u_idx = self._get_or_add_node(u)
+        v_idx = self._get_or_add_node(v)
+        self._graph.add_edge(u_idx, v_idx, None)
+
+    def topological_sort(self):
+        """
+        Replaces nx.topological_sort(g).
+        Returns a list of nodes in topological order.
+        """
+        indices = rx.topological_sort(self._graph)
+        return [self._graph[i] for i in indices]
+
+    def ancestors(self, node):
+        """
+        Replaces nx.ancestors(g, node).
+        Returns a set of all nodes that have a path to `node`.
+        """
+        idx = self._node_to_idx.get(node)
+        if idx is None:
+            return set()
+        # CORRECTED: Call rx.ancestors() as a top-level function
+        ancestor_indices = rx.ancestors(self._graph, idx)
+        return {self._graph[i] for i in ancestor_indices}
+
+    def descendants(self, node):
+        """
+        Replaces nx.descendants(g, node).
+        Returns a set of all nodes reachable from `node`.
+        """
+        idx = self._node_to_idx.get(node)
+        if idx is None:
+            return set()
+        # CORRECTED: Call rx.descendants() as a top-level function
+        descendant_indices = rx.descendants(self._graph, idx)
+        return {self._graph[i] for i in descendant_indices}
+
+    def simple_cycles(self):
+        """
+        Replaces nx.simple_cycles(g).
+        Returns a generator of lists, where each list is a cycle.
+        """
+        for cycle_indices in rx.simple_cycles(self._graph):
+            yield [self._graph[i] for i in cycle_indices]
+
+    def print(self):
+        for line in generate_network_text(self._graph): print(line)
+
 
 # The glyph classes are framework-agnostic and can be used directly.
 class BaseGlyphs:
@@ -52,7 +125,7 @@ class UtfUndirectedGlyphs(UtfBaseGlyphs):
     backedge: str = "─"
     vertical_edge: str = "│"
 
-def _find_sources_rx(graph: Union[rustworkx.PyGraph, rustworkx.PyDiGraph]) -> List[int]:
+def _find_sources_rx(graph: Union[rx.PyGraph, rx.PyDiGraph]) -> List[int]:
     """
     Finds source nodes for traversal. For directed graphs, it prioritizes nodes
     with an in-degree of 0.
@@ -60,7 +133,7 @@ def _find_sources_rx(graph: Union[rustworkx.PyGraph, rustworkx.PyDiGraph]) -> Li
     if not graph:
         return []
 
-    if isinstance(graph, rustworkx.PyDiGraph):
+    if isinstance(graph, rx.PyDiGraph):
         # For directed graphs, the true sources are nodes with an in-degree of 0.
         sources = [
             node for node in graph.node_indices() if graph.in_degree(node) == 0
@@ -69,10 +142,10 @@ def _find_sources_rx(graph: Union[rustworkx.PyGraph, rustworkx.PyDiGraph]) -> Li
             return sources
         
         # Fallback for graphs with no 0-in-degree nodes (e.g., all nodes are in cycles).
-        components = rustworkx.strongly_connected_components(graph)
+        components = rx.strongly_connected_components(graph)
         degree_func = lambda n: graph.in_degree(n) + graph.out_degree(n)
     else: # It's a PyGraph
-        components = rustworkx.connected_components(graph)
+        components = rx.connected_components(graph)
         degree_func = graph.degree
 
     if not components or not any(components):
@@ -87,8 +160,8 @@ def _find_sources_rx(graph: Union[rustworkx.PyGraph, rustworkx.PyDiGraph]) -> Li
     ]
     return sources
 
-def generate_network_text_rx(
-    graph: Union[rustworkx.PyGraph, rustworkx.PyDiGraph],
+def generate_network_text(
+    graph: Union[rx.PyGraph, rx.PyDiGraph],
     with_labels: Union[bool, str] = True,
     sources: List[Any] = None,
     max_depth: int = None,
@@ -104,7 +177,7 @@ def generate_network_text_rx(
 
     EllipsisType = type(...)
     collapse_attr = "collapse"
-    is_directed = isinstance(graph, rustworkx.PyDiGraph)
+    is_directed = isinstance(graph, rx.PyDiGraph)
 
     if is_directed:
         glyphs = AsciiDirectedGlyphs if ascii_only else UtfDirectedGlyphs
@@ -192,6 +265,8 @@ def generate_network_text_rx(
                     label = str(node_data.get(label_attr, node_data))
                 else:
                     label = str(node_data)
+                if isinstance(node_data, Path):
+                    label = str(node_data.name)
             else:
                 label = str(node_data)
 
@@ -223,6 +298,8 @@ def generate_network_text_rx(
                     p_data = graph[p_idx]
                     if label_attr and isinstance(p_data, dict):
                         other_parent_labels.append(str(p_data.get(label_attr, p_data)))
+                    elif isinstance(p_data, Path):
+                        other_parent_labels.append(str(p_data.name))
                     else:
                         other_parent_labels.append(str(p_data))
                 suffix = f" {glyphs.backedge} {', '.join(other_parent_labels)}"
@@ -246,8 +323,8 @@ def generate_network_text_rx(
             )
 
 if __name__ == "__main__":
-    # Create a rustworkx graph
-    graph = rustworkx.PyGraph()
+    # Create a rx graph
+    graph = rx.PyGraph()
 
     # Define the node data payloads first
     node_data = list(range(10)) + ["A", "B", "C", "D", "E", "F"]
@@ -275,19 +352,19 @@ if __name__ == "__main__":
     graph.add_edges_from_no_data(edges)
 
     print("--- Standard Tree ---")
-    # Note: The function name in my previous answer was generate_network_text_rx
-    # It should be called with the rustworkx graph.
-    for line in generate_network_text_rx(graph):
+    # Note: The function name in my previous answer was generate_network_text
+    # It should be called with the rx graph.
+    for line in generate_network_text(graph):
         print(line)
 
     print("\n--- With Vertical Chains ---")
-    for line in generate_network_text_rx(graph, vertical_chains=True):
+    for line in generate_network_text(graph, vertical_chains=True):
         print(line)
 
     print("\n--- Directed Graph Example ---")
 
     # 1. Create a directed graph
-    digraph = rustworkx.PyDiGraph()
+    digraph = rx.PyDiGraph()
 
     # 2. Add nodes and create the data-to-index map
     node_data = ["A", "B", "C"]
@@ -303,5 +380,5 @@ if __name__ == "__main__":
 
     # 4. Generate and print the text representation
     # The source will be 'A' as it's the only node with an in-degree of 0.
-    for line in generate_network_text_rx(digraph):
+    for line in generate_network_text(digraph):
         print(line)

@@ -7,7 +7,6 @@ from lark import Transformer
 from lark.exceptions import UnexpectedToken
 from xdsl.ir import Block, Region
 from xdsl.dialects.builtin import IntegerType, IntegerAttr, StringAttr, NoneAttr, Signedness
-import networkx as nx
 from utils import *
 import copy
 import time

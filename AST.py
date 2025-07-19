@@ -13,7 +13,7 @@ import mid
 from utils import *
 from scope import Scope, ConstraintSet, TypeEnvironment, MemRegions, ScopeExit
 from method_dispatch import *
-from constraint_graph import *
+#from constraint_graph import *
 from xdsl.dialects import llvm, arith, builtin, memref, cf, func
 from xdsl.ir import Block, Region, TypeAttribute
 from xdsl.dialects.builtin import (
@@ -22,7 +22,7 @@ from xdsl.dialects.builtin import (
 )
 from itertools import product, chain, combinations
 from functools import cmp_to_key
-import networkx as nx
+import graph_utils as nx
 from pathlib import Path
 
 silent = [False]
@@ -3836,10 +3836,10 @@ class Import(Statement):
             if k not in scope.functions.keys(): scope.functions[k] = v
 
     def ensure_acyclic_imports(self, import_graph):
-        dependency_cycle = next(nx.simple_cycles(import_graph), None)
+        dependency_cycle = next(import_graph.simple_cycles(), None)
         if dependency_cycle:
             print("Dependency graph:")
-            nx.write_network_text(import_graph)
+            print(nx.generate_network_text(import_graph))
             raise Exception(f"{self.info}: Import of {self.import_filepath} from {self.info.filepath} creates a cycle in the dependency graph.")
 
     def codegen(self, scope):

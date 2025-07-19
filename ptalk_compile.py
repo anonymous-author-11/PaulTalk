@@ -21,7 +21,7 @@ from pathlib import Path
 import copy
 import re
 import platform
-import networkx as nx
+import graph_utils as nx
 import hashlib
 
 # When compiled with Nuitka, DIST_FOLDER will point to the ptalk.dist folder
@@ -522,7 +522,7 @@ class Dependencies:
     @property
     def list(self):
         if self._list: return self._list
-        dependency_list = list(reversed(list(nx.topological_sort(self.graph))))
+        dependency_list = list(reversed(list(self.graph.topological_sort())))
         # input file is excluded from the list
         self._list = dependency_list[:-1]
         return self._list
@@ -532,13 +532,13 @@ class Dependencies:
         if self._recompile_list: return self._recompile_list
         to_recompile = set()
         # ordered in reverse-topological order; input file is included
-        sorted_paths = list(reversed(list(nx.topological_sort(self.graph))))
+        sorted_paths = list(reversed(list(self.graph.topological_sort())))
         for path in sorted_paths:
             if path in to_recompile: continue
             src = SourceFile(path, self.build)
             src.add_dependencies(self)
             if src.already_perfect(): continue
-            dependents = set(nx.ancestors(self.graph, path))
+            dependents = set(self.graph.ancestors(path))
             to_recompile.add(path)
             to_recompile = to_recompile.union(dependents)
         self._recompile_list = [path for path in sorted_paths if path in to_recompile]
@@ -547,10 +547,7 @@ class Dependencies:
     def print(self):
         if not self.print_graph: return
         print("Dependency graph:")
-        stringio = StringIO()
-        nx.write_network_text(self.graph, path=stringio)
-        text_repr = stringio.getvalue().replace("╾","<─").replace("╼",">")
-        print(text_repr)
+        self.graph.print()
 
 @dataclass
 class SourceFile:
@@ -564,7 +561,7 @@ class SourceFile:
         self.dependencies = None
 
     def add_dependencies(self, dependencies):
-        deps = nx.descendants(dependencies.graph, self.path)
+        deps = dependencies.graph.descendants(self.path)
         sorted_deps = [p for p in dependencies.list if p in deps]
         self.dependencies = sorted_deps
 

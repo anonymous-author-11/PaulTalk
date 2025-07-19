@@ -8,7 +8,7 @@ from xdsl.ir import Block, Region, Operation
 from xdsl.dialects import cf
 import random
 import copy
-import networkx as nx
+import graph_utils as nx
 from dataclasses import dataclass
 from pathlib import Path
 
