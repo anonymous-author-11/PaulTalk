@@ -459,6 +459,16 @@ DONE:
 
 TODO:
 
+- Add a SizedIterator
+	- Do NOT guarantee a SizedIterator from a Collection
+		- Example: Map
+	- Have a .remaining() -> i32 method
+
+- It would not be safe for Array or String to hand out buffer views
+	- If the views hold a reference to the underlying buffer
+	- Because upon resizing, that buffer would no longer be the backing buffer
+	- Instead, View should rely on Indexable facilities
+
 - String could expose a writer that can only write to its end
 	- Is that a Writer[i32] or a Writer[i8]?
 	- It's an abstract Writer[i32]
@@ -499,19 +509,20 @@ TODO:
 	- Report name collisions of imports (only when used!) (?)
 
 - Add an "extern type" statement
-	- Very useful for C interop
+	- Potentially useful for C interop
 	- Compiles down to LLVM opaque named type
 	- Will this run into ABI issues?
+	- Wait but how to construct extern types?
 
 - Could the compiler be aware of DefaultString for literals without it being exposed?
 
-- it would be nice to narrow types *within* a logical expression, not merely in the following block
+- It would be nice to narrow types *within* a logical expression, not merely in the following block
 	- Would be implemented inside of Logical
 
 - Should ensure that all branches must return if return value declared
 
 - Could try to fuse llc and lld into one subprocess call
-	- Will this employ the linker's wisdom to avoid codgenning unused code?
+	- Will this employ the linker's wisdom to avoid codegenning unused code?
 
 - super() may be useful for polymorphism in the AST
 
@@ -534,7 +545,7 @@ TODO:
 	- File.iterator() -> ConstantTimeIterator[i8] & Writer[i8] & Seeker[i32]
 	- LLVM can optimize many of these casts out
 - Change the console's "active code page" in the main() prelude
-	- to make puts /printf display unicode correctly
+	- to make puts / printf display unicode correctly
 	- Obviously OS-specific
 - We could have special-cased all() and any() functions which take tuples of Booleans
 	- Necessary for ergonomics if tuple comparison produces tuples of Booleans

@@ -1,4 +1,10 @@
 
+class SizedIterator[T] extends Iterator[T] {
+
+    // how many items are remaining to be returned by .next?
+    abstract def remaining() -> i32 {}
+}
+
 class BulkWriter[T] {
 
     // Write values up to max_elems; return the number written
@@ -14,8 +20,9 @@ class BulkWriter[T] {
     def write_from(iterable : Iterable[T], max_elems : i32) -> i32 {
         self.write_from(iterable.iterator(), max_elems);
     }
+    // Delegates to the above, so that it does not skip overrides
     def write_from(iterable : Iterable[T]) -> i32 {
-        self.write_from(iterable.iterator(), i32.max());
+        self.write_from(iterable, i32.max());
     }
 }
 
@@ -36,6 +43,31 @@ class Writer[T] extends BulkWriter[T] {
         return count;
     }
 }
+
+class YieldWriter[T] extends Writer[T] {
+    def write(value : T) yields T? {
+        yield(value);
+    }
+}
+
+class PushIterator[T] extends Iterator[T] {
+    @coro : Coroutine[() yields T?]
+
+    def init(iterator : Iterator[T], writer : Writer[T]) {
+        fn = (iterator : Iterator[T], writer : Writer[T]) => { writer.write_from(iterator); }
+        @coro = Coroutine{fn, iterator, writer};
+    }
+
+    def next() -> T? {
+        yielded = @coro.call();
+        if yielded is T { return yielded; }
+        return nil;
+    }
+}
+
+my_ary = [1,2,3];
+byte_yielder = UTF8Encoder{YieldWriter{}};
+utf8_bytes = PushIterator{my_ary.iterator(), byte_yielder};
 
 class Peeker[T] extends Iterator[T] {
     @iterator : Iterator[T]
@@ -69,6 +101,9 @@ class DefaultString extends String {
 
 	def init(@bytes : Buffer[i8], @byte_length : i32, @char_length : i32, @capacity : i32) {
 	}
+    def reserve_extra(n : i32) {
+        self.reserve(n + @byte_length);
+    }
 	def increment_chars(n : i32) {
 		@char_length = @char_length + n;
 	}
@@ -78,19 +113,6 @@ class DefaultString extends String {
 		@bytes.[@byte_length] = byte;
 		@byte_length = new_len;
 	}
-    def append_bytes(bytes : Iterator[i8], max_bytes : i32) -> i32 {
-        index = @byte_length;
-        max_len = index + max_bytes;
-        self.reserve(max_len);
-        for byte in bytes {
-            if index >= max_len { break; }
-            @bytes.[index] = byte;
-            index = index + 1;
-        }
-        count = index - @byte_length;
-        @byte_length = index;
-        return count;
-    }
 	def byte_writer() -> Writer[i8] {
 		return DefaultStringByteWriter{self};
 	}
@@ -107,11 +129,13 @@ class DefaultStringByteWriter extends Writer[i8] {
 	def write(byte : i8) {
 		@string.append_byte(byte);
 	}
-    def write_from(bytes : Iterator[i8], max_bytes : i32) -> i32 {
-        return @string.append_bytes(bytes.iterator(), max_bytes);
-    }
-    def write_from(bytes : Collection[i8]) -> i32 {
-        return @string.append_bytes(bytes.iterator(), bytes.size());
+
+    // .write_from(bytes) with a single argument will call this override
+    def write_from(bytes : Collection[i8], max_elems : i32) -> i32 {
+        n_bytes = bytes.size()
+        if max_elems > n_bytes { max_elems = n_bytes; }
+        @string.reserve_extra(max_elems);
+        return self.write_from(bytes.iterator(), max_elems);
     }
 }
 

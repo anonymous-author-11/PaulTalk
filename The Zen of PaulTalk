@@ -5,11 +5,10 @@ There is never too much abstraction, or too little--
 There is only the right abstraction, and the wrong.
 Real-world entities are often poor abstractions.
 Use the type system; do not abuse the type system.
+Validate early; do not pollute the happy path.
 Slowness can preclude correctness.
 Subtyping means substitutability.
-Validate early: do not pollute the happy path.
-Exceptionality is contextual, not essential.
-With parameters and indentation, less is more.
+Flat is better than nested.
 All experts were once beginners,
 All masterpieces were once prototypes.
 Syntactic clutter leads to mental clutter.
