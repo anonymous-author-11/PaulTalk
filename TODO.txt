@@ -499,6 +499,7 @@ TODO:
 	- Step two is to use path-qualified names in scope.classes and scope.functions [check!]
 		- We could do {name : {path : definition}} [check!]
 		- Use absolute path [check!]
+	- scope.get_class should use the path info in the FatPtr [check!]
 	- Step 3: Add namespacing to grammar
 		- Dot-qualification
 		- Import syntax
@@ -513,6 +514,7 @@ TODO:
 		- Easier after
 		- Want to add export status to scope.classes and scope.functions map
 	- Report name collisions of imports (only when used!) (?)
+
 
 - Add an "extern type" statement
 	- Potentially useful for C interop

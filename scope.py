@@ -64,6 +64,10 @@ class TypeEnvironment:
         if typ.cls.data not in self.classes:
             raise Exception(f"{node_info}: Class {typ.cls.data} has not been declared.")
         classes = self.classes[typ.cls.data]
+        if typ.path != NoneAttr() and Path(typ.path.data) not in classes:
+            raise Exception(f"{node_info}: There is no class {typ.cls.data} declared in file {typ.path.data}.")
+        if typ.path != NoneAttr():
+            return classes[Path(typ.path.data)]
         files = [*classes.keys()]
         if len(files) != 1:
             raise Exception(f"{node_info}: Class {typ.cls.data} has multiple declarations, in {[file.name for file in files]}.")
@@ -342,9 +346,10 @@ class TypeEnvironment:
 
         if typ in self.aliases: return self.simplify(self.aliases[typ])
 
-        if isinstance(typ, FatPtr) and FatPtr.basic(typ.cls.data) in self.aliases.keys():
-            path = self.get_class(None, typ).info.filepath if typ.cls.data in self.classes else typ.path.data
-            fatptr = FatPtr.generic(self.aliases[FatPtr.basic(typ.cls.data)].cls.data, typ.type_params.data)
+        if isinstance(typ, FatPtr) and FatPtr.basic(typ.cls.data) in self.aliases:
+            meaning = self.aliases[FatPtr.basic(typ.cls.data)]
+            path = self.get_class(None, meaning).info.filepath if meaning.cls.data in self.classes else typ.path.data
+            fatptr = FatPtr.generic(meaning.cls.data, typ.type_params.data)
             return FatPtr.with_path(fatptr, path)
 
         if isinstance(typ, FatPtr) and typ.type_params != NoneAttr():

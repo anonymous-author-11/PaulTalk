@@ -184,12 +184,18 @@ class Program(Node):
 
         for cls in classes: scope.add_class(cls)
         for fn in functions: scope.add_function(fn)
+        for imp in imports:
+            imp.name_resolution(scope)
         for alias in aliases:
             if alias.alias in scope.functions:
                 raise Exception(f"{alias.info}: Alias conflicts with function named {alias.alias}")
-            scope.type_env.add_alias(alias.alias, alias.meaning)
-        for imp in imports:
-            imp.name_resolution(scope)
+            if isinstance(alias.meaning, FatPtr) and alias.meaning.type_params == NoneAttr():
+                meaning = scope.get_class(alias.info, alias.meaning).type()
+                if meaning.type_params != NoneAttr():
+                    meaning = FatPtr([meaning.cls, NoneAttr(), meaning.path])
+            else:
+                meaning = scope.type_env.validated_type(alias.info, alias.meaning)
+            scope.type_env.add_alias(alias.alias, meaning)
         for cls in classes:
             if not cls._type_env: cls.register_type_env(scope.type_env)
 
@@ -431,7 +437,6 @@ class OverloadedBinaryOp(BinaryOp):
     def ensure_object_receiver(self, scope, left_type):
         if not isinstance(left_type, FatPtr):
             raise Exception(f"{self.info}: no overloaded operators for non-object {left_type}")
-        left_type = scope.type_env.validated_type(self.info, left_type)
 
     def ensure_existing_overload(self, scope, left_type, mangled_operator, right_type):
         left_class = scope.get_class(self.info, left_type)
@@ -443,6 +448,7 @@ class OverloadedBinaryOp(BinaryOp):
         left_type = self.left.exprtype(scope)
         right_type = self.right.exprtype(scope)
         if isinstance(left_type, TypeParameter): left_type = left_type.bound
+        left_type = scope.type_env.validated_type(self.info, left_type)
         self.ensure_object_receiver(scope, left_type)
         mangled_operator = "_" + self.operator
         self.ensure_existing_overload(scope, left_type, mangled_operator, right_type)
