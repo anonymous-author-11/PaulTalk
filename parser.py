@@ -3,15 +3,11 @@ import lark_cython
 from AST import *
 from hi import *
 from mid import *
-from lark import Transformer
 from lark.exceptions import UnexpectedToken
 from xdsl.ir import Block, Region
 from xdsl.dialects.builtin import IntegerType, IntegerAttr, StringAttr, NoneAttr, Signedness
 from utils import *
-import copy
-import time
 from pathlib import Path
-import os
 import ast
 
 DIR_PATH = Path(__file__).parent.resolve()

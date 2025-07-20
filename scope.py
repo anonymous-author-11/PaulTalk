@@ -46,11 +46,41 @@ class TypeEnvironment:
         del self.aliases[key]
         self.frozen_aliases = frozenset(self.aliases.items())
 
-    def validated_type(self, node_info, typ):
-        if not isinstance(typ, FatPtr): return typ
+    def add_class(self, cls):
+        if cls.name in self.classes and cls.info.filepath in self.classes[cls.name]:
+            raise Exception(f"{cls.info}: Class {cls.name} already declared in this scope")
+        if cls.name not in self.classes: self.classes[cls.name] = {}
+        self.classes[cls.name][cls.info.filepath] = cls
+
+    def add_function(self, fn):
+        if fn.name in self.functions and fn.info.filepath in self.functions[fn.name]:
+            raise Exception(f"{fn.info}: Function {fn.name} already declared in this scope")
+        if fn.name not in self.functions: self.functions[fn.name] = {}
+        self.functions[fn.name][fn.info.filepath] = fn
+
+    def get_class(self, node_info, typ):
+        if not isinstance(typ, FatPtr):
+            raise Exception(f"{node_info}: Tried to get class of non-fatptr type {typ}")
         if typ.cls.data not in self.classes:
             raise Exception(f"{node_info}: Class {typ.cls.data} has not been declared.")
-        cls = self.classes[typ.cls.data]
+        classes = self.classes[typ.cls.data]
+        files = [*classes.keys()]
+        if len(files) != 1:
+            raise Exception(f"{node_info}: Class {typ.cls.data} has multiple declarations, in {[file.name for file in files]}.")
+        return next(iter(classes.values()))
+
+    def get_function(self, node_info, fn_name):
+        if fn_name not in self.functions:
+            raise Exception(f"{node_info}: Function {fn_name} has not been declared.")
+        functions = self.functions[fn_name]
+        files = [*functions.keys()]
+        if len(files) != 1:
+            raise Exception(f"{node_info}: Function {fn_name} has multiple declarations, in {[file.name for file in files]}.")
+        return next(iter(functions.values()))
+
+    def validated_type(self, node_info, typ):
+        if not isinstance(typ, FatPtr): return typ
+        cls = self.get_class(node_info, typ)
         if typ.type_params == NoneAttr() and len(cls.type_parameters) != 0:
             raise Exception(f"{node_info}: Wrong number of type parameters for {typ.cls.data}: expected {len(cls.type_parameters)}.")
         if typ.type_params != NoneAttr():
@@ -267,13 +297,13 @@ class TypeEnvironment:
                 print(f" problem is {typ}")
                 raise Exception(self.classes)
 
-            cls = self.classes[typ.cls.data]
+            cls = self.get_class(None, typ)
             temp_env = TypeEnvironment(self)
             temp_env.aliases = {}
             typ = temp_env.simplify(typ)
 
             supertypes = [sup for sup in cls.direct_supertypes() if isinstance(sup, FatPtr)]
-            formal_types = [cls.type(), *(self.classes[sup.cls.data].type() for sup in supertypes)]
+            formal_types = [cls.type(), *(self.get_class(None, sup).type() for sup in supertypes)]
             concrete_types = [typ, *supertypes]
             ancestors = [temp_env.specialize(formal_types, concrete_types, anc) for anc in cls.ancestors()]
             ancestors = [self.simplify(anc) for anc in ancestors]
@@ -282,9 +312,6 @@ class TypeEnvironment:
 
         if isinstance(typ, TypeParameter): return [typ, *self.ancestors(typ.bound)]
         raise Exception(f"can't find ancestors for {typ}")
-
-    def all_types(self):
-        return [*builtin_types.values(), *[FatPtr.basic(name) for name in self.classes.keys()]]
 
     # remove all aliases from type parameters to concrete types
     def deconcretize(self):
@@ -316,16 +343,16 @@ class TypeEnvironment:
         if typ in self.aliases: return self.simplify(self.aliases[typ])
 
         if isinstance(typ, FatPtr) and FatPtr.basic(typ.cls.data) in self.aliases.keys():
-            path = self.classes[typ.cls.data].info.filepath if typ.cls.data in self.classes else typ.path.data
+            path = self.get_class(None, typ).info.filepath if typ.cls.data in self.classes else typ.path.data
             fatptr = FatPtr.generic(self.aliases[FatPtr.basic(typ.cls.data)].cls.data, typ.type_params.data)
             return FatPtr.with_path(fatptr, path)
 
         if isinstance(typ, FatPtr) and typ.type_params != NoneAttr():
-            path = self.classes[typ.cls.data].info.filepath if typ.cls.data in self.classes else typ.path.data
+            path = self.get_class(None, typ).info.filepath if typ.cls.data in self.classes else typ.path.data
             return FatPtr([typ.cls, ArrayAttr([self.simplify(t) for t in typ.type_params.data]), StringAttr(path)])
 
         if isinstance(typ, FatPtr) and typ.cls.data in self.classes:
-            path = self.classes[typ.cls.data].info.filepath
+            path = self.get_class(None, typ).info.filepath
             return FatPtr.with_path(typ, path)
 
         if isinstance(typ, Buffer): return Buffer([self.simplify(typ.elem_type)])
@@ -373,11 +400,10 @@ class TypeEnvironment:
 
     def constraints_of(self, typ):
         constraints = ConstraintSet(set())
-        classes = self.classes
         if isinstance(typ, FatPtr):
-            return classes[typ.cls.data].all_constraints().copy()
-        if isinstance(typ, TypeParameter) and isinstance(typ.bound, FatPtr) and typ.bound.cls.data in classes:
-            return classes[typ.bound.cls.data].all_constraints().copy()
+            return self.get_class(None, typ).all_constraints().copy()
+        if isinstance(typ, TypeParameter) and isinstance(typ.bound, FatPtr) and typ.bound.cls.data in self.classes:
+            return self.get_class(None, typ.bound).all_constraints().copy()
         if isinstance(typ, Union):
             for t in typ.types.data:
                 constraints = constraints.union(self.constraints_of(t))
@@ -519,6 +545,18 @@ class Scope:
     def functions(self):
         return self.type_env.functions
 
+    def get_class(self, node_info, typ):
+        return self.type_env.get_class(node_info, typ)
+
+    def get_function(self, node_info, fn_name):
+        return self.type_env.get_function(node_info, fn_name)
+
+    def add_class(self, cls):
+        return self.type_env.add_class(cls)
+
+    def add_function(self, fn):
+        return self.type_env.add_function(fn)
+
     def subtype(self, left, right):
         return self.type_env.subtype(left, right)
 
@@ -547,7 +585,7 @@ class Scope:
 
     def offset_to(self, from_typ, to_typ):
         if from_typ in builtin_types.values() or to_typ in builtin_types.values(): return 0
-        if isinstance(from_typ, FatPtr) and isinstance(to_typ, FatPtr): return self.classes[from_typ.cls.data].offset_to(to_typ.cls.data)
+        if isinstance(from_typ, FatPtr) and isinstance(to_typ, FatPtr): return self.get_class(None, from_typ).offset_to(to_typ.cls.data)
         raise Exception(f"not implemented yet for types {from_typ} and {to_typ}")
 
     def get_parameterization(self, typ):
@@ -586,7 +624,7 @@ class Scope:
                 self.region.last_block.add_ops([gep, load, parameterization])
                 self.parameterization_cache[typ] = parameterization.results[0]
                 return parameterization.results[0]
-            t_cls = self.classes[first_arg_with_type.cls.data]
+            t_cls = self.get_class(None, first_arg_with_type)
             if len(type_index(first_arg_with_type, typ)) < 1:
                 print(first_arg_with_type)
                 print(typ)

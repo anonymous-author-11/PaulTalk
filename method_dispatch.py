@@ -289,7 +289,7 @@ class ClassMock:
                 else:
                     return False
         
-        linearizations = [scope.classes[sup.cls.data].c3_linearization(sup.type_params.data if sup.type_params != NoneAttr() else []) for sup in self.direct_supertypes]
+        linearizations = [scope.get_class(None, sup).c3_linearization(sup.type_params.data if sup.type_params != NoneAttr() else []) for sup in self.direct_supertypes]
         linearizations.append(self.direct_supertypes)
         
         order = merge(linearizations)

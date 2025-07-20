@@ -459,6 +459,9 @@ DONE:
 
 TODO:
 
+- Why are function literals added to scope.functions?
+	- So that 
+
 - Add a SizedIterator
 	- Do NOT guarantee a SizedIterator from a Collection
 		- Example: Map
@@ -467,7 +470,9 @@ TODO:
 - It would not be safe for Array or String to hand out buffer views
 	- If the views hold a reference to the underlying buffer
 	- Because upon resizing, that buffer would no longer be the backing buffer
-	- Instead, View should rely on Indexable facilities
+	- A Slice could, because it is fixed-length
+	- View could rely on Indexable facilities
+	- Possibly an argument for making String immutable
 
 - String could expose a writer that can only write to its end
 	- Is that a Writer[i32] or a Writer[i8]?
@@ -478,7 +483,6 @@ TODO:
 
 - Things we could work on right now
 	- Basic namespacing
-	- Extern type
 	- Comparison for tuples
 	- Closures
 	- Moving patterns to PDL
@@ -492,10 +496,9 @@ TODO:
 			- Probably during scope.validate_type [check!]
 			- Should expose a FatPtr classmethod to create new with path [check!]
 		- make sure all creations of FatPtr in typeflow add paths [check!]
-	- Technically can't we do export / no_export lists before namespacing?
-	- Step two is to use path-qualified names in scope.classes and scope.functions
-		- We could do {name : {path : definition}}
-		- Use absolute path
+	- Step two is to use path-qualified names in scope.classes and scope.functions [check!]
+		- We could do {name : {path : definition}} [check!]
+		- Use absolute path [check!]
 	- Step 3: Add namespacing to grammar
 		- Dot-qualification
 		- Import syntax
@@ -506,6 +509,9 @@ TODO:
 			- We need a way to semantically distinguish them
 			- Namespaced take precedence over variable names
 			- Check if receiver is an Identifier; check if it's in scope.functions
+	- Technically can't we do export / no_export lists before namespacing?
+		- Easier after
+		- Want to add export status to scope.classes and scope.functions map
 	- Report name collisions of imports (only when used!) (?)
 
 - Add an "extern type" statement

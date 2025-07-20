@@ -18,7 +18,6 @@ import random
 import functools
 import os
 from pathlib import Path
-import copy
 import re
 import platform
 import graph_utils as nx

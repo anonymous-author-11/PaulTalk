@@ -182,14 +182,8 @@ class Program(Node):
         aliases = (stmt for stmt in self.statements if isinstance(stmt, Alias))
         imports = (stmt for stmt in self.statements if isinstance(stmt, Import))
 
-        for cls in classes:
-            if cls.name in scope.classes:
-                raise Exception(f"{cls.info}: Class {cls.name} already declared in this scope")
-            scope.classes[cls.name] = cls
-        for fn in functions:
-            if fn.name in scope.functions:
-                raise Exception(f"{fn.info}: Function {fn.name} already declared in this scope")
-            scope.functions[fn.name] = fn
+        for cls in classes: scope.add_class(cls)
+        for fn in functions: scope.add_function(fn)
         for alias in aliases:
             if alias.alias in scope.functions:
                 raise Exception(f"{alias.info}: Alias conflicts with function named {alias.alias}")
@@ -437,11 +431,10 @@ class OverloadedBinaryOp(BinaryOp):
     def ensure_object_receiver(self, scope, left_type):
         if not isinstance(left_type, FatPtr):
             raise Exception(f"{self.info}: no overloaded operators for non-object {left_type}")
-        if left_type.cls.data not in scope.classes.keys():
-            raise Exception(f"{self.info}: non existent class {left_type.cls.data}")
+        left_type = scope.type_env.validated_type(self.info, left_type)
 
     def ensure_existing_overload(self, scope, left_type, mangled_operator, right_type):
-        left_class = scope.classes[left_type.cls.data]
+        left_class = scope.get_class(self.info, left_type)
         matching_behavior = any(behavior.applicable(left_type, scope, mangled_operator, [right_type]) for behavior in left_class.behaviors)
         if not matching_behavior:
             raise Exception(f"{self.info}: class {left_class.name} has no overload for operator {self.operator}")
@@ -790,7 +783,6 @@ class FunctionLiteral(Expression):
         self.body.typeflow(body_scope)
         self.insert_implicit_return(body_scope)
         return_type = self.return_type() if self.return_type() else Nothing()
-        scope.functions[self.name] = self
         return Function([ArrayAttr(param_types), self.yield_type, return_type])
 
 @dataclass
@@ -868,7 +860,7 @@ class FunctionIdentifier(Identifier):
         return wrap.results[0]
 
     def exprtype(self, scope):
-        func = scope.functions[self.name]
+        func = scope.get_function(self.info, self.name)
         return_type = func.return_type() if func.return_type() else Nothing()
         return Function([ArrayAttr([param.type(scope.type_env) for param in func.params]), func.yield_type, return_type])
 
@@ -1132,7 +1124,7 @@ class Into(Expression):
     # see if there is a .to_ method on the operand that returns the rhs type
     def find_to_method(self, scope, operand_type, to_type):
         if not isinstance(operand_type, FatPtr): return None
-        operand_class = scope.classes[operand_type.cls.data]
+        operand_class = scope.get_class(self.info, operand_type)
         candidate_behaviors = [behavior for behavior in operand_class.behaviors if behavior.name.startswith("to_") and behavior.arity == 0]
         candidate_behaviors = [behavior for behavior in candidate_behaviors if scope.subtype(behavior.specialized_return_type(operand_type, [], scope), to_type)]
         if len(candidate_behaviors) > 1:
@@ -1149,7 +1141,7 @@ class Into(Expression):
     # see if there is a .from_ ClassMethod on the target type that accepts the operand type
     def find_from_method(self, scope, operand_type, to_type):
         if not isinstance(to_type, FatPtr): return None
-        to_class = scope.classes[to_type.cls.data]
+        to_class = scope.get_class(self.info, to_type)
         candidate_behaviors = [behavior for behavior in to_class.behaviors if behavior.name.startswith("_Self_from_") and behavior.arity == 1]
         candidate_behaviors = [behavior for behavior in candidate_behaviors if behavior.applicable(to_type, scope, behavior.name, [operand_type])]
         if len(candidate_behaviors) == 0: return None
@@ -1161,7 +1153,7 @@ class Into(Expression):
     # see if the target type has a constructor that accepts the operand type
     def find_constructor(self, scope, operand_type, to_type):
         if not isinstance(to_type, FatPtr): return None
-        to_class = scope.classes[to_type.cls.data]
+        to_class = scope.get_class(self.info, to_type)
         candidate_behaviors = [behavior for behavior in to_class.behaviors if behavior.name == "init" and behavior.arity == 1]
         candidate_behaviors = [behavior for behavior in candidate_behaviors if behavior.applicable(to_type, scope, "init", [operand_type])]
         if len(candidate_behaviors) == 0: return None
@@ -1190,16 +1182,16 @@ class FunctionCall(Expression):
         return call_op.results[0] if len(call_op.results) > 0 else None
 
     def ensure_declared(self, scope):
-        if self.function not in scope.functions.keys():
+        if self.function not in scope.functions:
             raise Exception(f"{self.info}: function name {self.function} not found!") 
 
     def ensure_valid_arg_types(self, scope):
-        for i, param in enumerate(scope.functions[self.function].params):
+        for i, param in enumerate(scope.get_function(self.info, self.function).params):
             if(scope.subtype(self.arguments[i].exprtype(scope), param.type(scope.type_env))): continue
             raise Exception(f"{self.info}: argument type {self.arguments[i].exprtype(scope)} not subtype of declared parameter type {param.type(scope.type_env)} for parameter {param.name}")
 
     def apply_constraints(self, scope):
-        func = scope.functions[self.function]
+        func = scope.get_function(self.info, self.function)
         formal_constraints = func.constraints
         mapping = [*zip((param.name for param in func.params), (arg.info.id for arg in self.arguments)), ("ret", self.info.id)]
         mapping = {k:v for k,v in mapping}
@@ -1216,7 +1208,7 @@ class FunctionCall(Expression):
         self.ensure_declared(scope)
         self.ensure_valid_arg_types(scope)
         self.apply_constraints(scope)
-        return scope.functions[self.function].return_type()
+        return scope.get_function(self.info, self.function).return_type()
 
     def typeflow(self, scope):
         self.exprtype(scope)
@@ -1242,7 +1234,7 @@ class MethodCall(Expression):
         if isinstance(rec_typ, Tuple):
             cast_info = NodeInfo(None, self.info.filepath, self.info.line_number)
             return MethodCall(self.info, TupleToArray(cast_info, self.receiver), self.method, self.arguments).codegen(scope)
-        rec_class = scope.classes[rec_typ.cls.data]
+        rec_class = scope.get_class(self.info, rec_typ)
 
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
         behavior = next(iter(behavior for behavior in rec_class.behaviors if behavior.applicable(rec_typ, scope, self.method, arg_types)))
@@ -1309,7 +1301,7 @@ class MethodCall(Expression):
         if not isinstance(rec_typ, FatPtr):
             debug_print(scope.type_table)
             raise Exception(f"{self.info}: receiver type {rec_typ} for method call .{self.method} is not an object!")
-        rec_class = scope.classes[rec_typ.cls.data]
+        rec_class = scope.get_class(self.info, rec_typ)
         behaviors = [behavior for behavior in rec_class.behaviors if behavior.applicable(rec_typ, scope, self.method, arg_types)]
         if len(behaviors) == 0:
             raise Exception(f"{self.info}: there exists no overload of method {rec_typ}.{self.method} compatible with argument types {arg_types}")
@@ -1556,7 +1548,7 @@ class ClassMethodCall(MethodCall):
         if "Intrinsic" in self.receiver.cls.data:
             return IntrinsicCall(self.info, self.receiver.cls.data, self.method, self.arguments).codegen(scope)
         rec_typ = scope.simplify(self.receiver)
-        rec_class = scope.classes[rec_typ.cls.data]
+        rec_class = scope.get_class(self.info, rec_typ)
 
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
         behavior = next(iter(behavior for behavior in rec_class.behaviors if behavior.applicable(rec_typ, scope, "_Self_" + self.method, arg_types)))
@@ -1623,11 +1615,8 @@ class ClassMethodCall(MethodCall):
     def simple_exprtype(self, scope):
         
         rec_typ = scope.simplify(self.receiver)
-        if rec_typ.cls.data not in scope.classes.keys():
-            raise Exception(f"{self.info}: Class {rec_typ.cls.data} has not been declared.")
-        rec_class = scope.classes[rec_typ.cls.data]
-
         rec_typ = scope.type_env.validated_type(self.info, rec_typ)
+        rec_class = scope.get_class(self.info, rec_typ)
 
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
         behaviors = [behavior for behavior in rec_class.behaviors if behavior.applicable(rec_typ, scope, "_Self_" + self.method, arg_types)]
@@ -1722,7 +1711,7 @@ class ObjectCreation(Expression):
             unwrap = UnwrapOp(operands=[arg], result_types=[input_types[i].base_typ()])
             scope.region.last_block.add_op(unwrap)
             inputs[i] = unwrap.results[0]
-        cls = scope.classes[self_type.cls.data]
+        cls = scope.get_class(self.info, self_type)
         n_data_fields = len([f for f in cls.fields() if not isinstance(f.declaration, TypeFieldDecl)])
         parameterizations = self.parameterizations(cls, self_type, scope)
         num_data_fields = IntegerAttr.from_int_and_width(n_data_fields, 32)
@@ -1763,7 +1752,7 @@ class ObjectCreation(Expression):
     # try to deduce the reciever type from the argument types, e.g. Pair{5, 6} => Pair[i32, i32].new(5, 6)
     def deduce_type_parameters(self, simplified_type, arg_types, scope):
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
-        cls = scope.classes[simplified_type.cls.data]
+        cls = scope.get_class(self.info, simplified_type)
         cls_type =  cls.type()
         behavior_candidates = [behavior for behavior in cls.behaviors if behavior.name == "init" and behavior.arity == len(self.arguments)]
         if len(behavior_candidates) == 0:
@@ -1795,10 +1784,7 @@ class ObjectCreation(Expression):
         if self.type.cls.data == "Buffer":
             raise Exception(f"{self.info}: Buffer type must be parameterized, like Buffer[i8] or Buffer[f64]")
         simplified_type = scope.simplify(self.type)
-        if simplified_type.cls.data not in scope.classes:
-            raise Exception(f"{self.info}: Class {simplified_type.cls.data} has not been declared.")
-
-        cls = scope.classes[simplified_type.cls.data]
+        cls = scope.get_class(self.info, simplified_type)
         input_types = [arg.exprtype(scope) for arg in self.arguments]
         if simplified_type.type_params == NoneAttr() and len(cls.type_parameters) > 0:
             simplified_type = self.deduce_type_parameters(simplified_type, input_types, scope)
@@ -1858,7 +1844,6 @@ class ExternDef(Statement):
     def typeflow(self, scope):
         if self.name[0].isupper():
             raise Exception(f"{self.info}: Function names should not be capitalized.")
-        scope.functions[self.name] = self
         for i, param in enumerate(self.params): param.typeflow(scope)
 
 @dataclass
@@ -1878,7 +1863,6 @@ class FunctionDef(Statement):
 
     def codegen(self, scope):
         if self.name in scope.comp_unit.codegenned: return
-        scope.functions[self.name] = self
         body_scope = Scope(scope, method=self)
         body_scope.type_table = {}
         body_scope.symbol_table = {}
@@ -1923,7 +1907,6 @@ class FunctionDef(Statement):
     def typeflow(self, scope):
         if self.name[0].isupper():
             raise Exception(f"{self.info}: Function names should not be capitalized.")
-        scope.functions[self.name] = self
         body_scope = Scope(scope, method=self)
         body_scope.type_table = {}
         body_scope.symbol_table = {}
@@ -2052,8 +2035,8 @@ class MethodDef(Statement):
         original_method = (self, *self.overridden_methods())[-1]
         return_type = self.defining_class.type_env.simplify(original_method.return_type())
         return_cls = None
-        if isinstance(return_type, FatPtr): return_cls = body_scope.classes[return_type.cls.data]
-        if isinstance(return_type, TypeParameter): return_cls = body_scope.classes[return_type.bound.cls.data]
+        if isinstance(return_type, FatPtr): return_cls = body_scope.get_class(self.info, return_type)
+        if isinstance(return_type, TypeParameter): return_cls = body_scope.get_class(self.info, return_type.bound)
         if return_cls:
             for lhs, op, rhs in return_cls.all_constraints()._set:
                 annotated_facts.add((lhs.replace("self","ret"), op, rhs.replace("self","ret")))
@@ -2201,8 +2184,8 @@ class ClassMethodDef(MethodDef):
         return_cls = None
         original_method = (self, *self.overridden_methods())[-1]
         return_type = self.defining_class.type_env.simplify(original_method.return_type())
-        if isinstance(return_type, FatPtr): return_cls = body_scope.classes[return_type.cls.data]
-        if isinstance(return_type, TypeParameter): return_cls = body_scope.classes[return_type.bound.cls.data]
+        if isinstance(return_type, FatPtr): return_cls = body_scope.get_class(self.info, return_type)
+        if isinstance(return_type, TypeParameter): return_cls = body_scope.get_class(self.info, return_type.bound)
         if return_cls:
             for lhs, op, rhs in return_cls.all_constraints()._set:
                 annotated_facts.add((lhs.replace("self","ret"), op, rhs.replace("self","ret")))
@@ -2812,7 +2795,6 @@ class ClassDef(Statement):
         }
         class_def = TypeDefOp.create(attributes=attr_dict)
         scope.region.last_block.add_op(class_def)
-        scope.classes[self.name] = self
 
         self_scope = self.self_scope(scope)
 
@@ -2843,7 +2825,6 @@ class ClassDef(Statement):
     def typeflow(self, scope):
         if not self.name[0].isupper():
             raise Exception(f"{self.info}: Class names should be capitalized.")
-        scope.classes[self.name] = self
         self.mem_regions.points_to_facts.add(("self","==","self"))
         for reg in self.all_regions():
             self.mem_regions.points_to_facts.add(("self", "<", reg))
@@ -2873,7 +2854,8 @@ class ClassDef(Statement):
             if anc.type_params == NoneAttr(): continue
             for i, t in enumerate(anc.type_params.data):
                 types = [t.type_params.data[i] for t in ancestors if t.cls.data == anc.cls.data]
-                old_tp = self._type_env.classes[anc.cls.data].type_parameters[i]
+                anc_class = self._type_env.get_class(self.info, anc)
+                old_tp = anc_class.type_parameters[i]
                 t = self._type_env.simplify(Union.from_list(types))
                 self._type_env.add_alias(old_tp, t)
         for t in self.type_parameters: self._type_env.add_alias(FatPtr.basic(t.label.data), t)
@@ -2963,7 +2945,7 @@ class ClassDef(Statement):
         if undeclared:
             print(self._type_env.classes)
             raise Exception(f"{self.info}: Supertype {undeclared.cls.data} has not been declared.")
-        linearizations = [self._type_env.classes[sup.cls.data].c3_linearization(sup.type_params.data if sup.type_params != NoneAttr() else []) for sup in self.direct_supertypes() if isinstance(sup, FatPtr)]
+        linearizations = [self._type_env.get_class(self.info, sup).c3_linearization(sup.type_params.data if sup.type_params != NoneAttr() else []) for sup in self.direct_supertypes() if isinstance(sup, FatPtr)]
         linearizations.append(self.direct_supertypes())
         
         order = merge(linearizations)
@@ -2974,7 +2956,7 @@ class ClassDef(Statement):
     def my_ordering(self):
         if self._my_ordering: return self._my_ordering
         def cmp_key(a, b): return 0 if self._type_env.subtype(a, b) else 1
-        direct_supertypes = [self._type_env.classes[sup.cls.data] for sup in self.direct_supertypes() if isinstance(sup, FatPtr)]
+        direct_supertypes = [self._type_env.get_class(self.info, sup) for sup in self.direct_supertypes() if isinstance(sup, FatPtr)]
         sorted_direct_supertypes = sorted(direct_supertypes, key=cmp_to_key(cmp_key))
         self._my_ordering = [*chain.from_iterable([sup, *sup.my_ordering()] for sup in sorted_direct_supertypes)]
         return self._my_ordering
@@ -3106,7 +3088,7 @@ class ClassMock:
                 else:
                     return False
         
-        linearizations = [type_env.classes[sup.cls.data].c3_linearization(sup.type_params.data if sup.type_params != NoneAttr() else []) for sup in self.direct_supertypes]
+        linearizations = [type_env.get_class(None, sup).c3_linearization(sup.type_params.data if sup.type_params != NoneAttr() else []) for sup in self.direct_supertypes]
         linearizations.append(self.direct_supertypes)
         
         order = merge(linearizations)
@@ -3830,10 +3812,14 @@ class Import(Statement):
         sandbox.comp_unit = scope.comp_unit
         self.type_env = sandbox.type_env
         self.program.name_resolution(sandbox)
-        for k, v in self.type_env.classes.items():
-            if k not in scope.classes.keys(): scope.classes[k] = v
-        for k, v in self.type_env.functions.items():
-            if k not in scope.functions.keys(): scope.functions[k] = v
+        for name, classes in self.type_env.classes.items():
+            for path, definition in classes.items():
+                if name in scope.classes and path in scope.classes[name]: continue
+                scope.add_class(definition)
+        for name, functions in self.type_env.functions.items():
+            for path, definition in functions.items():
+                if name in scope.functions and path in scope.functions[name]: continue
+                scope.add_function(definition)
 
     def ensure_acyclic_imports(self, import_graph):
         dependency_cycle = next(import_graph.simple_cycles(), None)
