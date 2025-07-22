@@ -1080,6 +1080,9 @@ def foo(a : Foo, b : Bar) -> Baz {
 
 { @elems_reg holds first.elems_reg, second.elems_reg }
 
+- Cool bonus feature: you can now specify aliasing in function types
+	- (x : T) -> U yields Y ~> { ret == x }
+
 - A holds B could by-default imply that B == A.all_fields
 	- This makes overriding easier but regions less precise
 	- Probably a good default

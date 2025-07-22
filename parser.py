@@ -184,9 +184,8 @@ class CSTTransformer(Transformer):
 
     def constraint(self, lhs, op, rhs):
         node_info = NodeInfo(None, self.file_path, line_number(op))
-        # canonicalize to use "<"
-        if op.value == ">": return Constraint(node_info, rhs, "<", lhs)
-        return Constraint(node_info, lhs, op.value, rhs)
+        op_map = {"holds":"<", "==":"=="}
+        return Constraint(node_info, lhs, op_map[op.value], rhs)
 
     def alias(self, alias, name, meaning):
         node_info = NodeInfo(None, self.file_path, line_number(alias))

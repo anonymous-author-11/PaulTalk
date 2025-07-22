@@ -81,6 +81,7 @@ class Iterable[T] extends Container {
 }
 
 // Must be O(1) to get next element
+// ( O(1) with respect to what? )
 class ConstantTimeIterator[T] extends Iterator[T] {}
 
 // Adapts a Coroutine into an Iterator
@@ -269,8 +270,8 @@ class ZipIterable[T, U] extends Iterable[Pair[T, U]] {
     @second : Iterable[U]
 
     regions {
-        @elems_reg < @first.elems_reg,
-        @elems_reg < @second.elems_reg
+        @elems_reg holds @first.elems_reg,
+        @elems_reg holds @second.elems_reg
     }
 
     def init(@first : Iterable[T], @second : Iterable[U]) {}
@@ -285,8 +286,8 @@ class ZipIterator[T, U] extends Iterator[Pair[T, U]] {
     @second : Iterator[U]
 
     regions {
-        @elems_reg < @first.elems_reg,
-        @elems_reg < @second.elems_reg
+        @elems_reg holds @first.elems_reg,
+        @elems_reg holds @second.elems_reg
     }
 
     def init(@first : Iterator[T], @second : Iterator[U]) {
@@ -306,8 +307,8 @@ class ProductIterable[T, U] extends Iterable[Pair[T, U]] {
     @second : Iterable[U]
 
     regions {
-        @elems_reg < @first.elems_reg,
-        @elems_reg < @second.elems_reg
+        @elems_reg holds @first.elems_reg,
+        @elems_reg holds @second.elems_reg
     }
 
     def init(@first : Iterable[T], @second : Iterable[U]) {
@@ -326,8 +327,8 @@ class ProductIterator[T, U] extends Iterator[Pair[T, U]] {
     regions {
         @current_first == @first_iterator.elems_reg,
         @second_iterator.elems_reg == @second_iterable.elems_reg,
-        @elems_reg < @first_iterator.elems_reg,
-        @elems_reg < @second_iterator.elems_reg
+        @elems_reg holds @first_iterator.elems_reg,
+        @elems_reg holds @second_iterator.elems_reg
     }
 
     def init(@first_iterator : Iterator[T], @second_iterable : Iterable[U]) {

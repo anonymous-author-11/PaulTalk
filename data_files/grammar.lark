@@ -42,8 +42,7 @@ method_param_list: (method_param ("," method_param)*)? -> param_list
 
 class_region_constraints: "regions" "{" constraint_list "}" 
 constraint_list: (constraint ("," constraint)*)?
-constraint: region_variable LT region_variable
-          | region_variable GT region_variable
+constraint: region_variable HOLDS region_variable
           | region_variable EQ region_variable
 region_variable: ((ident | FIELD) ("." (ident | FIELD))*)? 
 
@@ -181,6 +180,7 @@ LE: "<="
 GE: ">="
 LT: "<"
 GT: ">"
+HOLDS: "holds"
 AS: "as"
 IS: "is"
 INTO: "into"

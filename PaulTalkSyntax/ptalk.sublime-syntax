@@ -71,7 +71,7 @@ contexts:
       scope: storage.modifier.mini
 
   keywords:
-    - match: '\b(where|extends|yields|import|alias|regions)\b'
+    - match: '\b(where|extends|yields|import|alias|regions|holds)\b'
       scope: keyword.other.mini
 
   types:
