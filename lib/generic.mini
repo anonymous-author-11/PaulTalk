@@ -65,10 +65,10 @@ class Float64 extends Addable[Float64, Float64], Addable[Int32, Float64] {
 	def init(@value : f64) {
     }
 
-    #[ret == @value]
 	def value() -> f64 {
         return @value;
-    }
+    } ~> { ret == @value }
+
 	def +(other : Int32) -> Float64 {
 		cast : f64 = other.value();
 		return Float64{@value + cast};
@@ -84,10 +84,10 @@ class Int32 extends Addable[Int32, Int32], Addable[Float64, Float64] {
 	def init(@value : i32) {
     }
 
-    #[ret == @value]
 	def value() -> i32 {
         return @value;
-    }
+    } ~> { ret == @value }
+    
 	def +(other : Int32) -> Int32 {
 		return Int32{@value + other.value()};
 	}

@@ -515,7 +515,6 @@ TODO:
 		- Want to add export status to scope.classes and scope.functions map
 	- Report name collisions of imports (only when used!) (?)
 
-
 - Add an "extern type" statement
 	- Potentially useful for C interop
 	- Compiles down to LLVM opaque named type
@@ -1052,6 +1051,72 @@ TODO:
 	- Uninitialized would need to be a builtin type that forwards .init() calls
 
 # --- Possibilities ---
+
+"To find the region of a given object o, the allocator first
+gets the object’s page p by rounding its address, and
+then uses p.firstpage to reach the first page, identifying
+o’s region."
+
+- This could solve the generic-fields issue
+	- Have a method in the vtable to get the region of the instance
+
+- Value types would make conservative aliasing much less onerous
+	- Actually, would not unless deep copying performed
+	- Shallow copying would still allow aliasing
+
+- Should we embrace parameter-passing modes instead of value types?
+	- How the argument is taken is determined by the definition, not the caller
+
+- Give option to specify either "alias[x < y, z == q]" or "no_alias[x < y, z != q]"
+	- Also for class contstraints
+	- Sometimes one or the other is more concise
+	- Rename "alias" to "uses" for type aliases
+
+- I kind of prefer this syntax:
+
+def foo(a : Foo, b : Bar) -> Baz {
+	...
+} ~> { b holds a.qux, self.baz == ret }
+
+{ @elems_reg holds first.elems_reg, second.elems_reg }
+
+- A holds B could by-default imply that B == A.all_fields
+	- This makes overriding easier but regions less precise
+	- Probably a good default
+
+- You'd have to ask: how many further aliasing relations do we have to disallow to ensure that the disallowed relation is respected?
+	- Is there even a unique answer to this question?
+		- Minimum number of edges removed
+	- This is NP-hard and even approximations are still hard
+	- Can't you just check that the method graph doesn't have the outlawed relations?
+		- But what do you propagate to callers?
+		- "A conservative approximation in which the given relations do not appear"
+		- Which is exactly what is very hard to produce
+
+- Rationale
+	- It leads with the method name
+	- This is exactly why we avoided "public static void main"
+	- It uses an otherwise unused line (the closing brace line)
+	- It's suggestive about what it is specifying
+	- It reads like a kind of postcondition
+
+- Need to ensure that aliasing between self-fields cannot be extensive in method constraints than in class constraints
+	- E.g. @x and @y become aliased when method .foo() is called, but @x and @y are otherwise not aliased
+	- Necessary for downcast safety
+	- Imagine bar.foo(); if bar is Subtype { ... }
+		- bar.x and bar.y become aliased by .foo(), then are not known to be aliased in the following block
+
+- If a virtual region is not bound to a field, it should default to the region of 'self'
+
+- Value semantics doesn't necessarily mean "on the stack"
+	- That could just be a possible optimization
+	- But you do really want it to mean "stored inline in object"
+
+- Should .copy() be user-defined or automatic?
+	- Possibly unsafe if user-defined
+	- Non-owning views should not copy the source
+	- You'd have to automatically create .shallowcopy and .deepcopy
+	- Then which one would assignment use?
 
 - Assume call return value offsets
 - Expect reciever static types

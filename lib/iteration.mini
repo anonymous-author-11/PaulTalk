@@ -7,14 +7,14 @@ class Pair[T, U] {
 
 	def init(@first : T, @second : U) {
 	}
-    #[ret == @first]
+
 	def first() -> T {
 		return @first;
-	}
-    #[ret == @second]
+	} ~> { ret == @first }
+    
 	def second() -> U {
 		return @second;
-	}
+	} ~> { ret == @second }
 }
 
 class Container {
@@ -23,23 +23,25 @@ class Container {
 
 class Iterator[T] extends Container {
 
-    #[ret == @elems_reg]
-	abstract def next() -> T? {}
+	abstract def next() -> T? {
+    } ~> { ret == @elems_reg }
+
 }
 
 class Iterable[T] extends Container {
 
-    #[ret.elems_reg == @elems_reg]
 	abstract def iterator() -> Iterator[T] {
-    }
+    } ~> { ret.elems_reg == @elems_reg }
+
 	def each(f : (T)) {
         for x in self { f.call(x); }
     }
-    #[ret == accumulator]
+    
     def reduce(accumulator : T, f : (T, T) -> T) -> T {
         for x in self { accumulator = f.call(accumulator, x); }
         return accumulator;
-    }
+    } ~> { ret == accumulator }
+
     def all(f : (T) -> Bool) -> Bool {
         for x in self { if not f.call(x) { return false; } }
         return true;
@@ -48,34 +50,34 @@ class Iterable[T] extends Container {
         for x in self { if f.call(x) { return true; } }
         return false;
     }
-    #[ret.iterable == self]
+    
     def enumerate() -> Iterable[Pair[i32, T]] {
         return Enumeration{self};
-    }
-    #[ret.iterable == self, ret.f == f]
+    } ~> { ret.iterable == self }
+
     def map[U](f : (T) -> U) -> Iterable[U] {
         return MapIterable{self, f};
-    }
-    #[ret.iterable == self, ret.f == f]
+    } ~> { ret.iterable == self, ret.f == f }
+    
     def filter(f : (T) -> Bool) -> Iterable[T] {
         return FilterIterable{self, f};
-    }
-    #[ret.first == self, ret.second == other]
+    } ~> { ret.iterable == self, ret.f == f }
+    
     def chain(other : Iterable[T]) -> Iterable[T] {
         return ChainIterable{self, other};
-    }
-    #[ret.first == self, ret.second == other]
+    } ~> { ret.first == self, ret.second == other }
+    
     def interleave(other : Iterable[T]) -> Iterable[T] {
         return InterleaveIterable{self, other};
-    }
-    #[ret.first == self, ret.second == other]
+    } ~> { ret.first == self, ret.second == other }
+    
     def zip[U](other : Iterable[U]) -> Iterable[Pair[T, U]] {
         return ZipIterable{self, other};
-    }
-    #[ret.first == self, ret.second == other]
+    } ~> { ret.first == self, ret.second == other }
+    
     def product[U](other : Iterable[U]) -> Iterable[Pair[T, U]] {
         return ProductIterable{self, other};
-    }
+    } ~> { ret.first == self, ret.second == other }
 }
 
 // Must be O(1) to get next element

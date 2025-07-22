@@ -90,12 +90,12 @@ class CSTTransformer(Transformer):
     def statement(self, stmt):
         return stmt
 
-    def extern_def(self, constraints, deff, name, params, elipsis, return_type, yield_type):
+    def extern_def(self, deff, name, params, elipsis, return_type, yield_type, constraints):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         node_info = NodeInfo(None, self.file_path, line_number(name))
         return ExternDef(node_info, name.value, constraints or [], params or [], len(params or []), return_type, yield_type or exception_or_nil)
 
-    def function_def(self, constraints, deff, name, params, return_type, yield_type, body):
+    def function_def(self, deff, name, params, return_type, yield_type, body, constraints):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         node_info = NodeInfo(None, self.file_path, line_number(name))
         return FunctionDef(node_info, name.value, constraints or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, False)
@@ -107,7 +107,7 @@ class CSTTransformer(Transformer):
         if "=" in name.value: return "_set_" + name.value.replace("=","")
         return name.value
 
-    def method_def(self, constraints, abstract, deff, name, type_params, params, return_type, yield_type, body):
+    def method_def(self, abstract, deff, name, type_params, params, return_type, yield_type, body, constraints):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractMethodDef if abstract else MethodDef
         mangled_name = name + "_" + clean_param_names(params)
@@ -121,14 +121,14 @@ class CSTTransformer(Transformer):
         }[op.value]
         return translated_op
 
-    def operator_def(self, constraints, abstract, deff, translated_op, type_params, params, return_type, yield_type, body):
+    def operator_def(self, abstract, deff, translated_op, type_params, params, return_type, yield_type, body, constraints):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractMethodDef if abstract else MethodDef
         mangled_name = translated_op + "_" + clean_param_names(params)
         node_info = NodeInfo(None, self.file_path, line_number(deff))
         return ty(node_info, translated_op, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
 
-    def class_method_def(self, constraints, abstract, deff, self_tok, name, type_params, params, return_type, yield_type, body):
+    def class_method_def(self, abstract, deff, self_tok, name, type_params, params, return_type, yield_type, body, constraints):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractClassMethodDef if abstract else ClassMethodDef
         mangled_name = "_Self_" + name.value + "_" + clean_param_names(params)

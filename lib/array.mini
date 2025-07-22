@@ -30,14 +30,15 @@ class Array[T] extends
     }
     def init(@buffer : Buffer[T], @length : i32, @capacity : i32) {
     }
-    #[ret == @length]
+    
     def size() -> i32 {
         return @length;
-    }
-    #[ret == @capacity]
+    } ~> { ret == @length }
+    
     def capacity() -> i32 {
     	return @capacity;
-    }
+    } ~> { ret == @capacity }
+
     def reserve(new_capacity : i32) {
         if new_capacity <= @capacity { return; }
         @capacity = new_capacity;
@@ -52,14 +53,13 @@ class Array[T] extends
 
     // List[T] overrides
 
-    #[ret == self, x == @elems_reg]
     def append(x : T) -> Self {
         if @length >= @capacity { self.reserve(@capacity * 2); }
         @buffer.[@length] = x;
         @length = @length + 1;
         return self;
-    }
-    #[ret == self, other.elems_reg == @elems_reg]
+    } ~> { ret == self, x == @elems_reg }
+    
     def extend(other : Collection[T]) -> Self {
         old_len = @length;
         new_len = old_len + other.size();
@@ -71,7 +71,7 @@ class Array[T] extends
         }
         @length = new_len;
         return self;
-    }
+    } ~> { ret == self, other.elems_reg == @elems_reg }
 
     // IndexableCollection[i32, T, T] overrides
 
@@ -81,18 +81,18 @@ class Array[T] extends
     def values() -> Self {
         return self;
     }
-    #[ret == @elems_reg]
+    
     def [](index : i32) -> T yields OutOfBounds {
         self.bounds_check(index);
         if index < 0 { index = @length + index; }
         return self.unchecked_index(index);
-    }
-    #[value == @elems_reg]
+    } ~> { ret == @elems_reg }
+    
     def []=(index : i32, value : T) yields OutOfBounds {
         self.bounds_check(index);
         if index < 0 { index = @length + index; }
         self.unchecked_insert(index, value);
-    }
+    } ~> { value == @elems_reg }
 
     def bounds_check(index : i32) yields OutOfBounds {
         past_end = index > (@length - 1);
@@ -101,14 +101,15 @@ class Array[T] extends
             yield(OutOfBounds.new(@length, index));
         }
     }
-    #[ret == @elems_reg]
+    
     def unchecked_index(index : i32) -> T {
     	return @buffer.[index];
-    }
-    #[value == @elems_reg]
+    } ~> { ret == @elems_reg }
+    
     def unchecked_insert(index : i32, value : T) {
         @buffer.[index] = value;
-    }
+    } ~> { value == @elems_reg }
+    
     def iterator() -> ConstantTimeIterator[T] {
     	return ArrayIterator{self};
     }
