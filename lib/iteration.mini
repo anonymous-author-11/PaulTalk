@@ -7,16 +7,7 @@ class Pair[T, U] {
     getter @first : T
     getter @second : U
 
-	def init(@first : T, @second : U) {
-	}
-
-	def first() -> T {
-		return @first;
-	} ~> { ret == @first }
-    
-	def second() -> U {
-		return @second;
-	} ~> { ret == @second }
+	def init(@first : T, @second : U) {}
 
 }
 

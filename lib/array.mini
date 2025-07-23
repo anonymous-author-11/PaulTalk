@@ -19,6 +19,8 @@ class Array[T] extends
         return Self.empty().extend(iterable);
     }
 
+    getter @capacity : i32
+
 	def init() {
 		@buffer = Buffer[T].new(1);
 		@length = 0;
@@ -34,10 +36,6 @@ class Array[T] extends
     def size() -> i32 {
         return @length;
     } ~> { ret == @length }
-    
-    def capacity() -> i32 {
-    	return @capacity;
-    } ~> { ret == @capacity }
 
     def reserve(new_capacity : i32) {
         if new_capacity <= @capacity { return; }

@@ -200,13 +200,8 @@ class UTF8Encoder extends Writer[i32] {
     def init(@writer : Writer[i8], @replacement_fn : (Writer[i8])) {
     }
 
-    def replacement_fn() -> (Writer[i8]) {
-        return @replacement_fn;
-    } ~> { ret == @replacement_fn }
-
-    def replacement_fn=(new_fn : (Writer[i8])) {
-        @replacement_fn = new_fn;
-    } ~> { new_fn == @replacement_fn }
+    getter @replacement_fn : (Writer[i8])
+    setter @replacement_fn : (Writer[i8])
 
 	def write(cp : i32) {
         if cp <= 0x7F { // 1-byte
@@ -271,17 +266,9 @@ class UTF8CodepointsValidator extends Iterator[i32] {
     def init(@iterator : Iterator[i8], @replacement_fn : (i32) -> i32) {
     }
 
-    def iterator() -> Iterator[i32] {
-        return @iterator;
-    } ~> { ret == @iterator }
-
-    def replacement_fn() -> (i32) -> i32 {
-        return @replacement_fn;
-    } ~> { ret == @replacement_fn }
-
-    def replacement_fn=(new_fn : (i32) -> i32) {
-        @replacement_fn = new_fn;
-    } ~> { new_fn == @replacement_fn }
+    getter @iterator : Iterator[i32]
+    getter @replacement_fn : (i32) -> i32
+    setter @replacement_fn : (i32) -> i32
 
     def replace_codepoint(codepoint : i32) -> i32 {
         yield(InvalidUTF8Error{});
@@ -318,13 +305,8 @@ class UTF8BytesValidator {
 
     def init(@writer : Writer[i8]) {}
 
-    def replacement_fn() -> (Writer[i8]) {
-        return @replacement_fn;
-    } ~> { ret == @replacement_fn }
-
-    def replacement_fn=(new_fn : (Writer[i8])) {
-        @replacement_fn = new_fn;
-    } ~> { new_fn == @replacement_fn }
+    getter @replacement_fn : (Writer[i8])
+    setter @replacement_fn : (Writer[i8])
 
     // Re-encode bytes for one codepoint from the byte source into @writer
     def write_codepoints_from(iterator : Iterator[i8], max_codepoints : i32) -> i32 {
@@ -414,17 +396,9 @@ class UTF8Decoder extends Iterator[i32] {
         @peeker = iterator into Peeker;
     }
 
-    def peeker() -> Peeker[i8] {
-        return @peeker;
-    } ~> { ret == @peeker }
-
-    def replacement_fn() -> (i8) -> i32 {
-        return @replacement_fn;
-    } ~> { ret == @replacement_fn}
-
-    def replacement_fn=(new_fn : (i8) -> i32) {
-        @replacement_fn = new_fn;
-    } ~> { new_fn == @replacement_fn}
+    getter @peeker : Peeker[i8]
+    getter @replacement_fn : (i8) -> i32
+    setter @replacement_fn : (i8) -> i32
 
     // returns (codepoint, bytes_needed)
     def process_first_byte(b1 : i8) -> Tuple[i32, i32] {

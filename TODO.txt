@@ -459,8 +459,11 @@ DONE:
 
 TODO: 
 
-- Why can't I just implement naive getters / setters and optimize later?
-	- In fact I can and should
+- Implement naive getters / setters [check!]
+	- In fact I can and should [check!]
+
+- Why was I able to multiply define getters and setters? Should be an error
+- Pair.swapped leads to infinite recursion in type substitution
 
 - Add a SizedIterator
 	- Do NOT guarantee a SizedIterator from a Collection

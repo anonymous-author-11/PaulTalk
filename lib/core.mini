@@ -198,9 +198,10 @@ class String extends List[Character], Representable {
     // Constructor for internal use.
     def init(@bytes : Buffer[i8], @byte_length : i32, @char_length : i32, @capacity : i32) {}
 
-    def byte_length() -> i32 { return @byte_length; }
+    getter @byte_length : i32
+    getter @capacity : i32
+
     def size() -> i32 { return @char_length; }
-    def capacity() -> i32 { return @capacity; }
 
     def c_string() -> Buffer[i8] {
         buf = Buffer[i8].new(@byte_length + 1);
@@ -283,11 +284,10 @@ class String extends List[Character], Representable {
 class Character {
     @codepoint : i32
 
+    getter @codepoint : i32
+
     def init(@codepoint : i32) {}
 
-    def codepoint() -> i32 {
-        return @codepoint;
-    }
     def to_string() -> String {
         return Unicode.encode_one(@codepoint);
     }
