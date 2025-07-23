@@ -470,7 +470,7 @@ class String extends List[Character], Representable {
         return DefaultString{1};
     }
 
-    def Self.new(capacity) -> String {
+    def Self.new(capacity : i32) -> String {
         return DefaultString{capacity};
     }
 

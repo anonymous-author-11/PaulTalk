@@ -25,7 +25,7 @@ class Iterator[T] extends Container {
 class Iterable[T] extends Container {
 
 	abstract def iterator() -> Iterator[T] {
-    } ~> { ret.elems_reg == @elems_reg }
+    } ~> { ret.elems_reg == @elems_reg, ret holds self }
 
 	def each(f : (T)) {
         for x in self { f.call(x); }
@@ -105,7 +105,10 @@ class Enumerator[T] extends Iterator[Pair[i32, T]] {
     @iterator : Iterator[T]
     @index : i32
 
-    regions { @elems_reg == @iterable.elems_reg }
+    regions {
+        @elems_reg == @iterator.elems_reg,
+        @elems_reg holds @index
+    }
 
     def init(@iterator : Iterator[T]) {
         @index = 0;
@@ -324,10 +327,11 @@ class ProductIterator[T, U] extends Iterator[Pair[T, U]] {
     @current_first : T?
 
     regions {
-        @current_first == @first_iterator.elems_reg,
+        @elems_reg holds @current_first,
+        @elems_reg holds @second_iterator.elems_reg,
+        @current_first holds @first_iterator.elems_reg,
         @second_iterator.elems_reg == @second_iterable.elems_reg,
-        @elems_reg holds @first_iterator.elems_reg,
-        @elems_reg holds @second_iterator.elems_reg
+        @second_iterator holds @second_iterable
     }
 
     def init(@first_iterator : Iterator[T], @second_iterable : Iterable[U]) {

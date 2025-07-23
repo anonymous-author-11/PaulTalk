@@ -11,6 +11,7 @@ import copy
 import graph_utils as nx
 from dataclasses import dataclass
 from pathlib import Path
+from constraint_graph_rx import *
 
 @dataclass
 class TypeCache:
@@ -469,6 +470,31 @@ class MemRegions:
             param_labels = sorted(label for label in labels if label in param_names)
             best_label = (*param_labels, "stack")[0]
             allocation.region = best_label
+
+    def compute_graph(self, found_facts, annotated_facts, param_names, name):
+
+        G1, var_mapping1 = create_constraint_graph(found_facts)
+
+        param_names = {*chain.from_iterable([var for var in var_mapping1 if var == param or var.startswith(f"{param}.")] for param in param_names)}
+
+        G0, var_mapping0 = create_constraint_graph(annotated_facts)
+        
+        #visualize_graph_transformation(G1, var_mapping1, param_names)
+        print(f"Original Points-to graph for {name}:")
+        print(pretty_print_graph(G1, var_mapping1, param_names))
+        print(f"Original Annotation graph for {name}:")
+        print(pretty_print_graph(G0, var_mapping0, param_names))
+
+        G0, var_mapping0 = transform_until_stable(G0, var_mapping0, param_names)
+        G1, var_mapping1 = transform_until_stable(G1, var_mapping1, param_names)
+        print(f"Transformed Points-to graph for {name}:")
+        print(pretty_print_graph(G1, var_mapping1, param_names))
+        print(f"Transformed Annotation graph for {name}:")
+        print(pretty_print_graph(G0, var_mapping0, param_names))
+
+        ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
+        if ok: self.assign_regions(var_mapping1, param_names)
+        return ok, comment
 
 class CompilationUnit:
     dependency_graph: nx.DiGraph

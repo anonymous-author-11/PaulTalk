@@ -459,8 +459,24 @@ DONE:
 
 TODO: 
 
+- Reform constraint_graph for rustworkx
+
+- Points-to analysis
+	- How should we be treating builtin value types?
+		- Just exclude them from the graphs?
+	- Add conservative aliasing by default
+	- Reform tuple and buffer points-to-facts
+	- Big problemo regarding Iterable method return types
+
 - Implement naive getters / setters [check!]
 	- In fact I can and should [check!]
+
+- Getters / setters should not have to specify types
+	- Can't be desugared in parsing
+	- Need to move logic to AST
+
+- I shouldn't have to have empty bodies for methods
+	- But I would like one required if there are constraints
 
 - Why was I able to multiply define getters and setters? Should be an error
 - Pair.swapped leads to infinite recursion in type substitution

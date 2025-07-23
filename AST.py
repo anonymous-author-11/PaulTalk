@@ -2042,7 +2042,8 @@ class MethodDef(Statement):
         return_type = self.defining_class.type_env.simplify(original_method.return_type())
         return_cls = None
         if isinstance(return_type, FatPtr): return_cls = body_scope.get_class(self.info, return_type)
-        if isinstance(return_type, TypeParameter): return_cls = body_scope.get_class(self.info, return_type.bound)
+        if isinstance(return_type, TypeParameter) and isinstance(return_type.bound, FatPtr):
+            return_cls = body_scope.get_class(self.info, return_type.bound)
         if return_cls:
             for lhs, op, rhs in return_cls.all_constraints()._set:
                 annotated_facts.add((lhs.replace("self","ret"), op, rhs.replace("self","ret")))
@@ -2055,26 +2056,12 @@ class MethodDef(Statement):
         virtual_regions = [reg.replace("@","self.") for reg in self.defining_class.all_regions()]
         param_names = [*(param.name for param in self.params), *fields, *virtual_regions, "self"]
         if self.hasreturn: param_names.append("ret")
-        G1, var_mapping1 = create_constraint_graph(body_scope.mem_regions.points_to_facts._set)
 
-        param_names = {*chain.from_iterable([var for var in var_mapping1 if var == param or var.startswith(f"{param}.")] for param in param_names)}
+        found_facts = body_scope.mem_regions.points_to_facts._set
+        annotated_facts = self.annotated_points_to_facts(body_scope, param_names)._set
+        name = f"{self.defining_class.name}.{self.name}"
 
-        annotated_facts = self.annotated_points_to_facts(body_scope, param_names)
-        G0, var_mapping0 = create_constraint_graph(annotated_facts._set)
-        
-        #visualize_graph_transformation(G1, var_mapping1, param_names)
-        #debug_print(f"Original Points-to graph for {self.defining_class.name}.{self.name}:")
-        #debug_print(pretty_debug_print_graph(G1, var_mapping1, param_names))
-        #debug_print(f"Original Annotation graph for {self.defining_class.name}.{self.name}:")
-        #debug_print(pretty_debug_print_graph(G0, var_mapping0, param_names))
-        G0, var_mapping0 = transform_until_stable(G0, var_mapping0, param_names)
-        G1, var_mapping1 = transform_until_stable(G1, var_mapping1, param_names)
-        #debug_print(f"Transformed Points-to graph for {self.defining_class.name}.{self.name}:")
-        #debug_print(pretty_debug_print_graph(G1, var_mapping1, param_names))
-        #debug_print(f"Transformed Annotation graph for {self.defining_class.name}.{self.name}:")
-        #debug_print(pretty_debug_print_graph(G0, var_mapping0, param_names))
-        ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
-        body_scope.mem_regions.assign_regions(var_mapping1, param_names)
+        ok, comment = body_scope.mem_regions.compute_graph(found_facts, annotated_facts, param_names, name)
         if not ok: raise Exception(f"{self.info}: {comment}")
 
     def check_setter_num_params(self):
@@ -2191,7 +2178,8 @@ class ClassMethodDef(MethodDef):
         original_method = (self, *self.overridden_methods())[-1]
         return_type = self.defining_class.type_env.simplify(original_method.return_type())
         if isinstance(return_type, FatPtr): return_cls = body_scope.get_class(self.info, return_type)
-        if isinstance(return_type, TypeParameter): return_cls = body_scope.get_class(self.info, return_type.bound)
+        if isinstance(return_type, TypeParameter) and isinstance(return_type.bound, FatPtr):
+            return_cls = body_scope.get_class(self.info, return_type.bound)
         if return_cls:
             for lhs, op, rhs in return_cls.all_constraints()._set:
                 annotated_facts.add((lhs.replace("self","ret"), op, rhs.replace("self","ret")))
@@ -2203,22 +2191,11 @@ class ClassMethodDef(MethodDef):
         if self.hasreturn: param_names.append("ret")
         G1, var_mapping1 = create_constraint_graph(body_scope.mem_regions.points_to_facts._set)
 
-        param_names = {*chain.from_iterable([var for var in var_mapping1 if var == param or var.startswith(f"{param}.")] for param in param_names)}
+        found_facts = body_scope.mem_regions.points_to_facts._set
         annotated_facts = self.annotated_points_to_facts(body_scope, param_names)
-        
-        G0, var_mapping0 = create_constraint_graph(annotated_facts._set)
-        
-        #visualize_graph_transformation(G1, var_mapping1, param_names)
-        #debug_print(f"Original points-to graph for {self.defining_class.name}.{self.name}:")
-        #debug_print(pretty_debug_print_graph(G1, var_mapping1, param_names))
-        G0, var_mapping0 = transform_until_stable(G0, var_mapping0, param_names)
-        G1, var_mapping1 = transform_until_stable(G1, var_mapping1, param_names)
-        #debug_print(f"Transformed points-to graph for {self.defining_class.name}.{self.name}:")
-        #debug_print(pretty_debug_print_graph(G1, var_mapping1, param_names))
-        #debug_print(f"Annotation graph for {self.defining_class.name}.{self.name}:")
-        #debug_print(pretty_debug_print_graph(G0, var_mapping0, param_names))
-        ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
-        body_scope.mem_regions.assign_regions(var_mapping1, param_names)
+        name = f"{self.defining_class.name}.{self.name}"
+
+        ok, comment = body_scope.mem_regions.compute_graph(found_facts, annotated_facts, param_names, name)
         if not ok: raise Exception(f"{self.info}: {comment}")
 
     def setup_init(self, body_scope):
