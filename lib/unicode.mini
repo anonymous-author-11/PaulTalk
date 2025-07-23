@@ -7,40 +7,46 @@ class SizedIterator[T] extends Iterator[T] {
 
 class BulkWriter[T] {
 
+    // Virtual region where things will be written to
+    @dest_reg : Region
+
     // Write values up to max_elems; return the number written
     // Performance contract: Upper-bound O(n_written)
-    abstract def write_from(iterator : Iterator[T], max_elems : i32) -> i32 {}
+    abstract def write_from(iterator : Iterator[T], max_elems : i32) -> i32 {
+    } ~> { @dest_reg == iterator.elems_reg }
 
     // Write as many values as possible; return the number written
     def write_from(iterator : Iterator[T]) -> i32 {
         self.write_from(iterator, i32.max());
-    }
+    } ~> { @dest_reg == iterator.elems_reg }
 
     // Convenience methods to handle Iterables
     def write_from(iterable : Iterable[T], max_elems : i32) -> i32 {
         self.write_from(iterable.iterator(), max_elems);
-    }
+    } ~> { @dest_reg == iterable.elems_reg }
+
     // Delegates to the above, so that it does not skip overrides
     def write_from(iterable : Iterable[T]) -> i32 {
         self.write_from(iterable, i32.max());
-    }
+    } ~> { @dest_reg == iterable.elems_reg }
 }
 
 class Writer[T] extends BulkWriter[T] {
 
     // Write a single value
-    abstract def write(value : T) {}
+    abstract def write(value : T) {
+    } ~> { @dest_reg == value }
 
     // Generic implementation of .write_from in terms of .write
     def write_from(iterator : Iterator[T], max_elems : i32) -> i32 {
         next = iterator.next();
-        count = 0;
-        while next is T and count < max_elems {
+        n_written = 0;
+        while next is T and n_written < max_elems {
             self.write(next);
-            count = count + 1;
+            n_written = n_written + 1;
             next = iterator.next();
         }
-        return count;
+        return n_written;
     }
 }
 
@@ -73,14 +79,19 @@ class Peeker[T] extends Iterator[T] {
     @iterator : Iterator[T]
     @peeked : T?
 
+    regions {
+        @elems_reg == @iterator.elems_reg,
+        @elems_reg == @peeked
+    }
+
     def Self.from_iterator(iterator : Iterator[T]) -> Peeker[T] {
         return Peeker{iterator};
-    }
+    } ~> { ret.iterator == iterator }
 
     // No need to wrap if the iterator is already a Peeker
     def Self.from_iterator(peeker : Peeker[T]) -> Peeker[T] {
         return peeker;
-    }
+    } ~> { ret == peeker }
     
     def init(@iterator : Iterator[T]) {}
 
@@ -94,7 +105,7 @@ class Peeker[T] extends Iterator[T] {
     def peek() -> T? {
         if @peeked is Nil { @peeked = @iterator.next(); }
         return @peeked;
-    }
+    } ~> { ret == @elems_reg }
 }
 
 class DefaultString extends String {
@@ -115,14 +126,17 @@ class DefaultString extends String {
 	}
 	def byte_writer() -> Writer[i8] {
 		return DefaultStringByteWriter{self};
-	}
+	} ~> { ret.string == self, ret.dest_reg == @elems_reg }
+
 	def codepoint_writer() -> Writer[i32] {
 		return DefaultStringCodepointWriter{self};
-	}
+	} ~> { ret.string == self, ret.dest_reg == @elems_reg }
 }
 
 class DefaultStringByteWriter extends Writer[i8] {
 	@string : DefaultString
+
+    regions { @dest_reg == @string.elems_reg }
 
 	def init(@string : DefaultString) {}
 
@@ -143,6 +157,11 @@ class DefaultStringCodepointWriter extends Writer[i32] {
 	@string : DefaultString
 	@encoder : UTF8Encoder
 
+    regions {
+        @dest_reg == @encoder.dest_reg,
+        @encoder.dest_reg == @string.elems_reg
+    }
+
 	def init(@string : DefaultString) {
 		@encoder = LosslessUTF8Encoder{@string.byte_writer()};
 	}
@@ -162,6 +181,8 @@ class UTF8Encoder extends Writer[i32] {
 	@writer : Writer[i8]
     @replacement_fn : (Writer[i8])
 
+    regions { @dest_reg == @writer.dest_reg }
+
     def Self.lossy(writer : Writer[i8]) -> UTF8Encoder {
         replacement_fn = (writer : Writer[i8]) => {
             writer.write(0xEF as i8);
@@ -169,7 +190,7 @@ class UTF8Encoder extends Writer[i32] {
             writer.write(0xBD as i8);
         }
         return UTF8Encoder{writer, replacement_fn};
-    }
+    } ~> { ret.writer = writer }
 
     // Default is lossless, yield Exception on invalid codepoint
     def init(@writer : Writer[i8]) {
@@ -181,11 +202,11 @@ class UTF8Encoder extends Writer[i32] {
 
     def replacement_fn() -> (Writer[i8]) {
         return @replacement_fn;
-    }
+    } ~> { ret == @replacement_fn }
 
     def replacement_fn=(new_fn : (Writer[i8])) {
         @replacement_fn = new_fn;
-    }
+    } ~> { new_fn == @replacement_fn }
 
 	def write(cp : i32) {
         if cp <= 0x7F { // 1-byte
@@ -217,7 +238,7 @@ class UTF8Encoder extends Writer[i32] {
     def write_from(iterator : UTF8Decoder, max_elems : i32) -> i32 {
         validator = UTF8BytesValidator{@writer, iterator.replacement_fn()};
         return validator.write_codepoints_from(iterator.peeker(), max_elems);
-    }
+    } ~> { @dest_reg holds iterator.peeker.elems_reg }
 
     // optimization: validator + encoder = encoder
     def write_from(iterator : UTF8CodepointsValidator, max_elems : i32) -> i32 {
@@ -226,17 +247,19 @@ class UTF8Encoder extends Writer[i32] {
         n_written = self.write_from(iterator.iterator());
         @replacement_fn = old_replacement_fn;
         return n_written;
-    }
+    } ~> { @dest_reg holds iterator.iterator.elems_reg }
 }
 
 class UTF8CodepointsValidator extends Iterator[i32] {
     @iterator : Iterator[i32]
     @replacement_fn : (i32) -> i32
 
+    regions { @elems_reg == @iterator.elems_reg }
+
     def Self.lossy(iterator : Iterator[i32]) -> UTF8CodepointsValidator {
         replacement_fn = (codepoint : i32) => { 0xFFFD; };
         return UTF8CodepointsValidator{iterator, replacement_fn};
-    }
+    } ~> { ret.iterator = iterator }
 
     def init(@iterator : Iterator[i32]) {
         @replacement_fn = (codepoint : i32) => {
@@ -250,15 +273,15 @@ class UTF8CodepointsValidator extends Iterator[i32] {
 
     def iterator() -> Iterator[i32] {
         return @iterator;
-    }
+    } ~> { ret == @iterator }
 
     def replacement_fn() -> (i32) -> i32 {
         return @replacement_fn;
-    }
+    } ~> { ret == @replacement_fn }
 
     def replacement_fn=(new_fn : (i32) -> i32) {
         @replacement_fn = new_fn;
-    }
+    } ~> { new_fn == @replacement_fn }
 
     def replace_codepoint(codepoint : i32) -> i32 {
         yield(InvalidUTF8Error{});
@@ -284,7 +307,7 @@ class UTF8BytesValidator {
             writer.write(0xBD as i8);
         };
         return UTF8BytesValidator{writer, replacement_fn};
-    }
+    } ~> { ret.writer == writer }
 
     def init(@writer : Writer[i8]) {
         @replacement_fn = (writer : Writer[i8]) => { yield(InvalidUTF8Error{}); }
@@ -297,11 +320,11 @@ class UTF8BytesValidator {
 
     def replacement_fn() -> (Writer[i8]) {
         return @replacement_fn;
-    }
+    } ~> { ret == @replacement_fn }
 
     def replacement_fn=(new_fn : (Writer[i8])) {
         @replacement_fn = new_fn;
-    }
+    } ~> { new_fn == @replacement_fn }
 
     // Re-encode bytes for one codepoint from the byte source into @writer
     def write_codepoints_from(iterator : Iterator[i8], max_codepoints : i32) -> i32 {
@@ -353,27 +376,31 @@ class UTF8BytesValidator {
             n_written = n_written + 1;
         }
         return n_written;
-    }
+    } ~> { @writer.dest_reg holds iterator.elems_reg }
 
     def write_codepoints_from(iterator : Iterator[i8]) -> i32 {
         self.write_from(iterator, i32.max());
-    }
+    } ~> { @writer.dest_reg holds iterator.elems_reg }
+
     def write_codepoints_from(iterable : Iterable[i8], max_elems : i32) -> i32 {
         self.write_from(iterable.iterator(), max_elems);
-    }
+    } ~> { @writer.dest_reg holds iterable.elems_reg }
+
     def write_codepoints_from(iterable : Iterable[i8]) -> i32 {
         self.write_from(iterable.iterator(), i32.max());
-    }
+    } ~> { @writer.dest_reg holds iterable.elems_reg }
 }
 
-class UTF8Decoder {
+class UTF8Decoder extends Iterator[i32] {
     @peeker : Peeker[i8]
     @replacement_fn : (i8) -> i32
+
+    regions { @elems_reg == @peeker.elems_reg }
 
     def Self.lossy(iterator : Iterator[i8]) -> UTF8Decoder {
         replacement_fn = (byte : i8) => { 0xFFFD; };
         return UTF8Decoder{iterator, replacement_fn};
-    }
+    } ~> { ret.iterator == iterator }
 
     def init(iterator : Iterator[i8]) {
         @peeker = iterator into Peeker;
@@ -389,15 +416,15 @@ class UTF8Decoder {
 
     def peeker() -> Peeker[i8] {
         return @peeker;
-    }
+    } ~> { ret == @peeker }
 
     def replacement_fn() -> (i8) -> i32 {
         return @replacement_fn;
-    }
+    } ~> { ret == @replacement_fn}
 
     def replacement_fn=(new_fn : (i8) -> i32) {
         @replacement_fn = new_fn;
-    }
+    } ~> { new_fn == @replacement_fn}
 
     // returns (codepoint, bytes_needed)
     def process_first_byte(b1 : i8) -> Tuple[i32, i32] {
@@ -463,7 +490,7 @@ class UTF8Decoder {
     }
 }
 
-class String {
+class String extends List[Character], Representable {
 
     def Self.new() -> String {
         return DefaultString{1};
@@ -479,7 +506,7 @@ class String {
         validator = UTF8BytesValidator{result.byte_writer()};
         validator.write_codepoints_from(source_bytes.iterator());
         return result;
-    }
+    } ~> { ret.elems_reg holds source_bytes.elems_reg }
 
     // LOSSY constructor. Never fails, replaces invalid sequences with '�'.
     // Consequently, byte length of resultant string may be different than source length
@@ -488,38 +515,5 @@ class String {
         validator = UTF8BytesValidator.lossy(result.byte_writer());
         validator.write_codepoints_from(source_bytes.iterator());
         return result;
-    }
-}
-
-class String {
-
-    def Self.from_bytes_lossy(source_bytes: Slice[i8]) -> String {
-        result : DefaultString?;
-        with LossyReplacer{} do { return self.from_bytes_internal(source_bytes); }
-    }
-    def Self.from_bytes(source_bytes: Slice[i8]) -> String {
-        result : DefaultString?;
-        with StrictReplacer{} do { return self.from_bytes_internal(source_bytes); }
-    }
-
-    // but really we don't want to be decoding then re-encoding the bytes. We want to just copy them.
-    def Self.from_bytes_internal(source_bytes: Slice[i8]) -> String uses Exit, Replacer[i32] {
-        result = DefaultString{source_bytes.size()}; // Pre-allocate
-        decoder = source_bytes.iterator() into Peeker into UTF8Decoder;
-        writer = result.codepoint_writer();
-        do with Replacer { writer.write_from(decoder); }
-        return result;
-    }
-
-    def append(cp : i32) {
-        if cp > 0x10FFFF { Exit.raise(InvalidUTF8Error{}); } // invalid codepoint
-        self.codepoint_writer().write(cp);
-    }
-    def append_lossy(cp : i32) {
-        if cp > 0x10FFFF { // invalid codepoint
-            self.codepoint_writer().write(0xFFFD);
-            return;
-        } 
-        self.codepoint_writer().write(cp);
-    }
+    } ~> { ret.elems_reg holds source_bytes.elems_reg }
 }

@@ -1,9 +1,11 @@
 import builtins;
 
 class Pair[T, U] {
-
 	@first : T
 	@second : U
+
+    getter @first : T
+    getter @second : U
 
 	def init(@first : T, @second : U) {
 	}
@@ -15,6 +17,7 @@ class Pair[T, U] {
 	def second() -> U {
 		return @second;
 	} ~> { ret == @second }
+
 }
 
 class Container {
@@ -24,7 +27,7 @@ class Container {
 class Iterator[T] extends Container {
 
 	abstract def next() -> T? {
-    } ~> { ret == @elems_reg }
+    } ~> { ret holds @elems_reg }
 
 }
 
@@ -98,6 +101,8 @@ class CoroIterator[T] extends Iterator[T] {
 class Enumeration[T] extends Iterable[Pair[i32, T]] {
     @iterable : Iterable[T]
 
+    regions { @elems_reg == @iterable.elems_reg }
+
     def init(@iterable : Iterable[T]) {}
 
     def iterator() -> Enumerator[T] {
@@ -108,6 +113,8 @@ class Enumeration[T] extends Iterable[Pair[i32, T]] {
 class Enumerator[T] extends Iterator[Pair[i32, T]] {
     @iterator : Iterator[T]
     @index : i32
+
+    regions { @elems_reg == @iterable.elems_reg }
 
     def init(@iterator : Iterator[T]) {
         @index = 0;
@@ -187,9 +194,10 @@ class ChainIterable[T] extends Iterable[T] {
     @first : Iterable[T]
     @second : Iterable[T]
 
+    // The chained iterables can still live in different regions
     regions {
-        @first == @second,
-        @elems_reg == @first.elems_reg
+        @elems_reg holds @first.elems_reg,
+        @elems_reg holds @second.elems_reg
     }
 
     def init(@first : Iterable[T], @second : Iterable[T]) {}
@@ -205,8 +213,8 @@ class ChainIterator[T] extends Iterator[T] {
     @on_first : Bool
 
     regions {
-        @first == @second,
-        @elems_reg == @first.elems_reg
+        @elems_reg holds @first.elems_reg,
+        @elems_reg holds @second.elems_reg
     }
 
     def init(@first : Iterator[T], @second : Iterator[T]) {
@@ -227,8 +235,8 @@ class InterleaveIterable[T] extends Iterable[T] {
     @second : Iterable[T]
 
     regions {
-        @first == @second,
-        @elems_reg == @first.elems_reg
+        @elems_reg holds @first.elems_reg,
+        @elems_reg holds @second.elems_reg
     }
 
     def init(@first : Iterable[T], @second : Iterable[T]) {}
@@ -244,8 +252,8 @@ class InterleaveIterator[T] extends Iterator[T] {
     @on_first : Bool
 
     regions {
-        @first == @second,
-        @elems_reg == @first.elems_reg
+        @elems_reg holds @first.elems_reg,
+        @elems_reg holds @second.elems_reg
     }
 
     def init(@first : Iterator[T], @second : Iterator[T]) {

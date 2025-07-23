@@ -21,12 +21,17 @@ alias: ALIAS basic_type "=" typ
 
 expression_statement: expression ";"
 
-class_def: CLASS (basic_type | parameterized_type) ["extends" type_list] ["where" type_bound_list] "{" [field_decls] [class_region_constraints] (class_method_def*)? ((method_def | operator_def)*)? "}"
+class_def: CLASS (basic_type | parameterized_type) ["extends" type_list] ["where" type_bound_list] "{" [field_decls] [class_region_constraints] (class_method_def*)? (instance_def*)? "}"
 field_decls: (field_decl)+
 type_bound_list: type_bound ("," type_bound)*
 type_bound: ident "<:" typ
 
 ident_list: ident ("," ident)*
+
+instance_def: method_def | operator_def | getter | setter
+
+getter: "getter" FIELD ":" typ
+setter: "setter" FIELD ":" typ
 
 extern_def: "extern" DEF ident "(" param_list ["," ELIPSIS] ")" ["->" typ] ["yields" typ] ["~>" "{" constraint_list "}"]
 function_def: DEF ident "(" param_list ")" ["->" typ] ["yields" typ] block ["~>" "{" constraint_list "}"]

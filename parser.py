@@ -24,7 +24,7 @@ def get_fresh_parser():
     with open(CACHED_GRAMMAR_PATH, "wb") as f: fresh_parser.save(f)
     return fresh_parser
 
-parser = get_cached_parser()
+parser = get_fresh_parser()
 source_directories = {}
 parsed = {}
 
@@ -107,12 +107,35 @@ class CSTTransformer(Transformer):
         if "=" in name.value: return "_set_" + name.value.replace("=","")
         return name.value
 
+    def instance_def(self, method):
+        return method
+
     def method_def(self, abstract, deff, name, type_params, params, return_type, yield_type, body, constraints):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractMethodDef if abstract else MethodDef
         mangled_name = name + "_" + clean_param_names(params)
         node_info = NodeInfo(None, self.file_path, line_number(deff))
         return ty(node_info, name, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
+
+    def getter(self, field, typ):
+        node_infos = [NodeInfo(None, self.file_path, line_number(field)) for i in range(5)]
+        name = field.value.replace("@","")
+        field_id = Identifier(node_infos[0], field.value)
+        ret = ReturnValue(node_infos[1], field_id)
+        block = BlockNode(node_infos[2], [ret])
+        constraint = Constraint(node_infos[3], "ret", "==", field.value)
+        return self.method_def(None, field, name, [], [], typ, None, block, [constraint])
+
+    def setter(self, field, typ):
+        node_infos = [NodeInfo(None, self.file_path, line_number(field)) for i in range(7)]
+        name = "_set_" + field.value.replace("@","")
+        param = VarDecl(node_infos[0], "value", typ)
+        field_id = Identifier(node_infos[1], field.value)
+        value_id = Identifier(node_infos[2], "value")
+        assignment = Assignment(node_infos[3], field_id, value)
+        block = BlockNode(node_infos[4], [assignment])
+        constraint = Constraint(node_infos[5], field.value, "==", "value")
+        return self.method_def(None, field, name, [], [param], None, None, block, [constraint])
 
     def operator(self, op):
         translated_op = "_" + {

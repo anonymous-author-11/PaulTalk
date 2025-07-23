@@ -457,10 +457,10 @@ DONE:
 	- Fix bump_malloc [check!]
 	- Lazily constructed exception messages [check!] [reverted in 0.4.*]
 
-TODO:
+TODO: 
 
-- Why are function literals added to scope.functions?
-	- So that 
+- Why can't I just implement naive getters / setters and optimize later?
+	- In fact I can and should
 
 - Add a SizedIterator
 	- Do NOT guarantee a SizedIterator from a Collection
@@ -477,6 +477,10 @@ TODO:
 - String could expose a writer that can only write to its end
 	- Is that a Writer[i32] or a Writer[i8]?
 	- It's an abstract Writer[i32]
+	- This means that byte indices are *stable*
+	- Byte indices will forever remain on codepoint boundaries
+	- Any other kind of mutation must return a new string
+		- E.g: .replace() -> String
 
 - Constructor should check for T.new first before T.init
 	- So that new can return some subtype
@@ -778,6 +782,16 @@ TODO:
 		- Decrease work done in interface_codegen [check!]
 		- std.mini should compile near instantly [check!]
 	- Cache the parser instead of reconstructing every time [check!]
+
+- Release 0.6.0
+	- Update region syntax [check!]
+		- ~> {constraints} postcondition on methods [check!]
+		- "holds" instead of "<" [check!]
+		- Added to highlighting [check!]
+	- Remove dependency on networkx [check!]
+		- use rustworkx [check!]
+		- Import time halved [check!]
+		- Update constraint_graph accordingly
 	- Does just adding dependencies to the path work?
 		- The source_dirs collection should be ordered, not a set [check!]
 		- Add the dependency folder to an env variable named for the package
@@ -1059,6 +1073,7 @@ o’s region."
 
 - This could solve the generic-fields issue
 	- Have a method in the vtable to get the region of the instance
+	- But it limits the size of allocations to 1 page
 
 - Value types would make conservative aliasing much less onerous
 	- Actually, would not unless deep copying performed
@@ -1080,12 +1095,72 @@ def foo(a : Foo, b : Bar) -> Baz {
 
 { @elems_reg holds first.elems_reg, second.elems_reg }
 
-- Cool bonus feature: you can now specify aliasing in function types
+- Cool bonus feature: you can now specify constraints in function types
 	- (x : T) -> U yields Y ~> { ret == x }
+	- The you can define useful typedefs with constraints
+	- would have to be generic over variable names
 
 - A holds B could by-default imply that B == A.all_fields
 	- This makes overriding easier but regions less precise
 	- Probably a good default
+
+- Putting into a collection and taking out should be asymmetric
+	- Putting in: { collection.elems_reg holds value }
+	- Taking out: { ret == collection.elems_reg }
+	- Imagine if the collection had two abstract regions
+		- Then putting generates up-down
+		- Getting generates up-up
+		- Their combination generates a cycle
+		- That cycle gets resolved to equality
+	- collection.put_region / collection.get_region
+		- append(value) ~> { collection.put_region holds value }
+		- take() ~> { collection.get_region holds value, value holds collection.put_region}
+
+- You could allow people to define region classes and operations on them
+
+region Elements {
+	@in : Region
+	@out : Region
+
+	def put(reg : Region) ~> {
+		@in -> reg,
+		reg -> @out
+	}
+
+	def get(ret : Region) ~> {
+		ret -> @in,
+		@out -> ret
+	}
+}
+
+class Collection {
+	@elements : Elements
+}
+
+def put(value) ~> { collection.elements.put(value) }
+def get() ~> { collection.elements.get(ret) }
+
+But that is going too far. Not going to happen.
+
+Instead, we could define operators for more complex operations.
+
+"a from b" ~> {a holds b.0, b.1 holds a}
+"a marries b" ~> { a.0 == b.0, a.1 == b.1 }
+
+- Can you even think of an example where you wouldn't want .chain et al to merge regions?
+	- Not really
+	- What about:
+		- Chain a and b
+		- Call function with chained as argument
+			- Function goes through all elements and prints them
+			- Returns
+		- Now chained collection is never used again
+		- We'd like a and b to be in different regions
+
+- The current design is a sweet spot, no need for change
+
+- Be nice to be able to define reusable region constraints
+	- Save the typing on the same constraint over and over
 
 - You'd have to ask: how many further aliasing relations do we have to disallow to ensure that the disallowed relation is respected?
 	- Is there even a unique answer to this question?
