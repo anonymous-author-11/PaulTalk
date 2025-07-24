@@ -2644,7 +2644,7 @@ class Behavior(Statement):
         if any(len(name_set) > 1 for name_set in name_sets):
             k, offender = next((k, name_set) for (k, name_set) in enumerate(name_sets) if len(name_set) > 1 )
             raise Exception(f"{self.info}: For overloads of method {self.name} with arity {self.arity}, parameter {k} has multiple names ({offender}).")
-        
+
         behavior_scope = Scope(scope, behavior=self)
         for method in self.methods:
             if method.definition.defining_class != self.cls: continue

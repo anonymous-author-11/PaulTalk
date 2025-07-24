@@ -1,20 +1,14 @@
 import builtins;
 
 class Pair[T, U] {
-
 	@first : T
 	@second : U
 
-	def init(@first : T, @second : U) {
-	}
-    #[ret == @first]
-	def first() -> T {
-		return @first;
-	}
-    #[ret == @second]
-	def second() -> U {
-		return @second;
-	}
+    getters @first, @second
+    setters @first, @second
+
+	def init(@first : T, @second : U) {}
+
 }
 
 class Container {
@@ -23,23 +17,25 @@ class Container {
 
 class Iterator[T] extends Container {
 
-    #[ret == @elems_reg]
-	abstract def next() -> T? {}
+	abstract def next() -> T? {
+    } ~> { ret holds @elems_reg }
+
 }
 
 class Iterable[T] extends Container {
 
-    #[ret.elems_reg == @elems_reg]
 	abstract def iterator() -> Iterator[T] {
-    }
+    } ~> { ret.elems_reg == @elems_reg, ret holds self }
+
 	def each(f : (T)) {
         for x in self { f.call(x); }
     }
-    #[ret == accumulator]
+    
     def reduce(accumulator : T, f : (T, T) -> T) -> T {
         for x in self { accumulator = f.call(accumulator, x); }
         return accumulator;
-    }
+    } ~> { ret == accumulator }
+
     def all(f : (T) -> Bool) -> Bool {
         for x in self { if not f.call(x) { return false; } }
         return true;
@@ -48,37 +44,38 @@ class Iterable[T] extends Container {
         for x in self { if f.call(x) { return true; } }
         return false;
     }
-    #[ret.iterable == self]
+    
     def enumerate() -> Iterable[Pair[i32, T]] {
         return Enumeration{self};
-    }
-    #[ret.iterable == self, ret.f == f]
+    } ~> { ret.iterable == self }
+
     def map[U](f : (T) -> U) -> Iterable[U] {
         return MapIterable{self, f};
-    }
-    #[ret.iterable == self, ret.f == f]
+    } ~> { ret.iterable == self, ret.f == f }
+    
     def filter(f : (T) -> Bool) -> Iterable[T] {
         return FilterIterable{self, f};
-    }
-    #[ret.first == self, ret.second == other]
+    } ~> { ret.iterable == self, ret.f == f }
+    
     def chain(other : Iterable[T]) -> Iterable[T] {
         return ChainIterable{self, other};
-    }
-    #[ret.first == self, ret.second == other]
+    } ~> { ret.first == self, ret.second == other }
+    
     def interleave(other : Iterable[T]) -> Iterable[T] {
         return InterleaveIterable{self, other};
-    }
-    #[ret.first == self, ret.second == other]
+    } ~> { ret.first == self, ret.second == other }
+    
     def zip[U](other : Iterable[U]) -> Iterable[Pair[T, U]] {
         return ZipIterable{self, other};
-    }
-    #[ret.first == self, ret.second == other]
+    } ~> { ret.first == self, ret.second == other }
+    
     def product[U](other : Iterable[U]) -> Iterable[Pair[T, U]] {
         return ProductIterable{self, other};
-    }
+    } ~> { ret.first == self, ret.second == other }
 }
 
 // Must be O(1) to get next element
+// ( O(1) with respect to what? )
 class ConstantTimeIterator[T] extends Iterator[T] {}
 
 // Adapts a Coroutine into an Iterator
@@ -95,6 +92,8 @@ class CoroIterator[T] extends Iterator[T] {
 class Enumeration[T] extends Iterable[Pair[i32, T]] {
     @iterable : Iterable[T]
 
+    regions { @elems_reg == @iterable.elems_reg }
+
     def init(@iterable : Iterable[T]) {}
 
     def iterator() -> Enumerator[T] {
@@ -105,6 +104,11 @@ class Enumeration[T] extends Iterable[Pair[i32, T]] {
 class Enumerator[T] extends Iterator[Pair[i32, T]] {
     @iterator : Iterator[T]
     @index : i32
+
+    regions {
+        @elems_reg == @iterator.elems_reg,
+        @elems_reg holds @index
+    }
 
     def init(@iterator : Iterator[T]) {
         @index = 0;
@@ -184,9 +188,10 @@ class ChainIterable[T] extends Iterable[T] {
     @first : Iterable[T]
     @second : Iterable[T]
 
+    // The chained iterables can still live in different regions
     regions {
-        @first == @second,
-        @elems_reg == @first.elems_reg
+        @elems_reg holds @first.elems_reg,
+        @elems_reg holds @second.elems_reg
     }
 
     def init(@first : Iterable[T], @second : Iterable[T]) {}
@@ -202,8 +207,8 @@ class ChainIterator[T] extends Iterator[T] {
     @on_first : Bool
 
     regions {
-        @first == @second,
-        @elems_reg == @first.elems_reg
+        @elems_reg holds @first.elems_reg,
+        @elems_reg holds @second.elems_reg
     }
 
     def init(@first : Iterator[T], @second : Iterator[T]) {
@@ -224,8 +229,8 @@ class InterleaveIterable[T] extends Iterable[T] {
     @second : Iterable[T]
 
     regions {
-        @first == @second,
-        @elems_reg == @first.elems_reg
+        @elems_reg holds @first.elems_reg,
+        @elems_reg holds @second.elems_reg
     }
 
     def init(@first : Iterable[T], @second : Iterable[T]) {}
@@ -241,8 +246,8 @@ class InterleaveIterator[T] extends Iterator[T] {
     @on_first : Bool
 
     regions {
-        @first == @second,
-        @elems_reg == @first.elems_reg
+        @elems_reg holds @first.elems_reg,
+        @elems_reg holds @second.elems_reg
     }
 
     def init(@first : Iterator[T], @second : Iterator[T]) {
@@ -267,8 +272,8 @@ class ZipIterable[T, U] extends Iterable[Pair[T, U]] {
     @second : Iterable[U]
 
     regions {
-        @elems_reg < @first.elems_reg,
-        @elems_reg < @second.elems_reg
+        @elems_reg holds @first.elems_reg,
+        @elems_reg holds @second.elems_reg
     }
 
     def init(@first : Iterable[T], @second : Iterable[U]) {}
@@ -283,8 +288,8 @@ class ZipIterator[T, U] extends Iterator[Pair[T, U]] {
     @second : Iterator[U]
 
     regions {
-        @elems_reg < @first.elems_reg,
-        @elems_reg < @second.elems_reg
+        @elems_reg holds @first.elems_reg,
+        @elems_reg holds @second.elems_reg
     }
 
     def init(@first : Iterator[T], @second : Iterator[U]) {
@@ -304,8 +309,8 @@ class ProductIterable[T, U] extends Iterable[Pair[T, U]] {
     @second : Iterable[U]
 
     regions {
-        @elems_reg < @first.elems_reg,
-        @elems_reg < @second.elems_reg
+        @elems_reg holds @first.elems_reg,
+        @elems_reg holds @second.elems_reg
     }
 
     def init(@first : Iterable[T], @second : Iterable[U]) {
@@ -322,10 +327,11 @@ class ProductIterator[T, U] extends Iterator[Pair[T, U]] {
     @current_first : T?
 
     regions {
-        @current_first == @first_iterator.elems_reg,
+        @elems_reg holds @current_first,
+        @elems_reg holds @second_iterator.elems_reg,
+        @current_first holds @first_iterator.elems_reg,
         @second_iterator.elems_reg == @second_iterable.elems_reg,
-        @elems_reg < @first_iterator.elems_reg,
-        @elems_reg < @second_iterator.elems_reg
+        @second_iterator holds @second_iterable
     }
 
     def init(@first_iterator : Iterator[T], @second_iterable : Iterable[U]) {

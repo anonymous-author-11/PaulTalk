@@ -205,6 +205,13 @@ class CSTTransformer(Transformer):
                     raise Exception(f"Line {line_number(cls)}: Class {class_name} has no field {field_name}")
                 method.params[0]._type = m_fields[0]._type
 
+        method_signatures = [(m.name, *(param._type for param in m.params)) for m in methods]
+        method_duplicates = duplicates(method_signatures)
+        if len(method_duplicates) > 0:
+            offender = next(iter(method_duplicates.keys()))
+            param_types = ", ".join([*offender[1:]])
+            raise Exception(f"{node_info}: {class_name}.{offender[0]}({param_types}) is defined multiple times")
+
         return class_def
 
     def field_decls(self, *decls):

@@ -120,6 +120,8 @@ class String extends List[Character], Representable {
     @char_length : i32 // Number of unicode codepoints
     @capacity: i32
 
+    getters @byte_length, @capacity
+
     def Self.empty() -> Self { return Self{}; }
 
     // This benefits from any optimized .extend overrides
@@ -198,9 +200,7 @@ class String extends List[Character], Representable {
     // Constructor for internal use.
     def init(@bytes : Buffer[i8], @byte_length : i32, @char_length : i32, @capacity : i32) {}
 
-    def byte_length() -> i32 { return @byte_length; }
     def size() -> i32 { return @char_length; }
-    def capacity() -> i32 { return @capacity; }
 
     def c_string() -> Buffer[i8] {
         buf = Buffer[i8].new(@byte_length + 1);
@@ -283,11 +283,10 @@ class String extends List[Character], Representable {
 class Character {
     @codepoint : i32
 
+    getter @codepoint
+
     def init(@codepoint : i32) {}
 
-    def codepoint() -> i32 {
-        return @codepoint;
-    }
     def to_string() -> String {
         return Unicode.encode_one(@codepoint);
     }

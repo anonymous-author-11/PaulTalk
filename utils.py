@@ -6,6 +6,14 @@ from xdsl.ir import Block, Region
 from xdsl.dialects import cf
 import random
 import re
+from collections import defaultdict
+
+def duplicates(mylist):
+    D = defaultdict(list)
+    for i, item in enumerate(mylist):
+        D[item].append(i)
+    D = {k:v for k,v in D.items() if len(v)>1}
+    return D
 
 def type_index(outer_type, inner_type):
     if outer_type == inner_type: return []

@@ -468,19 +468,9 @@ TODO:
 	- Problemo regarding Iterable method return types
 		- Can be solved with boilerplate
 
-- Getters / setters should not have to specify types
-	- Can't be desugared in parsing
-	- Need to move logic to AST
-	- Subclass MethodDef
-		- Mess with return_type for Getter
-		- Mess with params for Setter
-
-- Enable getters list, setters list
-
 - I shouldn't have to have empty bodies for methods
 	- But I would like one required if there are constraints
 
-- Why was I able to multiply define getters and setters? Should be an error
 - Pair.swapped leads to infinite recursion in type substitution
 
 - Add a SizedIterator
@@ -804,7 +794,7 @@ TODO:
 		- std.mini should compile near instantly [check!]
 	- Cache the parser instead of reconstructing every time [check!]
 
-- Release 0.6.0
+- Release 0.6.0 [check!]
 	- Update region syntax [check!]
 		- ~> {constraints} postcondition on methods [check!]
 		- "holds" instead of "<" [check!]
@@ -813,11 +803,15 @@ TODO:
 		- use rustworkx [check!]
 		- Import time halved [check!]
 		- Update constraint_graph accordingly [check!]
-	- Implement naive getters / setters [check!]
-		- Requires type annotation [check!]
+	- Implement getters / setters [check!]
 		- Desugared during parsing [check!]
 		- Has correct region contraints [check!]
 		- Syntax highlighting [check!]
+		- Do not have to specify types [check!]
+		- Enable getters list, setters list [check!]
+	- Add check for multiply defined methods [check!]
+
+- Release 0.7.0
 	- Does just adding dependencies to the path work?
 		- The source_dirs collection should be ordered, not a set [check!]
 		- Add the dependency folder to an env variable named for the package
