@@ -1,5 +1,0 @@
-import std;
-
-triple = (1,2,3);
-mapped = (triple * triple).map((x : i32) => { x * 2; });
-for i in mapped { IO.print(i); }
