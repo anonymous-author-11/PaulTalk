@@ -120,8 +120,7 @@ class String extends List[Character], Representable {
     @char_length : i32 // Number of unicode codepoints
     @capacity: i32
 
-    getter @byte_length
-    getter @capacity
+    getters @byte_length, @capacity
 
     def Self.empty() -> Self { return Self{}; }
 

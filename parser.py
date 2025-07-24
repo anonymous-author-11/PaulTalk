@@ -24,7 +24,7 @@ def get_fresh_parser():
     with open(CACHED_GRAMMAR_PATH, "wb") as f: fresh_parser.save(f)
     return fresh_parser
 
-parser = get_fresh_parser()
+parser = get_cached_parser()
 source_directories = {}
 parsed = {}
 
@@ -211,7 +211,13 @@ class CSTTransformer(Transformer):
         return list(decls)
 
     def method_defs(self, *methods):
-        return list(chain.from_iterable([x] if isinstance(x, MethodDef) else x for x in methods))
+        meths = []
+        for m in methods:
+            if isinstance(m, MethodDef):
+                meths.append(m)
+                continue
+            meths.extend(m)
+        return meths
 
     def class_region_constraints(self, constraint_list):
         return constraint_list

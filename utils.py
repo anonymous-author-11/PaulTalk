@@ -5,6 +5,7 @@ from hashlib import sha256
 from xdsl.ir import Block, Region
 from xdsl.dialects import cf
 import random
+import re
 
 def type_index(outer_type, inner_type):
     if outer_type == inner_type: return []
@@ -53,13 +54,14 @@ def name_hierarchy(typ):
     return ArrayAttr([StringAttr(clean_name(f"{typ}")), *[name_hierarchy(t) for t in typ.type_params.data]])
 
 def clean_param_names(params):
-    joined = "_".join(["".join([param.name, param._type.__repr__()]) for param in params])
+    joined = "_".join([f"{param.name}{param._type.__repr__()}" for param in params])
     return clean_name(joined)
 
+replacements = {" ":"_", "@":"","[":"","]":"",",":".","->":"to","|":"or","(":"_",")":"_","<:":"subtype","\\":"_bslash_","C:":"C"}
+repl_pattern = re.compile('|'.join(f'(?:{re.escape(k)})' for k in replacements))
+
 def clean_name(name):
-    map = {" ":"_", "@":"","[":"","]":"",",":".","->":"to","|":"or","(":"_",")":"_","<:":"subtype","\\":"_bslash_","C:":"C"}
-    for k, v in map.items(): name = name.replace(k, v)
-    return name
+    return repl_pattern.sub(lambda m: replacements[m.group()], name)
 
 def random_letters(n):
     return "".join(random.choices('abcdefghijklmnopqrstuvwxyz', k=n))

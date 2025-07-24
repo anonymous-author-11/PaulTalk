@@ -183,6 +183,9 @@ class UTF8Encoder extends Writer[i32] {
 
     regions { @dest_reg == @writer.dest_reg }
 
+    getter @replacement_fn
+    setter @replacement_fn
+
     def Self.lossy(writer : Writer[i8]) -> UTF8Encoder {
         replacement_fn = (writer : Writer[i8]) => {
             writer.write(0xEF as i8);
@@ -199,9 +202,6 @@ class UTF8Encoder extends Writer[i32] {
 
     def init(@writer : Writer[i8], @replacement_fn : (Writer[i8])) {
     }
-
-    getter @replacement_fn
-    setter @replacement_fn : (Writer[i8])
 
 	def write(cp : i32) {
         if cp <= 0x7F { // 1-byte
@@ -251,6 +251,9 @@ class UTF8CodepointsValidator extends Iterator[i32] {
 
     regions { @elems_reg == @iterator.elems_reg }
 
+    getters @iterator, @replacement_fn
+    setter @replacement_fn
+
     def Self.lossy(iterator : Iterator[i32]) -> UTF8CodepointsValidator {
         replacement_fn = (codepoint : i32) => { 0xFFFD; };
         return UTF8CodepointsValidator{iterator, replacement_fn};
@@ -265,10 +268,6 @@ class UTF8CodepointsValidator extends Iterator[i32] {
 
     def init(@iterator : Iterator[i8], @replacement_fn : (i32) -> i32) {
     }
-
-    getter @iterator
-    getter @replacement_fn
-    setter @replacement_fn : (i32) -> i32
 
     def replace_codepoint(codepoint : i32) -> i32 {
         yield(InvalidUTF8Error{});
@@ -287,6 +286,9 @@ class UTF8BytesValidator {
     @writer : Writer[i8]
     @replacement_fn : (Writer[i8])
 
+    getter @replacement_fn
+    setter @replacement_fn
+
     def Self.lossy(writer : Writer[i8]) -> UTF8BytesValidator {
         replacement_fn = (writer : Writer[i8]) => {
             writer.write(0xEF as i8);
@@ -304,9 +306,6 @@ class UTF8BytesValidator {
     }
 
     def init(@writer : Writer[i8]) {}
-
-    getter @replacement_fn
-    setter @replacement_fn : (Writer[i8])
 
     // Re-encode bytes for one codepoint from the byte source into @writer
     def write_codepoints_from(iterator : Iterator[i8], max_codepoints : i32) -> i32 {
@@ -379,6 +378,9 @@ class UTF8Decoder extends Iterator[i32] {
 
     regions { @elems_reg == @peeker.elems_reg }
 
+    getters @peeker, @replacement_fn
+    setter @replacement_fn
+
     def Self.lossy(iterator : Iterator[i8]) -> UTF8Decoder {
         replacement_fn = (byte : i8) => { 0xFFFD; };
         return UTF8Decoder{iterator, replacement_fn};
@@ -395,10 +397,6 @@ class UTF8Decoder extends Iterator[i32] {
     def init(iterator : Iterator[i8], @replacement_fn : (i8) -> i32) {
         @peeker = iterator into Peeker;
     }
-
-    getter @peeker
-    getter @replacement_fn
-    setter @replacement_fn : (i8) -> i32
 
     // returns (codepoint, bytes_needed)
     def process_first_byte(b1 : i8) -> Tuple[i32, i32] {
