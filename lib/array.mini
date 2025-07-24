@@ -19,7 +19,7 @@ class Array[T] extends
         return Self.empty().extend(iterable);
     }
 
-    getter @capacity : i32
+    getter @capacity
 
 	def init() {
 		@buffer = Buffer[T].new(1);

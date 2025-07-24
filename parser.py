@@ -24,7 +24,7 @@ def get_fresh_parser():
     with open(CACHED_GRAMMAR_PATH, "wb") as f: fresh_parser.save(f)
     return fresh_parser
 
-parser = get_cached_parser()
+parser = get_fresh_parser()
 source_directories = {}
 parsed = {}
 
@@ -107,35 +107,39 @@ class CSTTransformer(Transformer):
         if "=" in name.value: return "_set_" + name.value.replace("=","")
         return name.value
 
-    def instance_def(self, method):
-        return method
-
     def method_def(self, abstract, deff, name, type_params, params, return_type, yield_type, body, constraints):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractMethodDef if abstract else MethodDef
-        mangled_name = name + "_" + clean_param_names(params)
         node_info = NodeInfo(None, self.file_path, line_number(deff))
-        return ty(node_info, name, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
+        return ty(node_info, name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
 
-    def getter(self, field, typ):
+    def getters(self, field, *fields):
+        return [self.getter(field), *(self.getter(f) for f in fields)]
+
+    def setters(self, field, *fields):
+        return [self.setter(field), *(self.setter(f) for f in fields)]
+
+    def getter(self, field):
         node_infos = [NodeInfo(None, self.file_path, line_number(field)) for i in range(5)]
+        exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         name = field.value.replace("@","")
         field_id = Identifier(node_infos[0], field.value)
         ret = ReturnValue(node_infos[1], field_id)
-        block = BlockNode(node_infos[2], [ret])
+        body = BlockNode(node_infos[2], [ret])
         constraint = Constraint(node_infos[3], "ret", "==", field.value)
-        return self.method_def(None, field, name, [], [], typ, None, block, [constraint])
+        return Getter(node_infos[4], name, [constraint], [], [], 0, None, exception_or_nil, body, None, False)
 
-    def setter(self, field, typ):
+    def setter(self, field):
         node_infos = [NodeInfo(None, self.file_path, line_number(field)) for i in range(7)]
+        exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         name = "_set_" + field.value.replace("@","")
-        param = VarDecl(node_infos[0], "value", typ)
+        param = VarDecl(node_infos[0], "value", None)
         field_id = Identifier(node_infos[1], field.value)
         value_id = Identifier(node_infos[2], "value")
-        assignment = Assignment(node_infos[3], field_id, value)
-        block = BlockNode(node_infos[4], [assignment])
+        assignment = Assignment(node_infos[3], field_id, value_id)
+        body = BlockNode(node_infos[4], [assignment])
         constraint = Constraint(node_infos[5], field.value, "==", "value")
-        return self.method_def(None, field, name, [], [param], None, None, block, [constraint])
+        return Setter(node_infos[6], name, [constraint], [], [param], 1, None, exception_or_nil, body, None, False)
 
     def operator(self, op):
         translated_op = "_" + {
@@ -147,18 +151,16 @@ class CSTTransformer(Transformer):
     def operator_def(self, abstract, deff, translated_op, type_params, params, return_type, yield_type, body, constraints):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractMethodDef if abstract else MethodDef
-        mangled_name = translated_op + "_" + clean_param_names(params)
         node_info = NodeInfo(None, self.file_path, line_number(deff))
-        return ty(node_info, translated_op, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
+        return ty(node_info, translated_op, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
 
     def class_method_def(self, abstract, deff, self_tok, name, type_params, params, return_type, yield_type, body, constraints):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractClassMethodDef if abstract else ClassMethodDef
-        mangled_name = "_Self_" + name.value + "_" + clean_param_names(params)
         node_info = NodeInfo(None, self.file_path, line_number(name))
-        return ty(node_info, "_Self_" + name.value, mangled_name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
+        return ty(node_info, "_Self_" + name.value, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
 
-    def class_def(self, cls, name, supertype_list, bound_list, fields, region_constraints, *methods):
+    def class_def(self, cls, name, supertype_list, bound_list, fields, region_constraints, methods):
         if not isinstance(name, FatPtr):
             raise Exception(f"Line {line_number(cls)}: Invalid class name.")
         class_name = name.cls.data
@@ -175,7 +177,6 @@ class CSTTransformer(Transformer):
         if supertype_list and any(not isinstance(t, FatPtr) for t in supertype_list):
             offender = next(t for t in supertype_list if not isinstance(t, FatPtr))
             raise Exception(f"Line {line_number(cls)}: Cannot extend {t}")
-        fields = fields or []
         region_constraints = region_constraints or []
         regions = [f.name for f in fields if f._type == FatPtr.basic("Region")]
         fields = [f for f in fields if f._type != FatPtr.basic("Region")]
@@ -184,14 +185,33 @@ class CSTTransformer(Transformer):
         if class_name == "Object": direct_supertypes = [Any()]
         node_info = NodeInfo(None, self.file_path, line_number(cls))
         class_def = ClassDef(node_info, class_name, type_parameters, direct_supertypes, fields, regions, region_constraints, methods)
-        for field in fields: field.defining_class = class_def
+
+        for field in fields:
+            field.defining_class = class_def
+
         for method in methods:
             method.defining_class = class_def
             method.type_params = [TypeParameter.make(ident.value, class_name) for ident in method.type_params]
+            if isinstance(method, Getter):
+                field_name = "@" + method.name
+                m_fields = [field for field in fields if field.name == field_name]
+                if len(m_fields) != 1:
+                    raise Exception(f"Line {line_number(cls)}: Class {class_name} has no field {field_name}")
+                method._return_type = m_fields[0]._type
+            if isinstance(method, Setter):
+                field_name = "@" + method.name.replace("_set_", "")
+                m_fields = [field for field in fields if field.name == field_name]
+                if len(m_fields) != 1:
+                    raise Exception(f"Line {line_number(cls)}: Class {class_name} has no field {field_name}")
+                method.params[0]._type = m_fields[0]._type
+
         return class_def
 
     def field_decls(self, *decls):
         return list(decls)
+
+    def method_defs(self, *methods):
+        return list(chain.from_iterable([x] if isinstance(x, MethodDef) else x for x in methods))
 
     def class_region_constraints(self, constraint_list):
         return constraint_list

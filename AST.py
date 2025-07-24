@@ -1927,7 +1927,6 @@ class FunctionDef(Statement):
 @dataclass
 class MethodDef(Statement):
     name: str
-    mangled_name: str
     constraints: List[Constraint]
     type_params: List[TypeAttribute]
     params: List['VarDecl']
@@ -1937,6 +1936,10 @@ class MethodDef(Statement):
     body: BlockNode
     defining_class: 'ClassDef'
     hasreturn: bool
+
+    @property
+    def mangled_name(self):
+        return self.name + "_" + clean_param_names(self.params)
 
     def codegen(self, scope):
         #debug_print(f"codegenning {self.defining_class.name}.{self.name}")
@@ -2122,6 +2125,14 @@ class AbstractMethodDef(MethodDef):
         return
     def __hash__(self):
         return hash(self.qualified_name())
+
+@dataclass
+class Getter(MethodDef):
+    pass
+
+@dataclass
+class Setter(MethodDef):
+    pass
 
 @dataclass
 class ClassMethodDef(MethodDef):

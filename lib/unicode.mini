@@ -200,7 +200,7 @@ class UTF8Encoder extends Writer[i32] {
     def init(@writer : Writer[i8], @replacement_fn : (Writer[i8])) {
     }
 
-    getter @replacement_fn : (Writer[i8])
+    getter @replacement_fn
     setter @replacement_fn : (Writer[i8])
 
 	def write(cp : i32) {
@@ -266,8 +266,8 @@ class UTF8CodepointsValidator extends Iterator[i32] {
     def init(@iterator : Iterator[i8], @replacement_fn : (i32) -> i32) {
     }
 
-    getter @iterator : Iterator[i32]
-    getter @replacement_fn : (i32) -> i32
+    getter @iterator
+    getter @replacement_fn
     setter @replacement_fn : (i32) -> i32
 
     def replace_codepoint(codepoint : i32) -> i32 {
@@ -305,7 +305,7 @@ class UTF8BytesValidator {
 
     def init(@writer : Writer[i8]) {}
 
-    getter @replacement_fn : (Writer[i8])
+    getter @replacement_fn
     setter @replacement_fn : (Writer[i8])
 
     // Re-encode bytes for one codepoint from the byte source into @writer
@@ -396,8 +396,8 @@ class UTF8Decoder extends Iterator[i32] {
         @peeker = iterator into Peeker;
     }
 
-    getter @peeker : Peeker[i8]
-    getter @replacement_fn : (i8) -> i32
+    getter @peeker
+    getter @replacement_fn
     setter @replacement_fn : (i8) -> i32
 
     // returns (codepoint, bytes_needed)

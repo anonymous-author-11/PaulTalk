@@ -4,8 +4,8 @@ class Pair[T, U] {
 	@first : T
 	@second : U
 
-    getter @first : T
-    getter @second : U
+    getters @first, @second
+    setters @first, @second
 
 	def init(@first : T, @second : U) {}
 
