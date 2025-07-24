@@ -15,24 +15,29 @@ metadir = 0install
 distdir = 
 
 
-Executing: ['C:\\Users\\PaulK\\AppData\\Local\\0install.net\\implementations\\sha256new_2OU36IVT46VNZJ26HY7UEJDV5X54Z6E32PZ4WJ2MYNCCQ2E4OJLA\\ptalk.dist/ptalk.exe', 'compile', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\hash_benchmark.mini', '-o', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build-windows-x86_64/program.exe', '--build-dir', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build']
+Executing: ['C:\\Users\\PaulK\\AppData\\Local\\0install.net\\implementations\\sha256new_L4QROT5HNM52NUMUYQPM7VCDABYIZ5E4RRJQRLLOMQ5HM5CFZQ2A\\ptalk.dist/ptalk.exe', 'compile', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\hash_benchmark.mini', '-o', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build-windows-x86_64/program.exe', '--build-dir', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build']
 Compiling hash_benchmark.mini
-Recompiling dependencies: builtins, iteration, collection, range, indexable, list, core, io, files, array, channel, math, map, std, cuckoo
-Time to import: 0.3328394889831543 seconds
-Time to parse: 0.5226473808288574 seconds
-Time to type check: 1.4459655284881592 seconds
-Time to codegen: 16.556255340576172 seconds
-Time to do python lowering: 19.805809020996094 seconds
-Time to do PDL lowering: 1.757164716720581 seconds
-Time to do mlir-opt: 1.9785449504852295 seconds
-Time to mlir-opt lower: 0.8835630416870117 seconds
-Time to mlir-translate: 0.6448092460632324 seconds
-Time to generate bitcodes: 1.4993906021118164 seconds
-Time to llvm-link: 0.4819753170013428 seconds
-Time to optimize: 3.6142373085021973 seconds
-Time to llc: 1.352376937866211 seconds
-Time to lld link: 0.11008405685424805 seconds
-Total time to compile: 51.00812554359436 seconds
-Compiled 2194 lines of code at 43.012754862455914 LoC/second
+Recompiling dependencies: builtins, iteration, collection, list, indexable, range, core, map, cuckoo, math, io, channel, array, files, std
+ancestors of builtins.Object are [builtins.Object, Any]
+ancestors of list.List[List.T <: Any] are [list.List[List.T <: Any], collection.Collection[List.T <: Any], iteration.Iterable[List.T <: Any], iteration.Container, builtins.Object, Any]
+ancestors of indexable.Indexable[Indexable.I <: Any, Indexable.V <: Any] are [indexable.Indexable[Indexable.I <: Any, Indexable.V <: Any], builtins.Object, Any]
+ancestors of math.Math are [math.Math, builtins.Object, Any]
+ancestors of io.IO are [io.IO, builtins.Object, Any]
+Time to import: 0.25525712966918945 seconds
+Time to parse: 0.4442434310913086 seconds
+Time to type check: 1.7279539108276367 seconds
+Time to codegen: 20.752545833587646 seconds
+Time to do python lowering: 20.15279722213745 seconds
+Time to do PDL lowering: 1.5001823902130127 seconds
+Time to do mlir-opt: 1.7265558242797852 seconds
+Time to mlir-opt lower: 0.9051308631896973 seconds
+Time to mlir-translate: 0.5723085403442383 seconds
+Time to generate bitcodes: 1.4919445514678955 seconds
+Time to llvm-link: 0.5031247138977051 seconds
+Time to optimize: 3.5685951709747314 seconds
+Time to llc: 1.3367834091186523 seconds
+Time to lld link: 0.09489893913269043 seconds
+Total time to compile: 55.069098234176636 seconds
+Compiled 2198 lines of code at 39.91349178541462 LoC/second
 Finished compiling hash_benchmark.mini
 Build successful

@@ -277,7 +277,7 @@ class TypeEnvironment:
             self.caches[cache_key].ancestors[typ] = result
             return result
         result = self.ancestors_inner(typ)
-        print(f"ancestors of {typ} are {result}")
+        #print(f"ancestors of {typ} are {result}")
         self.caches[cache_key] = TypeCache.empty()
         self.caches[cache_key].ancestors[typ] = result
         return result
