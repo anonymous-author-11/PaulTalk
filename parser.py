@@ -9,6 +9,7 @@ from xdsl.dialects.builtin import IntegerType, IntegerAttr, StringAttr, NoneAttr
 from utils import *
 from pathlib import Path
 import ast
+from scope import Constraints
 
 DIR_PATH = Path(__file__).parent.resolve()
 GRAMMAR_PATH = DIR_PATH / "data_files/grammar.lark"
@@ -24,7 +25,7 @@ def get_fresh_parser():
     with open(CACHED_GRAMMAR_PATH, "wb") as f: fresh_parser.save(f)
     return fresh_parser
 
-parser = get_cached_parser()
+parser = get_fresh_parser()
 source_directories = {}
 parsed = {}
 
@@ -93,12 +94,14 @@ class CSTTransformer(Transformer):
     def extern_def(self, deff, name, params, elipsis, return_type, yield_type, constraints):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         node_info = NodeInfo(None, self.file_path, line_number(name))
-        return ExternDef(node_info, name.value, constraints or [], params or [], len(params or []), return_type, yield_type or exception_or_nil)
+        constraints = constraints if constraints else Constraints()
+        return ExternDef(node_info, name.value, constraints, params or [], len(params or []), return_type, yield_type or exception_or_nil)
 
     def function_def(self, deff, name, params, return_type, yield_type, body, constraints):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         node_info = NodeInfo(None, self.file_path, line_number(name))
-        return FunctionDef(node_info, name.value, constraints or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, False)
+        constraints = constraints if constraints else Constraints()
+        return FunctionDef(node_info, name.value, constraints, params or [], len(params or []), return_type, yield_type or exception_or_nil, body, False)
 
     def abstract(self):
         return True
@@ -111,7 +114,8 @@ class CSTTransformer(Transformer):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractMethodDef if abstract else MethodDef
         node_info = NodeInfo(None, self.file_path, line_number(deff))
-        return ty(node_info, name, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
+        constraints = constraints if constraints else Constraints()
+        return ty(node_info, name, constraints, type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
 
     def getters(self, field, *fields):
         return [self.getter(field), *(self.getter(f) for f in fields)]
@@ -126,8 +130,8 @@ class CSTTransformer(Transformer):
         field_id = Identifier(node_infos[0], field.value)
         ret = ReturnValue(node_infos[1], field_id)
         body = BlockNode(node_infos[2], [ret])
-        constraint = Constraint(node_infos[3], "ret", "==", field.value)
-        return Getter(node_infos[4], name, [constraint], [], [], 0, None, exception_or_nil, body, None, False)
+        constraints = Constraints({("ret", "==", field.value.replace("@", "self."))})
+        return Getter(node_infos[4], name, constraints, [], [], 0, None, exception_or_nil, body, None, False)
 
     def setter(self, field):
         node_infos = [NodeInfo(None, self.file_path, line_number(field)) for i in range(7)]
@@ -138,8 +142,8 @@ class CSTTransformer(Transformer):
         value_id = Identifier(node_infos[2], "value")
         assignment = Assignment(node_infos[3], field_id, value_id)
         body = BlockNode(node_infos[4], [assignment])
-        constraint = Constraint(node_infos[5], field.value, "==", "value")
-        return Setter(node_infos[6], name, [constraint], [], [param], 1, None, exception_or_nil, body, None, False)
+        constraints = Constraints(({(field.value.replace("@", "self."), "==", "value")}))
+        return Setter(node_infos[6], name, constraints, [], [param], 1, None, exception_or_nil, body, None, False)
 
     def operator(self, op):
         translated_op = "_" + {
@@ -152,13 +156,15 @@ class CSTTransformer(Transformer):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractMethodDef if abstract else MethodDef
         node_info = NodeInfo(None, self.file_path, line_number(deff))
-        return ty(node_info, translated_op, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
+        constraints = constraints if constraints else Constraints()
+        return ty(node_info, translated_op, constraints, type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
 
     def class_method_def(self, abstract, deff, self_tok, name, type_params, params, return_type, yield_type, body, constraints):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractClassMethodDef if abstract else ClassMethodDef
         node_info = NodeInfo(None, self.file_path, line_number(name))
-        return ty(node_info, "_Self_" + name.value, constraints or [], type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
+        constraints = constraints if constraints else Constraints()
+        return ty(node_info, "_Self_" + name.value, constraints, type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False)
 
     def class_def(self, cls, name, supertype_list, bound_list, fields, region_constraints, methods):
         if not isinstance(name, FatPtr):
@@ -177,7 +183,7 @@ class CSTTransformer(Transformer):
         if supertype_list and any(not isinstance(t, FatPtr) for t in supertype_list):
             offender = next(t for t in supertype_list if not isinstance(t, FatPtr))
             raise Exception(f"Line {line_number(cls)}: Cannot extend {t}")
-        region_constraints = region_constraints or []
+        region_constraints = region_constraints if region_constraints else Constraints()
         regions = [f.name for f in fields if f._type == FatPtr.basic("Region")]
         fields = [f for f in fields if f._type != FatPtr.basic("Region")]
         
@@ -235,13 +241,18 @@ class CSTTransformer(Transformer):
     def param_list(self, *params):
         return list(params)
 
+    def no_alias(self, token):
+        return Constraints()
+
+    def all_alias(self, token):
+        return Constraints(all_alias=True)
+
     def constraint_list(self, *constraints):
-        return list(constraints)
+        return Constraints(set(constraints))
 
     def constraint(self, lhs, op, rhs):
-        node_info = NodeInfo(None, self.file_path, line_number(op))
         op_map = {"holds":"<", "==":"=="}
-        return Constraint(node_info, lhs, op_map[op.value], rhs)
+        return (lhs.replace("@", "self."), op_map[op.value], rhs.replace("@", "self."))
 
     def alias(self, alias, name, meaning):
         node_info = NodeInfo(None, self.file_path, line_number(alias))

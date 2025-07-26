@@ -135,22 +135,22 @@ target triple = "aarch64-windows-msvc"
 @Collection_offset_tbl = constant [8 x i32] [i32 69, i32 10, i32 0, i32 69, i32 0, i32 44, i32 0, i32 10]
 @EnumeratedCollection_hashtbl = constant [8 x ptr] [ptr @any_typ, ptr @Iterable, ptr @EnumeratedCollection, ptr null, ptr @Container, ptr null, ptr @Collection, ptr @Object]
 @EnumeratedCollection_offset_tbl = constant [8 x i32] [i32 10, i32 107, i32 10, i32 0, i32 132, i32 0, i32 48, i32 132]
-@EnumeratedCollection = constant { [3 x i64], [7 x ptr], [122 x ptr] } { [3 x i64] [i64 7081690788784801875, i64 4611686018427388247, i64 7], [7 x ptr] [ptr @subtype_test, ptr @EnumeratedCollection_hashtbl, ptr @EnumeratedCollection_offset_tbl, ptr @_data_size_EnumeratedCollection, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [122 x ptr] [ptr @EnumeratedCollection_field_EnumeratedCollection_0, ptr @EnumeratedCollection_field_EnumeratedCollection_1, ptr @EnumeratedCollection_field_collection, ptr @EnumeratedCollection_B_init_collectionCollectionT, ptr @EnumeratedCollection_B_size_, ptr @EnumeratedCollection_B_is_empty_, ptr @EnumeratedCollection_B_iterator_, ptr @EnumeratedCollection_B_each_fFunctionT_to_Nothing, ptr @EnumeratedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @EnumeratedCollection_B_all_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_any_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_enumerate_, ptr @EnumeratedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @EnumeratedCollection_B_filter_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @EnumeratedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @EnumeratedCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @EnumeratedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @EnumeratedCollection_init_collectionCollectionT, ptr @EnumeratedCollection_size_, ptr @Collection_is_empty_, ptr @EnumeratedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @EnumeratedCollection_field_EnumeratedCollection_1, ptr @EnumeratedCollection_B_size_, ptr @EnumeratedCollection_B_is_empty_, ptr @EnumeratedCollection_B_iterator_, ptr @EnumeratedCollection_B_each_fFunctionT_to_Nothing, ptr @EnumeratedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @EnumeratedCollection_B_all_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_any_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_enumerate_, ptr @EnumeratedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @EnumeratedCollection_B_filter_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @EnumeratedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @EnumeratedCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @EnumeratedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @EnumeratedCollection_size_, ptr @Collection_is_empty_, ptr @EnumeratedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @EnumeratedCollection_field_EnumeratedCollection_1, ptr @EnumeratedCollection_B_iterator_, ptr @EnumeratedCollection_B_each_fFunctionT_to_Nothing, ptr @EnumeratedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @EnumeratedCollection_B_all_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_any_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_enumerate_, ptr @EnumeratedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @EnumeratedCollection_B_filter_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @EnumeratedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @EnumeratedCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @EnumeratedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @EnumeratedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @EnumeratedCollection_field_EnumeratedCollection_1, ptr @EnumeratedCollection_B_iterator_, ptr @EnumeratedCollection_B_each_fFunctionT_to_Nothing, ptr @EnumeratedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @EnumeratedCollection_B_all_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_any_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_enumerate_, ptr @EnumeratedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @EnumeratedCollection_B_filter_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @EnumeratedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @EnumeratedCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @EnumeratedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @EnumeratedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
+@EnumeratedCollection = constant { [3 x i64], [7 x ptr], [122 x ptr] } { [3 x i64] [i64 7081690788784801875, i64 4611686018427388247, i64 7], [7 x ptr] [ptr @subtype_test, ptr @EnumeratedCollection_hashtbl, ptr @EnumeratedCollection_offset_tbl, ptr @_data_size_EnumeratedCollection, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [122 x ptr] [ptr @EnumeratedCollection_field_EnumeratedCollection_0, ptr @EnumeratedCollection_field_EnumeratedCollection_1, ptr @EnumeratedCollection_field_collection, ptr @EnumeratedCollection_B_init_collectionCollectionT, ptr @EnumeratedCollection_B_size_, ptr @EnumeratedCollection_B_is_empty_, ptr @EnumeratedCollection_B_iterator_, ptr @EnumeratedCollection_B_each_fFunctionT_to_Nothing, ptr @EnumeratedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @EnumeratedCollection_B_all_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_any_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_enumerate_, ptr @EnumeratedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @EnumeratedCollection_B_filter_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @EnumeratedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @EnumeratedCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @EnumeratedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @EnumeratedCollection_init_collectionCollectionT, ptr @EnumeratedCollection_size_, ptr @Collection_is_empty_, ptr @EnumeratedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @EnumeratedCollection_field_EnumeratedCollection_1, ptr @EnumeratedCollection_B_size_, ptr @EnumeratedCollection_B_is_empty_, ptr @EnumeratedCollection_B_iterator_, ptr @EnumeratedCollection_B_each_fFunctionT_to_Nothing, ptr @EnumeratedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @EnumeratedCollection_B_all_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_any_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_enumerate_, ptr @EnumeratedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @EnumeratedCollection_B_filter_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @EnumeratedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @EnumeratedCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @EnumeratedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @EnumeratedCollection_size_, ptr @Collection_is_empty_, ptr @EnumeratedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @EnumeratedCollection_field_EnumeratedCollection_1, ptr @EnumeratedCollection_B_iterator_, ptr @EnumeratedCollection_B_each_fFunctionT_to_Nothing, ptr @EnumeratedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @EnumeratedCollection_B_all_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_any_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_enumerate_, ptr @EnumeratedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @EnumeratedCollection_B_filter_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @EnumeratedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @EnumeratedCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @EnumeratedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @EnumeratedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @EnumeratedCollection_field_EnumeratedCollection_1, ptr @EnumeratedCollection_B_iterator_, ptr @EnumeratedCollection_B_each_fFunctionT_to_Nothing, ptr @EnumeratedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @EnumeratedCollection_B_all_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_any_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_enumerate_, ptr @EnumeratedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @EnumeratedCollection_B_filter_fFunctionT_to_Bool, ptr @EnumeratedCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @EnumeratedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @EnumeratedCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @EnumeratedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @EnumeratedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
 @MappedCollection_hashtbl = constant [8 x ptr] [ptr @Object, ptr @any_typ, ptr null, ptr @Container, ptr null, ptr @Iterable, ptr @MappedCollection, ptr @Collection]
 @MappedCollection_offset_tbl = constant [8 x i32] [i32 133, i32 10, i32 0, i32 133, i32 0, i32 108, i32 10, i32 49]
-@MappedCollection = constant { [3 x i64], [7 x ptr], [123 x ptr] } { [3 x i64] [i64 5460697656559120915, i64 4611686018427388081, i64 7], [7 x ptr] [ptr @subtype_test, ptr @MappedCollection_hashtbl, ptr @MappedCollection_offset_tbl, ptr @_data_size_MappedCollection, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [123 x ptr] [ptr @MappedCollection_field_MappedCollection_0, ptr @MappedCollection_field_MappedCollection_1, ptr @MappedCollection_field_collection, ptr @MappedCollection_field_f, ptr @MappedCollection_B_init_collectionCollectionT_fFunctionT_to_U, ptr @MappedCollection_B_size_, ptr @MappedCollection_B_is_empty_, ptr @MappedCollection_B_iterator_, ptr @MappedCollection_B_each_fFunctionT_to_Nothing, ptr @MappedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MappedCollection_B_all_fFunctionT_to_Bool, ptr @MappedCollection_B_any_fFunctionT_to_Bool, ptr @MappedCollection_B_enumerate_, ptr @MappedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MappedCollection_B_filter_fFunctionT_to_Bool, ptr @MappedCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @MappedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @MappedCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @MappedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @MappedCollection_init_collectionCollectionT_fFunctionT_to_U, ptr @MappedCollection_size_, ptr @Collection_is_empty_, ptr @MappedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @MappedCollection_field_MappedCollection_1, ptr @MappedCollection_B_size_, ptr @MappedCollection_B_is_empty_, ptr @MappedCollection_B_iterator_, ptr @MappedCollection_B_each_fFunctionT_to_Nothing, ptr @MappedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MappedCollection_B_all_fFunctionT_to_Bool, ptr @MappedCollection_B_any_fFunctionT_to_Bool, ptr @MappedCollection_B_enumerate_, ptr @MappedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MappedCollection_B_filter_fFunctionT_to_Bool, ptr @MappedCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @MappedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @MappedCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @MappedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @MappedCollection_size_, ptr @Collection_is_empty_, ptr @MappedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @MappedCollection_field_MappedCollection_1, ptr @MappedCollection_B_iterator_, ptr @MappedCollection_B_each_fFunctionT_to_Nothing, ptr @MappedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MappedCollection_B_all_fFunctionT_to_Bool, ptr @MappedCollection_B_any_fFunctionT_to_Bool, ptr @MappedCollection_B_enumerate_, ptr @MappedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MappedCollection_B_filter_fFunctionT_to_Bool, ptr @MappedCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @MappedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @MappedCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @MappedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @MappedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @MappedCollection_field_MappedCollection_1, ptr @MappedCollection_B_iterator_, ptr @MappedCollection_B_each_fFunctionT_to_Nothing, ptr @MappedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MappedCollection_B_all_fFunctionT_to_Bool, ptr @MappedCollection_B_any_fFunctionT_to_Bool, ptr @MappedCollection_B_enumerate_, ptr @MappedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MappedCollection_B_filter_fFunctionT_to_Bool, ptr @MappedCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @MappedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @MappedCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @MappedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @MappedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
+@MappedCollection = constant { [3 x i64], [7 x ptr], [123 x ptr] } { [3 x i64] [i64 5460697656559120915, i64 4611686018427388081, i64 7], [7 x ptr] [ptr @subtype_test, ptr @MappedCollection_hashtbl, ptr @MappedCollection_offset_tbl, ptr @_data_size_MappedCollection, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [123 x ptr] [ptr @MappedCollection_field_MappedCollection_0, ptr @MappedCollection_field_MappedCollection_1, ptr @MappedCollection_field_collection, ptr @MappedCollection_field_f, ptr @MappedCollection_B_init_collectionCollectionT_fFunctionT_to_U, ptr @MappedCollection_B_size_, ptr @MappedCollection_B_is_empty_, ptr @MappedCollection_B_iterator_, ptr @MappedCollection_B_each_fFunctionT_to_Nothing, ptr @MappedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MappedCollection_B_all_fFunctionT_to_Bool, ptr @MappedCollection_B_any_fFunctionT_to_Bool, ptr @MappedCollection_B_enumerate_, ptr @MappedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MappedCollection_B_filter_fFunctionT_to_Bool, ptr @MappedCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @MappedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @MappedCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @MappedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @MappedCollection_init_collectionCollectionT_fFunctionT_to_U, ptr @MappedCollection_size_, ptr @Collection_is_empty_, ptr @MappedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @MappedCollection_field_MappedCollection_1, ptr @MappedCollection_B_size_, ptr @MappedCollection_B_is_empty_, ptr @MappedCollection_B_iterator_, ptr @MappedCollection_B_each_fFunctionT_to_Nothing, ptr @MappedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MappedCollection_B_all_fFunctionT_to_Bool, ptr @MappedCollection_B_any_fFunctionT_to_Bool, ptr @MappedCollection_B_enumerate_, ptr @MappedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MappedCollection_B_filter_fFunctionT_to_Bool, ptr @MappedCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @MappedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @MappedCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @MappedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @MappedCollection_size_, ptr @Collection_is_empty_, ptr @MappedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @MappedCollection_field_MappedCollection_1, ptr @MappedCollection_B_iterator_, ptr @MappedCollection_B_each_fFunctionT_to_Nothing, ptr @MappedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MappedCollection_B_all_fFunctionT_to_Bool, ptr @MappedCollection_B_any_fFunctionT_to_Bool, ptr @MappedCollection_B_enumerate_, ptr @MappedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MappedCollection_B_filter_fFunctionT_to_Bool, ptr @MappedCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @MappedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @MappedCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @MappedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @MappedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @MappedCollection_field_MappedCollection_1, ptr @MappedCollection_B_iterator_, ptr @MappedCollection_B_each_fFunctionT_to_Nothing, ptr @MappedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MappedCollection_B_all_fFunctionT_to_Bool, ptr @MappedCollection_B_any_fFunctionT_to_Bool, ptr @MappedCollection_B_enumerate_, ptr @MappedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MappedCollection_B_filter_fFunctionT_to_Bool, ptr @MappedCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @MappedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @MappedCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @MappedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @MappedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
 @ChainedCollection_hashtbl = constant [8 x ptr] [ptr null, ptr @Object, ptr @any_typ, ptr @Collection, ptr @ChainedCollection, ptr @Container, ptr @Iterable, ptr null]
 @ChainedCollection_offset_tbl = constant [8 x i32] [i32 0, i32 132, i32 10, i32 48, i32 10, i32 132, i32 107, i32 0]
-@ChainedCollection = constant { [3 x i64], [7 x ptr], [122 x ptr] } { [3 x i64] [i64 -4136536984535342799, i64 4611686018427388319, i64 7], [7 x ptr] [ptr @subtype_test, ptr @ChainedCollection_hashtbl, ptr @ChainedCollection_offset_tbl, ptr @_data_size_ChainedCollection, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [122 x ptr] [ptr @ChainedCollection_field_ChainedCollection_0, ptr @ChainedCollection_field_first, ptr @ChainedCollection_field_second, ptr @ChainedCollection_B_init_firstCollectionT_secondCollectionT, ptr @ChainedCollection_B_size_, ptr @ChainedCollection_B_is_empty_, ptr @ChainedCollection_B_iterator_, ptr @ChainedCollection_B_each_fFunctionT_to_Nothing, ptr @ChainedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ChainedCollection_B_all_fFunctionT_to_Bool, ptr @ChainedCollection_B_any_fFunctionT_to_Bool, ptr @ChainedCollection_B_enumerate_, ptr @ChainedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ChainedCollection_B_filter_fFunctionT_to_Bool, ptr @ChainedCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @ChainedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @ChainedCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @ChainedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ChainedCollection_init_firstCollectionT_secondCollectionT, ptr @ChainedCollection_size_, ptr @Collection_is_empty_, ptr @ChainedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @ChainedCollection_field_ChainedCollection_0, ptr @ChainedCollection_B_size_, ptr @ChainedCollection_B_is_empty_, ptr @ChainedCollection_B_iterator_, ptr @ChainedCollection_B_each_fFunctionT_to_Nothing, ptr @ChainedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ChainedCollection_B_all_fFunctionT_to_Bool, ptr @ChainedCollection_B_any_fFunctionT_to_Bool, ptr @ChainedCollection_B_enumerate_, ptr @ChainedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ChainedCollection_B_filter_fFunctionT_to_Bool, ptr @ChainedCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @ChainedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @ChainedCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @ChainedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ChainedCollection_size_, ptr @Collection_is_empty_, ptr @ChainedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @ChainedCollection_field_ChainedCollection_0, ptr @ChainedCollection_B_iterator_, ptr @ChainedCollection_B_each_fFunctionT_to_Nothing, ptr @ChainedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ChainedCollection_B_all_fFunctionT_to_Bool, ptr @ChainedCollection_B_any_fFunctionT_to_Bool, ptr @ChainedCollection_B_enumerate_, ptr @ChainedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ChainedCollection_B_filter_fFunctionT_to_Bool, ptr @ChainedCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @ChainedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @ChainedCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @ChainedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ChainedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @ChainedCollection_field_ChainedCollection_0, ptr @ChainedCollection_B_iterator_, ptr @ChainedCollection_B_each_fFunctionT_to_Nothing, ptr @ChainedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ChainedCollection_B_all_fFunctionT_to_Bool, ptr @ChainedCollection_B_any_fFunctionT_to_Bool, ptr @ChainedCollection_B_enumerate_, ptr @ChainedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ChainedCollection_B_filter_fFunctionT_to_Bool, ptr @ChainedCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @ChainedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @ChainedCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @ChainedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ChainedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
+@ChainedCollection = constant { [3 x i64], [7 x ptr], [122 x ptr] } { [3 x i64] [i64 -4136536984535342799, i64 4611686018427388319, i64 7], [7 x ptr] [ptr @subtype_test, ptr @ChainedCollection_hashtbl, ptr @ChainedCollection_offset_tbl, ptr @_data_size_ChainedCollection, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [122 x ptr] [ptr @ChainedCollection_field_ChainedCollection_0, ptr @ChainedCollection_field_first, ptr @ChainedCollection_field_second, ptr @ChainedCollection_B_init_firstCollectionT_secondCollectionT, ptr @ChainedCollection_B_size_, ptr @ChainedCollection_B_is_empty_, ptr @ChainedCollection_B_iterator_, ptr @ChainedCollection_B_each_fFunctionT_to_Nothing, ptr @ChainedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ChainedCollection_B_all_fFunctionT_to_Bool, ptr @ChainedCollection_B_any_fFunctionT_to_Bool, ptr @ChainedCollection_B_enumerate_, ptr @ChainedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ChainedCollection_B_filter_fFunctionT_to_Bool, ptr @ChainedCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @ChainedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @ChainedCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @ChainedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ChainedCollection_init_firstCollectionT_secondCollectionT, ptr @ChainedCollection_size_, ptr @Collection_is_empty_, ptr @ChainedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @ChainedCollection_field_ChainedCollection_0, ptr @ChainedCollection_B_size_, ptr @ChainedCollection_B_is_empty_, ptr @ChainedCollection_B_iterator_, ptr @ChainedCollection_B_each_fFunctionT_to_Nothing, ptr @ChainedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ChainedCollection_B_all_fFunctionT_to_Bool, ptr @ChainedCollection_B_any_fFunctionT_to_Bool, ptr @ChainedCollection_B_enumerate_, ptr @ChainedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ChainedCollection_B_filter_fFunctionT_to_Bool, ptr @ChainedCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @ChainedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @ChainedCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @ChainedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ChainedCollection_size_, ptr @Collection_is_empty_, ptr @ChainedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @ChainedCollection_field_ChainedCollection_0, ptr @ChainedCollection_B_iterator_, ptr @ChainedCollection_B_each_fFunctionT_to_Nothing, ptr @ChainedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ChainedCollection_B_all_fFunctionT_to_Bool, ptr @ChainedCollection_B_any_fFunctionT_to_Bool, ptr @ChainedCollection_B_enumerate_, ptr @ChainedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ChainedCollection_B_filter_fFunctionT_to_Bool, ptr @ChainedCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @ChainedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @ChainedCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @ChainedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ChainedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @ChainedCollection_field_ChainedCollection_0, ptr @ChainedCollection_B_iterator_, ptr @ChainedCollection_B_each_fFunctionT_to_Nothing, ptr @ChainedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ChainedCollection_B_all_fFunctionT_to_Bool, ptr @ChainedCollection_B_any_fFunctionT_to_Bool, ptr @ChainedCollection_B_enumerate_, ptr @ChainedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ChainedCollection_B_filter_fFunctionT_to_Bool, ptr @ChainedCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @ChainedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @ChainedCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @ChainedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ChainedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
 @InterleavedCollection_hashtbl = constant [8 x ptr] [ptr @Object, ptr @any_typ, ptr null, ptr @Container, ptr @InterleavedCollection, ptr @Iterable, ptr null, ptr @Collection]
 @InterleavedCollection_offset_tbl = constant [8 x i32] [i32 132, i32 10, i32 0, i32 132, i32 10, i32 107, i32 0, i32 48]
-@InterleavedCollection = constant { [3 x i64], [7 x ptr], [122 x ptr] } { [3 x i64] [i64 8589355597059143861, i64 4611686018427388081, i64 7], [7 x ptr] [ptr @subtype_test, ptr @InterleavedCollection_hashtbl, ptr @InterleavedCollection_offset_tbl, ptr @_data_size_InterleavedCollection, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [122 x ptr] [ptr @InterleavedCollection_field_InterleavedCollection_0, ptr @InterleavedCollection_field_first, ptr @InterleavedCollection_field_second, ptr @InterleavedCollection_B_init_firstCollectionT_secondCollectionT, ptr @InterleavedCollection_B_size_, ptr @InterleavedCollection_B_is_empty_, ptr @InterleavedCollection_B_iterator_, ptr @InterleavedCollection_B_each_fFunctionT_to_Nothing, ptr @InterleavedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @InterleavedCollection_B_all_fFunctionT_to_Bool, ptr @InterleavedCollection_B_any_fFunctionT_to_Bool, ptr @InterleavedCollection_B_enumerate_, ptr @InterleavedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @InterleavedCollection_B_filter_fFunctionT_to_Bool, ptr @InterleavedCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @InterleavedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @InterleavedCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @InterleavedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @InterleavedCollection_init_firstCollectionT_secondCollectionT, ptr @InterleavedCollection_size_, ptr @Collection_is_empty_, ptr @InterleavedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @InterleavedCollection_field_InterleavedCollection_0, ptr @InterleavedCollection_B_size_, ptr @InterleavedCollection_B_is_empty_, ptr @InterleavedCollection_B_iterator_, ptr @InterleavedCollection_B_each_fFunctionT_to_Nothing, ptr @InterleavedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @InterleavedCollection_B_all_fFunctionT_to_Bool, ptr @InterleavedCollection_B_any_fFunctionT_to_Bool, ptr @InterleavedCollection_B_enumerate_, ptr @InterleavedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @InterleavedCollection_B_filter_fFunctionT_to_Bool, ptr @InterleavedCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @InterleavedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @InterleavedCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @InterleavedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @InterleavedCollection_size_, ptr @Collection_is_empty_, ptr @InterleavedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @InterleavedCollection_field_InterleavedCollection_0, ptr @InterleavedCollection_B_iterator_, ptr @InterleavedCollection_B_each_fFunctionT_to_Nothing, ptr @InterleavedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @InterleavedCollection_B_all_fFunctionT_to_Bool, ptr @InterleavedCollection_B_any_fFunctionT_to_Bool, ptr @InterleavedCollection_B_enumerate_, ptr @InterleavedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @InterleavedCollection_B_filter_fFunctionT_to_Bool, ptr @InterleavedCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @InterleavedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @InterleavedCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @InterleavedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @InterleavedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @InterleavedCollection_field_InterleavedCollection_0, ptr @InterleavedCollection_B_iterator_, ptr @InterleavedCollection_B_each_fFunctionT_to_Nothing, ptr @InterleavedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @InterleavedCollection_B_all_fFunctionT_to_Bool, ptr @InterleavedCollection_B_any_fFunctionT_to_Bool, ptr @InterleavedCollection_B_enumerate_, ptr @InterleavedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @InterleavedCollection_B_filter_fFunctionT_to_Bool, ptr @InterleavedCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @InterleavedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @InterleavedCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @InterleavedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @InterleavedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
+@InterleavedCollection = constant { [3 x i64], [7 x ptr], [122 x ptr] } { [3 x i64] [i64 8589355597059143861, i64 4611686018427388081, i64 7], [7 x ptr] [ptr @subtype_test, ptr @InterleavedCollection_hashtbl, ptr @InterleavedCollection_offset_tbl, ptr @_data_size_InterleavedCollection, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [122 x ptr] [ptr @InterleavedCollection_field_InterleavedCollection_0, ptr @InterleavedCollection_field_first, ptr @InterleavedCollection_field_second, ptr @InterleavedCollection_B_init_firstCollectionT_secondCollectionT, ptr @InterleavedCollection_B_size_, ptr @InterleavedCollection_B_is_empty_, ptr @InterleavedCollection_B_iterator_, ptr @InterleavedCollection_B_each_fFunctionT_to_Nothing, ptr @InterleavedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @InterleavedCollection_B_all_fFunctionT_to_Bool, ptr @InterleavedCollection_B_any_fFunctionT_to_Bool, ptr @InterleavedCollection_B_enumerate_, ptr @InterleavedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @InterleavedCollection_B_filter_fFunctionT_to_Bool, ptr @InterleavedCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @InterleavedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @InterleavedCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @InterleavedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @InterleavedCollection_init_firstCollectionT_secondCollectionT, ptr @InterleavedCollection_size_, ptr @Collection_is_empty_, ptr @InterleavedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @InterleavedCollection_field_InterleavedCollection_0, ptr @InterleavedCollection_B_size_, ptr @InterleavedCollection_B_is_empty_, ptr @InterleavedCollection_B_iterator_, ptr @InterleavedCollection_B_each_fFunctionT_to_Nothing, ptr @InterleavedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @InterleavedCollection_B_all_fFunctionT_to_Bool, ptr @InterleavedCollection_B_any_fFunctionT_to_Bool, ptr @InterleavedCollection_B_enumerate_, ptr @InterleavedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @InterleavedCollection_B_filter_fFunctionT_to_Bool, ptr @InterleavedCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @InterleavedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @InterleavedCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @InterleavedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @InterleavedCollection_size_, ptr @Collection_is_empty_, ptr @InterleavedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @InterleavedCollection_field_InterleavedCollection_0, ptr @InterleavedCollection_B_iterator_, ptr @InterleavedCollection_B_each_fFunctionT_to_Nothing, ptr @InterleavedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @InterleavedCollection_B_all_fFunctionT_to_Bool, ptr @InterleavedCollection_B_any_fFunctionT_to_Bool, ptr @InterleavedCollection_B_enumerate_, ptr @InterleavedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @InterleavedCollection_B_filter_fFunctionT_to_Bool, ptr @InterleavedCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @InterleavedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @InterleavedCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @InterleavedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @InterleavedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @InterleavedCollection_field_InterleavedCollection_0, ptr @InterleavedCollection_B_iterator_, ptr @InterleavedCollection_B_each_fFunctionT_to_Nothing, ptr @InterleavedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @InterleavedCollection_B_all_fFunctionT_to_Bool, ptr @InterleavedCollection_B_any_fFunctionT_to_Bool, ptr @InterleavedCollection_B_enumerate_, ptr @InterleavedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @InterleavedCollection_B_filter_fFunctionT_to_Bool, ptr @InterleavedCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @InterleavedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @InterleavedCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @InterleavedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @InterleavedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
 @ZippedCollection_hashtbl = constant [8 x ptr] [ptr @any_typ, ptr @Collection, ptr @Object, ptr @Container, ptr @ZippedCollection, ptr @Iterable, ptr null, ptr null]
 @ZippedCollection_offset_tbl = constant [8 x i32] [i32 10, i32 50, i32 134, i32 134, i32 10, i32 109, i32 0, i32 0]
-@ZippedCollection = constant { [3 x i64], [7 x ptr], [124 x ptr] } { [3 x i64] [i64 880335312586431241, i64 4611686018427388513, i64 7], [7 x ptr] [ptr @subtype_test, ptr @ZippedCollection_hashtbl, ptr @ZippedCollection_offset_tbl, ptr @_data_size_ZippedCollection, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [124 x ptr] [ptr @ZippedCollection_field_ZippedCollection_0, ptr @ZippedCollection_field_ZippedCollection_1, ptr @ZippedCollection_field_ZippedCollection_2, ptr @ZippedCollection_field_first, ptr @ZippedCollection_field_second, ptr @ZippedCollection_B_init_firstCollectionT_secondCollectionU, ptr @ZippedCollection_B_size_, ptr @ZippedCollection_B_is_empty_, ptr @ZippedCollection_B_iterator_, ptr @ZippedCollection_B_each_fFunctionT_to_Nothing, ptr @ZippedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ZippedCollection_B_all_fFunctionT_to_Bool, ptr @ZippedCollection_B_any_fFunctionT_to_Bool, ptr @ZippedCollection_B_enumerate_, ptr @ZippedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ZippedCollection_B_filter_fFunctionT_to_Bool, ptr @ZippedCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @ZippedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @ZippedCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @ZippedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ZippedCollection_init_firstCollectionT_secondCollectionU, ptr @ZippedCollection_size_, ptr @Collection_is_empty_, ptr @ZippedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @ZippedCollection_field_ZippedCollection_2, ptr @ZippedCollection_B_size_, ptr @ZippedCollection_B_is_empty_, ptr @ZippedCollection_B_iterator_, ptr @ZippedCollection_B_each_fFunctionT_to_Nothing, ptr @ZippedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ZippedCollection_B_all_fFunctionT_to_Bool, ptr @ZippedCollection_B_any_fFunctionT_to_Bool, ptr @ZippedCollection_B_enumerate_, ptr @ZippedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ZippedCollection_B_filter_fFunctionT_to_Bool, ptr @ZippedCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @ZippedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @ZippedCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @ZippedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ZippedCollection_size_, ptr @Collection_is_empty_, ptr @ZippedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @ZippedCollection_field_ZippedCollection_2, ptr @ZippedCollection_B_iterator_, ptr @ZippedCollection_B_each_fFunctionT_to_Nothing, ptr @ZippedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ZippedCollection_B_all_fFunctionT_to_Bool, ptr @ZippedCollection_B_any_fFunctionT_to_Bool, ptr @ZippedCollection_B_enumerate_, ptr @ZippedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ZippedCollection_B_filter_fFunctionT_to_Bool, ptr @ZippedCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @ZippedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @ZippedCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @ZippedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ZippedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @ZippedCollection_field_ZippedCollection_2, ptr @ZippedCollection_B_iterator_, ptr @ZippedCollection_B_each_fFunctionT_to_Nothing, ptr @ZippedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ZippedCollection_B_all_fFunctionT_to_Bool, ptr @ZippedCollection_B_any_fFunctionT_to_Bool, ptr @ZippedCollection_B_enumerate_, ptr @ZippedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ZippedCollection_B_filter_fFunctionT_to_Bool, ptr @ZippedCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @ZippedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @ZippedCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @ZippedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ZippedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
+@ZippedCollection = constant { [3 x i64], [7 x ptr], [124 x ptr] } { [3 x i64] [i64 880335312586431241, i64 4611686018427388513, i64 7], [7 x ptr] [ptr @subtype_test, ptr @ZippedCollection_hashtbl, ptr @ZippedCollection_offset_tbl, ptr @_data_size_ZippedCollection, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [124 x ptr] [ptr @ZippedCollection_field_ZippedCollection_0, ptr @ZippedCollection_field_ZippedCollection_1, ptr @ZippedCollection_field_ZippedCollection_2, ptr @ZippedCollection_field_first, ptr @ZippedCollection_field_second, ptr @ZippedCollection_B_init_firstCollectionT_secondCollectionU, ptr @ZippedCollection_B_size_, ptr @ZippedCollection_B_is_empty_, ptr @ZippedCollection_B_iterator_, ptr @ZippedCollection_B_each_fFunctionT_to_Nothing, ptr @ZippedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ZippedCollection_B_all_fFunctionT_to_Bool, ptr @ZippedCollection_B_any_fFunctionT_to_Bool, ptr @ZippedCollection_B_enumerate_, ptr @ZippedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ZippedCollection_B_filter_fFunctionT_to_Bool, ptr @ZippedCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @ZippedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @ZippedCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @ZippedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ZippedCollection_init_firstCollectionT_secondCollectionU, ptr @ZippedCollection_size_, ptr @Collection_is_empty_, ptr @ZippedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @ZippedCollection_field_ZippedCollection_2, ptr @ZippedCollection_B_size_, ptr @ZippedCollection_B_is_empty_, ptr @ZippedCollection_B_iterator_, ptr @ZippedCollection_B_each_fFunctionT_to_Nothing, ptr @ZippedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ZippedCollection_B_all_fFunctionT_to_Bool, ptr @ZippedCollection_B_any_fFunctionT_to_Bool, ptr @ZippedCollection_B_enumerate_, ptr @ZippedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ZippedCollection_B_filter_fFunctionT_to_Bool, ptr @ZippedCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @ZippedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @ZippedCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @ZippedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ZippedCollection_size_, ptr @Collection_is_empty_, ptr @ZippedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @ZippedCollection_field_ZippedCollection_2, ptr @ZippedCollection_B_iterator_, ptr @ZippedCollection_B_each_fFunctionT_to_Nothing, ptr @ZippedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ZippedCollection_B_all_fFunctionT_to_Bool, ptr @ZippedCollection_B_any_fFunctionT_to_Bool, ptr @ZippedCollection_B_enumerate_, ptr @ZippedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ZippedCollection_B_filter_fFunctionT_to_Bool, ptr @ZippedCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @ZippedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @ZippedCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @ZippedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ZippedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @ZippedCollection_field_ZippedCollection_2, ptr @ZippedCollection_B_iterator_, ptr @ZippedCollection_B_each_fFunctionT_to_Nothing, ptr @ZippedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ZippedCollection_B_all_fFunctionT_to_Bool, ptr @ZippedCollection_B_any_fFunctionT_to_Bool, ptr @ZippedCollection_B_enumerate_, ptr @ZippedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ZippedCollection_B_filter_fFunctionT_to_Bool, ptr @ZippedCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @ZippedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @ZippedCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @ZippedCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ZippedCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
 @ProductCollection_hashtbl = constant [8 x ptr] [ptr @any_typ, ptr @Iterable, ptr null, ptr @ProductCollection, ptr @Container, ptr null, ptr @Collection, ptr @Object]
 @ProductCollection_offset_tbl = constant [8 x i32] [i32 10, i32 109, i32 0, i32 10, i32 134, i32 0, i32 50, i32 134]
-@ProductCollection = constant { [3 x i64], [7 x ptr], [124 x ptr] } { [3 x i64] [i64 -310975631771072937, i64 4611686018427388247, i64 7], [7 x ptr] [ptr @subtype_test, ptr @ProductCollection_hashtbl, ptr @ProductCollection_offset_tbl, ptr @_data_size_ProductCollection, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [124 x ptr] [ptr @ProductCollection_field_ProductCollection_0, ptr @ProductCollection_field_ProductCollection_1, ptr @ProductCollection_field_ProductCollection_2, ptr @ProductCollection_field_first, ptr @ProductCollection_field_second, ptr @ProductCollection_B_init_firstCollectionT_secondCollectionU, ptr @ProductCollection_B_size_, ptr @ProductCollection_B_is_empty_, ptr @ProductCollection_B_iterator_, ptr @ProductCollection_B_each_fFunctionT_to_Nothing, ptr @ProductCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ProductCollection_B_all_fFunctionT_to_Bool, ptr @ProductCollection_B_any_fFunctionT_to_Bool, ptr @ProductCollection_B_enumerate_, ptr @ProductCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ProductCollection_B_filter_fFunctionT_to_Bool, ptr @ProductCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @ProductCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @ProductCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @ProductCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ProductCollection_init_firstCollectionT_secondCollectionU, ptr @ProductCollection_size_, ptr @Collection_is_empty_, ptr @ProductCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @ProductCollection_field_ProductCollection_2, ptr @ProductCollection_B_size_, ptr @ProductCollection_B_is_empty_, ptr @ProductCollection_B_iterator_, ptr @ProductCollection_B_each_fFunctionT_to_Nothing, ptr @ProductCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ProductCollection_B_all_fFunctionT_to_Bool, ptr @ProductCollection_B_any_fFunctionT_to_Bool, ptr @ProductCollection_B_enumerate_, ptr @ProductCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ProductCollection_B_filter_fFunctionT_to_Bool, ptr @ProductCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @ProductCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @ProductCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @ProductCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ProductCollection_size_, ptr @Collection_is_empty_, ptr @ProductCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @ProductCollection_field_ProductCollection_2, ptr @ProductCollection_B_iterator_, ptr @ProductCollection_B_each_fFunctionT_to_Nothing, ptr @ProductCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ProductCollection_B_all_fFunctionT_to_Bool, ptr @ProductCollection_B_any_fFunctionT_to_Bool, ptr @ProductCollection_B_enumerate_, ptr @ProductCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ProductCollection_B_filter_fFunctionT_to_Bool, ptr @ProductCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @ProductCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @ProductCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @ProductCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ProductCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @ProductCollection_field_ProductCollection_2, ptr @ProductCollection_B_iterator_, ptr @ProductCollection_B_each_fFunctionT_to_Nothing, ptr @ProductCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ProductCollection_B_all_fFunctionT_to_Bool, ptr @ProductCollection_B_any_fFunctionT_to_Bool, ptr @ProductCollection_B_enumerate_, ptr @ProductCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ProductCollection_B_filter_fFunctionT_to_Bool, ptr @ProductCollection_B_chain_otherIterableT_chain_otherCollectionT, ptr @ProductCollection_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @ProductCollection_B_zip_otherCollectionU_zip_otherIterableU, ptr @ProductCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ProductCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
+@ProductCollection = constant { [3 x i64], [7 x ptr], [124 x ptr] } { [3 x i64] [i64 -310975631771072937, i64 4611686018427388247, i64 7], [7 x ptr] [ptr @subtype_test, ptr @ProductCollection_hashtbl, ptr @ProductCollection_offset_tbl, ptr @_data_size_ProductCollection, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [124 x ptr] [ptr @ProductCollection_field_ProductCollection_0, ptr @ProductCollection_field_ProductCollection_1, ptr @ProductCollection_field_ProductCollection_2, ptr @ProductCollection_field_first, ptr @ProductCollection_field_second, ptr @ProductCollection_B_init_firstCollectionT_secondCollectionU, ptr @ProductCollection_B_size_, ptr @ProductCollection_B_is_empty_, ptr @ProductCollection_B_iterator_, ptr @ProductCollection_B_each_fFunctionT_to_Nothing, ptr @ProductCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ProductCollection_B_all_fFunctionT_to_Bool, ptr @ProductCollection_B_any_fFunctionT_to_Bool, ptr @ProductCollection_B_enumerate_, ptr @ProductCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ProductCollection_B_filter_fFunctionT_to_Bool, ptr @ProductCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @ProductCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @ProductCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @ProductCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ProductCollection_init_firstCollectionT_secondCollectionU, ptr @ProductCollection_size_, ptr @Collection_is_empty_, ptr @ProductCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @ProductCollection_field_ProductCollection_2, ptr @ProductCollection_B_size_, ptr @ProductCollection_B_is_empty_, ptr @ProductCollection_B_iterator_, ptr @ProductCollection_B_each_fFunctionT_to_Nothing, ptr @ProductCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ProductCollection_B_all_fFunctionT_to_Bool, ptr @ProductCollection_B_any_fFunctionT_to_Bool, ptr @ProductCollection_B_enumerate_, ptr @ProductCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ProductCollection_B_filter_fFunctionT_to_Bool, ptr @ProductCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @ProductCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @ProductCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @ProductCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ProductCollection_size_, ptr @Collection_is_empty_, ptr @ProductCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @ProductCollection_field_ProductCollection_2, ptr @ProductCollection_B_iterator_, ptr @ProductCollection_B_each_fFunctionT_to_Nothing, ptr @ProductCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ProductCollection_B_all_fFunctionT_to_Bool, ptr @ProductCollection_B_any_fFunctionT_to_Bool, ptr @ProductCollection_B_enumerate_, ptr @ProductCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ProductCollection_B_filter_fFunctionT_to_Bool, ptr @ProductCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @ProductCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @ProductCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @ProductCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ProductCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @ProductCollection_field_ProductCollection_2, ptr @ProductCollection_B_iterator_, ptr @ProductCollection_B_each_fFunctionT_to_Nothing, ptr @ProductCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @ProductCollection_B_all_fFunctionT_to_Bool, ptr @ProductCollection_B_any_fFunctionT_to_Bool, ptr @ProductCollection_B_enumerate_, ptr @ProductCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @ProductCollection_B_filter_fFunctionT_to_Bool, ptr @ProductCollection_B_chain_otherCollectionT_chain_otherIterableT, ptr @ProductCollection_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @ProductCollection_B_zip_otherIterableU_zip_otherCollectionU, ptr @ProductCollection_B_product_otherCollectionU_product_otherIterableU, ptr @ProductCollection_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
 @EnumeratedCollection_field_collection = internal constant { ptr, ptr } { ptr @EnumeratedCollection_getter_collection, ptr @EnumeratedCollection_setter_collection }
 @MappedCollection_field_collection = internal constant { ptr, ptr } { ptr @MappedCollection_getter_collection, ptr @MappedCollection_setter_collection }
 @MappedCollection_field_f = internal constant { ptr, ptr } { ptr @MappedCollection_getter_f, ptr @MappedCollection_setter_f }
@@ -239,10 +239,10 @@ target triple = "aarch64-windows-msvc"
 @Map_offset_tbl = constant [8 x i32] [i32 198, i32 10, i32 64, i32 288, i32 204, i32 263, i32 10, i32 204]
 @MapKeys_hashtbl = constant [8 x ptr] [ptr null, ptr @Object, ptr @any_typ, ptr @Collection, ptr @MapKeys, ptr @Container, ptr @Iterable, ptr null]
 @MapKeys_offset_tbl = constant [8 x i32] [i32 0, i32 132, i32 10, i32 48, i32 10, i32 132, i32 107, i32 0]
-@MapKeys = constant { [3 x i64], [7 x ptr], [122 x ptr] } { [3 x i64] [i64 -6755415596079746205, i64 4611686018427388319, i64 7], [7 x ptr] [ptr @subtype_test, ptr @MapKeys_hashtbl, ptr @MapKeys_offset_tbl, ptr @_data_size_MapKeys, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [122 x ptr] [ptr @MapKeys_field_MapKeys_1, ptr @MapKeys_field_MapKeys_0, ptr @MapKeys_field_map, ptr @MapKeys_B_init_mapMapK._V, ptr @MapKeys_B_size_, ptr @MapKeys_B_is_empty_, ptr @MapKeys_B_iterator_, ptr @MapKeys_B_each_fFunctionT_to_Nothing, ptr @MapKeys_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapKeys_B_all_fFunctionT_to_Bool, ptr @MapKeys_B_any_fFunctionT_to_Bool, ptr @MapKeys_B_enumerate_, ptr @MapKeys_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MapKeys_B_filter_fFunctionT_to_Bool, ptr @MapKeys_B_chain_otherIterableT_chain_otherCollectionT, ptr @MapKeys_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @MapKeys_B_zip_otherCollectionU_zip_otherIterableU, ptr @MapKeys_B_product_otherCollectionU_product_otherIterableU, ptr @MapKeys_init_mapMapK._V, ptr @MapKeys_size_, ptr @Collection_is_empty_, ptr @MapKeys_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @MapKeys_field_MapKeys_0, ptr @MapKeys_B_size_, ptr @MapKeys_B_is_empty_, ptr @MapKeys_B_iterator_, ptr @MapKeys_B_each_fFunctionT_to_Nothing, ptr @MapKeys_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapKeys_B_all_fFunctionT_to_Bool, ptr @MapKeys_B_any_fFunctionT_to_Bool, ptr @MapKeys_B_enumerate_, ptr @MapKeys_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MapKeys_B_filter_fFunctionT_to_Bool, ptr @MapKeys_B_chain_otherIterableT_chain_otherCollectionT, ptr @MapKeys_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @MapKeys_B_zip_otherCollectionU_zip_otherIterableU, ptr @MapKeys_B_product_otherCollectionU_product_otherIterableU, ptr @MapKeys_size_, ptr @Collection_is_empty_, ptr @MapKeys_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @MapKeys_field_MapKeys_0, ptr @MapKeys_B_iterator_, ptr @MapKeys_B_each_fFunctionT_to_Nothing, ptr @MapKeys_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapKeys_B_all_fFunctionT_to_Bool, ptr @MapKeys_B_any_fFunctionT_to_Bool, ptr @MapKeys_B_enumerate_, ptr @MapKeys_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MapKeys_B_filter_fFunctionT_to_Bool, ptr @MapKeys_B_chain_otherIterableT_chain_otherCollectionT, ptr @MapKeys_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @MapKeys_B_zip_otherCollectionU_zip_otherIterableU, ptr @MapKeys_B_product_otherCollectionU_product_otherIterableU, ptr @MapKeys_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @MapKeys_field_MapKeys_0, ptr @MapKeys_B_iterator_, ptr @MapKeys_B_each_fFunctionT_to_Nothing, ptr @MapKeys_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapKeys_B_all_fFunctionT_to_Bool, ptr @MapKeys_B_any_fFunctionT_to_Bool, ptr @MapKeys_B_enumerate_, ptr @MapKeys_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MapKeys_B_filter_fFunctionT_to_Bool, ptr @MapKeys_B_chain_otherIterableT_chain_otherCollectionT, ptr @MapKeys_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @MapKeys_B_zip_otherCollectionU_zip_otherIterableU, ptr @MapKeys_B_product_otherCollectionU_product_otherIterableU, ptr @MapKeys_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
+@MapKeys = constant { [3 x i64], [7 x ptr], [122 x ptr] } { [3 x i64] [i64 -6755415596079746205, i64 4611686018427388319, i64 7], [7 x ptr] [ptr @subtype_test, ptr @MapKeys_hashtbl, ptr @MapKeys_offset_tbl, ptr @_data_size_MapKeys, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [122 x ptr] [ptr @MapKeys_field_MapKeys_1, ptr @MapKeys_field_MapKeys_0, ptr @MapKeys_field_map, ptr @MapKeys_B_init_mapMapK._V, ptr @MapKeys_B_size_, ptr @MapKeys_B_is_empty_, ptr @MapKeys_B_iterator_, ptr @MapKeys_B_each_fFunctionT_to_Nothing, ptr @MapKeys_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapKeys_B_all_fFunctionT_to_Bool, ptr @MapKeys_B_any_fFunctionT_to_Bool, ptr @MapKeys_B_enumerate_, ptr @MapKeys_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MapKeys_B_filter_fFunctionT_to_Bool, ptr @MapKeys_B_chain_otherCollectionT_chain_otherIterableT, ptr @MapKeys_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @MapKeys_B_zip_otherIterableU_zip_otherCollectionU, ptr @MapKeys_B_product_otherCollectionU_product_otherIterableU, ptr @MapKeys_init_mapMapK._V, ptr @MapKeys_size_, ptr @Collection_is_empty_, ptr @MapKeys_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @MapKeys_field_MapKeys_0, ptr @MapKeys_B_size_, ptr @MapKeys_B_is_empty_, ptr @MapKeys_B_iterator_, ptr @MapKeys_B_each_fFunctionT_to_Nothing, ptr @MapKeys_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapKeys_B_all_fFunctionT_to_Bool, ptr @MapKeys_B_any_fFunctionT_to_Bool, ptr @MapKeys_B_enumerate_, ptr @MapKeys_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MapKeys_B_filter_fFunctionT_to_Bool, ptr @MapKeys_B_chain_otherCollectionT_chain_otherIterableT, ptr @MapKeys_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @MapKeys_B_zip_otherIterableU_zip_otherCollectionU, ptr @MapKeys_B_product_otherCollectionU_product_otherIterableU, ptr @MapKeys_size_, ptr @Collection_is_empty_, ptr @MapKeys_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @MapKeys_field_MapKeys_0, ptr @MapKeys_B_iterator_, ptr @MapKeys_B_each_fFunctionT_to_Nothing, ptr @MapKeys_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapKeys_B_all_fFunctionT_to_Bool, ptr @MapKeys_B_any_fFunctionT_to_Bool, ptr @MapKeys_B_enumerate_, ptr @MapKeys_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MapKeys_B_filter_fFunctionT_to_Bool, ptr @MapKeys_B_chain_otherCollectionT_chain_otherIterableT, ptr @MapKeys_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @MapKeys_B_zip_otherIterableU_zip_otherCollectionU, ptr @MapKeys_B_product_otherCollectionU_product_otherIterableU, ptr @MapKeys_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @MapKeys_field_MapKeys_0, ptr @MapKeys_B_iterator_, ptr @MapKeys_B_each_fFunctionT_to_Nothing, ptr @MapKeys_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapKeys_B_all_fFunctionT_to_Bool, ptr @MapKeys_B_any_fFunctionT_to_Bool, ptr @MapKeys_B_enumerate_, ptr @MapKeys_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MapKeys_B_filter_fFunctionT_to_Bool, ptr @MapKeys_B_chain_otherCollectionT_chain_otherIterableT, ptr @MapKeys_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @MapKeys_B_zip_otherIterableU_zip_otherCollectionU, ptr @MapKeys_B_product_otherCollectionU_product_otherIterableU, ptr @MapKeys_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
 @MapValues_hashtbl = constant [8 x ptr] [ptr @any_typ, ptr @Iterable, ptr null, ptr @MapValues, ptr @Container, ptr null, ptr @Collection, ptr @Object]
 @MapValues_offset_tbl = constant [8 x i32] [i32 10, i32 107, i32 0, i32 10, i32 132, i32 0, i32 48, i32 132]
-@MapValues = constant { [3 x i64], [7 x ptr], [122 x ptr] } { [3 x i64] [i64 2074062704914054732, i64 4611686018427388247, i64 7], [7 x ptr] [ptr @subtype_test, ptr @MapValues_hashtbl, ptr @MapValues_offset_tbl, ptr @_data_size_MapValues, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [122 x ptr] [ptr @MapValues_field_MapValues_0, ptr @MapValues_field_MapValues_1, ptr @MapValues_field_map, ptr @MapValues_B_init_mapMapK._V, ptr @MapValues_B_size_, ptr @MapValues_B_is_empty_, ptr @MapValues_B_iterator_, ptr @MapValues_B_each_fFunctionT_to_Nothing, ptr @MapValues_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapValues_B_all_fFunctionT_to_Bool, ptr @MapValues_B_any_fFunctionT_to_Bool, ptr @MapValues_B_enumerate_, ptr @MapValues_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MapValues_B_filter_fFunctionT_to_Bool, ptr @MapValues_B_chain_otherIterableT_chain_otherCollectionT, ptr @MapValues_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @MapValues_B_zip_otherCollectionU_zip_otherIterableU, ptr @MapValues_B_product_otherCollectionU_product_otherIterableU, ptr @MapValues_init_mapMapK._V, ptr @MapValues_size_, ptr @Collection_is_empty_, ptr @MapValues_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @MapValues_field_MapValues_1, ptr @MapValues_B_size_, ptr @MapValues_B_is_empty_, ptr @MapValues_B_iterator_, ptr @MapValues_B_each_fFunctionT_to_Nothing, ptr @MapValues_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapValues_B_all_fFunctionT_to_Bool, ptr @MapValues_B_any_fFunctionT_to_Bool, ptr @MapValues_B_enumerate_, ptr @MapValues_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MapValues_B_filter_fFunctionT_to_Bool, ptr @MapValues_B_chain_otherIterableT_chain_otherCollectionT, ptr @MapValues_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @MapValues_B_zip_otherCollectionU_zip_otherIterableU, ptr @MapValues_B_product_otherCollectionU_product_otherIterableU, ptr @MapValues_size_, ptr @Collection_is_empty_, ptr @MapValues_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @MapValues_field_MapValues_1, ptr @MapValues_B_iterator_, ptr @MapValues_B_each_fFunctionT_to_Nothing, ptr @MapValues_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapValues_B_all_fFunctionT_to_Bool, ptr @MapValues_B_any_fFunctionT_to_Bool, ptr @MapValues_B_enumerate_, ptr @MapValues_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MapValues_B_filter_fFunctionT_to_Bool, ptr @MapValues_B_chain_otherIterableT_chain_otherCollectionT, ptr @MapValues_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @MapValues_B_zip_otherCollectionU_zip_otherIterableU, ptr @MapValues_B_product_otherCollectionU_product_otherIterableU, ptr @MapValues_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @MapValues_field_MapValues_1, ptr @MapValues_B_iterator_, ptr @MapValues_B_each_fFunctionT_to_Nothing, ptr @MapValues_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapValues_B_all_fFunctionT_to_Bool, ptr @MapValues_B_any_fFunctionT_to_Bool, ptr @MapValues_B_enumerate_, ptr @MapValues_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MapValues_B_filter_fFunctionT_to_Bool, ptr @MapValues_B_chain_otherIterableT_chain_otherCollectionT, ptr @MapValues_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @MapValues_B_zip_otherCollectionU_zip_otherIterableU, ptr @MapValues_B_product_otherCollectionU_product_otherIterableU, ptr @MapValues_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
+@MapValues = constant { [3 x i64], [7 x ptr], [122 x ptr] } { [3 x i64] [i64 2074062704914054732, i64 4611686018427388247, i64 7], [7 x ptr] [ptr @subtype_test, ptr @MapValues_hashtbl, ptr @MapValues_offset_tbl, ptr @_data_size_MapValues, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [122 x ptr] [ptr @MapValues_field_MapValues_0, ptr @MapValues_field_MapValues_1, ptr @MapValues_field_map, ptr @MapValues_B_init_mapMapK._V, ptr @MapValues_B_size_, ptr @MapValues_B_is_empty_, ptr @MapValues_B_iterator_, ptr @MapValues_B_each_fFunctionT_to_Nothing, ptr @MapValues_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapValues_B_all_fFunctionT_to_Bool, ptr @MapValues_B_any_fFunctionT_to_Bool, ptr @MapValues_B_enumerate_, ptr @MapValues_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MapValues_B_filter_fFunctionT_to_Bool, ptr @MapValues_B_chain_otherCollectionT_chain_otherIterableT, ptr @MapValues_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @MapValues_B_zip_otherIterableU_zip_otherCollectionU, ptr @MapValues_B_product_otherCollectionU_product_otherIterableU, ptr @MapValues_init_mapMapK._V, ptr @MapValues_size_, ptr @Collection_is_empty_, ptr @MapValues_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @MapValues_field_MapValues_1, ptr @MapValues_B_size_, ptr @MapValues_B_is_empty_, ptr @MapValues_B_iterator_, ptr @MapValues_B_each_fFunctionT_to_Nothing, ptr @MapValues_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapValues_B_all_fFunctionT_to_Bool, ptr @MapValues_B_any_fFunctionT_to_Bool, ptr @MapValues_B_enumerate_, ptr @MapValues_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MapValues_B_filter_fFunctionT_to_Bool, ptr @MapValues_B_chain_otherCollectionT_chain_otherIterableT, ptr @MapValues_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @MapValues_B_zip_otherIterableU_zip_otherCollectionU, ptr @MapValues_B_product_otherCollectionU_product_otherIterableU, ptr @MapValues_size_, ptr @Collection_is_empty_, ptr @MapValues_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @MapValues_field_MapValues_1, ptr @MapValues_B_iterator_, ptr @MapValues_B_each_fFunctionT_to_Nothing, ptr @MapValues_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapValues_B_all_fFunctionT_to_Bool, ptr @MapValues_B_any_fFunctionT_to_Bool, ptr @MapValues_B_enumerate_, ptr @MapValues_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MapValues_B_filter_fFunctionT_to_Bool, ptr @MapValues_B_chain_otherCollectionT_chain_otherIterableT, ptr @MapValues_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @MapValues_B_zip_otherIterableU_zip_otherCollectionU, ptr @MapValues_B_product_otherCollectionU_product_otherIterableU, ptr @MapValues_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @MapValues_field_MapValues_1, ptr @MapValues_B_iterator_, ptr @MapValues_B_each_fFunctionT_to_Nothing, ptr @MapValues_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @MapValues_B_all_fFunctionT_to_Bool, ptr @MapValues_B_any_fFunctionT_to_Bool, ptr @MapValues_B_enumerate_, ptr @MapValues_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @MapValues_B_filter_fFunctionT_to_Bool, ptr @MapValues_B_chain_otherCollectionT_chain_otherIterableT, ptr @MapValues_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @MapValues_B_zip_otherIterableU_zip_otherCollectionU, ptr @MapValues_B_product_otherCollectionU_product_otherIterableU, ptr @MapValues_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
 @MapKeyIterator_hashtbl = constant [8 x ptr] [ptr null, ptr @MapKeyIterator, ptr @Container, ptr @Iterator, ptr @Object, ptr null, ptr @any_typ, ptr null]
 @MapKeyIterator_offset_tbl = constant [8 x i32] [i32 0, i32 10, i32 20, i32 17, i32 20, i32 0, i32 10, i32 0]
 @MapKeyIterator = constant { [3 x i64], [7 x ptr], [10 x ptr] } { [3 x i64] [i64 7211362081012783701, i64 4611686018427388091, i64 7], [7 x ptr] [ptr @subtype_test, ptr @MapKeyIterator_hashtbl, ptr @MapKeyIterator_offset_tbl, ptr @_data_size_MapKeyIterator, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [10 x ptr] [ptr @MapKeyIterator_field_MapKeyIterator_1, ptr @MapKeyIterator_field_MapKeyIterator_0, ptr @MapKeyIterator_field_map_iterator, ptr @MapKeyIterator_B_init_map_iteratorIteratorPairK._V, ptr @MapKeyIterator_B_next_, ptr @MapKeyIterator_init_map_iteratorIteratorPairK._V, ptr @MapKeyIterator_next_, ptr @MapKeyIterator_field_MapKeyIterator_0, ptr @MapKeyIterator_B_next_, ptr @MapKeyIterator_next_] }
@@ -267,7 +267,7 @@ target triple = "aarch64-windows-msvc"
 @Entry = constant { [3 x i64], [7 x ptr], [15 x ptr] } { [3 x i64] [i64 4015701072841558310, i64 4611686018427388181, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Entry_hashtbl, ptr @Entry_offset_tbl, ptr @_data_size_Entry, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [15 x ptr] [ptr @Entry_field_Entry_0, ptr @Entry_field_Entry_1, ptr @Entry_field_primary_hash, ptr @Entry_field_key, ptr @Entry_field_value, ptr @Entry_B_init_keyK_valueV_primary_hashi32, ptr @Entry_B_key_, ptr @Entry_B_value_, ptr @Entry_B_primary_hash_, ptr @Entry_B_to_pair_, ptr @Entry_init_keyK_valueV_primary_hashi32, ptr @Entry_key_, ptr @Entry_value_, ptr @Entry_primary_hash_, ptr @Entry_to_pair_] }
 @CuckooMap_hashtbl = constant [16 x ptr] [ptr null, ptr @Container, ptr null, ptr null, ptr null, ptr @Object, ptr @any_typ, ptr @Collection, ptr null, ptr @Map, ptr @IndexableCollection, ptr @CuckooMap, ptr null, ptr @Indexable, ptr @Iterable, ptr @HashMap]
 @CuckooMap_offset_tbl = constant [16 x i32] [i32 0, i32 1154, i32 0, i32 0, i32 0, i32 1070, i32 10, i32 1070, i32 0, i32 652, i32 930, i32 10, i32 0, i32 1064, i32 1129, i32 94]
-@CuckooMap = constant { [3 x i64], [7 x ptr], [1144 x ptr] } { [3 x i64] [i64 3547150501766965522, i64 4611686018427388447, i64 15], [7 x ptr] [ptr @subtype_test, ptr @CuckooMap_hashtbl, ptr @CuckooMap_offset_tbl, ptr @_data_size_CuckooMap, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [1144 x ptr] [ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_field_table1, ptr @CuckooMap_field_table2, ptr @CuckooMap_field_table_len, ptr @CuckooMap_field_size, ptr @CuckooMap_field_hasher, ptr @CuckooMap_field_eq, ptr @CuckooMap_B__Self_max_displacements_, ptr @CuckooMap_B_hash1_keyK, ptr @CuckooMap_B_hash2_from_primary_primary_hashi32, ptr @CuckooMap_B_index1_primary_hashi32, ptr @CuckooMap_B_index2_primary_hashi32, ptr @CuckooMap_B_place_entry_or_get_failed_entry_to_insertEntryK._V, ptr @CuckooMap_B_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_per_tablei32, ptr @CuckooMap_B_resize_, ptr @CuckooMap_B_replace_in_table_keyK_valueV_h1i32_idxi32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_B_get_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_B_remove_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_B_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, ptr @CuckooMap_B_get_keyK, ptr @CuckooMap_B_insert_keyK_valueV, ptr @CuckooMap_B_remove_keyK, ptr @CuckooMap_B_keys_, ptr @CuckooMap_B_clear_, ptr @CuckooMap_B_indices_, ptr @CuckooMap_B_values_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap__Self_max_displacements_, ptr @CuckooMap_hash1_keyK, ptr @CuckooMap_hash2_from_primary_primary_hashi32, ptr @CuckooMap_index1_primary_hashi32, ptr @CuckooMap_index2_primary_hashi32, ptr @CuckooMap_place_entry_or_get_failed_entry_to_insertEntryK._V, ptr @CuckooMap_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_per_tablei32, ptr @CuckooMap_resize_, ptr @CuckooMap_replace_in_table_keyK_valueV_h1i32_idxi32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_get_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_remove_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, ptr @CuckooMap_get_keyK, ptr @CuckooMap_insert_keyK_valueV, ptr @CuckooMap_remove_keyK, ptr @Map_keys_, ptr @CuckooMap_clear_, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, ptr @CuckooMap_B_get_keyK, ptr @CuckooMap_B_insert_keyK_valueV, ptr @CuckooMap_B_remove_keyK, ptr @CuckooMap_B_keys_, ptr @CuckooMap_B_clear_, ptr @CuckooMap_B_indices_, ptr @CuckooMap_B_values_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, ptr @CuckooMap_get_keyK, ptr @CuckooMap_insert_keyK_valueV, ptr @CuckooMap_remove_keyK, ptr @Map_keys_, ptr @CuckooMap_clear_, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_get_keyK, ptr @CuckooMap_B_insert_keyK_valueV, ptr @CuckooMap_B_remove_keyK, ptr @CuckooMap_B_keys_, ptr @CuckooMap_B_clear_, ptr @CuckooMap_B_indices_, ptr @CuckooMap_B_values_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_get_keyK, ptr @CuckooMap_insert_keyK_valueV, ptr @CuckooMap_remove_keyK, ptr @Map_keys_, ptr @CuckooMap_clear_, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_indices_, ptr @CuckooMap_B_values_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_indices_, ptr @CuckooMap_B_values_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_get_keyK, ptr @CuckooMap_B_insert_keyK_valueV, ptr @CuckooMap_B_remove_keyK, ptr @CuckooMap_B_keys_, ptr @CuckooMap_B_clear_, ptr @CuckooMap_B_indices_, ptr @CuckooMap_B_values_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_get_keyK, ptr @CuckooMap_insert_keyK_valueV, ptr @CuckooMap_remove_keyK, ptr @Map_keys_, ptr @CuckooMap_clear_, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_indices_, ptr @CuckooMap_B_values_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_indices_, ptr @CuckooMap_B_values_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
+@CuckooMap = constant { [3 x i64], [7 x ptr], [1144 x ptr] } { [3 x i64] [i64 3547150501766965522, i64 4611686018427388447, i64 15], [7 x ptr] [ptr @subtype_test, ptr @CuckooMap_hashtbl, ptr @CuckooMap_offset_tbl, ptr @_data_size_CuckooMap, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [1144 x ptr] [ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_field_table1, ptr @CuckooMap_field_table2, ptr @CuckooMap_field_table_len, ptr @CuckooMap_field_size, ptr @CuckooMap_field_hasher, ptr @CuckooMap_field_eq, ptr @CuckooMap_B__Self_max_displacements_, ptr @CuckooMap_B_hash1_keyK, ptr @CuckooMap_B_hash2_from_primary_primary_hashi32, ptr @CuckooMap_B_index1_primary_hashi32, ptr @CuckooMap_B_index2_primary_hashi32, ptr @CuckooMap_B_place_entry_or_get_failed_entry_to_insertEntryK._V, ptr @CuckooMap_B_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_per_tablei32, ptr @CuckooMap_B_resize_, ptr @CuckooMap_B_replace_in_table_keyK_valueV_h1i32_idxi32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_B_get_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_B_remove_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_B_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, ptr @CuckooMap_B_get_keyK, ptr @CuckooMap_B_insert_keyK_valueV, ptr @CuckooMap_B_remove_keyK, ptr @CuckooMap_B_keys_, ptr @CuckooMap_B_clear_, ptr @CuckooMap_B_indices_, ptr @CuckooMap_B_values_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap__Self_max_displacements_, ptr @CuckooMap_hash1_keyK, ptr @CuckooMap_hash2_from_primary_primary_hashi32, ptr @CuckooMap_index1_primary_hashi32, ptr @CuckooMap_index2_primary_hashi32, ptr @CuckooMap_place_entry_or_get_failed_entry_to_insertEntryK._V, ptr @CuckooMap_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_per_tablei32, ptr @CuckooMap_resize_, ptr @CuckooMap_replace_in_table_keyK_valueV_h1i32_idxi32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_get_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_remove_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil, ptr @CuckooMap_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, ptr @CuckooMap_get_keyK, ptr @CuckooMap_insert_keyK_valueV, ptr @CuckooMap_remove_keyK, ptr @Map_keys_, ptr @CuckooMap_clear_, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, ptr @CuckooMap_B_get_keyK, ptr @CuckooMap_B_insert_keyK_valueV, ptr @CuckooMap_B_remove_keyK, ptr @CuckooMap_B_keys_, ptr @CuckooMap_B_clear_, ptr @CuckooMap_B_indices_, ptr @CuckooMap_B_values_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, ptr @CuckooMap_get_keyK, ptr @CuckooMap_insert_keyK_valueV, ptr @CuckooMap_remove_keyK, ptr @Map_keys_, ptr @CuckooMap_clear_, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_get_keyK, ptr @CuckooMap_B_insert_keyK_valueV, ptr @CuckooMap_B_remove_keyK, ptr @CuckooMap_B_keys_, ptr @CuckooMap_B_clear_, ptr @CuckooMap_B_indices_, ptr @CuckooMap_B_values_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_get_keyK, ptr @CuckooMap_insert_keyK_valueV, ptr @CuckooMap_remove_keyK, ptr @Map_keys_, ptr @CuckooMap_clear_, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_indices_, ptr @CuckooMap_B_values_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_indices_, ptr @CuckooMap_B_values_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_get_keyK, ptr @CuckooMap_B_insert_keyK_valueV, ptr @CuckooMap_B_remove_keyK, ptr @CuckooMap_B_keys_, ptr @CuckooMap_B_clear_, ptr @CuckooMap_B_indices_, ptr @CuckooMap_B_values_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_get_keyK, ptr @CuckooMap_insert_keyK_valueV, ptr @CuckooMap_remove_keyK, ptr @Map_keys_, ptr @CuckooMap_clear_, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_indices_, ptr @CuckooMap_B_values_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_indices_, ptr @CuckooMap_B_values_, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_0, ptr @CuckooMap_field_CuckooMap_1, ptr @CuckooMap_B__index_keyK, ptr @CuckooMap_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @CuckooMap__set_index_keyK_valueV, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_size_, ptr @CuckooMap_B_is_empty_, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_size_, ptr @Collection_is_empty_, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @CuckooMap_field_CuckooMap_8, ptr @CuckooMap_B_iterator_, ptr @CuckooMap_B_each_fFunctionT_to_Nothing, ptr @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @CuckooMap_B_all_fFunctionT_to_Bool, ptr @CuckooMap_B_any_fFunctionT_to_Bool, ptr @CuckooMap_B_enumerate_, ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @CuckooMap_B_filter_fFunctionT_to_Bool, ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, ptr @CuckooMap_B_product_otherCollectionU_product_otherIterableU, ptr @CuckooMap_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
 @CuckooMapIterator_hashtbl = constant [8 x ptr] [ptr @CuckooMapIterator, ptr null, ptr @Container, ptr @Iterator, ptr @Object, ptr null, ptr @any_typ, ptr null]
 @CuckooMapIterator_offset_tbl = constant [8 x i32] [i32 10, i32 0, i32 27, i32 24, i32 27, i32 0, i32 10, i32 0]
 @CuckooMapIterator = constant { [3 x i64], [7 x ptr], [17 x ptr] } { [3 x i64] [i64 -1975748647346050920, i64 4611686018427388091, i64 7], [7 x ptr] [ptr @subtype_test, ptr @CuckooMapIterator_hashtbl, ptr @CuckooMapIterator_offset_tbl, ptr @_data_size_CuckooMapIterator, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [17 x ptr] [ptr @CuckooMapIterator_field_CuckooMapIterator_0, ptr @CuckooMapIterator_field_CuckooMapIterator_1, ptr @CuckooMapIterator_field_CuckooMapIterator_2, ptr @CuckooMapIterator_field_map_table1, ptr @CuckooMapIterator_field_map_table2, ptr @CuckooMapIterator_field_table_len, ptr @CuckooMapIterator_field_index, ptr @CuckooMapIterator_field_on_second, ptr @CuckooMapIterator_B_init_map_table1BufferEntryK._V_or_Nil_map_table2BufferEntryK._V_or_Nil_table_leni32, ptr @CuckooMapIterator_B_next_from_table_tableBufferEntryK._V_or_Nil, ptr @CuckooMapIterator_B_next_, ptr @CuckooMapIterator_init_map_table1BufferEntryK._V_or_Nil_map_table2BufferEntryK._V_or_Nil_table_leni32, ptr @CuckooMapIterator_next_from_table_tableBufferEntryK._V_or_Nil, ptr @CuckooMapIterator_next_, ptr @CuckooMapIterator_field_CuckooMapIterator_2, ptr @CuckooMapIterator_B_next_, ptr @CuckooMapIterator_next_] }
@@ -293,7 +293,7 @@ target triple = "aarch64-windows-msvc"
 @Character = constant { [3 x i64], [7 x ptr], [11 x ptr] } { [3 x i64] [i64 6681222582356018452, i64 4611686018427388091, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Character_hashtbl, ptr @Character_offset_tbl, ptr @_data_size_Character, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [11 x ptr] [ptr @Character_field_codepoint, ptr @Character_B_codepoint_, ptr @Character_B_init_codepointi32, ptr @Character_B_to_string_, ptr @Character_B__EQ_otherCharacter, ptr @Character_B_n_bytes_, ptr @Character_codepoint_, ptr @Character_init_codepointi32, ptr @Character_to_string_, ptr @Character__EQ_otherCharacter, ptr @Character_n_bytes_] }
 @IO_hashtbl = constant [4 x ptr] [ptr @any_typ, ptr @IO, ptr null, ptr @Object]
 @IO_offset_tbl = constant [4 x i32] [i32 10, i32 10, i32 0, i32 20]
-@IO = constant { [3 x i64], [7 x ptr], [10 x ptr] } { [3 x i64] [i64 5359822646784595218, i64 4611686018427388247, i64 3], [7 x ptr] [ptr @subtype_test, ptr @IO_hashtbl, ptr @IO_offset_tbl, ptr @_data_size_IO, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [10 x ptr] [ptr @IO_B__Self_print_xNil__Self_print_xi32__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xi8__Self_print_xBool__Self_print_xi64__Self_print_xString__Self_print_xf64, ptr @IO__Self_print_xNil, ptr @IO__Self_print_xi32, ptr @IO__Self_print_xRepresentable, ptr @IO__Self_print_xCharacter, ptr @IO__Self_print_xi8, ptr @IO__Self_print_xBool, ptr @IO__Self_print_xi64, ptr @IO__Self_print_xString, ptr @IO__Self_print_xf64] }
+@IO = constant { [3 x i64], [7 x ptr], [10 x ptr] } { [3 x i64] [i64 5359822646784595218, i64 4611686018427388247, i64 3], [7 x ptr] [ptr @subtype_test, ptr @IO_hashtbl, ptr @IO_offset_tbl, ptr @_data_size_IO, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [10 x ptr] [ptr @IO_B__Self_print_xNil__Self_print_xi64__Self_print_xBool__Self_print_xi8__Self_print_xi32__Self_print_xCharacter__Self_print_xString__Self_print_xRepresentable__Self_print_xf64, ptr @IO__Self_print_xNil, ptr @IO__Self_print_xi64, ptr @IO__Self_print_xBool, ptr @IO__Self_print_xi8, ptr @IO__Self_print_xi32, ptr @IO__Self_print_xCharacter, ptr @IO__Self_print_xString, ptr @IO__Self_print_xRepresentable, ptr @IO__Self_print_xf64] }
 @Container = constant { [3 x i64], [7 x ptr], [0 x ptr] } { [3 x i64] [i64 9056556090793359372, i64 4611686018427388081, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Container_hashtbl, ptr @Container_offset_tbl, ptr @_data_size_Container, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [0 x ptr] undef }
 @Iterator = constant { [3 x i64], [7 x ptr], [0 x ptr] } { [3 x i64] [i64 8673632051301757104, i64 4611686018427388349, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Iterator_hashtbl, ptr @Iterator_offset_tbl, ptr @_data_size_Iterator, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [0 x ptr] undef }
 @Iterable = constant { [3 x i64], [7 x ptr], [0 x ptr] } { [3 x i64] [i64 3037712219555723519, i64 4611686018427388477, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Iterable_hashtbl, ptr @Iterable_offset_tbl, ptr @_data_size_Iterable, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [0 x ptr] undef }
@@ -302,12 +302,12 @@ target triple = "aarch64-windows-msvc"
 @List = constant { [3 x i64], [7 x ptr], [0 x ptr] } { [3 x i64] [i64 -83120161364696977, i64 4611686018427388081, i64 7], [7 x ptr] [ptr @subtype_test, ptr @List_hashtbl, ptr @List_offset_tbl, ptr @_data_size_List, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [0 x ptr] undef }
 @Indexable = constant { [3 x i64], [7 x ptr], [0 x ptr] } { [3 x i64] [i64 8246772220324864030, i64 4611686018427388091, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Indexable_hashtbl, ptr @Indexable_offset_tbl, ptr @_data_size_Indexable, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [0 x ptr] undef }
 @IndexableCollection = constant { [3 x i64], [7 x ptr], [0 x ptr] } { [3 x i64] [i64 -307435881317861917, i64 4611686018427389201, i64 7], [7 x ptr] [ptr @subtype_test, ptr @IndexableCollection_hashtbl, ptr @IndexableCollection_offset_tbl, ptr @_data_size_IndexableCollection, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [0 x ptr] undef }
-@Range = constant { [3 x i64], [7 x ptr], [127 x ptr] } { [3 x i64] [i64 5490049236840671069, i64 4611686018427389989, i64 15], [7 x ptr] [ptr @subtype_test, ptr @Range_hashtbl, ptr @Range_offset_tbl, ptr @_data_size_Range, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [127 x ptr] [ptr @Range_field_start, ptr @Range_field_end, ptr @Range_field_step, ptr @Range_field_Range_0, ptr @Range_B_init_endi32, ptr @Range_B_init_starti32_endi32, ptr @Range_B_step_stepi32, ptr @Range_B_size_, ptr @Range_B_is_empty_, ptr @Range_B_iterator_, ptr @Range_B_each_fFunctionT_to_Nothing, ptr @Range_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Range_B_all_fFunctionT_to_Bool, ptr @Range_B_any_fFunctionT_to_Bool, ptr @Range_B_enumerate_, ptr @Range_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Range_B_filter_fFunctionT_to_Bool, ptr @Range_B_chain_otherIterableT_chain_otherCollectionT, ptr @Range_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @Range_B_zip_otherCollectionU_zip_otherIterableU, ptr @Range_B_product_otherCollectionU_product_otherIterableU, ptr @Range_init_endi32, ptr @Range_init_starti32_endi32, ptr @Range_step_stepi32, ptr @Range_size_, ptr @Collection_is_empty_, ptr @Range_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @Range_field_Range_0, ptr @Range_B_size_, ptr @Range_B_is_empty_, ptr @Range_B_iterator_, ptr @Range_B_each_fFunctionT_to_Nothing, ptr @Range_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Range_B_all_fFunctionT_to_Bool, ptr @Range_B_any_fFunctionT_to_Bool, ptr @Range_B_enumerate_, ptr @Range_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Range_B_filter_fFunctionT_to_Bool, ptr @Range_B_chain_otherIterableT_chain_otherCollectionT, ptr @Range_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @Range_B_zip_otherCollectionU_zip_otherIterableU, ptr @Range_B_product_otherCollectionU_product_otherIterableU, ptr @Range_size_, ptr @Collection_is_empty_, ptr @Range_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @Range_field_Range_0, ptr @Range_B_iterator_, ptr @Range_B_each_fFunctionT_to_Nothing, ptr @Range_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Range_B_all_fFunctionT_to_Bool, ptr @Range_B_any_fFunctionT_to_Bool, ptr @Range_B_enumerate_, ptr @Range_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Range_B_filter_fFunctionT_to_Bool, ptr @Range_B_chain_otherIterableT_chain_otherCollectionT, ptr @Range_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @Range_B_zip_otherCollectionU_zip_otherIterableU, ptr @Range_B_product_otherCollectionU_product_otherIterableU, ptr @Range_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @Range_field_Range_0, ptr @Range_B_iterator_, ptr @Range_B_each_fFunctionT_to_Nothing, ptr @Range_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Range_B_all_fFunctionT_to_Bool, ptr @Range_B_any_fFunctionT_to_Bool, ptr @Range_B_enumerate_, ptr @Range_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Range_B_filter_fFunctionT_to_Bool, ptr @Range_B_chain_otherIterableT_chain_otherCollectionT, ptr @Range_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @Range_B_zip_otherCollectionU_zip_otherIterableU, ptr @Range_B_product_otherCollectionU_product_otherIterableU, ptr @Range_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
+@Range = constant { [3 x i64], [7 x ptr], [127 x ptr] } { [3 x i64] [i64 5490049236840671069, i64 4611686018427389989, i64 15], [7 x ptr] [ptr @subtype_test, ptr @Range_hashtbl, ptr @Range_offset_tbl, ptr @_data_size_Range, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [127 x ptr] [ptr @Range_field_start, ptr @Range_field_end, ptr @Range_field_step, ptr @Range_field_Range_0, ptr @Range_B_init_endi32, ptr @Range_B_init_starti32_endi32, ptr @Range_B_step_stepi32, ptr @Range_B_size_, ptr @Range_B_is_empty_, ptr @Range_B_iterator_, ptr @Range_B_each_fFunctionT_to_Nothing, ptr @Range_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Range_B_all_fFunctionT_to_Bool, ptr @Range_B_any_fFunctionT_to_Bool, ptr @Range_B_enumerate_, ptr @Range_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Range_B_filter_fFunctionT_to_Bool, ptr @Range_B_chain_otherCollectionT_chain_otherIterableT, ptr @Range_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @Range_B_zip_otherIterableU_zip_otherCollectionU, ptr @Range_B_product_otherCollectionU_product_otherIterableU, ptr @Range_init_endi32, ptr @Range_init_starti32_endi32, ptr @Range_step_stepi32, ptr @Range_size_, ptr @Collection_is_empty_, ptr @Range_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @Range_field_Range_0, ptr @Range_B_size_, ptr @Range_B_is_empty_, ptr @Range_B_iterator_, ptr @Range_B_each_fFunctionT_to_Nothing, ptr @Range_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Range_B_all_fFunctionT_to_Bool, ptr @Range_B_any_fFunctionT_to_Bool, ptr @Range_B_enumerate_, ptr @Range_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Range_B_filter_fFunctionT_to_Bool, ptr @Range_B_chain_otherCollectionT_chain_otherIterableT, ptr @Range_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @Range_B_zip_otherIterableU_zip_otherCollectionU, ptr @Range_B_product_otherCollectionU_product_otherIterableU, ptr @Range_size_, ptr @Collection_is_empty_, ptr @Range_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @Range_field_Range_0, ptr @Range_B_iterator_, ptr @Range_B_each_fFunctionT_to_Nothing, ptr @Range_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Range_B_all_fFunctionT_to_Bool, ptr @Range_B_any_fFunctionT_to_Bool, ptr @Range_B_enumerate_, ptr @Range_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Range_B_filter_fFunctionT_to_Bool, ptr @Range_B_chain_otherCollectionT_chain_otherIterableT, ptr @Range_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @Range_B_zip_otherIterableU_zip_otherCollectionU, ptr @Range_B_product_otherCollectionU_product_otherIterableU, ptr @Range_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @Range_field_Range_0, ptr @Range_B_iterator_, ptr @Range_B_each_fFunctionT_to_Nothing, ptr @Range_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Range_B_all_fFunctionT_to_Bool, ptr @Range_B_any_fFunctionT_to_Bool, ptr @Range_B_enumerate_, ptr @Range_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Range_B_filter_fFunctionT_to_Bool, ptr @Range_B_chain_otherCollectionT_chain_otherIterableT, ptr @Range_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @Range_B_zip_otherIterableU_zip_otherCollectionU, ptr @Range_B_product_otherCollectionU_product_otherIterableU, ptr @Range_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
 @Representable = constant { [3 x i64], [7 x ptr], [2 x ptr] } { [3 x i64] [i64 -7260840641129990118, i64 4611686018427388093, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Representable_hashtbl, ptr @Representable_offset_tbl, ptr @_data_size_Representable, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [2 x ptr] [ptr @Representable_B_repr_, ptr @Representable_repr_] }
 @OutOfBounds = constant { [3 x i64], [7 x ptr], [31 x ptr] } { [3 x i64] [i64 5348403617834207535, i64 4611686018427388247, i64 3], [7 x ptr] [ptr @subtype_test, ptr @OutOfBounds_hashtbl, ptr @OutOfBounds_offset_tbl, ptr @_data_size_OutOfBounds, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [31 x ptr] [ptr @OutOfBounds_field_details, ptr @OutOfBounds_field_line_number, ptr @OutOfBounds_field_file_name, ptr @OutOfBounds_field_message, ptr @OutOfBounds_field_stacktrace, ptr @OutOfBounds_B_init_boundsi32_indexi32, ptr @OutOfBounds_B_init_messageString, ptr @OutOfBounds_B_init_, ptr @OutOfBounds_B_set_info_line_numberi32_file_nameString, ptr @OutOfBounds_B_report_, ptr @OutOfBounds_B_print_message_, ptr @OutOfBounds_init_boundsi32_indexi32, ptr @Exception_init_messageString, ptr @Exception_init_, ptr @Exception_set_info_line_numberi32_file_nameString, ptr @Exception_report_, ptr @OutOfBounds_print_message_, ptr @OutOfBounds_field_line_number, ptr @OutOfBounds_field_file_name, ptr @OutOfBounds_field_message, ptr @OutOfBounds_field_stacktrace, ptr @OutOfBounds_B_init_messageString, ptr @OutOfBounds_B_init_, ptr @OutOfBounds_B_set_info_line_numberi32_file_nameString, ptr @OutOfBounds_B_report_, ptr @OutOfBounds_B_print_message_, ptr @Exception_init_messageString, ptr @Exception_init_, ptr @Exception_set_info_line_numberi32_file_nameString, ptr @Exception_report_, ptr @OutOfBounds_print_message_] }
 @Array_hashtbl = constant [32 x ptr] [ptr null, ptr @Representable, ptr @List, ptr null, ptr null, ptr @Container, ptr @Array, ptr null, ptr null, ptr @Iterable, ptr @Object, ptr null, ptr null, ptr null, ptr null, ptr null, ptr @IndexableCollection, ptr null, ptr @Collection, ptr @any_typ, ptr null, ptr null, ptr null, ptr null, ptr null, ptr null, ptr null, ptr @Indexable, ptr null, ptr null, ptr null, ptr null]
 @Array_offset_tbl = constant [32 x i32] [i32 0, i32 537, i32 93, i32 0, i32 0, i32 313, i32 10, i32 0, i32 0, i32 288, i32 313, i32 0, i32 0, i32 0, i32 0, i32 0, i32 313, i32 0, i32 229, i32 10, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 447, i32 0, i32 0, i32 0, i32 0]
-@Array = constant { [3 x i64], [7 x ptr], [529 x ptr] } { [3 x i64] [i64 -5261542750394134544, i64 4611686018427389773, i64 31], [7 x ptr] [ptr @subtype_test, ptr @Array_hashtbl, ptr @Array_offset_tbl, ptr @_data_size_Array, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [529 x ptr] [ptr @Array_field_Array_0, ptr @Array_field_buffer, ptr @Array_field_length, ptr @Array_field_capacity, ptr @Array_field_Array_2, ptr @Array_B_capacity_, ptr @Array_B_init_, ptr @Array_B_init_capacityi32, ptr @Array_B_init_bufferBufferT_lengthi32_capacityi32, ptr @Array_B_reserve_new_capacityi32, ptr @Array_B_bounds_check_indexi32, ptr @Array_B_unchecked_index_indexi32, ptr @Array_B_unchecked_insert_indexi32_valueT, ptr @Array_B__Self_empty_, ptr @Array_B__Self_from_iterable_iterableIterableT, ptr @Array_B_append_xT, ptr @Array_B_length_, ptr @Array_B_first_, ptr @Array_B_last_, ptr @Array_B_extend_otherIterableT_extend_otherCollectionT, ptr @Array_B_get_indexi32, ptr @Array_B_index_of_targetT_eqFunctionT._T_to_Bool, ptr @Array_B_indices_, ptr @Array_B_values_, ptr @Array_B__index_indexi32, ptr @Array_B__set_index_indexi32_valueT, ptr @Array_B_size_, ptr @Array_B_is_empty_, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherIterableT_chain_otherCollectionT, ptr @Array_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @Array_B_zip_otherCollectionU_zip_otherIterableU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_B_repr_, ptr @Array_capacity_, ptr @Array_init_, ptr @Array_init_capacityi32, ptr @Array_init_bufferBufferT_lengthi32_capacityi32, ptr @Array_reserve_new_capacityi32, ptr @Array_bounds_check_indexi32, ptr @Array_unchecked_index_indexi32, ptr @Array_unchecked_insert_indexi32_valueT, ptr @Array__Self_empty_, ptr @Array__Self_from_iterable_iterableIterableT, ptr @Array_append_xT, ptr @List_length_, ptr @List_first_, ptr @List_last_, ptr @List_extend_otherIterableT, ptr @Array_extend_otherCollectionT, ptr @List_get_indexi32, ptr @List_index_of_targetT_eqFunctionT._T_to_Bool, ptr @Array_indices_, ptr @Array_values_, ptr @Array__index_indexi32, ptr @Array__set_index_indexi32_valueT, ptr @Array_size_, ptr @Collection_is_empty_, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @Array_repr_, ptr @Array_field_Array_0, ptr @Array_B__Self_empty_, ptr @Array_B__Self_from_iterable_iterableIterableT, ptr @Array_B_append_xT, ptr @Array_B_length_, ptr @Array_B_first_, ptr @Array_B_last_, ptr @Array_B_extend_otherIterableT_extend_otherCollectionT, ptr @Array_B_get_indexi32, ptr @Array_B_index_of_targetT_eqFunctionT._T_to_Bool, ptr @Array_B_size_, ptr @Array_B_is_empty_, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherIterableT_chain_otherCollectionT, ptr @Array_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @Array_B_zip_otherCollectionU_zip_otherIterableU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array__Self_empty_, ptr @Array__Self_from_iterable_iterableIterableT, ptr @Array_append_xT, ptr @List_length_, ptr @List_first_, ptr @List_last_, ptr @List_extend_otherIterableT, ptr @List_get_indexi32, ptr @List_index_of_targetT_eqFunctionT._T_to_Bool, ptr @Array_size_, ptr @Collection_is_empty_, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_0, ptr @Array_B_size_, ptr @Array_B_is_empty_, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherIterableT_chain_otherCollectionT, ptr @Array_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @Array_B_zip_otherCollectionU_zip_otherIterableU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_size_, ptr @Collection_is_empty_, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherIterableT_chain_otherCollectionT, ptr @Array_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @Array_B_zip_otherCollectionU_zip_otherIterableU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherIterableT_chain_otherCollectionT, ptr @Array_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @Array_B_zip_otherCollectionU_zip_otherIterableU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_0, ptr @Array_B_size_, ptr @Array_B_is_empty_, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherIterableT_chain_otherCollectionT, ptr @Array_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @Array_B_zip_otherCollectionU_zip_otherIterableU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_size_, ptr @Collection_is_empty_, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherIterableT_chain_otherCollectionT, ptr @Array_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @Array_B_zip_otherCollectionU_zip_otherIterableU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherIterableT_chain_otherCollectionT, ptr @Array_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @Array_B_zip_otherCollectionU_zip_otherIterableU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_2, ptr @Array_field_Array_0, ptr @Array_field_Array_0, ptr @Array_B_indices_, ptr @Array_B_values_, ptr @Array_B__index_indexi32, ptr @Array_B__set_index_indexi32_valueT, ptr @Array_B_size_, ptr @Array_B_is_empty_, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherIterableT_chain_otherCollectionT, ptr @Array_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @Array_B_zip_otherCollectionU_zip_otherIterableU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_indices_, ptr @Array_values_, ptr @Array__index_indexi32, ptr @Array__set_index_indexi32_valueT, ptr @Array_size_, ptr @Collection_is_empty_, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_2, ptr @Array_field_Array_0, ptr @Array_B__index_indexi32, ptr @Array_B__set_index_indexi32_valueT, ptr @Array__index_indexi32, ptr @Array__set_index_indexi32_valueT, ptr @Array_field_Array_0, ptr @Array_B_size_, ptr @Array_B_is_empty_, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherIterableT_chain_otherCollectionT, ptr @Array_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @Array_B_zip_otherCollectionU_zip_otherIterableU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_size_, ptr @Collection_is_empty_, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherIterableT_chain_otherCollectionT, ptr @Array_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @Array_B_zip_otherCollectionU_zip_otherIterableU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherIterableT_chain_otherCollectionT, ptr @Array_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @Array_B_zip_otherCollectionU_zip_otherIterableU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_2, ptr @Array_field_Array_0, ptr @Array_B__index_indexi32, ptr @Array_B__set_index_indexi32_valueT, ptr @Array__index_indexi32, ptr @Array__set_index_indexi32_valueT, ptr @Array_field_Array_0, ptr @Array_B_size_, ptr @Array_B_is_empty_, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherIterableT_chain_otherCollectionT, ptr @Array_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @Array_B_zip_otherCollectionU_zip_otherIterableU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_size_, ptr @Collection_is_empty_, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherIterableT_chain_otherCollectionT, ptr @Array_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @Array_B_zip_otherCollectionU_zip_otherIterableU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherIterableT_chain_otherCollectionT, ptr @Array_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @Array_B_zip_otherCollectionU_zip_otherIterableU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @Array_B_repr_, ptr @Array_repr_] }
+@Array = constant { [3 x i64], [7 x ptr], [529 x ptr] } { [3 x i64] [i64 -5261542750394134544, i64 4611686018427389773, i64 31], [7 x ptr] [ptr @subtype_test, ptr @Array_hashtbl, ptr @Array_offset_tbl, ptr @_data_size_Array, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [529 x ptr] [ptr @Array_field_Array_0, ptr @Array_field_buffer, ptr @Array_field_length, ptr @Array_field_capacity, ptr @Array_field_Array_2, ptr @Array_B_capacity_, ptr @Array_B_init_, ptr @Array_B_init_capacityi32, ptr @Array_B_init_bufferBufferT_lengthi32_capacityi32, ptr @Array_B_reserve_new_capacityi32, ptr @Array_B_bounds_check_indexi32, ptr @Array_B_unchecked_index_indexi32, ptr @Array_B_unchecked_insert_indexi32_valueT, ptr @Array_B__Self_empty_, ptr @Array_B__Self_from_iterable_iterableIterableT, ptr @Array_B_append_xT, ptr @Array_B_length_, ptr @Array_B_first_, ptr @Array_B_last_, ptr @Array_B_extend_otherIterableT_extend_otherCollectionT, ptr @Array_B_get_indexi32, ptr @Array_B_index_of_targetT_eqFunctionT._T_to_Bool, ptr @Array_B_indices_, ptr @Array_B_values_, ptr @Array_B__index_indexi32, ptr @Array_B__set_index_indexi32_valueT, ptr @Array_B_size_, ptr @Array_B_is_empty_, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherCollectionT_chain_otherIterableT, ptr @Array_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @Array_B_zip_otherIterableU_zip_otherCollectionU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_B_repr_, ptr @Array_capacity_, ptr @Array_init_, ptr @Array_init_capacityi32, ptr @Array_init_bufferBufferT_lengthi32_capacityi32, ptr @Array_reserve_new_capacityi32, ptr @Array_bounds_check_indexi32, ptr @Array_unchecked_index_indexi32, ptr @Array_unchecked_insert_indexi32_valueT, ptr @Array__Self_empty_, ptr @Array__Self_from_iterable_iterableIterableT, ptr @Array_append_xT, ptr @List_length_, ptr @List_first_, ptr @List_last_, ptr @List_extend_otherIterableT, ptr @Array_extend_otherCollectionT, ptr @List_get_indexi32, ptr @List_index_of_targetT_eqFunctionT._T_to_Bool, ptr @Array_indices_, ptr @Array_values_, ptr @Array__index_indexi32, ptr @Array__set_index_indexi32_valueT, ptr @Array_size_, ptr @Collection_is_empty_, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @Array_repr_, ptr @Array_field_Array_0, ptr @Array_B__Self_empty_, ptr @Array_B__Self_from_iterable_iterableIterableT, ptr @Array_B_append_xT, ptr @Array_B_length_, ptr @Array_B_first_, ptr @Array_B_last_, ptr @Array_B_extend_otherIterableT_extend_otherCollectionT, ptr @Array_B_get_indexi32, ptr @Array_B_index_of_targetT_eqFunctionT._T_to_Bool, ptr @Array_B_size_, ptr @Array_B_is_empty_, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherCollectionT_chain_otherIterableT, ptr @Array_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @Array_B_zip_otherIterableU_zip_otherCollectionU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array__Self_empty_, ptr @Array__Self_from_iterable_iterableIterableT, ptr @Array_append_xT, ptr @List_length_, ptr @List_first_, ptr @List_last_, ptr @List_extend_otherIterableT, ptr @List_get_indexi32, ptr @List_index_of_targetT_eqFunctionT._T_to_Bool, ptr @Array_size_, ptr @Collection_is_empty_, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_0, ptr @Array_B_size_, ptr @Array_B_is_empty_, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherCollectionT_chain_otherIterableT, ptr @Array_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @Array_B_zip_otherIterableU_zip_otherCollectionU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_size_, ptr @Collection_is_empty_, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherCollectionT_chain_otherIterableT, ptr @Array_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @Array_B_zip_otherIterableU_zip_otherCollectionU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherCollectionT_chain_otherIterableT, ptr @Array_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @Array_B_zip_otherIterableU_zip_otherCollectionU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_0, ptr @Array_B_size_, ptr @Array_B_is_empty_, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherCollectionT_chain_otherIterableT, ptr @Array_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @Array_B_zip_otherIterableU_zip_otherCollectionU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_size_, ptr @Collection_is_empty_, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherCollectionT_chain_otherIterableT, ptr @Array_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @Array_B_zip_otherIterableU_zip_otherCollectionU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherCollectionT_chain_otherIterableT, ptr @Array_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @Array_B_zip_otherIterableU_zip_otherCollectionU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_2, ptr @Array_field_Array_0, ptr @Array_field_Array_0, ptr @Array_B_indices_, ptr @Array_B_values_, ptr @Array_B__index_indexi32, ptr @Array_B__set_index_indexi32_valueT, ptr @Array_B_size_, ptr @Array_B_is_empty_, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherCollectionT_chain_otherIterableT, ptr @Array_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @Array_B_zip_otherIterableU_zip_otherCollectionU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_indices_, ptr @Array_values_, ptr @Array__index_indexi32, ptr @Array__set_index_indexi32_valueT, ptr @Array_size_, ptr @Collection_is_empty_, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_2, ptr @Array_field_Array_0, ptr @Array_B__index_indexi32, ptr @Array_B__set_index_indexi32_valueT, ptr @Array__index_indexi32, ptr @Array__set_index_indexi32_valueT, ptr @Array_field_Array_0, ptr @Array_B_size_, ptr @Array_B_is_empty_, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherCollectionT_chain_otherIterableT, ptr @Array_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @Array_B_zip_otherIterableU_zip_otherCollectionU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_size_, ptr @Collection_is_empty_, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherCollectionT_chain_otherIterableT, ptr @Array_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @Array_B_zip_otherIterableU_zip_otherCollectionU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherCollectionT_chain_otherIterableT, ptr @Array_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @Array_B_zip_otherIterableU_zip_otherCollectionU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_2, ptr @Array_field_Array_0, ptr @Array_B__index_indexi32, ptr @Array_B__set_index_indexi32_valueT, ptr @Array__index_indexi32, ptr @Array__set_index_indexi32_valueT, ptr @Array_field_Array_0, ptr @Array_B_size_, ptr @Array_B_is_empty_, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherCollectionT_chain_otherIterableT, ptr @Array_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @Array_B_zip_otherIterableU_zip_otherCollectionU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_size_, ptr @Collection_is_empty_, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherCollectionT_chain_otherIterableT, ptr @Array_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @Array_B_zip_otherIterableU_zip_otherCollectionU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @Array_field_Array_0, ptr @Array_B_iterator_, ptr @Array_B_each_fFunctionT_to_Nothing, ptr @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Array_B_all_fFunctionT_to_Bool, ptr @Array_B_any_fFunctionT_to_Bool, ptr @Array_B_enumerate_, ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @Array_B_filter_fFunctionT_to_Bool, ptr @Array_B_chain_otherCollectionT_chain_otherIterableT, ptr @Array_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @Array_B_zip_otherIterableU_zip_otherCollectionU, ptr @Array_B_product_otherCollectionU_product_otherIterableU, ptr @Array_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @Array_B_repr_, ptr @Array_repr_] }
 @ArrayIterator_hashtbl = constant [8 x ptr] [ptr @Object, ptr @any_typ, ptr null, ptr @Container, ptr @ArrayIterator, ptr @Iterator, ptr @ConstantTimeIterator, ptr null]
 @ArrayIterator_offset_tbl = constant [8 x i32] [i32 26, i32 10, i32 0, i32 26, i32 10, i32 23, i32 17, i32 0]
 @ArrayIterator = constant { [3 x i64], [7 x ptr], [16 x ptr] } { [3 x i64] [i64 3447345754186651411, i64 4611686018427388081, i64 7], [7 x ptr] [ptr @subtype_test, ptr @ArrayIterator_hashtbl, ptr @ArrayIterator_offset_tbl, ptr @_data_size_ArrayIterator, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [16 x ptr] [ptr @ArrayIterator_field_ArrayIterator_0, ptr @ArrayIterator_field_array, ptr @ArrayIterator_field_index, ptr @ArrayIterator_B_init_arrayArrayT, ptr @ArrayIterator_B_next_, ptr @ArrayIterator_init_arrayArrayT, ptr @ArrayIterator_next_, ptr @ArrayIterator_field_ArrayIterator_0, ptr @ArrayIterator_B_next_, ptr @ArrayIterator_next_, ptr @ArrayIterator_field_ArrayIterator_0, ptr @ArrayIterator_B_next_, ptr @ArrayIterator_next_, ptr @ArrayIterator_field_ArrayIterator_0, ptr @ArrayIterator_B_next_, ptr @ArrayIterator_next_] }
@@ -328,7 +328,7 @@ target triple = "aarch64-windows-msvc"
 @function_typ = constant { [3 x i64], [7 x ptr], [0 x ptr] } { [3 x i64] [i64 7927147055246173914, i64 4611686018427388081, i64 3], [7 x ptr] [ptr @subtype_test, ptr @function_typ_hashtbl, ptr @function_typ_offset_tbl, ptr @_data_size_function_typ, ptr @_box_function_typ, ptr @_unbox_function_typ, ptr @_data_size_function_typ], [0 x ptr] undef }
 @buffer_typ = constant { [3 x i64], [7 x ptr], [0 x ptr] } { [3 x i64] [i64 -318192747195410237, i64 4611686018427388091, i64 3], [7 x ptr] [ptr @subtype_test, ptr @buffer_typ_hashtbl, ptr @buffer_typ_offset_tbl, ptr @_data_size_buffer_typ, ptr @_box_buffer_typ, ptr @_unbox_buffer_typ, ptr @_data_size_buffer_typ], [0 x ptr] undef }
 @Object = constant { [3 x i64], [7 x ptr], [0 x ptr] } { [3 x i64] [i64 3282773614056351330, i64 4611686018427388081, i64 1], [7 x ptr] [ptr @subtype_test, ptr @Object_hashtbl, ptr @Object_offset_tbl, ptr @_data_size_Object, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [0 x ptr] undef }
-@String = constant { [3 x i64], [7 x ptr], [314 x ptr] } { [3 x i64] [i64 6499063144389013426, i64 4611686018427390361, i64 15], [7 x ptr] [ptr @subtype_test, ptr @String_hashtbl, ptr @String_offset_tbl, ptr @_data_size_String, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [314 x ptr] [ptr @String_field_bytes, ptr @String_field_byte_length, ptr @String_field_char_length, ptr @String_field_capacity, ptr @String_field_String_0, ptr @String_B_byte_length_, ptr @String_B_capacity_, ptr @String_B__Self_from_bytes_source_bytesBufferi8_source_leni32, ptr @String_B__Self_from_bytes_lossy_source_bytesBufferi8_source_leni32, ptr @String_B__Self_from_c_string_c_stringBufferi8, ptr @String_B_init_, ptr @String_B_init_capacityi32, ptr @String_B_init_bytesBufferi8_byte_lengthi32_char_lengthi32_capacityi32, ptr @String_B_c_string_, ptr @String_B_append_char_from_bytes_source_bytesBufferi8_start_indexi32_n_bytesi32, ptr @String_B_reserve_new_capacityi32, ptr @String_B__EQ_otherString, ptr @String_B_decode_at_byte_indexi32, ptr @String_B_unchecked_index_xi32, ptr @String_B_unchecked_insert_xi32_valuei8, ptr @String_B_copy_, ptr @String_B__Self_empty_, ptr @String_B__Self_from_iterable_iterableIterableCharacter, ptr @String_B_append_charCharacter, ptr @String_B_length_, ptr @String_B_first_, ptr @String_B_last_, ptr @String_B_extend_otherIterableT_extend_otherCollectionCharacter_extend_otherString, ptr @String_B_get_indexi32, ptr @String_B_index_of_targetT_eqFunctionT._T_to_Bool, ptr @String_B_size_, ptr @String_B_is_empty_, ptr @String_B_iterator_, ptr @String_B_each_fFunctionT_to_Nothing, ptr @String_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @String_B_all_fFunctionT_to_Bool, ptr @String_B_any_fFunctionT_to_Bool, ptr @String_B_enumerate_, ptr @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @String_B_filter_fFunctionT_to_Bool, ptr @String_B_chain_otherIterableT_chain_otherCollectionT, ptr @String_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @String_B_zip_otherCollectionU_zip_otherIterableU, ptr @String_B_product_otherCollectionU_product_otherIterableU, ptr @String_B_repr_, ptr @String_byte_length_, ptr @String_capacity_, ptr @String__Self_from_bytes_source_bytesBufferi8_source_leni32, ptr @String__Self_from_bytes_lossy_source_bytesBufferi8_source_leni32, ptr @String__Self_from_c_string_c_stringBufferi8, ptr @String_init_, ptr @String_init_capacityi32, ptr @String_init_bytesBufferi8_byte_lengthi32_char_lengthi32_capacityi32, ptr @String_c_string_, ptr @String_append_char_from_bytes_source_bytesBufferi8_start_indexi32_n_bytesi32, ptr @String_reserve_new_capacityi32, ptr @String__EQ_otherString, ptr @String_decode_at_byte_indexi32, ptr @String_unchecked_index_xi32, ptr @String_unchecked_insert_xi32_valuei8, ptr @String_copy_, ptr @String__Self_empty_, ptr @String__Self_from_iterable_iterableIterableCharacter, ptr @String_append_charCharacter, ptr @List_length_, ptr @List_first_, ptr @List_last_, ptr @List_extend_otherIterableT, ptr @String_extend_otherCollectionCharacter, ptr @String_extend_otherString, ptr @List_get_indexi32, ptr @List_index_of_targetT_eqFunctionT._T_to_Bool, ptr @String_size_, ptr @Collection_is_empty_, ptr @String_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @String_repr_, ptr @String_field_String_0, ptr @String_B__Self_empty_, ptr @String_B__Self_from_iterable_iterableIterableCharacter, ptr @String_B_append_charCharacter, ptr @String_B_length_, ptr @String_B_first_, ptr @String_B_last_, ptr @String_B_extend_otherIterableT_extend_otherCollectionCharacter_extend_otherString, ptr @String_B_get_indexi32, ptr @String_B_index_of_targetT_eqFunctionT._T_to_Bool, ptr @String_B_size_, ptr @String_B_is_empty_, ptr @String_B_iterator_, ptr @String_B_each_fFunctionT_to_Nothing, ptr @String_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @String_B_all_fFunctionT_to_Bool, ptr @String_B_any_fFunctionT_to_Bool, ptr @String_B_enumerate_, ptr @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @String_B_filter_fFunctionT_to_Bool, ptr @String_B_chain_otherIterableT_chain_otherCollectionT, ptr @String_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @String_B_zip_otherCollectionU_zip_otherIterableU, ptr @String_B_product_otherCollectionU_product_otherIterableU, ptr @String__Self_empty_, ptr @String__Self_from_iterable_iterableIterableCharacter, ptr @String_append_charCharacter, ptr @List_length_, ptr @List_first_, ptr @List_last_, ptr @List_extend_otherIterableT, ptr @List_get_indexi32, ptr @List_index_of_targetT_eqFunctionT._T_to_Bool, ptr @String_size_, ptr @Collection_is_empty_, ptr @String_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @String_field_String_0, ptr @String_B_size_, ptr @String_B_is_empty_, ptr @String_B_iterator_, ptr @String_B_each_fFunctionT_to_Nothing, ptr @String_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @String_B_all_fFunctionT_to_Bool, ptr @String_B_any_fFunctionT_to_Bool, ptr @String_B_enumerate_, ptr @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @String_B_filter_fFunctionT_to_Bool, ptr @String_B_chain_otherIterableT_chain_otherCollectionT, ptr @String_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @String_B_zip_otherCollectionU_zip_otherIterableU, ptr @String_B_product_otherCollectionU_product_otherIterableU, ptr @String_size_, ptr @Collection_is_empty_, ptr @String_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @String_field_String_0, ptr @String_B_iterator_, ptr @String_B_each_fFunctionT_to_Nothing, ptr @String_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @String_B_all_fFunctionT_to_Bool, ptr @String_B_any_fFunctionT_to_Bool, ptr @String_B_enumerate_, ptr @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @String_B_filter_fFunctionT_to_Bool, ptr @String_B_chain_otherIterableT_chain_otherCollectionT, ptr @String_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @String_B_zip_otherCollectionU_zip_otherIterableU, ptr @String_B_product_otherCollectionU_product_otherIterableU, ptr @String_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @String_field_String_0, ptr @String_B_iterator_, ptr @String_B_each_fFunctionT_to_Nothing, ptr @String_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @String_B_all_fFunctionT_to_Bool, ptr @String_B_any_fFunctionT_to_Bool, ptr @String_B_enumerate_, ptr @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @String_B_filter_fFunctionT_to_Bool, ptr @String_B_chain_otherIterableT_chain_otherCollectionT, ptr @String_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @String_B_zip_otherCollectionU_zip_otherIterableU, ptr @String_B_product_otherCollectionU_product_otherIterableU, ptr @String_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @String_field_String_0, ptr @String_B_size_, ptr @String_B_is_empty_, ptr @String_B_iterator_, ptr @String_B_each_fFunctionT_to_Nothing, ptr @String_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @String_B_all_fFunctionT_to_Bool, ptr @String_B_any_fFunctionT_to_Bool, ptr @String_B_enumerate_, ptr @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @String_B_filter_fFunctionT_to_Bool, ptr @String_B_chain_otherIterableT_chain_otherCollectionT, ptr @String_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @String_B_zip_otherCollectionU_zip_otherIterableU, ptr @String_B_product_otherCollectionU_product_otherIterableU, ptr @String_size_, ptr @Collection_is_empty_, ptr @String_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @String_field_String_0, ptr @String_B_iterator_, ptr @String_B_each_fFunctionT_to_Nothing, ptr @String_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @String_B_all_fFunctionT_to_Bool, ptr @String_B_any_fFunctionT_to_Bool, ptr @String_B_enumerate_, ptr @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @String_B_filter_fFunctionT_to_Bool, ptr @String_B_chain_otherIterableT_chain_otherCollectionT, ptr @String_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @String_B_zip_otherCollectionU_zip_otherIterableU, ptr @String_B_product_otherCollectionU_product_otherIterableU, ptr @String_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @String_field_String_0, ptr @String_B_iterator_, ptr @String_B_each_fFunctionT_to_Nothing, ptr @String_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @String_B_all_fFunctionT_to_Bool, ptr @String_B_any_fFunctionT_to_Bool, ptr @String_B_enumerate_, ptr @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @String_B_filter_fFunctionT_to_Bool, ptr @String_B_chain_otherIterableT_chain_otherCollectionT, ptr @String_B_interleave_otherCollectionT_interleave_otherIterableT, ptr @String_B_zip_otherCollectionU_zip_otherIterableU, ptr @String_B_product_otherCollectionU_product_otherIterableU, ptr @String_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @String_B_repr_, ptr @String_repr_] }
+@String = constant { [3 x i64], [7 x ptr], [314 x ptr] } { [3 x i64] [i64 6499063144389013426, i64 4611686018427390361, i64 15], [7 x ptr] [ptr @subtype_test, ptr @String_hashtbl, ptr @String_offset_tbl, ptr @_data_size_String, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [314 x ptr] [ptr @String_field_bytes, ptr @String_field_byte_length, ptr @String_field_char_length, ptr @String_field_capacity, ptr @String_field_String_0, ptr @String_B_byte_length_, ptr @String_B_capacity_, ptr @String_B__Self_from_bytes_source_bytesBufferi8_source_leni32, ptr @String_B__Self_from_bytes_lossy_source_bytesBufferi8_source_leni32, ptr @String_B__Self_from_c_string_c_stringBufferi8, ptr @String_B_init_, ptr @String_B_init_capacityi32, ptr @String_B_init_bytesBufferi8_byte_lengthi32_char_lengthi32_capacityi32, ptr @String_B_c_string_, ptr @String_B_append_char_from_bytes_source_bytesBufferi8_start_indexi32_n_bytesi32, ptr @String_B_reserve_new_capacityi32, ptr @String_B__EQ_otherString, ptr @String_B_decode_at_byte_indexi32, ptr @String_B_unchecked_index_xi32, ptr @String_B_unchecked_insert_xi32_valuei8, ptr @String_B_copy_, ptr @String_B__Self_empty_, ptr @String_B__Self_from_iterable_iterableIterableCharacter, ptr @String_B_append_charCharacter, ptr @String_B_length_, ptr @String_B_first_, ptr @String_B_last_, ptr @String_B_extend_otherIterableT_extend_otherCollectionCharacter_extend_otherString, ptr @String_B_get_indexi32, ptr @String_B_index_of_targetT_eqFunctionT._T_to_Bool, ptr @String_B_size_, ptr @String_B_is_empty_, ptr @String_B_iterator_, ptr @String_B_each_fFunctionT_to_Nothing, ptr @String_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @String_B_all_fFunctionT_to_Bool, ptr @String_B_any_fFunctionT_to_Bool, ptr @String_B_enumerate_, ptr @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @String_B_filter_fFunctionT_to_Bool, ptr @String_B_chain_otherCollectionT_chain_otherIterableT, ptr @String_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @String_B_zip_otherIterableU_zip_otherCollectionU, ptr @String_B_product_otherCollectionU_product_otherIterableU, ptr @String_B_repr_, ptr @String_byte_length_, ptr @String_capacity_, ptr @String__Self_from_bytes_source_bytesBufferi8_source_leni32, ptr @String__Self_from_bytes_lossy_source_bytesBufferi8_source_leni32, ptr @String__Self_from_c_string_c_stringBufferi8, ptr @String_init_, ptr @String_init_capacityi32, ptr @String_init_bytesBufferi8_byte_lengthi32_char_lengthi32_capacityi32, ptr @String_c_string_, ptr @String_append_char_from_bytes_source_bytesBufferi8_start_indexi32_n_bytesi32, ptr @String_reserve_new_capacityi32, ptr @String__EQ_otherString, ptr @String_decode_at_byte_indexi32, ptr @String_unchecked_index_xi32, ptr @String_unchecked_insert_xi32_valuei8, ptr @String_copy_, ptr @String__Self_empty_, ptr @String__Self_from_iterable_iterableIterableCharacter, ptr @String_append_charCharacter, ptr @List_length_, ptr @List_first_, ptr @List_last_, ptr @List_extend_otherIterableT, ptr @String_extend_otherCollectionCharacter, ptr @String_extend_otherString, ptr @List_get_indexi32, ptr @List_index_of_targetT_eqFunctionT._T_to_Bool, ptr @String_size_, ptr @Collection_is_empty_, ptr @String_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @String_repr_, ptr @String_field_String_0, ptr @String_B__Self_empty_, ptr @String_B__Self_from_iterable_iterableIterableCharacter, ptr @String_B_append_charCharacter, ptr @String_B_length_, ptr @String_B_first_, ptr @String_B_last_, ptr @String_B_extend_otherIterableT_extend_otherCollectionCharacter_extend_otherString, ptr @String_B_get_indexi32, ptr @String_B_index_of_targetT_eqFunctionT._T_to_Bool, ptr @String_B_size_, ptr @String_B_is_empty_, ptr @String_B_iterator_, ptr @String_B_each_fFunctionT_to_Nothing, ptr @String_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @String_B_all_fFunctionT_to_Bool, ptr @String_B_any_fFunctionT_to_Bool, ptr @String_B_enumerate_, ptr @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @String_B_filter_fFunctionT_to_Bool, ptr @String_B_chain_otherCollectionT_chain_otherIterableT, ptr @String_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @String_B_zip_otherIterableU_zip_otherCollectionU, ptr @String_B_product_otherCollectionU_product_otherIterableU, ptr @String__Self_empty_, ptr @String__Self_from_iterable_iterableIterableCharacter, ptr @String_append_charCharacter, ptr @List_length_, ptr @List_first_, ptr @List_last_, ptr @List_extend_otherIterableT, ptr @List_get_indexi32, ptr @List_index_of_targetT_eqFunctionT._T_to_Bool, ptr @String_size_, ptr @Collection_is_empty_, ptr @String_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @String_field_String_0, ptr @String_B_size_, ptr @String_B_is_empty_, ptr @String_B_iterator_, ptr @String_B_each_fFunctionT_to_Nothing, ptr @String_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @String_B_all_fFunctionT_to_Bool, ptr @String_B_any_fFunctionT_to_Bool, ptr @String_B_enumerate_, ptr @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @String_B_filter_fFunctionT_to_Bool, ptr @String_B_chain_otherCollectionT_chain_otherIterableT, ptr @String_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @String_B_zip_otherIterableU_zip_otherCollectionU, ptr @String_B_product_otherCollectionU_product_otherIterableU, ptr @String_size_, ptr @Collection_is_empty_, ptr @String_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @String_field_String_0, ptr @String_B_iterator_, ptr @String_B_each_fFunctionT_to_Nothing, ptr @String_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @String_B_all_fFunctionT_to_Bool, ptr @String_B_any_fFunctionT_to_Bool, ptr @String_B_enumerate_, ptr @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @String_B_filter_fFunctionT_to_Bool, ptr @String_B_chain_otherCollectionT_chain_otherIterableT, ptr @String_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @String_B_zip_otherIterableU_zip_otherCollectionU, ptr @String_B_product_otherCollectionU_product_otherIterableU, ptr @String_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @String_field_String_0, ptr @String_B_iterator_, ptr @String_B_each_fFunctionT_to_Nothing, ptr @String_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @String_B_all_fFunctionT_to_Bool, ptr @String_B_any_fFunctionT_to_Bool, ptr @String_B_enumerate_, ptr @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @String_B_filter_fFunctionT_to_Bool, ptr @String_B_chain_otherCollectionT_chain_otherIterableT, ptr @String_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @String_B_zip_otherIterableU_zip_otherCollectionU, ptr @String_B_product_otherCollectionU_product_otherIterableU, ptr @String_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @String_field_String_0, ptr @String_B_size_, ptr @String_B_is_empty_, ptr @String_B_iterator_, ptr @String_B_each_fFunctionT_to_Nothing, ptr @String_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @String_B_all_fFunctionT_to_Bool, ptr @String_B_any_fFunctionT_to_Bool, ptr @String_B_enumerate_, ptr @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @String_B_filter_fFunctionT_to_Bool, ptr @String_B_chain_otherCollectionT_chain_otherIterableT, ptr @String_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @String_B_zip_otherIterableU_zip_otherCollectionU, ptr @String_B_product_otherCollectionU_product_otherIterableU, ptr @String_size_, ptr @Collection_is_empty_, ptr @String_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @String_field_String_0, ptr @String_B_iterator_, ptr @String_B_each_fFunctionT_to_Nothing, ptr @String_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @String_B_all_fFunctionT_to_Bool, ptr @String_B_any_fFunctionT_to_Bool, ptr @String_B_enumerate_, ptr @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @String_B_filter_fFunctionT_to_Bool, ptr @String_B_chain_otherCollectionT_chain_otherIterableT, ptr @String_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @String_B_zip_otherIterableU_zip_otherCollectionU, ptr @String_B_product_otherCollectionU_product_otherIterableU, ptr @String_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @String_field_String_0, ptr @String_B_iterator_, ptr @String_B_each_fFunctionT_to_Nothing, ptr @String_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @String_B_all_fFunctionT_to_Bool, ptr @String_B_any_fFunctionT_to_Bool, ptr @String_B_enumerate_, ptr @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @String_B_filter_fFunctionT_to_Bool, ptr @String_B_chain_otherCollectionT_chain_otherIterableT, ptr @String_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @String_B_zip_otherIterableU_zip_otherCollectionU, ptr @String_B_product_otherCollectionU_product_otherIterableU, ptr @String_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @String_B_repr_, ptr @String_repr_] }
 @Exception = constant { [3 x i64], [7 x ptr], [14 x ptr] } { [3 x i64] [i64 9027164862567808692, i64 4611686018427388091, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Exception_hashtbl, ptr @Exception_offset_tbl, ptr @_data_size_Exception, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [14 x ptr] [ptr @Exception_field_line_number, ptr @Exception_field_file_name, ptr @Exception_field_message, ptr @Exception_field_stacktrace, ptr @Exception_B_init_messageString, ptr @Exception_B_init_, ptr @Exception_B_set_info_line_numberi32_file_nameString, ptr @Exception_B_report_, ptr @Exception_B_print_message_, ptr @Exception_init_messageString, ptr @Exception_init_, ptr @Exception_set_info_line_numberi32_file_nameString, ptr @Exception_report_, ptr @Exception_print_message_] }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind speculatable willreturn memory(argmem: read)
@@ -922,7 +922,7 @@ declare ptr @RtlLookupFunctionEntry(i64, ptr, ptr)
 
 declare ptr @RtlVirtualUnwind(i32, i64, i64, ptr, ptr, ptr, ptr, ptr)
 
-define i1 @zoeqkrwugn(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #3 {
+define i1 @uwebukycqf(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #3 {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -931,14 +931,14 @@ define i1 @zoeqkrwugn(ptr nest nocapture nofree noundef nonnull readonly %0, { p
   ret i1 %4
 }
 
-define i32 @tdfasjexas(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #3 {
+define i32 @pzcbyjowbr(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #3 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @wryurxzenj(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #3 {
+define i1 @zzixvstaag(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #3 {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -947,14 +947,14 @@ define i1 @wryurxzenj(ptr nest nocapture nofree noundef nonnull readonly %0, { p
   ret i1 %4
 }
 
-define i32 @xfctfcdhgs(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #3 {
+define i32 @fybyqtbjjb(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #3 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @hyaxmlzbks(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #3 {
+define i1 @ztgbskdwod(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #3 {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -963,14 +963,14 @@ define i1 @hyaxmlzbks(ptr nest nocapture nofree noundef nonnull readonly %0, { p
   ret i1 %4
 }
 
-define i32 @cuugdpgnny(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #3 {
+define i32 @pndvblrjtk(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #3 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @ufjhiswmua(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #3 {
+define i1 @bycpulutzd(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #3 {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -979,14 +979,14 @@ define i1 @ufjhiswmua(ptr nest nocapture nofree noundef nonnull readonly %0, { p
   ret i1 %4
 }
 
-define i32 @mdpnoafjfh(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #3 {
+define i32 @jcrmnapgzw(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #3 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @oxrtkwaxjb(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #3 {
+define i1 @plgiarseev(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #3 {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -995,14 +995,14 @@ define i1 @oxrtkwaxjb(ptr nest nocapture nofree noundef nonnull readonly %0, { p
   ret i1 %4
 }
 
-define i32 @pdosxztqjt(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #3 {
+define i32 @lpsmhfrggl(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #3 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @qarfwzkrsv(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #3 {
+define i1 @mssyqbheov(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #3 {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -1011,14 +1011,14 @@ define i1 @qarfwzkrsv(ptr nest nocapture nofree noundef nonnull readonly %0, { p
   ret i1 %4
 }
 
-define i32 @ooeaxdzlkj(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #3 {
+define i32 @yztivhtcwu(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #3 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @ylighrwwhd(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #3 {
+define i1 @tinqrfeqlt(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #3 {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -1027,14 +1027,14 @@ define i1 @ylighrwwhd(ptr nest nocapture nofree noundef nonnull readonly %0, { p
   ret i1 %4
 }
 
-define i32 @xehcsxgghh(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #3 {
+define i32 @omzlmxcvml(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #3 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @gbsaiaroxn(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #3 {
+define i1 @kzieoozhdm(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #3 {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -1043,14 +1043,14 @@ define i1 @gbsaiaroxn(ptr nest nocapture nofree noundef nonnull readonly %0, { p
   ret i1 %4
 }
 
-define i32 @guwgpxjitl(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #3 {
+define i32 @ookmndyonn(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #3 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @estoarvlyn(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #3 {
+define i1 @lfirhvwibv(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #3 {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -1059,14 +1059,14 @@ define i1 @estoarvlyn(ptr nest nocapture nofree noundef nonnull readonly %0, { p
   ret i1 %4
 }
 
-define i32 @kjfeexdjxl(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #3 {
+define i32 @lzmyyfnkqe(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #3 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = call i32 %0(i32 %.sroa.1.8.extract.trunc)
   ret i32 %3
 }
 
-define i1 @jspfeujlja(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #3 {
+define i1 @befbyhhyls(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1, { ptr, i160 } %2) #3 {
   %.fca.1.extract3 = extractvalue { ptr, i160 } %1, 1
   %.sroa.15.8.extract.trunc = trunc i160 %.fca.1.extract3 to i32
   %.fca.1.extract = extractvalue { ptr, i160 } %2, 1
@@ -1075,7 +1075,7 @@ define i1 @jspfeujlja(ptr nest nocapture nofree noundef nonnull readonly %0, { p
   ret i1 %4
 }
 
-define i32 @ovvmwieice(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #3 {
+define i32 @xkddmtvgfv(ptr nest nocapture nofree noundef nonnull readonly %0, { ptr, i160 } %1) #3 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
   %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
   %3 = call i32 %0(i32 %.sroa.1.8.extract.trunc)
@@ -1411,13 +1411,13 @@ define void @benchmark_insert_sequential(i32 %0) local_unnamed_addr #3 {
   %35 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %32)
   %36 = call ptr @bump_malloc(i64 noundef 24)
   call void @anoint_trampoline(ptr %36)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %36, ptr noalias nofree noundef nonnull readnone @ovvmwieice, ptr noalias nofree noundef nonnull readnone @i32_hasher)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %36, ptr noalias nofree noundef nonnull readnone @xkddmtvgfv, ptr noalias nofree noundef nonnull readnone @i32_hasher)
   %37 = call ptr @adjust_trampoline(ptr %36)
   %38 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %36)
   %39 = insertvalue { ptr } undef, ptr %37, 0
   %40 = call ptr @bump_malloc(i64 noundef 24)
   call void @anoint_trampoline(ptr %40)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %40, ptr noalias nofree noundef nonnull readnone @jspfeujlja, ptr noalias nofree noundef nonnull readnone @i32_eq)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %40, ptr noalias nofree noundef nonnull readnone @befbyhhyls, ptr noalias nofree noundef nonnull readnone @i32_eq)
   %41 = call ptr @adjust_trampoline(ptr %40)
   %42 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %40)
   %43 = insertvalue { ptr } undef, ptr %41, 0
@@ -1742,13 +1742,13 @@ define void @benchmark_insert_random(i32 %0) local_unnamed_addr #3 {
   %53 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %50)
   %54 = call ptr @bump_malloc(i64 noundef 24)
   call void @anoint_trampoline(ptr %54)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %54, ptr noalias nofree noundef nonnull readnone @kjfeexdjxl, ptr noalias nofree noundef nonnull readnone @i32_hasher)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %54, ptr noalias nofree noundef nonnull readnone @lzmyyfnkqe, ptr noalias nofree noundef nonnull readnone @i32_hasher)
   %55 = call ptr @adjust_trampoline(ptr %54)
   %56 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %54)
   %57 = insertvalue { ptr } undef, ptr %55, 0
   %58 = call ptr @bump_malloc(i64 noundef 24)
   call void @anoint_trampoline(ptr %58)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %58, ptr noalias nofree noundef nonnull readnone @estoarvlyn, ptr noalias nofree noundef nonnull readnone @i32_eq)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %58, ptr noalias nofree noundef nonnull readnone @lfirhvwibv, ptr noalias nofree noundef nonnull readnone @i32_eq)
   %59 = call ptr @adjust_trampoline(ptr %58)
   %60 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %58)
   %61 = insertvalue { ptr } undef, ptr %59, 0
@@ -1825,13 +1825,13 @@ define void @benchmark_insert_random(i32 %0) local_unnamed_addr #3 {
   %110 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %107)
   %111 = call ptr @bump_malloc(i64 noundef 24)
   call void @anoint_trampoline(ptr %111)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %111, ptr noalias nofree noundef nonnull readnone @guwgpxjitl, ptr noalias nofree noundef nonnull readnone @i32_hasher)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %111, ptr noalias nofree noundef nonnull readnone @ookmndyonn, ptr noalias nofree noundef nonnull readnone @i32_hasher)
   %112 = call ptr @adjust_trampoline(ptr %111)
   %113 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %111)
   %114 = insertvalue { ptr } undef, ptr %112, 0
   %115 = call ptr @bump_malloc(i64 noundef 24)
   call void @anoint_trampoline(ptr %115)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %115, ptr noalias nofree noundef nonnull readnone @gbsaiaroxn, ptr noalias nofree noundef nonnull readnone @i32_eq)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %115, ptr noalias nofree noundef nonnull readnone @kzieoozhdm, ptr noalias nofree noundef nonnull readnone @i32_eq)
   %116 = call ptr @adjust_trampoline(ptr %115)
   %117 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %115)
   %118 = insertvalue { ptr } undef, ptr %116, 0
@@ -2287,13 +2287,13 @@ define void @benchmark_get_sequential_hit(i32 %0) local_unnamed_addr #3 {
   %41 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %38)
   %42 = call ptr @bump_malloc(i64 noundef 24)
   call void @anoint_trampoline(ptr %42)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %42, ptr noalias nofree noundef nonnull readnone @xehcsxgghh, ptr noalias nofree noundef nonnull readnone @i32_hasher)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %42, ptr noalias nofree noundef nonnull readnone @omzlmxcvml, ptr noalias nofree noundef nonnull readnone @i32_hasher)
   %43 = call ptr @adjust_trampoline(ptr %42)
   %44 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %42)
   %45 = insertvalue { ptr } undef, ptr %43, 0
   %46 = call ptr @bump_malloc(i64 noundef 24)
   call void @anoint_trampoline(ptr %46)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %46, ptr noalias nofree noundef nonnull readnone @ylighrwwhd, ptr noalias nofree noundef nonnull readnone @i32_eq)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %46, ptr noalias nofree noundef nonnull readnone @tinqrfeqlt, ptr noalias nofree noundef nonnull readnone @i32_eq)
   %47 = call ptr @adjust_trampoline(ptr %46)
   %48 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %46)
   %49 = insertvalue { ptr } undef, ptr %47, 0
@@ -2672,13 +2672,13 @@ define void @benchmark_get_random_hit(i32 %0) local_unnamed_addr #3 {
   %62 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %59)
   %63 = call ptr @bump_malloc(i64 noundef 24)
   call void @anoint_trampoline(ptr %63)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %63, ptr noalias nofree noundef nonnull readnone @ooeaxdzlkj, ptr noalias nofree noundef nonnull readnone @i32_hasher)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %63, ptr noalias nofree noundef nonnull readnone @yztivhtcwu, ptr noalias nofree noundef nonnull readnone @i32_hasher)
   %64 = call ptr @adjust_trampoline(ptr %63)
   %65 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %63)
   %66 = insertvalue { ptr } undef, ptr %64, 0
   %67 = call ptr @bump_malloc(i64 noundef 24)
   call void @anoint_trampoline(ptr %67)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %67, ptr noalias nofree noundef nonnull readnone @qarfwzkrsv, ptr noalias nofree noundef nonnull readnone @i32_eq)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %67, ptr noalias nofree noundef nonnull readnone @mssyqbheov, ptr noalias nofree noundef nonnull readnone @i32_eq)
   %68 = call ptr @adjust_trampoline(ptr %67)
   %69 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %67)
   %70 = insertvalue { ptr } undef, ptr %68, 0
@@ -2755,13 +2755,13 @@ define void @benchmark_get_random_hit(i32 %0) local_unnamed_addr #3 {
   %119 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %116)
   %120 = call ptr @bump_malloc(i64 noundef 24)
   call void @anoint_trampoline(ptr %120)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %120, ptr noalias nofree noundef nonnull readnone @pdosxztqjt, ptr noalias nofree noundef nonnull readnone @i32_hasher)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %120, ptr noalias nofree noundef nonnull readnone @lpsmhfrggl, ptr noalias nofree noundef nonnull readnone @i32_hasher)
   %121 = call ptr @adjust_trampoline(ptr %120)
   %122 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %120)
   %123 = insertvalue { ptr } undef, ptr %121, 0
   %124 = call ptr @bump_malloc(i64 noundef 24)
   call void @anoint_trampoline(ptr %124)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %124, ptr noalias nofree noundef nonnull readnone @oxrtkwaxjb, ptr noalias nofree noundef nonnull readnone @i32_eq)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %124, ptr noalias nofree noundef nonnull readnone @plgiarseev, ptr noalias nofree noundef nonnull readnone @i32_eq)
   %125 = call ptr @adjust_trampoline(ptr %124)
   %126 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %124)
   %127 = insertvalue { ptr } undef, ptr %125, 0
@@ -3314,13 +3314,13 @@ define void @benchmark_get_random_miss(i32 %0) local_unnamed_addr #3 {
   %79 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %76)
   %80 = call ptr @bump_malloc(i64 noundef 24)
   call void @anoint_trampoline(ptr %80)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %80, ptr noalias nofree noundef nonnull readnone @mdpnoafjfh, ptr noalias nofree noundef nonnull readnone @i32_hasher)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %80, ptr noalias nofree noundef nonnull readnone @jcrmnapgzw, ptr noalias nofree noundef nonnull readnone @i32_hasher)
   %81 = call ptr @adjust_trampoline(ptr %80)
   %82 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %80)
   %83 = insertvalue { ptr } undef, ptr %81, 0
   %84 = call ptr @bump_malloc(i64 noundef 24)
   call void @anoint_trampoline(ptr %84)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %84, ptr noalias nofree noundef nonnull readnone @ufjhiswmua, ptr noalias nofree noundef nonnull readnone @i32_eq)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %84, ptr noalias nofree noundef nonnull readnone @bycpulutzd, ptr noalias nofree noundef nonnull readnone @i32_eq)
   %85 = call ptr @adjust_trampoline(ptr %84)
   %86 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %84)
   %87 = insertvalue { ptr } undef, ptr %85, 0
@@ -3391,13 +3391,13 @@ define void @benchmark_get_random_miss(i32 %0) local_unnamed_addr #3 {
   %132 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %129)
   %133 = call ptr @bump_malloc(i64 noundef 24)
   call void @anoint_trampoline(ptr %133)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %133, ptr noalias nofree noundef nonnull readnone @cuugdpgnny, ptr noalias nofree noundef nonnull readnone @i32_hasher)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %133, ptr noalias nofree noundef nonnull readnone @pndvblrjtk, ptr noalias nofree noundef nonnull readnone @i32_hasher)
   %134 = call ptr @adjust_trampoline(ptr %133)
   %135 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %133)
   %136 = insertvalue { ptr } undef, ptr %134, 0
   %137 = call ptr @bump_malloc(i64 noundef 24)
   call void @anoint_trampoline(ptr %137)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %137, ptr noalias nofree noundef nonnull readnone @hyaxmlzbks, ptr noalias nofree noundef nonnull readnone @i32_eq)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %137, ptr noalias nofree noundef nonnull readnone @ztgbskdwod, ptr noalias nofree noundef nonnull readnone @i32_eq)
   %138 = call ptr @adjust_trampoline(ptr %137)
   %139 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %137)
   %140 = insertvalue { ptr } undef, ptr %138, 0
@@ -4101,13 +4101,13 @@ define void @benchmark_remove_random(i32 %0) local_unnamed_addr #3 {
   %85 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %82)
   %86 = call ptr @bump_malloc(i64 noundef 24)
   call void @anoint_trampoline(ptr %86)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %86, ptr noalias nofree noundef nonnull readnone @xfctfcdhgs, ptr noalias nofree noundef nonnull readnone @i32_hasher)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %86, ptr noalias nofree noundef nonnull readnone @fybyqtbjjb, ptr noalias nofree noundef nonnull readnone @i32_hasher)
   %87 = call ptr @adjust_trampoline(ptr %86)
   %88 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %86)
   %89 = insertvalue { ptr } undef, ptr %87, 0
   %90 = call ptr @bump_malloc(i64 noundef 24)
   call void @anoint_trampoline(ptr %90)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %90, ptr noalias nofree noundef nonnull readnone @wryurxzenj, ptr noalias nofree noundef nonnull readnone @i32_eq)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %90, ptr noalias nofree noundef nonnull readnone @zzixvstaag, ptr noalias nofree noundef nonnull readnone @i32_eq)
   %91 = call ptr @adjust_trampoline(ptr %90)
   %92 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %90)
   %93 = insertvalue { ptr } undef, ptr %91, 0
@@ -4184,13 +4184,13 @@ define void @benchmark_remove_random(i32 %0) local_unnamed_addr #3 {
   %142 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %139)
   %143 = call ptr @bump_malloc(i64 noundef 24)
   call void @anoint_trampoline(ptr %143)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %143, ptr noalias nofree noundef nonnull readnone @tdfasjexas, ptr noalias nofree noundef nonnull readnone @i32_hasher)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %143, ptr noalias nofree noundef nonnull readnone @pzcbyjowbr, ptr noalias nofree noundef nonnull readnone @i32_hasher)
   %144 = call ptr @adjust_trampoline(ptr %143)
   %145 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %143)
   %146 = insertvalue { ptr } undef, ptr %144, 0
   %147 = call ptr @bump_malloc(i64 noundef 24)
   call void @anoint_trampoline(ptr %147)
-  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %147, ptr noalias nofree noundef nonnull readnone @zoeqkrwugn, ptr noalias nofree noundef nonnull readnone @i32_eq)
+  call void @llvm.init.trampoline(ptr nocapture nofree writeonly %147, ptr noalias nofree noundef nonnull readnone @uwebukycqf, ptr noalias nofree noundef nonnull readnone @i32_eq)
   %148 = call ptr @adjust_trampoline(ptr %147)
   %149 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree %147)
   %150 = insertvalue { ptr } undef, ptr %148, 0
@@ -5698,7 +5698,7 @@ define ptr @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U({ ptr, ptr, ptr,
   %4 = load ptr, ptr %1, align 8
   %5 = icmp eq ptr %4, @function_typ
   %6 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %7 = select i1 %5, i64 74, i64 73
+  %7 = select i1 %5, i64 73, i64 74
   %8 = getelementptr [1144 x ptr], ptr %6, i64 0, i64 %7
   %9 = getelementptr i8, ptr %8, i64 80
   %10 = load ptr, ptr %9, align 8
@@ -5714,7 +5714,7 @@ define ptr @CuckooMap_B_filter_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr
   ret ptr %6
 }
 
-define ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -5747,7 +5747,7 @@ define ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, 
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %22, %15, %2
-  %28 = phi i32 [ 76, %22 ], [ 76, %15 ], [ 77, %2 ]
+  %28 = phi i32 [ 77, %22 ], [ 77, %15 ], [ 76, %2 ]
   %29 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %30 = zext nneg i32 %28 to i64
   %31 = getelementptr [1144 x ptr], ptr %29, i64 0, i64 %30
@@ -5756,7 +5756,7 @@ define ptr @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, 
   ret ptr %33
 }
 
-define ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -5789,7 +5789,7 @@ define ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT({ 
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %22, %15, %2
-  %28 = phi i32 [ 79, %22 ], [ 79, %15 ], [ 78, %2 ]
+  %28 = phi i32 [ 78, %22 ], [ 78, %15 ], [ 79, %2 ]
   %29 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %30 = zext nneg i32 %28 to i64
   %31 = getelementptr [1144 x ptr], ptr %29, i64 0, i64 %30
@@ -5798,7 +5798,7 @@ define ptr @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT({ 
   ret ptr %33
 }
 
-define ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -5831,7 +5831,7 @@ define ptr @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU({ ptr, ptr, ptr,
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %22, %15, %2
-  %28 = phi i32 [ 81, %22 ], [ 81, %15 ], [ 80, %2 ]
+  %28 = phi i32 [ 80, %22 ], [ 80, %15 ], [ 81, %2 ]
   %29 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %30 = zext nneg i32 %28 to i64
   %31 = getelementptr [1144 x ptr], ptr %29, i64 0, i64 %30
@@ -8115,82 +8115,6 @@ define { ptr, ptr, ptr, i32 } @Collection_enumerate_({ ptr, ptr, ptr, i32 } %0, 
   ret { ptr, ptr, ptr, i32 } %47
 }
 
-define { ptr, ptr, ptr, i32 } @Collection_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readonly %2, { ptr } %3) #3 {
-  %.fca.0.extract32 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %0, 2
-  %5 = call i32 @get_offset(ptr %.fca.0.extract32, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %6 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract32)
-  %7 = sext i32 %5 to i64
-  %8 = getelementptr ptr, ptr %.fca.0.extract32, i64 %7
-  %9 = load ptr, ptr %8, align 8
-  %10 = call ptr @typegetter_wrapper(ptr %9, ptr %.fca.1.extract)
-  %11 = load ptr, ptr %2, align 8
-  %12 = getelementptr i8, ptr %11, i64 8
-  %13 = load ptr, ptr %12, align 8
-  %14 = alloca [3 x ptr], align 8
-  store ptr @MappedCollection, ptr %14, align 8
-  %15 = getelementptr inbounds i8, ptr %14, i64 8
-  store ptr %10, ptr %15, align 8
-  %16 = getelementptr inbounds i8, ptr %14, i64 16
-  store ptr %13, ptr %16, align 8
-  %17 = call { i64, i64 } @size_wrapper(ptr noundef nonnull @_data_size_MappedCollection, ptr noundef nonnull align 8 dereferenceable(24) %14)
-  %18 = extractvalue { i64, i64 } %17, 0
-  %19 = call ptr @bump_malloc(i64 %18)
-  store ptr %10, ptr %19, align 8
-  %20 = getelementptr i8, ptr %19, i64 8
-  store ptr %13, ptr %20, align 8
-  %21 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %19)
-  %22 = call i32 @get_offset(ptr noundef %.fca.0.extract32, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %23 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract32, 0
-  %24 = insertvalue { ptr, ptr, ptr, i32 } %23, ptr %.fca.1.extract, 1
-  %25 = insertvalue { ptr, ptr, ptr, i32 } %24, ptr %.fca.2.extract, 2
-  %26 = insertvalue { ptr, ptr, ptr, i32 } %25, i32 %22, 3
-  %27 = insertvalue { ptr, ptr, ptr, i32 } { ptr @MappedCollection, ptr undef, ptr undef, i32 undef }, ptr %19, 1
-  %28 = insertvalue { ptr, ptr, ptr, i32 } %27, ptr undef, 2
-  %29 = insertvalue { ptr, ptr, ptr, i32 } %28, i32 10, 3
-  %30 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract32)
-  %31 = load ptr, ptr %8, align 8
-  %32 = call ptr @typegetter_wrapper(ptr %31, ptr %.fca.1.extract)
-  %33 = call ptr @bump_malloc(i64 noundef 24)
-  %34 = getelementptr i8, ptr %33, i64 8
-  store ptr %32, ptr %34, align 8
-  %35 = getelementptr i8, ptr %33, i64 16
-  store ptr null, ptr %35, align 8
-  %36 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %33)
-  store ptr @Collection, ptr %33, align 8
-  %37 = load ptr, ptr %2, align 8
-  %38 = getelementptr i8, ptr %37, i64 8
-  %39 = load ptr, ptr %38, align 8
-  %40 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract32)
-  %41 = load ptr, ptr %8, align 8
-  %42 = call ptr @typegetter_wrapper(ptr %41, ptr %.fca.1.extract)
-  %43 = call ptr @bump_malloc(i64 noundef 32)
-  %44 = getelementptr i8, ptr %43, i64 16
-  store ptr %42, ptr %44, align 8
-  %45 = getelementptr i8, ptr %43, i64 8
-  store ptr %39, ptr %45, align 8
-  %46 = getelementptr i8, ptr %43, i64 24
-  store ptr null, ptr %46, align 8
-  %47 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(32) %43)
-  store ptr @function_typ, ptr %43, align 8
-  %48 = alloca [2 x ptr], align 8
-  store ptr %33, ptr %48, align 8
-  %49 = getelementptr inbounds i8, ptr %48, i64 8
-  store ptr %43, ptr %49, align 8
-  %50 = call ptr @llvm.invariant.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %48)
-  %51 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1064) @MappedCollection)
-  %52 = alloca { ptr, ptr }, align 8
-  store ptr %.fca.0.extract32, ptr %52, align 8
-  %53 = getelementptr inbounds i8, ptr %52, i64 8
-  store ptr @function_typ, ptr %53, align 8
-  %54 = call ptr @behavior_wrapper(ptr noundef nonnull @MappedCollection_B_init_collectionCollectionT_fFunctionT_to_U, { ptr, ptr, ptr, i32 } %29, ptr noundef nonnull align 8 dereferenceable(16) %52)
-  call void %54({ ptr, ptr, ptr, i32 } %29, { ptr, ptr, ptr, i32 } %29, ptr nonnull %48, { ptr, ptr, ptr, i32 } %26, { ptr } %3)
-  %55 = call i32 @get_offset(ptr noundef nonnull align 16 dereferenceable(1064) @MappedCollection, ptr noundef nonnull @Iterable)
-  %56 = insertvalue { ptr, ptr, ptr, i32 } %28, i32 %55, 3
-  ret { ptr, ptr, ptr, i32 } %56
-}
-
 define { ptr, ptr, ptr, i32 } @Iterable_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readonly %2, { ptr } %3) #3 {
   %.fca.0.extract32 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %0, 1
@@ -8267,6 +8191,82 @@ define { ptr, ptr, ptr, i32 } @Iterable_map_fFunctionT_to_U({ ptr, ptr, ptr, i32
   ret { ptr, ptr, ptr, i32 } %56
 }
 
+define { ptr, ptr, ptr, i32 } @Collection_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readonly %2, { ptr } %3) #3 {
+  %.fca.0.extract32 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %0, 2
+  %5 = call i32 @get_offset(ptr %.fca.0.extract32, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %6 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract32)
+  %7 = sext i32 %5 to i64
+  %8 = getelementptr ptr, ptr %.fca.0.extract32, i64 %7
+  %9 = load ptr, ptr %8, align 8
+  %10 = call ptr @typegetter_wrapper(ptr %9, ptr %.fca.1.extract)
+  %11 = load ptr, ptr %2, align 8
+  %12 = getelementptr i8, ptr %11, i64 8
+  %13 = load ptr, ptr %12, align 8
+  %14 = alloca [3 x ptr], align 8
+  store ptr @MappedCollection, ptr %14, align 8
+  %15 = getelementptr inbounds i8, ptr %14, i64 8
+  store ptr %10, ptr %15, align 8
+  %16 = getelementptr inbounds i8, ptr %14, i64 16
+  store ptr %13, ptr %16, align 8
+  %17 = call { i64, i64 } @size_wrapper(ptr noundef nonnull @_data_size_MappedCollection, ptr noundef nonnull align 8 dereferenceable(24) %14)
+  %18 = extractvalue { i64, i64 } %17, 0
+  %19 = call ptr @bump_malloc(i64 %18)
+  store ptr %10, ptr %19, align 8
+  %20 = getelementptr i8, ptr %19, i64 8
+  store ptr %13, ptr %20, align 8
+  %21 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %19)
+  %22 = call i32 @get_offset(ptr noundef %.fca.0.extract32, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %23 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract32, 0
+  %24 = insertvalue { ptr, ptr, ptr, i32 } %23, ptr %.fca.1.extract, 1
+  %25 = insertvalue { ptr, ptr, ptr, i32 } %24, ptr %.fca.2.extract, 2
+  %26 = insertvalue { ptr, ptr, ptr, i32 } %25, i32 %22, 3
+  %27 = insertvalue { ptr, ptr, ptr, i32 } { ptr @MappedCollection, ptr undef, ptr undef, i32 undef }, ptr %19, 1
+  %28 = insertvalue { ptr, ptr, ptr, i32 } %27, ptr undef, 2
+  %29 = insertvalue { ptr, ptr, ptr, i32 } %28, i32 10, 3
+  %30 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract32)
+  %31 = load ptr, ptr %8, align 8
+  %32 = call ptr @typegetter_wrapper(ptr %31, ptr %.fca.1.extract)
+  %33 = call ptr @bump_malloc(i64 noundef 24)
+  %34 = getelementptr i8, ptr %33, i64 8
+  store ptr %32, ptr %34, align 8
+  %35 = getelementptr i8, ptr %33, i64 16
+  store ptr null, ptr %35, align 8
+  %36 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %33)
+  store ptr @Collection, ptr %33, align 8
+  %37 = load ptr, ptr %2, align 8
+  %38 = getelementptr i8, ptr %37, i64 8
+  %39 = load ptr, ptr %38, align 8
+  %40 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract32)
+  %41 = load ptr, ptr %8, align 8
+  %42 = call ptr @typegetter_wrapper(ptr %41, ptr %.fca.1.extract)
+  %43 = call ptr @bump_malloc(i64 noundef 32)
+  %44 = getelementptr i8, ptr %43, i64 16
+  store ptr %42, ptr %44, align 8
+  %45 = getelementptr i8, ptr %43, i64 8
+  store ptr %39, ptr %45, align 8
+  %46 = getelementptr i8, ptr %43, i64 24
+  store ptr null, ptr %46, align 8
+  %47 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(32) %43)
+  store ptr @function_typ, ptr %43, align 8
+  %48 = alloca [2 x ptr], align 8
+  store ptr %33, ptr %48, align 8
+  %49 = getelementptr inbounds i8, ptr %48, i64 8
+  store ptr %43, ptr %49, align 8
+  %50 = call ptr @llvm.invariant.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %48)
+  %51 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1064) @MappedCollection)
+  %52 = alloca { ptr, ptr }, align 8
+  store ptr %.fca.0.extract32, ptr %52, align 8
+  %53 = getelementptr inbounds i8, ptr %52, i64 8
+  store ptr @function_typ, ptr %53, align 8
+  %54 = call ptr @behavior_wrapper(ptr noundef nonnull @MappedCollection_B_init_collectionCollectionT_fFunctionT_to_U, { ptr, ptr, ptr, i32 } %29, ptr noundef nonnull align 8 dereferenceable(16) %52)
+  call void %54({ ptr, ptr, ptr, i32 } %29, { ptr, ptr, ptr, i32 } %29, ptr nonnull %48, { ptr, ptr, ptr, i32 } %26, { ptr } %3)
+  %55 = call i32 @get_offset(ptr noundef nonnull align 16 dereferenceable(1064) @MappedCollection, ptr noundef nonnull @Iterable)
+  %56 = insertvalue { ptr, ptr, ptr, i32 } %28, i32 %55, 3
+  ret { ptr, ptr, ptr, i32 } %56
+}
+
 define { ptr, ptr, ptr, i32 } @Iterable_filter_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr } %3) #3 {
   %.fca.0.extract32 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %0, 1
@@ -8331,79 +8331,6 @@ define { ptr, ptr, ptr, i32 } @Iterable_filter_fFunctionT_to_Bool({ ptr, ptr, pt
   %47 = call i32 @get_offset(ptr noundef nonnull align 16 dereferenceable(512) @FilterIterable, ptr noundef nonnull align 16 dereferenceable(80) @Iterable)
   %48 = insertvalue { ptr, ptr, ptr, i32 } %23, i32 %47, 3
   ret { ptr, ptr, ptr, i32 } %48
-}
-
-define { ptr, ptr, ptr, i32 } @Iterable_chain_otherIterableT({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3) #3 {
-  %.fca.0.extract41 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract42 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %.fca.2.extract43 = extractvalue { ptr, ptr, ptr, i32 } %0, 2
-  %5 = call i32 @get_offset(ptr %.fca.0.extract41, ptr noundef nonnull align 16 dereferenceable(80) @Iterable)
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %3, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %3, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %3, 2
-  %6 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Iterable)
-  %7 = call ptr @llvm.invariant.start.p0(i64 noundef 200, ptr nocapture nofree noundef %.fca.0.extract41)
-  %8 = sext i32 %5 to i64
-  %9 = getelementptr ptr, ptr %.fca.0.extract41, i64 %8
-  %10 = load ptr, ptr %9, align 8
-  %11 = call ptr @typegetter_wrapper(ptr %10, ptr %.fca.1.extract42)
-  %12 = alloca [2 x ptr], align 8
-  store ptr @ChainIterable, ptr %12, align 8
-  %13 = getelementptr inbounds i8, ptr %12, i64 8
-  store ptr %11, ptr %13, align 8
-  %14 = call { i64, i64 } @size_wrapper(ptr noundef nonnull @_data_size_ChainIterable, ptr noundef nonnull align 8 dereferenceable(16) %12)
-  %15 = extractvalue { i64, i64 } %14, 0
-  %16 = call ptr @bump_malloc(i64 %15)
-  store ptr %11, ptr %16, align 8
-  %17 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %16)
-  %18 = call i32 @get_offset(ptr noundef %.fca.0.extract41, ptr noundef nonnull align 16 dereferenceable(80) @Iterable)
-  %19 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract41, 0
-  %20 = insertvalue { ptr, ptr, ptr, i32 } %19, ptr %.fca.1.extract42, 1
-  %21 = insertvalue { ptr, ptr, ptr, i32 } %20, ptr %.fca.2.extract43, 2
-  %22 = insertvalue { ptr, ptr, ptr, i32 } %21, i32 %18, 3
-  %23 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Iterable)
-  %24 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
-  %25 = insertvalue { ptr, ptr, ptr, i32 } %24, ptr %.fca.1.extract, 1
-  %26 = insertvalue { ptr, ptr, ptr, i32 } %25, ptr %.fca.2.extract, 2
-  %27 = insertvalue { ptr, ptr, ptr, i32 } %26, i32 %23, 3
-  %28 = insertvalue { ptr, ptr, ptr, i32 } { ptr @ChainIterable, ptr undef, ptr undef, i32 undef }, ptr %16, 1
-  %29 = insertvalue { ptr, ptr, ptr, i32 } %28, ptr undef, 2
-  %30 = insertvalue { ptr, ptr, ptr, i32 } %29, i32 10, 3
-  %31 = call ptr @llvm.invariant.start.p0(i64 noundef 200, ptr nocapture nofree noundef %.fca.0.extract41)
-  %32 = load ptr, ptr %9, align 8
-  %33 = call ptr @typegetter_wrapper(ptr %32, ptr %.fca.1.extract42)
-  %34 = call ptr @bump_malloc(i64 noundef 24)
-  %35 = getelementptr i8, ptr %34, i64 8
-  store ptr %33, ptr %35, align 8
-  %36 = getelementptr i8, ptr %34, i64 16
-  store ptr null, ptr %36, align 8
-  %37 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %34)
-  store ptr @Iterable, ptr %34, align 8
-  %38 = call ptr @llvm.invariant.start.p0(i64 noundef 200, ptr nocapture nofree noundef %.fca.0.extract41)
-  %39 = load ptr, ptr %9, align 8
-  %40 = call ptr @typegetter_wrapper(ptr %39, ptr %.fca.1.extract42)
-  %41 = call ptr @bump_malloc(i64 noundef 24)
-  %42 = getelementptr i8, ptr %41, i64 8
-  store ptr %40, ptr %42, align 8
-  %43 = getelementptr i8, ptr %41, i64 16
-  store ptr null, ptr %43, align 8
-  %44 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %41)
-  store ptr @Iterable, ptr %41, align 8
-  %45 = alloca [2 x ptr], align 8
-  store ptr %34, ptr %45, align 8
-  %46 = getelementptr inbounds i8, ptr %45, i64 8
-  store ptr %41, ptr %46, align 8
-  %47 = call ptr @llvm.invariant.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %45)
-  %48 = call ptr @llvm.invariant.start.p0(i64 noundef 432, ptr nocapture nofree noundef nonnull align 16 dereferenceable(512) @ChainIterable)
-  %49 = alloca { ptr, ptr }, align 8
-  store ptr %.fca.0.extract41, ptr %49, align 8
-  %50 = getelementptr inbounds i8, ptr %49, i64 8
-  store ptr %.fca.0.extract, ptr %50, align 8
-  %51 = call ptr @behavior_wrapper(ptr noundef nonnull @ChainIterable_B_init_firstIterableT_secondIterableT, { ptr, ptr, ptr, i32 } %30, ptr noundef nonnull align 8 dereferenceable(16) %49)
-  call void %51({ ptr, ptr, ptr, i32 } %30, { ptr, ptr, ptr, i32 } %30, ptr nonnull %45, { ptr, ptr, ptr, i32 } %22, { ptr, ptr, ptr, i32 } %27)
-  %52 = call i32 @get_offset(ptr noundef nonnull align 16 dereferenceable(512) @ChainIterable, ptr noundef nonnull align 16 dereferenceable(80) @Iterable)
-  %53 = insertvalue { ptr, ptr, ptr, i32 } %29, i32 %52, 3
-  ret { ptr, ptr, ptr, i32 } %53
 }
 
 define { ptr, ptr, ptr, i32 } @Collection_chain_otherCollectionT({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3) #3 {
@@ -8479,43 +8406,43 @@ define { ptr, ptr, ptr, i32 } @Collection_chain_otherCollectionT({ ptr, ptr, ptr
   ret { ptr, ptr, ptr, i32 } %53
 }
 
-define { ptr, ptr, ptr, i32 } @Collection_interleave_otherCollectionT({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3) #3 {
+define { ptr, ptr, ptr, i32 } @Iterable_chain_otherIterableT({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3) #3 {
   %.fca.0.extract41 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %.fca.1.extract42 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
   %.fca.2.extract43 = extractvalue { ptr, ptr, ptr, i32 } %0, 2
-  %5 = call i32 @get_offset(ptr %.fca.0.extract41, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %5 = call i32 @get_offset(ptr %.fca.0.extract41, ptr noundef nonnull align 16 dereferenceable(80) @Iterable)
   %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %3, 0
   %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %3, 1
   %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %3, 2
-  %6 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %7 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract41)
+  %6 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Iterable)
+  %7 = call ptr @llvm.invariant.start.p0(i64 noundef 200, ptr nocapture nofree noundef %.fca.0.extract41)
   %8 = sext i32 %5 to i64
   %9 = getelementptr ptr, ptr %.fca.0.extract41, i64 %8
   %10 = load ptr, ptr %9, align 8
   %11 = call ptr @typegetter_wrapper(ptr %10, ptr %.fca.1.extract42)
   %12 = alloca [2 x ptr], align 8
-  store ptr @InterleavedCollection, ptr %12, align 8
+  store ptr @ChainIterable, ptr %12, align 8
   %13 = getelementptr inbounds i8, ptr %12, i64 8
   store ptr %11, ptr %13, align 8
-  %14 = call { i64, i64 } @size_wrapper(ptr noundef nonnull @_data_size_InterleavedCollection, ptr noundef nonnull align 8 dereferenceable(16) %12)
+  %14 = call { i64, i64 } @size_wrapper(ptr noundef nonnull @_data_size_ChainIterable, ptr noundef nonnull align 8 dereferenceable(16) %12)
   %15 = extractvalue { i64, i64 } %14, 0
   %16 = call ptr @bump_malloc(i64 %15)
   store ptr %11, ptr %16, align 8
   %17 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %16)
-  %18 = call i32 @get_offset(ptr noundef %.fca.0.extract41, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %18 = call i32 @get_offset(ptr noundef %.fca.0.extract41, ptr noundef nonnull align 16 dereferenceable(80) @Iterable)
   %19 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract41, 0
   %20 = insertvalue { ptr, ptr, ptr, i32 } %19, ptr %.fca.1.extract42, 1
   %21 = insertvalue { ptr, ptr, ptr, i32 } %20, ptr %.fca.2.extract43, 2
   %22 = insertvalue { ptr, ptr, ptr, i32 } %21, i32 %18, 3
-  %23 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %23 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Iterable)
   %24 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
   %25 = insertvalue { ptr, ptr, ptr, i32 } %24, ptr %.fca.1.extract, 1
   %26 = insertvalue { ptr, ptr, ptr, i32 } %25, ptr %.fca.2.extract, 2
   %27 = insertvalue { ptr, ptr, ptr, i32 } %26, i32 %23, 3
-  %28 = insertvalue { ptr, ptr, ptr, i32 } { ptr @InterleavedCollection, ptr undef, ptr undef, i32 undef }, ptr %16, 1
+  %28 = insertvalue { ptr, ptr, ptr, i32 } { ptr @ChainIterable, ptr undef, ptr undef, i32 undef }, ptr %16, 1
   %29 = insertvalue { ptr, ptr, ptr, i32 } %28, ptr undef, 2
   %30 = insertvalue { ptr, ptr, ptr, i32 } %29, i32 10, 3
-  %31 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract41)
+  %31 = call ptr @llvm.invariant.start.p0(i64 noundef 200, ptr nocapture nofree noundef %.fca.0.extract41)
   %32 = load ptr, ptr %9, align 8
   %33 = call ptr @typegetter_wrapper(ptr %32, ptr %.fca.1.extract42)
   %34 = call ptr @bump_malloc(i64 noundef 24)
@@ -8524,8 +8451,8 @@ define { ptr, ptr, ptr, i32 } @Collection_interleave_otherCollectionT({ ptr, ptr
   %36 = getelementptr i8, ptr %34, i64 16
   store ptr null, ptr %36, align 8
   %37 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %34)
-  store ptr @Collection, ptr %34, align 8
-  %38 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract41)
+  store ptr @Iterable, ptr %34, align 8
+  %38 = call ptr @llvm.invariant.start.p0(i64 noundef 200, ptr nocapture nofree noundef %.fca.0.extract41)
   %39 = load ptr, ptr %9, align 8
   %40 = call ptr @typegetter_wrapper(ptr %39, ptr %.fca.1.extract42)
   %41 = call ptr @bump_malloc(i64 noundef 24)
@@ -8534,20 +8461,20 @@ define { ptr, ptr, ptr, i32 } @Collection_interleave_otherCollectionT({ ptr, ptr
   %43 = getelementptr i8, ptr %41, i64 16
   store ptr null, ptr %43, align 8
   %44 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %41)
-  store ptr @Collection, ptr %41, align 8
+  store ptr @Iterable, ptr %41, align 8
   %45 = alloca [2 x ptr], align 8
   store ptr %34, ptr %45, align 8
   %46 = getelementptr inbounds i8, ptr %45, i64 8
   store ptr %41, ptr %46, align 8
   %47 = call ptr @llvm.invariant.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %45)
-  %48 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1056) @InterleavedCollection)
+  %48 = call ptr @llvm.invariant.start.p0(i64 noundef 432, ptr nocapture nofree noundef nonnull align 16 dereferenceable(512) @ChainIterable)
   %49 = alloca { ptr, ptr }, align 8
   store ptr %.fca.0.extract41, ptr %49, align 8
   %50 = getelementptr inbounds i8, ptr %49, i64 8
   store ptr %.fca.0.extract, ptr %50, align 8
-  %51 = call ptr @behavior_wrapper(ptr noundef nonnull @InterleavedCollection_B_init_firstCollectionT_secondCollectionT, { ptr, ptr, ptr, i32 } %30, ptr noundef nonnull align 8 dereferenceable(16) %49)
+  %51 = call ptr @behavior_wrapper(ptr noundef nonnull @ChainIterable_B_init_firstIterableT_secondIterableT, { ptr, ptr, ptr, i32 } %30, ptr noundef nonnull align 8 dereferenceable(16) %49)
   call void %51({ ptr, ptr, ptr, i32 } %30, { ptr, ptr, ptr, i32 } %30, ptr nonnull %45, { ptr, ptr, ptr, i32 } %22, { ptr, ptr, ptr, i32 } %27)
-  %52 = call i32 @get_offset(ptr noundef nonnull align 16 dereferenceable(1056) @InterleavedCollection, ptr noundef nonnull @Iterable)
+  %52 = call i32 @get_offset(ptr noundef nonnull align 16 dereferenceable(512) @ChainIterable, ptr noundef nonnull align 16 dereferenceable(80) @Iterable)
   %53 = insertvalue { ptr, ptr, ptr, i32 } %29, i32 %52, 3
   ret { ptr, ptr, ptr, i32 } %53
 }
@@ -8625,106 +8552,77 @@ define { ptr, ptr, ptr, i32 } @Iterable_interleave_otherIterableT({ ptr, ptr, pt
   ret { ptr, ptr, ptr, i32 } %53
 }
 
-define { ptr, ptr, ptr, i32 } @Collection_zip_otherCollectionU({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3) #3 {
-  %.fca.0.extract64 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract65 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %.fca.2.extract66 = extractvalue { ptr, ptr, ptr, i32 } %0, 2
-  %5 = call i32 @get_offset(ptr %.fca.0.extract64, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %.fca.0.extract43 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
-  %.fca.1.extract44 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
-  %.fca.2.extract45 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
-  %6 = call i32 @get_offset(ptr %.fca.0.extract43, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %7 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract64)
+define { ptr, ptr, ptr, i32 } @Collection_interleave_otherCollectionT({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3) #3 {
+  %.fca.0.extract41 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract42 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %.fca.2.extract43 = extractvalue { ptr, ptr, ptr, i32 } %0, 2
+  %5 = call i32 @get_offset(ptr %.fca.0.extract41, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %3, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %3, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %3, 2
+  %6 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %7 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract41)
   %8 = sext i32 %5 to i64
-  %9 = getelementptr ptr, ptr %.fca.0.extract64, i64 %8
+  %9 = getelementptr ptr, ptr %.fca.0.extract41, i64 %8
   %10 = load ptr, ptr %9, align 8
-  %11 = call ptr @typegetter_wrapper(ptr %10, ptr %.fca.1.extract65)
-  %.fca.3.extract33 = extractvalue { ptr, ptr, ptr, i32 } %3, 3
-  %12 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract43)
-  %13 = sext i32 %.fca.3.extract33 to i64
-  %14 = getelementptr ptr, ptr %.fca.0.extract43, i64 %13
-  %15 = load ptr, ptr %14, align 8
-  %16 = call ptr @typegetter_wrapper(ptr %15, ptr %.fca.1.extract44)
-  %17 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract64)
-  %18 = load ptr, ptr %9, align 8
-  %19 = call ptr @typegetter_wrapper(ptr %18, ptr %.fca.1.extract65)
-  %20 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract43)
-  %21 = load ptr, ptr %14, align 8
-  %22 = call ptr @typegetter_wrapper(ptr %21, ptr %.fca.1.extract44)
-  %23 = call ptr @bump_malloc(i64 noundef 32)
-  %24 = getelementptr i8, ptr %23, i64 16
-  store ptr %22, ptr %24, align 8
-  %25 = getelementptr i8, ptr %23, i64 8
-  store ptr %19, ptr %25, align 8
-  %26 = getelementptr i8, ptr %23, i64 24
-  store ptr null, ptr %26, align 8
-  %27 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(32) %23)
-  store ptr @Pair, ptr %23, align 8
-  %28 = alloca [4 x ptr], align 8
-  store ptr @ZippedCollection, ptr %28, align 8
-  %29 = getelementptr inbounds i8, ptr %28, i64 8
-  store ptr %11, ptr %29, align 8
-  %30 = getelementptr inbounds i8, ptr %28, i64 16
-  store ptr %16, ptr %30, align 8
-  %31 = getelementptr inbounds i8, ptr %28, i64 24
-  store ptr %23, ptr %31, align 8
-  %32 = call { i64, i64 } @size_wrapper(ptr nonnull @_data_size_ZippedCollection, ptr noundef nonnull align 8 dereferenceable(32) %28)
-  %33 = extractvalue { i64, i64 } %32, 0
-  %34 = call ptr @bump_malloc(i64 %33)
-  store ptr %11, ptr %34, align 8
+  %11 = call ptr @typegetter_wrapper(ptr %10, ptr %.fca.1.extract42)
+  %12 = alloca [2 x ptr], align 8
+  store ptr @InterleavedCollection, ptr %12, align 8
+  %13 = getelementptr inbounds i8, ptr %12, i64 8
+  store ptr %11, ptr %13, align 8
+  %14 = call { i64, i64 } @size_wrapper(ptr noundef nonnull @_data_size_InterleavedCollection, ptr noundef nonnull align 8 dereferenceable(16) %12)
+  %15 = extractvalue { i64, i64 } %14, 0
+  %16 = call ptr @bump_malloc(i64 %15)
+  store ptr %11, ptr %16, align 8
+  %17 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %16)
+  %18 = call i32 @get_offset(ptr noundef %.fca.0.extract41, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %19 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract41, 0
+  %20 = insertvalue { ptr, ptr, ptr, i32 } %19, ptr %.fca.1.extract42, 1
+  %21 = insertvalue { ptr, ptr, ptr, i32 } %20, ptr %.fca.2.extract43, 2
+  %22 = insertvalue { ptr, ptr, ptr, i32 } %21, i32 %18, 3
+  %23 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %24 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
+  %25 = insertvalue { ptr, ptr, ptr, i32 } %24, ptr %.fca.1.extract, 1
+  %26 = insertvalue { ptr, ptr, ptr, i32 } %25, ptr %.fca.2.extract, 2
+  %27 = insertvalue { ptr, ptr, ptr, i32 } %26, i32 %23, 3
+  %28 = insertvalue { ptr, ptr, ptr, i32 } { ptr @InterleavedCollection, ptr undef, ptr undef, i32 undef }, ptr %16, 1
+  %29 = insertvalue { ptr, ptr, ptr, i32 } %28, ptr undef, 2
+  %30 = insertvalue { ptr, ptr, ptr, i32 } %29, i32 10, 3
+  %31 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract41)
+  %32 = load ptr, ptr %9, align 8
+  %33 = call ptr @typegetter_wrapper(ptr %32, ptr %.fca.1.extract42)
+  %34 = call ptr @bump_malloc(i64 noundef 24)
   %35 = getelementptr i8, ptr %34, i64 8
-  store ptr %16, ptr %35, align 8
+  store ptr %33, ptr %35, align 8
   %36 = getelementptr i8, ptr %34, i64 16
-  store ptr %23, ptr %36, align 8
-  %37 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %34)
-  %38 = call i32 @get_offset(ptr noundef %.fca.0.extract64, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %39 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract64, 0
-  %40 = insertvalue { ptr, ptr, ptr, i32 } %39, ptr %.fca.1.extract65, 1
-  %41 = insertvalue { ptr, ptr, ptr, i32 } %40, ptr %.fca.2.extract66, 2
-  %42 = insertvalue { ptr, ptr, ptr, i32 } %41, i32 %38, 3
-  %43 = call i32 @get_offset(ptr noundef %.fca.0.extract43, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %44 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract43, 0
-  %45 = insertvalue { ptr, ptr, ptr, i32 } %44, ptr %.fca.1.extract44, 1
-  %46 = insertvalue { ptr, ptr, ptr, i32 } %45, ptr %.fca.2.extract45, 2
-  %47 = insertvalue { ptr, ptr, ptr, i32 } %46, i32 %43, 3
-  %48 = insertvalue { ptr, ptr, ptr, i32 } { ptr @ZippedCollection, ptr undef, ptr undef, i32 undef }, ptr %34, 1
-  %49 = insertvalue { ptr, ptr, ptr, i32 } %48, ptr undef, 2
-  %50 = insertvalue { ptr, ptr, ptr, i32 } %49, i32 10, 3
-  %51 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract64)
-  %52 = load ptr, ptr %9, align 8
-  %53 = call ptr @typegetter_wrapper(ptr %52, ptr %.fca.1.extract65)
-  %54 = call ptr @bump_malloc(i64 noundef 24)
-  %55 = getelementptr i8, ptr %54, i64 8
-  store ptr %53, ptr %55, align 8
-  %56 = getelementptr i8, ptr %54, i64 16
-  store ptr null, ptr %56, align 8
-  %57 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %54)
-  store ptr @Collection, ptr %54, align 8
-  %58 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract43)
-  %59 = load ptr, ptr %14, align 8
-  %60 = call ptr @typegetter_wrapper(ptr %59, ptr %.fca.1.extract44)
-  %61 = call ptr @bump_malloc(i64 noundef 24)
-  %62 = getelementptr i8, ptr %61, i64 8
-  store ptr %60, ptr %62, align 8
-  %63 = getelementptr i8, ptr %61, i64 16
-  store ptr null, ptr %63, align 8
-  %64 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %61)
-  store ptr @Collection, ptr %61, align 8
-  %65 = alloca [2 x ptr], align 8
-  store ptr %54, ptr %65, align 8
-  %66 = getelementptr inbounds i8, ptr %65, i64 8
-  store ptr %61, ptr %66, align 8
-  %67 = call ptr @llvm.invariant.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %65)
-  %68 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1072) @ZippedCollection)
-  %69 = alloca { ptr, ptr }, align 8
-  store ptr %.fca.0.extract64, ptr %69, align 8
-  %70 = getelementptr inbounds i8, ptr %69, i64 8
-  store ptr %.fca.0.extract43, ptr %70, align 8
-  %71 = call ptr @behavior_wrapper(ptr noundef nonnull @ZippedCollection_B_init_firstCollectionT_secondCollectionU, { ptr, ptr, ptr, i32 } %50, ptr noundef nonnull align 8 dereferenceable(16) %69)
-  call void %71({ ptr, ptr, ptr, i32 } %50, { ptr, ptr, ptr, i32 } %50, ptr nonnull %65, { ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %47)
-  %72 = call i32 @get_offset(ptr noundef nonnull align 16 dereferenceable(1072) @ZippedCollection, ptr noundef nonnull @Iterable)
-  %73 = insertvalue { ptr, ptr, ptr, i32 } %49, i32 %72, 3
-  ret { ptr, ptr, ptr, i32 } %73
+  store ptr null, ptr %36, align 8
+  %37 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %34)
+  store ptr @Collection, ptr %34, align 8
+  %38 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract41)
+  %39 = load ptr, ptr %9, align 8
+  %40 = call ptr @typegetter_wrapper(ptr %39, ptr %.fca.1.extract42)
+  %41 = call ptr @bump_malloc(i64 noundef 24)
+  %42 = getelementptr i8, ptr %41, i64 8
+  store ptr %40, ptr %42, align 8
+  %43 = getelementptr i8, ptr %41, i64 16
+  store ptr null, ptr %43, align 8
+  %44 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %41)
+  store ptr @Collection, ptr %41, align 8
+  %45 = alloca [2 x ptr], align 8
+  store ptr %34, ptr %45, align 8
+  %46 = getelementptr inbounds i8, ptr %45, i64 8
+  store ptr %41, ptr %46, align 8
+  %47 = call ptr @llvm.invariant.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %45)
+  %48 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1056) @InterleavedCollection)
+  %49 = alloca { ptr, ptr }, align 8
+  store ptr %.fca.0.extract41, ptr %49, align 8
+  %50 = getelementptr inbounds i8, ptr %49, i64 8
+  store ptr %.fca.0.extract, ptr %50, align 8
+  %51 = call ptr @behavior_wrapper(ptr noundef nonnull @InterleavedCollection_B_init_firstCollectionT_secondCollectionT, { ptr, ptr, ptr, i32 } %30, ptr noundef nonnull align 8 dereferenceable(16) %49)
+  call void %51({ ptr, ptr, ptr, i32 } %30, { ptr, ptr, ptr, i32 } %30, ptr nonnull %45, { ptr, ptr, ptr, i32 } %22, { ptr, ptr, ptr, i32 } %27)
+  %52 = call i32 @get_offset(ptr noundef nonnull align 16 dereferenceable(1056) @InterleavedCollection, ptr noundef nonnull @Iterable)
+  %53 = insertvalue { ptr, ptr, ptr, i32 } %29, i32 %52, 3
+  ret { ptr, ptr, ptr, i32 } %53
 }
 
 define { ptr, ptr, ptr, i32 } @Iterable_zip_otherIterableU({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3) #3 {
@@ -8825,6 +8723,108 @@ define { ptr, ptr, ptr, i32 } @Iterable_zip_otherIterableU({ ptr, ptr, ptr, i32 
   %71 = call ptr @behavior_wrapper(ptr noundef nonnull @ZipIterable_B_init_firstIterableT_secondIterableU, { ptr, ptr, ptr, i32 } %50, ptr noundef nonnull align 8 dereferenceable(16) %69)
   call void %71({ ptr, ptr, ptr, i32 } %50, { ptr, ptr, ptr, i32 } %50, ptr nonnull %65, { ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %47)
   %72 = call i32 @get_offset(ptr noundef nonnull align 16 dereferenceable(528) @ZipIterable, ptr noundef nonnull align 16 dereferenceable(80) @Iterable)
+  %73 = insertvalue { ptr, ptr, ptr, i32 } %49, i32 %72, 3
+  ret { ptr, ptr, ptr, i32 } %73
+}
+
+define { ptr, ptr, ptr, i32 } @Collection_zip_otherCollectionU({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3) #3 {
+  %.fca.0.extract64 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract65 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %.fca.2.extract66 = extractvalue { ptr, ptr, ptr, i32 } %0, 2
+  %5 = call i32 @get_offset(ptr %.fca.0.extract64, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %.fca.0.extract43 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
+  %.fca.1.extract44 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
+  %.fca.2.extract45 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
+  %6 = call i32 @get_offset(ptr %.fca.0.extract43, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %7 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract64)
+  %8 = sext i32 %5 to i64
+  %9 = getelementptr ptr, ptr %.fca.0.extract64, i64 %8
+  %10 = load ptr, ptr %9, align 8
+  %11 = call ptr @typegetter_wrapper(ptr %10, ptr %.fca.1.extract65)
+  %.fca.3.extract33 = extractvalue { ptr, ptr, ptr, i32 } %3, 3
+  %12 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract43)
+  %13 = sext i32 %.fca.3.extract33 to i64
+  %14 = getelementptr ptr, ptr %.fca.0.extract43, i64 %13
+  %15 = load ptr, ptr %14, align 8
+  %16 = call ptr @typegetter_wrapper(ptr %15, ptr %.fca.1.extract44)
+  %17 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract64)
+  %18 = load ptr, ptr %9, align 8
+  %19 = call ptr @typegetter_wrapper(ptr %18, ptr %.fca.1.extract65)
+  %20 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract43)
+  %21 = load ptr, ptr %14, align 8
+  %22 = call ptr @typegetter_wrapper(ptr %21, ptr %.fca.1.extract44)
+  %23 = call ptr @bump_malloc(i64 noundef 32)
+  %24 = getelementptr i8, ptr %23, i64 16
+  store ptr %22, ptr %24, align 8
+  %25 = getelementptr i8, ptr %23, i64 8
+  store ptr %19, ptr %25, align 8
+  %26 = getelementptr i8, ptr %23, i64 24
+  store ptr null, ptr %26, align 8
+  %27 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(32) %23)
+  store ptr @Pair, ptr %23, align 8
+  %28 = alloca [4 x ptr], align 8
+  store ptr @ZippedCollection, ptr %28, align 8
+  %29 = getelementptr inbounds i8, ptr %28, i64 8
+  store ptr %11, ptr %29, align 8
+  %30 = getelementptr inbounds i8, ptr %28, i64 16
+  store ptr %16, ptr %30, align 8
+  %31 = getelementptr inbounds i8, ptr %28, i64 24
+  store ptr %23, ptr %31, align 8
+  %32 = call { i64, i64 } @size_wrapper(ptr nonnull @_data_size_ZippedCollection, ptr noundef nonnull align 8 dereferenceable(32) %28)
+  %33 = extractvalue { i64, i64 } %32, 0
+  %34 = call ptr @bump_malloc(i64 %33)
+  store ptr %11, ptr %34, align 8
+  %35 = getelementptr i8, ptr %34, i64 8
+  store ptr %16, ptr %35, align 8
+  %36 = getelementptr i8, ptr %34, i64 16
+  store ptr %23, ptr %36, align 8
+  %37 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %34)
+  %38 = call i32 @get_offset(ptr noundef %.fca.0.extract64, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %39 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract64, 0
+  %40 = insertvalue { ptr, ptr, ptr, i32 } %39, ptr %.fca.1.extract65, 1
+  %41 = insertvalue { ptr, ptr, ptr, i32 } %40, ptr %.fca.2.extract66, 2
+  %42 = insertvalue { ptr, ptr, ptr, i32 } %41, i32 %38, 3
+  %43 = call i32 @get_offset(ptr noundef %.fca.0.extract43, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %44 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract43, 0
+  %45 = insertvalue { ptr, ptr, ptr, i32 } %44, ptr %.fca.1.extract44, 1
+  %46 = insertvalue { ptr, ptr, ptr, i32 } %45, ptr %.fca.2.extract45, 2
+  %47 = insertvalue { ptr, ptr, ptr, i32 } %46, i32 %43, 3
+  %48 = insertvalue { ptr, ptr, ptr, i32 } { ptr @ZippedCollection, ptr undef, ptr undef, i32 undef }, ptr %34, 1
+  %49 = insertvalue { ptr, ptr, ptr, i32 } %48, ptr undef, 2
+  %50 = insertvalue { ptr, ptr, ptr, i32 } %49, i32 10, 3
+  %51 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract64)
+  %52 = load ptr, ptr %9, align 8
+  %53 = call ptr @typegetter_wrapper(ptr %52, ptr %.fca.1.extract65)
+  %54 = call ptr @bump_malloc(i64 noundef 24)
+  %55 = getelementptr i8, ptr %54, i64 8
+  store ptr %53, ptr %55, align 8
+  %56 = getelementptr i8, ptr %54, i64 16
+  store ptr null, ptr %56, align 8
+  %57 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %54)
+  store ptr @Collection, ptr %54, align 8
+  %58 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %.fca.0.extract43)
+  %59 = load ptr, ptr %14, align 8
+  %60 = call ptr @typegetter_wrapper(ptr %59, ptr %.fca.1.extract44)
+  %61 = call ptr @bump_malloc(i64 noundef 24)
+  %62 = getelementptr i8, ptr %61, i64 8
+  store ptr %60, ptr %62, align 8
+  %63 = getelementptr i8, ptr %61, i64 16
+  store ptr null, ptr %63, align 8
+  %64 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %61)
+  store ptr @Collection, ptr %61, align 8
+  %65 = alloca [2 x ptr], align 8
+  store ptr %54, ptr %65, align 8
+  %66 = getelementptr inbounds i8, ptr %65, i64 8
+  store ptr %61, ptr %66, align 8
+  %67 = call ptr @llvm.invariant.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %65)
+  %68 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1072) @ZippedCollection)
+  %69 = alloca { ptr, ptr }, align 8
+  store ptr %.fca.0.extract64, ptr %69, align 8
+  %70 = getelementptr inbounds i8, ptr %69, i64 8
+  store ptr %.fca.0.extract43, ptr %70, align 8
+  %71 = call ptr @behavior_wrapper(ptr noundef nonnull @ZippedCollection_B_init_firstCollectionT_secondCollectionU, { ptr, ptr, ptr, i32 } %50, ptr noundef nonnull align 8 dereferenceable(16) %69)
+  call void %71({ ptr, ptr, ptr, i32 } %50, { ptr, ptr, ptr, i32 } %50, ptr nonnull %65, { ptr, ptr, ptr, i32 } %42, { ptr, ptr, ptr, i32 } %47)
+  %72 = call i32 @get_offset(ptr noundef nonnull align 16 dereferenceable(1072) @ZippedCollection, ptr noundef nonnull @Iterable)
   %73 = insertvalue { ptr, ptr, ptr, i32 } %49, i32 %72, 3
   ret { ptr, ptr, ptr, i32 } %73
 }
@@ -11062,7 +11062,7 @@ define ptr @ProductCollection_B_filter_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 }
   ret ptr %6
 }
 
-define ptr @ProductCollection_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @ProductCollection_B_chain_otherCollectionT_chain_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -11094,7 +11094,7 @@ define ptr @ProductCollection_B_chain_otherIterableT_chain_otherCollectionT({ pt
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %21, %14, %2
-  %27 = phi i32 [ 32, %21 ], [ 32, %14 ], [ 33, %2 ]
+  %27 = phi i32 [ 33, %21 ], [ 33, %14 ], [ 32, %2 ]
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %29 = zext nneg i32 %27 to i64
   %30 = getelementptr [124 x ptr], ptr %28, i64 0, i64 %29
@@ -11103,7 +11103,7 @@ define ptr @ProductCollection_B_chain_otherIterableT_chain_otherCollectionT({ pt
   ret ptr %32
 }
 
-define ptr @ProductCollection_B_interleave_otherCollectionT_interleave_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @ProductCollection_B_interleave_otherIterableT_interleave_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -11135,7 +11135,7 @@ define ptr @ProductCollection_B_interleave_otherCollectionT_interleave_otherIter
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %21, %14, %2
-  %27 = phi i32 [ 35, %21 ], [ 35, %14 ], [ 34, %2 ]
+  %27 = phi i32 [ 34, %21 ], [ 34, %14 ], [ 35, %2 ]
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %29 = zext nneg i32 %27 to i64
   %30 = getelementptr [124 x ptr], ptr %28, i64 0, i64 %29
@@ -11144,7 +11144,7 @@ define ptr @ProductCollection_B_interleave_otherCollectionT_interleave_otherIter
   ret ptr %32
 }
 
-define ptr @ProductCollection_B_zip_otherCollectionU_zip_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @ProductCollection_B_zip_otherIterableU_zip_otherCollectionU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -11176,7 +11176,7 @@ define ptr @ProductCollection_B_zip_otherCollectionU_zip_otherIterableU({ ptr, p
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %21, %14, %2
-  %27 = phi i32 [ 37, %21 ], [ 37, %14 ], [ 36, %2 ]
+  %27 = phi i32 [ 36, %21 ], [ 36, %14 ], [ 37, %2 ]
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %29 = zext nneg i32 %27 to i64
   %30 = getelementptr [124 x ptr], ptr %28, i64 0, i64 %29
@@ -11671,6 +11671,1074 @@ define { i64, i64 } @_data_size_Collection(ptr nocapture nofree readnone %0) #1 
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
+define { i64, i64 } @_data_size_ZippedCollection(ptr nocapture nofree readnone %0) #1 {
+  ret { i64, i64 } { i64 88, i64 8 }
+}
+
+define ptr @ZippedCollection_B_init_firstCollectionT_secondCollectionU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
+  %14 = getelementptr inbounds i8, ptr %1, i64 8
+  %15 = load ptr, ptr %14, align 8
+  %16 = getelementptr i8, ptr %15, i64 8
+  %17 = getelementptr i8, ptr %15, i64 16
+  %18 = getelementptr i8, ptr %15, i64 24
+  %19 = getelementptr i8, ptr %15, i64 32
+  %20 = load i64, ptr %16, align 4
+  %21 = load i64, ptr %17, align 4
+  %22 = load ptr, ptr %18, align 8
+  %23 = load ptr, ptr %19, align 8
+  %24 = call i1 @subtype_test_wrapper(ptr %22, i64 %21, i64 %20, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %23)
+  %25 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %26 = getelementptr i8, ptr %25, i64 240
+  %27 = load ptr, ptr %26, align 8
+  ret ptr %27
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define ptr @ZippedCollection_field_ZippedCollection_0(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) #6 {
+  %2 = load ptr, ptr %0, align 8
+  ret ptr %2
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define ptr @ZippedCollection_field_ZippedCollection_1(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 8
+  %3 = load ptr, ptr %2, align 8
+  ret ptr %3
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define ptr @ZippedCollection_field_ZippedCollection_2(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 16
+  %3 = load ptr, ptr %2, align 8
+  ret ptr %3
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @ZippedCollection_B_size_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 248
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @ZippedCollection_B_is_empty_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 256
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @ZippedCollection_B_iterator_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 264
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @ZippedCollection_B_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 272
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+define ptr @ZippedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = load i64, ptr @Pair, align 4
+  %14 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 %13, i64 noundef ptrtoint (ptr @Pair to i64), ptr %12)
+  %15 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %16 = getelementptr i8, ptr %15, i64 280
+  %17 = load ptr, ptr %16, align 8
+  ret ptr %17
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @ZippedCollection_B_all_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 288
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @ZippedCollection_B_any_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 296
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @ZippedCollection_B_enumerate_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 304
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @ZippedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = icmp eq ptr %4, @function_typ
+  %6 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %7 = select i1 %5, i64 30, i64 29
+  %8 = getelementptr [124 x ptr], ptr %6, i64 0, i64 %7
+  %9 = getelementptr i8, ptr %8, i64 80
+  %10 = load ptr, ptr %9, align 8
+  ret ptr %10
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @ZippedCollection_B_filter_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 328
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+define ptr @ZippedCollection_B_chain_otherCollectionT_chain_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
+  br i1 %13, label %._crit_edge, label %14
+
+14:                                               ; preds = %2
+  %15 = load i64, ptr %5, align 4
+  %16 = load i64, ptr %6, align 4
+  %17 = load ptr, ptr %7, align 8
+  %18 = load ptr, ptr %8, align 8
+  %19 = load i64, ptr @Iterable, align 4
+  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
+  br i1 %20, label %21, label %._crit_edge
+
+21:                                               ; preds = %14
+  %22 = load i64, ptr %5, align 4
+  %23 = load i64, ptr %6, align 4
+  %24 = load ptr, ptr %7, align 8
+  %25 = load ptr, ptr %8, align 8
+  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %21, %14, %2
+  %27 = phi i32 [ 33, %21 ], [ 33, %14 ], [ 32, %2 ]
+  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %29 = zext nneg i32 %27 to i64
+  %30 = getelementptr [124 x ptr], ptr %28, i64 0, i64 %29
+  %31 = getelementptr i8, ptr %30, i64 80
+  %32 = load ptr, ptr %31, align 8
+  ret ptr %32
+}
+
+define ptr @ZippedCollection_B_interleave_otherIterableT_interleave_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
+  br i1 %13, label %._crit_edge, label %14
+
+14:                                               ; preds = %2
+  %15 = load i64, ptr %5, align 4
+  %16 = load i64, ptr %6, align 4
+  %17 = load ptr, ptr %7, align 8
+  %18 = load ptr, ptr %8, align 8
+  %19 = load i64, ptr @Iterable, align 4
+  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
+  br i1 %20, label %21, label %._crit_edge
+
+21:                                               ; preds = %14
+  %22 = load i64, ptr %5, align 4
+  %23 = load i64, ptr %6, align 4
+  %24 = load ptr, ptr %7, align 8
+  %25 = load ptr, ptr %8, align 8
+  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %21, %14, %2
+  %27 = phi i32 [ 34, %21 ], [ 34, %14 ], [ 35, %2 ]
+  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %29 = zext nneg i32 %27 to i64
+  %30 = getelementptr [124 x ptr], ptr %28, i64 0, i64 %29
+  %31 = getelementptr i8, ptr %30, i64 80
+  %32 = load ptr, ptr %31, align 8
+  ret ptr %32
+}
+
+define ptr @ZippedCollection_B_zip_otherIterableU_zip_otherCollectionU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
+  br i1 %13, label %._crit_edge, label %14
+
+14:                                               ; preds = %2
+  %15 = load i64, ptr %5, align 4
+  %16 = load i64, ptr %6, align 4
+  %17 = load ptr, ptr %7, align 8
+  %18 = load ptr, ptr %8, align 8
+  %19 = load i64, ptr @Iterable, align 4
+  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
+  br i1 %20, label %21, label %._crit_edge
+
+21:                                               ; preds = %14
+  %22 = load i64, ptr %5, align 4
+  %23 = load i64, ptr %6, align 4
+  %24 = load ptr, ptr %7, align 8
+  %25 = load ptr, ptr %8, align 8
+  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %21, %14, %2
+  %27 = phi i32 [ 36, %21 ], [ 36, %14 ], [ 37, %2 ]
+  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %29 = zext nneg i32 %27 to i64
+  %30 = getelementptr [124 x ptr], ptr %28, i64 0, i64 %29
+  %31 = getelementptr i8, ptr %30, i64 80
+  %32 = load ptr, ptr %31, align 8
+  ret ptr %32
+}
+
+define ptr @ZippedCollection_B_product_otherCollectionU_product_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
+  br i1 %13, label %._crit_edge, label %14
+
+14:                                               ; preds = %2
+  %15 = load i64, ptr %5, align 4
+  %16 = load i64, ptr %6, align 4
+  %17 = load ptr, ptr %7, align 8
+  %18 = load ptr, ptr %8, align 8
+  %19 = load i64, ptr @Iterable, align 4
+  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
+  br i1 %20, label %21, label %._crit_edge
+
+21:                                               ; preds = %14
+  %22 = load i64, ptr %5, align 4
+  %23 = load i64, ptr %6, align 4
+  %24 = load ptr, ptr %7, align 8
+  %25 = load ptr, ptr %8, align 8
+  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %21, %14, %2
+  %27 = phi i32 [ 39, %21 ], [ 39, %14 ], [ 38, %2 ]
+  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %29 = zext nneg i32 %27 to i64
+  %30 = getelementptr [124 x ptr], ptr %28, i64 0, i64 %29
+  %31 = getelementptr i8, ptr %30, i64 80
+  %32 = load ptr, ptr %31, align 8
+  ret ptr %32
+}
+
+define void @ZippedCollection_init_firstCollectionT_secondCollectionU({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3, { ptr, ptr, ptr, i32 } %4) #3 {
+  %.fca.0.extract34 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract35 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %6 = call i32 @get_offset(ptr %.fca.0.extract34, ptr noundef nonnull align 16 dereferenceable(1072) @ZippedCollection)
+  %.fca.0.extract19 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
+  %.fca.1.extract20 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
+  %.fca.2.extract21 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
+  %7 = call i32 @get_offset(ptr %.fca.0.extract19, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %8 = call i32 @get_offset(ptr %.fca.0.extract19, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %9 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract34)
+  %10 = sext i32 %6 to i64
+  %11 = getelementptr ptr, ptr %.fca.0.extract34, i64 %10
+  %12 = getelementptr i8, ptr %11, i64 24
+  %13 = load ptr, ptr %12, align 8
+  %14 = getelementptr i8, ptr %13, i64 8
+  %15 = load ptr, ptr %14, align 8
+  %16 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract19, 0
+  %17 = insertvalue { ptr, ptr, ptr, i32 } %16, ptr %.fca.1.extract20, 1
+  %18 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %.fca.2.extract21, 2
+  %19 = insertvalue { ptr, ptr, ptr, i32 } %18, i32 %8, 3
+  call void %15(ptr %.fca.1.extract35, { ptr, ptr, ptr, i32 } %19) #30
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 2
+  %20 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %21 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract34)
+  %23 = getelementptr i8, ptr %11, i64 32
+  %24 = load ptr, ptr %23, align 8
+  %25 = getelementptr i8, ptr %24, i64 8
+  %26 = load ptr, ptr %25, align 8
+  %27 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
+  %28 = insertvalue { ptr, ptr, ptr, i32 } %27, ptr %.fca.1.extract, 1
+  %29 = insertvalue { ptr, ptr, ptr, i32 } %28, ptr %.fca.2.extract, 2
+  %30 = insertvalue { ptr, ptr, ptr, i32 } %29, i32 %21, 3
+  call void %26(ptr %.fca.1.extract35, { ptr, ptr, ptr, i32 } %30) #30
+  ret void
+}
+
+define i32 @ZippedCollection_size_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
+  %4 = alloca [0 x ptr], align 8
+  %.fca.0.extract20 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract22 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %5 = call i32 @get_offset(ptr %.fca.0.extract20, ptr noundef nonnull align 16 dereferenceable(1072) @ZippedCollection)
+  %6 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract20)
+  %7 = sext i32 %5 to i64
+  %8 = getelementptr ptr, ptr %.fca.0.extract20, i64 %7
+  %9 = getelementptr i8, ptr %8, i64 24
+  %10 = load ptr, ptr %9, align 8
+  %11 = load ptr, ptr %10, align 8
+  %12 = call { ptr, ptr, ptr, i32 } %11(ptr %.fca.1.extract22) #31
+  %13 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract5 = extractvalue { ptr, ptr, ptr, i32 } %12, 0
+  store ptr %.fca.0.extract5, ptr %13, align 8
+  %.fca.1.extract7 = extractvalue { ptr, ptr, ptr, i32 } %12, 1
+  %.fca.1.gep8 = getelementptr inbounds i8, ptr %13, i64 8
+  store ptr %.fca.1.extract7, ptr %.fca.1.gep8, align 8
+  %.fca.2.extract9 = extractvalue { ptr, ptr, ptr, i32 } %12, 2
+  %.fca.2.gep10 = getelementptr inbounds i8, ptr %13, i64 16
+  store ptr %.fca.2.extract9, ptr %.fca.2.gep10, align 8
+  %.fca.3.extract11 = extractvalue { ptr, ptr, ptr, i32 } %12, 3
+  %.fca.3.gep12 = getelementptr inbounds i8, ptr %13, i64 24
+  store i32 %.fca.3.extract11, ptr %.fca.3.gep12, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %13, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %14, 0
+  %16 = load ptr, ptr %.fca.1.gep8, align 8
+  %17 = insertvalue { ptr, ptr, ptr, i32 } %15, ptr %16, 1
+  %18 = load ptr, ptr %.fca.2.gep10, align 8
+  %19 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %18, 2
+  %20 = load i32, ptr %.fca.3.gep12, align 8
+  %21 = insertvalue { ptr, ptr, ptr, i32 } %19, i32 %20, 3
+  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %23 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %14)
+  %24 = sext i32 %20 to i64
+  %25 = getelementptr ptr, ptr %14, i64 %24
+  %26 = getelementptr i8, ptr %25, i64 8
+  %27 = load ptr, ptr %26, align 8
+  %28 = call ptr @behavior_wrapper(ptr %27, { ptr, ptr, ptr, i32 } %21, ptr noundef nonnull align 8 %4)
+  %29 = call i32 %28({ ptr, ptr, ptr, i32 } %21, { ptr, ptr, ptr, i32 } %21, ptr nonnull align 8 %4)
+  %30 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract20)
+  %31 = getelementptr i8, ptr %8, i64 32
+  %32 = load ptr, ptr %31, align 8
+  %33 = load ptr, ptr %32, align 8
+  %34 = call { ptr, ptr, ptr, i32 } %33(ptr %.fca.1.extract22) #31
+  %35 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %34, 0
+  store ptr %.fca.0.extract, ptr %35, align 8
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %34, 1
+  %.fca.1.gep = getelementptr inbounds i8, ptr %35, i64 8
+  store ptr %.fca.1.extract, ptr %.fca.1.gep, align 8
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %34, 2
+  %.fca.2.gep = getelementptr inbounds i8, ptr %35, i64 16
+  store ptr %.fca.2.extract, ptr %.fca.2.gep, align 8
+  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %34, 3
+  %.fca.3.gep = getelementptr inbounds i8, ptr %35, i64 24
+  store i32 %.fca.3.extract, ptr %.fca.3.gep, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %35, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %36 = load ptr, ptr %35, align 8
+  %37 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %36, 0
+  %38 = load ptr, ptr %.fca.1.gep, align 8
+  %39 = insertvalue { ptr, ptr, ptr, i32 } %37, ptr %38, 1
+  %40 = load ptr, ptr %.fca.2.gep, align 8
+  %41 = insertvalue { ptr, ptr, ptr, i32 } %39, ptr %40, 2
+  %42 = load i32, ptr %.fca.3.gep, align 8
+  %43 = insertvalue { ptr, ptr, ptr, i32 } %41, i32 %42, 3
+  %44 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %45 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %36)
+  %46 = sext i32 %42 to i64
+  %47 = getelementptr ptr, ptr %36, i64 %46
+  %48 = getelementptr i8, ptr %47, i64 8
+  %49 = load ptr, ptr %48, align 8
+  %50 = call ptr @behavior_wrapper(ptr %49, { ptr, ptr, ptr, i32 } %43, ptr noundef nonnull align 8 %4)
+  %51 = call i32 %50({ ptr, ptr, ptr, i32 } %43, { ptr, ptr, ptr, i32 } %43, ptr nonnull %4)
+  %.sroa.speculated = call i32 @llvm.smin.i32(i32 %29, i32 %51)
+  ret i32 %.sroa.speculated
+}
+
+define { ptr, ptr, ptr, i32 } @ZippedCollection_iterator_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
+  %4 = alloca [0 x ptr], align 8
+  %.fca.0.extract129 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract131 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %5 = call i32 @get_offset(ptr %.fca.0.extract129, ptr noundef nonnull align 16 dereferenceable(1072) @ZippedCollection)
+  %6 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract129)
+  %7 = sext i32 %5 to i64
+  %8 = getelementptr ptr, ptr %.fca.0.extract129, i64 %7
+  %9 = getelementptr i8, ptr %8, i64 24
+  %10 = load ptr, ptr %9, align 8
+  %11 = load ptr, ptr %10, align 8
+  %12 = call { ptr, ptr, ptr, i32 } %11(ptr %.fca.1.extract131) #31
+  %13 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract90 = extractvalue { ptr, ptr, ptr, i32 } %12, 0
+  store ptr %.fca.0.extract90, ptr %13, align 8
+  %.fca.1.extract92 = extractvalue { ptr, ptr, ptr, i32 } %12, 1
+  %.fca.1.gep93 = getelementptr inbounds i8, ptr %13, i64 8
+  store ptr %.fca.1.extract92, ptr %.fca.1.gep93, align 8
+  %.fca.2.extract94 = extractvalue { ptr, ptr, ptr, i32 } %12, 2
+  %.fca.2.gep95 = getelementptr inbounds i8, ptr %13, i64 16
+  store ptr %.fca.2.extract94, ptr %.fca.2.gep95, align 8
+  %.fca.3.extract96 = extractvalue { ptr, ptr, ptr, i32 } %12, 3
+  %.fca.3.gep97 = getelementptr inbounds i8, ptr %13, i64 24
+  store i32 %.fca.3.extract96, ptr %.fca.3.gep97, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %13, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %14, 0
+  %16 = load ptr, ptr %.fca.1.gep93, align 8
+  %17 = insertvalue { ptr, ptr, ptr, i32 } %15, ptr %16, 1
+  %18 = load ptr, ptr %.fca.2.gep95, align 8
+  %19 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %18, 2
+  %20 = load i32, ptr %.fca.3.gep97, align 8
+  %21 = insertvalue { ptr, ptr, ptr, i32 } %19, i32 %20, 3
+  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %23 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %14)
+  %24 = sext i32 %20 to i64
+  %25 = getelementptr ptr, ptr %14, i64 %24
+  %26 = getelementptr i8, ptr %25, i64 24
+  %27 = load ptr, ptr %26, align 8
+  %28 = call ptr @behavior_wrapper(ptr %27, { ptr, ptr, ptr, i32 } %21, ptr noundef nonnull align 8 %4)
+  %29 = call { ptr, ptr, ptr, i32 } %28({ ptr, ptr, ptr, i32 } %21, { ptr, ptr, ptr, i32 } %21, ptr nonnull align 8 %4)
+  %.fca.0.extract78 = extractvalue { ptr, ptr, ptr, i32 } %29, 0
+  %30 = call i32 @get_offset(ptr %.fca.0.extract78, ptr noundef nonnull @Iterator)
+  %31 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract129)
+  %32 = getelementptr i8, ptr %8, i64 32
+  %33 = load ptr, ptr %32, align 8
+  %34 = load ptr, ptr %33, align 8
+  %35 = call { ptr, ptr, ptr, i32 } %34(ptr %.fca.1.extract131) #31
+  %36 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract69 = extractvalue { ptr, ptr, ptr, i32 } %35, 0
+  store ptr %.fca.0.extract69, ptr %36, align 8
+  %.fca.1.extract71 = extractvalue { ptr, ptr, ptr, i32 } %35, 1
+  %.fca.1.gep72 = getelementptr inbounds i8, ptr %36, i64 8
+  store ptr %.fca.1.extract71, ptr %.fca.1.gep72, align 8
+  %.fca.2.extract73 = extractvalue { ptr, ptr, ptr, i32 } %35, 2
+  %.fca.2.gep74 = getelementptr inbounds i8, ptr %36, i64 16
+  store ptr %.fca.2.extract73, ptr %.fca.2.gep74, align 8
+  %.fca.3.extract75 = extractvalue { ptr, ptr, ptr, i32 } %35, 3
+  %.fca.3.gep76 = getelementptr inbounds i8, ptr %36, i64 24
+  store i32 %.fca.3.extract75, ptr %.fca.3.gep76, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %36, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %37 = load ptr, ptr %36, align 8
+  %38 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %37, 0
+  %39 = load ptr, ptr %.fca.1.gep72, align 8
+  %40 = insertvalue { ptr, ptr, ptr, i32 } %38, ptr %39, 1
+  %41 = load ptr, ptr %.fca.2.gep74, align 8
+  %42 = insertvalue { ptr, ptr, ptr, i32 } %40, ptr %41, 2
+  %43 = load i32, ptr %.fca.3.gep76, align 8
+  %44 = insertvalue { ptr, ptr, ptr, i32 } %42, i32 %43, 3
+  %45 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %46 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %37)
+  %47 = sext i32 %43 to i64
+  %48 = getelementptr ptr, ptr %37, i64 %47
+  %49 = getelementptr i8, ptr %48, i64 24
+  %50 = load ptr, ptr %49, align 8
+  %51 = call ptr @behavior_wrapper(ptr %50, { ptr, ptr, ptr, i32 } %44, ptr noundef nonnull align 8 %4)
+  %52 = call { ptr, ptr, ptr, i32 } %51({ ptr, ptr, ptr, i32 } %44, { ptr, ptr, ptr, i32 } %44, ptr nonnull align 8 %4)
+  %.fca.0.extract57 = extractvalue { ptr, ptr, ptr, i32 } %52, 0
+  %53 = call i32 @get_offset(ptr %.fca.0.extract57, ptr noundef nonnull @Iterator)
+  %54 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract129)
+  %55 = load ptr, ptr %8, align 8
+  %56 = call ptr @typegetter_wrapper(ptr %55, ptr %.fca.1.extract131)
+  %57 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract129)
+  %58 = getelementptr i8, ptr %8, i64 8
+  %59 = load ptr, ptr %58, align 8
+  %60 = call ptr @typegetter_wrapper(ptr %59, ptr %.fca.1.extract131)
+  %61 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract129)
+  %62 = load ptr, ptr %8, align 8
+  %63 = call ptr @typegetter_wrapper(ptr %62, ptr %.fca.1.extract131)
+  %64 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract129)
+  %65 = load ptr, ptr %58, align 8
+  %66 = call ptr @typegetter_wrapper(ptr %65, ptr %.fca.1.extract131)
+  %67 = call ptr @bump_malloc(i64 noundef 32)
+  %68 = getelementptr i8, ptr %67, i64 16
+  store ptr %66, ptr %68, align 8
+  %69 = getelementptr i8, ptr %67, i64 8
+  store ptr %63, ptr %69, align 8
+  %70 = getelementptr i8, ptr %67, i64 24
+  store ptr null, ptr %70, align 8
+  %71 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(32) %67)
+  store ptr @Pair, ptr %67, align 8
+  %72 = alloca [4 x ptr], align 8
+  store ptr @ZipIterator, ptr %72, align 8
+  %73 = getelementptr inbounds i8, ptr %72, i64 8
+  store ptr %56, ptr %73, align 8
+  %74 = getelementptr inbounds i8, ptr %72, i64 16
+  store ptr %60, ptr %74, align 8
+  %75 = getelementptr inbounds i8, ptr %72, i64 24
+  store ptr %67, ptr %75, align 8
+  %76 = load ptr, ptr getelementptr (i8, ptr @ZipIterator, i64 48), align 8
+  %77 = call { i64, i64 } @size_wrapper(ptr %76, ptr noundef nonnull align 8 dereferenceable(32) %72)
+  %78 = extractvalue { i64, i64 } %77, 0
+  %79 = call ptr @bump_malloc(i64 %78)
+  store ptr %56, ptr %79, align 8
+  %80 = getelementptr i8, ptr %79, i64 8
+  store ptr %60, ptr %80, align 8
+  %81 = getelementptr i8, ptr %79, i64 16
+  store ptr %67, ptr %81, align 8
+  %82 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %79)
+  %83 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract129)
+  %84 = load ptr, ptr %9, align 8
+  %85 = load ptr, ptr %84, align 8
+  %86 = call { ptr, ptr, ptr, i32 } %85(ptr %.fca.1.extract131) #31
+  %87 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract40 = extractvalue { ptr, ptr, ptr, i32 } %86, 0
+  store ptr %.fca.0.extract40, ptr %87, align 8
+  %.fca.1.extract42 = extractvalue { ptr, ptr, ptr, i32 } %86, 1
+  %.fca.1.gep43 = getelementptr inbounds i8, ptr %87, i64 8
+  store ptr %.fca.1.extract42, ptr %.fca.1.gep43, align 8
+  %.fca.2.extract44 = extractvalue { ptr, ptr, ptr, i32 } %86, 2
+  %.fca.2.gep45 = getelementptr inbounds i8, ptr %87, i64 16
+  store ptr %.fca.2.extract44, ptr %.fca.2.gep45, align 8
+  %.fca.3.extract46 = extractvalue { ptr, ptr, ptr, i32 } %86, 3
+  %.fca.3.gep47 = getelementptr inbounds i8, ptr %87, i64 24
+  store i32 %.fca.3.extract46, ptr %.fca.3.gep47, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %87, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %88 = load ptr, ptr %87, align 8
+  %89 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %88, 0
+  %90 = load ptr, ptr %.fca.1.gep43, align 8
+  %91 = insertvalue { ptr, ptr, ptr, i32 } %89, ptr %90, 1
+  %92 = load ptr, ptr %.fca.2.gep45, align 8
+  %93 = insertvalue { ptr, ptr, ptr, i32 } %91, ptr %92, 2
+  %94 = load i32, ptr %.fca.3.gep47, align 8
+  %95 = insertvalue { ptr, ptr, ptr, i32 } %93, i32 %94, 3
+  %96 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %97 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %88)
+  %98 = sext i32 %94 to i64
+  %99 = getelementptr ptr, ptr %88, i64 %98
+  %100 = getelementptr i8, ptr %99, i64 24
+  %101 = load ptr, ptr %100, align 8
+  %102 = call ptr @behavior_wrapper(ptr %101, { ptr, ptr, ptr, i32 } %95, ptr noundef nonnull align 8 %4)
+  %103 = call { ptr, ptr, ptr, i32 } %102({ ptr, ptr, ptr, i32 } %95, { ptr, ptr, ptr, i32 } %95, ptr nonnull align 8 %4)
+  %.fca.0.extract28 = extractvalue { ptr, ptr, ptr, i32 } %103, 0
+  %.fca.1.extract30 = extractvalue { ptr, ptr, ptr, i32 } %103, 1
+  %.fca.2.extract32 = extractvalue { ptr, ptr, ptr, i32 } %103, 2
+  %104 = call i32 @get_offset(ptr %.fca.0.extract28, ptr noundef nonnull @Iterator)
+  %105 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract129)
+  %106 = load ptr, ptr %32, align 8
+  %107 = load ptr, ptr %106, align 8
+  %108 = call { ptr, ptr, ptr, i32 } %107(ptr %.fca.1.extract131) #31
+  %109 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract19 = extractvalue { ptr, ptr, ptr, i32 } %108, 0
+  store ptr %.fca.0.extract19, ptr %109, align 8
+  %.fca.1.extract20 = extractvalue { ptr, ptr, ptr, i32 } %108, 1
+  %.fca.1.gep = getelementptr inbounds i8, ptr %109, i64 8
+  store ptr %.fca.1.extract20, ptr %.fca.1.gep, align 8
+  %.fca.2.extract21 = extractvalue { ptr, ptr, ptr, i32 } %108, 2
+  %.fca.2.gep = getelementptr inbounds i8, ptr %109, i64 16
+  store ptr %.fca.2.extract21, ptr %.fca.2.gep, align 8
+  %.fca.3.extract22 = extractvalue { ptr, ptr, ptr, i32 } %108, 3
+  %.fca.3.gep = getelementptr inbounds i8, ptr %109, i64 24
+  store i32 %.fca.3.extract22, ptr %.fca.3.gep, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %109, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %110 = load ptr, ptr %109, align 8
+  %111 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %110, 0
+  %112 = load ptr, ptr %.fca.1.gep, align 8
+  %113 = insertvalue { ptr, ptr, ptr, i32 } %111, ptr %112, 1
+  %114 = load ptr, ptr %.fca.2.gep, align 8
+  %115 = insertvalue { ptr, ptr, ptr, i32 } %113, ptr %114, 2
+  %116 = load i32, ptr %.fca.3.gep, align 8
+  %117 = insertvalue { ptr, ptr, ptr, i32 } %115, i32 %116, 3
+  %118 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %119 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %110)
+  %120 = sext i32 %116 to i64
+  %121 = getelementptr ptr, ptr %110, i64 %120
+  %122 = getelementptr i8, ptr %121, i64 24
+  %123 = load ptr, ptr %122, align 8
+  %124 = call ptr @behavior_wrapper(ptr %123, { ptr, ptr, ptr, i32 } %117, ptr noundef nonnull align 8 %4)
+  %125 = call { ptr, ptr, ptr, i32 } %124({ ptr, ptr, ptr, i32 } %117, { ptr, ptr, ptr, i32 } %117, ptr nonnull %4)
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %125, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %125, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %125, 2
+  %126 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull @Iterator)
+  %127 = call i32 @get_offset(ptr %.fca.0.extract28, ptr noundef nonnull @Iterator)
+  %128 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract28, 0
+  %129 = insertvalue { ptr, ptr, ptr, i32 } %128, ptr %.fca.1.extract30, 1
+  %130 = insertvalue { ptr, ptr, ptr, i32 } %129, ptr %.fca.2.extract32, 2
+  %131 = insertvalue { ptr, ptr, ptr, i32 } %130, i32 %127, 3
+  %132 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull @Iterator)
+  %133 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
+  %134 = insertvalue { ptr, ptr, ptr, i32 } %133, ptr %.fca.1.extract, 1
+  %135 = insertvalue { ptr, ptr, ptr, i32 } %134, ptr %.fca.2.extract, 2
+  %136 = insertvalue { ptr, ptr, ptr, i32 } %135, i32 %132, 3
+  %137 = insertvalue { ptr, ptr, ptr, i32 } { ptr @ZipIterator, ptr undef, ptr undef, i32 undef }, ptr %79, 1
+  %138 = insertvalue { ptr, ptr, ptr, i32 } %137, ptr undef, 2
+  %139 = insertvalue { ptr, ptr, ptr, i32 } %138, i32 10, 3
+  %140 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract129)
+  %141 = load ptr, ptr %8, align 8
+  %142 = call ptr @typegetter_wrapper(ptr %141, ptr %.fca.1.extract131)
+  %143 = call ptr @bump_malloc(i64 noundef 24)
+  %144 = getelementptr i8, ptr %143, i64 8
+  store ptr %142, ptr %144, align 8
+  %145 = getelementptr i8, ptr %143, i64 16
+  store ptr null, ptr %145, align 8
+  %146 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %143)
+  store ptr @Iterator, ptr %143, align 8
+  %147 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract129)
+  %148 = load ptr, ptr %58, align 8
+  %149 = call ptr @typegetter_wrapper(ptr %148, ptr %.fca.1.extract131)
+  %150 = call ptr @bump_malloc(i64 noundef 24)
+  %151 = getelementptr i8, ptr %150, i64 8
+  store ptr %149, ptr %151, align 8
+  %152 = getelementptr i8, ptr %150, i64 16
+  store ptr null, ptr %152, align 8
+  %153 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %150)
+  store ptr @Iterator, ptr %150, align 8
+  %154 = alloca [2 x ptr], align 8
+  store ptr %143, ptr %154, align 8
+  %155 = getelementptr inbounds i8, ptr %154, i64 8
+  store ptr %150, ptr %155, align 8
+  %156 = call ptr @llvm.invariant.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %154)
+  %157 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef nonnull @ZipIterator)
+  %158 = load ptr, ptr getelementptr (i8, ptr @ZipIterator, i64 120), align 8
+  %159 = alloca { ptr, ptr }, align 8
+  store ptr %.fca.0.extract28, ptr %159, align 8
+  %160 = getelementptr inbounds i8, ptr %159, i64 8
+  store ptr %.fca.0.extract, ptr %160, align 8
+  %161 = call ptr @behavior_wrapper(ptr %158, { ptr, ptr, ptr, i32 } %139, ptr noundef nonnull align 8 dereferenceable(16) %159)
+  call void %161({ ptr, ptr, ptr, i32 } %139, { ptr, ptr, ptr, i32 } %139, ptr nonnull %154, { ptr, ptr, ptr, i32 } %131, { ptr, ptr, ptr, i32 } %136)
+  %162 = call i32 @get_offset(ptr noundef nonnull @ZipIterator, ptr noundef nonnull @Iterator)
+  %163 = insertvalue { ptr, ptr, ptr, i32 } %138, i32 %162, 3
+  ret { ptr, ptr, ptr, i32 } %163
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
+define { i64, i64 } @_data_size_ZipIterator(ptr nocapture nofree readnone %0) #1 {
+  ret { i64, i64 } { i64 88, i64 8 }
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define ptr @ZipIterator_field_ZipIterator_0(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) #6 {
+  %2 = load ptr, ptr %0, align 8
+  ret ptr %2
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define ptr @ZipIterator_field_ZipIterator_1(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 8
+  %3 = load ptr, ptr %2, align 8
+  ret ptr %3
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define ptr @ZipIterator_field_ZipIterator_2(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 16
+  %3 = load ptr, ptr %2, align 8
+  ret ptr %3
+}
+
+define ptr @ZipIterator_B_init_firstIteratorT_secondIteratorU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 8673632051301757104, i64 noundef ptrtoint (ptr @Iterator to i64), ptr %12)
+  %14 = getelementptr inbounds i8, ptr %1, i64 8
+  %15 = load ptr, ptr %14, align 8
+  %16 = getelementptr i8, ptr %15, i64 8
+  %17 = getelementptr i8, ptr %15, i64 16
+  %18 = getelementptr i8, ptr %15, i64 24
+  %19 = getelementptr i8, ptr %15, i64 32
+  %20 = load i64, ptr %16, align 4
+  %21 = load i64, ptr %17, align 4
+  %22 = load ptr, ptr %18, align 8
+  %23 = load ptr, ptr %19, align 8
+  %24 = call i1 @subtype_test_wrapper(ptr %22, i64 %21, i64 %20, i64 noundef 8673632051301757104, i64 noundef ptrtoint (ptr @Iterator to i64), ptr %23)
+  %25 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %26 = getelementptr i8, ptr %25, i64 136
+  %27 = load ptr, ptr %26, align 8
+  ret ptr %27
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @ZipIterator_B_next_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 144
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+define void @ZipIterator_init_firstIteratorT_secondIteratorU({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3, { ptr, ptr, ptr, i32 } %4) #3 {
+  %.fca.0.extract34 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract35 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %6 = call i32 @get_offset(ptr %.fca.0.extract34, ptr noundef nonnull align 16 dereferenceable(176) @ZipIterator)
+  %.fca.0.extract19 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
+  %.fca.1.extract20 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
+  %.fca.2.extract21 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
+  %7 = call i32 @get_offset(ptr %.fca.0.extract19, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %8 = call i32 @get_offset(ptr %.fca.0.extract19, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %9 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef %.fca.0.extract34)
+  %10 = sext i32 %6 to i64
+  %11 = getelementptr ptr, ptr %.fca.0.extract34, i64 %10
+  %12 = getelementptr i8, ptr %11, i64 24
+  %13 = load ptr, ptr %12, align 8
+  %14 = getelementptr i8, ptr %13, i64 8
+  %15 = load ptr, ptr %14, align 8
+  %16 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract19, 0
+  %17 = insertvalue { ptr, ptr, ptr, i32 } %16, ptr %.fca.1.extract20, 1
+  %18 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %.fca.2.extract21, 2
+  %19 = insertvalue { ptr, ptr, ptr, i32 } %18, i32 %8, 3
+  call void %15(ptr %.fca.1.extract35, { ptr, ptr, ptr, i32 } %19) #30
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 2
+  %20 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %21 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef %.fca.0.extract34)
+  %23 = getelementptr i8, ptr %11, i64 32
+  %24 = load ptr, ptr %23, align 8
+  %25 = getelementptr i8, ptr %24, i64 8
+  %26 = load ptr, ptr %25, align 8
+  %27 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
+  %28 = insertvalue { ptr, ptr, ptr, i32 } %27, ptr %.fca.1.extract, 1
+  %29 = insertvalue { ptr, ptr, ptr, i32 } %28, ptr %.fca.2.extract, 2
+  %30 = insertvalue { ptr, ptr, ptr, i32 } %29, i32 %21, 3
+  call void %26(ptr %.fca.1.extract35, { ptr, ptr, ptr, i32 } %30) #30
+  ret void
+}
+
+define { ptr, i160 } @ZipIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
+  %4 = alloca [0 x ptr], align 8
+  %5 = alloca [3 x ptr], align 8
+  %6 = alloca [2 x ptr], align 8
+  %7 = alloca { ptr, ptr }, align 8
+  %.fca.0.extract46 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract48 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %8 = call i32 @get_offset(ptr %.fca.0.extract46, ptr noundef nonnull align 16 dereferenceable(176) @ZipIterator)
+  %9 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef %.fca.0.extract46)
+  %10 = sext i32 %8 to i64
+  %11 = getelementptr ptr, ptr %.fca.0.extract46, i64 %10
+  %12 = getelementptr i8, ptr %11, i64 24
+  %13 = load ptr, ptr %12, align 8
+  %14 = load ptr, ptr %13, align 8
+  %15 = call { ptr, ptr, ptr, i32 } %14(ptr %.fca.1.extract48) #31
+  %16 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract12 = extractvalue { ptr, ptr, ptr, i32 } %15, 0
+  store ptr %.fca.0.extract12, ptr %16, align 8
+  %.fca.1.extract14 = extractvalue { ptr, ptr, ptr, i32 } %15, 1
+  %.fca.1.gep15 = getelementptr inbounds i8, ptr %16, i64 8
+  store ptr %.fca.1.extract14, ptr %.fca.1.gep15, align 8
+  %.fca.2.extract16 = extractvalue { ptr, ptr, ptr, i32 } %15, 2
+  %.fca.2.gep17 = getelementptr inbounds i8, ptr %16, i64 16
+  store ptr %.fca.2.extract16, ptr %.fca.2.gep17, align 8
+  %.fca.3.extract18 = extractvalue { ptr, ptr, ptr, i32 } %15, 3
+  %.fca.3.gep19 = getelementptr inbounds i8, ptr %16, i64 24
+  store i32 %.fca.3.extract18, ptr %.fca.3.gep19, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %16, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %17 = load ptr, ptr %16, align 8
+  %18 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %17, 0
+  %19 = load ptr, ptr %.fca.1.gep15, align 8
+  %20 = insertvalue { ptr, ptr, ptr, i32 } %18, ptr %19, 1
+  %21 = load ptr, ptr %.fca.2.gep17, align 8
+  %22 = insertvalue { ptr, ptr, ptr, i32 } %20, ptr %21, 2
+  %23 = load i32, ptr %.fca.3.gep19, align 8
+  %24 = insertvalue { ptr, ptr, ptr, i32 } %22, i32 %23, 3
+  %25 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %26 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef %17)
+  %27 = sext i32 %23 to i64
+  %28 = getelementptr ptr, ptr %17, i64 %27
+  %29 = getelementptr i8, ptr %28, i64 8
+  %30 = load ptr, ptr %29, align 8
+  %31 = call ptr @behavior_wrapper(ptr %30, { ptr, ptr, ptr, i32 } %24, ptr noundef nonnull align 8 %4)
+  %32 = call { ptr, i160 } %31({ ptr, ptr, ptr, i32 } %24, { ptr, ptr, ptr, i32 } %24, ptr nonnull align 8 %4)
+  %.fca.0.extract5 = extractvalue { ptr, i160 } %32, 0
+  %33 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef %.fca.0.extract46)
+  %34 = getelementptr i8, ptr %11, i64 32
+  %35 = load ptr, ptr %34, align 8
+  %36 = load ptr, ptr %35, align 8
+  %37 = call { ptr, ptr, ptr, i32 } %36(ptr %.fca.1.extract48) #31
+  %38 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract3 = extractvalue { ptr, ptr, ptr, i32 } %37, 0
+  store ptr %.fca.0.extract3, ptr %38, align 8
+  %.fca.1.extract4 = extractvalue { ptr, ptr, ptr, i32 } %37, 1
+  %.fca.1.gep = getelementptr inbounds i8, ptr %38, i64 8
+  store ptr %.fca.1.extract4, ptr %.fca.1.gep, align 8
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %37, 2
+  %.fca.2.gep = getelementptr inbounds i8, ptr %38, i64 16
+  store ptr %.fca.2.extract, ptr %.fca.2.gep, align 8
+  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %37, 3
+  %.fca.3.gep = getelementptr inbounds i8, ptr %38, i64 24
+  store i32 %.fca.3.extract, ptr %.fca.3.gep, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %38, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %39 = load ptr, ptr %38, align 8
+  %40 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %39, 0
+  %41 = load ptr, ptr %.fca.1.gep, align 8
+  %42 = insertvalue { ptr, ptr, ptr, i32 } %40, ptr %41, 1
+  %43 = load ptr, ptr %.fca.2.gep, align 8
+  %44 = insertvalue { ptr, ptr, ptr, i32 } %42, ptr %43, 2
+  %45 = load i32, ptr %.fca.3.gep, align 8
+  %46 = insertvalue { ptr, ptr, ptr, i32 } %44, i32 %45, 3
+  %47 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %48 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef %39)
+  %49 = sext i32 %45 to i64
+  %50 = getelementptr ptr, ptr %39, i64 %49
+  %51 = getelementptr i8, ptr %50, i64 8
+  %52 = load ptr, ptr %51, align 8
+  %53 = call ptr @behavior_wrapper(ptr %52, { ptr, ptr, ptr, i32 } %46, ptr noundef nonnull align 8 %4)
+  %54 = call { ptr, i160 } %53({ ptr, ptr, ptr, i32 } %46, { ptr, ptr, ptr, i32 } %46, ptr nonnull %4)
+  %.fca.0.extract = extractvalue { ptr, i160 } %54, 0
+  %55 = icmp eq ptr %.fca.0.extract5, @nil_typ
+  %56 = icmp eq ptr %.fca.0.extract5, null
+  %57 = or i1 %55, %56
+  br i1 %57, label %.critedge, label %58
+
+58:                                               ; preds = %3
+  %59 = icmp eq ptr %.fca.0.extract, @nil_typ
+  %60 = icmp eq ptr %.fca.0.extract, null
+  %61 = or i1 %59, %60
+  br i1 %61, label %.critedge, label %62
+
+62:                                               ; preds = %58
+  %63 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef %.fca.0.extract46)
+  %64 = load ptr, ptr %11, align 8
+  %65 = call ptr @typegetter_wrapper(ptr %64, ptr %.fca.1.extract48)
+  %66 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef %.fca.0.extract46)
+  %67 = getelementptr i8, ptr %11, i64 8
+  %68 = load ptr, ptr %67, align 8
+  %69 = call ptr @typegetter_wrapper(ptr %68, ptr %.fca.1.extract48)
+  store ptr @Pair, ptr %5, align 8
+  %70 = getelementptr inbounds i8, ptr %5, i64 8
+  store ptr %65, ptr %70, align 8
+  %71 = getelementptr inbounds i8, ptr %5, i64 16
+  store ptr %69, ptr %71, align 8
+  %72 = call { i64, i64 } @size_wrapper(ptr noundef nonnull @_data_size_Pair, ptr noundef nonnull align 8 dereferenceable(24) %5)
+  %73 = extractvalue { i64, i64 } %72, 0
+  %74 = call ptr @bump_malloc(i64 %73)
+  store ptr %65, ptr %74, align 8
+  %75 = getelementptr i8, ptr %74, i64 8
+  store ptr %69, ptr %75, align 8
+  %76 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %74)
+  %77 = insertvalue { ptr, ptr, ptr, i32 } { ptr @Pair, ptr undef, ptr undef, i32 undef }, ptr %74, 1
+  %78 = insertvalue { ptr, ptr, ptr, i32 } %77, ptr undef, 2
+  %79 = insertvalue { ptr, ptr, ptr, i32 } %78, i32 10, 3
+  %80 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef %.fca.0.extract46)
+  %81 = load ptr, ptr %11, align 8
+  %82 = call ptr @typegetter_wrapper(ptr %81, ptr %.fca.1.extract48)
+  %83 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef %.fca.0.extract46)
+  %84 = load ptr, ptr %67, align 8
+  %85 = call ptr @typegetter_wrapper(ptr %84, ptr %.fca.1.extract48)
+  store ptr %82, ptr %6, align 8
+  %86 = getelementptr inbounds i8, ptr %6, i64 8
+  store ptr %85, ptr %86, align 8
+  %87 = call ptr @llvm.invariant.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %6)
+  %88 = call ptr @llvm.invariant.start.p0(i64 noundef 112, ptr nocapture nofree noundef nonnull align 16 dereferenceable(192) @Pair)
+  store ptr %.fca.0.extract5, ptr %7, align 8
+  %89 = getelementptr inbounds i8, ptr %7, i64 8
+  store ptr %.fca.0.extract, ptr %89, align 8
+  %90 = call ptr @behavior_wrapper(ptr noundef nonnull @Pair_B_init_firstT_secondU, { ptr, ptr, ptr, i32 } %79, ptr noundef nonnull align 8 dereferenceable(16) %7)
+  call void %90({ ptr, ptr, ptr, i32 } %79, { ptr, ptr, ptr, i32 } %79, ptr nonnull %6, { ptr, i160 } %32, { ptr, i160 } %54)
+  %91 = ptrtoint ptr %74 to i64
+  %.sroa.361.8.insert.ext = zext i64 %91 to i160
+  %.sroa.361.8.insert.insert = or disjoint i160 %.sroa.361.8.insert.ext, 3402823669209384634633746074317682114560
+  br label %.critedge
+
+.critedge:                                        ; preds = %62, %58, %3
+  %.reg2mem5.sroa.0.0 = phi ptr [ @Pair, %62 ], [ @nil_typ, %58 ], [ @nil_typ, %3 ]
+  %.reg2mem5.sroa.3.0 = phi i160 [ %.sroa.361.8.insert.insert, %62 ], [ undef, %58 ], [ undef, %3 ]
+  %.reload6.fca.0.insert = insertvalue { ptr, i160 } poison, ptr %.reg2mem5.sroa.0.0, 0
+  %.reload6.fca.1.insert = insertvalue { ptr, i160 } %.reload6.fca.0.insert, i160 %.reg2mem5.sroa.3.0, 1
+  ret { ptr, i160 } %.reload6.fca.1.insert
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define { ptr, ptr, ptr, i32 } @ZipIterator_getter_second(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 56
+  %3 = load ptr, ptr %2, align 8
+  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
+  %5 = getelementptr i8, ptr %0, i64 64
+  %6 = load ptr, ptr %5, align 8
+  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
+  %8 = getelementptr i8, ptr %0, i64 72
+  %9 = load ptr, ptr %8, align 8
+  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
+  %11 = getelementptr i8, ptr %0, i64 80
+  %12 = load i32, ptr %11, align 8
+  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
+  ret { ptr, ptr, ptr, i32 } %13
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
+define void @ZipIterator_setter_second(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
+  %3 = getelementptr i8, ptr %0, i64 56
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
+  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
+  store ptr %.fca.0.extract, ptr %3, align 8
+  %4 = getelementptr i8, ptr %0, i64 64
+  store ptr %.fca.1.extract, ptr %4, align 8
+  %5 = getelementptr i8, ptr %0, i64 72
+  store ptr %.fca.2.extract, ptr %5, align 8
+  %6 = getelementptr i8, ptr %0, i64 80
+  store i32 %.fca.3.extract, ptr %6, align 8
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define { ptr, ptr, ptr, i32 } @ZipIterator_getter_first(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 24
+  %3 = load ptr, ptr %2, align 8
+  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
+  %5 = getelementptr i8, ptr %0, i64 32
+  %6 = load ptr, ptr %5, align 8
+  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
+  %8 = getelementptr i8, ptr %0, i64 40
+  %9 = load ptr, ptr %8, align 8
+  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
+  %11 = getelementptr i8, ptr %0, i64 48
+  %12 = load i32, ptr %11, align 8
+  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
+  ret { ptr, ptr, ptr, i32 } %13
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
+define void @ZipIterator_setter_first(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
+  %3 = getelementptr i8, ptr %0, i64 24
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
+  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
+  store ptr %.fca.0.extract, ptr %3, align 8
+  %4 = getelementptr i8, ptr %0, i64 32
+  store ptr %.fca.1.extract, ptr %4, align 8
+  %5 = getelementptr i8, ptr %0, i64 40
+  store ptr %.fca.2.extract, ptr %5, align 8
+  %6 = getelementptr i8, ptr %0, i64 48
+  store i32 %.fca.3.extract, ptr %6, align 8
+  ret void
+}
+
+; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare i32 @llvm.smin.i32(i32, i32) #5
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define { ptr, ptr, ptr, i32 } @ZippedCollection_getter_second(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 56
+  %3 = load ptr, ptr %2, align 8
+  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
+  %5 = getelementptr i8, ptr %0, i64 64
+  %6 = load ptr, ptr %5, align 8
+  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
+  %8 = getelementptr i8, ptr %0, i64 72
+  %9 = load ptr, ptr %8, align 8
+  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
+  %11 = getelementptr i8, ptr %0, i64 80
+  %12 = load i32, ptr %11, align 8
+  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
+  ret { ptr, ptr, ptr, i32 } %13
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
+define void @ZippedCollection_setter_second(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
+  %3 = getelementptr i8, ptr %0, i64 56
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
+  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
+  store ptr %.fca.0.extract, ptr %3, align 8
+  %4 = getelementptr i8, ptr %0, i64 64
+  store ptr %.fca.1.extract, ptr %4, align 8
+  %5 = getelementptr i8, ptr %0, i64 72
+  store ptr %.fca.2.extract, ptr %5, align 8
+  %6 = getelementptr i8, ptr %0, i64 80
+  store i32 %.fca.3.extract, ptr %6, align 8
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define { ptr, ptr, ptr, i32 } @ZippedCollection_getter_first(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 24
+  %3 = load ptr, ptr %2, align 8
+  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
+  %5 = getelementptr i8, ptr %0, i64 32
+  %6 = load ptr, ptr %5, align 8
+  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
+  %8 = getelementptr i8, ptr %0, i64 40
+  %9 = load ptr, ptr %8, align 8
+  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
+  %11 = getelementptr i8, ptr %0, i64 48
+  %12 = load i32, ptr %11, align 8
+  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
+  ret { ptr, ptr, ptr, i32 } %13
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
+define void @ZippedCollection_setter_first(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
+  %3 = getelementptr i8, ptr %0, i64 24
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
+  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
+  store ptr %.fca.0.extract, ptr %3, align 8
+  %4 = getelementptr i8, ptr %0, i64 32
+  store ptr %.fca.1.extract, ptr %4, align 8
+  %5 = getelementptr i8, ptr %0, i64 40
+  store ptr %.fca.2.extract, ptr %5, align 8
+  %6 = getelementptr i8, ptr %0, i64 48
+  store i32 %.fca.3.extract, ptr %6, align 8
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
 define { i64, i64 } @_data_size_ZipIterable(ptr nocapture nofree readnone %0) #1 {
   ret { i64, i64 } { i64 88, i64 8 }
 }
@@ -12158,319 +13226,6 @@ define { ptr, ptr, ptr, i32 } @ZipIterable_iterator_({ ptr, ptr, ptr, i32 } %0, 
   ret { ptr, ptr, ptr, i32 } %161
 }
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define { i64, i64 } @_data_size_ZipIterator(ptr nocapture nofree readnone %0) #1 {
-  ret { i64, i64 } { i64 88, i64 8 }
-}
-
-define ptr @ZipIterator_B_init_firstIteratorT_secondIteratorU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 8673632051301757104, i64 noundef ptrtoint (ptr @Iterator to i64), ptr %12)
-  %14 = getelementptr inbounds i8, ptr %1, i64 8
-  %15 = load ptr, ptr %14, align 8
-  %16 = getelementptr i8, ptr %15, i64 8
-  %17 = getelementptr i8, ptr %15, i64 16
-  %18 = getelementptr i8, ptr %15, i64 24
-  %19 = getelementptr i8, ptr %15, i64 32
-  %20 = load i64, ptr %16, align 4
-  %21 = load i64, ptr %17, align 4
-  %22 = load ptr, ptr %18, align 8
-  %23 = load ptr, ptr %19, align 8
-  %24 = call i1 @subtype_test_wrapper(ptr %22, i64 %21, i64 %20, i64 noundef 8673632051301757104, i64 noundef ptrtoint (ptr @Iterator to i64), ptr %23)
-  %25 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %26 = getelementptr i8, ptr %25, i64 136
-  %27 = load ptr, ptr %26, align 8
-  ret ptr %27
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define ptr @ZipIterator_field_ZipIterator_0(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) #6 {
-  %2 = load ptr, ptr %0, align 8
-  ret ptr %2
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define ptr @ZipIterator_field_ZipIterator_1(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 8
-  %3 = load ptr, ptr %2, align 8
-  ret ptr %3
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define ptr @ZipIterator_field_ZipIterator_2(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 16
-  %3 = load ptr, ptr %2, align 8
-  ret ptr %3
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @ZipIterator_B_next_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 144
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-define void @ZipIterator_init_firstIteratorT_secondIteratorU({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3, { ptr, ptr, ptr, i32 } %4) #3 {
-  %.fca.0.extract34 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract35 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %6 = call i32 @get_offset(ptr %.fca.0.extract34, ptr noundef nonnull align 16 dereferenceable(176) @ZipIterator)
-  %.fca.0.extract19 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
-  %.fca.1.extract20 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
-  %.fca.2.extract21 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
-  %7 = call i32 @get_offset(ptr %.fca.0.extract19, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %8 = call i32 @get_offset(ptr %.fca.0.extract19, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %9 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef %.fca.0.extract34)
-  %10 = sext i32 %6 to i64
-  %11 = getelementptr ptr, ptr %.fca.0.extract34, i64 %10
-  %12 = getelementptr i8, ptr %11, i64 24
-  %13 = load ptr, ptr %12, align 8
-  %14 = getelementptr i8, ptr %13, i64 8
-  %15 = load ptr, ptr %14, align 8
-  %16 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract19, 0
-  %17 = insertvalue { ptr, ptr, ptr, i32 } %16, ptr %.fca.1.extract20, 1
-  %18 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %.fca.2.extract21, 2
-  %19 = insertvalue { ptr, ptr, ptr, i32 } %18, i32 %8, 3
-  call void %15(ptr %.fca.1.extract35, { ptr, ptr, ptr, i32 } %19) #30
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 2
-  %20 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %21 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef %.fca.0.extract34)
-  %23 = getelementptr i8, ptr %11, i64 32
-  %24 = load ptr, ptr %23, align 8
-  %25 = getelementptr i8, ptr %24, i64 8
-  %26 = load ptr, ptr %25, align 8
-  %27 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
-  %28 = insertvalue { ptr, ptr, ptr, i32 } %27, ptr %.fca.1.extract, 1
-  %29 = insertvalue { ptr, ptr, ptr, i32 } %28, ptr %.fca.2.extract, 2
-  %30 = insertvalue { ptr, ptr, ptr, i32 } %29, i32 %21, 3
-  call void %26(ptr %.fca.1.extract35, { ptr, ptr, ptr, i32 } %30) #30
-  ret void
-}
-
-define { ptr, i160 } @ZipIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
-  %4 = alloca [0 x ptr], align 8
-  %5 = alloca [3 x ptr], align 8
-  %6 = alloca [2 x ptr], align 8
-  %7 = alloca { ptr, ptr }, align 8
-  %.fca.0.extract46 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract48 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %8 = call i32 @get_offset(ptr %.fca.0.extract46, ptr noundef nonnull align 16 dereferenceable(176) @ZipIterator)
-  %9 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef %.fca.0.extract46)
-  %10 = sext i32 %8 to i64
-  %11 = getelementptr ptr, ptr %.fca.0.extract46, i64 %10
-  %12 = getelementptr i8, ptr %11, i64 24
-  %13 = load ptr, ptr %12, align 8
-  %14 = load ptr, ptr %13, align 8
-  %15 = call { ptr, ptr, ptr, i32 } %14(ptr %.fca.1.extract48) #31
-  %16 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract12 = extractvalue { ptr, ptr, ptr, i32 } %15, 0
-  store ptr %.fca.0.extract12, ptr %16, align 8
-  %.fca.1.extract14 = extractvalue { ptr, ptr, ptr, i32 } %15, 1
-  %.fca.1.gep15 = getelementptr inbounds i8, ptr %16, i64 8
-  store ptr %.fca.1.extract14, ptr %.fca.1.gep15, align 8
-  %.fca.2.extract16 = extractvalue { ptr, ptr, ptr, i32 } %15, 2
-  %.fca.2.gep17 = getelementptr inbounds i8, ptr %16, i64 16
-  store ptr %.fca.2.extract16, ptr %.fca.2.gep17, align 8
-  %.fca.3.extract18 = extractvalue { ptr, ptr, ptr, i32 } %15, 3
-  %.fca.3.gep19 = getelementptr inbounds i8, ptr %16, i64 24
-  store i32 %.fca.3.extract18, ptr %.fca.3.gep19, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %16, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %17 = load ptr, ptr %16, align 8
-  %18 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %17, 0
-  %19 = load ptr, ptr %.fca.1.gep15, align 8
-  %20 = insertvalue { ptr, ptr, ptr, i32 } %18, ptr %19, 1
-  %21 = load ptr, ptr %.fca.2.gep17, align 8
-  %22 = insertvalue { ptr, ptr, ptr, i32 } %20, ptr %21, 2
-  %23 = load i32, ptr %.fca.3.gep19, align 8
-  %24 = insertvalue { ptr, ptr, ptr, i32 } %22, i32 %23, 3
-  %25 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %26 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef %17)
-  %27 = sext i32 %23 to i64
-  %28 = getelementptr ptr, ptr %17, i64 %27
-  %29 = getelementptr i8, ptr %28, i64 8
-  %30 = load ptr, ptr %29, align 8
-  %31 = call ptr @behavior_wrapper(ptr %30, { ptr, ptr, ptr, i32 } %24, ptr noundef nonnull align 8 %4)
-  %32 = call { ptr, i160 } %31({ ptr, ptr, ptr, i32 } %24, { ptr, ptr, ptr, i32 } %24, ptr nonnull align 8 %4)
-  %.fca.0.extract5 = extractvalue { ptr, i160 } %32, 0
-  %33 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef %.fca.0.extract46)
-  %34 = getelementptr i8, ptr %11, i64 32
-  %35 = load ptr, ptr %34, align 8
-  %36 = load ptr, ptr %35, align 8
-  %37 = call { ptr, ptr, ptr, i32 } %36(ptr %.fca.1.extract48) #31
-  %38 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract3 = extractvalue { ptr, ptr, ptr, i32 } %37, 0
-  store ptr %.fca.0.extract3, ptr %38, align 8
-  %.fca.1.extract4 = extractvalue { ptr, ptr, ptr, i32 } %37, 1
-  %.fca.1.gep = getelementptr inbounds i8, ptr %38, i64 8
-  store ptr %.fca.1.extract4, ptr %.fca.1.gep, align 8
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %37, 2
-  %.fca.2.gep = getelementptr inbounds i8, ptr %38, i64 16
-  store ptr %.fca.2.extract, ptr %.fca.2.gep, align 8
-  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %37, 3
-  %.fca.3.gep = getelementptr inbounds i8, ptr %38, i64 24
-  store i32 %.fca.3.extract, ptr %.fca.3.gep, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %38, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %39 = load ptr, ptr %38, align 8
-  %40 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %39, 0
-  %41 = load ptr, ptr %.fca.1.gep, align 8
-  %42 = insertvalue { ptr, ptr, ptr, i32 } %40, ptr %41, 1
-  %43 = load ptr, ptr %.fca.2.gep, align 8
-  %44 = insertvalue { ptr, ptr, ptr, i32 } %42, ptr %43, 2
-  %45 = load i32, ptr %.fca.3.gep, align 8
-  %46 = insertvalue { ptr, ptr, ptr, i32 } %44, i32 %45, 3
-  %47 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %48 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef %39)
-  %49 = sext i32 %45 to i64
-  %50 = getelementptr ptr, ptr %39, i64 %49
-  %51 = getelementptr i8, ptr %50, i64 8
-  %52 = load ptr, ptr %51, align 8
-  %53 = call ptr @behavior_wrapper(ptr %52, { ptr, ptr, ptr, i32 } %46, ptr noundef nonnull align 8 %4)
-  %54 = call { ptr, i160 } %53({ ptr, ptr, ptr, i32 } %46, { ptr, ptr, ptr, i32 } %46, ptr nonnull %4)
-  %.fca.0.extract = extractvalue { ptr, i160 } %54, 0
-  %55 = icmp eq ptr %.fca.0.extract5, @nil_typ
-  %56 = icmp eq ptr %.fca.0.extract5, null
-  %57 = or i1 %55, %56
-  br i1 %57, label %.critedge, label %58
-
-58:                                               ; preds = %3
-  %59 = icmp eq ptr %.fca.0.extract, @nil_typ
-  %60 = icmp eq ptr %.fca.0.extract, null
-  %61 = or i1 %59, %60
-  br i1 %61, label %.critedge, label %62
-
-62:                                               ; preds = %58
-  %63 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef %.fca.0.extract46)
-  %64 = load ptr, ptr %11, align 8
-  %65 = call ptr @typegetter_wrapper(ptr %64, ptr %.fca.1.extract48)
-  %66 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef %.fca.0.extract46)
-  %67 = getelementptr i8, ptr %11, i64 8
-  %68 = load ptr, ptr %67, align 8
-  %69 = call ptr @typegetter_wrapper(ptr %68, ptr %.fca.1.extract48)
-  store ptr @Pair, ptr %5, align 8
-  %70 = getelementptr inbounds i8, ptr %5, i64 8
-  store ptr %65, ptr %70, align 8
-  %71 = getelementptr inbounds i8, ptr %5, i64 16
-  store ptr %69, ptr %71, align 8
-  %72 = call { i64, i64 } @size_wrapper(ptr noundef nonnull @_data_size_Pair, ptr noundef nonnull align 8 dereferenceable(24) %5)
-  %73 = extractvalue { i64, i64 } %72, 0
-  %74 = call ptr @bump_malloc(i64 %73)
-  store ptr %65, ptr %74, align 8
-  %75 = getelementptr i8, ptr %74, i64 8
-  store ptr %69, ptr %75, align 8
-  %76 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %74)
-  %77 = insertvalue { ptr, ptr, ptr, i32 } { ptr @Pair, ptr undef, ptr undef, i32 undef }, ptr %74, 1
-  %78 = insertvalue { ptr, ptr, ptr, i32 } %77, ptr undef, 2
-  %79 = insertvalue { ptr, ptr, ptr, i32 } %78, i32 10, 3
-  %80 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef %.fca.0.extract46)
-  %81 = load ptr, ptr %11, align 8
-  %82 = call ptr @typegetter_wrapper(ptr %81, ptr %.fca.1.extract48)
-  %83 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef %.fca.0.extract46)
-  %84 = load ptr, ptr %67, align 8
-  %85 = call ptr @typegetter_wrapper(ptr %84, ptr %.fca.1.extract48)
-  store ptr %82, ptr %6, align 8
-  %86 = getelementptr inbounds i8, ptr %6, i64 8
-  store ptr %85, ptr %86, align 8
-  %87 = call ptr @llvm.invariant.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %6)
-  %88 = call ptr @llvm.invariant.start.p0(i64 noundef 112, ptr nocapture nofree noundef nonnull align 16 dereferenceable(192) @Pair)
-  store ptr %.fca.0.extract5, ptr %7, align 8
-  %89 = getelementptr inbounds i8, ptr %7, i64 8
-  store ptr %.fca.0.extract, ptr %89, align 8
-  %90 = call ptr @behavior_wrapper(ptr noundef nonnull @Pair_B_init_firstT_secondU, { ptr, ptr, ptr, i32 } %79, ptr noundef nonnull align 8 dereferenceable(16) %7)
-  call void %90({ ptr, ptr, ptr, i32 } %79, { ptr, ptr, ptr, i32 } %79, ptr nonnull %6, { ptr, i160 } %32, { ptr, i160 } %54)
-  %91 = ptrtoint ptr %74 to i64
-  %.sroa.361.8.insert.ext = zext i64 %91 to i160
-  %.sroa.361.8.insert.insert = or disjoint i160 %.sroa.361.8.insert.ext, 3402823669209384634633746074317682114560
-  br label %.critedge
-
-.critedge:                                        ; preds = %62, %58, %3
-  %.reg2mem5.sroa.0.0 = phi ptr [ @Pair, %62 ], [ @nil_typ, %58 ], [ @nil_typ, %3 ]
-  %.reg2mem5.sroa.3.0 = phi i160 [ %.sroa.361.8.insert.insert, %62 ], [ undef, %58 ], [ undef, %3 ]
-  %.reload6.fca.0.insert = insertvalue { ptr, i160 } poison, ptr %.reg2mem5.sroa.0.0, 0
-  %.reload6.fca.1.insert = insertvalue { ptr, i160 } %.reload6.fca.0.insert, i160 %.reg2mem5.sroa.3.0, 1
-  ret { ptr, i160 } %.reload6.fca.1.insert
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define { ptr, ptr, ptr, i32 } @ZipIterator_getter_second(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 56
-  %3 = load ptr, ptr %2, align 8
-  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
-  %5 = getelementptr i8, ptr %0, i64 64
-  %6 = load ptr, ptr %5, align 8
-  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
-  %8 = getelementptr i8, ptr %0, i64 72
-  %9 = load ptr, ptr %8, align 8
-  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
-  %11 = getelementptr i8, ptr %0, i64 80
-  %12 = load i32, ptr %11, align 8
-  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
-  ret { ptr, ptr, ptr, i32 } %13
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define void @ZipIterator_setter_second(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
-  %3 = getelementptr i8, ptr %0, i64 56
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
-  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
-  store ptr %.fca.0.extract, ptr %3, align 8
-  %4 = getelementptr i8, ptr %0, i64 64
-  store ptr %.fca.1.extract, ptr %4, align 8
-  %5 = getelementptr i8, ptr %0, i64 72
-  store ptr %.fca.2.extract, ptr %5, align 8
-  %6 = getelementptr i8, ptr %0, i64 80
-  store i32 %.fca.3.extract, ptr %6, align 8
-  ret void
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define { ptr, ptr, ptr, i32 } @ZipIterator_getter_first(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 24
-  %3 = load ptr, ptr %2, align 8
-  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
-  %5 = getelementptr i8, ptr %0, i64 32
-  %6 = load ptr, ptr %5, align 8
-  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
-  %8 = getelementptr i8, ptr %0, i64 40
-  %9 = load ptr, ptr %8, align 8
-  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
-  %11 = getelementptr i8, ptr %0, i64 48
-  %12 = load i32, ptr %11, align 8
-  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
-  ret { ptr, ptr, ptr, i32 } %13
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define void @ZipIterator_setter_first(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
-  %3 = getelementptr i8, ptr %0, i64 24
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
-  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
-  store ptr %.fca.0.extract, ptr %3, align 8
-  %4 = getelementptr i8, ptr %0, i64 32
-  store ptr %.fca.1.extract, ptr %4, align 8
-  %5 = getelementptr i8, ptr %0, i64 40
-  store ptr %.fca.2.extract, ptr %5, align 8
-  %6 = getelementptr i8, ptr %0, i64 48
-  store i32 %.fca.3.extract, ptr %6, align 8
-  ret void
-}
-
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
 define { ptr, ptr, ptr, i32 } @ZipIterable_getter_second(ptr nocapture nofree readonly align 8 %0) #6 {
   %2 = getelementptr i8, ptr %0, i64 56
@@ -12540,11 +13295,11 @@ define void @ZipIterable_setter_first(ptr nocapture nofree writeonly align 8 %0,
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define { i64, i64 } @_data_size_ZippedCollection(ptr nocapture nofree readnone %0) #1 {
-  ret { i64, i64 } { i64 88, i64 8 }
+define { i64, i64 } @_data_size_InterleavedCollection(ptr nocapture nofree readnone %0) #1 {
+  ret { i64, i64 } { i64 72, i64 8 }
 }
 
-define ptr @ZippedCollection_B_init_firstCollectionT_secondCollectionU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @InterleavedCollection_B_init_firstCollectionT_secondCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -12568,33 +13323,37 @@ define ptr @ZippedCollection_B_init_firstCollectionT_secondCollectionU({ ptr, pt
   %23 = load ptr, ptr %19, align 8
   %24 = call i1 @subtype_test_wrapper(ptr %22, i64 %21, i64 %20, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %23)
   %25 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %26 = getelementptr i8, ptr %25, i64 240
+  %26 = getelementptr i8, ptr %25, i64 224
   %27 = load ptr, ptr %26, align 8
   ret ptr %27
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define ptr @ZippedCollection_field_ZippedCollection_0(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) #6 {
+define ptr @InterleavedCollection_field_InterleavedCollection_0(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) #6 {
   %2 = load ptr, ptr %0, align 8
   ret ptr %2
 }
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define ptr @ZippedCollection_field_ZippedCollection_1(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 8
-  %3 = load ptr, ptr %2, align 8
-  ret ptr %3
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define ptr @ZippedCollection_field_ZippedCollection_2(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 16
-  %3 = load ptr, ptr %2, align 8
-  ret ptr %3
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @InterleavedCollection_B_size_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 232
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @ZippedCollection_B_size_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
+define ptr @InterleavedCollection_B_is_empty_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 240
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @InterleavedCollection_B_iterator_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %5 = getelementptr i8, ptr %4, i64 248
@@ -12603,33 +13362,15 @@ define ptr @ZippedCollection_B_size_({ ptr, ptr, ptr, i32 } %0, ptr nocapture no
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @ZippedCollection_B_is_empty_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
+define ptr @InterleavedCollection_B_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %5 = getelementptr i8, ptr %4, i64 256
   %6 = load ptr, ptr %5, align 8
   ret ptr %6
 }
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @ZippedCollection_B_iterator_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 264
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @ZippedCollection_B_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 272
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-define ptr @ZippedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @InterleavedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -12640,17 +13381,35 @@ define ptr @ZippedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, ptr
   %10 = load i64, ptr %6, align 4
   %11 = load ptr, ptr %7, align 8
   %12 = load ptr, ptr %8, align 8
-  %13 = load i64, ptr @Pair, align 4
-  %14 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 %13, i64 noundef ptrtoint (ptr @Pair to i64), ptr %12)
+  %13 = load i64, ptr @any_typ, align 4
+  %14 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 %13, i64 noundef ptrtoint (ptr @any_typ to i64), ptr %12)
   %15 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %16 = getelementptr i8, ptr %15, i64 280
+  %16 = getelementptr i8, ptr %15, i64 264
   %17 = load ptr, ptr %16, align 8
   ret ptr %17
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @ZippedCollection_B_all_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
+define ptr @InterleavedCollection_B_all_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 272
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @InterleavedCollection_B_any_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 280
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @InterleavedCollection_B_enumerate_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %5 = getelementptr i8, ptr %4, i64 288
   %6 = load ptr, ptr %5, align 8
@@ -12658,46 +13417,69 @@ define ptr @ZippedCollection_B_all_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0,
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @ZippedCollection_B_any_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 296
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @ZippedCollection_B_enumerate_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 304
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @ZippedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
+define ptr @InterleavedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = icmp eq ptr %4, @function_typ
   %6 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %7 = select i1 %5, i64 30, i64 29
-  %8 = getelementptr [124 x ptr], ptr %6, i64 0, i64 %7
+  %7 = select i1 %5, i64 28, i64 27
+  %8 = getelementptr [122 x ptr], ptr %6, i64 0, i64 %7
   %9 = getelementptr i8, ptr %8, i64 80
   %10 = load ptr, ptr %9, align 8
   ret ptr %10
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @ZippedCollection_B_filter_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
+define ptr @InterleavedCollection_B_filter_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 328
+  %5 = getelementptr i8, ptr %4, i64 312
   %6 = load ptr, ptr %5, align 8
   ret ptr %6
 }
 
-define ptr @ZippedCollection_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @InterleavedCollection_B_chain_otherCollectionT_chain_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
+  br i1 %13, label %._crit_edge, label %14
+
+14:                                               ; preds = %2
+  %15 = load i64, ptr %5, align 4
+  %16 = load i64, ptr %6, align 4
+  %17 = load ptr, ptr %7, align 8
+  %18 = load ptr, ptr %8, align 8
+  %19 = load i64, ptr @Iterable, align 4
+  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
+  br i1 %20, label %21, label %._crit_edge
+
+21:                                               ; preds = %14
+  %22 = load i64, ptr %5, align 4
+  %23 = load i64, ptr %6, align 4
+  %24 = load ptr, ptr %7, align 8
+  %25 = load ptr, ptr %8, align 8
+  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %21, %14, %2
+  %27 = phi i32 [ 31, %21 ], [ 31, %14 ], [ 30, %2 ]
+  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %29 = zext nneg i32 %27 to i64
+  %30 = getelementptr [122 x ptr], ptr %28, i64 0, i64 %29
+  %31 = getelementptr i8, ptr %30, i64 80
+  %32 = load ptr, ptr %31, align 8
+  ret ptr %32
+}
+
+define ptr @InterleavedCollection_B_interleave_otherIterableT_interleave_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -12732,13 +13514,13 @@ define ptr @ZippedCollection_B_chain_otherIterableT_chain_otherCollectionT({ ptr
   %27 = phi i32 [ 32, %21 ], [ 32, %14 ], [ 33, %2 ]
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %29 = zext nneg i32 %27 to i64
-  %30 = getelementptr [124 x ptr], ptr %28, i64 0, i64 %29
+  %30 = getelementptr [122 x ptr], ptr %28, i64 0, i64 %29
   %31 = getelementptr i8, ptr %30, i64 80
   %32 = load ptr, ptr %31, align 8
   ret ptr %32
 }
 
-define ptr @ZippedCollection_B_interleave_otherCollectionT_interleave_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @InterleavedCollection_B_zip_otherIterableU_zip_otherCollectionU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -12770,16 +13552,16 @@ define ptr @ZippedCollection_B_interleave_otherCollectionT_interleave_otherItera
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %21, %14, %2
-  %27 = phi i32 [ 35, %21 ], [ 35, %14 ], [ 34, %2 ]
+  %27 = phi i32 [ 34, %21 ], [ 34, %14 ], [ 35, %2 ]
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %29 = zext nneg i32 %27 to i64
-  %30 = getelementptr [124 x ptr], ptr %28, i64 0, i64 %29
+  %30 = getelementptr [122 x ptr], ptr %28, i64 0, i64 %29
   %31 = getelementptr i8, ptr %30, i64 80
   %32 = load ptr, ptr %31, align 8
   ret ptr %32
 }
 
-define ptr @ZippedCollection_B_zip_otherCollectionU_zip_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @InterleavedCollection_B_product_otherCollectionU_product_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -12814,66 +13596,25 @@ define ptr @ZippedCollection_B_zip_otherCollectionU_zip_otherIterableU({ ptr, pt
   %27 = phi i32 [ 37, %21 ], [ 37, %14 ], [ 36, %2 ]
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %29 = zext nneg i32 %27 to i64
-  %30 = getelementptr [124 x ptr], ptr %28, i64 0, i64 %29
+  %30 = getelementptr [122 x ptr], ptr %28, i64 0, i64 %29
   %31 = getelementptr i8, ptr %30, i64 80
   %32 = load ptr, ptr %31, align 8
   ret ptr %32
 }
 
-define ptr @ZippedCollection_B_product_otherCollectionU_product_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
-  br i1 %13, label %._crit_edge, label %14
-
-14:                                               ; preds = %2
-  %15 = load i64, ptr %5, align 4
-  %16 = load i64, ptr %6, align 4
-  %17 = load ptr, ptr %7, align 8
-  %18 = load ptr, ptr %8, align 8
-  %19 = load i64, ptr @Iterable, align 4
-  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
-  br i1 %20, label %21, label %._crit_edge
-
-21:                                               ; preds = %14
-  %22 = load i64, ptr %5, align 4
-  %23 = load i64, ptr %6, align 4
-  %24 = load ptr, ptr %7, align 8
-  %25 = load ptr, ptr %8, align 8
-  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
-  br label %._crit_edge
-
-._crit_edge:                                      ; preds = %21, %14, %2
-  %27 = phi i32 [ 39, %21 ], [ 39, %14 ], [ 38, %2 ]
-  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = zext nneg i32 %27 to i64
-  %30 = getelementptr [124 x ptr], ptr %28, i64 0, i64 %29
-  %31 = getelementptr i8, ptr %30, i64 80
-  %32 = load ptr, ptr %31, align 8
-  ret ptr %32
-}
-
-define void @ZippedCollection_init_firstCollectionT_secondCollectionU({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3, { ptr, ptr, ptr, i32 } %4) #3 {
+define void @InterleavedCollection_init_firstCollectionT_secondCollectionT({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3, { ptr, ptr, ptr, i32 } %4) #3 {
   %.fca.0.extract34 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %.fca.1.extract35 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %6 = call i32 @get_offset(ptr %.fca.0.extract34, ptr noundef nonnull align 16 dereferenceable(1072) @ZippedCollection)
+  %6 = call i32 @get_offset(ptr %.fca.0.extract34, ptr noundef nonnull align 16 dereferenceable(1056) @InterleavedCollection)
   %.fca.0.extract19 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
   %.fca.1.extract20 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
   %.fca.2.extract21 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
   %7 = call i32 @get_offset(ptr %.fca.0.extract19, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
   %8 = call i32 @get_offset(ptr %.fca.0.extract19, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %9 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract34)
+  %9 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract34)
   %10 = sext i32 %6 to i64
   %11 = getelementptr ptr, ptr %.fca.0.extract34, i64 %10
-  %12 = getelementptr i8, ptr %11, i64 24
+  %12 = getelementptr i8, ptr %11, i64 8
   %13 = load ptr, ptr %12, align 8
   %14 = getelementptr i8, ptr %13, i64 8
   %15 = load ptr, ptr %14, align 8
@@ -12887,8 +13628,8 @@ define void @ZippedCollection_init_firstCollectionT_secondCollectionU({ ptr, ptr
   %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 2
   %20 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
   %21 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract34)
-  %23 = getelementptr i8, ptr %11, i64 32
+  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract34)
+  %23 = getelementptr i8, ptr %11, i64 16
   %24 = load ptr, ptr %23, align 8
   %25 = getelementptr i8, ptr %24, i64 8
   %26 = load ptr, ptr %25, align 8
@@ -12900,38 +13641,38 @@ define void @ZippedCollection_init_firstCollectionT_secondCollectionU({ ptr, ptr
   ret void
 }
 
-define i32 @ZippedCollection_size_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
+define i32 @InterleavedCollection_size_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
   %4 = alloca [0 x ptr], align 8
-  %.fca.0.extract20 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract22 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %5 = call i32 @get_offset(ptr %.fca.0.extract20, ptr noundef nonnull align 16 dereferenceable(1072) @ZippedCollection)
-  %6 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract20)
+  %.fca.0.extract17 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract19 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %5 = call i32 @get_offset(ptr %.fca.0.extract17, ptr noundef nonnull align 16 dereferenceable(1056) @InterleavedCollection)
+  %6 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract17)
   %7 = sext i32 %5 to i64
-  %8 = getelementptr ptr, ptr %.fca.0.extract20, i64 %7
-  %9 = getelementptr i8, ptr %8, i64 24
+  %8 = getelementptr ptr, ptr %.fca.0.extract17, i64 %7
+  %9 = getelementptr i8, ptr %8, i64 8
   %10 = load ptr, ptr %9, align 8
   %11 = load ptr, ptr %10, align 8
-  %12 = call { ptr, ptr, ptr, i32 } %11(ptr %.fca.1.extract22) #31
+  %12 = call { ptr, ptr, ptr, i32 } %11(ptr %.fca.1.extract19) #31
   %13 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract5 = extractvalue { ptr, ptr, ptr, i32 } %12, 0
-  store ptr %.fca.0.extract5, ptr %13, align 8
-  %.fca.1.extract7 = extractvalue { ptr, ptr, ptr, i32 } %12, 1
-  %.fca.1.gep8 = getelementptr inbounds i8, ptr %13, i64 8
-  store ptr %.fca.1.extract7, ptr %.fca.1.gep8, align 8
-  %.fca.2.extract9 = extractvalue { ptr, ptr, ptr, i32 } %12, 2
-  %.fca.2.gep10 = getelementptr inbounds i8, ptr %13, i64 16
-  store ptr %.fca.2.extract9, ptr %.fca.2.gep10, align 8
-  %.fca.3.extract11 = extractvalue { ptr, ptr, ptr, i32 } %12, 3
-  %.fca.3.gep12 = getelementptr inbounds i8, ptr %13, i64 24
-  store i32 %.fca.3.extract11, ptr %.fca.3.gep12, align 8
+  %.fca.0.extract3 = extractvalue { ptr, ptr, ptr, i32 } %12, 0
+  store ptr %.fca.0.extract3, ptr %13, align 8
+  %.fca.1.extract5 = extractvalue { ptr, ptr, ptr, i32 } %12, 1
+  %.fca.1.gep6 = getelementptr inbounds i8, ptr %13, i64 8
+  store ptr %.fca.1.extract5, ptr %.fca.1.gep6, align 8
+  %.fca.2.extract7 = extractvalue { ptr, ptr, ptr, i32 } %12, 2
+  %.fca.2.gep8 = getelementptr inbounds i8, ptr %13, i64 16
+  store ptr %.fca.2.extract7, ptr %.fca.2.gep8, align 8
+  %.fca.3.extract9 = extractvalue { ptr, ptr, ptr, i32 } %12, 3
+  %.fca.3.gep10 = getelementptr inbounds i8, ptr %13, i64 24
+  store i32 %.fca.3.extract9, ptr %.fca.3.gep10, align 8
   call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %13, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
   %14 = load ptr, ptr %13, align 8
   %15 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %14, 0
-  %16 = load ptr, ptr %.fca.1.gep8, align 8
+  %16 = load ptr, ptr %.fca.1.gep6, align 8
   %17 = insertvalue { ptr, ptr, ptr, i32 } %15, ptr %16, 1
-  %18 = load ptr, ptr %.fca.2.gep10, align 8
+  %18 = load ptr, ptr %.fca.2.gep8, align 8
   %19 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %18, 2
-  %20 = load i32, ptr %.fca.3.gep12, align 8
+  %20 = load i32, ptr %.fca.3.gep10, align 8
   %21 = insertvalue { ptr, ptr, ptr, i32 } %19, i32 %20, 3
   %22 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
   %23 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %14)
@@ -12941,11 +13682,11 @@ define i32 @ZippedCollection_size_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i
   %27 = load ptr, ptr %26, align 8
   %28 = call ptr @behavior_wrapper(ptr %27, { ptr, ptr, ptr, i32 } %21, ptr noundef nonnull align 8 %4)
   %29 = call i32 %28({ ptr, ptr, ptr, i32 } %21, { ptr, ptr, ptr, i32 } %21, ptr nonnull align 8 %4)
-  %30 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract20)
-  %31 = getelementptr i8, ptr %8, i64 32
+  %30 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract17)
+  %31 = getelementptr i8, ptr %8, i64 16
   %32 = load ptr, ptr %31, align 8
   %33 = load ptr, ptr %32, align 8
-  %34 = call { ptr, ptr, ptr, i32 } %33(ptr %.fca.1.extract22) #31
+  %34 = call { ptr, ptr, ptr, i32 } %33(ptr %.fca.1.extract19) #31
   %35 = alloca { ptr, ptr, ptr, i32 }, align 8
   %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %34, 0
   store ptr %.fca.0.extract, ptr %35, align 8
@@ -12975,22 +13716,22 @@ define i32 @ZippedCollection_size_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i
   %49 = load ptr, ptr %48, align 8
   %50 = call ptr @behavior_wrapper(ptr %49, { ptr, ptr, ptr, i32 } %43, ptr noundef nonnull align 8 %4)
   %51 = call i32 %50({ ptr, ptr, ptr, i32 } %43, { ptr, ptr, ptr, i32 } %43, ptr nonnull %4)
-  %.sroa.speculated = call i32 @llvm.smin.i32(i32 %29, i32 %51)
-  ret i32 %.sroa.speculated
+  %52 = add i32 %51, %29
+  ret i32 %52
 }
 
-define { ptr, ptr, ptr, i32 } @ZippedCollection_iterator_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
+define { ptr, ptr, ptr, i32 } @InterleavedCollection_iterator_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
   %4 = alloca [0 x ptr], align 8
-  %.fca.0.extract129 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract131 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %5 = call i32 @get_offset(ptr %.fca.0.extract129, ptr noundef nonnull align 16 dereferenceable(1072) @ZippedCollection)
-  %6 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract129)
+  %.fca.0.extract120 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract122 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %5 = call i32 @get_offset(ptr %.fca.0.extract120, ptr noundef nonnull align 16 dereferenceable(1056) @InterleavedCollection)
+  %6 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
   %7 = sext i32 %5 to i64
-  %8 = getelementptr ptr, ptr %.fca.0.extract129, i64 %7
-  %9 = getelementptr i8, ptr %8, i64 24
+  %8 = getelementptr ptr, ptr %.fca.0.extract120, i64 %7
+  %9 = getelementptr i8, ptr %8, i64 8
   %10 = load ptr, ptr %9, align 8
   %11 = load ptr, ptr %10, align 8
-  %12 = call { ptr, ptr, ptr, i32 } %11(ptr %.fca.1.extract131) #31
+  %12 = call { ptr, ptr, ptr, i32 } %11(ptr %.fca.1.extract122) #31
   %13 = alloca { ptr, ptr, ptr, i32 }, align 8
   %.fca.0.extract90 = extractvalue { ptr, ptr, ptr, i32 } %12, 0
   store ptr %.fca.0.extract90, ptr %13, align 8
@@ -13022,11 +13763,11 @@ define { ptr, ptr, ptr, i32 } @ZippedCollection_iterator_({ ptr, ptr, ptr, i32 }
   %29 = call { ptr, ptr, ptr, i32 } %28({ ptr, ptr, ptr, i32 } %21, { ptr, ptr, ptr, i32 } %21, ptr nonnull align 8 %4)
   %.fca.0.extract78 = extractvalue { ptr, ptr, ptr, i32 } %29, 0
   %30 = call i32 @get_offset(ptr %.fca.0.extract78, ptr noundef nonnull @Iterator)
-  %31 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract129)
-  %32 = getelementptr i8, ptr %8, i64 32
+  %31 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
+  %32 = getelementptr i8, ptr %8, i64 16
   %33 = load ptr, ptr %32, align 8
   %34 = load ptr, ptr %33, align 8
-  %35 = call { ptr, ptr, ptr, i32 } %34(ptr %.fca.1.extract131) #31
+  %35 = call { ptr, ptr, ptr, i32 } %34(ptr %.fca.1.extract122) #31
   %36 = alloca { ptr, ptr, ptr, i32 }, align 8
   %.fca.0.extract69 = extractvalue { ptr, ptr, ptr, i32 } %35, 0
   store ptr %.fca.0.extract69, ptr %36, align 8
@@ -13058,238 +13799,555 @@ define { ptr, ptr, ptr, i32 } @ZippedCollection_iterator_({ ptr, ptr, ptr, i32 }
   %52 = call { ptr, ptr, ptr, i32 } %51({ ptr, ptr, ptr, i32 } %44, { ptr, ptr, ptr, i32 } %44, ptr nonnull align 8 %4)
   %.fca.0.extract57 = extractvalue { ptr, ptr, ptr, i32 } %52, 0
   %53 = call i32 @get_offset(ptr %.fca.0.extract57, ptr noundef nonnull @Iterator)
-  %54 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract129)
+  %54 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
   %55 = load ptr, ptr %8, align 8
-  %56 = call ptr @typegetter_wrapper(ptr %55, ptr %.fca.1.extract131)
-  %57 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract129)
-  %58 = getelementptr i8, ptr %8, i64 8
-  %59 = load ptr, ptr %58, align 8
-  %60 = call ptr @typegetter_wrapper(ptr %59, ptr %.fca.1.extract131)
-  %61 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract129)
-  %62 = load ptr, ptr %8, align 8
-  %63 = call ptr @typegetter_wrapper(ptr %62, ptr %.fca.1.extract131)
-  %64 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract129)
-  %65 = load ptr, ptr %58, align 8
-  %66 = call ptr @typegetter_wrapper(ptr %65, ptr %.fca.1.extract131)
-  %67 = call ptr @bump_malloc(i64 noundef 32)
-  %68 = getelementptr i8, ptr %67, i64 16
-  store ptr %66, ptr %68, align 8
-  %69 = getelementptr i8, ptr %67, i64 8
-  store ptr %63, ptr %69, align 8
-  %70 = getelementptr i8, ptr %67, i64 24
-  store ptr null, ptr %70, align 8
-  %71 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(32) %67)
-  store ptr @Pair, ptr %67, align 8
-  %72 = alloca [4 x ptr], align 8
-  store ptr @ZipIterator, ptr %72, align 8
-  %73 = getelementptr inbounds i8, ptr %72, i64 8
-  store ptr %56, ptr %73, align 8
-  %74 = getelementptr inbounds i8, ptr %72, i64 16
-  store ptr %60, ptr %74, align 8
-  %75 = getelementptr inbounds i8, ptr %72, i64 24
-  store ptr %67, ptr %75, align 8
-  %76 = load ptr, ptr getelementptr (i8, ptr @ZipIterator, i64 48), align 8
-  %77 = call { i64, i64 } @size_wrapper(ptr %76, ptr noundef nonnull align 8 dereferenceable(32) %72)
-  %78 = extractvalue { i64, i64 } %77, 0
-  %79 = call ptr @bump_malloc(i64 %78)
-  store ptr %56, ptr %79, align 8
-  %80 = getelementptr i8, ptr %79, i64 8
-  store ptr %60, ptr %80, align 8
-  %81 = getelementptr i8, ptr %79, i64 16
-  store ptr %67, ptr %81, align 8
-  %82 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %79)
-  %83 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract129)
-  %84 = load ptr, ptr %9, align 8
-  %85 = load ptr, ptr %84, align 8
-  %86 = call { ptr, ptr, ptr, i32 } %85(ptr %.fca.1.extract131) #31
-  %87 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract40 = extractvalue { ptr, ptr, ptr, i32 } %86, 0
-  store ptr %.fca.0.extract40, ptr %87, align 8
-  %.fca.1.extract42 = extractvalue { ptr, ptr, ptr, i32 } %86, 1
-  %.fca.1.gep43 = getelementptr inbounds i8, ptr %87, i64 8
+  %56 = call ptr @typegetter_wrapper(ptr %55, ptr %.fca.1.extract122)
+  %57 = alloca [2 x ptr], align 8
+  store ptr @InterleaveIterator, ptr %57, align 8
+  %58 = getelementptr inbounds i8, ptr %57, i64 8
+  store ptr %56, ptr %58, align 8
+  %59 = load ptr, ptr getelementptr (i8, ptr @InterleaveIterator, i64 48), align 8
+  %60 = call { i64, i64 } @size_wrapper(ptr %59, ptr noundef nonnull align 8 dereferenceable(16) %57)
+  %61 = extractvalue { i64, i64 } %60, 0
+  %62 = call ptr @bump_malloc(i64 %61)
+  store ptr %56, ptr %62, align 8
+  %63 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %62)
+  %64 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
+  %65 = load ptr, ptr %9, align 8
+  %66 = load ptr, ptr %65, align 8
+  %67 = call { ptr, ptr, ptr, i32 } %66(ptr %.fca.1.extract122) #31
+  %68 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract40 = extractvalue { ptr, ptr, ptr, i32 } %67, 0
+  store ptr %.fca.0.extract40, ptr %68, align 8
+  %.fca.1.extract42 = extractvalue { ptr, ptr, ptr, i32 } %67, 1
+  %.fca.1.gep43 = getelementptr inbounds i8, ptr %68, i64 8
   store ptr %.fca.1.extract42, ptr %.fca.1.gep43, align 8
-  %.fca.2.extract44 = extractvalue { ptr, ptr, ptr, i32 } %86, 2
-  %.fca.2.gep45 = getelementptr inbounds i8, ptr %87, i64 16
+  %.fca.2.extract44 = extractvalue { ptr, ptr, ptr, i32 } %67, 2
+  %.fca.2.gep45 = getelementptr inbounds i8, ptr %68, i64 16
   store ptr %.fca.2.extract44, ptr %.fca.2.gep45, align 8
-  %.fca.3.extract46 = extractvalue { ptr, ptr, ptr, i32 } %86, 3
-  %.fca.3.gep47 = getelementptr inbounds i8, ptr %87, i64 24
+  %.fca.3.extract46 = extractvalue { ptr, ptr, ptr, i32 } %67, 3
+  %.fca.3.gep47 = getelementptr inbounds i8, ptr %68, i64 24
   store i32 %.fca.3.extract46, ptr %.fca.3.gep47, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %87, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %68, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %69 = load ptr, ptr %68, align 8
+  %70 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %69, 0
+  %71 = load ptr, ptr %.fca.1.gep43, align 8
+  %72 = insertvalue { ptr, ptr, ptr, i32 } %70, ptr %71, 1
+  %73 = load ptr, ptr %.fca.2.gep45, align 8
+  %74 = insertvalue { ptr, ptr, ptr, i32 } %72, ptr %73, 2
+  %75 = load i32, ptr %.fca.3.gep47, align 8
+  %76 = insertvalue { ptr, ptr, ptr, i32 } %74, i32 %75, 3
+  %77 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %78 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %69)
+  %79 = sext i32 %75 to i64
+  %80 = getelementptr ptr, ptr %69, i64 %79
+  %81 = getelementptr i8, ptr %80, i64 24
+  %82 = load ptr, ptr %81, align 8
+  %83 = call ptr @behavior_wrapper(ptr %82, { ptr, ptr, ptr, i32 } %76, ptr noundef nonnull align 8 %4)
+  %84 = call { ptr, ptr, ptr, i32 } %83({ ptr, ptr, ptr, i32 } %76, { ptr, ptr, ptr, i32 } %76, ptr nonnull align 8 %4)
+  %.fca.0.extract28 = extractvalue { ptr, ptr, ptr, i32 } %84, 0
+  %.fca.1.extract30 = extractvalue { ptr, ptr, ptr, i32 } %84, 1
+  %.fca.2.extract32 = extractvalue { ptr, ptr, ptr, i32 } %84, 2
+  %85 = call i32 @get_offset(ptr %.fca.0.extract28, ptr noundef nonnull @Iterator)
+  %86 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
+  %87 = load ptr, ptr %32, align 8
   %88 = load ptr, ptr %87, align 8
-  %89 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %88, 0
-  %90 = load ptr, ptr %.fca.1.gep43, align 8
-  %91 = insertvalue { ptr, ptr, ptr, i32 } %89, ptr %90, 1
-  %92 = load ptr, ptr %.fca.2.gep45, align 8
-  %93 = insertvalue { ptr, ptr, ptr, i32 } %91, ptr %92, 2
-  %94 = load i32, ptr %.fca.3.gep47, align 8
-  %95 = insertvalue { ptr, ptr, ptr, i32 } %93, i32 %94, 3
-  %96 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %97 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %88)
-  %98 = sext i32 %94 to i64
-  %99 = getelementptr ptr, ptr %88, i64 %98
-  %100 = getelementptr i8, ptr %99, i64 24
-  %101 = load ptr, ptr %100, align 8
-  %102 = call ptr @behavior_wrapper(ptr %101, { ptr, ptr, ptr, i32 } %95, ptr noundef nonnull align 8 %4)
-  %103 = call { ptr, ptr, ptr, i32 } %102({ ptr, ptr, ptr, i32 } %95, { ptr, ptr, ptr, i32 } %95, ptr nonnull align 8 %4)
-  %.fca.0.extract28 = extractvalue { ptr, ptr, ptr, i32 } %103, 0
-  %.fca.1.extract30 = extractvalue { ptr, ptr, ptr, i32 } %103, 1
-  %.fca.2.extract32 = extractvalue { ptr, ptr, ptr, i32 } %103, 2
-  %104 = call i32 @get_offset(ptr %.fca.0.extract28, ptr noundef nonnull @Iterator)
-  %105 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract129)
-  %106 = load ptr, ptr %32, align 8
-  %107 = load ptr, ptr %106, align 8
-  %108 = call { ptr, ptr, ptr, i32 } %107(ptr %.fca.1.extract131) #31
-  %109 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract19 = extractvalue { ptr, ptr, ptr, i32 } %108, 0
-  store ptr %.fca.0.extract19, ptr %109, align 8
-  %.fca.1.extract20 = extractvalue { ptr, ptr, ptr, i32 } %108, 1
-  %.fca.1.gep = getelementptr inbounds i8, ptr %109, i64 8
+  %89 = call { ptr, ptr, ptr, i32 } %88(ptr %.fca.1.extract122) #31
+  %90 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract19 = extractvalue { ptr, ptr, ptr, i32 } %89, 0
+  store ptr %.fca.0.extract19, ptr %90, align 8
+  %.fca.1.extract20 = extractvalue { ptr, ptr, ptr, i32 } %89, 1
+  %.fca.1.gep = getelementptr inbounds i8, ptr %90, i64 8
   store ptr %.fca.1.extract20, ptr %.fca.1.gep, align 8
-  %.fca.2.extract21 = extractvalue { ptr, ptr, ptr, i32 } %108, 2
-  %.fca.2.gep = getelementptr inbounds i8, ptr %109, i64 16
+  %.fca.2.extract21 = extractvalue { ptr, ptr, ptr, i32 } %89, 2
+  %.fca.2.gep = getelementptr inbounds i8, ptr %90, i64 16
   store ptr %.fca.2.extract21, ptr %.fca.2.gep, align 8
-  %.fca.3.extract22 = extractvalue { ptr, ptr, ptr, i32 } %108, 3
-  %.fca.3.gep = getelementptr inbounds i8, ptr %109, i64 24
+  %.fca.3.extract22 = extractvalue { ptr, ptr, ptr, i32 } %89, 3
+  %.fca.3.gep = getelementptr inbounds i8, ptr %90, i64 24
   store i32 %.fca.3.extract22, ptr %.fca.3.gep, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %109, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %110 = load ptr, ptr %109, align 8
-  %111 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %110, 0
-  %112 = load ptr, ptr %.fca.1.gep, align 8
-  %113 = insertvalue { ptr, ptr, ptr, i32 } %111, ptr %112, 1
-  %114 = load ptr, ptr %.fca.2.gep, align 8
-  %115 = insertvalue { ptr, ptr, ptr, i32 } %113, ptr %114, 2
-  %116 = load i32, ptr %.fca.3.gep, align 8
-  %117 = insertvalue { ptr, ptr, ptr, i32 } %115, i32 %116, 3
-  %118 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %119 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %110)
-  %120 = sext i32 %116 to i64
-  %121 = getelementptr ptr, ptr %110, i64 %120
-  %122 = getelementptr i8, ptr %121, i64 24
-  %123 = load ptr, ptr %122, align 8
-  %124 = call ptr @behavior_wrapper(ptr %123, { ptr, ptr, ptr, i32 } %117, ptr noundef nonnull align 8 %4)
-  %125 = call { ptr, ptr, ptr, i32 } %124({ ptr, ptr, ptr, i32 } %117, { ptr, ptr, ptr, i32 } %117, ptr nonnull %4)
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %125, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %125, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %125, 2
-  %126 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull @Iterator)
-  %127 = call i32 @get_offset(ptr %.fca.0.extract28, ptr noundef nonnull @Iterator)
-  %128 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract28, 0
-  %129 = insertvalue { ptr, ptr, ptr, i32 } %128, ptr %.fca.1.extract30, 1
-  %130 = insertvalue { ptr, ptr, ptr, i32 } %129, ptr %.fca.2.extract32, 2
-  %131 = insertvalue { ptr, ptr, ptr, i32 } %130, i32 %127, 3
-  %132 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull @Iterator)
-  %133 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
-  %134 = insertvalue { ptr, ptr, ptr, i32 } %133, ptr %.fca.1.extract, 1
-  %135 = insertvalue { ptr, ptr, ptr, i32 } %134, ptr %.fca.2.extract, 2
-  %136 = insertvalue { ptr, ptr, ptr, i32 } %135, i32 %132, 3
-  %137 = insertvalue { ptr, ptr, ptr, i32 } { ptr @ZipIterator, ptr undef, ptr undef, i32 undef }, ptr %79, 1
-  %138 = insertvalue { ptr, ptr, ptr, i32 } %137, ptr undef, 2
-  %139 = insertvalue { ptr, ptr, ptr, i32 } %138, i32 10, 3
-  %140 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract129)
-  %141 = load ptr, ptr %8, align 8
-  %142 = call ptr @typegetter_wrapper(ptr %141, ptr %.fca.1.extract131)
-  %143 = call ptr @bump_malloc(i64 noundef 24)
-  %144 = getelementptr i8, ptr %143, i64 8
-  store ptr %142, ptr %144, align 8
-  %145 = getelementptr i8, ptr %143, i64 16
-  store ptr null, ptr %145, align 8
-  %146 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %143)
-  store ptr @Iterator, ptr %143, align 8
-  %147 = call ptr @llvm.invariant.start.p0(i64 noundef 992, ptr nocapture nofree noundef %.fca.0.extract129)
-  %148 = load ptr, ptr %58, align 8
-  %149 = call ptr @typegetter_wrapper(ptr %148, ptr %.fca.1.extract131)
-  %150 = call ptr @bump_malloc(i64 noundef 24)
-  %151 = getelementptr i8, ptr %150, i64 8
-  store ptr %149, ptr %151, align 8
-  %152 = getelementptr i8, ptr %150, i64 16
-  store ptr null, ptr %152, align 8
-  %153 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %150)
-  store ptr @Iterator, ptr %150, align 8
-  %154 = alloca [2 x ptr], align 8
-  store ptr %143, ptr %154, align 8
-  %155 = getelementptr inbounds i8, ptr %154, i64 8
-  store ptr %150, ptr %155, align 8
-  %156 = call ptr @llvm.invariant.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %154)
-  %157 = call ptr @llvm.invariant.start.p0(i64 noundef 96, ptr nocapture nofree noundef nonnull @ZipIterator)
-  %158 = load ptr, ptr getelementptr (i8, ptr @ZipIterator, i64 120), align 8
-  %159 = alloca { ptr, ptr }, align 8
-  store ptr %.fca.0.extract28, ptr %159, align 8
-  %160 = getelementptr inbounds i8, ptr %159, i64 8
-  store ptr %.fca.0.extract, ptr %160, align 8
-  %161 = call ptr @behavior_wrapper(ptr %158, { ptr, ptr, ptr, i32 } %139, ptr noundef nonnull align 8 dereferenceable(16) %159)
-  call void %161({ ptr, ptr, ptr, i32 } %139, { ptr, ptr, ptr, i32 } %139, ptr nonnull %154, { ptr, ptr, ptr, i32 } %131, { ptr, ptr, ptr, i32 } %136)
-  %162 = call i32 @get_offset(ptr noundef nonnull @ZipIterator, ptr noundef nonnull @Iterator)
-  %163 = insertvalue { ptr, ptr, ptr, i32 } %138, i32 %162, 3
-  ret { ptr, ptr, ptr, i32 } %163
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %90, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %91 = load ptr, ptr %90, align 8
+  %92 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %91, 0
+  %93 = load ptr, ptr %.fca.1.gep, align 8
+  %94 = insertvalue { ptr, ptr, ptr, i32 } %92, ptr %93, 1
+  %95 = load ptr, ptr %.fca.2.gep, align 8
+  %96 = insertvalue { ptr, ptr, ptr, i32 } %94, ptr %95, 2
+  %97 = load i32, ptr %.fca.3.gep, align 8
+  %98 = insertvalue { ptr, ptr, ptr, i32 } %96, i32 %97, 3
+  %99 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %100 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %91)
+  %101 = sext i32 %97 to i64
+  %102 = getelementptr ptr, ptr %91, i64 %101
+  %103 = getelementptr i8, ptr %102, i64 24
+  %104 = load ptr, ptr %103, align 8
+  %105 = call ptr @behavior_wrapper(ptr %104, { ptr, ptr, ptr, i32 } %98, ptr noundef nonnull align 8 %4)
+  %106 = call { ptr, ptr, ptr, i32 } %105({ ptr, ptr, ptr, i32 } %98, { ptr, ptr, ptr, i32 } %98, ptr nonnull %4)
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %106, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %106, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %106, 2
+  %107 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull @Iterator)
+  %108 = call i32 @get_offset(ptr %.fca.0.extract28, ptr noundef nonnull @Iterator)
+  %109 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract28, 0
+  %110 = insertvalue { ptr, ptr, ptr, i32 } %109, ptr %.fca.1.extract30, 1
+  %111 = insertvalue { ptr, ptr, ptr, i32 } %110, ptr %.fca.2.extract32, 2
+  %112 = insertvalue { ptr, ptr, ptr, i32 } %111, i32 %108, 3
+  %113 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull @Iterator)
+  %114 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
+  %115 = insertvalue { ptr, ptr, ptr, i32 } %114, ptr %.fca.1.extract, 1
+  %116 = insertvalue { ptr, ptr, ptr, i32 } %115, ptr %.fca.2.extract, 2
+  %117 = insertvalue { ptr, ptr, ptr, i32 } %116, i32 %113, 3
+  %118 = insertvalue { ptr, ptr, ptr, i32 } { ptr @InterleaveIterator, ptr undef, ptr undef, i32 undef }, ptr %62, 1
+  %119 = insertvalue { ptr, ptr, ptr, i32 } %118, ptr undef, 2
+  %120 = insertvalue { ptr, ptr, ptr, i32 } %119, i32 10, 3
+  %121 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
+  %122 = load ptr, ptr %8, align 8
+  %123 = call ptr @typegetter_wrapper(ptr %122, ptr %.fca.1.extract122)
+  %124 = call ptr @bump_malloc(i64 noundef 24)
+  %125 = getelementptr i8, ptr %124, i64 8
+  store ptr %123, ptr %125, align 8
+  %126 = getelementptr i8, ptr %124, i64 16
+  store ptr null, ptr %126, align 8
+  %127 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %124)
+  store ptr @Iterator, ptr %124, align 8
+  %128 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
+  %129 = load ptr, ptr %8, align 8
+  %130 = call ptr @typegetter_wrapper(ptr %129, ptr %.fca.1.extract122)
+  %131 = call ptr @bump_malloc(i64 noundef 24)
+  %132 = getelementptr i8, ptr %131, i64 8
+  store ptr %130, ptr %132, align 8
+  %133 = getelementptr i8, ptr %131, i64 16
+  store ptr null, ptr %133, align 8
+  %134 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %131)
+  store ptr @Iterator, ptr %131, align 8
+  %135 = alloca [2 x ptr], align 8
+  store ptr %124, ptr %135, align 8
+  %136 = getelementptr inbounds i8, ptr %135, i64 8
+  store ptr %131, ptr %136, align 8
+  %137 = call ptr @llvm.invariant.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %135)
+  %138 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull @InterleaveIterator)
+  %139 = load ptr, ptr getelementptr (i8, ptr @InterleaveIterator, i64 112), align 8
+  %140 = alloca { ptr, ptr }, align 8
+  store ptr %.fca.0.extract28, ptr %140, align 8
+  %141 = getelementptr inbounds i8, ptr %140, i64 8
+  store ptr %.fca.0.extract, ptr %141, align 8
+  %142 = call ptr @behavior_wrapper(ptr %139, { ptr, ptr, ptr, i32 } %120, ptr noundef nonnull align 8 dereferenceable(16) %140)
+  call void %142({ ptr, ptr, ptr, i32 } %120, { ptr, ptr, ptr, i32 } %120, ptr nonnull %135, { ptr, ptr, ptr, i32 } %112, { ptr, ptr, ptr, i32 } %117)
+  %143 = call i32 @get_offset(ptr noundef nonnull @InterleaveIterator, ptr noundef nonnull @Iterator)
+  %144 = insertvalue { ptr, ptr, ptr, i32 } %119, i32 %143, 3
+  ret { ptr, ptr, ptr, i32 } %144
 }
 
-; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
-declare i32 @llvm.smin.i32(i32, i32) #5
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
+define { i64, i64 } @_data_size_InterleaveIterator(ptr nocapture nofree readnone %0) #1 {
+  ret { i64, i64 } { i64 80, i64 8 }
+}
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define { ptr, ptr, ptr, i32 } @ZippedCollection_getter_second(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 56
+define ptr @InterleaveIterator_field_InterleaveIterator_0(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) #6 {
+  %2 = load ptr, ptr %0, align 8
+  ret ptr %2
+}
+
+define ptr @InterleaveIterator_B_init_firstIteratorT_secondIteratorT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 8673632051301757104, i64 noundef ptrtoint (ptr @Iterator to i64), ptr %12)
+  %14 = getelementptr inbounds i8, ptr %1, i64 8
+  %15 = load ptr, ptr %14, align 8
+  %16 = getelementptr i8, ptr %15, i64 8
+  %17 = getelementptr i8, ptr %15, i64 16
+  %18 = getelementptr i8, ptr %15, i64 24
+  %19 = getelementptr i8, ptr %15, i64 32
+  %20 = load i64, ptr %16, align 4
+  %21 = load i64, ptr %17, align 4
+  %22 = load ptr, ptr %18, align 8
+  %23 = load ptr, ptr %19, align 8
+  %24 = call i1 @subtype_test_wrapper(ptr %22, i64 %21, i64 %20, i64 noundef 8673632051301757104, i64 noundef ptrtoint (ptr @Iterator to i64), ptr %23)
+  %25 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %26 = getelementptr i8, ptr %25, i64 128
+  %27 = load ptr, ptr %26, align 8
+  ret ptr %27
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @InterleaveIterator_B_next_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 136
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+define void @InterleaveIterator_init_firstIteratorT_secondIteratorT({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3, { ptr, ptr, ptr, i32 } %4) #3 {
+  %.fca.0.extract38 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract39 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %6 = call i32 @get_offset(ptr %.fca.0.extract38, ptr noundef nonnull align 16 dereferenceable(168) @InterleaveIterator)
+  %.fca.0.extract20 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
+  %.fca.1.extract21 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
+  %.fca.2.extract22 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
+  %7 = call i32 @get_offset(ptr %.fca.0.extract20, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %8 = call i32 @get_offset(ptr %.fca.0.extract20, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %9 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract38)
+  %10 = sext i32 %6 to i64
+  %11 = getelementptr ptr, ptr %.fca.0.extract38, i64 %10
+  %12 = getelementptr i8, ptr %11, i64 8
+  %13 = load ptr, ptr %12, align 8
+  %14 = getelementptr i8, ptr %13, i64 8
+  %15 = load ptr, ptr %14, align 8
+  %16 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract20, 0
+  %17 = insertvalue { ptr, ptr, ptr, i32 } %16, ptr %.fca.1.extract21, 1
+  %18 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %.fca.2.extract22, 2
+  %19 = insertvalue { ptr, ptr, ptr, i32 } %18, i32 %8, 3
+  call void %15(ptr %.fca.1.extract39, { ptr, ptr, ptr, i32 } %19) #30
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 2
+  %20 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %21 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract38)
+  %23 = getelementptr i8, ptr %11, i64 16
+  %24 = load ptr, ptr %23, align 8
+  %25 = getelementptr i8, ptr %24, i64 8
+  %26 = load ptr, ptr %25, align 8
+  %27 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
+  %28 = insertvalue { ptr, ptr, ptr, i32 } %27, ptr %.fca.1.extract, 1
+  %29 = insertvalue { ptr, ptr, ptr, i32 } %28, ptr %.fca.2.extract, 2
+  %30 = insertvalue { ptr, ptr, ptr, i32 } %29, i32 %21, 3
+  call void %26(ptr %.fca.1.extract39, { ptr, ptr, ptr, i32 } %30) #30
+  %31 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract38)
+  %32 = getelementptr i8, ptr %11, i64 24
+  %33 = load ptr, ptr %32, align 8
+  %34 = getelementptr i8, ptr %33, i64 8
+  %35 = load ptr, ptr %34, align 8
+  call void %35(ptr %.fca.1.extract39, i1 true) #30
+  ret void
+}
+
+define { ptr, i160 } @InterleaveIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
+  %4 = alloca [0 x ptr], align 8
+  %5 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %6 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %7 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %8 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract32 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract33 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %9 = call i32 @get_offset(ptr %.fca.0.extract32, ptr noundef nonnull align 16 dereferenceable(168) @InterleaveIterator)
+  %10 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract32)
+  %11 = sext i32 %9 to i64
+  %12 = getelementptr ptr, ptr %.fca.0.extract32, i64 %11
+  %13 = getelementptr i8, ptr %12, i64 24
+  %14 = load ptr, ptr %13, align 8
+  %15 = load ptr, ptr %14, align 8
+  %16 = call i1 %15(ptr %.fca.1.extract33) #31
+  %17 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract32)
+  %18 = getelementptr i8, ptr %14, i64 8
+  %19 = load ptr, ptr %18, align 8
+  br i1 %16, label %20, label %47
+
+20:                                               ; preds = %3
+  %.sink140.sroa.gep151 = getelementptr inbounds i8, ptr %6, i64 24
+  %.sink140.sroa.gep148 = getelementptr inbounds i8, ptr %6, i64 16
+  %.sink140.sroa.gep = getelementptr inbounds i8, ptr %6, i64 8
+  call void %19(ptr %.fca.1.extract33, i1 false) #30
+  %21 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract32)
+  %22 = getelementptr i8, ptr %12, i64 8
+  %23 = load ptr, ptr %22, align 8
+  %24 = load ptr, ptr %23, align 8
+  %25 = call { ptr, ptr, ptr, i32 } %24(ptr %.fca.1.extract33) #31
+  %.fca.0.extract101 = extractvalue { ptr, ptr, ptr, i32 } %25, 0
+  store ptr %.fca.0.extract101, ptr %5, align 8
+  %.fca.1.extract103 = extractvalue { ptr, ptr, ptr, i32 } %25, 1
+  %.fca.1.gep104 = getelementptr inbounds i8, ptr %5, i64 8
+  store ptr %.fca.1.extract103, ptr %.fca.1.gep104, align 8
+  %.fca.2.extract105 = extractvalue { ptr, ptr, ptr, i32 } %25, 2
+  %.fca.2.gep106 = getelementptr inbounds i8, ptr %5, i64 16
+  store ptr %.fca.2.extract105, ptr %.fca.2.gep106, align 8
+  %.fca.3.extract107 = extractvalue { ptr, ptr, ptr, i32 } %25, 3
+  %.fca.3.gep108 = getelementptr inbounds i8, ptr %5, i64 24
+  store i32 %.fca.3.extract107, ptr %.fca.3.gep108, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %5, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %26 = load ptr, ptr %5, align 8
+  %27 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %26, 0
+  %28 = load ptr, ptr %.fca.1.gep104, align 8
+  %29 = insertvalue { ptr, ptr, ptr, i32 } %27, ptr %28, 1
+  %30 = load ptr, ptr %.fca.2.gep106, align 8
+  %31 = insertvalue { ptr, ptr, ptr, i32 } %29, ptr %30, 2
+  %32 = load i32, ptr %.fca.3.gep108, align 8
+  %33 = insertvalue { ptr, ptr, ptr, i32 } %31, i32 %32, 3
+  %34 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %35 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef %26)
+  %36 = sext i32 %32 to i64
+  %37 = getelementptr ptr, ptr %26, i64 %36
+  %38 = getelementptr i8, ptr %37, i64 8
+  %39 = load ptr, ptr %38, align 8
+  %40 = call ptr @behavior_wrapper(ptr %39, { ptr, ptr, ptr, i32 } %33, ptr noundef nonnull align 8 %4)
+  %41 = call { ptr, i160 } %40({ ptr, ptr, ptr, i32 } %33, { ptr, ptr, ptr, i32 } %33, ptr nonnull align 8 %4)
+  %.fca.0.extract95 = extractvalue { ptr, i160 } %41, 0
+  %42 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract32)
+  %43 = load ptr, ptr %12, align 8
+  %44 = call ptr @typegetter_wrapper(ptr %43, ptr %.fca.1.extract33)
+  %45 = icmp eq ptr %.fca.0.extract95, @nil_typ
+  %46 = icmp eq ptr %.fca.0.extract95, null
+  %.not114.not = or i1 %45, %46
+  br i1 %.not114.not, label %.sink.split, label %95
+
+47:                                               ; preds = %3
+  %.sink140.sroa.gep152 = getelementptr inbounds i8, ptr %8, i64 24
+  %.sink140.sroa.gep149 = getelementptr inbounds i8, ptr %8, i64 16
+  %.sink140.sroa.gep146 = getelementptr inbounds i8, ptr %8, i64 8
+  call void %19(ptr %.fca.1.extract33, i1 true) #30
+  %48 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract32)
+  %49 = getelementptr i8, ptr %12, i64 16
+  %50 = load ptr, ptr %49, align 8
+  %51 = load ptr, ptr %50, align 8
+  %52 = call { ptr, ptr, ptr, i32 } %51(ptr %.fca.1.extract33) #31
+  %.fca.0.extract69 = extractvalue { ptr, ptr, ptr, i32 } %52, 0
+  store ptr %.fca.0.extract69, ptr %7, align 8
+  %.fca.1.extract71 = extractvalue { ptr, ptr, ptr, i32 } %52, 1
+  %.fca.1.gep72 = getelementptr inbounds i8, ptr %7, i64 8
+  store ptr %.fca.1.extract71, ptr %.fca.1.gep72, align 8
+  %.fca.2.extract73 = extractvalue { ptr, ptr, ptr, i32 } %52, 2
+  %.fca.2.gep74 = getelementptr inbounds i8, ptr %7, i64 16
+  store ptr %.fca.2.extract73, ptr %.fca.2.gep74, align 8
+  %.fca.3.extract75 = extractvalue { ptr, ptr, ptr, i32 } %52, 3
+  %.fca.3.gep76 = getelementptr inbounds i8, ptr %7, i64 24
+  store i32 %.fca.3.extract75, ptr %.fca.3.gep76, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %7, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %53 = load ptr, ptr %7, align 8
+  %54 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %53, 0
+  %55 = load ptr, ptr %.fca.1.gep72, align 8
+  %56 = insertvalue { ptr, ptr, ptr, i32 } %54, ptr %55, 1
+  %57 = load ptr, ptr %.fca.2.gep74, align 8
+  %58 = insertvalue { ptr, ptr, ptr, i32 } %56, ptr %57, 2
+  %59 = load i32, ptr %.fca.3.gep76, align 8
+  %60 = insertvalue { ptr, ptr, ptr, i32 } %58, i32 %59, 3
+  %61 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %62 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef %53)
+  %63 = sext i32 %59 to i64
+  %64 = getelementptr ptr, ptr %53, i64 %63
+  %65 = getelementptr i8, ptr %64, i64 8
+  %66 = load ptr, ptr %65, align 8
+  %67 = call ptr @behavior_wrapper(ptr %66, { ptr, ptr, ptr, i32 } %60, ptr noundef nonnull align 8 %4)
+  %68 = call { ptr, i160 } %67({ ptr, ptr, ptr, i32 } %60, { ptr, ptr, ptr, i32 } %60, ptr nonnull align 8 %4)
+  %.fca.0.extract54 = extractvalue { ptr, i160 } %68, 0
+  %69 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract32)
+  %70 = load ptr, ptr %12, align 8
+  %71 = call ptr @typegetter_wrapper(ptr %70, ptr %.fca.1.extract33)
+  %72 = icmp eq ptr %.fca.0.extract54, @nil_typ
+  %73 = icmp eq ptr %.fca.0.extract54, null
+  %.not111.not = or i1 %72, %73
+  br i1 %.not111.not, label %.sink.split, label %95
+
+.sink.split:                                      ; preds = %47, %20
+  %.sink145 = phi i64 [ 16, %20 ], [ 8, %47 ]
+  %.sink140.sroa.phi = phi ptr [ %.sink140.sroa.gep, %20 ], [ %.sink140.sroa.gep146, %47 ]
+  %.sink140.sroa.phi147 = phi ptr [ %.sink140.sroa.gep148, %20 ], [ %.sink140.sroa.gep149, %47 ]
+  %.sink140.sroa.phi150 = phi ptr [ %.sink140.sroa.gep151, %20 ], [ %.sink140.sroa.gep152, %47 ]
+  %.sink140 = phi ptr [ %6, %20 ], [ %8, %47 ]
+  %.pn.ph = phi { ptr, i160 } [ %41, %20 ], [ %68, %47 ]
+  %.sroa.speculated68.ph = phi ptr [ %.fca.0.extract95, %20 ], [ %.fca.0.extract54, %47 ]
+  %74 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract32)
+  %75 = getelementptr i8, ptr %12, i64 %.sink145
+  %76 = load ptr, ptr %75, align 8
+  %77 = load ptr, ptr %76, align 8
+  %78 = call { ptr, ptr, ptr, i32 } %77(ptr %.fca.1.extract33) #31
+  %.fca.0.extract38 = extractvalue { ptr, ptr, ptr, i32 } %78, 0
+  store ptr %.fca.0.extract38, ptr %.sink140, align 8
+  %.fca.1.extract39 = extractvalue { ptr, ptr, ptr, i32 } %78, 1
+  store ptr %.fca.1.extract39, ptr %.sink140.sroa.phi, align 8
+  %.fca.2.extract40 = extractvalue { ptr, ptr, ptr, i32 } %78, 2
+  store ptr %.fca.2.extract40, ptr %.sink140.sroa.phi147, align 8
+  %.fca.3.extract41 = extractvalue { ptr, ptr, ptr, i32 } %78, 3
+  store i32 %.fca.3.extract41, ptr %.sink140.sroa.phi150, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %.sink140, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %79 = load ptr, ptr %.sink140, align 8
+  %80 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %79, 0
+  %81 = load ptr, ptr %.sink140.sroa.phi, align 8
+  %82 = insertvalue { ptr, ptr, ptr, i32 } %80, ptr %81, 1
+  %83 = load ptr, ptr %.sink140.sroa.phi147, align 8
+  %84 = insertvalue { ptr, ptr, ptr, i32 } %82, ptr %83, 2
+  %85 = load i32, ptr %.sink140.sroa.phi150, align 8
+  %86 = insertvalue { ptr, ptr, ptr, i32 } %84, i32 %85, 3
+  %87 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %88 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef %79)
+  %89 = sext i32 %85 to i64
+  %90 = getelementptr ptr, ptr %79, i64 %89
+  %91 = getelementptr i8, ptr %90, i64 8
+  %92 = load ptr, ptr %91, align 8
+  %93 = call ptr @behavior_wrapper(ptr %92, { ptr, ptr, ptr, i32 } %86, ptr noundef nonnull align 8 %4)
+  %94 = call { ptr, i160 } %93({ ptr, ptr, ptr, i32 } %86, { ptr, ptr, ptr, i32 } %86, ptr nonnull %4)
+  %.fca.0.extract34 = extractvalue { ptr, i160 } %94, 0
+  %.fca.1.extract35 = extractvalue { ptr, i160 } %94, 1
+  br label %95
+
+95:                                               ; preds = %.sink.split, %47, %20
+  %.pn = phi { ptr, i160 } [ %41, %20 ], [ %68, %47 ], [ %.pn.ph, %.sink.split ]
+  %.sroa.speculated68 = phi ptr [ %.fca.0.extract95, %20 ], [ %.fca.0.extract54, %47 ], [ %.sroa.speculated68.ph, %.sink.split ]
+  %.reg2mem23.0.in = phi i1 [ false, %20 ], [ false, %47 ], [ true, %.sink.split ]
+  %.reg2mem25.sroa.3.0 = phi i160 [ poison, %20 ], [ poison, %47 ], [ %.fca.1.extract35, %.sink.split ]
+  %.reg2mem25.sroa.0.0 = phi ptr [ poison, %20 ], [ poison, %47 ], [ %.fca.0.extract34, %.sink.split ]
+  %.sroa.3100.0..sroa.3.0 = extractvalue { ptr, i160 } %.pn, 1
+  %.reg2mem21.sroa.3.0 = select i1 %.reg2mem23.0.in, i160 %.reg2mem25.sroa.3.0, i160 %.sroa.3100.0..sroa.3.0
+  %.reg2mem21.sroa.0.0 = select i1 %.reg2mem23.0.in, ptr %.reg2mem25.sroa.0.0, ptr %.sroa.speculated68
+  %.reload22.fca.0.insert = insertvalue { ptr, i160 } poison, ptr %.reg2mem21.sroa.0.0, 0
+  %.reload22.fca.1.insert = insertvalue { ptr, i160 } %.reload22.fca.0.insert, i160 %.reg2mem21.sroa.3.0, 1
+  ret { ptr, i160 } %.reload22.fca.1.insert
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define i1 @InterleaveIterator_getter_on_first(ptr nocapture nofree readonly %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 72
+  %3 = load i1, ptr %2, align 1
+  ret i1 %3
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
+define void @InterleaveIterator_setter_on_first(ptr nocapture nofree writeonly %0, i1 %1) #7 {
+  %3 = getelementptr i8, ptr %0, i64 72
+  store i1 %1, ptr %3, align 1
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define { ptr, ptr, ptr, i32 } @InterleaveIterator_getter_second(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 40
   %3 = load ptr, ptr %2, align 8
   %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
-  %5 = getelementptr i8, ptr %0, i64 64
+  %5 = getelementptr i8, ptr %0, i64 48
   %6 = load ptr, ptr %5, align 8
   %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
-  %8 = getelementptr i8, ptr %0, i64 72
+  %8 = getelementptr i8, ptr %0, i64 56
   %9 = load ptr, ptr %8, align 8
   %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
-  %11 = getelementptr i8, ptr %0, i64 80
+  %11 = getelementptr i8, ptr %0, i64 64
   %12 = load i32, ptr %11, align 8
   %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
   ret { ptr, ptr, ptr, i32 } %13
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define void @ZippedCollection_setter_second(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
-  %3 = getelementptr i8, ptr %0, i64 56
+define void @InterleaveIterator_setter_second(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
+  %3 = getelementptr i8, ptr %0, i64 40
   %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
   %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
   %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
   %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
   store ptr %.fca.0.extract, ptr %3, align 8
-  %4 = getelementptr i8, ptr %0, i64 64
+  %4 = getelementptr i8, ptr %0, i64 48
   store ptr %.fca.1.extract, ptr %4, align 8
-  %5 = getelementptr i8, ptr %0, i64 72
+  %5 = getelementptr i8, ptr %0, i64 56
   store ptr %.fca.2.extract, ptr %5, align 8
-  %6 = getelementptr i8, ptr %0, i64 80
+  %6 = getelementptr i8, ptr %0, i64 64
   store i32 %.fca.3.extract, ptr %6, align 8
   ret void
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define { ptr, ptr, ptr, i32 } @ZippedCollection_getter_first(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 24
+define { ptr, ptr, ptr, i32 } @InterleaveIterator_getter_first(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 8
   %3 = load ptr, ptr %2, align 8
   %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
-  %5 = getelementptr i8, ptr %0, i64 32
+  %5 = getelementptr i8, ptr %0, i64 16
   %6 = load ptr, ptr %5, align 8
   %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
-  %8 = getelementptr i8, ptr %0, i64 40
+  %8 = getelementptr i8, ptr %0, i64 24
   %9 = load ptr, ptr %8, align 8
   %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
-  %11 = getelementptr i8, ptr %0, i64 48
+  %11 = getelementptr i8, ptr %0, i64 32
   %12 = load i32, ptr %11, align 8
   %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
   ret { ptr, ptr, ptr, i32 } %13
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define void @ZippedCollection_setter_first(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
-  %3 = getelementptr i8, ptr %0, i64 24
+define void @InterleaveIterator_setter_first(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
+  %3 = getelementptr i8, ptr %0, i64 8
   %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
   %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
   %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
   %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
   store ptr %.fca.0.extract, ptr %3, align 8
-  %4 = getelementptr i8, ptr %0, i64 32
+  %4 = getelementptr i8, ptr %0, i64 16
   store ptr %.fca.1.extract, ptr %4, align 8
-  %5 = getelementptr i8, ptr %0, i64 40
+  %5 = getelementptr i8, ptr %0, i64 24
   store ptr %.fca.2.extract, ptr %5, align 8
-  %6 = getelementptr i8, ptr %0, i64 48
+  %6 = getelementptr i8, ptr %0, i64 32
+  store i32 %.fca.3.extract, ptr %6, align 8
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define { ptr, ptr, ptr, i32 } @InterleavedCollection_getter_second(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 40
+  %3 = load ptr, ptr %2, align 8
+  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
+  %5 = getelementptr i8, ptr %0, i64 48
+  %6 = load ptr, ptr %5, align 8
+  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
+  %8 = getelementptr i8, ptr %0, i64 56
+  %9 = load ptr, ptr %8, align 8
+  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
+  %11 = getelementptr i8, ptr %0, i64 64
+  %12 = load i32, ptr %11, align 8
+  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
+  ret { ptr, ptr, ptr, i32 } %13
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
+define void @InterleavedCollection_setter_second(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
+  %3 = getelementptr i8, ptr %0, i64 40
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
+  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
+  store ptr %.fca.0.extract, ptr %3, align 8
+  %4 = getelementptr i8, ptr %0, i64 48
+  store ptr %.fca.1.extract, ptr %4, align 8
+  %5 = getelementptr i8, ptr %0, i64 56
+  store ptr %.fca.2.extract, ptr %5, align 8
+  %6 = getelementptr i8, ptr %0, i64 64
+  store i32 %.fca.3.extract, ptr %6, align 8
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define { ptr, ptr, ptr, i32 } @InterleavedCollection_getter_first(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 8
+  %3 = load ptr, ptr %2, align 8
+  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
+  %5 = getelementptr i8, ptr %0, i64 16
+  %6 = load ptr, ptr %5, align 8
+  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
+  %8 = getelementptr i8, ptr %0, i64 24
+  %9 = load ptr, ptr %8, align 8
+  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
+  %11 = getelementptr i8, ptr %0, i64 32
+  %12 = load i32, ptr %11, align 8
+  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
+  ret { ptr, ptr, ptr, i32 } %13
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
+define void @InterleavedCollection_setter_first(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
+  %3 = getelementptr i8, ptr %0, i64 8
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
+  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
+  store ptr %.fca.0.extract, ptr %3, align 8
+  %4 = getelementptr i8, ptr %0, i64 16
+  store ptr %.fca.1.extract, ptr %4, align 8
+  %5 = getelementptr i8, ptr %0, i64 24
+  store ptr %.fca.2.extract, ptr %5, align 8
+  %6 = getelementptr i8, ptr %0, i64 32
   store i32 %.fca.3.extract, ptr %6, align 8
   ret void
 }
@@ -13742,353 +14800,6 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable_iterator_({ ptr, ptr, ptr, i32
   ret { ptr, ptr, ptr, i32 } %142
 }
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define { i64, i64 } @_data_size_InterleaveIterator(ptr nocapture nofree readnone %0) #1 {
-  ret { i64, i64 } { i64 80, i64 8 }
-}
-
-define ptr @InterleaveIterator_B_init_firstIteratorT_secondIteratorT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 8673632051301757104, i64 noundef ptrtoint (ptr @Iterator to i64), ptr %12)
-  %14 = getelementptr inbounds i8, ptr %1, i64 8
-  %15 = load ptr, ptr %14, align 8
-  %16 = getelementptr i8, ptr %15, i64 8
-  %17 = getelementptr i8, ptr %15, i64 16
-  %18 = getelementptr i8, ptr %15, i64 24
-  %19 = getelementptr i8, ptr %15, i64 32
-  %20 = load i64, ptr %16, align 4
-  %21 = load i64, ptr %17, align 4
-  %22 = load ptr, ptr %18, align 8
-  %23 = load ptr, ptr %19, align 8
-  %24 = call i1 @subtype_test_wrapper(ptr %22, i64 %21, i64 %20, i64 noundef 8673632051301757104, i64 noundef ptrtoint (ptr @Iterator to i64), ptr %23)
-  %25 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %26 = getelementptr i8, ptr %25, i64 128
-  %27 = load ptr, ptr %26, align 8
-  ret ptr %27
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define ptr @InterleaveIterator_field_InterleaveIterator_0(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) #6 {
-  %2 = load ptr, ptr %0, align 8
-  ret ptr %2
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @InterleaveIterator_B_next_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 136
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-define void @InterleaveIterator_init_firstIteratorT_secondIteratorT({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3, { ptr, ptr, ptr, i32 } %4) #3 {
-  %.fca.0.extract38 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract39 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %6 = call i32 @get_offset(ptr %.fca.0.extract38, ptr noundef nonnull align 16 dereferenceable(168) @InterleaveIterator)
-  %.fca.0.extract20 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
-  %.fca.1.extract21 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
-  %.fca.2.extract22 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
-  %7 = call i32 @get_offset(ptr %.fca.0.extract20, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %8 = call i32 @get_offset(ptr %.fca.0.extract20, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %9 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract38)
-  %10 = sext i32 %6 to i64
-  %11 = getelementptr ptr, ptr %.fca.0.extract38, i64 %10
-  %12 = getelementptr i8, ptr %11, i64 8
-  %13 = load ptr, ptr %12, align 8
-  %14 = getelementptr i8, ptr %13, i64 8
-  %15 = load ptr, ptr %14, align 8
-  %16 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract20, 0
-  %17 = insertvalue { ptr, ptr, ptr, i32 } %16, ptr %.fca.1.extract21, 1
-  %18 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %.fca.2.extract22, 2
-  %19 = insertvalue { ptr, ptr, ptr, i32 } %18, i32 %8, 3
-  call void %15(ptr %.fca.1.extract39, { ptr, ptr, ptr, i32 } %19) #30
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 2
-  %20 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %21 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract38)
-  %23 = getelementptr i8, ptr %11, i64 16
-  %24 = load ptr, ptr %23, align 8
-  %25 = getelementptr i8, ptr %24, i64 8
-  %26 = load ptr, ptr %25, align 8
-  %27 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
-  %28 = insertvalue { ptr, ptr, ptr, i32 } %27, ptr %.fca.1.extract, 1
-  %29 = insertvalue { ptr, ptr, ptr, i32 } %28, ptr %.fca.2.extract, 2
-  %30 = insertvalue { ptr, ptr, ptr, i32 } %29, i32 %21, 3
-  call void %26(ptr %.fca.1.extract39, { ptr, ptr, ptr, i32 } %30) #30
-  %31 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract38)
-  %32 = getelementptr i8, ptr %11, i64 24
-  %33 = load ptr, ptr %32, align 8
-  %34 = getelementptr i8, ptr %33, i64 8
-  %35 = load ptr, ptr %34, align 8
-  call void %35(ptr %.fca.1.extract39, i1 true) #30
-  ret void
-}
-
-define { ptr, i160 } @InterleaveIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
-  %4 = alloca [0 x ptr], align 8
-  %5 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %6 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %7 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %8 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract32 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract33 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %9 = call i32 @get_offset(ptr %.fca.0.extract32, ptr noundef nonnull align 16 dereferenceable(168) @InterleaveIterator)
-  %10 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract32)
-  %11 = sext i32 %9 to i64
-  %12 = getelementptr ptr, ptr %.fca.0.extract32, i64 %11
-  %13 = getelementptr i8, ptr %12, i64 24
-  %14 = load ptr, ptr %13, align 8
-  %15 = load ptr, ptr %14, align 8
-  %16 = call i1 %15(ptr %.fca.1.extract33) #31
-  %17 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract32)
-  %18 = getelementptr i8, ptr %14, i64 8
-  %19 = load ptr, ptr %18, align 8
-  br i1 %16, label %20, label %47
-
-20:                                               ; preds = %3
-  %.sink140.sroa.gep151 = getelementptr inbounds i8, ptr %6, i64 24
-  %.sink140.sroa.gep148 = getelementptr inbounds i8, ptr %6, i64 16
-  %.sink140.sroa.gep = getelementptr inbounds i8, ptr %6, i64 8
-  call void %19(ptr %.fca.1.extract33, i1 false) #30
-  %21 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract32)
-  %22 = getelementptr i8, ptr %12, i64 8
-  %23 = load ptr, ptr %22, align 8
-  %24 = load ptr, ptr %23, align 8
-  %25 = call { ptr, ptr, ptr, i32 } %24(ptr %.fca.1.extract33) #31
-  %.fca.0.extract101 = extractvalue { ptr, ptr, ptr, i32 } %25, 0
-  store ptr %.fca.0.extract101, ptr %5, align 8
-  %.fca.1.extract103 = extractvalue { ptr, ptr, ptr, i32 } %25, 1
-  %.fca.1.gep104 = getelementptr inbounds i8, ptr %5, i64 8
-  store ptr %.fca.1.extract103, ptr %.fca.1.gep104, align 8
-  %.fca.2.extract105 = extractvalue { ptr, ptr, ptr, i32 } %25, 2
-  %.fca.2.gep106 = getelementptr inbounds i8, ptr %5, i64 16
-  store ptr %.fca.2.extract105, ptr %.fca.2.gep106, align 8
-  %.fca.3.extract107 = extractvalue { ptr, ptr, ptr, i32 } %25, 3
-  %.fca.3.gep108 = getelementptr inbounds i8, ptr %5, i64 24
-  store i32 %.fca.3.extract107, ptr %.fca.3.gep108, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %5, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %26 = load ptr, ptr %5, align 8
-  %27 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %26, 0
-  %28 = load ptr, ptr %.fca.1.gep104, align 8
-  %29 = insertvalue { ptr, ptr, ptr, i32 } %27, ptr %28, 1
-  %30 = load ptr, ptr %.fca.2.gep106, align 8
-  %31 = insertvalue { ptr, ptr, ptr, i32 } %29, ptr %30, 2
-  %32 = load i32, ptr %.fca.3.gep108, align 8
-  %33 = insertvalue { ptr, ptr, ptr, i32 } %31, i32 %32, 3
-  %34 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %35 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef %26)
-  %36 = sext i32 %32 to i64
-  %37 = getelementptr ptr, ptr %26, i64 %36
-  %38 = getelementptr i8, ptr %37, i64 8
-  %39 = load ptr, ptr %38, align 8
-  %40 = call ptr @behavior_wrapper(ptr %39, { ptr, ptr, ptr, i32 } %33, ptr noundef nonnull align 8 %4)
-  %41 = call { ptr, i160 } %40({ ptr, ptr, ptr, i32 } %33, { ptr, ptr, ptr, i32 } %33, ptr nonnull align 8 %4)
-  %.fca.0.extract95 = extractvalue { ptr, i160 } %41, 0
-  %42 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract32)
-  %43 = load ptr, ptr %12, align 8
-  %44 = call ptr @typegetter_wrapper(ptr %43, ptr %.fca.1.extract33)
-  %45 = icmp eq ptr %.fca.0.extract95, @nil_typ
-  %46 = icmp eq ptr %.fca.0.extract95, null
-  %.not114.not = or i1 %45, %46
-  br i1 %.not114.not, label %.sink.split, label %95
-
-47:                                               ; preds = %3
-  %.sink140.sroa.gep152 = getelementptr inbounds i8, ptr %8, i64 24
-  %.sink140.sroa.gep149 = getelementptr inbounds i8, ptr %8, i64 16
-  %.sink140.sroa.gep146 = getelementptr inbounds i8, ptr %8, i64 8
-  call void %19(ptr %.fca.1.extract33, i1 true) #30
-  %48 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract32)
-  %49 = getelementptr i8, ptr %12, i64 16
-  %50 = load ptr, ptr %49, align 8
-  %51 = load ptr, ptr %50, align 8
-  %52 = call { ptr, ptr, ptr, i32 } %51(ptr %.fca.1.extract33) #31
-  %.fca.0.extract69 = extractvalue { ptr, ptr, ptr, i32 } %52, 0
-  store ptr %.fca.0.extract69, ptr %7, align 8
-  %.fca.1.extract71 = extractvalue { ptr, ptr, ptr, i32 } %52, 1
-  %.fca.1.gep72 = getelementptr inbounds i8, ptr %7, i64 8
-  store ptr %.fca.1.extract71, ptr %.fca.1.gep72, align 8
-  %.fca.2.extract73 = extractvalue { ptr, ptr, ptr, i32 } %52, 2
-  %.fca.2.gep74 = getelementptr inbounds i8, ptr %7, i64 16
-  store ptr %.fca.2.extract73, ptr %.fca.2.gep74, align 8
-  %.fca.3.extract75 = extractvalue { ptr, ptr, ptr, i32 } %52, 3
-  %.fca.3.gep76 = getelementptr inbounds i8, ptr %7, i64 24
-  store i32 %.fca.3.extract75, ptr %.fca.3.gep76, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %7, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %53 = load ptr, ptr %7, align 8
-  %54 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %53, 0
-  %55 = load ptr, ptr %.fca.1.gep72, align 8
-  %56 = insertvalue { ptr, ptr, ptr, i32 } %54, ptr %55, 1
-  %57 = load ptr, ptr %.fca.2.gep74, align 8
-  %58 = insertvalue { ptr, ptr, ptr, i32 } %56, ptr %57, 2
-  %59 = load i32, ptr %.fca.3.gep76, align 8
-  %60 = insertvalue { ptr, ptr, ptr, i32 } %58, i32 %59, 3
-  %61 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %62 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef %53)
-  %63 = sext i32 %59 to i64
-  %64 = getelementptr ptr, ptr %53, i64 %63
-  %65 = getelementptr i8, ptr %64, i64 8
-  %66 = load ptr, ptr %65, align 8
-  %67 = call ptr @behavior_wrapper(ptr %66, { ptr, ptr, ptr, i32 } %60, ptr noundef nonnull align 8 %4)
-  %68 = call { ptr, i160 } %67({ ptr, ptr, ptr, i32 } %60, { ptr, ptr, ptr, i32 } %60, ptr nonnull align 8 %4)
-  %.fca.0.extract54 = extractvalue { ptr, i160 } %68, 0
-  %69 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract32)
-  %70 = load ptr, ptr %12, align 8
-  %71 = call ptr @typegetter_wrapper(ptr %70, ptr %.fca.1.extract33)
-  %72 = icmp eq ptr %.fca.0.extract54, @nil_typ
-  %73 = icmp eq ptr %.fca.0.extract54, null
-  %.not111.not = or i1 %72, %73
-  br i1 %.not111.not, label %.sink.split, label %95
-
-.sink.split:                                      ; preds = %47, %20
-  %.sink145 = phi i64 [ 16, %20 ], [ 8, %47 ]
-  %.sink140.sroa.phi = phi ptr [ %.sink140.sroa.gep, %20 ], [ %.sink140.sroa.gep146, %47 ]
-  %.sink140.sroa.phi147 = phi ptr [ %.sink140.sroa.gep148, %20 ], [ %.sink140.sroa.gep149, %47 ]
-  %.sink140.sroa.phi150 = phi ptr [ %.sink140.sroa.gep151, %20 ], [ %.sink140.sroa.gep152, %47 ]
-  %.sink140 = phi ptr [ %6, %20 ], [ %8, %47 ]
-  %.pn.ph = phi { ptr, i160 } [ %41, %20 ], [ %68, %47 ]
-  %.sroa.speculated68.ph = phi ptr [ %.fca.0.extract95, %20 ], [ %.fca.0.extract54, %47 ]
-  %74 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract32)
-  %75 = getelementptr i8, ptr %12, i64 %.sink145
-  %76 = load ptr, ptr %75, align 8
-  %77 = load ptr, ptr %76, align 8
-  %78 = call { ptr, ptr, ptr, i32 } %77(ptr %.fca.1.extract33) #31
-  %.fca.0.extract38 = extractvalue { ptr, ptr, ptr, i32 } %78, 0
-  store ptr %.fca.0.extract38, ptr %.sink140, align 8
-  %.fca.1.extract39 = extractvalue { ptr, ptr, ptr, i32 } %78, 1
-  store ptr %.fca.1.extract39, ptr %.sink140.sroa.phi, align 8
-  %.fca.2.extract40 = extractvalue { ptr, ptr, ptr, i32 } %78, 2
-  store ptr %.fca.2.extract40, ptr %.sink140.sroa.phi147, align 8
-  %.fca.3.extract41 = extractvalue { ptr, ptr, ptr, i32 } %78, 3
-  store i32 %.fca.3.extract41, ptr %.sink140.sroa.phi150, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %.sink140, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %79 = load ptr, ptr %.sink140, align 8
-  %80 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %79, 0
-  %81 = load ptr, ptr %.sink140.sroa.phi, align 8
-  %82 = insertvalue { ptr, ptr, ptr, i32 } %80, ptr %81, 1
-  %83 = load ptr, ptr %.sink140.sroa.phi147, align 8
-  %84 = insertvalue { ptr, ptr, ptr, i32 } %82, ptr %83, 2
-  %85 = load i32, ptr %.sink140.sroa.phi150, align 8
-  %86 = insertvalue { ptr, ptr, ptr, i32 } %84, i32 %85, 3
-  %87 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %88 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef %79)
-  %89 = sext i32 %85 to i64
-  %90 = getelementptr ptr, ptr %79, i64 %89
-  %91 = getelementptr i8, ptr %90, i64 8
-  %92 = load ptr, ptr %91, align 8
-  %93 = call ptr @behavior_wrapper(ptr %92, { ptr, ptr, ptr, i32 } %86, ptr noundef nonnull align 8 %4)
-  %94 = call { ptr, i160 } %93({ ptr, ptr, ptr, i32 } %86, { ptr, ptr, ptr, i32 } %86, ptr nonnull %4)
-  %.fca.0.extract34 = extractvalue { ptr, i160 } %94, 0
-  %.fca.1.extract35 = extractvalue { ptr, i160 } %94, 1
-  br label %95
-
-95:                                               ; preds = %.sink.split, %47, %20
-  %.pn = phi { ptr, i160 } [ %41, %20 ], [ %68, %47 ], [ %.pn.ph, %.sink.split ]
-  %.sroa.speculated68 = phi ptr [ %.fca.0.extract95, %20 ], [ %.fca.0.extract54, %47 ], [ %.sroa.speculated68.ph, %.sink.split ]
-  %.reg2mem23.0.in = phi i1 [ false, %20 ], [ false, %47 ], [ true, %.sink.split ]
-  %.reg2mem25.sroa.3.0 = phi i160 [ poison, %20 ], [ poison, %47 ], [ %.fca.1.extract35, %.sink.split ]
-  %.reg2mem25.sroa.0.0 = phi ptr [ poison, %20 ], [ poison, %47 ], [ %.fca.0.extract34, %.sink.split ]
-  %.sroa.3100.0..sroa.3.0 = extractvalue { ptr, i160 } %.pn, 1
-  %.reg2mem21.sroa.3.0 = select i1 %.reg2mem23.0.in, i160 %.reg2mem25.sroa.3.0, i160 %.sroa.3100.0..sroa.3.0
-  %.reg2mem21.sroa.0.0 = select i1 %.reg2mem23.0.in, ptr %.reg2mem25.sroa.0.0, ptr %.sroa.speculated68
-  %.reload22.fca.0.insert = insertvalue { ptr, i160 } poison, ptr %.reg2mem21.sroa.0.0, 0
-  %.reload22.fca.1.insert = insertvalue { ptr, i160 } %.reload22.fca.0.insert, i160 %.reg2mem21.sroa.3.0, 1
-  ret { ptr, i160 } %.reload22.fca.1.insert
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define i1 @InterleaveIterator_getter_on_first(ptr nocapture nofree readonly %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 72
-  %3 = load i1, ptr %2, align 1
-  ret i1 %3
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define void @InterleaveIterator_setter_on_first(ptr nocapture nofree writeonly %0, i1 %1) #7 {
-  %3 = getelementptr i8, ptr %0, i64 72
-  store i1 %1, ptr %3, align 1
-  ret void
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define { ptr, ptr, ptr, i32 } @InterleaveIterator_getter_second(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 40
-  %3 = load ptr, ptr %2, align 8
-  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
-  %5 = getelementptr i8, ptr %0, i64 48
-  %6 = load ptr, ptr %5, align 8
-  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
-  %8 = getelementptr i8, ptr %0, i64 56
-  %9 = load ptr, ptr %8, align 8
-  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
-  %11 = getelementptr i8, ptr %0, i64 64
-  %12 = load i32, ptr %11, align 8
-  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
-  ret { ptr, ptr, ptr, i32 } %13
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define void @InterleaveIterator_setter_second(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
-  %3 = getelementptr i8, ptr %0, i64 40
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
-  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
-  store ptr %.fca.0.extract, ptr %3, align 8
-  %4 = getelementptr i8, ptr %0, i64 48
-  store ptr %.fca.1.extract, ptr %4, align 8
-  %5 = getelementptr i8, ptr %0, i64 56
-  store ptr %.fca.2.extract, ptr %5, align 8
-  %6 = getelementptr i8, ptr %0, i64 64
-  store i32 %.fca.3.extract, ptr %6, align 8
-  ret void
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define { ptr, ptr, ptr, i32 } @InterleaveIterator_getter_first(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 8
-  %3 = load ptr, ptr %2, align 8
-  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
-  %5 = getelementptr i8, ptr %0, i64 16
-  %6 = load ptr, ptr %5, align 8
-  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
-  %8 = getelementptr i8, ptr %0, i64 24
-  %9 = load ptr, ptr %8, align 8
-  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
-  %11 = getelementptr i8, ptr %0, i64 32
-  %12 = load i32, ptr %11, align 8
-  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
-  ret { ptr, ptr, ptr, i32 } %13
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define void @InterleaveIterator_setter_first(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
-  %3 = getelementptr i8, ptr %0, i64 8
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
-  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
-  store ptr %.fca.0.extract, ptr %3, align 8
-  %4 = getelementptr i8, ptr %0, i64 16
-  store ptr %.fca.1.extract, ptr %4, align 8
-  %5 = getelementptr i8, ptr %0, i64 24
-  store ptr %.fca.2.extract, ptr %5, align 8
-  %6 = getelementptr i8, ptr %0, i64 32
-  store i32 %.fca.3.extract, ptr %6, align 8
-  ret void
-}
-
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
 define { ptr, ptr, ptr, i32 } @InterleaveIterable_getter_second(ptr nocapture nofree readonly align 8 %0) #6 {
   %2 = getelementptr i8, ptr %0, i64 40
@@ -14142,1724 +14853,6 @@ define { ptr, ptr, ptr, i32 } @InterleaveIterable_getter_first(ptr nocapture nof
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
 define void @InterleaveIterable_setter_first(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
-  %3 = getelementptr i8, ptr %0, i64 8
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
-  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
-  store ptr %.fca.0.extract, ptr %3, align 8
-  %4 = getelementptr i8, ptr %0, i64 16
-  store ptr %.fca.1.extract, ptr %4, align 8
-  %5 = getelementptr i8, ptr %0, i64 24
-  store ptr %.fca.2.extract, ptr %5, align 8
-  %6 = getelementptr i8, ptr %0, i64 32
-  store i32 %.fca.3.extract, ptr %6, align 8
-  ret void
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define { i64, i64 } @_data_size_InterleavedCollection(ptr nocapture nofree readnone %0) #1 {
-  ret { i64, i64 } { i64 72, i64 8 }
-}
-
-define ptr @InterleavedCollection_B_init_firstCollectionT_secondCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
-  %14 = getelementptr inbounds i8, ptr %1, i64 8
-  %15 = load ptr, ptr %14, align 8
-  %16 = getelementptr i8, ptr %15, i64 8
-  %17 = getelementptr i8, ptr %15, i64 16
-  %18 = getelementptr i8, ptr %15, i64 24
-  %19 = getelementptr i8, ptr %15, i64 32
-  %20 = load i64, ptr %16, align 4
-  %21 = load i64, ptr %17, align 4
-  %22 = load ptr, ptr %18, align 8
-  %23 = load ptr, ptr %19, align 8
-  %24 = call i1 @subtype_test_wrapper(ptr %22, i64 %21, i64 %20, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %23)
-  %25 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %26 = getelementptr i8, ptr %25, i64 224
-  %27 = load ptr, ptr %26, align 8
-  ret ptr %27
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define ptr @InterleavedCollection_field_InterleavedCollection_0(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) #6 {
-  %2 = load ptr, ptr %0, align 8
-  ret ptr %2
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @InterleavedCollection_B_size_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 232
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @InterleavedCollection_B_is_empty_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 240
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @InterleavedCollection_B_iterator_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 248
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @InterleavedCollection_B_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 256
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-define ptr @InterleavedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = load i64, ptr @any_typ, align 4
-  %14 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 %13, i64 noundef ptrtoint (ptr @any_typ to i64), ptr %12)
-  %15 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %16 = getelementptr i8, ptr %15, i64 264
-  %17 = load ptr, ptr %16, align 8
-  ret ptr %17
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @InterleavedCollection_B_all_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 272
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @InterleavedCollection_B_any_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 280
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @InterleavedCollection_B_enumerate_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 288
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @InterleavedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = icmp eq ptr %4, @function_typ
-  %6 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %7 = select i1 %5, i64 27, i64 28
-  %8 = getelementptr [122 x ptr], ptr %6, i64 0, i64 %7
-  %9 = getelementptr i8, ptr %8, i64 80
-  %10 = load ptr, ptr %9, align 8
-  ret ptr %10
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @InterleavedCollection_B_filter_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 312
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-define ptr @InterleavedCollection_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
-  br i1 %13, label %._crit_edge, label %14
-
-14:                                               ; preds = %2
-  %15 = load i64, ptr %5, align 4
-  %16 = load i64, ptr %6, align 4
-  %17 = load ptr, ptr %7, align 8
-  %18 = load ptr, ptr %8, align 8
-  %19 = load i64, ptr @Iterable, align 4
-  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
-  br i1 %20, label %21, label %._crit_edge
-
-21:                                               ; preds = %14
-  %22 = load i64, ptr %5, align 4
-  %23 = load i64, ptr %6, align 4
-  %24 = load ptr, ptr %7, align 8
-  %25 = load ptr, ptr %8, align 8
-  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
-  br label %._crit_edge
-
-._crit_edge:                                      ; preds = %21, %14, %2
-  %27 = phi i32 [ 30, %21 ], [ 30, %14 ], [ 31, %2 ]
-  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = zext nneg i32 %27 to i64
-  %30 = getelementptr [122 x ptr], ptr %28, i64 0, i64 %29
-  %31 = getelementptr i8, ptr %30, i64 80
-  %32 = load ptr, ptr %31, align 8
-  ret ptr %32
-}
-
-define ptr @InterleavedCollection_B_interleave_otherCollectionT_interleave_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
-  br i1 %13, label %._crit_edge, label %14
-
-14:                                               ; preds = %2
-  %15 = load i64, ptr %5, align 4
-  %16 = load i64, ptr %6, align 4
-  %17 = load ptr, ptr %7, align 8
-  %18 = load ptr, ptr %8, align 8
-  %19 = load i64, ptr @Iterable, align 4
-  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
-  br i1 %20, label %21, label %._crit_edge
-
-21:                                               ; preds = %14
-  %22 = load i64, ptr %5, align 4
-  %23 = load i64, ptr %6, align 4
-  %24 = load ptr, ptr %7, align 8
-  %25 = load ptr, ptr %8, align 8
-  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
-  br label %._crit_edge
-
-._crit_edge:                                      ; preds = %21, %14, %2
-  %27 = phi i32 [ 33, %21 ], [ 33, %14 ], [ 32, %2 ]
-  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = zext nneg i32 %27 to i64
-  %30 = getelementptr [122 x ptr], ptr %28, i64 0, i64 %29
-  %31 = getelementptr i8, ptr %30, i64 80
-  %32 = load ptr, ptr %31, align 8
-  ret ptr %32
-}
-
-define ptr @InterleavedCollection_B_zip_otherCollectionU_zip_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
-  br i1 %13, label %._crit_edge, label %14
-
-14:                                               ; preds = %2
-  %15 = load i64, ptr %5, align 4
-  %16 = load i64, ptr %6, align 4
-  %17 = load ptr, ptr %7, align 8
-  %18 = load ptr, ptr %8, align 8
-  %19 = load i64, ptr @Iterable, align 4
-  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
-  br i1 %20, label %21, label %._crit_edge
-
-21:                                               ; preds = %14
-  %22 = load i64, ptr %5, align 4
-  %23 = load i64, ptr %6, align 4
-  %24 = load ptr, ptr %7, align 8
-  %25 = load ptr, ptr %8, align 8
-  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
-  br label %._crit_edge
-
-._crit_edge:                                      ; preds = %21, %14, %2
-  %27 = phi i32 [ 35, %21 ], [ 35, %14 ], [ 34, %2 ]
-  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = zext nneg i32 %27 to i64
-  %30 = getelementptr [122 x ptr], ptr %28, i64 0, i64 %29
-  %31 = getelementptr i8, ptr %30, i64 80
-  %32 = load ptr, ptr %31, align 8
-  ret ptr %32
-}
-
-define ptr @InterleavedCollection_B_product_otherCollectionU_product_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
-  br i1 %13, label %._crit_edge, label %14
-
-14:                                               ; preds = %2
-  %15 = load i64, ptr %5, align 4
-  %16 = load i64, ptr %6, align 4
-  %17 = load ptr, ptr %7, align 8
-  %18 = load ptr, ptr %8, align 8
-  %19 = load i64, ptr @Iterable, align 4
-  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
-  br i1 %20, label %21, label %._crit_edge
-
-21:                                               ; preds = %14
-  %22 = load i64, ptr %5, align 4
-  %23 = load i64, ptr %6, align 4
-  %24 = load ptr, ptr %7, align 8
-  %25 = load ptr, ptr %8, align 8
-  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
-  br label %._crit_edge
-
-._crit_edge:                                      ; preds = %21, %14, %2
-  %27 = phi i32 [ 37, %21 ], [ 37, %14 ], [ 36, %2 ]
-  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = zext nneg i32 %27 to i64
-  %30 = getelementptr [122 x ptr], ptr %28, i64 0, i64 %29
-  %31 = getelementptr i8, ptr %30, i64 80
-  %32 = load ptr, ptr %31, align 8
-  ret ptr %32
-}
-
-define void @InterleavedCollection_init_firstCollectionT_secondCollectionT({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3, { ptr, ptr, ptr, i32 } %4) #3 {
-  %.fca.0.extract34 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract35 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %6 = call i32 @get_offset(ptr %.fca.0.extract34, ptr noundef nonnull align 16 dereferenceable(1056) @InterleavedCollection)
-  %.fca.0.extract19 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
-  %.fca.1.extract20 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
-  %.fca.2.extract21 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
-  %7 = call i32 @get_offset(ptr %.fca.0.extract19, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %8 = call i32 @get_offset(ptr %.fca.0.extract19, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %9 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract34)
-  %10 = sext i32 %6 to i64
-  %11 = getelementptr ptr, ptr %.fca.0.extract34, i64 %10
-  %12 = getelementptr i8, ptr %11, i64 8
-  %13 = load ptr, ptr %12, align 8
-  %14 = getelementptr i8, ptr %13, i64 8
-  %15 = load ptr, ptr %14, align 8
-  %16 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract19, 0
-  %17 = insertvalue { ptr, ptr, ptr, i32 } %16, ptr %.fca.1.extract20, 1
-  %18 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %.fca.2.extract21, 2
-  %19 = insertvalue { ptr, ptr, ptr, i32 } %18, i32 %8, 3
-  call void %15(ptr %.fca.1.extract35, { ptr, ptr, ptr, i32 } %19) #30
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 2
-  %20 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %21 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract34)
-  %23 = getelementptr i8, ptr %11, i64 16
-  %24 = load ptr, ptr %23, align 8
-  %25 = getelementptr i8, ptr %24, i64 8
-  %26 = load ptr, ptr %25, align 8
-  %27 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
-  %28 = insertvalue { ptr, ptr, ptr, i32 } %27, ptr %.fca.1.extract, 1
-  %29 = insertvalue { ptr, ptr, ptr, i32 } %28, ptr %.fca.2.extract, 2
-  %30 = insertvalue { ptr, ptr, ptr, i32 } %29, i32 %21, 3
-  call void %26(ptr %.fca.1.extract35, { ptr, ptr, ptr, i32 } %30) #30
-  ret void
-}
-
-define i32 @InterleavedCollection_size_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
-  %4 = alloca [0 x ptr], align 8
-  %.fca.0.extract17 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract19 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %5 = call i32 @get_offset(ptr %.fca.0.extract17, ptr noundef nonnull align 16 dereferenceable(1056) @InterleavedCollection)
-  %6 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract17)
-  %7 = sext i32 %5 to i64
-  %8 = getelementptr ptr, ptr %.fca.0.extract17, i64 %7
-  %9 = getelementptr i8, ptr %8, i64 8
-  %10 = load ptr, ptr %9, align 8
-  %11 = load ptr, ptr %10, align 8
-  %12 = call { ptr, ptr, ptr, i32 } %11(ptr %.fca.1.extract19) #31
-  %13 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract3 = extractvalue { ptr, ptr, ptr, i32 } %12, 0
-  store ptr %.fca.0.extract3, ptr %13, align 8
-  %.fca.1.extract5 = extractvalue { ptr, ptr, ptr, i32 } %12, 1
-  %.fca.1.gep6 = getelementptr inbounds i8, ptr %13, i64 8
-  store ptr %.fca.1.extract5, ptr %.fca.1.gep6, align 8
-  %.fca.2.extract7 = extractvalue { ptr, ptr, ptr, i32 } %12, 2
-  %.fca.2.gep8 = getelementptr inbounds i8, ptr %13, i64 16
-  store ptr %.fca.2.extract7, ptr %.fca.2.gep8, align 8
-  %.fca.3.extract9 = extractvalue { ptr, ptr, ptr, i32 } %12, 3
-  %.fca.3.gep10 = getelementptr inbounds i8, ptr %13, i64 24
-  store i32 %.fca.3.extract9, ptr %.fca.3.gep10, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %13, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %14 = load ptr, ptr %13, align 8
-  %15 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %14, 0
-  %16 = load ptr, ptr %.fca.1.gep6, align 8
-  %17 = insertvalue { ptr, ptr, ptr, i32 } %15, ptr %16, 1
-  %18 = load ptr, ptr %.fca.2.gep8, align 8
-  %19 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %18, 2
-  %20 = load i32, ptr %.fca.3.gep10, align 8
-  %21 = insertvalue { ptr, ptr, ptr, i32 } %19, i32 %20, 3
-  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %23 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %14)
-  %24 = sext i32 %20 to i64
-  %25 = getelementptr ptr, ptr %14, i64 %24
-  %26 = getelementptr i8, ptr %25, i64 8
-  %27 = load ptr, ptr %26, align 8
-  %28 = call ptr @behavior_wrapper(ptr %27, { ptr, ptr, ptr, i32 } %21, ptr noundef nonnull align 8 %4)
-  %29 = call i32 %28({ ptr, ptr, ptr, i32 } %21, { ptr, ptr, ptr, i32 } %21, ptr nonnull align 8 %4)
-  %30 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract17)
-  %31 = getelementptr i8, ptr %8, i64 16
-  %32 = load ptr, ptr %31, align 8
-  %33 = load ptr, ptr %32, align 8
-  %34 = call { ptr, ptr, ptr, i32 } %33(ptr %.fca.1.extract19) #31
-  %35 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %34, 0
-  store ptr %.fca.0.extract, ptr %35, align 8
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %34, 1
-  %.fca.1.gep = getelementptr inbounds i8, ptr %35, i64 8
-  store ptr %.fca.1.extract, ptr %.fca.1.gep, align 8
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %34, 2
-  %.fca.2.gep = getelementptr inbounds i8, ptr %35, i64 16
-  store ptr %.fca.2.extract, ptr %.fca.2.gep, align 8
-  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %34, 3
-  %.fca.3.gep = getelementptr inbounds i8, ptr %35, i64 24
-  store i32 %.fca.3.extract, ptr %.fca.3.gep, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %35, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %36 = load ptr, ptr %35, align 8
-  %37 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %36, 0
-  %38 = load ptr, ptr %.fca.1.gep, align 8
-  %39 = insertvalue { ptr, ptr, ptr, i32 } %37, ptr %38, 1
-  %40 = load ptr, ptr %.fca.2.gep, align 8
-  %41 = insertvalue { ptr, ptr, ptr, i32 } %39, ptr %40, 2
-  %42 = load i32, ptr %.fca.3.gep, align 8
-  %43 = insertvalue { ptr, ptr, ptr, i32 } %41, i32 %42, 3
-  %44 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %45 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %36)
-  %46 = sext i32 %42 to i64
-  %47 = getelementptr ptr, ptr %36, i64 %46
-  %48 = getelementptr i8, ptr %47, i64 8
-  %49 = load ptr, ptr %48, align 8
-  %50 = call ptr @behavior_wrapper(ptr %49, { ptr, ptr, ptr, i32 } %43, ptr noundef nonnull align 8 %4)
-  %51 = call i32 %50({ ptr, ptr, ptr, i32 } %43, { ptr, ptr, ptr, i32 } %43, ptr nonnull %4)
-  %52 = add i32 %51, %29
-  ret i32 %52
-}
-
-define { ptr, ptr, ptr, i32 } @InterleavedCollection_iterator_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
-  %4 = alloca [0 x ptr], align 8
-  %.fca.0.extract120 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract122 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %5 = call i32 @get_offset(ptr %.fca.0.extract120, ptr noundef nonnull align 16 dereferenceable(1056) @InterleavedCollection)
-  %6 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
-  %7 = sext i32 %5 to i64
-  %8 = getelementptr ptr, ptr %.fca.0.extract120, i64 %7
-  %9 = getelementptr i8, ptr %8, i64 8
-  %10 = load ptr, ptr %9, align 8
-  %11 = load ptr, ptr %10, align 8
-  %12 = call { ptr, ptr, ptr, i32 } %11(ptr %.fca.1.extract122) #31
-  %13 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract90 = extractvalue { ptr, ptr, ptr, i32 } %12, 0
-  store ptr %.fca.0.extract90, ptr %13, align 8
-  %.fca.1.extract92 = extractvalue { ptr, ptr, ptr, i32 } %12, 1
-  %.fca.1.gep93 = getelementptr inbounds i8, ptr %13, i64 8
-  store ptr %.fca.1.extract92, ptr %.fca.1.gep93, align 8
-  %.fca.2.extract94 = extractvalue { ptr, ptr, ptr, i32 } %12, 2
-  %.fca.2.gep95 = getelementptr inbounds i8, ptr %13, i64 16
-  store ptr %.fca.2.extract94, ptr %.fca.2.gep95, align 8
-  %.fca.3.extract96 = extractvalue { ptr, ptr, ptr, i32 } %12, 3
-  %.fca.3.gep97 = getelementptr inbounds i8, ptr %13, i64 24
-  store i32 %.fca.3.extract96, ptr %.fca.3.gep97, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %13, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %14 = load ptr, ptr %13, align 8
-  %15 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %14, 0
-  %16 = load ptr, ptr %.fca.1.gep93, align 8
-  %17 = insertvalue { ptr, ptr, ptr, i32 } %15, ptr %16, 1
-  %18 = load ptr, ptr %.fca.2.gep95, align 8
-  %19 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %18, 2
-  %20 = load i32, ptr %.fca.3.gep97, align 8
-  %21 = insertvalue { ptr, ptr, ptr, i32 } %19, i32 %20, 3
-  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %23 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %14)
-  %24 = sext i32 %20 to i64
-  %25 = getelementptr ptr, ptr %14, i64 %24
-  %26 = getelementptr i8, ptr %25, i64 24
-  %27 = load ptr, ptr %26, align 8
-  %28 = call ptr @behavior_wrapper(ptr %27, { ptr, ptr, ptr, i32 } %21, ptr noundef nonnull align 8 %4)
-  %29 = call { ptr, ptr, ptr, i32 } %28({ ptr, ptr, ptr, i32 } %21, { ptr, ptr, ptr, i32 } %21, ptr nonnull align 8 %4)
-  %.fca.0.extract78 = extractvalue { ptr, ptr, ptr, i32 } %29, 0
-  %30 = call i32 @get_offset(ptr %.fca.0.extract78, ptr noundef nonnull @Iterator)
-  %31 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
-  %32 = getelementptr i8, ptr %8, i64 16
-  %33 = load ptr, ptr %32, align 8
-  %34 = load ptr, ptr %33, align 8
-  %35 = call { ptr, ptr, ptr, i32 } %34(ptr %.fca.1.extract122) #31
-  %36 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract69 = extractvalue { ptr, ptr, ptr, i32 } %35, 0
-  store ptr %.fca.0.extract69, ptr %36, align 8
-  %.fca.1.extract71 = extractvalue { ptr, ptr, ptr, i32 } %35, 1
-  %.fca.1.gep72 = getelementptr inbounds i8, ptr %36, i64 8
-  store ptr %.fca.1.extract71, ptr %.fca.1.gep72, align 8
-  %.fca.2.extract73 = extractvalue { ptr, ptr, ptr, i32 } %35, 2
-  %.fca.2.gep74 = getelementptr inbounds i8, ptr %36, i64 16
-  store ptr %.fca.2.extract73, ptr %.fca.2.gep74, align 8
-  %.fca.3.extract75 = extractvalue { ptr, ptr, ptr, i32 } %35, 3
-  %.fca.3.gep76 = getelementptr inbounds i8, ptr %36, i64 24
-  store i32 %.fca.3.extract75, ptr %.fca.3.gep76, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %36, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %37 = load ptr, ptr %36, align 8
-  %38 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %37, 0
-  %39 = load ptr, ptr %.fca.1.gep72, align 8
-  %40 = insertvalue { ptr, ptr, ptr, i32 } %38, ptr %39, 1
-  %41 = load ptr, ptr %.fca.2.gep74, align 8
-  %42 = insertvalue { ptr, ptr, ptr, i32 } %40, ptr %41, 2
-  %43 = load i32, ptr %.fca.3.gep76, align 8
-  %44 = insertvalue { ptr, ptr, ptr, i32 } %42, i32 %43, 3
-  %45 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %46 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %37)
-  %47 = sext i32 %43 to i64
-  %48 = getelementptr ptr, ptr %37, i64 %47
-  %49 = getelementptr i8, ptr %48, i64 24
-  %50 = load ptr, ptr %49, align 8
-  %51 = call ptr @behavior_wrapper(ptr %50, { ptr, ptr, ptr, i32 } %44, ptr noundef nonnull align 8 %4)
-  %52 = call { ptr, ptr, ptr, i32 } %51({ ptr, ptr, ptr, i32 } %44, { ptr, ptr, ptr, i32 } %44, ptr nonnull align 8 %4)
-  %.fca.0.extract57 = extractvalue { ptr, ptr, ptr, i32 } %52, 0
-  %53 = call i32 @get_offset(ptr %.fca.0.extract57, ptr noundef nonnull @Iterator)
-  %54 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
-  %55 = load ptr, ptr %8, align 8
-  %56 = call ptr @typegetter_wrapper(ptr %55, ptr %.fca.1.extract122)
-  %57 = alloca [2 x ptr], align 8
-  store ptr @InterleaveIterator, ptr %57, align 8
-  %58 = getelementptr inbounds i8, ptr %57, i64 8
-  store ptr %56, ptr %58, align 8
-  %59 = load ptr, ptr getelementptr (i8, ptr @InterleaveIterator, i64 48), align 8
-  %60 = call { i64, i64 } @size_wrapper(ptr %59, ptr noundef nonnull align 8 dereferenceable(16) %57)
-  %61 = extractvalue { i64, i64 } %60, 0
-  %62 = call ptr @bump_malloc(i64 %61)
-  store ptr %56, ptr %62, align 8
-  %63 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %62)
-  %64 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
-  %65 = load ptr, ptr %9, align 8
-  %66 = load ptr, ptr %65, align 8
-  %67 = call { ptr, ptr, ptr, i32 } %66(ptr %.fca.1.extract122) #31
-  %68 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract40 = extractvalue { ptr, ptr, ptr, i32 } %67, 0
-  store ptr %.fca.0.extract40, ptr %68, align 8
-  %.fca.1.extract42 = extractvalue { ptr, ptr, ptr, i32 } %67, 1
-  %.fca.1.gep43 = getelementptr inbounds i8, ptr %68, i64 8
-  store ptr %.fca.1.extract42, ptr %.fca.1.gep43, align 8
-  %.fca.2.extract44 = extractvalue { ptr, ptr, ptr, i32 } %67, 2
-  %.fca.2.gep45 = getelementptr inbounds i8, ptr %68, i64 16
-  store ptr %.fca.2.extract44, ptr %.fca.2.gep45, align 8
-  %.fca.3.extract46 = extractvalue { ptr, ptr, ptr, i32 } %67, 3
-  %.fca.3.gep47 = getelementptr inbounds i8, ptr %68, i64 24
-  store i32 %.fca.3.extract46, ptr %.fca.3.gep47, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %68, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %69 = load ptr, ptr %68, align 8
-  %70 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %69, 0
-  %71 = load ptr, ptr %.fca.1.gep43, align 8
-  %72 = insertvalue { ptr, ptr, ptr, i32 } %70, ptr %71, 1
-  %73 = load ptr, ptr %.fca.2.gep45, align 8
-  %74 = insertvalue { ptr, ptr, ptr, i32 } %72, ptr %73, 2
-  %75 = load i32, ptr %.fca.3.gep47, align 8
-  %76 = insertvalue { ptr, ptr, ptr, i32 } %74, i32 %75, 3
-  %77 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %78 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %69)
-  %79 = sext i32 %75 to i64
-  %80 = getelementptr ptr, ptr %69, i64 %79
-  %81 = getelementptr i8, ptr %80, i64 24
-  %82 = load ptr, ptr %81, align 8
-  %83 = call ptr @behavior_wrapper(ptr %82, { ptr, ptr, ptr, i32 } %76, ptr noundef nonnull align 8 %4)
-  %84 = call { ptr, ptr, ptr, i32 } %83({ ptr, ptr, ptr, i32 } %76, { ptr, ptr, ptr, i32 } %76, ptr nonnull align 8 %4)
-  %.fca.0.extract28 = extractvalue { ptr, ptr, ptr, i32 } %84, 0
-  %.fca.1.extract30 = extractvalue { ptr, ptr, ptr, i32 } %84, 1
-  %.fca.2.extract32 = extractvalue { ptr, ptr, ptr, i32 } %84, 2
-  %85 = call i32 @get_offset(ptr %.fca.0.extract28, ptr noundef nonnull @Iterator)
-  %86 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
-  %87 = load ptr, ptr %32, align 8
-  %88 = load ptr, ptr %87, align 8
-  %89 = call { ptr, ptr, ptr, i32 } %88(ptr %.fca.1.extract122) #31
-  %90 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract19 = extractvalue { ptr, ptr, ptr, i32 } %89, 0
-  store ptr %.fca.0.extract19, ptr %90, align 8
-  %.fca.1.extract20 = extractvalue { ptr, ptr, ptr, i32 } %89, 1
-  %.fca.1.gep = getelementptr inbounds i8, ptr %90, i64 8
-  store ptr %.fca.1.extract20, ptr %.fca.1.gep, align 8
-  %.fca.2.extract21 = extractvalue { ptr, ptr, ptr, i32 } %89, 2
-  %.fca.2.gep = getelementptr inbounds i8, ptr %90, i64 16
-  store ptr %.fca.2.extract21, ptr %.fca.2.gep, align 8
-  %.fca.3.extract22 = extractvalue { ptr, ptr, ptr, i32 } %89, 3
-  %.fca.3.gep = getelementptr inbounds i8, ptr %90, i64 24
-  store i32 %.fca.3.extract22, ptr %.fca.3.gep, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %90, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %91 = load ptr, ptr %90, align 8
-  %92 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %91, 0
-  %93 = load ptr, ptr %.fca.1.gep, align 8
-  %94 = insertvalue { ptr, ptr, ptr, i32 } %92, ptr %93, 1
-  %95 = load ptr, ptr %.fca.2.gep, align 8
-  %96 = insertvalue { ptr, ptr, ptr, i32 } %94, ptr %95, 2
-  %97 = load i32, ptr %.fca.3.gep, align 8
-  %98 = insertvalue { ptr, ptr, ptr, i32 } %96, i32 %97, 3
-  %99 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %100 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %91)
-  %101 = sext i32 %97 to i64
-  %102 = getelementptr ptr, ptr %91, i64 %101
-  %103 = getelementptr i8, ptr %102, i64 24
-  %104 = load ptr, ptr %103, align 8
-  %105 = call ptr @behavior_wrapper(ptr %104, { ptr, ptr, ptr, i32 } %98, ptr noundef nonnull align 8 %4)
-  %106 = call { ptr, ptr, ptr, i32 } %105({ ptr, ptr, ptr, i32 } %98, { ptr, ptr, ptr, i32 } %98, ptr nonnull %4)
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %106, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %106, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %106, 2
-  %107 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull @Iterator)
-  %108 = call i32 @get_offset(ptr %.fca.0.extract28, ptr noundef nonnull @Iterator)
-  %109 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract28, 0
-  %110 = insertvalue { ptr, ptr, ptr, i32 } %109, ptr %.fca.1.extract30, 1
-  %111 = insertvalue { ptr, ptr, ptr, i32 } %110, ptr %.fca.2.extract32, 2
-  %112 = insertvalue { ptr, ptr, ptr, i32 } %111, i32 %108, 3
-  %113 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull @Iterator)
-  %114 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
-  %115 = insertvalue { ptr, ptr, ptr, i32 } %114, ptr %.fca.1.extract, 1
-  %116 = insertvalue { ptr, ptr, ptr, i32 } %115, ptr %.fca.2.extract, 2
-  %117 = insertvalue { ptr, ptr, ptr, i32 } %116, i32 %113, 3
-  %118 = insertvalue { ptr, ptr, ptr, i32 } { ptr @InterleaveIterator, ptr undef, ptr undef, i32 undef }, ptr %62, 1
-  %119 = insertvalue { ptr, ptr, ptr, i32 } %118, ptr undef, 2
-  %120 = insertvalue { ptr, ptr, ptr, i32 } %119, i32 10, 3
-  %121 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
-  %122 = load ptr, ptr %8, align 8
-  %123 = call ptr @typegetter_wrapper(ptr %122, ptr %.fca.1.extract122)
-  %124 = call ptr @bump_malloc(i64 noundef 24)
-  %125 = getelementptr i8, ptr %124, i64 8
-  store ptr %123, ptr %125, align 8
-  %126 = getelementptr i8, ptr %124, i64 16
-  store ptr null, ptr %126, align 8
-  %127 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %124)
-  store ptr @Iterator, ptr %124, align 8
-  %128 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
-  %129 = load ptr, ptr %8, align 8
-  %130 = call ptr @typegetter_wrapper(ptr %129, ptr %.fca.1.extract122)
-  %131 = call ptr @bump_malloc(i64 noundef 24)
-  %132 = getelementptr i8, ptr %131, i64 8
-  store ptr %130, ptr %132, align 8
-  %133 = getelementptr i8, ptr %131, i64 16
-  store ptr null, ptr %133, align 8
-  %134 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %131)
-  store ptr @Iterator, ptr %131, align 8
-  %135 = alloca [2 x ptr], align 8
-  store ptr %124, ptr %135, align 8
-  %136 = getelementptr inbounds i8, ptr %135, i64 8
-  store ptr %131, ptr %136, align 8
-  %137 = call ptr @llvm.invariant.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %135)
-  %138 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull @InterleaveIterator)
-  %139 = load ptr, ptr getelementptr (i8, ptr @InterleaveIterator, i64 112), align 8
-  %140 = alloca { ptr, ptr }, align 8
-  store ptr %.fca.0.extract28, ptr %140, align 8
-  %141 = getelementptr inbounds i8, ptr %140, i64 8
-  store ptr %.fca.0.extract, ptr %141, align 8
-  %142 = call ptr @behavior_wrapper(ptr %139, { ptr, ptr, ptr, i32 } %120, ptr noundef nonnull align 8 dereferenceable(16) %140)
-  call void %142({ ptr, ptr, ptr, i32 } %120, { ptr, ptr, ptr, i32 } %120, ptr nonnull %135, { ptr, ptr, ptr, i32 } %112, { ptr, ptr, ptr, i32 } %117)
-  %143 = call i32 @get_offset(ptr noundef nonnull @InterleaveIterator, ptr noundef nonnull @Iterator)
-  %144 = insertvalue { ptr, ptr, ptr, i32 } %119, i32 %143, 3
-  ret { ptr, ptr, ptr, i32 } %144
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define { ptr, ptr, ptr, i32 } @InterleavedCollection_getter_second(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 40
-  %3 = load ptr, ptr %2, align 8
-  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
-  %5 = getelementptr i8, ptr %0, i64 48
-  %6 = load ptr, ptr %5, align 8
-  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
-  %8 = getelementptr i8, ptr %0, i64 56
-  %9 = load ptr, ptr %8, align 8
-  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
-  %11 = getelementptr i8, ptr %0, i64 64
-  %12 = load i32, ptr %11, align 8
-  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
-  ret { ptr, ptr, ptr, i32 } %13
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define void @InterleavedCollection_setter_second(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
-  %3 = getelementptr i8, ptr %0, i64 40
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
-  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
-  store ptr %.fca.0.extract, ptr %3, align 8
-  %4 = getelementptr i8, ptr %0, i64 48
-  store ptr %.fca.1.extract, ptr %4, align 8
-  %5 = getelementptr i8, ptr %0, i64 56
-  store ptr %.fca.2.extract, ptr %5, align 8
-  %6 = getelementptr i8, ptr %0, i64 64
-  store i32 %.fca.3.extract, ptr %6, align 8
-  ret void
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define { ptr, ptr, ptr, i32 } @InterleavedCollection_getter_first(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 8
-  %3 = load ptr, ptr %2, align 8
-  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
-  %5 = getelementptr i8, ptr %0, i64 16
-  %6 = load ptr, ptr %5, align 8
-  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
-  %8 = getelementptr i8, ptr %0, i64 24
-  %9 = load ptr, ptr %8, align 8
-  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
-  %11 = getelementptr i8, ptr %0, i64 32
-  %12 = load i32, ptr %11, align 8
-  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
-  ret { ptr, ptr, ptr, i32 } %13
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define void @InterleavedCollection_setter_first(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
-  %3 = getelementptr i8, ptr %0, i64 8
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
-  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
-  store ptr %.fca.0.extract, ptr %3, align 8
-  %4 = getelementptr i8, ptr %0, i64 16
-  store ptr %.fca.1.extract, ptr %4, align 8
-  %5 = getelementptr i8, ptr %0, i64 24
-  store ptr %.fca.2.extract, ptr %5, align 8
-  %6 = getelementptr i8, ptr %0, i64 32
-  store i32 %.fca.3.extract, ptr %6, align 8
-  ret void
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define { i64, i64 } @_data_size_ChainedCollection(ptr nocapture nofree readnone %0) #1 {
-  ret { i64, i64 } { i64 72, i64 8 }
-}
-
-define ptr @ChainedCollection_B_init_firstCollectionT_secondCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
-  %14 = getelementptr inbounds i8, ptr %1, i64 8
-  %15 = load ptr, ptr %14, align 8
-  %16 = getelementptr i8, ptr %15, i64 8
-  %17 = getelementptr i8, ptr %15, i64 16
-  %18 = getelementptr i8, ptr %15, i64 24
-  %19 = getelementptr i8, ptr %15, i64 32
-  %20 = load i64, ptr %16, align 4
-  %21 = load i64, ptr %17, align 4
-  %22 = load ptr, ptr %18, align 8
-  %23 = load ptr, ptr %19, align 8
-  %24 = call i1 @subtype_test_wrapper(ptr %22, i64 %21, i64 %20, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %23)
-  %25 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %26 = getelementptr i8, ptr %25, i64 224
-  %27 = load ptr, ptr %26, align 8
-  ret ptr %27
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define ptr @ChainedCollection_field_ChainedCollection_0(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) #6 {
-  %2 = load ptr, ptr %0, align 8
-  ret ptr %2
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @ChainedCollection_B_size_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 232
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @ChainedCollection_B_is_empty_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 240
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @ChainedCollection_B_iterator_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 248
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @ChainedCollection_B_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 256
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-define ptr @ChainedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = load i64, ptr @any_typ, align 4
-  %14 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 %13, i64 noundef ptrtoint (ptr @any_typ to i64), ptr %12)
-  %15 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %16 = getelementptr i8, ptr %15, i64 264
-  %17 = load ptr, ptr %16, align 8
-  ret ptr %17
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @ChainedCollection_B_all_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 272
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @ChainedCollection_B_any_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 280
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @ChainedCollection_B_enumerate_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 288
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @ChainedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = icmp eq ptr %4, @function_typ
-  %6 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %7 = select i1 %5, i64 27, i64 28
-  %8 = getelementptr [122 x ptr], ptr %6, i64 0, i64 %7
-  %9 = getelementptr i8, ptr %8, i64 80
-  %10 = load ptr, ptr %9, align 8
-  ret ptr %10
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @ChainedCollection_B_filter_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 312
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-define ptr @ChainedCollection_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
-  br i1 %13, label %._crit_edge, label %14
-
-14:                                               ; preds = %2
-  %15 = load i64, ptr %5, align 4
-  %16 = load i64, ptr %6, align 4
-  %17 = load ptr, ptr %7, align 8
-  %18 = load ptr, ptr %8, align 8
-  %19 = load i64, ptr @Iterable, align 4
-  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
-  br i1 %20, label %21, label %._crit_edge
-
-21:                                               ; preds = %14
-  %22 = load i64, ptr %5, align 4
-  %23 = load i64, ptr %6, align 4
-  %24 = load ptr, ptr %7, align 8
-  %25 = load ptr, ptr %8, align 8
-  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
-  br label %._crit_edge
-
-._crit_edge:                                      ; preds = %21, %14, %2
-  %27 = phi i32 [ 30, %21 ], [ 30, %14 ], [ 31, %2 ]
-  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = zext nneg i32 %27 to i64
-  %30 = getelementptr [122 x ptr], ptr %28, i64 0, i64 %29
-  %31 = getelementptr i8, ptr %30, i64 80
-  %32 = load ptr, ptr %31, align 8
-  ret ptr %32
-}
-
-define ptr @ChainedCollection_B_interleave_otherCollectionT_interleave_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
-  br i1 %13, label %._crit_edge, label %14
-
-14:                                               ; preds = %2
-  %15 = load i64, ptr %5, align 4
-  %16 = load i64, ptr %6, align 4
-  %17 = load ptr, ptr %7, align 8
-  %18 = load ptr, ptr %8, align 8
-  %19 = load i64, ptr @Iterable, align 4
-  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
-  br i1 %20, label %21, label %._crit_edge
-
-21:                                               ; preds = %14
-  %22 = load i64, ptr %5, align 4
-  %23 = load i64, ptr %6, align 4
-  %24 = load ptr, ptr %7, align 8
-  %25 = load ptr, ptr %8, align 8
-  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
-  br label %._crit_edge
-
-._crit_edge:                                      ; preds = %21, %14, %2
-  %27 = phi i32 [ 33, %21 ], [ 33, %14 ], [ 32, %2 ]
-  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = zext nneg i32 %27 to i64
-  %30 = getelementptr [122 x ptr], ptr %28, i64 0, i64 %29
-  %31 = getelementptr i8, ptr %30, i64 80
-  %32 = load ptr, ptr %31, align 8
-  ret ptr %32
-}
-
-define ptr @ChainedCollection_B_zip_otherCollectionU_zip_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
-  br i1 %13, label %._crit_edge, label %14
-
-14:                                               ; preds = %2
-  %15 = load i64, ptr %5, align 4
-  %16 = load i64, ptr %6, align 4
-  %17 = load ptr, ptr %7, align 8
-  %18 = load ptr, ptr %8, align 8
-  %19 = load i64, ptr @Iterable, align 4
-  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
-  br i1 %20, label %21, label %._crit_edge
-
-21:                                               ; preds = %14
-  %22 = load i64, ptr %5, align 4
-  %23 = load i64, ptr %6, align 4
-  %24 = load ptr, ptr %7, align 8
-  %25 = load ptr, ptr %8, align 8
-  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
-  br label %._crit_edge
-
-._crit_edge:                                      ; preds = %21, %14, %2
-  %27 = phi i32 [ 35, %21 ], [ 35, %14 ], [ 34, %2 ]
-  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = zext nneg i32 %27 to i64
-  %30 = getelementptr [122 x ptr], ptr %28, i64 0, i64 %29
-  %31 = getelementptr i8, ptr %30, i64 80
-  %32 = load ptr, ptr %31, align 8
-  ret ptr %32
-}
-
-define ptr @ChainedCollection_B_product_otherCollectionU_product_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
-  br i1 %13, label %._crit_edge, label %14
-
-14:                                               ; preds = %2
-  %15 = load i64, ptr %5, align 4
-  %16 = load i64, ptr %6, align 4
-  %17 = load ptr, ptr %7, align 8
-  %18 = load ptr, ptr %8, align 8
-  %19 = load i64, ptr @Iterable, align 4
-  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
-  br i1 %20, label %21, label %._crit_edge
-
-21:                                               ; preds = %14
-  %22 = load i64, ptr %5, align 4
-  %23 = load i64, ptr %6, align 4
-  %24 = load ptr, ptr %7, align 8
-  %25 = load ptr, ptr %8, align 8
-  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
-  br label %._crit_edge
-
-._crit_edge:                                      ; preds = %21, %14, %2
-  %27 = phi i32 [ 37, %21 ], [ 37, %14 ], [ 36, %2 ]
-  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = zext nneg i32 %27 to i64
-  %30 = getelementptr [122 x ptr], ptr %28, i64 0, i64 %29
-  %31 = getelementptr i8, ptr %30, i64 80
-  %32 = load ptr, ptr %31, align 8
-  ret ptr %32
-}
-
-define void @ChainedCollection_init_firstCollectionT_secondCollectionT({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3, { ptr, ptr, ptr, i32 } %4) #3 {
-  %.fca.0.extract34 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract35 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %6 = call i32 @get_offset(ptr %.fca.0.extract34, ptr noundef nonnull align 16 dereferenceable(1056) @ChainedCollection)
-  %.fca.0.extract19 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
-  %.fca.1.extract20 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
-  %.fca.2.extract21 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
-  %7 = call i32 @get_offset(ptr %.fca.0.extract19, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %8 = call i32 @get_offset(ptr %.fca.0.extract19, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %9 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract34)
-  %10 = sext i32 %6 to i64
-  %11 = getelementptr ptr, ptr %.fca.0.extract34, i64 %10
-  %12 = getelementptr i8, ptr %11, i64 8
-  %13 = load ptr, ptr %12, align 8
-  %14 = getelementptr i8, ptr %13, i64 8
-  %15 = load ptr, ptr %14, align 8
-  %16 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract19, 0
-  %17 = insertvalue { ptr, ptr, ptr, i32 } %16, ptr %.fca.1.extract20, 1
-  %18 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %.fca.2.extract21, 2
-  %19 = insertvalue { ptr, ptr, ptr, i32 } %18, i32 %8, 3
-  call void %15(ptr %.fca.1.extract35, { ptr, ptr, ptr, i32 } %19) #30
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 2
-  %20 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %21 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract34)
-  %23 = getelementptr i8, ptr %11, i64 16
-  %24 = load ptr, ptr %23, align 8
-  %25 = getelementptr i8, ptr %24, i64 8
-  %26 = load ptr, ptr %25, align 8
-  %27 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
-  %28 = insertvalue { ptr, ptr, ptr, i32 } %27, ptr %.fca.1.extract, 1
-  %29 = insertvalue { ptr, ptr, ptr, i32 } %28, ptr %.fca.2.extract, 2
-  %30 = insertvalue { ptr, ptr, ptr, i32 } %29, i32 %21, 3
-  call void %26(ptr %.fca.1.extract35, { ptr, ptr, ptr, i32 } %30) #30
-  ret void
-}
-
-define i32 @ChainedCollection_size_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
-  %4 = alloca [0 x ptr], align 8
-  %.fca.0.extract17 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract19 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %5 = call i32 @get_offset(ptr %.fca.0.extract17, ptr noundef nonnull align 16 dereferenceable(1056) @ChainedCollection)
-  %6 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract17)
-  %7 = sext i32 %5 to i64
-  %8 = getelementptr ptr, ptr %.fca.0.extract17, i64 %7
-  %9 = getelementptr i8, ptr %8, i64 8
-  %10 = load ptr, ptr %9, align 8
-  %11 = load ptr, ptr %10, align 8
-  %12 = call { ptr, ptr, ptr, i32 } %11(ptr %.fca.1.extract19) #31
-  %13 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract3 = extractvalue { ptr, ptr, ptr, i32 } %12, 0
-  store ptr %.fca.0.extract3, ptr %13, align 8
-  %.fca.1.extract5 = extractvalue { ptr, ptr, ptr, i32 } %12, 1
-  %.fca.1.gep6 = getelementptr inbounds i8, ptr %13, i64 8
-  store ptr %.fca.1.extract5, ptr %.fca.1.gep6, align 8
-  %.fca.2.extract7 = extractvalue { ptr, ptr, ptr, i32 } %12, 2
-  %.fca.2.gep8 = getelementptr inbounds i8, ptr %13, i64 16
-  store ptr %.fca.2.extract7, ptr %.fca.2.gep8, align 8
-  %.fca.3.extract9 = extractvalue { ptr, ptr, ptr, i32 } %12, 3
-  %.fca.3.gep10 = getelementptr inbounds i8, ptr %13, i64 24
-  store i32 %.fca.3.extract9, ptr %.fca.3.gep10, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %13, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %14 = load ptr, ptr %13, align 8
-  %15 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %14, 0
-  %16 = load ptr, ptr %.fca.1.gep6, align 8
-  %17 = insertvalue { ptr, ptr, ptr, i32 } %15, ptr %16, 1
-  %18 = load ptr, ptr %.fca.2.gep8, align 8
-  %19 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %18, 2
-  %20 = load i32, ptr %.fca.3.gep10, align 8
-  %21 = insertvalue { ptr, ptr, ptr, i32 } %19, i32 %20, 3
-  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %23 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %14)
-  %24 = sext i32 %20 to i64
-  %25 = getelementptr ptr, ptr %14, i64 %24
-  %26 = getelementptr i8, ptr %25, i64 8
-  %27 = load ptr, ptr %26, align 8
-  %28 = call ptr @behavior_wrapper(ptr %27, { ptr, ptr, ptr, i32 } %21, ptr noundef nonnull align 8 %4)
-  %29 = call i32 %28({ ptr, ptr, ptr, i32 } %21, { ptr, ptr, ptr, i32 } %21, ptr nonnull align 8 %4)
-  %30 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract17)
-  %31 = getelementptr i8, ptr %8, i64 16
-  %32 = load ptr, ptr %31, align 8
-  %33 = load ptr, ptr %32, align 8
-  %34 = call { ptr, ptr, ptr, i32 } %33(ptr %.fca.1.extract19) #31
-  %35 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %34, 0
-  store ptr %.fca.0.extract, ptr %35, align 8
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %34, 1
-  %.fca.1.gep = getelementptr inbounds i8, ptr %35, i64 8
-  store ptr %.fca.1.extract, ptr %.fca.1.gep, align 8
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %34, 2
-  %.fca.2.gep = getelementptr inbounds i8, ptr %35, i64 16
-  store ptr %.fca.2.extract, ptr %.fca.2.gep, align 8
-  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %34, 3
-  %.fca.3.gep = getelementptr inbounds i8, ptr %35, i64 24
-  store i32 %.fca.3.extract, ptr %.fca.3.gep, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %35, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %36 = load ptr, ptr %35, align 8
-  %37 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %36, 0
-  %38 = load ptr, ptr %.fca.1.gep, align 8
-  %39 = insertvalue { ptr, ptr, ptr, i32 } %37, ptr %38, 1
-  %40 = load ptr, ptr %.fca.2.gep, align 8
-  %41 = insertvalue { ptr, ptr, ptr, i32 } %39, ptr %40, 2
-  %42 = load i32, ptr %.fca.3.gep, align 8
-  %43 = insertvalue { ptr, ptr, ptr, i32 } %41, i32 %42, 3
-  %44 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %45 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %36)
-  %46 = sext i32 %42 to i64
-  %47 = getelementptr ptr, ptr %36, i64 %46
-  %48 = getelementptr i8, ptr %47, i64 8
-  %49 = load ptr, ptr %48, align 8
-  %50 = call ptr @behavior_wrapper(ptr %49, { ptr, ptr, ptr, i32 } %43, ptr noundef nonnull align 8 %4)
-  %51 = call i32 %50({ ptr, ptr, ptr, i32 } %43, { ptr, ptr, ptr, i32 } %43, ptr nonnull %4)
-  %52 = add i32 %51, %29
-  ret i32 %52
-}
-
-define { ptr, ptr, ptr, i32 } @ChainedCollection_iterator_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
-  %4 = alloca [0 x ptr], align 8
-  %.fca.0.extract120 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract122 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %5 = call i32 @get_offset(ptr %.fca.0.extract120, ptr noundef nonnull align 16 dereferenceable(1056) @ChainedCollection)
-  %6 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
-  %7 = sext i32 %5 to i64
-  %8 = getelementptr ptr, ptr %.fca.0.extract120, i64 %7
-  %9 = getelementptr i8, ptr %8, i64 8
-  %10 = load ptr, ptr %9, align 8
-  %11 = load ptr, ptr %10, align 8
-  %12 = call { ptr, ptr, ptr, i32 } %11(ptr %.fca.1.extract122) #31
-  %13 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract90 = extractvalue { ptr, ptr, ptr, i32 } %12, 0
-  store ptr %.fca.0.extract90, ptr %13, align 8
-  %.fca.1.extract92 = extractvalue { ptr, ptr, ptr, i32 } %12, 1
-  %.fca.1.gep93 = getelementptr inbounds i8, ptr %13, i64 8
-  store ptr %.fca.1.extract92, ptr %.fca.1.gep93, align 8
-  %.fca.2.extract94 = extractvalue { ptr, ptr, ptr, i32 } %12, 2
-  %.fca.2.gep95 = getelementptr inbounds i8, ptr %13, i64 16
-  store ptr %.fca.2.extract94, ptr %.fca.2.gep95, align 8
-  %.fca.3.extract96 = extractvalue { ptr, ptr, ptr, i32 } %12, 3
-  %.fca.3.gep97 = getelementptr inbounds i8, ptr %13, i64 24
-  store i32 %.fca.3.extract96, ptr %.fca.3.gep97, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %13, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %14 = load ptr, ptr %13, align 8
-  %15 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %14, 0
-  %16 = load ptr, ptr %.fca.1.gep93, align 8
-  %17 = insertvalue { ptr, ptr, ptr, i32 } %15, ptr %16, 1
-  %18 = load ptr, ptr %.fca.2.gep95, align 8
-  %19 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %18, 2
-  %20 = load i32, ptr %.fca.3.gep97, align 8
-  %21 = insertvalue { ptr, ptr, ptr, i32 } %19, i32 %20, 3
-  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %23 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %14)
-  %24 = sext i32 %20 to i64
-  %25 = getelementptr ptr, ptr %14, i64 %24
-  %26 = getelementptr i8, ptr %25, i64 24
-  %27 = load ptr, ptr %26, align 8
-  %28 = call ptr @behavior_wrapper(ptr %27, { ptr, ptr, ptr, i32 } %21, ptr noundef nonnull align 8 %4)
-  %29 = call { ptr, ptr, ptr, i32 } %28({ ptr, ptr, ptr, i32 } %21, { ptr, ptr, ptr, i32 } %21, ptr nonnull align 8 %4)
-  %.fca.0.extract78 = extractvalue { ptr, ptr, ptr, i32 } %29, 0
-  %30 = call i32 @get_offset(ptr %.fca.0.extract78, ptr noundef nonnull @Iterator)
-  %31 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
-  %32 = getelementptr i8, ptr %8, i64 16
-  %33 = load ptr, ptr %32, align 8
-  %34 = load ptr, ptr %33, align 8
-  %35 = call { ptr, ptr, ptr, i32 } %34(ptr %.fca.1.extract122) #31
-  %36 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract69 = extractvalue { ptr, ptr, ptr, i32 } %35, 0
-  store ptr %.fca.0.extract69, ptr %36, align 8
-  %.fca.1.extract71 = extractvalue { ptr, ptr, ptr, i32 } %35, 1
-  %.fca.1.gep72 = getelementptr inbounds i8, ptr %36, i64 8
-  store ptr %.fca.1.extract71, ptr %.fca.1.gep72, align 8
-  %.fca.2.extract73 = extractvalue { ptr, ptr, ptr, i32 } %35, 2
-  %.fca.2.gep74 = getelementptr inbounds i8, ptr %36, i64 16
-  store ptr %.fca.2.extract73, ptr %.fca.2.gep74, align 8
-  %.fca.3.extract75 = extractvalue { ptr, ptr, ptr, i32 } %35, 3
-  %.fca.3.gep76 = getelementptr inbounds i8, ptr %36, i64 24
-  store i32 %.fca.3.extract75, ptr %.fca.3.gep76, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %36, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %37 = load ptr, ptr %36, align 8
-  %38 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %37, 0
-  %39 = load ptr, ptr %.fca.1.gep72, align 8
-  %40 = insertvalue { ptr, ptr, ptr, i32 } %38, ptr %39, 1
-  %41 = load ptr, ptr %.fca.2.gep74, align 8
-  %42 = insertvalue { ptr, ptr, ptr, i32 } %40, ptr %41, 2
-  %43 = load i32, ptr %.fca.3.gep76, align 8
-  %44 = insertvalue { ptr, ptr, ptr, i32 } %42, i32 %43, 3
-  %45 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %46 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %37)
-  %47 = sext i32 %43 to i64
-  %48 = getelementptr ptr, ptr %37, i64 %47
-  %49 = getelementptr i8, ptr %48, i64 24
-  %50 = load ptr, ptr %49, align 8
-  %51 = call ptr @behavior_wrapper(ptr %50, { ptr, ptr, ptr, i32 } %44, ptr noundef nonnull align 8 %4)
-  %52 = call { ptr, ptr, ptr, i32 } %51({ ptr, ptr, ptr, i32 } %44, { ptr, ptr, ptr, i32 } %44, ptr nonnull align 8 %4)
-  %.fca.0.extract57 = extractvalue { ptr, ptr, ptr, i32 } %52, 0
-  %53 = call i32 @get_offset(ptr %.fca.0.extract57, ptr noundef nonnull @Iterator)
-  %54 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
-  %55 = load ptr, ptr %8, align 8
-  %56 = call ptr @typegetter_wrapper(ptr %55, ptr %.fca.1.extract122)
-  %57 = alloca [2 x ptr], align 8
-  store ptr @ChainIterator, ptr %57, align 8
-  %58 = getelementptr inbounds i8, ptr %57, i64 8
-  store ptr %56, ptr %58, align 8
-  %59 = load ptr, ptr getelementptr (i8, ptr @ChainIterator, i64 48), align 8
-  %60 = call { i64, i64 } @size_wrapper(ptr %59, ptr noundef nonnull align 8 dereferenceable(16) %57)
-  %61 = extractvalue { i64, i64 } %60, 0
-  %62 = call ptr @bump_malloc(i64 %61)
-  store ptr %56, ptr %62, align 8
-  %63 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %62)
-  %64 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
-  %65 = load ptr, ptr %9, align 8
-  %66 = load ptr, ptr %65, align 8
-  %67 = call { ptr, ptr, ptr, i32 } %66(ptr %.fca.1.extract122) #31
-  %68 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract40 = extractvalue { ptr, ptr, ptr, i32 } %67, 0
-  store ptr %.fca.0.extract40, ptr %68, align 8
-  %.fca.1.extract42 = extractvalue { ptr, ptr, ptr, i32 } %67, 1
-  %.fca.1.gep43 = getelementptr inbounds i8, ptr %68, i64 8
-  store ptr %.fca.1.extract42, ptr %.fca.1.gep43, align 8
-  %.fca.2.extract44 = extractvalue { ptr, ptr, ptr, i32 } %67, 2
-  %.fca.2.gep45 = getelementptr inbounds i8, ptr %68, i64 16
-  store ptr %.fca.2.extract44, ptr %.fca.2.gep45, align 8
-  %.fca.3.extract46 = extractvalue { ptr, ptr, ptr, i32 } %67, 3
-  %.fca.3.gep47 = getelementptr inbounds i8, ptr %68, i64 24
-  store i32 %.fca.3.extract46, ptr %.fca.3.gep47, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %68, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %69 = load ptr, ptr %68, align 8
-  %70 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %69, 0
-  %71 = load ptr, ptr %.fca.1.gep43, align 8
-  %72 = insertvalue { ptr, ptr, ptr, i32 } %70, ptr %71, 1
-  %73 = load ptr, ptr %.fca.2.gep45, align 8
-  %74 = insertvalue { ptr, ptr, ptr, i32 } %72, ptr %73, 2
-  %75 = load i32, ptr %.fca.3.gep47, align 8
-  %76 = insertvalue { ptr, ptr, ptr, i32 } %74, i32 %75, 3
-  %77 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %78 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %69)
-  %79 = sext i32 %75 to i64
-  %80 = getelementptr ptr, ptr %69, i64 %79
-  %81 = getelementptr i8, ptr %80, i64 24
-  %82 = load ptr, ptr %81, align 8
-  %83 = call ptr @behavior_wrapper(ptr %82, { ptr, ptr, ptr, i32 } %76, ptr noundef nonnull align 8 %4)
-  %84 = call { ptr, ptr, ptr, i32 } %83({ ptr, ptr, ptr, i32 } %76, { ptr, ptr, ptr, i32 } %76, ptr nonnull align 8 %4)
-  %.fca.0.extract28 = extractvalue { ptr, ptr, ptr, i32 } %84, 0
-  %.fca.1.extract30 = extractvalue { ptr, ptr, ptr, i32 } %84, 1
-  %.fca.2.extract32 = extractvalue { ptr, ptr, ptr, i32 } %84, 2
-  %85 = call i32 @get_offset(ptr %.fca.0.extract28, ptr noundef nonnull @Iterator)
-  %86 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
-  %87 = load ptr, ptr %32, align 8
-  %88 = load ptr, ptr %87, align 8
-  %89 = call { ptr, ptr, ptr, i32 } %88(ptr %.fca.1.extract122) #31
-  %90 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract19 = extractvalue { ptr, ptr, ptr, i32 } %89, 0
-  store ptr %.fca.0.extract19, ptr %90, align 8
-  %.fca.1.extract20 = extractvalue { ptr, ptr, ptr, i32 } %89, 1
-  %.fca.1.gep = getelementptr inbounds i8, ptr %90, i64 8
-  store ptr %.fca.1.extract20, ptr %.fca.1.gep, align 8
-  %.fca.2.extract21 = extractvalue { ptr, ptr, ptr, i32 } %89, 2
-  %.fca.2.gep = getelementptr inbounds i8, ptr %90, i64 16
-  store ptr %.fca.2.extract21, ptr %.fca.2.gep, align 8
-  %.fca.3.extract22 = extractvalue { ptr, ptr, ptr, i32 } %89, 3
-  %.fca.3.gep = getelementptr inbounds i8, ptr %90, i64 24
-  store i32 %.fca.3.extract22, ptr %.fca.3.gep, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %90, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %91 = load ptr, ptr %90, align 8
-  %92 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %91, 0
-  %93 = load ptr, ptr %.fca.1.gep, align 8
-  %94 = insertvalue { ptr, ptr, ptr, i32 } %92, ptr %93, 1
-  %95 = load ptr, ptr %.fca.2.gep, align 8
-  %96 = insertvalue { ptr, ptr, ptr, i32 } %94, ptr %95, 2
-  %97 = load i32, ptr %.fca.3.gep, align 8
-  %98 = insertvalue { ptr, ptr, ptr, i32 } %96, i32 %97, 3
-  %99 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %100 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %91)
-  %101 = sext i32 %97 to i64
-  %102 = getelementptr ptr, ptr %91, i64 %101
-  %103 = getelementptr i8, ptr %102, i64 24
-  %104 = load ptr, ptr %103, align 8
-  %105 = call ptr @behavior_wrapper(ptr %104, { ptr, ptr, ptr, i32 } %98, ptr noundef nonnull align 8 %4)
-  %106 = call { ptr, ptr, ptr, i32 } %105({ ptr, ptr, ptr, i32 } %98, { ptr, ptr, ptr, i32 } %98, ptr nonnull %4)
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %106, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %106, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %106, 2
-  %107 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull @Iterator)
-  %108 = call i32 @get_offset(ptr %.fca.0.extract28, ptr noundef nonnull @Iterator)
-  %109 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract28, 0
-  %110 = insertvalue { ptr, ptr, ptr, i32 } %109, ptr %.fca.1.extract30, 1
-  %111 = insertvalue { ptr, ptr, ptr, i32 } %110, ptr %.fca.2.extract32, 2
-  %112 = insertvalue { ptr, ptr, ptr, i32 } %111, i32 %108, 3
-  %113 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull @Iterator)
-  %114 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
-  %115 = insertvalue { ptr, ptr, ptr, i32 } %114, ptr %.fca.1.extract, 1
-  %116 = insertvalue { ptr, ptr, ptr, i32 } %115, ptr %.fca.2.extract, 2
-  %117 = insertvalue { ptr, ptr, ptr, i32 } %116, i32 %113, 3
-  %118 = insertvalue { ptr, ptr, ptr, i32 } { ptr @ChainIterator, ptr undef, ptr undef, i32 undef }, ptr %62, 1
-  %119 = insertvalue { ptr, ptr, ptr, i32 } %118, ptr undef, 2
-  %120 = insertvalue { ptr, ptr, ptr, i32 } %119, i32 10, 3
-  %121 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
-  %122 = load ptr, ptr %8, align 8
-  %123 = call ptr @typegetter_wrapper(ptr %122, ptr %.fca.1.extract122)
-  %124 = call ptr @bump_malloc(i64 noundef 24)
-  %125 = getelementptr i8, ptr %124, i64 8
-  store ptr %123, ptr %125, align 8
-  %126 = getelementptr i8, ptr %124, i64 16
-  store ptr null, ptr %126, align 8
-  %127 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %124)
-  store ptr @Iterator, ptr %124, align 8
-  %128 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
-  %129 = load ptr, ptr %8, align 8
-  %130 = call ptr @typegetter_wrapper(ptr %129, ptr %.fca.1.extract122)
-  %131 = call ptr @bump_malloc(i64 noundef 24)
-  %132 = getelementptr i8, ptr %131, i64 8
-  store ptr %130, ptr %132, align 8
-  %133 = getelementptr i8, ptr %131, i64 16
-  store ptr null, ptr %133, align 8
-  %134 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %131)
-  store ptr @Iterator, ptr %131, align 8
-  %135 = alloca [2 x ptr], align 8
-  store ptr %124, ptr %135, align 8
-  %136 = getelementptr inbounds i8, ptr %135, i64 8
-  store ptr %131, ptr %136, align 8
-  %137 = call ptr @llvm.invariant.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %135)
-  %138 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull @ChainIterator)
-  %139 = load ptr, ptr getelementptr (i8, ptr @ChainIterator, i64 112), align 8
-  %140 = alloca { ptr, ptr }, align 8
-  store ptr %.fca.0.extract28, ptr %140, align 8
-  %141 = getelementptr inbounds i8, ptr %140, i64 8
-  store ptr %.fca.0.extract, ptr %141, align 8
-  %142 = call ptr @behavior_wrapper(ptr %139, { ptr, ptr, ptr, i32 } %120, ptr noundef nonnull align 8 dereferenceable(16) %140)
-  call void %142({ ptr, ptr, ptr, i32 } %120, { ptr, ptr, ptr, i32 } %120, ptr nonnull %135, { ptr, ptr, ptr, i32 } %112, { ptr, ptr, ptr, i32 } %117)
-  %143 = call i32 @get_offset(ptr noundef nonnull @ChainIterator, ptr noundef nonnull @Iterator)
-  %144 = insertvalue { ptr, ptr, ptr, i32 } %119, i32 %143, 3
-  ret { ptr, ptr, ptr, i32 } %144
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define { i64, i64 } @_data_size_ChainIterator(ptr nocapture nofree readnone %0) #1 {
-  ret { i64, i64 } { i64 80, i64 8 }
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define ptr @ChainIterator_field_ChainIterator_0(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) #6 {
-  %2 = load ptr, ptr %0, align 8
-  ret ptr %2
-}
-
-define ptr @ChainIterator_B_init_firstIteratorT_secondIteratorT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 8673632051301757104, i64 noundef ptrtoint (ptr @Iterator to i64), ptr %12)
-  %14 = getelementptr inbounds i8, ptr %1, i64 8
-  %15 = load ptr, ptr %14, align 8
-  %16 = getelementptr i8, ptr %15, i64 8
-  %17 = getelementptr i8, ptr %15, i64 16
-  %18 = getelementptr i8, ptr %15, i64 24
-  %19 = getelementptr i8, ptr %15, i64 32
-  %20 = load i64, ptr %16, align 4
-  %21 = load i64, ptr %17, align 4
-  %22 = load ptr, ptr %18, align 8
-  %23 = load ptr, ptr %19, align 8
-  %24 = call i1 @subtype_test_wrapper(ptr %22, i64 %21, i64 %20, i64 noundef 8673632051301757104, i64 noundef ptrtoint (ptr @Iterator to i64), ptr %23)
-  %25 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %26 = getelementptr i8, ptr %25, i64 128
-  %27 = load ptr, ptr %26, align 8
-  ret ptr %27
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @ChainIterator_B_next_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 136
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-define void @ChainIterator_init_firstIteratorT_secondIteratorT({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3, { ptr, ptr, ptr, i32 } %4) #3 {
-  %.fca.0.extract38 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract39 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %6 = call i32 @get_offset(ptr %.fca.0.extract38, ptr noundef nonnull align 16 dereferenceable(168) @ChainIterator)
-  %.fca.0.extract20 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
-  %.fca.1.extract21 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
-  %.fca.2.extract22 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
-  %7 = call i32 @get_offset(ptr %.fca.0.extract20, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %8 = call i32 @get_offset(ptr %.fca.0.extract20, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %9 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract38)
-  %10 = sext i32 %6 to i64
-  %11 = getelementptr ptr, ptr %.fca.0.extract38, i64 %10
-  %12 = getelementptr i8, ptr %11, i64 8
-  %13 = load ptr, ptr %12, align 8
-  %14 = getelementptr i8, ptr %13, i64 8
-  %15 = load ptr, ptr %14, align 8
-  %16 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract20, 0
-  %17 = insertvalue { ptr, ptr, ptr, i32 } %16, ptr %.fca.1.extract21, 1
-  %18 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %.fca.2.extract22, 2
-  %19 = insertvalue { ptr, ptr, ptr, i32 } %18, i32 %8, 3
-  call void %15(ptr %.fca.1.extract39, { ptr, ptr, ptr, i32 } %19) #30
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 2
-  %20 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %21 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract38)
-  %23 = getelementptr i8, ptr %11, i64 16
-  %24 = load ptr, ptr %23, align 8
-  %25 = getelementptr i8, ptr %24, i64 8
-  %26 = load ptr, ptr %25, align 8
-  %27 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
-  %28 = insertvalue { ptr, ptr, ptr, i32 } %27, ptr %.fca.1.extract, 1
-  %29 = insertvalue { ptr, ptr, ptr, i32 } %28, ptr %.fca.2.extract, 2
-  %30 = insertvalue { ptr, ptr, ptr, i32 } %29, i32 %21, 3
-  call void %26(ptr %.fca.1.extract39, { ptr, ptr, ptr, i32 } %30) #30
-  %31 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract38)
-  %32 = getelementptr i8, ptr %11, i64 24
-  %33 = load ptr, ptr %32, align 8
-  %34 = getelementptr i8, ptr %33, i64 8
-  %35 = load ptr, ptr %34, align 8
-  call void %35(ptr %.fca.1.extract39, i1 true) #30
-  ret void
-}
-
-define { ptr, i160 } @ChainIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
-  %4 = alloca [0 x ptr], align 8
-  %5 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %6 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract18 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract19 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %7 = call i32 @get_offset(ptr %.fca.0.extract18, ptr noundef nonnull align 16 dereferenceable(168) @ChainIterator)
-  %8 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract18)
-  %9 = sext i32 %7 to i64
-  %10 = getelementptr ptr, ptr %.fca.0.extract18, i64 %9
-  %11 = getelementptr i8, ptr %10, i64 24
-  %12 = load ptr, ptr %11, align 8
-  %13 = load ptr, ptr %12, align 8
-  %14 = call i1 %13(ptr %.fca.1.extract19) #31
-  br i1 %14, label %15, label %47
-
-15:                                               ; preds = %3
-  %16 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract18)
-  %17 = getelementptr i8, ptr %10, i64 8
-  %18 = load ptr, ptr %17, align 8
-  %19 = load ptr, ptr %18, align 8
-  %20 = call { ptr, ptr, ptr, i32 } %19(ptr %.fca.1.extract19) #31
-  %.fca.0.extract38 = extractvalue { ptr, ptr, ptr, i32 } %20, 0
-  store ptr %.fca.0.extract38, ptr %5, align 8
-  %.fca.1.extract40 = extractvalue { ptr, ptr, ptr, i32 } %20, 1
-  %.fca.1.gep41 = getelementptr inbounds i8, ptr %5, i64 8
-  store ptr %.fca.1.extract40, ptr %.fca.1.gep41, align 8
-  %.fca.2.extract42 = extractvalue { ptr, ptr, ptr, i32 } %20, 2
-  %.fca.2.gep43 = getelementptr inbounds i8, ptr %5, i64 16
-  store ptr %.fca.2.extract42, ptr %.fca.2.gep43, align 8
-  %.fca.3.extract44 = extractvalue { ptr, ptr, ptr, i32 } %20, 3
-  %.fca.3.gep45 = getelementptr inbounds i8, ptr %5, i64 24
-  store i32 %.fca.3.extract44, ptr %.fca.3.gep45, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %5, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %21 = load ptr, ptr %5, align 8
-  %22 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %21, 0
-  %23 = load ptr, ptr %.fca.1.gep41, align 8
-  %24 = insertvalue { ptr, ptr, ptr, i32 } %22, ptr %23, 1
-  %25 = load ptr, ptr %.fca.2.gep43, align 8
-  %26 = insertvalue { ptr, ptr, ptr, i32 } %24, ptr %25, 2
-  %27 = load i32, ptr %.fca.3.gep45, align 8
-  %28 = insertvalue { ptr, ptr, ptr, i32 } %26, i32 %27, 3
-  %29 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %30 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef %21)
-  %31 = sext i32 %27 to i64
-  %32 = getelementptr ptr, ptr %21, i64 %31
-  %33 = getelementptr i8, ptr %32, i64 8
-  %34 = load ptr, ptr %33, align 8
-  %35 = call ptr @behavior_wrapper(ptr %34, { ptr, ptr, ptr, i32 } %28, ptr noundef nonnull align 8 %4)
-  %36 = call { ptr, i160 } %35({ ptr, ptr, ptr, i32 } %28, { ptr, ptr, ptr, i32 } %28, ptr nonnull %4)
-  %.fca.0.extract32 = extractvalue { ptr, i160 } %36, 0
-  %.fca.1.extract34 = extractvalue { ptr, i160 } %36, 1
-  %37 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract18)
-  %38 = load ptr, ptr %10, align 8
-  %39 = call ptr @typegetter_wrapper(ptr %38, ptr %.fca.1.extract19)
-  %40 = icmp ne ptr %.fca.0.extract32, @nil_typ
-  %41 = icmp ne ptr %.fca.0.extract32, null
-  %.not47.not.not = and i1 %40, %41
-  br i1 %.not47.not.not, label %47, label %42
-
-42:                                               ; preds = %15
-  %43 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract18)
-  %44 = load ptr, ptr %11, align 8
-  %45 = getelementptr i8, ptr %44, i64 8
-  %46 = load ptr, ptr %45, align 8
-  call void %46(ptr %.fca.1.extract19, i1 false) #30
-  br label %47
-
-47:                                               ; preds = %42, %15, %3
-  %.reg2mem15.sroa.0.0 = phi ptr [ %.fca.0.extract32, %15 ], [ %.fca.0.extract32, %42 ], [ poison, %3 ]
-  %.reg2mem15.sroa.3.0 = phi i160 [ %.fca.1.extract34, %15 ], [ %.fca.1.extract34, %42 ], [ poison, %3 ]
-  %.reg2mem13.0 = phi i1 [ true, %15 ], [ false, %42 ], [ false, %3 ]
-  br i1 %.reg2mem13.0, label %70, label %48
-
-48:                                               ; preds = %47
-  %49 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract18)
-  %50 = getelementptr i8, ptr %10, i64 16
-  %51 = load ptr, ptr %50, align 8
-  %52 = load ptr, ptr %51, align 8
-  %53 = call { ptr, ptr, ptr, i32 } %52(ptr %.fca.1.extract19) #31
-  %.fca.0.extract24 = extractvalue { ptr, ptr, ptr, i32 } %53, 0
-  store ptr %.fca.0.extract24, ptr %6, align 8
-  %.fca.1.extract25 = extractvalue { ptr, ptr, ptr, i32 } %53, 1
-  %.fca.1.gep = getelementptr inbounds i8, ptr %6, i64 8
-  store ptr %.fca.1.extract25, ptr %.fca.1.gep, align 8
-  %.fca.2.extract26 = extractvalue { ptr, ptr, ptr, i32 } %53, 2
-  %.fca.2.gep = getelementptr inbounds i8, ptr %6, i64 16
-  store ptr %.fca.2.extract26, ptr %.fca.2.gep, align 8
-  %.fca.3.extract27 = extractvalue { ptr, ptr, ptr, i32 } %53, 3
-  %.fca.3.gep = getelementptr inbounds i8, ptr %6, i64 24
-  store i32 %.fca.3.extract27, ptr %.fca.3.gep, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %6, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %54 = load ptr, ptr %6, align 8
-  %55 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %54, 0
-  %56 = load ptr, ptr %.fca.1.gep, align 8
-  %57 = insertvalue { ptr, ptr, ptr, i32 } %55, ptr %56, 1
-  %58 = load ptr, ptr %.fca.2.gep, align 8
-  %59 = insertvalue { ptr, ptr, ptr, i32 } %57, ptr %58, 2
-  %60 = load i32, ptr %.fca.3.gep, align 8
-  %61 = insertvalue { ptr, ptr, ptr, i32 } %59, i32 %60, 3
-  %62 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %63 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef %54)
-  %64 = sext i32 %60 to i64
-  %65 = getelementptr ptr, ptr %54, i64 %64
-  %66 = getelementptr i8, ptr %65, i64 8
-  %67 = load ptr, ptr %66, align 8
-  %68 = call ptr @behavior_wrapper(ptr %67, { ptr, ptr, ptr, i32 } %61, ptr noundef nonnull align 8 %4)
-  %69 = call { ptr, i160 } %68({ ptr, ptr, ptr, i32 } %61, { ptr, ptr, ptr, i32 } %61, ptr nonnull %4)
-  %.fca.0.extract20 = extractvalue { ptr, i160 } %69, 0
-  %.fca.1.extract21 = extractvalue { ptr, i160 } %69, 1
-  br label %70
-
-70:                                               ; preds = %48, %47
-  %.reg2mem11.sroa.0.0 = phi ptr [ %.fca.0.extract20, %48 ], [ %.reg2mem15.sroa.0.0, %47 ]
-  %.reg2mem11.sroa.3.0 = phi i160 [ %.fca.1.extract21, %48 ], [ %.reg2mem15.sroa.3.0, %47 ]
-  %.reload12.fca.0.insert = insertvalue { ptr, i160 } poison, ptr %.reg2mem11.sroa.0.0, 0
-  %.reload12.fca.1.insert = insertvalue { ptr, i160 } %.reload12.fca.0.insert, i160 %.reg2mem11.sroa.3.0, 1
-  ret { ptr, i160 } %.reload12.fca.1.insert
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define i1 @ChainIterator_getter_on_first(ptr nocapture nofree readonly %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 72
-  %3 = load i1, ptr %2, align 1
-  ret i1 %3
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define void @ChainIterator_setter_on_first(ptr nocapture nofree writeonly %0, i1 %1) #7 {
-  %3 = getelementptr i8, ptr %0, i64 72
-  store i1 %1, ptr %3, align 1
-  ret void
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define { ptr, ptr, ptr, i32 } @ChainIterator_getter_second(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 40
-  %3 = load ptr, ptr %2, align 8
-  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
-  %5 = getelementptr i8, ptr %0, i64 48
-  %6 = load ptr, ptr %5, align 8
-  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
-  %8 = getelementptr i8, ptr %0, i64 56
-  %9 = load ptr, ptr %8, align 8
-  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
-  %11 = getelementptr i8, ptr %0, i64 64
-  %12 = load i32, ptr %11, align 8
-  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
-  ret { ptr, ptr, ptr, i32 } %13
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define void @ChainIterator_setter_second(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
-  %3 = getelementptr i8, ptr %0, i64 40
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
-  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
-  store ptr %.fca.0.extract, ptr %3, align 8
-  %4 = getelementptr i8, ptr %0, i64 48
-  store ptr %.fca.1.extract, ptr %4, align 8
-  %5 = getelementptr i8, ptr %0, i64 56
-  store ptr %.fca.2.extract, ptr %5, align 8
-  %6 = getelementptr i8, ptr %0, i64 64
-  store i32 %.fca.3.extract, ptr %6, align 8
-  ret void
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define { ptr, ptr, ptr, i32 } @ChainIterator_getter_first(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 8
-  %3 = load ptr, ptr %2, align 8
-  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
-  %5 = getelementptr i8, ptr %0, i64 16
-  %6 = load ptr, ptr %5, align 8
-  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
-  %8 = getelementptr i8, ptr %0, i64 24
-  %9 = load ptr, ptr %8, align 8
-  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
-  %11 = getelementptr i8, ptr %0, i64 32
-  %12 = load i32, ptr %11, align 8
-  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
-  ret { ptr, ptr, ptr, i32 } %13
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define void @ChainIterator_setter_first(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
-  %3 = getelementptr i8, ptr %0, i64 8
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
-  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
-  store ptr %.fca.0.extract, ptr %3, align 8
-  %4 = getelementptr i8, ptr %0, i64 16
-  store ptr %.fca.1.extract, ptr %4, align 8
-  %5 = getelementptr i8, ptr %0, i64 24
-  store ptr %.fca.2.extract, ptr %5, align 8
-  %6 = getelementptr i8, ptr %0, i64 32
-  store i32 %.fca.3.extract, ptr %6, align 8
-  ret void
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define { ptr, ptr, ptr, i32 } @ChainedCollection_getter_second(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 40
-  %3 = load ptr, ptr %2, align 8
-  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
-  %5 = getelementptr i8, ptr %0, i64 48
-  %6 = load ptr, ptr %5, align 8
-  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
-  %8 = getelementptr i8, ptr %0, i64 56
-  %9 = load ptr, ptr %8, align 8
-  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
-  %11 = getelementptr i8, ptr %0, i64 64
-  %12 = load i32, ptr %11, align 8
-  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
-  ret { ptr, ptr, ptr, i32 } %13
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define void @ChainedCollection_setter_second(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
-  %3 = getelementptr i8, ptr %0, i64 40
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
-  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
-  store ptr %.fca.0.extract, ptr %3, align 8
-  %4 = getelementptr i8, ptr %0, i64 48
-  store ptr %.fca.1.extract, ptr %4, align 8
-  %5 = getelementptr i8, ptr %0, i64 56
-  store ptr %.fca.2.extract, ptr %5, align 8
-  %6 = getelementptr i8, ptr %0, i64 64
-  store i32 %.fca.3.extract, ptr %6, align 8
-  ret void
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define { ptr, ptr, ptr, i32 } @ChainedCollection_getter_first(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 8
-  %3 = load ptr, ptr %2, align 8
-  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
-  %5 = getelementptr i8, ptr %0, i64 16
-  %6 = load ptr, ptr %5, align 8
-  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
-  %8 = getelementptr i8, ptr %0, i64 24
-  %9 = load ptr, ptr %8, align 8
-  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
-  %11 = getelementptr i8, ptr %0, i64 32
-  %12 = load i32, ptr %11, align 8
-  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
-  ret { ptr, ptr, ptr, i32 } %13
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define void @ChainedCollection_setter_first(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
   %3 = getelementptr i8, ptr %0, i64 8
   %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
   %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
@@ -16323,6 +15316,302 @@ define { ptr, ptr, ptr, i32 } @ChainIterable_iterator_({ ptr, ptr, ptr, i32 } %0
   ret { ptr, ptr, ptr, i32 } %142
 }
 
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
+define { i64, i64 } @_data_size_ChainIterator(ptr nocapture nofree readnone %0) #1 {
+  ret { i64, i64 } { i64 80, i64 8 }
+}
+
+define ptr @ChainIterator_B_init_firstIteratorT_secondIteratorT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 8673632051301757104, i64 noundef ptrtoint (ptr @Iterator to i64), ptr %12)
+  %14 = getelementptr inbounds i8, ptr %1, i64 8
+  %15 = load ptr, ptr %14, align 8
+  %16 = getelementptr i8, ptr %15, i64 8
+  %17 = getelementptr i8, ptr %15, i64 16
+  %18 = getelementptr i8, ptr %15, i64 24
+  %19 = getelementptr i8, ptr %15, i64 32
+  %20 = load i64, ptr %16, align 4
+  %21 = load i64, ptr %17, align 4
+  %22 = load ptr, ptr %18, align 8
+  %23 = load ptr, ptr %19, align 8
+  %24 = call i1 @subtype_test_wrapper(ptr %22, i64 %21, i64 %20, i64 noundef 8673632051301757104, i64 noundef ptrtoint (ptr @Iterator to i64), ptr %23)
+  %25 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %26 = getelementptr i8, ptr %25, i64 128
+  %27 = load ptr, ptr %26, align 8
+  ret ptr %27
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define ptr @ChainIterator_field_ChainIterator_0(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) #6 {
+  %2 = load ptr, ptr %0, align 8
+  ret ptr %2
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @ChainIterator_B_next_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 136
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+define void @ChainIterator_init_firstIteratorT_secondIteratorT({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3, { ptr, ptr, ptr, i32 } %4) #3 {
+  %.fca.0.extract38 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract39 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %6 = call i32 @get_offset(ptr %.fca.0.extract38, ptr noundef nonnull align 16 dereferenceable(168) @ChainIterator)
+  %.fca.0.extract20 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
+  %.fca.1.extract21 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
+  %.fca.2.extract22 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
+  %7 = call i32 @get_offset(ptr %.fca.0.extract20, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %8 = call i32 @get_offset(ptr %.fca.0.extract20, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %9 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract38)
+  %10 = sext i32 %6 to i64
+  %11 = getelementptr ptr, ptr %.fca.0.extract38, i64 %10
+  %12 = getelementptr i8, ptr %11, i64 8
+  %13 = load ptr, ptr %12, align 8
+  %14 = getelementptr i8, ptr %13, i64 8
+  %15 = load ptr, ptr %14, align 8
+  %16 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract20, 0
+  %17 = insertvalue { ptr, ptr, ptr, i32 } %16, ptr %.fca.1.extract21, 1
+  %18 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %.fca.2.extract22, 2
+  %19 = insertvalue { ptr, ptr, ptr, i32 } %18, i32 %8, 3
+  call void %15(ptr %.fca.1.extract39, { ptr, ptr, ptr, i32 } %19) #30
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 2
+  %20 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %21 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract38)
+  %23 = getelementptr i8, ptr %11, i64 16
+  %24 = load ptr, ptr %23, align 8
+  %25 = getelementptr i8, ptr %24, i64 8
+  %26 = load ptr, ptr %25, align 8
+  %27 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
+  %28 = insertvalue { ptr, ptr, ptr, i32 } %27, ptr %.fca.1.extract, 1
+  %29 = insertvalue { ptr, ptr, ptr, i32 } %28, ptr %.fca.2.extract, 2
+  %30 = insertvalue { ptr, ptr, ptr, i32 } %29, i32 %21, 3
+  call void %26(ptr %.fca.1.extract39, { ptr, ptr, ptr, i32 } %30) #30
+  %31 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract38)
+  %32 = getelementptr i8, ptr %11, i64 24
+  %33 = load ptr, ptr %32, align 8
+  %34 = getelementptr i8, ptr %33, i64 8
+  %35 = load ptr, ptr %34, align 8
+  call void %35(ptr %.fca.1.extract39, i1 true) #30
+  ret void
+}
+
+define { ptr, i160 } @ChainIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
+  %4 = alloca [0 x ptr], align 8
+  %5 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %6 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract18 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract19 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %7 = call i32 @get_offset(ptr %.fca.0.extract18, ptr noundef nonnull align 16 dereferenceable(168) @ChainIterator)
+  %8 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract18)
+  %9 = sext i32 %7 to i64
+  %10 = getelementptr ptr, ptr %.fca.0.extract18, i64 %9
+  %11 = getelementptr i8, ptr %10, i64 24
+  %12 = load ptr, ptr %11, align 8
+  %13 = load ptr, ptr %12, align 8
+  %14 = call i1 %13(ptr %.fca.1.extract19) #31
+  br i1 %14, label %15, label %47
+
+15:                                               ; preds = %3
+  %16 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract18)
+  %17 = getelementptr i8, ptr %10, i64 8
+  %18 = load ptr, ptr %17, align 8
+  %19 = load ptr, ptr %18, align 8
+  %20 = call { ptr, ptr, ptr, i32 } %19(ptr %.fca.1.extract19) #31
+  %.fca.0.extract38 = extractvalue { ptr, ptr, ptr, i32 } %20, 0
+  store ptr %.fca.0.extract38, ptr %5, align 8
+  %.fca.1.extract40 = extractvalue { ptr, ptr, ptr, i32 } %20, 1
+  %.fca.1.gep41 = getelementptr inbounds i8, ptr %5, i64 8
+  store ptr %.fca.1.extract40, ptr %.fca.1.gep41, align 8
+  %.fca.2.extract42 = extractvalue { ptr, ptr, ptr, i32 } %20, 2
+  %.fca.2.gep43 = getelementptr inbounds i8, ptr %5, i64 16
+  store ptr %.fca.2.extract42, ptr %.fca.2.gep43, align 8
+  %.fca.3.extract44 = extractvalue { ptr, ptr, ptr, i32 } %20, 3
+  %.fca.3.gep45 = getelementptr inbounds i8, ptr %5, i64 24
+  store i32 %.fca.3.extract44, ptr %.fca.3.gep45, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %5, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %21 = load ptr, ptr %5, align 8
+  %22 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %21, 0
+  %23 = load ptr, ptr %.fca.1.gep41, align 8
+  %24 = insertvalue { ptr, ptr, ptr, i32 } %22, ptr %23, 1
+  %25 = load ptr, ptr %.fca.2.gep43, align 8
+  %26 = insertvalue { ptr, ptr, ptr, i32 } %24, ptr %25, 2
+  %27 = load i32, ptr %.fca.3.gep45, align 8
+  %28 = insertvalue { ptr, ptr, ptr, i32 } %26, i32 %27, 3
+  %29 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %30 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef %21)
+  %31 = sext i32 %27 to i64
+  %32 = getelementptr ptr, ptr %21, i64 %31
+  %33 = getelementptr i8, ptr %32, i64 8
+  %34 = load ptr, ptr %33, align 8
+  %35 = call ptr @behavior_wrapper(ptr %34, { ptr, ptr, ptr, i32 } %28, ptr noundef nonnull align 8 %4)
+  %36 = call { ptr, i160 } %35({ ptr, ptr, ptr, i32 } %28, { ptr, ptr, ptr, i32 } %28, ptr nonnull %4)
+  %.fca.0.extract32 = extractvalue { ptr, i160 } %36, 0
+  %.fca.1.extract34 = extractvalue { ptr, i160 } %36, 1
+  %37 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract18)
+  %38 = load ptr, ptr %10, align 8
+  %39 = call ptr @typegetter_wrapper(ptr %38, ptr %.fca.1.extract19)
+  %40 = icmp ne ptr %.fca.0.extract32, @nil_typ
+  %41 = icmp ne ptr %.fca.0.extract32, null
+  %.not47.not.not = and i1 %40, %41
+  br i1 %.not47.not.not, label %47, label %42
+
+42:                                               ; preds = %15
+  %43 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract18)
+  %44 = load ptr, ptr %11, align 8
+  %45 = getelementptr i8, ptr %44, i64 8
+  %46 = load ptr, ptr %45, align 8
+  call void %46(ptr %.fca.1.extract19, i1 false) #30
+  br label %47
+
+47:                                               ; preds = %42, %15, %3
+  %.reg2mem15.sroa.0.0 = phi ptr [ %.fca.0.extract32, %15 ], [ %.fca.0.extract32, %42 ], [ poison, %3 ]
+  %.reg2mem15.sroa.3.0 = phi i160 [ %.fca.1.extract34, %15 ], [ %.fca.1.extract34, %42 ], [ poison, %3 ]
+  %.reg2mem13.0 = phi i1 [ true, %15 ], [ false, %42 ], [ false, %3 ]
+  br i1 %.reg2mem13.0, label %70, label %48
+
+48:                                               ; preds = %47
+  %49 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract18)
+  %50 = getelementptr i8, ptr %10, i64 16
+  %51 = load ptr, ptr %50, align 8
+  %52 = load ptr, ptr %51, align 8
+  %53 = call { ptr, ptr, ptr, i32 } %52(ptr %.fca.1.extract19) #31
+  %.fca.0.extract24 = extractvalue { ptr, ptr, ptr, i32 } %53, 0
+  store ptr %.fca.0.extract24, ptr %6, align 8
+  %.fca.1.extract25 = extractvalue { ptr, ptr, ptr, i32 } %53, 1
+  %.fca.1.gep = getelementptr inbounds i8, ptr %6, i64 8
+  store ptr %.fca.1.extract25, ptr %.fca.1.gep, align 8
+  %.fca.2.extract26 = extractvalue { ptr, ptr, ptr, i32 } %53, 2
+  %.fca.2.gep = getelementptr inbounds i8, ptr %6, i64 16
+  store ptr %.fca.2.extract26, ptr %.fca.2.gep, align 8
+  %.fca.3.extract27 = extractvalue { ptr, ptr, ptr, i32 } %53, 3
+  %.fca.3.gep = getelementptr inbounds i8, ptr %6, i64 24
+  store i32 %.fca.3.extract27, ptr %.fca.3.gep, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %6, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %54 = load ptr, ptr %6, align 8
+  %55 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %54, 0
+  %56 = load ptr, ptr %.fca.1.gep, align 8
+  %57 = insertvalue { ptr, ptr, ptr, i32 } %55, ptr %56, 1
+  %58 = load ptr, ptr %.fca.2.gep, align 8
+  %59 = insertvalue { ptr, ptr, ptr, i32 } %57, ptr %58, 2
+  %60 = load i32, ptr %.fca.3.gep, align 8
+  %61 = insertvalue { ptr, ptr, ptr, i32 } %59, i32 %60, 3
+  %62 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %63 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef %54)
+  %64 = sext i32 %60 to i64
+  %65 = getelementptr ptr, ptr %54, i64 %64
+  %66 = getelementptr i8, ptr %65, i64 8
+  %67 = load ptr, ptr %66, align 8
+  %68 = call ptr @behavior_wrapper(ptr %67, { ptr, ptr, ptr, i32 } %61, ptr noundef nonnull align 8 %4)
+  %69 = call { ptr, i160 } %68({ ptr, ptr, ptr, i32 } %61, { ptr, ptr, ptr, i32 } %61, ptr nonnull %4)
+  %.fca.0.extract20 = extractvalue { ptr, i160 } %69, 0
+  %.fca.1.extract21 = extractvalue { ptr, i160 } %69, 1
+  br label %70
+
+70:                                               ; preds = %48, %47
+  %.reg2mem11.sroa.0.0 = phi ptr [ %.fca.0.extract20, %48 ], [ %.reg2mem15.sroa.0.0, %47 ]
+  %.reg2mem11.sroa.3.0 = phi i160 [ %.fca.1.extract21, %48 ], [ %.reg2mem15.sroa.3.0, %47 ]
+  %.reload12.fca.0.insert = insertvalue { ptr, i160 } poison, ptr %.reg2mem11.sroa.0.0, 0
+  %.reload12.fca.1.insert = insertvalue { ptr, i160 } %.reload12.fca.0.insert, i160 %.reg2mem11.sroa.3.0, 1
+  ret { ptr, i160 } %.reload12.fca.1.insert
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define i1 @ChainIterator_getter_on_first(ptr nocapture nofree readonly %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 72
+  %3 = load i1, ptr %2, align 1
+  ret i1 %3
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
+define void @ChainIterator_setter_on_first(ptr nocapture nofree writeonly %0, i1 %1) #7 {
+  %3 = getelementptr i8, ptr %0, i64 72
+  store i1 %1, ptr %3, align 1
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define { ptr, ptr, ptr, i32 } @ChainIterator_getter_second(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 40
+  %3 = load ptr, ptr %2, align 8
+  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
+  %5 = getelementptr i8, ptr %0, i64 48
+  %6 = load ptr, ptr %5, align 8
+  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
+  %8 = getelementptr i8, ptr %0, i64 56
+  %9 = load ptr, ptr %8, align 8
+  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
+  %11 = getelementptr i8, ptr %0, i64 64
+  %12 = load i32, ptr %11, align 8
+  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
+  ret { ptr, ptr, ptr, i32 } %13
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
+define void @ChainIterator_setter_second(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
+  %3 = getelementptr i8, ptr %0, i64 40
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
+  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
+  store ptr %.fca.0.extract, ptr %3, align 8
+  %4 = getelementptr i8, ptr %0, i64 48
+  store ptr %.fca.1.extract, ptr %4, align 8
+  %5 = getelementptr i8, ptr %0, i64 56
+  store ptr %.fca.2.extract, ptr %5, align 8
+  %6 = getelementptr i8, ptr %0, i64 64
+  store i32 %.fca.3.extract, ptr %6, align 8
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define { ptr, ptr, ptr, i32 } @ChainIterator_getter_first(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 8
+  %3 = load ptr, ptr %2, align 8
+  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
+  %5 = getelementptr i8, ptr %0, i64 16
+  %6 = load ptr, ptr %5, align 8
+  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
+  %8 = getelementptr i8, ptr %0, i64 24
+  %9 = load ptr, ptr %8, align 8
+  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
+  %11 = getelementptr i8, ptr %0, i64 32
+  %12 = load i32, ptr %11, align 8
+  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
+  ret { ptr, ptr, ptr, i32 } %13
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
+define void @ChainIterator_setter_first(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
+  %3 = getelementptr i8, ptr %0, i64 8
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
+  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
+  store ptr %.fca.0.extract, ptr %3, align 8
+  %4 = getelementptr i8, ptr %0, i64 16
+  store ptr %.fca.1.extract, ptr %4, align 8
+  %5 = getelementptr i8, ptr %0, i64 24
+  store ptr %.fca.2.extract, ptr %5, align 8
+  %6 = getelementptr i8, ptr %0, i64 32
+  store i32 %.fca.3.extract, ptr %6, align 8
+  ret void
+}
+
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
 define { ptr, ptr, ptr, i32 } @ChainIterable_getter_second(ptr nocapture nofree readonly align 8 %0) #6 {
   %2 = getelementptr i8, ptr %0, i64 40
@@ -16376,6 +15665,717 @@ define { ptr, ptr, ptr, i32 } @ChainIterable_getter_first(ptr nocapture nofree r
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
 define void @ChainIterable_setter_first(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
+  %3 = getelementptr i8, ptr %0, i64 8
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
+  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
+  store ptr %.fca.0.extract, ptr %3, align 8
+  %4 = getelementptr i8, ptr %0, i64 16
+  store ptr %.fca.1.extract, ptr %4, align 8
+  %5 = getelementptr i8, ptr %0, i64 24
+  store ptr %.fca.2.extract, ptr %5, align 8
+  %6 = getelementptr i8, ptr %0, i64 32
+  store i32 %.fca.3.extract, ptr %6, align 8
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
+define { i64, i64 } @_data_size_ChainedCollection(ptr nocapture nofree readnone %0) #1 {
+  ret { i64, i64 } { i64 72, i64 8 }
+}
+
+define ptr @ChainedCollection_B_init_firstCollectionT_secondCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
+  %14 = getelementptr inbounds i8, ptr %1, i64 8
+  %15 = load ptr, ptr %14, align 8
+  %16 = getelementptr i8, ptr %15, i64 8
+  %17 = getelementptr i8, ptr %15, i64 16
+  %18 = getelementptr i8, ptr %15, i64 24
+  %19 = getelementptr i8, ptr %15, i64 32
+  %20 = load i64, ptr %16, align 4
+  %21 = load i64, ptr %17, align 4
+  %22 = load ptr, ptr %18, align 8
+  %23 = load ptr, ptr %19, align 8
+  %24 = call i1 @subtype_test_wrapper(ptr %22, i64 %21, i64 %20, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %23)
+  %25 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %26 = getelementptr i8, ptr %25, i64 224
+  %27 = load ptr, ptr %26, align 8
+  ret ptr %27
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define ptr @ChainedCollection_field_ChainedCollection_0(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) #6 {
+  %2 = load ptr, ptr %0, align 8
+  ret ptr %2
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @ChainedCollection_B_size_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 232
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @ChainedCollection_B_is_empty_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 240
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @ChainedCollection_B_iterator_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 248
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @ChainedCollection_B_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 256
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+define ptr @ChainedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = load i64, ptr @any_typ, align 4
+  %14 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 %13, i64 noundef ptrtoint (ptr @any_typ to i64), ptr %12)
+  %15 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %16 = getelementptr i8, ptr %15, i64 264
+  %17 = load ptr, ptr %16, align 8
+  ret ptr %17
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @ChainedCollection_B_all_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 272
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @ChainedCollection_B_any_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 280
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @ChainedCollection_B_enumerate_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 288
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @ChainedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = icmp eq ptr %4, @function_typ
+  %6 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %7 = select i1 %5, i64 28, i64 27
+  %8 = getelementptr [122 x ptr], ptr %6, i64 0, i64 %7
+  %9 = getelementptr i8, ptr %8, i64 80
+  %10 = load ptr, ptr %9, align 8
+  ret ptr %10
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @ChainedCollection_B_filter_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 312
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+define ptr @ChainedCollection_B_chain_otherCollectionT_chain_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
+  br i1 %13, label %._crit_edge, label %14
+
+14:                                               ; preds = %2
+  %15 = load i64, ptr %5, align 4
+  %16 = load i64, ptr %6, align 4
+  %17 = load ptr, ptr %7, align 8
+  %18 = load ptr, ptr %8, align 8
+  %19 = load i64, ptr @Iterable, align 4
+  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
+  br i1 %20, label %21, label %._crit_edge
+
+21:                                               ; preds = %14
+  %22 = load i64, ptr %5, align 4
+  %23 = load i64, ptr %6, align 4
+  %24 = load ptr, ptr %7, align 8
+  %25 = load ptr, ptr %8, align 8
+  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %21, %14, %2
+  %27 = phi i32 [ 31, %21 ], [ 31, %14 ], [ 30, %2 ]
+  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %29 = zext nneg i32 %27 to i64
+  %30 = getelementptr [122 x ptr], ptr %28, i64 0, i64 %29
+  %31 = getelementptr i8, ptr %30, i64 80
+  %32 = load ptr, ptr %31, align 8
+  ret ptr %32
+}
+
+define ptr @ChainedCollection_B_interleave_otherIterableT_interleave_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
+  br i1 %13, label %._crit_edge, label %14
+
+14:                                               ; preds = %2
+  %15 = load i64, ptr %5, align 4
+  %16 = load i64, ptr %6, align 4
+  %17 = load ptr, ptr %7, align 8
+  %18 = load ptr, ptr %8, align 8
+  %19 = load i64, ptr @Iterable, align 4
+  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
+  br i1 %20, label %21, label %._crit_edge
+
+21:                                               ; preds = %14
+  %22 = load i64, ptr %5, align 4
+  %23 = load i64, ptr %6, align 4
+  %24 = load ptr, ptr %7, align 8
+  %25 = load ptr, ptr %8, align 8
+  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %21, %14, %2
+  %27 = phi i32 [ 32, %21 ], [ 32, %14 ], [ 33, %2 ]
+  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %29 = zext nneg i32 %27 to i64
+  %30 = getelementptr [122 x ptr], ptr %28, i64 0, i64 %29
+  %31 = getelementptr i8, ptr %30, i64 80
+  %32 = load ptr, ptr %31, align 8
+  ret ptr %32
+}
+
+define ptr @ChainedCollection_B_zip_otherIterableU_zip_otherCollectionU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
+  br i1 %13, label %._crit_edge, label %14
+
+14:                                               ; preds = %2
+  %15 = load i64, ptr %5, align 4
+  %16 = load i64, ptr %6, align 4
+  %17 = load ptr, ptr %7, align 8
+  %18 = load ptr, ptr %8, align 8
+  %19 = load i64, ptr @Iterable, align 4
+  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
+  br i1 %20, label %21, label %._crit_edge
+
+21:                                               ; preds = %14
+  %22 = load i64, ptr %5, align 4
+  %23 = load i64, ptr %6, align 4
+  %24 = load ptr, ptr %7, align 8
+  %25 = load ptr, ptr %8, align 8
+  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %21, %14, %2
+  %27 = phi i32 [ 34, %21 ], [ 34, %14 ], [ 35, %2 ]
+  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %29 = zext nneg i32 %27 to i64
+  %30 = getelementptr [122 x ptr], ptr %28, i64 0, i64 %29
+  %31 = getelementptr i8, ptr %30, i64 80
+  %32 = load ptr, ptr %31, align 8
+  ret ptr %32
+}
+
+define ptr @ChainedCollection_B_product_otherCollectionU_product_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
+  br i1 %13, label %._crit_edge, label %14
+
+14:                                               ; preds = %2
+  %15 = load i64, ptr %5, align 4
+  %16 = load i64, ptr %6, align 4
+  %17 = load ptr, ptr %7, align 8
+  %18 = load ptr, ptr %8, align 8
+  %19 = load i64, ptr @Iterable, align 4
+  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
+  br i1 %20, label %21, label %._crit_edge
+
+21:                                               ; preds = %14
+  %22 = load i64, ptr %5, align 4
+  %23 = load i64, ptr %6, align 4
+  %24 = load ptr, ptr %7, align 8
+  %25 = load ptr, ptr %8, align 8
+  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %21, %14, %2
+  %27 = phi i32 [ 37, %21 ], [ 37, %14 ], [ 36, %2 ]
+  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %29 = zext nneg i32 %27 to i64
+  %30 = getelementptr [122 x ptr], ptr %28, i64 0, i64 %29
+  %31 = getelementptr i8, ptr %30, i64 80
+  %32 = load ptr, ptr %31, align 8
+  ret ptr %32
+}
+
+define void @ChainedCollection_init_firstCollectionT_secondCollectionT({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3, { ptr, ptr, ptr, i32 } %4) #3 {
+  %.fca.0.extract34 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract35 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %6 = call i32 @get_offset(ptr %.fca.0.extract34, ptr noundef nonnull align 16 dereferenceable(1056) @ChainedCollection)
+  %.fca.0.extract19 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
+  %.fca.1.extract20 = extractvalue { ptr, ptr, ptr, i32 } %3, 1
+  %.fca.2.extract21 = extractvalue { ptr, ptr, ptr, i32 } %3, 2
+  %7 = call i32 @get_offset(ptr %.fca.0.extract19, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %8 = call i32 @get_offset(ptr %.fca.0.extract19, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %9 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract34)
+  %10 = sext i32 %6 to i64
+  %11 = getelementptr ptr, ptr %.fca.0.extract34, i64 %10
+  %12 = getelementptr i8, ptr %11, i64 8
+  %13 = load ptr, ptr %12, align 8
+  %14 = getelementptr i8, ptr %13, i64 8
+  %15 = load ptr, ptr %14, align 8
+  %16 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract19, 0
+  %17 = insertvalue { ptr, ptr, ptr, i32 } %16, ptr %.fca.1.extract20, 1
+  %18 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %.fca.2.extract21, 2
+  %19 = insertvalue { ptr, ptr, ptr, i32 } %18, i32 %8, 3
+  call void %15(ptr %.fca.1.extract35, { ptr, ptr, ptr, i32 } %19) #30
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %4, 2
+  %20 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %21 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract34)
+  %23 = getelementptr i8, ptr %11, i64 16
+  %24 = load ptr, ptr %23, align 8
+  %25 = getelementptr i8, ptr %24, i64 8
+  %26 = load ptr, ptr %25, align 8
+  %27 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
+  %28 = insertvalue { ptr, ptr, ptr, i32 } %27, ptr %.fca.1.extract, 1
+  %29 = insertvalue { ptr, ptr, ptr, i32 } %28, ptr %.fca.2.extract, 2
+  %30 = insertvalue { ptr, ptr, ptr, i32 } %29, i32 %21, 3
+  call void %26(ptr %.fca.1.extract35, { ptr, ptr, ptr, i32 } %30) #30
+  ret void
+}
+
+define i32 @ChainedCollection_size_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
+  %4 = alloca [0 x ptr], align 8
+  %.fca.0.extract17 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract19 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %5 = call i32 @get_offset(ptr %.fca.0.extract17, ptr noundef nonnull align 16 dereferenceable(1056) @ChainedCollection)
+  %6 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract17)
+  %7 = sext i32 %5 to i64
+  %8 = getelementptr ptr, ptr %.fca.0.extract17, i64 %7
+  %9 = getelementptr i8, ptr %8, i64 8
+  %10 = load ptr, ptr %9, align 8
+  %11 = load ptr, ptr %10, align 8
+  %12 = call { ptr, ptr, ptr, i32 } %11(ptr %.fca.1.extract19) #31
+  %13 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract3 = extractvalue { ptr, ptr, ptr, i32 } %12, 0
+  store ptr %.fca.0.extract3, ptr %13, align 8
+  %.fca.1.extract5 = extractvalue { ptr, ptr, ptr, i32 } %12, 1
+  %.fca.1.gep6 = getelementptr inbounds i8, ptr %13, i64 8
+  store ptr %.fca.1.extract5, ptr %.fca.1.gep6, align 8
+  %.fca.2.extract7 = extractvalue { ptr, ptr, ptr, i32 } %12, 2
+  %.fca.2.gep8 = getelementptr inbounds i8, ptr %13, i64 16
+  store ptr %.fca.2.extract7, ptr %.fca.2.gep8, align 8
+  %.fca.3.extract9 = extractvalue { ptr, ptr, ptr, i32 } %12, 3
+  %.fca.3.gep10 = getelementptr inbounds i8, ptr %13, i64 24
+  store i32 %.fca.3.extract9, ptr %.fca.3.gep10, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %13, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %14, 0
+  %16 = load ptr, ptr %.fca.1.gep6, align 8
+  %17 = insertvalue { ptr, ptr, ptr, i32 } %15, ptr %16, 1
+  %18 = load ptr, ptr %.fca.2.gep8, align 8
+  %19 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %18, 2
+  %20 = load i32, ptr %.fca.3.gep10, align 8
+  %21 = insertvalue { ptr, ptr, ptr, i32 } %19, i32 %20, 3
+  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %23 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %14)
+  %24 = sext i32 %20 to i64
+  %25 = getelementptr ptr, ptr %14, i64 %24
+  %26 = getelementptr i8, ptr %25, i64 8
+  %27 = load ptr, ptr %26, align 8
+  %28 = call ptr @behavior_wrapper(ptr %27, { ptr, ptr, ptr, i32 } %21, ptr noundef nonnull align 8 %4)
+  %29 = call i32 %28({ ptr, ptr, ptr, i32 } %21, { ptr, ptr, ptr, i32 } %21, ptr nonnull align 8 %4)
+  %30 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract17)
+  %31 = getelementptr i8, ptr %8, i64 16
+  %32 = load ptr, ptr %31, align 8
+  %33 = load ptr, ptr %32, align 8
+  %34 = call { ptr, ptr, ptr, i32 } %33(ptr %.fca.1.extract19) #31
+  %35 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %34, 0
+  store ptr %.fca.0.extract, ptr %35, align 8
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %34, 1
+  %.fca.1.gep = getelementptr inbounds i8, ptr %35, i64 8
+  store ptr %.fca.1.extract, ptr %.fca.1.gep, align 8
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %34, 2
+  %.fca.2.gep = getelementptr inbounds i8, ptr %35, i64 16
+  store ptr %.fca.2.extract, ptr %.fca.2.gep, align 8
+  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %34, 3
+  %.fca.3.gep = getelementptr inbounds i8, ptr %35, i64 24
+  store i32 %.fca.3.extract, ptr %.fca.3.gep, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %35, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %36 = load ptr, ptr %35, align 8
+  %37 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %36, 0
+  %38 = load ptr, ptr %.fca.1.gep, align 8
+  %39 = insertvalue { ptr, ptr, ptr, i32 } %37, ptr %38, 1
+  %40 = load ptr, ptr %.fca.2.gep, align 8
+  %41 = insertvalue { ptr, ptr, ptr, i32 } %39, ptr %40, 2
+  %42 = load i32, ptr %.fca.3.gep, align 8
+  %43 = insertvalue { ptr, ptr, ptr, i32 } %41, i32 %42, 3
+  %44 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %45 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %36)
+  %46 = sext i32 %42 to i64
+  %47 = getelementptr ptr, ptr %36, i64 %46
+  %48 = getelementptr i8, ptr %47, i64 8
+  %49 = load ptr, ptr %48, align 8
+  %50 = call ptr @behavior_wrapper(ptr %49, { ptr, ptr, ptr, i32 } %43, ptr noundef nonnull align 8 %4)
+  %51 = call i32 %50({ ptr, ptr, ptr, i32 } %43, { ptr, ptr, ptr, i32 } %43, ptr nonnull %4)
+  %52 = add i32 %51, %29
+  ret i32 %52
+}
+
+define { ptr, ptr, ptr, i32 } @ChainedCollection_iterator_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
+  %4 = alloca [0 x ptr], align 8
+  %.fca.0.extract120 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract122 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %5 = call i32 @get_offset(ptr %.fca.0.extract120, ptr noundef nonnull align 16 dereferenceable(1056) @ChainedCollection)
+  %6 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
+  %7 = sext i32 %5 to i64
+  %8 = getelementptr ptr, ptr %.fca.0.extract120, i64 %7
+  %9 = getelementptr i8, ptr %8, i64 8
+  %10 = load ptr, ptr %9, align 8
+  %11 = load ptr, ptr %10, align 8
+  %12 = call { ptr, ptr, ptr, i32 } %11(ptr %.fca.1.extract122) #31
+  %13 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract90 = extractvalue { ptr, ptr, ptr, i32 } %12, 0
+  store ptr %.fca.0.extract90, ptr %13, align 8
+  %.fca.1.extract92 = extractvalue { ptr, ptr, ptr, i32 } %12, 1
+  %.fca.1.gep93 = getelementptr inbounds i8, ptr %13, i64 8
+  store ptr %.fca.1.extract92, ptr %.fca.1.gep93, align 8
+  %.fca.2.extract94 = extractvalue { ptr, ptr, ptr, i32 } %12, 2
+  %.fca.2.gep95 = getelementptr inbounds i8, ptr %13, i64 16
+  store ptr %.fca.2.extract94, ptr %.fca.2.gep95, align 8
+  %.fca.3.extract96 = extractvalue { ptr, ptr, ptr, i32 } %12, 3
+  %.fca.3.gep97 = getelementptr inbounds i8, ptr %13, i64 24
+  store i32 %.fca.3.extract96, ptr %.fca.3.gep97, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %13, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %14, 0
+  %16 = load ptr, ptr %.fca.1.gep93, align 8
+  %17 = insertvalue { ptr, ptr, ptr, i32 } %15, ptr %16, 1
+  %18 = load ptr, ptr %.fca.2.gep95, align 8
+  %19 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %18, 2
+  %20 = load i32, ptr %.fca.3.gep97, align 8
+  %21 = insertvalue { ptr, ptr, ptr, i32 } %19, i32 %20, 3
+  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %23 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %14)
+  %24 = sext i32 %20 to i64
+  %25 = getelementptr ptr, ptr %14, i64 %24
+  %26 = getelementptr i8, ptr %25, i64 24
+  %27 = load ptr, ptr %26, align 8
+  %28 = call ptr @behavior_wrapper(ptr %27, { ptr, ptr, ptr, i32 } %21, ptr noundef nonnull align 8 %4)
+  %29 = call { ptr, ptr, ptr, i32 } %28({ ptr, ptr, ptr, i32 } %21, { ptr, ptr, ptr, i32 } %21, ptr nonnull align 8 %4)
+  %.fca.0.extract78 = extractvalue { ptr, ptr, ptr, i32 } %29, 0
+  %30 = call i32 @get_offset(ptr %.fca.0.extract78, ptr noundef nonnull @Iterator)
+  %31 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
+  %32 = getelementptr i8, ptr %8, i64 16
+  %33 = load ptr, ptr %32, align 8
+  %34 = load ptr, ptr %33, align 8
+  %35 = call { ptr, ptr, ptr, i32 } %34(ptr %.fca.1.extract122) #31
+  %36 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract69 = extractvalue { ptr, ptr, ptr, i32 } %35, 0
+  store ptr %.fca.0.extract69, ptr %36, align 8
+  %.fca.1.extract71 = extractvalue { ptr, ptr, ptr, i32 } %35, 1
+  %.fca.1.gep72 = getelementptr inbounds i8, ptr %36, i64 8
+  store ptr %.fca.1.extract71, ptr %.fca.1.gep72, align 8
+  %.fca.2.extract73 = extractvalue { ptr, ptr, ptr, i32 } %35, 2
+  %.fca.2.gep74 = getelementptr inbounds i8, ptr %36, i64 16
+  store ptr %.fca.2.extract73, ptr %.fca.2.gep74, align 8
+  %.fca.3.extract75 = extractvalue { ptr, ptr, ptr, i32 } %35, 3
+  %.fca.3.gep76 = getelementptr inbounds i8, ptr %36, i64 24
+  store i32 %.fca.3.extract75, ptr %.fca.3.gep76, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %36, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %37 = load ptr, ptr %36, align 8
+  %38 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %37, 0
+  %39 = load ptr, ptr %.fca.1.gep72, align 8
+  %40 = insertvalue { ptr, ptr, ptr, i32 } %38, ptr %39, 1
+  %41 = load ptr, ptr %.fca.2.gep74, align 8
+  %42 = insertvalue { ptr, ptr, ptr, i32 } %40, ptr %41, 2
+  %43 = load i32, ptr %.fca.3.gep76, align 8
+  %44 = insertvalue { ptr, ptr, ptr, i32 } %42, i32 %43, 3
+  %45 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %46 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %37)
+  %47 = sext i32 %43 to i64
+  %48 = getelementptr ptr, ptr %37, i64 %47
+  %49 = getelementptr i8, ptr %48, i64 24
+  %50 = load ptr, ptr %49, align 8
+  %51 = call ptr @behavior_wrapper(ptr %50, { ptr, ptr, ptr, i32 } %44, ptr noundef nonnull align 8 %4)
+  %52 = call { ptr, ptr, ptr, i32 } %51({ ptr, ptr, ptr, i32 } %44, { ptr, ptr, ptr, i32 } %44, ptr nonnull align 8 %4)
+  %.fca.0.extract57 = extractvalue { ptr, ptr, ptr, i32 } %52, 0
+  %53 = call i32 @get_offset(ptr %.fca.0.extract57, ptr noundef nonnull @Iterator)
+  %54 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
+  %55 = load ptr, ptr %8, align 8
+  %56 = call ptr @typegetter_wrapper(ptr %55, ptr %.fca.1.extract122)
+  %57 = alloca [2 x ptr], align 8
+  store ptr @ChainIterator, ptr %57, align 8
+  %58 = getelementptr inbounds i8, ptr %57, i64 8
+  store ptr %56, ptr %58, align 8
+  %59 = load ptr, ptr getelementptr (i8, ptr @ChainIterator, i64 48), align 8
+  %60 = call { i64, i64 } @size_wrapper(ptr %59, ptr noundef nonnull align 8 dereferenceable(16) %57)
+  %61 = extractvalue { i64, i64 } %60, 0
+  %62 = call ptr @bump_malloc(i64 %61)
+  store ptr %56, ptr %62, align 8
+  %63 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %62)
+  %64 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
+  %65 = load ptr, ptr %9, align 8
+  %66 = load ptr, ptr %65, align 8
+  %67 = call { ptr, ptr, ptr, i32 } %66(ptr %.fca.1.extract122) #31
+  %68 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract40 = extractvalue { ptr, ptr, ptr, i32 } %67, 0
+  store ptr %.fca.0.extract40, ptr %68, align 8
+  %.fca.1.extract42 = extractvalue { ptr, ptr, ptr, i32 } %67, 1
+  %.fca.1.gep43 = getelementptr inbounds i8, ptr %68, i64 8
+  store ptr %.fca.1.extract42, ptr %.fca.1.gep43, align 8
+  %.fca.2.extract44 = extractvalue { ptr, ptr, ptr, i32 } %67, 2
+  %.fca.2.gep45 = getelementptr inbounds i8, ptr %68, i64 16
+  store ptr %.fca.2.extract44, ptr %.fca.2.gep45, align 8
+  %.fca.3.extract46 = extractvalue { ptr, ptr, ptr, i32 } %67, 3
+  %.fca.3.gep47 = getelementptr inbounds i8, ptr %68, i64 24
+  store i32 %.fca.3.extract46, ptr %.fca.3.gep47, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %68, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %69 = load ptr, ptr %68, align 8
+  %70 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %69, 0
+  %71 = load ptr, ptr %.fca.1.gep43, align 8
+  %72 = insertvalue { ptr, ptr, ptr, i32 } %70, ptr %71, 1
+  %73 = load ptr, ptr %.fca.2.gep45, align 8
+  %74 = insertvalue { ptr, ptr, ptr, i32 } %72, ptr %73, 2
+  %75 = load i32, ptr %.fca.3.gep47, align 8
+  %76 = insertvalue { ptr, ptr, ptr, i32 } %74, i32 %75, 3
+  %77 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %78 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %69)
+  %79 = sext i32 %75 to i64
+  %80 = getelementptr ptr, ptr %69, i64 %79
+  %81 = getelementptr i8, ptr %80, i64 24
+  %82 = load ptr, ptr %81, align 8
+  %83 = call ptr @behavior_wrapper(ptr %82, { ptr, ptr, ptr, i32 } %76, ptr noundef nonnull align 8 %4)
+  %84 = call { ptr, ptr, ptr, i32 } %83({ ptr, ptr, ptr, i32 } %76, { ptr, ptr, ptr, i32 } %76, ptr nonnull align 8 %4)
+  %.fca.0.extract28 = extractvalue { ptr, ptr, ptr, i32 } %84, 0
+  %.fca.1.extract30 = extractvalue { ptr, ptr, ptr, i32 } %84, 1
+  %.fca.2.extract32 = extractvalue { ptr, ptr, ptr, i32 } %84, 2
+  %85 = call i32 @get_offset(ptr %.fca.0.extract28, ptr noundef nonnull @Iterator)
+  %86 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
+  %87 = load ptr, ptr %32, align 8
+  %88 = load ptr, ptr %87, align 8
+  %89 = call { ptr, ptr, ptr, i32 } %88(ptr %.fca.1.extract122) #31
+  %90 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract19 = extractvalue { ptr, ptr, ptr, i32 } %89, 0
+  store ptr %.fca.0.extract19, ptr %90, align 8
+  %.fca.1.extract20 = extractvalue { ptr, ptr, ptr, i32 } %89, 1
+  %.fca.1.gep = getelementptr inbounds i8, ptr %90, i64 8
+  store ptr %.fca.1.extract20, ptr %.fca.1.gep, align 8
+  %.fca.2.extract21 = extractvalue { ptr, ptr, ptr, i32 } %89, 2
+  %.fca.2.gep = getelementptr inbounds i8, ptr %90, i64 16
+  store ptr %.fca.2.extract21, ptr %.fca.2.gep, align 8
+  %.fca.3.extract22 = extractvalue { ptr, ptr, ptr, i32 } %89, 3
+  %.fca.3.gep = getelementptr inbounds i8, ptr %90, i64 24
+  store i32 %.fca.3.extract22, ptr %.fca.3.gep, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %90, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %91 = load ptr, ptr %90, align 8
+  %92 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %91, 0
+  %93 = load ptr, ptr %.fca.1.gep, align 8
+  %94 = insertvalue { ptr, ptr, ptr, i32 } %92, ptr %93, 1
+  %95 = load ptr, ptr %.fca.2.gep, align 8
+  %96 = insertvalue { ptr, ptr, ptr, i32 } %94, ptr %95, 2
+  %97 = load i32, ptr %.fca.3.gep, align 8
+  %98 = insertvalue { ptr, ptr, ptr, i32 } %96, i32 %97, 3
+  %99 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %100 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %91)
+  %101 = sext i32 %97 to i64
+  %102 = getelementptr ptr, ptr %91, i64 %101
+  %103 = getelementptr i8, ptr %102, i64 24
+  %104 = load ptr, ptr %103, align 8
+  %105 = call ptr @behavior_wrapper(ptr %104, { ptr, ptr, ptr, i32 } %98, ptr noundef nonnull align 8 %4)
+  %106 = call { ptr, ptr, ptr, i32 } %105({ ptr, ptr, ptr, i32 } %98, { ptr, ptr, ptr, i32 } %98, ptr nonnull %4)
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %106, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %106, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %106, 2
+  %107 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull @Iterator)
+  %108 = call i32 @get_offset(ptr %.fca.0.extract28, ptr noundef nonnull @Iterator)
+  %109 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract28, 0
+  %110 = insertvalue { ptr, ptr, ptr, i32 } %109, ptr %.fca.1.extract30, 1
+  %111 = insertvalue { ptr, ptr, ptr, i32 } %110, ptr %.fca.2.extract32, 2
+  %112 = insertvalue { ptr, ptr, ptr, i32 } %111, i32 %108, 3
+  %113 = call i32 @get_offset(ptr %.fca.0.extract, ptr noundef nonnull @Iterator)
+  %114 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract, 0
+  %115 = insertvalue { ptr, ptr, ptr, i32 } %114, ptr %.fca.1.extract, 1
+  %116 = insertvalue { ptr, ptr, ptr, i32 } %115, ptr %.fca.2.extract, 2
+  %117 = insertvalue { ptr, ptr, ptr, i32 } %116, i32 %113, 3
+  %118 = insertvalue { ptr, ptr, ptr, i32 } { ptr @ChainIterator, ptr undef, ptr undef, i32 undef }, ptr %62, 1
+  %119 = insertvalue { ptr, ptr, ptr, i32 } %118, ptr undef, 2
+  %120 = insertvalue { ptr, ptr, ptr, i32 } %119, i32 10, 3
+  %121 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
+  %122 = load ptr, ptr %8, align 8
+  %123 = call ptr @typegetter_wrapper(ptr %122, ptr %.fca.1.extract122)
+  %124 = call ptr @bump_malloc(i64 noundef 24)
+  %125 = getelementptr i8, ptr %124, i64 8
+  store ptr %123, ptr %125, align 8
+  %126 = getelementptr i8, ptr %124, i64 16
+  store ptr null, ptr %126, align 8
+  %127 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %124)
+  store ptr @Iterator, ptr %124, align 8
+  %128 = call ptr @llvm.invariant.start.p0(i64 noundef 976, ptr nocapture nofree noundef %.fca.0.extract120)
+  %129 = load ptr, ptr %8, align 8
+  %130 = call ptr @typegetter_wrapper(ptr %129, ptr %.fca.1.extract122)
+  %131 = call ptr @bump_malloc(i64 noundef 24)
+  %132 = getelementptr i8, ptr %131, i64 8
+  store ptr %130, ptr %132, align 8
+  %133 = getelementptr i8, ptr %131, i64 16
+  store ptr null, ptr %133, align 8
+  %134 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %131)
+  store ptr @Iterator, ptr %131, align 8
+  %135 = alloca [2 x ptr], align 8
+  store ptr %124, ptr %135, align 8
+  %136 = getelementptr inbounds i8, ptr %135, i64 8
+  store ptr %131, ptr %136, align 8
+  %137 = call ptr @llvm.invariant.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %135)
+  %138 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull @ChainIterator)
+  %139 = load ptr, ptr getelementptr (i8, ptr @ChainIterator, i64 112), align 8
+  %140 = alloca { ptr, ptr }, align 8
+  store ptr %.fca.0.extract28, ptr %140, align 8
+  %141 = getelementptr inbounds i8, ptr %140, i64 8
+  store ptr %.fca.0.extract, ptr %141, align 8
+  %142 = call ptr @behavior_wrapper(ptr %139, { ptr, ptr, ptr, i32 } %120, ptr noundef nonnull align 8 dereferenceable(16) %140)
+  call void %142({ ptr, ptr, ptr, i32 } %120, { ptr, ptr, ptr, i32 } %120, ptr nonnull %135, { ptr, ptr, ptr, i32 } %112, { ptr, ptr, ptr, i32 } %117)
+  %143 = call i32 @get_offset(ptr noundef nonnull @ChainIterator, ptr noundef nonnull @Iterator)
+  %144 = insertvalue { ptr, ptr, ptr, i32 } %119, i32 %143, 3
+  ret { ptr, ptr, ptr, i32 } %144
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define { ptr, ptr, ptr, i32 } @ChainedCollection_getter_second(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 40
+  %3 = load ptr, ptr %2, align 8
+  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
+  %5 = getelementptr i8, ptr %0, i64 48
+  %6 = load ptr, ptr %5, align 8
+  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
+  %8 = getelementptr i8, ptr %0, i64 56
+  %9 = load ptr, ptr %8, align 8
+  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
+  %11 = getelementptr i8, ptr %0, i64 64
+  %12 = load i32, ptr %11, align 8
+  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
+  ret { ptr, ptr, ptr, i32 } %13
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
+define void @ChainedCollection_setter_second(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
+  %3 = getelementptr i8, ptr %0, i64 40
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
+  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
+  store ptr %.fca.0.extract, ptr %3, align 8
+  %4 = getelementptr i8, ptr %0, i64 48
+  store ptr %.fca.1.extract, ptr %4, align 8
+  %5 = getelementptr i8, ptr %0, i64 56
+  store ptr %.fca.2.extract, ptr %5, align 8
+  %6 = getelementptr i8, ptr %0, i64 64
+  store i32 %.fca.3.extract, ptr %6, align 8
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define { ptr, ptr, ptr, i32 } @ChainedCollection_getter_first(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 8
+  %3 = load ptr, ptr %2, align 8
+  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
+  %5 = getelementptr i8, ptr %0, i64 16
+  %6 = load ptr, ptr %5, align 8
+  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
+  %8 = getelementptr i8, ptr %0, i64 24
+  %9 = load ptr, ptr %8, align 8
+  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
+  %11 = getelementptr i8, ptr %0, i64 32
+  %12 = load i32, ptr %11, align 8
+  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
+  ret { ptr, ptr, ptr, i32 } %13
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
+define void @ChainedCollection_setter_first(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
   %3 = getelementptr i8, ptr %0, i64 8
   %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
   %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
@@ -17043,6 +17043,790 @@ define void @FilterIterable_setter_iterable(ptr nocapture nofree writeonly align
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
+define { i64, i64 } @_data_size_MappedCollection(ptr nocapture nofree readnone %0) #1 {
+  ret { i64, i64 } { i64 56, i64 8 }
+}
+
+define ptr @MappedCollection_B_init_collectionCollectionT_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
+  %14 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %15 = getelementptr i8, ptr %14, i64 232
+  %16 = load ptr, ptr %15, align 8
+  ret ptr %16
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define ptr @MappedCollection_field_MappedCollection_0(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) #6 {
+  %2 = load ptr, ptr %0, align 8
+  ret ptr %2
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define ptr @MappedCollection_field_MappedCollection_1(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 8
+  %3 = load ptr, ptr %2, align 8
+  ret ptr %3
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @MappedCollection_B_size_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 240
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @MappedCollection_B_is_empty_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 248
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @MappedCollection_B_iterator_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 256
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @MappedCollection_B_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 264
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+define ptr @MappedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = load i64, ptr @any_typ, align 4
+  %14 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 %13, i64 noundef ptrtoint (ptr @any_typ to i64), ptr %12)
+  %15 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %16 = getelementptr i8, ptr %15, i64 272
+  %17 = load ptr, ptr %16, align 8
+  ret ptr %17
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @MappedCollection_B_all_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 280
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @MappedCollection_B_any_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 288
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @MappedCollection_B_enumerate_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 296
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @MappedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = icmp eq ptr %4, @function_typ
+  %6 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %7 = select i1 %5, i64 28, i64 29
+  %8 = getelementptr [123 x ptr], ptr %6, i64 0, i64 %7
+  %9 = getelementptr i8, ptr %8, i64 80
+  %10 = load ptr, ptr %9, align 8
+  ret ptr %10
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @MappedCollection_B_filter_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 320
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+define ptr @MappedCollection_B_chain_otherCollectionT_chain_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
+  br i1 %13, label %._crit_edge, label %14
+
+14:                                               ; preds = %2
+  %15 = load i64, ptr %5, align 4
+  %16 = load i64, ptr %6, align 4
+  %17 = load ptr, ptr %7, align 8
+  %18 = load ptr, ptr %8, align 8
+  %19 = load i64, ptr @Iterable, align 4
+  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
+  br i1 %20, label %21, label %._crit_edge
+
+21:                                               ; preds = %14
+  %22 = load i64, ptr %5, align 4
+  %23 = load i64, ptr %6, align 4
+  %24 = load ptr, ptr %7, align 8
+  %25 = load ptr, ptr %8, align 8
+  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %21, %14, %2
+  %27 = phi i32 [ 32, %21 ], [ 32, %14 ], [ 31, %2 ]
+  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %29 = zext nneg i32 %27 to i64
+  %30 = getelementptr [123 x ptr], ptr %28, i64 0, i64 %29
+  %31 = getelementptr i8, ptr %30, i64 80
+  %32 = load ptr, ptr %31, align 8
+  ret ptr %32
+}
+
+define ptr @MappedCollection_B_interleave_otherIterableT_interleave_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
+  br i1 %13, label %._crit_edge, label %14
+
+14:                                               ; preds = %2
+  %15 = load i64, ptr %5, align 4
+  %16 = load i64, ptr %6, align 4
+  %17 = load ptr, ptr %7, align 8
+  %18 = load ptr, ptr %8, align 8
+  %19 = load i64, ptr @Iterable, align 4
+  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
+  br i1 %20, label %21, label %._crit_edge
+
+21:                                               ; preds = %14
+  %22 = load i64, ptr %5, align 4
+  %23 = load i64, ptr %6, align 4
+  %24 = load ptr, ptr %7, align 8
+  %25 = load ptr, ptr %8, align 8
+  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %21, %14, %2
+  %27 = phi i32 [ 33, %21 ], [ 33, %14 ], [ 34, %2 ]
+  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %29 = zext nneg i32 %27 to i64
+  %30 = getelementptr [123 x ptr], ptr %28, i64 0, i64 %29
+  %31 = getelementptr i8, ptr %30, i64 80
+  %32 = load ptr, ptr %31, align 8
+  ret ptr %32
+}
+
+define ptr @MappedCollection_B_zip_otherIterableU_zip_otherCollectionU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
+  br i1 %13, label %._crit_edge, label %14
+
+14:                                               ; preds = %2
+  %15 = load i64, ptr %5, align 4
+  %16 = load i64, ptr %6, align 4
+  %17 = load ptr, ptr %7, align 8
+  %18 = load ptr, ptr %8, align 8
+  %19 = load i64, ptr @Iterable, align 4
+  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
+  br i1 %20, label %21, label %._crit_edge
+
+21:                                               ; preds = %14
+  %22 = load i64, ptr %5, align 4
+  %23 = load i64, ptr %6, align 4
+  %24 = load ptr, ptr %7, align 8
+  %25 = load ptr, ptr %8, align 8
+  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %21, %14, %2
+  %27 = phi i32 [ 35, %21 ], [ 35, %14 ], [ 36, %2 ]
+  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %29 = zext nneg i32 %27 to i64
+  %30 = getelementptr [123 x ptr], ptr %28, i64 0, i64 %29
+  %31 = getelementptr i8, ptr %30, i64 80
+  %32 = load ptr, ptr %31, align 8
+  ret ptr %32
+}
+
+define ptr @MappedCollection_B_product_otherCollectionU_product_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
+  br i1 %13, label %._crit_edge, label %14
+
+14:                                               ; preds = %2
+  %15 = load i64, ptr %5, align 4
+  %16 = load i64, ptr %6, align 4
+  %17 = load ptr, ptr %7, align 8
+  %18 = load ptr, ptr %8, align 8
+  %19 = load i64, ptr @Iterable, align 4
+  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
+  br i1 %20, label %21, label %._crit_edge
+
+21:                                               ; preds = %14
+  %22 = load i64, ptr %5, align 4
+  %23 = load i64, ptr %6, align 4
+  %24 = load ptr, ptr %7, align 8
+  %25 = load ptr, ptr %8, align 8
+  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
+  br label %._crit_edge
+
+._crit_edge:                                      ; preds = %21, %14, %2
+  %27 = phi i32 [ 38, %21 ], [ 38, %14 ], [ 37, %2 ]
+  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %29 = zext nneg i32 %27 to i64
+  %30 = getelementptr [123 x ptr], ptr %28, i64 0, i64 %29
+  %31 = getelementptr i8, ptr %30, i64 80
+  %32 = load ptr, ptr %31, align 8
+  ret ptr %32
+}
+
+define void @MappedCollection_init_collectionCollectionT_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3, { ptr } %4) #3 {
+  %.fca.0.extract18 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract19 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %6 = call i32 @get_offset(ptr %.fca.0.extract18, ptr noundef nonnull align 16 dereferenceable(1064) @MappedCollection)
+  %.fca.0.extract10 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %3, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %3, 2
+  %7 = call i32 @get_offset(ptr %.fca.0.extract10, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %8 = call i32 @get_offset(ptr %.fca.0.extract10, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %9 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract18)
+  %10 = sext i32 %6 to i64
+  %11 = getelementptr ptr, ptr %.fca.0.extract18, i64 %10
+  %12 = getelementptr i8, ptr %11, i64 16
+  %13 = load ptr, ptr %12, align 8
+  %14 = getelementptr i8, ptr %13, i64 8
+  %15 = load ptr, ptr %14, align 8
+  %16 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract10, 0
+  %17 = insertvalue { ptr, ptr, ptr, i32 } %16, ptr %.fca.1.extract, 1
+  %18 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %.fca.2.extract, 2
+  %19 = insertvalue { ptr, ptr, ptr, i32 } %18, i32 %8, 3
+  call void %15(ptr %.fca.1.extract19, { ptr, ptr, ptr, i32 } %19) #30
+  %20 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract18)
+  %21 = getelementptr i8, ptr %11, i64 24
+  %22 = load ptr, ptr %21, align 8
+  %23 = getelementptr i8, ptr %22, i64 8
+  %24 = load ptr, ptr %23, align 8
+  call void %24(ptr %.fca.1.extract19, { ptr } %4) #30
+  ret void
+}
+
+define i32 @MappedCollection_size_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
+  %4 = alloca [0 x ptr], align 8
+  %.fca.0.extract4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract6 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %5 = call i32 @get_offset(ptr %.fca.0.extract4, ptr noundef nonnull align 16 dereferenceable(1064) @MappedCollection)
+  %6 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract4)
+  %7 = sext i32 %5 to i64
+  %8 = getelementptr ptr, ptr %.fca.0.extract4, i64 %7
+  %9 = getelementptr i8, ptr %8, i64 16
+  %10 = load ptr, ptr %9, align 8
+  %11 = load ptr, ptr %10, align 8
+  %12 = call { ptr, ptr, ptr, i32 } %11(ptr %.fca.1.extract6) #31
+  %13 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %12, 0
+  store ptr %.fca.0.extract, ptr %13, align 8
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %12, 1
+  %.fca.1.gep = getelementptr inbounds i8, ptr %13, i64 8
+  store ptr %.fca.1.extract, ptr %.fca.1.gep, align 8
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %12, 2
+  %.fca.2.gep = getelementptr inbounds i8, ptr %13, i64 16
+  store ptr %.fca.2.extract, ptr %.fca.2.gep, align 8
+  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %12, 3
+  %.fca.3.gep = getelementptr inbounds i8, ptr %13, i64 24
+  store i32 %.fca.3.extract, ptr %.fca.3.gep, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %13, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %14, 0
+  %16 = load ptr, ptr %.fca.1.gep, align 8
+  %17 = insertvalue { ptr, ptr, ptr, i32 } %15, ptr %16, 1
+  %18 = load ptr, ptr %.fca.2.gep, align 8
+  %19 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %18, 2
+  %20 = load i32, ptr %.fca.3.gep, align 8
+  %21 = insertvalue { ptr, ptr, ptr, i32 } %19, i32 %20, 3
+  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %23 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %14)
+  %24 = sext i32 %20 to i64
+  %25 = getelementptr ptr, ptr %14, i64 %24
+  %26 = getelementptr i8, ptr %25, i64 8
+  %27 = load ptr, ptr %26, align 8
+  %28 = call ptr @behavior_wrapper(ptr %27, { ptr, ptr, ptr, i32 } %21, ptr noundef nonnull align 8 %4)
+  %29 = call i32 %28({ ptr, ptr, ptr, i32 } %21, { ptr, ptr, ptr, i32 } %21, ptr nonnull %4)
+  ret i32 %29
+}
+
+define { ptr, ptr, ptr, i32 } @MappedCollection_iterator_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
+  %4 = alloca [0 x ptr], align 8
+  %.fca.0.extract79 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract81 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %5 = call i32 @get_offset(ptr %.fca.0.extract79, ptr noundef nonnull align 16 dereferenceable(1064) @MappedCollection)
+  %6 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract79)
+  %7 = sext i32 %5 to i64
+  %8 = getelementptr ptr, ptr %.fca.0.extract79, i64 %7
+  %9 = getelementptr i8, ptr %8, i64 16
+  %10 = load ptr, ptr %9, align 8
+  %11 = load ptr, ptr %10, align 8
+  %12 = call { ptr, ptr, ptr, i32 } %11(ptr %.fca.1.extract81) #31
+  %13 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract43 = extractvalue { ptr, ptr, ptr, i32 } %12, 0
+  store ptr %.fca.0.extract43, ptr %13, align 8
+  %.fca.1.extract45 = extractvalue { ptr, ptr, ptr, i32 } %12, 1
+  %.fca.1.gep46 = getelementptr inbounds i8, ptr %13, i64 8
+  store ptr %.fca.1.extract45, ptr %.fca.1.gep46, align 8
+  %.fca.2.extract47 = extractvalue { ptr, ptr, ptr, i32 } %12, 2
+  %.fca.2.gep48 = getelementptr inbounds i8, ptr %13, i64 16
+  store ptr %.fca.2.extract47, ptr %.fca.2.gep48, align 8
+  %.fca.3.extract49 = extractvalue { ptr, ptr, ptr, i32 } %12, 3
+  %.fca.3.gep50 = getelementptr inbounds i8, ptr %13, i64 24
+  store i32 %.fca.3.extract49, ptr %.fca.3.gep50, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %13, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %14, 0
+  %16 = load ptr, ptr %.fca.1.gep46, align 8
+  %17 = insertvalue { ptr, ptr, ptr, i32 } %15, ptr %16, 1
+  %18 = load ptr, ptr %.fca.2.gep48, align 8
+  %19 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %18, 2
+  %20 = load i32, ptr %.fca.3.gep50, align 8
+  %21 = insertvalue { ptr, ptr, ptr, i32 } %19, i32 %20, 3
+  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %23 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %14)
+  %24 = sext i32 %20 to i64
+  %25 = getelementptr ptr, ptr %14, i64 %24
+  %26 = getelementptr i8, ptr %25, i64 24
+  %27 = load ptr, ptr %26, align 8
+  %28 = call ptr @behavior_wrapper(ptr %27, { ptr, ptr, ptr, i32 } %21, ptr noundef nonnull align 8 %4)
+  %29 = call { ptr, ptr, ptr, i32 } %28({ ptr, ptr, ptr, i32 } %21, { ptr, ptr, ptr, i32 } %21, ptr nonnull align 8 %4)
+  %.fca.0.extract31 = extractvalue { ptr, ptr, ptr, i32 } %29, 0
+  %30 = call i32 @get_offset(ptr %.fca.0.extract31, ptr noundef nonnull @Iterator)
+  %31 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract79)
+  %32 = getelementptr i8, ptr %8, i64 24
+  %33 = load ptr, ptr %32, align 8
+  %34 = load ptr, ptr %33, align 8
+  %35 = call { ptr } %34(ptr %.fca.1.extract81) #31
+  %36 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract79)
+  %37 = load ptr, ptr %8, align 8
+  %38 = call ptr @typegetter_wrapper(ptr %37, ptr %.fca.1.extract81)
+  %39 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract79)
+  %40 = getelementptr i8, ptr %8, i64 8
+  %41 = load ptr, ptr %40, align 8
+  %42 = call ptr @typegetter_wrapper(ptr %41, ptr %.fca.1.extract81)
+  %43 = alloca [3 x ptr], align 8
+  store ptr @MapIterator, ptr %43, align 8
+  %44 = getelementptr inbounds i8, ptr %43, i64 8
+  store ptr %38, ptr %44, align 8
+  %45 = getelementptr inbounds i8, ptr %43, i64 16
+  store ptr %42, ptr %45, align 8
+  %46 = load ptr, ptr getelementptr (i8, ptr @MapIterator, i64 48), align 8
+  %47 = call { i64, i64 } @size_wrapper(ptr %46, ptr noundef nonnull align 8 dereferenceable(24) %43)
+  %48 = extractvalue { i64, i64 } %47, 0
+  %49 = call ptr @bump_malloc(i64 %48)
+  store ptr %38, ptr %49, align 8
+  %50 = getelementptr i8, ptr %49, i64 8
+  store ptr %42, ptr %50, align 8
+  %51 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %49)
+  %52 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract79)
+  %53 = load ptr, ptr %9, align 8
+  %54 = load ptr, ptr %53, align 8
+  %55 = call { ptr, ptr, ptr, i32 } %54(ptr %.fca.1.extract81) #31
+  %56 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract16 = extractvalue { ptr, ptr, ptr, i32 } %55, 0
+  store ptr %.fca.0.extract16, ptr %56, align 8
+  %.fca.1.extract17 = extractvalue { ptr, ptr, ptr, i32 } %55, 1
+  %.fca.1.gep = getelementptr inbounds i8, ptr %56, i64 8
+  store ptr %.fca.1.extract17, ptr %.fca.1.gep, align 8
+  %.fca.2.extract18 = extractvalue { ptr, ptr, ptr, i32 } %55, 2
+  %.fca.2.gep = getelementptr inbounds i8, ptr %56, i64 16
+  store ptr %.fca.2.extract18, ptr %.fca.2.gep, align 8
+  %.fca.3.extract19 = extractvalue { ptr, ptr, ptr, i32 } %55, 3
+  %.fca.3.gep = getelementptr inbounds i8, ptr %56, i64 24
+  store i32 %.fca.3.extract19, ptr %.fca.3.gep, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %56, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
+  %57 = load ptr, ptr %56, align 8
+  %58 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %57, 0
+  %59 = load ptr, ptr %.fca.1.gep, align 8
+  %60 = insertvalue { ptr, ptr, ptr, i32 } %58, ptr %59, 1
+  %61 = load ptr, ptr %.fca.2.gep, align 8
+  %62 = insertvalue { ptr, ptr, ptr, i32 } %60, ptr %61, 2
+  %63 = load i32, ptr %.fca.3.gep, align 8
+  %64 = insertvalue { ptr, ptr, ptr, i32 } %62, i32 %63, 3
+  %65 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %66 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %57)
+  %67 = sext i32 %63 to i64
+  %68 = getelementptr ptr, ptr %57, i64 %67
+  %69 = getelementptr i8, ptr %68, i64 24
+  %70 = load ptr, ptr %69, align 8
+  %71 = call ptr @behavior_wrapper(ptr %70, { ptr, ptr, ptr, i32 } %64, ptr noundef nonnull align 8 %4)
+  %72 = call { ptr, ptr, ptr, i32 } %71({ ptr, ptr, ptr, i32 } %64, { ptr, ptr, ptr, i32 } %64, ptr nonnull %4)
+  %.fca.0.extract15 = extractvalue { ptr, ptr, ptr, i32 } %72, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %72, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %72, 2
+  %73 = call i32 @get_offset(ptr %.fca.0.extract15, ptr noundef nonnull @Iterator)
+  %74 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract79)
+  %75 = load ptr, ptr %32, align 8
+  %76 = load ptr, ptr %75, align 8
+  %77 = call { ptr } %76(ptr %.fca.1.extract81) #31
+  %78 = call i32 @get_offset(ptr %.fca.0.extract15, ptr noundef nonnull @Iterator)
+  %79 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract15, 0
+  %80 = insertvalue { ptr, ptr, ptr, i32 } %79, ptr %.fca.1.extract, 1
+  %81 = insertvalue { ptr, ptr, ptr, i32 } %80, ptr %.fca.2.extract, 2
+  %82 = insertvalue { ptr, ptr, ptr, i32 } %81, i32 %78, 3
+  %83 = insertvalue { ptr, ptr, ptr, i32 } { ptr @MapIterator, ptr undef, ptr undef, i32 undef }, ptr %49, 1
+  %84 = insertvalue { ptr, ptr, ptr, i32 } %83, ptr undef, 2
+  %85 = insertvalue { ptr, ptr, ptr, i32 } %84, i32 10, 3
+  %86 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract79)
+  %87 = load ptr, ptr %8, align 8
+  %88 = call ptr @typegetter_wrapper(ptr %87, ptr %.fca.1.extract81)
+  %89 = call ptr @bump_malloc(i64 noundef 24)
+  %90 = getelementptr i8, ptr %89, i64 8
+  store ptr %88, ptr %90, align 8
+  %91 = getelementptr i8, ptr %89, i64 16
+  store ptr null, ptr %91, align 8
+  %92 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %89)
+  store ptr @Iterator, ptr %89, align 8
+  %93 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract79)
+  %94 = load ptr, ptr %40, align 8
+  %95 = call ptr @typegetter_wrapper(ptr %94, ptr %.fca.1.extract81)
+  %96 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract79)
+  %97 = load ptr, ptr %8, align 8
+  %98 = call ptr @typegetter_wrapper(ptr %97, ptr %.fca.1.extract81)
+  %99 = call ptr @bump_malloc(i64 noundef 32)
+  %100 = getelementptr i8, ptr %99, i64 16
+  store ptr %98, ptr %100, align 8
+  %101 = getelementptr i8, ptr %99, i64 8
+  store ptr %95, ptr %101, align 8
+  %102 = getelementptr i8, ptr %99, i64 24
+  store ptr null, ptr %102, align 8
+  %103 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(32) %99)
+  store ptr @function_typ, ptr %99, align 8
+  %104 = alloca [2 x ptr], align 8
+  store ptr %89, ptr %104, align 8
+  %105 = getelementptr inbounds i8, ptr %104, i64 8
+  store ptr %99, ptr %105, align 8
+  %106 = call ptr @llvm.invariant.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %104)
+  %107 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull @MapIterator)
+  %108 = load ptr, ptr getelementptr (i8, ptr @MapIterator, i64 112), align 8
+  %109 = alloca { ptr, ptr }, align 8
+  store ptr %.fca.0.extract15, ptr %109, align 8
+  %110 = getelementptr inbounds i8, ptr %109, i64 8
+  store ptr @function_typ, ptr %110, align 8
+  %111 = call ptr @behavior_wrapper(ptr %108, { ptr, ptr, ptr, i32 } %85, ptr noundef nonnull align 8 dereferenceable(16) %109)
+  call void %111({ ptr, ptr, ptr, i32 } %85, { ptr, ptr, ptr, i32 } %85, ptr nonnull %104, { ptr, ptr, ptr, i32 } %82, { ptr } %77)
+  %112 = call i32 @get_offset(ptr noundef nonnull @MapIterator, ptr noundef nonnull @Iterator)
+  %113 = insertvalue { ptr, ptr, ptr, i32 } %84, i32 %112, 3
+  ret { ptr, ptr, ptr, i32 } %113
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
+define { i64, i64 } @_data_size_MapIterator(ptr nocapture nofree readnone %0) #1 {
+  ret { i64, i64 } { i64 56, i64 8 }
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define ptr @MapIterator_field_MapIterator_0(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) #6 {
+  %2 = load ptr, ptr %0, align 8
+  ret ptr %2
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define ptr @MapIterator_field_MapIterator_1(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 8
+  %3 = load ptr, ptr %2, align 8
+  ret ptr %3
+}
+
+define ptr @MapIterator_B_init_iteratorIteratorT_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
+  %4 = load ptr, ptr %1, align 8
+  %5 = getelementptr i8, ptr %4, i64 8
+  %6 = getelementptr i8, ptr %4, i64 16
+  %7 = getelementptr i8, ptr %4, i64 24
+  %8 = getelementptr i8, ptr %4, i64 32
+  %9 = load i64, ptr %5, align 4
+  %10 = load i64, ptr %6, align 4
+  %11 = load ptr, ptr %7, align 8
+  %12 = load ptr, ptr %8, align 8
+  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 8673632051301757104, i64 noundef ptrtoint (ptr @Iterator to i64), ptr %12)
+  %14 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %15 = getelementptr i8, ptr %14, i64 128
+  %16 = load ptr, ptr %15, align 8
+  ret ptr %16
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
+define ptr @MapIterator_B_next_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
+  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %5 = getelementptr i8, ptr %4, i64 136
+  %6 = load ptr, ptr %5, align 8
+  ret ptr %6
+}
+
+define void @MapIterator_init_iteratorIteratorT_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3, { ptr } %4) #3 {
+  %.fca.0.extract18 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract19 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %6 = call i32 @get_offset(ptr %.fca.0.extract18, ptr noundef nonnull align 16 dereferenceable(168) @MapIterator)
+  %.fca.0.extract10 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %3, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %3, 2
+  %7 = call i32 @get_offset(ptr %.fca.0.extract10, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %8 = call i32 @get_offset(ptr %.fca.0.extract10, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %9 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract18)
+  %10 = sext i32 %6 to i64
+  %11 = getelementptr ptr, ptr %.fca.0.extract18, i64 %10
+  %12 = getelementptr i8, ptr %11, i64 16
+  %13 = load ptr, ptr %12, align 8
+  %14 = getelementptr i8, ptr %13, i64 8
+  %15 = load ptr, ptr %14, align 8
+  %16 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract10, 0
+  %17 = insertvalue { ptr, ptr, ptr, i32 } %16, ptr %.fca.1.extract, 1
+  %18 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %.fca.2.extract, 2
+  %19 = insertvalue { ptr, ptr, ptr, i32 } %18, i32 %8, 3
+  call void %15(ptr %.fca.1.extract19, { ptr, ptr, ptr, i32 } %19) #30
+  %20 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract18)
+  %21 = getelementptr i8, ptr %11, i64 24
+  %22 = load ptr, ptr %21, align 8
+  %23 = getelementptr i8, ptr %22, i64 8
+  %24 = load ptr, ptr %23, align 8
+  call void %24(ptr %.fca.1.extract19, { ptr } %4) #30
+  ret void
+}
+
+define { ptr, i160 } @MapIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
+  %4 = alloca [0 x ptr], align 8
+  %.fca.0.extract21 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
+  %.fca.1.extract23 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
+  %5 = call i32 @get_offset(ptr %.fca.0.extract21, ptr noundef nonnull align 16 dereferenceable(168) @MapIterator)
+  %6 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract21)
+  %7 = sext i32 %5 to i64
+  %8 = getelementptr ptr, ptr %.fca.0.extract21, i64 %7
+  %9 = getelementptr i8, ptr %8, i64 16
+  %10 = load ptr, ptr %9, align 8
+  %11 = load ptr, ptr %10, align 8
+  %12 = call { ptr, ptr, ptr, i32 } %11(ptr %.fca.1.extract23) #31
+  %13 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %.fca.0.extract2 = extractvalue { ptr, ptr, ptr, i32 } %12, 0
+  store ptr %.fca.0.extract2, ptr %13, align 8
+  %.fca.1.extract3 = extractvalue { ptr, ptr, ptr, i32 } %12, 1
+  %.fca.1.gep = getelementptr inbounds i8, ptr %13, i64 8
+  store ptr %.fca.1.extract3, ptr %.fca.1.gep, align 8
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %12, 2
+  %.fca.2.gep = getelementptr inbounds i8, ptr %13, i64 16
+  store ptr %.fca.2.extract, ptr %.fca.2.gep, align 8
+  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %12, 3
+  %.fca.3.gep = getelementptr inbounds i8, ptr %13, i64 24
+  store i32 %.fca.3.extract, ptr %.fca.3.gep, align 8
+  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %13, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
+  %14 = load ptr, ptr %13, align 8
+  %15 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %14, 0
+  %16 = load ptr, ptr %.fca.1.gep, align 8
+  %17 = insertvalue { ptr, ptr, ptr, i32 } %15, ptr %16, 1
+  %18 = load ptr, ptr %.fca.2.gep, align 8
+  %19 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %18, 2
+  %20 = load i32, ptr %.fca.3.gep, align 8
+  %21 = insertvalue { ptr, ptr, ptr, i32 } %19, i32 %20, 3
+  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
+  %23 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef %14)
+  %24 = sext i32 %20 to i64
+  %25 = getelementptr ptr, ptr %14, i64 %24
+  %26 = getelementptr i8, ptr %25, i64 8
+  %27 = load ptr, ptr %26, align 8
+  %28 = call ptr @behavior_wrapper(ptr %27, { ptr, ptr, ptr, i32 } %21, ptr noundef nonnull align 8 %4)
+  %29 = call { ptr, i160 } %28({ ptr, ptr, ptr, i32 } %21, { ptr, ptr, ptr, i32 } %21, ptr nonnull %4)
+  %.fca.0.extract = extractvalue { ptr, i160 } %29, 0
+  %30 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract21)
+  %31 = load ptr, ptr %8, align 8
+  %32 = call ptr @typegetter_wrapper(ptr %31, ptr %.fca.1.extract23)
+  %33 = icmp ne ptr %.fca.0.extract, @nil_typ
+  %34 = icmp ne ptr %.fca.0.extract, null
+  %.not46 = and i1 %33, %34
+  br i1 %.not46, label %35, label %42
+
+35:                                               ; preds = %3
+  %36 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract21)
+  %37 = getelementptr i8, ptr %8, i64 24
+  %38 = load ptr, ptr %37, align 8
+  %39 = load ptr, ptr %38, align 8
+  %40 = call { ptr } %39(ptr %.fca.1.extract23) #31
+  %.fca.0.extract38 = extractvalue { ptr } %40, 0
+  %41 = call { ptr, i160 } %.fca.0.extract38({ ptr, i160 } %29)
+  %.fca.0.extract32 = extractvalue { ptr, i160 } %41, 0
+  %.fca.1.extract34 = extractvalue { ptr, i160 } %41, 1
+  br label %42
+
+42:                                               ; preds = %35, %3
+  %.reg2mem5.sroa.0.0 = phi ptr [ %.fca.0.extract32, %35 ], [ @nil_typ, %3 ]
+  %.reg2mem5.sroa.3.0 = phi i160 [ %.fca.1.extract34, %35 ], [ undef, %3 ]
+  %.reload6.fca.0.insert = insertvalue { ptr, i160 } poison, ptr %.reg2mem5.sroa.0.0, 0
+  %.reload6.fca.1.insert = insertvalue { ptr, i160 } %.reload6.fca.0.insert, i160 %.reg2mem5.sroa.3.0, 1
+  ret { ptr, i160 } %.reload6.fca.1.insert
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define { ptr } @MapIterator_getter_f(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 48
+  %3 = load ptr, ptr %2, align 8
+  %4 = insertvalue { ptr } undef, ptr %3, 0
+  ret { ptr } %4
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
+define void @MapIterator_setter_f(ptr nocapture nofree writeonly align 8 %0, { ptr } %1) #7 {
+  %3 = getelementptr i8, ptr %0, i64 48
+  %.fca.0.extract = extractvalue { ptr } %1, 0
+  store ptr %.fca.0.extract, ptr %3, align 8
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define { ptr, ptr, ptr, i32 } @MapIterator_getter_iterator(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 16
+  %3 = load ptr, ptr %2, align 8
+  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
+  %5 = getelementptr i8, ptr %0, i64 24
+  %6 = load ptr, ptr %5, align 8
+  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
+  %8 = getelementptr i8, ptr %0, i64 32
+  %9 = load ptr, ptr %8, align 8
+  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
+  %11 = getelementptr i8, ptr %0, i64 40
+  %12 = load i32, ptr %11, align 8
+  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
+  ret { ptr, ptr, ptr, i32 } %13
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
+define void @MapIterator_setter_iterator(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
+  %3 = getelementptr i8, ptr %0, i64 16
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
+  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
+  store ptr %.fca.0.extract, ptr %3, align 8
+  %4 = getelementptr i8, ptr %0, i64 24
+  store ptr %.fca.1.extract, ptr %4, align 8
+  %5 = getelementptr i8, ptr %0, i64 32
+  store ptr %.fca.2.extract, ptr %5, align 8
+  %6 = getelementptr i8, ptr %0, i64 40
+  store i32 %.fca.3.extract, ptr %6, align 8
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define { ptr } @MappedCollection_getter_f(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 48
+  %3 = load ptr, ptr %2, align 8
+  %4 = insertvalue { ptr } undef, ptr %3, 0
+  ret { ptr } %4
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
+define void @MappedCollection_setter_f(ptr nocapture nofree writeonly align 8 %0, { ptr } %1) #7 {
+  %3 = getelementptr i8, ptr %0, i64 48
+  %.fca.0.extract = extractvalue { ptr } %1, 0
+  store ptr %.fca.0.extract, ptr %3, align 8
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
+define { ptr, ptr, ptr, i32 } @MappedCollection_getter_collection(ptr nocapture nofree readonly align 8 %0) #6 {
+  %2 = getelementptr i8, ptr %0, i64 16
+  %3 = load ptr, ptr %2, align 8
+  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
+  %5 = getelementptr i8, ptr %0, i64 24
+  %6 = load ptr, ptr %5, align 8
+  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
+  %8 = getelementptr i8, ptr %0, i64 32
+  %9 = load ptr, ptr %8, align 8
+  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
+  %11 = getelementptr i8, ptr %0, i64 40
+  %12 = load i32, ptr %11, align 8
+  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
+  ret { ptr, ptr, ptr, i32 } %13
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
+define void @MappedCollection_setter_collection(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
+  %3 = getelementptr i8, ptr %0, i64 16
+  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
+  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
+  store ptr %.fca.0.extract, ptr %3, align 8
+  %4 = getelementptr i8, ptr %0, i64 24
+  store ptr %.fca.1.extract, ptr %4, align 8
+  %5 = getelementptr i8, ptr %0, i64 32
+  store ptr %.fca.2.extract, ptr %5, align 8
+  %6 = getelementptr i8, ptr %0, i64 40
+  store i32 %.fca.3.extract, ptr %6, align 8
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
 define { i64, i64 } @_data_size_MapIterable(ptr nocapture nofree readnone %0) #1 {
   ret { i64, i64 } { i64 56, i64 8 }
 }
@@ -17421,201 +18205,6 @@ define { ptr, ptr, ptr, i32 } @MapIterable_iterator_({ ptr, ptr, ptr, i32 } %0, 
   ret { ptr, ptr, ptr, i32 } %111
 }
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define { i64, i64 } @_data_size_MapIterator(ptr nocapture nofree readnone %0) #1 {
-  ret { i64, i64 } { i64 56, i64 8 }
-}
-
-define ptr @MapIterator_B_init_iteratorIteratorT_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 8673632051301757104, i64 noundef ptrtoint (ptr @Iterator to i64), ptr %12)
-  %14 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %15 = getelementptr i8, ptr %14, i64 128
-  %16 = load ptr, ptr %15, align 8
-  ret ptr %16
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define ptr @MapIterator_field_MapIterator_0(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) #6 {
-  %2 = load ptr, ptr %0, align 8
-  ret ptr %2
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define ptr @MapIterator_field_MapIterator_1(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 8
-  %3 = load ptr, ptr %2, align 8
-  ret ptr %3
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @MapIterator_B_next_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 136
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-define void @MapIterator_init_iteratorIteratorT_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3, { ptr } %4) #3 {
-  %.fca.0.extract18 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract19 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %6 = call i32 @get_offset(ptr %.fca.0.extract18, ptr noundef nonnull align 16 dereferenceable(168) @MapIterator)
-  %.fca.0.extract10 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %3, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %3, 2
-  %7 = call i32 @get_offset(ptr %.fca.0.extract10, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %8 = call i32 @get_offset(ptr %.fca.0.extract10, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %9 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract18)
-  %10 = sext i32 %6 to i64
-  %11 = getelementptr ptr, ptr %.fca.0.extract18, i64 %10
-  %12 = getelementptr i8, ptr %11, i64 16
-  %13 = load ptr, ptr %12, align 8
-  %14 = getelementptr i8, ptr %13, i64 8
-  %15 = load ptr, ptr %14, align 8
-  %16 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract10, 0
-  %17 = insertvalue { ptr, ptr, ptr, i32 } %16, ptr %.fca.1.extract, 1
-  %18 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %.fca.2.extract, 2
-  %19 = insertvalue { ptr, ptr, ptr, i32 } %18, i32 %8, 3
-  call void %15(ptr %.fca.1.extract19, { ptr, ptr, ptr, i32 } %19) #30
-  %20 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract18)
-  %21 = getelementptr i8, ptr %11, i64 24
-  %22 = load ptr, ptr %21, align 8
-  %23 = getelementptr i8, ptr %22, i64 8
-  %24 = load ptr, ptr %23, align 8
-  call void %24(ptr %.fca.1.extract19, { ptr } %4) #30
-  ret void
-}
-
-define { ptr, i160 } @MapIterator_next_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
-  %4 = alloca [0 x ptr], align 8
-  %.fca.0.extract21 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract23 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %5 = call i32 @get_offset(ptr %.fca.0.extract21, ptr noundef nonnull align 16 dereferenceable(168) @MapIterator)
-  %6 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract21)
-  %7 = sext i32 %5 to i64
-  %8 = getelementptr ptr, ptr %.fca.0.extract21, i64 %7
-  %9 = getelementptr i8, ptr %8, i64 16
-  %10 = load ptr, ptr %9, align 8
-  %11 = load ptr, ptr %10, align 8
-  %12 = call { ptr, ptr, ptr, i32 } %11(ptr %.fca.1.extract23) #31
-  %13 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract2 = extractvalue { ptr, ptr, ptr, i32 } %12, 0
-  store ptr %.fca.0.extract2, ptr %13, align 8
-  %.fca.1.extract3 = extractvalue { ptr, ptr, ptr, i32 } %12, 1
-  %.fca.1.gep = getelementptr inbounds i8, ptr %13, i64 8
-  store ptr %.fca.1.extract3, ptr %.fca.1.gep, align 8
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %12, 2
-  %.fca.2.gep = getelementptr inbounds i8, ptr %13, i64 16
-  store ptr %.fca.2.extract, ptr %.fca.2.gep, align 8
-  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %12, 3
-  %.fca.3.gep = getelementptr inbounds i8, ptr %13, i64 24
-  store i32 %.fca.3.extract, ptr %.fca.3.gep, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %13, ptr noundef nonnull align 16 dereferenceable(80) @Iterator)
-  %14 = load ptr, ptr %13, align 8
-  %15 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %14, 0
-  %16 = load ptr, ptr %.fca.1.gep, align 8
-  %17 = insertvalue { ptr, ptr, ptr, i32 } %15, ptr %16, 1
-  %18 = load ptr, ptr %.fca.2.gep, align 8
-  %19 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %18, 2
-  %20 = load i32, ptr %.fca.3.gep, align 8
-  %21 = insertvalue { ptr, ptr, ptr, i32 } %19, i32 %20, 3
-  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %23 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef %14)
-  %24 = sext i32 %20 to i64
-  %25 = getelementptr ptr, ptr %14, i64 %24
-  %26 = getelementptr i8, ptr %25, i64 8
-  %27 = load ptr, ptr %26, align 8
-  %28 = call ptr @behavior_wrapper(ptr %27, { ptr, ptr, ptr, i32 } %21, ptr noundef nonnull align 8 %4)
-  %29 = call { ptr, i160 } %28({ ptr, ptr, ptr, i32 } %21, { ptr, ptr, ptr, i32 } %21, ptr nonnull %4)
-  %.fca.0.extract = extractvalue { ptr, i160 } %29, 0
-  %30 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract21)
-  %31 = load ptr, ptr %8, align 8
-  %32 = call ptr @typegetter_wrapper(ptr %31, ptr %.fca.1.extract23)
-  %33 = icmp ne ptr %.fca.0.extract, @nil_typ
-  %34 = icmp ne ptr %.fca.0.extract, null
-  %.not46 = and i1 %33, %34
-  br i1 %.not46, label %35, label %42
-
-35:                                               ; preds = %3
-  %36 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract21)
-  %37 = getelementptr i8, ptr %8, i64 24
-  %38 = load ptr, ptr %37, align 8
-  %39 = load ptr, ptr %38, align 8
-  %40 = call { ptr } %39(ptr %.fca.1.extract23) #31
-  %.fca.0.extract38 = extractvalue { ptr } %40, 0
-  %41 = call { ptr, i160 } %.fca.0.extract38({ ptr, i160 } %29)
-  %.fca.0.extract32 = extractvalue { ptr, i160 } %41, 0
-  %.fca.1.extract34 = extractvalue { ptr, i160 } %41, 1
-  br label %42
-
-42:                                               ; preds = %35, %3
-  %.reg2mem5.sroa.0.0 = phi ptr [ %.fca.0.extract32, %35 ], [ @nil_typ, %3 ]
-  %.reg2mem5.sroa.3.0 = phi i160 [ %.fca.1.extract34, %35 ], [ undef, %3 ]
-  %.reload6.fca.0.insert = insertvalue { ptr, i160 } poison, ptr %.reg2mem5.sroa.0.0, 0
-  %.reload6.fca.1.insert = insertvalue { ptr, i160 } %.reload6.fca.0.insert, i160 %.reg2mem5.sroa.3.0, 1
-  ret { ptr, i160 } %.reload6.fca.1.insert
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define { ptr } @MapIterator_getter_f(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 48
-  %3 = load ptr, ptr %2, align 8
-  %4 = insertvalue { ptr } undef, ptr %3, 0
-  ret { ptr } %4
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define void @MapIterator_setter_f(ptr nocapture nofree writeonly align 8 %0, { ptr } %1) #7 {
-  %3 = getelementptr i8, ptr %0, i64 48
-  %.fca.0.extract = extractvalue { ptr } %1, 0
-  store ptr %.fca.0.extract, ptr %3, align 8
-  ret void
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define { ptr, ptr, ptr, i32 } @MapIterator_getter_iterator(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 16
-  %3 = load ptr, ptr %2, align 8
-  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
-  %5 = getelementptr i8, ptr %0, i64 24
-  %6 = load ptr, ptr %5, align 8
-  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
-  %8 = getelementptr i8, ptr %0, i64 32
-  %9 = load ptr, ptr %8, align 8
-  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
-  %11 = getelementptr i8, ptr %0, i64 40
-  %12 = load i32, ptr %11, align 8
-  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
-  ret { ptr, ptr, ptr, i32 } %13
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define void @MapIterator_setter_iterator(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
-  %3 = getelementptr i8, ptr %0, i64 16
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
-  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
-  store ptr %.fca.0.extract, ptr %3, align 8
-  %4 = getelementptr i8, ptr %0, i64 24
-  store ptr %.fca.1.extract, ptr %4, align 8
-  %5 = getelementptr i8, ptr %0, i64 32
-  store ptr %.fca.2.extract, ptr %5, align 8
-  %6 = getelementptr i8, ptr %0, i64 40
-  store i32 %.fca.3.extract, ptr %6, align 8
-  ret void
-}
-
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
 define { ptr } @MapIterable_getter_f(ptr nocapture nofree readonly align 8 %0) #6 {
   %2 = getelementptr i8, ptr %0, i64 48
@@ -17651,595 +18240,6 @@ define { ptr, ptr, ptr, i32 } @MapIterable_getter_iterable(ptr nocapture nofree 
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
 define void @MapIterable_setter_iterable(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
-  %3 = getelementptr i8, ptr %0, i64 16
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 2
-  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 3
-  store ptr %.fca.0.extract, ptr %3, align 8
-  %4 = getelementptr i8, ptr %0, i64 24
-  store ptr %.fca.1.extract, ptr %4, align 8
-  %5 = getelementptr i8, ptr %0, i64 32
-  store ptr %.fca.2.extract, ptr %5, align 8
-  %6 = getelementptr i8, ptr %0, i64 40
-  store i32 %.fca.3.extract, ptr %6, align 8
-  ret void
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none)
-define { i64, i64 } @_data_size_MappedCollection(ptr nocapture nofree readnone %0) #1 {
-  ret { i64, i64 } { i64 56, i64 8 }
-}
-
-define ptr @MappedCollection_B_init_collectionCollectionT_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
-  %14 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %15 = getelementptr i8, ptr %14, i64 232
-  %16 = load ptr, ptr %15, align 8
-  ret ptr %16
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define ptr @MappedCollection_field_MappedCollection_0(ptr nocapture nofree noundef nonnull readonly align 8 dereferenceable(8) %0) #6 {
-  %2 = load ptr, ptr %0, align 8
-  ret ptr %2
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define ptr @MappedCollection_field_MappedCollection_1(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 8
-  %3 = load ptr, ptr %2, align 8
-  ret ptr %3
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @MappedCollection_B_size_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 240
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @MappedCollection_B_is_empty_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 248
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @MappedCollection_B_iterator_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 256
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @MappedCollection_B_each_fFunctionT_to_Nothing({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 264
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-define ptr @MappedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = load i64, ptr @any_typ, align 4
-  %14 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 %13, i64 noundef ptrtoint (ptr @any_typ to i64), ptr %12)
-  %15 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %16 = getelementptr i8, ptr %15, i64 272
-  %17 = load ptr, ptr %16, align 8
-  ret ptr %17
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @MappedCollection_B_all_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 280
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @MappedCollection_B_any_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 288
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @MappedCollection_B_enumerate_({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 296
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @MappedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = icmp eq ptr %4, @function_typ
-  %6 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %7 = select i1 %5, i64 28, i64 29
-  %8 = getelementptr [123 x ptr], ptr %6, i64 0, i64 %7
-  %9 = getelementptr i8, ptr %8, i64 80
-  %10 = load ptr, ptr %9, align 8
-  ret ptr %10
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: readwrite, inaccessiblemem: none)
-define ptr @MappedCollection_B_filter_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #2 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %5 = getelementptr i8, ptr %4, i64 320
-  %6 = load ptr, ptr %5, align 8
-  ret ptr %6
-}
-
-define ptr @MappedCollection_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
-  br i1 %13, label %._crit_edge, label %14
-
-14:                                               ; preds = %2
-  %15 = load i64, ptr %5, align 4
-  %16 = load i64, ptr %6, align 4
-  %17 = load ptr, ptr %7, align 8
-  %18 = load ptr, ptr %8, align 8
-  %19 = load i64, ptr @Iterable, align 4
-  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
-  br i1 %20, label %21, label %._crit_edge
-
-21:                                               ; preds = %14
-  %22 = load i64, ptr %5, align 4
-  %23 = load i64, ptr %6, align 4
-  %24 = load ptr, ptr %7, align 8
-  %25 = load ptr, ptr %8, align 8
-  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
-  br label %._crit_edge
-
-._crit_edge:                                      ; preds = %21, %14, %2
-  %27 = phi i32 [ 31, %21 ], [ 31, %14 ], [ 32, %2 ]
-  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = zext nneg i32 %27 to i64
-  %30 = getelementptr [123 x ptr], ptr %28, i64 0, i64 %29
-  %31 = getelementptr i8, ptr %30, i64 80
-  %32 = load ptr, ptr %31, align 8
-  ret ptr %32
-}
-
-define ptr @MappedCollection_B_interleave_otherCollectionT_interleave_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
-  br i1 %13, label %._crit_edge, label %14
-
-14:                                               ; preds = %2
-  %15 = load i64, ptr %5, align 4
-  %16 = load i64, ptr %6, align 4
-  %17 = load ptr, ptr %7, align 8
-  %18 = load ptr, ptr %8, align 8
-  %19 = load i64, ptr @Iterable, align 4
-  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
-  br i1 %20, label %21, label %._crit_edge
-
-21:                                               ; preds = %14
-  %22 = load i64, ptr %5, align 4
-  %23 = load i64, ptr %6, align 4
-  %24 = load ptr, ptr %7, align 8
-  %25 = load ptr, ptr %8, align 8
-  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
-  br label %._crit_edge
-
-._crit_edge:                                      ; preds = %21, %14, %2
-  %27 = phi i32 [ 34, %21 ], [ 34, %14 ], [ 33, %2 ]
-  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = zext nneg i32 %27 to i64
-  %30 = getelementptr [123 x ptr], ptr %28, i64 0, i64 %29
-  %31 = getelementptr i8, ptr %30, i64 80
-  %32 = load ptr, ptr %31, align 8
-  ret ptr %32
-}
-
-define ptr @MappedCollection_B_zip_otherCollectionU_zip_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
-  br i1 %13, label %._crit_edge, label %14
-
-14:                                               ; preds = %2
-  %15 = load i64, ptr %5, align 4
-  %16 = load i64, ptr %6, align 4
-  %17 = load ptr, ptr %7, align 8
-  %18 = load ptr, ptr %8, align 8
-  %19 = load i64, ptr @Iterable, align 4
-  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
-  br i1 %20, label %21, label %._crit_edge
-
-21:                                               ; preds = %14
-  %22 = load i64, ptr %5, align 4
-  %23 = load i64, ptr %6, align 4
-  %24 = load ptr, ptr %7, align 8
-  %25 = load ptr, ptr %8, align 8
-  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
-  br label %._crit_edge
-
-._crit_edge:                                      ; preds = %21, %14, %2
-  %27 = phi i32 [ 36, %21 ], [ 36, %14 ], [ 35, %2 ]
-  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = zext nneg i32 %27 to i64
-  %30 = getelementptr [123 x ptr], ptr %28, i64 0, i64 %29
-  %31 = getelementptr i8, ptr %30, i64 80
-  %32 = load ptr, ptr %31, align 8
-  ret ptr %32
-}
-
-define ptr @MappedCollection_B_product_otherCollectionU_product_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
-  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
-  %4 = load ptr, ptr %1, align 8
-  %5 = getelementptr i8, ptr %4, i64 8
-  %6 = getelementptr i8, ptr %4, i64 16
-  %7 = getelementptr i8, ptr %4, i64 24
-  %8 = getelementptr i8, ptr %4, i64 32
-  %9 = load i64, ptr %5, align 4
-  %10 = load i64, ptr %6, align 4
-  %11 = load ptr, ptr %7, align 8
-  %12 = load ptr, ptr %8, align 8
-  %13 = call i1 @subtype_test_wrapper(ptr %11, i64 %10, i64 %9, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %12)
-  br i1 %13, label %._crit_edge, label %14
-
-14:                                               ; preds = %2
-  %15 = load i64, ptr %5, align 4
-  %16 = load i64, ptr %6, align 4
-  %17 = load ptr, ptr %7, align 8
-  %18 = load ptr, ptr %8, align 8
-  %19 = load i64, ptr @Iterable, align 4
-  %20 = call i1 @subtype_test_wrapper(ptr %17, i64 %16, i64 %15, i64 %19, i64 noundef ptrtoint (ptr @Iterable to i64), ptr %18)
-  br i1 %20, label %21, label %._crit_edge
-
-21:                                               ; preds = %14
-  %22 = load i64, ptr %5, align 4
-  %23 = load i64, ptr %6, align 4
-  %24 = load ptr, ptr %7, align 8
-  %25 = load ptr, ptr %8, align 8
-  %26 = call i1 @subtype_test_wrapper(ptr %24, i64 %23, i64 %22, i64 noundef 1375598993350293883, i64 noundef ptrtoint (ptr @Collection to i64), ptr %25)
-  br label %._crit_edge
-
-._crit_edge:                                      ; preds = %21, %14, %2
-  %27 = phi i32 [ 38, %21 ], [ 38, %14 ], [ 37, %2 ]
-  %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %29 = zext nneg i32 %27 to i64
-  %30 = getelementptr [123 x ptr], ptr %28, i64 0, i64 %29
-  %31 = getelementptr i8, ptr %30, i64 80
-  %32 = load ptr, ptr %31, align 8
-  ret ptr %32
-}
-
-define void @MappedCollection_init_collectionCollectionT_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2, { ptr, ptr, ptr, i32 } %3, { ptr } %4) #3 {
-  %.fca.0.extract18 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract19 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %6 = call i32 @get_offset(ptr %.fca.0.extract18, ptr noundef nonnull align 16 dereferenceable(1064) @MappedCollection)
-  %.fca.0.extract10 = extractvalue { ptr, ptr, ptr, i32 } %3, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %3, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %3, 2
-  %7 = call i32 @get_offset(ptr %.fca.0.extract10, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %8 = call i32 @get_offset(ptr %.fca.0.extract10, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %9 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract18)
-  %10 = sext i32 %6 to i64
-  %11 = getelementptr ptr, ptr %.fca.0.extract18, i64 %10
-  %12 = getelementptr i8, ptr %11, i64 16
-  %13 = load ptr, ptr %12, align 8
-  %14 = getelementptr i8, ptr %13, i64 8
-  %15 = load ptr, ptr %14, align 8
-  %16 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract10, 0
-  %17 = insertvalue { ptr, ptr, ptr, i32 } %16, ptr %.fca.1.extract, 1
-  %18 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %.fca.2.extract, 2
-  %19 = insertvalue { ptr, ptr, ptr, i32 } %18, i32 %8, 3
-  call void %15(ptr %.fca.1.extract19, { ptr, ptr, ptr, i32 } %19) #30
-  %20 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract18)
-  %21 = getelementptr i8, ptr %11, i64 24
-  %22 = load ptr, ptr %21, align 8
-  %23 = getelementptr i8, ptr %22, i64 8
-  %24 = load ptr, ptr %23, align 8
-  call void %24(ptr %.fca.1.extract19, { ptr } %4) #30
-  ret void
-}
-
-define i32 @MappedCollection_size_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
-  %4 = alloca [0 x ptr], align 8
-  %.fca.0.extract4 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract6 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %5 = call i32 @get_offset(ptr %.fca.0.extract4, ptr noundef nonnull align 16 dereferenceable(1064) @MappedCollection)
-  %6 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract4)
-  %7 = sext i32 %5 to i64
-  %8 = getelementptr ptr, ptr %.fca.0.extract4, i64 %7
-  %9 = getelementptr i8, ptr %8, i64 16
-  %10 = load ptr, ptr %9, align 8
-  %11 = load ptr, ptr %10, align 8
-  %12 = call { ptr, ptr, ptr, i32 } %11(ptr %.fca.1.extract6) #31
-  %13 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %12, 0
-  store ptr %.fca.0.extract, ptr %13, align 8
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %12, 1
-  %.fca.1.gep = getelementptr inbounds i8, ptr %13, i64 8
-  store ptr %.fca.1.extract, ptr %.fca.1.gep, align 8
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %12, 2
-  %.fca.2.gep = getelementptr inbounds i8, ptr %13, i64 16
-  store ptr %.fca.2.extract, ptr %.fca.2.gep, align 8
-  %.fca.3.extract = extractvalue { ptr, ptr, ptr, i32 } %12, 3
-  %.fca.3.gep = getelementptr inbounds i8, ptr %13, i64 24
-  store i32 %.fca.3.extract, ptr %.fca.3.gep, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %13, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %14 = load ptr, ptr %13, align 8
-  %15 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %14, 0
-  %16 = load ptr, ptr %.fca.1.gep, align 8
-  %17 = insertvalue { ptr, ptr, ptr, i32 } %15, ptr %16, 1
-  %18 = load ptr, ptr %.fca.2.gep, align 8
-  %19 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %18, 2
-  %20 = load i32, ptr %.fca.3.gep, align 8
-  %21 = insertvalue { ptr, ptr, ptr, i32 } %19, i32 %20, 3
-  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %23 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %14)
-  %24 = sext i32 %20 to i64
-  %25 = getelementptr ptr, ptr %14, i64 %24
-  %26 = getelementptr i8, ptr %25, i64 8
-  %27 = load ptr, ptr %26, align 8
-  %28 = call ptr @behavior_wrapper(ptr %27, { ptr, ptr, ptr, i32 } %21, ptr noundef nonnull align 8 %4)
-  %29 = call i32 %28({ ptr, ptr, ptr, i32 } %21, { ptr, ptr, ptr, i32 } %21, ptr nonnull %4)
-  ret i32 %29
-}
-
-define { ptr, ptr, ptr, i32 } @MappedCollection_iterator_({ ptr, ptr, ptr, i32 } %0, { ptr, ptr, ptr, i32 } %1, ptr nocapture nofree readnone %2) #3 {
-  %4 = alloca [0 x ptr], align 8
-  %.fca.0.extract79 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %.fca.1.extract81 = extractvalue { ptr, ptr, ptr, i32 } %0, 1
-  %5 = call i32 @get_offset(ptr %.fca.0.extract79, ptr noundef nonnull align 16 dereferenceable(1064) @MappedCollection)
-  %6 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract79)
-  %7 = sext i32 %5 to i64
-  %8 = getelementptr ptr, ptr %.fca.0.extract79, i64 %7
-  %9 = getelementptr i8, ptr %8, i64 16
-  %10 = load ptr, ptr %9, align 8
-  %11 = load ptr, ptr %10, align 8
-  %12 = call { ptr, ptr, ptr, i32 } %11(ptr %.fca.1.extract81) #31
-  %13 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract43 = extractvalue { ptr, ptr, ptr, i32 } %12, 0
-  store ptr %.fca.0.extract43, ptr %13, align 8
-  %.fca.1.extract45 = extractvalue { ptr, ptr, ptr, i32 } %12, 1
-  %.fca.1.gep46 = getelementptr inbounds i8, ptr %13, i64 8
-  store ptr %.fca.1.extract45, ptr %.fca.1.gep46, align 8
-  %.fca.2.extract47 = extractvalue { ptr, ptr, ptr, i32 } %12, 2
-  %.fca.2.gep48 = getelementptr inbounds i8, ptr %13, i64 16
-  store ptr %.fca.2.extract47, ptr %.fca.2.gep48, align 8
-  %.fca.3.extract49 = extractvalue { ptr, ptr, ptr, i32 } %12, 3
-  %.fca.3.gep50 = getelementptr inbounds i8, ptr %13, i64 24
-  store i32 %.fca.3.extract49, ptr %.fca.3.gep50, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %13, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %14 = load ptr, ptr %13, align 8
-  %15 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %14, 0
-  %16 = load ptr, ptr %.fca.1.gep46, align 8
-  %17 = insertvalue { ptr, ptr, ptr, i32 } %15, ptr %16, 1
-  %18 = load ptr, ptr %.fca.2.gep48, align 8
-  %19 = insertvalue { ptr, ptr, ptr, i32 } %17, ptr %18, 2
-  %20 = load i32, ptr %.fca.3.gep50, align 8
-  %21 = insertvalue { ptr, ptr, ptr, i32 } %19, i32 %20, 3
-  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %23 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %14)
-  %24 = sext i32 %20 to i64
-  %25 = getelementptr ptr, ptr %14, i64 %24
-  %26 = getelementptr i8, ptr %25, i64 24
-  %27 = load ptr, ptr %26, align 8
-  %28 = call ptr @behavior_wrapper(ptr %27, { ptr, ptr, ptr, i32 } %21, ptr noundef nonnull align 8 %4)
-  %29 = call { ptr, ptr, ptr, i32 } %28({ ptr, ptr, ptr, i32 } %21, { ptr, ptr, ptr, i32 } %21, ptr nonnull align 8 %4)
-  %.fca.0.extract31 = extractvalue { ptr, ptr, ptr, i32 } %29, 0
-  %30 = call i32 @get_offset(ptr %.fca.0.extract31, ptr noundef nonnull @Iterator)
-  %31 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract79)
-  %32 = getelementptr i8, ptr %8, i64 24
-  %33 = load ptr, ptr %32, align 8
-  %34 = load ptr, ptr %33, align 8
-  %35 = call { ptr } %34(ptr %.fca.1.extract81) #31
-  %36 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract79)
-  %37 = load ptr, ptr %8, align 8
-  %38 = call ptr @typegetter_wrapper(ptr %37, ptr %.fca.1.extract81)
-  %39 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract79)
-  %40 = getelementptr i8, ptr %8, i64 8
-  %41 = load ptr, ptr %40, align 8
-  %42 = call ptr @typegetter_wrapper(ptr %41, ptr %.fca.1.extract81)
-  %43 = alloca [3 x ptr], align 8
-  store ptr @MapIterator, ptr %43, align 8
-  %44 = getelementptr inbounds i8, ptr %43, i64 8
-  store ptr %38, ptr %44, align 8
-  %45 = getelementptr inbounds i8, ptr %43, i64 16
-  store ptr %42, ptr %45, align 8
-  %46 = load ptr, ptr getelementptr (i8, ptr @MapIterator, i64 48), align 8
-  %47 = call { i64, i64 } @size_wrapper(ptr %46, ptr noundef nonnull align 8 dereferenceable(24) %43)
-  %48 = extractvalue { i64, i64 } %47, 0
-  %49 = call ptr @bump_malloc(i64 %48)
-  store ptr %38, ptr %49, align 8
-  %50 = getelementptr i8, ptr %49, i64 8
-  store ptr %42, ptr %50, align 8
-  %51 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %49)
-  %52 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract79)
-  %53 = load ptr, ptr %9, align 8
-  %54 = load ptr, ptr %53, align 8
-  %55 = call { ptr, ptr, ptr, i32 } %54(ptr %.fca.1.extract81) #31
-  %56 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %.fca.0.extract16 = extractvalue { ptr, ptr, ptr, i32 } %55, 0
-  store ptr %.fca.0.extract16, ptr %56, align 8
-  %.fca.1.extract17 = extractvalue { ptr, ptr, ptr, i32 } %55, 1
-  %.fca.1.gep = getelementptr inbounds i8, ptr %56, i64 8
-  store ptr %.fca.1.extract17, ptr %.fca.1.gep, align 8
-  %.fca.2.extract18 = extractvalue { ptr, ptr, ptr, i32 } %55, 2
-  %.fca.2.gep = getelementptr inbounds i8, ptr %56, i64 16
-  store ptr %.fca.2.extract18, ptr %.fca.2.gep, align 8
-  %.fca.3.extract19 = extractvalue { ptr, ptr, ptr, i32 } %55, 3
-  %.fca.3.gep = getelementptr inbounds i8, ptr %56, i64 24
-  store i32 %.fca.3.extract19, ptr %.fca.3.gep, align 8
-  call void @assume_offset(ptr noundef nonnull align 8 dereferenceable(32) %56, ptr noundef nonnull align 16 dereferenceable(80) @Collection)
-  %57 = load ptr, ptr %56, align 8
-  %58 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %57, 0
-  %59 = load ptr, ptr %.fca.1.gep, align 8
-  %60 = insertvalue { ptr, ptr, ptr, i32 } %58, ptr %59, 1
-  %61 = load ptr, ptr %.fca.2.gep, align 8
-  %62 = insertvalue { ptr, ptr, ptr, i32 } %60, ptr %61, 2
-  %63 = load i32, ptr %.fca.3.gep, align 8
-  %64 = insertvalue { ptr, ptr, ptr, i32 } %62, i32 %63, 3
-  %65 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %4)
-  %66 = call ptr @llvm.invariant.start.p0(i64 noundef 472, ptr nocapture nofree noundef %57)
-  %67 = sext i32 %63 to i64
-  %68 = getelementptr ptr, ptr %57, i64 %67
-  %69 = getelementptr i8, ptr %68, i64 24
-  %70 = load ptr, ptr %69, align 8
-  %71 = call ptr @behavior_wrapper(ptr %70, { ptr, ptr, ptr, i32 } %64, ptr noundef nonnull align 8 %4)
-  %72 = call { ptr, ptr, ptr, i32 } %71({ ptr, ptr, ptr, i32 } %64, { ptr, ptr, ptr, i32 } %64, ptr nonnull %4)
-  %.fca.0.extract15 = extractvalue { ptr, ptr, ptr, i32 } %72, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %72, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %72, 2
-  %73 = call i32 @get_offset(ptr %.fca.0.extract15, ptr noundef nonnull @Iterator)
-  %74 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract79)
-  %75 = load ptr, ptr %32, align 8
-  %76 = load ptr, ptr %75, align 8
-  %77 = call { ptr } %76(ptr %.fca.1.extract81) #31
-  %78 = call i32 @get_offset(ptr %.fca.0.extract15, ptr noundef nonnull @Iterator)
-  %79 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract15, 0
-  %80 = insertvalue { ptr, ptr, ptr, i32 } %79, ptr %.fca.1.extract, 1
-  %81 = insertvalue { ptr, ptr, ptr, i32 } %80, ptr %.fca.2.extract, 2
-  %82 = insertvalue { ptr, ptr, ptr, i32 } %81, i32 %78, 3
-  %83 = insertvalue { ptr, ptr, ptr, i32 } { ptr @MapIterator, ptr undef, ptr undef, i32 undef }, ptr %49, 1
-  %84 = insertvalue { ptr, ptr, ptr, i32 } %83, ptr undef, 2
-  %85 = insertvalue { ptr, ptr, ptr, i32 } %84, i32 10, 3
-  %86 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract79)
-  %87 = load ptr, ptr %8, align 8
-  %88 = call ptr @typegetter_wrapper(ptr %87, ptr %.fca.1.extract81)
-  %89 = call ptr @bump_malloc(i64 noundef 24)
-  %90 = getelementptr i8, ptr %89, i64 8
-  store ptr %88, ptr %90, align 8
-  %91 = getelementptr i8, ptr %89, i64 16
-  store ptr null, ptr %91, align 8
-  %92 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef nonnull align 8 dereferenceable(24) %89)
-  store ptr @Iterator, ptr %89, align 8
-  %93 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract79)
-  %94 = load ptr, ptr %40, align 8
-  %95 = call ptr @typegetter_wrapper(ptr %94, ptr %.fca.1.extract81)
-  %96 = call ptr @llvm.invariant.start.p0(i64 noundef 984, ptr nocapture nofree noundef %.fca.0.extract79)
-  %97 = load ptr, ptr %8, align 8
-  %98 = call ptr @typegetter_wrapper(ptr %97, ptr %.fca.1.extract81)
-  %99 = call ptr @bump_malloc(i64 noundef 32)
-  %100 = getelementptr i8, ptr %99, i64 16
-  store ptr %98, ptr %100, align 8
-  %101 = getelementptr i8, ptr %99, i64 8
-  store ptr %95, ptr %101, align 8
-  %102 = getelementptr i8, ptr %99, i64 24
-  store ptr null, ptr %102, align 8
-  %103 = call ptr @llvm.invariant.start.p0(i64 noundef 24, ptr nocapture nofree noundef nonnull align 8 dereferenceable(32) %99)
-  store ptr @function_typ, ptr %99, align 8
-  %104 = alloca [2 x ptr], align 8
-  store ptr %89, ptr %104, align 8
-  %105 = getelementptr inbounds i8, ptr %104, i64 8
-  store ptr %99, ptr %105, align 8
-  %106 = call ptr @llvm.invariant.start.p0(i64 noundef 4, ptr nocapture nofree noundef nonnull align 8 dereferenceable(16) %104)
-  %107 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull @MapIterator)
-  %108 = load ptr, ptr getelementptr (i8, ptr @MapIterator, i64 112), align 8
-  %109 = alloca { ptr, ptr }, align 8
-  store ptr %.fca.0.extract15, ptr %109, align 8
-  %110 = getelementptr inbounds i8, ptr %109, i64 8
-  store ptr @function_typ, ptr %110, align 8
-  %111 = call ptr @behavior_wrapper(ptr %108, { ptr, ptr, ptr, i32 } %85, ptr noundef nonnull align 8 dereferenceable(16) %109)
-  call void %111({ ptr, ptr, ptr, i32 } %85, { ptr, ptr, ptr, i32 } %85, ptr nonnull %104, { ptr, ptr, ptr, i32 } %82, { ptr } %77)
-  %112 = call i32 @get_offset(ptr noundef nonnull @MapIterator, ptr noundef nonnull @Iterator)
-  %113 = insertvalue { ptr, ptr, ptr, i32 } %84, i32 %112, 3
-  ret { ptr, ptr, ptr, i32 } %113
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define { ptr } @MappedCollection_getter_f(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 48
-  %3 = load ptr, ptr %2, align 8
-  %4 = insertvalue { ptr } undef, ptr %3, 0
-  ret { ptr } %4
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define void @MappedCollection_setter_f(ptr nocapture nofree writeonly align 8 %0, { ptr } %1) #7 {
-  %3 = getelementptr i8, ptr %0, i64 48
-  %.fca.0.extract = extractvalue { ptr } %1, 0
-  store ptr %.fca.0.extract, ptr %3, align 8
-  ret void
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read)
-define { ptr, ptr, ptr, i32 } @MappedCollection_getter_collection(ptr nocapture nofree readonly align 8 %0) #6 {
-  %2 = getelementptr i8, ptr %0, i64 16
-  %3 = load ptr, ptr %2, align 8
-  %4 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %3, 0
-  %5 = getelementptr i8, ptr %0, i64 24
-  %6 = load ptr, ptr %5, align 8
-  %7 = insertvalue { ptr, ptr, ptr, i32 } %4, ptr %6, 1
-  %8 = getelementptr i8, ptr %0, i64 32
-  %9 = load ptr, ptr %8, align 8
-  %10 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %9, 2
-  %11 = getelementptr i8, ptr %0, i64 40
-  %12 = load i32, ptr %11, align 8
-  %13 = insertvalue { ptr, ptr, ptr, i32 } %10, i32 %12, 3
-  ret { ptr, ptr, ptr, i32 } %13
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write)
-define void @MappedCollection_setter_collection(ptr nocapture nofree writeonly align 8 %0, { ptr, ptr, ptr, i32 } %1) #7 {
   %3 = getelementptr i8, ptr %0, i64 16
   %.fca.0.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 0
   %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %1, 1
@@ -18379,7 +18379,7 @@ define ptr @EnumeratedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U({ ptr
   %4 = load ptr, ptr %1, align 8
   %5 = icmp eq ptr %4, @function_typ
   %6 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %7 = select i1 %5, i64 27, i64 28
+  %7 = select i1 %5, i64 28, i64 27
   %8 = getelementptr [122 x ptr], ptr %6, i64 0, i64 %7
   %9 = getelementptr i8, ptr %8, i64 80
   %10 = load ptr, ptr %9, align 8
@@ -18395,7 +18395,7 @@ define ptr @EnumeratedCollection_B_filter_fFunctionT_to_Bool({ ptr, ptr, ptr, i3
   ret ptr %6
 }
 
-define ptr @EnumeratedCollection_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @EnumeratedCollection_B_chain_otherCollectionT_chain_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -18427,7 +18427,7 @@ define ptr @EnumeratedCollection_B_chain_otherIterableT_chain_otherCollectionT({
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %21, %14, %2
-  %27 = phi i32 [ 30, %21 ], [ 30, %14 ], [ 31, %2 ]
+  %27 = phi i32 [ 31, %21 ], [ 31, %14 ], [ 30, %2 ]
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %29 = zext nneg i32 %27 to i64
   %30 = getelementptr [122 x ptr], ptr %28, i64 0, i64 %29
@@ -18436,7 +18436,7 @@ define ptr @EnumeratedCollection_B_chain_otherIterableT_chain_otherCollectionT({
   ret ptr %32
 }
 
-define ptr @EnumeratedCollection_B_interleave_otherCollectionT_interleave_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @EnumeratedCollection_B_interleave_otherIterableT_interleave_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -18468,7 +18468,7 @@ define ptr @EnumeratedCollection_B_interleave_otherCollectionT_interleave_otherI
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %21, %14, %2
-  %27 = phi i32 [ 33, %21 ], [ 33, %14 ], [ 32, %2 ]
+  %27 = phi i32 [ 32, %21 ], [ 32, %14 ], [ 33, %2 ]
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %29 = zext nneg i32 %27 to i64
   %30 = getelementptr [122 x ptr], ptr %28, i64 0, i64 %29
@@ -18477,7 +18477,7 @@ define ptr @EnumeratedCollection_B_interleave_otherCollectionT_interleave_otherI
   ret ptr %32
 }
 
-define ptr @EnumeratedCollection_B_zip_otherCollectionU_zip_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @EnumeratedCollection_B_zip_otherIterableU_zip_otherCollectionU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -18509,7 +18509,7 @@ define ptr @EnumeratedCollection_B_zip_otherCollectionU_zip_otherIterableU({ ptr
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %21, %14, %2
-  %27 = phi i32 [ 35, %21 ], [ 35, %14 ], [ 34, %2 ]
+  %27 = phi i32 [ 34, %21 ], [ 34, %14 ], [ 35, %2 ]
   %28 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %29 = zext nneg i32 %27 to i64
   %30 = getelementptr [122 x ptr], ptr %28, i64 0, i64 %29
@@ -20040,7 +20040,7 @@ define ptr @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U({ ptr, ptr, ptr, i3
   %4 = load ptr, ptr %1, align 8
   %5 = icmp eq ptr %4, @function_typ
   %6 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %7 = select i1 %5, i64 81, i64 80
+  %7 = select i1 %5, i64 80, i64 81
   %8 = getelementptr [314 x ptr], ptr %6, i64 0, i64 %7
   %9 = getelementptr i8, ptr %8, i64 80
   %10 = load ptr, ptr %9, align 8
@@ -20056,7 +20056,7 @@ define ptr @String_B_filter_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr no
   ret ptr %6
 }
 
-define ptr @String_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @String_B_chain_otherCollectionT_chain_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -20089,7 +20089,7 @@ define ptr @String_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, ptr
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %22, %15, %2
-  %28 = phi i32 [ 83, %22 ], [ 83, %15 ], [ 84, %2 ]
+  %28 = phi i32 [ 84, %22 ], [ 84, %15 ], [ 83, %2 ]
   %29 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %30 = zext nneg i32 %28 to i64
   %31 = getelementptr [314 x ptr], ptr %29, i64 0, i64 %30
@@ -20098,7 +20098,7 @@ define ptr @String_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, ptr
   ret ptr %33
 }
 
-define ptr @String_B_interleave_otherCollectionT_interleave_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @String_B_interleave_otherIterableT_interleave_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -20131,7 +20131,7 @@ define ptr @String_B_interleave_otherCollectionT_interleave_otherIterableT({ ptr
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %22, %15, %2
-  %28 = phi i32 [ 86, %22 ], [ 86, %15 ], [ 85, %2 ]
+  %28 = phi i32 [ 85, %22 ], [ 85, %15 ], [ 86, %2 ]
   %29 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %30 = zext nneg i32 %28 to i64
   %31 = getelementptr [314 x ptr], ptr %29, i64 0, i64 %30
@@ -20140,7 +20140,7 @@ define ptr @String_B_interleave_otherCollectionT_interleave_otherIterableT({ ptr
   ret ptr %33
 }
 
-define ptr @String_B_zip_otherCollectionU_zip_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @String_B_zip_otherIterableU_zip_otherCollectionU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -20173,7 +20173,7 @@ define ptr @String_B_zip_otherCollectionU_zip_otherIterableU({ ptr, ptr, ptr, i3
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %22, %15, %2
-  %28 = phi i32 [ 88, %22 ], [ 88, %15 ], [ 87, %2 ]
+  %28 = phi i32 [ 87, %22 ], [ 87, %15 ], [ 88, %2 ]
   %29 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %30 = zext nneg i32 %28 to i64
   %31 = getelementptr [314 x ptr], ptr %29, i64 0, i64 %30
@@ -23467,7 +23467,7 @@ define ptr @Range_B_map_fFunctionT_to_U_map_fFunctionT_to_U({ ptr, ptr, ptr, i32
   %4 = load ptr, ptr %1, align 8
   %5 = icmp eq ptr %4, @function_typ
   %6 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %7 = select i1 %5, i64 33, i64 32
+  %7 = select i1 %5, i64 32, i64 33
   %8 = getelementptr [127 x ptr], ptr %6, i64 0, i64 %7
   %9 = getelementptr i8, ptr %8, i64 80
   %10 = load ptr, ptr %9, align 8
@@ -23483,7 +23483,7 @@ define ptr @Range_B_filter_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr noc
   ret ptr %6
 }
 
-define ptr @Range_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @Range_B_chain_otherCollectionT_chain_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -23516,7 +23516,7 @@ define ptr @Range_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, ptr,
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %22, %15, %2
-  %28 = phi i32 [ 35, %22 ], [ 35, %15 ], [ 36, %2 ]
+  %28 = phi i32 [ 36, %22 ], [ 36, %15 ], [ 35, %2 ]
   %29 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %30 = zext nneg i32 %28 to i64
   %31 = getelementptr [127 x ptr], ptr %29, i64 0, i64 %30
@@ -23525,7 +23525,7 @@ define ptr @Range_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, ptr,
   ret ptr %33
 }
 
-define ptr @Range_B_interleave_otherCollectionT_interleave_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @Range_B_interleave_otherIterableT_interleave_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -23558,7 +23558,7 @@ define ptr @Range_B_interleave_otherCollectionT_interleave_otherIterableT({ ptr,
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %22, %15, %2
-  %28 = phi i32 [ 38, %22 ], [ 38, %15 ], [ 37, %2 ]
+  %28 = phi i32 [ 37, %22 ], [ 37, %15 ], [ 38, %2 ]
   %29 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %30 = zext nneg i32 %28 to i64
   %31 = getelementptr [127 x ptr], ptr %29, i64 0, i64 %30
@@ -23567,7 +23567,7 @@ define ptr @Range_B_interleave_otherCollectionT_interleave_otherIterableT({ ptr,
   ret ptr %33
 }
 
-define ptr @Range_B_zip_otherCollectionU_zip_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @Range_B_zip_otherIterableU_zip_otherCollectionU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -23600,7 +23600,7 @@ define ptr @Range_B_zip_otherCollectionU_zip_otherIterableU({ ptr, ptr, ptr, i32
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %22, %15, %2
-  %28 = phi i32 [ 40, %22 ], [ 40, %15 ], [ 39, %2 ]
+  %28 = phi i32 [ 39, %22 ], [ 39, %15 ], [ 40, %2 ]
   %29 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %30 = zext nneg i32 %28 to i64
   %31 = getelementptr [127 x ptr], ptr %29, i64 0, i64 %30
@@ -25543,7 +25543,7 @@ define ptr @MapValues_B_map_fFunctionT_to_U_map_fFunctionT_to_U({ ptr, ptr, ptr,
   %4 = load ptr, ptr %1, align 8
   %5 = icmp eq ptr %4, @function_typ
   %6 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %7 = select i1 %5, i64 27, i64 28
+  %7 = select i1 %5, i64 28, i64 27
   %8 = getelementptr [122 x ptr], ptr %6, i64 0, i64 %7
   %9 = getelementptr i8, ptr %8, i64 80
   %10 = load ptr, ptr %9, align 8
@@ -25559,7 +25559,7 @@ define ptr @MapValues_B_filter_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr
   ret ptr %6
 }
 
-define ptr @MapValues_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @MapValues_B_chain_otherCollectionT_chain_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -25592,7 +25592,7 @@ define ptr @MapValues_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, 
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %22, %15, %2
-  %28 = phi i32 [ 30, %22 ], [ 30, %15 ], [ 31, %2 ]
+  %28 = phi i32 [ 31, %22 ], [ 31, %15 ], [ 30, %2 ]
   %29 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %30 = zext nneg i32 %28 to i64
   %31 = getelementptr [122 x ptr], ptr %29, i64 0, i64 %30
@@ -25601,7 +25601,7 @@ define ptr @MapValues_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, 
   ret ptr %33
 }
 
-define ptr @MapValues_B_interleave_otherCollectionT_interleave_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @MapValues_B_interleave_otherIterableT_interleave_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -25634,7 +25634,7 @@ define ptr @MapValues_B_interleave_otherCollectionT_interleave_otherIterableT({ 
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %22, %15, %2
-  %28 = phi i32 [ 33, %22 ], [ 33, %15 ], [ 32, %2 ]
+  %28 = phi i32 [ 32, %22 ], [ 32, %15 ], [ 33, %2 ]
   %29 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %30 = zext nneg i32 %28 to i64
   %31 = getelementptr [122 x ptr], ptr %29, i64 0, i64 %30
@@ -25643,7 +25643,7 @@ define ptr @MapValues_B_interleave_otherCollectionT_interleave_otherIterableT({ 
   ret ptr %33
 }
 
-define ptr @MapValues_B_zip_otherCollectionU_zip_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @MapValues_B_zip_otherIterableU_zip_otherCollectionU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -25676,7 +25676,7 @@ define ptr @MapValues_B_zip_otherCollectionU_zip_otherIterableU({ ptr, ptr, ptr,
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %22, %15, %2
-  %28 = phi i32 [ 35, %22 ], [ 35, %15 ], [ 34, %2 ]
+  %28 = phi i32 [ 34, %22 ], [ 34, %15 ], [ 35, %2 ]
   %29 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %30 = zext nneg i32 %28 to i64
   %31 = getelementptr [122 x ptr], ptr %29, i64 0, i64 %30
@@ -26279,7 +26279,7 @@ define ptr @MapKeys_B_map_fFunctionT_to_U_map_fFunctionT_to_U({ ptr, ptr, ptr, i
   %4 = load ptr, ptr %1, align 8
   %5 = icmp eq ptr %4, @function_typ
   %6 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %7 = select i1 %5, i64 27, i64 28
+  %7 = select i1 %5, i64 28, i64 27
   %8 = getelementptr [122 x ptr], ptr %6, i64 0, i64 %7
   %9 = getelementptr i8, ptr %8, i64 80
   %10 = load ptr, ptr %9, align 8
@@ -26295,7 +26295,7 @@ define ptr @MapKeys_B_filter_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr n
   ret ptr %6
 }
 
-define ptr @MapKeys_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @MapKeys_B_chain_otherCollectionT_chain_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -26328,7 +26328,7 @@ define ptr @MapKeys_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, pt
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %22, %15, %2
-  %28 = phi i32 [ 30, %22 ], [ 30, %15 ], [ 31, %2 ]
+  %28 = phi i32 [ 31, %22 ], [ 31, %15 ], [ 30, %2 ]
   %29 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %30 = zext nneg i32 %28 to i64
   %31 = getelementptr [122 x ptr], ptr %29, i64 0, i64 %30
@@ -26337,7 +26337,7 @@ define ptr @MapKeys_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, pt
   ret ptr %33
 }
 
-define ptr @MapKeys_B_interleave_otherCollectionT_interleave_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @MapKeys_B_interleave_otherIterableT_interleave_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -26370,7 +26370,7 @@ define ptr @MapKeys_B_interleave_otherCollectionT_interleave_otherIterableT({ pt
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %22, %15, %2
-  %28 = phi i32 [ 33, %22 ], [ 33, %15 ], [ 32, %2 ]
+  %28 = phi i32 [ 32, %22 ], [ 32, %15 ], [ 33, %2 ]
   %29 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %30 = zext nneg i32 %28 to i64
   %31 = getelementptr [122 x ptr], ptr %29, i64 0, i64 %30
@@ -26379,7 +26379,7 @@ define ptr @MapKeys_B_interleave_otherCollectionT_interleave_otherIterableT({ pt
   ret ptr %33
 }
 
-define ptr @MapKeys_B_zip_otherCollectionU_zip_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @MapKeys_B_zip_otherIterableU_zip_otherCollectionU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -26412,7 +26412,7 @@ define ptr @MapKeys_B_zip_otherCollectionU_zip_otherIterableU({ ptr, ptr, ptr, i
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %22, %15, %2
-  %28 = phi i32 [ 35, %22 ], [ 35, %15 ], [ 34, %2 ]
+  %28 = phi i32 [ 34, %22 ], [ 34, %15 ], [ 35, %2 ]
   %29 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %30 = zext nneg i32 %28 to i64
   %31 = getelementptr [122 x ptr], ptr %29, i64 0, i64 %30
@@ -27060,31 +27060,31 @@ define { i64, i64 } @_data_size_IO(ptr nocapture nofree readnone %0) #1 {
   ret { i64, i64 } { i64 0, i64 1 }
 }
 
-define ptr @IO_B__Self_print_xNil__Self_print_xi32__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xi8__Self_print_xBool__Self_print_xi64__Self_print_xString__Self_print_xf64(ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %0) #3 {
+define ptr @IO_B__Self_print_xNil__Self_print_xi64__Self_print_xBool__Self_print_xi8__Self_print_xi32__Self_print_xCharacter__Self_print_xString__Self_print_xRepresentable__Self_print_xf64(ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %0) #3 {
   %2 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %0) #29
   %3 = load ptr, ptr %0, align 8
-  %4 = icmp eq ptr %3, @nil_typ
-  %5 = icmp eq ptr %3, null
-  %6 = or i1 %4, %5
+  %4 = icmp eq ptr %3, @i32_typ
+  br i1 %4, label %._crit_edge, label %5
+
+5:                                                ; preds = %1
+  %6 = icmp eq ptr %3, @bool_typ
   br i1 %6, label %._crit_edge, label %7
 
-7:                                                ; preds = %1
-  %8 = icmp eq ptr %3, @bool_typ
+7:                                                ; preds = %5
+  %8 = icmp eq ptr %3, @i8_typ
   br i1 %8, label %._crit_edge, label %9
 
 9:                                                ; preds = %7
-  %10 = icmp eq ptr %3, @i8_typ
+  %10 = icmp eq ptr %3, @i64_typ
   br i1 %10, label %._crit_edge, label %11
 
 11:                                               ; preds = %9
-  %12 = icmp eq ptr %3, @i32_typ
-  br i1 %12, label %._crit_edge, label %13
-
-13:                                               ; preds = %11
-  %14 = icmp eq ptr %3, @i64_typ
+  %12 = icmp eq ptr %3, @nil_typ
+  %13 = icmp eq ptr %3, null
+  %14 = or i1 %12, %13
   br i1 %14, label %._crit_edge, label %15
 
-15:                                               ; preds = %13
+15:                                               ; preds = %11
   %16 = icmp eq ptr %3, @f64_typ
   br i1 %16, label %._crit_edge, label %17
 
@@ -27124,19 +27124,19 @@ define ptr @IO_B__Self_print_xNil__Self_print_xi32__Self_print_xRepresentable__S
   %43 = load i64, ptr %19, align 4
   %44 = load ptr, ptr %20, align 8
   %45 = load ptr, ptr %21, align 8
-  %46 = load i64, ptr @Character, align 4
-  %47 = call i1 @subtype_test_wrapper(ptr %44, i64 %43, i64 %42, i64 %46, i64 noundef ptrtoint (ptr @Character to i64), ptr %45)
-  br i1 %47, label %.critedge14, label %48
+  %46 = call i1 @subtype_test_wrapper(ptr %44, i64 %43, i64 %42, i64 %26, i64 noundef ptrtoint (ptr @String to i64), ptr %45)
+  br i1 %46, label %.critedge14, label %47
 
-48:                                               ; preds = %41
-  %49 = load i64, ptr %18, align 4
-  %50 = load i64, ptr %19, align 4
-  %51 = load ptr, ptr %20, align 8
-  %52 = load ptr, ptr %21, align 8
-  %53 = call i1 @subtype_test_wrapper(ptr %51, i64 %50, i64 %49, i64 %26, i64 noundef ptrtoint (ptr @String to i64), ptr %52)
+47:                                               ; preds = %41
+  %48 = load i64, ptr %18, align 4
+  %49 = load i64, ptr %19, align 4
+  %50 = load ptr, ptr %20, align 8
+  %51 = load ptr, ptr %21, align 8
+  %52 = load i64, ptr @Character, align 4
+  %53 = call i1 @subtype_test_wrapper(ptr %50, i64 %49, i64 %48, i64 %52, i64 noundef ptrtoint (ptr @Character to i64), ptr %51)
   br i1 %53, label %.critedge14, label %._crit_edge
 
-.critedge14:                                      ; preds = %48, %41, %.critedge
+.critedge14:                                      ; preds = %47, %41, %.critedge
   %54 = load i64, ptr %18, align 4
   %55 = load i64, ptr %19, align 4
   %56 = load ptr, ptr %20, align 8
@@ -27153,8 +27153,8 @@ define ptr @IO_B__Self_print_xNil__Self_print_xi32__Self_print_xRepresentable__S
   %65 = call i1 @subtype_test_wrapper(ptr %63, i64 %62, i64 %61, i64 %26, i64 noundef ptrtoint (ptr @String to i64), ptr %64)
   br label %._crit_edge
 
-._crit_edge:                                      ; preds = %60, %.critedge14, %48, %28, %15, %13, %11, %9, %7, %1
-  %.reg2mem25.0 = phi i32 [ 1, %1 ], [ 6, %7 ], [ 5, %9 ], [ 2, %11 ], [ 7, %13 ], [ 9, %15 ], [ 4, %.critedge14 ], [ 4, %60 ], [ 3, %48 ], [ 8, %28 ]
+._crit_edge:                                      ; preds = %60, %.critedge14, %47, %28, %15, %11, %9, %7, %5, %1
+  %.reg2mem25.0 = phi i32 [ 5, %1 ], [ 3, %5 ], [ 4, %7 ], [ 2, %9 ], [ 1, %11 ], [ 9, %15 ], [ 6, %.critedge14 ], [ 6, %60 ], [ 8, %47 ], [ 7, %28 ]
   %66 = zext nneg i32 %.reg2mem25.0 to i64
   %67 = getelementptr [10 x ptr], ptr @IO, i64 0, i64 %66
   %68 = getelementptr i8, ptr %67, i64 80
@@ -27208,104 +27208,10 @@ define void @IO__Self_print_xNil(ptr nocapture nofree readnone %0, { ptr, i160 }
 }
 
 ; Function Attrs: nofree nounwind
-define void @IO__Self_print_xi32(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #28 {
+define void @IO__Self_print_xi64(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #28 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
-  %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
-  %3 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %.sroa.1.8.extract.trunc) #27
-  ret void
-}
-
-define void @IO__Self_print_xRepresentable(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #3 {
-  %3 = alloca [0 x ptr], align 8
-  %.fca.0.extract11 = extractvalue { ptr, i160 } %1, 0
-  %.fca.1.extract12 = extractvalue { ptr, i160 } %1, 1
-  %.sroa.214.8.extract.trunc = trunc i160 %.fca.1.extract12 to i64
-  %.sroa.415.8.extract.shift = lshr i160 %.fca.1.extract12, 64
-  %.sroa.415.8.extract.trunc = trunc i160 %.sroa.415.8.extract.shift to i64
-  %4 = inttoptr i64 %.sroa.214.8.extract.trunc to ptr
-  %5 = inttoptr i64 %.sroa.415.8.extract.trunc to ptr
-  %6 = call i32 @get_offset(ptr %.fca.0.extract11, ptr noundef nonnull @Representable)
-  %7 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract11, 0
-  %8 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %4, 1
-  %9 = insertvalue { ptr, ptr, ptr, i32 } %8, ptr %5, 2
-  %10 = insertvalue { ptr, ptr, ptr, i32 } %9, i32 %6, 3
-  %11 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %3)
-  %12 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef %.fca.0.extract11)
-  %13 = sext i32 %6 to i64
-  %14 = getelementptr ptr, ptr %.fca.0.extract11, i64 %13
-  %15 = load ptr, ptr %14, align 8
-  %16 = call ptr @behavior_wrapper(ptr %15, { ptr, ptr, ptr, i32 } %10, ptr noundef nonnull align 8 %3)
-  %17 = call { ptr, ptr, ptr, i32 } %16({ ptr, ptr, ptr, i32 } %10, { ptr, ptr, ptr, i32 } %10, ptr nonnull align 8 %3)
-  %.fca.0.extract5 = extractvalue { ptr, ptr, ptr, i32 } %17, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %17, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %17, 2
-  %18 = call i32 @get_offset(ptr %.fca.0.extract5, ptr noundef nonnull @String)
-  %19 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract5, 0
-  %20 = insertvalue { ptr, ptr, ptr, i32 } %19, ptr %.fca.1.extract, 1
-  %21 = insertvalue { ptr, ptr, ptr, i32 } %20, ptr %.fca.2.extract, 2
-  %22 = insertvalue { ptr, ptr, ptr, i32 } %21, i32 %18, 3
-  %23 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %3)
-  %24 = call ptr @llvm.invariant.start.p0(i64 noundef 2512, ptr nocapture nofree noundef %.fca.0.extract5)
-  %25 = sext i32 %18 to i64
-  %26 = getelementptr ptr, ptr %.fca.0.extract5, i64 %25
-  %27 = getelementptr i8, ptr %26, i64 104
-  %28 = load ptr, ptr %27, align 8
-  %29 = call ptr @behavior_wrapper(ptr %28, { ptr, ptr, ptr, i32 } %22, ptr noundef nonnull align 8 %3)
-  %30 = call { ptr } %29({ ptr, ptr, ptr, i32 } %22, { ptr, ptr, ptr, i32 } %22, ptr nonnull %3)
-  %.fca.0.extract = extractvalue { ptr } %30, 0
-  %puts = call i32 @puts(ptr nocapture nofree noundef nonnull readonly dereferenceable(1) %.fca.0.extract) #40
-  ret void
-}
-
-define void @IO__Self_print_xCharacter(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #3 {
-  %3 = alloca [0 x ptr], align 8
-  %.fca.0.extract11 = extractvalue { ptr, i160 } %1, 0
-  %.fca.1.extract12 = extractvalue { ptr, i160 } %1, 1
-  %.sroa.214.8.extract.trunc = trunc i160 %.fca.1.extract12 to i64
-  %.sroa.415.8.extract.shift = lshr i160 %.fca.1.extract12, 64
-  %.sroa.415.8.extract.trunc = trunc i160 %.sroa.415.8.extract.shift to i64
-  %4 = inttoptr i64 %.sroa.214.8.extract.trunc to ptr
-  %5 = inttoptr i64 %.sroa.415.8.extract.trunc to ptr
-  %6 = call i32 @get_offset(ptr %.fca.0.extract11, ptr noundef nonnull @Character)
-  %7 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract11, 0
-  %8 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %4, 1
-  %9 = insertvalue { ptr, ptr, ptr, i32 } %8, ptr %5, 2
-  %10 = insertvalue { ptr, ptr, ptr, i32 } %9, i32 %6, 3
-  %11 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %3)
-  %12 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract11)
-  %13 = sext i32 %6 to i64
-  %14 = getelementptr ptr, ptr %.fca.0.extract11, i64 %13
-  %15 = getelementptr i8, ptr %14, i64 24
-  %16 = load ptr, ptr %15, align 8
-  %17 = call ptr @behavior_wrapper(ptr %16, { ptr, ptr, ptr, i32 } %10, ptr noundef nonnull align 8 %3)
-  %18 = call { ptr, ptr, ptr, i32 } %17({ ptr, ptr, ptr, i32 } %10, { ptr, ptr, ptr, i32 } %10, ptr nonnull align 8 %3)
-  %.fca.0.extract5 = extractvalue { ptr, ptr, ptr, i32 } %18, 0
-  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %18, 1
-  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %18, 2
-  %19 = call i32 @get_offset(ptr %.fca.0.extract5, ptr noundef nonnull @String)
-  %20 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract5, 0
-  %21 = insertvalue { ptr, ptr, ptr, i32 } %20, ptr %.fca.1.extract, 1
-  %22 = insertvalue { ptr, ptr, ptr, i32 } %21, ptr %.fca.2.extract, 2
-  %23 = insertvalue { ptr, ptr, ptr, i32 } %22, i32 %19, 3
-  %24 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %3)
-  %25 = call ptr @llvm.invariant.start.p0(i64 noundef 2512, ptr nocapture nofree noundef %.fca.0.extract5)
-  %26 = sext i32 %19 to i64
-  %27 = getelementptr ptr, ptr %.fca.0.extract5, i64 %26
-  %28 = getelementptr i8, ptr %27, i64 104
-  %29 = load ptr, ptr %28, align 8
-  %30 = call ptr @behavior_wrapper(ptr %29, { ptr, ptr, ptr, i32 } %23, ptr noundef nonnull align 8 %3)
-  %31 = call { ptr } %30({ ptr, ptr, ptr, i32 } %23, { ptr, ptr, ptr, i32 } %23, ptr nonnull %3)
-  %.fca.0.extract = extractvalue { ptr } %31, 0
-  %puts = call i32 @puts(ptr nocapture nofree noundef nonnull readonly dereferenceable(1) %.fca.0.extract) #40
-  ret void
-}
-
-; Function Attrs: nofree nounwind
-define void @IO__Self_print_xi8(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #28 {
-  %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
-  %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i8
-  %3 = sext i8 %.sroa.1.8.extract.trunc to i32
-  %4 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %3) #27
+  %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i64
+  %3 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(6) @i64_string, i64 %.sroa.1.8.extract.trunc) #27
   ret void
 }
 
@@ -27408,10 +27314,62 @@ define void @IO__Self_print_xBool(ptr nocapture nofree readnone %0, { ptr, i160 
 }
 
 ; Function Attrs: nofree nounwind
-define void @IO__Self_print_xi64(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #28 {
+define void @IO__Self_print_xi8(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #28 {
   %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
-  %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i64
-  %3 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(6) @i64_string, i64 %.sroa.1.8.extract.trunc) #27
+  %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i8
+  %3 = sext i8 %.sroa.1.8.extract.trunc to i32
+  %4 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %3) #27
+  ret void
+}
+
+; Function Attrs: nofree nounwind
+define void @IO__Self_print_xi32(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #28 {
+  %.fca.1.extract = extractvalue { ptr, i160 } %1, 1
+  %.sroa.1.8.extract.trunc = trunc i160 %.fca.1.extract to i32
+  %3 = call i32 (ptr, ...) @printf(ptr nocapture nofree noundef nonnull readonly dereferenceable(4) @i32_string, i32 %.sroa.1.8.extract.trunc) #27
+  ret void
+}
+
+define void @IO__Self_print_xCharacter(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #3 {
+  %3 = alloca [0 x ptr], align 8
+  %.fca.0.extract11 = extractvalue { ptr, i160 } %1, 0
+  %.fca.1.extract12 = extractvalue { ptr, i160 } %1, 1
+  %.sroa.214.8.extract.trunc = trunc i160 %.fca.1.extract12 to i64
+  %.sroa.415.8.extract.shift = lshr i160 %.fca.1.extract12, 64
+  %.sroa.415.8.extract.trunc = trunc i160 %.sroa.415.8.extract.shift to i64
+  %4 = inttoptr i64 %.sroa.214.8.extract.trunc to ptr
+  %5 = inttoptr i64 %.sroa.415.8.extract.trunc to ptr
+  %6 = call i32 @get_offset(ptr %.fca.0.extract11, ptr noundef nonnull @Character)
+  %7 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract11, 0
+  %8 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %4, 1
+  %9 = insertvalue { ptr, ptr, ptr, i32 } %8, ptr %5, 2
+  %10 = insertvalue { ptr, ptr, ptr, i32 } %9, i32 %6, 3
+  %11 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %3)
+  %12 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef %.fca.0.extract11)
+  %13 = sext i32 %6 to i64
+  %14 = getelementptr ptr, ptr %.fca.0.extract11, i64 %13
+  %15 = getelementptr i8, ptr %14, i64 24
+  %16 = load ptr, ptr %15, align 8
+  %17 = call ptr @behavior_wrapper(ptr %16, { ptr, ptr, ptr, i32 } %10, ptr noundef nonnull align 8 %3)
+  %18 = call { ptr, ptr, ptr, i32 } %17({ ptr, ptr, ptr, i32 } %10, { ptr, ptr, ptr, i32 } %10, ptr nonnull align 8 %3)
+  %.fca.0.extract5 = extractvalue { ptr, ptr, ptr, i32 } %18, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %18, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %18, 2
+  %19 = call i32 @get_offset(ptr %.fca.0.extract5, ptr noundef nonnull @String)
+  %20 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract5, 0
+  %21 = insertvalue { ptr, ptr, ptr, i32 } %20, ptr %.fca.1.extract, 1
+  %22 = insertvalue { ptr, ptr, ptr, i32 } %21, ptr %.fca.2.extract, 2
+  %23 = insertvalue { ptr, ptr, ptr, i32 } %22, i32 %19, 3
+  %24 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %3)
+  %25 = call ptr @llvm.invariant.start.p0(i64 noundef 2512, ptr nocapture nofree noundef %.fca.0.extract5)
+  %26 = sext i32 %19 to i64
+  %27 = getelementptr ptr, ptr %.fca.0.extract5, i64 %26
+  %28 = getelementptr i8, ptr %27, i64 104
+  %29 = load ptr, ptr %28, align 8
+  %30 = call ptr @behavior_wrapper(ptr %29, { ptr, ptr, ptr, i32 } %23, ptr noundef nonnull align 8 %3)
+  %31 = call { ptr } %30({ ptr, ptr, ptr, i32 } %23, { ptr, ptr, ptr, i32 } %23, ptr nonnull %3)
+  %.fca.0.extract = extractvalue { ptr } %31, 0
+  %puts = call i32 @puts(ptr nocapture nofree noundef nonnull readonly dereferenceable(1) %.fca.0.extract) #40
   ret void
 }
 
@@ -27438,6 +27396,48 @@ define void @IO__Self_print_xString(ptr nocapture nofree readnone %0, { ptr, i16
   %17 = call ptr @behavior_wrapper(ptr %16, { ptr, ptr, ptr, i32 } %10, ptr noundef nonnull align 8 %3)
   %18 = call { ptr } %17({ ptr, ptr, ptr, i32 } %10, { ptr, ptr, ptr, i32 } %10, ptr nonnull %3)
   %.fca.0.extract = extractvalue { ptr } %18, 0
+  %puts = call i32 @puts(ptr nocapture nofree noundef nonnull readonly dereferenceable(1) %.fca.0.extract) #40
+  ret void
+}
+
+define void @IO__Self_print_xRepresentable(ptr nocapture nofree readnone %0, { ptr, i160 } %1) #3 {
+  %3 = alloca [0 x ptr], align 8
+  %.fca.0.extract11 = extractvalue { ptr, i160 } %1, 0
+  %.fca.1.extract12 = extractvalue { ptr, i160 } %1, 1
+  %.sroa.214.8.extract.trunc = trunc i160 %.fca.1.extract12 to i64
+  %.sroa.415.8.extract.shift = lshr i160 %.fca.1.extract12, 64
+  %.sroa.415.8.extract.trunc = trunc i160 %.sroa.415.8.extract.shift to i64
+  %4 = inttoptr i64 %.sroa.214.8.extract.trunc to ptr
+  %5 = inttoptr i64 %.sroa.415.8.extract.trunc to ptr
+  %6 = call i32 @get_offset(ptr %.fca.0.extract11, ptr noundef nonnull @Representable)
+  %7 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract11, 0
+  %8 = insertvalue { ptr, ptr, ptr, i32 } %7, ptr %4, 1
+  %9 = insertvalue { ptr, ptr, ptr, i32 } %8, ptr %5, 2
+  %10 = insertvalue { ptr, ptr, ptr, i32 } %9, i32 %6, 3
+  %11 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %3)
+  %12 = call ptr @llvm.invariant.start.p0(i64 noundef 16, ptr nocapture nofree noundef %.fca.0.extract11)
+  %13 = sext i32 %6 to i64
+  %14 = getelementptr ptr, ptr %.fca.0.extract11, i64 %13
+  %15 = load ptr, ptr %14, align 8
+  %16 = call ptr @behavior_wrapper(ptr %15, { ptr, ptr, ptr, i32 } %10, ptr noundef nonnull align 8 %3)
+  %17 = call { ptr, ptr, ptr, i32 } %16({ ptr, ptr, ptr, i32 } %10, { ptr, ptr, ptr, i32 } %10, ptr nonnull align 8 %3)
+  %.fca.0.extract5 = extractvalue { ptr, ptr, ptr, i32 } %17, 0
+  %.fca.1.extract = extractvalue { ptr, ptr, ptr, i32 } %17, 1
+  %.fca.2.extract = extractvalue { ptr, ptr, ptr, i32 } %17, 2
+  %18 = call i32 @get_offset(ptr %.fca.0.extract5, ptr noundef nonnull @String)
+  %19 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.fca.0.extract5, 0
+  %20 = insertvalue { ptr, ptr, ptr, i32 } %19, ptr %.fca.1.extract, 1
+  %21 = insertvalue { ptr, ptr, ptr, i32 } %20, ptr %.fca.2.extract, 2
+  %22 = insertvalue { ptr, ptr, ptr, i32 } %21, i32 %18, 3
+  %23 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %3)
+  %24 = call ptr @llvm.invariant.start.p0(i64 noundef 2512, ptr nocapture nofree noundef %.fca.0.extract5)
+  %25 = sext i32 %18 to i64
+  %26 = getelementptr ptr, ptr %.fca.0.extract5, i64 %25
+  %27 = getelementptr i8, ptr %26, i64 104
+  %28 = load ptr, ptr %27, align 8
+  %29 = call ptr @behavior_wrapper(ptr %28, { ptr, ptr, ptr, i32 } %22, ptr noundef nonnull align 8 %3)
+  %30 = call { ptr } %29({ ptr, ptr, ptr, i32 } %22, { ptr, ptr, ptr, i32 } %22, ptr nonnull %3)
+  %.fca.0.extract = extractvalue { ptr } %30, 0
   %puts = call i32 @puts(ptr nocapture nofree noundef nonnull readonly dereferenceable(1) %.fca.0.extract) #40
   ret void
 }
@@ -27911,7 +27911,7 @@ define ptr @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U({ ptr, ptr, ptr, i32
   %4 = load ptr, ptr %1, align 8
   %5 = icmp eq ptr %4, @function_typ
   %6 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
-  %7 = select i1 %5, i64 71, i64 72
+  %7 = select i1 %5, i64 72, i64 71
   %8 = getelementptr [529 x ptr], ptr %6, i64 0, i64 %7
   %9 = getelementptr i8, ptr %8, i64 80
   %10 = load ptr, ptr %9, align 8
@@ -27927,7 +27927,7 @@ define ptr @Array_B_filter_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, ptr noc
   ret ptr %6
 }
 
-define ptr @Array_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @Array_B_chain_otherCollectionT_chain_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -27960,7 +27960,7 @@ define ptr @Array_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, ptr,
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %22, %15, %2
-  %28 = phi i32 [ 74, %22 ], [ 74, %15 ], [ 75, %2 ]
+  %28 = phi i32 [ 75, %22 ], [ 75, %15 ], [ 74, %2 ]
   %29 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %30 = zext nneg i32 %28 to i64
   %31 = getelementptr [529 x ptr], ptr %29, i64 0, i64 %30
@@ -27969,7 +27969,7 @@ define ptr @Array_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, ptr,
   ret ptr %33
 }
 
-define ptr @Array_B_interleave_otherCollectionT_interleave_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @Array_B_interleave_otherIterableT_interleave_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -28002,7 +28002,7 @@ define ptr @Array_B_interleave_otherCollectionT_interleave_otherIterableT({ ptr,
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %22, %15, %2
-  %28 = phi i32 [ 77, %22 ], [ 77, %15 ], [ 76, %2 ]
+  %28 = phi i32 [ 76, %22 ], [ 76, %15 ], [ 77, %2 ]
   %29 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %30 = zext nneg i32 %28 to i64
   %31 = getelementptr [529 x ptr], ptr %29, i64 0, i64 %30
@@ -28011,7 +28011,7 @@ define ptr @Array_B_interleave_otherCollectionT_interleave_otherIterableT({ ptr,
   ret ptr %33
 }
 
-define ptr @Array_B_zip_otherCollectionU_zip_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
+define ptr @Array_B_zip_otherIterableU_zip_otherCollectionU({ ptr, ptr, ptr, i32 } %0, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #3 {
   %3 = call ptr @llvm.invariant.start.p0(i64 noundef 8, ptr nocapture nofree noundef nonnull align 8 dereferenceable(8) %1) #29
   %4 = load ptr, ptr %1, align 8
   %5 = getelementptr i8, ptr %4, i64 8
@@ -28044,7 +28044,7 @@ define ptr @Array_B_zip_otherCollectionU_zip_otherIterableU({ ptr, ptr, ptr, i32
   br label %._crit_edge
 
 ._crit_edge:                                      ; preds = %22, %15, %2
-  %28 = phi i32 [ 79, %22 ], [ 79, %15 ], [ 78, %2 ]
+  %28 = phi i32 [ 78, %22 ], [ 78, %15 ], [ 79, %2 ]
   %29 = extractvalue { ptr, ptr, ptr, i32 } %0, 0
   %30 = zext nneg i32 %28 to i64
   %31 = getelementptr [529 x ptr], ptr %29, i64 0, i64 %30

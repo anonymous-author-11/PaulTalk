@@ -460,13 +460,38 @@ DONE:
 TODO: 
 
 - Points-to analysis
-	- How should we be treating builtin value types?
-		- Just exclude them from the graphs?
-		- Yeah just ignore them in apply_constraints
+	- Exclude trivial value types from the graphs in apply_constraints [check!]
 	- Add conservative aliasing by default
-	- Reform tuple and buffer points-to-facts
+	- Reform tuple and buffer points-to-facts [check!]
+		- Tuple: add pseudo-fields [check!]
+		- Buffer [check!]
+			- holds rather than == [check!]
+			- No more .elems_reg [check!]
 	- Problemo regarding Iterable method return types
 		- Can be solved with boilerplate
+
+- Add apply_constraints to fn literal call
+
+- Figure out a way to integrate ~> no_alias and ~> all_alias
+	- If all_alias, skip graph compatibility check
+
+- Big problemo: conservative aliasing in the presence of downcasts
+	- You could track which identifiers had been poisoned
+	- And propagate upon assignment
+	- Need to conservatively alias the downcast when poisoned
+	- Is this flow-sensitive?
+
+- When attempting to deallocate a region
+	- Increment the protection counts of all other known (live?) regions
+	- Attempt to remove the region
+	- Decrement the protection counts
+	- Now it doesn't matter if target region was aliased with any others
+	- Memory leak is a fine result for a non-annotated program
+
+- Simplest solution
+	- Upon any call to a non-annotated fn, mark the calling context as single-region
+	- Proceed as if there had been no aliasing
+	- At end of context, merge all the nodes into one
 
 - I shouldn't have to have empty bodies for methods
 	- But I would like one required if there are constraints

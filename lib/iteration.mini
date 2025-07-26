@@ -40,6 +40,7 @@ class Iterable[T] extends Container {
         for x in self { if not f.call(x) { return false; } }
         return true;
     }
+    
     def any(f : (T) -> Bool) -> Bool {
         for x in self { if f.call(x) { return true; } }
         return false;
@@ -105,10 +106,7 @@ class Enumerator[T] extends Iterator[Pair[i32, T]] {
     @iterator : Iterator[T]
     @index : i32
 
-    regions {
-        @elems_reg == @iterator.elems_reg,
-        @elems_reg holds @index
-    }
+    regions { @elems_reg == @iterator.elems_reg }
 
     def init(@iterator : Iterator[T]) {
         @index = 0;

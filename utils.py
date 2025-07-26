@@ -87,6 +87,12 @@ def is_builtin(typ):
         if isinstance(typ, t): return True
     return False
 
+def is_value_type(typ):
+    value_types = { Integer, Float, Bool, Nil }
+    for t in value_types:
+        if isinstance(typ, t): return True
+    return False
+
 builtin_types = {
     "bool_typ":Bool(), "i8_typ":Integer(8), "i32_typ":Integer(32), "i64_typ":Integer(64),
     "i128_typ":Integer(128), "f64_typ":Float(), "nil_typ":Nil(), "any_typ":Any(), "nothing_typ":Nothing(),

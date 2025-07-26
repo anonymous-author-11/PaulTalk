@@ -405,21 +405,27 @@ class TypeEnvironment:
         return typ
 
     def constraints_of(self, typ):
-        constraints = ConstraintSet(set())
+        constraints = Constraints()
         if isinstance(typ, FatPtr):
-            return self.get_class(None, typ).all_constraints().copy()
+            return self.get_class(None, typ).all_constraints()
         if isinstance(typ, TypeParameter) and isinstance(typ.bound, FatPtr) and typ.bound.cls.data in self.classes:
-            return self.get_class(None, typ.bound).all_constraints().copy()
+            return self.get_class(None, typ.bound).all_constraints()
         if isinstance(typ, Union):
             for t in typ.types.data:
                 constraints = constraints.union(self.constraints_of(t))
         return constraints
 
 @dataclass
-class ConstraintSet:
-    _set: set["Constraint"]
+class Constraints:
+    _set: set[tuple[str, str, str]]
+    all_alias: bool
 
-    def add(self, triple: tuple[str, str, str]):
+    def __init__(self, sett=None, all_alias=False):
+        self._set = sett if sett else set()
+        self.all_alias = all_alias
+
+    def add(self, triple):
+        triple = (triple[0].replace("@", "self."), triple[1], triple[2].replace("@", "self."))
         self._set.add(triple)
         
         # add implicit constraints ensuring that foo < foo.bar for lhs and rhs
@@ -431,15 +437,23 @@ class ConstraintSet:
             if i == len(rhs.split(".")) - 1: break
             self._set.add((".".join(rhs.split(".")[:(i + 1)]), "<", ".".join(rhs.split(".")[:(i + 2)])))
 
-    def transform_with_mapping(self, mapping):
-        old_set = self._set
-        self._set = set()
-        for lhs, op, rhs in old_set:
+    def map(self, mapping):
+        new_set = set()
+        for lhs, op, rhs in self._set:
             lhs_split = lhs.split(".")
-            lhs_split[0] = mapping[lhs_split[0]]
             rhs_split = rhs.split(".")
+            lhs_split[0] = mapping[lhs_split[0]]
             rhs_split[0] = mapping[rhs_split[0]]
-            self.add((".".join(lhs_split), op, ".".join(rhs_split)))
+            new_lhs = ".".join(lhs_split).replace("@", "self.")
+            new_rhs = ".".join(rhs_split).replace("@", "self.")
+            new_set.add((new_lhs, op, new_rhs))
+        return Constraints(new_set, self.all_alias)
+
+    def prune(self, names):
+        return Constraints({(a,b,c) for (a,b,c) in self._set if (a not in names) and (c not in names)}, self.all_alias)
+
+    def final(self):
+        return self if not self.all_alias else Constraints({(a, "==", c) for (a,b,c) in self._set}, self.all_alias)
 
     def __contains__(self, item):
         return item in self._set
@@ -448,18 +462,21 @@ class ConstraintSet:
         self._set.remove(item)
 
     def copy(self):
-        return ConstraintSet(self._set.copy())
+        return Constraints(self._set.copy(), self.all_alias)
 
-    def union(self, other):
-        return ConstraintSet(self._set.union(other._set))
+    def union(self, *others):
+        combined_set = set.union(self._set, *(other._set for other in others))
+        all_alias = self.all_alias or any(other.all_alias for other in others)
+        return Constraints(combined_set, all_alias)
 
 class MemRegions:
     allocations: dict
-    points_to_facts: ConstraintSet
+    points_to_facts: Constraints
 
     def __init__(self, parent=None):
         self.allocations = parent.allocations.copy() if parent else {}
-        self.points_to_facts = parent.points_to_facts.copy() if parent else ConstraintSet(set())
+        self.points_to_facts = parent.points_to_facts.copy() if parent else Constraints(set())
+        self.single_region = False
 
     def assign_regions(self, var_mapping, param_names):
         rep_to_vars = {}
@@ -473,11 +490,16 @@ class MemRegions:
 
     def compute_graph(self, found_facts, annotated_facts, param_names, name):
 
-        G1, var_mapping1 = create_constraint_graph(found_facts)
+        G1, var_mapping1 = create_constraint_graph(found_facts.final()._set)
 
         param_names = {*chain.from_iterable([var for var in var_mapping1 if var == param or var.startswith(f"{param}.")] for param in param_names)}
 
-        G0, var_mapping0 = create_constraint_graph(annotated_facts)
+        if annotated_facts.all_alias:
+            ok, comment = True, "Skip compatibility check"
+            self.assign_regions(var_mapping1, param_names)
+            return ok, comment
+
+        G0, var_mapping0 = create_constraint_graph(annotated_facts._set)
         
         #visualize_graph_transformation(G1, var_mapping1, param_names)
         print(f"Original Points-to graph for {name}:")

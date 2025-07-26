@@ -1321,12 +1321,12 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %852 = "mid.unwrap"(%851) : (!hi.fatptr<"Iterator", [!hi.type_param<"T", !hi.any, "Enumerator">]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %853 = "mid.parameterizations_array"() : () -> !llvm.ptr
       %854 = "mid.method_call"(%853, %852) {"offset" = 1 : i32, "vptrs" = [], "vtable_size" = 3 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>
-      %855 = "hi.cast"(%854) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Enumerator">, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[!hi.type_param<"T", !hi.any, "Enumerator">, !hi.nil]>
+      %855 = "hi.cast"(%854) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "Enumerator">]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "Enumerator">]>
       %856 = "mid.get_type_field"(%850) {"offset" = 0 : i64, "vtable_bytes" = 88 : i32} : (!hi.fatptr<"Enumerator", [!hi.type_param<"T", !hi.any, "Enumerator">]>) -> !hi.reified_type
-      %857 = "mid.checkflag"(%855) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Enumerator">, !hi.nil]>) -> si1
+      %857 = "mid.checkflag"(%855) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "Enumerator">]>) -> si1
       %858 = "mid.unwrap"(%857) : (si1) -> i1
       "mid.if"(%858) ({
-        %859 = "hi.cast"(%855) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Enumerator">, !hi.nil]>, "to_typ" = !hi.type_param<"T", !hi.any, "Enumerator">, "from_typ_name" = "union_typ", "to_typ_name" = "any_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Enumerator">, !hi.nil]>) -> !hi.type_param<"T", !hi.any, "Enumerator">
+        %859 = "hi.cast"(%855) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "Enumerator">]>, "to_typ" = !hi.type_param<"T", !hi.any, "Enumerator">, "from_typ_name" = "union_typ", "to_typ_name" = "any_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "Enumerator">]>) -> !hi.type_param<"T", !hi.any, "Enumerator">
         %860 = "mid.get_field"(%850) {"offset" = 3 : i64, "vtable_bytes" = 88 : i32, "original_type" = i32} : (!hi.fatptr<"Enumerator", [!hi.type_param<"T", !hi.any, "Enumerator">]>) -> si32
         %861 = "mid.refer"(%860) {"typ" = i32} : (si32) -> si32
         %862 = "mid.get_field"(%850) {"offset" = 3 : i64, "vtable_bytes" = 88 : i32, "original_type" = i32} : (!hi.fatptr<"Enumerator", [!hi.type_param<"T", !hi.any, "Enumerator">]>) -> si32
@@ -1351,7 +1351,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %879 = "hi.cast"(%870) {"from_typ" = !hi.fatptr<"Pair", [si32, !hi.type_param<"T", !hi.any, "Enumerator">]>, "to_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "from_typ_name" = "Pair", "to_typ_name" = "union_typ"} : (!hi.fatptr<"Pair", [si32, !hi.type_param<"T", !hi.any, "Enumerator">]>) -> !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>
         "mid.return"(%879) : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> ()
       }) : (i1) -> ()
-      %880 = "hi.cast"(%855) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Enumerator">, !hi.nil]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Enumerator">, !hi.nil]>) -> !hi.nil
+      %880 = "hi.cast"(%855) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "Enumerator">]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "Enumerator">]>) -> !hi.nil
       %881 = "mid.alloc"() {"typ" = !llvm.array<0 x i8>} : () -> !llvm.ptr
       %882 = "hi.cast"(%881) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>
       "mid.return"(%882) : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> ()
@@ -3596,13 +3596,13 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %2311 = "mid.unwrap"(%2310) : (!hi.fatptr<"Iterator", [!hi.type_param<"T", !hi.any, "ZipIterator">]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %2312 = "mid.parameterizations_array"() : () -> !llvm.ptr
       %2313 = "mid.method_call"(%2312, %2311) {"offset" = 1 : i32, "vptrs" = [], "vtable_size" = 3 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>
-      %2314 = "hi.cast"(%2313) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "ZipIterator">]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "ZipIterator">]>
+      %2314 = "hi.cast"(%2313) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "ZipIterator">, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[!hi.type_param<"T", !hi.any, "ZipIterator">, !hi.nil]>
       %2315 = "mid.get_field"(%2309) {"offset" = 4 : i64, "vtable_bytes" = 96 : i32, "original_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "assumed_type" = "Iterator"} : (!hi.fatptr<"ZipIterator", [!hi.type_param<"T", !hi.any, "ZipIterator">, !hi.type_param<"U", !hi.any, "ZipIterator">]>) -> !hi.fatptr<"Iterator", [!hi.type_param<"U", !hi.any, "ZipIterator">]>
       %2316 = "mid.unwrap"(%2315) : (!hi.fatptr<"Iterator", [!hi.type_param<"U", !hi.any, "ZipIterator">]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %2317 = "mid.parameterizations_array"() : () -> !llvm.ptr
       %2318 = "mid.method_call"(%2317, %2316) {"offset" = 1 : i32, "vptrs" = [], "vtable_size" = 3 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>
       %2319 = "hi.cast"(%2318) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[!hi.type_param<"U", !hi.any, "ZipIterator">, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[!hi.type_param<"U", !hi.any, "ZipIterator">, !hi.nil]>
-      %2320 = "mid.checkflag"(%2314) {"typ_name" = "nil_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "ZipIterator">]>) -> si1
+      %2320 = "mid.checkflag"(%2314) {"typ_name" = "nil_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "ZipIterator">, !hi.nil]>) -> si1
       %2321 = "hi.logical"(%2320) ({
         %2322 = "mid.checkflag"(%2319) {"typ_name" = "nil_typ"} : (!hi.union<[!hi.type_param<"U", !hi.any, "ZipIterator">, !hi.nil]>) -> si1
         func.return %2322 : si1
@@ -3613,7 +3613,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %2325 = "hi.cast"(%2324) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>
         "mid.return"(%2325) : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> ()
       }) : (i1) -> ()
-      %2326 = "hi.cast"(%2314) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "ZipIterator">]>, "to_typ" = !hi.type_param<"T", !hi.any, "ZipIterator">, "from_typ_name" = "union_typ", "to_typ_name" = "any_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "ZipIterator">]>) -> !hi.type_param<"T", !hi.any, "ZipIterator">
+      %2326 = "hi.cast"(%2314) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "ZipIterator">, !hi.nil]>, "to_typ" = !hi.type_param<"T", !hi.any, "ZipIterator">, "from_typ_name" = "union_typ", "to_typ_name" = "any_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "ZipIterator">, !hi.nil]>) -> !hi.type_param<"T", !hi.any, "ZipIterator">
       %2327 = "hi.cast"(%2319) {"from_typ" = !hi.union<[!hi.type_param<"U", !hi.any, "ZipIterator">, !hi.nil]>, "to_typ" = !hi.type_param<"U", !hi.any, "ZipIterator">, "from_typ_name" = "union_typ", "to_typ_name" = "any_typ"} : (!hi.union<[!hi.type_param<"U", !hi.any, "ZipIterator">, !hi.nil]>) -> !hi.type_param<"U", !hi.any, "ZipIterator">
       %2328 = "mid.unwrap"(%2326) : (!hi.type_param<"T", !hi.any, "ZipIterator">) -> !llvm.struct<(!llvm.ptr, i160)>
       %2329 = "mid.unwrap"(%2327) : (!hi.type_param<"U", !hi.any, "ZipIterator">) -> !llvm.struct<(!llvm.ptr, i160)>
@@ -4185,12 +4185,12 @@ builtin.module attributes  {"sym_name" = "ir"} {
     "mid.external_typedef"() {"class_name" = "ProductIterable"} : () -> ()
     "mid.external_typedef"() {"class_name" = "ProductIterator"} : () -> ()
     "mid.typedef"() {"class_name" = "Collection", "methods" = [], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Container, 18446744073709551615 : i64, @Iterable, 18446744073709551615 : i64, @Collection], "offset_tbl" = [69 : i32, 10 : i32, 0 : i32, 69 : i32, 0 : i32, 44 : i32, 0 : i32, 10 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 1375598993350293883 : i64, "base_typ" = !llvm.struct<(!llvm.ptr)>, "data_size_fn" = "_data_size_Collection", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
-    "mid.typedef"() {"class_name" = "EnumeratedCollection", "methods" = [@EnumeratedCollection_field_EnumeratedCollection_0, @EnumeratedCollection_field_EnumeratedCollection_1, @EnumeratedCollection_field_collection, @EnumeratedCollection_B_init_collectionCollectionT, @EnumeratedCollection_B_size_, @EnumeratedCollection_B_is_empty_, @EnumeratedCollection_B_iterator_, @EnumeratedCollection_B_each_fFunctionT_to_Nothing, @EnumeratedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @EnumeratedCollection_B_all_fFunctionT_to_Bool, @EnumeratedCollection_B_any_fFunctionT_to_Bool, @EnumeratedCollection_B_enumerate_, @EnumeratedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @EnumeratedCollection_B_filter_fFunctionT_to_Bool, @EnumeratedCollection_B_chain_otherIterableT_chain_otherCollectionT, @EnumeratedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @EnumeratedCollection_B_zip_otherCollectionU_zip_otherIterableU, @EnumeratedCollection_B_product_otherCollectionU_product_otherIterableU, @EnumeratedCollection_init_collectionCollectionT, @EnumeratedCollection_size_, @Collection_is_empty_, @EnumeratedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @EnumeratedCollection_field_EnumeratedCollection_1, @EnumeratedCollection_B_size_, @EnumeratedCollection_B_is_empty_, @EnumeratedCollection_B_iterator_, @EnumeratedCollection_B_each_fFunctionT_to_Nothing, @EnumeratedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @EnumeratedCollection_B_all_fFunctionT_to_Bool, @EnumeratedCollection_B_any_fFunctionT_to_Bool, @EnumeratedCollection_B_enumerate_, @EnumeratedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @EnumeratedCollection_B_filter_fFunctionT_to_Bool, @EnumeratedCollection_B_chain_otherIterableT_chain_otherCollectionT, @EnumeratedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @EnumeratedCollection_B_zip_otherCollectionU_zip_otherIterableU, @EnumeratedCollection_B_product_otherCollectionU_product_otherIterableU, @EnumeratedCollection_size_, @Collection_is_empty_, @EnumeratedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @EnumeratedCollection_field_EnumeratedCollection_1, @EnumeratedCollection_B_iterator_, @EnumeratedCollection_B_each_fFunctionT_to_Nothing, @EnumeratedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @EnumeratedCollection_B_all_fFunctionT_to_Bool, @EnumeratedCollection_B_any_fFunctionT_to_Bool, @EnumeratedCollection_B_enumerate_, @EnumeratedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @EnumeratedCollection_B_filter_fFunctionT_to_Bool, @EnumeratedCollection_B_chain_otherIterableT_chain_otherCollectionT, @EnumeratedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @EnumeratedCollection_B_zip_otherCollectionU_zip_otherIterableU, @EnumeratedCollection_B_product_otherCollectionU_product_otherIterableU, @EnumeratedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @EnumeratedCollection_field_EnumeratedCollection_1, @EnumeratedCollection_B_iterator_, @EnumeratedCollection_B_each_fFunctionT_to_Nothing, @EnumeratedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @EnumeratedCollection_B_all_fFunctionT_to_Bool, @EnumeratedCollection_B_any_fFunctionT_to_Bool, @EnumeratedCollection_B_enumerate_, @EnumeratedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @EnumeratedCollection_B_filter_fFunctionT_to_Bool, @EnumeratedCollection_B_chain_otherIterableT_chain_otherCollectionT, @EnumeratedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @EnumeratedCollection_B_zip_otherCollectionU_zip_otherIterableU, @EnumeratedCollection_B_product_otherCollectionU_product_otherIterableU, @EnumeratedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU], "hash_tbl" = [@any_typ, @Iterable, @EnumeratedCollection, 18446744073709551615 : i64, @Container, 18446744073709551615 : i64, @Collection, @Object], "offset_tbl" = [10 : i32, 107 : i32, 10 : i32, 0 : i32, 132 : i32, 0 : i32, 48 : i32, 132 : i32], "prime" = 4611686018427388247 : i64, "hash_id" = 7081690788784801875 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_EnumeratedCollection", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
-    "mid.typedef"() {"class_name" = "MappedCollection", "methods" = [@MappedCollection_field_MappedCollection_0, @MappedCollection_field_MappedCollection_1, @MappedCollection_field_collection, @MappedCollection_field_f, @MappedCollection_B_init_collectionCollectionT_fFunctionT_to_U, @MappedCollection_B_size_, @MappedCollection_B_is_empty_, @MappedCollection_B_iterator_, @MappedCollection_B_each_fFunctionT_to_Nothing, @MappedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @MappedCollection_B_all_fFunctionT_to_Bool, @MappedCollection_B_any_fFunctionT_to_Bool, @MappedCollection_B_enumerate_, @MappedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MappedCollection_B_filter_fFunctionT_to_Bool, @MappedCollection_B_chain_otherIterableT_chain_otherCollectionT, @MappedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @MappedCollection_B_zip_otherCollectionU_zip_otherIterableU, @MappedCollection_B_product_otherCollectionU_product_otherIterableU, @MappedCollection_init_collectionCollectionT_fFunctionT_to_U, @MappedCollection_size_, @Collection_is_empty_, @MappedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @MappedCollection_field_MappedCollection_1, @MappedCollection_B_size_, @MappedCollection_B_is_empty_, @MappedCollection_B_iterator_, @MappedCollection_B_each_fFunctionT_to_Nothing, @MappedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @MappedCollection_B_all_fFunctionT_to_Bool, @MappedCollection_B_any_fFunctionT_to_Bool, @MappedCollection_B_enumerate_, @MappedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MappedCollection_B_filter_fFunctionT_to_Bool, @MappedCollection_B_chain_otherIterableT_chain_otherCollectionT, @MappedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @MappedCollection_B_zip_otherCollectionU_zip_otherIterableU, @MappedCollection_B_product_otherCollectionU_product_otherIterableU, @MappedCollection_size_, @Collection_is_empty_, @MappedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @MappedCollection_field_MappedCollection_1, @MappedCollection_B_iterator_, @MappedCollection_B_each_fFunctionT_to_Nothing, @MappedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @MappedCollection_B_all_fFunctionT_to_Bool, @MappedCollection_B_any_fFunctionT_to_Bool, @MappedCollection_B_enumerate_, @MappedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MappedCollection_B_filter_fFunctionT_to_Bool, @MappedCollection_B_chain_otherIterableT_chain_otherCollectionT, @MappedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @MappedCollection_B_zip_otherCollectionU_zip_otherIterableU, @MappedCollection_B_product_otherCollectionU_product_otherIterableU, @MappedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @MappedCollection_field_MappedCollection_1, @MappedCollection_B_iterator_, @MappedCollection_B_each_fFunctionT_to_Nothing, @MappedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @MappedCollection_B_all_fFunctionT_to_Bool, @MappedCollection_B_any_fFunctionT_to_Bool, @MappedCollection_B_enumerate_, @MappedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MappedCollection_B_filter_fFunctionT_to_Bool, @MappedCollection_B_chain_otherIterableT_chain_otherCollectionT, @MappedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @MappedCollection_B_zip_otherCollectionU_zip_otherIterableU, @MappedCollection_B_product_otherCollectionU_product_otherIterableU, @MappedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Container, 18446744073709551615 : i64, @Iterable, @MappedCollection, @Collection], "offset_tbl" = [133 : i32, 10 : i32, 0 : i32, 133 : i32, 0 : i32, 108 : i32, 10 : i32, 49 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 5460697656559120915 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>)>, "data_size_fn" = "_data_size_MappedCollection", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
-    "mid.typedef"() {"class_name" = "ChainedCollection", "methods" = [@ChainedCollection_field_ChainedCollection_0, @ChainedCollection_field_first, @ChainedCollection_field_second, @ChainedCollection_B_init_firstCollectionT_secondCollectionT, @ChainedCollection_B_size_, @ChainedCollection_B_is_empty_, @ChainedCollection_B_iterator_, @ChainedCollection_B_each_fFunctionT_to_Nothing, @ChainedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ChainedCollection_B_all_fFunctionT_to_Bool, @ChainedCollection_B_any_fFunctionT_to_Bool, @ChainedCollection_B_enumerate_, @ChainedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ChainedCollection_B_filter_fFunctionT_to_Bool, @ChainedCollection_B_chain_otherIterableT_chain_otherCollectionT, @ChainedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @ChainedCollection_B_zip_otherCollectionU_zip_otherIterableU, @ChainedCollection_B_product_otherCollectionU_product_otherIterableU, @ChainedCollection_init_firstCollectionT_secondCollectionT, @ChainedCollection_size_, @Collection_is_empty_, @ChainedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @ChainedCollection_field_ChainedCollection_0, @ChainedCollection_B_size_, @ChainedCollection_B_is_empty_, @ChainedCollection_B_iterator_, @ChainedCollection_B_each_fFunctionT_to_Nothing, @ChainedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ChainedCollection_B_all_fFunctionT_to_Bool, @ChainedCollection_B_any_fFunctionT_to_Bool, @ChainedCollection_B_enumerate_, @ChainedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ChainedCollection_B_filter_fFunctionT_to_Bool, @ChainedCollection_B_chain_otherIterableT_chain_otherCollectionT, @ChainedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @ChainedCollection_B_zip_otherCollectionU_zip_otherIterableU, @ChainedCollection_B_product_otherCollectionU_product_otherIterableU, @ChainedCollection_size_, @Collection_is_empty_, @ChainedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @ChainedCollection_field_ChainedCollection_0, @ChainedCollection_B_iterator_, @ChainedCollection_B_each_fFunctionT_to_Nothing, @ChainedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ChainedCollection_B_all_fFunctionT_to_Bool, @ChainedCollection_B_any_fFunctionT_to_Bool, @ChainedCollection_B_enumerate_, @ChainedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ChainedCollection_B_filter_fFunctionT_to_Bool, @ChainedCollection_B_chain_otherIterableT_chain_otherCollectionT, @ChainedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @ChainedCollection_B_zip_otherCollectionU_zip_otherIterableU, @ChainedCollection_B_product_otherCollectionU_product_otherIterableU, @ChainedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @ChainedCollection_field_ChainedCollection_0, @ChainedCollection_B_iterator_, @ChainedCollection_B_each_fFunctionT_to_Nothing, @ChainedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ChainedCollection_B_all_fFunctionT_to_Bool, @ChainedCollection_B_any_fFunctionT_to_Bool, @ChainedCollection_B_enumerate_, @ChainedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ChainedCollection_B_filter_fFunctionT_to_Bool, @ChainedCollection_B_chain_otherIterableT_chain_otherCollectionT, @ChainedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @ChainedCollection_B_zip_otherCollectionU_zip_otherIterableU, @ChainedCollection_B_product_otherCollectionU_product_otherIterableU, @ChainedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU], "hash_tbl" = [18446744073709551615 : i64, @Object, @any_typ, @Collection, @ChainedCollection, @Container, @Iterable, 18446744073709551615 : i64], "offset_tbl" = [0 : i32, 132 : i32, 10 : i32, 48 : i32, 10 : i32, 132 : i32, 107 : i32, 0 : i32], "prime" = 4611686018427388319 : i64, "hash_id" = 14310207089174208817 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_ChainedCollection", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
-    "mid.typedef"() {"class_name" = "InterleavedCollection", "methods" = [@InterleavedCollection_field_InterleavedCollection_0, @InterleavedCollection_field_first, @InterleavedCollection_field_second, @InterleavedCollection_B_init_firstCollectionT_secondCollectionT, @InterleavedCollection_B_size_, @InterleavedCollection_B_is_empty_, @InterleavedCollection_B_iterator_, @InterleavedCollection_B_each_fFunctionT_to_Nothing, @InterleavedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @InterleavedCollection_B_all_fFunctionT_to_Bool, @InterleavedCollection_B_any_fFunctionT_to_Bool, @InterleavedCollection_B_enumerate_, @InterleavedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @InterleavedCollection_B_filter_fFunctionT_to_Bool, @InterleavedCollection_B_chain_otherIterableT_chain_otherCollectionT, @InterleavedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @InterleavedCollection_B_zip_otherCollectionU_zip_otherIterableU, @InterleavedCollection_B_product_otherCollectionU_product_otherIterableU, @InterleavedCollection_init_firstCollectionT_secondCollectionT, @InterleavedCollection_size_, @Collection_is_empty_, @InterleavedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @InterleavedCollection_field_InterleavedCollection_0, @InterleavedCollection_B_size_, @InterleavedCollection_B_is_empty_, @InterleavedCollection_B_iterator_, @InterleavedCollection_B_each_fFunctionT_to_Nothing, @InterleavedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @InterleavedCollection_B_all_fFunctionT_to_Bool, @InterleavedCollection_B_any_fFunctionT_to_Bool, @InterleavedCollection_B_enumerate_, @InterleavedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @InterleavedCollection_B_filter_fFunctionT_to_Bool, @InterleavedCollection_B_chain_otherIterableT_chain_otherCollectionT, @InterleavedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @InterleavedCollection_B_zip_otherCollectionU_zip_otherIterableU, @InterleavedCollection_B_product_otherCollectionU_product_otherIterableU, @InterleavedCollection_size_, @Collection_is_empty_, @InterleavedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @InterleavedCollection_field_InterleavedCollection_0, @InterleavedCollection_B_iterator_, @InterleavedCollection_B_each_fFunctionT_to_Nothing, @InterleavedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @InterleavedCollection_B_all_fFunctionT_to_Bool, @InterleavedCollection_B_any_fFunctionT_to_Bool, @InterleavedCollection_B_enumerate_, @InterleavedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @InterleavedCollection_B_filter_fFunctionT_to_Bool, @InterleavedCollection_B_chain_otherIterableT_chain_otherCollectionT, @InterleavedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @InterleavedCollection_B_zip_otherCollectionU_zip_otherIterableU, @InterleavedCollection_B_product_otherCollectionU_product_otherIterableU, @InterleavedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @InterleavedCollection_field_InterleavedCollection_0, @InterleavedCollection_B_iterator_, @InterleavedCollection_B_each_fFunctionT_to_Nothing, @InterleavedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @InterleavedCollection_B_all_fFunctionT_to_Bool, @InterleavedCollection_B_any_fFunctionT_to_Bool, @InterleavedCollection_B_enumerate_, @InterleavedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @InterleavedCollection_B_filter_fFunctionT_to_Bool, @InterleavedCollection_B_chain_otherIterableT_chain_otherCollectionT, @InterleavedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @InterleavedCollection_B_zip_otherCollectionU_zip_otherIterableU, @InterleavedCollection_B_product_otherCollectionU_product_otherIterableU, @InterleavedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Container, @InterleavedCollection, @Iterable, 18446744073709551615 : i64, @Collection], "offset_tbl" = [132 : i32, 10 : i32, 0 : i32, 132 : i32, 10 : i32, 107 : i32, 0 : i32, 48 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 8589355597059143861 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_InterleavedCollection", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
-    "mid.typedef"() {"class_name" = "ZippedCollection", "methods" = [@ZippedCollection_field_ZippedCollection_0, @ZippedCollection_field_ZippedCollection_1, @ZippedCollection_field_ZippedCollection_2, @ZippedCollection_field_first, @ZippedCollection_field_second, @ZippedCollection_B_init_firstCollectionT_secondCollectionU, @ZippedCollection_B_size_, @ZippedCollection_B_is_empty_, @ZippedCollection_B_iterator_, @ZippedCollection_B_each_fFunctionT_to_Nothing, @ZippedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ZippedCollection_B_all_fFunctionT_to_Bool, @ZippedCollection_B_any_fFunctionT_to_Bool, @ZippedCollection_B_enumerate_, @ZippedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ZippedCollection_B_filter_fFunctionT_to_Bool, @ZippedCollection_B_chain_otherIterableT_chain_otherCollectionT, @ZippedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @ZippedCollection_B_zip_otherCollectionU_zip_otherIterableU, @ZippedCollection_B_product_otherCollectionU_product_otherIterableU, @ZippedCollection_init_firstCollectionT_secondCollectionU, @ZippedCollection_size_, @Collection_is_empty_, @ZippedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @ZippedCollection_field_ZippedCollection_2, @ZippedCollection_B_size_, @ZippedCollection_B_is_empty_, @ZippedCollection_B_iterator_, @ZippedCollection_B_each_fFunctionT_to_Nothing, @ZippedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ZippedCollection_B_all_fFunctionT_to_Bool, @ZippedCollection_B_any_fFunctionT_to_Bool, @ZippedCollection_B_enumerate_, @ZippedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ZippedCollection_B_filter_fFunctionT_to_Bool, @ZippedCollection_B_chain_otherIterableT_chain_otherCollectionT, @ZippedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @ZippedCollection_B_zip_otherCollectionU_zip_otherIterableU, @ZippedCollection_B_product_otherCollectionU_product_otherIterableU, @ZippedCollection_size_, @Collection_is_empty_, @ZippedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @ZippedCollection_field_ZippedCollection_2, @ZippedCollection_B_iterator_, @ZippedCollection_B_each_fFunctionT_to_Nothing, @ZippedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ZippedCollection_B_all_fFunctionT_to_Bool, @ZippedCollection_B_any_fFunctionT_to_Bool, @ZippedCollection_B_enumerate_, @ZippedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ZippedCollection_B_filter_fFunctionT_to_Bool, @ZippedCollection_B_chain_otherIterableT_chain_otherCollectionT, @ZippedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @ZippedCollection_B_zip_otherCollectionU_zip_otherIterableU, @ZippedCollection_B_product_otherCollectionU_product_otherIterableU, @ZippedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @ZippedCollection_field_ZippedCollection_2, @ZippedCollection_B_iterator_, @ZippedCollection_B_each_fFunctionT_to_Nothing, @ZippedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ZippedCollection_B_all_fFunctionT_to_Bool, @ZippedCollection_B_any_fFunctionT_to_Bool, @ZippedCollection_B_enumerate_, @ZippedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ZippedCollection_B_filter_fFunctionT_to_Bool, @ZippedCollection_B_chain_otherIterableT_chain_otherCollectionT, @ZippedCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @ZippedCollection_B_zip_otherCollectionU_zip_otherIterableU, @ZippedCollection_B_product_otherCollectionU_product_otherIterableU, @ZippedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU], "hash_tbl" = [@any_typ, @Collection, @Object, @Container, @ZippedCollection, @Iterable, 18446744073709551615 : i64, 18446744073709551615 : i64], "offset_tbl" = [10 : i32, 50 : i32, 134 : i32, 134 : i32, 10 : i32, 109 : i32, 0 : i32, 0 : i32], "prime" = 4611686018427388513 : i64, "hash_id" = 880335312586431241 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_ZippedCollection", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
-    "mid.typedef"() {"class_name" = "ProductCollection", "methods" = [@ProductCollection_field_ProductCollection_0, @ProductCollection_field_ProductCollection_1, @ProductCollection_field_ProductCollection_2, @ProductCollection_field_first, @ProductCollection_field_second, @ProductCollection_B_init_firstCollectionT_secondCollectionU, @ProductCollection_B_size_, @ProductCollection_B_is_empty_, @ProductCollection_B_iterator_, @ProductCollection_B_each_fFunctionT_to_Nothing, @ProductCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ProductCollection_B_all_fFunctionT_to_Bool, @ProductCollection_B_any_fFunctionT_to_Bool, @ProductCollection_B_enumerate_, @ProductCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ProductCollection_B_filter_fFunctionT_to_Bool, @ProductCollection_B_chain_otherIterableT_chain_otherCollectionT, @ProductCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @ProductCollection_B_zip_otherCollectionU_zip_otherIterableU, @ProductCollection_B_product_otherCollectionU_product_otherIterableU, @ProductCollection_init_firstCollectionT_secondCollectionU, @ProductCollection_size_, @Collection_is_empty_, @ProductCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @ProductCollection_field_ProductCollection_2, @ProductCollection_B_size_, @ProductCollection_B_is_empty_, @ProductCollection_B_iterator_, @ProductCollection_B_each_fFunctionT_to_Nothing, @ProductCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ProductCollection_B_all_fFunctionT_to_Bool, @ProductCollection_B_any_fFunctionT_to_Bool, @ProductCollection_B_enumerate_, @ProductCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ProductCollection_B_filter_fFunctionT_to_Bool, @ProductCollection_B_chain_otherIterableT_chain_otherCollectionT, @ProductCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @ProductCollection_B_zip_otherCollectionU_zip_otherIterableU, @ProductCollection_B_product_otherCollectionU_product_otherIterableU, @ProductCollection_size_, @Collection_is_empty_, @ProductCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @ProductCollection_field_ProductCollection_2, @ProductCollection_B_iterator_, @ProductCollection_B_each_fFunctionT_to_Nothing, @ProductCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ProductCollection_B_all_fFunctionT_to_Bool, @ProductCollection_B_any_fFunctionT_to_Bool, @ProductCollection_B_enumerate_, @ProductCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ProductCollection_B_filter_fFunctionT_to_Bool, @ProductCollection_B_chain_otherIterableT_chain_otherCollectionT, @ProductCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @ProductCollection_B_zip_otherCollectionU_zip_otherIterableU, @ProductCollection_B_product_otherCollectionU_product_otherIterableU, @ProductCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @ProductCollection_field_ProductCollection_2, @ProductCollection_B_iterator_, @ProductCollection_B_each_fFunctionT_to_Nothing, @ProductCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ProductCollection_B_all_fFunctionT_to_Bool, @ProductCollection_B_any_fFunctionT_to_Bool, @ProductCollection_B_enumerate_, @ProductCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ProductCollection_B_filter_fFunctionT_to_Bool, @ProductCollection_B_chain_otherIterableT_chain_otherCollectionT, @ProductCollection_B_interleave_otherCollectionT_interleave_otherIterableT, @ProductCollection_B_zip_otherCollectionU_zip_otherIterableU, @ProductCollection_B_product_otherCollectionU_product_otherIterableU, @ProductCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU], "hash_tbl" = [@any_typ, @Iterable, 18446744073709551615 : i64, @ProductCollection, @Container, 18446744073709551615 : i64, @Collection, @Object], "offset_tbl" = [10 : i32, 109 : i32, 0 : i32, 10 : i32, 134 : i32, 0 : i32, 50 : i32, 134 : i32], "prime" = 4611686018427388247 : i64, "hash_id" = 18135768441938478679 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_ProductCollection", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+    "mid.typedef"() {"class_name" = "EnumeratedCollection", "methods" = [@EnumeratedCollection_field_EnumeratedCollection_0, @EnumeratedCollection_field_EnumeratedCollection_1, @EnumeratedCollection_field_collection, @EnumeratedCollection_B_init_collectionCollectionT, @EnumeratedCollection_B_size_, @EnumeratedCollection_B_is_empty_, @EnumeratedCollection_B_iterator_, @EnumeratedCollection_B_each_fFunctionT_to_Nothing, @EnumeratedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @EnumeratedCollection_B_all_fFunctionT_to_Bool, @EnumeratedCollection_B_any_fFunctionT_to_Bool, @EnumeratedCollection_B_enumerate_, @EnumeratedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @EnumeratedCollection_B_filter_fFunctionT_to_Bool, @EnumeratedCollection_B_chain_otherCollectionT_chain_otherIterableT, @EnumeratedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @EnumeratedCollection_B_zip_otherIterableU_zip_otherCollectionU, @EnumeratedCollection_B_product_otherCollectionU_product_otherIterableU, @EnumeratedCollection_init_collectionCollectionT, @EnumeratedCollection_size_, @Collection_is_empty_, @EnumeratedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @EnumeratedCollection_field_EnumeratedCollection_1, @EnumeratedCollection_B_size_, @EnumeratedCollection_B_is_empty_, @EnumeratedCollection_B_iterator_, @EnumeratedCollection_B_each_fFunctionT_to_Nothing, @EnumeratedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @EnumeratedCollection_B_all_fFunctionT_to_Bool, @EnumeratedCollection_B_any_fFunctionT_to_Bool, @EnumeratedCollection_B_enumerate_, @EnumeratedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @EnumeratedCollection_B_filter_fFunctionT_to_Bool, @EnumeratedCollection_B_chain_otherCollectionT_chain_otherIterableT, @EnumeratedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @EnumeratedCollection_B_zip_otherIterableU_zip_otherCollectionU, @EnumeratedCollection_B_product_otherCollectionU_product_otherIterableU, @EnumeratedCollection_size_, @Collection_is_empty_, @EnumeratedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @EnumeratedCollection_field_EnumeratedCollection_1, @EnumeratedCollection_B_iterator_, @EnumeratedCollection_B_each_fFunctionT_to_Nothing, @EnumeratedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @EnumeratedCollection_B_all_fFunctionT_to_Bool, @EnumeratedCollection_B_any_fFunctionT_to_Bool, @EnumeratedCollection_B_enumerate_, @EnumeratedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @EnumeratedCollection_B_filter_fFunctionT_to_Bool, @EnumeratedCollection_B_chain_otherCollectionT_chain_otherIterableT, @EnumeratedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @EnumeratedCollection_B_zip_otherIterableU_zip_otherCollectionU, @EnumeratedCollection_B_product_otherCollectionU_product_otherIterableU, @EnumeratedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @EnumeratedCollection_field_EnumeratedCollection_1, @EnumeratedCollection_B_iterator_, @EnumeratedCollection_B_each_fFunctionT_to_Nothing, @EnumeratedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @EnumeratedCollection_B_all_fFunctionT_to_Bool, @EnumeratedCollection_B_any_fFunctionT_to_Bool, @EnumeratedCollection_B_enumerate_, @EnumeratedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @EnumeratedCollection_B_filter_fFunctionT_to_Bool, @EnumeratedCollection_B_chain_otherCollectionT_chain_otherIterableT, @EnumeratedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @EnumeratedCollection_B_zip_otherIterableU_zip_otherCollectionU, @EnumeratedCollection_B_product_otherCollectionU_product_otherIterableU, @EnumeratedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU], "hash_tbl" = [@any_typ, @Iterable, @EnumeratedCollection, 18446744073709551615 : i64, @Container, 18446744073709551615 : i64, @Collection, @Object], "offset_tbl" = [10 : i32, 107 : i32, 10 : i32, 0 : i32, 132 : i32, 0 : i32, 48 : i32, 132 : i32], "prime" = 4611686018427388247 : i64, "hash_id" = 7081690788784801875 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_EnumeratedCollection", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+    "mid.typedef"() {"class_name" = "MappedCollection", "methods" = [@MappedCollection_field_MappedCollection_0, @MappedCollection_field_MappedCollection_1, @MappedCollection_field_collection, @MappedCollection_field_f, @MappedCollection_B_init_collectionCollectionT_fFunctionT_to_U, @MappedCollection_B_size_, @MappedCollection_B_is_empty_, @MappedCollection_B_iterator_, @MappedCollection_B_each_fFunctionT_to_Nothing, @MappedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @MappedCollection_B_all_fFunctionT_to_Bool, @MappedCollection_B_any_fFunctionT_to_Bool, @MappedCollection_B_enumerate_, @MappedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MappedCollection_B_filter_fFunctionT_to_Bool, @MappedCollection_B_chain_otherCollectionT_chain_otherIterableT, @MappedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @MappedCollection_B_zip_otherIterableU_zip_otherCollectionU, @MappedCollection_B_product_otherCollectionU_product_otherIterableU, @MappedCollection_init_collectionCollectionT_fFunctionT_to_U, @MappedCollection_size_, @Collection_is_empty_, @MappedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @MappedCollection_field_MappedCollection_1, @MappedCollection_B_size_, @MappedCollection_B_is_empty_, @MappedCollection_B_iterator_, @MappedCollection_B_each_fFunctionT_to_Nothing, @MappedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @MappedCollection_B_all_fFunctionT_to_Bool, @MappedCollection_B_any_fFunctionT_to_Bool, @MappedCollection_B_enumerate_, @MappedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MappedCollection_B_filter_fFunctionT_to_Bool, @MappedCollection_B_chain_otherCollectionT_chain_otherIterableT, @MappedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @MappedCollection_B_zip_otherIterableU_zip_otherCollectionU, @MappedCollection_B_product_otherCollectionU_product_otherIterableU, @MappedCollection_size_, @Collection_is_empty_, @MappedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @MappedCollection_field_MappedCollection_1, @MappedCollection_B_iterator_, @MappedCollection_B_each_fFunctionT_to_Nothing, @MappedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @MappedCollection_B_all_fFunctionT_to_Bool, @MappedCollection_B_any_fFunctionT_to_Bool, @MappedCollection_B_enumerate_, @MappedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MappedCollection_B_filter_fFunctionT_to_Bool, @MappedCollection_B_chain_otherCollectionT_chain_otherIterableT, @MappedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @MappedCollection_B_zip_otherIterableU_zip_otherCollectionU, @MappedCollection_B_product_otherCollectionU_product_otherIterableU, @MappedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @MappedCollection_field_MappedCollection_1, @MappedCollection_B_iterator_, @MappedCollection_B_each_fFunctionT_to_Nothing, @MappedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @MappedCollection_B_all_fFunctionT_to_Bool, @MappedCollection_B_any_fFunctionT_to_Bool, @MappedCollection_B_enumerate_, @MappedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MappedCollection_B_filter_fFunctionT_to_Bool, @MappedCollection_B_chain_otherCollectionT_chain_otherIterableT, @MappedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @MappedCollection_B_zip_otherIterableU_zip_otherCollectionU, @MappedCollection_B_product_otherCollectionU_product_otherIterableU, @MappedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Container, 18446744073709551615 : i64, @Iterable, @MappedCollection, @Collection], "offset_tbl" = [133 : i32, 10 : i32, 0 : i32, 133 : i32, 0 : i32, 108 : i32, 10 : i32, 49 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 5460697656559120915 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>)>, "data_size_fn" = "_data_size_MappedCollection", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+    "mid.typedef"() {"class_name" = "ChainedCollection", "methods" = [@ChainedCollection_field_ChainedCollection_0, @ChainedCollection_field_first, @ChainedCollection_field_second, @ChainedCollection_B_init_firstCollectionT_secondCollectionT, @ChainedCollection_B_size_, @ChainedCollection_B_is_empty_, @ChainedCollection_B_iterator_, @ChainedCollection_B_each_fFunctionT_to_Nothing, @ChainedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ChainedCollection_B_all_fFunctionT_to_Bool, @ChainedCollection_B_any_fFunctionT_to_Bool, @ChainedCollection_B_enumerate_, @ChainedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ChainedCollection_B_filter_fFunctionT_to_Bool, @ChainedCollection_B_chain_otherCollectionT_chain_otherIterableT, @ChainedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @ChainedCollection_B_zip_otherIterableU_zip_otherCollectionU, @ChainedCollection_B_product_otherCollectionU_product_otherIterableU, @ChainedCollection_init_firstCollectionT_secondCollectionT, @ChainedCollection_size_, @Collection_is_empty_, @ChainedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @ChainedCollection_field_ChainedCollection_0, @ChainedCollection_B_size_, @ChainedCollection_B_is_empty_, @ChainedCollection_B_iterator_, @ChainedCollection_B_each_fFunctionT_to_Nothing, @ChainedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ChainedCollection_B_all_fFunctionT_to_Bool, @ChainedCollection_B_any_fFunctionT_to_Bool, @ChainedCollection_B_enumerate_, @ChainedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ChainedCollection_B_filter_fFunctionT_to_Bool, @ChainedCollection_B_chain_otherCollectionT_chain_otherIterableT, @ChainedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @ChainedCollection_B_zip_otherIterableU_zip_otherCollectionU, @ChainedCollection_B_product_otherCollectionU_product_otherIterableU, @ChainedCollection_size_, @Collection_is_empty_, @ChainedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @ChainedCollection_field_ChainedCollection_0, @ChainedCollection_B_iterator_, @ChainedCollection_B_each_fFunctionT_to_Nothing, @ChainedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ChainedCollection_B_all_fFunctionT_to_Bool, @ChainedCollection_B_any_fFunctionT_to_Bool, @ChainedCollection_B_enumerate_, @ChainedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ChainedCollection_B_filter_fFunctionT_to_Bool, @ChainedCollection_B_chain_otherCollectionT_chain_otherIterableT, @ChainedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @ChainedCollection_B_zip_otherIterableU_zip_otherCollectionU, @ChainedCollection_B_product_otherCollectionU_product_otherIterableU, @ChainedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @ChainedCollection_field_ChainedCollection_0, @ChainedCollection_B_iterator_, @ChainedCollection_B_each_fFunctionT_to_Nothing, @ChainedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ChainedCollection_B_all_fFunctionT_to_Bool, @ChainedCollection_B_any_fFunctionT_to_Bool, @ChainedCollection_B_enumerate_, @ChainedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ChainedCollection_B_filter_fFunctionT_to_Bool, @ChainedCollection_B_chain_otherCollectionT_chain_otherIterableT, @ChainedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @ChainedCollection_B_zip_otherIterableU_zip_otherCollectionU, @ChainedCollection_B_product_otherCollectionU_product_otherIterableU, @ChainedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU], "hash_tbl" = [18446744073709551615 : i64, @Object, @any_typ, @Collection, @ChainedCollection, @Container, @Iterable, 18446744073709551615 : i64], "offset_tbl" = [0 : i32, 132 : i32, 10 : i32, 48 : i32, 10 : i32, 132 : i32, 107 : i32, 0 : i32], "prime" = 4611686018427388319 : i64, "hash_id" = 14310207089174208817 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_ChainedCollection", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+    "mid.typedef"() {"class_name" = "InterleavedCollection", "methods" = [@InterleavedCollection_field_InterleavedCollection_0, @InterleavedCollection_field_first, @InterleavedCollection_field_second, @InterleavedCollection_B_init_firstCollectionT_secondCollectionT, @InterleavedCollection_B_size_, @InterleavedCollection_B_is_empty_, @InterleavedCollection_B_iterator_, @InterleavedCollection_B_each_fFunctionT_to_Nothing, @InterleavedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @InterleavedCollection_B_all_fFunctionT_to_Bool, @InterleavedCollection_B_any_fFunctionT_to_Bool, @InterleavedCollection_B_enumerate_, @InterleavedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @InterleavedCollection_B_filter_fFunctionT_to_Bool, @InterleavedCollection_B_chain_otherCollectionT_chain_otherIterableT, @InterleavedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @InterleavedCollection_B_zip_otherIterableU_zip_otherCollectionU, @InterleavedCollection_B_product_otherCollectionU_product_otherIterableU, @InterleavedCollection_init_firstCollectionT_secondCollectionT, @InterleavedCollection_size_, @Collection_is_empty_, @InterleavedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @InterleavedCollection_field_InterleavedCollection_0, @InterleavedCollection_B_size_, @InterleavedCollection_B_is_empty_, @InterleavedCollection_B_iterator_, @InterleavedCollection_B_each_fFunctionT_to_Nothing, @InterleavedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @InterleavedCollection_B_all_fFunctionT_to_Bool, @InterleavedCollection_B_any_fFunctionT_to_Bool, @InterleavedCollection_B_enumerate_, @InterleavedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @InterleavedCollection_B_filter_fFunctionT_to_Bool, @InterleavedCollection_B_chain_otherCollectionT_chain_otherIterableT, @InterleavedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @InterleavedCollection_B_zip_otherIterableU_zip_otherCollectionU, @InterleavedCollection_B_product_otherCollectionU_product_otherIterableU, @InterleavedCollection_size_, @Collection_is_empty_, @InterleavedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @InterleavedCollection_field_InterleavedCollection_0, @InterleavedCollection_B_iterator_, @InterleavedCollection_B_each_fFunctionT_to_Nothing, @InterleavedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @InterleavedCollection_B_all_fFunctionT_to_Bool, @InterleavedCollection_B_any_fFunctionT_to_Bool, @InterleavedCollection_B_enumerate_, @InterleavedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @InterleavedCollection_B_filter_fFunctionT_to_Bool, @InterleavedCollection_B_chain_otherCollectionT_chain_otherIterableT, @InterleavedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @InterleavedCollection_B_zip_otherIterableU_zip_otherCollectionU, @InterleavedCollection_B_product_otherCollectionU_product_otherIterableU, @InterleavedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @InterleavedCollection_field_InterleavedCollection_0, @InterleavedCollection_B_iterator_, @InterleavedCollection_B_each_fFunctionT_to_Nothing, @InterleavedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @InterleavedCollection_B_all_fFunctionT_to_Bool, @InterleavedCollection_B_any_fFunctionT_to_Bool, @InterleavedCollection_B_enumerate_, @InterleavedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @InterleavedCollection_B_filter_fFunctionT_to_Bool, @InterleavedCollection_B_chain_otherCollectionT_chain_otherIterableT, @InterleavedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @InterleavedCollection_B_zip_otherIterableU_zip_otherCollectionU, @InterleavedCollection_B_product_otherCollectionU_product_otherIterableU, @InterleavedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Container, @InterleavedCollection, @Iterable, 18446744073709551615 : i64, @Collection], "offset_tbl" = [132 : i32, 10 : i32, 0 : i32, 132 : i32, 10 : i32, 107 : i32, 0 : i32, 48 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 8589355597059143861 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_InterleavedCollection", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+    "mid.typedef"() {"class_name" = "ZippedCollection", "methods" = [@ZippedCollection_field_ZippedCollection_0, @ZippedCollection_field_ZippedCollection_1, @ZippedCollection_field_ZippedCollection_2, @ZippedCollection_field_first, @ZippedCollection_field_second, @ZippedCollection_B_init_firstCollectionT_secondCollectionU, @ZippedCollection_B_size_, @ZippedCollection_B_is_empty_, @ZippedCollection_B_iterator_, @ZippedCollection_B_each_fFunctionT_to_Nothing, @ZippedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ZippedCollection_B_all_fFunctionT_to_Bool, @ZippedCollection_B_any_fFunctionT_to_Bool, @ZippedCollection_B_enumerate_, @ZippedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ZippedCollection_B_filter_fFunctionT_to_Bool, @ZippedCollection_B_chain_otherCollectionT_chain_otherIterableT, @ZippedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @ZippedCollection_B_zip_otherIterableU_zip_otherCollectionU, @ZippedCollection_B_product_otherCollectionU_product_otherIterableU, @ZippedCollection_init_firstCollectionT_secondCollectionU, @ZippedCollection_size_, @Collection_is_empty_, @ZippedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @ZippedCollection_field_ZippedCollection_2, @ZippedCollection_B_size_, @ZippedCollection_B_is_empty_, @ZippedCollection_B_iterator_, @ZippedCollection_B_each_fFunctionT_to_Nothing, @ZippedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ZippedCollection_B_all_fFunctionT_to_Bool, @ZippedCollection_B_any_fFunctionT_to_Bool, @ZippedCollection_B_enumerate_, @ZippedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ZippedCollection_B_filter_fFunctionT_to_Bool, @ZippedCollection_B_chain_otherCollectionT_chain_otherIterableT, @ZippedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @ZippedCollection_B_zip_otherIterableU_zip_otherCollectionU, @ZippedCollection_B_product_otherCollectionU_product_otherIterableU, @ZippedCollection_size_, @Collection_is_empty_, @ZippedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @ZippedCollection_field_ZippedCollection_2, @ZippedCollection_B_iterator_, @ZippedCollection_B_each_fFunctionT_to_Nothing, @ZippedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ZippedCollection_B_all_fFunctionT_to_Bool, @ZippedCollection_B_any_fFunctionT_to_Bool, @ZippedCollection_B_enumerate_, @ZippedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ZippedCollection_B_filter_fFunctionT_to_Bool, @ZippedCollection_B_chain_otherCollectionT_chain_otherIterableT, @ZippedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @ZippedCollection_B_zip_otherIterableU_zip_otherCollectionU, @ZippedCollection_B_product_otherCollectionU_product_otherIterableU, @ZippedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @ZippedCollection_field_ZippedCollection_2, @ZippedCollection_B_iterator_, @ZippedCollection_B_each_fFunctionT_to_Nothing, @ZippedCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ZippedCollection_B_all_fFunctionT_to_Bool, @ZippedCollection_B_any_fFunctionT_to_Bool, @ZippedCollection_B_enumerate_, @ZippedCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ZippedCollection_B_filter_fFunctionT_to_Bool, @ZippedCollection_B_chain_otherCollectionT_chain_otherIterableT, @ZippedCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @ZippedCollection_B_zip_otherIterableU_zip_otherCollectionU, @ZippedCollection_B_product_otherCollectionU_product_otherIterableU, @ZippedCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU], "hash_tbl" = [@any_typ, @Collection, @Object, @Container, @ZippedCollection, @Iterable, 18446744073709551615 : i64, 18446744073709551615 : i64], "offset_tbl" = [10 : i32, 50 : i32, 134 : i32, 134 : i32, 10 : i32, 109 : i32, 0 : i32, 0 : i32], "prime" = 4611686018427388513 : i64, "hash_id" = 880335312586431241 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_ZippedCollection", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+    "mid.typedef"() {"class_name" = "ProductCollection", "methods" = [@ProductCollection_field_ProductCollection_0, @ProductCollection_field_ProductCollection_1, @ProductCollection_field_ProductCollection_2, @ProductCollection_field_first, @ProductCollection_field_second, @ProductCollection_B_init_firstCollectionT_secondCollectionU, @ProductCollection_B_size_, @ProductCollection_B_is_empty_, @ProductCollection_B_iterator_, @ProductCollection_B_each_fFunctionT_to_Nothing, @ProductCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ProductCollection_B_all_fFunctionT_to_Bool, @ProductCollection_B_any_fFunctionT_to_Bool, @ProductCollection_B_enumerate_, @ProductCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ProductCollection_B_filter_fFunctionT_to_Bool, @ProductCollection_B_chain_otherCollectionT_chain_otherIterableT, @ProductCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @ProductCollection_B_zip_otherIterableU_zip_otherCollectionU, @ProductCollection_B_product_otherCollectionU_product_otherIterableU, @ProductCollection_init_firstCollectionT_secondCollectionU, @ProductCollection_size_, @Collection_is_empty_, @ProductCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @ProductCollection_field_ProductCollection_2, @ProductCollection_B_size_, @ProductCollection_B_is_empty_, @ProductCollection_B_iterator_, @ProductCollection_B_each_fFunctionT_to_Nothing, @ProductCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ProductCollection_B_all_fFunctionT_to_Bool, @ProductCollection_B_any_fFunctionT_to_Bool, @ProductCollection_B_enumerate_, @ProductCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ProductCollection_B_filter_fFunctionT_to_Bool, @ProductCollection_B_chain_otherCollectionT_chain_otherIterableT, @ProductCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @ProductCollection_B_zip_otherIterableU_zip_otherCollectionU, @ProductCollection_B_product_otherCollectionU_product_otherIterableU, @ProductCollection_size_, @Collection_is_empty_, @ProductCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @ProductCollection_field_ProductCollection_2, @ProductCollection_B_iterator_, @ProductCollection_B_each_fFunctionT_to_Nothing, @ProductCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ProductCollection_B_all_fFunctionT_to_Bool, @ProductCollection_B_any_fFunctionT_to_Bool, @ProductCollection_B_enumerate_, @ProductCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ProductCollection_B_filter_fFunctionT_to_Bool, @ProductCollection_B_chain_otherCollectionT_chain_otherIterableT, @ProductCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @ProductCollection_B_zip_otherIterableU_zip_otherCollectionU, @ProductCollection_B_product_otherCollectionU_product_otherIterableU, @ProductCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @ProductCollection_field_ProductCollection_2, @ProductCollection_B_iterator_, @ProductCollection_B_each_fFunctionT_to_Nothing, @ProductCollection_B_reduce_accumulatorT_fFunctionT._T_to_T, @ProductCollection_B_all_fFunctionT_to_Bool, @ProductCollection_B_any_fFunctionT_to_Bool, @ProductCollection_B_enumerate_, @ProductCollection_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @ProductCollection_B_filter_fFunctionT_to_Bool, @ProductCollection_B_chain_otherCollectionT_chain_otherIterableT, @ProductCollection_B_interleave_otherIterableT_interleave_otherCollectionT, @ProductCollection_B_zip_otherIterableU_zip_otherCollectionU, @ProductCollection_B_product_otherCollectionU_product_otherIterableU, @ProductCollection_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU], "hash_tbl" = [@any_typ, @Iterable, 18446744073709551615 : i64, @ProductCollection, @Container, 18446744073709551615 : i64, @Collection, @Object], "offset_tbl" = [10 : i32, 109 : i32, 0 : i32, 10 : i32, 134 : i32, 0 : i32, 50 : i32, 134 : i32], "prime" = 4611686018427388247 : i64, "hash_id" = 18135768441938478679 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_ProductCollection", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
     "mid.data_size_def"() {"meth_name" = "_data_size_Collection", "types" = [!llvm.ptr]} : () -> ()
     "mid.type_accessor_def"() {"offset" = 0 : i32, "meth_name" = "Collection_field_Collection_0"} : () -> ()
     "mid.func"() ({
@@ -4396,6 +4396,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %123 = "llvm.getelementptr"(%121, %122) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%123) : (!llvm.ptr) -> ()
     }) {"func_name" = "Collection_B_enumerate_", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    "llvm.func"() <{"sym_name" = "Iterable_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
     "mid.func"() ({
     ^bb31(%124 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %125 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %126 : !llvm.ptr, %127 : !llvm.struct<(!llvm.ptr)>):
       %128 = "mid.wrap"(%124) : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.fatptr<"Collection", [!hi.type_param<"T", !hi.any, "Collection">]>
@@ -4426,19 +4428,17 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %152 = "hi.cast"(%138) {"from_typ" = !hi.fatptr<"MappedCollection", [!hi.type_param<"T", !hi.any, "Collection">, !hi.type_param<"U", !hi.any, "Collection">]>, "to_typ" = !hi.fatptr<"Iterable", [!hi.type_param<"U", !hi.any, "Collection">]>, "from_typ_name" = "MappedCollection", "to_typ_name" = "Iterable"} : (!hi.fatptr<"MappedCollection", [!hi.type_param<"T", !hi.any, "Collection">, !hi.type_param<"U", !hi.any, "Collection">]>) -> !hi.fatptr<"Iterable", [!hi.type_param<"U", !hi.any, "Collection">]>
       "mid.return"(%152) : (!hi.fatptr<"Iterable", [!hi.type_param<"U", !hi.any, "Collection">]>) -> ()
     }) {"func_name" = "Collection_map_fFunctionT_to_U", "result_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
-    "llvm.func"() <{"sym_name" = "Iterable_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
     "mid.func"() ({
     ^bb32(%153 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %154 : !llvm.ptr):
       %155 = "mid.invariant"(%154) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %156 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb33] : () -> ()
     ^bb34:
-      %157 = "llvm.mlir.constant"() <{"value" = 63 : i32}> : () -> i32
+      %157 = "llvm.mlir.constant"() <{"value" = 64 : i32}> : () -> i32
       "llvm.store"(%157, %156) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb35] : () -> ()
     ^bb36:
-      %158 = "llvm.mlir.constant"() <{"value" = 64 : i32}> : () -> i32
+      %158 = "llvm.mlir.constant"() <{"value" = 63 : i32}> : () -> i32
       "llvm.store"(%158, %156) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb35] : () -> ()
     ^bb33:
@@ -4483,8 +4483,6 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %182 = "llvm.getelementptr"(%180, %181) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%182) : (!llvm.ptr) -> ()
     }) {"func_name" = "Collection_B_filter_fFunctionT_to_Bool", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Iterable_chain_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
     "mid.func"() ({
     ^bb42(%183 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %184 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %185 : !llvm.ptr, %186 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>):
       %187 = "mid.wrap"(%183) : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.fatptr<"Collection", [!hi.type_param<"T", !hi.any, "Collection">]>
@@ -4509,17 +4507,19 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %205 = "hi.cast"(%194) {"from_typ" = !hi.fatptr<"ChainedCollection", [!hi.type_param<"T", !hi.any, "Collection">]>, "to_typ" = !hi.fatptr<"Iterable", [!hi.type_param<"T", !hi.any, "Collection">]>, "from_typ_name" = "ChainedCollection", "to_typ_name" = "Iterable"} : (!hi.fatptr<"ChainedCollection", [!hi.type_param<"T", !hi.any, "Collection">]>) -> !hi.fatptr<"Iterable", [!hi.type_param<"T", !hi.any, "Collection">]>
       "mid.return"(%205) : (!hi.fatptr<"Iterable", [!hi.type_param<"T", !hi.any, "Collection">]>) -> ()
     }) {"func_name" = "Collection_chain_otherCollectionT", "result_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
+    "llvm.func"() <{"sym_name" = "Iterable_chain_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
     "mid.func"() ({
     ^bb43(%206 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %207 : !llvm.ptr):
       %208 = "mid.invariant"(%207) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %209 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb44] : () -> ()
     ^bb45:
-      %210 = "llvm.mlir.constant"() <{"value" = 27 : i32}> : () -> i32
+      %210 = "llvm.mlir.constant"() <{"value" = 26 : i32}> : () -> i32
       "llvm.store"(%210, %209) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb46] : () -> ()
     ^bb47:
-      %211 = "llvm.mlir.constant"() <{"value" = 26 : i32}> : () -> i32
+      %211 = "llvm.mlir.constant"() <{"value" = 27 : i32}> : () -> i32
       "llvm.store"(%211, %209) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb46] : () -> ()
     ^bb44:
@@ -4544,7 +4544,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %224 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %225 = "llvm.getelementptr"(%223, %224) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%225) : (!llvm.ptr) -> ()
-    }) {"func_name" = "Collection_B_chain_otherIterableT_chain_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "Collection_B_chain_otherCollectionT_chain_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    "llvm.func"() <{"sym_name" = "Iterable_interleave_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
     "mid.func"() ({
     ^bb50(%226 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %227 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %228 : !llvm.ptr, %229 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>):
       %230 = "mid.wrap"(%226) : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.fatptr<"Collection", [!hi.type_param<"T", !hi.any, "Collection">]>
@@ -4569,19 +4571,17 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %248 = "hi.cast"(%237) {"from_typ" = !hi.fatptr<"InterleavedCollection", [!hi.type_param<"T", !hi.any, "Collection">]>, "to_typ" = !hi.fatptr<"Iterable", [!hi.type_param<"T", !hi.any, "Collection">]>, "from_typ_name" = "InterleavedCollection", "to_typ_name" = "Iterable"} : (!hi.fatptr<"InterleavedCollection", [!hi.type_param<"T", !hi.any, "Collection">]>) -> !hi.fatptr<"Iterable", [!hi.type_param<"T", !hi.any, "Collection">]>
       "mid.return"(%248) : (!hi.fatptr<"Iterable", [!hi.type_param<"T", !hi.any, "Collection">]>) -> ()
     }) {"func_name" = "Collection_interleave_otherCollectionT", "result_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
-    "llvm.func"() <{"sym_name" = "Iterable_interleave_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
     "mid.func"() ({
     ^bb51(%249 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %250 : !llvm.ptr):
       %251 = "mid.invariant"(%250) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %252 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb52] : () -> ()
     ^bb53:
-      %253 = "llvm.mlir.constant"() <{"value" = 28 : i32}> : () -> i32
+      %253 = "llvm.mlir.constant"() <{"value" = 29 : i32}> : () -> i32
       "llvm.store"(%253, %252) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb54] : () -> ()
     ^bb55:
-      %254 = "llvm.mlir.constant"() <{"value" = 29 : i32}> : () -> i32
+      %254 = "llvm.mlir.constant"() <{"value" = 28 : i32}> : () -> i32
       "llvm.store"(%254, %252) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb54] : () -> ()
     ^bb52:
@@ -4606,7 +4606,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %267 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %268 = "llvm.getelementptr"(%266, %267) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%268) : (!llvm.ptr) -> ()
-    }) {"func_name" = "Collection_B_interleave_otherCollectionT_interleave_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "Collection_B_interleave_otherIterableT_interleave_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    "llvm.func"() <{"sym_name" = "Iterable_zip_otherIterableU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
     "mid.func"() ({
     ^bb58(%269 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %270 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %271 : !llvm.ptr, %272 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>):
       %273 = "mid.wrap"(%269) : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.fatptr<"Collection", [!hi.type_param<"T", !hi.any, "Collection">]>
@@ -4638,19 +4640,17 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %298 = "hi.cast"(%286) {"from_typ" = !hi.fatptr<"ZippedCollection", [!hi.type_param<"T", !hi.any, "Collection">, !hi.type_param<"U", !hi.any, "Collection">]>, "to_typ" = !hi.fatptr<"Iterable", [!hi.fatptr<"Pair", [!hi.type_param<"T", !hi.any, "Collection">, !hi.type_param<"U", !hi.any, "Collection">]>]>, "from_typ_name" = "ZippedCollection", "to_typ_name" = "Iterable"} : (!hi.fatptr<"ZippedCollection", [!hi.type_param<"T", !hi.any, "Collection">, !hi.type_param<"U", !hi.any, "Collection">]>) -> !hi.fatptr<"Iterable", [!hi.fatptr<"Pair", [!hi.type_param<"T", !hi.any, "Collection">, !hi.type_param<"U", !hi.any, "Collection">]>]>
       "mid.return"(%298) : (!hi.fatptr<"Iterable", [!hi.fatptr<"Pair", [!hi.type_param<"T", !hi.any, "Collection">, !hi.type_param<"U", !hi.any, "Collection">]>]>) -> ()
     }) {"func_name" = "Collection_zip_otherCollectionU", "result_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
-    "llvm.func"() <{"sym_name" = "Iterable_zip_otherIterableU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
     "mid.func"() ({
     ^bb59(%299 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %300 : !llvm.ptr):
       %301 = "mid.invariant"(%300) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %302 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb60] : () -> ()
     ^bb61:
-      %303 = "llvm.mlir.constant"() <{"value" = 68 : i32}> : () -> i32
+      %303 = "llvm.mlir.constant"() <{"value" = 69 : i32}> : () -> i32
       "llvm.store"(%303, %302) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb62] : () -> ()
     ^bb63:
-      %304 = "llvm.mlir.constant"() <{"value" = 69 : i32}> : () -> i32
+      %304 = "llvm.mlir.constant"() <{"value" = 68 : i32}> : () -> i32
       "llvm.store"(%304, %302) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb62] : () -> ()
     ^bb60:
@@ -4675,7 +4675,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %317 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %318 = "llvm.getelementptr"(%316, %317) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%318) : (!llvm.ptr) -> ()
-    }) {"func_name" = "Collection_B_zip_otherCollectionU_zip_otherIterableU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "Collection_B_zip_otherIterableU_zip_otherCollectionU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb66(%319 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %320 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %321 : !llvm.ptr, %322 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>):
       %323 = "mid.wrap"(%319) : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.fatptr<"Collection", [!hi.type_param<"T", !hi.any, "Collection">]>
@@ -4990,11 +4990,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %527 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb111] : () -> ()
     ^bb112:
-      %528 = "llvm.mlir.constant"() <{"value" = 27 : i32}> : () -> i32
+      %528 = "llvm.mlir.constant"() <{"value" = 28 : i32}> : () -> i32
       "llvm.store"(%528, %527) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb113] : () -> ()
     ^bb114:
-      %529 = "llvm.mlir.constant"() <{"value" = 28 : i32}> : () -> i32
+      %529 = "llvm.mlir.constant"() <{"value" = 27 : i32}> : () -> i32
       "llvm.store"(%529, %527) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb113] : () -> ()
     ^bb111:
@@ -5043,11 +5043,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %557 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb121] : () -> ()
     ^bb122:
-      %558 = "llvm.mlir.constant"() <{"value" = 31 : i32}> : () -> i32
+      %558 = "llvm.mlir.constant"() <{"value" = 30 : i32}> : () -> i32
       "llvm.store"(%558, %557) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb123] : () -> ()
     ^bb124:
-      %559 = "llvm.mlir.constant"() <{"value" = 30 : i32}> : () -> i32
+      %559 = "llvm.mlir.constant"() <{"value" = 31 : i32}> : () -> i32
       "llvm.store"(%559, %557) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb123] : () -> ()
     ^bb121:
@@ -5072,18 +5072,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %572 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %573 = "llvm.getelementptr"(%571, %572) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%573) : (!llvm.ptr) -> ()
-    }) {"func_name" = "EnumeratedCollection_B_chain_otherIterableT_chain_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "EnumeratedCollection_B_chain_otherCollectionT_chain_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb127(%574 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %575 : !llvm.ptr):
       %576 = "mid.invariant"(%575) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %577 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb128] : () -> ()
     ^bb129:
-      %578 = "llvm.mlir.constant"() <{"value" = 32 : i32}> : () -> i32
+      %578 = "llvm.mlir.constant"() <{"value" = 33 : i32}> : () -> i32
       "llvm.store"(%578, %577) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb130] : () -> ()
     ^bb131:
-      %579 = "llvm.mlir.constant"() <{"value" = 33 : i32}> : () -> i32
+      %579 = "llvm.mlir.constant"() <{"value" = 32 : i32}> : () -> i32
       "llvm.store"(%579, %577) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb130] : () -> ()
     ^bb128:
@@ -5108,18 +5108,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %592 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %593 = "llvm.getelementptr"(%591, %592) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%593) : (!llvm.ptr) -> ()
-    }) {"func_name" = "EnumeratedCollection_B_interleave_otherCollectionT_interleave_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "EnumeratedCollection_B_interleave_otherIterableT_interleave_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb134(%594 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %595 : !llvm.ptr):
       %596 = "mid.invariant"(%595) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %597 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb135] : () -> ()
     ^bb136:
-      %598 = "llvm.mlir.constant"() <{"value" = 34 : i32}> : () -> i32
+      %598 = "llvm.mlir.constant"() <{"value" = 35 : i32}> : () -> i32
       "llvm.store"(%598, %597) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb137] : () -> ()
     ^bb138:
-      %599 = "llvm.mlir.constant"() <{"value" = 35 : i32}> : () -> i32
+      %599 = "llvm.mlir.constant"() <{"value" = 34 : i32}> : () -> i32
       "llvm.store"(%599, %597) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb137] : () -> ()
     ^bb135:
@@ -5144,7 +5144,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %612 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %613 = "llvm.getelementptr"(%611, %612) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%613) : (!llvm.ptr) -> ()
-    }) {"func_name" = "EnumeratedCollection_B_zip_otherCollectionU_zip_otherIterableU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "EnumeratedCollection_B_zip_otherIterableU_zip_otherCollectionU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb141(%614 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %615 : !llvm.ptr):
       %616 = "mid.invariant"(%615) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
@@ -5498,11 +5498,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %836 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb196] : () -> ()
     ^bb197:
-      %837 = "llvm.mlir.constant"() <{"value" = 32 : i32}> : () -> i32
+      %837 = "llvm.mlir.constant"() <{"value" = 31 : i32}> : () -> i32
       "llvm.store"(%837, %836) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb198] : () -> ()
     ^bb199:
-      %838 = "llvm.mlir.constant"() <{"value" = 31 : i32}> : () -> i32
+      %838 = "llvm.mlir.constant"() <{"value" = 32 : i32}> : () -> i32
       "llvm.store"(%838, %836) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb198] : () -> ()
     ^bb196:
@@ -5527,18 +5527,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %851 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %852 = "llvm.getelementptr"(%850, %851) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%852) : (!llvm.ptr) -> ()
-    }) {"func_name" = "MappedCollection_B_chain_otherIterableT_chain_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "MappedCollection_B_chain_otherCollectionT_chain_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb202(%853 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %854 : !llvm.ptr):
       %855 = "mid.invariant"(%854) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %856 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb203] : () -> ()
     ^bb204:
-      %857 = "llvm.mlir.constant"() <{"value" = 33 : i32}> : () -> i32
+      %857 = "llvm.mlir.constant"() <{"value" = 34 : i32}> : () -> i32
       "llvm.store"(%857, %856) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb205] : () -> ()
     ^bb206:
-      %858 = "llvm.mlir.constant"() <{"value" = 34 : i32}> : () -> i32
+      %858 = "llvm.mlir.constant"() <{"value" = 33 : i32}> : () -> i32
       "llvm.store"(%858, %856) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb205] : () -> ()
     ^bb203:
@@ -5563,18 +5563,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %871 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %872 = "llvm.getelementptr"(%870, %871) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%872) : (!llvm.ptr) -> ()
-    }) {"func_name" = "MappedCollection_B_interleave_otherCollectionT_interleave_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "MappedCollection_B_interleave_otherIterableT_interleave_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb209(%873 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %874 : !llvm.ptr):
       %875 = "mid.invariant"(%874) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %876 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb210] : () -> ()
     ^bb211:
-      %877 = "llvm.mlir.constant"() <{"value" = 35 : i32}> : () -> i32
+      %877 = "llvm.mlir.constant"() <{"value" = 36 : i32}> : () -> i32
       "llvm.store"(%877, %876) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb212] : () -> ()
     ^bb213:
-      %878 = "llvm.mlir.constant"() <{"value" = 36 : i32}> : () -> i32
+      %878 = "llvm.mlir.constant"() <{"value" = 35 : i32}> : () -> i32
       "llvm.store"(%878, %876) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb212] : () -> ()
     ^bb210:
@@ -5599,7 +5599,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %891 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %892 = "llvm.getelementptr"(%890, %891) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%892) : (!llvm.ptr) -> ()
-    }) {"func_name" = "MappedCollection_B_zip_otherCollectionU_zip_otherIterableU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "MappedCollection_B_zip_otherIterableU_zip_otherCollectionU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb216(%893 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %894 : !llvm.ptr):
       %895 = "mid.invariant"(%894) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
@@ -5911,11 +5911,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1097 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb261] : () -> ()
     ^bb262:
-      %1098 = "llvm.mlir.constant"() <{"value" = 27 : i32}> : () -> i32
+      %1098 = "llvm.mlir.constant"() <{"value" = 28 : i32}> : () -> i32
       "llvm.store"(%1098, %1097) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb263] : () -> ()
     ^bb264:
-      %1099 = "llvm.mlir.constant"() <{"value" = 28 : i32}> : () -> i32
+      %1099 = "llvm.mlir.constant"() <{"value" = 27 : i32}> : () -> i32
       "llvm.store"(%1099, %1097) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb263] : () -> ()
     ^bb261:
@@ -5964,11 +5964,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1127 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb271] : () -> ()
     ^bb272:
-      %1128 = "llvm.mlir.constant"() <{"value" = 31 : i32}> : () -> i32
+      %1128 = "llvm.mlir.constant"() <{"value" = 30 : i32}> : () -> i32
       "llvm.store"(%1128, %1127) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb273] : () -> ()
     ^bb274:
-      %1129 = "llvm.mlir.constant"() <{"value" = 30 : i32}> : () -> i32
+      %1129 = "llvm.mlir.constant"() <{"value" = 31 : i32}> : () -> i32
       "llvm.store"(%1129, %1127) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb273] : () -> ()
     ^bb271:
@@ -5993,18 +5993,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1142 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1143 = "llvm.getelementptr"(%1141, %1142) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1143) : (!llvm.ptr) -> ()
-    }) {"func_name" = "ChainedCollection_B_chain_otherIterableT_chain_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "ChainedCollection_B_chain_otherCollectionT_chain_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb277(%1144 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1145 : !llvm.ptr):
       %1146 = "mid.invariant"(%1145) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %1147 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb278] : () -> ()
     ^bb279:
-      %1148 = "llvm.mlir.constant"() <{"value" = 32 : i32}> : () -> i32
+      %1148 = "llvm.mlir.constant"() <{"value" = 33 : i32}> : () -> i32
       "llvm.store"(%1148, %1147) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb280] : () -> ()
     ^bb281:
-      %1149 = "llvm.mlir.constant"() <{"value" = 33 : i32}> : () -> i32
+      %1149 = "llvm.mlir.constant"() <{"value" = 32 : i32}> : () -> i32
       "llvm.store"(%1149, %1147) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb280] : () -> ()
     ^bb278:
@@ -6029,18 +6029,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1162 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1163 = "llvm.getelementptr"(%1161, %1162) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1163) : (!llvm.ptr) -> ()
-    }) {"func_name" = "ChainedCollection_B_interleave_otherCollectionT_interleave_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "ChainedCollection_B_interleave_otherIterableT_interleave_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb284(%1164 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1165 : !llvm.ptr):
       %1166 = "mid.invariant"(%1165) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %1167 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb285] : () -> ()
     ^bb286:
-      %1168 = "llvm.mlir.constant"() <{"value" = 34 : i32}> : () -> i32
+      %1168 = "llvm.mlir.constant"() <{"value" = 35 : i32}> : () -> i32
       "llvm.store"(%1168, %1167) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb287] : () -> ()
     ^bb288:
-      %1169 = "llvm.mlir.constant"() <{"value" = 35 : i32}> : () -> i32
+      %1169 = "llvm.mlir.constant"() <{"value" = 34 : i32}> : () -> i32
       "llvm.store"(%1169, %1167) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb287] : () -> ()
     ^bb285:
@@ -6065,7 +6065,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1182 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1183 = "llvm.getelementptr"(%1181, %1182) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1183) : (!llvm.ptr) -> ()
-    }) {"func_name" = "ChainedCollection_B_zip_otherCollectionU_zip_otherIterableU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "ChainedCollection_B_zip_otherIterableU_zip_otherCollectionU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb291(%1184 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1185 : !llvm.ptr):
       %1186 = "mid.invariant"(%1185) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
@@ -6377,11 +6377,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1388 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb336] : () -> ()
     ^bb337:
-      %1389 = "llvm.mlir.constant"() <{"value" = 27 : i32}> : () -> i32
+      %1389 = "llvm.mlir.constant"() <{"value" = 28 : i32}> : () -> i32
       "llvm.store"(%1389, %1388) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb338] : () -> ()
     ^bb339:
-      %1390 = "llvm.mlir.constant"() <{"value" = 28 : i32}> : () -> i32
+      %1390 = "llvm.mlir.constant"() <{"value" = 27 : i32}> : () -> i32
       "llvm.store"(%1390, %1388) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb338] : () -> ()
     ^bb336:
@@ -6430,11 +6430,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1418 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb346] : () -> ()
     ^bb347:
-      %1419 = "llvm.mlir.constant"() <{"value" = 31 : i32}> : () -> i32
+      %1419 = "llvm.mlir.constant"() <{"value" = 30 : i32}> : () -> i32
       "llvm.store"(%1419, %1418) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb348] : () -> ()
     ^bb349:
-      %1420 = "llvm.mlir.constant"() <{"value" = 30 : i32}> : () -> i32
+      %1420 = "llvm.mlir.constant"() <{"value" = 31 : i32}> : () -> i32
       "llvm.store"(%1420, %1418) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb348] : () -> ()
     ^bb346:
@@ -6459,18 +6459,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1433 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1434 = "llvm.getelementptr"(%1432, %1433) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1434) : (!llvm.ptr) -> ()
-    }) {"func_name" = "InterleavedCollection_B_chain_otherIterableT_chain_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "InterleavedCollection_B_chain_otherCollectionT_chain_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb352(%1435 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1436 : !llvm.ptr):
       %1437 = "mid.invariant"(%1436) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %1438 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb353] : () -> ()
     ^bb354:
-      %1439 = "llvm.mlir.constant"() <{"value" = 32 : i32}> : () -> i32
+      %1439 = "llvm.mlir.constant"() <{"value" = 33 : i32}> : () -> i32
       "llvm.store"(%1439, %1438) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb355] : () -> ()
     ^bb356:
-      %1440 = "llvm.mlir.constant"() <{"value" = 33 : i32}> : () -> i32
+      %1440 = "llvm.mlir.constant"() <{"value" = 32 : i32}> : () -> i32
       "llvm.store"(%1440, %1438) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb355] : () -> ()
     ^bb353:
@@ -6495,18 +6495,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1453 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1454 = "llvm.getelementptr"(%1452, %1453) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1454) : (!llvm.ptr) -> ()
-    }) {"func_name" = "InterleavedCollection_B_interleave_otherCollectionT_interleave_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "InterleavedCollection_B_interleave_otherIterableT_interleave_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb359(%1455 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1456 : !llvm.ptr):
       %1457 = "mid.invariant"(%1456) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %1458 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb360] : () -> ()
     ^bb361:
-      %1459 = "llvm.mlir.constant"() <{"value" = 34 : i32}> : () -> i32
+      %1459 = "llvm.mlir.constant"() <{"value" = 35 : i32}> : () -> i32
       "llvm.store"(%1459, %1458) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb362] : () -> ()
     ^bb363:
-      %1460 = "llvm.mlir.constant"() <{"value" = 35 : i32}> : () -> i32
+      %1460 = "llvm.mlir.constant"() <{"value" = 34 : i32}> : () -> i32
       "llvm.store"(%1460, %1458) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb362] : () -> ()
     ^bb360:
@@ -6531,7 +6531,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1473 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1474 = "llvm.getelementptr"(%1472, %1473) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1474) : (!llvm.ptr) -> ()
-    }) {"func_name" = "InterleavedCollection_B_zip_otherCollectionU_zip_otherIterableU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "InterleavedCollection_B_zip_otherIterableU_zip_otherCollectionU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb366(%1475 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1476 : !llvm.ptr):
       %1477 = "mid.invariant"(%1476) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
@@ -6907,11 +6907,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1715 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb421] : () -> ()
     ^bb422:
-      %1716 = "llvm.mlir.constant"() <{"value" = 33 : i32}> : () -> i32
+      %1716 = "llvm.mlir.constant"() <{"value" = 32 : i32}> : () -> i32
       "llvm.store"(%1716, %1715) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb423] : () -> ()
     ^bb424:
-      %1717 = "llvm.mlir.constant"() <{"value" = 32 : i32}> : () -> i32
+      %1717 = "llvm.mlir.constant"() <{"value" = 33 : i32}> : () -> i32
       "llvm.store"(%1717, %1715) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb423] : () -> ()
     ^bb421:
@@ -6936,18 +6936,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1730 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1731 = "llvm.getelementptr"(%1729, %1730) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1731) : (!llvm.ptr) -> ()
-    }) {"func_name" = "ZippedCollection_B_chain_otherIterableT_chain_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "ZippedCollection_B_chain_otherCollectionT_chain_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb427(%1732 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1733 : !llvm.ptr):
       %1734 = "mid.invariant"(%1733) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %1735 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb428] : () -> ()
     ^bb429:
-      %1736 = "llvm.mlir.constant"() <{"value" = 34 : i32}> : () -> i32
+      %1736 = "llvm.mlir.constant"() <{"value" = 35 : i32}> : () -> i32
       "llvm.store"(%1736, %1735) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb430] : () -> ()
     ^bb431:
-      %1737 = "llvm.mlir.constant"() <{"value" = 35 : i32}> : () -> i32
+      %1737 = "llvm.mlir.constant"() <{"value" = 34 : i32}> : () -> i32
       "llvm.store"(%1737, %1735) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb430] : () -> ()
     ^bb428:
@@ -6972,18 +6972,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1750 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1751 = "llvm.getelementptr"(%1749, %1750) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1751) : (!llvm.ptr) -> ()
-    }) {"func_name" = "ZippedCollection_B_interleave_otherCollectionT_interleave_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "ZippedCollection_B_interleave_otherIterableT_interleave_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb434(%1752 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1753 : !llvm.ptr):
       %1754 = "mid.invariant"(%1753) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %1755 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb435] : () -> ()
     ^bb436:
-      %1756 = "llvm.mlir.constant"() <{"value" = 36 : i32}> : () -> i32
+      %1756 = "llvm.mlir.constant"() <{"value" = 37 : i32}> : () -> i32
       "llvm.store"(%1756, %1755) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb437] : () -> ()
     ^bb438:
-      %1757 = "llvm.mlir.constant"() <{"value" = 37 : i32}> : () -> i32
+      %1757 = "llvm.mlir.constant"() <{"value" = 36 : i32}> : () -> i32
       "llvm.store"(%1757, %1755) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb437] : () -> ()
     ^bb435:
@@ -7008,7 +7008,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1770 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1771 = "llvm.getelementptr"(%1769, %1770) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1771) : (!llvm.ptr) -> ()
-    }) {"func_name" = "ZippedCollection_B_zip_otherCollectionU_zip_otherIterableU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "ZippedCollection_B_zip_otherIterableU_zip_otherCollectionU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb441(%1772 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1773 : !llvm.ptr):
       %1774 = "mid.invariant"(%1773) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
@@ -7371,11 +7371,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %2002 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb496] : () -> ()
     ^bb497:
-      %2003 = "llvm.mlir.constant"() <{"value" = 33 : i32}> : () -> i32
+      %2003 = "llvm.mlir.constant"() <{"value" = 32 : i32}> : () -> i32
       "llvm.store"(%2003, %2002) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb498] : () -> ()
     ^bb499:
-      %2004 = "llvm.mlir.constant"() <{"value" = 32 : i32}> : () -> i32
+      %2004 = "llvm.mlir.constant"() <{"value" = 33 : i32}> : () -> i32
       "llvm.store"(%2004, %2002) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb498] : () -> ()
     ^bb496:
@@ -7400,18 +7400,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %2017 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %2018 = "llvm.getelementptr"(%2016, %2017) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%2018) : (!llvm.ptr) -> ()
-    }) {"func_name" = "ProductCollection_B_chain_otherIterableT_chain_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "ProductCollection_B_chain_otherCollectionT_chain_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb502(%2019 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %2020 : !llvm.ptr):
       %2021 = "mid.invariant"(%2020) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %2022 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb503] : () -> ()
     ^bb504:
-      %2023 = "llvm.mlir.constant"() <{"value" = 34 : i32}> : () -> i32
+      %2023 = "llvm.mlir.constant"() <{"value" = 35 : i32}> : () -> i32
       "llvm.store"(%2023, %2022) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb505] : () -> ()
     ^bb506:
-      %2024 = "llvm.mlir.constant"() <{"value" = 35 : i32}> : () -> i32
+      %2024 = "llvm.mlir.constant"() <{"value" = 34 : i32}> : () -> i32
       "llvm.store"(%2024, %2022) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb505] : () -> ()
     ^bb503:
@@ -7436,18 +7436,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %2037 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %2038 = "llvm.getelementptr"(%2036, %2037) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%2038) : (!llvm.ptr) -> ()
-    }) {"func_name" = "ProductCollection_B_interleave_otherCollectionT_interleave_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "ProductCollection_B_interleave_otherIterableT_interleave_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb509(%2039 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %2040 : !llvm.ptr):
       %2041 = "mid.invariant"(%2040) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %2042 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb510] : () -> ()
     ^bb511:
-      %2043 = "llvm.mlir.constant"() <{"value" = 36 : i32}> : () -> i32
+      %2043 = "llvm.mlir.constant"() <{"value" = 37 : i32}> : () -> i32
       "llvm.store"(%2043, %2042) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb512] : () -> ()
     ^bb513:
-      %2044 = "llvm.mlir.constant"() <{"value" = 37 : i32}> : () -> i32
+      %2044 = "llvm.mlir.constant"() <{"value" = 36 : i32}> : () -> i32
       "llvm.store"(%2044, %2042) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb512] : () -> ()
     ^bb510:
@@ -7472,7 +7472,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %2057 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %2058 = "llvm.getelementptr"(%2056, %2057) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%2058) : (!llvm.ptr) -> ()
-    }) {"func_name" = "ProductCollection_B_zip_otherCollectionU_zip_otherIterableU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "ProductCollection_B_zip_otherIterableU_zip_otherCollectionU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb516(%2059 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %2060 : !llvm.ptr):
       %2061 = "mid.invariant"(%2060) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
@@ -7657,8 +7657,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %63 = "mid.unwrap"(%62) : (!hi.bool) -> i1
       "mid.if"(%63) ({
         %64 = "mid.alloc"() {"typ" = !llvm.array<0 x i8>} : () -> !llvm.ptr
-        %65 = "hi.cast"(%64) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>
-        "mid.return"(%65) : (!hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>) -> ()
+        %65 = "hi.cast"(%64) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>
+        "mid.return"(%65) : (!hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>) -> ()
       }) : (i1) -> ()
       %66 = "mid.unwrap"(%58) : (!hi.fatptr<"List", [!hi.type_param<"T", !hi.any, "List">]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %67 = "mid.parameterizations_array"() : () -> !llvm.ptr
@@ -7669,14 +7669,14 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %71 = "mid.unwrap"(%70) : (!hi.fatptr<"ConstantTimeIterator", [!hi.type_param<"T", !hi.any, "List">]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %72 = "mid.parameterizations_array"() : () -> !llvm.ptr
         %73 = "mid.method_call"(%72, %71) {"offset" = 1 : i32, "vptrs" = [], "vtable_size" = 6 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.union<[!hi.type_param<"T", !hi.any, "ConstantTimeIterator">, !hi.nil]>
-        %74 = "hi.cast"(%73) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "ConstantTimeIterator">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "ConstantTimeIterator">, !hi.nil]>) -> !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>
+        %74 = "hi.cast"(%73) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "ConstantTimeIterator">, !hi.nil]>, "to_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "ConstantTimeIterator">, !hi.nil]>) -> !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>
         %75 = "mid.get_type_field"(%58) {"offset" = 0 : i64, "vtable_bytes" = 1088 : i32} : (!hi.fatptr<"List", [!hi.type_param<"T", !hi.any, "List">]>) -> !hi.reified_type
-        %76 = "mid.checkflag"(%74) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>) -> si1
+        %76 = "mid.checkflag"(%74) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>) -> si1
         %77 = "mid.unwrap"(%76) : (si1) -> i1
       }, {
-        %78 = "hi.cast"(%74) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>, "to_typ" = !hi.type_param<"T", !hi.any, "List">, "from_typ_name" = "union_typ", "to_typ_name" = "any_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>) -> !hi.type_param<"T", !hi.any, "List">
-        %79 = "hi.cast"(%78) {"from_typ" = !hi.type_param<"T", !hi.any, "List">, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ"} : (!hi.type_param<"T", !hi.any, "List">) -> !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>
-        "mid.return"(%79) : (!hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>) -> ()
+        %78 = "hi.cast"(%74) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>, "to_typ" = !hi.type_param<"T", !hi.any, "List">, "from_typ_name" = "union_typ", "to_typ_name" = "any_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>) -> !hi.type_param<"T", !hi.any, "List">
+        %79 = "hi.cast"(%78) {"from_typ" = !hi.type_param<"T", !hi.any, "List">, "to_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ"} : (!hi.type_param<"T", !hi.any, "List">) -> !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>
+        "mid.return"(%79) : (!hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>) -> ()
       }) : () -> ()
     }) {"func_name" = "List_first_", "result_type" = !llvm.struct<(!llvm.ptr, i160)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
@@ -7711,10 +7711,10 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %103 = "mid.unwrap"(%94) : (!hi.fatptr<"List", [!hi.type_param<"T", !hi.any, "List">]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %104 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %105 = "mid.parameterizations_array"(%104) : (!llvm.ptr) -> !llvm.ptr
-      %106 = "mid.method_call"(%105, %103, %102) {"offset" = 8 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 136 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i32) -> !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>
-      %107 = "hi.cast"(%106) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>) -> !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>
-      %108 = "hi.cast"(%107) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>) -> !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>
-      "mid.return"(%108) : (!hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>) -> ()
+      %106 = "mid.method_call"(%105, %103, %102) {"offset" = 8 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 136 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i32) -> !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>
+      %107 = "hi.cast"(%106) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>, "to_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>) -> !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>
+      %108 = "hi.cast"(%107) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>, "to_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>) -> !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>
+      "mid.return"(%108) : (!hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>) -> ()
     }) {"func_name" = "List_last_", "result_type" = !llvm.struct<(!llvm.ptr, i160)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
     ^bb20(%109 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %110 : !llvm.ptr):
@@ -7748,12 +7748,12 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %132 = "mid.unwrap"(%131) : (!hi.fatptr<"Iterator", [!hi.type_param<"T", !hi.any, "List">]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %133 = "mid.parameterizations_array"() : () -> !llvm.ptr
         %134 = "mid.method_call"(%133, %132) {"offset" = 1 : i32, "vptrs" = [], "vtable_size" = 3 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>
-        %135 = "hi.cast"(%134) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>
+        %135 = "hi.cast"(%134) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>
         %136 = "mid.get_type_field"(%124) {"offset" = 0 : i64, "vtable_bytes" = 1088 : i32} : (!hi.fatptr<"List", [!hi.type_param<"T", !hi.any, "List">]>) -> !hi.reified_type
-        %137 = "mid.checkflag"(%135) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>) -> si1
+        %137 = "mid.checkflag"(%135) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>) -> si1
         %138 = "mid.unwrap"(%137) : (si1) -> i1
       }, {
-        %139 = "hi.cast"(%135) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>, "to_typ" = !hi.type_param<"T", !hi.any, "List">, "from_typ_name" = "union_typ", "to_typ_name" = "any_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>) -> !hi.type_param<"T", !hi.any, "List">
+        %139 = "hi.cast"(%135) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>, "to_typ" = !hi.type_param<"T", !hi.any, "List">, "from_typ_name" = "union_typ", "to_typ_name" = "any_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>) -> !hi.type_param<"T", !hi.any, "List">
         %140 = "hi.cast"(%139) {"from_typ" = !hi.type_param<"T", !hi.any, "List">, "to_typ" = !hi.type_param<"T", !hi.any, "List">, "from_typ_name" = "any_typ", "to_typ_name" = "any_typ"} : (!hi.type_param<"T", !hi.any, "List">) -> !hi.type_param<"T", !hi.any, "List">
         %141 = "mid.unwrap"(%140) : (!hi.type_param<"T", !hi.any, "List">) -> !llvm.struct<(!llvm.ptr, i160)>
         %142 = "mid.unwrap"(%124) : (!hi.fatptr<"List", [!hi.type_param<"T", !hi.any, "List">]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
@@ -7761,8 +7761,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %144 = "mid.parameterizations_array"(%143) : (!hi.reified_type) -> !llvm.ptr
         %145 = "mid.method_call"(%144, %142, %141) {"offset" = 3 : i32, "vptrs" = ["any_typ"], "vtable_size" = 136 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.fatptr<"List", [!hi.type_param<"T", !hi.any, "List">]>
         %146 = "hi.cast"(%145) {"from_typ" = !hi.fatptr<"List", [!hi.type_param<"T", !hi.any, "List">]>, "to_typ" = !hi.fatptr<"List", [!hi.type_param<"T", !hi.any, "List">]>, "from_typ_name" = "List", "to_typ_name" = "List"} : (!hi.fatptr<"List", [!hi.type_param<"T", !hi.any, "List">]>) -> !hi.fatptr<"List", [!hi.type_param<"T", !hi.any, "List">]>
-        %147 = "hi.cast"(%139) {"from_typ" = !hi.type_param<"T", !hi.any, "List">, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ"} : (!hi.type_param<"T", !hi.any, "List">) -> !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>
-        "mid.assign"(%135, %147) {"typ" = !llvm.struct<(!llvm.ptr, i160)>} : (!hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>, !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>) -> ()
+        %147 = "hi.cast"(%139) {"from_typ" = !hi.type_param<"T", !hi.any, "List">, "to_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ"} : (!hi.type_param<"T", !hi.any, "List">) -> !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>
+        "mid.assign"(%135, %147) {"typ" = !llvm.struct<(!llvm.ptr, i160)>} : (!hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>, !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>) -> ()
       }) : () -> ()
       %148 = "hi.cast"(%124) {"from_typ" = !hi.fatptr<"List", [!hi.type_param<"T", !hi.any, "List">]>, "to_typ" = !hi.fatptr<"List", [!hi.type_param<"T", !hi.any, "List">]>, "from_typ_name" = "List", "to_typ_name" = "List"} : (!hi.fatptr<"List", [!hi.type_param<"T", !hi.any, "List">]>) -> !hi.fatptr<"List", [!hi.type_param<"T", !hi.any, "List">]>
       "mid.return"(%148) : (!hi.fatptr<"List", [!hi.type_param<"T", !hi.any, "List">]>) -> ()
@@ -7803,8 +7803,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %175 = "mid.unwrap"(%174) : (si1) -> i1
       "mid.if"(%175) ({
         %176 = "mid.alloc"() {"typ" = !llvm.array<0 x i8>} : () -> !llvm.ptr
-        %177 = "hi.cast"(%176) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>
-        "mid.return"(%177) : (!hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>) -> ()
+        %177 = "hi.cast"(%176) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>
+        "mid.return"(%177) : (!hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>) -> ()
       }) : (i1) -> ()
       %178 = "mid.unwrap"(%167) : (!hi.fatptr<"List", [!hi.type_param<"T", !hi.any, "List">]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %179 = "mid.parameterizations_array"() : () -> !llvm.ptr
@@ -7835,8 +7835,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
           %201 = "mid.parameterizations_array"() : () -> !llvm.ptr
           %202 = "mid.method_call"(%201, %200) {"offset" = 5 : i32, "vptrs" = [], "vtable_size" = 14 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.type_param<"U", !hi.any, "Pair">
           %203 = "hi.cast"(%202) {"from_typ" = !hi.type_param<"U", !hi.any, "Pair">, "to_typ" = !hi.type_param<"T", !hi.any, "List">, "from_typ_name" = "any_typ", "to_typ_name" = "any_typ"} : (!hi.type_param<"U", !hi.any, "Pair">) -> !hi.type_param<"T", !hi.any, "List">
-          %204 = "hi.cast"(%203) {"from_typ" = !hi.type_param<"T", !hi.any, "List">, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ"} : (!hi.type_param<"T", !hi.any, "List">) -> !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>
-          "mid.return"(%204) : (!hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "List">]>) -> ()
+          %204 = "hi.cast"(%203) {"from_typ" = !hi.type_param<"T", !hi.any, "List">, "to_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ"} : (!hi.type_param<"T", !hi.any, "List">) -> !hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>
+          "mid.return"(%204) : (!hi.union<[!hi.type_param<"T", !hi.any, "List">, !hi.nil]>) -> ()
         }) : (i1) -> ()
         %205 = "hi.cast"(%193) {"from_typ" = !hi.fatptr<"Pair", [si32, !hi.type_param<"T", !hi.any, "List">]>, "to_typ" = !hi.union<[!hi.fatptr<"Pair", [si32, !hi.type_param<"T", !hi.any, "List">]>, !hi.nil]>, "from_typ_name" = "Pair", "to_typ_name" = "union_typ"} : (!hi.fatptr<"Pair", [si32, !hi.type_param<"T", !hi.any, "List">]>) -> !hi.union<[!hi.fatptr<"Pair", [si32, !hi.type_param<"T", !hi.any, "List">]>, !hi.nil]>
         "mid.assign"(%190, %205) {"typ" = !llvm.struct<(!llvm.ptr, i160)>} : (!hi.union<[!hi.fatptr<"Pair", [si32, !hi.type_param<"T", !hi.any, "List">]>, !hi.nil]>, !hi.union<[!hi.fatptr<"Pair", [si32, !hi.type_param<"T", !hi.any, "List">]>, !hi.nil]>) -> ()
@@ -7879,8 +7879,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %234 = "mid.unwrap"(%233) : (!hi.bool) -> i1
       "mid.if"(%234) ({
         %235 = "mid.alloc"() {"typ" = !llvm.array<0 x i8>} : () -> !llvm.ptr
-        %236 = "hi.cast"(%235) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[si32, !hi.nil]>
-        "mid.return"(%236) : (!hi.union<[si32, !hi.nil]>) -> ()
+        %236 = "hi.cast"(%235) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[!hi.nil, si32]>
+        "mid.return"(%236) : (!hi.union<[!hi.nil, si32]>) -> ()
       }) : (i1) -> ()
       %237 = "mid.unwrap"(%225) : (!hi.fatptr<"List", [!hi.type_param<"T", !hi.any, "List">]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %238 = "mid.parameterizations_array"() : () -> !llvm.ptr
@@ -7916,15 +7916,15 @@ builtin.module attributes  {"sym_name" = "ir"} {
           %265 = "mid.parameterizations_array"() : () -> !llvm.ptr
           %266 = "mid.method_call"(%265, %264) {"offset" = 4 : i32, "vptrs" = [], "vtable_size" = 14 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.type_param<"T", !hi.any, "Pair">
           %267 = "hi.cast"(%266) {"from_typ" = !hi.type_param<"T", !hi.any, "Pair">, "to_typ" = si32, "from_typ_name" = "any_typ", "to_typ_name" = "i32_typ"} : (!hi.type_param<"T", !hi.any, "Pair">) -> si32
-          %268 = "hi.cast"(%267) {"from_typ" = si32, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si32, !hi.nil]>
-          "mid.return"(%268) : (!hi.union<[si32, !hi.nil]>) -> ()
+          %268 = "hi.cast"(%267) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.nil, si32]>
+          "mid.return"(%268) : (!hi.union<[!hi.nil, si32]>) -> ()
         }) : (i1) -> ()
         %269 = "hi.cast"(%252) {"from_typ" = !hi.fatptr<"Pair", [si32, !hi.type_param<"T", !hi.any, "List">]>, "to_typ" = !hi.union<[!hi.fatptr<"Pair", [si32, !hi.type_param<"T", !hi.any, "List">]>, !hi.nil]>, "from_typ_name" = "Pair", "to_typ_name" = "union_typ"} : (!hi.fatptr<"Pair", [si32, !hi.type_param<"T", !hi.any, "List">]>) -> !hi.union<[!hi.fatptr<"Pair", [si32, !hi.type_param<"T", !hi.any, "List">]>, !hi.nil]>
         "mid.assign"(%249, %269) {"typ" = !llvm.struct<(!llvm.ptr, i160)>} : (!hi.union<[!hi.fatptr<"Pair", [si32, !hi.type_param<"T", !hi.any, "List">]>, !hi.nil]>, !hi.union<[!hi.fatptr<"Pair", [si32, !hi.type_param<"T", !hi.any, "List">]>, !hi.nil]>) -> ()
       }) : () -> ()
       %270 = "mid.alloc"() {"typ" = !llvm.array<0 x i8>} : () -> !llvm.ptr
-      %271 = "hi.cast"(%270) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[si32, !hi.nil]>
-      "mid.return"(%271) : (!hi.union<[si32, !hi.nil]>) -> ()
+      %271 = "hi.cast"(%270) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[!hi.nil, si32]>
+      "mid.return"(%271) : (!hi.union<[!hi.nil, si32]>) -> ()
     }) {"func_name" = "List_index_of_targetT_eqFunctionT._T_to_Bool", "result_type" = !llvm.struct<(!llvm.ptr, i32)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
     ^bb34(%272 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %273 : !llvm.ptr):
@@ -8128,9 +8128,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %382 = "llvm.getelementptr"(%380, %381) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%382) : (!llvm.ptr) -> ()
     }) {"func_name" = "List_B_enumerate_", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb68(%383 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %384 : !llvm.ptr):
@@ -8138,11 +8138,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %386 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb69] : () -> ()
     ^bb70:
-      %387 = "llvm.mlir.constant"() <{"value" = 124 : i32}> : () -> i32
+      %387 = "llvm.mlir.constant"() <{"value" = 125 : i32}> : () -> i32
       "llvm.store"(%387, %386) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb71] : () -> ()
     ^bb72:
-      %388 = "llvm.mlir.constant"() <{"value" = 125 : i32}> : () -> i32
+      %388 = "llvm.mlir.constant"() <{"value" = 124 : i32}> : () -> i32
       "llvm.store"(%388, %386) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb71] : () -> ()
     ^bb69:
@@ -8187,9 +8187,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %412 = "llvm.getelementptr"(%410, %411) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%412) : (!llvm.ptr) -> ()
     }) {"func_name" = "List_B_filter_fFunctionT_to_Bool", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Iterable_chain_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
     "llvm.func"() <{"sym_name" = "Collection_chain_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Iterable_chain_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb78(%413 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %414 : !llvm.ptr):
@@ -8197,11 +8197,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %416 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb79] : () -> ()
     ^bb80:
-      %417 = "llvm.mlir.constant"() <{"value" = 45 : i32}> : () -> i32
+      %417 = "llvm.mlir.constant"() <{"value" = 44 : i32}> : () -> i32
       "llvm.store"(%417, %416) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb81] : () -> ()
     ^bb82:
-      %418 = "llvm.mlir.constant"() <{"value" = 44 : i32}> : () -> i32
+      %418 = "llvm.mlir.constant"() <{"value" = 45 : i32}> : () -> i32
       "llvm.store"(%418, %416) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb81] : () -> ()
     ^bb79:
@@ -8226,10 +8226,10 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %431 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %432 = "llvm.getelementptr"(%430, %431) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%432) : (!llvm.ptr) -> ()
-    }) {"func_name" = "List_B_chain_otherIterableT_chain_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_interleave_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
+    }) {"func_name" = "List_B_chain_otherCollectionT_chain_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_interleave_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_interleave_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb85(%433 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %434 : !llvm.ptr):
@@ -8237,11 +8237,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %436 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb86] : () -> ()
     ^bb87:
-      %437 = "llvm.mlir.constant"() <{"value" = 46 : i32}> : () -> i32
+      %437 = "llvm.mlir.constant"() <{"value" = 47 : i32}> : () -> i32
       "llvm.store"(%437, %436) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb88] : () -> ()
     ^bb89:
-      %438 = "llvm.mlir.constant"() <{"value" = 47 : i32}> : () -> i32
+      %438 = "llvm.mlir.constant"() <{"value" = 46 : i32}> : () -> i32
       "llvm.store"(%438, %436) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb88] : () -> ()
     ^bb86:
@@ -8266,10 +8266,10 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %451 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %452 = "llvm.getelementptr"(%450, %451) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%452) : (!llvm.ptr) -> ()
-    }) {"func_name" = "List_B_interleave_otherCollectionT_interleave_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_zip_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
+    }) {"func_name" = "List_B_interleave_otherIterableT_interleave_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_zip_otherIterableU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_zip_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb92(%453 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %454 : !llvm.ptr):
@@ -8277,11 +8277,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %456 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb93] : () -> ()
     ^bb94:
-      %457 = "llvm.mlir.constant"() <{"value" = 131 : i32}> : () -> i32
+      %457 = "llvm.mlir.constant"() <{"value" = 132 : i32}> : () -> i32
       "llvm.store"(%457, %456) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb95] : () -> ()
     ^bb96:
-      %458 = "llvm.mlir.constant"() <{"value" = 132 : i32}> : () -> i32
+      %458 = "llvm.mlir.constant"() <{"value" = 131 : i32}> : () -> i32
       "llvm.store"(%458, %456) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb95] : () -> ()
     ^bb93:
@@ -8306,7 +8306,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %471 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %472 = "llvm.getelementptr"(%470, %471) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%472) : (!llvm.ptr) -> ()
-    }) {"func_name" = "List_B_zip_otherCollectionU_zip_otherIterableU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "List_B_zip_otherIterableU_zip_otherCollectionU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Collection_product_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_product_otherIterableU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
@@ -8710,9 +8710,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %172 = "llvm.getelementptr"(%170, %171) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%172) : (!llvm.ptr) -> ()
     }) {"func_name" = "IndexableCollection_B_enumerate_", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb53(%173 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %174 : !llvm.ptr):
@@ -8720,11 +8720,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %176 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb54] : () -> ()
     ^bb55:
-      %177 = "llvm.mlir.constant"() <{"value" = 336 : i32}> : () -> i32
+      %177 = "llvm.mlir.constant"() <{"value" = 337 : i32}> : () -> i32
       "llvm.store"(%177, %176) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb56] : () -> ()
     ^bb57:
-      %178 = "llvm.mlir.constant"() <{"value" = 337 : i32}> : () -> i32
+      %178 = "llvm.mlir.constant"() <{"value" = 336 : i32}> : () -> i32
       "llvm.store"(%178, %176) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb56] : () -> ()
     ^bb54:
@@ -8769,9 +8769,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %202 = "llvm.getelementptr"(%200, %201) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%202) : (!llvm.ptr) -> ()
     }) {"func_name" = "IndexableCollection_B_filter_fFunctionT_to_Bool", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Iterable_chain_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
     "llvm.func"() <{"sym_name" = "Collection_chain_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Iterable_chain_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb63(%203 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %204 : !llvm.ptr):
@@ -8779,11 +8779,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %206 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb64] : () -> ()
     ^bb65:
-      %207 = "llvm.mlir.constant"() <{"value" = 37 : i32}> : () -> i32
+      %207 = "llvm.mlir.constant"() <{"value" = 36 : i32}> : () -> i32
       "llvm.store"(%207, %206) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb66] : () -> ()
     ^bb67:
-      %208 = "llvm.mlir.constant"() <{"value" = 36 : i32}> : () -> i32
+      %208 = "llvm.mlir.constant"() <{"value" = 37 : i32}> : () -> i32
       "llvm.store"(%208, %206) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb66] : () -> ()
     ^bb64:
@@ -8808,10 +8808,10 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %221 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %222 = "llvm.getelementptr"(%220, %221) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%222) : (!llvm.ptr) -> ()
-    }) {"func_name" = "IndexableCollection_B_chain_otherIterableT_chain_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_interleave_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
+    }) {"func_name" = "IndexableCollection_B_chain_otherCollectionT_chain_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_interleave_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_interleave_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb70(%223 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %224 : !llvm.ptr):
@@ -8819,11 +8819,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %226 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb71] : () -> ()
     ^bb72:
-      %227 = "llvm.mlir.constant"() <{"value" = 38 : i32}> : () -> i32
+      %227 = "llvm.mlir.constant"() <{"value" = 39 : i32}> : () -> i32
       "llvm.store"(%227, %226) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb73] : () -> ()
     ^bb74:
-      %228 = "llvm.mlir.constant"() <{"value" = 39 : i32}> : () -> i32
+      %228 = "llvm.mlir.constant"() <{"value" = 38 : i32}> : () -> i32
       "llvm.store"(%228, %226) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb73] : () -> ()
     ^bb71:
@@ -8848,10 +8848,10 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %241 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %242 = "llvm.getelementptr"(%240, %241) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%242) : (!llvm.ptr) -> ()
-    }) {"func_name" = "IndexableCollection_B_interleave_otherCollectionT_interleave_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_zip_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
+    }) {"func_name" = "IndexableCollection_B_interleave_otherIterableT_interleave_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_zip_otherIterableU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_zip_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb77(%243 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %244 : !llvm.ptr):
@@ -8859,11 +8859,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %246 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb78] : () -> ()
     ^bb79:
-      %247 = "llvm.mlir.constant"() <{"value" = 343 : i32}> : () -> i32
+      %247 = "llvm.mlir.constant"() <{"value" = 344 : i32}> : () -> i32
       "llvm.store"(%247, %246) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb80] : () -> ()
     ^bb81:
-      %248 = "llvm.mlir.constant"() <{"value" = 344 : i32}> : () -> i32
+      %248 = "llvm.mlir.constant"() <{"value" = 343 : i32}> : () -> i32
       "llvm.store"(%248, %246) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb80] : () -> ()
     ^bb78:
@@ -8888,7 +8888,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %261 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %262 = "llvm.getelementptr"(%260, %261) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%262) : (!llvm.ptr) -> ()
-    }) {"func_name" = "IndexableCollection_B_zip_otherCollectionU_zip_otherIterableU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "IndexableCollection_B_zip_otherIterableU_zip_otherCollectionU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Collection_product_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_product_otherIterableU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
@@ -8974,7 +8974,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     "mid.external_typedef"() {"class_name" = "InterleavedCollection"} : () -> ()
     "mid.external_typedef"() {"class_name" = "ZippedCollection"} : () -> ()
     "mid.external_typedef"() {"class_name" = "ProductCollection"} : () -> ()
-    "mid.typedef"() {"class_name" = "Range", "methods" = [@Range_field_start, @Range_field_end, @Range_field_step, @Range_field_Range_0, @Range_B_init_endi32, @Range_B_init_starti32_endi32, @Range_B_step_stepi32, @Range_B_size_, @Range_B_is_empty_, @Range_B_iterator_, @Range_B_each_fFunctionT_to_Nothing, @Range_B_reduce_accumulatorT_fFunctionT._T_to_T, @Range_B_all_fFunctionT_to_Bool, @Range_B_any_fFunctionT_to_Bool, @Range_B_enumerate_, @Range_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Range_B_filter_fFunctionT_to_Bool, @Range_B_chain_otherIterableT_chain_otherCollectionT, @Range_B_interleave_otherCollectionT_interleave_otherIterableT, @Range_B_zip_otherCollectionU_zip_otherIterableU, @Range_B_product_otherCollectionU_product_otherIterableU, @Range_init_endi32, @Range_init_starti32_endi32, @Range_step_stepi32, @Range_size_, @Collection_is_empty_, @Range_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @Range_field_Range_0, @Range_B_size_, @Range_B_is_empty_, @Range_B_iterator_, @Range_B_each_fFunctionT_to_Nothing, @Range_B_reduce_accumulatorT_fFunctionT._T_to_T, @Range_B_all_fFunctionT_to_Bool, @Range_B_any_fFunctionT_to_Bool, @Range_B_enumerate_, @Range_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Range_B_filter_fFunctionT_to_Bool, @Range_B_chain_otherIterableT_chain_otherCollectionT, @Range_B_interleave_otherCollectionT_interleave_otherIterableT, @Range_B_zip_otherCollectionU_zip_otherIterableU, @Range_B_product_otherCollectionU_product_otherIterableU, @Range_size_, @Collection_is_empty_, @Range_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @Range_field_Range_0, @Range_B_iterator_, @Range_B_each_fFunctionT_to_Nothing, @Range_B_reduce_accumulatorT_fFunctionT._T_to_T, @Range_B_all_fFunctionT_to_Bool, @Range_B_any_fFunctionT_to_Bool, @Range_B_enumerate_, @Range_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Range_B_filter_fFunctionT_to_Bool, @Range_B_chain_otherIterableT_chain_otherCollectionT, @Range_B_interleave_otherCollectionT_interleave_otherIterableT, @Range_B_zip_otherCollectionU_zip_otherIterableU, @Range_B_product_otherCollectionU_product_otherIterableU, @Range_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @Range_field_Range_0, @Range_B_iterator_, @Range_B_each_fFunctionT_to_Nothing, @Range_B_reduce_accumulatorT_fFunctionT._T_to_T, @Range_B_all_fFunctionT_to_Bool, @Range_B_any_fFunctionT_to_Bool, @Range_B_enumerate_, @Range_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Range_B_filter_fFunctionT_to_Bool, @Range_B_chain_otherIterableT_chain_otherCollectionT, @Range_B_interleave_otherCollectionT_interleave_otherIterableT, @Range_B_zip_otherCollectionU_zip_otherIterableU, @Range_B_product_otherCollectionU_product_otherIterableU, @Range_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU], "hash_tbl" = [18446744073709551615 : i64, @Object, 18446744073709551615 : i64, @Range, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, @Container, 18446744073709551615 : i64, @Collection, 18446744073709551615 : i64, @Iterable, @any_typ, 18446744073709551615 : i64], "offset_tbl" = [0 : i32, 137 : i32, 0 : i32, 10 : i32, 0 : i32, 0 : i32, 0 : i32, 0 : i32, 0 : i32, 137 : i32, 0 : i32, 53 : i32, 0 : i32, 112 : i32, 10 : i32, 0 : i32], "prime" = 4611686018427389989 : i64, "hash_id" = 5490049236840671069 : i64, "base_typ" = !llvm.struct<(i32, i32, i32)>, "data_size_fn" = "_data_size_Range", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+    "mid.typedef"() {"class_name" = "Range", "methods" = [@Range_field_start, @Range_field_end, @Range_field_step, @Range_field_Range_0, @Range_B_init_endi32, @Range_B_init_starti32_endi32, @Range_B_step_stepi32, @Range_B_size_, @Range_B_is_empty_, @Range_B_iterator_, @Range_B_each_fFunctionT_to_Nothing, @Range_B_reduce_accumulatorT_fFunctionT._T_to_T, @Range_B_all_fFunctionT_to_Bool, @Range_B_any_fFunctionT_to_Bool, @Range_B_enumerate_, @Range_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Range_B_filter_fFunctionT_to_Bool, @Range_B_chain_otherCollectionT_chain_otherIterableT, @Range_B_interleave_otherIterableT_interleave_otherCollectionT, @Range_B_zip_otherIterableU_zip_otherCollectionU, @Range_B_product_otherCollectionU_product_otherIterableU, @Range_init_endi32, @Range_init_starti32_endi32, @Range_step_stepi32, @Range_size_, @Collection_is_empty_, @Range_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @Range_field_Range_0, @Range_B_size_, @Range_B_is_empty_, @Range_B_iterator_, @Range_B_each_fFunctionT_to_Nothing, @Range_B_reduce_accumulatorT_fFunctionT._T_to_T, @Range_B_all_fFunctionT_to_Bool, @Range_B_any_fFunctionT_to_Bool, @Range_B_enumerate_, @Range_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Range_B_filter_fFunctionT_to_Bool, @Range_B_chain_otherCollectionT_chain_otherIterableT, @Range_B_interleave_otherIterableT_interleave_otherCollectionT, @Range_B_zip_otherIterableU_zip_otherCollectionU, @Range_B_product_otherCollectionU_product_otherIterableU, @Range_size_, @Collection_is_empty_, @Range_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @Range_field_Range_0, @Range_B_iterator_, @Range_B_each_fFunctionT_to_Nothing, @Range_B_reduce_accumulatorT_fFunctionT._T_to_T, @Range_B_all_fFunctionT_to_Bool, @Range_B_any_fFunctionT_to_Bool, @Range_B_enumerate_, @Range_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Range_B_filter_fFunctionT_to_Bool, @Range_B_chain_otherCollectionT_chain_otherIterableT, @Range_B_interleave_otherIterableT_interleave_otherCollectionT, @Range_B_zip_otherIterableU_zip_otherCollectionU, @Range_B_product_otherCollectionU_product_otherIterableU, @Range_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @Range_field_Range_0, @Range_B_iterator_, @Range_B_each_fFunctionT_to_Nothing, @Range_B_reduce_accumulatorT_fFunctionT._T_to_T, @Range_B_all_fFunctionT_to_Bool, @Range_B_any_fFunctionT_to_Bool, @Range_B_enumerate_, @Range_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Range_B_filter_fFunctionT_to_Bool, @Range_B_chain_otherCollectionT_chain_otherIterableT, @Range_B_interleave_otherIterableT_interleave_otherCollectionT, @Range_B_zip_otherIterableU_zip_otherCollectionU, @Range_B_product_otherCollectionU_product_otherIterableU, @Range_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU], "hash_tbl" = [18446744073709551615 : i64, @Object, 18446744073709551615 : i64, @Range, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, @Container, 18446744073709551615 : i64, @Collection, 18446744073709551615 : i64, @Iterable, @any_typ, 18446744073709551615 : i64], "offset_tbl" = [0 : i32, 137 : i32, 0 : i32, 10 : i32, 0 : i32, 0 : i32, 0 : i32, 0 : i32, 0 : i32, 137 : i32, 0 : i32, 53 : i32, 0 : i32, 112 : i32, 10 : i32, 0 : i32], "prime" = 4611686018427389989 : i64, "hash_id" = 5490049236840671069 : i64, "base_typ" = !llvm.struct<(i32, i32, i32)>, "data_size_fn" = "_data_size_Range", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
     "mid.typedef"() {"class_name" = "RangeIterator", "methods" = [@RangeIterator_field_counter, @RangeIterator_field_end, @RangeIterator_field_step, @RangeIterator_field_RangeIterator_0, @RangeIterator_B_init_counteri32_endi32_stepi32, @RangeIterator_B_next_, @RangeIterator_init_counteri32_endi32_stepi32, @RangeIterator_next_, @RangeIterator_field_RangeIterator_0, @RangeIterator_B_next_, @RangeIterator_next_], "hash_tbl" = [@any_typ, 18446744073709551615 : i64, @Iterator, @RangeIterator, @Container, @Object, 18446744073709551615 : i64, 18446744073709551615 : i64], "offset_tbl" = [10 : i32, 0 : i32, 18 : i32, 10 : i32, 21 : i32, 21 : i32, 0 : i32, 0 : i32], "prime" = 4611686018427388157 : i64, "hash_id" = 17533181587765144941 : i64, "base_typ" = !llvm.struct<(i32, i32, i32)>, "data_size_fn" = "_data_size_RangeIterator", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
     "mid.data_size_def"() {"meth_name" = "_data_size_Range", "types" = [i32, i32, i32]} : () -> ()
     "mid.getter_def"() {"meth_name" = "Range_getter_start", "types" = [i32, i32, i32], "offset" = 0 : i64, "original_type" = i32, "specialized_name" = "i32_typ", "parameterization" = "_parameterization_i32"} : () -> ()
@@ -9329,9 +9329,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %224 = "llvm.getelementptr"(%222, %223) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%224) : (!llvm.ptr) -> ()
     }) {"func_name" = "Range_B_enumerate_", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb47(%225 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %226 : !llvm.ptr):
@@ -9339,11 +9339,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %228 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb48] : () -> ()
     ^bb49:
-      %229 = "llvm.mlir.constant"() <{"value" = 33 : i32}> : () -> i32
+      %229 = "llvm.mlir.constant"() <{"value" = 32 : i32}> : () -> i32
       "llvm.store"(%229, %228) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb50] : () -> ()
     ^bb51:
-      %230 = "llvm.mlir.constant"() <{"value" = 32 : i32}> : () -> i32
+      %230 = "llvm.mlir.constant"() <{"value" = 33 : i32}> : () -> i32
       "llvm.store"(%230, %228) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb50] : () -> ()
     ^bb48:
@@ -9388,9 +9388,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %254 = "llvm.getelementptr"(%252, %253) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%254) : (!llvm.ptr) -> ()
     }) {"func_name" = "Range_B_filter_fFunctionT_to_Bool", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Iterable_chain_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
     "llvm.func"() <{"sym_name" = "Collection_chain_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Iterable_chain_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb57(%255 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %256 : !llvm.ptr):
@@ -9398,11 +9398,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %258 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb58] : () -> ()
     ^bb59:
-      %259 = "llvm.mlir.constant"() <{"value" = 36 : i32}> : () -> i32
+      %259 = "llvm.mlir.constant"() <{"value" = 35 : i32}> : () -> i32
       "llvm.store"(%259, %258) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb60] : () -> ()
     ^bb61:
-      %260 = "llvm.mlir.constant"() <{"value" = 35 : i32}> : () -> i32
+      %260 = "llvm.mlir.constant"() <{"value" = 36 : i32}> : () -> i32
       "llvm.store"(%260, %258) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb60] : () -> ()
     ^bb58:
@@ -9427,10 +9427,10 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %273 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %274 = "llvm.getelementptr"(%272, %273) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%274) : (!llvm.ptr) -> ()
-    }) {"func_name" = "Range_B_chain_otherIterableT_chain_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_interleave_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
+    }) {"func_name" = "Range_B_chain_otherCollectionT_chain_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_interleave_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_interleave_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb64(%275 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %276 : !llvm.ptr):
@@ -9438,11 +9438,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %278 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb65] : () -> ()
     ^bb66:
-      %279 = "llvm.mlir.constant"() <{"value" = 37 : i32}> : () -> i32
+      %279 = "llvm.mlir.constant"() <{"value" = 38 : i32}> : () -> i32
       "llvm.store"(%279, %278) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb67] : () -> ()
     ^bb68:
-      %280 = "llvm.mlir.constant"() <{"value" = 38 : i32}> : () -> i32
+      %280 = "llvm.mlir.constant"() <{"value" = 37 : i32}> : () -> i32
       "llvm.store"(%280, %278) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb67] : () -> ()
     ^bb65:
@@ -9467,10 +9467,10 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %293 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %294 = "llvm.getelementptr"(%292, %293) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%294) : (!llvm.ptr) -> ()
-    }) {"func_name" = "Range_B_interleave_otherCollectionT_interleave_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_zip_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
+    }) {"func_name" = "Range_B_interleave_otherIterableT_interleave_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_zip_otherIterableU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_zip_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb71(%295 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %296 : !llvm.ptr):
@@ -9478,11 +9478,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %298 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb72] : () -> ()
     ^bb73:
-      %299 = "llvm.mlir.constant"() <{"value" = 39 : i32}> : () -> i32
+      %299 = "llvm.mlir.constant"() <{"value" = 40 : i32}> : () -> i32
       "llvm.store"(%299, %298) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb74] : () -> ()
     ^bb75:
-      %300 = "llvm.mlir.constant"() <{"value" = 40 : i32}> : () -> i32
+      %300 = "llvm.mlir.constant"() <{"value" = 39 : i32}> : () -> i32
       "llvm.store"(%300, %298) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb74] : () -> ()
     ^bb72:
@@ -9507,7 +9507,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %313 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %314 = "llvm.getelementptr"(%312, %313) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%314) : (!llvm.ptr) -> ()
-    }) {"func_name" = "Range_B_zip_otherCollectionU_zip_otherIterableU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "Range_B_zip_otherIterableU_zip_otherCollectionU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Collection_product_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_product_otherIterableU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
@@ -9700,7 +9700,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     "mid.external_typedef"() {"class_name" = "RangeIterator"} : () -> ()
     "mid.typedef"() {"class_name" = "Unicode", "methods" = [@Unicode_B__Self_replacement_codepoint_, @Unicode_B__Self_replacement_str_, @Unicode_B__Self_replacement_buf_, @Unicode_B__Self_decode_one_bytesBufferi8_indexi32_leni32, @Unicode_B__Self_encode_one_cpi32, @Unicode__Self_replacement_codepoint_, @Unicode__Self_replacement_str_, @Unicode__Self_replacement_buf_, @Unicode__Self_decode_one_bytesBufferi8_indexi32_leni32, @Unicode__Self_encode_one_cpi32], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Unicode], "offset_tbl" = [20 : i32, 10 : i32, 0 : i32, 10 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 10992518002160706297 : i64, "base_typ" = !llvm.struct<()>, "data_size_fn" = "_data_size_Unicode", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
     "mid.typedef"() {"class_name" = "Representable", "methods" = [@Representable_B_repr_, @Representable_repr_], "hash_tbl" = [@Representable, 18446744073709551615 : i64, @any_typ, @Object], "offset_tbl" = [10 : i32, 0 : i32, 10 : i32, 12 : i32], "prime" = 4611686018427388093 : i64, "hash_id" = 11185903432579561498 : i64, "base_typ" = !llvm.struct<()>, "data_size_fn" = "_data_size_Representable", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
-    "mid.typedef"() {"class_name" = "String", "methods" = [@String_field_bytes, @String_field_byte_length, @String_field_char_length, @String_field_capacity, @String_field_String_0, @String_B_byte_length_, @String_B_capacity_, @String_B__Self_from_bytes_source_bytesBufferi8_source_leni32, @String_B__Self_from_bytes_lossy_source_bytesBufferi8_source_leni32, @String_B__Self_from_c_string_c_stringBufferi8, @String_B_init_, @String_B_init_capacityi32, @String_B_init_bytesBufferi8_byte_lengthi32_char_lengthi32_capacityi32, @String_B_c_string_, @String_B_append_char_from_bytes_source_bytesBufferi8_start_indexi32_n_bytesi32, @String_B_reserve_new_capacityi32, @String_B__EQ_otherString, @String_B_decode_at_byte_indexi32, @String_B_unchecked_index_xi32, @String_B_unchecked_insert_xi32_valuei8, @String_B_copy_, @String_B__Self_empty_, @String_B__Self_from_iterable_iterableIterableCharacter, @String_B_append_charCharacter, @String_B_length_, @String_B_first_, @String_B_last_, @String_B_extend_otherIterableT_extend_otherCollectionCharacter_extend_otherString, @String_B_get_indexi32, @String_B_index_of_targetT_eqFunctionT._T_to_Bool, @String_B_size_, @String_B_is_empty_, @String_B_iterator_, @String_B_each_fFunctionT_to_Nothing, @String_B_reduce_accumulatorT_fFunctionT._T_to_T, @String_B_all_fFunctionT_to_Bool, @String_B_any_fFunctionT_to_Bool, @String_B_enumerate_, @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @String_B_filter_fFunctionT_to_Bool, @String_B_chain_otherIterableT_chain_otherCollectionT, @String_B_interleave_otherCollectionT_interleave_otherIterableT, @String_B_zip_otherCollectionU_zip_otherIterableU, @String_B_product_otherCollectionU_product_otherIterableU, @String_B_repr_, @String_byte_length_, @String_capacity_, @String__Self_from_bytes_source_bytesBufferi8_source_leni32, @String__Self_from_bytes_lossy_source_bytesBufferi8_source_leni32, @String__Self_from_c_string_c_stringBufferi8, @String_init_, @String_init_capacityi32, @String_init_bytesBufferi8_byte_lengthi32_char_lengthi32_capacityi32, @String_c_string_, @String_append_char_from_bytes_source_bytesBufferi8_start_indexi32_n_bytesi32, @String_reserve_new_capacityi32, @String__EQ_otherString, @String_decode_at_byte_indexi32, @String_unchecked_index_xi32, @String_unchecked_insert_xi32_valuei8, @String_copy_, @String__Self_empty_, @String__Self_from_iterable_iterableIterableCharacter, @String_append_charCharacter, @List_length_, @List_first_, @List_last_, @List_extend_otherIterableT, @String_extend_otherCollectionCharacter, @String_extend_otherString, @List_get_indexi32, @List_index_of_targetT_eqFunctionT._T_to_Bool, @String_size_, @Collection_is_empty_, @String_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @String_repr_, @String_field_String_0, @String_B__Self_empty_, @String_B__Self_from_iterable_iterableIterableCharacter, @String_B_append_charCharacter, @String_B_length_, @String_B_first_, @String_B_last_, @String_B_extend_otherIterableT_extend_otherCollectionCharacter_extend_otherString, @String_B_get_indexi32, @String_B_index_of_targetT_eqFunctionT._T_to_Bool, @String_B_size_, @String_B_is_empty_, @String_B_iterator_, @String_B_each_fFunctionT_to_Nothing, @String_B_reduce_accumulatorT_fFunctionT._T_to_T, @String_B_all_fFunctionT_to_Bool, @String_B_any_fFunctionT_to_Bool, @String_B_enumerate_, @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @String_B_filter_fFunctionT_to_Bool, @String_B_chain_otherIterableT_chain_otherCollectionT, @String_B_interleave_otherCollectionT_interleave_otherIterableT, @String_B_zip_otherCollectionU_zip_otherIterableU, @String_B_product_otherCollectionU_product_otherIterableU, @String__Self_empty_, @String__Self_from_iterable_iterableIterableCharacter, @String_append_charCharacter, @List_length_, @List_first_, @List_last_, @List_extend_otherIterableT, @List_get_indexi32, @List_index_of_targetT_eqFunctionT._T_to_Bool, @String_size_, @Collection_is_empty_, @String_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @String_field_String_0, @String_B_size_, @String_B_is_empty_, @String_B_iterator_, @String_B_each_fFunctionT_to_Nothing, @String_B_reduce_accumulatorT_fFunctionT._T_to_T, @String_B_all_fFunctionT_to_Bool, @String_B_any_fFunctionT_to_Bool, @String_B_enumerate_, @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @String_B_filter_fFunctionT_to_Bool, @String_B_chain_otherIterableT_chain_otherCollectionT, @String_B_interleave_otherCollectionT_interleave_otherIterableT, @String_B_zip_otherCollectionU_zip_otherIterableU, @String_B_product_otherCollectionU_product_otherIterableU, @String_size_, @Collection_is_empty_, @String_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @String_field_String_0, @String_B_iterator_, @String_B_each_fFunctionT_to_Nothing, @String_B_reduce_accumulatorT_fFunctionT._T_to_T, @String_B_all_fFunctionT_to_Bool, @String_B_any_fFunctionT_to_Bool, @String_B_enumerate_, @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @String_B_filter_fFunctionT_to_Bool, @String_B_chain_otherIterableT_chain_otherCollectionT, @String_B_interleave_otherCollectionT_interleave_otherIterableT, @String_B_zip_otherCollectionU_zip_otherIterableU, @String_B_product_otherCollectionU_product_otherIterableU, @String_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @String_field_String_0, @String_B_iterator_, @String_B_each_fFunctionT_to_Nothing, @String_B_reduce_accumulatorT_fFunctionT._T_to_T, @String_B_all_fFunctionT_to_Bool, @String_B_any_fFunctionT_to_Bool, @String_B_enumerate_, @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @String_B_filter_fFunctionT_to_Bool, @String_B_chain_otherIterableT_chain_otherCollectionT, @String_B_interleave_otherCollectionT_interleave_otherIterableT, @String_B_zip_otherCollectionU_zip_otherIterableU, @String_B_product_otherCollectionU_product_otherIterableU, @String_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @String_field_String_0, @String_B_size_, @String_B_is_empty_, @String_B_iterator_, @String_B_each_fFunctionT_to_Nothing, @String_B_reduce_accumulatorT_fFunctionT._T_to_T, @String_B_all_fFunctionT_to_Bool, @String_B_any_fFunctionT_to_Bool, @String_B_enumerate_, @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @String_B_filter_fFunctionT_to_Bool, @String_B_chain_otherIterableT_chain_otherCollectionT, @String_B_interleave_otherCollectionT_interleave_otherIterableT, @String_B_zip_otherCollectionU_zip_otherIterableU, @String_B_product_otherCollectionU_product_otherIterableU, @String_size_, @Collection_is_empty_, @String_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @String_field_String_0, @String_B_iterator_, @String_B_each_fFunctionT_to_Nothing, @String_B_reduce_accumulatorT_fFunctionT._T_to_T, @String_B_all_fFunctionT_to_Bool, @String_B_any_fFunctionT_to_Bool, @String_B_enumerate_, @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @String_B_filter_fFunctionT_to_Bool, @String_B_chain_otherIterableT_chain_otherCollectionT, @String_B_interleave_otherCollectionT_interleave_otherIterableT, @String_B_zip_otherCollectionU_zip_otherIterableU, @String_B_product_otherCollectionU_product_otherIterableU, @String_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @String_field_String_0, @String_B_iterator_, @String_B_each_fFunctionT_to_Nothing, @String_B_reduce_accumulatorT_fFunctionT._T_to_T, @String_B_all_fFunctionT_to_Bool, @String_B_any_fFunctionT_to_Bool, @String_B_enumerate_, @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @String_B_filter_fFunctionT_to_Bool, @String_B_chain_otherIterableT_chain_otherCollectionT, @String_B_interleave_otherCollectionT_interleave_otherIterableT, @String_B_zip_otherCollectionU_zip_otherIterableU, @String_B_product_otherCollectionU_product_otherIterableU, @String_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @String_B_repr_, @String_repr_], "hash_tbl" = [@Iterable, @List, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, @Object, @Collection, @any_typ, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, @String, 18446744073709551615 : i64, @Container, @Representable], "offset_tbl" = [297 : i32, 102 : i32, 0 : i32, 0 : i32, 0 : i32, 0 : i32, 322 : i32, 238 : i32, 10 : i32, 0 : i32, 0 : i32, 0 : i32, 10 : i32, 0 : i32, 322 : i32, 322 : i32], "prime" = 4611686018427390361 : i64, "hash_id" = 6499063144389013426 : i64, "base_typ" = !llvm.struct<(!llvm.struct<(!llvm.ptr)>, i32, i32, i32)>, "data_size_fn" = "_data_size_String", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+    "mid.typedef"() {"class_name" = "String", "methods" = [@String_field_bytes, @String_field_byte_length, @String_field_char_length, @String_field_capacity, @String_field_String_0, @String_B_byte_length_, @String_B_capacity_, @String_B__Self_from_bytes_source_bytesBufferi8_source_leni32, @String_B__Self_from_bytes_lossy_source_bytesBufferi8_source_leni32, @String_B__Self_from_c_string_c_stringBufferi8, @String_B_init_, @String_B_init_capacityi32, @String_B_init_bytesBufferi8_byte_lengthi32_char_lengthi32_capacityi32, @String_B_c_string_, @String_B_append_char_from_bytes_source_bytesBufferi8_start_indexi32_n_bytesi32, @String_B_reserve_new_capacityi32, @String_B__EQ_otherString, @String_B_decode_at_byte_indexi32, @String_B_unchecked_index_xi32, @String_B_unchecked_insert_xi32_valuei8, @String_B_copy_, @String_B__Self_empty_, @String_B__Self_from_iterable_iterableIterableCharacter, @String_B_append_charCharacter, @String_B_length_, @String_B_first_, @String_B_last_, @String_B_extend_otherIterableT_extend_otherCollectionCharacter_extend_otherString, @String_B_get_indexi32, @String_B_index_of_targetT_eqFunctionT._T_to_Bool, @String_B_size_, @String_B_is_empty_, @String_B_iterator_, @String_B_each_fFunctionT_to_Nothing, @String_B_reduce_accumulatorT_fFunctionT._T_to_T, @String_B_all_fFunctionT_to_Bool, @String_B_any_fFunctionT_to_Bool, @String_B_enumerate_, @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @String_B_filter_fFunctionT_to_Bool, @String_B_chain_otherCollectionT_chain_otherIterableT, @String_B_interleave_otherIterableT_interleave_otherCollectionT, @String_B_zip_otherIterableU_zip_otherCollectionU, @String_B_product_otherCollectionU_product_otherIterableU, @String_B_repr_, @String_byte_length_, @String_capacity_, @String__Self_from_bytes_source_bytesBufferi8_source_leni32, @String__Self_from_bytes_lossy_source_bytesBufferi8_source_leni32, @String__Self_from_c_string_c_stringBufferi8, @String_init_, @String_init_capacityi32, @String_init_bytesBufferi8_byte_lengthi32_char_lengthi32_capacityi32, @String_c_string_, @String_append_char_from_bytes_source_bytesBufferi8_start_indexi32_n_bytesi32, @String_reserve_new_capacityi32, @String__EQ_otherString, @String_decode_at_byte_indexi32, @String_unchecked_index_xi32, @String_unchecked_insert_xi32_valuei8, @String_copy_, @String__Self_empty_, @String__Self_from_iterable_iterableIterableCharacter, @String_append_charCharacter, @List_length_, @List_first_, @List_last_, @List_extend_otherIterableT, @String_extend_otherCollectionCharacter, @String_extend_otherString, @List_get_indexi32, @List_index_of_targetT_eqFunctionT._T_to_Bool, @String_size_, @Collection_is_empty_, @String_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @String_repr_, @String_field_String_0, @String_B__Self_empty_, @String_B__Self_from_iterable_iterableIterableCharacter, @String_B_append_charCharacter, @String_B_length_, @String_B_first_, @String_B_last_, @String_B_extend_otherIterableT_extend_otherCollectionCharacter_extend_otherString, @String_B_get_indexi32, @String_B_index_of_targetT_eqFunctionT._T_to_Bool, @String_B_size_, @String_B_is_empty_, @String_B_iterator_, @String_B_each_fFunctionT_to_Nothing, @String_B_reduce_accumulatorT_fFunctionT._T_to_T, @String_B_all_fFunctionT_to_Bool, @String_B_any_fFunctionT_to_Bool, @String_B_enumerate_, @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @String_B_filter_fFunctionT_to_Bool, @String_B_chain_otherCollectionT_chain_otherIterableT, @String_B_interleave_otherIterableT_interleave_otherCollectionT, @String_B_zip_otherIterableU_zip_otherCollectionU, @String_B_product_otherCollectionU_product_otherIterableU, @String__Self_empty_, @String__Self_from_iterable_iterableIterableCharacter, @String_append_charCharacter, @List_length_, @List_first_, @List_last_, @List_extend_otherIterableT, @List_get_indexi32, @List_index_of_targetT_eqFunctionT._T_to_Bool, @String_size_, @Collection_is_empty_, @String_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @String_field_String_0, @String_B_size_, @String_B_is_empty_, @String_B_iterator_, @String_B_each_fFunctionT_to_Nothing, @String_B_reduce_accumulatorT_fFunctionT._T_to_T, @String_B_all_fFunctionT_to_Bool, @String_B_any_fFunctionT_to_Bool, @String_B_enumerate_, @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @String_B_filter_fFunctionT_to_Bool, @String_B_chain_otherCollectionT_chain_otherIterableT, @String_B_interleave_otherIterableT_interleave_otherCollectionT, @String_B_zip_otherIterableU_zip_otherCollectionU, @String_B_product_otherCollectionU_product_otherIterableU, @String_size_, @Collection_is_empty_, @String_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @String_field_String_0, @String_B_iterator_, @String_B_each_fFunctionT_to_Nothing, @String_B_reduce_accumulatorT_fFunctionT._T_to_T, @String_B_all_fFunctionT_to_Bool, @String_B_any_fFunctionT_to_Bool, @String_B_enumerate_, @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @String_B_filter_fFunctionT_to_Bool, @String_B_chain_otherCollectionT_chain_otherIterableT, @String_B_interleave_otherIterableT_interleave_otherCollectionT, @String_B_zip_otherIterableU_zip_otherCollectionU, @String_B_product_otherCollectionU_product_otherIterableU, @String_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @String_field_String_0, @String_B_iterator_, @String_B_each_fFunctionT_to_Nothing, @String_B_reduce_accumulatorT_fFunctionT._T_to_T, @String_B_all_fFunctionT_to_Bool, @String_B_any_fFunctionT_to_Bool, @String_B_enumerate_, @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @String_B_filter_fFunctionT_to_Bool, @String_B_chain_otherCollectionT_chain_otherIterableT, @String_B_interleave_otherIterableT_interleave_otherCollectionT, @String_B_zip_otherIterableU_zip_otherCollectionU, @String_B_product_otherCollectionU_product_otherIterableU, @String_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @String_field_String_0, @String_B_size_, @String_B_is_empty_, @String_B_iterator_, @String_B_each_fFunctionT_to_Nothing, @String_B_reduce_accumulatorT_fFunctionT._T_to_T, @String_B_all_fFunctionT_to_Bool, @String_B_any_fFunctionT_to_Bool, @String_B_enumerate_, @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @String_B_filter_fFunctionT_to_Bool, @String_B_chain_otherCollectionT_chain_otherIterableT, @String_B_interleave_otherIterableT_interleave_otherCollectionT, @String_B_zip_otherIterableU_zip_otherCollectionU, @String_B_product_otherCollectionU_product_otherIterableU, @String_size_, @Collection_is_empty_, @String_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @String_field_String_0, @String_B_iterator_, @String_B_each_fFunctionT_to_Nothing, @String_B_reduce_accumulatorT_fFunctionT._T_to_T, @String_B_all_fFunctionT_to_Bool, @String_B_any_fFunctionT_to_Bool, @String_B_enumerate_, @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @String_B_filter_fFunctionT_to_Bool, @String_B_chain_otherCollectionT_chain_otherIterableT, @String_B_interleave_otherIterableT_interleave_otherCollectionT, @String_B_zip_otherIterableU_zip_otherCollectionU, @String_B_product_otherCollectionU_product_otherIterableU, @String_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @String_field_String_0, @String_B_iterator_, @String_B_each_fFunctionT_to_Nothing, @String_B_reduce_accumulatorT_fFunctionT._T_to_T, @String_B_all_fFunctionT_to_Bool, @String_B_any_fFunctionT_to_Bool, @String_B_enumerate_, @String_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @String_B_filter_fFunctionT_to_Bool, @String_B_chain_otherCollectionT_chain_otherIterableT, @String_B_interleave_otherIterableT_interleave_otherCollectionT, @String_B_zip_otherIterableU_zip_otherCollectionU, @String_B_product_otherCollectionU_product_otherIterableU, @String_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @String_B_repr_, @String_repr_], "hash_tbl" = [@Iterable, @List, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, @Object, @Collection, @any_typ, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, @String, 18446744073709551615 : i64, @Container, @Representable], "offset_tbl" = [297 : i32, 102 : i32, 0 : i32, 0 : i32, 0 : i32, 0 : i32, 322 : i32, 238 : i32, 10 : i32, 0 : i32, 0 : i32, 0 : i32, 10 : i32, 0 : i32, 322 : i32, 322 : i32], "prime" = 4611686018427390361 : i64, "hash_id" = 6499063144389013426 : i64, "base_typ" = !llvm.struct<(!llvm.struct<(!llvm.ptr)>, i32, i32, i32)>, "data_size_fn" = "_data_size_String", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
     "mid.typedef"() {"class_name" = "Character", "methods" = [@Character_field_codepoint, @Character_B_codepoint_, @Character_B_init_codepointi32, @Character_B_to_string_, @Character_B__EQ_otherCharacter, @Character_B_n_bytes_, @Character_codepoint_, @Character_init_codepointi32, @Character_to_string_, @Character__EQ_otherCharacter, @Character_n_bytes_], "hash_tbl" = [@Object, 18446744073709551615 : i64, @any_typ, @Character], "offset_tbl" = [21 : i32, 0 : i32, 10 : i32, 10 : i32], "prime" = 4611686018427388091 : i64, "hash_id" = 6681222582356018452 : i64, "base_typ" = !llvm.struct<(i32)>, "data_size_fn" = "_data_size_Character", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
     "mid.typedef"() {"class_name" = "StringIterator", "methods" = [@StringIterator_field_str, @StringIterator_field_byte_index, @StringIterator_field_StringIterator_0, @StringIterator_B_init_strString, @StringIterator_B_next_, @StringIterator_init_strString, @StringIterator_next_, @StringIterator_field_StringIterator_0, @StringIterator_B_next_, @StringIterator_next_, @StringIterator_field_StringIterator_0, @StringIterator_B_next_, @StringIterator_next_, @StringIterator_field_StringIterator_0, @StringIterator_B_next_, @StringIterator_next_], "hash_tbl" = [@StringIterator, 18446744073709551615 : i64, @Container, @Iterator, @Object, @ConstantTimeIterator, @any_typ, 18446744073709551615 : i64], "offset_tbl" = [10 : i32, 0 : i32, 26 : i32, 23 : i32, 26 : i32, 17 : i32, 10 : i32, 0 : i32], "prime" = 4611686018427388091 : i64, "hash_id" = 11186173084763598986 : i64, "base_typ" = !llvm.struct<(!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i32)>, "data_size_fn" = "_data_size_StringIterator", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
     "mid.typedef"() {"class_name" = "Stacktrace", "methods" = [@Stacktrace_field_stacktrace, @Stacktrace_field_n_frames, @Stacktrace_B_init_, @Stacktrace_B_print_, @Stacktrace_init_, @Stacktrace_print_], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Stacktrace], "offset_tbl" = [16 : i32, 10 : i32, 0 : i32, 10 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 18387359861185834519 : i64, "base_typ" = !llvm.struct<(!llvm.struct<(!llvm.ptr)>, i64)>, "data_size_fn" = "_data_size_Stacktrace", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
@@ -9945,11 +9945,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %168 = "mid.unwrap"(%167) : (!hi.fatptr<"RangeIterator">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %169 = "mid.parameterizations_array"() : () -> !llvm.ptr
         %170 = "mid.method_call"(%169, %168) {"offset" = 5 : i32, "vptrs" = [], "vtable_size" = 11 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>
-        %171 = "hi.cast"(%170) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[si32, !hi.nil]>
-        %172 = "mid.checkflag"(%171) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[si32, !hi.nil]>) -> si1
+        %171 = "hi.cast"(%170) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[!hi.nil, si32]>
+        %172 = "mid.checkflag"(%171) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, si32]>) -> si1
         %173 = "mid.unwrap"(%172) : (si1) -> i1
       }, {
-        %174 = "hi.cast"(%171) {"from_typ" = !hi.union<[si32, !hi.nil]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[si32, !hi.nil]>) -> si32
+        %174 = "hi.cast"(%171) {"from_typ" = !hi.union<[!hi.nil, si32]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[!hi.nil, si32]>) -> si32
         %175 = "hi.arithmetic"(%88, %174) {"op" = "ADD", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si32
         %176 = "hi.cast"(%175) {"from_typ" = si32, "to_typ" = si64, "from_typ_name" = "i32_typ", "to_typ_name" = "i64_typ"} : (si32) -> si64
         %177 = "mid.buffer_get"(%86, %176) {"typ" = i8} : (!hi.buffer<si8>, si64) -> si8
@@ -9971,8 +9971,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %190 = "hi.arithmetic"(%187, %189) {"op" = "bit_or", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si32
         %191 = "hi.cast"(%190) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
         "mid.assign"(%98, %191) {"typ" = i32} : (si32, si32) -> ()
-        %192 = "hi.cast"(%174) {"from_typ" = si32, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si32, !hi.nil]>
-        "mid.assign"(%171, %192) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[si32, !hi.nil]>, !hi.union<[si32, !hi.nil]>) -> ()
+        %192 = "hi.cast"(%174) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.nil, si32]>
+        "mid.assign"(%171, %192) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[!hi.nil, si32]>, !hi.union<[!hi.nil, si32]>) -> ()
       }) : () -> ()
       %193 = "mid.literal"() {"value" = 2 : i32, "typ" = i32} : () -> si32
       %194 = "hi.comparison"(%99, %193) {"op" = "EQ", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si1
@@ -10924,19 +10924,19 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %916 = "mid.unwrap"(%915) : (!hi.fatptr<"RangeIterator">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %917 = "mid.parameterizations_array"() : () -> !llvm.ptr
         %918 = "mid.method_call"(%917, %916) {"offset" = 5 : i32, "vptrs" = [], "vtable_size" = 11 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>
-        %919 = "hi.cast"(%918) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[si32, !hi.nil]>
-        %920 = "mid.checkflag"(%919) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[si32, !hi.nil]>) -> si1
+        %919 = "hi.cast"(%918) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[!hi.nil, si32]>
+        %920 = "mid.checkflag"(%919) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, si32]>) -> si1
         %921 = "mid.unwrap"(%920) : (si1) -> i1
       }, {
-        %922 = "hi.cast"(%919) {"from_typ" = !hi.union<[si32, !hi.nil]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[si32, !hi.nil]>) -> si32
+        %922 = "hi.cast"(%919) {"from_typ" = !hi.union<[!hi.nil, si32]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[!hi.nil, si32]>) -> si32
         %923 = "mid.get_field"(%885) {"offset" = 0 : i64, "vtable_bytes" = 2512 : i32, "original_type" = !llvm.struct<(!llvm.ptr)>} : (!hi.fatptr<"String">) -> !hi.buffer<si8>
         %924 = "hi.cast"(%922) {"from_typ" = si32, "to_typ" = si64, "from_typ_name" = "i32_typ", "to_typ_name" = "i64_typ"} : (si32) -> si64
         %925 = "mid.buffer_get"(%923, %924) {"typ" = i8} : (!hi.buffer<si8>, si64) -> si8
         %926 = "hi.cast"(%925) {"from_typ" = si8, "to_typ" = si8, "from_typ_name" = "i8_typ", "to_typ_name" = "i8_typ"} : (si8) -> si8
         %927 = "hi.cast"(%922) {"from_typ" = si32, "to_typ" = si64, "from_typ_name" = "i32_typ", "to_typ_name" = "i64_typ"} : (si32) -> si64
         "mid.buffer_set"(%891, %927, %926) {"typ" = i8} : (!hi.buffer<si8>, si64, si8) -> ()
-        %928 = "hi.cast"(%922) {"from_typ" = si32, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si32, !hi.nil]>
-        "mid.assign"(%919, %928) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[si32, !hi.nil]>, !hi.union<[si32, !hi.nil]>) -> ()
+        %928 = "hi.cast"(%922) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.nil, si32]>
+        "mid.assign"(%919, %928) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[!hi.nil, si32]>, !hi.union<[!hi.nil, si32]>) -> ()
       }) : () -> ()
       %929 = "mid.literal"() {"value" = 0 : i8, "typ" = i8} : () -> si8
       %930 = "mid.get_field"(%885) {"offset" = 1 : i64, "vtable_bytes" = 2512 : i32, "original_type" = i32} : (!hi.fatptr<"String">) -> si32
@@ -11016,11 +11016,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %993 = "mid.unwrap"(%992) : (!hi.fatptr<"RangeIterator">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %994 = "mid.parameterizations_array"() : () -> !llvm.ptr
         %995 = "mid.method_call"(%994, %993) {"offset" = 5 : i32, "vptrs" = [], "vtable_size" = 11 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>
-        %996 = "hi.cast"(%995) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[si32, !hi.nil]>
-        %997 = "mid.checkflag"(%996) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[si32, !hi.nil]>) -> si1
+        %996 = "hi.cast"(%995) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[!hi.nil, si32]>
+        %997 = "mid.checkflag"(%996) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, si32]>) -> si1
         %998 = "mid.unwrap"(%997) : (si1) -> i1
       }, {
-        %999 = "hi.cast"(%996) {"from_typ" = !hi.union<[si32, !hi.nil]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[si32, !hi.nil]>) -> si32
+        %999 = "hi.cast"(%996) {"from_typ" = !hi.union<[!hi.nil, si32]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[!hi.nil, si32]>) -> si32
         %1000 = "mid.get_field"(%951) {"offset" = 1 : i64, "vtable_bytes" = 2512 : i32, "original_type" = i32} : (!hi.fatptr<"String">) -> si32
         %1001 = "hi.arithmetic"(%1000, %999) {"op" = "ADD", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si32
         %1002 = "hi.arithmetic"(%955, %999) {"op" = "ADD", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si32
@@ -11030,8 +11030,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1006 = "hi.cast"(%1004) {"from_typ" = si8, "to_typ" = si8, "from_typ_name" = "i8_typ", "to_typ_name" = "i8_typ"} : (si8) -> si8
         %1007 = "hi.cast"(%1001) {"from_typ" = si32, "to_typ" = si64, "from_typ_name" = "i32_typ", "to_typ_name" = "i64_typ"} : (si32) -> si64
         "mid.buffer_set"(%1005, %1007, %1006) {"typ" = i8} : (!hi.buffer<si8>, si64, si8) -> ()
-        %1008 = "hi.cast"(%999) {"from_typ" = si32, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si32, !hi.nil]>
-        "mid.assign"(%996, %1008) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[si32, !hi.nil]>, !hi.union<[si32, !hi.nil]>) -> ()
+        %1008 = "hi.cast"(%999) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.nil, si32]>
+        "mid.assign"(%996, %1008) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[!hi.nil, si32]>, !hi.union<[!hi.nil, si32]>) -> ()
       }) : () -> ()
       %1009 = "mid.get_field"(%951) {"offset" = 2 : i64, "vtable_bytes" = 2512 : i32, "original_type" = i32} : (!hi.fatptr<"String">) -> si32
       %1010 = "mid.literal"() {"value" = 1 : i32, "typ" = i32} : () -> si32
@@ -11127,19 +11127,19 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1078 = "mid.unwrap"(%1077) : (!hi.fatptr<"RangeIterator">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %1079 = "mid.parameterizations_array"() : () -> !llvm.ptr
         %1080 = "mid.method_call"(%1079, %1078) {"offset" = 5 : i32, "vptrs" = [], "vtable_size" = 11 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>
-        %1081 = "hi.cast"(%1080) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[si32, !hi.nil]>
-        %1082 = "mid.checkflag"(%1081) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[si32, !hi.nil]>) -> si1
+        %1081 = "hi.cast"(%1080) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[!hi.nil, si32]>
+        %1082 = "mid.checkflag"(%1081) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, si32]>) -> si1
         %1083 = "mid.unwrap"(%1082) : (si1) -> i1
       }, {
-        %1084 = "hi.cast"(%1081) {"from_typ" = !hi.union<[si32, !hi.nil]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[si32, !hi.nil]>) -> si32
+        %1084 = "hi.cast"(%1081) {"from_typ" = !hi.union<[!hi.nil, si32]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[!hi.nil, si32]>) -> si32
         %1085 = "hi.cast"(%1084) {"from_typ" = si32, "to_typ" = si64, "from_typ_name" = "i32_typ", "to_typ_name" = "i64_typ"} : (si32) -> si64
         %1086 = "mid.buffer_get"(%1049, %1085) {"typ" = i8} : (!hi.buffer<si8>, si64) -> si8
         %1087 = "mid.get_field"(%1041) {"offset" = 0 : i64, "vtable_bytes" = 2512 : i32, "original_type" = !llvm.struct<(!llvm.ptr)>} : (!hi.fatptr<"String">) -> !hi.buffer<si8>
         %1088 = "hi.cast"(%1086) {"from_typ" = si8, "to_typ" = si8, "from_typ_name" = "i8_typ", "to_typ_name" = "i8_typ"} : (si8) -> si8
         %1089 = "hi.cast"(%1084) {"from_typ" = si32, "to_typ" = si64, "from_typ_name" = "i32_typ", "to_typ_name" = "i64_typ"} : (si32) -> si64
         "mid.buffer_set"(%1087, %1089, %1088) {"typ" = i8} : (!hi.buffer<si8>, si64, si8) -> ()
-        %1090 = "hi.cast"(%1084) {"from_typ" = si32, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si32, !hi.nil]>
-        "mid.assign"(%1081, %1090) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[si32, !hi.nil]>, !hi.union<[si32, !hi.nil]>) -> ()
+        %1090 = "hi.cast"(%1084) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.nil, si32]>
+        "mid.assign"(%1081, %1090) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[!hi.nil, si32]>, !hi.union<[!hi.nil, si32]>) -> ()
       }) : () -> ()
     }) {"func_name" = "String_reserve_new_capacityi32", "result_type" = !llvm.void, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
@@ -11211,11 +11211,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1145 = "mid.unwrap"(%1144) : (!hi.fatptr<"RangeIterator">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %1146 = "mid.parameterizations_array"() : () -> !llvm.ptr
         %1147 = "mid.method_call"(%1146, %1145) {"offset" = 5 : i32, "vptrs" = [], "vtable_size" = 11 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>
-        %1148 = "hi.cast"(%1147) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[si32, !hi.nil]>
-        %1149 = "mid.checkflag"(%1148) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[si32, !hi.nil]>) -> si1
+        %1148 = "hi.cast"(%1147) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[!hi.nil, si32]>
+        %1149 = "mid.checkflag"(%1148) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, si32]>) -> si1
         %1150 = "mid.unwrap"(%1149) : (si1) -> i1
       }, {
-        %1151 = "hi.cast"(%1148) {"from_typ" = !hi.union<[si32, !hi.nil]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[si32, !hi.nil]>) -> si32
+        %1151 = "hi.cast"(%1148) {"from_typ" = !hi.union<[!hi.nil, si32]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[!hi.nil, si32]>) -> si32
         %1152 = "mid.get_field"(%1109) {"offset" = 0 : i64, "vtable_bytes" = 2512 : i32, "original_type" = !llvm.struct<(!llvm.ptr)>} : (!hi.fatptr<"String">) -> !hi.buffer<si8>
         %1153 = "hi.cast"(%1151) {"from_typ" = si32, "to_typ" = si64, "from_typ_name" = "i32_typ", "to_typ_name" = "i64_typ"} : (si32) -> si64
         %1154 = "mid.buffer_get"(%1152, %1153) {"typ" = i8} : (!hi.buffer<si8>, si64) -> si8
@@ -11233,8 +11233,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
           %1165 = "hi.cast"(%1164) {"from_typ" = !hi.bool, "to_typ" = !hi.bool, "from_typ_name" = "bool_typ", "to_typ_name" = "bool_typ"} : (!hi.bool) -> !hi.bool
           "mid.return"(%1165) : (!hi.bool) -> ()
         }) : (i1) -> ()
-        %1166 = "hi.cast"(%1151) {"from_typ" = si32, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si32, !hi.nil]>
-        "mid.assign"(%1148, %1166) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[si32, !hi.nil]>, !hi.union<[si32, !hi.nil]>) -> ()
+        %1166 = "hi.cast"(%1151) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.nil, si32]>
+        "mid.assign"(%1148, %1166) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[!hi.nil, si32]>, !hi.union<[!hi.nil, si32]>) -> ()
       }) : () -> ()
       %1167 = "mid.literal"() {"value" = true, "typ" = i1} : () -> !hi.bool
       %1168 = "hi.cast"(%1167) {"from_typ" = !hi.bool, "to_typ" = !hi.bool, "from_typ_name" = "bool_typ", "to_typ_name" = "bool_typ"} : (!hi.bool) -> !hi.bool
@@ -11418,19 +11418,19 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1306 = "mid.unwrap"(%1305) : (!hi.fatptr<"RangeIterator">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %1307 = "mid.parameterizations_array"() : () -> !llvm.ptr
         %1308 = "mid.method_call"(%1307, %1306) {"offset" = 5 : i32, "vptrs" = [], "vtable_size" = 11 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>
-        %1309 = "hi.cast"(%1308) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[si32, !hi.nil]>
-        %1310 = "mid.checkflag"(%1309) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[si32, !hi.nil]>) -> si1
+        %1309 = "hi.cast"(%1308) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[!hi.nil, si32]>
+        %1310 = "mid.checkflag"(%1309) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, si32]>) -> si1
         %1311 = "mid.unwrap"(%1310) : (si1) -> i1
       }, {
-        %1312 = "hi.cast"(%1309) {"from_typ" = !hi.union<[si32, !hi.nil]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[si32, !hi.nil]>) -> si32
+        %1312 = "hi.cast"(%1309) {"from_typ" = !hi.union<[!hi.nil, si32]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[!hi.nil, si32]>) -> si32
         %1313 = "mid.get_field"(%1277) {"offset" = 0 : i64, "vtable_bytes" = 2512 : i32, "original_type" = !llvm.struct<(!llvm.ptr)>} : (!hi.fatptr<"String">) -> !hi.buffer<si8>
         %1314 = "hi.cast"(%1312) {"from_typ" = si32, "to_typ" = si64, "from_typ_name" = "i32_typ", "to_typ_name" = "i64_typ"} : (si32) -> si64
         %1315 = "mid.buffer_get"(%1313, %1314) {"typ" = i8} : (!hi.buffer<si8>, si64) -> si8
         %1316 = "hi.cast"(%1315) {"from_typ" = si8, "to_typ" = si8, "from_typ_name" = "i8_typ", "to_typ_name" = "i8_typ"} : (si8) -> si8
         %1317 = "hi.cast"(%1312) {"from_typ" = si32, "to_typ" = si64, "from_typ_name" = "i32_typ", "to_typ_name" = "i64_typ"} : (si32) -> si64
         "mid.buffer_set"(%1281, %1317, %1316) {"typ" = i8} : (!hi.buffer<si8>, si64, si8) -> ()
-        %1318 = "hi.cast"(%1312) {"from_typ" = si32, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si32, !hi.nil]>
-        "mid.assign"(%1309, %1318) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[si32, !hi.nil]>, !hi.union<[si32, !hi.nil]>) -> ()
+        %1318 = "hi.cast"(%1312) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.nil, si32]>
+        "mid.assign"(%1309, %1318) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[!hi.nil, si32]>, !hi.union<[!hi.nil, si32]>) -> ()
       }) : () -> ()
       %1319 = "mid.get_field"(%1277) {"offset" = 1 : i64, "vtable_bytes" = 2512 : i32, "original_type" = i32} : (!hi.fatptr<"String">) -> si32
       %1320 = "mid.get_field"(%1277) {"offset" = 2 : i64, "vtable_bytes" = 2512 : i32, "original_type" = i32} : (!hi.fatptr<"String">) -> si32
@@ -11756,11 +11756,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1557 = "mid.unwrap"(%1556) : (!hi.fatptr<"RangeIterator">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %1558 = "mid.parameterizations_array"() : () -> !llvm.ptr
         %1559 = "mid.method_call"(%1558, %1557) {"offset" = 5 : i32, "vptrs" = [], "vtable_size" = 11 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>
-        %1560 = "hi.cast"(%1559) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[si32, !hi.nil]>
-        %1561 = "mid.checkflag"(%1560) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[si32, !hi.nil]>) -> si1
+        %1560 = "hi.cast"(%1559) {"from_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"T", !hi.any, "Iterator">, !hi.nil]>) -> !hi.union<[!hi.nil, si32]>
+        %1561 = "mid.checkflag"(%1560) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, si32]>) -> si1
         %1562 = "mid.unwrap"(%1561) : (si1) -> i1
       }, {
-        %1563 = "hi.cast"(%1560) {"from_typ" = !hi.union<[si32, !hi.nil]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[si32, !hi.nil]>) -> si32
+        %1563 = "hi.cast"(%1560) {"from_typ" = !hi.union<[!hi.nil, si32]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[!hi.nil, si32]>) -> si32
         %1564 = "hi.arithmetic"(%1563, %1528) {"op" = "ADD", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si32
         %1565 = "hi.cast"(%1563) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
         %1566 = "mid.unwrap"(%1565) : (si32) -> i32
@@ -11778,8 +11778,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1578 = "mid.parameterization"() {"id_hierarchy" = ["i8_typ"], "name_hierarchy" = ["i8"]} : () -> !llvm.ptr
         %1579 = "mid.parameterizations_array"(%1577, %1578) : (!llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%1579, %1576, %1573, %1575) {"offset" = 19 : i32, "vptrs" = ["i32_typ", "i8_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i32, i8) -> ()
-        %1580 = "hi.cast"(%1563) {"from_typ" = si32, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si32, !hi.nil]>
-        "mid.assign"(%1560, %1580) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[si32, !hi.nil]>, !hi.union<[si32, !hi.nil]>) -> ()
+        %1580 = "hi.cast"(%1563) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.nil, si32]>
+        "mid.assign"(%1560, %1580) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[!hi.nil, si32]>, !hi.union<[!hi.nil, si32]>) -> ()
       }) : () -> ()
       %1581 = "hi.cast"(%1529) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
       "mid.set_field"(%1520, %1581) {"offset" = 1 : i64, "vtable_bytes" = 2512 : i32, "original_type" = i32} : (!hi.fatptr<"String">, si32) -> ()
@@ -12093,9 +12093,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1760 = "llvm.getelementptr"(%1758, %1759) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1760) : (!llvm.ptr) -> ()
     }) {"func_name" = "String_B_enumerate_", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb187(%1761 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1762 : !llvm.ptr):
@@ -12103,11 +12103,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1764 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb188] : () -> ()
     ^bb189:
-      %1765 = "llvm.mlir.constant"() <{"value" = 81 : i32}> : () -> i32
+      %1765 = "llvm.mlir.constant"() <{"value" = 80 : i32}> : () -> i32
       "llvm.store"(%1765, %1764) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb190] : () -> ()
     ^bb191:
-      %1766 = "llvm.mlir.constant"() <{"value" = 80 : i32}> : () -> i32
+      %1766 = "llvm.mlir.constant"() <{"value" = 81 : i32}> : () -> i32
       "llvm.store"(%1766, %1764) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb190] : () -> ()
     ^bb188:
@@ -12152,9 +12152,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1790 = "llvm.getelementptr"(%1788, %1789) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1790) : (!llvm.ptr) -> ()
     }) {"func_name" = "String_B_filter_fFunctionT_to_Bool", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Iterable_chain_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
     "llvm.func"() <{"sym_name" = "Collection_chain_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Iterable_chain_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb197(%1791 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1792 : !llvm.ptr):
@@ -12162,11 +12162,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1794 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb198] : () -> ()
     ^bb199:
-      %1795 = "llvm.mlir.constant"() <{"value" = 84 : i32}> : () -> i32
+      %1795 = "llvm.mlir.constant"() <{"value" = 83 : i32}> : () -> i32
       "llvm.store"(%1795, %1794) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb200] : () -> ()
     ^bb201:
-      %1796 = "llvm.mlir.constant"() <{"value" = 83 : i32}> : () -> i32
+      %1796 = "llvm.mlir.constant"() <{"value" = 84 : i32}> : () -> i32
       "llvm.store"(%1796, %1794) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb200] : () -> ()
     ^bb198:
@@ -12191,10 +12191,10 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1809 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1810 = "llvm.getelementptr"(%1808, %1809) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1810) : (!llvm.ptr) -> ()
-    }) {"func_name" = "String_B_chain_otherIterableT_chain_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_interleave_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
+    }) {"func_name" = "String_B_chain_otherCollectionT_chain_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_interleave_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_interleave_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb204(%1811 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1812 : !llvm.ptr):
@@ -12202,11 +12202,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1814 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb205] : () -> ()
     ^bb206:
-      %1815 = "llvm.mlir.constant"() <{"value" = 85 : i32}> : () -> i32
+      %1815 = "llvm.mlir.constant"() <{"value" = 86 : i32}> : () -> i32
       "llvm.store"(%1815, %1814) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb207] : () -> ()
     ^bb208:
-      %1816 = "llvm.mlir.constant"() <{"value" = 86 : i32}> : () -> i32
+      %1816 = "llvm.mlir.constant"() <{"value" = 85 : i32}> : () -> i32
       "llvm.store"(%1816, %1814) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb207] : () -> ()
     ^bb205:
@@ -12231,10 +12231,10 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1829 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1830 = "llvm.getelementptr"(%1828, %1829) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1830) : (!llvm.ptr) -> ()
-    }) {"func_name" = "String_B_interleave_otherCollectionT_interleave_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_zip_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
+    }) {"func_name" = "String_B_interleave_otherIterableT_interleave_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_zip_otherIterableU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_zip_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb211(%1831 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1832 : !llvm.ptr):
@@ -12242,11 +12242,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1834 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb212] : () -> ()
     ^bb213:
-      %1835 = "llvm.mlir.constant"() <{"value" = 87 : i32}> : () -> i32
+      %1835 = "llvm.mlir.constant"() <{"value" = 88 : i32}> : () -> i32
       "llvm.store"(%1835, %1834) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb214] : () -> ()
     ^bb215:
-      %1836 = "llvm.mlir.constant"() <{"value" = 88 : i32}> : () -> i32
+      %1836 = "llvm.mlir.constant"() <{"value" = 87 : i32}> : () -> i32
       "llvm.store"(%1836, %1834) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb214] : () -> ()
     ^bb212:
@@ -12271,7 +12271,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1849 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1850 = "llvm.getelementptr"(%1848, %1849) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1850) : (!llvm.ptr) -> ()
-    }) {"func_name" = "String_B_zip_otherCollectionU_zip_otherIterableU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "String_B_zip_otherIterableU_zip_otherCollectionU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Collection_product_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_product_otherIterableU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
@@ -13422,8 +13422,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       "mid.return"(%2709) : (!llvm.ptr) -> ()
     }) {"func_name" = "InvalidUTF8Error_B_print_message_", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.data_size_def"() {"meth_name" = "_data_size_OutOfBounds", "types" = [!llvm.struct<(!llvm.ptr, i160)>, i32, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>]} : () -> ()
-    "mid.getter_def"() {"meth_name" = "OutOfBounds_getter_details", "types" = [!llvm.struct<(!llvm.ptr, i160)>, i32, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>], "offset" = 0 : i64, "original_type" = !llvm.struct<(!llvm.ptr, i160)>, "specialized_name" = "union_typ", "parameterization" = "_parameterization_Nil_or_core.OutOfBoundsDetails"} : () -> ()
-    "mid.setter_def"() {"meth_name" = "OutOfBounds_setter_details", "types" = [!llvm.struct<(!llvm.ptr, i160)>, i32, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>], "offset" = 0 : i64, "original_type" = !llvm.struct<(!llvm.ptr, i160)>, "specialized_name" = "union_typ", "parameterization" = "_parameterization_Nil_or_core.OutOfBoundsDetails"} : () -> ()
+    "mid.getter_def"() {"meth_name" = "OutOfBounds_getter_details", "types" = [!llvm.struct<(!llvm.ptr, i160)>, i32, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>], "offset" = 0 : i64, "original_type" = !llvm.struct<(!llvm.ptr, i160)>, "specialized_name" = "union_typ", "parameterization" = "_parameterization_core.OutOfBoundsDetails_or_Nil"} : () -> ()
+    "mid.setter_def"() {"meth_name" = "OutOfBounds_setter_details", "types" = [!llvm.struct<(!llvm.ptr, i160)>, i32, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>], "offset" = 0 : i64, "original_type" = !llvm.struct<(!llvm.ptr, i160)>, "specialized_name" = "union_typ", "parameterization" = "_parameterization_core.OutOfBoundsDetails_or_Nil"} : () -> ()
     "mid.accessor_def"() {"meth_name" = "OutOfBounds_field_details", "getter_name" = "OutOfBounds_getter_details", "setter_name" = "OutOfBounds_setter_details"} : () -> ()
     "mid.getter_def"() {"meth_name" = "OutOfBounds_getter_line_number", "types" = [!llvm.struct<(!llvm.ptr, i160)>, i32, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>], "offset" = 1 : i64, "original_type" = i32, "specialized_name" = "i32_typ", "parameterization" = "_parameterization_i32"} : () -> ()
     "mid.setter_def"() {"meth_name" = "OutOfBounds_setter_line_number", "types" = [!llvm.struct<(!llvm.ptr, i160)>, i32, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>], "offset" = 1 : i64, "original_type" = i32, "specialized_name" = "i32_typ", "parameterization" = "_parameterization_i32"} : () -> ()
@@ -13457,8 +13457,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %2730 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %2731 = "mid.parameterizations_array"(%2729, %2730) : (!llvm.ptr, !llvm.ptr) -> !llvm.ptr
       "mid.method_call"(%2731, %2728, %2725, %2727) {"offset" = 2 : i32, "vptrs" = ["i32_typ", "i32_typ"], "vtable_size" = 6 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i32, i32) -> ()
-      %2732 = "hi.cast"(%2723) {"from_typ" = !hi.fatptr<"OutOfBoundsDetails">, "to_typ" = !hi.union<[!hi.nil, !hi.fatptr<"OutOfBoundsDetails">]>, "from_typ_name" = "OutOfBoundsDetails", "to_typ_name" = "union_typ"} : (!hi.fatptr<"OutOfBoundsDetails">) -> !hi.union<[!hi.nil, !hi.fatptr<"OutOfBoundsDetails">]>
-      "mid.set_field"(%2716, %2732) {"offset" = 0 : i64, "vtable_bytes" = 248 : i32, "original_type" = !llvm.struct<(!llvm.ptr, i160)>} : (!hi.fatptr<"OutOfBounds">, !hi.union<[!hi.nil, !hi.fatptr<"OutOfBoundsDetails">]>) -> ()
+      %2732 = "hi.cast"(%2723) {"from_typ" = !hi.fatptr<"OutOfBoundsDetails">, "to_typ" = !hi.union<[!hi.fatptr<"OutOfBoundsDetails">, !hi.nil]>, "from_typ_name" = "OutOfBoundsDetails", "to_typ_name" = "union_typ"} : (!hi.fatptr<"OutOfBoundsDetails">) -> !hi.union<[!hi.fatptr<"OutOfBoundsDetails">, !hi.nil]>
+      "mid.set_field"(%2716, %2732) {"offset" = 0 : i64, "vtable_bytes" = 248 : i32, "original_type" = !llvm.struct<(!llvm.ptr, i160)>} : (!hi.fatptr<"OutOfBounds">, !hi.union<[!hi.fatptr<"OutOfBoundsDetails">, !hi.nil]>) -> ()
       %2733 = "mid.literal"() {"value" = 0 : i32, "typ" = i32} : () -> si32
       %2734 = "hi.cast"(%2733) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
       "mid.set_field"(%2716, %2734) {"offset" = 1 : i64, "vtable_bytes" = 248 : i32, "original_type" = i32} : (!hi.fatptr<"OutOfBounds">, si32) -> ()
@@ -13659,17 +13659,17 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %2876 = "mid.method_call"(%2875, %2874) {"offset" = 13 : i32, "vptrs" = [], "vtable_size" = 314 : i64, "ret_type" = !llvm.struct<(!llvm.ptr)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.buffer<si8>
       %2877 = "hi.cast"(%2876) {"from_typ" = !hi.buffer<si8>, "to_typ" = !hi.buffer<si8>, "from_typ_name" = "buffer_typ", "to_typ_name" = "buffer_typ"} : (!hi.buffer<si8>) -> !hi.buffer<si8>
       %2878 = "mid.print"(%2877) {"typ" = !llvm.struct<(!llvm.ptr)>} : (!hi.buffer<si8>) -> i32
-      %2879 = "mid.get_field"(%2872) {"offset" = 0 : i64, "vtable_bytes" = 248 : i32, "original_type" = !llvm.struct<(!llvm.ptr, i160)>} : (!hi.fatptr<"OutOfBounds">) -> !hi.union<[!hi.nil, !hi.fatptr<"OutOfBoundsDetails">]>
-      %2880 = "mid.refer"(%2879) {"typ" = !llvm.struct<(!llvm.ptr, i160)>} : (!hi.union<[!hi.nil, !hi.fatptr<"OutOfBoundsDetails">]>) -> !hi.union<[!hi.nil, !hi.fatptr<"OutOfBoundsDetails">]>
-      %2881 = "mid.checkflag"(%2880) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, !hi.fatptr<"OutOfBoundsDetails">]>) -> si1
+      %2879 = "mid.get_field"(%2872) {"offset" = 0 : i64, "vtable_bytes" = 248 : i32, "original_type" = !llvm.struct<(!llvm.ptr, i160)>} : (!hi.fatptr<"OutOfBounds">) -> !hi.union<[!hi.fatptr<"OutOfBoundsDetails">, !hi.nil]>
+      %2880 = "mid.refer"(%2879) {"typ" = !llvm.struct<(!llvm.ptr, i160)>} : (!hi.union<[!hi.fatptr<"OutOfBoundsDetails">, !hi.nil]>) -> !hi.union<[!hi.fatptr<"OutOfBoundsDetails">, !hi.nil]>
+      %2881 = "mid.checkflag"(%2880) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.fatptr<"OutOfBoundsDetails">, !hi.nil]>) -> si1
       %2882 = "mid.unwrap"(%2881) : (si1) -> i1
       "mid.if"(%2882) ({
-        %2883 = "hi.cast"(%2880) {"from_typ" = !hi.union<[!hi.nil, !hi.fatptr<"OutOfBoundsDetails">]>, "to_typ" = !hi.fatptr<"OutOfBoundsDetails">, "from_typ_name" = "union_typ", "to_typ_name" = "OutOfBoundsDetails"} : (!hi.union<[!hi.nil, !hi.fatptr<"OutOfBoundsDetails">]>) -> !hi.fatptr<"OutOfBoundsDetails">
+        %2883 = "hi.cast"(%2880) {"from_typ" = !hi.union<[!hi.fatptr<"OutOfBoundsDetails">, !hi.nil]>, "to_typ" = !hi.fatptr<"OutOfBoundsDetails">, "from_typ_name" = "union_typ", "to_typ_name" = "OutOfBoundsDetails"} : (!hi.union<[!hi.fatptr<"OutOfBoundsDetails">, !hi.nil]>) -> !hi.fatptr<"OutOfBoundsDetails">
         %2884 = "mid.unwrap"(%2883) : (!hi.fatptr<"OutOfBoundsDetails">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %2885 = "mid.parameterizations_array"() : () -> !llvm.ptr
         "mid.method_call"(%2885, %2884) {"offset" = 3 : i32, "vptrs" = [], "vtable_size" = 6 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> ()
-        %2886 = "hi.cast"(%2883) {"from_typ" = !hi.fatptr<"OutOfBoundsDetails">, "to_typ" = !hi.union<[!hi.nil, !hi.fatptr<"OutOfBoundsDetails">]>, "from_typ_name" = "OutOfBoundsDetails", "to_typ_name" = "union_typ"} : (!hi.fatptr<"OutOfBoundsDetails">) -> !hi.union<[!hi.nil, !hi.fatptr<"OutOfBoundsDetails">]>
-        "mid.assign"(%2880, %2886) {"typ" = !llvm.struct<(!llvm.ptr, i160)>} : (!hi.union<[!hi.nil, !hi.fatptr<"OutOfBoundsDetails">]>, !hi.union<[!hi.nil, !hi.fatptr<"OutOfBoundsDetails">]>) -> ()
+        %2886 = "hi.cast"(%2883) {"from_typ" = !hi.fatptr<"OutOfBoundsDetails">, "to_typ" = !hi.union<[!hi.fatptr<"OutOfBoundsDetails">, !hi.nil]>, "from_typ_name" = "OutOfBoundsDetails", "to_typ_name" = "union_typ"} : (!hi.fatptr<"OutOfBoundsDetails">) -> !hi.union<[!hi.fatptr<"OutOfBoundsDetails">, !hi.nil]>
+        "mid.assign"(%2880, %2886) {"typ" = !llvm.struct<(!llvm.ptr, i160)>} : (!hi.union<[!hi.fatptr<"OutOfBoundsDetails">, !hi.nil]>, !hi.union<[!hi.fatptr<"OutOfBoundsDetails">, !hi.nil]>) -> ()
       }) : (i1) -> ()
     }) {"func_name" = "OutOfBounds_print_message_", "result_type" = !llvm.void, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
@@ -13918,8 +13918,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
     "mid.external_typedef"() {"class_name" = "OutOfBoundsDetails"} : () -> ()
     "mid.typedef"() {"class_name" = "KeyNotFound", "methods" = [@KeyNotFound_field_line_number, @KeyNotFound_field_file_name, @KeyNotFound_field_message, @KeyNotFound_field_stacktrace, @KeyNotFound_B_init_messageString, @KeyNotFound_B_init_, @KeyNotFound_B_set_info_line_numberi32_file_nameString, @KeyNotFound_B_report_, @KeyNotFound_B_print_message_, @Exception_init_messageString, @Exception_init_, @Exception_set_info_line_numberi32_file_nameString, @Exception_report_, @Exception_print_message_, @KeyNotFound_field_line_number, @KeyNotFound_field_file_name, @KeyNotFound_field_message, @KeyNotFound_field_stacktrace, @KeyNotFound_B_init_messageString, @KeyNotFound_B_init_, @KeyNotFound_B_set_info_line_numberi32_file_nameString, @KeyNotFound_B_report_, @KeyNotFound_B_print_message_, @Exception_init_messageString, @Exception_init_, @Exception_set_info_line_numberi32_file_nameString, @Exception_report_, @Exception_print_message_], "hash_tbl" = [@Object, @KeyNotFound, @any_typ, @Exception], "offset_tbl" = [38 : i32, 10 : i32, 10 : i32, 24 : i32], "prime" = 4611686018427388091 : i64, "hash_id" = 2946564862774055400 : i64, "base_typ" = !llvm.struct<(i32, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_KeyNotFound", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
     "mid.typedef"() {"class_name" = "Map", "methods" = [], "hash_tbl" = [@Indexable, @Map, @IndexableCollection, @Container, @Collection, @Iterable, @any_typ, @Object], "offset_tbl" = [198 : i32, 10 : i32, 64 : i32, 288 : i32, 204 : i32, 263 : i32, 10 : i32, 204 : i32], "prime" = 4611686018427389201 : i64, "hash_id" = 13196888402582771646 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr)>, "data_size_fn" = "_data_size_Map", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
-    "mid.typedef"() {"class_name" = "MapKeys", "methods" = [@MapKeys_field_MapKeys_1, @MapKeys_field_MapKeys_0, @MapKeys_field_map, @MapKeys_B_init_mapMapK._V, @MapKeys_B_size_, @MapKeys_B_is_empty_, @MapKeys_B_iterator_, @MapKeys_B_each_fFunctionT_to_Nothing, @MapKeys_B_reduce_accumulatorT_fFunctionT._T_to_T, @MapKeys_B_all_fFunctionT_to_Bool, @MapKeys_B_any_fFunctionT_to_Bool, @MapKeys_B_enumerate_, @MapKeys_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MapKeys_B_filter_fFunctionT_to_Bool, @MapKeys_B_chain_otherIterableT_chain_otherCollectionT, @MapKeys_B_interleave_otherCollectionT_interleave_otherIterableT, @MapKeys_B_zip_otherCollectionU_zip_otherIterableU, @MapKeys_B_product_otherCollectionU_product_otherIterableU, @MapKeys_init_mapMapK._V, @MapKeys_size_, @Collection_is_empty_, @MapKeys_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @MapKeys_field_MapKeys_0, @MapKeys_B_size_, @MapKeys_B_is_empty_, @MapKeys_B_iterator_, @MapKeys_B_each_fFunctionT_to_Nothing, @MapKeys_B_reduce_accumulatorT_fFunctionT._T_to_T, @MapKeys_B_all_fFunctionT_to_Bool, @MapKeys_B_any_fFunctionT_to_Bool, @MapKeys_B_enumerate_, @MapKeys_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MapKeys_B_filter_fFunctionT_to_Bool, @MapKeys_B_chain_otherIterableT_chain_otherCollectionT, @MapKeys_B_interleave_otherCollectionT_interleave_otherIterableT, @MapKeys_B_zip_otherCollectionU_zip_otherIterableU, @MapKeys_B_product_otherCollectionU_product_otherIterableU, @MapKeys_size_, @Collection_is_empty_, @MapKeys_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @MapKeys_field_MapKeys_0, @MapKeys_B_iterator_, @MapKeys_B_each_fFunctionT_to_Nothing, @MapKeys_B_reduce_accumulatorT_fFunctionT._T_to_T, @MapKeys_B_all_fFunctionT_to_Bool, @MapKeys_B_any_fFunctionT_to_Bool, @MapKeys_B_enumerate_, @MapKeys_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MapKeys_B_filter_fFunctionT_to_Bool, @MapKeys_B_chain_otherIterableT_chain_otherCollectionT, @MapKeys_B_interleave_otherCollectionT_interleave_otherIterableT, @MapKeys_B_zip_otherCollectionU_zip_otherIterableU, @MapKeys_B_product_otherCollectionU_product_otherIterableU, @MapKeys_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @MapKeys_field_MapKeys_0, @MapKeys_B_iterator_, @MapKeys_B_each_fFunctionT_to_Nothing, @MapKeys_B_reduce_accumulatorT_fFunctionT._T_to_T, @MapKeys_B_all_fFunctionT_to_Bool, @MapKeys_B_any_fFunctionT_to_Bool, @MapKeys_B_enumerate_, @MapKeys_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MapKeys_B_filter_fFunctionT_to_Bool, @MapKeys_B_chain_otherIterableT_chain_otherCollectionT, @MapKeys_B_interleave_otherCollectionT_interleave_otherIterableT, @MapKeys_B_zip_otherCollectionU_zip_otherIterableU, @MapKeys_B_product_otherCollectionU_product_otherIterableU, @MapKeys_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU], "hash_tbl" = [18446744073709551615 : i64, @Object, @any_typ, @Collection, @MapKeys, @Container, @Iterable, 18446744073709551615 : i64], "offset_tbl" = [0 : i32, 132 : i32, 10 : i32, 48 : i32, 10 : i32, 132 : i32, 107 : i32, 0 : i32], "prime" = 4611686018427388319 : i64, "hash_id" = 11691328477629805411 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_MapKeys", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
-    "mid.typedef"() {"class_name" = "MapValues", "methods" = [@MapValues_field_MapValues_0, @MapValues_field_MapValues_1, @MapValues_field_map, @MapValues_B_init_mapMapK._V, @MapValues_B_size_, @MapValues_B_is_empty_, @MapValues_B_iterator_, @MapValues_B_each_fFunctionT_to_Nothing, @MapValues_B_reduce_accumulatorT_fFunctionT._T_to_T, @MapValues_B_all_fFunctionT_to_Bool, @MapValues_B_any_fFunctionT_to_Bool, @MapValues_B_enumerate_, @MapValues_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MapValues_B_filter_fFunctionT_to_Bool, @MapValues_B_chain_otherIterableT_chain_otherCollectionT, @MapValues_B_interleave_otherCollectionT_interleave_otherIterableT, @MapValues_B_zip_otherCollectionU_zip_otherIterableU, @MapValues_B_product_otherCollectionU_product_otherIterableU, @MapValues_init_mapMapK._V, @MapValues_size_, @Collection_is_empty_, @MapValues_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @MapValues_field_MapValues_1, @MapValues_B_size_, @MapValues_B_is_empty_, @MapValues_B_iterator_, @MapValues_B_each_fFunctionT_to_Nothing, @MapValues_B_reduce_accumulatorT_fFunctionT._T_to_T, @MapValues_B_all_fFunctionT_to_Bool, @MapValues_B_any_fFunctionT_to_Bool, @MapValues_B_enumerate_, @MapValues_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MapValues_B_filter_fFunctionT_to_Bool, @MapValues_B_chain_otherIterableT_chain_otherCollectionT, @MapValues_B_interleave_otherCollectionT_interleave_otherIterableT, @MapValues_B_zip_otherCollectionU_zip_otherIterableU, @MapValues_B_product_otherCollectionU_product_otherIterableU, @MapValues_size_, @Collection_is_empty_, @MapValues_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @MapValues_field_MapValues_1, @MapValues_B_iterator_, @MapValues_B_each_fFunctionT_to_Nothing, @MapValues_B_reduce_accumulatorT_fFunctionT._T_to_T, @MapValues_B_all_fFunctionT_to_Bool, @MapValues_B_any_fFunctionT_to_Bool, @MapValues_B_enumerate_, @MapValues_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MapValues_B_filter_fFunctionT_to_Bool, @MapValues_B_chain_otherIterableT_chain_otherCollectionT, @MapValues_B_interleave_otherCollectionT_interleave_otherIterableT, @MapValues_B_zip_otherCollectionU_zip_otherIterableU, @MapValues_B_product_otherCollectionU_product_otherIterableU, @MapValues_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @MapValues_field_MapValues_1, @MapValues_B_iterator_, @MapValues_B_each_fFunctionT_to_Nothing, @MapValues_B_reduce_accumulatorT_fFunctionT._T_to_T, @MapValues_B_all_fFunctionT_to_Bool, @MapValues_B_any_fFunctionT_to_Bool, @MapValues_B_enumerate_, @MapValues_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MapValues_B_filter_fFunctionT_to_Bool, @MapValues_B_chain_otherIterableT_chain_otherCollectionT, @MapValues_B_interleave_otherCollectionT_interleave_otherIterableT, @MapValues_B_zip_otherCollectionU_zip_otherIterableU, @MapValues_B_product_otherCollectionU_product_otherIterableU, @MapValues_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU], "hash_tbl" = [@any_typ, @Iterable, 18446744073709551615 : i64, @MapValues, @Container, 18446744073709551615 : i64, @Collection, @Object], "offset_tbl" = [10 : i32, 107 : i32, 0 : i32, 10 : i32, 132 : i32, 0 : i32, 48 : i32, 132 : i32], "prime" = 4611686018427388247 : i64, "hash_id" = 2074062704914054732 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_MapValues", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+    "mid.typedef"() {"class_name" = "MapKeys", "methods" = [@MapKeys_field_MapKeys_1, @MapKeys_field_MapKeys_0, @MapKeys_field_map, @MapKeys_B_init_mapMapK._V, @MapKeys_B_size_, @MapKeys_B_is_empty_, @MapKeys_B_iterator_, @MapKeys_B_each_fFunctionT_to_Nothing, @MapKeys_B_reduce_accumulatorT_fFunctionT._T_to_T, @MapKeys_B_all_fFunctionT_to_Bool, @MapKeys_B_any_fFunctionT_to_Bool, @MapKeys_B_enumerate_, @MapKeys_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MapKeys_B_filter_fFunctionT_to_Bool, @MapKeys_B_chain_otherCollectionT_chain_otherIterableT, @MapKeys_B_interleave_otherIterableT_interleave_otherCollectionT, @MapKeys_B_zip_otherIterableU_zip_otherCollectionU, @MapKeys_B_product_otherCollectionU_product_otherIterableU, @MapKeys_init_mapMapK._V, @MapKeys_size_, @Collection_is_empty_, @MapKeys_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @MapKeys_field_MapKeys_0, @MapKeys_B_size_, @MapKeys_B_is_empty_, @MapKeys_B_iterator_, @MapKeys_B_each_fFunctionT_to_Nothing, @MapKeys_B_reduce_accumulatorT_fFunctionT._T_to_T, @MapKeys_B_all_fFunctionT_to_Bool, @MapKeys_B_any_fFunctionT_to_Bool, @MapKeys_B_enumerate_, @MapKeys_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MapKeys_B_filter_fFunctionT_to_Bool, @MapKeys_B_chain_otherCollectionT_chain_otherIterableT, @MapKeys_B_interleave_otherIterableT_interleave_otherCollectionT, @MapKeys_B_zip_otherIterableU_zip_otherCollectionU, @MapKeys_B_product_otherCollectionU_product_otherIterableU, @MapKeys_size_, @Collection_is_empty_, @MapKeys_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @MapKeys_field_MapKeys_0, @MapKeys_B_iterator_, @MapKeys_B_each_fFunctionT_to_Nothing, @MapKeys_B_reduce_accumulatorT_fFunctionT._T_to_T, @MapKeys_B_all_fFunctionT_to_Bool, @MapKeys_B_any_fFunctionT_to_Bool, @MapKeys_B_enumerate_, @MapKeys_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MapKeys_B_filter_fFunctionT_to_Bool, @MapKeys_B_chain_otherCollectionT_chain_otherIterableT, @MapKeys_B_interleave_otherIterableT_interleave_otherCollectionT, @MapKeys_B_zip_otherIterableU_zip_otherCollectionU, @MapKeys_B_product_otherCollectionU_product_otherIterableU, @MapKeys_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @MapKeys_field_MapKeys_0, @MapKeys_B_iterator_, @MapKeys_B_each_fFunctionT_to_Nothing, @MapKeys_B_reduce_accumulatorT_fFunctionT._T_to_T, @MapKeys_B_all_fFunctionT_to_Bool, @MapKeys_B_any_fFunctionT_to_Bool, @MapKeys_B_enumerate_, @MapKeys_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MapKeys_B_filter_fFunctionT_to_Bool, @MapKeys_B_chain_otherCollectionT_chain_otherIterableT, @MapKeys_B_interleave_otherIterableT_interleave_otherCollectionT, @MapKeys_B_zip_otherIterableU_zip_otherCollectionU, @MapKeys_B_product_otherCollectionU_product_otherIterableU, @MapKeys_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU], "hash_tbl" = [18446744073709551615 : i64, @Object, @any_typ, @Collection, @MapKeys, @Container, @Iterable, 18446744073709551615 : i64], "offset_tbl" = [0 : i32, 132 : i32, 10 : i32, 48 : i32, 10 : i32, 132 : i32, 107 : i32, 0 : i32], "prime" = 4611686018427388319 : i64, "hash_id" = 11691328477629805411 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_MapKeys", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+    "mid.typedef"() {"class_name" = "MapValues", "methods" = [@MapValues_field_MapValues_0, @MapValues_field_MapValues_1, @MapValues_field_map, @MapValues_B_init_mapMapK._V, @MapValues_B_size_, @MapValues_B_is_empty_, @MapValues_B_iterator_, @MapValues_B_each_fFunctionT_to_Nothing, @MapValues_B_reduce_accumulatorT_fFunctionT._T_to_T, @MapValues_B_all_fFunctionT_to_Bool, @MapValues_B_any_fFunctionT_to_Bool, @MapValues_B_enumerate_, @MapValues_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MapValues_B_filter_fFunctionT_to_Bool, @MapValues_B_chain_otherCollectionT_chain_otherIterableT, @MapValues_B_interleave_otherIterableT_interleave_otherCollectionT, @MapValues_B_zip_otherIterableU_zip_otherCollectionU, @MapValues_B_product_otherCollectionU_product_otherIterableU, @MapValues_init_mapMapK._V, @MapValues_size_, @Collection_is_empty_, @MapValues_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @MapValues_field_MapValues_1, @MapValues_B_size_, @MapValues_B_is_empty_, @MapValues_B_iterator_, @MapValues_B_each_fFunctionT_to_Nothing, @MapValues_B_reduce_accumulatorT_fFunctionT._T_to_T, @MapValues_B_all_fFunctionT_to_Bool, @MapValues_B_any_fFunctionT_to_Bool, @MapValues_B_enumerate_, @MapValues_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MapValues_B_filter_fFunctionT_to_Bool, @MapValues_B_chain_otherCollectionT_chain_otherIterableT, @MapValues_B_interleave_otherIterableT_interleave_otherCollectionT, @MapValues_B_zip_otherIterableU_zip_otherCollectionU, @MapValues_B_product_otherCollectionU_product_otherIterableU, @MapValues_size_, @Collection_is_empty_, @MapValues_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @MapValues_field_MapValues_1, @MapValues_B_iterator_, @MapValues_B_each_fFunctionT_to_Nothing, @MapValues_B_reduce_accumulatorT_fFunctionT._T_to_T, @MapValues_B_all_fFunctionT_to_Bool, @MapValues_B_any_fFunctionT_to_Bool, @MapValues_B_enumerate_, @MapValues_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MapValues_B_filter_fFunctionT_to_Bool, @MapValues_B_chain_otherCollectionT_chain_otherIterableT, @MapValues_B_interleave_otherIterableT_interleave_otherCollectionT, @MapValues_B_zip_otherIterableU_zip_otherCollectionU, @MapValues_B_product_otherCollectionU_product_otherIterableU, @MapValues_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @MapValues_field_MapValues_1, @MapValues_B_iterator_, @MapValues_B_each_fFunctionT_to_Nothing, @MapValues_B_reduce_accumulatorT_fFunctionT._T_to_T, @MapValues_B_all_fFunctionT_to_Bool, @MapValues_B_any_fFunctionT_to_Bool, @MapValues_B_enumerate_, @MapValues_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @MapValues_B_filter_fFunctionT_to_Bool, @MapValues_B_chain_otherCollectionT_chain_otherIterableT, @MapValues_B_interleave_otherIterableT_interleave_otherCollectionT, @MapValues_B_zip_otherIterableU_zip_otherCollectionU, @MapValues_B_product_otherCollectionU_product_otherIterableU, @MapValues_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU], "hash_tbl" = [@any_typ, @Iterable, 18446744073709551615 : i64, @MapValues, @Container, 18446744073709551615 : i64, @Collection, @Object], "offset_tbl" = [10 : i32, 107 : i32, 0 : i32, 10 : i32, 132 : i32, 0 : i32, 48 : i32, 132 : i32], "prime" = 4611686018427388247 : i64, "hash_id" = 2074062704914054732 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_MapValues", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
     "mid.typedef"() {"class_name" = "MapKeyIterator", "methods" = [@MapKeyIterator_field_MapKeyIterator_1, @MapKeyIterator_field_MapKeyIterator_0, @MapKeyIterator_field_map_iterator, @MapKeyIterator_B_init_map_iteratorIteratorPairK._V, @MapKeyIterator_B_next_, @MapKeyIterator_init_map_iteratorIteratorPairK._V, @MapKeyIterator_next_, @MapKeyIterator_field_MapKeyIterator_0, @MapKeyIterator_B_next_, @MapKeyIterator_next_], "hash_tbl" = [18446744073709551615 : i64, @MapKeyIterator, @Container, @Iterator, @Object, 18446744073709551615 : i64, @any_typ, 18446744073709551615 : i64], "offset_tbl" = [0 : i32, 10 : i32, 20 : i32, 17 : i32, 20 : i32, 0 : i32, 10 : i32, 0 : i32], "prime" = 4611686018427388091 : i64, "hash_id" = 7211362081012783701 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_MapKeyIterator", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
     "mid.typedef"() {"class_name" = "MapValueIterator", "methods" = [@MapValueIterator_field_MapValueIterator_0, @MapValueIterator_field_MapValueIterator_1, @MapValueIterator_field_map_iterator, @MapValueIterator_B_init_map_iteratorIteratorPairK._V, @MapValueIterator_B_next_, @MapValueIterator_init_map_iteratorIteratorPairK._V, @MapValueIterator_next_, @MapValueIterator_field_MapValueIterator_1, @MapValueIterator_B_next_, @MapValueIterator_next_], "hash_tbl" = [@any_typ, @MapValueIterator, @Iterator, 18446744073709551615 : i64, @Container, @Object, 18446744073709551615 : i64, 18446744073709551615 : i64], "offset_tbl" = [10 : i32, 10 : i32, 17 : i32, 0 : i32, 20 : i32, 20 : i32, 0 : i32, 0 : i32], "prime" = 4611686018427388157 : i64, "hash_id" = 13464941020225438231 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "data_size_fn" = "_data_size_MapValueIterator", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
     "mid.typedef"() {"class_name" = "HashMap", "methods" = [], "hash_tbl" = [18446744073709551615 : i64, @Container, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, @Object, @any_typ, @Collection, 18446744073709551615 : i64, @Map, @IndexableCollection, 18446744073709551615 : i64, 18446744073709551615 : i64, @Indexable, @Iterable, @HashMap], "offset_tbl" = [0 : i32, 568 : i32, 0 : i32, 0 : i32, 0 : i32, 484 : i32, 10 : i32, 484 : i32, 0 : i32, 66 : i32, 344 : i32, 0 : i32, 0 : i32, 478 : i32, 543 : i32, 10 : i32], "prime" = 4611686018427388447 : i64, "hash_id" = 15597100789811399287 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr)>, "data_size_fn" = "_data_size_HashMap", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
@@ -14596,9 +14596,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %425 = "llvm.getelementptr"(%423, %424) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%425) : (!llvm.ptr) -> ()
     }) {"func_name" = "Map_B_enumerate_", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb87(%426 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %427 : !llvm.ptr):
@@ -14655,9 +14655,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %455 = "llvm.getelementptr"(%453, %454) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%455) : (!llvm.ptr) -> ()
     }) {"func_name" = "Map_B_filter_fFunctionT_to_Bool", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Iterable_chain_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
     "llvm.func"() <{"sym_name" = "Collection_chain_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Iterable_chain_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb97(%456 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %457 : !llvm.ptr):
@@ -14665,11 +14665,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %459 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb98] : () -> ()
     ^bb99:
-      %460 = "llvm.mlir.constant"() <{"value" = 47 : i32}> : () -> i32
+      %460 = "llvm.mlir.constant"() <{"value" = 46 : i32}> : () -> i32
       "llvm.store"(%460, %459) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb100] : () -> ()
     ^bb101:
-      %461 = "llvm.mlir.constant"() <{"value" = 46 : i32}> : () -> i32
+      %461 = "llvm.mlir.constant"() <{"value" = 47 : i32}> : () -> i32
       "llvm.store"(%461, %459) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb100] : () -> ()
     ^bb98:
@@ -14694,10 +14694,10 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %474 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %475 = "llvm.getelementptr"(%473, %474) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%475) : (!llvm.ptr) -> ()
-    }) {"func_name" = "Map_B_chain_otherIterableT_chain_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_interleave_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
+    }) {"func_name" = "Map_B_chain_otherCollectionT_chain_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_interleave_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_interleave_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb104(%476 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %477 : !llvm.ptr):
@@ -14705,11 +14705,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %479 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb105] : () -> ()
     ^bb106:
-      %480 = "llvm.mlir.constant"() <{"value" = 48 : i32}> : () -> i32
+      %480 = "llvm.mlir.constant"() <{"value" = 49 : i32}> : () -> i32
       "llvm.store"(%480, %479) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb107] : () -> ()
     ^bb108:
-      %481 = "llvm.mlir.constant"() <{"value" = 49 : i32}> : () -> i32
+      %481 = "llvm.mlir.constant"() <{"value" = 48 : i32}> : () -> i32
       "llvm.store"(%481, %479) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb107] : () -> ()
     ^bb105:
@@ -14734,10 +14734,10 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %494 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %495 = "llvm.getelementptr"(%493, %494) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%495) : (!llvm.ptr) -> ()
-    }) {"func_name" = "Map_B_interleave_otherCollectionT_interleave_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_zip_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
+    }) {"func_name" = "Map_B_interleave_otherIterableT_interleave_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_zip_otherIterableU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_zip_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb111(%496 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %497 : !llvm.ptr):
@@ -14745,11 +14745,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %499 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb112] : () -> ()
     ^bb113:
-      %500 = "llvm.mlir.constant"() <{"value" = 190 : i32}> : () -> i32
+      %500 = "llvm.mlir.constant"() <{"value" = 191 : i32}> : () -> i32
       "llvm.store"(%500, %499) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb114] : () -> ()
     ^bb115:
-      %501 = "llvm.mlir.constant"() <{"value" = 191 : i32}> : () -> i32
+      %501 = "llvm.mlir.constant"() <{"value" = 190 : i32}> : () -> i32
       "llvm.store"(%501, %499) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb114] : () -> ()
     ^bb112:
@@ -14774,7 +14774,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %514 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %515 = "llvm.getelementptr"(%513, %514) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%515) : (!llvm.ptr) -> ()
-    }) {"func_name" = "Map_B_zip_otherCollectionU_zip_otherIterableU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "Map_B_zip_otherIterableU_zip_otherCollectionU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Collection_product_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_product_otherIterableU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
@@ -15060,11 +15060,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %694 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb162] : () -> ()
     ^bb163:
-      %695 = "llvm.mlir.constant"() <{"value" = 27 : i32}> : () -> i32
+      %695 = "llvm.mlir.constant"() <{"value" = 28 : i32}> : () -> i32
       "llvm.store"(%695, %694) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb164] : () -> ()
     ^bb165:
-      %696 = "llvm.mlir.constant"() <{"value" = 28 : i32}> : () -> i32
+      %696 = "llvm.mlir.constant"() <{"value" = 27 : i32}> : () -> i32
       "llvm.store"(%696, %694) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb164] : () -> ()
     ^bb162:
@@ -15113,11 +15113,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %724 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb172] : () -> ()
     ^bb173:
-      %725 = "llvm.mlir.constant"() <{"value" = 31 : i32}> : () -> i32
+      %725 = "llvm.mlir.constant"() <{"value" = 30 : i32}> : () -> i32
       "llvm.store"(%725, %724) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb174] : () -> ()
     ^bb175:
-      %726 = "llvm.mlir.constant"() <{"value" = 30 : i32}> : () -> i32
+      %726 = "llvm.mlir.constant"() <{"value" = 31 : i32}> : () -> i32
       "llvm.store"(%726, %724) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb174] : () -> ()
     ^bb172:
@@ -15142,18 +15142,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %739 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %740 = "llvm.getelementptr"(%738, %739) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%740) : (!llvm.ptr) -> ()
-    }) {"func_name" = "MapKeys_B_chain_otherIterableT_chain_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "MapKeys_B_chain_otherCollectionT_chain_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb178(%741 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %742 : !llvm.ptr):
       %743 = "mid.invariant"(%742) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %744 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb179] : () -> ()
     ^bb180:
-      %745 = "llvm.mlir.constant"() <{"value" = 32 : i32}> : () -> i32
+      %745 = "llvm.mlir.constant"() <{"value" = 33 : i32}> : () -> i32
       "llvm.store"(%745, %744) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb181] : () -> ()
     ^bb182:
-      %746 = "llvm.mlir.constant"() <{"value" = 33 : i32}> : () -> i32
+      %746 = "llvm.mlir.constant"() <{"value" = 32 : i32}> : () -> i32
       "llvm.store"(%746, %744) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb181] : () -> ()
     ^bb179:
@@ -15178,18 +15178,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %759 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %760 = "llvm.getelementptr"(%758, %759) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%760) : (!llvm.ptr) -> ()
-    }) {"func_name" = "MapKeys_B_interleave_otherCollectionT_interleave_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "MapKeys_B_interleave_otherIterableT_interleave_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb185(%761 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %762 : !llvm.ptr):
       %763 = "mid.invariant"(%762) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %764 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb186] : () -> ()
     ^bb187:
-      %765 = "llvm.mlir.constant"() <{"value" = 34 : i32}> : () -> i32
+      %765 = "llvm.mlir.constant"() <{"value" = 35 : i32}> : () -> i32
       "llvm.store"(%765, %764) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb188] : () -> ()
     ^bb189:
-      %766 = "llvm.mlir.constant"() <{"value" = 35 : i32}> : () -> i32
+      %766 = "llvm.mlir.constant"() <{"value" = 34 : i32}> : () -> i32
       "llvm.store"(%766, %764) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb188] : () -> ()
     ^bb186:
@@ -15214,7 +15214,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %779 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %780 = "llvm.getelementptr"(%778, %779) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%780) : (!llvm.ptr) -> ()
-    }) {"func_name" = "MapKeys_B_zip_otherCollectionU_zip_otherIterableU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "MapKeys_B_zip_otherIterableU_zip_otherCollectionU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb192(%781 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %782 : !llvm.ptr):
       %783 = "mid.invariant"(%782) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
@@ -15496,11 +15496,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %959 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb236] : () -> ()
     ^bb237:
-      %960 = "llvm.mlir.constant"() <{"value" = 27 : i32}> : () -> i32
+      %960 = "llvm.mlir.constant"() <{"value" = 28 : i32}> : () -> i32
       "llvm.store"(%960, %959) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb238] : () -> ()
     ^bb239:
-      %961 = "llvm.mlir.constant"() <{"value" = 28 : i32}> : () -> i32
+      %961 = "llvm.mlir.constant"() <{"value" = 27 : i32}> : () -> i32
       "llvm.store"(%961, %959) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb238] : () -> ()
     ^bb236:
@@ -15549,11 +15549,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %989 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb246] : () -> ()
     ^bb247:
-      %990 = "llvm.mlir.constant"() <{"value" = 31 : i32}> : () -> i32
+      %990 = "llvm.mlir.constant"() <{"value" = 30 : i32}> : () -> i32
       "llvm.store"(%990, %989) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb248] : () -> ()
     ^bb249:
-      %991 = "llvm.mlir.constant"() <{"value" = 30 : i32}> : () -> i32
+      %991 = "llvm.mlir.constant"() <{"value" = 31 : i32}> : () -> i32
       "llvm.store"(%991, %989) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb248] : () -> ()
     ^bb246:
@@ -15578,18 +15578,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1004 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1005 = "llvm.getelementptr"(%1003, %1004) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1005) : (!llvm.ptr) -> ()
-    }) {"func_name" = "MapValues_B_chain_otherIterableT_chain_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "MapValues_B_chain_otherCollectionT_chain_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb252(%1006 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1007 : !llvm.ptr):
       %1008 = "mid.invariant"(%1007) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %1009 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb253] : () -> ()
     ^bb254:
-      %1010 = "llvm.mlir.constant"() <{"value" = 32 : i32}> : () -> i32
+      %1010 = "llvm.mlir.constant"() <{"value" = 33 : i32}> : () -> i32
       "llvm.store"(%1010, %1009) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb255] : () -> ()
     ^bb256:
-      %1011 = "llvm.mlir.constant"() <{"value" = 33 : i32}> : () -> i32
+      %1011 = "llvm.mlir.constant"() <{"value" = 32 : i32}> : () -> i32
       "llvm.store"(%1011, %1009) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb255] : () -> ()
     ^bb253:
@@ -15614,18 +15614,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1024 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1025 = "llvm.getelementptr"(%1023, %1024) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1025) : (!llvm.ptr) -> ()
-    }) {"func_name" = "MapValues_B_interleave_otherCollectionT_interleave_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "MapValues_B_interleave_otherIterableT_interleave_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb259(%1026 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1027 : !llvm.ptr):
       %1028 = "mid.invariant"(%1027) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %1029 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb260] : () -> ()
     ^bb261:
-      %1030 = "llvm.mlir.constant"() <{"value" = 34 : i32}> : () -> i32
+      %1030 = "llvm.mlir.constant"() <{"value" = 35 : i32}> : () -> i32
       "llvm.store"(%1030, %1029) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb262] : () -> ()
     ^bb263:
-      %1031 = "llvm.mlir.constant"() <{"value" = 35 : i32}> : () -> i32
+      %1031 = "llvm.mlir.constant"() <{"value" = 34 : i32}> : () -> i32
       "llvm.store"(%1031, %1029) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb262] : () -> ()
     ^bb260:
@@ -15650,7 +15650,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1044 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1045 = "llvm.getelementptr"(%1043, %1044) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1045) : (!llvm.ptr) -> ()
-    }) {"func_name" = "MapValues_B_zip_otherCollectionU_zip_otherIterableU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "MapValues_B_zip_otherIterableU_zip_otherCollectionU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb266(%1046 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1047 : !llvm.ptr):
       %1048 = "mid.invariant"(%1047) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
@@ -16284,11 +16284,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1427 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb370] : () -> ()
     ^bb371:
-      %1428 = "llvm.mlir.constant"() <{"value" = 49 : i32}> : () -> i32
+      %1428 = "llvm.mlir.constant"() <{"value" = 48 : i32}> : () -> i32
       "llvm.store"(%1428, %1427) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb372] : () -> ()
     ^bb373:
-      %1429 = "llvm.mlir.constant"() <{"value" = 48 : i32}> : () -> i32
+      %1429 = "llvm.mlir.constant"() <{"value" = 49 : i32}> : () -> i32
       "llvm.store"(%1429, %1427) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb372] : () -> ()
     ^bb370:
@@ -16313,18 +16313,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1442 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1443 = "llvm.getelementptr"(%1441, %1442) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1443) : (!llvm.ptr) -> ()
-    }) {"func_name" = "HashMap_B_chain_otherIterableT_chain_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "HashMap_B_chain_otherCollectionT_chain_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb376(%1444 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1445 : !llvm.ptr):
       %1446 = "mid.invariant"(%1445) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %1447 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb377] : () -> ()
     ^bb378:
-      %1448 = "llvm.mlir.constant"() <{"value" = 50 : i32}> : () -> i32
+      %1448 = "llvm.mlir.constant"() <{"value" = 51 : i32}> : () -> i32
       "llvm.store"(%1448, %1447) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb379] : () -> ()
     ^bb380:
-      %1449 = "llvm.mlir.constant"() <{"value" = 51 : i32}> : () -> i32
+      %1449 = "llvm.mlir.constant"() <{"value" = 50 : i32}> : () -> i32
       "llvm.store"(%1449, %1447) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb379] : () -> ()
     ^bb377:
@@ -16349,18 +16349,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1462 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1463 = "llvm.getelementptr"(%1461, %1462) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1463) : (!llvm.ptr) -> ()
-    }) {"func_name" = "HashMap_B_interleave_otherCollectionT_interleave_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "HashMap_B_interleave_otherIterableT_interleave_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb383(%1464 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1465 : !llvm.ptr):
       %1466 = "mid.invariant"(%1465) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
       %1467 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb384] : () -> ()
     ^bb385:
-      %1468 = "llvm.mlir.constant"() <{"value" = 136 : i32}> : () -> i32
+      %1468 = "llvm.mlir.constant"() <{"value" = 137 : i32}> : () -> i32
       "llvm.store"(%1468, %1467) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb386] : () -> ()
     ^bb387:
-      %1469 = "llvm.mlir.constant"() <{"value" = 137 : i32}> : () -> i32
+      %1469 = "llvm.mlir.constant"() <{"value" = 136 : i32}> : () -> i32
       "llvm.store"(%1469, %1467) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb386] : () -> ()
     ^bb384:
@@ -16385,7 +16385,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1482 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1483 = "llvm.getelementptr"(%1481, %1482) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1483) : (!llvm.ptr) -> ()
-    }) {"func_name" = "HashMap_B_zip_otherCollectionU_zip_otherIterableU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "HashMap_B_zip_otherIterableU_zip_otherCollectionU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb390(%1484 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1485 : !llvm.ptr):
       %1486 = "mid.invariant"(%1485) {"num_bytes" = 8 : i64} : (!llvm.ptr) -> !llvm.ptr
@@ -16601,7 +16601,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     "mid.external_typedef"() {"class_name" = "MapValueIterator"} : () -> ()
     "mid.external_typedef"() {"class_name" = "HashMap"} : () -> ()
     "mid.typedef"() {"class_name" = "Entry", "methods" = [@Entry_field_Entry_0, @Entry_field_Entry_1, @Entry_field_primary_hash, @Entry_field_key, @Entry_field_value, @Entry_B_init_keyK_valueV_primary_hashi32, @Entry_B_key_, @Entry_B_value_, @Entry_B_primary_hash_, @Entry_B_to_pair_, @Entry_init_keyK_valueV_primary_hashi32, @Entry_key_, @Entry_value_, @Entry_primary_hash_, @Entry_to_pair_], "hash_tbl" = [@Entry, @Object, @any_typ, 18446744073709551615 : i64], "offset_tbl" = [10 : i32, 25 : i32, 10 : i32, 0 : i32], "prime" = 4611686018427388181 : i64, "hash_id" = 4015701072841558310 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, i32, !llvm.struct<(!llvm.ptr, i160)>, !llvm.struct<(!llvm.ptr, i160)>)>, "data_size_fn" = "_data_size_Entry", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
-    "mid.typedef"() {"class_name" = "CuckooMap", "methods" = [@CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_field_CuckooMap_8, @CuckooMap_field_table1, @CuckooMap_field_table2, @CuckooMap_field_table_len, @CuckooMap_field_size, @CuckooMap_field_hasher, @CuckooMap_field_eq, @CuckooMap_B__Self_max_displacements_, @CuckooMap_B_hash1_keyK, @CuckooMap_B_hash2_from_primary_primary_hashi32, @CuckooMap_B_index1_primary_hashi32, @CuckooMap_B_index2_primary_hashi32, @CuckooMap_B_place_entry_or_get_failed_entry_to_insertEntryK._V, @CuckooMap_B_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_per_tablei32, @CuckooMap_B_resize_, @CuckooMap_B_replace_in_table_keyK_valueV_h1i32_idxi32_tableBufferEntryK._V_or_Nil, @CuckooMap_B_get_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil, @CuckooMap_B_remove_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil, @CuckooMap_B_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, @CuckooMap_B_get_keyK, @CuckooMap_B_insert_keyK_valueV, @CuckooMap_B_remove_keyK, @CuckooMap_B_keys_, @CuckooMap_B_clear_, @CuckooMap_B_indices_, @CuckooMap_B_values_, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap__Self_max_displacements_, @CuckooMap_hash1_keyK, @CuckooMap_hash2_from_primary_primary_hashi32, @CuckooMap_index1_primary_hashi32, @CuckooMap_index2_primary_hashi32, @CuckooMap_place_entry_or_get_failed_entry_to_insertEntryK._V, @CuckooMap_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_per_tablei32, @CuckooMap_resize_, @CuckooMap_replace_in_table_keyK_valueV_h1i32_idxi32_tableBufferEntryK._V_or_Nil, @CuckooMap_get_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil, @CuckooMap_remove_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil, @CuckooMap_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, @CuckooMap_get_keyK, @CuckooMap_insert_keyK_valueV, @CuckooMap_remove_keyK, @Map_keys_, @CuckooMap_clear_, @Map_indices_, @Map_values_, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, @CuckooMap_B_get_keyK, @CuckooMap_B_insert_keyK_valueV, @CuckooMap_B_remove_keyK, @CuckooMap_B_keys_, @CuckooMap_B_clear_, @CuckooMap_B_indices_, @CuckooMap_B_values_, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, @CuckooMap_get_keyK, @CuckooMap_insert_keyK_valueV, @CuckooMap_remove_keyK, @Map_keys_, @CuckooMap_clear_, @Map_indices_, @Map_values_, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_get_keyK, @CuckooMap_B_insert_keyK_valueV, @CuckooMap_B_remove_keyK, @CuckooMap_B_keys_, @CuckooMap_B_clear_, @CuckooMap_B_indices_, @CuckooMap_B_values_, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_get_keyK, @CuckooMap_insert_keyK_valueV, @CuckooMap_remove_keyK, @Map_keys_, @CuckooMap_clear_, @Map_indices_, @Map_values_, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_indices_, @CuckooMap_B_values_, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @Map_indices_, @Map_values_, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_indices_, @CuckooMap_B_values_, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @Map_indices_, @Map_values_, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_get_keyK, @CuckooMap_B_insert_keyK_valueV, @CuckooMap_B_remove_keyK, @CuckooMap_B_keys_, @CuckooMap_B_clear_, @CuckooMap_B_indices_, @CuckooMap_B_values_, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_get_keyK, @CuckooMap_insert_keyK_valueV, @CuckooMap_remove_keyK, @Map_keys_, @CuckooMap_clear_, @Map_indices_, @Map_values_, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_indices_, @CuckooMap_B_values_, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @Map_indices_, @Map_values_, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_indices_, @CuckooMap_B_values_, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @Map_indices_, @Map_values_, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherIterableT_chain_otherCollectionT, @CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT, @CuckooMap_B_zip_otherCollectionU_zip_otherIterableU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU], "hash_tbl" = [18446744073709551615 : i64, @Container, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, @Object, @any_typ, @Collection, 18446744073709551615 : i64, @Map, @IndexableCollection, @CuckooMap, 18446744073709551615 : i64, @Indexable, @Iterable, @HashMap], "offset_tbl" = [0 : i32, 1154 : i32, 0 : i32, 0 : i32, 0 : i32, 1070 : i32, 10 : i32, 1070 : i32, 0 : i32, 652 : i32, 930 : i32, 10 : i32, 0 : i32, 1064 : i32, 1129 : i32, 94 : i32], "prime" = 4611686018427388447 : i64, "hash_id" = 3547150501766965522 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr)>, !llvm.struct<(!llvm.ptr)>, i32, i32, !llvm.struct<(!llvm.ptr)>, !llvm.struct<(!llvm.ptr)>)>, "data_size_fn" = "_data_size_CuckooMap", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+    "mid.typedef"() {"class_name" = "CuckooMap", "methods" = [@CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_field_CuckooMap_8, @CuckooMap_field_table1, @CuckooMap_field_table2, @CuckooMap_field_table_len, @CuckooMap_field_size, @CuckooMap_field_hasher, @CuckooMap_field_eq, @CuckooMap_B__Self_max_displacements_, @CuckooMap_B_hash1_keyK, @CuckooMap_B_hash2_from_primary_primary_hashi32, @CuckooMap_B_index1_primary_hashi32, @CuckooMap_B_index2_primary_hashi32, @CuckooMap_B_place_entry_or_get_failed_entry_to_insertEntryK._V, @CuckooMap_B_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_per_tablei32, @CuckooMap_B_resize_, @CuckooMap_B_replace_in_table_keyK_valueV_h1i32_idxi32_tableBufferEntryK._V_or_Nil, @CuckooMap_B_get_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil, @CuckooMap_B_remove_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil, @CuckooMap_B_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, @CuckooMap_B_get_keyK, @CuckooMap_B_insert_keyK_valueV, @CuckooMap_B_remove_keyK, @CuckooMap_B_keys_, @CuckooMap_B_clear_, @CuckooMap_B_indices_, @CuckooMap_B_values_, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap__Self_max_displacements_, @CuckooMap_hash1_keyK, @CuckooMap_hash2_from_primary_primary_hashi32, @CuckooMap_index1_primary_hashi32, @CuckooMap_index2_primary_hashi32, @CuckooMap_place_entry_or_get_failed_entry_to_insertEntryK._V, @CuckooMap_move_entries_old_tableBufferEntryK._V_or_Nil_old_capacity_per_tablei32, @CuckooMap_resize_, @CuckooMap_replace_in_table_keyK_valueV_h1i32_idxi32_tableBufferEntryK._V_or_Nil, @CuckooMap_get_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil, @CuckooMap_remove_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil, @CuckooMap_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, @CuckooMap_get_keyK, @CuckooMap_insert_keyK_valueV, @CuckooMap_remove_keyK, @Map_keys_, @CuckooMap_clear_, @Map_indices_, @Map_values_, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, @CuckooMap_B_get_keyK, @CuckooMap_B_insert_keyK_valueV, @CuckooMap_B_remove_keyK, @CuckooMap_B_keys_, @CuckooMap_B_clear_, @CuckooMap_B_indices_, @CuckooMap_B_values_, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, @CuckooMap_get_keyK, @CuckooMap_insert_keyK_valueV, @CuckooMap_remove_keyK, @Map_keys_, @CuckooMap_clear_, @Map_indices_, @Map_values_, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_get_keyK, @CuckooMap_B_insert_keyK_valueV, @CuckooMap_B_remove_keyK, @CuckooMap_B_keys_, @CuckooMap_B_clear_, @CuckooMap_B_indices_, @CuckooMap_B_values_, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_get_keyK, @CuckooMap_insert_keyK_valueV, @CuckooMap_remove_keyK, @Map_keys_, @CuckooMap_clear_, @Map_indices_, @Map_values_, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_indices_, @CuckooMap_B_values_, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @Map_indices_, @Map_values_, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_indices_, @CuckooMap_B_values_, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @Map_indices_, @Map_values_, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_get_keyK, @CuckooMap_B_insert_keyK_valueV, @CuckooMap_B_remove_keyK, @CuckooMap_B_keys_, @CuckooMap_B_clear_, @CuckooMap_B_indices_, @CuckooMap_B_values_, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_get_keyK, @CuckooMap_insert_keyK_valueV, @CuckooMap_remove_keyK, @Map_keys_, @CuckooMap_clear_, @Map_indices_, @Map_values_, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_indices_, @CuckooMap_B_values_, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @Map_indices_, @Map_values_, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_indices_, @CuckooMap_B_values_, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @Map_indices_, @Map_values_, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_0, @CuckooMap_field_CuckooMap_1, @CuckooMap_B__index_keyK, @CuckooMap_B__set_index_keyK_valueV, @Map__index_keyK, @CuckooMap__set_index_keyK_valueV, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_size_, @CuckooMap_B_is_empty_, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_size_, @Collection_is_empty_, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @CuckooMap_field_CuckooMap_8, @CuckooMap_B_iterator_, @CuckooMap_B_each_fFunctionT_to_Nothing, @CuckooMap_B_reduce_accumulatorT_fFunctionT._T_to_T, @CuckooMap_B_all_fFunctionT_to_Bool, @CuckooMap_B_any_fFunctionT_to_Bool, @CuckooMap_B_enumerate_, @CuckooMap_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @CuckooMap_B_filter_fFunctionT_to_Bool, @CuckooMap_B_chain_otherCollectionT_chain_otherIterableT, @CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT, @CuckooMap_B_zip_otherIterableU_zip_otherCollectionU, @CuckooMap_B_product_otherCollectionU_product_otherIterableU, @CuckooMap_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU], "hash_tbl" = [18446744073709551615 : i64, @Container, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, @Object, @any_typ, @Collection, 18446744073709551615 : i64, @Map, @IndexableCollection, @CuckooMap, 18446744073709551615 : i64, @Indexable, @Iterable, @HashMap], "offset_tbl" = [0 : i32, 1154 : i32, 0 : i32, 0 : i32, 0 : i32, 1070 : i32, 10 : i32, 1070 : i32, 0 : i32, 652 : i32, 930 : i32, 10 : i32, 0 : i32, 1064 : i32, 1129 : i32, 94 : i32], "prime" = 4611686018427388447 : i64, "hash_id" = 3547150501766965522 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr)>, !llvm.struct<(!llvm.ptr)>, i32, i32, !llvm.struct<(!llvm.ptr)>, !llvm.struct<(!llvm.ptr)>)>, "data_size_fn" = "_data_size_CuckooMap", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
     "mid.typedef"() {"class_name" = "CuckooMapIterator", "methods" = [@CuckooMapIterator_field_CuckooMapIterator_0, @CuckooMapIterator_field_CuckooMapIterator_1, @CuckooMapIterator_field_CuckooMapIterator_2, @CuckooMapIterator_field_map_table1, @CuckooMapIterator_field_map_table2, @CuckooMapIterator_field_table_len, @CuckooMapIterator_field_index, @CuckooMapIterator_field_on_second, @CuckooMapIterator_B_init_map_table1BufferEntryK._V_or_Nil_map_table2BufferEntryK._V_or_Nil_table_leni32, @CuckooMapIterator_B_next_from_table_tableBufferEntryK._V_or_Nil, @CuckooMapIterator_B_next_, @CuckooMapIterator_init_map_table1BufferEntryK._V_or_Nil_map_table2BufferEntryK._V_or_Nil_table_leni32, @CuckooMapIterator_next_from_table_tableBufferEntryK._V_or_Nil, @CuckooMapIterator_next_, @CuckooMapIterator_field_CuckooMapIterator_2, @CuckooMapIterator_B_next_, @CuckooMapIterator_next_], "hash_tbl" = [@CuckooMapIterator, 18446744073709551615 : i64, @Container, @Iterator, @Object, 18446744073709551615 : i64, @any_typ, 18446744073709551615 : i64], "offset_tbl" = [10 : i32, 0 : i32, 27 : i32, 24 : i32, 27 : i32, 0 : i32, 10 : i32, 0 : i32], "prime" = 4611686018427388091 : i64, "hash_id" = 16470995426363500696 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.struct<(!llvm.ptr)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i1)>, "data_size_fn" = "_data_size_CuckooMapIterator", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
     "llvm.func"() <{"sym_name" = "capture_backtrace", "function_type" = !llvm.func<i64 (i64, !llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
@@ -17420,15 +17420,15 @@ builtin.module attributes  {"sym_name" = "ir"} {
           %583 = "mid.parameterizations_array"() : () -> !llvm.ptr
           %584 = "mid.method_call"(%583, %582) {"offset" = 7 : i32, "vptrs" = [], "vtable_size" = 15 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.type_param<"V", !hi.any, "Entry">
           %585 = "hi.cast"(%584) {"from_typ" = !hi.type_param<"V", !hi.any, "Entry">, "to_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "from_typ_name" = "any_typ", "to_typ_name" = "any_typ"} : (!hi.type_param<"V", !hi.any, "Entry">) -> !hi.type_param<"V", !hi.any, "CuckooMap">
-          %586 = "hi.cast"(%585) {"from_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ"} : (!hi.type_param<"V", !hi.any, "CuckooMap">) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-          "mid.return"(%586) : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> ()
+          %586 = "hi.cast"(%585) {"from_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "to_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ"} : (!hi.type_param<"V", !hi.any, "CuckooMap">) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+          "mid.return"(%586) : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> ()
         }) : (i1) -> ()
         %587 = "hi.cast"(%563) {"from_typ" = !hi.fatptr<"Entry", [!hi.type_param<"K", !hi.any, "CuckooMap">, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.union<[!hi.fatptr<"Entry", [!hi.type_param<"K", !hi.any, "CuckooMap">, !hi.type_param<"V", !hi.any, "CuckooMap">]>, !hi.nil]>, "from_typ_name" = "Entry", "to_typ_name" = "union_typ"} : (!hi.fatptr<"Entry", [!hi.type_param<"K", !hi.any, "CuckooMap">, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.union<[!hi.fatptr<"Entry", [!hi.type_param<"K", !hi.any, "CuckooMap">, !hi.type_param<"V", !hi.any, "CuckooMap">]>, !hi.nil]>
         "mid.assign"(%560, %587) {"typ" = !llvm.struct<(!llvm.ptr, i160)>} : (!hi.union<[!hi.fatptr<"Entry", [!hi.type_param<"K", !hi.any, "CuckooMap">, !hi.type_param<"V", !hi.any, "CuckooMap">]>, !hi.nil]>, !hi.union<[!hi.fatptr<"Entry", [!hi.type_param<"K", !hi.any, "CuckooMap">, !hi.type_param<"V", !hi.any, "CuckooMap">]>, !hi.nil]>) -> ()
       }) : (i1) -> ()
       %588 = "mid.alloc"() {"typ" = !llvm.array<0 x i8>} : () -> !llvm.ptr
-      %589 = "hi.cast"(%588) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-      "mid.return"(%589) : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> ()
+      %589 = "hi.cast"(%588) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+      "mid.return"(%589) : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> ()
     }) {"func_name" = "CuckooMap_get_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil", "result_type" = !llvm.struct<(!llvm.ptr, i160)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
     ^bb73(%590 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %591 : !llvm.ptr):
@@ -17519,15 +17519,15 @@ builtin.module attributes  {"sym_name" = "ir"} {
           %661 = "hi.arithmetic"(%659, %660) {"op" = "SUB", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si32
           %662 = "hi.cast"(%661) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
           "mid.set_field"(%620, %662) {"offset" = 6 : i64, "vtable_bytes" = 9152 : i32, "original_type" = i32} : (!hi.fatptr<"CuckooMap", [!hi.type_param<"K", !hi.any, "CuckooMap">, !hi.type_param<"V", !hi.any, "CuckooMap">]>, si32) -> ()
-          %663 = "hi.cast"(%655) {"from_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ"} : (!hi.type_param<"V", !hi.any, "CuckooMap">) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-          "mid.return"(%663) : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> ()
+          %663 = "hi.cast"(%655) {"from_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "to_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ"} : (!hi.type_param<"V", !hi.any, "CuckooMap">) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+          "mid.return"(%663) : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> ()
         }) : (i1) -> ()
         %664 = "hi.cast"(%633) {"from_typ" = !hi.fatptr<"Entry", [!hi.type_param<"K", !hi.any, "CuckooMap">, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.union<[!hi.fatptr<"Entry", [!hi.type_param<"K", !hi.any, "CuckooMap">, !hi.type_param<"V", !hi.any, "CuckooMap">]>, !hi.nil]>, "from_typ_name" = "Entry", "to_typ_name" = "union_typ"} : (!hi.fatptr<"Entry", [!hi.type_param<"K", !hi.any, "CuckooMap">, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.union<[!hi.fatptr<"Entry", [!hi.type_param<"K", !hi.any, "CuckooMap">, !hi.type_param<"V", !hi.any, "CuckooMap">]>, !hi.nil]>
         "mid.assign"(%630, %664) {"typ" = !llvm.struct<(!llvm.ptr, i160)>} : (!hi.union<[!hi.fatptr<"Entry", [!hi.type_param<"K", !hi.any, "CuckooMap">, !hi.type_param<"V", !hi.any, "CuckooMap">]>, !hi.nil]>, !hi.union<[!hi.fatptr<"Entry", [!hi.type_param<"K", !hi.any, "CuckooMap">, !hi.type_param<"V", !hi.any, "CuckooMap">]>, !hi.nil]>) -> ()
       }) : (i1) -> ()
       %665 = "mid.alloc"() {"typ" = !llvm.array<0 x i8>} : () -> !llvm.ptr
-      %666 = "hi.cast"(%665) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-      "mid.return"(%666) : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> ()
+      %666 = "hi.cast"(%665) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+      "mid.return"(%666) : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> ()
     }) {"func_name" = "CuckooMap_remove_from_table_keyK_h1i32_idxi32_tableBufferEntryK._V_or_Nil", "result_type" = !llvm.struct<(!llvm.ptr, i160)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
     ^bb81(%667 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %668 : !llvm.ptr):
@@ -17655,17 +17655,17 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %762 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %763 = "mid.parameterization"() {"id_hierarchy" = ["buffer_typ"], "name_hierarchy" = ["Buffercuckoo.EntryCuckooMap.K_subtype_Any._CuckooMap.V_subtype_Any_or_Nil"]} : () -> !llvm.ptr
       %764 = "mid.parameterizations_array"(%760, %761, %762, %763) : (!hi.reified_type, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
-      %765 = "mid.method_call"(%764, %759, %752, %754, %756, %758) {"offset" = 18 : i32, "vptrs" = ["any_typ", "i32_typ", "i32_typ", "buffer_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>, i32, i32, !llvm.struct<(!llvm.ptr)>) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-      %766 = "hi.cast"(%765) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
+      %765 = "mid.method_call"(%764, %759, %752, %754, %756, %758) {"offset" = 18 : i32, "vptrs" = ["any_typ", "i32_typ", "i32_typ", "buffer_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>, i32, i32, !llvm.struct<(!llvm.ptr)>) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+      %766 = "hi.cast"(%765) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
       %767 = "mid.get_type_field"(%733) {"offset" = 1 : i64, "vtable_bytes" = 9152 : i32} : (!hi.fatptr<"CuckooMap", [!hi.type_param<"K", !hi.any, "CuckooMap">, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.reified_type
-      %768 = "mid.checkflag"(%766) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> si1
+      %768 = "mid.checkflag"(%766) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> si1
       %769 = "mid.unwrap"(%768) : (si1) -> i1
       "mid.if"(%769) ({
-        %770 = "hi.cast"(%766) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "from_typ_name" = "union_typ", "to_typ_name" = "any_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.type_param<"V", !hi.any, "CuckooMap">
-        %771 = "hi.cast"(%770) {"from_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ"} : (!hi.type_param<"V", !hi.any, "CuckooMap">) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-        "mid.return"(%771) : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> ()
+        %770 = "hi.cast"(%766) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "from_typ_name" = "union_typ", "to_typ_name" = "any_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.type_param<"V", !hi.any, "CuckooMap">
+        %771 = "hi.cast"(%770) {"from_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "to_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ"} : (!hi.type_param<"V", !hi.any, "CuckooMap">) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+        "mid.return"(%771) : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> ()
       }) : (i1) -> ()
-      %772 = "hi.cast"(%766) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.nil
+      %772 = "hi.cast"(%766) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.nil
       %773 = "hi.cast"(%742) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
       %774 = "mid.unwrap"(%773) : (si32) -> i32
       %775 = "mid.unwrap"(%733) : (!hi.fatptr<"CuckooMap", [!hi.type_param<"K", !hi.any, "CuckooMap">, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
@@ -17688,20 +17688,20 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %792 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %793 = "mid.parameterization"() {"id_hierarchy" = ["buffer_typ"], "name_hierarchy" = ["Buffercuckoo.EntryCuckooMap.K_subtype_Any._CuckooMap.V_subtype_Any_or_Nil"]} : () -> !llvm.ptr
       %794 = "mid.parameterizations_array"(%790, %791, %792, %793) : (!hi.reified_type, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
-      %795 = "mid.method_call"(%794, %789, %782, %784, %786, %788) {"offset" = 18 : i32, "vptrs" = ["any_typ", "i32_typ", "i32_typ", "buffer_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>, i32, i32, !llvm.struct<(!llvm.ptr)>) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-      %796 = "hi.cast"(%795) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
+      %795 = "mid.method_call"(%794, %789, %782, %784, %786, %788) {"offset" = 18 : i32, "vptrs" = ["any_typ", "i32_typ", "i32_typ", "buffer_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>, i32, i32, !llvm.struct<(!llvm.ptr)>) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+      %796 = "hi.cast"(%795) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
       %797 = "mid.get_type_field"(%733) {"offset" = 1 : i64, "vtable_bytes" = 9152 : i32} : (!hi.fatptr<"CuckooMap", [!hi.type_param<"K", !hi.any, "CuckooMap">, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.reified_type
-      %798 = "mid.checkflag"(%796) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> si1
+      %798 = "mid.checkflag"(%796) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> si1
       %799 = "mid.unwrap"(%798) : (si1) -> i1
       "mid.if"(%799) ({
-        %800 = "hi.cast"(%796) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "from_typ_name" = "union_typ", "to_typ_name" = "any_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.type_param<"V", !hi.any, "CuckooMap">
-        %801 = "hi.cast"(%800) {"from_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ"} : (!hi.type_param<"V", !hi.any, "CuckooMap">) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-        "mid.return"(%801) : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> ()
+        %800 = "hi.cast"(%796) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "from_typ_name" = "union_typ", "to_typ_name" = "any_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.type_param<"V", !hi.any, "CuckooMap">
+        %801 = "hi.cast"(%800) {"from_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "to_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ"} : (!hi.type_param<"V", !hi.any, "CuckooMap">) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+        "mid.return"(%801) : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> ()
       }) : (i1) -> ()
-      %802 = "hi.cast"(%796) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.nil
+      %802 = "hi.cast"(%796) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.nil
       %803 = "mid.alloc"() {"typ" = !llvm.array<0 x i8>} : () -> !llvm.ptr
-      %804 = "hi.cast"(%803) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-      "mid.return"(%804) : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> ()
+      %804 = "hi.cast"(%803) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+      "mid.return"(%804) : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> ()
     }) {"func_name" = "CuckooMap_get_keyK", "result_type" = !llvm.struct<(!llvm.ptr, i160)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
     ^bb95(%805 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %806 : !llvm.ptr):
@@ -17940,17 +17940,17 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %998 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %999 = "mid.parameterization"() {"id_hierarchy" = ["buffer_typ"], "name_hierarchy" = ["Buffercuckoo.EntryCuckooMap.K_subtype_Any._CuckooMap.V_subtype_Any_or_Nil"]} : () -> !llvm.ptr
       %1000 = "mid.parameterizations_array"(%996, %997, %998, %999) : (!hi.reified_type, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
-      %1001 = "mid.method_call"(%1000, %995, %988, %990, %992, %994) {"offset" = 19 : i32, "vptrs" = ["any_typ", "i32_typ", "i32_typ", "buffer_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>, i32, i32, !llvm.struct<(!llvm.ptr)>) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-      %1002 = "hi.cast"(%1001) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
+      %1001 = "mid.method_call"(%1000, %995, %988, %990, %992, %994) {"offset" = 19 : i32, "vptrs" = ["any_typ", "i32_typ", "i32_typ", "buffer_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>, i32, i32, !llvm.struct<(!llvm.ptr)>) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+      %1002 = "hi.cast"(%1001) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
       %1003 = "mid.get_type_field"(%969) {"offset" = 1 : i64, "vtable_bytes" = 9152 : i32} : (!hi.fatptr<"CuckooMap", [!hi.type_param<"K", !hi.any, "CuckooMap">, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.reified_type
-      %1004 = "mid.checkflag"(%1002) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> si1
+      %1004 = "mid.checkflag"(%1002) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> si1
       %1005 = "mid.unwrap"(%1004) : (si1) -> i1
       "mid.if"(%1005) ({
-        %1006 = "hi.cast"(%1002) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "from_typ_name" = "union_typ", "to_typ_name" = "any_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.type_param<"V", !hi.any, "CuckooMap">
-        %1007 = "hi.cast"(%1006) {"from_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ"} : (!hi.type_param<"V", !hi.any, "CuckooMap">) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-        "mid.return"(%1007) : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> ()
+        %1006 = "hi.cast"(%1002) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "from_typ_name" = "union_typ", "to_typ_name" = "any_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.type_param<"V", !hi.any, "CuckooMap">
+        %1007 = "hi.cast"(%1006) {"from_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "to_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ"} : (!hi.type_param<"V", !hi.any, "CuckooMap">) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+        "mid.return"(%1007) : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> ()
       }) : (i1) -> ()
-      %1008 = "hi.cast"(%1002) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.nil
+      %1008 = "hi.cast"(%1002) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.nil
       %1009 = "hi.cast"(%978) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
       %1010 = "mid.unwrap"(%1009) : (si32) -> i32
       %1011 = "mid.unwrap"(%969) : (!hi.fatptr<"CuckooMap", [!hi.type_param<"K", !hi.any, "CuckooMap">, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
@@ -17973,20 +17973,20 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1028 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %1029 = "mid.parameterization"() {"id_hierarchy" = ["buffer_typ"], "name_hierarchy" = ["Buffercuckoo.EntryCuckooMap.K_subtype_Any._CuckooMap.V_subtype_Any_or_Nil"]} : () -> !llvm.ptr
       %1030 = "mid.parameterizations_array"(%1026, %1027, %1028, %1029) : (!hi.reified_type, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
-      %1031 = "mid.method_call"(%1030, %1025, %1018, %1020, %1022, %1024) {"offset" = 19 : i32, "vptrs" = ["any_typ", "i32_typ", "i32_typ", "buffer_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>, i32, i32, !llvm.struct<(!llvm.ptr)>) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-      %1032 = "hi.cast"(%1031) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
+      %1031 = "mid.method_call"(%1030, %1025, %1018, %1020, %1022, %1024) {"offset" = 19 : i32, "vptrs" = ["any_typ", "i32_typ", "i32_typ", "buffer_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>, i32, i32, !llvm.struct<(!llvm.ptr)>) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+      %1032 = "hi.cast"(%1031) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
       %1033 = "mid.get_type_field"(%969) {"offset" = 1 : i64, "vtable_bytes" = 9152 : i32} : (!hi.fatptr<"CuckooMap", [!hi.type_param<"K", !hi.any, "CuckooMap">, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.reified_type
-      %1034 = "mid.checkflag"(%1032) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> si1
+      %1034 = "mid.checkflag"(%1032) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> si1
       %1035 = "mid.unwrap"(%1034) : (si1) -> i1
       "mid.if"(%1035) ({
-        %1036 = "hi.cast"(%1032) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "from_typ_name" = "union_typ", "to_typ_name" = "any_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.type_param<"V", !hi.any, "CuckooMap">
-        %1037 = "hi.cast"(%1036) {"from_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ"} : (!hi.type_param<"V", !hi.any, "CuckooMap">) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-        "mid.return"(%1037) : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> ()
+        %1036 = "hi.cast"(%1032) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "from_typ_name" = "union_typ", "to_typ_name" = "any_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.type_param<"V", !hi.any, "CuckooMap">
+        %1037 = "hi.cast"(%1036) {"from_typ" = !hi.type_param<"V", !hi.any, "CuckooMap">, "to_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ"} : (!hi.type_param<"V", !hi.any, "CuckooMap">) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+        "mid.return"(%1037) : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> ()
       }) : (i1) -> ()
-      %1038 = "hi.cast"(%1032) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.nil
+      %1038 = "hi.cast"(%1032) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.nil
       %1039 = "mid.alloc"() {"typ" = !llvm.array<0 x i8>} : () -> !llvm.ptr
-      %1040 = "hi.cast"(%1039) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-      "mid.return"(%1040) : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> ()
+      %1040 = "hi.cast"(%1039) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+      "mid.return"(%1040) : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> ()
     }) {"func_name" = "CuckooMap_remove_keyK", "result_type" = !llvm.struct<(!llvm.ptr, i160)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
     ^bb106(%1041 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1042 : !llvm.ptr):
@@ -18387,9 +18387,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1290 = "llvm.getelementptr"(%1288, %1289) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1290) : (!llvm.ptr) -> ()
     }) {"func_name" = "CuckooMap_B_enumerate_", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb164(%1291 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1292 : !llvm.ptr):
@@ -18397,11 +18397,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1294 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb165] : () -> ()
     ^bb166:
-      %1295 = "llvm.mlir.constant"() <{"value" = 74 : i32}> : () -> i32
+      %1295 = "llvm.mlir.constant"() <{"value" = 73 : i32}> : () -> i32
       "llvm.store"(%1295, %1294) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb167] : () -> ()
     ^bb168:
-      %1296 = "llvm.mlir.constant"() <{"value" = 73 : i32}> : () -> i32
+      %1296 = "llvm.mlir.constant"() <{"value" = 74 : i32}> : () -> i32
       "llvm.store"(%1296, %1294) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb167] : () -> ()
     ^bb165:
@@ -18446,9 +18446,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1320 = "llvm.getelementptr"(%1318, %1319) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1320) : (!llvm.ptr) -> ()
     }) {"func_name" = "CuckooMap_B_filter_fFunctionT_to_Bool", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Iterable_chain_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
     "llvm.func"() <{"sym_name" = "Collection_chain_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Iterable_chain_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb174(%1321 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1322 : !llvm.ptr):
@@ -18456,11 +18456,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1324 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb175] : () -> ()
     ^bb176:
-      %1325 = "llvm.mlir.constant"() <{"value" = 77 : i32}> : () -> i32
+      %1325 = "llvm.mlir.constant"() <{"value" = 76 : i32}> : () -> i32
       "llvm.store"(%1325, %1324) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb177] : () -> ()
     ^bb178:
-      %1326 = "llvm.mlir.constant"() <{"value" = 76 : i32}> : () -> i32
+      %1326 = "llvm.mlir.constant"() <{"value" = 77 : i32}> : () -> i32
       "llvm.store"(%1326, %1324) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb177] : () -> ()
     ^bb175:
@@ -18485,10 +18485,10 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1339 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1340 = "llvm.getelementptr"(%1338, %1339) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1340) : (!llvm.ptr) -> ()
-    }) {"func_name" = "CuckooMap_B_chain_otherIterableT_chain_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_interleave_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
+    }) {"func_name" = "CuckooMap_B_chain_otherCollectionT_chain_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_interleave_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_interleave_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb181(%1341 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1342 : !llvm.ptr):
@@ -18496,11 +18496,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1344 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb182] : () -> ()
     ^bb183:
-      %1345 = "llvm.mlir.constant"() <{"value" = 78 : i32}> : () -> i32
+      %1345 = "llvm.mlir.constant"() <{"value" = 79 : i32}> : () -> i32
       "llvm.store"(%1345, %1344) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb184] : () -> ()
     ^bb185:
-      %1346 = "llvm.mlir.constant"() <{"value" = 79 : i32}> : () -> i32
+      %1346 = "llvm.mlir.constant"() <{"value" = 78 : i32}> : () -> i32
       "llvm.store"(%1346, %1344) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb184] : () -> ()
     ^bb182:
@@ -18525,10 +18525,10 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1359 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1360 = "llvm.getelementptr"(%1358, %1359) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1360) : (!llvm.ptr) -> ()
-    }) {"func_name" = "CuckooMap_B_interleave_otherCollectionT_interleave_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_zip_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
+    }) {"func_name" = "CuckooMap_B_interleave_otherIterableT_interleave_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_zip_otherIterableU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_zip_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb188(%1361 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1362 : !llvm.ptr):
@@ -18536,11 +18536,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1364 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb189] : () -> ()
     ^bb190:
-      %1365 = "llvm.mlir.constant"() <{"value" = 80 : i32}> : () -> i32
+      %1365 = "llvm.mlir.constant"() <{"value" = 81 : i32}> : () -> i32
       "llvm.store"(%1365, %1364) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb191] : () -> ()
     ^bb192:
-      %1366 = "llvm.mlir.constant"() <{"value" = 81 : i32}> : () -> i32
+      %1366 = "llvm.mlir.constant"() <{"value" = 80 : i32}> : () -> i32
       "llvm.store"(%1366, %1364) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb191] : () -> ()
     ^bb189:
@@ -18565,7 +18565,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1379 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %1380 = "llvm.getelementptr"(%1378, %1379) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%1380) : (!llvm.ptr) -> ()
-    }) {"func_name" = "CuckooMap_B_zip_otherCollectionU_zip_otherIterableU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "CuckooMap_B_zip_otherIterableU_zip_otherCollectionU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Collection_product_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_product_otherIterableU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
@@ -18859,7 +18859,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     "mid.external_typedef"() {"class_name" = "InvalidUTF8Error"} : () -> ()
     "mid.external_typedef"() {"class_name" = "OutOfBounds"} : () -> ()
     "mid.external_typedef"() {"class_name" = "OutOfBoundsDetails"} : () -> ()
-    "mid.typedef"() {"class_name" = "Math", "methods" = [@Math_B__Self_sqrt_xf64, @Math_B__Self_abs_xi32__Self_abs_xf64, @Math_B__Self_max_af64_bf64__Self_max_ai32_bi32, @Math_B__Self_min_ai32_bi32__Self_min_af64_bf64, @Math_B__Self_round_xf64, @Math_B__Self_floor_xf64, @Math_B__Self_ceiling_xf64, @Math__Self_sqrt_xf64, @Math__Self_abs_xi32, @Math__Self_abs_xf64, @Math__Self_max_af64_bf64, @Math__Self_max_ai32_bi32, @Math__Self_min_ai32_bi32, @Math__Self_min_af64_bf64, @Math__Self_round_xf64, @Math__Self_floor_xf64, @Math__Self_ceiling_xf64], "hash_tbl" = [@Object, 18446744073709551615 : i64, @any_typ, @Math], "offset_tbl" = [27 : i32, 0 : i32, 10 : i32, 10 : i32], "prime" = 4611686018427388091 : i64, "hash_id" = 8094150130346788308 : i64, "base_typ" = !llvm.struct<()>, "data_size_fn" = "_data_size_Math", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+    "mid.typedef"() {"class_name" = "Math", "methods" = [@Math_B__Self_sqrt_xf64, @Math_B__Self_abs_xi32__Self_abs_xf64, @Math_B__Self_max_ai32_bi32__Self_max_af64_bf64, @Math_B__Self_min_ai32_bi32__Self_min_af64_bf64, @Math_B__Self_round_xf64, @Math_B__Self_floor_xf64, @Math_B__Self_ceiling_xf64, @Math__Self_sqrt_xf64, @Math__Self_abs_xi32, @Math__Self_abs_xf64, @Math__Self_max_ai32_bi32, @Math__Self_max_af64_bf64, @Math__Self_min_ai32_bi32, @Math__Self_min_af64_bf64, @Math__Self_round_xf64, @Math__Self_floor_xf64, @Math__Self_ceiling_xf64], "hash_tbl" = [@Object, 18446744073709551615 : i64, @any_typ, @Math], "offset_tbl" = [27 : i32, 0 : i32, 10 : i32, 10 : i32], "prime" = 4611686018427388091 : i64, "hash_id" = 8094150130346788308 : i64, "base_typ" = !llvm.struct<()>, "data_size_fn" = "_data_size_Math", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
     "llvm.func"() <{"sym_name" = "capture_backtrace", "function_type" = !llvm.func<i64 (i64, !llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "llvm.func"() <{"sym_name" = "print_backtrace", "function_type" = !llvm.func<void (!llvm.struct<(!llvm.ptr)>, i64)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
@@ -18901,37 +18901,37 @@ builtin.module attributes  {"sym_name" = "ir"} {
     }) {"func_name" = "Math_B__Self_sqrt_xf64", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb5(%20 : !llvm.ptr, %21 : !llvm.struct<(!llvm.ptr, i64)>):
-      %22 = "mid.wrap"(%21) : (!llvm.struct<(!llvm.ptr, i64)>) -> !hi.union<[si32, !hi.float]>
-      %23 = "hi.cast"(%22) {"from_typ" = !hi.union<[si32, !hi.float]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[si32, !hi.float]>) -> si32
+      %22 = "mid.wrap"(%21) : (!llvm.struct<(!llvm.ptr, i64)>) -> !hi.union<[!hi.float, si32]>
+      %23 = "hi.cast"(%22) {"from_typ" = !hi.union<[!hi.float, si32]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[!hi.float, si32]>) -> si32
       %24 = "mid.literal"() {"value" = 0 : i32, "typ" = i32} : () -> si32
       %25 = "hi.comparison"(%23, %24) {"op" = "GE", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si1
       %26 = "mid.unwrap"(%25) : (si1) -> i1
       "mid.if"(%26) ({
-        %27 = "hi.cast"(%23) {"from_typ" = si32, "to_typ" = !hi.union<[si32, !hi.float]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si32, !hi.float]>
-        "mid.return"(%27) : (!hi.union<[si32, !hi.float]>) -> ()
+        %27 = "hi.cast"(%23) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.float, si32]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.float, si32]>
+        "mid.return"(%27) : (!hi.union<[!hi.float, si32]>) -> ()
       }) : (i1) -> ()
       %28 = "mid.literal"() {"value" = -1 : i32, "typ" = i32} : () -> si32
       %29 = "hi.arithmetic"(%28, %23) {"op" = "MUL", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si32
-      %30 = "hi.cast"(%29) {"from_typ" = si32, "to_typ" = !hi.union<[si32, !hi.float]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si32, !hi.float]>
-      "mid.return"(%30) : (!hi.union<[si32, !hi.float]>) -> ()
+      %30 = "hi.cast"(%29) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.float, si32]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.float, si32]>
+      "mid.return"(%30) : (!hi.union<[!hi.float, si32]>) -> ()
     }) {"func_name" = "Math__Self_abs_xi32", "result_type" = !llvm.struct<(!llvm.ptr, i64)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
     ^bb6(%31 : !llvm.ptr, %32 : !llvm.struct<(!llvm.ptr, i64)>):
-      %33 = "mid.wrap"(%32) : (!llvm.struct<(!llvm.ptr, i64)>) -> !hi.union<[si32, !hi.float]>
-      %34 = "hi.cast"(%33) {"from_typ" = !hi.union<[si32, !hi.float]>, "to_typ" = !hi.float, "from_typ_name" = "union_typ", "to_typ_name" = "f64_typ"} : (!hi.union<[si32, !hi.float]>) -> !hi.float
+      %33 = "mid.wrap"(%32) : (!llvm.struct<(!llvm.ptr, i64)>) -> !hi.union<[!hi.float, si32]>
+      %34 = "hi.cast"(%33) {"from_typ" = !hi.union<[!hi.float, si32]>, "to_typ" = !hi.float, "from_typ_name" = "union_typ", "to_typ_name" = "f64_typ"} : (!hi.union<[!hi.float, si32]>) -> !hi.float
       %35 = "mid.literal"() {"value" = 0.000000e+00 : f64, "typ" = f64} : () -> !hi.float
       %36 = "hi.comparison"(%34, %35) {"op" = "GE", "lhs_type" = !hi.float, "rhs_type" = !hi.float} : (!hi.float, !hi.float) -> si1
       %37 = "mid.unwrap"(%36) : (si1) -> i1
       "mid.if"(%37) ({
-        %38 = "hi.cast"(%34) {"from_typ" = !hi.float, "to_typ" = !hi.union<[si32, !hi.float]>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!hi.float) -> !hi.union<[si32, !hi.float]>
-        "mid.return"(%38) : (!hi.union<[si32, !hi.float]>) -> ()
+        %38 = "hi.cast"(%34) {"from_typ" = !hi.float, "to_typ" = !hi.union<[!hi.float, si32]>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!hi.float) -> !hi.union<[!hi.float, si32]>
+        "mid.return"(%38) : (!hi.union<[!hi.float, si32]>) -> ()
       }) : (i1) -> ()
       %39 = "mid.literal"() {"value" = 0.000000e+00 : f64, "typ" = f64} : () -> !hi.float
       %40 = "mid.literal"() {"value" = 1.000000e+00 : f64, "typ" = f64} : () -> !hi.float
       %41 = "hi.arithmetic"(%39, %40) {"op" = "SUB", "lhs_type" = !hi.float, "rhs_type" = !hi.float} : (!hi.float, !hi.float) -> !hi.float
       %42 = "hi.arithmetic"(%41, %34) {"op" = "MUL", "lhs_type" = !hi.float, "rhs_type" = !hi.float} : (!hi.float, !hi.float) -> !hi.float
-      %43 = "hi.cast"(%42) {"from_typ" = !hi.float, "to_typ" = !hi.union<[si32, !hi.float]>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!hi.float) -> !hi.union<[si32, !hi.float]>
-      "mid.return"(%43) : (!hi.union<[si32, !hi.float]>) -> ()
+      %43 = "hi.cast"(%42) {"from_typ" = !hi.float, "to_typ" = !hi.union<[!hi.float, si32]>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!hi.float) -> !hi.union<[!hi.float, si32]>
+      "mid.return"(%43) : (!hi.union<[!hi.float, si32]>) -> ()
     }) {"func_name" = "Math__Self_abs_xf64", "result_type" = !llvm.struct<(!llvm.ptr, i64)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
     ^bb7(%44 : !llvm.ptr):
@@ -18939,21 +18939,21 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %46 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb8] : () -> ()
     ^bb9:
-      %47 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
+      %47 = "llvm.mlir.constant"() <{"value" = 8 : i32}> : () -> i32
       "llvm.store"(%47, %46) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb10] : () -> ()
     ^bb11:
-      %48 = "llvm.mlir.constant"() <{"value" = 8 : i32}> : () -> i32
+      %48 = "llvm.mlir.constant"() <{"value" = 9 : i32}> : () -> i32
       "llvm.store"(%48, %46) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb10] : () -> ()
     ^bb8:
       %49 = "llvm.getelementptr"(%44) <{"rawConstantIndices" = array<i32: 0>, "elem_type" = !llvm.ptr}> : (!llvm.ptr) -> !llvm.ptr
-      %50 = "mid.checkflag"(%49) {"typ_name" = "f64_typ"} : (!llvm.ptr) -> !hi.bool
+      %50 = "mid.checkflag"(%49) {"typ_name" = "i32_typ"} : (!llvm.ptr) -> !hi.bool
       %51 = "llvm.load"(%50) : (!hi.bool) -> i1
       "cf.cond_br"(%51) [^bb9, ^bb12] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
     ^bb12:
       %52 = "llvm.getelementptr"(%44) <{"rawConstantIndices" = array<i32: 0>, "elem_type" = !llvm.ptr}> : (!llvm.ptr) -> !llvm.ptr
-      %53 = "mid.checkflag"(%52) {"typ_name" = "i32_typ"} : (!llvm.ptr) -> !hi.bool
+      %53 = "mid.checkflag"(%52) {"typ_name" = "f64_typ"} : (!llvm.ptr) -> !hi.bool
       %54 = "llvm.load"(%53) : (!hi.bool) -> i1
       "cf.cond_br"(%54) [^bb11, ^bb11] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
     ^bb10:
@@ -18966,34 +18966,34 @@ builtin.module attributes  {"sym_name" = "ir"} {
     }) {"func_name" = "Math_B__Self_abs_xi32__Self_abs_xf64", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb13(%60 : !llvm.ptr, %61 : !llvm.struct<(!llvm.ptr, i64)>, %62 : !llvm.struct<(!llvm.ptr, i64)>):
-      %63 = "mid.wrap"(%61) : (!llvm.struct<(!llvm.ptr, i64)>) -> !hi.union<[si32, !hi.float]>
-      %64 = "hi.cast"(%63) {"from_typ" = !hi.union<[si32, !hi.float]>, "to_typ" = !hi.float, "from_typ_name" = "union_typ", "to_typ_name" = "f64_typ"} : (!hi.union<[si32, !hi.float]>) -> !hi.float
-      %65 = "mid.wrap"(%62) : (!llvm.struct<(!llvm.ptr, i64)>) -> !hi.union<[si32, !hi.float]>
-      %66 = "hi.cast"(%65) {"from_typ" = !hi.union<[si32, !hi.float]>, "to_typ" = !hi.float, "from_typ_name" = "union_typ", "to_typ_name" = "f64_typ"} : (!hi.union<[si32, !hi.float]>) -> !hi.float
-      %67 = "hi.comparison"(%64, %66) {"op" = "GT", "lhs_type" = !hi.float, "rhs_type" = !hi.float} : (!hi.float, !hi.float) -> si1
+      %63 = "mid.wrap"(%61) : (!llvm.struct<(!llvm.ptr, i64)>) -> !hi.union<[!hi.float, si32]>
+      %64 = "hi.cast"(%63) {"from_typ" = !hi.union<[!hi.float, si32]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[!hi.float, si32]>) -> si32
+      %65 = "mid.wrap"(%62) : (!llvm.struct<(!llvm.ptr, i64)>) -> !hi.union<[!hi.float, si32]>
+      %66 = "hi.cast"(%65) {"from_typ" = !hi.union<[!hi.float, si32]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[!hi.float, si32]>) -> si32
+      %67 = "hi.comparison"(%64, %66) {"op" = "GT", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si1
       %68 = "mid.unwrap"(%67) : (si1) -> i1
       "mid.if"(%68) ({
-        %69 = "hi.cast"(%64) {"from_typ" = !hi.float, "to_typ" = !hi.union<[si32, !hi.float]>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!hi.float) -> !hi.union<[si32, !hi.float]>
-        "mid.return"(%69) : (!hi.union<[si32, !hi.float]>) -> ()
+        %69 = "hi.cast"(%64) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.float, si32]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.float, si32]>
+        "mid.return"(%69) : (!hi.union<[!hi.float, si32]>) -> ()
       }) : (i1) -> ()
-      %70 = "hi.cast"(%66) {"from_typ" = !hi.float, "to_typ" = !hi.union<[si32, !hi.float]>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!hi.float) -> !hi.union<[si32, !hi.float]>
-      "mid.return"(%70) : (!hi.union<[si32, !hi.float]>) -> ()
-    }) {"func_name" = "Math__Self_max_af64_bf64", "result_type" = !llvm.struct<(!llvm.ptr, i64)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
+      %70 = "hi.cast"(%66) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.float, si32]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.float, si32]>
+      "mid.return"(%70) : (!hi.union<[!hi.float, si32]>) -> ()
+    }) {"func_name" = "Math__Self_max_ai32_bi32", "result_type" = !llvm.struct<(!llvm.ptr, i64)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
     ^bb14(%71 : !llvm.ptr, %72 : !llvm.struct<(!llvm.ptr, i64)>, %73 : !llvm.struct<(!llvm.ptr, i64)>):
-      %74 = "mid.wrap"(%72) : (!llvm.struct<(!llvm.ptr, i64)>) -> !hi.union<[si32, !hi.float]>
-      %75 = "hi.cast"(%74) {"from_typ" = !hi.union<[si32, !hi.float]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[si32, !hi.float]>) -> si32
-      %76 = "mid.wrap"(%73) : (!llvm.struct<(!llvm.ptr, i64)>) -> !hi.union<[si32, !hi.float]>
-      %77 = "hi.cast"(%76) {"from_typ" = !hi.union<[si32, !hi.float]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[si32, !hi.float]>) -> si32
-      %78 = "hi.comparison"(%75, %77) {"op" = "GT", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si1
+      %74 = "mid.wrap"(%72) : (!llvm.struct<(!llvm.ptr, i64)>) -> !hi.union<[!hi.float, si32]>
+      %75 = "hi.cast"(%74) {"from_typ" = !hi.union<[!hi.float, si32]>, "to_typ" = !hi.float, "from_typ_name" = "union_typ", "to_typ_name" = "f64_typ"} : (!hi.union<[!hi.float, si32]>) -> !hi.float
+      %76 = "mid.wrap"(%73) : (!llvm.struct<(!llvm.ptr, i64)>) -> !hi.union<[!hi.float, si32]>
+      %77 = "hi.cast"(%76) {"from_typ" = !hi.union<[!hi.float, si32]>, "to_typ" = !hi.float, "from_typ_name" = "union_typ", "to_typ_name" = "f64_typ"} : (!hi.union<[!hi.float, si32]>) -> !hi.float
+      %78 = "hi.comparison"(%75, %77) {"op" = "GT", "lhs_type" = !hi.float, "rhs_type" = !hi.float} : (!hi.float, !hi.float) -> si1
       %79 = "mid.unwrap"(%78) : (si1) -> i1
       "mid.if"(%79) ({
-        %80 = "hi.cast"(%75) {"from_typ" = si32, "to_typ" = !hi.union<[si32, !hi.float]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si32, !hi.float]>
-        "mid.return"(%80) : (!hi.union<[si32, !hi.float]>) -> ()
+        %80 = "hi.cast"(%75) {"from_typ" = !hi.float, "to_typ" = !hi.union<[!hi.float, si32]>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!hi.float) -> !hi.union<[!hi.float, si32]>
+        "mid.return"(%80) : (!hi.union<[!hi.float, si32]>) -> ()
       }) : (i1) -> ()
-      %81 = "hi.cast"(%77) {"from_typ" = si32, "to_typ" = !hi.union<[si32, !hi.float]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si32, !hi.float]>
-      "mid.return"(%81) : (!hi.union<[si32, !hi.float]>) -> ()
-    }) {"func_name" = "Math__Self_max_ai32_bi32", "result_type" = !llvm.struct<(!llvm.ptr, i64)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
+      %81 = "hi.cast"(%77) {"from_typ" = !hi.float, "to_typ" = !hi.union<[!hi.float, si32]>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!hi.float) -> !hi.union<[!hi.float, si32]>
+      "mid.return"(%81) : (!hi.union<[!hi.float, si32]>) -> ()
+    }) {"func_name" = "Math__Self_max_af64_bf64", "result_type" = !llvm.struct<(!llvm.ptr, i64)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
     ^bb15(%82 : !llvm.ptr):
       %83 = "mid.invariant"(%82) {"num_bytes" = 16 : i64} : (!llvm.ptr) -> !llvm.ptr
@@ -19005,7 +19005,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       "cf.br"() [^bb18] : () -> ()
     ^bb19:
       %86 = "llvm.getelementptr"(%82) <{"rawConstantIndices" = array<i32: 1>, "elem_type" = !llvm.ptr}> : (!llvm.ptr) -> !llvm.ptr
-      %87 = "mid.checkflag"(%86) {"typ_name" = "f64_typ"} : (!llvm.ptr) -> !hi.bool
+      %87 = "mid.checkflag"(%86) {"typ_name" = "i32_typ"} : (!llvm.ptr) -> !hi.bool
       %88 = "llvm.load"(%87) : (!hi.bool) -> i1
       "cf.cond_br"(%88) [^bb17, ^bb17] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
     ^bb20:
@@ -19014,17 +19014,17 @@ builtin.module attributes  {"sym_name" = "ir"} {
       "cf.br"() [^bb18] : () -> ()
     ^bb21:
       %90 = "llvm.getelementptr"(%82) <{"rawConstantIndices" = array<i32: 1>, "elem_type" = !llvm.ptr}> : (!llvm.ptr) -> !llvm.ptr
-      %91 = "mid.checkflag"(%90) {"typ_name" = "i32_typ"} : (!llvm.ptr) -> !hi.bool
+      %91 = "mid.checkflag"(%90) {"typ_name" = "f64_typ"} : (!llvm.ptr) -> !hi.bool
       %92 = "llvm.load"(%91) : (!hi.bool) -> i1
       "cf.cond_br"(%92) [^bb20, ^bb20] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
     ^bb16:
       %93 = "llvm.getelementptr"(%82) <{"rawConstantIndices" = array<i32: 0>, "elem_type" = !llvm.ptr}> : (!llvm.ptr) -> !llvm.ptr
-      %94 = "mid.checkflag"(%93) {"typ_name" = "f64_typ"} : (!llvm.ptr) -> !hi.bool
+      %94 = "mid.checkflag"(%93) {"typ_name" = "i32_typ"} : (!llvm.ptr) -> !hi.bool
       %95 = "llvm.load"(%94) : (!hi.bool) -> i1
       "cf.cond_br"(%95) [^bb19, ^bb22] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
     ^bb22:
       %96 = "llvm.getelementptr"(%82) <{"rawConstantIndices" = array<i32: 0>, "elem_type" = !llvm.ptr}> : (!llvm.ptr) -> !llvm.ptr
-      %97 = "mid.checkflag"(%96) {"typ_name" = "i32_typ"} : (!llvm.ptr) -> !hi.bool
+      %97 = "mid.checkflag"(%96) {"typ_name" = "f64_typ"} : (!llvm.ptr) -> !hi.bool
       %98 = "llvm.load"(%97) : (!hi.bool) -> i1
       "cf.cond_br"(%98) [^bb21, ^bb21] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
     ^bb18:
@@ -19034,36 +19034,36 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %102 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %103 = "llvm.getelementptr"(%101, %102) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%103) : (!llvm.ptr) -> ()
-    }) {"func_name" = "Math_B__Self_max_af64_bf64__Self_max_ai32_bi32", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "Math_B__Self_max_ai32_bi32__Self_max_af64_bf64", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.func"() ({
     ^bb23(%104 : !llvm.ptr, %105 : !llvm.struct<(!llvm.ptr, i64)>, %106 : !llvm.struct<(!llvm.ptr, i64)>):
-      %107 = "mid.wrap"(%105) : (!llvm.struct<(!llvm.ptr, i64)>) -> !hi.union<[si32, !hi.float]>
-      %108 = "hi.cast"(%107) {"from_typ" = !hi.union<[si32, !hi.float]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[si32, !hi.float]>) -> si32
-      %109 = "mid.wrap"(%106) : (!llvm.struct<(!llvm.ptr, i64)>) -> !hi.union<[si32, !hi.float]>
-      %110 = "hi.cast"(%109) {"from_typ" = !hi.union<[si32, !hi.float]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[si32, !hi.float]>) -> si32
+      %107 = "mid.wrap"(%105) : (!llvm.struct<(!llvm.ptr, i64)>) -> !hi.union<[!hi.float, si32]>
+      %108 = "hi.cast"(%107) {"from_typ" = !hi.union<[!hi.float, si32]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[!hi.float, si32]>) -> si32
+      %109 = "mid.wrap"(%106) : (!llvm.struct<(!llvm.ptr, i64)>) -> !hi.union<[!hi.float, si32]>
+      %110 = "hi.cast"(%109) {"from_typ" = !hi.union<[!hi.float, si32]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[!hi.float, si32]>) -> si32
       %111 = "hi.comparison"(%108, %110) {"op" = "LT", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si1
       %112 = "mid.unwrap"(%111) : (si1) -> i1
       "mid.if"(%112) ({
-        %113 = "hi.cast"(%108) {"from_typ" = si32, "to_typ" = !hi.union<[si32, !hi.float]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si32, !hi.float]>
-        "mid.return"(%113) : (!hi.union<[si32, !hi.float]>) -> ()
+        %113 = "hi.cast"(%108) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.float, si32]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.float, si32]>
+        "mid.return"(%113) : (!hi.union<[!hi.float, si32]>) -> ()
       }) : (i1) -> ()
-      %114 = "hi.cast"(%110) {"from_typ" = si32, "to_typ" = !hi.union<[si32, !hi.float]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si32, !hi.float]>
-      "mid.return"(%114) : (!hi.union<[si32, !hi.float]>) -> ()
+      %114 = "hi.cast"(%110) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.float, si32]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.float, si32]>
+      "mid.return"(%114) : (!hi.union<[!hi.float, si32]>) -> ()
     }) {"func_name" = "Math__Self_min_ai32_bi32", "result_type" = !llvm.struct<(!llvm.ptr, i64)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
     ^bb24(%115 : !llvm.ptr, %116 : !llvm.struct<(!llvm.ptr, i64)>, %117 : !llvm.struct<(!llvm.ptr, i64)>):
-      %118 = "mid.wrap"(%116) : (!llvm.struct<(!llvm.ptr, i64)>) -> !hi.union<[si32, !hi.float]>
-      %119 = "hi.cast"(%118) {"from_typ" = !hi.union<[si32, !hi.float]>, "to_typ" = !hi.float, "from_typ_name" = "union_typ", "to_typ_name" = "f64_typ"} : (!hi.union<[si32, !hi.float]>) -> !hi.float
-      %120 = "mid.wrap"(%117) : (!llvm.struct<(!llvm.ptr, i64)>) -> !hi.union<[si32, !hi.float]>
-      %121 = "hi.cast"(%120) {"from_typ" = !hi.union<[si32, !hi.float]>, "to_typ" = !hi.float, "from_typ_name" = "union_typ", "to_typ_name" = "f64_typ"} : (!hi.union<[si32, !hi.float]>) -> !hi.float
+      %118 = "mid.wrap"(%116) : (!llvm.struct<(!llvm.ptr, i64)>) -> !hi.union<[!hi.float, si32]>
+      %119 = "hi.cast"(%118) {"from_typ" = !hi.union<[!hi.float, si32]>, "to_typ" = !hi.float, "from_typ_name" = "union_typ", "to_typ_name" = "f64_typ"} : (!hi.union<[!hi.float, si32]>) -> !hi.float
+      %120 = "mid.wrap"(%117) : (!llvm.struct<(!llvm.ptr, i64)>) -> !hi.union<[!hi.float, si32]>
+      %121 = "hi.cast"(%120) {"from_typ" = !hi.union<[!hi.float, si32]>, "to_typ" = !hi.float, "from_typ_name" = "union_typ", "to_typ_name" = "f64_typ"} : (!hi.union<[!hi.float, si32]>) -> !hi.float
       %122 = "hi.comparison"(%119, %121) {"op" = "LT", "lhs_type" = !hi.float, "rhs_type" = !hi.float} : (!hi.float, !hi.float) -> si1
       %123 = "mid.unwrap"(%122) : (si1) -> i1
       "mid.if"(%123) ({
-        %124 = "hi.cast"(%119) {"from_typ" = !hi.float, "to_typ" = !hi.union<[si32, !hi.float]>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!hi.float) -> !hi.union<[si32, !hi.float]>
-        "mid.return"(%124) : (!hi.union<[si32, !hi.float]>) -> ()
+        %124 = "hi.cast"(%119) {"from_typ" = !hi.float, "to_typ" = !hi.union<[!hi.float, si32]>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!hi.float) -> !hi.union<[!hi.float, si32]>
+        "mid.return"(%124) : (!hi.union<[!hi.float, si32]>) -> ()
       }) : (i1) -> ()
-      %125 = "hi.cast"(%121) {"from_typ" = !hi.float, "to_typ" = !hi.union<[si32, !hi.float]>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!hi.float) -> !hi.union<[si32, !hi.float]>
-      "mid.return"(%125) : (!hi.union<[si32, !hi.float]>) -> ()
+      %125 = "hi.cast"(%121) {"from_typ" = !hi.float, "to_typ" = !hi.union<[!hi.float, si32]>, "from_typ_name" = "f64_typ", "to_typ_name" = "union_typ"} : (!hi.float) -> !hi.union<[!hi.float, si32]>
+      "mid.return"(%125) : (!hi.union<[!hi.float, si32]>) -> ()
     }) {"func_name" = "Math__Self_min_af64_bf64", "result_type" = !llvm.struct<(!llvm.ptr, i64)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
     ^bb25(%126 : !llvm.ptr):
@@ -19071,31 +19071,31 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %128 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb26] : () -> ()
     ^bb27:
-      %129 = "llvm.mlir.constant"() <{"value" = 12 : i32}> : () -> i32
+      %129 = "llvm.mlir.constant"() <{"value" = 13 : i32}> : () -> i32
       "llvm.store"(%129, %128) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb28] : () -> ()
     ^bb29:
       %130 = "llvm.getelementptr"(%126) <{"rawConstantIndices" = array<i32: 1>, "elem_type" = !llvm.ptr}> : (!llvm.ptr) -> !llvm.ptr
-      %131 = "mid.checkflag"(%130) {"typ_name" = "i32_typ"} : (!llvm.ptr) -> !hi.bool
+      %131 = "mid.checkflag"(%130) {"typ_name" = "f64_typ"} : (!llvm.ptr) -> !hi.bool
       %132 = "llvm.load"(%131) : (!hi.bool) -> i1
       "cf.cond_br"(%132) [^bb27, ^bb27] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
     ^bb30:
-      %133 = "llvm.mlir.constant"() <{"value" = 13 : i32}> : () -> i32
+      %133 = "llvm.mlir.constant"() <{"value" = 12 : i32}> : () -> i32
       "llvm.store"(%133, %128) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb28] : () -> ()
     ^bb31:
       %134 = "llvm.getelementptr"(%126) <{"rawConstantIndices" = array<i32: 1>, "elem_type" = !llvm.ptr}> : (!llvm.ptr) -> !llvm.ptr
-      %135 = "mid.checkflag"(%134) {"typ_name" = "f64_typ"} : (!llvm.ptr) -> !hi.bool
+      %135 = "mid.checkflag"(%134) {"typ_name" = "i32_typ"} : (!llvm.ptr) -> !hi.bool
       %136 = "llvm.load"(%135) : (!hi.bool) -> i1
       "cf.cond_br"(%136) [^bb30, ^bb30] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
     ^bb26:
       %137 = "llvm.getelementptr"(%126) <{"rawConstantIndices" = array<i32: 0>, "elem_type" = !llvm.ptr}> : (!llvm.ptr) -> !llvm.ptr
-      %138 = "mid.checkflag"(%137) {"typ_name" = "i32_typ"} : (!llvm.ptr) -> !hi.bool
+      %138 = "mid.checkflag"(%137) {"typ_name" = "f64_typ"} : (!llvm.ptr) -> !hi.bool
       %139 = "llvm.load"(%138) : (!hi.bool) -> i1
       "cf.cond_br"(%139) [^bb29, ^bb32] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
     ^bb32:
       %140 = "llvm.getelementptr"(%126) <{"rawConstantIndices" = array<i32: 0>, "elem_type" = !llvm.ptr}> : (!llvm.ptr) -> !llvm.ptr
-      %141 = "mid.checkflag"(%140) {"typ_name" = "f64_typ"} : (!llvm.ptr) -> !hi.bool
+      %141 = "mid.checkflag"(%140) {"typ_name" = "i32_typ"} : (!llvm.ptr) -> !hi.bool
       %142 = "llvm.load"(%141) : (!hi.bool) -> i1
       "cf.cond_br"(%142) [^bb31, ^bb31] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
     ^bb28:
@@ -19262,7 +19262,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     "mid.external_typedef"() {"class_name" = "InvalidUTF8Error"} : () -> ()
     "mid.external_typedef"() {"class_name" = "OutOfBounds"} : () -> ()
     "mid.external_typedef"() {"class_name" = "OutOfBoundsDetails"} : () -> ()
-    "mid.typedef"() {"class_name" = "IO", "methods" = [@IO_B__Self_print_xNil__Self_print_xi32__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xi8__Self_print_xBool__Self_print_xi64__Self_print_xString__Self_print_xf64, @IO__Self_print_xNil, @IO__Self_print_xi32, @IO__Self_print_xRepresentable, @IO__Self_print_xCharacter, @IO__Self_print_xi8, @IO__Self_print_xBool, @IO__Self_print_xi64, @IO__Self_print_xString, @IO__Self_print_xf64], "hash_tbl" = [@any_typ, @IO, 18446744073709551615 : i64, @Object], "offset_tbl" = [10 : i32, 10 : i32, 0 : i32, 20 : i32], "prime" = 4611686018427388247 : i64, "hash_id" = 5359822646784595218 : i64, "base_typ" = !llvm.struct<()>, "data_size_fn" = "_data_size_IO", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+    "mid.typedef"() {"class_name" = "IO", "methods" = [@IO_B__Self_print_xNil__Self_print_xi64__Self_print_xBool__Self_print_xi8__Self_print_xi32__Self_print_xCharacter__Self_print_xString__Self_print_xRepresentable__Self_print_xf64, @IO__Self_print_xNil, @IO__Self_print_xi64, @IO__Self_print_xBool, @IO__Self_print_xi8, @IO__Self_print_xi32, @IO__Self_print_xCharacter, @IO__Self_print_xString, @IO__Self_print_xRepresentable, @IO__Self_print_xf64], "hash_tbl" = [@any_typ, @IO, 18446744073709551615 : i64, @Object], "offset_tbl" = [10 : i32, 10 : i32, 0 : i32, 20 : i32], "prime" = 4611686018427388247 : i64, "hash_id" = 5359822646784595218 : i64, "base_typ" = !llvm.struct<()>, "data_size_fn" = "_data_size_IO", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
     "llvm.func"() <{"sym_name" = "capture_backtrace", "function_type" = !llvm.func<i64 (i64, !llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "llvm.func"() <{"sym_name" = "print_backtrace", "function_type" = !llvm.func<void (!llvm.struct<(!llvm.ptr)>, i64)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
@@ -19272,8 +19272,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
     "mid.data_size_def"() {"meth_name" = "_data_size_IO", "types" = []} : () -> ()
     "mid.func"() ({
     ^bb0(%0 : !llvm.ptr, %1 : !llvm.struct<(!llvm.ptr, i160)>):
-      %2 = "mid.wrap"(%1) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %3 = "hi.cast"(%2) {"from_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !hi.nil
+      %2 = "mid.wrap"(%1) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %3 = "hi.cast"(%2) {"from_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !hi.nil
       %4 = "mid.literal"() {"value" = 4 : i32, "typ" = i32} : () -> si32
       %5 = "hi.cast"(%4) {"from_typ" = si32, "to_typ" = si64, "from_typ_name" = "i32_typ", "to_typ_name" = "i64_typ"} : (si32) -> si64
       %6 = "mid.create_buffer"(%5) {"typ" = i8, "region_id" = ""} : (si64) -> !llvm.ptr
@@ -19315,149 +19315,149 @@ builtin.module attributes  {"sym_name" = "ir"} {
     }) {"func_name" = "IO__Self_print_xNil", "result_type" = !llvm.void, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
     ^bb1(%40 : !llvm.ptr, %41 : !llvm.struct<(!llvm.ptr, i160)>):
-      %42 = "mid.wrap"(%41) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %43 = "hi.cast"(%42) {"from_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> si32
-      %44 = "mid.print"(%43) {"typ" = i32} : (si32) -> i32
-    }) {"func_name" = "IO__Self_print_xi32", "result_type" = !llvm.void, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
+      %42 = "mid.wrap"(%41) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %43 = "hi.cast"(%42) {"from_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "to_typ" = si64, "from_typ_name" = "union_typ", "to_typ_name" = "i64_typ"} : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> si64
+      %44 = "mid.print"(%43) {"typ" = i64} : (si64) -> i32
+    }) {"func_name" = "IO__Self_print_xi64", "result_type" = !llvm.void, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
     ^bb2(%45 : !llvm.ptr, %46 : !llvm.struct<(!llvm.ptr, i160)>):
-      %47 = "mid.wrap"(%46) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %48 = "hi.cast"(%47) {"from_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "to_typ" = !hi.fatptr<"Representable">, "from_typ_name" = "union_typ", "to_typ_name" = "Representable"} : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !hi.fatptr<"Representable">
-      %49 = "mid.unwrap"(%48) : (!hi.fatptr<"Representable">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
-      %50 = "mid.parameterizations_array"() : () -> !llvm.ptr
-      %51 = "mid.method_call"(%50, %49) {"offset" = 0 : i32, "vptrs" = [], "vtable_size" = 2 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.fatptr<"String">
-      %52 = "hi.cast"(%51) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.fatptr<"String">, "from_typ_name" = "String", "to_typ_name" = "String"} : (!hi.fatptr<"String">) -> !hi.fatptr<"String">
-      %53 = "mid.unwrap"(%52) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
-      %54 = "mid.parameterizations_array"() : () -> !llvm.ptr
-      %55 = "mid.method_call"(%54, %53) {"offset" = 13 : i32, "vptrs" = [], "vtable_size" = 314 : i64, "ret_type" = !llvm.struct<(!llvm.ptr)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.buffer<si8>
-      %56 = "hi.cast"(%55) {"from_typ" = !hi.buffer<si8>, "to_typ" = !hi.buffer<si8>, "from_typ_name" = "buffer_typ", "to_typ_name" = "buffer_typ"} : (!hi.buffer<si8>) -> !hi.buffer<si8>
-      %57 = "mid.print"(%56) {"typ" = !llvm.struct<(!llvm.ptr)>} : (!hi.buffer<si8>) -> i32
-    }) {"func_name" = "IO__Self_print_xRepresentable", "result_type" = !llvm.void, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
-    "mid.func"() ({
-    ^bb3(%58 : !llvm.ptr, %59 : !llvm.struct<(!llvm.ptr, i160)>):
-      %60 = "mid.wrap"(%59) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %61 = "hi.cast"(%60) {"from_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "to_typ" = !hi.fatptr<"Character">, "from_typ_name" = "union_typ", "to_typ_name" = "Character"} : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !hi.fatptr<"Character">
-      %62 = "mid.unwrap"(%61) : (!hi.fatptr<"Character">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
-      %63 = "mid.parameterizations_array"() : () -> !llvm.ptr
-      %64 = "mid.method_call"(%63, %62) {"offset" = 3 : i32, "vptrs" = [], "vtable_size" = 11 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.fatptr<"String">
-      %65 = "hi.cast"(%64) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.fatptr<"String">, "from_typ_name" = "String", "to_typ_name" = "String"} : (!hi.fatptr<"String">) -> !hi.fatptr<"String">
-      %66 = "mid.unwrap"(%65) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
-      %67 = "mid.parameterizations_array"() : () -> !llvm.ptr
-      %68 = "mid.method_call"(%67, %66) {"offset" = 13 : i32, "vptrs" = [], "vtable_size" = 314 : i64, "ret_type" = !llvm.struct<(!llvm.ptr)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.buffer<si8>
-      %69 = "hi.cast"(%68) {"from_typ" = !hi.buffer<si8>, "to_typ" = !hi.buffer<si8>, "from_typ_name" = "buffer_typ", "to_typ_name" = "buffer_typ"} : (!hi.buffer<si8>) -> !hi.buffer<si8>
-      %70 = "mid.print"(%69) {"typ" = !llvm.struct<(!llvm.ptr)>} : (!hi.buffer<si8>) -> i32
-    }) {"func_name" = "IO__Self_print_xCharacter", "result_type" = !llvm.void, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
-    "mid.func"() ({
-    ^bb4(%71 : !llvm.ptr, %72 : !llvm.struct<(!llvm.ptr, i160)>):
-      %73 = "mid.wrap"(%72) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %74 = "hi.cast"(%73) {"from_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "to_typ" = si8, "from_typ_name" = "union_typ", "to_typ_name" = "i8_typ"} : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> si8
-      %75 = "mid.print"(%74) {"typ" = i8} : (si8) -> i32
-    }) {"func_name" = "IO__Self_print_xi8", "result_type" = !llvm.void, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
-    "mid.func"() ({
-    ^bb5(%76 : !llvm.ptr, %77 : !llvm.struct<(!llvm.ptr, i160)>):
-      %78 = "mid.wrap"(%77) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %79 = "hi.cast"(%78) {"from_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "to_typ" = !hi.bool, "from_typ_name" = "union_typ", "to_typ_name" = "bool_typ"} : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !hi.bool
-      %80 = "mid.unwrap"(%79) : (!hi.bool) -> i1
-      "mid.if"(%80) ({
-        %81 = "mid.literal"() {"value" = 5 : i32, "typ" = i32} : () -> si32
-        %82 = "hi.cast"(%81) {"from_typ" = si32, "to_typ" = si64, "from_typ_name" = "i32_typ", "to_typ_name" = "i64_typ"} : (si32) -> si64
-        %83 = "mid.create_buffer"(%82) {"typ" = i8, "region_id" = ""} : (si64) -> !llvm.ptr
-        %84 = "mid.refer"(%83) {"typ" = !llvm.struct<(!llvm.ptr)>} : (!llvm.ptr) -> !hi.buffer<si8>
-        %85 = "mid.literal"() {"typ" = !llvm.array<4 x i8>, "value" = "true"} : () -> !llvm.ptr
-        %86 = "mid.literal"() {"typ" = i32, "value" = 0 : i32} : () -> !llvm.ptr
-        "mid.buffer_set"(%84, %86, %85) {"typ" = !llvm.array<4 x i8>} : (!hi.buffer<si8>, !llvm.ptr, !llvm.ptr) -> ()
-        %87 = "mid.literal"() {"value" = 4 : i32, "typ" = i32} : () -> si32
-        %88 = "mid.literal"() {"value" = 4 : i32, "typ" = i32} : () -> si32
-        %89 = "mid.literal"() {"value" = 5 : i32, "typ" = i32} : () -> si32
-        %90 = "mid.unwrap"(%84) : (!hi.buffer<si8>) -> !llvm.struct<(!llvm.ptr)>
-        %91 = "mid.unwrap"(%87) : (si32) -> i32
-        %92 = "mid.unwrap"(%88) : (si32) -> i32
-        %93 = "mid.unwrap"(%89) : (si32) -> i32
-        %94 = "mid.new"() {"typ" = !llvm.struct<(!llvm.struct<(!llvm.ptr)>, i32, i32, i32)>, "class_name" = "String", "num_data_fields" = 4 : i32, "region_id" = "none"} : () -> !hi.fatptr<"String">
-        %95 = "mid.literal"() {"value" = 4 : i32, "typ" = i32} : () -> si32
-        %96 = "mid.literal"() {"value" = 4 : i32, "typ" = i32} : () -> si32
-        %97 = "mid.literal"() {"value" = 5 : i32, "typ" = i32} : () -> si32
-        %98 = "hi.cast"(%84) {"from_typ" = !hi.buffer<si8>, "to_typ" = !hi.buffer<si8>, "from_typ_name" = "buffer_typ", "to_typ_name" = "buffer_typ"} : (!hi.buffer<si8>) -> !hi.buffer<si8>
-        %99 = "mid.unwrap"(%98) : (!hi.buffer<si8>) -> !llvm.struct<(!llvm.ptr)>
-        %100 = "hi.cast"(%95) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
-        %101 = "mid.unwrap"(%100) : (si32) -> i32
-        %102 = "hi.cast"(%96) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
-        %103 = "mid.unwrap"(%102) : (si32) -> i32
-        %104 = "hi.cast"(%97) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
-        %105 = "mid.unwrap"(%104) : (si32) -> i32
-        %106 = "mid.unwrap"(%94) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
-        %107 = "mid.parameterization"() {"id_hierarchy" = ["buffer_typ"], "name_hierarchy" = ["Bufferi8"]} : () -> !llvm.ptr
-        %108 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
-        %109 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
-        %110 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
-        %111 = "mid.parameterizations_array"(%107, %108, %109, %110) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
-        "mid.method_call"(%111, %106, %99, %101, %103, %105) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %112 = "mid.unwrap"(%94) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
-        %113 = "mid.parameterizations_array"() : () -> !llvm.ptr
-        %114 = "mid.method_call"(%113, %112) {"offset" = 13 : i32, "vptrs" = [], "vtable_size" = 314 : i64, "ret_type" = !llvm.struct<(!llvm.ptr)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.buffer<si8>
-        %115 = "hi.cast"(%114) {"from_typ" = !hi.buffer<si8>, "to_typ" = !hi.buffer<si8>, "from_typ_name" = "buffer_typ", "to_typ_name" = "buffer_typ"} : (!hi.buffer<si8>) -> !hi.buffer<si8>
-        %116 = "mid.print"(%115) {"typ" = !llvm.struct<(!llvm.ptr)>} : (!hi.buffer<si8>) -> i32
+      %47 = "mid.wrap"(%46) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %48 = "hi.cast"(%47) {"from_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "to_typ" = !hi.bool, "from_typ_name" = "union_typ", "to_typ_name" = "bool_typ"} : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !hi.bool
+      %49 = "mid.unwrap"(%48) : (!hi.bool) -> i1
+      "mid.if"(%49) ({
+        %50 = "mid.literal"() {"value" = 5 : i32, "typ" = i32} : () -> si32
+        %51 = "hi.cast"(%50) {"from_typ" = si32, "to_typ" = si64, "from_typ_name" = "i32_typ", "to_typ_name" = "i64_typ"} : (si32) -> si64
+        %52 = "mid.create_buffer"(%51) {"typ" = i8, "region_id" = ""} : (si64) -> !llvm.ptr
+        %53 = "mid.refer"(%52) {"typ" = !llvm.struct<(!llvm.ptr)>} : (!llvm.ptr) -> !hi.buffer<si8>
+        %54 = "mid.literal"() {"typ" = !llvm.array<4 x i8>, "value" = "true"} : () -> !llvm.ptr
+        %55 = "mid.literal"() {"typ" = i32, "value" = 0 : i32} : () -> !llvm.ptr
+        "mid.buffer_set"(%53, %55, %54) {"typ" = !llvm.array<4 x i8>} : (!hi.buffer<si8>, !llvm.ptr, !llvm.ptr) -> ()
+        %56 = "mid.literal"() {"value" = 4 : i32, "typ" = i32} : () -> si32
+        %57 = "mid.literal"() {"value" = 4 : i32, "typ" = i32} : () -> si32
+        %58 = "mid.literal"() {"value" = 5 : i32, "typ" = i32} : () -> si32
+        %59 = "mid.unwrap"(%53) : (!hi.buffer<si8>) -> !llvm.struct<(!llvm.ptr)>
+        %60 = "mid.unwrap"(%56) : (si32) -> i32
+        %61 = "mid.unwrap"(%57) : (si32) -> i32
+        %62 = "mid.unwrap"(%58) : (si32) -> i32
+        %63 = "mid.new"() {"typ" = !llvm.struct<(!llvm.struct<(!llvm.ptr)>, i32, i32, i32)>, "class_name" = "String", "num_data_fields" = 4 : i32, "region_id" = "none"} : () -> !hi.fatptr<"String">
+        %64 = "mid.literal"() {"value" = 4 : i32, "typ" = i32} : () -> si32
+        %65 = "mid.literal"() {"value" = 4 : i32, "typ" = i32} : () -> si32
+        %66 = "mid.literal"() {"value" = 5 : i32, "typ" = i32} : () -> si32
+        %67 = "hi.cast"(%53) {"from_typ" = !hi.buffer<si8>, "to_typ" = !hi.buffer<si8>, "from_typ_name" = "buffer_typ", "to_typ_name" = "buffer_typ"} : (!hi.buffer<si8>) -> !hi.buffer<si8>
+        %68 = "mid.unwrap"(%67) : (!hi.buffer<si8>) -> !llvm.struct<(!llvm.ptr)>
+        %69 = "hi.cast"(%64) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
+        %70 = "mid.unwrap"(%69) : (si32) -> i32
+        %71 = "hi.cast"(%65) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
+        %72 = "mid.unwrap"(%71) : (si32) -> i32
+        %73 = "hi.cast"(%66) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
+        %74 = "mid.unwrap"(%73) : (si32) -> i32
+        %75 = "mid.unwrap"(%63) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
+        %76 = "mid.parameterization"() {"id_hierarchy" = ["buffer_typ"], "name_hierarchy" = ["Bufferi8"]} : () -> !llvm.ptr
+        %77 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
+        %78 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
+        %79 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
+        %80 = "mid.parameterizations_array"(%76, %77, %78, %79) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
+        "mid.method_call"(%80, %75, %68, %70, %72, %74) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
+        %81 = "mid.unwrap"(%63) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
+        %82 = "mid.parameterizations_array"() : () -> !llvm.ptr
+        %83 = "mid.method_call"(%82, %81) {"offset" = 13 : i32, "vptrs" = [], "vtable_size" = 314 : i64, "ret_type" = !llvm.struct<(!llvm.ptr)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.buffer<si8>
+        %84 = "hi.cast"(%83) {"from_typ" = !hi.buffer<si8>, "to_typ" = !hi.buffer<si8>, "from_typ_name" = "buffer_typ", "to_typ_name" = "buffer_typ"} : (!hi.buffer<si8>) -> !hi.buffer<si8>
+        %85 = "mid.print"(%84) {"typ" = !llvm.struct<(!llvm.ptr)>} : (!hi.buffer<si8>) -> i32
       }, {
-        %117 = "mid.literal"() {"value" = 6 : i32, "typ" = i32} : () -> si32
-        %118 = "hi.cast"(%117) {"from_typ" = si32, "to_typ" = si64, "from_typ_name" = "i32_typ", "to_typ_name" = "i64_typ"} : (si32) -> si64
-        %119 = "mid.create_buffer"(%118) {"typ" = i8, "region_id" = ""} : (si64) -> !llvm.ptr
-        %120 = "mid.refer"(%119) {"typ" = !llvm.struct<(!llvm.ptr)>} : (!llvm.ptr) -> !hi.buffer<si8>
-        %121 = "mid.literal"() {"typ" = !llvm.array<5 x i8>, "value" = "false"} : () -> !llvm.ptr
-        %122 = "mid.literal"() {"typ" = i32, "value" = 0 : i32} : () -> !llvm.ptr
-        "mid.buffer_set"(%120, %122, %121) {"typ" = !llvm.array<5 x i8>} : (!hi.buffer<si8>, !llvm.ptr, !llvm.ptr) -> ()
-        %123 = "mid.literal"() {"value" = 5 : i32, "typ" = i32} : () -> si32
-        %124 = "mid.literal"() {"value" = 5 : i32, "typ" = i32} : () -> si32
-        %125 = "mid.literal"() {"value" = 6 : i32, "typ" = i32} : () -> si32
-        %126 = "mid.unwrap"(%120) : (!hi.buffer<si8>) -> !llvm.struct<(!llvm.ptr)>
-        %127 = "mid.unwrap"(%123) : (si32) -> i32
-        %128 = "mid.unwrap"(%124) : (si32) -> i32
-        %129 = "mid.unwrap"(%125) : (si32) -> i32
-        %130 = "mid.new"() {"typ" = !llvm.struct<(!llvm.struct<(!llvm.ptr)>, i32, i32, i32)>, "class_name" = "String", "num_data_fields" = 4 : i32, "region_id" = "none"} : () -> !hi.fatptr<"String">
-        %131 = "mid.literal"() {"value" = 5 : i32, "typ" = i32} : () -> si32
-        %132 = "mid.literal"() {"value" = 5 : i32, "typ" = i32} : () -> si32
-        %133 = "mid.literal"() {"value" = 6 : i32, "typ" = i32} : () -> si32
-        %134 = "hi.cast"(%120) {"from_typ" = !hi.buffer<si8>, "to_typ" = !hi.buffer<si8>, "from_typ_name" = "buffer_typ", "to_typ_name" = "buffer_typ"} : (!hi.buffer<si8>) -> !hi.buffer<si8>
-        %135 = "mid.unwrap"(%134) : (!hi.buffer<si8>) -> !llvm.struct<(!llvm.ptr)>
-        %136 = "hi.cast"(%131) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
-        %137 = "mid.unwrap"(%136) : (si32) -> i32
-        %138 = "hi.cast"(%132) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
-        %139 = "mid.unwrap"(%138) : (si32) -> i32
-        %140 = "hi.cast"(%133) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
-        %141 = "mid.unwrap"(%140) : (si32) -> i32
-        %142 = "mid.unwrap"(%130) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
-        %143 = "mid.parameterization"() {"id_hierarchy" = ["buffer_typ"], "name_hierarchy" = ["Bufferi8"]} : () -> !llvm.ptr
-        %144 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
-        %145 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
-        %146 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
-        %147 = "mid.parameterizations_array"(%143, %144, %145, %146) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
-        "mid.method_call"(%147, %142, %135, %137, %139, %141) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %148 = "mid.unwrap"(%130) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
-        %149 = "mid.parameterizations_array"() : () -> !llvm.ptr
-        %150 = "mid.method_call"(%149, %148) {"offset" = 13 : i32, "vptrs" = [], "vtable_size" = 314 : i64, "ret_type" = !llvm.struct<(!llvm.ptr)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.buffer<si8>
-        %151 = "hi.cast"(%150) {"from_typ" = !hi.buffer<si8>, "to_typ" = !hi.buffer<si8>, "from_typ_name" = "buffer_typ", "to_typ_name" = "buffer_typ"} : (!hi.buffer<si8>) -> !hi.buffer<si8>
-        %152 = "mid.print"(%151) {"typ" = !llvm.struct<(!llvm.ptr)>} : (!hi.buffer<si8>) -> i32
+        %86 = "mid.literal"() {"value" = 6 : i32, "typ" = i32} : () -> si32
+        %87 = "hi.cast"(%86) {"from_typ" = si32, "to_typ" = si64, "from_typ_name" = "i32_typ", "to_typ_name" = "i64_typ"} : (si32) -> si64
+        %88 = "mid.create_buffer"(%87) {"typ" = i8, "region_id" = ""} : (si64) -> !llvm.ptr
+        %89 = "mid.refer"(%88) {"typ" = !llvm.struct<(!llvm.ptr)>} : (!llvm.ptr) -> !hi.buffer<si8>
+        %90 = "mid.literal"() {"typ" = !llvm.array<5 x i8>, "value" = "false"} : () -> !llvm.ptr
+        %91 = "mid.literal"() {"typ" = i32, "value" = 0 : i32} : () -> !llvm.ptr
+        "mid.buffer_set"(%89, %91, %90) {"typ" = !llvm.array<5 x i8>} : (!hi.buffer<si8>, !llvm.ptr, !llvm.ptr) -> ()
+        %92 = "mid.literal"() {"value" = 5 : i32, "typ" = i32} : () -> si32
+        %93 = "mid.literal"() {"value" = 5 : i32, "typ" = i32} : () -> si32
+        %94 = "mid.literal"() {"value" = 6 : i32, "typ" = i32} : () -> si32
+        %95 = "mid.unwrap"(%89) : (!hi.buffer<si8>) -> !llvm.struct<(!llvm.ptr)>
+        %96 = "mid.unwrap"(%92) : (si32) -> i32
+        %97 = "mid.unwrap"(%93) : (si32) -> i32
+        %98 = "mid.unwrap"(%94) : (si32) -> i32
+        %99 = "mid.new"() {"typ" = !llvm.struct<(!llvm.struct<(!llvm.ptr)>, i32, i32, i32)>, "class_name" = "String", "num_data_fields" = 4 : i32, "region_id" = "none"} : () -> !hi.fatptr<"String">
+        %100 = "mid.literal"() {"value" = 5 : i32, "typ" = i32} : () -> si32
+        %101 = "mid.literal"() {"value" = 5 : i32, "typ" = i32} : () -> si32
+        %102 = "mid.literal"() {"value" = 6 : i32, "typ" = i32} : () -> si32
+        %103 = "hi.cast"(%89) {"from_typ" = !hi.buffer<si8>, "to_typ" = !hi.buffer<si8>, "from_typ_name" = "buffer_typ", "to_typ_name" = "buffer_typ"} : (!hi.buffer<si8>) -> !hi.buffer<si8>
+        %104 = "mid.unwrap"(%103) : (!hi.buffer<si8>) -> !llvm.struct<(!llvm.ptr)>
+        %105 = "hi.cast"(%100) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
+        %106 = "mid.unwrap"(%105) : (si32) -> i32
+        %107 = "hi.cast"(%101) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
+        %108 = "mid.unwrap"(%107) : (si32) -> i32
+        %109 = "hi.cast"(%102) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
+        %110 = "mid.unwrap"(%109) : (si32) -> i32
+        %111 = "mid.unwrap"(%99) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
+        %112 = "mid.parameterization"() {"id_hierarchy" = ["buffer_typ"], "name_hierarchy" = ["Bufferi8"]} : () -> !llvm.ptr
+        %113 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
+        %114 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
+        %115 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
+        %116 = "mid.parameterizations_array"(%112, %113, %114, %115) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
+        "mid.method_call"(%116, %111, %104, %106, %108, %110) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
+        %117 = "mid.unwrap"(%99) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
+        %118 = "mid.parameterizations_array"() : () -> !llvm.ptr
+        %119 = "mid.method_call"(%118, %117) {"offset" = 13 : i32, "vptrs" = [], "vtable_size" = 314 : i64, "ret_type" = !llvm.struct<(!llvm.ptr)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.buffer<si8>
+        %120 = "hi.cast"(%119) {"from_typ" = !hi.buffer<si8>, "to_typ" = !hi.buffer<si8>, "from_typ_name" = "buffer_typ", "to_typ_name" = "buffer_typ"} : (!hi.buffer<si8>) -> !hi.buffer<si8>
+        %121 = "mid.print"(%120) {"typ" = !llvm.struct<(!llvm.ptr)>} : (!hi.buffer<si8>) -> i32
       }) : (i1) -> ()
     }) {"func_name" = "IO__Self_print_xBool", "result_type" = !llvm.void, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
-    ^bb6(%153 : !llvm.ptr, %154 : !llvm.struct<(!llvm.ptr, i160)>):
-      %155 = "mid.wrap"(%154) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %156 = "hi.cast"(%155) {"from_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "to_typ" = si64, "from_typ_name" = "union_typ", "to_typ_name" = "i64_typ"} : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> si64
-      %157 = "mid.print"(%156) {"typ" = i64} : (si64) -> i32
-    }) {"func_name" = "IO__Self_print_xi64", "result_type" = !llvm.void, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
+    ^bb3(%122 : !llvm.ptr, %123 : !llvm.struct<(!llvm.ptr, i160)>):
+      %124 = "mid.wrap"(%123) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %125 = "hi.cast"(%124) {"from_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "to_typ" = si8, "from_typ_name" = "union_typ", "to_typ_name" = "i8_typ"} : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> si8
+      %126 = "mid.print"(%125) {"typ" = i8} : (si8) -> i32
+    }) {"func_name" = "IO__Self_print_xi8", "result_type" = !llvm.void, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
-    ^bb7(%158 : !llvm.ptr, %159 : !llvm.struct<(!llvm.ptr, i160)>):
-      %160 = "mid.wrap"(%159) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %161 = "hi.cast"(%160) {"from_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "to_typ" = !hi.fatptr<"String">, "from_typ_name" = "union_typ", "to_typ_name" = "String"} : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !hi.fatptr<"String">
+    ^bb4(%127 : !llvm.ptr, %128 : !llvm.struct<(!llvm.ptr, i160)>):
+      %129 = "mid.wrap"(%128) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %130 = "hi.cast"(%129) {"from_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> si32
+      %131 = "mid.print"(%130) {"typ" = i32} : (si32) -> i32
+    }) {"func_name" = "IO__Self_print_xi32", "result_type" = !llvm.void, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
+    "mid.func"() ({
+    ^bb5(%132 : !llvm.ptr, %133 : !llvm.struct<(!llvm.ptr, i160)>):
+      %134 = "mid.wrap"(%133) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %135 = "hi.cast"(%134) {"from_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "to_typ" = !hi.fatptr<"Character">, "from_typ_name" = "union_typ", "to_typ_name" = "Character"} : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !hi.fatptr<"Character">
+      %136 = "mid.unwrap"(%135) : (!hi.fatptr<"Character">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
+      %137 = "mid.parameterizations_array"() : () -> !llvm.ptr
+      %138 = "mid.method_call"(%137, %136) {"offset" = 3 : i32, "vptrs" = [], "vtable_size" = 11 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.fatptr<"String">
+      %139 = "hi.cast"(%138) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.fatptr<"String">, "from_typ_name" = "String", "to_typ_name" = "String"} : (!hi.fatptr<"String">) -> !hi.fatptr<"String">
+      %140 = "mid.unwrap"(%139) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
+      %141 = "mid.parameterizations_array"() : () -> !llvm.ptr
+      %142 = "mid.method_call"(%141, %140) {"offset" = 13 : i32, "vptrs" = [], "vtable_size" = 314 : i64, "ret_type" = !llvm.struct<(!llvm.ptr)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.buffer<si8>
+      %143 = "hi.cast"(%142) {"from_typ" = !hi.buffer<si8>, "to_typ" = !hi.buffer<si8>, "from_typ_name" = "buffer_typ", "to_typ_name" = "buffer_typ"} : (!hi.buffer<si8>) -> !hi.buffer<si8>
+      %144 = "mid.print"(%143) {"typ" = !llvm.struct<(!llvm.ptr)>} : (!hi.buffer<si8>) -> i32
+    }) {"func_name" = "IO__Self_print_xCharacter", "result_type" = !llvm.void, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
+    "mid.func"() ({
+    ^bb6(%145 : !llvm.ptr, %146 : !llvm.struct<(!llvm.ptr, i160)>):
+      %147 = "mid.wrap"(%146) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %148 = "hi.cast"(%147) {"from_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "to_typ" = !hi.fatptr<"String">, "from_typ_name" = "union_typ", "to_typ_name" = "String"} : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !hi.fatptr<"String">
+      %149 = "mid.unwrap"(%148) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
+      %150 = "mid.parameterizations_array"() : () -> !llvm.ptr
+      %151 = "mid.method_call"(%150, %149) {"offset" = 13 : i32, "vptrs" = [], "vtable_size" = 314 : i64, "ret_type" = !llvm.struct<(!llvm.ptr)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.buffer<si8>
+      %152 = "hi.cast"(%151) {"from_typ" = !hi.buffer<si8>, "to_typ" = !hi.buffer<si8>, "from_typ_name" = "buffer_typ", "to_typ_name" = "buffer_typ"} : (!hi.buffer<si8>) -> !hi.buffer<si8>
+      %153 = "mid.print"(%152) {"typ" = !llvm.struct<(!llvm.ptr)>} : (!hi.buffer<si8>) -> i32
+    }) {"func_name" = "IO__Self_print_xString", "result_type" = !llvm.void, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
+    "mid.func"() ({
+    ^bb7(%154 : !llvm.ptr, %155 : !llvm.struct<(!llvm.ptr, i160)>):
+      %156 = "mid.wrap"(%155) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %157 = "hi.cast"(%156) {"from_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "to_typ" = !hi.fatptr<"Representable">, "from_typ_name" = "union_typ", "to_typ_name" = "Representable"} : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !hi.fatptr<"Representable">
+      %158 = "mid.unwrap"(%157) : (!hi.fatptr<"Representable">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
+      %159 = "mid.parameterizations_array"() : () -> !llvm.ptr
+      %160 = "mid.method_call"(%159, %158) {"offset" = 0 : i32, "vptrs" = [], "vtable_size" = 2 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.fatptr<"String">
+      %161 = "hi.cast"(%160) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.fatptr<"String">, "from_typ_name" = "String", "to_typ_name" = "String"} : (!hi.fatptr<"String">) -> !hi.fatptr<"String">
       %162 = "mid.unwrap"(%161) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %163 = "mid.parameterizations_array"() : () -> !llvm.ptr
       %164 = "mid.method_call"(%163, %162) {"offset" = 13 : i32, "vptrs" = [], "vtable_size" = 314 : i64, "ret_type" = !llvm.struct<(!llvm.ptr)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.buffer<si8>
       %165 = "hi.cast"(%164) {"from_typ" = !hi.buffer<si8>, "to_typ" = !hi.buffer<si8>, "from_typ_name" = "buffer_typ", "to_typ_name" = "buffer_typ"} : (!hi.buffer<si8>) -> !hi.buffer<si8>
       %166 = "mid.print"(%165) {"typ" = !llvm.struct<(!llvm.ptr)>} : (!hi.buffer<si8>) -> i32
-    }) {"func_name" = "IO__Self_print_xString", "result_type" = !llvm.void, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
+    }) {"func_name" = "IO__Self_print_xRepresentable", "result_type" = !llvm.void, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
     ^bb8(%167 : !llvm.ptr, %168 : !llvm.struct<(!llvm.ptr, i160)>):
-      %169 = "mid.wrap"(%168) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %170 = "hi.cast"(%169) {"from_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "to_typ" = !hi.float, "from_typ_name" = "union_typ", "to_typ_name" = "f64_typ"} : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !hi.float
+      %169 = "mid.wrap"(%168) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %170 = "hi.cast"(%169) {"from_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "to_typ" = !hi.float, "from_typ_name" = "union_typ", "to_typ_name" = "f64_typ"} : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !hi.float
       %171 = "mid.print"(%170) {"typ" = f64} : (!hi.float) -> i32
     }) {"func_name" = "IO__Self_print_xf64", "result_type" = !llvm.void, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
@@ -19466,15 +19466,15 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %174 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb10] : () -> ()
     ^bb11:
-      %175 = "llvm.mlir.constant"() <{"value" = 1 : i32}> : () -> i32
+      %175 = "llvm.mlir.constant"() <{"value" = 5 : i32}> : () -> i32
       "llvm.store"(%175, %174) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb12] : () -> ()
     ^bb13:
-      %176 = "llvm.mlir.constant"() <{"value" = 6 : i32}> : () -> i32
+      %176 = "llvm.mlir.constant"() <{"value" = 3 : i32}> : () -> i32
       "llvm.store"(%176, %174) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb12] : () -> ()
     ^bb14:
-      %177 = "llvm.mlir.constant"() <{"value" = 5 : i32}> : () -> i32
+      %177 = "llvm.mlir.constant"() <{"value" = 4 : i32}> : () -> i32
       "llvm.store"(%177, %174) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb12] : () -> ()
     ^bb15:
@@ -19482,7 +19482,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       "llvm.store"(%178, %174) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb12] : () -> ()
     ^bb16:
-      %179 = "llvm.mlir.constant"() <{"value" = 7 : i32}> : () -> i32
+      %179 = "llvm.mlir.constant"() <{"value" = 1 : i32}> : () -> i32
       "llvm.store"(%179, %174) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb12] : () -> ()
     ^bb17:
@@ -19490,20 +19490,20 @@ builtin.module attributes  {"sym_name" = "ir"} {
       "llvm.store"(%180, %174) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb12] : () -> ()
     ^bb18:
-      %181 = "llvm.mlir.constant"() <{"value" = 8 : i32}> : () -> i32
+      %181 = "llvm.mlir.constant"() <{"value" = 7 : i32}> : () -> i32
       "llvm.store"(%181, %174) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb12] : () -> ()
     ^bb19:
-      %182 = "llvm.mlir.constant"() <{"value" = 3 : i32}> : () -> i32
+      %182 = "llvm.mlir.constant"() <{"value" = 8 : i32}> : () -> i32
       "llvm.store"(%182, %174) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb12] : () -> ()
     ^bb20:
-      %183 = "llvm.mlir.constant"() <{"value" = 4 : i32}> : () -> i32
+      %183 = "llvm.mlir.constant"() <{"value" = 6 : i32}> : () -> i32
       "llvm.store"(%183, %174) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb12] : () -> ()
     ^bb10:
       %184 = "llvm.getelementptr"(%172) <{"rawConstantIndices" = array<i32: 0>, "elem_type" = !llvm.ptr}> : (!llvm.ptr) -> !llvm.ptr
-      %185 = "mid.checkflag"(%184) {"typ_name" = "nil_typ"} : (!llvm.ptr) -> !hi.bool
+      %185 = "mid.checkflag"(%184) {"typ_name" = "i32_typ"} : (!llvm.ptr) -> !hi.bool
       %186 = "llvm.load"(%185) : (!hi.bool) -> i1
       "cf.cond_br"(%186) [^bb11, ^bb21] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
     ^bb21:
@@ -19518,12 +19518,12 @@ builtin.module attributes  {"sym_name" = "ir"} {
       "cf.cond_br"(%192) [^bb14, ^bb23] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
     ^bb23:
       %193 = "llvm.getelementptr"(%172) <{"rawConstantIndices" = array<i32: 0>, "elem_type" = !llvm.ptr}> : (!llvm.ptr) -> !llvm.ptr
-      %194 = "mid.checkflag"(%193) {"typ_name" = "i32_typ"} : (!llvm.ptr) -> !hi.bool
+      %194 = "mid.checkflag"(%193) {"typ_name" = "i64_typ"} : (!llvm.ptr) -> !hi.bool
       %195 = "llvm.load"(%194) : (!hi.bool) -> i1
       "cf.cond_br"(%195) [^bb15, ^bb24] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
     ^bb24:
       %196 = "llvm.getelementptr"(%172) <{"rawConstantIndices" = array<i32: 0>, "elem_type" = !llvm.ptr}> : (!llvm.ptr) -> !llvm.ptr
-      %197 = "mid.checkflag"(%196) {"typ_name" = "i64_typ"} : (!llvm.ptr) -> !hi.bool
+      %197 = "mid.checkflag"(%196) {"typ_name" = "nil_typ"} : (!llvm.ptr) -> !hi.bool
       %198 = "llvm.load"(%197) : (!hi.bool) -> i1
       "cf.cond_br"(%198) [^bb16, ^bb25] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
     ^bb25:
@@ -19548,12 +19548,12 @@ builtin.module attributes  {"sym_name" = "ir"} {
       "cf.cond_br"(%210) [^bb29, ^bb30] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
     ^bb29:
       %211 = "llvm.getelementptr"(%172) <{"rawConstantIndices" = array<i32: 0>, "elem_type" = !llvm.ptr}> : (!llvm.ptr) -> !llvm.ptr
-      %212 = "mid.checkflag"(%211) {"typ_name" = "Character"} : (!llvm.ptr) -> !hi.bool
+      %212 = "mid.checkflag"(%211) {"typ_name" = "String"} : (!llvm.ptr) -> !hi.bool
       %213 = "llvm.load"(%212) : (!hi.bool) -> i1
       "cf.cond_br"(%213) [^bb30, ^bb31] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
     ^bb31:
       %214 = "llvm.getelementptr"(%172) <{"rawConstantIndices" = array<i32: 0>, "elem_type" = !llvm.ptr}> : (!llvm.ptr) -> !llvm.ptr
-      %215 = "mid.checkflag"(%214) {"typ_name" = "String"} : (!llvm.ptr) -> !hi.bool
+      %215 = "mid.checkflag"(%214) {"typ_name" = "Character"} : (!llvm.ptr) -> !hi.bool
       %216 = "llvm.load"(%215) : (!hi.bool) -> i1
       "cf.cond_br"(%216) [^bb30, ^bb19] <{"operandSegmentSizes" = array<i32: 1, 0, 0>}> : (i1) -> ()
     ^bb30:
@@ -19573,7 +19573,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %226 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %227 = "llvm.getelementptr"(%225, %226) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%227) : (!llvm.ptr) -> ()
-    }) {"func_name" = "IO_B__Self_print_xNil__Self_print_xi32__Self_print_xRepresentable__Self_print_xCharacter__Self_print_xi8__Self_print_xBool__Self_print_xi64__Self_print_xString__Self_print_xf64", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "IO_B__Self_print_xNil__Self_print_xi64__Self_print_xBool__Self_print_xi8__Self_print_xi32__Self_print_xCharacter__Self_print_xString__Self_print_xRepresentable__Self_print_xf64", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
   }
   builtin.module attributes  {"sym_name" = "channel"} {
     "mid.prelude"() : () -> ()
@@ -19856,7 +19856,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
     "mid.external_typedef"() {"class_name" = "InvalidUTF8Error"} : () -> ()
     "mid.external_typedef"() {"class_name" = "OutOfBounds"} : () -> ()
     "mid.external_typedef"() {"class_name" = "OutOfBoundsDetails"} : () -> ()
-    "mid.typedef"() {"class_name" = "Array", "methods" = [@Array_field_Array_0, @Array_field_buffer, @Array_field_length, @Array_field_capacity, @Array_field_Array_2, @Array_B_capacity_, @Array_B_init_, @Array_B_init_capacityi32, @Array_B_init_bufferBufferT_lengthi32_capacityi32, @Array_B_reserve_new_capacityi32, @Array_B_bounds_check_indexi32, @Array_B_unchecked_index_indexi32, @Array_B_unchecked_insert_indexi32_valueT, @Array_B__Self_empty_, @Array_B__Self_from_iterable_iterableIterableT, @Array_B_append_xT, @Array_B_length_, @Array_B_first_, @Array_B_last_, @Array_B_extend_otherIterableT_extend_otherCollectionT, @Array_B_get_indexi32, @Array_B_index_of_targetT_eqFunctionT._T_to_Bool, @Array_B_indices_, @Array_B_values_, @Array_B__index_indexi32, @Array_B__set_index_indexi32_valueT, @Array_B_size_, @Array_B_is_empty_, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherIterableT_chain_otherCollectionT, @Array_B_interleave_otherCollectionT_interleave_otherIterableT, @Array_B_zip_otherCollectionU_zip_otherIterableU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_B_repr_, @Array_capacity_, @Array_init_, @Array_init_capacityi32, @Array_init_bufferBufferT_lengthi32_capacityi32, @Array_reserve_new_capacityi32, @Array_bounds_check_indexi32, @Array_unchecked_index_indexi32, @Array_unchecked_insert_indexi32_valueT, @Array__Self_empty_, @Array__Self_from_iterable_iterableIterableT, @Array_append_xT, @List_length_, @List_first_, @List_last_, @List_extend_otherIterableT, @Array_extend_otherCollectionT, @List_get_indexi32, @List_index_of_targetT_eqFunctionT._T_to_Bool, @Array_indices_, @Array_values_, @Array__index_indexi32, @Array__set_index_indexi32_valueT, @Array_size_, @Collection_is_empty_, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @Array_repr_, @Array_field_Array_0, @Array_B__Self_empty_, @Array_B__Self_from_iterable_iterableIterableT, @Array_B_append_xT, @Array_B_length_, @Array_B_first_, @Array_B_last_, @Array_B_extend_otherIterableT_extend_otherCollectionT, @Array_B_get_indexi32, @Array_B_index_of_targetT_eqFunctionT._T_to_Bool, @Array_B_size_, @Array_B_is_empty_, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherIterableT_chain_otherCollectionT, @Array_B_interleave_otherCollectionT_interleave_otherIterableT, @Array_B_zip_otherCollectionU_zip_otherIterableU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array__Self_empty_, @Array__Self_from_iterable_iterableIterableT, @Array_append_xT, @List_length_, @List_first_, @List_last_, @List_extend_otherIterableT, @List_get_indexi32, @List_index_of_targetT_eqFunctionT._T_to_Bool, @Array_size_, @Collection_is_empty_, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @Array_field_Array_0, @Array_B_size_, @Array_B_is_empty_, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherIterableT_chain_otherCollectionT, @Array_B_interleave_otherCollectionT_interleave_otherIterableT, @Array_B_zip_otherCollectionU_zip_otherIterableU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_size_, @Collection_is_empty_, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @Array_field_Array_0, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherIterableT_chain_otherCollectionT, @Array_B_interleave_otherCollectionT_interleave_otherIterableT, @Array_B_zip_otherCollectionU_zip_otherIterableU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @Array_field_Array_0, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherIterableT_chain_otherCollectionT, @Array_B_interleave_otherCollectionT_interleave_otherIterableT, @Array_B_zip_otherCollectionU_zip_otherIterableU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @Array_field_Array_0, @Array_B_size_, @Array_B_is_empty_, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherIterableT_chain_otherCollectionT, @Array_B_interleave_otherCollectionT_interleave_otherIterableT, @Array_B_zip_otherCollectionU_zip_otherIterableU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_size_, @Collection_is_empty_, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @Array_field_Array_0, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherIterableT_chain_otherCollectionT, @Array_B_interleave_otherCollectionT_interleave_otherIterableT, @Array_B_zip_otherCollectionU_zip_otherIterableU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @Array_field_Array_0, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherIterableT_chain_otherCollectionT, @Array_B_interleave_otherCollectionT_interleave_otherIterableT, @Array_B_zip_otherCollectionU_zip_otherIterableU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @Array_field_Array_2, @Array_field_Array_0, @Array_field_Array_0, @Array_B_indices_, @Array_B_values_, @Array_B__index_indexi32, @Array_B__set_index_indexi32_valueT, @Array_B_size_, @Array_B_is_empty_, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherIterableT_chain_otherCollectionT, @Array_B_interleave_otherCollectionT_interleave_otherIterableT, @Array_B_zip_otherCollectionU_zip_otherIterableU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_indices_, @Array_values_, @Array__index_indexi32, @Array__set_index_indexi32_valueT, @Array_size_, @Collection_is_empty_, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @Array_field_Array_2, @Array_field_Array_0, @Array_B__index_indexi32, @Array_B__set_index_indexi32_valueT, @Array__index_indexi32, @Array__set_index_indexi32_valueT, @Array_field_Array_0, @Array_B_size_, @Array_B_is_empty_, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherIterableT_chain_otherCollectionT, @Array_B_interleave_otherCollectionT_interleave_otherIterableT, @Array_B_zip_otherCollectionU_zip_otherIterableU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_size_, @Collection_is_empty_, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @Array_field_Array_0, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherIterableT_chain_otherCollectionT, @Array_B_interleave_otherCollectionT_interleave_otherIterableT, @Array_B_zip_otherCollectionU_zip_otherIterableU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @Array_field_Array_0, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherIterableT_chain_otherCollectionT, @Array_B_interleave_otherCollectionT_interleave_otherIterableT, @Array_B_zip_otherCollectionU_zip_otherIterableU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @Array_field_Array_2, @Array_field_Array_0, @Array_B__index_indexi32, @Array_B__set_index_indexi32_valueT, @Array__index_indexi32, @Array__set_index_indexi32_valueT, @Array_field_Array_0, @Array_B_size_, @Array_B_is_empty_, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherIterableT_chain_otherCollectionT, @Array_B_interleave_otherCollectionT_interleave_otherIterableT, @Array_B_zip_otherCollectionU_zip_otherIterableU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_size_, @Collection_is_empty_, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Collection_map_fFunctionT_to_U, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Collection_chain_otherCollectionT, @Collection_interleave_otherCollectionT, @Iterable_interleave_otherIterableT, @Collection_zip_otherCollectionU, @Iterable_zip_otherIterableU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @Array_field_Array_0, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherIterableT_chain_otherCollectionT, @Array_B_interleave_otherCollectionT_interleave_otherIterableT, @Array_B_zip_otherCollectionU_zip_otherIterableU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @Array_field_Array_0, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherIterableT_chain_otherCollectionT, @Array_B_interleave_otherCollectionT_interleave_otherIterableT, @Array_B_zip_otherCollectionU_zip_otherIterableU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @Array_B_repr_, @Array_repr_], "hash_tbl" = [18446744073709551615 : i64, @Representable, @List, 18446744073709551615 : i64, 18446744073709551615 : i64, @Container, @Array, 18446744073709551615 : i64, 18446744073709551615 : i64, @Iterable, @Object, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, @IndexableCollection, 18446744073709551615 : i64, @Collection, @any_typ, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, @Indexable, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64], "offset_tbl" = [0 : i32, 537 : i32, 93 : i32, 0 : i32, 0 : i32, 313 : i32, 10 : i32, 0 : i32, 0 : i32, 288 : i32, 313 : i32, 0 : i32, 0 : i32, 0 : i32, 0 : i32, 0 : i32, 313 : i32, 0 : i32, 229 : i32, 10 : i32, 0 : i32, 0 : i32, 0 : i32, 0 : i32, 0 : i32, 0 : i32, 0 : i32, 447 : i32, 0 : i32, 0 : i32, 0 : i32, 0 : i32], "prime" = 4611686018427389773 : i64, "hash_id" = 13185201323315417072 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr)>, i32, i32)>, "data_size_fn" = "_data_size_Array", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
+    "mid.typedef"() {"class_name" = "Array", "methods" = [@Array_field_Array_0, @Array_field_buffer, @Array_field_length, @Array_field_capacity, @Array_field_Array_2, @Array_B_capacity_, @Array_B_init_, @Array_B_init_capacityi32, @Array_B_init_bufferBufferT_lengthi32_capacityi32, @Array_B_reserve_new_capacityi32, @Array_B_bounds_check_indexi32, @Array_B_unchecked_index_indexi32, @Array_B_unchecked_insert_indexi32_valueT, @Array_B__Self_empty_, @Array_B__Self_from_iterable_iterableIterableT, @Array_B_append_xT, @Array_B_length_, @Array_B_first_, @Array_B_last_, @Array_B_extend_otherIterableT_extend_otherCollectionT, @Array_B_get_indexi32, @Array_B_index_of_targetT_eqFunctionT._T_to_Bool, @Array_B_indices_, @Array_B_values_, @Array_B__index_indexi32, @Array_B__set_index_indexi32_valueT, @Array_B_size_, @Array_B_is_empty_, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherCollectionT_chain_otherIterableT, @Array_B_interleave_otherIterableT_interleave_otherCollectionT, @Array_B_zip_otherIterableU_zip_otherCollectionU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_B_repr_, @Array_capacity_, @Array_init_, @Array_init_capacityi32, @Array_init_bufferBufferT_lengthi32_capacityi32, @Array_reserve_new_capacityi32, @Array_bounds_check_indexi32, @Array_unchecked_index_indexi32, @Array_unchecked_insert_indexi32_valueT, @Array__Self_empty_, @Array__Self_from_iterable_iterableIterableT, @Array_append_xT, @List_length_, @List_first_, @List_last_, @List_extend_otherIterableT, @Array_extend_otherCollectionT, @List_get_indexi32, @List_index_of_targetT_eqFunctionT._T_to_Bool, @Array_indices_, @Array_values_, @Array__index_indexi32, @Array__set_index_indexi32_valueT, @Array_size_, @Collection_is_empty_, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @Array_repr_, @Array_field_Array_0, @Array_B__Self_empty_, @Array_B__Self_from_iterable_iterableIterableT, @Array_B_append_xT, @Array_B_length_, @Array_B_first_, @Array_B_last_, @Array_B_extend_otherIterableT_extend_otherCollectionT, @Array_B_get_indexi32, @Array_B_index_of_targetT_eqFunctionT._T_to_Bool, @Array_B_size_, @Array_B_is_empty_, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherCollectionT_chain_otherIterableT, @Array_B_interleave_otherIterableT_interleave_otherCollectionT, @Array_B_zip_otherIterableU_zip_otherCollectionU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array__Self_empty_, @Array__Self_from_iterable_iterableIterableT, @Array_append_xT, @List_length_, @List_first_, @List_last_, @List_extend_otherIterableT, @List_get_indexi32, @List_index_of_targetT_eqFunctionT._T_to_Bool, @Array_size_, @Collection_is_empty_, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @Array_field_Array_0, @Array_B_size_, @Array_B_is_empty_, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherCollectionT_chain_otherIterableT, @Array_B_interleave_otherIterableT_interleave_otherCollectionT, @Array_B_zip_otherIterableU_zip_otherCollectionU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_size_, @Collection_is_empty_, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @Array_field_Array_0, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherCollectionT_chain_otherIterableT, @Array_B_interleave_otherIterableT_interleave_otherCollectionT, @Array_B_zip_otherIterableU_zip_otherCollectionU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @Array_field_Array_0, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherCollectionT_chain_otherIterableT, @Array_B_interleave_otherIterableT_interleave_otherCollectionT, @Array_B_zip_otherIterableU_zip_otherCollectionU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @Array_field_Array_0, @Array_B_size_, @Array_B_is_empty_, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherCollectionT_chain_otherIterableT, @Array_B_interleave_otherIterableT_interleave_otherCollectionT, @Array_B_zip_otherIterableU_zip_otherCollectionU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_size_, @Collection_is_empty_, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @Array_field_Array_0, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherCollectionT_chain_otherIterableT, @Array_B_interleave_otherIterableT_interleave_otherCollectionT, @Array_B_zip_otherIterableU_zip_otherCollectionU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @Array_field_Array_0, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherCollectionT_chain_otherIterableT, @Array_B_interleave_otherIterableT_interleave_otherCollectionT, @Array_B_zip_otherIterableU_zip_otherCollectionU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @Array_field_Array_2, @Array_field_Array_0, @Array_field_Array_0, @Array_B_indices_, @Array_B_values_, @Array_B__index_indexi32, @Array_B__set_index_indexi32_valueT, @Array_B_size_, @Array_B_is_empty_, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherCollectionT_chain_otherIterableT, @Array_B_interleave_otherIterableT_interleave_otherCollectionT, @Array_B_zip_otherIterableU_zip_otherCollectionU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_indices_, @Array_values_, @Array__index_indexi32, @Array__set_index_indexi32_valueT, @Array_size_, @Collection_is_empty_, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @Array_field_Array_2, @Array_field_Array_0, @Array_B__index_indexi32, @Array_B__set_index_indexi32_valueT, @Array__index_indexi32, @Array__set_index_indexi32_valueT, @Array_field_Array_0, @Array_B_size_, @Array_B_is_empty_, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherCollectionT_chain_otherIterableT, @Array_B_interleave_otherIterableT_interleave_otherCollectionT, @Array_B_zip_otherIterableU_zip_otherCollectionU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_size_, @Collection_is_empty_, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @Array_field_Array_0, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherCollectionT_chain_otherIterableT, @Array_B_interleave_otherIterableT_interleave_otherCollectionT, @Array_B_zip_otherIterableU_zip_otherCollectionU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @Array_field_Array_0, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherCollectionT_chain_otherIterableT, @Array_B_interleave_otherIterableT_interleave_otherCollectionT, @Array_B_zip_otherIterableU_zip_otherCollectionU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @Array_field_Array_2, @Array_field_Array_0, @Array_B__index_indexi32, @Array_B__set_index_indexi32_valueT, @Array__index_indexi32, @Array__set_index_indexi32_valueT, @Array_field_Array_0, @Array_B_size_, @Array_B_is_empty_, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherCollectionT_chain_otherIterableT, @Array_B_interleave_otherIterableT_interleave_otherCollectionT, @Array_B_zip_otherIterableU_zip_otherCollectionU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_size_, @Collection_is_empty_, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Collection_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Collection_chain_otherCollectionT, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Collection_interleave_otherCollectionT, @Iterable_zip_otherIterableU, @Collection_zip_otherCollectionU, @Collection_product_otherCollectionU, @Iterable_product_otherIterableU, @Array_field_Array_0, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherCollectionT_chain_otherIterableT, @Array_B_interleave_otherIterableT_interleave_otherCollectionT, @Array_B_zip_otherIterableU_zip_otherCollectionU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @Array_field_Array_0, @Array_B_iterator_, @Array_B_each_fFunctionT_to_Nothing, @Array_B_reduce_accumulatorT_fFunctionT._T_to_T, @Array_B_all_fFunctionT_to_Bool, @Array_B_any_fFunctionT_to_Bool, @Array_B_enumerate_, @Array_B_map_fFunctionT_to_U_map_fFunctionT_to_U, @Array_B_filter_fFunctionT_to_Bool, @Array_B_chain_otherCollectionT_chain_otherIterableT, @Array_B_interleave_otherIterableT_interleave_otherCollectionT, @Array_B_zip_otherIterableU_zip_otherCollectionU, @Array_B_product_otherCollectionU_product_otherIterableU, @Array_iterator_, @Iterable_each_fFunctionT_to_Nothing, @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, @Iterable_all_fFunctionT_to_Bool, @Iterable_any_fFunctionT_to_Bool, @Collection_enumerate_, @Iterable_map_fFunctionT_to_U, @Iterable_filter_fFunctionT_to_Bool, @Iterable_chain_otherIterableT, @Iterable_interleave_otherIterableT, @Iterable_zip_otherIterableU, @Iterable_product_otherIterableU, @Array_B_repr_, @Array_repr_], "hash_tbl" = [18446744073709551615 : i64, @Representable, @List, 18446744073709551615 : i64, 18446744073709551615 : i64, @Container, @Array, 18446744073709551615 : i64, 18446744073709551615 : i64, @Iterable, @Object, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, @IndexableCollection, 18446744073709551615 : i64, @Collection, @any_typ, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, @Indexable, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64, 18446744073709551615 : i64], "offset_tbl" = [0 : i32, 537 : i32, 93 : i32, 0 : i32, 0 : i32, 313 : i32, 10 : i32, 0 : i32, 0 : i32, 288 : i32, 313 : i32, 0 : i32, 0 : i32, 0 : i32, 0 : i32, 0 : i32, 313 : i32, 0 : i32, 229 : i32, 10 : i32, 0 : i32, 0 : i32, 0 : i32, 0 : i32, 0 : i32, 0 : i32, 0 : i32, 447 : i32, 0 : i32, 0 : i32, 0 : i32, 0 : i32], "prime" = 4611686018427389773 : i64, "hash_id" = 13185201323315417072 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr)>, i32, i32)>, "data_size_fn" = "_data_size_Array", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
     "mid.typedef"() {"class_name" = "ArrayIterator", "methods" = [@ArrayIterator_field_ArrayIterator_0, @ArrayIterator_field_array, @ArrayIterator_field_index, @ArrayIterator_B_init_arrayArrayT, @ArrayIterator_B_next_, @ArrayIterator_init_arrayArrayT, @ArrayIterator_next_, @ArrayIterator_field_ArrayIterator_0, @ArrayIterator_B_next_, @ArrayIterator_next_, @ArrayIterator_field_ArrayIterator_0, @ArrayIterator_B_next_, @ArrayIterator_next_, @ArrayIterator_field_ArrayIterator_0, @ArrayIterator_B_next_, @ArrayIterator_next_], "hash_tbl" = [@Object, @any_typ, 18446744073709551615 : i64, @Container, @ArrayIterator, @Iterator, @ConstantTimeIterator, 18446744073709551615 : i64], "offset_tbl" = [26 : i32, 10 : i32, 0 : i32, 26 : i32, 10 : i32, 23 : i32, 17 : i32, 0 : i32], "prime" = 4611686018427388081 : i64, "hash_id" = 3447345754186651411 : i64, "base_typ" = !llvm.struct<(!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i32)>, "data_size_fn" = "_data_size_ArrayIterator", "box_fn" = "_box_Default", "unbox_fn" = "_unbox_Default", "size_fn" = "_size_Default"} : () -> ()
     "llvm.func"() <{"sym_name" = "capture_backtrace", "function_type" = !llvm.func<i64 (i64, !llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
@@ -20981,9 +20981,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %769 = "llvm.getelementptr"(%767, %768) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%769) : (!llvm.ptr) -> ()
     }) {"func_name" = "Array_B_enumerate_", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_map_fFunctionT_to_U", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb131(%770 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %771 : !llvm.ptr):
@@ -20991,11 +20991,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %773 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb132] : () -> ()
     ^bb133:
-      %774 = "llvm.mlir.constant"() <{"value" = 71 : i32}> : () -> i32
+      %774 = "llvm.mlir.constant"() <{"value" = 72 : i32}> : () -> i32
       "llvm.store"(%774, %773) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb134] : () -> ()
     ^bb135:
-      %775 = "llvm.mlir.constant"() <{"value" = 72 : i32}> : () -> i32
+      %775 = "llvm.mlir.constant"() <{"value" = 71 : i32}> : () -> i32
       "llvm.store"(%775, %773) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb134] : () -> ()
     ^bb132:
@@ -21040,9 +21040,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %799 = "llvm.getelementptr"(%797, %798) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%799) : (!llvm.ptr) -> ()
     }) {"func_name" = "Array_B_filter_fFunctionT_to_Bool", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Iterable_chain_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
     "llvm.func"() <{"sym_name" = "Collection_chain_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Iterable_chain_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb141(%800 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %801 : !llvm.ptr):
@@ -21050,11 +21050,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %803 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb142] : () -> ()
     ^bb143:
-      %804 = "llvm.mlir.constant"() <{"value" = 75 : i32}> : () -> i32
+      %804 = "llvm.mlir.constant"() <{"value" = 74 : i32}> : () -> i32
       "llvm.store"(%804, %803) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb144] : () -> ()
     ^bb145:
-      %805 = "llvm.mlir.constant"() <{"value" = 74 : i32}> : () -> i32
+      %805 = "llvm.mlir.constant"() <{"value" = 75 : i32}> : () -> i32
       "llvm.store"(%805, %803) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb144] : () -> ()
     ^bb142:
@@ -21079,10 +21079,10 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %818 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %819 = "llvm.getelementptr"(%817, %818) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%819) : (!llvm.ptr) -> ()
-    }) {"func_name" = "Array_B_chain_otherIterableT_chain_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_interleave_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
+    }) {"func_name" = "Array_B_chain_otherCollectionT_chain_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_interleave_otherIterableT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_interleave_otherCollectionT", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb148(%820 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %821 : !llvm.ptr):
@@ -21090,11 +21090,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %823 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb149] : () -> ()
     ^bb150:
-      %824 = "llvm.mlir.constant"() <{"value" = 76 : i32}> : () -> i32
+      %824 = "llvm.mlir.constant"() <{"value" = 77 : i32}> : () -> i32
       "llvm.store"(%824, %823) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb151] : () -> ()
     ^bb152:
-      %825 = "llvm.mlir.constant"() <{"value" = 77 : i32}> : () -> i32
+      %825 = "llvm.mlir.constant"() <{"value" = 76 : i32}> : () -> i32
       "llvm.store"(%825, %823) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb151] : () -> ()
     ^bb149:
@@ -21119,10 +21119,10 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %838 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %839 = "llvm.getelementptr"(%837, %838) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%839) : (!llvm.ptr) -> ()
-    }) {"func_name" = "Array_B_interleave_otherCollectionT_interleave_otherIterableT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
-    "llvm.func"() <{"sym_name" = "Collection_zip_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
-    }) : () -> ()
+    }) {"func_name" = "Array_B_interleave_otherIterableT_interleave_otherCollectionT", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_zip_otherIterableU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
+    }) : () -> ()
+    "llvm.func"() <{"sym_name" = "Collection_zip_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "mid.func"() ({
     ^bb155(%840 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %841 : !llvm.ptr):
@@ -21130,11 +21130,11 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %843 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "cf.br"() [^bb156] : () -> ()
     ^bb157:
-      %844 = "llvm.mlir.constant"() <{"value" = 78 : i32}> : () -> i32
+      %844 = "llvm.mlir.constant"() <{"value" = 79 : i32}> : () -> i32
       "llvm.store"(%844, %843) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb158] : () -> ()
     ^bb159:
-      %845 = "llvm.mlir.constant"() <{"value" = 79 : i32}> : () -> i32
+      %845 = "llvm.mlir.constant"() <{"value" = 78 : i32}> : () -> i32
       "llvm.store"(%845, %843) <{"ordering" = 0 : i64}> : (i32, !llvm.ptr) -> ()
       "cf.br"() [^bb158] : () -> ()
     ^bb156:
@@ -21159,7 +21159,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %858 = "llvm.mlir.constant"() <{"value" = 10 : i32}> : () -> i32
       %859 = "llvm.getelementptr"(%857, %858) <{"rawConstantIndices" = array<i32: -2147483648>, "elem_type" = !llvm.ptr}> : (!llvm.ptr, i32) -> !llvm.ptr
       "mid.return"(%859) : (!llvm.ptr) -> ()
-    }) {"func_name" = "Array_B_zip_otherCollectionU_zip_otherIterableU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
+    }) {"func_name" = "Array_B_zip_otherIterableU_zip_otherCollectionU", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "llvm.func"() <{"sym_name" = "Collection_product_otherCollectionU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
     }) : () -> ()
     "llvm.func"() <{"sym_name" = "Iterable_product_otherIterableU", "function_type" = !llvm.func<!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)> (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>)>, "CConv" = #llvm.cconv<ccc>, "linkage" = #llvm.linkage<"external">, "visibility_" = 0 : i64}> ({
@@ -21313,8 +21313,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %963 = "mid.unwrap"(%962) : (si1) -> i1
       "mid.if"(%963) ({
         %964 = "mid.alloc"() {"typ" = !llvm.array<0 x i8>} : () -> !llvm.ptr
-        %965 = "hi.cast"(%964) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "ArrayIterator">]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "ArrayIterator">]>
-        "mid.return"(%965) : (!hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "ArrayIterator">]>) -> ()
+        %965 = "hi.cast"(%964) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "ArrayIterator">, !hi.nil]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[!hi.type_param<"T", !hi.any, "ArrayIterator">, !hi.nil]>
+        "mid.return"(%965) : (!hi.union<[!hi.type_param<"T", !hi.any, "ArrayIterator">, !hi.nil]>) -> ()
       }) : (i1) -> ()
       %966 = "mid.get_field"(%955) {"offset" = 2 : i64, "vtable_bytes" = 128 : i32, "original_type" = i32} : (!hi.fatptr<"ArrayIterator", [!hi.type_param<"T", !hi.any, "ArrayIterator">]>) -> si32
       %967 = "mid.refer"(%966) {"typ" = i32} : (si32) -> si32
@@ -21331,8 +21331,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %977 = "mid.parameterizations_array"(%976) : (!llvm.ptr) -> !llvm.ptr
       %978 = "mid.method_call"(%977, %975, %973) {"offset" = 11 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 529 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, i32) -> !hi.type_param<"T", !hi.any, "Array">
       %979 = "hi.cast"(%978) {"from_typ" = !hi.type_param<"T", !hi.any, "Array">, "to_typ" = !hi.type_param<"T", !hi.any, "ArrayIterator">, "from_typ_name" = "any_typ", "to_typ_name" = "any_typ"} : (!hi.type_param<"T", !hi.any, "Array">) -> !hi.type_param<"T", !hi.any, "ArrayIterator">
-      %980 = "hi.cast"(%979) {"from_typ" = !hi.type_param<"T", !hi.any, "ArrayIterator">, "to_typ" = !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "ArrayIterator">]>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ"} : (!hi.type_param<"T", !hi.any, "ArrayIterator">) -> !hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "ArrayIterator">]>
-      "mid.return"(%980) : (!hi.union<[!hi.nil, !hi.type_param<"T", !hi.any, "ArrayIterator">]>) -> ()
+      %980 = "hi.cast"(%979) {"from_typ" = !hi.type_param<"T", !hi.any, "ArrayIterator">, "to_typ" = !hi.union<[!hi.type_param<"T", !hi.any, "ArrayIterator">, !hi.nil]>, "from_typ_name" = "any_typ", "to_typ_name" = "union_typ"} : (!hi.type_param<"T", !hi.any, "ArrayIterator">) -> !hi.union<[!hi.type_param<"T", !hi.any, "ArrayIterator">, !hi.nil]>
+      "mid.return"(%980) : (!hi.union<[!hi.type_param<"T", !hi.any, "ArrayIterator">, !hi.nil]>) -> ()
     }) {"func_name" = "ArrayIterator_next_", "result_type" = !llvm.struct<(!llvm.ptr, i160)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
     ^bb179(%981 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %982 : !llvm.ptr):
@@ -22328,12 +22328,12 @@ builtin.module attributes  {"sym_name" = "ir"} {
           %691 = "mid.wrap"(%690) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.fatptr<"FileSystemError">, !hi.nil]>
         }) : (i1) -> ()
         %692 = "mid.alloc"() {"typ" = !llvm.array<0 x i8>} : () -> !llvm.ptr
-        %693 = "hi.cast"(%692) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.nil, si8]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[!hi.nil, si8]>
-        "mid.return"(%693) : (!hi.union<[!hi.nil, si8]>) -> ()
+        %693 = "hi.cast"(%692) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[si8, !hi.nil]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!llvm.ptr) -> !hi.union<[si8, !hi.nil]>
+        "mid.return"(%693) : (!hi.union<[si8, !hi.nil]>) -> ()
       }) : (i1) -> ()
       %694 = "hi.cast"(%635) {"from_typ" = si32, "to_typ" = si8, "from_typ_name" = "i32_typ", "to_typ_name" = "i8_typ"} : (si32) -> si8
-      %695 = "hi.cast"(%694) {"from_typ" = si8, "to_typ" = !hi.union<[!hi.nil, si8]>, "from_typ_name" = "i8_typ", "to_typ_name" = "union_typ"} : (si8) -> !hi.union<[!hi.nil, si8]>
-      "mid.return"(%695) : (!hi.union<[!hi.nil, si8]>) -> ()
+      %695 = "hi.cast"(%694) {"from_typ" = si8, "to_typ" = !hi.union<[si8, !hi.nil]>, "from_typ_name" = "i8_typ", "to_typ_name" = "union_typ"} : (si8) -> !hi.union<[si8, !hi.nil]>
+      "mid.return"(%695) : (!hi.union<[si8, !hi.nil]>) -> ()
     }) {"func_name" = "File_read_byte_", "result_type" = !llvm.struct<(!llvm.ptr, i8)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
     "mid.func"() ({
     ^bb46(%696 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %697 : !llvm.ptr):
@@ -22670,16 +22670,16 @@ builtin.module attributes  {"sym_name" = "ir"} {
       "mid.return"(%949) : (!llvm.ptr) -> ()
     }) {"func_name" = "FileWriter_B_process_fileFile", "result_type" = !llvm.ptr, "yield_type" = !hi.nil} : () -> ()
     "mid.data_size_def"() {"meth_name" = "_data_size_FileSystem", "types" = []} : () -> ()
-    "mid.arg_passer"() {"func_name" = "coroutine_bfqxdzlgkq_passer", "arg_types" = [!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>], "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "yield_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>} : () -> ()
-    "mid.buffer_filler"() {"func_name" = "coroutine_bfqxdzlgkq_buffer_filler", "arg_types" = [!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>], "yield_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>} : () -> ()
+    "mid.arg_passer"() {"func_name" = "coroutine_avmncietco_passer", "arg_types" = [!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>], "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "yield_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>} : () -> ()
+    "mid.buffer_filler"() {"func_name" = "coroutine_avmncietco_buffer_filler", "arg_types" = [!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>], "yield_type" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>} : () -> ()
     "mid.func"() ({
     ^bb77(%950 : !llvm.ptr, %951 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %952 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %953 : !llvm.struct<(!llvm.ptr, i160)>):
       %954 = "mid.wrap"(%951) : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.fatptr<"String">
       %955 = "hi.cast"(%954) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.fatptr<"String">, "from_typ_name" = "String", "to_typ_name" = "String"} : (!hi.fatptr<"String">) -> !hi.fatptr<"String">
       %956 = "mid.wrap"(%952) : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.fatptr<"String">
       %957 = "hi.cast"(%956) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.fatptr<"String">, "from_typ_name" = "String", "to_typ_name" = "String"} : (!hi.fatptr<"String">) -> !hi.fatptr<"String">
-      %958 = "mid.wrap"(%953) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>, !hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>]>
-      %959 = "hi.cast"(%958) {"from_typ" = !hi.union<[!hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>, !hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>]>, "to_typ" = !hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>, "from_typ_name" = "union_typ", "to_typ_name" = "function_typ"} : (!hi.union<[!hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>, !hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>]>) -> !hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>
+      %958 = "mid.wrap"(%953) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>, !hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>]>
+      %959 = "hi.cast"(%958) {"from_typ" = !hi.union<[!hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>, !hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>]>, "to_typ" = !hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>, "from_typ_name" = "union_typ", "to_typ_name" = "function_typ"} : (!hi.union<[!hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>, !hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>]>) -> !hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>
       %960 = "mid.unwrap"(%955) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %961 = "mid.unwrap"(%957) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %962 = "mid.new"() {"typ" = !llvm.struct<(!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i1)>, "class_name" = "File", "num_data_fields" = 4 : i32, "region_id" = "none"} : () -> !hi.fatptr<"File">
@@ -22694,7 +22694,7 @@ builtin.module attributes  {"sym_name" = "ir"} {
       "mid.method_call"(%970, %967, %964, %966) {"offset" = 4 : i32, "vptrs" = [#none, #none], "vtable_size" = 20 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> ()
       %971 = "mid.refer"(%962) {"typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>} : (!hi.fatptr<"File">) -> !hi.fatptr<"File">
       %972 = "mid.unwrap"(%971) : (!hi.fatptr<"File">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
-      %973 = "mid.coro_create"(%959, %972) {"arg_passer" = @coroutine_bfqxdzlgkq_passer, "buffer_filler" = @coroutine_bfqxdzlgkq_buffer_filler} : (!hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.coroutine<[!hi.any], !hi.any, !hi.union<[!hi.type_param<"T", !hi.any, "FileSystem">, !hi.nil]>>
+      %973 = "mid.coro_create"(%959, %972) {"arg_passer" = @coroutine_avmncietco_passer, "buffer_filler" = @coroutine_avmncietco_buffer_filler} : (!hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.coroutine<[!hi.any], !hi.any, !hi.union<[!hi.type_param<"T", !hi.any, "FileSystem">, !hi.nil]>>
       %974 = "mid.refer"(%973) {"typ" = !llvm.struct<(!llvm.ptr)>} : (!hi.coroutine<[!hi.any], !hi.any, !hi.union<[!hi.type_param<"T", !hi.any, "FileSystem">, !hi.nil]>>) -> !hi.coroutine<[!hi.any], !hi.any, !hi.union<[!hi.type_param<"T", !hi.any, "FileSystem">, !hi.nil]>>
       %975 = "mid.coro_call"(%974) : (!hi.coroutine<[!hi.any], !hi.any, !hi.union<[!hi.type_param<"T", !hi.any, "FileSystem">, !hi.nil]>>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %976 = "mid.wrap"(%975) : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.any
@@ -22740,17 +22740,17 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1008 = "hi.cast"(%1007) {"from_typ" = !hi.type_param<"T", !hi.any, "FileProcessor">, "to_typ" = !hi.type_param<"T", !hi.any, "FileSystem">, "from_typ_name" = "any_typ", "to_typ_name" = "any_typ"} : (!hi.type_param<"T", !hi.any, "FileProcessor">) -> !hi.type_param<"T", !hi.any, "FileSystem">
       %1009 = "hi.cast"(%1008) {"from_typ" = !hi.type_param<"T", !hi.any, "FileSystem">, "to_typ" = !hi.type_param<"T", !hi.any, "FileSystem">, "from_typ_name" = "any_typ", "to_typ_name" = "any_typ"} : (!hi.type_param<"T", !hi.any, "FileSystem">) -> !hi.type_param<"T", !hi.any, "FileSystem">
       "mid.return"(%1009) : (!hi.type_param<"T", !hi.any, "FileSystem">) -> ()
-    }) {"func_name" = "_functionliteral_cssztoocnp", "result_type" = !llvm.struct<(!llvm.ptr, i160)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
-    "mid.arg_passer"() {"func_name" = "coroutine_usalnzzpxr_passer", "arg_types" = [!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>], "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "yield_type" = !llvm.struct<(!llvm.ptr, i160)>} : () -> ()
-    "mid.buffer_filler"() {"func_name" = "coroutine_usalnzzpxr_buffer_filler", "arg_types" = [!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>], "yield_type" = !llvm.struct<(!llvm.ptr, i160)>} : () -> ()
+    }) {"func_name" = "_functionliteral_aigfutdptd", "result_type" = !llvm.struct<(!llvm.ptr, i160)>, "yield_type" = !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>} : () -> ()
+    "mid.arg_passer"() {"func_name" = "coroutine_ylemnmjrui_passer", "arg_types" = [!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>], "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "yield_type" = !llvm.struct<(!llvm.ptr, i160)>} : () -> ()
+    "mid.buffer_filler"() {"func_name" = "coroutine_ylemnmjrui_buffer_filler", "arg_types" = [!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>], "yield_type" = !llvm.struct<(!llvm.ptr, i160)>} : () -> ()
     "mid.func"() ({
     ^bb79(%1010 : !llvm.ptr, %1011 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1012 : !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, %1013 : !llvm.struct<(!llvm.ptr, i160)>):
       %1014 = "mid.wrap"(%1011) : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.fatptr<"String">
       %1015 = "hi.cast"(%1014) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.fatptr<"String">, "from_typ_name" = "String", "to_typ_name" = "String"} : (!hi.fatptr<"String">) -> !hi.fatptr<"String">
       %1016 = "mid.wrap"(%1012) : (!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.fatptr<"String">
       %1017 = "hi.cast"(%1016) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.fatptr<"String">, "from_typ_name" = "String", "to_typ_name" = "String"} : (!hi.fatptr<"String">) -> !hi.fatptr<"String">
-      %1018 = "mid.wrap"(%1013) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>, !hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>]>
-      %1019 = "hi.cast"(%1018) {"from_typ" = !hi.union<[!hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>, !hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>]>, "to_typ" = !hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>, "from_typ_name" = "union_typ", "to_typ_name" = "FileProcessor"} : (!hi.union<[!hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>, !hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>]>) -> !hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>
+      %1018 = "mid.wrap"(%1013) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>, !hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>]>
+      %1019 = "hi.cast"(%1018) {"from_typ" = !hi.union<[!hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>, !hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>]>, "to_typ" = !hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>, "from_typ_name" = "union_typ", "to_typ_name" = "FileProcessor"} : (!hi.union<[!hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>, !hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>]>) -> !hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>
       %1020 = "mid.unwrap"(%1015) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %1021 = "mid.unwrap"(%1017) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %1022 = "mid.new"() {"typ" = !llvm.struct<(!llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i1)>, "class_name" = "File", "num_data_fields" = 4 : i32, "region_id" = "none"} : () -> !hi.fatptr<"File">
@@ -22764,12 +22764,12 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1030 = "mid.parameterizations_array"(%1028, %1029) : (!llvm.ptr, !llvm.ptr) -> !llvm.ptr
       "mid.method_call"(%1030, %1027, %1024, %1026) {"offset" = 4 : i32, "vptrs" = [#none, #none], "vtable_size" = 20 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> ()
       %1031 = "mid.refer"(%1022) {"typ" = !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>} : (!hi.fatptr<"File">) -> !hi.fatptr<"File">
-      %1032 = "mid.addr_of"() {"global_name" = @_functionliteral_cssztoocnp} : () -> !llvm.ptr
+      %1032 = "mid.addr_of"() {"global_name" = @_functionliteral_aigfutdptd} : () -> !llvm.ptr
       %1033 = "mid.alloc"() {"typ" = !llvm.ptr} : () -> !llvm.ptr
       "llvm.store"(%1032, %1033) <{"ordering" = 0 : i64}> : (!llvm.ptr, !llvm.ptr) -> ()
       %1034 = "mid.unwrap"(%1019) : (!hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %1035 = "mid.unwrap"(%1031) : (!hi.fatptr<"File">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
-      %1036 = "mid.coro_create"(%1033, %1034, %1035) {"arg_passer" = @coroutine_usalnzzpxr_passer, "buffer_filler" = @coroutine_usalnzzpxr_buffer_filler} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.coroutine<[!hi.union<[!hi.fatptr<"Exception">, !hi.nil]>], !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>, !hi.union<[!hi.type_param<"T", !hi.any, "FileSystem">, !hi.nil]>>
+      %1036 = "mid.coro_create"(%1033, %1034, %1035) {"arg_passer" = @coroutine_ylemnmjrui_passer, "buffer_filler" = @coroutine_ylemnmjrui_buffer_filler} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>) -> !hi.coroutine<[!hi.union<[!hi.fatptr<"Exception">, !hi.nil]>], !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>, !hi.union<[!hi.type_param<"T", !hi.any, "FileSystem">, !hi.nil]>>
       %1037 = "mid.refer"(%1036) {"typ" = !llvm.struct<(!llvm.ptr)>} : (!hi.coroutine<[!hi.union<[!hi.fatptr<"Exception">, !hi.nil]>], !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>, !hi.union<[!hi.type_param<"T", !hi.any, "FileSystem">, !hi.nil]>>) -> !hi.coroutine<[!hi.union<[!hi.fatptr<"Exception">, !hi.nil]>], !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>, !hi.union<[!hi.type_param<"T", !hi.any, "FileSystem">, !hi.nil]>>
       %1038 = "mid.coro_call"(%1037) : (!hi.coroutine<[!hi.union<[!hi.fatptr<"Exception">, !hi.nil]>], !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>, !hi.union<[!hi.type_param<"T", !hi.any, "FileSystem">, !hi.nil]>>) -> !llvm.struct<(!llvm.ptr, i160)>
       %1039 = "mid.wrap"(%1038) : (!llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.fatptr<"Exception">, !hi.nil]>
@@ -22888,8 +22888,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1122 = "mid.unwrap"(%1121) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %1123 = "hi.cast"(%1100) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.fatptr<"String">, "from_typ_name" = "String", "to_typ_name" = "String"} : (!hi.fatptr<"String">) -> !hi.fatptr<"String">
       %1124 = "mid.unwrap"(%1123) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
-      %1125 = "hi.cast"(%1118) {"from_typ" = !hi.fatptr<"FileReader">, "to_typ" = !hi.union<[!hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>, !hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>]>, "from_typ_name" = "FileReader", "to_typ_name" = "union_typ"} : (!hi.fatptr<"FileReader">) -> !hi.union<[!hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>, !hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>]>
-      %1126 = "mid.unwrap"(%1125) : (!hi.union<[!hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>, !hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %1125 = "hi.cast"(%1118) {"from_typ" = !hi.fatptr<"FileReader">, "to_typ" = !hi.union<[!hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>, !hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>]>, "from_typ_name" = "FileReader", "to_typ_name" = "union_typ"} : (!hi.fatptr<"FileReader">) -> !hi.union<[!hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>, !hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>]>
+      %1126 = "mid.unwrap"(%1125) : (!hi.union<[!hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>, !hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %1127 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %1128 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %1129 = "mid.parameterization"() {"id_hierarchy" = ["FileReader"], "name_hierarchy" = ["files.FileReader"]} : () -> !llvm.ptr
@@ -22972,8 +22972,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1192 = "mid.unwrap"(%1191) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
       %1193 = "hi.cast"(%1166) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.fatptr<"String">, "from_typ_name" = "String", "to_typ_name" = "String"} : (!hi.fatptr<"String">) -> !hi.fatptr<"String">
       %1194 = "mid.unwrap"(%1193) : (!hi.fatptr<"String">) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
-      %1195 = "hi.cast"(%1185) {"from_typ" = !hi.fatptr<"FileWriter">, "to_typ" = !hi.union<[!hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>, !hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>]>, "from_typ_name" = "FileWriter", "to_typ_name" = "union_typ"} : (!hi.fatptr<"FileWriter">) -> !hi.union<[!hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>, !hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>]>
-      %1196 = "mid.unwrap"(%1195) : (!hi.union<[!hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>, !hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %1195 = "hi.cast"(%1185) {"from_typ" = !hi.fatptr<"FileWriter">, "to_typ" = !hi.union<[!hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>, !hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>]>, "from_typ_name" = "FileWriter", "to_typ_name" = "union_typ"} : (!hi.fatptr<"FileWriter">) -> !hi.union<[!hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>, !hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>]>
+      %1196 = "mid.unwrap"(%1195) : (!hi.union<[!hi.fatptr<"FileProcessor", [!hi.type_param<"T", !hi.any, "FileSystem">]>, !hi.function<[!hi.fatptr<"File">], !hi.any, !hi.type_param<"T", !hi.any, "FileSystem">>]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %1197 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %1198 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %1199 = "mid.parameterization"() {"id_hierarchy" = ["FileWriter"], "name_hierarchy" = ["files.FileWriter"]} : () -> !llvm.ptr
@@ -23317,8 +23317,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %60 = "hi.cast"(%59) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
       %61 = "mid.wrap"(%56) : (i64) -> si64
       %62 = "hi.cast"(%61) {"from_typ" = si64, "to_typ" = si64, "from_typ_name" = "i64_typ", "to_typ_name" = "i64_typ"} : (si64) -> si64
-      %63 = "hi.cast"(%58) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %64 = "mid.unwrap"(%63) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %63 = "hi.cast"(%58) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %64 = "mid.unwrap"(%63) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %65 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %66 = "mid.parameterizations_array"(%65) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%66, %64) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -23355,13 +23355,13 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %96 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %97 = "mid.parameterizations_array"(%93, %94, %95, %96) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
       "mid.method_call"(%97, %92, %85, %87, %89, %91) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-      %98 = "hi.cast"(%80) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %99 = "mid.unwrap"(%98) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %98 = "hi.cast"(%80) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %99 = "mid.unwrap"(%98) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %100 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %101 = "mid.parameterizations_array"(%100) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%101, %99) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-      %102 = "hi.cast"(%60) {"from_typ" = si32, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %103 = "mid.unwrap"(%102) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %102 = "hi.cast"(%60) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %103 = "mid.unwrap"(%102) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %104 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %105 = "mid.parameterizations_array"(%104) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%105, %103) {"offset" = 0 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -23398,13 +23398,13 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %135 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %136 = "mid.parameterizations_array"(%132, %133, %134, %135) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
       "mid.method_call"(%136, %131, %124, %126, %128, %130) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-      %137 = "hi.cast"(%119) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %138 = "mid.unwrap"(%137) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %137 = "hi.cast"(%119) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %138 = "mid.unwrap"(%137) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %139 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %140 = "mid.parameterizations_array"(%139) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%140, %138) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-      %141 = "hi.cast"(%62) {"from_typ" = si64, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "i64_typ", "to_typ_name" = "union_typ"} : (si64) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %142 = "mid.unwrap"(%141) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %141 = "hi.cast"(%62) {"from_typ" = si64, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "i64_typ", "to_typ_name" = "union_typ"} : (si64) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %142 = "mid.unwrap"(%141) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %143 = "mid.parameterization"() {"id_hierarchy" = ["i64_typ"], "name_hierarchy" = ["i64"]} : () -> !llvm.ptr
       %144 = "mid.parameterizations_array"(%143) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%144, %142) {"offset" = 0 : i32, "vptrs" = ["i64_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -23441,8 +23441,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %174 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %175 = "mid.parameterizations_array"(%171, %172, %173, %174) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
       "mid.method_call"(%175, %170, %163, %165, %167, %169) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-      %176 = "hi.cast"(%158) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %177 = "mid.unwrap"(%176) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %176 = "hi.cast"(%158) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %177 = "mid.unwrap"(%176) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %178 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %179 = "mid.parameterizations_array"(%178) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%179, %177) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -23487,13 +23487,13 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %216 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %217 = "mid.parameterizations_array"(%213, %214, %215, %216) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%217, %212, %205, %207, %209, %211) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %218 = "hi.cast"(%200) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %219 = "mid.unwrap"(%218) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %218 = "hi.cast"(%200) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %219 = "mid.unwrap"(%218) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %220 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
         %221 = "mid.parameterizations_array"(%220) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%221, %219) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-        %222 = "hi.cast"(%186) {"from_typ" = si64, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "i64_typ", "to_typ_name" = "union_typ"} : (si64) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %223 = "mid.unwrap"(%222) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %222 = "hi.cast"(%186) {"from_typ" = si64, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "i64_typ", "to_typ_name" = "union_typ"} : (si64) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %223 = "mid.unwrap"(%222) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %224 = "mid.parameterization"() {"id_hierarchy" = ["i64_typ"], "name_hierarchy" = ["i64"]} : () -> !llvm.ptr
         %225 = "mid.parameterizations_array"(%224) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%225, %223) {"offset" = 0 : i32, "vptrs" = ["i64_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -23530,8 +23530,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %255 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %256 = "mid.parameterizations_array"(%252, %253, %254, %255) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%256, %251, %244, %246, %248, %250) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %257 = "hi.cast"(%239) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %258 = "mid.unwrap"(%257) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %257 = "hi.cast"(%239) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %258 = "mid.unwrap"(%257) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %259 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
         %260 = "mid.parameterizations_array"(%259) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%260, %258) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -23600,22 +23600,22 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %313 = "mid.unwrap"(%286) : (!hi.fatptr<"CuckooMap", [si32, si32]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %314 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %315 = "mid.parameterizations_array"(%314) : (!llvm.ptr) -> !llvm.ptr
-        %316 = "mid.method_call"(%315, %313, %312) {"offset" = 21 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-        %317 = "hi.cast"(%316) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.union<[si32, !hi.nil]>
-        %318 = "mid.checkflag"(%317) {"typ_name" = "nil_typ"} : (!hi.union<[si32, !hi.nil]>) -> si1
+        %316 = "mid.method_call"(%315, %313, %312) {"offset" = 21 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+        %317 = "hi.cast"(%316) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.union<[!hi.nil, si32]>
+        %318 = "mid.checkflag"(%317) {"typ_name" = "nil_typ"} : (!hi.union<[!hi.nil, si32]>) -> si1
         %319 = "mid.unwrap"(%318) : (si1) -> i1
         "mid.if"(%319) ({
-          %320 = "hi.cast"(%317) {"from_typ" = !hi.union<[si32, !hi.nil]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[si32, !hi.nil]>) -> !hi.nil
+          %320 = "hi.cast"(%317) {"from_typ" = !hi.union<[!hi.nil, si32]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[!hi.nil, si32]>) -> !hi.nil
           %321 = "mid.literal"() {"value" = false, "typ" = i1} : () -> !hi.bool
           %322 = "hi.cast"(%321) {"from_typ" = !hi.bool, "to_typ" = !hi.bool, "from_typ_name" = "bool_typ", "to_typ_name" = "bool_typ"} : (!hi.bool) -> !hi.bool
           "mid.assign"(%305, %322) {"typ" = i1} : (!hi.bool, !hi.bool) -> ()
-          %323 = "hi.cast"(%320) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!hi.nil) -> !hi.union<[si32, !hi.nil]>
-          "mid.assign"(%317, %323) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[si32, !hi.nil]>, !hi.union<[si32, !hi.nil]>) -> ()
+          %323 = "hi.cast"(%320) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!hi.nil) -> !hi.union<[!hi.nil, si32]>
+          "mid.assign"(%317, %323) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[!hi.nil, si32]>, !hi.union<[!hi.nil, si32]>) -> ()
         }) : (i1) -> ()
-        %324 = "mid.checkflag"(%317) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[si32, !hi.nil]>) -> si1
+        %324 = "mid.checkflag"(%317) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, si32]>) -> si1
         %325 = "mid.unwrap"(%324) : (si1) -> i1
         "mid.if"(%325) ({
-          %326 = "hi.cast"(%317) {"from_typ" = !hi.union<[si32, !hi.nil]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[si32, !hi.nil]>) -> si32
+          %326 = "hi.cast"(%317) {"from_typ" = !hi.union<[!hi.nil, si32]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[!hi.nil, si32]>) -> si32
           %327 = "hi.comparison"(%326, %263) {"op" = "NEQ", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si1
           %328 = "mid.unwrap"(%327) : (si1) -> i1
           "mid.if"(%328) ({
@@ -23623,8 +23623,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
             %330 = "hi.cast"(%329) {"from_typ" = !hi.bool, "to_typ" = !hi.bool, "from_typ_name" = "bool_typ", "to_typ_name" = "bool_typ"} : (!hi.bool) -> !hi.bool
             "mid.assign"(%305, %330) {"typ" = i1} : (!hi.bool, !hi.bool) -> ()
           }) : (i1) -> ()
-          %331 = "hi.cast"(%326) {"from_typ" = si32, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si32, !hi.nil]>
-          "mid.assign"(%317, %331) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[si32, !hi.nil]>, !hi.union<[si32, !hi.nil]>) -> ()
+          %331 = "hi.cast"(%326) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.nil, si32]>
+          "mid.assign"(%317, %331) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[!hi.nil, si32]>, !hi.union<[!hi.nil, si32]>) -> ()
         }) : (i1) -> ()
         %332 = "mid.unwrap"(%286) : (!hi.fatptr<"CuckooMap", [si32, si32]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %333 = "mid.parameterizations_array"() : () -> !llvm.ptr
@@ -23722,8 +23722,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %413 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %414 = "mid.parameterizations_array"(%410, %411, %412, %413) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
       "mid.method_call"(%414, %409, %402, %404, %406, %408) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-      %415 = "hi.cast"(%397) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %416 = "mid.unwrap"(%415) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %415 = "hi.cast"(%397) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %416 = "mid.unwrap"(%415) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %417 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %418 = "mid.parameterizations_array"(%417) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%418, %416) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -23762,8 +23762,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %449 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %450 = "mid.parameterizations_array"(%446, %447, %448, %449) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%450, %445, %438, %440, %442, %444) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %451 = "hi.cast"(%433) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %452 = "mid.unwrap"(%451) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %451 = "hi.cast"(%433) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %452 = "mid.unwrap"(%451) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %453 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
         %454 = "mid.parameterizations_array"(%453) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%454, %452) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -23801,8 +23801,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %484 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %485 = "mid.parameterizations_array"(%481, %482, %483, %484) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%485, %480, %473, %475, %477, %479) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %486 = "hi.cast"(%468) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %487 = "mid.unwrap"(%486) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %486 = "hi.cast"(%468) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %487 = "mid.unwrap"(%486) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %488 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
         %489 = "mid.parameterizations_array"(%488) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%489, %487) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -23972,22 +23972,22 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %629 = "mid.unwrap"(%515) : (!hi.fatptr<"CuckooMap", [si32, si32]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %630 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %631 = "mid.parameterizations_array"(%630) : (!llvm.ptr) -> !llvm.ptr
-        %632 = "mid.method_call"(%631, %629, %628) {"offset" = 21 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-        %633 = "hi.cast"(%632) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.union<[si32, !hi.nil]>
-        %634 = "mid.checkflag"(%633) {"typ_name" = "nil_typ"} : (!hi.union<[si32, !hi.nil]>) -> si1
+        %632 = "mid.method_call"(%631, %629, %628) {"offset" = 21 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+        %633 = "hi.cast"(%632) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.union<[!hi.nil, si32]>
+        %634 = "mid.checkflag"(%633) {"typ_name" = "nil_typ"} : (!hi.union<[!hi.nil, si32]>) -> si1
         %635 = "mid.unwrap"(%634) : (si1) -> i1
         "mid.if"(%635) ({
-          %636 = "hi.cast"(%633) {"from_typ" = !hi.union<[si32, !hi.nil]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[si32, !hi.nil]>) -> !hi.nil
+          %636 = "hi.cast"(%633) {"from_typ" = !hi.union<[!hi.nil, si32]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[!hi.nil, si32]>) -> !hi.nil
           %637 = "mid.literal"() {"value" = false, "typ" = i1} : () -> !hi.bool
           %638 = "hi.cast"(%637) {"from_typ" = !hi.bool, "to_typ" = !hi.bool, "from_typ_name" = "bool_typ", "to_typ_name" = "bool_typ"} : (!hi.bool) -> !hi.bool
           "mid.assign"(%623, %638) {"typ" = i1} : (!hi.bool, !hi.bool) -> ()
-          %639 = "hi.cast"(%636) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!hi.nil) -> !hi.union<[si32, !hi.nil]>
-          "mid.assign"(%633, %639) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[si32, !hi.nil]>, !hi.union<[si32, !hi.nil]>) -> ()
+          %639 = "hi.cast"(%636) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!hi.nil) -> !hi.union<[!hi.nil, si32]>
+          "mid.assign"(%633, %639) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[!hi.nil, si32]>, !hi.union<[!hi.nil, si32]>) -> ()
         }) : (i1) -> ()
-        %640 = "mid.checkflag"(%633) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[si32, !hi.nil]>) -> si1
+        %640 = "mid.checkflag"(%633) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, si32]>) -> si1
         %641 = "mid.unwrap"(%640) : (si1) -> i1
         "mid.if"(%641) ({
-          %642 = "hi.cast"(%633) {"from_typ" = !hi.union<[si32, !hi.nil]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[si32, !hi.nil]>) -> si32
+          %642 = "hi.cast"(%633) {"from_typ" = !hi.union<[!hi.nil, si32]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[!hi.nil, si32]>) -> si32
           %643 = "mid.literal"() {"value" = 1 : i32, "typ" = i32} : () -> si32
           %644 = "hi.arithmetic"(%560, %643) {"op" = "ADD", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si32
           %645 = "hi.comparison"(%642, %644) {"op" = "NEQ", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si1
@@ -23997,8 +23997,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
             %648 = "hi.cast"(%647) {"from_typ" = !hi.bool, "to_typ" = !hi.bool, "from_typ_name" = "bool_typ", "to_typ_name" = "bool_typ"} : (!hi.bool) -> !hi.bool
             "mid.assign"(%623, %648) {"typ" = i1} : (!hi.bool, !hi.bool) -> ()
           }) : (i1) -> ()
-          %649 = "hi.cast"(%642) {"from_typ" = si32, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si32, !hi.nil]>
-          "mid.assign"(%633, %649) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[si32, !hi.nil]>, !hi.union<[si32, !hi.nil]>) -> ()
+          %649 = "hi.cast"(%642) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.nil, si32]>
+          "mid.assign"(%633, %649) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[!hi.nil, si32]>, !hi.union<[!hi.nil, si32]>) -> ()
         }) : (i1) -> ()
         %650 = "mid.unwrap"(%515) : (!hi.fatptr<"CuckooMap", [si32, si32]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %651 = "mid.parameterizations_array"() : () -> !llvm.ptr
@@ -24096,8 +24096,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %731 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %732 = "mid.parameterizations_array"(%728, %729, %730, %731) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
       "mid.method_call"(%732, %727, %720, %722, %724, %726) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-      %733 = "hi.cast"(%715) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %734 = "mid.unwrap"(%733) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %733 = "hi.cast"(%715) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %734 = "mid.unwrap"(%733) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %735 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %736 = "mid.parameterizations_array"(%735) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%736, %734) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -24136,8 +24136,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %767 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %768 = "mid.parameterizations_array"(%764, %765, %766, %767) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%768, %763, %756, %758, %760, %762) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %769 = "hi.cast"(%751) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %770 = "mid.unwrap"(%769) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %769 = "hi.cast"(%751) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %770 = "mid.unwrap"(%769) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %771 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
         %772 = "mid.parameterizations_array"(%771) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%772, %770) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -24175,8 +24175,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %802 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %803 = "mid.parameterizations_array"(%799, %800, %801, %802) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%803, %798, %791, %793, %795, %797) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %804 = "hi.cast"(%786) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %805 = "mid.unwrap"(%804) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %804 = "hi.cast"(%786) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %805 = "mid.unwrap"(%804) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %806 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
         %807 = "mid.parameterizations_array"(%806) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%807, %805) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -24214,13 +24214,13 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %837 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %838 = "mid.parameterizations_array"(%834, %835, %836, %837) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
       "mid.method_call"(%838, %833, %826, %828, %830, %832) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-      %839 = "hi.cast"(%821) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %840 = "mid.unwrap"(%839) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %839 = "hi.cast"(%821) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %840 = "mid.unwrap"(%839) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %841 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %842 = "mid.parameterizations_array"(%841) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%842, %840) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-      %843 = "hi.cast"(%535) {"from_typ" = si32, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %844 = "mid.unwrap"(%843) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %843 = "hi.cast"(%535) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %844 = "mid.unwrap"(%843) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %845 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %846 = "mid.parameterizations_array"(%845) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%846, %844) {"offset" = 0 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -24257,8 +24257,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %876 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %877 = "mid.parameterizations_array"(%873, %874, %875, %876) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
       "mid.method_call"(%877, %872, %865, %867, %869, %871) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-      %878 = "hi.cast"(%860) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %879 = "mid.unwrap"(%878) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %878 = "hi.cast"(%860) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %879 = "mid.unwrap"(%878) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %880 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %881 = "mid.parameterizations_array"(%880) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%881, %879) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -24332,20 +24332,20 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %937 = "mid.unwrap"(%907) : (!hi.fatptr<"CuckooMap", [si32, si32]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %938 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %939 = "mid.parameterizations_array"(%938) : (!llvm.ptr) -> !llvm.ptr
-        %940 = "mid.method_call"(%939, %937, %936) {"offset" = 21 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-        %941 = "hi.cast"(%940) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.union<[si32, !hi.nil]>
-        %942 = "mid.checkflag"(%941) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[si32, !hi.nil]>) -> si1
+        %940 = "mid.method_call"(%939, %937, %936) {"offset" = 21 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+        %941 = "hi.cast"(%940) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.union<[!hi.nil, si32]>
+        %942 = "mid.checkflag"(%941) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, si32]>) -> si1
         %943 = "mid.unwrap"(%942) : (si1) -> i1
         "mid.if"(%943) ({
-          %944 = "hi.cast"(%941) {"from_typ" = !hi.union<[si32, !hi.nil]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[si32, !hi.nil]>) -> si32
+          %944 = "hi.cast"(%941) {"from_typ" = !hi.union<[!hi.nil, si32]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[!hi.nil, si32]>) -> si32
           %945 = "hi.cast"(%944) {"from_typ" = si32, "to_typ" = si64, "from_typ_name" = "i32_typ", "to_typ_name" = "i64_typ"} : (si32) -> si64
           %946 = "hi.arithmetic"(%929, %945) {"op" = "ADD", "lhs_type" = si64, "rhs_type" = si64} : (si64, si64) -> si64
           %947 = "hi.cast"(%946) {"from_typ" = si64, "to_typ" = si64, "from_typ_name" = "i64_typ", "to_typ_name" = "i64_typ"} : (si64) -> si64
           "mid.assign"(%929, %947) {"typ" = i64} : (si64, si64) -> ()
-          %948 = "hi.cast"(%944) {"from_typ" = si32, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si32, !hi.nil]>
-          "mid.assign"(%941, %948) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[si32, !hi.nil]>, !hi.union<[si32, !hi.nil]>) -> ()
+          %948 = "hi.cast"(%944) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.nil, si32]>
+          "mid.assign"(%941, %948) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[!hi.nil, si32]>, !hi.union<[!hi.nil, si32]>) -> ()
         }, {
-          %949 = "hi.cast"(%941) {"from_typ" = !hi.union<[si32, !hi.nil]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[si32, !hi.nil]>) -> !hi.nil
+          %949 = "hi.cast"(%941) {"from_typ" = !hi.union<[!hi.nil, si32]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[!hi.nil, si32]>) -> !hi.nil
           %950 = "mid.literal"() {"value" = false, "typ" = i1} : () -> !hi.bool
           %951 = "hi.cast"(%950) {"from_typ" = !hi.bool, "to_typ" = !hi.bool, "from_typ_name" = "bool_typ", "to_typ_name" = "bool_typ"} : (!hi.bool) -> !hi.bool
           "mid.assign"(%930, %951) {"typ" = i1} : (!hi.bool, !hi.bool) -> ()
@@ -24382,18 +24382,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
           %981 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
           %982 = "mid.parameterizations_array"(%978, %979, %980, %981) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
           "mid.method_call"(%982, %977, %970, %972, %974, %976) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-          %983 = "hi.cast"(%965) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-          %984 = "mid.unwrap"(%983) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+          %983 = "hi.cast"(%965) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+          %984 = "mid.unwrap"(%983) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
           %985 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
           %986 = "mid.parameterizations_array"(%985) : (!llvm.ptr) -> !llvm.ptr
           "mid.class_method_call"(%986, %984) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-          %987 = "hi.cast"(%909) {"from_typ" = si32, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-          %988 = "mid.unwrap"(%987) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+          %987 = "hi.cast"(%909) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+          %988 = "mid.unwrap"(%987) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
           %989 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
           %990 = "mid.parameterizations_array"(%989) : (!llvm.ptr) -> !llvm.ptr
           "mid.class_method_call"(%990, %988) {"offset" = 0 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-          %991 = "hi.cast"(%949) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!hi.nil) -> !hi.union<[si32, !hi.nil]>
-          "mid.assign"(%941, %991) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[si32, !hi.nil]>, !hi.union<[si32, !hi.nil]>) -> ()
+          %991 = "hi.cast"(%949) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!hi.nil) -> !hi.union<[!hi.nil, si32]>
+          "mid.assign"(%941, %991) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[!hi.nil, si32]>, !hi.union<[!hi.nil, si32]>) -> ()
         }) : (i1) -> ()
         %992 = "mid.literal"() {"value" = 1 : i32, "typ" = i32} : () -> si32
         %993 = "hi.arithmetic"(%909, %992) {"op" = "ADD", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si32
@@ -24479,8 +24479,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1064 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %1065 = "mid.parameterizations_array"(%1061, %1062, %1063, %1064) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
       "mid.method_call"(%1065, %1060, %1053, %1055, %1057, %1059) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-      %1066 = "hi.cast"(%1048) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %1067 = "mid.unwrap"(%1066) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %1066 = "hi.cast"(%1048) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %1067 = "mid.unwrap"(%1066) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %1068 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %1069 = "mid.parameterizations_array"(%1068) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%1069, %1067) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -24519,8 +24519,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1100 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %1101 = "mid.parameterizations_array"(%1097, %1098, %1099, %1100) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%1101, %1096, %1089, %1091, %1093, %1095) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %1102 = "hi.cast"(%1084) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %1103 = "mid.unwrap"(%1102) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %1102 = "hi.cast"(%1084) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %1103 = "mid.unwrap"(%1102) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %1104 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
         %1105 = "mid.parameterizations_array"(%1104) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%1105, %1103) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -24558,8 +24558,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1135 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %1136 = "mid.parameterizations_array"(%1132, %1133, %1134, %1135) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%1136, %1131, %1124, %1126, %1128, %1130) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %1137 = "hi.cast"(%1119) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %1138 = "mid.unwrap"(%1137) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %1137 = "hi.cast"(%1119) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %1138 = "mid.unwrap"(%1137) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %1139 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
         %1140 = "mid.parameterizations_array"(%1139) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%1140, %1138) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -24660,9 +24660,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1224 = "mid.unwrap"(%1209) : (!hi.fatptr<"CuckooMap", [si32, !hi.bool]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %1225 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %1226 = "mid.parameterizations_array"(%1225) : (!llvm.ptr) -> !llvm.ptr
-        %1227 = "mid.method_call"(%1226, %1224, %1223) {"offset" = 21 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-        %1228 = "hi.cast"(%1227) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.union<[!hi.bool, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.union<[!hi.bool, !hi.nil]>
-        %1229 = "mid.checkflag"(%1228) {"typ_name" = "nil_typ"} : (!hi.union<[!hi.bool, !hi.nil]>) -> si1
+        %1227 = "mid.method_call"(%1226, %1224, %1223) {"offset" = 21 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+        %1228 = "hi.cast"(%1227) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, !hi.bool]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.union<[!hi.nil, !hi.bool]>
+        %1229 = "mid.checkflag"(%1228) {"typ_name" = "nil_typ"} : (!hi.union<[!hi.nil, !hi.bool]>) -> si1
         %1230 = "mid.unwrap"(%1229) : (si1) -> i1
         "mid.if"(%1230) ({
           %1231 = "mid.literal"() {"value" = 1 : i32, "typ" = i32} : () -> si32
@@ -24745,13 +24745,13 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1298 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %1299 = "mid.parameterizations_array"(%1295, %1296, %1297, %1298) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%1299, %1294, %1287, %1289, %1291, %1293) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %1300 = "hi.cast"(%1282) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %1301 = "mid.unwrap"(%1300) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %1300 = "hi.cast"(%1282) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %1301 = "mid.unwrap"(%1300) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %1302 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
         %1303 = "mid.parameterizations_array"(%1302) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%1303, %1301) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-        %1304 = "hi.cast"(%1210) {"from_typ" = si32, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %1305 = "mid.unwrap"(%1304) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %1304 = "hi.cast"(%1210) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %1305 = "mid.unwrap"(%1304) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %1306 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %1307 = "mid.parameterizations_array"(%1306) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%1307, %1305) {"offset" = 0 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -24788,8 +24788,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1337 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %1338 = "mid.parameterizations_array"(%1334, %1335, %1336, %1337) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%1338, %1333, %1326, %1328, %1330, %1332) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %1339 = "hi.cast"(%1321) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %1340 = "mid.unwrap"(%1339) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %1339 = "hi.cast"(%1321) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %1340 = "mid.unwrap"(%1339) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %1341 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
         %1342 = "mid.parameterizations_array"(%1341) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%1342, %1340) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -24816,20 +24816,20 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1359 = "mid.unwrap"(%1166) : (!hi.fatptr<"CuckooMap", [si32, si32]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %1360 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %1361 = "mid.parameterizations_array"(%1360) : (!llvm.ptr) -> !llvm.ptr
-        %1362 = "mid.method_call"(%1361, %1359, %1358) {"offset" = 21 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-        %1363 = "hi.cast"(%1362) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.union<[si32, !hi.nil]>
-        %1364 = "mid.checkflag"(%1363) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[si32, !hi.nil]>) -> si1
+        %1362 = "mid.method_call"(%1361, %1359, %1358) {"offset" = 21 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+        %1363 = "hi.cast"(%1362) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.union<[!hi.nil, si32]>
+        %1364 = "mid.checkflag"(%1363) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, si32]>) -> si1
         %1365 = "mid.unwrap"(%1364) : (si1) -> i1
         "mid.if"(%1365) ({
-          %1366 = "hi.cast"(%1363) {"from_typ" = !hi.union<[si32, !hi.nil]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[si32, !hi.nil]>) -> si32
+          %1366 = "hi.cast"(%1363) {"from_typ" = !hi.union<[!hi.nil, si32]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[!hi.nil, si32]>) -> si32
           %1367 = "hi.cast"(%1366) {"from_typ" = si32, "to_typ" = si64, "from_typ_name" = "i32_typ", "to_typ_name" = "i64_typ"} : (si32) -> si64
           %1368 = "hi.arithmetic"(%1345, %1367) {"op" = "ADD", "lhs_type" = si64, "rhs_type" = si64} : (si64, si64) -> si64
           %1369 = "hi.cast"(%1368) {"from_typ" = si64, "to_typ" = si64, "from_typ_name" = "i64_typ", "to_typ_name" = "i64_typ"} : (si64) -> si64
           "mid.assign"(%1345, %1369) {"typ" = i64} : (si64, si64) -> ()
-          %1370 = "hi.cast"(%1366) {"from_typ" = si32, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si32, !hi.nil]>
-          "mid.assign"(%1363, %1370) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[si32, !hi.nil]>, !hi.union<[si32, !hi.nil]>) -> ()
+          %1370 = "hi.cast"(%1366) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.nil, si32]>
+          "mid.assign"(%1363, %1370) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[!hi.nil, si32]>, !hi.union<[!hi.nil, si32]>) -> ()
         }, {
-          %1371 = "hi.cast"(%1363) {"from_typ" = !hi.union<[si32, !hi.nil]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[si32, !hi.nil]>) -> !hi.nil
+          %1371 = "hi.cast"(%1363) {"from_typ" = !hi.union<[!hi.nil, si32]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[!hi.nil, si32]>) -> !hi.nil
           %1372 = "mid.literal"() {"value" = false, "typ" = i1} : () -> !hi.bool
           %1373 = "hi.cast"(%1372) {"from_typ" = !hi.bool, "to_typ" = !hi.bool, "from_typ_name" = "bool_typ", "to_typ_name" = "bool_typ"} : (!hi.bool) -> !hi.bool
           "mid.assign"(%1346, %1373) {"typ" = i1} : (!hi.bool, !hi.bool) -> ()
@@ -24866,18 +24866,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
           %1403 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
           %1404 = "mid.parameterizations_array"(%1400, %1401, %1402, %1403) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
           "mid.method_call"(%1404, %1399, %1392, %1394, %1396, %1398) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-          %1405 = "hi.cast"(%1387) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-          %1406 = "mid.unwrap"(%1405) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+          %1405 = "hi.cast"(%1387) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+          %1406 = "mid.unwrap"(%1405) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
           %1407 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
           %1408 = "mid.parameterizations_array"(%1407) : (!llvm.ptr) -> !llvm.ptr
           "mid.class_method_call"(%1408, %1406) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-          %1409 = "hi.cast"(%1356) {"from_typ" = si32, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-          %1410 = "mid.unwrap"(%1409) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+          %1409 = "hi.cast"(%1356) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+          %1410 = "mid.unwrap"(%1409) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
           %1411 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
           %1412 = "mid.parameterizations_array"(%1411) : (!llvm.ptr) -> !llvm.ptr
           "mid.class_method_call"(%1412, %1410) {"offset" = 0 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-          %1413 = "hi.cast"(%1371) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!hi.nil) -> !hi.union<[si32, !hi.nil]>
-          "mid.assign"(%1363, %1413) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[si32, !hi.nil]>, !hi.union<[si32, !hi.nil]>) -> ()
+          %1413 = "hi.cast"(%1371) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!hi.nil) -> !hi.union<[!hi.nil, si32]>
+          "mid.assign"(%1363, %1413) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[!hi.nil, si32]>, !hi.union<[!hi.nil, si32]>) -> ()
         }) : (i1) -> ()
         %1414 = "mid.literal"() {"value" = 1 : i32, "typ" = i32} : () -> si32
         %1415 = "hi.arithmetic"(%1347, %1414) {"op" = "ADD", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si32
@@ -24963,8 +24963,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1486 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %1487 = "mid.parameterizations_array"(%1483, %1484, %1485, %1486) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
       "mid.method_call"(%1487, %1482, %1475, %1477, %1479, %1481) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-      %1488 = "hi.cast"(%1470) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %1489 = "mid.unwrap"(%1488) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %1488 = "hi.cast"(%1470) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %1489 = "mid.unwrap"(%1488) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %1490 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %1491 = "mid.parameterizations_array"(%1490) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%1491, %1489) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -25003,8 +25003,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1522 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %1523 = "mid.parameterizations_array"(%1519, %1520, %1521, %1522) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%1523, %1518, %1511, %1513, %1515, %1517) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %1524 = "hi.cast"(%1506) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %1525 = "mid.unwrap"(%1524) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %1524 = "hi.cast"(%1506) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %1525 = "mid.unwrap"(%1524) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %1526 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
         %1527 = "mid.parameterizations_array"(%1526) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%1527, %1525) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -25042,8 +25042,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1557 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %1558 = "mid.parameterizations_array"(%1554, %1555, %1556, %1557) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%1558, %1553, %1546, %1548, %1550, %1552) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %1559 = "hi.cast"(%1541) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %1560 = "mid.unwrap"(%1559) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %1559 = "hi.cast"(%1541) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %1560 = "mid.unwrap"(%1559) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %1561 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
         %1562 = "mid.parameterizations_array"(%1561) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%1562, %1560) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -25144,9 +25144,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1646 = "mid.unwrap"(%1631) : (!hi.fatptr<"CuckooMap", [si32, !hi.bool]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %1647 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %1648 = "mid.parameterizations_array"(%1647) : (!llvm.ptr) -> !llvm.ptr
-        %1649 = "mid.method_call"(%1648, %1646, %1645) {"offset" = 21 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-        %1650 = "hi.cast"(%1649) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.union<[!hi.bool, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.union<[!hi.bool, !hi.nil]>
-        %1651 = "mid.checkflag"(%1650) {"typ_name" = "nil_typ"} : (!hi.union<[!hi.bool, !hi.nil]>) -> si1
+        %1649 = "mid.method_call"(%1648, %1646, %1645) {"offset" = 21 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+        %1650 = "hi.cast"(%1649) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, !hi.bool]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.union<[!hi.nil, !hi.bool]>
+        %1651 = "mid.checkflag"(%1650) {"typ_name" = "nil_typ"} : (!hi.union<[!hi.nil, !hi.bool]>) -> si1
         %1652 = "mid.unwrap"(%1651) : (si1) -> i1
         "mid.if"(%1652) ({
           %1653 = "mid.literal"() {"value" = 1 : i32, "typ" = i32} : () -> si32
@@ -25213,9 +25213,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1702 = "mid.unwrap"(%1631) : (!hi.fatptr<"CuckooMap", [si32, !hi.bool]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %1703 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %1704 = "mid.parameterizations_array"(%1703) : (!llvm.ptr) -> !llvm.ptr
-        %1705 = "mid.method_call"(%1704, %1702, %1701) {"offset" = 21 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-        %1706 = "hi.cast"(%1705) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.union<[!hi.bool, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.union<[!hi.bool, !hi.nil]>
-        %1707 = "mid.checkflag"(%1706) {"typ_name" = "nil_typ"} : (!hi.union<[!hi.bool, !hi.nil]>) -> si1
+        %1705 = "mid.method_call"(%1704, %1702, %1701) {"offset" = 21 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+        %1706 = "hi.cast"(%1705) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, !hi.bool]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.union<[!hi.nil, !hi.bool]>
+        %1707 = "mid.checkflag"(%1706) {"typ_name" = "nil_typ"} : (!hi.union<[!hi.nil, !hi.bool]>) -> si1
         %1708 = "mid.unwrap"(%1707) : (si1) -> i1
         "mid.if"(%1708) ({
           %1709 = "hi.cast"(%1687) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
@@ -25273,13 +25273,13 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1754 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %1755 = "mid.parameterizations_array"(%1751, %1752, %1753, %1754) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%1755, %1750, %1743, %1745, %1747, %1749) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %1756 = "hi.cast"(%1738) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %1757 = "mid.unwrap"(%1756) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %1756 = "hi.cast"(%1738) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %1757 = "mid.unwrap"(%1756) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %1758 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
         %1759 = "mid.parameterizations_array"(%1758) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%1759, %1757) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-        %1760 = "hi.cast"(%1687) {"from_typ" = si32, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %1761 = "mid.unwrap"(%1760) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %1760 = "hi.cast"(%1687) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %1761 = "mid.unwrap"(%1760) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %1762 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %1763 = "mid.parameterizations_array"(%1762) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%1763, %1761) {"offset" = 0 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -25316,8 +25316,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1793 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %1794 = "mid.parameterizations_array"(%1790, %1791, %1792, %1793) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%1794, %1789, %1782, %1784, %1786, %1788) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %1795 = "hi.cast"(%1777) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %1796 = "mid.unwrap"(%1795) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %1795 = "hi.cast"(%1777) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %1796 = "mid.unwrap"(%1795) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %1797 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
         %1798 = "mid.parameterizations_array"(%1797) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%1798, %1796) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -25344,9 +25344,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1815 = "mid.unwrap"(%1588) : (!hi.fatptr<"CuckooMap", [si32, si32]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %1816 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %1817 = "mid.parameterizations_array"(%1816) : (!llvm.ptr) -> !llvm.ptr
-        %1818 = "mid.method_call"(%1817, %1815, %1814) {"offset" = 21 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-        %1819 = "hi.cast"(%1818) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.union<[si32, !hi.nil]>
-        %1820 = "mid.checkflag"(%1819) {"typ_name" = "nil_typ"} : (!hi.union<[si32, !hi.nil]>) -> si1
+        %1818 = "mid.method_call"(%1817, %1815, %1814) {"offset" = 21 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+        %1819 = "hi.cast"(%1818) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.union<[!hi.nil, si32]>
+        %1820 = "mid.checkflag"(%1819) {"typ_name" = "nil_typ"} : (!hi.union<[!hi.nil, si32]>) -> si1
         %1821 = "mid.unwrap"(%1820) : (si1) -> i1
         "mid.if"(%1821) ({
           %1822 = "mid.literal"() {"value" = 1 : i32, "typ" = i32} : () -> si32
@@ -25462,8 +25462,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %1913 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %1914 = "mid.parameterizations_array"(%1910, %1911, %1912, %1913) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
       "mid.method_call"(%1914, %1909, %1902, %1904, %1906, %1908) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-      %1915 = "hi.cast"(%1897) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %1916 = "mid.unwrap"(%1915) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %1915 = "hi.cast"(%1897) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %1916 = "mid.unwrap"(%1915) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %1917 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %1918 = "mid.parameterizations_array"(%1917) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%1918, %1916) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -25502,8 +25502,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1949 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %1950 = "mid.parameterizations_array"(%1946, %1947, %1948, %1949) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%1950, %1945, %1938, %1940, %1942, %1944) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %1951 = "hi.cast"(%1933) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %1952 = "mid.unwrap"(%1951) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %1951 = "hi.cast"(%1933) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %1952 = "mid.unwrap"(%1951) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %1953 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
         %1954 = "mid.parameterizations_array"(%1953) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%1954, %1952) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -25541,8 +25541,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %1984 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %1985 = "mid.parameterizations_array"(%1981, %1982, %1983, %1984) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%1985, %1980, %1973, %1975, %1977, %1979) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %1986 = "hi.cast"(%1968) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %1987 = "mid.unwrap"(%1986) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %1986 = "hi.cast"(%1968) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %1987 = "mid.unwrap"(%1986) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %1988 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
         %1989 = "mid.parameterizations_array"(%1988) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%1989, %1987) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -25580,13 +25580,13 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %2019 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %2020 = "mid.parameterizations_array"(%2016, %2017, %2018, %2019) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
       "mid.method_call"(%2020, %2015, %2008, %2010, %2012, %2014) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-      %2021 = "hi.cast"(%2003) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %2022 = "mid.unwrap"(%2021) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %2021 = "hi.cast"(%2003) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %2022 = "mid.unwrap"(%2021) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %2023 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %2024 = "mid.parameterizations_array"(%2023) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%2024, %2022) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-      %2025 = "hi.cast"(%1801) {"from_typ" = si32, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %2026 = "mid.unwrap"(%2025) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %2025 = "hi.cast"(%1801) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %2026 = "mid.unwrap"(%2025) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %2027 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %2028 = "mid.parameterizations_array"(%2027) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%2028, %2026) {"offset" = 0 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -25623,13 +25623,13 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %2058 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %2059 = "mid.parameterizations_array"(%2055, %2056, %2057, %2058) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
       "mid.method_call"(%2059, %2054, %2047, %2049, %2051, %2053) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-      %2060 = "hi.cast"(%2042) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %2061 = "mid.unwrap"(%2060) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %2060 = "hi.cast"(%2042) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %2061 = "mid.unwrap"(%2060) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %2062 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %2063 = "mid.parameterizations_array"(%2062) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%2063, %2061) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-      %2064 = "hi.cast"(%1802) {"from_typ" = si32, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %2065 = "mid.unwrap"(%2064) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %2064 = "hi.cast"(%1802) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %2065 = "mid.unwrap"(%2064) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %2066 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %2067 = "mid.parameterizations_array"(%2066) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%2067, %2065) {"offset" = 0 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -25666,8 +25666,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %2097 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %2098 = "mid.parameterizations_array"(%2094, %2095, %2096, %2097) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
       "mid.method_call"(%2098, %2093, %2086, %2088, %2090, %2092) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-      %2099 = "hi.cast"(%2081) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %2100 = "mid.unwrap"(%2099) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %2099 = "hi.cast"(%2081) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %2100 = "mid.unwrap"(%2099) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %2101 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %2102 = "mid.parameterizations_array"(%2101) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%2102, %2100) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -25766,9 +25766,9 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %2185 = "mid.unwrap"(%2170) : (!hi.fatptr<"CuckooMap", [si32, !hi.bool]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %2186 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %2187 = "mid.parameterizations_array"(%2186) : (!llvm.ptr) -> !llvm.ptr
-        %2188 = "mid.method_call"(%2187, %2185, %2184) {"offset" = 21 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-        %2189 = "hi.cast"(%2188) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.union<[!hi.bool, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.union<[!hi.bool, !hi.nil]>
-        %2190 = "mid.checkflag"(%2189) {"typ_name" = "nil_typ"} : (!hi.union<[!hi.bool, !hi.nil]>) -> si1
+        %2188 = "mid.method_call"(%2187, %2185, %2184) {"offset" = 21 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+        %2189 = "hi.cast"(%2188) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, !hi.bool]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.union<[!hi.nil, !hi.bool]>
+        %2190 = "mid.checkflag"(%2189) {"typ_name" = "nil_typ"} : (!hi.union<[!hi.nil, !hi.bool]>) -> si1
         %2191 = "mid.unwrap"(%2190) : (si1) -> i1
         "mid.if"(%2191) ({
           %2192 = "mid.literal"() {"value" = 1 : i32, "typ" = i32} : () -> si32
@@ -25847,13 +25847,13 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %2256 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %2257 = "mid.parameterizations_array"(%2253, %2254, %2255, %2256) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%2257, %2252, %2245, %2247, %2249, %2251) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %2258 = "hi.cast"(%2240) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %2259 = "mid.unwrap"(%2258) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %2258 = "hi.cast"(%2240) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %2259 = "mid.unwrap"(%2258) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %2260 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
         %2261 = "mid.parameterizations_array"(%2260) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%2261, %2259) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-        %2262 = "hi.cast"(%2171) {"from_typ" = si32, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %2263 = "mid.unwrap"(%2262) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %2262 = "hi.cast"(%2171) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %2263 = "mid.unwrap"(%2262) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %2264 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %2265 = "mid.parameterizations_array"(%2264) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%2265, %2263) {"offset" = 0 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -25890,8 +25890,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %2295 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %2296 = "mid.parameterizations_array"(%2292, %2293, %2294, %2295) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%2296, %2291, %2284, %2286, %2288, %2290) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %2297 = "hi.cast"(%2279) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %2298 = "mid.unwrap"(%2297) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %2297 = "hi.cast"(%2279) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %2298 = "mid.unwrap"(%2297) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %2299 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
         %2300 = "mid.parameterizations_array"(%2299) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%2300, %2298) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -25918,12 +25918,12 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %2317 = "mid.unwrap"(%2128) : (!hi.fatptr<"CuckooMap", [si32, si32]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %2318 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %2319 = "mid.parameterizations_array"(%2318) : (!llvm.ptr) -> !llvm.ptr
-        %2320 = "mid.method_call"(%2319, %2317, %2316) {"offset" = 23 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-        %2321 = "hi.cast"(%2320) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.union<[si32, !hi.nil]>
-        %2322 = "mid.checkflag"(%2321) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[si32, !hi.nil]>) -> si1
+        %2320 = "mid.method_call"(%2319, %2317, %2316) {"offset" = 23 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+        %2321 = "hi.cast"(%2320) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.union<[!hi.nil, si32]>
+        %2322 = "mid.checkflag"(%2321) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, si32]>) -> si1
         %2323 = "mid.unwrap"(%2322) : (si1) -> i1
         "mid.if"(%2323) ({
-          %2324 = "hi.cast"(%2321) {"from_typ" = !hi.union<[si32, !hi.nil]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[si32, !hi.nil]>) -> si32
+          %2324 = "hi.cast"(%2321) {"from_typ" = !hi.union<[!hi.nil, si32]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[!hi.nil, si32]>) -> si32
           %2325 = "mid.literal"() {"value" = 1 : i32, "typ" = i32} : () -> si32
           %2326 = "hi.arithmetic"(%2314, %2325) {"op" = "ADD", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si32
           %2327 = "hi.comparison"(%2324, %2326) {"op" = "NEQ", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si1
@@ -25965,13 +25965,13 @@ builtin.module attributes  {"sym_name" = "ir"} {
             %2360 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
             %2361 = "mid.parameterizations_array"(%2357, %2358, %2359, %2360) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
             "mid.method_call"(%2361, %2356, %2349, %2351, %2353, %2355) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-            %2362 = "hi.cast"(%2344) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-            %2363 = "mid.unwrap"(%2362) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+            %2362 = "hi.cast"(%2344) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+            %2363 = "mid.unwrap"(%2362) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
             %2364 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
             %2365 = "mid.parameterizations_array"(%2364) : (!llvm.ptr) -> !llvm.ptr
             "mid.class_method_call"(%2365, %2363) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-            %2366 = "hi.cast"(%2314) {"from_typ" = si32, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-            %2367 = "mid.unwrap"(%2366) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+            %2366 = "hi.cast"(%2314) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+            %2367 = "mid.unwrap"(%2366) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
             %2368 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
             %2369 = "mid.parameterizations_array"(%2368) : (!llvm.ptr) -> !llvm.ptr
             "mid.class_method_call"(%2369, %2367) {"offset" = 0 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -25980,10 +25980,10 @@ builtin.module attributes  {"sym_name" = "ir"} {
           %2371 = "hi.arithmetic"(%2303, %2370) {"op" = "ADD", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si32
           %2372 = "hi.cast"(%2371) {"from_typ" = si32, "to_typ" = si32, "from_typ_name" = "i32_typ", "to_typ_name" = "i32_typ"} : (si32) -> si32
           "mid.assign"(%2303, %2372) {"typ" = i32} : (si32, si32) -> ()
-          %2373 = "hi.cast"(%2324) {"from_typ" = si32, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si32, !hi.nil]>
-          "mid.assign"(%2321, %2373) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[si32, !hi.nil]>, !hi.union<[si32, !hi.nil]>) -> ()
+          %2373 = "hi.cast"(%2324) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.nil, si32]>
+          "mid.assign"(%2321, %2373) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[!hi.nil, si32]>, !hi.union<[!hi.nil, si32]>) -> ()
         }, {
-          %2374 = "hi.cast"(%2321) {"from_typ" = !hi.union<[si32, !hi.nil]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[si32, !hi.nil]>) -> !hi.nil
+          %2374 = "hi.cast"(%2321) {"from_typ" = !hi.union<[!hi.nil, si32]>, "to_typ" = !hi.nil, "from_typ_name" = "union_typ", "to_typ_name" = "nil_typ"} : (!hi.union<[!hi.nil, si32]>) -> !hi.nil
           %2375 = "mid.literal"() {"value" = false, "typ" = i1} : () -> !hi.bool
           %2376 = "hi.cast"(%2375) {"from_typ" = !hi.bool, "to_typ" = !hi.bool, "from_typ_name" = "bool_typ", "to_typ_name" = "bool_typ"} : (!hi.bool) -> !hi.bool
           "mid.assign"(%2304, %2376) {"typ" = i1} : (!hi.bool, !hi.bool) -> ()
@@ -26020,18 +26020,18 @@ builtin.module attributes  {"sym_name" = "ir"} {
           %2406 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
           %2407 = "mid.parameterizations_array"(%2403, %2404, %2405, %2406) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
           "mid.method_call"(%2407, %2402, %2395, %2397, %2399, %2401) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-          %2408 = "hi.cast"(%2390) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-          %2409 = "mid.unwrap"(%2408) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+          %2408 = "hi.cast"(%2390) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+          %2409 = "mid.unwrap"(%2408) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
           %2410 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
           %2411 = "mid.parameterizations_array"(%2410) : (!llvm.ptr) -> !llvm.ptr
           "mid.class_method_call"(%2411, %2409) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-          %2412 = "hi.cast"(%2314) {"from_typ" = si32, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-          %2413 = "mid.unwrap"(%2412) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+          %2412 = "hi.cast"(%2314) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+          %2413 = "mid.unwrap"(%2412) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
           %2414 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
           %2415 = "mid.parameterizations_array"(%2414) : (!llvm.ptr) -> !llvm.ptr
           "mid.class_method_call"(%2415, %2413) {"offset" = 0 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-          %2416 = "hi.cast"(%2374) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!hi.nil) -> !hi.union<[si32, !hi.nil]>
-          "mid.assign"(%2321, %2416) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[si32, !hi.nil]>, !hi.union<[si32, !hi.nil]>) -> ()
+          %2416 = "hi.cast"(%2374) {"from_typ" = !hi.nil, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "nil_typ", "to_typ_name" = "union_typ"} : (!hi.nil) -> !hi.union<[!hi.nil, si32]>
+          "mid.assign"(%2321, %2416) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[!hi.nil, si32]>, !hi.union<[!hi.nil, si32]>) -> ()
         }) : (i1) -> ()
         %2417 = "mid.literal"() {"value" = 1 : i32, "typ" = i32} : () -> si32
         %2418 = "hi.arithmetic"(%2305, %2417) {"op" = "ADD", "lhs_type" = si32, "rhs_type" = si32} : (si32, si32) -> si32
@@ -26075,17 +26075,17 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %2447 = "mid.unwrap"(%2128) : (!hi.fatptr<"CuckooMap", [si32, si32]>) -> !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>
         %2448 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %2449 = "mid.parameterizations_array"(%2448) : (!llvm.ptr) -> !llvm.ptr
-        %2450 = "mid.method_call"(%2449, %2447, %2446) {"offset" = 21 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>
-        %2451 = "hi.cast"(%2450) {"from_typ" = !hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.nil, !hi.type_param<"V", !hi.any, "CuckooMap">]>) -> !hi.union<[si32, !hi.nil]>
-        %2452 = "mid.checkflag"(%2451) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[si32, !hi.nil]>) -> si1
+        %2450 = "mid.method_call"(%2449, %2447, %2446) {"offset" = 21 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 1144 : i64, "ret_type" = !llvm.struct<(!llvm.ptr, i160)>, "ret_type_unq" = !llvm.struct<(!llvm.ptr, i160)>} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr, i160)>) -> !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>
+        %2451 = "hi.cast"(%2450) {"from_typ" = !hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "union_typ", "to_typ_name" = "union_typ"} : (!hi.union<[!hi.type_param<"V", !hi.any, "CuckooMap">, !hi.nil]>) -> !hi.union<[!hi.nil, si32]>
+        %2452 = "mid.checkflag"(%2451) {"typ_name" = "nil_typ", "neg"} : (!hi.union<[!hi.nil, si32]>) -> si1
         %2453 = "mid.unwrap"(%2452) : (si1) -> i1
         "mid.if"(%2453) ({
-          %2454 = "hi.cast"(%2451) {"from_typ" = !hi.union<[si32, !hi.nil]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[si32, !hi.nil]>) -> si32
+          %2454 = "hi.cast"(%2451) {"from_typ" = !hi.union<[!hi.nil, si32]>, "to_typ" = si32, "from_typ_name" = "union_typ", "to_typ_name" = "i32_typ"} : (!hi.union<[!hi.nil, si32]>) -> si32
           %2455 = "mid.literal"() {"value" = false, "typ" = i1} : () -> !hi.bool
           %2456 = "hi.cast"(%2455) {"from_typ" = !hi.bool, "to_typ" = !hi.bool, "from_typ_name" = "bool_typ", "to_typ_name" = "bool_typ"} : (!hi.bool) -> !hi.bool
           "mid.assign"(%2304, %2456) {"typ" = i1} : (!hi.bool, !hi.bool) -> ()
-          %2457 = "hi.cast"(%2454) {"from_typ" = si32, "to_typ" = !hi.union<[si32, !hi.nil]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si32, !hi.nil]>
-          "mid.assign"(%2451, %2457) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[si32, !hi.nil]>, !hi.union<[si32, !hi.nil]>) -> ()
+          %2457 = "hi.cast"(%2454) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.nil, si32]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.nil, si32]>
+          "mid.assign"(%2451, %2457) {"typ" = !llvm.struct<(!llvm.ptr, i32)>} : (!hi.union<[!hi.nil, si32]>, !hi.union<[!hi.nil, si32]>) -> ()
         }) : (i1) -> ()
       }) : (i1) -> ()
       %2458 = "mid.literal"() {"value" = 14 : i32, "typ" = i32} : () -> si32
@@ -26159,8 +26159,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %2522 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %2523 = "mid.parameterizations_array"(%2519, %2520, %2521, %2522) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
       "mid.method_call"(%2523, %2518, %2511, %2513, %2515, %2517) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-      %2524 = "hi.cast"(%2506) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %2525 = "mid.unwrap"(%2524) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %2524 = "hi.cast"(%2506) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %2525 = "mid.unwrap"(%2524) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %2526 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %2527 = "mid.parameterizations_array"(%2526) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%2527, %2525) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -26199,8 +26199,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %2558 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %2559 = "mid.parameterizations_array"(%2555, %2556, %2557, %2558) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%2559, %2554, %2547, %2549, %2551, %2553) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %2560 = "hi.cast"(%2542) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %2561 = "mid.unwrap"(%2560) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %2560 = "hi.cast"(%2542) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %2561 = "mid.unwrap"(%2560) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %2562 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
         %2563 = "mid.parameterizations_array"(%2562) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%2563, %2561) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -26238,8 +26238,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
         %2593 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
         %2594 = "mid.parameterizations_array"(%2590, %2591, %2592, %2593) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
         "mid.method_call"(%2594, %2589, %2582, %2584, %2586, %2588) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-        %2595 = "hi.cast"(%2577) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-        %2596 = "mid.unwrap"(%2595) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+        %2595 = "hi.cast"(%2577) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+        %2596 = "mid.unwrap"(%2595) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
         %2597 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
         %2598 = "mid.parameterizations_array"(%2597) : (!llvm.ptr) -> !llvm.ptr
         "mid.class_method_call"(%2598, %2596) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -26277,13 +26277,13 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %2628 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %2629 = "mid.parameterizations_array"(%2625, %2626, %2627, %2628) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
       "mid.method_call"(%2629, %2624, %2617, %2619, %2621, %2623) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-      %2630 = "hi.cast"(%2612) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %2631 = "mid.unwrap"(%2630) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %2630 = "hi.cast"(%2612) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %2631 = "mid.unwrap"(%2630) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %2632 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %2633 = "mid.parameterizations_array"(%2632) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%2633, %2631) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
-      %2634 = "hi.cast"(%2303) {"from_typ" = si32, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %2635 = "mid.unwrap"(%2634) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %2634 = "hi.cast"(%2303) {"from_typ" = si32, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "i32_typ", "to_typ_name" = "union_typ"} : (si32) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %2635 = "mid.unwrap"(%2634) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %2636 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %2637 = "mid.parameterizations_array"(%2636) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%2637, %2635) {"offset" = 0 : i32, "vptrs" = ["i32_typ"], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -26320,8 +26320,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %2667 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %2668 = "mid.parameterizations_array"(%2664, %2665, %2666, %2667) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
       "mid.method_call"(%2668, %2663, %2656, %2658, %2660, %2662) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-      %2669 = "hi.cast"(%2651) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %2670 = "mid.unwrap"(%2669) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %2669 = "hi.cast"(%2651) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %2670 = "mid.unwrap"(%2669) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %2671 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %2672 = "mid.parameterizations_array"(%2671) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%2672, %2670) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -26360,8 +26360,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %2702 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %2703 = "mid.parameterizations_array"(%2699, %2700, %2701, %2702) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
       "mid.method_call"(%2703, %2698, %2691, %2693, %2695, %2697) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-      %2704 = "hi.cast"(%2686) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %2705 = "mid.unwrap"(%2704) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %2704 = "hi.cast"(%2686) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %2705 = "mid.unwrap"(%2704) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %2706 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %2707 = "mid.parameterizations_array"(%2706) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%2707, %2705) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()
@@ -26411,8 +26411,8 @@ builtin.module attributes  {"sym_name" = "ir"} {
       %2744 = "mid.parameterization"() {"id_hierarchy" = ["i32_typ"], "name_hierarchy" = ["i32"]} : () -> !llvm.ptr
       %2745 = "mid.parameterizations_array"(%2741, %2742, %2743, %2744) : (!llvm.ptr, !llvm.ptr, !llvm.ptr, !llvm.ptr) -> !llvm.ptr
       "mid.method_call"(%2745, %2740, %2733, %2735, %2737, %2739) {"offset" = 12 : i32, "vptrs" = ["buffer_typ", "i32_typ", "i32_typ", "i32_typ"], "vtable_size" = 314 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, !llvm.ptr, !llvm.ptr, i32)>, !llvm.struct<(!llvm.ptr)>, i32, i32, i32) -> ()
-      %2746 = "hi.cast"(%2728) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>
-      %2747 = "mid.unwrap"(%2746) : (!hi.union<[si64, !hi.fatptr<"Character">, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Representable">]>) -> !llvm.struct<(!llvm.ptr, i160)>
+      %2746 = "hi.cast"(%2728) {"from_typ" = !hi.fatptr<"String">, "to_typ" = !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>, "from_typ_name" = "String", "to_typ_name" = "union_typ"} : (!hi.fatptr<"String">) -> !hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>
+      %2747 = "mid.unwrap"(%2746) : (!hi.union<[!hi.fatptr<"Representable">, si64, !hi.float, !hi.bool, !hi.nil, !hi.fatptr<"Character">]>) -> !llvm.struct<(!llvm.ptr, i160)>
       %2748 = "mid.parameterization"() {"id_hierarchy" = ["String"], "name_hierarchy" = ["core.String"]} : () -> !llvm.ptr
       %2749 = "mid.parameterizations_array"(%2748) : (!llvm.ptr) -> !llvm.ptr
       "mid.class_method_call"(%2749, %2747) {"offset" = 0 : i32, "vptrs" = [#none], "vtable_size" = 10 : i64, "ret_type" = !llvm.void, "ret_type_unq" = !llvm.void, "class_name" = "IO"} : (!llvm.ptr, !llvm.struct<(!llvm.ptr, i160)>) -> ()

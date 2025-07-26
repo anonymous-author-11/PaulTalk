@@ -11,9 +11,8 @@ from mid import *
 import hi
 import mid
 from utils import *
-from scope import Scope, ConstraintSet, TypeEnvironment, MemRegions, ScopeExit
+from scope import Scope, Constraints, TypeEnvironment, MemRegions, ScopeExit
 from method_dispatch import *
-#from constraint_graph import *
 from xdsl.dialects import llvm, arith, builtin, memref, cf, func
 from xdsl.ir import Block, Region, TypeAttribute
 from xdsl.dialects.builtin import (
@@ -691,7 +690,14 @@ class TupleLiteral(Expression):
         return create_tuple.results[0]
 
     def exprtype(self, scope):
+        self.apply_constraints(scope)
         return Tuple([ArrayAttr([elem.exprtype(scope) for elem in self.elems])])
+
+    def apply_constraints(self, scope):
+        for i, elem in enumerate(self.elems):
+            index_string = self.receiver.info.id + "." + str(i)
+            scope.mem_regions.points_to_facts.add((index_string, "==", elem.info.id))
+            scope.mem_regions.points_to_facts.add((self.receiver.info.id, "<", index_string))
 
     def typeflow(self, scope):
         self.exprtype(scope)
@@ -1198,17 +1204,10 @@ class FunctionCall(Expression):
 
     def apply_constraints(self, scope):
         func = scope.get_function(self.info, self.function)
-        formal_constraints = func.constraints
-        mapping = [*zip((param.name for param in func.params), (arg.info.id for arg in self.arguments)), ("ret", self.info.id)]
-        mapping = {k:v for k,v in mapping}
-        for c in formal_constraints:
-            lhs_split = c.lhs.split(".")
-            lhs_split[0] = mapping[lhs_split[0]]
-            rhs_split = c.rhs.split(".")
-            rhs_split[0] = mapping[rhs_split[0]]
-            scope.mem_regions.points_to_facts.add((".".join(lhs_split), c.op, ".".join(rhs_split)))
-            if len(lhs_split) > 1: scope.mem_regions.points_to_facts.add((lhs_split[0], "<", ".".join(lhs_split)))
-            if len(rhs_split) > 1: scope.mem_regions.points_to_facts.add((rhs_split[0], "<", ".".join(rhs_split)))
+        formal_constraints = Constraints(set(func.constraints))
+        mapping = {param.name:arg.info.id for param, arg in zip(func.params, self.arguments)} | {"ret":self.info.id}
+        formal_constraints = formal_constraints.map(mapping)
+        scope.mem_regions.points_to_facts = scope.mem_regions.points_to_facts.union(formal_constraints)
 
     def exprtype(self, scope):
         self.ensure_declared(scope)
@@ -1289,17 +1288,25 @@ class MethodCall(Expression):
         scope.region.last_block.add_op(ary)
         return ary.results[0]
 
+    def additional_constraint_mappings(self):
+        return { "ret":self.info.id, "self":self.receiver.info.id }
+
     def apply_constraints(self, scope, behavior, specialized):
         formal_constraints = behavior.constraints()
-        if self.method == "init": formal_constraints = formal_constraints.union(behavior.cls.all_constraints())
+        if self.method == "init":
+            formal_constraints = formal_constraints.union(behavior.cls.all_constraints())
         if specialized:
-            return_constraints = scope.type_env.constraints_of(specialized)
-            return_constraints.transform_with_mapping({"self":"ret"})
+            return_constraints = scope.type_env.constraints_of(specialized).map({"self":"ret"})
             formal_constraints = formal_constraints.union(return_constraints)
 
-        mapping = [*((str(i), arg.info.id) for (i, arg) in enumerate(self.arguments)), ("ret", self.info.id), ("self", self.receiver.info.id)]
-        mapping = {k:v for k,v in mapping}
-        formal_constraints.transform_with_mapping(mapping)
+        mapping = {str(i):arg.info.id for i, arg in enumerate(self.arguments)}
+        mapping = mapping | self.additional_constraint_mappings()
+        formal_constraints = formal_constraints.map(mapping)
+
+        # Exclude trivial value types from alias graph
+        value_type_names = {arg.info.id for arg in self.arguments if is_value_type(arg.exprtype(scope))}
+        formal_constraints = formal_constraints.prune(value_type_names)
+
         scope.mem_regions.points_to_facts = scope.mem_regions.points_to_facts.union(formal_constraints)
 
     def simple_exprtype(self, scope, rec_typ):
@@ -1463,8 +1470,7 @@ class BufferIndexation(Indexation):
         return buf_get.results[0]
 
     def apply_constraints(self, scope):
-        scope.mem_regions.points_to_facts.add((self.receiver.info.id + ".elems_reg", "==", self.info.id))
-        scope.mem_regions.points_to_facts.add((self.receiver.info.id, "<", self.receiver.info.id + ".elems_reg"))
+        scope.mem_regions.points_to_facts.add((self.info.id, "<", self.receiver.info.id))
 
     def exprtype(self, scope):
         rec_typ = self.receiver.exprtype(scope)
@@ -1496,8 +1502,7 @@ class BufferSetIndex(MethodCall):
         scope.region.last_block.add_ops([cast_val, cast_idx, buf_set])
 
     def apply_constraints(self, scope):
-        scope.mem_regions.points_to_facts.add((self.receiver.info.id + ".elems_reg", "==", self.info.id))
-        scope.mem_regions.points_to_facts.add((self.receiver.info.id, "<", self.receiver.info.id + ".elems_reg"))
+        scope.mem_regions.points_to_facts.add((self.receiver.info.id, "<", self.arguments[1].info.id))
 
     def exprtype(self, scope):
         rec_typ = self.receiver.exprtype(scope)
@@ -1523,8 +1528,9 @@ class TupleIndexation(Indexation):
         return idx.results[0]
 
     def apply_constraints(self, scope):
-        scope.mem_regions.points_to_facts.add((self.receiver.info.id + ".elems_reg", "==", self.info.id))
-        scope.mem_regions.points_to_facts.add((self.receiver.info.id, "<", self.receiver.info.id + ".elems_reg"))
+        index_string = str(self.arguments[0].value)
+        scope.mem_regions.points_to_facts.add((self.receiver.info.id + "." + index_string, "==", self.info.id))
+        scope.mem_regions.points_to_facts.add((self.receiver.info.id, "<", self.receiver.info.id + "." + index_string))
 
     def exprtype(self, scope):
         rec_typ = self.receiver.exprtype(scope)
@@ -1541,6 +1547,11 @@ class TupleSetIndex(MethodCall):
         indexation = TupleIndexation(self.info, self.receiver, "_index", [self.arguments[0]])
         assign = Assignment(self.info, indexation, self.arguments[1])
         return assign.codegen(scope)
+
+    def apply_constraints(self, scope):
+        index_string = str(self.arguments[0].value)
+        scope.mem_regions.points_to_facts.add((self.receiver.info.id + "." + index_string, "==", self.arguments[1].info.id))
+        scope.mem_regions.points_to_facts.add((self.receiver.info.id, "<", self.receiver.info.id + "." + index_string))
 
     def exprtype(self, scope):
         indexation = TupleIndexation(self.info, self.receiver, "_index", [self.arguments[0]])
@@ -1611,12 +1622,8 @@ class ClassMethodCall(MethodCall):
         scope.region.last_block.add_op(ary)
         return ary.results[0]
 
-    def apply_constraints(self, scope, behavior):
-        formal_constraints = behavior.constraints()
-        mapping = [*((str(i), arg.info.id) for (i, arg) in enumerate(self.arguments)), ("ret", self.info.id)]
-        mapping = {k:v for k,v in mapping}
-        formal_constraints.transform_with_mapping(mapping)
-        scope.mem_regions.points_to_facts = scope.mem_regions.points_to_facts.union(formal_constraints)
+    def additional_constraint_mappings(self):
+        return { "ret":self.info.id }
 
     def simple_exprtype(self, scope):
         
@@ -1633,9 +1640,9 @@ class ClassMethodCall(MethodCall):
         behavior_decl = behaviors[0]
         if any(isinstance(method.definition, AbstractMethodDef) for method in behavior_decl.methods):
             raise Exception(f"{self.info}: Class method {rec_typ.cls.data}.{self.method} has an abstract overload, and cannot be called directly.")
-        self.apply_constraints(scope, behaviors[0])
         broad = behavior_decl.broad_return_type()
         specialized = behavior_decl.specialized_return_type(rec_typ, arg_types, scope)
+        self.apply_constraints(scope, behaviors[0], specialized)
         return broad, specialized
 
     def exprtype(self, scope):
@@ -1814,19 +1821,9 @@ class ObjectCreation(Expression):
         return simplified_type
 
 @dataclass
-class Constraint(Node):
-    lhs: str
-    op: str
-    rhs: str
-
-    def __post_init__(self):
-        self.lhs = self.lhs.replace("@","self.")
-        self.rhs = self.rhs.replace("@","self.")
-
-@dataclass
 class ExternDef(Statement):
     name: str
-    constraints : List[Constraint]
+    constraints : Constraints
     params: List['VarDecl']
     arity: int
     _return_type: TypeAttribute
@@ -1855,7 +1852,7 @@ class ExternDef(Statement):
 @dataclass
 class FunctionDef(Statement):
     name: str
-    constraints : List[Constraint]
+    constraints : Constraints
     params: List['VarDecl']
     arity: int
     _return_type: TypeAttribute
@@ -1927,7 +1924,7 @@ class FunctionDef(Statement):
 @dataclass
 class MethodDef(Statement):
     name: str
-    constraints: List[Constraint]
+    constraints: Constraints
     type_params: List[TypeAttribute]
     params: List['VarDecl']
     arity: int
@@ -2023,33 +2020,42 @@ class MethodDef(Statement):
         if not self.hasreturn and self.return_type():
             raise Exception(f"{self.info}: Method declares return type {self.return_type()} yet has no return statement.")
 
+    def self_type_constraints(self):
+        return self.defining_class.all_constraints()
+
     def annotated_points_to_facts(self, body_scope, param_names):
-        annotated_facts = self.defining_class.all_constraints()
 
-        for meth in chain.from_iterable(m.overridden_methods() for m in body_scope.behavior.methods):
-            for c in meth.constraints:
-                # not robust to differently named parameters
-                annotated_facts.add((c.lhs, c.op, c.rhs))
+        # (self class + overridden methods + annotations + return type) constraints
 
-        for c in self.constraints:
+        # constraints from self class
+        annotated_facts = self.self_type_constraints()
+
+        # constraints from overridden methods
+        all_overridden_methods = chain.from_iterable(m.overridden_methods() for m in body_scope.behavior.methods)
+        # not robust to differently named parameters
+        annotated_facts = annotated_facts.union(*(m.constraints for m in all_overridden_methods))
+
+        # annotation constraints
+        for lhs, op, rhs in self.constraints._set:
             # ensures that overrides can have more precise (less conservative) constraints
-            if (c.lhs, "==", c.rhs) in annotated_facts:
-                annotated_facts.remove((c.lhs, "==", c.rhs))
-            if (c.rhs, "==", c.lhs) in annotated_facts:
-                annotated_facts.remove((c.rhs, "==", c.lhs))
-            if c.op == "==" and ((c.lhs, "<", c.rhs) in annotated_facts or (c.rhs, "<", c.lhs) in annotated_facts):
-                raise Exception(f"{self.info}: Constraint {c.lhs} {c.op} {c.rhs} is less precise than constraints from overridden methods.")
-            annotated_facts.add((c.lhs, c.op, c.rhs))
+            if (lhs, "==", rhs) in annotated_facts:
+                annotated_facts.remove((lhs, "==", rhs))
+            if (rhs, "==", lhs) in annotated_facts:
+                annotated_facts.remove((rhs, "==", lhs))
+            if op == "==" and ((lhs, "<", rhs) in annotated_facts or (rhs, "<", lhs) in annotated_facts):
+                raise Exception(f"{self.info}: Constraint {lhs} {op} {rhs} is less precise than constraints from overridden methods.")
+            annotated_facts.add((lhs, op, rhs))
 
+        # return type constraints
         original_method = (self, *self.overridden_methods())[-1]
         return_type = self.defining_class.type_env.simplify(original_method.return_type())
         return_cls = None
-        if isinstance(return_type, FatPtr): return_cls = body_scope.get_class(self.info, return_type)
+        if isinstance(return_type, FatPtr):
+            return_cls = body_scope.get_class(self.info, return_type)
         if isinstance(return_type, TypeParameter) and isinstance(return_type.bound, FatPtr):
             return_cls = body_scope.get_class(self.info, return_type.bound)
         if return_cls:
-            for lhs, op, rhs in return_cls.all_constraints()._set:
-                annotated_facts.add((lhs.replace("self","ret"), op, rhs.replace("self","ret")))
+            annotated_facts = annotated_facts.union(return_cls.all_constraints().map({"self":"ret"}))
 
         for name in param_names: annotated_facts.add((name, "==", name))
         return annotated_facts
@@ -2060,15 +2066,15 @@ class MethodDef(Statement):
         param_names = [*(param.name for param in self.params), *fields, *virtual_regions, "self"]
         if self.hasreturn: param_names.append("ret")
 
-        found_facts = body_scope.mem_regions.points_to_facts._set
-        annotated_facts = self.annotated_points_to_facts(body_scope, param_names)._set
+        found_facts = body_scope.mem_regions.points_to_facts
+        annotated_facts = self.annotated_points_to_facts(body_scope, param_names)
         name = f"{self.defining_class.name}.{self.name}"
 
         ok, comment = body_scope.mem_regions.compute_graph(found_facts, annotated_facts, param_names, name)
         if not ok: raise Exception(f"{self.info}: {comment}")
 
     def check_setter_num_params(self):
-        if self.name[0:5] != "_set_": return
+        if not self.name.startswith("_set_"): return
         if self.name == "_set_index":
             if len(self.params) > 1: return
             raise Exception(f"{self.info}: Index setter method []= must take at least two parameters (index and value), not {len(self.params)}")
@@ -2102,6 +2108,8 @@ class MethodDef(Statement):
 
     def typeflow(self, body_scope):
         self.check_setter_num_params()
+        cls_constraints = self.defining_class.all_constraints()
+        body_scope.mem_regions.points_to_facts = body_scope.mem_regions.points_to_facts.union(cls_constraints)
         self.body.typeflow(body_scope)
 
     def param_types(self):
@@ -2168,41 +2176,15 @@ class ClassMethodDef(MethodDef):
             body_scope.symbol_table[param.name] = cast.results[0]
             body_scope.type_table[param.name] = param_type
 
-    def annotated_points_to_facts(self, body_scope, param_names):
-        annotated_facts = ConstraintSet(set())
-
-        for meth in chain.from_iterable(m.overridden_methods() for m in body_scope.behavior.methods):
-            for c in meth.constraints:
-                # not robust to differently named parameters
-                annotated_facts.add((c.lhs, c.op, c.rhs))
-
-        for c in self.constraints:
-            # ensures that overrides can have more precise (less conservative) constraints
-            if (c.lhs, "==", c.rhs) in annotated_facts:
-                annotated_facts.remove((c.lhs, "==", c.rhs))
-            if (c.rhs, "==", c.lhs) in annotated_facts:
-                annotated_facts.remove((c.rhs, "==", c.lhs))
-            if c.op == "==" and ((c.lhs, "<", c.rhs) in annotated_facts or (c.rhs, "<", c.lhs) in annotated_facts):
-                raise Exception(f"{self.info}: Constraint {c.lhs} {c.op} {c.rhs} is less precise than constraints from overridden methods.")
-            annotated_facts.add((c.lhs, c.op, c.rhs))
-        return_cls = None
-        original_method = (self, *self.overridden_methods())[-1]
-        return_type = self.defining_class.type_env.simplify(original_method.return_type())
-        if isinstance(return_type, FatPtr): return_cls = body_scope.get_class(self.info, return_type)
-        if isinstance(return_type, TypeParameter) and isinstance(return_type.bound, FatPtr):
-            return_cls = body_scope.get_class(self.info, return_type.bound)
-        if return_cls:
-            for lhs, op, rhs in return_cls.all_constraints()._set:
-                annotated_facts.add((lhs.replace("self","ret"), op, rhs.replace("self","ret")))
-        for name in param_names: annotated_facts.add((name, "==", name))
-        return annotated_facts
+    def self_type_constraints(self):
+        return Constraints(set())
 
     def check_lifetime_constraints(self, body_scope):
         param_names = [param.name for param in self.params]
         if self.hasreturn: param_names.append("ret")
         G1, var_mapping1 = create_constraint_graph(body_scope.mem_regions.points_to_facts._set)
 
-        found_facts = body_scope.mem_regions.points_to_facts._set
+        found_facts = body_scope.mem_regions.points_to_facts
         annotated_facts = self.annotated_points_to_facts(body_scope, param_names)
         name = f"{self.defining_class.name}.{self.name}"
 
@@ -2221,7 +2203,7 @@ class ClassMethodDef(MethodDef):
             param.typeflow(body_scope)
 
     def initialize_points_to(self, body_scope):
-        body_scope.mem_regions.points_to_facts = ConstraintSet(set())
+        body_scope.mem_regions.points_to_facts = Constraints(set())
 
     def ensure_capitalization(self):
         if self.name[5].isupper():
@@ -2281,7 +2263,7 @@ class Method:
         self.enforce_override_rules(body_scope)
         self.definition.typeflow(body_scope)
         self.ensure_proper_init(body_scope)
-        #self.definition.check_lifetime_constraints(body_scope)
+        self.definition.check_lifetime_constraints(body_scope)
         self.definition.ensure_return_type(scope)
 
     def ensure_proper_init(self, body_scope):
@@ -2393,12 +2375,12 @@ class Method:
         return broad
 
     def constraints(self):
-        constraints = [*chain.from_iterable((self.definition.constraints, *(defn.constraints for defn in self.overridden_methods())))]
+        constraints = self.definition.constraints.union(*(defn.constraints for defn in self.overridden_methods()))
         if isinstance(self.definition, ClassMethodDef): return constraints
         for param in self.definition.params:
             if "@" not in param.name: continue
             node_info = NodeInfo(None, self.definition.info.filepath, self.definition.info.line_number)
-            constraints.append(Constraint(node_info, "self", "<", param.name))
+            constraints.add(("self", "<", param.name))
         return constraints
 
     def return_type(self):
@@ -2533,22 +2515,23 @@ class Behavior(Statement):
         return result
 
     def constraints(self):
-        constraints = ConstraintSet(set())
+        constraints = Constraints()
         for m in self.methods:
-            mapping = {param.name:str(i) for i,param in enumerate(m.definition.params)}
-            mapping["ret"] = "ret"
-            mapping["self"] = "self"
-            for c in m.constraints():
-                lhs_split = c.lhs.replace("self.","@").split(".")
+            mapping = {param.name:str(i) for i,param in enumerate(m.definition.params)} | {"ret":"ret", "self":"self"}
+            m_constraints = m.constraints()
+            constraints.all_alias = constraints.all_alias or m_constraints.all_alias
+            for lhs, op, rhs in m_constraints._set:
+                lhs_split = lhs.replace("self.","@").split(".")
                 lhs_additional = "@" in lhs_split[0]
                 lhs_split[0] = mapping[lhs_split[0]] if lhs_split[0] in mapping else lhs_split[0]
-                rhs_split = c.rhs.replace("self.","@").split(".")
+                rhs_split = rhs.replace("self.","@").split(".")
                 rhs_additional = "@" in rhs_split[0]
                 rhs_split[0] = mapping[rhs_split[0]] if rhs_split[0] in mapping else rhs_split[0]
-                constraint = Constraint(c.info, ".".join(lhs_split), c.op, ".".join(rhs_split))
-                constraints.add((constraint.lhs, constraint.op, constraint.rhs))
-                if lhs_additional: constraints.add((c.lhs, "==", constraint.lhs))
-                if rhs_additional: constraints.add((c.rhs, "==", constraint.rhs))
+                new_lhs = ".".join(lhs_split)
+                new_rhs = ".".join(rhs_split)
+                constraints.add((new_lhs, op, new_rhs))
+                if lhs_additional: constraints.add((lhs, "==", new_lhs))
+                if rhs_additional: constraints.add((rhs, "==", new_rhs))
         return constraints
 
     def __repr__(self):
@@ -2732,7 +2715,7 @@ class ClassDef(Statement):
     _ancestors: List[TypeAttribute]
     field_declarations: List["FieldDecl"]
     virtual_regions: List[str]
-    region_constraints: List[Constraint]
+    region_constraints: Constraints
     method_definitions: List[MethodDef]
     _behaviors: List[Behavior]
     _type_env: TypeEnvironment
@@ -2862,21 +2845,21 @@ class ClassDef(Statement):
         return pruned
 
     def all_constraints(self):
-        constraints = ConstraintSet(set())
+        constraints = Constraints()
         full_ordering = [self, *self.my_ordering()]
-        region_constraints = [*chain.from_iterable(cls.region_constraints for cls in full_ordering)]
+        region_constraints = [*chain.from_iterable(cls.region_constraints._set for cls in full_ordering)]
         virtual_regions = self.all_regions()
-        for c in region_constraints: constraints.add((c.lhs.replace("@","self."), c.op, c.rhs.replace("@","self.")))
-        for region in virtual_regions: constraints.add(("self", "<", region.replace("@","self.")))
+        for triple in region_constraints: constraints.add(triple)
+        for region in virtual_regions: constraints.add(("self", "<", region))
         fields = [field for field in self.fields() if not isinstance(field.declaration, TypeFieldDecl)]
         for field in fields:
-            constraints.add(("self", "<", field.declaration.name.replace("@","self.")))
+            constraints.add(("self", "<", field.declaration.name))
             field_type = field.type()
             # recursive, need to think more about how to handle this
             if self._type_env.subtype(self.type(), field_type): continue
             field_type_constraints = self._type_env.constraints_of(field_type)
-            mapping = {"self":field.declaration.name.replace("@","self.")}
-            field_type_constraints.transform_with_mapping(mapping)
+            mapping = {"self":field.declaration.name}
+            field_type_constraints = field_type_constraints.map(mapping)
             constraints = constraints.union(field_type_constraints)
         
         return constraints
