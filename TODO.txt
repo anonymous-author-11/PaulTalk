@@ -470,23 +470,14 @@ TODO:
 	- Problemo regarding Iterable method return types
 		- Can be solved with boilerplate
 
+- Class constraints of the returned value's concrete type should be added to the annotation graph
+
 - Add apply_constraints to fn literal call
 
 - Figure out a way to integrate ~> no_alias and ~> all_alias
 	- If all_alias, skip graph compatibility check
-
-- Big problemo: conservative aliasing in the presence of downcasts
-	- You could track which identifiers had been poisoned
-	- And propagate upon assignment
-	- Need to conservatively alias the downcast when poisoned
-	- Is this flow-sensitive?
-
-- When attempting to deallocate a region
-	- Increment the protection counts of all other known (live?) regions
-	- Attempt to remove the region
-	- Decrement the protection counts
-	- Now it doesn't matter if target region was aliased with any others
-	- Memory leak is a fine result for a non-annotated program
+	- Must wait until typeflow to determine if no annotation means all_alias
+		- Could inherit annotations from overrides
 
 - Simplest solution
 	- Upon any call to a non-annotated fn, mark the calling context as single-region
@@ -1129,6 +1120,13 @@ o’s region."
 
 - Should we embrace parameter-passing modes instead of value types?
 	- How the argument is taken is determined by the definition, not the caller
+
+- When attempting to deallocate a region
+	- Increment the protection counts of all other known (live?) regions
+	- Attempt to remove the region
+	- Decrement the protection counts
+	- Now it doesn't matter if target region was aliased with any others
+	- Memory leak is a fine result for a non-annotated program
 
 - Give option to specify either "alias[x < y, z == q]" or "no_alias[x < y, z != q]"
 	- Also for class contstraints

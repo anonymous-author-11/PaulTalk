@@ -216,12 +216,17 @@ def check_graph_compatibility(G1: DiGraph, var_mapping1, G2: DiGraph, var_mappin
             p1_rep_G1, p2_rep_G1 = var_mapping1[p1], var_mapping1[p2]
             p1_rep_G2, p2_rep_G2 = var_mapping2[p1], var_mapping2[p2]
 
-            # Use rustworkx.has_path, which requires integer indices
+            # --- MODIFIED LOGIC ---
+            # A path exists if the representatives are the same node, OR if rustworkx finds a path.
+            
             g1_idx1, g1_idx2 = G1._node_to_idx.get(p1_rep_G1), G1._node_to_idx.get(p2_rep_G1)
-            path_in_G1 = g1_idx1 is not None and g1_idx2 is not None and rx.has_path(G1._graph, g1_idx1, g1_idx2)
+            same_node_g1 = (p1_rep_G1 == p2_rep_G1)
+            path_in_G1 = same_node_g1 or (g1_idx1 is not None and g1_idx2 is not None and rx.has_path(G1._graph, g1_idx1, g1_idx2))
 
             g2_idx1, g2_idx2 = G2._node_to_idx.get(p1_rep_G2), G2._node_to_idx.get(p2_rep_G2)
-            path_in_G2 = g2_idx1 is not None and g2_idx2 is not None and rx.has_path(G2._graph, g2_idx1, g2_idx2)
+            same_node_g2 = (p1_rep_G2 == p2_rep_G2)
+            path_in_G2 = same_node_g2 or (g2_idx1 is not None and g2_idx2 is not None and rx.has_path(G2._graph, g2_idx1, g2_idx2))
+            # --- END MODIFIED LOGIC ---
 
             if path_in_G1 and not path_in_G2:
                 return False, f"Path from {p1} to {p2} exists in G1 but not in G2"

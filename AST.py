@@ -1933,6 +1933,7 @@ class MethodDef(Statement):
     body: BlockNode
     defining_class: 'ClassDef'
     hasreturn: bool
+    concrete_return_types: TypeAttribute
 
     @property
     def mangled_name(self):
@@ -2047,8 +2048,8 @@ class MethodDef(Statement):
             annotated_facts.add((lhs, op, rhs))
 
         # return type constraints
-        original_method = (self, *self.overridden_methods())[-1]
-        return_type = self.defining_class.type_env.simplify(original_method.return_type())
+        concrete_return_type = next((t for t in self.concrete_return_types if isinstance(t, FatPtr) or isinstance(t, TypeParameter)), None)
+        return_type = concrete_return_type or self.return_type()
         return_cls = None
         if isinstance(return_type, FatPtr):
             return_cls = body_scope.get_class(self.info, return_type)
@@ -3617,6 +3618,7 @@ class ReturnValue(Return):
             raise Exception(f"{self.info}: returned value of invalid type: {ret_typ}. Should be subtype of {scope.method.return_type()}.")
         scope.mem_regions.points_to_facts.add(("ret", "==", self.value.info.id))
         scope.method.definition.hasreturn = True
+        scope.method.definition.concrete_return_types.append(ret_typ)
         self.untype_variables(scope)
 
 @dataclass

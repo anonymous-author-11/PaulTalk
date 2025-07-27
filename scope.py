@@ -491,31 +491,38 @@ class MemRegions:
     def compute_graph(self, found_facts, annotated_facts, param_names, name):
 
         G1, var_mapping1 = create_constraint_graph(found_facts.final()._set)
-
-        param_names = {*chain.from_iterable([var for var in var_mapping1 if var == param or var.startswith(f"{param}.")] for param in param_names)}
+        G0, var_mapping0 = create_constraint_graph(annotated_facts._set)
 
         if annotated_facts.all_alias:
             ok, comment = True, "Skip compatibility check"
             self.assign_regions(var_mapping1, param_names)
             return ok, comment
 
-        G0, var_mapping0 = create_constraint_graph(annotated_facts._set)
-        
-        #visualize_graph_transformation(G1, var_mapping1, param_names)
-        print(f"Original Points-to graph for {name}:")
-        print(pretty_print_graph(G1, var_mapping1, param_names))
-        print(f"Original Annotation graph for {name}:")
-        print(pretty_print_graph(G0, var_mapping0, param_names))
+        # Use the initial param_names for the transformation
+        initial_param_names = {p for p in param_names}
 
-        G0, var_mapping0 = transform_until_stable(G0, var_mapping0, param_names)
-        G1, var_mapping1 = transform_until_stable(G1, var_mapping1, param_names)
-        print(f"Transformed Points-to graph for {name}:")
-        print(pretty_print_graph(G1, var_mapping1, param_names))
-        print(f"Transformed Annotation graph for {name}:")
-        print(pretty_print_graph(G0, var_mapping0, param_names))
+        G0, var_mapping0 = transform_until_stable(G0, var_mapping0, initial_param_names)
+        G1, var_mapping1 = transform_until_stable(G1, var_mapping1, initial_param_names)
 
-        ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, param_names)
-        if ok: self.assign_regions(var_mapping1, param_names)
+        # --- FIX: Re-expand the parameter set using the FINAL variable mappings ---
+        # This new set will include variables like 'ret.elems_reg' created during transformation.
+        all_vars = set(var_mapping0.keys()) | set(var_mapping1.keys())
+        final_param_names = {var for var in all_vars if any(var == p or var.startswith(f"{p}.") for p in initial_param_names)}
+
+        #print(f"Initial discovered points-to graph for {name}:")
+        #print(pretty_print_graph(G1, var_mapping1, final_param_names))
+        #print(f"Initial annotation-specified graph for {name}:")
+        #print(pretty_print_graph(G0, var_mapping0, final_param_names))
+
+        G0, var_mapping0 = transform_until_stable(G0, var_mapping0, final_param_names)
+        G1, var_mapping1 = transform_until_stable(G1, var_mapping1, final_param_names)
+        print(f"Final discovered points-to graph for {name}:")
+        print(pretty_print_graph(G1, var_mapping1, final_param_names))
+        print(f"Final annotation-specified graph for {name}:")
+        print(pretty_print_graph(G0, var_mapping0, final_param_names))
+
+        ok, comment = check_graph_compatibility(G1, var_mapping1, G0, var_mapping0, final_param_names)
+        if ok: self.assign_regions(var_mapping1, final_param_names)
         return ok, comment
 
 class CompilationUnit:
