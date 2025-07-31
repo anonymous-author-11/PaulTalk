@@ -457,32 +457,83 @@ DONE:
 	- Fix bump_malloc [check!]
 	- Lazily constructed exception messages [check!] [reverted in 0.4.*]
 
-TODO: 
+TODO:
+
+- Idea: have scope.get_region(name)
+	- Will create region if not already existing
+	- Will return handle to region if already created
+	- Multiple names can map to the same region
+
+- Liveness analysis
+	- Backwards pass twice over ast
+		- We need two passes because ...
+	- For each identifier, mark when it becomes live and when used
+		- Becomes live:
+			- vardecl (including params) or assignment
+			- fields + self at beginning of method
+		- Use
+			- Reciever or argument to call
+			- Operand in binary op
+			- rhs in assignment
+			- returned value
+		- Live at end of method
+			- self and fields
+			- retured value
+	- Maybe put a .free method in vtable to recursively .free fields
+		- Since the fields won't be known statically
+		- Except that an object doesn't 'own' its fields
+		- Unknown fields are 
+
+- Contract: each method / function has "freeing responsibilities"
+	- Which are limited to the static knowledge is has, from the POV of the caller
+	- I.e. types in signature + annotations
+	- Overrides only have the freeing responsibilities of the overidden method
+	- Anything not covered by the freeing responsibility of the callee must be handled by the caller
+	- Internal downcasts will show up in the annotations
+
+- Any local regions pointed to by a parameter region must be merged with the pointee
+	- This should happen after compatibility checking; before region assignment
+
+- Add more concise alias annotations
+	- a holds (b, c)
+	- a == b == c
+	- (a, b) holds c
+
+- Add apply_constraints to fn literal call
+- Apply constraints upon downcast
+
+- We need to determine when to infer all_alias [check!]
+	- If the constraint set is empty AND no_alias is NOT specified [check!]
+- Mark .init methods as no_alias by default [check!]
+- Propagate all_alias on function / method call [check!]
+- Only print points-to graphs on error [check!]
 
 - Points-to analysis
 	- Exclude trivial value types from the graphs in apply_constraints [check!]
-	- Add conservative aliasing by default
+	- Add conservative aliasing by default [check!]
+		- For .annotated_facts and .constraints [check!]
 	- Reform tuple and buffer points-to-facts [check!]
 		- Tuple: add pseudo-fields [check!]
 		- Buffer [check!]
 			- holds rather than == [check!]
 			- No more .elems_reg [check!]
-	- Problemo regarding Iterable method return types
-		- Can be solved with boilerplate
+	- Problemo regarding Iterable method return types [check!]
+		- Can be solved with boilerplate [check!]
+	- What if just on downcast we set all fields equal to the holder?
+		- Or no, only the newly exposed fields
 
-- Class constraints of the returned value's concrete type should be added to the annotation graph
-
-- Add apply_constraints to fn literal call
+- Class constraints of the returned value's concrete type should be added to the annotation graph [check!]
 
 - Figure out a way to integrate ~> no_alias and ~> all_alias
 	- If all_alias, skip graph compatibility check
-	- Must wait until typeflow to determine if no annotation means all_alias
-		- Could inherit annotations from overrides
+		- Incorporate in override check as well
+	- Must wait until typeflow to determine if no annotation means all_alias [check!]
+		- Could inherit annotations from overrides [check!]
 
-- Simplest solution
-	- Upon any call to a non-annotated fn, mark the calling context as single-region
-	- Proceed as if there had been no aliasing
-	- At end of context, merge all the nodes into one
+- Simplest solution [check!]
+	- Upon any call to a non-annotated fn, mark the calling context as all_alias [check!]
+	- Proceed as if there had been no aliasing [check!]
+	- At end of context, merge all the nodes into one [check!]
 
 - I shouldn't have to have empty bodies for methods
 	- But I would like one required if there are constraints
