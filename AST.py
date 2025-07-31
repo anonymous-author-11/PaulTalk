@@ -3616,7 +3616,8 @@ class ReturnValue(Return):
         matches = scope.matches(ret_typ, meth_ret_type)
         if not (direct_subtype or matches):
             raise Exception(f"{self.info}: returned value of invalid type: {ret_typ}. Should be subtype of {scope.method.return_type()}.")
-        scope.mem_regions.points_to_facts.add(("ret", "==", self.value.info.id))
+        if not is_value_type(ret_typ):
+            scope.mem_regions.points_to_facts.add(("ret", "==", self.value.info.id))
         scope.method.definition.hasreturn = True
         scope.method.definition.concrete_return_types.append(ret_typ)
         self.untype_variables(scope)
