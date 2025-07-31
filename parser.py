@@ -242,7 +242,7 @@ class CSTTransformer(Transformer):
         return list(params)
 
     def no_alias(self, token):
-        return Constraints()
+        return Constraints(no_alias=True)
 
     def all_alias(self, token):
         return Constraints(all_alias=True)
