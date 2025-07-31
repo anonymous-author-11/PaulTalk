@@ -274,7 +274,7 @@ class String extends List[Character], Representable {
     }
     def iterator() -> ConstantTimeIterator[Character] {
         return StringIterator{self};
-    }
+    } ~> { ret.str == self }
     def repr() -> String {
         return self;
     }

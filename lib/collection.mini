@@ -12,27 +12,27 @@ class Collection[T] extends Iterable[T] {
 
     def enumerate() -> EnumeratedCollection[T] {
         return EnumeratedCollection{self};
-    } ~> { ret.iterable == self }
+    }
     
     def map[U](f : (T) -> U) -> MappedCollection[T, U] {
         return MappedCollection{self, f};
-    } ~> { ret.iterable == self, ret.f == f }
+    }
     
     def chain(other : Collection[T]) -> ChainedCollection[T] {
         return ChainedCollection{self, other};
-    } ~> { ret.first == self, ret.second == other }
+    }
     
     def interleave(other : Collection[T]) -> InterleavedCollection[T] {
         return InterleavedCollection{self, other};
-    } ~> { ret.first == self, ret.second == other }
+    }
     
     def zip[U](other : Collection[U]) -> ZippedCollection[T, U] {
         return ZippedCollection{self, other};
-    } ~> { ret.first == self, ret.second == other }
+    }
     
     def product[U](other : Collection[U]) -> ProductCollection[T, U] {
         return ProductCollection{self, other};
-    } ~> { ret.first == self, ret.second == other }
+    }
 }
 
 class WrappedCollection[T] extends Wrapping[T] {
