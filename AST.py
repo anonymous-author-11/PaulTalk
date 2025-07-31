@@ -2854,13 +2854,13 @@ class ClassDef(Statement):
         for region in virtual_regions: constraints.add(("self", "<", region))
         fields = [field for field in self.fields() if not isinstance(field.declaration, TypeFieldDecl)]
         for field in fields:
-            constraints.add(("self", "<", field.declaration.name))
             field_type = field.type()
+            if is_value_type(field_type): continue
+            constraints.add(("self", "<", field.declaration.name))
+            
             # recursive, need to think more about how to handle this
             if self._type_env.subtype(self.type(), field_type): continue
-            field_type_constraints = self._type_env.constraints_of(field_type)
-            mapping = {"self":field.declaration.name}
-            field_type_constraints = field_type_constraints.map(mapping)
+            field_type_constraints = self._type_env.constraints_of(field_type).map({"self":field.declaration.name})
             constraints = constraints.union(field_type_constraints)
         
         return constraints
