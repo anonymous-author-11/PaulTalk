@@ -91,6 +91,10 @@ def is_value_type(typ):
     value_types = { Integer, Float, Bool, Nil }
     for t in value_types:
         if isinstance(typ, t): return True
+    if isinstance(typ, Tuple):
+        return all(is_value_type(t) for t in typ.types.data)
+    if isinstance(typ, Union):
+        return all(is_value_type(t) for t in typ.types.data)
     return False
 
 builtin_types = {
