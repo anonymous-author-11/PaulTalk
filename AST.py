@@ -11,7 +11,7 @@ from mid import *
 import hi
 import mid
 from utils import *
-from scope import Scope, Constraints, TypeEnvironment, MemRegions, ScopeExit
+from scope import Scope, Constraints, TypeEnvironment, MemRegions, ScopeExit, PointsToGraph
 from method_dispatch import *
 from xdsl.dialects import llvm, arith, builtin, memref, cf, func
 from xdsl.ir import Block, Region, TypeAttribute
@@ -695,9 +695,9 @@ class TupleLiteral(Expression):
 
     def apply_constraints(self, scope):
         for i, elem in enumerate(self.elems):
-            index_string = self.receiver.info.id + "." + str(i)
+            index_string = self.info.id + "." + str(i)
             scope.mem_regions.points_to_facts.add((index_string, "==", elem.info.id))
-            scope.mem_regions.points_to_facts.add((self.receiver.info.id, "<", index_string))
+            scope.mem_regions.points_to_facts.add((self.info.id, "<", index_string))
 
     def typeflow(self, scope):
         self.exprtype(scope)
@@ -1202,18 +1202,30 @@ class FunctionCall(Expression):
             if(scope.subtype(self.arguments[i].exprtype(scope), param.type(scope.type_env))): continue
             raise Exception(f"{self.info}: argument type {self.arguments[i].exprtype(scope)} not subtype of declared parameter type {param.type(scope.type_env)} for parameter {param.name}")
 
-    def apply_constraints(self, scope):
+    def apply_constraints(self, scope, ret_type):
         func = scope.get_function(self.info, self.function)
-        formal_constraints = Constraints(set(func.constraints))
+        formal_constraints = func.constraints
         mapping = {param.name:arg.info.id for param, arg in zip(func.params, self.arguments)} | {"ret":self.info.id}
         formal_constraints = formal_constraints.map(mapping)
+
+        arg_types = [arg.exprtype(scope) for arg in self.arguments]
+        types = (ret_type, *arg_types)
+
+        if len(types) == 0 or all(is_value_type(t) for t in types): return
+
+        if formal_constraints.all_alias:
+            scope.mem_regions.points_to_facts.all_alias = True
+            #print(f"{self.info} call to .{self.method} poisons the calling context")
+            return
+
         scope.mem_regions.points_to_facts = scope.mem_regions.points_to_facts.union(formal_constraints)
 
     def exprtype(self, scope):
         self.ensure_declared(scope)
         self.ensure_valid_arg_types(scope)
-        self.apply_constraints(scope)
-        return scope.get_function(self.info, self.function).return_type()
+        ret_type = scope.get_function(self.info, self.function).return_type()
+        self.apply_constraints(scope, ret_type)
+        return ret_type
 
     def typeflow(self, scope):
         self.exprtype(scope)
@@ -1292,10 +1304,14 @@ class MethodCall(Expression):
         return { "ret":self.info.id, "self":self.receiver.info.id }
 
     def apply_constraints(self, scope, behavior, specialized):
+        arg_types = [arg.exprtype(scope) for arg in self.arguments]
+        types = (specialized, *arg_types)
+        if len(types) == 0 or all(is_value_type(t) for t in types): return
+
         formal_constraints = behavior.constraints()
         if self.method == "init":
             formal_constraints = formal_constraints.union(behavior.cls.all_constraints())
-        if specialized:
+        if specialized and not is_value_type(specialized):
             return_constraints = scope.type_env.constraints_of(specialized).map({"self":"ret"})
             formal_constraints = formal_constraints.union(return_constraints)
 
@@ -1304,8 +1320,15 @@ class MethodCall(Expression):
         formal_constraints = formal_constraints.map(mapping)
 
         # Exclude trivial value types from alias graph
-        value_type_names = {arg.info.id for arg in self.arguments if is_value_type(arg.exprtype(scope))}
+        
+        value_type_names = {arg.info.id for (arg, arg_t) in zip(self.arguments, arg_types) if is_value_type(arg_t)}
+        if specialized and is_value_type(specialized): value_type_names.add("ret")
         formal_constraints = formal_constraints.prune(value_type_names)
+
+        if formal_constraints.all_alias:
+            scope.mem_regions.points_to_facts.all_alias = True
+            #print(f"{self.info} call to .{self.method} poisons the calling context")
+            return
 
         scope.mem_regions.points_to_facts = scope.mem_regions.points_to_facts.union(formal_constraints)
 
@@ -1428,6 +1451,10 @@ class FunctionLiteralCall(MethodCall):
         if len(call_op.results) == 0: return
         return call_op.results[0]
 
+    def apply_constraints(self, scope):
+        return
+        #scope.mem_regions.points_to_facts.all_alias = True
+
     def exprtype(self, scope):
         rec_typ = self.receiver.exprtype(scope)
         if self.method != "call":
@@ -1437,6 +1464,7 @@ class FunctionLiteralCall(MethodCall):
         for i, param in enumerate(rec_typ.param_types.data):
             if not scope.subtype(self.arguments[i].exprtype(scope), param):
                 raise Exception(f"{self.info}: argument type {self.arguments[i].exprtype(scope)} not subtype of declared parameter type {param} for parameter #{i + 1}")
+        self.apply_constraints(scope)
         return None if rec_typ.return_type == Nothing() else rec_typ.return_type
 
     def typeflow(self, scope):
@@ -1716,6 +1744,9 @@ class ObjectCreation(Expression):
 
     def codegen(self, scope):
 
+        #if not self.region:
+        #    raise Exception(f"{self.info}: not assigned to a region")
+
         self_type = self.exprtype(scope)
         input_types = [arg.exprtype(scope) for arg in self.arguments]
         inputs = [arg.codegen(scope) for arg in self.arguments]
@@ -1924,7 +1955,7 @@ class FunctionDef(Statement):
 @dataclass
 class MethodDef(Statement):
     name: str
-    constraints: Constraints
+    _constraints: Constraints
     type_params: List[TypeAttribute]
     params: List['VarDecl']
     arity: int
@@ -2017,6 +2048,10 @@ class MethodDef(Statement):
         if isinstance(self, AbstractMethodDef): overridden_methods = [x for x in overridden_methods if isinstance(x, AbstractMethodDef)]
         return overridden_methods
 
+    def widely_overridden_methods(self):
+        behavior = next(b for b in self.defining_class.behaviors if b.name == self.name and b.arity == self.arity)
+        return [*chain.from_iterable(m.definition.overridden_methods() for m in behavior.methods)]
+
     def ensure_return_type(self, scope):
         if not self.hasreturn and self.return_type():
             raise Exception(f"{self.info}: Method declares return type {self.return_type()} yet has no return statement.")
@@ -2024,20 +2059,15 @@ class MethodDef(Statement):
     def self_type_constraints(self):
         return self.defining_class.all_constraints()
 
-    def annotated_points_to_facts(self, body_scope, param_names):
-
-        # (self class + overridden methods + annotations + return type) constraints
-
-        # constraints from self class
-        annotated_facts = self.self_type_constraints()
-
+    @property
+    def constraints(self):
         # constraints from overridden methods
-        all_overridden_methods = chain.from_iterable(m.overridden_methods() for m in body_scope.behavior.methods)
         # not robust to differently named parameters
-        annotated_facts = annotated_facts.union(*(m.constraints for m in all_overridden_methods))
+        annotated_facts = Constraints(all_alias=self._constraints.all_alias, no_alias=self._constraints.no_alias)
+        annotated_facts = annotated_facts.union(*(m._constraints for m in self.widely_overridden_methods()))
 
         # annotation constraints
-        for lhs, op, rhs in self.constraints._set:
+        for lhs, op, rhs in self._constraints._set:
             # ensures that overrides can have more precise (less conservative) constraints
             if (lhs, "==", rhs) in annotated_facts:
                 annotated_facts.remove((lhs, "==", rhs))
@@ -2046,6 +2076,22 @@ class MethodDef(Statement):
             if op == "==" and ((lhs, "<", rhs) in annotated_facts or (rhs, "<", lhs) in annotated_facts):
                 raise Exception(f"{self.info}: Constraint {lhs} {op} {rhs} is less precise than constraints from overridden methods.")
             annotated_facts.add((lhs, op, rhs))
+
+        # If there are no annotations on this method or any of its overidden methods, mark as all_alias
+        if (not self.name == "init") and (not annotated_facts.no_alias) and len(annotated_facts._set) == 0:
+            #print(f"inferring that {self.defining_class.name}.{self.name} is all_alias")
+            annotated_facts.all_alias = True
+
+        return annotated_facts
+
+    def annotated_points_to_facts(self, body_scope, param_names):
+
+        # (self class + overridden methods + annotations + return type) constraints
+
+        initial_constraints = self.constraints if not self._constraints.no_alias else self._constraints
+
+        # constraints from self class
+        annotated_facts = initial_constraints.union(self.self_type_constraints())
 
         # return type constraints
         concrete_return_type = next((t for t in self.concrete_return_types if isinstance(t, FatPtr) or isinstance(t, TypeParameter)), None)
@@ -2061,18 +2107,90 @@ class MethodDef(Statement):
         for name in param_names: annotated_facts.add((name, "==", name))
         return annotated_facts
 
-    def check_lifetime_constraints(self, body_scope):
+    def overridden_facts(self, body_scope, param_names):
+        all_overridden_methods = [*chain.from_iterable(m.definition.overridden_methods() for m in body_scope.behavior.methods)]
+        class_constraints = (m.self_type_constraints() for m in all_overridden_methods)
+        method_constraints = (m.constraints for m in all_overridden_methods)
+        overridden_facts = Constraints().union(*method_constraints, *class_constraints)
+        # return type constraints
+        for m in all_overridden_methods:
+            return_type = m.return_type()
+            return_cls = None
+            if isinstance(return_type, FatPtr):
+                return_cls = body_scope.get_class(self.info, return_type)
+            if isinstance(return_type, TypeParameter) and isinstance(return_type.bound, FatPtr):
+                return_cls = body_scope.get_class(self.info, return_type.bound)
+            if return_cls:
+                overridden_facts = overridden_facts.union(return_cls.all_constraints().map({"self":"ret"}))
+
+        return overridden_facts
+
+    def check_override_lifetime_constraints(self, body_scope, annotated_graph, param_names, name):
+        all_overridden_methods = [*chain.from_iterable(m.definition.overridden_methods() for m in body_scope.behavior.methods)]
+        if len(all_overridden_methods) < 1: return
+        
+        overridden_facts = self.overridden_facts(body_scope, param_names)
+        overridden_graph = PointsToGraph(overridden_facts, param_names)
+        overridden_graph.transform_until_stable()
+        annotated_graph.transform_until_stable()
+        
+        ok, comment = annotated_graph.is_covered_by(overridden_graph)
+        if ok: return
+
+        print(f"Overidden methods points-to graph for {name}:")
+        overridden_graph.print()
+        print(f"Annotation-specified graph for {name}:")
+        annotated_graph.print()
+        raise Exception(f"{self.info}: Override check-- {comment}")
+
+    def pointsto_param_names(self):
         fields = [field.declaration.name for field in self.defining_class.fields() if not isinstance(field.declaration, TypeFieldDecl)]
         virtual_regions = [reg.replace("@","self.") for reg in self.defining_class.all_regions()]
         param_names = [*(param.name for param in self.params), *fields, *virtual_regions, "self"]
         if self.hasreturn: param_names.append("ret")
+        return param_names
 
+    def check_lifetime_constraints(self, body_scope):
+        
+        param_names = self.pointsto_param_names()
+        
         found_facts = body_scope.mem_regions.points_to_facts
+
+        #if found_facts.all_alias:
+            #print(f"{self.defining_class.name}.{self.name} was discovered to be all_alias")
+
         annotated_facts = self.annotated_points_to_facts(body_scope, param_names)
         name = f"{self.defining_class.name}.{self.name}"
 
-        ok, comment = body_scope.mem_regions.compute_graph(found_facts, annotated_facts, param_names, name)
-        if not ok: raise Exception(f"{self.info}: {comment}")
+        annotated_graph = PointsToGraph(annotated_facts, param_names)
+        discovered_graph = PointsToGraph(found_facts, param_names)
+
+        self.check_override_lifetime_constraints(body_scope, annotated_graph, param_names, name)
+
+        if annotated_facts.all_alias:
+            body_scope.mem_regions.assign_regions(discovered_graph.var_mapping, param_names)
+            return
+
+        discovered_graph.transform_until_stable()
+        annotated_graph.transform_until_stable()
+
+        print(f"Final discovered points-to graph for {name}:")
+        discovered_graph.print()
+        print(f"Final annotation-specified graph for {name}:")
+        annotated_graph.print()
+
+        ok, comment = discovered_graph.is_approximated_by(annotated_graph)
+
+        if ok:
+            body_scope.mem_regions.assign_regions(discovered_graph.var_mapping, param_names)
+            return
+
+        print(f"Final discovered points-to graph for {name}:")
+        discovered_graph.print()
+        print(f"Final annotation-specified graph for {name}:")
+        annotated_graph.print()
+
+        raise Exception(f"{self.info}: {comment}")
 
     def check_setter_num_params(self):
         if not self.name.startswith("_set_"): return
@@ -2109,7 +2227,7 @@ class MethodDef(Statement):
 
     def typeflow(self, body_scope):
         self.check_setter_num_params()
-        cls_constraints = self.defining_class.all_constraints()
+        cls_constraints = self.self_type_constraints()
         body_scope.mem_regions.points_to_facts = body_scope.mem_regions.points_to_facts.union(cls_constraints)
         self.body.typeflow(body_scope)
 
@@ -2178,19 +2296,12 @@ class ClassMethodDef(MethodDef):
             body_scope.type_table[param.name] = param_type
 
     def self_type_constraints(self):
-        return Constraints(set())
+        return Constraints()
 
-    def check_lifetime_constraints(self, body_scope):
+    def pointsto_param_names(self):
         param_names = [param.name for param in self.params]
         if self.hasreturn: param_names.append("ret")
-        G1, var_mapping1 = create_constraint_graph(body_scope.mem_regions.points_to_facts._set)
-
-        found_facts = body_scope.mem_regions.points_to_facts
-        annotated_facts = self.annotated_points_to_facts(body_scope, param_names)
-        name = f"{self.defining_class.name}.{self.name}"
-
-        ok, comment = body_scope.mem_regions.compute_graph(found_facts, annotated_facts, param_names, name)
-        if not ok: raise Exception(f"{self.info}: {comment}")
+        return param_names
 
     def setup_init(self, body_scope):
         if self.name == "init":
@@ -2204,7 +2315,7 @@ class ClassMethodDef(MethodDef):
             param.typeflow(body_scope)
 
     def initialize_points_to(self, body_scope):
-        body_scope.mem_regions.points_to_facts = Constraints(set())
+        body_scope.mem_regions.points_to_facts = Constraints()
 
     def ensure_capitalization(self):
         if self.name[5].isupper():
@@ -2380,7 +2491,8 @@ class Method:
         if isinstance(self.definition, ClassMethodDef): return constraints
         for param in self.definition.params:
             if "@" not in param.name: continue
-            node_info = NodeInfo(None, self.definition.info.filepath, self.definition.info.line_number)
+            param_type = param.type(self.type_env)
+            if is_value_type(param_type): continue
             constraints.add(("self", "<", param.name))
         return constraints
 
