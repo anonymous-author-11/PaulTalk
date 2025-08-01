@@ -459,6 +459,31 @@ DONE:
 
 TODO:
 
+- Build workflow
+	- set CCFLAGS="/O2 /Ob3"
+	- run nuitka command
+	- add + commit + push all the changes
+		- git add -A
+		- git commit -m "Rebuild for version 0.x.x"
+		- git push origin main
+	- Make temp_branch
+		- git checkout --orphan "temp_branch"
+		- git add ptalk.dist
+		- git commit -m "Version 0.x.x"
+		- git push origin temp_branch
+		- git switch main
+	- gh release create "v0.x.x" --target "temp_branch" --notes "Release for version 0.x.x."
+	- delete temp_branch
+		- git branch -D temp_branch
+		- git push origin --delete temp_branch
+	- Update 0install feed
+		- add new implementation to ptalk.xml
+			- Good old textual replacement
+		- 0publish ptalk.xml --add-missing
+		- 0publish ptalk.xml --xmlsign (with password)
+		- git commit -m "Update ptalk.xml feed"
+		- git push origin main
+
 - Idea: have scope.get_region(name)
 	- Will create region if not already existing
 	- Will return handle to region if already created
