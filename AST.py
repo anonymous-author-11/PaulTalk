@@ -125,19 +125,20 @@ class NodeInfo:
         return self.line_number
 
     @property
+    def source_line(self):
+        with open(self.filepath, "r") as f: lines = f.readlines()
+        return lines[self.line - 1]
+
+    @property
     def id(self):
         if not self._id: self._id = random_letters(10)
         return self._id
 
     def __repr__(self):
-        with open(self.filepath, "r") as f: lines = f.readlines()
-        line = lines[self.line - 1]
-        return f"{line}\n\nFile {self.filepath.name}, line {self.line}"
+        return f"{self.source_line}\n\nFile {self.filepath.name}, line {self.line}"
 
     def __format__(self, format_spec):
-        with open(self.filepath, "r") as f: lines = f.readlines()
-        line = lines[self.line - 1]
-        return f"{line}\n\nFile {self.filepath.name}, line {self.line}"
+        return f"{self.source_line}\n\nFile {self.filepath.name}, line {self.line}"
 
 @dataclass
 class Node:
