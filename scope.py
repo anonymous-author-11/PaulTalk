@@ -504,6 +504,30 @@ class PointsToGraph:
         self.var_mapping = var_mapping
         self.param_names = param_names.copy()
         self.is_stable = False
+
+    @property
+    def regions(self):
+        return [v for v in self.var_mapping.values()]
+
+    # return the list of all node id's that keep this region alive
+    def pointers(self, region):
+        pointer_regions = {*self.graph.ancestors(region)}
+        return [k for k,v in self.var_mapping.items() if v in pointer_regions]
+
+    # a region is live if anything pointing to the region is live
+    def is_live(self, region, live_tbl):
+        return any(p in live_tbl and live_tbl[p] for p in self.pointers(region))
+
+    def region_liveness(self, live_tbl):
+        return { self.region_name(reg):self.is_live(reg, live_tbl) for reg in self.regions }
+
+    def region_name(self, region):
+        labels = [k for k, v in self.var_mapping.items() if v == region]
+        if len(labels) == 0: return None
+        param_labels = sorted(label for label in labels if label in self.param_names)
+        other_labels = sorted(label for label in labels if label not in self.param_names)
+        sorted_labels = [*param_labels, *other_labels]
+        return next(iter(sorted_labels))
         
     def transform_until_stable(self):
         if self.is_stable: return

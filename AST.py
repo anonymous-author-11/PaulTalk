@@ -153,16 +153,72 @@ class Node:
 
 @dataclass
 class Statement(Node):
-    pass
+    
+    def liveness(self, live_tbl, points_to_graph):
+        return live_tbl
 
 @dataclass
 class BlockNode(Node):
     statements: List[Statement]
 
     def codegen(self, scope):
-        for stmt in self.statements: stmt.codegen(scope)
+        for stmt in self.statements:
+            stmt.codegen(scope)
+
+    # insert region creation / removal statements via backward liveness analysis
+    def liveness(self, live_tbl, points_to_graph):
+
+        print("running liveness of block node")
+        new_stmts = []
+        for stmt in reversed(self.statements):
+            before_tbl = stmt.liveness(live_tbl, points_to_graph)
+            after_liveness = points_to_graph.region_liveness(live_tbl)
+            before_liveness = points_to_graph.region_liveness(before_tbl)
+
+            print(stmt.info.source_line)
+            print(f"before region liveness: {before_liveness}")
+            print(f"after region liveness: {after_liveness}")
+
+            if isinstance(stmt, NewScope):
+                new_stmts.append(stmt)
+                live_tbl = before_tbl
+                continue
+            
+            # Rule 1: region is alive before stmt and dead after: insert 'remove r' after stmt
+            killed_regions = [k for k, v in after_liveness.items() if before_liveness[k] and not after_liveness[k]]
+            for reg in killed_regions:
+                if isinstance(stmt, Return): break
+                remove_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+                reg_name = points_to_graph.region_name(reg)
+                if not reg_name: continue
+                remove_stmt = RemoveRegion(remove_info, reg_name)
+                new_stmts.append(remove_stmt)
+
+            new_stmts.append(stmt)
+
+            # Rule 2: region is dead before stmt and alive after: insert 'create r' before stmt
+            gen_regions = [k for k, v in after_liveness.items() if after_liveness[k] and not before_liveness[k]]
+            for reg in gen_regions:
+                create_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+                reg_name = points_to_graph.region_name(reg)
+                if not reg_name: continue
+                create_stmt = CreateRegion(create_info, reg_name)
+                new_stmts.append(create_stmt)
+
+            # update liveness table
+            live_tbl = before_tbl
+
+        self.statements = [*reversed(new_stmts)]
+        return live_tbl
+
+    def liveness_dry(self, live_tbl, points_to_graph):
+        for stmt in reversed(self.statements): live_tbl = stmt.liveness(live_tbl, points_to_graph)
+        return live_tbl
+
     def typeflow(self, scope):
-        for stmt in self.statements: stmt.typeflow(scope)
+        for stmt in self.statements:
+            stmt.typeflow(scope)
+
 @dataclass
 class NewScope(BlockNode, Statement):
 
@@ -270,12 +326,21 @@ class Expression(Node):
     @property
     def subexpressions(self):
         return set()
+
+    @property
+    def used_ids(self):
+        used = set.union({self.info.id}, *(subexpr.used_ids for subexpr in self.subexpressions))
+        return {id.replace("@", "self.") for id in used}
+
     def __hash__(self):
         return hash(id(self))
 
 @dataclass
 class ExpressionStatement(Statement):
     expr : Expression
+
+    def liveness(self, live_tbl, points_to_graph):
+        return live_tbl | {id:True for id in self.expr.used_ids}
 
     def codegen(self, scope):
         self.expr.codegen(scope)
@@ -2265,6 +2330,9 @@ class MethodDef(Statement):
         if self.hasreturn: param_names.append("ret")
         return param_names
 
+    def live_at_return(self):
+        return {"self":True}
+
     def check_lifetime_constraints(self, body_scope):
         
         param_names = self.pointsto_param_names()
@@ -2298,6 +2366,8 @@ class MethodDef(Statement):
 
         if ok:
             body_scope.mem_regions.assign_regions(discovered_graph.var_mapping, param_names)
+            live_tbl = {k:False for k,v in discovered_graph.var_mapping.items()} | self.live_at_return()
+            self.body.liveness(live_tbl, discovered_graph)
             return
 
         print(f"Final discovered points-to graph for {name}:")
@@ -2431,6 +2501,9 @@ class ClassMethodDef(MethodDef):
 
     def initialize_points_to(self, body_scope):
         body_scope.mem_regions.points_to_facts = Constraints()
+
+    def live_at_return(self):
+        return {}
 
     def ensure_capitalization(self):
         if self.name[5].isupper():
@@ -3307,6 +3380,9 @@ class VarDecl(Statement):
     def __post_init__(self):
         self.info = NodeInfo(self.name, self.info.filepath, self.info.line_number)
 
+    def liveness(self, live_tbl, points_to_graph):
+        return live_tbl | { self.name : False }
+
     def codegen(self, scope):
         scope.type_table[self.name] = self.type(scope.type_env)
 
@@ -3399,6 +3475,9 @@ class Field:
 class Assignment(Statement):
     target: Identifier
     value: Expression
+
+    def liveness(self, live_tbl, points_to_graph):
+        return live_tbl | {id:True for id in self.value.used_ids} | { self.target.name : False }
 
     def codegen(self, scope):
         typ = self.value.exprtype(scope)
@@ -3595,6 +3674,16 @@ class IfStatement(Branch):
     then_block: BlockNode
     else_block: Optional[BlockNode]
 
+    def liveness(self, live_tbl, points_to_graph):
+        then_tbl = self.then_block.liveness(live_tbl, points_to_graph)
+        live_in_then = {k:v for k,v in then_tbl.items() if v}
+        else_tbl = {}
+        live_in_else = {}
+        if self.else_block:
+            else_tbl = self.else_block.liveness(live_tbl, points_to_graph)
+            live_in_else = {k:v for k,v in else_tbl.items() if v}
+        return then_tbl | else_tbl | live_in_then | live_in_else | {id:True for id in self.condition.used_ids}
+
     def codegen(self, scope):
         bool_condition = self.condition.codegen(scope)
         unwrap = UnwrapOp.create(operands=[bool_condition], result_types=[IntegerType(1)])
@@ -3662,6 +3751,21 @@ class IfStatement(Branch):
 class WhileStatement(Branch):
     preheader: Statement
     body: BlockNode
+
+    def liveness(self, live_tbl, points_to_graph):
+
+        # first run though
+        live_tbl = self.body.liveness_dry(live_tbl, points_to_graph)
+        used_in_condition = self.condition.used_ids
+        live_tbl = live_tbl | {id:True for id in used_in_condition}
+        if self.preheader: live_tbl = live_tbl | self.preheader.liveness(live_tbl, points_to_graph)
+
+        # second run through
+        live_tbl = self.body.liveness(live_tbl, points_to_graph)
+        live_tbl = live_tbl | {id:True for id in used_in_condition}
+        if self.preheader: live_tbl = live_tbl | self.preheader.liveness(live_tbl, points_to_graph)
+
+        return live_tbl
 
     def codegen(self, scope):
         condition_scope = Scope(scope)
@@ -3744,6 +3848,23 @@ class For(Statement):
     temp_ident: Identifier
     body: BlockNode
 
+    def liveness(self, live_tbl, points_to_graph):
+
+        node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for i in range(7)]
+        assign0 = Assignment(node_infos[0], self.temp_ident, self.iterator)
+        nxt_call = MethodCall(node_infos[1], self.temp_ident, "next", [])
+        assign1 = Assignment(node_infos[2], self.inductee, nxt_call)
+        condition = NegatedTypeCheck(node_infos[3], self.inductee, Nil())
+        wile = WhileStatement(node_infos[4], condition, assign1, self.body)
+
+        before_tbl = wile.liveness(live_tbl, points_to_graph)
+        after_liveness = points_to_graph.region_liveness(live_tbl)
+        before_liveness = points_to_graph.region_liveness(before_tbl)
+        killed_regions = [k for k, v in after_liveness.items() if before_liveness[k] and not after_liveness[k]]
+        gen_regions = [k for k, v in after_liveness.items() if after_liveness[k] and not before_liveness[k]]
+
+        return wile.liveness(live_tbl, points_to_graph) | {self.temp_ident.name:False, self.inductee.name:False}
+
     def codegen(self, scope):
         """
         for x in iterable { ... }
@@ -3767,6 +3888,7 @@ class For(Statement):
     def typeflow(self, scope):
         node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for i in range(7)]
         iterable_type = scope.simplify(self.iterable.exprtype(scope))
+
         if isinstance(iterable_type, Tuple):
             cast_info = NodeInfo(None, self.info.filepath, self.info.line_number)
             self.iterable = TupleToArray(cast_info, self.iterable)
@@ -3798,6 +3920,9 @@ class For(Statement):
 @dataclass
 class Return(Statement):
 
+    def liveness(self, live_tbl, points_to_graph):
+        return {k:(k == "self") for k,v in live_tbl.items() }
+
     def codegen(self, scope):
         ret_op = ReturnOp.create()
         scope.region.last_block.add_op(ret_op)
@@ -3823,6 +3948,9 @@ class Return(Statement):
 @dataclass
 class ReturnValue(Return):
     value: Expression
+
+    def liveness(self, live_tbl, points_to_graph):
+        return {k:(k == "self") for k,v in live_tbl.items() } | { id:True for id in self.value.used_ids }
 
     def codegen(self, scope):
         retval_typ = scope.simplify(self.value.exprtype(scope))
