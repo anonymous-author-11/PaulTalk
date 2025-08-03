@@ -267,6 +267,9 @@ class Expression(Node):
     def exprtype(self, scope):
         pass
 
+    @property
+    def subexpressions(self):
+        return set()
     def __hash__(self):
         return hash(id(self))
 
@@ -285,6 +288,10 @@ class BinaryOp(Expression):
     left: Expression
     operator: str
     right: Expression
+
+    @property
+    def subexpressions(self):
+        return [self.left, self.right]
 
     def codegen(self, scope):
         left_type = self.left.exprtype(scope)
@@ -467,6 +474,10 @@ class Logical(BinaryOp):
 class Not(Expression):
     operand: Expression
 
+    @property
+    def subexpressions(self):
+        return [self.operand]
+
     def codegen(self, scope):
         false = BoolLiteral(self.info, 0)
         return Comparison(self.info, false, "EQ", self.operand).codegen(scope)
@@ -509,6 +520,10 @@ class OverloadedBinaryOp(BinaryOp):
 @dataclass
 class NegativeOp(Expression):
     operand: Expression
+
+    @property
+    def subexpressions(self):
+        return [self.operand]
 
     def codegen(self, scope):
         typ = self.exprtype(scope)
@@ -602,6 +617,10 @@ class ArrayLiteral(Expression):
     elements: tuple[Expression]
     specified_elem_type: TypeAttribute
 
+    @property
+    def subexpressions(self):
+        return [*self.elements]
+
     def codegen(self, scope):
         self_type = self.exprtype(scope)
         elem_type = self_type.type_params.data[0]
@@ -694,6 +713,10 @@ class RangeLiteral(Expression):
     start: Expression
     end: Expression
 
+    @property
+    def subexpressions(self):
+        return [self.start, self.end]
+
     def ensure_i32_args(self, scope):
         start_type = self.start.exprtype(scope)
         end_type = self.end.exprtype(scope)
@@ -730,6 +753,10 @@ class ExclusiveRangeLiteral(RangeLiteral):
 @dataclass
 class TupleLiteral(Expression):
     elems: tuple[Expression]
+
+    @property
+    def subexpressions(self):
+        return [*self.elems]
 
     def codegen(self, scope):
         self_type = self.exprtype(scope)
@@ -938,6 +965,10 @@ class TypeCheck(Expression):
     left: Expression
     right: TypeAttribute
 
+    @property
+    def subexpressions(self):
+        return [self.left]
+
     def codegen(self, scope):
 
         left_type = self.left.exprtype(scope)
@@ -1042,6 +1073,10 @@ class NegatedTypeCheck(TypeCheck):
 class TupleToBuffer(Expression):
     tupl: Expression
 
+    @property
+    def subexpressions(self):
+        return [self.tupl]
+
     def codegen(self, scope):
         tuple_type = self.tupl.exprtype(scope)
         tupl = self.tupl.codegen(scope)
@@ -1058,6 +1093,10 @@ class TupleToBuffer(Expression):
 @dataclass
 class TupleToArray(Expression):
     tupl: Expression
+
+    @property
+    def subexpressions(self):
+        return [self.tupl]
 
     def codegen(self, scope):
         tuple_type = self.tupl.exprtype(scope)        
@@ -1092,6 +1131,10 @@ class As(Expression):
         self.operand = operand
         self.typ = typ
         self.force = force
+
+    @property
+    def subexpressions(self):
+        return [self.operand]
 
     def codegen(self, scope):
 
@@ -1148,6 +1191,10 @@ class Into(Expression):
         self.operand = operand
         self.typ = typ
         self.method = None
+
+    @property
+    def subexpressions(self):
+        return [self.operand]
 
     def codegen(self, scope):
         operand_type = self.operand.exprtype(scope)
@@ -1230,6 +1277,10 @@ class FunctionCall(Expression):
     function: str
     arguments: List[Expression]
 
+    @property
+    def subexpressions(self):
+        return [*self.arguments]
+
     def codegen(self, scope):
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
         args = [arg.codegen(scope) for arg in self.arguments]
@@ -1287,6 +1338,10 @@ class MethodCall(Expression):
     receiver: Expression
     method: str
     arguments: List[Expression]
+
+    @property
+    def subexpressions(self):
+        return [*self.arguments]
 
     def codegen(self, scope):
         rec_typ = self.receiver.exprtype(scope)
@@ -1759,6 +1814,10 @@ class IntrinsicCall(ClassMethodCall):
 class PrintCall(Expression):
     args: List[Expression]
 
+    @property
+    def subexpressions(self):
+        return [*self.args]
+
     def codegen(self, scope):
         attr_dict = {"typ":self.args[0].exprtype(scope).base_typ()}
         debug_print_op = PrintOp.create(operands=[self.args[0].codegen(scope)], attributes=attr_dict, result_types=[IntegerType(32)])
@@ -1793,6 +1852,10 @@ class ObjectCreation(Expression):
     type: TypeAttribute
     arguments: List[Expression]
     region: str
+
+    @property
+    def subexpressions(self):
+        return [*self.arguments]
 
     def codegen(self, scope):
 
@@ -3791,6 +3854,10 @@ class CoCreate(Expression):
     name: str
     args: List[Expression]
 
+    @property
+    def subexpressions(self):
+        return [*self.args]
+
     def codegen(self, scope):
         func_type = self.args[0].exprtype(scope)
         self_type = self.exprtype(scope)
@@ -3843,6 +3910,10 @@ class CoCreate(Expression):
 @dataclass
 class CoYield(Expression):
     arg: Expression
+
+    @property
+    def subexpressions(self):
+        return [self.arg]
 
     def codegen(self, scope):
         if not self.arg:
@@ -3916,6 +3987,10 @@ class CreateBuffer(Expression):
     buf: TypeAttribute
     size: Expression
     region: str
+
+    @property
+    def subexpressions(self):
+        return [self.size]
 
     def codegen(self, scope):
         size_type = self.size.exprtype(scope)
