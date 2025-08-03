@@ -489,13 +489,37 @@ TODO:
 	- Will return handle to region if already created
 	- Multiple names can map to the same region
 
+- Is it right to "re-create" nonlocal regions?
+	- The paper with region protection does not do this
+	- Could replace any creation-of-nonlocal-region with a reset
+	- This makes it a matter of correctness, not merely an optimization
+
+- Desugar for-loop into: block { preheader{stmts}, loop{stmts} }
+
+- Make it illegal to assign to 'self' [check!]
+- Track node id's rather than Identifiers [check!]
+- Need to handle break and continue for liveness
+- If we store region strings in nodes that create nodes and transmit them we should be good
+	- I.e. literals like Array, Range, String
+- We have to merge local regions into parameter regions before liveness
+
+- Introduce "NewScope" as subtype of BlockNode
+	- Correctly handles scope merging
+
+- Have typeflow return a list of statements as a replacement
+	- By default just returns [self]
+
 - Liveness analysis
 	- Backwards pass twice over ast
 		- We need two passes because ...
+			- We need to know whether a variable is live at the beginning of the loop
+			- If live at beginning, must be live at end!
+			- Run through once to determine liveness at beginning
+			- Run through a second time with that knowledge
 	- For each identifier, mark when it becomes live and when used
 		- Becomes live:
-			- vardecl (including params) or assignment
-			- fields + self at beginning of method
+			- vardecl or assignment
+			- fields + self + params at beginning of method
 		- Use
 			- Reciever or argument to call
 			- Operand in binary op

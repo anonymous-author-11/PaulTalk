@@ -3,3 +3,4 @@
 __pycache__/
 !.aiderignore
 !.aider.conf.yml
+.crush/
