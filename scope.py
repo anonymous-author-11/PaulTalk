@@ -509,9 +509,29 @@ class PointsToGraph:
     def regions(self):
         return [v for v in self.var_mapping.values()]
 
+    def region_insertion_points(self, stmt, before_tbl, after_tbl):
+        after_liveness = self.region_liveness(after_tbl)
+        before_liveness = self.region_liveness(before_tbl)
+
+        print(stmt.info.source_line)
+        print(stmt.__class__.__name__)
+        print(f"before region liveness: {before_liveness}")
+        print(f"after region liveness: {after_liveness}")
+
+        print(f"before variable liveness: {before_tbl}")
+        print(f"after variable liveness: {after_tbl}")
+
+        killed_regions = (k for k, v in before_liveness.items() if before_liveness[k] and not after_liveness[k])
+        gen_regions = (k for k, v in before_liveness.items() if after_liveness[k] and not before_liveness[k])
+
+        creates = [(stmt, CreateRegionOp.make(reg)) for reg in gen_regions]
+        removes = [(stmt, RemoveRegionOp.make(reg)) for reg in killed_regions]
+
+        return [*creates, *removes]
+
     # return the list of all node id's that keep this region alive
     def pointers(self, region):
-        pointer_regions = {*self.graph.ancestors(region)}
+        pointer_regions = {region, *self.graph.ancestors(region)}
         return [k for k,v in self.var_mapping.items() if v in pointer_regions]
 
     # a region is live if anything pointing to the region is live

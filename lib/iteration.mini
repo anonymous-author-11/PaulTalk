@@ -30,7 +30,7 @@ class Iterable[T] extends Container {
 
 	def each(f : (T)) {
         for x in self { f.call(x); }
-    }
+    } ~> no_alias
     
     def reduce(accumulator : T, f : (T, T) -> T) -> T {
         for x in self { accumulator = f.call(accumulator, x); }
@@ -40,12 +40,12 @@ class Iterable[T] extends Container {
     def all(f : (T) -> Bool) -> Bool {
         for x in self { if not f.call(x) { return false; } }
         return true;
-    }
+    } ~> no_alias
 
     def any(f : (T) -> Bool) -> Bool {
         for x in self { if f.call(x) { return true; } }
         return false;
-    }
+    } ~> no_alias
     
     def enumerate() -> Enumeration[T] {
         return Enumerated{self};

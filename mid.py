@@ -224,15 +224,27 @@ class CreateRegionOp(IRDLOperation):
     reg_name: StringAttr = attr_def(StringAttr)
     result : OpResult = result_def()
 
+    @classmethod
+    def make(cls, name):
+        return CreateRegionOp.create(attributes={"reg_name":StringAttr(name)}, result_types=[llvm.LLVMPointerType.opaque()])
+
 @irdl_op_definition
 class RemoveRegionOp(IRDLOperation):
     name = "mid.remove_region"
     reg_name: StringAttr = attr_def(StringAttr)
 
+    @classmethod
+    def make(cls, name):
+        return RemoveRegionOp.create(attributes={"reg_name":StringAttr(name)})
+
 @irdl_op_definition
 class ResetRegionOp(IRDLOperation):
     name = "mid.reset_region"
     reg_name: StringAttr = attr_def(StringAttr)
+
+    @classmethod
+    def make(cls, name):
+        return ResetRegionOp.create(attributes={"reg_name":StringAttr(name)})
 
 @irdl_op_definition
 class UtilsAPIOp(IRDLOperation):

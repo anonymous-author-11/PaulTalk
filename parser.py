@@ -115,7 +115,7 @@ class CSTTransformer(Transformer):
         ty = AbstractMethodDef if abstract else MethodDef
         node_info = NodeInfo(None, self.file_path, line_number(deff))
         constraints = constraints if constraints else Constraints()
-        return ty(node_info, name, constraints, type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False, [])
+        return ty(node_info, name, constraints, type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False, [], {})
 
     def getters(self, field, *fields):
         return [self.getter(field), *(self.getter(f) for f in fields)]
@@ -131,7 +131,7 @@ class CSTTransformer(Transformer):
         ret = ReturnValue(node_infos[1], field_id)
         body = BlockNode(node_infos[2], [ret])
         constraints = Constraints({("ret", "==", field.value.replace("@", "self."))})
-        return Getter(node_infos[4], name, constraints, [], [], 0, None, exception_or_nil, body, None, False, [])
+        return Getter(node_infos[4], name, constraints, [], [], 0, None, exception_or_nil, body, None, False, [], {})
 
     def setter(self, field):
         node_infos = [NodeInfo(None, self.file_path, line_number(field)) for i in range(7)]
@@ -143,7 +143,7 @@ class CSTTransformer(Transformer):
         assignment = Assignment(node_infos[3], field_id, value_id)
         body = BlockNode(node_infos[4], [assignment])
         constraints = Constraints(({(field.value.replace("@", "self."), "==", "value")}))
-        return Setter(node_infos[6], name, constraints, [], [param], 1, None, exception_or_nil, body, None, False, [])
+        return Setter(node_infos[6], name, constraints, [], [param], 1, None, exception_or_nil, body, None, False, [], {})
 
     def operator(self, op):
         translated_op = "_" + {
@@ -157,14 +157,14 @@ class CSTTransformer(Transformer):
         ty = AbstractMethodDef if abstract else MethodDef
         node_info = NodeInfo(None, self.file_path, line_number(deff))
         constraints = constraints if constraints else Constraints()
-        return ty(node_info, translated_op, constraints, type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False, [])
+        return ty(node_info, translated_op, constraints, type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False, [], {})
 
     def class_method_def(self, abstract, deff, self_tok, name, type_params, params, return_type, yield_type, body, constraints):
         exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractClassMethodDef if abstract else ClassMethodDef
         node_info = NodeInfo(None, self.file_path, line_number(name))
         constraints = constraints if constraints else Constraints()
-        return ty(node_info, "_Self_" + name.value, constraints, type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False, [])
+        return ty(node_info, "_Self_" + name.value, constraints, type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False, [], {})
 
     def class_def(self, cls, name, supertype_list, bound_list, fields, region_constraints, methods):
         if not isinstance(name, FatPtr):

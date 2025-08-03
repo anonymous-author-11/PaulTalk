@@ -494,17 +494,15 @@ TODO:
 	- Could replace any creation-of-nonlocal-region with a reset
 	- This makes it a matter of correctness, not merely an optimization
 
-- Desugar for-loop into: block { preheader{stmts}, loop{stmts} }
-
 - Make it illegal to assign to 'self' [check!]
 - Track node id's rather than Identifiers [check!]
+- Introduce "NewScope" as subtype of BlockNode [check!]
+	- Correctly handles scope merging [check!]
+
 - Need to handle break and continue for liveness
 - If we store region strings in nodes that create nodes and transmit them we should be good
 	- I.e. literals like Array, Range, String
 - We have to merge local regions into parameter regions before liveness
-
-- Introduce "NewScope" as subtype of BlockNode
-	- Correctly handles scope merging
 
 - Make Node id's deterministic between typeflow / codegen [check!]
 - Store region insertion points in Method / Function / Program
