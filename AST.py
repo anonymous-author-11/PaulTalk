@@ -191,7 +191,32 @@ class NewScope(BlockNode, Statement):
             scope.symbol_table.pop(k)
 
 @dataclass
-class Program(Node):
+class CreateRegion(Statement):
+    name: str
+
+    def codegen(self, scope):
+        create_region = CreateRegionOp.create(attributes={"reg_name":StringAttr(self.name)}, result_types=[llvm.LLVMPointerType.opaque()])
+        scope.region.last_block.add_op(create_region)
+        return create_region.results[0]
+
+@dataclass
+class RemoveRegion(Statement):
+    name : str
+    
+    def codegen(self, scope):
+        remove_region = RemoveRegionOp.create(attributes={"reg_name":StringAttr(self.name)})
+        scope.region.last_block.add_op(remove_region)
+
+@dataclass
+class ResetRegion(Statement):
+    name: str
+    
+    def codegen(self, scope):
+        reset_region = ResetRegionOp.create(attributes={"reg_name":StringAttr(self.name)})
+        scope.region.last_block.add_op(reset_region)
+
+@dataclass
+class Program(BlockNode):
     statements: List[Statement]
 
     def codegen(self, scope):

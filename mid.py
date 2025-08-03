@@ -219,6 +219,22 @@ class MallocOp(IRDLOperation):
     result: OpResult = result_def()
 
 @irdl_op_definition
+class CreateRegionOp(IRDLOperation):
+    name = "mid.create_region"
+    reg_name: StringAttr = attr_def(StringAttr)
+    result : OpResult = result_def()
+
+@irdl_op_definition
+class RemoveRegionOp(IRDLOperation):
+    name = "mid.remove_region"
+    reg_name: StringAttr = attr_def(StringAttr)
+
+@irdl_op_definition
+class ResetRegionOp(IRDLOperation):
+    name = "mid.reset_region"
+    reg_name: StringAttr = attr_def(StringAttr)
+
+@irdl_op_definition
 class UtilsAPIOp(IRDLOperation):
     name = "mid.utils_api"
 

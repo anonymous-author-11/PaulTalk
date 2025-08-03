@@ -734,6 +734,28 @@ module @patterns {
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
+  pdl.pattern @LowerCreateRegion : benefit(1) {
+    %reg_name = pdl.attribute
+    %ptr_type = pdl.type : !llvm.ptr
+    %root = pdl.operation "mid.create_region" {"reg_name" = %reg_name} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      pdl.erase %root
+    }
+  }
+  pdl.pattern @LowerRemoveRegion : benefit(1) {
+    %reg_name = pdl.attribute
+    %root = pdl.operation "mid.remove_region" {"reg_name" = %reg_name}
+    pdl.rewrite %root {
+      pdl.erase %root
+    }
+  }
+  pdl.pattern @LowerResetRegion : benefit(1) {
+    %reg_name = pdl.attribute
+    %root = pdl.operation "mid.reset_region" {"reg_name" = %reg_name}
+    pdl.rewrite %root {
+      pdl.erase %root
+    }
+  }
   pdl.pattern @LowerFloatArithmetic : benefit(1) {
     %op_type = pdl.type
     pdl.apply_native_constraint "is_float"(%op_type : !pdl.type)
