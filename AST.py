@@ -109,9 +109,18 @@ class AST:
 
 @dataclass
 class NodeInfo:
-    _id: str
+    id: str
     filepath: Path
     line_number: int
+
+    @classmethod
+    def from_info(cls, node_info, name):
+        return NodeInfo("_" + node_info.id + "_" + name, node_info.filepath, node_info.line_number)
+
+    def __init__(self, id, filepath, line_number):
+        self.id = id if id else random_letters(10)
+        self.filepath = filepath
+        self.line_number = line_number
 
     @property
     def line(self):
@@ -120,19 +129,13 @@ class NodeInfo:
             "list.mini", "range.mini", "indexable.mini",
             "core.mini"
         )
-        if self.filepath.name in special_files:
-            return self.line_number + 2
-        return self.line_number
+        if self.filepath.name not in special_files: return self.line_number
+        return self.line_number + 2
 
     @property
     def source_line(self):
         with open(self.filepath, "r") as f: lines = f.readlines()
         return lines[self.line - 1]
-
-    @property
-    def id(self):
-        if not self._id: self._id = random_letters(10)
-        return self._id
 
     def __repr__(self):
         return f"{self.source_line}\n\nFile {self.filepath.name}, line {self.line}"
@@ -179,6 +182,9 @@ class BlockNode(Node):
             print(f"before region liveness: {before_liveness}")
             print(f"after region liveness: {after_liveness}")
 
+            print(f"before variable liveness: {before_tbl}")
+            print(f"after variable liveness: {live_tbl}")
+
             if isinstance(stmt, NewScope):
                 new_stmts.append(stmt)
                 live_tbl = before_tbl
@@ -188,7 +194,7 @@ class BlockNode(Node):
             killed_regions = [k for k, v in after_liveness.items() if before_liveness[k] and not after_liveness[k]]
             for reg in killed_regions:
                 if isinstance(stmt, Return): break
-                remove_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+                remove_info = NodeInfo.from_info(stmt.info, f"remove_{reg}_region")
                 reg_name = points_to_graph.region_name(reg)
                 if not reg_name: continue
                 remove_stmt = RemoveRegion(remove_info, reg_name)
@@ -199,7 +205,7 @@ class BlockNode(Node):
             # Rule 2: region is dead before stmt and alive after: insert 'create r' before stmt
             gen_regions = [k for k, v in after_liveness.items() if after_liveness[k] and not before_liveness[k]]
             for reg in gen_regions:
-                create_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+                create_info = NodeInfo.from_info(stmt.info, f"create_{reg}_region")
                 reg_name = points_to_graph.region_name(reg)
                 if not reg_name: continue
                 create_stmt = CreateRegion(create_info, reg_name)
@@ -396,11 +402,11 @@ class BinaryOp(Expression):
         # Or if one is unsigned and the other is signed, cast the unsigned one
         if isinstance(left_type, Integer) and isinstance(right_type, Integer):
             if left_type.bitwidth < right_type.bitwidth:
-                as_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+                as_info = NodeInfo.from_info(self.info, "lhs_widen")
                 self.left = As(as_info, self.left, right_type)
                 left_type = self.left.exprtype(scope)
             if left_type.bitwidth > right_type.bitwidth:
-                as_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+                as_info = NodeInfo.from_info(self.info, "rhs_widen")
                 self.right = As(as_info, self.right, left_type)
                 right_type = self.right.exprtype(scope)
         return left_type, right_type
@@ -408,11 +414,11 @@ class BinaryOp(Expression):
     def floatify_ints(self, left_type, right_type, scope):
         # For int-float ops of the same width, convert the int to a float
         if isinstance(left_type, Integer) and isinstance(right_type, Float) and left_type.bitwidth == right_type.bitwidth:
-            as_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+            as_info = NodeInfo.from_info(self.info, "lhs_floatify")
             self.left = As(as_info, self.left, right_type)
             left_type = self.left.exprtype(scope)
         if isinstance(right_type, Integer) and isinstance(left_type, Float) and left_type.bitwidth == right_type.bitwidth:
-            as_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+            as_info = NodeInfo.from_info(self.info, "rhs_floatify")
             self.right = As(as_info, self.right, left_type)
             right_type = self.right.exprtype(scope)
         return left_type, right_type
@@ -449,31 +455,35 @@ class BinaryOp(Expression):
 class TuplesOp(BinaryOp):
     op_type: type
 
+    def desugared(self, scope, left_type, right_type):
+        num_elems = len(left_type.types.data)
+
+        indices_infos = [NodeInfo.from_info(self.info, f"index_{i}") for i in range(num_elems)]
+        left_infos = [NodeInfo.from_info(self.info, f"lhs_index_{i}") for i in range(num_elems)]
+        right_infos = [NodeInfo.from_info(self.info, f"rhs_index_{i}") for i in range(num_elems)]
+        op_infos = [NodeInfo.from_info(self.info, f"op_{i}") for i in range(num_elems)]
+
+        indices = [IntegerLiteral(indices_infos[i], i, 32) for i in range(num_elems)]
+        left_elems = [TupleIndexation(left_infos[i], self.left, "_index", [indices[i]]) for i in range(num_elems)]
+        right_elems = [TupleIndexation(right_infos[i], self.right, "_index", [indices[i]]) for i in range(num_elems)]
+        result_elems = tuple(self.op_type(op_infos[i], left_elems[i], self.operator, right_elems[i]) for i in range(num_elems))
+        return TupleLiteral(self.info, result_elems)
+
     def codegen(self, scope):
         left_type = self.left.exprtype(scope)
         right_type = self.right.exprtype(scope)
-        num_elems = len(left_type.types.data)
-        node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for x in range(4 * num_elems)]
-        indices = [IntegerLiteral(node_infos[i], i, 32) for i in range(num_elems)]
-        left_elems = [TupleIndexation(node_infos[num_elems + i], self.left, "_index", [indices[i]]) for i in range(num_elems)]
-        right_elems = [TupleIndexation(node_infos[2 * num_elems + i], self.right, "_index", [indices[i]]) for i in range(num_elems)]
-        result_elems = tuple(self.op_type(node_infos[3 * num_elems + i], left_elems[i], self.operator, right_elems[i]) for i in range(num_elems))
-        return TupleLiteral(self.info, result_elems).codegen(scope)
+        return self.desugared(scope, left_type, right_type).codegen(scope)
 
     def exprtype(self, scope):
         left_type = self.left.exprtype(scope)
         right_type = self.right.exprtype(scope)
+
         if left_type != right_type:
             raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
         if self.operator not in ("ADD","SUB","MUL","DIV","MOD","LSHIFT","RSHIFT","bit_and","bit_or","bit_xor"):
             raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
-        num_elems = len(left_type.types.data)
-        node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for x in range(4 * num_elems)]
-        indices = [IntegerLiteral(node_infos[i], i, 32) for i in range(num_elems)]
-        left_elems = [TupleIndexation(node_infos[num_elems + i], self.left, "_index", [indices[i]]) for i in range(num_elems)]
-        right_elems = [TupleIndexation(node_infos[2 * num_elems + i], self.right, "_index", [indices[i]]) for i in range(num_elems)]
-        result_elems = tuple(self.op_type(node_infos[3 * num_elems + i], left_elems[i], self.operator, right_elems[i]) for i in range(num_elems))
-        return TupleLiteral(self.info, result_elems).exprtype(scope)
+
+        return self.desugared(scope, left_type, right_type).exprtype(scope)
 
 @dataclass
 class Arithmetic(BinaryOp):
@@ -558,7 +568,7 @@ class OverloadedBinaryOp(BinaryOp):
 
     def codegen(self, scope):
         mangled_operator = "_" + self.operator
-        method_call = MethodCall(NodeInfo(None, self.info.filepath, self.info.line_number), self.left, mangled_operator, [self.right])
+        method_call = MethodCall(self.info, self.left, mangled_operator, [self.right])
         return method_call.codegen(scope)
 
     def ensure_object_receiver(self, scope, left_type):
@@ -579,7 +589,7 @@ class OverloadedBinaryOp(BinaryOp):
         self.ensure_object_receiver(scope, left_type)
         mangled_operator = "_" + self.operator
         self.ensure_existing_overload(scope, left_type, mangled_operator, right_type)
-        method_call = MethodCall(NodeInfo(None, self.info.filepath, self.info.line_number), self.left, mangled_operator, [self.right])
+        method_call = MethodCall(self.info, self.left, mangled_operator, [self.right])
         return method_call.exprtype(scope)
 
 @dataclass
@@ -592,8 +602,8 @@ class NegativeOp(Expression):
 
     def codegen(self, scope):
         typ = self.exprtype(scope)
-        zero_int = IntegerLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), 0, 32)
-        zero_double = DoubleLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), 0.0)
+        zero_int = IntegerLiteral(NodeInfo.from_info(self.info, "zero_int"), 0, 32)
+        zero_double = DoubleLiteral(NodeInfo.from_info(self.info, "zero_double"), 0.0)
         zero = zero_int if typ == Integer(32) else zero_double
         return Arithmetic(self.info, zero, "SUB", self.operand).codegen(scope)
 
@@ -689,17 +699,18 @@ class ArrayLiteral(Expression):
     def codegen(self, scope):
         self_type = self.exprtype(scope)
         elem_type = self_type.type_params.data[0]
-        sizelit = IntegerLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), len(self.elements), 32)
-        capacitylit = IntegerLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), len(self.elements) + 1, 32)
-        buf = CreateBuffer(NodeInfo(None, self.info.filepath, self.info.line_number), Buffer([elem_type]), capacitylit, None)
-        temp_var = Identifier(NodeInfo(None, self.info.filepath, self.info.line_number), "_temp_buf" + random_letters(10))
-        assign = Assignment(NodeInfo(None, self.info.filepath, self.info.line_number), temp_var, buf)
+        sizelit = IntegerLiteral(NodeInfo.from_info(self.info, "size"), len(self.elements), 32)
+        capacitylit = IntegerLiteral(NodeInfo.from_info(self.info, "capacity"), len(self.elements) + 1, 32)
+        buf = CreateBuffer(NodeInfo.from_info(self.info, "buffer"), Buffer([elem_type]), capacitylit, None)
+        temp_info = NodeInfo.from_info(self.info, "temp_buf")
+        temp_var = Identifier(temp_info, temp_info.id)
+        assign = Assignment(NodeInfo.from_info(self.info, "assign"), temp_var, buf)
         assign.codegen(scope);
         for i, elem in enumerate(self.elements):
-            iliteral = IntegerLiteral(NodeInfo(None, self.info.filepath, self.info.line_number), i, 32)
-            indexation = MethodCall(NodeInfo(None, self.info.filepath, self.info.line_number), temp_var, "_set_index", [iliteral, elem])
+            iliteral = IntegerLiteral(NodeInfo.from_info(self.info, f"integer_{i}"), i, 32)
+            indexation = MethodCall(NodeInfo.from_info(self.info, f"index_{i}"), temp_var, "_set_index", [iliteral, elem])
             indexation.codegen(scope)
-        ary = ObjectCreation(self.info, random_letters(10), self_type, [temp_var, sizelit, capacitylit], None)
+        ary = ObjectCreation(self.info, self.info.id + "_array_literal", self_type, [temp_var, sizelit, capacitylit], None)
         return ary.codegen(scope)
 
     def exprtype(self, scope):
@@ -727,13 +738,14 @@ class StringLiteral(Expression):
     def codegen(self, scope):
         n_bytes = len(self.value.encode('utf-8'))
         n_codepoints = len(self.value)
-        node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for i in range(7)]
-        size_lit = IntegerLiteral(node_infos[0], n_codepoints, 32)
-        n_bytes_lit = IntegerLiteral(node_infos[1], n_bytes, 32)
-        capacity_lit = IntegerLiteral(node_infos[2], n_bytes + 1, 32)
-        buf = CreateBuffer(node_infos[3], Buffer([Integer(8)]), capacity_lit, None)
-        temp_var = Identifier(node_infos[4], "_temp_buf" + random_letters(10))
-        assign = Assignment(node_infos[5], temp_var, buf)
+
+        size_lit = IntegerLiteral(NodeInfo.from_info(self.info, "size"), n_codepoints, 32)
+        n_bytes_lit = IntegerLiteral(NodeInfo.from_info(self.info, "n_bytes"), n_bytes, 32)
+        capacity_lit = IntegerLiteral(NodeInfo.from_info(self.info, "capacity"), n_bytes + 1, 32)
+        buf = CreateBuffer(NodeInfo.from_info(self.info, "buffer"), Buffer([Integer(8)]), capacity_lit, None)
+        temp_info = NodeInfo.from_info(self.info, "temp_buf")
+        temp_var = Identifier(temp_info, temp_info.id)
+        assign = Assignment(NodeInfo.from_info(self.info, "assign"), temp_var, buf)
         assign.codegen(scope);
         llvmtype = llvm.LLVMArrayType.from_size_and_type(n_bytes, IntegerType(8))
         lit = LiteralOp.create(attributes={"typ":llvmtype, "value":BytesAttr(self.value.encode('utf-8'))}, result_types=[llvm.LLVMPointerType.opaque()])
@@ -742,7 +754,8 @@ class StringLiteral(Expression):
         operands = [temp_var.codegen(scope), zero.results[0], lit.results[0]]
         buffer_set = BufferSetOp.create(operands=operands, attributes={"typ": llvmtype})
         scope.region.last_block.add_ops([lit, zero, buffer_set])
-        string = ObjectCreation(self.info, random_letters(10), self.exprtype(scope), [temp_var, n_bytes_lit, size_lit, capacity_lit], None)
+        obj_name = self.info.id + "_string_literal"
+        string = ObjectCreation(self.info, obj_name, self.exprtype(scope), [temp_var, n_bytes_lit, size_lit, capacity_lit], None)
         return string.codegen(scope)
 
     def exprtype(self, scope):
@@ -758,9 +771,9 @@ class CharLiteral(Expression):
 
     def codegen(self, scope):
         codepoint = ord(self.value)
-        cp_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+        cp_info = NodeInfo.from_info(self.info, "codepoint")
         codepoint_literal = IntegerLiteral(cp_info, codepoint, 32)
-        char = ObjectCreation(self.info, random_letters(10), self.exprtype(scope), [codepoint_literal], None)
+        char = ObjectCreation(self.info, self.info.id + "_char_literal", self.exprtype(scope), [codepoint_literal], None)
         return char.codegen(scope)
 
     def exprtype(self, scope):
@@ -795,11 +808,11 @@ class RangeLiteral(Expression):
 class InclusiveRangeLiteral(RangeLiteral):
 
     def codegen(self, scope):
-        return ObjectCreation(self.info, random_letters(10), FatPtr.basic("Range"), [self.start, self.end], None).codegen(scope)
+        return ObjectCreation(self.info, self.info.id + "_inclusive_range", FatPtr.basic("Range"), [self.start, self.end], None).codegen(scope)
     
     def exprtype(self, scope):
         self.ensure_i32_args(scope)
-        return ObjectCreation(self.info, random_letters(10), FatPtr.basic("Range"), [self.start, self.end], None).exprtype(scope)
+        return ObjectCreation(self.info, self.info.id + "_inclusive_range", FatPtr.basic("Range"), [self.start, self.end], None).exprtype(scope)
 
 @dataclass
 class ExclusiveRangeLiteral(RangeLiteral):
@@ -807,13 +820,13 @@ class ExclusiveRangeLiteral(RangeLiteral):
     def codegen(self, scope):
         one = IntegerLiteral(self.info, 1, 32)
         end_minus_one = Arithmetic(self.info, self.end, "SUB", one)
-        return ObjectCreation(self.info, random_letters(10), FatPtr.basic("Range"), [self.start, end_minus_one], None).codegen(scope)
+        return ObjectCreation(self.info, self.info.id + "_exclusive_range", FatPtr.basic("Range"), [self.start, end_minus_one], None).codegen(scope)
     
     def exprtype(self, scope):
         self.ensure_i32_args(scope)
         one = IntegerLiteral(self.info, 1, 32)
         end_minus_one = Arithmetic(self.info, self.end, "SUB", one)
-        return ObjectCreation(self.info, random_letters(10), FatPtr.basic("Range"), [self.start, end_minus_one], None).exprtype(scope)
+        return ObjectCreation(self.info, self.info.id + "_exclusive_range", FatPtr.basic("Range"), [self.start, end_minus_one], None).exprtype(scope)
 
 @dataclass
 class TupleLiteral(Expression):
@@ -912,12 +925,14 @@ class FunctionLiteral(Expression):
             self.has_return = True
             self._return_type = None
             return
+        ret_info = NodeInfo.from_info(self.info, "implicit_return")
         if isinstance(last_stmt, ExpressionStatement) and last_stmt.expr.exprtype(scope) and last_stmt.expr.exprtype(scope) != llvm.LLVMVoidType():
-            self.body.statements[-1] = ReturnValue(NodeInfo(None, self.info.filepath, self.info.line_number), last_stmt.expr)
+
+            self.body.statements[-1] = ReturnValue(ret_info, last_stmt.expr)
             self.has_return = True
             self._return_type = last_stmt.expr.exprtype(scope)
             return
-        self.body.statements.append(Return(NodeInfo(None, self.info.filepath, self.info.line_number)))
+        self.body.statements.append(Return(ret_info))
         self.has_return = True
         self._return_type = None
 
@@ -1166,14 +1181,10 @@ class TupleToArray(Expression):
     def codegen(self, scope):
         tuple_type = self.tupl.exprtype(scope)        
         elem_type = self.elem_type(tuple_type, scope)
-        cast_info = NodeInfo(None, self.info.filepath, self.info.line_number)
-        size_info = NodeInfo(None, self.info.filepath, self.info.line_number)
-        capacity_info = NodeInfo(None, self.info.filepath, self.info.line_number)
-        ary_info = NodeInfo(None, self.info.filepath, self.info.line_number)
-        buf = TupleToBuffer(cast_info, self.tupl)
-        sizelit = IntegerLiteral(size_info, len(tuple_type.types.data), 32)
-        capacitylit = IntegerLiteral(capacity_info, len(tuple_type.types.data), 32)
-        ary = ObjectCreation(ary_info, random_letters(10), FatPtr.generic("Array", [elem_type]), [buf, sizelit, capacitylit], None)
+        buf = TupleToBuffer(NodeInfo.from_info(self.info, "cast"), self.tupl)
+        sizelit = IntegerLiteral(NodeInfo.from_info(self.info, "size"), len(tuple_type.types.data), 32)
+        capacitylit = IntegerLiteral(NodeInfo.from_info(self.info, "capacity"), len(tuple_type.types.data), 32)
+        ary = ObjectCreation(self.info, self.info.id + "_tuple_to_array", FatPtr.generic("Array", [elem_type]), [buf, sizelit, capacitylit], None)
         return ary.codegen(scope)
 
     def elem_type(self, tuple_type, scope):
@@ -1333,7 +1344,7 @@ class Into(Expression):
         candidate_behaviors = [behavior for behavior in to_class.behaviors if behavior.name == "init" and behavior.arity == 1]
         candidate_behaviors = [behavior for behavior in candidate_behaviors if behavior.applicable(to_type, scope, "init", [operand_type])]
         if len(candidate_behaviors) == 0: return None
-        call = ObjectCreation(self.info, random_letters(10), to_type, [self.operand], None)
+        call = ObjectCreation(self.info, self.info.id + "_into_constructor", to_type, [self.operand], None)
         call.exprtype(scope)
         return call
 
@@ -1421,8 +1432,8 @@ class MethodCall(Expression):
         if isinstance(rec_typ, Tuple) and self.method == "_index":
             return TupleIndexation(self.info, self.receiver, self.method, self.arguments).codegen(scope)
         if isinstance(rec_typ, Tuple):
-            cast_info = NodeInfo(None, self.info.filepath, self.info.line_number)
-            return MethodCall(self.info, TupleToArray(cast_info, self.receiver), self.method, self.arguments).codegen(scope)
+            to_array = TupleToArray(NodeInfo.from_info(self.info, "cast"), self.receiver)
+            return MethodCall(self.info, to_array, self.method, self.arguments).codegen(scope)
         rec_class = scope.get_class(self.info, rec_typ)
 
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
@@ -1535,8 +1546,8 @@ class MethodCall(Expression):
         if isinstance(rec_typ, Tuple) and self.method == "_index":
             return TupleIndexation(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
         if isinstance(rec_typ, Tuple):
-            cast_info = NodeInfo(None, self.info.filepath, self.info.line_number)
-            return MethodCall(self.info, TupleToArray(cast_info, self.receiver), self.method, self.arguments).exprtype(scope)
+            to_array = TupleToArray(NodeInfo.from_info(self.info, "cast"), self.receiver)
+            return MethodCall(self.info, to_array, self.method, self.arguments).exprtype(scope)
         if isinstance(rec_typ, Coroutine): return CoroutineCall(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
         if isinstance(rec_typ, Function): return FunctionLiteralCall(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
         broad, specialized = self.simple_exprtype(scope, rec_typ)
@@ -1945,15 +1956,14 @@ class ObjectCreation(Expression):
         scope.type_table[self.anon_name] = self_type
 
         anon_id = Identifier(self.info, self.anon_name)
-        MethodCall(NodeInfo(None, self.info.filepath, self.info.line_number), anon_id, "init", self.arguments).codegen(scope)
+        MethodCall(NodeInfo.from_info(self.info, "init_call"), anon_id, "init", self.arguments).codegen(scope)
 
         exception_type = FatPtr.basic("Exception")
         is_exception = scope.subtype(self_type, exception_type)
         if is_exception:
-            node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for i in range(3)]
-            file_name = StringLiteral(node_infos[0], str(self.info.filepath).replace("\\", "/"))
-            line_number = IntegerLiteral(node_infos[1], self.info.line_number, 32)
-            MethodCall(node_infos[2], anon_id, "set_info", [line_number, file_name]).codegen(scope)
+            file_name = StringLiteral(NodeInfo.from_info(self.info, "file_name"), str(self.info.filepath).replace("\\", "/"))
+            line_number = IntegerLiteral(NodeInfo.from_info(self.info, "line_number"), self.info.line_number, 32)
+            MethodCall(NodeInfo.from_info(self.info, "set_exception_info"), anon_id, "set_info", [line_number, file_name]).codegen(scope)
 
         return new_op.results[0]
 
@@ -2026,7 +2036,7 @@ class ObjectCreation(Expression):
             raise Exception(f"{self.info}: Cannot instantiate class {simplified_type} with abstract method {offender.definition.name} defined in class {offender.definition.defining_class.name}")
         scope.type_table[self.anon_name] = simplified_type
         anon_id = Identifier(self.info, self.anon_name)
-        MethodCall(NodeInfo(None, self.info.filepath, self.info.line_number), anon_id, "init", self.arguments).exprtype(scope)
+        MethodCall(NodeInfo.from_info(self.info, "init_call"), anon_id, "init", self.arguments).exprtype(scope)
         scope.mem_regions.allocations[self.info.id] = self
         scope.mem_regions.points_to_facts.add((self.info.id, "==", self.anon_name))
         return simplified_type
@@ -2574,10 +2584,9 @@ class Method:
             declared_type = field.type()
             if field.declaration.name in body_scope.type_table and body_scope.subtype(body_scope.type_table[field.declaration.name], declared_type): continue
             if declared_type == Nil () or isinstance(declared_type, Union) and Nil() in declared_type.types.data:
-                node_infos = [NodeInfo(None, self.definition.info.filepath, self.definition.info.line_number) for i in range(3)]
-                field_id = Identifier(node_infos[0], field.declaration.name)
-                nil = NilLiteral(node_infos[1])
-                initialization = Assignment(node_infos[2], field_id, nil)
+                field_id = Identifier(NodeInfo.from_info(self.info, "field_id"), field.declaration.name)
+                nil = NilLiteral(NodeInfo.from_info(self.info, "nil"))
+                initialization = Assignment(NodeInfo.from_info(self.info, "assign"), field_id, nil)
                 self.definition.body.statements.append(initialization)
                 continue
             debug_print(f"field name in body type table? {field.declaration.name in body_scope.type_table}")
@@ -3177,7 +3186,7 @@ class ClassDef(Statement):
         return flat_list
 
     def type_fields(self):
-        return [TypeFieldDecl(NodeInfo(None, self.info.filepath, self.info.line_number), f"{self.name}_{i}", ReifiedType(), self, t) for i, t in enumerate(self.all_type_parameters())]
+        return [TypeFieldDecl(NodeInfo.from_info(self.info, f"type_param_{i}"), f"{self.name}_{i}", ReifiedType(), self, t) for i, t in enumerate(self.all_type_parameters())]
 
     def base_typ(self):
         return llvm.LLVMStructType.from_type_list([t.base_typ() for t in self.fields_types()])
@@ -3276,7 +3285,7 @@ class ClassDef(Statement):
             meth_name = belonging_methods[0].definition.name
             meth_arity = belonging_methods[0].definition.arity
             ty = ClassBehavior if len(meth_name) > 6 and meth_name.startswith("_Self_") else Behavior
-            node_info = NodeInfo(None, self.info.filepath, self.info.line_number)
+            node_info = NodeInfo.from_info(self.info, meth_name)
             behavior = ty(node_info, meth_name, 0, belonging_methods, meth_arity, None, self, [])
             behavior.remove_superfluous_methods()
             self._behaviors.append(behavior)
@@ -3376,9 +3385,6 @@ class ClassMock:
 class VarDecl(Statement):
     name: str
     _type: TypeAttribute
-
-    def __post_init__(self):
-        self.info = NodeInfo(self.name, self.info.filepath, self.info.line_number)
 
     def liveness(self, live_tbl, points_to_graph):
         return live_tbl | { self.name : False }
@@ -3852,12 +3858,11 @@ class For(Statement):
 
     def liveness(self, live_tbl, points_to_graph):
 
-        node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for i in range(7)]
-        assign0 = Assignment(node_infos[0], self.temp_ident, self.iterator)
-        nxt_call = MethodCall(node_infos[1], self.temp_ident, "next", [])
-        assign1 = Assignment(node_infos[2], self.inductee, nxt_call)
-        condition = NegatedTypeCheck(node_infos[3], self.inductee, Nil())
-        wile = WhileStatement(node_infos[4], condition, assign1, self.body)
+        assign0 = Assignment(NodeInfo.from_info(self.info, "assign_iterator"), self.temp_ident, self.iterator)
+        nxt_call = MethodCall(NodeInfo.from_info(self.info, "next_call"), self.temp_ident, "next", [])
+        assign1 = Assignment(NodeInfo.from_info(self.info, "assign_next"), self.inductee, nxt_call)
+        condition = NegatedTypeCheck(NodeInfo.from_info(self.info, "nil_check"), self.inductee, Nil())
+        wile = WhileStatement(NodeInfo.from_info(self.info, "while_loop"), condition, assign1, self.body)
 
         before_tbl = wile.liveness(live_tbl, points_to_graph)
         after_liveness = points_to_graph.region_liveness(live_tbl)
@@ -3876,24 +3881,21 @@ class For(Statement):
         _iterator_xyz = iterable.iterator();
         while (x := _iterator_xyz.next()) is not Nil { ... }
         """
-        node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for i in range(5)]
-        assign0 = Assignment(node_infos[0], self.temp_ident, self.iterator)
+        assign0 = Assignment(NodeInfo.from_info(self.info, "assign_iterator"), self.temp_ident, self.iterator)
         assign0.codegen(scope)
-        nxt_call = MethodCall(node_infos[1], self.temp_ident, "next", [])
+        nxt_call = MethodCall(NodeInfo.from_info(self.info, "next_call"), self.temp_ident, "next", [])
         nxt_type = nxt_call.exprtype(scope)
         continue_type = scope.simplify(Union.from_list([t for t in nxt_type.types.data if t != Nil()]))
-        assign1 = Assignment(node_infos[2], self.inductee, nxt_call)
-        condition = TypeCheck(node_infos[3], self.inductee, continue_type)
-        wile = WhileStatement(node_infos[4], condition, assign1, self.body)
+        assign1 = Assignment(NodeInfo.from_info(self.info, "assign_next"), self.inductee, nxt_call)
+        condition = TypeCheck(NodeInfo.from_info(self.info, "nil_check"), self.inductee, continue_type)
+        wile = WhileStatement(NodeInfo.from_info(self.info, "while_loop"), condition, assign1, self.body)
         wile.codegen(scope)
 
     def typeflow(self, scope):
-        node_infos = [NodeInfo(None, self.info.filepath, self.info.line_number) for i in range(7)]
         iterable_type = scope.simplify(self.iterable.exprtype(scope))
 
         if isinstance(iterable_type, Tuple):
-            cast_info = NodeInfo(None, self.info.filepath, self.info.line_number)
-            self.iterable = TupleToArray(cast_info, self.iterable)
+            self.iterable = TupleToArray(NodeInfo.from_info(self.info, "cast"), self.iterable)
             self.iterator.receiver = self.iterable
             iterable_type = self.iterable.exprtype(scope)
 
@@ -3902,10 +3904,10 @@ class For(Statement):
         iterator_type = self.iterator.exprtype(scope)
         if not isinstance(iterator_type, FatPtr):
             raise Exception(f"{self.info}: For-loop iterator must be an object with a .next() method, not {iterator_type}")
-        assign0 = Assignment(node_infos[0], self.temp_ident, self.iterator)
+        assign0 = Assignment(NodeInfo.from_info(self.info, "assign_iterator"), self.temp_ident, self.iterator)
         assign0.typeflow(scope)
 
-        nxt_call = MethodCall(node_infos[1], self.temp_ident, "next", [])
+        nxt_call = MethodCall(NodeInfo.from_info(self.info, "next_call"), self.temp_ident, "next", [])
         nxt_type = nxt_call.exprtype(scope)
         if not isinstance(nxt_type, Union):
             debug_print(nxt_type)
@@ -3914,9 +3916,9 @@ class For(Statement):
         if continue_type == Nothing():
             raise Exception(f"{self.info}: For-loop would never enter.")
 
-        assign1 = Assignment(node_infos[2], self.inductee, nxt_call)
-        condition = TypeCheck(node_infos[3], self.inductee, continue_type)
-        wile = WhileStatement(node_infos[4], condition, assign1, self.body)
+        assign1 = Assignment(NodeInfo.from_info(self.info, "assign_next"), self.inductee, nxt_call)
+        condition = TypeCheck(NodeInfo.from_info(self.info, "nil_check"), self.inductee, continue_type)
+        wile = WhileStatement(NodeInfo.from_info(self.info, "while_loop"), condition, assign1, self.body)
         wile.typeflow(scope)
 
 @dataclass

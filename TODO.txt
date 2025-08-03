@@ -506,6 +506,12 @@ TODO:
 - Introduce "NewScope" as subtype of BlockNode
 	- Correctly handles scope merging
 
+- Make Node id's deterministic between typeflow / codegen [check!]
+- Store region insertion points in Method / Function / Program
+	- Insert CreateRegion(name=abc) before statement with id=xyz
+- During codegen, insert region ops according to stored info
+	- Store created regions in scope; use to retrieve
+
 - Have typeflow return a list of statements as a replacement
 	- By default just returns [self]
 
