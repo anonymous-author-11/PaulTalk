@@ -14,7 +14,7 @@ statement: function_def
          | break_statement ";"
          | continue_statement ";"
          | expression_statement
-         | block
+         | block -> new_scope
 
 import_statement: "import" ident ("." ident)*
 alias: ALIAS basic_type "=" typ

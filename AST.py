@@ -162,6 +162,32 @@ class BlockNode(Node):
         for stmt in self.statements: stmt.codegen(scope)
     def typeflow(self, scope):
         for stmt in self.statements: stmt.typeflow(scope)
+@dataclass
+class NewScope(BlockNode, Statement):
+
+    def typeflow(self, scope):
+        old_type_table = scope.type_table.copy()
+        old_symbol_table = scope.symbol_table.copy()
+        for stmt in self.statements:
+            stmt.typeflow(scope)
+        self.restore_outer_scope(scope, old_type_table, old_symbol_table)
+
+    def codegen(self, scope):
+        old_type_table = scope.type_table.copy()
+        old_symbol_table = scope.symbol_table.copy()
+        for stmt in self.statements:
+            stmt.codegen(scope)
+        self.restore_outer_scope(scope, old_type_table, old_symbol_table)
+
+    def restore_outer_scope(self, scope, old_type_table, old_symbol_table):
+        new_type_table = scope.type_table.copy()
+        new_symbol_table = scope.symbol_table.copy()
+        for k,v in new_type_table.items():
+            if k in old_type_table: continue
+            scope.type_table.pop(k)
+        for k,v in new_symbol_table.items():
+            if k in old_symbol_table: continue
+            scope.symbol_table.pop(k)
 
 @dataclass
 class Program(Node):

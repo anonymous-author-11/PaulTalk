@@ -238,6 +238,10 @@ class CSTTransformer(Transformer):
     def region_variable(self, *idents):
         return ".".join(ident.value for ident in idents)
 
+    def new_scope(self, *statements):
+        node_info = NodeInfo(None, self.file_path, statements[0].info.line_number if len(statements) > 0 else 0)
+        return NewScope(node_info, list(statements))
+
     def param_list(self, *params):
         return list(params)
 
