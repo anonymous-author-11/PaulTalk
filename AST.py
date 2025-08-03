@@ -3505,6 +3505,8 @@ class Assignment(Statement):
             return CallAssignment(self.info, self.target, self.value).typeflow(scope)
         if(not isinstance(self.target, Identifier)):
             raise Exception(f"{self.info}: lhs in assignment is not an identifier!")
+        if self.target.name == "self":
+            raise Exception(f"{self.info}: Cannot assign to self.")
         if self.target.name[0].isupper():
             raise Exception(f"{self.info}: Variables should not be capitalized.")
         scope.type_table[self.target.name] = value_type
