@@ -11,7 +11,7 @@ from mid import *
 import hi
 import mid
 from utils import *
-from scope import Scope, Constraints, TypeEnvironment, MemRegions, ScopeExit, PointsToGraph
+from scope import Scope, Constraints, TypeEnvironment, ScopeExit, PointsToGraph
 from method_dispatch import *
 from xdsl.dialects import llvm, arith, builtin, memref, cf, func
 from xdsl.ir import Block, Region, TypeAttribute
@@ -245,7 +245,7 @@ class Program(BlockNode):
         for stmt in self.statements:
             if isinstance(stmt, Import): continue
             stmt.typeflow(scope)
-        #G0, var_mapping0 = create_constraint_graph(scope.mem_regions.points_to_facts._set)
+        #G0, var_mapping0 = create_constraint_graph(scope.points_to_facts._set)
         #G0, var_mapping0 = transform_until_stable(G0, var_mapping0, set())
         #debug_print(f"Transformed points-to graph for main:")
         #debug_print(pretty_debug_print_graph(G0, var_mapping0, set()))
@@ -281,7 +281,9 @@ class ExpressionStatement(Statement):
         return before_tbl
 
     def codegen(self, scope):
+        scope.insert_region_creations(self)
         self.expr.codegen(scope)
+        scope.insert_region_removals(self)
 
     def typeflow(self, scope):
         self.expr.exprtype(scope)
@@ -633,7 +635,7 @@ class ArrayLiteral(Expression):
         elem_type = self_type.type_params.data[0]
         sizelit = IntegerLiteral(NodeInfo.from_info(self.info, "size"), len(self.elements), 32)
         capacitylit = IntegerLiteral(NodeInfo.from_info(self.info, "capacity"), len(self.elements) + 1, 32)
-        buf = CreateBuffer(NodeInfo.from_info(self.info, "buffer"), Buffer([elem_type]), capacitylit, None)
+        buf = CreateBuffer(NodeInfo.from_info(self.info, "buffer"), Buffer([elem_type]), capacitylit)
         temp_info = NodeInfo.from_info(self.info, "temp_buf")
         temp_var = Identifier(temp_info, temp_info.id)
         assign = Assignment(NodeInfo.from_info(self.info, "assign"), temp_var, buf)
@@ -642,7 +644,7 @@ class ArrayLiteral(Expression):
             iliteral = IntegerLiteral(NodeInfo.from_info(self.info, f"integer_{i}"), i, 32)
             indexation = MethodCall(NodeInfo.from_info(self.info, f"index_{i}"), temp_var, "_set_index", [iliteral, elem])
             indexation.codegen(scope)
-        ary = ObjectCreation(self.info, self.info.id + "_array_literal", self_type, [temp_var, sizelit, capacitylit], None)
+        ary = ObjectCreation(self.info, self.info.id + "_array_literal", self_type, [temp_var, sizelit, capacitylit])
         return ary.codegen(scope)
 
     def exprtype(self, scope):
@@ -674,7 +676,7 @@ class StringLiteral(Expression):
         size_lit = IntegerLiteral(NodeInfo.from_info(self.info, "size"), n_codepoints, 32)
         n_bytes_lit = IntegerLiteral(NodeInfo.from_info(self.info, "n_bytes"), n_bytes, 32)
         capacity_lit = IntegerLiteral(NodeInfo.from_info(self.info, "capacity"), n_bytes + 1, 32)
-        buf = CreateBuffer(NodeInfo.from_info(self.info, "buffer"), Buffer([Integer(8)]), capacity_lit, None)
+        buf = CreateBuffer(NodeInfo.from_info(self.info, "buffer"), Buffer([Integer(8)]), capacity_lit)
         temp_info = NodeInfo.from_info(self.info, "temp_buf")
         temp_var = Identifier(temp_info, temp_info.id)
         assign = Assignment(NodeInfo.from_info(self.info, "assign"), temp_var, buf)
@@ -687,7 +689,7 @@ class StringLiteral(Expression):
         buffer_set = BufferSetOp.create(operands=operands, attributes={"typ": llvmtype})
         scope.region.last_block.add_ops([lit, zero, buffer_set])
         obj_name = self.info.id + "_string_literal"
-        string = ObjectCreation(self.info, obj_name, self.exprtype(scope), [temp_var, n_bytes_lit, size_lit, capacity_lit], None)
+        string = ObjectCreation(self.info, obj_name, self.exprtype(scope), [temp_var, n_bytes_lit, size_lit, capacity_lit])
         return string.codegen(scope)
 
     def exprtype(self, scope):
@@ -705,7 +707,7 @@ class CharLiteral(Expression):
         codepoint = ord(self.value)
         cp_info = NodeInfo.from_info(self.info, "codepoint")
         codepoint_literal = IntegerLiteral(cp_info, codepoint, 32)
-        char = ObjectCreation(self.info, self.info.id + "_char_literal", self.exprtype(scope), [codepoint_literal], None)
+        char = ObjectCreation(self.info, self.info.id + "_char_literal", self.exprtype(scope), [codepoint_literal])
         return char.codegen(scope)
 
     def exprtype(self, scope):
@@ -740,11 +742,11 @@ class RangeLiteral(Expression):
 class InclusiveRangeLiteral(RangeLiteral):
 
     def codegen(self, scope):
-        return ObjectCreation(self.info, self.info.id + "_inclusive_range", FatPtr.basic("Range"), [self.start, self.end], None).codegen(scope)
+        return ObjectCreation(self.info, self.info.id + "_inclusive_range", FatPtr.basic("Range"), [self.start, self.end]).codegen(scope)
     
     def exprtype(self, scope):
         self.ensure_i32_args(scope)
-        return ObjectCreation(self.info, self.info.id + "_inclusive_range", FatPtr.basic("Range"), [self.start, self.end], None).exprtype(scope)
+        return ObjectCreation(self.info, self.info.id + "_inclusive_range", FatPtr.basic("Range"), [self.start, self.end]).exprtype(scope)
 
 @dataclass
 class ExclusiveRangeLiteral(RangeLiteral):
@@ -752,13 +754,13 @@ class ExclusiveRangeLiteral(RangeLiteral):
     def codegen(self, scope):
         one = IntegerLiteral(self.info, 1, 32)
         end_minus_one = Arithmetic(self.info, self.end, "SUB", one)
-        return ObjectCreation(self.info, self.info.id + "_exclusive_range", FatPtr.basic("Range"), [self.start, end_minus_one], None).codegen(scope)
+        return ObjectCreation(self.info, self.info.id + "_exclusive_range", FatPtr.basic("Range"), [self.start, end_minus_one]).codegen(scope)
     
     def exprtype(self, scope):
         self.ensure_i32_args(scope)
         one = IntegerLiteral(self.info, 1, 32)
         end_minus_one = Arithmetic(self.info, self.end, "SUB", one)
-        return ObjectCreation(self.info, self.info.id + "_exclusive_range", FatPtr.basic("Range"), [self.start, end_minus_one], None).exprtype(scope)
+        return ObjectCreation(self.info, self.info.id + "_exclusive_range", FatPtr.basic("Range"), [self.start, end_minus_one]).exprtype(scope)
 
 @dataclass
 class TupleLiteral(Expression):
@@ -785,8 +787,8 @@ class TupleLiteral(Expression):
     def apply_constraints(self, scope):
         for i, elem in enumerate(self.elems):
             index_string = self.info.id + "." + str(i)
-            scope.mem_regions.points_to_facts.add((index_string, "==", elem.info.id))
-            scope.mem_regions.points_to_facts.add((self.info.id, "<", index_string))
+            scope.points_to_facts.add((index_string, "==", elem.info.id))
+            scope.points_to_facts.add((self.info.id, "<", index_string))
 
     def typeflow(self, scope):
         self.exprtype(scope)
@@ -1116,7 +1118,7 @@ class TupleToArray(Expression):
         buf = TupleToBuffer(NodeInfo.from_info(self.info, "cast"), self.tupl)
         sizelit = IntegerLiteral(NodeInfo.from_info(self.info, "size"), len(tuple_type.types.data), 32)
         capacitylit = IntegerLiteral(NodeInfo.from_info(self.info, "capacity"), len(tuple_type.types.data), 32)
-        ary = ObjectCreation(self.info, self.info.id + "_tuple_to_array", FatPtr.generic("Array", [elem_type]), [buf, sizelit, capacitylit], None)
+        ary = ObjectCreation(self.info, self.info.id + "_tuple_to_array", FatPtr.generic("Array", [elem_type]), [buf, sizelit, capacitylit])
         return ary.codegen(scope)
 
     def elem_type(self, tuple_type, scope):
@@ -1276,7 +1278,7 @@ class Into(Expression):
         candidate_behaviors = [behavior for behavior in to_class.behaviors if behavior.name == "init" and behavior.arity == 1]
         candidate_behaviors = [behavior for behavior in candidate_behaviors if behavior.applicable(to_type, scope, "init", [operand_type])]
         if len(candidate_behaviors) == 0: return None
-        call = ObjectCreation(self.info, self.info.id + "_into_constructor", to_type, [self.operand], None)
+        call = ObjectCreation(self.info, self.info.id + "_into_constructor", to_type, [self.operand])
         call.exprtype(scope)
         return call
 
@@ -1325,11 +1327,11 @@ class FunctionCall(Expression):
         if len(types) == 0 or all(is_value_type(t) for t in types): return
 
         if formal_constraints.all_alias:
-            scope.mem_regions.points_to_facts.all_alias = True
+            scope.points_to_facts.all_alias = True
             #print(f"{self.info} call to .{self.method} poisons the calling context")
             return
 
-        scope.mem_regions.points_to_facts = scope.mem_regions.points_to_facts.union(formal_constraints)
+        scope.points_to_facts = scope.points_to_facts.union(formal_constraints)
 
     def exprtype(self, scope):
         self.ensure_declared(scope)
@@ -1441,11 +1443,11 @@ class MethodCall(Expression):
         formal_constraints = formal_constraints.prune(value_type_names)
 
         if formal_constraints.all_alias:
-            scope.mem_regions.points_to_facts.all_alias = True
+            scope.points_to_facts.all_alias = True
             #print(f"{self.info} call to .{self.method} poisons the calling context")
             return
 
-        scope.mem_regions.points_to_facts = scope.mem_regions.points_to_facts.union(formal_constraints)
+        scope.points_to_facts = scope.points_to_facts.union(formal_constraints)
 
     def simple_exprtype(self, scope, rec_typ):
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
@@ -1568,7 +1570,7 @@ class FunctionLiteralCall(MethodCall):
 
     def apply_constraints(self, scope):
         return
-        #scope.mem_regions.points_to_facts.all_alias = True
+        #scope.points_to_facts.all_alias = True
 
     def exprtype(self, scope):
         rec_typ = self.receiver.exprtype(scope)
@@ -1613,7 +1615,7 @@ class BufferIndexation(Indexation):
         return buf_get.results[0]
 
     def apply_constraints(self, scope):
-        scope.mem_regions.points_to_facts.add((self.info.id, "<", self.receiver.info.id))
+        scope.points_to_facts.add((self.info.id, "<", self.receiver.info.id))
 
     def exprtype(self, scope):
         rec_typ = self.receiver.exprtype(scope)
@@ -1645,7 +1647,7 @@ class BufferSetIndex(MethodCall):
         scope.region.last_block.add_ops([cast_val, cast_idx, buf_set])
 
     def apply_constraints(self, scope):
-        scope.mem_regions.points_to_facts.add((self.receiver.info.id, "<", self.arguments[1].info.id))
+        scope.points_to_facts.add((self.receiver.info.id, "<", self.arguments[1].info.id))
 
     def exprtype(self, scope):
         rec_typ = self.receiver.exprtype(scope)
@@ -1672,8 +1674,8 @@ class TupleIndexation(Indexation):
 
     def apply_constraints(self, scope):
         index_string = str(self.arguments[0].value)
-        scope.mem_regions.points_to_facts.add((self.receiver.info.id + "." + index_string, "==", self.info.id))
-        scope.mem_regions.points_to_facts.add((self.receiver.info.id, "<", self.receiver.info.id + "." + index_string))
+        scope.points_to_facts.add((self.receiver.info.id + "." + index_string, "==", self.info.id))
+        scope.points_to_facts.add((self.receiver.info.id, "<", self.receiver.info.id + "." + index_string))
 
     def exprtype(self, scope):
         rec_typ = self.receiver.exprtype(scope)
@@ -1693,8 +1695,8 @@ class TupleSetIndex(MethodCall):
 
     def apply_constraints(self, scope):
         index_string = str(self.arguments[0].value)
-        scope.mem_regions.points_to_facts.add((self.receiver.info.id + "." + index_string, "==", self.arguments[1].info.id))
-        scope.mem_regions.points_to_facts.add((self.receiver.info.id, "<", self.receiver.info.id + "." + index_string))
+        scope.points_to_facts.add((self.receiver.info.id + "." + index_string, "==", self.arguments[1].info.id))
+        scope.points_to_facts.add((self.receiver.info.id, "<", self.receiver.info.id + "." + index_string))
 
     def exprtype(self, scope):
         indexation = TupleIndexation(self.info, self.receiver, "_index", [self.arguments[0]])
@@ -1859,16 +1861,12 @@ class ObjectCreation(Expression):
     anon_name: str
     type: TypeAttribute
     arguments: List[Expression]
-    region: str
 
     @property
     def subexpressions(self):
         return [*self.arguments]
 
     def codegen(self, scope):
-
-        #if not self.region:
-        #    raise Exception(f"{self.info}: not assigned to a region")
 
         self_type = self.exprtype(scope)
         input_types = [arg.exprtype(scope) for arg in self.arguments]
@@ -1882,7 +1880,8 @@ class ObjectCreation(Expression):
         n_data_fields = len([f for f in cls.fields() if not isinstance(f.declaration, TypeFieldDecl)])
         parameterizations = self.parameterizations(cls, self_type, scope)
         num_data_fields = IntegerAttr.from_int_and_width(n_data_fields, 32)
-        new_op = NewOp.make(parameterizations, cls.base_typ(), self_type.cls, num_data_fields, self.region, self_type)
+        region_name = scope.region_mapping[self.info.id] if self.info.id in scope.region_mapping else ""
+        new_op = NewOp.make(parameterizations, cls.base_typ(), self_type.cls, num_data_fields, region_name, self_type)
         scope.region.last_block.add_op(new_op)
         scope.symbol_table[self.anon_name] = new_op.results[0]
         scope.type_table[self.anon_name] = self_type
@@ -1969,8 +1968,7 @@ class ObjectCreation(Expression):
         scope.type_table[self.anon_name] = simplified_type
         anon_id = Identifier(self.info, self.anon_name)
         MethodCall(NodeInfo.from_info(self.info, "init_call"), anon_id, "init", self.arguments).exprtype(scope)
-        scope.mem_regions.allocations[self.info.id] = self
-        scope.mem_regions.points_to_facts.add((self.info.id, "==", self.anon_name))
+        scope.points_to_facts.add((self.info.id, "==", self.anon_name))
         return simplified_type
 
 @dataclass
@@ -2080,7 +2078,6 @@ class MethodDef(Statement):
     _constraints: Constraints
     type_params: List[TypeAttribute]
     params: List['VarDecl']
-    arity: int
     _return_type: TypeAttribute
     yield_type: TypeAttribute
     body: BlockNode
@@ -2088,15 +2085,40 @@ class MethodDef(Statement):
     hasreturn: bool
     concrete_return_types: TypeAttribute
     insertion_points: dict
+    region_mapping: dict
 
     @property
     def mangled_name(self):
         return self.name + "_" + clean_param_names(self.params)
 
+    @property
+    def arity(self):
+        return len(self.params)
+
+    def __init__(self, info, name, body, params=None, constraints=None, type_params=None, return_type=None, yield_type=None):
+        self.info = info
+        self.name = name
+        self.body = body
+        self._return_type = return_type
+        
+        self.type_params = type_params or []
+        self.params = params or []
+        self.concrete_return_types = []
+        
+        self._constraints = constraints or Constraints()
+        self.yield_type = yield_type or Union.from_list([FatPtr.basic("Exception"), Nil()])
+
+        self.defining_class = None
+        self.hasreturn = False
+        self.insertion_points = None
+        self.region_mapping = None
+
     def codegen(self, scope):
         #debug_print(f"codegenning {self.defining_class.name}.{self.name}")
         if self.qualified_name() in scope.comp_unit.codegenned: return
         body_scope = Scope(scope)
+        body_scope.region_mapping = self.region_mapping
+        body_scope.insertion_points = self.insertion_points
         arg_types = scope.behavior.broad_param_types()
         self.wrap_self(body_scope)
         self.wrap_params(body_scope, arg_types)
@@ -2280,7 +2302,7 @@ class MethodDef(Statement):
         
         param_names = self.pointsto_param_names()
         
-        found_facts = body_scope.mem_regions.points_to_facts
+        found_facts = body_scope.points_to_facts
 
         #if found_facts.all_alias:
             #print(f"{self.defining_class.name}.{self.name} was discovered to be all_alias")
@@ -2294,7 +2316,8 @@ class MethodDef(Statement):
         self.check_override_lifetime_constraints(body_scope, annotated_graph, param_names, name)
 
         if annotated_facts.all_alias:
-            body_scope.mem_regions.assign_regions(discovered_graph.var_mapping, param_names)
+            single_region_name = "single_region_" + random_letters(10)
+            self.region_mapping = {k:single_region_name for k,v in discovered_graph.var_mapping.items()}
             print(f"{self.defining_class.name}.{self.name} annotated with all_alias")
             return
 
@@ -2309,11 +2332,12 @@ class MethodDef(Statement):
         ok, comment = discovered_graph.is_approximated_by(annotated_graph)
 
         if ok:
-            body_scope.mem_regions.assign_regions(discovered_graph.var_mapping, param_names)
             live_tbl = {k:False for k,v in discovered_graph.var_mapping.items()} | self.live_at_return()
             insertion_points = {}
             self.body.liveness(live_tbl, discovered_graph, insertion_points)
             self.insertion_points = insertion_points
+            self.region_mapping = {k:discovered_graph.region_name(v) for k,v in discovered_graph.var_mapping.items()}
+
             if len(insertion_points) > 0: print(f"insertion points for {self.defining_class.name}.{self.name}")
             for id, points in insertion_points.items():
                 for a,b in points:
@@ -2364,7 +2388,7 @@ class MethodDef(Statement):
     def typeflow(self, body_scope):
         self.check_setter_num_params()
         cls_constraints = self.self_type_constraints()
-        body_scope.mem_regions.points_to_facts = body_scope.mem_regions.points_to_facts.union(cls_constraints)
+        body_scope.points_to_facts = body_scope.points_to_facts.union(cls_constraints)
         self.body.typeflow(body_scope)
 
     def param_types(self):
@@ -2379,7 +2403,6 @@ class MethodDef(Statement):
     def __repr__(self):
         return f"MethodDef({self.name}, {self.param_types()})"
 
-@dataclass
 class AbstractMethodDef(MethodDef):
     def ensure_return_type(self, scope):
         if len(self.body.statements) > 0:
@@ -2389,15 +2412,12 @@ class AbstractMethodDef(MethodDef):
     def __hash__(self):
         return hash(self.qualified_name())
 
-@dataclass
 class Getter(MethodDef):
     pass
 
-@dataclass
 class Setter(MethodDef):
     pass
 
-@dataclass
 class ClassMethodDef(MethodDef):
 
     def codegen(self, scope):
@@ -2451,7 +2471,7 @@ class ClassMethodDef(MethodDef):
             param.typeflow(body_scope)
 
     def initialize_points_to(self, body_scope):
-        body_scope.mem_regions.points_to_facts = Constraints()
+        body_scope.points_to_facts = Constraints()
 
     def live_at_return(self):
         return {}
@@ -2970,7 +2990,6 @@ class ClassDef(Statement):
     method_definitions: List[MethodDef]
     _behaviors: List[Behavior]
     _type_env: TypeEnvironment
-    mem_regions: MemRegions
     _vtable: List[Method | Behavior]
     _my_ordering: List["ClassDef"]
 
@@ -2983,7 +3002,6 @@ class ClassDef(Statement):
         self.virtual_regions = regions
         self.region_constraints = constraints
         self.method_definitions = methods
-        self.mem_regions = MemRegions()
         self._ancestors = None
         self._behaviors = None
         self._type_env = None
@@ -3036,7 +3054,6 @@ class ClassDef(Statement):
     def self_scope(self, scope):
         self_scope = Scope(scope, cls=self)
         self_scope.type_env = self.type_env
-        self_scope.mem_regions = self.mem_regions
         self_scope.symbol_table = {}
         self_scope.type_table = {}
         return self_scope
@@ -3053,14 +3070,9 @@ class ClassDef(Statement):
     def typeflow(self, scope):
         if not self.name[0].isupper():
             raise Exception(f"{self.info}: Class names should be capitalized.")
-        self.mem_regions.points_to_facts.add(("self","==","self"))
-        for reg in self.all_regions():
-            self.mem_regions.points_to_facts.add(("self", "<", reg))
         self_scope = self.self_scope(scope)
         for field in self.fields():
             field.declaration.typeflow(self_scope)
-            if not isinstance(field.declaration, TypeFieldDecl):
-                self.mem_regions.points_to_facts.add(("self", "<", field.declaration.name))
         unpruned = [*self.field_declarations, *chain.from_iterable(cls.field_declarations for cls in self.my_ordering())]
         field_names = {declaration.name for declaration in unpruned}
         field_type_sets = [set([f.type(scope.type_env) for f in unpruned if f.name == name]) for name in field_names]
@@ -3334,6 +3346,7 @@ class VarDecl(Statement):
         return before_tbl
 
     def codegen(self, scope):
+        scope.insert_region_creations(self)
         scope.type_table[self.name] = self.type(scope.type_env)
 
     def ensure_capitalization(self):
@@ -3444,15 +3457,17 @@ class Assignment(Statement):
         if should_reassign: return Reassignment(self.info, self.target, self.value).codegen(scope)
         if isinstance(self.value, Identifier) or isinstance(typ, FatPtr) or isinstance(typ, Buffer) or isinstance(typ, Coroutine):
             return Reference(self.info, self.target, self.value).codegen(scope)
+        scope.insert_region_creations(self)
         new_val = self.value.codegen(scope)
         scope.symbol_table[self.target.name] = new_val
         scope.type_table[self.target.name] = typ
+        scope.insert_region_removals(self)
 
     def typeflow(self, scope):
         value_type = self.value.exprtype(scope)
         if not value_type or value_type == llvm.LLVMVoidType():
             raise Exception(f"{self.info}: Assignment impossible: right hand side expression does not return anything.")
-        scope.mem_regions.points_to_facts.add((self.target.info.id, "==", self.value.info.id))
+        scope.points_to_facts.add((self.target.info.id, "==", self.value.info.id))
         if isinstance(self.target, Identifier) and "@" in self.target.name:
             return FieldAssignment(self.info, self.target, self.value).typeflow(scope)
         if isinstance(self.target, MethodCall):
@@ -3469,6 +3484,7 @@ class Assignment(Statement):
 class Reference(Assignment):
 
     def codegen(self, scope):
+        scope.insert_region_creations(self)
         typ = self.value.exprtype(scope)
         new_val = self.value.codegen(scope)
         refer_op = ReferOp.create(operands=[new_val], attributes={"typ":typ.base_typ()}, result_types=[typ])
@@ -3476,22 +3492,26 @@ class Reference(Assignment):
         new_val = refer_op.results[0]
         scope.symbol_table[self.target.name] = new_val
         scope.type_table[self.target.name] = typ
+        scope.insert_region_removals(self)
 
 @dataclass
 class Reassignment(Assignment):
 
     def codegen(self, scope):
+        scope.insert_region_creations(self)
         typ = self.value.exprtype(scope)
         new_val = self.value.codegen(scope)
         old_typ = scope.type_table[self.target.name]
         cast = CastOp.make(new_val, typ, old_typ)
         assign = AssignOp.make(scope.symbol_table[self.target.name], cast.results[0], old_typ)
         scope.region.last_block.add_ops([cast, assign])
+        scope.insert_region_removals(self)
 
 @dataclass
 class FieldAssignment(Assignment):
 
     def codegen(self, scope):
+        scope.insert_region_creations(self)
         typ = self.value.exprtype(scope)
         new_val = self.value.codegen(scope)
         target_type = self.target.exprtype(scope)
@@ -3505,6 +3525,7 @@ class FieldAssignment(Assignment):
         operands = [scope.symbol_table["self"], cast.results[0]]
         set_field = SetFieldOp.create(operands=operands, attributes=attr_dict)
         scope.region.last_block.add_ops([cast, set_field])
+        scope.insert_region_removals(self)
 
     def typeflow(self, scope):
         typ = self.value.exprtype(scope)
@@ -3522,12 +3543,14 @@ class FieldAssignment(Assignment):
 class CallAssignment(Assignment):
 
     def codegen(self, scope):
+        scope.insert_region_creations(self)
         typ = self.value.exprtype(scope)
         new_val = self.value.codegen(scope)
         target_type = self.target.exprtype(scope)
         cast = CastOp.make(new_val, typ, target_type)
         assign = AssignOp.make(self.target.codegen(scope), cast.results[0], target_type)
         scope.region.last_block.add_ops([cast, assign])
+        scope.insert_region_removals(self)
 
     def typeflow(self, scope):
         typ = self.value.exprtype(scope)
@@ -3605,7 +3628,7 @@ class Branch(Statement):
             new_typ = main_scope.simplify(Union.from_list(all_types))
             #print(f"{self.info}: merged {key} from {all_types} to {new_typ}")
             main_scope.type_table[key] = new_typ
-        self.merge_scope_memregions(main_scope, branch_scopes)
+        self.merge_scope_pointsto(main_scope, branch_scopes)
 
     def merge_scopes(self, main_scope, branch_scopes):
         for key, value in main_scope.type_table.items():
@@ -3618,12 +3641,12 @@ class Branch(Statement):
             main_scope.symbol_table[key] = cast.results[0]
             main_scope.type_table[key] = new_typ
             main_scope.region.last_block.add_op(cast)
-        self.merge_scope_memregions(main_scope, branch_scopes)
+        self.merge_scope_pointsto(main_scope, branch_scopes)
 
-    def merge_scope_memregions(self, main_scope, branch_scopes):
+    def merge_scope_pointsto(self, main_scope, branch_scopes):
+        main_scope.points_to_facts = main_scope.points_to_facts.union(*(scope.points_to_facts for scope in branch_scopes))
         for scope in branch_scopes:
-            main_scope.mem_regions.points_to_facts = main_scope.mem_regions.points_to_facts.union(scope.mem_regions.points_to_facts)
-            for k, v in scope.mem_regions.allocations.items(): main_scope.mem_regions.allocations[k] = v
+            main_scope.created_regions = main_scope.created_regions | scope.created_regions
 
 @dataclass
 class IfStatement(Branch):
@@ -3646,6 +3669,8 @@ class IfStatement(Branch):
         return before_tbl 
 
     def codegen(self, scope):
+        scope.insert_region_creations(self)
+
         bool_condition = self.condition.codegen(scope)
         unwrap = UnwrapOp.create(operands=[bool_condition], result_types=[IntegerType(1)])
         scope.region.last_block.add_op(unwrap)
@@ -3682,6 +3707,8 @@ class IfStatement(Branch):
         if_op = IfOp.create(operands=[unwrap.results[0]], regions=branch_regions)
         scope.region.last_block.add_op(if_op)
         self.merge_scopes(scope, route_scopes)
+
+        scope.insert_region_removals(self)
 
     def typeflow(self, scope):
         bool_condition = self.condition.typeflow(scope)
@@ -3755,6 +3782,7 @@ class WhileStatement(Branch):
         return union_tbl
 
     def codegen(self, scope):
+        scope.insert_region_creations(self)
         condition_scope = Scope(scope)
         if self.preheader: self.preheader.typeflow(condition_scope)
         self.condition.typeflow(condition_scope)
@@ -3792,6 +3820,7 @@ class WhileStatement(Branch):
         scope.region.last_block.add_op(while_op)
         
         self.merge_scopes(scope, route_scopes)
+        scope.insert_region_removals(self)
 
     def typeflow(self, scope):
         condition_scope = Scope(scope)
@@ -3907,6 +3936,7 @@ class Return(Statement):
         return before_tbl
 
     def codegen(self, scope):
+        scope.insert_region_creations(self)
         ret_op = ReturnOp.create()
         scope.region.last_block.add_op(ret_op)
         self.untype_variables(scope)
@@ -3940,6 +3970,7 @@ class ReturnValue(Return):
         return before_tbl
 
     def codegen(self, scope):
+        scope.insert_region_creations(self)
         retval_typ = scope.simplify(self.value.exprtype(scope))
         broad_return_type = scope.behavior.broad_return_type() if scope.behavior else scope.method.definition.return_type()
         cast = CastOp.make(self.value.codegen(scope), retval_typ, broad_return_type)
@@ -3959,7 +3990,7 @@ class ReturnValue(Return):
         if not (direct_subtype or matches):
             raise Exception(f"{self.info}: returned value of invalid type: {ret_typ}. Should be subtype of {scope.method.return_type()}.")
         if not is_value_type(ret_typ):
-            scope.mem_regions.points_to_facts.add(("ret", "==", self.value.info.id))
+            scope.points_to_facts.add(("ret", "==", self.value.info.id))
         scope.method.definition.hasreturn = True
         scope.method.definition.concrete_return_types.append(ret_typ)
         self.untype_variables(scope)
@@ -4101,7 +4132,6 @@ class Continue(Statement):
 class CreateBuffer(Expression):
     buf: TypeAttribute
     size: Expression
-    region: str
 
     @property
     def subexpressions(self):
@@ -4111,9 +4141,9 @@ class CreateBuffer(Expression):
         size_type = self.size.exprtype(scope)
         size = self.size.codegen(scope)
         cast = CastOp.make(size, size_type, Integer(64))
-        region_id = StringAttr(self.region) if self.region else StringAttr("")
+        region_name = scope.region_mapping[self.info.id] if self.info.id in scope.region_mapping else ""
         elem_type = scope.simplify(self.buf.elem_type)
-        attr_dict = {"typ":elem_type.base_typ(), "region_id":region_id}
+        attr_dict = {"typ":elem_type.base_typ(), "region_id":StringAttr(region_name)}
         operands = [cast.results[0]]
         if isinstance(elem_type, TypeParameter):
             parameterization = scope.get_parameterization(elem_type)
@@ -4128,7 +4158,6 @@ class CreateBuffer(Expression):
             raise Exception(f"{self.info}: Buffer creation takes an integer as argument, not {size_typ}.")
         if size_typ.bitwidth > 64:
             raise Exception(f"{self.info}: Buffer creation can only take integers up to 64 bits wide, not {size_typ}.")
-        scope.mem_regions.allocations[self.info.id] = self
         buf_type = scope.simplify(self.buf)
         elem_type = scope.type_env.validated_type(self.info, buf_type.elem_type)
         return Buffer([elem_type])

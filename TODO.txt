@@ -493,6 +493,23 @@ TODO:
 	- The paper with region protection does not do this
 	- Could replace any creation-of-nonlocal-region with a reset
 	- This makes it a matter of correctness, not merely an optimization
+	- How do we deal with loops?
+
+- Can you think of an example where the create and remove are not syntactically ordered?
+
+// create region
+a = Object{};
+use(a);
+// remove region
+
+while bar {
+	// create region
+	a = Object{};
+	other_code();
+	use(a);
+	// remove region
+}
+// remove region
 
 - Make it illegal to assign to 'self' [check!]
 - Track node id's rather than Identifiers [check!]

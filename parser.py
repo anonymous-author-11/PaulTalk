@@ -111,11 +111,9 @@ class CSTTransformer(Transformer):
         return name.value
 
     def method_def(self, abstract, deff, name, type_params, params, return_type, yield_type, body, constraints):
-        exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractMethodDef if abstract else MethodDef
         node_info = NodeInfo(None, self.file_path, line_number(deff))
-        constraints = constraints if constraints else Constraints()
-        return ty(node_info, name, constraints, type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False, [], {})
+        return ty(node_info, name, body, params, constraints, type_params, return_type, yield_type)
 
     def getters(self, field, *fields):
         return [self.getter(field), *(self.getter(f) for f in fields)]
@@ -125,17 +123,15 @@ class CSTTransformer(Transformer):
 
     def getter(self, field):
         node_infos = [NodeInfo(None, self.file_path, line_number(field)) for i in range(5)]
-        exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         name = field.value.replace("@","")
         field_id = Identifier(node_infos[0], field.value)
         ret = ReturnValue(node_infos[1], field_id)
         body = BlockNode(node_infos[2], [ret])
         constraints = Constraints({("ret", "==", field.value.replace("@", "self."))})
-        return Getter(node_infos[4], name, constraints, [], [], 0, None, exception_or_nil, body, None, False, [], {})
+        return Getter(node_infos[4], name, body, constraints=constraints)
 
     def setter(self, field):
         node_infos = [NodeInfo(None, self.file_path, line_number(field)) for i in range(7)]
-        exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         name = "_set_" + field.value.replace("@","")
         param = VarDecl(node_infos[0], "value", None)
         field_id = Identifier(node_infos[1], field.value)
@@ -143,7 +139,7 @@ class CSTTransformer(Transformer):
         assignment = Assignment(node_infos[3], field_id, value_id)
         body = BlockNode(node_infos[4], [assignment])
         constraints = Constraints(({(field.value.replace("@", "self."), "==", "value")}))
-        return Setter(node_infos[6], name, constraints, [], [param], 1, None, exception_or_nil, body, None, False, [], {})
+        return Setter(node_infos[6], name, body, constraints=constraints, params=[param])
 
     def operator(self, op):
         translated_op = "_" + {
@@ -153,18 +149,14 @@ class CSTTransformer(Transformer):
         return translated_op
 
     def operator_def(self, abstract, deff, translated_op, type_params, params, return_type, yield_type, body, constraints):
-        exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractMethodDef if abstract else MethodDef
         node_info = NodeInfo(None, self.file_path, line_number(deff))
-        constraints = constraints if constraints else Constraints()
-        return ty(node_info, translated_op, constraints, type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False, [], {})
+        return ty(node_info, translated_op, body, params, constraints, type_params, return_type, yield_type)
 
     def class_method_def(self, abstract, deff, self_tok, name, type_params, params, return_type, yield_type, body, constraints):
-        exception_or_nil = Union.from_list([FatPtr.basic("Exception"), Nil()])
         ty = AbstractClassMethodDef if abstract else ClassMethodDef
         node_info = NodeInfo(None, self.file_path, line_number(name))
-        constraints = constraints if constraints else Constraints()
-        return ty(node_info, "_Self_" + name.value, constraints, type_params or [], params or [], len(params or []), return_type, yield_type or exception_or_nil, body, None, False, [], {})
+        return ty(node_info, "_Self_" + name.value, body, params, constraints, type_params, return_type, yield_type)
 
     def class_def(self, cls, name, supertype_list, bound_list, fields, region_constraints, methods):
         if not isinstance(name, FatPtr):
@@ -562,14 +554,14 @@ class CSTTransformer(Transformer):
             if receiver.name == "Coroutine" and meth_name == "new":
                 return CoCreate(node_info, "coroutine_" + random_letters(10), args)
             if meth_name == "new":
-                return ObjectCreation(node_info, random_letters(10), FatPtr.basic(receiver.name), args, None)
+                return ObjectCreation(node_info, random_letters(10), FatPtr.basic(receiver.name), args)
             return ClassMethodCall(node_info, FatPtr.basic(receiver.name), meth_name.value, args)
         if isinstance(receiver, ParametrizedAttribute):
             if isinstance(receiver, Buffer) and meth_name == "new":
                 node_info = NodeInfo(None, self.file_path, args[0].info.line_number)
-                return CreateBuffer(node_info, receiver, args[0], None)
+                return CreateBuffer(node_info, receiver, args[0])
             if meth_name == "new":
-                return ObjectCreation(node_info, random_letters(10), receiver, args, None)
+                return ObjectCreation(node_info, random_letters(10), receiver, args)
             return ClassMethodCall(node_info, receiver, meth_name.value, args)
         return MethodCall(node_info, receiver, meth_name.value, args)
 
@@ -578,15 +570,15 @@ class CSTTransformer(Transformer):
         if isinstance(receiver, Identifier) and receiver.name[0].isupper():
             if receiver.name == "Coroutine":
                 return CoCreate(node_info, "coroutine_" + random_letters(10), args)
-            return ObjectCreation(node_info, random_letters(10), FatPtr.basic(receiver.name), args, None)
+            return ObjectCreation(node_info, random_letters(10), FatPtr.basic(receiver.name), args)
         if isinstance(receiver, ParametrizedAttribute):
             if isinstance(receiver, Buffer):
                 node_info = NodeInfo(None, self.file_path, args[0].info.line_number)
-                return CreateBuffer(node_info, receiver, args[0], None)
-            return ObjectCreation(node_info, random_letters(10), receiver, args, None)
+                return CreateBuffer(node_info, receiver, args[0])
+            return ObjectCreation(node_info, random_letters(10), receiver, args)
         if receiver.value == "Coroutine":
             return CoCreate(node_info, "coroutine_" + random_letters(10), args)
-        return ObjectCreation(node_info, random_letters(10), FatPtr.basic(receiver.value), args, None)
+        return ObjectCreation(node_info, random_letters(10), FatPtr.basic(receiver.value), args)
 
     def indexation(self, receiver, *indices):
         node_info = NodeInfo(None, self.file_path, receiver.info.line_number)

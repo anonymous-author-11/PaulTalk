@@ -473,25 +473,6 @@ class Constraints:
         no_alias = (not all_alias) and self.no_alias or any(other.no_alias for other in others)
         return Constraints(combined_set, all_alias, no_alias)
 
-class MemRegions:
-    allocations: dict
-    points_to_facts: Constraints
-
-    def __init__(self, parent=None):
-        self.allocations = parent.allocations.copy() if parent else {}
-        self.points_to_facts = parent.points_to_facts.copy() if parent else Constraints()
-        self.single_region = False
-
-    def assign_regions(self, var_mapping, param_names):
-        rep_to_vars = {}
-        for var, rep in var_mapping.items():
-            rep_to_vars.setdefault(rep, []).append(var)
-        for id, allocation in self.allocations.items():
-            labels = rep_to_vars[var_mapping[id]]
-            param_labels = sorted(label for label in labels if label in param_names)
-            best_label = (*param_labels, "stack")[0]
-            allocation.region = best_label
-
 class PointsToGraph:
     param_names: set
     graph: nx.DiGraph
@@ -623,28 +604,50 @@ class Scope:
     region: Region
     comp_unit: CompilationUnit
     type_env: TypeEnvironment
-    mem_regions: MemRegions
+    points_to_facts: Constraints
     symbol_table: dict
     type_table: dict
     parameterization_cache: dict
     exits: list
+    insertion_points: dict
+    region_mapping: dict
+    created_regions: dict
 
     def __init__(self, parent=None, cls=None, behavior=None, method=None, wile=None):
         self.region = Region([Block([])])
 
         self.comp_unit = parent.comp_unit if parent else CompilationUnit()
         self.type_env = TypeEnvironment(parent.type_env) if parent else TypeEnvironment()
-        self.mem_regions = MemRegions(parent.mem_regions) if parent else MemRegions()
+        self.points_to_facts = parent.points_to_facts.copy() if parent else Constraints()
 
         self.symbol_table = parent.symbol_table.copy() if parent else {}
         self.type_table = parent.type_table.copy() if parent else {}
+        self.created_regions = parent.created_regions.copy() if parent else {}
+        self.insertion_points = parent.insertion_points.copy() if parent else {}
+        self.region_mapping = parent.region_mapping.copy() if parent else {}
         self.parameterization_cache = parent.parameterization_cache.copy() if parent and parent.method else {}
         self.cls = parent.cls if (parent and parent.cls and not cls) else cls
         self.method = parent.method if (parent and parent.method and not method) else method
         self.behavior = parent.behavior if (parent and parent.behavior and not behavior) else behavior
         self.wile = parent.wile if (parent and parent.wile and not wile) else wile
         self.exits = parent.exits if (parent and parent.wile and not wile) else []
+        
         self.parent = parent
+
+    def insert_region_creations(self, stmt):
+        if stmt.info.id not in self.insertion_points: return
+        insertion_points = self.insertion_points[stmt.info.id]
+        creations = [b for a,b in insertion_points if isinstance(b, CreateRegionOp)]
+        for creation in creations:
+            self.region.last_block.add_op(creation)
+            self.created_regions[creation.reg_name.data] = creation.results[0]
+
+    def insert_region_removals(self, stmt):
+        if stmt.info.id not in self.insertion_points: return
+        insertion_points = self.insertion_points[stmt.info.id]
+        removals = [b for a,b in insertion_points if isinstance(b, RemoveRegionOp)]
+        for removal in removals:
+            self.region.last_block.add_op(removal)
 
     @property
     def classes(self):
