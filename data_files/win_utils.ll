@@ -6,6 +6,8 @@ declare i32 @VirtualFree(ptr allocptr nocapture noundef, i64, i32) mustprogress 
 declare i32 @VirtualProtect(ptr, i64, i32, ptr) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
 
 ; Define an OS-agnostic wrapper around VirtualAlloc
+; MEM_RESERVE: 8192, MEM_COMMIT: 4096, (MEM_RESERVE | MEM_COMMIT): 12288
+; 4 for PAGE_READWRITE
 define noalias ptr @virtual_reserve(i64 %size) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
 	%result = call noalias ptr @VirtualAlloc(ptr null, i64 %size, i32 12288, i32 4) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1) "alloc-family"="malloc"
 	ret ptr %result
@@ -126,10 +128,17 @@ entry:
   ret i64 %.0.lcssa
 }
 
+; Page Fault Exception handler
+
 %struct._EXCEPTION_POINTERS = type { ptr, ptr }
 %struct._EXCEPTION_RECORD = type { i32, i32, ptr, ptr, i32, [15 x i64] }
 
-; call ptr @AddVectoredExceptionHandler(i32 1, ptr @PageFaultHandler")
+declare ptr @AddVectoredExceptionHandler(i32 noundef, ptr noundef)
+
+define void @os_specific_setup() {
+  %1 = call ptr @AddVectoredExceptionHandler(i32 1, ptr @PageFaultHandler)
+  ret void
+}
 
 define i32 @PageFaultHandler(ptr %0) mustprogress uwtable {
   %2 = load ptr, ptr %0, align 8
@@ -142,6 +151,7 @@ define i32 @PageFaultHandler(ptr %0) mustprogress uwtable {
   %6 = load i64, ptr %5, align 8
 
   %7 = inttoptr i64 %6 to ptr
+  ; 4096 for MEM_COMMIT, 4 for PAGE_READWRITE
   %8 = tail call ptr @VirtualAlloc(ptr noundef %7, i64 noundef 4096, i32 noundef 4096, i32 noundef 4)
   br label %9
 

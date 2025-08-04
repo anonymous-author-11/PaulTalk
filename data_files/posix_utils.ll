@@ -68,3 +68,6 @@ define void @anoint_trampoline(ptr %tramp) mustprogress nofree nosync nounwind w
   ret void
 }
 
+define void @os_specific_setup() {
+  ret void
+}
