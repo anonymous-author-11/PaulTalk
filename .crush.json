@@ -1,0 +1,21 @@
+{
+  "$schema": "https://charm.land/crush.json",
+  "providers": {
+    "zai": {
+      "type": "openai",
+      "base_url": "https://llm.chutes.ai/v1",
+      "api_key": "$CHUTES_API_KEY",
+      "models": [
+        {
+          "id": "zai-org/GLM-4.5-Air",
+          "name": "GLM 4.5 Air (free)",
+          "cost_per_1m_in": 0.0,
+          "cost_per_1m_out": 0.0,
+          "cost_per_1m_in_cached": 0.0,
+          "cost_per_1m_out_cached": 0.0,
+          "context_window": 128000
+        }
+      ]
+    }
+  }
+}

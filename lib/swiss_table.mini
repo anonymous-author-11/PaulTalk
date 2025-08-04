@@ -1,0 +1,357 @@
+import map;
+
+// Swiss table metadata constants
+alias ControlByte = i8; // Metadata byte for each slot
+
+class SwissTable[K, V] extends HashMap[K, V] {
+    @entries: Buffer[Entry[K,V]?]
+    @entries_len : i32
+    @size: i32      // number of actual entries (key -> V)
+    @load: i32      // number of occupied slots (including tombstones)
+    @hasher: (K) -> i32
+    @eq: (K, K) -> Bool
+    @control: Buffer[ControlByte]  // Metadata for each slot
+
+    // Metadata: 
+    // - 0x00: Empty slot (never been used)
+    // - 0x80: Tombstone (deleted slot)
+    // - 0x01-0x7F: Active slot with (h2 & 0x7F) + 1 probes
+    // - MSB (0x80) indicates active slot
+
+    def init(@hasher: (K) -> i32, @eq : (K, K) -> Bool) {
+        // Start with 8 slots (power of 2)
+        initial_capacity = 8;
+        @entries = Buffer[Entry[K,V]?].new(initial_capacity);
+        @entries_len = initial_capacity;
+        @control = Buffer[ControlByte].new(initial_capacity);
+        @size = 0;
+        @load = 0;
+        
+        // Control bytes are already zeroed
+    }
+
+    // Extracts control byte from a 32-bit hash
+    def control_from_hash(hash: i32) -> ControlByte {
+        return ((hash bit_and 0xFF) bit_xor ((hash >> 8) bit_and 0xFF) bit_xor 
+                ((hash >> 16) bit_and 0xFF) bit_xor ((hash >> 24) bit_and 0xFF)) bit_and 0x7F;
+    }
+
+    // Finds the slot for a key using linear probing with metadata
+    def find_slot(key: K, hash: i32) -> i32 {
+        capacity = @entries_len;
+        mask = capacity - 1;
+        control_byte = self.control_from_hash(hash);
+        
+        // Start probing from the ideal position
+        current_index = hash bit_and mask;
+        
+        // Linear probing with metadata guidance
+        probes = 0;
+        max_probes = 8; // Limit probe sequence
+        
+        while probes < max_probes {
+            current_control = @control.[current_index];
+            
+            // Empty slot - key not found
+            if current_control == 0x00 {
+                return current_index;
+            }
+            
+            // Check if this could be our key
+            if (current_control bit_and 0x80) != 0 { // Active slot
+                active_probes = (current_control bit_and 0x7F);
+                entry = @entries.[current_index];
+                
+                if entry is Entry[K,V] and entry.hash() == hash {
+                    // Hash matches, check key equality
+                    if @eq.call(entry.key(), key) {
+                        return current_index; // Key found
+                    }
+                }
+                
+                // If this entry has fewer probes than our target, it "blocked" us
+                if active_probes < probes {
+                    return current_index; // Key not found due to blocking
+                }
+            }
+            
+            // Move to next slot
+            current_index = (current_index + 1) bit_and mask;
+            probes = probes + 1;
+        }
+        
+        // Fallback: linear search without metadata
+        return self.find_slot_linear(key, hash);
+    }
+
+    // Fallback linear search when metadata-based search fails
+    def find_slot_linear(key: K, hash: i32) -> i32 {
+        capacity = @entries_len;
+        mask = capacity - 1;
+        current_index = hash bit_and mask;
+        
+        while true {
+            current_control = @control.[current_index];
+            
+            if current_control == 0x00 {
+                return current_index; // Empty slot
+            }
+            
+            if (current_control bit_and 0x80) != 0 { // Active slot
+                entry = @entries.[current_index];
+                if entry is Entry[K,V] and entry.hash() == hash {
+                    if @eq.call(entry.key(), key) {
+                        return current_index; // Key found
+                    }
+                }
+            }
+            
+            current_index = (current_index + 1) bit_and mask;
+        }
+    }
+
+    // Inserts an entry and rebalances control bytes
+    def insert_entry(entry: Entry[K,V], hash: i32) {
+        capacity = @entries_len;
+        mask = capacity - 1;
+        control_byte = self.control_from_hash(hash);
+        ideal_index = hash bit_and mask;
+        
+        current_index = ideal_index;
+        entry_to_insert = entry;
+        entry_control = control_byte bit_or 0x80; // Mark as active
+        
+        // Linear probing to find insertion point
+        while true {
+            current_control = @control.[current_index];
+            
+            if current_control == 0x00 { // Empty slot
+                @entries.[current_index] = entry_to_insert;
+                @control.[current_index] = entry_control;
+                @size = @size + 1;
+                @load = @load + 1;
+                return;
+            }
+            
+            // Check for tombstone
+            if current_control == 0x80 { // Tombstone
+                @entries.[current_index] = entry_to_insert;
+                @control.[current_index] = entry_control;
+                @size = @size + 1;
+                // @load doesn't change (replacing tombstone)
+                return;
+            }
+            
+            // Active slot - check if we should swap for better placement
+            existing_entry = @entries.[current_index];
+            if existing_entry is Entry[K,V] {
+                existing_probes = current_control bit_and 0x7F;
+                new_probes = (current_index - ideal_index + capacity) bit_and mask;
+                
+                // If existing entry has more probes than ours, swap
+                if existing_probes > new_probes {
+                    // Swap entries and control bytes
+                    temp_entry = existing_entry;
+                    temp_control = current_control;
+                    
+                    @entries.[current_index] = entry_to_insert;
+                    @control.[current_index] = entry_control;
+                    
+                    entry_to_insert = temp_entry;
+                    control_byte = self.control_from_hash(entry_to_insert.hash()) bit_or 0x80;
+                    ideal_index = entry_to_insert.hash() bit_and mask;
+                }
+            }
+            
+            // Move to next slot
+            current_index = (current_index + 1) bit_and mask;
+        }
+    }
+
+    // Ensures capacity and handles resizing
+    def ensure_capacity(required_load: i32) {
+        current_length = @entries_len;
+        // Resize if load factor > 0.8
+        needs_resize = current_length == 0 or required_load * 10 >= current_length * 8;
+        
+        if needs_resize {
+            new_capacity = current_length * 2;
+            if new_capacity < 8 { new_capacity = 8; }
+            self.resize(new_capacity);
+        }
+    }
+
+    // Resizes the internal arrays and rehashes all entries
+    def resize(new_capacity: i32) {
+        old_entries = @entries;
+        old_control = @control;
+        old_len = @entries_len;
+        
+        @entries = Buffer[Entry[K,V]?].new(new_capacity);
+        @control = Buffer[ControlByte].new(new_capacity);
+        @entries_len = new_capacity;
+        @size = 0;
+        @load = 0;
+        
+        // Initialize new control bytes
+        i = 0;
+        while i < new_capacity {
+            @control.[i] = 0x00; // Empty slot
+            i = i + 1;
+        }
+        
+        // Re-insert all active entries
+        for i in 0..old_len {
+            entry = old_entries.[i];
+            if entry is Entry[K,V] {
+                val = entry.value();
+                if val is not V { continue; }
+                // Re-insert with new hash calculation
+                hash = @hasher.call(entry.key());
+                self.insert_entry(entry, hash);
+            }
+        }
+    }
+
+    // Internal insert method
+    def insert_internal(key: K, value: V, hash: i32) {
+        i = self.find_slot(key, hash);
+        current_control = @control.[i];
+        current_entry_or_nil = @entries.[i];
+        
+        new_entry = Entry[K,V].new(key, value, hash);
+        
+        if current_control == 0x00 { // Empty slot
+            @entries.[i] = new_entry;
+            control_byte = self.control_from_hash(hash) bit_or 0x80;
+            @control.[i] = control_byte;
+            @size = @size + 1;
+            @load = @load + 1;
+        } else if current_control == 0x80 { // Tombstone
+            @entries.[i] = new_entry;
+            control_byte = self.control_from_hash(hash) bit_or 0x80;
+            @control.[i] = control_byte;
+            @size = @size + 1;
+            // @load doesn't change
+        } else { // Active slot - replace existing
+            @entries.[i] = new_entry;
+            control_byte = self.control_from_hash(hash) bit_or 0x80;
+            @control.[i] = control_byte;
+            // @size and @load don't change
+        }
+    }
+
+    // Public insert method
+    def insert(key: K, value: V) {
+        self.ensure_capacity(@load + 1);
+        hash = @hasher.call(key);
+        self.insert_internal(key, value, hash);
+    }
+
+    // Get value associated with key
+    def get(key: K) -> V? {
+        hash = @hasher.call(key);
+        i = self.find_slot(key, hash);
+        current_control = @control.[i];
+        
+        if current_control == 0x00 or current_control == 0x80 {
+            return nil; // Empty or tombstone
+        }
+        
+        entry_or_nil = @entries.[i];
+        if entry_or_nil is Entry[K,V] {
+            return entry_or_nil.value();
+        }
+        
+        return nil;
+    }
+
+    // Remove key and return its value
+    def remove(key: K) -> V? {
+        hash = @hasher.call(key);
+        i = self.find_slot(key, hash);
+        current_control = @control.[i];
+        
+        if current_control == 0x00 or current_control == 0x80 {
+            return nil; // Empty or already tombstone
+        }
+        
+        entry_or_nil = @entries.[i];
+        if entry_or_nil is not Entry[K,V] {
+            return nil;
+        }
+        
+        val = entry_or_nil.value();
+        if val is not V {
+            return nil;
+        }
+        
+        // Mark as tombstone
+        @control.[i] = 0x80;
+        @size = @size - 1;
+        // @load remains the same
+        
+        return val;
+    }
+
+    // Clear the map
+    def clear() {
+        // Re-initialize with default capacity
+        initial_capacity = 8;
+        @entries = Buffer[Entry[K,V]?].new(initial_capacity);
+        @control = Buffer[ControlByte].new(initial_capacity);
+        @entries_len = initial_capacity;
+        @size = 0;
+        @load = 0;
+        
+        // Initialize control bytes
+        i = 0;
+        while i < initial_capacity {
+            @control.[i] = 0x00; // Empty slot
+            i = i + 1;
+        }
+    }
+
+    // Return number of active key-value pairs
+    def size() -> i32 {
+        return @size;
+    }
+
+    // --- Iterator Implementation ---
+    def iterator() -> SwissTableIterator[K,V] {
+        return SwissTableIterator[K,V].new(@entries, @control, @entries_len);
+    }
+}
+
+class SwissTableIterator[K,V] extends Iterator[Pair[K,V]] {
+    @map_entries: Buffer[Entry[K,V]?]
+    @map_control: Buffer[ControlByte]
+    @index: i32
+    @length: i32
+
+    def init(@map_entries: Buffer[Entry[K,V]?], @map_control: Buffer[ControlByte], @length : i32) {
+        @index = 0;
+        @length = @length;
+    }
+
+    def next() -> Pair[K, V]? {
+        while @index < @length {
+            current_control = @map_control.[@index];
+            entry_or_nil = @map_entries.[@index];
+            @index = @index + 1;
+            
+            // Skip empty and tombstone slots
+            if current_control == 0x00 or current_control == 0x80 {
+                continue;
+            }
+            
+            if entry_or_nil is Entry[K,V] {
+                val = entry_or_nil.value();
+                if val is V {
+                    return Pair{entry_or_nil.key(), val};
+                }
+            }
+        }
+        return nil; // End of iteration
+    }
+}

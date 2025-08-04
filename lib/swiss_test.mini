@@ -1,0 +1,124 @@
+import swiss_table;
+
+// Test the Swiss table implementation
+def test_swiss_table() {
+    // Create a Swiss table with string keys and values
+    swiss_map = SwissTable[String, String].new(string_hasher, string_eq);
+    
+    // Test basic operations
+    swiss_map.insert("hello", "world");
+    swiss_map.insert("foo", "bar");
+    swiss_map.insert("baz", "qux");
+    
+    // Test get operations
+    val1 = swiss_map.get("hello");
+    if val1 is String {
+        IO.print("hello: " + val1);
+    }
+    
+    val2 = swiss_map.get("foo");
+    if val2 is String {
+        IO.print("foo: " + val2);
+    }
+    
+    // Test non-existent key
+    val3 = swiss_map.get("nonexistent");
+    if val3 is not String {
+        IO.print("nonexistent not found");
+    }
+    
+    // Test size
+    IO.print("Size: " + swiss_map.size().to_string());
+    
+    // Test iteration
+    IO.print("All entries:");
+    for entry in swiss_map {
+        IO.print(entry.first() + " -> " + entry.second());
+    }
+    
+    // Test remove
+    removed = swiss_map.remove("foo");
+    if removed is String {
+        IO.print("Removed: " + removed);
+    }
+    
+    IO.print("Size after remove: " + swiss_map.size().to_string());
+    
+    // Test non-existent remove
+    removed2 = swiss_map.remove("nonexistent");
+    if removed2 is not String {
+        IO.print("Non-existent removal failed as expected");
+    }
+}
+
+// Test with i32 keys
+def test_swiss_table_i32() {
+    swiss_map = SwissTable[i32, String].new(i32_hasher, i32_eq);
+    
+    swiss_map.insert(1, "one");
+    swiss_map.insert(2, "two");
+    swiss_map.insert(3, "three");
+    
+    IO.print("i32 map size: " + swiss_map.size().to_string());
+    
+    for entry in swiss_map {
+        IO.print(entry.first().to_string() + " -> " + entry.second());
+    }
+}
+
+// Performance comparison test
+def test_swiss_vs_quadratic() {
+    import quadratic_probe;
+    
+    // Test with many insertions
+    n = 1000;
+    
+    // Swiss table
+    swiss_start = System.time();
+    swiss_map = SwissTable[i32, i32].new(i32_hasher, i32_eq);
+    for i in 0..n {
+        swiss_map.insert(i, i * 2);
+    }
+    swiss_end = System.time();
+    
+    // Quadratic probe
+    quad_start = System.time();
+    quad_map = QuadraticProbeMap[i32, i32].new(i32_hasher, i32_eq);
+    for i in 0..n {
+        quad_map.insert(i, i * 2);
+    }
+    quad_end = System.time();
+    
+    IO.print("Swiss table insert time: " + (swiss_end - swiss_start).to_string());
+    IO.print("Quadratic probe insert time: " + (quad_end - quad_start).to_string());
+    
+    // Test lookups
+    swiss_lookup_start = System.time();
+    for i in 0..n {
+        val = swiss_map.get(i);
+    }
+    swiss_lookup_end = System.time();
+    
+    quad_lookup_start = System.time();
+    for i in 0..n {
+        val = quad_map.get(i);
+    }
+    quad_lookup_end = System.time();
+    
+    IO.print("Swiss table lookup time: " + (swiss_lookup_end - swiss_lookup_start).to_string());
+    IO.print("Quadratic probe lookup time: " + (quad_lookup_end - quad_lookup_start).to_string());
+}
+
+// Run all tests
+def main() {
+    IO.print("=== Swiss Table Tests ===");
+    test_swiss_table();
+    IO.print("");
+    
+    IO.print("=== Swiss Table i32 Tests ===");
+    test_swiss_table_i32();
+    IO.print("");
+    
+    IO.print("=== Performance Comparison ===");
+    test_swiss_vs_quadratic();
+}
