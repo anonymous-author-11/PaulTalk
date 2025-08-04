@@ -1,7 +1,8 @@
 ## Region Runtime System
 
 Each region will be a VirtualAlloc / mmapped hunk of memory, paged in as it is touched.
-	- Just reserve the memory; don't commit
+	- Commit the first page, only reserve the rest
+	- Register a vectored exception handler to commit pages upon fault
 
 To avoid the overhead of a system call upon region creation, we will maintain a free list of regions.
 	- When we do multithreading, this can be a thread-local free list
@@ -23,9 +24,10 @@ CreateRegion() -> Ptr[Region]
 - If none left in free list:
 	- Do syscall to get new slab of memory
 	- Increment a global counter (atomically if you like) to generate a new region_id
-	- Set generation number, protection count to zero
-	- Set current_ptr to start
+	- Generation number, protection are already zeroed
+	- Set current_ptr to start of region
 	- Store region ptr in RegionsArray[region_id]
+		- Does not need to be synchronized
 	- Return the region
 
 CreateRegion(old_reg : Ptr[Region], gen_number : i64) -> Ptr[Region]
@@ -77,7 +79,10 @@ RegionOf(FatPtr : Ptr[FatPtr]) -> Ptr[Region]
 GetRegion(region_id : i32) -> Ptr[Region]
 
 - Maintain a flat array of region ptrs where the region_id is the index (RegionsArray)
-- Have a counter which generates new region id's
+- Have a global counter which generates new region id's
 - This array shouldn't grow unboundedly, because of the free-list reuse
+	- After a certain point in the program, all created regions should be coming off the free-list
 - Only when a brand-new slab is allocated from the OS do we append to the array
-- Have this array itself be paged in on demand; never freed
+	- Worst-case memory overhead if every region is only 4096 bytes:
+		- 1 ptr per region: 1/64th of high-water-mark memory usage
+- Have this array itself be VirtualAlloc'd / mmapped, paged in on demand; never freed
