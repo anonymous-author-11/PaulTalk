@@ -473,6 +473,12 @@ class Constraints:
         no_alias = (not all_alias) and self.no_alias or any(other.no_alias for other in others)
         return Constraints(combined_set, all_alias, no_alias)
 
+@dataclass
+class InsertionPoint:
+    stmt: "Statement"
+    op: "IRDLOperation"
+    reg_name: str
+
 class PointsToGraph:
     param_names: set
     graph: nx.DiGraph
@@ -505,8 +511,8 @@ class PointsToGraph:
         killed_regions = (k for k, v in before_liveness.items() if before_liveness[k] and not after_liveness[k])
         gen_regions = (k for k, v in before_liveness.items() if after_liveness[k] and not before_liveness[k])
 
-        creates = [(stmt, CreateRegionOp.make(reg)) for reg in gen_regions]
-        removes = [(stmt, RemoveRegionOp.make(reg)) for reg in killed_regions]
+        creates = [InsertionPoint(stmt, CreateRegionOp, reg) for reg in gen_regions]
+        removes = [InsertionPoint(stmt, RemoveRegionOp, reg) for reg in killed_regions]
 
         return [*creates, *removes]
 
@@ -637,17 +643,25 @@ class Scope:
     def insert_region_creations(self, stmt):
         if stmt.info.id not in self.insertion_points: return
         insertion_points = self.insertion_points[stmt.info.id]
-        creations = [b for a,b in insertion_points if isinstance(b, CreateRegionOp)]
+        creations = [point for point in insertion_points if point.op == CreateRegionOp]
         for creation in creations:
-            self.region.last_block.add_op(creation)
-            self.created_regions[creation.reg_name.data] = creation.results[0]
+            if creation.reg_name in self.created_regions and self.created_regions[creation.reg_name]:
+                op = op = creation.op.make(creation.reg_name, self.created_regions[creation.reg_name])
+            else:
+                op = creation.op.make(creation.reg_name)
+            self.region.last_block.add_op(op)
+            self.created_regions[creation.reg_name] = op.results[0]
 
     def insert_region_removals(self, stmt):
         if stmt.info.id not in self.insertion_points: return
         insertion_points = self.insertion_points[stmt.info.id]
-        removals = [b for a,b in insertion_points if isinstance(b, RemoveRegionOp)]
+        removals = [point for point in insertion_points if point.op == RemoveRegionOp]
         for removal in removals:
-            self.region.last_block.add_op(removal)
+            if removal.reg_name in self.created_regions and self.created_regions[removal.reg_name]:
+                op = op = removal.op.make(removal.reg_name, self.created_regions[removal.reg_name])
+            else:
+                op = removal.op.make(removal.reg_name)
+            self.region.last_block.add_op(op)
 
     @property
     def classes(self):

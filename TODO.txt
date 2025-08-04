@@ -459,6 +459,14 @@ DONE:
 
 TODO:
 
+- Make it illegal to assign to 'self' [check!]
+- Track node id's rather than Identifiers [check!]
+- Introduce "NewScope" as subtype of BlockNode [check!]
+	- Correctly handles scope merging [check!]
+- Make Node id's deterministic between typeflow / codegen [check!]
+- Store region insertion points in Method [check!]
+	- Insert CreateRegion(name=abc) before statement with id=xyz [check!]
+
 - Build workflow
 	- set CCFLAGS="/O2 /Ob3"
 	- run nuitka command
@@ -484,51 +492,54 @@ TODO:
 		- git commit -m "Update ptalk.xml feed"
 		- git push origin main
 
-- Idea: have scope.get_region(name)
-	- Will create region if not already existing
-	- Will return handle to region if already created
-	- Multiple names can map to the same region
-
 - Is it right to "re-create" nonlocal regions?
 	- The paper with region protection does not do this
 	- Could replace any creation-of-nonlocal-region with a reset
 	- This makes it a matter of correctness, not merely an optimization
 	- How do we deal with loops?
+	- Especially where "remove" comes after "create" in the loop
+
+- Models for how to store / retrieve regions from objects
+	- Model 1: store region ptr in fatptr
+	- Model 2: store object data ptr, find region ptr by rounding address
+		- Two words in fatptr left over for small structs
+		- Generic fields can be in separate regions
+	- Model 3: store data ptr; store region id number (i32)
+		- Use id number against some global data structure to get region
+		- Maybe just a flat array of all the regions that have ever existed
+		- Store region_from_box in vtable
+		- Use region_from_box for getting field regions
+
+- Important that the object data ptr is allocated via a LLVM-recognized allocation fn
+	- And doesn't capture the region ptr
+	- Can then be heap2stack'd
+
+- Have CreateRegion take an operand if the region had ever been live before in the method [check!]
+	- At runtime this should return the existing region if it wasn't freed
+		- Have a flag in the region header to say if it is freed
+	- This is problematic; what if the region was reused?
+	- CreateRegion could return a generation number; can compare this generation number to the region header
+		- If the generation number is different, then it was actually freed and repurposed; don't use
+
+- Should insert region removal statements at beginning of method if never used
 
 - Can you think of an example where the create and remove are not syntactically ordered?
-
-// create region
-a = Object{};
-use(a);
-// remove region
-
-while bar {
-	// create region
-	a = Object{};
-	other_code();
-	use(a);
-	// remove region
-}
-// remove region
-
-- Make it illegal to assign to 'self' [check!]
-- Track node id's rather than Identifiers [check!]
-- Introduce "NewScope" as subtype of BlockNode [check!]
-	- Correctly handles scope merging [check!]
+	- Imagine an iterator that returns a freshly allocated object
+	- It needs a return region passed-in to .next()
+	- This return region would be removed at the end of the loop and created in the preheader every time
 
 - Need to handle break and continue for liveness
 - If we store region strings in nodes that create nodes and transmit them we should be good
 	- I.e. literals like Array, Range, String
-- We have to merge local regions into parameter regions before liveness
 
-- Make Node id's deterministic between typeflow / codegen [check!]
-- Store region insertion points in Method / Function / Program
-	- Insert CreateRegion(name=abc) before statement with id=xyz
-- During codegen, insert region ops according to stored info
-	- Store created regions in scope; use to retrieve
+- Any local regions pointed to by a parameter region must be merged with the pointee
+	- This should happen after compatibility checking; before liveness analysis
 
-- Have typeflow return a list of statements as a replacement
-	- By default just returns [self]
+- Also store insertion points + region mapping in Function / Program
+	
+- During codegen, insert region ops according to stored info [check!]
+	- Store created regions in scope; use to retrieve [check!]
+	- Pass regions for object / buffer creation, and also return regions for calls
 
 - Liveness analysis
 	- Backwards pass twice over ast
@@ -549,10 +560,6 @@ while bar {
 		- Live at end of method
 			- self and fields
 			- retured value
-	- Maybe put a .free method in vtable to recursively .free fields
-		- Since the fields won't be known statically
-		- Except that an object doesn't 'own' its fields
-		- Unknown fields are 
 
 - Contract: each method / function has "freeing responsibilities"
 	- Which are limited to the static knowledge is has, from the POV of the caller
@@ -561,10 +568,8 @@ while bar {
 	- Anything not covered by the freeing responsibility of the callee must be handled by the caller
 	- Internal downcasts will show up in the annotations
 
-- Any local regions pointed to by a parameter region must be merged with the pointee
-	- This should happen after compatibility checking; before region assignment
-
 - Add more concise alias annotations
+	- Should significantly reduce verbosity
 	- a holds (b, c)
 	- a == b == c
 	- (a, b) holds c

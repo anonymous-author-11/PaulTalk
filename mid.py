@@ -222,29 +222,35 @@ class MallocOp(IRDLOperation):
 class CreateRegionOp(IRDLOperation):
     name = "mid.create_region"
     reg_name: StringAttr = attr_def(StringAttr)
+    operand : OptOperandDef = opt_operand_def()
     result : OpResult = result_def()
 
     @classmethod
-    def make(cls, name):
-        return CreateRegionOp.create(attributes={"reg_name":StringAttr(name)}, result_types=[llvm.LLVMPointerType.opaque()])
+    def make(cls, name, operand=None):
+        operands = [operand] if operand else []
+        return CreateRegionOp.create(operands=operands, attributes={"reg_name":StringAttr(name)}, result_types=[llvm.LLVMPointerType.opaque()])
 
 @irdl_op_definition
 class RemoveRegionOp(IRDLOperation):
     name = "mid.remove_region"
+    operand : OptOperandDef = opt_operand_def()
     reg_name: StringAttr = attr_def(StringAttr)
 
     @classmethod
-    def make(cls, name):
-        return RemoveRegionOp.create(attributes={"reg_name":StringAttr(name)})
+    def make(cls, name, operand=None):
+        operands = [operand] if operand else []
+        return RemoveRegionOp.create(operands=operands, attributes={"reg_name":StringAttr(name)})
 
 @irdl_op_definition
 class ResetRegionOp(IRDLOperation):
     name = "mid.reset_region"
+    operand : OptOperandDef = opt_operand_def()
     reg_name: StringAttr = attr_def(StringAttr)
 
     @classmethod
-    def make(cls, name):
-        return ResetRegionOp.create(attributes={"reg_name":StringAttr(name)})
+    def make(cls, name, operand=None):
+        operands = [operand] if operand else []
+        return ResetRegionOp.create(operands=operands, attributes={"reg_name":StringAttr(name)})
 
 @irdl_op_definition
 class UtilsAPIOp(IRDLOperation):

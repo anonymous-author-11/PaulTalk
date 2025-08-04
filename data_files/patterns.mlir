@@ -737,21 +737,26 @@ module @patterns {
   pdl.pattern @LowerCreateRegion : benefit(1) {
     %reg_name = pdl.attribute
     %ptr_type = pdl.type : !llvm.ptr
-    %root = pdl.operation "mid.create_region" {"reg_name" = %reg_name} -> (%ptr_type : !pdl.type)
+    %operands = pdl.operands
+    %root = pdl.operation "mid.create_region"(%operands : !pdl.range<value>) {"reg_name" = %reg_name} -> (%ptr_type : !pdl.type)
     pdl.rewrite %root {
-      pdl.erase %root
+      %ptr_type_attr = pdl.attribute = !llvm.ptr
+      %alloca = pdl.operation "mid.alloc" {"typ" = %ptr_type_attr} -> (%ptr_type : !pdl.type)
+      pdl.replace %root with %alloca
     }
   }
   pdl.pattern @LowerRemoveRegion : benefit(1) {
     %reg_name = pdl.attribute
-    %root = pdl.operation "mid.remove_region" {"reg_name" = %reg_name}
+    %operands = pdl.operands
+    %root = pdl.operation "mid.remove_region"(%operands : !pdl.range<value>) {"reg_name" = %reg_name}
     pdl.rewrite %root {
       pdl.erase %root
     }
   }
   pdl.pattern @LowerResetRegion : benefit(1) {
     %reg_name = pdl.attribute
-    %root = pdl.operation "mid.reset_region" {"reg_name" = %reg_name}
+    %operands = pdl.operands
+    %root = pdl.operation "mid.reset_region"(%operands : !pdl.range<value>) {"reg_name" = %reg_name}
     pdl.rewrite %root {
       pdl.erase %root
     }

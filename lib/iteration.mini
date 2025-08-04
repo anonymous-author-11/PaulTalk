@@ -12,9 +12,6 @@ class Pair[T, U] {
 
 }
 
-
-
-
 class Container {
     @elems_reg : Region
 }
