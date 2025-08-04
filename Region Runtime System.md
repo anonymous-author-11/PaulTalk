@@ -1,9 +1,10 @@
 ## Region Runtime System
 
 Each region will be a VirtualAlloc / mmapped hunk of memory, paged in as it is touched.
-	- Does this require setting up signal handlers?
+	- Just reserve the memory; don't commit
 
 To avoid the overhead of a system call upon region creation, we will maintain a free list of regions.
+	- When we do multithreading, this can be a thread-local free list
 
 Each region should have a header storing info such as:
 	- Current_ptr location (ptr)
@@ -21,7 +22,7 @@ CreateRegion() -> Ptr[Region]
 	- Return the region
 - If none left in free list:
 	- Do syscall to get new slab of memory
-	- Increment a global counter to generate a new region_id
+	- Increment a global counter (atomically if you like) to generate a new region_id
 	- Set generation number, protection count to zero
 	- Set current_ptr to start
 	- Store region ptr in RegionsArray[region_id]
@@ -40,11 +41,12 @@ RemoveRegion(region: Ptr[Region])
 - Check the protection count
 	- If nonzero: return immediately
 	- If zero: continue
-- Memset zeroes, from start to current_ptr
+- VirtualFree with MEM_RESET or madvise with MADV_DONTNEED
+	- Will logically memset to zero (without physically doing the work)
+	- Returns physical memory to the OS
 - Set the region current_ptr back to the start
 - Increment the generation counter
 - Push the region to the free list
-- Should we return any memory to the OS?
 
 AllocateFromRegion(region : Ptr[Region], size : i64) -> Ptr
 
@@ -63,6 +65,7 @@ ProtectRegion(region : Ptr[Region])
 UnprotectRegion(region : Ptr[Region])
 
 - Decrement the region header's protection count
+- NOT a reference count (does not push to the free list when hits zero)
 
 RegionOf(FatPtr : Ptr[FatPtr]) -> Ptr[Region]
 

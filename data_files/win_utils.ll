@@ -125,3 +125,27 @@ entry:
   %.0.lcssa = phi i64 [ 0, %entry ], [ %n_captured, %.lr.ph ], [ %max_frames, %13 ]
   ret i64 %.0.lcssa
 }
+
+%struct._EXCEPTION_POINTERS = type { ptr, ptr }
+%struct._EXCEPTION_RECORD = type { i32, i32, ptr, ptr, i32, [15 x i64] }
+
+; call ptr @AddVectoredExceptionHandler(i32 1, ptr @PageFaultHandler")
+
+define i32 @PageFaultHandler(ptr %0) mustprogress uwtable {
+  %2 = load ptr, ptr %0, align 8
+  %3 = load i32, ptr %2, align 8
+  %.not = icmp eq i32 %3, -1073741819
+  br i1 %.not, label %4, label %9
+
+4:                                                ; preds = %1
+  %5 = getelementptr inbounds %struct._EXCEPTION_RECORD, ptr %2, i32 0, i32 5, i32 1
+  %6 = load i64, ptr %5, align 8
+
+  %7 = inttoptr i64 %6 to ptr
+  %8 = tail call ptr @VirtualAlloc(ptr noundef %7, i64 noundef 4096, i32 noundef 4096, i32 noundef 4)
+  br label %9
+
+9:                                                ; preds = %1, %4
+  %.0 = phi i32 [ -1, %4 ], [ 0, %1 ]
+  ret i32 %.0
+}
