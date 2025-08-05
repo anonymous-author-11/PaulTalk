@@ -1,5 +1,6 @@
 import builtins;
 
+
 class Pair[T, U] {
 	@first : T
 	@second : U
@@ -12,18 +13,16 @@ class Pair[T, U] {
 
 }
 
-class Container {
+class Iterator[T] {
     @elems_reg : Region
-}
-
-class Iterator[T] extends Container {
 
 	abstract def next() -> T? {
     } ~> { ret holds @elems_reg }
 
 }
 
-class Iterable[T] extends Container {
+class Iterable[T] {
+    @elems_reg : Region
 
 	abstract def iterator() -> Iterator[T] {
     } ~> { ret.elems_reg == @elems_reg, ret holds self }
@@ -84,7 +83,7 @@ class Iterable[T] extends Container {
     }
     
     def product[U](other : Iterable[U]) -> Iterable[Pair[T, U]] {
-        return Productized{self, other};
+        return Products{self, other};
     } ~> {
         ret holds self, ret holds other,
         ret.elems_reg holds @elems_reg,
@@ -116,7 +115,7 @@ class Enumerated[T] extends Iterable[Pair[i32, T]] {
 
     def iterator() -> Enumerator[T] {
         return Enumerator{@iterable.iterator()};
-    } ~> { ret.iterator holds @iterable}
+    } ~> { ret.iterator holds @iterable }
 }
 
 class Enumerator[T] extends Iterator[Pair[i32, T]] {
@@ -340,7 +339,7 @@ class Zipper[T, U] extends Iterator[Pair[T, U]] {
 
 }
 
-class Productized[T, U] extends Iterable[Pair[T, U]] {
+class Products[T, U] extends Iterable[Pair[T, U]] {
     @first : Iterable[T]
     @second : Iterable[U]
 

@@ -25,7 +25,7 @@ def get_fresh_parser():
     with open(CACHED_GRAMMAR_PATH, "wb") as f: fresh_parser.save(f)
     return fresh_parser
 
-parser = get_fresh_parser()
+parser = get_cached_parser()
 source_directories = {}
 parsed = {}
 

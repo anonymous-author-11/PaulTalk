@@ -540,6 +540,7 @@ TODO:
 	- at call site, calculate used-in-call regions which are live after the call
 	- Insert protections for them before the call and deprotectiosn after
 	- More complicated than you think, actually: calls are not statements
+	- Is there any reason we can't insert around expressions?
 
 - Should insert region removal statements at beginning of method if never used
 

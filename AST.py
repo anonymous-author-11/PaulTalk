@@ -2247,15 +2247,13 @@ class MethodDef(Statement):
         # constraints from self class
         annotated_facts = initial_constraints.union(self.self_type_constraints())
 
+        for param in self.params:
+            param_constraints = body_scope.type_env.constraints_of(param.type(body_scope.type_env)).map({"self":param.name})
+            annotated_facts = annotated_facts.union(param_constraints)
+
         # return type constraints
-        return_type = self.return_type()
-        return_cls = None
-        if isinstance(return_type, FatPtr):
-            return_cls = body_scope.get_class(self.info, return_type)
-        if isinstance(return_type, TypeParameter) and isinstance(return_type.bound, FatPtr):
-            return_cls = body_scope.get_class(self.info, return_type.bound)
-        if return_cls:
-            annotated_facts = annotated_facts.union(return_cls.all_constraints().map({"self":"ret"}))
+        return_constraints = body_scope.type_env.constraints_of(self.return_type()).map({"self":"ret"})
+        annotated_facts = annotated_facts.union(return_constraints)
 
         for name in param_names: annotated_facts.add((name, "==", name))
         return annotated_facts
