@@ -1,6 +1,5 @@
 import builtins;
 
-
 class Pair[T, U] {
 	@first : T
 	@second : U
@@ -52,42 +51,38 @@ class Iterable[T] {
 
     def map[U](f : (T) -> U) -> Iterable[U] {
         return Mapped{self, f};
-    } ~> { ret holds self, ret holds f, ret.elems_reg == @elems_reg }
+    } ~> { ret holds (self, f), ret.elems_reg == @elems_reg }
     
     def filter(f : (T) -> Bool) -> Iterable[T] {
         return Filtered{self, f};
-    } ~> { ret holds self, ret holds f, ret.elems_reg == @elems_reg }
+    } ~> { ret holds (self, f), ret.elems_reg == @elems_reg }
     
     def chain(other : Iterable[T]) -> Iterable[T] {
         return Chained{self, other};
     } ~> {
-        ret holds self, ret holds other,
-        ret.elems_reg holds @elems_reg,
-        ret.elems_reg holds other.elems_reg
+        ret holds (self, other),
+        ret.elems_reg holds (@elems_reg, other.elems_reg)
     }
     
     def interleave(other : Iterable[T]) -> Iterable[T] {
         return Interleaved{self, other};
     } ~> {
-        ret holds self, ret holds other,
-        ret.elems_reg holds @elems_reg,
-        ret.elems_reg holds other.elems_reg
+        ret holds (self, other),
+        ret.elems_reg holds (@elems_reg, other.elems_reg)
     }
     
     def zip[U](other : Iterable[U]) -> Iterable[Pair[T, U]] {
         return Zipped{self, other};
     } ~> {
-        ret holds self, ret holds other,
-        ret.elems_reg holds @elems_reg,
-        ret.elems_reg holds other.elems_reg
+        ret holds (self, other),
+        ret.elems_reg holds (@elems_reg, other.elems_reg)
     }
     
     def product[U](other : Iterable[U]) -> Iterable[Pair[T, U]] {
         return Products{self, other};
     } ~> {
-        ret holds self, ret holds other,
-        ret.elems_reg holds @elems_reg,
-        ret.elems_reg holds other.elems_reg
+        ret holds (self, other),
+        ret.elems_reg holds (@elems_reg, other.elems_reg)
     }
 }
 
@@ -202,10 +197,7 @@ class Chained[T] extends Iterable[T] {
     @first : Iterable[T]
     @second : Iterable[T]
 
-    regions {
-        @elems_reg holds @first.elems_reg,
-        @elems_reg holds @second.elems_reg
-    }
+    regions { @elems_reg holds (@first.elems_reg, @second.elems_reg) }
 
     def init(@first : Iterable[T], @second : Iterable[T]) {}
 
@@ -225,10 +217,7 @@ class Chainer[T] extends Iterator[T] {
     @second : Iterator[T]
     @on_first : Bool
 
-    regions {
-        @elems_reg holds @first.elems_reg,
-        @elems_reg holds @second.elems_reg
-    }
+    regions { @elems_reg holds (@first.elems_reg, @second.elems_reg) }
 
     def init(@first : Iterator[T], @second : Iterator[T]) {
         @on_first = true;
@@ -247,10 +236,7 @@ class Interleaved[T] extends Iterable[T] {
     @first : Iterable[T]
     @second : Iterable[T]
 
-    regions {
-        @elems_reg holds @first.elems_reg,
-        @elems_reg holds @second.elems_reg
-    }
+    regions { @elems_reg holds (@first.elems_reg, @second.elems_reg) }
 
     def init(@first : Iterable[T], @second : Iterable[T]) {}
 
@@ -270,10 +256,7 @@ class Interleaver[T] extends Iterator[T] {
     @second : Iterator[T]
     @on_first : Bool
 
-    regions {
-        @elems_reg holds @first.elems_reg,
-        @elems_reg holds @second.elems_reg
-    }
+    regions { @elems_reg holds (@first.elems_reg, @second.elems_reg) }
 
     def init(@first : Iterator[T], @second : Iterator[T]) {
         @on_first = true;
@@ -296,10 +279,7 @@ class Zipped[T, U] extends Iterable[Pair[T, U]] {
     @first : Iterable[T]
     @second : Iterable[U]
 
-    regions {
-        @elems_reg holds @first.elems_reg,
-        @elems_reg holds @second.elems_reg
-    }
+    regions { @elems_reg holds (@first.elems_reg, @second.elems_reg) }
 
     def init(@first : Iterable[T], @second : Iterable[U]) {}
 
@@ -318,10 +298,7 @@ class Zipper[T, U] extends Iterator[Pair[T, U]] {
     @first : Iterator[T]
     @second : Iterator[U]
 
-    regions {
-        @elems_reg holds @first.elems_reg,
-        @elems_reg holds @second.elems_reg
-    }
+    regions { @elems_reg holds (@first.elems_reg, @second.elems_reg) }
 
     def init(@first : Iterator[T], @second : Iterator[U]) {
     }
@@ -332,10 +309,7 @@ class Zipper[T, U] extends Iterator[Pair[T, U]] {
         // notice the sophistication of the flow-typing
         if first_elem is Nil or second_elem is Nil { return nil; }
         return Pair{first_elem, second_elem};
-    } ~> {
-        ret.first holds @elems_reg,
-        ret.second holds @elems_reg
-    }
+    } ~> { (ret.first, ret.second) holds @elems_reg }
 
 }
 
@@ -343,10 +317,7 @@ class Products[T, U] extends Iterable[Pair[T, U]] {
     @first : Iterable[T]
     @second : Iterable[U]
 
-    regions {
-        @elems_reg holds @first.elems_reg,
-        @elems_reg holds @second.elems_reg
-    }
+    regions { @elems_reg holds (@first.elems_reg, @second.elems_reg) }
 
     def init(@first : Iterable[T], @second : Iterable[U]) {}
 

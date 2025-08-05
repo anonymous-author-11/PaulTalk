@@ -459,6 +459,12 @@ DONE:
 
 TODO:
 
+- Add more concise alias annotations
+	- Should significantly reduce verbosity
+	- a holds (b, c)
+	- a == b == c
+	- (a, b) holds c
+
 - Make it illegal to assign to 'self' [check!]
 - Track node id's rather than Identifiers [check!]
 - Introduce "NewScope" as subtype of BlockNode [check!]
@@ -466,6 +472,23 @@ TODO:
 - Make Node id's deterministic between typeflow / codegen [check!]
 - Store region insertion points in Method [check!]
 	- Insert CreateRegion(name=abc) before statement with id=xyz [check!]
+
+- Important that the object data ptr is allocated via a LLVM-recognized allocation fn [check!]
+	- And doesn't capture the region ptr [check!]
+
+- Have CreateRegion take an operand if the region had ever been live before in the method [check!]
+	- At runtime this should return the existing region if it wasn't freed [check!]
+	- Handle the case where if the region was reused in between [check!]
+	- CreateRegion can take a generation number; can compare this generation number to the region header [check!]
+		- If the generation number is different, then it was actually freed and repurposed; don't use [check!]
+
+- Ok, we need to be more precise about points-to graph conformance [check!]
+	- I believe that we should use other.param_names always? [check!]
+
+- Handle the all_alias case for liveness analysis [check!]
+	- Skip liveness analysis [check!]
+
+- Would it be correct for the iterable methods to return iterables but have "holds" constraints? [check!]
 
 - Build workflow
 	- set CCFLAGS="/O2 /Ob3"
@@ -510,31 +533,15 @@ TODO:
 		- Store region_from_box in vtable
 		- Use region_from_box for getting field regions
 
-- Important that the object data ptr is allocated via a LLVM-recognized allocation fn
-	- And doesn't capture the region ptr
-	- Can then be heap2stack'd
-
-- Have CreateRegion take an operand if the region had ever been live before in the method [check!]
-	- At runtime this should return the existing region if it wasn't freed
-		- Have a flag in the region header to say if it is freed
-	- This is problematic; what if the region was reused?
-	- CreateRegion could return a generation number; can compare this generation number to the region header
-		- If the generation number is different, then it was actually freed and repurposed; don't use
-
-- Ok, we need to be more precise about points-to graph conformance
-	- I believe that we should use is_covered_by always?
-
 - Explicit test for zero-length memset in RemoveRegion [check!]
-- ReallocFromRegion(allocation : Ptr, region : Ptr[Region])
-	- Do we need to store a last_current ptr in the region header?
-	- Spelled my_buffer.realloc(size); does not return anything
+- ReallocFromRegion(allocation : Ptr, region : Ptr[Region], old_size : i64, new_size : i64) [check!]
+	- Do we need to store a last_current ptr in the region header? No. [check!]
+
+- Add my_buffer.realloc(size); does not return anything
+
 - Consider IR annotations on Create/Remove Regions
 	- memory(none, argmem: readwrite, inaccessiblemem: readwrite) for both?
 	- I.e. the only observable effect of this call is on its ptr argument
-
-- Handle the all_alias case for liveness analysis
-	- Skip liveness analysis
-- Would it be correct for the iterable methods to return iterables but have "holds" constraints?
 
 - Insert ProtectRegion and UnprotectRegion calls
 	- at call site, calculate used-in-call regions which are live after the call
@@ -588,12 +595,6 @@ TODO:
 	- Overrides only have the freeing responsibilities of the overidden method
 	- Anything not covered by the freeing responsibility of the callee must be handled by the caller
 	- Internal downcasts will show up in the annotations
-
-- Add more concise alias annotations
-	- Should significantly reduce verbosity
-	- a holds (b, c)
-	- a == b == c
-	- (a, b) holds c
 
 - Add apply_constraints to fn literal call
 - Apply constraints upon downcast

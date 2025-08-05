@@ -196,7 +196,7 @@ update_header:
 }
 
 ; AllocateFromRegion(region : Ptr[Region], size : i64) -> Ptr
-define noalias ptr @AllocateFromRegion(ptr %region, i64 %size) noinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1) "alloc-family"="malloc" {
+define noalias ptr @AllocateFromRegion(ptr nocapture nofree %region, i64 %size) noinline mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1) "alloc-family"="malloc" {
   %current_ptr_gep = getelementptr inbounds %RegionHeader, ptr %region, i32 0, i32 0
   %current_ptr = load ptr, ptr %current_ptr_gep, align 8
 
@@ -211,7 +211,7 @@ define noalias ptr @AllocateFromRegion(ptr %region, i64 %size) noinline mustprog
 }
 
 ; Attempts to reallocate a memory block within a region.
-define ptr @ReallocFromRegion(ptr allocptr %allocation, ptr %region, i64 %old_size, i64 %new_size) noinline mustprogress nounwind willreturn allockind("realloc,zeroed") allocsize(3) "alloc-family"="malloc" {
+define ptr @ReallocFromRegion(ptr allocptr %allocation, ptr nocapture nofree %region, i64 %old_size, i64 %new_size) noinline mustprogress nounwind willreturn allockind("realloc,zeroed") allocsize(3) "alloc-family"="malloc" {
 entry:
   ; --- Step 1: Get the region's current state ---
   %current_ptr_gep = getelementptr inbounds %RegionHeader, ptr %region, i32 0, i32 0

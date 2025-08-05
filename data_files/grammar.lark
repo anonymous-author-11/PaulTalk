@@ -53,8 +53,18 @@ constraint_list: "{" (constraint ("," constraint)*)? "}"
                | NO_ALIAS -> no_alias
                | ALL_ALIAS -> all_alias
 
-constraint: region_variable HOLDS region_variable
-          | region_variable EQ region_variable
+constraint: holds_constraint
+          | equality_chain
+
+holds_constraint: region_variable HOLDS parenthesized_rv_list  -> holds_many
+                | parenthesized_rv_list HOLDS region_variable  -> many_holds
+                | region_variable HOLDS region_variable        -> holds_one
+
+parenthesized_rv_list: "(" region_variable_list ")"
+region_variable_list: region_variable ("," region_variable)*
+
+equality_chain: region_variable (EQ region_variable)+
+
 region_variable: ((ident | FIELD) ("." (ident | FIELD))*)? 
 
 method_param: param | field_param

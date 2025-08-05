@@ -228,7 +228,7 @@ class CSTTransformer(Transformer):
         return constraint_list
 
     def region_variable(self, *idents):
-        return ".".join(ident.value for ident in idents)
+        return ".".join(ident.value for ident in idents).replace("@", "self.")
 
     def new_scope(self, *statements):
         node_info = NodeInfo(None, self.file_path, statements[0].info.line_number if len(statements) > 0 else 0)
@@ -243,12 +243,35 @@ class CSTTransformer(Transformer):
     def all_alias(self, token):
         return Constraints(all_alias=True)
 
-    def constraint_list(self, *constraints):
-        return Constraints(set(constraints))
+    def constraint(self, constraints):
+        return Constraints(constraints)
 
-    def constraint(self, lhs, op, rhs):
-        op_map = {"holds":"<", "==":"=="}
-        return (lhs.replace("@", "self."), op_map[op.value], rhs.replace("@", "self."))
+    def holds_one(self, lhs, op, rhs):
+        return {(lhs, "<", rhs)}
+
+    def holds_many(self, lhs, op, rhs_list):
+        return {(lhs, "<", r) for r in rhs_list}
+
+    def many_holds(self, lhs_list, op, rhs):
+        return {(l, "<", rhs) for l in lhs_list}
+
+    def equality_chain(self, *items):
+        region_vars = [item for item in items if isinstance(item, str)]
+        constraints = set()
+        for i in range(len(region_vars) - 1):
+            lhs = region_vars[i]
+            rhs = region_vars[i+1]
+            constraints.add((lhs, "==", rhs))
+        return constraints
+
+    def parenthesized_rv_list(self, rv_list):
+        return rv_list
+
+    def region_variable_list(self, *rvs):
+        return list(rvs)
+
+    def constraint_list(self, *constraints):
+        return Constraints().union(*constraints)
 
     def alias(self, alias, name, meaning):
         node_info = NodeInfo(None, self.file_path, line_number(alias))

@@ -70,10 +70,7 @@ class ChainedCollection[T] extends Collection[T] {
     @first : Collection[T]
     @second : Collection[T]
 
-    regions {
-        @elems_reg holds @first.elems_reg,
-        @elems_reg holds @second.elems_reg
-    }
+    regions { @elems_reg holds (@first.elems_reg, @second.elems_reg) }
 
     def init(@first : Collection[T], @second : Collection[T]) {
     }
@@ -94,10 +91,7 @@ class InterleavedCollection[T] extends Collection[T] {
     @first : Collection[T]
     @second : Collection[T]
 
-    regions {
-        @elems_reg holds @first.elems_reg,
-        @elems_reg holds @second.elems_reg
-    }
+    regions { @elems_reg holds (@first.elems_reg, @second.elems_reg) }
 
     def init(@first : Collection[T], @second : Collection[T]) {
     }
@@ -118,10 +112,7 @@ class ZippedCollection[T, U] extends Collection[Pair[T, U]] {
     @first : Collection[T]
     @second : Collection[U]
 
-    regions {
-        @elems_reg holds @first.elems_reg,
-        @elems_reg holds @second.elems_reg
-    }
+    regions { @elems_reg holds (@first.elems_reg, @second.elems_reg) }
 
     def init(@first : Collection[T], @second : Collection[U]) {
     }
@@ -145,10 +136,7 @@ class ProductCollection[T, U] extends Collection[Pair[T, U]] {
     @first : Collection[T]
     @second : Collection[U]
 
-    regions {
-        @elems_reg holds @first.elems_reg,
-        @elems_reg holds @second.elems_reg
-    }
+    regions { @elems_reg holds (@first.elems_reg, @second.elems_reg) }
 
     def init(@first : Collection[T], @second : Collection[U]) {
     }
