@@ -293,14 +293,14 @@ class CSTTransformer(Transformer):
         return FieldDecl(node_info, name.value, typ, None)
 
     def assignment(self, target, value):
+        node_info = NodeInfo(None, self.file_path, target.info.line_number)
         if isinstance(target, MethodCall) and not isinstance(target, Indexation):
             if target.method == "_index": 
                 target.method = "_set" + target.method
             else:
                 target.method = "_set_" + target.method
             target.arguments = (*target.arguments, value)
-            return target
-        node_info = NodeInfo(None, self.file_path, target.info.line_number)
+            return ExpressionStatement(node_info, target)
         return Assignment(node_info, target, value)
 
     def if_statement(self, condition, then_block, else_block=None):

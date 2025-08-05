@@ -2087,7 +2087,6 @@ class MethodDef(Statement):
     body: BlockNode
     defining_class: 'ClassDef'
     hasreturn: bool
-    concrete_return_types: TypeAttribute
     insertion_points: dict
     region_mapping: dict
     liveness_at_start: dict
@@ -2108,7 +2107,6 @@ class MethodDef(Statement):
         
         self.type_params = type_params or []
         self.params = params or []
-        self.concrete_return_types = []
         
         self._constraints = constraints or Constraints()
         self.yield_type = yield_type or Union.from_list([FatPtr.basic("Exception"), Nil()])
@@ -3473,7 +3471,8 @@ class Assignment(Statement):
         value_type = self.value.exprtype(scope)
         if not value_type or value_type == llvm.LLVMVoidType():
             raise Exception(f"{self.info}: Assignment impossible: right hand side expression does not return anything.")
-        scope.points_to_facts.add((self.target.info.id, "==", self.value.info.id))
+        if not is_value_type(value_type):
+            scope.points_to_facts.add((self.target.info.id, "==", self.value.info.id))
         if isinstance(self.target, Identifier) and "@" in self.target.name:
             return FieldAssignment(self.info, self.target, self.value).typeflow(scope)
         if isinstance(self.target, MethodCall):
@@ -4000,7 +3999,6 @@ class ReturnValue(Return):
         if not is_value_type(ret_typ):
             scope.points_to_facts.add(("ret", "==", self.value.info.id))
         scope.method.definition.hasreturn = True
-        scope.method.definition.concrete_return_types.append(ret_typ)
         self.untype_variables(scope)
 
 @dataclass

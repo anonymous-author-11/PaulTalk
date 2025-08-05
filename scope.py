@@ -405,6 +405,7 @@ class TypeEnvironment:
         return typ
 
     def constraints_of(self, typ):
+        typ = self.simplify(typ)
         constraints = Constraints()
         if isinstance(typ, FatPtr):
             return self.get_class(None, typ).all_constraints()
