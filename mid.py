@@ -253,6 +253,28 @@ class ResetRegionOp(IRDLOperation):
         return ResetRegionOp.create(operands=operands, attributes={"reg_name":StringAttr(name)})
 
 @irdl_op_definition
+class ProtectRegionOp(IRDLOperation):
+    name = "mid.protect_region"
+    operand : OptOperandDef = opt_operand_def()
+    reg_name: StringAttr = attr_def(StringAttr)
+
+    @classmethod
+    def make(cls, name, operand=None):
+        operands = [operand] if operand else []
+        return ProtectRegionOp.create(operands=operands, attributes={"reg_name":StringAttr(name)})
+
+@irdl_op_definition
+class UnprotectRegionOp(IRDLOperation):
+    name = "mid.unprotect_region"
+    operand : OptOperandDef = opt_operand_def()
+    reg_name: StringAttr = attr_def(StringAttr)
+
+    @classmethod
+    def make(cls, name, operand=None):
+        operands = [operand] if operand else []
+        return UnprotectRegionOp.create(operands=operands, attributes={"reg_name":StringAttr(name)})
+
+@irdl_op_definition
 class UtilsAPIOp(IRDLOperation):
     name = "mid.utils_api"
 

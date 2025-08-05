@@ -525,6 +525,15 @@ TODO:
 - ReallocFromRegion(allocation : Ptr, region : Ptr[Region])
 	- Do we need to store a last_current ptr in the region header?
 	- Spelled my_buffer.realloc(size); does not return anything
+- Consider IR annotations on Create/Remove Regions
+	- memory(none, argmem: readwrite, inaccessiblemem: readwrite) for both?
+	- I.e. the only observable effect of this call is on its ptr argument
+
+- Insert ProtectRegion and UnprotectRegion calls
+	- at call site, calculate used-in-call regions which are live after the call
+	- Insert protections for them before the call and deprotectiosn after
+	- More complicated than you think, actually: calls are not statements
+
 - Should insert region removal statements at beginning of method if never used
 
 - Can you think of an example where the create and remove are not syntactically ordered?
