@@ -142,13 +142,68 @@ exit:
 }
 
 define void @RemoveInternal(ptr %region) noinline {
-  ; Reset the physical pages
+  
   %data_start = getelementptr i8, ptr %region, i64 @REGION_HEADER_SIZE
-  %size_to_reset = sub i64 @REGION_SIZE, @REGION_HEADER_SIZE
-  call void @virtual_reset(ptr %data_start, i64 %size_to_reset)
+  %current_ptr_gep = getelementptr inbounds %RegionHeader, ptr %region, i32 0, i32 0
+  %gen_gep = getelementptr inbounds %RegionHeader, ptr %region, i32 0, i32 1
+  %old_gen = load i64, ptr %gen_gep, align 8
+
+  %reg_ptr_i64 = ptrtoint ptr %region to i64
+  %current_ptr_i64 = load i64, ptr %current_ptr_gep
+  %size_to_reset = sub i64 %current_ptr_i64, %reg_ptr_i64
+
+  ; Reset the physical pages
+  call void @virtual_reset(ptr %region, i64 %size_to_reset)
 
   ; Reset current_ptr
   %current_ptr_gep = getelementptr inbounds %RegionHeader, ptr %region, i32 0, i32 0
+  store ptr %data_start, ptr %current_ptr_gep, align 8
+
+  ; Increment generation
+  %new_gen = add i64 %old_gen, 1
+  store i64 %new_gen, ptr %gen_gep, align 8
+
+  ; Push to free list
+  %old_head = load ptr, ptr @g_region_free_list_head, align 8
+  store ptr %old_head, ptr %current_ptr_gep, align 8 ; Repurpose current_ptr as 'next'
+  store ptr %region, ptr @g_region_free_list_head, align 8
+  ret void
+}
+
+; This version avoids the decommit/recommit cycle on the first page.
+define void @RemoveInternal(ptr %region) noinline {
+entry:
+  ; --- Step 1: Get pointers and calculate boundaries ---
+  %current_ptr_gep = getelementptr inbounds %RegionHeader, ptr %region, i32 0, i32 0
+  %current_ptr = load ptr, ptr %current_ptr_gep, align 8
+  %data_start = getelementptr i8, ptr %region, i64 @REGION_HEADER_SIZE
+
+  %page1_end_ptr = getelementptr i8, ptr %region, i64 @PAGE_SIZE
+  %page1_end_int = ptrtoint ptr %page1_end_ptr to i64
+
+  ; --- Step 2: Manually zero the data portion of the first page ---
+  ; Since we are not giving this page back to the OS, we must clear it ourselves.
+  %current_ptr_int = ptrtoint ptr %current_ptr to i64
+  %end_of_data_on_page1_int = call i64 @llvm.umin.i64(i64 %current_ptr_int, i64 %page1_end_int)
+  %data_start_int = ptrtoint ptr %data_start to i64
+  %bytes_to_clear_on_page1 = sub i64 %end_of_data_on_page1_int, %data_start_int
+  call void @llvm.memset.p0.i64(ptr align 16 %data_start, i8 0, i64 %bytes_to_clear_on_page1, i1 false)
+
+  ; --- Step 3: Release all subsequent pages (from page 2 onwards) ---
+  ; This only needs to happen if the allocation extended beyond the first page.
+  %allocation_past_page1 = icmp sgt ptr %current_ptr, %page1_end_ptr
+  br i1 %allocation_past_page1, label %do_reset_rest, label %update_header
+
+do_reset_rest:
+  %size_of_rest = sub i64 %current_ptr_int, %page1_end_int
+  call void @virtual_reset(ptr %page1_end_ptr, i64 %size_of_rest)
+  br label %update_header
+
+update_header:
+  ; --- Step 4: Update the header on the now-clean, still-resident first page ---
+  ; This executes without a page fault.
+  
+  ; Reset current_ptr
   store ptr %data_start, ptr %current_ptr_gep, align 8
 
   ; Increment generation
@@ -157,9 +212,9 @@ define void @RemoveInternal(ptr %region) noinline {
   %new_gen = add i64 %old_gen, 1
   store i64 %new_gen, ptr %gen_gep, align 8
 
-  ; Push to free list
+  ; Push to free list (repurposing current_ptr as 'next')
   %old_head = load ptr, ptr @g_region_free_list_head, align 8
-  store ptr %old_head, ptr %current_ptr_gep, align 8 ; Repurpose current_ptr as 'next'
+  store ptr %old_head, ptr %current_ptr_gep, align 8
   store ptr %region, ptr @g_region_free_list_head, align 8
   ret void
 }

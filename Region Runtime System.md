@@ -43,9 +43,9 @@ RemoveRegion(region: Ptr[Region])
 - Check the protection count
 	- If nonzero: return immediately
 	- If zero: continue
-- VirtualFree with MEM_RESET or madvise with MADV_DONTNEED
+- VirtualFree with MEM_DECOMMIT or madvise with MADV_DONTNEED
 	- Will logically memset to zero (without physically doing the work)
-	- Returns physical memory to the OS
+	- Returns physical memory pages to the OS
 - Set the region current_ptr back to the start
 - Increment the generation counter
 - Push the region to the free list
