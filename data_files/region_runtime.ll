@@ -41,6 +41,8 @@ declare noalias ptr @virtual_reserve(i64)
 ; New OS-agnostic primitive
 declare void @virtual_reset(ptr, i64)
 
+declare void @llvm.memcpy.p0.p0.i64(ptr nocapture writeonly, ptr nocapture readonly, i64, i1 immarg)
+declare i64 @llvm.umin.i64(i64, i64)
 
 ; --- Runtime Initialization ---
 
@@ -158,8 +160,11 @@ entry:
   %end_of_data_on_page1_int = call i64 @llvm.umin.i64(i64 %current_ptr_int, i64 %page1_end_int)
   %data_start_int = ptrtoint ptr %data_start to i64
   %bytes_to_clear_on_page1 = sub i64 %end_of_data_on_page1_int, %data_start_int
-  call void @llvm.memset.p0.i64(ptr align 16 %data_start, i8 0, i64 %bytes_to_clear_on_page1, i1 false)
+  %skip_memset = icmp eq i64 %bytes_to_clear_on_page1, 0
+  br i1 %skip_memset, label %update_header, label %do_memset
 
+do_memset:
+  call void @llvm.memset.p0.i64(ptr align 16 %data_start, i8 0, i64 %bytes_to_clear_on_page1, i1 false)
   ; --- Step 3: Release all subsequent pages (from page 2 onwards) ---
   ; This only needs to happen if the allocation extended beyond the first page.
   %allocation_past_page1 = icmp sgt ptr %current_ptr, %page1_end_ptr
@@ -203,6 +208,51 @@ define noalias ptr @AllocateFromRegion(ptr %region, i64 %size) noinline mustprog
   store ptr %new_ptr, ptr %current_ptr_gep, align 8
 
   ret ptr %current_ptr
+}
+
+; Attempts to reallocate a memory block within a region.
+define ptr @ReallocFromRegion(ptr allocptr %allocation, ptr %region, i64 %old_size, i64 %new_size) noinline mustprogress nounwind willreturn allockind("realloc,zeroed") allocsize(3) "alloc-family"="malloc" {
+entry:
+  ; --- Step 1: Get the region's current state ---
+  %current_ptr_gep = getelementptr inbounds %RegionHeader, ptr %region, i32 0, i32 0
+  %current_ptr = load ptr, ptr %current_ptr_gep, align 8
+
+  ; --- Step 2: Check for the fast path condition ---
+  ; The fast path is possible only if '%allocation' was the last thing allocated.
+  ; To check this, we must use the *aligned* old size, since that's what the
+  ; original AllocateFromRegion would have used to bump the pointer.
+  %old_size_plus_15 = add i64 %old_size, 15
+  %aligned_old_size = and i64 %old_size_plus_15, -16
+
+  %expected_start_ptr = getelementptr i8, ptr %current_ptr, i64 %aligned_old_size, i64 -1
+  %is_last_alloc = icmp eq ptr %expected_start_ptr, %allocation
+  br i1 %is_last_alloc, label %extend_in_place, label %fallback_alloc_and_copy
+
+extend_in_place:
+  ; --- Fast Path ---
+  ; We can just update the current_ptr to the new position.
+  ; Calculate the new current_ptr based on the start of the allocation and the new size.
+  %new_size_plus_15 = add i64 %new_size, 15
+  %aligned_new_size = and i64 %new_size_plus_15, -16
+  %new_current_ptr = getelementptr i8, ptr %allocation, i64 %aligned_new_size
+  
+  store ptr %new_current_ptr, ptr %current_ptr_gep, align 8
+  br label %return
+
+fallback_alloc_and_copy:
+  ; --- Slow Path ---
+  ; The allocation is followed by other data, so we must allocate a new block and copy.
+  %new_allocation = call ptr @AllocateFromRegion(ptr %region, i64 %new_size)
+
+  ; Copy data from the old allocation to the new one.
+  ; The number of bytes to copy is the minimum of the old and new sizes.
+  %bytes_to_copy = call i64 @llvm.umin.i64(i64 %old_size, i64 %new_size)
+  call void @llvm.memcpy.p0.p0.i64(ptr align 16 %new_allocation, ptr align 16 %allocation, i64 %bytes_to_copy, i1 false)
+  br label %return
+
+return:
+  %retval = phi ptr [ %allocation, %extend_in_place ], [ %new_allocation, %fallback_alloc_and_copy ]
+  ret ptr %retval
 }
 
 ; ProtectRegion(region : Ptr[Region])

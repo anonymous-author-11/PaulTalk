@@ -521,6 +521,10 @@ TODO:
 	- CreateRegion could return a generation number; can compare this generation number to the region header
 		- If the generation number is different, then it was actually freed and repurposed; don't use
 
+- Explicit test for zero-length memset in RemoveRegion [check!]
+- ReallocFromRegion(allocation : Ptr, region : Ptr[Region])
+	- Do we need to store a last_current ptr in the region header?
+	- Spelled my_buffer.realloc(size); does not return anything
 - Should insert region removal statements at beginning of method if never used
 
 - Can you think of an example where the create and remove are not syntactically ordered?
