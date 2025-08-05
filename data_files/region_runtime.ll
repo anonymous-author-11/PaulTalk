@@ -141,35 +141,6 @@ exit:
   ret void
 }
 
-define void @RemoveInternal(ptr %region) noinline {
-  
-  %data_start = getelementptr i8, ptr %region, i64 @REGION_HEADER_SIZE
-  %current_ptr_gep = getelementptr inbounds %RegionHeader, ptr %region, i32 0, i32 0
-  %gen_gep = getelementptr inbounds %RegionHeader, ptr %region, i32 0, i32 1
-  %old_gen = load i64, ptr %gen_gep, align 8
-
-  %reg_ptr_i64 = ptrtoint ptr %region to i64
-  %current_ptr_i64 = load i64, ptr %current_ptr_gep
-  %size_to_reset = sub i64 %current_ptr_i64, %reg_ptr_i64
-
-  ; Reset the physical pages
-  call void @virtual_reset(ptr %region, i64 %size_to_reset)
-
-  ; Reset current_ptr
-  %current_ptr_gep = getelementptr inbounds %RegionHeader, ptr %region, i32 0, i32 0
-  store ptr %data_start, ptr %current_ptr_gep, align 8
-
-  ; Increment generation
-  %new_gen = add i64 %old_gen, 1
-  store i64 %new_gen, ptr %gen_gep, align 8
-
-  ; Push to free list
-  %old_head = load ptr, ptr @g_region_free_list_head, align 8
-  store ptr %old_head, ptr %current_ptr_gep, align 8 ; Repurpose current_ptr as 'next'
-  store ptr %region, ptr @g_region_free_list_head, align 8
-  ret void
-}
-
 ; This version avoids the decommit/recommit cycle on the first page.
 define void @RemoveInternal(ptr %region) noinline {
 entry:
