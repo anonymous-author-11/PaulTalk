@@ -1706,6 +1706,10 @@ class TupleSetIndex(MethodCall):
 @dataclass
 class ClassMethodCall(MethodCall):
 
+    @property
+    def subexpressions(self):
+        return [*self.arguments]
+
     def codegen(self, scope):
         if "Intrinsic" in self.receiver.cls.data:
             return IntrinsicCall(self.info, self.receiver.cls.data, self.method, self.arguments).codegen(scope)
@@ -2111,8 +2115,9 @@ class MethodDef(Statement):
 
         self.defining_class = None
         self.hasreturn = False
-        self.insertion_points = None
-        self.region_mapping = None
+        self.insertion_points = {}
+        self.region_mapping = {}
+        self.liveness_at_start = {}
 
     def codegen(self, scope):
         #debug_print(f"codegenning {self.defining_class.name}.{self.name}")
@@ -2243,8 +2248,7 @@ class MethodDef(Statement):
         annotated_facts = initial_constraints.union(self.self_type_constraints())
 
         # return type constraints
-        concrete_return_type = next((t for t in self.concrete_return_types if isinstance(t, FatPtr) or isinstance(t, TypeParameter)), None)
-        return_type = concrete_return_type or self.return_type()
+        return_type = self.return_type()
         return_cls = None
         if isinstance(return_type, FatPtr):
             return_cls = body_scope.get_class(self.info, return_type)
@@ -2322,16 +2326,17 @@ class MethodDef(Statement):
         if annotated_facts.all_alias:
             single_region_name = "single_region_" + random_letters(10)
             self.region_mapping = {k:single_region_name for k,v in discovered_graph.var_mapping.items()}
+            self.liveness_at_start = {k:True for k,v in discovered_graph.var_mapping.items()}
             print(f"{self.defining_class.name}.{self.name} annotated with all_alias")
             return
 
         discovered_graph.transform_until_stable()
         annotated_graph.transform_until_stable()
 
-        print(f"Final discovered points-to graph for {name}:")
-        discovered_graph.print()
-        print(f"Final annotation-specified graph for {name}:")
-        annotated_graph.print()
+        #print(f"Final discovered points-to graph for {name}:")
+        #discovered_graph.print()
+        #print(f"Final annotation-specified graph for {name}:")
+        #annotated_graph.print()
 
         ok, comment = discovered_graph.is_approximated_by(annotated_graph)
 
@@ -2343,11 +2348,11 @@ class MethodDef(Statement):
             self.region_mapping = {k:discovered_graph.region_name(v) for k,v in discovered_graph.var_mapping.items()}
             self.liveness_at_start = liveness_at_start
 
-            if len(insertion_points) > 0: print(f"insertion points for {self.defining_class.name}.{self.name}")
-            all_insertion_points = [*chain.from_iterable(points for points in insertion_points.values())]
-            for point in all_insertion_points:
-                print(point.stmt.info.source_line)
-                print(f"{point.stmt.__class__.__name__} {point.op.__class__.__name__} {point.reg_name}")
+            #if len(insertion_points) > 0: print(f"insertion points for {self.defining_class.name}.{self.name}")
+            #all_insertion_points = [*chain.from_iterable(points for points in insertion_points.values())]
+            #for point in all_insertion_points:
+            #    print(point.stmt.info.source_line)
+            #    print(f"{point.stmt.__class__.__name__} {point.op.__class__.__name__} {point.reg_name}")
             return
 
         print(f"Final discovered points-to graph for {name}:")
@@ -2497,7 +2502,6 @@ class ClassMethodDef(MethodDef):
     def __hash__(self):
         return hash(self.qualified_name())
 
-@dataclass
 class AbstractClassMethodDef(AbstractMethodDef, ClassMethodDef):
 
     def __hash__(self):
@@ -3446,7 +3450,6 @@ class Assignment(Statement):
 
     def liveness(self, live_tbl, points_to_graph, insertion_points):
         before_tbl = live_tbl | {id:True for id in self.value.used_ids} | { self.target.info.id:False }
-        print(f"assignment target is {self.target.name}")
         stmt_insertion_points = points_to_graph.region_insertion_points(self, before_tbl, live_tbl)
         if len(stmt_insertion_points) > 0: insertion_points[self.info.id] = stmt_insertion_points
         return before_tbl
@@ -3749,8 +3752,6 @@ class WhileStatement(Branch):
 
         insertion_points_copy = insertion_points.copy()
 
-        print("first pass through")
-
         # first run though; use throwaway inerstion_points_copy
         before_tbl = self.body.liveness(live_tbl, points_to_graph, insertion_points_copy)
 
@@ -3765,8 +3766,6 @@ class WhileStatement(Branch):
         live_after = {k:v for k,v in live_tbl.items() if v}
         live_before = {k:v for k,v in before_tbl.items() if v}
         union_tbl = before_tbl | live_after | live_before
-
-        print("second pass through")
 
         # second run through; use real insertion_points
         before_tbl = self.body.liveness(union_tbl, points_to_graph, insertion_points)
@@ -3967,6 +3966,10 @@ class Return(Statement):
 @dataclass
 class ReturnValue(Return):
     value: Expression
+
+    @property
+    def subexpressions(self):
+        return [self.value]
 
     def liveness(self, live_tbl, points_to_graph, insertion_points):
         before_tbl = {k:(k == "self" or k == "ret") for k,v in live_tbl.items() } | { id:True for id in self.value.used_ids }

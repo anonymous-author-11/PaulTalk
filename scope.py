@@ -500,13 +500,13 @@ class PointsToGraph:
         after_liveness = self.region_liveness(after_tbl)
         before_liveness = self.region_liveness(before_tbl)
 
-        print(stmt.info.source_line)
-        print(stmt.__class__.__name__)
-        print(f"before region liveness: {before_liveness}")
-        print(f"after region liveness: {after_liveness}")
+        #print(stmt.info.source_line)
+        #print(stmt.__class__.__name__)
+        #print(f"before region liveness: {before_liveness}")
+        #print(f"after region liveness: {after_liveness}")
 
-        print(f"before variable liveness: {before_tbl}")
-        print(f"after variable liveness: {after_tbl}")
+        #print(f"before variable liveness: {before_tbl}")
+        #print(f"after variable liveness: {after_tbl}")
 
         killed_regions = (k for k, v in before_liveness.items() if before_liveness[k] and not after_liveness[k])
         gen_regions = (k for k, v in before_liveness.items() if after_liveness[k] and not before_liveness[k])
@@ -551,8 +551,7 @@ class PointsToGraph:
         print(pretty_print_graph(self.graph, self.var_mapping, self.param_names))
 
     def is_approximated_by(self, other):
-        all_param_names = self.param_names | other.param_names
-        ok, comment = check_graph_compatibility(self.graph, self.var_mapping, other.graph, other.var_mapping, all_param_names)
+        ok, comment = check_graph_compatibility(self.graph, self.var_mapping, other.graph, other.var_mapping, other.param_names)
         return ok, comment
 
     def is_covered_by(self, other):

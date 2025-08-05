@@ -521,6 +521,9 @@ TODO:
 	- CreateRegion could return a generation number; can compare this generation number to the region header
 		- If the generation number is different, then it was actually freed and repurposed; don't use
 
+- Ok, we need to be more precise about points-to graph conformance
+	- I believe that we should use is_covered_by always?
+
 - Explicit test for zero-length memset in RemoveRegion [check!]
 - ReallocFromRegion(allocation : Ptr, region : Ptr[Region])
 	- Do we need to store a last_current ptr in the region header?
@@ -528,6 +531,10 @@ TODO:
 - Consider IR annotations on Create/Remove Regions
 	- memory(none, argmem: readwrite, inaccessiblemem: readwrite) for both?
 	- I.e. the only observable effect of this call is on its ptr argument
+
+- Handle the all_alias case for liveness analysis
+	- Skip liveness analysis
+- Would it be correct for the iterable methods to return iterables but have "holds" constraints?
 
 - Insert ProtectRegion and UnprotectRegion calls
 	- at call site, calculate used-in-call regions which are live after the call
