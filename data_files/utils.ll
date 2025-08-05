@@ -30,6 +30,9 @@ declare void @os_specific_setup()
 ; An OS-agnostic virtual-memory reservation API
 declare noalias ptr @virtual_reserve(i64) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
 
+; An OS-agnostic API to reset a reserved memory region
+declare void @virtual_reset(ptr, i64)
+
 ; An OS-agnostic API to make trampoline code executable
 declare void @anoint_trampoline(ptr %tramp) mustprogress nofree nosync nounwind willreturn memory(argmem: readwrite)
 

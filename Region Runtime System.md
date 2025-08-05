@@ -22,10 +22,10 @@ CreateRegion() -> Ptr[Region]
 	- Increment its generation number
 	- Return the region
 - If none left in free list:
-	- Do syscall to get new slab of memory
+	- Do syscall to get new slab of memory (big, gigabytes probably)
 	- Increment a global counter (atomically if you like) to generate a new region_id
 	- Generation number, protection are already zeroed
-	- Set current_ptr to start of region
+	- Set current_ptr to start of region + 32 bytes (after 24-bytes header, 16 byte aligned)
 	- Store region ptr in RegionsArray[region_id]
 		- Does not need to be synchronized
 	- Return the region

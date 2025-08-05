@@ -20,6 +20,13 @@ define void @anoint_trampoline(ptr %tramp) mustprogress nofree nosync nounwind w
   ret void
 }
 
+; MEM_DECOMMIT = 0x4000 = 16384
+; For dwFreeType = MEM_DECOMMIT, the dwSize parameter is the size of the region to decommit.
+define void @virtual_reset(ptr %addr, i64 %size) {
+  %result = call i32 @VirtualFree(ptr %addr, i64 %size, i32 16384)
+  ret void
+}
+
 declare void @coroutine_trampoline(ptr)
 
 declare i32 @printf(ptr, ...)
@@ -144,7 +151,7 @@ define i32 @PageFaultHandler(ptr %0) mustprogress uwtable {
   %2 = load ptr, ptr %0, align 8
   %3 = load i32, ptr %2, align 8
   %.not = icmp eq i32 %3, -1073741819
-  br i1 %.not, label %4, label %9
+  br i1 %.not, label %4, label %11
 
 4:                                                ; preds = %1
   %5 = getelementptr inbounds %struct._EXCEPTION_RECORD, ptr %2, i32 0, i32 5, i32 1
@@ -153,9 +160,13 @@ define i32 @PageFaultHandler(ptr %0) mustprogress uwtable {
   %7 = inttoptr i64 %6 to ptr
   ; 4096 for MEM_COMMIT, 4 for PAGE_READWRITE
   %8 = tail call ptr @VirtualAlloc(ptr noundef %7, i64 noundef 4096, i32 noundef 4096, i32 noundef 4)
-  br label %9
+  %is_null = icmp eq ptr %8, null
+  br i1 %is_null, label %9, label %11
 
 9:                                                ; preds = %1, %4
-  %.0 = phi i32 [ -1, %4 ], [ 0, %1 ]
+  br label %11
+
+11:
+  %.0 = phi i32 [ -1, %4 ], [ 0, %1 ], [ 0, %9 ]
   ret i32 %.0
 }

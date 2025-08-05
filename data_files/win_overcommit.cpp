@@ -18,10 +18,11 @@ static LONG WINAPI SimpleHandler(PEXCEPTION_POINTERS ptr) {
     // The base address for VirtualAlloc must be page-aligned. Since the OS
     // allocates memory on page boundaries, faulting_address will be within
     // a page that we can commit. We don't need to align it ourselves.
-    VirtualAlloc(faulting_address, 4096, MEM_COMMIT, PAGE_READWRITE);
-
-    // Tell the OS to retry the instruction that failed.
-    return EXCEPTION_CONTINUE_EXECUTION;
+    if (VirtualAlloc(faulting_address, 4096, MEM_COMMIT, PAGE_READWRITE)) {
+        // Tell the OS to retry the instruction that failed.
+        return EXCEPTION_CONTINUE_EXECUTION;
+    }
+    return EXCEPTION_CONTINUE_SEARCH;
 }
 
 int main() {
