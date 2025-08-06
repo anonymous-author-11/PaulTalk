@@ -22,6 +22,10 @@ class Entry[K,V] {
     getters @hash, @key, @value
 
     def init(@key: K, @value: V, @hash: i32) {}
+
+    def to_pair() -> Pair[K, V] {
+            return Pair{@key, @value};
+        } ~> { ret.first == @key, ret.second == @value }
 }
 
 class SwissTable[K, V] extends HashMap[K, V] {
@@ -32,7 +36,9 @@ class SwissTable[K, V] extends HashMap[K, V] {
     @hasher: (K) -> i32
     @eq: (K, K) -> Bool
 
-     regions { @elems_reg == @entries }
+    regions { @elems_reg == @entries }
+
+    getter @size
 
     def init(@hasher: (K) -> i32, @eq : (K, K) -> Bool) {
         initial_capacity = 8;
@@ -41,12 +47,7 @@ class SwissTable[K, V] extends HashMap[K, V] {
         @entries_len = initial_capacity;
         @size = 0;
         
-        // Initialize metadata
-        i = 0;
-        while i < initial_capacity {
-            @metadata.[i] = empty_slot();
-            i = i + 1;
-        }
+        // metadata is already zeroed
     }
 
     // Simplified hash-to-metadata function
@@ -108,12 +109,7 @@ class SwissTable[K, V] extends HashMap[K, V] {
         @entries_len = new_capacity;
         @size = 0;
         
-        // Initialize new metadata
-        i = 0;
-        while i < new_capacity {
-            @metadata.[i] = empty_slot();
-            i = i + 1;
-        }
+        // metadata is zeroed
         
         // Reinsert all entries
         for i in 0..old_len {
@@ -183,14 +179,10 @@ class SwissTable[K, V] extends HashMap[K, V] {
         }
         
         entry_or_nil = @entries.[i];
-        if entry_or_nil is not Entry[K,V] {
-            return nil;
-        }
+        if entry_or_nil is not Entry[K,V] { return nil; }
         
         val = entry_or_nil.value();
-        if val is not V {
-            return nil;
-        }
+        if val is not V { return nil; }
         
         // Mark as tombstone
         @metadata.[i] = tombstone_slot();
@@ -206,16 +198,7 @@ class SwissTable[K, V] extends HashMap[K, V] {
         @entries_len = initial_capacity;
         @size = 0;
         
-        // Initialize metadata
-        i = 0;
-        while i < initial_capacity {
-            @metadata.[i] = empty_slot();
-            i = i + 1;
-        }
-    }
-
-    def size() -> i32 {
-        return @size;
+        // metadata is zeroed
     }
 
     def iterator() -> SwissTableIterator[K,V] {
@@ -231,7 +214,7 @@ class SwissTableIterator[K,V] extends Iterator[Pair[K,V]] {
 
     regions { @elems_reg == @map_entries }
 
-    def init(@map_entries: Buffer[Entry[K,V] | Nil], @map_metadata: Buffer[i8], @length : i32) {
+    def init(@map_entries: Buffer[Entry[K,V]?], @map_metadata: Buffer[i8], @length : i32) {
         @index = 0;
         @length = @length;
     }
@@ -247,12 +230,7 @@ class SwissTableIterator[K,V] extends Iterator[Pair[K,V]] {
                 continue;
             }
             
-            if entry_or_nil is Entry[K,V] {
-                val = entry_or_nil.value();
-                if val is V {
-                    return Pair{entry_or_nil.key(), val};
-                }
-            }
+            if entry_or_nil is Entry[K,V] { return entry_or_nil.to_pair(); }
         }
         return nil;
     }
