@@ -112,7 +112,7 @@ define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) noinl
   br i1 %page_or_more, label %commit, label %exit
 
 commit:
-  call void @virtual_commit(ptr %current, i64 %size)
+  call void @virtual_commit(ptr %current, i64 %aligned_size)
   br label %exit
 
 exit:

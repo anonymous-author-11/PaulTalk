@@ -15,7 +15,7 @@ source_filename = "region_runtime.ll"
 
 ; --- Constants ---
 
-@REGION_SIZE = internal constant i64 536870912 ; 512 MiB
+@REGION_SIZE = internal constant i64 5368709120 ; 5 GB
 @REGION_HEADER_SIZE = internal constant i64 32 ; 24 bytes for header, aligned to 32 for current_ptr start
 @REGIONS_ARRAY_SIZE = internal constant i64 1048576 ; Sufficient for 131,072 regions (131072 * 8 bytes/ptr)
 
@@ -38,7 +38,8 @@ source_filename = "region_runtime.ll"
 ; From utils.ll / os-specific files
 declare noalias ptr @virtual_reserve(i64)
 
-; New OS-agnostic primitive
+declare void @virtual_commit(ptr, i64)
+
 declare void @virtual_reset(ptr, i64)
 
 declare void @llvm.memcpy.p0.p0.i64(ptr nocapture writeonly, ptr nocapture readonly, i64, i1 immarg)
@@ -206,7 +207,14 @@ define noalias ptr @AllocateFromRegion(ptr nocapture nofree %region, i64 %size) 
 
   %new_ptr = getelementptr i8, ptr %current_ptr, i64 %aligned_size
   store ptr %new_ptr, ptr %current_ptr_gep, align 8
+  %page_or_more = icmp i64 %size, 4096
+  br i1 %page_or_more, label %commit, label %return
 
+commit:
+  call void @virtual_commit(ptr %current_ptr, i64 %size)
+  br label %return
+
+return:
   ret ptr %current_ptr
 }
 
@@ -237,6 +245,11 @@ extend_in_place:
   %new_current_ptr = getelementptr i8, ptr %allocation, i64 %aligned_new_size
   
   store ptr %new_current_ptr, ptr %current_ptr_gep, align 8
+  %page_or_more = icmp i64 %size, 4096
+  br i1 %page_or_more, label %commit, label %return
+
+commit:
+  call void @virtual_commit(ptr %current_ptr, i64 %aligned_new_size)
   br label %return
 
 fallback_alloc_and_copy:
