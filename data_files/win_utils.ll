@@ -5,7 +5,7 @@ declare noalias ptr @VirtualAlloc(ptr, i64, i32, i32) mustprogress nofree nounwi
 declare i32 @VirtualFree(ptr allocptr nocapture noundef, i64, i32) mustprogress nounwind willreturn allockind("free") memory(argmem: readwrite, inaccessiblemem: readwrite)
 declare i32 @VirtualProtect(ptr, i64, i32, ptr) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
 
-; Define an OS-agnostic wrapper around VirtualAlloc
+; Define an OS-agnostic wrapper around VirtualAlloc(MEM_RESERVE)
 ; MEM_RESERVE: 8192, MEM_COMMIT: 4096, (MEM_RESERVE | MEM_COMMIT): 12288
 ; 4 for PAGE_READWRITE
 define noalias ptr @virtual_reserve(i64 %size) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
@@ -13,9 +13,16 @@ define noalias ptr @virtual_reserve(i64 %size) mustprogress nofree nounwind will
 	ret ptr %result
 }
 
+; Define an OS-agnostic wrapper around VirtualAlloc(MEM_COMMIT)
+; MEM_COMMIT: 4096, 4 for PAGE_READWRITE
+define void @virtual_commit(ptr %allocation, i64 %size) {
+  %result = call ptr @VirtualAlloc(ptr %allocation, i64 %size, i32 4096, i32 4)
+  ret void
+}
+
 ; Define an OS-agnostic wrapper around VirtualProtect
 define void @anoint_trampoline(ptr %tramp) mustprogress nofree nosync nounwind willreturn memory(argmem: readwrite) {
-  %oldProtect = alloca i32  
+  %oldProtect = alloca i32
   %result = call i32 @VirtualProtect(ptr %tramp, i64 16, i32 64, ptr %oldProtect)
   ret void
 }

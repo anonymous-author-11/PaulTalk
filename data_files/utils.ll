@@ -30,6 +30,9 @@ declare void @os_specific_setup()
 ; An OS-agnostic virtual-memory reservation API
 declare noalias ptr @virtual_reserve(i64) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
 
+; An OS-agnostic API to commit a section of a reserved memory region
+declare void @virtual_commit(ptr, i64)
+
 ; An OS-agnostic API to reset a reserved memory region
 declare void @virtual_reset(ptr, i64)
 
@@ -104,9 +107,15 @@ define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) noinl
   ; Update the current pointer
   store ptr %new_ptr, ptr %current_ptr
 
-  ; why doesn't this work when I remove noinline??
-  ;call void @llvm.assume(i1 true) ["noalias"(ptr %current)]
+  ; if we are allocating more than one page, commit the full size of the allocation
+  %page_or_more = icmp sge i64 %size, 4096
+  br i1 %page_or_more, label %commit, label %exit
 
+commit:
+  call void @virtual_commit(ptr %current, i64 %size)
+  br label %exit
+
+exit:
   ret ptr %current 
 }
 

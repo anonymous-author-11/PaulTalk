@@ -16,10 +16,16 @@ declare i32 @madvise(ptr, i64, i32)
 
 declare void @free(ptr)
 
-; Define an OS-agnostic wrapper around mmap
+; Define an OS-agnostic wrapper around mmap to reserve memory
 define noalias ptr @virtual_reserve(i64 %size) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
 	%result = call noalias ptr @mmap(ptr null, i64 %size, i32 3, i32 4098, i32 -1, i64 0) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1) "alloc-family"="malloc"
 	ret ptr %result
+}
+
+; Define an OS-agnostic wrapper to commit memory
+; On posix this is a no-op
+define void @virtual_commit(ptr %allocation, i64 %size) {
+  ret void
 }
 
 ; MADV_DONTNEED = 4 (on Linux)

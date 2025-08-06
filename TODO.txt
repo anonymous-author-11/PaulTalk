@@ -459,7 +459,10 @@ DONE:
 
 TODO:
 
-- Obviously there is an issue with nil-initialized buffer.
+- Obviously there is an issue with nil-initialized buffer in swiss_table.mini.
+- Why can't I commit more than 1 page per access fault?
+	- Possibility: might have something to do with trampolines and virtualprotect
+	- Although writing to the trampoline before protecting did not seem to help
 
 - Make it illegal to assign to 'self' [check!]
 - Track node id's rather than Identifiers [check!]

@@ -1,4 +1,4 @@
-import swiss_table_v2;
+import swiss_table;
 import std;
 
 alias Map = SwissTable;
