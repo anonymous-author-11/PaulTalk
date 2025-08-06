@@ -24,8 +24,9 @@ class Entry[K,V] {
     def init(@key: K, @value: V, @hash: i32) {}
 
     def to_pair() -> Pair[K, V] {
-            return Pair{@key, @value};
-        } ~> { ret.first == @key, ret.second == @value }
+        return Pair{@key, @value};
+    } ~> { ret.first == @key, ret.second == @value }
+
 }
 
 class SwissTable[K, V] extends HashMap[K, V] {

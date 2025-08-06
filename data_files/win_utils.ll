@@ -9,7 +9,7 @@ declare i32 @VirtualProtect(ptr, i64, i32, ptr) mustprogress nocallback nofree n
 ; MEM_RESERVE: 8192, MEM_COMMIT: 4096, (MEM_RESERVE | MEM_COMMIT): 12288
 ; 4 for PAGE_READWRITE
 define noalias ptr @virtual_reserve(i64 %size) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
-	%result = call noalias ptr @VirtualAlloc(ptr null, i64 %size, i32 12288, i32 4) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1) "alloc-family"="malloc"
+	%result = call noalias ptr @VirtualAlloc(ptr null, i64 %size, i32 8192, i32 4) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1) "alloc-family"="malloc"
 	ret ptr %result
 }
 
@@ -147,7 +147,7 @@ define void @os_specific_setup() {
   ret void
 }
 
-define i32 @PageFaultHandler(ptr %0) mustprogress uwtable {
+define i32 @PageFaultHandler(ptr %0) mustprogress optnone noinline uwtable {
   %2 = load ptr, ptr %0, align 8
   %3 = load i32, ptr %2, align 8
   %.not = icmp eq i32 %3, -1073741819
@@ -159,7 +159,7 @@ define i32 @PageFaultHandler(ptr %0) mustprogress uwtable {
 
   %7 = inttoptr i64 %6 to ptr
   ; 4096 for MEM_COMMIT, 4 for PAGE_READWRITE
-  %8 = tail call ptr @VirtualAlloc(ptr noundef %7, i64 noundef 4096, i32 noundef 4096, i32 noundef 4)
+  %8 = call ptr @VirtualAlloc(ptr noundef %7, i64 noundef 4096, i32 noundef 4096, i32 noundef 4)
   %is_null = icmp eq ptr %8, null
   br i1 %is_null, label %9, label %11
 

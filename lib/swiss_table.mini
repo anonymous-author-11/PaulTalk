@@ -14,6 +14,11 @@ class Entry[K,V] {
     getters @hash, @key, @value
 
     def init(@key: K, @value: V, @hash: i32) {}
+
+    def to_pair() -> Pair[K, V] {
+        return Pair{@key, @value};
+    } ~> { ret.first == @key, ret.second == @value }
+
 }
 
 class SwissTable[K, V] extends HashMap[K, V] {
@@ -23,7 +28,9 @@ class SwissTable[K, V] extends HashMap[K, V] {
     @hasher: (K) -> i32
     @eq: (K, K) -> Bool
 
-     regions { @elems_reg == @entries }
+    regions { @elems_reg == @entries }
+
+    getter @size
 
     def init(@hasher: (K) -> i32, @eq : (K, K) -> Bool) {
         initial_capacity = 8;
@@ -172,10 +179,6 @@ class SwissTable[K, V] extends HashMap[K, V] {
         }
     }
 
-    def size() -> i32 {
-        return @size;
-    }
-
     def iterator() -> SwissTableIterator[K,V] {
         return SwissTableIterator[K,V].new(@entries, @entries_len);
     } ~> { ret.map_entries == @entries }
@@ -198,12 +201,7 @@ class SwissTableIterator[K,V] extends Iterator[Pair[K,V]] {
             entry_or_nil = @map_entries.[@index];
             @index = @index + 1;
             
-            if entry_or_nil is Entry[K,V] {
-                val = entry_or_nil.value();
-                if val is V {
-                    return Pair{entry_or_nil.key(), val};
-                }
-            }
+            if entry_or_nil is Entry[K,V] { return entry_or_nil.to_pair(); }
         }
         return nil;
     }
