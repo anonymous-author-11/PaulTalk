@@ -459,6 +459,8 @@ DONE:
 
 TODO:
 
+ok, last session I had you write lib/swiss_table.mini, based on the other hash table implementations in that folder. I have hooked up hash_benchmark.mini to the new swiss table. However, if you compile and run it, you will see that it is not working correctly. take a look at the code, compile and run, and try to fix it. I would discourage you from trying to make SwissTable extend OpenAddressMap, because it is not really a well-crafted base class.
+
 - Make it illegal to assign to 'self' [check!]
 - Track node id's rather than Identifiers [check!]
 - Introduce "NewScope" as subtype of BlockNode [check!]

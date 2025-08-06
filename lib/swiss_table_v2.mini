@@ -1,9 +1,17 @@
 import map;
 import io;
 
-// Tombstone marker for deleted slots
-class Tombstone {
-    def init() {}
+// Swiss table inspired design with simplified metadata
+def empty_slot() -> i8 {
+    return 0x00 as i8;
+}
+
+def tombstone_slot() -> i8 {
+    return 0x80 as i8;
+}
+
+def active_slot() -> i8 {
+    return 0x01 as i8;
 }
 
 class Entry[K,V] {
@@ -17,7 +25,8 @@ class Entry[K,V] {
 }
 
 class SwissTable[K, V] extends HashMap[K, V] {
-    @entries: Buffer[Entry[K,V] | Tombstone | Nil]
+    @entries: Buffer[Entry[K,V]?]
+    @metadata: Buffer[i8]  // Simplified metadata: 0=empty, 128=tombstone, 1-127=active with probe count
     @entries_len : i32
     @size: i32      
     @hasher: (K) -> i32
@@ -27,73 +36,93 @@ class SwissTable[K, V] extends HashMap[K, V] {
 
     def init(@hasher: (K) -> i32, @eq : (K, K) -> Bool) {
         initial_capacity = 8;
-        @entries = Buffer[Entry[K,V] | Tombstone | Nil].new(initial_capacity);
+        @entries = Buffer[Entry[K,V]?].new(initial_capacity);
+        @metadata = Buffer[i8].new(initial_capacity);
         @entries_len = initial_capacity;
         @size = 0;
         
-        // Initialize all slots as empty
+        // Initialize metadata
         i = 0;
         while i < initial_capacity {
-            @entries.[i] = nil;
+            @metadata.[i] = empty_slot();
             i = i + 1;
         }
     }
 
+    // Simplified hash-to-metadata function
+    def hash_to_metadata(hash: i32) -> i8 {
+        return (hash bit_and 0x7F) as i8; // Use lower 7 bits
+    }
+
+    // Find slot with Swiss table inspired probing
     def find_slot(key: K, hash: i32) -> i32 {
         capacity = @entries_len;
         mask = capacity - 1;
-        current_index = hash bit_and mask;
+        ideal_index = hash bit_and mask;
+        metadata_val = self.hash_to_metadata(hash);
+        
+        current_index = ideal_index;
         first_tombstone = -1;
         
+        // Probe with metadata guidance
         while true {
-            current_entry = @entries.[current_index];
+            current_metadata = @metadata.[current_index];
             
-            if current_entry is Nil {
-                // If we found a tombstone earlier, return it for insertion
+            if current_metadata == empty_slot() {
+                // Return first tombstone found if any, otherwise current position
                 if first_tombstone != -1 {
                     return first_tombstone;
                 }
                 return current_index;
             }
             
-            if current_entry is Tombstone {
-                // Remember the first tombstone slot
+            if current_metadata == tombstone_slot() {
+                // Remember first tombstone
                 if first_tombstone == -1 {
                     first_tombstone = current_index;
                 }
             }
             
-            if current_entry is Entry[K,V] {
-                if current_entry.hash() == hash and @eq.call(current_entry.key(), key) {
-                    return current_index;
+            // Check for matching key
+            if current_metadata >= active_slot() { // Active slot
+                entry = @entries.[current_index];
+                if entry is Entry[K,V] {
+                    if entry.hash() == hash and @eq.call(entry.key(), key) {
+                        return current_index;
+                    }
                 }
             }
             
+            // Move to next slot
             current_index = (current_index + 1) bit_and mask;
         }
     }
 
     def resize(new_capacity: i32) {
         old_entries = @entries;
+        old_metadata = @metadata;
         old_len = @entries_len;
         
-        @entries = Buffer[Entry[K,V] | Tombstone | Nil].new(new_capacity);
+        @entries = Buffer[Entry[K,V]?].new(new_capacity);
+        @metadata = Buffer[i8].new(new_capacity);
         @entries_len = new_capacity;
         @size = 0;
         
-        // Initialize all slots as empty
+        // Initialize new metadata
         i = 0;
         while i < new_capacity {
-            @entries.[i] = nil;
+            @metadata.[i] = empty_slot();
             i = i + 1;
         }
         
+        // Reinsert all entries
         for i in 0..old_len {
             entry = old_entries.[i];
             if entry is Entry[K,V] {
                 hash = @hasher.call(entry.key());
                 slot = self.find_slot(entry.key(), hash);
                 @entries.[slot] = entry;
+                @metadata.[slot] = active_slot();
                 @size = @size + 1;
             }
         }
@@ -101,7 +130,7 @@ class SwissTable[K, V] extends HashMap[K, V] {
 
     def ensure_capacity(required_size: i32) {
         current_length = @entries_len;
-        needs_resize = current_length == 0 or required_size * 10 >= current_length * 8;
+        needs_resize = current_length == 0 or required_size >= (current_length * 7) / 10;
         
         if needs_resize {
             new_capacity = current_length * 2;
@@ -114,14 +143,15 @@ class SwissTable[K, V] extends HashMap[K, V] {
         self.ensure_capacity(@size + 1);
         hash = @hasher.call(key);
         i = self.find_slot(key, hash);
+        current_metadata = @metadata.[i];
         
         new_entry = Entry[K,V].new(key, value, hash);
-        existing_entry = @entries.[i];
         
-        if existing_entry is Nil {
+        if current_metadata == empty_slot() {
+            @metadata.[i] = active_slot();
             @size = @size + 1;
         }
-        // If replacing a tombstone, size doesn't change
+        // If tombstone, size doesn't increase but we reuse the slot
         
         @entries.[i] = new_entry;
     }
@@ -129,8 +159,13 @@ class SwissTable[K, V] extends HashMap[K, V] {
     def get(key: K) -> V? {
         hash = @hasher.call(key);
         i = self.find_slot(key, hash);
-        entry_or_nil = @entries.[i];
+        current_metadata = @metadata.[i];
         
+        if current_metadata == empty_slot() or current_metadata == tombstone_slot() {
+            return nil;
+        }
+        
+        entry_or_nil = @entries.[i];
         if entry_or_nil is Entry[K,V] {
             return entry_or_nil.value();
         }
@@ -141,8 +176,13 @@ class SwissTable[K, V] extends HashMap[K, V] {
     def remove(key: K) -> V? {
         hash = @hasher.call(key);
         i = self.find_slot(key, hash);
-        entry_or_nil = @entries.[i];
+        current_metadata = @metadata.[i];
         
+        if current_metadata == empty_slot() or current_metadata == tombstone_slot() {
+            return nil;
+        }
+        
+        entry_or_nil = @entries.[i];
         if entry_or_nil is not Entry[K,V] {
             return nil;
         }
@@ -152,22 +192,24 @@ class SwissTable[K, V] extends HashMap[K, V] {
             return nil;
         }
         
-        // Replace with tombstone
-        @entries.[i] = Tombstone{};
+        // Mark as tombstone
+        @metadata.[i] = tombstone_slot();
+        @entries.[i] = nil;
         @size = @size - 1;
         return val;
     }
 
     def clear() {
         initial_capacity = 8;
-        @entries = Buffer[Entry[K,V] | Tombstone | Nil].new(initial_capacity);
+        @entries = Buffer[Entry[K,V]?].new(initial_capacity);
+        @metadata = Buffer[i8].new(initial_capacity);
         @entries_len = initial_capacity;
         @size = 0;
         
-        // Initialize all slots as empty
+        // Initialize metadata
         i = 0;
         while i < initial_capacity {
-            @entries.[i] = nil;
+            @metadata.[i] = empty_slot();
             i = i + 1;
         }
     }
@@ -177,26 +219,33 @@ class SwissTable[K, V] extends HashMap[K, V] {
     }
 
     def iterator() -> SwissTableIterator[K,V] {
-        return SwissTableIterator[K,V].new(@entries, @entries_len);
-    } ~> { ret.map_entries == @entries }
+        return SwissTableIterator[K,V].new(@entries, @metadata, @entries_len);
+    } ~> { ret.map_entries == @entries, ret.map_metadata == @metadata }
 }
 
 class SwissTableIterator[K,V] extends Iterator[Pair[K,V]] {
-    @map_entries: Buffer[Entry[K,V] | Tombstone | Nil]
+    @map_entries: Buffer[Entry[K,V]?]
+    @map_metadata: Buffer[i8]
     @index: i32
     @length: i32
 
     regions { @elems_reg == @map_entries }
 
-    def init(@map_entries: Buffer[Entry[K,V] | Tombstone | Nil], @length : i32) {
+    def init(@map_entries: Buffer[Entry[K,V] | Nil], @map_metadata: Buffer[i8], @length : i32) {
         @index = 0;
         @length = @length;
     }
 
     def next() -> Pair[K, V]? {
         while @index < @length {
+            current_metadata = @map_metadata.[@index];
             entry_or_nil = @map_entries.[@index];
             @index = @index + 1;
+            
+            // Skip empty and tombstone slots
+            if current_metadata == empty_slot() or current_metadata == tombstone_slot() {
+                continue;
+            }
             
             if entry_or_nil is Entry[K,V] {
                 val = entry_or_nil.value();
