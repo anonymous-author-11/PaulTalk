@@ -349,13 +349,13 @@ class TypeEnvironment:
 
         if isinstance(typ, FatPtr) and FatPtr.basic(typ.cls.data) in self.aliases:
             meaning = self.aliases[FatPtr.basic(typ.cls.data)]
-            path = self.get_class(None, meaning).info.filepath if meaning.cls.data in self.classes else typ.path.data
+            path = self.get_class(None, meaning).info.filepath if meaning.cls.data in self.classes else typ.path
             fatptr = FatPtr.generic(meaning.cls.data, typ.type_params.data)
             return FatPtr.with_path(fatptr, path)
 
         if isinstance(typ, FatPtr) and typ.type_params != NoneAttr():
-            path = self.get_class(None, typ).info.filepath if typ.cls.data in self.classes else typ.path.data
-            return FatPtr([typ.cls, ArrayAttr([self.simplify(t) for t in typ.type_params.data]), StringAttr(path)])
+            path = StringAttr(self.get_class(None, typ).info.filepath) if typ.cls.data in self.classes else typ.path
+            return FatPtr([typ.cls, ArrayAttr([self.simplify(t) for t in typ.type_params.data]), path])
 
         if isinstance(typ, FatPtr) and typ.cls.data in self.classes:
             path = self.get_class(None, typ).info.filepath

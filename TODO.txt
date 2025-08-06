@@ -459,12 +459,6 @@ DONE:
 
 TODO:
 
-- Add more concise alias annotations
-	- Should significantly reduce verbosity
-	- a holds (b, c)
-	- a == b == c
-	- (a, b) holds c
-
 - Make it illegal to assign to 'self' [check!]
 - Track node id's rather than Identifiers [check!]
 - Introduce "NewScope" as subtype of BlockNode [check!]
@@ -489,6 +483,12 @@ TODO:
 	- Skip liveness analysis [check!]
 
 - Would it be correct for the iterable methods to return iterables but have "holds" constraints? [check!]
+
+- Add more concise alias annotations [check!]
+	- Should significantly reduce verbosity [check!]
+	- a holds (b, c) [check!]
+	- a == b == c [check!]
+	- (a, b) holds c [check!]
 
 - Build workflow
 	- set CCFLAGS="/O2 /Ob3"

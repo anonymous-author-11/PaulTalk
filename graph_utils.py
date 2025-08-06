@@ -74,7 +74,6 @@ class DiGraph:
     def print(self):
         for line in generate_network_text(self._graph): print(line)
 
-
 # The glyph classes are framework-agnostic and can be used directly.
 class BaseGlyphs:
     @classmethod
@@ -165,7 +164,7 @@ def generate_network_text(
     with_labels: Union[bool, str] = True,
     sources: List[Any] = None,
     max_depth: int = None,
-    ascii_only: bool = False,
+    ascii_only: bool = True,
     vertical_chains: bool = False,
 ):
     class StackFrame(NamedTuple):

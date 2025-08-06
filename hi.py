@@ -178,6 +178,8 @@ class FatPtr(ParametrizedAttribute, TypeAttribute):
 
     @classmethod
     def with_path(cls, fatptr, path):
+        if isinstance(path, NoneAttr): return fatptr
+        if isinstance(path, StringAttr): path = path.data
         if fatptr.type_params != NoneAttr():
             return FatPtr([fatptr.cls, fatptr.type_params, StringAttr(f"{path}")])
         if (fatptr.cls.data, path) in path_indexed_cache:
