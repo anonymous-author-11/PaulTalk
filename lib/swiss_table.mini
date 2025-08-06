@@ -1,5 +1,16 @@
 import map;
 
+class Entry[K,V] {
+    @hash: i32
+    @key: K
+    @value: V
+
+    getters @hash, @key, @value
+
+    def init(@key: K, @value: V, @hash: i32) {}
+
+}
+
 // Swiss table metadata constants
 alias ControlByte = i8; // Metadata byte for each slot
 
@@ -11,6 +22,8 @@ class SwissTable[K, V] extends HashMap[K, V] {
     @hasher: (K) -> i32
     @eq: (K, K) -> Bool
     @control: Buffer[ControlByte]  // Metadata for each slot
+
+     regions { @elems_reg == @entries }
 
     // Metadata: 
     // - 0x00: Empty slot (never been used)
@@ -32,8 +45,8 @@ class SwissTable[K, V] extends HashMap[K, V] {
 
     // Extracts control byte from a 32-bit hash
     def control_from_hash(hash: i32) -> ControlByte {
-        return ((hash bit_and 0xFF) bit_xor ((hash >> 8) bit_and 0xFF) bit_xor 
-                ((hash >> 16) bit_and 0xFF) bit_xor ((hash >> 24) bit_and 0xFF)) bit_and 0x7F;
+        return (((hash bit_and 0xFF) bit_xor ((hash >> 8) bit_and 0xFF) bit_xor 
+                ((hash >> 16) bit_and 0xFF) bit_xor ((hash >> 24) bit_and 0xFF)) bit_and 0x7F) as i8;
     }
 
     // Finds the slot for a key using linear probing with metadata
@@ -62,9 +75,9 @@ class SwissTable[K, V] extends HashMap[K, V] {
                 active_probes = (current_control bit_and 0x7F);
                 entry = @entries.[current_index];
                 
-                if entry is Entry[K,V] and entry.hash() == hash {
+                if entry is Entry[K,V] {
                     // Hash matches, check key equality
-                    if @eq.call(entry.key(), key) {
+                    if entry.hash() == hash and @eq.call(entry.key(), key) {
                         return current_index; // Key found
                     }
                 }
@@ -99,8 +112,8 @@ class SwissTable[K, V] extends HashMap[K, V] {
             
             if (current_control bit_and 0x80) != 0 { // Active slot
                 entry = @entries.[current_index];
-                if entry is Entry[K,V] and entry.hash() == hash {
-                    if @eq.call(entry.key(), key) {
+                if entry is Entry[K,V] {
+                    if entry.hash() == hash and @eq.call(entry.key(), key) {
                         return current_index; // Key found
                     }
                 }
@@ -196,7 +209,7 @@ class SwissTable[K, V] extends HashMap[K, V] {
         // Initialize new control bytes
         i = 0;
         while i < new_capacity {
-            @control.[i] = 0x00; // Empty slot
+            @control.[i] = 0x00 as i8; // Empty slot
             i = i + 1;
         }
         
@@ -290,7 +303,7 @@ class SwissTable[K, V] extends HashMap[K, V] {
         }
         
         // Mark as tombstone
-        @control.[i] = 0x80;
+        @control.[i] = 0x80 as i8;
         @size = @size - 1;
         // @load remains the same
         
@@ -310,7 +323,7 @@ class SwissTable[K, V] extends HashMap[K, V] {
         // Initialize control bytes
         i = 0;
         while i < initial_capacity {
-            @control.[i] = 0x00; // Empty slot
+            @control.[i] = 0x00 as i8; // Empty slot
             i = i + 1;
         }
     }
@@ -323,7 +336,7 @@ class SwissTable[K, V] extends HashMap[K, V] {
     // --- Iterator Implementation ---
     def iterator() -> SwissTableIterator[K,V] {
         return SwissTableIterator[K,V].new(@entries, @control, @entries_len);
-    }
+    } ~> { ret.map_entries == @entries, ret.map_control == @control }
 }
 
 class SwissTableIterator[K,V] extends Iterator[Pair[K,V]] {
@@ -331,6 +344,8 @@ class SwissTableIterator[K,V] extends Iterator[Pair[K,V]] {
     @map_control: Buffer[ControlByte]
     @index: i32
     @length: i32
+
+    regions { @elems_reg == @map_entries }
 
     def init(@map_entries: Buffer[Entry[K,V]?], @map_control: Buffer[ControlByte], @length : i32) {
         @index = 0;

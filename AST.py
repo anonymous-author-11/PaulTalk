@@ -2323,7 +2323,7 @@ class MethodDef(Statement):
             single_region_name = "single_region_" + random_letters(10)
             self.region_mapping = {k:single_region_name for k,v in discovered_graph.var_mapping.items()}
             self.liveness_at_start = {k:True for k,v in discovered_graph.var_mapping.items()}
-            print(f"{self.defining_class.name}.{self.name} annotated with all_alias")
+            #print(f"{self.defining_class.name}.{self.name} annotated with all_alias")
             return
 
         discovered_graph.transform_until_stable()
