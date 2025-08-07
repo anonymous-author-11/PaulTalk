@@ -176,7 +176,7 @@ def transform_parameter_graph(G: DiGraph, var_mapping, parameter_names):
 
     return new_G, new_var_mapping
 
-def check_graph_compatibility(G1: DiGraph, var_mapping1, G2: DiGraph, var_mapping2, parameter_names):
+def check_graph_compatibility(G1: DiGraph, var_mapping1, G2: DiGraph, var_mapping2, parameter_names, g1_name, g2_name):
     """
     Check if two constraint graphs satisfy specific compatibility conditions:
     1. Parameters in the same node in G1 must also be in the same node in G2.
@@ -194,7 +194,7 @@ def check_graph_compatibility(G1: DiGraph, var_mapping1, G2: DiGraph, var_mappin
     """
     for var in parameter_names:
         if var in var_mapping1 and var not in var_mapping2:
-            return False, f"Parameter {var} exists in G1 but not in G2"
+            return False, f"Parameter {var} exists in {g1_name} but not in {g2_name}."
     valid_params = [var for var in parameter_names if var in var_mapping1 and var in var_mapping2]
     
     if not valid_params:
@@ -206,7 +206,7 @@ def check_graph_compatibility(G1: DiGraph, var_mapping1, G2: DiGraph, var_mappin
         same_node_G1 = var_mapping1[p1] == var_mapping1[p2]
         same_node_G2 = var_mapping2[p1] == var_mapping2[p2]
         if same_node_G1 and not same_node_G2:
-            return False, f"Parameters {p1} and {p2} are in the same node in G1 but different nodes in G2"
+            return False, f"Parameters {p1} and {p2} are in the same node in {g1_name}, but different nodes in {g2_name}. You must modify the region annotations to resolve this incompatibility."
     
     # Condition 2: Check paths from G1 exist in G2
     for p1 in valid_params:
@@ -229,7 +229,7 @@ def check_graph_compatibility(G1: DiGraph, var_mapping1, G2: DiGraph, var_mappin
             # --- END MODIFIED LOGIC ---
 
             if path_in_G1 and not path_in_G2:
-                return False, f"Path from {p1} to {p2} exists in G1 but not in G2"
+                return False, f"{p1} holds {p2} in {g1_name}, but not in {g2_name}. You must modify the region annotations to resolve this incompatibility."
     
     return True, "Both conditions are satisfied"
 

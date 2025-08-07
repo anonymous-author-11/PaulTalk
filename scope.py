@@ -551,14 +551,14 @@ class PointsToGraph:
     def print(self):
         print(pretty_print_graph(self.graph, self.var_mapping, self.param_names))
 
-    def is_approximated_by(self, other):
-        ok, comment = check_graph_compatibility(self.graph, self.var_mapping, other.graph, other.var_mapping, other.param_names)
+    def is_approximated_by(self, other, g1_name, g2_name):
+        ok, comment = check_graph_compatibility(self.graph, self.var_mapping, other.graph, other.var_mapping, other.param_names, g1_name, g2_name)
         return ok, comment
 
-    def is_covered_by(self, other):
+    def is_covered_by(self, other, g1_name, g2_name):
         self.transform_until_stable()
         other.transform_until_stable()
-        ok, comment = check_graph_compatibility(self.graph, self.var_mapping, other.graph, other.var_mapping, other.param_names)
+        ok, comment = check_graph_compatibility(self.graph, self.var_mapping, other.graph, other.var_mapping, other.param_names, g1_name, g2_name)
         return ok, comment
 
 class CompilationUnit:

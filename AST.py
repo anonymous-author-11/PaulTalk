@@ -2283,7 +2283,9 @@ class MethodDef(Statement):
         overridden_graph.transform_until_stable()
         annotated_graph.transform_until_stable()
         
-        ok, comment = annotated_graph.is_covered_by(overridden_graph)
+        annotated_graph_name = "points-to graph specified by signature and annotations"
+        overidden_graph_name = "points-to graph inherited from overidden methods' annotations"
+        ok, comment = annotated_graph.is_covered_by(overridden_graph, annotated_graph_name, overidden_graph_name)
         if ok: return
 
         print(f"Overidden methods points-to graph for {name}:")
@@ -2334,7 +2336,9 @@ class MethodDef(Statement):
         #print(f"Final annotation-specified graph for {name}:")
         #annotated_graph.print()
 
-        ok, comment = discovered_graph.is_approximated_by(annotated_graph)
+        discovered_graph_name = "discovered points-to graph of method body"
+        annotated_graph_name = "points-to graph specified by signature and annotations"
+        ok, comment = discovered_graph.is_approximated_by(annotated_graph, discovered_graph_name, annotated_graph_name)
 
         if ok:
             live_tbl = {k:False for k,v in discovered_graph.var_mapping.items()} | self.live_at_return()

@@ -339,8 +339,7 @@ class Productizer[T, U] extends Iterator[Pair[T, U]] {
     @current_first : T?
 
     regions {
-        @elems_reg holds @current_first,
-        @elems_reg holds @second_iterator.elems_reg,
+        @elems_reg holds (@current_first, @second_iterator.elems_reg),
         @current_first holds @first_iterator.elems_reg,
         @second_iterator.elems_reg == @second.elems_reg,
         @second_iterator holds @second
