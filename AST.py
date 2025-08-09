@@ -939,9 +939,9 @@ class FunctionLiteral(Expression):
         body_scope.behavior = None
         body_scope.type_table = {}
         body_scope.symbol_table = {}
-        param_types = [param.type(scope.type_env) for param in self.params]
+        param_types = [param.type(body_scope.type_env) for param in self.params]
         for i, param in enumerate(self.params):
-            param.typeflow(scope)
+            param.typeflow(body_scope)
             body_scope.type_table[param.name] = param_types[i]
         self.body.typeflow(body_scope)
         self.insert_implicit_return(body_scope)
@@ -3955,8 +3955,8 @@ class WhileStatement(Branch):
         route_scopes = [*exit_scopes, body_scope, skip_scope]
 
         self.merge_scope_types(scope, route_scopes)
-        if self.preheader: self.preheader.typeflow(scope)
         condition_scope = Scope(scope)
+        if self.preheader: self.preheader.typeflow(condition_scope)
         self.condition.typeflow(condition_scope)
         body_scope = Scope(condition_scope, wile=condition_scope.region.last_block)
         skip_scope = Scope(condition_scope)
@@ -4004,16 +4004,17 @@ class For(Statement):
         _iterator_xyz = iterable.iterator();
         while (x := _iterator_xyz.next()) is not Nil { ... }
         """
+
         assign0 = Assignment(NodeInfo.from_info(self.info, "assign_iterator"), self.temp_ident, self.iterator)
         assign0.codegen(scope)
         nxt_call = MethodCall(NodeInfo.from_info(self.info, "next_call"), self.temp_ident, "next", [])
-        nxt_type = nxt_call.exprtype(scope)
         assign1 = Assignment(NodeInfo.from_info(self.info, "assign_next"), self.inductee, nxt_call)
         condition = NegatedTypeCheck(NodeInfo.from_info(self.info, "nil_check"), self.inductee, Nil())
         wile = WhileStatement(NodeInfo.from_info(self.info, "while_loop"), condition, assign1, self.body)
         wile.codegen(scope)
 
     def typeflow(self, scope):
+
         iterable_type = scope.simplify(self.iterable.exprtype(scope))
 
         if isinstance(iterable_type, Tuple):
