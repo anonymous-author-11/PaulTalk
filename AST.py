@@ -4096,7 +4096,7 @@ class ReturnValue(Return):
     def codegen(self, scope):
         scope.insert_region_creations(self)
         retval_typ = scope.simplify(self.value.exprtype(scope))
-        broad_return_type = scope.behavior.broad_return_type() if scope.behavior else scope.method.definition.return_type()
+        broad_return_type = scope.behavior.broad_return_type() if scope.behavior else scope.simplify(scope.method.definition.return_type())
         cast = CastOp.make(self.value.codegen(scope), retval_typ, broad_return_type)
         ret_op = ReturnOp.create(operands=[cast.results[0]])
         scope.region.last_block.add_ops([cast, ret_op])
