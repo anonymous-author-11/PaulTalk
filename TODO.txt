@@ -687,7 +687,9 @@ DONE:
 
 TODO:
 
-- Add more functionality to tests
+- Add more functionality to tests [check!]
+- Bug in PrimeSieve where I was able to insert a NaiveSieve into the map without making it extend PrimeSieve
+	- Must be something wrong in behavior.applicable
 
 - Release 0.8.0
 	- Automate build workflow [check!]

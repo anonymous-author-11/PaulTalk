@@ -771,5 +771,122 @@ class CompilerTests(CompilerTestCase):
         expected_output = "coconut"
         self.run_mini_code(mini_code, expected_output, "fn_map_call")
 
+    def test_array_literals(self):
+        mini_code = """
+            import array;
+            import io;
+
+            intary = [1,2,3,4,5];
+
+            strary = ["a","b","c","d"];
+
+            intstrary = [1, "b", 3, "d"];
+
+            IO.print(intstrary.[3]);
+
+            IO.print("look at this!");
+        """
+        expected_output = "d\nlook at this!"
+        self.run_mini_code(mini_code, expected_output, "array_literals")
+
+    def test_iterable_chain(self):
+        mini_code = """
+            import range;
+            import io;
+
+            add = (a : i32, b : i32) => { a + b; };
+
+            v = (1...15).map((x : i32) => { x * x; })
+                .filter((x : i32) => { x % 2 == 0; })
+                .reduce(0, add);
+
+            IO.print(v);
+        """
+        expected_output = "560"
+        self.run_mini_code(mini_code, expected_output, "iterable_chain")
+
+    def test_tuple_arithmetic(self):
+        mini_code = """
+            import io;
+            import core;
+
+            alias swizzle = Tuple[i64, i64, i32];
+
+            def swizzle_add(a : swizzle, b : swizzle) -> swizzle {
+                return a + b;
+            }
+
+            a = (
+                (1,2,3),
+                (4,5,6),
+                (7,8,9)
+            );
+            b = (
+                (10,11,12),
+                (13,14,15),
+                (16,17,18)
+            );
+            c = a + b;
+            IO.print(c.[0].[2]); // 3 + 12 = 15
+
+            alias square = Tuple[4 x Tuple[4 x i32]];
+            alias buf = Buffer[square];
+
+            def tuple_add(a : buf, b : buf) -> square {
+                return a.[0] + b.[0];
+            }
+        """
+        expected_output = "15"
+        self.run_mini_code(mini_code, expected_output, "tuple_arithmetic")
+
+    def test_matmul(self):
+        mini_code = """
+            import matmul;
+
+            size = 512;
+
+            matrix1 = Matrix.new(size, size);
+            matrix2 = Matrix.new(size, size);
+            
+            for i in 0..size {
+                for j in 0..size {
+                    val1 = (i + j) % 10;
+                    val2 = (i - j + 10) % 10;
+                    matrix1.[i, j] = val1 as f64; 
+                    matrix2.[i, j] = val2 as f64;
+                }
+            }
+            
+            result = matrix1 * matrix2;
+            
+            sum = 0.0;
+            for i in 0..size { sum = sum + result.[0, i]; }
+            IO.print(sum);
+        """
+        expected_output = "230346.000000"
+        self.run_mini_code(mini_code, expected_output, "matmul")
+
+    def test_prime_sieves(self):
+        mini_code = """
+            import primesieve;
+
+            limit = 10_000_000;
+
+            sieves = SwissTable[String, PrimeSieve].new(string_hasher, string_eq);
+            sieves.insert("Naive Sieve", NaiveSieveWithCollection{limit});
+            sieves.insert("Regular Sieve", SimplePrimeSieve{limit});
+            sieves.insert("Optimized Sieve", CacheOptimizedSieve{limit});
+            sieves.insert("Bitpacked Sieve", CacheOptimizedBitpackedSieve{limit});
+
+            for (name, sieve) in sieves {
+                IO.print(name);
+                sieve.generate_primes();
+                prime_count = sieve.count_primes();
+                IO.print(prime_count);
+            }
+        """
+        expected_output = "Regular Sieve\n664579\nNaive Sieve\n664579\nBitpacked Sieve\n664579\nOptimized Sieve\n664579"
+        self.run_mini_code(mini_code, expected_output, "prime_sieves")
+
 if __name__ == '__main__':
     unittest.main()
