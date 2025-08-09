@@ -2401,6 +2401,7 @@ class MethodDef(Statement):
         self.check_setter_num_params()
         cls_constraints = self.self_type_constraints()
         body_scope.points_to_facts = body_scope.points_to_facts.union(cls_constraints)
+        body_scope.points_to_facts.all_alias = False
         self.body.typeflow(body_scope)
 
     def param_types(self):
