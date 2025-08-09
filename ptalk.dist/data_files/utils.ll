@@ -24,8 +24,17 @@ declare void @report_exception( {ptr} )
 @current_coroutine = linkonce_odr thread_local global ptr null
 @always_one = linkonce thread_local global i1 1
 
+; do any OS-specific preliminary setup
+declare void @os_specific_setup()
+
 ; An OS-agnostic virtual-memory reservation API
 declare noalias ptr @virtual_reserve(i64) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
+
+; An OS-agnostic API to commit a section of a reserved memory region
+declare void @virtual_commit(ptr, i64)
+
+; An OS-agnostic API to reset a reserved memory region
+declare void @virtual_reset(ptr, i64)
 
 ; An OS-agnostic API to make trampoline code executable
 declare void @anoint_trampoline(ptr %tramp) mustprogress nofree nosync nounwind willreturn memory(argmem: readwrite)
@@ -98,10 +107,27 @@ define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) noinl
   ; Update the current pointer
   store ptr %new_ptr, ptr %current_ptr
 
-  ; why doesn't this work when I remove noinline??
-  ;call void @llvm.assume(i1 true) ["noalias"(ptr %current)]
-
+  ; if we are allocating more than one page, commit the full size of the allocation
+  call void @commit_additional_pages(ptr %current, i64 %aligned_size)
   ret ptr %current 
+}
+
+define void @commit_additional_pages(ptr %base, i64 %size) {
+  %page_or_more = icmp sge i64 %size, 4096
+  br i1 %page_or_more, label %commit, label %return
+
+commit:
+  %base_i64 = ptrtoint ptr %base to i64
+  %base_plus_4096 = add i64 %base_i64, 4096
+  %next_page_i64 = and i64 %base_plus_4096, -4096
+  %next_page = inttoptr i64 %next_page_i64 to ptr
+  %left_in_page = sub i64 %next_page_i64, %base_i64
+  %commit_size = sub i64 %size, %left_in_page
+  call void @virtual_commit(ptr %next_page, i64 %commit_size)
+  br label %return
+
+return:
+  ret void
 }
 
 define { i64, i64 } @_data_size_tuple_typ(ptr %0) {
@@ -237,6 +263,7 @@ define ptr @coroutine_create(ptr %func, ptr %arg_passer) {
 
   ; Reserve a new stack (8MB == 8388608 bytes) for the coroutine (and put the coroutine itself on this stack)
   %stack = call noalias ptr @virtual_reserve(i64 8388608) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
+  call void @virtual_commit(ptr %stack, i64 8388608)
 
   ; Store the passed function pointer in the coroutine
   %func_ptr = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %stack, i32 0, i32 0
@@ -265,6 +292,7 @@ define ptr @coroutine_create(ptr %func, ptr %arg_passer) {
 }
 
 define void @setup_landing_pad() {
+  call void @os_specific_setup()
   %region = call noalias ptr @virtual_reserve(i64 5368709120) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
   store ptr %region, ptr @current_ptr
   %buf_first_word = getelementptr [3 x ptr], ptr @into_caller_buf, i32 0, i32 0

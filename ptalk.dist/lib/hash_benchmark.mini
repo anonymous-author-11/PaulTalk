@@ -1,7 +1,7 @@
-import cuckoo;
+import swiss_table_v2;
 import std;
 
-alias Map = CuckooMap;
+alias Map = SwissTable;
 
 // --- Additions for Benchmarking ---
 extern def clock() -> i64
@@ -43,7 +43,6 @@ def benchmark_insert_sequential(n: i32) {
     i = 0;
     while i < n {
         map.insert(i, i + 1);
-        // IO.print(i);
         i = i + 1;
     }
     end_time: i64 = clock();
@@ -128,6 +127,7 @@ def benchmark_get_sequential_hit(n: i32) {
     start_time: i64 = clock();
     actual_sum: i64 = 0;
     verification_passed = true; // Assume pass initially
+    printed_errors = 0;
     i = 0;
     while i < n {
         val = map.get(i);
@@ -137,7 +137,11 @@ def benchmark_get_sequential_hit(n: i32) {
              // If Nil is returned, it's an error for a hit test
              verification_passed = false;
              // Optionally print error for debugging, but avoid flooding console
-             IO.print("Error: Nil returned during sequential hit test for key "); IO.print(i);
+             if printed_errors < 10 {
+                IO.print("Error: Nil returned during sequential hit test for key "); IO.print(i);
+                printed_errors = printed_errors + 1;
+             }
+             
         }
         i = i + 1;
     }
@@ -184,6 +188,7 @@ def benchmark_get_random_hit(n: i32) {
     start_time: i64 = clock();
     actual_sum: i64 = 0;
     verification_passed = true; // Assume pass initially
+    printed_errors = 0;
     i = 0;
     while i < n { // Iterate up to actual number of unique keys added
         key = keys_present.unchecked_index(i);
@@ -194,7 +199,10 @@ def benchmark_get_random_hit(n: i32) {
              // Nil returned is an error for hit test
              verification_passed = false;
              // Optionally print error
-             IO.print("Error: Nil returned during random hit test for key "); IO.print(key);
+             if printed_errors < 10 {
+                IO.print("Error: Nil returned during random hit test for key "); IO.print(key);
+                printed_errors = printed_errors + 1;
+             }
         }
         i = i + 1;
     }
@@ -306,6 +314,7 @@ def benchmark_remove_random(n: i32) {
     start_time: i64 = clock();
     remove_count = 0;
     verification_passed = true; // Assume pass
+    printed_errors = 0;
     i = 0;
     while i < n { // Remove the actual number of keys added
         key = keys_to_remove.unchecked_index(i);
@@ -315,13 +324,19 @@ def benchmark_remove_random(n: i32) {
              if val != expected_val {
                   // Value mismatch is a form of failure
                   verification_passed = false;
-                  IO.print("Warning: Remove returned wrong value for key "); IO.print(key);
+                  if printed_errors < 10 {
+                    IO.print("Warning: Remove returned wrong value for key "); IO.print(key);
+                    printed_errors = printed_errors + 1;
+                  }
              }
              remove_count = remove_count + 1;
         } else {
              // Remove returning Nil for a key that should exist is an error
              verification_passed = false;
-             IO.print("Warning: Remove returned Nil for key "); IO.print(key);
+             if printed_errors < 10 {
+                IO.print("Warning: Remove returned Nil for key "); IO.print(key);
+                printed_errors = printed_errors + 1;
+             }
         }
         i = i + 1;
     }

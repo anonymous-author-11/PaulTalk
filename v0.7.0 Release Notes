@@ -1,0 +1,41 @@
+v0.7.0 Release Notes
+
+- Faster compilation times
+- Commit memory on-demand via page fault handler
+- Make it illegal to assign to 'self'
+- Correctly handle new scope blocks in typeflow
+- Increase determinism in the compiler-- deterministic node ID's
+- Write runtime utilities for region system
+	- Can be found in data_files/region_runtime.ll
+	- Will eventually be lowered to
+- Prioritize current-file classes and functions when multiply defined
+- Implement basic liveness analysis
+	- Inserted operations are simply removed during lowering
+- Add more concise alias annotations
+	- Should significantly reduce verbosity
+	- a holds (b, c, d)
+	- a == b == c
+	- (a, b, c) holds d
+- Improved points-to analysis
+	- Exclude trivial value types from the graphs in apply_constraints
+	- Better error messages for points-to graph analysis
+	- Only print points-to graphs on error
+	- Add conservative aliasing (all_alias) by default
+		- For .annotated_facts and .constraints
+	- Reform tuple and buffer points-to-facts
+		- Tuple: add pseudo-fields .0, .1, etc.
+		- Buffer 
+			- holds rather than == constraints
+			- No more .elems_reg
+	- Integrate no_alias and all_alias annotations
+		- If all_alias, skip graph compatibility check
+			- Incorporate in override check as well
+		- Must wait until typeflow to determine if no annotation means all_alias
+			- B/c could inherit annotations from overrides
+	- Infer all_alias annotation in general case
+		- If the constraint set is empty AND no_alias is NOT specified
+	- Mark .init methods as no_alias by default
+	- Propagate all_alias on function / method call
+		- Upon any call to a non-annotated fn, mark the calling context as all_alias
+		- Proceed as if there had been no aliasing
+		- At end of context, merge all the nodes into one

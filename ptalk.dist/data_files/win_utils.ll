@@ -1,20 +1,36 @@
 
 ; Windows-specific utility functions
 
-declare noalias ptr @VirtualAlloc(ptr, i64, i32, i32) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1) "alloc-family"="malloc"
+declare ptr @VirtualAlloc(ptr, i64, i32, i32) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1) "alloc-family"="malloc"
 declare i32 @VirtualFree(ptr allocptr nocapture noundef, i64, i32) mustprogress nounwind willreturn allockind("free") memory(argmem: readwrite, inaccessiblemem: readwrite)
 declare i32 @VirtualProtect(ptr, i64, i32, ptr) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
 
-; Define an OS-agnostic wrapper around VirtualAlloc
+; Define an OS-agnostic wrapper around VirtualAlloc(MEM_RESERVE)
+; MEM_RESERVE: 8192, MEM_COMMIT: 4096, (MEM_RESERVE | MEM_COMMIT): 12288
+; 4 for PAGE_READWRITE
 define noalias ptr @virtual_reserve(i64 %size) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc" {
-	%result = call noalias ptr @VirtualAlloc(ptr null, i64 %size, i32 12288, i32 4) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1) "alloc-family"="malloc"
+	%result = call noalias ptr @VirtualAlloc(ptr null, i64 %size, i32 8192, i32 4) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1) "alloc-family"="malloc"
 	ret ptr %result
+}
+
+; Define an OS-agnostic wrapper around VirtualAlloc(MEM_COMMIT)
+; MEM_COMMIT: 4096, 4 for PAGE_READWRITE
+define void @virtual_commit(ptr %allocation, i64 %size) optnone noinline {
+  %result = call ptr @VirtualAlloc(ptr %allocation, i64 %size, i32 4096, i32 4)
+  ret void
 }
 
 ; Define an OS-agnostic wrapper around VirtualProtect
 define void @anoint_trampoline(ptr %tramp) mustprogress nofree nosync nounwind willreturn memory(argmem: readwrite) {
-  %oldProtect = alloca i32  
+  %oldProtect = alloca i32
   %result = call i32 @VirtualProtect(ptr %tramp, i64 16, i32 64, ptr %oldProtect)
+  ret void
+}
+
+; MEM_DECOMMIT = 0x4000 = 16384
+; For dwFreeType = MEM_DECOMMIT, the dwSize parameter is the size of the region to decommit.
+define void @virtual_reset(ptr %addr, i64 %size) {
+  %result = call i32 @VirtualFree(ptr %addr, i64 %size, i32 16384)
   ret void
 }
 
@@ -124,4 +140,51 @@ entry:
 ._crit_edge:                                      ; preds = %13, %._crit_edge.loopexit.split.loop.exit, %4
   %.0.lcssa = phi i64 [ 0, %entry ], [ %n_captured, %.lr.ph ], [ %max_frames, %13 ]
   ret i64 %.0.lcssa
+}
+
+; Page Fault Exception handler
+
+%struct._EXCEPTION_POINTERS = type { ptr, ptr }
+%struct._EXCEPTION_RECORD = type { i32, i32, ptr, ptr, i32, [15 x i64] }
+
+declare ptr @AddVectoredExceptionHandler(i32 noundef, ptr noundef)
+
+define void @os_specific_setup() {
+  %1 = call ptr @AddVectoredExceptionHandler(i32 1, ptr @PageFaultHandler)
+  ret void
+}
+
+@last_fault_addr = internal global ptr null
+
+define i32 @PageFaultHandler(ptr %0) mustprogress optnone noinline uwtable {
+entry:
+  %2 = load ptr, ptr %0, align 8
+  %3 = load i32, ptr %2, align 8
+  %.not = icmp eq i32 %3, -1073741819
+  br i1 %.not, label %get_fault_info, label %fail
+
+get_fault_info:                                                ; preds = %entry
+  %fault_addr_ptr_ptr = getelementptr inbounds %struct._EXCEPTION_RECORD, ptr %2, i32 0, i32 5, i32 1
+  %fault_addr_ptr = load ptr, ptr %fault_addr_ptr_ptr, align 8
+  %fault_addr_int = ptrtoint ptr %fault_addr_ptr to i64
+
+  %last_fault_addr = load ptr, ptr @last_fault_addr
+  %same_addr = icmp eq ptr %fault_addr_ptr, %last_fault_addr
+  br i1 %same_addr, label %fail, label %commit
+
+commit:
+  store ptr %fault_addr_ptr, ptr @last_fault_addr
+
+  ; 4096 for MEM_COMMIT, 4 for PAGE_READWRITE
+  %commit_result = call ptr @VirtualAlloc(ptr %fault_addr_ptr, i64 noundef 4096, i32 noundef 4096, i32 noundef 4)
+
+  %is_null = icmp eq ptr %commit_result, null
+  br i1 %is_null, label %fail, label %return
+
+fail:                                                ; preds = %entry, %get_fault_info
+  br label %return
+
+return:
+  %.0 = phi i32 [ -1, %commit ], [ 0, %fail ]
+  ret i32 %.0
 }

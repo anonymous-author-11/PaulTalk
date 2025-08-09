@@ -459,10 +459,6 @@ DONE:
 
 TODO:
 
-- We need to prioritize current-file classes and functions when multiply defined
-
-- Better error messages for points-to graph analysis [check!]
-
 - Obviously there is an issue with nil-initialized buffer in swiss_table.mini.
 
 - Make it illegal to assign to 'self' [check!]
@@ -496,6 +492,9 @@ TODO:
 	- a == b == c [check!]
 	- (a, b) holds c [check!]
 
+- Better error messages for points-to graph analysis [check!]
+- Prioritize current-file classes and functions when multiply defined [check!]
+
 - Build workflow
 	- set CCFLAGS="/O2 /Ob3"
 	- py -m nuitka ptalk.py --standalone --msvc=latest --include-data-dir=data_files=data_files --include-data-dir=lib=lib --include-raw-dir=executables=executables --nofollow-import-to=sympy --nofollow-import-to=pandas --nofollow-import-to=numpy --nofollow-import-to=sqlalchemy --nofollow-import-to=scipy --nofollow-import-to=PIL --nofollow-import-to=pygments
@@ -509,7 +508,7 @@ TODO:
 		- git commit -m "Version 0.x.x"
 		- git push origin temp_branch
 		- git switch main
-	- gh release create "v0.x.x" --target "temp_branch" --notes "Release for version 0.x.x."
+	- gh release create "v0.x.x" --target "temp_branch" --notes-file "v0.x.x Release Notes" --prerelease
 	- delete temp_branch
 		- git branch -D temp_branch
 		- git push origin --delete temp_branch
@@ -981,7 +980,7 @@ TODO:
 		- Enable getters list, setters list [check!]
 	- Add check for multiply defined methods [check!]
 
-- Release 0.7.0
+- Release 0.8.0
 	- Does just adding dependencies to the path work?
 		- The source_dirs collection should be ordered, not a set [check!]
 		- Add the dependency folder to an env variable named for the package

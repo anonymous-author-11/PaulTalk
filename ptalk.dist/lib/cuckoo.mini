@@ -12,8 +12,8 @@ class Entry[K,V] {
     def primary_hash() -> i32 { return @primary_hash; }
 
     def to_pair() -> Pair[K, V] {
-        return Pair[K, V].new(@key, @value);
-    }
+        return Pair{@key, @value};
+    } ~> { ret.first == @key, ret.second == @value }
 }
 
 class CuckooMap[K,V] extends HashMap[K, V] {
@@ -23,6 +23,8 @@ class CuckooMap[K,V] extends HashMap[K, V] {
     @size : i32
     @hasher : (K) -> i32 // Primary user-provided hash function
     @eq : (K, K) -> Bool
+
+    regions { @elems_reg == @table1 == @table2 }
 
     def Self.max_displacements() -> i32 {
         return 100;
@@ -289,7 +291,7 @@ class CuckooMap[K,V] extends HashMap[K, V] {
     def iterator() -> CuckooMapIterator[K,V] {
         // Pass both tables to the iterator
         return CuckooMapIterator[K,V].new(@table1, @table2, @table_len);
-    }
+    } ~> { ret.map_table1 == @table1, ret.map_table2 == @table2 }
 }
 
 class CuckooMapIterator[K,V] extends Iterator[Pair[K,V]] {
@@ -298,6 +300,11 @@ class CuckooMapIterator[K,V] extends Iterator[Pair[K,V]] {
     @table_len : i32
     @index: i32       // Index within the current table
     @on_second : Bool // whether on second table
+
+    regions {
+        @elems_reg holds (@map_table1, @map_table2),
+        @map_table1 == @map_table2
+    }
 
     def init(@map_table1: Buffer[Entry[K,V]?], @map_table2: Buffer[Entry[K,V]?], @table_len : i32) {
         @index = 0;
@@ -311,7 +318,7 @@ class CuckooMapIterator[K,V] extends Iterator[Pair[K,V]] {
             if entry is Entry[K, V] { return entry.to_pair(); }
         }
         return nil;
-    }
+    } ~> { ret holds @elems_reg }
 
     def next() -> Pair[K, V]? {
         if not @on_second {

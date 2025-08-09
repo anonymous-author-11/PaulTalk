@@ -27,7 +27,8 @@ class File {
 		@handle = fopen(@name.c_string(), @mode.c_string());
 		if @handle is Nil { yield(FileSystemError.new()); }
 		@open = true;
-	}
+	} ~> all_alias
+	
 	def mode=(@mode : String) {
 		if not @open { return; }
 		self.reopen();

@@ -12,9 +12,7 @@ class Entry[K,V] {
     def init(@key: K, @value: V, @hash: i32) {}
     def init(@key: K, @value: Tombstone, @hash: i32) {}
 
-    def key() -> K { return @key; }
-    def value() -> V | Tombstone { return @value; }
-    def hash() -> i32 { return @hash; }
+    getters @hash, @key, @value
 }
 
 class OpenAddressMap[K,V] extends HashMap[K,V] {
@@ -24,6 +22,8 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
     @load: i32      // number of occupied slots (key -> V or key -> Tombstone)
     @hasher: (K) -> i32
     @eq: (K, K) -> Bool
+
+    regions { @elems_reg == @entries }
 
     def init(@hasher: (K) -> i32, @eq : (K, K) -> Bool) {
         // Ensure initial capacity is a power of 2
@@ -169,13 +169,15 @@ class OpenAddressMap[K,V] extends HashMap[K,V] {
     // Conforms to Iterable by providing iterator()
     def iterator() -> OpenAddressMapIterator[K,V] {
         return OpenAddressMapIterator[K,V].new(@entries, @entries_len);
-    }
+    } ~> { ret.map_entries == @entries}
 }
 
 class OpenAddressMapIterator[K,V] extends Iterator[Pair[K,V]] {
     @map_entries: Buffer[Entry[K,V]?]
     @index: i32
     @length: i32 // Cache length for minor optimization
+
+    regions { @elems_reg == @map_entries }
 
     def init(@map_entries: Buffer[Entry[K,V]?], @length : i32) {
         @index = 0;
@@ -192,6 +194,6 @@ class OpenAddressMapIterator[K,V] extends Iterator[Pair[K,V]] {
             return Pair{entry_or_nil.key(), val};
         }
         return nil; // End of iteration
-    }
+    } ~> { (ret.first, ret.second) holds @elems_reg }
 }
 

@@ -9,7 +9,7 @@ class Array[T] extends
 	@length : i32
 	@capacity : i32
 
-    regions { @elems_reg == @buffer.elems_reg }
+    regions { @elems_reg == @buffer }
 
     def Self.empty() -> Self { return Self{}; }
 
@@ -56,7 +56,7 @@ class Array[T] extends
         @buffer.[@length] = x;
         @length = @length + 1;
         return self;
-    } ~> { ret == self, x == @elems_reg }
+    }
     
     def extend(other : Collection[T]) -> Self {
         old_len = @length;
@@ -69,7 +69,7 @@ class Array[T] extends
         }
         @length = new_len;
         return self;
-    } ~> { ret == self, other.elems_reg == @elems_reg }
+    }
 
     // IndexableCollection[i32, T, T] overrides
 
@@ -84,13 +84,13 @@ class Array[T] extends
         self.bounds_check(index);
         if index < 0 { index = @length + index; }
         return self.unchecked_index(index);
-    } ~> { ret == @elems_reg }
+    }
     
     def []=(index : i32, value : T) yields OutOfBounds {
         self.bounds_check(index);
         if index < 0 { index = @length + index; }
         self.unchecked_insert(index, value);
-    } ~> { value == @elems_reg }
+    }
 
     def bounds_check(index : i32) yields OutOfBounds {
         past_end = index > (@length - 1);
@@ -102,11 +102,11 @@ class Array[T] extends
     
     def unchecked_index(index : i32) -> T {
     	return @buffer.[index];
-    } ~> { ret == @elems_reg }
+    } ~> { ret holds @elems_reg }
     
     def unchecked_insert(index : i32, value : T) {
         @buffer.[index] = value;
-    } ~> { value == @elems_reg }
+    } ~> { @elems_reg holds value }
     
     def iterator() -> ConstantTimeIterator[T] {
     	return ArrayIterator{self};
