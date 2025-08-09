@@ -459,6 +459,9 @@ DONE:
 
 TODO:
 
+- Add an extra argument to buffer indexation to enable SIMD loads and stores
+	- This argument must be an integer literal
+
 - Obviously there is an issue with nil-initialized buffer in swiss_table.mini.
 
 - Make it illegal to assign to 'self' [check!]

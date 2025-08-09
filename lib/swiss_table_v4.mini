@@ -1,0 +1,246 @@
+import map;
+import io;
+
+// --- Swiss Table Control Bytes (LSB Scheme) ---
+// LSB=0 for sentinels, LSB=1 for occupied slots.
+
+// 0b0000_0000 (0): Slot is empty. Relies on zero-initialization.
+def empty() -> i8 { return 0 as i8; }
+
+// 0b1111_1110 (-2): Slot was occupied, but is now deleted (tombstone). LSB is 0.
+def deleted() -> i8 { return -2 as i8; }
+
+// A bitmask to check if a control byte represents an occupied slot.
+def occupied_mask() -> i8 { return 1 as i8; }
+
+// The width of a probe group. Real implementations use SIMD to check
+// this many slots at once. We simulate this with a loop.
+def group_width() -> i32 { return 16; }
+
+
+class Entry[K,V] {
+    @hash: i32
+    @key: K
+    @value: V
+
+    getters @hash, @key, @value
+
+    def init(@key: K, @value: V, @hash: i32) {}
+
+    def to_pair() -> Pair[K, V] {
+        return Pair{@key, @value};
+    } ~> { ret.first == @key, ret.second == @value }
+}
+
+class SwissTable[K, V] extends HashMap[K, V] {
+    @entries: Buffer[Entry[K,V]?]
+    @metadata: Buffer[i8]
+    @entries_len : i32
+    @size: i32
+    @hasher: (K) -> i32
+    @eq: (K, K) -> Bool
+
+    regions { @elems_reg == @entries }
+    getter @size
+
+    // Extracts 6 bits for H2 and packs them into a control byte with LSB=1.
+    def Self.h2_to_control(hash: i32) -> i8 {
+        // Use bits 25-30 of the hash (6 bits).
+        h2_6bit = (hash >> 26) as i8;
+        // Shift left to make room for the occupied bit, then set the LSB.
+        return (h2_6bit << 1) bit_or occupied_mask();
+    }
+
+    def init(@hasher: (K) -> i32, @eq : (K, K) -> Bool) {
+        initial_capacity = 8;
+        @entries = Buffer[Entry[K,V]?].new(initial_capacity);
+        @metadata = Buffer[i8].new(initial_capacity); // Assumed to be zero-initialized.
+        @entries_len = initial_capacity;
+        @size = 0;
+        // No explicit initialization loop needed for @metadata.
+    }
+
+    def find_slot(key: K, hash: i32) -> i32 {
+        capacity = @entries_len;
+        mask = capacity - 1;
+        start_index = hash bit_and mask;
+        h2_control = Self.h2_to_control(hash);
+
+        first_tombstone = -1;
+        probe_offset = 0;
+        metadata = @metadata;
+        entries = @entries;
+
+        while true {
+            for i in 0..group_width() {
+                index = (start_index + probe_offset + i) bit_and mask;
+                control = metadata.[index];
+
+                if control == h2_control {
+                    entry = entries.[index];
+                    if entry is Entry[K,V] {
+                        if entry.hash() == hash and @eq.call(entry.key(), key) {
+                            return index;
+                        }
+                    }
+                }
+
+                // Check if the slot is a sentinel (LSB is 0).
+                if (control bit_and occupied_mask()) == 0 {
+                    if control == empty() {
+                        if first_tombstone != -1 { return first_tombstone; }
+                        return index;
+                    }
+                    // It must be deleted.
+                    if first_tombstone == -1 {
+                        first_tombstone = index;
+                    }
+                }
+            }
+            probe_offset = probe_offset + group_width();
+        }
+    }
+
+    def resize(new_capacity: i32) {
+        old_entries = @entries;
+        old_len = @entries_len;
+
+        @entries = Buffer[Entry[K,V]?].new(new_capacity);
+        @metadata = Buffer[i8].new(new_capacity); // Assumed zero-initialized.
+        @entries_len = new_capacity;
+        @size = 0;
+
+        metadata = @metadata;
+        entries = @entries;
+
+        for i in 0..old_len {
+            entry = old_entries.[i];
+            // Check if the old slot was occupied.
+            if entry is Nil { continue; }
+            slot = self.find_slot_for_new_key(entry.hash());
+            entries.[slot] = entry;
+            metadata.[slot] = Self.h2_to_control(entry.hash());
+            @size = @size + 1;
+        }
+    }
+
+    def find_slot_for_new_key(hash: i32) -> i32 {
+        capacity = @entries_len;
+        mask = capacity - 1;
+        start_index = hash bit_and mask;
+        probe_offset = 0;
+        metadata = @metadata;
+
+        while true {
+            for i in 0..group_width() {
+                index = (start_index + probe_offset + i) bit_and mask;
+                control = metadata.[index];
+                // Is it a sentinel? (empty or deleted)
+                if (control bit_and occupied_mask()) == 0 {
+                    return index;
+                }
+            }
+            probe_offset = probe_offset + group_width();
+        }
+    }
+
+    def ensure_capacity(required_size: i32) {
+        current_length = @entries_len;
+        // Load factor of 7/8 = 87.5%. Abseil uses this.
+        needs_resize = current_length == 0 or required_size > (current_length * 7) / 8;
+        if not needs_resize { return; }
+
+        new_capacity = current_length * 2;
+        if new_capacity < 8 { new_capacity = 8; }
+        self.resize(new_capacity);
+    }
+
+    def insert(key: K, value: V) {
+        self.ensure_capacity(@size + 1);
+        hash = @hasher.call(key);
+        i = self.find_slot(key, hash);
+
+        // A new insert happens if the slot was a sentinel.
+        is_new_insert = (@metadata.[i] bit_and occupied_mask()) == 0;
+        if is_new_insert { @size = @size + 1; }
+
+        @metadata.[i] = Self.h2_to_control(hash);
+        @entries.[i] = Entry[K,V].new(key, value, hash);
+    }
+
+    def get(key: K) -> V? {
+        if @size == 0 { return nil; }
+        hash = @hasher.call(key);
+        i = self.find_slot(key, hash);
+
+        // If the slot is not occupied
+        if (@metadata.[i] bit_and occupied_mask()) == 0 { return nil; }
+
+        entry_or_nil = @entries.[i];
+        if entry_or_nil is Nil { return nil; }
+
+        return entry_or_nil.value();
+    }
+
+    def remove(key: K) -> V? {
+        if @size == 0 { return nil; }
+        hash = @hasher.call(key);
+        i = self.find_slot(key, hash);
+
+        // If the slot is not occupied
+        if (@metadata.[i] bit_and occupied_mask()) == 0 { return nil; }
+
+        entry_or_nil = @entries.[i];
+        if entry_or_nil is Nil { return nil; }
+
+        val = entry_or_nil.value();
+        @metadata.[i] = deleted();
+        @entries.[i] = nil;
+        @size = @size - 1;
+        return val;
+    }
+
+    def clear() {
+        initial_capacity = 8;
+        @entries = Buffer[Entry[K,V]?].new(initial_capacity);
+        @metadata = Buffer[i8].new(initial_capacity); // Assumed zero-initialized.
+        @entries_len = initial_capacity;
+        @size = 0;
+    }
+
+    def iterator() -> SwissTableIterator[K,V] {
+        return SwissTableIterator[K,V].new(@entries, @metadata, @entries_len);
+    } ~> { ret.map_entries == @entries, ret.map_metadata == @metadata }
+}
+
+class SwissTableIterator[K,V] extends Iterator[Pair[K,V]] {
+    @map_entries: Buffer[Entry[K,V]?]
+    @map_metadata: Buffer[i8]
+    @index: i32
+    @length: i32
+
+    regions { @elems_reg == @map_entries }
+
+    def init(@map_entries: Buffer[Entry[K,V]?], @map_metadata: Buffer[i8], @length : i32) {
+        @index = 0;
+        @length = @length;
+    }
+
+    def next() -> Pair[K, V]? {
+        while @index < @length {
+            control = @map_metadata.[@index];
+            entry_or_nil = @map_entries.[@index];
+            @index = @index + 1;
+
+            // Skip sentinel slots (LSB is 0).
+            if (control bit_and occupied_mask()) == 0 {
+                continue;
+            }
+
+            if entry_or_nil is Entry[K,V] {
+                return entry_or_nil.to_pair();
+            }
+        }
+        return nil;
+    }
+}
