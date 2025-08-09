@@ -1,0 +1,36 @@
+v0.8.0 Release Notes
+
+- Automate build workflow
+- Add more functionality to tests
+- Remove junk from stdlib
+- Fix various bugs
+
+- Implement dictionary literal
+	- Uses swiss_table_v3 (very fast!)
+	- Included in std.mini
+	- Only supports i32 and String keys for now
+
+Example:
+
+string_map = {"Language":"PaulTalk", "OS":"Windows", "Architecture":"x86_64"};
+IO.print(string_map.["OS"]);
+
+- Implement tuple destructuring
+	- In assignments
+	- Special-case logic when the rhs is a Pair
+	- For-loop inductees
+
+Examples:
+
+my_tuple = (4, 5);
+(four, five) = my_tuple;
+
+my_pair = Pair{2, 3};
+(first, second) = my_pair;
+
+for (key, value) in my_map {
+	...
+}
+
+ary = [7, 8];
+(ary.[0], ary.[1]) = (ary.[0] * 2, ary.[1] * 2);

@@ -14,9 +14,9 @@ def main(argv):
 	version_string = argv[1]
 	password = argv[2]
 
-	release_notes = Path(f"v{version_string} Release Notes")
+	release_notes = Path(f"v{version_string} Release Notes.txt")
 	if not release_notes.exists():
-		print("No release notes found for version {version_string}", file=sys.stderr)
+		print(f"No release notes found for version {version_string}", file=sys.stderr)
 		sys.exit(1)
 
 	set_env_variables()
