@@ -503,10 +503,11 @@ TODO:
 		- git commit -m "Rebuild for version 0.x.x"
 		- git push origin main
 	- Make temp_branch
-		- git checkout --orphan "temp_branch"
-		- git add ptalk.dist
+		- set GIT_ASK_YESNO=false
+		- git switch --orphan "temp_branch"
+		- git checkout main -- ptalk.dist
 		- git commit -m "Version 0.x.x"
-		- git push origin temp_branch
+		- git push -u origin temp_branch
 		- git switch main
 	- gh release create "v0.x.x" --target "temp_branch" --notes-file "v0.x.x Release Notes" --prerelease
 	- delete temp_branch
