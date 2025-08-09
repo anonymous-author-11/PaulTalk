@@ -1,0 +1,30 @@
+
+class Blocking {
+    def init() {}
+}
+
+class Channel[T] {
+    @value : T?
+
+    def init() {
+        @value = nil;
+    }
+    def get() -> T yields Blocking {
+        while true {
+            value = @value;
+            if value is T {
+                @value = nil;
+                return value;
+            }
+            yield(Blocking.new());
+        }
+    }
+    def put(new_value : T) yields Blocking {
+        old_value = @value;
+        while old_value is T {
+            yield(Blocking.new());
+            old_value = @value;
+        }
+        @value = new_value;
+    }
+}

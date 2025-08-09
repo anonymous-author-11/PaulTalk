@@ -1,0 +1,208 @@
+import map;
+import io;
+
+// Tombstone marker for deleted slots
+class Tombstone {
+    def init() {}
+}
+
+class Entry[K,V] {
+    @hash: i32
+    @key: K
+    @value: V
+
+    getters @hash, @key, @value
+
+    def init(@key: K, @value: V, @hash: i32) {}
+
+    def to_pair() -> Pair[K, V] {
+        return Pair{@key, @value};
+    } ~> { ret.first == @key, ret.second == @value }
+
+}
+
+class LinearProbeMap[K, V] extends HashMap[K, V] {
+    @entries: Buffer[Entry[K,V] | Tombstone | Nil]
+    @entries_len : i32
+    @size: i32      
+    @hasher: (K) -> i32
+    @eq: (K, K) -> Bool
+
+    regions { @elems_reg == @entries }
+
+    getter @size
+
+    def init(@hasher: (K) -> i32, @eq : (K, K) -> Bool) {
+        initial_capacity = 8;
+        @entries = Buffer[Entry[K,V] | Tombstone | Nil].new(initial_capacity);
+        @entries_len = initial_capacity;
+        @size = 0;
+        
+        // Initialize all slots as empty
+        i = 0;
+        while i < initial_capacity {
+            @entries.[i] = nil;
+            i = i + 1;
+        }
+    }
+
+    def find_slot(key: K, hash: i32) -> i32 {
+        capacity = @entries_len;
+        mask = capacity - 1;
+        current_index = hash bit_and mask;
+        first_tombstone = -1;
+        
+        while true {
+            current_entry = @entries.[current_index];
+            
+            if current_entry is Nil {
+                // If we found a tombstone earlier, return it for insertion
+                if first_tombstone != -1 {
+                    return first_tombstone;
+                }
+                return current_index;
+            }
+            
+            if current_entry is Tombstone {
+                // Remember the first tombstone slot
+                if first_tombstone == -1 {
+                    first_tombstone = current_index;
+                }
+            }
+            
+            if current_entry is Entry[K,V] {
+                if current_entry.hash() == hash and @eq.call(current_entry.key(), key) {
+                    return current_index;
+                }
+            }
+            
+            current_index = (current_index + 1) bit_and mask;
+        }
+    }
+
+    def resize(new_capacity: i32) {
+        old_entries = @entries;
+        old_len = @entries_len;
+        
+        @entries = Buffer[Entry[K,V] | Tombstone | Nil].new(new_capacity);
+        @entries_len = new_capacity;
+        @size = 0;
+        
+        // Initialize all slots as empty
+        i = 0;
+        while i < new_capacity {
+            @entries.[i] = nil;
+            i = i + 1;
+        }
+        
+        for i in 0..old_len {
+            entry = old_entries.[i];
+            if entry is Entry[K,V] {
+                hash = @hasher.call(entry.key());
+                slot = self.find_slot(entry.key(), hash);
+                @entries.[slot] = entry;
+                @size = @size + 1;
+            }
+        }
+    }
+
+    def ensure_capacity(required_size: i32) {
+        current_length = @entries_len;
+        needs_resize = current_length == 0 or required_size * 10 >= current_length * 8;
+        
+        if needs_resize {
+            new_capacity = current_length * 2;
+            if new_capacity < 8 { new_capacity = 8; }
+            self.resize(new_capacity);
+        }
+    }
+
+    def insert(key: K, value: V) {
+        self.ensure_capacity(@size + 1);
+        hash = @hasher.call(key);
+        i = self.find_slot(key, hash);
+        
+        new_entry = Entry[K,V].new(key, value, hash);
+        existing_entry = @entries.[i];
+        
+        if existing_entry is Nil {
+            @size = @size + 1;
+        }
+        // If replacing a tombstone, size doesn't change
+        
+        @entries.[i] = new_entry;
+    }
+
+    def get(key: K) -> V? {
+        hash = @hasher.call(key);
+        i = self.find_slot(key, hash);
+        entry_or_nil = @entries.[i];
+        
+        if entry_or_nil is Entry[K,V] {
+            return entry_or_nil.value();
+        }
+        
+        return nil;
+    }
+
+    def remove(key: K) -> V? {
+        hash = @hasher.call(key);
+        i = self.find_slot(key, hash);
+        entry_or_nil = @entries.[i];
+        
+        if entry_or_nil is not Entry[K,V] {
+            return nil;
+        }
+        
+        val = entry_or_nil.value();
+        if val is not V {
+            return nil;
+        }
+        
+        // Replace with tombstone
+        @entries.[i] = Tombstone{};
+        @size = @size - 1;
+        return val;
+    }
+
+    def clear() {
+        initial_capacity = 8;
+        @entries = Buffer[Entry[K,V] | Tombstone | Nil].new(initial_capacity);
+        @entries_len = initial_capacity;
+        @size = 0;
+        
+        // Initialize all slots as empty
+        i = 0;
+        while i < initial_capacity {
+            @entries.[i] = nil;
+            i = i + 1;
+        }
+    }
+
+    def iterator() -> LinearProbeMapIterator[K,V] {
+        return LinearProbeMapIterator[K,V].new(@entries, @entries_len);
+    } ~> { ret.map_entries == @entries }
+}
+
+class LinearProbeMapIterator[K,V] extends Iterator[Pair[K,V]] {
+    @map_entries: Buffer[Entry[K,V] | Tombstone | Nil]
+    @index: i32
+    @length: i32
+
+    regions { @elems_reg == @map_entries }
+
+    def init(@map_entries: Buffer[Entry[K,V] | Tombstone | Nil], @length : i32) {
+        @index = 0;
+        @length = @length;
+    }
+
+    def next() -> Pair[K, V]? {
+        while @index < @length {
+            entry_or_nil = @map_entries.[@index];
+            @index = @index + 1;
+            
+            if entry_or_nil is Entry[K,V] { return entry_or_nil.to_pair(); }
+        }
+        return nil;
+    }
+}

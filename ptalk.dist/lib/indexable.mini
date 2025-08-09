@@ -1,0 +1,22 @@
+import collection;
+
+// In future make I <: Equatable
+class Indexable[I, V] {
+
+	// Should be O(1) access
+	abstract def [](index : I) -> V {}
+
+	// Should be O(1) access
+	abstract def []=(index : I, value : V) {}
+
+}
+
+class IndexableCollection[I, V, T] extends Indexable[I, V], Collection[T] {
+
+	// .indices().size() == self.size()
+	abstract def indices() -> Collection[I] {}
+
+	// .values().size() == self.size()
+	abstract def values() -> Collection[V] {}
+
+}

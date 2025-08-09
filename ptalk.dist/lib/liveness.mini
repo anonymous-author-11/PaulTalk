@@ -1,0 +1,250 @@
+import std;
+
+class Data {
+	@value : i32
+
+	def init(@value : i32) {}
+}
+
+// first example: bad, leads to memory leak
+
+def make_pair() -> Object {
+	// two regions are created for ret.first and ret.second
+	// the Pair itself is placed into passed-in 'ret' region
+	return Pair{Data{5}, Data{7}};
+}
+
+def use_object(obj : Object) {
+	// obj region is attempted to be freed
+}
+
+my_pair = make_pair(); // passes in my_pair region for ret
+
+// .first and .second regions are not known about
+
+// last use; no protection increment for my_pair region
+use_object(my_pair); // my_pair region is freed
+
+// .first and .second regions are leaked
+
+// ----------------------------------------------------------------------------------
+
+// how to solve?
+// Merge .first and .second into ret
+// Rule: local regions pointed to by parameter regions (including ret) must be merged with those parameter regions
+
+def make_pair() -> Object {
+	// the Pair and both Data are placed into passed-in 'ret' region
+	return Pair{Data{5}, Data{7}};
+}
+
+def use_object(obj : Object) {
+	// obj region is attempted to be freed
+}
+
+my_pair = make_pair(); // passes in my_pair region for ret
+
+// .first and .second regions are not known about
+
+// last use; no protection increment for my_pair
+use_object(my_pair); // my_pair region is freed
+
+// .first and .second regions were also the region that was freed
+
+// ----------------------------------------------------------------------------------
+
+// retaining finer-grained regions with this new change
+
+def make_pair(first : Data, second: Data) -> Object {
+	// Pair allocated in 'ret' region
+	return Pair{first, second};
+} ~> { ret.first == first, ret.second == second }
+// annotation required for aliasing created between ret and parameters
+
+def use_object(obj : Object) {
+	// obj region is attempted to be freed
+}
+
+// first and second allocated in different regions
+
+first = Data{5};
+second = Data{7};
+
+// passes in my_pair region for ret
+my_pair = make_pair(first, second); // now my_pair.first == first and my_pair.second == second
+
+// .first and .second regions are known about
+
+// last use; no protection increment for my_pair
+// callee does not know about .first and .second
+use_object(my_pair); // my_pair region is freed
+
+// it is now my responsibility to free first and second
+// first and second regions have nothing pointing to them; are dead
+// first and second regions are freed
+
+// ----------------------------------------------------------------------------------
+
+// seems like the freeing constract should be:
+
+// If the callee does not know about the variables, it can't try to free them
+// how do we to know what the callee knows about? from its signature types and annotations
+// if it does a downcast internally, this will show up in the annotations
+
+// For covariant overrides, we could say that its "freeing responsibities" are limited to those of its overridden method
+// and the caller would treat it like its overridden method, b/c it cannot know statically
+
+// since use_object signature uses Object, it does not know about .first and .second fields
+// therefore, it was still the caller's responsibility to free .first and .second regions
+
+// ----------------------------------------------------------------------------------
+
+def make_pair(first : Data, second: Data) -> Object {
+	// Pair allocated in 'ret' region
+	return Pair{first, second};
+} ~> { ret.first == first, ret.second == second }
+
+def use_object(obj : Object) {
+	if obj is Pair[Data, Data] {
+		// downcast -> merge obj with its fields
+		// obj == obj.first == obj.second
+		// do stuff
+	}
+	// attempt to free obj region, which also means .first and .second
+
+} ~> { obj == obj.first == obj.second} // annotation required due to downcast
+
+// first and second allocated in same region, due to subsequent use_object call
+
+first = Data{5};
+second = Data{7};
+
+// passes in (first + second) region for ret
+my_pair = make_pair(first, second);
+
+// .first and .second regions are known about
+
+// last use; no protection increment for my_pair
+// callee annotation knows about .first and .second
+use_object(my_pair); // frees all, my_pair == my_pair.first == my_pair.second
+
+// not responsible for freeing .first and .second
+
+// ----------------------------------------------------------------------------------
+
+def make_pair(first : Data, second: Data) -> Object {
+	// Pair allocated in 'ret' region
+	return Pair{first, second};
+} ~> { ret.first == first, ret.second == second }
+
+class ObjectUser {
+
+	def init() {}
+
+	def use_object(obj : Object) {
+		// attempt to free obj region
+	}
+
+}
+
+class PairUser extends ObjectUser {
+
+	// covariant override
+	def use_object(obj : Pair[Data, Data]) {
+		// only attempts to free obj region, not .first and .second
+		// obj.first and obj.second are not part of its "freeing responsibility"
+		// its freeing responsibilities are limited to those of its overridden method
+	}
+
+}
+
+// first and second allocated in different regions
+
+first = Data{5};
+second = Data{7};
+
+// passes in my_pair region for ret
+my_pair = make_pair(first, second);
+
+// .first and .second regions are known about
+
+// static type is ObjectUser
+my_user : ObjectUser = PairUser{};
+
+// last use; no protection increment for my_pair
+// callee does not know about .first and .second
+my_user.use_object(my_pair); // frees my_pair
+
+// now responsible for freeing .first and .second
+
+// ----------------------------------------------------------------------------------
+
+// Rule 1: region is dead before stmt and alive after: insert 'create r' before stmt
+
+// Rule 2: region is alive before stmt and dead after: insert 'remove r' after stmt
+
+// Rule 3: region is live at control flow split; dead in any of the targets:
+// insert a 'remove r' statement at the beginning of that target
+
+// Rule 4: "s1;s2;", region is live before s1, dead after s1, live after s2:
+// insert "reset r" between s1 and s2
+
+// region is dead at control flow split; alive in any of the targets: impossible
+
+// go backwards and mark the spots where it flips from "dead" to "alive" (uses)
+// uses where it was alive after don't count
+// then also mark where it flips from "alive" to "dead" (assignments)
+
+// when you hit while loop, run through it once assuming that all are dead at end
+// then those that end up being alive at start will need to be alive at end
+// so run over a second time with those now alive at start
+
+class Polynomial {
+	@coeffs : List[Complex]
+
+	// what is the life-cycle of the region of 'sum' ?
+	// naive: loop-spanning, memory leak
+	// sophisticated: reset sum's region before "sum = tmp.plus(coeff);" every time
+
+	// "the value produced at the end of one iteration is needed at the beginning of the next iteration"
+
+	// "It therefore generates a region removal statement first, [...] followed by a region creation statement, at
+	// [the] next line, to store the new value. Intuitively, this resets the contents of the region"
+
+	// "Therefore, region [of 'sum'] is being created at two different points and removed at two other points in the program"
+
+	def value_at(x : Complex) {
+		// Rule 1: create rev region
+		rev = @coeffs.reversed();
+
+		// Rule 1: create sum region
+		sum = Complex{0, 0};
+
+		// Rule 1: create it region
+		it = rev.iterator();
+
+		// Rule 1: create coeff region
+		coeff = it.next();
+
+		while coeff is Complex {
+			// Rule 1: create tmp region
+			tmp = sum.mul(x);
+
+			// Rule 4: reset sum region
+
+			sum = tmp.plus(coeff);
+			// Rule 2: remove tmp region
+
+			// Rule 4: reset coeff region
+
+			coeff = it.next();
+		}
+		// Rule 3: remove coeff region
+		// Rule 3: remove it region
+		// Rule 3: remove rev region
+
+		IO.print(sum.re());
+		IO.print(sum.im());
+		// Rule 2: remove sum region
+	}
+}

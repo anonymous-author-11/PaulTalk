@@ -1,0 +1,61 @@
+import collection;
+
+class List[T] extends Collection[T] {
+
+    // must be able to create an empty List with no arguments
+    abstract def Self.empty() -> Self {
+    } ~> no_alias
+
+    // Create a List from any iterable, even of unknown size
+    // 'my_iterable into List' can desugar to this method
+    abstract def Self.from_iterable(iterable : Iterable[T]) -> Self {
+    } ~> no_alias
+
+    // append always increases .size() by 1
+    abstract def append(x : T) -> Self {
+    }
+
+    // iterator.next() should be O(1)
+    abstract def iterator() -> ConstantTimeIterator[T] {}
+
+    // we do not provide List.set(index, value), as String for example cannot fulfill it
+
+    def length() -> i32 {
+        return self.size();
+    }
+
+    // O(1) time complexity
+    def first() -> T? {
+    	if self.is_empty() { return nil; }
+    	for elem in self { return elem; }
+    }
+
+    // O(size) time complexity
+    def last() -> T? {
+    	return self.get(self.size() - 1);
+    }
+
+    // No time complexity guarantees
+    def extend(other : Iterable[T]) -> Self {
+        for x in other { self.append(x); }
+        return self;
+    }
+
+    // O(index) time complexity
+    def get(index : i32) -> T? {
+    	if index >= self.size() { return nil; }
+    	for (first, second) in self.enumerate() {
+    		if first == index { return second; }
+    	}
+    }
+
+    // O(index) time complexity
+    def index_of(target : T, eq : (T, T) -> Bool) -> i32? {
+    	if self.is_empty() { return nil; }
+    	for (first, second) in self.enumerate() {
+    		if eq.call(second, target) { return first; }
+    	}
+    	return nil;
+    }
+
+}

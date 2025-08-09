@@ -1,0 +1,329 @@
+import std;
+
+extern def clock() -> i64
+
+def min(a : i32, b : i32) -> i32 {
+    if a < b { return a; }
+    return b;
+}
+
+def max(a : i32, b : i32) -> i32 {
+    if a > b { return a; }
+    return b;
+}
+
+class PrimeSieve {
+    abstract def generate_primes() {}
+    abstract def count_primes() -> i32 {}
+}
+
+class SimplePrimeSieve extends PrimeSieve {
+    @sieve : Buffer[Bool]
+    @size : i32
+
+    def init(@size : i32) {
+        @sieve = Buffer[Bool].new(@size + 1);
+        i = 0;
+        while i <= @size {
+            @sieve.[i] = true;
+            i = i + 1;
+        }
+        @sieve.[0] = false;
+        @sieve.[1] = false;
+    }
+
+    def generate_primes() {
+        sqrt_size = isqrt(@size);
+        
+        i = 3;
+        while i <= sqrt_size {
+            if @sieve.[i] {
+                j = i * i;
+                while j <= @size {
+                    @sieve.[j] = false;
+                    j = j + i + i;
+                }
+            }
+            i = i + 2;
+        }
+    }
+
+    def count_primes() -> i32 {
+        count = 1;
+        i = 3;
+        while i <= @size {
+            if @sieve.[i] { count = count + 1; }
+            i = i + 2;
+        }
+        return count;
+    }
+}
+
+class CacheOptimizedSieve extends PrimeSieve {
+    @sieve : Buffer[Bool]
+    @size : i32
+
+    def Self.cache_size() -> i32 {
+        return 4096 * 8;
+    }
+
+    def init(@size : i32) {
+        @sieve = Buffer[Bool].new(@size + 1);
+        i = 0;
+        while i <= @size {
+            @sieve.[i] = true;
+            i = i + 1;
+        }
+        @sieve.[0] = false;
+        @sieve.[1] = false;
+    }
+
+    def generate_primes() {
+        segment_low = 0;
+        while segment_low <= @size {
+            segment_high = min(segment_low + Self.cache_size() - 1, @size);
+
+            factor = 3;
+            while factor * factor <= segment_high {
+                if @sieve.[factor] {
+                    current_multiple = max(factor * factor, (segment_low + factor - 1) / factor * factor);
+
+                    if current_multiple % 2 == 0 {
+                        current_multiple = current_multiple + factor;
+                    }
+
+                    j = current_multiple;
+                    while j <= segment_high {
+                        @sieve.[j] = false;
+                        j = j + factor + factor;
+                    }
+                }
+                factor = factor + 2;
+            }
+            segment_low = segment_low + Self.cache_size();
+        }
+    }
+
+    def count_primes() -> i32 {
+        count = 1;
+        i = 3;
+        while i <= @size {
+            if @sieve.[i] { count = count + 1; }
+            i = i + 2;
+        }
+        return count;
+    }
+}
+
+class CacheOptimizedBitpackedSieve extends PrimeSieve {
+    @sieve_bits : Buffer[i8] // Using i8 for bit-packing
+    @size : i32
+
+    def Self.cache_size_bytes() -> i32 { // Cache size in bytes, e.g., 4KB
+        return 4096;
+    }
+    
+    // Size in terms of numbers represented by the cache (cache_size_bytes * 8 bits/byte)
+    def Self.cache_segment_elements() -> i32 {
+        return Self.cache_size_bytes() * 8;
+    }
+
+    // Helper to get the bit for a number n
+    // Returns true if the bit is SET (i.e., n is marked composite)
+    def is_marked_composite(n : i32) -> Bool {
+        if n < 2 { return true; } // 0 and 1 are not prime
+        byte_index = n / 8;
+        bit_offset = (n % 8) as i8;
+        return (@sieve_bits.[byte_index] bit_and (1 << bit_offset)) != 0;
+    }
+
+    // Helper to set the bit for a number n (mark as composite)
+    def mark_composite(n : i32) {
+        if n < 2 { return; }
+        byte_index = n / 8;
+        bit_offset = (n % 8) as i8;
+        @sieve_bits.[byte_index] = @sieve_bits.[byte_index] bit_or (1 << bit_offset);
+    }
+
+    def init(@size : i32) {
+        num_bytes = (@size / 8) + 1;
+        @sieve_bits = Buffer[i8].new(num_bytes);
+    }
+
+    def generate_primes() {
+        i = 4;
+        while i <= @size {
+            self.mark_composite(i);
+            i = i + 2;
+        }
+
+        segment_low = 0;
+        // segment_elements_per_cache_line could be Self.cache_segment_elements()
+        // but usually the L1/L2 cache_size_bytes is a good target for segment size.
+        segment_elements = Self.cache_segment_elements();
+
+        while segment_low <= @size {
+            segment_high = min(segment_low + segment_elements - 1, @size);
+            
+            // Factors only need to go up to sqrt(@size) for the whole sieve,
+            // but for each segment, we are sieving with these pre-found small primes.
+            // The small primes themselves (factor) must have already been processed
+            // in their own segments, or be <= sqrt(current_segment_high).
+            // Let's assume primes up to sqrt(@size) are found "globally" first,
+            // or we iterate factors up to sqrt(segment_high).
+            // For simplicity here, we'll iterate factors up to sqrt(@size).
+            // A more advanced segmented sieve might have a separate small prime generation phase.
+            
+            factor = 3;
+            sqrt_total_size = isqrt(@size); // Iterate factors up to overall sqrt
+
+            while factor <= sqrt_total_size {
+                // Check if factor is prime (not marked composite)
+                // We only care about odd factors here as evens are handled.
+                if not self.is_marked_composite(factor) {
+                    // Calculate first multiple of factor >= segment_low and also >= factor*factor
+                    start_multiple = max(factor * factor, (segment_low + factor - 1) / factor * factor);
+                    
+                    // Adjust start_multiple to be an ODD multiple of factor
+                    current_multiple = start_multiple;
+                    if current_multiple < segment_low { // Ensure it's at least segment_low
+                        current_multiple = segment_low;
+                    }
+                    // Align to the first multiple of `factor` >= current_multiple
+                    if current_multiple % factor != 0 {
+                        current_multiple = current_multiple + (factor - (current_multiple % factor));
+                    }
+
+                    // Ensure it's an odd multiple
+                    if current_multiple % 2 == 0 {
+                        current_multiple = current_multiple + factor;
+                    }
+
+                    j = current_multiple;
+                    while j <= segment_high {
+                        self.mark_composite(j);
+                        j = j + factor + factor; // Step by 2*factor to keep j odd
+                    }
+                }
+                factor = factor + 2; // Next odd factor
+            }
+            segment_low = segment_low + segment_elements;
+        }
+    }
+
+    def count_primes() -> i32 {
+        if @size < 2 { return 0; }
+        count = 1; // For prime '2'
+        i = 3;
+        while i <= @size {
+            if not self.is_marked_composite(i) {
+                count = count + 1;
+            }
+            i = i + 2; // Only check odd numbers
+        }
+        return count;
+    }
+}
+
+class NaiveSieveWithCollection extends PrimeSieve {
+    @sieve_flags : Buffer[Bool]
+    @size : i32
+    @primes_list : Array[i32] // To store the collected primes
+
+    def init(@size : i32) {
+        // @size = @size; // shorthand from your style
+        @sieve_flags = Buffer[Bool].new(@size + 1);
+        @primes_list = [] of i32;
+        i = 0;
+        while i <= @size {
+            @sieve_flags.[i] = true;
+            i = i + 1;
+        }
+        if @size >= 0 { @sieve_flags.[0] = false; }
+        if @size >= 1 { @sieve_flags.[1] = false; }
+    }
+
+    def generate_primes() {
+        // 1. Sieving process (Rust/Zig style)
+        p = 2;
+        while p * p <= @size {
+            if @sieve_flags.[p] { // If p is prime
+                index = p * p;
+                while index <= @size {
+                    @sieve_flags.[index] = false; // Mark multiple as not prime
+                    index = index + p;          // Increment by p
+                }
+            }
+            p = p + 1; // Increment p by 1
+        }
+
+        // Allocate and fill the primes_list
+        result_idx = 0;
+        i_collect = 2; // Start collecting actual primes from 2
+        while i_collect <= @size {
+            if @sieve_flags.[i_collect] {
+                @primes_list.append(i_collect);
+                result_idx = result_idx + 1;
+            }
+            i_collect = i_collect + 1;
+        }
+    }
+
+    // Method to get the collected primes
+    def get_primes_list() -> Array[i32] {
+        return @primes_list;
+    }
+
+    // Method to get the count (mirroring other classes, though list has len)
+    def count_primes() -> i32 {
+        return @primes_list.length(); // Assuming Buffer has a .len()
+    }
+}
+
+def isqrt_rec(n : i32) -> i32 {
+    if n < 2 { return n; }
+    small = isqrt(n >> 2) << 1;
+    large = small + 1;
+    if large * large > n { return small; }
+    return large;
+}
+
+def isqrt(n : i32) -> i32 {    
+    root = 0;
+    shift = 15; 
+    while shift >= 0 {
+        root_candidate = root bit_or (1 << shift);
+        if root_candidate <= n / root_candidate { root = root_candidate; }
+        shift = shift - 1;
+    }
+    return root;
+}
+
+def benchmark_primes() {
+    limit = 10_000_000;
+
+    sieves = SwissTable[String, PrimeSieve].new(string_hasher, string_eq);
+    sieves.insert("Naive Sieve", NaiveSieveWithCollection{limit});
+    sieves.insert("Regular Sieve", SimplePrimeSieve{limit});
+    sieves.insert("Optimized Sieve", CacheOptimizedSieve{limit});
+    sieves.insert("Bitpacked Sieve", CacheOptimizedBitpackedSieve{limit});
+
+    for (name, sieve) in sieves {
+        IO.print(name);
+        start_time = clock();
+        sieve.generate_primes();
+        prime_count = sieve.count_primes();
+        end_time = clock();
+        
+        time_taken = end_time - start_time;
+        
+        IO.print("Number of primes up to");
+        IO.print(limit);
+        IO.print(":");
+        IO.print(prime_count);
+        IO.print("Time taken:");
+        IO.print(time_taken);
+    }
+}
+
+benchmark_primes();

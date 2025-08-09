@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<interface
+  xmlns="http://zero-install.sourceforge.net/2004/injector/interface"
+  xmlns:compile="http://zero-install.sourceforge.net/2006/namespaces/0compile"
+  uri="http://foo.bar/build">
+  <name>DoCompile</name>
+  <summary>Runs the PaulTalk compiler on MAIN_FILE_PATH to produce BIN_NAME.exe, making use of any dependencies</summary>
+
+  <implementation id="." arch="OS_NAME-src" version="1.0.1">
+    <command name='compile'>
+      <runner interface='https://raw.githubusercontent.com/anonymous-author-11/PaulTalk/refs/heads/main/ptalk.xml'>
+        <arg>compile</arg>
+        <arg>MAIN_FILE_PATH</arg>
+        <arg>-o</arg>
+        <arg>$DISTDIR/BIN_NAME.exe</arg>
+        <arg>--build-dir</arg>
+        <arg>$BUILDDIR</arg>
+      </runner>
+      <compile:implementation arch='OS_NAME-CPU_NAME'>
+        <command name='run' path='BIN_NAME.exe' />
+      </compile:implementation>
+    </command>
+    DEPENDENCIES
+  </implementation>
+</interface>
