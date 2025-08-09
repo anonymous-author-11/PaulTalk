@@ -2556,10 +2556,11 @@ class Method:
             declared_type = field.type()
             if field.declaration.name in body_scope.type_table and body_scope.subtype(body_scope.type_table[field.declaration.name], declared_type): continue
             if declared_type == Nil () or isinstance(declared_type, Union) and Nil() in declared_type.types.data:
-                field_id = Identifier(NodeInfo.from_info(self.info, "field_id"), field.declaration.name)
-                nil = NilLiteral(NodeInfo.from_info(self.info, "nil"))
-                initialization = Assignment(NodeInfo.from_info(self.info, "assign"), field_id, nil)
+                field_id = Identifier(NodeInfo.from_info(self.definition.info, "field_id"), field.declaration.name)
+                nil = NilLiteral(NodeInfo.from_info(self.definition.info, "nil"))
+                initialization = Assignment(NodeInfo.from_info(self.definition.info, "assign"), field_id, nil)
                 self.definition.body.statements.append(initialization)
+                initialization.typeflow(body_scope)
                 continue
             debug_print(f"field name in body type table? {field.declaration.name in body_scope.type_table}")
             raise Exception(f"{self.definition.info}: field {field.declaration.name} not properly initialized for class {body_scope.cls.name}. You may need to override this constructor.")
