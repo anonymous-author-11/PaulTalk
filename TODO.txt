@@ -687,7 +687,6 @@ DONE:
 
 TODO:
 
-- Add more functionality to tests [check!]
 - Bug in PrimeSieve where I was able to insert a NaiveSieve into the map without making it extend PrimeSieve
 	- Must be something wrong in behavior.applicable
 
@@ -697,9 +696,14 @@ TODO:
 		- Use swiss_table_v3 [check!]
 		- Include in std [check!]
 	- Implement tuple destructuring [check!]
-		- For assignment [check!]
+		- In assignment [check!]
 		- Special-case Pair rhs [check!]
-		- For loops [check!]
+		- For-loop inductee [check!]
+	- Add more functionality to tests [check!]
+	- Remove junk from stdlib [check!]
+	- Fix various bugs [check!]
+
+- Release 0.9.0
 	- Does just adding dependencies to the path work?
 		- The source_dirs collection should be ordered, not a set [check!]
 		- Add the dependency folder to an env variable named for the package
