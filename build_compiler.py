@@ -53,7 +53,7 @@ def create_temp_branch(version_string):
 
 # Create github release
 def create_github_release(version_string):
-	run_command(f"gh release create \"v{version_string}\" --target \"temp_branch\" --notes-file \"v{version_string} Release Notes\" --prerelease")
+	run_command(f"gh release create \"v{version_string}\" --target \"temp_branch\" --notes-file \"v{version_string} Release Notes.txt\" --prerelease")
 
 # Remove temproary branch
 def remove_temp_branch():
@@ -119,7 +119,7 @@ def finish_xml_feed(password):
  	run_command(f"0publish ptalk.xml --xmlsign --gpg-passphrase={password}")
 
 def finalize():
- 	run_command("git commit -m \"Update ptalk.xml feed\"")
+ 	run_command("git commit -a -m \"Update ptalk.xml feed\"")
  	run_command("git push origin main")
 
 if __name__ == "__main__":
