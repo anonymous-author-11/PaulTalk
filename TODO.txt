@@ -457,370 +457,6 @@ DONE:
 	- Fix bump_malloc [check!]
 	- Lazily constructed exception messages [check!] [reverted in 0.4.*]
 
-TODO:
-
-- Implement dictionary literal [check!]
-	- Use swiss_table_v3 [check!]
-	- Include in std [check!]
-
-- Implement tuple destructuring
-	- For assignment [check!]
-	- Special-case Pair rhs [check!]
-	- For loops [check!]
-
-- Add an extra argument to buffer indexation to enable SIMD loads and stores
-	- This argument must be an integer literal
-
-- Obviously there is an issue with nil-initialized buffer in swiss_table.mini.
-
-- Make it illegal to assign to 'self' [check!]
-- Track node id's rather than Identifiers [check!]
-- Introduce "NewScope" as subtype of BlockNode [check!]
-	- Correctly handles scope merging [check!]
-- Make Node id's deterministic between typeflow / codegen [check!]
-- Store region insertion points in Method [check!]
-	- Insert CreateRegion(name=abc) before statement with id=xyz [check!]
-
-- Important that the object data ptr is allocated via a LLVM-recognized allocation fn [check!]
-	- And doesn't capture the region ptr [check!]
-
-- Have CreateRegion take an operand if the region had ever been live before in the method [check!]
-	- At runtime this should return the existing region if it wasn't freed [check!]
-	- Handle the case where if the region was reused in between [check!]
-	- CreateRegion can take a generation number; can compare this generation number to the region header [check!]
-		- If the generation number is different, then it was actually freed and repurposed; don't use [check!]
-
-- Ok, we need to be more precise about points-to graph conformance [check!]
-	- I believe that we should use other.param_names always? [check!]
-
-- Handle the all_alias case for liveness analysis [check!]
-	- Skip liveness analysis [check!]
-
-- Would it be correct for the iterable methods to return iterables but have "holds" constraints? [check!]
-
-- Add more concise alias annotations [check!]
-	- Should significantly reduce verbosity [check!]
-	- a holds (b, c) [check!]
-	- a == b == c [check!]
-	- (a, b) holds c [check!]
-
-- Better error messages for points-to graph analysis [check!]
-- Prioritize current-file classes and functions when multiply defined [check!]
-
-- Build workflow
-	- set CCFLAGS="/O2 /Ob3"
-	- py -m nuitka ptalk.py --standalone --msvc=latest --include-data-dir=data_files=data_files --include-data-dir=lib=lib --include-raw-dir=executables=executables --nofollow-import-to=sympy --nofollow-import-to=pandas --nofollow-import-to=numpy --nofollow-import-to=sqlalchemy --nofollow-import-to=scipy --nofollow-import-to=PIL --nofollow-import-to=pygments
-	- add + commit + push all the changes
-		- git add -A
-		- git commit -m "Rebuild for version 0.x.x"
-		- git push origin main
-	- Make temp_branch
-		- set GIT_ASK_YESNO=false
-		- git switch --orphan "temp_branch"
-		- git checkout main -- ptalk.dist
-		- git commit -m "Version 0.x.x"
-		- git push -u origin temp_branch
-		- git switch main
-	- gh release create "v0.x.x" --target "temp_branch" --notes-file "v0.x.x Release Notes" --prerelease
-	- delete temp_branch
-		- git branch -D temp_branch
-		- git push origin --delete temp_branch
-	- Update 0install feed
-		- add new implementation to ptalk.xml
-			- Good old textual replacement
-		- 0publish ptalk.xml --add-missing
-		- 0publish ptalk.xml --xmlsign (with password)
-		- git commit -m "Update ptalk.xml feed"
-		- git push origin main
-
-- Is it right to "re-create" nonlocal regions?
-	- The paper with region protection does not do this
-	- Could replace any creation-of-nonlocal-region with a reset
-	- This makes it a matter of correctness, not merely an optimization
-	- How do we deal with loops?
-	- Especially where "remove" comes after "create" in the loop
-
-- Models for how to store / retrieve regions from objects
-	- Model 1: store region ptr in fatptr
-	- Model 2: store object data ptr, find region ptr by rounding address
-		- Two words in fatptr left over for small structs
-		- Generic fields can be in separate regions
-	- Model 3: store data ptr; store region id number (i32)
-		- Use id number against some global data structure to get region
-		- Maybe just a flat array of all the regions that have ever existed
-		- Store region_from_box in vtable
-		- Use region_from_box for getting field regions
-
-- Explicit test for zero-length memset in RemoveRegion [check!]
-- ReallocFromRegion(allocation : Ptr, region : Ptr[Region], old_size : i64, new_size : i64) [check!]
-	- Do we need to store a last_current ptr in the region header? No. [check!]
-
-- Add my_buffer.realloc(size); does not return anything
-
-- Consider IR annotations on Create/Remove Regions
-	- memory(none, argmem: readwrite, inaccessiblemem: readwrite) for both?
-	- I.e. the only observable effect of this call is on its ptr argument
-
-- Insert ProtectRegion and UnprotectRegion calls
-	- at call site, calculate used-in-call regions which are live after the call
-	- Insert protections for them before the call and deprotectiosn after
-	- More complicated than you think, actually: calls are not statements
-	- Is there any reason we can't insert around expressions?
-
-- Should insert region removal statements at beginning of method if never used
-
-- Can you think of an example where the create and remove are not syntactically ordered?
-	- Imagine an iterator that returns a freshly allocated object
-	- It needs a return region passed-in to .next()
-	- This return region would be removed at the end of the loop and created in the preheader every time
-
-- Need to handle break and continue for liveness
-- If we store region strings in nodes that create nodes and transmit them we should be good
-	- I.e. literals like Array, Range, String
-
-- Any local regions pointed to by a parameter region must be merged with the pointee
-	- This should happen after compatibility checking; before liveness analysis
-
-- Also store insertion points + region mapping in Function / Program
-	
-- During codegen, insert region ops according to stored info [check!]
-	- Store created regions in scope; use to retrieve [check!]
-	- Pass regions for object / buffer creation, and also return regions for calls
-
-- Liveness analysis
-	- Backwards pass twice over ast
-		- We need two passes because ...
-			- We need to know whether a variable is live at the beginning of the loop
-			- If live at beginning, must be live at end!
-			- Run through once to determine liveness at beginning
-			- Run through a second time with that knowledge
-	- For each identifier, mark when it becomes live and when used
-		- Becomes live:
-			- vardecl or assignment
-			- fields + self + params at beginning of method
-		- Use
-			- Reciever or argument to call
-			- Operand in binary op
-			- rhs in assignment
-			- returned value
-		- Live at end of method
-			- self and fields
-			- retured value
-
-- Contract: each method / function has "freeing responsibilities"
-	- Which are limited to the static knowledge is has, from the POV of the caller
-	- I.e. types in signature + annotations
-	- Overrides only have the freeing responsibilities of the overidden method
-	- Anything not covered by the freeing responsibility of the callee must be handled by the caller
-	- Internal downcasts will show up in the annotations
-
-- Add apply_constraints to fn literal call
-- Apply constraints upon downcast
-
-- We need to determine when to infer all_alias [check!]
-	- If the constraint set is empty AND no_alias is NOT specified [check!]
-- Mark .init methods as no_alias by default [check!]
-- Propagate all_alias on function / method call [check!]
-- Only print points-to graphs on error [check!]
-
-- Points-to analysis
-	- Exclude trivial value types from the graphs in apply_constraints [check!]
-	- Add conservative aliasing by default [check!]
-		- For .annotated_facts and .constraints [check!]
-	- Reform tuple and buffer points-to-facts [check!]
-		- Tuple: add pseudo-fields [check!]
-		- Buffer [check!]
-			- holds rather than == [check!]
-			- No more .elems_reg [check!]
-	- Problemo regarding Iterable method return types [check!]
-		- Can be solved with boilerplate [check!]
-	- What if just on downcast we set all fields equal to the holder?
-		- Or no, only the newly exposed fields
-
-- Class constraints of the returned value's concrete type should be added to the annotation graph [check!]
-
-- Figure out a way to integrate ~> no_alias and ~> all_alias
-	- If all_alias, skip graph compatibility check
-		- Incorporate in override check as well
-	- Must wait until typeflow to determine if no annotation means all_alias [check!]
-		- Could inherit annotations from overrides [check!]
-
-- Simplest solution [check!]
-	- Upon any call to a non-annotated fn, mark the calling context as all_alias [check!]
-	- Proceed as if there had been no aliasing [check!]
-	- At end of context, merge all the nodes into one [check!]
-
-- I shouldn't have to have empty bodies for methods
-	- But I would like one required if there are constraints
-
-- Pair.swapped leads to infinite recursion in type substitution
-
-- Add a SizedIterator
-	- Do NOT guarantee a SizedIterator from a Collection
-		- Example: Map
-	- Have a .remaining() -> i32 method
-
-- It would not be safe for Array or String to hand out buffer views
-	- If the views hold a reference to the underlying buffer
-	- Because upon resizing, that buffer would no longer be the backing buffer
-	- A Slice could, because it is fixed-length
-	- View could rely on Indexable facilities
-	- Possibly an argument for making String immutable
-
-- String could expose a writer that can only write to its end
-	- Is that a Writer[i32] or a Writer[i8]?
-	- It's an abstract Writer[i32]
-	- This means that byte indices are *stable*
-	- Byte indices will forever remain on codepoint boundaries
-	- Any other kind of mutation must return a new string
-		- E.g: .replace() -> String
-
-- Constructor should check for T.new first before T.init
-	- So that new can return some subtype
-
-- Things we could work on right now
-	- Basic namespacing
-	- Comparison for tuples
-	- Closures
-	- Moving patterns to PDL
-	- Lifetime analysis
-
-- Namespacing
-	- Step one: adding path to FatPtr [check!]
-		- Would make it more involved to construct FatPtrs
-		- Especially in the parser
-		- We'd need to add in the path later [check!]
-			- Probably during scope.validate_type [check!]
-			- Should expose a FatPtr classmethod to create new with path [check!]
-		- make sure all creations of FatPtr in typeflow add paths [check!]
-	- Step two is to use path-qualified names in scope.classes and scope.functions [check!]
-		- We could do {name : {path : definition}} [check!]
-		- Use absolute path [check!]
-	- scope.get_class should use the path info in the FatPtr [check!]
-	- Step 3: Add namespacing to grammar
-		- Dot-qualification
-		- Import syntax
-			- import std.fmt.{foo as localfoo, bar as localbar};
-		- Export syntax
-			- Export
-		- Method and function calls become syntactically indistinguishable
-			- We need a way to semantically distinguish them
-			- Namespaced take precedence over variable names
-			- Check if receiver is an Identifier; check if it's in scope.functions
-	- Technically can't we do export / no_export lists before namespacing?
-		- Easier after
-		- Want to add export status to scope.classes and scope.functions map
-	- Report name collisions of imports (only when used!) (?)
-
-- Add an "extern type" statement
-	- Potentially useful for C interop
-	- Compiles down to LLVM opaque named type
-	- Will this run into ABI issues?
-	- Wait but how to construct extern types?
-
-- Could the compiler be aware of DefaultString for literals without it being exposed?
-
-- It would be nice to narrow types *within* a logical expression, not merely in the following block
-	- Would be implemented inside of Logical
-
-- Should ensure that all branches must return if return value declared
-
-- Could try to fuse llc and lld into one subprocess call
-	- Will this employ the linker's wisdom to avoid codegenning unused code?
-
-- super() may be useful for polymorphism in the AST
-
-- Cache flow analysis results to avoid time redoing work for nested control flow
-
-- @current_coroutine will break if two coroutines call each other
-	- We should instead maintain a stack of coroutines
-
-- Array[i32 | f64] is not working correctly
-	- A small union (128 bits) which is stored inside of its fatptr
-
-- Check if a method's definition has different param base types than its behavior
-	- ['a','b','c'].filter( ... ) into String
-	- Will invoke List.extend(iterable) whose signature will mismatch the behavior
-
-- You could probably see what's going wrong with O0 by seeing the asm for passing a fatptr vs type-param
-
-- I think I could have stuff like "x : Addable & Comparable" in signatures
-	- Before using a method we must cast to the particular required supertype
-	- File.iterator() -> ConstantTimeIterator[i8] & Writer[i8] & Seeker[i32]
-	- LLVM can optimize many of these casts out
-- Change the console's "active code page" in the main() prelude
-	- to make puts / printf display unicode correctly
-	- Obviously OS-specific
-- We could have special-cased all() and any() functions which take tuples of Booleans
-	- Necessary for ergonomics if tuple comparison produces tuples of Booleans
-	- And could compile to SIMD intrinsics (_mm_movemask_ps)
-	- For other Iterable[Bool] it can just lower to .all() and .any() methods
-	- Should also enable bitwise operations for tuples
-- The lack of closures may be a problem
-	- Iterable.map function can't take any extra parameters
-	- I could require explicit capture like C++
-		- Hard to track which variables are used in the fn
-		- Probably better to do the work of tracking
-	- Capture value types by copy, not reference
-		- No need to "lift" captured variables
-		- No escaping stack pointers
-	- I could use the llvm.trampoline tools
-		- vs making fn into a fat ptr
-		- Preserves C interop
-
-- Blocked on namespacing:
-	- Selective imports
-		- from x import y;
-		- Should improve compilation time
-	- Export / no_export lists
-		- An alternative to public / private annotations
-		- no_export { ConcreteStringIndex, Entry }
-		- Justification
-			- The "privateness" of a class / function is not intrinsic
-			- You might want to export a class from one file and not from another
-		- Export local definitions by default
-		- Don't export imports by default
-		- There's a difference between symbol visibility and data accessibility
-			- Files / export lists used for symbol visibility control; classes for data accessibility
-			- What is encapsulated is static (symbol visibility) vs dynamic (data accessibility)
-
-- Formatted string literals
-	- Just special-case .repr for builtins
-	- You can use s(n)printf or something
-		- Blocked on variadic extern defs
-	- Or you can implement a builtin format() like the builtin print()
-		- Is it a good idea to go further down that road?
-		- No, probably not
-
-- Should probably unify ExterndDef and FunctionDef (and FunctionLiteral) logic
-	- Should probably make them responsible for determining applicability
-		- So that extern defs can handle variadicity
-	- Currently calls can have more arguments than the function has parameters
-		- Which should not be the case
-
-- Dictionary literals
-	- Need to choose a default implementation
-		- LinearProbe works
-	- Adding to stdlib will balloon compilation times :(
-		- So for now, blocked on improving typeflow / codegen speed
-
-- Deduplicate behaviors
-	- If all methods in the behavior are inherited from the same class, reuse that behavior
-	- I believe behaviors encode absolute vtable offsets so this would not work out of the box
-	- Would have to add the fatptr offset within the behavior before loading the method fptr
-
-- Records: why not?
-	- Idea: casting between these works seamlessly, unlike tuples
-	- Their allocated size is dynamic
-	- Blocker: Indexing would need to run specialized code to calculate the offset
-
-- Snprintf can convert things to string representations
-- I should be able to declare variadic extern defs
-	- e.g. "extern def printf(Buffer[i8], ...) -> i32"
-- Why does it crash at O0?
-- GEP inbounds could help optimization on dynamic geps
-- I should add real type checking for call/yield
-
 - Release 0.4.0
 	- Put .gitignore * in build dir [check!]
 	- We don't have to do codegen to discover the dependency graph [check!]
@@ -993,7 +629,73 @@ TODO:
 		- Enable getters list, setters list [check!]
 	- Add check for multiply defined methods [check!]
 
+- Release 0.7.0 [check!]
+	- We need to determine when to infer all_alias [check!]
+		- If the constraint set is empty AND no_alias is NOT specified [check!]
+	- Mark .init methods as no_alias by default [check!]
+	- Propagate all_alias on function / method call [check!]
+		- Upon any call to a non-annotated fn, mark the calling context as all_alias [check!]
+		- Proceed as if there had been no aliasing [check!]
+		- At end of context, merge all the nodes into one [check!]
+	- Only print points-to graphs on error [check!]
+	- Improve Points-to analysis [check!]
+		- Exclude trivial value types from the graphs in apply_constraints [check!]
+		- Add conservative aliasing by default [check!]
+			- For .annotated_facts and .constraints [check!]
+		- Reform tuple and buffer points-to-facts [check!]
+			- Tuple: add pseudo-fields [check!]
+			- Buffer [check!]
+				- holds rather than == [check!]
+				- No more .elems_reg [check!]
+		- Problemo regarding Iterable method return types [check!]
+			- Can be solved with boilerplate [check!]
+	- Class constraints of the returned value's concrete type should be added to the annotation graph [check!]
+	- Figure out a way to integrate ~> no_alias and ~> all_alias [check!]
+		- If all_alias, skip graph compatibility check [check!]
+			- Incorporate in override check as well
+		- Must wait until typeflow to determine if no annotation means all_alias [check!]
+			- Could inherit annotations from overrides [check!]
+	- Explicit test for zero-length memset in RemoveRegion [check!]
+	- ReallocFromRegion(allocation : Ptr, region : Ptr[Region], old_size : i64, new_size : i64) [check!]
+		- Do we need to store a last_current ptr in the region header? No. [check!]
+	- Make it illegal to assign to 'self' [check!]
+	- Track node id's rather than Identifiers [check!]
+	- Introduce "NewScope" as subtype of BlockNode [check!]
+		- Correctly handles scope merging [check!]
+	- Make Node id's deterministic between typeflow / codegen [check!]
+	- Store region insertion points in Method [check!]
+		- Insert CreateRegion(name=abc) before statement with id=xyz [check!]
+	- Important that the object data ptr is allocated via a LLVM-recognized allocation fn [check!]
+		- And doesn't capture the region ptr [check!]
+	- Have CreateRegion take an operand if the region had ever been live before in the method [check!]
+		- At runtime this should return the existing region if it wasn't freed [check!]
+		- Handle the case where if the region was reused in between [check!]
+		- CreateRegion can take a generation number; can compare this generation number to the region header [check!]
+			- If the generation number is different, then it was actually freed and repurposed; don't use [check!]
+	- Ok, we need to be more precise about points-to graph conformance [check!]
+		- I believe that we should use other.param_names always? [check!]
+	- Handle the all_alias case for liveness analysis [check!]
+		- Skip liveness analysis [check!]
+	- Would it be correct for the iterable methods to return iterables but have "holds" constraints? [check!]
+	- Add more concise alias annotations [check!]
+		- Should significantly reduce verbosity [check!]
+		- a holds (b, c) [check!]
+		- a == b == c [check!]
+		- (a, b) holds c [check!]
+	- Better error messages for points-to graph analysis [check!]
+	- Prioritize current-file classes and functions when multiply defined [check!]
+
+TODO:
+
 - Release 0.8.0
+	- Automate build workflow [check!]
+	- Implement dictionary literal [check!]
+		- Use swiss_table_v3 [check!]
+		- Include in std [check!]
+	- Implement tuple destructuring
+		- For assignment [check!]
+		- Special-case Pair rhs [check!]
+		- For loops [check!]
 	- Does just adding dependencies to the path work?
 		- The source_dirs collection should be ordered, not a set [check!]
 		- Add the dependency folder to an env variable named for the package
@@ -1005,6 +707,262 @@ TODO:
 		- File name extensions: .mini -> .ptk
 		- MLIR dialect: mini. -> mid.
 	- 'ptalk build init [name]' could create a minimal manifest.yaml in the cwd
+
+- Add an extra argument to buffer indexation to enable SIMD loads and stores
+	- This argument must be an integer literal
+
+- Obviously there is an issue with nil-initialized buffer in swiss_table.mini.
+
+- Is it right to "re-create" nonlocal regions?
+	- The paper with region protection does not do this
+	- Could replace any creation-of-nonlocal-region with a reset
+	- This makes it a matter of correctness, not merely an optimization
+	- How do we deal with loops?
+	- Especially where "remove" comes after "create" in the loop
+
+- Models for how to store / retrieve regions from objects
+	- Model 1: store region ptr in fatptr
+	- Model 2: store object data ptr, find region ptr by rounding address
+		- Two words in fatptr left over for small structs
+		- Generic fields can be in separate regions
+	- Model 3: store data ptr; store region id number (i32)
+		- Use id number against some global data structure to get region
+		- Maybe just a flat array of all the regions that have ever existed
+		- Store region_from_box in vtable
+		- Use region_from_box for getting field regions
+
+- Add my_buffer.realloc(size); does not return anything
+
+- Consider IR annotations on Create/Remove Regions
+	- memory(none, argmem: readwrite, inaccessiblemem: readwrite) for both?
+	- I.e. the only observable effect of this call is on its ptr argument
+
+- Insert ProtectRegion and UnprotectRegion calls
+	- at call site, calculate used-in-call regions which are live after the call
+	- Insert protections for them before the call and deprotectiosn after
+	- More complicated than you think, actually: calls are not statements
+	- Is there any reason we can't insert around expressions?
+
+- Should insert region removal statements at beginning of method if never used
+
+- Can you think of an example where the create and remove are not syntactically ordered?
+	- Imagine an iterator that returns a freshly allocated object
+	- It needs a return region passed-in to .next()
+	- This return region would be removed at the end of the loop and created in the preheader every time
+
+- Need to handle break and continue for liveness
+- If we store region strings in nodes that create nodes and transmit them we should be good
+	- I.e. literals like Array, Range, String
+
+- Any local regions pointed to by a parameter region must be merged with the pointee
+	- This should happen after compatibility checking; before liveness analysis
+
+- Also store insertion points + region mapping in Function / Program
+	
+- During codegen, insert region ops according to stored info [check!]
+	- Store created regions in scope; use to retrieve [check!]
+	- Pass regions for object / buffer creation, and also return regions for calls
+
+- Liveness analysis
+	- Backwards pass twice over ast
+		- We need two passes because ...
+			- We need to know whether a variable is live at the beginning of the loop
+			- If live at beginning, must be live at end!
+			- Run through once to determine liveness at beginning
+			- Run through a second time with that knowledge
+	- For each identifier, mark when it becomes live and when used
+		- Becomes live:
+			- vardecl or assignment
+			- fields + self + params at beginning of method
+		- Use
+			- Reciever or argument to call
+			- Operand in binary op
+			- rhs in assignment
+			- returned value
+		- Live at end of method
+			- self and fields
+			- retured value
+
+- Contract: each method / function has "freeing responsibilities"
+	- Which are limited to the static knowledge is has, from the POV of the caller
+	- I.e. types in signature + annotations
+	- Overrides only have the freeing responsibilities of the overidden method
+	- Anything not covered by the freeing responsibility of the callee must be handled by the caller
+	- Internal downcasts will show up in the annotations
+
+- Add apply_constraints to fn literal call
+- Apply constraints upon downcast
+
+- I shouldn't have to have empty bodies for methods
+	- But I would like one required if there are constraints
+
+- Pair.swapped leads to infinite recursion in type substitution
+
+- Add a SizedIterator
+	- Do NOT guarantee a SizedIterator from a Collection
+		- Example: Map
+	- Have a .remaining() -> i32 method
+
+- It would not be safe for Array or String to hand out buffer views
+	- If the views hold a reference to the underlying buffer
+	- Because upon resizing, that buffer would no longer be the backing buffer
+	- A Slice could, because it is fixed-length
+	- View could rely on Indexable facilities
+	- Possibly an argument for making String immutable
+
+- String could expose a writer that can only write to its end
+	- Is that a Writer[i32] or a Writer[i8]?
+	- It's an abstract Writer[i32]
+	- This means that byte indices are *stable*
+	- Byte indices will forever remain on codepoint boundaries
+	- Any other kind of mutation must return a new string
+		- E.g: .replace() -> String
+
+- Constructor should check for T.new first before T.init
+	- So that new can return some subtype
+
+- Things we could work on right now
+	- Basic namespacing
+	- Comparison for tuples
+	- Closures
+	- Moving patterns to PDL
+	- Lifetime analysis
+
+- Namespacing
+	- Step one: adding path to FatPtr [check!]
+		- Would make it more involved to construct FatPtrs
+		- Especially in the parser
+		- We'd need to add in the path later [check!]
+			- Probably during scope.validate_type [check!]
+			- Should expose a FatPtr classmethod to create new with path [check!]
+		- make sure all creations of FatPtr in typeflow add paths [check!]
+	- Step two is to use path-qualified names in scope.classes and scope.functions [check!]
+		- We could do {name : {path : definition}} [check!]
+		- Use absolute path [check!]
+	- scope.get_class should use the path info in the FatPtr [check!]
+	- Step 3: Add namespacing to grammar
+		- Dot-qualification
+		- Import syntax
+			- import std.fmt.{foo as localfoo, bar as localbar};
+		- Export syntax
+			- Export
+		- Method and function calls become syntactically indistinguishable
+			- We need a way to semantically distinguish them
+			- Namespaced take precedence over variable names
+			- Check if receiver is an Identifier; check if it's in scope.functions
+	- Technically can't we do export / no_export lists before namespacing?
+		- Easier after
+		- Want to add export status to scope.classes and scope.functions map
+	- Report name collisions of imports (only when used!) (?)
+
+- Add an "extern type" statement
+	- Potentially useful for C interop
+	- Compiles down to LLVM opaque named type
+	- Will this run into ABI issues?
+	- Wait but how to construct extern types?
+
+- Could the compiler be aware of DefaultString for literals without it being exposed?
+
+- It would be nice to narrow types *within* a logical expression, not merely in the following block
+	- Would be implemented inside of Logical
+
+- Should ensure that all branches must return if return value declared
+
+- Could try to fuse llc and lld into one subprocess call
+	- Will this employ the linker's wisdom to avoid codegenning unused code?
+
+- super() may be useful for polymorphism in the AST
+
+- Cache flow analysis results to avoid time redoing work for nested control flow
+
+- @current_coroutine will break if two coroutines call each other
+	- We should instead maintain a stack of coroutines
+
+- Array[i32 | f64] is not working correctly
+	- A small union (128 bits) which is stored inside of its fatptr
+
+- Check if a method's definition has different param base types than its behavior
+	- ['a','b','c'].filter( ... ) into String
+	- Will invoke List.extend(iterable) whose signature will mismatch the behavior
+
+- You could probably see what's going wrong with O0 by seeing the asm for passing a fatptr vs type-param
+
+- I think I could have stuff like "x : Addable & Comparable" in signatures
+	- Before using a method we must cast to the particular required supertype
+	- File.iterator() -> ConstantTimeIterator[i8] & Writer[i8] & Seeker[i32]
+	- LLVM can optimize many of these casts out
+- Change the console's "active code page" in the main() prelude
+	- to make puts / printf display unicode correctly
+	- Obviously OS-specific
+- We could have special-cased all() and any() functions which take tuples of Booleans
+	- Necessary for ergonomics if tuple comparison produces tuples of Booleans
+	- And could compile to SIMD intrinsics (_mm_movemask_ps)
+	- For other Iterable[Bool] it can just lower to .all() and .any() methods
+	- Should also enable bitwise operations for tuples
+- The lack of closures may be a problem
+	- Iterable.map function can't take any extra parameters
+	- I could require explicit capture like C++
+		- Hard to track which variables are used in the fn
+		- Probably better to do the work of tracking
+	- Capture value types by copy, not reference
+		- No need to "lift" captured variables
+		- No escaping stack pointers
+	- I could use the llvm.trampoline tools
+		- vs making fn into a fat ptr
+		- Preserves C interop
+
+- Blocked on namespacing:
+	- Selective imports
+		- from x import y;
+		- Should improve compilation time
+	- Export / no_export lists
+		- An alternative to public / private annotations
+		- no_export { ConcreteStringIndex, Entry }
+		- Justification
+			- The "privateness" of a class / function is not intrinsic
+			- You might want to export a class from one file and not from another
+		- Export local definitions by default
+		- Don't export imports by default
+		- There's a difference between symbol visibility and data accessibility
+			- Files / export lists used for symbol visibility control; classes for data accessibility
+			- What is encapsulated is static (symbol visibility) vs dynamic (data accessibility)
+
+- Formatted string literals
+	- Just special-case .repr for builtins
+	- You can use s(n)printf or something
+		- Blocked on variadic extern defs
+	- Or you can implement a builtin format() like the builtin print()
+		- Is it a good idea to go further down that road?
+		- No, probably not
+
+- Should probably unify ExterndDef and FunctionDef (and FunctionLiteral) logic
+	- Should probably make them responsible for determining applicability
+		- So that extern defs can handle variadicity
+	- Currently calls can have more arguments than the function has parameters
+		- Which should not be the case
+
+- Dictionary literals
+	- Need to choose a default implementation
+		- LinearProbe works
+	- Adding to stdlib will balloon compilation times :(
+		- So for now, blocked on improving typeflow / codegen speed
+
+- Deduplicate behaviors
+	- If all methods in the behavior are inherited from the same class, reuse that behavior
+	- I believe behaviors encode absolute vtable offsets so this would not work out of the box
+	- Would have to add the fatptr offset within the behavior before loading the method fptr
+
+- Records: why not?
+	- Idea: casting between these works seamlessly, unlike tuples
+	- Their allocated size is dynamic
+	- Blocker: Indexing would need to run specialized code to calculate the offset
+
+- Snprintf can convert things to string representations
+- I should be able to declare variadic extern defs
+	- e.g. "extern def printf(Buffer[i8], ...) -> i32"
+- Why does it crash at O0?
+- GEP inbounds could help optimization on dynamic geps
+- I should add real type checking for call/yield
 
 - Stdlib ideas
 	- ReverseIterator[T] has a .prev() method

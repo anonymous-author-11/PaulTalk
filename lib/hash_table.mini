@@ -1,4 +1,4 @@
-import swiss_table_v2;
+import swiss_table_v3;
 import io;
 
 map = {5:77, 8:34, 15:99};
