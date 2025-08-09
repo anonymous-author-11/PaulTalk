@@ -888,5 +888,161 @@ class CompilerTests(CompilerTestCase):
         expected_output = "Regular Sieve\n664579\nNaive Sieve\n664579\nBitpacked Sieve\n664579\nOptimized Sieve\n664579"
         self.run_mini_code(mini_code, expected_output, "prime_sieves")
 
+    def test_pair(self):
+        mini_code = """
+            import iteration;
+            import io;
+
+            pair1 = Pair{5, 7.0};
+            t = pair1.second();
+            IO.print(t);
+
+            pair2 = Pair{7.0, 9};
+            t = pair2.second();
+            IO.print(t);
+
+            pair3 = Pair{(1.0, 2.0, 3.0, 4.0), 5.0};
+            t = pair3.first();
+            fourth = t.[3];
+            IO.print(fourth);
+
+            class FancyPair extends Pair[Tuple[f64,f64,f64,f64], f64] {
+
+                def init(@first : Tuple[f64,f64,f64,f64], @second : f64) {}
+
+                def second() -> f64 {
+                    return @second;
+                }
+            }
+
+            b = FancyPair{(1.0, 2.0, 3.0, 4.0), 5.0};
+            IO.print(b.second());
+        """
+        expected_output = "7.000000\n9\n4.000000\n5.000000"
+        self.run_mini_code(mini_code, expected_output, "pair")
+
+    def test_array_iteration(self):
+        mini_code = """
+            import array;
+            import io;
+
+            ary = [] of i32;
+            ary.append(5).append(6).append(7).append(8);
+            add = (a : i32, b : i32) => { a + b; };
+
+            IO.print(ary.reduce(0, add));
+            times_two = (x : i32) => { x * 2; };
+            ftimes_two = (x : f64) => { x * 2.0; };
+            identity = (x : i32) => { x; };
+            to_float = (x : i32) => { y : f64 = x; y; };
+            ary2 = ary.map(times_two);
+            ary3 = ary2.map(identity).map(to_float);
+
+            for x in ary3 {
+                IO.print(55);
+                IO.print(x);
+            }
+
+            for (first, second) in ary.zip(ary3) {
+                IO.print(first);
+                IO.print(second);
+            }
+        """
+        expected_output = "26\n55\n10.000000\n55\n12.000000\n55\n14.000000\n55\n16.000000\n5\n10.000000\n6\n12.000000\n7\n14.000000\n8\n16.000000"
+        self.run_mini_code(mini_code, expected_output, "array_iteration")
+
+    def test_complex_generics(self):
+        mini_code = """
+            import io;
+            
+            class Addable[T, U] {
+                abstract def +(other : T) -> U {}
+            }
+
+            class Float64 extends Addable[Float64, Float64], Addable[Int32, Float64] {
+                @value : f64
+
+                def init(@value : f64) {
+                }
+
+                def value() -> f64 {
+                    return @value;
+                } ~> { ret == @value }
+
+                def +(other : Int32) -> Float64 {
+                    cast : f64 = other.value();
+                    return Float64{@value + cast};
+                }
+                def +(other : Float64) -> Float64 {
+                    return Float64{@value + other.value()};
+                }
+            }
+
+            class Int32 extends Addable[Int32, Int32], Addable[Float64, Float64] {
+                @value : i32
+
+                def init(@value : i32) {
+                }
+
+                def value() -> i32 {
+                    return @value;
+                } ~> { ret == @value }
+                
+                def +(other : Int32) -> Int32 {
+                    return Int32{@value + other.value()};
+                }
+                def +(other : Float64) -> Float64 {
+                    cast : f64 = @value;
+                    return Float64{cast + other.value()};
+                }
+            }
+
+            a = Int32{5};
+            b = Int32{7};
+            c = a + b;
+            IO.print(add_five(c).value());
+
+            def add_five(x : Addable[Float64, Float64]) -> Float64 {
+                return x + Float64{5.0};
+            }
+
+            class Holder[T] where T <: Addable[Float64, Float64] {
+                @held : T
+                def init(@held : T) {}
+                def value() -> Float64 {
+                    return @held + Float64{45.0};
+                }
+                def value=(x : T) {
+                    @held = x;
+                }
+            }
+
+            holder = Holder{Int32{6}};
+            IO.print(holder.value().value());
+            holder.value() = Int32{77};
+            IO.print(holder.value().value());
+
+        """
+        expected_output = "17.000000\n51.000000\n122.000000"
+        self.run_mini_code(mini_code, expected_output, "complex_generics")
+
+    def test_sizeof(self):
+        mini_code = """
+            import io;
+            import core;
+
+            class Temp[T] {
+                def init() {}
+                def print() {
+                    IO.print(sizeof(T));
+                }
+            }
+
+            temp = Temp[String?].new();
+            temp.print();
+        """
+        expected_output = "32"
+        self.run_mini_code(mini_code, expected_output, "sizeof")
+
 if __name__ == '__main__':
     unittest.main()
