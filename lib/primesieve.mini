@@ -13,6 +13,11 @@ def max(a : i32, b : i32) -> i32 {
 }
 
 class PrimeSieve {
+    abstract def generate_primes() {}
+    abstract def count_primes() -> i32 {}
+}
+
+class SimplePrimeSieve extends PrimeSieve {
     @sieve : Buffer[Bool]
     @size : i32
 
@@ -54,7 +59,7 @@ class PrimeSieve {
     }
 }
 
-class CacheOptimizedSieve {
+class CacheOptimizedSieve extends PrimeSieve {
     @sieve : Buffer[Bool]
     @size : i32
 
@@ -110,7 +115,7 @@ class CacheOptimizedSieve {
     }
 }
 
-class CacheOptimizedBitpackedSieve {
+class CacheOptimizedBitpackedSieve extends PrimeSieve {
     @sieve_bits : Buffer[i8] // Using i8 for bit-packing
     @size : i32
 
@@ -220,7 +225,7 @@ class CacheOptimizedBitpackedSieve {
     }
 }
 
-class NaiveSieveWithCollection {
+class NaiveSieveWithCollection extends PrimeSieve {
     @sieve_flags : Buffer[Bool]
     @size : i32
     @primes_list : Array[i32] // To store the collected primes
@@ -228,7 +233,7 @@ class NaiveSieveWithCollection {
     def init(@size : i32) {
         // @size = @size; // shorthand from your style
         @sieve_flags = Buffer[Bool].new(@size + 1);
-        @primes_list = [];
+        @primes_list = [] of i32;
         i = 0;
         while i <= @size {
             @sieve_flags.[i] = true;
@@ -296,21 +301,29 @@ def isqrt(n : i32) -> i32 {
 
 def benchmark_primes() {
     limit = 10_000_000;
-    
-    start_time = clock();
-    sieve = NaiveSieveWithCollection.new(limit);
-    sieve.generate_primes();
-    prime_count = sieve.count_primes();
-    end_time = clock();
-    
-    time_taken = end_time - start_time;
-    
-    IO.print("Number of primes up to");
-    IO.print(limit);
-    IO.print(":");
-    IO.print(prime_count);
-    IO.print("Time taken:");
-    IO.print(time_taken);
+
+    sieves = SwissTable[String, PrimeSieve].new(string_hasher, string_eq);
+    sieves.insert("Naive Sieve", NaiveSieveWithCollection{limit});
+    sieves.insert("Regular Sieve", SimplePrimeSieve{limit});
+    sieves.insert("Optimized Sieve", CacheOptimizedSieve{limit});
+    sieves.insert("Bitpacked Sieve", CacheOptimizedBitpackedSieve{limit});
+
+    for (name, sieve) in sieves {
+        IO.print(name);
+        start_time = clock();
+        sieve.generate_primes();
+        prime_count = sieve.count_primes();
+        end_time = clock();
+        
+        time_taken = end_time - start_time;
+        
+        IO.print("Number of primes up to");
+        IO.print(limit);
+        IO.print(":");
+        IO.print(prime_count);
+        IO.print("Time taken:");
+        IO.print(time_taken);
+    }
 }
 
 benchmark_primes();
