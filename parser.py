@@ -376,7 +376,8 @@ class CSTTransformer(Transformer):
             "Any":Any(),
             "Nil":Nil()
         }
-        return type_map[type_name.value] if type_name.value in type_map else FatPtr.basic(type_name.value)
+        if type_name.value in type_map: return type_map[type_name.value]
+        return FatPtr.basic(type_name.value)
 
     def union_type(self, left, right):
         return Union.from_list([left, right])

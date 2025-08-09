@@ -459,7 +459,9 @@ DONE:
 
 TODO:
 
-- Better error messages for points-to graph analysis
+- We need to prioritize current-file classes and functions when multiply defined
+
+- Better error messages for points-to graph analysis [check!]
 
 - Obviously there is an issue with nil-initialized buffer in swiss_table.mini.
 
