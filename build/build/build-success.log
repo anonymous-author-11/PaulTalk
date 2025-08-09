@@ -15,16 +15,24 @@ metadir = 0install
 distdir = 
 
 
-Executing: ['C:\\Users\\PaulK\\AppData\\Local\\0install.net\\implementations\\sha256new_JRZBBN4XYBSF3O7HAGW4AFOE3C5NSOPGVM2C6SU46SVYPL6PNPRA\\ptalk.dist/ptalk.exe', 'compile', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\hash_benchmark.mini', '-o', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build-windows-x86_64/program.exe', '--build-dir', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build']
+Executing: ['C:\\Users\\PaulK\\AppData\\Local\\0install.net\\implementations\\sha256new_XTFDSF4SIL7P52WX4WK4DCTUPEYXVH5H4SNKHIPLJHI3LYIW4STA\\ptalk.dist/ptalk.exe', 'compile', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\lib\\hash_benchmark.mini', '-o', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build-windows-x86_64/program.exe', '--build-dir', 'C:\\Users\\PaulK\\OneDrive\\Documents\\PL\\PyPL\\build\\build']
 Compiling hash_benchmark.mini
-Time to import: 0.25325989723205566 seconds
-Time to parse: 0.41205334663391113 seconds
-Time to type check: 1.8081278800964355 seconds
-Time to llvm-link: 0.3630235195159912 seconds
-Time to optimize: 3.7001001834869385 seconds
-Time to llc: 1.2975773811340332 seconds
-Time to lld link: 0.07193446159362793 seconds
-Total time to compile: 7.9376060962677 seconds
-Compiled 360 lines of code at 45.35372448996603 LoC/second
+Recompiling dependencies: builtins, iteration, collection, list, indexable, range, core, map, io, swiss_table_v2, math, channel, array, files, std
+Time to import: 0.3071465492248535 seconds
+Time to parse: 0.5152430534362793 seconds
+Time to type check: 1.6372709274291992 seconds
+Time to codegen: 18.045421838760376 seconds
+Time to do python lowering: 19.771451473236084 seconds
+Time to do PDL lowering: 1.514775037765503 seconds
+Time to do mlir-opt: 1.6369071006774902 seconds
+Time to mlir-opt lower: 0.8470091819763184 seconds
+Time to mlir-translate: 0.556448221206665 seconds
+Time to generate bitcodes: 1.4769573211669922 seconds
+Time to llvm-link: 0.5301167964935303 seconds
+Time to optimize: 4.887584686279297 seconds
+Time to llc: 1.5535287857055664 seconds
+Time to lld link: 0.1100006103515625 seconds
+Total time to compile: 53.40939521789551 seconds
+Compiled 2174 lines of code at 40.70444892945677 LoC/second
 Finished compiling hash_benchmark.mini
 Build successful
