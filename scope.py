@@ -59,6 +59,21 @@ class TypeEnvironment:
         if fn.name not in self.functions: self.functions[fn.name] = {}
         self.functions[fn.name][fn.info.filepath] = fn
 
+    # This is very ugly hacky code
+    def qualify(self, typ, node_info):
+        if not isinstance(typ, FatPtr):
+            return typ
+        try:
+            typ = self.simplify(typ)
+        except:
+            pass
+        if typ.cls.data not in self.classes:
+            raise Exception(f"{node_info}: Class {typ.cls.data} has not been declared.")
+        classes = self.classes[typ.cls.data]
+        if typ.path != NoneAttr() or (not node_info) or (node_info.filepath not in classes):
+            return typ
+        return FatPtr.with_path(typ, node_info.filepath)
+
     def get_class(self, node_info, typ):
         if not isinstance(typ, FatPtr):
             raise Exception(f"{node_info}: Tried to get class of non-fatptr type {typ}")
@@ -69,6 +84,8 @@ class TypeEnvironment:
             raise Exception(f"{node_info}: There is no class {typ.cls.data} declared in file {typ.path.data}.")
         if typ.path != NoneAttr():
             return classes[Path(typ.path.data)]
+        if node_info and node_info.filepath in classes:
+            return classes[node_info.filepath]
         files = [*classes.keys()]
         if len(files) != 1:
             raise Exception(f"{node_info}: Class {typ.cls.data} has multiple declarations, in {[file.name for file in files]}.")
@@ -78,6 +95,8 @@ class TypeEnvironment:
         if fn_name not in self.functions:
             raise Exception(f"{node_info}: Function {fn_name} has not been declared.")
         functions = self.functions[fn_name]
+        if node_info and node_info.filepath in functions:
+            return functions[node_info.filepath]
         files = [*functions.keys()]
         if len(files) != 1:
             raise Exception(f"{node_info}: Function {fn_name} has multiple declarations, in {[file.name for file in files]}.")

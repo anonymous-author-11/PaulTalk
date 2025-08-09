@@ -207,12 +207,12 @@ class FatPtr(ParametrizedAttribute, TypeAttribute):
     def __repr__(self):
         namespace = f"{Path(self.path.data).stem}." if self.path != NoneAttr() else ""
         type_param_string = (f"{[*self.type_params.data]}") if not isinstance(self.type_params, NoneAttr) else ""
-        return namespace + f"{self.cls.data}" + type_param_string
+        return f"{self.cls.data}" + type_param_string
 
     def __format__(self, format_spec):
         namespace = f"{Path(self.path.data).stem}." if self.path != NoneAttr() else ""
         type_param_string = (f"{[*self.type_params.data]}") if not isinstance(self.type_params, NoneAttr) else ""
-        return namespace + f"{self.cls.data}" + type_param_string
+        return f"{self.cls.data}" + type_param_string
 
     def __eq__(self, other):
         if not isinstance(other, FatPtr): return False

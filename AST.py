@@ -1954,7 +1954,7 @@ class ObjectCreation(Expression):
     def exprtype(self, scope):
         if self.type.cls.data == "Buffer":
             raise Exception(f"{self.info}: Buffer type must be parameterized, like Buffer[i8] or Buffer[f64]")
-        simplified_type = scope.simplify(self.type)
+        simplified_type = scope.type_env.qualify(self.type, self.info)
         cls = scope.get_class(self.info, simplified_type)
         input_types = [arg.exprtype(scope) for arg in self.arguments]
         if simplified_type.type_params == NoneAttr() and len(cls.type_parameters) > 0:
