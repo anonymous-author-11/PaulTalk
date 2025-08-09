@@ -8,14 +8,16 @@ from ptalk_compile import compiler_driver_main
 from AST import silent
 from utils import random_letters
 import stat
+import sys
 
 class CompilerTestCase(unittest.TestCase):
+
     def setUp(self):
         self.temp_input_file_name = f"{random_letters(10)}.mini"
         self.output_path = None  # To be set in individual test methods
 
-    def tearDown(self):
-        os.remove(self.temp_input_file_name)
+    @classmethod
+    def tearDownClass(cls):
         test_bin = Path("./test_bin")
         test_build = Path("./test_build")
         if test_bin.exists():
@@ -29,20 +31,23 @@ class CompilerTestCase(unittest.TestCase):
             os.chmod(test_build, stat.S_IWRITE)
             shutil.rmtree(test_build)
 
+    def tearDown(self):
+        os.remove(self.temp_input_file_name)
+
     def run_mini_code(self, mini_code, expected_output, output_file_name_base):
-        with open(self.temp_input_file_name, "w") as f: f.write(mini_code)
+        with open(self.temp_input_file_name, "w", encoding='utf-8') as f: f.write(mini_code)
         self.output_path = Path(f"./test_bin/{output_file_name_base}.exe")
 
         try:
             silent[0] = True
-            compiler_driver_main(self.temp_input_file_name, self.output_path, build_dir="test_build", no_timings=True)
+            compiler_driver_main(self.temp_input_file_name, self.output_path, debug_mode=True, build_dir="test_build", no_timings=True)
         except Exception as e:
             error_msg = "Compilation failed:\n" + str(e)
             self.fail(error_msg)
 
         # Proceed to run executable if compilation succeeded
         exe_command = [f"./test_bin/{output_file_name_base}.exe"]
-        completed_process = subprocess.run(exe_command, capture_output=True, text=True, check=True)
+        completed_process = subprocess.run(exe_command, capture_output=True, text=True, check=True, encoding='utf-8')
         actual_output = completed_process.stdout.strip()
 
         # Split the actual output into lines for comparison
@@ -605,6 +610,166 @@ class CompilerTests(CompilerTestCase):
         """
         with self.assertRaisesRegex(Exception, "can only have return statements in functions"):
             self.run_mini_code(mini_code, "", "return_statement_outside_function")
+
+    def test_flow_typing_break(self):
+        mini_code = """
+            import range;
+            import io;
+
+            a = 5;
+            for i in 0...10 {
+                a = nil;
+                break;
+                a = 6;
+            }
+            IO.print(a); // should print 'nil'
+        """
+        expected_output = "nil"
+        self.run_mini_code(mini_code, expected_output, "type_inference_break_stmt")
+
+    def test_file_stuff(self):
+        mini_code = """
+            import core;
+            import io;
+            import files;
+
+            class Foo {
+                def Self.collection_taker(c : Iterable[Character]) {
+                    IO.print("jolly good");
+                }
+            }
+            file = File{"bigtings.txt", "rb"};
+            fr = FileReader{} as FileProcessor[String];
+            txt = fr.process(file);
+            IO.print(txt);
+            Foo.collection_taker("a string");
+        """
+        expected_output = "this\nis how\nwe do\nit\njolly good"
+        self.run_mini_code(mini_code, expected_output, "file_stuff")
+
+    def test_mutated_branch(self):
+        mini_code = """
+            import io;
+
+            a = 5;
+            b = true;
+            if b {
+                a = 6.0;
+                a = 7;
+            }
+            IO.print(a); // Should print 7
+        """
+        expected_output = "7"
+        self.run_mini_code(mini_code, expected_output, "mutated_branch")
+
+    def test_unicode(self):
+        mini_code = """
+            import core;
+            import io;
+
+            def add_translation(translation : String) -> String {
+                str = "Computer in Chinese is ";
+                return str.extend(translation);
+            }
+
+            IO.print(add_translation("电脑"));
+        """
+        expected_output = "Computer in Chinese is 电脑"
+        self.run_mini_code(mini_code, expected_output, "unicode_manipulation")
+
+    def test_into_operator(self):
+        mini_code = """
+            import core;
+            import array;
+            import io;
+
+            IO.print(['a', 'b', 'c', 'd'] into String);
+        """
+        expected_output = "abcd"
+        self.run_mini_code(mini_code, expected_output, "chars_into_string_operator")
+
+    def test_chained_into(self):
+        mini_code = """
+            import core;
+            import io;
+
+            IO.print(100 into Character into String);
+        """
+        expected_output = "d"
+        self.run_mini_code(mini_code, expected_output, "chained_into_operators")
+
+    def test_nil_syntax_sugar(self):
+        mini_code = """
+            import core;
+            import io;
+
+            nilable : String? = nil;
+
+            if nilable is not String {
+                IO.print(nilable);
+            }
+        """
+        expected_output = "nil"
+        self.run_mini_code(mini_code, expected_output, "nil_syntax_sugar")
+
+    def test_small_union_array(self):
+        mini_code = """
+            import array;
+            ary = [] of i32 | f64;
+            ary.append(1);
+            ary.append(2.0);
+            print(5);
+        """
+        expected_output = "5"
+        self.run_mini_code(mini_code, expected_output, "small_union_array")
+
+    def test_i32_map(self):
+        mini_code = """
+            import std;
+
+            map = {5:77, 8:34, 15:99};
+            val = map.[8];
+            IO.print(val);
+        """
+        expected_output = "34"
+        self.run_mini_code(mini_code, expected_output, "i32_map_get")
+
+    def test_str_map_iterate(self):
+        mini_code = """
+            import std;
+
+            stringmap = {"foo":"bar", "baz":"qux", "hello":"world"};
+
+            for (key, value) in stringmap {
+                IO.print(key);
+                IO.print(value);
+            }
+        """
+        expected_output = "hello\nworld\nbaz\nqux\nfoo\nbar"
+        self.run_mini_code(mini_code, expected_output, "str_map_iterate")
+
+    def test_fn_map(self):
+        mini_code = """
+            import std;
+
+            def say_apple() {
+                IO.print("apple");
+            }
+
+            def say_banana() {
+                IO.print("banana");
+            }
+
+            def say_coconut() {
+                IO.print("coconut");
+            }
+
+            fmap = {"a":say_apple, "b":say_banana, "c":say_coconut};
+            func = fmap.["c"];
+            func.call();
+        """
+        expected_output = "coconut"
+        self.run_mini_code(mini_code, expected_output, "fn_map_call")
 
 if __name__ == '__main__':
     unittest.main()

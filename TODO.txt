@@ -687,12 +687,14 @@ DONE:
 
 TODO:
 
+- Add more functionality to tests
+
 - Release 0.8.0
 	- Automate build workflow [check!]
 	- Implement dictionary literal [check!]
 		- Use swiss_table_v3 [check!]
 		- Include in std [check!]
-	- Implement tuple destructuring
+	- Implement tuple destructuring [check!]
 		- For assignment [check!]
 		- Special-case Pair rhs [check!]
 		- For loops [check!]
