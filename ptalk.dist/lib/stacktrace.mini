@@ -1,0 +1,19 @@
+import std;
+
+def foo() {
+	bar();
+}
+
+def bar() {
+	baz();
+}
+
+def baz() {
+	qux();
+}
+
+def qux() {
+	yield(Exception{});
+}
+
+foo();

@@ -1,0 +1,12 @@
+import array;
+import io;
+
+intary = [1,2,3,4,5];
+
+strary = ["a","b","c","d"];
+
+intstrary = [1, "b", 3, "d"];
+
+IO.print(intstrary.[3]);
+
+IO.print("look at this!");
