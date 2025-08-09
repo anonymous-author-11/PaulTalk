@@ -42,6 +42,8 @@ declare void @virtual_commit(ptr, i64)
 
 declare void @virtual_reset(ptr, i64)
 
+declare void @commit_additional_pages(ptr, i64)
+
 declare void @llvm.memcpy.p0.p0.i64(ptr nocapture writeonly, ptr nocapture readonly, i64, i1 immarg)
 declare i64 @llvm.umin.i64(i64, i64)
 
@@ -207,14 +209,7 @@ define noalias ptr @AllocateFromRegion(ptr nocapture nofree %region, i64 %size) 
 
   %new_ptr = getelementptr i8, ptr %current_ptr, i64 %aligned_size
   store ptr %new_ptr, ptr %current_ptr_gep, align 8
-  %page_or_more = icmp i64 %size, 4096
-  br i1 %page_or_more, label %commit, label %return
-
-commit:
-  call void @virtual_commit(ptr %current_ptr, i64 %size)
-  br label %return
-
-return:
+  call void @commit_additional_pages(ptr %current_ptr, i64 %aligned_size)
   ret ptr %current_ptr
 }
 
@@ -245,11 +240,8 @@ extend_in_place:
   %new_current_ptr = getelementptr i8, ptr %allocation, i64 %aligned_new_size
   
   store ptr %new_current_ptr, ptr %current_ptr_gep, align 8
-  %page_or_more = icmp i64 %size, 4096
-  br i1 %page_or_more, label %commit, label %return
-
-commit:
-  call void @virtual_commit(ptr %current_ptr, i64 %aligned_new_size)
+  %additional_size = sub i64 %aligned_new_size, %aligned_old_size
+  call void @commit_additional_pages(ptr %current_ptr, i64 %additional_size)
   br label %return
 
 fallback_alloc_and_copy:

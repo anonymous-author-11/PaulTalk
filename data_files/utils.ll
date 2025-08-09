@@ -108,21 +108,26 @@ define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) noinl
   store ptr %new_ptr, ptr %current_ptr
 
   ; if we are allocating more than one page, commit the full size of the allocation
-  %page_or_more = icmp sge i64 %aligned_size, 4096
-  br i1 %page_or_more, label %commit, label %exit
+  call void @commit_additional_pages(ptr %current, i64 %aligned_size)
+  ret ptr %current 
+}
+
+define void @commit_additional_pages(ptr %base, i64 %size) {
+  %page_or_more = icmp sge i64 %size, 4096
+  br i1 %page_or_more, label %commit, label %return
 
 commit:
-  %current_i64 = ptrtoint ptr %current to i64
-  %current_plus_4096 = add i64 %current_i64, 4096
-  %next_page_i64 = and i64 %current_plus_4096, -4096
+  %base_i64 = ptrtoint ptr %base to i64
+  %base_plus_4096 = add i64 %base_i64, 4096
+  %next_page_i64 = and i64 %base_plus_4096, -4096
   %next_page = inttoptr i64 %next_page_i64 to ptr
-  %left_in_page = sub i64 %next_page_i64, %current_i64
-  %commit_size = sub i64 %aligned_size, %left_in_page
+  %left_in_page = sub i64 %next_page_i64, %base_i64
+  %commit_size = sub i64 %size, %left_in_page
   call void @virtual_commit(ptr %next_page, i64 %commit_size)
-  br label %exit
+  br label %return
 
-exit:
-  ret ptr %current 
+return:
+  ret void
 }
 
 define { i64, i64 } @_data_size_tuple_typ(ptr %0) {
