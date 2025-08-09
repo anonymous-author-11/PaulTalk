@@ -82,10 +82,11 @@ assignable: ident -> identifier
           | method_call
           | object_creation
           | indexation
+          | tuple_literal
 
 if_statement: "if" expression block ("else" block)?
 while_statement: "while" expression block
-for_statement: "for" ident "in" expression block
+for_statement: "for" (ident | tuple_literal) "in" expression block
 return_statement: RETURN [expression]
 break_statement: BREAK
 continue_statement: CONTINUE
@@ -159,7 +160,7 @@ primary: "(" expression ")" -> paren_expr
        | CHAR -> char_literal
        | function_literal
        | array_literal
-       | tuple_literal
+       | dictionary_literal
        | print_call
        | sizeof_call
        | yield_call
@@ -167,10 +168,12 @@ primary: "(" expression ")" -> paren_expr
 
 expression_list: (expression ("," expression)*)?
 
+kv_pair: expression ":" expression
+
 function_literal: "(" param_list ")" ["yields" typ] ARROW block
 array_literal: LBRACKET expression_list "]" ["of" typ]
 tuple_literal: "(" expression "," expression ("," expression)* ")"
-dictionary_literal: "{" (expression ":" expression ("," expression ":" expression)*)? "}"
+dictionary_literal: LBRACE kv_pair ("," kv_pair)* "}"
 print_call: "print" "(" (expression ("," expression)*)? ")"
 sizeof_call: "sizeof" "(" typ ")"
 yield_call: YIELD "(" [expression] ")"

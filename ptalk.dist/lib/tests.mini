@@ -315,12 +315,6 @@ producer = Coroutine.new((chan : Channel[i32]) => { chan.put(88); }, chan);
 producer.call();
 IO.print(chan.get());
 
-v = (1...15).map((x : i32) => { x * x; })
-    .filter((x : i32) => { x % 2 == 0; })
-    .reduce(0, add);
-
-IO.print(v);
-
 hex_literal = 0x0100;
 IO.print(hex_literal);
 tuple = (4, 5, 6);

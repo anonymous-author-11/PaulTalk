@@ -44,16 +44,16 @@ class List[T] extends Collection[T] {
     // O(index) time complexity
     def get(index : i32) -> T? {
     	if index >= self.size() { return nil; }
-    	for pair in self.enumerate() {
-    		if pair.first() == index { return pair.second(); }
+    	for (first, second) in self.enumerate() {
+    		if first == index { return second; }
     	}
     }
 
     // O(index) time complexity
     def index_of(target : T, eq : (T, T) -> Bool) -> i32? {
     	if self.is_empty() { return nil; }
-    	for pair in self.enumerate() {
-    		if eq.call(pair.second(), target) { return pair.first(); }
+    	for (first, second) in self.enumerate() {
+    		if eq.call(second, target) { return first; }
     	}
     	return nil;
     }
