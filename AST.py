@@ -47,6 +47,8 @@ class AST:
 
     def codegen(self) -> ModuleOp:
         if not self.typed: self.root.typeflow(self.global_scope)
+        self.global_scope.type_table = {}
+        self.global_scope.symbol_table = {}
         #debug_print("typechecking complete")
         self.root.codegen(self.global_scope)
         #debug_print("codegen complete")
