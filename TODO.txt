@@ -498,7 +498,7 @@ TODO:
 
 - Build workflow
 	- set CCFLAGS="/O2 /Ob3"
-	- run nuitka command
+	- py -m nuitka ptalk.py --standalone --msvc=latest --include-data-dir=data_files=data_files --include-data-dir=lib=lib --include-raw-dir=executables=executables --nofollow-import-to=sympy --nofollow-import-to=pandas --nofollow-import-to=numpy --nofollow-import-to=sqlalchemy --nofollow-import-to=scipy --nofollow-import-to=PIL --nofollow-import-to=pygments
 	- add + commit + push all the changes
 		- git add -A
 		- git commit -m "Rebuild for version 0.x.x"
