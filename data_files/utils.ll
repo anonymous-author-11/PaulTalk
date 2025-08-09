@@ -108,11 +108,17 @@ define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) noinl
   store ptr %new_ptr, ptr %current_ptr
 
   ; if we are allocating more than one page, commit the full size of the allocation
-  %page_or_more = icmp sge i64 %size, 4096
+  %page_or_more = icmp sge i64 %aligned_size, 4096
   br i1 %page_or_more, label %commit, label %exit
 
 commit:
-  call void @virtual_commit(ptr %current, i64 %aligned_size)
+  %current_i64 = ptrtoint ptr %current to i64
+  %current_plus_4096 = add i64 %current_i64, 4096
+  %next_page_i64 = and i64 %current_plus_4096, -4096
+  %next_page = inttoptr i64 %next_page_i64 to ptr
+  %left_in_page = sub i64 %next_page_i64, %current_i64
+  %commit_size = sub i64 %aligned_size, %left_in_page
+  call void @virtual_commit(ptr %next_page, i64 %commit_size)
   br label %exit
 
 exit:
@@ -252,6 +258,7 @@ define ptr @coroutine_create(ptr %func, ptr %arg_passer) {
 
   ; Reserve a new stack (8MB == 8388608 bytes) for the coroutine (and put the coroutine itself on this stack)
   %stack = call noalias ptr @virtual_reserve(i64 8388608) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(0) "alloc-family"="malloc"
+  call void @virtual_commit(ptr %stack, i64 8388608)
 
   ; Store the passed function pointer in the coroutine
   %func_ptr = getelementptr { ptr, [3 x ptr], ptr, i1 }, ptr %stack, i32 0, i32 0

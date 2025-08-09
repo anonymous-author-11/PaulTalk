@@ -1,7 +1,7 @@
 
 ; Windows-specific utility functions
 
-declare noalias ptr @VirtualAlloc(ptr, i64, i32, i32) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1) "alloc-family"="malloc"
+declare ptr @VirtualAlloc(ptr, i64, i32, i32) mustprogress nofree nounwind willreturn allockind("alloc,zeroed") allocsize(1) "alloc-family"="malloc"
 declare i32 @VirtualFree(ptr allocptr nocapture noundef, i64, i32) mustprogress nounwind willreturn allockind("free") memory(argmem: readwrite, inaccessiblemem: readwrite)
 declare i32 @VirtualProtect(ptr, i64, i32, ptr) mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
 
@@ -15,7 +15,7 @@ define noalias ptr @virtual_reserve(i64 %size) mustprogress nofree nounwind will
 
 ; Define an OS-agnostic wrapper around VirtualAlloc(MEM_COMMIT)
 ; MEM_COMMIT: 4096, 4 for PAGE_READWRITE
-define void @virtual_commit(ptr %allocation, i64 %size) {
+define void @virtual_commit(ptr %allocation, i64 %size) optnone noinline {
   %result = call ptr @VirtualAlloc(ptr %allocation, i64 %size, i32 4096, i32 4)
   ret void
 }
@@ -154,26 +154,37 @@ define void @os_specific_setup() {
   ret void
 }
 
+@last_fault_addr = internal global ptr null
+
 define i32 @PageFaultHandler(ptr %0) mustprogress optnone noinline uwtable {
+entry:
   %2 = load ptr, ptr %0, align 8
   %3 = load i32, ptr %2, align 8
   %.not = icmp eq i32 %3, -1073741819
-  br i1 %.not, label %4, label %11
+  br i1 %.not, label %get_fault_info, label %fail
 
-4:                                                ; preds = %1
-  %5 = getelementptr inbounds %struct._EXCEPTION_RECORD, ptr %2, i32 0, i32 5, i32 1
-  %6 = load i64, ptr %5, align 8
+get_fault_info:                                                ; preds = %entry
+  %fault_addr_ptr_ptr = getelementptr inbounds %struct._EXCEPTION_RECORD, ptr %2, i32 0, i32 5, i32 1
+  %fault_addr_ptr = load ptr, ptr %fault_addr_ptr_ptr, align 8
+  %fault_addr_int = ptrtoint ptr %fault_addr_ptr to i64
 
-  %7 = inttoptr i64 %6 to ptr
+  %last_fault_addr = load ptr, ptr @last_fault_addr
+  %same_addr = icmp eq ptr %fault_addr_ptr, %last_fault_addr
+  br i1 %same_addr, label %fail, label %commit
+
+commit:
+  store ptr %fault_addr_ptr, ptr @last_fault_addr
+
   ; 4096 for MEM_COMMIT, 4 for PAGE_READWRITE
-  %8 = call ptr @VirtualAlloc(ptr noundef %7, i64 noundef 4096, i32 noundef 4096, i32 noundef 4)
-  %is_null = icmp eq ptr %8, null
-  br i1 %is_null, label %9, label %11
+  %commit_result = call ptr @VirtualAlloc(ptr %fault_addr_ptr, i64 noundef 4096, i32 noundef 4096, i32 noundef 4)
 
-9:                                                ; preds = %1, %4
-  br label %11
+  %is_null = icmp eq ptr %commit_result, null
+  br i1 %is_null, label %fail, label %return
 
-11:
-  %.0 = phi i32 [ -1, %4 ], [ 0, %1 ], [ 0, %9 ]
+fail:                                                ; preds = %entry, %get_fault_info
+  br label %return
+
+return:
+  %.0 = phi i32 [ -1, %commit ], [ 0, %fail ]
   ret i32 %.0
 }
