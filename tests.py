@@ -9,6 +9,7 @@ from AST import silent
 from utils import random_letters
 import stat
 import sys
+import decimal
 
 class CompilerTestCase(unittest.TestCase):
 
@@ -1043,6 +1044,19 @@ class CompilerTests(CompilerTestCase):
         """
         expected_output = "32"
         self.run_mini_code(mini_code, expected_output, "sizeof")
+
+    def test_number_max_min(self):
+        mini_code = """
+            import io;
+            
+            IO.print(i32.max());
+            IO.print(i32.min());
+            IO.print(f64.max());
+            IO.print(f64.min());
+        """
+        float_max_str = "179769300000000004979913091153546431177385676945343486730197993498529636492108312404543796370045487218955201046137662191918513706549560771088224207924409275479864981823815660983343422176365744870072127934490865277449576937261468130920376085948653305075071243237207672347403131791038321491100101082182265602048.000000"
+        expected_output = f"2147483647\n-2147483648\n{float_max_str}\n-{float_max_str}"
+        self.run_mini_code(mini_code, expected_output, "number_max_min")
 
 if __name__ == '__main__':
     unittest.main()

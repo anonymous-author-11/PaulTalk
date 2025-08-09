@@ -1,0 +1,6 @@
+import io;
+
+IO.print(i32.max());
+IO.print(i32.min());
+IO.print(f64.max());
+IO.print(f64.min());

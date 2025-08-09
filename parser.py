@@ -10,6 +10,7 @@ from utils import *
 from pathlib import Path
 import ast
 from scope import Constraints
+import sys
 
 DIR_PATH = Path(__file__).parent.resolve()
 GRAMMAR_PATH = DIR_PATH / "data_files/grammar.lark"
@@ -25,7 +26,7 @@ def get_fresh_parser():
     with open(CACHED_GRAMMAR_PATH, "wb") as f: fresh_parser.save(f)
     return fresh_parser
 
-parser = get_cached_parser()
+parser = get_fresh_parser()
 source_directories = {}
 parsed = {}
 
@@ -588,12 +589,31 @@ class CSTTransformer(Transformer):
 
     def method_call(self, receiver, meth_name, *args):
         node_info = NodeInfo(None, self.file_path, line_number(meth_name))
+
+        # i32.max() or i32.min() for example
+        if isinstance(receiver, Identifier) and receiver.name in ("i8", "i16", "i32", "i64", "i128"):
+            int_type = Integer({"i8":8, "i16":16, "i32":32, "i64":64, "i128":128}[receiver.name])
+            if meth_name == "max":
+                return IntegerLiteral(node_info, int_type.value_range()[1] - 1, int_type.bitwidth)
+            if meth_name == "min":
+                return IntegerLiteral(node_info, int_type.value_range()[0], int_type.bitwidth)
+
+        # f64.max() and f64.min()
+        if isinstance(receiver, Identifier) and receiver.name == "f64":
+            if meth_name == "max":
+                return DoubleLiteral(node_info, sys.float_info.max)
+            if meth_name == "min":
+                return DoubleLiteral(node_info, -1 * sys.float_info.max)
+
+        # Foo.bar()
         if isinstance(receiver, Identifier) and receiver.name[0].isupper():
             if receiver.name == "Coroutine" and meth_name == "new":
                 return CoCreate(node_info, "coroutine_" + random_letters(10), args)
             if meth_name == "new":
                 return ObjectCreation(node_info, random_letters(10), FatPtr.basic(receiver.name), args)
             return ClassMethodCall(node_info, FatPtr.basic(receiver.name), meth_name.value, args)
+
+        # Foo[T, U].bar()
         if isinstance(receiver, ParametrizedAttribute):
             if isinstance(receiver, Buffer) and meth_name == "new":
                 node_info = NodeInfo(None, self.file_path, args[0].info.line_number)
@@ -601,6 +621,8 @@ class CSTTransformer(Transformer):
             if meth_name == "new":
                 return ObjectCreation(node_info, random_letters(10), receiver, args)
             return ClassMethodCall(node_info, receiver, meth_name.value, args)
+
+        # foo.bar()
         return MethodCall(node_info, receiver, meth_name.value, args)
 
     def object_creation(self, receiver, lbrace, *args):

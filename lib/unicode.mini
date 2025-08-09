@@ -1,4 +1,7 @@
 
+import collection;
+import range;
+
 class SizedIterator[T] extends Iterator[T] {
 
     // how many items are remaining to be returned by .next?
@@ -35,7 +38,7 @@ class Writer[T] extends BulkWriter[T] {
 
     // Write a single value
     abstract def write(value : T) {
-    } ~> { @dest_reg == value }
+    } ~> { @dest_reg holds value }
 
     // Generic implementation of .write_from in terms of .write
     def write_from(iterator : Iterator[T], max_elems : i32) -> i32 {
@@ -79,10 +82,7 @@ class Peeker[T] extends Iterator[T] {
     @iterator : Iterator[T]
     @peeked : T?
 
-    regions {
-        @elems_reg == @iterator.elems_reg,
-        @elems_reg == @peeked
-    }
+    regions { @elems_reg == @iterator.elems_reg == @peeked }
 
     def Self.from_iterator(iterator : Iterator[T]) -> Peeker[T] {
         return Peeker{iterator};
@@ -105,7 +105,7 @@ class Peeker[T] extends Iterator[T] {
     def peek() -> T? {
         if @peeked is Nil { @peeked = @iterator.next(); }
         return @peeked;
-    } ~> { ret == @elems_reg }
+    } ~> { ret holds @elems_reg }
 }
 
 class DefaultString extends String {
@@ -144,7 +144,7 @@ class DefaultStringByteWriter extends Writer[i8] {
 		@string.append_byte(byte);
 	}
 
-    // .write_from(bytes) with a single argument will call this override
+    // .write_from(bytes) with a single argument will delegate to this override
     def write_from(bytes : Collection[i8], max_elems : i32) -> i32 {
         n_bytes = bytes.size()
         if max_elems > n_bytes { max_elems = n_bytes; }
