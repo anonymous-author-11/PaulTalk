@@ -335,16 +335,22 @@ class CSTTransformer(Transformer):
         return WhileStatement(node_info, condition, None, body)
 
     def for_statement(self, inductee, iterable, body):
-        for_info = NodeInfo(None, self.file_path, line_number(inductee))
-        inductee_info = NodeInfo(None, self.file_path, line_number(inductee))
+        line = line_number(inductee) if not isinstance(inductee, TupleLiteral) else inductee.info.line_number
+        for_info = NodeInfo(None, self.file_path, line)
+        inductee_info = NodeInfo(None, self.file_path, line)
         temp_name = "_temp_" + random_letters(10)
-        temp_info = NodeInfo(temp_name, self.file_path, line_number(inductee))
+        temp_info = NodeInfo(temp_name, self.file_path, line)
         iterator_name = "_iterator_" + random_letters(10)
-        iterator_info = NodeInfo(iterator_name, self.file_path, line_number(inductee))
-        inductee = Identifier(inductee_info, inductee.value)
+        iterator_info = NodeInfo(iterator_name, self.file_path, line)
+        inductee_name = ("inductee_" + random_letters(10)) if isinstance(inductee, TupleLiteral) else inductee.value
+        inductee_id = Identifier(inductee_info, inductee_name)
         temp_ident = Identifier(temp_info, temp_name)
         iterator = MethodCall(iterator_info, iterable, "iterator", [])
-        return For(for_info, inductee, iterable, iterator, temp_ident, body)
+        if isinstance(inductee, TupleLiteral):
+            destructure_info = NodeInfo(None, self.file_path, line)
+            destructure = DestructureAssignment(destructure_info, inductee, inductee_id)
+            body.statements = [destructure, *body.statements]
+        return For(for_info, inductee_id, iterable, iterator, temp_ident, body)
 
     def return_statement(self, ret, value):
         node_info = NodeInfo(None, self.file_path, line_number(ret))

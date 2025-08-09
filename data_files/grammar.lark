@@ -82,10 +82,11 @@ assignable: ident -> identifier
           | method_call
           | object_creation
           | indexation
+          | tuple_literal
 
 if_statement: "if" expression block ("else" block)?
 while_statement: "while" expression block
-for_statement: "for" ident "in" expression block
+for_statement: "for" (ident | tuple_literal) "in" expression block
 return_statement: RETURN [expression]
 break_statement: BREAK
 continue_statement: CONTINUE
@@ -160,7 +161,6 @@ primary: "(" expression ")" -> paren_expr
        | function_literal
        | array_literal
        | dictionary_literal
-       | tuple_literal
        | print_call
        | sizeof_call
        | yield_call

@@ -459,9 +459,14 @@ DONE:
 
 TODO:
 
-- Implement dictionary literal
-	- Use swiss_table_v3
+- Implement dictionary literal [check!]
+	- Use swiss_table_v3 [check!]
 	- Include in std [check!]
+
+- Implement tuple destructuring
+	- For assignment [check!]
+	- Special-case Pair rhs [check!]
+	- For loops [check!]
 
 - Add an extra argument to buffer indexation to enable SIMD loads and stores
 	- This argument must be an integer literal

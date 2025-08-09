@@ -318,8 +318,7 @@ class StringIterator extends ConstantTimeIterator[Character] {
         
         // This path should be safe if the String invariant holds.
         if decode_result is Tuple[i32, i32] {
-            codepoint = decode_result.[0];
-            bytes_consumed = decode_result.[1];
+            (codepoint, bytes_consumed) = decode_result;
             @byte_index = @byte_index + bytes_consumed;
             return Character{codepoint};
         }

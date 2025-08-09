@@ -3520,6 +3520,8 @@ class Assignment(Statement):
             return FieldAssignment(self.info, self.target, self.value).codegen(scope)
         if isinstance(self.target, MethodCall):
             return CallAssignment(self.info, self.target, self.value).codegen(scope)
+        if isinstance(self.target, TupleLiteral):
+            return DestructureAssignment(self.info, self.target, self.value).codegen(scope)
         in_symbol_table = self.target.name in scope.symbol_table
         should_reassign = in_symbol_table and scope.subtype(typ,scope.type_table[self.target.name])
         if should_reassign: return Reassignment(self.info, self.target, self.value).codegen(scope)
@@ -3541,6 +3543,8 @@ class Assignment(Statement):
             return FieldAssignment(self.info, self.target, self.value).typeflow(scope)
         if isinstance(self.target, MethodCall):
             return CallAssignment(self.info, self.target, self.value).typeflow(scope)
+        if isinstance(self.target, TupleLiteral):
+            return DestructureAssignment(self.info, self.target, self.value).typeflow(scope)
         if(not isinstance(self.target, Identifier)):
             raise Exception(f"{self.info}: lhs in assignment is not an identifier!")
         if self.target.name == "self":
@@ -3548,6 +3552,56 @@ class Assignment(Statement):
         if self.target.name[0].isupper():
             raise Exception(f"{self.info}: Variables should not be capitalized.")
         scope.type_table[self.target.name] = value_type
+
+@dataclass
+class DestructureAssignment(Assignment):
+
+    def codegen(self, scope):
+        value_type = self.value.exprtype(scope)
+
+        tupl = Identifier(self.info, self.info.id + "_lhs_tuple")
+        assign = Assignment(self.info, tupl, self.value)
+        assign.codegen(scope)
+
+        # Special-case for Pair[T, U] rhs
+        if isinstance(value_type, FatPtr):
+            first = MethodCall(NodeInfo.from_info(self.info, "first_call"), tupl, "first", [])
+            second = MethodCall(NodeInfo.from_info(self.info, "second_call"), tupl, "second", [])
+            Assignment(NodeInfo.from_info(self.info, f"assign_first"), self.target.elems[0], first).codegen(scope)
+            Assignment(NodeInfo.from_info(self.info, f"assign_second"), self.target.elems[1], second).codegen(scope)
+            return
+
+        for i, t in enumerate(value_type.types.data):
+            lhs = self.target.elems[i]
+            int_literal = IntegerLiteral(NodeInfo.from_info(self.info, f"literal_{i}"), i, 32)
+            rhs = TupleIndexation(NodeInfo.from_info(self.info, f"index_{i}"), tupl, "_index", [int_literal])
+            Assignment(NodeInfo.from_info(self.info, f"assign_{i}"), lhs, rhs).codegen(scope)
+
+    def typeflow(self, scope):
+        value_type = self.value.exprtype(scope)
+        if not isinstance(value_type, Tuple):
+            if not isinstance(value_type, FatPtr) or value_type.cls.data != "Pair":
+                raise Exception(f"{self.info}: rhs of destructuring assignment should be a tuple, not {value_type}")
+            if len(self.target.elems) != 2:
+                raise Exception(f"Can only destrcture a {value_type} instance into two identifiers, not {len(self.target.elems)}")
+
+        tupl = Identifier(self.info, self.info.id + "_lhs_tuple")
+        assign = Assignment(self.info, tupl, self.value)
+        assign.typeflow(scope)
+
+        # Special-case for Pair[T, U] rhs
+        if isinstance(value_type, FatPtr):
+            first = MethodCall(NodeInfo.from_info(self.info, "first_call"), tupl, "first", [])
+            second = MethodCall(NodeInfo.from_info(self.info, "second_call"), tupl, "second", [])
+            Assignment(NodeInfo.from_info(self.info, f"assign_first"), self.target.elems[0], first).typeflow(scope)
+            Assignment(NodeInfo.from_info(self.info, f"assign_second"), self.target.elems[1], second).typeflow(scope)
+            return
+
+        for i, t in enumerate(value_type.types.data):
+            lhs = self.target.elems[i]
+            int_literal = IntegerLiteral(NodeInfo.from_info(self.info, f"literal_{i}"), i, 32)
+            rhs = TupleIndexation(NodeInfo.from_info(self.info, f"index_{i}"), tupl, "_index", [int_literal])
+            Assignment(NodeInfo.from_info(self.info, f"assign_{i}"), lhs, rhs).typeflow(scope)
 
 @dataclass
 class Reference(Assignment):
@@ -3954,9 +4008,8 @@ class For(Statement):
         assign0.codegen(scope)
         nxt_call = MethodCall(NodeInfo.from_info(self.info, "next_call"), self.temp_ident, "next", [])
         nxt_type = nxt_call.exprtype(scope)
-        continue_type = scope.simplify(Union.from_list([t for t in nxt_type.types.data if t != Nil()]))
         assign1 = Assignment(NodeInfo.from_info(self.info, "assign_next"), self.inductee, nxt_call)
-        condition = TypeCheck(NodeInfo.from_info(self.info, "nil_check"), self.inductee, continue_type)
+        condition = NegatedTypeCheck(NodeInfo.from_info(self.info, "nil_check"), self.inductee, Nil())
         wile = WhileStatement(NodeInfo.from_info(self.info, "while_loop"), condition, assign1, self.body)
         wile.codegen(scope)
 
@@ -3986,7 +4039,7 @@ class For(Statement):
             raise Exception(f"{self.info}: For-loop would never enter.")
 
         assign1 = Assignment(NodeInfo.from_info(self.info, "assign_next"), self.inductee, nxt_call)
-        condition = TypeCheck(NodeInfo.from_info(self.info, "nil_check"), self.inductee, continue_type)
+        condition = NegatedTypeCheck(NodeInfo.from_info(self.info, "nil_check"), self.inductee, Nil())
         wile = WhileStatement(NodeInfo.from_info(self.info, "while_loop"), condition, assign1, self.body)
         wile.typeflow(scope)
 

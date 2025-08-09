@@ -7,9 +7,9 @@ IO.print(val);
 
 stringmap = {"foo":"bar", "baz":"qux", "hello":"world"};
 
-for entry in stringmap {
-    IO.print(entry.first());
-    IO.print(entry.second());
+for (key, value) in stringmap {
+    IO.print(key);
+    IO.print(value);
 }
 
 def say_apple() {
