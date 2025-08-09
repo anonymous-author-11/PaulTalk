@@ -522,6 +522,14 @@ class CSTTransformer(Transformer):
         node_info = NodeInfo(None, self.file_path, line_number(lbracket))
         return ArrayLiteral(node_info, tuple(elems), elem_type)
 
+    def kv_pair(self, key, value):
+        return (key, value)
+
+    def dictionary_literal(self, lbrace, kv_1, *kv_rest):
+        all_pairs = [kv_1, *kv_rest]
+        node_info = NodeInfo(None, self.file_path, line_number(lbrace))
+        return DictionaryLiteral(node_info, all_pairs)
+
     def tuple_literal(self, first, second, *rest):
         node_info = NodeInfo(None, self.file_path, first.info.line_number)
         return TupleLiteral(node_info, (first, second, *rest))

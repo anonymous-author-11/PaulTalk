@@ -459,6 +459,10 @@ DONE:
 
 TODO:
 
+- Implement dictionary literal
+	- Use swiss_table_v3
+	- Include in std [check!]
+
 - Add an extra argument to buffer indexation to enable SIMD loads and stores
 	- This argument must be an integer literal
 

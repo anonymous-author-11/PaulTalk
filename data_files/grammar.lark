@@ -159,6 +159,7 @@ primary: "(" expression ")" -> paren_expr
        | CHAR -> char_literal
        | function_literal
        | array_literal
+       | dictionary_literal
        | tuple_literal
        | print_call
        | sizeof_call
@@ -167,10 +168,12 @@ primary: "(" expression ")" -> paren_expr
 
 expression_list: (expression ("," expression)*)?
 
+kv_pair: expression ":" expression
+
 function_literal: "(" param_list ")" ["yields" typ] ARROW block
 array_literal: LBRACKET expression_list "]" ["of" typ]
 tuple_literal: "(" expression "," expression ("," expression)* ")"
-dictionary_literal: "{" (expression ":" expression ("," expression ":" expression)*)? "}"
+dictionary_literal: LBRACE kv_pair ("," kv_pair)* "}"
 print_call: "print" "(" (expression ("," expression)*)? ")"
 sizeof_call: "sizeof" "(" typ ")"
 yield_call: YIELD "(" [expression] ")"

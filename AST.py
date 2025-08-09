@@ -668,6 +668,62 @@ class ArrayLiteral(Expression):
         for elem in self.elements: elem.typeflow(scope)
 
 @dataclass
+class DictionaryLiteral(Expression):
+    pairs: list[tuple[Expression, Expression]]
+
+    @property
+    def subexpressions(self):
+        return [*chain.from_iterable(self.pairs)]
+
+    def codegen(self, scope):
+        self_type = self.exprtype(scope)
+        key_type = self_type.type_params.data[0]
+        value_type = self_type.type_params.data[1]
+
+        hasher = self.get_hasher(key_type)
+        eq = self.get_eq(key_type)
+
+        dict_obj = ObjectCreation(self.info, self.info.id + "_dict_literal", self_type, [hasher, eq])
+        dict_var = Identifier(self.info, self.info.id + "_dict_literal_var")
+        assign = Assignment(NodeInfo.from_info(self.info, "assign"), dict_var, dict_obj)
+        assign.codegen(scope)
+
+        # insert the key-value pairs
+        for i, (k, v) in enumerate(self.pairs):
+            MethodCall(NodeInfo.from_info(self.info, f"pair_{i}"), dict_var, "insert", [k, v]).codegen(scope)
+
+        return dict_var.codegen(scope)
+
+    def get_hasher(self, key_type):
+        if key_type == Integer(32):
+            return FunctionIdentifier(NodeInfo.from_info(self.info, "hasher"), "i32_hasher")
+        if key_type == FatPtr.basic("String"):
+            return FunctionIdentifier(NodeInfo.from_info(self.info, "hasher"), "string_hasher")
+
+    def get_eq(self, key_type):
+        if key_type == Integer(32):
+            return FunctionIdentifier(NodeInfo.from_info(self.info, "eq"), "i32_eq")
+        if key_type == FatPtr.basic("String"):
+            return FunctionIdentifier(NodeInfo.from_info(self.info, "eq"), "string_eq")
+
+    def exprtype(self, scope):
+        if len(self.pairs) == 0:
+            raise Exception(f"{self.info}: Cannot infer type of an empty dictionary literal")
+
+        key_types = [key.exprtype(scope) for key, value in self.pairs]
+        value_types = [value.exprtype(scope) for key, value in self.pairs]
+        inferred_key_type = scope.simplify(Union.from_list(key_types))
+        inferred_value_type = scope.simplify(Union.from_list(value_types))
+
+        if inferred_key_type not in (FatPtr.basic("String"), Integer(32)):
+            raise Exception(f"Currently only support i32 and String as dictionary key type, not {inferred_key_type}")
+
+        return FatPtr.generic("SwissTable", [inferred_key_type, inferred_value_type])
+
+    def typeflow(self, scope):
+        self.exprtype(scope)
+
+@dataclass
 class StringLiteral(Expression):
     value: str
 

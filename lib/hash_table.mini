@@ -1,22 +1,12 @@
-import quadratic_probe;
+import swiss_table_v2;
 import io;
 
-alias Map = QuadraticProbeMap;
+map = {5:77, 8:34, 15:99};
+val = map.[8];
+IO.print(val);
 
-map = Map[i32, i32].new(i32_hasher, i32_eq);
-map.insert(5,77);
-map.insert(8,34);
-map.insert(15,99);
-val = map.get(8);
-if val is i32 {
-    IO.print(val);
-} else {
-    IO.print("not an i32");
-}
-stringmap = Map[String, String].new(string_hasher, string_eq);
-stringmap.insert("foo","bar");
-stringmap.insert("baz","qux");
-stringmap.insert("hello","world");
+stringmap = {"foo":"bar", "baz":"qux", "hello":"world"};
+
 for entry in stringmap {
     IO.print(entry.first());
     IO.print(entry.second());
@@ -34,11 +24,6 @@ def say_coconut() {
     IO.print("coconut");
 }
 
-fmap = Map[String, ()].new(string_hasher, string_eq);
-fmap.insert("a", say_apple);
-fmap.insert("b", say_banana);
-fmap.insert("c", say_coconut);
-func = fmap.get("c");
-if func is () {
-    func.call();
-}
+fmap = {"a":say_apple, "b":say_banana, "c":say_coconut};
+func = fmap.["c"];
+func.call();
