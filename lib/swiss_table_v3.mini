@@ -32,7 +32,7 @@ class Entry[K,V] {
     } ~> { ret.first == @key, ret.second == @value }
 }
 
-class SwissTable[K, V] extends HashMap[K, V] {
+class SwissTable[K, V] extends OpenAddressMap[K, V] {
     @entries: Buffer[Entry[K,V]?]
     @metadata: Buffer[i8]
     @entries_len : i32
@@ -41,7 +41,7 @@ class SwissTable[K, V] extends HashMap[K, V] {
     @eq: (K, K) -> Bool
 
     regions { @elems_reg == @entries }
-    getter @size
+    getter @size, @entries_len
 
     // Extracts 6 bits for H2 and packs them into a control byte with LSB=1.
     def Self.h2_to_control(hash: i32) -> i8 {
@@ -208,39 +208,42 @@ class SwissTable[K, V] extends HashMap[K, V] {
         @size = 0;
     }
 
-    def iterator() -> SwissTableIterator[K,V] {
-        return SwissTableIterator[K,V].new(@entries, @metadata, @entries_len);
-    } ~> { ret.map_entries == @entries, ret.map_metadata == @metadata }
+    // return (new_cursor, next_entry) in buffer starting at position of input cursor
+    def scan_next(start_cursor: i32) -> Tuple[i32, Entry[K,V]]? {
+        meta = @metadata;
+        entries = @entries;
+
+        if start_cursor >= @entries_len { return nil; }
+
+        for cursor in start_cursor..@entries_len {
+            if (meta.[cursor] bit_and occupied_mask()) == 0 { continue; }
+            entry = entries.[cursor];
+            if entry is Nil { continue; }
+            return (cursor + 1, entry);
+        }
+        return nil;
+    }
+
+    def iterator() -> OpenAddressIterator[K,V] {
+        return OpenAddressIterator{self};
+    } ~> { ret.map == self }
 }
 
-class SwissTableIterator[K,V] extends Iterator[Pair[K,V]] {
-    @map_entries: Buffer[Entry[K,V]?]
-    @map_metadata: Buffer[i8]
-    @index: i32
-    @length: i32
+class OpenAddressIterator[K,V] extends Iterator[Pair[K,V]] {
+    @map : OpenAddressMap[K,V]
+    @cursor: i32
 
-    regions { @elems_reg == @map_entries }
+    regions { @elems_reg == @map.elems_reg }
 
-    def init(@map_entries: Buffer[Entry[K,V]?], @map_metadata: Buffer[i8], @length : i32) {
-        @index = 0;
-        @length = @length;
+    def init(@map : OpenAddressMap[K,V]) {
+        @cursor = 0;
     }
 
     def next() -> Pair[K, V]? {
-        while @index < @length {
-            control = @map_metadata.[@index];
-            entry_or_nil = @map_entries.[@index];
-            @index = @index + 1;
-
-            // Skip sentinel slots (LSB is 0).
-            if (control bit_and occupied_mask()) == 0 {
-                continue;
-            }
-
-            if entry_or_nil is Entry[K,V] {
-                return entry_or_nil.to_pair();
-            }
-        }
+        tuple_or_nil = @map.scan_next(@cursor);
+        if tuple_or_nil is Nil { return nil; }
+        (@cursor, entry) = tuple_or_nil;
+        if entry is Entry[K,V] { return entry.to_pair(); }
         return nil;
     }
 }
