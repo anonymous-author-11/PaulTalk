@@ -1,0 +1,29 @@
+SIMD Ideas
+
+- Have a syntax for creating a tuple of length N (integer literal) filled with value x (runtime variable)
+	- Term of art is "broadcast" but this is far too verbose
+	- 'N of x'
+	- lowers to vector.broadcast(x, N)
+- Have a syntax for creating a tuple of length N filled with (x, x + 1, ... , x + (N - 1))
+	- 'N from x'
+	- 'N from x by step'
+	- Lowers to arith.add(vector.broadcast(x, N), vector.step(N))
+	- When indexing a buffer with this tuple it can be a vector load/store
+- Allow calling a function with signature (A, B) -> C with (Tuple[N x A], Tuple[N x B]) -> Tuple[N x C]
+	- Desugars to constructing a tuple out of multiple function calls
+	- For some primitive operations this can be a SIMD operation
+- Syntax to load and store a Tuple[N x T] from a Buffer[T]
+	- my_tuple = my_buffer.[idx_tuple]
+	- my_buffer.[idx_tuple] = my_tuple
+- Allow masked indexation
+	- Loads/gathers require a mask and a tuple of passthrough values
+	- Stores/scatters just require a mask
+	- Syntax
+		- my_buffer.[my_tuple].mask(my_mask, my_passthru)
+		- my_buffer.[my_tuple, my_mask, my_passthru]
+		- Syntax with .mask extends more naturally to user-defined .[] method
+	- Any benefit of enabling this operation on user-defined index operations?
+- Builtin / magic functions for horizontal reductions
+	- sum(tuple) / product(tuple)
+	- max(tuple) / min(tuple)
+	- any(tuple) / all(tuple)
