@@ -7,11 +7,11 @@ SIMD Ideas
 - Have a syntax for creating a tuple of length N filled with (x, x + 1, ... , x + (N - 1))
 	- 'N from x'
 	- 'N from x by step'
-	- Lowers to arith.add(vector.broadcast(x, N), vector.step(N))
-	- When indexing a buffer with this tuple it can be a vector load/store
+	- Lowers to arith.add(vector.broadcast(x, N), arith.mul(vector.step(N), vector.broadcast(N, step)))
+	- When indexing a buffer with this tuple it can be a vector load/store rather than gather/scatter
 - Allow calling a function with signature (A, B) -> C with (Tuple[N x A], Tuple[N x B]) -> Tuple[N x C]
 	- Desugars to constructing a tuple out of multiple function calls
-	- For some primitive operations this can be a SIMD operation
+	- For some primitive operations (sin, sqrt) this can be a SIMD operation
 - Syntax to load and store a Tuple[N x T] from a Buffer[T]
 	- my_tuple = my_buffer.[idx_tuple]
 	- my_buffer.[idx_tuple] = my_tuple
