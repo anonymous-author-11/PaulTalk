@@ -18,7 +18,7 @@ source_filename = "region_runtime.ll"
 @REGION_SIZE = internal constant i64 5368709120 ; 5 GB
 @REGION_HEADER_SIZE = internal constant i64 32 ; 24 bytes for header, aligned to 32 for current_ptr start
 @REGIONS_ARRAY_SIZE = internal constant i64 1048576 ; Sufficient for 131,072 regions (131072 * 8 bytes/ptr)
-
+@PAGE_SIZE = internal constant i64 4096
 
 ; --- Global State ---
 
@@ -44,7 +44,26 @@ declare void @virtual_reset(ptr, i64)
 
 declare void @commit_additional_pages(ptr, i64)
 
+;define void @commit_additional_pages(ptr %base, i64 %size) {
+;  %page_or_more = icmp sge i64 %size, 4096
+;  br i1 %page_or_more, label %commit, label %return
+;
+;commit:
+;  %base_i64 = ptrtoint ptr %base to i64
+;  %base_plus_4096 = add i64 %base_i64, 4096
+;  %next_page_i64 = and i64 %base_plus_4096, -4096
+;  %next_page = inttoptr i64 %next_page_i64 to ptr
+;  %left_in_page = sub i64 %next_page_i64, %base_i64
+;  %commit_size = sub i64 %size, %left_in_page
+;  call void @virtual_commit(ptr %next_page, i64 %commit_size)
+;  br label %return
+;
+;return:
+;  ret void
+;}
+
 declare void @llvm.memcpy.p0.p0.i64(ptr nocapture writeonly, ptr nocapture readonly, i64, i1 immarg)
+declare void @llvm.memset.p0.i64(ptr nocapture writeonly, i8, i64, i1 immarg) nocallback nofree nounwind willreturn memory(argmem: write)
 declare i64 @llvm.umin.i64(i64, i64)
 
 ; --- Runtime Initialization ---
@@ -52,7 +71,8 @@ declare i64 @llvm.umin.i64(i64, i64)
 ; Must be called once at program startup.
 define void @runtime_init() {
   ; Allocate the RegionsArray itself.
-  %regions_array_mem = call noalias ptr @virtual_reserve(i64 @REGIONS_ARRAY_SIZE)
+  %reg_ary_size = load i64, ptr @REGIONS_ARRAY_SIZE
+  %regions_array_mem = call noalias ptr @virtual_reserve(i64 %reg_ary_size)
   store ptr %regions_array_mem, ptr @g_regions_array, align 8
   ret void
 }
@@ -69,16 +89,21 @@ entry:
 
 from_freelist:
   ; Pop from free list
-  %region_to_revive = phi ptr [ %free_list_head, %entry ]
-  %next_ptr_gep = getelementptr inbounds %RegionHeader, ptr %region_to_revive, i32 0, i32 0
+  %next_ptr_gep = getelementptr inbounds %RegionHeader, ptr %free_list_head, i32 0, i32 0
   %next_in_list = load ptr, ptr %next_ptr_gep, align 8
   store ptr %next_in_list, ptr @g_region_free_list_head, align 8
 
   ; Increment generation number
-  %gen_gep = getelementptr inbounds %RegionHeader, ptr %region_to_revive, i32 0, i32 1
+  %gen_gep = getelementptr inbounds %RegionHeader, ptr %free_list_head, i32 0, i32 1
   %old_gen = load i64, ptr %gen_gep, align 8
   %new_gen = add i64 %old_gen, 1
   store i64 %new_gen, ptr %gen_gep, align 8
+
+  ; Reset current_ptr to start
+  %current_ptr_gep = getelementptr inbounds %RegionHeader, ptr %free_list_head, i32 0, i32 0
+  %reg_header_size = load i64, ptr @REGION_HEADER_SIZE
+  %data_start = getelementptr i8, ptr %free_list_head, i64 %reg_header_size
+  store ptr %data_start, ptr %current_ptr_gep, align 8
 
   br label %return
 
@@ -88,12 +113,13 @@ alloc_new:
   br label %return
 
 return:
-  %retval = phi ptr [ %region_to_revive, %from_freelist ], [ %new_region, %alloc_new ]
+  %retval = phi ptr [ %free_list_head, %from_freelist ], [ %new_region, %alloc_new ]
   ret ptr %retval
 }
 
 define noalias ptr @FreshRegion() noinline {
-  %new_region = call noalias ptr @virtual_reserve(i64 @REGION_SIZE)
+  %reg_size = load i64, ptr @REGION_SIZE
+  %new_region = call noalias ptr @virtual_reserve(i64 %reg_size)
 
   ; Get new region_id and increment the global counter
   %id = load i32, ptr @g_next_region_id, align 4
@@ -104,7 +130,8 @@ define noalias ptr @FreshRegion() noinline {
   %id_gep = getelementptr inbounds %RegionHeader, ptr %new_region, i32 0, i32 3
   store i32 %id, ptr %id_gep, align 4
   %current_ptr_gep = getelementptr inbounds %RegionHeader, ptr %new_region, i32 0, i32 0
-  %initial_current_ptr = getelementptr i8, ptr %new_region, i64 @REGION_HEADER_SIZE
+  %reg_header_size = load i64, ptr @REGION_HEADER_SIZE
+  %initial_current_ptr = getelementptr i8, ptr %new_region, i64 %reg_header_size
   store ptr %initial_current_ptr, ptr %current_ptr_gep, align 8
 
   ; Store region ptr in RegionsArray using the id as an index
@@ -135,7 +162,7 @@ return:
 define void @RemoveRegion(ptr %region) {
   %prot_count_gep = getelementptr inbounds %RegionHeader, ptr %region, i32 0, i32 2
   %prot_count = load i32, ptr %prot_count_gep, align 4
-  %is_protected = icmp ne i32 %prot_count, 0
+  %is_protected = icmp sgt i32 %prot_count, 0
   br i1 %is_protected, label %exit, label %do_remove
 
 do_remove:
@@ -152,9 +179,11 @@ entry:
   ; --- Step 1: Get pointers and calculate boundaries ---
   %current_ptr_gep = getelementptr inbounds %RegionHeader, ptr %region, i32 0, i32 0
   %current_ptr = load ptr, ptr %current_ptr_gep, align 8
-  %data_start = getelementptr i8, ptr %region, i64 @REGION_HEADER_SIZE
+  %reg_header_size = load i64, ptr @REGION_HEADER_SIZE
+  %data_start = getelementptr i8, ptr %region, i64 %reg_header_size
 
-  %page1_end_ptr = getelementptr i8, ptr %region, i64 @PAGE_SIZE
+  %page_size = load i64, ptr @PAGE_SIZE
+  %page1_end_ptr = getelementptr i8, ptr %region, i64 %page_size
   %page1_end_int = ptrtoint ptr %page1_end_ptr to i64
 
   ; --- Step 2: Manually zero the data portion of the first page ---
@@ -226,8 +255,9 @@ entry:
   ; original AllocateFromRegion would have used to bump the pointer.
   %old_size_plus_15 = add i64 %old_size, 15
   %aligned_old_size = and i64 %old_size_plus_15, -16
+  %negative_aligned_old_size = sub i64 0, %aligned_old_size
 
-  %expected_start_ptr = getelementptr i8, ptr %current_ptr, i64 %aligned_old_size, i64 -1
+  %expected_start_ptr = getelementptr i8, ptr %current_ptr, i64 %negative_aligned_old_size
   %is_last_alloc = icmp eq ptr %expected_start_ptr, %allocation
   br i1 %is_last_alloc, label %extend_in_place, label %fallback_alloc_and_copy
 
@@ -243,6 +273,8 @@ extend_in_place:
   %additional_size = sub i64 %aligned_new_size, %aligned_old_size
   call void @commit_additional_pages(ptr %current_ptr, i64 %additional_size)
   br label %return
+
+  ; TODO: memset extra bytes to zero when new_size < old_size
 
 fallback_alloc_and_copy:
   ; --- Slow Path ---
@@ -273,7 +305,9 @@ define void @ProtectRegion(ptr %region) {
 define void @UnprotectRegion(ptr %region) {
   %prot_count_gep = getelementptr inbounds %RegionHeader, ptr %region, i32 0, i32 2
   %old_count = load i32, ptr %prot_count_gep, align 4
-  %new_count = sub i32 %old_count, 1
+  %count_positive = icmp sgt i32 %old_count, 0
+  %sub_val = select i1 %count_positive, i32 1, i32 0
+  %new_count = sub i32 %old_count, %sub_val
   store i32 %new_count, ptr %prot_count_gep, align 4
   ret void
 }
