@@ -63,7 +63,7 @@ contexts:
       scope: keyword.control.mini
 
   word-operators:
-    - match: '\b(as|into|of|is|not|or|and|bit_and|bit_or|bit_xor)\b'
+    - match: '\b(as|into|of|from|is|not|or|and|bit_and|bit_or|bit_xor)\b'
       scope: keyword.operator.expression.mini
 
   modifiers:
