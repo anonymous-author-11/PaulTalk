@@ -1070,6 +1070,18 @@ class CompilerTests(CompilerTestCase):
         expected_output = "5"
         self.run_mini_code(mini_code, expected_output, "splat")
 
+    def test_invalid_splat(self):
+        mini_code = """
+            import io;
+            import core;
+
+            x = 5;
+            broadcast = 4.0 of x;
+            IO.print(broadcast.[3]);
+        """
+        with self.assertRaisesRegex(Exception, "left-hand side of 'of' literal must be an integer literal"):
+            self.run_mini_code(mini_code, "", "invalid_splat")
+
     def test_ramp(self):
         mini_code = """
             import io;
@@ -1081,6 +1093,18 @@ class CompilerTests(CompilerTestCase):
         """
         expected_output = "8"
         self.run_mini_code(mini_code, expected_output, "ramp")
+
+    def test_invalid_ramp(self):
+        mini_code = """
+            import io;
+            import core;
+
+            x = 5;
+            broadcast = 4.0 from x;
+            IO.print(broadcast.[3]);
+        """
+        with self.assertRaisesRegex(Exception, "left-hand side of 'from' literal must be an integer literal"):
+            self.run_mini_code(mini_code, "", "invalid_ramp")
 
 if __name__ == '__main__':
     unittest.main()

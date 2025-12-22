@@ -1,0 +1,14 @@
+import io;
+import core;
+
+def foo(tup : Tuple[4 x i32]) -> Tuple[4 x i32] {
+	return tup + (4 from 7);
+}
+
+def bar(x : i32) -> Tuple[4 x i32] {
+	return 4 of x;
+}
+
+def baz(x : i32) -> Tuple[4 x i32] {
+	return 4 from x;
+}

@@ -123,8 +123,7 @@ class Matrix {
                                 b_kj = other.[k_block, j_block];
                                 if b_kj == 0.0 { continue; }
                                 a_vec = self.get_simd(i_block, k_block);
-                                b_vec = (b_kj, b_kj, b_kj, b_kj, b_kj, b_kj, b_kj, b_kj);
-                                c_vec = c_vec + a_vec * b_vec;
+                                c_vec = c_vec + a_vec * (8 of b_kj);
                             }
                             result.set_simd(i_block, j_block, c_vec);
                             i_block = i_block + 8;
