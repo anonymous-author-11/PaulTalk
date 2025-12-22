@@ -131,15 +131,19 @@ arithmetic: term -> arithmetic_single
           | arithmetic PLUS term
           | arithmetic MINUS term
 
-term: cast -> term_single
-    | term TIMES cast -> arithmetic
-    | term DIVIDE cast -> arithmetic
-    | term MODULO cast -> arithmetic
-    | term LSHIFT cast -> arithmetic
-    | term RSHIFT cast -> arithmetic
-    | term BIT_AND cast -> arithmetic
-    | term BIT_OR cast -> arithmetic
-    | term BIT_XOR cast -> arithmetic
+term: vec -> term_single
+    | term TIMES vec -> arithmetic
+    | term DIVIDE vec -> arithmetic
+    | term MODULO vec -> arithmetic
+    | term LSHIFT vec -> arithmetic
+    | term RSHIFT vec -> arithmetic
+    | term BIT_AND vec -> arithmetic
+    | term BIT_OR vec -> arithmetic
+    | term BIT_XOR vec -> arithmetic
+
+vec: cast -> cast_single
+    | cast OF vec -> splat
+    | cast FROM vec -> ramp
 
 cast: factor -> cast_single
     | cast AS typ -> as_op
@@ -210,6 +214,8 @@ ALL_ALIAS: "all_alias"
 AS: "as"
 IS: "is"
 INTO: "into"
+OF: "of"
+FROM: "from"
 NOT: "not"
 OR: "or"
 AND: "and"

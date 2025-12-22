@@ -360,6 +360,42 @@ class CreateTupleOp(IRDLOperation):
     result: OpResult = result_def()
 
 @irdl_op_definition
+class SplatOp(IRDLOperation):
+    name = "mid.splat"
+    value: Operand = operand_def()
+    lanes: IntegerAttr = attr_def(IntegerAttr)
+    val_typ: TypeAttribute = attr_def(TypeAttribute)
+    tup_typ: TypeAttribute = attr_def(TypeAttribute)
+    result: OpResult = result_def()
+
+    @classmethod
+    def make(cls, value, elem_typ, tup_typ, lanes):
+        val_typ = elem_typ.base_typ()
+        attr_dict = {"lanes":IntegerAttr.from_int_and_width(lanes, 32), "val_typ":val_typ, "tup_typ":tup_typ.base_typ()}
+        return SplatOp.create(operands=[value], attributes=attr_dict, result_types=[tup_typ])
+
+@irdl_op_definition
+class RampOp(IRDLOperation):
+    name = "mid.ramp"
+    value: Operand = operand_def()
+    lanes: IntegerAttr = attr_def(IntegerAttr)
+    val_typ: TypeAttribute = attr_def(TypeAttribute)
+    tup_typ: TypeAttribute = attr_def(TypeAttribute)
+    result: OpResult = result_def()
+
+    @classmethod
+    def make(cls, value, elem_typ, tup_typ, lanes):
+        val_typ = elem_typ.base_typ()
+        step_vec = builtin.DenseIntOrFPElementsAttr.vector_from_list(list(range(lanes)), val_typ)
+        attr_dict = {
+            "lanes":IntegerAttr.from_int_and_width(lanes, 32),
+            "val_typ":val_typ,
+            "tup_typ":tup_typ.base_typ(),
+            "step_vec":step_vec
+        }
+        return RampOp.create(operands=[value], attributes=attr_dict, result_types=[tup_typ])
+
+@irdl_op_definition
 class MethodCallLike(IRDLOperation):
     name = "mid.method_call_like"
     args: VarOperand = var_operand_def()

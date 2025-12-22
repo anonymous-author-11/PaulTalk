@@ -703,6 +703,9 @@ TODO:
 - Bug in primesieve.mini where I was able to insert a NaiveSieve into the map without making it extend PrimeSieve
 	- Must be something wrong in behavior.applicable
 
+- Add 'N of x' syntax
+- Add 'N from x' syntax
+
 - Release 0.9.0
 	- Implement i32.max() et. al. [check!]
 		- Can handle in parsing [check!]

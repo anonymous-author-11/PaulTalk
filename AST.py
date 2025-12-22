@@ -840,7 +840,7 @@ class TupleLiteral(Expression):
 
     def exprtype(self, scope):
         self.apply_constraints(scope)
-        return Tuple([ArrayAttr([elem.exprtype(scope) for elem in self.elems])])
+        return Tuple.make([elem.exprtype(scope) for elem in self.elems])
 
     def apply_constraints(self, scope):
         for i, elem in enumerate(self.elems):
@@ -1339,6 +1339,54 @@ class Into(Expression):
         call = ObjectCreation(self.info, self.info.id + "_into_constructor", to_type, [self.operand])
         call.exprtype(scope)
         return call
+
+@dataclass
+class Splat(Expression):
+    lanes: Expression
+    value: Expression
+
+    @property
+    def subexpressions(self):
+        return [self.value]
+
+    def codegen(self, scope):
+        val = self.value.codegen(scope)
+        elem_type = self.value.exprtype(scope)
+        tup_typ = Tuple.make([elem_type for i in range(self.lanes.value)])
+        splat_op = SplatOp.make(val, elem_type, tup_typ, self.lanes.value)
+        scope.region.last_block.add_op(splat_op)
+        return splat_op.results[0]
+
+    def exprtype(self, scope):
+        if not isinstance(self.lanes, IntegerLiteral):
+            raise Exception(f"{self.info}: left-hand side of 'of' literal must be an integer literal")
+        val_type = self.value.exprtype(scope)
+        return Tuple.make([val_type for i in range(self.lanes.value)])
+
+@dataclass
+class Ramp(Expression):
+    lanes: Expression
+    value: Expression
+
+    @property
+    def subexpressions(self):
+        return [self.value]
+
+    def codegen(self, scope):
+        val = self.value.codegen(scope)
+        elem_type = self.value.exprtype(scope)
+        tup_typ = Tuple.make([elem_type for i in range(self.lanes.value)])
+        splat_op = RampOp.make(val, elem_type, tup_typ, self.lanes.value)
+        scope.region.last_block.add_op(splat_op)
+        return splat_op.results[0]
+
+    def exprtype(self, scope):
+        if not isinstance(self.lanes, IntegerLiteral):
+            raise Exception(f"{self.info}: left-hand side of 'from' literal must be an integer literal")
+        val_type = self.value.exprtype(scope)
+        if not isinstance(val_type, Integer):
+            raise Exception(f"{self.info}: right-hand side of 'from' literal must be an integer, not {val_type}")
+        return Tuple.make([val_type for i in range(self.lanes.value)])
 
 @dataclass
 class FunctionCall(Expression):

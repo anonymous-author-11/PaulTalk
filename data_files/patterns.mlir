@@ -1520,6 +1520,51 @@ module @patterns {
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
+  pdl.pattern @LowerSplat : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %value = pdl.operand
+    %tup_typ_attr = pdl.attribute
+    %val_typ_attr = pdl.attribute
+    %lanes_attr = pdl.attribute
+    %root = pdl.operation "mid.splat"(%value : !pdl.value) {"tup_typ" = %tup_typ_attr, "lanes" = %lanes_attr, "val_typ" = %val_typ_attr} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %tup_typ = pdl.apply_native_rewrite "type_attr_to_type"(%tup_typ_attr : !pdl.attribute) : !pdl.type
+      %val_typ = pdl.apply_native_rewrite "type_attr_to_type"(%val_typ_attr : !pdl.attribute) : !pdl.type
+      %alloca = pdl.operation "mid.alloc" {"typ" = %tup_typ_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %load = pdl.operation "llvm.load"(%value : !pdl.value) -> (%val_typ : !pdl.type)
+      %load_result = pdl.result 0 of %load
+      %splat = pdl.operation "vector.broadcast"(%load_result : !pdl.value) -> (%tup_typ : !pdl.type)
+      %splat_result = pdl.result 0 of %splat
+      %store = pdl.operation "llvm.store"(%splat_result, %alloca_result : !pdl.value, !pdl.value)
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerRamp : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %value = pdl.operand
+    %tup_typ_attr = pdl.attribute
+    %val_typ_attr = pdl.attribute
+    %lanes_attr = pdl.attribute
+    %step_vec = pdl.attribute
+    %root = pdl.operation "mid.ramp"(%value : !pdl.value) {"tup_typ" = %tup_typ_attr, "lanes" = %lanes_attr, "val_typ" = %val_typ_attr, "step_vec" = %step_vec} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %tup_typ = pdl.apply_native_rewrite "type_attr_to_type"(%tup_typ_attr : !pdl.attribute) : !pdl.type
+      %val_typ = pdl.apply_native_rewrite "type_attr_to_type"(%val_typ_attr : !pdl.attribute) : !pdl.type
+      %alloca = pdl.operation "mid.alloc" {"typ" = %tup_typ_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %load = pdl.operation "llvm.load"(%value : !pdl.value) -> (%val_typ : !pdl.type)
+      %load_result = pdl.result 0 of %load
+      %step = pdl.operation "llvm.mlir.constant" {"value" = %step_vec} -> (%tup_typ : !pdl.type)
+      %step_result = pdl.result 0 of %step
+      %splat = pdl.operation "vector.broadcast"(%load_result : !pdl.value) -> (%tup_typ : !pdl.type)
+      %splat_result = pdl.result 0 of %splat
+      %add = pdl.operation "arith.addi"(%step_result, %splat_result : !pdl.value, !pdl.value) -> (%tup_typ : !pdl.type)
+      %add_result = pdl.result 0 of %add
+      %store = pdl.operation "llvm.store"(%add_result, %alloca_result : !pdl.value, !pdl.value)
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
   pdl.pattern @LowerPlaceIntoBuffer : benefit(1) {
     // Match the operands and types
     %ptr_type = pdl.type : !llvm.ptr

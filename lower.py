@@ -30,7 +30,7 @@ import hi
 import mid
 from hi import *
 from mid import *
-from xdsl.dialects import scf, func, builtin, cf, memref
+from xdsl.dialects import scf, func, builtin, cf, memref, vector
 from xdsl.printer import Printer
 from utils import builtin_types, vtable_buffer_size
 from itertools import chain

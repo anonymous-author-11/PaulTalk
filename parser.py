@@ -399,7 +399,7 @@ class CSTTransformer(Transformer):
         if type_name == "Coroutine":
             return Coroutine([types[0].param_types, types[0].yield_type, types[0].return_type])
         if type_name == "Tuple":
-            return Tuple([ArrayAttr(types)])
+            return Tuple.make(types)
         if type_name == "Buffer":
             return Buffer([types[0]])
         return FatPtr.generic(type_name.value, types)
@@ -494,6 +494,14 @@ class CSTTransformer(Transformer):
     def into_op(self, operand, astoken, typ):
         node_info = NodeInfo(None, self.file_path, line_number(astoken))
         return Into(node_info, operand, typ);
+
+    def splat(self, lanes, oftoken, value):
+        node_info = NodeInfo(None, self.file_path, line_number(oftoken))
+        return Splat(node_info, lanes, value);
+
+    def ramp(self, lanes, fromtoken, value):
+        node_info = NodeInfo(None, self.file_path, line_number(fromtoken))
+        return Ramp(node_info, lanes, value);
 
     def paren_expr(self, expr):
         return expr

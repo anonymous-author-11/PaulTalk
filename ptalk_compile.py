@@ -232,9 +232,10 @@ class CompilationJob:
         memref = "--finalize-memref-to-llvm"
         cf = "--convert-cf-to-llvm"
         ub = "--convert-ub-to-llvm"
+        vec = "--convert-vector-to-llvm"
 
         self.record_time("before_mlir_opt_lower")
-        to_llvm_dialect = f"{MLIR_OPT_PATH} {scf} {arith} {func} {index} {memref} {cf} {ub} --reconcile-unrealized-casts"
+        to_llvm_dialect = f"{MLIR_OPT_PATH} {scf} {arith} {func} {index} {memref} {cf} {ub} {vec} --reconcile-unrealized-casts"
         cmd_out = subprocess.run(to_llvm_dialect, text=True, shell=True, input=module_str, capture_output=True)
         if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
         module_str = cmd_out.stdout[14:-3].replace("module","// ----- module")[9:]
