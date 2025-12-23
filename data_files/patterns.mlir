@@ -612,10 +612,11 @@ module @patterns {
     %index = pdl.operand : %ptr_type
     %elem_type_attr = pdl.attribute
     %vec_type_attr = pdl.attribute
+    %alignment = pdl.attribute
     %i32_type = pdl.type : i32
     %i64_type = pdl.type : i64
     %i8_attr = pdl.attribute = i8
-    %root = pdl.operation "mid.vec_load"(%receiver, %index : !pdl.value, !pdl.value) {"elem_typ" = %elem_type_attr, "vec_typ" = %vec_type_attr} -> (%ptr_type : !pdl.type)
+    %root = pdl.operation "mid.vec_load"(%receiver, %index : !pdl.value, !pdl.value) {"elem_typ" = %elem_type_attr, "vec_typ" = %vec_type_attr, "alignment" = %alignment} -> (%ptr_type : !pdl.type)
     pdl.rewrite %root {
       %vec_type = pdl.apply_native_rewrite "type_attr_to_type"(%vec_type_attr : !pdl.attribute) : !pdl.type
       %alloca = pdl.operation "mid.alloc" {"typ" = %vec_type_attr} -> (%ptr_type : !pdl.type)
@@ -624,7 +625,7 @@ module @patterns {
       %type_size_result = pdl.result 0 of %type_size
       %indexation = pdl.operation "mid.buffer_indexation"(%receiver, %index, %type_size_result : !pdl.value, !pdl.value, !pdl.value) -> (%ptr_type : !pdl.type)
       %indexation_result = pdl.result 0 of %indexation
-      %gather = pdl.operation "llvm.load"(%indexation_result: !pdl.value) -> (%vec_type : !pdl.type)
+      %gather = pdl.operation "llvm.load"(%indexation_result: !pdl.value) {"alignment" = %alignment} -> (%vec_type : !pdl.type)
       %gather_result = pdl.result 0 of %gather
       %store = pdl.operation "llvm.store"(%gather_result, %alloca_result : !pdl.value, !pdl.value)
       pdl.replace %root with (%alloca_result : !pdl.value)

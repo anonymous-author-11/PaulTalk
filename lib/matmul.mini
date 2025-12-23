@@ -62,12 +62,11 @@ class Matrix {
     }
 
     // relevant IR:
-    // %31 = load <8 x double>, ptr %30, align 8
-    // ret <8 x double> %31
+    // %24 = load <8 x double>, ptr %23, align 8
+    // ret <8 x double> %24
     def get_simd(start_row : i32, col : i32) -> Tuple[8 x f64] {
         start_index = (col as i64) * @rows + start_row;
-        idx = 8 from start_index;
-        return @data.[idx];
+        return @data.[8 from start_index]; 
     }
 
     // relevant IR:

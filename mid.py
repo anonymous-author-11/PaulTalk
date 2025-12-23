@@ -171,13 +171,15 @@ class VecLoadOp(IRDLOperation):
     index: Operand = operand_def()
     elem_typ: TypeAttribute = attr_def(TypeAttribute)
     vec_typ: TypeAttribute = attr_def(TypeAttribute)
+    alignment: IntegerAttr = attr_def(IntegerAttr)
     result: OpResult = result_def()
 
     @classmethod
     def make(cls, receiver, index, vec_typ):
         attr_dict = {
             "elem_typ":vec_typ.types.data[0].base_typ(),
-            "vec_typ":vec_typ.base_typ
+            "vec_typ":vec_typ.base_typ(),
+            "alignment":IntegerAttr.from_int_and_width(int(hi.type_size(vec_typ.types.data[0].base_typ()) / 8), 64),
         }
         return VecLoadOp.create(operands=[receiver, index], attributes=attr_dict, result_types=[vec_typ])
 
