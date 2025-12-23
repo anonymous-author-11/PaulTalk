@@ -1466,7 +1466,10 @@ class MethodCall(Expression):
         if isinstance(rec_typ, Function): return FunctionLiteralCall(self.info, self.receiver, self.method, self.arguments).codegen(scope)
         if isinstance(rec_typ, Buffer) and self.method == "_set_index":
             return BufferSetIndex(self.info, self.receiver, self.method, self.arguments).codegen(scope)
-        if isinstance(rec_typ, Buffer): return BufferIndexation(self.info, self.receiver, self.method, self.arguments).codegen(scope)
+        if isinstance(rec_typ, Buffer):
+            if len(self.arguments) > 0 and isinstance(self.arguments[0].exprtype(scope), Tuple):
+                return BufferGather(self.info, self.receiver, self.method, self.arguments).codegen(scope)
+            return BufferIndexation(self.info, self.receiver, self.method, self.arguments).codegen(scope)
         if isinstance(rec_typ, Tuple) and self.method == "_set_index":
             return TupleSetIndex(self.info, self.receiver, self.method, self.arguments).codegen(scope)
         if isinstance(rec_typ, Tuple) and self.method == "_index":
@@ -1580,6 +1583,8 @@ class MethodCall(Expression):
         if isinstance(rec_typ, Buffer) and self.method == "_set_index":
             return BufferSetIndex(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
         if isinstance(rec_typ, Buffer) and self.method == "_index":
+            if len(self.arguments) > 0 and isinstance(self.arguments[0].exprtype(scope), Tuple):
+                return BufferGather(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
             return BufferIndexation(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
         if isinstance(rec_typ, Tuple) and self.method == "_set_index":
             return TupleSetIndex(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
@@ -1704,6 +1709,73 @@ class Indexation(MethodCall):
             raise Exception(f"{self.info}: Indexation only suppports one argument")
 
 @dataclass
+class BufferGather(Indexation):
+
+    @property
+    def temp_receiver(self):
+        temp_identifier_name = self.info.id + "_temp_receiver"
+        return Identifier(self.info, temp_identifier_name)
+
+    @property
+    def temp_assign(self):
+        # Evaluate the reciever once and assign to a temporary variable to avoid evaluating multiple times
+        return Assignment(NodeInfo.from_info(self.info, "assign"), self.temp_receiver, self.receiver)
+
+    def codegen(self, scope):
+        self.temp_assign.codegen(scope)
+        ret_type = self.exprtype(scope)
+
+        use_vec_load_instrinsic = isinstance(self.arguments[0], Ramp) and ret_type.vector_like
+        use_gather_intrinsic = ret_type.vector_like and not isinstance(self.arguments[0], Ramp)
+        if not (use_vec_load_instrinsic or use_gather_intrinsic):
+            return self.tup_literal(scope).codegen(scope)
+
+        op = VecLoadOp if use_vec_load_instrinsic else GatherOp
+
+        rec = self.temp_receiver.codegen(scope)
+        idx = self.arguments[0].codegen(scope)
+        gather = op.make(rec, idx, ret_type)
+        scope.region.last_block.add_op(gather)
+        return gather.results[0]
+
+    def apply_constraints(self, scope):
+        self.tup_literal(scope).apply_constraints(scope)
+
+    def indexations(self, scope):
+        idx_typ = self.arguments[0].exprtype(scope)
+        lanes = list(enumerate(idx_typ.types.data))
+        buf_index_infos = [NodeInfo.from_info(self.info, f"buffer_index_{i}") for i, t in lanes]
+        tup_index_infos = [NodeInfo.from_info(self.info, f"tuple_index_{i}") for i, t in lanes]
+        int_literals_infos = [NodeInfo.from_info(self.info, f"int_literal_{i}") for i, t in lanes]
+        int_literals = [IntegerLiteral(int_literals_infos[i], i, 32) for i, t in lanes]
+        tup_indexations = [TupleIndexation(tup_index_infos[i], self.arguments[0], self.method, [int_literals[i]]) for i, t in lanes]
+        return [BufferIndexation(buf_index_infos[i], self.temp_receiver, self.method, [tup_indexations[i]]) for i, t in lanes]
+
+    def tup_literal(self, scope):
+        return TupleLiteral(self.info, self.indexations(scope))
+
+    def exprtype(self, scope):
+        rec_typ = self.receiver.exprtype(scope)
+        self.ensure_prereqs(scope, rec_typ)
+        idx_typ = self.arguments[0].exprtype(scope)
+        if not idx_typ.is_homogenous and len(idx_typ.types.data) > 0 and isinstance(idx_typ.types.data[0], Integer):
+            raise Exception(f"{self.info}: Indexation with a tuple must use a tuple of integers, not {idx_typ}.")
+        idx_elem_type = idx_typ.types.data[0]
+
+        # If indexing with a splat or rampm literal, cast to i64 before constructing the vector
+        if isinstance(self.arguments[0], Ramp) or isinstance(self.arguments[0], Splat) and idx_elem_type.bitwidth < 64:
+            as_info = NodeInfo.from_info(self.arguments[0].info, "cast_i64")
+            self.arguments[0].value = As(as_info, self.arguments[0].value, Integer(64))
+            idx_typ = self.arguments[0].exprtype(scope)
+            idx_elem_type = idx_typ.types.data[0]
+
+        if idx_elem_type.bitwidth > 64:
+            raise Exception(f"{self.info}: Indexation only supported with integers up to 64 bits in width.")
+        self.temp_assign.typeflow(scope)
+        self.apply_constraints(scope)
+        return scope.simplify(Tuple.make([rec_typ.elem_type for t in idx_typ.types.data]))
+
+@dataclass
 class BufferIndexation(Indexation):
 
     def codegen(self, scope):
@@ -1726,10 +1798,10 @@ class BufferIndexation(Indexation):
     def exprtype(self, scope):
         rec_typ = self.receiver.exprtype(scope)
         self.ensure_prereqs(scope, rec_typ)
-        id_typ = self.arguments[0].exprtype(scope)
-        if not isinstance(id_typ, Integer):
+        idx_typ = self.arguments[0].exprtype(scope)
+        if not isinstance(idx_typ, Integer):
             raise Exception(f"{self.info}: Indexation currently only supported with integers.")
-        if id_typ.bitwidth > 64:
+        if idx_typ.bitwidth > 64:
             raise Exception(f"{self.info}: Indexation only supported with integers up to 64 bits in width.")
         self.apply_constraints(scope)
         return scope.simplify(rec_typ.elem_type)

@@ -165,6 +165,45 @@ class BufferIndexationOp(IRDLOperation):
     result: OpResult = result_def()
 
 @irdl_op_definition
+class VecLoadOp(IRDLOperation):
+    name = "mid.vec_load"
+    receiver: Operand = operand_def()
+    index: Operand = operand_def()
+    elem_typ: TypeAttribute = attr_def(TypeAttribute)
+    vec_typ: TypeAttribute = attr_def(TypeAttribute)
+    result: OpResult = result_def()
+
+    @classmethod
+    def make(cls, receiver, index, vec_typ):
+        attr_dict = {
+            "elem_typ":vec_typ.types.data[0].base_typ(),
+            "vec_typ":vec_typ.base_typ
+        }
+        return VecLoadOp.create(operands=[receiver, index], attributes=attr_dict, result_types=[vec_typ])
+
+@irdl_op_definition
+class GatherOp(IRDLOperation):
+    name = "mid.gather"
+    receiver: Operand = operand_def()
+    index: Operand = operand_def()
+    elem_typ: TypeAttribute = attr_def(TypeAttribute)
+    vec_typ: TypeAttribute = attr_def(TypeAttribute)
+    idx_typ : TypeAttribute = attr_def(TypeAttribute)
+    mask_typ: TypeAttribute = attr_def(TypeAttribute)
+    result: OpResult = result_def()
+
+    @classmethod
+    def make(cls, receiver, index, vec_typ):
+        attr_dict = {
+            "elem_typ":vec_typ.types.data[0].base_typ(),
+            "vec_typ":vec_typ.base_typ(),
+            "ptrs_vec":llvm.LLVMArrayType.from_size_and_type(len(vec_typ.types), llvm.LLVMPointerType.opaque()),
+            "idx_typ":index.type.base_typ(),
+            "mask_typ":builtin.VectorType(IntegerType(1), [len(vec_typ.types)])
+        }
+        return GatherOp.create(operands=[receiver, index], attributes=attr_dict, result_types=[vec_typ])
+
+@irdl_op_definition
 class BufferGetOp(IRDLOperation):
     name = "mid.buffer_get"
     receiver: Operand = operand_def()

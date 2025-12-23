@@ -66,16 +66,8 @@ class Matrix {
     // ret <8 x double> %31
     def get_simd(start_row : i32, col : i32) -> Tuple[8 x f64] {
         start_index = (col as i64) * @rows + start_row;
-        data = @data;
-        a = data.[start_index + 0];
-        b = data.[start_index + 1];
-        c = data.[start_index + 2];
-        d = data.[start_index + 3];
-        e = data.[start_index + 4];
-        f = data.[start_index + 5];
-        g = data.[start_index + 6];
-        h = data.[start_index + 7];
-        return (a, b, c, d, e, f, g, h);
+        idx = 8 from start_index;
+        return @data.[idx];
     }
 
     // relevant IR:
@@ -148,7 +140,7 @@ class Matrix {
 }
 
 def benchmark_matrix_multiplication() {
-    size = 4096;
+    size = 2048;
 
     matrix1 = Matrix.new(size, size);
     matrix2 = Matrix.new(size, size);

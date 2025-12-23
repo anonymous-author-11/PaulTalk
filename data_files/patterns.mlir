@@ -591,11 +591,10 @@ module @patterns {
     %receiver = pdl.operand : %ptr_type
     %index = pdl.operand : %ptr_type
     %elem_type_attr = pdl.attribute
-    %elem_type = pdl.type
     %i32_type = pdl.type : i32
     %i64_type = pdl.type : i64
     %i8_attr = pdl.attribute = i8
-    %root = pdl.operation "mid.buffer_get"(%receiver, %index : !pdl.value, !pdl.value) {"typ" = %elem_type_attr} -> (%elem_type : !pdl.type)
+    %root = pdl.operation "mid.buffer_get"(%receiver, %index : !pdl.value, !pdl.value) {"typ" = %elem_type_attr} -> (%ptr_type : !pdl.type)
     pdl.rewrite %root {
       %alloca = pdl.operation "mid.alloc" {"typ" = %elem_type_attr} -> (%ptr_type : !pdl.type)
       %alloca_result = pdl.result 0 of %alloca
@@ -604,6 +603,78 @@ module @patterns {
       %indexation = pdl.operation "mid.buffer_indexation"(%receiver, %index, %type_size_result : !pdl.value, !pdl.value, !pdl.value) -> (%ptr_type : !pdl.type)
       %indexation_result = pdl.result 0 of %indexation
       %assign = pdl.operation "mid.assign"(%alloca_result, %indexation_result : !pdl.value, !pdl.value) {"typ" = %elem_type_attr}
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerVecLoad : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %receiver = pdl.operand : %ptr_type
+    %index = pdl.operand : %ptr_type
+    %elem_type_attr = pdl.attribute
+    %vec_type_attr = pdl.attribute
+    %i32_type = pdl.type : i32
+    %i64_type = pdl.type : i64
+    %i8_attr = pdl.attribute = i8
+    %root = pdl.operation "mid.vec_load"(%receiver, %index : !pdl.value, !pdl.value) {"elem_typ" = %elem_type_attr, "vec_typ" = %vec_type_attr} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %vec_type = pdl.apply_native_rewrite "type_attr_to_type"(%vec_type_attr : !pdl.attribute) : !pdl.type
+      %alloca = pdl.operation "mid.alloc" {"typ" = %vec_type_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %type_size = pdl.operation "mid.type_size" {"typ" = %elem_type_attr} -> (%i64_type : !pdl.type)
+      %type_size_result = pdl.result 0 of %type_size
+      %indexation = pdl.operation "mid.buffer_indexation"(%receiver, %index, %type_size_result : !pdl.value, !pdl.value, !pdl.value) -> (%ptr_type : !pdl.type)
+      %indexation_result = pdl.result 0 of %indexation
+      %gather = pdl.operation "llvm.load"(%indexation_result: !pdl.value) -> (%vec_type : !pdl.type)
+      %gather_result = pdl.result 0 of %gather
+      %store = pdl.operation "llvm.store"(%gather_result, %alloca_result : !pdl.value, !pdl.value)
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerGather : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %receiver = pdl.operand : %ptr_type
+    %index = pdl.operand : %ptr_type
+    %elem_type_attr = pdl.attribute
+    %vec_type_attr = pdl.attribute
+    %ptrs_vec_attr = pdl.attribute
+    %idx_typ_attr = pdl.attribute
+    %mask_typ_attr = pdl.attribute
+    %i32_type = pdl.type : i32
+    %i64_type = pdl.type : i64
+    %i1_type = pdl.type : i1
+    %root = pdl.operation "mid.gather"(%receiver, %index : !pdl.value, !pdl.value) {"elem_typ" = %elem_type_attr, "vec_typ" = %vec_type_attr, "ptrs_vec" = %ptrs_vec_attr, "idx_typ" = %idx_typ_attr, "mask_typ" = %mask_typ_attr} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %vec_typ = pdl.apply_native_rewrite "type_attr_to_type"(%vec_type_attr : !pdl.attribute) : !pdl.type
+      %ptrs_vec = pdl.apply_native_rewrite "array_to_vector"(%ptrs_vec_attr : !pdl.attribute) : !pdl.type
+      %idx_typ = pdl.apply_native_rewrite "type_attr_to_type"(%idx_typ_attr : !pdl.attribute) : !pdl.type
+      %mask_typ = pdl.apply_native_rewrite "type_attr_to_type"(%mask_typ_attr : !pdl.attribute) : !pdl.type
+
+      %alloca = pdl.operation "mid.alloc" {"typ" = %vec_type_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+
+      %load_index = pdl.operation "llvm.load"(%index : !pdl.value) -> (%idx_typ : !pdl.type)
+      %load_index_result = pdl.result 0 of %load_index
+
+      %buf_ptr = pdl.operation "llvm.load"(%receiver : !pdl.value) -> (%ptr_type : !pdl.type)
+      %buf_ptr_result = pdl.result 0 of %buf_ptr
+
+      %indices = pdl.attribute = array<i32: -2147483648>
+      %gep1 = pdl.operation "llvm.getelementptr"(%buf_ptr_result, %load_index_result : !pdl.value, !pdl.value) {"elem_type" = %elem_type_attr, "rawConstantIndices" = %indices} -> (%ptrs_vec : !pdl.type)
+      %gep1_result = pdl.result 0 of %gep1
+
+      %one_attr = pdl.attribute = 1
+      %one = pdl.operation "llvm.mlir.constant" {"value" = %one_attr} -> (%i1_type : !pdl.type)
+      %one_result = pdl.result 0 of %one
+      %mask = pdl.operation "vector.broadcast"(%one_result : !pdl.value) -> (%mask_typ : !pdl.type)
+      %mask_result = pdl.result 0 of %mask
+      %passthru = pdl.operation "llvm.mlir.poison" -> (%vec_typ : !pdl.type)
+      %passthru_result = pdl.result 0 of %passthru
+      %zero_attr = pdl.attribute = 0 : i32
+
+      %gather = pdl.operation "llvm.intr.masked.gather"(%gep1_result, %mask_result, %passthru_result : !pdl.value, !pdl.value, !pdl.value) {"alignment" = %zero_attr} -> (%vec_typ : !pdl.type)
+      %gather_result = pdl.result 0 of %gather
+      
+      %store = pdl.operation "llvm.store"(%gather_result, %alloca_result : !pdl.value, !pdl.value)
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
