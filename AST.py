@@ -1465,6 +1465,8 @@ class MethodCall(Expression):
         if isinstance(rec_typ, Coroutine): return CoroutineCall(self.info, self.receiver, self.method, self.arguments).codegen(scope)
         if isinstance(rec_typ, Function): return FunctionLiteralCall(self.info, self.receiver, self.method, self.arguments).codegen(scope)
         if isinstance(rec_typ, Buffer) and self.method == "_set_index":
+            if len(self.arguments) > 0 and isinstance(self.arguments[0].exprtype(scope), Tuple):
+                return BufferScatter(self.info, self.receiver, self.method, self.arguments).codegen(scope)
             return BufferSetIndex(self.info, self.receiver, self.method, self.arguments).codegen(scope)
         if isinstance(rec_typ, Buffer):
             if len(self.arguments) > 0 and isinstance(self.arguments[0].exprtype(scope), Tuple):
@@ -1581,6 +1583,8 @@ class MethodCall(Expression):
         rec_typ = self.receiver.exprtype(scope)
         if isinstance(rec_typ, TypeParameter): rec_typ = rec_typ.bound
         if isinstance(rec_typ, Buffer) and self.method == "_set_index":
+            if len(self.arguments) > 0 and isinstance(self.arguments[0].exprtype(scope), Tuple):
+                return BufferScatter(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
             return BufferSetIndex(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
         if isinstance(rec_typ, Buffer) and self.method == "_index":
             if len(self.arguments) > 0 and isinstance(self.arguments[0].exprtype(scope), Tuple):
@@ -1717,23 +1721,33 @@ class BufferGather(Indexation):
         return Identifier(self.info, temp_identifier_name)
 
     @property
-    def temp_assign(self):
-        # Evaluate the reciever once and assign to a temporary variable to avoid evaluating multiple times
+    def temp_idx(self):
+        temp_idx_name = self.info.id + "_temp_idx"
+        return Identifier(self.info, temp_idx_name)
+
+    @property
+    def temp_receiver_assign(self):
+        # Evaluate the receiver once and assign to a temporary variable to avoid evaluating multiple times
         return Assignment(NodeInfo.from_info(self.info, "assign"), self.temp_receiver, self.receiver)
 
+    @property
+    def temp_idx_assign(self):
+        return Assignment(NodeInfo.from_info(self.info, "assign"), self.temp_idx, self.arguments[0])
+
     def codegen(self, scope):
-        self.temp_assign.codegen(scope)
+        self.temp_receiver_assign.codegen(scope)
+        self.temp_idx_assign.codegen(scope)
         ret_type = self.exprtype(scope)
 
-        use_vec_load_instrinsic = isinstance(self.arguments[0], Ramp) and ret_type.vector_like
-        use_gather_intrinsic = ret_type.vector_like and not isinstance(self.arguments[0], Ramp)
-        if not (use_vec_load_instrinsic or use_gather_intrinsic):
-            return self.tup_literal(scope).codegen(scope)
+        # Fallback for general element types: construct a tuple literal from individual indexations
+        if not ret_type.vector_like: return self.tup_literal(scope).codegen(scope)
 
-        op = VecLoadOp if use_vec_load_instrinsic else GatherOp
+        # If the indexing argument is a ramp literal, we can emit a contiguous vector load
+        # Otherwise we fall back onto a vector gather instruction
+        op = VecLoadOp if isinstance(self.arguments[0], Ramp) else GatherOp
 
         rec = self.temp_receiver.codegen(scope)
-        idx = self.arguments[0].codegen(scope)
+        idx = self.temp_idx.codegen(scope)
         gather = op.make(rec, idx, ret_type)
         scope.region.last_block.add_op(gather)
         return gather.results[0]
@@ -1748,7 +1762,7 @@ class BufferGather(Indexation):
         tup_index_infos = [NodeInfo.from_info(self.info, f"tuple_index_{i}") for i, t in lanes]
         int_literals_infos = [NodeInfo.from_info(self.info, f"int_literal_{i}") for i, t in lanes]
         int_literals = [IntegerLiteral(int_literals_infos[i], i, 32) for i, t in lanes]
-        tup_indexations = [TupleIndexation(tup_index_infos[i], self.arguments[0], self.method, [int_literals[i]]) for i, t in lanes]
+        tup_indexations = [TupleIndexation(tup_index_infos[i], self.temp_idx, self.method, [int_literals[i]]) for i, t in lanes]
         return [BufferIndexation(buf_index_infos[i], self.temp_receiver, self.method, [tup_indexations[i]]) for i, t in lanes]
 
     def tup_literal(self, scope):
@@ -1758,12 +1772,12 @@ class BufferGather(Indexation):
         rec_typ = self.receiver.exprtype(scope)
         self.ensure_prereqs(scope, rec_typ)
         idx_typ = self.arguments[0].exprtype(scope)
-        if not idx_typ.is_homogenous and len(idx_typ.types.data) > 0 and isinstance(idx_typ.types.data[0], Integer):
+        if not (idx_typ.is_homogenous and len(idx_typ.types.data) > 0 and isinstance(idx_typ.types.data[0], Integer)):
             raise Exception(f"{self.info}: Indexation with a tuple must use a tuple of integers, not {idx_typ}.")
         idx_elem_type = idx_typ.types.data[0]
 
-        # If indexing with a splat or rampm literal, cast to i64 before constructing the vector
-        if isinstance(self.arguments[0], Ramp) or isinstance(self.arguments[0], Splat) and idx_elem_type.bitwidth < 64:
+        # If indexing with a splat or ramp literal, cast to i64 before constructing the vector
+        if (isinstance(self.arguments[0], Ramp) or isinstance(self.arguments[0], Splat)) and idx_elem_type.bitwidth < 64:
             as_info = NodeInfo.from_info(self.arguments[0].info, "cast_i64")
             self.arguments[0].value = As(as_info, self.arguments[0].value, Integer(64))
             idx_typ = self.arguments[0].exprtype(scope)
@@ -1771,9 +1785,111 @@ class BufferGather(Indexation):
 
         if idx_elem_type.bitwidth > 64:
             raise Exception(f"{self.info}: Indexation only supported with integers up to 64 bits in width.")
-        self.temp_assign.typeflow(scope)
+        self.temp_receiver_assign.typeflow(scope)
+        self.temp_idx_assign.typeflow(scope)
         self.apply_constraints(scope)
         return scope.simplify(Tuple.make([rec_typ.elem_type for t in idx_typ.types.data]))
+
+@dataclass
+class BufferScatter(MethodCall):
+
+    # Evaluate the receiver, indices, and values once, and assign to temporary variables to avoid evaluating multiple times
+
+    @property
+    def temp_receiver(self):
+        temp_identifier_name = self.info.id + "_temp_receiver"
+        return Identifier(self.info, temp_identifier_name)
+
+    @property
+    def temp_vals(self):
+        temp_vals_name = self.info.id + "_temp_vals"
+        return Identifier(self.info, temp_vals_name)
+
+    @property
+    def temp_idx(self):
+        temp_idx_name = self.info.id + "_temp_idx"
+        return Identifier(self.info, temp_idx_name)
+
+    @property
+    def temp_receiver_assign(self):
+        return Assignment(NodeInfo.from_info(self.info, "assign"), self.temp_receiver, self.receiver)
+
+    @property
+    def temp_idx_assign(self):
+        return Assignment(NodeInfo.from_info(self.info, "assign"), self.temp_idx, self.arguments[0])
+
+    @property
+    def temp_vals_assign(self):
+        return Assignment(NodeInfo.from_info(self.info, "assign"), self.temp_vals, self.arguments[1])
+
+    def codegen(self, scope):
+        self.temp_receiver_assign.codegen(scope)
+        self.temp_idx_assign.codegen(scope)
+        self.temp_vals_assign.codegen(scope)
+        tup_type = self.temp_vals.exprtype(scope)
+
+        # Fallback for general element types: store each individual indexation
+        if not tup_type.vector_like:
+            for indexation in self.indexations(scope):
+                indexation.codegen(scope)
+                return
+
+        # If the indexing argument is a ramp literal, we can emit a contiguous vector load
+        # Otherwise we fall back onto a vector gather instruction
+        op = VecStoreOp if isinstance(self.arguments[0], Ramp) else ScatterOp
+
+        rec = self.temp_receiver.codegen(scope)
+        idx = self.temp_idx.codegen(scope)
+        vals = self.temp_vals.codegen(scope)
+        scatter = op.make(rec, idx, vals, tup_type)
+        scope.region.last_block.add_op(scatter)
+
+    def apply_constraints(self, scope):
+        for indexation in self.indexations(scope):
+            indexation.apply_constraints(scope)
+
+    def indexations(self, scope):
+        idx_typ = self.temp_idx.exprtype(scope)
+        lanes = list(enumerate(idx_typ.types.data))
+        buf_index_infos = [NodeInfo.from_info(self.info, f"buffer_index_{i}") for i, t in lanes]
+        idx_tup_index_infos = [NodeInfo.from_info(self.info, f"idx_tuple_index_{i}") for i, t in lanes]
+        val_infos = [NodeInfo.from_info(self.info, f"val_{i}") for i, t in lanes]
+        int_literals_infos = [NodeInfo.from_info(self.info, f"int_literal_{i}") for i, t in lanes]
+        int_literals = [IntegerLiteral(int_literals_infos[i], i, 32) for i, t in lanes]
+        idx_tup_indexations = [TupleIndexation(idx_tup_index_infos[i], self.temp_idx, self.method, [int_literals[i]]) for i, t in lanes]
+        val_indexations = [TupleIndexation(val_infos[i], self.temp_vals, self.method, [int_literals[i]]) for i, t in lanes]
+        return [BufferSetIndex(buf_index_infos[i], self.temp_receiver, self.method, [idx_tup_indexations[i], val_indexations[i]]) for i, t in lanes]
+
+    def tup_literal(self, scope):
+        return TupleLiteral(self.info, self.indexations(scope))
+
+    def exprtype(self, scope):
+        rec_typ = self.receiver.exprtype(scope)
+        idx_typ = self.arguments[0].exprtype(scope)
+        value_tuple_type = self.arguments[1].exprtype(scope)
+        if not (isinstance(value_tuple_type, Tuple) and len(value_tuple_type.types) == len(idx_typ.types)):
+            raise Exception(f"{self.info}: Indexing argument is a {idx_typ} but values inserted are {value_tuple_type}.")
+        if not (idx_typ.is_homogenous and len(idx_typ.types.data) > 0 and isinstance(idx_typ.types.data[0], Integer)):
+            raise Exception(f"{self.info}: Indexation with a tuple must use a tuple of integers, not {idx_typ}.")
+        idx_elem_type = idx_typ.types.data[0]
+
+        # If indexing with a splat or ramp literal, cast to i64 before constructing the vector
+        if (isinstance(self.arguments[0], Ramp) or isinstance(self.arguments[0], Splat)) and idx_elem_type.bitwidth < 64:
+            as_info = NodeInfo.from_info(self.arguments[0].info, "cast_i64")
+            self.arguments[0].value = As(as_info, self.arguments[0].value, Integer(64))
+            idx_typ = self.arguments[0].exprtype(scope)
+            idx_elem_type = idx_typ.types.data[0]
+
+        if idx_elem_type.bitwidth > 64:
+            raise Exception(f"{self.info}: Indexation only supported with integers up to 64 bits in width.")
+
+        if not scope.subtype(value_tuple_type.types.data[0], rec_typ.elem_type):
+            raise Exception(f"{self.info}: Value being placed in buffer is of type {value_tuple_type}, but buffer is of type {rec_typ}.")
+
+        self.temp_receiver_assign.typeflow(scope)
+        self.temp_idx_assign.typeflow(scope)
+        self.temp_vals_assign.typeflow(scope)
+        self.apply_constraints(scope)
 
 @dataclass
 class BufferIndexation(Indexation):

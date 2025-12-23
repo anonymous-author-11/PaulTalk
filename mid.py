@@ -179,9 +179,28 @@ class VecLoadOp(IRDLOperation):
         attr_dict = {
             "elem_typ":vec_typ.types.data[0].base_typ(),
             "vec_typ":vec_typ.base_typ(),
-            "alignment":IntegerAttr.from_int_and_width(int(hi.type_size(vec_typ.types.data[0].base_typ()) / 8), 64),
+            "alignment":IntegerAttr.from_int_and_width(int(hi.type_size(vec_typ.types.data[0].base_typ()) / 8), 64)
         }
         return VecLoadOp.create(operands=[receiver, index], attributes=attr_dict, result_types=[vec_typ])
+
+@irdl_op_definition
+class VecStoreOp(IRDLOperation):
+    name = "mid.vec_store"
+    receiver: Operand = operand_def()
+    index: Operand = operand_def()
+    vals: Operand = operand_def()
+    elem_typ: TypeAttribute = attr_def(TypeAttribute)
+    vec_typ: TypeAttribute = attr_def(TypeAttribute)
+    alignment: IntegerAttr = attr_def(IntegerAttr)
+
+    @classmethod
+    def make(cls, receiver, index, vals, vec_typ):
+        attr_dict = {
+            "elem_typ":vec_typ.types.data[0].base_typ(),
+            "vec_typ":vec_typ.base_typ(),
+            "alignment":IntegerAttr.from_int_and_width(int(hi.type_size(vec_typ.types.data[0].base_typ()) / 8), 64)
+        }
+        return VecStoreOp.create(operands=[receiver, index, vals], attributes=attr_dict)
 
 @irdl_op_definition
 class GatherOp(IRDLOperation):
@@ -192,6 +211,7 @@ class GatherOp(IRDLOperation):
     vec_typ: TypeAttribute = attr_def(TypeAttribute)
     idx_typ : TypeAttribute = attr_def(TypeAttribute)
     mask_typ: TypeAttribute = attr_def(TypeAttribute)
+    alignment: IntegerAttr = attr_def(IntegerAttr)
     result: OpResult = result_def()
 
     @classmethod
@@ -201,9 +221,35 @@ class GatherOp(IRDLOperation):
             "vec_typ":vec_typ.base_typ(),
             "ptrs_vec":llvm.LLVMArrayType.from_size_and_type(len(vec_typ.types), llvm.LLVMPointerType.opaque()),
             "idx_typ":index.type.base_typ(),
-            "mask_typ":builtin.VectorType(IntegerType(1), [len(vec_typ.types)])
+            "mask_typ":builtin.VectorType(IntegerType(1), [len(vec_typ.types)]),
+            "alignment":IntegerAttr.from_int_and_width(int(hi.type_size(vec_typ.types.data[0].base_typ()) / 8), 32)
         }
         return GatherOp.create(operands=[receiver, index], attributes=attr_dict, result_types=[vec_typ])
+
+
+@irdl_op_definition
+class ScatterOp(IRDLOperation):
+    name = "mid.scatter"
+    receiver: Operand = operand_def()
+    index: Operand = operand_def()
+    vals: Operand = operand_def()
+    elem_typ: TypeAttribute = attr_def(TypeAttribute)
+    vec_typ: TypeAttribute = attr_def(TypeAttribute)
+    idx_typ : TypeAttribute = attr_def(TypeAttribute)
+    mask_typ: TypeAttribute = attr_def(TypeAttribute)
+    alignment: IntegerAttr = attr_def(IntegerAttr)
+
+    @classmethod
+    def make(cls, receiver, index, vals, vec_typ):
+        attr_dict = {
+            "elem_typ":vec_typ.types.data[0].base_typ(),
+            "vec_typ":vec_typ.base_typ(),
+            "ptrs_vec":llvm.LLVMArrayType.from_size_and_type(len(vec_typ.types), llvm.LLVMPointerType.opaque()),
+            "idx_typ":index.type.base_typ(),
+            "mask_typ":builtin.VectorType(IntegerType(1), [len(vec_typ.types)]),
+            "alignment":IntegerAttr.from_int_and_width(int(hi.type_size(vec_typ.types.data[0].base_typ()) / 8), 32)
+        }
+        return ScatterOp.create(operands=[receiver, index, vals], attributes=attr_dict)
 
 @irdl_op_definition
 class BufferGetOp(IRDLOperation):
