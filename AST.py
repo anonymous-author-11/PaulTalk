@@ -1728,11 +1728,11 @@ class BufferGather(Indexation):
     @property
     def temp_receiver_assign(self):
         # Evaluate the receiver once and assign to a temporary variable to avoid evaluating multiple times
-        return Assignment(NodeInfo.from_info(self.info, "assign"), self.temp_receiver, self.receiver)
+        return Assignment(NodeInfo.from_info(self.info, "assign_receiver"), self.temp_receiver, self.receiver)
 
     @property
     def temp_idx_assign(self):
-        return Assignment(NodeInfo.from_info(self.info, "assign"), self.temp_idx, self.arguments[0])
+        return Assignment(NodeInfo.from_info(self.info, "assign_idx"), self.temp_idx, self.arguments[0])
 
     def codegen(self, scope):
         self.temp_receiver_assign.codegen(scope)
@@ -1812,15 +1812,15 @@ class BufferScatter(MethodCall):
 
     @property
     def temp_receiver_assign(self):
-        return Assignment(NodeInfo.from_info(self.info, "assign"), self.temp_receiver, self.receiver)
+        return Assignment(NodeInfo.from_info(self.info, "assign_receiver"), self.temp_receiver, self.receiver)
 
     @property
     def temp_idx_assign(self):
-        return Assignment(NodeInfo.from_info(self.info, "assign"), self.temp_idx, self.arguments[0])
+        return Assignment(NodeInfo.from_info(self.info, "assign_idx"), self.temp_idx, self.arguments[0])
 
     @property
     def temp_vals_assign(self):
-        return Assignment(NodeInfo.from_info(self.info, "assign"), self.temp_vals, self.arguments[1])
+        return Assignment(NodeInfo.from_info(self.info, "assign_vals"), self.temp_vals, self.arguments[1])
 
     def codegen(self, scope):
         self.temp_receiver_assign.codegen(scope)

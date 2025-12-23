@@ -65,15 +65,15 @@ class Matrix {
     // %24 = load <8 x double>, ptr %23, align 8
     // ret <8 x double> %24
     def get_simd(start_row : i32, col : i32) -> Tuple[8 x f64] {
-        start_index = (col as i64) * @rows + start_row;
+        start_index = col * @rows + start_row;
         return @data.[8 from start_index]; 
     }
 
     // relevant IR:
-    // store <8 x double> %5, ptr %31, align 8
-    // ret void
+    // %25 = getelementptr i8, ptr %.fca.0.extract, i64 %24
+    // store <8 x double> %5, ptr %25, align 8
     def set_simd(start_row : i32, col : i32, values : Tuple[8 x f64]) {
-        start_index = (col as i64) * @rows + start_row;
+        start_index = col * @rows + start_row;
         @data.[8 from start_index] = values;
     }
 

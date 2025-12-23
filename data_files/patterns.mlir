@@ -729,7 +729,7 @@ module @patterns {
       %load_index = pdl.operation "llvm.load"(%index : !pdl.value) -> (%idx_typ : !pdl.type)
       %load_index_result = pdl.result 0 of %load_index
 
-      %load_vals = pdl.operation "llvm.load(%vals : !pdl.value" -> (%vec_typ : !pdl.type)
+      %load_vals = pdl.operation "llvm.load"(%vals : !pdl.value) -> (%vec_typ : !pdl.type)
       %load_vals_result = pdl.result 0 of %load_vals
 
       %buf_ptr = pdl.operation "llvm.load"(%receiver : !pdl.value) -> (%ptr_type : !pdl.type)
