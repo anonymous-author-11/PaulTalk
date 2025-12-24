@@ -259,7 +259,14 @@ class Tuple(ParametrizedAttribute, TypeAttribute):
 
     def base_typ(self):
         # A tuple of homogenous integers, floats, or bools can be lowered to a SIMD vector
-        if self.vector_like: return builtin.VectorType(self.types.data[0].base_typ(), [len(self.types.data)])
+        if self.vector_like:
+
+            # Have to account for i1's not being stored in a bitpacked manner
+            if isinstance(self.types.data[0], Bool):
+                return builtin.VectorType(IntegerType(8), [len(self.types.data)])
+
+            return builtin.VectorType(self.types.data[0].base_typ(), [len(self.types.data)])
+        
         return llvm.LLVMStructType.from_type_list([t.base_typ() for t in self.types.data])
 
     def symbol(self):
