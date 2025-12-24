@@ -1165,6 +1165,7 @@ class NegatedTypeCheck(TypeCheck):
 @dataclass
 class TupleToBuffer(Expression):
     tupl: Expression
+    on_stack: bool
 
     @property
     def subexpressions(self):
@@ -1173,6 +1174,14 @@ class TupleToBuffer(Expression):
     def codegen(self, scope):
         tuple_type = self.tupl.exprtype(scope)
         tupl = self.tupl.codegen(scope)
+
+        # box onto heap
+        if not self.on_stack:
+            malloc = MallocOp.make(tuple_type)
+            memcpy = MemCpyOp.make(tupl, malloc.results[0], tuple_type.base_typ())
+            scope.region.last_block.add_ops([malloc, memcpy])
+            tupl = malloc
+
         alloca = AllocateOp.make(llvm.LLVMPointerType.opaque())
         store = llvm.StoreOp(tupl, alloca.results[0])
         scope.region.last_block.add_ops([alloca, store])
@@ -1186,6 +1195,7 @@ class TupleToBuffer(Expression):
 @dataclass
 class TupleToArray(Expression):
     tupl: Expression
+    on_stack: bool
 
     @property
     def subexpressions(self):
@@ -1194,7 +1204,7 @@ class TupleToArray(Expression):
     def codegen(self, scope):
         tuple_type = self.tupl.exprtype(scope)        
         elem_type = self.elem_type(tuple_type, scope)
-        buf = TupleToBuffer(NodeInfo.from_info(self.info, "cast"), self.tupl)
+        buf = TupleToBuffer(NodeInfo.from_info(self.info, "cast"), self.tupl, self.on_stack)
         sizelit = IntegerLiteral(NodeInfo.from_info(self.info, "size"), len(tuple_type.types.data), 32)
         capacitylit = IntegerLiteral(NodeInfo.from_info(self.info, "capacity"), len(tuple_type.types.data), 32)
         ary = ObjectCreation(self.info, self.info.id + "_tuple_to_array", FatPtr.generic("Array", [elem_type]), [buf, sizelit, capacitylit])
@@ -1498,7 +1508,7 @@ class MethodCall(Expression):
         if isinstance(rec_typ, Tuple) and self.method == "_index":
             return TupleIndexation(self.info, self.receiver, self.method, self.arguments).codegen(scope)
         if isinstance(rec_typ, Tuple):
-            to_array = TupleToArray(NodeInfo.from_info(self.info, "cast"), self.receiver)
+            to_array = TupleToArray(NodeInfo.from_info(self.info, "cast"), self.receiver, False)
             return MethodCall(self.info, to_array, self.method, self.arguments).codegen(scope)
         rec_class = scope.get_class(self.info, rec_typ)
 
@@ -1616,7 +1626,7 @@ class MethodCall(Expression):
         if isinstance(rec_typ, Tuple) and self.method == "_index":
             return TupleIndexation(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
         if isinstance(rec_typ, Tuple):
-            to_array = TupleToArray(NodeInfo.from_info(self.info, "cast"), self.receiver)
+            to_array = TupleToArray(NodeInfo.from_info(self.info, "cast"), self.receiver, False)
             return MethodCall(self.info, to_array, self.method, self.arguments).exprtype(scope)
         if isinstance(rec_typ, Coroutine): return CoroutineCall(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
         if isinstance(rec_typ, Function): return FunctionLiteralCall(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
@@ -4275,7 +4285,7 @@ class For(Statement):
         iterable_type = scope.simplify(self.iterable.exprtype(scope))
 
         if isinstance(iterable_type, Tuple):
-            self.iterable = TupleToArray(NodeInfo.from_info(self.info, "cast"), self.iterable)
+            self.iterable = TupleToArray(NodeInfo.from_info(self.info, "cast"), self.iterable, True)
             self.iterator.receiver = self.iterable
             iterable_type = self.iterable.exprtype(scope)
 
