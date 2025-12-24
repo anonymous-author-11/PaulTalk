@@ -3,3 +3,7 @@ import std;
 triple = (1,2,3);
 mapped = (triple * triple).map((x : i32) => { x * 2; });
 for i in mapped { IO.print(i); }
+
+bools = (10 from 0) < (10 of 5);
+
+for bool in bools { IO.print(bool); }

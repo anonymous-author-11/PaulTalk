@@ -305,6 +305,10 @@ class MallocOp(IRDLOperation):
     typ: TypeAttribute = attr_def(TypeAttribute)
     result: OpResult = result_def()
 
+    @classmethod
+    def make(cls, typ):
+        return MallocOp.create(operands=[], attributes={"typ":typ.base_typ()}, result_types=[typ])
+
 @irdl_op_definition
 class CreateRegionOp(IRDLOperation):
     name = "mid.create_region"

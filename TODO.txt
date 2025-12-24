@@ -710,6 +710,13 @@ TODO:
 	- Lower to gather/scatter when primitive vector-typed [check!]
 	- Desugar to several indexations in general case [check!]
 
+- Horizontal reductions for tuples
+- Make iterating over tuples safe [check!]
+	- Only place on stack when the iterable in a for-loop [check!]
+- logical, comparisons for tuples
+
+- TupleToArray should have a bool OnStack which is set to true only when it is the iterable in a for-loop
+
 - Release 0.9.0
 	- Implement i32.max() et. al. [check!]
 		- Can handle in parsing [check!]
