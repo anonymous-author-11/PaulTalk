@@ -391,6 +391,22 @@ class BinaryOp(Expression):
 class TuplesOp(BinaryOp):
     op_type: type
 
+    @property
+    def temp_left_id(self):
+        return Identifier(self.info, self.left.info.id + "_temp_tup")
+
+    @property
+    def temp_right_id(self):
+        return Identifier(self.info, self.right.info.id + "_temp_tup")
+
+    @property
+    def assign_left(self):
+        return Assignment(NodeInfo.from_info(self.info, "_assign_left"), self.temp_left_id, self.left)
+
+    @property
+    def assign_right(self):
+        return Assignment(NodeInfo.from_info(self.info, "_assign_right"), self.temp_right_id, self.right)
+
     def desugared(self, scope, left_type, right_type):
         num_elems = len(left_type.types.data)
 
@@ -400,14 +416,16 @@ class TuplesOp(BinaryOp):
         op_infos = [NodeInfo.from_info(self.info, f"op_{i}") for i in range(num_elems)]
 
         indices = [IntegerLiteral(indices_infos[i], i, 32) for i in range(num_elems)]
-        left_elems = [TupleIndexation(left_infos[i], self.left, "_index", [indices[i]]) for i in range(num_elems)]
-        right_elems = [TupleIndexation(right_infos[i], self.right, "_index", [indices[i]]) for i in range(num_elems)]
+        left_elems = [TupleIndexation(left_infos[i], self.temp_left_id, "_index", [indices[i]]) for i in range(num_elems)]
+        right_elems = [TupleIndexation(right_infos[i], self.temp_right_id, "_index", [indices[i]]) for i in range(num_elems)]
         result_elems = tuple(self.op_type(op_infos[i], left_elems[i], self.operator, right_elems[i]) for i in range(num_elems))
         return TupleLiteral(self.info, result_elems)
 
     def codegen(self, scope):
         left_type = self.left.exprtype(scope)
         right_type = self.right.exprtype(scope)
+        self.assign_left.codegen(scope)
+        self.assign_right.codegen(scope)
         return self.desugared(scope, left_type, right_type).codegen(scope)
 
     def exprtype(self, scope):
@@ -418,6 +436,9 @@ class TuplesOp(BinaryOp):
             raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
         if self.operator not in ("ADD","SUB","MUL","DIV","MOD","LSHIFT","RSHIFT","bit_and","bit_or","bit_xor"):
             raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
+
+        self.assign_left.typeflow(scope)
+        self.assign_right.typeflow(scope)
 
         return self.desugared(scope, left_type, right_type).exprtype(scope)
 
