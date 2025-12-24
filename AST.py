@@ -434,7 +434,7 @@ class TuplesOp(BinaryOp):
 
         if left_type != right_type:
             raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
-        if self.operator not in ("ADD","SUB","MUL","DIV","MOD","LSHIFT","RSHIFT","bit_and","bit_or","bit_xor"):
+        if self.operator in ("or", "and"):
             raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
 
         self.assign_left.typeflow(scope)
@@ -472,7 +472,7 @@ class Arithmetic(BinaryOp):
 @dataclass
 class Comparison(BinaryOp):
     def concrete_op(self, operands, attributes, result_types):
-        return hi.ComparisonOp.create(operands=operands, attributes=attributes, result_types=[Integer(1)])
+        return hi.ComparisonOp.create(operands=operands, attributes=attributes, result_types=[Bool()])
     def concrete_exprtype(self, left_type, right_type):
         if left_type != right_type:
             raise Exception(f"{self.info}: tried to use {self.operator} on different types: {left_type} and {right_type}")
