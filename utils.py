@@ -44,6 +44,8 @@ def id_hierarchy(typ, ambient_types):
         return ArrayAttr([IntegerAttr.from_int_and_width(ambient_types.index(typ), 32)])
     if isinstance(typ, Union) or isinstance(typ, Tuple):
         return ArrayAttr([typ.symbol(), *[id_hierarchy(t, ambient_types) for t in typ.types.data]])
+    if isinstance(typ, Buffer):
+        return ArrayAttr([typ.symbol(), id_hierarchy(typ.elem_type, ambient_types)])
     if isinstance(typ, Function):
         types = [typ.return_type, *typ.param_types.data]
         return ArrayAttr([typ.symbol(), *[id_hierarchy(t, ambient_types) for t in types]])
@@ -54,6 +56,8 @@ def id_hierarchy(typ, ambient_types):
 def name_hierarchy(typ):
     if isinstance(typ, Union) or isinstance(typ, Tuple):
         return ArrayAttr([StringAttr(clean_name(f"{typ}")), *[name_hierarchy(t) for t in typ.types.data]])
+    if isinstance(typ, Buffer):
+        return ArrayAttr([StringAttr(clean_name(f"{typ}")), name_hierarchy(typ.elem_type)])
     if isinstance(typ, Function):
         types = [typ.return_type, *typ.param_types.data]
         return ArrayAttr([StringAttr(clean_name(f"{typ}")), *[name_hierarchy(t) for t in types]])
