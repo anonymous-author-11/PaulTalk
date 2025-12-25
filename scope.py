@@ -3,7 +3,6 @@ from mid import *
 from utils import *
 from itertools import product, chain, combinations
 from hashlib import sha256
-from gmpy2 import next_prime
 from xdsl.ir import Block, Region, Operation
 from xdsl.dialects import cf
 import random
@@ -824,61 +823,82 @@ class Scope:
             method_scope = method_scope.parent
         return method_scope
 
-    def build_hashtable(self, typ):
-        EMPTY = 2**64 - 1
-        TABLE_SIZE = 1 << (len(self.ancestors(typ)) - 1).bit_length()
-        def insert(key, value, prime_candidate, table_size):
-            h1 = (key * prime_candidate) & 0xFFFFFFFFFFFFFFFF
-            h1 = h1 ^ (h1 >> 32)
-            h1 = h1 & (table_size - 1)
-            if table1[h1] != EMPTY: return False
-            table1[h1] = value
-            return True
-        def insert_ancestors(ancestors, table_size):
-            for ancestor in ancestors:
-                success = insert(hash_id(ancestor.symbol().data), SymbolRefAttr(ancestor.symbol()), prime_candidate, table_size)
-                if not success: return False
-            return True
-        prime_candidate = int(next_prime(2**62))
-        for i in range(100):
-            table_size = TABLE_SIZE * 2 if i > 50 else TABLE_SIZE
-            table1 = [EMPTY] * table_size
-            prime_candidate = int(next_prime(prime_candidate))
-            ancestors = {ancestor.symbol():ancestor for ancestor in self.ancestors(typ)}.values()
-            success = insert_ancestors(ancestors, table_size)
-            if not success: continue
-            #print(f"built hashtable for type {typ}.")
-            array_attr = ArrayAttr([x if isinstance(x, SymbolRefAttr) else IntegerAttr.from_int_and_width(x, 64) for x in table1])
-            prime_literal = IntegerAttr.from_int_and_width(prime_candidate, 64)
-            return array_attr, prime_literal
-        print(f"ancestors are: {self.ancestors(typ)}")
-        raise Exception(f"could not build hash table for type {typ}.")
+MASK64 = 0xFFFFFFFFFFFFFFFF
 
-    def build_offset_table(self, typ):
-        EMPTY = 2**64 - 1
-        TABLE_SIZE = 1 << (len(self.ancestors(typ)) - 1).bit_length()
-        def insert(key, value, prime_candidate, table_size):
-            h1 = (key * prime_candidate) & 0xFFFFFFFFFFFFFFFF
-            h1 = h1 ^ (h1 >> 32)
-            h1 = h1 & (table_size - 1)
-            if table1[h1] != EMPTY: return False
-            table1[h1] = value
-            return True
-        def insert_ancestors(ancestors, table_size):
-            for ancestor in ancestors:
-                success = insert(hash_id(ancestor.symbol().data), self.offset_to(typ, ancestor) + vtable_buffer_size(), prime_candidate, table_size)
-                if not success: return False
-            return True
-        prime_candidate = int(next_prime(2**62))
-        for i in range(100):
-            table_size = TABLE_SIZE * 2 if i > 50 else TABLE_SIZE
-            table1 = [EMPTY] * table_size
-            prime_candidate = int(next_prime(prime_candidate))
-            ancestors = {ancestor.symbol():ancestor for ancestor in self.ancestors(typ)}.values()
-            success = insert_ancestors(ancestors, table_size)
-            if not success: continue
-            #print(f"built hashtable for type {typ}.")
-            array_attr = ArrayAttr([IntegerAttr.from_int_and_width(x, 32) if x < 10000 else IntegerAttr.from_int_and_width(0, 32) for x in table1])
-            return array_attr
-        print(f"ancestors are: {self.ancestors(typ)}")
-        raise Exception(f"could not build hash table for type {typ}.")
+def splitmix64(seed):
+    x = seed & MASK64
+    while True:
+        x = (x + 0x9E3779B97F4A7C15) & MASK64
+        z = x
+        z = (z ^ (z >> 30)) * 0xBF58476D1CE4E5B9 & MASK64
+        z = (z ^ (z >> 27)) * 0x94D049BB133111EB & MASK64
+        z = z ^ (z >> 31)
+        yield z & MASK64
+
+def multiplier_candidates(seed):
+    for z in splitmix64(seed):
+        m = z | 1  # force odd
+        yield m
+
+def build_hashtable(scope, typ):
+    all_ancestors = scope.ancestors(typ)
+    EMPTY = 2**64 - 1
+    TABLE_SIZE = 1 << (len(all_ancestors) - 1).bit_length()
+    gen = multiplier_candidates(hash_id(typ.symbol().data))
+    def insert(key, value, prime_candidate, table_size):
+        h1 = (key * prime_candidate) & MASK64
+        h1 = h1 ^ (h1 >> 32)
+        h1 = h1 & (table_size - 1)
+        if table1[h1] != EMPTY: return False
+        table1[h1] = value
+        return True
+    def insert_ancestors(ancestors, table_size):
+        for ancestor in ancestors:
+            success = insert(hash_id(ancestor.symbol().data), SymbolRefAttr(ancestor.symbol()), prime_candidate, table_size)
+            if not success: return False
+        return True
+    prime_candidate = next(gen)
+    for i in range(100):
+        table_size = TABLE_SIZE * 2 if i > 50 else TABLE_SIZE
+        table1 = [EMPTY] * table_size
+        prime_candidate = next(gen)
+        ancestors = {ancestor.symbol():ancestor for ancestor in all_ancestors}.values()
+        success = insert_ancestors(ancestors, table_size)
+        if not success: continue
+        #print(f"built hashtable for type {typ}.")
+        array_attr = ArrayAttr([x if isinstance(x, SymbolRefAttr) else IntegerAttr.from_int_and_width(x, 64) for x in table1])
+        prime_literal = IntegerAttr.from_int_and_width(prime_candidate, 64)
+        return array_attr, prime_literal
+    print(f"ancestors are: {all_ancestors}")
+    raise Exception(f"could not build hash table for type {typ}.")
+
+def build_offset_table(scope, typ):
+    all_ancestors = scope.ancestors(typ)
+    EMPTY = 2**64 - 1
+    TABLE_SIZE = 1 << (len(all_ancestors) - 1).bit_length()
+    gen = multiplier_candidates(hash_id(typ.symbol().data))
+    def insert(key, value, prime_candidate, table_size):
+        h1 = (key * prime_candidate) & MASK64
+        h1 = h1 ^ (h1 >> 32)
+        h1 = h1 & (table_size - 1)
+        if table1[h1] != EMPTY: return False
+        table1[h1] = value
+        return True
+    def insert_ancestors(ancestors, table_size):
+        for ancestor in ancestors:
+            success = insert(hash_id(ancestor.symbol().data), scope.offset_to(typ, ancestor) + vtable_buffer_size(), prime_candidate, table_size)
+            if not success: return False
+        return True
+    prime_candidate = next(gen)
+    for i in range(100):
+        table_size = TABLE_SIZE * 2 if i > 50 else TABLE_SIZE
+        table1 = [EMPTY] * table_size
+        prime_candidate = next(gen)
+        ancestors = {ancestor.symbol():ancestor for ancestor in all_ancestors}.values()
+        success = insert_ancestors(ancestors, table_size)
+        if not success: continue
+        #print(f"built hashtable for type {typ}.")
+        array_attr = ArrayAttr([IntegerAttr.from_int_and_width(x, 32) if x < 10000 else IntegerAttr.from_int_and_width(0, 32) for x in table1])
+        return array_attr
+    print(f"ancestors are: {all_ancestors}")
+    raise Exception(f"could not build hash table for type {typ}.")

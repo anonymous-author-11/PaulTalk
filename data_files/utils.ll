@@ -352,7 +352,6 @@ define i64 @hash_to_index(i64 %tbl_size, i64 %hash_coef, i64 %cand_id) {
   %shifted = lshr i64 %product, 32
   %xored = xor i64 %product, %shifted
   %hash = and i64 %xored, %tbl_size
-  %bug = icmp sgt i64 %hash, %tbl_size
   ret i64 %hash
 }
 

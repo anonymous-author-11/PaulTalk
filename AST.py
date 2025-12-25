@@ -11,7 +11,7 @@ from mid import *
 import hi
 import mid
 from utils import *
-from scope import Scope, Constraints, TypeEnvironment, ScopeExit, PointsToGraph
+from scope import Scope, Constraints, TypeEnvironment, ScopeExit, PointsToGraph, build_hashtable, build_offset_table
 from method_dispatch import *
 from xdsl.dialects import llvm, arith, builtin, memref, cf, func
 from xdsl.ir import Block, Region, TypeAttribute
@@ -84,8 +84,8 @@ class AST:
                 unbox_fn = UnboxDefOp.make("_unbox_" + typ_name)
                 func_ops.extend([box_fn, unbox_fn])
 
-            hash_tbl, prime = self.global_scope.build_hashtable(typ)
-            offset_tbl = self.global_scope.build_offset_table(typ)
+            hash_tbl, prime = build_hashtable(self.global_scope, typ)
+            offset_tbl = build_offset_table(self.global_scope, typ)
             hashid = IntegerAttr.from_int_and_width(hash_id(typ_name), 64)
             attr_dict = {
                 "class_name":StringAttr(typ_name),
@@ -3365,8 +3365,8 @@ class ClassDef(Statement):
             #debug_print(any(m for m in self.vtable() if isinstance(m, Method) and m.is_override_of(offender)))
             #debug_print(f"{self.name} is not instantiable because of abstract method {self.name}.{offender.definition.name}")
         combined = ArrayAttr([]) if not_instantiable else ArrayAttr([thing.symbol() for thing in self.vtable()])
-        hash_tbl, prime = scope.build_hashtable(self.type())
-        offset_tbl = scope.build_offset_table(self.type())
+        hash_tbl, prime = build_hashtable(scope, self.type())
+        offset_tbl = build_offset_table(scope, self.type())
         hashid = IntegerAttr.from_int_and_width(hash_id(self.name), 64)
         class_name = StringAttr(self.name)
         attr_dict = {
