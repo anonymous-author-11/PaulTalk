@@ -7,3 +7,4 @@ for i in mapped { IO.print(i); }
 bools = (10 from 0) < (10 of 5);
 
 for bool in bools { IO.print(bool); }
+
