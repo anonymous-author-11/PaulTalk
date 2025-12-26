@@ -715,6 +715,9 @@ TODO:
 - Comparisons for tuples [check!]
 
 - Make TupleToArray safe [check!]
+
+- Allow indexing tuples with tuples
+
 - Add masking to tuple loads/stores
 - Horizontal reductions for tuples
 	- sum(tuple) / product(tuple)
@@ -726,7 +729,7 @@ TODO:
 	- Should have to do stuff like widen and floatify vectirs of ints
 
 - Anything which desugars into something else should have a member called desugaring
-- BinaryOp and MethodCall should have a member 
+- BinaryOp and MethodCall should have a member for their concrete implementation
 
 - Also have special vector lowerings for tuple cast where it could be an arith.extsi etc.
 

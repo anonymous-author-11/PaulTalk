@@ -209,7 +209,7 @@ class SwissTable[K, V] extends OpenAddressMap[K, V] {
     }
 
     // return (new_cursor, next_entry) in buffer starting at position of input cursor
-    def scan_next(start_cursor: i32) -> Tuple[i32, Entry[K,V]]? {
+    def scan_next(start_cursor: i32) -> Tuple[i32, Pair[K,V]]? {
         meta = @metadata;
         entries = @entries;
 
@@ -219,7 +219,7 @@ class SwissTable[K, V] extends OpenAddressMap[K, V] {
             if (meta.[cursor] bit_and occupied_mask()) == 0 { continue; }
             entry = entries.[cursor];
             if entry is Nil { continue; }
-            return (cursor + 1, entry);
+            return (cursor + 1, entry.to_pair());
         }
         return nil;
     }
@@ -242,8 +242,7 @@ class OpenAddressIterator[K,V] extends Iterator[Pair[K,V]] {
     def next() -> Pair[K, V]? {
         tuple_or_nil = @map.scan_next(@cursor);
         if tuple_or_nil is Nil { return nil; }
-        (@cursor, entry) = tuple_or_nil;
-        if entry is Entry[K,V] { return entry.to_pair(); }
-        return nil;
+        (@cursor, pair) = tuple_or_nil;
+        return pair;
     }
 }

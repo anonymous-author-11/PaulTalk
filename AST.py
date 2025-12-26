@@ -1754,8 +1754,8 @@ class BufferGather(Indexation):
         return Assignment(NodeInfo.from_info(self.info, f"assign_{node_name}"), target, value)
 
     def codegen(self, scope):
-        self.temp_assign("receiver").codegen(scope)
-        self.temp_assign("idx").codegen(scope)
+        self.temp_assign("receiver", self.temp_id("receiver"), self.receiver).codegen(scope)
+        self.temp_assign("idx", self.temp_id("idx"), self.arguments[0]).codegen(scope)
         ret_type = self.exprtype(scope)
 
         # Fallback for general element types: construct a tuple literal from individual indexations
@@ -1804,8 +1804,8 @@ class BufferGather(Indexation):
 
         if idx_elem_type.bitwidth > 64:
             raise Exception(f"{self.info}: Indexation only supported with integers up to 64 bits in width.")
-        self.temp_assign("receiver").typeflow(scope)
-        self.temp_assign("idx").typeflow(scope)
+        self.temp_assign("receiver", self.temp_id("receiver"), self.receiver).typeflow(scope)
+        self.temp_assign("idx", self.temp_id("idx"), self.arguments[0]).typeflow(scope)
         self.apply_constraints(scope)
         return scope.simplify(Tuple.make([rec_typ.elem_type for t in idx_typ.types.data]))
 
@@ -1826,7 +1826,7 @@ class BufferScatter(MethodCall):
         self.temp_assign("idx", self.temp_id("idx"), self.arguments[0]).codegen(scope)
         self.temp_assign("vals", self.temp_id("vals"), self.arguments[1]).codegen(scope)
 
-        tup_type = self.temp_vals.exprtype(scope)
+        tup_type = self.temp_id("vals").exprtype(scope)
 
         # Fallback for general element types: store each individual indexation
         if not tup_type.vector_like:
@@ -1849,7 +1849,7 @@ class BufferScatter(MethodCall):
             indexation.apply_constraints(scope)
 
     def indexations(self, scope):
-        idx_typ = self.temp_idx.exprtype(scope)
+        idx_typ = self.temp_id("idx").exprtype(scope)
         lanes = list(enumerate(idx_typ.types.data))
         buf_index_infos = [NodeInfo.from_info(self.info, f"buffer_index_{i}") for i, t in lanes]
         idx_tup_index_infos = [NodeInfo.from_info(self.info, f"idx_tuple_index_{i}") for i, t in lanes]
