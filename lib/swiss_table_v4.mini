@@ -41,7 +41,7 @@ class SwissTable[K, V] extends OpenAddressMap[K, V] {
     @eq: (K, K) -> Bool
 
     regions { @elems_reg == @entries }
-    getter @size, @entries_len
+    getters @size, @entries_len
 
     // Extracts 6 bits for H2 and packs them into a control byte with LSB=1.
     def Self.h2_to_control(hash: i32) -> i8 {
@@ -209,7 +209,7 @@ class SwissTable[K, V] extends OpenAddressMap[K, V] {
     }
 
     // return (new_cursor, next_entry) in buffer starting at position of input cursor
-    def scan_next(start_cursor: i32) -> Tuple[i32, Pair[K,V]]? {
+    def scan_next(start_cursor: i32) -> Pair[i32, Pair[K,V]]? {
         meta = @metadata;
         entries = @entries;
 
@@ -219,10 +219,10 @@ class SwissTable[K, V] extends OpenAddressMap[K, V] {
             if (meta.[cursor] bit_and occupied_mask()) == 0 { continue; }
             entry = entries.[cursor];
             if entry is Nil { continue; }
-            return (cursor + 1, entry.to_pair());
+            return Pair{cursor + 1, entry.to_pair()};
         }
         return nil;
-    }
+    } ~> { ret holds @elems_reg }
 
     def iterator() -> OpenAddressIterator[K,V] {
         return OpenAddressIterator{self};

@@ -74,9 +74,9 @@ class PushIterator[T] extends Iterator[T] {
     }
 }
 
-my_ary = [1,2,3];
-byte_yielder = UTF8Encoder{YieldWriter{}};
-utf8_bytes = PushIterator{my_ary.iterator(), byte_yielder};
+// my_ary = [1,2,3];
+// byte_yielder = UTF8Encoder{YieldWriter{}};
+// utf8_bytes = PushIterator{my_ary.iterator(), byte_yielder};
 
 class Peeker[T] extends Iterator[T] {
     @iterator : Iterator[T]

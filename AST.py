@@ -2525,11 +2525,14 @@ class MethodDef(Statement):
             annotated_facts.add((lhs, op, rhs))
 
         # If there are no annotations on this method or any of its overidden methods, mark as all_alias
-        if (not self.name == "init") and (not annotated_facts.no_alias) and len(annotated_facts._set) == 0:
+        if self.should_infer_all_alias(annotated_facts):
             #print(f"inferring that {self.defining_class.name}.{self.name} is all_alias")
             annotated_facts.all_alias = True
 
         return annotated_facts
+
+    def should_infer_all_alias(self, annotated_facts) -> bool:
+        return (not self.name == "init") and (not annotated_facts.no_alias) and len(annotated_facts._set) == 0
 
     def annotated_points_to_facts(self, body_scope, param_names):
 
@@ -2759,6 +2762,13 @@ class ClassMethodDef(MethodDef):
 
     def self_type_constraints(self):
         return Constraints()
+
+    # Class methods with all value-typed parameters should not be inferred all_alias
+    def should_infer_all_alias(self, annotated_facts) -> bool:
+        normal_conditions = (not self.name == "init") and (not annotated_facts.no_alias) and len(annotated_facts._set) == 0
+        class_env = self.defining_class.type_env
+        not_all_primitive_params = not all(is_value_type(class_env.simplify(param.type(class_env))) for param in self.params)
+        return normal_conditions and not_all_primitive_params
 
     def pointsto_param_names(self):
         param_names = [param.name for param in self.params]

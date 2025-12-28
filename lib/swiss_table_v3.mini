@@ -46,7 +46,7 @@ class SwissTable[K, V] extends HashMap[K, V] {
     // Extracts 6 bits for H2 and packs them into a control byte with LSB=1.
     def Self.h2_to_control(hash: i32) -> i8 {
         // Use bits 25-30 of the hash (6 bits).
-        h2_6bit = (hash >> 26) as i8;
+        h2_6bit = ((hash >> 25) bit_and 0x3F) as i8;
         // Shift left to make room for the occupied bit, then set the LSB.
         return (h2_6bit << 1) bit_or occupied_mask();
     }
