@@ -102,7 +102,7 @@ def is_value_type(typ):
     return False
 
 builtin_types = {
-    "bool_typ":Bool(), "i8_typ":Integer(8), "i32_typ":Integer(32), "i64_typ":Integer(64),
+    "bool_typ":Bool(),"i1_typ":Integer(1), "i8_typ":Integer(8), "i32_typ":Integer(32), "i64_typ":Integer(64),
     "i128_typ":Integer(128), "f64_typ":Float(), "nil_typ":Nil(), "any_typ":Any(), "nothing_typ":Nothing(),
     "coroutine_typ":Coroutine([ArrayAttr([]), Nothing(), Nothing()]), "function_typ":Function([ArrayAttr([]), Nothing(), Nothing()]),
     "buffer_typ":Buffer([Nothing()]), "tuple_typ":Tuple([ArrayAttr([])]), "union_typ":Union.from_list([IntegerType(8)])
