@@ -1486,26 +1486,35 @@ class MethodCall(Expression):
     def subexpressions(self):
         return [self.receiver, *self.arguments]
 
+    def desugar(self, scope, rec_typ):
+        if isinstance(rec_typ, Coroutine):
+            return CoroutineCall(self.info, self.receiver, self.method, self.arguments)
+        if isinstance(rec_typ, Function):
+            return FunctionLiteralCall(self.info, self.receiver, self.method, self.arguments)
+        if isinstance(rec_typ, Buffer) and self.method == "_set_index":
+            if len(self.arguments) > 0 and isinstance(self.arguments[0].exprtype(scope), Tuple):
+                return BufferScatter(self.info, self.receiver, self.method, self.arguments)
+            return BufferSetIndex(self.info, self.receiver, self.method, self.arguments)
+        if isinstance(rec_typ, Buffer):
+            if len(self.arguments) > 0 and isinstance(self.arguments[0].exprtype(scope), Tuple):
+                return BufferGather(self.info, self.receiver, self.method, self.arguments)
+            return BufferIndexation(self.info, self.receiver, self.method, self.arguments)
+        if isinstance(rec_typ, Tuple) and self.method == "_set_index":
+            return TupleSetIndex(self.info, self.receiver, self.method, self.arguments)
+        if isinstance(rec_typ, Tuple) and self.method == "_index":
+            return TupleIndexation(self.info, self.receiver, self.method, self.arguments)
+        if isinstance(rec_typ, Tuple):
+            to_array = TupleToArray(NodeInfo.from_info(self.info, "cast"), self.receiver, False)
+            return MethodCall(self.info, to_array, self.method, self.arguments)
+        return None
+
     def codegen(self, scope):
         rec_typ = self.receiver.exprtype(scope)
         if isinstance(rec_typ, TypeParameter): rec_typ = rec_typ.bound
-        if isinstance(rec_typ, Coroutine): return CoroutineCall(self.info, self.receiver, self.method, self.arguments).codegen(scope)
-        if isinstance(rec_typ, Function): return FunctionLiteralCall(self.info, self.receiver, self.method, self.arguments).codegen(scope)
-        if isinstance(rec_typ, Buffer) and self.method == "_set_index":
-            if len(self.arguments) > 0 and isinstance(self.arguments[0].exprtype(scope), Tuple):
-                return BufferScatter(self.info, self.receiver, self.method, self.arguments).codegen(scope)
-            return BufferSetIndex(self.info, self.receiver, self.method, self.arguments).codegen(scope)
-        if isinstance(rec_typ, Buffer):
-            if len(self.arguments) > 0 and isinstance(self.arguments[0].exprtype(scope), Tuple):
-                return BufferGather(self.info, self.receiver, self.method, self.arguments).codegen(scope)
-            return BufferIndexation(self.info, self.receiver, self.method, self.arguments).codegen(scope)
-        if isinstance(rec_typ, Tuple) and self.method == "_set_index":
-            return TupleSetIndex(self.info, self.receiver, self.method, self.arguments).codegen(scope)
-        if isinstance(rec_typ, Tuple) and self.method == "_index":
-            return TupleIndexation(self.info, self.receiver, self.method, self.arguments).codegen(scope)
-        if isinstance(rec_typ, Tuple):
-            to_array = TupleToArray(NodeInfo.from_info(self.info, "cast"), self.receiver, False)
-            return MethodCall(self.info, to_array, self.method, self.arguments).codegen(scope)
+
+        desugared = self.desugar(scope, rec_typ)
+        if desugared: return desugared.codegen(scope)
+
         rec_class = scope.get_class(self.info, rec_typ)
 
         arg_types = [arg.exprtype(scope) for arg in self.arguments]
@@ -1609,23 +1618,8 @@ class MethodCall(Expression):
     def exprtype(self, scope):
         rec_typ = self.receiver.exprtype(scope)
         if isinstance(rec_typ, TypeParameter): rec_typ = rec_typ.bound
-        if isinstance(rec_typ, Buffer) and self.method == "_set_index":
-            if len(self.arguments) > 0 and isinstance(self.arguments[0].exprtype(scope), Tuple):
-                return BufferScatter(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
-            return BufferSetIndex(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
-        if isinstance(rec_typ, Buffer) and self.method == "_index":
-            if len(self.arguments) > 0 and isinstance(self.arguments[0].exprtype(scope), Tuple):
-                return BufferGather(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
-            return BufferIndexation(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
-        if isinstance(rec_typ, Tuple) and self.method == "_set_index":
-            return TupleSetIndex(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
-        if isinstance(rec_typ, Tuple) and self.method == "_index":
-            return TupleIndexation(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
-        if isinstance(rec_typ, Tuple):
-            to_array = TupleToArray(NodeInfo.from_info(self.info, "cast"), self.receiver, False)
-            return MethodCall(self.info, to_array, self.method, self.arguments).exprtype(scope)
-        if isinstance(rec_typ, Coroutine): return CoroutineCall(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
-        if isinstance(rec_typ, Function): return FunctionLiteralCall(self.info, self.receiver, self.method, self.arguments).exprtype(scope)
+        desugared = self.desugar(scope, rec_typ)
+        if desugared: return desugared.exprtype(scope)
         broad, specialized = self.simple_exprtype(scope, rec_typ)
         return specialized
 
