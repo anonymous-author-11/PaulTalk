@@ -39,7 +39,7 @@ class SwissTable[K, V] extends HashMap[K, V] {
 
     def init(@hasher: (K) -> i32, @eq: (K, K) -> Bool) {
         // Minimum capacity must be >= group_width for SIMD loads
-        initial_capacity = 16;
+        initial_capacity = 32;
         // Allocate extra group for safe SIMD loads near end
         @entries = Buffer[Entry[K,V]?].new(initial_capacity + group_width());
         @metadata = Buffer[i8].new(initial_capacity + group_width());
@@ -92,55 +92,63 @@ class SwissTable[K, V] extends HashMap[K, V] {
         entries = @entries;
 
         while true {
-            // SIMD: Check all 16 slots in parallel for H2 match
             h2_matches = self.match_h2_in_group(probe_index, h2_control);
 
-            // Iterate through H2 matches (usually 0-2 iterations)
             bit_pos = 0;
             for match in h2_matches {
                 if not match {
                     bit_pos = bit_pos + 1;
                     continue;
                 }
-                slot = (probe_index + bit_pos) bit_and mask;
+                // NEW: Skip positions in the padding area
+                if probe_index + bit_pos >= capacity {
+                    bit_pos = bit_pos + 1;
+                    continue;
+                }
+                slot = probe_index + bit_pos;  // No mask needed now
                 entry = entries.[slot];
                 if entry is Entry[K,V] {
                     if entry.hash() == hash and @eq.call(entry.key(), key) {
-                        return slot;  // Found it!
+                        return slot;
                     }
                 }
                 bit_pos = bit_pos + 1;
             }
 
-            // SIMD: Check for any empty slot (terminates probing)
             empty_matches = self.match_empty_in_group(probe_index);
 
-            if empty_matches != (16 of false) {
-                // Key doesn't exist - return insertion point
-                if first_tombstone != -1 { return first_tombstone; }
-                bit_pos = 0;
-                for match in empty_matches {
-                    if match { return (probe_index + bit_pos) bit_and mask; }
+            bit_pos = 0;
+            for match in empty_matches {
+                // NEW: Skip padding positions
+                if probe_index + bit_pos >= capacity {
                     bit_pos = bit_pos + 1;
+                    continue;
                 }
+                if match {
+                    if first_tombstone != -1 { return first_tombstone; }
+                    return probe_index + bit_pos;  // No mask needed
+                }
+                bit_pos = bit_pos + 1;
             }
 
-            // No empty slots - check for tombstones to potentially reuse
             if first_tombstone == -1 {
-                // Sentinels that aren't empty must be tombstones
                 tombstone_matches = self.match_sentinel_in_group(probe_index);
+
                 bit_pos = 0;
                 for match in tombstone_matches {
+                    // NEW: Skip padding positions
+                    if probe_index + bit_pos >= capacity {
+                        bit_pos = bit_pos + 1;
+                        continue;
+                    }
                     if match {
-                        first_tombstone = (probe_index + bit_pos) bit_and mask;
+                        first_tombstone = probe_index + bit_pos;  // No mask
                         break;
                     }
                     bit_pos = bit_pos + 1;
                 }
             }
 
-            // Triangular probing: probe_index += probe_count * group_width
-            // Simplified here to linear for clarity
             probe_index = (probe_index + group_width()) bit_and mask;
         }
     }
@@ -154,14 +162,17 @@ class SwissTable[K, V] extends HashMap[K, V] {
         while true {
             sentinel_matches = self.match_sentinel_in_group(probe_index);
 
-            if sentinel_matches != (16 of false) {
-                bit_pos = 0;
-                for match in sentinel_matches {
-                    if match {
-                        return (probe_index + bit_pos) bit_and mask;
-                    }
+            bit_pos = 0;
+            for match in sentinel_matches {
+                // Skip padding positions
+                if probe_index + bit_pos >= capacity {
                     bit_pos = bit_pos + 1;
+                    continue;
                 }
+                if match {
+                    return probe_index + bit_pos;
+                }
+                bit_pos = bit_pos + 1;
             }
 
             probe_index = (probe_index + group_width()) bit_and mask;
@@ -245,7 +256,7 @@ class SwissTable[K, V] extends HashMap[K, V] {
     }
 
     def clear() {
-        initial_capacity = 16;
+        initial_capacity = 32;
         @entries = Buffer[Entry[K,V]?].new(initial_capacity + group_width());
         @metadata = Buffer[i8].new(initial_capacity + group_width());
         @entries_len = initial_capacity;

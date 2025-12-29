@@ -5,4 +5,4 @@ import io;
 import channel;
 import array;
 import files;
-import swiss_table_v3;
+import swiss_table_v5;
