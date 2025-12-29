@@ -923,6 +923,23 @@ module @patterns {
       pdl.erase %root
     }
   }
+  pdl.pattern @LowerStoreBoolBuffer : benefit(1) {
+    %byte_tupl_type_attr = pdl.attribute
+    %tupl_type_attr = pdl.attribute
+    %tuple = pdl.operand
+    %buffer = pdl.operand
+    %root = pdl.operation "mid.store_bool_buffer"(%tuple, %buffer : !pdl.value, !pdl.value) {"tupl_type" = %tupl_type_attr, "byte_tupl_type" = %byte_tupl_type_attr}
+    pdl.rewrite %root {
+      %byte_tupl_type = pdl.apply_native_rewrite "type_attr_to_type"(%byte_tupl_type_attr : !pdl.attribute) : !pdl.type
+      %tupl_type = pdl.apply_native_rewrite "type_attr_to_type"(%tupl_type_attr : !pdl.attribute) : !pdl.type
+      %load = pdl.operation "llvm.load"(%tuple : !pdl.value) -> (%tupl_type : !pdl.type)
+      %load_result = pdl.result 0 of %load
+      %zext = pdl.operation "llvm.zext"(%load_result : !pdl.value) -> (%byte_tupl_type : !pdl.type)
+      %zext_result = pdl.result 0 of %zext
+      %store = pdl.operation "llvm.store"(%zext_result, %buffer : !pdl.value, !pdl.value)
+      pdl.replace %root with %store
+    }
+  }
   pdl.pattern @LowerFloatArithmetic : benefit(1) {
     %op_type = pdl.type
     pdl.apply_native_constraint "is_float"(%op_type : !pdl.type)

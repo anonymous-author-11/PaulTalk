@@ -728,6 +728,8 @@ TODO:
 - Need to be able to reference tuple fields (tup.1, tup.2, etc) in region annotations (disallowed by grammar)
 
 - Also have special vector lowerings for tuple cast where it could be an arith.extsi etc.
+- Be able to cast Bool to integers, and i1 to Bool
+- Cast Tuple[Bool] to Tuple[i8] before TupleToArray [check!]
 
 - Should the parser emit Arithmetic and Comparison or just BinaryOp?
 	- We don't know that this is actually arithmetic yet, until we discern types

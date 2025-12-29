@@ -1182,13 +1182,23 @@ class TupleToBuffer(Expression):
     def codegen(self, scope):
         tuple_type = self.tupl.exprtype(scope)
         tupl = self.tupl.codegen(scope)
+        alloc_type = tuple_type if not tuple_type.is_bitvector else Tuple.make([Integer(8) for t in tuple_type.types.data])
 
         # box onto heap
         if not self.on_stack:
-            malloc = MallocOp.make(tuple_type)
-            memcpy = MemCpyOp.make(tupl, malloc.results[0], tuple_type.base_typ())
+            malloc = MallocOp.make(alloc_type)
+            if tuple_type.is_bitvector:
+                memcpy = StoreBoolBufferOp.make(tupl, malloc.results[0], tuple_type)
+            else:
+                memcpy = MemCpyOp.make(tupl, malloc.results[0], tuple_type.base_typ())
             scope.region.last_block.add_ops([malloc, memcpy])
             tupl = malloc
+
+        if tuple_type.is_bitvector and self.on_stack:
+            new_alloca = AllocateOp.make(alloc_type.base_typ())
+            mov = StoreBoolBufferOp.make(tupl, new_alloca.results[0], tuple_type)
+            scope.region.last_block.add_ops([new_alloca, mov])
+            tupl = new_alloca
 
         alloca = AllocateOp.make(llvm.LLVMPointerType.opaque())
         store = llvm.StoreOp(tupl, alloca.results[0])

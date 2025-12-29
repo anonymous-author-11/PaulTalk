@@ -751,6 +751,23 @@ class SetterDefOp(IRDLOperation):
         return SetterDefOp.create(attributes=attr_dict)
 
 @irdl_op_definition
+class StoreBoolBufferOp(IRDLOperation):
+    name = "mid.store_bool_buffer"
+    tupl: Operand = operand_def()
+    dest: Operand = operand_def()
+    tupl_type: TypeAttribute = attr_def(TypeAttribute)
+    byte_tupl_type: TypeAttribute = attr_def(TypeAttribute)
+
+    @classmethod
+    def make(cls, tupl, dest, tupl_type):
+        byte_tupl_type = hi.Tuple.make([hi.Integer(8) for t in tupl_type.types.data])
+        attr_dict = {
+            "tupl_type":tupl_type.base_typ(),
+            "byte_tupl_type":byte_tupl_type.base_typ()
+        }
+        return StoreBoolBufferOp.create(operands=[tupl, dest], attributes=attr_dict)
+
+@irdl_op_definition
 class ArgPasserOp(IRDLOperation):
     name = "mid.arg_passer"
     func_name: StringAttr = attr_def(StringAttr)

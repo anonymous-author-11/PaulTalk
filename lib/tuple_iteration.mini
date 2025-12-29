@@ -9,3 +9,4 @@ bools = (10 from 0) < (10 of 5);
 IO.print(bools.[3]);
 IO.print(bools.[7]);
 
+for bool in bools { IO.print(bool); }
