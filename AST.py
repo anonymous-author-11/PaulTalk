@@ -295,18 +295,16 @@ class BinaryOp(Expression):
     left: Expression
     operator: str
     right: Expression
+    desugared: Expression = None
 
     @property
     def subexpressions(self):
         return [self.left, self.right]
 
-    def codegen(self, scope):
+    def standard_codegen(self, scope):
         left_type = self.left.exprtype(scope)
-        if isinstance(left_type, FatPtr) or isinstance(left_type, TypeParameter):
-            return OverloadedBinaryOp(self.info, self.left, self.operator, self.right).codegen(scope)
         right_type = self.right.exprtype(scope)
-        if isinstance(left_type, Tuple) and isinstance(right_type, Tuple):
-            return TuplesOp(self.info, self.left, self.operator, self.right, type(self)).codegen(scope)
+
         operands = [self.left.codegen(scope), self.right.codegen(scope)]
         attr_dict = {
             "op":StringAttr(self.operator),
@@ -317,11 +315,8 @@ class BinaryOp(Expression):
         scope.region.last_block.add_op(binop)
         return binop.results[0]
 
-    def concrete_op(self, operands, attributes, result_types):
-        raise Exception("abstract")
-
-    def concrete_exprtype(self, left_type, right_type, scope):
-        raise Exception("abstract")
+    def codegen(self, scope):
+        return self.desugared.codegen(scope)
 
     def conform_literals(self, left_type, right_type, scope):
         # For int-int ops where one is a literal, set the literal's width equal to the other
@@ -366,21 +361,23 @@ class BinaryOp(Expression):
         if not (left_number and right_number):
             raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
 
-    def exprtype(self, scope):
+    def desugar(self, scope):
         left_type = self.left.exprtype(scope)
         if isinstance(left_type, FatPtr) or isinstance(left_type, TypeParameter):
-            return OverloadedBinaryOp(self.info, self.left, self.operator, self.right).exprtype(scope)
+            return OverloadedBinaryOp(self.info, self.left, self.operator, self.right)
         right_type = self.right.exprtype(scope)
         if isinstance(left_type, Tuple) and isinstance(right_type, Tuple):
-            return TuplesOp(self.info, self.left, self.operator, self.right, type(self)).exprtype(scope)
+            return TuplesOp(self.info, self.left, self.operator, self.right)
+        if self.operator in ("ADD", "SUB", "MUL", "DIV", "bit_or", "bit_and", "bit_xor", "MOD", "LSHIFT", "RSHIFT"):
+            return Arithmetic(self.info, self.left, self.operator, self.right)
+        if self.operator in ("EQ","NEQ","LT","GT","LE","GE"):
+            return Comparison(self.info, self.left, self.operator, self.right)
+        raise Exception(f"{self.info}: Operator {self.operator} not accounted for")
 
-        self.ensure_numbers(left_type, right_type)
-
-        left_type, right_type = self.conform_literals(left_type, right_type, scope)
-        left_type, right_type = self.widen_operands(left_type, right_type, scope)
-        left_type, right_type = self.floatify_ints(left_type, right_type, scope)
-
-        return self.concrete_exprtype(left_type, right_type)
+    def exprtype(self, scope):
+        if self.desugared: return self.desugared.exprtype(scope)
+        self.desugared = self.desugar(scope)
+        return self.desugared.exprtype(scope)
 
     def typeflow(self, scope):
         self.left.typeflow(scope)
@@ -389,25 +386,14 @@ class BinaryOp(Expression):
 
 @dataclass
 class TuplesOp(BinaryOp):
-    op_type: type
 
-    @property
-    def temp_left_id(self):
-        return Identifier(self.info, self.left.info.id + "_temp_tup")
+    def temp_id(self, name):
+        return Identifier(self.info, self.info.id + f"_{name}")
 
-    @property
-    def temp_right_id(self):
-        return Identifier(self.info, self.right.info.id + "_temp_tup")
+    def temp_assign(self, node_name, target, value):
+        return Assignment(NodeInfo.from_info(self.info, f"_assign_{node_name}"), target, value)
 
-    @property
-    def assign_left(self):
-        return Assignment(NodeInfo.from_info(self.info, "_assign_left"), self.temp_left_id, self.left)
-
-    @property
-    def assign_right(self):
-        return Assignment(NodeInfo.from_info(self.info, "_assign_right"), self.temp_right_id, self.right)
-
-    def desugared(self, scope, left_type, right_type):
+    def desugar(self, left_type, right_type):
         num_elems = len(left_type.types.data)
 
         indices_infos = [NodeInfo.from_info(self.info, f"index_{i}") for i in range(num_elems)]
@@ -416,17 +402,15 @@ class TuplesOp(BinaryOp):
         op_infos = [NodeInfo.from_info(self.info, f"op_{i}") for i in range(num_elems)]
 
         indices = [IntegerLiteral(indices_infos[i], i, 32) for i in range(num_elems)]
-        left_elems = [TupleIndexation(left_infos[i], self.temp_left_id, "_index", [indices[i]]) for i in range(num_elems)]
-        right_elems = [TupleIndexation(right_infos[i], self.temp_right_id, "_index", [indices[i]]) for i in range(num_elems)]
-        result_elems = tuple(self.op_type(op_infos[i], left_elems[i], self.operator, right_elems[i]) for i in range(num_elems))
+        left_elems = [TupleIndexation(left_infos[i], self.temp_id("left"), "_index", [indices[i]]) for i in range(num_elems)]
+        right_elems = [TupleIndexation(right_infos[i], self.temp_id("right"), "_index", [indices[i]]) for i in range(num_elems)]
+        result_elems = tuple(BinaryOp(op_infos[i], left_elems[i], self.operator, right_elems[i]) for i in range(num_elems))
         return TupleLiteral(self.info, result_elems)
 
     def codegen(self, scope):
-        left_type = self.left.exprtype(scope)
-        right_type = self.right.exprtype(scope)
-        self.assign_left.codegen(scope)
-        self.assign_right.codegen(scope)
-        return self.desugared(scope, left_type, right_type).codegen(scope)
+        self.temp_assign("left", self.temp_id("left"), self.left).codegen(scope)
+        self.temp_assign("right", self.temp_id("right"), self.right).codegen(scope)
+        return self.desugared.codegen(scope)
 
     def exprtype(self, scope):
         left_type = self.left.exprtype(scope)
@@ -437,10 +421,12 @@ class TuplesOp(BinaryOp):
         if self.operator in ("or", "and"):
             raise Exception(f"{self.info}: Operator {self.operator} not available between types {(left_type, right_type)}")
 
-        self.assign_left.typeflow(scope)
-        self.assign_right.typeflow(scope)
+        self.temp_assign("left", self.temp_id("left"), self.left).typeflow(scope)
+        self.temp_assign("right", self.temp_id("right"), self.right).typeflow(scope)
 
-        return self.desugared(scope, left_type, right_type).exprtype(scope)
+        if self.desugared: return self.desugared.exprtype(scope)
+        self.desugared = self.desugar(left_type, right_type)
+        return self.desugared.exprtype(scope)
 
 @dataclass
 class Arithmetic(BinaryOp):
@@ -448,9 +434,23 @@ class Arithmetic(BinaryOp):
     def concrete_op(self, operands, attributes, result_types):
         return hi.ArithmeticOp.create(operands=operands, attributes=attributes, result_types=result_types)
 
-    def concrete_exprtype(self, left_type, right_type):
+    def codegen(self, scope):
+        return self.standard_codegen(scope)
 
-        needs_same_types = self.operator in ("ADD", "SUB", "MUL", "DIV", "MOD")
+    def exprtype(self, scope):
+        left_type = self.left.exprtype(scope)
+        right_type = self.right.exprtype(scope)
+
+        self.ensure_numbers(left_type, right_type)
+
+        left_type, right_type = self.conform_literals(left_type, right_type, scope)
+
+        # These operations are asymmetric
+        if not self.operator in ("MOD", "LSHIFT", "RSHIFT"):
+            left_type, right_type = self.widen_operands(left_type, right_type, scope)
+            left_type, right_type = self.floatify_ints(left_type, right_type, scope)
+
+        needs_same_types = self.operator in ("ADD", "SUB", "MUL", "DIV", "MOD", "LSHIFT", "RSHIFT")
         if needs_same_types and left_type != right_type:
             raise Exception(f"{self.info}: tried to use {self.operator} on different types: {left_type} and {right_type}")
 
@@ -471,9 +471,21 @@ class Arithmetic(BinaryOp):
 
 @dataclass
 class Comparison(BinaryOp):
+
     def concrete_op(self, operands, attributes, result_types):
         return hi.ComparisonOp.create(operands=operands, attributes=attributes, result_types=[Bool()])
-    def concrete_exprtype(self, left_type, right_type):
+
+    def codegen(self, scope):
+        return self.standard_codegen(scope)
+
+    def exprtype(self, scope):
+        left_type = self.left.exprtype(scope)
+        right_type = self.right.exprtype(scope)
+        self.ensure_numbers(left_type, right_type)
+        left_type, right_type = self.conform_literals(left_type, right_type, scope)
+        left_type, right_type = self.widen_operands(left_type, right_type, scope)
+        left_type, right_type = self.floatify_ints(left_type, right_type, scope)
+
         if left_type != right_type:
             raise Exception(f"{self.info}: tried to use {self.operator} on different types: {left_type} and {right_type}")
         return Bool()
@@ -497,7 +509,9 @@ class Logical(BinaryOp):
         scope.region.last_block.add_op(logical)
         return logical.results[0]
 
-    def concrete_exprtype(self, left_type, right_type):
+    def exprtype(self, scope):
+        left_type = self.left.exprtype(scope)
+        right_type = self.right.exprtype(scope)
         if left_type != Bool() or right_type != Bool():
             raise Exception(f"{self.info} Logical operator {self.operator} must take two booleans, not {left_type} and {right_type}")
         return Bool()
@@ -583,13 +597,7 @@ class NegativeOp(Expression):
 class IntegerLiteral(Expression):
     value: int
     width: int
-    signed: bool
-
-    def __init__(self, info: NodeInfo, value: int, width: int, signed=True):
-        self.info = info
-        self.value = value
-        self.width = width
-        self.signed = signed
+    signed: bool = True
 
     def codegen(self, scope):
         typ = self.exprtype(scope)
@@ -1223,13 +1231,7 @@ class TupleToArray(Expression):
 class As(Expression):
     operand: Expression
     typ: TypeAttribute
-    force: bool
-
-    def __init__(self, info: NodeInfo, operand: Expression, typ: TypeAttribute, force=False):
-        self.info = info
-        self.operand = operand
-        self.typ = typ
-        self.force = force
+    force: bool = False
 
     @property
     def subexpressions(self):
@@ -1283,13 +1285,7 @@ class As(Expression):
 class Into(Expression):
     operand: Expression
     typ: TypeAttribute
-    method: "MethodCall"
-
-    def __init__(self, info, operand, typ):
-        self.info = info
-        self.operand = operand
-        self.typ = typ
-        self.method = None
+    method: "MethodCall" = None
 
     @property
     def subexpressions(self):
@@ -3754,6 +3750,7 @@ class Field:
 class Assignment(Statement):
     target: Identifier
     value: Expression
+    desugared: Expression = None
 
     def liveness(self, live_tbl, points_to_graph, insertion_points):
         before_tbl = live_tbl | {id:True for id in self.value.used_ids} | { self.target.info.id:False }
@@ -3761,37 +3758,35 @@ class Assignment(Statement):
         if len(stmt_insertion_points) > 0: insertion_points[self.info.id] = stmt_insertion_points
         return before_tbl
 
-    def codegen(self, scope):
-        typ = self.value.exprtype(scope)
+    def desugar(self, scope, typ):
         if isinstance(self.target, Identifier) and "@" in self.target.name:
-            return FieldAssignment(self.info, self.target, self.value).codegen(scope)
+            return FieldAssignment(self.info, self.target, self.value)
         if isinstance(self.target, MethodCall):
-            return CallAssignment(self.info, self.target, self.value).codegen(scope)
+            return CallAssignment(self.info, self.target, self.value)
         if isinstance(self.target, TupleLiteral):
-            return DestructureAssignment(self.info, self.target, self.value).codegen(scope)
+            if isinstance(typ, FatPtr):
+                return DestructurePairAssignment(self.info, self.target, self.value)
+            return DestructureAssignment(self.info, self.target, self.value)
         in_symbol_table = self.target.name in scope.symbol_table
         should_reassign = in_symbol_table and scope.subtype(typ,scope.type_table[self.target.name])
-        if should_reassign: return Reassignment(self.info, self.target, self.value).codegen(scope)
+        if should_reassign:
+            return Reassignment(self.info, self.target, self.value)
         if isinstance(self.value, Identifier) or isinstance(typ, FatPtr) or isinstance(typ, Buffer) or isinstance(typ, Coroutine):
-            return Reference(self.info, self.target, self.value).codegen(scope)
-        scope.insert_region_creations(self)
-        new_val = self.value.codegen(scope)
-        scope.symbol_table[self.target.name] = new_val
-        scope.type_table[self.target.name] = typ
-        scope.insert_region_removals(self)
+            return Reference(self.info, self.target, self.value)
+        return SimpleAssignment(self.info, self.target, self.value)
 
-    def typeflow(self, scope):
+    def codegen(self, scope):
+        if self.desugared: return self.desugared.codegen(scope)
+        value_type = self.value.exprtype(scope)
+        self.desugared = self.desugar(scope, value_type)
+        return self.desugared.codegen(scope)
+
+    def basic_typeflow(self, scope):
         value_type = self.value.exprtype(scope)
         if not value_type or value_type == llvm.LLVMVoidType():
             raise Exception(f"{self.info}: Assignment impossible: right hand side expression does not return anything.")
         if not is_value_type(value_type):
             scope.points_to_facts.add((self.target.info.id, "==", self.value.info.id))
-        if isinstance(self.target, Identifier) and "@" in self.target.name:
-            return FieldAssignment(self.info, self.target, self.value).typeflow(scope)
-        if isinstance(self.target, MethodCall):
-            return CallAssignment(self.info, self.target, self.value).typeflow(scope)
-        if isinstance(self.target, TupleLiteral):
-            return DestructureAssignment(self.info, self.target, self.value).typeflow(scope)
         if(not isinstance(self.target, Identifier)):
             raise Exception(f"{self.info}: lhs in assignment is not an identifier!")
         if self.target.name == "self":
@@ -3799,6 +3794,26 @@ class Assignment(Statement):
         if self.target.name[0].isupper():
             raise Exception(f"{self.info}: Variables should not be capitalized.")
         scope.type_table[self.target.name] = value_type
+
+    def typeflow(self, scope):
+        if self.desugared: return self.desugared.typeflow(scope)
+        value_type = self.value.exprtype(scope)
+        self.desugared = self.desugar(scope, value_type)
+        return self.desugared.typeflow(scope)
+
+@dataclass
+class SimpleAssignment(Assignment):
+
+    def codegen(self, scope):
+        typ = self.value.exprtype(scope)
+        scope.insert_region_creations(self)
+        new_val = self.value.codegen(scope)
+        scope.symbol_table[self.target.name] = new_val
+        scope.type_table[self.target.name] = typ
+        scope.insert_region_removals(self)
+
+    def typeflow(self, scope):
+        self.basic_typeflow(scope)
 
 @dataclass
 class DestructureAssignment(Assignment):
@@ -3810,45 +3825,53 @@ class DestructureAssignment(Assignment):
         assign = Assignment(self.info, tupl, self.value)
         assign.codegen(scope)
 
-        # Special-case for Pair[T, U] rhs
-        if isinstance(value_type, FatPtr):
-            first = MethodCall(NodeInfo.from_info(self.info, "first_call"), tupl, "first", [])
-            second = MethodCall(NodeInfo.from_info(self.info, "second_call"), tupl, "second", [])
-            Assignment(NodeInfo.from_info(self.info, f"assign_first"), self.target.elems[0], first).codegen(scope)
-            Assignment(NodeInfo.from_info(self.info, f"assign_second"), self.target.elems[1], second).codegen(scope)
-            return
+        for assignment in self.assignments(scope, tupl, value_type):
+            assignment.codegen(scope)
 
+    def assignments(self, scope, tupl, value_type):
+        result = []
         for i, t in enumerate(value_type.types.data):
             lhs = self.target.elems[i]
             int_literal = IntegerLiteral(NodeInfo.from_info(self.info, f"literal_{i}"), i, 32)
             rhs = TupleIndexation(NodeInfo.from_info(self.info, f"index_{i}"), tupl, "_index", [int_literal])
-            Assignment(NodeInfo.from_info(self.info, f"assign_{i}"), lhs, rhs).codegen(scope)
+            assign = Assignment(NodeInfo.from_info(self.info, f"assign_{i}"), lhs, rhs)
+            result.append(assign)
+        return result
 
     def typeflow(self, scope):
         value_type = self.value.exprtype(scope)
-        if not isinstance(value_type, Tuple):
-            if not isinstance(value_type, FatPtr) or value_type.cls.data != "Pair":
-                raise Exception(f"{self.info}: rhs of destructuring assignment should be a tuple, not {value_type}")
-            if len(self.target.elems) != 2:
-                raise Exception(f"Can only destrcture a {value_type} instance into two identifiers, not {len(self.target.elems)}")
+        tupl = Identifier(self.info, self.info.id + "_lhs_tuple")
+        assign = Assignment(self.info, tupl, self.value)
+        assign.typeflow(scope)
+
+        for assignment in self.assignments(scope, tupl, value_type):
+            assignment.typeflow(scope)
+
+@dataclass
+class DestructurePairAssignment(DestructureAssignment):
+
+    # Special case where the rhs of a destructuring assignment is a Pair
+    
+    def assignments(self, scope, tupl, value_type):
+        first = MethodCall(NodeInfo.from_info(self.info, "first_call"), tupl, "first", [])
+        second = MethodCall(NodeInfo.from_info(self.info, "second_call"), tupl, "second", [])
+        first_assign = Assignment(NodeInfo.from_info(self.info, f"assign_first"), self.target.elems[0], first)
+        second_assign = Assignment(NodeInfo.from_info(self.info, f"assign_second"), self.target.elems[1], second)
+        return [first_assign, second_assign]
+
+    def typeflow(self, scope):
+        value_type = self.value.exprtype(scope)
+        if value_type.cls.data != "Pair":
+            raise Exception(f"{self.info}: rhs of destructuring assignment should be a tuple or Pair, not {value_type}")
+        if len(self.target.elems) != 2:
+            raise Exception(f"Can only destructure a {value_type} instance into two identifiers, not {len(self.target.elems)}")
 
         tupl = Identifier(self.info, self.info.id + "_lhs_tuple")
         assign = Assignment(self.info, tupl, self.value)
         assign.typeflow(scope)
 
-        # Special-case for Pair[T, U] rhs
-        if isinstance(value_type, FatPtr):
-            first = MethodCall(NodeInfo.from_info(self.info, "first_call"), tupl, "first", [])
-            second = MethodCall(NodeInfo.from_info(self.info, "second_call"), tupl, "second", [])
-            Assignment(NodeInfo.from_info(self.info, f"assign_first"), self.target.elems[0], first).typeflow(scope)
-            Assignment(NodeInfo.from_info(self.info, f"assign_second"), self.target.elems[1], second).typeflow(scope)
-            return
-
-        for i, t in enumerate(value_type.types.data):
-            lhs = self.target.elems[i]
-            int_literal = IntegerLiteral(NodeInfo.from_info(self.info, f"literal_{i}"), i, 32)
-            rhs = TupleIndexation(NodeInfo.from_info(self.info, f"index_{i}"), tupl, "_index", [int_literal])
-            Assignment(NodeInfo.from_info(self.info, f"assign_{i}"), lhs, rhs).typeflow(scope)
+        for assignment in self.assignments(scope, tupl, value_type):
+            assignment.typeflow(scope)
 
 @dataclass
 class Reference(Assignment):
@@ -3864,6 +3887,9 @@ class Reference(Assignment):
         scope.type_table[self.target.name] = typ
         scope.insert_region_removals(self)
 
+    def typeflow(self, scope):
+        self.basic_typeflow(scope)
+
 @dataclass
 class Reassignment(Assignment):
 
@@ -3876,6 +3902,9 @@ class Reassignment(Assignment):
         assign = AssignOp.make(scope.symbol_table[self.target.name], cast.results[0], old_typ)
         scope.region.last_block.add_ops([cast, assign])
         scope.insert_region_removals(self)
+
+    def typeflow(self, scope):
+        self.basic_typeflow(scope)
 
 @dataclass
 class FieldAssignment(Assignment):

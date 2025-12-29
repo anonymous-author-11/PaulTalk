@@ -1032,13 +1032,14 @@ module @patterns {
     }
   }
   pdl.pattern @LowerLShift : benefit(1) {
-    %op_type = pdl.type
-    %lhs = pdl.operand : %op_type
-    %rhs = pdl.operand : %op_type
+    %lhs_type = pdl.type
+    %rhs_type = pdl.type
+    %lhs = pdl.operand : %lhs_type
+    %rhs = pdl.operand : %rhs_type
     %op_name_attr = pdl.attribute = "LSHIFT"
-    %root = pdl.operation "mid.int_arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%op_type : !pdl.type)
+    %root = pdl.operation "mid.int_arithmetic"(%lhs, %rhs : !pdl.value, !pdl.value) {"op" = %op_name_attr} -> (%lhs_type : !pdl.type)
     pdl.rewrite %root {
-      %replacement = pdl.operation "arith.shli"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%op_type : !pdl.type)
+      %replacement = pdl.operation "arith.shli"(%lhs, %rhs : !pdl.value, !pdl.value) -> (%lhs_type : !pdl.type)
       %result = pdl.result 0 of %replacement
       pdl.replace %root with (%result : !pdl.value)
     }
@@ -1158,6 +1159,21 @@ module @patterns {
       %intrinsic = pdl.operation "llvm.call_intrinsic"(%args : !pdl.range<value>) {"intrin" = %call_name, "operandSegmentSizes" = %opsegsize, "op_bundle_sizes" = %opbundlesize} -> (%result_type : !pdl.type)
       %intrinsic_result = pdl.result 0 of %intrinsic
       pdl.replace %root with (%intrinsic_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerTupleGet : benefit(1) {
+    %index = pdl.attribute
+    %receiver = pdl.operand
+    %result_type = pdl.type
+    %pointee_type = pdl.attribute
+    %root = pdl.operation "mid.tuple_get"(%receiver : !pdl.value) {"typ" = %pointee_type, "index" = %index} -> (%result_type : !pdl.type)
+    %zero = pdl.attribute = 0
+    
+    pdl.rewrite %root {
+      %indices = pdl.apply_native_rewrite "array_attr"(%zero, %index : !pdl.attribute, !pdl.attribute) : !pdl.attribute
+      %gep = pdl.operation "llvm.getelementptr"(%receiver : !pdl.value) {"elem_type" = %pointee_type, "rawConstantIndices" = %indices} -> (%result_type : !pdl.type)
+      %result = pdl.result 0 of %gep
+      pdl.replace %root with (%result : !pdl.value)
     }
   }
   pdl.pattern @LowerTupleIndexation : benefit(1) {

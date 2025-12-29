@@ -349,7 +349,7 @@ class CSTTransformer(Transformer):
         iterator = MethodCall(iterator_info, iterable, "iterator", [])
         if isinstance(inductee, TupleLiteral):
             destructure_info = NodeInfo(None, self.file_path, line)
-            destructure = DestructureAssignment(destructure_info, inductee, inductee_id)
+            destructure = Assignment(destructure_info, inductee, inductee_id)
             body.statements = [destructure, *body.statements]
         return For(for_info, inductee_id, iterable, iterator, temp_ident, body)
 
@@ -445,12 +445,12 @@ class CSTTransformer(Transformer):
             "bit_and":"bit_and","bit_or":"bit_or","bit_xor":"bit_xor"
         }[op.value]
         node_info = NodeInfo(None, self.file_path, line_number(op))
-        return Arithmetic(node_info, left, translated_op, right)
+        return BinaryOp(node_info, left, translated_op, right)
 
     def comparison(self, left, op, right):
         translated_op = {"==":"EQ","!=":"NEQ","<":"LT",">":"GT","<=":"LE",">=":"GE"}[op.value]
         node_info = NodeInfo(None, self.file_path, line_number(op))
-        return Comparison(node_info, left, translated_op, right)
+        return BinaryOp(node_info, left, translated_op, right)
 
     def logical(self, left, op, right):
         node_info = NodeInfo(None, self.file_path, line_number(op))
