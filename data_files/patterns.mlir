@@ -1691,6 +1691,29 @@ module @patterns {
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
+  pdl.pattern @LowerSplatBool : benefit(2) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %i1_type = pdl.type : i1
+    %i1_type_attr = pdl.attribute = i1
+    %i8_type = pdl.type : i8
+    %value = pdl.operand : %ptr_type
+    %tup_typ_attr = pdl.attribute
+    %lanes_attr = pdl.attribute
+    %root = pdl.operation "mid.splat"(%value : !pdl.value) {"tup_typ" = %tup_typ_attr, "lanes" = %lanes_attr, "val_typ" = %i1_type_attr} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %tup_typ = pdl.apply_native_rewrite "type_attr_to_type"(%tup_typ_attr : !pdl.attribute) : !pdl.type
+      %alloca = pdl.operation "mid.alloc" {"typ" = %tup_typ_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %load = pdl.operation "llvm.load"(%value : !pdl.value) -> (%i1_type : !pdl.type)
+      %load_result = pdl.result 0 of %load
+      %zext = pdl.operation "arith.extui"(%load_result : !pdl.value) -> (%i8_type : !pdl.type)
+      %zext_result = pdl.result 0 of %zext
+      %splat = pdl.operation "vector.broadcast"(%zext_result : !pdl.value) -> (%tup_typ : !pdl.type)
+      %splat_result = pdl.result 0 of %splat
+      %store = pdl.operation "llvm.store"(%splat_result, %alloca_result : !pdl.value, !pdl.value)
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
   pdl.pattern @LowerRamp : benefit(1) {
     %ptr_type = pdl.type : !llvm.ptr
     %value = pdl.operand
