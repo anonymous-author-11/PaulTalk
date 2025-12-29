@@ -4113,7 +4113,9 @@ class IfStatement(Branch):
         scope.insert_region_removals(self)
 
     def typeflow(self, scope):
-        bool_condition = self.condition.typeflow(scope)
+        condition_type = self.condition.exprtype(scope)
+        if condition_type != Bool():
+            raise Exception(f"{self.info}: condition of if-statement must be a Bool, not {condition_type}")
         branch_blocks = [self.then_block] if (not self.else_block) else [self.then_block, self.else_block]
         
         branch_scopes = [Scope(scope) for block in branch_blocks]
@@ -4223,7 +4225,9 @@ class WhileStatement(Branch):
     def typeflow(self, scope):
         condition_scope = Scope(scope)
         if self.preheader: self.preheader.typeflow(condition_scope)
-        self.condition.typeflow(condition_scope)
+        condition_type = self.condition.exprtype(condition_scope)
+        if condition_type != Bool():
+            raise Exception(f"{self.info}: condition of if-statement must be a Bool, not {condition_type}")
         body_scope = Scope(condition_scope, wile=condition_scope.region.last_block)
         skip_scope = Scope(condition_scope)
         self.narrow_types_true(body_scope, self.condition)
