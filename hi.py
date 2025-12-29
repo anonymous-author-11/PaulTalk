@@ -253,6 +253,10 @@ class Tuple(ParametrizedAttribute, TypeAttribute):
         is_numeric = isinstance(self.types.data[0], Integer) or isinstance(self.types.data[0], Float) or isinstance(self.types.data[0], Bool)
         return is_numeric
 
+    @property
+    def is_bitvector(self):
+        return self.vector_like and self.types.data[0] == Bool()
+
     @classmethod
     def make(cls, types):
         return Tuple([ArrayAttr(types)])
@@ -260,11 +264,6 @@ class Tuple(ParametrizedAttribute, TypeAttribute):
     def base_typ(self):
         # A tuple of homogenous integers, floats, or bools can be lowered to a SIMD vector
         if self.vector_like:
-
-            # Have to account for i1's not being stored in a bitpacked manner
-            if isinstance(self.types.data[0], Bool):
-                return builtin.VectorType(IntegerType(8), [len(self.types.data)])
-
             return builtin.VectorType(self.types.data[0].base_typ(), [len(self.types.data)])
         
         return llvm.LLVMStructType.from_type_list([t.base_typ() for t in self.types.data])

@@ -16,6 +16,7 @@ from xdsl import traits
 from xdsl.traits import SymbolOpInterface
 from xdsl.printer import Printer
 import hi
+import math
 
 @irdl_op_definition
 class PreludeOp(IRDLOperation):
@@ -270,12 +271,84 @@ class BufferSetOp(IRDLOperation):
     typ: TypeAttribute = attr_def(TypeAttribute)
 
 @irdl_op_definition
-class TupleIndexationOp(IRDLOperation):
-    name = "mid.tuple_indexation"
+class TupleGetOp(IRDLOperation):
+    name = "mid.tuple_get"
     receiver: Operand = operand_def()
     index: IntegerAttr = attr_def(IntegerAttr)
+    tup_typ: TypeAttribute = attr_def(TypeAttribute)
+    elem_typ: TypeAttribute = attr_def(TypeAttribute)
     result: OpResult = result_def()
-    typ: TypeAttribute = attr_def(TypeAttribute)
+
+    @classmethod
+    def make(cls, receiver, index, tup_typ):
+        if tup_typ.is_bitvector:
+            return BitVectorGetOp.make(receiver, index, tup_typ)
+        elem_type = tup_typ.types.data[index]
+        attr_dict = {
+            "index":IntegerAttr.from_int_and_width(index, 32),
+            "tup_typ":tup_typ.base_typ(),
+            "elem_typ":elem_type.base_typ()
+        }
+        return TupleGetOp.create(operands=[receiver], attributes=attr_dict, result_types=[elem_type])
+
+@irdl_op_definition
+class TupleSetOp(IRDLOperation):
+    name = "mid.tuple_set"
+    receiver: Operand = operand_def()
+    value: Operand = operand_def()
+    index: IntegerAttr = attr_def(IntegerAttr)
+    tup_typ: TypeAttribute = attr_def(TypeAttribute)
+    elem_typ: TypeAttribute = attr_def(TypeAttribute)
+
+    @classmethod
+    def make(cls, receiver, value, index, tup_typ):
+        if tup_typ.is_bitvector:
+            return BitVectorSetOp.make(receiver, value, index, tup_typ)
+        elem_type = tup_typ.types.data[index]
+        attr_dict = {
+            "index":IntegerAttr.from_int_and_width(index, 32),
+            "tup_typ":tup_typ.base_typ(),
+            "elem_typ":elem_type.base_typ()
+        }
+        return TupleSetOp.create(operands=[receiver, value], attributes=attr_dict)
+
+@irdl_op_definition
+class BitVectorGetOp(IRDLOperation):
+    name = "mid.bitvector_get"
+    receiver: Operand = operand_def()
+    byte_index: IntegerAttr = attr_def(IntegerAttr)
+    bit_index: IntegerAttr = attr_def(IntegerAttr)
+    result: OpResult = result_def()
+
+    @classmethod
+    def make(cls, receiver, index, tup_typ):
+        elem_type = tup_typ.types.data[index]
+        byte_index = math.floor(index / 8)
+        bit_index = index % 8
+        attr_dict = {
+            "byte_index":IntegerAttr.from_int_and_width(byte_index, 32),
+            "bit_index":IntegerAttr.from_int_and_width(bit_index, 32)
+        }
+        return BitVectorGetOp.create(operands=[receiver], attributes=attr_dict, result_types=[elem_type])
+
+@irdl_op_definition
+class BitVectorSetOp(IRDLOperation):
+    name = "mid.bitvector_set"
+    receiver: Operand = operand_def()
+    value: Operand = operand_def()
+    byte_index: IntegerAttr = attr_def(IntegerAttr)
+    bit_index: IntegerAttr = attr_def(IntegerAttr)
+    result: OpResult = result_def()
+
+    @classmethod
+    def make(cls, receiver, value, index, tup_typ):
+        byte_index = math.floor(index / 8)
+        bit_index = index % 8
+        attr_dict = {
+            "byte_index":IntegerAttr.from_int_and_width(byte_index, 32),
+            "bit_index":IntegerAttr.from_int_and_width(bit_index, 32)
+        }
+        return BitVectorSetOp.create(operands=[receiver, value], attributes=attr_dict)
 
 @irdl_op_definition
 class PDLOps(IRDLOperation):
@@ -446,6 +519,19 @@ class CreateBufferOp(IRDLOperation):
 @irdl_op_definition
 class CreateTupleOp(IRDLOperation):
     name = "mid.create_tuple"
+    values: VarOperand = var_operand_def()
+    typ: TypeAttribute = attr_def(TypeAttribute)
+    result: OpResult = result_def()
+
+    @classmethod
+    def make(cls, values, typ):
+        if typ.is_bitvector:
+            return CreateBitVectorOp.create(operands=values, attributes={"typ":typ.base_typ()}, result_types=[typ])
+        return CreateTupleOp.create(operands=values, attributes={"typ":typ.base_typ()}, result_types=[typ])
+
+@irdl_op_definition
+class CreateBitVectorOp(IRDLOperation):
+    name = "mid.create_bitvector"
     values: VarOperand = var_operand_def()
     typ: TypeAttribute = attr_def(TypeAttribute)
     result: OpResult = result_def()
@@ -1132,8 +1218,10 @@ Mid = Dialect(
         IntrinsicOp,
         CreateBufferOp,
         CreateTupleOp,
+        CreateBitVectorOp,
         BufferIndexationOp,
-        TupleIndexationOp,
+        TupleGetOp,
+        TupleSetOp,
         InvariantOp,
         SetupExceptionOp,
         PDLOps,

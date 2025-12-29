@@ -257,6 +257,7 @@ class CompilationJob:
 
         # Split the big llvm IR string into individual bitcode files and save them
         # This can be done fully concurrently
+        with open("simple_lower.ll", "w") as outfile: outfile.write(llvm_string)
         sections = llvm_string.split("// -----")
         processes = [self.pre_link_opt(job, section) for (job, section) in zip(jobs, sections)]
         for job in jobs:

@@ -189,7 +189,6 @@ class LowerMid(ModulePass):
                 #LowerMemCpy(),
                 #LowerIntrinsic(),
                 #LowerBufferIndexation(),
-                #LowerTupleIndexation(),
                 #LowerUnwrap(),
                 #LowerComparison(),
                 #LowerArithmetic(),
@@ -753,12 +752,6 @@ class LowerBufferIndexation(RewritePattern):
         gep1 = llvm.GEPOp.from_mixed_indices(buf_ptr.results[0], [idx_bytes.results[0]], pointee_type=IntegerType(8))
         rewriter.inline_block_before_matched_op(Block([buf_ptr, idx, null, gep0, idx_bytes]))
         rewriter.replace_matched_op(gep1)
-
-class LowerTupleIndexation(RewritePattern):
-    @op_type_rewrite_pattern
-    def match_and_rewrite(self, op: TupleIndexationOp, rewriter: PatternRewriter):
-        gep = llvm.GEPOp(op.receiver, [0, op.index.value.data], pointee_type=op.typ)
-        rewriter.replace_matched_op(gep)
 
 class LowerCreateBuffer(RewritePattern):
     @op_type_rewrite_pattern

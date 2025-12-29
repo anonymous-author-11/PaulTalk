@@ -863,7 +863,7 @@ class TupleLiteral(Expression):
         elem_types = [elem.exprtype(scope) for elem in self.elems]
         unwrapped = [UnwrapOp.create(operands=[elem], result_types=[elem_types[i].base_typ()]) for (i, elem) in enumerate(elems)]
         operands = [unwrap.results[0] for unwrap in unwrapped]
-        create_tuple = CreateTupleOp.create(operands=operands, attributes={"typ":self_type.base_typ()}, result_types=[self_type])
+        create_tuple = CreateTupleOp.make(operands, self_type)
         scope.region.last_block.add_ops([*unwrapped, create_tuple])
         return create_tuple.results[0]
 
@@ -1951,11 +1951,9 @@ class TupleIndexation(Indexation):
 
     def codegen(self, scope):
         rec_typ = self.receiver.exprtype(scope)
-        self_typ = self.exprtype(scope)
-        attr_dict = {"typ":rec_typ.base_typ(), "index":IntegerAttr.from_int_and_width(self.arguments[0].value, 32)}
-        idx = TupleIndexationOp.create(operands=[self.receiver.codegen(scope)], attributes=attr_dict, result_types=[self_typ])
-        scope.region.last_block.add_op(idx)
-        return idx.results[0]
+        get = TupleGetOp.make(self.receiver.codegen(scope), self.arguments[0].value, rec_typ)
+        scope.region.last_block.add_op(get)
+        return get.results[0]
 
     def apply_constraints(self, scope):
         index_string = str(self.arguments[0].value)
@@ -1974,9 +1972,10 @@ class TupleIndexation(Indexation):
 class TupleSetIndex(MethodCall):
 
     def codegen(self, scope):
-        indexation = TupleIndexation(self.info, self.receiver, "_index", [self.arguments[0]])
-        assign = Assignment(self.info, indexation, self.arguments[1])
-        return assign.codegen(scope)
+        rec_typ = self.receiver.exprtype(scope)
+        set_op = TupleSetOp.make(self.receiver.codegen(scope), self.arguments[1].codegen(scope), self.arguments[0].value, rec_typ)
+        scope.region.last_block.add_op(set_op)
+        return set_op.results[0]
 
     def apply_constraints(self, scope):
         index_string = str(self.arguments[0].value)

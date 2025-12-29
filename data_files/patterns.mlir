@@ -72,6 +72,33 @@ module @patterns {
       pdl.apply_native_rewrite "hoist_alloca"(%root : !pdl.operation)
     }
   }
+  pdl.pattern @FixBoolLoad : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %i1_type = pdl.type : i1
+    %i8_type = pdl.type : i8
+    %ptr = pdl.operand : %ptr_type
+    %root = pdl.operation "llvm.load"(%ptr : !pdl.value) -> (%i1_type : !pdl.type)
+    pdl.rewrite %root {
+      %load = pdl.operation "llvm.load"(%ptr : !pdl.value) -> (%i8_type : !pdl.type)
+      %byte = pdl.result 0 of %load
+      %trunc = pdl.operation "llvm.trunc"(%byte : !pdl.value) -> (%i1_type : !pdl.type)
+      pdl.replace %root with %trunc
+    }
+  }
+  pdl.pattern @FixBoolStore : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %i1_type = pdl.type : i1
+    %i8_type = pdl.type : i8
+    %bool = pdl.operand : %i1_type
+    %ptr = pdl.operand : %ptr_type
+    %root = pdl.operation "llvm.store"(%bool, %ptr : !pdl.value, !pdl.value)
+    pdl.rewrite %root {
+      %zext = pdl.operation "llvm.zext"(%bool : !pdl.value) -> (%i8_type : !pdl.type)
+      %byte = pdl.result 0 of %zext
+      %store = pdl.operation "llvm.store"(%byte, %ptr : !pdl.value, !pdl.value)
+      pdl.replace %root with %store
+    }
+  }
   pdl.pattern @LowerAddrOf : benefit(1) {
     %global_name_attr = pdl.attribute
     %result_type = pdl.type : !llvm.ptr
@@ -1162,43 +1189,101 @@ module @patterns {
     }
   }
   pdl.pattern @LowerTupleGet : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
     %index = pdl.attribute
     %receiver = pdl.operand
     %result_type = pdl.type
-    %pointee_type = pdl.attribute
-    %root = pdl.operation "mid.tuple_get"(%receiver : !pdl.value) {"typ" = %pointee_type, "index" = %index} -> (%result_type : !pdl.type)
+    %tup_type = pdl.attribute
+    %elem_type = pdl.attribute
+    %root = pdl.operation "mid.tuple_get"(%receiver : !pdl.value) {"tup_typ" = %tup_type, "elem_typ" = %elem_type, "index" = %index} -> (%result_type : !pdl.type)
+    %zero = pdl.attribute = 0
+    
+    pdl.rewrite %root {
+      %alloca = pdl.operation "mid.alloc" {"typ" = %elem_type} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %indices = pdl.apply_native_rewrite "array_attr"(%zero, %index : !pdl.attribute, !pdl.attribute) : !pdl.attribute
+      %gep = pdl.operation "llvm.getelementptr"(%receiver : !pdl.value) {"elem_type" = %tup_type, "rawConstantIndices" = %indices} -> (%result_type : !pdl.type)
+      %gep_result = pdl.result 0 of %gep
+      %assign = pdl.operation "mid.assign"(%alloca_result, %gep_result : !pdl.value, !pdl.value) {"typ" = %elem_type}
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerTupleSet : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %index = pdl.attribute
+    %receiver = pdl.operand
+    %value = pdl.operand
+    %tup_type = pdl.attribute
+    %elem_type = pdl.attribute
+    %root = pdl.operation "mid.tuple_set"(%receiver, %value : !pdl.value, !pdl.value) {"tup_typ" = %tup_type, "elem_typ" = %elem_type, "index" = %index}
     %zero = pdl.attribute = 0
     
     pdl.rewrite %root {
       %indices = pdl.apply_native_rewrite "array_attr"(%zero, %index : !pdl.attribute, !pdl.attribute) : !pdl.attribute
-      %gep = pdl.operation "llvm.getelementptr"(%receiver : !pdl.value) {"elem_type" = %pointee_type, "rawConstantIndices" = %indices} -> (%result_type : !pdl.type)
-      %result = pdl.result 0 of %gep
-      pdl.replace %root with (%result : !pdl.value)
+      %gep = pdl.operation "llvm.getelementptr"(%receiver : !pdl.value) {"elem_type" = %tup_type, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
+      %gep_result = pdl.result 0 of %gep
+      %assign = pdl.operation "mid.assign"(%gep_result, %value : !pdl.value, !pdl.value) {"typ" = %elem_type}
+      pdl.replace %root with %assign
     }
   }
-  pdl.pattern @LowerTupleIndexation : benefit(1) {
-    %index = pdl.attribute
+  pdl.pattern @LowerBitVectorGet : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %byte_type = pdl.type : vector<8 x i1>
+    %i1_type = pdl.type : i1
+    %i32_type = pdl.type : i32
+    %i8_type_attr = pdl.attribute = i8
+    %i1_type_attr = pdl.attribute = i1
+    %byte_index = pdl.attribute
+    %bit_index = pdl.attribute
     %receiver = pdl.operand
     %result_type = pdl.type
-    %pointee_type = pdl.attribute
-    %root = pdl.operation "mid.tuple_indexation"(%receiver : !pdl.value) {"typ" = %pointee_type, "index" = %index} -> (%result_type : !pdl.type)
+    %root = pdl.operation "mid.bitvector_get"(%receiver : !pdl.value) {"byte_index" = %byte_index, "bit_index" = %bit_index} -> (%result_type : !pdl.type)
     %zero = pdl.attribute = 0
     
     pdl.rewrite %root {
-      %indices = pdl.apply_native_rewrite "array_attr"(%zero, %index : !pdl.attribute, !pdl.attribute) : !pdl.attribute
-      %gep = pdl.operation "llvm.getelementptr"(%receiver : !pdl.value) {"elem_type" = %pointee_type, "rawConstantIndices" = %indices} -> (%result_type : !pdl.type)
-      %result = pdl.result 0 of %gep
-      pdl.replace %root with (%result : !pdl.value)
+      %alloca = pdl.operation "mid.alloc" {"typ" = %i1_type_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %indices = pdl.apply_native_rewrite "array_attr"(%byte_index : !pdl.attribute) : !pdl.attribute
+      %gep = pdl.operation "llvm.getelementptr"(%receiver : !pdl.value) {"elem_type" = %i8_type_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
+      %gep_result = pdl.result 0 of %gep
+      %byte_load = pdl.operation "llvm.load"(%gep_result : !pdl.value) -> (%byte_type : !pdl.type)
+      %byte = pdl.result 0 of %byte_load
+      %bit_idx_constant = pdl.operation "llvm.mlir.constant" {"value" = %bit_index} -> (%i32_type : !pdl.type)
+      %bit_index_result = pdl.result 0 of %bit_idx_constant
+      %extract = pdl.operation "llvm.extractelement"(%byte, %bit_index_result : !pdl.value, !pdl.value) -> (%i1_type : !pdl.type)
+      %bit = pdl.result 0 of %extract
+      %store = pdl.operation "llvm.store"(%bit, %alloca_result : !pdl.value, !pdl.value)
+      pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
-  pdl.pattern @LowerParameterizationIndexation : benefit(1) {
-    %result_type = pdl.type
-    %operand = pdl.operand
-    %indices = pdl.attribute
-    %root = pdl.operation "mid.parameterization_indexation"(%operand : !pdl.value) {"indices" = %indices} -> (%result_type : !pdl.type)
+  pdl.pattern @LowerBitVectorSet : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %byte_type = pdl.type : vector<8 x i1>
+    %i1_type = pdl.type : i1
+    %i32_type = pdl.type : i32
+    %i8_type_attr = pdl.attribute = i8
+    %i1_type_attr = pdl.attribute = i1
+    %byte_index = pdl.attribute
+    %bit_index = pdl.attribute
+    %receiver = pdl.operand
+    %value = pdl.operand
+    %root = pdl.operation "mid.bitvector_set"(%receiver, %value : !pdl.value, !pdl.value) {"byte_index" = %byte_index, "bit_index" = %bit_index}
+    %zero = pdl.attribute = 0
+    
     pdl.rewrite %root {
-      %result = pdl.apply_native_rewrite "lower_parameterization_indexation"(%root : !pdl.operation) : !pdl.value
-      pdl.replace %root with (%result : !pdl.value)
+      %indices = pdl.apply_native_rewrite "array_attr"(%byte_index : !pdl.attribute) : !pdl.attribute
+      %gep = pdl.operation "llvm.getelementptr"(%receiver : !pdl.value) {"elem_type" = %i8_type_attr, "rawConstantIndices" = %indices} -> (%ptr_type : !pdl.type)
+      %gep_result = pdl.result 0 of %gep
+      %byte_load = pdl.operation "llvm.load"(%gep_result : !pdl.value) -> (%byte_type : !pdl.type)
+      %byte = pdl.result 0 of %byte_load
+      %bit_load = pdl.operation "llvm.load"(%value : !pdl.value) -> (%i1_type : !pdl.type)
+      %bit = pdl.result 0 of %bit_load
+      %bit_idx_constant = pdl.operation "llvm.mlir.constant" {"value" = %bit_index} -> (%i32_type : !pdl.type)
+      %bit_index_result = pdl.result 0 of %bit_idx_constant
+      %insert = pdl.operation "llvm.insertelement"(%byte, %bit, %bit_index_result : !pdl.value, !pdl.value, !pdl.value) -> (%byte_type : !pdl.type)
+      %new_byte = pdl.result 0 of %insert
+      %store = pdl.operation "llvm.store"(%new_byte, %gep_result : !pdl.value, !pdl.value)
+      pdl.replace %root with %store
     }
   }
   pdl.pattern @LowerMemCpyStruct : benefit(2) {
@@ -1659,6 +1744,16 @@ module @patterns {
       pdl.replace %root with (%ary_result : !pdl.value)
     }
   }
+  pdl.pattern @LowerParameterizationIndexation : benefit(1) {
+    %result_type = pdl.type
+    %operand = pdl.operand
+    %indices = pdl.attribute
+    %root = pdl.operation "mid.parameterization_indexation"(%operand : !pdl.value) {"indices" = %indices} -> (%result_type : !pdl.type)
+    pdl.rewrite %root {
+      %result = pdl.apply_native_rewrite "lower_parameterization_indexation"(%root : !pdl.operation) : !pdl.value
+      pdl.replace %root with (%result : !pdl.value)
+    }
+  }
   pdl.pattern @LowerCreateTuple : benefit(1) {
     %ptr_type = pdl.type : !llvm.ptr
     %values = pdl.operands
@@ -1668,6 +1763,21 @@ module @patterns {
       %alloca = pdl.operation "mid.alloc" {"typ" = %typ_attr} -> (%ptr_type : !pdl.type)
       %alloca_result = pdl.result 0 of %alloca
       pdl.apply_native_rewrite "store_operands_in_container"(%root, %typ_attr, %alloca_result : !pdl.operation, !pdl.attribute, !pdl.value)
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
+  pdl.pattern @LowerCreateBitVector : benefit(1) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %values = pdl.operands
+    %typ_attr = pdl.attribute
+    %root = pdl.operation "mid.create_bitvector"(%values : !pdl.range<value>) {"typ" = %typ_attr} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %vec_type = pdl.apply_native_rewrite "type_attr_to_type"(%typ_attr : !pdl.attribute) : !pdl.type
+      %alloca = pdl.operation "mid.alloc" {"typ" = %typ_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %vec = pdl.operation "vector.from_elements"(%values : !pdl.range<value>) -> (%vec_type : !pdl.type)
+      %vec_result = pdl.result 0 of %vec
+      %store = pdl.operation "llvm.store"(%vec_result, %alloca_result : !pdl.value, !pdl.value)
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
@@ -1686,29 +1796,6 @@ module @patterns {
       %load = pdl.operation "llvm.load"(%value : !pdl.value) -> (%val_typ : !pdl.type)
       %load_result = pdl.result 0 of %load
       %splat = pdl.operation "vector.broadcast"(%load_result : !pdl.value) -> (%tup_typ : !pdl.type)
-      %splat_result = pdl.result 0 of %splat
-      %store = pdl.operation "llvm.store"(%splat_result, %alloca_result : !pdl.value, !pdl.value)
-      pdl.replace %root with (%alloca_result : !pdl.value)
-    }
-  }
-  pdl.pattern @LowerSplatBool : benefit(2) {
-    %ptr_type = pdl.type : !llvm.ptr
-    %i1_type = pdl.type : i1
-    %i1_type_attr = pdl.attribute = i1
-    %i8_type = pdl.type : i8
-    %value = pdl.operand : %ptr_type
-    %tup_typ_attr = pdl.attribute
-    %lanes_attr = pdl.attribute
-    %root = pdl.operation "mid.splat"(%value : !pdl.value) {"tup_typ" = %tup_typ_attr, "lanes" = %lanes_attr, "val_typ" = %i1_type_attr} -> (%ptr_type : !pdl.type)
-    pdl.rewrite %root {
-      %tup_typ = pdl.apply_native_rewrite "type_attr_to_type"(%tup_typ_attr : !pdl.attribute) : !pdl.type
-      %alloca = pdl.operation "mid.alloc" {"typ" = %tup_typ_attr} -> (%ptr_type : !pdl.type)
-      %alloca_result = pdl.result 0 of %alloca
-      %load = pdl.operation "llvm.load"(%value : !pdl.value) -> (%i1_type : !pdl.type)
-      %load_result = pdl.result 0 of %load
-      %zext = pdl.operation "arith.extui"(%load_result : !pdl.value) -> (%i8_type : !pdl.type)
-      %zext_result = pdl.result 0 of %zext
-      %splat = pdl.operation "vector.broadcast"(%zext_result : !pdl.value) -> (%tup_typ : !pdl.type)
       %splat_result = pdl.result 0 of %splat
       %store = pdl.operation "llvm.store"(%splat_result, %alloca_result : !pdl.value, !pdl.value)
       pdl.replace %root with (%alloca_result : !pdl.value)
