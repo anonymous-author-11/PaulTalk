@@ -351,6 +351,45 @@ class BitVectorSetOp(IRDLOperation):
         return BitVectorSetOp.create(operands=[receiver, value], attributes=attr_dict)
 
 @irdl_op_definition
+class CttzOp(IRDLOperation):
+    name = "mid.cttz"
+    operand : Operand = operand_def()
+    tupl_type: TypeAttribute = attr_def(TypeAttribute)
+    int_type: TypeAttribute = attr_def(TypeAttribute)
+    result : OpResult = result_def()
+
+    @classmethod
+    def make(cls, operand, typ):
+        attr_dict = {"tupl_type":typ.base_typ(), "int_type":IntegerType(len(typ.types.data))}
+        return CttzOp.create(operands=[operand], attributes=attr_dict, result_types=[hi.Integer(32)])
+
+@irdl_op_definition
+class CtlzOp(IRDLOperation):
+    name = "mid.ctlz"
+    operand : Operand = operand_def()
+    tupl_type: TypeAttribute = attr_def(TypeAttribute)
+    int_type: TypeAttribute = attr_def(TypeAttribute)
+    result : OpResult = result_def()
+
+    @classmethod
+    def make(cls, operand, typ):
+        attr_dict = {"tupl_type":typ.base_typ(), "int_type":IntegerType(len(typ.types.data))}
+        return CtlzOp.create(operands=[operand], attributes=attr_dict, result_types=[hi.Integer(32)])
+
+@irdl_op_definition
+class BlsrOp(IRDLOperation):
+    name = "mid.blsr"
+    operand : Operand = operand_def()
+    tupl_type: TypeAttribute = attr_def(TypeAttribute)
+    int_type: TypeAttribute = attr_def(TypeAttribute)
+    result : OpResult = result_def()
+
+    @classmethod
+    def make(cls, operand, typ):
+        attr_dict = {"tupl_type":typ.base_typ(), "int_type":IntegerType(len(typ.types.data))}
+        return BlsrOp.create(operands=[operand], attributes=attr_dict, result_types=[typ])
+
+@irdl_op_definition
 class PDLOps(IRDLOperation):
     name = "mid.pdl_ops"
 

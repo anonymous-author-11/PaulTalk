@@ -585,16 +585,18 @@ class CSTTransformer(Transformer):
         node_info = NodeInfo(None, self.file_path, line_number(token))
         return Identifier(node_info, token.value)
 
-    def print_call(self, *args):
-        node_info = NodeInfo(None, self.file_path, args[0].info.line_number if len(args) > 0 else 0)
-        return PrintCall(node_info, args)
-
     def sizeof_call(self, typ):
         node_info = NodeInfo(None, self.file_path, 0)
         return SizeOfCall(node_info, typ)
 
     def function_call(self, func_name, *args):
         node_info = NodeInfo(None, self.file_path, line_number(func_name))
+        if func_name.value == "print":
+            return PrintCall(node_info, args)
+        if func_name.value == "cttz":
+            return CttzCall(node_info, args)
+        if func_name.value == "blsr":
+            return BlsrCall(node_info, args)
         return FunctionCall(node_info, func_name.value, args)
 
     def method_call(self, receiver, meth_name, *args):

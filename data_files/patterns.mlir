@@ -923,6 +923,83 @@ module @patterns {
       pdl.erase %root
     }
   }
+  pdl.pattern @cttz : benefit(1) {
+    %tuple = pdl.operand
+    %tupl_type_attr = pdl.attribute
+    %int_type_attr = pdl.attribute
+    %ptr_type = pdl.type : !llvm.ptr
+    %i1_type = pdl.type : i1
+    %i32_type = pdl.type : i32
+    %i32_type_attr = pdl.attribute = i32
+    %root = pdl.operation "mid.cttz"(%tuple : !pdl.value) {"tupl_type" = %tupl_type_attr, "int_type" = %int_type_attr} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %tupl_type = pdl.apply_native_rewrite "type_attr_to_type"(%tupl_type_attr : !pdl.attribute) : !pdl.type
+      %int_type = pdl.apply_native_rewrite "type_attr_to_type"(%int_type_attr : !pdl.attribute) : !pdl.type
+      %false = pdl.attribute = false
+      %alloca = pdl.operation "mid.alloc" {"typ" = %i32_type_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %load = pdl.operation "llvm.load"(%tuple : !pdl.value) -> (%tupl_type : !pdl.type)
+      %load_result = pdl.result 0 of %load
+      %cast = pdl.operation "llvm.bitcast"(%load_result : !pdl.value) -> (%int_type : !pdl.type)
+      %cast_result = pdl.result 0 of %cast
+      %cttz = pdl.operation "llvm.intr.cttz"(%cast_result : !pdl.value) {"is_zero_poison" = %false} -> (%i32_type : !pdl.type)
+      %cttz_rsult = pdl.result 0 of %cttz
+      %store = pdl.operation "llvm.store"(%cttz_rsult, %alloca_result : !pdl.value, !pdl.value)
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
+  pdl.pattern @ctlz : benefit(1) {
+    %tuple = pdl.operand
+    %tupl_type_attr = pdl.attribute
+    %int_type_attr = pdl.attribute
+    %ptr_type = pdl.type : !llvm.ptr
+    %i1_type = pdl.type : i1
+    %i32_type = pdl.type : i32
+    %i32_type_attr = pdl.attribute = i32
+    %root = pdl.operation "mid.ctlz"(%tuple : !pdl.value) {"tupl_type" = %tupl_type_attr, "int_type" = %int_type_attr} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %tupl_type = pdl.apply_native_rewrite "type_attr_to_type"(%tupl_type_attr : !pdl.attribute) : !pdl.type
+      %int_type = pdl.apply_native_rewrite "type_attr_to_type"(%int_type_attr : !pdl.attribute) : !pdl.type
+      %false = pdl.attribute = false
+      %alloca = pdl.operation "mid.alloc" {"typ" = %i32_type_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %load = pdl.operation "llvm.load"(%tuple : !pdl.value) -> (%tupl_type : !pdl.type)
+      %load_result = pdl.result 0 of %load
+      %cast = pdl.operation "llvm.bitcast"(%load_result : !pdl.value) -> (%int_type : !pdl.type)
+      %cast_result = pdl.result 0 of %cast
+      %ctlz = pdl.operation "llvm.intr.ctlz"(%cast_result : !pdl.value) {"is_zero_poison" = %false} -> (%i32_type : !pdl.type)
+      %ctlz_rsult = pdl.result 0 of %ctlz
+      %store = pdl.operation "llvm.store"(%ctlz_rsult, %alloca_result : !pdl.value, !pdl.value)
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
+  pdl.pattern @blsr : benefit(1) {
+    %tuple = pdl.operand
+    %tupl_type_attr = pdl.attribute
+    %int_type_attr = pdl.attribute
+    %ptr_type = pdl.type : !llvm.ptr
+    %root = pdl.operation "mid.blsr"(%tuple : !pdl.value) {"tupl_type" = %tupl_type_attr, "int_type" = %int_type_attr} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %tupl_type = pdl.apply_native_rewrite "type_attr_to_type"(%tupl_type_attr : !pdl.attribute) : !pdl.type
+      %int_type = pdl.apply_native_rewrite "type_attr_to_type"(%int_type_attr : !pdl.attribute) : !pdl.type
+
+      %alloca = pdl.operation "mid.alloc" {"typ" = %tupl_type_attr} -> (%ptr_type : !pdl.type)
+      %alloca_result = pdl.result 0 of %alloca
+      %load = pdl.operation "llvm.load"(%tuple : !pdl.value) -> (%tupl_type : !pdl.type)
+      %load_result = pdl.result 0 of %load
+      %cast = pdl.operation "llvm.bitcast"(%load_result : !pdl.value) -> (%int_type : !pdl.type)
+      %cast_result = pdl.result 0 of %cast
+      %one_attr = pdl.attribute = 1
+      %one_const = pdl.operation "llvm.mlir.constant" {"value" = %one_attr} -> (%int_type : !pdl.type)
+      %one = pdl.result 0 of %one_const
+      %minus_one = pdl.operation "llvm.sub"(%cast_result, %one : !pdl.value, !pdl.value) -> (%int_type : !pdl.type)
+      %minus_one_result = pdl.result 0 of %minus_one
+      %and = pdl.operation "llvm.and"(%cast_result, %minus_one_result : !pdl.value, !pdl.value) -> (%int_type : !pdl.type)
+      %and_result = pdl.result 0 of %and
+      %store = pdl.operation "llvm.store"(%and_result, %alloca_result : !pdl.value, !pdl.value)
+      pdl.replace %root with (%alloca_result : !pdl.value)
+    }
+  }
   pdl.pattern @LowerStoreBoolBuffer : benefit(1) {
     %byte_tupl_type_attr = pdl.attribute
     %tupl_type_attr = pdl.attribute

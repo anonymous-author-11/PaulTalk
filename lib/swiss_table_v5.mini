@@ -2,11 +2,12 @@ import map;
 import io;
 import array;
 
-// --- Control Byte Constants (unchanged) ---
+// --- Control Byte Constants ---
 def empty() -> i8 { return 0 as i8; }
 def deleted() -> i8 { return -2 as i8; }
 def occupied_mask() -> i8 { return 1 as i8; }
-def group_width() -> i32 { return 16; }
+def group_width() -> i32 { return 8; }
+def padding() -> i8 { return -1 as i8; }
 
 class Entry[K,V] {
     @hash: i32
@@ -37,45 +38,23 @@ class SwissTable[K, V] extends HashMap[K, V] {
         return (h2_6bit << 1) bit_or occupied_mask();
     }
 
+    def Self.min_capacity() -> i32 {
+        return group_width() * 4;
+    }
+
     def init(@hasher: (K) -> i32, @eq: (K, K) -> Bool) {
         // Minimum capacity must be >= group_width for SIMD loads
-        initial_capacity = 32;
+        initial_capacity = Self.min_capacity();
         // Allocate extra group for safe SIMD loads near end
-        @entries = Buffer[Entry[K,V]?].new(initial_capacity + group_width());
-        @metadata = Buffer[i8].new(initial_capacity + group_width());
+        padded_capacity = initial_capacity + group_width();
+        
+        @entries = Buffer[Entry[K,V]?].new(padded_capacity);
+        @metadata = Buffer[i8].new(padded_capacity);
         @entries_len = initial_capacity;
         @size = 0;
-    }
-
-    // =========================================================
-    // SIMD Group Operations - The core of Swiss Table performance
-    // =========================================================
-
-    // Load 16 control bytes and find slots matching h2_control
-    // Returns a bitmask where bit i is set if metadata[group_start + i] matches
-    def match_h2_in_group(group_start: i32, h2_control: i8) -> Tuple[16 x Bool] {
-        group = @metadata.[16 from group_start];   // SIMD load: Tuple[16 x i8]
-        needle = 16 of h2_control;                 // broadcast: Tuple[16 x i8]
-        matches = group == needle;                 // compare: Tuple[16 x Bool]
-        return matches;                     // extract bitmask
-    }
-
-    // Find empty slots in a group
-    def match_empty_in_group(group_start: i32) -> Tuple[16 x Bool] {
-        group = @metadata.[16 from group_start];
-        empty_vec = 16 of empty();
-        matches = group == empty_vec;
-        return matches;
-    }
-
-    // Find sentinel slots (empty OR deleted) - slots where LSB is 0
-    def match_sentinel_in_group(group_start: i32) -> Tuple[16 x Bool] {
-        group = @metadata.[16 from group_start];
-        mask_vec = 16 of occupied_mask();          // (1, 1, 1, ..., 1)
-        lsb_bits = group bit_and mask_vec;         // extract LSB of each byte
-        zero_vec = 16 of (0 as i8);
-        is_sentinel = lsb_bits == zero_vec;        // LSB == 0 means sentinel
-        return is_sentinel;
+        for i in initial_capacity..padded_capacity {
+            @metadata.[i] = padding();
+        }
     }
 
     // =========================================================
@@ -83,105 +62,78 @@ class SwissTable[K, V] extends HashMap[K, V] {
     // =========================================================
 
     def find_slot(key: K, hash: i32) -> i32 {
-        capacity = @entries_len;
-        mask = capacity - 1;
-        h2_control = Self.h2_to_control(hash);
-        probe_index = hash bit_and mask;
+        mask = @entries_len - 1;
+        h2 = Self.h2_to_control(hash);
+        probe = hash bit_and mask;
+        tombstone = -1;
+        metadata = @metadata;
 
-        first_tombstone = -1;
-        entries = @entries;
+        h2_splat = 8 of h2;
+        zero_splat = 8 of (0 as i8);
+        one_splat = 8 of (1 as i8);
 
         while true {
-            h2_matches = self.match_h2_in_group(probe_index, h2_control);
+            group = metadata.[8 from probe];
 
-            bit_pos = 0;
-            for match in h2_matches {
-                if not match {
-                    bit_pos = bit_pos + 1;
-                    continue;
-                }
-                // NEW: Skip positions in the padding area
-                if probe_index + bit_pos >= capacity {
-                    bit_pos = bit_pos + 1;
-                    continue;
-                }
-                slot = probe_index + bit_pos;  // No mask needed now
-                entry = entries.[slot];
+            // --- H2 matches (no bounds check: -1 can't match h2) ---
+            h2_matches = group == h2_splat;
+            i = cttz(h2_matches);
+            while i < group_width() {
+                slot = probe + i;
+                entry = @entries.[slot];
                 if entry is Entry[K,V] {
                     if entry.hash() == hash and @eq.call(entry.key(), key) {
                         return slot;
                     }
                 }
-                bit_pos = bit_pos + 1;
+                h2_matches = blsr(h2_matches);
+                i = cttz(h2_matches);
             }
 
-            empty_matches = self.match_empty_in_group(probe_index);
-
-            bit_pos = 0;
-            for match in empty_matches {
-                // NEW: Skip padding positions
-                if probe_index + bit_pos >= capacity {
-                    bit_pos = bit_pos + 1;
-                    continue;
-                }
-                if match {
-                    if first_tombstone != -1 { return first_tombstone; }
-                    return probe_index + bit_pos;  // No mask needed
-                }
-                bit_pos = bit_pos + 1;
+            // --- Empty (no bounds check: -1 ≠ 0) ---
+            empty_matches = group == zero_splat;
+            i = cttz(empty_matches);
+            if i < group_width() {
+                if tombstone >= 0 { return tombstone; }
+                return probe + i;
             }
 
-            if first_tombstone == -1 {
-                tombstone_matches = self.match_sentinel_in_group(probe_index);
-
-                bit_pos = 0;
-                for match in tombstone_matches {
-                    // NEW: Skip padding positions
-                    if probe_index + bit_pos >= capacity {
-                        bit_pos = bit_pos + 1;
-                        continue;
-                    }
-                    if match {
-                        first_tombstone = probe_index + bit_pos;  // No mask
-                        break;
-                    }
-                    bit_pos = bit_pos + 1;
+            // --- First tombstone (no bounds check: -1 has LSB=1) ---
+            if tombstone < 0 {
+                lsb = group bit_and one_splat;
+                deleted_matches = lsb == zero_splat;
+                i = cttz(deleted_matches);
+                if i < group_width() {
+                    tombstone = probe + i;
                 }
             }
 
-            probe_index = (probe_index + group_width()) bit_and mask;
+            probe = (probe + group_width()) bit_and mask;
         }
     }
 
-    // Optimized path for insertion during resize (no existing keys)
     def find_empty_slot(hash: i32) -> i32 {
-        capacity = @entries_len;
-        mask = capacity - 1;
-        probe_index = hash bit_and mask;
+        mask = @entries_len - 1;
+        probe = hash bit_and mask;
+        metadata = @metadata;
+
+        zero_splat = 8 of (0 as i8);
+        one_splat = 8 of (1 as i8);
 
         while true {
-            sentinel_matches = self.match_sentinel_in_group(probe_index);
+            group = metadata.[8 from probe];
 
-            bit_pos = 0;
-            for match in sentinel_matches {
-                // Skip padding positions
-                if probe_index + bit_pos >= capacity {
-                    bit_pos = bit_pos + 1;
-                    continue;
-                }
-                if match {
-                    return probe_index + bit_pos;
-                }
-                bit_pos = bit_pos + 1;
+            lsb = group bit_and one_splat;
+            sentinel_matches = lsb == zero_splat;
+
+            i = cttz(sentinel_matches);
+            if i < group_width() {
+                return probe + i;
             }
 
-            probe_index = (probe_index + group_width()) bit_and mask;
+            probe = (probe + 8) bit_and mask;
         }
     }
-
-    // =========================================================
-    // Public API
-    // =========================================================
 
     def insert(key: K, value: V) {
         self.ensure_capacity(@size + 1);
@@ -228,7 +180,8 @@ class SwissTable[K, V] extends HashMap[K, V] {
         if required <= (@entries_len * 7) / 8 { return; }
 
         new_capacity = @entries_len * 2;
-        if new_capacity < 16 { new_capacity = 16; }
+        min_capacity = Self.min_capacity();
+        if new_capacity < min_capacity { new_capacity = min_capacity; }
         self.resize(new_capacity);
     }
 
@@ -238,10 +191,15 @@ class SwissTable[K, V] extends HashMap[K, V] {
         old_len = @entries_len;
 
         // Allocate with padding for safe SIMD loads
-        @entries = Buffer[Entry[K,V]?].new(new_capacity + group_width());
-        @metadata = Buffer[i8].new(new_capacity + group_width());
+        padded_capacity = new_capacity + group_width();
+        @entries = Buffer[Entry[K,V]?].new(padded_capacity);
+        @metadata = Buffer[i8].new(padded_capacity);
         @entries_len = new_capacity;
         @size = 0;
+
+        for i in new_capacity..padded_capacity {
+            @metadata.[i] = padding();
+        }
 
         for i in 0..old_len {
             if (old_metadata.[i] bit_and occupied_mask()) == 0 { continue; }
@@ -256,11 +214,16 @@ class SwissTable[K, V] extends HashMap[K, V] {
     }
 
     def clear() {
-        initial_capacity = 32;
-        @entries = Buffer[Entry[K,V]?].new(initial_capacity + group_width());
-        @metadata = Buffer[i8].new(initial_capacity + group_width());
+        initial_capacity = Self.min_capacity();
+        padded_capacity = initial_capacity + group_width();
+        @entries = Buffer[Entry[K,V]?].new(padded_capacity);
+        @metadata = Buffer[i8].new(padded_capacity);
         @entries_len = initial_capacity;
         @size = 0;
+
+        for i in initial_capacity..padded_capacity {
+            @metadata.[i] = padding();
+        }
     }
 
     // return (new_cursor, next_entry) in buffer starting at position of input cursor

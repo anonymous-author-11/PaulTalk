@@ -95,6 +95,31 @@ def i32_hasher(i : i32) -> i32 {
     return i;
 }
 
+def i32_hasher_weak(i: i32) -> i32 {
+    return i bit_xor (i << 2);
+}
+
+def i32_hasher_identity(i: i32) -> i32 {
+    return i bit_xor (i << 2);
+}
+
+def i32_hasher_low_bits(i: i32) -> i32 {
+    return i bit_and 0xFFFF;  // Only 16 bits of entropy
+}
+
+def i32_hasher_simd_friendly(i: i32) -> i32 {
+    mixed = i * -1640531535;
+    
+    // Slot: 14 bits → 16K unique slots → ~64 keys/slot collision
+    slot = (mixed >> 6) bit_and 0x3FFF;
+    
+    // H2: from different bits → diverse within collision chain
+    h2 = mixed bit_and 0x3F;
+    
+    // Pack: H2 in bits 26-31, slot in bits 0-13
+    return (h2 << 26) bit_or slot;
+}
+
 def i32_eq(a : i32, b : i32) -> Bool {
     return a == b;
 }

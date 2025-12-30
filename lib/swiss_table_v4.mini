@@ -13,11 +13,6 @@ def deleted() -> i8 { return -2 as i8; }
 // A bitmask to check if a control byte represents an occupied slot.
 def occupied_mask() -> i8 { return 1 as i8; }
 
-// The width of a probe group. Real implementations use SIMD to check
-// this many slots at once. We simulate this with a loop.
-def group_width() -> i32 { return 16; }
-
-
 class Entry[K,V] {
     @hash: i32
     @key: K
@@ -32,7 +27,7 @@ class Entry[K,V] {
     } ~> { ret.first == @key, ret.second == @value }
 }
 
-class SwissTable[K, V] extends OpenAddressMap[K, V] {
+class SwissTable[K, V] extends HashMap[K, V] {
     @entries: Buffer[Entry[K,V]?]
     @metadata: Buffer[i8]
     @entries_len : i32
@@ -57,7 +52,6 @@ class SwissTable[K, V] extends OpenAddressMap[K, V] {
         @metadata = Buffer[i8].new(initial_capacity); // zero-initialized.
         @entries_len = initial_capacity;
         @size = 0;
-        // No explicit initialization loop needed for @metadata.
     }
 
     def find_slot(key: K, hash: i32) -> i32 {
@@ -72,32 +66,30 @@ class SwissTable[K, V] extends OpenAddressMap[K, V] {
         entries = @entries;
 
         while true {
-            for i in 0..group_width() {
-                index = (start_index + probe_offset + i) bit_and mask;
-                control = metadata.[index];
+            index = (start_index + probe_offset) bit_and mask;
+            control = metadata.[index];
 
-                if control == h2_control {
-                    entry = entries.[index];
-                    if entry is Entry[K,V] {
-                        if entry.hash() == hash and @eq.call(entry.key(), key) {
-                            return index;
-                        }
-                    }
-                }
-
-                // Check if the slot is a sentinel (LSB is 0).
-                if (control bit_and occupied_mask()) == 0 {
-                    if control == empty() {
-                        if first_tombstone != -1 { return first_tombstone; }
+            if control == h2_control {
+                entry = entries.[index];
+                if entry is Entry[K,V] {
+                    if entry.hash() == hash and @eq.call(entry.key(), key) {
                         return index;
-                    }
-                    // It must be deleted.
-                    if first_tombstone == -1 {
-                        first_tombstone = index;
                     }
                 }
             }
-            probe_offset = probe_offset + group_width();
+
+            // Check if the slot is a sentinel (LSB is 0).
+            if (control bit_and occupied_mask()) == 0 {
+                if control == empty() {
+                    if first_tombstone != -1 { return first_tombstone; }
+                    return index;
+                }
+                // It must be deleted.
+                if first_tombstone == -1 {
+                    first_tombstone = index;
+                }
+            }
+            probe_offset = probe_offset + 1;
         }
     }
 
@@ -132,15 +124,13 @@ class SwissTable[K, V] extends OpenAddressMap[K, V] {
         metadata = @metadata;
 
         while true {
-            for i in 0..group_width() {
-                index = (start_index + probe_offset + i) bit_and mask;
-                control = metadata.[index];
-                // Is it a sentinel? (empty or deleted)
-                if (control bit_and occupied_mask()) == 0 {
-                    return index;
-                }
+            index = (start_index + probe_offset) bit_and mask;
+            control = metadata.[index];
+            // Is it a sentinel? (empty or deleted)
+            if (control bit_and occupied_mask()) == 0 {
+                return index;
             }
-            probe_offset = probe_offset + group_width();
+            probe_offset = probe_offset + 1;
         }
     }
 
@@ -224,18 +214,18 @@ class SwissTable[K, V] extends OpenAddressMap[K, V] {
         return nil;
     } ~> { ret holds @elems_reg }
 
-    def iterator() -> OpenAddressIterator[K,V] {
-        return OpenAddressIterator{self};
+    def iterator() -> SwissTableIterator[K,V] {
+        return SwissTableIterator{self};
     } ~> { ret.map == self }
 }
 
-class OpenAddressIterator[K,V] extends Iterator[Pair[K,V]] {
-    @map : OpenAddressMap[K,V]
+class SwissTableIterator[K,V] extends Iterator[Pair[K,V]] {
+    @map : SwissTable[K,V]
     @cursor: i32
 
     regions { @elems_reg == @map.elems_reg }
 
-    def init(@map : OpenAddressMap[K,V]) {
+    def init(@map : SwissTable[K,V]) {
         @cursor = 0;
     }
 

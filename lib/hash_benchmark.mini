@@ -215,6 +215,45 @@ def benchmark_get_random_hit(n: i32) {
     IO.print("    Verification: "); if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
 }
 
+def benchmark_get_shuffled(n: i32) {
+    map = Map[i32, i32].new(i32_hasher, i32_eq);
+    keys = Array[i32].new(n);
+    rng = PRNG.new(999);
+    
+    // Insert sequential keys
+    i = 0;
+    while i < n {
+        keys.unchecked_insert(i, i);
+        map.insert(i, i + 1);
+        i = i + 1;
+    }
+    
+    // Shuffle for random access pattern
+    i = n - 1;
+    while i > 0 {
+        j = rng.next() % (i + 1);
+        if j < 0 { j = j * -1; }  // Handle negative mod
+        tmp = keys.unchecked_index(i);
+        keys.unchecked_insert(i, keys.unchecked_index(j));
+        keys.unchecked_insert(j, tmp);
+        i = i - 1;
+    }
+    
+    // Now benchmark with randomized access order
+    start_time: i64 = clock();
+    actual_sum: i64 = 0;
+    i = 0;
+    while i < n {
+        key = keys.unchecked_index(i);
+        val = map.get(key);
+        if val is i32 { actual_sum = actual_sum + val; }
+        i = i + 1;
+    }
+    end_time: i64 = clock();
+    
+    print_benchmark_result("Get Shuffled", n, end_time - start_time);
+}
+
 def benchmark_get_random_miss(n: i32) {
     map = Map[i32, i32].new(i32_hasher, i32_eq);
     rng_setup = PRNG.new(789);
@@ -368,6 +407,7 @@ benchmark_insert_sequential(n);
 benchmark_insert_random(n);
 benchmark_get_sequential_hit(n);
 benchmark_get_random_hit(n);
+benchmark_get_shuffled(n);
 benchmark_get_random_miss(n);
 benchmark_remove_random(n);
 

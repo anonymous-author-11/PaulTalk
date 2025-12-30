@@ -2137,6 +2137,52 @@ class PrintCall(Expression):
         self.args[0].typeflow(scope)
 
 @dataclass
+class CttzCall(Expression):
+    args: List[Expression]
+
+    @property
+    def subexpressions(self):
+        return [*self.args]
+
+    def codegen(self, scope):
+        arg = self.args[0].codegen(scope)
+        arg_type = self.args[0].exprtype(scope)
+        cttz_op = CttzOp.make(arg, arg_type)
+        scope.region.last_block.add_op(cttz_op)
+        return cttz_op.results[0]
+
+    def exprtype(self, scope):
+        if len(self.args) != 1:
+            raise Exception(f"{self.info}: cttz call should take 1 argument, not {len(self.args)}")
+        arg_type = self.args[0].exprtype(scope)
+        if not (isinstance(arg_type, Tuple) and arg_type.is_bitvector):
+            raise Exception(f"{self.info}: cttz call currently only implemented for Tuple[N x Bool], not {arg_type}")
+        return Integer(32)
+
+@dataclass
+class BlsrCall(Expression):
+    args: List[Expression]
+
+    @property
+    def subexpressions(self):
+        return [*self.args]
+
+    def codegen(self, scope):
+        arg = self.args[0].codegen(scope)
+        arg_type = self.args[0].exprtype(scope)
+        blsr_op = BlsrOp.make(arg, arg_type)
+        scope.region.last_block.add_op(blsr_op)
+        return blsr_op.results[0]
+
+    def exprtype(self, scope):
+        if len(self.args) != 1:
+            raise Exception(f"{self.info}: blsr call should take 1 argument, not {len(self.args)}")
+        arg_type = self.args[0].exprtype(scope)
+        if not (isinstance(arg_type, Tuple) and arg_type.is_bitvector):
+            raise Exception(f"{self.info}: blsr call currently only implemented for Tuple[N x Bool], not {arg_type}")
+        return arg_type
+
+@dataclass
 class SizeOfCall(Expression):
     typ: TypeAttribute
 
