@@ -421,7 +421,7 @@ class OptimizationSettings:
     @property
     def llc_options(self):
         if self.debug_mode: return ("-O=0",)
-        return ("-O=3", "-fp-contract=fast")
+        return ("-O=3", "-fp-contract=fast", "-mcpu=native")
 
     def attributor(self, mode="module"):
         # We --disable-tail-calls for the following reason:

@@ -136,7 +136,7 @@ class SwissTable[K, V] extends HashMap[K, V] {
 
     def ensure_capacity(required_size: i32) {
         current_length = @entries_len;
-        // Load factor of 7/8 = 87.5%. Abseil uses this.
+        // Load factor
         needs_resize = current_length == 0 or required_size > (current_length * 7) / 8;
         if not needs_resize { return; }
 
@@ -155,7 +155,7 @@ class SwissTable[K, V] extends HashMap[K, V] {
         if is_new_insert { @size = @size + 1; }
 
         @metadata.[i] = Self.h2_to_control(hash);
-        @entries.[i] = Entry[K,V].new(key, value, hash);
+        @entries.[i] = Entry{key, value, hash};
     }
 
     def get(key: K) -> V? {

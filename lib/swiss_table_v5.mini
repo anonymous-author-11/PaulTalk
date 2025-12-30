@@ -6,7 +6,7 @@ import array;
 def empty() -> i8 { return 0 as i8; }
 def deleted() -> i8 { return -2 as i8; }
 def occupied_mask() -> i8 { return 1 as i8; }
-def group_width() -> i32 { return 8; }
+def group_width() -> i32 { return 32; }
 def padding() -> i8 { return -1 as i8; }
 
 class Entry[K,V] {
@@ -57,10 +57,6 @@ class SwissTable[K, V] extends HashMap[K, V] {
         }
     }
 
-    // =========================================================
-    // Core lookup with SIMD acceleration
-    // =========================================================
-
     def find_slot(key: K, hash: i32) -> i32 {
         mask = @entries_len - 1;
         h2 = Self.h2_to_control(hash);
@@ -68,12 +64,26 @@ class SwissTable[K, V] extends HashMap[K, V] {
         tombstone = -1;
         metadata = @metadata;
 
-        h2_splat = 8 of h2;
-        zero_splat = 8 of (0 as i8);
-        one_splat = 8 of (1 as i8);
+        // Scalar load to check first candidate slot
+        first_metadata = metadata.[probe];
+        if first_metadata == empty() { return probe; }
+        if first_metadata == h2 {
+            entry = @entries.[probe];
+            if entry is Entry[K,V] {
+                if entry.hash() == hash and @eq.call(entry.key(), key) {
+                    return probe;
+                }
+            }
+        }
+
+        // first one was not it, start probing
+        probe = probe + 1;
+        h2_splat = 32 of h2;
+        zero_splat = 32 of empty();
+        one_splat = 32 of occupied_mask();
 
         while true {
-            group = metadata.[8 from probe];
+            group = metadata.[32 from probe];
 
             // --- H2 matches (no bounds check: -1 can't match h2) ---
             h2_matches = group == h2_splat;
@@ -117,21 +127,23 @@ class SwissTable[K, V] extends HashMap[K, V] {
         probe = hash bit_and mask;
         metadata = @metadata;
 
-        zero_splat = 8 of (0 as i8);
-        one_splat = 8 of (1 as i8);
+        // Scalar load to check first candidate slot
+        if metadata.[probe] == empty() { return probe; }
+        probe = probe + 1;
+
+        zero_splat = 32 of empty();
+        one_splat = 32 of occupied_mask();
 
         while true {
-            group = metadata.[8 from probe];
+            group = metadata.[32 from probe];
 
             lsb = group bit_and one_splat;
             sentinel_matches = lsb == zero_splat;
 
             i = cttz(sentinel_matches);
-            if i < group_width() {
-                return probe + i;
-            }
+            if i < group_width() { return probe + i; }
 
-            probe = (probe + 8) bit_and mask;
+            probe = (probe + group_width()) bit_and mask;
         }
     }
 
@@ -144,7 +156,7 @@ class SwissTable[K, V] extends HashMap[K, V] {
         if is_new { @size = @size + 1; }
 
         @metadata.[slot] = Self.h2_to_control(hash);
-        @entries.[slot] = Entry[K,V].new(key, value, hash);
+        @entries.[slot] = Entry{key, value, hash};
     }
 
     def get(key: K) -> V? {

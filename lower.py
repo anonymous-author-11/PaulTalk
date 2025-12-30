@@ -528,6 +528,9 @@ class LowerArithmetic(RewritePattern):
             rhs_sign = op.rhs_type.signedness.data
             int_op = int_arithmetic_map[(lhs_sign, op.op.data, rhs_sign)]
             operation = int_op(lhs.results[0], rhs.results[0])
+        if op.lhs_type == Bool() and op.rhs_type == Bool():
+            int_op = int_arithmetic_map[(Signedness.UNSIGNED, op.op.data, Signedness.UNSIGNED)]
+            operation = int_op(lhs.results[0], rhs.results[0])
         if isinstance(op.lhs_type, Float) and isinstance(op.rhs_type, Float):
             float_op = float_arithmetic_map[op.op.data]
             operation = float_op(lhs.results[0], rhs.results[0])

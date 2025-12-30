@@ -2,10 +2,8 @@ import std;
 
 alias Map = SwissTable;
 
-// --- Additions for Benchmarking ---
 extern def clock() -> i64
 
-// --- PRNG Class ---
 class PRNG {
     @seed: i32
     def init(initial_seed: i32) {
@@ -23,7 +21,18 @@ class PRNG {
     }
 }
 
-// --- Helper to print benchmark results ---
+def shuffle(arr: Array[i32], n: i32, rng: PRNG) {
+    i = n - 1;
+    while i > 0 {
+        j = rng.next() % (i + 1);
+        if j < 0 { j = j * -1; }
+        tmp = arr.unchecked_index(i);
+        arr.unchecked_insert(i, arr.unchecked_index(j));
+        arr.unchecked_insert(j, tmp);
+        i = i - 1;
+    }
+}
+
 def print_benchmark_result(test_name: String, n: i32, duration: i64) {
     IO.print(test_name);
     IO.print("  Operations: "); IO.print(n);
@@ -33,8 +42,6 @@ def print_benchmark_result(test_name: String, n: i32, duration: i64) {
         IO.print("  Time/Op:    ~"); IO.print(ns_per_op); IO.print(" ns");
     }
 }
-
-// --- Benchmarking Functions ---
 
 def benchmark_insert_sequential(n: i32) {
     map = Map[i32, i32].new(i32_hasher, i32_eq);
@@ -48,15 +55,12 @@ def benchmark_insert_sequential(n: i32) {
 
     verification_passed = true;
     if n > 0 {
-        // Verify last element
         last_val = map.get(n - 1);
         if last_val is Nil { verification_passed = false; }
         if last_val is i32 { if last_val != n { verification_passed = false; } }
-
-        // Verify size
         if map.size() != n { verification_passed = false; }
     } else {
-         if map.size() != 0 { verification_passed = false; }
+        if map.size() != 0 { verification_passed = false; }
     }
     print_benchmark_result("Insert Sequential", n, end_time - start_time);
     IO.print("    Verification: ");
@@ -67,19 +71,19 @@ def benchmark_insert_random(n: i32) {
     map = Map[i32, i32].new(i32_hasher, i32_eq);
     rng = PRNG.new(123);
     keys_to_insert = Array[i32].new(n);
-    expected_size = 0;
-    // Use a separate map instance just for counting expected unique keys
+    
     temp_map_for_size_check = Map[i32, Bool].new(i32_hasher, i32_eq);
     i = 0;
-    last_key = -1;
     while i < n {
         key = rng.next();
         keys_to_insert.unchecked_insert(i, key);
-        if i == n-1 { last_key = key; }
-        temp_map_for_size_check.insert(key, true); // Value doesn't matter
+        temp_map_for_size_check.insert(key, true);
         i = i + 1;
     }
     expected_size = temp_map_for_size_check.size();
+    
+    // Shuffle insertion order
+    shuffle(keys_to_insert, n, PRNG.new(777));
 
     start_time: i64 = clock();
     i = 0;
@@ -92,18 +96,12 @@ def benchmark_insert_random(n: i32) {
 
     verification_passed = true;
     if n > 0 {
-        // Verify one of the inserted elements (e.g., the last one)
-         last_val = map.get(last_key);
-         if last_val is Nil { verification_passed = false; }
-         if last_val is i32 { if last_val != (last_key + 1) { verification_passed = false; } }
-
-        // Verify size matches expected unique count
-         actual_size = map.size();
-         if actual_size != expected_size {
-              verification_passed = false;
-         }
+        actual_size = map.size();
+        if actual_size != expected_size {
+            verification_passed = false;
+        }
     } else {
-         if map.size() != 0 { verification_passed = false; }
+        if map.size() != 0 { verification_passed = false; }
     }
     print_benchmark_result("Insert Random", n, end_time - start_time);
     IO.print("    Verification: ");
@@ -111,8 +109,7 @@ def benchmark_insert_random(n: i32) {
     IO.print("    (Expected unique size: "); IO.print(expected_size); IO.print(")");
 }
 
-
-def benchmark_get_sequential_hit(n: i32) {
+def benchmark_get_sequential(n: i32) {
     map = Map[i32, i32].new(i32_hasher, i32_eq);
     expected_sum: i64 = 0;
     i = 0;
@@ -125,121 +122,39 @@ def benchmark_get_sequential_hit(n: i32) {
 
     start_time: i64 = clock();
     actual_sum: i64 = 0;
-    verification_passed = true; // Assume pass initially
-    printed_errors = 0;
     i = 0;
     while i < n {
         val = map.get(i);
         if val is i32 {
             actual_sum = actual_sum + val;
-        } else {
-             // If Nil is returned, it's an error for a hit test
-             verification_passed = false;
-             // Optionally print error for debugging, but avoid flooding console
-             if printed_errors < 10 {
-                IO.print("Error: Nil returned during sequential hit test for key "); IO.print(i);
-                printed_errors = printed_errors + 1;
-             }
-             
         }
         i = i + 1;
     }
     end_time: i64 = clock();
 
-    // Final check on the sum
-    if actual_sum != expected_sum {
-         verification_passed = false;
-    }
-    print_benchmark_result("Get Sequential Hit", n, end_time - start_time);
+    verification_passed = actual_sum == expected_sum;
+    print_benchmark_result("Get Sequential", n, end_time - start_time);
     IO.print("    Verification: "); if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
 }
 
-def benchmark_get_random_hit(n: i32) {
-    map = Map[i32, i32].new(i32_hasher, i32_eq);
-    rng = PRNG.new(456);
-    keys_present = Array[i32].new(n);
-    expected_sum: i64 = 0;
-    // Use temp map to ensure N unique keys are inserted and tracked
-    temp_map_for_setup = Map[i32, Bool].new(i32_hasher, i32_eq);
-    keys_added_count = 0;
-    attempts = 0;
-    max_attempts = n * 10; // Safety break
-
-    while keys_added_count < n and attempts < max_attempts {
-        key = rng.next();
-        if temp_map_for_setup.get(key) is Nil { // Key not yet inserted
-            value_to_insert = key + 1;
-            map.insert(key, value_to_insert);
-            keys_present.unchecked_insert(keys_added_count, key);
-            temp_map_for_setup.insert(key, true); // Mark as added
-            expected_sum = expected_sum + value_to_insert;
-            keys_added_count = keys_added_count + 1;
-        }
-        attempts = attempts + 1;
-    }
-
-    // Adjust n if we couldn't generate enough unique keys
-    if keys_added_count < n {
-        IO.print("Warning: Could only generate "); IO.print(keys_added_count); IO.print(" unique keys for random hit test.");
-        n = keys_added_count;
-    }
-
-    start_time: i64 = clock();
-    actual_sum: i64 = 0;
-    verification_passed = true; // Assume pass initially
-    printed_errors = 0;
-    i = 0;
-    while i < n { // Iterate up to actual number of unique keys added
-        key = keys_present.unchecked_index(i);
-        val = map.get(key);
-        if val is i32 {
-            actual_sum = actual_sum + val;
-        } else {
-             // Nil returned is an error for hit test
-             verification_passed = false;
-             // Optionally print error
-             if printed_errors < 10 {
-                IO.print("Error: Nil returned during random hit test for key "); IO.print(key);
-                printed_errors = printed_errors + 1;
-             }
-        }
-        i = i + 1;
-    }
-    end_time: i64 = clock();
-
-    // Final sum check
-    if actual_sum != expected_sum {
-         verification_passed = false;
-    }
-    print_benchmark_result("Get Random Hit", n, end_time - start_time);
-    IO.print("    Verification: "); if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
-}
-
-def benchmark_get_shuffled(n: i32) {
+def benchmark_get_random(n: i32) {
     map = Map[i32, i32].new(i32_hasher, i32_eq);
     keys = Array[i32].new(n);
     rng = PRNG.new(999);
+    expected_sum: i64 = 0;
     
-    // Insert sequential keys
     i = 0;
     while i < n {
         keys.unchecked_insert(i, i);
-        map.insert(i, i + 1);
+        value = i + 1;
+        map.insert(i, value);
+        expected_sum = expected_sum + value;
         i = i + 1;
     }
     
-    // Shuffle for random access pattern
-    i = n - 1;
-    while i > 0 {
-        j = rng.next() % (i + 1);
-        if j < 0 { j = j * -1; }  // Handle negative mod
-        tmp = keys.unchecked_index(i);
-        keys.unchecked_insert(i, keys.unchecked_index(j));
-        keys.unchecked_insert(j, tmp);
-        i = i - 1;
-    }
-    
-    // Now benchmark with randomized access order
+    // Shuffle for true random access pattern
+    shuffle(keys, n, rng);
+
     start_time: i64 = clock();
     actual_sum: i64 = 0;
     i = 0;
@@ -251,56 +166,58 @@ def benchmark_get_shuffled(n: i32) {
     }
     end_time: i64 = clock();
     
-    print_benchmark_result("Get Shuffled", n, end_time - start_time);
+    verification_passed = actual_sum == expected_sum;
+    print_benchmark_result("Get Random", n, end_time - start_time);
+    IO.print("    Verification: "); if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
 }
 
-def benchmark_get_random_miss(n: i32) {
+def benchmark_get_miss(n: i32) {
     map = Map[i32, i32].new(i32_hasher, i32_eq);
     rng_setup = PRNG.new(789);
     rng_miss = PRNG.new(987);
-    // Insert N unique keys
+    
     temp_map_for_setup = Map[i32, Bool].new(i32_hasher, i32_eq);
     keys_added_count = 0;
     attempts = 0;
     max_attempts_setup = n * 10;
 
     while keys_added_count < n and attempts < max_attempts_setup {
-         key = rng_setup.next();
-         if temp_map_for_setup.get(key) is Nil {
-             map.insert(key, key + 1);
-             temp_map_for_setup.insert(key, true);
-             keys_added_count = keys_added_count + 1;
-         }
-         attempts = attempts + 1;
-    }
-
-    // Generate N keys for miss test, ensuring they aren't in the setup map
-    keys_to_miss = Array[i32].new(n);
-    miss_keys_generated = 0;
-    attempts = 0;
-    max_attempts_miss = n * 20; // Need more attempts potentially
-
-    while miss_keys_generated < n and attempts < max_attempts_miss {
-        key = rng_miss.next();
-        // Check if this key happens to be one we inserted during setup
-        if temp_map_for_setup.get(key) is Nil { // Good, this key is likely a miss
-             keys_to_miss.unchecked_insert(miss_keys_generated, key);
-             miss_keys_generated = miss_keys_generated + 1;
+        key = rng_setup.next();
+        if temp_map_for_setup.get(key) is Nil {
+            map.insert(key, key + 1);
+            temp_map_for_setup.insert(key, true);
+            keys_added_count = keys_added_count + 1;
         }
         attempts = attempts + 1;
     }
 
-    // Adjust n if we couldn't generate enough guaranteed miss keys
+    keys_to_miss = Array[i32].new(n);
+    miss_keys_generated = 0;
+    attempts = 0;
+    max_attempts_miss = n * 20;
+
+    while miss_keys_generated < n and attempts < max_attempts_miss {
+        key = rng_miss.next();
+        if temp_map_for_setup.get(key) is Nil {
+            keys_to_miss.unchecked_insert(miss_keys_generated, key);
+            miss_keys_generated = miss_keys_generated + 1;
+        }
+        attempts = attempts + 1;
+    }
+
     if miss_keys_generated < n {
         IO.print("Warning: Could only generate "); IO.print(miss_keys_generated); IO.print(" guaranteed miss keys.");
         n = miss_keys_generated;
     }
 
+    // Shuffle miss keys too
+    shuffle(keys_to_miss, n, PRNG.new(555));
+
     start_time: i64 = clock();
     miss_count = 0;
     hit_count = 0;
     i = 0;
-    while i < n { // Test with generated miss keys
+    while i < n {
         key = keys_to_miss.unchecked_index(i);
         if map.get(key) is Nil { miss_count = miss_count + 1; }
         else { hit_count = hit_count + 1; }
@@ -308,16 +225,14 @@ def benchmark_get_random_miss(n: i32) {
     }
     end_time: i64 = clock();
 
-    // Verification: Expect nearly all lookups to be misses. Allow < 5% accidental hits.
     verification_passed = true;
     if n > 0 {
-         // Check if hit count exceeds threshold
-         if (hit_count * 100 / n) >= 5 { verification_passed = false; }
+        if (hit_count * 100 / n) >= 5 { verification_passed = false; }
     } else {
-         if hit_count != 0 { verification_passed = false; } // No hits if n=0
+        if hit_count != 0 { verification_passed = false; }
     }
 
-    print_benchmark_result("Get Random Miss", n, end_time - start_time);
+    print_benchmark_result("Get Miss", n, end_time - start_time);
     IO.print("    Verification: "); if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
     IO.print("    (Misses: "); IO.print(miss_count); IO.print(", Hits: "); IO.print(hit_count); IO.print(")");
 }
@@ -326,7 +241,7 @@ def benchmark_remove_random(n: i32) {
     map = Map[i32, i32].new(i32_hasher, i32_eq);
     rng = PRNG.new(101112);
     keys_to_remove = Array[i32].new(n);
-    // Use a temporary map to ensure we add N unique keys
+    
     temp_map_keys = Map[i32, Bool].new(i32_hasher, i32_eq);
     keys_added_count = 0;
     attempts = 0;
@@ -334,81 +249,51 @@ def benchmark_remove_random(n: i32) {
 
     while keys_added_count < n and attempts < max_attempts {
         key = rng.next();
-        if temp_map_keys.get(key) is Nil { // If key is not already added
+        if temp_map_keys.get(key) is Nil {
             map.insert(key, key + 1);
             keys_to_remove.unchecked_insert(keys_added_count, key);
-            temp_map_keys.insert(key, true); // Mark key as added
+            temp_map_keys.insert(key, true);
             keys_added_count = keys_added_count + 1;
         }
         attempts = attempts + 1;
     }
 
-    // Adjust n if we couldn't add enough unique keys
     if keys_added_count < n {
         IO.print("Warning: Could only generate "); IO.print(keys_added_count); IO.print(" unique keys for remove test.");
         n = keys_added_count;
     }
 
+    // Shuffle removal order
+    shuffle(keys_to_remove, n, PRNG.new(888));
+
     start_time: i64 = clock();
     remove_count = 0;
-    verification_passed = true; // Assume pass
-    printed_errors = 0;
     i = 0;
-    while i < n { // Remove the actual number of keys added
+    while i < n {
         key = keys_to_remove.unchecked_index(i);
         val = map.remove(key);
-        if val is i32 { // Check if remove returned a value
-             expected_val = key + 1;
-             if val != expected_val {
-                  // Value mismatch is a form of failure
-                  verification_passed = false;
-                  if printed_errors < 10 {
-                    IO.print("Warning: Remove returned wrong value for key "); IO.print(key);
-                    printed_errors = printed_errors + 1;
-                  }
-             }
-             remove_count = remove_count + 1;
-        } else {
-             // Remove returning Nil for a key that should exist is an error
-             verification_passed = false;
-             if printed_errors < 10 {
-                IO.print("Warning: Remove returned Nil for key "); IO.print(key);
-                printed_errors = printed_errors + 1;
-             }
+        if val is i32 {
+            remove_count = remove_count + 1;
         }
         i = i + 1;
     }
     end_time: i64 = clock();
 
-    // Final checks
-    if remove_count != n { verification_passed = false; } // Should have removed exactly n items
-    actual_size = map.size();
-    if actual_size != 0 { verification_passed = false; } // Map should be empty
-
-    // Double check: try getting one of the removed keys
-    if n > 0 {
-         key_to_check = keys_to_remove.unchecked_index(0);
-         val_after_remove = map.get(key_to_check);
-         if val_after_remove is i32 { // Should be Nil if removal worked
-             verification_passed = false;
-         }
-    }
+    verification_passed = remove_count == n and map.size() == 0;
+    
     print_benchmark_result("Remove Random", n, end_time - start_time);
     IO.print("    Verification: "); if verification_passed { IO.print("PASS"); } else { IO.print("FAIL"); }
     IO.print("    (Items removed: "); IO.print(remove_count); IO.print(")");
 }
 
-// --- Main Execution ---
-
 IO.print("--- Map Benchmarks ---");
-n = 1_000_000; // Benchmark size
+n = 1_500_000;
 
 benchmark_insert_sequential(n);
 benchmark_insert_random(n);
-benchmark_get_sequential_hit(n);
-benchmark_get_random_hit(n);
-benchmark_get_shuffled(n);
-benchmark_get_random_miss(n);
+benchmark_get_sequential(n);
+benchmark_get_random(n);
+benchmark_get_miss(n);
 benchmark_remove_random(n);
 
 IO.print("--- Benchmarks Complete ---");

@@ -464,6 +464,8 @@ class Arithmetic(BinaryOp):
         # This is overly restrictive-- bitwise ops can work on floats
         needs_integers = self.operator in ("MOD", "LSHIFT", "RSHIFT", "bit_and", "bit_or", "bit_xor")
         uses_integers = isinstance(left_type, Integer)
+        bitwise_of_bools = self.operator in ("bit_and", "bit_or", "bit_xor") and left_type == Bool()
+        needs_integers = needs_integers and not bitwise_of_bools
         if needs_integers and not uses_integers:
             raise Exception(f"{self.info}: {self.operator} only works on integers, not {left_type} and {right_type}")
 

@@ -85,7 +85,7 @@ class HashMap[K, V] extends Map[K, V] {
     abstract def init(hasher: (K) -> i32, eq : (K, K) -> Bool) {}
 }
 
-def i32_hasher(i : i32) -> i32 {
+def i32_hasher_old(i : i32) -> i32 {
     i = (i + 0x7ed55d16) + (i << 12);
     i = (i bit_xor 0xc761c23c) bit_xor (i >> 19);
     i = (i + 0x165667b1) + (i << 5);
@@ -95,12 +95,34 @@ def i32_hasher(i : i32) -> i32 {
     return i;
 }
 
+def i32_hasher(x: i32) -> i32 {
+    return i32_hasher_lowbias(x);
+}
+
+def i32_hasher_murmur(x: i32) -> i32 {
+    x = x bit_xor (x >> 16);
+    x = x * 0x85ebca6b;
+    x = x bit_xor (x >> 13);
+    x = x * 0xc2b2ae35;
+    x = x bit_xor (x >> 16);
+    return x;
+}
+
+def i32_hasher_lowbias(x: i32) -> i32 {
+    x = x bit_xor (x >> 16);
+    x = x * 0x7feb352d;
+    x = x bit_xor (x >> 15);
+    x = x * 0x846ca68b;
+    x = x bit_xor (x >> 16);
+    return x;
+}
+
 def i32_hasher_weak(i: i32) -> i32 {
     return i bit_xor (i << 2);
 }
 
 def i32_hasher_identity(i: i32) -> i32 {
-    return i bit_xor (i << 2);
+    return i;
 }
 
 def i32_hasher_low_bits(i: i32) -> i32 {
