@@ -1,0 +1,48 @@
+Rationale For Design Decisions
+
+Non-Monomorphized Generics
+
+	- ABI / Interoperability / Dylibs
+	- Combination of genericity and virtuality
+	- Compilation time
+
+Stackful vs Stackless Coroutines
+
+	- Function coloring / composability
+
+Word operators for bitwise operations
+
+	- Verbosity vs frequency
+	- Avoidance of ambiguity
+	- Readability
+
+Exceptions vs Result types
+
+	- Avoid pollution of the happy path
+	- Utility of stack trace
+	- Unions make checked exceptions nicer
+	- Unwrapping overhead on every callsite
+
+Multiple Inheritance vs Interfaces
+
+	- Whether something is implemented is an implementation detail
+	- Deadly Diamond of Death vs C3 linearization
+
+Multiple Dispatch
+
+	- Great for operator dispatch
+	- Implemented in a modular manner
+	- Perfect hashing is so fast
+	- Solves binary method problem
+	- Enables all manner of optimizations
+
+Operator Overloading
+
+	- Matrix types, quaternion types, etc.
+	- Much more readable, chains beautifully
+	- Combines nicely with multimethods
+
+Region Inference vs Garbage Collection
+
+	- Interoperability / embeddability
+	- Determinism

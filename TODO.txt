@@ -730,6 +730,12 @@ TODO:
 - Also have special vector lowerings for tuple cast where it could be an arith.extsi etc.
 - Be able to cast Bool to integers, and i1 to Bool
 - Cast Tuple[Bool] to Tuple[i8] before TupleToArray [check!]
+- Field access utilities etc should be preserve_allcc
+- Can we do a similar hoisting trick for field accesses that we do for allocas?
+	- Not really because sometimes you want it sunk
+	- Making it speculatable should make it hoistable anyway
+
+- Why not work on namespacing now?
 
 - Should the parser emit Arithmetic and Comparison or just BinaryOp?
 	- We don't know that this is actually arithmetic yet, until we discern types
