@@ -564,13 +564,13 @@ class CreateTupleOp(IRDLOperation):
 
     @classmethod
     def make(cls, values, typ):
-        if typ.is_bitvector:
-            return CreateBitVectorOp.create(operands=values, attributes={"typ":typ.base_typ()}, result_types=[typ])
+        if typ.vector_like:
+            return CreateVectorOp.create(operands=values, attributes={"typ":typ.base_typ()}, result_types=[typ])
         return CreateTupleOp.create(operands=values, attributes={"typ":typ.base_typ()}, result_types=[typ])
 
 @irdl_op_definition
-class CreateBitVectorOp(IRDLOperation):
-    name = "mid.create_bitvector"
+class CreateVectorOp(IRDLOperation):
+    name = "mid.create_vector"
     values: VarOperand = var_operand_def()
     typ: TypeAttribute = attr_def(TypeAttribute)
     result: OpResult = result_def()
@@ -1274,7 +1274,7 @@ Mid = Dialect(
         IntrinsicOp,
         CreateBufferOp,
         CreateTupleOp,
-        CreateBitVectorOp,
+        CreateVectorOp,
         BufferIndexationOp,
         TupleGetOp,
         TupleSetOp,

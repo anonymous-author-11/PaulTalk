@@ -6,9 +6,10 @@ Non-Monomorphized Generics
 	- Combination of genericity and virtuality
 	- Compilation time
 
-Stackful vs Stackless Coroutines
+Stackful over Stackless Coroutines
 
-	- Function coloring / composability
+	- Function coloring / composability / virality
+	- Enable seamless transition between synchronous / async
 
 Word operators for bitwise operations
 
@@ -16,14 +17,14 @@ Word operators for bitwise operations
 	- Avoidance of ambiguity
 	- Readability
 
-Exceptions vs Result types
+Exceptions over Result types
 
 	- Avoid pollution of the happy path
 	- Utility of stack trace
 	- Unions make checked exceptions nicer
 	- Unwrapping overhead on every callsite
 
-Multiple Inheritance vs Interfaces
+Multiple Inheritance over Interfaces
 
 	- Whether something is implemented is an implementation detail
 	- Deadly Diamond of Death vs C3 linearization
@@ -42,7 +43,7 @@ Operator Overloading
 	- Much more readable, chains beautifully
 	- Combines nicely with multimethods
 
-Region Inference vs Garbage Collection
+Region Inference over Garbage Collection
 
 	- Interoperability / embeddability
 	- Determinism

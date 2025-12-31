@@ -1030,7 +1030,6 @@ class CompilerTests(CompilerTestCase):
     def test_sizeof(self):
         mini_code = """
             import io;
-            import core;
 
             class Temp[T] {
                 def init() {}
@@ -1061,7 +1060,6 @@ class CompilerTests(CompilerTestCase):
     def test_splat(self):
         mini_code = """
             import io;
-            import core;
 
             x = 5;
             broadcast = 4 of x;
@@ -1073,7 +1071,6 @@ class CompilerTests(CompilerTestCase):
     def test_invalid_splat(self):
         mini_code = """
             import io;
-            import core;
 
             x = 5;
             broadcast = 4.0 of x;
@@ -1085,7 +1082,6 @@ class CompilerTests(CompilerTestCase):
     def test_ramp(self):
         mini_code = """
             import io;
-            import core;
 
             x = 5;
             broadcast = 4 from x;
@@ -1097,7 +1093,6 @@ class CompilerTests(CompilerTestCase):
     def test_invalid_ramp(self):
         mini_code = """
             import io;
-            import core;
 
             x = 5;
             broadcast = 4.0 from x;
@@ -1105,6 +1100,26 @@ class CompilerTests(CompilerTestCase):
         """
         with self.assertRaisesRegex(Exception, "left-hand side of 'from' literal must be an integer literal"):
             self.run_mini_code(mini_code, "", "invalid_ramp")
+
+    def test_invalid_if_condition(self):
+        mini_code = """
+            import io;
+
+            x = 5;
+            if x { IO.print(7); }
+        """
+        with self.assertRaisesRegex(Exception, "condition of if-statement must be a Bool, not i32"):
+            self.run_mini_code(mini_code, "", "invalid_if_condition")
+
+    def test_invalid_while_condition(self):
+        mini_code = """
+            import io;
+
+            x = 5;
+            while x { IO.print(7); }
+        """
+        with self.assertRaisesRegex(Exception, "condition of while-statement must be a Bool, not i32"):
+            self.run_mini_code(mini_code, "", "invalid_while_condition")
 
 if __name__ == '__main__':
     unittest.main()

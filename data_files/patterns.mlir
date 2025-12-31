@@ -1860,11 +1860,11 @@ module @patterns {
       pdl.replace %root with (%alloca_result : !pdl.value)
     }
   }
-  pdl.pattern @LowerCreateBitVector : benefit(1) {
+  pdl.pattern @LowerCreateVector : benefit(1) {
     %ptr_type = pdl.type : !llvm.ptr
     %values = pdl.operands
     %typ_attr = pdl.attribute
-    %root = pdl.operation "mid.create_bitvector"(%values : !pdl.range<value>) {"typ" = %typ_attr} -> (%ptr_type : !pdl.type)
+    %root = pdl.operation "mid.create_vector"(%values : !pdl.range<value>) {"typ" = %typ_attr} -> (%ptr_type : !pdl.type)
     pdl.rewrite %root {
       %vec_type = pdl.apply_native_rewrite "type_attr_to_type"(%typ_attr : !pdl.attribute) : !pdl.type
       %alloca = pdl.operation "mid.alloc" {"typ" = %typ_attr} -> (%ptr_type : !pdl.type)

@@ -700,6 +700,9 @@ DONE:
 
 TODO:
 
+- Might want to work on intrinsics
+	- intrinsic("llvm.sin").call()
+
 - Bug in primesieve.mini where I was able to insert a NaiveSieve into the map without making it extend PrimeSieve
 	- Must be something wrong in behavior.applicable
 
@@ -707,10 +710,8 @@ TODO:
 
 - Union involving Tuple is clearly broken
 
-- What would be necessary in order to have bitpacked Tuple[N x Bool]?
-	- Buffer[Bool] would have to be bitpacked as well
-
-- Constructing a tuple should be vectorized as well
+- Also have special vector lowerings for tuple cast where it could be an arith.extsi etc.
+	- Basically have to rewrite those casts (widen, truncate, floatify) to accept vectors
 
 - Add masking to tuple loads/stores
 - Horizontal reductions for tuples
@@ -720,31 +721,18 @@ TODO:
 	- first(tuple) / last(tuple) for Tuple[Bool]
 - Logical ops for boolean tuples
 - Add vector lowerings for tuple arithmetic 
-	- Should have to do stuff like widen and floatify vectirs of ints
+	- Simplest case [check!]
+	- Should have to do stuff like widen and floatify vectors of ints
 
 - Anything which desugars into something else should have a member called desugaring
 - BinaryOp and MethodCall should have a member for their concrete implementation
 
 - Need to be able to reference tuple fields (tup.1, tup.2, etc) in region annotations (disallowed by grammar)
 
-- Also have special vector lowerings for tuple cast where it could be an arith.extsi etc.
 - Be able to cast Bool to integers, and i1 to Bool
-- Cast Tuple[Bool] to Tuple[i8] before TupleToArray [check!]
 - Field access utilities etc should be preserve_allcc
-- Can we do a similar hoisting trick for field accesses that we do for allocas?
-	- Not really because sometimes you want it sunk
-	- Making it speculatable should make it hoistable anyway
 
 - Why not work on namespacing now?
-
-- Should the parser emit Arithmetic and Comparison or just BinaryOp?
-	- We don't know that this is actually arithmetic yet, until we discern types
-- What's the warrant for there being substantive logic in BinaryOp?
-	- Things like ensuring that the operands are numbers, or the same type
-	- Widening and floatifying int operands
-	- None of it applies to Logical
-	- Certain arithmetic ops don't require same-typed operands
-	- The logic is not the same for TuplesOp
 
 - Release 0.9.0
 	- Implement i32.max() et. al. [check!]
@@ -758,8 +746,12 @@ TODO:
 			- Desugar to several indexations in general case [check!]
 		- Make iterating over tuples safe [check!]
 			- Only place on stack when the iterable in a for-loop [check!]
+			- Make TupleToArray safe [check!]
 		- Comparisons for tuples [check!]
-		- Make TupleToArray safe [check!]
+		- Cast Tuple[Bool] to Tuple[i8] before TupleToArray [check!]
+		- Lower Tuple[N x Bool] to bitvectors [check!]
+			- Special lowering for indexing [check!]
+		- Constructing a tuple should be vectorized as well [check!]
 	- Does just adding dependencies to the path work?
 		- The source_dirs collection should be ordered, not a set [check!]
 		- Add the dependency folder to an env variable named for the package

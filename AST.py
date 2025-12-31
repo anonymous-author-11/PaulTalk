@@ -410,7 +410,12 @@ class TuplesOp(BinaryOp):
     def codegen(self, scope):
         self.temp_assign("left", self.temp_id("left"), self.left).codegen(scope)
         self.temp_assign("right", self.temp_id("right"), self.right).codegen(scope)
-        return self.desugared.codegen(scope)
+        if self.desugared: return self.desugared.codegen(scope)
+
+        return self.standard_codegen(scope)
+
+    def concrete_op(self, operands, attributes, result_types):
+        return hi.ArithmeticOp.create(operands=operands, attributes=attributes, result_types=result_types)
 
     def exprtype(self, scope):
         left_type = self.left.exprtype(scope)
@@ -425,6 +430,7 @@ class TuplesOp(BinaryOp):
         self.temp_assign("right", self.temp_id("right"), self.right).typeflow(scope)
 
         if self.desugared: return self.desugared.exprtype(scope)
+        if left_type.vector_like: return left_type
         self.desugared = self.desugar(left_type, right_type)
         return self.desugared.exprtype(scope)
 
@@ -4275,7 +4281,7 @@ class WhileStatement(Branch):
         if self.preheader: self.preheader.typeflow(condition_scope)
         condition_type = self.condition.exprtype(condition_scope)
         if condition_type != Bool():
-            raise Exception(f"{self.info}: condition of if-statement must be a Bool, not {condition_type}")
+            raise Exception(f"{self.info}: condition of while-statement must be a Bool, not {condition_type}")
         body_scope = Scope(condition_scope, wile=condition_scope.region.last_block)
         skip_scope = Scope(condition_scope)
         self.narrow_types_true(body_scope, self.condition)

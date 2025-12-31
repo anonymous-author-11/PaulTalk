@@ -487,7 +487,7 @@ class LowerTupleCast(RewritePattern):
         rewriter.inline_block_after_matched_op(Block([*to_geps, *memcpys]))
         rewriter.replace_matched_op(alloca)
 
-int_arithmetic_map = {
+arithmetic_map = {
     (Signedness.SIGNED, "ADD", Signedness.SIGNED):arith.Addi,
     (Signedness.SIGNED, "SUB", Signedness.SIGNED): arith.Subi,
     (Signedness.SIGNED, "MUL", Signedness.SIGNED): arith.Muli,
@@ -507,14 +507,11 @@ int_arithmetic_map = {
     (Signedness.SIGNED, "bit_xor", Signedness.SIGNED):arith.XOrI,
     (Signedness.UNSIGNED, "bit_and", Signedness.UNSIGNED):arith.AndI,
     (Signedness.UNSIGNED, "bit_or", Signedness.UNSIGNED):arith.OrI,
-    (Signedness.UNSIGNED, "bit_xor", Signedness.UNSIGNED):arith.XOrI
-}
-
-float_arithmetic_map = {
+    (Signedness.UNSIGNED, "bit_xor", Signedness.UNSIGNED):arith.XOrI,
     "ADD":arith.Addf,
-    "SUB": arith.Subf,
-    "MUL": arith.Mulf,
-    "DIV": arith.Divf
+    "SUB":arith.Subf,
+    "MUL":arith.Mulf,
+    "DIV":arith.Divf
 }
 
 class LowerArithmetic(RewritePattern):
@@ -523,17 +520,24 @@ class LowerArithmetic(RewritePattern):
         lhs = UnwrapOp.create(operands=[op.lhs], result_types=[op.lhs_type.base_typ()])
         rhs = UnwrapOp.create(operands=[op.rhs], result_types=[op.rhs_type.base_typ()])
         rewriter.inline_block_before_matched_op(Block([lhs, rhs]))
-        if isinstance(op.lhs_type, Integer) and isinstance(op.rhs_type, Integer):
-            lhs_sign = op.lhs_type.signedness.data
-            rhs_sign = op.rhs_type.signedness.data
-            int_op = int_arithmetic_map[(lhs_sign, op.op.data, rhs_sign)]
-            operation = int_op(lhs.results[0], rhs.results[0])
-        if op.lhs_type == Bool() and op.rhs_type == Bool():
-            int_op = int_arithmetic_map[(Signedness.UNSIGNED, op.op.data, Signedness.UNSIGNED)]
-            operation = int_op(lhs.results[0], rhs.results[0])
-        if isinstance(op.lhs_type, Float) and isinstance(op.rhs_type, Float):
-            float_op = float_arithmetic_map[op.op.data]
-            operation = float_op(lhs.results[0], rhs.results[0])
+
+        lhs_type = op.lhs_type
+        rhs_type = op.rhs_type
+
+        if isinstance(op.lhs_type, Tuple) and isinstance(op.rhs_type, Tuple):
+            lhs_type = lhs_type.types.data[0]
+            rhs_type = rhs_type.types.data[0]
+
+        both_ints = isinstance(lhs_type, Integer) and isinstance(rhs_type, Integer)
+        both_bools = lhs_type == Bool() and rhs_type == Bool()
+        both_floats = isinstance(lhs_type, Float) and isinstance(rhs_type, Float)
+
+        if both_ints: key = (lhs_type.signedness.data, op.op.data, rhs_type.signedness.data)
+        if both_bools: key = (Signedness.UNSIGNED, op.op.data, Signedness.UNSIGNED)
+        if both_floats: key = op.op.data
+
+        operation = arithmetic_map[key](lhs.results[0], rhs.results[0])
+
         wrap = WrapOp.make(operation.results[0])
         rewriter.insert_op_before_matched_op(operation)
         rewriter.replace_matched_op(wrap)
