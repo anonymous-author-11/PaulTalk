@@ -680,7 +680,7 @@ module @patterns {
       pdl.replace %root with %store
     }
   }
-  pdl.pattern @LowerGatherRamp : benefit(20) {
+  pdl.pattern @LowerGatherRamp : benefit(2) {
     %ptr_type = pdl.type : !llvm.ptr
     %receiver = pdl.operand : %ptr_type
     %elem_type_attr = pdl.attribute
@@ -701,7 +701,16 @@ module @patterns {
     %index = pdl.result 0 of %refer
     %root = pdl.operation "mid.gather"(%receiver, %index : !pdl.value, !pdl.value) {"elem_typ" = %elem_type_attr, "vec_typ" = %vec_type_attr, "ptrs_vec" = %ptrs_vec_attr, "idx_typ" = %idx_typ_attr, "mask_typ" = %mask_typ_attr, "alignment" = %alignment} -> (%ptr_type : !pdl.type)
     pdl.rewrite %root {
-      %vec_load = pdl.operation "mid.vec_load"(%ramp_result, %index : !pdl.value, !pdl.value) {"elem_typ" = %elem_type_attr, "vec_typ" = %vec_type_attr, "alignment" = %alignment} -> (%ptr_type : !pdl.type)
+      %val_type = pdl.apply_native_rewrite "type_attr_to_type"(%val_type_attr : !pdl.attribute) : !pdl.type
+      %i64_type = pdl.type : i64
+      %i64_type_attr = pdl.attribute = i64
+      %load_val = pdl.operation "llvm.load"(%value : !pdl.value) -> (%val_type : !pdl.type)
+      %load_result = pdl.result 0 of %load_val
+      %new_index = pdl.operation "arith.extsi"(%load_result : !pdl.value) -> (%i64_type : !pdl.type)
+      %new_index_result = pdl.result 0 of %new_index
+      %wrapped = pdl.operation "mid.wrap"(%new_index_result : !pdl.value) -> (%ptr_type : !pdl.type)
+      %wrapped_result = pdl.result 0 of %wrapped
+      %vec_load = pdl.operation "mid.vec_load"(%receiver, %wrapped_result : !pdl.value, !pdl.value) {"elem_typ" = %elem_type_attr, "vec_typ" = %vec_type_attr, "alignment" = %alignment} -> (%ptr_type : !pdl.type)
       pdl.replace %root with %vec_load
     }
   }

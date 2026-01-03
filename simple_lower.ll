@@ -146,7 +146,7 @@ source_filename = "LLVMDialectModule"
 @Entry = constant { [3 x i64], [7 x ptr], [15 x ptr] } { [3 x i64] [i64 4015701072841558310, i64 -4133576829646489783, i64 3], [7 x ptr] [ptr @subtype_test, ptr @Entry_hashtbl, ptr @Entry_offset_tbl, ptr @_data_size_Entry, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [15 x ptr] [ptr @Entry_field_Entry_0, ptr @Entry_field_Entry_1, ptr @Entry_field_hash, ptr @Entry_field_key, ptr @Entry_field_value, ptr @Entry_B_hash_, ptr @Entry_B_key_, ptr @Entry_B_value_, ptr @Entry_B_init_keyK_valueV_hashi32, ptr @Entry_B_to_pair_, ptr @Entry_hash_, ptr @Entry_key_, ptr @Entry_value_, ptr @Entry_init_keyK_valueV_hashi32, ptr @Entry_to_pair_] }
 @SwissTable_hashtbl = constant [16 x ptr] [ptr @Collection, ptr @Object, ptr @HashMap, ptr null, ptr @IndexableCollection, ptr @SwissTable, ptr null, ptr null, ptr null, ptr @Map, ptr null, ptr null, ptr @Iterable, ptr @any_typ, ptr @Indexable, ptr null]
 @SwissTable_offset_tbl = constant [16 x i32] [i32 1064, i32 1064, i32 88, i32 0, i32 924, i32 10, i32 0, i32 0, i32 0, i32 646, i32 0, i32 0, i32 1123, i32 10, i32 1058, i32 0]
-@SwissTable = constant { [3 x i64], [7 x ptr], [1138 x ptr] } { [3 x i64] [i64 4490338885899135281, i64 8479622929818133973, i64 15], [7 x ptr] [ptr @subtype_test, ptr @SwissTable_hashtbl, ptr @SwissTable_offset_tbl, ptr @_data_size_SwissTable, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [1138 x ptr] [ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_field_entries, ptr @SwissTable_field_metadata, ptr @SwissTable_field_entries_len, ptr @SwissTable_field_size, ptr @SwissTable_field_hasher, ptr @SwissTable_field_eq, ptr @SwissTable_B_entries_len_, ptr @SwissTable_B__Self_h2_to_control_hashi32, ptr @SwissTable_B__Self_min_capacity_, ptr @SwissTable_B_find_slot_keyK_hashi32, ptr @SwissTable_B_find_empty_slot_hashi32, ptr @SwissTable_B_ensure_capacity_requiredi32, ptr @SwissTable_B_resize_new_capacityi32, ptr @SwissTable_B_scan_next_start_cursori32, ptr @SwissTable_B_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, ptr @SwissTable_B_get_keyK, ptr @SwissTable_B_insert_keyK_valueV, ptr @SwissTable_B_remove_keyK, ptr @SwissTable_B_keys_, ptr @SwissTable_B_clear_, ptr @SwissTable_B_indices_, ptr @SwissTable_B_values_, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_entries_len_, ptr @SwissTable__Self_h2_to_control_hashi32, ptr @SwissTable__Self_min_capacity_, ptr @SwissTable_find_slot_keyK_hashi32, ptr @SwissTable_find_empty_slot_hashi32, ptr @SwissTable_ensure_capacity_requiredi32, ptr @SwissTable_resize_new_capacityi32, ptr @SwissTable_scan_next_start_cursori32, ptr @SwissTable_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, ptr @SwissTable_get_keyK, ptr @SwissTable_insert_keyK_valueV, ptr @SwissTable_remove_keyK, ptr @Map_keys_, ptr @SwissTable_clear_, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, ptr @SwissTable_B_get_keyK, ptr @SwissTable_B_insert_keyK_valueV, ptr @SwissTable_B_remove_keyK, ptr @SwissTable_B_keys_, ptr @SwissTable_B_clear_, ptr @SwissTable_B_indices_, ptr @SwissTable_B_values_, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, ptr @SwissTable_get_keyK, ptr @SwissTable_insert_keyK_valueV, ptr @SwissTable_remove_keyK, ptr @Map_keys_, ptr @SwissTable_clear_, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_get_keyK, ptr @SwissTable_B_insert_keyK_valueV, ptr @SwissTable_B_remove_keyK, ptr @SwissTable_B_keys_, ptr @SwissTable_B_clear_, ptr @SwissTable_B_indices_, ptr @SwissTable_B_values_, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_get_keyK, ptr @SwissTable_insert_keyK_valueV, ptr @SwissTable_remove_keyK, ptr @Map_keys_, ptr @SwissTable_clear_, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_indices_, ptr @SwissTable_B_values_, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_indices_, ptr @SwissTable_B_values_, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_get_keyK, ptr @SwissTable_B_insert_keyK_valueV, ptr @SwissTable_B_remove_keyK, ptr @SwissTable_B_keys_, ptr @SwissTable_B_clear_, ptr @SwissTable_B_indices_, ptr @SwissTable_B_values_, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_get_keyK, ptr @SwissTable_insert_keyK_valueV, ptr @SwissTable_remove_keyK, ptr @Map_keys_, ptr @SwissTable_clear_, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_indices_, ptr @SwissTable_B_values_, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_indices_, ptr @SwissTable_B_values_, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Collection_chain_otherCollectionT, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Iterable_zip_otherIterableU, ptr @Collection_zip_otherCollectionU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
+@SwissTable = constant { [3 x i64], [7 x ptr], [1138 x ptr] } { [3 x i64] [i64 4490338885899135281, i64 8479622929818133973, i64 15], [7 x ptr] [ptr @subtype_test, ptr @SwissTable_hashtbl, ptr @SwissTable_offset_tbl, ptr @_data_size_SwissTable, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [1138 x ptr] [ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_field_entries, ptr @SwissTable_field_metadata, ptr @SwissTable_field_entries_len, ptr @SwissTable_field_size, ptr @SwissTable_field_hasher, ptr @SwissTable_field_eq, ptr @SwissTable_B_entries_len_, ptr @SwissTable_B__Self_h2_to_control_hashi32, ptr @SwissTable_B__Self_min_capacity_, ptr @SwissTable_B_find_slot_keyK_hashi32, ptr @SwissTable_B_find_empty_slot_hashi32, ptr @SwissTable_B_ensure_capacity_requiredi32, ptr @SwissTable_B_resize_new_capacityi32, ptr @SwissTable_B_scan_next_start_cursori32, ptr @SwissTable_B_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, ptr @SwissTable_B_get_keyK, ptr @SwissTable_B_insert_keyK_valueV, ptr @SwissTable_B_remove_keyK, ptr @SwissTable_B_keys_, ptr @SwissTable_B_clear_, ptr @SwissTable_B_indices_, ptr @SwissTable_B_values_, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_entries_len_, ptr @SwissTable__Self_h2_to_control_hashi32, ptr @SwissTable__Self_min_capacity_, ptr @SwissTable_find_slot_keyK_hashi32, ptr @SwissTable_find_empty_slot_hashi32, ptr @SwissTable_ensure_capacity_requiredi32, ptr @SwissTable_resize_new_capacityi32, ptr @SwissTable_scan_next_start_cursori32, ptr @SwissTable_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, ptr @SwissTable_get_keyK, ptr @SwissTable_insert_keyK_valueV, ptr @SwissTable_remove_keyK, ptr @Map_keys_, ptr @SwissTable_clear_, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, ptr @SwissTable_B_get_keyK, ptr @SwissTable_B_insert_keyK_valueV, ptr @SwissTable_B_remove_keyK, ptr @SwissTable_B_keys_, ptr @SwissTable_B_clear_, ptr @SwissTable_B_indices_, ptr @SwissTable_B_values_, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_init_hasherFunctionK_to_i32_eqFunctionK._K_to_Bool, ptr @SwissTable_get_keyK, ptr @SwissTable_insert_keyK_valueV, ptr @SwissTable_remove_keyK, ptr @Map_keys_, ptr @SwissTable_clear_, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_get_keyK, ptr @SwissTable_B_insert_keyK_valueV, ptr @SwissTable_B_remove_keyK, ptr @SwissTable_B_keys_, ptr @SwissTable_B_clear_, ptr @SwissTable_B_indices_, ptr @SwissTable_B_values_, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_get_keyK, ptr @SwissTable_insert_keyK_valueV, ptr @SwissTable_remove_keyK, ptr @Map_keys_, ptr @SwissTable_clear_, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_indices_, ptr @SwissTable_B_values_, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_indices_, ptr @SwissTable_B_values_, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_get_keyK, ptr @SwissTable_B_insert_keyK_valueV, ptr @SwissTable_B_remove_keyK, ptr @SwissTable_B_keys_, ptr @SwissTable_B_clear_, ptr @SwissTable_B_indices_, ptr @SwissTable_B_values_, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_get_keyK, ptr @SwissTable_insert_keyK_valueV, ptr @SwissTable_remove_keyK, ptr @Map_keys_, ptr @SwissTable_clear_, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_indices_, ptr @SwissTable_B_values_, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_indices_, ptr @SwissTable_B_values_, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @Map_indices_, ptr @Map_values_, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_0, ptr @SwissTable_field_SwissTable_1, ptr @SwissTable_B__index_keyK, ptr @SwissTable_B__set_index_keyK_valueV, ptr @Map__index_keyK, ptr @Map__set_index_keyK_valueV, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_size_, ptr @SwissTable_B_is_empty_, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_size_, ptr @Collection_is_empty_, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Collection_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Collection_chain_otherCollectionT, ptr @Iterable_interleave_otherIterableT, ptr @Collection_interleave_otherCollectionT, ptr @Collection_zip_otherCollectionU, ptr @Iterable_zip_otherIterableU, ptr @Collection_product_otherCollectionU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU, ptr @SwissTable_field_SwissTable_8, ptr @SwissTable_B_iterator_, ptr @SwissTable_B_each_fFunctionT_to_Nothing, ptr @SwissTable_B_reduce_accumulatorT_fFunctionT._T_to_T, ptr @SwissTable_B_all_fFunctionT_to_Bool, ptr @SwissTable_B_any_fFunctionT_to_Bool, ptr @SwissTable_B_enumerate_, ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U, ptr @SwissTable_B_filter_fFunctionT_to_Bool, ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT, ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT, ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU, ptr @SwissTable_B_product_otherCollectionU_product_otherIterableU, ptr @SwissTable_iterator_, ptr @Iterable_each_fFunctionT_to_Nothing, ptr @Iterable_reduce_accumulatorT_fFunctionT._T_to_T, ptr @Iterable_all_fFunctionT_to_Bool, ptr @Iterable_any_fFunctionT_to_Bool, ptr @Collection_enumerate_, ptr @Iterable_map_fFunctionT_to_U, ptr @Iterable_filter_fFunctionT_to_Bool, ptr @Iterable_chain_otherIterableT, ptr @Iterable_interleave_otherIterableT, ptr @Iterable_zip_otherIterableU, ptr @Iterable_product_otherIterableU] }
 @SwissTableIterator_hashtbl = constant [4 x ptr] [ptr @any_typ, ptr @Object, ptr @Iterator, ptr @SwissTableIterator]
 @SwissTableIterator_offset_tbl = constant [4 x i32] [i32 10, i32 22, i32 19, i32 10]
 @SwissTableIterator = constant { [3 x i64], [7 x ptr], [12 x ptr] } { [3 x i64] [i64 7015872805459348650, i64 -8639102966487814585, i64 3], [7 x ptr] [ptr @subtype_test, ptr @SwissTableIterator_hashtbl, ptr @SwissTableIterator_offset_tbl, ptr @_data_size_SwissTableIterator, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [12 x ptr] [ptr @SwissTableIterator_field_SwissTableIterator_0, ptr @SwissTableIterator_field_SwissTableIterator_1, ptr @SwissTableIterator_field_SwissTableIterator_2, ptr @SwissTableIterator_field_map, ptr @SwissTableIterator_field_cursor, ptr @SwissTableIterator_B_init_mapSwissTableK._V, ptr @SwissTableIterator_B_next_, ptr @SwissTableIterator_init_mapSwissTableK._V, ptr @SwissTableIterator_next_, ptr @SwissTableIterator_field_SwissTableIterator_2, ptr @SwissTableIterator_B_next_, ptr @SwissTableIterator_next_] }
@@ -1861,902 +1861,906 @@ define i32 @SwissTable_find_slot_keyK_hashi32({ ptr, ptr, ptr, i32 } %0, { ptr, 
   %37 = alloca <32 x i32>, align 128
   %38 = alloca ptr, align 8
   %39 = alloca <32 x i32>, align 128
-  %40 = alloca <32 x i8>, align 32
+  %40 = alloca i64, align 8
   %41 = alloca <32 x i8>, align 32
   %42 = alloca <32 x i8>, align 32
-  %43 = alloca <32 x i1>, align 4
-  %44 = alloca i32, align 4
+  %43 = alloca <32 x i8>, align 32
+  %44 = alloca <32 x i1>, align 4
   %45 = alloca i32, align 4
-  %46 = alloca i1, align 1
-  %47 = alloca i32, align 4
-  %48 = alloca ptr, align 8
-  %49 = alloca i64, align 8
-  %50 = alloca i160, align 8
-  %51 = alloca ptr, align 8
-  %52 = alloca i1, align 1
-  %53 = alloca { ptr, ptr, ptr, i32 }, align 8
-  %54 = alloca [0 x ptr], align 8
-  %55 = alloca {}, align 8
-  %56 = alloca i32, align 4
-  %57 = alloca i1, align 1
+  %46 = alloca i32, align 4
+  %47 = alloca i1, align 1
+  %48 = alloca i32, align 4
+  %49 = alloca ptr, align 8
+  %50 = alloca i64, align 8
+  %51 = alloca i160, align 8
+  %52 = alloca ptr, align 8
+  %53 = alloca i1, align 1
+  %54 = alloca { ptr, ptr, ptr, i32 }, align 8
+  %55 = alloca [0 x ptr], align 8
+  %56 = alloca {}, align 8
+  %57 = alloca i32, align 4
   %58 = alloca i1, align 1
-  %59 = alloca [0 x ptr], align 8
-  %60 = alloca {}, align 8
-  %61 = alloca { ptr, i160 }, align 8
-  %62 = alloca i160, align 8
-  %63 = alloca ptr, align 8
-  %64 = alloca i160, align 8
-  %65 = alloca ptr, align 8
-  %66 = alloca i160, align 8
-  %67 = alloca ptr, align 8
+  %59 = alloca i1, align 1
+  %60 = alloca [0 x ptr], align 8
+  %61 = alloca {}, align 8
+  %62 = alloca { ptr, i160 }, align 8
+  %63 = alloca i160, align 8
+  %64 = alloca ptr, align 8
+  %65 = alloca i160, align 8
+  %66 = alloca ptr, align 8
+  %67 = alloca i160, align 8
   %68 = alloca ptr, align 8
-  %69 = alloca i1, align 1
-  %70 = alloca <32 x i1>, align 4
-  %71 = alloca i32, align 4
-  %72 = alloca <32 x i8>, align 32
+  %69 = alloca ptr, align 8
+  %70 = alloca i1, align 1
+  %71 = alloca <32 x i1>, align 4
+  %72 = alloca i32, align 4
   %73 = alloca <32 x i8>, align 32
-  %74 = alloca <32 x i1>, align 4
-  %75 = alloca i32, align 4
+  %74 = alloca <32 x i8>, align 32
+  %75 = alloca <32 x i1>, align 4
   %76 = alloca i32, align 4
-  %77 = alloca i1, align 1
-  %78 = alloca i32, align 4
-  %79 = alloca i1, align 1
-  %80 = alloca i32, align 4
+  %77 = alloca i32, align 4
+  %78 = alloca i1, align 1
+  %79 = alloca i32, align 4
+  %80 = alloca i1, align 1
   %81 = alloca i32, align 4
-  %82 = alloca i1, align 1
-  %83 = alloca <32 x i8>, align 32
+  %82 = alloca i32, align 4
+  %83 = alloca i1, align 1
   %84 = alloca <32 x i8>, align 32
   %85 = alloca <32 x i8>, align 32
   %86 = alloca <32 x i8>, align 32
   %87 = alloca <32 x i8>, align 32
-  %88 = alloca <32 x i1>, align 4
-  %89 = alloca i32, align 4
+  %88 = alloca <32 x i8>, align 32
+  %89 = alloca <32 x i1>, align 4
   %90 = alloca i32, align 4
-  %91 = alloca i1, align 1
-  %92 = alloca i32, align 4
+  %91 = alloca i32, align 4
+  %92 = alloca i1, align 1
   %93 = alloca i32, align 4
   %94 = alloca i32, align 4
   %95 = alloca i32, align 4
-  %96 = alloca { ptr, ptr, ptr, i32 }, align 8
-  store { ptr, ptr, ptr, i32 } %0, ptr %96, align 8
-  %97 = alloca i32, align 4
-  %98 = alloca ptr, align 8
+  %96 = alloca i32, align 4
+  %97 = alloca { ptr, ptr, ptr, i32 }, align 8
+  store { ptr, ptr, ptr, i32 } %0, ptr %97, align 8
+  %98 = alloca i32, align 4
   %99 = alloca ptr, align 8
   %100 = alloca ptr, align 8
-  %101 = getelementptr { ptr, ptr, ptr, i32 }, ptr %96, i32 0, i32 0
-  %102 = load ptr, ptr %101, align 8
-  store ptr %102, ptr %98, align 8
-  %103 = getelementptr { ptr, ptr, ptr, i32 }, ptr %96, i32 0, i32 1
-  %104 = load ptr, ptr %103, align 8
-  store ptr %104, ptr %99, align 8
-  %105 = getelementptr { ptr, ptr, ptr, i32 }, ptr %96, i32 0, i32 2
-  %106 = load ptr, ptr %105, align 8
-  store ptr %106, ptr %100, align 8
-  %107 = getelementptr { ptr, ptr, ptr, i32 }, ptr %96, i32 0, i32 3
-  %108 = load i32, ptr %107, align 4
-  store i32 %108, ptr %97, align 4
-  %109 = load ptr, ptr %98, align 8
-  %110 = call i32 @get_offset(ptr %109, ptr @SwissTable)
-  store i32 %110, ptr %97, align 4
-  %111 = alloca { ptr, i160 }, align 8
-  store { ptr, i160 } %3, ptr %111, align 8
-  %112 = alloca i160, align 8
-  %113 = alloca ptr, align 8
-  %114 = getelementptr { ptr, i160 }, ptr %111, i32 0, i32 0
-  %115 = load ptr, ptr %114, align 8
-  store ptr %115, ptr %113, align 8
-  %116 = getelementptr { ptr, i160 }, ptr %111, i32 0, i32 1
-  %117 = load i160, ptr %116, align 4
-  store i160 %117, ptr %112, align 4
-  %118 = alloca i32, align 4
-  store i32 %4, ptr %118, align 4
-  %119 = load ptr, ptr %99, align 8
-  %120 = load ptr, ptr %98, align 8
-  %121 = call ptr @llvm.invariant.start.p0(i64 9104, ptr %120)
-  %122 = load i32, ptr %97, align 4
-  %123 = getelementptr ptr, ptr %120, i32 %122
-  %124 = getelementptr ptr, ptr %123, i32 5
-  %125 = load ptr, ptr %124, align 8
-  %126 = getelementptr { ptr, ptr }, ptr %125, i32 0, i32 0
-  %127 = load ptr, ptr %126, align 8
-  %128 = call i32 %127(ptr %119) #2
-  %129 = alloca i32, align 4
-  store i32 %128, ptr %129, align 4
+  %101 = alloca ptr, align 8
+  %102 = getelementptr { ptr, ptr, ptr, i32 }, ptr %97, i32 0, i32 0
+  %103 = load ptr, ptr %102, align 8
+  store ptr %103, ptr %99, align 8
+  %104 = getelementptr { ptr, ptr, ptr, i32 }, ptr %97, i32 0, i32 1
+  %105 = load ptr, ptr %104, align 8
+  store ptr %105, ptr %100, align 8
+  %106 = getelementptr { ptr, ptr, ptr, i32 }, ptr %97, i32 0, i32 2
+  %107 = load ptr, ptr %106, align 8
+  store ptr %107, ptr %101, align 8
+  %108 = getelementptr { ptr, ptr, ptr, i32 }, ptr %97, i32 0, i32 3
+  %109 = load i32, ptr %108, align 4
+  store i32 %109, ptr %98, align 4
+  %110 = load ptr, ptr %99, align 8
+  %111 = call i32 @get_offset(ptr %110, ptr @SwissTable)
+  store i32 %111, ptr %98, align 4
+  %112 = alloca { ptr, i160 }, align 8
+  store { ptr, i160 } %3, ptr %112, align 8
+  %113 = alloca i160, align 8
+  %114 = alloca ptr, align 8
+  %115 = getelementptr { ptr, i160 }, ptr %112, i32 0, i32 0
+  %116 = load ptr, ptr %115, align 8
+  store ptr %116, ptr %114, align 8
+  %117 = getelementptr { ptr, i160 }, ptr %112, i32 0, i32 1
+  %118 = load i160, ptr %117, align 4
+  store i160 %118, ptr %113, align 4
+  %119 = alloca i32, align 4
+  store i32 %4, ptr %119, align 4
+  %120 = load ptr, ptr %100, align 8
+  %121 = load ptr, ptr %99, align 8
+  %122 = call ptr @llvm.invariant.start.p0(i64 9104, ptr %121)
+  %123 = load i32, ptr %98, align 4
+  %124 = getelementptr ptr, ptr %121, i32 %123
+  %125 = getelementptr ptr, ptr %124, i32 5
+  %126 = load ptr, ptr %125, align 8
+  %127 = getelementptr { ptr, ptr }, ptr %126, i32 0, i32 0
+  %128 = load ptr, ptr %127, align 8
+  %129 = call i32 %128(ptr %120) #2
   %130 = alloca i32, align 4
-  store i32 1, ptr %130, align 4
-  %131 = load i32, ptr %129, align 4
+  store i32 %129, ptr %130, align 4
+  %131 = alloca i32, align 4
+  store i32 1, ptr %131, align 4
   %132 = load i32, ptr %130, align 4
-  %133 = sub i32 %131, %132
-  %134 = alloca i32, align 4
-  store i32 %133, ptr %134, align 4
-  %135 = load i32, ptr %118, align 4
-  %136 = load ptr, ptr %99, align 8
-  %137 = load ptr, ptr %98, align 8
-  %138 = call ptr @llvm.invariant.start.p0(i64 9104, ptr %137)
-  %139 = load i32, ptr %97, align 4
-  %140 = getelementptr ptr, ptr %137, i32 %139
-  %141 = load ptr, ptr %140, align 8
-  %142 = call ptr @typegetter_wrapper(ptr %141, ptr %136)
-  %143 = load ptr, ptr %99, align 8
-  %144 = load ptr, ptr %98, align 8
-  %145 = call ptr @llvm.invariant.start.p0(i64 9104, ptr %144)
-  %146 = load i32, ptr %97, align 4
-  %147 = getelementptr ptr, ptr %144, i32 %146
-  %148 = getelementptr ptr, ptr %147, i32 1
-  %149 = load ptr, ptr %148, align 8
-  %150 = call ptr @typegetter_wrapper(ptr %149, ptr %143)
-  %151 = alloca [3 x ptr], align 8
-  %152 = getelementptr [3 x ptr], ptr %151, i32 0, i32 0
-  store ptr @_parameterization_i32, ptr %152, align 8
-  %153 = getelementptr [3 x ptr], ptr %151, i32 0, i32 1
-  store ptr %142, ptr %153, align 8
-  %154 = getelementptr [3 x ptr], ptr %151, i32 0, i32 2
-  store ptr %150, ptr %154, align 8
-  %155 = call ptr @llvm.invariant.start.p0(i64 9, ptr %151)
-  %156 = call ptr @llvm.invariant.start.p0(i64 9104, ptr @SwissTable)
-  %157 = load ptr, ptr getelementptr (ptr, ptr getelementptr (ptr, ptr @SwissTable, i32 10), i32 10), align 8
-  %158 = alloca { ptr }, align 8
-  %159 = getelementptr { ptr }, ptr %158, i32 0, i32 0
-  store ptr @i32_typ, ptr %159, align 8
-  %160 = call ptr @class_behavior_wrapper(ptr %157, ptr %158)
-  %161 = call i8 %160(ptr %151, i32 %135)
-  %162 = alloca i8, align 1
-  store i8 %161, ptr %162, align 1
-  %163 = load i32, ptr %118, align 4
-  %164 = load i32, ptr %134, align 4
-  %165 = and i32 %163, %164
-  %166 = alloca i32, align 4
-  store i32 %165, ptr %166, align 4
+  %133 = load i32, ptr %131, align 4
+  %134 = sub i32 %132, %133
+  %135 = alloca i32, align 4
+  store i32 %134, ptr %135, align 4
+  %136 = load i32, ptr %119, align 4
+  %137 = load ptr, ptr %100, align 8
+  %138 = load ptr, ptr %99, align 8
+  %139 = call ptr @llvm.invariant.start.p0(i64 9104, ptr %138)
+  %140 = load i32, ptr %98, align 4
+  %141 = getelementptr ptr, ptr %138, i32 %140
+  %142 = load ptr, ptr %141, align 8
+  %143 = call ptr @typegetter_wrapper(ptr %142, ptr %137)
+  %144 = load ptr, ptr %100, align 8
+  %145 = load ptr, ptr %99, align 8
+  %146 = call ptr @llvm.invariant.start.p0(i64 9104, ptr %145)
+  %147 = load i32, ptr %98, align 4
+  %148 = getelementptr ptr, ptr %145, i32 %147
+  %149 = getelementptr ptr, ptr %148, i32 1
+  %150 = load ptr, ptr %149, align 8
+  %151 = call ptr @typegetter_wrapper(ptr %150, ptr %144)
+  %152 = alloca [3 x ptr], align 8
+  %153 = getelementptr [3 x ptr], ptr %152, i32 0, i32 0
+  store ptr @_parameterization_i32, ptr %153, align 8
+  %154 = getelementptr [3 x ptr], ptr %152, i32 0, i32 1
+  store ptr %143, ptr %154, align 8
+  %155 = getelementptr [3 x ptr], ptr %152, i32 0, i32 2
+  store ptr %151, ptr %155, align 8
+  %156 = call ptr @llvm.invariant.start.p0(i64 9, ptr %152)
+  %157 = call ptr @llvm.invariant.start.p0(i64 9104, ptr @SwissTable)
+  %158 = load ptr, ptr getelementptr (ptr, ptr getelementptr (ptr, ptr @SwissTable, i32 10), i32 10), align 8
+  %159 = alloca { ptr }, align 8
+  %160 = getelementptr { ptr }, ptr %159, i32 0, i32 0
+  store ptr @i32_typ, ptr %160, align 8
+  %161 = call ptr @class_behavior_wrapper(ptr %158, ptr %159)
+  %162 = call i8 %161(ptr %152, i32 %136)
+  %163 = alloca i8, align 1
+  store i8 %162, ptr %163, align 1
+  %164 = load i32, ptr %119, align 4
+  %165 = load i32, ptr %135, align 4
+  %166 = and i32 %164, %165
   %167 = alloca i32, align 4
-  store i32 -1, ptr %167, align 4
-  %168 = load ptr, ptr %99, align 8
-  %169 = load ptr, ptr %98, align 8
-  %170 = call ptr @llvm.invariant.start.p0(i64 9104, ptr %169)
-  %171 = load i32, ptr %97, align 4
-  %172 = getelementptr ptr, ptr %169, i32 %171
-  %173 = getelementptr ptr, ptr %172, i32 4
-  %174 = load ptr, ptr %173, align 8
-  %175 = getelementptr { ptr, ptr }, ptr %174, i32 0, i32 0
-  %176 = load ptr, ptr %175, align 8
-  %177 = call { ptr } %176(ptr %168) #2
-  %178 = alloca ptr, align 8
-  store { ptr } %177, ptr %178, align 8
+  store i32 %166, ptr %167, align 4
+  %168 = alloca i32, align 4
+  store i32 -1, ptr %168, align 4
+  %169 = load ptr, ptr %100, align 8
+  %170 = load ptr, ptr %99, align 8
+  %171 = call ptr @llvm.invariant.start.p0(i64 9104, ptr %170)
+  %172 = load i32, ptr %98, align 4
+  %173 = getelementptr ptr, ptr %170, i32 %172
+  %174 = getelementptr ptr, ptr %173, i32 4
+  %175 = load ptr, ptr %174, align 8
+  %176 = getelementptr { ptr, ptr }, ptr %175, i32 0, i32 0
+  %177 = load ptr, ptr %176, align 8
+  %178 = call { ptr } %177(ptr %169) #2
   %179 = alloca ptr, align 8
-  %180 = load ptr, ptr %178, align 8
-  store ptr %180, ptr %179, align 8
-  %181 = alloca i64, align 8
-  %182 = load i32, ptr %166, align 4
-  %183 = sext i32 %182 to i64
-  store i64 %183, ptr %181, align 4
-  %184 = alloca i8, align 1
-  %185 = load ptr, ptr %179, align 8
-  %186 = load i64, ptr %181, align 4
-  %187 = mul i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), %186
-  %188 = getelementptr i8, ptr %185, i64 %187
-  %189 = load i8, ptr %188, align 1
-  store i8 %189, ptr %184, align 1
-  %190 = call i8 @empty()
-  %191 = alloca i8, align 1
-  store i8 %190, ptr %191, align 1
-  %192 = load i8, ptr %184, align 1
-  %193 = load i8, ptr %191, align 1
-  %194 = icmp eq i8 %192, %193
-  %195 = alloca i1, align 1
-  %196 = zext i1 %194 to i8
-  store i8 %196, ptr %195, align 1
-  %197 = load i8, ptr %195, align 1
-  %198 = trunc i8 %197 to i1
-  br i1 %198, label %199, label %203
+  store { ptr } %178, ptr %179, align 8
+  %180 = alloca ptr, align 8
+  %181 = load ptr, ptr %179, align 8
+  store ptr %181, ptr %180, align 8
+  %182 = alloca i64, align 8
+  %183 = load i32, ptr %167, align 4
+  %184 = sext i32 %183 to i64
+  store i64 %184, ptr %182, align 4
+  %185 = alloca i8, align 1
+  %186 = load ptr, ptr %180, align 8
+  %187 = load i64, ptr %182, align 4
+  %188 = mul i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), %187
+  %189 = getelementptr i8, ptr %186, i64 %188
+  %190 = load i8, ptr %189, align 1
+  store i8 %190, ptr %185, align 1
+  %191 = call i8 @empty()
+  %192 = alloca i8, align 1
+  store i8 %191, ptr %192, align 1
+  %193 = load i8, ptr %185, align 1
+  %194 = load i8, ptr %192, align 1
+  %195 = icmp eq i8 %193, %194
+  %196 = alloca i1, align 1
+  %197 = zext i1 %195 to i8
+  store i8 %197, ptr %196, align 1
+  %198 = load i8, ptr %196, align 1
+  %199 = trunc i8 %198 to i1
+  br i1 %199, label %200, label %204
 
-199:                                              ; preds = %642, %5
-  %200 = phi ptr [ %643, %642 ], [ %166, %5 ]
-  %201 = phi i32 [ %644, %642 ], [ poison, %5 ]
-  %202 = phi i32 [ %645, %642 ], [ 0, %5 ]
-  br label %646
+200:                                              ; preds = %645, %5
+  %201 = phi ptr [ %646, %645 ], [ %167, %5 ]
+  %202 = phi i32 [ %647, %645 ], [ poison, %5 ]
+  %203 = phi i32 [ %648, %645 ], [ 0, %5 ]
+  br label %649
 
-203:                                              ; preds = %5
-  %204 = load i8, ptr %184, align 1
-  %205 = load i8, ptr %162, align 1
-  %206 = icmp eq i8 %204, %205
-  %207 = zext i1 %206 to i8
-  store i8 %207, ptr %6, align 1
-  %208 = load i8, ptr %6, align 1
-  %209 = trunc i8 %208 to i1
-  br i1 %209, label %210, label %332
+204:                                              ; preds = %5
+  %205 = load i8, ptr %185, align 1
+  %206 = load i8, ptr %163, align 1
+  %207 = icmp eq i8 %205, %206
+  %208 = zext i1 %207 to i8
+  store i8 %208, ptr %6, align 1
+  %209 = load i8, ptr %6, align 1
+  %210 = trunc i8 %209 to i1
+  br i1 %210, label %211, label %333
 
-210:                                              ; preds = %203
-  %211 = load ptr, ptr %99, align 8
-  %212 = load ptr, ptr %98, align 8
-  %213 = call ptr @llvm.invariant.start.p0(i64 9104, ptr %212)
-  %214 = load i32, ptr %97, align 4
-  %215 = getelementptr ptr, ptr %212, i32 %214
-  %216 = getelementptr ptr, ptr %215, i32 3
-  %217 = load ptr, ptr %216, align 8
-  %218 = getelementptr { ptr, ptr }, ptr %217, i32 0, i32 0
-  %219 = load ptr, ptr %218, align 8
-  %220 = call { ptr } %219(ptr %211) #2
-  store { ptr } %220, ptr %7, align 8
-  %221 = load i32, ptr %166, align 4
-  %222 = sext i32 %221 to i64
-  store i64 %222, ptr %8, align 4
-  %223 = load ptr, ptr %7, align 8
-  %224 = load i64, ptr %8, align 4
-  %225 = mul i64 ptrtoint (ptr getelementptr ({ ptr, i160 }, ptr null, i32 1) to i64), %224
-  %226 = getelementptr i8, ptr %223, i64 %225
-  %227 = getelementptr { ptr, i160 }, ptr %226, i32 0, i32 0
-  %228 = load ptr, ptr %227, align 8
-  store ptr %228, ptr %10, align 8
-  %229 = getelementptr { ptr, i160 }, ptr %226, i32 0, i32 1
-  %230 = load i160, ptr %229, align 4
-  store i160 %230, ptr %9, align 4
-  %231 = load ptr, ptr %10, align 8
-  %232 = ptrtoint ptr %231 to i64
-  %233 = icmp eq i64 %232, ptrtoint (ptr @nil_typ to i64)
-  %234 = icmp eq i64 %232, 0
-  %235 = or i1 %233, %234
-  %236 = icmp eq i1 %235, false
-  %237 = zext i1 %236 to i8
-  store i8 %237, ptr %11, align 1
-  %238 = load i8, ptr %11, align 1
-  %239 = trunc i8 %238 to i1
-  br i1 %239, label %240, label %329
+211:                                              ; preds = %204
+  %212 = load ptr, ptr %100, align 8
+  %213 = load ptr, ptr %99, align 8
+  %214 = call ptr @llvm.invariant.start.p0(i64 9104, ptr %213)
+  %215 = load i32, ptr %98, align 4
+  %216 = getelementptr ptr, ptr %213, i32 %215
+  %217 = getelementptr ptr, ptr %216, i32 3
+  %218 = load ptr, ptr %217, align 8
+  %219 = getelementptr { ptr, ptr }, ptr %218, i32 0, i32 0
+  %220 = load ptr, ptr %219, align 8
+  %221 = call { ptr } %220(ptr %212) #2
+  store { ptr } %221, ptr %7, align 8
+  %222 = load i32, ptr %167, align 4
+  %223 = sext i32 %222 to i64
+  store i64 %223, ptr %8, align 4
+  %224 = load ptr, ptr %7, align 8
+  %225 = load i64, ptr %8, align 4
+  %226 = mul i64 ptrtoint (ptr getelementptr ({ ptr, i160 }, ptr null, i32 1) to i64), %225
+  %227 = getelementptr i8, ptr %224, i64 %226
+  %228 = getelementptr { ptr, i160 }, ptr %227, i32 0, i32 0
+  %229 = load ptr, ptr %228, align 8
+  store ptr %229, ptr %10, align 8
+  %230 = getelementptr { ptr, i160 }, ptr %227, i32 0, i32 1
+  %231 = load i160, ptr %230, align 4
+  store i160 %231, ptr %9, align 4
+  %232 = load ptr, ptr %10, align 8
+  %233 = ptrtoint ptr %232 to i64
+  %234 = icmp eq i64 %233, ptrtoint (ptr @nil_typ to i64)
+  %235 = icmp eq i64 %233, 0
+  %236 = or i1 %234, %235
+  %237 = icmp eq i1 %236, false
+  %238 = zext i1 %237 to i8
+  store i8 %238, ptr %11, align 1
+  %239 = load i8, ptr %11, align 1
+  %240 = trunc i8 %239 to i1
+  br i1 %240, label %241, label %330
 
-240:                                              ; preds = %210
-  %241 = getelementptr { ptr, i160 }, ptr %12, i32 0, i32 0
-  %242 = load ptr, ptr %10, align 8
-  store ptr %242, ptr %241, align 8
-  %243 = getelementptr { ptr, i160 }, ptr %12, i32 0, i32 1
-  %244 = load i160, ptr %9, align 4
-  store i160 %244, ptr %243, align 4
-  %245 = load ptr, ptr %12, align 8
-  %246 = call i32 @get_offset(ptr %245, ptr @Entry)
-  %247 = getelementptr { ptr, ptr, ptr, i32 }, ptr %12, i32 0, i32 3
-  store i32 %246, ptr %247, align 4
-  %248 = getelementptr { ptr, ptr, ptr, i32 }, ptr %12, i32 0, i32 0
-  %249 = load ptr, ptr %248, align 8
-  %250 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %249, 0
-  %251 = getelementptr { ptr, ptr, ptr, i32 }, ptr %12, i32 0, i32 1
-  %252 = load ptr, ptr %251, align 8
-  %253 = insertvalue { ptr, ptr, ptr, i32 } %250, ptr %252, 1
-  %254 = getelementptr { ptr, ptr, ptr, i32 }, ptr %12, i32 0, i32 2
-  %255 = load ptr, ptr %254, align 8
-  %256 = insertvalue { ptr, ptr, ptr, i32 } %253, ptr %255, 2
-  %257 = load i32, ptr %247, align 4
-  %258 = insertvalue { ptr, ptr, ptr, i32 } %256, i32 %257, 3
-  %259 = call ptr @llvm.invariant.start.p0(i64 0, ptr %13)
-  %260 = call ptr @llvm.invariant.start.p0(i64 120, ptr %249)
-  %261 = getelementptr ptr, ptr %249, i32 %257
-  %262 = getelementptr ptr, ptr %261, i32 5
-  %263 = load ptr, ptr %262, align 8
-  %264 = call ptr @behavior_wrapper(ptr %263, { ptr, ptr, ptr, i32 } %258, ptr %14)
-  %265 = call i32 %264({ ptr, ptr, ptr, i32 } %258, { ptr, ptr, ptr, i32 } %258, ptr %13)
-  store i32 %265, ptr %15, align 4
-  %266 = load i32, ptr %15, align 4
-  %267 = load i32, ptr %118, align 4
-  %268 = icmp eq i32 %266, %267
-  %269 = zext i1 %268 to i8
-  store i8 %269, ptr %16, align 1
-  %270 = load i8, ptr %16, align 1
-  %271 = trunc i8 %270 to i1
-  %272 = zext i1 %271 to i8
-  store i8 %272, ptr %17, align 1
-  br i1 %271, label %273, label %321
+241:                                              ; preds = %211
+  %242 = getelementptr { ptr, i160 }, ptr %12, i32 0, i32 0
+  %243 = load ptr, ptr %10, align 8
+  store ptr %243, ptr %242, align 8
+  %244 = getelementptr { ptr, i160 }, ptr %12, i32 0, i32 1
+  %245 = load i160, ptr %9, align 4
+  store i160 %245, ptr %244, align 4
+  %246 = load ptr, ptr %12, align 8
+  %247 = call i32 @get_offset(ptr %246, ptr @Entry)
+  %248 = getelementptr { ptr, ptr, ptr, i32 }, ptr %12, i32 0, i32 3
+  store i32 %247, ptr %248, align 4
+  %249 = getelementptr { ptr, ptr, ptr, i32 }, ptr %12, i32 0, i32 0
+  %250 = load ptr, ptr %249, align 8
+  %251 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %250, 0
+  %252 = getelementptr { ptr, ptr, ptr, i32 }, ptr %12, i32 0, i32 1
+  %253 = load ptr, ptr %252, align 8
+  %254 = insertvalue { ptr, ptr, ptr, i32 } %251, ptr %253, 1
+  %255 = getelementptr { ptr, ptr, ptr, i32 }, ptr %12, i32 0, i32 2
+  %256 = load ptr, ptr %255, align 8
+  %257 = insertvalue { ptr, ptr, ptr, i32 } %254, ptr %256, 2
+  %258 = load i32, ptr %248, align 4
+  %259 = insertvalue { ptr, ptr, ptr, i32 } %257, i32 %258, 3
+  %260 = call ptr @llvm.invariant.start.p0(i64 0, ptr %13)
+  %261 = call ptr @llvm.invariant.start.p0(i64 120, ptr %250)
+  %262 = getelementptr ptr, ptr %250, i32 %258
+  %263 = getelementptr ptr, ptr %262, i32 5
+  %264 = load ptr, ptr %263, align 8
+  %265 = call ptr @behavior_wrapper(ptr %264, { ptr, ptr, ptr, i32 } %259, ptr %14)
+  %266 = call i32 %265({ ptr, ptr, ptr, i32 } %259, { ptr, ptr, ptr, i32 } %259, ptr %13)
+  store i32 %266, ptr %15, align 4
+  %267 = load i32, ptr %15, align 4
+  %268 = load i32, ptr %119, align 4
+  %269 = icmp eq i32 %267, %268
+  %270 = zext i1 %269 to i8
+  store i8 %270, ptr %16, align 1
+  %271 = load i8, ptr %16, align 1
+  %272 = trunc i8 %271 to i1
+  %273 = zext i1 %272 to i8
+  store i8 %273, ptr %17, align 1
+  br i1 %272, label %274, label %322
 
-273:                                              ; preds = %240
-  %274 = load ptr, ptr %248, align 8
-  %275 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %274, 0
-  %276 = load ptr, ptr %251, align 8
-  %277 = insertvalue { ptr, ptr, ptr, i32 } %275, ptr %276, 1
-  %278 = load ptr, ptr %254, align 8
-  %279 = insertvalue { ptr, ptr, ptr, i32 } %277, ptr %278, 2
-  %280 = load i32, ptr %247, align 4
-  %281 = insertvalue { ptr, ptr, ptr, i32 } %279, i32 %280, 3
-  %282 = call ptr @llvm.invariant.start.p0(i64 0, ptr %18)
-  %283 = call ptr @llvm.invariant.start.p0(i64 120, ptr %274)
-  %284 = getelementptr ptr, ptr %274, i32 %280
-  %285 = getelementptr ptr, ptr %284, i32 6
-  %286 = load ptr, ptr %285, align 8
-  %287 = call ptr @behavior_wrapper(ptr %286, { ptr, ptr, ptr, i32 } %281, ptr %19)
-  %288 = call { ptr, i160 } %287({ ptr, ptr, ptr, i32 } %281, { ptr, ptr, ptr, i32 } %281, ptr %18)
-  store { ptr, i160 } %288, ptr %20, align 8
-  %289 = getelementptr { ptr, i160 }, ptr %20, i32 0, i32 0
-  %290 = load ptr, ptr %289, align 8
-  store ptr %290, ptr %22, align 8
-  %291 = getelementptr { ptr, i160 }, ptr %20, i32 0, i32 1
-  %292 = load i160, ptr %291, align 4
-  store i160 %292, ptr %21, align 4
-  %293 = load ptr, ptr %22, align 8
-  store ptr %293, ptr %24, align 8
-  %294 = load i160, ptr %21, align 4
-  store i160 %294, ptr %23, align 4
-  %295 = load ptr, ptr %24, align 8
-  %296 = insertvalue { ptr, i160 } undef, ptr %295, 0
-  %297 = load i160, ptr %23, align 4
-  %298 = insertvalue { ptr, i160 } %296, i160 %297, 1
-  %299 = load ptr, ptr %113, align 8
-  store ptr %299, ptr %26, align 8
-  %300 = load i160, ptr %112, align 4
-  store i160 %300, ptr %25, align 4
-  %301 = load ptr, ptr %26, align 8
-  %302 = insertvalue { ptr, i160 } undef, ptr %301, 0
-  %303 = load i160, ptr %25, align 4
-  %304 = insertvalue { ptr, i160 } %302, i160 %303, 1
-  %305 = load ptr, ptr %99, align 8
-  %306 = load ptr, ptr %98, align 8
-  %307 = call ptr @llvm.invariant.start.p0(i64 9104, ptr %306)
-  %308 = load i32, ptr %97, align 4
-  %309 = getelementptr ptr, ptr %306, i32 %308
-  %310 = getelementptr ptr, ptr %309, i32 8
-  %311 = load ptr, ptr %310, align 8
-  %312 = getelementptr { ptr, ptr }, ptr %311, i32 0, i32 0
-  %313 = load ptr, ptr %312, align 8
-  %314 = call { ptr } %313(ptr %305) #2
-  store { ptr } %314, ptr %27, align 8
-  %315 = load ptr, ptr %27, align 8
-  %316 = call i1 %315({ ptr, i160 } %298, { ptr, i160 } %304)
-  %317 = zext i1 %316 to i8
-  store i8 %317, ptr %28, align 1
-  %318 = load i8, ptr %28, align 1
-  %319 = trunc i8 %318 to i1
-  %320 = zext i1 %319 to i8
-  store i8 %320, ptr %17, align 1
-  br label %321
+274:                                              ; preds = %241
+  %275 = load ptr, ptr %249, align 8
+  %276 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %275, 0
+  %277 = load ptr, ptr %252, align 8
+  %278 = insertvalue { ptr, ptr, ptr, i32 } %276, ptr %277, 1
+  %279 = load ptr, ptr %255, align 8
+  %280 = insertvalue { ptr, ptr, ptr, i32 } %278, ptr %279, 2
+  %281 = load i32, ptr %248, align 4
+  %282 = insertvalue { ptr, ptr, ptr, i32 } %280, i32 %281, 3
+  %283 = call ptr @llvm.invariant.start.p0(i64 0, ptr %18)
+  %284 = call ptr @llvm.invariant.start.p0(i64 120, ptr %275)
+  %285 = getelementptr ptr, ptr %275, i32 %281
+  %286 = getelementptr ptr, ptr %285, i32 6
+  %287 = load ptr, ptr %286, align 8
+  %288 = call ptr @behavior_wrapper(ptr %287, { ptr, ptr, ptr, i32 } %282, ptr %19)
+  %289 = call { ptr, i160 } %288({ ptr, ptr, ptr, i32 } %282, { ptr, ptr, ptr, i32 } %282, ptr %18)
+  store { ptr, i160 } %289, ptr %20, align 8
+  %290 = getelementptr { ptr, i160 }, ptr %20, i32 0, i32 0
+  %291 = load ptr, ptr %290, align 8
+  store ptr %291, ptr %22, align 8
+  %292 = getelementptr { ptr, i160 }, ptr %20, i32 0, i32 1
+  %293 = load i160, ptr %292, align 4
+  store i160 %293, ptr %21, align 4
+  %294 = load ptr, ptr %22, align 8
+  store ptr %294, ptr %24, align 8
+  %295 = load i160, ptr %21, align 4
+  store i160 %295, ptr %23, align 4
+  %296 = load ptr, ptr %24, align 8
+  %297 = insertvalue { ptr, i160 } undef, ptr %296, 0
+  %298 = load i160, ptr %23, align 4
+  %299 = insertvalue { ptr, i160 } %297, i160 %298, 1
+  %300 = load ptr, ptr %114, align 8
+  store ptr %300, ptr %26, align 8
+  %301 = load i160, ptr %113, align 4
+  store i160 %301, ptr %25, align 4
+  %302 = load ptr, ptr %26, align 8
+  %303 = insertvalue { ptr, i160 } undef, ptr %302, 0
+  %304 = load i160, ptr %25, align 4
+  %305 = insertvalue { ptr, i160 } %303, i160 %304, 1
+  %306 = load ptr, ptr %100, align 8
+  %307 = load ptr, ptr %99, align 8
+  %308 = call ptr @llvm.invariant.start.p0(i64 9104, ptr %307)
+  %309 = load i32, ptr %98, align 4
+  %310 = getelementptr ptr, ptr %307, i32 %309
+  %311 = getelementptr ptr, ptr %310, i32 8
+  %312 = load ptr, ptr %311, align 8
+  %313 = getelementptr { ptr, ptr }, ptr %312, i32 0, i32 0
+  %314 = load ptr, ptr %313, align 8
+  %315 = call { ptr } %314(ptr %306) #2
+  store { ptr } %315, ptr %27, align 8
+  %316 = load ptr, ptr %27, align 8
+  %317 = call i1 %316({ ptr, i160 } %299, { ptr, i160 } %305)
+  %318 = zext i1 %317 to i8
+  store i8 %318, ptr %28, align 1
+  %319 = load i8, ptr %28, align 1
+  %320 = trunc i8 %319 to i1
+  %321 = zext i1 %320 to i8
+  store i8 %321, ptr %17, align 1
+  br label %322
 
-321:                                              ; preds = %273, %240
-  %322 = load i8, ptr %17, align 1
-  %323 = trunc i8 %322 to i1
-  %324 = zext i1 %323 to i32
-  br i1 %323, label %325, label %326
+322:                                              ; preds = %274, %241
+  %323 = load i8, ptr %17, align 1
+  %324 = trunc i8 %323 to i1
+  %325 = zext i1 %324 to i32
+  br i1 %324, label %326, label %327
 
-325:                                              ; preds = %321
-  br label %329
+326:                                              ; preds = %322
+  br label %330
 
-326:                                              ; preds = %321
-  %327 = load ptr, ptr %241, align 8
-  store ptr %327, ptr %10, align 8
-  %328 = load i160, ptr %243, align 4
-  store i160 %328, ptr %9, align 4
-  br label %329
+327:                                              ; preds = %322
+  %328 = load ptr, ptr %242, align 8
+  store ptr %328, ptr %10, align 8
+  %329 = load i160, ptr %244, align 4
+  store i160 %329, ptr %9, align 4
+  br label %330
 
-329:                                              ; preds = %325, %326, %210
-  %330 = phi i32 [ %324, %326 ], [ %324, %325 ], [ 0, %210 ]
-  br label %331
-
-331:                                              ; preds = %329
+330:                                              ; preds = %326, %327, %211
+  %331 = phi i32 [ %325, %327 ], [ %325, %326 ], [ 0, %211 ]
   br label %332
 
-332:                                              ; preds = %331, %203
-  %333 = phi i32 [ %330, %331 ], [ 0, %203 ]
-  br label %334
+332:                                              ; preds = %330
+  br label %333
 
-334:                                              ; preds = %332
+333:                                              ; preds = %332, %204
+  %334 = phi i32 [ %331, %332 ], [ 0, %204 ]
   br label %335
 
-335:                                              ; preds = %334
-  %336 = zext i32 %333 to i64
-  %337 = trunc i64 %336 to i32
-  switch i32 %337, label %642 [
-    i32 0, label %338
+335:                                              ; preds = %333
+  br label %336
+
+336:                                              ; preds = %335
+  %337 = zext i32 %334 to i64
+  %338 = trunc i64 %337 to i32
+  switch i32 %338, label %645 [
+    i32 0, label %339
   ]
 
-338:                                              ; preds = %335
+339:                                              ; preds = %336
   store i32 1, ptr %29, align 4
-  %339 = load i32, ptr %166, align 4
-  %340 = load i32, ptr %29, align 4
-  %341 = add i32 %339, %340
-  store i32 %341, ptr %30, align 4
-  %342 = load i8, ptr %162, align 1
-  %343 = insertelement <32 x i8> undef, i8 %342, i32 0
-  %344 = shufflevector <32 x i8> %343, <32 x i8> undef, <32 x i32> zeroinitializer
-  store <32 x i8> %344, ptr %31, align 32
-  %345 = call i8 @empty()
-  store i8 %345, ptr %32, align 1
-  %346 = load i8, ptr %32, align 1
-  %347 = insertelement <32 x i8> undef, i8 %346, i32 0
-  %348 = shufflevector <32 x i8> %347, <32 x i8> undef, <32 x i32> zeroinitializer
-  store <32 x i8> %348, ptr %33, align 32
-  %349 = call i8 @occupied_mask()
-  store i8 %349, ptr %34, align 1
-  %350 = load i8, ptr %34, align 1
-  %351 = insertelement <32 x i8> undef, i8 %350, i32 0
-  %352 = shufflevector <32 x i8> %351, <32 x i8> undef, <32 x i32> zeroinitializer
-  store <32 x i8> %352, ptr %35, align 32
-  br label %353
+  %340 = load i32, ptr %167, align 4
+  %341 = load i32, ptr %29, align 4
+  %342 = add i32 %340, %341
+  store i32 %342, ptr %30, align 4
+  %343 = load i8, ptr %163, align 1
+  %344 = insertelement <32 x i8> undef, i8 %343, i32 0
+  %345 = shufflevector <32 x i8> %344, <32 x i8> undef, <32 x i32> zeroinitializer
+  store <32 x i8> %345, ptr %31, align 32
+  %346 = call i8 @empty()
+  store i8 %346, ptr %32, align 1
+  %347 = load i8, ptr %32, align 1
+  %348 = insertelement <32 x i8> undef, i8 %347, i32 0
+  %349 = shufflevector <32 x i8> %348, <32 x i8> undef, <32 x i32> zeroinitializer
+  store <32 x i8> %349, ptr %33, align 32
+  %350 = call i8 @occupied_mask()
+  store i8 %350, ptr %34, align 1
+  %351 = load i8, ptr %34, align 1
+  %352 = insertelement <32 x i8> undef, i8 %351, i32 0
+  %353 = shufflevector <32 x i8> %352, <32 x i8> undef, <32 x i32> zeroinitializer
+  store <32 x i8> %353, ptr %35, align 32
+  br label %354
 
-353:                                              ; preds = %618, %338
+354:                                              ; preds = %621, %339
   store i8 1, ptr %36, align 1
-  %354 = load i8, ptr %36, align 1
-  %355 = trunc i8 %354 to i1
-  br i1 %355, label %356, label %611
+  %355 = load i8, ptr %36, align 1
+  %356 = trunc i8 %355 to i1
+  br i1 %356, label %357, label %614
 
-356:                                              ; preds = %353
-  %357 = load i32, ptr %30, align 4
-  %358 = insertelement <32 x i32> undef, i32 %357, i32 0
-  %359 = shufflevector <32 x i32> %358, <32 x i32> undef, <32 x i32> zeroinitializer
-  %360 = add <32 x i32> %359, <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
-  store <32 x i32> %360, ptr %37, align 128
-  %361 = load ptr, ptr %179, align 8
-  store ptr %361, ptr %38, align 8
-  %362 = load <32 x i32>, ptr %37, align 128
-  store <32 x i32> %362, ptr %39, align 128
-  %363 = load ptr, ptr %37, align 8
-  %364 = load i64, ptr %39, align 4
-  %365 = mul i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), %364
-  %366 = getelementptr i8, ptr %363, i64 %365
-  %367 = load <32 x i8>, ptr %366, align 1
-  store <32 x i8> %367, ptr %40, align 32
-  %368 = load <32 x i8>, ptr %40, align 32
-  store <32 x i8> %368, ptr %41, align 32
-  %369 = load <32 x i8>, ptr %31, align 32
-  store <32 x i8> %369, ptr %42, align 32
-  %370 = load <32 x i8>, ptr %40, align 32
-  %371 = load <32 x i8>, ptr %31, align 32
-  %372 = icmp eq <32 x i8> %370, %371
-  store <32 x i1> %372, ptr %43, align 4
-  %373 = load <32 x i1>, ptr %43, align 4
-  %374 = bitcast <32 x i1> %373 to i32
-  %375 = call i32 @llvm.cttz.i32(i32 %374, i1 false)
-  store i32 %375, ptr %44, align 4
-  br label %376
+357:                                              ; preds = %354
+  %358 = load i32, ptr %30, align 4
+  %359 = insertelement <32 x i32> undef, i32 %358, i32 0
+  %360 = shufflevector <32 x i32> %359, <32 x i32> undef, <32 x i32> zeroinitializer
+  %361 = add <32 x i32> %360, <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7, i32 8, i32 9, i32 10, i32 11, i32 12, i32 13, i32 14, i32 15, i32 16, i32 17, i32 18, i32 19, i32 20, i32 21, i32 22, i32 23, i32 24, i32 25, i32 26, i32 27, i32 28, i32 29, i32 30, i32 31>
+  store <32 x i32> %361, ptr %37, align 128
+  %362 = load ptr, ptr %180, align 8
+  store ptr %362, ptr %38, align 8
+  %363 = load <32 x i32>, ptr %37, align 128
+  store <32 x i32> %363, ptr %39, align 128
+  %364 = load i32, ptr %30, align 4
+  %365 = sext i32 %364 to i64
+  store i64 %365, ptr %40, align 4
+  %366 = load ptr, ptr %38, align 8
+  %367 = load i64, ptr %40, align 4
+  %368 = mul i64 ptrtoint (ptr getelementptr (i8, ptr null, i32 1) to i64), %367
+  %369 = getelementptr i8, ptr %366, i64 %368
+  %370 = load <32 x i8>, ptr %369, align 1
+  store <32 x i8> %370, ptr %41, align 32
+  %371 = load <32 x i8>, ptr %41, align 32
+  store <32 x i8> %371, ptr %42, align 32
+  %372 = load <32 x i8>, ptr %31, align 32
+  store <32 x i8> %372, ptr %43, align 32
+  %373 = load <32 x i8>, ptr %41, align 32
+  %374 = load <32 x i8>, ptr %31, align 32
+  %375 = icmp eq <32 x i8> %373, %374
+  store <32 x i1> %375, ptr %44, align 4
+  %376 = load <32 x i1>, ptr %44, align 4
+  %377 = bitcast <32 x i1> %376 to i32
+  %378 = call i32 @llvm.cttz.i32(i32 %377, i1 false)
+  store i32 %378, ptr %45, align 4
+  br label %379
 
-376:                                              ; preds = %539, %356
-  %377 = call i32 @group_width()
-  store i32 %377, ptr %45, align 4
-  %378 = load i32, ptr %44, align 4
-  %379 = load i32, ptr %45, align 4
-  %380 = icmp slt i32 %378, %379
-  %381 = zext i1 %380 to i8
-  store i8 %381, ptr %46, align 1
-  %382 = load i8, ptr %46, align 1
-  %383 = trunc i8 %382 to i1
-  br i1 %383, label %384, label %530
+379:                                              ; preds = %542, %357
+  %380 = call i32 @group_width()
+  store i32 %380, ptr %46, align 4
+  %381 = load i32, ptr %45, align 4
+  %382 = load i32, ptr %46, align 4
+  %383 = icmp slt i32 %381, %382
+  %384 = zext i1 %383 to i8
+  store i8 %384, ptr %47, align 1
+  %385 = load i8, ptr %47, align 1
+  %386 = trunc i8 %385 to i1
+  br i1 %386, label %387, label %533
 
-384:                                              ; preds = %376
-  %385 = load i32, ptr %30, align 4
-  %386 = load i32, ptr %44, align 4
-  %387 = add i32 %385, %386
-  store i32 %387, ptr %47, align 4
-  %388 = load ptr, ptr %99, align 8
-  %389 = load ptr, ptr %98, align 8
-  %390 = call ptr @llvm.invariant.start.p0(i64 9104, ptr %389)
-  %391 = load i32, ptr %97, align 4
-  %392 = getelementptr ptr, ptr %389, i32 %391
-  %393 = getelementptr ptr, ptr %392, i32 3
-  %394 = load ptr, ptr %393, align 8
-  %395 = getelementptr { ptr, ptr }, ptr %394, i32 0, i32 0
-  %396 = load ptr, ptr %395, align 8
-  %397 = call { ptr } %396(ptr %388) #2
-  store { ptr } %397, ptr %48, align 8
-  %398 = load i32, ptr %47, align 4
-  %399 = sext i32 %398 to i64
-  store i64 %399, ptr %49, align 4
-  %400 = load ptr, ptr %48, align 8
-  %401 = load i64, ptr %49, align 4
-  %402 = mul i64 ptrtoint (ptr getelementptr ({ ptr, i160 }, ptr null, i32 1) to i64), %401
-  %403 = getelementptr i8, ptr %400, i64 %402
-  %404 = getelementptr { ptr, i160 }, ptr %403, i32 0, i32 0
-  %405 = load ptr, ptr %404, align 8
-  store ptr %405, ptr %51, align 8
-  %406 = getelementptr { ptr, i160 }, ptr %403, i32 0, i32 1
-  %407 = load i160, ptr %406, align 4
-  store i160 %407, ptr %50, align 4
-  %408 = load ptr, ptr %51, align 8
-  %409 = ptrtoint ptr %408 to i64
-  %410 = icmp eq i64 %409, ptrtoint (ptr @nil_typ to i64)
-  %411 = icmp eq i64 %409, 0
-  %412 = or i1 %410, %411
-  %413 = icmp eq i1 %412, false
-  %414 = zext i1 %413 to i8
-  store i8 %414, ptr %52, align 1
-  %415 = load i8, ptr %52, align 1
-  %416 = trunc i8 %415 to i1
-  br i1 %416, label %417, label %507
+387:                                              ; preds = %379
+  %388 = load i32, ptr %30, align 4
+  %389 = load i32, ptr %45, align 4
+  %390 = add i32 %388, %389
+  store i32 %390, ptr %48, align 4
+  %391 = load ptr, ptr %100, align 8
+  %392 = load ptr, ptr %99, align 8
+  %393 = call ptr @llvm.invariant.start.p0(i64 9104, ptr %392)
+  %394 = load i32, ptr %98, align 4
+  %395 = getelementptr ptr, ptr %392, i32 %394
+  %396 = getelementptr ptr, ptr %395, i32 3
+  %397 = load ptr, ptr %396, align 8
+  %398 = getelementptr { ptr, ptr }, ptr %397, i32 0, i32 0
+  %399 = load ptr, ptr %398, align 8
+  %400 = call { ptr } %399(ptr %391) #2
+  store { ptr } %400, ptr %49, align 8
+  %401 = load i32, ptr %48, align 4
+  %402 = sext i32 %401 to i64
+  store i64 %402, ptr %50, align 4
+  %403 = load ptr, ptr %49, align 8
+  %404 = load i64, ptr %50, align 4
+  %405 = mul i64 ptrtoint (ptr getelementptr ({ ptr, i160 }, ptr null, i32 1) to i64), %404
+  %406 = getelementptr i8, ptr %403, i64 %405
+  %407 = getelementptr { ptr, i160 }, ptr %406, i32 0, i32 0
+  %408 = load ptr, ptr %407, align 8
+  store ptr %408, ptr %52, align 8
+  %409 = getelementptr { ptr, i160 }, ptr %406, i32 0, i32 1
+  %410 = load i160, ptr %409, align 4
+  store i160 %410, ptr %51, align 4
+  %411 = load ptr, ptr %52, align 8
+  %412 = ptrtoint ptr %411 to i64
+  %413 = icmp eq i64 %412, ptrtoint (ptr @nil_typ to i64)
+  %414 = icmp eq i64 %412, 0
+  %415 = or i1 %413, %414
+  %416 = icmp eq i1 %415, false
+  %417 = zext i1 %416 to i8
+  store i8 %417, ptr %53, align 1
+  %418 = load i8, ptr %53, align 1
+  %419 = trunc i8 %418 to i1
+  br i1 %419, label %420, label %510
 
-417:                                              ; preds = %384
-  %418 = getelementptr { ptr, i160 }, ptr %53, i32 0, i32 0
-  %419 = load ptr, ptr %51, align 8
-  store ptr %419, ptr %418, align 8
-  %420 = getelementptr { ptr, i160 }, ptr %53, i32 0, i32 1
-  %421 = load i160, ptr %50, align 4
-  store i160 %421, ptr %420, align 4
-  %422 = load ptr, ptr %53, align 8
-  %423 = call i32 @get_offset(ptr %422, ptr @Entry)
-  %424 = getelementptr { ptr, ptr, ptr, i32 }, ptr %53, i32 0, i32 3
-  store i32 %423, ptr %424, align 4
-  %425 = getelementptr { ptr, ptr, ptr, i32 }, ptr %53, i32 0, i32 0
-  %426 = load ptr, ptr %425, align 8
-  %427 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %426, 0
-  %428 = getelementptr { ptr, ptr, ptr, i32 }, ptr %53, i32 0, i32 1
+420:                                              ; preds = %387
+  %421 = getelementptr { ptr, i160 }, ptr %54, i32 0, i32 0
+  %422 = load ptr, ptr %52, align 8
+  store ptr %422, ptr %421, align 8
+  %423 = getelementptr { ptr, i160 }, ptr %54, i32 0, i32 1
+  %424 = load i160, ptr %51, align 4
+  store i160 %424, ptr %423, align 4
+  %425 = load ptr, ptr %54, align 8
+  %426 = call i32 @get_offset(ptr %425, ptr @Entry)
+  %427 = getelementptr { ptr, ptr, ptr, i32 }, ptr %54, i32 0, i32 3
+  store i32 %426, ptr %427, align 4
+  %428 = getelementptr { ptr, ptr, ptr, i32 }, ptr %54, i32 0, i32 0
   %429 = load ptr, ptr %428, align 8
-  %430 = insertvalue { ptr, ptr, ptr, i32 } %427, ptr %429, 1
-  %431 = getelementptr { ptr, ptr, ptr, i32 }, ptr %53, i32 0, i32 2
+  %430 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %429, 0
+  %431 = getelementptr { ptr, ptr, ptr, i32 }, ptr %54, i32 0, i32 1
   %432 = load ptr, ptr %431, align 8
-  %433 = insertvalue { ptr, ptr, ptr, i32 } %430, ptr %432, 2
-  %434 = load i32, ptr %424, align 4
-  %435 = insertvalue { ptr, ptr, ptr, i32 } %433, i32 %434, 3
-  %436 = call ptr @llvm.invariant.start.p0(i64 0, ptr %54)
-  %437 = call ptr @llvm.invariant.start.p0(i64 120, ptr %426)
-  %438 = getelementptr ptr, ptr %426, i32 %434
-  %439 = getelementptr ptr, ptr %438, i32 5
-  %440 = load ptr, ptr %439, align 8
-  %441 = call ptr @behavior_wrapper(ptr %440, { ptr, ptr, ptr, i32 } %435, ptr %55)
-  %442 = call i32 %441({ ptr, ptr, ptr, i32 } %435, { ptr, ptr, ptr, i32 } %435, ptr %54)
-  store i32 %442, ptr %56, align 4
-  %443 = load i32, ptr %56, align 4
-  %444 = load i32, ptr %118, align 4
-  %445 = icmp eq i32 %443, %444
-  %446 = zext i1 %445 to i8
-  store i8 %446, ptr %57, align 1
-  %447 = load i8, ptr %57, align 1
-  %448 = trunc i8 %447 to i1
+  %433 = insertvalue { ptr, ptr, ptr, i32 } %430, ptr %432, 1
+  %434 = getelementptr { ptr, ptr, ptr, i32 }, ptr %54, i32 0, i32 2
+  %435 = load ptr, ptr %434, align 8
+  %436 = insertvalue { ptr, ptr, ptr, i32 } %433, ptr %435, 2
+  %437 = load i32, ptr %427, align 4
+  %438 = insertvalue { ptr, ptr, ptr, i32 } %436, i32 %437, 3
+  %439 = call ptr @llvm.invariant.start.p0(i64 0, ptr %55)
+  %440 = call ptr @llvm.invariant.start.p0(i64 120, ptr %429)
+  %441 = getelementptr ptr, ptr %429, i32 %437
+  %442 = getelementptr ptr, ptr %441, i32 5
+  %443 = load ptr, ptr %442, align 8
+  %444 = call ptr @behavior_wrapper(ptr %443, { ptr, ptr, ptr, i32 } %438, ptr %56)
+  %445 = call i32 %444({ ptr, ptr, ptr, i32 } %438, { ptr, ptr, ptr, i32 } %438, ptr %55)
+  store i32 %445, ptr %57, align 4
+  %446 = load i32, ptr %57, align 4
+  %447 = load i32, ptr %119, align 4
+  %448 = icmp eq i32 %446, %447
   %449 = zext i1 %448 to i8
   store i8 %449, ptr %58, align 1
-  br i1 %448, label %450, label %498
+  %450 = load i8, ptr %58, align 1
+  %451 = trunc i8 %450 to i1
+  %452 = zext i1 %451 to i8
+  store i8 %452, ptr %59, align 1
+  br i1 %451, label %453, label %501
 
-450:                                              ; preds = %417
-  %451 = load ptr, ptr %425, align 8
-  %452 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %451, 0
-  %453 = load ptr, ptr %428, align 8
-  %454 = insertvalue { ptr, ptr, ptr, i32 } %452, ptr %453, 1
-  %455 = load ptr, ptr %431, align 8
-  %456 = insertvalue { ptr, ptr, ptr, i32 } %454, ptr %455, 2
-  %457 = load i32, ptr %424, align 4
-  %458 = insertvalue { ptr, ptr, ptr, i32 } %456, i32 %457, 3
-  %459 = call ptr @llvm.invariant.start.p0(i64 0, ptr %59)
-  %460 = call ptr @llvm.invariant.start.p0(i64 120, ptr %451)
-  %461 = getelementptr ptr, ptr %451, i32 %457
-  %462 = getelementptr ptr, ptr %461, i32 6
-  %463 = load ptr, ptr %462, align 8
-  %464 = call ptr @behavior_wrapper(ptr %463, { ptr, ptr, ptr, i32 } %458, ptr %60)
-  %465 = call { ptr, i160 } %464({ ptr, ptr, ptr, i32 } %458, { ptr, ptr, ptr, i32 } %458, ptr %59)
-  store { ptr, i160 } %465, ptr %61, align 8
-  %466 = getelementptr { ptr, i160 }, ptr %61, i32 0, i32 0
-  %467 = load ptr, ptr %466, align 8
-  store ptr %467, ptr %63, align 8
-  %468 = getelementptr { ptr, i160 }, ptr %61, i32 0, i32 1
-  %469 = load i160, ptr %468, align 4
-  store i160 %469, ptr %62, align 4
-  %470 = load ptr, ptr %63, align 8
-  store ptr %470, ptr %65, align 8
-  %471 = load i160, ptr %62, align 4
-  store i160 %471, ptr %64, align 4
-  %472 = load ptr, ptr %65, align 8
-  %473 = insertvalue { ptr, i160 } undef, ptr %472, 0
-  %474 = load i160, ptr %64, align 4
-  %475 = insertvalue { ptr, i160 } %473, i160 %474, 1
-  %476 = load ptr, ptr %113, align 8
-  store ptr %476, ptr %67, align 8
-  %477 = load i160, ptr %112, align 4
-  store i160 %477, ptr %66, align 4
-  %478 = load ptr, ptr %67, align 8
-  %479 = insertvalue { ptr, i160 } undef, ptr %478, 0
-  %480 = load i160, ptr %66, align 4
-  %481 = insertvalue { ptr, i160 } %479, i160 %480, 1
-  %482 = load ptr, ptr %99, align 8
-  %483 = load ptr, ptr %98, align 8
-  %484 = call ptr @llvm.invariant.start.p0(i64 9104, ptr %483)
-  %485 = load i32, ptr %97, align 4
-  %486 = getelementptr ptr, ptr %483, i32 %485
-  %487 = getelementptr ptr, ptr %486, i32 8
-  %488 = load ptr, ptr %487, align 8
-  %489 = getelementptr { ptr, ptr }, ptr %488, i32 0, i32 0
-  %490 = load ptr, ptr %489, align 8
-  %491 = call { ptr } %490(ptr %482) #2
-  store { ptr } %491, ptr %68, align 8
-  %492 = load ptr, ptr %68, align 8
-  %493 = call i1 %492({ ptr, i160 } %475, { ptr, i160 } %481)
-  %494 = zext i1 %493 to i8
-  store i8 %494, ptr %69, align 1
-  %495 = load i8, ptr %69, align 1
-  %496 = trunc i8 %495 to i1
+453:                                              ; preds = %420
+  %454 = load ptr, ptr %428, align 8
+  %455 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %454, 0
+  %456 = load ptr, ptr %431, align 8
+  %457 = insertvalue { ptr, ptr, ptr, i32 } %455, ptr %456, 1
+  %458 = load ptr, ptr %434, align 8
+  %459 = insertvalue { ptr, ptr, ptr, i32 } %457, ptr %458, 2
+  %460 = load i32, ptr %427, align 4
+  %461 = insertvalue { ptr, ptr, ptr, i32 } %459, i32 %460, 3
+  %462 = call ptr @llvm.invariant.start.p0(i64 0, ptr %60)
+  %463 = call ptr @llvm.invariant.start.p0(i64 120, ptr %454)
+  %464 = getelementptr ptr, ptr %454, i32 %460
+  %465 = getelementptr ptr, ptr %464, i32 6
+  %466 = load ptr, ptr %465, align 8
+  %467 = call ptr @behavior_wrapper(ptr %466, { ptr, ptr, ptr, i32 } %461, ptr %61)
+  %468 = call { ptr, i160 } %467({ ptr, ptr, ptr, i32 } %461, { ptr, ptr, ptr, i32 } %461, ptr %60)
+  store { ptr, i160 } %468, ptr %62, align 8
+  %469 = getelementptr { ptr, i160 }, ptr %62, i32 0, i32 0
+  %470 = load ptr, ptr %469, align 8
+  store ptr %470, ptr %64, align 8
+  %471 = getelementptr { ptr, i160 }, ptr %62, i32 0, i32 1
+  %472 = load i160, ptr %471, align 4
+  store i160 %472, ptr %63, align 4
+  %473 = load ptr, ptr %64, align 8
+  store ptr %473, ptr %66, align 8
+  %474 = load i160, ptr %63, align 4
+  store i160 %474, ptr %65, align 4
+  %475 = load ptr, ptr %66, align 8
+  %476 = insertvalue { ptr, i160 } undef, ptr %475, 0
+  %477 = load i160, ptr %65, align 4
+  %478 = insertvalue { ptr, i160 } %476, i160 %477, 1
+  %479 = load ptr, ptr %114, align 8
+  store ptr %479, ptr %68, align 8
+  %480 = load i160, ptr %113, align 4
+  store i160 %480, ptr %67, align 4
+  %481 = load ptr, ptr %68, align 8
+  %482 = insertvalue { ptr, i160 } undef, ptr %481, 0
+  %483 = load i160, ptr %67, align 4
+  %484 = insertvalue { ptr, i160 } %482, i160 %483, 1
+  %485 = load ptr, ptr %100, align 8
+  %486 = load ptr, ptr %99, align 8
+  %487 = call ptr @llvm.invariant.start.p0(i64 9104, ptr %486)
+  %488 = load i32, ptr %98, align 4
+  %489 = getelementptr ptr, ptr %486, i32 %488
+  %490 = getelementptr ptr, ptr %489, i32 8
+  %491 = load ptr, ptr %490, align 8
+  %492 = getelementptr { ptr, ptr }, ptr %491, i32 0, i32 0
+  %493 = load ptr, ptr %492, align 8
+  %494 = call { ptr } %493(ptr %485) #2
+  store { ptr } %494, ptr %69, align 8
+  %495 = load ptr, ptr %69, align 8
+  %496 = call i1 %495({ ptr, i160 } %478, { ptr, i160 } %484)
   %497 = zext i1 %496 to i8
-  store i8 %497, ptr %58, align 1
-  br label %498
+  store i8 %497, ptr %70, align 1
+  %498 = load i8, ptr %70, align 1
+  %499 = trunc i8 %498 to i1
+  %500 = zext i1 %499 to i8
+  store i8 %500, ptr %59, align 1
+  br label %501
 
-498:                                              ; preds = %450, %417
-  %499 = load i8, ptr %58, align 1
-  %500 = trunc i8 %499 to i1
-  %501 = xor i1 %500, true
-  %502 = zext i1 %501 to i32
-  br i1 %500, label %503, label %504
+501:                                              ; preds = %453, %420
+  %502 = load i8, ptr %59, align 1
+  %503 = trunc i8 %502 to i1
+  %504 = xor i1 %503, true
+  %505 = zext i1 %504 to i32
+  br i1 %503, label %506, label %507
 
-503:                                              ; preds = %498
-  br label %507
-
-504:                                              ; preds = %498
-  %505 = load ptr, ptr %418, align 8
-  store ptr %505, ptr %51, align 8
-  %506 = load i160, ptr %420, align 4
-  store i160 %506, ptr %50, align 4
-  br label %507
-
-507:                                              ; preds = %503, %504, %384
-  %508 = phi i32 [ %502, %504 ], [ %502, %503 ], [ 1, %384 ]
-  br label %509
-
-509:                                              ; preds = %507
+506:                                              ; preds = %501
   br label %510
 
-510:                                              ; preds = %509
-  %511 = zext i32 %508 to i64
-  %512 = trunc i64 %511 to i32
-  switch i32 %512, label %514 [
-    i32 0, label %513
+507:                                              ; preds = %501
+  %508 = load ptr, ptr %421, align 8
+  store ptr %508, ptr %52, align 8
+  %509 = load i160, ptr %423, align 4
+  store i160 %509, ptr %51, align 4
+  br label %510
+
+510:                                              ; preds = %506, %507, %387
+  %511 = phi i32 [ %505, %507 ], [ %505, %506 ], [ 1, %387 ]
+  br label %512
+
+512:                                              ; preds = %510
+  br label %513
+
+513:                                              ; preds = %512
+  %514 = zext i32 %511 to i64
+  %515 = trunc i64 %514 to i32
+  switch i32 %515, label %517 [
+    i32 0, label %516
   ]
 
-513:                                              ; preds = %510
-  br label %524
+516:                                              ; preds = %513
+  br label %527
 
-514:                                              ; preds = %510
-  %515 = load <32 x i1>, ptr %43, align 4
-  %516 = bitcast <32 x i1> %515 to i32
-  %517 = sub i32 %516, 1
-  %518 = and i32 %516, %517
-  store i32 %518, ptr %70, align 4
-  %519 = load <32 x i1>, ptr %70, align 4
-  %520 = bitcast <32 x i1> %519 to i32
-  %521 = call i32 @llvm.cttz.i32(i32 %520, i1 false)
+517:                                              ; preds = %513
+  %518 = load <32 x i1>, ptr %44, align 4
+  %519 = bitcast <32 x i1> %518 to i32
+  %520 = sub i32 %519, 1
+  %521 = and i32 %519, %520
   store i32 %521, ptr %71, align 4
-  %522 = load i32, ptr %71, align 4
-  store i32 %522, ptr %44, align 4
-  %523 = load <32 x i1>, ptr %70, align 4
-  store <32 x i1> %523, ptr %43, align 4
-  br label %524
+  %522 = load <32 x i1>, ptr %71, align 4
+  %523 = bitcast <32 x i1> %522 to i32
+  %524 = call i32 @llvm.cttz.i32(i32 %523, i1 false)
+  store i32 %524, ptr %72, align 4
+  %525 = load i32, ptr %72, align 4
+  store i32 %525, ptr %45, align 4
+  %526 = load <32 x i1>, ptr %71, align 4
+  store <32 x i1> %526, ptr %44, align 4
+  br label %527
 
-524:                                              ; preds = %514, %513
-  %525 = phi ptr [ poison, %514 ], [ %47, %513 ]
-  %526 = phi i32 [ poison, %514 ], [ 2, %513 ]
-  %527 = phi i32 [ poison, %514 ], [ 0, %513 ]
-  %528 = phi i32 [ 0, %514 ], [ 1, %513 ]
-  %529 = phi i32 [ 1, %514 ], [ 0, %513 ]
-  br label %531
+527:                                              ; preds = %517, %516
+  %528 = phi ptr [ poison, %517 ], [ %48, %516 ]
+  %529 = phi i32 [ poison, %517 ], [ 2, %516 ]
+  %530 = phi i32 [ poison, %517 ], [ 0, %516 ]
+  %531 = phi i32 [ 0, %517 ], [ 1, %516 ]
+  %532 = phi i32 [ 1, %517 ], [ 0, %516 ]
+  br label %534
 
-530:                                              ; preds = %376
-  br label %531
+533:                                              ; preds = %379
+  br label %534
 
-531:                                              ; preds = %524, %530
-  %532 = phi ptr [ poison, %530 ], [ %525, %524 ]
-  %533 = phi i32 [ poison, %530 ], [ %526, %524 ]
-  %534 = phi i32 [ poison, %530 ], [ %527, %524 ]
-  %535 = phi i32 [ 2, %530 ], [ %528, %524 ]
-  %536 = phi i32 [ 0, %530 ], [ %529, %524 ]
-  br label %537
+534:                                              ; preds = %527, %533
+  %535 = phi ptr [ poison, %533 ], [ %528, %527 ]
+  %536 = phi i32 [ poison, %533 ], [ %529, %527 ]
+  %537 = phi i32 [ poison, %533 ], [ %530, %527 ]
+  %538 = phi i32 [ 2, %533 ], [ %531, %527 ]
+  %539 = phi i32 [ 0, %533 ], [ %532, %527 ]
+  br label %540
 
-537:                                              ; preds = %531
-  %538 = trunc i32 %536 to i1
-  br i1 %538, label %539, label %540
+540:                                              ; preds = %534
+  %541 = trunc i32 %539 to i1
+  br i1 %541, label %542, label %543
 
-539:                                              ; preds = %537
-  br label %376
+542:                                              ; preds = %540
+  br label %379
 
-540:                                              ; preds = %537
-  %541 = zext i32 %535 to i64
-  %542 = trunc i64 %541 to i32
-  switch i32 %542, label %547 [
-    i32 1, label %543
+543:                                              ; preds = %540
+  %544 = zext i32 %538 to i64
+  %545 = trunc i64 %544 to i32
+  switch i32 %545, label %550 [
+    i32 1, label %546
   ]
 
-543:                                              ; preds = %566, %602, %540
-  %544 = phi ptr [ poison, %602 ], [ poison, %566 ], [ %532, %540 ]
-  %545 = phi i32 [ %563, %602 ], [ %563, %566 ], [ %533, %540 ]
-  %546 = phi i32 [ %565, %602 ], [ %565, %566 ], [ %534, %540 ]
-  br label %611
+546:                                              ; preds = %569, %605, %543
+  %547 = phi ptr [ poison, %605 ], [ poison, %569 ], [ %535, %543 ]
+  %548 = phi i32 [ %566, %605 ], [ %566, %569 ], [ %536, %543 ]
+  %549 = phi i32 [ %568, %605 ], [ %568, %569 ], [ %537, %543 ]
+  br label %614
 
-547:                                              ; preds = %540
-  %548 = load <32 x i8>, ptr %40, align 32
-  store <32 x i8> %548, ptr %72, align 32
-  %549 = load <32 x i8>, ptr %33, align 32
-  store <32 x i8> %549, ptr %73, align 32
-  %550 = load <32 x i8>, ptr %40, align 32
-  %551 = load <32 x i8>, ptr %33, align 32
-  %552 = icmp eq <32 x i8> %550, %551
-  store <32 x i1> %552, ptr %74, align 4
-  %553 = load <32 x i1>, ptr %74, align 4
-  %554 = bitcast <32 x i1> %553 to i32
-  %555 = call i32 @llvm.cttz.i32(i32 %554, i1 false)
-  store i32 %555, ptr %75, align 4
-  %556 = call i32 @group_width()
-  store i32 %556, ptr %76, align 4
-  %557 = load i32, ptr %75, align 4
-  %558 = load i32, ptr %76, align 4
-  %559 = icmp slt i32 %557, %558
-  %560 = zext i1 %559 to i8
-  store i8 %560, ptr %77, align 1
-  %561 = load i8, ptr %77, align 1
-  %562 = trunc i8 %561 to i1
-  %563 = zext i1 %562 to i32
-  %564 = xor i1 %562, true
-  %565 = zext i1 %564 to i32
-  br i1 %562, label %566, label %567
+550:                                              ; preds = %543
+  %551 = load <32 x i8>, ptr %41, align 32
+  store <32 x i8> %551, ptr %73, align 32
+  %552 = load <32 x i8>, ptr %33, align 32
+  store <32 x i8> %552, ptr %74, align 32
+  %553 = load <32 x i8>, ptr %41, align 32
+  %554 = load <32 x i8>, ptr %33, align 32
+  %555 = icmp eq <32 x i8> %553, %554
+  store <32 x i1> %555, ptr %75, align 4
+  %556 = load <32 x i1>, ptr %75, align 4
+  %557 = bitcast <32 x i1> %556 to i32
+  %558 = call i32 @llvm.cttz.i32(i32 %557, i1 false)
+  store i32 %558, ptr %76, align 4
+  %559 = call i32 @group_width()
+  store i32 %559, ptr %77, align 4
+  %560 = load i32, ptr %76, align 4
+  %561 = load i32, ptr %77, align 4
+  %562 = icmp slt i32 %560, %561
+  %563 = zext i1 %562 to i8
+  store i8 %563, ptr %78, align 1
+  %564 = load i8, ptr %78, align 1
+  %565 = trunc i8 %564 to i1
+  %566 = zext i1 %565 to i32
+  %567 = xor i1 %565, true
+  %568 = zext i1 %567 to i32
+  br i1 %565, label %569, label %570
 
-566:                                              ; preds = %547
-  br label %543
+569:                                              ; preds = %550
+  br label %546
 
-567:                                              ; preds = %547
-  store i32 0, ptr %81, align 4
-  %568 = load i32, ptr %167, align 4
-  %569 = load i32, ptr %81, align 4
-  %570 = icmp slt i32 %568, %569
-  %571 = zext i1 %570 to i8
-  store i8 %571, ptr %82, align 1
-  %572 = load i8, ptr %82, align 1
-  %573 = trunc i8 %572 to i1
-  br i1 %573, label %574, label %602
+570:                                              ; preds = %550
+  store i32 0, ptr %82, align 4
+  %571 = load i32, ptr %168, align 4
+  %572 = load i32, ptr %82, align 4
+  %573 = icmp slt i32 %571, %572
+  %574 = zext i1 %573 to i8
+  store i8 %574, ptr %83, align 1
+  %575 = load i8, ptr %83, align 1
+  %576 = trunc i8 %575 to i1
+  br i1 %576, label %577, label %605
 
-574:                                              ; preds = %567
-  %575 = load <32 x i8>, ptr %40, align 32
-  store <32 x i8> %575, ptr %83, align 32
-  %576 = load <32 x i8>, ptr %35, align 32
-  store <32 x i8> %576, ptr %84, align 32
-  %577 = load <32 x i8>, ptr %40, align 32
-  %578 = load <32 x i8>, ptr %35, align 32
-  %579 = and <32 x i8> %577, %578
+577:                                              ; preds = %570
+  %578 = load <32 x i8>, ptr %41, align 32
+  store <32 x i8> %578, ptr %84, align 32
+  %579 = load <32 x i8>, ptr %35, align 32
   store <32 x i8> %579, ptr %85, align 32
-  %580 = load <32 x i8>, ptr %85, align 32
-  store <32 x i8> %580, ptr %86, align 32
-  %581 = load <32 x i8>, ptr %33, align 32
-  store <32 x i8> %581, ptr %87, align 32
-  %582 = load <32 x i8>, ptr %85, align 32
-  %583 = load <32 x i8>, ptr %33, align 32
-  %584 = icmp eq <32 x i8> %582, %583
-  store <32 x i1> %584, ptr %88, align 4
-  %585 = load <32 x i1>, ptr %88, align 4
-  %586 = bitcast <32 x i1> %585 to i32
-  %587 = call i32 @llvm.cttz.i32(i32 %586, i1 false)
-  store i32 %587, ptr %89, align 4
-  %588 = call i32 @group_width()
-  store i32 %588, ptr %90, align 4
-  %589 = load i32, ptr %89, align 4
-  %590 = load i32, ptr %90, align 4
-  %591 = icmp slt i32 %589, %590
-  %592 = zext i1 %591 to i8
-  store i8 %592, ptr %91, align 1
-  %593 = load i8, ptr %91, align 1
-  %594 = trunc i8 %593 to i1
-  br i1 %594, label %595, label %600
+  %580 = load <32 x i8>, ptr %41, align 32
+  %581 = load <32 x i8>, ptr %35, align 32
+  %582 = and <32 x i8> %580, %581
+  store <32 x i8> %582, ptr %86, align 32
+  %583 = load <32 x i8>, ptr %86, align 32
+  store <32 x i8> %583, ptr %87, align 32
+  %584 = load <32 x i8>, ptr %33, align 32
+  store <32 x i8> %584, ptr %88, align 32
+  %585 = load <32 x i8>, ptr %86, align 32
+  %586 = load <32 x i8>, ptr %33, align 32
+  %587 = icmp eq <32 x i8> %585, %586
+  store <32 x i1> %587, ptr %89, align 4
+  %588 = load <32 x i1>, ptr %89, align 4
+  %589 = bitcast <32 x i1> %588 to i32
+  %590 = call i32 @llvm.cttz.i32(i32 %589, i1 false)
+  store i32 %590, ptr %90, align 4
+  %591 = call i32 @group_width()
+  store i32 %591, ptr %91, align 4
+  %592 = load i32, ptr %90, align 4
+  %593 = load i32, ptr %91, align 4
+  %594 = icmp slt i32 %592, %593
+  %595 = zext i1 %594 to i8
+  store i8 %595, ptr %92, align 1
+  %596 = load i8, ptr %92, align 1
+  %597 = trunc i8 %596 to i1
+  br i1 %597, label %598, label %603
 
-595:                                              ; preds = %574
-  %596 = load i32, ptr %30, align 4
-  %597 = load i32, ptr %89, align 4
-  %598 = add i32 %596, %597
-  store i32 %598, ptr %92, align 4
-  %599 = load i32, ptr %92, align 4
-  store i32 %599, ptr %167, align 4
-  br label %600
+598:                                              ; preds = %577
+  %599 = load i32, ptr %30, align 4
+  %600 = load i32, ptr %90, align 4
+  %601 = add i32 %599, %600
+  store i32 %601, ptr %93, align 4
+  %602 = load i32, ptr %93, align 4
+  store i32 %602, ptr %168, align 4
+  br label %603
 
-600:                                              ; preds = %595, %574
-  %601 = load i32, ptr %89, align 4
-  store i32 %601, ptr %75, align 4
-  br label %602
+603:                                              ; preds = %598, %577
+  %604 = load i32, ptr %90, align 4
+  store i32 %604, ptr %76, align 4
+  br label %605
 
-602:                                              ; preds = %600, %567
-  %603 = call i32 @group_width()
-  store i32 %603, ptr %93, align 4
-  %604 = load i32, ptr %30, align 4
-  %605 = load i32, ptr %93, align 4
-  %606 = add i32 %604, %605
+605:                                              ; preds = %603, %570
+  %606 = call i32 @group_width()
   store i32 %606, ptr %94, align 4
-  %607 = load i32, ptr %94, align 4
-  %608 = load i32, ptr %134, align 4
-  %609 = and i32 %607, %608
+  %607 = load i32, ptr %30, align 4
+  %608 = load i32, ptr %94, align 4
+  %609 = add i32 %607, %608
   store i32 %609, ptr %95, align 4
   %610 = load i32, ptr %95, align 4
-  store i32 %610, ptr %30, align 4
-  br label %543
+  %611 = load i32, ptr %135, align 4
+  %612 = and i32 %610, %611
+  store i32 %612, ptr %96, align 4
+  %613 = load i32, ptr %96, align 4
+  store i32 %613, ptr %30, align 4
+  br label %546
 
-611:                                              ; preds = %543, %353
-  %612 = phi ptr [ %544, %543 ], [ poison, %353 ]
-  %613 = phi i32 [ %545, %543 ], [ 3, %353 ]
-  %614 = phi i32 [ %546, %543 ], [ 0, %353 ]
-  br label %615
+614:                                              ; preds = %546, %354
+  %615 = phi ptr [ %547, %546 ], [ poison, %354 ]
+  %616 = phi i32 [ %548, %546 ], [ 3, %354 ]
+  %617 = phi i32 [ %549, %546 ], [ 0, %354 ]
+  br label %618
 
-615:                                              ; preds = %611
-  br label %616
+618:                                              ; preds = %614
+  br label %619
 
-616:                                              ; preds = %615
-  %617 = trunc i32 %614 to i1
-  br i1 %617, label %618, label %619
+619:                                              ; preds = %618
+  %620 = trunc i32 %617 to i1
+  br i1 %620, label %621, label %622
 
-618:                                              ; preds = %616
-  br label %353
-
-619:                                              ; preds = %616
-  %620 = zext i32 %613 to i64
-  %621 = trunc i64 %620 to i32
-  switch i32 %621, label %638 [
-    i32 1, label %622
-    i32 2, label %663
-  ]
+621:                                              ; preds = %619
+  br label %354
 
 622:                                              ; preds = %619
-  store i32 0, ptr %78, align 4
-  %623 = load i32, ptr %167, align 4
-  %624 = load i32, ptr %78, align 4
-  %625 = icmp sge i32 %623, %624
-  %626 = zext i1 %625 to i8
-  store i8 %626, ptr %79, align 1
-  %627 = load i8, ptr %79, align 1
-  %628 = trunc i8 %627 to i1
-  %629 = select i1 %628, i32 0, i32 2
-  br i1 %628, label %630, label %631
-
-630:                                              ; preds = %622
-  br label %636
-
-631:                                              ; preds = %622
-  %632 = load i32, ptr %30, align 4
-  %633 = load i32, ptr %75, align 4
-  %634 = add i32 %632, %633
-  store i32 %634, ptr %80, align 4
-  %635 = load i32, ptr %80, align 4
-  br label %636
-
-636:                                              ; preds = %630, %631
-  %637 = phi i32 [ %635, %631 ], [ poison, %630 ]
-  br label %638
-
-638:                                              ; preds = %636, %663, %619
-  %639 = phi ptr [ %664, %663 ], [ %167, %636 ], [ poison, %619 ]
-  %640 = phi i32 [ %665, %663 ], [ %637, %636 ], [ poison, %619 ]
-  %641 = phi i32 [ %666, %663 ], [ %629, %636 ], [ 1, %619 ]
-  br label %642
-
-642:                                              ; preds = %638, %335
-  %643 = phi ptr [ %639, %638 ], [ %166, %335 ]
-  %644 = phi i32 [ %640, %638 ], [ poison, %335 ]
-  %645 = phi i32 [ %641, %638 ], [ 0, %335 ]
-  br label %199
-
-646:                                              ; preds = %199
-  br label %647
-
-647:                                              ; preds = %646
-  %648 = zext i32 %202 to i64
-  %649 = trunc i64 %648 to i32
-  switch i32 %649, label %652 [
-    i32 0, label %650
-    i32 1, label %667
+  %623 = zext i32 %616 to i64
+  %624 = trunc i64 %623 to i32
+  switch i32 %624, label %641 [
+    i32 1, label %625
+    i32 2, label %666
   ]
 
-650:                                              ; preds = %647
-  %651 = load i32, ptr %200, align 4
-  br label %655
+625:                                              ; preds = %622
+  store i32 0, ptr %79, align 4
+  %626 = load i32, ptr %168, align 4
+  %627 = load i32, ptr %79, align 4
+  %628 = icmp sge i32 %626, %627
+  %629 = zext i1 %628 to i8
+  store i8 %629, ptr %80, align 1
+  %630 = load i8, ptr %80, align 1
+  %631 = trunc i8 %630 to i1
+  %632 = select i1 %631, i32 0, i32 2
+  br i1 %631, label %633, label %634
 
-652:                                              ; preds = %667, %647
-  %653 = phi i32 [ %668, %667 ], [ %201, %647 ]
-  %654 = phi i32 [ %669, %667 ], [ 0, %647 ]
-  br label %655
+633:                                              ; preds = %625
+  br label %639
 
-655:                                              ; preds = %652, %650
-  %656 = phi i32 [ %653, %652 ], [ %651, %650 ]
-  %657 = phi i32 [ %654, %652 ], [ 0, %650 ]
-  %658 = zext i32 %657 to i64
-  %659 = trunc i64 %658 to i32
-  switch i32 %659, label %660 [
-    i32 0, label %670
+634:                                              ; preds = %625
+  %635 = load i32, ptr %30, align 4
+  %636 = load i32, ptr %76, align 4
+  %637 = add i32 %635, %636
+  store i32 %637, ptr %81, align 4
+  %638 = load i32, ptr %81, align 4
+  br label %639
+
+639:                                              ; preds = %633, %634
+  %640 = phi i32 [ %638, %634 ], [ poison, %633 ]
+  br label %641
+
+641:                                              ; preds = %639, %666, %622
+  %642 = phi ptr [ %667, %666 ], [ %168, %639 ], [ poison, %622 ]
+  %643 = phi i32 [ %668, %666 ], [ %640, %639 ], [ poison, %622 ]
+  %644 = phi i32 [ %669, %666 ], [ %632, %639 ], [ 1, %622 ]
+  br label %645
+
+645:                                              ; preds = %641, %336
+  %646 = phi ptr [ %642, %641 ], [ %167, %336 ]
+  %647 = phi i32 [ %643, %641 ], [ poison, %336 ]
+  %648 = phi i32 [ %644, %641 ], [ 0, %336 ]
+  br label %200
+
+649:                                              ; preds = %200
+  br label %650
+
+650:                                              ; preds = %649
+  %651 = zext i32 %203 to i64
+  %652 = trunc i64 %651 to i32
+  switch i32 %652, label %655 [
+    i32 0, label %653
+    i32 1, label %670
   ]
 
-660:                                              ; preds = %670, %655
-  %661 = phi i32 [ %671, %670 ], [ poison, %655 ]
-  br label %662
+653:                                              ; preds = %650
+  %654 = load i32, ptr %201, align 4
+  br label %658
 
-662:                                              ; preds = %660
-  ret i32 %661
+655:                                              ; preds = %670, %650
+  %656 = phi i32 [ %671, %670 ], [ %202, %650 ]
+  %657 = phi i32 [ %672, %670 ], [ 0, %650 ]
+  br label %658
 
-663:                                              ; preds = %619
-  %664 = phi ptr [ %612, %619 ]
-  %665 = phi i32 [ poison, %619 ]
-  %666 = phi i32 [ 0, %619 ]
-  br label %638
+658:                                              ; preds = %655, %653
+  %659 = phi i32 [ %656, %655 ], [ %654, %653 ]
+  %660 = phi i32 [ %657, %655 ], [ 0, %653 ]
+  %661 = zext i32 %660 to i64
+  %662 = trunc i64 %661 to i32
+  switch i32 %662, label %663 [
+    i32 0, label %673
+  ]
 
-667:                                              ; preds = %647
-  %668 = phi i32 [ poison, %647 ]
-  %669 = phi i32 [ 1, %647 ]
-  br label %652
+663:                                              ; preds = %673, %658
+  %664 = phi i32 [ %674, %673 ], [ poison, %658 ]
+  br label %665
 
-670:                                              ; preds = %655
-  %671 = phi i32 [ %656, %655 ]
-  br label %660
+665:                                              ; preds = %663
+  ret i32 %664
+
+666:                                              ; preds = %622
+  %667 = phi ptr [ %615, %622 ]
+  %668 = phi i32 [ poison, %622 ]
+  %669 = phi i32 [ 0, %622 ]
+  br label %641
+
+670:                                              ; preds = %650
+  %671 = phi i32 [ poison, %650 ]
+  %672 = phi i32 [ 1, %650 ]
+  br label %655
+
+673:                                              ; preds = %658
+  %674 = phi i32 [ %659, %658 ]
+  br label %663
 }
 
 define ptr @SwissTable_B_find_slot_keyK_hashi32({ ptr, ptr, ptr, i32 } %0, ptr %1) {
@@ -7237,9 +7241,9 @@ define ptr @SwissTable_B_enumerate_({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   ret ptr %9
 }
 
-declare { ptr, ptr, ptr, i32 } @Collection_map_fFunctionT_to_U({ ptr })
-
 declare { ptr, ptr, ptr, i32 } @Iterable_map_fFunctionT_to_U({ ptr })
+
+declare { ptr, ptr, ptr, i32 } @Collection_map_fFunctionT_to_U({ ptr })
 
 define ptr @SwissTable_B_map_fFunctionT_to_U_map_fFunctionT_to_U({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
@@ -7297,11 +7301,11 @@ define ptr @SwissTable_B_filter_fFunctionT_to_Bool({ ptr, ptr, ptr, i32 } %0, pt
   ret ptr %14
 }
 
-declare { ptr, ptr, ptr, i32 } @Collection_chain_otherCollectionT({ ptr, ptr, ptr, i32 })
-
 declare { ptr, ptr, ptr, i32 } @Iterable_chain_otherIterableT({ ptr, ptr, ptr, i32 })
 
-define ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+declare { ptr, ptr, ptr, i32 } @Collection_chain_otherCollectionT({ ptr, ptr, ptr, i32 })
+
+define ptr @SwissTable_B_chain_otherIterableT_chain_otherCollectionT({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = alloca i1, align 1
   %5 = alloca i1, align 1
@@ -7322,7 +7326,7 @@ define ptr @SwissTable_B_chain_otherCollectionT_chain_otherIterableT({ ptr, ptr,
   store i8 %19, ptr %3, align 1
   %20 = load i8, ptr %3, align 1
   %21 = trunc i8 %20 to i1
-  %22 = select i1 %21, i32 70, i32 71
+  %22 = select i1 %21, i32 71, i32 70
   br i1 %21, label %23, label %24
 
 23:                                               ; preds = %39, %24, %2
@@ -7447,11 +7451,11 @@ define ptr @SwissTable_B_interleave_otherIterableT_interleave_otherCollectionT({
   ret ptr %57
 }
 
-declare { ptr, ptr, ptr, i32 } @Iterable_zip_otherIterableU({ ptr, ptr, ptr, i32 })
-
 declare { ptr, ptr, ptr, i32 } @Collection_zip_otherCollectionU({ ptr, ptr, ptr, i32 })
 
-define ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU({ ptr, ptr, ptr, i32 } %0, ptr %1) {
+declare { ptr, ptr, ptr, i32 } @Iterable_zip_otherIterableU({ ptr, ptr, ptr, i32 })
+
+define ptr @SwissTable_B_zip_otherCollectionU_zip_otherIterableU({ ptr, ptr, ptr, i32 } %0, ptr %1) {
   %3 = alloca i1, align 1
   %4 = alloca i1, align 1
   %5 = alloca i1, align 1
@@ -7472,7 +7476,7 @@ define ptr @SwissTable_B_zip_otherIterableU_zip_otherCollectionU({ ptr, ptr, ptr
   store i8 %19, ptr %3, align 1
   %20 = load i8, ptr %3, align 1
   %21 = trunc i8 %20 to i1
-  %22 = select i1 %21, i32 75, i32 74
+  %22 = select i1 %21, i32 74, i32 75
   br i1 %21, label %23, label %24
 
 23:                                               ; preds = %39, %24, %2
@@ -8640,7 +8644,7 @@ source_filename = "LLVMDialectModule"
 @PRNG = constant { [3 x i64], [7 x ptr], [5 x ptr] } { [3 x i64] [i64 -4401938362882229211, i64 8342457054901451907, i64 3], [7 x ptr] [ptr @subtype_test, ptr @PRNG_hashtbl, ptr @PRNG_offset_tbl, ptr @_data_size_PRNG, ptr @_box_Default, ptr @_unbox_Default, ptr @_size_Default], [5 x ptr] [ptr @PRNG_field_seed, ptr @PRNG_B_init_initial_seedi32, ptr @PRNG_B_next_, ptr @PRNG_init_initial_seedi32, ptr @PRNG_next_] }
 @PRNG_field_seed = internal constant { ptr, ptr } { ptr @PRNG_getter_seed, ptr @PRNG_setter_seed }
 
-define i1 @yzsozgvwag(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @hofctfpuow(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -8664,7 +8668,7 @@ define i1 @yzsozgvwag(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %18
 }
 
-define i32 @uimigjftnd(ptr nest %0, { ptr, i160 } %1) {
+define i32 @mgbwbmrclj(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = alloca i32, align 4
@@ -8679,7 +8683,7 @@ define i32 @uimigjftnd(ptr nest %0, { ptr, i160 } %1) {
   ret i32 %10
 }
 
-define i1 @ycbmehvpeh(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @qpabxjxihh(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -8703,7 +8707,7 @@ define i1 @ycbmehvpeh(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %18
 }
 
-define i32 @iobuhvxquu(ptr nest %0, { ptr, i160 } %1) {
+define i32 @hezheciyrc(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = alloca i32, align 4
@@ -8718,7 +8722,7 @@ define i32 @iobuhvxquu(ptr nest %0, { ptr, i160 } %1) {
   ret i32 %10
 }
 
-define i1 @zqxbelkboy(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @bqwiuhwoad(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -8742,7 +8746,7 @@ define i1 @zqxbelkboy(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %18
 }
 
-define i32 @ihfohaglua(ptr nest %0, { ptr, i160 } %1) {
+define i32 @yaojtkvlzk(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = alloca i32, align 4
@@ -8757,7 +8761,7 @@ define i32 @ihfohaglua(ptr nest %0, { ptr, i160 } %1) {
   ret i32 %10
 }
 
-define i1 @nfcrxaimft(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @vfzeodgyds(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -8781,7 +8785,7 @@ define i1 @nfcrxaimft(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %18
 }
 
-define i32 @zkdfyamkhr(ptr nest %0, { ptr, i160 } %1) {
+define i32 @sltlyotmqv(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = alloca i32, align 4
@@ -8796,7 +8800,7 @@ define i32 @zkdfyamkhr(ptr nest %0, { ptr, i160 } %1) {
   ret i32 %10
 }
 
-define i1 @zekuvbpzyr(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @bqigognnau(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -8820,7 +8824,7 @@ define i1 @zekuvbpzyr(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %18
 }
 
-define i32 @fuszonqidn(ptr nest %0, { ptr, i160 } %1) {
+define i32 @unyenadkvd(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = alloca i32, align 4
@@ -8835,7 +8839,7 @@ define i32 @fuszonqidn(ptr nest %0, { ptr, i160 } %1) {
   ret i32 %10
 }
 
-define i1 @xdstyjqhjd(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @axyecohjye(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -8859,7 +8863,7 @@ define i1 @xdstyjqhjd(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %18
 }
 
-define i32 @edhvqbthcl(ptr nest %0, { ptr, i160 } %1) {
+define i32 @valltfxcvw(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = alloca i32, align 4
@@ -8874,7 +8878,7 @@ define i32 @edhvqbthcl(ptr nest %0, { ptr, i160 } %1) {
   ret i32 %10
 }
 
-define i1 @uqiyedmale(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @uxukppsnvm(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -8898,7 +8902,7 @@ define i1 @uqiyedmale(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %18
 }
 
-define i32 @cwcuvcdeua(ptr nest %0, { ptr, i160 } %1) {
+define i32 @lsefazdmqi(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = alloca i32, align 4
@@ -8913,7 +8917,7 @@ define i32 @cwcuvcdeua(ptr nest %0, { ptr, i160 } %1) {
   ret i32 %10
 }
 
-define i1 @ohqvbutign(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @zlcrwdjwzr(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -8937,7 +8941,7 @@ define i1 @ohqvbutign(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %18
 }
 
-define i32 @mthvwceocf(ptr nest %0, { ptr, i160 } %1) {
+define i32 @xpbwjdcvve(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = alloca i32, align 4
@@ -8952,7 +8956,7 @@ define i32 @mthvwceocf(ptr nest %0, { ptr, i160 } %1) {
   ret i32 %10
 }
 
-define i1 @uxdeyturnt(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
+define i1 @kqgscadzap(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   %4 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %4, align 8
   %5 = alloca { ptr, i160 }, align 8
@@ -8976,7 +8980,7 @@ define i1 @uxdeyturnt(ptr nest %0, { ptr, i160 } %1, { ptr, i160 } %2) {
   ret i1 %18
 }
 
-define i32 @msglapfbig(ptr nest %0, { ptr, i160 } %1) {
+define i32 @ekwdpjwokj(ptr nest %0, { ptr, i160 } %1) {
   %3 = alloca { ptr, i160 }, align 8
   store { ptr, i160 } %1, ptr %3, align 8
   %4 = alloca i32, align 4
@@ -10431,7 +10435,7 @@ define void @benchmark_insert_sequential(i32 %0) {
   %144 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %144)
   %145 = load ptr, ptr %142, align 8
-  call void @llvm.init.trampoline(ptr %144, ptr @msglapfbig, ptr %145)
+  call void @llvm.init.trampoline(ptr %144, ptr @ekwdpjwokj, ptr %145)
   %146 = call ptr @adjust_trampoline(ptr %144)
   %147 = alloca ptr, align 8
   store ptr %146, ptr %147, align 8
@@ -10442,7 +10446,7 @@ define void @benchmark_insert_sequential(i32 %0) {
   %152 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %152)
   %153 = load ptr, ptr %143, align 8
-  call void @llvm.init.trampoline(ptr %152, ptr @uxdeyturnt, ptr %153)
+  call void @llvm.init.trampoline(ptr %152, ptr @kqgscadzap, ptr %153)
   %154 = call ptr @adjust_trampoline(ptr %152)
   %155 = alloca ptr, align 8
   store ptr %154, ptr %155, align 8
@@ -11271,7 +11275,7 @@ define void @benchmark_insert_random(i32 %0) {
   %199 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %199)
   %200 = load ptr, ptr %197, align 8
-  call void @llvm.init.trampoline(ptr %199, ptr @mthvwceocf, ptr %200)
+  call void @llvm.init.trampoline(ptr %199, ptr @xpbwjdcvve, ptr %200)
   %201 = call ptr @adjust_trampoline(ptr %199)
   %202 = alloca ptr, align 8
   store ptr %201, ptr %202, align 8
@@ -11282,7 +11286,7 @@ define void @benchmark_insert_random(i32 %0) {
   %207 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %207)
   %208 = load ptr, ptr %198, align 8
-  call void @llvm.init.trampoline(ptr %207, ptr @ohqvbutign, ptr %208)
+  call void @llvm.init.trampoline(ptr %207, ptr @zlcrwdjwzr, ptr %208)
   %209 = call ptr @adjust_trampoline(ptr %207)
   %210 = alloca ptr, align 8
   store ptr %209, ptr %210, align 8
@@ -11471,7 +11475,7 @@ define void @benchmark_insert_random(i32 %0) {
   %344 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %344)
   %345 = load ptr, ptr %342, align 8
-  call void @llvm.init.trampoline(ptr %344, ptr @cwcuvcdeua, ptr %345)
+  call void @llvm.init.trampoline(ptr %344, ptr @lsefazdmqi, ptr %345)
   %346 = call ptr @adjust_trampoline(ptr %344)
   %347 = alloca ptr, align 8
   store ptr %346, ptr %347, align 8
@@ -11482,7 +11486,7 @@ define void @benchmark_insert_random(i32 %0) {
   %352 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %352)
   %353 = load ptr, ptr %343, align 8
-  call void @llvm.init.trampoline(ptr %352, ptr @uqiyedmale, ptr %353)
+  call void @llvm.init.trampoline(ptr %352, ptr @uxukppsnvm, ptr %353)
   %354 = call ptr @adjust_trampoline(ptr %352)
   %355 = alloca ptr, align 8
   store ptr %354, ptr %355, align 8
@@ -12533,7 +12537,7 @@ define void @benchmark_get_sequential(i32 %0) {
   %132 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %132)
   %133 = load ptr, ptr %130, align 8
-  call void @llvm.init.trampoline(ptr %132, ptr @edhvqbthcl, ptr %133)
+  call void @llvm.init.trampoline(ptr %132, ptr @valltfxcvw, ptr %133)
   %134 = call ptr @adjust_trampoline(ptr %132)
   %135 = alloca ptr, align 8
   store ptr %134, ptr %135, align 8
@@ -12544,7 +12548,7 @@ define void @benchmark_get_sequential(i32 %0) {
   %140 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %140)
   %141 = load ptr, ptr %131, align 8
-  call void @llvm.init.trampoline(ptr %140, ptr @xdstyjqhjd, ptr %141)
+  call void @llvm.init.trampoline(ptr %140, ptr @axyecohjye, ptr %141)
   %142 = call ptr @adjust_trampoline(ptr %140)
   %143 = alloca ptr, align 8
   store ptr %142, ptr %143, align 8
@@ -13222,7 +13226,7 @@ define void @benchmark_get_random(i32 %0) {
   %140 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %140)
   %141 = load ptr, ptr %138, align 8
-  call void @llvm.init.trampoline(ptr %140, ptr @fuszonqidn, ptr %141)
+  call void @llvm.init.trampoline(ptr %140, ptr @unyenadkvd, ptr %141)
   %142 = call ptr @adjust_trampoline(ptr %140)
   %143 = alloca ptr, align 8
   store ptr %142, ptr %143, align 8
@@ -13233,7 +13237,7 @@ define void @benchmark_get_random(i32 %0) {
   %148 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %148)
   %149 = load ptr, ptr %139, align 8
-  call void @llvm.init.trampoline(ptr %148, ptr @zekuvbpzyr, ptr %149)
+  call void @llvm.init.trampoline(ptr %148, ptr @bqigognnau, ptr %149)
   %150 = call ptr @adjust_trampoline(ptr %148)
   %151 = alloca ptr, align 8
   store ptr %150, ptr %151, align 8
@@ -14267,7 +14271,7 @@ define void @benchmark_get_miss(i32 %0) {
   %317 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %317)
   %318 = load ptr, ptr %315, align 8
-  call void @llvm.init.trampoline(ptr %317, ptr @zkdfyamkhr, ptr %318)
+  call void @llvm.init.trampoline(ptr %317, ptr @sltlyotmqv, ptr %318)
   %319 = call ptr @adjust_trampoline(ptr %317)
   %320 = alloca ptr, align 8
   store ptr %319, ptr %320, align 8
@@ -14278,7 +14282,7 @@ define void @benchmark_get_miss(i32 %0) {
   %325 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %325)
   %326 = load ptr, ptr %316, align 8
-  call void @llvm.init.trampoline(ptr %325, ptr @nfcrxaimft, ptr %326)
+  call void @llvm.init.trampoline(ptr %325, ptr @vfzeodgyds, ptr %326)
   %327 = call ptr @adjust_trampoline(ptr %325)
   %328 = alloca ptr, align 8
   store ptr %327, ptr %328, align 8
@@ -14467,7 +14471,7 @@ define void @benchmark_get_miss(i32 %0) {
   %462 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %462)
   %463 = load ptr, ptr %460, align 8
-  call void @llvm.init.trampoline(ptr %462, ptr @ihfohaglua, ptr %463)
+  call void @llvm.init.trampoline(ptr %462, ptr @yaojtkvlzk, ptr %463)
   %464 = call ptr @adjust_trampoline(ptr %462)
   %465 = alloca ptr, align 8
   store ptr %464, ptr %465, align 8
@@ -14478,7 +14482,7 @@ define void @benchmark_get_miss(i32 %0) {
   %470 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %470)
   %471 = load ptr, ptr %461, align 8
-  call void @llvm.init.trampoline(ptr %470, ptr @zqxbelkboy, ptr %471)
+  call void @llvm.init.trampoline(ptr %470, ptr @bqwiuhwoad, ptr %471)
   %472 = call ptr @adjust_trampoline(ptr %470)
   %473 = alloca ptr, align 8
   store ptr %472, ptr %473, align 8
@@ -16241,7 +16245,7 @@ define void @benchmark_remove_random(i32 %0) {
   %257 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %257)
   %258 = load ptr, ptr %255, align 8
-  call void @llvm.init.trampoline(ptr %257, ptr @iobuhvxquu, ptr %258)
+  call void @llvm.init.trampoline(ptr %257, ptr @hezheciyrc, ptr %258)
   %259 = call ptr @adjust_trampoline(ptr %257)
   %260 = alloca ptr, align 8
   store ptr %259, ptr %260, align 8
@@ -16252,7 +16256,7 @@ define void @benchmark_remove_random(i32 %0) {
   %265 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %265)
   %266 = load ptr, ptr %256, align 8
-  call void @llvm.init.trampoline(ptr %265, ptr @ycbmehvpeh, ptr %266)
+  call void @llvm.init.trampoline(ptr %265, ptr @qpabxjxihh, ptr %266)
   %267 = call ptr @adjust_trampoline(ptr %265)
   %268 = alloca ptr, align 8
   store ptr %267, ptr %268, align 8
@@ -16441,7 +16445,7 @@ define void @benchmark_remove_random(i32 %0) {
   %402 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %402)
   %403 = load ptr, ptr %400, align 8
-  call void @llvm.init.trampoline(ptr %402, ptr @uimigjftnd, ptr %403)
+  call void @llvm.init.trampoline(ptr %402, ptr @mgbwbmrclj, ptr %403)
   %404 = call ptr @adjust_trampoline(ptr %402)
   %405 = alloca ptr, align 8
   store ptr %404, ptr %405, align 8
@@ -16452,7 +16456,7 @@ define void @benchmark_remove_random(i32 %0) {
   %410 = call ptr @bump_malloc(i64 ptrtoint (ptr getelementptr ([24 x i8], ptr null, i32 1) to i64))
   call void @anoint_trampoline(ptr %410)
   %411 = load ptr, ptr %401, align 8
-  call void @llvm.init.trampoline(ptr %410, ptr @yzsozgvwag, ptr %411)
+  call void @llvm.init.trampoline(ptr %410, ptr @hofctfpuow, ptr %411)
   %412 = call ptr @adjust_trampoline(ptr %410)
   %413 = alloca ptr, align 8
   store ptr %412, ptr %413, align 8
