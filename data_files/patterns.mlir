@@ -680,6 +680,31 @@ module @patterns {
       pdl.replace %root with %store
     }
   }
+  pdl.pattern @LowerGatherRamp : benefit(20) {
+    %ptr_type = pdl.type : !llvm.ptr
+    %receiver = pdl.operand : %ptr_type
+    %elem_type_attr = pdl.attribute
+    %val_type_attr = pdl.attribute
+    %vec_type_attr = pdl.attribute
+    %refer_typ = pdl.attribute
+    %tup_type_attr = pdl.attribute
+    %ptrs_vec_attr = pdl.attribute
+    %idx_typ_attr = pdl.attribute
+    %mask_typ_attr = pdl.attribute
+    %alignment = pdl.attribute
+    %value = pdl.operand
+    %lanes_attr = pdl.attribute
+    %step_vec = pdl.attribute
+    %ramp = pdl.operation "mid.ramp"(%value : !pdl.value) {"tup_typ" = %tup_type_attr, "lanes" = %lanes_attr, "val_typ" = %val_type_attr, "step_vec" = %step_vec} -> (%ptr_type : !pdl.type)
+    %ramp_result = pdl.result 0 of %ramp
+    %refer = pdl.operation "mid.refer"(%ramp_result : !pdl.value) {"typ" = %refer_typ} -> (%ptr_type : !pdl.type)
+    %index = pdl.result 0 of %refer
+    %root = pdl.operation "mid.gather"(%receiver, %index : !pdl.value, !pdl.value) {"elem_typ" = %elem_type_attr, "vec_typ" = %vec_type_attr, "ptrs_vec" = %ptrs_vec_attr, "idx_typ" = %idx_typ_attr, "mask_typ" = %mask_typ_attr, "alignment" = %alignment} -> (%ptr_type : !pdl.type)
+    pdl.rewrite %root {
+      %vec_load = pdl.operation "mid.vec_load"(%ramp_result, %index : !pdl.value, !pdl.value) {"elem_typ" = %elem_type_attr, "vec_typ" = %vec_type_attr, "alignment" = %alignment} -> (%ptr_type : !pdl.type)
+      pdl.replace %root with %vec_load
+    }
+  }
   pdl.pattern @LowerGather : benefit(1) {
     %ptr_type = pdl.type : !llvm.ptr
     %receiver = pdl.operand : %ptr_type

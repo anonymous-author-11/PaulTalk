@@ -83,7 +83,8 @@ class SwissTable[K, V] extends HashMap[K, V] {
         one_splat = 32 of occupied_mask();
 
         while true {
-            group = metadata.[32 from probe];
+            indices = 32 from probe;
+            group = metadata.[indices];
 
             // --- H2 matches (no bounds check: -1 can't match h2) ---
             h2_matches = group == h2_splat;

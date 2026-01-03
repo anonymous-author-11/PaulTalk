@@ -637,9 +637,11 @@ class Cmpi(ComparisonOperation):
             }
             arg = Cmpi._get_comparison_predicate(arg, cmpi_comparison_operations)
 
+        result_type = IntegerType(1) if not isinstance(operand1.type, VectorType) else VectorType(IntegerType(1), operand1.type.shape, operand1.type.num_scalable_dims)
+
         super().__init__(
             operands=[operand1, operand2],
-            result_types=[IntegerType(1)],
+            result_types=[result_type],
             properties={"predicate": IntegerAttr.from_int_and_width(arg, 64)},
         )
 
@@ -734,9 +736,11 @@ class Cmpf(ComparisonOperation):
             }
             arg = Cmpf._get_comparison_predicate(arg, cmpf_comparison_operations)
 
+        result_type = IntegerType(1) if not isinstance(operand1.type, VectorType) else VectorType(IntegerType(1), operand1.type.shape, operand1.type.num_scalable_dims)
+
         super().__init__(
             operands=[operand1, operand2],
-            result_types=[IntegerType(1)],
+            result_types=[result_type],
             properties={"predicate": IntegerAttr.from_int_and_width(arg, 64)},
         )
 

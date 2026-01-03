@@ -571,21 +571,35 @@ class LowerLogical(RewritePattern):
 
         rewriter.replace_matched_op(result)
 
-comparison_op_map = {
+int_comparison_op_map = {
     Signedness.SIGNED:{"EQ":"eq", "NEQ":"ne", "LT":"slt", "GT":"sgt", "LE":"sle", "GE":"sge"},
     Signedness.UNSIGNED:{"EQ":"eq", "NEQ":"ne", "LT":"ult", "GT":"ugt", "LE":"ule", "GE":"uge"},
 }
+
+float_comparison_op_map = {"EQ":1, "GT":2, "GE":3, "LT":4, "LE":5, "NEQ":6}
 
 class LowerComparison(RewritePattern):
     @op_type_rewrite_pattern
     def match_and_rewrite(self, op: hi.ComparisonOp, rewriter: PatternRewriter):
         lhs = UnwrapOp.create(operands=[op.lhs], result_types=[op.lhs_type.base_typ()])
         rhs = UnwrapOp.create(operands=[op.rhs], result_types=[op.rhs_type.base_typ()])
-        if isinstance(op.lhs_type, Integer):
-            opcode = comparison_op_map[op.lhs_type.signedness.data][op.op.data]
+
+        lhs_type = op.lhs_type
+        rhs_type = op.rhs_type
+
+        if isinstance(op.lhs_type, Tuple) and isinstance(op.rhs_type, Tuple):
+            lhs_type = lhs_type.types.data[0]
+            rhs_type = rhs_type.types.data[0]
+
+        if isinstance(lhs_type, Integer):
+            opcode = int_comparison_op_map[lhs_type.signedness.data][op.op.data]
             cmp_op = arith.Cmpi(lhs.results[0], rhs.results[0], opcode)
-        else:
-            cmp_op = mid.ComparisonOp.make(lhs.results[0], rhs.results[0], op.op.data)
+        if isinstance(lhs_type, Float):
+            opcode = float_comparison_op_map[op.op.data]
+            cmp_op = arith.Cmpf(lhs.results[0], rhs.results[0], opcode)
+        if isinstance(lhs_type, Bool):
+            opcode = int_comparison_op_map[Signedness.UNSIGNED][op.op.data]
+            cmp_op = arith.Cmpi(lhs.results[0], rhs.results[0], opcode)
         wrap = WrapOp.make(cmp_op.results[0])
         rewriter.inline_block_before_matched_op(Block([lhs, rhs, cmp_op]))
         rewriter.replace_matched_op(wrap)

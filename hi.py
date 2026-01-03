@@ -567,7 +567,8 @@ class ComparisonOp(IRDLOperation):
     @classmethod
     def make(cls, lhs, rhs, op):
         if isinstance(op, str): op = StringAttr(op)
-        return ComparisonOp.create(operands=[lhs, rhs], attributes={"op":op}, result_types=[Integer(1)])
+        result_type = Integer(1) if not isinstance(lhs.type, Tuple) else Tuple.make([Integer(1) for t in lhs.type.types.data])
+        return ComparisonOp.create(operands=[lhs, rhs], attributes={"op":op}, result_types=[result_type])
 
 Hi = Dialect(
     "hi",

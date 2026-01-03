@@ -223,7 +223,7 @@ class GatherOp(IRDLOperation):
             "ptrs_vec":llvm.LLVMArrayType.from_size_and_type(len(vec_typ.types), llvm.LLVMPointerType.opaque()),
             "idx_typ":index.type.base_typ(),
             "mask_typ":builtin.VectorType(IntegerType(1), [len(vec_typ.types)]),
-            "alignment":IntegerAttr.from_int_and_width(int(hi.type_size(vec_typ.types.data[0].base_typ()) / 8), 32)
+            "alignment":IntegerAttr.from_int_and_width(int(hi.type_size(vec_typ.types.data[0].base_typ()) / 8), 64)
         }
         return GatherOp.create(operands=[receiver, index], attributes=attr_dict, result_types=[vec_typ])
 
@@ -248,7 +248,7 @@ class ScatterOp(IRDLOperation):
             "ptrs_vec":llvm.LLVMArrayType.from_size_and_type(len(vec_typ.types), llvm.LLVMPointerType.opaque()),
             "idx_typ":index.type.base_typ(),
             "mask_typ":builtin.VectorType(IntegerType(1), [len(vec_typ.types)]),
-            "alignment":IntegerAttr.from_int_and_width(int(hi.type_size(vec_typ.types.data[0].base_typ()) / 8), 32)
+            "alignment":IntegerAttr.from_int_and_width(int(hi.type_size(vec_typ.types.data[0].base_typ()) / 8), 64)
         }
         return ScatterOp.create(operands=[receiver, index, vals], attributes=attr_dict)
 

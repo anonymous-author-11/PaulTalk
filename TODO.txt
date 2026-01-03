@@ -733,6 +733,9 @@ TODO:
 - Field access utilities etc should be preserve_allcc
 
 - Why not work on namespacing now?
+	- Adding dots to grammar
+		- Whether something is a type depends on its rightmost element (parsed last)
+	- We could use :: instead of .
 
 - Release 0.9.0
 	- Implement i32.max() et. al. [check!]
