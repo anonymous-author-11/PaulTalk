@@ -2,48 +2,99 @@ Rationale For Design Decisions
 
 Non-Monomorphized Generics
 
-	- ABI / Interoperability / Dylibs
+	- ABI / Interoperability / Dynamic libraries
+		- Can generic functions be called from other languages?
+		- Can generic functions be exposed by a dynamic library?
 	- Combination of genericity and virtuality
+		- Vtable size shouldn't be dependent on knowing all callsites
+		- An OO language can't make virtual methods a second-class citizen
 	- Compilation time
+		- The raw amount of IR generated for every permutation of argument types
+		- Incrementality: users of generic libraries have a faster recompile cycle
+	- Instance generic parameters added as immutable fields instead of dictionary-passing
+		- This also enables zero-cost covariant upcasting
+		- Consider the mechanics of casting CovariantBox[Shark] to CovariantBox[Animal]
+	- Generic buffers and fields are still packed for value types
+		- E.g. Array[i32] still has i32's placed contiguously in its buffer
+		- Pair[i64, f64] uses 128 bits for its data fields
+		- Type size used at runtime to get the offset
 
 Stackful over Stackless Coroutines
 
 	- Function coloring / composability / virality
-	- Enable seamless transition between synchronous / async
+	- Ability to yield from nested calls
+		- One yield instead of a series of yields
+	- Enables seamless transition between synchronous / async
+		- Most functions are written synchronously first
+		- Only later optimized to function asynchronously
+	- Does not require a default runtime scheduler / event loop
+	- Coroutine schedulers may be implemented in libraries
 
-Word operators for bitwise operations
+Word operators for bitwise 'and/or/xor' operations
 
-	- Verbosity vs frequency
+	- bit_and, bit_or, bit_xor
+	- Exact same precedence as normal bitwise operators
+	- Brevity vs readability
+		- Operations that are frequent should be as concise as possible
+		- Operations which are rarer should be more readable
+		- Bitwise operations are *lexically* infrequent (despite being frequent at runtime)
 	- Avoidance of ambiguity
-	- Readability
+		- Is this logical or bitwise?
+		- Does it short-circuit?
+	- Bitshifts are still << and >>
 
 Exceptions over Result types
 
 	- Avoid pollution of the happy path
+		- Centralize error handling in a few locations
+		- As opposed to scattering it all over the program
 	- Utility of stack trace
-	- Unions make checked exceptions nicer
-	- Unwrapping overhead on every callsite
+		- Error-return solutions inevitably end up simulating ad-hoc, messy, bespoke stack traces by wrapping errors
+	- Exceptions can be type-checked, and union types make checked exceptions much nicer
+	- Avoid unwrapping overhead on every callsite
+		- Code size and runtime overhead
 
 Multiple Inheritance over Interfaces
 
-	- Whether something is implemented is an implementation detail
+	- Whether a class has fields is itself an implementation detail
+		- Often a class starts off concrete and later becomes abstract
 	- Deadly Diamond of Death vs C3 linearization
+		- Really not a problem at all
+	- Casting to a supertype involves a perfect hash and modifying a vtable offset in the fatptr
+		- It certainly does not require searching an inheritance tree at runtime
 
 Multiple Dispatch
 
 	- Great for operator dispatch
-	- Implemented in a modular manner
-	- Perfect hashing is so fast
-	- Solves binary method problem
+		- Multiplying by a diagonal matrix can be much faster than multiplying by an arbitrary matrix
 	- Enables all manner of optimizations
+		- .append can care whether the operand has a known size and pre-allocate
+	- Implemented in a modular manner
+		- Doesn't require knowing all types that the method ever might be called with
+		- Methods can't be added outside of a class definition
+	- Perfect hashing for subtype testing is fast
+		- And the optimizer can see through it, to statically dispatch when concrete argument types are visible
+	- Dispatch is speculatable; the resolved fptr can be hoisted out of loops / kept in a local
+	- Solves "binary method problem"
 
 Operator Overloading
 
 	- Matrix types, quaternion types, etc.
 	- Much more readable, chains beautifully
 	- Combines nicely with multimethods
+	- Abuse curtailed by having a fixed set of operators with fixed precedence
+	- No implicit conversions for user-defined operators
 
 Region Inference over Garbage Collection
 
 	- Interoperability / embeddability
+		- Which language manages the memory? Two garbage collectors rarely play well together
+		- Should be able to interoperate / embed with both higher-level and lower-level languages
 	- Determinism
+		- The same program should exhibit reproducible memory subsystem performance
+	- Memory management gradualism
+		- A naive program can be written with no region annotations
+		- This will result in coarse-grained conservative regions and space overhead
+		- Annotations can be added incrementally to fine-grain regions and improve performance
+		- Annotations focus on performance-critical subsections or mature library code
+	- Cyclic references are placed into the same region and deallocated simultaneously
