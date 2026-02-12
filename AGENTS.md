@@ -18,6 +18,12 @@ python ptalk_build.py
 
 ## Code Style Guidelines
 
+### General
+- Indentation: always try to keep fewer than 4 levels of indendation
+	- Early return/break/continue
+	- Method / function outlining
+	- Single-line conditionals
+
 ### Python Code
 - Imports: Use absolute imports, organize by standard library, third-party, local
 - Naming: snake_case for functions/variables, PascalCase for classes
