@@ -43,7 +43,11 @@ jobs:
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        if (Test-Path requirements.txt) {
+            pip install -r requirements.txt
+        } else {
+            Write-Output "No requirements.txt found; skipping dependency install."
+        }
         # Print installed packages for debugging
         pip freeze
 
@@ -56,7 +60,7 @@ jobs:
             llvm-link --version
             opt --version
             llc --version
-            lld-link --version
+            lld --version
             Write-Output "All tools verified successfully!"
         } catch {
             Write-Error "Tool verification failed: $_"
@@ -73,7 +77,7 @@ jobs:
         "@ > test.mini
 
         # Try to compile it
-        python compiler.py test.mini -o test.exe
+        python ptalk_compile.py test.mini -o test.exe --build-dir ci_build --no-timings
 
         # If compilation succeeds, try running it
         if (Test-Path test.exe) {
@@ -84,4 +88,9 @@ jobs:
             Write-Error "Compilation failed - no executable produced"
             exit 1
         }
+      shell: pwsh
+
+    - name: Run fast test suite
+      run: |
+        python tests.py --suite fast
       shell: pwsh

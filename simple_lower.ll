@@ -387,7 +387,7 @@ define { ptr, ptr, ptr, i32 } @add_translation({ ptr, ptr, ptr, i32 } %0) {
   ret { ptr, ptr, ptr, i32 } %146
 }
 
-define i32 @_main_lwpsbxojlj() {
+define i32 @_main_xjogpkejmk() {
   call void @setup_landing_pad()
   %1 = alloca i32, align 4
   store i32 7, ptr %1, align 4

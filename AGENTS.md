@@ -6,6 +6,12 @@
 # Run all tests
 python tests.py
 
+# Run fast PR-style suite
+python tests.py --suite fast
+
+# Run stress-only suite
+python tests.py --suite stress
+
 # Run single test (replace TestName with specific test method)
 python -m unittest tests.CompilerTests.test_end_to_end
 
@@ -41,7 +47,9 @@ python ptalk_build.py
 ### Testing
 - Write end-to-end tests in `tests.py` using `CompilerTestCase`
 - Test both successful compilation and error cases
-- Use `self.run_mini_code(code, expected_output, test_name)` helper
+- Use `self.compile_and_run(code, expected_output, test_name)` for success cases
+- Use `self.compile_fails(code, expected_phrase, test_name, expected_category=...)` for failure cases
+- `self.run_mini_code(...)` is still available as a compatibility wrapper
 - Clean up temp files in `tearDown()` method
 
 ### Project Structure

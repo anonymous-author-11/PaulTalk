@@ -3,15 +3,34 @@ import subprocess
 import tempfile
 import shutil
 import os
+import argparse
 from pathlib import Path
 from ptalk_compile import compiler_driver_main
+from parser import parse
 from AST import silent
 from utils import random_letters
 import stat
 import sys
-import decimal
 
 class CompilerTestCase(unittest.TestCase):
+
+    @staticmethod
+    def _force_remove_tree(path: Path):
+        if not path.exists():
+            return
+
+        def _onerror(func, file_path, _exc_info):
+            try:
+                os.chmod(file_path, stat.S_IWRITE)
+                func(file_path)
+            except Exception:
+                # Best-effort cleanup; avoid failing tests on locked artifacts.
+                pass
+
+        try:
+            shutil.rmtree(path, onerror=_onerror)
+        except Exception:
+            pass
 
     def setUp(self):
         self.temp_input_file_name = f"{random_letters(10)}.mini"
@@ -19,49 +38,106 @@ class CompilerTestCase(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        test_bin = Path("./test_bin")
-        test_build = Path("./test_build")
-        if test_bin.exists():
-            os.chmod(test_bin, stat.S_IWRITE)
-            shutil.rmtree(test_bin)
-        if test_build.exists():
-            bitcodes_folder = test_build.joinpath("bitcodes")
-            hashes_folder = test_build.joinpath("hashes")
-            if bitcodes_folder.exists(): os.chmod(bitcodes_folder, stat.S_IWRITE)
-            if hashes_folder.exists(): os.chmod(hashes_folder, stat.S_IWRITE)
-            os.chmod(test_build, stat.S_IWRITE)
-            shutil.rmtree(test_build)
+        cls._force_remove_tree(Path("./test_bin"))
+        cls._force_remove_tree(Path("./test_build"))
 
     def tearDown(self):
-        os.remove(self.temp_input_file_name)
+        if os.path.exists(self.temp_input_file_name):
+            os.remove(self.temp_input_file_name)
 
-    def run_mini_code(self, mini_code, expected_output, output_file_name_base):
+    def _ensure_test_dirs(self):
+        Path("./test_bin").mkdir(parents=True, exist_ok=True)
+        Path("./test_build").mkdir(parents=True, exist_ok=True)
+
+    def compile_to_executable(self, mini_code, output_file_name_base, debug_mode=True):
+        self._ensure_test_dirs()
         with open(self.temp_input_file_name, "w", encoding='utf-8') as f: f.write(mini_code)
         self.output_path = Path(f"./test_bin/{output_file_name_base}.exe")
+        silent[0] = True
+        compiler_driver_main(
+            self.temp_input_file_name,
+            self.output_path,
+            debug_mode=debug_mode,
+            build_dir="test_build",
+            no_timings=True
+        )
+        return self.output_path
 
-        try:
-            silent[0] = True
-            compiler_driver_main(self.temp_input_file_name, self.output_path, debug_mode=True, build_dir="test_build", no_timings=True)
-        except Exception as e:
-            error_msg = "Compilation failed:\n" + str(e)
-            self.fail(error_msg)
+    def run_executable(self, exe_path: Path) -> str:
+        completed_process = subprocess.run(
+            [str(exe_path)],
+            capture_output=True,
+            text=True,
+            check=True,
+            encoding='utf-8'
+        )
+        return completed_process.stdout.strip()
 
-        # Proceed to run executable if compilation succeeded
-        exe_command = [f"./test_bin/{output_file_name_base}.exe"]
-        completed_process = subprocess.run(exe_command, capture_output=True, text=True, check=True, encoding='utf-8')
-        actual_output = completed_process.stdout.strip()
+    def _split_output_lines(self, output: str) -> list[str]:
+        stripped = output.strip()
+        if stripped == "":
+            return []
+        return stripped.splitlines()
 
-        # Split the actual output into lines for comparison
-        actual_lines = actual_output.split('\n')
-        expected_lines = expected_output.split('\n') if expected_output else []
+    def assert_output_exact(self, actual_output: str, expected_output: str):
+        actual_lines = self._split_output_lines(actual_output)
+        expected_lines = self._split_output_lines(expected_output)
+        self.assertEqual(
+            actual_lines,
+            expected_lines,
+            f"Output mismatch.\nExpected: {expected_lines}\nActual: {actual_lines}"
+        )
 
-        # Compare each line of output
-        for i, (actual, expected) in enumerate(zip(actual_lines, expected_lines)):
-            self.assertEqual(actual, expected, f"Mismatch on line {i+1}")
+    def compile_and_run(self, mini_code, expected_output, output_file_name_base, debug_mode=True):
+        exe_path = self.compile_to_executable(mini_code, output_file_name_base, debug_mode=debug_mode)
+        actual_output = self.run_executable(exe_path)
+        self.assert_output_exact(actual_output, expected_output)
+        return actual_output
 
-        # If there are extra lines in actual output, fail the test
-        if len(actual_lines) > len(expected_lines):
-            self.fail(f"Unexpected output lines: {actual_lines[len(expected_lines):]}")
+    def compile_only(self, mini_code, output_file_name_base, output_suffix=".obj", debug_mode=True):
+        self._ensure_test_dirs()
+        with open(self.temp_input_file_name, "w", encoding="utf-8") as f:
+            f.write(mini_code)
+        output_path = Path(f"./test_bin/{output_file_name_base}{output_suffix}")
+        silent[0] = True
+        compiler_driver_main(
+            self.temp_input_file_name,
+            output_path,
+            debug_mode=debug_mode,
+            build_dir="test_build",
+            no_timings=True
+        )
+        return output_path
+
+    def _error_category(self, message: str) -> str:
+        if "Parsing Error:" in message:
+            return "parse"
+        return "compile"
+
+    def compile_fails(self, mini_code, expected_phrase, output_file_name_base, expected_category="compile"):
+        self._ensure_test_dirs()
+        with open(self.temp_input_file_name, "w", encoding='utf-8') as f: f.write(mini_code)
+        self.output_path = Path(f"./test_bin/{output_file_name_base}.exe")
+        silent[0] = True
+        with self.assertRaises(Exception) as cm:
+            compiler_driver_main(
+                self.temp_input_file_name,
+                self.output_path,
+                debug_mode=True,
+                build_dir="test_build",
+                no_timings=True
+            )
+        error_text = str(cm.exception)
+        self.assertEqual(
+            self._error_category(error_text),
+            expected_category,
+            f"Unexpected error category for message: {error_text}"
+        )
+        self.assertIn(expected_phrase, error_text)
+
+    # Compatibility wrapper for existing tests.
+    def run_mini_code(self, mini_code, expected_output, output_file_name_base):
+        self.compile_and_run(mini_code, expected_output, output_file_name_base)
 
 class CompilerTests(CompilerTestCase):
 
@@ -1121,5 +1197,128 @@ class CompilerTests(CompilerTestCase):
         with self.assertRaisesRegex(Exception, "condition of while-statement must be a Bool, not i32"):
             self.run_mini_code(mini_code, "", "invalid_while_condition")
 
+class ParserContractTests(unittest.TestCase):
+
+    def _write_temp_source(self, source: str, suffix: str = ".mini") -> Path:
+        with tempfile.NamedTemporaryFile("w", suffix=suffix, delete=False, encoding="utf-8") as tmp:
+            tmp.write(source)
+            return Path(tmp.name)
+
+    def test_parser_error_shape(self):
+        source_path = self._write_temp_source("def broken( {")
+        try:
+            with self.assertRaises(Exception) as cm:
+                parse(source_path)
+            error_text = str(cm.exception)
+            self.assertIn("Parsing Error:", error_text)
+            self.assertIn("File '", error_text)
+            self.assertIn("Line ", error_text)
+            self.assertIn("Column ", error_text)
+            self.assertIn("Expected one of:", error_text)
+        finally:
+            source_path.unlink(missing_ok=True)
+
+    def test_parser_error_line_is_user_source_line(self):
+        source_path = self._write_temp_source("x = 5;\nif {\n")
+        try:
+            with self.assertRaises(Exception) as cm:
+                parse(source_path)
+            error_text = str(cm.exception)
+            self.assertRegex(error_text, r"Line 2, Column \d+:")
+        finally:
+            source_path.unlink(missing_ok=True)
+
+class CompilerCliContractTests(CompilerTestCase):
+
+    def test_cli_rejects_non_mini_input(self):
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False, encoding="utf-8") as tmp:
+            tmp.write("print(1);")
+            temp_txt = Path(tmp.name)
+        try:
+            with self.assertRaisesRegex(Exception, "should point to a \\.mini file"):
+                compiler_driver_main(
+                    temp_txt,
+                    Path("./test_bin/non_mini.exe"),
+                    debug_mode=True,
+                    build_dir="test_build",
+                    no_timings=True
+                )
+        finally:
+            temp_txt.unlink(missing_ok=True)
+
+    def test_cli_requires_output_extension(self):
+        with open(self.temp_input_file_name, "w", encoding="utf-8") as f:
+            f.write("print(1);")
+        with self.assertRaisesRegex(Exception, "Please provide an file extension in the output name."):
+            compiler_driver_main(
+                self.temp_input_file_name,
+                Path("./test_bin/no_extension"),
+                debug_mode=True,
+                build_dir="test_build",
+                no_timings=True
+            )
+
+    def test_cli_can_emit_object_file(self):
+        output_obj = Path("./test_bin/cli_object_output.obj")
+        output_obj.unlink(missing_ok=True)
+        output_obj = self.compile_only("print(1);", "cli_object_output", output_suffix=".obj")
+        self.assertTrue(output_obj.exists(), f"Expected object file at {output_obj}")
+
+STRESS_TEST_NAMES = {
+    "test_end_to_end",
+    "test_array_iteration",
+    "test_matmul",
+    "test_prime_sieves",
+}
+
+def iter_tests(test_suite):
+    for test in test_suite:
+        if isinstance(test, unittest.TestSuite):
+            yield from iter_tests(test)
+        else:
+            yield test
+
+def normalize_selection_name(name: str) -> str:
+    if __name__ == "__main__" and name.startswith("tests."):
+        return name[len("tests."):]
+    return name
+
+def build_suite(suite_name: str, selected_names: list[str] | None = None) -> unittest.TestSuite:
+    loader = unittest.TestLoader()
+    if selected_names:
+        normalized_names = [normalize_selection_name(name) for name in selected_names]
+        base_suite = loader.loadTestsFromNames(normalized_names, module=sys.modules[__name__])
+    else:
+        base_suite = loader.loadTestsFromModule(sys.modules[__name__])
+
+    if suite_name == "full":
+        return base_suite
+
+    suite = unittest.TestSuite()
+    for test in iter_tests(base_suite):
+        test_name = test.id().split(".")[-1]
+        is_stress = test_name in STRESS_TEST_NAMES
+        if suite_name == "fast" and not is_stress:
+            suite.addTest(test)
+        elif suite_name == "stress" and is_stress:
+            suite.addTest(test)
+    return suite
+
+def main():
+    parser = argparse.ArgumentParser(description="PaulTalk test runner")
+    parser.add_argument(
+        "--suite",
+        choices=("fast", "full", "stress"),
+        default="full",
+        help="Select test suite tier."
+    )
+    parser.add_argument("-v", "--verbose", action="store_true", help="Run with verbose output.")
+    args, remaining = parser.parse_known_args()
+
+    suite = build_suite(args.suite, selected_names=remaining if remaining else None)
+    runner = unittest.TextTestRunner(verbosity=2 if args.verbose else 1)
+    result = runner.run(suite)
+    sys.exit(0 if result.wasSuccessful() else 1)
+
 if __name__ == '__main__':
-    unittest.main()
+    main()
