@@ -113,17 +113,19 @@ define noalias ptr @bump_malloc_inner(i64 noundef %size, ptr %current_ptr) noinl
 }
 
 define void @commit_additional_pages(ptr %base, i64 %size) {
-  %page_or_more = icmp sge i64 %size, 4096
-  br i1 %page_or_more, label %commit, label %return
+  %base_i = ptrtoint ptr %base to i64
+  %end_i  = add i64 %base_i, %size
+  %start_tmp = add i64 %base_i, 4095
+  %start_i   = and i64 %start_tmp, -4096
+  %end_tmp = add i64 %end_i, 4095
+  %end_a   = and i64 %end_tmp, -4096
+  %need = icmp ugt i64 %end_a, %start_i
+  br i1 %need, label %commit, label %return
 
 commit:
-  %base_i64 = ptrtoint ptr %base to i64
-  %base_plus_4096 = add i64 %base_i64, 4096
-  %next_page_i64 = and i64 %base_plus_4096, -4096
-  %next_page = inttoptr i64 %next_page_i64 to ptr
-  %left_in_page = sub i64 %next_page_i64, %base_i64
-  %commit_size = sub i64 %size, %left_in_page
-  call void @virtual_commit(ptr %next_page, i64 %commit_size)
+  %n = sub i64 %end_a, %start_i
+  %p = inttoptr i64 %start_i to ptr
+  call void @virtual_commit(ptr %p, i64 %n)
   br label %return
 
 return:
