@@ -43,3 +43,8 @@ python ptalk_build.py
 - Standard library in `lib/` directory with `.mini` extension
 - LLVM utilities in `data_files/` with `.ll` extension
 - Grammar definition in `data_files/grammar.lark`
+
+## Additional Notes
+
+- There are a fair number of random / temporary / old files in this project
+- Stuff in the "Design Docs" folder is more likely to be outdated or speculative

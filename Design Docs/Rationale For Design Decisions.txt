@@ -98,3 +98,9 @@ Region Inference over Garbage Collection
 		- Annotations can be added incrementally to fine-grain regions and improve performance
 		- Annotations focus on performance-critical subsections or mature library code
 	- Cyclic references are placed into the same region and deallocated simultaneously
+
+Use-site value/reference specification
+
+	- As opposed to declaration-site specification a la C# struct/class declaration
+	- Defaults to reference type in contrast to C / C++
+	- Value types have much more limited subtyping
