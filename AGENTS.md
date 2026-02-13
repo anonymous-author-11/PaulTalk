@@ -12,6 +12,9 @@ python tests.py --suite fast
 # Run stress-only suite
 python tests.py --suite stress
 
+# Run tests in isolated worker dirs (useful for process-level sharding)
+$env:PTALK_TEST_BUILD_DIR="test_build_worker1"; $env:PTALK_TEST_BIN_DIR="test_bin_worker1"; python tests.py --suite fast
+
 # Run single test (replace TestName with specific test method)
 python -m unittest tests.CompilerTests.test_end_to_end
 
@@ -50,6 +53,8 @@ python ptalk_build.py
 - Use `self.compile_and_run(code, expected_output, test_name)` for success cases
 - Use `self.compile_fails(code, expected_phrase, test_name, expected_category=...)` for failure cases
 - `self.run_mini_code(...)` is still available as a compatibility wrapper
+- Default suite runs should stay single-process to maximize shared `test_build` cache reuse
+- Parallel workers should use distinct `PTALK_TEST_BUILD_DIR` and `PTALK_TEST_BIN_DIR` values
 - Clean up temp files in `tearDown()` method
 
 ### Project Structure

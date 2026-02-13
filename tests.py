@@ -4,6 +4,7 @@ import tempfile
 import shutil
 import os
 import argparse
+import time
 from pathlib import Path
 from ptalk_compile import compiler_driver_main
 from parser import parse
@@ -13,6 +14,14 @@ import stat
 import sys
 
 class CompilerTestCase(unittest.TestCase):
+
+    @classmethod
+    def bin_dir(cls) -> Path:
+        return Path(os.environ.get("PTALK_TEST_BIN_DIR", "./test_bin"))
+
+    @classmethod
+    def build_dir(cls) -> Path:
+        return Path(os.environ.get("PTALK_TEST_BUILD_DIR", "./test_build"))
 
     @staticmethod
     def _force_remove_tree(path: Path):
@@ -38,27 +47,27 @@ class CompilerTestCase(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls._force_remove_tree(Path("./test_bin"))
-        cls._force_remove_tree(Path("./test_build"))
+        cls._force_remove_tree(cls.bin_dir())
+        cls._force_remove_tree(cls.build_dir())
 
     def tearDown(self):
         if os.path.exists(self.temp_input_file_name):
             os.remove(self.temp_input_file_name)
 
     def _ensure_test_dirs(self):
-        Path("./test_bin").mkdir(parents=True, exist_ok=True)
-        Path("./test_build").mkdir(parents=True, exist_ok=True)
+        self.bin_dir().mkdir(parents=True, exist_ok=True)
+        self.build_dir().mkdir(parents=True, exist_ok=True)
 
     def compile_to_executable(self, mini_code, output_file_name_base, debug_mode=True):
         self._ensure_test_dirs()
         with open(self.temp_input_file_name, "w", encoding='utf-8') as f: f.write(mini_code)
-        self.output_path = Path(f"./test_bin/{output_file_name_base}.exe")
+        self.output_path = self.bin_dir() / f"{output_file_name_base}.exe"
         silent[0] = True
         compiler_driver_main(
             self.temp_input_file_name,
             self.output_path,
             debug_mode=debug_mode,
-            build_dir="test_build",
+            build_dir=self.build_dir(),
             no_timings=True
         )
         return self.output_path
@@ -98,13 +107,13 @@ class CompilerTestCase(unittest.TestCase):
         self._ensure_test_dirs()
         with open(self.temp_input_file_name, "w", encoding="utf-8") as f:
             f.write(mini_code)
-        output_path = Path(f"./test_bin/{output_file_name_base}{output_suffix}")
+        output_path = self.bin_dir() / f"{output_file_name_base}{output_suffix}"
         silent[0] = True
         compiler_driver_main(
             self.temp_input_file_name,
             output_path,
             debug_mode=debug_mode,
-            build_dir="test_build",
+            build_dir=self.build_dir(),
             no_timings=True
         )
         return output_path
@@ -117,14 +126,14 @@ class CompilerTestCase(unittest.TestCase):
     def compile_fails(self, mini_code, expected_phrase, output_file_name_base, expected_category="compile"):
         self._ensure_test_dirs()
         with open(self.temp_input_file_name, "w", encoding='utf-8') as f: f.write(mini_code)
-        self.output_path = Path(f"./test_bin/{output_file_name_base}.exe")
+        self.output_path = self.bin_dir() / f"{output_file_name_base}.exe"
         silent[0] = True
         with self.assertRaises(Exception) as cm:
             compiler_driver_main(
                 self.temp_input_file_name,
                 self.output_path,
                 debug_mode=True,
-                build_dir="test_build",
+                build_dir=self.build_dir(),
                 no_timings=True
             )
         error_text = str(cm.exception)
@@ -1231,6 +1240,7 @@ class ParserContractTests(unittest.TestCase):
 class CompilerCliContractTests(CompilerTestCase):
 
     def test_cli_rejects_non_mini_input(self):
+        self._ensure_test_dirs()
         with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False, encoding="utf-8") as tmp:
             tmp.write("print(1);")
             temp_txt = Path(tmp.name)
@@ -1238,37 +1248,111 @@ class CompilerCliContractTests(CompilerTestCase):
             with self.assertRaisesRegex(Exception, "should point to a \\.mini file"):
                 compiler_driver_main(
                     temp_txt,
-                    Path("./test_bin/non_mini.exe"),
+                    self.bin_dir() / "non_mini.exe",
                     debug_mode=True,
-                    build_dir="test_build",
+                    build_dir=self.build_dir(),
                     no_timings=True
                 )
         finally:
             temp_txt.unlink(missing_ok=True)
 
     def test_cli_requires_output_extension(self):
+        self._ensure_test_dirs()
         with open(self.temp_input_file_name, "w", encoding="utf-8") as f:
             f.write("print(1);")
         with self.assertRaisesRegex(Exception, "Please provide an file extension in the output name."):
             compiler_driver_main(
                 self.temp_input_file_name,
-                Path("./test_bin/no_extension"),
+                self.bin_dir() / "no_extension",
                 debug_mode=True,
-                build_dir="test_build",
+                build_dir=self.build_dir(),
                 no_timings=True
             )
 
     def test_cli_can_emit_object_file(self):
-        output_obj = Path("./test_bin/cli_object_output.obj")
+        self._ensure_test_dirs()
+        output_obj = self.bin_dir() / "cli_object_output.obj"
         output_obj.unlink(missing_ok=True)
         output_obj = self.compile_only("print(1);", "cli_object_output", output_suffix=".obj")
         self.assertTrue(output_obj.exists(), f"Expected object file at {output_obj}")
+
+class DependencyCacheTests(CompilerTestCase):
+
+    def _run_compile_subprocess(self, input_file: Path, output_file: Path, build_dir: Path):
+        cmd = [
+            sys.executable,
+            "ptalk_compile.py",
+            str(input_file),
+            "-o",
+            str(output_file),
+            "--build-dir",
+            str(build_dir),
+            "--debug",
+            "--no-timings",
+        ]
+        subprocess.run(cmd, check=True, capture_output=True, text=True, encoding="utf-8")
+
+    def test_incremental_cache_reuses_unchanged_sources(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            dep = root / "dep_cache_case.mini"
+            main = root / "main_cache_case.mini"
+            output = root / "program.obj"
+            build = root / "build"
+
+            dep.write_text("def value() -> i32 { return 7; }\n", encoding="utf-8")
+            main.write_text("import dep_cache_case;\nresult = value();\n", encoding="utf-8")
+
+            silent[0] = True
+            compiler_driver_main(main, output, build_dir=build, debug_mode=True, no_timings=True)
+
+            dep_hash = build / "hashes" / "dep_cache_case.hash"
+            main_hash = build / "hashes" / "main_cache_case.hash"
+            dep_bc = build / "bitcodes" / "dep_cache_case.bc"
+            main_bc = build / "bitcodes" / "main_cache_case.bc"
+            tracked = [dep_hash, main_hash, dep_bc, main_bc]
+            for tracked_file in tracked:
+                self.assertTrue(tracked_file.exists(), f"Missing expected cache artifact: {tracked_file}")
+
+            first_times = {path: path.stat().st_mtime_ns for path in tracked}
+            time.sleep(0.05)
+            compiler_driver_main(main, output, build_dir=build, debug_mode=True, no_timings=True)
+            second_times = {path: path.stat().st_mtime_ns for path in tracked}
+            self.assertEqual(first_times, second_times, "Incremental cache artifacts changed without source changes.")
+
+    def test_dependency_change_updates_hash_and_bitcode_across_invocations(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            dep = root / "dep_rebuild_case.mini"
+            main = root / "main_rebuild_case.mini"
+            output = root / "program.obj"
+            build = root / "build"
+
+            dep.write_text("def value() -> i32 { return 7; }\n", encoding="utf-8")
+            main.write_text("import dep_rebuild_case;\nresult = value();\n", encoding="utf-8")
+
+            self._run_compile_subprocess(main, output, build)
+            dep_hash = build / "hashes" / "dep_rebuild_case.hash"
+            dep_bc = build / "bitcodes" / "dep_rebuild_case.bc"
+            first_hash = dep_hash.read_bytes()
+            first_bc_mtime = dep_bc.stat().st_mtime_ns
+
+            time.sleep(0.05)
+            dep.write_text("def value() -> i32 { return 9; }\n", encoding="utf-8")
+            self._run_compile_subprocess(main, output, build)
+
+            second_hash = dep_hash.read_bytes()
+            second_bc_mtime = dep_bc.stat().st_mtime_ns
+            self.assertNotEqual(first_hash, second_hash, "Dependency hash file did not change after source edit.")
+            self.assertNotEqual(first_bc_mtime, second_bc_mtime, "Dependency bitcode was not regenerated after edit.")
 
 STRESS_TEST_NAMES = {
     "test_end_to_end",
     "test_array_iteration",
     "test_matmul",
     "test_prime_sieves",
+    "test_incremental_cache_reuses_unchanged_sources",
+    "test_dependency_change_updates_hash_and_bitcode_across_invocations",
 }
 
 def iter_tests(test_suite):

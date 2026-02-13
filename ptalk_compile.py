@@ -17,6 +17,7 @@ import subprocess
 import random
 import functools
 import os
+import tempfile
 from pathlib import Path
 import re
 import platform
@@ -97,15 +98,31 @@ class CompilationJob:
         if not self.output_path:
             return self.finish()
 
-        self.llvm_link()
-        self.run_opt()
+        linked_dbg_ir = self.llvm_link()
+        optimized_dbg_ir = self.run_opt(linked_dbg_ir)
         #self.record_all_passes()
-        self.run_llc()
+        self.run_llc(optimized_dbg_ir)
 
         # Only creating an object file
         if self.output_path.suffix != ".obj":
             self.run_lld()
         self.finish()
+
+    def write_side_ir(self, path: Path, text: str):
+        with open(path, "w", encoding="utf-8") as outfile:
+            outfile.write(text)
+
+    def run_debugir(self, linked_ir: str) -> str:
+        with tempfile.TemporaryDirectory(dir=self.build.dir) as temp_dir:
+            linked_path = Path(temp_dir) / "linked.ll"
+            linked_dbg_path = Path(temp_dir) / "linked.dbg.ll"
+            with open(linked_path, "w", encoding="utf-8") as outfile:
+                outfile.write(linked_ir)
+
+            run_checked((DEBUGIR_PATH, linked_path))
+
+            with open(linked_dbg_path, "r", encoding="utf-8") as infile:
+                return infile.read()
 
     def finish(self):
         self.record_time("end_time")
@@ -197,7 +214,7 @@ class CompilationJob:
         Printer(stringio).print(combined_module)
         module_str = stringio.getvalue()
         self.metrics.hi_ir_lines = module_str.count('\n')
-        with open(self.build.in_mlir, "w") as outfile: outfile.write(module_str)
+        self.write_side_ir(self.build.in_mlir, module_str)
         
         # Using multiprocessing invariably leeds to a recursion limit exceeded while pickling the IR
         # Using non-parallel concurrency (threading) is not measurably any faster than serial processing
@@ -207,7 +224,7 @@ class CompilationJob:
         self.time_printer.print(f'Time to do python lowering: {self.time_between("before_firstpass", "after_firstpass")} seconds')
 
         # MLIR is already natively multithreaded, which is great. This is why we combined all the modules into one.
-        module_str = run_pdl_lowering(module_str, self.build.dir)
+        module_str = run_pdl_lowering(module_str, self.build.out_mlir)
         self.record_time("after_pdl")
         self.time_printer.print(f'Time to do PDL lowering: {self.time_between("after_firstpass", "after_pdl")} seconds')
 
@@ -257,13 +274,14 @@ class CompilationJob:
 
         # Split the big llvm IR string into individual bitcode files and save them
         # This can be done fully concurrently
-        with open("simple_lower.ll", "w") as outfile: outfile.write(llvm_string)
+        self.write_side_ir(self.build.dir / "simple_lower.ll", llvm_string)
         sections = llvm_string.split("// -----")
         processes = [self.pre_link_opt(job, section) for (job, section) in zip(jobs, sections)]
+        for process in processes:
+            process.wait()
         for job in jobs:
             job.input.add_dependencies(self.dependencies)
             job.input.write_hash()
-        for process in processes: process.wait()
 
         self.record_time("lower_to_llvm")
         self.time_printer.print(f'Time to generate bitcodes: {self.time_between("after_mlir_translate", "lower_to_llvm")} seconds')
@@ -292,44 +310,57 @@ class CompilationJob:
 
     # merge all the .bc files into one big .ll file for optimization
     # kind of like LTO but no pretense of being at "link-time"
-    def llvm_link(self):
+    def llvm_link(self) -> str:
 
         self.record_time("before_llvm_link")
 
         if self.build.out_lib.exists(): os.remove(self.build.out_lib)
         bitcode_files = self.build.bitcode_files([path.stem for path in self.dependencies.list])
         make_archive = (LLVM_AR_PATH, "cr", self.build.out_lib, *bitcode_files)
-        subprocess.run(make_archive)
+        run_checked(make_archive)
 
-        link_utils = (LLVM_LINK_PATH, UTILS_PATH, OS_UTILS_PATH, self.input.bc_file, LAYOUT_PATH, "-S", "-o", self.build.out_utils)
-        subprocess.run(link_utils)
+        link_utils = (LLVM_LINK_PATH, UTILS_PATH, OS_UTILS_PATH, self.input.bc_file, LAYOUT_PATH, "-S")
+        utils_ir = run_checked(link_utils)
 
         # use the correct main function
-        replace_in_file(self.build.out_utils, f"_main_{clean_name(self.input.path.stem)}", "main")
+        utils_ir = utils_ir.replace(f"_main_{clean_name(self.input.path.stem)}", "main")
+        self.write_side_ir(self.build.out_utils, utils_ir)
 
         # using --only-needed cuts out a lot of unnecessary imports
         flags = ("--only-needed", "--suppress-warnings")
-        link_imports = (LLVM_LINK_PATH, "-S", self.build.out_utils, self.build.out_lib, "-o", self.build.out_linked, *flags)
-        subprocess.run(link_imports)
+        link_imports = (LLVM_LINK_PATH, "-S", "-", self.build.out_lib, *flags)
+        linked_ir = run_checked(link_imports, input_text=utils_ir)
 
         # Add debug metadata to the IR, before any inlining
-        subprocess.run((DEBUGIR_PATH, self.build.out_linked))
+        linked_dbg_ir = self.run_debugir(linked_ir)
+        self.write_side_ir(self.build.out_linked, linked_ir)
+        self.write_side_ir(self.build.out_linked_dbg, linked_dbg_ir)
 
         self.record_time("after_llvm_link")
         self.time_printer.print(f'Time to llvm-link: {self.time_between("before_llvm_link", "after_llvm_link")} seconds')
+        return linked_dbg_ir
 
-    def run_opt(self):
+    def run_opt(self, linked_dbg_ir: str) -> str:
 
-        passes = f"--passes=\"{self.settings.opt_level}\""
+        passes = f"--passes={self.settings.opt_level}"
 
-        settings = f"{self.settings.devirt} {self.settings.vec} {self.settings.inlining} {self.settings.attributor()} {self.settings.hotcold}"
-        opt = f"{OPT_PATH} -S {self.build.out_linked_dbg} {passes} {settings} -o {self.build.out_optimized_dbg}"
-        subprocess.run(opt)
+        settings = (
+            *self.settings.devirt.split(),
+            *self.settings.vec.split(),
+            *self.settings.inlining.split(),
+            *self.settings.attributor().split(),
+            *self.settings.hotcold.split(),
+        )
+        opt = (OPT_PATH, "-S", "-", passes, *settings)
+        optimized_dbg_ir = run_checked(opt, input_text=linked_dbg_ir)
+        self.write_side_ir(self.build.out_optimized_dbg, optimized_dbg_ir)
 
-        subprocess.run((OPT_PATH, "-S", self.build.out_optimized_dbg, "-o", self.build.out_optimized, "--strip-debug"))
+        optimized_ir = run_checked((OPT_PATH, "-S", "-", "--strip-debug"), input_text=optimized_dbg_ir)
+        self.write_side_ir(self.build.out_optimized, optimized_ir)
 
         self.record_time("after_opt")
         self.time_printer.print(f'Time to optimize: {self.time_between("after_llvm_link", "after_opt")} seconds')
+        return optimized_dbg_ir
 
     def record_all_passes(self):
         #clang = "clang -x ir out_linked.ll -fsanitize=bounds -O1 -S -emit-llvm -o clang.ll -mllvm -print-after-all -mllvm -inline-threshold=10000 -Xclang -triple=x86_64-pc-windows-msvc"
@@ -345,7 +376,7 @@ class CompilationJob:
         opt_out = subprocess.run(opt, capture_output=True, text=True)
         with open(self.build.opt_passes, "w") as outfile: outfile.write(opt_out.stderr)
 
-    def run_llc(self):
+    def run_llc(self, optimized_dbg_ir: str):
 
         # overrides the target triple specified in the IR
         target_triple = "-mtriple=x86_64-pc-windows-msvc"
@@ -358,8 +389,8 @@ class CompilationJob:
         os.makedirs(self.obj_path.parent, exist_ok=True)
 
         self.record_time("before_llc")
-        llc = (LLC_PATH, "-filetype=obj", self.build.final_ir, *self.settings.llc_options, target_triple, exception_model, "-o", self.obj_path)
-        subprocess.run(llc)
+        llc = (LLC_PATH, "-filetype=obj", "-", *self.settings.llc_options, target_triple, exception_model, "-o", self.obj_path)
+        run_checked(llc, input_text=optimized_dbg_ir)
 
         self.record_time("after_llc")
         self.time_printer.print(f'Time to llc: {self.time_between("before_llc", "after_llc")} seconds')
@@ -374,7 +405,7 @@ class CompilationJob:
         
         # lld with -flavor link is equivalent to lld-link
         lld_link = (LLD_PATH, "-flavor", "link", self.obj_path, f"/out:{exe_path}", "/ignore:longsections", "/debug", *includes)
-        subprocess.run(lld_link)
+        run_checked(lld_link)
 
         self.record_time("after_lld")
         self.time_printer.print(f'Time to lld link: {self.time_between("after_llc", "after_lld")} seconds')
@@ -625,6 +656,12 @@ def replace_in_file(path, string, replacement):
         f.write(txt.replace(string, replacement))
         f.truncate()
 
+def run_checked(command, *, input_text=None, shell=False) -> str:
+    cmd_out = subprocess.run(command, capture_output=True, text=True, input=input_text, shell=shell)
+    if cmd_out.returncode != 0:
+        raise Exception(cmd_out.stderr if cmd_out.stderr else f"Command failed: {command}")
+    return cmd_out.stdout
+
 def add_source_directories(input_path):
 
     # Immediate parent directory of the file being compiled
@@ -650,14 +687,14 @@ def add_source_directories(input_path):
         folder = folder.resolve()
         source_directories[folder] = folder
 
-def run_pdl_lowering(module_str, build_dir) -> str:
+def run_pdl_lowering(module_str, side_output_path) -> str:
     with open(PDL_PATTERNS_PATH, "r") as patterns_file: patterns = patterns_file.read()
 
     to_pdl_bytecode = f"{MLIR_OPT_PATH} -allow-unregistered-dialect --mlir-print-op-generic --convert-pdl-to-pdl-interp"
     run_bytecode = f"{STANDALONE_OPT_PATH} -allow-unregistered-dialect --mlir-print-op-generic --my-custom-pass"
     
-    out_mlir_path = build_dir / "out.mlir"
-    with open(out_mlir_path, "w") as outfile: outfile.write(module_str)
+    with open(side_output_path, "w", encoding="utf-8") as outfile:
+        outfile.write(module_str)
 
     cmd_out = subprocess.run(to_pdl_bytecode, capture_output=True, shell=True, text=True, input=patterns)
     if cmd_out.returncode != 0: raise Exception(cmd_out.stderr)
@@ -688,7 +725,8 @@ def run_pdl_lowering(module_str, build_dir) -> str:
     module_str = module_str[23:-16]
     module_str = module_str.replace("placeholder.call", "llvm.call")
     module_str = module_str.replace("placeholder.extractvalue", "llvm.extractvalue")
-    with open(out_mlir_path, "w") as outfile: outfile.write(module_str)
+    with open(side_output_path, "w", encoding="utf-8") as outfile:
+        outfile.write(module_str)
     return module_str
 
 def _make_gen(reader):
