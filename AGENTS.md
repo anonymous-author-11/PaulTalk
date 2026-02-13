@@ -48,14 +48,17 @@ python ptalk_build.py
 - Imports: Use `import module;` format, semicolon-terminated
 
 ### Testing
-- Write end-to-end tests in `tests.py` using `CompilerTestCase`
+- Keep `tests.py` as the suite entrypoint and test selector
+- Add compiler behavior tests in `test_modules/compiler_negative.py` or `test_modules/compiler_positive.py`
+- Add parser/CLI/cache contract tests in `test_modules/contracts.py`
+- Shared harness utilities live in `test_modules/base_case.py` (`CompilerTestCase`)
 - Test both successful compilation and error cases
 - Use `self.compile_and_run(code, expected_output, test_name)` for success cases
 - Use `self.compile_fails(code, expected_phrase, test_name, expected_category=...)` for failure cases
 - `self.run_mini_code(...)` is still available as a compatibility wrapper
 - Default suite runs should stay single-process to maximize shared `test_build` cache reuse
 - Parallel workers should use distinct `PTALK_TEST_BUILD_DIR` and `PTALK_TEST_BIN_DIR` values
-- Clean up temp files in `tearDown()` method
+- Per-test temp source files are cleaned in `tearDown()`; build/bin dirs are cleaned at process exit
 
 ### Project Structure
 - Compiler pipeline: parse → type check → MLIR gen → optimize → LLVM gen → link
