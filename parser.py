@@ -26,7 +26,12 @@ def get_fresh_parser():
     with open(CACHED_GRAMMAR_PATH, "wb") as f: fresh_parser.save(f)
     return fresh_parser
 
-parser = get_fresh_parser()
+def get_parser():
+    if CACHED_GRAMMAR_PATH.exists() and CACHED_GRAMMAR_PATH.stat().st_mtime >= GRAMMAR_PATH.stat().st_mtime:
+        return get_cached_parser()
+    return get_fresh_parser()
+
+parser = get_parser()
 source_directories = {}
 parsed = {}
 
