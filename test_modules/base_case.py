@@ -87,7 +87,9 @@ class CompilerTestCase(unittest.TestCase):
         return completed_process.stdout.strip()
 
     def _split_output_lines(self, output: str) -> list[str]:
-        stripped = output.strip()
+        # Normalize platform-specific line endings before line-wise comparison.
+        normalized = output.replace("\r\n", "\n").replace("\r", "\n")
+        stripped = normalized.strip()
         if stripped == "":
             return []
         return stripped.splitlines()
