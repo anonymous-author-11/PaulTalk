@@ -59,7 +59,7 @@ jobs:
         .\executables\llvm-link.exe --version
         .\executables\opt.exe --version
         .\executables\llc.exe --version
-        .\executables\lld.exe --version
+        .\executables\lld.exe -flavor link --version
 
     - name: Test simple compilation
       shell: pwsh
