@@ -1,0 +1,6 @@
+# Dependencies required by CI (compiler smoke + fast test suite)
+lark
+lark-cython
+rustworkx
+typing-extensions
+immutabledict
