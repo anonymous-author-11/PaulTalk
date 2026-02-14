@@ -1,0 +1,33 @@
+import std;
+
+class PRNG {
+    @seed : i32
+
+    def init(initial_seed : i32) {
+        if initial_seed <= 0 {
+            @seed = 1;
+            return;
+        }
+        @seed = initial_seed bit_and 0x7FFFFFFF;
+    }
+
+    def next() -> i32 {
+        a = 1103515245;
+        c = 12345;
+        @seed = (@seed * a + c) bit_and 0x7FFFFFFF;
+        return @seed;
+    }
+}
+
+def shuffle_i32(keys : Array[i32], n : i32, rng : PRNG) {
+    for i in 0..n {
+        remaining = n - i;
+        if remaining <= 1 { continue; }
+        offset = rng.next() % remaining;
+        if offset < 0 { offset = offset * -1; }
+        j = i + offset;
+        temp = keys.unchecked_index(i);
+        keys.unchecked_insert(i, keys.unchecked_index(j));
+        keys.unchecked_insert(j, temp);
+    }
+}

@@ -6,6 +6,7 @@ from test_modules.base_case import CompilerTestCase
 from test_modules.compiler_negative import CompilerNegativeTestsMixin
 from test_modules.compiler_positive import CompilerPositiveTestsMixin
 from test_modules.contracts import CompilerCliContractTests, DependencyCacheTests, ParserContractTests
+from test_modules.performance import CompilerPerformanceTests
 
 
 class CompilerTests(CompilerNegativeTestsMixin, CompilerPositiveTestsMixin, CompilerTestCase):
@@ -39,19 +40,25 @@ def build_suite(suite_name: str, selected_names: list[str] | None = None) -> uni
     if selected_names:
         normalized_names = [normalize_selection_name(name) for name in selected_names]
         base_suite = loader.loadTestsFromNames(normalized_names, module=sys.modules[__name__])
+        return base_suite
     else:
         base_suite = loader.loadTestsFromModule(sys.modules[__name__])
 
-    if suite_name == "full":
+    if suite_name == "all":
         return base_suite
 
     suite = unittest.TestSuite()
     for test in iter_tests(base_suite):
         test_name = test.id().split(".")[-1]
+        is_perf = test.__class__.__name__ == CompilerPerformanceTests.__name__
         is_stress = test_name in STRESS_TEST_NAMES
-        if suite_name == "fast" and not is_stress:
+        if suite_name == "full" and not is_perf:
             suite.addTest(test)
-        elif suite_name == "stress" and is_stress:
+        elif suite_name == "fast" and not is_stress and not is_perf:
+            suite.addTest(test)
+        elif suite_name == "stress" and is_stress and not is_perf:
+            suite.addTest(test)
+        elif suite_name == "perf" and is_perf:
             suite.addTest(test)
     return suite
 
@@ -60,7 +67,7 @@ def main():
     parser = argparse.ArgumentParser(description="PaulTalk test runner")
     parser.add_argument(
         "--suite",
-        choices=("fast", "full", "stress"),
+        choices=("fast", "full", "stress", "perf", "all"),
         default="full",
         help="Select test suite tier."
     )

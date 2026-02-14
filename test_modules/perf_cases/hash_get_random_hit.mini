@@ -1,0 +1,36 @@
+import std;
+import hash_perf_utils;
+
+n = 600_000;
+table = SwissTable[i32, i32].new(i32_hasher, i32_eq);
+insert_keys = Array[i32].new(n);
+lookup_keys = Array[i32].new(n);
+
+for i in 0..n {
+    insert_keys.unchecked_insert(i, i);
+    lookup_keys.unchecked_insert(i, i);
+}
+
+shuffle_i32(insert_keys, n, PRNG.new(111));
+shuffle_i32(lookup_keys, n, PRNG.new(222));
+
+for i in 0..n {
+    key = insert_keys.unchecked_index(i);
+    table.insert(key, key * 3 + 1);
+}
+
+checksum : i64 = 0;
+for i in 0..n {
+    key = lookup_keys.unchecked_index(i);
+    value = table.get(key);
+    if value is i32 {
+        checksum = checksum + (value as i64);
+    }
+}
+
+expected_checksum : i64 = ((3 as i64) * (n as i64) * (n as i64) - (n as i64)) / 2;
+if checksum == expected_checksum {
+    IO.print("ok");
+} else {
+    IO.print("bad");
+}

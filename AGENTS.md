@@ -3,7 +3,7 @@
 ## Build Commands
 
 ```bash
-# Run all tests
+# Run default correctness suites (fast + stress, excludes perf)
 python tests.py
 
 # Run fast PR-style suite
@@ -11,6 +11,12 @@ python tests.py --suite fast
 
 # Run stress-only suite
 python tests.py --suite stress
+
+# Run perf-only suite (debug + release benchmark checks)
+python tests.py --suite perf
+
+# Run every suite including perf
+python tests.py --suite all
 
 # Run tests in isolated worker dirs (useful for process-level sharding)
 $env:PTALK_TEST_BUILD_DIR="test_build_worker1"; $env:PTALK_TEST_BIN_DIR="test_bin_worker1"; python tests.py --suite fast
@@ -51,6 +57,7 @@ python ptalk_build.py
 - Keep `tests.py` as the suite entrypoint and test selector
 - Add compiler behavior tests in `test_modules/compiler_negative.py` or `test_modules/compiler_positive.py`
 - Add parser/CLI/cache contract tests in `test_modules/contracts.py`
+- Add perf cases by creating a `.mini` file in `test_modules/perf_cases/` and registering it in `test_modules/perf_cases/manifest.json`
 - Shared harness utilities live in `test_modules/base_case.py` (`CompilerTestCase`)
 - Test both successful compilation and error cases
 - Use `self.compile_and_run(code, expected_output, test_name)` for success cases

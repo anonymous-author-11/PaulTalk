@@ -5,6 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   verify:
@@ -66,3 +67,103 @@ jobs:
       shell: pwsh
       run: |
         python tests.py --suite fast
+
+    - name: Restore performance baseline
+      if: github.event_name != 'pull_request'
+      uses: actions/cache/restore@v4
+      with:
+        path: artifacts/perf/perf_baseline.json
+        key: perf-baseline-${{ github.ref_name }}-${{ github.run_id }}
+        restore-keys: |
+          perf-baseline-${{ github.ref_name }}-
+
+    - name: Run performance suite
+      if: github.event_name != 'pull_request'
+      shell: pwsh
+      env:
+        PTALK_PERF_RESULTS_FILE: artifacts/perf/results.json
+        PTALK_PERF_BASELINE_FILE: artifacts/perf/perf_baseline.json
+        PTALK_PERF_MAX_REGRESSION_RATIO: "2.0"
+        PTALK_PERF_RUNS: "3"
+        PTALK_PERF_WARMUPS: "1"
+      run: |
+        python tests.py --suite perf -v
+
+    - name: Publish performance summary
+      if: always() && github.event_name != 'pull_request' && hashFiles('artifacts/perf/results.json') != ''
+      shell: pwsh
+      run: |
+        @'
+        import json
+        import os
+        from pathlib import Path
+
+        results_path = Path("artifacts/perf/results.json")
+        data = json.loads(results_path.read_text(encoding="utf-8"))
+
+        lines = []
+        lines.append("## Performance Benchmarks")
+        lines.append("")
+        lines.append("| Benchmark | Mode | Avg (s) | Baseline (s) | Ratio (x) | Max Ratio (x) | Gate | Runs (s) |")
+        lines.append("|---|---|---:|---:|---:|---:|---|---|")
+
+        benchmarks = data.get("benchmarks", [])
+        benchmarks.sort(key=lambda item: (item["name"], item["mode"]))
+        for item in benchmarks:
+            run_values = ", ".join(f"{run:.3f}" for run in item.get("runs_seconds", []))
+            baseline = item.get("baseline_seconds")
+            ratio = item.get("regression_ratio")
+            gate = "checked" if item.get("regression_check_enabled") else "bootstrap"
+            baseline_text = f"{baseline:.3f}" if baseline is not None else "n/a"
+            ratio_text = f"{ratio:.3f}" if ratio is not None else "n/a"
+            lines.append(
+                f"| {item['name']} | {item['mode']} | "
+                f"{item['average_seconds']:.3f} | {baseline_text} | "
+                f"{ratio_text} | {item['max_regression_ratio']:.3f} | {gate} | {run_values} |"
+            )
+
+        summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
+        if summary_path:
+            with open(summary_path, "a", encoding="utf-8") as summary_file:
+                summary_file.write("\n".join(lines) + "\n")
+        '@ | python -
+
+    - name: Refresh performance baseline
+      if: always() && github.event_name != 'pull_request' && hashFiles('artifacts/perf/results.json') != ''
+      shell: pwsh
+      run: |
+        @'
+        import json
+        from pathlib import Path
+
+        results_path = Path("artifacts/perf/results.json")
+        baseline_path = Path("artifacts/perf/perf_baseline.json")
+        data = json.loads(results_path.read_text(encoding="utf-8"))
+
+        benchmarks = {}
+        for row in data.get("benchmarks", []):
+            name = row["name"]
+            mode = row["mode"]
+            benchmarks.setdefault(name, {})[mode] = row["average_seconds"]
+
+        payload = {"benchmarks": benchmarks}
+        baseline_path.parent.mkdir(parents=True, exist_ok=True)
+        baseline_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+        '@ | python -
+
+    - name: Save performance baseline
+      if: always() && github.event_name != 'pull_request' && hashFiles('artifacts/perf/perf_baseline.json') != ''
+      uses: actions/cache/save@v4
+      with:
+        path: artifacts/perf/perf_baseline.json
+        key: perf-baseline-${{ github.ref_name }}-${{ github.run_id }}
+
+    - name: Upload performance results
+      if: always() && github.event_name != 'pull_request' && hashFiles('artifacts/perf/results.json') != ''
+      uses: actions/upload-artifact@v4
+      with:
+        name: perf-results-${{ github.run_id }}
+        path: |
+          artifacts/perf/results.json
+          artifacts/perf/perf_baseline.json
+        if-no-files-found: error

@@ -1,0 +1,49 @@
+{
+  "cases": [
+    {
+      "name": "matmul",
+      "file": "matmul_benchmark.mini",
+      "expected_output": "ok"
+    },
+    {
+      "name": "prime_sieve_naive",
+      "file": "prime_sieve_naive.mini",
+      "expected_output": "ok"
+    },
+    {
+      "name": "prime_sieve_simple",
+      "file": "prime_sieve_simple.mini",
+      "expected_output": "ok"
+    },
+    {
+      "name": "prime_sieve_optimized",
+      "file": "prime_sieve_optimized.mini",
+      "expected_output": "ok"
+    },
+    {
+      "name": "prime_sieve_bitpacked",
+      "file": "prime_sieve_bitpacked.mini",
+      "expected_output": "ok"
+    },
+    {
+      "name": "hash_insert_random",
+      "file": "hash_insert_random.mini",
+      "expected_output": "ok"
+    },
+    {
+      "name": "hash_get_random_hit",
+      "file": "hash_get_random_hit.mini",
+      "expected_output": "ok"
+    },
+    {
+      "name": "hash_get_random_miss",
+      "file": "hash_get_random_miss.mini",
+      "expected_output": "ok"
+    },
+    {
+      "name": "hash_remove_random",
+      "file": "hash_remove_random.mini",
+      "expected_output": "ok"
+    }
+  ]
+}

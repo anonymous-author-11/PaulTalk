@@ -1,0 +1,23 @@
+import matmul;
+
+size = 512;
+matrix1 = Matrix.new(size, size);
+matrix2 = Matrix.new(size, size);
+
+for i in 0..size {
+    for j in 0..size {
+        val1 = (i + j) % 10;
+        val2 = (i - j + 10) % 10;
+        matrix1.[i, j] = val1 as f64;
+        matrix2.[i, j] = val2 as f64;
+    }
+}
+
+result = matrix1 * matrix2;
+sum = 0.0;
+for i in 0..size {
+    sum = sum + result.[0, i];
+}
+
+if sum == 230346.0 { IO.print("ok"); }
+else { IO.print("bad"); }

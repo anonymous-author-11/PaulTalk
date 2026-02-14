@@ -1,0 +1,12 @@
+import primesieve;
+
+limit = 2_000_000;
+sieve = CacheOptimizedSieve{limit};
+sieve.generate_primes();
+count = sieve.count_primes();
+
+if count == 148933 {
+    IO.print("ok");
+} else {
+    IO.print("bad");
+}
