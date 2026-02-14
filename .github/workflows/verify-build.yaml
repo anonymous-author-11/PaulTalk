@@ -84,7 +84,7 @@ jobs:
         PTALK_PERF_RESULTS_FILE: artifacts/perf/results.json
         PTALK_PERF_BASELINE_FILE: artifacts/perf/perf_baseline.json
         PTALK_PERF_MAX_REGRESSION_RATIO: "2.0"
-        PTALK_PERF_RUNS: "3"
+        PTALK_PERF_RUNS: "5"
         PTALK_PERF_WARMUPS: "1"
       run: |
         python tests.py --suite perf -v
