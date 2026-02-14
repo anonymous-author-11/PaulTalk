@@ -37,7 +37,9 @@ python ptalk_build.py
 - Indentation: always try to keep fewer than 4 levels of indendation
 	- Early return/break/continue
 	- Method / function outlining
-	- Single-line conditionals
+	- Single-line conditionals: a single statement guarded by a conditional should be on the same line,
+	subject to line-width constraints only
+	- Avoid defensively adding try/catch to everything
 
 ### Python Code
 - Imports: Use absolute imports, organize by standard library, third-party, local
