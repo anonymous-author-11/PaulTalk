@@ -1,0 +1,13 @@
+[MASTER]
+persistent = no
+load-plugins = pylint.extensions.no_self_use
+
+[MESSAGES CONTROL]
+disable = all
+enable = no-self-use,R1702
+
+[DESIGN]
+max-nested-blocks = 3
+
+[REPORTS]
+score = no

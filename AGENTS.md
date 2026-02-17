@@ -24,6 +24,12 @@ $env:PTALK_TEST_BUILD_DIR="test_build_worker1"; $env:PTALK_TEST_BIN_DIR="test_bi
 # Run single test (replace TestName with specific test method)
 python -m unittest tests.CompilerTests.test_end_to_end
 
+# Lint changed Python files for AI style rules (max 3 nested blocks, no-self-use)
+python tools/lint_ai_changes.py
+
+# Lint specific files with AI style rules
+python tools/lint_ai_changes.py parser.py test_modules/contracts.py
+
 # Compile single file
 python ptalk_compile.py input.mini -o output.exe --build-dir build
 
