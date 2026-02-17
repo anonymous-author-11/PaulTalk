@@ -1,4 +1,6 @@
 
+// A vision for the future evolution of the stdlib
+
 import collection;
 import range;
 
@@ -108,37 +110,230 @@ class Peeker[T] extends Iterator[T] {
     } ~> { ret holds @elems_reg }
 }
 
-class DefaultString extends String {
+class String extends List[Character], Representable {
+    @bytes : Buffer[i8]
+    @byte_length : i32
+    @char_length : i32 // Number of unicode codepoints
+    @capacity: i32
 
-	def init(@bytes : Buffer[i8], @byte_length : i32, @char_length : i32, @capacity : i32) {
-	}
+    getters @byte_length, @char_length, @capacity
+
+    def Self.empty() -> Self { return Self{}; }
+
+    // This benefits from any optimized .extend overrides
+    def Self.from_iterable(iterable : Iterable[Character]) -> Self {
+        return Self.empty().extend(iterable); 
+    }
+
+    // STRICT, Failable constructor. Validates input and can yield an error.
+    def Self.from_bytes(source_bytes: Collection[i8]) -> String yields InvalidUTF8Error {
+        result = String{source_bytes.size()};    // Pre-allocate
+        validator = UTF8BytesValidator{result.bytes().writer()};
+        validator.write_codepoints_from(source_bytes.iterator());
+        return result;
+    } ~> { ret.elems_reg holds source_bytes.elems_reg }
+
+    // LOSSY constructor. Never fails, replaces invalid sequences with '�'.
+    // Consequently, byte length of resultant string may be different than source length
+    def Self.from_bytes_lossy(source_bytes: Collection[i8]) -> String {
+        result = String{source_bytes.size()};    // Pre-allocate
+        validator = UTF8BytesValidator.lossy(result.bytes().writer());
+        validator.write_codepoints_from(source_bytes.iterator());
+        return result;
+    } ~> { ret.elems_reg holds source_bytes.elems_reg }
+
+    def init() {
+        @bytes = Buffer[i8].new(1);
+        @capacity = 1;
+        @byte_length = 0;
+        @char_length = 0;
+    }
+    def init(@capacity : i32) {
+        @bytes = Buffer[i8].new(@capacity);
+        @byte_length = 0;
+        @char_length = 0;
+    }
+    // Constructor for internal use.
+    def init(@bytes : Buffer[i8], @byte_length : i32, @char_length : i32, @capacity : i32) {
+    }
+    def size() -> i32 { return @char_length; }
+
+    def c_string() -> Buffer[i8] {
+        buf = Buffer[i8].new(@byte_length + 1);
+        for i in 0..@byte_length { buf.[i] = @bytes.[i]; }
+        null = 0 as i8;
+        buf.[@byte_length] = null;
+        return buf;
+    }
+    def append(char : Character) -> Self {
+        self.writer().write(char);
+        return self;
+    }
+    def extend(other : Iterator[Character]) -> Self {
+        self.writer().write_from(other);
+        return self;
+    }
+    def extend(other : Iterable[Character]) -> Self {
+        self.writer().write_from(other);
+        return self;
+    }
+    // We know the other string is already valid and don't need to validate
+    def extend(other : String) -> Self {
+        // We know exactly how many bytes to reserve
+        other_b_len = other.byte_length();
+        old_b_len = @byte_length;
+        new_b_len = old_b_len + other_b_len;
+        self.reserve(new_b_len);
+        for i in 0..other_b_len {
+            self.unchecked_insert(i + old_b_len, other.unchecked_index(i));
+        }
+        @byte_length = new_b_len;
+        @char_length = @char_length + other.size();
+        return self;
+    }
+    def reserve(new_capacity : i32) {
+        if new_capacity <= @capacity { return; }
+        @capacity = new_capacity;
+        old_bytes = @bytes;
+        @bytes = Buffer[i8].new(@capacity);
+        for i in 0..@byte_length { @bytes.[i] = old_bytes.[i]; }
+    }
+    def ==(other : String) -> Bool {
+        if @byte_length != other.byte_length() { return false; }
+        for i in 0..@byte_length {
+            if @bytes.[i] != other.unchecked_index(i) { return false; }
+        }
+        return true;
+    }
+    def unchecked_index(x : i32) -> i8 {
+        return @bytes.[x];
+    }
+    def unchecked_insert(x : i32, value : i8) {
+        @bytes.[x] = value;
+    }
+    def copy() -> Self {
+        new_buf = Buffer[i8].new(@byte_length);
+        for i in 0..@byte_length { new_buf.[i] = @bytes.[i]; }
+        return String{new_buf, @byte_length, @char_length, @byte_length};
+    }
     def reserve_extra(n : i32) {
         self.reserve(n + @byte_length);
     }
-	def increment_chars(n : i32) {
-		@char_length = @char_length + n;
-	}
-	def append_byte(byte : i8) {
-		new_len = @byte_length + 1;
-		self.reserve(new_len);
-		@bytes.[@byte_length] = byte;
-		@byte_length = new_len;
-	}
-	def byte_writer() -> Writer[i8] {
-		return DefaultStringByteWriter{self};
-	} ~> { ret.string == self, ret.dest_reg == @elems_reg }
+    def increment_chars(n : i32) {
+        @char_length = @char_length + n;
+    }
+    def append_byte(byte : i8) {
+        new_len = @byte_length + 1;
+        self.reserve(new_len);
+        @bytes.[@byte_length] = byte;
+        @byte_length = new_len;
+    }
+    def repr() -> String {
+        return self;
+    }
+    def codepoints() -> List[i32] {
+        return StringCodePoints{self};
+    }
+    def bytes() -> List[i8] {
+        return StringBytes{self, @bytes};
+    }
+    def iterator() -> ConstantTimeIterator[Character] {
+        return StringIterator{self};
+    } ~> { ret.str == self }
 
-	def codepoint_writer() -> Writer[i32] {
-		return DefaultStringCodepointWriter{self};
-	} ~> { ret.string == self, ret.dest_reg == @elems_reg }
 }
 
-class DefaultStringByteWriter extends Writer[i8] {
-	@string : DefaultString
+class StringCodePoints extends List[i32] {
+    @str : String
+
+    def size() -> i32 {
+        return @str.char_length();
+    }
+    def iterator() -> Iterator[i32] {
+        return UTF8Decoder{@str.bytes().iterator()};
+    }
+    def writer() -> Writer[i32] {
+        return StringCodepointWriter{self};
+    } ~> { ret.string == self, ret.dest_reg == @elems_reg }
+}
+
+class StringBytes extends List[i8] {
+    @str : String
+
+    def size() -> i32 {
+        return @str.char_length();
+    }
+    def iterator() -> Iterator[i8] {
+        return StringBytesIterator{@str};
+    }
+    def writer() -> Writer[i8] {
+        return StringByteWriter{@str};
+    } ~> { ret.string == self, ret.dest_reg == @elems_reg }
+
+}
+
+// Iterator can trust that the source string is valid.
+// Constant-time *with respect to the length of the String*
+class StringIterator extends ConstantTimeIterator[Character] {
+    @decoder : UTF8Decoder
+
+    def init(@decoder : UTF8Decoder) {}
+
+    def next() -> Character? {
+        next_cp = @decoder.next();
+        if next_cp is i32 { return Character{next_cp}; }
+        return nil;
+    }
+}
+
+class StringBytesIterator extends ConstantTimeIterator[i8] {
+    @str : String
+    @cursor : i32
+
+    def init(@str : String) {
+        @cursor = 0;
+    }
+
+    def next() -> i8? {
+        if @cursor >= @str.byte_length() { return nil; }
+        next = @str.unchecked_index(@cursor);
+        @cursor = @cursor + 1;
+        return next;
+    }
+}
+
+class StringWriter extends Writer[Character] {
+    @string : String
+    @encoder : UTF8Encoder
+
+    regions {
+        @dest_reg == @encoder.dest_reg,
+        @encoder.dest_reg == @string.elems_reg
+    }
+
+    def init(@string : String) {
+        @encoder = LosslessUTF8Encoder{@string.bytes().writer()};
+    }
+
+    def write(char : Character) {
+        @encoder.write(char.codepoint());
+        @string.increment_chars(1);
+    }
+    // A String has already validated bytes, so we can just write its bytes directly
+    def write_from(str : String) -> i32 {
+        n_chars = str.char_length();
+        @string.bytes().writer().write_from(str.bytes());
+        @string.increment_chars(n_chars);
+        return n_chars;
+    }
+}
+
+class StringByteWriter extends Writer[i8] {
+	@string : String
 
     regions { @dest_reg == @string.elems_reg }
 
-	def init(@string : DefaultString) {}
+	def init(@string : String) {}
 
 	def write(byte : i8) {
 		@string.append_byte(byte);
@@ -153,8 +348,8 @@ class DefaultStringByteWriter extends Writer[i8] {
     }
 }
 
-class DefaultStringCodepointWriter extends Writer[i32] {
-	@string : DefaultString
+class StringCodepointWriter extends Writer[i32] {
+	@string : String
 	@encoder : UTF8Encoder
 
     regions {
@@ -162,11 +357,11 @@ class DefaultStringCodepointWriter extends Writer[i32] {
         @encoder.dest_reg == @string.elems_reg
     }
 
-	def init(@string : DefaultString) {
-		@encoder = LosslessUTF8Encoder{@string.byte_writer()};
+	def init(@string : String) {
+		@encoder = LosslessUTF8Encoder{@string.bytes().writer()};
 	}
 
-	def write(codepoint : i32) -> i32 {
+	def write(codepoint : i32) {
 		@encoder.write(codepoint);
 		@string.increment_chars(1);
 	}
@@ -460,32 +655,4 @@ class UTF8Decoder extends Iterator[i32] {
 
         return codepoint;
     }
-}
-
-class String extends List[Character], Representable {
-
-    def Self.new() -> String {
-        return DefaultString{1};
-    }
-
-    def Self.new(capacity : i32) -> String {
-        return DefaultString{capacity};
-    }
-
-    // STRICT, Failable constructor. Validates input and can yield an error.
-    def Self.from_bytes(source_bytes: Collection[i8]) -> String yields InvalidUTF8Error {
-        result = DefaultString{source_bytes.size()};    // Pre-allocate
-        validator = UTF8BytesValidator{result.byte_writer()};
-        validator.write_codepoints_from(source_bytes.iterator());
-        return result;
-    } ~> { ret.elems_reg holds source_bytes.elems_reg }
-
-    // LOSSY constructor. Never fails, replaces invalid sequences with '�'.
-    // Consequently, byte length of resultant string may be different than source length
-    def Self.from_bytes_lossy(source_bytes: Collection[i8]) -> String {
-        result = DefaultString{source_bytes.size()};    // Pre-allocate
-        validator = UTF8BytesValidator.lossy(result.byte_writer());
-        validator.write_codepoints_from(source_bytes.iterator());
-        return result;
-    } ~> { ret.elems_reg holds source_bytes.elems_reg }
 }
