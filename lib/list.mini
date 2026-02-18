@@ -1,4 +1,5 @@
 import collection;
+import writer;
 
 class List[T] extends Collection[T] {
 
@@ -8,7 +9,8 @@ class List[T] extends Collection[T] {
 
     // Create a List from any iterable, even of unknown size
     // 'my_iterable into List' can desugar to this method
-    abstract def Self.from_iterable(iterable : Iterable[T]) -> Self {
+    def Self.from_iterable(iterable : Iterable[T]) -> Self {
+        return Self.empty().extend(iterable);
     } ~> no_alias
 
     // append always increases .size() by 1
@@ -36,6 +38,12 @@ class List[T] extends Collection[T] {
     }
 
     // No time complexity guarantees
+    def extend(other : Iterator[T]) -> Self {
+        for x in other { self.append(x); }
+        return self;
+    }
+
+    // No time complexity guarantees
     def extend(other : Iterable[T]) -> Self {
         for x in other { self.append(x); }
         return self;
@@ -57,5 +65,18 @@ class List[T] extends Collection[T] {
     	}
     	return nil;
     }
+    def writer() -> Writer[T] {
+        return ListWriter{self};
+    } ~> { ret.dest_reg == @elems_reg }
 
+}
+
+class ListWriter[T] extends Writer[T] {
+    @list : List[T]
+
+    def init(@list : List[T]) {
+    }
+    def write(value : T) {
+        @list.append(value);
+    }
 }

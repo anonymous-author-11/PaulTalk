@@ -1,0 +1,46 @@
+import iteration;
+
+class BulkWriter[T] {
+
+    // Virtual region where things will be written to
+    @dest_reg : Region
+
+    // Write values up to max_elems; return the number written
+    // Performance contract: Upper-bound O(n_written)
+    abstract def write_from(source : Iterator[T], max_elems : i32) -> i32 {
+    } ~> { @dest_reg == source.elems_reg }
+
+    // Write as many values as possible; return the number written
+    def write_from(source : Iterator[T]) -> i32 {
+        return self.write_from(source, i32.max());
+    } ~> { @dest_reg == source.elems_reg }
+
+    // Convenience methods to handle Iterables
+    def write_from(source : Iterable[T], max_elems : i32) -> i32 {
+        return self.write_from(source.iterator(), max_elems);
+    } ~> { @dest_reg == source.elems_reg }
+
+    // Delegates to the above, so that it does not skip overrides
+    def write_from(source : Iterable[T]) -> i32 {
+        return self.write_from(source, i32.max());
+    } ~> { @dest_reg == source.elems_reg }
+}
+
+class Writer[T] extends BulkWriter[T] {
+
+    // Write a single value
+    abstract def write(value : T) {
+    } ~> { @dest_reg holds value }
+
+    // Generic implementation of .write_from in terms of .write
+    def write_from(source : Iterator[T], max_elems : i32) -> i32 {
+        next = source.next();
+        n_written = 0;
+        while next is T and n_written < max_elems {
+            self.write(next);
+            n_written = n_written + 1;
+            next = source.next();
+        }
+        return n_written;
+    }
+}

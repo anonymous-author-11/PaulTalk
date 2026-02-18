@@ -1953,6 +1953,8 @@ class BufferSetIndex(MethodCall):
         scope.region.last_block.add_ops([cast_val, cast_idx, buf_set])
 
     def apply_constraints(self, scope):
+        value_type = self.arguments[1].exprtype(scope)
+        if is_value_type(value_type): return
         scope.points_to_facts.add((self.receiver.info.id, "<", self.arguments[1].info.id))
 
     def exprtype(self, scope):
@@ -3743,7 +3745,7 @@ class FieldDecl(VarDecl):
 
     def ensure_capitalization(self):
         if self.name[1].isupper():
-            raise Exception(f"{self.info}: Fields should not be capitalized.")
+            raise Exception(f"{self.info}: Fields should not be capitalized ({self.name}).")
 
     def scoped_name(self, type_env):
         return self.name
@@ -3751,6 +3753,9 @@ class FieldDecl(VarDecl):
 @dataclass
 class TypeFieldDecl(FieldDecl):
     type_param: TypeAttribute
+
+    def ensure_capitalization(self):
+        return
 
     def scoped_name(self, type_env):
         return clean_name(f"{type_env.simplify(self.type_param)}").lower()
@@ -4413,8 +4418,8 @@ class Return(Statement):
     def typeflow(self, scope):
         if(not scope.method):
             raise Exception(f"{self.info}: can only have return statements in functions")
-        if(scope.method.definition.return_type()):
-            raise Exception(f"{self.info}: function declares a return type but returns no values")
+        if(scope.method.definition.return_type() and not isinstance(scope.method, FunctionLiteral)):
+            raise Exception(f"{self.info}: function declares a return type ({scope.method.definition.return_type()}) but returns no values")
         scope.method.definition.hasreturn = True
         self.untype_variables(scope)
 

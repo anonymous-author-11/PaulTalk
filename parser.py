@@ -51,8 +51,8 @@ def parse(file_path) -> AST:
 
         # auto-include core.mini
         special_files = (
-            "builtins.mini", "iteration.mini", "collection.mini",
-            "list.mini", "range.mini", "indexable.mini",
+            "builtins.mini", "iteration.mini", "collection.mini", "writer.mini",
+            "list.mini", "range.mini", "indexable.mini", "unicode.mini",
             "core.mini"
         )
         if file_path.name not in special_files:
@@ -213,7 +213,7 @@ class CSTTransformer(Transformer):
         method_duplicates = duplicates(method_signatures)
         if len(method_duplicates) > 0:
             offender = next(iter(method_duplicates.keys()))
-            param_types = ", ".join([*offender[1:]])
+            param_types = ", ".join([f"{x}" for x in offender[1:]])
             raise Exception(f"{node_info}: {class_name}.{offender[0]}({param_types}) is defined multiple times")
 
         return class_def

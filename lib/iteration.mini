@@ -16,7 +16,7 @@ class Iterator[T] {
     @elems_reg : Region
 
 	abstract def next() -> T? {
-    } ~> { ret holds @elems_reg }
+    } ~> { self holds ret, ret holds @elems_reg }
 
 }
 

@@ -187,7 +187,11 @@ class TypeEnvironment:
 
     # is lhs a valid instantiation of rhs?
     def matches_inner(self, left, right):
-        if isinstance(left, FatPtr) and isinstance(right, FatPtr): return left.cls == right.cls
+        if isinstance(left, FatPtr) and isinstance(right, FatPtr):
+            if left.cls != right.cls: return False
+            if left.type_params == NoneAttr() and right.type_params == NoneAttr(): return True
+            if left.type_params == NoneAttr() or right.type_params == NoneAttr(): return False
+            return all(self.matches(l,r) for (l,r) in zip(left.type_params.data, right.type_params.data))
         if isinstance(left, Buffer):
             return isinstance(right, Buffer) and self.matches(left.elem_type, right.elem_type)
         if isinstance(left, TypeParameter) and isinstance(right, TypeParameter):
