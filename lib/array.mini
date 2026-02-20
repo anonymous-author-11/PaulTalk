@@ -1,7 +1,7 @@
 import core;
 
 class Array[T] extends
-    List[T],
+    Stack[T],
     IndexableCollection[i32, T, T],
     Representable
 {
@@ -68,6 +68,48 @@ class Array[T] extends
             i = i + 1;
         }
         @length = new_len;
+        return self;
+    }
+
+    def pop() -> T? {
+        if @length == 0 { return nil; }
+        @length = @length - 1;
+        return @buffer.[@length];
+    }
+
+    def peek() -> T? {
+        if @length == 0 { return nil; }
+        return @buffer.[@length - 1];
+    }
+
+    def remove_at(index : i32) -> T yields OutOfBounds {
+        self.bounds_check(index);
+        if index < 0 { index = @length + index; }
+        removed = @buffer.[index];
+        last_index = @length - 1;
+        while index < last_index {
+            @buffer.[index] = @buffer.[index + 1];
+            index = index + 1;
+        }
+        @length = last_index;
+        return removed;
+    }
+
+    def clear() -> Self {
+        @length = 0;
+        return self;
+    }
+
+    def reverse() -> Self {
+        left = 0;
+        right = @length - 1;
+        while left < right {
+            left_value = @buffer.[left];
+            @buffer.[left] = @buffer.[right];
+            @buffer.[right] = left_value;
+            left = left + 1;
+            right = right - 1;
+        }
         return self;
     }
 

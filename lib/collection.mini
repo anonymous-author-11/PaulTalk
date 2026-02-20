@@ -8,6 +8,13 @@ class Collection[T] extends Iterable[T] {
         return self.size() == 0;
     }
 
+    def contains(target : T, eq : (T, T) -> Bool) -> Bool {
+        for item in self {
+            if eq.call(item, target) { return true; }
+        }
+        return false;
+    }
+
     // Iterable.filter is *not* overridden because the size of a filtered collection cannot be known prior to iterating
 
     def enumerate() -> Collection[Pair[i32, T]] {

@@ -71,6 +71,101 @@ class CompilerPositiveTestsMixin:
             expected_output = "Computer in Chinese is 电脑"
             self.run_mini_code(mini_code, expected_output, "unicode_manipulation")
 
+    def test_string_search_helpers(self):
+            mini_code = """
+                import core;
+                import io;
+
+                text = "hello world";
+                IO.print(text.starts_with("hell"));
+                IO.print(text.ends_with("world"));
+                IO.print(text.contains("lo wo"));
+                IO.print(text.contains("xyz"));
+                IO.print("".contains(""));
+            """
+            expected_output = "true\ntrue\ntrue\nfalse\ntrue"
+            self.run_mini_code(mini_code, expected_output, "string_search_helpers")
+
+    def test_string_byte_index_of(self):
+            mini_code = """
+                import core;
+                import io;
+
+                text = "电脑abc电脑";
+
+                idx1 = text.byte_index_of("电");
+                if idx1 is i32 { IO.print(idx1); } else { IO.print("nil"); }
+
+                idx2 = text.byte_index_of("abc");
+                if idx2 is i32 { IO.print(idx2); } else { IO.print("nil"); }
+
+                idx3 = text.byte_index_of("脑a");
+                if idx3 is i32 { IO.print(idx3); } else { IO.print("nil"); }
+
+                idx4 = text.byte_index_of("xyz");
+                if idx4 is i32 { IO.print(idx4); } else { IO.print("nil"); }
+            """
+            expected_output = "0\n6\n3\nnil"
+            self.run_mini_code(mini_code, expected_output, "string_byte_index_of")
+
+    def test_string_trim_helpers(self):
+            mini_code = """
+                import core;
+                import io;
+
+                text = "  hello  ";
+                IO.print(text.trim() == "hello");
+                IO.print(text.trim_start() == "hello  ");
+                IO.print(text.trim_end() == "  hello");
+                IO.print("  电脑  ".trim() == "电脑");
+                IO.print(" \\n\\t".trim().byte_length());
+            """
+            expected_output = "true\ntrue\ntrue\ntrue\n0"
+            self.run_mini_code(mini_code, expected_output, "string_trim_helpers")
+
+    def test_string_repeat_and_join(self):
+            mini_code = """
+                import core;
+                import io;
+                import array;
+
+                dash = "-";
+                words = ["paul", "talk", "lang"];
+                IO.print(dash.join(words));
+                IO.print("na".repeat(4));
+                IO.print("x".repeat(0));
+                IO.print("".join(words));
+            """
+            expected_output = "paul-talk-lang\nnananana\n\npaultalklang"
+            self.run_mini_code(mini_code, expected_output, "string_repeat_and_join")
+
+    def test_string_split_iterable(self):
+            mini_code = """
+                import core;
+                import io;
+
+                text = "a,b,,c,";
+                for part in text.split(",") {
+                    IO.print(part.byte_length());
+                    IO.print(part);
+                }
+
+                text2 = "猫::狗::鸟";
+                for part in text2.split("::") {
+                    IO.print(part);
+                }
+
+                for part in "abc".split("|") {
+                    IO.print(part);
+                }
+
+                for part in "xyz".split("") {
+                    IO.print(part);
+                }
+            """
+            expected_output = "1\na\n1\nb\n0\n\n1\nc\n0\n\n猫\n狗\n鸟\nabc\nxyz"
+            self.run_mini_code(mini_code, expected_output, "string_split_iterable")
+
     def test_into_operator(self):
             mini_code = """
                 import core;
@@ -128,6 +223,77 @@ class CompilerPositiveTestsMixin:
             expected_output = "34"
             self.run_mini_code(mini_code, expected_output, "i32_map_get")
 
+    def test_map_helpers(self):
+            mini_code = """
+                import std;
+
+                map = {"a":11, "b":22};
+                IO.print(map.contains_key("a"));
+                IO.print(map.contains_key("z"));
+                IO.print(map.get_or("b", 99));
+                IO.print(map.get_or("missing", 99));
+            """
+            expected_output = "true\nfalse\n22\n99"
+            self.run_mini_code(mini_code, expected_output, "map_helpers")
+
+    def test_map_get_or_insert(self):
+            mini_code = """
+                import std;
+
+                map = {"a":11};
+                IO.print(map.get_or_insert("a", 99));
+                IO.print(map.get_or_insert("b", 22));
+                IO.print(map.["b"]);
+                IO.print(map.size());
+            """
+            expected_output = "11\n22\n22\n2"
+            self.run_mini_code(mini_code, expected_output, "map_get_or_insert")
+
+    def test_map_update_and_remove_or(self):
+            mini_code = """
+                import std;
+
+                map = {"a":11, "b":7};
+                updated_a = map.update("a", (x : i32) => { x * 3; });
+                updated_z = map.update("z", (x : i32) => { x * 3; });
+                IO.print(updated_a);
+                IO.print(updated_z);
+                IO.print(map.["a"]);
+                IO.print(map.remove_or("b", -1));
+                IO.print(map.remove_or("missing", -1));
+                IO.print(map.size());
+            """
+            expected_output = "true\nfalse\n33\n7\n-1\n1"
+            self.run_mini_code(mini_code, expected_output, "map_update_and_remove_or")
+
+    def test_map_insert_with_variants(self):
+            mini_code = """
+                import std;
+
+                def forty_two(key : String) -> i32 {
+                    return 42;
+                }
+
+                def ninety_nine(key : String) -> i32 {
+                    return 99;
+                }
+
+                map = {"a":10};
+                IO.print(map.get_or_insert_with("a", forty_two));
+                IO.print(map.get_or_insert_with("b", forty_two));
+                IO.print(map.["b"]);
+
+                updated_b = map.update_or_insert("b", (x : i32) => { x + 8; }, ninety_nine);
+                inserted_c = map.update_or_insert("c", (x : i32) => { x + 8; }, ninety_nine);
+                IO.print(updated_b);
+                IO.print(map.["b"]);
+                IO.print(inserted_c);
+                IO.print(map.["c"]);
+                IO.print(map.size());
+            """
+            expected_output = "10\n42\n42\n50\n50\n99\n99\n3"
+            self.run_mini_code(mini_code, expected_output, "map_insert_with_variants")
+
     def test_str_map_iterate(self):
             mini_code = """
                 import std;
@@ -183,6 +349,74 @@ class CompilerPositiveTestsMixin:
             expected_output = "d\nlook at this!"
             self.run_mini_code(mini_code, expected_output, "array_literals")
 
+    def test_array_mutation_helpers(self):
+            mini_code = """
+                import array;
+                import io;
+
+                ary = [1,2,3,4];
+                popped = ary.pop();
+                if popped is i32 { IO.print(popped); }
+
+                removed = ary.remove_at(1);
+                IO.print(removed);
+                IO.print(ary.length());
+
+                ary.reverse();
+                for x in ary { IO.print(x); }
+
+                ary.clear();
+                IO.print(ary.size());
+                empty_pop = ary.pop();
+                if empty_pop is Nil { IO.print("nil"); }
+
+                ary2 = [5,6,7];
+                IO.print(ary2.remove_at(-1));
+                for x in ary2 { IO.print(x); }
+            """
+            expected_output = "4\n2\n2\n3\n1\n0\nnil\n7\n5\n6"
+            self.run_mini_code(mini_code, expected_output, "array_mutation_helpers")
+
+    def test_collection_contains(self):
+            mini_code = """
+                import array;
+                import io;
+
+                nums = [1,2,3,4];
+                i32_eq = (a : i32, b : i32) => { a == b; };
+                IO.print(nums.contains(3, i32_eq));
+                IO.print(nums.contains(9, i32_eq));
+
+                words = ["alpha", "beta", "gamma"];
+                string_eq_fn = (a : String, b : String) => { a == b; };
+                IO.print(words.contains("beta", string_eq_fn));
+                IO.print(words.contains("delta", string_eq_fn));
+            """
+            expected_output = "true\nfalse\ntrue\nfalse"
+            self.run_mini_code(mini_code, expected_output, "collection_contains")
+
+    def test_stack_abstraction_with_array(self):
+            mini_code = """
+                import array;
+                import io;
+
+                def fill_stack(stack : Stack[i32]) {
+                    stack.push(10).push(20).push(30);
+                }
+
+                ary = [] of i32;
+                fill_stack(ary);
+                top = ary.peek();
+                if top is i32 { IO.print(top); } else { IO.print("nil"); }
+                IO.print(ary.pop());
+                IO.print(ary.pop());
+                IO.print(ary.pop());
+                last_pop = ary.pop();
+                if last_pop is Nil { IO.print("nil"); }
+            """
+            expected_output = "30\n30\n20\n10\nnil"
+            self.run_mini_code(mini_code, expected_output, "stack_abstraction_with_array")
+
     def test_iterable_chain(self):
             mini_code = """
                 import range;
@@ -198,6 +432,57 @@ class CompilerPositiveTestsMixin:
             """
             expected_output = "560"
             self.run_mini_code(mini_code, expected_output, "iterable_chain")
+
+    def test_iterable_find(self):
+            mini_code = """
+                import range;
+                import io;
+
+                numbers = 1...10;
+                first_even = numbers.find((x : i32) => { x % 2 == 0; });
+                if first_even is i32 { IO.print(first_even); }
+
+                missing = numbers.find((x : i32) => { x > 20; });
+                if missing is Nil { IO.print("nil"); }
+            """
+            expected_output = "2\nnil"
+            self.run_mini_code(mini_code, expected_output, "iterable_find")
+
+    def test_iterable_first(self):
+            mini_code = """
+                import range;
+                import io;
+
+                numbers = 1...5;
+                first = numbers.first();
+                if first is i32 { IO.print(first); } else { IO.print("nil"); }
+
+                empty = (1...5).filter((x : i32) => { x > 10; });
+                first_empty = empty.first();
+                if first_empty is Nil { IO.print("nil"); } else { IO.print("bad"); }
+
+            """
+            expected_output = "1\nnil"
+            self.run_mini_code(mini_code, expected_output, "iterable_first")
+
+    def test_iterable_last(self):
+            mini_code = """
+                import range;
+                import io;
+
+                numbers = 1...5;
+                last_num = numbers.last();
+                if last_num is i32 { IO.print(last_num); } else { IO.print("nil"); }
+
+                empty = (1...5).filter((x : i32) => { x > 10; });
+                last_empty = empty.last();
+                if last_empty is Nil { IO.print("nil"); } else { IO.print("bad"); }
+
+                doubled_last = (1...5).map((x : i32) => { x * 2; }).last();
+                if doubled_last is i32 { IO.print(doubled_last); } else { IO.print("nil"); }
+            """
+            expected_output = "5\nnil\n10"
+            self.run_mini_code(mini_code, expected_output, "iterable_last")
 
     def test_tuple_arithmetic(self):
             mini_code = """

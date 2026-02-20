@@ -47,6 +47,22 @@ class Iterable[T] {
         for x in self { if f.call(x) { return true; } }
         return false;
     } ~> no_alias
+
+    def first() -> T? {
+        for x in self { return x; }
+        return nil;
+    }
+
+    def last() -> T? {
+        last_value = nil;
+        for value in self { last_value = value; }
+        return last_value;
+    }
+
+    def find(f : (T) -> Bool) -> T? {
+        for x in self { if f.call(x) { return x; } }
+        return nil;
+    }
     
     def enumerate() -> Iterable[Pair[i32, T]] {
         return Enumerated{self};

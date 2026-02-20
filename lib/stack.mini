@@ -1,0 +1,14 @@
+import list;
+
+class Stack[T] extends List[T] {
+
+    abstract def pop() -> T? {}
+
+    def push(item : T) -> Self {
+        return self.append(item);
+    }
+
+    def peek() -> T? {
+        return self.last();
+    }
+}

@@ -1,7 +1,7 @@
 
 // A vision for the future evolution of the stdlib
 
-import list;
+import stack;
 import indexable;
 import range;
 
@@ -53,6 +53,16 @@ class UTF8 {
         if codepoint <= 0xFFFF { return 3; }
         if codepoint <= 0x10FFFF { return 4; }
         return 0;
+    }
+
+    def Self.is_ascii_whitespace(byte : i8) -> Bool {
+        if byte == (32 as i8) { return true; }
+        if byte == (9 as i8) { return true; }
+        if byte == (10 as i8) { return true; }
+        if byte == (11 as i8) { return true; }
+        if byte == (12 as i8) { return true; }
+        if byte == (13 as i8) { return true; }
+        return false;
     }
 }
 
@@ -220,6 +230,106 @@ class String extends List[Character], Representable {
         }
         return true;
     }
+    def starts_with(prefix : String) -> Bool {
+        prefix_len = prefix.byte_length();
+        if prefix_len > @byte_length { return false; }
+        return self.bytes_match_at(prefix, 0);
+    }
+    def ends_with(suffix : String) -> Bool {
+        suffix_len = suffix.byte_length();
+        if suffix_len > @byte_length { return false; }
+        offset = @byte_length - suffix_len;
+        return self.bytes_match_at(suffix, offset);
+    }
+    def bytes_match_at(needle : String, start : i32) -> Bool {
+        needle_len = needle.byte_length();
+        for i in 0..needle_len {
+            if @bytes.[start + i] != needle.unchecked_index(i) { return false; }
+        }
+        return true;
+    } ~> no_alias
+    def byte_index_of(needle : String) -> i32? {
+        needle_len = needle.byte_length();
+        if needle_len == 0 { return 0; }
+        if needle_len > @byte_length { return nil; }
+        last_start = @byte_length - needle_len;
+        for start in 0..(last_start + 1) {
+            if self.bytes_match_at(needle, start) { return start; }
+        }
+        return nil;
+    }
+    def contains(needle : String) -> Bool {
+        return self.byte_index_of(needle) is i32;
+    }
+    def lead_whitespace() -> i32 {
+        for i in 0..@byte_length {
+            if not UTF8.is_ascii_whitespace(@bytes.[i]) { return i; }
+        }
+        return @byte_length;
+    }
+    def trail_whitespace() -> i32 {
+        for i in 0..@byte_length {
+            idx = @byte_length - i - 1;
+            if not UTF8.is_ascii_whitespace(@bytes.[idx]) { return i; }
+        }
+        return @byte_length;
+    }
+    def trim_start() -> String {
+        start = self.lead_whitespace();
+        slice_len = @byte_length - start;
+        copied = Buffer[i8].new(slice_len);
+        for i in 0..slice_len { copied.[i] = @bytes.[start + i]; }
+        chars = @char_length - start;
+        return String{copied, slice_len, chars, slice_len};
+    }
+    def trim_end() -> String {
+        removed = self.trail_whitespace();
+        end_exclusive = @byte_length - removed;
+        copied = Buffer[i8].new(end_exclusive);
+        for i in 0..end_exclusive { copied.[i] = @bytes.[i]; }
+        chars = @char_length - removed;
+        return String{copied, end_exclusive, chars, end_exclusive};
+    }
+    def trim() -> String {
+        start = self.lead_whitespace();
+        trail_whitespace = self.trail_whitespace();
+        end_exclusive = @byte_length - trail_whitespace;
+        if end_exclusive < start { end_exclusive = start; }
+        slice_len = end_exclusive - start;
+        copied = Buffer[i8].new(slice_len);
+        for i in 0..slice_len { copied.[i] = @bytes.[start + i]; }
+        removed = start + trail_whitespace;
+        if removed > @char_length { removed = @char_length; }
+        chars = @char_length - removed;
+        return String{copied, slice_len, chars, slice_len};
+    }
+    def repeat(times : i32) -> String {
+        if times <= 0 { return String.empty(); }
+        result = String{@byte_length * times};
+        repeat_index = 0;
+        while repeat_index < times {
+            result.extend(self);
+            repeat_index = repeat_index + 1;
+        }
+        return result;
+    }
+    def join(parts : Iterable[String]) -> String {
+        iterator = parts.iterator();
+        first_part = iterator.next();
+        if first_part is not String { return String.empty(); }
+        result = String{first_part.byte_length()};
+        result.extend(first_part);
+        next_part = iterator.next();
+        while next_part is String {
+            result.extend(self);
+            result.extend(next_part);
+            next_part = iterator.next();
+        }
+        return result;
+    }
+    def split(delimiter : String) -> Iterable[String] {
+        return SplitString{self, delimiter};
+    }
     def unchecked_index(x : i32) -> i8 {
         return @bytes.[x];
     }
@@ -263,6 +373,81 @@ class String extends List[Character], Representable {
         return StringWriter{self};
     } ~> { ret.string == self }
 
+}
+
+class SplitString extends Iterable[String] {
+    @source : String
+    @delimiter : String
+
+    def init(@source : String, @delimiter : String) {}
+
+    def iterator() -> SplitStringIterator {
+        return SplitStringIterator{@source, @delimiter};
+    } ~> { ret.source == @source, ret.delimiter == @delimiter }
+}
+
+class SplitStringIterator extends Iterator[String] {
+    @source : String
+    @delimiter : String
+    @cursor : i32
+    @done : Bool
+
+    def init(@source : String, @delimiter : String) {
+        @cursor = 0;
+        @done = false;
+    }
+
+    def build_segment(start : i32, end_exclusive : i32) -> String {
+        n_bytes = end_exclusive - start;
+        bytes = Buffer[i8].new(n_bytes);
+        n_chars = 0;
+
+        i = 0;
+        while i < n_bytes {
+            byte = @source.unchecked_index(start + i);
+            bytes.[i] = byte;
+            if not UTF8.is_continuation(byte as i32) { n_chars = n_chars + 1; }
+            i = i + 1;
+        }
+
+        return String{bytes, n_bytes, n_chars, n_bytes};
+    } ~> no_alias
+
+    def find_delimiter(last_start : i32) -> i32? {
+        scan = @cursor;
+        while scan <= last_start {
+            if @source.bytes_match_at(@delimiter, scan) { return scan; }
+            scan = scan + 1;
+        }
+        return nil;
+    } ~> no_alias
+
+    def next() -> String? {
+        if @done { return nil; }
+
+        source_len = @source.byte_length();
+        delimiter_len = @delimiter.byte_length();
+        if delimiter_len == 0 {
+            @done = true;
+            return self.build_segment(0, source_len);
+        }
+
+        start = @cursor;
+        if start > source_len {
+            @done = true;
+            return nil;
+        }
+
+        last_start = source_len - delimiter_len;
+        next_delimiter = self.find_delimiter(last_start);
+        if next_delimiter is i32 {
+            @cursor = next_delimiter + delimiter_len;
+            return self.build_segment(start, next_delimiter);
+        }
+
+        @done = true;
+        return self.build_segment(start, source_len);
+    }
 }
 
 class StringCodePoints extends List[i32] {

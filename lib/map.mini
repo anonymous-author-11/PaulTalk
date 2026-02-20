@@ -20,6 +20,56 @@ class Map[K, V] extends IndexableCollection[K, V, Pair[K, V]] {
     def clear() {
         for key in self.keys() { self.remove(key); }
     }
+    def contains_key(key : K) -> Bool {
+        value = self.get(key);
+        return value is V;
+    }
+    def contains(pair : Pair[K, V], eq : (Pair[K, V], Pair[K, V]) -> Bool) -> Bool {
+        key = pair.first();
+        value = self.get(key);
+        if value is not V { return false; }
+        return eq.call(pair, Pair{key, value});
+    }
+    def get_or(key : K, fallback : V) -> V {
+        value = self.get(key);
+        if value is V { return value; }
+        return fallback;
+    }
+    def get_or_insert(key : K, fallback : V) -> V {
+        value = self.get(key);
+        if value is V { return value; }
+        self.insert(key, fallback);
+        return fallback;
+    }
+    def get_or_insert_with(key : K, fallback_fn : (K) -> V) -> V {
+        value = self.get(key);
+        if value is V { return value; }
+        fallback = fallback_fn.call(key);
+        self.insert(key, fallback);
+        return fallback;
+    }
+    def remove_or(key : K, fallback : V) -> V {
+        value = self.remove(key);
+        if value is V { return value; }
+        return fallback;
+    }
+    def update(key : K, f : (V) -> V) -> Bool {
+        value = self.get(key);
+        if value is not V { return false; }
+        self.insert(key, f.call(value));
+        return true;
+    }
+    def update_or_insert(key : K, update_fn : (V) -> V, fallback_fn : (K) -> V) -> V {
+        value = self.get(key);
+        if value is V {
+            updated = update_fn.call(value);
+            self.insert(key, updated);
+            return updated;
+        }
+        fallback = fallback_fn.call(key);
+        self.insert(key, fallback);
+        return fallback;
+    }
     def [](key : K) -> V {
         val = self.get(key);
         if val is V { return val; }
