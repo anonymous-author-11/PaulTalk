@@ -700,6 +700,7 @@ DONE:
 
 TODO:
 
+- Argc and argv
 - Should self even point to virtual regions if they aren't identified with a field?
 - See how timings would suffer if we used malloc for bump_alloc
 	- Then possibly also realloc
