@@ -977,3 +977,1387 @@ String_c_string_.exit:                            ; preds = %RangeIterator_next_
   %puts.i371 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly dereferenceable(2) %result.i5.i.h2s1360) #46
   ret i32 0
 }
+
+define noundef i32 @main_v3() local_unnamed_addr #7 {
+StringWriter_write_from_sourceCollectionCharacter_max_elemsi32.exit:
+  %0 = alloca [0 x ptr], align 8
+  %result.i5.i.h2s1702 = alloca [2 x i8], align 2
+  store i16 0, ptr %result.i5.i.h2s1702, align 2
+  %result.i5.i.i.h2s1703 = alloca [4 x i8], align 4
+  store i32 0, ptr %result.i5.i.i.h2s1703, align 4
+  %result.i32.h2s1705 = alloca [160 x i8], align 1
+  %1 = getelementptr inbounds i8, ptr %result.i32.h2s1705, i64 16
+  call void @llvm.memset.p0.i64(ptr noundef nonnull align 1 dereferenceable(160) %1, i8 0, i64 144, i1 false)
+  %result.i5.i661.h2s1706 = alloca [30 x i8], align 1
+  call void @setup_landing_pad()
+  %2 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
+  %3 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  store i8 67, ptr %result.i5.i661.h2s1706, align 1
+  %scevgep716 = getelementptr inbounds i8, ptr %result.i5.i661.h2s1706, i64 1
+  store <22 x i8> <i8 111, i8 109, i8 112, i8 117, i8 116, i8 101, i8 114, i8 32, i8 105, i8 110, i8 32, i8 67, i8 104, i8 105, i8 110, i8 101, i8 115, i8 101, i8 32, i8 105, i8 115, i8 32>, ptr %scevgep716, align 1
+  %result.i5.i411.h2s1707.sroa.3.1.scevgep716.sroa_idx = getelementptr inbounds i8, ptr %result.i5.i661.h2s1706, i64 23
+  store <4 x i8> <i8 -25, i8 -108, i8 -75, i8 -24>, ptr %result.i5.i411.h2s1707.sroa.3.1.scevgep716.sroa_idx, align 1
+  %result.i5.i411.h2s1707.sroa.4.1.scevgep716.sroa_idx = getelementptr inbounds i8, ptr %result.i5.i661.h2s1706, i64 27
+  store i8 -124, ptr %result.i5.i411.h2s1707.sroa.4.1.scevgep716.sroa_idx, align 1
+  %result.i5.i411.h2s1707.sroa.5.1.scevgep716.sroa_idx = getelementptr inbounds i8, ptr %result.i5.i661.h2s1706, i64 28
+  store i8 -111, ptr %result.i5.i411.h2s1707.sroa.5.1.scevgep716.sroa_idx, align 1
+  %4 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %5 = getelementptr inbounds i8, ptr %result.i5.i661.h2s1706, i64 29
+  store i8 0, ptr %5, align 1
+  %puts.i472 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly dereferenceable(30) %result.i5.i661.h2s1706) #46
+  %result.i31 = call noalias align 4 dereferenceable_or_null(4) ptr @bump_malloc_wrapper(i64 noundef 4) #45
+  store i32 97, ptr %result.i31, align 4
+  store ptr @Character, ptr %result.i32.h2s1705, align 8
+  %6 = getelementptr inbounds i8, ptr %result.i32.h2s1705, i64 8
+  store ptr %result.i31, ptr %6, align 8
+  %7 = getelementptr inbounds i8, ptr %result.i32.h2s1705, i64 24
+  store i32 10, ptr %7, align 4
+  %result.i30 = call noalias align 4 dereferenceable_or_null(4) ptr @bump_malloc_wrapper(i64 noundef 4) #45
+  store i32 98, ptr %result.i30, align 4
+  %8 = getelementptr inbounds i8, ptr %result.i32.h2s1705, i64 32
+  store ptr @Character, ptr %8, align 8
+  %9 = getelementptr inbounds i8, ptr %result.i32.h2s1705, i64 40
+  store ptr %result.i30, ptr %9, align 8
+  %10 = getelementptr inbounds i8, ptr %result.i32.h2s1705, i64 56
+  store i32 10, ptr %10, align 4
+  %result.i29 = call noalias align 4 dereferenceable_or_null(4) ptr @bump_malloc_wrapper(i64 noundef 4) #45
+  store i32 99, ptr %result.i29, align 4
+  %11 = getelementptr inbounds i8, ptr %result.i32.h2s1705, i64 64
+  store ptr @Character, ptr %11, align 8
+  %12 = getelementptr inbounds i8, ptr %result.i32.h2s1705, i64 72
+  store ptr %result.i29, ptr %12, align 8
+  %13 = getelementptr inbounds i8, ptr %result.i32.h2s1705, i64 88
+  store i32 10, ptr %13, align 4
+  %result.i28 = call noalias align 4 dereferenceable_or_null(4) ptr @bump_malloc_wrapper(i64 noundef 4) #45
+  store i32 100, ptr %result.i28, align 4
+  %14 = getelementptr inbounds i8, ptr %result.i32.h2s1705, i64 96
+  store ptr @Character, ptr %14, align 8
+  %15 = getelementptr inbounds i8, ptr %result.i32.h2s1705, i64 104
+  store ptr %result.i28, ptr %15, align 8
+  %16 = getelementptr inbounds i8, ptr %result.i32.h2s1705, i64 120
+  store i32 10, ptr %16, align 4
+  %17 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %18 = call ptr @llvm.invariant.start.p0(i64 noundef 2248, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2328) @StringBytes) #54
+  %19 = call ptr @llvm.invariant.start.p0(i64 noundef 288, ptr nocapture nofree noundef nonnull align 16 dereferenceable(368) @StringByteWriter) #53
+  %20 = call ptr @llvm.invariant.start.p0(i64 noundef 368, ptr nocapture nofree noundef nonnull align 16 dereferenceable(448) @UTF8Encoder) #54
+  %21 = call ptr @llvm.invariant.start.p0(i64 noundef 304, ptr nocapture nofree noundef nonnull align 16 dereferenceable(384) @StringWriter)
+  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 56, ptr nocapture nofree noundef nonnull align 16 dereferenceable(384) @StringWriter) #53
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %23 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  %24 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  %25 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %26 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %27 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %28 = call ptr @llvm.invariant.start.p0(i64 noundef 128, ptr nocapture nofree noundef nonnull align 16 dereferenceable(208) @ArrayIterator)
+  %29 = load i160, ptr %6, align 8
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %extract.t = trunc i160 %29 to i64
+  %extract = lshr i160 %29, 64
+  %extract.t878 = trunc i160 %extract to i64
+  %30 = inttoptr i64 %extract.t to ptr
+  %31 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  %32 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef nonnull align 16 dereferenceable(152) @Character) #53
+  %33 = load i32, ptr %30, align 4
+  %34 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @UTF8) #54
+  %35 = icmp slt i32 %33, 128
+  br i1 %35, label %Character_n_bytes_.exit, label %36
+
+36:                                               ; preds = %StringWriter_write_from_sourceCollectionCharacter_max_elemsi32.exit
+  %37 = icmp ult i32 %33, 2048
+  br i1 %37, label %Character_n_bytes_.exit, label %38
+
+38:                                               ; preds = %36
+  %39 = icmp ult i32 %33, 1114112
+  %spec.select.i1448 = select i1 %39, i32 4, i32 3
+  br label %Character_n_bytes_.exit
+
+Character_n_bytes_.exit:                          ; preds = %38, %36, %StringWriter_write_from_sourceCollectionCharacter_max_elemsi32.exit
+  %40 = phi i32 [ 2, %36 ], [ 1, %StringWriter_write_from_sourceCollectionCharacter_max_elemsi32.exit ], [ %spec.select.i1448, %38 ]
+  %41 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %42 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %43 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %44 = load i160, ptr %9, align 8
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %extract.t881 = trunc i160 %44 to i64
+  %45 = inttoptr i64 %extract.t881 to ptr
+  %46 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  %47 = load i32, ptr %45, align 4
+  %48 = icmp slt i32 %47, 128
+  br i1 %48, label %Character_n_bytes_.exit1465, label %49
+
+49:                                               ; preds = %Character_n_bytes_.exit
+  %50 = icmp ult i32 %47, 2048
+  br i1 %50, label %Character_n_bytes_.exit1465, label %51
+
+51:                                               ; preds = %49
+  %52 = icmp ult i32 %47, 1114112
+  %spec.select.i1463 = select i1 %52, i32 4, i32 3
+  br label %Character_n_bytes_.exit1465
+
+Character_n_bytes_.exit1465:                      ; preds = %51, %49, %Character_n_bytes_.exit
+  %53 = phi i32 [ 2, %49 ], [ 1, %Character_n_bytes_.exit ], [ %spec.select.i1463, %51 ]
+  %54 = add nuw nsw i32 %53, %40
+  %55 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %56 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %57 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %58 = call ptr @llvm.invariant.start.p0(i64 noundef 128, ptr nocapture nofree noundef nonnull align 16 dereferenceable(208) @ArrayIterator)
+  %59 = call ptr @llvm.invariant.start.p0(i64 noundef 4280, ptr nocapture nofree noundef nonnull align 16 dereferenceable(4360) @Array) #54
+  %60 = load i160, ptr %12, align 8
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %extract.t881.1 = trunc i160 %60 to i64
+  %61 = inttoptr i64 %extract.t881.1 to ptr
+  %62 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  %63 = load i32, ptr %61, align 4
+  %64 = icmp slt i32 %63, 128
+  br i1 %64, label %Character_n_bytes_.exit1481, label %65
+
+65:                                               ; preds = %Character_n_bytes_.exit1465
+  %66 = icmp ult i32 %63, 2048
+  br i1 %66, label %Character_n_bytes_.exit1481, label %67
+
+67:                                               ; preds = %65
+  %68 = icmp ult i32 %63, 1114112
+  %spec.select.i1479 = select i1 %68, i32 4, i32 3
+  br label %Character_n_bytes_.exit1481
+
+Character_n_bytes_.exit1481:                      ; preds = %67, %65, %Character_n_bytes_.exit1465
+  %69 = phi i32 [ 2, %65 ], [ 1, %Character_n_bytes_.exit1465 ], [ %spec.select.i1479, %67 ]
+  %70 = add nuw nsw i32 %54, %69
+  %71 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %72 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %73 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %74 = load i160, ptr %15, align 8
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %extract.t881.2 = trunc i160 %74 to i64
+  %75 = inttoptr i64 %extract.t881.2 to ptr
+  %76 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  %77 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef nonnull align 16 dereferenceable(152) @Character) #53
+  %78 = load i32, ptr %75, align 4
+  %79 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @UTF8) #54
+  %80 = icmp slt i32 %78, 128
+  br i1 %80, label %._crit_edge1.i869.preheader, label %81
+
+81:                                               ; preds = %Character_n_bytes_.exit1481
+  %82 = icmp ult i32 %78, 2048
+  br i1 %82, label %._crit_edge1.i869.preheader, label %83
+
+83:                                               ; preds = %81
+  %84 = icmp ult i32 %78, 1114112
+  %spec.select.i1495 = select i1 %84, i32 4, i32 3
+  br label %._crit_edge1.i869.preheader
+
+._crit_edge1.i869.preheader:                      ; preds = %83, %81, %Character_n_bytes_.exit1481
+  %85 = phi i32 [ 2, %81 ], [ 1, %Character_n_bytes_.exit1481 ], [ %spec.select.i1495, %83 ]
+  %86 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %87 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %88 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %89 = add nuw nsw i32 %70, %85
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %90 = zext nneg i32 %89 to i64
+  %result.i5.i894 = call noalias ptr @bump_malloc_wrapper(i64 noundef %90) #45
+  %91 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %92 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  %93 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %94 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  %95 = call ptr @llvm.invariant.start.p0(i64 noundef 304, ptr nocapture nofree noundef nonnull align 16 dereferenceable(384) @StringWriter)
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %96 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %97 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %98 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %99 = call ptr @llvm.invariant.start.p0(i64 noundef 128, ptr nocapture nofree noundef nonnull align 16 dereferenceable(208) @ArrayIterator)
+  %100 = call ptr @llvm.invariant.start.p0(i64 noundef 4280, ptr nocapture nofree noundef nonnull align 16 dereferenceable(4360) @Array) #54
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %101 = call ptr @llvm.invariant.start.p0(i64 noundef 128, ptr nocapture nofree noundef nonnull align 16 dereferenceable(384) @StringWriter)
+  br label %._crit_edge1.i869
+
+._crit_edge1.i869:                                ; preds = %ArrayIterator_next_.exit957, %._crit_edge1.i869.preheader
+  %result.i2.i.i.h2s1704.sroa.22.0 = phi i32 [ %89, %._crit_edge1.i869.preheader ], [ %result.i2.i.i.h2s1704.sroa.22.1, %ArrayIterator_next_.exit957 ]
+  %result.i2.i.i.h2s1704.sroa.0.0 = phi ptr [ %result.i5.i894, %._crit_edge1.i869.preheader ], [ %result.i2.i.i.h2s1704.sroa.0.1, %ArrayIterator_next_.exit957 ]
+  %102 = phi ptr [ %result.i5.i894, %._crit_edge1.i869.preheader ], [ %356, %ArrayIterator_next_.exit957 ]
+  %103 = phi i32 [ %89, %._crit_edge1.i869.preheader ], [ %357, %ArrayIterator_next_.exit957 ]
+  %.pre1503 = phi i32 [ 0, %._crit_edge1.i869.preheader ], [ %358, %ArrayIterator_next_.exit957 ]
+  %104 = phi ptr [ %result.i5.i894, %._crit_edge1.i869.preheader ], [ %359, %ArrayIterator_next_.exit957 ]
+  %105 = phi i32 [ %89, %._crit_edge1.i869.preheader ], [ %360, %ArrayIterator_next_.exit957 ]
+  %106 = phi i32 [ 0, %._crit_edge1.i869.preheader ], [ %361, %ArrayIterator_next_.exit957 ]
+  %indvars.iv1163 = phi i64 [ 1, %._crit_edge1.i869.preheader ], [ %indvars.iv.next1164, %ArrayIterator_next_.exit957 ]
+  %.reg2mem5.sroa.0.0.i946.pn = phi ptr [ @Character, %._crit_edge1.i869.preheader ], [ %vptr.i1205, %ArrayIterator_next_.exit957 ]
+  %.reg2mem5.sroa.3.0.i947.pn.off0 = phi i64 [ %extract.t, %._crit_edge1.i869.preheader ], [ %extract.t967, %ArrayIterator_next_.exit957 ]
+  %.reg2mem5.sroa.3.0.i947.pn.off64 = phi i64 [ %extract.t878, %._crit_edge1.i869.preheader ], [ %extract.t969, %ArrayIterator_next_.exit957 ]
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %107 = inttoptr i64 %.reg2mem5.sroa.3.0.i947.pn.off0 to ptr
+  %108 = inttoptr i64 %.reg2mem5.sroa.3.0.i947.pn.off64 to ptr
+  %hash_coef_ptr.i5.i = getelementptr i8, ptr %.reg2mem5.sroa.0.0.i946.pn, i64 8
+  %tbl_size_ptr.i6.i = getelementptr i8, ptr %.reg2mem5.sroa.0.0.i946.pn, i64 16
+  %offset_tbl_ptr.i7.i = getelementptr i8, ptr %.reg2mem5.sroa.0.0.i946.pn, i64 40
+  %hash_coef.i8.i = load i64, ptr %hash_coef_ptr.i5.i, align 4
+  %tbl_size.i9.i = load i64, ptr %tbl_size_ptr.i6.i, align 4
+  %offset_tbl.i10.i = load ptr, ptr %offset_tbl_ptr.i7.i, align 8
+  %product.i.i11.i = mul i64 %hash_coef.i8.i, 6681222582356018452
+  %shifted.i.i12.i = lshr i64 %product.i.i11.i, 32
+  %xored.i.i13.i = xor i64 %shifted.i.i12.i, %product.i.i11.i
+  %hash.i.i14.i = and i64 %xored.i.i13.i, %tbl_size.i9.i
+  %offset_ptr.i15.i = getelementptr i32, ptr %offset_tbl.i10.i, i64 %hash.i.i14.i
+  %offset.i16.i = load i32, ptr %offset_ptr.i15.i, align 4
+  %109 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.reg2mem5.sroa.0.0.i946.pn, 0
+  %110 = insertvalue { ptr, ptr, ptr, i32 } %109, ptr %107, 1
+  %111 = insertvalue { ptr, ptr, ptr, i32 } %110, ptr %108, 2
+  %112 = insertvalue { ptr, ptr, ptr, i32 } %111, i32 %offset.i16.i, 3
+  %113 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0) #53
+  %114 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef align 8 %.reg2mem5.sroa.0.0.i946.pn) #53
+  %115 = sext i32 %offset.i16.i to i64
+  %116 = getelementptr ptr, ptr %.reg2mem5.sroa.0.0.i946.pn, i64 %115
+  %117 = getelementptr i8, ptr %116, i64 32
+  %118 = load ptr, ptr %117, align 8
+  %result.i4.i917 = call ptr %118({ ptr, ptr, ptr, i32 } %112, ptr nocapture nofree noundef nonnull readonly align 8 %0) #43
+  %119 = call i32 %result.i4.i917({ ptr, ptr, ptr, i32 } %112, { ptr, ptr, ptr, i32 } %112, ptr nonnull align 8 %0)
+  %120 = call ptr @llvm.invariant.start.p0(i64 noundef 304, ptr nocapture nofree noundef nonnull align 16 dereferenceable(384) @StringWriter)
+  %121 = add i32 %119, %106
+  %122 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String) #55
+  %.not.i1184 = icmp sgt i32 %121, %105
+  br i1 %.not.i1184, label %123, label %String_reserve_new_capacityi32.exit1189
+
+123:                                              ; preds = %._crit_edge1.i869
+  %124 = sext i32 %121 to i64
+  %result.i5.i1185 = call noalias ptr @bump_malloc_wrapper(i64 noundef %124) #45
+  %125 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %126 = add i32 %.pre1503, -1
+  %127 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  %128 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %129 = icmp slt i32 %126, 0
+  br i1 %129, label %String_reserve_new_capacityi32.exit1189, label %._crit_edge1.lr.ph.i1187
+
+._crit_edge1.lr.ph.i1187:                         ; preds = %123
+  %130 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %131 = load i8, ptr %104, align 1
+  store i8 %131, ptr %result.i5.i1185, align 1
+  %132 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %133 = icmp eq i32 %126, 0
+  br i1 %133, label %String_reserve_new_capacityi32.exit1189, label %RangeIterator_next_.exit52.i1188
+
+RangeIterator_next_.exit52.i1188:                 ; preds = %RangeIterator_next_.exit52.i1188, %._crit_edge1.lr.ph.i1187
+  %134 = phi i32 [ %135, %RangeIterator_next_.exit52.i1188 ], [ 1, %._crit_edge1.lr.ph.i1187 ]
+  %135 = add i32 %134, 1
+  %136 = sext i32 %134 to i64
+  %137 = getelementptr i8, ptr %104, i64 %136
+  %138 = load i8, ptr %137, align 1
+  %139 = getelementptr i8, ptr %result.i5.i1185, i64 %136
+  store i8 %138, ptr %139, align 1
+  %140 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %141 = icmp sgt i32 %135, %126
+  br i1 %141, label %String_reserve_new_capacityi32.exit1189, label %RangeIterator_next_.exit52.i1188
+
+String_reserve_new_capacityi32.exit1189:          ; preds = %RangeIterator_next_.exit52.i1188, %._crit_edge1.lr.ph.i1187, %123, %._crit_edge1.i869
+  %result.i2.i.i.h2s1704.sroa.22.2 = phi i32 [ %121, %123 ], [ %121, %._crit_edge1.lr.ph.i1187 ], [ %result.i2.i.i.h2s1704.sroa.22.0, %._crit_edge1.i869 ], [ %121, %RangeIterator_next_.exit52.i1188 ]
+  %result.i2.i.i.h2s1704.sroa.0.2 = phi ptr [ %result.i5.i1185, %123 ], [ %result.i5.i1185, %._crit_edge1.lr.ph.i1187 ], [ %result.i2.i.i.h2s1704.sroa.0.0, %._crit_edge1.i869 ], [ %result.i5.i1185, %RangeIterator_next_.exit52.i1188 ]
+  %142 = phi ptr [ %result.i5.i1185, %123 ], [ %result.i5.i1185, %._crit_edge1.lr.ph.i1187 ], [ %102, %._crit_edge1.i869 ], [ %result.i5.i1185, %RangeIterator_next_.exit52.i1188 ]
+  %143 = phi i32 [ %121, %123 ], [ %121, %._crit_edge1.lr.ph.i1187 ], [ %103, %._crit_edge1.i869 ], [ %121, %RangeIterator_next_.exit52.i1188 ]
+  %144 = phi ptr [ %result.i5.i1185, %123 ], [ %result.i5.i1185, %._crit_edge1.lr.ph.i1187 ], [ %104, %._crit_edge1.i869 ], [ %result.i5.i1185, %RangeIterator_next_.exit52.i1188 ]
+  %145 = phi i32 [ %121, %123 ], [ %121, %._crit_edge1.lr.ph.i1187 ], [ %105, %._crit_edge1.i869 ], [ %121, %RangeIterator_next_.exit52.i1188 ]
+  %146 = phi i32 [ %.pre1503, %123 ], [ 1, %._crit_edge1.lr.ph.i1187 ], [ %106, %._crit_edge1.i869 ], [ %.pre1503, %RangeIterator_next_.exit52.i1188 ]
+  %147 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %148 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef align 8 %.reg2mem5.sroa.0.0.i946.pn)
+  %149 = getelementptr i8, ptr %116, i64 8
+  %150 = load ptr, ptr %149, align 8
+  %result.i2.i919 = call ptr %150({ ptr, ptr, ptr, i32 } %112, ptr nocapture nofree noundef nonnull readonly align 8 %0) #43
+  %151 = call i32 %result.i2.i919({ ptr, ptr, ptr, i32 } %112, { ptr, ptr, ptr, i32 } %112, ptr nonnull align 8 %0)
+  %152 = call ptr @llvm.invariant.start.p0(i64 noundef 304, ptr nocapture nofree noundef nonnull align 16 dereferenceable(384) @StringWriter)
+  %153 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @UTF8) #53
+  %154 = icmp slt i32 %151, 128
+  br i1 %154, label %159, label %155
+
+155:                                              ; preds = %String_reserve_new_capacityi32.exit1189
+  %156 = icmp ult i32 %151, 2048
+  br i1 %156, label %187, label %157
+
+157:                                              ; preds = %155
+  %158 = icmp ult i32 %151, 1114112
+  br i1 %158, label %UTF8__Self_encoded_width_codepointi32.exit.i, label %codeRepl
+
+159:                                              ; preds = %String_reserve_new_capacityi32.exit1189
+  %160 = call ptr @llvm.invariant.start.p0(i64 noundef 368, ptr nocapture nofree noundef nonnull align 16 dereferenceable(448) @UTF8Encoder)
+  %.sroa.1.8.extract.trunc.i = trunc i32 %151 to i8
+  %161 = call ptr @llvm.invariant.start.p0(i64 noundef 288, ptr nocapture nofree noundef nonnull align 16 dereferenceable(368) @StringByteWriter) #53
+  %162 = add i32 %.pre1503, 1
+  %163 = icmp sgt i32 %162, %143
+  br i1 %163, label %164, label %String_append_byte_bytei8.exit
+
+164:                                              ; preds = %159
+  %165 = shl i32 %143, 1
+  %spec.select.i = call i32 @llvm.smax.i32(i32 %165, i32 %162) #54
+  %166 = sext i32 %spec.select.i to i64
+  %result.i5.i1504 = call noalias ptr @bump_malloc_wrapper(i64 noundef %166) #45
+  %167 = add i32 %.pre1503, -1
+  %168 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  %169 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %170 = icmp slt i32 %167, 0
+  br i1 %170, label %String_append_byte_bytei8.exit, label %._crit_edge1.lr.ph.i
+
+._crit_edge1.lr.ph.i:                             ; preds = %164
+  %171 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %172 = load i8, ptr %144, align 1
+  store i8 %172, ptr %result.i5.i1504, align 1
+  %173 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %174 = icmp eq i32 %167, 0
+  br i1 %174, label %String_append_byte_bytei8.exit, label %RangeIterator_next_.exit52.i1506
+
+RangeIterator_next_.exit52.i1506:                 ; preds = %RangeIterator_next_.exit52.i1506, %._crit_edge1.lr.ph.i
+  %175 = phi i32 [ %176, %RangeIterator_next_.exit52.i1506 ], [ 1, %._crit_edge1.lr.ph.i ]
+  %176 = add i32 %175, 1
+  %177 = sext i32 %175 to i64
+  %178 = getelementptr i8, ptr %144, i64 %177
+  %179 = load i8, ptr %178, align 1
+  %180 = getelementptr i8, ptr %result.i5.i1504, i64 %177
+  store i8 %179, ptr %180, align 1
+  %181 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %182 = icmp sgt i32 %176, %167
+  br i1 %182, label %String_append_byte_bytei8.exit, label %RangeIterator_next_.exit52.i1506
+
+String_append_byte_bytei8.exit:                   ; preds = %RangeIterator_next_.exit52.i1506, %._crit_edge1.lr.ph.i, %164, %159
+  %result.i2.i.i.h2s1704.sroa.22.3 = phi i32 [ %spec.select.i, %164 ], [ %spec.select.i, %._crit_edge1.lr.ph.i ], [ %result.i2.i.i.h2s1704.sroa.22.2, %159 ], [ %spec.select.i, %RangeIterator_next_.exit52.i1506 ]
+  %result.i2.i.i.h2s1704.sroa.0.3 = phi ptr [ %result.i5.i1504, %164 ], [ %result.i5.i1504, %._crit_edge1.lr.ph.i ], [ %result.i2.i.i.h2s1704.sroa.0.2, %159 ], [ %result.i5.i1504, %RangeIterator_next_.exit52.i1506 ]
+  %183 = phi ptr [ %result.i5.i1504, %164 ], [ %result.i5.i1504, %._crit_edge1.lr.ph.i ], [ %142, %159 ], [ %result.i5.i1504, %RangeIterator_next_.exit52.i1506 ]
+  %184 = phi i32 [ %spec.select.i, %164 ], [ %spec.select.i, %._crit_edge1.lr.ph.i ], [ %143, %159 ], [ %spec.select.i, %RangeIterator_next_.exit52.i1506 ]
+  %185 = sext i32 %.pre1503 to i64
+  %186 = getelementptr i8, ptr %183, i64 %185
+  store i8 %.sroa.1.8.extract.trunc.i, ptr %186, align 1
+  br label %UTF8Encoder_write_valuei32.exit
+
+187:                                              ; preds = %155
+  %188 = lshr i32 %151, 6
+  %189 = trunc nuw nsw i32 %188 to i8
+  %190 = or disjoint i8 %189, -64
+  %191 = call ptr @llvm.invariant.start.p0(i64 noundef 368, ptr nocapture nofree noundef nonnull align 16 dereferenceable(448) @UTF8Encoder)
+  %192 = call ptr @llvm.invariant.start.p0(i64 noundef 288, ptr nocapture nofree noundef nonnull align 16 dereferenceable(368) @StringByteWriter) #53
+  %193 = add i32 %.pre1503, 1
+  %194 = icmp sgt i32 %193, %145
+  br i1 %194, label %195, label %String_append_byte_bytei8.exit1341
+
+195:                                              ; preds = %187
+  %196 = shl i32 %145, 1
+  %spec.select.i1337 = call i32 @llvm.smax.i32(i32 %196, i32 %193) #54
+  %197 = sext i32 %spec.select.i1337 to i64
+  %result.i5.i1522 = call noalias ptr @bump_malloc_wrapper(i64 noundef %197) #45
+  %198 = add i32 %.pre1503, -1
+  %199 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  %200 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %201 = icmp slt i32 %198, 0
+  br i1 %201, label %String_append_byte_bytei8.exit1341, label %._crit_edge1.lr.ph.i1524
+
+._crit_edge1.lr.ph.i1524:                         ; preds = %195
+  %202 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %203 = load i8, ptr %144, align 1
+  store i8 %203, ptr %result.i5.i1522, align 1
+  %204 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %205 = icmp eq i32 %198, 0
+  br i1 %205, label %String_append_byte_bytei8.exit1341, label %RangeIterator_next_.exit52.i1526
+
+RangeIterator_next_.exit52.i1526:                 ; preds = %RangeIterator_next_.exit52.i1526, %._crit_edge1.lr.ph.i1524
+  %206 = phi i32 [ %207, %RangeIterator_next_.exit52.i1526 ], [ 1, %._crit_edge1.lr.ph.i1524 ]
+  %207 = add i32 %206, 1
+  %208 = sext i32 %206 to i64
+  %209 = getelementptr i8, ptr %144, i64 %208
+  %210 = load i8, ptr %209, align 1
+  %211 = getelementptr i8, ptr %result.i5.i1522, i64 %208
+  store i8 %210, ptr %211, align 1
+  %212 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %213 = icmp sgt i32 %207, %198
+  br i1 %213, label %String_append_byte_bytei8.exit1341, label %RangeIterator_next_.exit52.i1526
+
+String_append_byte_bytei8.exit1341:               ; preds = %RangeIterator_next_.exit52.i1526, %._crit_edge1.lr.ph.i1524, %195, %187
+  %result.i2.i.i.h2s1704.sroa.22.4 = phi i32 [ %spec.select.i1337, %195 ], [ %spec.select.i1337, %._crit_edge1.lr.ph.i1524 ], [ %result.i2.i.i.h2s1704.sroa.22.2, %187 ], [ %spec.select.i1337, %RangeIterator_next_.exit52.i1526 ]
+  %result.i2.i.i.h2s1704.sroa.0.4 = phi ptr [ %result.i5.i1522, %195 ], [ %result.i5.i1522, %._crit_edge1.lr.ph.i1524 ], [ %result.i2.i.i.h2s1704.sroa.0.2, %187 ], [ %result.i5.i1522, %RangeIterator_next_.exit52.i1526 ]
+  %214 = phi ptr [ %result.i5.i1522, %195 ], [ %result.i5.i1522, %._crit_edge1.lr.ph.i1524 ], [ %144, %187 ], [ %result.i5.i1522, %RangeIterator_next_.exit52.i1526 ]
+  %215 = sext i32 %.pre1503 to i64
+  %216 = getelementptr i8, ptr %214, i64 %215
+  store i8 %190, ptr %216, align 1
+  %217 = trunc i32 %151 to i8
+  %218 = and i8 %217, 63
+  %219 = or disjoint i8 %218, -128
+  %220 = call ptr @llvm.invariant.start.p0(i64 noundef 368, ptr nocapture nofree noundef nonnull align 16 dereferenceable(448) @UTF8Encoder)
+  %221 = call ptr @llvm.invariant.start.p0(i64 noundef 288, ptr nocapture nofree noundef nonnull align 16 dereferenceable(368) @StringByteWriter) #53
+  %222 = add i32 %.pre1503, 2
+  %223 = icmp sgt i32 %222, %result.i2.i.i.h2s1704.sroa.22.4
+  br i1 %223, label %224, label %String_append_byte_bytei8.exit1361
+
+224:                                              ; preds = %String_append_byte_bytei8.exit1341
+  %225 = shl i32 %result.i2.i.i.h2s1704.sroa.22.4, 1
+  %spec.select.i1357 = call i32 @llvm.smax.i32(i32 %225, i32 %222) #54
+  %226 = sext i32 %spec.select.i1357 to i64
+  %result.i5.i1544 = call noalias ptr @bump_malloc_wrapper(i64 noundef %226) #45
+  %227 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  %228 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %229 = icmp slt i32 %.pre1503, 0
+  br i1 %229, label %String_append_byte_bytei8.exit1361, label %._crit_edge1.lr.ph.i1546
+
+._crit_edge1.lr.ph.i1546:                         ; preds = %224
+  %230 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %231 = load i8, ptr %result.i2.i.i.h2s1704.sroa.0.4, align 1
+  store i8 %231, ptr %result.i5.i1544, align 1
+  %232 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %233 = icmp eq i32 %.pre1503, 0
+  br i1 %233, label %String_append_byte_bytei8.exit1361, label %RangeIterator_next_.exit52.i1548
+
+RangeIterator_next_.exit52.i1548:                 ; preds = %RangeIterator_next_.exit52.i1548, %._crit_edge1.lr.ph.i1546
+  %234 = phi i32 [ %235, %RangeIterator_next_.exit52.i1548 ], [ 1, %._crit_edge1.lr.ph.i1546 ]
+  %235 = add i32 %234, 1
+  %236 = sext i32 %234 to i64
+  %237 = getelementptr i8, ptr %result.i2.i.i.h2s1704.sroa.0.4, i64 %236
+  %238 = load i8, ptr %237, align 1
+  %239 = getelementptr i8, ptr %result.i5.i1544, i64 %236
+  store i8 %238, ptr %239, align 1
+  %240 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %241 = icmp sgt i32 %235, %.pre1503
+  br i1 %241, label %String_append_byte_bytei8.exit1361, label %RangeIterator_next_.exit52.i1548
+
+String_append_byte_bytei8.exit1361:               ; preds = %RangeIterator_next_.exit52.i1548, %._crit_edge1.lr.ph.i1546, %224, %String_append_byte_bytei8.exit1341
+  %result.i2.i.i.h2s1704.sroa.22.5 = phi i32 [ %spec.select.i1357, %224 ], [ %spec.select.i1357, %._crit_edge1.lr.ph.i1546 ], [ %result.i2.i.i.h2s1704.sroa.22.4, %String_append_byte_bytei8.exit1341 ], [ %spec.select.i1357, %RangeIterator_next_.exit52.i1548 ]
+  %result.i2.i.i.h2s1704.sroa.0.5 = phi ptr [ %result.i5.i1544, %224 ], [ %result.i5.i1544, %._crit_edge1.lr.ph.i1546 ], [ %result.i2.i.i.h2s1704.sroa.0.4, %String_append_byte_bytei8.exit1341 ], [ %result.i5.i1544, %RangeIterator_next_.exit52.i1548 ]
+  %242 = sext i32 %193 to i64
+  %243 = getelementptr i8, ptr %result.i2.i.i.h2s1704.sroa.0.5, i64 %242
+  store i8 %219, ptr %243, align 1
+  br label %UTF8Encoder_write_valuei32.exit
+
+UTF8__Self_encoded_width_codepointi32.exit.i:     ; preds = %157
+  %244 = lshr i32 %151, 18
+  %245 = trunc nuw nsw i32 %244 to i8
+  %246 = or disjoint i8 %245, -16
+  %247 = call ptr @llvm.invariant.start.p0(i64 noundef 368, ptr nocapture nofree noundef nonnull align 16 dereferenceable(448) @UTF8Encoder)
+  %248 = call ptr @llvm.invariant.start.p0(i64 noundef 288, ptr nocapture nofree noundef nonnull align 16 dereferenceable(368) @StringByteWriter) #53
+  %249 = add i32 %.pre1503, 1
+  %250 = icmp sgt i32 %249, %145
+  br i1 %250, label %251, label %String_append_byte_bytei8.exit1381
+
+251:                                              ; preds = %UTF8__Self_encoded_width_codepointi32.exit.i
+  %252 = shl i32 %145, 1
+  %spec.select.i1377 = call i32 @llvm.smax.i32(i32 %252, i32 %249) #54
+  %253 = sext i32 %spec.select.i1377 to i64
+  %result.i5.i1566 = call noalias ptr @bump_malloc_wrapper(i64 noundef %253) #45
+  %254 = add i32 %.pre1503, -1
+  %255 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  %256 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %257 = icmp slt i32 %254, 0
+  br i1 %257, label %String_append_byte_bytei8.exit1381, label %._crit_edge1.lr.ph.i1568
+
+._crit_edge1.lr.ph.i1568:                         ; preds = %251
+  %258 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %259 = load i8, ptr %144, align 1
+  store i8 %259, ptr %result.i5.i1566, align 1
+  %260 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %261 = icmp eq i32 %254, 0
+  br i1 %261, label %String_append_byte_bytei8.exit1381, label %RangeIterator_next_.exit52.i1570
+
+RangeIterator_next_.exit52.i1570:                 ; preds = %RangeIterator_next_.exit52.i1570, %._crit_edge1.lr.ph.i1568
+  %262 = phi i32 [ %263, %RangeIterator_next_.exit52.i1570 ], [ 1, %._crit_edge1.lr.ph.i1568 ]
+  %263 = add i32 %262, 1
+  %264 = sext i32 %262 to i64
+  %265 = getelementptr i8, ptr %144, i64 %264
+  %266 = load i8, ptr %265, align 1
+  %267 = getelementptr i8, ptr %result.i5.i1566, i64 %264
+  store i8 %266, ptr %267, align 1
+  %268 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %269 = icmp sgt i32 %263, %254
+  br i1 %269, label %String_append_byte_bytei8.exit1381, label %RangeIterator_next_.exit52.i1570
+
+String_append_byte_bytei8.exit1381:               ; preds = %RangeIterator_next_.exit52.i1570, %._crit_edge1.lr.ph.i1568, %251, %UTF8__Self_encoded_width_codepointi32.exit.i
+  %result.i2.i.i.h2s1704.sroa.22.6 = phi i32 [ %spec.select.i1377, %251 ], [ %spec.select.i1377, %._crit_edge1.lr.ph.i1568 ], [ %result.i2.i.i.h2s1704.sroa.22.2, %UTF8__Self_encoded_width_codepointi32.exit.i ], [ %spec.select.i1377, %RangeIterator_next_.exit52.i1570 ]
+  %result.i2.i.i.h2s1704.sroa.0.6 = phi ptr [ %result.i5.i1566, %251 ], [ %result.i5.i1566, %._crit_edge1.lr.ph.i1568 ], [ %result.i2.i.i.h2s1704.sroa.0.2, %UTF8__Self_encoded_width_codepointi32.exit.i ], [ %result.i5.i1566, %RangeIterator_next_.exit52.i1570 ]
+  %270 = phi ptr [ %result.i5.i1566, %251 ], [ %result.i5.i1566, %._crit_edge1.lr.ph.i1568 ], [ %144, %UTF8__Self_encoded_width_codepointi32.exit.i ], [ %result.i5.i1566, %RangeIterator_next_.exit52.i1570 ]
+  %271 = sext i32 %.pre1503 to i64
+  %272 = getelementptr i8, ptr %270, i64 %271
+  store i8 %246, ptr %272, align 1
+  %273 = lshr i32 %151, 12
+  %274 = trunc i32 %273 to i8
+  %275 = and i8 %274, 63
+  %276 = or disjoint i8 %275, -128
+  %277 = call ptr @llvm.invariant.start.p0(i64 noundef 368, ptr nocapture nofree noundef nonnull align 16 dereferenceable(448) @UTF8Encoder)
+  %278 = call ptr @llvm.invariant.start.p0(i64 noundef 288, ptr nocapture nofree noundef nonnull align 16 dereferenceable(368) @StringByteWriter) #53
+  %279 = add i32 %.pre1503, 2
+  %280 = icmp sgt i32 %279, %result.i2.i.i.h2s1704.sroa.22.6
+  br i1 %280, label %281, label %String_append_byte_bytei8.exit1401
+
+281:                                              ; preds = %String_append_byte_bytei8.exit1381
+  %282 = shl i32 %result.i2.i.i.h2s1704.sroa.22.6, 1
+  %spec.select.i1397 = call i32 @llvm.smax.i32(i32 %282, i32 %279) #54, !range !1
+  %283 = sext i32 %spec.select.i1397 to i64
+  %result.i5.i1588 = call noalias ptr @bump_malloc_wrapper(i64 noundef %283) #45
+  %284 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  %285 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %286 = icmp slt i32 %.pre1503, 0
+  br i1 %286, label %String_append_byte_bytei8.exit1401, label %._crit_edge1.lr.ph.i1590
+
+._crit_edge1.lr.ph.i1590:                         ; preds = %281
+  %287 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %288 = load i8, ptr %result.i2.i.i.h2s1704.sroa.0.6, align 1
+  store i8 %288, ptr %result.i5.i1588, align 1
+  %289 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %290 = icmp eq i32 %.pre1503, 0
+  br i1 %290, label %String_append_byte_bytei8.exit1401, label %RangeIterator_next_.exit52.i1592
+
+RangeIterator_next_.exit52.i1592:                 ; preds = %RangeIterator_next_.exit52.i1592, %._crit_edge1.lr.ph.i1590
+  %291 = phi i32 [ %292, %RangeIterator_next_.exit52.i1592 ], [ 1, %._crit_edge1.lr.ph.i1590 ]
+  %292 = add i32 %291, 1
+  %293 = sext i32 %291 to i64
+  %294 = getelementptr i8, ptr %result.i2.i.i.h2s1704.sroa.0.6, i64 %293
+  %295 = load i8, ptr %294, align 1
+  %296 = getelementptr i8, ptr %result.i5.i1588, i64 %293
+  store i8 %295, ptr %296, align 1
+  %297 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %298 = icmp sgt i32 %292, %.pre1503
+  br i1 %298, label %String_append_byte_bytei8.exit1401, label %RangeIterator_next_.exit52.i1592
+
+String_append_byte_bytei8.exit1401:               ; preds = %RangeIterator_next_.exit52.i1592, %._crit_edge1.lr.ph.i1590, %281, %String_append_byte_bytei8.exit1381
+  %result.i2.i.i.h2s1704.sroa.22.7 = phi i32 [ %spec.select.i1397, %281 ], [ %spec.select.i1397, %._crit_edge1.lr.ph.i1590 ], [ %result.i2.i.i.h2s1704.sroa.22.6, %String_append_byte_bytei8.exit1381 ], [ %spec.select.i1397, %RangeIterator_next_.exit52.i1592 ]
+  %result.i2.i.i.h2s1704.sroa.0.7 = phi ptr [ %result.i5.i1588, %281 ], [ %result.i5.i1588, %._crit_edge1.lr.ph.i1590 ], [ %result.i2.i.i.h2s1704.sroa.0.6, %String_append_byte_bytei8.exit1381 ], [ %result.i5.i1588, %RangeIterator_next_.exit52.i1592 ]
+  %299 = sext i32 %249 to i64
+  %300 = getelementptr i8, ptr %result.i2.i.i.h2s1704.sroa.0.7, i64 %299
+  store i8 %276, ptr %300, align 1
+  %301 = lshr i32 %151, 6
+  %302 = trunc i32 %301 to i8
+  %303 = and i8 %302, 63
+  %304 = or disjoint i8 %303, -128
+  %305 = call ptr @llvm.invariant.start.p0(i64 noundef 368, ptr nocapture nofree noundef nonnull align 16 dereferenceable(448) @UTF8Encoder)
+  %306 = call ptr @llvm.invariant.start.p0(i64 noundef 288, ptr nocapture nofree noundef nonnull align 16 dereferenceable(368) @StringByteWriter) #53
+  %307 = add i32 %.pre1503, 3
+  %308 = icmp sgt i32 %307, %result.i2.i.i.h2s1704.sroa.22.7
+  br i1 %308, label %309, label %String_append_byte_bytei8.exit1421
+
+309:                                              ; preds = %String_append_byte_bytei8.exit1401
+  %310 = shl i32 %result.i2.i.i.h2s1704.sroa.22.7, 1
+  %spec.select.i1417 = call i32 @llvm.smax.i32(i32 %310, i32 %307) #54
+  %311 = sext i32 %spec.select.i1417 to i64
+  %result.i5.i1610 = call noalias ptr @bump_malloc_wrapper(i64 noundef %311) #45
+  %312 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  %313 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %314 = icmp slt i32 %249, 0
+  br i1 %314, label %String_append_byte_bytei8.exit1421, label %._crit_edge1.lr.ph.i1612
+
+._crit_edge1.lr.ph.i1612:                         ; preds = %309
+  %315 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %316 = load i8, ptr %result.i2.i.i.h2s1704.sroa.0.7, align 1
+  store i8 %316, ptr %result.i5.i1610, align 1
+  %317 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %318 = icmp eq i32 %249, 0
+  br i1 %318, label %String_append_byte_bytei8.exit1421, label %RangeIterator_next_.exit52.i1614
+
+RangeIterator_next_.exit52.i1614:                 ; preds = %RangeIterator_next_.exit52.i1614, %._crit_edge1.lr.ph.i1612
+  %319 = phi i32 [ %320, %RangeIterator_next_.exit52.i1614 ], [ 1, %._crit_edge1.lr.ph.i1612 ]
+  %320 = add i32 %319, 1
+  %321 = sext i32 %319 to i64
+  %322 = getelementptr i8, ptr %result.i2.i.i.h2s1704.sroa.0.7, i64 %321
+  %323 = load i8, ptr %322, align 1
+  %324 = getelementptr i8, ptr %result.i5.i1610, i64 %321
+  store i8 %323, ptr %324, align 1
+  %325 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %326 = icmp sgt i32 %320, %249
+  br i1 %326, label %String_append_byte_bytei8.exit1421, label %RangeIterator_next_.exit52.i1614
+
+String_append_byte_bytei8.exit1421:               ; preds = %RangeIterator_next_.exit52.i1614, %._crit_edge1.lr.ph.i1612, %309, %String_append_byte_bytei8.exit1401
+  %result.i2.i.i.h2s1704.sroa.22.8 = phi i32 [ %spec.select.i1417, %309 ], [ %spec.select.i1417, %._crit_edge1.lr.ph.i1612 ], [ %result.i2.i.i.h2s1704.sroa.22.7, %String_append_byte_bytei8.exit1401 ], [ %spec.select.i1417, %RangeIterator_next_.exit52.i1614 ]
+  %result.i2.i.i.h2s1704.sroa.0.8 = phi ptr [ %result.i5.i1610, %309 ], [ %result.i5.i1610, %._crit_edge1.lr.ph.i1612 ], [ %result.i2.i.i.h2s1704.sroa.0.7, %String_append_byte_bytei8.exit1401 ], [ %result.i5.i1610, %RangeIterator_next_.exit52.i1614 ]
+  %327 = sext i32 %279 to i64
+  %328 = getelementptr i8, ptr %result.i2.i.i.h2s1704.sroa.0.8, i64 %327
+  store i8 %304, ptr %328, align 1
+  %329 = trunc i32 %151 to i8
+  %330 = and i8 %329, 63
+  %331 = or disjoint i8 %330, -128
+  %332 = call ptr @llvm.invariant.start.p0(i64 noundef 368, ptr nocapture nofree noundef nonnull align 16 dereferenceable(448) @UTF8Encoder)
+  %333 = call ptr @llvm.invariant.start.p0(i64 noundef 288, ptr nocapture nofree noundef nonnull align 16 dereferenceable(368) @StringByteWriter) #53
+  %334 = add i32 %.pre1503, 4
+  %335 = icmp sgt i32 %334, %result.i2.i.i.h2s1704.sroa.22.8
+  br i1 %335, label %336, label %String_append_byte_bytei8.exit1441
+
+336:                                              ; preds = %String_append_byte_bytei8.exit1421
+  %337 = shl i32 %result.i2.i.i.h2s1704.sroa.22.8, 1
+  %spec.select.i1437 = call i32 @llvm.smax.i32(i32 %337, i32 %334) #54
+  %338 = sext i32 %spec.select.i1437 to i64
+  %result.i5.i1632 = call noalias ptr @bump_malloc_wrapper(i64 noundef %338) #45
+  %339 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  %340 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %341 = icmp slt i32 %279, 0
+  br i1 %341, label %String_append_byte_bytei8.exit1441, label %._crit_edge1.lr.ph.i1634
+
+._crit_edge1.lr.ph.i1634:                         ; preds = %336
+  %342 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %343 = load i8, ptr %result.i2.i.i.h2s1704.sroa.0.8, align 1
+  store i8 %343, ptr %result.i5.i1632, align 1
+  %344 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %345 = icmp eq i32 %279, 0
+  br i1 %345, label %String_append_byte_bytei8.exit1441, label %RangeIterator_next_.exit52.i1636
+
+RangeIterator_next_.exit52.i1636:                 ; preds = %RangeIterator_next_.exit52.i1636, %._crit_edge1.lr.ph.i1634
+  %346 = phi i32 [ %347, %RangeIterator_next_.exit52.i1636 ], [ 1, %._crit_edge1.lr.ph.i1634 ]
+  %347 = add i32 %346, 1
+  %348 = sext i32 %346 to i64
+  %349 = getelementptr i8, ptr %result.i2.i.i.h2s1704.sroa.0.8, i64 %348
+  %350 = load i8, ptr %349, align 1
+  %351 = getelementptr i8, ptr %result.i5.i1632, i64 %348
+  store i8 %350, ptr %351, align 1
+  %352 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %353 = icmp sgt i32 %347, %279
+  br i1 %353, label %String_append_byte_bytei8.exit1441, label %RangeIterator_next_.exit52.i1636
+
+String_append_byte_bytei8.exit1441:               ; preds = %RangeIterator_next_.exit52.i1636, %._crit_edge1.lr.ph.i1634, %336, %String_append_byte_bytei8.exit1421
+  %result.i2.i.i.h2s1704.sroa.22.9 = phi i32 [ %spec.select.i1437, %336 ], [ %spec.select.i1437, %._crit_edge1.lr.ph.i1634 ], [ %result.i2.i.i.h2s1704.sroa.22.8, %String_append_byte_bytei8.exit1421 ], [ %spec.select.i1437, %RangeIterator_next_.exit52.i1636 ]
+  %result.i2.i.i.h2s1704.sroa.0.9 = phi ptr [ %result.i5.i1632, %336 ], [ %result.i5.i1632, %._crit_edge1.lr.ph.i1634 ], [ %result.i2.i.i.h2s1704.sroa.0.8, %String_append_byte_bytei8.exit1421 ], [ %result.i5.i1632, %RangeIterator_next_.exit52.i1636 ]
+  %354 = sext i32 %307 to i64
+  %355 = getelementptr i8, ptr %result.i2.i.i.h2s1704.sroa.0.9, i64 %354
+  store i8 %331, ptr %355, align 1
+  br label %UTF8Encoder_write_valuei32.exit
+
+codeRepl:                                         ; preds = %157
+  call void @main.cold.1() #56
+  br label %UTF8Encoder_write_valuei32.exit
+
+UTF8Encoder_write_valuei32.exit:                  ; preds = %codeRepl, %String_append_byte_bytei8.exit1441, %String_append_byte_bytei8.exit1361, %String_append_byte_bytei8.exit
+  %result.i2.i.i.h2s1704.sroa.22.1 = phi i32 [ %result.i2.i.i.h2s1704.sroa.22.3, %String_append_byte_bytei8.exit ], [ %result.i2.i.i.h2s1704.sroa.22.5, %String_append_byte_bytei8.exit1361 ], [ %result.i2.i.i.h2s1704.sroa.22.9, %String_append_byte_bytei8.exit1441 ], [ %result.i2.i.i.h2s1704.sroa.22.2, %codeRepl ]
+  %result.i2.i.i.h2s1704.sroa.0.1 = phi ptr [ %result.i2.i.i.h2s1704.sroa.0.3, %String_append_byte_bytei8.exit ], [ %result.i2.i.i.h2s1704.sroa.0.5, %String_append_byte_bytei8.exit1361 ], [ %result.i2.i.i.h2s1704.sroa.0.9, %String_append_byte_bytei8.exit1441 ], [ %result.i2.i.i.h2s1704.sroa.0.2, %codeRepl ]
+  %356 = phi ptr [ %183, %String_append_byte_bytei8.exit ], [ %result.i2.i.i.h2s1704.sroa.0.5, %String_append_byte_bytei8.exit1361 ], [ %result.i2.i.i.h2s1704.sroa.0.9, %String_append_byte_bytei8.exit1441 ], [ %142, %codeRepl ]
+  %357 = phi i32 [ %184, %String_append_byte_bytei8.exit ], [ %result.i2.i.i.h2s1704.sroa.22.5, %String_append_byte_bytei8.exit1361 ], [ %result.i2.i.i.h2s1704.sroa.22.9, %String_append_byte_bytei8.exit1441 ], [ %143, %codeRepl ]
+  %358 = phi i32 [ %162, %String_append_byte_bytei8.exit ], [ %222, %String_append_byte_bytei8.exit1361 ], [ %334, %String_append_byte_bytei8.exit1441 ], [ %.pre1503, %codeRepl ]
+  %359 = phi ptr [ %183, %String_append_byte_bytei8.exit ], [ %result.i2.i.i.h2s1704.sroa.0.5, %String_append_byte_bytei8.exit1361 ], [ %result.i2.i.i.h2s1704.sroa.0.9, %String_append_byte_bytei8.exit1441 ], [ %144, %codeRepl ]
+  %360 = phi i32 [ %184, %String_append_byte_bytei8.exit ], [ %result.i2.i.i.h2s1704.sroa.22.5, %String_append_byte_bytei8.exit1361 ], [ %result.i2.i.i.h2s1704.sroa.22.9, %String_append_byte_bytei8.exit1441 ], [ %145, %codeRepl ]
+  %361 = phi i32 [ %162, %String_append_byte_bytei8.exit ], [ %222, %String_append_byte_bytei8.exit1361 ], [ %334, %String_append_byte_bytei8.exit1441 ], [ %146, %codeRepl ]
+  %362 = call ptr @llvm.invariant.start.p0(i64 noundef 304, ptr nocapture nofree noundef nonnull align 16 dereferenceable(384) @StringWriter)
+  %363 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String) #54
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %364 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %365 = call ptr @llvm.invariant.start.p0(i64 noundef 128, ptr nocapture nofree noundef nonnull align 16 dereferenceable(208) @ArrayIterator) #54
+  %366 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %367 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  %368 = call ptr @llvm.invariant.start.p0(i64 noundef 4280, ptr nocapture nofree noundef nonnull align 16 dereferenceable(4360) @Array) #53
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %exitcond.not = icmp eq i64 %indvars.iv1163, 4
+  br i1 %exitcond.not, label %ArrayIterator_next_.exit957.thread, label %ArrayIterator_next_.exit957
+
+ArrayIterator_next_.exit957.thread:               ; preds = %UTF8Encoder_write_valuei32.exit
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  br label %Writer_write_from_sourceIteratorT_max_elemsi32.exit
+
+ArrayIterator_next_.exit957:                      ; preds = %UTF8Encoder_write_valuei32.exit
+  %indvars.iv.next1164 = add nuw nsw i64 %indvars.iv1163, 1
+  %369 = call ptr @llvm.invariant.start.p0(i64 noundef 128, ptr nocapture nofree noundef nonnull align 16 dereferenceable(208) @ArrayIterator)
+  %370 = call ptr @llvm.invariant.start.p0(i64 noundef 4280, ptr nocapture nofree noundef nonnull align 16 dereferenceable(4360) @Array) #54
+  %371 = shl nuw nsw i64 %indvars.iv1163, 5
+  %372 = getelementptr i8, ptr %result.i32.h2s1705, i64 %371
+  %vptr.i1205 = load ptr, ptr %372, align 8
+  %373 = getelementptr inbounds i8, ptr %372, i64 8
+  %374 = load i160, ptr %373, align 4
+  %extract.t967 = trunc i160 %374 to i64
+  %extract968 = lshr i160 %374, 64
+  %extract.t969 = trunc i160 %extract968 to i64
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %375 = icmp ne ptr %vptr.i1205, @nil_typ
+  %376 = icmp ne ptr %vptr.i1205, null
+  %.not35.i = and i1 %375, %376
+  br i1 %.not35.i, label %._crit_edge1.i869, label %Writer_write_from_sourceIteratorT_max_elemsi32.exit
+
+Writer_write_from_sourceIteratorT_max_elemsi32.exit: ; preds = %ArrayIterator_next_.exit957, %ArrayIterator_next_.exit957.thread
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %377 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
+  %378 = add i32 %358, 1
+  %379 = sext i32 %378 to i64
+  %result.i5.i699 = call noalias nonnull dereferenceable(1) ptr @bump_malloc_wrapper(i64 noundef %379) #45
+  %380 = add i32 %358, -1
+  %381 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  %382 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %383 = icmp slt i32 %380, 0
+  br i1 %383, label %String_c_string_.exit, label %._crit_edge.lr.ph.i700
+
+._crit_edge.lr.ph.i700:                           ; preds = %Writer_write_from_sourceIteratorT_max_elemsi32.exit
+  %384 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %385 = load i8, ptr %356, align 1
+  store i8 %385, ptr %result.i5.i699, align 1
+  %386 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %387 = icmp eq i32 %380, 0
+  br i1 %387, label %String_c_string_.exit, label %RangeIterator_next_.exit52.i
+
+RangeIterator_next_.exit52.i:                     ; preds = %RangeIterator_next_.exit52.i, %._crit_edge.lr.ph.i700
+  %388 = phi i32 [ %389, %RangeIterator_next_.exit52.i ], [ 1, %._crit_edge.lr.ph.i700 ]
+  %389 = add i32 %388, 1
+  %390 = sext i32 %388 to i64
+  %391 = getelementptr i8, ptr %356, i64 %390
+  %392 = load i8, ptr %391, align 1
+  %393 = getelementptr i8, ptr %result.i5.i699, i64 %390
+  store i8 %392, ptr %393, align 1
+  %394 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %395 = icmp sgt i32 %389, %380
+  br i1 %395, label %String_c_string_.exit, label %RangeIterator_next_.exit52.i
+
+String_c_string_.exit:                            ; preds = %RangeIterator_next_.exit52.i, %._crit_edge.lr.ph.i700, %Writer_write_from_sourceIteratorT_max_elemsi32.exit
+  %396 = sext i32 %358 to i64
+  %397 = getelementptr i8, ptr %result.i5.i699, i64 %396
+  store i8 0, ptr %397, align 1
+  %puts.i620 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly dereferenceable(1) %result.i5.i699) #46
+  store i8 110, ptr %result.i5.i.i.h2s1703, align 4
+  %scevgep.i = getelementptr inbounds i8, ptr %result.i5.i.i.h2s1703, i64 1
+  store i16 27753, ptr %scevgep.i, align 1
+  %398 = getelementptr inbounds i8, ptr %result.i5.i.i.h2s1703, i64 3
+  store i8 0, ptr %398, align 1
+  %puts.i = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly dereferenceable(4) %result.i5.i.i.h2s1703) #46
+  %399 = call ptr @llvm.invariant.start.p0(i64 noundef 4280, ptr nocapture nofree noundef nonnull align 16 dereferenceable(4360) @Array)
+  %400 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef nonnull align 16 dereferenceable(152) @Character) #53
+  %401 = call ptr @llvm.invariant.start.p0(i64 noundef 2248, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2328) @StringCodePoints) #54
+  %402 = call ptr @llvm.invariant.start.p0(i64 noundef 2248, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2328) @StringBytes) #54
+  %403 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @UTF8) #53
+  %404 = call ptr @llvm.invariant.start.p0(i64 noundef 368, ptr nocapture nofree noundef nonnull align 16 dereferenceable(448) @UTF8Encoder)
+  %405 = call ptr @llvm.invariant.start.p0(i64 noundef 288, ptr nocapture nofree noundef nonnull align 16 dereferenceable(368) @StringByteWriter) #53
+  %406 = call ptr @llvm.invariant.start.p0(i64 noundef 288, ptr nocapture nofree noundef nonnull align 16 dereferenceable(368) @StringCodepointWriter)
+  %407 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
+  %408 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  store i8 100, ptr %result.i5.i.h2s1702, align 2
+  %409 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %410 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %411 = getelementptr inbounds i8, ptr %result.i5.i.h2s1702, i64 1
+  store i8 0, ptr %411, align 1
+  %puts.i380 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly dereferenceable(2) %result.i5.i.h2s1702) #46
+  ret i32 0
+}
+
+
+define noundef i32 @main_v4() local_unnamed_addr #7 {
+._crit_edge1.i.preheader:
+  %0 = alloca [0 x ptr], align 8
+  %result.i5.i.h2s1446 = alloca [2 x i8], align 2
+  store i16 0, ptr %result.i5.i.h2s1446, align 2
+  %result.i5.i.i.h2s1447 = alloca [4 x i8], align 4
+  store i32 0, ptr %result.i5.i.i.h2s1447, align 4
+  %result.i32.h2s1449 = alloca [160 x i8], align 1
+  %1 = getelementptr inbounds i8, ptr %result.i32.h2s1449, i64 16
+  call void @llvm.memset.p0.i64(ptr noundef nonnull align 1 dereferenceable(160) %1, i8 0, i64 144, i1 false)
+  %result.i5.i667.h2s1450 = alloca [30 x i8], align 1
+  call void @setup_landing_pad()
+  %2 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
+  store i8 67, ptr %result.i5.i667.h2s1450, align 1
+  %scevgep725 = getelementptr inbounds i8, ptr %result.i5.i667.h2s1450, i64 1
+  store <22 x i8> <i8 111, i8 109, i8 112, i8 117, i8 116, i8 101, i8 114, i8 32, i8 105, i8 110, i8 32, i8 67, i8 104, i8 105, i8 110, i8 101, i8 115, i8 101, i8 32, i8 105, i8 115, i8 32>, ptr %scevgep725, align 1
+  %result.i5.i417.h2s1451.sroa.3.1.scevgep725.sroa_idx = getelementptr inbounds i8, ptr %result.i5.i667.h2s1450, i64 23
+  store <4 x i8> <i8 -25, i8 -108, i8 -75, i8 -24>, ptr %result.i5.i417.h2s1451.sroa.3.1.scevgep725.sroa_idx, align 1
+  %result.i5.i417.h2s1451.sroa.4.1.scevgep725.sroa_idx = getelementptr inbounds i8, ptr %result.i5.i667.h2s1450, i64 27
+  store i8 -124, ptr %result.i5.i417.h2s1451.sroa.4.1.scevgep725.sroa_idx, align 1
+  %result.i5.i417.h2s1451.sroa.5.1.scevgep725.sroa_idx = getelementptr inbounds i8, ptr %result.i5.i667.h2s1450, i64 28
+  store i8 -111, ptr %result.i5.i417.h2s1451.sroa.5.1.scevgep725.sroa_idx, align 1
+  %3 = getelementptr inbounds i8, ptr %result.i5.i667.h2s1450, i64 29
+  store i8 0, ptr %3, align 1
+  %puts.i478 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly dereferenceable(30) %result.i5.i667.h2s1450) #46
+  %result.i31 = call noalias align 4 dereferenceable_or_null(4) ptr @bump_malloc_wrapper(i64 noundef 4) #45
+  store i32 97, ptr %result.i31, align 4
+  store ptr @Character, ptr %result.i32.h2s1449, align 8
+  %4 = getelementptr inbounds i8, ptr %result.i32.h2s1449, i64 8
+  store ptr %result.i31, ptr %4, align 8
+  %5 = getelementptr inbounds i8, ptr %result.i32.h2s1449, i64 24
+  store i32 10, ptr %5, align 4
+  %result.i30 = call noalias align 4 dereferenceable_or_null(4) ptr @bump_malloc_wrapper(i64 noundef 4) #45
+  store i32 98, ptr %result.i30, align 4
+  %6 = getelementptr inbounds i8, ptr %result.i32.h2s1449, i64 32
+  store ptr @Character, ptr %6, align 8
+  %7 = getelementptr inbounds i8, ptr %result.i32.h2s1449, i64 40
+  store ptr %result.i30, ptr %7, align 8
+  %8 = getelementptr inbounds i8, ptr %result.i32.h2s1449, i64 56
+  store i32 10, ptr %8, align 4
+  %result.i29 = call noalias align 4 dereferenceable_or_null(4) ptr @bump_malloc_wrapper(i64 noundef 4) #45
+  store i32 99, ptr %result.i29, align 4
+  %9 = getelementptr inbounds i8, ptr %result.i32.h2s1449, i64 64
+  store ptr @Character, ptr %9, align 8
+  %10 = getelementptr inbounds i8, ptr %result.i32.h2s1449, i64 72
+  store ptr %result.i29, ptr %10, align 8
+  %11 = getelementptr inbounds i8, ptr %result.i32.h2s1449, i64 88
+  store i32 10, ptr %11, align 4
+  %result.i28 = call noalias align 4 dereferenceable_or_null(4) ptr @bump_malloc_wrapper(i64 noundef 4) #45
+  %12 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef nonnull align 16 dereferenceable(152) @Character) #53
+  store i32 100, ptr %result.i28, align 4
+  %13 = getelementptr inbounds i8, ptr %result.i32.h2s1449, i64 96
+  store ptr @Character, ptr %13, align 8
+  %14 = getelementptr inbounds i8, ptr %result.i32.h2s1449, i64 104
+  store ptr %result.i28, ptr %14, align 8
+  %15 = getelementptr inbounds i8, ptr %result.i32.h2s1449, i64 120
+  store i32 10, ptr %15, align 4
+  %16 = call ptr @llvm.invariant.start.p0(i64 noundef 2248, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2328) @StringBytes) #54
+  %17 = call ptr @llvm.invariant.start.p0(i64 noundef 288, ptr nocapture nofree noundef nonnull align 16 dereferenceable(368) @StringByteWriter) #53
+  %18 = call ptr @llvm.invariant.start.p0(i64 noundef 368, ptr nocapture nofree noundef nonnull align 16 dereferenceable(448) @UTF8Encoder) #54
+  %result.i5.i803 = call noalias dereferenceable_or_null(16) ptr @bump_malloc_wrapper(i64 noundef 16) #45
+  %19 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %20 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  %21 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %22 = call ptr @llvm.invariant.start.p0(i64 noundef 304, ptr nocapture nofree noundef nonnull align 16 dereferenceable(384) @StringWriter)
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %23 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %24 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %25 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %26 = call ptr @llvm.invariant.start.p0(i64 noundef 128, ptr nocapture nofree noundef nonnull align 16 dereferenceable(208) @ArrayIterator)
+  %27 = call ptr @llvm.invariant.start.p0(i64 noundef 4280, ptr nocapture nofree noundef nonnull align 16 dereferenceable(4360) @Array) #54
+  %28 = load i160, ptr %4, align 8
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %29 = call ptr @llvm.invariant.start.p0(i64 noundef 128, ptr nocapture nofree noundef nonnull align 16 dereferenceable(384) @StringWriter)
+  %extract866 = lshr i160 %28, 64
+  %extract.t867 = trunc i160 %extract866 to i64
+  %extract.t865 = trunc i160 %28 to i64
+  br label %._crit_edge1.i
+
+._crit_edge1.i:                                   ; preds = %ArrayIterator_next_.exit860, %._crit_edge1.i.preheader
+  %result.i2.i.i.h2s1448.sroa.21.0 = phi i32 [ 16, %._crit_edge1.i.preheader ], [ %result.i2.i.i.h2s1448.sroa.21.1, %ArrayIterator_next_.exit860 ]
+  %result.i2.i.i.h2s1448.sroa.0.0 = phi ptr [ %result.i5.i803, %._crit_edge1.i.preheader ], [ %result.i2.i.i.h2s1448.sroa.0.1, %ArrayIterator_next_.exit860 ]
+  %30 = phi ptr [ %result.i5.i803, %._crit_edge1.i.preheader ], [ %284, %ArrayIterator_next_.exit860 ]
+  %31 = phi i32 [ 16, %._crit_edge1.i.preheader ], [ %285, %ArrayIterator_next_.exit860 ]
+  %.pre1249 = phi i32 [ 0, %._crit_edge1.i.preheader ], [ %286, %ArrayIterator_next_.exit860 ]
+  %32 = phi ptr [ %result.i5.i803, %._crit_edge1.i.preheader ], [ %287, %ArrayIterator_next_.exit860 ]
+  %33 = phi i32 [ 16, %._crit_edge1.i.preheader ], [ %288, %ArrayIterator_next_.exit860 ]
+  %34 = phi i32 [ 0, %._crit_edge1.i.preheader ], [ %289, %ArrayIterator_next_.exit860 ]
+  %indvars.iv = phi i64 [ 1, %._crit_edge1.i.preheader ], [ %indvars.iv.next, %ArrayIterator_next_.exit860 ]
+  %.reg2mem5.sroa.0.0.i849.pn = phi ptr [ @Character, %._crit_edge1.i.preheader ], [ %vptr.i1002, %ArrayIterator_next_.exit860 ]
+  %.reg2mem5.sroa.3.0.i850.pn.off0 = phi i64 [ %extract.t865, %._crit_edge1.i.preheader ], [ %extract.t868, %ArrayIterator_next_.exit860 ]
+  %.reg2mem5.sroa.3.0.i850.pn.off64 = phi i64 [ %extract.t867, %._crit_edge1.i.preheader ], [ %extract.t870, %ArrayIterator_next_.exit860 ]
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %35 = inttoptr i64 %.reg2mem5.sroa.3.0.i850.pn.off0 to ptr
+  %36 = inttoptr i64 %.reg2mem5.sroa.3.0.i850.pn.off64 to ptr
+  %hash_coef_ptr.i5.i = getelementptr i8, ptr %.reg2mem5.sroa.0.0.i849.pn, i64 8
+  %tbl_size_ptr.i6.i = getelementptr i8, ptr %.reg2mem5.sroa.0.0.i849.pn, i64 16
+  %offset_tbl_ptr.i7.i = getelementptr i8, ptr %.reg2mem5.sroa.0.0.i849.pn, i64 40
+  %hash_coef.i8.i = load i64, ptr %hash_coef_ptr.i5.i, align 4
+  %tbl_size.i9.i = load i64, ptr %tbl_size_ptr.i6.i, align 4
+  %offset_tbl.i10.i = load ptr, ptr %offset_tbl_ptr.i7.i, align 8
+  %product.i.i11.i = mul i64 %hash_coef.i8.i, 6681222582356018452
+  %shifted.i.i12.i = lshr i64 %product.i.i11.i, 32
+  %xored.i.i13.i = xor i64 %shifted.i.i12.i, %product.i.i11.i
+  %hash.i.i14.i = and i64 %xored.i.i13.i, %tbl_size.i9.i
+  %offset_ptr.i15.i = getelementptr i32, ptr %offset_tbl.i10.i, i64 %hash.i.i14.i
+  %offset.i16.i = load i32, ptr %offset_ptr.i15.i, align 4
+  %37 = insertvalue { ptr, ptr, ptr, i32 } undef, ptr %.reg2mem5.sroa.0.0.i849.pn, 0
+  %38 = insertvalue { ptr, ptr, ptr, i32 } %37, ptr %35, 1
+  %39 = insertvalue { ptr, ptr, ptr, i32 } %38, ptr %36, 2
+  %40 = insertvalue { ptr, ptr, ptr, i32 } %39, i32 %offset.i16.i, 3
+  %41 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0) #53
+  %42 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef align 8 %.reg2mem5.sroa.0.0.i849.pn) #53
+  %43 = sext i32 %offset.i16.i to i64
+  %44 = getelementptr ptr, ptr %.reg2mem5.sroa.0.0.i849.pn, i64 %43
+  %45 = getelementptr i8, ptr %44, i64 32
+  %46 = load ptr, ptr %45, align 8
+  %result.i4.i821 = call ptr %46({ ptr, ptr, ptr, i32 } %40, ptr nocapture nofree noundef nonnull readonly align 8 %0) #43
+  %47 = call i32 %result.i4.i821({ ptr, ptr, ptr, i32 } %40, { ptr, ptr, ptr, i32 } %40, ptr nonnull align 8 %0)
+  %48 = call ptr @llvm.invariant.start.p0(i64 noundef 304, ptr nocapture nofree noundef nonnull align 16 dereferenceable(384) @StringWriter)
+  %49 = add i32 %47, %34
+  %50 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String) #55
+  %.not.i = icmp sgt i32 %49, %33
+  br i1 %.not.i, label %51, label %String_reserve_new_capacityi32.exit986
+
+51:                                               ; preds = %._crit_edge1.i
+  %52 = sext i32 %49 to i64
+  %result.i5.i983 = call noalias ptr @bump_malloc_wrapper(i64 noundef %52) #45
+  %53 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %54 = add i32 %.pre1249, -1
+  %55 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  %56 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %57 = icmp slt i32 %54, 0
+  br i1 %57, label %String_reserve_new_capacityi32.exit986, label %._crit_edge1.lr.ph.i
+
+._crit_edge1.lr.ph.i:                             ; preds = %51
+  %58 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %59 = load i8, ptr %32, align 1
+  store i8 %59, ptr %result.i5.i983, align 1
+  %60 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %61 = icmp eq i32 %54, 0
+  br i1 %61, label %String_reserve_new_capacityi32.exit986, label %RangeIterator_next_.exit52.i985
+
+RangeIterator_next_.exit52.i985:                  ; preds = %RangeIterator_next_.exit52.i985, %._crit_edge1.lr.ph.i
+  %62 = phi i32 [ %63, %RangeIterator_next_.exit52.i985 ], [ 1, %._crit_edge1.lr.ph.i ]
+  %63 = add i32 %62, 1
+  %64 = sext i32 %62 to i64
+  %65 = getelementptr i8, ptr %32, i64 %64
+  %66 = load i8, ptr %65, align 1
+  %67 = getelementptr i8, ptr %result.i5.i983, i64 %64
+  store i8 %66, ptr %67, align 1
+  %68 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %69 = icmp sgt i32 %63, %54
+  br i1 %69, label %String_reserve_new_capacityi32.exit986, label %RangeIterator_next_.exit52.i985
+
+String_reserve_new_capacityi32.exit986:           ; preds = %RangeIterator_next_.exit52.i985, %._crit_edge1.lr.ph.i, %51, %._crit_edge1.i
+  %result.i2.i.i.h2s1448.sroa.21.2 = phi i32 [ %49, %51 ], [ %49, %._crit_edge1.lr.ph.i ], [ %result.i2.i.i.h2s1448.sroa.21.0, %._crit_edge1.i ], [ %49, %RangeIterator_next_.exit52.i985 ]
+  %result.i2.i.i.h2s1448.sroa.0.2 = phi ptr [ %result.i5.i983, %51 ], [ %result.i5.i983, %._crit_edge1.lr.ph.i ], [ %result.i2.i.i.h2s1448.sroa.0.0, %._crit_edge1.i ], [ %result.i5.i983, %RangeIterator_next_.exit52.i985 ]
+  %70 = phi ptr [ %result.i5.i983, %51 ], [ %result.i5.i983, %._crit_edge1.lr.ph.i ], [ %30, %._crit_edge1.i ], [ %result.i5.i983, %RangeIterator_next_.exit52.i985 ]
+  %71 = phi i32 [ %49, %51 ], [ %49, %._crit_edge1.lr.ph.i ], [ %31, %._crit_edge1.i ], [ %49, %RangeIterator_next_.exit52.i985 ]
+  %72 = phi ptr [ %result.i5.i983, %51 ], [ %result.i5.i983, %._crit_edge1.lr.ph.i ], [ %32, %._crit_edge1.i ], [ %result.i5.i983, %RangeIterator_next_.exit52.i985 ]
+  %73 = phi i32 [ %49, %51 ], [ %49, %._crit_edge1.lr.ph.i ], [ %33, %._crit_edge1.i ], [ %49, %RangeIterator_next_.exit52.i985 ]
+  %74 = phi i32 [ %.pre1249, %51 ], [ 1, %._crit_edge1.lr.ph.i ], [ %34, %._crit_edge1.i ], [ %.pre1249, %RangeIterator_next_.exit52.i985 ]
+  %75 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %76 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef align 8 %.reg2mem5.sroa.0.0.i849.pn)
+  %77 = getelementptr i8, ptr %44, i64 8
+  %78 = load ptr, ptr %77, align 8
+  %result.i2.i822 = call ptr %78({ ptr, ptr, ptr, i32 } %40, ptr nocapture nofree noundef nonnull readonly align 8 %0) #43
+  %79 = call i32 %result.i2.i822({ ptr, ptr, ptr, i32 } %40, { ptr, ptr, ptr, i32 } %40, ptr nonnull align 8 %0)
+  %80 = call ptr @llvm.invariant.start.p0(i64 noundef 304, ptr nocapture nofree noundef nonnull align 16 dereferenceable(384) @StringWriter)
+  %81 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @UTF8) #53
+  %82 = icmp slt i32 %79, 128
+  br i1 %82, label %87, label %83
+
+83:                                               ; preds = %String_reserve_new_capacityi32.exit986
+  %84 = icmp ult i32 %79, 2048
+  br i1 %84, label %115, label %85
+
+85:                                               ; preds = %83
+  %86 = icmp ult i32 %79, 1114112
+  br i1 %86, label %UTF8__Self_encoded_width_codepointi32.exit.i, label %codeRepl
+
+87:                                               ; preds = %String_reserve_new_capacityi32.exit986
+  %88 = call ptr @llvm.invariant.start.p0(i64 noundef 368, ptr nocapture nofree noundef nonnull align 16 dereferenceable(448) @UTF8Encoder)
+  %.sroa.1.8.extract.trunc.i = trunc i32 %79 to i8
+  %89 = call ptr @llvm.invariant.start.p0(i64 noundef 288, ptr nocapture nofree noundef nonnull align 16 dereferenceable(368) @StringByteWriter) #53
+  %90 = add i32 %.pre1249, 1
+  %91 = icmp sgt i32 %90, %71
+  br i1 %91, label %92, label %String_append_byte_bytei8.exit
+
+92:                                               ; preds = %87
+  %93 = shl i32 %71, 1
+  %spec.select.i = call i32 @llvm.smax.i32(i32 %93, i32 %90) #54
+  %94 = sext i32 %spec.select.i to i64
+  %result.i5.i1251 = call noalias ptr @bump_malloc_wrapper(i64 noundef %94) #45
+  %95 = add i32 %.pre1249, -1
+  %96 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  %97 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %98 = icmp slt i32 %95, 0
+  br i1 %98, label %String_append_byte_bytei8.exit, label %._crit_edge1.lr.ph.i1253
+
+._crit_edge1.lr.ph.i1253:                         ; preds = %92
+  %99 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %100 = load i8, ptr %72, align 1
+  store i8 %100, ptr %result.i5.i1251, align 1
+  %101 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %102 = icmp eq i32 %95, 0
+  br i1 %102, label %String_append_byte_bytei8.exit, label %RangeIterator_next_.exit52.i1254
+
+RangeIterator_next_.exit52.i1254:                 ; preds = %RangeIterator_next_.exit52.i1254, %._crit_edge1.lr.ph.i1253
+  %103 = phi i32 [ %104, %RangeIterator_next_.exit52.i1254 ], [ 1, %._crit_edge1.lr.ph.i1253 ]
+  %104 = add i32 %103, 1
+  %105 = sext i32 %103 to i64
+  %106 = getelementptr i8, ptr %72, i64 %105
+  %107 = load i8, ptr %106, align 1
+  %108 = getelementptr i8, ptr %result.i5.i1251, i64 %105
+  store i8 %107, ptr %108, align 1
+  %109 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %110 = icmp sgt i32 %104, %95
+  br i1 %110, label %String_append_byte_bytei8.exit, label %RangeIterator_next_.exit52.i1254
+
+String_append_byte_bytei8.exit:                   ; preds = %RangeIterator_next_.exit52.i1254, %._crit_edge1.lr.ph.i1253, %92, %87
+  %result.i2.i.i.h2s1448.sroa.21.3 = phi i32 [ %spec.select.i, %92 ], [ %spec.select.i, %._crit_edge1.lr.ph.i1253 ], [ %result.i2.i.i.h2s1448.sroa.21.2, %87 ], [ %spec.select.i, %RangeIterator_next_.exit52.i1254 ]
+  %result.i2.i.i.h2s1448.sroa.0.3 = phi ptr [ %result.i5.i1251, %92 ], [ %result.i5.i1251, %._crit_edge1.lr.ph.i1253 ], [ %result.i2.i.i.h2s1448.sroa.0.2, %87 ], [ %result.i5.i1251, %RangeIterator_next_.exit52.i1254 ]
+  %111 = phi ptr [ %result.i5.i1251, %92 ], [ %result.i5.i1251, %._crit_edge1.lr.ph.i1253 ], [ %70, %87 ], [ %result.i5.i1251, %RangeIterator_next_.exit52.i1254 ]
+  %112 = phi i32 [ %spec.select.i, %92 ], [ %spec.select.i, %._crit_edge1.lr.ph.i1253 ], [ %71, %87 ], [ %spec.select.i, %RangeIterator_next_.exit52.i1254 ]
+  %113 = sext i32 %.pre1249 to i64
+  %114 = getelementptr i8, ptr %111, i64 %113
+  store i8 %.sroa.1.8.extract.trunc.i, ptr %114, align 1
+  br label %UTF8Encoder_write_valuei32.exit
+
+115:                                              ; preds = %83
+  %116 = lshr i32 %79, 6
+  %117 = trunc nuw nsw i32 %116 to i8
+  %118 = or disjoint i8 %117, -64
+  %119 = call ptr @llvm.invariant.start.p0(i64 noundef 368, ptr nocapture nofree noundef nonnull align 16 dereferenceable(448) @UTF8Encoder)
+  %120 = call ptr @llvm.invariant.start.p0(i64 noundef 288, ptr nocapture nofree noundef nonnull align 16 dereferenceable(368) @StringByteWriter) #53
+  %121 = add i32 %.pre1249, 1
+  %122 = icmp sgt i32 %121, %73
+  br i1 %122, label %123, label %String_append_byte_bytei8.exit1137
+
+123:                                              ; preds = %115
+  %124 = shl i32 %73, 1
+  %spec.select.i1133 = call i32 @llvm.smax.i32(i32 %124, i32 %121) #54
+  %125 = sext i32 %spec.select.i1133 to i64
+  %result.i5.i1270 = call noalias ptr @bump_malloc_wrapper(i64 noundef %125) #45
+  %126 = add i32 %.pre1249, -1
+  %127 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  %128 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %129 = icmp slt i32 %126, 0
+  br i1 %129, label %String_append_byte_bytei8.exit1137, label %._crit_edge1.lr.ph.i1272
+
+._crit_edge1.lr.ph.i1272:                         ; preds = %123
+  %130 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %131 = load i8, ptr %72, align 1
+  store i8 %131, ptr %result.i5.i1270, align 1
+  %132 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %133 = icmp eq i32 %126, 0
+  br i1 %133, label %String_append_byte_bytei8.exit1137, label %RangeIterator_next_.exit52.i1274
+
+RangeIterator_next_.exit52.i1274:                 ; preds = %RangeIterator_next_.exit52.i1274, %._crit_edge1.lr.ph.i1272
+  %134 = phi i32 [ %135, %RangeIterator_next_.exit52.i1274 ], [ 1, %._crit_edge1.lr.ph.i1272 ]
+  %135 = add i32 %134, 1
+  %136 = sext i32 %134 to i64
+  %137 = getelementptr i8, ptr %72, i64 %136
+  %138 = load i8, ptr %137, align 1
+  %139 = getelementptr i8, ptr %result.i5.i1270, i64 %136
+  store i8 %138, ptr %139, align 1
+  %140 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %141 = icmp sgt i32 %135, %126
+  br i1 %141, label %String_append_byte_bytei8.exit1137, label %RangeIterator_next_.exit52.i1274
+
+String_append_byte_bytei8.exit1137:               ; preds = %RangeIterator_next_.exit52.i1274, %._crit_edge1.lr.ph.i1272, %123, %115
+  %result.i2.i.i.h2s1448.sroa.21.4 = phi i32 [ %spec.select.i1133, %123 ], [ %spec.select.i1133, %._crit_edge1.lr.ph.i1272 ], [ %result.i2.i.i.h2s1448.sroa.21.2, %115 ], [ %spec.select.i1133, %RangeIterator_next_.exit52.i1274 ]
+  %result.i2.i.i.h2s1448.sroa.0.4 = phi ptr [ %result.i5.i1270, %123 ], [ %result.i5.i1270, %._crit_edge1.lr.ph.i1272 ], [ %result.i2.i.i.h2s1448.sroa.0.2, %115 ], [ %result.i5.i1270, %RangeIterator_next_.exit52.i1274 ]
+  %142 = phi ptr [ %result.i5.i1270, %123 ], [ %result.i5.i1270, %._crit_edge1.lr.ph.i1272 ], [ %72, %115 ], [ %result.i5.i1270, %RangeIterator_next_.exit52.i1274 ]
+  %143 = sext i32 %.pre1249 to i64
+  %144 = getelementptr i8, ptr %142, i64 %143
+  store i8 %118, ptr %144, align 1
+  %145 = trunc i32 %79 to i8
+  %146 = and i8 %145, 63
+  %147 = or disjoint i8 %146, -128
+  %148 = call ptr @llvm.invariant.start.p0(i64 noundef 368, ptr nocapture nofree noundef nonnull align 16 dereferenceable(448) @UTF8Encoder)
+  %149 = call ptr @llvm.invariant.start.p0(i64 noundef 288, ptr nocapture nofree noundef nonnull align 16 dereferenceable(368) @StringByteWriter) #53
+  %150 = add i32 %.pre1249, 2
+  %151 = icmp sgt i32 %150, %result.i2.i.i.h2s1448.sroa.21.4
+  br i1 %151, label %152, label %String_append_byte_bytei8.exit1157
+
+152:                                              ; preds = %String_append_byte_bytei8.exit1137
+  %153 = shl i32 %result.i2.i.i.h2s1448.sroa.21.4, 1
+  %spec.select.i1153 = call i32 @llvm.smax.i32(i32 %153, i32 %150) #54
+  %154 = sext i32 %spec.select.i1153 to i64
+  %result.i5.i1292 = call noalias ptr @bump_malloc_wrapper(i64 noundef %154) #45
+  %155 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  %156 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %157 = icmp slt i32 %.pre1249, 0
+  br i1 %157, label %String_append_byte_bytei8.exit1157, label %._crit_edge1.lr.ph.i1294
+
+._crit_edge1.lr.ph.i1294:                         ; preds = %152
+  %158 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %159 = load i8, ptr %result.i2.i.i.h2s1448.sroa.0.4, align 1
+  store i8 %159, ptr %result.i5.i1292, align 1
+  %160 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %161 = icmp eq i32 %.pre1249, 0
+  br i1 %161, label %String_append_byte_bytei8.exit1157, label %RangeIterator_next_.exit52.i1296
+
+RangeIterator_next_.exit52.i1296:                 ; preds = %RangeIterator_next_.exit52.i1296, %._crit_edge1.lr.ph.i1294
+  %162 = phi i32 [ %163, %RangeIterator_next_.exit52.i1296 ], [ 1, %._crit_edge1.lr.ph.i1294 ]
+  %163 = add i32 %162, 1
+  %164 = sext i32 %162 to i64
+  %165 = getelementptr i8, ptr %result.i2.i.i.h2s1448.sroa.0.4, i64 %164
+  %166 = load i8, ptr %165, align 1
+  %167 = getelementptr i8, ptr %result.i5.i1292, i64 %164
+  store i8 %166, ptr %167, align 1
+  %168 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %169 = icmp sgt i32 %163, %.pre1249
+  br i1 %169, label %String_append_byte_bytei8.exit1157, label %RangeIterator_next_.exit52.i1296
+
+String_append_byte_bytei8.exit1157:               ; preds = %RangeIterator_next_.exit52.i1296, %._crit_edge1.lr.ph.i1294, %152, %String_append_byte_bytei8.exit1137
+  %result.i2.i.i.h2s1448.sroa.21.5 = phi i32 [ %spec.select.i1153, %152 ], [ %spec.select.i1153, %._crit_edge1.lr.ph.i1294 ], [ %result.i2.i.i.h2s1448.sroa.21.4, %String_append_byte_bytei8.exit1137 ], [ %spec.select.i1153, %RangeIterator_next_.exit52.i1296 ]
+  %result.i2.i.i.h2s1448.sroa.0.5 = phi ptr [ %result.i5.i1292, %152 ], [ %result.i5.i1292, %._crit_edge1.lr.ph.i1294 ], [ %result.i2.i.i.h2s1448.sroa.0.4, %String_append_byte_bytei8.exit1137 ], [ %result.i5.i1292, %RangeIterator_next_.exit52.i1296 ]
+  %170 = sext i32 %121 to i64
+  %171 = getelementptr i8, ptr %result.i2.i.i.h2s1448.sroa.0.5, i64 %170
+  store i8 %147, ptr %171, align 1
+  br label %UTF8Encoder_write_valuei32.exit
+
+UTF8__Self_encoded_width_codepointi32.exit.i:     ; preds = %85
+  %172 = lshr i32 %79, 18
+  %173 = trunc nuw nsw i32 %172 to i8
+  %174 = or disjoint i8 %173, -16
+  %175 = call ptr @llvm.invariant.start.p0(i64 noundef 368, ptr nocapture nofree noundef nonnull align 16 dereferenceable(448) @UTF8Encoder)
+  %176 = call ptr @llvm.invariant.start.p0(i64 noundef 288, ptr nocapture nofree noundef nonnull align 16 dereferenceable(368) @StringByteWriter) #53
+  %177 = add i32 %.pre1249, 1
+  %178 = icmp sgt i32 %177, %73
+  br i1 %178, label %179, label %String_append_byte_bytei8.exit1177
+
+179:                                              ; preds = %UTF8__Self_encoded_width_codepointi32.exit.i
+  %180 = shl i32 %73, 1
+  %spec.select.i1173 = call i32 @llvm.smax.i32(i32 %180, i32 %177) #54
+  %181 = sext i32 %spec.select.i1173 to i64
+  %result.i5.i1314 = call noalias ptr @bump_malloc_wrapper(i64 noundef %181) #45
+  %182 = add i32 %.pre1249, -1
+  %183 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  %184 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %185 = icmp slt i32 %182, 0
+  br i1 %185, label %String_append_byte_bytei8.exit1177, label %._crit_edge1.lr.ph.i1316
+
+._crit_edge1.lr.ph.i1316:                         ; preds = %179
+  %186 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %187 = load i8, ptr %72, align 1
+  store i8 %187, ptr %result.i5.i1314, align 1
+  %188 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %189 = icmp eq i32 %182, 0
+  br i1 %189, label %String_append_byte_bytei8.exit1177, label %RangeIterator_next_.exit52.i1318
+
+RangeIterator_next_.exit52.i1318:                 ; preds = %RangeIterator_next_.exit52.i1318, %._crit_edge1.lr.ph.i1316
+  %190 = phi i32 [ %191, %RangeIterator_next_.exit52.i1318 ], [ 1, %._crit_edge1.lr.ph.i1316 ]
+  %191 = add i32 %190, 1
+  %192 = sext i32 %190 to i64
+  %193 = getelementptr i8, ptr %72, i64 %192
+  %194 = load i8, ptr %193, align 1
+  %195 = getelementptr i8, ptr %result.i5.i1314, i64 %192
+  store i8 %194, ptr %195, align 1
+  %196 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %197 = icmp sgt i32 %191, %182
+  br i1 %197, label %String_append_byte_bytei8.exit1177, label %RangeIterator_next_.exit52.i1318
+
+String_append_byte_bytei8.exit1177:               ; preds = %RangeIterator_next_.exit52.i1318, %._crit_edge1.lr.ph.i1316, %179, %UTF8__Self_encoded_width_codepointi32.exit.i
+  %result.i2.i.i.h2s1448.sroa.21.6 = phi i32 [ %spec.select.i1173, %179 ], [ %spec.select.i1173, %._crit_edge1.lr.ph.i1316 ], [ %result.i2.i.i.h2s1448.sroa.21.2, %UTF8__Self_encoded_width_codepointi32.exit.i ], [ %spec.select.i1173, %RangeIterator_next_.exit52.i1318 ]
+  %result.i2.i.i.h2s1448.sroa.0.6 = phi ptr [ %result.i5.i1314, %179 ], [ %result.i5.i1314, %._crit_edge1.lr.ph.i1316 ], [ %result.i2.i.i.h2s1448.sroa.0.2, %UTF8__Self_encoded_width_codepointi32.exit.i ], [ %result.i5.i1314, %RangeIterator_next_.exit52.i1318 ]
+  %198 = phi ptr [ %result.i5.i1314, %179 ], [ %result.i5.i1314, %._crit_edge1.lr.ph.i1316 ], [ %72, %UTF8__Self_encoded_width_codepointi32.exit.i ], [ %result.i5.i1314, %RangeIterator_next_.exit52.i1318 ]
+  %199 = sext i32 %.pre1249 to i64
+  %200 = getelementptr i8, ptr %198, i64 %199
+  store i8 %174, ptr %200, align 1
+  %201 = lshr i32 %79, 12
+  %202 = trunc i32 %201 to i8
+  %203 = and i8 %202, 63
+  %204 = or disjoint i8 %203, -128
+  %205 = call ptr @llvm.invariant.start.p0(i64 noundef 368, ptr nocapture nofree noundef nonnull align 16 dereferenceable(448) @UTF8Encoder)
+  %206 = call ptr @llvm.invariant.start.p0(i64 noundef 288, ptr nocapture nofree noundef nonnull align 16 dereferenceable(368) @StringByteWriter) #53
+  %207 = add i32 %.pre1249, 2
+  %208 = icmp sgt i32 %207, %result.i2.i.i.h2s1448.sroa.21.6
+  br i1 %208, label %209, label %String_append_byte_bytei8.exit1197
+
+209:                                              ; preds = %String_append_byte_bytei8.exit1177
+  %210 = shl i32 %result.i2.i.i.h2s1448.sroa.21.6, 1
+  %spec.select.i1193 = call i32 @llvm.smax.i32(i32 %210, i32 %207) #54, !range !1
+  %211 = sext i32 %spec.select.i1193 to i64
+  %result.i5.i1336 = call noalias ptr @bump_malloc_wrapper(i64 noundef %211) #45
+  %212 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  %213 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %214 = icmp slt i32 %.pre1249, 0
+  br i1 %214, label %String_append_byte_bytei8.exit1197, label %._crit_edge1.lr.ph.i1338
+
+._crit_edge1.lr.ph.i1338:                         ; preds = %209
+  %215 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %216 = load i8, ptr %result.i2.i.i.h2s1448.sroa.0.6, align 1
+  store i8 %216, ptr %result.i5.i1336, align 1
+  %217 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %218 = icmp eq i32 %.pre1249, 0
+  br i1 %218, label %String_append_byte_bytei8.exit1197, label %RangeIterator_next_.exit52.i1340
+
+RangeIterator_next_.exit52.i1340:                 ; preds = %RangeIterator_next_.exit52.i1340, %._crit_edge1.lr.ph.i1338
+  %219 = phi i32 [ %220, %RangeIterator_next_.exit52.i1340 ], [ 1, %._crit_edge1.lr.ph.i1338 ]
+  %220 = add i32 %219, 1
+  %221 = sext i32 %219 to i64
+  %222 = getelementptr i8, ptr %result.i2.i.i.h2s1448.sroa.0.6, i64 %221
+  %223 = load i8, ptr %222, align 1
+  %224 = getelementptr i8, ptr %result.i5.i1336, i64 %221
+  store i8 %223, ptr %224, align 1
+  %225 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %226 = icmp sgt i32 %220, %.pre1249
+  br i1 %226, label %String_append_byte_bytei8.exit1197, label %RangeIterator_next_.exit52.i1340
+
+String_append_byte_bytei8.exit1197:               ; preds = %RangeIterator_next_.exit52.i1340, %._crit_edge1.lr.ph.i1338, %209, %String_append_byte_bytei8.exit1177
+  %result.i2.i.i.h2s1448.sroa.21.7 = phi i32 [ %spec.select.i1193, %209 ], [ %spec.select.i1193, %._crit_edge1.lr.ph.i1338 ], [ %result.i2.i.i.h2s1448.sroa.21.6, %String_append_byte_bytei8.exit1177 ], [ %spec.select.i1193, %RangeIterator_next_.exit52.i1340 ]
+  %result.i2.i.i.h2s1448.sroa.0.7 = phi ptr [ %result.i5.i1336, %209 ], [ %result.i5.i1336, %._crit_edge1.lr.ph.i1338 ], [ %result.i2.i.i.h2s1448.sroa.0.6, %String_append_byte_bytei8.exit1177 ], [ %result.i5.i1336, %RangeIterator_next_.exit52.i1340 ]
+  %227 = sext i32 %177 to i64
+  %228 = getelementptr i8, ptr %result.i2.i.i.h2s1448.sroa.0.7, i64 %227
+  store i8 %204, ptr %228, align 1
+  %229 = lshr i32 %79, 6
+  %230 = trunc i32 %229 to i8
+  %231 = and i8 %230, 63
+  %232 = or disjoint i8 %231, -128
+  %233 = call ptr @llvm.invariant.start.p0(i64 noundef 368, ptr nocapture nofree noundef nonnull align 16 dereferenceable(448) @UTF8Encoder)
+  %234 = call ptr @llvm.invariant.start.p0(i64 noundef 288, ptr nocapture nofree noundef nonnull align 16 dereferenceable(368) @StringByteWriter) #53
+  %235 = add i32 %.pre1249, 3
+  %236 = icmp sgt i32 %235, %result.i2.i.i.h2s1448.sroa.21.7
+  br i1 %236, label %237, label %String_append_byte_bytei8.exit1217
+
+237:                                              ; preds = %String_append_byte_bytei8.exit1197
+  %238 = shl i32 %result.i2.i.i.h2s1448.sroa.21.7, 1
+  %spec.select.i1213 = call i32 @llvm.smax.i32(i32 %238, i32 %235) #54
+  %239 = sext i32 %spec.select.i1213 to i64
+  %result.i5.i1358 = call noalias ptr @bump_malloc_wrapper(i64 noundef %239) #45
+  %240 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  %241 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %242 = icmp slt i32 %177, 0
+  br i1 %242, label %String_append_byte_bytei8.exit1217, label %._crit_edge1.lr.ph.i1360
+
+._crit_edge1.lr.ph.i1360:                         ; preds = %237
+  %243 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %244 = load i8, ptr %result.i2.i.i.h2s1448.sroa.0.7, align 1
+  store i8 %244, ptr %result.i5.i1358, align 1
+  %245 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %246 = icmp eq i32 %177, 0
+  br i1 %246, label %String_append_byte_bytei8.exit1217, label %RangeIterator_next_.exit52.i1362
+
+RangeIterator_next_.exit52.i1362:                 ; preds = %RangeIterator_next_.exit52.i1362, %._crit_edge1.lr.ph.i1360
+  %247 = phi i32 [ %248, %RangeIterator_next_.exit52.i1362 ], [ 1, %._crit_edge1.lr.ph.i1360 ]
+  %248 = add i32 %247, 1
+  %249 = sext i32 %247 to i64
+  %250 = getelementptr i8, ptr %result.i2.i.i.h2s1448.sroa.0.7, i64 %249
+  %251 = load i8, ptr %250, align 1
+  %252 = getelementptr i8, ptr %result.i5.i1358, i64 %249
+  store i8 %251, ptr %252, align 1
+  %253 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %254 = icmp sgt i32 %248, %177
+  br i1 %254, label %String_append_byte_bytei8.exit1217, label %RangeIterator_next_.exit52.i1362
+
+String_append_byte_bytei8.exit1217:               ; preds = %RangeIterator_next_.exit52.i1362, %._crit_edge1.lr.ph.i1360, %237, %String_append_byte_bytei8.exit1197
+  %result.i2.i.i.h2s1448.sroa.21.8 = phi i32 [ %spec.select.i1213, %237 ], [ %spec.select.i1213, %._crit_edge1.lr.ph.i1360 ], [ %result.i2.i.i.h2s1448.sroa.21.7, %String_append_byte_bytei8.exit1197 ], [ %spec.select.i1213, %RangeIterator_next_.exit52.i1362 ]
+  %result.i2.i.i.h2s1448.sroa.0.8 = phi ptr [ %result.i5.i1358, %237 ], [ %result.i5.i1358, %._crit_edge1.lr.ph.i1360 ], [ %result.i2.i.i.h2s1448.sroa.0.7, %String_append_byte_bytei8.exit1197 ], [ %result.i5.i1358, %RangeIterator_next_.exit52.i1362 ]
+  %255 = sext i32 %207 to i64
+  %256 = getelementptr i8, ptr %result.i2.i.i.h2s1448.sroa.0.8, i64 %255
+  store i8 %232, ptr %256, align 1
+  %257 = trunc i32 %79 to i8
+  %258 = and i8 %257, 63
+  %259 = or disjoint i8 %258, -128
+  %260 = call ptr @llvm.invariant.start.p0(i64 noundef 368, ptr nocapture nofree noundef nonnull align 16 dereferenceable(448) @UTF8Encoder)
+  %261 = call ptr @llvm.invariant.start.p0(i64 noundef 288, ptr nocapture nofree noundef nonnull align 16 dereferenceable(368) @StringByteWriter) #53
+  %262 = add i32 %.pre1249, 4
+  %263 = icmp sgt i32 %262, %result.i2.i.i.h2s1448.sroa.21.8
+  br i1 %263, label %264, label %String_append_byte_bytei8.exit1237
+
+264:                                              ; preds = %String_append_byte_bytei8.exit1217
+  %265 = shl i32 %result.i2.i.i.h2s1448.sroa.21.8, 1
+  %spec.select.i1233 = call i32 @llvm.smax.i32(i32 %265, i32 %262) #54
+  %266 = sext i32 %spec.select.i1233 to i64
+  %result.i5.i1380 = call noalias ptr @bump_malloc_wrapper(i64 noundef %266) #45
+  %267 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  %268 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %269 = icmp slt i32 %207, 0
+  br i1 %269, label %String_append_byte_bytei8.exit1237, label %._crit_edge1.lr.ph.i1382
+
+._crit_edge1.lr.ph.i1382:                         ; preds = %264
+  %270 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %271 = load i8, ptr %result.i2.i.i.h2s1448.sroa.0.8, align 1
+  store i8 %271, ptr %result.i5.i1380, align 1
+  %272 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %273 = icmp eq i32 %207, 0
+  br i1 %273, label %String_append_byte_bytei8.exit1237, label %RangeIterator_next_.exit52.i1384
+
+RangeIterator_next_.exit52.i1384:                 ; preds = %RangeIterator_next_.exit52.i1384, %._crit_edge1.lr.ph.i1382
+  %274 = phi i32 [ %275, %RangeIterator_next_.exit52.i1384 ], [ 1, %._crit_edge1.lr.ph.i1382 ]
+  %275 = add i32 %274, 1
+  %276 = sext i32 %274 to i64
+  %277 = getelementptr i8, ptr %result.i2.i.i.h2s1448.sroa.0.8, i64 %276
+  %278 = load i8, ptr %277, align 1
+  %279 = getelementptr i8, ptr %result.i5.i1380, i64 %276
+  store i8 %278, ptr %279, align 1
+  %280 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %281 = icmp sgt i32 %275, %207
+  br i1 %281, label %String_append_byte_bytei8.exit1237, label %RangeIterator_next_.exit52.i1384
+
+String_append_byte_bytei8.exit1237:               ; preds = %RangeIterator_next_.exit52.i1384, %._crit_edge1.lr.ph.i1382, %264, %String_append_byte_bytei8.exit1217
+  %result.i2.i.i.h2s1448.sroa.21.9 = phi i32 [ %spec.select.i1233, %264 ], [ %spec.select.i1233, %._crit_edge1.lr.ph.i1382 ], [ %result.i2.i.i.h2s1448.sroa.21.8, %String_append_byte_bytei8.exit1217 ], [ %spec.select.i1233, %RangeIterator_next_.exit52.i1384 ]
+  %result.i2.i.i.h2s1448.sroa.0.9 = phi ptr [ %result.i5.i1380, %264 ], [ %result.i5.i1380, %._crit_edge1.lr.ph.i1382 ], [ %result.i2.i.i.h2s1448.sroa.0.8, %String_append_byte_bytei8.exit1217 ], [ %result.i5.i1380, %RangeIterator_next_.exit52.i1384 ]
+  %282 = sext i32 %235 to i64
+  %283 = getelementptr i8, ptr %result.i2.i.i.h2s1448.sroa.0.9, i64 %282
+  store i8 %259, ptr %283, align 1
+  br label %UTF8Encoder_write_valuei32.exit
+
+codeRepl:                                         ; preds = %85
+  call void @main.cold.1() #56
+  br label %UTF8Encoder_write_valuei32.exit
+
+UTF8Encoder_write_valuei32.exit:                  ; preds = %codeRepl, %String_append_byte_bytei8.exit1237, %String_append_byte_bytei8.exit1157, %String_append_byte_bytei8.exit
+  %result.i2.i.i.h2s1448.sroa.21.1 = phi i32 [ %result.i2.i.i.h2s1448.sroa.21.3, %String_append_byte_bytei8.exit ], [ %result.i2.i.i.h2s1448.sroa.21.5, %String_append_byte_bytei8.exit1157 ], [ %result.i2.i.i.h2s1448.sroa.21.9, %String_append_byte_bytei8.exit1237 ], [ %result.i2.i.i.h2s1448.sroa.21.2, %codeRepl ]
+  %result.i2.i.i.h2s1448.sroa.0.1 = phi ptr [ %result.i2.i.i.h2s1448.sroa.0.3, %String_append_byte_bytei8.exit ], [ %result.i2.i.i.h2s1448.sroa.0.5, %String_append_byte_bytei8.exit1157 ], [ %result.i2.i.i.h2s1448.sroa.0.9, %String_append_byte_bytei8.exit1237 ], [ %result.i2.i.i.h2s1448.sroa.0.2, %codeRepl ]
+  %284 = phi ptr [ %111, %String_append_byte_bytei8.exit ], [ %result.i2.i.i.h2s1448.sroa.0.5, %String_append_byte_bytei8.exit1157 ], [ %result.i2.i.i.h2s1448.sroa.0.9, %String_append_byte_bytei8.exit1237 ], [ %70, %codeRepl ]
+  %285 = phi i32 [ %112, %String_append_byte_bytei8.exit ], [ %result.i2.i.i.h2s1448.sroa.21.5, %String_append_byte_bytei8.exit1157 ], [ %result.i2.i.i.h2s1448.sroa.21.9, %String_append_byte_bytei8.exit1237 ], [ %71, %codeRepl ]
+  %286 = phi i32 [ %90, %String_append_byte_bytei8.exit ], [ %150, %String_append_byte_bytei8.exit1157 ], [ %262, %String_append_byte_bytei8.exit1237 ], [ %.pre1249, %codeRepl ]
+  %287 = phi ptr [ %111, %String_append_byte_bytei8.exit ], [ %result.i2.i.i.h2s1448.sroa.0.5, %String_append_byte_bytei8.exit1157 ], [ %result.i2.i.i.h2s1448.sroa.0.9, %String_append_byte_bytei8.exit1237 ], [ %72, %codeRepl ]
+  %288 = phi i32 [ %112, %String_append_byte_bytei8.exit ], [ %result.i2.i.i.h2s1448.sroa.21.5, %String_append_byte_bytei8.exit1157 ], [ %result.i2.i.i.h2s1448.sroa.21.9, %String_append_byte_bytei8.exit1237 ], [ %73, %codeRepl ]
+  %289 = phi i32 [ %90, %String_append_byte_bytei8.exit ], [ %150, %String_append_byte_bytei8.exit1157 ], [ %262, %String_append_byte_bytei8.exit1237 ], [ %74, %codeRepl ]
+  %290 = call ptr @llvm.invariant.start.p0(i64 noundef 304, ptr nocapture nofree noundef nonnull align 16 dereferenceable(384) @StringWriter)
+  %291 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String) #54
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %292 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %293 = call ptr @llvm.invariant.start.p0(i64 noundef 128, ptr nocapture nofree noundef nonnull align 16 dereferenceable(208) @ArrayIterator) #54
+  %294 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  call void @llvm.lifetime.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %295 = call ptr @llvm.invariant.start.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull readonly align 8 %0) #53
+  %296 = call ptr @llvm.invariant.start.p0(i64 noundef 4280, ptr nocapture nofree noundef nonnull align 16 dereferenceable(4360) @Array) #53
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %exitcond.not = icmp eq i64 %indvars.iv, 4
+  br i1 %exitcond.not, label %ArrayIterator_next_.exit860.thread, label %ArrayIterator_next_.exit860
+
+ArrayIterator_next_.exit860.thread:               ; preds = %UTF8Encoder_write_valuei32.exit
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  br label %Writer_write_from_sourceIteratorT_max_elemsi32.exit
+
+ArrayIterator_next_.exit860:                      ; preds = %UTF8Encoder_write_valuei32.exit
+  %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
+  %297 = call ptr @llvm.invariant.start.p0(i64 noundef 128, ptr nocapture nofree noundef nonnull align 16 dereferenceable(208) @ArrayIterator)
+  %298 = call ptr @llvm.invariant.start.p0(i64 noundef 4280, ptr nocapture nofree noundef nonnull align 16 dereferenceable(4360) @Array) #54
+  %299 = shl nuw nsw i64 %indvars.iv, 5
+  %300 = getelementptr i8, ptr %result.i32.h2s1449, i64 %299
+  %vptr.i1002 = load ptr, ptr %300, align 8
+  %301 = getelementptr inbounds i8, ptr %300, i64 8
+  %302 = load i160, ptr %301, align 4
+  %extract.t868 = trunc i160 %302 to i64
+  %extract869 = lshr i160 %302, 64
+  %extract.t870 = trunc i160 %extract869 to i64
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %303 = icmp ne ptr %vptr.i1002, @nil_typ
+  %304 = icmp ne ptr %vptr.i1002, null
+  %.not35.i = and i1 %303, %304
+  br i1 %.not35.i, label %._crit_edge1.i, label %Writer_write_from_sourceIteratorT_max_elemsi32.exit
+
+Writer_write_from_sourceIteratorT_max_elemsi32.exit: ; preds = %ArrayIterator_next_.exit860, %ArrayIterator_next_.exit860.thread
+  call void @llvm.lifetime.end.p0(i64 noundef 0, ptr nocapture nofree noundef nonnull align 8 %0)
+  %305 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
+  %306 = add i32 %286, 1
+  %307 = sext i32 %306 to i64
+  %result.i5.i707 = call noalias nonnull dereferenceable(1) ptr @bump_malloc_wrapper(i64 noundef %307) #45
+  %308 = add i32 %286, -1
+  %309 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  %310 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %311 = icmp slt i32 %308, 0
+  br i1 %311, label %String_c_string_.exit, label %._crit_edge.lr.ph.i708
+
+._crit_edge.lr.ph.i708:                           ; preds = %Writer_write_from_sourceIteratorT_max_elemsi32.exit
+  %312 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %313 = load i8, ptr %284, align 1
+  store i8 %313, ptr %result.i5.i707, align 1
+  %314 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %315 = icmp eq i32 %308, 0
+  br i1 %315, label %String_c_string_.exit, label %RangeIterator_next_.exit52.i
+
+RangeIterator_next_.exit52.i:                     ; preds = %RangeIterator_next_.exit52.i, %._crit_edge.lr.ph.i708
+  %316 = phi i32 [ %317, %RangeIterator_next_.exit52.i ], [ 1, %._crit_edge.lr.ph.i708 ]
+  %317 = add i32 %316, 1
+  %318 = sext i32 %316 to i64
+  %319 = getelementptr i8, ptr %284, i64 %318
+  %320 = load i8, ptr %319, align 1
+  %321 = getelementptr i8, ptr %result.i5.i707, i64 %318
+  store i8 %320, ptr %321, align 1
+  %322 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %323 = icmp sgt i32 %317, %308
+  br i1 %323, label %String_c_string_.exit, label %RangeIterator_next_.exit52.i
+
+String_c_string_.exit:                            ; preds = %RangeIterator_next_.exit52.i, %._crit_edge.lr.ph.i708, %Writer_write_from_sourceIteratorT_max_elemsi32.exit
+  %324 = sext i32 %286 to i64
+  %325 = getelementptr i8, ptr %result.i5.i707, i64 %324
+  store i8 0, ptr %325, align 1
+  %puts.i626 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly dereferenceable(1) %result.i5.i707) #46
+  store i8 110, ptr %result.i5.i.i.h2s1447, align 4
+  %scevgep.i = getelementptr inbounds i8, ptr %result.i5.i.i.h2s1447, i64 1
+  store i16 27753, ptr %scevgep.i, align 1
+  %326 = getelementptr inbounds i8, ptr %result.i5.i.i.h2s1447, i64 3
+  store i8 0, ptr %326, align 1
+  %puts.i = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly dereferenceable(4) %result.i5.i.i.h2s1447) #46
+  %327 = call ptr @llvm.invariant.start.p0(i64 noundef 4280, ptr nocapture nofree noundef nonnull align 16 dereferenceable(4360) @Array)
+  %328 = call ptr @llvm.invariant.start.p0(i64 noundef 72, ptr nocapture nofree noundef nonnull align 16 dereferenceable(152) @Character) #53
+  %329 = call ptr @llvm.invariant.start.p0(i64 noundef 2248, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2328) @StringCodePoints) #54
+  %330 = call ptr @llvm.invariant.start.p0(i64 noundef 2248, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2328) @StringBytes) #54
+  %331 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @UTF8) #53
+  %332 = call ptr @llvm.invariant.start.p0(i64 noundef 368, ptr nocapture nofree noundef nonnull align 16 dereferenceable(448) @UTF8Encoder)
+  %333 = call ptr @llvm.invariant.start.p0(i64 noundef 288, ptr nocapture nofree noundef nonnull align 16 dereferenceable(368) @StringByteWriter) #53
+  %334 = call ptr @llvm.invariant.start.p0(i64 noundef 288, ptr nocapture nofree noundef nonnull align 16 dereferenceable(368) @StringCodepointWriter)
+  %335 = call ptr @llvm.invariant.start.p0(i64 noundef 80, ptr nocapture nofree noundef nonnull align 16 dereferenceable(160) @IO)
+  %336 = call ptr @llvm.invariant.start.p0(i64 noundef 1016, ptr nocapture nofree noundef nonnull align 16 dereferenceable(1096) @Range) #54
+  store i8 100, ptr %result.i5.i.h2s1446, align 2
+  %337 = call ptr @llvm.invariant.start.p0(i64 noundef 88, ptr nocapture nofree noundef nonnull align 16 dereferenceable(168) @RangeIterator) #54
+  %338 = call ptr @llvm.invariant.start.p0(i64 noundef 2616, ptr nocapture nofree noundef nonnull align 16 dereferenceable(2696) @String)
+  %339 = getelementptr inbounds i8, ptr %result.i5.i.h2s1446, i64 1
+  store i8 0, ptr %339, align 1
+  %puts.i387 = call i32 @puts(ptr noalias nocapture nofree noundef nonnull readonly dereferenceable(2) %result.i5.i.h2s1446) #46
+  ret i32 0
+}

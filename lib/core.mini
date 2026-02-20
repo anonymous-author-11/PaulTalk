@@ -239,7 +239,11 @@ class String extends List[Character], Representable {
     } ~> no_alias
     def append_byte(byte : i8) {
         new_len = @byte_length + 1;
-        self.reserve(new_len);
+        if new_len > @capacity {
+            grown_capacity = @capacity * 2;
+            if grown_capacity < new_len { grown_capacity = new_len; }
+            self.reserve(grown_capacity);
+        }
         @bytes.[@byte_length] = byte;
         @byte_length = new_len;
     } ~> no_alias
@@ -371,8 +375,16 @@ class StringWriter extends Writer[Character] {
     }
 
     def write(value : Character) {
+        @string.reserve_extra(value.n_bytes());
         @encoder.write(value.codepoint());
         @string.increment_chars(1);
+    }
+    // Avoid repeated reserve/copy while encoding known-size collections.
+    def write_from(source : Collection[Character], max_elems : i32) -> i32 {
+        n_chars = source.size();
+        if max_elems > n_chars { max_elems = n_chars; }
+        @string.reserve_extra(n_chars * 4);
+        return self.write_from(source.iterator(), max_elems);
     }
     // A String has already validated bytes, so we can just write its bytes directly
     def write_from(source : String) -> i32 {
@@ -417,6 +429,9 @@ class StringCodepointWriter extends Writer[i32] {
 	}
 
 	def write(value : i32) {
+        width = UTF8.encoded_width(value);
+        if width == 0 { width = 3; }
+        @string.reserve_extra(width);
 		@encoder.write(value);
 		@string.increment_chars(1);
 	}
