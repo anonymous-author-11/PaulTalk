@@ -59,6 +59,8 @@ class MapValues[K, V] extends Collection[V] {
 class MapKeyIterator[K, V] extends Iterator[K] {
     @map_iterator : Iterator[Pair[K, V]]
 
+    regions { @nxt == @map_iterator.nxt.first }
+
     def init(@map_iterator : Iterator[Pair[K, V]]) {}
 
     def next() -> K? {
@@ -70,6 +72,8 @@ class MapKeyIterator[K, V] extends Iterator[K] {
 
 class MapValueIterator[K, V] extends Iterator[V] {
     @map_iterator : Iterator[Pair[K, V]]
+
+    regions { @nxt == @map_iterator.nxt.second }
 
     def init(@map_iterator : Iterator[Pair[K, V]]) {}
 

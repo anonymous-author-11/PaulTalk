@@ -445,7 +445,7 @@ class OptimizationSettings:
         opt_levels = {
             1:"default<O1>",
             2:"default<O2>",
-            3:"hotcoldsplit,default<O3>,default<O3>" # a pass so nice we run it twice
+            3:"hotcoldsplit,default<O3>,default<O3>,hotcoldsplit" # a pass so nice we run it twice
         }
         return opt_levels[1] if self.debug_mode else opt_levels[3]
 
@@ -656,10 +656,27 @@ def replace_in_file(path, string, replacement):
         f.write(txt.replace(string, replacement))
         f.truncate()
 
+def is_opt_command(command) -> bool:
+    if isinstance(command, (tuple, list)):
+        if len(command) == 0: return False
+        executable = str(command[0]).lower()
+    else:
+        executable = str(command).lower()
+    return "opt" in Path(executable).name
+
+def is_devirt_limit_error(message: str) -> bool:
+    lowered = message.lower()
+    mentions_devirt = ("devirt" in lowered) or ("devirtual" in lowered)
+    mentions_limit = ("limit" in lowered) or ("max-devirt-iterations" in lowered)
+    return mentions_devirt and mentions_limit
+
 def run_checked(command, *, input_text=None, shell=False) -> str:
     cmd_out = subprocess.run(command, capture_output=True, text=True, input=input_text, shell=shell)
     if cmd_out.returncode != 0:
-        raise Exception(cmd_out.stderr if cmd_out.stderr else f"Command failed: {command}")
+        message = cmd_out.stderr if cmd_out.stderr else f"Command failed: {command}"
+        if is_opt_command(command) and is_devirt_limit_error(message):
+            message = f"{message}\nyou probably wrote something infinitely recursive"
+        raise Exception(message)
     return cmd_out.stdout
 
 def add_source_directories(input_path):

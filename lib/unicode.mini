@@ -14,6 +14,48 @@ class SizedIterator[T] extends Iterator[T] {
     abstract def remaining() -> i32 {}
 }
 
+class UTF8 {
+
+    // returns (codepoint_seed, bytes_needed)
+    def Self.classify_lead(b1 : i32) -> Tuple[i32, i32] {
+
+        // these bit patterns are mutually exclusive
+        // LLVM will see that the conditions are disjoint
+
+        if (b1 bit_and 0x80) == 0 { return (b1, 1); } // 0xxxxxxx
+        if (b1 bit_and 0xE0) == 0xC0 { return (b1 bit_and 0x1F, 2); } // 110xxxxx
+        if (b1 bit_and 0xF0) == 0xE0 { return (b1 bit_and 0x0F, 3); } // 1110xxxx
+        if (b1 bit_and 0xF8) == 0xF0 { return (b1 bit_and 0x07, 4); } // 11110xxx
+        return (0, 0);
+    }
+
+    def Self.is_continuation(b : i32) -> Bool {
+        return (b bit_and 0xC0) == 0x80;
+    }
+
+    def Self.accumulate(codepoint : i32, b_next : i32) -> i32 {
+        return (codepoint << 6) bit_or (b_next bit_and 0x3F);
+    }
+
+    // Check for overlong encodings and other invalid sequences
+    def Self.is_valid_codepoint(codepoint : i32, bytes_needed : i32) -> Bool {
+        return (bytes_needed != 2 or codepoint >= 0x80) and
+           (bytes_needed != 3 or codepoint >= 0x800) and
+           (bytes_needed != 4 or codepoint >= 0x10000) and
+           (codepoint < 0xD800 or codepoint > 0xDFFF) and
+           (codepoint <= 0x10FFFF);
+    }
+
+    // Returns 0 for invalid codepoints.
+    def Self.encoded_width(codepoint : i32) -> i32 {
+        if codepoint <= 0x7F { return 1; }
+        if codepoint <= 0x7FF { return 2; }
+        if codepoint <= 0xFFFF { return 3; }
+        if codepoint <= 0x10FFFF { return 4; }
+        return 0;
+    }
+}
+
 /*
 class YieldWriter[T] extends Writer[T] {
     def write(value : T) yields T? {
@@ -88,6 +130,10 @@ class String extends List[Character], Representable {
 
     def Self.empty() -> Self { return Self{}; }
 
+    def Self.from_iterable(iterable : Iterable[Character]) -> Self {
+        return Self.empty().extend(iterable);
+    }
+
     // STRICT, Failable constructor. Validates input and can yield an error.
     def Self.from_bytes(source_bytes: Collection[i8]) -> String yields InvalidUTF8Error {
         result = String{source_bytes.size()};    // Pre-allocate
@@ -134,8 +180,8 @@ class String extends List[Character], Representable {
         buf.[@byte_length] = null;
         return buf;
     }
-    def append(char : Character) -> Self {
-        self.writer().write(char);
+    def append(x : Character) -> Self {
+        self.writer().write(x);
         return self;
     }
     def extend(other : Iterator[Character]) -> Self {
@@ -220,6 +266,9 @@ class StringCodePoints extends List[i32] {
     def Self.empty() -> Self {
         return Self{String.empty()};
     }
+    def Self.from_iterable(iterable : Iterable[i32]) -> Self {
+        return Self.empty().extend(iterable);
+    }
     def init(@str : String) {
     }
     def size() -> i32 {
@@ -248,6 +297,9 @@ class StringBytes extends List[i8] {
 
     def Self.empty() -> Self {
         return Self{String.empty()};
+    }
+    def Self.from_iterable(iterable : Iterable[i8]) -> Self {
+        return Self.empty().extend(iterable);
     }
     def init(@str : String) {
     }
@@ -383,12 +435,9 @@ class Character {
         return @codepoint == other.codepoint();
     }
     def n_bytes() -> i32 {
-        cp = @codepoint;
-        if cp <= 0x7F { return 1; }
-        if cp <= 0x7FF { return 2; }
-        if cp <= 0xFFFF { return 3; }
-        if cp <= 0x10FFFF { return 4; }
-        return 3; // For replacement character if codepoint is invalid
+        width = UTF8.encoded_width(@codepoint);
+        if width == 0 { return 3; } // Use replacement width for invalid codepoints
+        return width;
     }
 }
 
@@ -419,22 +468,23 @@ class UTF8Encoder extends Writer[i32] {
     }
 
 	def write(value : i32) {
-        if value <= 0x7F { // 1-byte
+        width = UTF8.encoded_width(value);
+        if width == 1 { // 1-byte
             @writer.write(value as i8);
             return;
         }
-        if value <= 0x7FF { // 2-byte
+        if width == 2 { // 2-byte
             @writer.write((0xC0 bit_or (value >> 6)) as i8);
             @writer.write((0x80 bit_or (value bit_and 0x3F)) as i8);
             return;
         }
-        if value <= 0xFFFF { // 3-byte
+        if width == 3 { // 3-byte
             @writer.write((0xE0 bit_or (value >> 12)) as i8);
             @writer.write((0x80 bit_or ((value >> 6) bit_and 0x3F)) as i8);
             @writer.write((0x80 bit_or (value bit_and 0x3F)) as i8);
             return;
         }
-        if value <= 0x10FFFF { // 4-byte
+        if width == 4 { // 4-byte
             @writer.write((0xF0 bit_or (value >> 18)) as i8);
             @writer.write((0x80 bit_or ((value >> 12) bit_and 0x3F)) as i8);
             @writer.write((0x80 bit_or ((value >> 6) bit_and 0x3F)) as i8);
@@ -528,7 +578,7 @@ class UTF8BytesValidator {
         while n_written < max_elems {
             b1 = peeker.next();
             if b1 is Nil { return n_written; }
-            tuple = self.process_first_byte(b1 as i32);
+            tuple = UTF8.classify_lead(b1 as i32);
             codepoint = tuple.[0];
             bytes_needed = tuple.[1];
 
@@ -552,16 +602,17 @@ class UTF8BytesValidator {
             for i in 1..bytes_needed {
                 b_next = peeker.peek();
                 if b_next is Nil { return n_written; }
-                if ((b_next as i32) bit_and 0xC0) != 0x80 {
+                b_next_i32 = b_next as i32;
+                if not UTF8.is_continuation(b_next_i32) {
                     valid_bytes = false;
                     break;
                 }
                 peeker.next();
                 temp_buf.[i] = b_next;
-                codepoint = (codepoint << 6) bit_or (b_next as i32 bit_and 0x3F);
+                codepoint = UTF8.accumulate(codepoint, b_next_i32);
             }
 
-            if (not valid_bytes) or self.invalid_codepoint(codepoint, bytes_needed) {
+            if (not valid_bytes) or (not UTF8.is_valid_codepoint(codepoint, bytes_needed)) {
                 @replacement_fn.call(@writer);
                 n_written = n_written + 1;
                 continue;
@@ -601,7 +652,7 @@ class UTF8Decoder extends ConstantTimeIterator[i32] {
     } ~> { ret.iterator == iterator }
 
     def init(iterator : Iterator[i8]) {
-        @peeker = iterator into Peeker;
+        @peeker = iterator into Peeker[i8];
         @replacement_fn = (byte : i8) => {
             yield(InvalidUTF8Error{});
             return -1;
@@ -609,68 +660,32 @@ class UTF8Decoder extends ConstantTimeIterator[i32] {
     }
 
     def init(iterator : Iterator[i8], @replacement_fn : (i8) -> i32) {
-        @peeker = iterator into Peeker;
-    }
-
-    // returns (codepoint, bytes_needed)
-    def process_first_byte(b1 : i8) -> Tuple[i32, i32] {
-        codepoint = 0;
-        bytes_needed = 0;
-
-        // these bit patterns are mutually exclusive
-        // LLVM will see that the conditions are disjoint
-
-        if (b1 bit_and 0x80) == 0 { // 0xxxxxxx
-            codepoint = b1;
-            bytes_needed = 1;
-        }
-        if (b1 bit_and 0xE0) == 0xC0 { // 110xxxxx
-            codepoint = b1 bit_and 0x1F;
-            bytes_needed = 2;
-        }
-        if (b1 bit_and 0xF0) == 0xE0 { // 1110xxxx
-            codepoint = b1 bit_and 0x0F;
-            bytes_needed = 3;
-        }
-        if (b1 bit_and 0xF8) == 0xF0 { // 11110xxx
-            codepoint = b1 bit_and 0x07;
-            bytes_needed = 4;
-        }
-        return (codepoint, bytes_needed);
-    }
-
-    // Check for overlong encodings and other invalid sequences
-    def invalid_codepoint(codepoint : i32, bytes_needed : i32) -> Bool {
-        return (bytes_needed == 2 and codepoint < 0x80) or
-           (bytes_needed == 3 and codepoint < 0x800) or
-           (bytes_needed == 4 and codepoint < 0x10000) or
-           (codepoint >= 0xD800 and codepoint <= 0xDFFF) or
-           (codepoint > 0x10FFFF);
+        @peeker = iterator into Peeker[i8];
     }
 
     def next() -> i32? {
         b1 = @peeker.next();
         if b1 is Nil { return nil; }
         b1 = b1 as i32;
-        tuple = self.process_first_byte(b1);
+        tuple = UTF8.classify_lead(b1);
         codepoint = tuple.[0];
         bytes_needed = tuple.[1];
 
         // Check for invalid start byte
-        if bytes_needed == 0 { return @replacement_fn.call(b1); }
+        if bytes_needed == 0 { return @replacement_fn.call(b1 as i8); }
 
         for i in 1..bytes_needed {
             b_next = @peeker.peek();
             if b_next is Nil { return nil; }
             b_next = b_next as i32;
-            if (b_next bit_and 0xC0) != 0x80 {  // Invalid continuation byte
-                return @replacement_fn.call(b1);
+            if not UTF8.is_continuation(b_next) { // Invalid continuation byte
+                return @replacement_fn.call(b1 as i8);
             }
-            codepoint = (codepoint << 6) bit_or (b_next bit_and 0x3F);
+            codepoint = UTF8.accumulate(codepoint, b_next);
             b_next = @peeker.next();            // Advance, now that known valid
         }
         
-        if self.invalid_codepoint(codepoint, bytes_needed) { return @replacement_fn.call(b1); }
+        if not UTF8.is_valid_codepoint(codepoint, bytes_needed) { return @replacement_fn.call(b1 as i8); }
 
         return codepoint;
     }

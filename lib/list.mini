@@ -9,13 +9,12 @@ class List[T] extends Collection[T] {
 
     // Create a List from any iterable, even of unknown size
     // 'my_iterable into List' can desugar to this method
-    def Self.from_iterable(iterable : Iterable[T]) -> Self {
-        return Self.empty().extend(iterable);
-    } ~> no_alias
+    abstract def Self.from_iterable(iterable : Iterable[T]) -> Self {
+    } ~> { ret.elems_reg holds iterable.elems_reg }
 
     // append always increases .size() by 1
     abstract def append(x : T) -> Self {
-    }
+    } ~> { @elems_reg holds x, ret == self }
 
     // iterator.next() should be O(1)
     abstract def iterator() -> ConstantTimeIterator[T] {}
@@ -39,7 +38,11 @@ class List[T] extends Collection[T] {
 
     // No time complexity guarantees
     def extend(other : Iterator[T]) -> Self {
-        for x in other { self.append(x); }
+        nxt = other.next();
+        while nxt is T {
+            self.append(nxt);
+            nxt = other.next();
+        }
         return self;
     }
 
@@ -67,12 +70,14 @@ class List[T] extends Collection[T] {
     }
     def writer() -> Writer[T] {
         return ListWriter{self};
-    } ~> { ret.dest_reg == @elems_reg }
+    } ~> { ret holds self, ret.dest_reg == @elems_reg }
 
 }
 
 class ListWriter[T] extends Writer[T] {
     @list : List[T]
+
+    regions { @dest_reg == @list.elems_reg }
 
     def init(@list : List[T]) {
     }

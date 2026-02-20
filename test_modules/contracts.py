@@ -3,9 +3,10 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from parser import parse
-from ptalk_compile import compiler_driver_main
+from ptalk_compile import compiler_driver_main, run_checked
 from .base_case import CompilerTestCase
 
 class ParserContractTests(unittest.TestCase):
@@ -93,3 +94,13 @@ class DependencyCacheTests(CompilerTestCase):
             "--no-timings",
         ]
         subprocess.run(cmd, check=True, capture_output=True, text=True, encoding="utf-8")
+
+class CompilerSubprocessContractTests(unittest.TestCase):
+
+    def test_run_checked_opt_devirt_limit_adds_recursion_hint(self):
+        stderr = "fatal error: max-devirt-iterations limit reached during devirtualization"
+        with patch("ptalk_compile.subprocess.run") as mock_run:
+            mock_run.return_value = subprocess.CompletedProcess(("opt.exe",), 1, "", stderr)
+            with self.assertRaises(Exception) as cm:
+                run_checked((Path("executables/opt.exe"), "-S", "-"))
+            self.assertIn("you probably wrote something infinitely recursive", str(cm.exception))

@@ -47,7 +47,7 @@ class Array[T] extends
             @buffer.[i] = old_buffer.[i];
             i = i + 1;
         }
-    }
+    } ~> no_alias
 
     // List[T] overrides
 

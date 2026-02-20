@@ -10,7 +10,7 @@ class Slice[T] extends IndexableCollection[i32, T, T] {
 	@length : i32
 
 	// Can't collect from an Iterable, as size needs to be known up-front
-	Self.collect(collection : Collection[T]) -> Self {
+	def Self.collect(collection : Collection[T]) -> Self {
 		collection_size = collection.size();
 		buf = Buffer[T].new(collection_size);
 		i = 0;

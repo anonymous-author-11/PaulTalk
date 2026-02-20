@@ -1867,8 +1867,8 @@ class BufferScatter(MethodCall):
         val_infos = [NodeInfo.from_info(self.info, f"val_{i}") for i, t in lanes]
         int_literals_infos = [NodeInfo.from_info(self.info, f"int_literal_{i}") for i, t in lanes]
         int_literals = [IntegerLiteral(int_literals_infos[i], i, 32) for i, t in lanes]
-        idx_tup_indexations = [TupleIndexation(idx_tup_index_infos[i], self.temp_id("idx"), self.method, [int_literals[i]]) for i, t in lanes]
-        val_indexations = [TupleIndexation(val_infos[i], self.temp_id("vals"), self.method, [int_literals[i]]) for i, t in lanes]
+        idx_tup_indexations = [TupleIndexation(idx_tup_index_infos[i], self.temp_id("idx"), "_index", [int_literals[i]]) for i, t in lanes]
+        val_indexations = [TupleIndexation(val_infos[i], self.temp_id("vals"), "_index", [int_literals[i]]) for i, t in lanes]
         return [BufferSetIndex(buf_index_infos[i], self.temp_id("receiver"), self.method, [idx_tup_indexations[i], val_indexations[i]]) for i, t in lanes]
 
     def tup_literal(self, scope):
@@ -2614,19 +2614,23 @@ class MethodDef(Statement):
 
     def overridden_facts(self, body_scope, param_names):
         all_overridden_methods = [*chain.from_iterable(m.definition.overridden_methods() for m in body_scope.behavior.methods)]
-        class_constraints = (m.self_type_constraints() for m in all_overridden_methods)
-        method_constraints = (m.constraints for m in all_overridden_methods)
-        overridden_facts = Constraints().union(*method_constraints, *class_constraints)
-        # return type constraints
+        overridden_facts = Constraints()
+
         for m in all_overridden_methods:
-            return_type = m.return_type()
+            overridden_facts = overridden_facts.union(m.constraints, m.self_type_constraints())
+
+            for param in m.params:
+                param_type = body_scope.type_env.simplify(param.type(m.defining_class.type_env))
+                param_constraints = body_scope.type_env.constraints_of(param_type).map({"self": param.name})
+                overridden_facts = overridden_facts.union(param_constraints)
+
+            return_type = body_scope.type_env.simplify(m.return_type())
             return_cls = None
-            if isinstance(return_type, FatPtr):
-                return_cls = body_scope.get_class(self.info, return_type)
+            if isinstance(return_type, FatPtr): return_cls = body_scope.get_class(self.info, return_type)
             if isinstance(return_type, TypeParameter) and isinstance(return_type.bound, FatPtr):
                 return_cls = body_scope.get_class(self.info, return_type.bound)
             if return_cls:
-                overridden_facts = overridden_facts.union(return_cls.all_constraints().map({"self":"ret"}))
+                overridden_facts = overridden_facts.union(return_cls.all_constraints().map({"self": "ret"}))
 
         return overridden_facts
 

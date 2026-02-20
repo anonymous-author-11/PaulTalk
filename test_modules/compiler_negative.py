@@ -269,7 +269,7 @@ class CompilerNegativeTestsMixin:
                 @FieldY : i32
             }
             """
-            self.compile_fails(mini_code, "Fields should not be capitalized.", "capitalized_field_decl")
+            self.compile_fails(mini_code, "Fields should not be capitalized", "capitalized_field_decl")
 
     def test_class_method_call_no_overload(self):
             mini_code = """

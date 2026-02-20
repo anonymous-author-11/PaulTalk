@@ -26,7 +26,7 @@ class IO {
         print(x.c_string());
     }
     def Self.print(x : Character){
-        print(x.to_string().c_string());
+        print((x into String).c_string());
     }
     def Self.print(x : Representable){
         print(x.repr().c_string());
