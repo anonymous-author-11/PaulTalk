@@ -1,0 +1,29 @@
+Standard Library Design Rules
+
+1. The concrete should depend on the abstract
+
+Example: Iterable should not have a .collect_array() -> Array method, because Iterable (abstract) should not depend on Array (concrete). Instead, Array has .from_iterable, and this is delegated to by "my_iterable into Array[i8]". 
+
+Similarly, the files with the fewest dependencies are the most abstract ones, like iteration.
+
+2. Don't cargo-cult things from other languages
+
+Lots of design decisions in other languages are driven by their own unique constraints. Maybe they only have single-dispatch, or maybe they have strict borrowing rules and parameter-passing modes, or maybe they locked in a poorly designed API in 1995 and can't break it now.
+
+3. Short suggestive names are better than verbose names
+
+Example: "Sequence" is a better name than "OrderedCollection". (This isn't to pass judgment on whether Sequence is even a good abstraction.) This is not a language where everything needs to be explicit in the name. Additionally, names can be good even if the names haven't been used in a programming context before. I would even encourage some charming colloquial names if they fit the abstraction. 
+
+4. Place methods at the appropriate abstraction level
+
+In general, if something can be written at a more abstract level (e.g. List vs Array) then it should be. You can provide optimized overloads for more concrete classes. Always think about whether you can "lift" a given method into a more abstract class.
+
+At the same time, think about what concrete information you need to rely on to write the method. Don't push it up too high, e.g. you write a method on Iterable that assumes that the iterable is finitely-sized (like .count). Can't assume that!
+
+5. Types should attempt to synthesize as many capabilities as possible from as little information as possible
+
+All Iterable knows is that it can be iterated over. As it turns out, you can write a whole lot of concrete methods that only rely on being able to iterate. And all of those can be inherited by anything that has an iterator. This is a major reuse win.
+
+6. Performance matters
+
+Good abstractions come from trying to do things efficiently, then seeing what patterns get duplicated, and forming the abstractions to reduce that duplication. If you don't care for efficiency then you won't have enough constraints to produce good abstractions.

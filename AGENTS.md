@@ -41,6 +41,7 @@ python ptalk_build.py
 
 ### General
 - Indentation: always try to keep fewer than 4 levels of indendation
+	- In both python and PaulTalk code
 	- Early return/break/continue
 	- Method / function outlining
 	- Single-line conditionals: a single statement guarded by a conditional should be on the same line,
@@ -54,6 +55,7 @@ python ptalk_build.py
 - Error handling: Use specific exceptions, prefer context managers
 
 ### PaulTalk (.mini) Code
+- Standard library design rules can be found in `Standard Library Design Rules.txt`
 - Classes: PascalCase (e.g., `class Animal extends Organism {}`)
 - Functions/Methods: snake_case (e.g., `def foo(x : T) -> U {}`)
 - Variables/Fields: snake_case with @ prefix for fields (e.g., `@name : String`)

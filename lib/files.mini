@@ -137,5 +137,8 @@ class FileSystem {
 	def Self.write_file(file_name : String, text : String) {
 		FileSystem.process_file(file_name, "wb", FileWriter.new(text));
 	}
+	def Self.append_file(file_name : String, text : String) {
+		FileSystem.process_file(file_name, "ab", FileWriter.new(text));
+	}
 
 }
