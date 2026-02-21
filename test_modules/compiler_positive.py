@@ -61,6 +61,91 @@ class CompilerPositiveTestsMixin:
             expected_output = "this\nis how\nwe do\nit\njolly good"
             self.run_mini_code(mini_code, expected_output, "file_stuff")
 
+    def test_filesystem_read_write_append(self):
+            mini_code = """
+                import core;
+                import io;
+                import files;
+
+                file_name = "files_test_rw.txt";
+                FileSystem.write(file_name, "line1");
+                FileSystem.append(file_name, "\\nline2");
+                IO.print(FileSystem.read(file_name));
+                FileSystem.remove(file_name);
+            """
+            expected_output = "line1\nline2"
+            self.run_mini_code(mini_code, expected_output, "filesystem_read_write_append")
+
+    def test_filesystem_exists(self):
+            mini_code = """
+                import core;
+                import io;
+                import files;
+
+                file_name = "files_test_exists.txt";
+                if FileSystem.exists(file_name) { FileSystem.remove(file_name); }
+                IO.print(FileSystem.exists(file_name));
+
+                FileSystem.write(file_name, "ok");
+                IO.print(FileSystem.exists(file_name));
+
+                FileSystem.remove(file_name);
+                IO.print(FileSystem.exists(file_name));
+            """
+            expected_output = "false\ntrue\nfalse"
+            self.run_mini_code(mini_code, expected_output, "filesystem_exists")
+
+    def test_buffered_file_index_and_append(self):
+            mini_code = """
+                import core;
+                import io;
+                import files;
+
+                file_name = "files_test_index.txt";
+                FileSystem.write(file_name, "abcde");
+
+                file = BufferedFile{file_name, "rb+"};
+                IO.print(file.size());
+                IO.print(file.[1]);
+
+                missing = file.read_at(50 as i64);
+                if missing is Nil { IO.print("nil"); }
+
+                file.[1] = 122 as i8;
+                file.append_byte(33 as i8);
+                IO.print(file.read());
+                file.close();
+                FileSystem.remove(file_name);
+            """
+            expected_output = "5\n98\nnil\nazcde!"
+            self.run_mini_code(mini_code, expected_output, "buffered_file_index_and_append")
+
+    def test_file_writer_and_iterator(self):
+            mini_code = """
+                import core;
+                import io;
+                import files;
+
+                file_name = "files_test_writer.txt";
+                file = BufferedFile{file_name, "wb+"};
+
+                writer = file.writer();
+                writer.write(65 as i8);
+                writer.write(66 as i8);
+                IO.print(writer.cursor());
+
+                overwriter = file.writer(1 as i64);
+                overwriter.write(67 as i8);
+                IO.print(overwriter.cursor());
+
+                IO.print(file.read());
+                for byte in file { IO.print(byte); }
+                file.close();
+                FileSystem.remove(file_name);
+            """
+            expected_output = "2\n2\nAC\n65\n67"
+            self.run_mini_code(mini_code, expected_output, "file_writer_and_iterator")
+
     def test_path_object_basics(self):
             mini_code = """
                 import std;
