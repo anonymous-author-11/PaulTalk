@@ -1152,7 +1152,7 @@ class TypeCheck(Expression):
             new_typ = scope.simplify(Union.from_list([t for t in old_typ.types.data if t != right_type]))
 
         # special-cased for checking C functions which return null pointers
-        if isinstance(old_typ, Buffer) and right_type == Nil(): new_typ = Buffer()
+        if isinstance(old_typ, Buffer) and right_type == Nil(): new_typ = old_typ
 
         scope.type_table[self.left.name] = new_typ
         #print(f"narrowed {self.left.name} from {old_typ} to {new_typ} in false branch")
