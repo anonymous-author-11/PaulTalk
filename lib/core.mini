@@ -1,6 +1,3 @@
-
-// A vision for the future evolution of the stdlib
-
 import stack;
 import indexable;
 import range;
@@ -189,7 +186,7 @@ class String extends List[Character], Representable {
         null = 0 as i8;
         buf.[@byte_length] = null;
         return buf;
-    }
+    } ~> no_alias
     def append(x : Character) -> Self {
         self.writer().write(x);
         return self;
