@@ -61,6 +61,54 @@ class CompilerPositiveTestsMixin:
             expected_output = "this\nis how\nwe do\nit\njolly good"
             self.run_mini_code(mini_code, expected_output, "file_stuff")
 
+    def test_path_object_basics(self):
+            mini_code = """
+                import std;
+
+                raw = Path{"./foo//bar/../baz.txt"};
+                IO.print(raw.to_string());
+
+                normalized = raw.normalize();
+                IO.print(normalized.to_string());
+                IO.print(normalized.is_absolute());
+                IO.print(normalized.basename());
+                IO.print(normalized.dirname().to_string());
+                IO.print(normalized.stem());
+
+                ext = normalized.extension();
+                if ext is String { IO.print(ext); } else { IO.print("nil"); }
+
+                joined = normalized.dirname().join("qux.log");
+                IO.print(joined.to_string());
+            """
+            expected_output = "./foo//bar/../baz.txt\nfoo/baz.txt\nfalse\nbaz.txt\nfoo\nbaz\n.txt\nfoo/qux.log"
+            self.run_mini_code(mini_code, expected_output, "path_object_basics")
+
+    def test_path_object_components_and_join(self):
+            mini_code = """
+                import std;
+
+                mixed = Path{"alpha\\\\beta\\\\..\\\\gamma.tar.gz"};
+                clean = mixed.normalize();
+                IO.print(clean.to_string());
+                for part in clean.components() { IO.print(part); }
+
+                replaced = clean.with_extension("bin");
+                IO.print(replaced.to_string());
+                IO.print(clean.with_extension(".zip").to_string());
+
+                base = Path{"foo/bar"};
+                IO.print(base.join("/abs//x").to_string());
+
+                rooted = Path{"/tmp//logs/"}.normalize();
+                IO.print(rooted.to_string());
+                IO.print(rooted.parent().to_string());
+
+                IO.print(Path{"../../a/../b"}.normalize().to_string());
+            """
+            expected_output = "alpha/gamma.tar.gz\nalpha\ngamma.tar.gz\nalpha/gamma.tar.bin\nalpha/gamma.tar.zip\n/abs/x\n/tmp/logs\n/tmp\n../../b"
+            self.run_mini_code(mini_code, expected_output, "path_object_components_and_join")
+
     def test_mutated_branch(self):
             mini_code = """
                 import io;

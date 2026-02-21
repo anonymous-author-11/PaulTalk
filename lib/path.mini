@@ -1,0 +1,248 @@
+import core;
+import array;
+
+class Path extends Representable {
+    @text : String
+
+    def init(@text : String) {
+    }
+
+    def Self.from_string(text : String) -> Self {
+        return Self{text};
+    }
+
+    def Self.separator() -> String {
+        return "/";
+    }
+
+    def Self.separator_byte() -> i8 {
+        return 47 as i8;
+    }
+
+    def Self.alt_separator_byte() -> i8 {
+        return 92 as i8;
+    }
+
+    def Self.dot_byte() -> i8 {
+        return 46 as i8;
+    }
+
+    def Self.is_separator_byte(byte : i8) -> Bool {
+        return byte == Self.separator_byte() or byte == Self.alt_separator_byte();
+    }
+
+    def Self.unify_separators(input : String) -> String {
+        out = String{input.byte_length()};
+        writer = out.bytes().writer();
+        for byte in input.bytes() {
+            if byte == Self.alt_separator_byte() {
+                writer.write(Self.separator_byte());
+                continue;
+            }
+            writer.write(byte);
+        }
+        out.increment_chars(input.char_length());
+        return out;
+    } ~> no_alias
+
+    def Self.slice_bytes(source : String, start : i32, end_exclusive : i32) -> String {
+        if start < 0 { start = 0; }
+        source_len = source.byte_length();
+        if end_exclusive > source_len { end_exclusive = source_len; }
+        if end_exclusive < start { end_exclusive = start; }
+
+        n_bytes = end_exclusive - start;
+        bytes = Buffer[i8].new(n_bytes);
+        chars = 0;
+        for i in 0..n_bytes {
+            byte = source.unchecked_index(start + i);
+            bytes.[i] = byte;
+            if not UTF8.is_continuation(byte as i32) { chars = chars + 1; }
+        }
+        return String{bytes, n_bytes, chars, n_bytes};
+    } ~> no_alias
+
+    def Self.last_index_of_byte(source : String, target : i8) -> i32? {
+        index = 0;
+        found = nil;
+        for byte in source.bytes() {
+            if byte == target { found = index; }
+            index = index + 1;
+        }
+        return found;
+    } ~> no_alias
+
+    def Self.join_parts(parts : Array[String], absolute : Bool) -> String {
+        n_parts = parts.size();
+        if n_parts == 0 {
+            if absolute { return Self.separator(); }
+            return ".";
+        }
+
+        total_bytes = n_parts - 1;
+        if absolute { total_bytes = total_bytes + 1; }
+        index = 0;
+        while index < n_parts {
+            total_bytes = total_bytes + parts.[index].byte_length();
+            index = index + 1;
+        }
+
+        out = String{total_bytes};
+        if absolute { out.extend(Self.separator()); }
+
+        index = 0;
+        while index < n_parts {
+            if index > 0 { out.extend(Self.separator()); }
+            out.extend(parts.[index]);
+            index = index + 1;
+        }
+        return out;
+    } ~> no_alias
+
+    def Self.components_from_normalized(normalized : String) -> Array[String] {
+        parts = [] of String;
+        if normalized == "." or normalized == Self.separator() { return parts; }
+        for segment in normalized.split(Self.separator()) {
+            if segment.byte_length() == 0 { continue; }
+            parts.append(segment);
+        }
+        return parts;
+    } ~> no_alias
+
+    def Self.normalize_text(input : String) -> String {
+        unified = Self.unify_separators(input);
+        absolute = false;
+        if unified.byte_length() > 0 {
+            absolute = unified.unchecked_index(0) == Self.separator_byte();
+        }
+
+        parts = [] of String;
+        for segment in unified.split(Self.separator()) {
+            if segment.byte_length() == 0 { continue; }
+            if segment == "." { continue; }
+            if segment != ".." {
+                parts.append(segment);
+                continue;
+            }
+            top = parts.peek();
+            if top is not String {
+                if not absolute { parts.append(".."); }
+                continue;
+            }
+            if top == ".." {
+                if not absolute { parts.append(".."); }
+                continue;
+            }
+            parts.pop();
+        }
+
+        return Self.join_parts(parts, absolute);
+    } ~> no_alias
+
+    def to_string() -> String {
+        return @text.copy();
+    }
+
+    def repr() -> String {
+        return self.to_string();
+    }
+
+    def is_absolute() -> Bool {
+        unified = Self.unify_separators(@text);
+        if unified.byte_length() == 0 { return false; }
+        return unified.unchecked_index(0) == Self.separator_byte();
+    }
+
+    def normalize() -> Path {
+        return Path{Self.normalize_text(@text)};
+    }
+
+    def components() -> Array[String] {
+        normalized = Self.normalize_text(@text);
+        return Self.components_from_normalized(normalized);
+    }
+
+    def basename() -> String {
+        normalized = Self.normalize_text(@text);
+        if normalized == Self.separator() { return Self.separator(); }
+        if normalized == "." { return "."; }
+
+        parts = Self.components_from_normalized(normalized);
+        tail = parts.peek();
+        if tail is String { return tail; }
+        return ".";
+    }
+
+    def dirname() -> Path {
+        normalized = Self.normalize_text(@text);
+        if normalized == Self.separator() { return Path{Self.separator()}; }
+        if normalized == "." { return Path{"."}; }
+
+        absolute = normalized.starts_with(Self.separator());
+        parts = Self.components_from_normalized(normalized);
+        if parts.size() == 0 {
+            if absolute { return Path{Self.separator()}; }
+            return Path{"."};
+        }
+        parts.pop();
+        return Path{Self.join_parts(parts, absolute)};
+    }
+
+    def parent() -> Path {
+        return self.dirname();
+    }
+
+    def join(child : Path) -> Path {
+        child_text = Self.normalize_text(child.to_string());
+        if child_text.starts_with(Self.separator()) { return Path{child_text}; }
+
+        base_text = Self.normalize_text(@text);
+        if child_text == "." { return Path{base_text}; }
+        if base_text == "." { return Path{child_text}; }
+
+        joined = base_text.copy();
+        if base_text != Self.separator() { joined.extend(Self.separator()); }
+        joined.extend(child_text);
+        return Path{Self.normalize_text(joined)};
+    }
+
+    def join(child : String) -> Path {
+        return self.join(Path{child});
+    }
+
+    def stem() -> String {
+        base = self.basename();
+        if base == "." or base == ".." or base == Self.separator() { return base; }
+
+        dot_index = Self.last_index_of_byte(base, Self.dot_byte());
+        if dot_index is not i32 { return base; }
+        if dot_index == 0 { return base; }
+        return Self.slice_bytes(base, 0, dot_index);
+    }
+
+    def extension() -> String? {
+        base = self.basename();
+        if base == "." or base == ".." or base == Self.separator() { return nil; }
+
+        dot_index = Self.last_index_of_byte(base, Self.dot_byte());
+        if dot_index is not i32 { return nil; }
+        if dot_index == 0 { return nil; }
+        if dot_index == base.byte_length() - 1 { return nil; }
+        return Self.slice_bytes(base, dot_index, base.byte_length());
+    }
+
+    def with_extension(ext : String) -> Path {
+        suffix = ext;
+        if suffix.byte_length() > 0 and not suffix.starts_with(".") {
+            prefixed = String{suffix.byte_length() + 1};
+            prefixed.extend(".");
+            prefixed.extend(suffix);
+            suffix = prefixed;
+        }
+
+        parent = self.dirname();
+        name = self.stem();
+        name.extend(suffix);
+        return parent.join(name);
+    }
+}
