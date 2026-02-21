@@ -227,6 +227,13 @@ class String extends List[Character], Representable {
         }
         return true;
     }
+    def !=(other : String) -> Bool {
+        if @byte_length != other.byte_length() { return true; }
+        for i in 0..@byte_length {
+            if @bytes.[i] != other.unchecked_index(i) { return true; }
+        }
+        return false;
+    }
     def starts_with(prefix : String) -> Bool {
         prefix_len = prefix.byte_length();
         if prefix_len > @byte_length { return false; }
