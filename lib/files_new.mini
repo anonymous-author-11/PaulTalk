@@ -1,0 +1,386 @@
+import core;
+import io;
+import array;
+import writer;
+
+extern def fopen(name : Buffer[i8], mode : Buffer[i8]) -> Buffer[i32]
+extern def fprintf(file : Buffer[i32], text : Buffer[i8]) -> i32
+extern def fclose(file : Buffer[i32]) -> i32
+extern def fgetc(file : Buffer[i32]) -> i32
+extern def fgets(out : Buffer[i8], size : i32, file : Buffer[i32]) -> i64
+extern def ferror(file : Buffer[i32]) -> i32
+extern def fseek(file : Buffer[i32], offset : i64, whence : i32) -> i32
+extern def ftell(file : Buffer[i32]) -> i64
+extern def fread(out : Buffer[i8], size : i64, nmemb : i64, file : Buffer[i32]) -> i64
+extern def fwrite(ptr : Buffer[i8], size : i64, nmemb : i64, file : Buffer[i32]) -> i64
+extern def perror(null : i64)
+
+class FileSystemError extends Exception {}
+
+class File extends IndexableCollection[i32, i8, i8] {
+
+	abstract def read_at(offset : i64) -> i8? {
+	} ~> no_alias
+	abstract def write(offset : i64, source : Buffer[i8], n_bytes : i32) -> i32 {
+	} ~> no_alias
+	abstract def byte_length() -> i64 {
+	} ~> no_alias
+	abstract def mode=(mode : String) {
+	}
+	abstract def reopen() {
+	} ~> no_alias
+	abstract def close() {
+	} ~> no_alias
+
+	def size() -> i32 {
+		length = self.byte_length();
+		max_i32 = i32.max() as i64;
+		if length > max_i32 { yield(FileSystemError.new()); }
+		return length as i32;
+	}
+
+	def bounds_check(index : i32) {
+		length = self.size();
+		if index < 0 or index >= length { yield(OutOfBounds.new(length, index)); }
+	}
+
+	def indices() -> Range {
+		return 0..self.size();
+	}
+
+	def values() -> Self {
+		return self;
+	}
+
+	def unchecked_index(index : i32) -> i8 {
+		value = self.read_at(index as i64);
+		if value is i8 { return value; }
+		yield(FileSystemError.new());
+	}
+
+	def [](index : i32) -> i8 {
+		self.bounds_check(index);
+		return self.unchecked_index(index);
+	}
+
+	def unchecked_insert(index : i32, value : i8) {
+		single_byte = Buffer[i8].new(1);
+		single_byte.[0] = value;
+		written = self.write(index as i64, single_byte, 1);
+		if written < 1 { yield(FileSystemError.new()); }
+	}
+
+	def []=(index : i32, value : i8) {
+		self.bounds_check(index);
+		self.unchecked_insert(index, value);
+	}
+
+	def append_byte(value : i8) {
+		offset = self.byte_length();
+		single_byte = Buffer[i8].new(1);
+		single_byte.[0] = value;
+		self.write(offset, single_byte, 1);
+	}
+
+	def read() -> String {
+		length_i32 = self.size();
+		buf = Buffer[i8].new(length_i32 + 1);
+		i = 0;
+		while i < length_i32 {
+			byte = self.read_at(i as i64);
+			if byte is not i8 { yield(FileSystemError.new()); }
+			buf.[i] = byte;
+			i = i + 1;
+		}
+		return String.from_bytes_lossy(Array{buf, length_i32, length_i32});
+	}
+
+	def write(text : String) -> i64 {
+		text_len = text.byte_length();
+		written = self.write(0 as i64, text.c_string(), text_len);
+		if written < text_len { yield(FileSystemError.new()); }
+		return written as i64;
+	}
+
+	def iterator() -> FileIterator {
+		return FileIterator{self};
+	} ~> { ret.file == self }
+
+	def writer() -> FileWriter {
+		return FileWriter{self};
+	}
+
+	def writer(cursor : i64) -> FileWriter {
+		return FileWriter{self, cursor};
+	}
+}
+
+class BufferedFile extends File {
+	@name : String
+	@mode : String
+	@handle : Buffer[i32]
+	@cache : Buffer[i8]
+	@cache_start : i64
+	@cache_len : i32
+	@cache_capacity : i32
+	@open : Bool
+
+	def Self.seek_set() -> i32 {
+		return 0;
+	}
+
+	def Self.default_cache_capacity() -> i32 {
+		return 8192;
+	}
+
+	def Self.seek_end() -> i32 {
+		return 2;
+	}
+
+	def init(@name : String, @mode : String) {
+		@cache_capacity = Self.default_cache_capacity();
+		@cache = Buffer[i8].new(@cache_capacity);
+		@cache_start = 0 as i64;
+		@cache_len = 0;
+		@open = false;
+		@handle = fopen(@name.c_string(), @mode.c_string());
+		if @handle is Nil { yield(FileSystemError.new()); }
+		@open = true;
+	} ~> all_alias
+
+	def ensure_open() {
+		if not @open { yield(FileSystemError.new()); }
+	} ~> no_alias
+
+	def current_position() -> i64 {
+		self.ensure_open();
+		pos = ftell(@handle);
+		if pos < 0 as i64 { yield(FileSystemError.new()); }
+		return pos;
+	} ~> no_alias
+
+	def seek_to(offset : i64) {
+		self.ensure_open();
+		status = fseek(@handle, offset, Self.seek_set());
+		if status != 0 { yield(FileSystemError.new()); }
+	} ~> no_alias
+
+	def invalidate_cache() {
+		@cache_len = 0;
+		@cache_start = 0 as i64;
+	} ~> no_alias
+
+	def cache_contains(offset : i64) -> Bool {
+		if @cache_len == 0 { return false; }
+		if offset < @cache_start { return false; }
+		cache_end = @cache_start + @cache_len as i64;
+		return offset < cache_end;
+	} ~> no_alias
+
+	def refill_cache(start_offset : i64) {
+		self.ensure_open();
+		if start_offset < 0 as i64 { start_offset = 0 as i64; }
+		self.seek_to(start_offset);
+		@cache_len = 0;
+		read_count = fread(@cache, 1 as i64, @cache_capacity as i64, @handle);
+		if ferror(@handle) != 0 { yield(FileSystemError.new()); }
+		@cache_start = start_offset;
+		@cache_len = read_count as i32;
+	} ~> no_alias
+
+	def read_at(offset : i64) -> i8? {
+		self.ensure_open();
+		if offset < 0 as i64 { return nil; }
+		if not self.cache_contains(offset) { self.refill_cache(offset); }
+		if not self.cache_contains(offset) { return nil; }
+		local_index = (offset - @cache_start) as i32;
+		return @cache.[local_index];
+	}
+
+	def write_at_offset(offset : i64, value : i8) {
+		self.ensure_open();
+		self.seek_to(offset);
+		single_byte = Buffer[i8].new(1);
+		single_byte.[0] = value;
+		written = fwrite(single_byte, 1 as i64, 1 as i64, @handle);
+		if written < 1 as i64 { yield(FileSystemError.new()); }
+		if ferror(@handle) != 0 { yield(FileSystemError.new()); }
+	}
+
+	def write(offset : i64, source : Buffer[i8], n_bytes : i32) -> i32 {
+		self.ensure_open();
+		if n_bytes <= 0 { return 0; }
+		self.seek_to(offset);
+		written = fwrite(source, 1 as i64, n_bytes as i64, @handle);
+		if ferror(@handle) != 0 { yield(FileSystemError.new()); }
+		self.invalidate_cache();
+		return written as i32;
+	}
+
+	def byte_length() -> i64 {
+		self.ensure_open();
+		status = fseek(@handle, 0 as i64, Self.seek_end());
+		if status != 0 { yield(FileSystemError.new()); }
+		length = ftell(@handle);
+		if length < 0 as i64 { yield(FileSystemError.new()); }
+		return length;
+	}
+
+	def unchecked_insert(index : i32, value : i8) {
+		self.write_at_offset(index as i64, value);
+		if self.cache_contains(index as i64) {
+			local_index = ((index as i64) - @cache_start) as i32;
+			@cache.[local_index] = value;
+		}
+	}
+
+	def mode=(@mode : String) {
+		if not @open { return; }
+		self.reopen();
+	}
+
+	def reopen() {
+		self.close();
+		@handle = fopen(@name.c_string(), @mode.c_string());
+		if @handle is Nil { yield(FileSystemError.new()); }
+		@open = true;
+		self.invalidate_cache();
+	} ~> no_alias
+
+	def close() {
+		if not @open { return; }
+		int = fclose(@handle);
+		@open = false;
+		self.invalidate_cache();
+		if int == -1 { yield(FileSystemError.new()); }
+	}
+
+	def read() -> String {
+		self.ensure_open();
+		length_i32 = self.size();
+		length_i64 = length_i32 as i64;
+		self.seek_to(0 as i64);
+		buf = Buffer[i8].new(length_i32 + 1);
+		read_count = fread(buf, 1 as i64, length_i64, @handle);
+		if read_count < length_i64 { yield(FileSystemError.new()); }
+		return String.from_bytes_lossy(Array{buf, length_i32, length_i32});
+	}
+}
+
+class FileIterator extends Iterator[i8] {
+	@file : File
+	@size : i32
+	@cursor : i32
+
+	regions { @elems_reg == @file.elems_reg }
+
+	def init(@file : File) {
+		@cursor = 0;
+		@size = @file.size();
+	}
+
+	def next() -> i8? {
+		if @cursor >= @size { return nil; }
+		index = @cursor;
+		@cursor = @cursor + 1;
+		return @file.unchecked_index(index);
+	}
+}
+
+class FileWriter extends Writer[i8] {
+	@file : File
+	@cursor : i64
+	@scratch : Buffer[i8]
+	@scratch_capacity : i32
+
+	regions { @dest_reg == @file.elems_reg }
+
+	def Self.default_scratch_capacity() -> i32 {
+		return 8192;
+	}
+
+	getter @cursor
+
+	def init(@file : File) {
+		@cursor = 0 as i64;
+		@scratch_capacity = Self.default_scratch_capacity();
+		@scratch = Buffer[i8].new(@scratch_capacity);
+	}
+
+	def init(@file : File, @cursor : i64) {
+		@scratch_capacity = Self.default_scratch_capacity();
+		@scratch = Buffer[i8].new(@scratch_capacity);
+		if @cursor < 0 as i64 { yield(FileSystemError.new()); }
+	}
+
+	def cursor=(new_cursor : i64) {
+		if new_cursor < 0 as i64 { yield(FileSystemError.new()); }
+		@cursor = new_cursor;
+	}
+
+	def write(value : i8) {
+		@scratch.[0] = value;
+		written = @file.write(@cursor, @scratch, 1);
+		@cursor = @cursor + written as i64;
+	}
+
+	def fill_scratch(source : Iterator[i8], max_elems : i32) -> i32 {
+		target = max_elems;
+		if target > @scratch_capacity { target = @scratch_capacity; }
+		filled = 0;
+		while filled < target {
+			next = source.next();
+			if next is not i8 { return filled; }
+			@scratch.[filled] = next;
+			filled = filled + 1;
+		}
+		return filled;
+	} ~> no_alias
+
+	def flush_scratch(n_bytes : i32) -> i32 {
+		written = @file.write(@cursor, @scratch, n_bytes);
+		@cursor = @cursor + written as i64;
+		return written;
+	}
+
+	def write_from(source : Iterator[i8], max_elems : i32) -> i32 {
+		if max_elems <= 0 { return 0; }
+		total_written = 0;
+		while total_written < max_elems {
+			remaining = max_elems - total_written;
+			filled = self.fill_scratch(source, remaining);
+			if filled == 0 { break; }
+			written = self.flush_scratch(filled);
+			total_written = total_written + written;
+			if written < filled { break; }
+		}
+		return total_written;
+	}
+
+	def write_from(source : Collection[i8], max_elems : i32) -> i32 {
+		n_write = source.size();
+		if max_elems < n_write { n_write = max_elems; }
+		return self.write_from(source.iterator(), n_write);
+	}
+}
+
+class FileSystem {
+
+	def Self.read(file_name : String) -> String {
+		file = BufferedFile{file_name, "rb"};
+		str = file.read();
+		file.close();
+		return str;
+	}
+	def Self.write(file_name : String, text : String) {
+		file = BufferedFile{file_name, "wb"};
+		file.write(text);
+		file.close();
+	}
+	def Self.append(file_name : String, text : String) {
+		file = BufferedFile{file_name, "ab"};
+		file.write(text);
+		file.close();
+	}
+
+}
