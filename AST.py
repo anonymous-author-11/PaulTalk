@@ -289,6 +289,8 @@ class ExpressionStatement(Statement):
 
     def typeflow(self, scope):
         self.expr.exprtype(scope)
+        if isinstance(self.expr, CoYield):
+            self.expr.untype_variables(scope)
 
 @dataclass
 class BinaryOp(Expression):
@@ -4551,6 +4553,19 @@ class CoYield(Expression):
         wrap = WrapOp.make(yield_op.results[0], self_type)
         scope.region.last_block.add_ops([cast, unwrap, yield_op, wrap])
         return wrap.results[0]
+
+    def untype_variables(self, scope):
+        exception_type = FatPtr.basic("Exception")
+        arg_type = self.arg.exprtype(scope)
+        yields_exception = scope.subtype(arg_type, exception_type)
+        if not yields_exception: return
+        # yielded exceptions in control-flow branches should affect type inference
+        for key in scope.type_table.keys():
+            if "@" not in key: scope.type_table[key] = Nothing()
+
+        # x : i32 | Nil;
+        # if x is Nil { yield(Exception{}); }
+        # now typeof(x) should be (i32 | Nothing) == i32
 
     def exprtype(self, scope):
         return scope.simplify(Union.from_list([Nil(), self.arg.exprtype(scope)])) if self.arg else None
