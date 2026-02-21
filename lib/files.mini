@@ -14,6 +14,7 @@ extern def ftell(file : Buffer[i32]) -> i64
 extern def fread(out : Buffer[i8], size : i64, nmemb : i64, file : Buffer[i32]) -> i64
 extern def fwrite(ptr : Buffer[i8], size : i64, nmemb : i64, file : Buffer[i32]) -> i64
 extern def perror(null : i64)
+extern def remove(name : Buffer[i8]) -> i32
 
 class FileSystemError extends Exception {}
 
@@ -366,6 +367,13 @@ class FileWriter extends Writer[i8] {
 
 class FileSystem {
 
+	def Self.exists(file_name : String) -> Bool {
+		handle = fopen(file_name.c_string(), "rb".c_string());
+		if handle is Nil { return false; }
+		fclose(handle);
+		return true;
+	}
+
 	def Self.read(file_name : String) -> String {
 		file = BufferedFile{file_name, "rb"};
 		str = file.read();
@@ -381,6 +389,10 @@ class FileSystem {
 		file = BufferedFile{file_name, "ab"};
 		file.write(text);
 		file.close();
+	}
+	def Self.remove(file_name : String) {
+		status = remove(file_name.c_string());
+		if status != 0 { yield(FileSystemError.new()); }
 	}
 
 }
