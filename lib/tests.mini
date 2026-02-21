@@ -279,8 +279,8 @@ returns_five = () => { 5; };
 IO.print([1,2,3,4].map(times_two).reduce(0, add));
 [5,6,7,8].each((x : i32) => { IO.print(x); });
 
-FileSystem.write_file("bigtings.txt", "this\nis how\nwe do\nit");
-IO.print(FileSystem.read_file("bigtings.txt"));
+FileSystem.write("bigtings.txt", "this\nis how\nwe do\nit");
+IO.print(FileSystem.read("bigtings.txt"));
 
 //system("dir".c_string());
 

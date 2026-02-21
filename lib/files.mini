@@ -79,7 +79,7 @@ class File {
 	}
 	def write(text : String) -> i64 {
 		if not @open { yield(FileSystemError.new()); }
-		text_len = text.length() as i64;
+		text_len = text.byte_length() as i64;
 		elem_size = 1 as i64;
 		int = fwrite(text.c_string(), elem_size, text_len, @handle);
 		if int < text_len { yield(FileSystemError.new()); }
@@ -87,58 +87,23 @@ class File {
 	}
 }
 
-class FileProcessor[T] {
-	abstract def process(file : File) -> T {
-	}
-}
-
-class FileReader extends FileProcessor[String] {
-	def init() {}
-	def process(file : File) -> String {
-		return file.read();
-	}
-}
-
-class FileWriter extends FileProcessor[i64] {
-	@text : String
-	def init(@text : String) {}
-	def process(file : File) -> i64 {
-		return file.write(@text);
-	}
-}
-
 class FileSystem {
 
-	def Self.process_file[T](file_name : String, mode: String, processor: FileProcessor[T]) -> T {
-		file = File.new(file_name, mode);
-		fn = (p : FileProcessor[T], f : File) => { p.process(f); };
-		coro = Coroutine.new(fn, processor, file);
-		possible_exception = coro.call();
+	def Self.read(file_name : String) -> String {
+		file = File{file_name, "rb"};
+		str = file.read();
 		file.close();
-		if possible_exception is Exception { yield(possible_exception); }
-		result = coro.result();
-		if result is T { return result; }
+		return str;
 	}
-
-	def Self.process_file[T](file_name : String, mode: String, processor: (File) -> T) -> T {
-		file = File.new(file_name, mode);
-		coro = Coroutine.new(processor, file);
-		possible_exception = coro.call();
+	def Self.write(file_name : String, text : String) {
+		file = File{file_name, "wb"};
+		file.write(text);
 		file.close();
-		if possible_exception is Exception { yield(possible_exception); }
-		result = coro.result();
-		if result is T { return result; }
 	}
-
-	def Self.read_file(file_name : String) -> String {
-		return FileSystem.process_file(file_name, "rb", FileReader.new());
-	}
-
-	def Self.write_file(file_name : String, text : String) {
-		FileSystem.process_file(file_name, "wb", FileWriter.new(text));
-	}
-	def Self.append_file(file_name : String, text : String) {
-		FileSystem.process_file(file_name, "ab", FileWriter.new(text));
+	def Self.append(file_name : String, text : String) {
+		file = File{file_name, "ab"};
+		file.write(text);
+		file.close();
 	}
 
 }

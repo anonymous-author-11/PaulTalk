@@ -27,6 +27,26 @@ class CompilerPositiveTestsMixin:
                 import io;
                 import files;
 
+                class FileProcessor[T] {
+                    abstract def process(file : File) -> T {
+                    }
+                }
+
+                class FileReader extends FileProcessor[String] {
+                    def init() {}
+                    def process(file : File) -> String {
+                        return file.read();
+                    }
+                }
+
+                class FileWriter extends FileProcessor[i64] {
+                    @text : String
+                    def init(@text : String) {}
+                    def process(file : File) -> i64 {
+                        return file.write(@text);
+                    }
+                }
+
                 class Foo {
                     def Self.collection_taker(c : Iterable[Character]) {
                         IO.print("jolly good");
