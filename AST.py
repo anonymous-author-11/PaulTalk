@@ -4555,6 +4555,7 @@ class CoYield(Expression):
         return wrap.results[0]
 
     def untype_variables(self, scope):
+        if not self.arg: return
         exception_type = FatPtr.basic("Exception")
         arg_type = self.arg.exprtype(scope)
         yields_exception = scope.subtype(arg_type, exception_type)

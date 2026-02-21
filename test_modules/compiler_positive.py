@@ -52,7 +52,7 @@ class CompilerPositiveTestsMixin:
                         IO.print("jolly good");
                     }
                 }
-                file = File{"bigtings.txt", "rb"};
+                file = BufferedFile{"bigtings.txt", "rb"};
                 fr = FileReader{} as FileProcessor[String];
                 txt = fr.process(file);
                 IO.print(txt);
