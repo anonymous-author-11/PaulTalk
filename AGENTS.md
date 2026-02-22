@@ -91,3 +91,5 @@ python ptalk_build.py
 	- Don't contort your code to work around the bug
 - Reuse a build directory so that compilation can use cached artifacts
 	- Don't recompile the entire stdlib every time you want to compile a single file
+- Tests (by design) have to recompile all their dependencies and are therefore quite slow
+	- For fast iteration, maybe just compile the test snippet yourself using your build directory
