@@ -4,28 +4,28 @@
 
 ```bash
 # Run default correctness suites (fast + stress, excludes perf)
-python tests.py
+python tests.py --build-dir temp_build
 
 # Run fast PR-style suite
-python tests.py --suite fast
+python tests.py --suite fast --build-dir temp_build
 
 # Run stress-only suite
-python tests.py --suite stress
+python tests.py --suite stress --build-dir temp_build
 
 # Run perf-only suite (debug + release benchmark checks)
-python tests.py --suite perf
+python tests.py --suite perf --build-dir temp_build
 
 # Run every suite including perf
-python tests.py --suite all
+python tests.py --suite all --build-dir temp_build
 
 # Run single test (replace TestName with specific test method)
-python -m unittest tests.CompilerTests.test_end_to_end
+python -m unittest tests.CompilerTests.test_end_to_end --build-dir temp_build
 
 # Lint changed Python files for AI style rules
 python tools/lint_ai_changes.py
 
 # Lint PaulTalk (.mini) files for style rules
-python tools/check_ptalk_code.py
+python tools/lint_ptalk_code.py core.mini path.mini
 
 # Lint specific files with AI style rules
 python tools/lint_ai_changes.py parser.py test_modules/contracts.py
@@ -36,6 +36,15 @@ python ptalk_compile.py input.mini -o output.exe --build-dir build
 # Build entire project
 python ptalk_build.py
 ```
+
+## General Notes
+
+- There are a fair number of random / temporary / old files in this project
+- Stuff in the "Design Docs" folder is more likely to be outdated or speculative
+- If you hit a PaulTalk compiler bug when trying to write substantive code, stop and report the bug to me
+	- Don't contort your code to work around the bug
+- Reuse a build directory (temp_build) so that compilation can use cached artifacts
+	- Don't recompile the entire stdlib every time you want to compile a single file
 
 ## Code Style Guidelines
 
@@ -76,8 +85,6 @@ python ptalk_build.py
 - Use `self.compile_and_run(code, expected_output, test_name)` for success cases
 - Use `self.compile_fails(code, expected_phrase, test_name, expected_category=...)` for failure cases
 - `self.run_mini_code(...)` is still available as a compatibility wrapper
-- Default suite runs should stay single-process to maximize shared `test_build` cache reuse
-- Parallel workers should use distinct `PTALK_TEST_BUILD_DIR` and `PTALK_TEST_BIN_DIR` values
 - Per-test temp source files are cleaned in `tearDown()`; build/bin dirs are cleaned at process exit
 
 ### Project Structure
@@ -85,14 +92,3 @@ python ptalk_build.py
 - Standard library in `lib/` directory with `.mini` extension
 - LLVM utilities in `data_files/` with `.ll` extension
 - Grammar definition in `data_files/grammar.lark`
-
-## Additional Notes
-
-- There are a fair number of random / temporary / old files in this project
-- Stuff in the "Design Docs" folder is more likely to be outdated or speculative
-- If you hit a PaulTalk compiler bug when trying to write substantive code, stop and report the bug to me
-	- Don't contort your code to work around the bug
-- Reuse a build directory so that compilation can use cached artifacts
-	- Don't recompile the entire stdlib every time you want to compile a single file
-- Tests (by design) have to recompile all their dependencies and are therefore quite slow
-	- For fast iteration, maybe just compile the test snippet yourself using your build directory

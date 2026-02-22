@@ -2,9 +2,9 @@
 
 Rules:
 1. At most 3 indentation levels (<= 12 leading spaces).
-2. No more than one statement per line (<= 1 semicolon outside strings/comments).
+2. No more than one statement per line (<= 1 semicolon outside strings/comments/fn literals).
 3. Max 80 characters per line.
-4. Method signature must be on one line (for lines starting with `def`, must contain `{`).
+4. Method signature must be on one line (for `def` and `abstract def`, line must contain `{`).
 5. Conditional headers must be on one line (for `if`, `while`, must contain `{`).
 """
 
@@ -29,7 +29,7 @@ RULE_SIGNATURE = "R4-def-header-one-line"
 RULE_CONDITION = "R5-cond-header-one-line"
 
 
-DEF_RE = re.compile(r"^\s*def\b")
+DEF_RE = re.compile(r"^\s*(?:abstract\s+)?def\b")
 IF_RE = re.compile(r"^\s*(?:else\s+)?if\b")
 WHILE_RE = re.compile(r"^\s*while\b")
 
@@ -40,6 +40,12 @@ class Violation:
     line_number: int
     message: str
     text: str
+
+
+@dataclass
+class SemicolonScanState:
+    in_fn_literal_depth: int = 0
+    pending_fn_block: bool = False
 
 
 def collect_targets(paths: list[str]) -> list[Path]:
@@ -116,34 +122,69 @@ def strip_comments(line: str, in_block_comment: bool) -> tuple[str, bool]:
     return "".join(out), in_block_comment
 
 
-def count_semicolons_outside_strings(code: str) -> int:
+def count_semicolons_outside_strings(
+    code: str, state: SemicolonScanState
+) -> int:
     count = 0
     in_single = False
     in_double = False
     escaped = False
+    index = 0
 
-    for char in code:
+    while index < len(code):
+        char = code[index]
         if in_single or in_double:
             if escaped:
                 escaped = False
+                index += 1
                 continue
             if char == "\\":
                 escaped = True
+                index += 1
                 continue
             if in_single and char == "'":
                 in_single = False
             if in_double and char == '"':
                 in_double = False
+            index += 1
             continue
 
         if char == "'":
             in_single = True
+            index += 1
             continue
         if char == '"':
             in_double = True
+            index += 1
             continue
+
+        if state.in_fn_literal_depth > 0:
+            if char == "{":
+                state.in_fn_literal_depth += 1
+            if char == "}":
+                state.in_fn_literal_depth -= 1
+            index += 1
+            continue
+
+        if state.pending_fn_block:
+            if char.isspace():
+                index += 1
+                continue
+            if char == "{":
+                state.in_fn_literal_depth = 1
+                state.pending_fn_block = False
+                index += 1
+                continue
+            state.pending_fn_block = False
+
+        if code[index : index + 2] == "=>":
+            state.pending_fn_block = True
+            index += 2
+            continue
+
         if char == ";":
             count += 1
+        index += 1
 
     return count
 
@@ -151,6 +192,7 @@ def count_semicolons_outside_strings(code: str) -> int:
 def check_file(path: Path) -> list[Violation]:
     violations: list[Violation] = []
     in_block_comment = False
+    semicolon_state = SemicolonScanState()
 
     for line_number, raw in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
         if len(raw) > MAX_LINE_WIDTH:
@@ -179,13 +221,13 @@ def check_file(path: Path) -> list[Violation]:
         if not stripped:
             continue
 
-        semicolons = count_semicolons_outside_strings(code)
+        semicolons = count_semicolons_outside_strings(code, semicolon_state)
         if semicolons > 1:
             violations.append(
                 Violation(
                     RULE_ONE_STMT,
                     line_number,
-                    f"Semicolons outside strings/comments = {semicolons} (max 1).",
+                    f"Semicolons outside strings/comments/fn literals = {semicolons} (max 1).",
                     raw,
                 )
             )
@@ -261,4 +303,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
