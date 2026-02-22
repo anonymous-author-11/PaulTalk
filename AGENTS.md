@@ -18,14 +18,14 @@ python tests.py --suite perf
 # Run every suite including perf
 python tests.py --suite all
 
-# Run tests in isolated worker dirs (useful for process-level sharding)
-$env:PTALK_TEST_BUILD_DIR="test_build_worker1"; $env:PTALK_TEST_BIN_DIR="test_bin_worker1"; python tests.py --suite fast
-
 # Run single test (replace TestName with specific test method)
 python -m unittest tests.CompilerTests.test_end_to_end
 
-# Lint changed Python files for AI style rules (max 3 nested blocks, no-self-use)
+# Lint changed Python files for AI style rules
 python tools/lint_ai_changes.py
+
+# Lint PaulTalk (.mini) files for style rules
+python tools/check_ptalk_code.py
 
 # Lint specific files with AI style rules
 python tools/lint_ai_changes.py parser.py test_modules/contracts.py
@@ -40,13 +40,16 @@ python ptalk_build.py
 ## Code Style Guidelines
 
 ### General
-- Indentation: always try to keep fewer than 4 levels of indendation
-	- In both python and PaulTalk code
+- Always run the linter tools on code you write
+- Indentation: always try to minimize indendation
 	- Early return/break/continue
 	- Method / function outlining
-	- Single-line conditionals: a single statement guarded by a conditional should be on the same line,
-	subject to line-width constraints only
+	- Single-line conditionals: a single statement on the same line
 	- Avoid defensively adding try/catch to everything
+- Variable naming: prefer short names that are full words
+	- You may still use single letters ('i') for loop induction variables and the like
+	- The constraints in check_ptalk_code.py may tempt you to shorten names more than you should
+- DRY: abstract common functionality to minimize repetition
 
 ### Python Code
 - Imports: Use absolute imports, organize by standard library, third-party, local
