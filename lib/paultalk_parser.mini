@@ -89,6 +89,34 @@ class ParseNode extends Representable {
         out.extend(@value);
         return out.extend(")");
     }
+
+    def tree_string() -> String {
+        out = String.empty();
+        self.append_tree(out, 0);
+        return out;
+    }
+
+    def append_tree(out : String, depth : i32) {
+        self.append_indent(out, depth);
+        out.extend(self.repr());
+        count = @children.size();
+        if count == 0 { return; }
+        out.extend("\n");
+        i = 0;
+        while i < count {
+            @children.[i].append_tree(out, depth + 1);
+            i = i + 1;
+            if i < count { out.extend("\n"); }
+        }
+    }
+
+    def append_indent(out : String, depth : i32) {
+        i = 0;
+        while i < depth {
+            out.extend("  ");
+            i = i + 1;
+        }
+    }
 }
 
 alias Node = ParseNode;
@@ -539,10 +567,11 @@ class PaulTalkParser {
         }
 
         if self.match_lexeme("where") {
-            where = ParseNode{"where"};
-            where.add(self.parse_where_item());
-            while self.match_lexeme(",") { where.add(self.parse_where_item()); }
-            node.add(where);
+            where_node = ParseNode{"where"};
+            where_node.add(self.parse_where_item());
+            w = where_node;
+            while self.match_lexeme(",") { w.add(self.parse_where_item()); }
+            node.add(where_node);
         }
 
         self.expect_lexeme("{", "Expected '{' to begin class body.");
@@ -846,11 +875,9 @@ class PaulTalkParser {
     }
 
     def is_object_creation_target(node : ParseNode) -> Bool {
-        if node.kind() == "identifier" or node.kind() == "type_identifier" {
-            return true;
-        }
-        return node.kind() == "parameterized_name" or
-            node.kind() == "member_access";
+        if node.kind() == "type_identifier" { return true; }
+        if node.kind() == "parameterized_name" { return true; }
+        return node.kind() == "member_access";
     }
 
     def parse_primary() -> ParseNode {
@@ -858,7 +885,9 @@ class PaulTalkParser {
             return self.parse_function_literal();
         }
         if self.match_lexeme("(") { return self.parse_group_or_tuple(); }
-        if self.match_lexeme("[") { return self.parse_array_literal(); }
+        if self.match_lexeme("[") or self.match_lexeme("[]") {
+            return self.parse_array_literal();
+        }
         if self.match_lexeme("{") { return self.parse_dictionary_literal(); }
         if self.match_lexeme("sizeof") {
             keyword = self.previous();
@@ -945,10 +974,13 @@ class PaulTalkParser {
     def parse_array_literal() -> ParseNode {
         open = self.previous();
         node = ParseNode{"array_literal", "", open.line(), open.column()};
-        if not self.check_lexeme("]") {
+        has_close = open.lexeme() == "[]";
+        if not has_close and not self.check_lexeme("]") {
             self.parse_expression_sequence(node, "]");
         }
-        self.expect_lexeme("]", "Expected ']' after array literal.");
+        if not has_close {
+            self.expect_lexeme("]", "Expected ']' after array literal.");
+        }
         if self.match_lexeme("of") {
             node.add(ParseNode{"element_type"}.add(self.parse_type()));
         }
@@ -1157,17 +1189,17 @@ class PaulTalkParser {
     def parse_constraint() -> ParseNode {
         if self.check_lexeme("(") {
             left_many = self.parse_parenthesized_region_variable_list();
-            holds = self.expect_lexeme("holds", "Expected 'holds'.");
+            holds_token = self.expect_lexeme("holds", "Expected 'holds'.");
             right = self.parse_region_variable();
-            return self.pair("many_holds", holds, left_many, right);
+            return self.pair("many_holds", holds_token, left_many, right);
         }
         left = self.parse_region_variable();
         if self.match_lexeme("holds") {
-            holds = self.previous();
+            holds_token = self.previous();
             needs_one = not self.check_lexeme("(");
-            if needs_one { return self.make_holds_one(holds, left); }
+            if needs_one { return self.make_holds_one(holds_token, left); }
             many = self.parse_parenthesized_region_variable_list();
-            return self.pair("holds_many", holds, left, many);
+            return self.pair("holds_many", holds_token, left, many);
         }
         eq = self.expect_lexeme("==", "Expected 'holds' or '=='.");
         chain = self.make_token_node("equality_chain", eq);
@@ -1179,9 +1211,9 @@ class PaulTalkParser {
         return chain;
     }
 
-    def make_holds_one(holds : Token, left : Node) -> Node {
+    def make_holds_one(holds_token : Token, left : Node) -> Node {
         right = self.parse_region_variable();
-        return self.pair("holds_one", holds, left, right);
+        return self.pair("holds_one", holds_token, left, right);
     }
 
     def pair(kind : String, token : Token, left : Node, right : Node) -> Node {
@@ -1377,4 +1409,8 @@ def parse_paultalk(source : String) -> ParseNode {
     lexer = PaulTalkLexer{source};
     tokens = lexer.tokenize();
     return PaulTalkParser{tokens}.parse_program();
+}
+
+def serialize_parse_tree(node : ParseNode) -> String {
+    return node.tree_string();
 }
